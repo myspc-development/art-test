@@ -17,26 +17,30 @@ class PostTypeRegistrar
             'supports'      => ['title', 'editor', 'thumbnail'],
         ];
 
-        // Register CPTs
+        // Register CPTs with custom menu icons
         $post_types = [
-            'artpulse_event'   => [
-                'label'           => __('Events', 'artpulse'),
-                'rewrite'         => ['slug' => 'events'],
-                'taxonomies'      => ['artpulse_event_type'],
+            'artpulse_event' => [
+                'label'      => __('Events', 'artpulse'),
+                'rewrite'    => ['slug' => 'events'],
+                'taxonomies' => ['artpulse_event_type'],
+                'menu_icon'  => 'dashicons-calendar',
             ],
-            'artpulse_artist'  => [
-                'label'           => __('Artists', 'artpulse'),
-                'rewrite'         => ['slug' => 'artists'],
-                'supports'        => ['title', 'editor', 'thumbnail', 'custom-fields'], // Added custom-fields support
+            'artpulse_artist' => [
+                'label'      => __('Artists', 'artpulse'),
+                'rewrite'    => ['slug' => 'artists'],
+                'supports'   => ['title', 'editor', 'thumbnail', 'custom-fields'],
+                'menu_icon'  => 'dashicons-admin-users',
             ],
             'artpulse_artwork' => [
-                'label'           => __('Artworks', 'artpulse'),
-                'rewrite'         => ['slug' => 'artworks'],
-                'supports'        => ['title', 'editor', 'thumbnail', 'custom-fields'], // Added custom-fields support
+                'label'      => __('Artworks', 'artpulse'),
+                'rewrite'    => ['slug' => 'artworks'],
+                'supports'   => ['title', 'editor', 'thumbnail', 'custom-fields'],
+                'menu_icon'  => 'dashicons-format-image',
             ],
-            'artpulse_org'     => [
-                'label'           => __('Organizations', 'artpulse'),
-                'rewrite'         => ['slug' => 'organizations'],
+            'artpulse_org' => [
+                'label'      => __('Organizations', 'artpulse'),
+                'rewrite'    => ['slug' => 'organizations'],
+                'menu_icon'  => 'dashicons-building',
             ],
         ];
 
@@ -87,96 +91,68 @@ class PostTypeRegistrar
 
     private static function register_meta_boxes()
     {
-        register_post_meta(
-            'artpulse_event',
-            '_ap_event_date',
-            [
-                'show_in_rest' => true,
-                'single'       => true,
-                'type'         => 'string',
-            ]
-        );
+        register_post_meta('artpulse_event', '_ap_event_date', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
 
-        register_post_meta(
-            'artpulse_event',
-            '_ap_event_location',
-            [
-                'show_in_rest' => true,
-                'single'       => true,
-                'type'         => 'string',
-            ]
-        );
+        register_post_meta('artpulse_event', '_ap_event_location', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
 
-        register_post_meta(
-            'artpulse_artist',
-            '_ap_artist_bio',
-            [
-                'show_in_rest' => true,
-                'single'       => true,
-                'type'         => 'string',
-            ]
-        );
+        register_post_meta('artpulse_artist', '_ap_artist_bio', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
 
-        register_post_meta(
-            'artpulse_artist',
-            '_ap_artist_org',
-            [
-                'show_in_rest' => true,
-                'single'       => true,
-                'type'         => 'integer',
-            ]
-        );
+        register_post_meta('artpulse_artist', '_ap_artist_org', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'integer',
+        ]);
 
-        register_post_meta(
-            'artpulse_artwork',
-            '_ap_artwork_medium',
-            [
-                'show_in_rest' => true,
-                'single'       => true,
-                'type'         => 'string',
-            ]
-        );
+        register_post_meta('artpulse_artwork', '_ap_artwork_medium', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
 
-        register_post_meta(
-            'artpulse_artwork',
-            '_ap_artwork_dimensions',
-            [
-                'show_in_rest' => true,
-                'single'       => true,
-                'type'         => 'string',
-            ]
-        );
+        register_post_meta('artpulse_artwork', '_ap_artwork_dimensions', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
 
-        register_post_meta(
-            'artpulse_artwork',
-            '_ap_artwork_materials',
-            [
-                'show_in_rest' => true,
-                'single'       => true,
-                'type'         => 'string',
-            ]
-        );
+        register_post_meta('artpulse_artwork', '_ap_artwork_materials', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
     }
 
     public static function generate_caps(string $post_type): array
     {
-        $plural = $post_type . 's'; // Simple pluralization
+        $plural = $post_type . 's';
 
         return [
-            'edit_post'             => "edit_{$post_type}",
-            'read_post'             => "read_{$post_type}",
-            'delete_post'           => "delete_{$post_type}",
-            'edit_posts'            => "edit_{$plural}",
-            'edit_others_posts'     => "edit_others_{$plural}",
-            'publish_posts'         => "publish_{$plural}",
-            'read_private_posts'    => "read_private_{$plural}",
-            'delete_posts'          => "delete_{$plural}",
-            'delete_private_posts'  => "delete_private_{$plural}",
+            'edit_post'              => "edit_{$post_type}",
+            'read_post'              => "read_{$post_type}",
+            'delete_post'            => "delete_{$post_type}",
+            'edit_posts'             => "edit_{$plural}",
+            'edit_others_posts'      => "edit_others_{$plural}",
+            'publish_posts'          => "publish_{$plural}",
+            'read_private_posts'     => "read_private_{$plural}",
+            'delete_posts'           => "delete_{$plural}",
+            'delete_private_posts'   => "delete_private_{$plural}",
             'delete_published_posts' => "delete_published_{$plural}",
-            'delete_others_posts'   => "delete_others_{$plural}",
-            'edit_private_posts'    => "edit_private_{$plural}",
-            'edit_published_posts'  => "edit_published_{$plural}",
-            'create_posts'          => "create_{$plural}",
+            'delete_others_posts'    => "delete_others_{$plural}",
+            'edit_private_posts'     => "edit_private_{$plural}",
+            'edit_published_posts'   => "edit_published_{$plural}",
+            'create_posts'           => "create_{$plural}",
         ];
     }
 }
