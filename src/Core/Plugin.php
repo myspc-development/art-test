@@ -124,6 +124,13 @@ class Plugin
         \ArtPulse\Admin\AdminColumnsOrganisation::register();
         \ArtPulse\Admin\QuickStartGuide::register();
 
+        \ArtPulse\Admin\AdminColumnsTaxonomies::register();
+        \ArtPulse\Admin\EngagementDashboard::register();
+        \ArtPulse\Admin\OrgDashboardAdmin::register();
+        \ArtPulse\Admin\ProfileLinkRequestAdmin::register();
+        \ArtPulse\Admin\MemberEnhancements::register();
+        \ArtPulse\Admin\MetaBoxesAddress::register( [ 'artpulse_event', 'artpulse_org' ] );
+
         \ArtPulse\Taxonomies\TaxonomiesRegistrar::register();
 
         if ( class_exists( '\\ArtPulse\\Ajax\\FrontendFilterHandler' ) ) {

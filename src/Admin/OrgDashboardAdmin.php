@@ -13,16 +13,6 @@ class OrgDashboardAdmin {
         );
     }
 
-    public static function render() {
-        echo '<div class="wrap"><h1>Organization Dashboard</h1>';
-        // Optionally: Admin org dropdown could go here
-        self::render_linked_artists();
-        self::render_org_artworks();
-        self::render_org_events();
-        self::render_org_analytics();
-        self::render_billing_history();
-        echo '</div>';
-    }
 
     // --- Helper: Get the current org id for this admin ---
     private static function get_current_org_id() {
