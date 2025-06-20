@@ -43,11 +43,12 @@ class RoleSetup
         $roles_caps = [
             'member' => [
                 'read',
-                'create_artpulse_event',
+                'create_artpulse_events',
             ],
             'artist' => [
                 'read',
-                'create_artpulse_artist',
+                'create_artpulse_artists',
+                'create_artpulse_artworks',
                 'edit_artpulse_artist', 'read_artpulse_artist', 'delete_artpulse_artist',
                 'edit_artpulse_artists', 'edit_others_artpulse_artists',
                 'publish_artpulse_artists', 'read_private_artpulse_artists',
@@ -57,7 +58,7 @@ class RoleSetup
             ],
             'organization' => [
                 'read',
-                'create_artpulse_org',
+                'create_artpulse_orgs',
                 'edit_artpulse_org', 'read_artpulse_org', 'delete_artpulse_org',
                 'edit_artpulse_orgs', 'edit_others_artpulse_orgs',
                 'publish_artpulse_orgs', 'read_private_artpulse_orgs',
