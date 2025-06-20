@@ -87,6 +87,7 @@ class Plugin
 
         \ArtPulse\Core\MembershipManager::register();
         \ArtPulse\Core\AccessControlManager::register();
+        \ArtPulse\Core\CapabilitiesManager::register();
         \ArtPulse\Core\DirectoryManager::register();
         \ArtPulse\Core\UserDashboardManager::register();
         \ArtPulse\Core\AnalyticsManager::register();
