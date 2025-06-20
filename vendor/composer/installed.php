@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'myspc-development/artpulse-management-plugin',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '663655b1142a1470310ee40dfde22af9ce4d95dc',
+        'type' => 'wordpress-plugin',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => false,
+    ),
+    'versions' => array(
+        'erusev/parsedown' => array(
+            'pretty_version' => '1.7.4',
+            'version' => '1.7.4.0',
+            'reference' => 'cb17b6477dfff935958ba01325f2e8a2bfa6dab3',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../erusev/parsedown',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'myspc-development/artpulse-management-plugin' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '663655b1142a1470310ee40dfde22af9ce4d95dc',
+            'type' => 'wordpress-plugin',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'stripe/stripe-php' => array(
+            'pretty_version' => 'v17.3.0',
+            'version' => '17.3.0.0',
+            'reference' => 'cfe8244f7e5f910b7fdb5c2cf77428c0acbb9f7c',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../stripe/stripe-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);
