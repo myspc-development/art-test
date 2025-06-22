@@ -149,7 +149,7 @@ class MetaBoxesOrganisation {
         }
     }
 
-    private static function get_registered_org_meta_fields() {
+    public static function get_registered_org_meta_fields() {
         // Note: Address fields are handled by MetaBoxesAddress.php
         return [
             'ead_org_name'                   => ['text',     __('Organization Name', 'artpulse-management')],

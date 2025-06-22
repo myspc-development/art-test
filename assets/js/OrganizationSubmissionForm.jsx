@@ -1,11 +1,58 @@
 import React, { useState } from 'react';
 
+const ORG_FIELDS = [
+  { name: 'ead_org_description', type: 'textarea', label: 'Description', required: true },
+  { name: 'ead_org_website_url', type: 'url', label: 'Website' },
+  { name: 'ead_org_logo_id', type: 'media', label: 'Logo' },
+  { name: 'ead_org_banner_id', type: 'media', label: 'Banner' },
+  { name: 'ead_org_type', type: 'select', label: 'Organization Type' },
+  { name: 'ead_org_size', type: 'text', label: 'Organization Size' },
+  { name: 'ead_org_facebook_url', type: 'url', label: 'Facebook URL' },
+  { name: 'ead_org_twitter_url', type: 'url', label: 'Twitter URL' },
+  { name: 'ead_org_instagram_url', type: 'url', label: 'Instagram URL' },
+  { name: 'ead_org_linkedin_url', type: 'url', label: 'LinkedIn URL' },
+  { name: 'ead_org_artsy_url', type: 'url', label: 'Artsy URL' },
+  { name: 'ead_org_pinterest_url', type: 'url', label: 'Pinterest URL' },
+  { name: 'ead_org_youtube_url', type: 'url', label: 'YouTube URL' },
+  { name: 'ead_org_primary_contact_name', type: 'text', label: 'Primary Contact Name' },
+  { name: 'ead_org_primary_contact_email', type: 'email', label: 'Primary Contact Email', required: true },
+  { name: 'ead_org_primary_contact_phone', type: 'text', label: 'Primary Contact Phone' },
+  { name: 'ead_org_primary_contact_role', type: 'text', label: 'Primary Contact Role' },
+  { name: 'ead_org_street_address', type: 'text', label: 'Street Address' },
+  { name: 'ead_org_postal_address', type: 'text', label: 'Postal Address' },
+  { name: 'ead_org_venue_address', type: 'text', label: 'Venue Address' },
+  { name: 'ead_org_venue_email', type: 'email', label: 'Venue Email' },
+  { name: 'ead_org_venue_phone', type: 'text', label: 'Venue Phone' },
+  { name: 'ead_org_monday_start_time', type: 'time', label: 'Monday Opening Time' },
+  { name: 'ead_org_monday_end_time', type: 'time', label: 'Monday Closing Time' },
+  { name: 'ead_org_monday_closed', type: 'checkbox', label: 'Closed on Monday' },
+  { name: 'ead_org_tuesday_start_time', type: 'time', label: 'Tuesday Opening Time' },
+  { name: 'ead_org_tuesday_end_time', type: 'time', label: 'Tuesday Closing Time' },
+  { name: 'ead_org_tuesday_closed', type: 'checkbox', label: 'Closed on Tuesday' },
+  { name: 'ead_org_wednesday_start_time', type: 'time', label: 'Wednesday Opening Time' },
+  { name: 'ead_org_wednesday_end_time', type: 'time', label: 'Wednesday Closing Time' },
+  { name: 'ead_org_wednesday_closed', type: 'checkbox', label: 'Closed on Wednesday' },
+  { name: 'ead_org_thursday_start_time', type: 'time', label: 'Thursday Opening Time' },
+  { name: 'ead_org_thursday_end_time', type: 'time', label: 'Thursday Closing Time' },
+  { name: 'ead_org_thursday_closed', type: 'checkbox', label: 'Closed on Thursday' },
+  { name: 'ead_org_friday_start_time', type: 'time', label: 'Friday Opening Time' },
+  { name: 'ead_org_friday_end_time', type: 'time', label: 'Friday Closing Time' },
+  { name: 'ead_org_friday_closed', type: 'checkbox', label: 'Closed on Friday' },
+  { name: 'ead_org_saturday_start_time', type: 'time', label: 'Saturday Opening Time' },
+  { name: 'ead_org_saturday_end_time', type: 'time', label: 'Saturday Closing Time' },
+  { name: 'ead_org_saturday_closed', type: 'checkbox', label: 'Closed on Saturday' },
+  { name: 'ead_org_sunday_start_time', type: 'time', label: 'Sunday Opening Time' },
+  { name: 'ead_org_sunday_end_time', type: 'time', label: 'Sunday Closing Time' },
+  { name: 'ead_org_sunday_closed', type: 'checkbox', label: 'Closed on Sunday' },
+];
+
+const ORG_TYPES = ['gallery','museum','studio','collective','non-profit','commercial-gallery','public-art-space','educational-institution','other'];
+
 export default function OrganizationSubmissionForm() {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [website, setWebsite] = useState('');
-  const [email, setEmail] = useState('');
   const [images, setImages] = useState([]);
+  const [logo, setLogo] = useState(null);
+  const [banner, setBanner] = useState(null);
   const [previews, setPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -14,6 +61,14 @@ export default function OrganizationSubmissionForm() {
     const files = Array.from(e.target.files).slice(0, 5);
     setImages(files);
     setPreviews(files.map(file => URL.createObjectURL(file)));
+  };
+
+  const handleLogoChange = (e) => {
+    setLogo(e.target.files[0] || null);
+  };
+
+  const handleBannerChange = (e) => {
+    setBanner(e.target.files[0] || null);
   };
 
   const uploadMedia = async (file) => {
@@ -45,10 +100,17 @@ export default function OrganizationSubmissionForm() {
         imageIds.push(id);
       }
 
+      let logoId = null;
+      if (logo) logoId = await uploadMedia(logo);
+      let bannerId = null;
+      if (banner) bannerId = await uploadMedia(banner);
+
       const payload = { post_type: 'artpulse_org', title };
       const fd = new FormData(e.target);
       fd.delete('title');
       fd.delete('images[]');
+      fd.delete('ead_org_logo_id');
+      fd.delete('ead_org_banner_id');
       for (const [key, value] of fd.entries()) {
         payload[key] = value;
       }
@@ -56,6 +118,8 @@ export default function OrganizationSubmissionForm() {
         if (!fd.has(cb.name)) payload[cb.name] = '0';
       });
       payload.image_ids = imageIds;
+      if (logoId) payload.ead_org_logo_id = logoId;
+      if (bannerId) payload.ead_org_banner_id = bannerId;
 
       const res = await fetch(APSubmission.endpoint, {
         method: 'POST',
@@ -71,11 +135,10 @@ export default function OrganizationSubmissionForm() {
 
       setMessage('Submission successful!');
       setTitle('');
-      setDescription('');
-      setWebsite('');
-      setEmail('');
       setImages([]);
       setPreviews([]);
+      setLogo(null);
+      setBanner(null);
     } catch (err) {
       console.error(err);
       setMessage(`Error: ${err.message}`);
@@ -85,7 +148,7 @@ export default function OrganizationSubmissionForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 max-w-xl mx-auto rounded-xl shadow bg-white space-y-4">
+    <form onSubmit={handleSubmit} className="p-4 max-w-xl mx-auto rounded-xl shadow bg-white space-y-4" encType="multipart/form-data">
       <h2 className="text-xl font-bold">Submit Organization</h2>
 
       <input
@@ -97,30 +160,37 @@ export default function OrganizationSubmissionForm() {
         required
       />
 
-      <textarea
-        className="w-full p-2 border rounded"
-        placeholder="Description"
-        value={description}
-        onChange={e => setDescription(e.target.value)}
-        required
-      />
-
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="Website"
-        value={website}
-        onChange={e => setWebsite(e.target.value)}
-      />
-
-      <input
-        className="w-full p-2 border rounded"
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        required
-      />
+      {ORG_FIELDS.map(field => (
+        <div key={field.name} className="w-full">
+          <label className="block text-sm" htmlFor={field.name}>{field.label}</label>
+          {field.type === 'textarea' && (
+            <textarea id={field.name} name={field.name} className="w-full p-2 border rounded" required={field.required}></textarea>
+          )}
+          {field.type === 'checkbox' && (
+            <input id={field.name} type="checkbox" name={field.name} value="1" />
+          )}
+          {field.type === 'select' && field.name === 'ead_org_type' && (
+            <select id={field.name} name={field.name} className="w-full p-2 border rounded">
+              <option value="">Select</option>
+              {ORG_TYPES.map(t => (
+                <option key={t} value={t}>{t.replace('-', ' ')}</option>
+              ))}
+            </select>
+          )}
+          {field.type === 'media' && (
+            <input
+              id={field.name}
+              type="file"
+              name={field.name}
+              accept="image/*"
+              onChange={field.name === 'ead_org_logo_id' ? handleLogoChange : handleBannerChange}
+            />
+          )}
+          {['textarea','checkbox','select','media'].indexOf(field.type) === -1 && (
+            <input id={field.name} type={field.type} name={field.name} className="w-full p-2 border rounded" required={field.required} />
+          )}
+        </div>
+      ))}
 
       <input
         className="w-full"
