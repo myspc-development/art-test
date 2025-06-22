@@ -42,6 +42,17 @@ Use these codes on any page to display forms or dashboards:
 - `[ap_user_dashboard]` – user dashboard and content
 - `[ap_directory]` – filterable directory
 
+### `[ap_directory]`
+The directory shortcode outputs posts grouped automatically from A–Z. Use it to
+list artists, organizations or events. A typical example looks like:
+
+```
+[ap_directory type="artist" limit="20"]
+```
+
+Results can be filtered by event type, city or region to help visitors narrow
+their search.
+
 ## Troubleshooting
 - Check the **System Status** section on the Settings page to see the latest webhook events.
 - Clear the log or simulate a webhook event if needed for testing.
