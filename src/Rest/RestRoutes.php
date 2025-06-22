@@ -42,6 +42,8 @@ class RestRoutes
             \ArtPulse\Rest\SubmissionRestController::register();
             // Register favorites endpoint so frontend can toggle favorites
             \ArtPulse\Rest\FavoriteRestController::register();
+            // Register import endpoint for CSV uploads
+            \ArtPulse\Rest\ImportRestController::register();
         });
 
         $post_types = ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org'];

@@ -86,6 +86,29 @@ class SettingsPage
     {
         update_user_meta($user->ID, 'last_login', current_time('mysql'));
     }
+
+    private static function exportPostsCsv(string $post_type): void
+    {
+        $query = new \WP_Query([
+            'post_type'      => $post_type,
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'no_found_rows'  => true,
+        ]);
+
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $post_type . '.csv"');
+
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['ID', 'Title', 'Status']);
+        foreach ($query->posts as $post_id) {
+            $post = get_post($post_id);
+            fputcsv($output, [$post_id, $post->post_title, $post->post_status]);
+        }
+        fclose($output);
+        exit;
+    }
     public static function renderMembersPage()
     {
         $search_query = sanitize_text_field($_GET['ap_search'] ?? '');
@@ -212,6 +235,14 @@ class SettingsPage
         $log            = get_option('artpulse_webhook_log', []);
         $current_tab    = sanitize_key($_GET['tab'] ?? 'general');
         $base_url       = admin_url('admin.php?page=artpulse-settings');
+
+        if (isset($_GET['ap_export_posts'])) {
+            $type = sanitize_key($_GET['ap_export_posts']);
+            $allowed = ['artpulse_org', 'artpulse_event', 'artpulse_artist', 'artpulse_artwork'];
+            if (in_array($type, $allowed, true)) {
+                self::exportPostsCsv($type);
+            }
+        }
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
@@ -221,6 +252,9 @@ class SettingsPage
                 </a>
                 <a href="<?php echo esc_url($base_url . '&tab=location'); ?>" class="nav-tab <?php echo $current_tab === 'location' ? 'nav-tab-active' : ''; ?>">
                     <?php esc_html_e('Location APIs', 'artpulse'); ?>
+                </a>
+                <a href="<?php echo esc_url($base_url . '&tab=import_export'); ?>" class="nav-tab <?php echo $current_tab === 'import_export' ? 'nav-tab-active' : ''; ?>">
+                    <?php esc_html_e('Import/Export', 'artpulse'); ?>
                 </a>
             </h2>
             <form method="post" action="options.php">
@@ -276,6 +310,23 @@ class SettingsPage
                 <?php wp_nonce_field('ap_clear_webhook_log_action'); ?>
                 <input type="submit" name="ap_clear_webhook_log" class="button button-secondary" value="<?php esc_attr_e('Clear Webhook Log', 'artpulse'); ?>">
             </form>
+            <?php elseif ($current_tab === 'import_export') : ?>
+            <hr>
+            <div id="ap-import-export">
+                <h2><?php esc_html_e('Import CSV', 'artpulse'); ?></h2>
+                <input type="file" id="ap-csv-file" accept=".csv" />
+                <div id="ap-mapping-step" style="margin-top:20px;"></div>
+                <button id="ap-start-import" class="button button-primary" disabled><?php esc_html_e('Start Import', 'artpulse'); ?></button>
+                <pre id="ap-import-status"></pre>
+                <hr>
+                <h2><?php esc_html_e('Export Posts', 'artpulse'); ?></h2>
+                <p>
+                    <a href="<?php echo esc_url(add_query_arg('ap_export_posts', 'artpulse_org')); ?>" class="button"><?php esc_html_e('Export Organizations', 'artpulse'); ?></a>
+                    <a href="<?php echo esc_url(add_query_arg('ap_export_posts', 'artpulse_event')); ?>" class="button"><?php esc_html_e('Export Events', 'artpulse'); ?></a>
+                    <a href="<?php echo esc_url(add_query_arg('ap_export_posts', 'artpulse_artist')); ?>" class="button"><?php esc_html_e('Export Artists', 'artpulse'); ?></a>
+                    <a href="<?php echo esc_url(add_query_arg('ap_export_posts', 'artpulse_artwork')); ?>" class="button"><?php esc_html_e('Export Artworks', 'artpulse'); ?></a>
+                </p>
+            </div>
             <?php endif; ?>
         </div>
         <?php

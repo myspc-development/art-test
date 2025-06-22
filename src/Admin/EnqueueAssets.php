@@ -109,6 +109,25 @@ class EnqueueAssets {
             }
         }
 
+        if ($screen->base === 'toplevel_page_artpulse-settings' && ($_GET['tab'] ?? '') === 'import_export') {
+            wp_enqueue_script('papaparse', 'https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js', [], null, true);
+            $import_path = $plugin_dir . '/assets/js/ap-csv-import.js';
+            $import_url  = $plugin_url . '/assets/js/ap-csv-import.js';
+            if (file_exists($import_path)) {
+                wp_enqueue_script(
+                    'ap-csv-import',
+                    $import_url,
+                    ['papaparse', 'wp-api-fetch'],
+                    filemtime($import_path),
+                    true
+                );
+                wp_localize_script('ap-csv-import', 'APCSVImport', [
+                    'endpoint' => esc_url_raw(rest_url('artpulse/v1/import')),
+                    'nonce'    => wp_create_nonce('wp_rest'),
+                ]);
+            }
+        }
+
         // Enqueue Core-specific admin assets (if not already enqueued on frontend)
         // Check if they are already enqueued in the frontend, if not, enqueue them here
         if (!wp_script_is('ap-user-dashboard', 'enqueued')) {
