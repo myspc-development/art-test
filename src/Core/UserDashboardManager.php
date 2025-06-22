@@ -79,6 +79,9 @@ class UserDashboardManager
         $data = [
             'membership_level'   => get_user_meta($user_id, 'ap_membership_level', true),
             'membership_expires' => get_user_meta($user_id, 'ap_membership_expires', true),
+            'country'            => get_user_meta($user_id, 'ap_country', true),
+            'state'              => get_user_meta($user_id, 'ap_state', true),
+            'city'               => get_user_meta($user_id, 'ap_city', true),
             'events'             => [],
             'artists'            => [],
             'artworks'           => [],
@@ -127,6 +130,15 @@ class UserDashboardManager
                 'ID'           => $user_id,
                 'display_name' => sanitize_text_field($params['display_name']),
             ]);
+        }
+        if ( isset($params['ap_country']) ) {
+            update_user_meta($user_id, 'ap_country', sanitize_text_field($params['ap_country']));
+        }
+        if ( isset($params['ap_state']) ) {
+            update_user_meta($user_id, 'ap_state', sanitize_text_field($params['ap_state']));
+        }
+        if ( isset($params['ap_city']) ) {
+            update_user_meta($user_id, 'ap_city', sanitize_text_field($params['ap_city']));
         }
         return rest_ensure_response([ 'success' => true ]);
     }
