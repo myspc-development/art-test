@@ -365,6 +365,10 @@ class SettingsPage
             'override_member_membership' => [
                 'label' => __('Override Member Membership', 'artpulse'),
                 'desc'  => __('Allow administrators to bypass membership requirements and fees for regular members.', 'artpulse'),
+            ],
+            'auto_expire_events' => [
+                'label' => __('Auto-expire Past Events', 'artpulse'),
+                'desc'  => __('Move events to Draft when the end date has passed.', 'artpulse'),
             ]
         ];
         foreach ($general_fields as $key => $config) {
@@ -416,7 +420,8 @@ class SettingsPage
                 'service_worker_enabled',
                 'override_artist_membership',
                 'override_org_membership',
-                'override_member_membership'
+                'override_member_membership',
+                'auto_expire_events'
             ])) {
                 $output[$key] = isset($value) ? 1 : 0;
             } else {
@@ -438,7 +443,8 @@ class SettingsPage
             'service_worker_enabled',
             'override_artist_membership',
             'override_org_membership',
-            'override_member_membership'
+            'override_member_membership',
+            'auto_expire_events'
         ])) {
             echo '<input type="checkbox" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="1"' . checked(1, $value, false) . ' />';
         } else {

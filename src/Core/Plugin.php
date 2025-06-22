@@ -129,6 +129,7 @@ class Plugin
         \ArtPulse\Admin\AdminColumnsOrganisation::register();
         \ArtPulse\Admin\QuickStartGuide::register();
         \ArtPulse\Taxonomies\TaxonomiesRegistrar::register();
+        \ArtPulse\Core\EventExpiryCron::register();
 
         if (class_exists('\\ArtPulse\\Ajax\\FrontendFilterHandler')) {
             \ArtPulse\Ajax\FrontendFilterHandler::register();
