@@ -16,9 +16,12 @@ class OrganizationDashboardShortcode {
         $org_id = get_user_meta($user_id, 'ap_organization_id', true);
         if (!$org_id) return '<p>No organization assigned.</p>';
 
+        wp_enqueue_script('ap-org-metrics');
+
         ob_start();
         ?>
         <div class="ap-org-dashboard">
+            <canvas id="ap-org-metrics" height="120"></canvas>
             <h2>Organization Events</h2>
             <button id="ap-add-event-btn">Add New Event</button>
 

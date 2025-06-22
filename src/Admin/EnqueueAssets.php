@@ -307,6 +307,24 @@ class EnqueueAssets {
             true
         );
 
+        wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], null, true);
+
+        $metrics_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-metrics.js';
+        $metrics_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-metrics.js';
+        if (file_exists($metrics_path)) {
+            wp_enqueue_script(
+                'ap-org-metrics',
+                $metrics_url,
+                ['chart-js', 'wp-api-fetch'],
+                filemtime($metrics_path),
+                true
+            );
+            wp_localize_script('ap-org-metrics', 'APOrgMetrics', [
+                'endpoint' => esc_url_raw(rest_url('artpulse/v1/org-metrics')),
+                'nonce'    => wp_create_nonce('wp_rest'),
+            ]);
+        }
+
         $opts = get_option('artpulse_settings', []);
         if (!empty($opts['service_worker_enabled'])) {
             wp_enqueue_script(
