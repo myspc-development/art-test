@@ -100,7 +100,7 @@ export default function SubmissionForm() {
       />
 
       <input
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded ap-google-autocomplete"
         type="text"
         placeholder="Location"
         value={location}

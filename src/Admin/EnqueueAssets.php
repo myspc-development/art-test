@@ -216,6 +216,14 @@ class EnqueueAssets {
             'googleEndpoint'   => esc_url_raw(rest_url('artpulse/v1/location/google')),
         ]);
 
+        wp_enqueue_script(
+            'ap-google-places',
+            $plugin_url . '/assets/js/google-places-autocomplete.js',
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
         wp_enqueue_style(
             'ap-forms-css',
             $plugin_url . '/assets/css/ap-forms.css',
