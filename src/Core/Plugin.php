@@ -92,6 +92,7 @@ class Plugin
         \ArtPulse\Core\AnalyticsDashboard::register();
         \ArtPulse\Core\FrontendMembershipPage::register();
         \ArtPulse\Community\ProfileLinkRequestManager::register();
+        \ArtPulse\Community\ArtistUpgradeRestController::register();
         \ArtPulse\Core\MyFollowsShortcode::register();
         \ArtPulse\Core\NotificationShortcode::register();
         \ArtPulse\Admin\AdminListSorting::register();
