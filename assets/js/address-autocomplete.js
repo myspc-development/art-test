@@ -1,6 +1,7 @@
 (function(){
   function populate(select, items, valueKey, textKey) {
     if(!select) return;
+    const current = select.dataset.selected || select.value;
     select.innerHTML = '';
     const empty = document.createElement('option');
     empty.value = '';
@@ -12,6 +13,9 @@
       opt.textContent = item[textKey];
       select.appendChild(opt);
     });
+    if(current){
+      select.value = current;
+    }
   }
 
   async function loadData() {
@@ -42,11 +46,17 @@
 
     countrySelects.forEach(sel => {
       populate(sel, data.countries, 'code', 'name');
+      if(sel.dataset.selected){
+        sel.value = sel.dataset.selected;
+        sel.dispatchEvent(new Event('change'));
+      }
       sel.addEventListener('change', async () => {
+        sel.dataset.selected = sel.value;
         const form = sel.closest('form');
         const stateSel = form.querySelector('.ap-address-state');
         const citySel = form.querySelector('.ap-address-city');
         if(stateSel){
+          stateSel.dataset.selected = '';
           const states = data.states.filter(s=>s.country===sel.value);
           if(states.length===0 && APLocation.geonamesEndpoint){
             const resp = await fetch(APLocation.geonamesEndpoint+'?type=states&country='+sel.value);
@@ -61,6 +71,7 @@
           }
         }
         if(citySel){
+          citySel.dataset.selected = '';
           citySel.innerHTML = '';
         }
         updateComponents(form);
@@ -68,11 +79,17 @@
     });
 
     stateSelects.forEach(sel => {
+      if(sel.dataset.selected){
+        sel.value = sel.dataset.selected;
+        sel.dispatchEvent(new Event('change'));
+      }
       sel.addEventListener('change', async () => {
+        sel.dataset.selected = sel.value;
         const form = sel.closest('form');
         const countrySel = form.querySelector('.ap-address-country');
         const citySel = form.querySelector('.ap-address-city');
         if(citySel){
+          citySel.dataset.selected = '';
           const cities = data.cities.filter(c=>c.country===countrySel.value && c.state===sel.value);
           if(cities.length===0 && APLocation.geonamesEndpoint){
             const resp = await fetch(APLocation.geonamesEndpoint+'?type=cities&country='+countrySel.value+'&state='+sel.value);
@@ -91,7 +108,12 @@
     });
 
     citySelects.forEach(sel => {
+      if(sel.dataset.selected){
+        sel.value = sel.dataset.selected;
+        updateComponents(sel.closest('form'));
+      }
       sel.addEventListener('change', () => {
+        sel.dataset.selected = sel.value;
         const form = sel.closest('form');
         updateComponents(form);
       });
