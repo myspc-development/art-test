@@ -119,3 +119,29 @@
 .ap-user-social-links a:hover {
   color: #005077;
 }
+
+/* Simple calendar styles */
+.ap-cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.ap-calendar {
+  width: 100%;
+  border-collapse: collapse;
+}
+.ap-calendar th,
+.ap-calendar td {
+  border: 1px solid #ddd;
+  width: 14%;
+  vertical-align: top;
+  padding: 4px;
+  font-size: 0.85rem;
+}
+.ap-calendar ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
