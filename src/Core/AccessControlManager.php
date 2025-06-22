@@ -11,8 +11,21 @@ class AccessControlManager
     public static function checkAccess()
     {
         if ( is_singular(['artpulse_event','artpulse_artwork']) ) {
-            $level = get_user_meta(get_current_user_id(),'ap_membership_level',true);
-            if ( $level === 'Free' ) {
+            $user_id  = get_current_user_id();
+            $level    = get_user_meta($user_id, 'ap_membership_level', true);
+            $settings = get_option('artpulse_settings', []);
+            $user     = wp_get_current_user();
+            $roles    = (array) $user->roles;
+
+            if (
+                (!empty($settings['override_artist_membership']) && in_array('artist', $roles, true)) ||
+                (!empty($settings['override_org_membership']) && in_array('organization', $roles, true)) ||
+                (!empty($settings['override_member_membership']) && in_array('member', $roles, true))
+            ) {
+                return;
+            }
+
+            if ($level === 'Free') {
                 wp_redirect(home_url());
                 exit;
             }
