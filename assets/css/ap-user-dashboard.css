@@ -162,3 +162,16 @@
   padding-left: 0;
   margin: 0;
 }
+
+/* Calendar date styling */
+.ap-date {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+/* Highlight days containing events */
+.ap-calendar td:has(ul) {
+  background-color: rgba(0, 115, 170, 0.1);
+}
