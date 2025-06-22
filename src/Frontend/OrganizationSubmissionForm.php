@@ -13,29 +13,51 @@ class OrganizationSubmissionForm {
 
         wp_enqueue_script('ap-org-submission-js');
 
+        $fields = \ArtPulse\Admin\MetaBoxesOrganisation::get_registered_org_meta_fields();
+
         ob_start();
         ?>
-        <form class="ap-org-submission-form">
+        <form class="ap-org-submission-form" enctype="multipart/form-data">
             <p>
                 <label for="ap-org-title"><?php esc_html_e('Organization Name', 'artpulse'); ?></label><br>
                 <input id="ap-org-title" type="text" name="title" required />
             </p>
-            <p>
-                <label for="ap-org-description"><?php esc_html_e('Description', 'artpulse'); ?></label><br>
-                <textarea id="ap-org-description" name="ead_org_description" required></textarea>
-            </p>
-            <p>
-                <label for="ap-org-website"><?php esc_html_e('Website', 'artpulse'); ?></label><br>
-                <input id="ap-org-website" type="text" name="ead_org_website_url" />
-            </p>
-            <p>
-                <label for="ap-org-email"><?php esc_html_e('Primary Contact Email', 'artpulse'); ?></label><br>
-                <input id="ap-org-email" type="email" name="ead_org_primary_contact_email" required />
-            </p>
-            <p>
-                <label for="ap-org-contact-name"><?php esc_html_e('Primary Contact Name', 'artpulse'); ?></label><br>
-                <input id="ap-org-contact-name" type="text" name="ead_org_primary_contact_name" />
-            </p>
+            <?php foreach ($fields as $key => $args) {
+                list($type, $label) = $args;
+                ?>
+                <p>
+                    <label for="<?php echo esc_attr($key); ?>"><?php echo esc_html($label); ?></label><br>
+                    <?php
+                    switch ($type) {
+                        case 'textarea':
+                            printf('<textarea id="%1$s" name="%1$s"%2$s></textarea>', esc_attr($key), $key === 'ead_org_description' ? ' required' : '');
+                            break;
+                        case 'checkbox':
+                            printf('<input id="%1$s" type="checkbox" name="%1$s" value="1" />', esc_attr($key));
+                            break;
+                        case 'select':
+                            if ($key === 'ead_org_type') {
+                                $opts = ['gallery', 'museum', 'studio', 'collective', 'non-profit', 'commercial-gallery', 'public-art-space', 'educational-institution', 'other'];
+                                echo '<select id="' . esc_attr($key) . '" name="' . esc_attr($key) . '">';
+                                echo '<option value="">' . esc_html__('Select', 'artpulse') . '</option>';
+                                foreach ($opts as $opt) {
+                                    echo '<option value="' . esc_attr($opt) . '">' . esc_html(ucfirst(str_replace('-', ' ', $opt))) . '</option>';
+                                }
+                                echo '</select>';
+                            } else {
+                                printf('<input id="%1$s" type="text" name="%1$s" />', esc_attr($key));
+                            }
+                            break;
+                        case 'media':
+                            printf('<input id="%1$s" type="file" name="%1$s" accept="image/*" />', esc_attr($key));
+                            break;
+                        default:
+                            $req = $key === 'ead_org_primary_contact_email' ? ' required' : '';
+                            printf('<input id="%1$s" type="%2$s" name="%1$s"%3$s />', esc_attr($key), esc_attr($type), $req);
+                    }
+                    ?>
+                </p>
+            <?php } ?>
             <p>
                 <label for="ap-org-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label><br>
                 <input id="ap-org-images" type="file" name="images[]" accept="image/*" multiple />
