@@ -62,12 +62,15 @@ class SubmissionRestController
         $params    = $request->get_json_params();
         $post_type = sanitize_key( $params['post_type'] ?? 'artpulse_event' );
 
-        $status = ( 'artpulse_org' === $post_type ) ? 'pending' : 'publish';
+        $user    = wp_get_current_user();
+        $is_artist = in_array('artist', (array) $user->roles, true);
+        $status = ( 'artpulse_org' === $post_type || ( 'artpulse_artist' === $post_type && ! $is_artist ) ) ? 'pending' : 'publish';
 
         $post_id = wp_insert_post( [
             'post_type'   => $post_type,
             'post_title'  => sanitize_text_field( $params['title'] ),
             'post_status' => $status,
+            'post_author' => $user->ID,
         ], true );
 
         if ( is_wp_error( $post_id ) ) {

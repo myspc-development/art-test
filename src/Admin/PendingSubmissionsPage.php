@@ -24,7 +24,7 @@ class PendingSubmissionsPage
     public static function render()
     {
         $posts = get_posts([
-            'post_type'   => ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org'],
+            'post_type'   => ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org', 'ap_artist_request'],
             'post_status' => 'pending',
             'numberposts' => 100,
         ]);

@@ -76,7 +76,14 @@ class ApprovalManager
         $nonce   = $_POST['nonce'] ?? '';
         if ( ! wp_verify_nonce($nonce, 'ap_approve_' . $post_id) ) {
             wp_die(__('Security check failed', 'artpulse'));        }
-        // Update post status to 'publish'
+        $post = get_post($post_id);
+        if ($post && $post->post_type === 'ap_artist_request') {
+            $user = get_user_by('id', $post->post_author);
+            if ($user && !in_array('artist', (array) $user->roles, true)) {
+                $user->set_role('artist');
+            }
+        }
+
         wp_update_post([
             'ID'          => $post_id,
             'post_status' => 'publish',

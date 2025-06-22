@@ -31,6 +31,14 @@ class PostTypeRegistrar
                 'supports'   => ['title', 'editor', 'thumbnail', 'custom-fields'],
                 'menu_icon'  => 'dashicons-admin-users',
             ],
+            'ap_artist_request' => [
+                'label'      => __('Artist Upgrade Requests', 'artpulse'),
+                'public'     => false,
+                'show_ui'    => true,
+                'show_in_menu'=> false,
+                'show_in_rest'=> true,
+                'supports'   => ['title'],
+            ],
             'artpulse_artwork' => [
                 'label'      => __('Artworks', 'artpulse'),
                 'rewrite'    => ['slug' => 'artworks'],
