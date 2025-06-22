@@ -353,6 +353,18 @@ class SettingsPage
             'service_worker_enabled' => [
                 'label' => __('Enable Service Worker', 'artpulse'),
                 'desc'  => __('Adds a service worker for basic offline caching.', 'artpulse'),
+            ],
+            'override_artist_membership' => [
+                'label' => __('Override Artist Membership', 'artpulse'),
+                'desc'  => __('Allow administrators to bypass membership requirements and fees for artists.', 'artpulse'),
+            ],
+            'override_org_membership' => [
+                'label' => __('Override Organization Membership', 'artpulse'),
+                'desc'  => __('Allow administrators to bypass membership requirements and fees for organizations.', 'artpulse'),
+            ],
+            'override_member_membership' => [
+                'label' => __('Override Member Membership', 'artpulse'),
+                'desc'  => __('Allow administrators to bypass membership requirements and fees for regular members.', 'artpulse'),
             ]
         ];
         foreach ($general_fields as $key => $config) {
@@ -397,7 +409,15 @@ class SettingsPage
     {
         $output = [];
         foreach ($input as $key => $value) {
-            if (in_array($key, ['stripe_enabled', 'woocommerce_enabled', 'debug_logging', 'service_worker_enabled'])) {
+            if (in_array($key, [
+                'stripe_enabled',
+                'woocommerce_enabled',
+                'debug_logging',
+                'service_worker_enabled',
+                'override_artist_membership',
+                'override_org_membership',
+                'override_member_membership'
+            ])) {
                 $output[$key] = isset($value) ? 1 : 0;
             } else {
                 $output[$key] = sanitize_text_field($value);
@@ -411,7 +431,15 @@ class SettingsPage
         $key     = $args['label_for'];
         $value   = $options[$key] ?? '';
         $desc    = $args['description'] ?? '';
-        if (in_array($key, ['stripe_enabled', 'woocommerce_enabled', 'debug_logging', 'service_worker_enabled'])) {
+        if (in_array($key, [
+            'stripe_enabled',
+            'woocommerce_enabled',
+            'debug_logging',
+            'service_worker_enabled',
+            'override_artist_membership',
+            'override_org_membership',
+            'override_member_membership'
+        ])) {
             echo '<input type="checkbox" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="1"' . checked(1, $value, false) . ' />';
         } else {
             echo '<input type="text" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" />';

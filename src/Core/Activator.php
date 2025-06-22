@@ -18,6 +18,9 @@ class Activator
                 'woocommerce_enabled'   => 0,
                 'service_worker_enabled' => 0,
                 'debug_logging'         => 0,
+                'override_artist_membership'  => 0,
+                'override_org_membership'    => 0,
+                'override_member_membership' => 0,
             ]);
         }
 
