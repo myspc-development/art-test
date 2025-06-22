@@ -26,7 +26,7 @@ class OrganizationSubmissionForm {
             </p>
             <p>
                 <label for="ap-org-website"><?php esc_html_e('Website', 'artpulse'); ?></label><br>
-                <input id="ap-org-website" type="url" name="ead_org_website_url" required />
+                <input id="ap-org-website" type="text" name="ead_org_website_url" />
             </p>
             <p>
                 <label for="ap-org-email"><?php esc_html_e('Primary Contact Email', 'artpulse'); ?></label><br>
