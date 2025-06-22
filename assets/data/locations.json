@@ -1,0 +1,37 @@
+{
+  "countries": [
+    {"code": "US", "name": "United States"},
+    {"code": "CA", "name": "Canada"},
+    {"code": "GB", "name": "United Kingdom"},
+    {"code": "DE", "name": "Germany"},
+    {"code": "FR", "name": "France"}
+  ],
+  "states": [
+    {"code": "CA", "country": "US", "name": "California"},
+    {"code": "NY", "country": "US", "name": "New York"},
+    {"code": "ON", "country": "CA", "name": "Ontario"},
+    {"code": "QC", "country": "CA", "name": "Quebec"},
+    {"code": "ENG", "country": "GB", "name": "England"},
+    {"code": "SCT", "country": "GB", "name": "Scotland"},
+    {"code": "BY", "country": "DE", "name": "Bavaria"},
+    {"code": "BE", "country": "DE", "name": "Berlin"},
+    {"code": "IDF", "country": "FR", "name": "Île-de-France"}
+  ],
+  "cities": [
+    {"name": "Los Angeles", "state": "CA", "country": "US"},
+    {"name": "San Francisco", "state": "CA", "country": "US"},
+    {"name": "New York City", "state": "NY", "country": "US"},
+    {"name": "Buffalo", "state": "NY", "country": "US"},
+    {"name": "Toronto", "state": "ON", "country": "CA"},
+    {"name": "Ottawa", "state": "ON", "country": "CA"},
+    {"name": "Montreal", "state": "QC", "country": "CA"},
+    {"name": "Quebec City", "state": "QC", "country": "CA"},
+    {"name": "London", "state": "ENG", "country": "GB"},
+    {"name": "Manchester", "state": "ENG", "country": "GB"},
+    {"name": "Edinburgh", "state": "SCT", "country": "GB"},
+    {"name": "Glasgow", "state": "SCT", "country": "GB"},
+    {"name": "Munich", "state": "BY", "country": "DE"},
+    {"name": "Berlin", "state": "BE", "country": "DE"},
+    {"name": "Paris", "state": "IDF", "country": "FR"}
+  ]
+}

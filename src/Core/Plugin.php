@@ -114,6 +114,7 @@ class Plugin
         \ArtPulse\Admin\ApprovalManager::register();
         \ArtPulse\Admin\PendingSubmissionsPage::register();
         \ArtPulse\Rest\RestRoutes::register();
+        \ArtPulse\Rest\LocationRestController::register();
 
         \ArtPulse\Admin\MetaBoxesArtist::register();
         \ArtPulse\Admin\MetaBoxesArtwork::register();

@@ -12,7 +12,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const logoFile = form.querySelector('#ead_org_logo_id') ? form.querySelector('#ead_org_logo_id').files[0] : null;
   const bannerFile = form.querySelector('#ead_org_banner_id') ? form.querySelector('#ead_org_banner_id').files[0] : null;
   const addressComponentsInput = form.querySelector('[name="address_components"]');
-  const addressComponents = addressComponentsInput ? addressComponentsInput.value : '';
+  let addressComponents = addressComponentsInput ? addressComponentsInput.value : '';
+  const countrySel = form.querySelector('.ap-address-country');
+  const stateSel = form.querySelector('.ap-address-state');
+  const citySel = form.querySelector('.ap-address-city');
+  if (!addressComponents && countrySel) {
+    addressComponents = JSON.stringify({
+      country: countrySel.value,
+      state: stateSel ? stateSel.value : '',
+      city: citySel ? citySel.value : ''
+    });
+    if (addressComponentsInput) addressComponentsInput.value = addressComponents;
+  }
 
   const submission = { post_type: 'artpulse_org', title };
   formData.delete('title');

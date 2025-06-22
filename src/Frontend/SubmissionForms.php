@@ -48,10 +48,19 @@ class SubmissionForms
                 <input id="ap-date" type="date" name="event_date" data-required="<?php esc_attr_e('Date is required', 'artpulse'); ?>" />
             </p>
             <p>
-                <label for="ap-location"><?php esc_html_e('Location*', 'artpulse'); ?></label><br>
-                <input id="ap-location" type="text" name="event_location" data-required="<?php esc_attr_e('Location is required', 'artpulse'); ?>" />
-                <input type="hidden" name="address_components" id="ap-address-components" />
+                <label for="ap-country"><?php esc_html_e('Country*', 'artpulse'); ?></label><br>
+                <select id="ap-country" class="ap-address-country ap-address-input" data-required="<?php esc_attr_e('Country is required', 'artpulse'); ?>"></select>
             </p>
+            <p>
+                <label for="ap-state"><?php esc_html_e('State/Province', 'artpulse'); ?></label><br>
+                <select id="ap-state" class="ap-address-state ap-address-input"></select>
+            </p>
+            <p>
+                <label for="ap-city"><?php esc_html_e('City', 'artpulse'); ?></label><br>
+                <select id="ap-city" class="ap-address-city ap-address-input"></select>
+            </p>
+            <input id="ap-location" type="hidden" name="event_location" />
+            <input type="hidden" name="address_components" id="ap-address-components" />
             <p>
                 <label for="ap-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label><br>
                 <input id="ap-images" type="file" name="images[]" accept="image/*" multiple />

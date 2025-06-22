@@ -203,6 +203,19 @@ class EnqueueAssets {
             'nonce'         => wp_create_nonce('wp_rest'),
         ]);
 
+        wp_enqueue_script(
+            'ap-address-autocomplete',
+            $plugin_url . '/assets/js/address-autocomplete.js',
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+        wp_localize_script('ap-address-autocomplete', 'APLocation', [
+            'datasetUrl'       => $plugin_url . '/assets/data/locations.json',
+            'geonamesEndpoint' => esc_url_raw(rest_url('artpulse/v1/location/geonames')),
+            'googleEndpoint'   => esc_url_raw(rest_url('artpulse/v1/location/google')),
+        ]);
+
         wp_enqueue_style(
             'ap-forms-css',
             $plugin_url . '/assets/css/ap-forms.css',
