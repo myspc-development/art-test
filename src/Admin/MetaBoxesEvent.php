@@ -75,15 +75,15 @@ class MetaBoxesEvent {
     }
 
     private static function get_registered_event_meta_fields() {
-        // Note: Address fields are handled by MetaBoxesAddress.php, so they are not duplicated here.
-        // If you want them in *this* metabox, you'd add them.
-        // The MetaBoxRegistrar calls MetaBoxesAddress::register(['artpulse_event', 'artpulse_org']);
-        // which will add a separate "Address" meta box.
+        // Note: Address fields are managed by the MetaBoxesAddress helper and are
+        // not registered here by default. If your event needs an address meta box
+        // you can manually call MetaBoxesAddress::register(['artpulse_event']).
         return [
             'event_start_date'      => ['type' => 'date', 'label' => __('Start Date', 'artpulse-management')],
             'event_end_date'        => ['type' => 'date', 'label' => __('End Date', 'artpulse-management')],
             'venue_name'            => ['type' => 'text', 'label' => __('Venue Name', 'artpulse-management')],
-            // Address fields (street_address, city, state, country, postcode) are typically handled by MetaBoxesAddress
+            // Address fields (street_address, city, state, country, postcode) would
+            // normally come from MetaBoxesAddress if it has been registered
             'event_organizer_name'  => ['type' => 'text', 'label' => __('Organizer Name', 'artpulse-management')],
             'event_organizer_email' => ['type' => 'email', 'label' => __('Organizer Email', 'artpulse-management')],
             'event_banner_id'       => ['type' => 'media', 'label' => __('Event Banner (Media Library ID)', 'artpulse-management')],
