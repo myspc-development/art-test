@@ -84,27 +84,47 @@ class EventSubmissionShortcode {
         $event_org = intval($_POST['event_org']);
 
         if (empty($event_title)) {
-            wc_add_notice('Please enter an event title.', 'error'); // Or use your notification system
+            if (function_exists('wc_add_notice')) {
+                wc_add_notice('Please enter an event title.', 'error'); // Or use your notification system
+            } else {
+                wp_die('Please enter an event title.');
+            }
             return; // Stop processing
         }
 
         if (empty($event_description)) {
-            wc_add_notice('Please enter an event description.', 'error');
+            if (function_exists('wc_add_notice')) {
+                wc_add_notice('Please enter an event description.', 'error');
+            } else {
+                wp_die('Please enter an event description.');
+            }
             return;
         }
 
         if (empty($event_date)) {
-            wc_add_notice('Please enter an event date.', 'error');
+            if (function_exists('wc_add_notice')) {
+                wc_add_notice('Please enter an event date.', 'error');
+            } else {
+                wp_die('Please enter an event date.');
+            }
             return;
         }
           // Validate the date format
         if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $event_date)) {
-            wc_add_notice('Please enter a valid date in YYYY-MM-DD format.', 'error');
+            if (function_exists('wc_add_notice')) {
+                wc_add_notice('Please enter a valid date in YYYY-MM-DD format.', 'error');
+            } else {
+                wp_die('Please enter a valid date in YYYY-MM-DD format.');
+            }
             return;
         }
 
         if ($event_org <= 0) {
-            wc_add_notice('Please select an organization.', 'error');
+            if (function_exists('wc_add_notice')) {
+                wc_add_notice('Please select an organization.', 'error');
+            } else {
+                wp_die('Please select an organization.');
+            }
             return;
         }
 
@@ -118,7 +138,11 @@ class EventSubmissionShortcode {
 
         if (is_wp_error($post_id)) {
             error_log('Error creating event post: ' . $post_id->get_error_message());
-            wc_add_notice('Error submitting event. Please try again later.', 'error');
+            if (function_exists('wc_add_notice')) {
+                wc_add_notice('Error submitting event. Please try again later.', 'error');
+            } else {
+                wp_die('Error submitting event. Please try again later.');
+            }
             return;
         }
 
@@ -138,15 +162,23 @@ class EventSubmissionShortcode {
 
             if (is_wp_error($attachment_id)) {
                 error_log('Error uploading image: ' . $attachment_id->get_error_message());
-                wc_add_notice('Error uploading image. Please try again.', 'error');
+                if (function_exists('wc_add_notice')) {
+                    wc_add_notice('Error uploading image. Please try again.', 'error');
+                } else {
+                    wp_die('Error uploading image. Please try again.');
+                }
             } else {
                 set_post_thumbnail($post_id, $attachment_id);
             }
         }
 
         // Success message and redirect
-        wc_add_notice('Event submitted successfully! It is awaiting review.', 'success');
-        wp_safe_redirect(home_url('/thank-you-page')); // Replace with your desired URL
-        exit;
+        if (function_exists('wc_add_notice')) {
+            wc_add_notice('Event submitted successfully! It is awaiting review.', 'success');
+            wp_safe_redirect(home_url('/thank-you-page')); // Replace with your desired URL
+            exit;
+        } else {
+            wp_die('Event submitted successfully! It is awaiting review.');
+        }
     }
 }
