@@ -20,7 +20,7 @@ class AdminColumnsOrganisation
                 $new['ead_org_name']       = __( 'Name', 'artpulse' );
                 $new['ead_org_description']= __( 'Description', 'artpulse' );
                 $new['ead_org_type']       = __( 'Type', 'artpulse' );
-                $new['ead_org_website']    = __( 'Website', 'artpulse' );
+                $new['ead_org_website_url']    = __( 'Website', 'artpulse' );
                 $new['ead_org_banner_url'] = __( 'Banner', 'artpulse' );
                 $new['ead_org_geo_lat']    = __( 'Latitude', 'artpulse' );
                 $new['ead_org_geo_lng']    = __( 'Longitude', 'artpulse' );
@@ -60,8 +60,8 @@ class AdminColumnsOrganisation
                 echo esc_html( $type ?: '—' );
                 break;
 
-            case 'ead_org_website':
-                $url = get_post_meta( $post_id, 'ead_org_website', true );
+            case 'ead_org_website_url':
+                $url = get_post_meta( $post_id, 'ead_org_website_url', true );
                 if ( $url ) {
                     printf( '<a href="%1$s" target="_blank">%2$s</a>', esc_url( $url ), esc_html( $url ) );
                 } else {

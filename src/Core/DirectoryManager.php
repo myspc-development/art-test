@@ -83,8 +83,8 @@ class DirectoryManager {
                 $item['dimensions'] = get_post_meta($p->ID, '_ap_artwork_dimensions', true);
                 $item['materials']  = get_post_meta($p->ID, '_ap_artwork_materials', true);
             } elseif ($type === 'org') {
-                $item['address'] = get_post_meta($p->ID, '_ap_org_address', true);
-                $item['website'] = get_post_meta($p->ID, '_ap_org_website', true);
+                $item['address'] = get_post_meta($p->ID, 'ead_org_street_address', true);
+                $item['website'] = get_post_meta($p->ID, 'ead_org_website_url', true);
             }
             return $item;
         }, $posts);

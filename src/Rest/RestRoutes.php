@@ -73,8 +73,8 @@ class RestRoutes
     public static function get_orgs()
     {
         return self::get_posts_with_meta('artpulse_org', [
-            'address' => '_ap_org_address',
-            'website' => '_ap_org_website',
+            'address' => 'ead_org_street_address',
+            'website' => 'ead_org_website_url',
         ]);
     }
 

@@ -6,9 +6,9 @@ while ( have_posts() ) : the_post(); ?>
   </div>
   <h1 class="entry-title"><?php the_title(); ?></h1>
   <div class="entry-content"><?php the_content(); ?></div>
-  <?php 
-    $address = get_post_meta(get_the_ID(),'_ap_org_address',true);
-    $website = get_post_meta(get_the_ID(),'_ap_org_website',true);
+  <?php
+    $address = get_post_meta(get_the_ID(),'ead_org_street_address',true);
+    $website = get_post_meta(get_the_ID(),'ead_org_website_url',true);
     if($address||$website): ?>
     <ul class="portfolio-meta">
       <?php if($address): ?>

@@ -104,7 +104,7 @@ class MetaFullTextSearch {
                     'ead_org_type',
                     'ead_org_description',
                     'ead_org_city',
-                    'ead_org_website',
+                    'ead_org_website_url',
                 ];
             default:
                 return [];
