@@ -62,6 +62,7 @@ class OrganizationDashboardShortcode {
                 }
                 ?>
             </ul>
+            <?php echo do_shortcode('[ap_org_profile_edit]'); ?>
         </div>
         <?php
         return ob_get_clean();

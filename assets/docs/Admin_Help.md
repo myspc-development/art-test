@@ -17,6 +17,7 @@ Welcome to ArtPulse! This short guide outlines the main tools available for site
 ## Organization Tools
 - Organizations have their own dashboard with linked artists, artworks and events.
 - Billing history and membership level are visible on each organization profile.
+- Use `[ap_org_profile_edit]` to let organizations update their profile details.
 
 ## Shortcodes
 Use these codes on any page to display forms or dashboards:
@@ -27,6 +28,7 @@ Use these codes on any page to display forms or dashboards:
 - `[ap_submit_event]` – event submission form
 - `[ap_filtered_list]` – output a filtered list of posts
 - `[ap_profile_edit]` – user profile editing form
+- `[ap_org_profile_edit]` – edit an organization profile
 - `[ap_user_profile]` – show a user profile
 - `[ap_submission_form]` – generic submission form
 - `[ap_submit_organization]` – organization submission form
