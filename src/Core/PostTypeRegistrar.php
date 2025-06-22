@@ -103,6 +103,78 @@ class PostTypeRegistrar
             'type'         => 'string',
         ]);
 
+        register_post_meta('artpulse_event', 'event_start_date', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_end_date', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'venue_name', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_street_address', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_city', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_state', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_country', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_postcode', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_organizer_name', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_organizer_email', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_banner_id', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'integer',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_featured', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+        ]);
+
         register_post_meta('artpulse_artist', '_ap_artist_bio', [
             'show_in_rest' => true,
             'single'       => true,
