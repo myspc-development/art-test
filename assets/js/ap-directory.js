@@ -2,11 +2,13 @@
   document.querySelectorAll('.ap-directory').forEach(initDirectory);
 
   function initDirectory(container){
-    const type       = container.dataset.type;
-    const results    = container.querySelector('.ap-directory-results');
-    const limitInput = container.querySelector('.ap-filter-limit');
-    const applyBtn   = container.querySelector('.ap-filter-apply');
-    const selectEl   = container.querySelector('.ap-filter-event-type');
+    const type         = container.dataset.type;
+    const results      = container.querySelector('.ap-directory-results');
+    const limitInput   = container.querySelector('.ap-filter-limit');
+    const applyBtn     = container.querySelector('.ap-filter-apply');
+    const selectEl     = container.querySelector('.ap-filter-event-type');
+    const cityInput    = container.querySelector('.ap-filter-city');
+    const regionInput  = container.querySelector('.ap-filter-region');
 
     if (!results || !limitInput || !applyBtn) return; // Safety check
 
@@ -41,6 +43,12 @@
       });
       if ( selectEl && selectEl.value ) {
         params.append('event_type', selectEl.value);
+      }
+      if ( cityInput && cityInput.value ) {
+        params.append('city', cityInput.value);
+      }
+      if ( regionInput && regionInput.value ) {
+        params.append('region', regionInput.value);
       }
 
       wp.apiFetch({ path: '/artpulse/v1/filter?' + params.toString() })
@@ -125,7 +133,9 @@ function createFollowButton(post, objectType) {
         detail: {
           type,
           limit: limitInput.value,
-          event_type: selectEl?.value || ''
+          event_type: selectEl?.value || '',
+          city: cityInput?.value || '',
+          region: regionInput?.value || ''
         }
       }));
     });

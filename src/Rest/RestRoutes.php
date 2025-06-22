@@ -2,6 +2,8 @@
 
 namespace ArtPulse\Rest;
 
+use WP_REST_Request;
+
 class RestRoutes
 {
     public static function register()
@@ -12,6 +14,10 @@ class RestRoutes
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_events'],
                 'permission_callback' => '__return_true',
+                'args'                => [
+                    'city'   => [ 'type' => 'string', 'required' => false ],
+                    'region' => [ 'type' => 'string', 'required' => false ],
+                ],
             ]);
 
             register_rest_route('artpulse/v1', '/artists', [
@@ -47,12 +53,36 @@ class RestRoutes
         }
     }
 
-    public static function get_events()
+    public static function get_events(\WP_REST_Request $request)
     {
+        $city   = sanitize_text_field($request->get_param('city'));
+        $region = sanitize_text_field($request->get_param('region'));
+
+        $args = [];
+        $meta_query = [];
+
+        if ($city) {
+            $meta_query[] = [
+                'key'   => 'event_city',
+                'value' => $city,
+            ];
+        }
+
+        if ($region) {
+            $meta_query[] = [
+                'key'   => 'event_state',
+                'value' => $region,
+            ];
+        }
+
+        if (!empty($meta_query)) {
+            $args['meta_query'] = $meta_query;
+        }
+
         return self::get_posts_with_meta('artpulse_event', [
             'event_date'     => '_ap_event_date',
             'event_location' => '_ap_event_location',
-        ]);
+        ], $args);
     }
 
     public static function get_artists()
@@ -80,23 +110,26 @@ class RestRoutes
         ]);
     }
 
-    private static function get_posts_with_meta($post_type, $meta_keys = [])
+    private static function get_posts_with_meta($post_type, $meta_keys = [], array $query_args = [])
     {
         $transient_key = 'ap_rest_posts_' . $post_type;
-        $cached        = get_transient($transient_key);
+        $use_cache     = empty($query_args);
 
-        if (false !== $cached) {
-            return $cached;
+        if ($use_cache) {
+            $cached = get_transient($transient_key);
+            if (false !== $cached) {
+                return $cached;
+            }
         }
 
-        $posts  = get_posts([
+        $posts  = get_posts(array_merge([
             'post_type'      => $post_type,
             'post_status'    => 'publish',
             'posts_per_page' => -1,
             // Fetch IDs only and skip FOUND_ROWS for a faster query.
             'fields'         => 'ids',
             'no_found_rows'  => true,
-        ]);
+        ], $query_args));
 
         $output = [];
 
@@ -115,7 +148,9 @@ class RestRoutes
             $output[] = $item;
         }
 
-        set_transient($transient_key, $output, HOUR_IN_SECONDS);
+        if ($use_cache) {
+            set_transient($transient_key, $output, HOUR_IN_SECONDS);
+        }
 
         return $output;
     }
