@@ -38,7 +38,7 @@ class OrganizationEventForm {
             <input id="ap_org_event_date" type="date" name="event_date" required>
 
             <label for="ap_org_event_location">Location*</label>
-            <input id="ap_org_event_location" type="text" name="event_location" required>
+            <input id="ap_org_event_location" class="ap-google-autocomplete" type="text" name="event_location" required>
 
             <label for="ap_org_event_type">Event Type</label>
             <select id="ap_org_event_type" name="event_type">

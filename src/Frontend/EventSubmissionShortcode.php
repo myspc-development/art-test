@@ -44,7 +44,7 @@ class EventSubmissionShortcode {
             <input id="ap_event_date" type="date" name="event_date" required>
 
             <label for="ap_event_location">Location</label>
-            <input id="ap_event_location" type="text" name="event_location">
+            <input id="ap_event_location" class="ap-google-autocomplete" type="text" name="event_location">
 
             <label for="ap_event_org">Organization</label>
             <select id="ap_event_org" name="event_org" required>

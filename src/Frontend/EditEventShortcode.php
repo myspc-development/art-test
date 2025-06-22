@@ -55,7 +55,7 @@ class EditEventShortcode {
             </p>
             <p>
                 <label>Location<br>
-                    <input type="text" name="location" value="<?php echo $location; ?>">
+                    <input type="text" name="location" class="ap-google-autocomplete" value="<?php echo $location; ?>">
                 </label>
             </p>
             <p>
