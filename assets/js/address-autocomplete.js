@@ -1,8 +1,15 @@
 (function(){
   async function loadData(){
     if(!window.APLocation) return {countries:[],states:[],cities:[]};
-    const res = await fetch(APLocation.datasetUrl);
-    return res.json();
+    const [countriesRes, statesRes, citiesRes] = await Promise.all([
+      fetch(APLocation.countriesUrl),
+      fetch(APLocation.statesUrl),
+      fetch(APLocation.citiesUrl)
+    ]);
+    const countries = countriesRes.ok ? await countriesRes.json() : [];
+    const states = statesRes.ok ? await statesRes.json() : [];
+    const cities = citiesRes.ok ? await citiesRes.json() : [];
+    return {countries, states, cities};
   }
 
   function createList(input){

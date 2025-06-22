@@ -82,28 +82,64 @@ class LocationRestController {
     }
 
     private static function merge_into_dataset(string $key, array $items): void {
-        $file = ARTPULSE_PLUGIN_DIR . '/assets/data/locations.json';
+        switch ($key) {
+            case 'countries':
+                $file = ARTPULSE_PLUGIN_DIR . '/data/countries.json';
+                break;
+            case 'states':
+                $file = ARTPULSE_PLUGIN_DIR . '/data/states.json';
+                break;
+            case 'cities':
+                $file = ARTPULSE_PLUGIN_DIR . '/data/cities.json';
+                break;
+            default:
+                return;
+        }
+
         if (!file_exists($file)) {
             return;
         }
+
         $current = json_decode(file_get_contents($file), true);
-        if (!isset($current[$key]) || !is_array($current[$key])) {
-            $current[$key] = [];
+        if (!is_array($current)) {
+            $current = [];
         }
+
         foreach ($items as $item) {
             $exists = false;
-            foreach ($current[$key] as $existing) {
-                if ($key === 'states' && $existing['code'] === $item['code'] && $existing['country'] === $item['country']) {
-                    $exists = true; break;
+            foreach ($current as $existing) {
+                if (
+                    $key === 'countries' && isset($existing['code']) && $existing['code'] === $item['code']
+                ) {
+                    $exists = true;
+                    break;
                 }
-                if ($key === 'cities' && $existing['name'] === $item['name'] && $existing['state'] === $item['state'] && $existing['country'] === $item['country']) {
-                    $exists = true; break;
+                if (
+                    $key === 'states' &&
+                    isset($existing['code'], $existing['country']) &&
+                    $existing['code'] === $item['code'] &&
+                    $existing['country'] === $item['country']
+                ) {
+                    $exists = true;
+                    break;
+                }
+                if (
+                    $key === 'cities' &&
+                    isset($existing['name'], $existing['state'], $existing['country']) &&
+                    $existing['name'] === $item['name'] &&
+                    $existing['state'] === $item['state'] &&
+                    $existing['country'] === $item['country']
+                ) {
+                    $exists = true;
+                    break;
                 }
             }
+
             if (!$exists) {
-                $current[$key][] = $item;
+                $current[] = $item;
             }
         }
+
         file_put_contents($file, json_encode($current, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
 }

@@ -230,7 +230,9 @@ class EnqueueAssets {
             true
         );
         wp_localize_script('ap-address-autocomplete', 'APLocation', [
-            'datasetUrl'       => $plugin_url . '/assets/data/locations.json',
+            'countriesUrl'     => $plugin_url . '/data/countries.json',
+            'statesUrl'        => $plugin_url . '/data/states.json',
+            'citiesUrl'        => $plugin_url . '/data/cities.json',
             'geonamesEndpoint' => esc_url_raw(rest_url('artpulse/v1/location/geonames')),
             'googleEndpoint'   => esc_url_raw(rest_url('artpulse/v1/location/google')),
         ]);
