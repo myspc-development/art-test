@@ -5,7 +5,8 @@ namespace ArtPulse\Frontend;
 class OrganizationDashboardShortcode {
     public static function register() {
         add_shortcode('ap_org_dashboard', [self::class, 'render']);
-        add_action('wp_ajax_ap_add_event', [self::class, 'handle_ajax_add_event']);
+        // Match the JS action in ap-org-dashboard.js
+        add_action('wp_ajax_ap_add_org_event', [self::class, 'handle_ajax_add_event']);
     }
 
     public static function render($atts) {
@@ -21,9 +22,9 @@ class OrganizationDashboardShortcode {
             <h2>Organization Events</h2>
             <button id="ap-add-event-btn">Add New Event</button>
 
-            <div id="ap-event-modal" style="display:none">
-                <div class="ap-form-messages" role="status" aria-live="polite"></div>
-                <form id="ap-event-form">
+            <div id="ap-org-modal" style="display:none">
+                <div id="ap-status-message" class="ap-form-messages" role="status" aria-live="polite"></div>
+                <form id="ap-org-event-form">
                     <label for="ap_event_title">Event Title</label>
                     <input id="ap_event_title" type="text" name="ap_event_title" required>
 
@@ -48,7 +49,7 @@ class OrganizationDashboardShortcode {
                 </form>
             </div>
 
-            <ul id="ap-event-list">
+            <ul id="ap-org-events">
                 <?php
                 $events = get_posts([
                     'post_type' => 'artpulse_event',
@@ -103,6 +104,6 @@ class OrganizationDashboardShortcode {
         }
         $html = ob_get_clean();
 
-        wp_send_json_success(['html' => $html]);
+        wp_send_json_success(['updated_list_html' => $html]);
     }
 }
