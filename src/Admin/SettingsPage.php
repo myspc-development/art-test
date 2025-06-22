@@ -210,16 +210,31 @@ class SettingsPage
         $webhook_status = get_option('artpulse_webhook_status', 'Unknown');
         $last_event     = get_option('artpulse_webhook_last_event', []);
         $log            = get_option('artpulse_webhook_log', []);
+        $current_tab    = sanitize_key($_GET['tab'] ?? 'general');
+        $base_url       = admin_url('admin.php?page=artpulse-settings');
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
+            <h2 class="nav-tab-wrapper">
+                <a href="<?php echo esc_url($base_url . '&tab=general'); ?>" class="nav-tab <?php echo $current_tab === 'general' ? 'nav-tab-active' : ''; ?>">
+                    <?php esc_html_e('General', 'artpulse'); ?>
+                </a>
+                <a href="<?php echo esc_url($base_url . '&tab=location'); ?>" class="nav-tab <?php echo $current_tab === 'location' ? 'nav-tab-active' : ''; ?>">
+                    <?php esc_html_e('Location APIs', 'artpulse'); ?>
+                </a>
+            </h2>
             <form method="post" action="options.php">
                 <?php
                 settings_fields('artpulse_settings_group');
-                do_settings_sections('artpulse-settings');
+                if ($current_tab === 'location') {
+                    do_settings_sections('artpulse-location');
+                } else {
+                    do_settings_sections('artpulse-settings');
+                }
                 submit_button();
                 ?>
             </form>
+            <?php if ($current_tab === 'general') : ?>
             <hr>
             <h2><?php esc_html_e('System Status', 'artpulse'); ?></h2>
             <p>
@@ -261,6 +276,7 @@ class SettingsPage
                 <?php wp_nonce_field('ap_clear_webhook_log_action'); ?>
                 <input type="submit" name="ap_clear_webhook_log" class="button button-secondary" value="<?php esc_attr_e('Clear Webhook Log', 'artpulse'); ?>">
             </form>
+            <?php endif; ?>
         </div>
         <?php
     }
@@ -277,7 +293,14 @@ class SettingsPage
             '__return_false',
             'artpulse-settings'
         );
-        $fields = [
+        add_settings_section(
+            'ap_location_api_section',
+            __('Location APIs', 'artpulse'),
+            '__return_false',
+            'artpulse-location'
+        );
+
+        $general_fields = [
             'basic_fee' => [
                 'label' => __('Basic Member Fee ($)', 'artpulse'),
                 'desc'  => __('Monthly cost for Basic members. Leave blank to disable.', 'artpulse'),
@@ -315,13 +338,37 @@ class SettingsPage
                 'desc'  => __('Adds a service worker for basic offline caching.', 'artpulse'),
             ]
         ];
-        foreach ($fields as $key => $config) {
+        foreach ($general_fields as $key => $config) {
             add_settings_field(
                 $key,
                 $config['label'],
                 [self::class, 'renderField'],
                 'artpulse-settings',
                 'ap_general_section',
+                [
+                    'label_for'   => $key,
+                    'description' => $config['desc'] ?? ''
+                ]
+            );
+        }
+
+        $location_fields = [
+            'geonames_username' => [
+                'label' => __('Geonames Username', 'artpulse'),
+                'desc'  => __('Username for querying the Geonames API.', 'artpulse'),
+            ],
+            'google_places_key' => [
+                'label' => __('Google Places API Key', 'artpulse'),
+                'desc'  => __('Key for Google Places requests.', 'artpulse'),
+            ],
+        ];
+        foreach ($location_fields as $key => $config) {
+            add_settings_field(
+                $key,
+                $config['label'],
+                [self::class, 'renderField'],
+                'artpulse-location',
+                'ap_location_api_section',
                 [
                     'label_for'   => $key,
                     'description' => $config['desc'] ?? ''
