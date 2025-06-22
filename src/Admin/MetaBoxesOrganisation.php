@@ -35,13 +35,20 @@ class MetaBoxesOrganisation {
             switch ($type) {
                 case 'text':
                 case 'url':
-                case 'email': // Though not used in current fields
-                case 'date':  // Though not used in current fields
-                case 'number': // For lat/lng, though text is also fine
+                case 'email':
+                case 'date':
+                case 'number':
+                case 'time':
                     echo '<input type="' . esc_attr($type) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" />';
                     break;
                 case 'textarea':
                     echo '<textarea name="' . esc_attr($key) . '" rows="4" class="large-text">' . esc_textarea($value) . '</textarea>';
+                    break;
+                case 'checkbox':
+                    echo '<input type="checkbox" name="' . esc_attr($key) . '" value="1" ' . checked($value, '1', false) . ' />';
+                    break;
+                case 'media':
+                    echo '<input type="number" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" placeholder="' . __('Media Library ID', 'artpulse-management') . '" />';
                     break;
                 default:
                     echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" />';
@@ -61,8 +68,8 @@ class MetaBoxesOrganisation {
 
         $fields = self::get_registered_org_meta_fields();
         foreach ($fields as $field => $args) {
-            $value = isset($_POST[$field]) ? $_POST[$field] : ''; // Default to empty string
-            $type = $args[0];
+            $value = isset($_POST[$field]) ? $_POST[$field] : '';
+            $type  = $args[0];
 
             // Validation based on type
             if ($type === 'url' && !empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
@@ -79,9 +86,16 @@ class MetaBoxesOrganisation {
                 $sanitized_value = sanitize_textarea_field($value);
             } elseif ($type === 'url') {
                 $sanitized_value = esc_url_raw($value);
+            } elseif ($type === 'checkbox') {
+                $sanitized_value = isset($_POST[$field]) ? '1' : '0';
             } else {
                 $sanitized_value = sanitize_text_field($value);
             }
+
+            if ($type === 'media' && !empty($sanitized_value) && !is_numeric($sanitized_value)) {
+                continue;
+            }
+
             update_post_meta($post_id, $field, $sanitized_value);
         }
     }
@@ -105,7 +119,7 @@ class MetaBoxesOrganisation {
                     }
                     return update_post_meta($object->ID, $key, $sanitized_value);
                 },
-                'schema'          => ['type' => ($args[0] === 'url' || $args[0] === 'textarea') ? 'string' : 'string' ] // Adjust schema type if needed
+                'schema'          => ['type' => $args[0] === 'checkbox' ? 'boolean' : ($args[0] === 'media' ? 'integer' : 'string')]
             ]);
         }
     }
@@ -138,14 +152,51 @@ class MetaBoxesOrganisation {
     private static function get_registered_org_meta_fields() {
         // Note: Address fields are handled by MetaBoxesAddress.php
         return [
-            'ead_org_name'        => ['text', __('Organization Name', 'artpulse-management')],
-            'ead_org_description' => ['textarea', __('Description', 'artpulse-management')],
-            'ead_org_type'        => ['text', __('Type (e.g. Museum, Gallery)', 'artpulse-management')], // Consider a select dropdown if types are predefined
-            'ead_org_website'     => ['url', __('Website', 'artpulse-management')],
-            'ead_org_logo_url'    => ['url', __('Logo Image URL', 'artpulse-management')], // Consider using Media Library ID instead
-            'ead_org_banner_url'  => ['url', __('Banner Image URL', 'artpulse-management')], // Consider using Media Library ID instead
-            'ead_org_geo_lat'     => ['text', __('Latitude', 'artpulse-management')], // 'number' type could also be used
-            'ead_org_geo_lng'     => ['text', __('Longitude', 'artpulse-management')] // 'number' type could also be used
+            'ead_org_name'                   => ['text',     __('Organization Name', 'artpulse-management')],
+            'ead_org_description'            => ['textarea', __('Description', 'artpulse-management')],
+            'ead_org_website_url'            => ['url',      __('Website URL', 'artpulse-management')],
+            'ead_org_logo_id'                => ['media',    __('Logo', 'artpulse-management')],
+            'ead_org_banner_id'              => ['media',    __('Banner', 'artpulse-management')],
+            'ead_org_type'                   => ['select',   __('Organization Type', 'artpulse-management')],
+            'ead_org_size'                   => ['select',   __('Organization Size', 'artpulse-management')],
+            'ead_org_facebook_url'           => ['url',      __('Facebook URL', 'artpulse-management')],
+            'ead_org_twitter_url'            => ['url',      __('Twitter URL', 'artpulse-management')],
+            'ead_org_instagram_url'          => ['url',      __('Instagram URL', 'artpulse-management')],
+            'ead_org_linkedin_url'           => ['url',      __('LinkedIn URL', 'artpulse-management')],
+            'ead_org_artsy_url'              => ['url',      __('Artsy URL', 'artpulse-management')],
+            'ead_org_pinterest_url'          => ['url',      __('Pinterest URL', 'artpulse-management')],
+            'ead_org_youtube_url'            => ['url',      __('YouTube URL', 'artpulse-management')],
+            'ead_org_primary_contact_name'   => ['text',     __('Primary Contact Name', 'artpulse-management')],
+            'ead_org_primary_contact_email'  => ['email',    __('Primary Contact Email', 'artpulse-management')],
+            'ead_org_primary_contact_phone'  => ['text',     __('Primary Contact Phone', 'artpulse-management')],
+            'ead_org_primary_contact_role'   => ['text',     __('Primary Contact Role', 'artpulse-management')],
+            'ead_org_street_address'         => ['text',     __('Street Address', 'artpulse-management')],
+            'ead_org_postal_address'         => ['text',     __('Postal Address', 'artpulse-management')],
+            'ead_org_venue_address'          => ['text',     __('Venue Address', 'artpulse-management')],
+            'ead_org_venue_email'            => ['email',    __('Venue Email', 'artpulse-management')],
+            'ead_org_venue_phone'            => ['text',     __('Venue Phone', 'artpulse-management')],
+            // Opening hours
+            'ead_org_monday_start_time'      => ['time',     __('Monday Opening Time', 'artpulse-management')],
+            'ead_org_monday_end_time'        => ['time',     __('Monday Closing Time', 'artpulse-management')],
+            'ead_org_monday_closed'          => ['checkbox', __('Closed on Monday', 'artpulse-management')],
+            'ead_org_tuesday_start_time'     => ['time',     __('Tuesday Opening Time', 'artpulse-management')],
+            'ead_org_tuesday_end_time'       => ['time',     __('Tuesday Closing Time', 'artpulse-management')],
+            'ead_org_tuesday_closed'         => ['checkbox', __('Closed on Tuesday', 'artpulse-management')],
+            'ead_org_wednesday_start_time'   => ['time',     __('Wednesday Opening Time', 'artpulse-management')],
+            'ead_org_wednesday_end_time'     => ['time',     __('Wednesday Closing Time', 'artpulse-management')],
+            'ead_org_wednesday_closed'       => ['checkbox', __('Closed on Wednesday', 'artpulse-management')],
+            'ead_org_thursday_start_time'    => ['time',     __('Thursday Opening Time', 'artpulse-management')],
+            'ead_org_thursday_end_time'      => ['time',     __('Thursday Closing Time', 'artpulse-management')],
+            'ead_org_thursday_closed'        => ['checkbox', __('Closed on Thursday', 'artpulse-management')],
+            'ead_org_friday_start_time'      => ['time',     __('Friday Opening Time', 'artpulse-management')],
+            'ead_org_friday_end_time'        => ['time',     __('Friday Closing Time', 'artpulse-management')],
+            'ead_org_friday_closed'          => ['checkbox', __('Closed on Friday', 'artpulse-management')],
+            'ead_org_saturday_start_time'    => ['time',     __('Saturday Opening Time', 'artpulse-management')],
+            'ead_org_saturday_end_time'      => ['time',     __('Saturday Closing Time', 'artpulse-management')],
+            'ead_org_saturday_closed'        => ['checkbox', __('Closed on Saturday', 'artpulse-management')],
+            'ead_org_sunday_start_time'      => ['time',     __('Sunday Opening Time', 'artpulse-management')],
+            'ead_org_sunday_end_time'        => ['time',     __('Sunday Closing Time', 'artpulse-management')],
+            'ead_org_sunday_closed'          => ['checkbox', __('Closed on Sunday', 'artpulse-management')],
         ];
     }
 }

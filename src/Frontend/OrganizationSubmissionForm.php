@@ -22,15 +22,19 @@ class OrganizationSubmissionForm {
             </p>
             <p>
                 <label for="ap-org-description"><?php esc_html_e('Description', 'artpulse'); ?></label><br>
-                <textarea id="ap-org-description" name="description" required></textarea>
+                <textarea id="ap-org-description" name="ead_org_description" required></textarea>
             </p>
             <p>
                 <label for="ap-org-website"><?php esc_html_e('Website', 'artpulse'); ?></label><br>
-                <input id="ap-org-website" type="url" name="org_website" required />
+                <input id="ap-org-website" type="url" name="ead_org_website_url" required />
             </p>
             <p>
-                <label for="ap-org-email"><?php esc_html_e('Email', 'artpulse'); ?></label><br>
-                <input id="ap-org-email" type="email" name="org_email" required />
+                <label for="ap-org-email"><?php esc_html_e('Primary Contact Email', 'artpulse'); ?></label><br>
+                <input id="ap-org-email" type="email" name="ead_org_primary_contact_email" required />
+            </p>
+            <p>
+                <label for="ap-org-contact-name"><?php esc_html_e('Primary Contact Name', 'artpulse'); ?></label><br>
+                <input id="ap-org-contact-name" type="text" name="ead_org_primary_contact_name" />
             </p>
             <p>
                 <label for="ap-org-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label><br>

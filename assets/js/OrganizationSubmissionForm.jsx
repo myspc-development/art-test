@@ -45,20 +45,25 @@ export default function OrganizationSubmissionForm() {
         imageIds.push(id);
       }
 
+      const payload = { post_type: 'artpulse_org', title };
+      const fd = new FormData(e.target);
+      fd.delete('title');
+      fd.delete('images[]');
+      for (const [key, value] of fd.entries()) {
+        payload[key] = value;
+      }
+      document.querySelectorAll('form input[type="checkbox"]').forEach(cb => {
+        if (!fd.has(cb.name)) payload[cb.name] = '0';
+      });
+      payload.image_ids = imageIds;
+
       const res = await fetch(APSubmission.endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-WP-Nonce': APSubmission.nonce
         },
-        body: JSON.stringify({
-          post_type: 'artpulse_org',
-          title,
-          org_description: description,
-          org_website: website,
-          org_email: email,
-          image_ids: imageIds
-        })
+        body: JSON.stringify(payload)
       });
 
       const json = await res.json();
