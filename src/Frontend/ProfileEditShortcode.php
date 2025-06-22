@@ -21,6 +21,9 @@ class ProfileEditShortcode {
         $twitter = get_user_meta($user_id, 'ap_social_twitter', true);
         $instagram = get_user_meta($user_id, 'ap_social_instagram', true);
         $website = get_user_meta($user_id, 'ap_social_website', true);
+        $country = get_user_meta($user_id, 'ap_country', true);
+        $state   = get_user_meta($user_id, 'ap_state', true);
+        $city    = get_user_meta($user_id, 'ap_city', true);
 
         $output = '';
         if (isset($_GET['ap_updated'])) {
@@ -59,6 +62,19 @@ class ProfileEditShortcode {
                 <input type="url" name="ap_social_website" id="ap_social_website" value="<?php echo esc_url($website); ?>">
             </p>
             <p>
+                <label for="ap_country">Country</label><br>
+                <select id="ap_country" class="ap-address-country ap-address-input" name="ap_country" data-selected="<?php echo esc_attr($country); ?>"></select>
+            </p>
+            <p>
+                <label for="ap_state">State/Province</label><br>
+                <select id="ap_state" class="ap-address-state ap-address-input" name="ap_state" data-selected="<?php echo esc_attr($state); ?>"></select>
+            </p>
+            <p>
+                <label for="ap_city">City</label><br>
+                <select id="ap_city" class="ap-address-city ap-address-input" name="ap_city" data-selected="<?php echo esc_attr($city); ?>"></select>
+            </p>
+            <input type="hidden" name="address_components" id="ap-profile-address-components" value="<?php echo esc_attr(json_encode(['country' => $country, 'state' => $state, 'city' => $city])); ?>">
+            <p>
                 <input type="submit" name="ap_profile_submit" value="Update Profile">
             </p>
         </form>
@@ -81,6 +97,17 @@ class ProfileEditShortcode {
         $twitter = esc_url_raw($_POST['ap_social_twitter']);
         $instagram = esc_url_raw($_POST['ap_social_instagram']);
         $website = esc_url_raw($_POST['ap_social_website']);
+        $components = [];
+        if (!empty($_POST['address_components'])) {
+            $decoded = json_decode(stripslashes($_POST['address_components']), true);
+            if (is_array($decoded)) {
+                $components = $decoded;
+            }
+        }
+
+        $country = isset($components['country']) ? sanitize_text_field($components['country']) : '';
+        $state   = isset($components['state']) ? sanitize_text_field($components['state']) : '';
+        $city    = isset($components['city']) ? sanitize_text_field($components['city']) : '';
 
         wp_update_user([
             'ID' => $user_id,
@@ -91,6 +118,9 @@ class ProfileEditShortcode {
         update_user_meta($user_id, 'ap_social_twitter', $twitter);
         update_user_meta($user_id, 'ap_social_instagram', $instagram);
         update_user_meta($user_id, 'ap_social_website', $website);
+        update_user_meta($user_id, 'ap_country', $country);
+        update_user_meta($user_id, 'ap_state', $state);
+        update_user_meta($user_id, 'ap_city', $city);
 
         // Handle Avatar Upload
         if (!empty($_FILES['ap_avatar']['tmp_name'])) {
