@@ -108,6 +108,7 @@ class Plugin
         \ArtPulse\Frontend\OrganizationSubmissionForm::register();
         \ArtPulse\Frontend\UserProfileShortcode::register();
         \ArtPulse\Frontend\ProfileEditShortcode::register();
+        \ArtPulse\Frontend\OrgProfileEditShortcode::register();
         \ArtPulse\Frontend\PortfolioBuilder::register();
         \ArtPulse\Admin\MetaBoxesRelationship::register();
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
