@@ -14,6 +14,9 @@ class OrganizationSubmissionForm {
         wp_enqueue_script('ap-org-submission-js');
 
         $fields = \ArtPulse\Admin\MetaBoxesOrganisation::get_registered_org_meta_fields();
+        // Avoid duplicate name input; the title field already captures the
+        // organization name.
+        unset($fields['ead_org_name']);
 
         ob_start();
         ?>
