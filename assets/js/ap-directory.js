@@ -50,7 +50,19 @@
             results.innerHTML = '<div class="ap-empty">No results found.</div>';
             return;
           }
+
+          let currentLetter = '';
+
           posts.forEach(post => {
+            const firstLetter = (post.title || '').charAt(0).toUpperCase();
+            if (firstLetter && firstLetter !== currentLetter) {
+              currentLetter = firstLetter;
+              const heading = document.createElement('h2');
+              heading.className = 'ap-letter-heading';
+              heading.textContent = currentLetter;
+              results.appendChild(heading);
+            }
+
             const div = document.createElement('div');
             div.className = 'portfolio-item';
 

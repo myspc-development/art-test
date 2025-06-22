@@ -91,6 +91,13 @@
   grid-column: 1 / -1;
 }
 
+.ap-letter-heading {
+  grid-column: 1 / -1;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-size: 1.2em;
+}
+
 .ap-spinner {
   display: inline-block;
   width: 20px;

@@ -61,6 +61,8 @@ class DirectoryManager {
         $args = [
             'post_type'      => 'artpulse_' . $type,
             'posts_per_page' => $limit,
+            'orderby'        => 'title',
+            'order'          => 'ASC',
         ];
 
         $posts = get_posts($args);
