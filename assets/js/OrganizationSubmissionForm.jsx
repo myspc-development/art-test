@@ -107,11 +107,10 @@ export default function OrganizationSubmissionForm() {
 
       <input
         className="w-full p-2 border rounded"
-        type="url"
+        type="text"
         placeholder="Website"
         value={website}
         onChange={e => setWebsite(e.target.value)}
-        required
       />
 
       <input
