@@ -11,6 +11,22 @@
   color: #333;
 }
 
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .ap-user-dashboard {
+    padding: 1rem;
+  }
+
+  .ap-user-dashboard .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ap-user-dashboard .dashboard-nav {
+    flex-direction: column;
+  }
+}
+
 .ap-user-dashboard h1,
 .ap-user-dashboard h2,
 .ap-user-dashboard h3 {
