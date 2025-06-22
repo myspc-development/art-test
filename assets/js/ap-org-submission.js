@@ -8,10 +8,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData(form);
     const title = formData.get('title');
-    const description = formData.get('description');
-    const website = formData.get('org_website');
-    const email = formData.get('org_email');
     const images = form.querySelector('#ap-org-images').files;
+
+    const submission = { post_type: 'artpulse_org', title };
+    formData.delete('title');
+    formData.delete('images[]');
+    for (const [key, value] of formData.entries()) {
+      submission[key] = value;
+    }
+    document.querySelectorAll('.ap-org-submission-form input[type="checkbox"]').forEach(cb => {
+      if (!formData.has(cb.name)) submission[cb.name] = '0';
+    });
 
     const imageIds = [];
     if (messageBox) messageBox.textContent = '';
@@ -22,14 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         imageIds.push(id);
       }
 
-      const submission = {
-        post_type: 'artpulse_org',
-        title: title,
-        org_description: description,
-        org_website: website,
-        org_email: email,
-        image_ids: imageIds
-      };
+      submission.image_ids = imageIds;
 
       const res = await fetch(APSubmission.endpoint, {
         method: 'POST',
