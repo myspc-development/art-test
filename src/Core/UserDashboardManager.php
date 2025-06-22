@@ -2,6 +2,7 @@
 namespace ArtPulse\Core;
 
 use WP_REST_Request;
+use ArtPulse\Community\FavoritesManager;
 
 class UserDashboardManager
 {
@@ -81,6 +82,7 @@ class UserDashboardManager
             'events'             => [],
             'artists'            => [],
             'artworks'           => [],
+            'favorite_events'    => [],
         ];
 
         foreach ( ['event','artist','artwork'] as $type ) {
@@ -96,6 +98,21 @@ class UserDashboardManager
                     'link'  => get_permalink($p),
                 ];
             }
+        }
+
+        // Fetch favorited events
+        $favorites = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
+        foreach ( $favorites as $fav ) {
+            $post = get_post($fav->object_id);
+            if ( ! $post ) {
+                continue;
+            }
+            $data['favorite_events'][] = [
+                'id'    => $post->ID,
+                'title' => $post->post_title,
+                'link'  => get_permalink($post),
+                'date'  => get_post_meta($post->ID, '_ap_event_date', true),
+            ];
         }
 
         return rest_ensure_response($data);
@@ -125,6 +142,8 @@ class UserDashboardManager
             <div id="ap-membership-info"></div>
             <h2><?php _e('Your Content','artpulse'); ?></h2>
             <div id="ap-user-content"></div>
+            <h2><?php _e('Your Favorited Events','artpulse'); ?></h2>
+            <div id="ap-favorite-events"></div>
         </div>
         <?php
         return ob_get_clean();
