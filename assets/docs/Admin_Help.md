@@ -18,6 +18,30 @@ Welcome to ArtPulse! This short guide outlines the main tools available for site
 - Organizations have their own dashboard with linked artists, artworks and events.
 - Billing history and membership level are visible on each organization profile.
 
+## Shortcodes
+Use these codes on any page to display forms or dashboards:
+
+- `[ap_org_dashboard]` – organization dashboard
+- `[ap_my_events]` – list events submitted by the user
+- `[ap_portfolio_builder]` – manage personal portfolio items
+- `[ap_submit_event]` – event submission form
+- `[ap_filtered_list]` – output a filtered list of posts
+- `[ap_profile_edit]` – user profile editing form
+- `[ap_user_profile]` – show a user profile
+- `[ap_submission_form]` – generic submission form
+- `[ap_submit_organization]` – organization submission form
+- `[ap_edit_event]` – edit an existing event
+- `[ap_notifications]` – display user notifications
+- `[ap_membership_account]` – membership account page
+- `[ap_my_follows]` – list followed items
+- `[ap_membership_purchase]` – link to purchase membership
+- `[ap_events]` – grid of events
+- `[ap_artists]` – grid of artists
+- `[ap_artworks]` – grid of artworks
+- `[ap_organizations]` – grid of organizations
+- `[ap_user_dashboard]` – user dashboard and content
+- `[ap_directory]` – filterable directory
+
 ## Troubleshooting
 - Check the **System Status** section on the Settings page to see the latest webhook events.
 - Clear the log or simulate a webhook event if needed for testing.
