@@ -15,9 +15,15 @@ class AdminColumnsOrganisation
         $new = [];
         foreach ( $columns as $key => $label ) {
             if ( 'cb' === $key ) {
-                $new['cb']             = $label;
-                $new['logo']           = __( 'Logo', 'artpulse' );
-                $new['ead_org_name']   = __( 'Name', 'artpulse' );
+                $new['cb']                 = $label;
+                $new['logo']               = __( 'Logo', 'artpulse' );
+                $new['ead_org_name']       = __( 'Name', 'artpulse' );
+                $new['ead_org_description']= __( 'Description', 'artpulse' );
+                $new['ead_org_type']       = __( 'Type', 'artpulse' );
+                $new['ead_org_website']    = __( 'Website', 'artpulse' );
+                $new['ead_org_banner_url'] = __( 'Banner', 'artpulse' );
+                $new['ead_org_geo_lat']    = __( 'Latitude', 'artpulse' );
+                $new['ead_org_geo_lng']    = __( 'Longitude', 'artpulse' );
             }
             $new[ $key ] = $label;
         }
@@ -43,12 +49,54 @@ class AdminColumnsOrganisation
                 $name = get_post_meta( $post_id, 'ead_org_name', true );
                 echo esc_html( $name ?: get_the_title( $post_id ) );
                 break;
+
+            case 'ead_org_description':
+                $desc = get_post_meta( $post_id, 'ead_org_description', true );
+                echo esc_html( $desc ?: '—' );
+                break;
+
+            case 'ead_org_type':
+                $type = get_post_meta( $post_id, 'ead_org_type', true );
+                echo esc_html( $type ?: '—' );
+                break;
+
+            case 'ead_org_website':
+                $url = get_post_meta( $post_id, 'ead_org_website', true );
+                if ( $url ) {
+                    printf( '<a href="%1$s" target="_blank">%2$s</a>', esc_url( $url ), esc_html( $url ) );
+                } else {
+                    echo '&mdash;';
+                }
+                break;
+
+            case 'ead_org_banner_url':
+                $url = get_post_meta( $post_id, 'ead_org_banner_url', true );
+                if ( $url ) {
+                    printf(
+                        '<a href="%1$s" target="_blank"><img src="%1$s" style="max-width:80px;height:auto;" /></a>',
+                        esc_url( $url )
+                    );
+                } else {
+                    echo '&mdash;';
+                }
+                break;
+
+            case 'ead_org_geo_lat':
+                $lat = get_post_meta( $post_id, 'ead_org_geo_lat', true );
+                echo esc_html( $lat ?: '—' );
+                break;
+
+            case 'ead_org_geo_lng':
+                $lng = get_post_meta( $post_id, 'ead_org_geo_lng', true );
+                echo esc_html( $lng ?: '—' );
+                break;
         }
     }
 
     public static function make_sortable( array $columns ): array
     {
         $columns['ead_org_name'] = 'ead_org_name';
+        $columns['ead_org_type'] = 'ead_org_type';
         return $columns;
     }
 }

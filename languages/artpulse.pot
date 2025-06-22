@@ -66,6 +66,30 @@ msgstr ""
 msgid "Logo"
 msgstr ""
 
+#: src/Admin/AdminColumnsOrganisation.php:21
+msgid "Description"
+msgstr ""
+
+#: src/Admin/AdminColumnsOrganisation.php:22
+msgid "Type"
+msgstr ""
+
+#: src/Admin/AdminColumnsOrganisation.php:23
+msgid "Website"
+msgstr ""
+
+#: src/Admin/AdminColumnsOrganisation.php:24
+msgid "Banner"
+msgstr ""
+
+#: src/Admin/AdminColumnsOrganisation.php:25
+msgid "Latitude"
+msgstr ""
+
+#: src/Admin/AdminColumnsOrganisation.php:26
+msgid "Longitude"
+msgstr ""
+
 #: src/Admin/ApprovalManager.php:30
 msgid "Submission Approval"
 msgstr ""
