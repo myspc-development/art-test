@@ -36,6 +36,7 @@ class Plugin
 
         add_action('rest_api_init', [\ArtPulse\Community\NotificationRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
+        add_action('init', [$this, 'maybe_migrate_org_meta']);
     }
 
     public function activate()
@@ -216,5 +217,37 @@ class Plugin
                 'enabled' => true,
             ]);
         }
+    }
+
+    public function maybe_migrate_org_meta()
+    {
+        if (get_option('ap_org_meta_prefix') === 'ead_org') {
+            return;
+        }
+
+        $posts = get_posts([
+            'post_type'      => 'artpulse_org',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'meta_query'     => [
+                'relation' => 'OR',
+                [ 'key' => '_ap_org_address', 'compare' => 'EXISTS' ],
+                [ 'key' => '_ap_org_website', 'compare' => 'EXISTS' ],
+            ],
+        ]);
+
+        foreach ($posts as $post_id) {
+            $address = get_post_meta($post_id, '_ap_org_address', true);
+            if ($address && !get_post_meta($post_id, 'ead_org_street_address', true)) {
+                update_post_meta($post_id, 'ead_org_street_address', $address);
+            }
+
+            $website = get_post_meta($post_id, '_ap_org_website', true);
+            if ($website && !get_post_meta($post_id, 'ead_org_website_url', true)) {
+                update_post_meta($post_id, 'ead_org_website_url', $website);
+            }
+        }
+
+        update_option('ap_org_meta_prefix', 'ead_org');
     }
 }
