@@ -160,6 +160,7 @@ class SubmissionRestController
             'artpulse_event'   => [
                 'event_date'     => '_ap_event_date',
                 'event_location' => '_ap_event_location',
+                'address_components' => 'address_components',
             ],
             'artpulse_artist'  => [
                 'artist_bio' => '_ap_artist_bio',
@@ -171,6 +172,7 @@ class SubmissionRestController
                 'artwork_materials'  => '_ap_artwork_materials',
             ],
             'artpulse_org'     => [
+                'address_components'           => 'address_components',
                 'ead_org_description'           => 'ead_org_description',
                 'ead_org_website_url'           => 'ead_org_website_url',
                 'ead_org_logo_id'               => 'ead_org_logo_id',

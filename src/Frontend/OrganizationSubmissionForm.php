@@ -64,6 +64,7 @@ class OrganizationSubmissionForm {
             <p>
                 <label for="ap-org-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label><br>
                 <input id="ap-org-images" type="file" name="images[]" accept="image/*" multiple />
+                <input type="hidden" name="address_components" id="ap-org-address-components" />
             </p>
             <p>
                 <button type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>

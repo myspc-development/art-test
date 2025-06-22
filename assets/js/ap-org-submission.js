@@ -8,15 +8,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData(form);
     const title = formData.get('title');
-    const images = form.querySelector('#ap-org-images').files;
-    const logoFile = form.querySelector('#ead_org_logo_id') ? form.querySelector('#ead_org_logo_id').files[0] : null;
-    const bannerFile = form.querySelector('#ead_org_banner_id') ? form.querySelector('#ead_org_banner_id').files[0] : null;
+  const images = form.querySelector('#ap-org-images').files;
+  const logoFile = form.querySelector('#ead_org_logo_id') ? form.querySelector('#ead_org_logo_id').files[0] : null;
+  const bannerFile = form.querySelector('#ead_org_banner_id') ? form.querySelector('#ead_org_banner_id').files[0] : null;
+  const addressComponentsInput = form.querySelector('[name="address_components"]');
+  const addressComponents = addressComponentsInput ? addressComponentsInput.value : '';
 
-    const submission = { post_type: 'artpulse_org', title };
-    formData.delete('title');
-    formData.delete('images[]');
-    formData.delete('ead_org_logo_id');
-    formData.delete('ead_org_banner_id');
+  const submission = { post_type: 'artpulse_org', title };
+  formData.delete('title');
+  formData.delete('images[]');
+  formData.delete('ead_org_logo_id');
+  formData.delete('ead_org_banner_id');
     for (const [key, value] of formData.entries()) {
       submission[key] = value;
     }
@@ -39,8 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (bannerFile) bannerId = await uploadMedia(bannerFile);
 
       submission.image_ids = imageIds;
-      if (logoId) submission.ead_org_logo_id = logoId;
-      if (bannerId) submission.ead_org_banner_id = bannerId;
+  if (logoId) submission.ead_org_logo_id = logoId;
+  if (bannerId) submission.ead_org_banner_id = bannerId;
+  if (addressComponents) submission.address_components = addressComponents;
 
       const res = await fetch(APSubmission.endpoint, {
         method: 'POST',

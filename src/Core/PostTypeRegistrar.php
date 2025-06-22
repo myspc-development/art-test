@@ -212,6 +212,18 @@ class PostTypeRegistrar
             'single'       => true,
             'type'         => 'string',
         ]);
+
+        register_post_meta('artpulse_event', 'address_components', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_org', 'address_components', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
     }
 
     public static function generate_caps(string $post_type): array
