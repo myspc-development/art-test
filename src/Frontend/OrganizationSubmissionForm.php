@@ -25,6 +25,18 @@ class OrganizationSubmissionForm {
                 <label for="ap-org-title"><?php esc_html_e('Organization Name', 'artpulse'); ?></label><br>
                 <input id="ap-org-title" type="text" name="title" required />
             </p>
+            <p>
+                <label for="ap-org-country"><?php esc_html_e('Country*', 'artpulse'); ?></label><br>
+                <select id="ap-org-country" class="ap-address-country ap-address-input" data-required="<?php esc_attr_e('Country is required', 'artpulse'); ?>"></select>
+            </p>
+            <p>
+                <label for="ap-org-state"><?php esc_html_e('State/Province', 'artpulse'); ?></label><br>
+                <select id="ap-org-state" class="ap-address-state ap-address-input"></select>
+            </p>
+            <p>
+                <label for="ap-org-city"><?php esc_html_e('City', 'artpulse'); ?></label><br>
+                <select id="ap-org-city" class="ap-address-city ap-address-input"></select>
+            </p>
             <?php foreach ($fields as $key => $args) {
                 list($type, $label) = $args;
                 ?>

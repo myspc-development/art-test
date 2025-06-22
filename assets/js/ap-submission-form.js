@@ -10,9 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const title = formData.get('title');
   const eventDate = formData.get('event_date');
-  const eventLocation = formData.get('event_location');
+  const countrySel = form.querySelector('.ap-address-country');
+  const stateSel = form.querySelector('.ap-address-state');
+  const citySel = form.querySelector('.ap-address-city');
   const addressComponentsInput = form.querySelector('[name="address_components"]');
   const addressComponents = addressComponentsInput ? addressComponentsInput.value : '';
+  let eventLocation = formData.get('event_location');
+  if (citySel) {
+    const parts = [];
+    if (citySel.value) parts.push(citySel.options[citySel.selectedIndex].text);
+    if (stateSel && stateSel.value) parts.push(stateSel.options[stateSel.selectedIndex].text);
+    if (countrySel && countrySel.value) parts.push(countrySel.options[countrySel.selectedIndex].text);
+    eventLocation = parts.join(', ');
+    form.querySelector('[name="event_location"]').value = eventLocation;
+  }
   const images = form.querySelector('#ap-images').files;
 
     const imageIds = [];
