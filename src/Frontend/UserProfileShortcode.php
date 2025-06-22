@@ -1,5 +1,5 @@
 <?php
-namespace Artpulse\Frontend;
+namespace ArtPulse\Frontend;
 
 class UserProfileShortcode {
 
