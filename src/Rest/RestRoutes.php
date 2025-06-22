@@ -34,6 +34,8 @@ class RestRoutes
 
             // ✅ Register the new SubmissionRestController endpoint
             \ArtPulse\Rest\SubmissionRestController::register();
+            // Register favorites endpoint so frontend can toggle favorites
+            \ArtPulse\Rest\FavoriteRestController::register();
         });
 
         $post_types = ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org'];
