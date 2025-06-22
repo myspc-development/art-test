@@ -54,10 +54,12 @@ Example usage:
 You can also filter results by event type, city or region using additional attributes.
 
 ## User Dashboard Calendar
-The `[ap_user_dashboard]` shortcode includes a calendar of your favorited events.
-This calendar appears once you have marked at least one event as a favorite.
-Change which events display by adding or removing favorites, or extend the calendar
-behaviour further through JavaScript.
+The `[ap_user_dashboard]` shortcode now lists local events based on the user's
+stored location. You can set or update this location in the profile editor
+via `[ap_profile_edit]`. When no location is saved, the calendar falls back to
+showing favorited events instead. Change which events display by updating your
+location or adding/removing favorites, or extend the calendar behaviour further
+through JavaScript.
 
 ## Troubleshooting
 - Check the **System Status** section on the Settings page to see the latest webhook events.
