@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let eventLocation = formData.get('event_location');
   if (citySel) {
     const parts = [];
-    if (citySel.value) parts.push(citySel.options[citySel.selectedIndex].text);
-    if (stateSel && stateSel.value) parts.push(stateSel.options[stateSel.selectedIndex].text);
-    if (countrySel && countrySel.value) parts.push(countrySel.options[countrySel.selectedIndex].text);
+    if (citySel.value) parts.push(citySel.value);
+    if (stateSel && stateSel.value) parts.push(stateSel.value);
+    if (countrySel && countrySel.value) parts.push(countrySel.value);
     eventLocation = parts.join(', ');
     form.querySelector('[name="event_location"]').value = eventLocation;
   }

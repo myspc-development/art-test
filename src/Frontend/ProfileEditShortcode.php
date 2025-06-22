@@ -63,15 +63,15 @@ class ProfileEditShortcode {
             </p>
             <p>
                 <label for="ap_country">Country</label><br>
-                <select id="ap_country" class="ap-address-country ap-address-input" name="ap_country" data-selected="<?php echo esc_attr($country); ?>"></select>
+                <input id="ap_country" type="text" class="ap-address-country ap-address-input" name="ap_country" data-selected="<?php echo esc_attr($country); ?>" />
             </p>
             <p>
                 <label for="ap_state">State/Province</label><br>
-                <select id="ap_state" class="ap-address-state ap-address-input" name="ap_state" data-selected="<?php echo esc_attr($state); ?>"></select>
+                <input id="ap_state" type="text" class="ap-address-state ap-address-input" name="ap_state" data-selected="<?php echo esc_attr($state); ?>" />
             </p>
             <p>
                 <label for="ap_city">City</label><br>
-                <select id="ap_city" class="ap-address-city ap-address-input" name="ap_city" data-selected="<?php echo esc_attr($city); ?>"></select>
+                <input id="ap_city" type="text" class="ap-address-city ap-address-input" name="ap_city" data-selected="<?php echo esc_attr($city); ?>" />
             </p>
             <input type="hidden" name="address_components" id="ap-profile-address-components" value="<?php echo esc_attr(json_encode(['country' => $country, 'state' => $state, 'city' => $city])); ?>">
             <p>
