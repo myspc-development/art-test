@@ -14,8 +14,9 @@ class ApprovalManager
     {
         // Add meta box to relevant CPTs
         add_action('add_meta_boxes', [ __CLASS__, 'addApprovalMetabox' ]);
-        // Handle approval action
+        // Handle approval and rejection actions
         add_action('admin_post_ap_approve_submission', [ __CLASS__, 'handleApproval' ]);
+        add_action('admin_post_ap_reject_submission', [ __CLASS__, 'handleRejection' ]);
     }
 
     /**
@@ -45,14 +46,21 @@ class ApprovalManager
             echo '<p>' . __('This submission is already reviewed.', 'artpulse') . '</p>';
             return;
         }
-        $approve_url = admin_url('admin-post.php');
-        $nonce = wp_create_nonce('ap_approve_' . $post->ID);
+        $approve_url   = admin_url('admin-post.php');
+        $approve_nonce = wp_create_nonce('ap_approve_' . $post->ID);
+        $reject_nonce  = wp_create_nonce('ap_reject_' . $post->ID);
         ?>
-        <form method="post" action="<?php echo esc_url($approve_url); ?>">
+        <form method="post" action="<?php echo esc_url($approve_url); ?>" style="margin-bottom:6px;">
             <input type="hidden" name="action" value="ap_approve_submission" />
             <input type="hidden" name="post_id" value="<?php echo esc_attr($post->ID); ?>" />
-            <input type="hidden" name="nonce" value="<?php echo esc_attr($nonce); ?>" />
-            <?php submit_button(__('Approve Submission', 'artpulse'), 'primary', 'submit', false); ?>
+            <input type="hidden" name="nonce" value="<?php echo esc_attr($approve_nonce); ?>" />
+            <?php submit_button(__('Approve', 'artpulse'), 'primary', 'submit', false); ?>
+        </form>
+        <form method="post" action="<?php echo esc_url($approve_url); ?>">
+            <input type="hidden" name="action" value="ap_reject_submission" />
+            <input type="hidden" name="post_id" value="<?php echo esc_attr($post->ID); ?>" />
+            <input type="hidden" name="nonce" value="<?php echo esc_attr($reject_nonce); ?>" />
+            <?php submit_button(__('Reject', 'artpulse'), 'secondary', 'submit', false); ?>
         </form>
         <?php
     }
@@ -75,6 +83,27 @@ class ApprovalManager
         ]);
         // Redirect back to edit screen
         wp_safe_redirect(admin_url('post.php?post=' . $post_id . '&action=edit'));
+        exit;
+    }
+
+    /**
+     * Handle rejection request.
+     */
+    public static function handleRejection()
+    {
+        if ( ! current_user_can('delete_posts') ) {
+            wp_die(__('Insufficient permissions', 'artpulse'));
+        }
+
+        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+        $nonce   = $_POST['nonce'] ?? '';
+        if ( ! wp_verify_nonce($nonce, 'ap_reject_' . $post_id) ) {
+            wp_die(__('Security check failed', 'artpulse'));
+        }
+
+        wp_trash_post($post_id);
+
+        wp_safe_redirect(admin_url('admin.php?page=ap-pending-submissions'));
         exit;
     }
 }
