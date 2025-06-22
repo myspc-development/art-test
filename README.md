@@ -17,3 +17,7 @@ The **ArtPulse → Settings** page includes options allowing administrators to b
 - **Override Organization Membership** – Organizations are exempt from membership requirements and fees.
 - **Override Member Membership** – Regular members are exempt from membership checks.
 
+## Event Auto-Expiration
+
+When **Auto-expire Past Events** is enabled under **ArtPulse → Settings**, a daily cron job runs and moves any `artpulse_event` posts whose end date is before today to Draft status. This keeps old events from appearing on the site automatically.
+
