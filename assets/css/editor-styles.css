@@ -1,3 +1,4 @@
+@import url("ap-core.css");
 /* Sidebar Taxonomy Selector Styles */
 .artpulse-taxonomy-filter-list {
   list-style-type: disc;
@@ -23,7 +24,7 @@
 .artpulse-advanced-taxonomy-filter-block button {
   margin: 6px 6px 6px 0;
   cursor: pointer;
-  background-color: #0073aa;
+  background-color: var(--ap-primary-color);
   color: white;
   border: none;
   padding: 6px 12px;
@@ -33,7 +34,7 @@
 
 .artpulse-advanced-taxonomy-filter-block button:hover,
 .artpulse-advanced-taxonomy-filter-block button:focus {
-  background-color: #005177;
+  background-color: var(--ap-primary-hover);
   outline: none;
 }
 

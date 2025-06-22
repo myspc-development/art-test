@@ -1,0 +1,47 @@
+/* Core shared variables and utilities */
+:root {
+  --ap-primary-color: #0073aa;
+  --ap-primary-hover: #005177;
+  --ap-border-radius: 4px;
+  --ap-space-medium: 1rem;
+}
+
+
+.ap-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: ap-spin 0.6s linear infinite;
+  margin-left: 0.5em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ap-spinner {
+    animation: none;
+  }
+}
+
+@keyframes ap-spin {
+  to { transform: rotate(360deg); }
+}
+
+.screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+button:focus {
+  outline: 2px solid var(--ap-primary-color);
+  outline-offset: 2px;
+}
+

@@ -1,3 +1,4 @@
+@import url("ap-core.css");
 .ap-filter-item {
   display: flex;
   align-items: flex-start;
@@ -14,7 +15,7 @@
 .ap-filter-item-thumbnail img {
   max-width: 120px;
   height: auto;
-  border-radius: 4px;
+  border-radius: var(--ap-border-radius);
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
@@ -29,14 +30,14 @@
 }
 
 .ap-filter-item-title a {
-  color: #0073aa;
+  color: var(--ap-primary-color);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .ap-filter-item-title a:hover,
 .ap-filter-item-title a:focus {
-  color: #005177;
+  color: var(--ap-primary-hover);
   text-decoration: underline;
   outline: none;
 }
