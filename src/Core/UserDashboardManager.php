@@ -154,6 +154,8 @@ class UserDashboardManager
             <div id="ap-membership-info"></div>
             <h2><?php _e('Your Content','artpulse'); ?></h2>
             <div id="ap-user-content"></div>
+            <h2><?php _e('Events Near You','artpulse'); ?></h2>
+            <div id="ap-local-events"></div>
             <h2><?php _e('Your Favorited Events','artpulse'); ?></h2>
             <div id="ap-favorite-events"></div>
         </div>
