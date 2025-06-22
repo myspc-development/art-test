@@ -71,6 +71,11 @@
   font-weight: 500;
 }
 
+.ap-user-dashboard .dashboard-nav a:focus {
+  outline: 2px solid var(--ap-primary-color);
+  outline-offset: 2px;
+}
+
 .ap-user-dashboard .dashboard-nav a:hover {
   text-decoration: underline;
 }
@@ -143,6 +148,11 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
+}
+
+.ap-cal-header button:focus {
+  outline: 2px solid var(--ap-primary-color);
+  outline-offset: 2px;
 }
 
 .ap-calendar {
