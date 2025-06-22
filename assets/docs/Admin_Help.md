@@ -42,6 +42,12 @@ Use these codes on any page to display forms or dashboards:
 - `[ap_user_dashboard]` – user dashboard and content
 - `[ap_directory]` – filterable directory
 
+## User Dashboard Calendar
+The `[ap_user_dashboard]` shortcode also shows a personal event calendar.
+The calendar becomes visible when a user has favorited one or more events.
+Users can change which events display by adding or removing favorites,
+or by customizing the calendar's behaviour through JavaScript.
+
 ## Troubleshooting
 - Check the **System Status** section on the Settings page to see the latest webhook events.
 - Clear the log or simulate a webhook event if needed for testing.
