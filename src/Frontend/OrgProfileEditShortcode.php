@@ -45,15 +45,15 @@ class OrgProfileEditShortcode {
             </p>
             <p>
                 <label for="ap_org_country"><?php esc_html_e('Country', 'artpulse-management'); ?></label><br>
-                <select id="ap_org_country" class="ap-address-country ap-address-input" name="ap_org_country" data-selected="<?php echo esc_attr($country); ?>"></select>
+                <input id="ap_org_country" type="text" class="ap-address-country ap-address-input" name="ap_org_country" data-selected="<?php echo esc_attr($country); ?>" />
             </p>
             <p>
                 <label for="ap_org_state"><?php esc_html_e('State/Province', 'artpulse-management'); ?></label><br>
-                <select id="ap_org_state" class="ap-address-state ap-address-input" name="ap_org_state" data-selected="<?php echo esc_attr($state); ?>"></select>
+                <input id="ap_org_state" type="text" class="ap-address-state ap-address-input" name="ap_org_state" data-selected="<?php echo esc_attr($state); ?>" />
             </p>
             <p>
                 <label for="ap_org_city"><?php esc_html_e('City', 'artpulse-management'); ?></label><br>
-                <select id="ap_org_city" class="ap-address-city ap-address-input" name="ap_org_city" data-selected="<?php echo esc_attr($city); ?>"></select>
+                <input id="ap_org_city" type="text" class="ap-address-city ap-address-input" name="ap_org_city" data-selected="<?php echo esc_attr($city); ?>" />
             </p>
             <input type="hidden" name="address_components" id="ap-org-address-components" value="<?php echo esc_attr(json_encode(['country' => $country, 'state' => $state, 'city' => $city])); ?>">
             <?php foreach ($fields as $key => $args) {

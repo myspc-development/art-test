@@ -1,122 +1,169 @@
 (function(){
-  function populate(select, items, valueKey, textKey) {
-    if(!select) return;
-    const current = select.dataset.selected || select.value;
-    select.innerHTML = '';
-    const empty = document.createElement('option');
-    empty.value = '';
-    empty.textContent = '';
-    select.appendChild(empty);
-    items.forEach(item => {
-      const opt = document.createElement('option');
-      opt.value = item[valueKey];
-      opt.textContent = item[textKey];
-      select.appendChild(opt);
-    });
-    if(current){
-      select.value = current;
-    }
-  }
-
-  async function loadData() {
+  async function loadData(){
     if(!window.APLocation) return {countries:[],states:[],cities:[]};
     const res = await fetch(APLocation.datasetUrl);
     return res.json();
   }
 
-  function updateComponents(form) {
+  function createList(input){
+    const id = input.id ? input.id + '-list' : 'ap-list-' + Math.random().toString(36).slice(2);
+    let list = document.getElementById(id);
+    if(!list){
+      list = document.createElement('datalist');
+      list.id = id;
+      document.body.appendChild(list);
+    }
+    input.setAttribute('list', id);
+    return list;
+  }
+
+  function filterItems(items, key, q){
+    const query = q.toLowerCase();
+    return items.filter(i => (i[key] || '').toLowerCase().startsWith(query));
+  }
+
+  function findItem(items, value){
+    const v = value.toLowerCase();
+    return items.find(i => (i.name && i.name.toLowerCase()===v) || (i.code && i.code.toLowerCase()===v));
+  }
+
+  function updateComponents(form){
     const c = form.querySelector('.ap-address-country');
     const s = form.querySelector('.ap-address-state');
     const ci = form.querySelector('.ap-address-city');
     const hidden = form.querySelector('[name="address_components"]');
-    if(hidden) {
+    if(hidden){
       hidden.value = JSON.stringify({
-        country: c ? c.value : '',
-        state: s ? s.value : '',
+        country: c ? (c.dataset.code || c.value) : '',
+        state: s ? (s.dataset.code || s.value) : '',
         city: ci ? ci.value : ''
       });
     }
   }
 
-  document.addEventListener('DOMContentLoaded', async function(){
+  document.addEventListener('DOMContentLoaded', async () => {
     const data = await loadData();
-    const countrySelects = document.querySelectorAll('.ap-address-country');
-    const stateSelects = document.querySelectorAll('.ap-address-state');
-    const citySelects = document.querySelectorAll('.ap-address-city');
 
-    countrySelects.forEach(sel => {
-      populate(sel, data.countries, 'code', 'name');
-      if(sel.dataset.selected){
-        sel.value = sel.dataset.selected;
-        sel.dispatchEvent(new Event('change'));
-      }
-      sel.addEventListener('change', async () => {
-        sel.dataset.selected = sel.value;
-        const form = sel.closest('form');
-        const stateSel = form.querySelector('.ap-address-state');
-        const citySel = form.querySelector('.ap-address-city');
-        if(stateSel){
-          stateSel.dataset.selected = '';
-          const states = data.states.filter(s=>s.country===sel.value);
-          if(states.length===0 && APLocation.geonamesEndpoint){
-            const resp = await fetch(APLocation.geonamesEndpoint+'?type=states&country='+sel.value);
-            const json = await resp.json();
-            if(Array.isArray(json)) {
-              data.states = data.states.concat(json);
-              json.forEach(s=>{s.country=sel.value});
-              populate(stateSel, json, 'code','name');
-            }
-          } else {
-            populate(stateSel, states,'code','name');
-          }
-        }
-        if(citySel){
-          citySel.dataset.selected = '';
-          citySel.innerHTML = '';
-        }
-        updateComponents(form);
-      });
+    document.querySelectorAll('form').forEach(form => {
+      const country = form.querySelector('.ap-address-country');
+      const state = form.querySelector('.ap-address-state');
+      const city = form.querySelector('.ap-address-city');
+
+      if(country) setupCountry(country, state, city);
+      if(state) setupState(state, country, city);
+      if(city) setupCity(city, country, state);
     });
 
-    stateSelects.forEach(sel => {
-      if(sel.dataset.selected){
-        sel.value = sel.dataset.selected;
-        sel.dispatchEvent(new Event('change'));
-      }
-      sel.addEventListener('change', async () => {
-        sel.dataset.selected = sel.value;
-        const form = sel.closest('form');
-        const countrySel = form.querySelector('.ap-address-country');
-        const citySel = form.querySelector('.ap-address-city');
-        if(citySel){
-          citySel.dataset.selected = '';
-          const cities = data.cities.filter(c=>c.country===countrySel.value && c.state===sel.value);
-          if(cities.length===0 && APLocation.geonamesEndpoint){
-            const resp = await fetch(APLocation.geonamesEndpoint+'?type=cities&country='+countrySel.value+'&state='+sel.value);
-            const json = await resp.json();
-            if(Array.isArray(json)) {
-              json.forEach(ci=>{ci.country=countrySel.value;ci.state=sel.value});
-              data.cities = data.cities.concat(json);
-              populate(citySel, json,'name','name');
-            }
-          } else {
-            populate(citySel, cities,'name','name');
-          }
+    function setupCountry(input, stateInput, cityInput){
+      const list = createList(input);
+      if(input.dataset.selected){
+        const item = findItem(data.countries, input.dataset.selected);
+        if(item){
+          input.value = item.name;
+          input.dataset.code = item.code;
+        }else{
+          input.value = input.dataset.selected;
         }
-        updateComponents(form);
-      });
-    });
-
-    citySelects.forEach(sel => {
-      if(sel.dataset.selected){
-        sel.value = sel.dataset.selected;
-        updateComponents(sel.closest('form'));
       }
-      sel.addEventListener('change', () => {
-        sel.dataset.selected = sel.value;
-        const form = sel.closest('form');
-        updateComponents(form);
+      input.addEventListener('input', () => {
+        const suggestions = filterItems(data.countries, 'name', input.value);
+        list.innerHTML = '';
+        suggestions.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.name;
+          list.appendChild(opt);
+        });
       });
-    });
+      input.addEventListener('change', () => {
+        const item = findItem(data.countries, input.value);
+        input.dataset.code = item ? item.code : input.value;
+        if(stateInput){
+          stateInput.value = '';
+          stateInput.dataset.code = '';
+        }
+        if(cityInput){
+          cityInput.value = '';
+        }
+        updateComponents(input.closest('form'));
+      });
+    }
+
+    async function ensureStates(countryCode){
+      let states = data.states.filter(s => s.country === countryCode);
+      if(states.length === 0 && APLocation.geonamesEndpoint && countryCode){
+        const resp = await fetch(APLocation.geonamesEndpoint + '?type=states&country=' + countryCode);
+        const json = await resp.json();
+        if(Array.isArray(json)){
+          json.forEach(s => {s.country = countryCode;});
+          data.states = data.states.concat(json);
+          states = json;
+        }
+      }
+      return states;
+    }
+
+    function setupState(input, countryInput, cityInput){
+      const list = createList(input);
+      if(input.dataset.selected){
+        input.value = input.dataset.selected;
+        input.dataset.code = input.dataset.selected;
+      }
+      input.addEventListener('input', async () => {
+        const cCode = countryInput ? (countryInput.dataset.code || countryInput.value) : '';
+        const states = await ensureStates(cCode);
+        const suggestions = filterItems(states, 'name', input.value);
+        list.innerHTML = '';
+        suggestions.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.name;
+          list.appendChild(opt);
+        });
+      });
+      input.addEventListener('change', () => {
+        const cCode = countryInput ? (countryInput.dataset.code || countryInput.value) : '';
+        const item = data.states.find(s => s.country === cCode && (s.name.toLowerCase()===input.value.toLowerCase() || (s.code && s.code.toLowerCase()===input.value.toLowerCase())));
+        input.dataset.code = item ? item.code : input.value;
+        if(cityInput){
+          cityInput.value = '';
+        }
+        updateComponents(input.closest('form'));
+      });
+    }
+
+    async function ensureCities(countryCode, stateCode){
+      let cities = data.cities.filter(c => c.country === countryCode && c.state === stateCode);
+      if(cities.length === 0 && APLocation.geonamesEndpoint && countryCode && stateCode){
+        const resp = await fetch(APLocation.geonamesEndpoint + '?type=cities&country=' + countryCode + '&state=' + stateCode);
+        const json = await resp.json();
+        if(Array.isArray(json)){
+          json.forEach(ci => {ci.country = countryCode; ci.state = stateCode;});
+          data.cities = data.cities.concat(json);
+          cities = json;
+        }
+      }
+      return cities;
+    }
+
+    function setupCity(input, countryInput, stateInput){
+      const list = createList(input);
+      if(input.dataset.selected){
+        input.value = input.dataset.selected;
+      }
+      input.addEventListener('input', async () => {
+        const cCode = countryInput ? (countryInput.dataset.code || countryInput.value) : '';
+        const sCode = stateInput ? (stateInput.dataset.code || stateInput.value) : '';
+        const cities = await ensureCities(cCode, sCode);
+        const suggestions = filterItems(cities, 'name', input.value);
+        list.innerHTML = '';
+        suggestions.forEach(ci => {
+          const opt = document.createElement('option');
+          opt.value = ci.name;
+          list.appendChild(opt);
+        });
+      });
+      input.addEventListener('change', () => {
+        updateComponents(input.closest('form'));
+      });
+    }
   });
 })();

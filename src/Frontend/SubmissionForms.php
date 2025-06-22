@@ -49,15 +49,15 @@ class SubmissionForms
             </p>
             <p>
                 <label for="ap-country"><?php esc_html_e('Country*', 'artpulse'); ?></label><br>
-                <select id="ap-country" class="ap-address-country ap-address-input" data-required="<?php esc_attr_e('Country is required', 'artpulse'); ?>"></select>
+                <input id="ap-country" type="text" class="ap-address-country ap-address-input" data-required="<?php esc_attr_e('Country is required', 'artpulse'); ?>" />
             </p>
             <p>
                 <label for="ap-state"><?php esc_html_e('State/Province', 'artpulse'); ?></label><br>
-                <select id="ap-state" class="ap-address-state ap-address-input"></select>
+                <input id="ap-state" type="text" class="ap-address-state ap-address-input" />
             </p>
             <p>
                 <label for="ap-city"><?php esc_html_e('City', 'artpulse'); ?></label><br>
-                <select id="ap-city" class="ap-address-city ap-address-input"></select>
+                <input id="ap-city" type="text" class="ap-address-city ap-address-input" />
             </p>
             <input id="ap-location" type="hidden" name="event_location" />
             <input type="hidden" name="address_components" id="ap-address-components" />
