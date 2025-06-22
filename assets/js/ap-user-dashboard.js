@@ -27,14 +27,34 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    if (data.favorite_events && data.favorite_events.length) {
-      renderFavoriteCalendar(data.favorite_events);
-    }
-  });
-});
+      const hasLocation = data.city || data.state;
+      if (hasLocation) {
+        const params = new URLSearchParams();
+        if (data.city) {
+          params.append('city', data.city);
+        }
+        if (data.state) {
+          params.append('region', data.state);
+        }
+        fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`)
+          .then(res => res.json())
+          .then(events => {
+            if (events && events.length) {
+              renderCalendar(events, 'ap-local-events');
+            }
+          });
+      } else if (data.favorite_events && data.favorite_events.length) {
+        renderCalendar(data.favorite_events, 'ap-local-events');
+      }
 
-function renderFavoriteCalendar(events) {
-  const container = document.getElementById('ap-favorite-events');
+      if (data.favorite_events && data.favorite_events.length) {
+        renderCalendar(data.favorite_events, 'ap-favorite-events');
+      }
+    });
+  });
+
+function renderCalendar(events, containerId = 'ap-favorite-events') {
+  const container = document.getElementById(containerId);
   if (!container) return;
 
   let current = new Date();
