@@ -50,6 +50,7 @@ class SubmissionForms
             <p>
                 <label for="ap-location"><?php esc_html_e('Location*', 'artpulse'); ?></label><br>
                 <input id="ap-location" type="text" name="event_location" data-required="<?php esc_attr_e('Location is required', 'artpulse'); ?>" />
+                <input type="hidden" name="address_components" id="ap-address-components" />
             </p>
             <p>
                 <label for="ap-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label><br>

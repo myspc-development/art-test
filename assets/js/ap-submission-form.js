@@ -9,9 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const postType = form.dataset.postType || 'artpulse_event';
 
     const title = formData.get('title');
-    const eventDate = formData.get('event_date');
-    const eventLocation = formData.get('event_location');
-    const images = form.querySelector('#ap-images').files;
+  const eventDate = formData.get('event_date');
+  const eventLocation = formData.get('event_location');
+  const addressComponentsInput = form.querySelector('[name="address_components"]');
+  const addressComponents = addressComponentsInput ? addressComponentsInput.value : '';
+  const images = form.querySelector('#ap-images').files;
 
     const imageIds = [];
 
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event_location: eventLocation,
         image_ids: imageIds
       };
+      if (addressComponents) submission.address_components = addressComponents;
 
       const res = await fetch(APSubmission.endpoint, {
         method: 'POST',

@@ -53,6 +53,7 @@ export default function OrganizationSubmissionForm() {
   const [images, setImages] = useState([]);
   const [logo, setLogo] = useState(null);
   const [banner, setBanner] = useState(null);
+  const [addressComponents, setAddressComponents] = useState('');
   const [previews, setPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -120,6 +121,7 @@ export default function OrganizationSubmissionForm() {
       payload.image_ids = imageIds;
       if (logoId) payload.ead_org_logo_id = logoId;
       if (bannerId) payload.ead_org_banner_id = bannerId;
+      if (addressComponents) payload.address_components = addressComponents;
 
       const res = await fetch(APSubmission.endpoint, {
         method: 'POST',
@@ -199,6 +201,7 @@ export default function OrganizationSubmissionForm() {
         accept="image/*"
         onChange={handleFileChange}
       />
+      <input type="hidden" value={addressComponents} readOnly name="address_components" />
 
       <div className="flex gap-2 flex-wrap">
         {previews.map((src, i) => (

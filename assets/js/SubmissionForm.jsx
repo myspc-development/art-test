@@ -4,6 +4,7 @@ export default function SubmissionForm() {
   const [title, setTitle] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [location, setLocation] = useState('');
+  const [addressComponents, setAddressComponents] = useState('');
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -55,7 +56,8 @@ export default function SubmissionForm() {
           title,
           event_date: eventDate,
           event_location: location,
-          image_ids: imageIds
+          image_ids: imageIds,
+          address_components: addressComponents
         })
       });
 
@@ -105,6 +107,7 @@ export default function SubmissionForm() {
         onChange={e => setLocation(e.target.value)}
         required
       />
+      <input type="hidden" value={addressComponents} readOnly name="address_components" />
 
       <input
         className="w-full"
