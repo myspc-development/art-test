@@ -190,6 +190,19 @@ class EnqueueAssets {
             'nonce'         => wp_create_nonce('wp_rest'),
         ]);
 
+        wp_enqueue_script(
+            'ap-org-submission-js',
+            $plugin_url . '/assets/js/ap-org-submission.js',
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+        wp_localize_script('ap-org-submission-js', 'APSubmission', [
+            'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
+            'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
+            'nonce'         => wp_create_nonce('wp_rest'),
+        ]);
+
         wp_enqueue_style(
             'ap-forms-css',
             $plugin_url . '/assets/css/ap-forms.css',

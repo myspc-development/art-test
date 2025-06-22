@@ -103,6 +103,7 @@ class Plugin
         \ArtPulse\Frontend\EditEventShortcode::register();
         \ArtPulse\Frontend\OrganizationDashboardShortcode::register();
         \ArtPulse\Frontend\OrganizationEventForm::register();
+        \ArtPulse\Frontend\OrganizationSubmissionForm::register();
         \ArtPulse\Frontend\UserProfileShortcode::register();
         \ArtPulse\Frontend\ProfileEditShortcode::register();
         \ArtPulse\Frontend\PortfolioBuilder::register();
@@ -174,6 +175,20 @@ class Plugin
         );
 
         wp_localize_script('ap-submission-form-js', 'APSubmission', [
+            'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
+            'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
+            'nonce'         => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_enqueue_script(
+            'ap-org-submission-js',
+            plugins_url('assets/js/ap-org-submission.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-org-submission-js', 'APSubmission', [
             'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
             'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
             'nonce'         => wp_create_nonce('wp_rest'),
