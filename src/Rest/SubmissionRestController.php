@@ -84,6 +84,13 @@ class SubmissionRestController
             }
         }
 
+        if ( isset( $params['event_type'] ) ) {
+            $term_id = absint( $params['event_type'] );
+            if ( $term_id ) {
+                wp_set_post_terms( $post_id, [ $term_id ], 'artpulse_event_type' );
+            }
+        }
+
         $saved_image_ids = [];
         if ( ! empty( $params['image_ids'] ) && is_array( $params['image_ids'] ) ) {
             $ids = array_slice( array_map( 'absint', $params['image_ids'] ), 0, 5 );
@@ -140,6 +147,78 @@ class SubmissionRestController
                 'required'    => false,
                 'description' => 'Location of the event.',
             ],
+            'event_start_date' => [
+                'type'        => 'string',
+                'format'      => 'date',
+                'required'    => false,
+                'description' => 'Start date of the event.',
+            ],
+            'event_end_date' => [
+                'type'        => 'string',
+                'format'      => 'date',
+                'required'    => false,
+                'description' => 'End date of the event.',
+            ],
+            'venue_name' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Venue name.',
+            ],
+            'event_street_address' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Street address for the event.',
+            ],
+            'event_city' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'City for the event.',
+            ],
+            'event_state' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'State or region for the event.',
+            ],
+            'event_country' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Country for the event.',
+            ],
+            'event_postcode' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Postal code for the event.',
+            ],
+            'event_organizer_name' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Name of the event organizer.',
+            ],
+            'event_organizer_email' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Email for the event organizer.',
+            ],
+            'event_banner_id' => [
+                'type'        => 'integer',
+                'required'    => false,
+                'description' => 'Attachment ID of the event banner.',
+            ],
+            'event_featured' => [
+                'type'        => 'boolean',
+                'required'    => false,
+                'description' => 'Whether the event should be featured.',
+            ],
+            'event_type' => [
+                'type'        => 'integer',
+                'required'    => false,
+                'description' => 'Term ID for the event type.',
+            ],
+            'address_components' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Structured address components JSON.',
+            ],
             'image_ids' => [
                 'type'        => 'array',
                 'items'       => [
@@ -158,9 +237,21 @@ class SubmissionRestController
     {
         return match ( $post_type ) {
             'artpulse_event'   => [
-                'event_date'     => '_ap_event_date',
-                'event_location' => '_ap_event_location',
-                'address_components' => 'address_components',
+                'event_date'           => '_ap_event_date',
+                'event_location'       => '_ap_event_location',
+                'event_start_date'     => 'event_start_date',
+                'event_end_date'       => 'event_end_date',
+                'venue_name'           => 'venue_name',
+                'event_street_address' => 'event_street_address',
+                'event_city'           => 'event_city',
+                'event_state'          => 'event_state',
+                'event_country'        => 'event_country',
+                'event_postcode'       => 'event_postcode',
+                'event_organizer_name'  => 'event_organizer_name',
+                'event_organizer_email' => 'event_organizer_email',
+                'event_banner_id'       => 'event_banner_id',
+                'event_featured'        => 'event_featured',
+                'address_components'    => 'address_components',
             ],
             'artpulse_artist'  => [
                 'artist_bio' => '_ap_artist_bio',
