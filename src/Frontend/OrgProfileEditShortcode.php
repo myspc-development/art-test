@@ -31,14 +31,11 @@ class OrgProfileEditShortcode {
         $city         = $components['city'] ?? '';
 
         $output = '';
-        if (isset($_GET['ap_updated'])) {
-            $output .= '<div class="notice success">Organization updated successfully.</div>';
-        }
-
         ob_start();
         ?>
         <form method="post" enctype="multipart/form-data" class="ap-org-profile-edit-form ap-form-container">
             <?php wp_nonce_field('ap_org_profile_edit_action', 'ap_org_profile_nonce'); ?>
+            <div class="ap-form-messages" role="status" aria-live="polite"></div>
             <p>
                 <label class="ap-form-label" for="post_title"><?php esc_html_e('Organization Name', 'artpulse-management'); ?></label><br>
                 <input class="ap-form-input" type="text" id="post_title" name="post_title" value="<?php echo esc_attr($org_post->post_title); ?>" required>
@@ -174,7 +171,8 @@ class OrgProfileEditShortcode {
             update_post_meta($org_id, $key, $san);
         }
 
-        wp_redirect(add_query_arg('ap_updated', '1', wp_get_referer()));
-        exit;
+        if (function_exists('wc_add_notice')) {
+            wc_add_notice('Organization updated successfully.', 'success');
+        }
     }
 }

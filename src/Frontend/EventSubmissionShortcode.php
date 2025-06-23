@@ -250,8 +250,6 @@ class EventSubmissionShortcode {
         // Success message and redirect
         if (function_exists('wc_add_notice')) {
             wc_add_notice('Event submitted successfully! It is awaiting review.', 'success');
-            wp_safe_redirect(home_url('/thank-you-page')); // Replace with your desired URL
-            exit;
         } else {
             wp_die('Event submitted successfully! It is awaiting review.');
         }

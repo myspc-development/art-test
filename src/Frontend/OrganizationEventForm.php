@@ -13,11 +13,6 @@ class OrganizationEventForm {
             return '<p>You must be logged in to submit an event.</p>';
         }
 
-        // Show success message if redirected after submission
-        if (!empty($_GET['event_submitted'])) {
-            echo '<div class="ap-success-message">✅ Event submitted successfully!</div>';
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ap_event_nonce']) && wp_verify_nonce($_POST['ap_event_nonce'], 'submit_event')) {
             self::handle_submission();
         }
@@ -173,7 +168,8 @@ class OrganizationEventForm {
         $user_message = "Hi {$current_user->display_name},\n\nThanks for submitting your event \"{$title}\". It is now pending review.";
         wp_mail($user_email, $user_subject, $user_message);
 
-        wp_redirect(add_query_arg('event_submitted', '1', wp_get_referer()));
-        exit;
+        if (function_exists('wc_add_notice')) {
+            wc_add_notice('Event submitted successfully!', 'success');
+        }
     }
 }

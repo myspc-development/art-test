@@ -189,6 +189,7 @@ class Plugin
             'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
             'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
             'nonce'         => wp_create_nonce('wp_rest'),
+            'dashboardUrl'  => $this->get_user_dashboard_url(),
         ]);
 
         wp_enqueue_script(
@@ -203,6 +204,7 @@ class Plugin
             'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
             'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
             'nonce'         => wp_create_nonce('wp_rest'),
+            'dashboardUrl'  => $this->get_user_dashboard_url(),
         ]);
 
         wp_enqueue_script(
@@ -219,6 +221,7 @@ class Plugin
             'orgSubmissionUrl'=> $this->get_org_submission_url(),
             'artistEndpoint'  => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
             'restNonce'       => wp_create_nonce('wp_rest'),
+            'dashboardUrl'    => $this->get_user_dashboard_url(),
         ]);
 
         wp_enqueue_script(
@@ -235,6 +238,7 @@ class Plugin
             'orgSubmissionUrl'=> $this->get_org_submission_url(),
             'artistEndpoint'  => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
             'restNonce'       => wp_create_nonce('wp_rest'),
+            'dashboardUrl'    => $this->get_user_dashboard_url(),
         ]);
 
         wp_enqueue_style(
@@ -267,6 +271,22 @@ class Plugin
             'post_type'   => 'page',
             'post_status' => 'publish',
             's'           => '[ap_submit_organization]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($pages)) {
+            return get_permalink($pages[0]->ID);
+        }
+
+        return home_url('/');
+    }
+
+    private function get_user_dashboard_url(): string
+    {
+        $pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_user_dashboard]',
             'numberposts' => 1,
         ]);
 

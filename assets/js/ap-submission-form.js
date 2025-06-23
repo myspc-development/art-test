@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('.ap-submission-form');
+  const messageBox = document.querySelector('.ap-form-messages');
   if (!form) return;
 
   form.addEventListener('submit', async (e) => {
@@ -78,14 +79,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
 
       if (res.ok) {
-        alert('Submission successful!');
-        console.log(data);
+        if (messageBox) messageBox.textContent = 'Submission successful!';
+        setTimeout(() => {
+          window.location.href = APSubmission.dashboardUrl;
+        }, 3000);
       } else {
-        alert(data.message || 'Submission failed.');
+        if (messageBox) messageBox.textContent = data.message || 'Submission failed.';
       }
     } catch (err) {
       console.error(err);
-      alert('Error: ' + err.message);
+      if (messageBox) messageBox.textContent = 'Error: ' + err.message;
     }
   });
 

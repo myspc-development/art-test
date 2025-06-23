@@ -43,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await submitForm(registerForm, 'ap_do_register', regMsg);
       if (result.res.ok && result.data.success) {
         regMsg.textContent = result.data.message || 'Registration successful';
+        setTimeout(() => {
+          window.location.href = APLogin.dashboardUrl;
+        }, 3000);
       }
     });
   }

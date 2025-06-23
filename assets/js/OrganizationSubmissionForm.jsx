@@ -147,6 +147,9 @@ export default function OrganizationSubmissionForm() {
       if (!res.ok) throw new Error(json.message || 'Submission failed');
 
       setMessage('Submission successful!');
+      setTimeout(() => {
+        window.location.href = APSubmission.dashboardUrl;
+      }, 3000);
       setTitle('');
       setImages([]);
       setPreviews([]);
@@ -165,54 +168,66 @@ export default function OrganizationSubmissionForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 max-w-xl mx-auto rounded-xl shadow bg-white space-y-4" encType="multipart/form-data">
-      <h2 className="text-xl font-bold">Submit Organization</h2>
+    <form onSubmit={handleSubmit} className="ap-form-container" encType="multipart/form-data">
+      <div className="ap-form-messages" role="status" aria-live="polite">{message}</div>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="Organization Name"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        required
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_org_title">Organization Name</label>
+        <input
+          id="ap_org_title"
+          className="ap-form-input"
+          type="text"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          required
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded ap-address-country"
-        type="text"
-        placeholder="Country"
-        value={country}
-        onChange={e => setCountry(e.target.value)}
-        required
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_org_country">Country</label>
+        <input
+          id="ap_org_country"
+          className="ap-form-input ap-address-country"
+          type="text"
+          value={country}
+          onChange={e => setCountry(e.target.value)}
+          required
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded ap-address-state"
-        type="text"
-        placeholder="State/Province"
-        value={stateProv}
-        onChange={e => setStateProv(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_org_state">State/Province</label>
+        <input
+          id="ap_org_state"
+          className="ap-form-input ap-address-state"
+          type="text"
+          value={stateProv}
+          onChange={e => setStateProv(e.target.value)}
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded ap-address-city"
-        type="text"
-        placeholder="City"
-        value={city}
-        onChange={e => setCity(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_org_city">City</label>
+        <input
+          id="ap_org_city"
+          className="ap-form-input ap-address-city"
+          type="text"
+          value={city}
+          onChange={e => setCity(e.target.value)}
+        />
+      </p>
 
       {ORG_FIELDS.map(field => (
-        <div key={field.name} className="w-full">
-          <label className="block text-sm" htmlFor={field.name}>{field.label}</label>
+        <p key={field.name}>
+          <label className="ap-form-label" htmlFor={field.name}>{field.label}</label>
           {field.type === 'textarea' && (
-            <textarea id={field.name} name={field.name} className="w-full p-2 border rounded" required={field.required}></textarea>
+            <textarea id={field.name} name={field.name} className="ap-form-textarea" required={field.required}></textarea>
           )}
           {field.type === 'checkbox' && (
-            <input id={field.name} type="checkbox" name={field.name} value="1" />
+            <input id={field.name} className="ap-form-input" type="checkbox" name={field.name} value="1" />
           )}
           {field.type === 'select' && field.name === 'ead_org_type' && (
-            <select id={field.name} name={field.name} className="w-full p-2 border rounded">
+            <select id={field.name} name={field.name} className="ap-form-select">
               <option value="">Select</option>
               {ORG_TYPES.map(t => (
                 <option key={t} value={t}>{t.replace('-', ' ')}</option>
@@ -222,6 +237,7 @@ export default function OrganizationSubmissionForm() {
           {field.type === 'media' && (
             <input
               id={field.name}
+              className="ap-form-input"
               type="file"
               name={field.name}
               accept="image/*"
@@ -229,18 +245,22 @@ export default function OrganizationSubmissionForm() {
             />
           )}
           {['textarea','checkbox','select','media'].indexOf(field.type) === -1 && (
-            <input id={field.name} type={field.type} name={field.name} className="w-full p-2 border rounded" required={field.required} />
+            <input id={field.name} className="ap-form-input" type={field.type} name={field.name} required={field.required} />
           )}
-        </div>
+        </p>
       ))}
 
-      <input
-        className="w-full"
-        type="file"
-        multiple
-        accept="image/*"
-        onChange={handleFileChange}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_org_images">Images (max 5)</label>
+        <input
+          id="ap_org_images"
+          className="ap-form-input"
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+      </p>
       <input type="hidden" value={addressComponents} readOnly name="address_components" />
 
       <div className="flex gap-2 flex-wrap">
@@ -250,14 +270,12 @@ export default function OrganizationSubmissionForm() {
       </div>
 
       <button
-        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+        className="ap-form-button"
         type="submit"
         disabled={loading}
       >
         {loading ? 'Submitting...' : 'Submit'}
       </button>
-
-      {message && <p className="text-sm text-center text-gray-700 mt-2">{message}</p>}
     </form>
   );
 }

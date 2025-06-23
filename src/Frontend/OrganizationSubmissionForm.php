@@ -90,7 +90,7 @@ class OrganizationSubmissionForm {
                 <button class="ap-form-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
             </p>
         </form>
-        <div class="ap-org-submission-message" role="status" aria-live="polite"></div>
+        <div class="ap-form-messages" role="status" aria-live="polite"></div>
         <?php
         return ob_get_clean();
     }
