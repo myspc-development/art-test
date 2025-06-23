@@ -43,27 +43,61 @@ class DirectoryManager {
             'callback'            => [ self::class, 'handleFilter' ],
             'permission_callback' => '__return_true',
             'args' => [
-                'type' => [ 'type' => 'string', 'required' => true ],
-                'limit'=> [ 'type' => 'integer', 'default' => 10 ],
+                'type'       => [ 'type' => 'string',  'required' => true ],
+                'limit'      => [ 'type' => 'integer', 'default'  => 10 ],
+                'event_type' => [ 'type' => 'integer' ],
+                'city'       => [ 'type' => 'string' ],
+                'region'     => [ 'type' => 'string' ],
             ]
         ]);
     }
 
     public static function handleFilter(WP_REST_Request $request) {
-        $type  = sanitize_text_field( $request->get_param('type') );
-        $limit = intval( $request->get_param('limit') ?? 10 );
+        $type       = sanitize_text_field( $request->get_param('type') );
+        $limit      = intval( $request->get_param('limit') ?? 10 );
+        $event_type = absint( $request->get_param('event_type') );
+        $city       = sanitize_text_field( $request->get_param('city') );
+        $region     = sanitize_text_field( $request->get_param('region') );
 
         $allowed = ['event', 'artist', 'artwork', 'org'];
         if (!in_array($type, $allowed, true)) {
             return new \WP_Error('invalid_type', 'Invalid directory type', [ 'status' => 400 ]);
         }
 
-        $args = [
+        $args       = [
             'post_type'      => 'artpulse_' . $type,
             'posts_per_page' => $limit,
             'orderby'        => 'title',
             'order'          => 'ASC',
         ];
+        $tax_query  = [];
+        $meta_query = [];
+
+        if ( $type === 'event' ) {
+            if ( $event_type ) {
+                $tax_query[] = [
+                    'taxonomy' => 'artpulse_event_type',
+                    'field'    => 'term_id',
+                    'terms'    => $event_type,
+                ];
+            }
+
+            if ( $city ) {
+                $meta_query[] = [ 'key' => 'event_city',  'value' => $city ];
+            }
+
+            if ( $region ) {
+                $meta_query[] = [ 'key' => 'event_state', 'value' => $region ];
+            }
+        }
+
+        if ( ! empty( $tax_query ) ) {
+            $args['tax_query'] = $tax_query;
+        }
+
+        if ( ! empty( $meta_query ) ) {
+            $args['meta_query'] = $meta_query;
+        }
 
         $posts = get_posts($args);
 
@@ -106,6 +140,8 @@ class DirectoryManager {
                 <?php if ($atts['type'] === 'event'): ?>
                     <label><?php _e('Filter by Event Type','artpulse'); ?>:</label>
                     <select class="ap-filter-event-type"></select>
+                    <input type="text" class="ap-filter-city" placeholder="<?php esc_attr_e('City','artpulse'); ?>" />
+                    <input type="text" class="ap-filter-region" placeholder="<?php esc_attr_e('Region','artpulse'); ?>" />
                 <?php endif; ?>
                 <label><?php _e('Limit','artpulse'); ?>:</label>
                 <input type="number" class="ap-filter-limit" value="<?php echo esc_attr($atts['limit']); ?>" />
