@@ -110,6 +110,7 @@ class Plugin
         \ArtPulse\Frontend\OrgProfileEditShortcode::register();
         \ArtPulse\Frontend\PortfolioBuilder::register();
         \ArtPulse\Frontend\LoginShortcode::register();
+        \ArtPulse\Frontend\RegistrationShortcode::register();
         \ArtPulse\Admin\MetaBoxesRelationship::register();
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
         \ArtPulse\Admin\ApprovalManager::register();
@@ -211,6 +212,22 @@ class Plugin
         );
 
         wp_localize_script('ap-login-js', 'APLogin', [
+            'ajaxUrl'         => admin_url('admin-ajax.php'),
+            'nonce'           => wp_create_nonce('ap_login_nonce'),
+            'orgSubmissionUrl'=> $this->get_org_submission_url(),
+            'artistEndpoint'  => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
+            'restNonce'       => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_enqueue_script(
+            'ap-register-js',
+            plugins_url('assets/js/ap-register.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-register-js', 'APLogin', [
             'ajaxUrl'         => admin_url('admin-ajax.php'),
             'nonce'           => wp_create_nonce('ap_login_nonce'),
             'orgSubmissionUrl'=> $this->get_org_submission_url(),
