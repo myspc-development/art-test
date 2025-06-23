@@ -1,0 +1,112 @@
+@import url("ap-core.css");
+@use 'variables';
+/*
+Theme Name: ArtPulse Forms
+Description: Styles for ArtPulse plugin forms.
+Version: 1.0.0
+*/
+
+/* General Form Styling */
+.ap-form-container {
+    margin-bottom: 20px;
+}
+
+.ap-form-group {
+    margin-bottom: 15px;
+}
+
+.ap-form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--ap-dark-text-color);
+}
+
+.ap-form-input,
+.ap-form-textarea,
+.ap-form-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid var(--ap-primary-color);
+    border-radius: var(--ap-border-radius);
+    background-color: var(--ap-bg-color);
+    color: var(--ap-dark-text-color);
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    font-size: 16px;
+}
+
+.ap-form-textarea {
+    resize: vertical; /* Allows vertical resizing */
+    min-height: 100px;
+}
+
+.ap-form-select {
+    height: 36px; /* Adjust height to match input */
+}
+
+/* Button Styling */
+.ap-form-button {
+    background-color: var(--ap-primary-color);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: var(--ap-border-radius);
+}
+
+.ap-form-button:hover {
+    background-color: var(--ap-primary-hover);
+}
+
+/* Error and Success Messages */
+.ap-form-error {
+    color: var(--ap-danger-color);
+    margin-top: 5px;
+}
+
+.ap-form-success {
+    color: var(--ap-success-color);
+    margin-top: 5px;
+}
+.ap-form-input[type="email"] {
+    /* Example: Style email inputs */
+}
+
+.ap-form-input[type="number"] {
+    /* Example: Style number inputs */
+}
+
+/* Responsive Design (Example - Adjust breakpoints as needed) */
+@media (max-width: 768px) {
+    .ap-form-input,
+    .ap-form-textarea,
+    .ap-form-select {
+        font-size: 14px;
+    }
+
+    .ap-form-button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+/* Custom Styles (Add your specific styles below) */
+
+/* Example: Style a specific form with ID "my-custom-form" */
+#my-custom-form .ap-form-label {
+    color: var(--ap-text-color);
+}
+
+#my-custom-form .ap-form-input {
+    border-color: var(--ap-muted-text-color);
+}
+
+/* Example: Style a specific class of form elements */
+.ap-form-highlighted {
+    background-color: var(--ap-bg-color);
+}
