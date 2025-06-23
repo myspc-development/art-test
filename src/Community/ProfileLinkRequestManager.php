@@ -53,7 +53,7 @@ class ProfileLinkRequestManager
     }
 
     // 🔧 This is the missing method you're calling on plugin activation
-    public function install_link_request_table(): void
+    public static function install_link_request_table(): void
     {
         global $wpdb;
 
