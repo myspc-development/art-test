@@ -43,8 +43,51 @@ class EventSubmissionShortcode {
             <label for="ap_event_date">Date</label>
             <input id="ap_event_date" type="date" name="event_date" required>
 
+            <label for="ap_event_start_date">Start Date</label>
+            <input id="ap_event_start_date" type="date" name="event_start_date">
+
+            <label for="ap_event_end_date">End Date</label>
+            <input id="ap_event_end_date" type="date" name="event_end_date">
+
             <label for="ap_event_location">Location</label>
             <input id="ap_event_location" class="ap-google-autocomplete" type="text" name="event_location">
+
+            <label for="ap_venue_name">Venue Name</label>
+            <input id="ap_venue_name" type="text" name="venue_name">
+
+            <label for="ap_event_street_address">Street Address</label>
+            <input id="ap_event_street_address" type="text" name="event_street_address">
+
+            <label for="ap_event_country">Country</label>
+            <input id="ap_event_country" type="text" name="event_country">
+
+            <label for="ap_event_state">State/Province</label>
+            <input id="ap_event_state" type="text" name="event_state">
+
+            <label for="ap_event_city">City</label>
+            <input id="ap_event_city" type="text" name="event_city">
+
+            <label for="ap_event_postcode">Postcode</label>
+            <input id="ap_event_postcode" type="text" name="event_postcode">
+
+            <input type="hidden" name="address_components" id="ap_address_components">
+
+            <label for="ap_event_organizer_name">Organizer Name</label>
+            <input id="ap_event_organizer_name" type="text" name="event_organizer_name">
+
+            <label for="ap_event_organizer_email">Organizer Email</label>
+            <input id="ap_event_organizer_email" type="email" name="event_organizer_email">
+
+            <label for="ap_event_type">Event Type</label>
+            <select id="ap_event_type" name="event_type">
+                <option value="">Select Type</option>
+                <?php
+                $terms = get_terms(['taxonomy' => 'artpulse_event_type', 'hide_empty' => false]);
+                foreach ($terms as $term) {
+                    echo '<option value="' . esc_attr($term->term_id) . '">' . esc_html($term->name) . '</option>';
+                }
+                ?>
+            </select>
 
             <label for="ap_event_org">Organization</label>
             <select id="ap_event_org" name="event_org" required>
@@ -54,8 +97,12 @@ class EventSubmissionShortcode {
                 <?php endforeach; ?>
             </select>
 
-            <label for="ap_event_image">Image</label>
-            <input id="ap_event_image" type="file" name="event_image">
+            <label for="ap_event_banner">Event Banner</label>
+            <input id="ap_event_banner" type="file" name="event_banner">
+
+            <label>
+                <input type="checkbox" name="event_featured" value="1"> Request Featured
+            </label>
 
             <button type="submit" name="ap_submit_event">Submit Event</button>
         </form>
@@ -80,8 +127,21 @@ class EventSubmissionShortcode {
         $event_title = sanitize_text_field($_POST['event_title']);
         $event_description = wp_kses_post($_POST['event_description']);
         $event_date = sanitize_text_field($_POST['event_date']);
+        $start_date = sanitize_text_field($_POST['event_start_date'] ?? '');
+        $end_date   = sanitize_text_field($_POST['event_end_date'] ?? '');
         $event_location = sanitize_text_field($_POST['event_location']);
+        $venue_name = sanitize_text_field($_POST['venue_name'] ?? '');
+        $street = sanitize_text_field($_POST['event_street_address'] ?? '');
+        $country = sanitize_text_field($_POST['event_country'] ?? '');
+        $state = sanitize_text_field($_POST['event_state'] ?? '');
+        $city = sanitize_text_field($_POST['event_city'] ?? '');
+        $postcode = sanitize_text_field($_POST['event_postcode'] ?? '');
+        $address_components = sanitize_text_field($_POST['address_components'] ?? '');
+        $organizer_name = sanitize_text_field($_POST['event_organizer_name'] ?? '');
+        $organizer_email = sanitize_email($_POST['event_organizer_email'] ?? '');
         $event_org = intval($_POST['event_org']);
+        $event_type = intval($_POST['event_type'] ?? 0);
+        $featured = isset($_POST['event_featured']) ? '1' : '0';
 
         if (empty($event_title)) {
             if (function_exists('wc_add_notice')) {
@@ -147,28 +207,43 @@ class EventSubmissionShortcode {
         }
 
         update_post_meta($post_id, '_ap_event_date', $event_date);
+        update_post_meta($post_id, 'event_start_date', $start_date);
+        update_post_meta($post_id, 'event_end_date', $end_date);
         update_post_meta($post_id, '_ap_event_location', $event_location);
+        update_post_meta($post_id, 'venue_name', $venue_name);
+        update_post_meta($post_id, 'event_street_address', $street);
+        update_post_meta($post_id, 'event_country', $country);
+        update_post_meta($post_id, 'event_state', $state);
+        update_post_meta($post_id, 'event_city', $city);
+        update_post_meta($post_id, 'event_postcode', $postcode);
+        update_post_meta($post_id, 'address_components', $address_components);
+        update_post_meta($post_id, 'event_organizer_name', $organizer_name);
+        update_post_meta($post_id, 'event_organizer_email', $organizer_email);
         update_post_meta($post_id, '_ap_event_organization', $event_org);
+        update_post_meta($post_id, 'event_featured', $featured);
 
-        // Handle image upload
-        if (!empty($_FILES['event_image']['name'])) {
+        if ($event_type) {
+            wp_set_post_terms($post_id, [$event_type], 'artpulse_event_type');
+        }
+        // Handle banner upload
+        if (!empty($_FILES['event_banner']['name'])) {
             if ( ! function_exists( 'media_handle_upload' ) ) {
                 require_once ABSPATH . 'wp-admin/includes/image.php';
                 require_once ABSPATH . 'wp-admin/includes/file.php';
                 require_once ABSPATH . 'wp-admin/includes/media.php';
             }
 
-            $attachment_id = media_handle_upload('event_image', $post_id);
+            $attachment_id = media_handle_upload('event_banner', $post_id);
 
             if (is_wp_error($attachment_id)) {
                 error_log('Error uploading image: ' . $attachment_id->get_error_message());
                 if (function_exists('wc_add_notice')) {
-                    wc_add_notice('Error uploading image. Please try again.', 'error');
+                    wc_add_notice('Error uploading banner. Please try again.', 'error');
                 } else {
-                    wp_die('Error uploading image. Please try again.');
+                    wp_die('Error uploading banner. Please try again.');
                 }
             } else {
-                set_post_thumbnail($post_id, $attachment_id);
+                update_post_meta($post_id, 'event_banner_id', $attachment_id);
             }
         }
 
