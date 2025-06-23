@@ -21,21 +21,22 @@
   font-weight: 500;
 }
 
+
 .artpulse-advanced-taxonomy-filter-block button {
   margin: 6px 6px 6px 0;
   cursor: pointer;
   background-color: var(--ap-primary-color);
-  color: white;
+  color: var(--ap-bg-color);
   border: none;
-  padding: 6px 12px;
-  border-radius: 3px;
-  transition: background-color 0.2s ease;
+  padding: var(--ap-button-padding);
+  border-radius: var(--ap-border-radius);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .artpulse-advanced-taxonomy-filter-block button:hover,
 .artpulse-advanced-taxonomy-filter-block button:focus {
   background-color: var(--ap-primary-hover);
-  outline: none;
+  box-shadow: 0 0 0 2px var(--ap-primary-color);
 }
 
 /* Responsive tweaks */
@@ -45,7 +46,7 @@
   }
 
   .artpulse-advanced-taxonomy-filter-block button {
-    padding: 5px 10px;
+    padding: var(--ap-button-padding);
     font-size: 14px;
   }
 }
