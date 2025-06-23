@@ -120,11 +120,12 @@ class SettingsPage
             header('Content-Type: text/csv');
             header('Content-Disposition: attachment; filename="artpulse-members.csv"');
             $output = fopen('php://output', 'w');
-            fputcsv($output, ['Name', 'Email', 'Role', 'Membership Level', 'Submissions', 'Last Login', 'Registered', 'Expiry']);
+            fputcsv($output, ['Name', 'Email', 'Role', 'Membership Level', 'Submissions', 'Last Login', 'Registered At', 'Expiry']);
             foreach ($users as $user) {
                 $level = get_user_meta($user->ID, 'ap_membership_level', true);
                 $last_login = get_user_meta($user->ID, 'last_login', true);
                 $expires = get_user_meta($user->ID, 'ap_membership_expires', true);
+                $registered_at = get_user_meta($user->ID, 'registered_at', true);
                 fputcsv($output, [
                     $user->display_name ?: $user->user_login,
                     $user->user_email,
@@ -132,7 +133,7 @@ class SettingsPage
                     $level ?: '—',
                     count_user_posts($user->ID, 'artwork'), // change to match your CPT
                     $last_login ?: '—',
-                    $user->user_registered,
+                    $registered_at ?: $user->user_registered,
                     $expires ?: '—',
                 ]);
             }
@@ -162,7 +163,7 @@ class SettingsPage
                     <th><?php esc_html_e('Level', 'artpulse'); ?></th>
                     <th><?php esc_html_e('Submissions', 'artpulse'); ?></th>
                     <th><?php esc_html_e('Last Login', 'artpulse'); ?></th>
-                    <th><?php esc_html_e('Registered', 'artpulse'); ?></th>
+                    <th><?php esc_html_e('Registered At', 'artpulse'); ?></th>
                     <th><?php esc_html_e('Expires', 'artpulse'); ?></th>
                     <th><?php esc_html_e('Actions', 'artpulse'); ?></th>
                 </tr>
@@ -171,8 +172,9 @@ class SettingsPage
                 <?php foreach ($users as $user):
                     $level     = get_user_meta($user->ID, 'ap_membership_level', true);
                     $last_login = get_user_meta($user->ID, 'last_login', true);
-                    $expires   = get_user_meta($user->ID, 'ap_membership_expires', true);
-                    $count     = count_user_posts($user->ID, 'artwork'); // change post type if needed
+                    $expires       = get_user_meta($user->ID, 'ap_membership_expires', true);
+                    $count         = count_user_posts($user->ID, 'artwork'); // change post type if needed
+                    $registered_at = get_user_meta($user->ID, 'registered_at', true);
                     ?>
                     <tr>
                         <td><?php echo esc_html($user->display_name ?: $user->user_login); ?></td>
@@ -180,7 +182,7 @@ class SettingsPage
                         <td><?php echo esc_html($level ?: '—'); ?></td>
                         <td><?php echo esc_html($count); ?></td>
                         <td><?php echo esc_html($last_login ?: '—'); ?></td>
-                        <td><?php echo esc_html(date_i18n(get_option('date_format'), strtotime($user->user_registered))); ?></td>
+                        <td><?php echo esc_html(date_i18n(get_option('date_format'), strtotime($registered_at ?: $user->user_registered))); ?></td>
                         <td><?php echo esc_html($expires ?: '—'); ?></td>
                         <td>
                             <a href="<?php echo esc_url(get_edit_user_link($user->ID)); ?>"><?php esc_html_e('View', 'artpulse'); ?></a>
