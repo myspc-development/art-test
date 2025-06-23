@@ -14,6 +14,8 @@ class MembershipManager
     {
         // Assign free membership on user registration
         add_action('user_register', [ self::class, 'assignFreeMembership' ]);
+        // Log registration details
+        add_action('user_register', [ self::class, 'logRegistration' ]);
 
         // Register Stripe webhook endpoint
         add_action('rest_api_init', [ self::class, 'registerRestRoutes' ]);
@@ -37,6 +39,19 @@ class MembershipManager
             __('Welcome to ArtPulse – Free Membership','artpulse'),
             __('Thanks for joining! You now have Free membership.','artpulse')
         );
+    }
+
+    /**
+     * Log registration time and IP address.
+     */
+    public static function logRegistration($user_id)
+    {
+        update_user_meta($user_id, 'registered_at', current_time('mysql'));
+
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        if (!empty($ip)) {
+            update_user_meta($user_id, 'registered_ip', sanitize_text_field($ip));
+        }
     }
 
     /**
