@@ -210,8 +210,11 @@ class Plugin
         );
 
         wp_localize_script('ap-login-js', 'APLogin', [
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce'   => wp_create_nonce('ap_login_nonce'),
+            'ajaxUrl'         => admin_url('admin-ajax.php'),
+            'nonce'           => wp_create_nonce('ap_login_nonce'),
+            'orgSubmissionUrl'=> $this->get_org_submission_url(),
+            'artistEndpoint'  => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
+            'restNonce'       => wp_create_nonce('wp_rest'),
         ]);
 
         wp_enqueue_style(
@@ -236,6 +239,22 @@ class Plugin
                 'enabled' => true,
             ]);
         }
+    }
+
+    private function get_org_submission_url(): string
+    {
+        $pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_submit_organization]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($pages)) {
+            return get_permalink($pages[0]->ID);
+        }
+
+        return home_url('/');
     }
 
     public function maybe_migrate_org_meta()
