@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ORG_FIELDS = [
   { name: 'ead_org_description', type: 'textarea', label: 'Description', required: true },
@@ -54,6 +54,9 @@ export default function OrganizationSubmissionForm() {
   const [logo, setLogo] = useState(null);
   const [banner, setBanner] = useState(null);
   const [addressComponents, setAddressComponents] = useState('');
+  const [country, setCountry] = useState('');
+  const [stateProv, setStateProv] = useState('');
+  const [city, setCity] = useState('');
   const [previews, setPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -71,6 +74,14 @@ export default function OrganizationSubmissionForm() {
   const handleBannerChange = (e) => {
     setBanner(e.target.files[0] || null);
   };
+
+  useEffect(() => {
+    setAddressComponents(JSON.stringify({
+      country,
+      state: stateProv,
+      city
+    }));
+  }, [country, stateProv, city]);
 
   const uploadMedia = async (file) => {
     const formData = new FormData();
@@ -141,6 +152,10 @@ export default function OrganizationSubmissionForm() {
       setPreviews([]);
       setLogo(null);
       setBanner(null);
+      setCountry('');
+      setStateProv('');
+      setCity('');
+      setAddressComponents('');
     } catch (err) {
       console.error(err);
       setMessage(`Error: ${err.message}`);
@@ -160,6 +175,31 @@ export default function OrganizationSubmissionForm() {
         value={title}
         onChange={e => setTitle(e.target.value)}
         required
+      />
+
+      <input
+        className="w-full p-2 border rounded ap-address-country"
+        type="text"
+        placeholder="Country"
+        value={country}
+        onChange={e => setCountry(e.target.value)}
+        required
+      />
+
+      <input
+        className="w-full p-2 border rounded ap-address-state"
+        type="text"
+        placeholder="State/Province"
+        value={stateProv}
+        onChange={e => setStateProv(e.target.value)}
+      />
+
+      <input
+        className="w-full p-2 border rounded ap-address-city"
+        type="text"
+        placeholder="City"
+        value={city}
+        onChange={e => setCity(e.target.value)}
       />
 
       {ORG_FIELDS.map(field => (
