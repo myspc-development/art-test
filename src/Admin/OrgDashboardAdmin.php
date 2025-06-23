@@ -13,6 +13,13 @@ class OrgDashboardAdmin {
         );
     }
 
+    // Hide the default Organizations CPT menu for non-admins
+    public static function hide_org_menu() {
+        if (!current_user_can('manage_options')) {
+            remove_menu_page('edit.php?post_type=artpulse_org');
+        }
+    }
+
     // --- Helper: Get the current org id for this admin ---
     private static function get_current_org_id() {
         // Super admins can choose any org via dropdown (?org_id=)
@@ -194,3 +201,4 @@ class OrgDashboardAdmin {
 }
 
 add_action('admin_menu', ['\\ArtPulse\\Admin\\OrgDashboardAdmin', 'register']);
+add_action('admin_menu', ['\\ArtPulse\\Admin\\OrgDashboardAdmin', 'hide_org_menu'], 999);
