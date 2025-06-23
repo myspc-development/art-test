@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('.ap-org-submission-form');
-  const messageBox = document.querySelector('.ap-org-submission-message');
+  const messageBox = document.querySelector('.ap-form-messages');
   if (!form) return;
 
   form.addEventListener('submit', async (e) => {
@@ -73,6 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (form.querySelector('#ap-org-images')) form.querySelector('#ap-org-images').value = '';
         if (form.querySelector('#ead_org_logo_id')) form.querySelector('#ead_org_logo_id').value = '';
         if (form.querySelector('#ead_org_banner_id')) form.querySelector('#ead_org_banner_id').value = '';
+        setTimeout(() => {
+          window.location.href = APSubmission.dashboardUrl;
+        }, 3000);
       } else {
         if (messageBox) messageBox.textContent = data.message || 'Submission failed.';
       }

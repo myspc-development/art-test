@@ -99,6 +99,9 @@ export default function SubmissionForm() {
       if (!res.ok) throw new Error(json.message || 'Submission failed');
 
       setMessage('Submission successful!');
+      setTimeout(() => {
+        window.location.href = APSubmission.dashboardUrl;
+      }, 3000);
       setTitle('');
       setEventDate('');
       setStartDate('');
@@ -125,141 +128,190 @@ export default function SubmissionForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 max-w-xl mx-auto rounded-xl shadow bg-white space-y-4">
-      <h2 className="text-xl font-bold">Submit New Event</h2>
+    <form onSubmit={handleSubmit} className="ap-form-container">
+      <div className="ap-form-messages" role="status" aria-live="polite">{message}</div>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="Event Title"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        required
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_title">Event Title</label>
+        <input
+          id="ap_event_title"
+          className="ap-form-input"
+          type="text"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          required
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="date"
-        value={eventDate}
-        onChange={e => setEventDate(e.target.value)}
-        required
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_date">Date</label>
+        <input
+          id="ap_event_date"
+          className="ap-form-input"
+          type="date"
+          value={eventDate}
+          onChange={e => setEventDate(e.target.value)}
+          required
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="date"
-        placeholder="Start Date"
-        value={startDate}
-        onChange={e => setStartDate(e.target.value)}
-        required
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_start">Start Date</label>
+        <input
+          id="ap_event_start"
+          className="ap-form-input"
+          type="date"
+          value={startDate}
+          onChange={e => setStartDate(e.target.value)}
+          required
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="date"
-        placeholder="End Date"
-        value={endDate}
-        onChange={e => setEndDate(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_end">End Date</label>
+        <input
+          id="ap_event_end"
+          className="ap-form-input"
+          type="date"
+          value={endDate}
+          onChange={e => setEndDate(e.target.value)}
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="Venue Name"
-        value={venueName}
-        onChange={e => setVenueName(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_venue_name">Venue Name</label>
+        <input
+          id="ap_venue_name"
+          className="ap-form-input"
+          type="text"
+          value={venueName}
+          onChange={e => setVenueName(e.target.value)}
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="Street Address"
-        value={streetAddress}
-        onChange={e => setStreetAddress(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_street">Street Address</label>
+        <input
+          id="ap_event_street"
+          className="ap-form-input"
+          type="text"
+          value={streetAddress}
+          onChange={e => setStreetAddress(e.target.value)}
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="Country"
-        value={country}
-        onChange={e => setCountry(e.target.value)}
-        required
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_country">Country</label>
+        <input
+          id="ap_event_country"
+          className="ap-form-input ap-address-country"
+          type="text"
+          value={country}
+          onChange={e => setCountry(e.target.value)}
+          required
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="State/Province"
-        value={stateProv}
-        onChange={e => setStateProv(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_state">State/Province</label>
+        <input
+          id="ap_event_state"
+          className="ap-form-input ap-address-state"
+          type="text"
+          value={stateProv}
+          onChange={e => setStateProv(e.target.value)}
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="City"
-        value={city}
-        onChange={e => setCity(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_city">City</label>
+        <input
+          id="ap_event_city"
+          className="ap-form-input ap-address-city"
+          type="text"
+          value={city}
+          onChange={e => setCity(e.target.value)}
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="Postcode"
-        value={postcode}
-        onChange={e => setPostcode(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_postcode">Postcode</label>
+        <input
+          id="ap_event_postcode"
+          className="ap-form-input ap-address-postcode"
+          type="text"
+          value={postcode}
+          onChange={e => setPostcode(e.target.value)}
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded ap-google-autocomplete"
-        type="text"
-        placeholder="Location"
-        value={location}
-        onChange={e => setLocation(e.target.value)}
-        required
-      />
-      <input type="hidden" value={addressComponents} readOnly name="address_components" />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_location">Location</label>
+        <input
+          id="ap_event_location"
+          className="ap-form-input ap-google-autocomplete"
+          type="text"
+          value={location}
+          onChange={e => setLocation(e.target.value)}
+          required
+        />
+        <input type="hidden" value={addressComponents} readOnly name="address_components" />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="text"
-        placeholder="Organizer Name"
-        value={organizerName}
-        onChange={e => setOrganizerName(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_organizer">Organizer Name</label>
+        <input
+          id="ap_event_organizer"
+          className="ap-form-input"
+          type="text"
+          value={organizerName}
+          onChange={e => setOrganizerName(e.target.value)}
+        />
+      </p>
 
-      <input
-        className="w-full p-2 border rounded"
-        type="email"
-        placeholder="Organizer Email"
-        value={organizerEmail}
-        onChange={e => setOrganizerEmail(e.target.value)}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_event_organizer_email">Organizer Email</label>
+        <input
+          id="ap_event_organizer_email"
+          className="ap-form-input"
+          type="email"
+          value={organizerEmail}
+          onChange={e => setOrganizerEmail(e.target.value)}
+        />
+      </p>
 
-      <input
-        className="w-full"
-        type="file"
-        accept="image/*"
-        onChange={handleBannerChange}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_banner">Event Banner</label>
+        <input
+          id="ap_banner"
+          className="ap-form-input"
+          type="file"
+          accept="image/*"
+          onChange={handleBannerChange}
+        />
+      </p>
 
-      <label className="flex items-center gap-2">
+      <label className="ap-form-label">
         <input
           type="checkbox"
+          className="ap-form-input"
           checked={featured}
           onChange={e => setFeatured(e.target.checked)}
         />
-        <span>Request Featured</span>
+        <span> Request Featured</span>
       </label>
 
-      <input
-        className="w-full"
-        type="file"
-        multiple
-        accept="image/*"
-        onChange={handleFileChange}
-      />
+      <p>
+        <label className="ap-form-label" htmlFor="ap_images">Images (max 5)</label>
+        <input
+          id="ap_images"
+          className="ap-form-input"
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+      </p>
 
       <div className="flex gap-2 flex-wrap">
         {previews.map((src, i) => (
@@ -268,14 +320,12 @@ export default function SubmissionForm() {
       </div>
 
       <button
-        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+        className="ap-form-button"
         type="submit"
         disabled={loading}
       >
         {loading ? 'Submitting...' : 'Submit'}
       </button>
-
-      {message && <p className="text-sm text-center text-gray-700 mt-2">{message}</p>}
     </form>
   );
 }
