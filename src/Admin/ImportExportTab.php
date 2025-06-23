@@ -40,6 +40,23 @@ class ImportExportTab
         <div id="ap-import-export">
             <h2><?php esc_html_e('Import CSV', 'artpulse'); ?></h2>
             <input type="file" id="ap-csv-file" accept=".csv" />
+            <p style="margin-top:10px;">
+                <label><input type="checkbox" id="ap-csv-has-header" checked> <?php esc_html_e('File has header row', 'artpulse'); ?></label>
+            </p>
+            <p>
+                <label for="ap-csv-delimiter"><?php esc_html_e('Delimiter', 'artpulse'); ?> </label>
+                <select id="ap-csv-delimiter">
+                    <option value=",">, (comma)</option>
+                    <option value=";">; (semicolon)</option>
+                    <option value="tab">Tab</option>
+                    <option value="custom"><?php esc_html_e('Custom', 'artpulse'); ?></option>
+                </select>
+                <input type="text" id="ap-csv-delimiter-custom" style="width:40px;display:none;" maxlength="1" />
+            </p>
+            <p>
+                <label for="ap-csv-skip"><?php esc_html_e('Rows to skip', 'artpulse'); ?></label>
+                <input type="number" id="ap-csv-skip" value="0" min="0" style="width:60px;" />
+            </p>
             <div id="ap-mapping-step" style="margin-top:20px;"></div>
             <button id="ap-start-import" class="button button-primary" disabled><?php esc_html_e('Start Import', 'artpulse'); ?></button>
             <pre id="ap-import-status"></pre>

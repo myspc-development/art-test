@@ -8,6 +8,12 @@ An Import/Export tab is available under **ArtPulse → Settings**. From this tab
 - Import data in chunks via the REST API endpoint `artpulse/v1/import`.
 - Download CSV exports for organizations, events, artists and artworks.
 
+During import you can configure:
+
+* Whether the uploaded file contains a header row.
+* Which delimiter to use (comma, semicolon, tab or a custom character).
+* How many initial rows should be skipped before parsing.
+
 Only users with the `manage_options` capability may perform imports. PapaParse is used client side for parsing CSV files.
 ## Membership Overrides
 
