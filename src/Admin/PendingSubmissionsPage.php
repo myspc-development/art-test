@@ -11,13 +11,14 @@ class PendingSubmissionsPage
 
     public static function addMenu()
     {
-        add_submenu_page(
-            'artpulse-dashboard',
+        add_menu_page(
             __('Pending Submissions', 'artpulse'),
             __('Pending', 'artpulse'),
             'publish_posts',
             'ap-pending-submissions',
-            [self::class, 'render']
+            [self::class, 'render'],
+            'dashicons-clock',
+            59
         );
     }
 

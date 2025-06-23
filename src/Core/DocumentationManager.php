@@ -19,8 +19,8 @@ class DocumentationManager
         $docsPath = plugin_dir_path(__DIR__ . '/../../') . 'assets/docs/';
         $parsedown = new Parsedown();
 
-        // Admin Help on Dashboard
-        if ($screen->id === 'toplevel_page_artpulse-dashboard') {
+        // Admin Help on Settings page
+        if ($screen->id === 'toplevel_page_artpulse-settings') {
             $md = file_get_contents($docsPath . 'Admin_Help.md');
             $content = '<div class="ap-doc">' . $parsedown->text($md) . '</div>';
             $screen->add_help_tab([

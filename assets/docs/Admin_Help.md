@@ -8,7 +8,7 @@ Welcome to ArtPulse! This short guide outlines the main tools available for site
 
 ## Managing Members
 - Use the **Members** submenu to search, filter and export member data.
-- Approve or reject content under **Pending Submissions** when moderation is required.
+- Approve or reject content from the **Pending Submissions** menu when moderation is required.
 
 ## Engagement & Analytics
 - Visit **Engagement Dashboard** for charts showing logins and uploads.

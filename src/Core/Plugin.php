@@ -81,7 +81,6 @@ class Plugin
     {
         \ArtPulse\Core\PostTypeRegistrar::register(); // ✅ CPTs
         \ArtPulse\Core\MetaBoxRegistrar::register();
-        \ArtPulse\Core\AdminDashboard::register();
         \ArtPulse\Core\ShortcodeManager::register();
         \ArtPulse\Admin\SettingsPage::register();
         \ArtPulse\Core\MembershipManager::register();
