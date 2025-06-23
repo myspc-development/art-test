@@ -38,3 +38,7 @@ Use the new directory shortcodes to display listings without specifying a type a
 
 The older `[ap_directory]` shortcode is still supported for backward compatibility.
 
+## Login Shortcode
+
+Use `[ap_login]` to display the front-end login form. The form also includes a registration section for new users. Signing up through this form automatically grants the “Free” membership level.
+
