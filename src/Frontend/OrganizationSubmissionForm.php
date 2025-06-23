@@ -60,7 +60,15 @@ class OrganizationSubmissionForm {
                                 }
                                 echo '</select>';
                             } else {
-                                printf('<input id="%1$s" type="text" name="%1$s" />', esc_attr($key));
+                                $extra_class = '';
+                                if (in_array($key, ['ead_org_street_address', 'ead_org_venue_address'], true)) {
+                                    $extra_class = ' class="ap-google-autocomplete"';
+                                }
+                                printf(
+                                    '<input id="%1$s" type="text" name="%1$s"%2$s />',
+                                    esc_attr($key),
+                                    $extra_class
+                                );
                             }
                             break;
                         case 'media':
