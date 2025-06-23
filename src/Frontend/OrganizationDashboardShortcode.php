@@ -34,8 +34,40 @@ class OrganizationDashboardShortcode {
                     <label class="ap-form-label" for="ap_event_date">Event Date</label>
                     <input class="ap-form-input" id="ap_event_date" type="date" name="ap_event_date" required>
 
+                    <label class="ap-form-label" for="ap_event_start_date">Start Date</label>
+                    <input class="ap-form-input" id="ap_event_start_date" type="date" name="ap_event_start_date">
+
+                    <label class="ap-form-label" for="ap_event_end_date">End Date</label>
+                    <input class="ap-form-input" id="ap_event_end_date" type="date" name="ap_event_end_date">
+
                     <label class="ap-form-label" for="ap_event_location">Location</label>
-                    <input class="ap-form-input ap-google-autocomplete" id="ap_event_location" type="text" name="ap_event_location" required>
+                    <input class="ap-form-input ap-google-autocomplete" id="ap_event_location" type="text" name="ap_event_location">
+
+                    <label class="ap-form-label" for="ap_venue_name">Venue Name</label>
+                    <input class="ap-form-input" id="ap_venue_name" type="text" name="ap_venue_name">
+
+                    <label class="ap-form-label" for="ap_event_street_address">Street Address</label>
+                    <input class="ap-form-input" id="ap_event_street_address" type="text" name="ap_event_street_address">
+
+                    <label class="ap-form-label" for="ap_event_country">Country</label>
+                    <input class="ap-form-input" id="ap_event_country" type="text" name="ap_event_country">
+
+                    <label class="ap-form-label" for="ap_event_state">State/Province</label>
+                    <input class="ap-form-input" id="ap_event_state" type="text" name="ap_event_state">
+
+                    <label class="ap-form-label" for="ap_event_city">City</label>
+                    <input class="ap-form-input" id="ap_event_city" type="text" name="ap_event_city">
+
+                    <label class="ap-form-label" for="ap_event_postcode">Postcode</label>
+                    <input class="ap-form-input" id="ap_event_postcode" type="text" name="ap_event_postcode">
+
+                    <input type="hidden" name="address_components" id="ap_address_components">
+
+                    <label class="ap-form-label" for="ap_event_organizer_name">Organizer Name</label>
+                    <input class="ap-form-input" id="ap_event_organizer_name" type="text" name="ap_event_organizer_name">
+
+                    <label class="ap-form-label" for="ap_event_organizer_email">Organizer Email</label>
+                    <input class="ap-form-input" id="ap_event_organizer_email" type="email" name="ap_event_organizer_email">
 
                     <label class="ap-form-label" for="ap_event_type">Event Type</label>
                     <select class="ap-form-select" id="ap_event_type" name="ap_event_type">
@@ -46,6 +78,10 @@ class OrganizationDashboardShortcode {
                         }
                         ?>
                     </select>
+
+                    <label class="ap-form-label">
+                        <input class="ap-form-input" type="checkbox" name="ap_event_featured" value="1"> Request Featured
+                    </label>
 
                     <input type="hidden" name="ap_event_organization" value="<?php echo esc_attr($org_id); ?>">
                     <button class="ap-form-button" type="submit">Submit</button>
@@ -74,11 +110,39 @@ class OrganizationDashboardShortcode {
     public static function handle_ajax_add_event() {
         check_ajax_referer('ap_org_dashboard_nonce', 'nonce');
 
-        $title = sanitize_text_field($_POST['ap_event_title']);
-        $date = sanitize_text_field($_POST['ap_event_date']);
-        $location = sanitize_text_field($_POST['ap_event_location']);
-        $event_type = intval($_POST['ap_event_type']);
-        $org_id = intval($_POST['ap_event_organization']);
+        $title            = sanitize_text_field($_POST['ap_event_title']);
+        $date             = sanitize_text_field($_POST['ap_event_date']);
+        $start_date       = sanitize_text_field($_POST['ap_event_start_date'] ?? '');
+        $end_date         = sanitize_text_field($_POST['ap_event_end_date'] ?? '');
+        $location         = sanitize_text_field($_POST['ap_event_location']);
+        $venue_name       = sanitize_text_field($_POST['ap_venue_name'] ?? '');
+        $street           = sanitize_text_field($_POST['ap_event_street_address'] ?? '');
+        $country          = sanitize_text_field($_POST['ap_event_country'] ?? '');
+        $state            = sanitize_text_field($_POST['ap_event_state'] ?? '');
+        $city             = sanitize_text_field($_POST['ap_event_city'] ?? '');
+        $postcode         = sanitize_text_field($_POST['ap_event_postcode'] ?? '');
+        $address_components = sanitize_text_field($_POST['address_components'] ?? '');
+        $organizer_name   = sanitize_text_field($_POST['ap_event_organizer_name'] ?? '');
+        $organizer_email  = sanitize_email($_POST['ap_event_organizer_email'] ?? '');
+        $event_type       = intval($_POST['ap_event_type'] ?? 0);
+        $featured         = isset($_POST['ap_event_featured']) ? '1' : '0';
+        $org_id           = intval($_POST['ap_event_organization']);
+
+        if (empty($title)) {
+            wp_send_json_error(['message' => 'Please enter an event title.']);
+        }
+
+        if (empty($date)) {
+            wp_send_json_error(['message' => 'Please enter an event date.']);
+        }
+
+        if (!preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $date)) {
+            wp_send_json_error(['message' => 'Please enter a valid date in YYYY-MM-DD format.']);
+        }
+
+        if ($org_id <= 0) {
+            wp_send_json_error(['message' => 'Please select an organization.']);
+        }
 
         $event_id = wp_insert_post([
             'post_title' => $title,
@@ -91,9 +155,24 @@ class OrganizationDashboardShortcode {
         }
 
         update_post_meta($event_id, '_ap_event_date', $date);
+        update_post_meta($event_id, 'event_start_date', $start_date);
+        update_post_meta($event_id, 'event_end_date', $end_date);
         update_post_meta($event_id, '_ap_event_location', $location);
+        update_post_meta($event_id, 'venue_name', $venue_name);
+        update_post_meta($event_id, 'event_street_address', $street);
+        update_post_meta($event_id, 'event_country', $country);
+        update_post_meta($event_id, 'event_state', $state);
+        update_post_meta($event_id, 'event_city', $city);
+        update_post_meta($event_id, 'event_postcode', $postcode);
+        update_post_meta($event_id, 'address_components', $address_components);
+        update_post_meta($event_id, 'event_organizer_name', $organizer_name);
+        update_post_meta($event_id, 'event_organizer_email', $organizer_email);
         update_post_meta($event_id, '_ap_event_organization', $org_id);
-        wp_set_post_terms($event_id, [$event_type], 'artpulse_event_type');
+        update_post_meta($event_id, 'event_featured', $featured);
+
+        if ($event_type) {
+            wp_set_post_terms($event_id, [$event_type], 'artpulse_event_type');
+        }
 
         // Reload the event list
         ob_start();
