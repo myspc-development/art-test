@@ -109,7 +109,10 @@ class EnqueueAssets {
             }
         }
 
-        if ($screen->base === 'toplevel_page_artpulse-settings' && ($_GET['tab'] ?? '') === 'import_export') {
+        if (
+            ($screen->base === 'toplevel_page_artpulse-settings' && ($_GET['tab'] ?? '') === 'import_export') ||
+            $screen->base === 'artpulse-settings_page_artpulse-import-export'
+        ) {
             wp_enqueue_script('papaparse', 'https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js', [], null, true);
             $import_path = $plugin_dir . '/assets/js/ap-csv-import.js';
             $import_url  = $plugin_url . '/assets/js/ap-csv-import.js';
