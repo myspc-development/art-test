@@ -31,10 +31,10 @@ class QuickStartGuide
 
         echo '<div class="wrap">';
         echo '<h1>' . esc_html__('ArtPulse Quick Start', 'artpulse') . '</h1>';
-        echo '<p>' . esc_html__('Refer to these guides to get up and running:', 'artpulse') . '</p>';
+        echo '<p>' . esc_html__('Refer to these enriched guides for workflow details and admin walkthroughs:', 'artpulse') . '</p>';
         echo '<ul>';
-        echo '<li><a href="' . esc_url($admin_doc) . '" target="_blank">' . esc_html__('Admin Guide', 'artpulse') . '</a></li>';
-        echo '<li><a href="' . esc_url($member_doc) . '" target="_blank">' . esc_html__('Member Guide', 'artpulse') . '</a></li>';
+        echo '<li><a href="' . esc_url($admin_doc) . '" target="_blank">' . esc_html__('Admin Guide (modules)', 'artpulse') . '</a></li>';
+        echo '<li><a href="' . esc_url($member_doc) . '" target="_blank">' . esc_html__('Member Guide (journey)', 'artpulse') . '</a></li>';
         echo '</ul>';
         echo '</div>';
     }

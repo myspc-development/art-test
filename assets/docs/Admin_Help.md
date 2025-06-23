@@ -2,6 +2,18 @@ Admin Quick Start Guide
 
 This guide covers the essential administration tasks for the ArtPulse plugin.
 
+For an overview of how a user interacts with ArtPulse, see the User Journey diagram below:
+
+```mermaid
+graph TD
+    A[Start Signup] --> B[Create Profile]
+    B --> C[Register Artwork]
+    C --> D[Submit Event]
+    D --> E[View Calendar]
+    E --> F[Upgrade Membership]
+    F --> G[Receive Notifications]
+```
+
 ## Installation & Setup
 1. Upload `artpulse.zip` via **Plugins → Add New** and activate.
 2. Under **ArtPulse → Settings → General** configure timezone, date format and enable Auto‑expire Past Events.
@@ -23,6 +35,14 @@ Enable this option in **Settings → General** to hide events automatically afte
 
 ## Gutenberg Relationship Blocks
 Blocks for **Artist ↔ Event** and **Artwork ↔ Organization** help you link related content in the editor.
+
+## Admin Module Walkthrough
+The administration screens follow the WordPress style guide, utilizing system fonts and the default blue (#2271b1) button color. A screenshot (`images/admin_modules_walkthrough.png`) labels the primary modules.
+
+## Styling Guidelines
+- Use headings that match core WP admin (H2 for primary sections).
+- Buttons should use the `button-primary` class.
+- Keep iconography consistent with the Dashicons set.
 
 ## Shortcodes & Forms
 The plugin registers the following shortcodes:
