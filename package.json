@@ -3,12 +3,14 @@
   "version": "0.1.2",
   "private": true,
   "scripts": {
-    "build": "wp-scripts build && npx babel assets/js/OrganizationSubmissionForm.jsx -o assets/js/ap-org-submission.js",
+    "build:css": "sass assets/scss:assets/css --no-source-map",
+    "build": "npm run build:css && wp-scripts build && npx babel assets/js/OrganizationSubmissionForm.jsx -o assets/js/ap-org-submission.js",
     "start": "wp-scripts start",
     "release": "standard-version"
   },
   "devDependencies": {
     "@wordpress/scripts": "^19.2.4",
-    "standard-version": "^9.5.0"
+    "standard-version": "^9.5.0",
+    "sass": "^1.69.5"
   }
 }
