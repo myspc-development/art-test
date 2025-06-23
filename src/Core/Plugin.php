@@ -121,6 +121,7 @@ class Plugin
         \ArtPulse\Admin\MetaBoxesArtist::register();
         \ArtPulse\Admin\MetaBoxesArtwork::register();
         \ArtPulse\Admin\MetaBoxesEvent::register();
+        \ArtPulse\Admin\MetaBoxesAddress::register(['artpulse_event']);
         \ArtPulse\Admin\MetaBoxesOrganisation::register();
 
         \ArtPulse\Admin\AdminColumnsArtist::register();

@@ -2,7 +2,11 @@
 namespace ArtPulse\Admin;
 
 class MetaBoxesAddress {
-
+    /**
+     * Register the address meta box for one or more post types.
+     *
+     * @param array|string $post_types Post types to attach the meta box to.
+     */
     public static function register($post_types) {
         if (!is_array($post_types)) {
             $post_types = [$post_types];
@@ -16,33 +20,42 @@ class MetaBoxesAddress {
                 continue;
             }
 
-            add_action("add_meta_boxes_{$post_type}", function($post) use ($post_type) {
+            // Determine prefix based on post type. Events store meta with the
+            // `event_` prefix while others use unprefixed keys.
+            $prefix = $post_type === 'artpulse_event' ? 'event_' : '';
+
+            add_action("add_meta_boxes_{$post_type}", function($post) use ($post_type, $prefix) {
                 add_meta_box(
                     'ead_address_meta_box_' . $post_type, // Unique ID per post type
                     __('Address', 'artpulse-management'),
-                    [self::class, 'render_address_meta_box'],
+                    function($post_object) use ($prefix) {
+                        self::render_address_meta_box($post_object, $prefix);
+                    },
                     $post_type, // This is correct, uses the passed post_type
                     'normal',
                     'default'
                 );
             });
 
-            add_action("save_post_{$post_type}", function($post_id, $post) use ($post_type) {
+            add_action("save_post_{$post_type}", function($post_id, $post) use ($post_type, $prefix) {
                 // Check if the current post type matches the one this hook is for
                 // This check is important because save_post_{$post_type} can sometimes be too broad
                 // if not careful with hook priorities or if other plugins interfere.
                 // However, WordPress core usually handles this correctly for this specific hook.
                 if ($post->post_type === $post_type) {
-                    self::save_address_meta($post_id, $post);
+                    self::save_address_meta($post_id, $post, $prefix);
                 }
             }, 10, 2);
         }
     }
 
-    public static function render_address_meta_box($post) {
+    /**
+     * Output the address form fields.
+     */
+    public static function render_address_meta_box($post, string $prefix = '') {
         wp_nonce_field('ead_address_meta_nonce', 'ead_address_meta_nonce_field');
 
-        $fields = self::get_address_meta_fields();
+        $fields = self::get_address_meta_fields($prefix);
 
         echo '<table class="form-table">';
         foreach ($fields as $key => $label) {
@@ -54,7 +67,10 @@ class MetaBoxesAddress {
         echo '</table>';
     }
 
-    public static function save_address_meta($post_id, $post) { // $post parameter is available
+    /**
+     * Persist address meta fields for a given post.
+     */
+    public static function save_address_meta($post_id, $post, string $prefix = '') { // $post parameter is available
         if (!isset($_POST['ead_address_meta_nonce_field']) || !wp_verify_nonce($_POST['ead_address_meta_nonce_field'], 'ead_address_meta_nonce')) {
             return;
         }
@@ -78,7 +94,7 @@ class MetaBoxesAddress {
         }
 
 
-        $fields = array_keys(self::get_address_meta_fields());
+        $fields = array_keys(self::get_address_meta_fields($prefix));
 
         foreach ($fields as $field) {
             if (isset($_POST[$field])) {
@@ -93,13 +109,18 @@ class MetaBoxesAddress {
         }
     }
 
-    private static function get_address_meta_fields() {
+    /**
+     * Return an associative array of address meta fields keyed by meta name.
+     */
+    private static function get_address_meta_fields(string $prefix = '') {
+        $prefix = $prefix !== '' ? rtrim($prefix, '_') . '_' : '';
+
         return [
-            'street_address' => __('Street Address', 'artpulse-management'),
-            'city'           => __('City', 'artpulse-management'),
-            'state'          => __('State / Province', 'artpulse-management'),
-            'postcode'       => __('Postcode / Zip Code', 'artpulse-management'),
-            'country'        => __('Country', 'artpulse-management'),
+            $prefix . 'street_address' => __('Street Address', 'artpulse-management'),
+            $prefix . 'city'           => __('City', 'artpulse-management'),
+            $prefix . 'state'          => __('State / Province', 'artpulse-management'),
+            $prefix . 'postcode'       => __('Postcode / Zip Code', 'artpulse-management'),
+            $prefix . 'country'        => __('Country', 'artpulse-management'),
         ];
     }
 }
