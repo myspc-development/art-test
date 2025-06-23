@@ -41,6 +41,7 @@ class ImportRestController
         $params    = $request->get_json_params();
         $rows      = $params['rows'] ?? [];
         $post_type = sanitize_key($params['post_type'] ?? '');
+        $trim      = !empty($params['trim_whitespace']);
 
         if (!in_array($post_type, self::$allowed_post_types, true)) {
             return new WP_REST_Response(['message' => 'Invalid post type'], 400);
@@ -58,11 +59,19 @@ class ImportRestController
             ];
 
             if (isset($row['post_title'])) {
-                $postarr['post_title'] = sanitize_text_field($row['post_title']);
+                $title = $row['post_title'];
+                if ($trim) {
+                    $title = trim((string) $title);
+                }
+                $postarr['post_title'] = sanitize_text_field($title);
                 unset($row['post_title']);
             }
             if (isset($row['post_content'])) {
-                $postarr['post_content'] = wp_kses_post($row['post_content']);
+                $content = $row['post_content'];
+                if ($trim) {
+                    $content = trim((string) $content);
+                }
+                $postarr['post_content'] = wp_kses_post($content);
                 unset($row['post_content']);
             }
 
@@ -72,6 +81,9 @@ class ImportRestController
             }
 
             foreach ($row as $key => $value) {
+                if ($trim) {
+                    $value = trim((string) $value);
+                }
                 update_post_meta($post_id, sanitize_key($key), sanitize_text_field($value));
             }
             $created[] = $post_id;

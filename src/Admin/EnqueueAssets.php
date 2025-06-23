@@ -125,8 +125,9 @@ class EnqueueAssets {
                     true
                 );
                 wp_localize_script('ap-csv-import', 'APCSVImport', [
-                    'endpoint' => esc_url_raw(rest_url('artpulse/v1/import')),
-                    'nonce'    => wp_create_nonce('wp_rest'),
+                    'endpoint'        => esc_url_raw(rest_url('artpulse/v1/import')),
+                    'templateBase'    => esc_url_raw(rest_url('artpulse/v1/import-template')),
+                    'nonce'           => wp_create_nonce('wp_rest'),
                 ]);
             }
         }

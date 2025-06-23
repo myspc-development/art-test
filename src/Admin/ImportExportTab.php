@@ -57,7 +57,13 @@ class ImportExportTab
                 <label for="ap-csv-skip"><?php esc_html_e('Rows to skip', 'artpulse'); ?></label>
                 <input type="number" id="ap-csv-skip" value="0" min="0" style="width:60px;" />
             </p>
+            <p>
+                <label><input type="checkbox" id="ap-trim-whitespace" /> <?php esc_html_e('Trim whitespace from values', 'artpulse'); ?></label>
+            </p>
             <div id="ap-mapping-step" style="margin-top:20px;"></div>
+            <p style="margin-top:10px;">
+                <button id="ap-save-template" class="button"><?php esc_html_e('Save Mapping Template', 'artpulse'); ?></button>
+            </p>
             <button id="ap-start-import" class="button button-primary" disabled><?php esc_html_e('Start Import', 'artpulse'); ?></button>
             <pre id="ap-import-status"></pre>
             <hr>
