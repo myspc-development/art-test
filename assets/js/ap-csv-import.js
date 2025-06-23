@@ -3,6 +3,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const mappingStep = document.getElementById('ap-mapping-step');
     const startBtn = document.getElementById('ap-start-import');
     const statusPre = document.getElementById('ap-import-status');
+    const headerInput = document.getElementById('ap-csv-has-header');
+    const delimiterSelect = document.getElementById('ap-csv-delimiter');
+    const delimiterCustom = document.getElementById('ap-csv-delimiter-custom');
+    const skipInput = document.getElementById('ap-csv-skip');
+
+    if (delimiterSelect) {
+        delimiterSelect.addEventListener('change', () => {
+            delimiterCustom.style.display = delimiterSelect.value === 'custom' ? 'inline-block' : 'none';
+        });
+    }
     if (!fileInput) return;
 
     let parsedData = [];
@@ -11,12 +21,40 @@ document.addEventListener('DOMContentLoaded', function () {
     fileInput.addEventListener('change', function () {
         const file = this.files[0];
         if (!file) return;
+
+        let delim = ',';
+        if (delimiterSelect) {
+            switch (delimiterSelect.value) {
+                case 'tab':
+                    delim = '\t';
+                    break;
+                case 'custom':
+                    delim = delimiterCustom.value || ',';
+                    break;
+                default:
+                    delim = delimiterSelect.value;
+            }
+        }
+
         Papa.parse(file, {
-            header: true,
+            header: false,
+            delimiter: delim,
             skipEmptyLines: true,
             complete: function (results) {
-                parsedData = results.data;
-                headers = results.meta.fields;
+                const skip = parseInt(skipInput?.value || '0', 10) || 0;
+                let rows = results.data.slice(skip);
+                if (headerInput?.checked) {
+                    headers = rows.shift();
+                } else {
+                    headers = rows[0].map((_, idx) => 'Column ' + (idx + 1));
+                }
+                parsedData = rows.map(r => {
+                    const obj = {};
+                    headers.forEach((h, idx) => {
+                        obj[h] = r[idx];
+                    });
+                    return obj;
+                });
                 buildMapping();
                 buildPreview();
             }
