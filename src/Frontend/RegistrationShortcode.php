@@ -41,12 +41,26 @@ class RegistrationShortcode
                     <input class="ap-form-input" id="ap_reg_password" type="password" name="password" required />
                 </p>
                 <p>
-                    <label class="ap-form-label" for="ap_continue_as"><?php esc_html_e('Continue as', 'artpulse-management'); ?></label>
-                    <select class="ap-form-select" id="ap_continue_as" name="continue_as">
-                        <option value="artist"><?php esc_html_e('Artist', 'artpulse-management'); ?></option>
-                        <option value="organization"><?php esc_html_e('Organization', 'artpulse-management'); ?></option>
-                    </select>
+                    <label class="ap-form-label" for="ap_reg_display_name"><?php esc_html_e('Display Name', 'artpulse-management'); ?></label>
+                    <input class="ap-form-input" id="ap_reg_display_name" type="text" name="display_name" />
                 </p>
+                <p>
+                    <label class="ap-form-label" for="ap_reg_bio"><?php esc_html_e('Bio', 'artpulse-management'); ?></label>
+                    <textarea class="ap-form-textarea" id="ap_reg_bio" name="description" rows="4"></textarea>
+                </p>
+                <p>
+                    <label class="ap-form-label" for="ap_country"><?php esc_html_e('Country', 'artpulse-management'); ?></label>
+                    <input class="ap-form-input ap-address-country ap-address-input" id="ap_country" type="text" name="ap_country" />
+                </p>
+                <p>
+                    <label class="ap-form-label" for="ap_state"><?php esc_html_e('State/Province', 'artpulse-management'); ?></label>
+                    <input class="ap-form-input ap-address-state ap-address-input" id="ap_state" type="text" name="ap_state" />
+                </p>
+                <p>
+                    <label class="ap-form-label" for="ap_city"><?php esc_html_e('City', 'artpulse-management'); ?></label>
+                    <input class="ap-form-input ap-address-city ap-address-input" id="ap_city" type="text" name="ap_city" />
+                </p>
+                <input type="hidden" name="address_components" id="ap_address_components" />
                 <p>
                     <button class="ap-form-button" type="submit"><?php esc_html_e('Register', 'artpulse-management'); ?></button>
                 </p>

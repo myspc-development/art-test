@@ -62,12 +62,26 @@ class LoginShortcode
                     <input class="ap-form-input" id="ap_reg_password" type="password" name="password" required />
                 </p>
                 <p>
-                    <label class="ap-form-label" for="ap_continue_as"><?php esc_html_e('Continue as', 'artpulse-management'); ?></label>
-                    <select class="ap-form-select" id="ap_continue_as" name="continue_as">
-                        <option value="artist"><?php esc_html_e('Artist', 'artpulse-management'); ?></option>
-                        <option value="organization"><?php esc_html_e('Organization', 'artpulse-management'); ?></option>
-                    </select>
+                    <label class="ap-form-label" for="ap_reg_display_name"><?php esc_html_e('Display Name', 'artpulse-management'); ?></label>
+                    <input class="ap-form-input" id="ap_reg_display_name" type="text" name="display_name" />
                 </p>
+                <p>
+                    <label class="ap-form-label" for="ap_reg_bio"><?php esc_html_e('Bio', 'artpulse-management'); ?></label>
+                    <textarea class="ap-form-textarea" id="ap_reg_bio" name="description" rows="4"></textarea>
+                </p>
+                <p>
+                    <label class="ap-form-label" for="ap_country"><?php esc_html_e('Country', 'artpulse-management'); ?></label>
+                    <input class="ap-form-input ap-address-country ap-address-input" id="ap_country" type="text" name="ap_country" />
+                </p>
+                <p>
+                    <label class="ap-form-label" for="ap_state"><?php esc_html_e('State/Province', 'artpulse-management'); ?></label>
+                    <input class="ap-form-input ap-address-state ap-address-input" id="ap_state" type="text" name="ap_state" />
+                </p>
+                <p>
+                    <label class="ap-form-label" for="ap_city"><?php esc_html_e('City', 'artpulse-management'); ?></label>
+                    <input class="ap-form-input ap-address-city ap-address-input" id="ap_city" type="text" name="ap_city" />
+                </p>
+                <input type="hidden" name="address_components" id="ap_address_components" />
                 <p>
                     <button class="ap-form-button" type="submit"><?php esc_html_e('Register', 'artpulse-management'); ?></button>
                 </p>
@@ -104,10 +118,21 @@ class LoginShortcode
             wp_send_json_error(['message' => __('Registration is currently disabled.', 'artpulse-management')]);
         }
 
-        $username     = sanitize_user($_POST['username'] ?? '');
-        $email        = sanitize_email($_POST['email'] ?? '');
-        $password     = $_POST['password'] ?? '';
-        $continue_as  = sanitize_text_field($_POST['continue_as'] ?? '');
+        $username      = sanitize_user($_POST['username'] ?? '');
+        $email         = sanitize_email($_POST['email'] ?? '');
+        $password      = $_POST['password'] ?? '';
+        $display_name  = sanitize_text_field($_POST['display_name'] ?? '');
+        $bio           = sanitize_textarea_field($_POST['description'] ?? '');
+        $components    = [];
+        if (!empty($_POST['address_components'])) {
+            $decoded = json_decode(stripslashes($_POST['address_components']), true);
+            if (is_array($decoded)) {
+                $components = $decoded;
+            }
+        }
+        $country = isset($components['country']) ? sanitize_text_field($components['country']) : '';
+        $state   = isset($components['state']) ? sanitize_text_field($components['state']) : '';
+        $city    = isset($components['city']) ? sanitize_text_field($components['city']) : '';
 
         $min_length = (int) apply_filters('ap_min_password_length', 8);
         if (
@@ -133,9 +158,27 @@ class LoginShortcode
         wp_set_current_user($result);
         wp_set_auth_cookie($result);
 
+        if ($display_name) {
+            wp_update_user([
+                'ID'           => $result,
+                'display_name' => $display_name,
+            ]);
+        }
+        if ($bio !== '') {
+            update_user_meta($result, 'description', $bio);
+        }
+        if ($country !== '') {
+            update_user_meta($result, 'ap_country', $country);
+        }
+        if ($state !== '') {
+            update_user_meta($result, 'ap_state', $state);
+        }
+        if ($city !== '') {
+            update_user_meta($result, 'ap_city', $city);
+        }
+
         wp_send_json_success([
-            'message'     => __('Registration successful', 'artpulse-management'),
-            'continue_as' => $continue_as,
+            'message' => __('Registration successful', 'artpulse-management'),
         ]);
     }
 }

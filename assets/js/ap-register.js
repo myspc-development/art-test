@@ -1,10 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
   const registerForm = document.getElementById('ap-register-form');
   const regMsg = document.getElementById('ap-register-message');
-  const continueSelect = document.getElementById('ap_continue_as');
+  const displayName = document.getElementById('ap_reg_display_name');
+  const bio = document.getElementById('ap_reg_bio');
+  const country = document.getElementById('ap_country');
+  const state = document.getElementById('ap_state');
+  const city = document.getElementById('ap_city');
+  const addr = document.getElementById('ap_address_components');
 
   async function submitForm(form, action, msgEl) {
     const formData = new FormData(form);
+    if (displayName) formData.set('display_name', displayName.value);
+    if (bio) formData.set('description', bio.value);
+    if (country || state || city) {
+      let comp = addr ? addr.value : '';
+      if (!comp) {
+        comp = JSON.stringify({
+          country: country ? country.value : '',
+          state: state ? state.value : '',
+          city: city ? city.value : ''
+        });
+        if (addr) addr.value = comp;
+      }
+      formData.set('address_components', comp);
+    }
     formData.append('action', action);
     formData.append('nonce', APLogin.nonce);
 
@@ -23,25 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const result = await submitForm(registerForm, 'ap_do_register', regMsg);
       if (result.res.ok && result.data.success) {
-        const choice = continueSelect ? continueSelect.value : '';
-        if (choice === 'organization') {
-          window.location.href = APLogin.orgSubmissionUrl;
-        } else if (choice === 'artist') {
-          try {
-            const res = await fetch(APLogin.artistEndpoint, {
-              method: 'POST',
-              headers: { 'X-WP-Nonce': APLogin.restNonce }
-            });
-            const data = await res.json();
-            if (res.ok) {
-              regMsg.textContent = data.message || 'Request submitted';
-            } else {
-              regMsg.textContent = data.message || 'Request failed';
-            }
-          } catch (err) {
-            regMsg.textContent = err.message;
-          }
-        }
+        regMsg.textContent = result.data.message || 'Registration successful';
       }
     });
   }

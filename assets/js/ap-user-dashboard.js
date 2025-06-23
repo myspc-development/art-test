@@ -12,6 +12,39 @@ document.addEventListener('DOMContentLoaded', () => {
     info.innerHTML = `<p>${apL10n.membership_level}: ${data.membership_level}</p>
                       <p>${apL10n.expires}: ${data.membership_expires ? new Date(data.membership_expires * 1000).toLocaleDateString() : apL10n.never}</p>`;
 
+    const upgrade = document.getElementById('ap-upgrade-options');
+    if (upgrade) {
+      if (data.artist_request_pending) {
+        upgrade.textContent = apL10n?.artist_pending || 'Artist upgrade request pending.';
+      } else {
+        const artistBtn = document.createElement('button');
+        artistBtn.textContent = apL10n?.upgrade_artist || 'Request Artist Upgrade';
+        artistBtn.onclick = async () => {
+          artistBtn.disabled = true;
+          try {
+            const res = await fetch(ArtPulseDashboardApi.artistEndpoint, {
+              method: 'POST',
+              headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+            });
+            const data = await res.json();
+            if (res.ok) {
+              upgrade.textContent = data.message || (apL10n?.request_submitted || 'Request submitted');
+            } else {
+              upgrade.textContent = data.message || 'Request failed';
+            }
+          } catch (err) {
+            upgrade.textContent = err.message;
+          }
+        };
+        const orgLink = document.createElement('a');
+        orgLink.href = ArtPulseDashboardApi.orgSubmissionUrl;
+        orgLink.textContent = apL10n?.submit_org || 'Submit Organization';
+        upgrade.appendChild(artistBtn);
+        upgrade.appendChild(document.createTextNode(' '));
+        upgrade.appendChild(orgLink);
+      }
+    }
+
     // Content
     const content = document.getElementById('ap-user-content');
     ['events','artists','artworks'].forEach(type => {

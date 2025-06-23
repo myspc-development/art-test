@@ -41,8 +41,10 @@ class UserDashboardManager
 
         // Localize dashboard REST endpoint
         wp_localize_script('ap-user-dashboard-js', 'ArtPulseDashboardApi', [
-            'root'  => esc_url_raw(rest_url()),
-            'nonce' => wp_create_nonce('wp_rest'),
+            'root'             => esc_url_raw(rest_url()),
+            'nonce'            => wp_create_nonce('wp_rest'),
+            'orgSubmissionUrl' => self::get_org_submission_url(),
+            'artistEndpoint'   => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
         ]);
 
         // Dashboard styles
@@ -82,6 +84,13 @@ class UserDashboardManager
             'country'            => get_user_meta($user_id, 'ap_country', true),
             'state'              => get_user_meta($user_id, 'ap_state', true),
             'city'               => get_user_meta($user_id, 'ap_city', true),
+            'artist_request_pending' => !empty(get_posts([
+                'post_type'      => 'ap_artist_request',
+                'post_status'    => 'pending',
+                'author'         => $user_id,
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+            ])),
             'events'             => [],
             'artists'            => [],
             'artworks'           => [],
@@ -143,6 +152,22 @@ class UserDashboardManager
         return rest_ensure_response([ 'success' => true ]);
     }
 
+    private static function get_org_submission_url(): string
+    {
+        $pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_submit_organization]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($pages)) {
+            return get_permalink($pages[0]->ID);
+        }
+
+        return home_url('/');
+    }
+
     public static function renderDashboard($atts)
     {
         if ( ! is_user_logged_in() ) {
@@ -152,6 +177,8 @@ class UserDashboardManager
         <div class="ap-user-dashboard">
             <h2><?php _e('Your Membership','artpulse'); ?></h2>
             <div id="ap-membership-info"></div>
+            <h2><?php _e('Upgrade Your Account','artpulse'); ?></h2>
+            <div id="ap-upgrade-options"></div>
             <h2><?php _e('Your Content','artpulse'); ?></h2>
             <div id="ap-user-content"></div>
             <h2><?php _e('Events Near You','artpulse'); ?></h2>
