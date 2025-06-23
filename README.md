@@ -40,5 +40,9 @@ The older `[ap_directory]` shortcode is still supported for backward compatibili
 
 ## Login Shortcode
 
-Use `[ap_login]` to display the front-end login form. The form also includes a registration section for new users. Signing up through this form automatically grants the “Free” membership level.
+Use `[ap_login]` to display the front-end login form.
+
+## Registration Shortcode
+
+Use `[ap_register]` to display a standalone registration form for new users. Signing up through this form automatically grants the “Free” membership level.
 
