@@ -30,7 +30,12 @@ class MembershipManager
     public static function assignFreeMembership($user_id)
     {
         $user = get_userdata($user_id);
-        $user->set_role('member');
+        if (in_array('administrator', (array) $user->roles, true)) {
+            // Don't override admin privileges when registering
+            $user->add_role('member');
+        } else {
+            $user->set_role('member');
+        }
         update_user_meta($user_id, 'ap_membership_level', 'Free');
 
         // Optional: send welcome email
@@ -138,7 +143,12 @@ class MembershipManager
                     $user_id = $user[0];
                     // downgrade
                     $usr = get_userdata($user_id);
-                    $usr->set_role('subscriber');
+                    if (in_array('administrator', (array) $usr->roles, true)) {
+                        // Administrators keep admin capabilities during downgrades
+                        $usr->add_role('subscriber');
+                    } else {
+                        $usr->set_role('subscriber');
+                    }
                     update_user_meta($user_id, 'ap_membership_level', 'Free');
                     update_user_meta($user_id, 'ap_membership_expires', current_time('timestamp'));
 
@@ -175,7 +185,12 @@ class MembershipManager
         ]);
 
         foreach ($expired as $user) {
-            $user->set_role('subscriber');
+            if (in_array('administrator', (array) $user->roles, true)) {
+                // Keep admin rights when membership expires
+                $user->add_role('subscriber');
+            } else {
+                $user->set_role('subscriber');
+            }
             update_user_meta($user->ID, 'ap_membership_level', 'Free');
 
             // Optionally notify

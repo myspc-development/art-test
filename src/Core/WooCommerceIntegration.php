@@ -57,7 +57,12 @@ class WooCommerceIntegration
 
         // Downgrade to Free
         $user = get_userdata( $user_id );
-        $user->set_role('subscriber');
+        if (in_array('administrator', (array) $user->roles, true)) {
+            // Preserve admin role when adjusting membership
+            $user->add_role('subscriber');
+        } else {
+            $user->set_role('subscriber');
+        }
         update_user_meta( $user_id, 'ap_membership_level', 'Free' );
         update_user_meta( $user_id, 'ap_membership_expires', current_time('timestamp') );
 
@@ -74,7 +79,12 @@ class WooCommerceIntegration
     protected static function assignMembership( $user_id, $level )
     {
         $user = get_userdata( $user_id );
-        $user->set_role('subscriber');
+        if (in_array('administrator', (array) $user->roles, true)) {
+            // Avoid stripping admin rights while granting membership
+            $user->add_role('subscriber');
+        } else {
+            $user->set_role('subscriber');
+        }
         update_user_meta( $user_id, 'ap_membership_level', $level );
 
         // Determine duration: Basic & Pro 30d, Org 365d
