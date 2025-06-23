@@ -145,6 +145,11 @@ class OrganizationDashboardShortcode {
             wp_send_json_error(['message' => 'Please select an organization.']);
         }
 
+        $user_org = intval(get_user_meta(get_current_user_id(), 'ap_organization_id', true));
+        if (!$user_org || $user_org !== $org_id) {
+            wp_send_json_error('Permission denied');
+        }
+
         $event_id = wp_insert_post([
             'post_title' => $title,
             'post_type' => 'artpulse_event',
