@@ -95,6 +95,10 @@ class SettingsPage
     public static function trackLastLogin($user_login, $user)
     {
         update_user_meta($user->ID, 'last_login', current_time('mysql'));
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        if (class_exists('\\ArtPulse\\Admin\\LoginEventsPage')) {
+            \ArtPulse\Admin\LoginEventsPage::add_event($user->ID, $ip);
+        }
     }
 
     public static function renderMembersPage()

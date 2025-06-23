@@ -54,6 +54,7 @@ class Plugin
             \ArtPulse\Community\ProfileLinkRequestManager::install_link_request_table();
             \ArtPulse\Community\FollowManager::install_follows_table();
             \ArtPulse\Community\NotificationManager::install_notifications_table();
+            \ArtPulse\Admin\LoginEventsPage::install_login_events_table();
             update_option($db_version_option, self::VERSION);
         }
 
@@ -115,6 +116,7 @@ class Plugin
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
         \ArtPulse\Admin\ApprovalManager::register();
         \ArtPulse\Admin\PendingSubmissionsPage::register();
+        \ArtPulse\Admin\LoginEventsPage::register();
         \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
