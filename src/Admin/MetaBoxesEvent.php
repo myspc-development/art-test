@@ -46,6 +46,20 @@ class MetaBoxesEvent {
                     echo '<input type="number" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" placeholder="' . __('Media Library ID', 'artpulse-management') . '" />';
                     // Consider adding a media uploader button here for better UX
                     break;
+                case 'post_select':
+                    $post_type = $args['post_type'] ?? 'post';
+                    $posts = get_posts([
+                        'post_type'   => $post_type,
+                        'numberposts' => -1,
+                        'post_status' => 'publish',
+                    ]);
+                    echo '<select name="' . esc_attr($key) . '" class="regular-text">';
+                    echo '<option value="">' . esc_html__('Select', 'artpulse-management') . '</option>';
+                    foreach ($posts as $p) {
+                        echo '<option value="' . esc_attr($p->ID) . '"' . selected((int)$value, $p->ID, false) . '>' . esc_html($p->post_title) . '</option>';
+                    }
+                    echo '</select>';
+                    break;
                 default:
                     echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" />';
             }
@@ -68,6 +82,12 @@ class MetaBoxesEvent {
                 continue; // Skip if email is invalid
             } elseif ($args['type'] === 'media' && !empty($value) && !is_numeric($value)) {
                 continue; // Skip if media ID is not numeric
+            } elseif ($args['type'] === 'post_select') {
+                $value = intval($value);
+                if ($value <= 0) {
+                    delete_post_meta($post_id, $field);
+                    continue;
+                }
             }
             // For date fields, you might want to add validation e.g., using strtotime or regex
             update_post_meta($post_id, $field, sanitize_text_field($value)); // sanitize_text_field is a good default
@@ -84,6 +104,11 @@ class MetaBoxesEvent {
             'venue_name'            => ['type' => 'text', 'label' => __('Venue Name', 'artpulse-management')],
             // Address fields (street_address, city, state, country, postcode) would
             // normally come from MetaBoxesAddress if it has been registered
+            '_ap_event_organization' => [
+                'type'      => 'post_select',
+                'label'     => __('Main Organization', 'artpulse-management'),
+                'post_type' => 'artpulse_org'
+            ],
             'event_organizer_name'  => ['type' => 'text', 'label' => __('Organizer Name', 'artpulse-management')],
             'event_organizer_email' => ['type' => 'email', 'label' => __('Organizer Email', 'artpulse-management')],
             'event_banner_id'       => ['type' => 'media', 'label' => __('Event Banner (Media Library ID)', 'artpulse-management')],
@@ -96,7 +121,14 @@ class MetaBoxesEvent {
             register_rest_field('artpulse_event', $field, [ // Corrected CPT slug
                 'get_callback'    => fn($object) => get_post_meta($object['id'], $field, true),
                 'update_callback' => fn($value, $object) => update_post_meta($object->ID, $field, sanitize_text_field($value)), // Consider type-specific sanitization
-                'schema'          => ['type' => $args['type'] === 'checkbox' ? 'boolean' : ($args['type'] === 'media' ? 'integer' : 'string')],
+                'schema'          => [
+                    'type' => match ($args['type']) {
+                        'checkbox'    => 'boolean',
+                        'media',
+                        'post_select' => 'integer',
+                        default       => 'string'
+                    }
+                ],
             ]);
         }
     }

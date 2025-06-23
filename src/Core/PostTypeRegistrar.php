@@ -171,6 +171,12 @@ class PostTypeRegistrar
             'type'         => 'string',
         ]);
 
+        register_post_meta('artpulse_event', '_ap_event_organization', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'integer',
+        ]);
+
         register_post_meta('artpulse_event', 'event_banner_id', [
             'show_in_rest' => true,
             'single'       => true,

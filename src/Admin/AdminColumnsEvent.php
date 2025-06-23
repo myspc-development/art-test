@@ -19,6 +19,7 @@ class AdminColumnsEvent
                 $new['event_banner']    = __( 'Banner',  'artpulse' );
                 $new['event_dates']     = __( 'Dates',   'artpulse' );
                 $new['event_venue']     = __( 'Venue',   'artpulse' );
+                $new['event_org']       = __( 'Organization', 'artpulse' );
                 $new['event_featured']  = __( '⭐ Featured', 'artpulse' );
             }
             $new[ $key ] = $label;
@@ -52,6 +53,21 @@ class AdminColumnsEvent
                 echo esc_html( $venue ?: '—' );
                 break;
 
+            case 'event_org':
+                $org_id = get_post_meta( $post_id, '_ap_event_organization', true );
+                if ( $org_id ) {
+                    $title = get_the_title( $org_id );
+                    if ( $title ) {
+                        $link = get_edit_post_link( $org_id );
+                        echo $link ? '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>' : esc_html( $title );
+                    } else {
+                        echo esc_html( $org_id );
+                    }
+                } else {
+                    echo '&mdash;';
+                }
+                break;
+
             case 'event_featured':
                 $flag = get_post_meta( $post_id, 'event_featured', true );
                 echo '1' === $flag ? '⭐' : '&mdash;';
@@ -62,6 +78,7 @@ class AdminColumnsEvent
     public static function make_sortable( array $columns ): array
     {
         $columns['event_featured'] = 'event_featured';
+        $columns['event_org']      = '_ap_event_organization';
         $columns['event_dates']    = 'event_start_date';
         return $columns;
     }
