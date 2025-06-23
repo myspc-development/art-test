@@ -25,8 +25,9 @@ Version: 1.0.0
 .ap-form-select {
     width: 100%;
     padding: 8px 12px;
-    border: 1px solid #ccc;
+    border: 2px solid var(--ap-primary-color);
     border-radius: var(--ap-border-radius);
+    background-color: #f9f9f9;
     box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
     font-size: 16px;
 }
