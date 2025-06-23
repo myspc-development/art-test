@@ -27,3 +27,14 @@ The **ArtPulse → Settings** page includes options allowing administrators to b
 
 When **Auto-expire Past Events** is enabled under **ArtPulse → Settings**, a daily cron job runs and moves any `artpulse_event` posts whose end date is before today to Draft status. This keeps old events from appearing on the site automatically.
 
+## Directory Shortcodes
+
+Use the new directory shortcodes to display listings without specifying a type attribute:
+
+- `[ap_event_directory]`
+- `[ap_artist_directory]`
+- `[ap_artwork_directory]`
+- `[ap_org_directory]`
+
+The older `[ap_directory]` shortcode is still supported for backward compatibility.
+

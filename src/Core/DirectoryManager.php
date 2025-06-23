@@ -6,6 +6,10 @@ use WP_REST_Request;
 class DirectoryManager {
     public static function register() {
         add_shortcode('ap_directory',   [ self::class, 'renderDirectory' ]);
+        add_shortcode('ap_event_directory',  [ self::class, 'renderEventDirectory' ]);
+        add_shortcode('ap_artist_directory', [ self::class, 'renderArtistDirectory' ]);
+        add_shortcode('ap_artwork_directory',[ self::class, 'renderArtworkDirectory' ]);
+        add_shortcode('ap_org_directory',    [ self::class, 'renderOrgDirectory' ]);
         add_action('wp_enqueue_scripts',[ self::class, 'enqueueAssets'  ]);
         add_action('rest_api_init',     [ self::class, 'register_routes' ]);
     }
@@ -151,5 +155,25 @@ class DirectoryManager {
         </div>
         <?php
         return ob_get_clean();
+    }
+
+    public static function renderEventDirectory($atts) {
+        $atts['type'] = 'event';
+        return self::renderDirectory($atts);
+    }
+
+    public static function renderArtistDirectory($atts) {
+        $atts['type'] = 'artist';
+        return self::renderDirectory($atts);
+    }
+
+    public static function renderArtworkDirectory($atts) {
+        $atts['type'] = 'artwork';
+        return self::renderDirectory($atts);
+    }
+
+    public static function renderOrgDirectory($atts) {
+        $atts['type'] = 'org';
+        return self::renderDirectory($atts);
     }
 }
