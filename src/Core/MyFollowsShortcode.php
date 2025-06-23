@@ -10,7 +10,7 @@ class MyFollowsShortcode {
     public static function enqueue() {
         wp_enqueue_script(
             'ap-my-follows-js',
-            plugins_url('assets/js/ap-my-follows.js', dirname(__DIR__, 2)),
+            plugins_url('assets/js/ap-my-follows.js', ARTPULSE_PLUGIN_FILE),
             ['wp-api-fetch'],
             '1.0.0',
             true
@@ -21,7 +21,7 @@ class MyFollowsShortcode {
         ]);
         wp_enqueue_style(
             'ap-directory-css',
-            plugins_url('assets/css/ap-directory.css', dirname(__DIR__, 2)),
+            plugins_url('assets/css/ap-directory.css', ARTPULSE_PLUGIN_FILE),
             [],
             '1.0.0'
         );

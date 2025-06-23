@@ -13,14 +13,14 @@ class DirectoryManager {
     public static function enqueueAssets() {
         wp_enqueue_script(
             'ap-directory-js',
-            plugins_url('assets/js/ap-directory.js', dirname(__DIR__, 2)),
+            plugins_url('assets/js/ap-directory.js', ARTPULSE_PLUGIN_FILE),
             ['wp-api-fetch'],
             '1.0.0',
             true
         );
         wp_enqueue_script(
             'ap-analytics-js',
-            plugins_url('assets/js/ap-analytics.js', dirname(__DIR__, 2)),
+            plugins_url('assets/js/ap-analytics.js', ARTPULSE_PLUGIN_FILE),
             ['ap-directory-js'],
             '1.0.0',
             true
@@ -31,7 +31,7 @@ class DirectoryManager {
         ]);
         wp_enqueue_style(
             'ap-directory-css',
-            plugins_url('assets/css/ap-directory.css', dirname(__DIR__, 2)),
+            plugins_url('assets/css/ap-directory.css', ARTPULSE_PLUGIN_FILE),
             [],
             '1.0.0'
         );
