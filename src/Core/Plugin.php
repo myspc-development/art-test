@@ -4,7 +4,7 @@ namespace ArtPulse\Core;
 
 class Plugin
 {
-    private const VERSION = '1.1.6';
+    private const VERSION = '1.1.5';
 
     public function __construct()
     {
