@@ -1,62 +1,109 @@
 @import url("ap-core.css");
 /*
 Theme Name: ArtPulse Forms
-Description: Simplified form styles for the plugin.
+Description: Styles for ArtPulse plugin forms.
 Version: 1.0.0
 */
 
-/* Basic form wrapper */
-form,
-.ap-form {
-  max-width: 640px;
-  margin: 1rem auto;
-  font-family: var(--ap-font-family-base);
+/* General Form Styling */
+.ap-form-container {
+    margin-bottom: 20px;
 }
 
-/* Field spacing */
-form > div,
-.ap-form .form-group {
-  margin-bottom: 1rem;
+.ap-form-group {
+    margin-bottom: 15px;
 }
 
-/* Labels */
-form label,
-.ap-form label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+.ap-form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-/* Inputs and textareas */
-form input,
-form select,
-form textarea,
-.ap-form input,
-.ap-form select,
-.ap-form textarea {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+.ap-form-input,
+.ap-form-textarea,
+.ap-form-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid var(--ap-primary-color);
+    border-radius: var(--ap-border-radius);
+    background-color: #f9f9f9;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    font-size: 16px;
 }
 
-/* Buttons */
-form button,
-form input[type="submit"],
-.ap-form button,
-.ap-form input[type="submit"] {
-  background: var(--ap-primary-color);
-  color: #fff;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 4px;
-  cursor: pointer;
+.ap-form-textarea {
+    resize: vertical; /* Allows vertical resizing */
+    min-height: 100px;
 }
 
-form button:hover,
-form input[type="submit"]:hover,
-.ap-form button:hover,
-.ap-form input[type="submit"]:hover {
-  background: var(--ap-primary-hover);
+.ap-form-select {
+    height: 36px; /* Adjust height to match input */
+}
+
+/* Button Styling */
+.ap-form-button {
+    background-color: var(--ap-primary-color);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: var(--ap-border-radius);
+}
+
+.ap-form-button:hover {
+    background-color: var(--ap-primary-hover);
+}
+
+/* Error and Success Messages */
+.ap-form-error {
+    color: red;
+    margin-top: 5px;
+}
+
+.ap-form-success {
+    color: green;
+    margin-top: 5px;
+}
+.ap-form-input[type="email"] {
+    /* Example: Style email inputs */
+}
+
+.ap-form-input[type="number"] {
+    /* Example: Style number inputs */
+}
+
+/* Responsive Design (Example - Adjust breakpoints as needed) */
+@media (max-width: 768px) {
+    .ap-form-input,
+    .ap-form-textarea,
+    .ap-form-select {
+        font-size: 14px;
+    }
+
+    .ap-form-button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+/* Custom Styles (Add your specific styles below) */
+
+/* Example: Style a specific form with ID "my-custom-form" */
+#my-custom-form .ap-form-label {
+    color: #333;
+}
+
+#my-custom-form .ap-form-input {
+    border-color: #666;
+}
+
+/* Example: Style a specific class of form elements */
+.ap-form-highlighted {
+    background-color: #f0f0f0;
 }
