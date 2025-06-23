@@ -21,23 +21,42 @@ class EditEventShortcode {
             return '<p>Invalid event ID.</p>';
         }
 
-        $event = get_post($post_id);
-        $user_id = get_current_user_id();
+        $event    = get_post($post_id);
+        $user_id  = get_current_user_id();
 
         if (!current_user_can('edit_post', $post_id)) {
             return '<p>You do not have permission to edit this event.</p>';
         }
 
-        $title = esc_attr($event->post_title);
-        $content = esc_textarea($event->post_content);
-        $date = esc_attr(get_post_meta($post_id, '_ap_event_date', true));
+        $title    = esc_attr($event->post_title);
+        $content  = esc_textarea($event->post_content);
+        $date     = esc_attr(get_post_meta($post_id, '_ap_event_date', true));
         $location = esc_attr(get_post_meta($post_id, '_ap_event_location', true));
-        $event_type = wp_get_post_terms($post_id, 'artpulse_event_type', ['fields' => 'ids']);
+        $start    = esc_attr(get_post_meta($post_id, 'event_start_date', true));
+        $end      = esc_attr(get_post_meta($post_id, 'event_end_date', true));
+        $venue    = esc_attr(get_post_meta($post_id, 'venue_name', true));
+        $street   = esc_attr(get_post_meta($post_id, 'event_street_address', true));
+        $country  = esc_attr(get_post_meta($post_id, 'event_country', true));
+        $state    = esc_attr(get_post_meta($post_id, 'event_state', true));
+        $city     = esc_attr(get_post_meta($post_id, 'event_city', true));
+        $postcode = esc_attr(get_post_meta($post_id, 'event_postcode', true));
+        $addr_comp = esc_attr(get_post_meta($post_id, 'address_components', true));
+        $org_name = esc_attr(get_post_meta($post_id, 'event_organizer_name', true));
+        $org_email = esc_attr(get_post_meta($post_id, 'event_organizer_email', true));
+        $org_selected = intval(get_post_meta($post_id, '_ap_event_organization', true));
+        $featured_checked = get_post_meta($post_id, 'event_featured', true) === '1' ? 'checked' : '';
+        $event_type   = wp_get_post_terms($post_id, 'artpulse_event_type', ['fields' => 'ids']);
         $event_type_id = !empty($event_type) ? $event_type[0] : '';
+
+        $orgs = get_posts([
+            'post_type'   => 'artpulse_org',
+            'author'      => $user_id,
+            'numberposts' => -1,
+        ]);
 
         ob_start();
         ?>
-        <form id="ap-edit-event-form" class="ap-form-container" data-post-id="<?php echo $post_id; ?>">
+        <form id="ap-edit-event-form" class="ap-form-container" enctype="multipart/form-data" data-post-id="<?php echo $post_id; ?>">
             <p>
                 <label class="ap-form-label">Title<br>
                     <input class="ap-form-input" type="text" name="title" value="<?php echo $title; ?>" required>
@@ -53,6 +72,47 @@ class EditEventShortcode {
                     <input class="ap-form-input" type="date" name="date" value="<?php echo $date; ?>">
                 </label>
             </p>
+            <p>
+                <label class="ap-form-label">Start Date<br>
+                    <input class="ap-form-input" type="date" name="start_date" value="<?php echo $start; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">End Date<br>
+                    <input class="ap-form-input" type="date" name="end_date" value="<?php echo $end; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">Venue Name<br>
+                    <input class="ap-form-input" type="text" name="venue_name" value="<?php echo $venue; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">Street Address<br>
+                    <input class="ap-form-input ap-address-street" type="text" name="event_street_address" value="<?php echo $street; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">Country<br>
+                    <input class="ap-form-input ap-address-country" type="text" name="event_country" value="<?php echo $country; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">State/Province<br>
+                    <input class="ap-form-input ap-address-state" type="text" name="event_state" value="<?php echo $state; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">City<br>
+                    <input class="ap-form-input ap-address-city" type="text" name="event_city" value="<?php echo $city; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">Postcode<br>
+                    <input class="ap-form-input ap-address-postcode" type="text" name="event_postcode" value="<?php echo $postcode; ?>">
+                </label>
+            </p>
+            <input type="hidden" name="address_components" id="ap_address_components" value="<?php echo $addr_comp; ?>">
             <p>
                 <label class="ap-form-label">Location<br>
                     <input class="ap-form-input" type="text" name="location" class="ap-google-autocomplete" value="<?php echo $location; ?>">
@@ -72,6 +132,36 @@ class EditEventShortcode {
                     ?>
                 </label>
             </p>
+            <p>
+                <label class="ap-form-label">Organizer Name<br>
+                    <input class="ap-form-input" type="text" name="event_organizer_name" value="<?php echo $org_name; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">Organizer Email<br>
+                    <input class="ap-form-input" type="email" name="event_organizer_email" value="<?php echo $org_email; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">Organization<br>
+                    <select class="ap-form-select" name="event_org" required>
+                        <option value="">Select Organization</option>
+                        <?php foreach ($orgs as $org): ?>
+                            <option value="<?php echo esc_attr($org->ID); ?>" <?php selected($org_selected, $org->ID); ?>><?php echo esc_html($org->post_title); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">Event Banner<br>
+                    <input class="ap-form-input" type="file" name="event_banner">
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input class="ap-form-input" type="checkbox" name="event_featured" value="1" <?php echo $featured_checked; ?>> Request Featured
+                </label>
+            </p>
             <p class="ap-edit-event-error" style="color:red;"></p>
             <p>
                 <button class="ap-form-button" type="submit">Save Changes</button>
@@ -82,6 +172,7 @@ class EditEventShortcode {
     }
 
     public static function enqueue_scripts() {
+        wp_enqueue_media();
         wp_enqueue_script('ap-edit-event-js', plugins_url('/assets/js/ap-edit-event.js', ARTPULSE_PLUGIN_FILE), ['jquery'], '1.0.0', true);
         wp_localize_script('ap-edit-event-js', 'APEditEvent', [
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -97,11 +188,24 @@ class EditEventShortcode {
             wp_send_json_error(['message' => 'Permission denied.']);
         }
 
-        $title = sanitize_text_field($_POST['title']);
-        $content = sanitize_textarea_field($_POST['content']);
-        $date = sanitize_text_field($_POST['date']);
-        $location = sanitize_text_field($_POST['location']);
-        $event_type = intval($_POST['event_type']);
+        $title          = sanitize_text_field($_POST['title']);
+        $content        = sanitize_textarea_field($_POST['content']);
+        $date           = sanitize_text_field($_POST['date']);
+        $start_date     = sanitize_text_field($_POST['start_date'] ?? '');
+        $end_date       = sanitize_text_field($_POST['end_date'] ?? '');
+        $location       = sanitize_text_field($_POST['location']);
+        $venue          = sanitize_text_field($_POST['venue_name'] ?? '');
+        $street         = sanitize_text_field($_POST['event_street_address'] ?? '');
+        $country        = sanitize_text_field($_POST['event_country'] ?? '');
+        $state          = sanitize_text_field($_POST['event_state'] ?? '');
+        $city           = sanitize_text_field($_POST['event_city'] ?? '');
+        $postcode       = sanitize_text_field($_POST['event_postcode'] ?? '');
+        $addr_comp      = sanitize_text_field($_POST['address_components'] ?? '');
+        $org_name       = sanitize_text_field($_POST['event_organizer_name'] ?? '');
+        $org_email      = sanitize_email($_POST['event_organizer_email'] ?? '');
+        $event_org      = intval($_POST['event_org'] ?? 0);
+        $event_type     = intval($_POST['event_type']);
+        $featured       = isset($_POST['event_featured']) ? '1' : '0';
 
         if (!$title || !$content) {
             wp_send_json_error(['message' => 'Title and content are required.']);
@@ -115,6 +219,32 @@ class EditEventShortcode {
 
         update_post_meta($post_id, '_ap_event_date', $date);
         update_post_meta($post_id, '_ap_event_location', $location);
+        update_post_meta($post_id, 'event_start_date', $start_date);
+        update_post_meta($post_id, 'event_end_date', $end_date);
+        update_post_meta($post_id, 'venue_name', $venue);
+        update_post_meta($post_id, 'event_street_address', $street);
+        update_post_meta($post_id, 'event_country', $country);
+        update_post_meta($post_id, 'event_state', $state);
+        update_post_meta($post_id, 'event_city', $city);
+        update_post_meta($post_id, 'event_postcode', $postcode);
+        update_post_meta($post_id, 'address_components', $addr_comp);
+        update_post_meta($post_id, 'event_organizer_name', $org_name);
+        update_post_meta($post_id, 'event_organizer_email', $org_email);
+        update_post_meta($post_id, '_ap_event_organization', $event_org);
+        update_post_meta($post_id, 'event_featured', $featured);
+
+        if (!empty($_FILES['event_banner']['name'])) {
+            if (!function_exists('media_handle_upload')) {
+                require_once ABSPATH . 'wp-admin/includes/image.php';
+                require_once ABSPATH . 'wp-admin/includes/file.php';
+                require_once ABSPATH . 'wp-admin/includes/media.php';
+            }
+
+            $attachment_id = media_handle_upload('event_banner', $post_id);
+            if (!is_wp_error($attachment_id)) {
+                update_post_meta($post_id, 'event_banner_id', $attachment_id);
+            }
+        }
 
         if ($event_type) {
             wp_set_post_terms($post_id, [$event_type], 'artpulse_event_type');
