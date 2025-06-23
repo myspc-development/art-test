@@ -51,7 +51,11 @@ The plugin registers the following shortcodes:
 |-----------|---------|
 | `[ap_artists]` | List artists. |
 | `[ap_artworks]` | List artworks. |
-| `[ap_directory]` | Directory of events, artists, artworks or organizations. |
+| `[ap_directory]` | Directory of events, artists, artworks or organizations (deprecated, use the type-specific shortcodes). |
+| `[ap_event_directory]` | Directory listing events. |
+| `[ap_artist_directory]` | Directory listing artists. |
+| `[ap_artwork_directory]` | Directory listing artworks. |
+| `[ap_org_directory]` | Directory listing organizations. |
 | `[ap_edit_event id="123"]` | Form to edit an event. |
 | `[ap_events]` | List events. |
 | `[ap_filtered_list]` | Display posts filtered by taxonomy. |
