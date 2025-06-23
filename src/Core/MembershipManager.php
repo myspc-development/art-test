@@ -28,7 +28,7 @@ class MembershipManager
     public static function assignFreeMembership($user_id)
     {
         $user = get_userdata($user_id);
-        $user->set_role('subscriber');
+        $user->set_role('member');
         update_user_meta($user_id, 'ap_membership_level', 'Free');
 
         // Optional: send welcome email
