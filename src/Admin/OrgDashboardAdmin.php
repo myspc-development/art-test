@@ -13,17 +13,6 @@ class OrgDashboardAdmin {
         );
     }
 
-    public static function render() {
-        echo '<div class="wrap"><h1>Organization Dashboard</h1>';
-        // Optionally: Admin org dropdown could go here
-        self::render_linked_artists();
-        self::render_org_artworks();
-        self::render_org_events();
-        self::render_org_analytics();
-        self::render_billing_history();
-        echo '</div>';
-    }
-
     // --- Helper: Get the current org id for this admin ---
     private static function get_current_org_id() {
         // Super admins can choose any org via dropdown (?org_id=)
@@ -45,33 +34,33 @@ class OrgDashboardAdmin {
     }
     
     public static function render() {
-    echo '<div class="wrap"><h1>Organization Dashboard</h1>';
+        echo '<div class="wrap"><h1>Organization Dashboard</h1>';
 
-    // Show org select dropdown for super admins only
-    if (current_user_can('administrator')) {
-        $all_orgs = get_posts([
-            'post_type' => 'artpulse_org',
-            'numberposts' => -1,
-            'post_status' => 'publish'
-        ]);
-        $selected_org = self::get_current_org_id();
-        echo '<form method="get" style="margin-bottom:1em;"><input type="hidden" name="page" value="ap-org-dashboard" />';
-        echo '<label for="ap-org-select"><strong>Select Organization: </strong></label>';
-        echo '<select name="org_id" id="ap-org-select" onchange="this.form.submit()">';
-        foreach ($all_orgs as $org) {
-            $selected = ($org->ID == $selected_org) ? 'selected' : '';
-            echo '<option value="' . esc_attr($org->ID) . '" ' . $selected . '>' . esc_html(get_the_title($org)) . '</option>';
+        // Show org select dropdown for super admins only
+        if (current_user_can('administrator')) {
+            $all_orgs = get_posts([
+                'post_type'   => 'artpulse_org',
+                'numberposts' => -1,
+                'post_status' => 'publish',
+            ]);
+            $selected_org = self::get_current_org_id();
+            echo '<form method="get" style="margin-bottom:1em;"><input type="hidden" name="page" value="ap-org-dashboard" />';
+            echo '<label for="ap-org-select"><strong>Select Organization: </strong></label>';
+            echo '<select name="org_id" id="ap-org-select" onchange="this.form.submit()">';
+            foreach ($all_orgs as $org) {
+                $selected = ($org->ID == $selected_org) ? 'selected' : '';
+                echo '<option value="' . esc_attr($org->ID) . '" ' . $selected . '>' . esc_html(get_the_title($org)) . '</option>';
+            }
+            echo '</select></form>';
         }
-        echo '</select></form>';
-    }
 
-    self::render_linked_artists();
-    self::render_org_artworks();
-    self::render_org_events();
-    self::render_org_analytics();
-    self::render_billing_history();
-    echo '</div>';
-}
+        self::render_linked_artists();
+        self::render_org_artworks();
+        self::render_org_events();
+        self::render_org_analytics();
+        self::render_billing_history();
+        echo '</div>';
+    }
 
 
     // --- SECTION: Linked Artists ---
