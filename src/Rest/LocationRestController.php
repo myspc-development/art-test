@@ -31,6 +31,22 @@ class LocationRestController {
         $country = sanitize_text_field($req->get_param('country'));
         $state = sanitize_text_field($req->get_param('state'));
 
+        if ($type === 'countries') {
+            $url = "http://api.geonames.org/countryInfoJSON?maxRows=1000&username={$user}";
+            $resp = wp_remote_get($url);
+            if (is_wp_error($resp)) return $resp;
+            $data = json_decode(wp_remote_retrieve_body($resp), true);
+            $countries = [];
+            foreach ($data['geonames'] ?? [] as $c) {
+                $countries[] = [
+                    'code' => $c['countryCode'] ?? '',
+                    'name' => $c['countryName'] ?? '',
+                ];
+            }
+            self::merge_into_dataset('countries', $countries);
+            return rest_ensure_response($countries);
+        }
+
         if ($type === 'states' && $country) {
             $url = "http://api.geonames.org/searchJSON?featureCode=ADM1&country={$country}&maxRows=1000&username={$user}";
             $resp = wp_remote_get($url);
@@ -97,6 +113,7 @@ class LocationRestController {
         }
 
         if (!file_exists($file)) {
+            file_put_contents($file, json_encode($items, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
             return;
         }
 
