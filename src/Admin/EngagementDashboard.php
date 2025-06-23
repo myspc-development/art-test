@@ -42,7 +42,7 @@ class EngagementDashboard
 
         $filtered = [];
         foreach ($all_users as $user) {
-            $last_login = get_user_meta($user->ID, 'wp_last_login', true);
+            $last_login = get_user_meta($user->ID, 'last_login', true);
             $artworks = count_user_posts($user->ID, 'artwork');
             $events = count_user_posts($user->ID, 'event');
             $activity_score = $artworks + $events;
