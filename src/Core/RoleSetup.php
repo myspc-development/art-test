@@ -64,6 +64,7 @@ class RoleSetup
                 'delete_artpulse_orgs', 'delete_private_artpulse_orgs',
                 'delete_published_artpulse_orgs', 'delete_others_artpulse_orgs',
                 'edit_private_artpulse_orgs', 'edit_published_artpulse_orgs',
+                'view_artpulse_dashboard',
             ],
             'administrator' => [],
         ];

@@ -6,7 +6,7 @@ class OrgDashboardAdmin {
         add_menu_page(
             'Organization Dashboard',
             'Org Dashboard',
-            'manage_options', // You can use a custom org-admin cap if desired
+            'view_artpulse_dashboard',
             'ap-org-dashboard',
             [self::class, 'render'],
             'dashicons-building'
