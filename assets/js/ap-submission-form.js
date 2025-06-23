@@ -10,9 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const title = formData.get('title');
   const eventDate = formData.get('event_date');
+  const startDate = formData.get('event_start_date');
+  const endDate = formData.get('event_end_date');
+  const venueName = formData.get('venue_name');
   const countrySel = form.querySelector('.ap-address-country');
   const stateSel = form.querySelector('.ap-address-state');
   const citySel = form.querySelector('.ap-address-city');
+  const streetInput = form.querySelector('.ap-address-street');
+  const postcodeInput = form.querySelector('.ap-address-postcode');
   const addressComponentsInput = form.querySelector('[name="address_components"]');
   const addressComponents = addressComponentsInput ? addressComponentsInput.value : '';
   let eventLocation = formData.get('event_location');
@@ -25,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     form.querySelector('[name="event_location"]').value = eventLocation;
   }
   const images = form.querySelector('#ap-images').files;
+  const bannerInput = form.querySelector('#ap-banner');
+  const bannerFile = bannerInput && bannerInput.files.length ? bannerInput.files[0] : null;
 
     const imageIds = [];
 
@@ -39,9 +46,24 @@ document.addEventListener('DOMContentLoaded', () => {
         post_type: postType,
         title: title,
         event_date: eventDate,
+        event_start_date: startDate,
+        event_end_date: endDate,
+        venue_name: venueName,
         event_location: eventLocation,
+        event_street_address: streetInput ? streetInput.value : formData.get('event_street_address'),
+        event_city: citySel ? citySel.value : formData.get('event_city'),
+        event_state: stateSel ? stateSel.value : formData.get('event_state'),
+        event_country: countrySel ? countrySel.value : formData.get('event_country'),
+        event_postcode: postcodeInput ? postcodeInput.value : formData.get('event_postcode'),
+        event_organizer_name: formData.get('event_organizer_name'),
+        event_organizer_email: formData.get('event_organizer_email'),
+        event_featured: formData.has('event_featured') ? '1' : '0',
         image_ids: imageIds
       };
+      if (bannerFile) {
+        const bannerId = await uploadMedia(bannerFile);
+        submission.event_banner_id = bannerId;
+      }
       if (addressComponents) submission.address_components = addressComponents;
 
       const res = await fetch(APSubmission.endpoint, {
