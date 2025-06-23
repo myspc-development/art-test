@@ -27,18 +27,18 @@ class OrganizationDashboardShortcode {
 
             <div id="ap-org-modal" style="display:none">
                 <div id="ap-status-message" class="ap-form-messages" role="status" aria-live="polite"></div>
-                <form id="ap-org-event-form">
-                    <label for="ap_event_title">Event Title</label>
-                    <input id="ap_event_title" type="text" name="ap_event_title" required>
+                <form id="ap-org-event-form" class="ap-form-container">
+                    <label class="ap-form-label" for="ap_event_title">Event Title</label>
+                    <input class="ap-form-input" id="ap_event_title" type="text" name="ap_event_title" required>
 
-                    <label for="ap_event_date">Event Date</label>
-                    <input id="ap_event_date" type="date" name="ap_event_date" required>
+                    <label class="ap-form-label" for="ap_event_date">Event Date</label>
+                    <input class="ap-form-input" id="ap_event_date" type="date" name="ap_event_date" required>
 
-                    <label for="ap_event_location">Location</label>
-                    <input id="ap_event_location" class="ap-google-autocomplete" type="text" name="ap_event_location" required>
+                    <label class="ap-form-label" for="ap_event_location">Location</label>
+                    <input class="ap-form-input ap-google-autocomplete" id="ap_event_location" type="text" name="ap_event_location" required>
 
-                    <label for="ap_event_type">Event Type</label>
-                    <select id="ap_event_type" name="ap_event_type">
+                    <label class="ap-form-label" for="ap_event_type">Event Type</label>
+                    <select class="ap-form-select" id="ap_event_type" name="ap_event_type">
                         <?php
                         $terms = get_terms('artpulse_event_type', ['hide_empty' => false]);
                         foreach ($terms as $term) {
@@ -48,7 +48,7 @@ class OrganizationDashboardShortcode {
                     </select>
 
                     <input type="hidden" name="ap_event_organization" value="<?php echo esc_attr($org_id); ?>">
-                    <button type="submit">Submit</button>
+                    <button class="ap-form-button" type="submit">Submit</button>
                 </form>
             </div>
 

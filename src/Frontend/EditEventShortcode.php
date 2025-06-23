@@ -37,29 +37,29 @@ class EditEventShortcode {
 
         ob_start();
         ?>
-        <form id="ap-edit-event-form" data-post-id="<?php echo $post_id; ?>">
+        <form id="ap-edit-event-form" class="ap-form-container" data-post-id="<?php echo $post_id; ?>">
             <p>
-                <label>Title<br>
-                    <input type="text" name="title" value="<?php echo $title; ?>" required>
+                <label class="ap-form-label">Title<br>
+                    <input class="ap-form-input" type="text" name="title" value="<?php echo $title; ?>" required>
                 </label>
             </p>
             <p>
-                <label>Description<br>
-                    <textarea name="content" required><?php echo $content; ?></textarea>
+                <label class="ap-form-label">Description<br>
+                    <textarea class="ap-form-textarea" name="content" required><?php echo $content; ?></textarea>
                 </label>
             </p>
             <p>
-                <label>Date<br>
-                    <input type="date" name="date" value="<?php echo $date; ?>">
+                <label class="ap-form-label">Date<br>
+                    <input class="ap-form-input" type="date" name="date" value="<?php echo $date; ?>">
                 </label>
             </p>
             <p>
-                <label>Location<br>
-                    <input type="text" name="location" class="ap-google-autocomplete" value="<?php echo $location; ?>">
+                <label class="ap-form-label">Location<br>
+                    <input class="ap-form-input" type="text" name="location" class="ap-google-autocomplete" value="<?php echo $location; ?>">
                 </label>
             </p>
             <p>
-                <label>Event Type<br>
+                <label class="ap-form-label">Event Type<br>
                     <?php
                     wp_dropdown_categories([
                         'taxonomy' => 'artpulse_event_type',
@@ -67,13 +67,14 @@ class EditEventShortcode {
                         'selected' => $event_type_id,
                         'show_option_none' => 'Select type',
                         'hide_empty' => false,
+                        'class' => 'ap-form-select',
                     ]);
                     ?>
                 </label>
             </p>
             <p class="ap-edit-event-error" style="color:red;"></p>
             <p>
-                <button type="submit">Save Changes</button>
+                <button class="ap-form-button" type="submit">Save Changes</button>
             </p>
         </form>
         <?php
