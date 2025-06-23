@@ -50,6 +50,7 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     const data = await loadData();
+    data.countriesLoaded = false;
 
     document.querySelectorAll('form').forEach(form => {
       const country = form.querySelector('.ap-address-country');
@@ -60,6 +61,18 @@
       if(state) setupState(state, country, city);
       if(city) setupCity(city, country, state);
     });
+
+    async function ensureCountries(){
+      if(!data.countriesLoaded && APLocation.geonamesEndpoint){
+        const resp = await fetch(APLocation.geonamesEndpoint + '?type=countries');
+        const json = await resp.json();
+        if(Array.isArray(json)){
+          data.countries = data.countries.concat(json);
+          data.countriesLoaded = true;
+        }
+      }
+      return data.countries;
+    }
 
     function setupCountry(input, stateInput, cityInput){
       const list = createList(input);
@@ -72,8 +85,12 @@
           input.value = input.dataset.selected;
         }
       }
-      input.addEventListener('input', () => {
-        const suggestions = filterItems(data.countries, 'name', input.value);
+      input.addEventListener('input', async () => {
+        let suggestions = filterItems(data.countries, 'name', input.value);
+        if(suggestions.length === 0){
+          await ensureCountries();
+          suggestions = filterItems(data.countries, 'name', input.value);
+        }
         list.innerHTML = '';
         suggestions.forEach(c => {
           const opt = document.createElement('option');
