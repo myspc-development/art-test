@@ -1,204 +1,63 @@
 Admin Quick Start Guide
 
-Welcome to the ArtPulse Admin Quick Start Guide. This document covers installation, configuration, and all key administrative features of the ArtPulse plugin.
-
-1. Installation & Setup
-
-Download & Activate
-
-Upload artpulse.zip via Plugins → Add New → Upload.
-
-Activate the ArtPulse plugin.
-
-General Settings (ArtPulse → Settings → General)
-
-Set your site’s default timezone and date format.
-
-Enable Auto-expire Past Events (see section below).
-
-Payments (ArtPulse → Settings → Payments)
-
-Enter your Stripe Publishable & Secret keys.
-
-Configure membership prices in the Pricing tab.
-
-Save changes to enable paid memberships.
-
-2. Stripe & Payments
-
-ArtPulse relies on Stripe for all payment processing.
-
-Ensure your webhook endpoint (https://<your-site>/wp-json/artpulse/v1/webhook) is configured in your Stripe Dashboard.
-
-Use the System Status panel (Settings → System Status) to view recent webhook events and errors.
-
-3. CSV Import / Export
-
-Where to find it:
-
-ArtPulse → Settings → Import / Export
-
-Import
-
-Upload a CSV file containing Organizations, Events, Artists, or Artworks.
-
-Map CSV columns to WordPress fields and post meta.
-
-Preview the first few rows.
-
-Click Import to send via REST endpoint:
-
-POST /wp-json/artpulse/v1/import
-
-Only administrators (manage_options) have access.
-
-Export
-
-Select one of the data types (Organizations, Events, Artists, Artworks).
-
-Click Export CSV to download for offline editing or backup.
-
-4. Membership Overrides
-
-Where to find it:
-
-ArtPulse → Settings → General
-
-Toggle any of the following to bypass membership checks (useful for testing or special circumstances):
-
-Override Artist Membership
-
-Override Organization Membership
-
-Override Member Membership
-
-Ticking a toggle exempts the corresponding user type from membership requirements and fees.
-
-5. Managing Members
-
-ArtPulse integrates with your site’s user management:
-
-Members are users with the member role.
-
-Artists are users with the artist role.
-
-Organizations are a custom post type (organization).
-
-Navigate to Users → All Users, then filter by role. Use the Bulk Actions dropdown to:
-
-Change roles
-
-Send membership reminders
-
-Deactivate/reactivate accounts
-
-6. User Dashboard Calendar
-
-Shortcode: [ap_user_dashboard]
-
-Place this on any page to show:
-
-A calendar of local or favorited events.
-
-“Add to calendar” links.
-
-RSVP buttons for upcoming events.
-
-Members set their location via:
-
-Shortcode: [ap_profile_edit]
-
-This populates the dashboard with nearby events.
-
-7. Auto-Expire Past Events
-
-Where to find it:
-
-ArtPulse → Settings → General
-
-Auto-expire Past Events
-
-When enabled, events with an end date before today are automatically hidden from public views.
-
-Keeps your calendar clean without manual pruning.
-
-8. Developer: REST API Import
-
-For programmatic imports, use:
-
-POST /wp-json/artpulse/v1/import
-Content-Type: application/json
-
-[
-  {"title": "Event One", "date_start": "2025-07-01", ...},
-  {"title": "Event Two", "date_start": "2025-08-15", ...}
-]
-
-Response:
-
-{"created": [123, 124]}
-
-Use this endpoint to automate bulk uploads from external systems.
-
-9. Gutenberg: Relationship Blocks
-
-In the Block Editor (Gutenberg), you’ll find two new blocks:
-
-Artist ↔ Event
-
-Link artists to events on either the Artist or Event editor screen.
-
-Artwork ↔ Organization
-
-Associate an artwork post with its owning organization.
-
-Use these blocks to build richly connected content without custom code.
-
-10. Front-end Shortcodes
-
-Shortcode
-
-Description
-
-[ap_user_dashboard]
-
-Calendar of local/favorited events for members.
-
-[ap_profile_edit]
-
-Form for members to update their stored location.
-
-Copy these into any page or post to expose ArtPulse features to your users.
-
-11. Custom Admin Columns & Sorting
-
-On each post-type list (e.g., Events, Artists):
-
-Additional columns (dates, statuses, membership level) are displayed.
-
-Click any column header to sort ascending/descending.
-
-Use Screen Options (top-right) to hide or show columns.
-
-12. Troubleshooting
-
-System Status (Settings → System Status)
-
-View recent webhook deliveries and errors.
-
-Check server requirements and plugin health.
-
-Logs
-
-Clear or replay webhook events from Stripe.
-
-Import Errors
-
-Failed CSV rows are skipped.
-
-Verify your column mappings and row formatting.
-
-If issues persist, contact support at support@artpulse.io.
-
-Thank you for using ArtPulse! For more details, see the Developer Guide or our online documentation at https://docs.artpulse.io.
+This guide covers the essential administration tasks for the ArtPulse plugin.
+
+## Installation & Setup
+1. Upload `artpulse.zip` via **Plugins → Add New** and activate.
+2. Under **ArtPulse → Settings → General** configure timezone, date format and enable Auto‑expire Past Events.
+3. Enter your Stripe keys and membership pricing in **Settings → Payments**.
+
+## CSV Import / Export
+- Navigate to **ArtPulse → Settings → Import / Export**.
+- Upload a CSV and map columns to import Organizations, Events, Artists or Artworks via `POST /wp-json/artpulse/v1/import`.
+- Export CSVs for offline editing or backup.
+
+## Membership Overrides
+Found in **Settings → General**. Toggles allow you to bypass Artist, Organization or Member membership checks when needed.
+
+## Managing Members
+Artists and members are WordPress users while organizations are a custom post type. Use **Users → All Users** or the post type screens to change roles, send reminders or deactivate accounts.
+
+## Auto‑Expire Past Events
+Enable this option in **Settings → General** to hide events automatically after their end date.
+
+## Gutenberg Relationship Blocks
+Blocks for **Artist ↔ Event** and **Artwork ↔ Organization** help you link related content in the editor.
+
+## Shortcodes & Forms
+The plugin registers the following shortcodes:
+
+| Shortcode | Purpose |
+|-----------|---------|
+| `[ap_artists]` | List artists. |
+| `[ap_artworks]` | List artworks. |
+| `[ap_directory]` | Directory of events, artists, artworks or organizations. |
+| `[ap_edit_event id="123"]` | Form to edit an event. |
+| `[ap_events]` | List events. |
+| `[ap_filtered_list]` | Display posts filtered by taxonomy. |
+| `[ap_membership_account]` | Show the logged‑in user’s membership account. |
+| `[ap_membership_purchase level="Pro"]` | Link to purchase a membership. |
+| `[ap_my_events]` | List events submitted by the current user. |
+| `[ap_my_follows]` | Display items the user follows. |
+| `[ap_notifications]` | Show user notifications. |
+| `[ap_org_dashboard]` | Dashboard for an organization with event management. |
+| `[ap_org_profile_edit]` | Form to edit an organization profile. |
+| `[ap_organizations]` | List organizations. |
+| `[ap_portfolio_builder]` | Manage a member portfolio. |
+| `[ap_profile_edit]` | Form for members to edit their profile. |
+| `[ap_submission_form]` | Generic submission form (`post_type` attribute selects type). |
+| `[ap_submit_event]` | Form to submit a new event. |
+| `[ap_submit_organization]` | Form to submit a new organization. |
+| `[ap_user_dashboard]` | Member dashboard with calendar and favorites. |
+| `[ap_user_profile id="1"]` | Display a user profile. |
+
+Copy any of these into a page or post to expose ArtPulse functionality.
+
+## Custom Admin Columns & Sorting
+Post lists display extra columns like dates and membership level. Columns can be sorted or hidden using **Screen Options**.
+
+## Troubleshooting
+- **System Status** lists recent webhook deliveries and server requirements.
+- Import errors skip failed rows—verify column mappings if data is missing.
+- For additional help see the Developer Guide or visit <https://docs.artpulse.io>.
 
