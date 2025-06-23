@@ -98,7 +98,7 @@ class OrganizationDashboardShortcode {
                     'meta_value' => $org_id
                 ]);
                 foreach ($events as $event) {
-                    echo '<li>' . esc_html($event->post_title) . '</li>';
+                    echo '<li>' . esc_html($event->post_title) . ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
                 }
                 ?>
             </ul>
@@ -189,7 +189,7 @@ class OrganizationDashboardShortcode {
             'meta_value' => $org_id
         ]);
         foreach ($events as $event) {
-            echo '<li>' . esc_html($event->post_title) . '</li>';
+            echo '<li>' . esc_html($event->post_title) . ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
         }
         $html = ob_get_clean();
 
@@ -225,7 +225,7 @@ class OrganizationDashboardShortcode {
             'meta_value' => $user_org
         ]);
         foreach ($events as $event) {
-            echo '<li>' . esc_html($event->post_title) . '</li>';
+            echo '<li>' . esc_html($event->post_title) . ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
         }
         $html = ob_get_clean();
 
