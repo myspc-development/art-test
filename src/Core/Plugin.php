@@ -109,6 +109,7 @@ class Plugin
         \ArtPulse\Frontend\ProfileEditShortcode::register();
         \ArtPulse\Frontend\OrgProfileEditShortcode::register();
         \ArtPulse\Frontend\PortfolioBuilder::register();
+        \ArtPulse\Frontend\LoginShortcode::register();
         \ArtPulse\Admin\MetaBoxesRelationship::register();
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
         \ArtPulse\Admin\ApprovalManager::register();
@@ -198,6 +199,19 @@ class Plugin
             'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
             'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
             'nonce'         => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_enqueue_script(
+            'ap-login-js',
+            plugins_url('assets/js/ap-login.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-login-js', 'APLogin', [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('ap_login_nonce'),
         ]);
 
         wp_enqueue_style(
