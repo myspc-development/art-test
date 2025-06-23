@@ -32,50 +32,50 @@ class ProfileEditShortcode {
 
         ob_start();
         ?>
-        <form method="post" enctype="multipart/form-data" class="ap-profile-edit-form">
+        <form method="post" enctype="multipart/form-data" class="ap-profile-edit-form ap-form-container">
             <?php wp_nonce_field('ap_profile_edit_action', 'ap_profile_nonce'); ?>
             <p>
-                <label for="display_name">Display Name</label><br>
-                <input type="text" name="display_name" id="display_name" value="<?php echo esc_attr($user->display_name); ?>" required>
+                <label class="ap-form-label" for="display_name">Display Name</label><br>
+                <input class="ap-form-input" type="text" name="display_name" id="display_name" value="<?php echo esc_attr($user->display_name); ?>" required>
             </p>
             <p>
-                <label for="description">Bio</label><br>
-                <textarea name="description" id="description" rows="5"><?php echo esc_textarea($bio); ?></textarea>
+                <label class="ap-form-label" for="description">Bio</label><br>
+                <textarea class="ap-form-textarea" name="description" id="description" rows="5"><?php echo esc_textarea($bio); ?></textarea>
             </p>
             <p>
-                <label for="ap_avatar">Custom Avatar</label><br>
+                <label class="ap-form-label" for="ap_avatar">Custom Avatar</label><br>
                 <?php if ($avatar): ?>
                     <img src="<?php echo esc_url($avatar); ?>" alt="Current Avatar" style="max-width: 100px;" /><br>
                 <?php endif; ?>
-                <input type="file" name="ap_avatar" id="ap_avatar" accept="image/*">
+                <input class="ap-form-input" type="file" name="ap_avatar" id="ap_avatar" accept="image/*">
             </p>
             <p>
-                <label for="ap_social_twitter">Twitter URL</label><br>
-                <input type="url" name="ap_social_twitter" id="ap_social_twitter" value="<?php echo esc_url($twitter); ?>">
+                <label class="ap-form-label" for="ap_social_twitter">Twitter URL</label><br>
+                <input class="ap-form-input" type="url" name="ap_social_twitter" id="ap_social_twitter" value="<?php echo esc_url($twitter); ?>">
             </p>
             <p>
-                <label for="ap_social_instagram">Instagram URL</label><br>
-                <input type="url" name="ap_social_instagram" id="ap_social_instagram" value="<?php echo esc_url($instagram); ?>">
+                <label class="ap-form-label" for="ap_social_instagram">Instagram URL</label><br>
+                <input class="ap-form-input" type="url" name="ap_social_instagram" id="ap_social_instagram" value="<?php echo esc_url($instagram); ?>">
             </p>
             <p>
-                <label for="ap_social_website">Website URL</label><br>
-                <input type="url" name="ap_social_website" id="ap_social_website" value="<?php echo esc_url($website); ?>">
+                <label class="ap-form-label" for="ap_social_website">Website URL</label><br>
+                <input class="ap-form-input" type="url" name="ap_social_website" id="ap_social_website" value="<?php echo esc_url($website); ?>">
             </p>
             <p>
-                <label for="ap_country">Country</label><br>
-                <input id="ap_country" type="text" class="ap-address-country ap-address-input" name="ap_country" data-selected="<?php echo esc_attr($country); ?>" />
+                <label class="ap-form-label" for="ap_country">Country</label><br>
+                <input class="ap-form-input ap-address-country ap-address-input" id="ap_country" type="text" name="ap_country" data-selected="<?php echo esc_attr($country); ?>" />
             </p>
             <p>
-                <label for="ap_state">State/Province</label><br>
-                <input id="ap_state" type="text" class="ap-address-state ap-address-input" name="ap_state" data-selected="<?php echo esc_attr($state); ?>" />
+                <label class="ap-form-label" for="ap_state">State/Province</label><br>
+                <input class="ap-form-input ap-address-state ap-address-input" id="ap_state" type="text" name="ap_state" data-selected="<?php echo esc_attr($state); ?>" />
             </p>
             <p>
-                <label for="ap_city">City</label><br>
-                <input id="ap_city" type="text" class="ap-address-city ap-address-input" name="ap_city" data-selected="<?php echo esc_attr($city); ?>" />
+                <label class="ap-form-label" for="ap_city">City</label><br>
+                <input class="ap-form-input ap-address-city ap-address-input" id="ap_city" type="text" name="ap_city" data-selected="<?php echo esc_attr($city); ?>" />
             </p>
             <input type="hidden" name="address_components" id="ap-profile-address-components" value="<?php echo esc_attr(json_encode(['country' => $country, 'state' => $state, 'city' => $city])); ?>">
             <p>
-                <input type="submit" name="ap_profile_submit" value="Update Profile">
+                <input class="ap-form-button" type="submit" name="ap_profile_submit" value="Update Profile">
             </p>
         </form>
         <?php
