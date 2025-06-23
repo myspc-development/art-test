@@ -39,7 +39,8 @@
 .ap-filter-item-title a:focus {
   color: var(--ap-primary-hover);
   text-decoration: underline;
-  outline: none;
+  outline: 2px solid var(--ap-primary-color);
+  outline-offset: 2px;
 }
 
 .ap-filter-item-excerpt {
