@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const delimiterSelect = document.getElementById('ap-csv-delimiter');
     const delimiterCustom = document.getElementById('ap-csv-delimiter-custom');
     const skipInput = document.getElementById('ap-csv-skip');
+    const trimInput = document.getElementById('ap-trim-whitespace');
+    const saveTemplateBtn = document.getElementById('ap-save-template');
 
     if (delimiterSelect) {
         delimiterSelect.addEventListener('change', () => {
@@ -17,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let parsedData = [];
     let headers = [];
+    let rawRows = [];
 
     fileInput.addEventListener('change', function () {
         const file = this.files[0];
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     headers = rows[0].map((_, idx) => 'Column ' + (idx + 1));
                 }
+                rawRows = rows;
                 parsedData = rows.map(r => {
                     const obj = {};
                     headers.forEach((h, idx) => {
@@ -64,11 +68,31 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildMapping() {
         mappingStep.innerHTML = '';
         const table = document.createElement('table');
-        headers.forEach(h => {
+        headers.forEach((h, idx) => {
             const row = document.createElement('tr');
             const label = document.createElement('td');
             label.textContent = h;
             row.appendChild(label);
+
+            const renameTd = document.createElement('td');
+            const renameInput = document.createElement('input');
+            renameInput.type = 'text';
+            renameInput.className = 'ap-rename-header';
+            renameInput.value = h;
+            renameInput.addEventListener('input', () => {
+                const old = headers[idx];
+                const val = renameInput.value || old;
+                headers[idx] = val;
+                label.textContent = val;
+                parsedData.forEach(r => {
+                    r[val] = r[old];
+                    delete r[old];
+                });
+                buildPreview();
+            });
+            renameTd.appendChild(renameInput);
+            row.appendChild(renameTd);
+
             const select = document.createElement('select');
             select.innerHTML = '<option value="">Ignore</option>' +
                 '<option value="post_title">Title</option>' +
@@ -76,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<option value="meta">Meta Field</option>';
             const input = document.createElement('input');
             input.type = 'text';
+            input.className = 'ap-meta-key';
             input.value = h;
             input.style.display = 'none';
             select.addEventListener('change', () => {
@@ -99,12 +124,14 @@ document.addEventListener('DOMContentLoaded', function () {
             opt.textContent = pt;
             ptSelect.appendChild(opt);
         });
+        ptSelect.addEventListener('change', () => loadTemplate(ptSelect.value));
         ptSelectTd.appendChild(ptSelect);
         postTypeRow.appendChild(ptLabel);
         postTypeRow.appendChild(ptSelectTd);
         table.appendChild(postTypeRow);
         mappingStep.appendChild(table);
         startBtn.disabled = false;
+        loadTemplate(ptSelect.value);
     }
 
     function buildPreview() {
@@ -137,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function sendChunks() {
         const selects = mappingStep.querySelectorAll('select');
-        const inputs = mappingStep.querySelectorAll('input[type="text"]');
+        const inputs = mappingStep.querySelectorAll('.ap-meta-key');
         const map = {};
         headers.forEach((h, idx) => {
             const val = selects[idx].value;
@@ -169,12 +196,59 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Content-Type': 'application/json',
                     'X-WP-Nonce': APCSVImport.nonce
                 },
-                body: JSON.stringify({ post_type: postType, rows: rows })
+                body: JSON.stringify({ post_type: postType, rows: rows, trim_whitespace: trimInput?.checked })
             }).then(r => r.json())
               .then(data => {
                   statusPre.textContent += 'Imported ' + (data.created ? data.created.length : 0) + " posts\n";
               });
         }
+    }
+
+    async function loadTemplate(postType) {
+        if (!APCSVImport.templateBase) return;
+        const resp = await fetch(`${APCSVImport.templateBase}/${postType}`);
+        const data = await resp.json();
+        if (!data || !data.mapping) return;
+        const selects = mappingStep.querySelectorAll('select');
+        const inputs = mappingStep.querySelectorAll('.ap-meta-key');
+        headers.forEach((h, idx) => {
+            const conf = data.mapping[h];
+            if (!conf) return;
+            selects[idx].value = conf.field;
+            if (conf.field === 'meta') {
+                inputs[idx].style.display = 'block';
+                inputs[idx].value = conf.metaKey || '';
+            }
+        });
+        if (trimInput) trimInput.checked = !!data.trim;
+    }
+
+    if (saveTemplateBtn) {
+        saveTemplateBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const selects = mappingStep.querySelectorAll('select');
+            const inputs = mappingStep.querySelectorAll('.ap-meta-key');
+            const map = {};
+            headers.forEach((h, idx) => {
+                const val = selects[idx].value;
+                if (!val) return;
+                if (val === 'meta') {
+                    map[h] = { field: 'meta', metaKey: inputs[idx].value };
+                } else {
+                    map[h] = { field: val };
+                }
+            });
+            const postType = document.getElementById('ap-post-type').value;
+            await fetch(`${APCSVImport.templateBase}/${postType}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': APCSVImport.nonce
+                },
+                body: JSON.stringify({ mapping: map, trim: trimInput?.checked })
+            });
+            alert('Template saved');
+        });
     }
 
     startBtn.addEventListener('click', () => {
