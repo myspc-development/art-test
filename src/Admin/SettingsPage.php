@@ -46,6 +46,14 @@ class SettingsPage
             'artpulse-engagement',
             [EngagementDashboard::class, 'render']
         );
+        add_submenu_page(
+            'artpulse-settings',
+            __('Import/Export', 'artpulse'),
+            __('Import/Export', 'artpulse'),
+            'manage_options',
+            'artpulse-import-export',
+            [self::class, 'renderImportExportPage']
+        );
     }
     public static function enqueueAdminAssets($hook)
     {
@@ -190,6 +198,23 @@ class SettingsPage
                 <?php endif; ?>
                 </tbody>
             </table>
+        </div>
+        <?php
+    }
+
+    public static function renderImportExportPage()
+    {
+        if (isset($_GET['ap_export_posts'])) {
+            $type    = sanitize_key($_GET['ap_export_posts']);
+            $allowed = ['artpulse_org', 'artpulse_event', 'artpulse_artist', 'artpulse_artwork'];
+            if (in_array($type, $allowed, true)) {
+                ImportExportTab::exportPostsCsv($type);
+            }
+        }
+        ?>
+        <div class="wrap">
+            <h1><?php esc_html_e('Import/Export', 'artpulse'); ?></h1>
+            <?php ImportExportTab::render(); ?>
         </div>
         <?php
     }
