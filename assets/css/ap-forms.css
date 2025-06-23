@@ -1,241 +1,62 @@
 @import url("ap-core.css");
 /*
 Theme Name: ArtPulse Forms
-Description: Styles for ArtPulse plugin forms.
+Description: Simplified form styles for the plugin.
 Version: 1.0.0
 */
 
-/* ========== SALIENT FORM BASE ========== */
+/* Basic form wrapper */
 form,
-.salient-form {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-  padding: 2rem 2.5rem;
-  max-width: 680px;
-  margin: 2rem auto;
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+.ap-form {
+  max-width: 640px;
+  margin: 1rem auto;
+  font-family: var(--ap-font-family-base);
 }
 
-/* ========== FORM FIELD WRAPPERS ========== */
-.salient-form .form-group,
-form .form-group,
-form > div {
-  margin-bottom: 1.6rem;
+/* Field spacing */
+form > div,
+.ap-form .form-group {
+  margin-bottom: 1rem;
 }
 
-/* ========== LABELS ========== */
-.salient-form label,
-form label {
+/* Labels */
+form label,
+.ap-form label {
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
-  font-size: 1rem;
-  color: #23272f;
-  letter-spacing: 0.01em;
 }
 
-/* ========== INPUTS & TEXTAREAS ========== */
-.salient-form input[type="text"],
-.salient-form input[type="email"],
-.salient-form input[type="number"],
-.salient-form input[type="tel"],
-.salient-form input[type="date"],
-.salient-form input[type="url"],
-.salient-form select,
-.salient-form textarea,
+/* Inputs and textareas */
 form input,
 form select,
-form textarea {
+form textarea,
+.ap-form input,
+.ap-form select,
+.ap-form textarea {
   width: 100%;
-  padding: 0.95rem 1.1rem;
-  border: 1px solid #e3e7ee;
-  border-radius: 8px;
-  background: #f9fafb;
-  font-size: 1rem;
-  color: #222;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  outline: none;
-  resize: vertical;
-  min-height: 45px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   box-sizing: border-box;
 }
 
-/* ========== FOCUS STATES ========== */
-.salient-form input:focus,
-.salient-form textarea:focus,
-.salient-form select:focus,
-form input:focus,
-form textarea:focus,
-form select:focus {
-  border-color: #3a86ff;
-  box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.3);
-  background: #fff;
-}
-
-/* ========== PLACEHOLDER ========== */
-.salient-form input::placeholder,
-.salient-form textarea::placeholder,
-form input::placeholder,
-form textarea::placeholder {
-  color: #b1b6c1;
-  opacity: 1;
-}
-
-/* ========== CHECKBOXES & RADIOS ========== */
-.salient-form input[type="checkbox"],
-.salient-form input[type="radio"],
-form input[type="checkbox"],
-form input[type="radio"] {
-  accent-color: #3a86ff;
-  width: 20px;
-  height: 20px;
-  margin-right: 0.5em;
-  vertical-align: middle;
-}
-
-.salient-form .checkbox-label,
-form .checkbox-label {
-  font-weight: 400;
-  font-size: 1rem;
-  color: #333;
-  cursor: pointer;
-  margin-left: 0.25rem;
-}
-
-/* ========== SELECT ========== */
-.salient-form select,
-form select {
-  appearance: none;
-  background: #f9fafb url('data:image/svg+xml;utf8,<svg fill="gray" height="14" viewBox="0 0 20 20" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>') no-repeat right 1.1rem center/1.1em auto;
-}
-
-/* ========== BUTTONS ========== */
-.salient-form button,
+/* Buttons */
 form button,
-.salient-form input[type="submit"],
-form input[type="submit"] {
-  background: #3a86ff;
+form input[type="submit"],
+.ap-form button,
+.ap-form input[type="submit"] {
+  background: var(--ap-primary-color);
   color: #fff;
-  font-weight: 700;
-  padding: 1rem 2.2rem;
   border: none;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(58, 134, 255, 0.2);
-  font-size: 1.05rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
-  margin-top: 1rem;
-  letter-spacing: 0.03em;
 }
 
-.salient-form button:hover,
 form button:hover,
-.salient-form input[type="submit"]:hover,
-form input[type="submit"]:hover {
-  background: #2965db;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(41, 101, 219, 0.25);
-}
-
-/* ========== FIELDSET & LEGEND ========== */
-.salient-form fieldset,
-form fieldset {
-  border: none;
-  padding: 0;
-  margin: 0 0 1.8rem 0;
-}
-
-.salient-form legend,
-form legend {
-  font-weight: 700;
-  color: #2b3441;
-  font-size: 1.05rem;
-  margin-bottom: 0.8rem;
-}
-
-/* ========== ERROR & SUCCESS STATES ========== */
-.salient-form .form-error,
-form .form-error {
-  color: #ef4444;
-  background: #fef2f2;
-  border-radius: 8px;
-  padding: 0.6em 1em;
-  margin-top: 0.25em;
-  font-size: 0.97em;
-}
-
-.salient-form .form-success,
-form .form-success {
-  color: #22c55e;
-  background: #f0fdf4;
-  border-radius: 8px;
-  padding: 0.6em 1em;
-  margin-top: 0.25em;
-  font-size: 0.97em;
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 650px) {
-  form,
-  .salient-form {
-    padding: 1.2rem 0.8rem;
-    border-radius: 8px;
-    max-width: 98vw;
-  }
-  .salient-form button,
-  form button,
-  .salient-form input[type="submit"],
-  form input[type="submit"] {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1rem;
-  }
-}
-
-/* ========== OPTIONAL: SPACING FOR RADIO/CHECKBOX GROUPS ========== */
-.salient-form .checkbox-group,
-.salient-form .radio-group,
-form .checkbox-group,
-form .radio-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.2rem;
-  margin-top: 0.4rem;
-}
-
-/* ========== REMOVE DEFAULT SPINNER IN NUMBER INPUTS ========== */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-input[type=number] {
-  -moz-appearance:textfield;
-}
-
-/* ========== IMPROVE TEXTAREA ========== */
-textarea {
-  min-height: 120px;
-  max-height: 320px;
-}
-
-/* ========== OPTIONAL: FORM HEADER ========== */
-.salient-form .form-title,
-form .form-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #101828;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.03em;
-  text-align: center;
-}
-
-/* ========== OPTIONAL: FORM FOOTER ========== */
-.salient-form .form-footer,
-form .form-footer {
-  margin-top: 2rem;
-  font-size: 0.97rem;
-  color: #8d99ae;
-  text-align: center;
+form input[type="submit"]:hover,
+.ap-form button:hover,
+.ap-form input[type="submit"]:hover {
+  background: var(--ap-primary-hover);
 }
