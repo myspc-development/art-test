@@ -62,6 +62,13 @@ class LoginShortcode
                     <input class="ap-form-input" id="ap_reg_password" type="password" name="password" required />
                 </p>
                 <p>
+                    <label class="ap-form-label" for="ap_continue_as"><?php esc_html_e('Continue as', 'artpulse-management'); ?></label>
+                    <select class="ap-form-select" id="ap_continue_as" name="continue_as">
+                        <option value="artist"><?php esc_html_e('Artist', 'artpulse-management'); ?></option>
+                        <option value="organization"><?php esc_html_e('Organization', 'artpulse-management'); ?></option>
+                    </select>
+                </p>
+                <p>
                     <button class="ap-form-button" type="submit"><?php esc_html_e('Register', 'artpulse-management'); ?></button>
                 </p>
             </form>
@@ -93,15 +100,23 @@ class LoginShortcode
     {
         check_ajax_referer('ap_login_nonce', 'nonce');
 
-        $username = sanitize_user($_POST['username'] ?? '');
-        $email    = sanitize_email($_POST['email'] ?? '');
-        $password = $_POST['password'] ?? '';
+        $username     = sanitize_user($_POST['username'] ?? '');
+        $email        = sanitize_email($_POST['email'] ?? '');
+        $password     = $_POST['password'] ?? '';
+        $continue_as  = sanitize_text_field($_POST['continue_as'] ?? '');
 
         $result = wp_create_user($username, $password, $email);
         if (is_wp_error($result)) {
             wp_send_json_error(['message' => $result->get_error_message()]);
         }
 
-        wp_send_json_success(['message' => __('Registration successful', 'artpulse-management')]);
+        // Auto login the new user
+        wp_set_current_user($result);
+        wp_set_auth_cookie($result);
+
+        wp_send_json_success([
+            'message'     => __('Registration successful', 'artpulse-management'),
+            'continue_as' => $continue_as,
+        ]);
     }
 }

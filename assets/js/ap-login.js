@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const registerForm = document.getElementById('ap-register-form');
   const loginMsg = document.getElementById('ap-login-message');
   const regMsg = document.getElementById('ap-register-message');
+  const continueSelect = document.getElementById('ap_continue_as');
 
   async function submitForm(form, action, msgEl) {
     const formData = new FormData(form);
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (res.ok && data.success && action === 'ap_do_login') {
       window.location.reload();
     }
+    return {res, data};
   }
 
   if (loginForm) {
@@ -29,9 +31,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (registerForm) {
-    registerForm.addEventListener('submit', (e) => {
+    registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      submitForm(registerForm, 'ap_do_register', regMsg);
+      const result = await submitForm(registerForm, 'ap_do_register', regMsg);
+      if (result.res.ok && result.data.success) {
+        const choice = continueSelect ? continueSelect.value : '';
+        if (choice === 'organization') {
+          window.location.href = APLogin.orgSubmissionUrl;
+        } else if (choice === 'artist') {
+          try {
+            const res = await fetch(APLogin.artistEndpoint, {
+              method: 'POST',
+              headers: { 'X-WP-Nonce': APLogin.restNonce }
+            });
+            const data = await res.json();
+            if (res.ok) {
+              regMsg.textContent = data.message || 'Request submitted';
+            } else {
+              regMsg.textContent = data.message || 'Request failed';
+            }
+          } catch (err) {
+            regMsg.textContent = err.message;
+          }
+        }
+      }
     });
   }
 });
