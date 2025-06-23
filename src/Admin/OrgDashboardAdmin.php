@@ -28,8 +28,8 @@ class OrgDashboardAdmin {
             ]);
             return $orgs ? $orgs[0]->ID : 0;
         }
-        // For org admins, load from user meta (example key: ap_org_id)
-        $org_id = intval(get_user_meta(get_current_user_id(), 'ap_org_id', true));
+        // For org admins, load from user meta (example key: ap_organization_id)
+        $org_id = intval(get_user_meta(get_current_user_id(), 'ap_organization_id', true));
         return $org_id;
     }
     
