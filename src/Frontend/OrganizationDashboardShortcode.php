@@ -7,6 +7,7 @@ class OrganizationDashboardShortcode {
         add_shortcode('ap_org_dashboard', [self::class, 'render']);
         // Match the JS action in ap-org-dashboard.js
         add_action('wp_ajax_ap_add_org_event', [self::class, 'handle_ajax_add_event']);
+        add_action('wp_ajax_ap_delete_org_event', [self::class, 'handle_ajax_delete_event']);
     }
 
     public static function render($atts) {
@@ -181,6 +182,42 @@ class OrganizationDashboardShortcode {
             'post_status' => 'any',
             'meta_key' => '_ap_event_organization',
             'meta_value' => $org_id
+        ]);
+        foreach ($events as $event) {
+            echo '<li>' . esc_html($event->post_title) . '</li>';
+        }
+        $html = ob_get_clean();
+
+        wp_send_json_success(['updated_list_html' => $html]);
+    }
+
+    public static function handle_ajax_delete_event() {
+        check_ajax_referer('ap_org_dashboard_nonce', 'nonce');
+
+        $event_id = intval($_POST['event_id'] ?? 0);
+        $post     = get_post($event_id);
+
+        if (!$post || get_post_type($event_id) !== 'artpulse_event') {
+            wp_send_json_error(['message' => 'Invalid event.']);
+        }
+
+        $user_id    = get_current_user_id();
+        $user_org   = get_user_meta($user_id, 'ap_organization_id', true);
+        $event_org  = intval(get_post_meta($event_id, '_ap_event_organization', true));
+
+        if (!$user_org || $user_org != $event_org) {
+            wp_send_json_error(['message' => 'Permission denied.']);
+        }
+
+        wp_delete_post($event_id, true);
+
+        // Reload the event list for this organization
+        ob_start();
+        $events = get_posts([
+            'post_type'  => 'artpulse_event',
+            'post_status' => 'any',
+            'meta_key'   => '_ap_event_organization',
+            'meta_value' => $user_org
         ]);
         foreach ($events as $event) {
             echo '<li>' . esc_html($event->post_title) . '</li>';
