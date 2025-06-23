@@ -24,7 +24,7 @@ class UserDashboardManager
         // Core dashboard script
         wp_enqueue_script(
             'ap-user-dashboard-js',
-            plugins_url('assets/js/ap-user-dashboard.js', __FILE__),
+            plugins_url('assets/js/ap-user-dashboard.js', ARTPULSE_PLUGIN_FILE),
             ['wp-api-fetch'],
             '1.0.0',
             true
@@ -33,7 +33,7 @@ class UserDashboardManager
         // Analytics events
         wp_enqueue_script(
             'ap-analytics-js',
-            plugins_url('assets/js/ap-analytics.js', __FILE__),
+            plugins_url('assets/js/ap-analytics.js', ARTPULSE_PLUGIN_FILE),
             ['ap-user-dashboard-js'],
             '1.0.0',
             true
@@ -47,10 +47,23 @@ class UserDashboardManager
             'artistEndpoint'   => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
         ]);
 
+        wp_localize_script('ap-user-dashboard-js', 'apL10n', [
+            'membership_level'  => __('Membership Level', 'artpulse'),
+            'expires'           => __('Expires', 'artpulse'),
+            'never'             => __('Never', 'artpulse'),
+            'upgrade_artist'    => __('Request Artist Upgrade', 'artpulse'),
+            'artist_pending'    => __('Artist upgrade request pending.', 'artpulse'),
+            'request_submitted' => __('Request submitted', 'artpulse'),
+            'submit_org'        => __('Submit Organization', 'artpulse'),
+            'events'            => __('Events', 'artpulse'),
+            'artists'           => __('Artists', 'artpulse'),
+            'artworks'          => __('Artworks', 'artpulse'),
+        ]);
+
         // Dashboard styles
         wp_enqueue_style(
             'ap-user-dashboard-css',
-            plugins_url('assets/css/ap-user-dashboard.css', __FILE__),
+            plugins_url('assets/css/ap-user-dashboard.css', ARTPULSE_PLUGIN_FILE),
             [],
             '1.0.0'
         );
