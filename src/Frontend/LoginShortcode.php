@@ -100,10 +100,29 @@ class LoginShortcode
     {
         check_ajax_referer('ap_login_nonce', 'nonce');
 
+        if (!apply_filters('ap_registration_allowed', true)) {
+            wp_send_json_error(['message' => __('Registration is currently disabled.', 'artpulse-management')]);
+        }
+
         $username     = sanitize_user($_POST['username'] ?? '');
         $email        = sanitize_email($_POST['email'] ?? '');
         $password     = $_POST['password'] ?? '';
         $continue_as  = sanitize_text_field($_POST['continue_as'] ?? '');
+
+        $min_length = (int) apply_filters('ap_min_password_length', 8);
+        if (
+            strlen($password) < $min_length ||
+            !preg_match('/[A-Za-z]/', $password) ||
+            !preg_match('/\d/', $password)
+        ) {
+            wp_send_json_error([
+                'message' => sprintf(
+                    /* translators: %d: minimum password length */
+                    __('Password must be at least %d characters long and include both letters and numbers.', 'artpulse-management'),
+                    $min_length
+                ),
+            ]);
+        }
 
         $result = wp_create_user($username, $password, $email);
         if (is_wp_error($result)) {
