@@ -60,31 +60,58 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-      const hasLocation = data.city || data.state;
-      if (hasLocation) {
-        const params = new URLSearchParams();
-        if (data.city) {
-          params.append('city', data.city);
-        }
-        if (data.state) {
-          params.append('region', data.state);
-        }
+    const hasLocation = data.city || data.state;
+    if (hasLocation) {
+      const params = new URLSearchParams();
+      if (data.city) params.append('city', data.city);
+      if (data.state) params.append('region', data.state);
+      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`)
+        .then(res => res.json())
+        .then(events => {
+          if (events && events.length) {
+            renderCalendar(events, 'ap-local-events');
+            renderEventsFeed(events);
+          } else {
+            renderEventsFeed([]);
+          }
+        })
+        .catch(() => renderEventsFeed([]));
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const params = new URLSearchParams({ lat: pos.coords.latitude, lng: pos.coords.longitude });
         fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`)
           .then(res => res.json())
           .then(events => {
             if (events && events.length) {
               renderCalendar(events, 'ap-local-events');
+              renderEventsFeed(events);
+            } else {
+              renderEventsFeed([]);
             }
-          });
-      } else if (data.favorite_events && data.favorite_events.length) {
-        renderCalendar(data.favorite_events, 'ap-local-events');
-      }
+          })
+          .catch(() => renderEventsFeed([]));
+      }, () => {
+        if (data.favorite_events && data.favorite_events.length) {
+          renderCalendar(data.favorite_events, 'ap-local-events');
+          renderEventsFeed(data.favorite_events);
+        } else {
+          renderEventsFeed([]);
+        }
+      });
+    } else if (data.favorite_events && data.favorite_events.length) {
+      renderCalendar(data.favorite_events, 'ap-local-events');
+      renderEventsFeed(data.favorite_events);
+    } else {
+      renderEventsFeed([]);
+    }
 
-      if (data.favorite_events && data.favorite_events.length) {
-        renderCalendar(data.favorite_events, 'ap-favorite-events');
-      }
-    });
+    if (data.favorite_events && data.favorite_events.length) {
+      renderCalendar(data.favorite_events, 'ap-favorite-events');
+    }
+
+    fetchNotifications();
   });
+});
 
 function renderCalendar(events, containerId = 'ap-favorite-events') {
   const container = document.getElementById(containerId);
@@ -158,4 +185,70 @@ function renderCalendar(events, containerId = 'ap-favorite-events') {
     next.onclick = () => { current.setMonth(current.getMonth() + 1); draw(); };
   }
   draw();
+}
+
+function renderEventsFeed(events) {
+  const feed = document.getElementById('ap-events-feed');
+  if (!feed) return;
+  feed.innerHTML = '';
+  if (!events || !events.length) {
+    feed.textContent = 'No upcoming events.';
+    return;
+  }
+  const ul = document.createElement('ul');
+  events.forEach(ev => {
+    const li = document.createElement('li');
+    const date = ev.date ? new Date(ev.date).toLocaleDateString() : '';
+    li.innerHTML = `<a href="${ev.link}">${ev.title}</a> ${date}`;
+    ul.appendChild(li);
+  });
+  feed.appendChild(ul);
+}
+
+function fetchNotifications() {
+  const container = document.getElementById('ap-dashboard-notifications');
+  if (!container) return;
+  container.textContent = '';
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/notifications`, {
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+  })
+    .then(res => res.json())
+    .then(data => {
+      const list = data.notifications || data;
+      if (!list || !list.length) {
+        container.textContent = 'No notifications.';
+        return;
+      }
+      const ul = document.createElement('ul');
+      list.forEach(n => {
+        const li = document.createElement('li');
+        li.textContent = n.content || n.type;
+        if (n.status !== 'read') {
+          const btn = document.createElement('button');
+          btn.textContent = 'Mark read';
+          btn.onclick = () => markNotificationRead(n.id, li);
+          li.append(' ', btn);
+        }
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    })
+    .catch(() => {
+      container.textContent = 'Failed to load notifications.';
+    });
+}
+
+function markNotificationRead(id, el) {
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/notifications/${id}/read`, {
+    method: 'POST',
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+  })
+    .then(res => res.json())
+    .then(() => {
+      el.remove();
+    })
+    .catch(() => {
+      // ignore errors but show simple message
+      alert('Failed to mark as read');
+    });
 }
