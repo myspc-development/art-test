@@ -39,6 +39,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_add_upload_cap']);
+        add_action('init', [\ArtPulse\Core\RoleSetup::class, 'maybe_install_table']);
     }
 
     public function activate()
