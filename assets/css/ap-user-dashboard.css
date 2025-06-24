@@ -22,6 +22,39 @@
   margin-bottom: var(--ap-space-medium);
 }
 
+#ap-events-feed,
+#ap-dashboard-notifications {
+  background: var(--ap-bg-color);
+  padding: 1rem;
+  border-radius: var(--ap-border-radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin-bottom: var(--ap-space-medium);
+}
+
+#ap-events-feed ul,
+#ap-dashboard-notifications ul {
+  list-style: disc;
+  margin-left: 1.25rem;
+  padding-left: 0;
+}
+
+#ap-events-feed li,
+#ap-dashboard-notifications li {
+  margin-bottom: 0.5rem;
+}
+
+#ap-events-feed a,
+#ap-dashboard-notifications a {
+  color: var(--ap-primary-color);
+  text-decoration: none;
+}
+
+#ap-events-feed a:hover,
+#ap-dashboard-notifications a:hover {
+  color: var(--ap-primary-hover);
+  text-decoration: underline;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .ap-user-dashboard {
@@ -35,6 +68,11 @@
 
   .ap-user-dashboard .dashboard-nav {
     flex-direction: column;
+  }
+
+  #ap-events-feed,
+  #ap-dashboard-notifications {
+    padding: 0.75rem;
   }
 }
 
