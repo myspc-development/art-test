@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Admin;
 
+use Stripe\StripeClient;
+
 class OrgDashboardAdmin {
     public static function register() {
         add_menu_page(
@@ -190,13 +192,29 @@ class OrgDashboardAdmin {
             return;
         }
         echo '<table class="widefat"><thead><tr><th>Charge ID</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>';
+
+        $settings = get_option('artpulse_settings', []);
+        $secret   = $settings['stripe_secret'] ?? '';
+        $stripe   = $secret ? new StripeClient($secret) : null;
+
         foreach ($payments as $charge_id) {
-            // You’d fetch more details from Stripe’s API here!
-            // For demonstration, just show the ID:
-            echo '<tr><td>' . esc_html($charge_id) . '</td><td>-</td><td>-</td><td>-</td></tr>';
+            $id = esc_html($charge_id);
+            $date = $amount = $status = '-';
+
+            if ($stripe) {
+                try {
+                    $charge = $stripe->charges->retrieve($charge_id, []);
+                    $date   = date_i18n(get_option('date_format'), intval($charge->created));
+                    $amount = number_format_i18n($charge->amount / 100, 2) . ' ' . strtoupper($charge->currency);
+                    $status = esc_html($charge->status);
+                } catch (\Exception $e) {
+                    // Fallback to ID only on API errors
+                }
+            }
+
+            echo '<tr><td>' . $id . '</td><td>' . $date . '</td><td>' . $amount . '</td><td>' . $status . '</td></tr>';
         }
         echo '</tbody></table>';
-        echo '<p><em>Tip: Integrate Stripe API to fetch full charge info live.</em></p>';
     }
 }
 
