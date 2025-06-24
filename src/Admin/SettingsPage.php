@@ -381,6 +381,10 @@ class SettingsPage
                 'label' => __('Stripe Webhook Secret', 'artpulse'),
                 'desc'  => __('Secret used to verify webhook calls from Stripe.', 'artpulse'),
             ],
+            'payment_metrics_cache' => [
+                'label' => __('Payment Metrics Cache (minutes)', 'artpulse'),
+                'desc'  => __('How long to cache payment analytics data.', 'artpulse'),
+            ],
             'service_worker_enabled' => [
                 'label' => __('Enable Service Worker', 'artpulse'),
                 'desc'  => __('Adds a service worker for basic offline caching.', 'artpulse'),
@@ -455,6 +459,8 @@ class SettingsPage
                 'auto_expire_events'
             ])) {
                 $output[$key] = isset($value) ? 1 : 0;
+            } elseif ($key === 'payment_metrics_cache') {
+                $output[$key] = absint($value);
             } else {
                 $output[$key] = sanitize_text_field($value);
             }
