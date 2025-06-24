@@ -96,21 +96,13 @@ class EnqueueAssets {
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
 
         if ($screen->base === 'artpulse-settings_page_artpulse-engagement') {
-            wp_enqueue_script(
-                'chart-js',
-                plugins_url('assets/js/chart.js', ARTPULSE_PLUGIN_FILE),
-                [],
-                null,
-                true
-            );
-
             $custom_js_path = $plugin_dir . '/assets/js/ap-engagement-dashboard.js';
             $custom_js_url = $plugin_url . '/assets/js/ap-engagement-dashboard.js';
             if (file_exists($custom_js_path)) {
                 wp_enqueue_script(
                     'ap-engagement-dashboard',
                     $custom_js_url,
-                    ['chart-js'],
+                    [],
                     filemtime($custom_js_path),
                     true
                 );
@@ -322,29 +314,6 @@ class EnqueueAssets {
             true
         );
 
-        wp_enqueue_script(
-            'chart-js',
-            plugins_url('assets/js/chart.js', ARTPULSE_PLUGIN_FILE),
-            [],
-            null,
-            true
-        );
-
-        $metrics_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-metrics.js';
-        $metrics_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-metrics.js';
-        if (file_exists($metrics_path)) {
-            wp_enqueue_script(
-                'ap-org-metrics',
-                $metrics_url,
-                ['chart-js', 'wp-api-fetch'],
-                filemtime($metrics_path),
-                true
-            );
-            wp_localize_script('ap-org-metrics', 'APOrgMetrics', [
-                'endpoint' => esc_url_raw(rest_url('artpulse/v1/org-metrics')),
-                'nonce'    => wp_create_nonce('wp_rest'),
-            ]);
-        }
 
         $opts = get_option('artpulse_settings', []);
         if (!empty($opts['service_worker_enabled'])) {
