@@ -17,7 +17,6 @@ class OrganizationDashboardShortcode {
         $org_id = get_user_meta($user_id, 'ap_organization_id', true);
         if (!$org_id) return '<p>No organization assigned.</p>';
 
-        wp_enqueue_script('ap-org-metrics');
 
         $status = isset($_GET['status']) ? sanitize_key($_GET['status']) : 'all';
         $paged  = max(1, intval($_GET['paged'] ?? 1));
