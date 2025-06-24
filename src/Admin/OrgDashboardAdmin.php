@@ -59,17 +59,52 @@ class OrgDashboardAdmin {
         $org_id = intval(get_user_meta(get_current_user_id(), 'ap_organization_id', true));
         return $org_id;
     }
+
+    /**
+     * Retrieve all organization posts with caching.
+     *
+     * @return array<int, \WP_Post>
+     */
+    private static function get_all_orgs(): array
+    {
+        $key = 'ap_dash_all_orgs';
+        $orgs = get_transient($key);
+        if ($orgs === false) {
+            $orgs = get_posts([
+                'post_type'   => 'artpulse_org',
+                'numberposts' => -1,
+                'post_status' => 'publish',
+            ]);
+            set_transient($key, $orgs, MINUTE_IN_SECONDS * 15);
+        }
+        return $orgs;
+    }
+
+    /**
+     * Retrieve posts for an organization with caching.
+     *
+     * @param int   $org_id Organization ID
+     * @param string $suffix Cache key suffix
+     * @param array  $args   WP_Query arguments
+     * @return array<int, \WP_Post>
+     */
+    private static function get_org_posts(int $org_id, string $suffix, array $args): array
+    {
+        $key = 'ap_dash_' . $suffix . '_' . $org_id;
+        $posts = get_transient($key);
+        if ($posts === false) {
+            $posts = get_posts($args);
+            set_transient($key, $posts, MINUTE_IN_SECONDS * 15);
+        }
+        return $posts;
+    }
     
     public static function render() {
         echo '<div class="wrap"><h1>Organization Dashboard</h1>';
 
         // Show org select dropdown for super admins only
         if (current_user_can('administrator')) {
-            $all_orgs = get_posts([
-                'post_type'   => 'artpulse_org',
-                'numberposts' => -1,
-                'post_status' => 'publish',
-            ]);
+            $all_orgs = self::get_all_orgs();
             $selected_org = self::get_current_org_id();
             echo '<form method="get" style="margin-bottom:1em;"><input type="hidden" name="page" value="ap-org-dashboard" />';
             echo '<label for="ap-org-select"><strong>Select Organization: </strong></label>';
@@ -107,7 +142,7 @@ class OrgDashboardAdmin {
             'post_status' => 'publish',
             'numberposts' => 50
         ];
-        $requests = get_posts($args);
+        $requests = self::get_org_posts($org_id, 'profile_links', $args);
         echo '<table class="widefat"><thead><tr><th>Artist ID</th><th>Requested On</th></tr></thead><tbody>';
         foreach ($requests as $req) {
             $artist_user_id = get_post_meta($req->ID, 'artist_user_id', true);
@@ -230,7 +265,7 @@ class OrgDashboardAdmin {
             'post_status' => 'publish',
             'numberposts' => 50
         ];
-        $artworks = get_posts($args);
+        $artworks = self::get_org_posts($org_id, 'artworks', $args);
         echo '<table class="widefat"><thead><tr><th>Artwork ID</th><th>Title</th></tr></thead><tbody>';
         foreach ($artworks as $artwork) {
             echo '<tr><td>' . $artwork->ID . '</td><td>' . esc_html(get_the_title($artwork)) . '</td></tr>';
@@ -254,7 +289,7 @@ class OrgDashboardAdmin {
             'post_status' => 'publish',
             'numberposts' => 50
         ];
-        $events = get_posts($args);
+        $events = self::get_org_posts($org_id, 'events', $args);
         echo '<table class="widefat"><thead><tr><th>Event ID</th><th>Title</th></tr></thead><tbody>';
         foreach ($events as $event) {
             echo '<tr><td>' . $event->ID . '</td><td>' . esc_html(get_the_title($event)) . '</td></tr>';
@@ -279,7 +314,7 @@ class OrgDashboardAdmin {
             'post_status' => 'publish',
             'numberposts' => 50
         ];
-        $artworks = get_posts($args);
+        $artworks = self::get_org_posts($org_id, 'stats_artworks', $args);
         $total_views = 0;
         $total_favorites = 0;
         foreach ($artworks as $artwork) {
@@ -335,7 +370,33 @@ class OrgDashboardAdmin {
         }
         echo '</tbody></table>';
     }
+
+    /**
+     * Clear cached dashboard queries when related posts are saved.
+     */
+    public static function clear_cache(int $post_id, \WP_Post $post, bool $update): void
+    {
+        if (wp_is_post_revision($post_id)) {
+            return;
+        }
+
+        if ($post->post_type === 'artpulse_org') {
+            delete_transient('ap_dash_all_orgs');
+            return;
+        }
+
+        if (in_array($post->post_type, ['ap_profile_link', 'artpulse_artwork', 'artpulse_event'], true)) {
+            $org_id = intval(get_post_meta($post_id, 'org_id', true));
+            if ($org_id) {
+                delete_transient('ap_dash_profile_links_' . $org_id);
+                delete_transient('ap_dash_artworks_' . $org_id);
+                delete_transient('ap_dash_events_' . $org_id);
+                delete_transient('ap_dash_stats_artworks_' . $org_id);
+            }
+        }
+    }
 }
 
 add_action('admin_menu', ['\\ArtPulse\\Admin\\OrgDashboardAdmin', 'register']);
 add_action('admin_menu', ['\\ArtPulse\\Admin\\OrgDashboardAdmin', 'hide_org_menu'], 999);
+add_action('save_post', ['\\ArtPulse\\Admin\\OrgDashboardAdmin', 'clear_cache'], 10, 3);
