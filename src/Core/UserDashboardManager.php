@@ -59,6 +59,10 @@ class UserDashboardManager
             'events'            => __('Events', 'artpulse'),
             'artists'           => __('Artists', 'artpulse'),
             'artworks'          => __('Artworks', 'artpulse'),
+            'subscription_status' => __('Subscription Status', 'artpulse'),
+            'next_payment'        => __('Next Payment', 'artpulse'),
+            'recent_transactions' => __('Recent Transactions', 'artpulse'),
+            'no_transactions'     => __('No transactions found.', 'artpulse'),
         ]);
 
         // Dashboard styles
@@ -141,6 +145,41 @@ class UserDashboardManager
             ];
         }
 
+        // Upcoming payment/renewal date
+        $next_payment = get_user_meta($user_id, 'ap_membership_expires', true);
+        if (!$next_payment && class_exists('Stripe\Stripe')) {
+            // Placeholder: if using Stripe subscriptions you would fetch here
+            $next_payment = null;
+        }
+        $data['next_payment'] = $next_payment;
+
+        // Recent transactions via WooCommerce or stored Stripe charge IDs
+        $data['transactions'] = [];
+        if (function_exists('wc_get_orders')) {
+            $orders = wc_get_orders([
+                'customer_id' => $user_id,
+                'limit'       => 5,
+                'orderby'     => 'date',
+                'order'       => 'DESC',
+            ]);
+            foreach ($orders as $order) {
+                $data['transactions'][] = [
+                    'id'     => $order->get_id(),
+                    'total'  => $order->get_total(),
+                    'date'   => $order->get_date_created() ? $order->get_date_created()->getTimestamp() : null,
+                    'status' => $order->get_status(),
+                ];
+            }
+        } else {
+            $charges = get_user_meta($user_id, 'stripe_payment_ids', true);
+            if (is_array($charges)) {
+                $charges = array_slice(array_reverse($charges), 0, 5);
+                foreach ($charges as $cid) {
+                    $data['transactions'][] = [ 'id' => $cid ];
+                }
+            }
+        }
+
         return rest_ensure_response($data);
     }
 
@@ -219,8 +258,12 @@ class UserDashboardManager
         $profile_edit_url = self::get_profile_edit_url();
         ob_start(); ?>
         <div class="ap-user-dashboard">
-            <h2><?php _e('Your Membership','artpulse'); ?></h2>
+            <h2><?php _e('Subscription Status','artpulse'); ?></h2>
             <div id="ap-membership-info"></div>
+            <h2><?php _e('Next Payment','artpulse'); ?></h2>
+            <div id="ap-next-payment"></div>
+            <h2><?php _e('Recent Transactions','artpulse'); ?></h2>
+            <div id="ap-transactions"></div>
             <a class="ap-edit-profile-link ap-form-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
             <h2><?php _e('Upgrade Your Account','artpulse'); ?></h2>
             <div id="ap-upgrade-options"></div>

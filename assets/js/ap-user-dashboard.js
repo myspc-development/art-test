@@ -14,6 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
     info.innerHTML = `<p>${apL10n.membership_level}: ${data.membership_level}</p>
                       <p>${apL10n.expires}: ${data.membership_expires ? new Date(data.membership_expires * 1000).toLocaleDateString() : apL10n.never}</p>`;
 
+    const nextPay = document.getElementById('ap-next-payment');
+    if (nextPay) {
+      nextPay.textContent = data.next_payment ? new Date(data.next_payment * 1000).toLocaleDateString() : apL10n.never;
+    }
+
+    const txWrap = document.getElementById('ap-transactions');
+    if (txWrap) {
+      txWrap.textContent = '';
+      if (data.transactions && data.transactions.length) {
+        const ul = document.createElement('ul');
+        data.transactions.forEach(t => {
+          const li = document.createElement('li');
+          const date = t.date ? new Date(t.date * 1000).toLocaleDateString() : '';
+          li.textContent = `${date} - ${t.total ? t.total : ''} ${t.status ? t.status : ''}`.trim();
+          ul.appendChild(li);
+        });
+        txWrap.appendChild(ul);
+      } else {
+        txWrap.textContent = apL10n.no_transactions;
+      }
+    }
+
     const upgrade = document.getElementById('ap-upgrade-options');
     if (upgrade) {
       if (data.artist_request_pending) {
