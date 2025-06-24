@@ -38,11 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
             upgrade.textContent = err.message;
           }
         };
-        const orgLink = document.createElement('a');
-        orgLink.href = ArtPulseDashboardApi.orgSubmissionUrl;
-        orgLink.textContent = apL10n?.submit_org || 'Submit Organization';
+        const orgLink = document.createElement('button');
+        orgLink.className = 'ap-form-button upgrade-org-btn';
+        orgLink.textContent = apL10n?.upgrade_org || 'Upgrade to Organization';
+        orgLink.onclick = () => {
+          window.location.href = ArtPulseDashboardApi.orgSubmissionUrl;
+        };
         upgrade.appendChild(artistBtn);
-        upgrade.appendChild(document.createTextNode(' '));
         upgrade.appendChild(orgLink);
       }
     }

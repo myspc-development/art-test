@@ -55,6 +55,7 @@ class UserDashboardManager
             'artist_pending'    => __('Artist upgrade request pending.', 'artpulse'),
             'request_submitted' => __('Request submitted', 'artpulse'),
             'submit_org'        => __('Submit Organization', 'artpulse'),
+            'upgrade_org'       => __('Upgrade to Organization', 'artpulse'),
             'events'            => __('Events', 'artpulse'),
             'artists'           => __('Artists', 'artpulse'),
             'artworks'          => __('Artworks', 'artpulse'),
