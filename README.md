@@ -46,3 +46,7 @@ Use `[ap_login]` to display the front-end login form.
 
 Use `[ap_register]` to display a standalone registration form for new users. Signing up through this form automatically grants the “Free” membership level.
 
+
+## Stripe Radar
+
+To receive early fraud warnings you must enable the **early_fraud_warning.created** webhook event in your Stripe dashboard. Configure it to post to `/wp-json/artpulse/v1/stripe-webhook` on your site. When Radar flags a charge, the plugin logs the details and emails the site administrator.

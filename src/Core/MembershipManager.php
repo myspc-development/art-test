@@ -166,6 +166,42 @@ class MembershipManager
                 }
                 break;
 
+            case 'payment_intent.succeeded':
+                $intent = $event->data->object;
+                try {
+                    $pi = $stripe->paymentIntents->retrieve($intent->id, ['expand' => ['charges']]);
+                } catch (\Exception $e) {
+                    error_log('Stripe: Error retrieving PaymentIntent ' . $intent->id . ' - ' . $e->getMessage());
+                    break;
+                }
+
+                $charge   = $pi->charges->data[0] ?? null;
+                $fraud    = $charge->fraud_details ?? [];
+                $warnings = [];
+
+                try {
+                    $result   = $stripe->radar->earlyFraudWarnings->all(['payment_intent' => $pi->id]);
+                    $warnings = $result->data;
+                } catch (\Exception $e) {
+                    error_log('Stripe: Error retrieving early fraud warnings - ' . $e->getMessage());
+                }
+
+                if (!empty((array) $fraud) || !empty($warnings)) {
+                    $admin_email = get_option('admin_email');
+                    $message = "Potential fraud detected for PaymentIntent {$pi->id}.\n";
+                    if (!empty((array) $fraud)) {
+                        $message .= 'Fraud details: ' . wp_json_encode($fraud) . "\n";
+                    }
+                    if (!empty($warnings)) {
+                        $ids = array_map(static function ($w) { return $w->id; }, $warnings);
+                        $message .= 'Early fraud warnings: ' . implode(', ', $ids) . "\n";
+                    }
+                    wp_mail($admin_email, 'ArtPulse: Stripe Fraud Alert', $message);
+                    error_log($message);
+                }
+
+                break;
+
             // Subscription cancelled or payment failed → downgrade immediately
             case 'customer.subscription.deleted':
             case 'invoice.payment_failed':
