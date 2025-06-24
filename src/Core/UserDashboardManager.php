@@ -69,7 +69,7 @@ class UserDashboardManager
         wp_enqueue_style(
             'ap-user-dashboard-css',
             plugins_url('assets/css/ap-user-dashboard.css', ARTPULSE_PLUGIN_FILE),
-            [],
+            ['dashicons'],
             '1.0.0'
         );
     }
@@ -258,24 +258,36 @@ class UserDashboardManager
         $profile_edit_url = self::get_profile_edit_url();
         ob_start(); ?>
         <div class="ap-user-dashboard">
-            <h2><?php _e('Subscription Status','artpulse'); ?></h2>
+            <nav class="dashboard-nav">
+                <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
+                <a href="#next-payment"><span class="dashicons dashicons-money"></span><?php esc_html_e('Next Payment', 'artpulse'); ?></a>
+                <a href="#transactions"><span class="dashicons dashicons-list-view"></span><?php esc_html_e('Transactions', 'artpulse'); ?></a>
+                <a href="#upgrade"><span class="dashicons dashicons-star-filled"></span><?php esc_html_e('Upgrade', 'artpulse'); ?></a>
+                <a href="#content"><span class="dashicons dashicons-media-default"></span><?php esc_html_e('Content', 'artpulse'); ?></a>
+                <a href="#local-events"><span class="dashicons dashicons-location-alt"></span><?php esc_html_e('Local Events', 'artpulse'); ?></a>
+                <a href="#favorites"><span class="dashicons dashicons-heart"></span><?php esc_html_e('Favorites', 'artpulse'); ?></a>
+                <a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a>
+                <a href="#notifications"><span class="dashicons dashicons-megaphone"></span><?php esc_html_e('Notifications', 'artpulse'); ?></a>
+            </nav>
+
+            <h2 id="membership"><?php _e('Subscription Status','artpulse'); ?></h2>
             <div id="ap-membership-info"></div>
-            <h2><?php _e('Next Payment','artpulse'); ?></h2>
+            <h2 id="next-payment"><?php _e('Next Payment','artpulse'); ?></h2>
             <div id="ap-next-payment"></div>
-            <h2><?php _e('Recent Transactions','artpulse'); ?></h2>
+            <h2 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h2>
             <div id="ap-transactions"></div>
             <a class="ap-edit-profile-link ap-form-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
-            <h2><?php _e('Upgrade Your Account','artpulse'); ?></h2>
+            <h2 id="upgrade"><?php _e('Upgrade Your Account','artpulse'); ?></h2>
             <div id="ap-upgrade-options"></div>
-            <h2><?php _e('Your Content','artpulse'); ?></h2>
+            <h2 id="content"><?php _e('Your Content','artpulse'); ?></h2>
             <div id="ap-user-content"></div>
-            <h2><?php _e('Events Near You','artpulse'); ?></h2>
+            <h2 id="local-events"><?php _e('Events Near You','artpulse'); ?></h2>
             <div id="ap-local-events"></div>
-            <h2><?php _e('Your Favorited Events','artpulse'); ?></h2>
+            <h2 id="favorites"><?php _e('Your Favorited Events','artpulse'); ?></h2>
             <div id="ap-favorite-events"></div>
-            <h2><?php _e('Upcoming Events','artpulse'); ?></h2>
+            <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
             <div id="ap-events-feed"></div>
-            <h2><?php _e('Notifications','artpulse'); ?></h2>
+            <h2 id="notifications"><?php _e('Notifications','artpulse'); ?></h2>
             <div id="ap-dashboard-notifications"></div>
         </div>
         <?php
