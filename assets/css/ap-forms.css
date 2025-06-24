@@ -10,7 +10,8 @@ Version: 1.0.0
     margin-bottom: 20px;
 }
 
-.ap-form-group {
+.ap-form-group,
+.form-group {
     margin-bottom: 15px;
 }
 
@@ -23,7 +24,8 @@ Version: 1.0.0
 
 .ap-form-input,
 .ap-form-textarea,
-.ap-form-select {
+.ap-form-select,
+.ap-input {
     width: 100%;
     padding: var(--ap-input-padding);
     border: 2px solid var(--ap-primary-color);
@@ -36,17 +38,22 @@ Version: 1.0.0
 
 .ap-form-input:focus,
 .ap-form-textarea:focus,
-.ap-form-select:focus {
+.ap-form-select:focus,
+.ap-input:focus {
     outline: 2px solid var(--ap-primary-color);
     outline-offset: 2px;
 }
 
-.ap-form-textarea {
+
+.ap-form-textarea,
+textarea.ap-input {
     resize: vertical; /* Allows vertical resizing */
     min-height: 100px;
 }
 
-.ap-form-select {
+
+.ap-form-select,
+select.ap-input {
     height: 36px; /* Adjust height to match input */
 }
 
@@ -94,7 +101,8 @@ Version: 1.0.0
 @media (max-width: 768px) {
     .ap-form-input,
     .ap-form-textarea,
-    .ap-form-select {
+    .ap-form-select,
+    .ap-input {
         font-size: 14px;
     }
 
@@ -118,4 +126,11 @@ Version: 1.0.0
 /* Example: Style a specific class of form elements */
 .ap-form-highlighted {
     background-color: var(--ap-bg-color);
+}
+
+/* Image previews in forms */
+.ap-image-preview {
+    max-width: 100px;
+    display: block;
+    margin-bottom: 0.5rem;
 }

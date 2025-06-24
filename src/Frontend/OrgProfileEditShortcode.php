@@ -36,72 +36,72 @@ class OrgProfileEditShortcode {
         <form method="post" enctype="multipart/form-data" class="ap-org-profile-edit-form ap-form-container">
             <?php wp_nonce_field('ap_org_profile_edit_action', 'ap_org_profile_nonce'); ?>
             <div class="ap-form-messages" role="status" aria-live="polite"></div>
-            <p>
-                <label class="ap-form-label" for="post_title"><?php esc_html_e('Organization Name', 'artpulse-management'); ?></label><br>
-                <input class="ap-form-input" type="text" id="post_title" name="post_title" value="<?php echo esc_attr($org_post->post_title); ?>" required>
-            </p>
-            <p>
-                <label class="ap-form-label" for="ap_org_country"><?php esc_html_e('Country', 'artpulse-management'); ?></label><br>
-                <input class="ap-form-input ap-address-country ap-address-input" id="ap_org_country" type="text" name="ap_org_country" data-selected="<?php echo esc_attr($country); ?>" />
-            </p>
-            <p>
-                <label class="ap-form-label" for="ap_org_state"><?php esc_html_e('State/Province', 'artpulse-management'); ?></label><br>
-                <input class="ap-form-input ap-address-state ap-address-input" id="ap_org_state" type="text" name="ap_org_state" data-selected="<?php echo esc_attr($state); ?>" />
-            </p>
-            <p>
-                <label class="ap-form-label" for="ap_org_city"><?php esc_html_e('City', 'artpulse-management'); ?></label><br>
-                <input class="ap-form-input ap-address-city ap-address-input" id="ap_org_city" type="text" name="ap_org_city" data-selected="<?php echo esc_attr($city); ?>" />
-            </p>
-            <input type="hidden" name="address_components" id="ap-org-address-components" value="<?php echo esc_attr(json_encode(['country' => $country, 'state' => $state, 'city' => $city])); ?>">
+            <div class="form-group">
+                <label class="ap-form-label" for="post_title"><?php esc_html_e('Organization Name', 'artpulse-management'); ?></label>
+                <input class="ap-input" type="text" id="post_title" name="post_title" value="<?php echo esc_attr($org_post->post_title); ?>" required>
+            </div>
+            <div class="form-group">
+                <label class="ap-form-label" for="ap_org_country"><?php esc_html_e('Country', 'artpulse-management'); ?></label>
+                <input class="ap-input ap-address-country ap-address-input" id="ap_org_country" type="text" name="ap_org_country" data-selected="<?php echo esc_attr($country); ?>" />
+            </div>
+            <div class="form-group">
+                <label class="ap-form-label" for="ap_org_state"><?php esc_html_e('State/Province', 'artpulse-management'); ?></label>
+                <input class="ap-input ap-address-state ap-address-input" id="ap_org_state" type="text" name="ap_org_state" data-selected="<?php echo esc_attr($state); ?>" />
+            </div>
+            <div class="form-group">
+                <label class="ap-form-label" for="ap_org_city"><?php esc_html_e('City', 'artpulse-management'); ?></label>
+                <input class="ap-input ap-address-city ap-address-input" id="ap_org_city" type="text" name="ap_org_city" data-selected="<?php echo esc_attr($city); ?>" />
+            </div>
+            <input class="ap-input" type="hidden" name="address_components" id="ap-org-address-components" value="<?php echo esc_attr(json_encode(['country' => $country, 'state' => $state, 'city' => $city])); ?>">
             <?php foreach ($fields as $key => $args) {
                 list($type, $label) = $args;
                 $value = get_post_meta($org_id, $key, true);
                 ?>
-                <p>
-                    <label class="ap-form-label" for="<?php echo esc_attr($key); ?>"><?php echo esc_html($label); ?></label><br>
+                <div class="form-group">
+                    <label class="ap-form-label" for="<?php echo esc_attr($key); ?>"><?php echo esc_html($label); ?></label>
                     <?php
                     switch ($type) {
                         case 'textarea':
-                            echo '<textarea class="ap-form-textarea" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '">' . esc_textarea($value) . '</textarea>';
+                            echo '<textarea class="ap-input" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '">' . esc_textarea($value) . '</textarea>';
                             break;
                         case 'checkbox':
-                            echo '<input class="ap-form-input" id="' . esc_attr($key) . '" type="checkbox" name="' . esc_attr($key) . '" value="1" ' . checked($value, '1', false) . ' />';
+                            echo '<input class="ap-input" id="' . esc_attr($key) . '" type="checkbox" name="' . esc_attr($key) . '" value="1" ' . checked($value, '1', false) . ' />';
                             break;
                         case 'select':
                             if ($key === 'ead_org_type') {
                                 $opts = ['gallery','museum','studio','collective','non-profit','commercial-gallery','public-art-space','educational-institution','other'];
-                                echo '<select class="ap-form-select" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '">';
+                                echo '<select class="ap-input" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '">';
                                 echo '<option value="">' . esc_html__('Select', 'artpulse-management') . '</option>';
                                 foreach ($opts as $opt) {
                                     echo '<option value="' . esc_attr($opt) . '" ' . selected($value, $opt, false) . '>' . esc_html(ucfirst(str_replace('-', ' ', $opt))) . '</option>';
                                 }
                                 echo '</select>';
                             } else {
-                                echo '<input class="ap-form-input" id="' . esc_attr($key) . '" type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" />';
+                                echo '<input class="ap-input" id="' . esc_attr($key) . '" type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" />';
                             }
                             break;
                         case 'media':
                             $img = $value ? wp_get_attachment_url($value) : '';
                             if ($img) {
-                                echo '<img src="' . esc_url($img) . '" alt="" style="max-width:100px;" /><br>';
+                                echo '<img src="' . esc_url($img) . '" alt="" class="ap-image-preview" />';
                             }
-                            echo '<input class="ap-form-input" id="' . esc_attr($key) . '" type="file" name="' . esc_attr($key) . '" accept="image/*" />';
+                            echo '<input class="ap-input" id="' . esc_attr($key) . '" type="file" name="' . esc_attr($key) . '" accept="image/*" />';
                             break;
                         case 'email':
-                            echo '<input class="ap-form-input" id="' . esc_attr($key) . '" type="email" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" />';
+                            echo '<input class="ap-input" id="' . esc_attr($key) . '" type="email" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" />';
                             break;
                         case 'url':
-                            echo '<input class="ap-form-input" id="' . esc_attr($key) . '" type="url" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" />';
+                            echo '<input class="ap-input" id="' . esc_attr($key) . '" type="url" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" />';
                             break;
                         default:
-                            echo '<input class="ap-form-input" id="' . esc_attr($key) . '" type="' . esc_attr($type) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" />';
+                            echo '<input class="ap-input" id="' . esc_attr($key) . '" type="' . esc_attr($type) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" />';
                     }
                     ?>
-                </p>
+                </div>
             <?php } ?>
-            <p>
-                <input type="submit" name="ap_org_profile_submit" value="<?php esc_attr_e('Update Organization', 'artpulse-management'); ?>">
-            </p>
+            <div class="form-group">
+                <input class="ap-input" type="submit" name="ap_org_profile_submit" value="<?php esc_attr_e('Update Organization', 'artpulse-management'); ?>">
+            </div>
         </form>
         <?php
         return $output . ob_get_clean();
