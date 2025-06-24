@@ -9,7 +9,13 @@ class UserAccountRestController
 {
     public static function register(): void
     {
-        add_action('rest_api_init', [self::class, 'register_routes']);
+        // If rest_api_init already ran (e.g. register() invoked within the
+        // hook itself) register routes immediately. Otherwise hook normally.
+        if ( did_action('rest_api_init') ) {
+            self::register_routes();
+        } else {
+            add_action('rest_api_init', [self::class, 'register_routes']);
+        }
     }
 
     public static function register_routes(): void
