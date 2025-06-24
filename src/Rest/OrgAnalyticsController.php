@@ -22,33 +22,40 @@ class OrgAnalyticsController {
             return rest_ensure_response([]);
         }
 
-        $event_query = new \WP_Query([
-            'post_type'     => 'artpulse_event',
-            'post_status'   => 'any',
-            'fields'        => 'ids',
-            'no_found_rows' => true,
-            'meta_key'      => '_ap_event_organization',
-            'meta_value'    => $org_id,
-        ]);
-        $event_count = count($event_query->posts);
+        $key  = 'ap_org_metrics_' . $org_id;
+        $data = get_transient($key);
+        if ($data === false) {
+            $event_query = new \WP_Query([
+                'post_type'     => 'artpulse_event',
+                'post_status'   => ['publish','pending','draft'],
+                'fields'        => 'ids',
+                'no_found_rows' => true,
+                'meta_key'      => '_ap_event_organization',
+                'meta_value'    => $org_id,
+            ]);
+            $event_count = count($event_query->posts);
 
-        $artwork_query = new \WP_Query([
-            'post_type'     => 'artpulse_artwork',
-            'post_status'   => 'any',
-            'fields'        => 'ids',
-            'no_found_rows' => true,
-            'meta_query'    => [
-                [
-                    'key'   => 'org_id',
-                    'value' => $org_id,
+            $artwork_query = new \WP_Query([
+                'post_type'     => 'artpulse_artwork',
+                'post_status'   => ['publish','pending','draft'],
+                'fields'        => 'ids',
+                'no_found_rows' => true,
+                'meta_query'    => [
+                    [
+                        'key'   => 'org_id',
+                        'value' => $org_id,
+                    ],
                 ],
-            ],
-        ]);
-        $artwork_count = count($artwork_query->posts);
+            ]);
+            $artwork_count = count($artwork_query->posts);
 
-        return rest_ensure_response([
-            'event_count'   => $event_count,
-            'artwork_count' => $artwork_count,
-        ]);
+            $data = [
+                'event_count'   => $event_count,
+                'artwork_count' => $artwork_count,
+            ];
+            set_transient($key, $data, MINUTE_IN_SECONDS * 15);
+        }
+
+        return rest_ensure_response($data);
     }
 }
