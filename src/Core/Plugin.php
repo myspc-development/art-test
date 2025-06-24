@@ -38,6 +38,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\FavoritesRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
+        add_action('init', [$this, 'maybe_add_upload_cap']);
     }
 
     public function activate()
@@ -332,5 +333,17 @@ class Plugin
         }
 
         update_option('ap_org_meta_prefix', 'ead_org');
+    }
+
+    public function maybe_add_upload_cap()
+    {
+        if (get_option('ap_member_upload_cap_added')) {
+            return;
+        }
+
+        require_once ARTPULSE_PLUGIN_DIR . 'src/Core/RoleSetup.php';
+        \ArtPulse\Core\RoleSetup::install();
+
+        update_option('ap_member_upload_cap_added', 1);
     }
 }
