@@ -45,6 +45,7 @@ class RoleSetup
                 'read',
                 'create_artpulse_event',
                 'view_artpulse_dashboard',
+                'upload_files',
             ],
             'artist' => [
                 'read',
@@ -66,6 +67,7 @@ class RoleSetup
                 'delete_published_artpulse_orgs', 'delete_others_artpulse_orgs',
                 'edit_private_artpulse_orgs', 'edit_published_artpulse_orgs',
                 'view_artpulse_dashboard',
+                'upload_files',
             ],
             'administrator' => [],
         ];
