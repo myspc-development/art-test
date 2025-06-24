@@ -300,9 +300,11 @@ class EnqueueAssets {
                 true
             );
             wp_localize_script('ap-org-dashboard', 'APOrgDashboard', [
-                'ajax_url'      => admin_url('admin-ajax.php'),
-                'nonce'         => wp_create_nonce('ap_org_dashboard_nonce'),
-                'eventFormUrl'  => Plugin::get_event_submission_url(),
+                'ajax_url'     => admin_url('admin-ajax.php'),
+                'nonce'        => wp_create_nonce('ap_org_dashboard_nonce'),
+                'eventFormUrl' => Plugin::get_event_submission_url(),
+                'rest_root'    => esc_url_raw(rest_url()),
+                'rest_nonce'   => wp_create_nonce('wp_rest'),
             ]);
         }
 

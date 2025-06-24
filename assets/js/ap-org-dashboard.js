@@ -6,6 +6,44 @@ document.addEventListener('DOMContentLoaded', () => {
   const eventsContainer = document.getElementById('ap-org-events');
   const statusBox = document.getElementById('ap-status-message');
 
+  // Load dashboard data
+  fetch(`${APOrgDashboard.rest_root}artpulse/v1/org/dashboard`, {
+    headers: { 'X-WP-Nonce': APOrgDashboard.rest_nonce }
+  })
+    .then(res => res.ok ? res.json() : null)
+    .then(data => {
+      if (!data) return;
+      const info = document.getElementById('ap-membership-info');
+      if (info) {
+        const expire = data.membership_expires ? new Date(data.membership_expires * 1000).toLocaleDateString() : 'Never';
+        info.innerHTML = `<p>Membership Level: ${data.membership_level || ''}</p><p>Expires: ${expire}</p>`;
+      }
+      const nextPay = document.getElementById('ap-next-payment');
+      if (nextPay) {
+        nextPay.textContent = data.next_payment ? new Date(data.next_payment * 1000).toLocaleDateString() : 'Never';
+      }
+      const txWrap = document.getElementById('ap-transactions');
+      if (txWrap) {
+        txWrap.textContent = '';
+        if (data.transactions && data.transactions.length) {
+          const ul = document.createElement('ul');
+          data.transactions.forEach(t => {
+            const li = document.createElement('li');
+            const date = t.date ? new Date(t.date * 1000).toLocaleDateString() : '';
+            li.textContent = `${date} - ${t.total ? t.total : ''} ${t.status ? t.status : ''}`.trim();
+            ul.appendChild(li);
+          });
+          txWrap.appendChild(ul);
+        } else {
+          txWrap.textContent = 'No transactions found.';
+        }
+      }
+      const metrics = document.getElementById('ap-org-analytics');
+      if (metrics && data.metrics) {
+        metrics.textContent = `Events: ${data.metrics.event_count || 0}, Artworks: ${data.metrics.artwork_count || 0}`;
+      }
+    });
+
   openBtn?.addEventListener('click', () => modal?.classList.add('open'));
   closeBtn?.addEventListener('click', () => modal?.classList.remove('open'));
 

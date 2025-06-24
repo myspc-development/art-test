@@ -33,10 +33,27 @@ class OrganizationDashboardShortcode {
         ob_start();
         ?>
         <div class="ap-org-dashboard">
-            <h2>Organization Events</h2>
-            <button id="ap-add-event-btn" class="ap-form-button" type="button">Add New Event</button>
+            <nav class="dashboard-nav">
+                <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
+                <a href="#billing"><span class="dashicons dashicons-money"></span><?php esc_html_e('Billing', 'artpulse'); ?></a>
+                <a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a>
+                <a href="#analytics"><span class="dashicons dashicons-chart-bar"></span><?php esc_html_e('Analytics', 'artpulse'); ?></a>
+                <a href="#profile"><span class="dashicons dashicons-admin-settings"></span><?php esc_html_e('Profile', 'artpulse'); ?></a>
+            </nav>
 
-            <div id="ap-org-modal" style="display:none">
+            <h2 id="membership"><?php _e('Membership','artpulse'); ?></h2>
+            <div id="ap-membership-info"></div>
+            <div id="ap-membership-actions"></div>
+
+            <h2 id="billing"><?php _e('Next Payment','artpulse'); ?></h2>
+            <div id="ap-next-payment"></div>
+            <h2 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h2>
+            <div id="ap-transactions"></div>
+
+            <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
+            <button id="ap-add-event-btn" class="ap-form-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
+
+            <div id="ap-org-modal" class="ap-org-modal" style="display:none">
                 <button id="ap-modal-close" type="button" class="ap-form-button">Close</button>
                 <div id="ap-status-message" class="ap-form-messages" role="status" aria-live="polite"></div>
                 <form id="ap-org-event-form" class="ap-form-container">
@@ -113,7 +130,7 @@ class OrganizationDashboardShortcode {
                 </label>
             </form>
 
-            <ul id="ap-org-events">
+            <ul id="ap-org-events" class="ap-org-events">
                 <?php
                 foreach ($query->posts as $event) {
                     $edit = get_edit_post_link($event->ID);
@@ -138,6 +155,10 @@ class OrganizationDashboardShortcode {
             ]);
             ?>
 
+            <h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2>
+            <div id="ap-org-analytics"></div>
+
+            <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
             <?php echo do_shortcode('[ap_org_profile_edit]'); ?>
         </div>
         <?php
