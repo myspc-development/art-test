@@ -44,6 +44,7 @@ class RoleSetup
             'member' => [
                 'read',
                 'create_artpulse_event',
+                'view_artpulse_dashboard',
             ],
             'artist' => [
                 'read',
