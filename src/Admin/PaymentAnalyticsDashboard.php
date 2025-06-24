@@ -24,10 +24,55 @@ class PaymentAnalyticsDashboard
 
     public static function render(): void
     {
-        $metrics = self::get_metrics();
+        $start_date = sanitize_text_field($_GET['start_date'] ?? '');
+        $end_date   = sanitize_text_field($_GET['end_date'] ?? '');
+
+        wp_enqueue_script(
+            'chart-js',
+            plugins_url('assets/js/chart.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            null,
+            true
+        );
+
+        $script_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/payment-analytics-dashboard.js';
+        wp_enqueue_script(
+            'ap-payment-dashboard',
+            plugins_url('assets/js/payment-analytics-dashboard.js', ARTPULSE_PLUGIN_FILE),
+            ['chart-js'],
+            file_exists($script_path) ? filemtime($script_path) : '1.0',
+            true
+        );
+
+        $metrics = self::get_metrics($start_date, $end_date);
+
+        wp_localize_script('ap-payment-dashboard', 'APPaymentDashboard', [
+            'months'        => $metrics['months'],
+            'revenue'       => $metrics['revenue_trend'],
+            'subscriptions' => $metrics['subscription_trend'],
+        ]);
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Payment Analytics', 'artpulse'); ?></h1>
+
+            <form method="get" style="margin-bottom:20px;">
+                <input type="hidden" name="page" value="artpulse-payment-analytics" />
+                <label><?php esc_html_e('Start Date', 'artpulse'); ?>
+                    <input type="date" name="start_date" value="<?php echo esc_attr($start_date); ?>" />
+                </label>
+                <label><?php esc_html_e('End Date', 'artpulse'); ?>
+                    <input type="date" name="end_date" value="<?php echo esc_attr($end_date); ?>" />
+                </label>
+                <button class="button" type="submit"><?php esc_html_e('Filter', 'artpulse'); ?></button>
+            </form>
+
+            <div style="max-width:800px;margin-bottom:20px;">
+                <canvas id="ap-payment-revenue-chart" height="120"></canvas>
+            </div>
+            <div style="max-width:800px;margin-bottom:20px;">
+                <canvas id="ap-payment-subscriptions-chart" height="120"></canvas>
+            </div>
+
             <table class="widefat">
                 <thead>
                 <tr>
@@ -73,11 +118,22 @@ class PaymentAnalyticsDashboard
         </div>
         <?php
     }
-    public static function get_metrics(): array
+    public static function get_metrics(string $start_date = '', string $end_date = ''): array
     {
-        $cached = get_transient('ap_payment_metrics');
+        $cache_key = 'ap_payment_metrics_' . md5($start_date . '_' . $end_date);
+        $cached = get_transient($cache_key);
         if (false !== $cached) {
             return $cached;
+        }
+
+        $start_ts = $start_date ? strtotime($start_date . ' 00:00:00') : strtotime('-5 months', current_time('timestamp'));
+        $end_ts   = $end_date ? strtotime($end_date . ' 23:59:59') : current_time('timestamp');
+
+        // Ensure start is before end
+        if ($start_ts > $end_ts) {
+            $tmp = $start_ts;
+            $start_ts = $end_ts;
+            $end_ts = $tmp;
         }
 
         $woo_total            = 0;
@@ -90,15 +146,30 @@ class PaymentAnalyticsDashboard
         $month_start     = strtotime('first day of this month 00:00:00');
         $last_month_start = strtotime('first day of last month 00:00:00');
 
+        $months = [];
+        $rev_by_month = [];
+        $subs_by_month = [];
+        $iter = strtotime(date('Y-m-01', $start_ts));
+        while ($iter <= $end_ts) {
+            $key = date('Y-m', $iter);
+            $months[] = date_i18n('M Y', $iter);
+            $rev_by_month[$key] = 0;
+            $subs_by_month[$key] = 0;
+            $iter = strtotime('+1 month', $iter);
+        }
+
         if (function_exists('wc_get_orders')) {
-            $lookback_days = absint(apply_filters('artpulse_payment_metrics_lookback_days', 365));
-            $date_after    = current_time('timestamp') - ($lookback_days * DAY_IN_SECONDS);
             $orders = wc_get_orders([
                 'limit'        => -1,
                 'status'       => ['completed', 'processing', 'failed', 'cancelled', 'refunded'],
-                'date_created' => '>' . gmdate('Y-m-d H:i:s', $date_after),
+                'date_created' => '>=' . gmdate('Y-m-d H:i:s', $start_ts),
             ]);
             foreach ($orders as $order) {
+                $created = $order->get_date_created() ? $order->get_date_created()->getTimestamp() : 0;
+                if ($created < $start_ts || $created > $end_ts) {
+                    continue;
+                }
+
                 $total  = $order->get_total();
                 $status = $order->get_status();
 
@@ -117,6 +188,11 @@ class PaymentAnalyticsDashboard
                     $wc_month_total += $total;
                 } elseif ($created >= $last_month_start && $created < $month_start) {
                     $wc_last_month_total += $total;
+                }
+
+                $key = date('Y-m', $created);
+                if (isset($rev_by_month[$key])) {
+                    $rev_by_month[$key] += $total;
                 }
             }
         }
@@ -140,6 +216,9 @@ class PaymentAnalyticsDashboard
                 foreach ($charges->data as $charge) {
                     $amount = $charge->amount / 100;
                     $time   = $charge->created;
+                    if ($time < $start_ts || $time > $end_ts) {
+                        continue;
+                    }
                     if ($charge->paid && !$charge->refunded) {
                         $stripe_total += $amount;
                         $stripe_success++;
@@ -147,6 +226,11 @@ class PaymentAnalyticsDashboard
                             $stripe_month_total += $amount;
                         } elseif ($time >= $last_month_start && $time < $month_start) {
                             $stripe_last_month_total += $amount;
+                        }
+
+                        $key = date('Y-m', $time);
+                        if (isset($rev_by_month[$key])) {
+                            $rev_by_month[$key] += $amount;
                         }
                     } else {
                         $stripe_failure++;
@@ -156,6 +240,9 @@ class PaymentAnalyticsDashboard
                 $subs = $stripe->subscriptions->all(['limit' => 100, 'status' => 'all']);
                 foreach ($subs->data as $sub) {
                     $created = $sub->created;
+                    if ($created < $start_ts || $created > $end_ts) {
+                        continue;
+                    }
                     if ($sub->status === 'active') {
                         $active_subs++;
                     }
@@ -166,6 +253,11 @@ class PaymentAnalyticsDashboard
                         $sub_month_count++;
                     } elseif ($created >= $last_month_start && $created < $month_start) {
                         $sub_last_month_count++;
+                    }
+
+                    $key = date('Y-m', $created);
+                    if (isset($subs_by_month[$key])) {
+                        $subs_by_month[$key]++;
                     }
                 }
             } catch (\Exception $e) {
@@ -196,11 +288,14 @@ class PaymentAnalyticsDashboard
             'monthly_subscription_growth'=> round($monthly_sub_growth, 2),
             'payment_success_rate'       => round($payment_success_rate, 2),
             'payment_failure_rate'       => round($payment_failure_rate, 2),
+            'months'                     => $months,
+            'revenue_trend'              => array_values($rev_by_month),
+            'subscription_trend'         => array_values($subs_by_month),
         ];
 
         $cache_minutes = absint($opts['payment_metrics_cache'] ?? 15);
         $cache_time    = (int) apply_filters('artpulse_payment_metrics_cache_time', $cache_minutes * MINUTE_IN_SECONDS);
-        set_transient('ap_payment_metrics', $metrics, $cache_time);
+        set_transient($cache_key, $metrics, $cache_time);
 
         return $metrics;
     }
