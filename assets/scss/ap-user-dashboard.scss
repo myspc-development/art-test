@@ -133,6 +133,8 @@
   text-decoration: none;
   color: var(--ap-primary-color);
   font-weight: 500;
+  display: inline-flex;
+  align-items: center;
 }
 
 .ap-user-dashboard .dashboard-nav a:focus {
@@ -142,6 +144,10 @@
 
 .ap-user-dashboard .dashboard-nav a:hover {
   text-decoration: underline;
+}
+
+.ap-user-dashboard .dashboard-nav .dashicons {
+  margin-right: 0.25rem;
 }
 
 .ap-user-dashboard .dashboard-content {
