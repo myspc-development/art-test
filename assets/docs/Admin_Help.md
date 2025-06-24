@@ -36,6 +36,12 @@ Enable this option in **Settings → General** to hide events automatically afte
 ## Gutenberg Relationship Blocks
 Blocks for **Artist ↔ Event** and **Artwork ↔ Organization** help you link related content in the editor.
 
+## Payment Analytics Dashboard
+Navigate to **ArtPulse → Payments** to see revenue and subscription trends over time.
+
+## Engagement Dashboard
+Open **ArtPulse → Engagement** to track member activity. The dashboard offers CSV export options and visual charts.
+
 ## Admin Module Walkthrough
 The administration screens follow the WordPress style guide, utilizing system fonts and the default blue (#2271b1) button color. A screenshot (`images/admin_modules_walkthrough.png`) labels the primary modules.
 
