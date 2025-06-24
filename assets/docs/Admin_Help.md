@@ -78,6 +78,10 @@ The plugin registers the following shortcodes:
 
 Copy any of these into a page or post to expose ArtPulse functionality.
 
+When an organization submission is approved in the admin area, the organization
+post is linked to the submitting user's account. This lets the user manage the
+organization from the front‑end dashboard.
+
 ## Custom Admin Columns & Sorting
 Post lists display extra columns like dates and membership level. Columns can be sorted or hidden using **Screen Options**.
 

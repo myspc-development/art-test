@@ -93,6 +93,10 @@ class ApprovalManager
             'ID'          => $post_id,
             'post_status' => 'publish',
         ]);
+        if ($post && $post->post_type === 'artpulse_org') {
+            update_user_meta($post->post_author, 'ap_organization_id', $post_id);
+            delete_user_meta($post->post_author, 'ap_pending_organization_id');
+        }
         // Redirect back to edit screen
         wp_safe_redirect(admin_url('post.php?post=' . $post_id . '&action=edit'));
         exit;
