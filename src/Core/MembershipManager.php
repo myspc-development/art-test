@@ -283,6 +283,7 @@ class MembershipManager
                 break;
         }
 
+        delete_transient('ap_payment_metrics');
         return rest_ensure_response(['received' => true]);
     }
 

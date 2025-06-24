@@ -43,6 +43,7 @@ class WooCommerceIntegration
             foreach ( $map as $level => $product_id ) {
                 if ( $product_id && $prod_id === $product_id ) {
                     self::assignMembership( $user_id, $level );
+                    delete_transient('ap_payment_metrics');
                     break 2;
                 }
             }
@@ -77,6 +78,8 @@ class WooCommerceIntegration
             __('Your ArtPulse membership has been cancelled','artpulse'),
             __('We detected a refund or cancellation. You have been moved to Free membership.','artpulse')
         );
+
+        delete_transient('ap_payment_metrics');
     }
 
     /**

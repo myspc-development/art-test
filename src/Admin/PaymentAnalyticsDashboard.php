@@ -198,7 +198,9 @@ class PaymentAnalyticsDashboard
             'payment_failure_rate'       => round($payment_failure_rate, 2),
         ];
 
-        set_transient('ap_payment_metrics', $metrics, 15 * MINUTE_IN_SECONDS);
+        $cache_minutes = absint($opts['payment_metrics_cache'] ?? 15);
+        $cache_time    = (int) apply_filters('artpulse_payment_metrics_cache_time', $cache_minutes * MINUTE_IN_SECONDS);
+        set_transient('ap_payment_metrics', $metrics, $cache_time);
 
         return $metrics;
     }
