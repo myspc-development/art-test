@@ -361,3 +361,19 @@ msgstr ""
 msgctxt "block title"
 msgid "ArtPulse Directory"
 msgstr ""
+
+#: src/Core/UserDashboardManager.php
+msgid "Subscription Status"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php
+msgid "Next Payment"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php
+msgid "Recent Transactions"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php
+msgid "No transactions found."
+msgstr ""
