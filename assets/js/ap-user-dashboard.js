@@ -14,6 +14,21 @@ document.addEventListener('DOMContentLoaded', () => {
     info.innerHTML = `<p>${apL10n.membership_level}: ${data.membership_level}</p>
                       <p>${apL10n.expires}: ${data.membership_expires ? new Date(data.membership_expires * 1000).toLocaleDateString() : apL10n.never}</p>`;
 
+    const actions = document.getElementById('ap-membership-actions');
+    if (actions && data.membership_level && data.membership_level !== 'Free') {
+      actions.textContent = '';
+      const btn = document.createElement('button');
+      btn.className = 'ap-form-button ap-membership-toggle';
+      if (data.membership_paused) {
+        btn.textContent = apL10n.resume;
+        btn.onclick = () => toggleMembership('resume', btn);
+      } else {
+        btn.textContent = apL10n.pause;
+        btn.onclick = () => toggleMembership('pause', btn);
+      }
+      actions.appendChild(btn);
+    }
+
     const nextPay = document.getElementById('ap-next-payment');
     if (nextPay) {
       nextPay.textContent = data.next_payment ? new Date(data.next_payment * 1000).toLocaleDateString() : apL10n.never;
@@ -312,7 +327,27 @@ function markAllNotificationsRead() {
       fetchNotifications();
     })
     .catch(() => {
-      alert('Failed to mark all as read');
+    alert('Failed to mark all as read');
+  });
+}
+
+function toggleMembership(action, btn) {
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/membership/${action}`, {
+    method: 'POST',
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+  })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        window.location.reload();
+      } else {
+        alert(res.message || 'Request failed');
+        btn.disabled = false;
+      }
+    })
+    .catch(() => {
+      alert('Request failed');
+      btn.disabled = false;
     });
 }
 

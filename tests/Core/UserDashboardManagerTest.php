@@ -32,6 +32,7 @@ class UserDashboardManagerTest extends TestCase
         $this->assertStringNotContainsString('id="next-payment"', $html);
         $this->assertStringNotContainsString('id="ap-user-content"', $html);
         $this->assertStringContainsString('id="ap-dashboard-notifications"', $html);
+        $this->assertStringContainsString('id="ap-membership-actions"', $html);
     }
 
     public function test_artist_dashboard_sections() {
@@ -40,6 +41,7 @@ class UserDashboardManagerTest extends TestCase
         $this->assertStringNotContainsString('id="next-payment"', $html);
         $this->assertStringContainsString('id="ap-user-content"', $html);
         $this->assertStringContainsString('id="ap-dashboard-notifications"', $html);
+        $this->assertStringContainsString('id="ap-membership-actions"', $html);
     }
 
     public function test_org_dashboard_sections() {
@@ -48,6 +50,7 @@ class UserDashboardManagerTest extends TestCase
         $this->assertStringContainsString('id="next-payment"', $html);
         $this->assertStringContainsString('id="ap-user-content"', $html);
         $this->assertStringContainsString('id="ap-dashboard-notifications"', $html);
+        $this->assertStringContainsString('id="ap-membership-actions"', $html);
     }
 
     public function test_admin_dashboard_sections() {
@@ -56,5 +59,6 @@ class UserDashboardManagerTest extends TestCase
         $this->assertStringContainsString('id="next-payment"', $html);
         $this->assertStringContainsString('id="ap-user-content"', $html);
         $this->assertStringContainsString('id="ap-dashboard-notifications"', $html);
+        $this->assertStringContainsString('id="ap-membership-actions"', $html);
     }
 }
