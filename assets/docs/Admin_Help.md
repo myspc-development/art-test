@@ -98,3 +98,6 @@ Post lists display extra columns like dates and membership level. Columns can be
 - Import errors skip failed rows—verify column mappings if data is missing.
 - For additional help see the Developer Guide or visit <https://docs.artpulse.io>.
 
+## Organization Dashboard Caching
+Organization dashboard queries are cached for 15 minutes using WordPress transient storage. This improves load time when viewing dashboard pages. Caches clear automatically whenever related organizations or events are modified.
+
