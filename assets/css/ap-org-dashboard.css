@@ -92,6 +92,24 @@
   opacity: 1;
 }
 
+.ap-form-button {
+  padding: var(--ap-button-padding);
+  background: var(--ap-primary-color);
+  color: var(--ap-bg-color);
+  border: none;
+  border-radius: var(--ap-border-radius);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ap-form-button:hover,
+.ap-form-button:focus {
+  background: var(--ap-primary-hover);
+  box-shadow: 0 0 0 2px var(--ap-primary-color);
+}
+
 
 @media (min-width: 768px) {
   .ap-org-dashboard {

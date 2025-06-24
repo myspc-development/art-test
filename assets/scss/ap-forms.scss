@@ -30,13 +30,24 @@ select.ap-input,
 .ap-form-textarea,
 .ap-form-select {
     width: 100%;
-    padding: 8px 12px;
+    padding: var(--ap-input-padding);
     border: 2px solid var(--ap-primary-color);
     border-radius: var(--ap-border-radius);
     background-color: var(--ap-bg-color);
     color: var(--ap-dark-text-color);
     box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
     font-size: 16px;
+}
+
+.ap-input:focus,
+input.ap-input:focus,
+textarea.ap-input:focus,
+select.ap-input:focus,
+.ap-form-input:focus,
+.ap-form-textarea:focus,
+.ap-form-select:focus {
+    outline: 2px solid var(--ap-primary-color);
+    outline-offset: 2px;
 }
 
 .ap-form-textarea,
@@ -54,8 +65,8 @@ select.ap-input {
 .ap-form-button {
     background-color: var(--ap-primary-color);
     border: none;
-    color: white;
-    padding: 10px 20px;
+    color: var(--ap-bg-color);
+    padding: var(--ap-button-padding);
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -63,10 +74,13 @@ select.ap-input {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: var(--ap-border-radius);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.ap-form-button:hover {
+.ap-form-button:hover,
+.ap-form-button:focus {
     background-color: var(--ap-primary-hover);
+    box-shadow: 0 0 0 2px var(--ap-primary-color);
 }
 
 /* Error and Success Messages */
@@ -101,7 +115,7 @@ select.ap-input {
 
     .ap-form-button {
         font-size: 14px;
-        padding: 8px 16px;
+        padding: var(--ap-button-padding);
     }
 }
 
