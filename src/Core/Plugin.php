@@ -305,6 +305,25 @@ class Plugin
         return home_url('/');
     }
 
+    /**
+     * Locate the page containing the event submission shortcode and return its URL.
+     */
+    public static function get_event_submission_url(): string
+    {
+        $pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_submit_event]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($pages)) {
+            return get_permalink($pages[0]->ID);
+        }
+
+        return home_url('/');
+    }
+
     public function maybe_migrate_org_meta()
     {
         if (get_option('ap_org_meta_prefix') === 'ead_org') {
