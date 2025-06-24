@@ -35,6 +35,12 @@
   font-weight: 500;
 }
 
+.ap-org-dashboard .dashboard-nav a.active {
+  background-color: var(--ap-primary-color);
+  color: #fff;
+  border-color: var(--ap-primary-color);
+}
+
 .ap-org-dashboard .dashboard-nav a:hover {
   text-decoration: underline;
 }
