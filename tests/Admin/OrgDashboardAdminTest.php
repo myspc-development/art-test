@@ -101,6 +101,7 @@ class OrgDashboardAdminTest extends TestCase
         Stub::$transients['ap_dash_artworks_10'] = ['b'];
         Stub::$transients['ap_dash_events_10'] = ['c'];
         Stub::$transients['ap_dash_stats_artworks_10'] = ['d'];
+        Stub::$transients['ap_org_metrics_10'] = ['e'];
         Stub::$post_meta[5]['org_id'] = 10;
 
         $post = new \WP_Post('artpulse_event', 5);
@@ -114,5 +115,6 @@ class OrgDashboardAdminTest extends TestCase
         $this->assertArrayNotHasKey('ap_dash_artworks_10', Stub::$transients);
         $this->assertArrayNotHasKey('ap_dash_events_10', Stub::$transients);
         $this->assertArrayNotHasKey('ap_dash_stats_artworks_10', Stub::$transients);
+        $this->assertArrayNotHasKey('ap_org_metrics_10', Stub::$transients);
     }
 }
