@@ -8,12 +8,16 @@ class PurchaseShortcode {
 
     public static function render($atts = []) {
         $atts = shortcode_atts([
-            'level' => 'Pro',
-            'class' => 'ap-purchase-link'
+            'level'       => 'Pro',
+            'class'       => 'ap-purchase-link',
+            'coupon'      => '',
+            'show_coupon' => false,
         ], $atts, 'ap_membership_purchase');
 
-        $level = sanitize_text_field($atts['level']);
-        $url   = home_url('/purchase-membership');
+        $level       = sanitize_text_field($atts['level']);
+        $show_coupon = filter_var($atts['show_coupon'], FILTER_VALIDATE_BOOLEAN);
+        $coupon      = sanitize_text_field($atts['coupon']);
+        $url         = home_url('/purchase-membership');
 
         if (function_exists('wc_get_checkout_url')) {
             $url = add_query_arg('level', strtolower($level), wc_get_checkout_url());
@@ -21,7 +25,24 @@ class PurchaseShortcode {
             $url = add_query_arg('level', strtolower($level), $url);
         }
 
+        if ($coupon !== '') {
+            $url = add_query_arg('coupon', rawurlencode($coupon), $url);
+        }
+
         $label = sprintf(__('Purchase %s membership', 'artpulse'), $level);
+
+        if ($show_coupon) {
+            $placeholder = esc_attr__('Coupon code', 'artpulse');
+            $button      = esc_html($label);
+            $class       = esc_attr($atts['class']);
+            $url         = esc_url($url);
+            return <<<HTML
+<form class="ap-purchase-form" onsubmit="event.preventDefault();var c=this.querySelector('input[name=coupon]').value;window.location='{$url}&coupon='+encodeURIComponent(c);">
+    <input type="text" name="coupon" placeholder="{$placeholder}">
+    <button type="submit" class="{$class}">{$button}</button>
+</form>
+HTML;
+        }
 
         return sprintf(
             '<a href="%s" class="%s">%s</a>',
