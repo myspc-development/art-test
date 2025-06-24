@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Admin;
 
+use ArtPulse\Core\Plugin;
+
 class EnqueueAssets {
 
     public static function register() {
@@ -306,8 +308,9 @@ class EnqueueAssets {
                 true
             );
             wp_localize_script('ap-org-dashboard', 'APOrgDashboard', [
-                'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('ap_org_dashboard_nonce'),
+                'ajax_url'      => admin_url('admin-ajax.php'),
+                'nonce'         => wp_create_nonce('ap_org_dashboard_nonce'),
+                'eventFormUrl'  => Plugin::get_event_submission_url(),
             ]);
         }
 
