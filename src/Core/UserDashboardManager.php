@@ -208,7 +208,7 @@ class UserDashboardManager
         <div class="ap-user-dashboard">
             <h2><?php _e('Your Membership','artpulse'); ?></h2>
             <div id="ap-membership-info"></div>
-            <a class="ap-edit-profile-link" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
+            <a class="ap-edit-profile-link ap-form-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
             <h2><?php _e('Upgrade Your Account','artpulse'); ?></h2>
             <div id="ap-upgrade-options"></div>
             <h2><?php _e('Your Content','artpulse'); ?></h2>
