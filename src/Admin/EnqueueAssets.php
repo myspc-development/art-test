@@ -94,7 +94,13 @@ class EnqueueAssets {
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
 
         if ($screen->base === 'artpulse-settings_page_artpulse-engagement') {
-            wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], null, true);
+            wp_enqueue_script(
+                'chart-js',
+                plugins_url('assets/js/chart.js', ARTPULSE_PLUGIN_FILE),
+                [],
+                null,
+                true
+            );
 
             $custom_js_path = $plugin_dir . '/assets/js/ap-engagement-dashboard.js';
             $custom_js_url = $plugin_url . '/assets/js/ap-engagement-dashboard.js';
@@ -313,7 +319,13 @@ class EnqueueAssets {
             true
         );
 
-        wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], null, true);
+        wp_enqueue_script(
+            'chart-js',
+            plugins_url('assets/js/chart.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            null,
+            true
+        );
 
         $metrics_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-metrics.js';
         $metrics_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-metrics.js';
