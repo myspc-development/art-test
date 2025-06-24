@@ -80,7 +80,7 @@ class UserDashboardManager
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getDashboardData' ],
             'permission_callback' => function() {
-                return is_user_logged_in();
+                return is_user_logged_in() && current_user_can('view_artpulse_dashboard');
             },
         ]);
 
@@ -95,6 +95,9 @@ class UserDashboardManager
 
     public static function getDashboardData(WP_REST_Request $request)
     {
+        if (!current_user_can('view_artpulse_dashboard')) {
+            return new \WP_Error('forbidden', __('You do not have permission to view this dashboard.', 'artpulse'), ['status' => 403]);
+        }
         $user_id = get_current_user_id();
         $data = [
             'membership_level'   => get_user_meta($user_id, 'ap_membership_level', true),
@@ -252,43 +255,62 @@ class UserDashboardManager
 
     public static function renderDashboard($atts)
     {
-        if ( ! is_user_logged_in() ) {
+        if ( ! is_user_logged_in() || ! current_user_can('view_artpulse_dashboard') ) {
             return '<p>' . __('Please log in to view your dashboard.', 'artpulse') . '</p>';
         }
+
+        $user           = wp_get_current_user();
+        $roles          = (array) $user->roles;
         $profile_edit_url = self::get_profile_edit_url();
+        $show_billing     = in_array('organization', $roles, true) || in_array('administrator', $roles, true);
+        $show_content     = in_array('artist', $roles, true) || in_array('organization', $roles, true) || in_array('administrator', $roles, true);
+        $show_notifications = !empty(array_intersect(['member','artist','organization','administrator'], $roles));
+
         ob_start(); ?>
         <div class="ap-user-dashboard">
             <nav class="dashboard-nav">
                 <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
+                <?php if ($show_billing) : ?>
                 <a href="#next-payment"><span class="dashicons dashicons-money"></span><?php esc_html_e('Next Payment', 'artpulse'); ?></a>
                 <a href="#transactions"><span class="dashicons dashicons-list-view"></span><?php esc_html_e('Transactions', 'artpulse'); ?></a>
+                <?php endif; ?>
                 <a href="#upgrade"><span class="dashicons dashicons-star-filled"></span><?php esc_html_e('Upgrade', 'artpulse'); ?></a>
+                <?php if ($show_content) : ?>
                 <a href="#content"><span class="dashicons dashicons-media-default"></span><?php esc_html_e('Content', 'artpulse'); ?></a>
+                <?php endif; ?>
                 <a href="#local-events"><span class="dashicons dashicons-location-alt"></span><?php esc_html_e('Local Events', 'artpulse'); ?></a>
                 <a href="#favorites"><span class="dashicons dashicons-heart"></span><?php esc_html_e('Favorites', 'artpulse'); ?></a>
                 <a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a>
+                <?php if ($show_notifications) : ?>
                 <a href="#notifications"><span class="dashicons dashicons-megaphone"></span><?php esc_html_e('Notifications', 'artpulse'); ?></a>
+                <?php endif; ?>
             </nav>
 
             <h2 id="membership"><?php _e('Subscription Status','artpulse'); ?></h2>
             <div id="ap-membership-info"></div>
+            <?php if ($show_billing) : ?>
             <h2 id="next-payment"><?php _e('Next Payment','artpulse'); ?></h2>
             <div id="ap-next-payment"></div>
             <h2 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h2>
             <div id="ap-transactions"></div>
+            <?php endif; ?>
             <a class="ap-edit-profile-link ap-form-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
             <h2 id="upgrade"><?php _e('Upgrade Your Account','artpulse'); ?></h2>
             <div id="ap-upgrade-options"></div>
+            <?php if ($show_content) : ?>
             <h2 id="content"><?php _e('Your Content','artpulse'); ?></h2>
             <div id="ap-user-content"></div>
+            <?php endif; ?>
             <h2 id="local-events"><?php _e('Events Near You','artpulse'); ?></h2>
             <div id="ap-local-events"></div>
             <h2 id="favorites"><?php _e('Your Favorited Events','artpulse'); ?></h2>
             <div id="ap-favorite-events"></div>
             <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
             <div id="ap-events-feed"></div>
+            <?php if ($show_notifications) : ?>
             <h2 id="notifications"><?php _e('Notifications','artpulse'); ?></h2>
             <div id="ap-dashboard-notifications"></div>
+            <?php endif; ?>
         </div>
         <?php
         return ob_get_clean();
