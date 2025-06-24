@@ -98,6 +98,23 @@
 }
 */
 
+@media (min-width: 768px) {
+  .ap-org-dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .ap-org-dashboard > h1,
+  .ap-org-dashboard .dashboard-nav {
+    grid-column: 1 / -1;
+  }
+
+  .dashboard-card {
+    margin-bottom: 0;
+  }
+}
+
 @media (max-width: 600px) {
   .ap-org-dashboard {
     max-width: 100%;
