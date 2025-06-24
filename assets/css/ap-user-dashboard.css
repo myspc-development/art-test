@@ -34,6 +34,10 @@
   margin-bottom: 0.5rem;
 }
 
+#ap-upgrade-options .upgrade-artist-btn {
+  margin-right: 0.5rem;
+}
+
 #ap-upgrade-options .upgrade-org-btn {
   margin-left: 0.5rem;
 }

@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         upgrade.textContent = apL10n?.artist_pending || 'Artist upgrade request pending.';
       } else {
         const artistBtn = document.createElement('button');
+        artistBtn.className = 'ap-form-button upgrade-artist-btn';
         artistBtn.textContent = apL10n?.upgrade_artist || 'Request Artist Upgrade';
         artistBtn.onclick = async () => {
           artistBtn.disabled = true;
