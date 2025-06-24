@@ -75,6 +75,11 @@ class PaymentAnalyticsDashboard
     }
     public static function get_metrics(): array
     {
+        $cached = get_transient('ap_payment_metrics');
+        if (false !== $cached) {
+            return $cached;
+        }
+
         $woo_total            = 0;
         $wc_success           = 0;
         $wc_failure           = 0;
@@ -86,9 +91,12 @@ class PaymentAnalyticsDashboard
         $last_month_start = strtotime('first day of last month 00:00:00');
 
         if (function_exists('wc_get_orders')) {
+            $lookback_days = absint(apply_filters('artpulse_payment_metrics_lookback_days', 365));
+            $date_after    = current_time('timestamp') - ($lookback_days * DAY_IN_SECONDS);
             $orders = wc_get_orders([
-                'limit'  => -1,
-                'status' => ['completed', 'processing', 'failed', 'cancelled', 'refunded'],
+                'limit'        => -1,
+                'status'       => ['completed', 'processing', 'failed', 'cancelled', 'refunded'],
+                'date_created' => '>' . gmdate('Y-m-d H:i:s', $date_after),
             ]);
             foreach ($orders as $order) {
                 $total  = $order->get_total();
@@ -179,7 +187,7 @@ class PaymentAnalyticsDashboard
 
         $churn_rate = ($cancellations + $active_subs) > 0 ? ($cancellations / ($cancellations + $active_subs)) * 100 : 0;
 
-        return [
+        $metrics = [
             'woo_total_revenue'          => round($woo_total, 2),
             'stripe_total_revenue'       => round($stripe_total, 2),
             'active_subscriptions'       => $active_subs,
@@ -189,5 +197,9 @@ class PaymentAnalyticsDashboard
             'payment_success_rate'       => round($payment_success_rate, 2),
             'payment_failure_rate'       => round($payment_failure_rate, 2),
         ];
+
+        set_transient('ap_payment_metrics', $metrics, 15 * MINUTE_IN_SECONDS);
+
+        return $metrics;
     }
 }
