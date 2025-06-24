@@ -3,6 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-user-dashboard');
   if (!dash) return;
 
+  const exportJsonBtn = document.getElementById('ap-export-json');
+  if (exportJsonBtn) exportJsonBtn.onclick = () => exportUserData('json');
+  const exportCsvBtn = document.getElementById('ap-export-csv');
+  if (exportCsvBtn) exportCsvBtn.onclick = () => exportUserData('csv');
+  const deleteBtn = document.getElementById('ap-delete-account');
+  if (deleteBtn) deleteBtn.onclick = deleteUserData;
+
   fetch(`${ArtPulseDashboardApi.root}artpulse/v1/user/dashboard`, {
     headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
   })
@@ -368,4 +375,40 @@ function unfavoriteEvent(id) {
     .catch(() => {
       alert('Failed to remove favorite');
     });
+}
+
+function exportUserData(format) {
+  fetch(`${ArtPulseDashboardApi.exportEndpoint}?format=${format}`, {
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+  })
+    .then(res => format === 'csv' ? res.text() : res.json())
+    .then(data => {
+      const content = format === 'csv' ? data : JSON.stringify(data, null, 2);
+      const type = format === 'csv' ? 'text/csv' : 'application/json';
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `user-data.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    })
+    .catch(() => alert('Export failed'));
+}
+
+function deleteUserData() {
+  if (!confirm('Are you sure you want to delete your account?')) return;
+  fetch(ArtPulseDashboardApi.deleteEndpoint, {
+    method: 'POST',
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+  })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        window.location.reload();
+      } else {
+        alert(res.message || 'Deletion failed');
+      }
+    })
+    .catch(() => alert('Deletion failed'));
 }
