@@ -14,7 +14,7 @@ class EngagementDashboard
     {
         wp_enqueue_script(
             'chart-js',
-            plugins_url('assets/js/chart.js', ARTPULSE_PLUGIN_FILE),
+            'https://cdn.jsdelivr.net/npm/chart.js',
             [],
             null,
             true
