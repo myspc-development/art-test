@@ -19,6 +19,18 @@ class OrganizationDashboardShortcode {
 
         wp_enqueue_script('ap-org-metrics');
 
+        $status = isset($_GET['status']) ? sanitize_key($_GET['status']) : 'all';
+        $paged  = max(1, intval($_GET['paged'] ?? 1));
+
+        $query = new \WP_Query([
+            'post_type'      => 'artpulse_event',
+            'post_status'    => $status === 'all' ? ['publish','pending','draft'] : [$status],
+            'meta_key'       => '_ap_event_organization',
+            'meta_value'     => $org_id,
+            'posts_per_page' => 10,
+            'paged'          => $paged,
+        ]);
+
         ob_start();
         ?>
         <div class="ap-org-dashboard">
@@ -26,19 +38,42 @@ class OrganizationDashboardShortcode {
             <h2>Organization Events</h2>
             <a id="ap-add-event-btn" class="ap-form-button" href="<?php echo esc_url(\ArtPulse\Core\Plugin::get_event_submission_url()); ?>">Add New Event</a>
 
+            <form method="get" class="ap-event-filter" style="margin-bottom:1em;">
+                <label>Status
+                    <select name="status" onchange="this.form.submit()">
+                        <option value="all" <?php selected($status, 'all'); ?>>All</option>
+                        <option value="publish" <?php selected($status, 'publish'); ?>>Published</option>
+                        <option value="pending" <?php selected($status, 'pending'); ?>>Pending</option>
+                        <option value="draft" <?php selected($status, 'draft'); ?>>Draft</option>
+                    </select>
+                </label>
+            </form>
+
             <ul id="ap-org-events">
                 <?php
-                $events = get_posts([
-                    'post_type' => 'artpulse_event',
-                    'post_status' => 'any',
-                    'meta_key' => '_ap_event_organization',
-                    'meta_value' => $org_id
-                ]);
-                foreach ($events as $event) {
-                    echo '<li>' . esc_html($event->post_title) . ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
+                foreach ($query->posts as $event) {
+                    $edit = get_edit_post_link($event->ID);
+                    echo '<li>' . esc_html($event->post_title);
+                    if ($edit) {
+                        echo ' <a href="' . esc_url($edit) . '" class="ap-edit-event">Edit</a>';
+                    }
+                    echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
                 }
                 ?>
             </ul>
+            <?php
+            $base = add_query_arg('paged', '%#%');
+            if ($status !== 'all') {
+                $base = add_query_arg('status', $status, $base);
+            }
+            echo paginate_links([
+                'base'    => $base,
+                'format'  => '',
+                'current' => $paged,
+                'total'   => $query->max_num_pages,
+            ]);
+            ?>
+
             <?php echo do_shortcode('[ap_org_profile_edit]'); ?>
         </div>
         <?php
@@ -48,7 +83,7 @@ class OrganizationDashboardShortcode {
     public static function handle_ajax_add_event() {
         check_ajax_referer('ap_org_dashboard_nonce', 'nonce');
 
-        if (!current_user_can('publish_posts')) {
+        if (!current_user_can('create_artpulse_event')) {
             wp_send_json_error(['message' => 'Insufficient permissions.']);
         }
 
@@ -124,13 +159,18 @@ class OrganizationDashboardShortcode {
         // Reload the event list
         ob_start();
         $events = get_posts([
-            'post_type' => 'artpulse_event',
-            'post_status' => 'any',
-            'meta_key' => '_ap_event_organization',
-            'meta_value' => $org_id
+            'post_type'   => 'artpulse_event',
+            'post_status' => ['publish','pending','draft'],
+            'meta_key'    => '_ap_event_organization',
+            'meta_value'  => $org_id,
         ]);
         foreach ($events as $event) {
-            echo '<li>' . esc_html($event->post_title) . ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
+            $edit = get_edit_post_link($event->ID);
+            echo '<li>' . esc_html($event->post_title);
+            if ($edit) {
+                echo ' <a href="' . esc_url($edit) . '" class="ap-edit-event">Edit</a>';
+            }
+            echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
         }
         $html = ob_get_clean();
 
@@ -140,7 +180,7 @@ class OrganizationDashboardShortcode {
     public static function handle_ajax_delete_event() {
         check_ajax_referer('ap_org_dashboard_nonce', 'nonce');
 
-        if (!current_user_can('publish_posts')) {
+        if (!current_user_can('delete_post', intval($_POST['event_id'] ?? 0))) {
             wp_send_json_error(['message' => 'Insufficient permissions.']);
         }
 
@@ -164,13 +204,18 @@ class OrganizationDashboardShortcode {
         // Reload the event list for this organization
         ob_start();
         $events = get_posts([
-            'post_type'  => 'artpulse_event',
-            'post_status' => 'any',
-            'meta_key'   => '_ap_event_organization',
-            'meta_value' => $user_org
+            'post_type'   => 'artpulse_event',
+            'post_status' => ['publish','pending','draft'],
+            'meta_key'    => '_ap_event_organization',
+            'meta_value'  => $user_org,
         ]);
         foreach ($events as $event) {
-            echo '<li>' . esc_html($event->post_title) . ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
+            $edit = get_edit_post_link($event->ID);
+            echo '<li>' . esc_html($event->post_title);
+            if ($edit) {
+                echo ' <a href="' . esc_url($edit) . '" class="ap-edit-event">Edit</a>';
+            }
+            echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
         }
         $html = ob_get_clean();
 
