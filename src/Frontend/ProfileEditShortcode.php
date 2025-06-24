@@ -131,6 +131,10 @@ class ProfileEditShortcode {
             }
         }
 
+        if (function_exists('wc_add_notice')) {
+            wc_add_notice('Profile updated successfully.', 'success');
+        }
+
         wp_redirect(add_query_arg('ap_updated', '1', wp_get_referer()));
         exit;
     }
