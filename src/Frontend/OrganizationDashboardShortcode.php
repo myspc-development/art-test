@@ -111,6 +111,10 @@ class OrganizationDashboardShortcode {
     public static function handle_ajax_add_event() {
         check_ajax_referer('ap_org_dashboard_nonce', 'nonce');
 
+        if (!current_user_can('publish_posts')) {
+            wp_send_json_error(['message' => 'Insufficient permissions.']);
+        }
+
         $title            = sanitize_text_field($_POST['ap_event_title']);
         $date             = sanitize_text_field($_POST['ap_event_date']);
         $start_date       = sanitize_text_field($_POST['ap_event_start_date'] ?? '');
@@ -198,6 +202,10 @@ class OrganizationDashboardShortcode {
 
     public static function handle_ajax_delete_event() {
         check_ajax_referer('ap_org_dashboard_nonce', 'nonce');
+
+        if (!current_user_can('publish_posts')) {
+            wp_send_json_error(['message' => 'Insufficient permissions.']);
+        }
 
         $event_id = intval($_POST['event_id'] ?? 0);
         $post     = get_post($event_id);
