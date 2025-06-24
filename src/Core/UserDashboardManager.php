@@ -181,15 +181,33 @@ class UserDashboardManager
         return home_url('/');
     }
 
+    private static function get_profile_edit_url(): string
+    {
+        $pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_profile_edit]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($pages)) {
+            return get_permalink($pages[0]->ID);
+        }
+
+        return home_url('/');
+    }
+
     public static function renderDashboard($atts)
     {
         if ( ! is_user_logged_in() ) {
             return '<p>' . __('Please log in to view your dashboard.', 'artpulse') . '</p>';
         }
+        $profile_edit_url = self::get_profile_edit_url();
         ob_start(); ?>
         <div class="ap-user-dashboard">
             <h2><?php _e('Your Membership','artpulse'); ?></h2>
             <div id="ap-membership-info"></div>
+            <a class="ap-edit-profile-link" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
             <h2><?php _e('Upgrade Your Account','artpulse'); ?></h2>
             <div id="ap-upgrade-options"></div>
             <h2><?php _e('Your Content','artpulse'); ?></h2>
