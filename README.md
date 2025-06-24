@@ -54,3 +54,12 @@ To receive early fraud warnings you must enable the **early_fraud_warning.create
 ## Dashboard Caching
 
 Queries in the organization dashboard that previously loaded all related posts on every page view now utilize WordPress transients. Cached results are stored per organization for 15 minutes and cleared whenever related posts are saved. This reduces repetitive database lookups and improves page load times, especially for organizations with large numbers of posts.
+
+## Database Indexes
+
+On activation the plugin adds indexes to core meta tables if they don't already exist:
+
+- **wp_usermeta**: `ap_usermeta_key_value` on `(meta_key, meta_value)`
+- **wp_postmeta**: `ap_postmeta_key_value` on `(meta_key, meta_value)`
+
+These indexes improve lookups for membership-related keys like `ap_organization_id`, `ap_membership_level` and `ap_membership_expires`.
