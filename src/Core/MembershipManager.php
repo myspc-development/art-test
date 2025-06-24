@@ -69,6 +69,18 @@ class MembershipManager
             'callback'            => [ self::class, 'handleStripeWebhook' ],
             'permission_callback' => '__return_true',
         ]);
+
+        register_rest_route('artpulse/v1', '/membership/pause', [
+            'methods'             => 'POST',
+            'callback'            => [ self::class, 'pauseMembership' ],
+            'permission_callback' => function() { return is_user_logged_in(); },
+        ]);
+
+        register_rest_route('artpulse/v1', '/membership/resume', [
+            'methods'             => 'POST',
+            'callback'            => [ self::class, 'resumeMembership' ],
+            'permission_callback' => function() { return is_user_logged_in(); },
+        ]);
     }
 
     /**
@@ -272,6 +284,72 @@ class MembershipManager
         }
 
         return rest_ensure_response(['received' => true]);
+    }
+
+    public static function pauseMembership(WP_REST_Request $request)
+    {
+        $user_id     = get_current_user_id();
+        $customer_id = get_user_meta($user_id, 'stripe_customer_id', true);
+        $settings    = get_option('artpulse_settings', []);
+        $secret      = $settings['stripe_secret'] ?? '';
+
+        if (!$customer_id || !$secret) {
+            return new WP_Error('missing_data', 'Subscription not configured', ['status' => 400]);
+        }
+
+        $stripe = new StripeClient($secret);
+
+        try {
+            $subs = $stripe->subscriptions->all(['customer' => $customer_id, 'status' => 'active', 'limit' => 1]);
+            if (empty($subs->data)) {
+                return new WP_Error('no_subscription', 'No active subscription', ['status' => 404]);
+            }
+
+            $sub = $stripe->subscriptions->update(
+                $subs->data[0]->id,
+                ['pause_collection' => ['behavior' => 'void']]
+            );
+
+            update_user_meta($user_id, 'ap_membership_paused', 1);
+            update_user_meta($user_id, 'ap_membership_expires', $sub->current_period_end);
+        } catch (\Exception $e) {
+            return new WP_Error('stripe_error', $e->getMessage(), ['status' => 500]);
+        }
+
+        return rest_ensure_response(['success' => true]);
+    }
+
+    public static function resumeMembership(WP_REST_Request $request)
+    {
+        $user_id     = get_current_user_id();
+        $customer_id = get_user_meta($user_id, 'stripe_customer_id', true);
+        $settings    = get_option('artpulse_settings', []);
+        $secret      = $settings['stripe_secret'] ?? '';
+
+        if (!$customer_id || !$secret) {
+            return new WP_Error('missing_data', 'Subscription not configured', ['status' => 400]);
+        }
+
+        $stripe = new StripeClient($secret);
+
+        try {
+            $subs = $stripe->subscriptions->all(['customer' => $customer_id, 'status' => 'all', 'limit' => 1]);
+            if (empty($subs->data)) {
+                return new WP_Error('no_subscription', 'Subscription not found', ['status' => 404]);
+            }
+
+            $sub = $stripe->subscriptions->update(
+                $subs->data[0]->id,
+                ['pause_collection' => '']
+            );
+
+            update_user_meta($user_id, 'ap_membership_paused', 0);
+            update_user_meta($user_id, 'ap_membership_expires', $sub->current_period_end);
+        } catch (\Exception $e) {
+            return new WP_Error('stripe_error', $e->getMessage(), ['status' => 500]);
+        }
+
+        return rest_ensure_response(['success' => true]);
     }
 
     /**

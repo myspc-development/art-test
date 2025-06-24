@@ -56,6 +56,8 @@ class UserDashboardManager
             'request_submitted' => __('Request submitted', 'artpulse'),
             'submit_org'        => __('Submit Organization', 'artpulse'),
             'upgrade_org'       => __('Upgrade to Organization', 'artpulse'),
+            'pause'             => __('Pause Membership', 'artpulse'),
+            'resume'            => __('Resume Membership', 'artpulse'),
             'events'            => __('Events', 'artpulse'),
             'artists'           => __('Artists', 'artpulse'),
             'artworks'          => __('Artworks', 'artpulse'),
@@ -102,6 +104,7 @@ class UserDashboardManager
         $data = [
             'membership_level'   => get_user_meta($user_id, 'ap_membership_level', true),
             'membership_expires' => get_user_meta($user_id, 'ap_membership_expires', true),
+            'membership_paused'  => (bool) get_user_meta($user_id, 'ap_membership_paused', true),
             'country'            => get_user_meta($user_id, 'ap_country', true),
             'state'              => get_user_meta($user_id, 'ap_state', true),
             'city'               => get_user_meta($user_id, 'ap_city', true),
@@ -288,6 +291,7 @@ class UserDashboardManager
 
             <h2 id="membership"><?php _e('Subscription Status','artpulse'); ?></h2>
             <div id="ap-membership-info"></div>
+            <div id="ap-membership-actions"></div>
             <?php if ($show_billing) : ?>
             <h2 id="next-payment"><?php _e('Next Payment','artpulse'); ?></h2>
             <div id="ap-next-payment"></div>
