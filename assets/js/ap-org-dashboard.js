@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const eventsContainer = document.getElementById('ap-org-events');
   const statusBox = document.getElementById('ap-status-message');
 
+  if (modal) {
+    modal.style.display = '';
+  }
+
   // Load dashboard data
   fetch(`${APOrgDashboard.rest_root}artpulse/v1/org/dashboard`, {
     headers: { 'X-WP-Nonce': APOrgDashboard.rest_nonce }
