@@ -11,6 +11,12 @@ class WooCommerceIntegration
         // Downgrade on refund or cancel
         add_action('woocommerce_order_status_refunded',  [ self::class, 'handleRefundOrCancel' ], 10, 1);
         add_action('woocommerce_order_status_cancelled', [ self::class, 'handleRefundOrCancel' ], 10, 1);
+
+        // Apply coupon from request before checkout totals
+        add_action('wp', [ self::class, 'applyCouponFromRequest' ]);
+
+        // Store coupon code on the order
+        add_action('woocommerce_checkout_create_order', [ self::class, 'captureCouponMeta' ], 10, 2);
     }
 
     public static function handleCompletedOrder( $order_id )
@@ -101,5 +107,45 @@ class WooCommerceIntegration
                 date_i18n( get_option('date_format'), $expiry )
             )
         );
+    }
+
+    /**
+     * Apply coupon code from the request to the cart if valid.
+     */
+    public static function applyCouponFromRequest(): void
+    {
+        if ( is_admin() || empty( $_GET['coupon'] ) ) {
+            return;
+        }
+
+        if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+            return;
+        }
+
+        $code   = wc_format_coupon_code( wp_unslash( $_GET['coupon'] ) );
+        $coupon = new \WC_Coupon( $code );
+
+        if ( $coupon->get_id() && ! WC()->cart->has_discount( $code ) ) {
+            WC()->cart->apply_coupon( $code );
+        }
+    }
+
+    /**
+     * Store coupon code used during checkout on the order.
+     */
+    public static function captureCouponMeta( $order, array $data ): void
+    {
+        $code = $_REQUEST['coupon'] ?? '';
+        if ( ! $code ) {
+            return;
+        }
+
+        $code   = wc_format_coupon_code( sanitize_text_field( wp_unslash( $code ) ) );
+        $coupon = new \WC_Coupon( $code );
+
+        if ( $coupon->get_id() ) {
+            $order->add_coupon( $coupon->get_code(), $coupon->get_amount(), $coupon->get_discount_type() );
+            $order->update_meta_data( '_ap_coupon_code', $coupon->get_code() );
+        }
     }
 }
