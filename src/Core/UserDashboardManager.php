@@ -184,6 +184,7 @@ class UserDashboardManager
 
     private static function get_profile_edit_url(): string
     {
+        // First look for a dedicated edit profile page
         $pages = get_posts([
             'post_type'   => 'page',
             'post_status' => 'publish',
@@ -193,6 +194,18 @@ class UserDashboardManager
 
         if (!empty($pages)) {
             return get_permalink($pages[0]->ID);
+        }
+
+        // Fallback to the user profile page if the edit page is missing
+        $profile_pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_user_profile]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($profile_pages)) {
+            return get_permalink($profile_pages[0]->ID);
         }
 
         return home_url('/');
