@@ -33,6 +33,7 @@ class OrganizationDashboardShortcode {
         ob_start();
         ?>
         <div class="ap-org-dashboard">
+            <h1 style="font-size:1.5rem;font-weight:600;margin-bottom:1.5rem;"><?php esc_html_e('Organization Dashboard','artpulse'); ?></h1>
             <nav class="dashboard-nav">
                 <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
                 <a href="#billing"><span class="dashicons dashicons-money"></span><?php esc_html_e('Billing', 'artpulse'); ?></a>
@@ -41,21 +42,28 @@ class OrganizationDashboardShortcode {
                 <a href="#profile"><span class="dashicons dashicons-admin-settings"></span><?php esc_html_e('Profile', 'artpulse'); ?></a>
             </nav>
 
-            <h2 id="membership"><?php _e('Membership','artpulse'); ?></h2>
-            <div id="ap-membership-info"></div>
-            <div id="ap-membership-actions"></div>
+            <section class="dashboard-card" id="membership-section">
+                <h2 id="membership"><?php _e('Membership','artpulse'); ?></h2>
+                <div id="ap-membership-info"></div>
+                <div id="ap-membership-actions"></div>
+            </section>
 
-            <h2 id="billing"><?php _e('Next Payment','artpulse'); ?></h2>
-            <div id="ap-next-payment"></div>
-            <h2 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h2>
-            <div id="ap-transactions"></div>
+            <section class="dashboard-card" id="billing-section">
+                <h2 id="billing"><?php _e('Next Payment','artpulse'); ?></h2>
+                <div id="ap-next-payment"></div>
+                <h3 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h3>
+                <div id="ap-transactions"></div>
+            </section>
 
-            <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
-            <button id="ap-add-event-btn" class="ap-form-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
+            <section class="dashboard-card" id="events-section">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <h2 id="events" style="margin:0"><?php _e('Organization Events','artpulse'); ?></h2>
+                    <button id="ap-add-event-btn" class="ap-form-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
+                </div>
 
-            <div id="ap-org-modal" class="ap-org-modal" style="display:none">
-                <button id="ap-modal-close" type="button" class="ap-form-button">Close</button>
-                <div id="ap-status-message" class="ap-form-messages" role="status" aria-live="polite"></div>
+                <div id="ap-org-modal" class="ap-org-modal" style="display:none">
+                    <button id="ap-modal-close" type="button" class="ap-form-button">Close</button>
+                    <div id="ap-status-message" class="ap-form-messages" role="status" aria-live="polite"></div>
                 <form id="ap-org-event-form" class="ap-form-container">
                     <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('ap_org_dashboard_nonce'); ?>">
 
@@ -154,12 +162,17 @@ class OrganizationDashboardShortcode {
                 'total'   => $query->max_num_pages,
             ]);
             ?>
+            </section>
 
-            <h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2>
-            <div id="ap-org-analytics"></div>
+            <section class="dashboard-card" id="analytics-section">
+                <h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2>
+                <div id="ap-org-analytics"></div>
+            </section>
 
-            <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
-            <?php echo do_shortcode('[ap_org_profile_edit]'); ?>
+            <section class="dashboard-card" id="profile-section">
+                <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
+                <?php echo do_shortcode('[ap_org_profile_edit]'); ?>
+            </section>
         </div>
         <?php
         return ob_get_clean();
