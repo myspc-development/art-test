@@ -2,6 +2,7 @@
 namespace ArtPulse\Community;
 
 use ArtPulse\Community\EmailNotifier;
+use ArtPulse\Community\SMSNotifier;
 
 class NotificationManager {
     public static function install_notifications_table() {
@@ -38,8 +39,9 @@ class NotificationManager {
             'created_at' => current_time('mysql')
         ]);
 
-        // Trigger optional email notification
+        // Trigger optional email and SMS notifications
         EmailNotifier::maybe_send($user_id, $type, $object_id, $related_id, $content);
+        SMSNotifier::maybe_send($user_id, $type, $object_id, $related_id, $content);
     }
 
     public static function get($user_id, $limit = 25) {

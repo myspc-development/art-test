@@ -1,0 +1,72 @@
+<?php
+namespace ArtPulse\Community;
+
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_Error;
+
+class UserPreferencesRestController
+{
+    public static function register(): void
+    {
+        add_action('init', [self::class, 'register_meta']);
+        add_action('rest_api_init', [self::class, 'register_routes']);
+    }
+
+    public static function register_meta(): void
+    {
+        register_meta('user', 'ap_push_token', [
+            'type'              => 'string',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'sanitize_text_field',
+        ]);
+
+        register_meta('user', 'ap_phone_number', [
+            'type'              => 'string',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'sanitize_text_field',
+        ]);
+
+        register_meta('user', 'ap_sms_opt_in', [
+            'type'              => 'boolean',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'rest_sanitize_boolean',
+        ]);
+    }
+
+    public static function register_routes(): void
+    {
+        register_rest_route('artpulse/v1', '/user-preferences', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'save_preferences'],
+            'permission_callback' => fn() => is_user_logged_in(),
+            'args'                => [
+                'push_token'   => [ 'type' => 'string', 'required' => false ],
+                'phone_number' => [ 'type' => 'string', 'required' => false ],
+                'sms_opt_in'   => [ 'type' => 'boolean', 'required' => false ],
+            ],
+        ]);
+    }
+
+    public static function save_preferences(WP_REST_Request $request): WP_REST_Response|WP_Error
+    {
+        $user_id = get_current_user_id();
+
+        if ($request->has_param('push_token')) {
+            update_user_meta($user_id, 'ap_push_token', sanitize_text_field($request['push_token']));
+        }
+
+        if ($request->has_param('phone_number')) {
+            update_user_meta($user_id, 'ap_phone_number', sanitize_text_field($request['phone_number']));
+        }
+
+        if ($request->has_param('sms_opt_in')) {
+            update_user_meta($user_id, 'ap_sms_opt_in', $request['sms_opt_in'] ? 1 : 0);
+        }
+
+        return rest_ensure_response(['status' => 'saved']);
+    }
+}

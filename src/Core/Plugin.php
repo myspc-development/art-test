@@ -97,6 +97,7 @@ class Plugin
         \ArtPulse\Community\ArtistUpgradeRestController::register();
         \ArtPulse\Core\MyFollowsShortcode::register();
         \ArtPulse\Core\NotificationShortcode::register();
+        \ArtPulse\Community\UserPreferencesRestController::register();
         \ArtPulse\Admin\AdminListSorting::register();
         \ArtPulse\Rest\RestSortingSupport::register();
         \ArtPulse\Admin\AdminListColumns::register();
