@@ -91,6 +91,7 @@ class Plugin
         \ArtPulse\Core\UserDashboardManager::register();
         \ArtPulse\Core\AnalyticsManager::register();
         \ArtPulse\Core\AnalyticsDashboard::register();
+        \ArtPulse\Admin\PaymentAnalyticsDashboard::register();
         \ArtPulse\Core\FrontendMembershipPage::register();
         \ArtPulse\Community\ProfileLinkRequestManager::register();
         \ArtPulse\Community\ArtistUpgradeRestController::register();
@@ -121,6 +122,7 @@ class Plugin
         \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
+        \ArtPulse\Rest\PaymentReportsController::register();
 
         \ArtPulse\Admin\MetaBoxesArtist::register();
         \ArtPulse\Admin\MetaBoxesArtwork::register();
