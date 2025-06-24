@@ -122,6 +122,7 @@ class Plugin
         \ArtPulse\Admin\ApprovalManager::register();
         \ArtPulse\Admin\PendingSubmissionsPage::register();
         \ArtPulse\Admin\LoginEventsPage::register();
+        \ArtPulse\Admin\OrgUserManager::register();
         \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
