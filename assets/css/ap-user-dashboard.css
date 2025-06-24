@@ -247,14 +247,22 @@
 }
 
 .ap-edit-profile-link {
-  display: inline-block;
-  margin-top: 0.5rem;
-  color: var(--ap-primary-color);
+  background-color: var(--ap-primary-color);
+  border: none;
+  color: var(--ap-bg-color);
+  padding: var(--ap-button-padding);
+  text-align: center;
   text-decoration: none;
-  font-weight: 500;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  border-radius: var(--ap-border-radius);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.ap-edit-profile-link:hover {
-  color: var(--ap-primary-hover);
-  text-decoration: underline;
+.ap-edit-profile-link:hover,
+.ap-edit-profile-link:focus {
+  background-color: var(--ap-primary-hover);
+  box-shadow: 0 0 0 2px var(--ap-primary-color);
 }
