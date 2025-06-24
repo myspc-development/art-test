@@ -124,6 +124,12 @@ class ProfileEditShortcode {
 
         // Handle Avatar Upload
         if (!empty($_FILES['ap_avatar']['tmp_name'])) {
+            if (!function_exists('media_handle_upload')) {
+                require_once ABSPATH . 'wp-admin/includes/file.php';
+                require_once ABSPATH . 'wp-admin/includes/media.php';
+                require_once ABSPATH . 'wp-admin/includes/image.php';
+            }
+
             $uploaded = media_handle_upload('ap_avatar', 0);
             if (!is_wp_error($uploaded)) {
                 $avatar_url = wp_get_attachment_url($uploaded);
