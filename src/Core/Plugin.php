@@ -124,6 +124,7 @@ class Plugin
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
         \ArtPulse\Rest\PaymentReportsController::register();
+        \ArtPulse\Rest\UserAccountRestController::register();
 
         \ArtPulse\Admin\MetaBoxesArtist::register();
         \ArtPulse\Admin\MetaBoxesArtwork::register();

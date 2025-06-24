@@ -45,6 +45,8 @@ class UserDashboardManager
             'nonce'            => wp_create_nonce('wp_rest'),
             'orgSubmissionUrl' => self::get_org_submission_url(),
             'artistEndpoint'   => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
+            'exportEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/export')),
+            'deleteEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/delete')),
         ]);
 
         wp_localize_script('ap-user-dashboard-js', 'apL10n', [
@@ -65,6 +67,9 @@ class UserDashboardManager
             'next_payment'        => __('Next Payment', 'artpulse'),
             'recent_transactions' => __('Recent Transactions', 'artpulse'),
             'no_transactions'     => __('No transactions found.', 'artpulse'),
+            'export_json'         => __('Export JSON', 'artpulse'),
+            'export_csv'          => __('Export CSV', 'artpulse'),
+            'delete_account'      => __('Delete Account', 'artpulse'),
         ]);
 
         // Dashboard styles
@@ -284,6 +289,7 @@ class UserDashboardManager
                 <a href="#local-events"><span class="dashicons dashicons-location-alt"></span><?php esc_html_e('Local Events', 'artpulse'); ?></a>
                 <a href="#favorites"><span class="dashicons dashicons-heart"></span><?php esc_html_e('Favorites', 'artpulse'); ?></a>
                 <a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a>
+                <a href="#account-tools"><span class="dashicons dashicons-download"></span><?php esc_html_e('Account', 'artpulse'); ?></a>
                 <?php if ($show_notifications) : ?>
                 <a href="#notifications"><span class="dashicons dashicons-megaphone"></span><?php esc_html_e('Notifications', 'artpulse'); ?></a>
                 <?php endif; ?>
@@ -315,6 +321,12 @@ class UserDashboardManager
             <h2 id="notifications"><?php _e('Notifications','artpulse'); ?></h2>
             <div id="ap-dashboard-notifications"></div>
             <?php endif; ?>
+            <h2 id="account-tools"><?php _e('Account Tools','artpulse'); ?></h2>
+            <div id="ap-account-tools">
+                <button id="ap-export-json" class="ap-form-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
+                <button id="ap-export-csv" class="ap-form-button"><?php esc_html_e('Export CSV','artpulse'); ?></button>
+                <button id="ap-delete-account" class="ap-form-button"><?php esc_html_e('Delete Account','artpulse'); ?></button>
+            </div>
         </div>
         <?php
         return ob_get_clean();
