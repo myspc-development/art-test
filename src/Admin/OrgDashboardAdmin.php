@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin;
 
 use Stripe\StripeClient;
+use Dompdf\Dompdf;
 
 class OrgDashboardAdmin {
     public static function register() {
@@ -13,12 +14,29 @@ class OrgDashboardAdmin {
             [self::class, 'render'],
             'dashicons-building'
         );
+        add_action('admin_init', [self::class, 'handleExports']);
     }
 
     // Hide the default Organizations CPT menu for non-admins
     public static function hide_org_menu() {
         if (!current_user_can('manage_options')) {
             remove_menu_page('edit.php?post_type=artpulse_org');
+        }
+    }
+
+    /**
+     * Handle CSV or PDF billing exports before page output.
+     */
+    public static function handleExports(): void
+    {
+        if (($_GET['page'] ?? '') !== 'ap-org-dashboard') {
+            return;
+        }
+
+        if (isset($_GET['ap_export_billing_csv'])) {
+            self::exportBillingCsv();
+        } elseif (isset($_GET['ap_export_billing_pdf'])) {
+            self::exportBillingPdf();
         }
     }
 
@@ -97,6 +115,103 @@ class OrgDashboardAdmin {
             echo '<tr><td>' . esc_html($artist_user_id) . '</td><td>' . esc_html($requested_on) . '</td></tr>';
         }
         echo '</tbody></table>';
+    }
+
+    /**
+     * Retrieve billing rows for the current organization.
+     *
+     * @param int $org_id Organization post ID.
+     * @return array<int, array<string, string>>
+     */
+    private static function getBillingRows(int $org_id): array
+    {
+        $payments = get_post_meta($org_id, 'stripe_payment_ids', true);
+        if (empty($payments) || !is_array($payments)) {
+            return [];
+        }
+
+        $settings = get_option('artpulse_settings', []);
+        $secret   = $settings['stripe_secret'] ?? '';
+        $stripe   = $secret ? new StripeClient($secret) : null;
+
+        $rows = [];
+        foreach ($payments as $charge_id) {
+            $row = [
+                'id'     => (string) $charge_id,
+                'date'   => '-',
+                'amount' => '-',
+                'status' => '-',
+            ];
+
+            if ($stripe) {
+                try {
+                    $charge         = $stripe->charges->retrieve($charge_id, []);
+                    $row['date']    = date_i18n(get_option('date_format'), intval($charge->created));
+                    $row['amount']  = number_format_i18n($charge->amount / 100, 2) . ' ' . strtoupper($charge->currency);
+                    $row['status']  = (string) $charge->status;
+                } catch (\Exception $e) {
+                    // Ignore failed API lookups
+                }
+            }
+
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Output billing history as CSV file.
+     */
+    private static function exportBillingCsv(): void
+    {
+        $org_id = self::get_current_org_id();
+        if (!$org_id) {
+            exit;
+        }
+
+        $rows = self::getBillingRows($org_id);
+
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="billing-' . $org_id . '.csv"');
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['Charge ID', 'Date', 'Amount', 'Status']);
+        foreach ($rows as $row) {
+            fputcsv($output, [$row['id'], $row['date'], $row['amount'], $row['status']]);
+        }
+        fclose($output);
+        exit;
+    }
+
+    /**
+     * Output billing history as a PDF file.
+     */
+    private static function exportBillingPdf(): void
+    {
+        $org_id = self::get_current_org_id();
+        if (!$org_id) {
+            exit;
+        }
+
+        $rows = self::getBillingRows($org_id);
+        $html  = '<h1>Billing History</h1><table border="1" cellspacing="0" cellpadding="4"><thead><tr>';
+        $html .= '<th>Charge ID</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>';
+        foreach ($rows as $row) {
+            $html .= '<tr><td>' . esc_html($row['id']) . '</td><td>' . esc_html($row['date']) . '</td><td>' . esc_html($row['amount']) . '</td><td>' . esc_html($row['status']) . '</td></tr>';
+        }
+        $html .= '</tbody></table>';
+
+        if (class_exists(Dompdf::class)) {
+            $dompdf = new Dompdf();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4');
+            $dompdf->render();
+            $dompdf->stream('billing-' . $org_id . '.pdf', ['Attachment' => true]);
+        } else {
+            header('Content-Type: text/html');
+            echo $html;
+        }
+        exit;
     }
 
     // --- SECTION: Org Artworks ---
@@ -191,6 +306,10 @@ class OrgDashboardAdmin {
             echo '<p>No billing history found.</p>';
             return;
         }
+        $csv_url = esc_url(add_query_arg('ap_export_billing_csv', 1));
+        $pdf_url = esc_url(add_query_arg('ap_export_billing_pdf', 1));
+        echo '<p><a href="' . $csv_url . '" class="button button-secondary">' . esc_html__('Export CSV', 'artpulse') . '</a> ';
+        echo '<a href="' . $pdf_url . '" class="button button-secondary">' . esc_html__('Export PDF', 'artpulse') . '</a></p>';
         echo '<table class="widefat"><thead><tr><th>Charge ID</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>';
 
         $settings = get_option('artpulse_settings', []);
