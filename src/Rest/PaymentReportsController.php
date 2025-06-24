@@ -21,6 +21,6 @@ class PaymentReportsController
     public static function get_reports(WP_REST_Request $request): WP_REST_Response
     {
         $metrics = PaymentAnalyticsDashboard::get_metrics();
-        return rest_ensure_response($metrics);
+        return rest_ensure_response([ 'metrics' => $metrics ]);
     }
 }
