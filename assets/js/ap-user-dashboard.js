@@ -52,7 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const ul = document.createElement('ul');
         data[type].forEach(item => {
           const li = document.createElement('li');
-          li.innerHTML = `<a href="${item.link}">${item.title}</a>`;
+          const a = document.createElement('a');
+          a.href = item.link;
+          a.textContent = item.title;
+          li.appendChild(a);
           ul.appendChild(li);
         });
         content.appendChild(document.createElement('h3')).textContent = apL10n[type];
@@ -166,7 +169,10 @@ function renderCalendar(events, containerId = 'ap-favorite-events') {
             const ul = document.createElement('ul');
             dayEvents.forEach(ev => {
               const li = document.createElement('li');
-              li.innerHTML = `<a href="${ev.link}">${ev.title}</a>`;
+              const a = document.createElement('a');
+              a.href = ev.link;
+              a.textContent = ev.title;
+              li.appendChild(a);
               ul.appendChild(li);
             });
             cell.appendChild(ul);
@@ -199,7 +205,11 @@ function renderEventsFeed(events) {
   events.forEach(ev => {
     const li = document.createElement('li');
     const date = ev.date ? new Date(ev.date).toLocaleDateString() : '';
-    li.innerHTML = `<a href="${ev.link}">${ev.title}</a> ${date}`;
+    const a = document.createElement('a');
+    a.href = ev.link;
+    a.textContent = ev.title;
+    li.appendChild(a);
+    if (date) li.append(' ', date);
     ul.appendChild(li);
   });
   feed.appendChild(ul);
