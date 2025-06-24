@@ -27,5 +27,8 @@ class Activator
         if (get_option('artpulse_webhook_status') === false) {
             add_option('artpulse_webhook_status', 'Not yet received');
         }
+
+        // Ensure role hierarchy table exists and populated
+        RoleSetup::maybe_install_table();
     }
 }

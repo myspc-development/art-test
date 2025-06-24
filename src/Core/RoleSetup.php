@@ -8,12 +8,34 @@ namespace ArtPulse\Core;
 class RoleSetup
 {
     /**
+     * Cached hierarchy loaded from the database.
+     * @var array<string, array{parent:?string,display:string}>
+     */
+    private static array $cache = [];
+
+    /**
+     * Default hierarchy used when populating the database.
+     * @var array<string, array{parent:?string,display:string}>
+     */
+    private const DEFAULT_HIERARCHY = [
+        'administrator' => ['parent' => null,           'display' => 'Administrator'],
+        'editor'        => ['parent' => 'administrator', 'display' => 'Editor'],
+        'author'        => ['parent' => 'editor',        'display' => 'Author'],
+        'contributor'   => ['parent' => 'author',        'display' => 'Contributor'],
+        'subscriber'    => ['parent' => 'contributor',   'display' => 'Subscriber'],
+        'member'        => ['parent' => 'subscriber',    'display' => 'Member'],
+        'artist'        => ['parent' => 'member',        'display' => 'Artist'],
+        'organization'  => ['parent' => 'member',        'display' => 'Organization'],
+    ];
+    /**
      * Run this during plugin activation.
      */
     public static function install(): void
     {
         self::add_roles();
         self::assign_capabilities();
+        self::install_roles_table();
+        self::populate_roles_table();
     }
 
     private static function add_roles(): void
@@ -109,6 +131,99 @@ class RoleSetup
                 foreach (array_unique($capabilities) as $cap) {
                     $role->add_cap($cap);
                 }
+            }
+        }
+    }
+
+    /**
+     * Create the role hierarchy table if needed.
+     */
+    public static function install_roles_table(): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_roles';
+        $charset = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE $table (
+            role_key varchar(191) NOT NULL,
+            parent_role_key varchar(191) NULL,
+            display_name varchar(191) NOT NULL,
+            PRIMARY KEY  (role_key)
+        ) $charset;";
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta($sql);
+    }
+
+    /**
+     * Populate the hierarchy table with default relationships.
+     */
+    public static function populate_roles_table(): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_roles';
+
+        foreach (self::DEFAULT_HIERARCHY as $role => $data) {
+            $wpdb->replace($table, [
+                'role_key'        => $role,
+                'parent_role_key' => $data['parent'],
+                'display_name'    => $data['display'],
+            ]);
+            self::$cache[$role] = [
+                'parent'  => $data['parent'],
+                'display' => $data['display'],
+            ];
+        }
+    }
+
+    /**
+     * Ensure the hierarchy table exists. Useful for upgrades.
+     */
+    public static function maybe_install_table(): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_roles';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_roles_table();
+            self::populate_roles_table();
+        }
+    }
+
+    public static function get_parent_role(string $role): ?string
+    {
+        self::ensure_cache();
+        return self::$cache[$role]['parent'] ?? null;
+    }
+
+    public static function get_child_roles(string $role): array
+    {
+        self::ensure_cache();
+        $children = [];
+        foreach (self::$cache as $key => $data) {
+            if ($data['parent'] === $role) {
+                $children[] = $key;
+            }
+        }
+        return $children;
+    }
+
+    private static function ensure_cache(): void
+    {
+        if (!empty(self::$cache)) {
+            return;
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_roles';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists === $table) {
+            $rows = $wpdb->get_results("SELECT role_key, parent_role_key, display_name FROM $table", ARRAY_A);
+            foreach ($rows as $row) {
+                self::$cache[$row['role_key']] = [
+                    'parent'  => $row['parent_role_key'] ?: null,
+                    'display' => $row['display_name'],
+                ];
             }
         }
     }
