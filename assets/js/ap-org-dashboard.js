@@ -108,7 +108,34 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             alert(data.data.message || 'Failed to delete.');
           }
-        });
+      });
+  }
+  });
+
+  // Highlight nav link for visible section
+  const navLinks = document.querySelectorAll('.dashboard-nav a');
+  const targets = [];
+  navLinks.forEach(link => {
+    const selector = link.getAttribute('href');
+    if (selector && selector.startsWith('#')) {
+      const target = document.querySelector(selector);
+      if (target) {
+        targets.push({ link, target });
+      }
     }
   });
+
+  if (targets.length) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const item = targets.find(t => t.target === entry.target);
+        if (item && entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          item.link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '0px 0px -50% 0px' });
+
+    targets.forEach(t => observer.observe(t.target));
+  }
 });
