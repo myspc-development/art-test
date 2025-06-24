@@ -104,6 +104,25 @@ class MembershipManager
                     update_user_meta($user_id, 'ap_membership_level', 'Pro');
                     $expiry = strtotime('+1 month', current_time('timestamp'));
                     update_user_meta($user_id, 'ap_membership_expires', $expiry);
+
+                    $amount   = isset($session->amount_total) ? $session->amount_total / 100 : 0;
+                    $currency = strtoupper($session->currency ?? '');
+                    $renewal  = date_i18n(get_option('date_format'), $expiry);
+                    $content  = sprintf(
+                        'Payment received: %s %s. Next renewal on %s.',
+                        number_format_i18n($amount, 2),
+                        $currency,
+                        $renewal
+                    );
+                    if (class_exists('ArtPulse\\Community\\NotificationManager')) {
+                        \ArtPulse\Community\NotificationManager::add(
+                            $user_id,
+                            'payment_paid',
+                            null,
+                            null,
+                            $content
+                        );
+                    }
                 }
                 break;
 
@@ -125,6 +144,25 @@ class MembershipManager
                     // Stripe sends current_period_end timestamp
                     $expiry = intval($sub->current_period_end);
                     update_user_meta($user_id, 'ap_membership_expires', $expiry);
+
+                    $amount   = isset($sub->amount_paid) ? $sub->amount_paid / 100 : 0;
+                    $currency = strtoupper($sub->currency ?? '');
+                    $renewal  = date_i18n(get_option('date_format'), $expiry);
+                    $content  = sprintf(
+                        'Payment received: %s %s. Next renewal on %s.',
+                        number_format_i18n($amount, 2),
+                        $currency,
+                        $renewal
+                    );
+                    if (class_exists('ArtPulse\\Community\\NotificationManager')) {
+                        \ArtPulse\Community\NotificationManager::add(
+                            $user_id,
+                            'payment_paid',
+                            null,
+                            null,
+                            $content
+                        );
+                    }
                 }
                 break;
 
@@ -158,6 +196,35 @@ class MembershipManager
                         __('Your ArtPulse membership has been cancelled','artpulse'),
                         __('Your subscription has ended or payment failed. You are now on Free membership.','artpulse')
                     );
+
+                    $amount   = isset($obj->amount_due) ? $obj->amount_due / 100 : 0;
+                    $currency = strtoupper($obj->currency ?? '');
+                    $content  = $amount ?
+                        sprintf(
+                            'Payment of %s %s failed and your membership was downgraded.',
+                            number_format_i18n($amount, 2),
+                            $currency
+                        ) :
+                        'Payment failed and your membership was downgraded.';
+
+                    if (class_exists('ArtPulse\\Community\\NotificationManager')) {
+                        \ArtPulse\Community\NotificationManager::add(
+                            $user_id,
+                            'payment_failed',
+                            null,
+                            null,
+                            $content
+                        );
+                        if ($event->type === 'customer.subscription.deleted') {
+                            \ArtPulse\Community\NotificationManager::add(
+                                $user_id,
+                                'membership_expired',
+                                null,
+                                null,
+                                'Your membership has expired and you have been moved to Free level.'
+                            );
+                        }
+                    }
                 }
                 break;
 

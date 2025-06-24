@@ -3,26 +3,30 @@ namespace ArtPulse\Community;
 
 class EmailNotifier {
     /**
+     * Notification types that will trigger an email.
+     *
+     * @var array<string>
+     */
+    public static $email_types = [
+        'link_request_sent',
+        'link_request_approved',
+        'link_request_denied',
+        'follower',
+        'favorite',
+        'comment',
+        'membership_upgrade',
+        'membership_downgrade',
+        'membership_expired',
+        'payment_paid',
+        'payment_failed',
+        'payment_refunded'
+    ];
+
+    /**
      * Trigger an email if the notification type is configured for email.
      */
     public static function maybe_send($user_id, $type, $object_id = null, $related_id = null, $content = '') {
-        // Types that should also send an email
-        $email_types = [
-            'link_request_sent',
-            'link_request_approved',
-            'link_request_denied',
-            'follower',
-            'favorite',
-            'comment',
-            'membership_upgrade',
-            'membership_downgrade',
-            'membership_expired',
-            'payment_paid',
-            'payment_failed',
-            'payment_refunded'
-        ];
-
-        if (!in_array($type, $email_types, true)) {
+        if (!in_array($type, self::$email_types, true)) {
             return;
         }
 
