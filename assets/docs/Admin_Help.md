@@ -74,7 +74,7 @@ The plugin registers the following shortcodes:
 | `[ap_submit_event]` | Form to submit a new event. |
 | `[ap_submit_organization]` | Form to submit a new organization. |
 | `[ap_user_dashboard]` | Member dashboard with calendar and favorites. |
-| `[ap_user_profile id="1"]` | Display a user profile. |
+| `[ap_user_profile id="1" show_social="true" show_membership="true" show_completeness="true"]` | Display a user profile with optional sections. |
 
 Copy any of these into a page or post to expose ArtPulse functionality.
 

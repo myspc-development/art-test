@@ -204,6 +204,17 @@
   color: var(--ap-primary-hover);
 }
 
+.ap-user-membership {
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.ap-profile-completeness {
+  font-size: 0.9rem;
+  color: var(--ap-muted-text-color);
+  margin-top: 1rem;
+}
+
 /* Simple calendar styles */
 .ap-cal-header {
   display: flex;
