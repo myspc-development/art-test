@@ -23,6 +23,12 @@ class NotificationRestController
             'args'                => self::get_schema(),
         ]);
 
+        register_rest_route('artpulse/v1', '/notifications/mark-all-read', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'mark_all_read'],
+            'permission_callback' => fn() => is_user_logged_in(),
+        ]);
+
         register_rest_route('artpulse/v1', '/notifications', [
             'methods'             => 'DELETE',
             'callback'            => [self::class, 'delete_notification'],
@@ -79,5 +85,19 @@ class NotificationRestController
         update_user_meta($user_id, '_ap_notifications', array_values($filtered));
 
         return rest_ensure_response(['status' => 'deleted', 'id' => $id]);
+    }
+
+    public static function mark_all_read(WP_REST_Request $request): WP_REST_Response
+    {
+        $user_id      = get_current_user_id();
+        $notifications = get_user_meta($user_id, '_ap_notifications', true) ?: [];
+
+        foreach ($notifications as &$n) {
+            $n['read'] = true;
+        }
+
+        update_user_meta($user_id, '_ap_notifications', $notifications);
+
+        return rest_ensure_response(['status' => 'all_read']);
     }
 }

@@ -229,6 +229,12 @@ function fetchNotifications() {
         container.textContent = 'No notifications.';
         return;
       }
+      const markAll = document.createElement('button');
+      markAll.textContent = 'Mark All Read';
+      markAll.className = 'ap-form-button mark-all-read';
+      markAll.onclick = markAllNotificationsRead;
+      container.appendChild(markAll);
+
       const ul = document.createElement('ul');
       list.forEach(n => {
         const li = document.createElement('li');
@@ -260,5 +266,19 @@ function markNotificationRead(id, el) {
     .catch(() => {
       // ignore errors but show simple message
       alert('Failed to mark as read');
+    });
+}
+
+function markAllNotificationsRead() {
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/notifications/mark-all-read`, {
+    method: 'POST',
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+  })
+    .then(res => res.json())
+    .then(() => {
+      fetchNotifications();
+    })
+    .catch(() => {
+      alert('Failed to mark all as read');
     });
 }

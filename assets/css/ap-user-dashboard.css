@@ -30,6 +30,9 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   margin-bottom: var(--ap-space-medium);
 }
+#ap-dashboard-notifications .mark-all-read {
+  margin-bottom: 0.5rem;
+}
 
 #ap-events-feed ul,
 #ap-dashboard-notifications ul {
