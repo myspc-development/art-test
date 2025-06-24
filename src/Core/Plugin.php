@@ -91,6 +91,7 @@ class Plugin
         \ArtPulse\Core\AccessControlManager::register();
         \ArtPulse\Core\DirectoryManager::register();
         \ArtPulse\Core\UserDashboardManager::register();
+        \ArtPulse\Core\OrgDashboardManager::register();
         \ArtPulse\Core\AnalyticsManager::register();
         \ArtPulse\Core\AnalyticsDashboard::register();
         \ArtPulse\Admin\PaymentAnalyticsDashboard::register();
