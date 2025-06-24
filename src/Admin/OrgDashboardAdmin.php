@@ -392,6 +392,7 @@ class OrgDashboardAdmin {
                 delete_transient('ap_dash_artworks_' . $org_id);
                 delete_transient('ap_dash_events_' . $org_id);
                 delete_transient('ap_dash_stats_artworks_' . $org_id);
+                delete_transient('ap_org_metrics_' . $org_id);
             }
         }
     }
