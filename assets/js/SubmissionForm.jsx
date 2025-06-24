@@ -135,7 +135,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_title">Event Title</label>
         <input
           id="ap_event_title"
-          className="ap-form-input"
+          className="ap-input"
           type="text"
           value={title}
           onChange={e => setTitle(e.target.value)}
@@ -147,7 +147,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_date">Date</label>
         <input
           id="ap_event_date"
-          className="ap-form-input"
+          className="ap-input"
           type="date"
           value={eventDate}
           onChange={e => setEventDate(e.target.value)}
@@ -159,7 +159,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_start">Start Date</label>
         <input
           id="ap_event_start"
-          className="ap-form-input"
+          className="ap-input"
           type="date"
           value={startDate}
           onChange={e => setStartDate(e.target.value)}
@@ -171,7 +171,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_end">End Date</label>
         <input
           id="ap_event_end"
-          className="ap-form-input"
+          className="ap-input"
           type="date"
           value={endDate}
           onChange={e => setEndDate(e.target.value)}
@@ -182,7 +182,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_venue_name">Venue Name</label>
         <input
           id="ap_venue_name"
-          className="ap-form-input"
+          className="ap-input"
           type="text"
           value={venueName}
           onChange={e => setVenueName(e.target.value)}
@@ -193,7 +193,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_street">Street Address</label>
         <input
           id="ap_event_street"
-          className="ap-form-input"
+          className="ap-input"
           type="text"
           value={streetAddress}
           onChange={e => setStreetAddress(e.target.value)}
@@ -204,7 +204,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_country">Country</label>
         <input
           id="ap_event_country"
-          className="ap-form-input ap-address-country"
+          className="ap-input ap-address-country"
           type="text"
           value={country}
           onChange={e => setCountry(e.target.value)}
@@ -216,7 +216,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_state">State/Province</label>
         <input
           id="ap_event_state"
-          className="ap-form-input ap-address-state"
+          className="ap-input ap-address-state"
           type="text"
           value={stateProv}
           onChange={e => setStateProv(e.target.value)}
@@ -227,7 +227,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_city">City</label>
         <input
           id="ap_event_city"
-          className="ap-form-input ap-address-city"
+          className="ap-input ap-address-city"
           type="text"
           value={city}
           onChange={e => setCity(e.target.value)}
@@ -238,7 +238,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_postcode">Postcode</label>
         <input
           id="ap_event_postcode"
-          className="ap-form-input ap-address-postcode"
+          className="ap-input ap-address-postcode"
           type="text"
           value={postcode}
           onChange={e => setPostcode(e.target.value)}
@@ -249,7 +249,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_location">Location</label>
         <input
           id="ap_event_location"
-          className="ap-form-input ap-google-autocomplete"
+          className="ap-input ap-google-autocomplete"
           type="text"
           value={location}
           onChange={e => setLocation(e.target.value)}
@@ -262,7 +262,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_organizer">Organizer Name</label>
         <input
           id="ap_event_organizer"
-          className="ap-form-input"
+          className="ap-input"
           type="text"
           value={organizerName}
           onChange={e => setOrganizerName(e.target.value)}
@@ -273,7 +273,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_event_organizer_email">Organizer Email</label>
         <input
           id="ap_event_organizer_email"
-          className="ap-form-input"
+          className="ap-input"
           type="email"
           value={organizerEmail}
           onChange={e => setOrganizerEmail(e.target.value)}
@@ -284,7 +284,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_banner">Event Banner</label>
         <input
           id="ap_banner"
-          className="ap-form-input"
+          className="ap-input"
           type="file"
           accept="image/*"
           onChange={handleBannerChange}
@@ -294,7 +294,7 @@ export default function SubmissionForm() {
       <label className="ap-form-label">
         <input
           type="checkbox"
-          className="ap-form-input"
+          className="ap-input"
           checked={featured}
           onChange={e => setFeatured(e.target.checked)}
         />
@@ -305,7 +305,7 @@ export default function SubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_images">Images (max 5)</label>
         <input
           id="ap_images"
-          className="ap-form-input"
+          className="ap-input"
           type="file"
           multiple
           accept="image/*"

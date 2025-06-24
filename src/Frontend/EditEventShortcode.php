@@ -59,63 +59,63 @@ class EditEventShortcode {
         <form id="ap-edit-event-form" class="ap-form-container" enctype="multipart/form-data" data-post-id="<?php echo $post_id; ?>">
             <p>
                 <label class="ap-form-label">Title<br>
-                    <input class="ap-form-input" type="text" name="title" value="<?php echo $title; ?>" required>
+                    <input class="ap-input" type="text" name="title" value="<?php echo $title; ?>" required>
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Description<br>
-                    <textarea class="ap-form-textarea" name="content" required><?php echo $content; ?></textarea>
+                    <textarea class="ap-input" name="content" required><?php echo $content; ?></textarea>
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Date<br>
-                    <input class="ap-form-input" type="date" name="date" value="<?php echo $date; ?>">
+                    <input class="ap-input" type="date" name="date" value="<?php echo $date; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Start Date<br>
-                    <input class="ap-form-input" type="date" name="start_date" value="<?php echo $start; ?>">
+                    <input class="ap-input" type="date" name="start_date" value="<?php echo $start; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">End Date<br>
-                    <input class="ap-form-input" type="date" name="end_date" value="<?php echo $end; ?>">
+                    <input class="ap-input" type="date" name="end_date" value="<?php echo $end; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Venue Name<br>
-                    <input class="ap-form-input" type="text" name="venue_name" value="<?php echo $venue; ?>">
+                    <input class="ap-input" type="text" name="venue_name" value="<?php echo $venue; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Street Address<br>
-                    <input class="ap-form-input ap-address-street" type="text" name="event_street_address" value="<?php echo $street; ?>">
+                    <input class="ap-input ap-address-street" type="text" name="event_street_address" value="<?php echo $street; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Country<br>
-                    <input class="ap-form-input ap-address-country" type="text" name="event_country" value="<?php echo $country; ?>">
+                    <input class="ap-input ap-address-country" type="text" name="event_country" value="<?php echo $country; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">State/Province<br>
-                    <input class="ap-form-input ap-address-state" type="text" name="event_state" value="<?php echo $state; ?>">
+                    <input class="ap-input ap-address-state" type="text" name="event_state" value="<?php echo $state; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">City<br>
-                    <input class="ap-form-input ap-address-city" type="text" name="event_city" value="<?php echo $city; ?>">
+                    <input class="ap-input ap-address-city" type="text" name="event_city" value="<?php echo $city; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Postcode<br>
-                    <input class="ap-form-input ap-address-postcode" type="text" name="event_postcode" value="<?php echo $postcode; ?>">
+                    <input class="ap-input ap-address-postcode" type="text" name="event_postcode" value="<?php echo $postcode; ?>">
                 </label>
             </p>
             <input type="hidden" name="address_components" id="ap_address_components" value="<?php echo $addr_comp; ?>">
             <p>
                 <label class="ap-form-label">Location<br>
-                    <input class="ap-form-input" type="text" name="location" class="ap-google-autocomplete" value="<?php echo $location; ?>">
+                    <input class="ap-input" type="text" name="location" class="ap-google-autocomplete" value="<?php echo $location; ?>">
                 </label>
             </p>
             <p>
@@ -127,24 +127,24 @@ class EditEventShortcode {
                         'selected' => $event_type_id,
                         'show_option_none' => 'Select type',
                         'hide_empty' => false,
-                        'class' => 'ap-form-select',
+                        'class' => 'ap-input',
                     ]);
                     ?>
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Organizer Name<br>
-                    <input class="ap-form-input" type="text" name="event_organizer_name" value="<?php echo $org_name; ?>">
+                    <input class="ap-input" type="text" name="event_organizer_name" value="<?php echo $org_name; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Organizer Email<br>
-                    <input class="ap-form-input" type="email" name="event_organizer_email" value="<?php echo $org_email; ?>">
+                    <input class="ap-input" type="email" name="event_organizer_email" value="<?php echo $org_email; ?>">
                 </label>
             </p>
             <p>
                 <label class="ap-form-label">Organization<br>
-                    <select class="ap-form-select" name="event_org" required>
+                    <select class="ap-input" name="event_org" required>
                         <option value="">Select Organization</option>
                         <?php foreach ($orgs as $org): ?>
                             <option value="<?php echo esc_attr($org->ID); ?>" <?php selected($org_selected, $org->ID); ?>><?php echo esc_html($org->post_title); ?></option>
@@ -154,12 +154,12 @@ class EditEventShortcode {
             </p>
             <p>
                 <label class="ap-form-label">Event Banner<br>
-                    <input class="ap-form-input" type="file" name="event_banner">
+                    <input class="ap-input" type="file" name="event_banner">
                 </label>
             </p>
             <p>
                 <label>
-                    <input class="ap-form-input" type="checkbox" name="event_featured" value="1" <?php echo $featured_checked; ?>> Request Featured
+                    <input class="ap-input" type="checkbox" name="event_featured" value="1" <?php echo $featured_checked; ?>> Request Featured
                 </label>
             </p>
             <p class="ap-edit-event-error" style="color:red;"></p>
