@@ -35,6 +35,7 @@ class Plugin
         add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_scripts']);
 
         add_action('rest_api_init', [\ArtPulse\Community\NotificationRestController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Community\FavoritesRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
     }

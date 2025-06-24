@@ -5,6 +5,7 @@ namespace ArtPulse\Community;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Community\NotificationManager;
 
 class FavoritesRestController
 {
@@ -106,19 +107,34 @@ class FavoritesRestController
         return rest_ensure_response(['status' => 'deleted', 'id' => $id]);
     }
 
-    // Placeholders for newly registered methods
+    // Notification routes using the new NotificationManager table
     public static function list(WP_REST_Request $request): WP_REST_Response
     {
-        return new WP_REST_Response(['message' => 'Notification list not yet implemented.'], 501);
+        $user_id = get_current_user_id();
+        $limit    = isset($request['limit']) ? absint($request['limit']) : 25;
+
+        $notifications = NotificationManager::get($user_id, $limit);
+
+        return rest_ensure_response($notifications);
     }
 
     public static function mark_read(WP_REST_Request $request): WP_REST_Response
     {
-        return new WP_REST_Response(['message' => 'Mark read not yet implemented.'], 501);
+        $user_id = get_current_user_id();
+        $id      = absint($request['id']);
+
+        if ($id) {
+            NotificationManager::mark_read($id, $user_id);
+        }
+
+        return rest_ensure_response(['status' => 'read', 'id' => $id]);
     }
 
     public static function mark_all_read(WP_REST_Request $request): WP_REST_Response
     {
-        return new WP_REST_Response(['message' => 'Mark all as read not yet implemented.'], 501);
+        $user_id = get_current_user_id();
+        NotificationManager::mark_all_read($user_id);
+
+        return rest_ensure_response(['status' => 'all_read']);
     }
 }
