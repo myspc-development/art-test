@@ -17,7 +17,7 @@ graph TD
 ## Installation & Setup
 1. Upload `artpulse.zip` via **Plugins → Add New** and activate.
 2. Under **ArtPulse → Settings → General** configure timezone, date format and enable Auto‑expire Past Events.
-3. Enter your Stripe keys and membership pricing in **Settings → Payments**.
+3. Enter your Stripe keys and membership pricing in **Settings → Payments**. These keys are required for the Billing History table to load charge details.
 
 ## CSV Import / Export
 - Navigate to **ArtPulse → Settings → Import / Export**.
