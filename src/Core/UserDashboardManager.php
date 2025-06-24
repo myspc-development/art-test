@@ -198,6 +198,10 @@ class UserDashboardManager
             <div id="ap-local-events"></div>
             <h2><?php _e('Your Favorited Events','artpulse'); ?></h2>
             <div id="ap-favorite-events"></div>
+            <h2><?php _e('Upcoming Events','artpulse'); ?></h2>
+            <div id="ap-events-feed"></div>
+            <h2><?php _e('Notifications','artpulse'); ?></h2>
+            <div id="ap-dashboard-notifications"></div>
         </div>
         <?php
         return ob_get_clean();
