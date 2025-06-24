@@ -30,5 +30,30 @@ class Activator
 
         // Ensure role hierarchy table exists and populated
         RoleSetup::maybe_install_table();
+
+        // Create indexes to speed up membership lookups
+        self::maybe_add_meta_indexes();
+    }
+
+    /**
+     * Add indexes on usermeta and postmeta for membership keys if missing.
+     */
+    private static function maybe_add_meta_indexes(): void
+    {
+        global $wpdb;
+
+        $tables = [
+            $wpdb->usermeta => 'ap_usermeta_key_value',
+            $wpdb->postmeta => 'ap_postmeta_key_value',
+        ];
+
+        foreach ($tables as $table => $index_name) {
+            $exists = $wpdb->get_var(
+                $wpdb->prepare("SHOW INDEX FROM {$table} WHERE Key_name = %s", $index_name)
+            );
+            if (!$exists) {
+                $wpdb->query("CREATE INDEX {$index_name} ON {$table} (meta_key(191), meta_value(191))");
+            }
+        }
     }
 }
