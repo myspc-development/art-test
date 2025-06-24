@@ -377,11 +377,17 @@ function unfavoriteEvent(id) {
     });
 }
 
+// Uses endpoints registered in UserAccountRestController::register_routes().
 function exportUserData(format) {
   fetch(`${ArtPulseDashboardApi.exportEndpoint}?format=${format}`, {
     headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
   })
-    .then(res => format === 'csv' ? res.text() : res.json())
+    .then(async res => {
+      if (!res.ok) {
+        throw new Error(`Export failed: server returned ${res.status}`);
+      }
+      return format === 'csv' ? res.text() : res.json();
+    })
     .then(data => {
       const content = format === 'csv' ? data : JSON.stringify(data, null, 2);
       const type = format === 'csv' ? 'text/csv' : 'application/json';
@@ -393,7 +399,7 @@ function exportUserData(format) {
       a.click();
       URL.revokeObjectURL(url);
     })
-    .catch(() => alert('Export failed'));
+    .catch(err => alert(err.message));
 }
 
 function deleteUserData() {
@@ -402,7 +408,12 @@ function deleteUserData() {
     method: 'POST',
     headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
   })
-    .then(res => res.json())
+    .then(async res => {
+      if (!res.ok) {
+        throw new Error(`Deletion failed: server returned ${res.status}`);
+      }
+      return res.json();
+    })
     .then(res => {
       if (res.success) {
         window.location.reload();
@@ -410,5 +421,5 @@ function deleteUserData() {
         alert(res.message || 'Deletion failed');
       }
     })
-    .catch(() => alert('Deletion failed'));
+    .catch(err => alert(err.message));
 }
