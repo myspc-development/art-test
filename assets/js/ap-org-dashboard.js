@@ -25,7 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
       credentials: 'same-origin',
       body: formData
     })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        statusBox.textContent = 'Request failed.';
+        statusBox.className = 'error';
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
+    })
     .then(data => {
       if (data.success) {
         // Update UI
@@ -62,7 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
           event_id: eventId
         })
       })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          statusBox.textContent = 'Request failed.';
+          statusBox.className = 'error';
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      })
       .then(data => {
         if (data.success) {
           eventsContainer.innerHTML = data.data.updated_list_html;
