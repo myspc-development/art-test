@@ -18,6 +18,7 @@ graph TD
 1. Upload `artpulse.zip` via **Plugins → Add New** and activate.
 2. Under **ArtPulse → Settings → General** configure timezone, date format and enable Auto‑expire Past Events.
 3. Enter your Stripe keys and membership pricing in **Settings → Payments**. These keys are required for the Billing History table to load charge details.
+4. Enable the `early_fraud_warning.created` webhook in Stripe and point it to `/wp-json/artpulse/v1/stripe-webhook`. This allows early fraud warnings to be logged and emailed to administrators.
 
 ## CSV Import / Export
 - Navigate to **ArtPulse → Settings → Import / Export**.
