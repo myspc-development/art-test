@@ -1,3 +1,4 @@
+let favoriteEvents = [];
 document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-user-dashboard');
   if (!dash) return;
@@ -7,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
   .then(res => res.json())
   .then(data => {
+    favoriteEvents = data.favorite_events || [];
     // Membership
     const info = document.getElementById('ap-membership-info');
     info.innerHTML = `<p>${apL10n.membership_level}: ${data.membership_level}</p>
@@ -94,29 +96,29 @@ document.addEventListener('DOMContentLoaded', () => {
           })
           .catch(() => renderEventsFeed([]));
       }, () => {
-        if (data.favorite_events && data.favorite_events.length) {
-          renderCalendar(data.favorite_events, 'ap-local-events');
-          renderEventsFeed(data.favorite_events);
+        if (favoriteEvents.length) {
+          renderCalendar(favoriteEvents, 'ap-local-events');
+          renderEventsFeed(favoriteEvents);
         } else {
           renderEventsFeed([]);
         }
       });
-    } else if (data.favorite_events && data.favorite_events.length) {
-      renderCalendar(data.favorite_events, 'ap-local-events');
-      renderEventsFeed(data.favorite_events);
+    } else if (favoriteEvents.length) {
+      renderCalendar(favoriteEvents, 'ap-local-events');
+      renderEventsFeed(favoriteEvents);
     } else {
       renderEventsFeed([]);
     }
 
-    if (data.favorite_events && data.favorite_events.length) {
-      renderCalendar(data.favorite_events, 'ap-favorite-events');
+    if (favoriteEvents.length) {
+      renderCalendar(favoriteEvents, 'ap-favorite-events', true);
     }
 
     fetchNotifications();
   });
 });
 
-function renderCalendar(events, containerId = 'ap-favorite-events') {
+function renderCalendar(events, containerId = 'ap-favorite-events', allowRemove = false) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -173,6 +175,12 @@ function renderCalendar(events, containerId = 'ap-favorite-events') {
               a.href = ev.link;
               a.textContent = ev.title;
               li.appendChild(a);
+              if (allowRemove && ev.id) {
+                const btn = document.createElement('button');
+                btn.textContent = 'Remove';
+                btn.onclick = () => unfavoriteEvent(ev.id);
+                li.append(' ', btn);
+              }
               ul.appendChild(li);
             });
             cell.appendChild(ul);
@@ -280,5 +288,24 @@ function markAllNotificationsRead() {
     })
     .catch(() => {
       alert('Failed to mark all as read');
+    });
+}
+
+function unfavoriteEvent(id) {
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/favorites`, {
+    method: 'DELETE',
+    headers: {
+      'X-WP-Nonce': ArtPulseDashboardApi.nonce,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ object_id: id, object_type: 'artpulse_event' })
+  })
+    .then(res => res.json())
+    .then(() => {
+      favoriteEvents = favoriteEvents.filter(ev => ev.id !== id);
+      renderCalendar(favoriteEvents, 'ap-favorite-events', true);
+    })
+    .catch(() => {
+      alert('Failed to remove favorite');
     });
 }
