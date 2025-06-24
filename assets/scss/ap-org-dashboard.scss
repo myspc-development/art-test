@@ -64,19 +64,21 @@
 }
 
 .ap-form-button {
-    padding: 0.5rem 1.2rem;
-    background: #2563eb;
-    color: #fff;
+    padding: var(--ap-button-padding);
+    background: var(--ap-primary-color);
+    color: var(--ap-bg-color);
     border: none;
-    border-radius: 8px;
+    border-radius: var(--ap-border-radius);
     font-weight: 500;
     font-size: 1rem;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
-.ap-form-button:hover {
-    background: #1d4ed8;
+.ap-form-button:hover,
+.ap-form-button:focus {
+    background: var(--ap-primary-hover);
+    box-shadow: 0 0 0 2px var(--ap-primary-color);
 }
 
 @media (max-width: 600px) {
