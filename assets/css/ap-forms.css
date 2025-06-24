@@ -22,10 +22,13 @@ Version: 1.0.0
     color: var(--ap-dark-text-color);
 }
 
+.ap-input,
+input.ap-input,
+textarea.ap-input,
+select.ap-input,
 .ap-form-input,
 .ap-form-textarea,
-.ap-form-select,
-.ap-input {
+.ap-form-select {
     width: 100%;
     padding: var(--ap-input-padding);
     border: 2px solid var(--ap-primary-color);
@@ -36,10 +39,13 @@ Version: 1.0.0
     font-size: 16px;
 }
 
+.ap-input:focus,
+input.ap-input:focus,
+textarea.ap-input:focus,
+select.ap-input:focus,
 .ap-form-input:focus,
 .ap-form-textarea:focus,
-.ap-form-select:focus,
-.ap-input:focus {
+.ap-form-select:focus {
     outline: 2px solid var(--ap-primary-color);
     outline-offset: 2px;
 }

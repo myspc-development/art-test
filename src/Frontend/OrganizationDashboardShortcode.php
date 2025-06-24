@@ -68,48 +68,48 @@ class OrganizationDashboardShortcode {
                     <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('ap_org_dashboard_nonce'); ?>">
 
                     <label class="ap-form-label" for="ap_event_title">Event Title</label>
-                    <input class="ap-form-input" id="ap_event_title" type="text" name="ap_event_title" required>
+                    <input class="ap-input" id="ap_event_title" type="text" name="ap_event_title" required>
 
                     <label class="ap-form-label" for="ap_event_date">Event Date</label>
-                    <input class="ap-form-input" id="ap_event_date" type="date" name="ap_event_date" required>
+                    <input class="ap-input" id="ap_event_date" type="date" name="ap_event_date" required>
 
                     <label class="ap-form-label" for="ap_event_start_date">Start Date</label>
-                    <input class="ap-form-input" id="ap_event_start_date" type="date" name="ap_event_start_date">
+                    <input class="ap-input" id="ap_event_start_date" type="date" name="ap_event_start_date">
 
                     <label class="ap-form-label" for="ap_event_end_date">End Date</label>
-                    <input class="ap-form-input" id="ap_event_end_date" type="date" name="ap_event_end_date">
+                    <input class="ap-input" id="ap_event_end_date" type="date" name="ap_event_end_date">
 
                     <label class="ap-form-label" for="ap_event_location">Location</label>
-                    <input class="ap-form-input ap-google-autocomplete" id="ap_event_location" type="text" name="ap_event_location">
+                    <input class="ap-input ap-google-autocomplete" id="ap_event_location" type="text" name="ap_event_location">
 
                     <label class="ap-form-label" for="ap_venue_name">Venue Name</label>
-                    <input class="ap-form-input" id="ap_venue_name" type="text" name="ap_venue_name">
+                    <input class="ap-input" id="ap_venue_name" type="text" name="ap_venue_name">
 
                     <label class="ap-form-label" for="ap_event_street_address">Street Address</label>
-                    <input class="ap-form-input" id="ap_event_street_address" type="text" name="ap_event_street_address">
+                    <input class="ap-input" id="ap_event_street_address" type="text" name="ap_event_street_address">
 
                     <label class="ap-form-label" for="ap_event_country">Country</label>
-                    <input class="ap-form-input" id="ap_event_country" type="text" name="ap_event_country">
+                    <input class="ap-input" id="ap_event_country" type="text" name="ap_event_country">
 
                     <label class="ap-form-label" for="ap_event_state">State/Province</label>
-                    <input class="ap-form-input" id="ap_event_state" type="text" name="ap_event_state">
+                    <input class="ap-input" id="ap_event_state" type="text" name="ap_event_state">
 
                     <label class="ap-form-label" for="ap_event_city">City</label>
-                    <input class="ap-form-input" id="ap_event_city" type="text" name="ap_event_city">
+                    <input class="ap-input" id="ap_event_city" type="text" name="ap_event_city">
 
                     <label class="ap-form-label" for="ap_event_postcode">Postcode</label>
-                    <input class="ap-form-input" id="ap_event_postcode" type="text" name="ap_event_postcode">
+                    <input class="ap-input" id="ap_event_postcode" type="text" name="ap_event_postcode">
 
                     <input type="hidden" name="address_components" id="ap_address_components">
 
                     <label class="ap-form-label" for="ap_event_organizer_name">Organizer Name</label>
-                    <input class="ap-form-input" id="ap_event_organizer_name" type="text" name="ap_event_organizer_name">
+                    <input class="ap-input" id="ap_event_organizer_name" type="text" name="ap_event_organizer_name">
 
                     <label class="ap-form-label" for="ap_event_organizer_email">Organizer Email</label>
-                    <input class="ap-form-input" id="ap_event_organizer_email" type="email" name="ap_event_organizer_email">
+                    <input class="ap-input" id="ap_event_organizer_email" type="email" name="ap_event_organizer_email">
 
                     <label class="ap-form-label" for="ap_event_type">Event Type</label>
-                    <select class="ap-form-select" id="ap_event_type" name="ap_event_type">
+                    <select class="ap-input" id="ap_event_type" name="ap_event_type">
                         <?php
                         $terms = get_terms('artpulse_event_type', ['hide_empty' => false]);
                         foreach ($terms as $term) {
@@ -119,7 +119,7 @@ class OrganizationDashboardShortcode {
                     </select>
 
                     <label class="ap-form-label">
-                        <input class="ap-form-input" type="checkbox" name="ap_event_featured" value="1"> Request Featured
+                        <input class="ap-input" type="checkbox" name="ap_event_featured" value="1"> Request Featured
                     </label>
 
                     <input type="hidden" name="ap_event_organization" value="<?php echo esc_attr($org_id); ?>">

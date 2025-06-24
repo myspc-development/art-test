@@ -175,7 +175,7 @@ export default function OrganizationSubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_org_title">Organization Name</label>
         <input
           id="ap_org_title"
-          className="ap-form-input"
+          className="ap-input"
           type="text"
           value={title}
           onChange={e => setTitle(e.target.value)}
@@ -187,7 +187,7 @@ export default function OrganizationSubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_org_country">Country</label>
         <input
           id="ap_org_country"
-          className="ap-form-input ap-address-country"
+          className="ap-input ap-address-country"
           type="text"
           value={country}
           onChange={e => setCountry(e.target.value)}
@@ -199,7 +199,7 @@ export default function OrganizationSubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_org_state">State/Province</label>
         <input
           id="ap_org_state"
-          className="ap-form-input ap-address-state"
+          className="ap-input ap-address-state"
           type="text"
           value={stateProv}
           onChange={e => setStateProv(e.target.value)}
@@ -210,7 +210,7 @@ export default function OrganizationSubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_org_city">City</label>
         <input
           id="ap_org_city"
-          className="ap-form-input ap-address-city"
+          className="ap-input ap-address-city"
           type="text"
           value={city}
           onChange={e => setCity(e.target.value)}
@@ -221,13 +221,13 @@ export default function OrganizationSubmissionForm() {
         <p key={field.name}>
           <label className="ap-form-label" htmlFor={field.name}>{field.label}</label>
           {field.type === 'textarea' && (
-            <textarea id={field.name} name={field.name} className="ap-form-textarea" required={field.required}></textarea>
+            <textarea id={field.name} name={field.name} className="ap-input" required={field.required}></textarea>
           )}
           {field.type === 'checkbox' && (
-            <input id={field.name} className="ap-form-input" type="checkbox" name={field.name} value="1" />
+            <input id={field.name} className="ap-input" type="checkbox" name={field.name} value="1" />
           )}
           {field.type === 'select' && field.name === 'ead_org_type' && (
-            <select id={field.name} name={field.name} className="ap-form-select">
+            <select id={field.name} name={field.name} className="ap-input">
               <option value="">Select</option>
               {ORG_TYPES.map(t => (
                 <option key={t} value={t}>{t.replace('-', ' ')}</option>
@@ -237,7 +237,7 @@ export default function OrganizationSubmissionForm() {
           {field.type === 'media' && (
             <input
               id={field.name}
-              className="ap-form-input"
+              className="ap-input"
               type="file"
               name={field.name}
               accept="image/*"
@@ -245,7 +245,7 @@ export default function OrganizationSubmissionForm() {
             />
           )}
           {['textarea','checkbox','select','media'].indexOf(field.type) === -1 && (
-            <input id={field.name} className="ap-form-input" type={field.type} name={field.name} required={field.required} />
+            <input id={field.name} className="ap-input" type={field.type} name={field.name} required={field.required} />
           )}
         </p>
       ))}
@@ -254,7 +254,7 @@ export default function OrganizationSubmissionForm() {
         <label className="ap-form-label" htmlFor="ap_org_images">Images (max 5)</label>
         <input
           id="ap_org_images"
-          className="ap-form-input"
+          className="ap-input"
           type="file"
           multiple
           accept="image/*"

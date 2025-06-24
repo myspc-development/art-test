@@ -60,18 +60,18 @@ class PortfolioBuilder
         <form id="ap-portfolio-form" class="ap-form-container">
             <h3>Create or Edit Portfolio Item</h3>
             <input type="hidden" name="post_id" value="" />
-            <p><label class="ap-form-label" for="ap_portfolio_title">Title</label><br><input class="ap-form-input" id="ap_portfolio_title" type="text" name="title" required /></p>
-            <p><label class="ap-form-label" for="ap_portfolio_description">Description</label><br><textarea class="ap-form-textarea" id="ap_portfolio_description" name="description" rows="3"></textarea></p>
+            <p><label class="ap-form-label" for="ap_portfolio_title">Title</label><br><input class="ap-input" id="ap_portfolio_title" type="text" name="title" required /></p>
+            <p><label class="ap-form-label" for="ap_portfolio_description">Description</label><br><textarea class="ap-input" id="ap_portfolio_description" name="description" rows="3"></textarea></p>
             <p><label class="ap-form-label" for="ap_portfolio_category">Category</label><br>
-                <select class="ap-form-select" id="ap_portfolio_category" name="category">
+                <select class="ap-input" id="ap_portfolio_category" name="category">
                     <option value="painting">Painting</option>
                     <option value="exhibition">Exhibition</option>
                     <option value="award">Award</option>
                 </select>
             </p>
-            <p><label class="ap-form-label" for="ap_portfolio_link">Link (optional)</label><br><input class="ap-form-input" id="ap_portfolio_link" type="url" name="link" /></p>
+            <p><label class="ap-form-label" for="ap_portfolio_link">Link (optional)</label><br><input class="ap-input" id="ap_portfolio_link" type="url" name="link" /></p>
             <p><label class="ap-form-label" for="ap_portfolio_visibility">Visibility</label><br>
-                <select class="ap-form-select" id="ap_portfolio_visibility" name="visibility">
+                <select class="ap-input" id="ap_portfolio_visibility" name="visibility">
                     <option value="public">Public</option>
                     <option value="private">Private</option>
                 </select>
