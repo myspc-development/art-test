@@ -153,6 +153,21 @@ class Plugin
             \ArtPulse\Core\WooCommerceIntegration::register();
             \ArtPulse\Core\PurchaseShortcode::register();
         }
+
+        \ArtPulse\Admin\AdminColumnsTaxonomies::register();
+        \ArtPulse\Admin\MemberEnhancements::register();
+        \ArtPulse\Admin\ProfileLinkRequestAdmin::register();
+        class_exists(\ArtPulse\Admin\OrgDashboardAdmin::class);
+        \ArtPulse\Blocks\AdvancedTaxonomyFilterBlock::register();
+        \ArtPulse\Blocks\AjaxFilterBlock::register();
+        \ArtPulse\Blocks\FilteredListShortcodeBlock::register();
+        \ArtPulse\Blocks\TaxonomyFilterBlock::register();
+        \ArtPulse\Community\FollowRestController::register();
+        \ArtPulse\Community\ProfileLinkRequestRestController::register();
+        \ArtPulse\Community\NotificationHooks::register();
+        \ArtPulse\Core\MembershipNotifier::register();
+        \ArtPulse\Core\MembershipCron::register();
+        class_exists(\ArtPulse\Search\MetaFullTextSearch::class);
     }
 
     public function enqueue_frontend_scripts()
