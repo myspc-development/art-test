@@ -55,6 +55,7 @@ register_activation_hook(__FILE__, function () {
 // Register REST API routes
 add_action('rest_api_init', function () {
     \ArtPulse\Rest\PortfolioRestController::register();
+    \ArtPulse\Rest\UserAccountRestController::register();
 });
 
 // Register Enqueue Assets
