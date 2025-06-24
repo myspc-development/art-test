@@ -4,6 +4,7 @@ namespace ArtPulse\Core;
 use Stripe\StripeClient;
 use WP_REST_Request;
 use WP_Error;
+use ArtPulse\Core\IntegrationHooks;
 
 class MembershipManager
 {
@@ -104,6 +105,7 @@ class MembershipManager
                     update_user_meta($user_id, 'ap_membership_level', 'Pro');
                     $expiry = strtotime('+1 month', current_time('timestamp'));
                     update_user_meta($user_id, 'ap_membership_expires', $expiry);
+                    IntegrationHooks::membershipUpgraded($user_id, 'Pro');
 
                     $amount   = isset($session->amount_total) ? $session->amount_total / 100 : 0;
                     $currency = strtoupper($session->currency ?? '');
@@ -144,6 +146,7 @@ class MembershipManager
                     // Stripe sends current_period_end timestamp
                     $expiry = intval($sub->current_period_end);
                     update_user_meta($user_id, 'ap_membership_expires', $expiry);
+                    IntegrationHooks::membershipUpgraded($user_id, 'Pro');
 
                     $amount   = isset($sub->amount_paid) ? $sub->amount_paid / 100 : 0;
                     $currency = strtoupper($sub->currency ?? '');
@@ -225,6 +228,7 @@ class MembershipManager
                     }
                     update_user_meta($user_id, 'ap_membership_level', 'Free');
                     update_user_meta($user_id, 'ap_membership_expires', current_time('timestamp'));
+                    IntegrationHooks::membershipDowngraded($user_id, 'Free');
 
                     // notify user
                     wp_mail(
@@ -295,6 +299,7 @@ class MembershipManager
                 $user->set_role('subscriber');
             }
             update_user_meta($user->ID, 'ap_membership_level', 'Free');
+            IntegrationHooks::membershipExpired($user->ID);
 
             // Optionally notify
             wp_mail(

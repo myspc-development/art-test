@@ -50,3 +50,24 @@ Use `[ap_register]` to display a standalone registration form for new users. Sig
 ## Stripe Radar
 
 To receive early fraud warnings you must enable the **early_fraud_warning.created** webhook event in your Stripe dashboard. Configure it to post to `/wp-json/artpulse/v1/stripe-webhook` on your site. When Radar flags a charge, the plugin logs the details and emails the site administrator.
+
+## Integration Hooks
+
+External systems may subscribe to custom actions fired by the plugin:
+
+- `ap_user_registered` &ndash; triggered after a new user account is created.
+- `ap_membership_upgraded` &ndash; fires when a user's membership level increases. Parameters: `$user_id`, `$new_level`.
+- `ap_membership_downgraded` &ndash; fires when a membership is downgraded. Parameters: `$user_id`, `$new_level`.
+- `ap_membership_expired` &ndash; triggered by the daily cron job when a membership lapses.
+
+Example usage:
+
+```php
+add_action( 'ap_membership_upgraded', function ( $user_id, $level ) {
+    wp_remote_post( 'https://example.com/webhook', [
+        'body'    => [ 'user' => $user_id, 'level' => $level ],
+    ] );
+} );
+```
+
+These hooks can be used to initiate REST calls or other integrations.

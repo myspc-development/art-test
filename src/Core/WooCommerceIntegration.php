@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Core;
 
+use ArtPulse\Core\IntegrationHooks;
+
 class WooCommerceIntegration
 {
     public static function register(): void
@@ -65,6 +67,7 @@ class WooCommerceIntegration
         }
         update_user_meta( $user_id, 'ap_membership_level', 'Free' );
         update_user_meta( $user_id, 'ap_membership_expires', current_time('timestamp') );
+        IntegrationHooks::membershipDowngraded( $user_id, 'Free' );
 
         wp_mail(
             $user->user_email,
@@ -91,6 +94,7 @@ class WooCommerceIntegration
         $days  = in_array( $level, ['Basic','Pro'], true ) ? 30 : 365;
         $expiry = strtotime( "+{$days} days", current_time('timestamp') );
         update_user_meta( $user_id, 'ap_membership_expires', $expiry );
+        IntegrationHooks::membershipUpgraded( $user_id, $level );
 
         wp_mail(
             $user->user_email,
