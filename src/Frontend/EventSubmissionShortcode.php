@@ -225,6 +225,26 @@ class EventSubmissionShortcode {
             return;
         }
 
+        // Verify the organization belongs to the current user
+        $user_orgs = get_posts([
+            'post_type'   => 'artpulse_org',
+            'author'      => $user_id,
+            'numberposts' => -1,
+        ]);
+        $authorized = array_map('intval', wp_list_pluck($user_orgs, 'ID'));
+        $meta_org = intval(get_user_meta($user_id, 'ap_organization_id', true));
+        if ($meta_org) {
+            $authorized[] = $meta_org;
+        }
+        if (!in_array($event_org, $authorized, true)) {
+            if (function_exists('wc_add_notice')) {
+                wc_add_notice('Invalid organization selected.', 'error');
+            } else {
+                wp_die('Invalid organization selected.');
+            }
+            return;
+        }
+
         $post_id = wp_insert_post([
             'post_type'   => 'artpulse_event',
             'post_status' => 'pending',
