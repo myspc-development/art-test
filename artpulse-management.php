@@ -188,7 +188,7 @@ function ap_enqueue_admin_styles($hook) {
     if (strpos($hook, 'artpulse') !== false) {
         wp_enqueue_style(
             'ap-admin-ui',
-            plugin_dir_url(__FILE__) . 'assets/css/ap-core.css',
+            plugin_dir_url(__FILE__) . 'assets/css/ap-style.css',
             [],
             '1.0'
         );

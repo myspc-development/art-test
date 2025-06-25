@@ -39,7 +39,7 @@ class UserDashboardManager
         ]);
         wp_enqueue_style(
             'ap-user-dashboard-css',
-            plugins_url('assets/css/ap-user-dashboard.css', __FILE__),
+            plugins_url('assets/css/ap-style.css', __FILE__),
             [],
             '1.0.0'
         );
@@ -162,12 +162,12 @@ echo "✅ Created assets/js/ap-user-dashboard.js"
 
 # 3) Create the CSS
 mkdir -p "$CSS_DIR"
-cat > "$CSS_DIR/ap-user-dashboard.css" << 'EOF'
+cat >> "$CSS_DIR/ap-style.css" << 'EOF'
 .ap-user-dashboard { padding: 20px; background: #f9f9f9; border-radius: 6px; }
 .ap-user-dashboard h2 { margin-top: 1.5em; font-size: 1.5rem; }
 .ap-user-dashboard ul { list-style: disc; margin-left: 20px; }
 EOF
-echo "✅ Created assets/css/ap-user-dashboard.css"
+echo "✅ Appended dashboard styles to assets/css/ap-style.css"
 
 # 4) Hook into plugin bootstrap
 if ! grep -q "UserDashboardManager::register" "$MAIN_FILE"; then
@@ -179,6 +179,6 @@ fi
 echo "🎉 Phase 6 scaffolding complete!"
 echo
 echo "Next: commit & push:"
-echo "  git add src/Core/UserDashboardManager.php assets/js/ap-user-dashboard.js assets/css/ap-user-dashboard.css artpulse-management.php"
+echo "  git add src/Core/UserDashboardManager.php assets/js/ap-user-dashboard.js assets/css/ap-style.css artpulse-management.php"
 echo "  git commit -m \"Phase 6: scaffold user/profile dashboard\""
 echo "  ./push-with-pat.sh"
