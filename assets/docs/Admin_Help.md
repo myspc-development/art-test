@@ -81,6 +81,7 @@ The plugin registers the following shortcodes:
 | `[ap_submission_form]` | Generic submission form (`post_type` attribute selects type). |
 | `[ap_submit_event]` | Form to submit a new event. |
 | `[ap_submit_organization]` | Form to submit a new organization. |
+| `[ap_submit_artist]` | Form to submit a new artist profile. |
 | `[ap_user_dashboard]` | Member dashboard with calendar and favorites. |
 | `[ap_user_profile id="1" show_social="true" show_membership="true" show_completeness="true"]` | Display a user profile with optional sections. |
 

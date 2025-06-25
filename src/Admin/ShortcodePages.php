@@ -33,6 +33,7 @@ class ShortcodePages
             '[ap_user_dashboard]'        => __('Member Dashboard', 'artpulse'),
             '[ap_profile_edit]'          => __('Edit Profile', 'artpulse'),
             '[ap_submit_organization]'   => __('Submit Organization', 'artpulse'),
+            '[ap_submit_artist]'        => __('Submit Artist', 'artpulse'),
             '[ap_org_dashboard]'         => __('Organization Dashboard', 'artpulse'),
             '[ap_submit_event]'          => __('Submit Event', 'artpulse'),
             '[ap_portfolio_builder]'     => __('Portfolio Builder', 'artpulse'),

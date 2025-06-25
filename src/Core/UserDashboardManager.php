@@ -44,6 +44,7 @@ class UserDashboardManager
             'root'             => esc_url_raw(rest_url()),
             'nonce'            => wp_create_nonce('wp_rest'),
             'orgSubmissionUrl' => self::get_org_submission_url(),
+            'artistSubmissionUrl' => self::get_artist_submission_url(),
             'artistEndpoint'   => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
             'exportEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/export')),
             'deleteEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/delete')),
@@ -221,6 +222,22 @@ class UserDashboardManager
             'post_type'   => 'page',
             'post_status' => 'publish',
             's'           => '[ap_submit_organization]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($pages)) {
+            return get_permalink($pages[0]->ID);
+        }
+
+        return home_url('/');
+    }
+
+    private static function get_artist_submission_url(): string
+    {
+        $pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_submit_artist]',
             'numberposts' => 1,
         ]);
 
