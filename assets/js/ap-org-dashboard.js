@@ -48,7 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-  openBtn?.addEventListener('click', () => modal?.classList.add('open'));
+  openBtn?.addEventListener('click', () => {
+    if (APOrgDashboard.eventFormUrl) {
+      window.location.href = APOrgDashboard.eventFormUrl;
+    } else {
+      modal?.classList.add('open');
+    }
+  });
   closeBtn?.addEventListener('click', () => modal?.classList.remove('open'));
 
   form?.addEventListener('submit', (e) => {
