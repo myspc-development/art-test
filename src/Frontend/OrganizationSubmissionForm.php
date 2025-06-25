@@ -15,10 +15,6 @@ class OrganizationSubmissionForm {
             ap_enqueue_global_styles();
         }
 
-        if (!wp_style_is('ap-style', 'enqueued')) {
-            wp_enqueue_style('ap-style');
-        }
-
         wp_enqueue_script('ap-org-submission-js');
 
         $fields = \ArtPulse\Admin\MetaBoxesOrganisation::get_registered_org_meta_fields();
