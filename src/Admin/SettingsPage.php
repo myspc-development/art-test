@@ -115,6 +115,11 @@ class SettingsPage
         $user_id = get_current_user_id();
         if ($user_id) {
             update_user_meta($user_id, 'last_logout', current_time('mysql'));
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+            update_user_meta($user_id, 'last_logout_ip', $ip);
+            if (class_exists('\\ArtPulse\\Admin\\LoginEventsPage') && method_exists('\\ArtPulse\\Admin\\LoginEventsPage', 'record_logout')) {
+                \ArtPulse\Admin\LoginEventsPage::record_logout($user_id);
+            }
         }
     }
 
