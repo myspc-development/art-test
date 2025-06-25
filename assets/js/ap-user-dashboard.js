@@ -60,7 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const upgrade = document.getElementById('ap-upgrade-options');
     if (upgrade) {
-      if (data.artist_request_pending) {
+      if (data.org_request_pending) {
+        upgrade.textContent = apL10n?.org_pending || 'Organization upgrade request pending.';
+      } else if (data.artist_request_pending) {
         upgrade.textContent = apL10n?.artist_pending || 'Artist upgrade request pending.';
       } else {
         const artistBtn = document.createElement('button');
