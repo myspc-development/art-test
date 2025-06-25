@@ -21,8 +21,8 @@ class MyFollowsShortcode {
         ]);
         if (!ap_styles_disabled()) {
             wp_enqueue_style(
-                'ap-directory-css',
-                plugins_url('assets/css/ap-directory.css', ARTPULSE_PLUGIN_FILE),
+                'ap-style',
+                plugins_url('assets/css/ap-style.css', ARTPULSE_PLUGIN_FILE),
                 [],
                 '1.0.0'
             );

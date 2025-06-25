@@ -163,8 +163,8 @@ function ap_enqueue_global_styles() {
 
     if (($bypass || ap_page_has_artpulse_shortcode()) && !ap_styles_disabled()) {
         wp_enqueue_style(
-            'ap-global-ui',
-            plugin_dir_url(__FILE__) . 'assets/css/ap-core.css',
+            'ap-style',
+            plugin_dir_url(__FILE__) . 'assets/css/ap-style.css',
             [],
             '1.0'
         );
@@ -172,7 +172,7 @@ function ap_enqueue_global_styles() {
         $accent = ap_get_accent_color();
         $hover  = ap_adjust_color_brightness($accent, -0.1);
         wp_add_inline_style(
-            'ap-global-ui',
+            'ap-style',
             ":root { --ap-primary-color: {$accent}; --ap-primary-hover: {$hover}; }"
         );
     }

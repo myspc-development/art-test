@@ -136,8 +136,8 @@ class EnqueueAssets {
         // Check if they are already enqueued in the frontend, if not, enqueue them here
         if (!wp_script_is('ap-user-dashboard', 'enqueued')) {
             wp_enqueue_style(
-                'ap-user-dashboard-css',
-                $plugin_url . '/assets/css/ap-user-dashboard.css',
+                'ap-style',
+                $plugin_url . '/assets/css/ap-style.css',
                 [],
                 '1.0.0'
             );
@@ -251,15 +251,8 @@ class EnqueueAssets {
 
         if (!ap_styles_disabled()) {
             wp_enqueue_style(
-                'ap-forms-css',
-                $plugin_url . '/assets/css/ap-forms.css',
-                [],
-                '1.0.0'
-            );
-
-            wp_enqueue_style(
-                'ap-directory-css',
-                $plugin_url . '/assets/css/ap-directory.css',
+                'ap-style',
+                $plugin_url . '/assets/css/ap-style.css',
                 [],
                 '1.0.0'
             );
