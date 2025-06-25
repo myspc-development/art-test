@@ -46,6 +46,10 @@ Use `[ap_login]` to display the front-end login form.
 
 Use `[ap_register]` to display a standalone registration form for new users. Signing up through this form automatically grants the “Free” membership level. After submitting the form a confirmation message appears and the user is redirected to their dashboard.
 
+## Logout Shortcode
+
+Use `[ap_logout]` to show a logout link. By default the link redirects to the site homepage after logging out. Provide a `redirect` attribute to send users elsewhere.
+
 
 ## Stripe Radar
 

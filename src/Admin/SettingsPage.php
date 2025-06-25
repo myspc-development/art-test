@@ -9,6 +9,7 @@ class SettingsPage
         add_action('admin_menu', [self::class, 'addMenu']);
         add_action('admin_init', [self::class, 'registerSettings']);
         add_action('wp_login', [self::class, 'trackLastLogin'], 10, 2);
+        add_action('wp_logout', [self::class, 'trackLastLogout']);
         add_action('admin_enqueue_scripts', [self::class, 'enqueueAdminAssets']);
     }
     public static function addMenu()
@@ -106,6 +107,14 @@ class SettingsPage
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
         if (class_exists('\\ArtPulse\\Admin\\LoginEventsPage')) {
             \ArtPulse\Admin\LoginEventsPage::add_event($user->ID, $ip);
+        }
+    }
+
+    public static function trackLastLogout(): void
+    {
+        $user_id = get_current_user_id();
+        if ($user_id) {
+            update_user_meta($user_id, 'last_logout', current_time('mysql'));
         }
     }
 

@@ -68,6 +68,7 @@ The plugin registers the following shortcodes:
 | `[ap_filtered_list]` | Display posts filtered by taxonomy. |
 | `[ap_login]` | Front-end login and registration form. |
 | `[ap_register]` | Standalone user registration form granting the Free membership level. |
+| `[ap_logout]` | Log the current user out and redirect them. |
 | `[ap_membership_account]` | Show the logged‑in user’s membership account. |
 | `[ap_membership_purchase level="Pro"]` | Link to purchase a membership. |
 | `[ap_my_events]` | List events submitted by the current user. |
