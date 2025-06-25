@@ -45,7 +45,7 @@ class ProfileEditShortcode {
             <p>
                 <label class="ap-form-label" for="ap_avatar">Custom Avatar</label><br>
                 <?php if ($avatar): ?>
-                    <img src="<?php echo esc_url($avatar); ?>" alt="Current Avatar" style="max-width: 100px;" /><br>
+                    <img src="<?php echo esc_url($avatar); ?>" alt="Current Avatar" width="100" /><br>
                 <?php endif; ?>
                 <input class="ap-input" type="file" name="ap_avatar" id="ap_avatar" accept="image/*">
             </p>

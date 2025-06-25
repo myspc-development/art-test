@@ -78,11 +78,11 @@ class PortfolioBuilder
             </p>
             <p>
                 <button class="ap-form-button" type="button" id="ap-upload-image">Upload Image</button><br>
-                <img id="ap-preview" style="max-width: 200px; display:none;" />
+                <img id="ap-preview" width="200" hidden />
                 <input type="hidden" name="image" />
             </p>
             <p><button class="ap-form-button" type="submit">Save Portfolio Item</button></p>
-            <p id="ap-portfolio-message" class="ap-form-messages" role="status" aria-live="polite" style="color:green;"></p>
+            <p id="ap-portfolio-message" class="ap-form-messages" role="status" aria-live="polite"></p>
         </form>
         <hr>
 

@@ -33,7 +33,7 @@ class OrganizationDashboardShortcode {
         ob_start();
         ?>
         <div class="ap-org-dashboard">
-            <h1 style="font-size:1.5rem;font-weight:600;margin-bottom:1.5rem;"><?php esc_html_e('Organization Dashboard','artpulse'); ?></h1>
+            <h1><?php esc_html_e('Organization Dashboard','artpulse'); ?></h1>
             <nav class="dashboard-nav">
                 <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
                 <a href="#billing"><span class="dashicons dashicons-money"></span><?php esc_html_e('Billing', 'artpulse'); ?></a>
@@ -56,12 +56,12 @@ class OrganizationDashboardShortcode {
             </section>
 
             <section class="dashboard-card" id="events-section">
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <h2 id="events" style="margin:0"><?php _e('Organization Events','artpulse'); ?></h2>
+                <div class="ap-org-header">
+                    <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
                     <button id="ap-add-event-btn" class="ap-form-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
                 </div>
 
-                <div id="ap-org-modal" class="ap-org-modal" style="display:none">
+                <div id="ap-org-modal" class="ap-org-modal">
                     <button id="ap-modal-close" type="button" class="ap-form-button">Close</button>
                     <div id="ap-status-message" class="ap-form-messages" role="status" aria-live="polite"></div>
                 <form id="ap-org-event-form" class="ap-form-container">
@@ -127,7 +127,7 @@ class OrganizationDashboardShortcode {
                 </form>
             </div>
 
-            <form method="get" class="ap-event-filter" style="margin-bottom:1em;">
+            <form method="get" class="ap-event-filter">
                 <label>Status
                     <select name="status" onchange="this.form.submit()">
                         <option value="all" <?php selected($status, 'all'); ?>>All</option>
