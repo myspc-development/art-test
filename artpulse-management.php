@@ -102,6 +102,41 @@ function ap_page_has_artpulse_shortcode() {
     return strpos($post->post_content, '[ap_') !== false;
 }
 
+/**
+ * Get the active theme accent color.
+ *
+ * @return string Hex color string.
+ */
+function ap_get_accent_color() {
+    return get_theme_mod('accent_color', '#0073aa');
+}
+
+/**
+ * Adjust a hex color brightness by the given percentage.
+ *
+ * @param string $hex      Base color in hex format.
+ * @param float  $percent  Percentage to lighten/darken (-1 to 1).
+ * @return string Adjusted hex color.
+ */
+function ap_adjust_color_brightness($hex, $percent) {
+    $hex = ltrim($hex, '#');
+    if (strlen($hex) === 3) {
+        $hex = str_repeat(substr($hex, 0, 1), 2) .
+               str_repeat(substr($hex, 1, 1), 2) .
+               str_repeat(substr($hex, 2, 1), 2);
+    }
+
+    $r = hexdec(substr($hex, 0, 2));
+    $g = hexdec(substr($hex, 2, 2));
+    $b = hexdec(substr($hex, 4, 2));
+
+    $r = max(0, min(255, (int) ($r * (1 + $percent))));
+    $g = max(0, min(255, (int) ($g * (1 + $percent))));
+    $b = max(0, min(255, (int) ($b * (1 + $percent))));
+
+    return sprintf('#%02x%02x%02x', $r, $g, $b);
+}
+
 function ap_enqueue_global_styles() {
     if (!is_admin() && ap_page_has_artpulse_shortcode()) {
         wp_enqueue_style(
@@ -109,6 +144,13 @@ function ap_enqueue_global_styles() {
             plugin_dir_url(__FILE__) . 'assets/css/ap-core.css',
             [],
             '1.0'
+        );
+
+        $accent = ap_get_accent_color();
+        $hover  = ap_adjust_color_brightness($accent, -0.1);
+        wp_add_inline_style(
+            'ap-global-ui',
+            ":root { --ap-primary-color: {$accent}; --ap-primary-hover: {$hover}; }"
         );
     }
 }

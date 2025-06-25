@@ -64,15 +64,18 @@ select.ap-input {
 }
 
 /* Button Styling */
-.ap-form-button {
+.ap-form-button,
+.ap-form-button.nectar-button {
     background-color: var(--ap-primary-color);
     border: none;
     color: var(--ap-bg-color);
-    padding: var(--ap-button-padding);
+    padding: calc(var(--ap-button-padding) * 1.2);
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     margin: 4px 2px;
     cursor: pointer;
     border-radius: var(--ap-border-radius);
@@ -80,7 +83,9 @@ select.ap-input {
 }
 
 .ap-form-button:hover,
-.ap-form-button:focus {
+.ap-form-button:focus,
+.ap-form-button.nectar-button:hover,
+.ap-form-button.nectar-button:focus {
     background-color: var(--ap-primary-hover);
     box-shadow: 0 0 0 2px var(--ap-primary-color);
 }
