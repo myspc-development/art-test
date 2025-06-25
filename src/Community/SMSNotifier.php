@@ -47,6 +47,7 @@ class SMSNotifier {
             'link_request_denied'  => 'Your profile link was denied.',
             'follower'             => 'You have a new follower.',
             'favorite'             => 'Your work was favorited.',
+            'favorite_added'      => 'Favorite saved.',
             'comment'              => 'New comment received.',
             'membership_upgrade'   => 'Membership upgraded.',
             'membership_downgrade' => 'Membership downgraded.',

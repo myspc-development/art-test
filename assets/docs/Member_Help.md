@@ -19,6 +19,7 @@ graph TD
 
 ## Following and Notifications
 - Click the heart icon to favorite artworks or follow other members.
+- When you favorite an event, a "favorite added" notification confirms it was saved.
 - Manage notifications from your user dashboard to stay informed of new activity.
 
 ## Submitting Events and Artworks
