@@ -32,7 +32,7 @@ class OrganizationDashboardShortcode {
 
         ob_start();
         ?>
-        <div class="ap-org-dashboard">
+        <div class="ap-dashboard">
             <h1><?php esc_html_e('Organization Dashboard','artpulse'); ?></h1>
             <nav class="dashboard-nav">
                 <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
@@ -42,21 +42,21 @@ class OrganizationDashboardShortcode {
                 <a href="#profile"><span class="dashicons dashicons-admin-settings"></span><?php esc_html_e('Profile', 'artpulse'); ?></a>
             </nav>
 
-            <section class="dashboard-card" id="membership-section">
+            <section class="ap-widget" id="membership-section">
                 <h2 id="membership"><?php _e('Membership','artpulse'); ?></h2>
                 <div id="ap-membership-info"></div>
                 <div id="ap-membership-actions"></div>
             </section>
 
-            <section class="dashboard-card" id="billing-section">
+            <section class="ap-widget" id="billing-section">
                 <h2 id="billing"><?php _e('Next Payment','artpulse'); ?></h2>
                 <div id="ap-next-payment"></div>
                 <h3 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h3>
                 <div id="ap-transactions"></div>
             </section>
 
-            <section class="dashboard-card" id="events-section">
-                <div class="ap-org-header">
+            <section class="ap-widget" id="events-section">
+                <div class="ap-widget-header">
                     <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
                     <button id="ap-add-event-btn" class="ap-form-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
                 </div>
@@ -164,12 +164,12 @@ class OrganizationDashboardShortcode {
             ?>
             </section>
 
-            <section class="dashboard-card" id="analytics-section">
+            <section class="ap-widget" id="analytics-section">
                 <h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2>
                 <div id="ap-org-analytics"></div>
             </section>
 
-            <section class="dashboard-card" id="profile-section">
+            <section class="ap-widget" id="profile-section">
                 <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
                 <?php echo do_shortcode('[ap_org_profile_edit]'); ?>
             </section>

@@ -75,8 +75,8 @@ class UserDashboardManager
         // Dashboard styles
         if (!ap_styles_disabled()) {
             wp_enqueue_style(
-                'ap-user-dashboard-css',
-                plugins_url('assets/css/ap-user-dashboard.css', ARTPULSE_PLUGIN_FILE),
+                'ap-style',
+                plugins_url('assets/css/ap-style.css', ARTPULSE_PLUGIN_FILE),
                 ['dashicons'],
                 '1.0.0'
             );
@@ -277,7 +277,7 @@ class UserDashboardManager
         $show_notifications = !empty(array_intersect(['member','artist','organization','administrator'], $roles));
 
         ob_start(); ?>
-        <div class="ap-user-dashboard">
+        <div class="ap-dashboard">
             <nav class="dashboard-nav">
                 <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
                 <?php if ($show_billing) : ?>

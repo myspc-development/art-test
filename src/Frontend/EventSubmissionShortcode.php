@@ -16,8 +16,8 @@ class EventSubmissionShortcode {
             ap_enqueue_global_styles();
         }
 
-        // Use the common form styles shared across the plugin
-        wp_enqueue_style('ap-forms-css');
+        // Use the unified global style sheet
+        wp_enqueue_style('ap-style');
     }
 
     public static function render() {
