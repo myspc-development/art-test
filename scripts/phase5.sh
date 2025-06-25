@@ -38,7 +38,7 @@ class DirectoryManager {
         ]);
         wp_enqueue_style(
             'ap-directory-css',
-            plugins_url('assets/css/ap-directory.css', __FILE__),
+            plugins_url('assets/css/ap-style.css', __FILE__),
             [],
             '1.0.0'
         );
@@ -150,15 +150,15 @@ cat > "$JS_DIR/ap-directory.js" << 'EOF'
 EOF
 echo "✅ Created assets/js/ap-directory.js"
 
-# 3) assets/css/ap-directory.css
-cat > "$CSS_DIR/ap-directory.css" << 'EOF'
+# 3) append styles to unified CSS
+cat >> "$CSS_DIR/ap-style.css" << 'EOF'
 .ap-directory { margin-bottom: 2em; }
 .ap-directory-filters { display:flex; gap:10px; margin-bottom:1em; align-items:center; }
 .ap-directory-results { display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:20px; }
 .ap-directory-results .portfolio-item img { width:100%; border-radius:6px; }
 .ap-directory-results .portfolio-item h3 { text-align:center; margin-top:0.5em; }
 EOF
-echo "✅ Created assets/css/ap-directory.css"
+echo "✅ Appended directory styles to assets/css/ap-style.css"
 
 # 4) Hook into bootstrap
 if ! grep -q "DirectoryManager::register" "$MAIN_FILE"; then
@@ -170,6 +170,6 @@ fi
 echo "🎉 Phase 5 scaffolding complete!"
 echo
 echo "Next: commit & push:"
-echo "  git add src/Core/DirectoryManager.php assets/js/ap-directory.js assets/css/ap-directory.css $MAIN_FILE"
+echo "  git add src/Core/DirectoryManager.php assets/js/ap-directory.js assets/css/ap-style.css $MAIN_FILE"
 echo "  git commit -m \"Phase 5: scaffold directory & filtering UI\""
 echo "  ./push-with-pat.sh"

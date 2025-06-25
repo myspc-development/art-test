@@ -33,7 +33,7 @@ cat > "$BLOCK_DIR/block.json" <<'EOF'
   "editorScript": "file:./index.js",
   "editorStyle": "file:./editor.css",
   "viewScript": "file:../../assets/js/ap-directory.js",
-  "style": "file:../../assets/css/ap-directory.css"
+  "style": "file:../../assets/css/ap-style.css"
 }
 EOF
 
