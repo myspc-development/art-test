@@ -4,6 +4,16 @@ while ( have_posts() ) : the_post(); ?>
   <div class="nectar-portfolio-single-media">
     <?php the_post_thumbnail('full',['class'=>'img-responsive']); ?>
   </div>
+  <?php
+    $gallery_ids = get_post_meta(get_the_ID(), '_ap_submission_images', true);
+    if (is_array($gallery_ids) && count($gallery_ids) > 1):
+      echo '<div class="artwork-gallery">';
+      foreach (array_slice($gallery_ids, 1) as $img_id) {
+        echo wp_get_attachment_image($img_id, 'large');
+      }
+      echo '</div>';
+    endif;
+  ?>
   <h1 class="entry-title"><?php the_title(); ?></h1>
   <div class="entry-content"><?php the_content(); ?></div>
   <?php 
