@@ -86,6 +86,8 @@ The plugin registers the following shortcodes:
 
 Copy any of these into a page or post to expose ArtPulse functionality.
 
+The **Settings → Shortcode Pages** screen lets you automatically generate pages containing any of the above shortcodes. Use the checkboxes to pick which pages to create.
+
 When an organization submission is approved in the admin area, the organization
 post is linked to the submitting user's account. This lets the user manage the
 organization from the front‑end dashboard.
