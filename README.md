@@ -67,3 +67,17 @@ On activation the plugin adds indexes to core meta tables if they don't already 
 - **wp_postmeta**: `ap_postmeta_key_value` on `(meta_key, meta_value)`
 
 These indexes improve lookups for membership-related keys like `ap_organization_id`, `ap_membership_level` and `ap_membership_expires`.
+
+## Shortcode Pages Tab
+
+Under **Settings → Shortcode Pages** you can automatically generate WordPress pages containing any of the plugin's shortcodes. Choose the shortcodes you want and the plugin creates and manages the corresponding pages for you.
+
+## Additional Settings
+
+Recent updates introduce new fields for location lookups and performance tweaks:
+
+- **Geonames Username** – Username for the Geonames API.
+- **Google Places API Key** – Key for Google Places requests.
+- **Enable Service Worker** – Adds a basic service worker for offline caching.
+
+For full usage details refer to the [Admin Guide](assets/docs/Admin_Help.md) and [Member Guide](assets/docs/Member_Help.md).
