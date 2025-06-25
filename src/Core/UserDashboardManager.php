@@ -283,6 +283,15 @@ class UserDashboardManager
             return '<p>' . __('Please log in to view your dashboard.', 'artpulse') . '</p>';
         }
 
+        $atts = shortcode_atts([
+            'show_forms' => false,
+        ], $atts, 'ap_user_dashboard');
+
+        $show_forms = filter_var($atts['show_forms'], FILTER_VALIDATE_BOOLEAN);
+
+        $artist_form = $show_forms ? do_shortcode('[ap_submit_artist]') : '';
+        $org_form    = $show_forms ? do_shortcode('[ap_submit_organization]') : '';
+
         $user           = wp_get_current_user();
         $roles          = (array) $user->roles;
         $profile_edit_url = self::get_profile_edit_url();
@@ -323,6 +332,12 @@ class UserDashboardManager
             <a class="ap-edit-profile-link ap-form-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
             <h2 id="upgrade"><?php _e('Upgrade Your Account','artpulse'); ?></h2>
             <div id="ap-upgrade-options"></div>
+            <?php if ($show_forms) : ?>
+            <div class="ap-dashboard-forms">
+                <?php echo $artist_form; ?>
+                <?php echo $org_form; ?>
+            </div>
+            <?php endif; ?>
             <?php if ($show_content) : ?>
             <h2 id="content"><?php _e('Your Content','artpulse'); ?></h2>
             <div id="ap-user-content"></div>
