@@ -48,7 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const result = await submitForm(loginForm, 'ap_do_login', loginMsg);
       if (result.res.ok && result.data.success) {
-        window.location.reload();
+        const target = result.data.data && result.data.data.dashboardUrl ? result.data.data.dashboardUrl : APLogin.dashboardUrl;
+        window.location.href = target;
       }
     });
   }

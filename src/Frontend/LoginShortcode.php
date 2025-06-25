@@ -74,7 +74,18 @@ class LoginShortcode
             wp_send_json_error(['message' => $user->get_error_message()]);
         }
 
-        wp_send_json_success(['message' => __('Login successful', 'artpulse-management')]);
+        $roles  = (array) $user->roles;
+        $target = \ArtPulse\Core\Plugin::get_user_dashboard_url();
+        if (in_array('organization', $roles, true)) {
+            $target = \ArtPulse\Core\Plugin::get_org_dashboard_url();
+        } elseif (in_array('artist', $roles, true)) {
+            $target = \ArtPulse\Core\Plugin::get_artist_dashboard_url();
+        }
+
+        wp_send_json_success([
+            'message'       => __('Login successful', 'artpulse-management'),
+            'dashboardUrl'  => $target,
+        ]);
     }
 
     public static function ajax_register(): void

@@ -91,6 +91,7 @@ class Plugin
         \ArtPulse\Core\MembershipManager::register();
         \ArtPulse\Core\AccessControlManager::register();
         \ArtPulse\Core\AdminAccessManager::register();
+        \ArtPulse\Core\LoginRedirectManager::register();
         \ArtPulse\Core\DirectoryManager::register();
         \ArtPulse\Core\UserDashboardManager::register();
         \ArtPulse\Core\OrgDashboardManager::register();
@@ -345,6 +346,25 @@ class Plugin
             'post_type'   => 'page',
             'post_status' => 'publish',
             's'           => '[ap_org_dashboard]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($pages)) {
+            return get_permalink($pages[0]->ID);
+        }
+
+        return home_url('/');
+    }
+
+    /**
+     * Locate the page containing the artist dashboard shortcode.
+     */
+    public static function get_artist_dashboard_url(): string
+    {
+        $pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_artist_dashboard]',
             'numberposts' => 1,
         ]);
 
