@@ -120,6 +120,7 @@ class Plugin
         \ArtPulse\Frontend\PortfolioBuilder::register();
         \ArtPulse\Frontend\LoginShortcode::register();
         \ArtPulse\Frontend\RegistrationShortcode::register();
+        \ArtPulse\Frontend\LogoutShortcode::register();
         \ArtPulse\Admin\MetaBoxesRelationship::register();
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
         \ArtPulse\Admin\ApprovalManager::register();
