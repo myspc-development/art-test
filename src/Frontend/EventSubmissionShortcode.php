@@ -11,6 +11,11 @@ class EventSubmissionShortcode {
     }
 
     public static function enqueue_scripts() {
+        // Ensure the core UI styles are loaded along with the form styles
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
+        }
+
         // Use the common form styles shared across the plugin
         wp_enqueue_style('ap-forms-css');
     }
