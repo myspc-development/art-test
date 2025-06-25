@@ -115,6 +115,7 @@ class Plugin
         \ArtPulse\Frontend\OrganizationEventForm::register();
         \ArtPulse\Frontend\OrganizationSubmissionForm::register();
         \ArtPulse\Frontend\SubmitArtistForm::register();
+        \ArtPulse\Frontend\ArtistDashboardShortcode::register();
         \ArtPulse\Frontend\UserProfileShortcode::register();
         \ArtPulse\Frontend\ProfileEditShortcode::register();
         \ArtPulse\Frontend\OrgProfileEditShortcode::register();
@@ -244,6 +245,21 @@ class Plugin
         );
 
         wp_localize_script('ap-artist-submission-js', 'APSubmission', [
+            'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
+            'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
+            'nonce'         => wp_create_nonce('wp_rest'),
+            'dashboardUrl'  => self::get_user_dashboard_url(),
+        ]);
+
+        wp_enqueue_script(
+            'ap-artwork-submission-js',
+            plugins_url('assets/js/ap-artwork-submission.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-artwork-submission-js', 'APSubmission', [
             'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
             'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
             'nonce'         => wp_create_nonce('wp_rest'),
