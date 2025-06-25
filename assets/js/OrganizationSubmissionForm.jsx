@@ -171,7 +171,7 @@ export default function OrganizationSubmissionForm() {
     <form onSubmit={handleSubmit} className="ap-form-container" encType="multipart/form-data">
       <div className="ap-form-messages" role="status" aria-live="polite">{message}</div>
 
-      <p>
+      <div className="form-group">
         <label className="ap-form-label" htmlFor="ap_org_title">Organization Name</label>
         <input
           id="ap_org_title"
@@ -181,9 +181,9 @@ export default function OrganizationSubmissionForm() {
           onChange={e => setTitle(e.target.value)}
           required
         />
-      </p>
+      </div>
 
-      <p>
+      <div className="form-group">
         <label className="ap-form-label" htmlFor="ap_org_country">Country</label>
         <input
           id="ap_org_country"
@@ -193,9 +193,9 @@ export default function OrganizationSubmissionForm() {
           onChange={e => setCountry(e.target.value)}
           required
         />
-      </p>
+      </div>
 
-      <p>
+      <div className="form-group">
         <label className="ap-form-label" htmlFor="ap_org_state">State/Province</label>
         <input
           id="ap_org_state"
@@ -204,9 +204,9 @@ export default function OrganizationSubmissionForm() {
           value={stateProv}
           onChange={e => setStateProv(e.target.value)}
         />
-      </p>
+      </div>
 
-      <p>
+      <div className="form-group">
         <label className="ap-form-label" htmlFor="ap_org_city">City</label>
         <input
           id="ap_org_city"
@@ -215,10 +215,10 @@ export default function OrganizationSubmissionForm() {
           value={city}
           onChange={e => setCity(e.target.value)}
         />
-      </p>
+      </div>
 
       {ORG_FIELDS.map(field => (
-        <p key={field.name}>
+        <div className="form-group" key={field.name}>
           <label className="ap-form-label" htmlFor={field.name}>{field.label}</label>
           {field.type === 'textarea' && (
             <textarea id={field.name} name={field.name} className="ap-input" required={field.required}></textarea>
@@ -247,10 +247,10 @@ export default function OrganizationSubmissionForm() {
           {['textarea','checkbox','select','media'].indexOf(field.type) === -1 && (
             <input id={field.name} className="ap-input" type={field.type} name={field.name} required={field.required} />
           )}
-        </p>
+        </div>
       ))}
 
-      <p>
+      <div className="form-group">
         <label className="ap-form-label" htmlFor="ap_org_images">Images (max 5)</label>
         <input
           id="ap_org_images"
@@ -260,12 +260,12 @@ export default function OrganizationSubmissionForm() {
           accept="image/*"
           onChange={handleFileChange}
         />
-      </p>
+      </div>
       <input type="hidden" value={addressComponents} readOnly name="address_components" />
 
-      <div className="flex gap-2 flex-wrap">
+      <div className="ap-form-group">
         {previews.map((src, i) => (
-          <img key={i} src={src} alt="" className="w-24 h-24 object-cover rounded border" />
+          <img key={i} src={src} alt="" className="ap-image-preview" />
         ))}
       </div>
 
