@@ -77,6 +77,10 @@ class SubmissionRestController
             return $post_id;
         }
 
+        if ( 'artpulse_org' === $post_type && 'pending' === $status ) {
+            update_user_meta( $user->ID, 'ap_pending_organization_id', $post_id );
+        }
+
         $meta_fields = self::get_meta_fields_for( $post_type );
         foreach ( $meta_fields as $field_key => $meta_key ) {
             if ( isset( $params[ $field_key ] ) ) {
