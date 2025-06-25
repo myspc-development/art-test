@@ -17,6 +17,8 @@ class RestRoutes
                 'args'                => [
                     'city'   => [ 'type' => 'string', 'required' => false ],
                     'region' => [ 'type' => 'string', 'required' => false ],
+                    'lat'    => [ 'type' => 'number', 'required' => false ],
+                    'lng'    => [ 'type' => 'number', 'required' => false ],
                 ],
             ]);
 
@@ -63,6 +65,22 @@ class RestRoutes
     {
         $city   = sanitize_text_field($request->get_param('city'));
         $region = sanitize_text_field($request->get_param('region'));
+        $lat    = $request->get_param('lat');
+        $lng    = $request->get_param('lng');
+
+        if ((null === $city || $city === '') || (null === $region || $region === '')) {
+            if (is_numeric($lat) && is_numeric($lng)) {
+                $nearest = self::nearest_city(floatval($lat), floatval($lng));
+                if ($nearest) {
+                    if (!$city) {
+                        $city = $nearest['name'];
+                    }
+                    if (!$region) {
+                        $region = $nearest['state'];
+                    }
+                }
+            }
+        }
 
         $args = [];
         $meta_query = [];
@@ -159,5 +177,49 @@ class RestRoutes
         }
 
         return $output;
+    }
+
+    private static function nearest_city(float $lat, float $lng): ?array
+    {
+        $cities = [
+            ['name' => 'Los Angeles',   'state' => 'CA',  'lat' => 34.0522, 'lng' => -118.2437],
+            ['name' => 'San Francisco', 'state' => 'CA',  'lat' => 37.7749, 'lng' => -122.4194],
+            ['name' => 'New York City', 'state' => 'NY',  'lat' => 40.7128, 'lng' => -74.0060],
+            ['name' => 'Buffalo',       'state' => 'NY',  'lat' => 42.8864, 'lng' => -78.8784],
+            ['name' => 'Toronto',       'state' => 'ON',  'lat' => 43.6532, 'lng' => -79.3832],
+            ['name' => 'Ottawa',        'state' => 'ON',  'lat' => 45.4215, 'lng' => -75.6972],
+            ['name' => 'Montreal',      'state' => 'QC',  'lat' => 45.5019, 'lng' => -73.5674],
+            ['name' => 'Quebec City',   'state' => 'QC',  'lat' => 46.8139, 'lng' => -71.2080],
+            ['name' => 'London',        'state' => 'ENG', 'lat' => 51.5074, 'lng' => -0.1278],
+            ['name' => 'Manchester',    'state' => 'ENG', 'lat' => 53.4808, 'lng' => -2.2426],
+            ['name' => 'Edinburgh',     'state' => 'SCT', 'lat' => 55.9533, 'lng' => -3.1883],
+            ['name' => 'Glasgow',       'state' => 'SCT', 'lat' => 55.8642, 'lng' => -4.2518],
+            ['name' => 'Munich',        'state' => 'BY',  'lat' => 48.1351, 'lng' => 11.5820],
+            ['name' => 'Berlin',        'state' => 'BE',  'lat' => 52.5200, 'lng' => 13.4050],
+            ['name' => 'Paris',         'state' => 'IDF', 'lat' => 48.8566, 'lng' => 2.3522],
+        ];
+
+        $nearest = null;
+        $min     = PHP_FLOAT_MAX;
+
+        foreach ($cities as $city) {
+            $dist = self::haversine_distance($lat, $lng, $city['lat'], $city['lng']);
+            if ($dist < $min) {
+                $min     = $dist;
+                $nearest = $city;
+            }
+        }
+
+        return $nearest;
+    }
+
+    private static function haversine_distance(float $lat1, float $lng1, float $lat2, float $lng2): float
+    {
+        $earth = 6371; // km
+        $dLat  = deg2rad($lat2 - $lat1);
+        $dLon  = deg2rad($lng2 - $lng1);
+        $a     = sin($dLat / 2) * sin($dLat / 2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) * sin($dLon / 2);
+        $c     = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        return $earth * $c;
     }
 }
