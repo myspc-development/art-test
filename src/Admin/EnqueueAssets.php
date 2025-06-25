@@ -134,7 +134,7 @@ class EnqueueAssets {
 
         // Enqueue Core-specific admin assets (if not already enqueued on frontend)
         // Check if they are already enqueued in the frontend, if not, enqueue them here
-        if (!wp_script_is('ap-user-dashboard', 'enqueued')) {
+        if (!wp_script_is('ap-user-dashboard-js', 'enqueued')) {
             wp_enqueue_style(
                 'ap-style',
                 $plugin_url . '/assets/css/ap-style.css',
@@ -304,7 +304,7 @@ class EnqueueAssets {
         }
 
         wp_enqueue_script(
-            'ap-user-dashboard',
+            'ap-user-dashboard-js',
             $plugin_url . '/assets/js/ap-user-dashboard.js',
             ['jquery'],
             '1.0.0',
