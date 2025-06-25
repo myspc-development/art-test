@@ -12,6 +12,15 @@ function esc_html_e($text, $domain = null) { }
 function __($text, $domain = null) { return $text; }
 function _e($text, $domain = null) { }
 function esc_url($url) { return $url; }
+function do_shortcode($code) {
+    if ($code === '[ap_submit_artist]') {
+        return '<form class="ap-artist-submission-form"></form>';
+    }
+    if ($code === '[ap_submit_organization]') {
+        return '<form class="ap-org-submission-form"></form>';
+    }
+    return '';
+}
 
 namespace ArtPulse\Core\Tests;
 
@@ -60,5 +69,12 @@ class UserDashboardManagerTest extends TestCase
         $this->assertStringContainsString('id="ap-user-content"', $html);
         $this->assertStringContainsString('id="ap-dashboard-notifications"', $html);
         $this->assertStringContainsString('id="ap-membership-actions"', $html);
+    }
+
+    public function test_forms_render_when_enabled() {
+        Stub::$roles = ['member'];
+        $html = UserDashboardManager::renderDashboard(['show_forms' => true]);
+        $this->assertStringContainsString('ap-artist-submission-form', $html);
+        $this->assertStringContainsString('ap-org-submission-form', $html);
     }
 }
