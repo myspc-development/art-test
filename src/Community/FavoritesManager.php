@@ -5,7 +5,7 @@ use ArtPulse\Community\NotificationManager;
 
 
 class FavoritesManager {
-    public static function add_favorite($user_id, $object_id, $object_type) {
+    public static function add_favorite($user_id, $object_id, $object_type, $notify_user = false) {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_favorites';
         $wpdb->replace($table, [
@@ -25,6 +25,18 @@ class FavoritesManager {
                 $object_id,
                 $user_id,
                 sprintf('Your %s "%s" was favorited!', $object_type, $title)
+            );
+        }
+
+        // --- Optionally notify the user that they favorited something ---
+        if ($notify_user) {
+            $title = self::get_object_title($object_id, $object_type);
+            NotificationManager::add(
+                $user_id,
+                'favorite_added',
+                $object_id,
+                $owner_id,
+                sprintf('You favorited the %s "%s".', $object_type, $title)
             );
         }
     }
