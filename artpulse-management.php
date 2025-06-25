@@ -79,3 +79,35 @@ function artpulse_create_custom_table() {
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
 }
+
+/**
+ * Enqueue global styles on the frontend.
+ */
+function ap_enqueue_global_styles() {
+    if (!is_admin()) {
+        wp_enqueue_style(
+            'ap-global-ui',
+            plugin_dir_url(__FILE__) . 'assets/css/ap-core.css',
+            [],
+            '1.0'
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'ap_enqueue_global_styles');
+
+/**
+ * Optionally enqueue styles for the admin area.
+ *
+ * @param string $hook Current admin page hook.
+ */
+function ap_enqueue_admin_styles($hook) {
+    if (strpos($hook, 'artpulse') !== false) {
+        wp_enqueue_style(
+            'ap-admin-ui',
+            plugin_dir_url(__FILE__) . 'assets/css/ap-core.css',
+            [],
+            '1.0'
+        );
+    }
+}
+add_action('admin_enqueue_scripts', 'ap_enqueue_admin_styles');
