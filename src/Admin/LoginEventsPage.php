@@ -30,12 +30,13 @@ class LoginEventsPage
             header('Content-Type: text/csv');
             header('Content-Disposition: attachment; filename="ap-login-events.csv"');
             $output = fopen('php://output', 'w');
-            fputcsv($output, ['User', 'Timestamp', 'IP']);
+            fputcsv($output, ['User', 'Login', 'Logout', 'IP']);
             foreach ($events as $event) {
                 $user = get_user_by('ID', $event->user_id);
                 fputcsv($output, [
                     $user ? $user->user_login : $event->user_id,
                     $event->login_at,
+                    $event->logout_at,
                     $event->ip_address,
                 ]);
             }
@@ -50,7 +51,8 @@ class LoginEventsPage
                 <thead>
                     <tr>
                         <th><?php esc_html_e('User', 'artpulse'); ?></th>
-                        <th><?php esc_html_e('Timestamp', 'artpulse'); ?></th>
+                        <th><?php esc_html_e('Login', 'artpulse'); ?></th>
+                        <th><?php esc_html_e('Logout', 'artpulse'); ?></th>
                         <th><?php esc_html_e('IP Address', 'artpulse'); ?></th>
                     </tr>
                 </thead>
@@ -59,11 +61,12 @@ class LoginEventsPage
                     <tr>
                         <td><a href="<?php echo esc_url(get_edit_user_link($event->user_id)); ?>"><?php echo esc_html(get_user_by('ID', $event->user_id)->user_login); ?></a></td>
                         <td><?php echo esc_html(date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($event->login_at))); ?></td>
+                        <td><?php echo esc_html($event->logout_at ? date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($event->logout_at)) : '—'); ?></td>
                         <td><?php echo esc_html($event->ip_address); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 <?php if (empty($events)): ?>
-                    <tr><td colspan="3"><?php esc_html_e('No login events found.', 'artpulse'); ?></td></tr>
+                    <tr><td colspan="4"><?php esc_html_e('No login events found.', 'artpulse'); ?></td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>
@@ -81,6 +84,7 @@ class LoginEventsPage
             user_id BIGINT NOT NULL,
             ip_address VARCHAR(45) NOT NULL,
             login_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            logout_at DATETIME NULL DEFAULT NULL,
             KEY user_id (user_id),
             KEY login_at (login_at)
         ) $charset_collate;";
@@ -97,5 +101,22 @@ class LoginEventsPage
             'ip_address'=> $ip,
             'login_at'  => current_time('mysql'),
         ]);
+    }
+
+    public static function record_logout($user_id)
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_login_events';
+        $event_id = $wpdb->get_var($wpdb->prepare(
+            "SELECT id FROM $table WHERE user_id = %d ORDER BY login_at DESC LIMIT 1",
+            $user_id
+        ));
+        if ($event_id) {
+            $wpdb->update(
+                $table,
+                ['logout_at' => current_time('mysql')],
+                ['id' => $event_id]
+            );
+        }
     }
 }
