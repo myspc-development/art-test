@@ -303,6 +303,22 @@ class EnqueueAssets {
             ]);
         }
 
+        $artist_dashboard_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-artist-dashboard.js';
+        $artist_dashboard_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-artist-dashboard.js';
+        if (file_exists($artist_dashboard_path)) {
+            wp_enqueue_script(
+                'ap-artist-dashboard',
+                $artist_dashboard_url,
+                ['jquery'],
+                '1.0.0',
+                true
+            );
+            wp_localize_script('ap-artist-dashboard', 'APArtistDashboard', [
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'nonce'    => wp_create_nonce('ap_artist_dashboard_nonce'),
+            ]);
+        }
+
         wp_enqueue_script(
             'ap-user-dashboard-js',
             $plugin_url . '/assets/js/ap-user-dashboard.js',
