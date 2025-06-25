@@ -54,6 +54,14 @@ class SettingsPage
             'artpulse-import-export',
             [self::class, 'renderImportExportPage']
         );
+        add_submenu_page(
+            'artpulse-settings',
+            __('Shortcode Pages', 'artpulse'),
+            __('Shortcode Pages', 'artpulse'),
+            'manage_options',
+            'artpulse-shortcode-pages',
+            [\ArtPulse\Admin\ShortcodePages::class, 'render']
+        );
     }
     public static function enqueueAdminAssets($hook)
     {
@@ -267,6 +275,9 @@ class SettingsPage
                 <a href="<?php echo esc_url($base_url . '&tab=import_export'); ?>" class="nav-tab <?php echo $current_tab === 'import_export' ? 'nav-tab-active' : ''; ?>">
                     <?php esc_html_e('Import/Export', 'artpulse'); ?>
                 </a>
+                <a href="<?php echo esc_url($base_url . '&tab=shortcodes'); ?>" class="nav-tab <?php echo $current_tab === 'shortcodes' ? 'nav-tab-active' : ''; ?>">
+                    <?php esc_html_e('Shortcode Pages', 'artpulse'); ?>
+                </a>
             </h2>
             <form method="post" action="options.php">
                 <?php
@@ -324,6 +335,9 @@ class SettingsPage
             <?php elseif ($current_tab === 'import_export') : ?>
             <hr>
             <?php ImportExportTab::render(); ?>
+            <?php elseif ($current_tab === 'shortcodes') : ?>
+            <hr>
+            <?php \ArtPulse\Admin\ShortcodePages::render(); ?>
             <?php endif; ?>
         </div>
         <?php

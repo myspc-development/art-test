@@ -87,6 +87,7 @@ class Plugin
         \ArtPulse\Core\MetaBoxRegistrar::register();
         \ArtPulse\Core\ShortcodeManager::register();
         \ArtPulse\Admin\SettingsPage::register();
+        \ArtPulse\Admin\ShortcodePages::register();
         \ArtPulse\Core\MembershipManager::register();
         \ArtPulse\Core\AccessControlManager::register();
         \ArtPulse\Core\DirectoryManager::register();
