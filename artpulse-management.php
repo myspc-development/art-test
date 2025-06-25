@@ -83,8 +83,27 @@ function artpulse_create_custom_table() {
 /**
  * Enqueue global styles on the frontend.
  */
+/**
+ * Check if the current post content contains any ArtPulse shortcode.
+ *
+ * @return bool
+ */
+function ap_page_has_artpulse_shortcode() {
+    if (!is_singular()) {
+        return false;
+    }
+
+    global $post;
+
+    if (!$post || empty($post->post_content)) {
+        return false;
+    }
+
+    return strpos($post->post_content, '[ap_') !== false;
+}
+
 function ap_enqueue_global_styles() {
-    if (!is_admin()) {
+    if (!is_admin() && ap_page_has_artpulse_shortcode()) {
         wp_enqueue_style(
             'ap-global-ui',
             plugin_dir_url(__FILE__) . 'assets/css/ap-core.css',
