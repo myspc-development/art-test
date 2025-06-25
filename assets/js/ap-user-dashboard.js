@@ -1,6 +1,6 @@
 let favoriteEvents = [];
 document.addEventListener('DOMContentLoaded', () => {
-  const dash = document.querySelector('.ap-user-dashboard');
+  const dash = document.querySelector('.ap-dashboard');
   if (!dash) return;
 
   const exportJsonBtn = document.getElementById('ap-export-json');

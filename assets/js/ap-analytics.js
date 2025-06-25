@@ -23,7 +23,7 @@
 
   // Dashboard load
   document.addEventListener('DOMContentLoaded', () => {
-    const dash = document.querySelector('.ap-user-dashboard');
+    const dash = document.querySelector('.ap-dashboard');
     if ( dash && window.gtag ) {
       gtag('event','user_dashboard_loaded');
     }
