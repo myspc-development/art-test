@@ -46,6 +46,10 @@ Use `[ap_login]` to display the front-end login form.
 
 Use `[ap_register]` to display a standalone registration form for new users. Signing up through this form automatically grants the “Free” membership level. After submitting the form a confirmation message appears and the user is redirected to their dashboard.
 
+## Artist Dashboard
+
+Use `[ap_artist_dashboard]` to provide artists with a private area where they can submit new artworks, see a list of their existing pieces and edit their profile information.
+
 
 ## Stripe Radar
 

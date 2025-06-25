@@ -93,6 +93,7 @@ class Plugin
         \ArtPulse\Core\DirectoryManager::register();
         \ArtPulse\Core\UserDashboardManager::register();
         \ArtPulse\Core\OrgDashboardManager::register();
+        \ArtPulse\Core\ArtistDashboardManager::register();
         \ArtPulse\Core\AnalyticsManager::register();
         \ArtPulse\Core\AnalyticsDashboard::register();
         \ArtPulse\Admin\PaymentAnalyticsDashboard::register();
@@ -111,6 +112,7 @@ class Plugin
         \ArtPulse\Frontend\EventSubmissionShortcode::register();
         \ArtPulse\Frontend\EditEventShortcode::register();
         \ArtPulse\Frontend\OrganizationDashboardShortcode::register();
+        \ArtPulse\Frontend\ArtistDashboardShortcode::register();
         \ArtPulse\Frontend\OrganizationEventForm::register();
         \ArtPulse\Frontend\OrganizationSubmissionForm::register();
         \ArtPulse\Frontend\SubmitArtistForm::register();
