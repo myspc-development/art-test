@@ -202,6 +202,7 @@ function renderCalendar(events, containerId = 'ap-favorite-events', allowRemove 
           const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
           cell.innerHTML = `<div class="ap-date">${date}</div>`;
           const dayEvents = events.filter(e => e.date === dateStr);
+          cell.classList.toggle('has-events', dayEvents.length > 0);
           if (dayEvents.length) {
             const ul = document.createElement('ul');
             dayEvents.forEach(ev => {

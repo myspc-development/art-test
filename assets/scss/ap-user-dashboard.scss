@@ -263,7 +263,7 @@
 }
 
 /* Highlight days containing events */
-.ap-calendar td:has(ul) {
+.ap-calendar td.has-events {
   background-color: rgba(0, 115, 170, 0.1);
 }
 
