@@ -162,7 +162,7 @@ class EditEventShortcode {
                     <input class="ap-input" type="checkbox" name="event_featured" value="1" <?php echo $featured_checked; ?>> Request Featured
                 </label>
             </p>
-            <p class="ap-edit-event-error" style="color:red;"></p>
+            <p class="ap-edit-event-error"></p>
             <p>
                 <button class="ap-form-button" type="submit">Save Changes</button>
             </p>
