@@ -1,4 +1,4 @@
-Admin Quick Start Guide
+# ArtPulse Admin Guide
 
 This guide covers the essential administration tasks for the ArtPulse plugin.
 
@@ -74,6 +74,7 @@ The plugin registers the following shortcodes:
 | `[ap_my_events]` | List events submitted by the current user. |
 | `[ap_my_follows]` | Display items the user follows. |
 | `[ap_notifications]` | Show user notifications. |
+| `[ap_artist_dashboard]` | Dashboard where artists can manage their artworks. |
 | `[ap_org_dashboard]` | Dashboard for an organization with event management. |
 | `[ap_org_profile_edit]` | Form to edit an organization profile. |
 | `[ap_organizations]` | List organizations. |
