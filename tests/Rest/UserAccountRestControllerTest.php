@@ -56,6 +56,22 @@ class UserAccountRestControllerTest extends \WP_UnitTestCase
         $this->assertSame($this->post_id, $data['posts'][0]['ID']);
     }
 
+    public function test_export_route_as_csv_returns_csv_data(): void
+    {
+        $request = new WP_REST_Request('GET', '/artpulse/v1/user/export');
+        $request->set_param('format', 'csv');
+        $response = rest_get_server()->dispatch($request);
+
+        $this->assertSame(200, $response->get_status());
+        $headers = $response->get_headers();
+        $this->assertSame('text/csv', $headers['Content-Type'] ?? $headers['content-type'] ?? null);
+
+        $csv = $response->get_data();
+        $this->assertIsString($csv);
+        $this->assertStringContainsString('Tester', $csv);
+        $this->assertStringContainsString('Sample Event', $csv);
+    }
+
     public function test_delete_route_trashes_posts_and_meta(): void
     {
         $request  = new WP_REST_Request('POST', '/artpulse/v1/user/delete');
