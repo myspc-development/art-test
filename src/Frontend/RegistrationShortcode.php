@@ -64,6 +64,7 @@ class RegistrationShortcode
                 <p>
                     <button class="ap-form-button" type="submit"><?php esc_html_e('Register', 'artpulse-management'); ?></button>
                 </p>
+                <div id="ap-register-success" class="ap-form-messages" role="status" aria-live="polite"></div>
             </form>
         </div>
         <?php

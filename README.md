@@ -44,7 +44,7 @@ Use `[ap_login]` to display the front-end login form.
 
 ## Registration Shortcode
 
-Use `[ap_register]` to display a standalone registration form for new users. Signing up through this form automatically grants the “Free” membership level.
+Use `[ap_register]` to display a standalone registration form for new users. Signing up through this form automatically grants the “Free” membership level. After submitting the form a confirmation message appears and the user is redirected to their dashboard.
 
 
 ## Stripe Radar
