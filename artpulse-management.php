@@ -137,8 +137,21 @@ function ap_adjust_color_brightness($hex, $percent) {
     return sprintf('#%02x%02x%02x', $r, $g, $b);
 }
 
+/**
+ * Enqueue the global UI styles on the frontend.
+ *
+ * By default the styles are only loaded when a page contains an
+ * ArtPulse shortcode. Themes or page builders can bypass this detection by
+ * filtering {@see 'ap_bypass_shortcode_detection'} and returning true.
+ */
 function ap_enqueue_global_styles() {
-    if (!is_admin() && ap_page_has_artpulse_shortcode()) {
+    if (is_admin()) {
+        return;
+    }
+
+    $bypass = apply_filters('ap_bypass_shortcode_detection', false);
+
+    if ($bypass || ap_page_has_artpulse_shortcode()) {
         wp_enqueue_style(
             'ap-global-ui',
             plugin_dir_url(__FILE__) . 'assets/css/ap-core.css',

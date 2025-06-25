@@ -11,6 +11,10 @@ class OrganizationSubmissionForm {
             return '';
         }
 
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
+        }
+
         if (!wp_style_is('ap-forms-css', 'enqueued')) {
             wp_enqueue_style('ap-forms-css');
         }
