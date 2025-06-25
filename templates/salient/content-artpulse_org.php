@@ -15,11 +15,38 @@ while ( have_posts() ) : the_post(); ?>
         <li><strong><?php esc_html_e('Address:','artpulse'); ?></strong> <?php echo esc_html($address); ?></li>
       <?php endif; ?>
       <?php if($website): ?>
-        <li><strong><?php esc_html_e('Website:','artpulse'); ?></strong> 
+        <li><strong><?php esc_html_e('Website:','artpulse'); ?></strong>
           <a href="<?php echo esc_url($website); ?>" target="_blank"><?php echo esc_html($website); ?></a>
         </li>
       <?php endif; ?>
     </ul>
+  <?php endif; ?>
+
+  <?php
+    $days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+    $hours = [];
+    foreach($days as $day){
+      $start  = get_post_meta(get_the_ID(),"ead_org_{$day}_start_time",true);
+      $end    = get_post_meta(get_the_ID(),"ead_org_{$day}_end_time",true);
+      $closed = get_post_meta(get_the_ID(),"ead_org_{$day}_closed",true);
+      if($start || $end || $closed){
+        $hours[$day] = [
+          'start'  => $start,
+          'end'    => $end,
+          'closed' => $closed,
+        ];
+      }
+    }
+    if(!empty($hours)):
+  ?>
+    <h2><?php esc_html_e('Opening Hours','artpulse'); ?></h2>
+    <ul class="portfolio-meta opening-hours">
+      <?php foreach($hours as $day=>$vals): ?>
+        <li><strong><?php echo esc_html(ucfirst($day).':'); ?></strong>
+          <?php echo $vals['closed'] ? esc_html__('Closed','artpulse') : esc_html(trim($vals['start'].' - '.$vals['end'])); ?>
+        </li>
+      <?php endforeach; ?>
+    </ul>
   <?php endif;
-endwhile;
+  endwhile;
 get_footer();

@@ -171,6 +171,27 @@ class OrganizationDashboardShortcode {
 
             <section class="ap-widget" id="profile-section">
                 <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
+                <?php
+                $days  = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+                $hours = [];
+                foreach ($days as $day) {
+                    $start  = get_post_meta($org_id, "ead_org_{$day}_start_time", true);
+                    $end    = get_post_meta($org_id, "ead_org_{$day}_end_time", true);
+                    $closed = get_post_meta($org_id, "ead_org_{$day}_closed", true);
+                    if ($start || $end || $closed) {
+                        $hours[$day] = [$start, $end, $closed];
+                    }
+                }
+                if ($hours) {
+                    echo '<div class="ap-opening-hours"><h3>' . esc_html__('Opening Hours', 'artpulse') . '</h3><ul>';
+                    foreach ($hours as $day => $vals) {
+                        echo '<li><strong>' . esc_html(ucfirst($day) . ':') . '</strong> ' .
+                            ($vals[2] ? esc_html__('Closed', 'artpulse') : esc_html(trim($vals[0] . ' - ' . $vals[1]))) .
+                            '</li>';
+                    }
+                    echo '</ul></div>';
+                }
+                ?>
                 <?php echo do_shortcode('[ap_org_profile_edit]'); ?>
             </section>
         </div>
