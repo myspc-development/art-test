@@ -250,31 +250,14 @@ class Plugin
         ]);
 
         wp_enqueue_script(
-            'ap-login-js',
-            plugins_url('assets/js/ap-login.js', ARTPULSE_PLUGIN_FILE),
+            'ap-auth-js',
+            plugins_url('assets/js/ap-auth.js', ARTPULSE_PLUGIN_FILE),
             [],
             '1.0.0',
             true
         );
 
-        wp_localize_script('ap-login-js', 'APLogin', [
-            'ajaxUrl'         => admin_url('admin-ajax.php'),
-            'nonce'           => wp_create_nonce('ap_login_nonce'),
-            'orgSubmissionUrl'=> $this->get_org_submission_url(),
-            'artistEndpoint'  => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
-            'restNonce'       => wp_create_nonce('wp_rest'),
-            'dashboardUrl'    => $this->get_user_dashboard_url(),
-        ]);
-
-        wp_enqueue_script(
-            'ap-register-js',
-            plugins_url('assets/js/ap-register.js', ARTPULSE_PLUGIN_FILE),
-            [],
-            '1.0.0',
-            true
-        );
-
-        wp_localize_script('ap-register-js', 'APLogin', [
+        wp_localize_script('ap-auth-js', 'APLogin', [
             'ajaxUrl'         => admin_url('admin-ajax.php'),
             'nonce'           => wp_create_nonce('ap_login_nonce'),
             'orgSubmissionUrl'=> $this->get_org_submission_url(),
