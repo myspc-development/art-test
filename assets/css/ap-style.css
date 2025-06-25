@@ -1000,3 +1000,9 @@ select.ap-input {
     padding: 1rem;
   }
 }
+
+.ap-help-text {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--ap-muted-text-color);
+}

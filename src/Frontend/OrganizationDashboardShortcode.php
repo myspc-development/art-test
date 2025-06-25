@@ -60,6 +60,12 @@ class OrganizationDashboardShortcode {
                     <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
                     <button id="ap-add-event-btn" class="ap-form-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
                 </div>
+                <p class="ap-help-text">
+                    <?php printf(
+                        __('Use the <a href="%s">Event Submission</a> page to submit a new event for admin approval.', 'artpulse'),
+                        esc_url(\ArtPulse\Core\Plugin::get_event_submission_url())
+                    ); ?>
+                </p>
 
                 <div id="ap-org-modal" class="ap-org-modal">
                     <button id="ap-modal-close" type="button" class="ap-form-button">Close</button>
