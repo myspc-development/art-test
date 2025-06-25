@@ -33,13 +33,8 @@ class DirectoryManager {
             'root'  => esc_url_raw(rest_url()),
             'nonce' => wp_create_nonce('wp_rest'),
         ]);
-        if (!ap_styles_disabled()) {
-            wp_enqueue_style(
-                'ap-style',
-                plugins_url('assets/css/ap-style.css', ARTPULSE_PLUGIN_FILE),
-                [],
-                '1.0.0'
-            );
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
         }
     }
 

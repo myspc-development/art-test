@@ -11,13 +11,10 @@ class EventSubmissionShortcode {
     }
 
     public static function enqueue_scripts() {
-        // Ensure the core UI styles are loaded along with the form styles
+        // Ensure the core UI styles are loaded
         if (function_exists('ap_enqueue_global_styles')) {
             ap_enqueue_global_styles();
         }
-
-        // Use the unified global style sheet
-        wp_enqueue_style('ap-style');
     }
 
     public static function render() {

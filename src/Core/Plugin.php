@@ -265,13 +265,8 @@ class Plugin
             'dashboardUrl'    => $this->get_user_dashboard_url(),
         ]);
 
-        if (!ap_styles_disabled()) {
-            wp_enqueue_style(
-                'ap-style',
-                plugins_url('assets/css/ap-style.css', ARTPULSE_PLUGIN_FILE),
-                [],
-                '1.0.0'
-            );
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
         }
 
         $opts = get_option('artpulse_settings', []);
