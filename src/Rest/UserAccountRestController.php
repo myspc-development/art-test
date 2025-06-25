@@ -135,6 +135,8 @@ class UserAccountRestController
             delete_user_meta($user_id, $key);
         }
 
+        wp_delete_user($user_id);
+
         return rest_ensure_response(['success' => true]);
     }
 }

@@ -82,5 +82,7 @@ class UserAccountRestControllerTest extends \WP_UnitTestCase
         foreach ($keys as $key) {
             $this->assertEmpty(get_user_meta($this->user_id, $key, true));
         }
+
+        $this->assertFalse(get_userdata($this->user_id));
     }
 }
