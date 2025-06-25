@@ -40,14 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (regSuccess) regSuccess.textContent = 'Submitting...';
       const result = await submitForm(registerForm, 'ap_do_register');
       if (result.res.ok && result.data.success) {
         if (regSuccess) regSuccess.textContent = result.data.data && result.data.data.message ? result.data.data.message : result.data.message || 'Registration successful';
-        setTimeout(() => {
-          window.location.href = APLogin.dashboardUrl;
-        }, 3000);
+        window.location.href = APLogin.dashboardUrl;
       } else if (regMsg) {
         regMsg.textContent = result.data && result.data.data && result.data.data.message ? result.data.data.message : result.data.message || '';
+        if (regSuccess) regSuccess.textContent = '';
       }
     });
   }
