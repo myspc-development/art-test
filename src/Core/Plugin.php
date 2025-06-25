@@ -265,12 +265,14 @@ class Plugin
             'dashboardUrl'    => $this->get_user_dashboard_url(),
         ]);
 
-        wp_enqueue_style(
-            'ap-forms-css',
-            plugins_url('assets/css/ap-forms.css', ARTPULSE_PLUGIN_FILE),
-            [],
-            '1.0.0'
-        );
+        if (!ap_styles_disabled()) {
+            wp_enqueue_style(
+                'ap-forms-css',
+                plugins_url('assets/css/ap-forms.css', ARTPULSE_PLUGIN_FILE),
+                [],
+                '1.0.0'
+            );
+        }
 
         $opts = get_option('artpulse_settings', []);
         if (!empty($opts['service_worker_enabled'])) {

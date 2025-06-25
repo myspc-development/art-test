@@ -33,12 +33,14 @@ class DirectoryManager {
             'root'  => esc_url_raw(rest_url()),
             'nonce' => wp_create_nonce('wp_rest'),
         ]);
-        wp_enqueue_style(
-            'ap-directory-css',
-            plugins_url('assets/css/ap-directory.css', ARTPULSE_PLUGIN_FILE),
-            [],
-            '1.0.0'
-        );
+        if (!ap_styles_disabled()) {
+            wp_enqueue_style(
+                'ap-directory-css',
+                plugins_url('assets/css/ap-directory.css', ARTPULSE_PLUGIN_FILE),
+                [],
+                '1.0.0'
+            );
+        }
     }
 
     public static function register_routes() {
