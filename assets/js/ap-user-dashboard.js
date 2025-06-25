@@ -392,6 +392,17 @@ function exportUserData(format) {
 
 function deleteUserData() {
   if (!confirm('Are you sure you want to delete your account?')) return;
+
+  const btn = document.getElementById('ap-delete-account');
+  if (btn) {
+    btn.disabled = true;
+    // Add a simple spinner to indicate progress
+    btn.insertAdjacentHTML(
+      'beforeend',
+      '<span class="ap-spinner" aria-hidden="true"></span>'
+    );
+  }
+
   fetch(ArtPulseDashboardApi.deleteEndpoint, {
     method: 'POST',
     headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
@@ -407,7 +418,19 @@ function deleteUserData() {
         window.location.reload();
       } else {
         alert(res.message || 'Deletion failed');
+        if (btn) {
+          btn.disabled = false;
+          const spinner = btn.querySelector('.ap-spinner');
+          if (spinner) spinner.remove();
+        }
       }
     })
-    .catch(err => alert(err.message));
+    .catch(err => {
+      alert(err.message);
+      if (btn) {
+        btn.disabled = false;
+        const spinner = btn.querySelector('.ap-spinner');
+        if (spinner) spinner.remove();
+      }
+    });
 }
