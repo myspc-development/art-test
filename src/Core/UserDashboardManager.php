@@ -73,12 +73,14 @@ class UserDashboardManager
         ]);
 
         // Dashboard styles
-        wp_enqueue_style(
-            'ap-user-dashboard-css',
-            plugins_url('assets/css/ap-user-dashboard.css', ARTPULSE_PLUGIN_FILE),
-            ['dashicons'],
-            '1.0.0'
-        );
+        if (!ap_styles_disabled()) {
+            wp_enqueue_style(
+                'ap-user-dashboard-css',
+                plugins_url('assets/css/ap-user-dashboard.css', ARTPULSE_PLUGIN_FILE),
+                ['dashicons'],
+                '1.0.0'
+            );
+        }
     }
 
     public static function registerRestRoutes()

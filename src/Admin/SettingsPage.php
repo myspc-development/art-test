@@ -404,6 +404,10 @@ class SettingsPage
             'auto_expire_events' => [
                 'label' => __('Auto-expire Past Events', 'artpulse'),
                 'desc'  => __('Move events to Draft when the end date has passed.', 'artpulse'),
+            ],
+            'disable_styles' => [
+                'label' => __('Disable Plugin Styles', 'artpulse'),
+                'desc'  => __('Do not load ArtPulse CSS on the frontend.', 'artpulse'),
             ]
         ];
         foreach ($general_fields as $key => $config) {
@@ -456,7 +460,8 @@ class SettingsPage
                 'override_artist_membership',
                 'override_org_membership',
                 'override_member_membership',
-                'auto_expire_events'
+                'auto_expire_events',
+                'disable_styles'
             ])) {
                 $output[$key] = isset($value) ? 1 : 0;
             } elseif ($key === 'payment_metrics_cache') {
@@ -481,7 +486,8 @@ class SettingsPage
             'override_artist_membership',
             'override_org_membership',
             'override_member_membership',
-            'auto_expire_events'
+            'auto_expire_events',
+            'disable_styles'
         ])) {
             echo '<input type="checkbox" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="1"' . checked(1, $value, false) . ' />';
         } else {

@@ -249,19 +249,21 @@ class EnqueueAssets {
             true
         );
 
-        wp_enqueue_style(
-            'ap-forms-css',
-            $plugin_url . '/assets/css/ap-forms.css',
-            [],
-            '1.0.0'
-        );
+        if (!ap_styles_disabled()) {
+            wp_enqueue_style(
+                'ap-forms-css',
+                $plugin_url . '/assets/css/ap-forms.css',
+                [],
+                '1.0.0'
+            );
 
-        wp_enqueue_style(
-            'ap-directory-css',
-            $plugin_url . '/assets/css/ap-directory.css',
-            [],
-            '1.0.0'
-        );
+            wp_enqueue_style(
+                'ap-directory-css',
+                $plugin_url . '/assets/css/ap-directory.css',
+                [],
+                '1.0.0'
+            );
+        }
 
         // Enqueue user dashboard styles (Frontend)
 

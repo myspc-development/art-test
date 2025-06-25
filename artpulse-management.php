@@ -138,6 +138,16 @@ function ap_adjust_color_brightness($hex, $percent) {
 }
 
 /**
+ * Determine if ArtPulse frontend styles are disabled.
+ *
+ * @return bool
+ */
+function ap_styles_disabled() {
+    $settings = get_option('artpulse_settings', []);
+    return !empty($settings['disable_styles']);
+}
+
+/**
  * Enqueue the global UI styles on the frontend.
  *
  * By default the styles are only loaded when a page contains an
@@ -151,7 +161,7 @@ function ap_enqueue_global_styles() {
 
     $bypass = apply_filters('ap_bypass_shortcode_detection', false);
 
-    if ($bypass || ap_page_has_artpulse_shortcode()) {
+    if (($bypass || ap_page_has_artpulse_shortcode()) && !ap_styles_disabled()) {
         wp_enqueue_style(
             'ap-global-ui',
             plugin_dir_url(__FILE__) . 'assets/css/ap-core.css',
