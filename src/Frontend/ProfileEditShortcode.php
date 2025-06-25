@@ -6,7 +6,7 @@ class ProfileEditShortcode {
 
     public static function register() {
         add_shortcode('ap_profile_edit', [self::class, 'render_form']);
-        add_action('init', [self::class, 'handle_form_submission']);
+        self::handle_form_submission();
     }
 
     public static function render_form() {
