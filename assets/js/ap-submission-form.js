@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('.ap-submission-form');
+  const form = document.querySelector('.ap-form-container');
   const messageBox = document.querySelector('.ap-form-messages');
   if (!form) return;
 

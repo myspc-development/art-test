@@ -36,7 +36,7 @@ class EventSubmissionShortcode {
         ob_start();
         ?>
         <div class="ap-form-messages" role="status" aria-live="polite"></div>
-        <form method="post" enctype="multipart/form-data" class="ap-event-form ap-form-container">
+        <form method="post" enctype="multipart/form-data" class="ap-form-container">
             <?php wp_nonce_field('ap_submit_event', 'ap_event_nonce'); ?>
 
             <p>
