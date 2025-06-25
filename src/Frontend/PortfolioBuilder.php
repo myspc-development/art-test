@@ -32,6 +32,11 @@ class PortfolioBuilder
     {
         if (!is_user_logged_in()) return;
 
+        if (function_exists('ap_enqueue_global_styles')) {
+            add_filter('ap_bypass_shortcode_detection', '__return_true');
+            ap_enqueue_global_styles();
+        }
+
         wp_enqueue_media();
 
         wp_enqueue_script(

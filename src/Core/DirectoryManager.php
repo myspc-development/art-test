@@ -34,6 +34,7 @@ class DirectoryManager {
             'nonce' => wp_create_nonce('wp_rest'),
         ]);
         if (function_exists('ap_enqueue_global_styles')) {
+            add_filter('ap_bypass_shortcode_detection', '__return_true');
             ap_enqueue_global_styles();
         }
     }

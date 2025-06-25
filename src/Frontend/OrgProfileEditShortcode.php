@@ -6,7 +6,15 @@ use ArtPulse\Admin\MetaBoxesOrganisation;
 class OrgProfileEditShortcode {
     public static function register() {
         add_shortcode('ap_org_profile_edit', [self::class, 'render_form']);
+        add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
         self::handle_form_submission();
+    }
+
+    public static function enqueue_styles() {
+        if (function_exists('ap_enqueue_global_styles')) {
+            add_filter('ap_bypass_shortcode_detection', '__return_true');
+            ap_enqueue_global_styles();
+        }
     }
 
     public static function render_form() {
