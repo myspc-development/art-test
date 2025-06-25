@@ -927,6 +927,19 @@ select.ap-input {
   margin-bottom: 0.25rem;
 }
 
+/* Portfolio builder saved items */
+#ap-saved-items {
+  background: var(--ap-bg-color);
+  padding: 1rem;
+  border-radius: var(--ap-border-radius);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  margin-bottom: var(--ap-space-medium);
+}
+
+.ap-saved-item {
+  margin-bottom: 0.5rem;
+}
+
 /* Modal overlay */
 .ap-org-modal {
   position: fixed;

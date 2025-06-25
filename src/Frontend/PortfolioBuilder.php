@@ -87,7 +87,7 @@ class PortfolioBuilder
         <hr>
 
         <h3>Your Saved Portfolio Items</h3>
-        <div id="ap-saved-items">
+        <div id="ap-saved-items" class="ap-widget">
             <?php
             $items = get_posts([
                 'post_type'   => 'portfolio',
@@ -104,11 +104,11 @@ class PortfolioBuilder
                     <strong><?php echo esc_html($item->post_title); ?></strong>
                     <p><?php echo esc_html($desc); ?></p>
                     <p>
-                        <button class="edit-item">Edit</button>
-                        <button class="toggle-visibility" data-new="<?php echo $visibility === 'private' ? 'public' : 'private'; ?>">
+                        <button class="ap-form-button edit-item">Edit</button>
+                        <button class="ap-form-button toggle-visibility" data-new="<?php echo $visibility === 'private' ? 'public' : 'private'; ?>">
                             <?php echo ucfirst($visibility); ?>
                         </button>
-                        <button class="delete-item">Delete</button>
+                        <button class="ap-form-button delete-item">Delete</button>
                     </p>
                 </div>
             <?php endforeach; ?>
