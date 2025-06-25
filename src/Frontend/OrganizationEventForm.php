@@ -20,7 +20,7 @@ class OrganizationEventForm {
         ob_start();
         ?>
         <div class="ap-form-messages" role="status" aria-live="polite"></div>
-        <form method="post" enctype="multipart/form-data" class="ap-event-form ap-form-container">
+        <form method="post" enctype="multipart/form-data" class="ap-form-container">
             <?php wp_nonce_field('submit_event', 'ap_event_nonce'); ?>
 
             <label class="ap-form-label" for="ap_org_event_title">Event Title*</label>

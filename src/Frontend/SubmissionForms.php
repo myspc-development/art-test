@@ -38,7 +38,7 @@ class SubmissionForms
 
         ob_start();
         ?>
-        <form class="ap-submission-form ap-form-container" data-post-type="<?php echo $post_type; ?>">
+        <form class="ap-form-container" data-post-type="<?php echo $post_type; ?>">
             <p>
                 <label class="ap-form-label" for="ap-title"><?php esc_html_e('Title*', 'artpulse'); ?></label><br>
                 <input class="ap-input" id="ap-title" type="text" name="title" data-required="<?php esc_attr_e('Title is required', 'artpulse'); ?>" />
