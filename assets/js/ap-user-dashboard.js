@@ -68,22 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const artistBtn = document.createElement('button');
         artistBtn.className = 'ap-form-button upgrade-artist-btn';
         artistBtn.textContent = apL10n?.upgrade_artist || 'Request Artist Upgrade';
-        artistBtn.onclick = async () => {
-          artistBtn.disabled = true;
-          try {
-            const res = await fetch(ArtPulseDashboardApi.artistEndpoint, {
-              method: 'POST',
-              headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
-            });
-            const data = await res.json();
-            if (res.ok) {
-              upgrade.textContent = data.message || (apL10n?.request_submitted || 'Request submitted');
-            } else {
-              upgrade.textContent = data.message || 'Request failed';
-            }
-          } catch (err) {
-            upgrade.textContent = err.message;
-          }
+        artistBtn.onclick = () => {
+          window.location.href = ArtPulseDashboardApi.artistSubmissionUrl;
         };
         const orgLink = document.createElement('button');
         orgLink.className = 'ap-form-button upgrade-org-btn';
