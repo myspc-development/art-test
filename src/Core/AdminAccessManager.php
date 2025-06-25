@@ -41,6 +41,8 @@ class AdminAccessManager
 
         if (in_array('organization', $roles, true)) {
             $target = Plugin::get_org_dashboard_url();
+        } elseif (in_array('artist', $roles, true)) {
+            $target = Plugin::get_artist_dashboard_url();
         }
 
         wp_safe_redirect($target);
