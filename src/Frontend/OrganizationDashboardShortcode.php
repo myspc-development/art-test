@@ -67,9 +67,15 @@ class OrganizationDashboardShortcode {
     public static function render($atts) {
         if (!is_user_logged_in()) return '<p>You must be logged in to view this dashboard.</p>';
 
+        // Capability checks for advanced dashboard features
+        $can_manage       = current_user_can('manage_options');
+        $can_edit_others  = current_user_can('edit_others_posts');
+
         $user_id = get_current_user_id();
         $org_id = get_user_meta($user_id, 'ap_organization_id', true);
         if (!$org_id) return '<p>No organization assigned.</p>';
+
+        $show_analytics = $can_manage || $can_edit_others;
 
         $stage_groups = self::get_project_stage_groups($org_id);
 
@@ -94,7 +100,9 @@ class OrganizationDashboardShortcode {
                 <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
                 <a href="#billing"><span class="dashicons dashicons-money"></span><?php esc_html_e('Billing', 'artpulse'); ?></a>
                 <a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a>
+                <?php if ($show_analytics) : ?>
                 <a href="#analytics"><span class="dashicons dashicons-chart-bar"></span><?php esc_html_e('Analytics', 'artpulse'); ?></a>
+                <?php endif; ?>
                 <a href="#profile"><span class="dashicons dashicons-admin-settings"></span><?php esc_html_e('Profile', 'artpulse'); ?></a>
             </nav>
 
@@ -114,7 +122,9 @@ class OrganizationDashboardShortcode {
             <section class="ap-widget" id="events-section">
                 <div class="ap-widget-header">
                     <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
+                    <?php if (current_user_can('edit_posts')) : ?>
                     <button id="ap-add-event-btn" class="ap-form-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
+                    <?php endif; ?>
                 </div>
                 <p class="ap-help-text">
                     <?php printf(
@@ -228,10 +238,12 @@ class OrganizationDashboardShortcode {
 
             <div id="kanban-board"></div>
 
+            <?php if ($show_analytics) : ?>
             <section class="ap-widget" id="analytics-section">
                 <h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2>
                 <div id="ap-org-analytics"></div>
             </section>
+            <?php endif; ?>
 
             <section class="ap-widget" id="profile-section">
                 <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
