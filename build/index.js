@@ -1,1 +1,1 @@
-console.log("ArtPulse Management plugin loaded.");
+// Build output

@@ -13,7 +13,6 @@ class PortfolioBuilder
         add_action('wp_ajax_ap_toggle_visibility', [self::class, 'toggle_visibility']);
         add_action('wp_ajax_ap_delete_portfolio_item', [self::class, 'delete_item']);
         add_action('wp_ajax_ap_save_portfolio_order', [self::class, 'save_order']);
-        //add_action('rest_api_init', [self::class, 'register_rest_routes']); // REMOVE THIS LINE
         add_action('rest_api_init', function () { // Add this block
             register_rest_route('artpulse/v1', '/portfolio/(?P<user_id>\d+)', [
                 'methods'             => 'GET',
@@ -240,21 +239,6 @@ class PortfolioBuilder
 
         wp_send_json_success(['message' => 'Order updated.']);
     }
-
-    //public static function register_rest_routes() // REMOVE THIS FUNCTION DEFINITION
-    //{
-    //    register_rest_route('artpulse/v1', '/portfolio/(?P<user_id>\d+)', [
-    //        'methods'             => 'GET',
-    //        'callback'            => [self::class, 'rest_get_portfolio'],
-    //        'permission_callback' => '__return_true',
-    //        'args' => [
-    //            'user_id' => [
-    //                'validate_callback' => 'is_numeric',
-    //                'sanitize_callback' => 'absint',
-    //            ],
-    //        ],
-    //    ]);
-    //}
 
     public static function rest_get_portfolio($request)
     {

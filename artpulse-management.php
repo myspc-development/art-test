@@ -31,14 +31,6 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 
 // 🔧 Boot the main plugin class (responsible for registering menus, settings, CPTs, etc.)
 $main = new Plugin();
-
-// Optional debug log for class check
-if (class_exists(WooCommerceIntegration::class)) {
-    error_log('Plugin class loaded successfully');
-} else {
-    error_log('Failed to load Plugin class');
-}
-
 // Instantiate WooCommerce integration (if needed for runtime)
 $plugin = new WooCommerceIntegration();
 
