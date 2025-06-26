@@ -208,6 +208,8 @@ class UserDashboardManager
             }
         }
 
+        $data['user_badges'] = self::getBadges($user_id);
+
         return rest_ensure_response($data);
     }
 
@@ -294,6 +296,24 @@ class UserDashboardManager
         return home_url('/');
     }
 
+    public static function addBadge(int $user_id, string $slug): void
+    {
+        $badges = get_user_meta($user_id, 'user_badges', true);
+        if (!is_array($badges)) {
+            $badges = [];
+        }
+        if (!in_array($slug, $badges, true)) {
+            $badges[] = $slug;
+            update_user_meta($user_id, 'user_badges', $badges);
+        }
+    }
+
+    public static function getBadges(int $user_id): array
+    {
+        $badges = get_user_meta($user_id, 'user_badges', true);
+        return is_array($badges) ? $badges : [];
+    }
+
     public static function renderDashboard($atts)
     {
         if ( ! is_user_logged_in() || ! current_user_can('view_artpulse_dashboard') ) {
@@ -341,6 +361,10 @@ class UserDashboardManager
 
             <h2 id="membership"><?php _e('Subscription Status','artpulse'); ?></h2>
             <div id="ap-membership-info"></div>
+            <?php $badges = self::getBadges(get_current_user_id());
+            if ($badges) : ?>
+            <div class="ap-badges"></div>
+            <?php endif; ?>
             <div id="ap-membership-actions"></div>
             <?php if ($show_billing) : ?>
             <h2 id="next-payment"><?php _e('Next Payment','artpulse'); ?></h2>

@@ -93,4 +93,11 @@ class UserDashboardManagerTest extends TestCase
         $html = UserDashboardManager::renderDashboard([]);
         $this->assertStringContainsString('id="support-history"', $html);
     }
+
+    public function test_badges_render_when_meta_exists() {
+        Stub::$roles = ['member'];
+        Stub::$meta = ['user_badges' => ['gold']];
+        $html = UserDashboardManager::renderDashboard([]);
+        $this->assertStringContainsString('class="ap-badges"', $html);
+    }
 }
