@@ -140,6 +140,16 @@ class SubmissionRestController
                 'required'    => true,
                 'description' => 'Title of the post.',
             ],
+            'artist_name' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Artist name to store as meta.',
+            ],
+            'ead_org_name' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Organization name to store as meta.',
+            ],
             'event_date' => [
                 'type'        => 'string',
                 'format'      => 'date',
@@ -260,6 +270,7 @@ class SubmissionRestController
             'artpulse_artist'  => [
                 'artist_bio' => '_ap_artist_bio',
                 'artist_org' => '_ap_artist_org',
+                'artist_name' => 'artist_name',
             ],
             'artpulse_artwork' => [
                 'artwork_medium'     => '_ap_artwork_medium',
@@ -267,6 +278,7 @@ class SubmissionRestController
                 'artwork_materials'  => '_ap_artwork_materials',
             ],
             'artpulse_org'     => [
+                'ead_org_name'              => 'ead_org_name',
                 'address_components'           => 'address_components',
                 'ead_org_description'           => 'ead_org_description',
                 'ead_org_website_url'           => 'ead_org_website_url',

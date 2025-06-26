@@ -82,6 +82,13 @@ Recent updates introduce new fields for location lookups and performance tweaks:
 
 For full usage details refer to the [Admin Guide](assets/docs/Admin_Help.md) and [Member Guide](assets/docs/Member_Help.md).
 
+## Submission Meta Fields
+
+Artist and organization submissions automatically copy the post title into a
+matching meta field. The artist form sets `artist_name`, while organization
+submissions populate `ead_org_name`. This makes it easier to search by name in
+the admin area and via the REST API.
+
 ## Portfolio Builder
 
 Use `[ap_portfolio_builder]` to allow members to create portfolio items. Drag items in the saved list to reorder them; changes are saved automatically.
