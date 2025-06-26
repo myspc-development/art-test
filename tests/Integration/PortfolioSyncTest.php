@@ -43,4 +43,37 @@ class PortfolioSyncTest extends \WP_UnitTestCase
             (int) get_post_meta($portfolio_id, '_ap_source_post', true)
         );
     }
+
+    public function test_event_meta_copied_to_portfolio(): void
+    {
+        $user_id = self::factory()->user->create(['role' => 'administrator']);
+        wp_set_current_user($user_id);
+
+        $event_id = wp_insert_post([
+            'post_title'  => 'Meta Sync Event',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+            'post_author' => $user_id,
+        ]);
+
+        update_post_meta($event_id, 'event_city', 'UpdatedCity');
+
+        wp_update_post(['ID' => $event_id]);
+
+        $portfolio = get_posts([
+            'post_type'   => 'portfolio',
+            'meta_key'    => '_ap_source_post',
+            'meta_value'  => $event_id,
+            'post_status' => 'any',
+            'fields'      => 'ids',
+            'numberposts' => 1,
+        ]);
+
+        $this->assertCount(1, $portfolio);
+        $portfolio_id = $portfolio[0];
+        $this->assertSame(
+            'UpdatedCity',
+            get_post_meta($portfolio_id, 'event_city', true)
+        );
+    }
 }
