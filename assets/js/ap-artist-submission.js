@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         post_type: 'artpulse_artist',
         title,
         artist_bio: bio,
-        artist_org: org
+        artist_org: org,
+        artist_name: title
       };
       if (imageIds.length) submission.image_ids = imageIds;
 

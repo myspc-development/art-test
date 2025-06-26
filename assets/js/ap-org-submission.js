@@ -25,7 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addressComponentsInput) addressComponentsInput.value = addressComponents;
   }
 
-  const submission = { post_type: 'artpulse_org', title };
+  const submission = {
+    post_type: 'artpulse_org',
+    title,
+    ead_org_name: title
+  };
   formData.delete('title');
   formData.delete('images[]');
   formData.delete('ead_org_logo_id');

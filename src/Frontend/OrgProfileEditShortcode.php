@@ -135,6 +135,7 @@ class OrgProfileEditShortcode {
             'ID'         => $org_id,
             'post_title' => $title,
         ]);
+        update_post_meta( $org_id, 'ead_org_name', $title );
 
         $fields = MetaBoxesOrganisation::get_registered_org_meta_fields();
         unset($fields['ead_org_name']);
