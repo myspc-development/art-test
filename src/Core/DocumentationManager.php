@@ -18,6 +18,7 @@ class DocumentationManager
         $screen = get_current_screen();
         $docsPath = plugin_dir_path(__DIR__ . '/../../') . 'assets/docs/';
         $parsedown = new Parsedown();
+        $parsedown->setSafeMode(true);
 
         // Admin Help on Settings page
         if ($screen->id === 'toplevel_page_artpulse-settings') {
