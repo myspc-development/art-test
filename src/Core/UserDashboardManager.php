@@ -124,6 +124,7 @@ class UserDashboardManager
             'artists'            => [],
             'artworks'           => [],
             'favorite_events'    => [],
+            'support_history'    => [],
         ];
 
         foreach ( ['event','artist','artwork'] as $type ) {
@@ -154,6 +155,22 @@ class UserDashboardManager
                 'link'  => get_permalink($post),
                 'date'  => get_post_meta($post->ID, '_ap_event_date', true),
             ];
+        }
+
+        // Previous support requests or tickets
+        $history_ids = get_user_meta($user_id, 'ap_support_history', true);
+        if (is_array($history_ids)) {
+            foreach ($history_ids as $sid) {
+                $p = get_post($sid);
+                if (!$p) {
+                    continue;
+                }
+                $data['support_history'][] = [
+                    'id'    => $p->ID,
+                    'title' => $p->post_title,
+                    'link'  => get_permalink($p),
+                ];
+            }
         }
 
         // Upcoming payment/renewal date
@@ -298,6 +315,8 @@ class UserDashboardManager
         $show_billing     = in_array('organization', $roles, true) || in_array('administrator', $roles, true);
         $show_content     = in_array('artist', $roles, true) || in_array('organization', $roles, true) || in_array('administrator', $roles, true);
         $show_notifications = !empty(array_intersect(['member','artist','organization','administrator'], $roles));
+        $support_history   = get_user_meta(get_current_user_id(), 'ap_support_history', true);
+        $show_support_history = is_array($support_history) && !empty($support_history);
 
         ob_start(); ?>
         <div class="ap-dashboard">
@@ -348,6 +367,12 @@ class UserDashboardManager
             <div id="ap-favorite-events"></div>
             <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
             <div id="ap-events-feed"></div>
+            <?php if ($show_support_history) : ?>
+            <section id="support-history">
+                <h2><?php _e('Support History','artpulse'); ?></h2>
+                <div id="ap-support-history"></div>
+            </section>
+            <?php endif; ?>
             <?php if ($show_notifications) : ?>
             <h2 id="notifications"><?php _e('Notifications','artpulse'); ?></h2>
             <div id="ap-dashboard-notifications"></div>
