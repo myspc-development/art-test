@@ -121,6 +121,9 @@ class EnqueueAssets {
                     filemtime($qs_path),
                     true
                 );
+                wp_localize_script('ap-quickstart', 'apQuickstart', [
+                    'mermaidUrl' => plugins_url('assets/libs/mermaid/mermaid.min.js', ARTPULSE_PLUGIN_FILE),
+                ]);
             }
         }
 
@@ -128,7 +131,13 @@ class EnqueueAssets {
             ($screen->base === 'toplevel_page_artpulse-settings' && ($_GET['tab'] ?? '') === 'import_export') ||
             $screen->base === 'artpulse-settings_page_artpulse-import-export'
         ) {
-            wp_enqueue_script('papaparse', 'https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js', [], null, true);
+            wp_enqueue_script(
+                'papaparse',
+                plugins_url('assets/libs/papaparse/papaparse.min.js', ARTPULSE_PLUGIN_FILE),
+                [],
+                null,
+                true
+            );
             $import_path = $plugin_dir . '/assets/js/ap-csv-import.js';
             $import_url  = $plugin_url . '/assets/js/ap-csv-import.js';
             if (file_exists($import_path)) {
@@ -332,8 +341,20 @@ class EnqueueAssets {
         $artist_dashboard_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-artist-dashboard.js';
         $artist_dashboard_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-artist-dashboard.js';
         if (file_exists($artist_dashboard_path)) {
-            wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], null, true);
-            wp_enqueue_script('sortable-js', 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js', [], null, true);
+            wp_enqueue_script(
+                'chart-js',
+                plugins_url('assets/libs/chart.js/chart.min.js', ARTPULSE_PLUGIN_FILE),
+                [],
+                null,
+                true
+            );
+            wp_enqueue_script(
+                'sortable-js',
+                plugins_url('assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE),
+                [],
+                null,
+                true
+            );
             wp_enqueue_script(
                 'ap-artist-dashboard',
                 $artist_dashboard_url,

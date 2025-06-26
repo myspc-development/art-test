@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const mermaidEl = document.querySelector('.mermaid');
   if (mermaidEl) {
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+    script.src = apQuickstart.mermaidUrl;
     script.onload = () => {
       if (window.mermaid) window.mermaid.initialize({ startOnLoad: true });
     };

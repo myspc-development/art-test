@@ -219,9 +219,20 @@ class MetaBoxesRelationship
             return;
         }
 
-        // Enqueue Select2
-        wp_enqueue_style('select2-css', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css', [], '4.1.0-rc.0');
-        wp_enqueue_script('select2-js', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery'], '4.1.0-rc.0', true);
+        // Enqueue Select2 from plugin assets
+        wp_enqueue_style(
+            'select2-css',
+            plugins_url('assets/libs/select2/css/select2.min.css', ARTPULSE_PLUGIN_FILE),
+            [],
+            '4.1.0-rc.0'
+        );
+        wp_enqueue_script(
+            'select2-js',
+            plugins_url('assets/libs/select2/js/select2.min.js', ARTPULSE_PLUGIN_FILE),
+            ['jquery'],
+            '4.1.0-rc.0',
+            true
+        );
 
         // Enqueue your custom admin script for relationship boxes
         // Adjust the path to your admin-relationship.js file

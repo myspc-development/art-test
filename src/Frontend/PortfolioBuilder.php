@@ -41,7 +41,7 @@ class PortfolioBuilder
 
         wp_enqueue_script(
             'sortable-js',
-            'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js',
+            plugins_url('/assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE),
             [],
             '1.15.0',
             true
