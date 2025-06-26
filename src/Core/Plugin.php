@@ -7,6 +7,7 @@ use ArtPulse\Core\AdminDashboard;
 use ArtPulse\Core\DocumentationManager;
 use ArtPulse\Rest\ArtistRestController;
 use ArtPulse\Rest\RestRelationships;
+use ArtPulse\Rest\TaxonomyRestFilters;
 
 class Plugin
 {
@@ -146,6 +147,7 @@ class Plugin
         \ArtPulse\Rest\UserAccountRestController::register();
         ArtistRestController::register();
         RestRelationships::register();
+        TaxonomyRestFilters::register();
 
         \ArtPulse\Admin\MetaBoxesArtist::register();
         \ArtPulse\Admin\MetaBoxesArtwork::register();
