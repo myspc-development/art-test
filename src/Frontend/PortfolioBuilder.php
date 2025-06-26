@@ -12,6 +12,7 @@ class PortfolioBuilder
         add_action('wp_ajax_ap_get_portfolio_item', [self::class, 'get_item']);
         add_action('wp_ajax_ap_toggle_visibility', [self::class, 'toggle_visibility']);
         add_action('wp_ajax_ap_delete_portfolio_item', [self::class, 'delete_item']);
+        add_action('wp_ajax_ap_save_portfolio_order', [self::class, 'save_order']);
         //add_action('rest_api_init', [self::class, 'register_rest_routes']); // REMOVE THIS LINE
         add_action('rest_api_init', function () { // Add this block
             register_rest_route('artpulse/v1', '/portfolio/(?P<user_id>\d+)', [
@@ -40,9 +41,17 @@ class PortfolioBuilder
         wp_enqueue_media();
 
         wp_enqueue_script(
+            'sortable-js',
+            'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js',
+            [],
+            '1.15.0',
+            true
+        );
+
+        wp_enqueue_script(
             'ap-portfolio-builder',
             plugins_url('/assets/js/ap-portfolio-builder.js', ARTPULSE_PLUGIN_FILE),
-            ['jquery'],
+            ['jquery', 'sortable-js'],
             '1.0',
             true
         );
@@ -211,6 +220,25 @@ class PortfolioBuilder
 
         wp_delete_post($id, true);
         wp_send_json_success();
+    }
+
+    public static function save_order()
+    {
+        check_ajax_referer('ap_portfolio_nonce', 'nonce');
+
+        $order = array_map('intval', $_POST['order'] ?? []);
+
+        foreach ($order as $index => $post_id) {
+            if (get_post_field('post_author', $post_id) != get_current_user_id()) {
+                continue;
+            }
+            wp_update_post([
+                'ID'         => $post_id,
+                'menu_order' => $index,
+            ]);
+        }
+
+        wp_send_json_success(['message' => 'Order updated.']);
     }
 
     //public static function register_rest_routes() // REMOVE THIS FUNCTION DEFINITION

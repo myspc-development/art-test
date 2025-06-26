@@ -81,3 +81,7 @@ Recent updates introduce new fields for location lookups and performance tweaks:
 - **Enable Service Worker** – Adds a basic service worker for offline caching.
 
 For full usage details refer to the [Admin Guide](assets/docs/Admin_Help.md) and [Member Guide](assets/docs/Member_Help.md).
+
+## Portfolio Builder
+
+Use `[ap_portfolio_builder]` to allow members to create portfolio items. Drag items in the saved list to reorder them; changes are saved automatically.
