@@ -10,6 +10,9 @@ class PortfolioManager
         add_action('init', [self::class, 'registerPortfolioTaxonomy']);
         add_action('add_meta_boxes', [self::class, 'addPortfolioMetaBoxes']);
         add_action('save_post', [self::class, 'savePortfolioMeta']);
+        if (is_admin()) {
+            add_action('admin_init', [self::class, 'maybe_migrate_meta']);
+        }
     }
 
     public static function registerPortfolioPostType()
@@ -81,5 +84,40 @@ class PortfolioManager
         if (isset($_POST['ap_visibility'])) {
             update_post_meta($post_id, '_ap_visibility', sanitize_text_field($_POST['ap_visibility']));
         }
+    }
+
+    public static function maybe_migrate_meta()
+    {
+        if (get_option('ap_portfolio_meta_migrated')) {
+            return;
+        }
+
+        $posts = get_posts([
+            'post_type'      => 'artpulse_portfolio',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'meta_query'     => [
+                'relation' => 'OR',
+                ['key' => '_ap_portfolio_link', 'compare' => 'EXISTS'],
+                ['key' => '_ap_visibility', 'compare' => 'EXISTS'],
+            ],
+        ]);
+
+        foreach ($posts as $post_id) {
+            $link = get_post_meta($post_id, '_ap_portfolio_link', true);
+            if ($link && !get_post_meta($post_id, 'portfolio_link', true)) {
+                update_post_meta($post_id, 'portfolio_link', $link);
+            }
+
+            $visibility = get_post_meta($post_id, '_ap_visibility', true);
+            if ($visibility && !get_post_meta($post_id, 'portfolio_visibility', true)) {
+                update_post_meta($post_id, 'portfolio_visibility', $visibility);
+            }
+
+            delete_post_meta($post_id, '_ap_portfolio_link');
+            delete_post_meta($post_id, '_ap_visibility');
+        }
+
+        update_option('ap_portfolio_meta_migrated', 1);
     }
 }
