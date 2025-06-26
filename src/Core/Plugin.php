@@ -5,6 +5,7 @@ namespace ArtPulse\Core;
 use ArtPulse\Core\PortfolioManager;
 use ArtPulse\Core\AdminDashboard;
 use ArtPulse\Core\DocumentationManager;
+use ArtPulse\Rest\ArtistRestController;
 
 class Plugin
 {
@@ -142,6 +143,7 @@ class Plugin
         \ArtPulse\Rest\OrgAnalyticsController::register();
         \ArtPulse\Rest\PaymentReportsController::register();
         \ArtPulse\Rest\UserAccountRestController::register();
+        ArtistRestController::register();
 
         \ArtPulse\Admin\MetaBoxesArtist::register();
         \ArtPulse\Admin\MetaBoxesArtwork::register();
