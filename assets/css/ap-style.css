@@ -350,6 +350,19 @@ button:focus {
   background-color: var(--ap-primary-hover);
   box-shadow: 0 0 0 2px var(--ap-primary-color);
 }
+
+.ap-badges {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0.5rem 0;
+}
+
+.ap-badges .badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ap-primary-color);
+}
 /*
 Theme Name: ArtPulse Forms
 Description: Styles for ArtPulse plugin forms.
