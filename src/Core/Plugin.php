@@ -8,6 +8,7 @@ use ArtPulse\Core\DocumentationManager;
 use ArtPulse\Rest\ArtistRestController;
 use ArtPulse\Rest\RestRelationships;
 use ArtPulse\Rest\TaxonomyRestFilters;
+use ArtPulse\Admin\EngagementDashboard;
 
 class Plugin
 {
@@ -106,6 +107,7 @@ class Plugin
         \ArtPulse\Core\AnalyticsManager::register();
         \ArtPulse\Core\AnalyticsDashboard::register();
         \ArtPulse\Admin\PaymentAnalyticsDashboard::register();
+        EngagementDashboard::register();
         AdminDashboard::register();
         \ArtPulse\Core\FrontendMembershipPage::register();
         \ArtPulse\Community\ProfileLinkRequestManager::register();
