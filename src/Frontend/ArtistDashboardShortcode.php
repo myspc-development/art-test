@@ -5,6 +5,7 @@ class ArtistDashboardShortcode {
     public static function register(): void {
         add_shortcode('ap_artist_dashboard', [self::class, 'render']);
         add_action('wp_ajax_ap_delete_artwork', [self::class, 'handle_ajax_delete_artwork']);
+        add_action('wp_ajax_save_artwork_order', [self::class, 'handle_save_artwork_order']);
     }
 
     public static function render(): string {
@@ -18,7 +19,19 @@ class ArtistDashboardShortcode {
             'author'      => get_current_user_id(),
             'post_status' => ['publish', 'pending', 'draft'],
             'numberposts' => -1,
+            'orderby'     => 'menu_order',
+            'order'       => 'ASC',
         ]);
+
+        // Build metrics array keyed by artwork ID
+        $metrics = [];
+        foreach ($artworks as $artwork) {
+            $metrics[$artwork->ID] = [
+                'views'  => (int) get_post_meta($artwork->ID, 'view_count', true),
+                'likes'  => (int) get_post_meta($artwork->ID, 'like_count', true),
+                'shares' => (int) get_post_meta($artwork->ID, 'share_count', true),
+            ];
+        }
 
         ob_start();
         ?>
@@ -71,6 +84,7 @@ class ArtistDashboardShortcode {
         <?php
         wp_enqueue_script('ap-artwork-submission-js');
         wp_enqueue_script('ap-artist-dashboard');
+        wp_localize_script('ap-artist-dashboard', 'APArtistMetrics', $metrics);
         return ob_get_clean();
     }
 
@@ -107,5 +121,26 @@ class ArtistDashboardShortcode {
         $html = ob_get_clean();
 
         wp_send_json_success(['updated_list_html' => $html]);
+    }
+
+    public static function handle_save_artwork_order(): void {
+        check_ajax_referer('ap_artist_dashboard_nonce', 'nonce');
+
+        $order = isset($_POST['order']) ? json_decode(stripslashes($_POST['order']), true) : [];
+        if (!is_array($order)) {
+            wp_send_json_error(['message' => 'Invalid order']);
+        }
+
+        foreach ($order as $index => $art_id) {
+            $art_id = intval($art_id);
+            if ($art_id && current_user_can('edit_post', $art_id)) {
+                wp_update_post([
+                    'ID'         => $art_id,
+                    'menu_order' => $index,
+                ]);
+            }
+        }
+
+        wp_send_json_success();
     }
 }
