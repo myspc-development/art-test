@@ -1,0 +1,46 @@
+<?php
+namespace ArtPulse\Integration\Tests;
+
+use ArtPulse\Integration\PortfolioSync;
+
+class PortfolioSyncTest extends \WP_UnitTestCase
+{
+    public function set_up(): void
+    {
+        parent::set_up();
+        // Ensure post types and hooks are registered
+        do_action('init');
+    }
+
+    public function test_portfolio_meta_set_on_insert(): void
+    {
+        $user_id = self::factory()->user->create(['role' => 'administrator']);
+        wp_set_current_user($user_id);
+
+        $event_id = wp_insert_post([
+            'post_title'  => 'Sync Event',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+            'post_author' => $user_id,
+            'meta_input'  => [
+                'event_city' => 'TestCity',
+            ],
+        ]);
+
+        $portfolio = get_posts([
+            'post_type'   => 'portfolio',
+            'meta_key'    => '_ap_source_post',
+            'meta_value'  => $event_id,
+            'post_status' => 'any',
+            'fields'      => 'ids',
+            'numberposts' => 1,
+        ]);
+
+        $this->assertCount(1, $portfolio);
+        $portfolio_id = $portfolio[0];
+        $this->assertSame(
+            $event_id,
+            (int) get_post_meta($portfolio_id, '_ap_source_post', true)
+        );
+    }
+}
