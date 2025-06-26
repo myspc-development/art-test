@@ -3,6 +3,7 @@
 namespace ArtPulse\Core;
 
 use ArtPulse\Core\PortfolioManager;
+use ArtPulse\Core\AdminDashboard;
 
 class Plugin
 {
@@ -101,6 +102,7 @@ class Plugin
         \ArtPulse\Core\AnalyticsManager::register();
         \ArtPulse\Core\AnalyticsDashboard::register();
         \ArtPulse\Admin\PaymentAnalyticsDashboard::register();
+        AdminDashboard::register();
         \ArtPulse\Core\FrontendMembershipPage::register();
         \ArtPulse\Community\ProfileLinkRequestManager::register();
         \ArtPulse\Community\ArtistUpgradeRestController::register();
