@@ -20,21 +20,25 @@ class EventsRouteTest extends \WP_UnitTestCase
             'post_title'  => 'LA Event',
             'post_type'   => 'artpulse_event',
             'post_status' => 'publish',
+            'meta_input'  => [
+                'event_city'       => 'Los Angeles',
+                'event_state'      => 'CA',
+                '_ap_event_date'   => '2024-01-01',
+                '_ap_event_location'=> 'LA',
+            ],
         ]);
-        update_post_meta($this->la_event, 'event_city', 'Los Angeles');
-        update_post_meta($this->la_event, 'event_state', 'CA');
-        update_post_meta($this->la_event, '_ap_event_date', '2024-01-01');
-        update_post_meta($this->la_event, '_ap_event_location', 'LA');
 
         $this->ny_event = wp_insert_post([
             'post_title'  => 'NY Event',
             'post_type'   => 'artpulse_event',
             'post_status' => 'publish',
+            'meta_input'  => [
+                'event_city'       => 'New York City',
+                'event_state'      => 'NY',
+                '_ap_event_date'   => '2024-01-01',
+                '_ap_event_location'=> 'NY',
+            ],
         ]);
-        update_post_meta($this->ny_event, 'event_city', 'New York City');
-        update_post_meta($this->ny_event, 'event_state', 'NY');
-        update_post_meta($this->ny_event, '_ap_event_date', '2024-01-01');
-        update_post_meta($this->ny_event, '_ap_event_location', 'NY');
 
         RestRoutes::register();
         do_action('rest_api_init');
