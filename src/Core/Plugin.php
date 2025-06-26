@@ -133,6 +133,7 @@ class Plugin
         \ArtPulse\Frontend\OrgProfileEditShortcode::register();
         \ArtPulse\Frontend\PortfolioBuilder::register();
         PortfolioManager::register();
+        \ArtPulse\Integration\PortfolioSync::register();
         \ArtPulse\Frontend\LoginShortcode::register();
         \ArtPulse\Frontend\RegistrationShortcode::register();
         \ArtPulse\Frontend\LogoutShortcode::register();
