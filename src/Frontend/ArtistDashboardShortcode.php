@@ -109,6 +109,8 @@ class ArtistDashboardShortcode {
             'author'      => get_current_user_id(),
             'post_status' => ['publish','pending','draft'],
             'numberposts' => -1,
+            'orderby'     => 'menu_order',
+            'order'       => 'ASC',
         ]);
         foreach ($artworks as $artwork) {
             $edit = get_edit_post_link($artwork->ID);
