@@ -2,6 +2,8 @@
 
 namespace ArtPulse\Core;
 
+use ArtPulse\Core\PortfolioManager;
+
 class Plugin
 {
     private const VERSION = '1.1.5';
@@ -122,6 +124,7 @@ class Plugin
         \ArtPulse\Frontend\ProfileEditShortcode::register();
         \ArtPulse\Frontend\OrgProfileEditShortcode::register();
         \ArtPulse\Frontend\PortfolioBuilder::register();
+        PortfolioManager::register();
         \ArtPulse\Frontend\LoginShortcode::register();
         \ArtPulse\Frontend\RegistrationShortcode::register();
         \ArtPulse\Frontend\LogoutShortcode::register();
