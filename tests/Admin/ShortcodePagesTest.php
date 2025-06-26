@@ -37,4 +37,13 @@ class ShortcodePagesTest extends TestCase
         $this->assertCount(2, self::$inserted);
         $this->assertSame([1,2], self::$updated['ap_shortcode_page_ids']);
     }
+
+    public function test_supports_artist_dashboard_and_logout_shortcodes(): void
+    {
+        ShortcodePages::create_pages(['[ap_logout]', '[ap_artist_dashboard]']);
+
+        $this->assertCount(2, self::$inserted);
+        $this->assertSame('Logout', self::$inserted[0]['post_title']);
+        $this->assertSame('Artist Dashboard', self::$inserted[1]['post_title']);
+    }
 }
