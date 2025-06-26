@@ -306,10 +306,12 @@ class EnqueueAssets {
         $artist_dashboard_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-artist-dashboard.js';
         $artist_dashboard_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-artist-dashboard.js';
         if (file_exists($artist_dashboard_path)) {
+            wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], null, true);
+            wp_enqueue_script('sortable-js', 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js', [], null, true);
             wp_enqueue_script(
                 'ap-artist-dashboard',
                 $artist_dashboard_url,
-                ['jquery'],
+                ['jquery', 'chart-js', 'sortable-js'],
                 '1.0.0',
                 true
             );
