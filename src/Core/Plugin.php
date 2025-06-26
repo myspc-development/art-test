@@ -90,6 +90,7 @@ class Plugin
         \ArtPulse\Admin\ShortcodePages::register();
         \ArtPulse\Core\MembershipManager::register();
         \ArtPulse\Core\AccessControlManager::register();
+        \ArtPulse\Core\CapabilitiesManager::register();
         \ArtPulse\Core\AdminAccessManager::register();
         \ArtPulse\Core\LoginRedirectManager::register();
         \ArtPulse\Core\DirectoryManager::register();
