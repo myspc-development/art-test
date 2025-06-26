@@ -110,6 +110,20 @@ class EnqueueAssets {
             }
         }
 
+        if ($screen->base === 'artpulse-settings_page_artpulse-quickstart') {
+            $qs_path = $plugin_dir . '/assets/js/ap-quickstart.js';
+            $qs_url  = $plugin_url . '/assets/js/ap-quickstart.js';
+            if (file_exists($qs_path)) {
+                wp_enqueue_script(
+                    'ap-quickstart',
+                    $qs_url,
+                    [],
+                    filemtime($qs_path),
+                    true
+                );
+            }
+        }
+
         if (
             ($screen->base === 'toplevel_page_artpulse-settings' && ($_GET['tab'] ?? '') === 'import_export') ||
             $screen->base === 'artpulse-settings_page_artpulse-import-export'

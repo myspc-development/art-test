@@ -1043,3 +1043,26 @@ select.ap-input {
   padding: 0.5rem;
   margin-bottom: 0.5rem;
 }
+.ap-qs-steps {
+  list-style: none;
+  padding-left: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.ap-qs-steps li {
+  background: var(--ap-light-bg-color);
+  border-left: 4px solid var(--ap-primary-color);
+  padding: 0.5rem;
+  border-radius: var(--ap-border-radius);
+}
+.ap-qs-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.ap-qs-thumbs img {
+  max-width: 100px;
+  cursor: pointer;
+  border-radius: var(--ap-border-radius);
+}
