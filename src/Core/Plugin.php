@@ -4,6 +4,7 @@ namespace ArtPulse\Core;
 
 use ArtPulse\Core\PortfolioManager;
 use ArtPulse\Core\AdminDashboard;
+use ArtPulse\Core\DocumentationManager;
 
 class Plugin
 {
@@ -153,6 +154,7 @@ class Plugin
         \ArtPulse\Admin\AdminColumnsEvent::register();
         \ArtPulse\Admin\AdminColumnsOrganisation::register();
         \ArtPulse\Admin\QuickStartGuide::register();
+        DocumentationManager::register();
         \ArtPulse\Taxonomies\TaxonomiesRegistrar::register();
         \ArtPulse\Core\EventExpiryCron::register();
 
