@@ -8,6 +8,13 @@ function wp_get_current_user() { return (object)['roles' => \ArtPulse\Core\Tests
 function get_posts($args) { return []; }
 function get_permalink($id) { return '/profile'; }
 function home_url($path = '/') { return '/'; }
+function get_current_user_id() { return \ArtPulse\Core\Tests\Stub::$user_id; }
+function get_user_meta($uid, $key, $single = false) {
+    return \ArtPulse\Core\Tests\Stub::$meta[$key] ?? [];
+}
+function get_post($id) {
+    return (object)['ID' => $id, 'post_title' => 'Post ' . $id];
+}
 function esc_html_e($text, $domain = null) { }
 function __($text, $domain = null) { return $text; }
 function _e($text, $domain = null) { }
@@ -31,6 +38,8 @@ class Stub {
     public static $logged_in = true;
     public static $can_view = true;
     public static $roles = [];
+    public static $user_id = 1;
+    public static $meta = [];
 }
 
 class UserDashboardManagerTest extends TestCase
@@ -76,5 +85,12 @@ class UserDashboardManagerTest extends TestCase
         $html = UserDashboardManager::renderDashboard(['show_forms' => true]);
         $this->assertStringContainsString('ap-artist-submission-form', $html);
         $this->assertStringContainsString('ap-org-submission-form', $html);
+    }
+
+    public function test_support_history_section_shown_when_history_exists() {
+        Stub::$roles = ['member'];
+        Stub::$meta = ['ap_support_history' => [1]];
+        $html = UserDashboardManager::renderDashboard([]);
+        $this->assertStringContainsString('id="support-history"', $html);
     }
 }

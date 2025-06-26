@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   .then(res => res.json())
   .then(data => {
     favoriteEvents = data.favorite_events || [];
+    const supportHistory = data.support_history || [];
     // Membership
     const info = document.getElementById('ap-membership-info');
     info.innerHTML = `<p>${apL10n.membership_level}: ${data.membership_level}</p>
@@ -149,6 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
       renderCalendar(favoriteEvents, 'ap-favorite-events', true);
     }
 
+    renderSupportHistory(supportHistory);
+
     fetchNotifications();
   });
 });
@@ -257,6 +260,26 @@ function renderEventsFeed(events) {
     ul.appendChild(li);
   });
   feed.appendChild(ul);
+}
+
+function renderSupportHistory(list) {
+  const container = document.getElementById('ap-support-history');
+  if (!container) return;
+  container.innerHTML = '';
+  if (!list || !list.length) {
+    container.textContent = 'No support requests.';
+    return;
+  }
+  const ul = document.createElement('ul');
+  list.forEach(item => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = item.link;
+    a.textContent = item.title;
+    li.appendChild(a);
+    ul.appendChild(li);
+  });
+  container.appendChild(ul);
 }
 
 function fetchNotifications() {
