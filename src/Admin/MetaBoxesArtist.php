@@ -60,6 +60,7 @@ class MetaBoxesArtist {
         }
 
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if (!current_user_can('edit_post', $post_id)) return;
         if ($post->post_type !== 'artpulse_artist') return; // Corrected CPT slug
 
         $fields = self::get_registered_artist_meta_fields();

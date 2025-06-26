@@ -71,6 +71,7 @@ class MetaBoxesEvent {
     public static function save_event_meta($post_id, $post) {
         if (!isset($_POST['ead_event_meta_nonce_field']) || !wp_verify_nonce($_POST['ead_event_meta_nonce_field'], 'ead_event_meta_nonce')) return;
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if (!current_user_can('edit_post', $post_id)) return;
         if ($post->post_type !== 'artpulse_event') return; // Corrected CPT slug
 
         $fields = self::get_registered_event_meta_fields();
