@@ -17,6 +17,7 @@ function _e($t,$d=null){}
 function esc_html($t){ return $t; }
 function esc_attr($t){ return $t; }
 function esc_url($t){ return $t; }
+function current_user_can($cap){ return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$caps[$cap] ?? false; }
 class WP_Query{ public array $posts=[]; public $max_num_pages=1; public function __construct($a){} }
 
 namespace ArtPulse\Frontend\Tests;
@@ -28,11 +29,13 @@ class OrganizationDashboardShortcodeTest extends TestCase
 {
     public static array $user_meta = [];
     public static array $post_meta = [];
+    public static array $caps = [];
 
     protected function setUp(): void
     {
         self::$user_meta = [];
         self::$post_meta = [];
+        self::$caps = [];
     }
 
     public function test_opening_hours_in_dashboard(): void
@@ -44,5 +47,26 @@ class OrganizationDashboardShortcodeTest extends TestCase
         $html = OrganizationDashboardShortcode::render([]);
         $this->assertStringContainsString('Opening Hours', $html);
         $this->assertStringContainsString('09:00 - 17:00', $html);
+    }
+
+    public function test_analytics_hidden_without_cap(): void
+    {
+        self::$user_meta[1]['ap_organization_id'] = 10;
+        self::$caps['manage_options'] = false;
+        self::$caps['edit_others_posts'] = false;
+
+        $html = OrganizationDashboardShortcode::render([]);
+        $this->assertStringNotContainsString('id="analytics-section"', $html);
+        $this->assertStringNotContainsString('href="#analytics"', $html);
+    }
+
+    public function test_analytics_visible_with_cap(): void
+    {
+        self::$user_meta[1]['ap_organization_id'] = 10;
+        self::$caps['manage_options'] = true;
+
+        $html = OrganizationDashboardShortcode::render([]);
+        $this->assertStringContainsString('id="analytics-section"', $html);
+        $this->assertStringContainsString('href="#analytics"', $html);
     }
 }
