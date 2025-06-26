@@ -10,12 +10,68 @@ class OrganizationDashboardShortcode {
         add_action('wp_ajax_ap_delete_org_event', [self::class, 'handle_ajax_delete_event']);
     }
 
+    /**
+     * Return artwork posts grouped by project stage for an organization.
+     */
+    public static function get_project_stage_groups(int $org_id): array {
+        $groups = [];
+
+        $terms = get_terms([
+            'taxonomy'   => 'ap_project_stage',
+            'hide_empty' => false,
+        ]);
+        if (!is_wp_error($terms)) {
+            foreach ($terms as $term) {
+                $groups[$term->slug] = [
+                    'slug'  => $term->slug,
+                    'name'  => $term->name,
+                    'items' => [],
+                ];
+            }
+        }
+
+        $posts = get_posts([
+            'post_type'      => 'artpulse_artwork',
+            'post_status'    => ['publish','pending','draft'],
+            'numberposts'    => -1,
+            'meta_key'       => 'org_id',
+            'meta_value'     => $org_id,
+        ]);
+
+        foreach ($posts as $p) {
+            $stage_terms = get_the_terms($p->ID, 'ap_project_stage');
+            $slug = '';
+            $name = '';
+            if ($stage_terms && !is_wp_error($stage_terms)) {
+                $slug = $stage_terms[0]->slug;
+                $name = $stage_terms[0]->name;
+            }
+
+            if (!isset($groups[$slug])) {
+                $groups[$slug] = [
+                    'slug'  => $slug,
+                    'name'  => $name ?: __('Uncategorized', 'artpulse'),
+                    'items' => [],
+                ];
+            }
+
+            $groups[$slug]['items'][] = [
+                'id'    => $p->ID,
+                'title' => $p->post_title,
+            ];
+        }
+
+        return array_values($groups);
+    }
+
     public static function render($atts) {
         if (!is_user_logged_in()) return '<p>You must be logged in to view this dashboard.</p>';
 
         $user_id = get_current_user_id();
         $org_id = get_user_meta($user_id, 'ap_organization_id', true);
         if (!$org_id) return '<p>No organization assigned.</p>';
+
+        $stage_groups = self::get_project_stage_groups($org_id);
 
 
         $status = isset($_GET['status']) ? sanitize_key($_GET['status']) : 'all';
@@ -169,6 +225,8 @@ class OrganizationDashboardShortcode {
             ]);
             ?>
             </section>
+
+            <div id="kanban-board"></div>
 
             <section class="ap-widget" id="analytics-section">
                 <h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2>

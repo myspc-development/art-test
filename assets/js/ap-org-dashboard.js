@@ -5,6 +5,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('ap-org-event-form');
   const eventsContainer = document.getElementById('ap-org-events');
   const statusBox = document.getElementById('ap-status-message');
+  const kanbanContainer = document.getElementById('kanban-board');
+
+  if (kanbanContainer && Array.isArray(APOrgDashboard.projectStages)) {
+    const board = document.createElement('div');
+    board.className = 'ap-kanban';
+    APOrgDashboard.projectStages.forEach(stage => {
+      const col = document.createElement('div');
+      col.className = 'ap-kanban-column';
+      const h = document.createElement('h3');
+      h.textContent = stage.name;
+      col.appendChild(h);
+      const list = document.createElement('ul');
+      stage.items.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'ap-kanban-item';
+        li.textContent = item.title;
+        list.appendChild(li);
+      });
+      col.appendChild(list);
+      board.appendChild(col);
+    });
+    kanbanContainer.appendChild(board);
+  }
 
   if (modal) {
     modal.style.display = '';

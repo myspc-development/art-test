@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin;
 
 use ArtPulse\Core\Plugin;
+use ArtPulse\Frontend\OrganizationDashboardShortcode;
 
 class EnqueueAssets {
 
@@ -285,7 +286,7 @@ class EnqueueAssets {
         );
 
         $org_dashboard_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-dashboard.js';
-        $org_dashboard_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-dashboard.js';
+        $org_dashboard_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-dashboard.js';
         if (file_exists($org_dashboard_path)) {
             wp_enqueue_script(
                 'ap-org-dashboard',
@@ -294,12 +295,23 @@ class EnqueueAssets {
                 '1.0.0',
                 true
             );
+
+            $stage_groups = [];
+            if (is_user_logged_in()) {
+                $uid    = get_current_user_id();
+                $org_id = get_user_meta($uid, 'ap_organization_id', true);
+                if ($org_id) {
+                    $stage_groups = OrganizationDashboardShortcode::get_project_stage_groups($org_id);
+                }
+            }
+
             wp_localize_script('ap-org-dashboard', 'APOrgDashboard', [
                 'ajax_url'     => admin_url('admin-ajax.php'),
                 'nonce'        => wp_create_nonce('ap_org_dashboard_nonce'),
                 'eventFormUrl' => Plugin::get_event_submission_url(),
                 'rest_root'    => esc_url_raw(rest_url()),
                 'rest_nonce'   => wp_create_nonce('wp_rest'),
+                'projectStages'=> $stage_groups,
             ]);
         }
 
