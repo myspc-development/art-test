@@ -7,6 +7,7 @@ class TaxonomiesRegistrar {
         add_action('init', [self::class, 'register_artwork_styles']);
         add_action('init', [self::class, 'register_event_types']);
         add_action('init', [self::class, 'register_org_categories']);
+        add_action('init', [self::class, 'register_project_stages']);
     }
 
     public static function register_artist_specialties() {
@@ -93,6 +94,28 @@ class TaxonomiesRegistrar {
             'show_ui' => true,
             'show_admin_column' => true,
             'rewrite' => ['slug' => 'organization-category'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    public static function register_project_stages() {
+        $labels = [
+            'name' => __('Project Stages', 'artpulse-management'),
+            'singular_name' => __('Project Stage', 'artpulse-management'),
+            'search_items' => __('Search Stages', 'artpulse-management'),
+            'all_items' => __('All Stages', 'artpulse-management'),
+            'edit_item' => __('Edit Stage', 'artpulse-management'),
+            'update_item' => __('Update Stage', 'artpulse-management'),
+            'add_new_item' => __('Add New Stage', 'artpulse-management'),
+            'new_item_name' => __('New Stage Name', 'artpulse-management'),
+            'menu_name' => __('Project Stages', 'artpulse-management'),
+        ];
+        register_taxonomy('ap_project_stage', 'artpulse_artwork', [
+            'hierarchical' => true,
+            'labels' => $labels,
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'project-stage'],
             'show_in_rest' => true,
         ]);
     }
