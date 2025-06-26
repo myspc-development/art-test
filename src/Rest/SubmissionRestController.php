@@ -5,6 +5,7 @@ namespace ArtPulse\Rest;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
+use ArtPulse\Integration\PortfolioSync;
 
 class SubmissionRestController
 {
@@ -66,11 +67,20 @@ class SubmissionRestController
         $is_artist = in_array('artist', (array) $user->roles, true);
         $status = ( 'artpulse_org' === $post_type || ( 'artpulse_artist' === $post_type && ! $is_artist ) ) ? 'pending' : 'publish';
 
+        $meta_fields = self::get_meta_fields_for( $post_type );
+        $meta_input  = [];
+        foreach ( $meta_fields as $field_key => $meta_key ) {
+            if ( isset( $params[ $field_key ] ) ) {
+                $meta_input[ $meta_key ] = sanitize_text_field( $params[ $field_key ] );
+            }
+        }
+
         $post_id = wp_insert_post( [
             'post_type'   => $post_type,
             'post_title'  => sanitize_text_field( $params['title'] ),
             'post_status' => $status,
             'post_author' => $user->ID,
+            'meta_input'  => $meta_input,
         ], true );
 
         if ( is_wp_error( $post_id ) ) {
@@ -81,12 +91,6 @@ class SubmissionRestController
             update_user_meta( $user->ID, 'ap_pending_organization_id', $post_id );
         }
 
-        $meta_fields = self::get_meta_fields_for( $post_type );
-        foreach ( $meta_fields as $field_key => $meta_key ) {
-            if ( isset( $params[ $field_key ] ) ) {
-                update_post_meta( $post_id, $meta_key, sanitize_text_field( $params[ $field_key ] ) );
-            }
-        }
 
         if ( isset( $params['event_type'] ) ) {
             $term_id = absint( $params['event_type'] );
@@ -97,13 +101,18 @@ class SubmissionRestController
 
         $saved_image_ids = [];
         if ( ! empty( $params['image_ids'] ) && is_array( $params['image_ids'] ) ) {
-            $ids = array_slice( array_map( 'absint', $params['image_ids'] ), 0, 5 );
+            $ids       = array_slice( array_map( 'absint', $params['image_ids'] ), 0, 5 );
             $valid_ids = array_filter( $ids, fn( $id ) => get_post_type( $id ) === 'attachment' );
             if ( $valid_ids ) {
                 update_post_meta( $post_id, '_ap_submission_images', $valid_ids );
                 set_post_thumbnail( $post_id, $valid_ids[0] );
                 $saved_image_ids = $valid_ids;
             }
+        }
+
+        if ( in_array( $post_type, [ 'artpulse_artist', 'artpulse_artwork', 'artpulse_event' ], true ) ) {
+            $post = get_post( $post_id );
+            PortfolioSync::sync_portfolio( $post_id, $post );
         }
 
         $post       = get_post( $post_id );
