@@ -42,4 +42,25 @@ jQuery(function ($) {
       $('#ap-portfolio-message').text('Error saving item.');
     });
   });
+
+  const savedList = document.getElementById('ap-saved-items');
+  if (savedList && window.Sortable) {
+    new Sortable(savedList, {
+      animation: 150,
+      onEnd: function () {
+        const ids = [];
+        savedList.querySelectorAll('.ap-saved-item').forEach(el => ids.push(el.dataset.id));
+
+        $.post(APPortfolio.ajaxUrl, {
+          action: 'ap_save_portfolio_order',
+          nonce: APPortfolio.nonce,
+          order: ids
+        }, function (res) {
+          if (res.data && res.data.message) {
+            $('.ap-form-messages').text(res.data.message);
+          }
+        });
+      }
+    });
+  }
 });
