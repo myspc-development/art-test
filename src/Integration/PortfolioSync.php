@@ -13,7 +13,7 @@ class PortfolioSync
     {
         $types = ['artpulse_artist', 'artpulse_artwork', 'artpulse_event'];
         foreach ($types as $type) {
-            add_action("save_post_{$type}", [self::class, 'sync_portfolio'], 10, 3);
+            add_action("save_post_{$type}", [self::class, 'sync_portfolio'], 10, 2);
         }
         add_action('before_delete_post', [self::class, 'delete_portfolio']);
     }
