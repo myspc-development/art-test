@@ -60,6 +60,7 @@ class MetaBoxesArtwork {
         }
 
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if (!current_user_can('edit_post', $post_id)) return;
         if ($post->post_type !== 'artpulse_artwork') return; // Corrected CPT slug
 
         $registered_fields = self::get_registered_artwork_meta_fields();
