@@ -121,6 +121,9 @@ class RsvpRestController
 
     public static function join(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        if (!is_user_logged_in()) {
+            return new WP_Error('rest_not_logged_in', 'Authentication required.', ['status' => 401]);
+        }
         $event_id = absint($request->get_param('event_id'));
         if (!self::validate_event($event_id)) {
             return new WP_Error('invalid_event', 'Invalid event.', ['status' => 400]);
@@ -171,6 +174,9 @@ class RsvpRestController
 
     public static function cancel(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        if (!is_user_logged_in()) {
+            return new WP_Error('rest_not_logged_in', 'Authentication required.', ['status' => 401]);
+        }
         $event_id = absint($request->get_param('event_id'));
         if (!self::validate_event($event_id)) {
             return new WP_Error('invalid_event', 'Invalid event.', ['status' => 400]);
@@ -231,6 +237,9 @@ class RsvpRestController
     public static function get_attendees(WP_REST_Request $request): WP_REST_Response
     {
         $event_id = absint($request->get_param('id'));
+        if (!current_user_can('edit_post', $event_id)) {
+            return new WP_Error('rest_forbidden', 'Insufficient permissions.', ['status' => 403]);
+        }
         ['rsvps' => $rsvps, 'waitlist' => $waitlist] = self::get_lists($event_id);
         $attended = get_post_meta($event_id, 'event_attended', true);
         if (!is_array($attended)) {
@@ -272,6 +281,9 @@ class RsvpRestController
     public static function export_attendees(WP_REST_Request $request): WP_REST_Response
     {
         $event_id = absint($request->get_param('id'));
+        if (!current_user_can('edit_post', $event_id)) {
+            return new WP_Error('rest_forbidden', 'Insufficient permissions.', ['status' => 403]);
+        }
         $date     = get_post_meta($event_id, '_ap_event_date', true);
         $data     = self::get_attendees($request)->get_data();
 

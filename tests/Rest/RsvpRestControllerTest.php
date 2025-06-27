@@ -12,6 +12,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     private int $event_id;
     private int $user1;
     private int $user2;
+    private int $user3;
     private array $emails = [];
 
     public function set_up(): void
@@ -20,17 +21,24 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         add_filter('pre_wp_mail', [$this, 'capture_mail'], 10, 6);
         $this->user1 = self::factory()->user->create(['role' => 'organization']);
         $this->user2 = self::factory()->user->create();
+        $this->user3 = self::factory()->user->create(['role' => 'organization']);
 
         $this->event_id = wp_insert_post([
             'post_title'  => 'Test Event',
             'post_type'   => 'artpulse_event',
-            'post_status' => 'publish',
+            'post_status' => 'draft',
+            'post_author' => $this->user1,
         ]);
         update_post_meta($this->event_id, 'event_rsvp_limit', 1);
         update_post_meta($this->event_id, '_ap_event_organization', 99);
         update_user_meta($this->user1, 'ap_organization_id', 99);
+        update_user_meta($this->user3, 'ap_organization_id', 99);
         update_post_meta($this->event_id, 'event_rsvp_list', []);
         update_post_meta($this->event_id, 'event_waitlist', []);
+
+        $u1 = new \WP_User($this->user1);
+        $u1->add_cap('edit_artpulse_event');
+        $u1->add_cap('edit_artpulse_events');
 
         RsvpRestController::register();
         do_action('rest_api_init');
@@ -156,5 +164,22 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $req->set_param('message', 'Hello');
         rest_get_server()->dispatch($req);
         $this->assertCount(2, $this->emails);
+    }
+
+    public function test_join_requires_login(): void
+    {
+        wp_set_current_user(0);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req->set_param('event_id', $this->event_id);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(401, $res->get_status());
+    }
+
+    public function test_attendee_list_requires_edit_permission(): void
+    {
+        wp_set_current_user($this->user3);
+        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(403, $res->get_status());
     }
 }
