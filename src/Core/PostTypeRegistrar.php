@@ -246,6 +246,17 @@ class PostTypeRegistrar
             'type'         => 'array',
         ]);
 
+        register_post_meta('artpulse_event', 'event_attended', [
+            'show_in_rest' => [
+                'schema' => [
+                    'type'  => 'array',
+                    'items' => [ 'type' => 'integer' ],
+                ],
+            ],
+            'single'       => true,
+            'type'         => 'array',
+        ]);
+
         register_post_meta('artpulse_artist', '_ap_artist_bio', [
             'show_in_rest' => true,
             'single'       => true,
