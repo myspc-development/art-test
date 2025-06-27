@@ -26,11 +26,12 @@ get_header(); ?>
             // Additional gallery images
             $gallery_ids = get_post_meta( get_the_ID(), '_ap_submission_images', true );
             if ( is_array( $gallery_ids ) && count( $gallery_ids ) > 1 ) {
-              echo '<div class="event-gallery">';
-              foreach ( array_slice( $gallery_ids, 1, 4 ) as $img_id ) {
-                echo wp_get_attachment_image( $img_id, 'large' );
+                          echo '<div class="event-gallery swiper">';
+              echo '<div class="swiper-wrapper">';
+              foreach ( array_slice( $gallery_ids, 1 ) as $img_id ) {
+                echo '<div class="swiper-slide">' . wp_get_attachment_image( $img_id, 'large' ) . '</div>';
               }
-              echo '</div>';
+              echo '</div><div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div>';
             }
 
             // Title

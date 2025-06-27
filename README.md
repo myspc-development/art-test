@@ -96,3 +96,8 @@ Use `[ap_portfolio_builder]` to allow members to create portfolio items. Drag it
 ## Portfolio Meta Migration
 
 Older versions saved portfolio links and visibility using the meta keys `_ap_portfolio_link` and `_ap_visibility`. These have been renamed to `portfolio_link` and `portfolio_visibility`. When the plugin loads in the admin area it copies any existing values to the new keys and removes the legacy ones.
+
+
+## Event Gallery
+
+Single event pages display gallery images using [Swiper](https://swiperjs.com/). The minified assets live in `assets/libs/swiper/` and are enqueued only when viewing an individual event. A small initialization script sets up the slider targeting `.event-gallery`.

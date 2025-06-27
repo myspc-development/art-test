@@ -213,6 +213,32 @@ class EnqueueAssets {
     public static function enqueue_frontend() {
         $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
 
+               if (is_singular('artpulse_event')) {
+            wp_enqueue_style(
+                'swiper-css',
+                plugins_url('assets/libs/swiper/swiper-bundle.min.css', ARTPULSE_PLUGIN_FILE)
+            );
+            wp_enqueue_script(
+                'swiper-js',
+                plugins_url('assets/libs/swiper/swiper-bundle.min.js', ARTPULSE_PLUGIN_FILE),
+                [],
+                null,
+                true
+            );
+            wp_enqueue_style(
+                'ap-event-gallery',
+                plugins_url('assets/css/event-gallery.css', ARTPULSE_PLUGIN_FILE)
+            );
+            wp_enqueue_script(
+                'ap-event-gallery-front',
+                plugins_url('assets/js/ap-event-gallery-front.js', ARTPULSE_PLUGIN_FILE),
+                ['swiper-js'],
+                null,
+                true
+            );
+        }
+
+
         wp_enqueue_script(
             'ap-membership-account-js',
             $plugin_url . '/assets/js/ap-membership-account.js',
