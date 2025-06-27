@@ -203,7 +203,7 @@ class RestRoutes
         $min     = PHP_FLOAT_MAX;
 
         foreach ($cities as $city) {
-            $dist = self::haversine_distance($lat, $lng, $city['lat'], $city['lng']);
+            $dist = self::geodesic_distance($lat, $lng, $city['lat'], $city['lng']);
             if ($dist < $min) {
                 $min     = $dist;
                 $nearest = $city;
@@ -213,6 +213,7 @@ class RestRoutes
         return $nearest;
     }
 
+
     private static function haversine_distance(float $lat1, float $lng1, float $lat2, float $lng2): float
     {
         $earth = 6371; // km
@@ -221,5 +222,62 @@ class RestRoutes
         $a     = sin($dLat / 2) * sin($dLat / 2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) * sin($dLon / 2);
         $c     = 2 * atan2(sqrt($a), sqrt(1 - $a));
         return $earth * $c;
+    }
+
+    private static function geodesic_distance(float $lat1, float $lng1, float $lat2, float $lng2): float
+    {
+        $a = 6378137.0; // WGS-84 major axis in meters
+        $b = 6356752.314245; // WGS-84 minor axis in meters
+        $f = 1 / 298.257223563; // WGS-84 flattening
+
+        $L  = deg2rad($lng2 - $lng1);
+        $U1 = atan((1 - $f) * tan(deg2rad($lat1)));
+        $U2 = atan((1 - $f) * tan(deg2rad($lat2)));
+
+        $sinU1 = sin($U1);
+        $cosU1 = cos($U1);
+        $sinU2 = sin($U2);
+        $cosU2 = cos($U2);
+
+        $lambda    = $L;
+        $lambdaPrev = 2 * M_PI;
+        $iterLimit = 20;
+        while (abs($lambda - $lambdaPrev) > 1e-12 && --$iterLimit > 0) {
+            $sinLambda = sin($lambda);
+            $cosLambda = cos($lambda);
+            $sinSigma  = sqrt(($cosU2 * $sinLambda) * ($cosU2 * $sinLambda) +
+                ($cosU1 * $sinU2 - $sinU1 * $cosU2 * $cosLambda) *
+                ($cosU1 * $sinU2 - $sinU1 * $cosU2 * $cosLambda));
+            if ($sinSigma === 0) {
+                return 0.0; // coincident points
+            }
+            $cosSigma = $sinU1 * $sinU2 + $cosU1 * $cosU2 * $cosLambda;
+            $sigma    = atan2($sinSigma, $cosSigma);
+            $sinAlpha = $cosU1 * $cosU2 * $sinLambda / $sinSigma;
+            $cosSqAlpha = 1 - $sinAlpha * $sinAlpha;
+            $cos2SigmaM = $cosSigma - 2 * $sinU1 * $sinU2 / ($cosSqAlpha ?: 1); // avoid NaN on equator
+            $C = $f / 16 * $cosSqAlpha * (4 + $f * (4 - 3 * $cosSqAlpha));
+            $lambdaPrev = $lambda;
+            $lambda = $L + (1 - $C) * $f * $sinAlpha *
+                ($sigma + $C * $sinSigma * ($cos2SigmaM + $C * $cosSigma *
+                (-1 + 2 * $cos2SigmaM * $cos2SigmaM)));
+        }
+
+        if ($iterLimit === 0) {
+            return self::haversine_distance($lat1, $lng1, $lat2, $lng2);
+        }
+
+        $uSq = $cosSqAlpha * ($a * $a - $b * $b) / ($b * $b);
+        $A    = 1 + $uSq / 16384 * (4096 + $uSq * (-768 + $uSq * (320 - 175 * $uSq)));
+        $B    = $uSq / 1024 * (256 + $uSq * (-128 + $uSq * (74 - 47 * $uSq)));
+        $deltaSigma = $B * $sinSigma * ($cos2SigmaM + $B / 4 * (
+                $cosSigma * (-1 + 2 * $cos2SigmaM * $cos2SigmaM) -
+                $B / 6 * $cos2SigmaM * (-3 + 4 * $sinSigma * $sinSigma) *
+                (-3 + 4 * $cos2SigmaM * $cos2SigmaM)
+            ));
+
+        $s = $b * $A * ($sigma - $deltaSigma);
+
+        return $s / 1000.0; // return distance in km
     }
 }
