@@ -24,6 +24,9 @@ export default function SubmissionForm() {
   const [organizerName, setOrganizerName] = useState('');
   const [organizerEmail, setOrganizerEmail] = useState('');
   const [featured, setFeatured] = useState(false);
+  const [rsvpEnabled, setRsvpEnabled] = useState(false);
+  const [rsvpLimit, setRsvpLimit] = useState('');
+  const [waitlistEnabled, setWaitlistEnabled] = useState(false);
   const orderRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -145,8 +148,11 @@ export default function SubmissionForm() {
           event_state: stateProv,
           event_country: country,
           event_postcode: postcode,
-          event_organizer_name: organizerName,
-          event_organizer_email: organizerEmail,
+         event_organizer_name: organizerName,
+         event_organizer_email: organizerEmail,
+          event_rsvp_enabled: rsvpEnabled ? '1' : '0',
+          event_rsvp_limit: rsvpLimit,
+          event_waitlist_enabled: waitlistEnabled ? '1' : '0',
           event_featured: featured ? '1' : '0',
           image_ids: imageIds,
           address_components: addressComponents,
@@ -175,6 +181,9 @@ export default function SubmissionForm() {
       setOrganizerName('');
       setOrganizerEmail('');
       setFeatured(false);
+      setRsvpEnabled(false);
+      setRsvpLimit('');
+      setWaitlistEnabled(false);
       setImages([]);
       setPreviews([]);
       setProgresses([]);
@@ -350,6 +359,36 @@ export default function SubmissionForm() {
           onChange={handleBannerChange}
         />
       </p>
+      <label className="ap-form-label">
+        <input
+          type="checkbox"
+          className="ap-input"
+          checked={rsvpEnabled}
+          onChange={e => setRsvpEnabled(e.target.checked)}
+        />
+        <span> Enable RSVP</span>
+      </label>
+
+      <p>
+        <label className="ap-form-label" htmlFor="ap_rsvp_limit">RSVP Limit</label>
+        <input
+          id="ap_rsvp_limit"
+          className="ap-input"
+          type="number"
+          value={rsvpLimit}
+          onChange={e => setRsvpLimit(e.target.value)}
+        />
+      </p>
+
+      <label className="ap-form-label">
+        <input
+          type="checkbox"
+          className="ap-input"
+          checked={waitlistEnabled}
+          onChange={e => setWaitlistEnabled(e.target.checked)}
+        />
+        <span> Enable Waitlist</span>
+      </label>
 
       <label className="ap-form-label">
         <input

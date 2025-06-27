@@ -9,6 +9,12 @@ jQuery(function ($) {
         if (!data.has('event_featured')) {
             data.append('event_featured', '0');
         }
+        if (!data.has('event_rsvp_enabled')) {
+            data.append('event_rsvp_enabled', '0');
+        }
+        if (!data.has('event_waitlist_enabled')) {
+            data.append('event_waitlist_enabled', '0');
+        }
         $.ajax({
             url: APEditEvent.ajax_url,
             method: 'POST',
