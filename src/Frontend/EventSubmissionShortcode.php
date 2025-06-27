@@ -223,6 +223,16 @@ class EventSubmissionShortcode {
             return;
         }
 
+        // Validate that start date is not later than end date when both provided
+        if ($start_date && $end_date && strtotime($start_date) > strtotime($end_date)) {
+            if (function_exists('wc_add_notice')) {
+                wc_add_notice('Start date cannot be later than end date.', 'error');
+            } else {
+                wp_die('Start date cannot be later than end date.');
+            }
+            return;
+        }
+
         if ($event_org <= 0) {
             if (function_exists('wc_add_notice')) {
                 wc_add_notice('Please select an organization.', 'error');
