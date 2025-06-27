@@ -85,6 +85,17 @@ class OrganizationEventForm {
             <input class="ap-input" id="ap_org_event_images" type="file" name="images[]" multiple>
 
             <label class="ap-form-label">
+                <input class="ap-input" type="checkbox" name="event_rsvp_enabled" value="1"> Enable RSVP
+            </label>
+
+            <label class="ap-form-label" for="ap_org_event_rsvp_limit">RSVP Limit</label>
+            <input class="ap-input" id="ap_org_event_rsvp_limit" type="number" name="event_rsvp_limit">
+
+            <label class="ap-form-label">
+                <input class="ap-input" type="checkbox" name="event_waitlist_enabled" value="1"> Enable Waitlist
+            </label>
+
+            <label class="ap-form-label">
                 <input class="ap-input" type="checkbox" name="event_featured" value="1"> Request Featured
             </label>
 
@@ -112,6 +123,9 @@ class OrganizationEventForm {
         $organizer_email = sanitize_email($_POST['event_organizer_email'] ?? '');
         $type = intval($_POST['event_type']);
         $featured = isset($_POST['event_featured']) ? '1' : '0';
+        $rsvp_enabled = isset($_POST['event_rsvp_enabled']) ? '1' : '0';
+        $rsvp_limit   = isset($_POST['event_rsvp_limit']) ? intval($_POST['event_rsvp_limit']) : 0;
+        $waitlist_enabled = isset($_POST['event_waitlist_enabled']) ? '1' : '0';
 
         $post_id = wp_insert_post([
             'post_title'   => $title,
@@ -137,6 +151,9 @@ class OrganizationEventForm {
         update_post_meta($post_id, 'event_organizer_name', $organizer_name);
         update_post_meta($post_id, 'event_organizer_email', $organizer_email);
         update_post_meta($post_id, 'event_featured', $featured);
+        update_post_meta($post_id, 'event_rsvp_enabled', $rsvp_enabled);
+        update_post_meta($post_id, 'event_rsvp_limit', $rsvp_limit);
+        update_post_meta($post_id, 'event_waitlist_enabled', $waitlist_enabled);
 
         if ($type) {
             wp_set_post_terms($post_id, [$type], 'artpulse_event_type');

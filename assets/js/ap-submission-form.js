@@ -58,6 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
         event_postcode: postcodeInput ? postcodeInput.value : formData.get('event_postcode'),
         event_organizer_name: formData.get('event_organizer_name'),
         event_organizer_email: formData.get('event_organizer_email'),
+        event_rsvp_enabled: formData.has('event_rsvp_enabled') ? '1' : '0',
+        event_rsvp_limit: formData.get('event_rsvp_limit'),
+        event_waitlist_enabled: formData.has('event_waitlist_enabled') ? '1' : '0',
         event_featured: formData.has('event_featured') ? '1' : '0',
         image_ids: imageIds
       };

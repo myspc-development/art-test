@@ -45,6 +45,9 @@ class EditEventShortcode {
         $org_email = esc_attr(get_post_meta($post_id, 'event_organizer_email', true));
         $org_selected = intval(get_post_meta($post_id, '_ap_event_organization', true));
         $featured_checked = get_post_meta($post_id, 'event_featured', true) === '1' ? 'checked' : '';
+        $rsvp_enabled_checked = get_post_meta($post_id, 'event_rsvp_enabled', true) === '1' ? 'checked' : '';
+        $rsvp_limit = esc_attr(get_post_meta($post_id, 'event_rsvp_limit', true));
+        $waitlist_checked = get_post_meta($post_id, 'event_waitlist_enabled', true) === '1' ? 'checked' : '';
         $event_type   = wp_get_post_terms($post_id, 'artpulse_event_type', ['fields' => 'ids']);
         $event_type_id = !empty($event_type) ? $event_type[0] : '';
 
@@ -159,6 +162,21 @@ class EditEventShortcode {
             </p>
             <p>
                 <label>
+                    <input class="ap-input" type="checkbox" name="event_rsvp_enabled" value="1" <?php echo $rsvp_enabled_checked; ?>> Enable RSVP
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">RSVP Limit<br>
+                    <input class="ap-input" type="number" name="event_rsvp_limit" value="<?php echo $rsvp_limit; ?>">
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input class="ap-input" type="checkbox" name="event_waitlist_enabled" value="1" <?php echo $waitlist_checked; ?>> Enable Waitlist
+                </label>
+            </p>
+            <p>
+                <label>
                     <input class="ap-input" type="checkbox" name="event_featured" value="1" <?php echo $featured_checked; ?>> Request Featured
                 </label>
             </p>
@@ -206,6 +224,9 @@ class EditEventShortcode {
         $event_org      = intval($_POST['event_org'] ?? 0);
         $event_type     = intval($_POST['event_type']);
         $featured       = isset($_POST['event_featured']) ? '1' : '0';
+        $rsvp_enabled   = isset($_POST['event_rsvp_enabled']) ? '1' : '0';
+        $rsvp_limit     = isset($_POST['event_rsvp_limit']) ? intval($_POST['event_rsvp_limit']) : 0;
+        $waitlist_enabled = isset($_POST['event_waitlist_enabled']) ? '1' : '0';
 
         if (!$title || !$content) {
             wp_send_json_error(['message' => 'Title and content are required.']);
@@ -232,6 +253,9 @@ class EditEventShortcode {
         update_post_meta($post_id, 'event_organizer_email', $org_email);
         update_post_meta($post_id, '_ap_event_organization', $event_org);
         update_post_meta($post_id, 'event_featured', $featured);
+        update_post_meta($post_id, 'event_rsvp_enabled', $rsvp_enabled);
+        update_post_meta($post_id, 'event_rsvp_limit', $rsvp_limit);
+        update_post_meta($post_id, 'event_waitlist_enabled', $waitlist_enabled);
 
         if (!empty($_FILES['event_banner']['name'])) {
             if (!function_exists('media_handle_upload')) {
