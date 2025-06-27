@@ -243,6 +243,30 @@ class EnqueueAssets {
             );
         }
 
+        if (is_singular('portfolio')) {
+            $swiper_css_path = $plugin_dir . '/assets/libs/swiper/swiper-bundle.min.css';
+            wp_enqueue_style(
+                'swiper-css',
+                plugins_url('assets/libs/swiper/swiper-bundle.min.css', ARTPULSE_PLUGIN_FILE),
+                [],
+                file_exists($swiper_css_path) ? filemtime($swiper_css_path) : null
+            );
+            wp_enqueue_script(
+                'swiper-js',
+                plugins_url('assets/libs/swiper/swiper-bundle.min.js', ARTPULSE_PLUGIN_FILE),
+                [],
+                null,
+                true
+            );
+            wp_enqueue_script(
+                'ap-portfolio-gallery-front',
+                plugins_url('assets/js/ap-portfolio-gallery-front.js', ARTPULSE_PLUGIN_FILE),
+                ['swiper-js'],
+                null,
+                true
+            );
+        }
+
 
         wp_enqueue_script(
             'ap-membership-account-js',
