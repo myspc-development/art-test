@@ -34,5 +34,18 @@ $excerpt   = get_the_excerpt( $post->ID );
                 <?php echo wp_kses_post( wpautop( $excerpt ) ); ?>
             </div>
         <?php endif; ?>
+
+        <?php
+            $sale_enabled = get_option( 'ap_enable_artworks_for_sale' );
+            $for_sale     = get_post_meta( $post->ID, 'for_sale', true );
+            $price        = get_post_meta( $post->ID, 'price', true );
+            if ( $sale_enabled && $for_sale ) : ?>
+            <div class="ap-for-sale">
+                <span class="ap-badge-sale"><?php esc_html_e( 'For Sale', 'artpulse' ); ?></span>
+                <?php if ( $price ) : ?>
+                    <span class="ap-price"><?php echo esc_html( $price ); ?></span>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
     </div>
 </article>
