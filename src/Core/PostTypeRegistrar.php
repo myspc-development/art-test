@@ -235,6 +235,29 @@ class PostTypeRegistrar
             'type'         => 'string',
         ]);
 
+        register_post_meta('artpulse_artwork', 'for_sale', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+        ]);
+
+        register_post_meta('artpulse_artwork', 'price', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_artwork', 'buy_link', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_artwork', 'price_history', [
+            'single' => true,
+            'type'   => 'array',
+        ]);
+
         register_post_meta('artpulse_event', 'address_components', [
             'show_in_rest' => true,
             'single'       => true,
