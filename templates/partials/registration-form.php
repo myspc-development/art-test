@@ -39,7 +39,7 @@
     </p>
     <input type="hidden" name="address_components" id="ap_address_components" />
     <p>
-        <button class="ap-form-button" type="submit"><?php esc_html_e('Register', 'artpulse-management'); ?></button>
+        <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Register', 'artpulse-management'); ?></button>
     </p>
     <div id="ap-register-success" class="ap-form-messages" role="status" aria-live="polite"></div>
 </form>

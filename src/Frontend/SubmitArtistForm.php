@@ -37,7 +37,7 @@ class SubmitArtistForm {
                 <input class="ap-input" id="ap-artist-images" type="file" name="images[]" accept="image/*" multiple />
             </div>
             <div class="form-group">
-                <button class="ap-form-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
+                <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
             </div>
         </form>
         <div class="ap-form-messages" role="status" aria-live="polite"></div>

@@ -43,7 +43,7 @@ class QuickStartGuide
         echo '<li>' . esc_html__('Manage members and events', 'artpulse') . '</li>';
         echo '</ol>';
         echo '<div class="mermaid">graph TD;A[Start Signup]-->B[Create Profile];B-->C[Register Artwork];C-->D[Submit Event];D-->E[View Calendar];E-->F[Upgrade Membership];F-->G[Receive Notifications];</div>';
-        echo '<p><a href="' . esc_url($admin_doc) . '" target="_blank" class="ap-form-button">' . esc_html__('Open Full Guide', 'artpulse') . '</a></p>';
+        echo '<p><a href="' . esc_url($admin_doc) . '" target="_blank" class="ap-form-button nectar-button">' . esc_html__('Open Full Guide', 'artpulse') . '</a></p>';
         echo '<div class="ap-qs-thumbs">';
         echo '<img class="qs-thumb" data-img="' . esc_url($img_base . 'admin_modules_walkthrough.png') . '" src="' . esc_url($img_base . 'admin_modules_walkthrough.png') . '" alt="" />';
         echo '</div>';
@@ -56,7 +56,7 @@ class QuickStartGuide
         echo '<li>' . esc_html__('Submit events for promotion', 'artpulse') . '</li>';
         echo '<li>' . esc_html__('Browse the calendar and upgrade when ready', 'artpulse') . '</li>';
         echo '</ol>';
-        echo '<p><a href="' . esc_url($member_doc) . '" target="_blank" class="ap-form-button">' . esc_html__('Open Full Guide', 'artpulse') . '</a></p>';
+        echo '<p><a href="' . esc_url($member_doc) . '" target="_blank" class="ap-form-button nectar-button">' . esc_html__('Open Full Guide', 'artpulse') . '</a></p>';
         echo '<div class="ap-qs-thumbs">';
         echo '<img class="qs-thumb" data-img="' . esc_url($img_base . 'event_calendar_view.png') . '" src="' . esc_url($img_base . 'event_calendar_view.png') . '" alt="" />';
         echo '<img class="qs-thumb" data-img="' . esc_url($img_base . 'artwork_registration_form.png') . '" src="' . esc_url($img_base . 'artwork_registration_form.png') . '" alt="" />';
@@ -65,7 +65,7 @@ class QuickStartGuide
         echo '</section>';
 
         echo '<div id="ap-qs-modal" class="ap-org-modal">';
-        echo '<button id="ap-qs-modal-close" type="button" class="ap-form-button">' . esc_html__('Close', 'artpulse') . '</button>';
+        echo '<button id="ap-qs-modal-close" type="button" class="ap-form-button nectar-button">' . esc_html__('Close', 'artpulse') . '</button>';
         echo '<img id="ap-qs-modal-img" alt="" />';
         echo '</div>';
 

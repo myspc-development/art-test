@@ -197,7 +197,7 @@ class EventSubmissionShortcode {
             </p>
 
             <p>
-                <button class="ap-form-button" type="submit" name="ap_submit_event">Submit Event</button>
+                <button class="ap-form-button nectar-button" type="submit" name="ap_submit_event">Submit Event</button>
             </p>
         </form>
         <?php

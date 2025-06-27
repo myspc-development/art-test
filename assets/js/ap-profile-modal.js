@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded',() => {
     modal = document.createElement('div');
     modal.id = 'ap-profile-modal';
     modal.className = 'ap-org-modal';
-    modal.innerHTML = `<button id="ap-profile-close" type="button" class="ap-form-button">Close</button><div id="ap-profile-msg" class="ap-form-messages" role="status" aria-live="polite"></div>`;
+    modal.innerHTML = `<button id="ap-profile-close" type="button" class="ap-form-button nectar-button">Close</button><div id="ap-profile-msg" class="ap-form-messages" role="status" aria-live="polite"></div>`;
     formWrap = document.createElement('div');
     modal.appendChild(formWrap);
     document.body.appendChild(modal);

@@ -41,7 +41,7 @@ class LoginShortcode
                     <input class="ap-input" id="ap_login_password" type="password" name="password" required />
                 </p>
                 <p>
-                    <button class="ap-form-button" type="submit"><?php esc_html_e('Login', 'artpulse-management'); ?></button>
+                    <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Login', 'artpulse-management'); ?></button>
                 </p>
             </form>
 

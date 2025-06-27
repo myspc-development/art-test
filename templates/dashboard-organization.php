@@ -3,7 +3,7 @@
  * Organization dashboard template.
  */
 ?>
-<div class="ap-dashboard">
+<div id="nectar-outer"><div class="container-wrap"><div class="container"><div class="row"><div class="col-md-8 col-md-offset-2"><div class="ap-dashboard">
     <nav class="dashboard-nav">
         <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
         <a href="#next-payment"><span class="dashicons dashicons-money"></span><?php esc_html_e('Next Payment', 'artpulse'); ?></a>
@@ -29,7 +29,7 @@
     <div id="ap-next-payment"></div>
     <h2 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h2>
     <div id="ap-transactions"></div>
-    <a class="ap-edit-profile-link ap-form-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
+    <a class="ap-edit-profile-link ap-form-button nectar-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
     <h2 id="upgrade"><?php _e('Upgrade Your Account','artpulse'); ?></h2>
     <div id="ap-upgrade-options"></div>
     <?php if ($show_forms) : ?>
@@ -58,8 +58,8 @@
     <?php endif; ?>
     <h2 id="account-tools"><?php _e('Account Tools','artpulse'); ?></h2>
     <div id="ap-account-tools">
-        <button id="ap-export-json" class="ap-form-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
-        <button id="ap-export-csv" class="ap-form-button"><?php esc_html_e('Export CSV','artpulse'); ?></button>
-        <button id="ap-delete-account" class="ap-form-button"><?php esc_html_e('Delete Account','artpulse'); ?></button>
+        <button id="ap-export-json" class="ap-form-button nectar-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
+        <button id="ap-export-csv" class="ap-form-button nectar-button"><?php esc_html_e('Export CSV','artpulse'); ?></button>
+        <button id="ap-delete-account" class="ap-form-button nectar-button"><?php esc_html_e('Delete Account','artpulse'); ?></button>
     </div>
-</div>
+</div></div></div></div></div>
