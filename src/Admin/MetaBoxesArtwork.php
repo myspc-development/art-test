@@ -65,8 +65,9 @@ class MetaBoxesArtwork {
 
         $registered_fields = self::get_registered_artwork_meta_fields();
         foreach ($registered_fields as $field => $args) {
-            $type = $args[0];
-            $value = $_POST[$field] ?? '';
+            $type       = $args[0];
+            $value      = $_POST[$field] ?? '';
+            $old_value  = get_post_meta($post_id, $field, true);
 
             // Basic validation examples
             if ($type === 'url' && !empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
@@ -89,6 +90,20 @@ class MetaBoxesArtwork {
                 $value = sanitize_textarea_field($value);
             } else {
                 $value = sanitize_text_field($value);
+            }
+
+            if ($field === 'artwork_price' && $value !== $old_value) {
+                $history = get_post_meta($post_id, 'price_history', true);
+                if (!is_array($history)) {
+                    $history = [];
+                }
+                if ($old_value !== '') {
+                    $history[] = [
+                        'price' => $old_value,
+                        'date'  => current_time('mysql'),
+                    ];
+                }
+                update_post_meta($post_id, 'price_history', $history);
             }
 
             update_post_meta($post_id, $field, $value);
