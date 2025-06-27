@@ -225,10 +225,6 @@ class EnqueueAssets {
                 null,
                 true
             );
-            wp_enqueue_style(
-                'ap-event-gallery',
-                plugins_url('assets/css/event-gallery.css', ARTPULSE_PLUGIN_FILE)
-            );
             wp_enqueue_script(
                 'ap-event-gallery-front',
                 plugins_url('assets/js/ap-event-gallery-front.js', ARTPULSE_PLUGIN_FILE),
