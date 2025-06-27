@@ -66,10 +66,11 @@ class ProfileEditShortcode {
             </p>
             <p>
                 <label class="ap-form-label" for="ap_avatar">Custom Avatar</label><br>
-                <?php if ($avatar): ?>
-                    <img src="<?php echo esc_url($avatar); ?>" alt="Current Avatar" width="100" /><br>
-                <?php endif; ?>
+                <img id="ap-avatar-preview" src="<?php echo $avatar ? esc_url($avatar) : ''; ?>" alt="" width="100" <?php echo $avatar ? '' : 'style="display:none;"'; ?> />
+                <br>
                 <input class="ap-input" type="file" name="ap_avatar" id="ap_avatar" accept="image/*">
+                <input type="hidden" name="ap_avatar_id" id="ap_avatar_id" value="">
+                <button type="button" class="ap-form-button" id="ap-avatar-media"><?php esc_html_e('Choose from Library', 'artpulse'); ?></button>
             </p>
             <p>
                 <label class="ap-form-label" for="ap_social_twitter">Twitter URL</label><br>
@@ -144,8 +145,14 @@ class ProfileEditShortcode {
         update_user_meta($user_id, 'ap_state', $state);
         update_user_meta($user_id, 'ap_city', $city);
 
-        // Handle Avatar Upload
-        if (!empty($_FILES['ap_avatar']['tmp_name'])) {
+        // Handle Avatar Upload or selected ID
+        $avatar_id = isset($_POST['ap_avatar_id']) ? intval($_POST['ap_avatar_id']) : 0;
+        if ($avatar_id) {
+            $avatar_url = wp_get_attachment_url($avatar_id);
+            if ($avatar_url) {
+                update_user_meta($user_id, 'ap_custom_avatar', $avatar_url);
+            }
+        } elseif (!empty($_FILES['ap_avatar']['tmp_name'])) {
             if (!function_exists('media_handle_upload')) {
                 require_once ABSPATH . 'wp-admin/includes/file.php';
                 require_once ABSPATH . 'wp-admin/includes/media.php';
@@ -206,7 +213,13 @@ class ProfileEditShortcode {
         update_user_meta($user_id, 'ap_state', $state);
         update_user_meta($user_id, 'ap_city', $city);
 
-        if (!empty($_FILES['ap_avatar']['tmp_name'])) {
+        $avatar_id = isset($_POST['ap_avatar_id']) ? intval($_POST['ap_avatar_id']) : 0;
+        if ($avatar_id) {
+            $avatar_url = wp_get_attachment_url($avatar_id);
+            if ($avatar_url) {
+                update_user_meta($user_id, 'ap_custom_avatar', $avatar_url);
+            }
+        } elseif (!empty($_FILES['ap_avatar']['tmp_name'])) {
             if (!function_exists('media_handle_upload')) {
                 require_once ABSPATH . 'wp-admin/includes/file.php';
                 require_once ABSPATH . 'wp-admin/includes/media.php';

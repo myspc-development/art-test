@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded',() => {
   const links = document.querySelectorAll('.ap-edit-profile-link');
   let modal, formWrap, messageBox;
+  let mediaFrame;
 
   function createModal() {
     if (modal) return;
@@ -19,7 +20,36 @@ document.addEventListener('DOMContentLoaded',() => {
     createModal();
     formWrap.innerHTML = '';
     formWrap.appendChild(form);
+    attachMediaButton(form);
     modal.classList.add('open');
+  }
+
+  function attachMediaButton(form) {
+    const btn = form.querySelector('#ap-avatar-media');
+    const preview = form.querySelector('#ap-avatar-preview');
+    const hidden = form.querySelector('#ap_avatar_id');
+    if (!btn) return;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (mediaFrame) {
+        mediaFrame.open();
+        return;
+      }
+      mediaFrame = wp.media({
+        title: 'Select Avatar',
+        button: { text: 'Use this image' },
+        multiple: false
+      });
+      mediaFrame.on('select', () => {
+        const attachment = mediaFrame.state().get('selection').first().toJSON();
+        if (preview) {
+          preview.src = attachment.url;
+          preview.style.display = '';
+        }
+        if (hidden) hidden.value = attachment.id;
+      });
+      mediaFrame.open();
+    });
   }
 
   function attachSubmit(form) {
