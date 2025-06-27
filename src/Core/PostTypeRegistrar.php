@@ -205,6 +205,47 @@ class PostTypeRegistrar
             'type'         => 'boolean',
         ]);
 
+        register_post_meta('artpulse_event', 'event_rsvp_enabled', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_rsvp_limit', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'integer',
+            'default'      => 50,
+        ]);
+
+        register_post_meta('artpulse_event', 'event_waitlist_enabled', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_rsvp_list', [
+            'show_in_rest' => [
+                'schema' => [
+                    'type'  => 'array',
+                    'items' => [ 'type' => 'integer' ],
+                ],
+            ],
+            'single'       => true,
+            'type'         => 'array',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_waitlist', [
+            'show_in_rest' => [
+                'schema' => [
+                    'type'  => 'array',
+                    'items' => [ 'type' => 'integer' ],
+                ],
+            ],
+            'single'       => true,
+            'type'         => 'array',
+        ]);
+
         register_post_meta('artpulse_artist', '_ap_artist_bio', [
             'show_in_rest' => true,
             'single'       => true,
