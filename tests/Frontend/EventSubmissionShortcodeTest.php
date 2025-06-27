@@ -62,4 +62,18 @@ class EventSubmissionShortcodeTest extends TestCase
         $this->assertSame('Invalid organization selected.', self::$notice);
         $this->assertEmpty(self::$inserted);
     }
+
+    public function test_start_date_after_end_date_rejected(): void
+    {
+        // Valid organization to avoid org failure
+        self::$user_meta[1]['ap_organization_id'] = 99;
+
+        $_POST['event_start_date'] = '2024-02-01';
+        $_POST['event_end_date']   = '2024-01-01';
+
+        EventSubmissionShortcode::maybe_handle_form();
+
+        $this->assertSame('Start date cannot be later than end date.', self::$notice);
+        $this->assertEmpty(self::$inserted);
+    }
 }
