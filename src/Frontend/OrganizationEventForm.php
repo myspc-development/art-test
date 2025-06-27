@@ -143,6 +143,10 @@ class OrganizationEventForm {
         }
 
         $image_ids = [];
+        $image_order = [];
+        if ( isset( $_POST['image_order'] ) ) {
+            $image_order = array_map( 'intval', array_filter( explode( ',', (string) $_POST['image_order'] ) ) );
+        }
 
         if (! function_exists('media_handle_upload')) {
             require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -158,8 +162,16 @@ class OrganizationEventForm {
         }
 
         if (!empty($_FILES['images']['name'][0])) {
-            $limit = min(count($_FILES['images']['name']), 5);
-            for ($i = 0; $i < $limit; $i++) {
+            $limit   = min(count($_FILES['images']['name']), 5);
+            $indices = range(0, $limit - 1);
+            $order   = array_values(array_unique(array_intersect($image_order, $indices)));
+            foreach ($indices as $idx) {
+                if (!in_array($idx, $order, true)) {
+                    $order[] = $idx;
+                }
+            }
+
+            foreach ($order as $i) {
                 if (empty($_FILES['images']['name'][$i])) {
                     continue;
                 }

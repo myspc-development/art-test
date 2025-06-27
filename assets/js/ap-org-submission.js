@@ -3,12 +3,61 @@ document.addEventListener('DOMContentLoaded', () => {
   const messageBox = document.querySelector('.ap-form-messages');
   if (!form) return;
 
+  const fileInput = form.querySelector('#ap-org-images');
+  const previewWrap = document.createElement('div');
+  previewWrap.className = 'ap-image-previews';
+  fileInput.insertAdjacentElement('afterend', previewWrap);
+  const orderInput = document.createElement('input');
+  orderInput.type = 'hidden';
+  orderInput.name = 'image_order';
+  form.appendChild(orderInput);
+
+  let files = [];
+  let order = [];
+
+  fileInput.addEventListener('change', () => {
+    files = Array.from(fileInput.files).slice(0, 5);
+    order = files.map((_, i) => i);
+    renderPreviews();
+    updateOrderInput();
+  });
+
+  let dragIndex = null;
+  function renderPreviews() {
+    previewWrap.innerHTML = '';
+    files.forEach((file, i) => {
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      img.className = 'ap-image-preview';
+      img.draggable = true;
+      img.dataset.index = i;
+      img.addEventListener('dragstart', () => { dragIndex = i; });
+      img.addEventListener('dragover', e => e.preventDefault());
+      img.addEventListener('drop', e => {
+        e.preventDefault();
+        const target = parseInt(e.currentTarget.dataset.index, 10);
+        if (dragIndex === null || dragIndex === target) return;
+        const [f] = files.splice(dragIndex, 1);
+        const [o] = order.splice(dragIndex, 1);
+        files.splice(target, 0, f);
+        order.splice(target, 0, o);
+        renderPreviews();
+        updateOrderInput();
+      });
+      previewWrap.appendChild(img);
+    });
+  }
+
+  function updateOrderInput() {
+    orderInput.value = order.join(',');
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = new FormData(form);
     const title = formData.get('title');
-  const images = form.querySelector('#ap-org-images').files;
+  const images = files;
   const logoFile = form.querySelector('#ead_org_logo_id') ? form.querySelector('#ead_org_logo_id').files[0] : null;
   const bannerFile = form.querySelector('#ead_org_banner_id') ? form.querySelector('#ead_org_banner_id').files[0] : null;
   const addressComponentsInput = form.querySelector('[name="address_components"]');
@@ -45,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (messageBox) messageBox.textContent = '';
 
     try {
-      for (const file of Array.from(images).slice(0, 5)) {
+      for (const file of images.slice(0, 5)) {
         const id = await uploadMedia(file);
         imageIds.push(id);
       }
@@ -74,9 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         if (messageBox) messageBox.textContent = 'Submission successful!';
         form.reset();
+        files = [];
+        order = [];
+        previewWrap.innerHTML = '';
         if (form.querySelector('#ap-org-images')) form.querySelector('#ap-org-images').value = '';
         if (form.querySelector('#ead_org_logo_id')) form.querySelector('#ead_org_logo_id').value = '';
         if (form.querySelector('#ead_org_banner_id')) form.querySelector('#ead_org_banner_id').value = '';
+        updateOrderInput();
         setTimeout(() => {
           window.location.href = APSubmission.dashboardUrl;
         }, 3000);

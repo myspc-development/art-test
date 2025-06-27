@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function SubmissionForm() {
   const [title, setTitle] = useState('');
@@ -16,16 +16,20 @@ export default function SubmissionForm() {
   const [images, setImages] = useState([]);
   const [banner, setBanner] = useState(null);
   const [previews, setPreviews] = useState([]);
+  const [order, setOrder] = useState([]);
+  const [dragIndex, setDragIndex] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [organizerName, setOrganizerName] = useState('');
   const [organizerEmail, setOrganizerEmail] = useState('');
   const [featured, setFeatured] = useState(false);
+  const orderRef = useRef(null);
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files).slice(0, 5);
     setImages(files);
     setPreviews(files.map(file => URL.createObjectURL(file)));
+    setOrder(files.map((_, i) => i));
   };
 
   const handleBannerChange = (e) => {
@@ -35,6 +39,30 @@ export default function SubmissionForm() {
   useEffect(() => {
     setAddressComponents(JSON.stringify({ country, state: stateProv, city }));
   }, [country, stateProv, city]);
+
+  useEffect(() => {
+    if (orderRef.current) {
+      orderRef.current.value = order.join(',');
+    }
+  }, [order]);
+
+  const handleDragStart = (i) => setDragIndex(i);
+  const handleDrop = (i) => {
+    if (dragIndex === null || dragIndex === i) return;
+    const imgs = [...images];
+    const prevs = [...previews];
+    const ord = [...order];
+    const [f] = imgs.splice(dragIndex, 1);
+    const [p] = prevs.splice(dragIndex, 1);
+    const [o] = ord.splice(dragIndex, 1);
+    imgs.splice(i, 0, f);
+    prevs.splice(i, 0, p);
+    ord.splice(i, 0, o);
+    setImages(imgs);
+    setPreviews(prevs);
+    setOrder(ord);
+    setDragIndex(null);
+  };
 
   const uploadMedia = async (file) => {
     const formData = new FormData();
@@ -311,11 +339,21 @@ export default function SubmissionForm() {
           accept="image/*"
           onChange={handleFileChange}
         />
+        <input type="hidden" name="image_order" ref={orderRef} readOnly />
       </p>
 
       <div className="flex gap-2 flex-wrap">
         {previews.map((src, i) => (
-          <img key={i} src={src} alt="" className="w-24 h-24 object-cover rounded border" />
+          <img
+            key={i}
+            src={src}
+            alt=""
+            className="w-24 h-24 object-cover rounded border"
+            draggable
+            onDragStart={() => handleDragStart(i)}
+            onDragOver={e => e.preventDefault()}
+            onDrop={() => handleDrop(i)}
+          />
         ))}
       </div>
 
