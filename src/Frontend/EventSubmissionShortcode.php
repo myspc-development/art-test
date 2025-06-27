@@ -3,6 +3,54 @@
 namespace ArtPulse\Frontend;
 
 class EventSubmissionShortcode {
+    /**
+     * Transient key used when WooCommerce is unavailable.
+     */
+    private const NOTICE_KEY = 'ap_event_notices';
+
+    /**
+     * Store a notice for later display.
+     */
+    protected static function add_notice(string $message, string $type = 'error'): void {
+        if (function_exists('wc_add_notice')) {
+            wc_add_notice($message, $type);
+            return;
+        }
+
+        $notices   = get_transient(self::NOTICE_KEY) ?: [];
+        $notices[] = [ 'message' => $message, 'type' => $type ];
+        set_transient(self::NOTICE_KEY, $notices, defined('MINUTE_IN_SECONDS') ? MINUTE_IN_SECONDS : 60);
+    }
+
+    /**
+     * Output any stored notices.
+     */
+    protected static function print_notices(): void {
+        if (function_exists('wc_print_notices')) {
+            wc_print_notices();
+            return;
+        }
+
+        $notices = get_transient(self::NOTICE_KEY);
+        if ($notices) {
+            foreach ($notices as $notice) {
+                $type    = esc_attr($notice['type']);
+                $message = esc_html($notice['message']);
+                echo "<div class='notice {$type}'>{$message}</div>";
+            }
+            delete_transient(self::NOTICE_KEY);
+        }
+    }
+
+    /**
+     * Redirect back to the form when possible.
+     */
+    protected static function maybe_redirect(): void {
+        if (function_exists('wp_safe_redirect') && function_exists('wp_get_referer')) {
+            wp_safe_redirect(wp_get_referer());
+            exit;
+        }
+    }
 
     public static function register() {
         add_shortcode('ap_submit_event', [self::class, 'render']);
@@ -32,7 +80,9 @@ class EventSubmissionShortcode {
 
         ob_start();
         ?>
-        <div class="ap-form-messages" role="status" aria-live="polite"></div>
+        <div class="ap-form-messages" role="status" aria-live="polite">
+            <?php self::print_notices(); ?>
+        </div>
         <form method="post" enctype="multipart/form-data" class="ap-form-container">
             <?php wp_nonce_field('ap_submit_event', 'ap_event_nonce'); ?>
 
@@ -161,7 +211,8 @@ class EventSubmissionShortcode {
 
         // Verify nonce
         if (!isset($_POST['ap_event_nonce']) || !wp_verify_nonce($_POST['ap_event_nonce'], 'ap_submit_event')) {
-            wp_die('Security check failed.'); // Or redirect with an error message
+            self::add_notice('Security check failed.', 'error');
+            self::maybe_redirect();
             return;
         }
 
@@ -188,57 +239,39 @@ class EventSubmissionShortcode {
         $featured = isset($_POST['event_featured']) ? '1' : '0';
 
         if (empty($event_title)) {
-            if (function_exists('wc_add_notice')) {
-                wc_add_notice('Please enter an event title.', 'error'); // Or use your notification system
-            } else {
-                wp_die('Please enter an event title.');
-            }
+            self::add_notice('Please enter an event title.', 'error');
+            self::maybe_redirect();
             return; // Stop processing
         }
 
         if (empty($event_description)) {
-            if (function_exists('wc_add_notice')) {
-                wc_add_notice('Please enter an event description.', 'error');
-            } else {
-                wp_die('Please enter an event description.');
-            }
+            self::add_notice('Please enter an event description.', 'error');
+            self::maybe_redirect();
             return;
         }
 
         if (empty($event_date)) {
-            if (function_exists('wc_add_notice')) {
-                wc_add_notice('Please enter an event date.', 'error');
-            } else {
-                wp_die('Please enter an event date.');
-            }
+            self::add_notice('Please enter an event date.', 'error');
+            self::maybe_redirect();
             return;
         }
           // Validate the date format
         if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $event_date)) {
-            if (function_exists('wc_add_notice')) {
-                wc_add_notice('Please enter a valid date in YYYY-MM-DD format.', 'error');
-            } else {
-                wp_die('Please enter a valid date in YYYY-MM-DD format.');
-            }
+            self::add_notice('Please enter a valid date in YYYY-MM-DD format.', 'error');
+            self::maybe_redirect();
             return;
         }
 
         // Validate that start date is not later than end date when both provided
         if ($start_date && $end_date && strtotime($start_date) > strtotime($end_date)) {
-            if (function_exists('wc_add_notice')) {
-                wc_add_notice('Start date cannot be later than end date.', 'error');
-            } else {
-                wp_die('Start date cannot be later than end date.');
-            }
+            self::add_notice('Start date cannot be later than end date.', 'error');
+            self::maybe_redirect();
             return;
         }
 
         if ($event_org <= 0) {
-            if (function_exists('wc_add_notice')) {
-                wc_add_notice('Please select an organization.', 'error');
-            } else {
-                wp_die('Please select an organization.');
-            }
+            self::add_notice('Please select an organization.', 'error');
+            self::maybe_redirect();
             return;
         }
 
@@ -254,11 +287,8 @@ class EventSubmissionShortcode {
             $authorized[] = $meta_org;
         }
         if (!in_array($event_org, $authorized, true)) {
-            if (function_exists('wc_add_notice')) {
-                wc_add_notice('Invalid organization selected.', 'error');
-            } else {
-                wp_die('Invalid organization selected.');
-            }
+            self::add_notice('Invalid organization selected.', 'error');
+            self::maybe_redirect();
             return;
         }
 
@@ -272,11 +302,8 @@ class EventSubmissionShortcode {
 
         if (is_wp_error($post_id)) {
             error_log('Error creating event post: ' . $post_id->get_error_message());
-            if (function_exists('wc_add_notice')) {
-                wc_add_notice('Error submitting event. Please try again later.', 'error');
-            } else {
-                wp_die('Error submitting event. Please try again later.');
-            }
+            self::add_notice('Error submitting event. Please try again later.', 'error');
+            self::maybe_redirect();
             return;
         }
 
@@ -314,11 +341,9 @@ class EventSubmissionShortcode {
                 $image_ids[] = $attachment_id;
             } else {
                 error_log('Error uploading image: ' . $attachment_id->get_error_message());
-                if (function_exists('wc_add_notice')) {
-                    wc_add_notice('Error uploading banner. Please try again.', 'error');
-                } else {
-                    wp_die('Error uploading banner. Please try again.');
-                }
+                self::add_notice('Error uploading banner. Please try again.', 'error');
+                self::maybe_redirect();
+                return;
             }
         }
 
@@ -351,10 +376,7 @@ class EventSubmissionShortcode {
         }
 
         // Success message and redirect
-        if (function_exists('wc_add_notice')) {
-            wc_add_notice('Event submitted successfully! It is awaiting review.', 'success');
-        } else {
-            wp_die('Event submitted successfully! It is awaiting review.');
-        }
+        self::add_notice('Event submitted successfully! It is awaiting review.', 'success');
+        self::maybe_redirect();
     }
 }
