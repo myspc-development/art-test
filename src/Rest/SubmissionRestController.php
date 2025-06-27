@@ -30,7 +30,7 @@ class SubmissionRestController
             [
                 'methods'             => 'POST',
                 'callback'            => [ self::class, 'handle_submission' ],
-                'permission_callback' => '__return_true',
+                'permission_callback' => [ self::class, 'check_permissions' ],
                 'args'                => self::get_endpoint_args(),
             ]
         );
@@ -53,6 +53,20 @@ class SubmissionRestController
     public static function register_routes(): void
     {
         self::register();
+    }
+
+    /**
+     * Permission callback for the submission endpoint.
+     */
+    public static function check_permissions( WP_REST_Request $request ): bool
+    {
+        $nonce = $request->get_header( 'X-WP-Nonce' ) ?: $request->get_param( '_wpnonce' );
+
+        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return false;
+        }
+
+        return current_user_can( 'edit_posts' );
     }
 
     /**
