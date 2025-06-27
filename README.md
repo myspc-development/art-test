@@ -102,7 +102,7 @@ Older versions saved portfolio links and visibility using the meta keys `_ap_por
 
 Single event pages display gallery images using [Swiper](https://swiperjs.com/). The minified assets live in `assets/libs/swiper/` and are enqueued only when viewing an individual event. A small initialization script sets up the slider targeting `.event-gallery`.
 
-Organization posts reuse this system. When viewing an individual organization the same assets load and any IDs stored in the `_ap_submission_images` field render inside a Swiper slider.
+Organization posts reuse this system. The same `ap-event-gallery-front.js` script loads when viewing an individual organization and initializes the slider if IDs are stored in the `_ap_submission_images` field.
 
 ## Portfolio Gallery
 
