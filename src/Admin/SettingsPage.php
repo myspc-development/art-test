@@ -84,8 +84,12 @@ class SettingsPage
     public static function getMonthlySignupsByLevel()
     {
         global $wpdb;
-        $levels = ['free', 'pro', 'org'];
-        $data = [];
+        $levels = ['Free', 'Pro', 'Org'];
+        $data   = [];
+        $months = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $months[] = date_i18n('M', strtotime("-{$i} months"));
+        }
         foreach ($levels as $level) {
             $counts = [];
             for ($i = 0; $i < 6; $i++) {
@@ -105,6 +109,7 @@ class SettingsPage
             }
             $data[$level] = array_reverse($counts); // recent months last
         }
+        $data['months'] = $months;
         return $data;
     }
     public static function trackLastLogin($user_login, $user)
@@ -133,6 +138,7 @@ class SettingsPage
     {
         $search_query = sanitize_text_field($_GET['ap_search'] ?? '');
         $level_filter = sanitize_text_field($_GET['ap_level'] ?? '');
+        $level_filter = ucfirst(strtolower($level_filter));
         $args = [
             'search'         => "*{$search_query}*",
             'search_columns' => ['user_login', 'user_email', 'display_name'],
@@ -180,9 +186,9 @@ class SettingsPage
                 <input type="text" name="ap_search" placeholder="<?php esc_attr_e('Search users...', 'artpulse'); ?>" value="<?php echo esc_attr($search_query); ?>" />
                 <select name="ap_level">
                     <option value=""><?php esc_html_e('All Levels', 'artpulse'); ?></option>
-                    <option value="free" <?php selected($level_filter, 'free'); ?>><?php esc_html_e('Free', 'artpulse'); ?></option>
-                    <option value="pro" <?php selected($level_filter, 'pro'); ?>><?php esc_html_e('Pro', 'artpulse'); ?></option>
-                    <option value="org" <?php selected($level_filter, 'org'); ?>><?php esc_html_e('Org', 'artpulse'); ?></option>
+                    <option value="Free" <?php selected($level_filter, 'Free'); ?>><?php esc_html_e('Free', 'artpulse'); ?></option>
+                    <option value="Pro" <?php selected($level_filter, 'Pro'); ?>><?php esc_html_e('Pro', 'artpulse'); ?></option>
+                    <option value="Org" <?php selected($level_filter, 'Org'); ?>><?php esc_html_e('Org', 'artpulse'); ?></option>
                 </select>
                 <button type="submit" class="button"><?php esc_html_e('Filter', 'artpulse'); ?></button>
                 <button type="submit" name="ap_export_csv" class="button-secondary"><?php esc_html_e('Export CSV', 'artpulse'); ?></button>
