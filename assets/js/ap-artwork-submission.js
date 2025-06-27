@@ -3,6 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const messageBox = document.querySelector('.ap-form-messages');
   if (!form) return;
 
+  const saleCheckbox = form.querySelector('#ap-artwork-for-sale');
+  const saleFields = form.querySelector('.ap-sale-fields');
+
+  if (saleCheckbox && saleFields) {
+    const toggleFields = () => {
+      saleFields.style.display = saleCheckbox.checked ? '' : 'none';
+    };
+    saleCheckbox.addEventListener('change', toggleFields);
+    toggleFields();
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -11,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const medium = formData.get('artwork_medium');
     const dimensions = formData.get('artwork_dimensions');
     const materials = formData.get('artwork_materials');
+    const forSale = saleCheckbox ? saleCheckbox.checked : false;
+    const price = formData.get('price');
+    const buyLink = formData.get('buy_link');
     const images = form.querySelector('#ap-artwork-images').files;
 
     const imageIds = [];
@@ -27,9 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
         title,
         artwork_medium: medium,
         artwork_dimensions: dimensions,
-        artwork_materials: materials
+        artwork_materials: materials,
+        for_sale: forSale
       };
       if (imageIds.length) submission.image_ids = imageIds;
+      if (forSale) {
+        if (price) submission.price = price;
+        if (buyLink) submission.buy_link = buyLink;
+      }
 
       const res = await fetch(APSubmission.endpoint, {
         method: 'POST',
