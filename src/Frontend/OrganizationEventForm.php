@@ -81,6 +81,9 @@ class OrganizationEventForm {
             <label class="ap-form-label" for="ap_org_event_banner">Event Banner</label>
             <input class="ap-input" id="ap_org_event_banner" type="file" name="event_banner">
 
+            <label class="ap-form-label" for="ap_org_event_images">Additional Images (max 5)</label>
+            <input class="ap-input" id="ap_org_event_images" type="file" name="images[]" multiple>
+
             <label class="ap-form-label">
                 <input class="ap-input" type="checkbox" name="event_featured" value="1"> Request Featured
             </label>
@@ -139,15 +142,47 @@ class OrganizationEventForm {
             wp_set_post_terms($post_id, [$type], 'artpulse_event_type');
         }
 
-        if (!empty($_FILES['event_banner']['tmp_name'])) {
+        $image_ids = [];
+
+        if (! function_exists('media_handle_upload')) {
             require_once ABSPATH . 'wp-admin/includes/file.php';
             require_once ABSPATH . 'wp-admin/includes/media.php';
             require_once ABSPATH . 'wp-admin/includes/image.php';
+        }
 
+        if (!empty($_FILES['event_banner']['tmp_name'])) {
             $attachment_id = media_handle_upload('event_banner', $post_id);
             if (!is_wp_error($attachment_id)) {
-                update_post_meta($post_id, 'event_banner_id', $attachment_id);
+                $image_ids[] = $attachment_id;
             }
+        }
+
+        if (!empty($_FILES['images']['name'][0])) {
+            $limit = min(count($_FILES['images']['name']), 5);
+            for ($i = 0; $i < $limit; $i++) {
+                if (empty($_FILES['images']['name'][$i])) {
+                    continue;
+                }
+                $_FILES['ap_image'] = [
+                    'name'     => $_FILES['images']['name'][$i],
+                    'type'     => $_FILES['images']['type'][$i],
+                    'tmp_name' => $_FILES['images']['tmp_name'][$i],
+                    'error'    => $_FILES['images']['error'][$i],
+                    'size'     => $_FILES['images']['size'][$i],
+                ];
+
+                $id = media_handle_upload('ap_image', $post_id);
+                if (!is_wp_error($id)) {
+                    $image_ids[] = $id;
+                }
+            }
+            unset($_FILES['ap_image']);
+        }
+
+        if ($image_ids) {
+            update_post_meta($post_id, '_ap_submission_images', $image_ids);
+            update_post_meta($post_id, 'event_banner_id', $image_ids[0]);
+            set_post_thumbnail($post_id, $image_ids[0]);
         }
 
         // Admin notification

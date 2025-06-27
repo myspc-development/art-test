@@ -136,6 +136,11 @@ class EventSubmissionShortcode {
             </p>
 
             <p>
+                <label class="ap-form-label" for="ap_event_images">Additional Images (max 5)</label>
+                <input class="ap-input" id="ap_event_images" type="file" name="images[]" multiple />
+            </p>
+
+            <p>
                 <label class="ap-form-label">
                     <input class="ap-input" type="checkbox" name="event_featured" value="1" /> Request Featured
                 </label>
@@ -284,26 +289,55 @@ class EventSubmissionShortcode {
         if ($event_type) {
             wp_set_post_terms($post_id, [$event_type], 'artpulse_event_type');
         }
-        // Handle banner upload
+        // Handle banner and additional image uploads
+        $image_ids = [];
+
+        if (! function_exists('media_handle_upload')) {
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+        }
+
         if (!empty($_FILES['event_banner']['name'])) {
-            if ( ! function_exists( 'media_handle_upload' ) ) {
-                require_once ABSPATH . 'wp-admin/includes/image.php';
-                require_once ABSPATH . 'wp-admin/includes/file.php';
-                require_once ABSPATH . 'wp-admin/includes/media.php';
-            }
-
             $attachment_id = media_handle_upload('event_banner', $post_id);
-
-            if (is_wp_error($attachment_id)) {
+            if (!is_wp_error($attachment_id)) {
+                $image_ids[] = $attachment_id;
+            } else {
                 error_log('Error uploading image: ' . $attachment_id->get_error_message());
                 if (function_exists('wc_add_notice')) {
                     wc_add_notice('Error uploading banner. Please try again.', 'error');
                 } else {
                     wp_die('Error uploading banner. Please try again.');
                 }
-            } else {
-                update_post_meta($post_id, 'event_banner_id', $attachment_id);
             }
+        }
+
+        if (!empty($_FILES['images']['name'][0])) {
+            $limit = min(count($_FILES['images']['name']), 5);
+            for ($i = 0; $i < $limit; $i++) {
+                if (empty($_FILES['images']['name'][$i])) {
+                    continue;
+                }
+                $_FILES['ap_image'] = [
+                    'name'     => $_FILES['images']['name'][$i],
+                    'type'     => $_FILES['images']['type'][$i],
+                    'tmp_name' => $_FILES['images']['tmp_name'][$i],
+                    'error'    => $_FILES['images']['error'][$i],
+                    'size'     => $_FILES['images']['size'][$i],
+                ];
+
+                $id = media_handle_upload('ap_image', $post_id);
+                if (!is_wp_error($id)) {
+                    $image_ids[] = $id;
+                }
+            }
+            unset($_FILES['ap_image']);
+        }
+
+        if ($image_ids) {
+            update_post_meta($post_id, '_ap_submission_images', $image_ids);
+            update_post_meta($post_id, 'event_banner_id', $image_ids[0]);
+            set_post_thumbnail($post_id, $image_ids[0]);
         }
 
         // Success message and redirect
