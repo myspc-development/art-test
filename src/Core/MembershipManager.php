@@ -7,6 +7,7 @@ use WP_Error;
 
 class MembershipManager
 {
+    public const LEVELS = ['Free', 'Pro', 'Org'];
     /**
      * Hook all actions.
      */
