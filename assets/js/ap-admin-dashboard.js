@@ -9,17 +9,17 @@ document.addEventListener('DOMContentLoaded', function () {
         datasets: [
             {
                 label: 'Pro Signups',
-                data: APAdminStats.pro,
+                data: APAdminStats.Pro,
                 backgroundColor: '#0073aa'
             },
             {
                 label: 'Org Signups',
-                data: APAdminStats.org,
+                data: APAdminStats.Org,
                 backgroundColor: '#46b450'
             },
             {
                 label: 'Free Signups',
-                data: APAdminStats.free,
+                data: APAdminStats.Free,
                 backgroundColor: '#d54e21'
             }
         ]
