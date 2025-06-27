@@ -78,7 +78,12 @@ class PostTypeRegistrar
             [
                 'type'         => 'array',
                 'single'       => true,
-                'show_in_rest' => true,
+                'show_in_rest' => [
+                    'schema' => [
+                        'type'  => 'array',
+                        'items' => [ 'type' => 'integer' ],
+                    ],
+                ],
             ]
         );
 
