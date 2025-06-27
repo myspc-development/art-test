@@ -23,6 +23,16 @@ get_header(); ?>
               echo '</div>';
             }
 
+            // Additional gallery images
+            $gallery_ids = get_post_meta( get_the_ID(), '_ap_submission_images', true );
+            if ( is_array( $gallery_ids ) && count( $gallery_ids ) > 1 ) {
+              echo '<div class="event-gallery">';
+              foreach ( array_slice( $gallery_ids, 1, 4 ) as $img_id ) {
+                echo wp_get_attachment_image( $img_id, 'large' );
+              }
+              echo '</div>';
+            }
+
             // Title
             echo '<h1 class="entry-title">'. get_the_title() .'</h1>';
 
@@ -48,10 +58,3 @@ get_header(); ?>
 
           endwhile;
           ?>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<?php get_footer(); ?>
