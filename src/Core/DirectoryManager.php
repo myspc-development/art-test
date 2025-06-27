@@ -50,6 +50,7 @@ class DirectoryManager {
                 'event_type' => [ 'type' => 'integer' ],
                 'city'       => [ 'type' => 'string' ],
                 'region'     => [ 'type' => 'string' ],
+                'for_sale'   => [ 'type' => 'boolean' ],
             ]
         ]);
     }
@@ -60,6 +61,7 @@ class DirectoryManager {
         $event_type = absint( $request->get_param('event_type') );
         $city       = sanitize_text_field( $request->get_param('city') );
         $region     = sanitize_text_field( $request->get_param('region') );
+        $for_sale   = $request->has_param('for_sale') ? rest_sanitize_boolean( $request->get_param('for_sale') ) : null;
 
         $allowed = ['event', 'artist', 'artwork', 'org'];
         if (!in_array($type, $allowed, true)) {
@@ -93,6 +95,14 @@ class DirectoryManager {
             }
         }
 
+        if ( $type === 'artwork' && $for_sale !== null ) {
+            $meta_query[] = [
+                'key'     => 'for_sale',
+                'value'   => $for_sale ? '1' : '0',
+                'compare' => '=',
+            ];
+        }
+
         if ( ! empty( $tax_query ) ) {
             $args['tax_query'] = $tax_query;
         }
@@ -120,6 +130,8 @@ class DirectoryManager {
                 $item['medium']     = get_post_meta($p->ID, '_ap_artwork_medium', true);
                 $item['dimensions'] = get_post_meta($p->ID, '_ap_artwork_dimensions', true);
                 $item['materials']  = get_post_meta($p->ID, '_ap_artwork_materials', true);
+                $item['for_sale']   = (bool) get_post_meta($p->ID, 'for_sale', true);
+                $item['price']      = get_post_meta($p->ID, 'price', true);
             } elseif ($type === 'org') {
                 $item['address'] = get_post_meta($p->ID, 'ead_org_street_address', true);
                 $item['website'] = get_post_meta($p->ID, 'ead_org_website_url', true);

@@ -9,6 +9,7 @@
     const selectEl     = container.querySelector('.ap-filter-event-type');
     const cityInput    = container.querySelector('.ap-filter-city');
     const regionInput  = container.querySelector('.ap-filter-region');
+    const saleFilter   = container.dataset.forSale;
 
     if (!results || !limitInput || !applyBtn) return; // Safety check
 
@@ -50,6 +51,9 @@
       if ( regionInput && regionInput.value ) {
         params.append('region', regionInput.value);
       }
+      if ( typeof saleFilter !== 'undefined' && saleFilter !== '' ) {
+        params.append('for_sale', saleFilter);
+      }
 
       wp.apiFetch({ path: '/artpulse/v1/filter?' + params.toString() })
         .then(posts => {
@@ -84,6 +88,12 @@
             }
             if ( post.location ) {
               html += `<p class="ap-meta-location">${post.location}</p>`;
+            }
+            if ( post.for_sale ) {
+              html += `<span class="ap-badge-sale">For Sale</span>`;
+            }
+            if ( post.price ) {
+              html += `<p class="ap-meta-price">${post.price}</p>`;
             }
             html += '</a>';
 
@@ -135,7 +145,8 @@ function createFollowButton(post, objectType) {
           limit: limitInput.value,
           event_type: selectEl?.value || '',
           city: cityInput?.value || '',
-          region: regionInput?.value || ''
+          region: regionInput?.value || '',
+          for_sale: saleFilter || ''
         }
       }));
     });
