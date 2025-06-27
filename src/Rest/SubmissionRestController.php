@@ -86,9 +86,15 @@ class SubmissionRestController
 
         $meta_fields = self::get_meta_fields_for( $post_type );
         $meta_input  = [];
+        $boolean_fields = [ 'event_featured', 'for_sale' ];
         foreach ( $meta_fields as $field_key => $meta_key ) {
             if ( isset( $params[ $field_key ] ) ) {
-                $meta_input[ $meta_key ] = sanitize_text_field( $params[ $field_key ] );
+                $value = $params[ $field_key ];
+                if ( in_array( $field_key, $boolean_fields, true ) ) {
+                    $meta_input[ $meta_key ] = rest_sanitize_boolean( $value );
+                } else {
+                    $meta_input[ $meta_key ] = sanitize_text_field( $value );
+                }
             }
         }
 
@@ -270,6 +276,21 @@ class SubmissionRestController
                 'required'    => false,
                 'description' => 'Term ID for the event type.',
             ],
+            'for_sale' => [
+                'type'        => 'boolean',
+                'required'    => false,
+                'description' => 'Whether the artwork is available for sale.',
+            ],
+            'price' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'Asking price for the artwork.',
+            ],
+            'buy_link' => [
+                'type'        => 'string',
+                'required'    => false,
+                'description' => 'URL to purchase the artwork.',
+            ],
             'address_components' => [
                 'type'        => 'string',
                 'required'    => false,
@@ -324,6 +345,9 @@ class SubmissionRestController
                 'artwork_medium'     => '_ap_artwork_medium',
                 'artwork_dimensions' => '_ap_artwork_dimensions',
                 'artwork_materials'  => '_ap_artwork_materials',
+                'for_sale'           => 'for_sale',
+                'price'              => 'price',
+                'buy_link'           => 'buy_link',
             ],
             'artpulse_org'     => [
                 'ead_org_name'              => 'ead_org_name',
