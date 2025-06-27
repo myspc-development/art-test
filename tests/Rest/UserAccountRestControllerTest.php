@@ -24,8 +24,8 @@ class UserAccountRestControllerTest extends \WP_UnitTestCase
 
         wp_set_current_user($this->user_id);
 
-        update_user_meta($this->user_id, 'ap_membership_level', 'free');
-        update_user_meta($this->user_id, 'ap_membership_expires', '2030-01-01');
+        update_user_meta($this->user_id, 'ap_membership_level', 'Free');
+        update_user_meta($this->user_id, 'ap_membership_expires', strtotime('2030-01-01'));
         update_user_meta($this->user_id, 'ap_country', 'US');
         update_user_meta($this->user_id, 'ap_state', 'CA');
         update_user_meta($this->user_id, 'ap_city', 'LA');

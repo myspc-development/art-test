@@ -16,19 +16,21 @@ class MembershipCron
             'number'       => 500,
         ]);
 
-        $today = date('Y-m-d');
-        $warning_day = date('Y-m-d', strtotime('+7 days'));
+        $now         = current_time('timestamp');
+        $warning_day = strtotime('+7 days', $now);
 
         foreach ($users as $user) {
-            $expires = get_user_meta($user->ID, 'ap_membership_expires', true);
-            if (!$expires) continue;
+            $expires = intval(get_user_meta($user->ID, 'ap_membership_expires', true));
+            if (!$expires) {
+                continue;
+            }
 
             if ($expires === $warning_day) {
                 MembershipNotifier::sendExpiryWarningEmail($user);
             }
 
-            if ($expires < $today) {
-                update_user_meta($user->ID, 'ap_membership_level', 'free');
+            if ($expires < $now) {
+                update_user_meta($user->ID, 'ap_membership_level', 'Free');
             }
         }
     }
