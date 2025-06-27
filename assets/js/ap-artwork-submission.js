@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const saleCheckbox = form.querySelector('#ap-artwork-for-sale');
   const saleFields = form.querySelector('.ap-sale-fields');
+  const saleEnabled = !!saleCheckbox;
 
   if (saleCheckbox && saleFields) {
     const toggleFields = () => {
@@ -41,14 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
         title,
         artwork_medium: medium,
         artwork_dimensions: dimensions,
-        artwork_materials: materials,
-        for_sale: forSale
+        artwork_materials: materials
       };
-      if (imageIds.length) submission.image_ids = imageIds;
-      if (forSale) {
-        if (price) submission.price = price;
-        if (buyLink) submission.buy_link = buyLink;
+      if (saleEnabled) {
+        submission.for_sale = forSale;
+        if (forSale) {
+          if (price) submission.price = price;
+          if (buyLink) submission.buy_link = buyLink;
+        }
       }
+      if (imageIds.length) submission.image_ids = imageIds;
 
       const res = await fetch(APSubmission.endpoint, {
         method: 'POST',
