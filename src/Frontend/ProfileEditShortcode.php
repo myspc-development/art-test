@@ -97,7 +97,7 @@ class ProfileEditShortcode {
             </p>
             <input type="hidden" name="address_components" id="ap-profile-address-components" value="<?php echo esc_attr(json_encode(['country' => $country, 'state' => $state, 'city' => $city])); ?>">
             <p>
-                <input class="ap-form-button" type="submit" name="ap_profile_submit" value="Update Profile">
+                <input class="ap-form-button nectar-button" type="submit" name="ap_profile_submit" value="Update Profile">
             </p>
         </form>
         <?php

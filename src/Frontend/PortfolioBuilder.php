@@ -90,11 +90,11 @@ class PortfolioBuilder
                 </select>
             </p>
             <p>
-                <button class="ap-form-button" type="button" id="ap-upload-image">Upload Image</button><br>
+                <button class="ap-form-button nectar-button" type="button" id="ap-upload-image">Upload Image</button><br>
                 <img id="ap-preview" width="200" hidden />
                 <input type="hidden" name="image" />
             </p>
-            <p><button class="ap-form-button" type="submit">Save Portfolio Item</button></p>
+            <p><button class="ap-form-button nectar-button" type="submit">Save Portfolio Item</button></p>
             <p id="ap-portfolio-message" class="ap-form-messages" role="status" aria-live="polite"></p>
         </form>
         <hr>
@@ -117,11 +117,11 @@ class PortfolioBuilder
                     <strong><?php echo esc_html($item->post_title); ?></strong>
                     <p><?php echo esc_html($desc); ?></p>
                     <p>
-                        <button class="ap-form-button edit-item">Edit</button>
-                        <button class="ap-form-button toggle-visibility" data-new="<?php echo $visibility === 'private' ? 'public' : 'private'; ?>">
+                        <button class="ap-form-button nectar-button edit-item">Edit</button>
+                        <button class="ap-form-button nectar-button toggle-visibility" data-new="<?php echo $visibility === 'private' ? 'public' : 'private'; ?>">
                             <?php echo ucfirst($visibility); ?>
                         </button>
-                        <button class="ap-form-button delete-item">Delete</button>
+                        <button class="ap-form-button nectar-button delete-item">Delete</button>
                     </p>
                 </div>
             <?php endforeach; ?>

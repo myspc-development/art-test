@@ -104,7 +104,7 @@ class SubmissionForms
                 <input class="ap-input" id="ap-images" type="file" name="images[]" accept="image/*" multiple />
             </p>
             <p>
-                <button class="ap-form-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
+                <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
             </p>
         </form>
         <ul class="ap-submissions-list"></ul>

@@ -88,7 +88,7 @@ class OrganizationEventForm {
                 <input class="ap-input" type="checkbox" name="event_featured" value="1"> Request Featured
             </label>
 
-            <button class="ap-form-button" type="submit">Submit Event</button>
+            <button class="ap-form-button nectar-button" type="submit">Submit Event</button>
         </form>
         <?php
         return ob_get_clean();

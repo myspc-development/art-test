@@ -164,7 +164,7 @@ class EditEventShortcode {
             </p>
             <p class="ap-edit-event-error"></p>
             <p>
-                <button class="ap-form-button" type="submit">Save Changes</button>
+                <button class="ap-form-button nectar-button" type="submit">Save Changes</button>
             </p>
         </form>
         <?php

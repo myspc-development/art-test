@@ -123,7 +123,7 @@ class OrganizationDashboardShortcode {
                 <div class="ap-widget-header">
                     <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
                     <?php if (current_user_can('edit_posts')) : ?>
-                    <button id="ap-add-event-btn" class="ap-form-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
+                    <button id="ap-add-event-btn" class="ap-form-button nectar-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
                     <?php endif; ?>
                 </div>
                 <p class="ap-help-text">
@@ -133,8 +133,8 @@ class OrganizationDashboardShortcode {
                     ); ?>
                 </p>
 
-                <div id="ap-org-modal" class="ap-org-modal">
-                    <button id="ap-modal-close" type="button" class="ap-form-button">Close</button>
+                <div id="ap-org-modal" class="ap-org-modal container">
+                    <button id="ap-modal-close" type="button" class="ap-form-button nectar-button">Close</button>
                     <div id="ap-status-message" class="ap-form-messages" role="status" aria-live="polite"></div>
                 <form id="ap-org-event-form" class="ap-form-container">
                     <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('ap_org_dashboard_nonce'); ?>">
@@ -195,7 +195,7 @@ class OrganizationDashboardShortcode {
                     </label>
 
                     <input type="hidden" name="ap_event_organization" value="<?php echo esc_attr($org_id); ?>">
-                    <button class="ap-form-button" type="submit">Submit</button>
+                    <button class="ap-form-button nectar-button" type="submit">Submit</button>
                 </form>
             </div>
 
