@@ -2,6 +2,13 @@
 
 This guide covers the essential administration tasks for the ArtPulse plugin.
 
+## What's New (v1.3+)
+- Artworks For Sale toggle: admins can enable/disable sale features site-wide.
+- Improved dashboards for artists, organizations, and members.
+- Location-aware calendar with proximity highlights and legend.
+- Price history and trends for artworks for sale.
+- Refined admin and member notifications.
+
 For an overview of how a user interacts with ArtPulse, see the User Journey diagram below:
 
 ```mermaid
@@ -34,6 +41,14 @@ Artists and members are WordPress users while organizations are a custom post ty
 ## Auto‑Expire Past Events
 Enable this option in **Settings → General** to hide events automatically after their end date.
 
+### Enabling/Disabling Artworks For Sale
+
+- Go to **ArtPulse → Settings → General**.
+- Find the “Enable Artworks for Sale” checkbox.
+- When ON: artists/organizations see “For Sale?” toggle, price, and contact/buy fields in their dashboards and artwork forms.
+- When OFF: all sale-related fields are hidden from dashboards and the public site, but stored data is preserved.
+- ![Screenshot: Settings page with toggle highlighted](images/settings_artworks_for_sale.png)
+
 ## Gutenberg Relationship Blocks
 Blocks for **Artist ↔ Event** and **Artwork ↔ Organization** help you link related content in the editor.
 
@@ -43,10 +58,22 @@ Navigate to **ArtPulse → Payments** to see revenue and subscription trends ove
 ## Engagement Dashboard
 Open **ArtPulse → Engagement** to track member activity. The dashboard offers CSV export options and visual charts.
 
+### Dashboard Upgrades
+- Dashboards for artists, orgs, and members now show personalized stats, quick links, and recent activity.
+- Use the admin panel to preview dashboards for each role.
+- All major actions (add/edit artworks, manage events, upgrade membership) are one click away.
+- ![Screenshot: Artist dashboard overview](images/dashboard_overview.png)
+
 ## Event Galleries
 When submitting or editing an event, the form now includes fields for a banner image and up to five gallery images. `[ap_submit_event]` and `[ap_edit_event id="123"]` automatically handle these uploads. The first image becomes the banner and the rest are stored as the event gallery.
 
 In the **Events** list a new **Gallery** column displays thumbnails of uploaded images. Administrators can drag and drop these thumbnails to reorder them—changes save immediately via AJAX. The order determines how images appear on the single event page.
+
+### Visual Calendar & Event Proximity
+- The event calendar now displays events with location-based color highlights.
+- A legend shows distance categories: <10km (green), <25km (yellow), <50km (blue).
+- Admins can set or edit event locations (lat/lng, address, region) on the event form.
+- ![Screenshot: Calendar page with colored events and legend](images/calendar_proximity.png)
 
 ## Admin Module Walkthrough
 The administration screens follow the WordPress style guide, utilizing system fonts and the default blue (#2271b1) button color. A screenshot (`images/admin_modules_walkthrough.png`) labels the primary modules.
@@ -105,7 +132,9 @@ organization from the front‑end dashboard.
 ## Custom Admin Columns & Sorting
 Post lists display extra columns like dates and membership level. Columns can be sorted or hidden using **Screen Options**.
 
-## Troubleshooting
+## FAQs and Troubleshooting
+- **Why can’t I see “for sale” options?** This feature may be disabled by the site admin. Ask your administrator if you need it enabled.
+- **My event isn’t showing up on the calendar/map?** Double-check the event location and date in your dashboard.
 - **System Status** lists recent webhook deliveries and server requirements.
 - Import errors skip failed rows—verify column mappings if data is missing.
 - For additional help see the Developer Guide or visit <https://docs.artpulse.io>.
