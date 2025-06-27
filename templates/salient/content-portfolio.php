@@ -26,12 +26,14 @@ get_header(); ?>
             // Additional gallery images
             $gallery_ids = get_post_meta( get_the_ID(), '_ap_submission_images', true );
             if ( is_array( $gallery_ids ) && count( $gallery_ids ) > 1 ) {
-                          echo '<div class="event-gallery swiper">';
+              echo '<div class="event-gallery swiper">';
               echo '<div class="swiper-wrapper">';
               foreach ( array_slice( $gallery_ids, 1 ) as $img_id ) {
                 echo '<div class="swiper-slide">' . wp_get_attachment_image( $img_id, 'large' ) . '</div>';
               }
               echo '</div><div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div>';
+            } else {
+              echo '<p class="no-gallery">' . esc_html__( 'No gallery images available.', 'artpulse' ) . '</p>';
             }
 
             // Title
