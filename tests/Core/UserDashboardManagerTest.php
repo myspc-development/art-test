@@ -28,6 +28,7 @@ function do_shortcode($code) {
     }
     return '';
 }
+function locate_template($template) { return ''; }
 
 namespace ArtPulse\Core\Tests;
 

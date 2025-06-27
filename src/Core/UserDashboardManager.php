@@ -314,6 +314,25 @@ class UserDashboardManager
         return is_array($badges) ? $badges : [];
     }
 
+    private static function load_template(string $template, array $vars = []): string
+    {
+        $path = locate_template($template);
+        if (!$path) {
+            $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/' . $template;
+        }
+
+        if (!file_exists($path)) {
+            return '';
+        }
+
+        ob_start();
+        if ($vars) {
+            extract($vars, EXTR_SKIP);
+        }
+        include $path;
+        return ob_get_clean();
+    }
+
     public static function renderDashboard($atts)
     {
         if ( ! is_user_logged_in() || ! current_user_can('view_artpulse_dashboard') ) {
@@ -329,86 +348,32 @@ class UserDashboardManager
         $artist_form = $show_forms ? do_shortcode('[ap_submit_artist]') : '';
         $org_form    = $show_forms ? do_shortcode('[ap_submit_organization]') : '';
 
-        $user           = wp_get_current_user();
-        $roles          = (array) $user->roles;
+        $user             = wp_get_current_user();
+        $roles            = (array) $user->roles;
         $profile_edit_url = self::get_profile_edit_url();
-        $show_billing     = in_array('organization', $roles, true) || in_array('administrator', $roles, true);
-        $show_content     = in_array('artist', $roles, true) || in_array('organization', $roles, true) || in_array('administrator', $roles, true);
         $show_notifications = !empty(array_intersect(['member','artist','organization','administrator'], $roles));
         $support_history   = get_user_meta(get_current_user_id(), 'ap_support_history', true);
         $show_support_history = is_array($support_history) && !empty($support_history);
+        $badges = self::getBadges(get_current_user_id());
 
-        ob_start(); ?>
-        <div class="ap-dashboard">
-            <nav class="dashboard-nav">
-                <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
-                <?php if ($show_billing) : ?>
-                <a href="#next-payment"><span class="dashicons dashicons-money"></span><?php esc_html_e('Next Payment', 'artpulse'); ?></a>
-                <a href="#transactions"><span class="dashicons dashicons-list-view"></span><?php esc_html_e('Transactions', 'artpulse'); ?></a>
-                <?php endif; ?>
-                <a href="#upgrade"><span class="dashicons dashicons-star-filled"></span><?php esc_html_e('Upgrade', 'artpulse'); ?></a>
-                <?php if ($show_content) : ?>
-                <a href="#content"><span class="dashicons dashicons-media-default"></span><?php esc_html_e('Content', 'artpulse'); ?></a>
-                <?php endif; ?>
-                <a href="#local-events"><span class="dashicons dashicons-location-alt"></span><?php esc_html_e('Local Events', 'artpulse'); ?></a>
-                <a href="#favorites"><span class="dashicons dashicons-heart"></span><?php esc_html_e('Favorites', 'artpulse'); ?></a>
-                <a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a>
-                <a href="#account-tools"><span class="dashicons dashicons-download"></span><?php esc_html_e('Account', 'artpulse'); ?></a>
-                <?php if ($show_notifications) : ?>
-                <a href="#notifications"><span class="dashicons dashicons-megaphone"></span><?php esc_html_e('Notifications', 'artpulse'); ?></a>
-                <?php endif; ?>
-            </nav>
+        $vars = [
+            'artist_form'         => $artist_form,
+            'org_form'            => $org_form,
+            'show_forms'          => $show_forms,
+            'profile_edit_url'    => $profile_edit_url,
+            'show_notifications'  => $show_notifications,
+            'show_support_history'=> $show_support_history,
+            'badges'              => $badges,
+        ];
 
-            <h2 id="membership"><?php _e('Subscription Status','artpulse'); ?></h2>
-            <div id="ap-membership-info"></div>
-            <?php $badges = self::getBadges(get_current_user_id());
-            if ($badges) : ?>
-            <div class="ap-badges"></div>
-            <?php endif; ?>
-            <div id="ap-membership-actions"></div>
-            <?php if ($show_billing) : ?>
-            <h2 id="next-payment"><?php _e('Next Payment','artpulse'); ?></h2>
-            <div id="ap-next-payment"></div>
-            <h2 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h2>
-            <div id="ap-transactions"></div>
-            <?php endif; ?>
-            <a class="ap-edit-profile-link ap-form-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
-            <h2 id="upgrade"><?php _e('Upgrade Your Account','artpulse'); ?></h2>
-            <div id="ap-upgrade-options"></div>
-            <?php if ($show_forms) : ?>
-            <div class="ap-dashboard-forms">
-                <?php echo $artist_form; ?>
-                <?php echo $org_form; ?>
-            </div>
-            <?php endif; ?>
-            <?php if ($show_content) : ?>
-            <h2 id="content"><?php _e('Your Content','artpulse'); ?></h2>
-            <div id="ap-user-content"></div>
-            <?php endif; ?>
-            <h2 id="local-events"><?php _e('Events Near You','artpulse'); ?></h2>
-            <div id="ap-local-events"></div>
-            <h2 id="favorites"><?php _e('Your Favorited Events','artpulse'); ?></h2>
-            <div id="ap-favorite-events"></div>
-            <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
-            <div id="ap-events-feed"></div>
-            <?php if ($show_support_history) : ?>
-            <section id="support-history">
-                <h2><?php _e('Support History','artpulse'); ?></h2>
-                <div id="ap-support-history"></div>
-            </section>
-            <?php endif; ?>
-            <?php if ($show_notifications) : ?>
-            <h2 id="notifications"><?php _e('Notifications','artpulse'); ?></h2>
-            <div id="ap-dashboard-notifications"></div>
-            <?php endif; ?>
-            <h2 id="account-tools"><?php _e('Account Tools','artpulse'); ?></h2>
-            <div id="ap-account-tools">
-                <button id="ap-export-json" class="ap-form-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
-                <button id="ap-export-csv" class="ap-form-button"><?php esc_html_e('Export CSV','artpulse'); ?></button>
-                <button id="ap-delete-account" class="ap-form-button"><?php esc_html_e('Delete Account','artpulse'); ?></button>
-            </div>
-        </div>
-        <?php
-        return ob_get_clean();
+        if (in_array('organization', $roles, true) || in_array('administrator', $roles, true)) {
+            return self::load_template('dashboard-organization.php', $vars);
+        }
+
+        if (in_array('artist', $roles, true)) {
+            return self::load_template('dashboard-artist.php', $vars);
+        }
+
+        return self::load_template('dashboard-member.php', $vars);
     }
 }
