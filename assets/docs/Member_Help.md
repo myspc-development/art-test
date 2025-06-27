@@ -23,7 +23,7 @@ graph TD
 - Manage notifications from your user dashboard to stay informed of new activity.
 
 ## Submitting Events and Artworks
-- The submission form lets you add descriptions, upload images and schedule dates.
+- The submission form lets you add descriptions, upload up to five images and schedule dates.
 - Depending on your membership level, submissions may require admin approval before publishing.
 
 ## Membership Levels and Billing
@@ -46,6 +46,11 @@ After creating your profile, register each piece through the **Add Artwork** for
 
 ## Event Registration
 When ready to promote an event, open **Submit Event** from your dashboard. Provide dates, times and location information. Example screenshot: `images/event_registration_form.png`.
+
+### Event Images
+Each event can include a banner plus up to five additional images. The submission and edit forms provide an **Images** field for this purpose. The first image is used as the banner while the rest display as a gallery below the event description on the site.
+
+To update an existing event from the frontend, place the `[ap_edit_event id="123"]` shortcode on a page and replace `123` with the event ID.
 
 ### Upgrade Callout and Email Notifications
 Members approaching upload limits will see an upgrade callout on their dashboard. Important account updates and submission status are also sent via email so be sure your address is current.
