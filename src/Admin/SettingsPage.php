@@ -452,6 +452,22 @@ class SettingsPage
             'disable_styles' => [
                 'label' => __('Disable Plugin Styles', 'artpulse'),
                 'desc'  => __('Do not load ArtPulse CSS on the frontend.', 'artpulse'),
+            ],
+            'default_rsvp_limit' => [
+                'label' => __('Default RSVP Limit', 'artpulse'),
+                'desc'  => __('Pre-filled limit for new events.', 'artpulse'),
+            ],
+            'min_rsvp_limit' => [
+                'label' => __('Minimum RSVP Limit', 'artpulse'),
+                'desc'  => __('Lowest allowed RSVP limit.', 'artpulse'),
+            ],
+            'max_rsvp_limit' => [
+                'label' => __('Maximum RSVP Limit', 'artpulse'),
+                'desc'  => __('Highest allowed RSVP limit.', 'artpulse'),
+            ],
+            'waitlists_enabled' => [
+                'label' => __('Enable Waitlists', 'artpulse'),
+                'desc'  => __('Allow events to use waitlists.', 'artpulse'),
             ]
         ];
         foreach ($general_fields as $key => $config) {
@@ -506,10 +522,11 @@ class SettingsPage
                 'override_member_membership',
                 'auto_expire_events',
                 'enable_artworks_for_sale',
-                'disable_styles'
+                'disable_styles',
+                'waitlists_enabled'
             ])) {
                 $output[$key] = isset($value) ? 1 : 0;
-            } elseif ($key === 'payment_metrics_cache') {
+            } elseif ($key === 'payment_metrics_cache' || in_array($key, ['default_rsvp_limit', 'min_rsvp_limit', 'max_rsvp_limit'])) {
                 $output[$key] = absint($value);
             } else {
                 $output[$key] = sanitize_text_field($value);
@@ -533,9 +550,12 @@ class SettingsPage
             'override_member_membership',
             'auto_expire_events',
             'enable_artworks_for_sale',
-            'disable_styles'
+            'disable_styles',
+            'waitlists_enabled'
         ])) {
             echo '<input type="checkbox" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="1"' . checked(1, $value, false) . ' />';
+        } elseif (in_array($key, ['default_rsvp_limit', 'min_rsvp_limit', 'max_rsvp_limit', 'payment_metrics_cache'])) {
+            echo '<input type="number" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" />';
         } else {
             echo '<input type="text" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" />';
         }
