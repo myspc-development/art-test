@@ -12,10 +12,12 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     private int $event_id;
     private int $user1;
     private int $user2;
+    private array $emails = [];
 
     public function set_up(): void
     {
         parent::set_up();
+        add_filter('pre_wp_mail', [$this, 'capture_mail'], 10, 6);
         $this->user1 = self::factory()->user->create(['role' => 'organization']);
         $this->user2 = self::factory()->user->create();
 
@@ -32,6 +34,18 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
 
         RsvpRestController::register();
         do_action('rest_api_init');
+    }
+
+    public function tear_down(): void
+    {
+        remove_filter('pre_wp_mail', [$this, 'capture_mail'], 10);
+        parent::tear_down();
+    }
+
+    public function capture_mail($null, $to, $subject, $message): bool
+    {
+        $this->emails[] = [$to, $subject, $message];
+        return true;
     }
 
     public function test_join_adds_user_to_rsvp_list(): void
@@ -120,5 +134,27 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $this->assertSame(200, $res->get_status());
         $this->assertSame([$this->user2], get_post_meta($this->event_id, 'event_rsvp_list', true));
         $this->assertEmpty(get_post_meta($this->event_id, 'event_waitlist', true));
+    }
+
+    public function test_join_sends_confirmation_and_org_email(): void
+    {
+        update_post_meta($this->event_id, 'event_organizer_email', 'org@test.com');
+        wp_set_current_user($this->user1);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req->set_param('event_id', $this->event_id);
+        rest_get_server()->dispatch($req);
+        $this->assertCount(2, $this->emails);
+    }
+
+    public function test_bulk_email_rsvps(): void
+    {
+        update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1, $this->user2]);
+        wp_set_current_user($this->user1);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/email-rsvps');
+        $req->set_param('event_id', $this->event_id);
+        $req->set_param('subject', 'Hi');
+        $req->set_param('message', 'Hello');
+        rest_get_server()->dispatch($req);
+        $this->assertCount(2, $this->emails);
     }
 }

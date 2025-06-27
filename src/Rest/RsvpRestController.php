@@ -69,6 +69,15 @@ class RsvpRestController
                 'user_id'  => [ 'validate_callback' => 'is_numeric' ],
             ],
         ]);
+
+        register_rest_route('artpulse/v1', '/event/(?P<event_id>\d+)/email-rsvps', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'email_rsvps'],
+            'permission_callback' => [self::class, 'check_permissions'],
+            'args'                => [
+                'event_id' => [ 'validate_callback' => 'is_numeric' ],
+            ],
+        ]);
     }
 
     protected static function get_lists(int $event_id): array
@@ -139,6 +148,20 @@ class RsvpRestController
 
         self::store_lists($event_id, $rsvps, $waitlist);
         self::log_rsvp($event_id);
+
+        $user    = wp_get_current_user();
+        $subject = sprintf(__('RSVP Confirmation for "%s"', 'artpulse'), get_the_title($event_id));
+        $message = sprintf(__('Hi %s,\n\nYou have successfully RSVPed for "%s".', 'artpulse'), $user->display_name, get_the_title($event_id));
+        if ($user && is_email($user->user_email)) {
+            wp_mail($user->user_email, $subject, $message);
+        }
+
+        $org_email = get_post_meta($event_id, 'event_organizer_email', true);
+        if ($org_email && is_email($org_email)) {
+            $org_subject = sprintf(__('New RSVP for "%s"', 'artpulse'), get_the_title($event_id));
+            $org_message = sprintf(__('%s (%s) just RSVPed.', 'artpulse'), $user->display_name, $user->user_email);
+            wp_mail($org_email, $org_subject, $org_message);
+        }
 
         return rest_ensure_response([
             'rsvp_count'     => count($rsvps),
@@ -318,5 +341,34 @@ class RsvpRestController
             'rsvp_count'     => count($rsvps),
             'waitlist_count' => count($waitlist),
         ]);
+    }
+
+    public static function email_rsvps(WP_REST_Request $request): WP_REST_Response|WP_Error
+    {
+        $event_id = absint($request->get_param('event_id'));
+        if (!self::validate_event($event_id)) {
+            return new WP_Error('invalid_event', 'Invalid event.', ['status' => 400]);
+        }
+
+        $subject = sanitize_text_field($request->get_param('subject'));
+        if (!$subject) {
+            $subject = sprintf(__('Reminder for "%s"', 'artpulse'), get_the_title($event_id));
+        }
+        $message = sanitize_textarea_field($request->get_param('message'));
+        if (!$message) {
+            $message = __('This is a reminder for your upcoming event.', 'artpulse');
+        }
+
+        ['rsvps' => $rsvps] = self::get_lists($event_id);
+        $sent = [];
+        foreach ($rsvps as $uid) {
+            $user = get_userdata($uid);
+            if ($user && is_email($user->user_email)) {
+                wp_mail($user->user_email, $subject, $message);
+                $sent[] = $user->user_email;
+            }
+        }
+
+        return rest_ensure_response(['sent' => $sent]);
     }
 }
