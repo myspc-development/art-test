@@ -18,6 +18,11 @@ class EnqueueAssets {
             return;
         }
 
+        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        if (!$screen) {
+            return;
+        }
+
         $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
 
