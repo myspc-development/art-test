@@ -6,6 +6,10 @@ use WP_REST_Response;
 
 class OrgAnalyticsController {
     public static function register(): void {
+        add_action('rest_api_init', [self::class, 'register_routes']);
+    }
+
+    public static function register_routes(): void {
         register_rest_route('artpulse/v1', '/org-metrics', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_metrics'],
