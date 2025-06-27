@@ -57,6 +57,23 @@ class SubmissionRestControllerTest extends TestCase
         $this->assertSame('ead_org_name', $org['ead_org_name']);
     }
 
+    public function test_meta_fields_include_sale_and_event_fields(): void
+    {
+        $ref = new \ReflectionClass(SubmissionRestController::class);
+        $method = $ref->getMethod('get_meta_fields_for');
+        $method->setAccessible(true);
+
+        $event   = $method->invoke(null, 'artpulse_event');
+        $artwork = $method->invoke(null, 'artpulse_artwork');
+
+        $this->assertSame('event_start_date', $event['event_start_date']);
+        $this->assertSame('event_end_date', $event['event_end_date']);
+
+        $this->assertSame('for_sale', $artwork['for_sale']);
+        $this->assertSame('price', $artwork['price']);
+        $this->assertSame('buy_link', $artwork['buy_link']);
+    }
+
     public function test_endpoint_args_include_names(): void
     {
         $args = SubmissionRestController::get_endpoint_args();
@@ -64,6 +81,17 @@ class SubmissionRestControllerTest extends TestCase
         $this->assertSame('string', $args['artist_name']['type']);
         $this->assertArrayHasKey('ead_org_name', $args);
         $this->assertSame('string', $args['ead_org_name']['type']);
+        // Newly added fields
+        $this->assertArrayHasKey('event_start_date', $args);
+        $this->assertSame('string', $args['event_start_date']['type']);
+        $this->assertArrayHasKey('event_end_date', $args);
+        $this->assertSame('string', $args['event_end_date']['type']);
+        $this->assertArrayHasKey('for_sale', $args);
+        $this->assertSame('boolean', $args['for_sale']['type']);
+        $this->assertArrayHasKey('price', $args);
+        $this->assertSame('string', $args['price']['type']);
+        $this->assertArrayHasKey('buy_link', $args);
+        $this->assertSame('string', $args['buy_link']['type']);
     }
 
     public function test_check_permissions_valid_nonce_and_capability(): void

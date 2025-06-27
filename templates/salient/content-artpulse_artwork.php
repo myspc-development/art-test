@@ -16,11 +16,15 @@ while ( have_posts() ) : the_post(); ?>
   ?>
   <h1 class="entry-title"><?php the_title(); ?></h1>
   <div class="entry-content"><?php the_content(); ?></div>
-  <?php 
+  <?php
     $medium     = get_post_meta(get_the_ID(),'_ap_artwork_medium',true);
     $dimensions = get_post_meta(get_the_ID(),'_ap_artwork_dimensions',true);
     $materials  = get_post_meta(get_the_ID(),'_ap_artwork_materials',true);
-    if($medium||$dimensions||$materials): ?>
+    $for_sale   = get_post_meta(get_the_ID(),'for_sale',true);
+    $price      = get_post_meta(get_the_ID(),'price',true);
+    $buy_link   = get_post_meta(get_the_ID(),'buy_link',true);
+    $sale_enabled = get_option('ap_enable_artworks_for_sale');
+    if($medium||$dimensions||$materials||($sale_enabled&&$for_sale&&($price||$buy_link))): ?>
     <ul class="portfolio-meta">
       <?php if($medium): ?>
         <li><strong><?php esc_html_e('Medium:','artpulse'); ?></strong> <?php echo esc_html($medium); ?></li>
@@ -30,6 +34,12 @@ while ( have_posts() ) : the_post(); ?>
       <?php endif; ?>
       <?php if($materials): ?>
         <li><strong><?php esc_html_e('Materials:','artpulse'); ?></strong> <?php echo esc_html($materials); ?></li>
+      <?php endif; ?>
+      <?php if($sale_enabled&&$for_sale&&$price): ?>
+        <li><strong><?php esc_html_e('Price:','artpulse'); ?></strong> <?php echo esc_html($price); ?></li>
+      <?php endif; ?>
+      <?php if($sale_enabled&&$for_sale&&$buy_link): ?>
+        <li><a class="ap-buy-link" href="<?php echo esc_url($buy_link); ?>" target="_blank"><?php esc_html_e('Buy Now','artpulse'); ?></a></li>
       <?php endif; ?>
     </ul>
   <?php endif;
