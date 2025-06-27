@@ -445,6 +445,10 @@ class SettingsPage
                 'label' => __('Auto-expire Past Events', 'artpulse'),
                 'desc'  => __('Move events to Draft when the end date has passed.', 'artpulse'),
             ],
+            'enable_artworks_for_sale' => [
+                'label' => __('Enable Artworks for Sale', 'artpulse'),
+                'desc'  => __('Allow artworks to be marked for sale.', 'artpulse'),
+            ],
             'disable_styles' => [
                 'label' => __('Disable Plugin Styles', 'artpulse'),
                 'desc'  => __('Do not load ArtPulse CSS on the frontend.', 'artpulse'),
@@ -501,6 +505,7 @@ class SettingsPage
                 'override_org_membership',
                 'override_member_membership',
                 'auto_expire_events',
+                'enable_artworks_for_sale',
                 'disable_styles'
             ])) {
                 $output[$key] = isset($value) ? 1 : 0;
@@ -527,6 +532,7 @@ class SettingsPage
             'override_org_membership',
             'override_member_membership',
             'auto_expire_events',
+            'enable_artworks_for_sale',
             'disable_styles'
         ])) {
             echo '<input type="checkbox" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="1"' . checked(1, $value, false) . ' />';

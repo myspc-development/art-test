@@ -381,3 +381,11 @@ msgstr ""
 #: src/Frontend/OrganizationDashboardShortcode.php
 msgid "Use the <a href=\"%s\">Event Submission</a> page to submit a new event for admin approval."
 msgstr ""
+
+#: src/Admin/SettingsPage.php
+msgid "Enable Artworks for Sale"
+msgstr ""
+
+#: src/Admin/SettingsPage.php
+msgid "Allow artworks to be marked for sale."
+msgstr ""
