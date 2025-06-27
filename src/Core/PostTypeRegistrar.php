@@ -71,6 +71,17 @@ class PostTypeRegistrar
         // Register Meta Boxes
         self::register_meta_boxes();
 
+        // Register additional post meta
+        register_post_meta(
+            'artpulse_event',
+            '_ap_submission_images',
+            [
+                'type'         => 'array',
+                'single'       => true,
+                'show_in_rest' => true,
+            ]
+        );
+
         // Taxonomies
         register_taxonomy(
             'artpulse_event_type',
