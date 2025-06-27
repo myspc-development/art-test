@@ -66,7 +66,10 @@ class SubmissionRestController
             return false;
         }
 
-        return current_user_can( 'edit_posts' );
+        // Allow any logged in user with upload permissions to submit content.
+        // Members are granted this capability on registration so they can
+        // request upgrades without needing edit privileges.
+        return current_user_can( 'upload_files' );
     }
 
     /**
