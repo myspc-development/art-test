@@ -2,8 +2,9 @@
 namespace ArtPulse\Admin;
 
 // Stub WordPress and plugin functions
-function wp_enqueue_script(...$args) {}
+function wp_enqueue_script(...$args) { \ArtPulse\Admin\Tests\EnqueueAssetsTest::$scripts[] = $args; }
 function wp_enqueue_style(...$args) {}
+function get_current_screen() { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$current_screen; }
 function plugin_dir_path($file) { return '/'; }
 function plugin_dir_url($file) { return '/'; }
 function file_exists($path) { return true; }
@@ -33,6 +34,8 @@ class EnqueueAssetsTest extends TestCase
     public static array $user_meta = [];
     public static array $posts = [];
     public static array $terms = [];
+    public static array $scripts = [];
+    public static $current_screen = null;
 
     protected function setUp(): void
     {
@@ -40,6 +43,8 @@ class EnqueueAssetsTest extends TestCase
         self::$user_meta = [];
         self::$posts = [];
         self::$terms = [];
+        self::$scripts = [];
+        self::$current_screen = null;
     }
 
     public static function add_post(int $id, string $title, string $stage_slug, string $stage_name): void
@@ -58,5 +63,26 @@ class EnqueueAssetsTest extends TestCase
         EnqueueAssets::enqueue_frontend();
         $this->assertArrayHasKey('projectStages', self::$localized);
         $this->assertSame('Stage 1', self::$localized['projectStages'][0]['name']);
+    }
+
+    public function test_block_editor_scripts_enqueue_when_screen_available(): void
+    {
+        if (!defined('ARTPULSE_PLUGIN_FILE')) {
+            define('ARTPULSE_PLUGIN_FILE', __FILE__);
+        }
+        self::$current_screen = (object)['id' => 'edit-artpulse_event'];
+        EnqueueAssets::enqueue_block_editor_assets();
+        $handles = array_map(fn($a) => $a[0] ?? '', self::$scripts);
+        $this->assertContains('ap-event-gallery', $handles);
+    }
+
+    public function test_exits_gracefully_without_screen(): void
+    {
+        if (!defined('ARTPULSE_PLUGIN_FILE')) {
+            define('ARTPULSE_PLUGIN_FILE', __FILE__);
+        }
+        self::$current_screen = null;
+        EnqueueAssets::enqueue_block_editor_assets();
+        $this->assertSame([], self::$scripts);
     }
 }
