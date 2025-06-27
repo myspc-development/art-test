@@ -43,6 +43,11 @@ Navigate to **ArtPulse → Payments** to see revenue and subscription trends ove
 ## Engagement Dashboard
 Open **ArtPulse → Engagement** to track member activity. The dashboard offers CSV export options and visual charts.
 
+## Event Galleries
+When submitting or editing an event, the form now includes fields for a banner image and up to five gallery images. `[ap_submit_event]` and `[ap_edit_event id="123"]` automatically handle these uploads. The first image becomes the banner and the rest are stored as the event gallery.
+
+In the **Events** list a new **Gallery** column displays thumbnails of uploaded images. Administrators can drag and drop these thumbnails to reorder them—changes save immediately via AJAX. The order determines how images appear on the single event page.
+
 ## Admin Module Walkthrough
 The administration screens follow the WordPress style guide, utilizing system fonts and the default blue (#2271b1) button color. A screenshot (`images/admin_modules_walkthrough.png`) labels the primary modules.
 
@@ -86,6 +91,8 @@ The plugin registers the following shortcodes:
 | `[ap_submit_artist]` | Form to submit a new artist profile. |
 | `[ap_user_dashboard]` | Member dashboard with calendar and favorites. Accepts `show_forms` to embed submission forms. |
 | `[ap_user_profile id="1" show_social="true" show_membership="true" show_completeness="true"]` | Display a user profile with optional sections. |
+
+`[ap_edit_event]` requires an `id` attribute identifying the event post. `[ap_events]` accepts `limit` to control how many events are listed.
 
 Copy any of these into a page or post to expose ArtPulse functionality.
 
