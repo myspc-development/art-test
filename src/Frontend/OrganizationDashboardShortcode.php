@@ -214,7 +214,17 @@ class OrganizationDashboardShortcode {
                 <?php
                 foreach ($query->posts as $event) {
                     $edit = get_edit_post_link($event->ID);
-                    echo '<li>' . esc_html($event->post_title);
+                    $rsvps = get_post_meta($event->ID, 'event_rsvp_list', true);
+                    $wait  = get_post_meta($event->ID, 'event_waitlist', true);
+                    $limit = intval(get_post_meta($event->ID, 'event_rsvp_limit', true));
+                    $rsvp_count = is_array($rsvps) ? count($rsvps) : 0;
+                    $wait_count = is_array($wait) ? count($wait) : 0;
+                    echo '<li data-event="' . $event->ID . '">' . esc_html($event->post_title);
+                    echo ' <span class="ap-rsvp-count">(' . $rsvp_count . '/' . ($limit ?: '&infin;') . ')</span>';
+                    if ($wait_count) {
+                        echo ' <span class="ap-waitlist-count">' . intval($wait_count) . ' WL</span>';
+                    }
+                    echo ' <a href="#" class="ap-view-attendees" data-id="' . $event->ID . '">Attendees</a>';
                     if ($edit) {
                         echo ' <a href="' . esc_url($edit) . '" class="ap-edit-event">Edit</a>';
                     }
@@ -235,6 +245,12 @@ class OrganizationDashboardShortcode {
             ]);
             ?>
             </section>
+
+            <div id="ap-attendee-modal" class="ap-org-modal container">
+                <button id="ap-attendee-close" type="button" class="ap-form-button nectar-button">Close</button>
+                <button id="ap-attendee-export" type="button" class="ap-form-button nectar-button">Export CSV</button>
+                <div id="ap-attendee-content"></div>
+            </div>
 
             <div id="kanban-board"></div>
 

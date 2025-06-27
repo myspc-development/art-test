@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('ap-org-event-form');
   const eventsContainer = document.getElementById('ap-org-events');
   const statusBox = document.getElementById('ap-status-message');
+  const attendeeModal = document.getElementById('ap-attendee-modal');
+  const attendeeContent = document.getElementById('ap-attendee-content');
+  const attendeeClose = document.getElementById('ap-attendee-close');
+  const attendeeExport = document.getElementById('ap-attendee-export');
   const kanbanContainer = document.getElementById('kanban-board');
 
   if (kanbanContainer && Array.isArray(APOrgDashboard.projectStages)) {
@@ -31,6 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (modal) {
     modal.style.display = '';
+  }
+  if (attendeeModal) {
+    attendeeModal.style.display = '';
   }
 
   // Load dashboard data
@@ -79,6 +86,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   closeBtn?.addEventListener('click', () => modal?.classList.remove('open'));
+  attendeeClose?.addEventListener('click', () => attendeeModal?.classList.remove('open'));
+  attendeeExport?.addEventListener('click', () => {
+    const id = attendeeExport.dataset.event;
+    if (!id) return;
+    fetch(`${APOrgDashboard.rest_root}artpulse/v1/event/${id}/attendees/export`, {
+      headers: { 'X-WP-Nonce': APOrgDashboard.rest_nonce }
+    })
+      .then(res => res.ok ? res.text() : null)
+      .then(csv => {
+        if (!csv) return;
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'attendees.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+  });
 
   form?.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -143,6 +169,68 @@ document.addEventListener('DOMContentLoaded', () => {
           }
       });
   }
+  if (e.target.matches('.ap-view-attendees')) {
+      e.preventDefault();
+      const eventId = e.target.dataset.id;
+      if (!eventId) return;
+      attendeeContent.textContent = '';
+      fetch(`${APOrgDashboard.rest_root}artpulse/v1/event/${eventId}/attendees`, {
+        headers: { 'X-WP-Nonce': APOrgDashboard.rest_nonce }
+      })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (!data) return;
+          const wrap = document.createElement('div');
+          const makeSection = (title, list) => {
+            if (!list.length) return;
+            const h = document.createElement('h3');
+            h.textContent = title;
+            wrap.appendChild(h);
+            const ul = document.createElement('ul');
+            list.forEach(a => {
+              const li = document.createElement('li');
+              li.innerHTML = `${a.email} - ${a.status} <button class="ap-mark-attended" data-event="${eventId}" data-user="${a.ID}">${a.status === 'Attended' ? 'Unmark' : 'Mark Attended'}</button> <button class="ap-remove-attendee" data-event="${eventId}" data-user="${a.ID}">Remove</button>`;
+              ul.appendChild(li);
+            });
+            wrap.appendChild(ul);
+          };
+          makeSection('RSVPs', data.attendees);
+          makeSection('Waitlist', data.waitlist);
+          attendeeContent.appendChild(wrap);
+          attendeeExport.dataset.event = eventId;
+          attendeeModal.classList.add('open');
+        });
+    }
+  });
+
+  attendeeContent?.addEventListener('click', e => {
+    if (e.target.matches('.ap-mark-attended')) {
+      const user = e.target.dataset.user;
+      const eventId = e.target.dataset.event;
+      fetch(`${APOrgDashboard.rest_root}artpulse/v1/event/${eventId}/attendees/${user}/attended`, {
+        method: 'POST',
+        headers: { 'X-WP-Nonce': APOrgDashboard.rest_nonce }
+      })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (!data) return;
+          e.target.textContent = data.attended ? 'Unmark' : 'Mark Attended';
+        });
+    }
+    if (e.target.matches('.ap-remove-attendee')) {
+      const user = e.target.dataset.user;
+      const eventId = e.target.dataset.event;
+      if (!confirm('Remove attendee?')) return;
+      fetch(`${APOrgDashboard.rest_root}artpulse/v1/event/${eventId}/attendees/${user}/remove`, {
+        method: 'POST',
+        headers: { 'X-WP-Nonce': APOrgDashboard.rest_nonce }
+      })
+        .then(res => res.ok ? res.json() : null)
+        .then(() => {
+          // reload list
+          document.querySelector(`.ap-view-attendees[data-id="${eventId}"]`)?.click();
+        });
+    }
   });
 
   // Highlight nav link for visible section

@@ -16,7 +16,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
-        $this->user1 = self::factory()->user->create();
+        $this->user1 = self::factory()->user->create(['role' => 'organization']);
         $this->user2 = self::factory()->user->create();
 
         $this->event_id = wp_insert_post([
@@ -25,6 +25,8 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
             'post_status' => 'publish',
         ]);
         update_post_meta($this->event_id, 'event_rsvp_limit', 1);
+        update_post_meta($this->event_id, '_ap_event_organization', 99);
+        update_user_meta($this->user1, 'ap_organization_id', 99);
         update_post_meta($this->event_id, 'event_rsvp_list', []);
         update_post_meta($this->event_id, 'event_waitlist', []);
 
@@ -76,6 +78,47 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
+        $this->assertEmpty(get_post_meta($this->event_id, 'event_waitlist', true));
+    }
+
+    public function test_get_attendees_returns_lists(): void
+    {
+        update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
+        update_post_meta($this->event_id, 'event_waitlist', [$this->user2]);
+        update_post_meta($this->event_id, 'event_attended', [$this->user1]);
+        wp_set_current_user($this->user1);
+        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertCount(1, $data['attendees']);
+        $this->assertSame('Attended', $data['attendees'][0]['status']);
+        $this->assertCount(1, $data['waitlist']);
+    }
+
+    public function test_toggle_attended(): void
+    {
+        update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
+        wp_set_current_user($this->user1);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/attendees/' . $this->user1 . '/attended');
+        $req->set_param('event_id', $this->event_id);
+        $req->set_param('user_id', $this->user1);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $this->assertSame([$this->user1], get_post_meta($this->event_id, 'event_attended', true));
+    }
+
+    public function test_remove_attendee_promotes_waitlist(): void
+    {
+        update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
+        update_post_meta($this->event_id, 'event_waitlist', [$this->user2]);
+        wp_set_current_user($this->user1);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/attendees/' . $this->user1 . '/remove');
+        $req->set_param('event_id', $this->event_id);
+        $req->set_param('user_id', $this->user1);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $this->assertSame([$this->user2], get_post_meta($this->event_id, 'event_rsvp_list', true));
         $this->assertEmpty(get_post_meta($this->event_id, 'event_waitlist', true));
     }
 }
