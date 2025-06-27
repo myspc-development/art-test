@@ -39,8 +39,14 @@ class MetaBoxesEvent {
                 case 'text':
                     echo '<input type="' . esc_attr($type) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" />';
                     break;
+                case 'number':
+                    echo '<input type="number" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" />';
+                    break;
                 case 'checkbox': // 'boolean' is more consistent with other files, but 'checkbox' works
                     echo '<input type="checkbox" name="' . esc_attr($key) . '" value="1" ' . checked($value, '1', false) . ' />';
+                    break;
+                case 'textarea':
+                    echo '<textarea name="' . esc_attr($key) . '" rows="4" class="large-text">' . esc_textarea($value) . '</textarea>';
                     break;
                 case 'media': // This is usually a number (attachment ID)
                     echo '<input type="number" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" placeholder="' . __('Media Library ID', 'artpulse-management') . '" />';
@@ -76,22 +82,39 @@ class MetaBoxesEvent {
 
         $fields = self::get_registered_event_meta_fields();
         foreach ($fields as $field => $args) {
+            $type  = $args['type'];
             $value = $_POST[$field] ?? '';
-            if ($args['type'] === 'checkbox') {
+
+            if ($type === 'checkbox') {
                 $value = isset($_POST[$field]) ? '1' : '0';
-            } elseif ($args['type'] === 'email' && !empty($value) && !is_email($value)) {
+            } elseif ($type === 'email' && !empty($value) && !is_email($value)) {
                 continue; // Skip if email is invalid
-            } elseif ($args['type'] === 'media' && !empty($value) && !is_numeric($value)) {
+            } elseif ($type === 'media' && !empty($value) && !is_numeric($value)) {
                 continue; // Skip if media ID is not numeric
-            } elseif ($args['type'] === 'post_select') {
+            } elseif ($type === 'post_select') {
                 $value = intval($value);
                 if ($value <= 0) {
                     delete_post_meta($post_id, $field);
                     continue;
                 }
+            } elseif ($type === 'number') {
+                $value = is_numeric($value) ? intval($value) : 0;
+            } elseif ($type === 'textarea') {
+                $value = sanitize_textarea_field($value);
             }
-            // For date fields, you might want to add validation e.g., using strtotime or regex
-            update_post_meta($post_id, $field, sanitize_text_field($value)); // sanitize_text_field is a good default
+
+            if ($type === 'textarea') {
+                if (in_array($field, ['event_rsvp_list', 'event_waitlist'])) {
+                    $arr = array_filter(array_map('trim', explode(',', $value)));
+                    update_post_meta($post_id, $field, $arr);
+                } else {
+                    update_post_meta($post_id, $field, $value);
+                }
+            } elseif ($type === 'number') {
+                update_post_meta($post_id, $field, $value);
+            } else {
+                update_post_meta($post_id, $field, sanitize_text_field($value));
+            }
         }
     }
 
@@ -114,6 +137,11 @@ class MetaBoxesEvent {
             'event_organizer_email' => ['type' => 'email', 'label' => __('Organizer Email', 'artpulse-management')],
             'event_banner_id'       => ['type' => 'media', 'label' => __('Event Banner (Media Library ID)', 'artpulse-management')],
             'event_featured'        => ['type' => 'checkbox', 'label' => __('Request Featured', 'artpulse-management')],
+            'event_rsvp_enabled'    => ['type' => 'checkbox', 'label' => __('Enable RSVPs', 'artpulse-management')],
+            'event_rsvp_limit'      => ['type' => 'number',   'label' => __('RSVP Limit', 'artpulse-management')],
+            'event_waitlist_enabled'=> ['type' => 'checkbox', 'label' => __('Enable Waitlist', 'artpulse-management')],
+            'event_rsvp_list'       => ['type' => 'textarea', 'label' => __('RSVP List', 'artpulse-management')],
+            'event_waitlist'        => ['type' => 'textarea', 'label' => __('Waitlist', 'artpulse-management')],
         ];
     }
 
@@ -124,10 +152,9 @@ class MetaBoxesEvent {
                 'update_callback' => fn($value, $object) => update_post_meta($object->ID, $field, sanitize_text_field($value)), // Consider type-specific sanitization
                 'schema'          => [
                     'type' => match ($args['type']) {
-                        'checkbox'    => 'boolean',
-                        'media',
-                        'post_select' => 'integer',
-                        default       => 'string'
+                        'checkbox'                => 'boolean',
+                        'media', 'post_select', 'number' => 'integer',
+                        default                  => 'string'
                     }
                 ],
             ]);
