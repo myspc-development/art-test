@@ -84,7 +84,7 @@ class SettingsPage
     public static function getMonthlySignupsByLevel()
     {
         global $wpdb;
-        $levels = ['Free', 'Pro', 'Org'];
+        $levels = \ArtPulse\Core\MembershipManager::LEVELS;
         $data   = [];
         $months = [];
         for ($i = 5; $i >= 0; $i--) {
@@ -186,9 +186,9 @@ class SettingsPage
                 <input type="text" name="ap_search" placeholder="<?php esc_attr_e('Search users...', 'artpulse'); ?>" value="<?php echo esc_attr($search_query); ?>" />
                 <select name="ap_level">
                     <option value=""><?php esc_html_e('All Levels', 'artpulse'); ?></option>
-                    <option value="Free" <?php selected($level_filter, 'Free'); ?>><?php esc_html_e('Free', 'artpulse'); ?></option>
-                    <option value="Pro" <?php selected($level_filter, 'Pro'); ?>><?php esc_html_e('Pro', 'artpulse'); ?></option>
-                    <option value="Org" <?php selected($level_filter, 'Org'); ?>><?php esc_html_e('Org', 'artpulse'); ?></option>
+                    <?php foreach (\ArtPulse\Core\MembershipManager::LEVELS as $l): ?>
+                        <option value="<?php echo esc_attr($l); ?>" <?php selected($level_filter, $l); ?>><?php echo esc_html($l); ?></option>
+                    <?php endforeach; ?>
                 </select>
                 <button type="submit" class="button"><?php esc_html_e('Filter', 'artpulse'); ?></button>
                 <button type="submit" name="ap_export_csv" class="button-secondary"><?php esc_html_e('Export CSV', 'artpulse'); ?></button>
