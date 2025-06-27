@@ -25,13 +25,25 @@ class MetaBoxesEvent {
     public static function render_event_details($post) {
         wp_nonce_field('ead_event_meta_nonce', 'ead_event_meta_nonce_field');
 
-        $fields = self::get_registered_event_meta_fields();
+        $fields  = self::get_registered_event_meta_fields();
+        $opts    = get_option('artpulse_settings', []);
+        $def_lim = isset($opts['default_rsvp_limit']) ? absint($opts['default_rsvp_limit']) : 50;
+        $min_lim = absint($opts['min_rsvp_limit'] ?? 0);
+        $max_lim = absint($opts['max_rsvp_limit'] ?? 0);
+        $def_wait= !empty($opts['waitlists_enabled']);
 
         echo '<table class="form-table">';
         foreach ($fields as $key => $args) {
-            $type = $args['type'];
+            $type  = $args['type'];
             $label = $args['label'];
             $value = get_post_meta($post->ID, $key, true);
+            if (!metadata_exists('post', $post->ID, $key)) {
+                if ($key === 'event_rsvp_limit') {
+                    $value = $def_lim;
+                } elseif ($key === 'event_waitlist_enabled') {
+                    $value = $def_wait ? '1' : '0';
+                }
+            }
             echo '<tr><th><label for="' . esc_attr($key) . '">' . esc_html($label) . '</label></th><td>';
             switch ($type) {
                 case 'date':
@@ -40,10 +52,19 @@ class MetaBoxesEvent {
                     echo '<input type="' . esc_attr($type) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" />';
                     break;
                 case 'number':
-                    echo '<input type="number" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" />';
+                    $extra = '';
+                    if ($key === 'event_rsvp_limit') {
+                        if ($min_lim) { $extra .= ' min="' . esc_attr($min_lim) . '"'; }
+                        if ($max_lim) { $extra .= ' max="' . esc_attr($max_lim) . '"'; }
+                    }
+                    echo '<input type="number" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text"' . $extra . ' />';
                     break;
                 case 'checkbox': // 'boolean' is more consistent with other files, but 'checkbox' works
-                    echo '<input type="checkbox" name="' . esc_attr($key) . '" value="1" ' . checked($value, '1', false) . ' />';
+                    if ($key === 'event_waitlist_enabled' && !$def_wait) {
+                        echo '<input type="hidden" name="' . esc_attr($key) . '" value="0" />' . esc_html__('Waitlists disabled', 'artpulse-management');
+                    } else {
+                        echo '<input type="checkbox" name="' . esc_attr($key) . '" value="1" ' . checked($value, '1', false) . ' />';
+                    }
                     break;
                 case 'textarea':
                     echo '<textarea name="' . esc_attr($key) . '" rows="4" class="large-text">' . esc_textarea($value) . '</textarea>';

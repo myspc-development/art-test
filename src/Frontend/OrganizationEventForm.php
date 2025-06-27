@@ -17,6 +17,12 @@ class OrganizationEventForm {
             self::handle_submission();
         }
 
+        $opts         = get_option('artpulse_settings', []);
+        $limit_default= isset($opts['default_rsvp_limit']) ? absint($opts['default_rsvp_limit']) : 50;
+        $limit_min    = absint($opts['min_rsvp_limit'] ?? 0);
+        $limit_max    = absint($opts['max_rsvp_limit'] ?? 0);
+        $wait_default = !empty($opts['waitlists_enabled']);
+
         ob_start();
         ?>
         <div class="ap-form-messages" role="status" aria-live="polite"></div>
@@ -89,11 +95,15 @@ class OrganizationEventForm {
             </label>
 
             <label class="ap-form-label" for="ap_org_event_rsvp_limit">RSVP Limit</label>
-            <input class="ap-input" id="ap_org_event_rsvp_limit" type="number" name="event_rsvp_limit">
+            <input class="ap-input" id="ap_org_event_rsvp_limit" type="number" name="event_rsvp_limit" value="<?php echo esc_attr($limit_default); ?>"<?php if ($limit_min) echo ' min="' . esc_attr($limit_min) . '"'; ?><?php if ($limit_max) echo ' max="' . esc_attr($limit_max) . '"'; ?>>
 
+            <?php if ($wait_default) : ?>
             <label class="ap-form-label">
-                <input class="ap-input" type="checkbox" name="event_waitlist_enabled" value="1"> Enable Waitlist
+                <input class="ap-input" type="checkbox" name="event_waitlist_enabled" value="1" checked> Enable Waitlist
             </label>
+            <?php else : ?>
+            <input type="hidden" name="event_waitlist_enabled" value="0">
+            <?php endif; ?>
 
             <label class="ap-form-label">
                 <input class="ap-input" type="checkbox" name="event_featured" value="1"> Request Featured

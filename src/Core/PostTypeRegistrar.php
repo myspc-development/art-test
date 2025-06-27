@@ -52,6 +52,10 @@ class PostTypeRegistrar
             ],
         ];
 
+        $opts              = get_option('artpulse_settings', []);
+        $default_rsvp      = isset($opts['default_rsvp_limit']) ? absint($opts['default_rsvp_limit']) : 50;
+        $default_waitlists = !empty($opts['waitlists_enabled']);
+
         foreach ($post_types as $post_type => $args) {
             $capabilities = self::generate_caps($post_type);
             register_post_type(
@@ -215,13 +219,14 @@ class PostTypeRegistrar
             'show_in_rest' => true,
             'single'       => true,
             'type'         => 'integer',
-            'default'      => 50,
+            'default'      => $default_rsvp,
         ]);
 
         register_post_meta('artpulse_event', 'event_waitlist_enabled', [
             'show_in_rest' => true,
             'single'       => true,
             'type'         => 'boolean',
+            'default'      => $default_waitlists,
         ]);
 
         register_post_meta('artpulse_event', 'event_rsvp_list', [
