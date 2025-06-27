@@ -33,6 +33,14 @@ class PortfolioSync
             return;
         }
 
+        $ids = [];
+        if (in_array($post->post_type, ['artpulse_artwork', 'artpulse_event'], true)) {
+            $ids = get_post_meta($post_id, '_ap_submission_images', true);
+            if (!is_array($ids)) {
+                $ids = [];
+            }
+        }
+
         $existing = get_posts([
             'post_type'   => 'portfolio',
             'meta_key'    => '_ap_source_post',
@@ -64,11 +72,17 @@ class PortfolioSync
         }
 
         if (!empty($portfolio_id) && !is_wp_error($portfolio_id)) {
-            $thumb = get_post_thumbnail_id($post_id);
-            if ($thumb) {
-                set_post_thumbnail($portfolio_id, $thumb);
+            update_post_meta($portfolio_id, '_ap_submission_images', $ids);
+
+            if ($ids) {
+                set_post_thumbnail($portfolio_id, $ids[0]);
             } else {
-                delete_post_thumbnail($portfolio_id);
+                $thumb = get_post_thumbnail_id($post_id);
+                if ($thumb) {
+                    set_post_thumbnail($portfolio_id, $thumb);
+                } else {
+                    delete_post_thumbnail($portfolio_id);
+                }
             }
         }
     }
