@@ -17,6 +17,13 @@ class OrgAnalyticsController {
                 return is_user_logged_in();
             },
         ]);
+
+        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/rsvp-stats', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'get_event_rsvp_stats'],
+            'permission_callback' => [\ArtPulse\Rest\RsvpRestController::class, 'check_permissions'],
+            'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
+        ]);
     }
 
     public static function get_metrics(WP_REST_Request $request): WP_REST_Response {
@@ -61,5 +68,21 @@ class OrgAnalyticsController {
         }
 
         return rest_ensure_response($data);
+    }
+
+    public static function get_event_rsvp_stats(WP_REST_Request $request): WP_REST_Response
+    {
+        $event_id = absint($request->get_param('id'));
+        $history  = get_post_meta($event_id, 'event_rsvp_history', true);
+        if (!is_array($history)) {
+            $history = [];
+        }
+        ksort($history);
+        return rest_ensure_response([
+            'dates'       => array_keys($history),
+            'counts'      => array_values($history),
+            'views'       => (int) get_post_meta($event_id, 'view_count', true),
+            'total_rsvps' => array_sum($history),
+        ]);
     }
 }
