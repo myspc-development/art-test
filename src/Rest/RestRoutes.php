@@ -50,6 +50,8 @@ class RestRoutes
             \ArtPulse\Rest\ImportTemplateController::register();
             // Register organization user management endpoints
             \ArtPulse\Rest\UserInvitationController::register();
+            // Register RSVP endpoints for events
+            \ArtPulse\Rest\RsvpRestController::register();
         });
 
         $post_types = ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org'];
