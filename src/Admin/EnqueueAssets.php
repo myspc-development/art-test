@@ -18,7 +18,7 @@ class EnqueueAssets {
             return;
         }
 
-        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        $screen = get_current_screen();
         if (!$screen) {
             return;
         }
