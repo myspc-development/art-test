@@ -78,6 +78,19 @@ class UserDashboardManager
         if (function_exists('ap_enqueue_global_styles')) {
             ap_enqueue_global_styles();
         }
+
+        wp_enqueue_media();
+        wp_enqueue_script(
+            'ap-profile-modal',
+            plugins_url('assets/js/ap-profile-modal.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.0.0',
+            true
+        );
+        wp_localize_script('ap-profile-modal', 'APProfileModal', [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('ap_profile_edit_action'),
+        ]);
     }
 
     public static function registerRestRoutes()

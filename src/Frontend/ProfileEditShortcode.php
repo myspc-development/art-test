@@ -8,6 +8,7 @@ class ProfileEditShortcode {
         add_shortcode('ap_profile_edit', [self::class, 'render_form']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
         self::handle_form_submission();
+        add_action('wp_ajax_update_profile_field', [self::class, 'ajax_update_profile']);
     }
 
     public static function enqueue_styles() {
@@ -15,6 +16,19 @@ class ProfileEditShortcode {
             add_filter('ap_bypass_shortcode_detection', '__return_true');
             ap_enqueue_global_styles();
         }
+
+        wp_enqueue_media();
+        wp_enqueue_script(
+            'ap-profile-modal',
+            plugins_url('assets/js/ap-profile-modal.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.0.0',
+            true
+        );
+        wp_localize_script('ap-profile-modal', 'APProfileModal', [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('ap_profile_edit_action'),
+        ]);
     }
 
     public static function render_form() {
@@ -151,5 +165,60 @@ class ProfileEditShortcode {
 
         wp_redirect(add_query_arg('ap_updated', '1', wp_get_referer()));
         exit;
+    }
+
+    public static function ajax_update_profile() {
+        check_ajax_referer('ap_profile_edit_action', 'nonce');
+
+        if (!is_user_logged_in()) {
+            wp_send_json_error(['message' => 'Not logged in']);
+        }
+
+        $user_id = get_current_user_id();
+        $display_name = sanitize_text_field($_POST['display_name'] ?? '');
+        $description  = sanitize_textarea_field($_POST['description'] ?? '');
+        $twitter      = esc_url_raw($_POST['ap_social_twitter'] ?? '');
+        $instagram    = esc_url_raw($_POST['ap_social_instagram'] ?? '');
+        $website      = esc_url_raw($_POST['ap_social_website'] ?? '');
+
+        $components = [];
+        if (!empty($_POST['address_components'])) {
+            $decoded = json_decode(stripslashes($_POST['address_components']), true);
+            if (is_array($decoded)) {
+                $components = $decoded;
+            }
+        }
+
+        $country = isset($components['country']) ? sanitize_text_field($components['country']) : '';
+        $state   = isset($components['state']) ? sanitize_text_field($components['state']) : '';
+        $city    = isset($components['city']) ? sanitize_text_field($components['city']) : '';
+
+        wp_update_user([
+            'ID'           => $user_id,
+            'display_name' => $display_name,
+        ]);
+
+        update_user_meta($user_id, 'description', $description);
+        update_user_meta($user_id, 'ap_social_twitter', $twitter);
+        update_user_meta($user_id, 'ap_social_instagram', $instagram);
+        update_user_meta($user_id, 'ap_social_website', $website);
+        update_user_meta($user_id, 'ap_country', $country);
+        update_user_meta($user_id, 'ap_state', $state);
+        update_user_meta($user_id, 'ap_city', $city);
+
+        if (!empty($_FILES['ap_avatar']['tmp_name'])) {
+            if (!function_exists('media_handle_upload')) {
+                require_once ABSPATH . 'wp-admin/includes/file.php';
+                require_once ABSPATH . 'wp-admin/includes/media.php';
+                require_once ABSPATH . 'wp-admin/includes/image.php';
+            }
+            $uploaded = media_handle_upload('ap_avatar', 0);
+            if (!is_wp_error($uploaded)) {
+                $avatar_url = wp_get_attachment_url($uploaded);
+                update_user_meta($user_id, 'ap_custom_avatar', $avatar_url);
+            }
+        }
+
+        wp_send_json_success(['display_name' => $display_name]);
     }
 }
