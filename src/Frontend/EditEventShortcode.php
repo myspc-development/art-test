@@ -57,6 +57,27 @@ class EditEventShortcode {
             'numberposts' => -1,
         ]);
 
+        wp_enqueue_script(
+            'chart-js',
+            plugins_url('assets/libs/chart.js/chart.min.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            null,
+            true
+        );
+        $script_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-rsvp-analytics.js';
+        wp_enqueue_script(
+            'ap-rsvp-analytics',
+            plugins_url('assets/js/ap-rsvp-analytics.js', ARTPULSE_PLUGIN_FILE),
+            ['chart-js'],
+            file_exists($script_path) ? filemtime($script_path) : '1.0',
+            true
+        );
+        wp_localize_script('ap-rsvp-analytics', 'APRsvpAnalytics', [
+            'rest_root' => esc_url_raw(rest_url()),
+            'nonce'     => wp_create_nonce('wp_rest'),
+            'event_id'  => $post_id,
+        ]);
+
         ob_start();
         ?>
         <form id="ap-edit-event-form" class="ap-form-container" enctype="multipart/form-data" data-post-id="<?php echo $post_id; ?>">
@@ -185,6 +206,11 @@ class EditEventShortcode {
                 <button class="ap-form-button nectar-button" type="submit">Save Changes</button>
             </p>
         </form>
+        <?php if (current_user_can('view_artpulse_dashboard')) : ?>
+            <h3><?php esc_html_e('RSVP Analytics', 'artpulse'); ?></h3>
+            <canvas id="ap-rsvp-analytics" height="120"></canvas>
+            <p><?php esc_html_e('Conversion from page views:', 'artpulse'); ?> <span id="ap-rsvp-conversion">0%</span></p>
+        <?php endif; ?>
         <?php
         return ob_get_clean();
     }
@@ -196,6 +222,9 @@ class EditEventShortcode {
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('ap_edit_event_nonce')
         ]);
+
+        wp_register_script('chart-js', plugins_url('assets/libs/chart.js/chart.min.js', ARTPULSE_PLUGIN_FILE), [], null, true);
+        wp_register_script('ap-rsvp-analytics', plugins_url('assets/js/ap-rsvp-analytics.js', ARTPULSE_PLUGIN_FILE), ['chart-js'], '1.0', true);
     }
 
     public static function handle_ajax() {

@@ -87,6 +87,24 @@ class RsvpRestController
         update_post_meta($event_id, 'event_waitlist', array_values($waitlist));
     }
 
+    /**
+     * Record a signup for analytics purposes.
+     */
+    protected static function log_rsvp(int $event_id): void
+    {
+        $history = get_post_meta($event_id, 'event_rsvp_history', true);
+        if (!is_array($history)) {
+            $history = [];
+        }
+        $date = current_time('Y-m-d');
+        if (isset($history[$date])) {
+            $history[$date]++;
+        } else {
+            $history[$date] = 1;
+        }
+        update_post_meta($event_id, 'event_rsvp_history', $history);
+    }
+
     protected static function validate_event(int $event_id): bool
     {
         return $event_id && get_post_type($event_id) === 'artpulse_event';
@@ -120,6 +138,7 @@ class RsvpRestController
         }
 
         self::store_lists($event_id, $rsvps, $waitlist);
+        self::log_rsvp($event_id);
 
         return rest_ensure_response([
             'rsvp_count'     => count($rsvps),

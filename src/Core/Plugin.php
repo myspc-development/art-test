@@ -166,6 +166,7 @@ class Plugin
         DocumentationManager::register();
         \ArtPulse\Taxonomies\TaxonomiesRegistrar::register();
         \ArtPulse\Core\EventExpiryCron::register();
+        \ArtPulse\Core\EventViewCounter::register();
 
         if (class_exists('\\ArtPulse\\Ajax\\FrontendFilterHandler')) {
             \ArtPulse\Ajax\FrontendFilterHandler::register();
