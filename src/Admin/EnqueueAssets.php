@@ -21,6 +21,23 @@ class EnqueueAssets {
         $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
 
+        if ($screen->id === 'edit-artpulse_event') {
+            $script = $plugin_dir . '/assets/js/ap-event-gallery.js';
+            if (file_exists($script)) {
+                wp_enqueue_script(
+                    'ap-event-gallery',
+                    $plugin_url . '/assets/js/ap-event-gallery.js',
+                    ['jquery', 'jquery-ui-sortable'],
+                    filemtime($script),
+                    true
+                );
+                wp_localize_script('ap-event-gallery', 'APEvtGallery', [
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'nonce'    => wp_create_nonce('ap_event_gallery_nonce'),
+                ]);
+            }
+        }
+
         // Sidebar taxonomy selector script
         $sidebar_script_path = $plugin_dir . '/assets/js/sidebar-taxonomies.js';
         $sidebar_script_url = $plugin_url . '/assets/js/sidebar-taxonomies.js';

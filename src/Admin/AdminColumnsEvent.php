@@ -8,6 +8,7 @@ class AdminColumnsEvent
         add_filter( 'manage_artpulse_event_posts_columns',        [ __CLASS__, 'add_columns' ] );
         add_action( 'manage_artpulse_event_posts_custom_column',  [ __CLASS__, 'render_columns' ], 10, 2 );
         add_filter( 'manage_edit-artpulse_event_sortable_columns', [ __CLASS__, 'make_sortable' ] );
+        add_action( 'wp_ajax_ap_save_event_gallery_order',        [ __CLASS__, 'ajax_save_gallery_order' ] );
     }
 
     public static function add_columns( array $columns ): array
@@ -17,6 +18,7 @@ class AdminColumnsEvent
             if ( 'cb' === $key ) {
                 $new['cb']              = $label;
                 $new['event_banner']    = __( 'Banner',  'artpulse' );
+                $new['event_gallery']   = __( 'Gallery', 'artpulse' );
                 $new['event_dates']     = __( 'Dates',   'artpulse' );
                 $new['event_venue']     = __( 'Venue',   'artpulse' );
                 $new['event_org']       = __( 'Organization', 'artpulse' );
@@ -34,6 +36,29 @@ class AdminColumnsEvent
                 $id = get_post_meta( $post_id, 'event_banner_id', true );
                 if ( $id ) {
                     echo wp_get_attachment_image( (int)$id, [60,60] );
+                } else {
+                    echo '&mdash;';
+                }
+                break;
+
+            case 'event_gallery':
+                $ids = get_post_meta( $post_id, '_ap_submission_images', true );
+                if ( is_array( $ids ) && $ids ) {
+                    $ids = array_slice( $ids, 0, 5 );
+                    echo '<ul class="ap-event-gallery-sortable" data-post-id="' . intval( $post_id ) . '">';
+                    foreach ( $ids as $img_id ) {
+                        $link = get_edit_post_link( $img_id );
+                        echo '<li data-id="' . intval( $img_id ) . '">';
+                        if ( $link ) {
+                            echo '<a href="' . esc_url( $link ) . '">';
+                        }
+                        echo wp_get_attachment_image( $img_id, [40,40] );
+                        if ( $link ) {
+                            echo '</a>';
+                        }
+                        echo '</li>';
+                    }
+                    echo '</ul>';
                 } else {
                     echo '&mdash;';
                 }
@@ -81,6 +106,34 @@ class AdminColumnsEvent
         $columns['event_org']      = '_ap_event_organization';
         $columns['event_dates']    = 'event_start_date';
         return $columns;
+    }
+
+    public static function ajax_save_gallery_order(): void
+    {
+        check_ajax_referer( 'ap_event_gallery_nonce', 'nonce' );
+
+        $post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
+        $order   = isset( $_POST['order'] ) ? array_map( 'intval', (array) $_POST['order'] ) : [];
+
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            wp_send_json_error( [ 'message' => 'Permission denied.' ] );
+        }
+
+        $existing = get_post_meta( $post_id, '_ap_submission_images', true );
+        if ( ! is_array( $existing ) ) {
+            $existing = [];
+        }
+
+        $new = array_values( array_unique( array_intersect( $order, $existing ) ) );
+        foreach ( $existing as $id ) {
+            if ( ! in_array( $id, $new, true ) ) {
+                $new[] = $id;
+            }
+        }
+
+        update_post_meta( $post_id, '_ap_submission_images', $new );
+
+        wp_send_json_success();
     }
 }
 
