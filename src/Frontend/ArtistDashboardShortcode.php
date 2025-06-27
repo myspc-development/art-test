@@ -71,6 +71,24 @@ class ArtistDashboardShortcode {
                     <label class="ap-form-label" for="ap-artwork-materials"><?php esc_html_e('Materials', 'artpulse'); ?></label>
                     <input class="ap-input" id="ap-artwork-materials" type="text" name="artwork_materials" />
                 </div>
+                <?php if (get_option('ap_enable_artworks_for_sale')) : ?>
+                <div class="form-group">
+                    <label class="ap-form-label" for="ap-artwork-for-sale">
+                        <input type="checkbox" id="ap-artwork-for-sale" name="for_sale" value="1" />
+                        <?php esc_html_e('For Sale?', 'artpulse'); ?>
+                    </label>
+                </div>
+                <div class="ap-sale-fields" style="display:none;">
+                    <div class="form-group">
+                        <label class="ap-form-label" for="ap-artwork-price"><?php esc_html_e('Price', 'artpulse'); ?></label>
+                        <input class="ap-input" id="ap-artwork-price" type="text" name="price" />
+                    </div>
+                    <div class="form-group">
+                        <label class="ap-form-label" for="ap-artwork-buy-link"><?php esc_html_e('Buy Link', 'artpulse'); ?></label>
+                        <input class="ap-input" id="ap-artwork-buy-link" type="url" name="buy_link" />
+                    </div>
+                </div>
+                <?php endif; ?>
                 <div class="form-group">
                     <label class="ap-form-label" for="ap-artwork-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label>
                     <input class="ap-input" id="ap-artwork-images" type="file" name="images[]" accept="image/*" multiple />
