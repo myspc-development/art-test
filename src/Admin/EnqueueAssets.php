@@ -212,11 +212,15 @@ class EnqueueAssets {
 
     public static function enqueue_frontend() {
         $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
+        $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
 
-               if (is_singular('artpulse_event')) {
+        if (is_singular('artpulse_event')) {
+            $swiper_css_path = $plugin_dir . '/assets/libs/swiper/swiper-bundle.min.css';
             wp_enqueue_style(
                 'swiper-css',
-                plugins_url('assets/libs/swiper/swiper-bundle.min.css', ARTPULSE_PLUGIN_FILE)
+                plugins_url('assets/libs/swiper/swiper-bundle.min.css', ARTPULSE_PLUGIN_FILE),
+                [],
+                file_exists($swiper_css_path) ? filemtime($swiper_css_path) : null
             );
             wp_enqueue_script(
                 'swiper-js',
