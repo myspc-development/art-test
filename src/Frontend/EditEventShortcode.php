@@ -243,6 +243,14 @@ class EditEventShortcode {
             $attachment_id = media_handle_upload('event_banner', $post_id);
             if (!is_wp_error($attachment_id)) {
                 update_post_meta($post_id, 'event_banner_id', $attachment_id);
+
+                $images = get_post_meta($post_id, '_ap_submission_images', true);
+                if (!is_array($images)) {
+                    $images = [];
+                }
+                array_unshift($images, $attachment_id);
+                $images = array_values(array_unique($images));
+                update_post_meta($post_id, '_ap_submission_images', $images);
             }
         }
 
