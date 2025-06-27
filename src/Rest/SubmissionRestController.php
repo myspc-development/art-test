@@ -121,6 +121,22 @@ class SubmissionRestController
             $ids       = array_slice( array_map( 'absint', $params['image_ids'] ), 0, 5 );
             $valid_ids = array_filter( $ids, fn( $id ) => get_post_type( $id ) === 'attachment' );
             if ( $valid_ids ) {
+                if ( ! empty( $params['image_order'] ) && is_array( $params['image_order'] ) ) {
+                    $indices = range( 0, count( $valid_ids ) - 1 );
+                    $order   = array_values( array_unique( array_intersect( array_map( 'absint', $params['image_order'] ), $indices ) ) );
+                    foreach ( $indices as $idx ) {
+                        if ( ! in_array( $idx, $order, true ) ) {
+                            $order[] = $idx;
+                        }
+                    }
+                    $reordered = [];
+                    foreach ( $order as $i ) {
+                        if ( isset( $valid_ids[ $i ] ) ) {
+                            $reordered[] = $valid_ids[ $i ];
+                        }
+                    }
+                    $valid_ids = $reordered;
+                }
                 update_post_meta( $post_id, '_ap_submission_images', $valid_ids );
                 set_post_thumbnail( $post_id, $valid_ids[0] );
                 $saved_image_ids = $valid_ids;
@@ -266,6 +282,12 @@ class SubmissionRestController
                 ],
                 'required'    => false,
                 'description' => 'List of image attachment IDs.',
+            ],
+            'image_order' => [
+                'type'        => 'array',
+                'items'       => [ 'type' => 'integer' ],
+                'required'    => false,
+                'description' => 'Optional order of image indexes.',
             ],
         ];
     }
