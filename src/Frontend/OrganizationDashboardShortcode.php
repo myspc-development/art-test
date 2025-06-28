@@ -108,26 +108,24 @@ class OrganizationDashboardShortcode {
                 <a href="#profile"><span class="dashicons dashicons-admin-settings"></span><?php esc_html_e('Profile', 'artpulse'); ?></a>
             </nav>
 
-            <section class="ap-widget" id="membership-section">
-                <h2 id="membership"><?php _e('Membership','artpulse'); ?></h2>
+            <details class="ap-widget" id="membership-section" open>
+                <summary><h2 id="membership"><?php _e('Membership','artpulse'); ?></h2></summary>
                 <div id="ap-membership-info"></div>
                 <div id="ap-membership-actions"></div>
-            </section>
+            </details>
 
-            <section class="ap-widget" id="billing-section">
-                <h2 id="billing"><?php _e('Next Payment','artpulse'); ?></h2>
+            <details class="ap-widget" id="billing-section" open>
+                <summary><h2 id="billing"><?php _e('Next Payment','artpulse'); ?></h2></summary>
                 <div id="ap-next-payment"></div>
                 <h3 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h3>
                 <div id="ap-transactions"></div>
-            </section>
+            </details>
 
-            <section class="ap-widget" id="events-section">
-                <div class="ap-widget-header">
-                    <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
-                    <?php if (current_user_can('edit_posts')) : ?>
-                    <button id="ap-add-event-btn" class="ap-form-button nectar-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
-                    <?php endif; ?>
-                </div>
+            <details class="ap-widget" id="events-section" open>
+                <summary><h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2></summary>
+                <?php if (current_user_can('edit_posts')) : ?>
+                <button id="ap-add-event-btn" class="ap-form-button nectar-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
+                <?php endif; ?>
                 <p class="ap-help-text">
                     <?php printf(
                         __('Use the <a href="%s">Event Submission</a> page to submit a new event for admin approval.', 'artpulse'),
@@ -246,7 +244,7 @@ class OrganizationDashboardShortcode {
                 'total'   => $query->max_num_pages,
             ]);
             ?>
-            </section>
+            </details>
 
             <div id="ap-attendee-modal" class="ap-org-modal container">
                 <button id="ap-attendee-close" type="button" class="ap-form-button nectar-button">Close</button>
@@ -257,14 +255,14 @@ class OrganizationDashboardShortcode {
             <div id="kanban-board"></div>
 
             <?php if ($show_analytics) : ?>
-            <section class="ap-widget" id="analytics-section">
-                <h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2>
+            <details class="ap-widget" id="analytics-section" open>
+                <summary><h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2></summary>
                 <div id="ap-org-analytics"></div>
-            </section>
+            </details>
             <?php endif; ?>
 
-            <section class="ap-widget" id="profile-section">
-                <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
+            <details class="ap-widget" id="profile-section" open>
+                <summary><h2 id="profile"><?php _e('Profile','artpulse'); ?></h2></summary>
                 <?php
                 $days  = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
                 $hours = [];
@@ -287,7 +285,7 @@ class OrganizationDashboardShortcode {
                 }
                 ?>
                 <?php echo do_shortcode('[ap_org_profile_edit]'); ?>
-            </section>
+            </details>
         </div>
         <?php
         return ob_get_clean();

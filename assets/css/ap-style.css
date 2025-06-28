@@ -924,6 +924,24 @@ select.ap-input {
   font-weight: 500;
 }
 
+/* Collapsible widgets */
+.ap-widget summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.ap-widget summary::-webkit-details-marker {
+  display: none;
+}
+.ap-widget summary::after {
+  content: '\25BC';
+  margin-left: auto;
+}
+.ap-widget[open] summary::after {
+  content: '\25B2';
+}
+
 #ap-membership-info,
 #ap-next-payment,
 #ap-transactions,
