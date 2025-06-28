@@ -7,6 +7,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 // Delete plugin options.
 delete_option( 'artpulse_settings' );
 
-// Drop custom DB tables if any.
-// global $wpdb;
-// $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}artpulse_events" );
+// Drop custom DB tables.
+global $wpdb;
+$table_name = $wpdb->prefix . 'artpulse_data';
+$wpdb->query( "DROP TABLE IF EXISTS $table_name" );
