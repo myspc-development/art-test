@@ -67,4 +67,47 @@ class EventsRouteTest extends \WP_UnitTestCase
         $this->assertContains($this->ny_event, $ids);
         $this->assertNotContains($this->la_event, $ids);
     }
+
+    public function test_event_response_includes_meta_and_org(): void
+    {
+        $org = wp_insert_post([
+            'post_title'  => 'My Org',
+            'post_type'   => 'artpulse_org',
+            'post_status' => 'publish',
+            'meta_input'  => [
+                'ead_org_street_address'       => '123',
+                'ead_org_website_url'          => 'http://example.com',
+                'ead_org_primary_contact_name' => 'Alice',
+                'ead_org_primary_contact_email'=> 'a@example.com',
+                'ead_org_primary_contact_phone'=> '555',
+                'ead_org_primary_contact_role' => 'Lead',
+            ],
+        ]);
+
+        update_post_meta($this->la_event, '_ap_event_organization', $org);
+        update_post_meta($this->la_event, 'event_rsvp_enabled', '1');
+        update_post_meta($this->la_event, 'event_rsvp_limit', 5);
+        update_post_meta($this->la_event, 'event_waitlist_enabled', '1');
+
+        $req = new WP_REST_Request('GET', '/artpulse/v1/events');
+        $req->set_param('city', 'Los Angeles');
+        $req->set_param('region', 'CA');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertCount(1, $data);
+        $event = $data[0];
+        $this->assertSame('1', $event['rsvp_enabled']);
+        $this->assertSame('5', $event['rsvp_limit']);
+        $this->assertSame('1', $event['waitlist_enabled']);
+        $this->assertSame($org, intval($event['event_organization']));
+        $this->assertIsArray($event['organization']);
+        $this->assertSame('My Org', $event['organization']['name']);
+        $this->assertSame('123', $event['organization']['address']);
+        $this->assertSame('http://example.com', $event['organization']['website']);
+        $this->assertSame('Alice', $event['organization']['contact_name']);
+        $this->assertSame('a@example.com', $event['organization']['contact_email']);
+        $this->assertSame('555', $event['organization']['contact_phone']);
+        $this->assertSame('Lead', $event['organization']['contact_role']);
+    }
 }

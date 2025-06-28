@@ -105,10 +105,33 @@ class RestRoutes
             $args['meta_query'] = $meta_query;
         }
 
-        return self::get_posts_with_meta('artpulse_event', [
-            'event_date'     => '_ap_event_date',
-            'event_location' => '_ap_event_location',
+        $events = self::get_posts_with_meta('artpulse_event', [
+            'event_date'         => '_ap_event_date',
+            'event_location'     => '_ap_event_location',
+            'event_organization' => '_ap_event_organization',
+            'rsvp_enabled'       => 'event_rsvp_enabled',
+            'rsvp_limit'         => 'event_rsvp_limit',
+            'waitlist_enabled'   => 'event_waitlist_enabled',
         ], $args);
+
+        foreach ($events as &$event) {
+            $org_id = intval($event['event_organization']);
+            if ($org_id) {
+                $event['organization'] = [
+                    'name'          => get_the_title($org_id),
+                    'address'       => get_post_meta($org_id, 'ead_org_street_address', true),
+                    'website'       => get_post_meta($org_id, 'ead_org_website_url', true),
+                    'contact_name'  => get_post_meta($org_id, 'ead_org_primary_contact_name', true),
+                    'contact_email' => get_post_meta($org_id, 'ead_org_primary_contact_email', true),
+                    'contact_phone' => get_post_meta($org_id, 'ead_org_primary_contact_phone', true),
+                    'contact_role'  => get_post_meta($org_id, 'ead_org_primary_contact_role', true),
+                ];
+            } else {
+                $event['organization'] = [];
+            }
+        }
+
+        return $events;
     }
 
     public static function get_artists()
