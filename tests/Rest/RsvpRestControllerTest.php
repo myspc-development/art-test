@@ -29,6 +29,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
             'post_status' => 'draft',
             'post_author' => $this->user1,
         ]);
+        update_post_meta($this->event_id, 'event_rsvp_enabled', '1');
         update_post_meta($this->event_id, 'event_rsvp_limit', 1);
         update_post_meta($this->event_id, '_ap_event_organization', 99);
         update_user_meta($this->user1, 'ap_organization_id', 99);
@@ -164,6 +165,16 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $req->set_param('message', 'Hello');
         rest_get_server()->dispatch($req);
         $this->assertCount(2, $this->emails);
+    }
+
+    public function test_join_fails_when_rsvp_disabled(): void
+    {
+        update_post_meta($this->event_id, 'event_rsvp_enabled', '0');
+        wp_set_current_user($this->user1);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req->set_param('event_id', $this->event_id);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(400, $res->get_status());
     }
 
     public function test_join_requires_login(): void
