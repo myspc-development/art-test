@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const openBtn = document.getElementById('ap-add-event-btn');
   const closeBtn = document.getElementById('ap-modal-close');
   const form = document.getElementById('ap-org-event-form');
+  const eventIdInput = document.getElementById('ap_event_id');
+  const submitBtn = form?.querySelector('button[type="submit"]');
   const eventsContainer = document.getElementById('ap-org-events');
   const statusBox = document.getElementById('ap-status-message');
   const attendeeModal = document.getElementById('ap-attendee-modal');
@@ -82,6 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (APOrgDashboard.eventFormUrl) {
       window.location.href = APOrgDashboard.eventFormUrl;
     } else {
+      if (eventIdInput) eventIdInput.value = '';
+      if (submitBtn) submitBtn.textContent = 'Submit';
       modal?.classList.add('open');
     }
   });
@@ -114,7 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const formData = new FormData(form);
-    formData.append('action', 'ap_add_org_event');
+    const action = eventIdInput && eventIdInput.value ? 'ap_update_org_event' : 'ap_add_org_event';
+    formData.append('action', action);
     if (!formData.has('nonce')) {
       formData.append('nonce', APOrgDashboard.nonce);
     }
@@ -128,6 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(data => {
         if (data.success) {
           form.reset();
+          if (eventIdInput) eventIdInput.value = '';
+          if (submitBtn) submitBtn.textContent = 'Submit';
           modal.classList.remove('open');
           eventsContainer.innerHTML = data.data.updated_list_html;
         } else if (statusBox) {
@@ -168,6 +175,37 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(data.data.message || 'Failed to delete.');
           }
       });
+  }
+  if (e.target.matches('.ap-inline-edit')) {
+      e.preventDefault();
+      const eventId = e.target.dataset.id;
+      if (!eventId) return;
+      fetch(APOrgDashboard.ajax_url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          action: 'ap_get_org_event',
+          nonce: APOrgDashboard.nonce,
+          event_id: eventId
+        })
+      })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (!data || !data.success) return;
+          Object.entries(data.data).forEach(([key, val]) => {
+            const field = form.querySelector(`[name="${key}"]`);
+            if (!field) return;
+            if (field.type === 'checkbox') {
+              field.checked = val === '1' || val === true;
+            } else {
+              field.value = val !== null ? val : '';
+            }
+          });
+          if (eventIdInput) eventIdInput.value = eventId;
+          if (submitBtn) submitBtn.textContent = 'Save';
+          modal.classList.add('open');
+        });
   }
   if (e.target.matches('.ap-view-attendees')) {
       e.preventDefault();
