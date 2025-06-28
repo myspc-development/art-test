@@ -129,6 +129,12 @@ class RsvpRestController
             return new WP_Error('invalid_event', 'Invalid event.', ['status' => 400]);
         }
 
+        // Ensure RSVPs are enabled
+        $rsvp_enabled = get_post_meta($event_id, 'event_rsvp_enabled', true);
+        if ($rsvp_enabled !== '1') {
+            return new WP_Error('rsvp_disabled', 'RSVPs are disabled for this event.', ['status' => 400]);
+        }
+
         $user_id = get_current_user_id();
 
         ['rsvps' => $rsvps, 'waitlist' => $waitlist] = self::get_lists($event_id);
@@ -137,9 +143,13 @@ class RsvpRestController
         $rsvps    = array_values(array_diff($rsvps, [$user_id]));
         $waitlist = array_values(array_diff($waitlist, [$user_id]));
 
-        $limit = intval(get_post_meta($event_id, 'event_rsvp_limit', true));
+        $limit            = intval(get_post_meta($event_id, 'event_rsvp_limit', true));
+        $waitlist_enabled = get_post_meta($event_id, 'event_waitlist_enabled', true) === '1';
 
         if ($limit && count($rsvps) >= $limit) {
+            if (!$waitlist_enabled) {
+                return new WP_Error('event_full', 'Event has reached RSVP capacity.', ['status' => 400]);
+            }
             if (!in_array($user_id, $waitlist, true)) {
                 $waitlist[] = $user_id;
             }

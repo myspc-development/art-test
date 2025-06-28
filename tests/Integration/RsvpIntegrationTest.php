@@ -27,6 +27,7 @@ class RsvpIntegrationTest extends \WP_UnitTestCase
             'post_status' => 'draft',
             'post_author' => $this->user1,
         ]);
+        update_post_meta($this->event_id, 'event_rsvp_enabled', '1');
         update_post_meta($this->event_id, 'event_rsvp_limit', 1);
         update_post_meta($this->event_id, 'event_rsvp_list', []);
         update_post_meta($this->event_id, 'event_waitlist', []);
