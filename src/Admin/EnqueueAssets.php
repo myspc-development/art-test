@@ -310,7 +310,7 @@ class EnqueueAssets {
 
         wp_enqueue_script(
             'chart-js',
-            'https://cdn.jsdelivr.net/npm/chart.js',
+            plugins_url('assets/libs/chart.js/chart.min.js', ARTPULSE_PLUGIN_FILE),
             [],
             null,
             true
