@@ -82,6 +82,12 @@ Recent updates introduce new fields for location lookups and performance tweaks:
 
 For full usage details refer to the [Admin Guide](assets/docs/Admin_Help.md) and [Member Guide](assets/docs/Member_Help.md).
 
+## Member Badges and Login Heatmap
+
+Administrators can assign badges to users directly from their profile pages. Edit a user and enter any badge slugs as a comma-separated list in the **User Badges** field.
+
+A new **Login Heatmap** submenu under **ArtPulse → Settings** displays hourly login counts for the last seven days so you can quickly spot peak activity times.
+
 ## Submission Meta Fields
 
 Artist and organization submissions automatically copy the post title into a

@@ -47,6 +47,7 @@ graph TD
 ### Using Your Dashboard
 - Track your artworks, events, and membership status at a glance.
 - Edit your profile and see recent notifications.
+- Earn badges for engagement. Any badges granted by admins appear below your membership details.
 - ![Screenshot: Member dashboard](images/member_dashboard.png)
 
 ## Event Calendar
