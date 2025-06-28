@@ -64,6 +64,12 @@ Open **ArtPulse → Engagement** to track member activity. The dashboard offers 
 - All major actions (add/edit artworks, manage events, upgrade membership) are one click away.
 - ![Screenshot: Artist dashboard overview](images/dashboard_overview.png)
 
+## Member Badges
+Edit any user profile to assign badges. Enter badge slugs separated by commas in the **User Badges** field. Badges display on member dashboards and in directories.
+
+## Login Heatmap
+The **Login Heatmap** page under **ArtPulse → Settings** visualizes logins by day and hour for the past week. Darker cells indicate heavier activity and can help identify popular usage times.
+
 ## Event Galleries
 When submitting or editing an event, the form now includes fields for a banner image and up to five gallery images. `[ap_submit_event]` and `[ap_edit_event id="123"]` automatically handle these uploads. The first image becomes the banner and the rest are stored as the event gallery.
 
