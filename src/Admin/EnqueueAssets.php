@@ -324,6 +324,7 @@ class EnqueueAssets {
         );
         wp_localize_script('ap-favorite-toggle', 'apFav', [
             'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('ap_toggle_favorite_nonce'),
         ]);
 
         wp_enqueue_script(

@@ -189,6 +189,10 @@ add_action('wp_ajax_ap_toggle_favorite', function() {
         wp_send_json_error(['error' => 'Unauthorized']);
     }
 
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'ap_toggle_favorite_nonce')) {
+        wp_send_json_error(['error' => 'Invalid nonce']);
+    }
+
     $user_id = get_current_user_id();
     $post_id = intval($_POST['post_id']);
     $type = get_post_type($post_id);
