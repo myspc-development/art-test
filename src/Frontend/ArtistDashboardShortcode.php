@@ -37,6 +37,9 @@ class ArtistDashboardShortcode {
         ?>
         <div class="ap-dashboard ap-artist-dashboard">
             <h1><?php esc_html_e('Artist Dashboard', 'artpulse'); ?></h1>
+            <div class="ap-dashboard-profile">
+                <?php echo do_shortcode('[ap_user_profile]'); ?>
+            </div>
 
             <h2><?php esc_html_e('Your Artworks', 'artpulse'); ?></h2>
             <ul class="ap-artwork-list">
