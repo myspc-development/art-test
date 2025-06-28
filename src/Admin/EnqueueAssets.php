@@ -309,6 +309,24 @@ class EnqueueAssets {
         );
 
         wp_enqueue_script(
+            'chart-js',
+            'https://cdn.jsdelivr.net/npm/chart.js',
+            [],
+            null,
+            true
+        );
+        wp_enqueue_script(
+            'ap-favorite-toggle',
+            $plugin_url . '/assets/js/ap-favorite-toggle.js',
+            ['jquery'],
+            '1.0.0',
+            true
+        );
+        wp_localize_script('ap-favorite-toggle', 'apFav', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+        ]);
+
+        wp_enqueue_script(
             'ap-notifications-js',
             $plugin_url . '/assets/js/ap-notifications.js',
             ['wp-api-fetch'],

@@ -1073,3 +1073,15 @@ select.ap-input {
   cursor: pointer;
   border-radius: var(--ap-border-radius);
 }
+.ap-fav-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.8em;
+    cursor: pointer;
+    color: #ccc;
+    transition: color 0.2s;
+}
+.ap-fav-btn.ap-favorited { color: #f5ab35; }
+.ap-analytics-widget li { margin-bottom: 2em; }
+.ap-fav-count { color: #888; font-size: 0.9em; margin-left: 0.7em; }
+
