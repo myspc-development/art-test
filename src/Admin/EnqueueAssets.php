@@ -450,6 +450,24 @@ class EnqueueAssets {
                 'rest_nonce'   => wp_create_nonce('wp_rest'),
                 'projectStages'=> $stage_groups,
             ]);
+
+            $wizard_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/rsvp-wizard.js';
+            $wizard_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/js/rsvp-wizard.js';
+            if (file_exists($wizard_path)) {
+                wp_enqueue_script(
+                    'ap-rsvp-wizard',
+                    $wizard_url,
+                    ['ap-org-dashboard'],
+                    '1.0.0',
+                    true
+                );
+                wp_localize_script('ap-rsvp-wizard', 'APRsvpWizard', [
+                    'ajax_url'   => admin_url('admin-ajax.php'),
+                    'nonce'      => wp_create_nonce('ap_org_dashboard_nonce'),
+                    'rest_root'  => esc_url_raw(rest_url()),
+                    'rest_nonce' => wp_create_nonce('wp_rest'),
+                ]);
+            }
         }
 
         $artist_dashboard_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-artist-dashboard.js';
