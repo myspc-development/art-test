@@ -17,6 +17,7 @@ class Plugin
     public function __construct()
     {
         $this->define_constants();
+        add_action('init', [$this, 'load_textdomain']);
         $this->register_hooks();
     }
 
@@ -443,6 +444,15 @@ class Plugin
         }
 
         update_option('ap_org_meta_prefix', 'ead_org');
+    }
+
+    public function load_textdomain()
+    {
+        load_plugin_textdomain(
+            'artpulse',
+            false,
+            dirname(plugin_basename(ARTPULSE_PLUGIN_FILE)) . '/languages'
+        );
     }
 
     public function maybe_add_upload_cap()
