@@ -183,3 +183,144 @@ function ap_enqueue_admin_styles($hook) {
     }
 }
 add_action('admin_enqueue_scripts', 'ap_enqueue_admin_styles');
+
+add_action('wp_ajax_ap_toggle_favorite', function() {
+    if (!is_user_logged_in() || !isset($_POST['post_id'])) {
+        wp_send_json_error(['error' => 'Unauthorized']);
+    }
+
+    $user_id = get_current_user_id();
+    $post_id = intval($_POST['post_id']);
+    $type = get_post_type($post_id);
+    $meta_key = ($type === 'artpulse_event') ? 'ap_favorite_events' : 'ap_favorite_artworks';
+    $favs = get_user_meta($user_id, $meta_key, true) ?: [];
+    $added = false;
+
+    $trend = get_post_meta($post_id, 'ap_favorite_trend', true) ?: [];
+    $today = date('Y-m-d');
+
+    if (in_array($post_id, $favs)) {
+        $favs = array_diff($favs, [$post_id]);
+        $fav_count = max(0, intval(get_post_meta($post_id, 'ap_favorite_count', true)) - 1);
+        $trend[$today] = max(0, ($trend[$today] ?? 1) - 1);
+    } else {
+        $favs[] = $post_id;
+        $added = true;
+        $fav_count = intval(get_post_meta($post_id, 'ap_favorite_count', true)) + 1;
+        $trend[$today] = ($trend[$today] ?? 0) + 1;
+    }
+
+    update_user_meta($user_id, $meta_key, array_values($favs));
+    update_post_meta($post_id, 'ap_favorite_count', $fav_count);
+    update_post_meta($post_id, 'ap_favorite_trend', $trend);
+
+    wp_send_json_success([
+        'added' => $added,
+        'count' => $fav_count,
+    ]);
+});
+
+function ap_user_has_favorited($user_id, $post_id) {
+    $meta_key = (get_post_type($post_id) == 'artpulse_event') ? 'ap_favorite_events' : 'ap_favorite_artworks';
+    $favs = get_user_meta($user_id, $meta_key, true) ?: [];
+    return in_array($post_id, $favs);
+}
+
+function ap_render_favorite_portfolio() {
+    if (!is_user_logged_in()) {
+        return '<p>' . __('Please log in to view your favorites.', 'artpulse') . '</p>';
+    }
+    $user_id = get_current_user_id();
+    $fav_events = get_user_meta($user_id, 'ap_favorite_events', true) ?: [];
+    $fav_artworks = get_user_meta($user_id, 'ap_favorite_artworks', true) ?: [];
+    $favorite_ids = array_merge($fav_events, $fav_artworks);
+
+    ob_start();
+    if ($favorite_ids) {
+        $fav_query = new WP_Query([
+            'post_type' => ['artpulse_event', 'artpulse_artwork'],
+            'post__in' => $favorite_ids,
+            'orderby' => 'post__in',
+            'posts_per_page' => 12
+        ]);
+        echo '<div class="row portfolio-items">';
+        while($fav_query->have_posts()) : $fav_query->the_post(); ?>
+            <div class="col span_4">
+                <div class="nectar-portfolio-item">
+                    <a href="<?php the_permalink(); ?>">
+                        <?php the_post_thumbnail('portfolio-thumb'); ?>
+                        <h3><?php the_title(); ?></h3>
+                        <span class="ap-fav-count"><?php echo intval(get_post_meta(get_the_ID(), 'ap_favorite_count', true)); ?> Favorites</span>
+                    </a>
+                    <button class="ap-fav-btn<?php echo ap_user_has_favorited($user_id, get_the_ID()) ? ' ap-favorited' : ''; ?>" data-post="<?php the_ID(); ?>">
+                        <?php echo ap_user_has_favorited($user_id, get_the_ID()) ? '★' : '☆'; ?>
+                    </button>
+                </div>
+            </div>
+        <?php endwhile;
+        echo '</div>';
+        wp_reset_postdata();
+    } else {
+        echo '<p>' . __('No favorites yet. Click the star on any event or artwork to add it to your favorites!', 'artpulse') . '</p>';
+    }
+    return ob_get_clean();
+}
+add_shortcode('ap_favorite_portfolio', 'ap_render_favorite_portfolio');
+
+function ap_favorites_analytics_widget() {
+    ob_start();
+    $args = [
+        'post_type' => ['artpulse_event', 'artpulse_artwork'],
+        'meta_key' => 'ap_favorite_count',
+        'orderby' => 'meta_value_num',
+        'order' => 'DESC',
+        'posts_per_page' => 5
+    ];
+    $query = new WP_Query($args);
+    echo '<h4>Top Favorited Events/Artworks</h4><ul class="ap-analytics-widget">';
+    while($query->have_posts()) : $query->the_post();
+        $trend = get_post_meta(get_the_ID(), 'ap_favorite_trend', true) ?: [];
+        $labels = [];
+        $counts = [];
+        foreach(array_slice(array_reverse(array_keys($trend)),0,7) as $d) {
+            $labels[] = $d;
+            $counts[] = $trend[$d];
+        }
+        ?>
+        <li>
+            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+            <span><?php echo intval(get_post_meta(get_the_ID(), 'ap_favorite_count', true)); ?> favorites</span>
+            <canvas id="favTrendChart-<?php the_ID(); ?>" width="300" height="80"></canvas>
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var ctx = document.getElementById('favTrendChart-<?php the_ID(); ?>').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: <?php echo json_encode($labels); ?>,
+                        datasets: [{
+                            label: 'Favorites per day',
+                            data: <?php echo json_encode($counts); ?>,
+                            borderColor: '#f5ab35',
+                            backgroundColor: 'rgba(245,171,53,0.1)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { display: true, title: { display: true, text: 'Date' } },
+                            y: { beginAtZero: true, title: { display: true, text: 'Favorites' } }
+                        }
+                    }
+                });
+            });
+            </script>
+        </li>
+    <?php endwhile;
+    echo '</ul>';
+    wp_reset_postdata();
+    return ob_get_clean();
+}
+add_shortcode('ap_favorites_analytics', 'ap_favorites_analytics_widget');
