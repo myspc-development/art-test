@@ -12,7 +12,7 @@ use ArtPulse\Admin\EngagementDashboard;
 
 class Plugin
 {
-    private const VERSION = '1.1.5';
+    private const VERSION = '1.3.5';
 
     public function __construct()
     {
