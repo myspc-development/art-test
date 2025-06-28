@@ -7,6 +7,8 @@ class OrganizationDashboardShortcode {
         add_shortcode('ap_org_dashboard', [self::class, 'render']);
         // Match the JS action in ap-org-dashboard.js
         add_action('wp_ajax_ap_add_org_event', [self::class, 'handle_ajax_add_event']);
+        add_action('wp_ajax_ap_get_org_event', [self::class, 'handle_ajax_get_event']);
+        add_action('wp_ajax_ap_update_org_event', [self::class, 'handle_ajax_update_event']);
         add_action('wp_ajax_ap_delete_org_event', [self::class, 'handle_ajax_delete_event']);
     }
 
@@ -195,6 +197,7 @@ class OrganizationDashboardShortcode {
                     </label>
 
                     <input type="hidden" name="ap_event_organization" value="<?php echo esc_attr($org_id); ?>">
+                    <input type="hidden" name="ap_event_id" id="ap_event_id" value="">
                     <button class="ap-form-button nectar-button" type="submit">Submit</button>
                 </form>
             </div>
@@ -225,9 +228,7 @@ class OrganizationDashboardShortcode {
                         echo ' <span class="ap-waitlist-count">' . intval($wait_count) . ' WL</span>';
                     }
                     echo ' <a href="#" class="ap-view-attendees" data-id="' . $event->ID . '">Attendees</a>';
-                    if ($edit) {
-                        echo ' <a href="' . esc_url($edit) . '" class="ap-edit-event">Edit</a>';
-                    }
+                    echo ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>';
                     echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
                 }
                 ?>
@@ -376,16 +377,109 @@ class OrganizationDashboardShortcode {
             'meta_value'  => $org_id,
         ]);
         foreach ($events as $event) {
-            $edit = get_edit_post_link($event->ID);
             echo '<li>' . esc_html($event->post_title);
-            if ($edit) {
-                echo ' <a href="' . esc_url($edit) . '" class="ap-edit-event">Edit</a>';
-            }
+            echo ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>';
             echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
         }
         $html = ob_get_clean();
 
         wp_send_json_success(['updated_list_html' => $html]);
+    }
+
+    public static function handle_ajax_get_event() {
+        check_ajax_referer('ap_org_dashboard_nonce', 'nonce');
+
+        $event_id = intval($_POST['event_id'] ?? 0);
+        if (!$event_id || get_post_type($event_id) !== 'artpulse_event') {
+            wp_send_json_error(['message' => 'Invalid event.']);
+        }
+
+        if (!current_user_can('edit_post', $event_id)) {
+            wp_send_json_error(['message' => 'Permission denied.']);
+        }
+
+        $data = [
+            'ap_event_title'          => get_the_title($event_id),
+            'ap_event_date'           => get_post_meta($event_id, '_ap_event_date', true),
+            'ap_event_start_date'     => get_post_meta($event_id, 'event_start_date', true),
+            'ap_event_end_date'       => get_post_meta($event_id, 'event_end_date', true),
+            'ap_event_location'       => get_post_meta($event_id, '_ap_event_location', true),
+            'ap_venue_name'           => get_post_meta($event_id, 'venue_name', true),
+            'ap_event_street_address' => get_post_meta($event_id, 'event_street_address', true),
+            'ap_event_country'        => get_post_meta($event_id, 'event_country', true),
+            'ap_event_state'          => get_post_meta($event_id, 'event_state', true),
+            'ap_event_city'           => get_post_meta($event_id, 'event_city', true),
+            'ap_event_postcode'       => get_post_meta($event_id, 'event_postcode', true),
+            'address_components'      => get_post_meta($event_id, 'address_components', true),
+            'ap_event_organizer_name' => get_post_meta($event_id, 'event_organizer_name', true),
+            'ap_event_organizer_email'=> get_post_meta($event_id, 'event_organizer_email', true),
+            'ap_event_type'           => current($terms = wp_get_post_terms($event_id, 'artpulse_event_type', ['fields' => 'ids'])) ?: '',
+            'ap_event_featured'       => get_post_meta($event_id, 'event_featured', true),
+            'ap_event_rsvp_enabled'   => get_post_meta($event_id, 'event_rsvp_enabled', true),
+            'ap_event_rsvp_limit'     => get_post_meta($event_id, 'event_rsvp_limit', true),
+        ];
+
+        wp_send_json_success($data);
+    }
+
+    public static function handle_ajax_update_event() {
+        check_ajax_referer('ap_org_dashboard_nonce', 'nonce');
+
+        $event_id = intval($_POST['ap_event_id'] ?? 0);
+        if (!$event_id || get_post_type($event_id) !== 'artpulse_event') {
+            wp_send_json_error(['message' => 'Invalid event.']);
+        }
+
+        if (!current_user_can('edit_post', $event_id)) {
+            wp_send_json_error(['message' => 'Permission denied.']);
+        }
+
+        $title            = sanitize_text_field($_POST['ap_event_title']);
+        $date             = sanitize_text_field($_POST['ap_event_date']);
+        $start_date       = sanitize_text_field($_POST['ap_event_start_date'] ?? '');
+        $end_date         = sanitize_text_field($_POST['ap_event_end_date'] ?? '');
+        $location         = sanitize_text_field($_POST['ap_event_location']);
+        $venue_name       = sanitize_text_field($_POST['ap_venue_name'] ?? '');
+        $street           = sanitize_text_field($_POST['ap_event_street_address'] ?? '');
+        $country          = sanitize_text_field($_POST['ap_event_country'] ?? '');
+        $state            = sanitize_text_field($_POST['ap_event_state'] ?? '');
+        $city             = sanitize_text_field($_POST['ap_event_city'] ?? '');
+        $postcode         = sanitize_text_field($_POST['ap_event_postcode'] ?? '');
+        $address_components = sanitize_text_field($_POST['address_components'] ?? '');
+        $organizer_name   = sanitize_text_field($_POST['ap_event_organizer_name'] ?? '');
+        $organizer_email  = sanitize_email($_POST['ap_event_organizer_email'] ?? '');
+        $event_type       = intval($_POST['ap_event_type'] ?? 0);
+        $featured         = isset($_POST['ap_event_featured']) ? '1' : '0';
+        $rsvp_enabled     = isset($_POST['ap_event_rsvp_enabled']) ? '1' : '0';
+        $rsvp_limit       = isset($_POST['ap_event_rsvp_limit']) ? intval($_POST['ap_event_rsvp_limit']) : 0;
+
+        wp_update_post([
+            'ID'         => $event_id,
+            'post_title' => $title,
+        ]);
+
+        update_post_meta($event_id, '_ap_event_date', $date);
+        update_post_meta($event_id, 'event_start_date', $start_date);
+        update_post_meta($event_id, 'event_end_date', $end_date);
+        update_post_meta($event_id, '_ap_event_location', $location);
+        update_post_meta($event_id, 'venue_name', $venue_name);
+        update_post_meta($event_id, 'event_street_address', $street);
+        update_post_meta($event_id, 'event_country', $country);
+        update_post_meta($event_id, 'event_state', $state);
+        update_post_meta($event_id, 'event_city', $city);
+        update_post_meta($event_id, 'event_postcode', $postcode);
+        update_post_meta($event_id, 'address_components', $address_components);
+        update_post_meta($event_id, 'event_organizer_name', $organizer_name);
+        update_post_meta($event_id, 'event_organizer_email', $organizer_email);
+        update_post_meta($event_id, 'event_featured', $featured);
+        update_post_meta($event_id, 'event_rsvp_enabled', $rsvp_enabled);
+        update_post_meta($event_id, 'event_rsvp_limit', $rsvp_limit);
+
+        if ($event_type) {
+            wp_set_post_terms($event_id, [$event_type], 'artpulse_event_type');
+        }
+
+        wp_send_json_success(['message' => 'Updated']);
     }
 
     public static function handle_ajax_delete_event() {
@@ -421,11 +515,8 @@ class OrganizationDashboardShortcode {
             'meta_value'  => $user_org,
         ]);
         foreach ($events as $event) {
-            $edit = get_edit_post_link($event->ID);
             echo '<li>' . esc_html($event->post_title);
-            if ($edit) {
-                echo ' <a href="' . esc_url($edit) . '" class="ap-edit-event">Edit</a>';
-            }
+            echo ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>';
             echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
         }
         $html = ob_get_clean();
