@@ -151,6 +151,12 @@ class OrgProfileEditShortcode {
             }
         }
 
+        if (!function_exists('media_handle_upload')) {
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+        }
+
         foreach ($fields as $key => $args) {
             $type = $args[0];
             if ($type === 'media') {
