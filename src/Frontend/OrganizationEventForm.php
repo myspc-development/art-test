@@ -5,7 +5,8 @@ namespace ArtPulse\Frontend;
 class OrganizationEventForm {
 
     public static function register() {
-        add_shortcode('ap_submit_event', [self::class, 'render']);
+        // Use a unique shortcode to avoid clashing with EventSubmissionShortcode
+        add_shortcode('ap_org_event_form', [self::class, 'render']);
     }
 
     public static function render() {
