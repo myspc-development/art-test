@@ -1085,3 +1085,6 @@ select.ap-input {
 .ap-analytics-widget li { margin-bottom: 2em; }
 .ap-fav-count { color: #888; font-size: 0.9em; margin-left: 0.7em; }
 
+.ap-rsvp-step { display: none; }
+.ap-rsvp-step.active { display: block; }
+

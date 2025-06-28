@@ -229,6 +229,7 @@ class OrganizationDashboardShortcode {
                     }
                     echo ' <a href="#" class="ap-view-attendees" data-id="' . $event->ID . '">Attendees</a>';
                     echo ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>';
+                    echo ' <button class="ap-config-rsvp" data-id="' . $event->ID . '">Configure RSVP</button>';
                     echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
                 }
                 ?>
@@ -417,6 +418,7 @@ class OrganizationDashboardShortcode {
             'ap_event_featured'       => get_post_meta($event_id, 'event_featured', true),
             'ap_event_rsvp_enabled'   => get_post_meta($event_id, 'event_rsvp_enabled', true),
             'ap_event_rsvp_limit'     => get_post_meta($event_id, 'event_rsvp_limit', true),
+            'ap_event_waitlist_enabled' => get_post_meta($event_id, 'event_waitlist_enabled', true),
         ];
 
         wp_send_json_success($data);
@@ -452,6 +454,7 @@ class OrganizationDashboardShortcode {
         $featured         = isset($_POST['ap_event_featured']) ? '1' : '0';
         $rsvp_enabled     = isset($_POST['ap_event_rsvp_enabled']) ? '1' : '0';
         $rsvp_limit       = isset($_POST['ap_event_rsvp_limit']) ? intval($_POST['ap_event_rsvp_limit']) : 0;
+        $waitlist_enabled = isset($_POST['ap_event_waitlist_enabled']) ? '1' : '0';
 
         wp_update_post([
             'ID'         => $event_id,
@@ -474,6 +477,7 @@ class OrganizationDashboardShortcode {
         update_post_meta($event_id, 'event_featured', $featured);
         update_post_meta($event_id, 'event_rsvp_enabled', $rsvp_enabled);
         update_post_meta($event_id, 'event_rsvp_limit', $rsvp_limit);
+        update_post_meta($event_id, 'event_waitlist_enabled', $waitlist_enabled);
 
         if ($event_type) {
             wp_set_post_terms($event_id, [$event_type], 'artpulse_event_type');
