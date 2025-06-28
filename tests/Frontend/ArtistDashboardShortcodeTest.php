@@ -21,6 +21,12 @@ function esc_html($t) { return $t; }
 function esc_url($t) { return $t; }
 function wp_enqueue_script($h){}
 function __( $t, $d=null ) { return $t; }
+function do_shortcode($code) {
+    if ($code === '[ap_user_profile]') {
+        return '<div class="ap-user-profile"></div>';
+    }
+    return '';
+}
 
 namespace ArtPulse\Frontend\Tests;
 
@@ -49,6 +55,7 @@ class ArtistDashboardShortcodeTest extends TestCase
         $html = ArtistDashboardShortcode::render();
         $this->assertStringContainsString('ap-delete-artwork', $html);
         $this->assertStringContainsString('ap-edit-artwork', $html);
+        $this->assertStringContainsString('ap-user-profile', $html);
     }
 
     public function test_deletion_returns_ordered_html(): void
