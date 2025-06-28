@@ -119,6 +119,10 @@ class PostTypeRegistrar
 
     private static function register_meta_boxes()
     {
+        $opts              = get_option('artpulse_settings', []);
+        $default_rsvp      = isset($opts['default_rsvp_limit']) ? absint($opts['default_rsvp_limit']) : 50;
+        $default_waitlists = !empty($opts['waitlists_enabled']);
+
         register_post_meta('artpulse_event', '_ap_event_date', [
             'show_in_rest' => true,
             'single'       => true,
