@@ -113,3 +113,15 @@ Organization posts reuse this system. The same `ap-event-gallery-front.js` scrip
 ## Portfolio Gallery
 
 Portfolio posts mirror this functionality. When a portfolio item contains multiple IDs in the `_ap_submission_images` meta field, each ID after the featured image outputs as a slide. The front-end script `ap-portfolio-gallery-front.js` initializes Swiper on single portfolio pages. If no gallery images are present a short “No gallery images available.” message is displayed.
+
+## Uninstall Cleanup
+
+When the plugin is uninstalled through the WordPress admin, all tables created by ArtPulse are removed automatically. The following tables are dropped along with the `artpulse_settings` option:
+
+- `{prefix}artpulse_data`
+- `{prefix}ap_favorites`
+- `{prefix}ap_follows`
+- `{prefix}ap_notifications`
+- `{prefix}ap_link_requests_meta`
+- `{prefix}ap_roles`
+- `{prefix}ap_login_events`
