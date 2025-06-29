@@ -48,33 +48,33 @@ graph TD
 - Track your artworks, events, and membership status at a glance.
 - Edit your profile and see recent notifications.
 - Earn badges for engagement. Any badges granted by admins appear below your membership details.
-- ![Screenshot: Member dashboard](images/member_dashboard.png)
+- ![Screenshot: Member dashboard](images/member_dashboard.png) — see the [User Guide](../../docs/user-guide.md) for dashboard features.
 
 ## Event Calendar
-The **My Calendar** view in your dashboard displays upcoming events you have registered for. Use the monthly navigation to see what's coming. A screenshot (`images/event_calendar_view.png`) illustrates this view.
+The **My Calendar** view in your dashboard displays upcoming events you have registered for. Use the monthly navigation to see what's coming. A screenshot (`images/event_calendar_view.png`) illustrates this view. See the [User Guide](../../docs/user-guide.md) for full calendar instructions.
 
 ### Exploring Events Near You
 - Allow browser location or set your home area to see events highlighted by proximity.
 - Use the color legend to spot the closest events.
 - Click an event to see full details, including distance from you and directions.
-- ![Screenshot: Event calendar with popover](images/calendar_nearby.png)
+- ![Screenshot: Event calendar with popover](images/calendar_nearby.png) — additional calendar options are covered in the [User Guide](../../docs/user-guide.md).
 
 ## Artwork Registration
-After creating your profile, register each piece through the **Add Artwork** form. Include high quality images and a detailed description. See `images/artwork_registration_form.png` for an example.
+After creating your profile, register each piece through the **Add Artwork** form. Include high quality images and a detailed description. See `images/artwork_registration_form.png` for an example. The [User Guide](../../docs/user-guide.md) covers this form in detail.
 
 ### Selling Artworks
 - If enabled by the site admin, you’ll see a “For Sale?” option when adding/editing artworks.
 - Enter a price and optional buy/contact link.
 - Buyers can contact you or purchase directly from your artwork’s page.
 - If this option isn’t visible, selling is currently disabled by the site admin.
-- ![Screenshot: Dashboard artwork form with sale fields](images/artwork_sale_fields.png)
+- ![Screenshot: Dashboard artwork form with sale fields](images/artwork_sale_fields.png) — see the [User Guide](../../docs/user-guide.md) for selling artworks.
 
 ### Artwork Price History
 - When viewing your artwork, you’ll see a list or chart of previous sale prices if you’ve changed the price over time.
-- ![Screenshot: Single artwork page with price history chart](images/price_history_chart.png)
+- ![Screenshot: Single artwork page with price history chart](images/price_history_chart.png) — details on price history appear in the [User Guide](../../docs/user-guide.md).
 
 ## Event Registration
-When ready to promote an event, open **Submit Event** from your dashboard. Provide dates, times and location information. Example screenshot: `images/event_registration_form.png`.
+When ready to promote an event, open **Submit Event** from your dashboard. Provide dates, times and location information. Example screenshot: `images/event_registration_form.png`. Refer to the [User Guide](../../docs/user-guide.md) for event submission steps.
 
 ### Event Images
 Each event can include a banner plus up to five additional images. The submission and edit forms provide an **Images** field for this purpose. The first image is used as the banner while the rest display as a gallery below the event description on the site.
