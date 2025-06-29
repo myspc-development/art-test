@@ -34,6 +34,11 @@ class FollowManager {
             'followed_on'  => current_time('mysql')
         ]);
 
+        /**
+         * Action triggered after a follow is added.
+         */
+        do_action('ap_follow_added', $user_id, $object_id, $object_type);
+
         // --- Notify the owner (if not following self) ---
         $owner_id = self::get_owner_user_id($object_id, $object_type);
         if ($owner_id && $owner_id !== $user_id && class_exists('\ArtPulse\Community\NotificationManager')) {
@@ -59,6 +64,11 @@ class FollowManager {
             'object_id'   => $object_id,
             'object_type' => $object_type,
         ]);
+
+        /**
+         * Action triggered after a follow is removed.
+         */
+        do_action('ap_follow_removed', $user_id, $object_id, $object_type);
     }
 
     /**

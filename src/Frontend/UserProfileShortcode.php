@@ -26,6 +26,8 @@ class UserProfileShortcode {
             return '<div class="ap-user-profile-error">User not found.</div>';
         }
 
+        \ArtPulse\Core\ProfileMetrics::log_metric($user_id, 'view');
+
         $bio       = get_user_meta($user_id, 'description', true);
         $followers = self::countFollowers($user_id);
         $avatar    = get_user_meta($user_id, 'ap_custom_avatar', true);

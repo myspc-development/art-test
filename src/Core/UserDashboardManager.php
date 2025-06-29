@@ -85,6 +85,12 @@ class UserDashboardManager
 
             $stats = \ArtPulse\Core\UserEngagementLogger::get_stats($uid);
             wp_localize_script('ap-user-dashboard-js', 'APUserStats', $stats);
+
+            wp_localize_script('ap-user-dashboard-js', 'APProfileMetrics', [
+                'endpoint'   => esc_url_raw(rest_url('artpulse/v1/profile-metrics')),
+                'profileId' => $uid,
+                'nonce'     => wp_create_nonce('wp_rest'),
+            ]);
         }
 
         // Dashboard styles

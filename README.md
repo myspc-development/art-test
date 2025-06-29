@@ -155,6 +155,7 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 - `{prefix}ap_favorites`
 - `{prefix}ap_follows`
 - `{prefix}ap_notifications`
+- `{prefix}ap_profile_metrics`
 - `{prefix}ap_link_requests_meta`
 - `{prefix}ap_roles`
 - `{prefix}ap_login_events`
