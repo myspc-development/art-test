@@ -28,6 +28,12 @@
   margin-bottom: var(--ap-space-medium);
 }
 
+#ap-dashboard-stats {
+  font-size: 0.9rem;
+  margin-bottom: var(--ap-space-medium);
+  color: var(--ap-muted-text-color);
+}
+
 #ap-events-feed,
 #ap-dashboard-notifications {
   background: var(--ap-bg-color);

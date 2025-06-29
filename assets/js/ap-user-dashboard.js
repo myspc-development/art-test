@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
   .then(data => {
     myEvents = data.my_events || [];
     nextEvent = data.next_event || null;
+    const statsBox = document.getElementById('ap-dashboard-stats');
+    if (statsBox) {
+      const rsvps = data.rsvp_count || 0;
+      const favs = data.favorite_count || 0;
+      statsBox.textContent = `RSVPs: ${rsvps} \u00b7 Favorites: ${favs}`;
+    }
     const supportHistory = data.support_history || [];
     // Membership
     const info = document.getElementById('ap-membership-info');
@@ -378,6 +384,12 @@ function refreshDashboardEvents() {
     .then(data => {
       myEvents = data.my_events || [];
       nextEvent = data.next_event || null;
+      const statsBox = document.getElementById('ap-dashboard-stats');
+      if (statsBox) {
+        const rsvps = data.rsvp_count || 0;
+        const favs = data.favorite_count || 0;
+        statsBox.textContent = `RSVPs: ${rsvps} \u00b7 Favorites: ${favs}`;
+      }
       document.getElementById('ap-my-events').innerHTML = '';
       document.getElementById('ap-next-event').innerHTML = '';
       if (myEvents.length) {

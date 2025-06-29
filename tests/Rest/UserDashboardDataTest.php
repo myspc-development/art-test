@@ -43,6 +43,7 @@ class UserDashboardDataTest extends \WP_UnitTestCase
         $this->assertSame(['gold'], $data['user_badges']);
         $this->assertSame(1, $data['favorite_count']);
         $this->assertSame(1, $data['rsvp_count']);
+        $this->assertSame(1, $data['my_event_count']);
     }
 
     public function test_dashboard_data_includes_event_lists(): void
@@ -58,6 +59,7 @@ class UserDashboardDataTest extends \WP_UnitTestCase
         $this->assertSame($this->event_id, $data['favorite_events'][0]['id']);
         $this->assertSame(1, $data['favorite_count']);
         $this->assertSame(1, $data['rsvp_count']);
+        $this->assertSame(1, $data['my_event_count']);
 
         $this->assertIsArray($data['my_events']);
         $this->assertCount(1, $data['my_events']);

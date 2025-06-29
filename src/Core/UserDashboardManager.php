@@ -230,6 +230,7 @@ class UserDashboardManager
             return strcmp($a['date'] ?? '', $b['date'] ?? '');
         });
         $data['my_events'] = $my_events;
+        $data['my_event_count'] = count($my_events);
 
         // Determine next upcoming RSVP event
         $next_event = null;
