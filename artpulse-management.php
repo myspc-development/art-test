@@ -261,7 +261,10 @@ function ap_render_favorite_portfolio() {
                         <?php the_post_thumbnail('portfolio-thumb'); ?>
                         <h3><?php the_title(); ?></h3>
                     </a>
-                    <?php echo \ArtPulse\Frontend\ap_render_favorite_button( get_the_ID() ); ?>
+                    <div class="ap-event-actions">
+                        <?php echo \ArtPulse\Frontend\ap_render_favorite_button( get_the_ID() ); ?>
+                        <span class="ap-fav-count"><?php echo intval( get_post_meta( get_the_ID(), 'ap_favorite_count', true ) ); ?></span>
+                    </div>
                 </div>
 <?php
             }
