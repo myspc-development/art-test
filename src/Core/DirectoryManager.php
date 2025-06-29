@@ -55,6 +55,7 @@ class DirectoryManager {
                 'city'       => [ 'type' => 'string' ],
                 'region'     => [ 'type' => 'string' ],
                 'for_sale'   => [ 'type' => 'boolean' ],
+                'keyword'    => [ 'type' => 'string' ],
             ]
         ]);
     }
@@ -69,6 +70,7 @@ class DirectoryManager {
         $city       = sanitize_text_field( $request->get_param('city') );
         $region     = sanitize_text_field( $request->get_param('region') );
         $for_sale   = $request->has_param('for_sale') ? rest_sanitize_boolean( $request->get_param('for_sale') ) : null;
+        $keyword    = sanitize_text_field( $request->get_param('keyword') );
 
         $allowed = ['event', 'artist', 'artwork', 'org'];
         if (!in_array($type, $allowed, true)) {
@@ -93,6 +95,7 @@ class DirectoryManager {
             'city'       => $city,
             'region'     => $region,
             'for_sale'   => $for_sale,
+            'keyword'    => $keyword,
         ];
 
         if ( ExternalSearch::is_enabled() ) {
@@ -146,6 +149,10 @@ class DirectoryManager {
                     'value'   => $location,
                     'compare' => 'LIKE',
                 ];
+            }
+
+            if ( $keyword ) {
+                $args['s'] = $keyword;
             }
 
             if ( ! empty( $tax_query ) ) {
@@ -209,6 +216,7 @@ class DirectoryManager {
                 <label><?php _e('Style','artpulse'); ?>:</label>
                 <select class="ap-filter-style"></select>
                 <input type="text" class="ap-filter-location" placeholder="<?php esc_attr_e('Location','artpulse'); ?>" />
+                <input type="text" class="ap-filter-keyword" placeholder="<?php esc_attr_e('Keyword','artpulse'); ?>" />
                 <label><?php _e('Limit','artpulse'); ?>:</label>
                 <input type="number" class="ap-filter-limit" value="<?php echo esc_attr($atts['limit']); ?>" />
                 <button class="ap-filter-apply"><?php _e('Apply','artpulse'); ?></button>
