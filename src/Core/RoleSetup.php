@@ -60,7 +60,7 @@ class RoleSetup
             'artpulse_artist',
             'artpulse_artwork',
             'artpulse_org',
-            'ap_profile_link_request',
+            'ap_profile_link_req',
             'ap_profile_link',
         ];
 

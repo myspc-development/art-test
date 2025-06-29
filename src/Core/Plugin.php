@@ -48,6 +48,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\FavoritesRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
+        add_action('init', [$this, 'maybe_migrate_profile_link_request_slug']);
         add_action('init', [$this, 'maybe_add_upload_cap']);
         add_action('init', [\ArtPulse\Core\RoleSetup::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\FavoritesManager::class, 'maybe_install_table']);
@@ -463,6 +464,22 @@ class Plugin
         }
 
         update_option('ap_org_meta_prefix', 'ead_org');
+    }
+
+    public function maybe_migrate_profile_link_request_slug()
+    {
+        if (get_option('ap_profile_link_req_migrated')) {
+            return;
+        }
+
+        global $wpdb;
+        $wpdb->update(
+            $wpdb->posts,
+            ['post_type' => 'ap_profile_link_req'],
+            ['post_type' => 'ap_profile_link_request']
+        );
+
+        update_option('ap_profile_link_req_migrated', 1);
     }
 
     public function load_textdomain()

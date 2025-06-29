@@ -39,7 +39,7 @@ class PostTypeRegistrar
                 'show_in_rest'=> true,
                 'supports'   => ['title'],
             ],
-            'ap_profile_link_request' => [
+            'ap_profile_link_req' => [
                 'label'       => __('Profile Link Requests', 'artpulse'),
                 'public'      => false,
                 'show_ui'     => true,

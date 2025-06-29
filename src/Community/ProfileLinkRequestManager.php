@@ -92,7 +92,7 @@ class ProfileLinkRequestManager
     public static function create(int $artist_user_id, int $org_id, string $message = ''): int
     {
         $post_id = wp_insert_post([
-            'post_type'   => 'ap_profile_link_request',
+            'post_type'   => 'ap_profile_link_req',
             'post_status' => 'publish',
             'post_title'  => 'Profile Link Request',
             'post_author' => $artist_user_id,
@@ -125,7 +125,7 @@ class ProfileLinkRequestManager
     public static function approve(int $request_id, int $user_id): void
     {
         $request = get_post($request_id);
-        if (!$request || $request->post_type !== 'ap_profile_link_request') {
+        if (!$request || $request->post_type !== 'ap_profile_link_req') {
             return;
         }
 
@@ -163,7 +163,7 @@ class ProfileLinkRequestManager
     public static function deny(int $request_id, int $user_id): void
     {
         $request = get_post($request_id);
-        if (!$request || $request->post_type !== 'ap_profile_link_request') {
+        if (!$request || $request->post_type !== 'ap_profile_link_req') {
             return;
         }
 
