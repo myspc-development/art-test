@@ -94,13 +94,165 @@ class DigestMailer
      */
     public static function generate_digest(int $user_id): array
     {
-        // Placeholder implementation. Production code would gather events
-        // and recommendations based on follows and location.
+        $today  = current_time('Y-m-d');
+
+        $events = [];
+        $seen   = [];
+
+        $add_event = static function (int $event_id) use (&$events, &$seen, $today): void {
+            if (isset($seen[$event_id])) {
+                return;
+            }
+            $date = get_post_meta($event_id, '_ap_event_date', true);
+            if (!$date || strtotime($date) < strtotime($today)) {
+                return;
+            }
+            $events[] = [
+                'id'       => $event_id,
+                'title'    => get_the_title($event_id),
+                'link'     => get_permalink($event_id),
+                'date'     => $date,
+                'location' => get_post_meta($event_id, '_ap_event_location', true),
+            ];
+            $seen[$event_id] = true;
+        };
+
+        // --- Gather events from follows ---
+        $follows = get_user_meta($user_id, '_ap_follows', true);
+        if (is_array($follows)) {
+            foreach ($follows as $fid) {
+                $post_type = get_post_type($fid);
+                if (!$post_type) {
+                    continue;
+                }
+                if ($post_type === 'artpulse_event') {
+                    $add_event((int) $fid);
+                } elseif ($post_type === 'artpulse_artist') {
+                    $posts = get_posts([
+                        'post_type'      => 'artpulse_event',
+                        'post_status'    => 'publish',
+                        'numberposts'    => -1,
+                        'meta_query'     => [
+                            [
+                                'key'     => '_ap_event_artists',
+                                'value'   => 'i:' . (int) $fid . ';',
+                                'compare' => 'LIKE',
+                            ],
+                            [
+                                'key'     => '_ap_event_date',
+                                'value'   => $today,
+                                'type'    => 'DATE',
+                                'compare' => '>=',
+                            ],
+                        ],
+                    ]);
+                    foreach ($posts as $p) {
+                        $add_event($p->ID);
+                    }
+                } elseif ($post_type === 'artpulse_org') {
+                    $posts = get_posts([
+                        'post_type'      => 'artpulse_event',
+                        'post_status'    => 'publish',
+                        'numberposts'    => -1,
+                        'meta_query'     => [
+                            'relation' => 'AND',
+                            [
+                                'relation' => 'OR',
+                                [
+                                    'key'   => '_ap_event_organization',
+                                    'value' => (int) $fid,
+                                ],
+                                [
+                                    'key'     => '_ap_event_organizations',
+                                    'value'   => 'i:' . (int) $fid . ';',
+                                    'compare' => 'LIKE',
+                                ],
+                            ],
+                            [
+                                'key'     => '_ap_event_date',
+                                'value'   => $today,
+                                'type'    => 'DATE',
+                                'compare' => '>=',
+                            ],
+                        ],
+                    ]);
+                    foreach ($posts as $p) {
+                        $add_event($p->ID);
+                    }
+                }
+            }
+        }
+
+        // --- Events near the user's location ---
+        $city  = get_user_meta($user_id, 'ap_city', true);
+        $state = get_user_meta($user_id, 'ap_state', true);
+        if ($city || $state) {
+            $meta_query = [
+                [
+                    'key'     => '_ap_event_date',
+                    'value'   => $today,
+                    'type'    => 'DATE',
+                    'compare' => '>=',
+                ],
+            ];
+            if ($city) {
+                $meta_query[] = [
+                    'key'   => 'event_city',
+                    'value' => $city,
+                ];
+            }
+            if ($state) {
+                $meta_query[] = [
+                    'key'   => 'event_state',
+                    'value' => $state,
+                ];
+            }
+
+            $posts = get_posts([
+                'post_type'      => 'artpulse_event',
+                'post_status'    => 'publish',
+                'numberposts'    => 5,
+                'meta_query'     => $meta_query,
+            ]);
+            foreach ($posts as $p) {
+                $add_event($p->ID);
+            }
+        }
+
+        // Sort events by date ascending
+        usort($events, static function ($a, $b) {
+            return strcmp($a['date'], $b['date']);
+        });
+
         $html  = '<h1>' . esc_html__('ArtPulse Digest', 'artpulse') . '</h1>';
-        $html .= '<p>' . esc_html__('Stay tuned for upcoming events!', 'artpulse') . '</p>';
+        $plain = "ArtPulse Digest\n";
 
-        $plain = "ArtPulse Digest\n\nStay tuned for upcoming events!";
+        if ($events) {
+            $html  .= '<p>' . esc_html__('Here are upcoming events you may be interested in:', 'artpulse') . '</p><ul>';
+            $plain .= "\n" . __('Here are upcoming events you may be interested in:', 'artpulse') . "\n";
+            foreach ($events as $e) {
+                $date_str = $e['date'] ? date_i18n('M d, Y', strtotime($e['date'])) : '';
+                $html .= sprintf(
+                    '<li><a href="%s">%s</a> - %s%s</li>',
+                    esc_url($e['link']),
+                    esc_html($e['title']),
+                    esc_html($date_str),
+                    $e['location'] ? ' – ' . esc_html($e['location']) : ''
+                );
+                $plain .= sprintf(
+                    "- %s - %s\n  %s\n",
+                    $e['title'],
+                    $date_str,
+                    $e['link']
+                );
+            }
+            $html .= '</ul>';
+        } else {
+            $msg  = __('No upcoming events found.', 'artpulse');
+            $html .= '<p>' . esc_html($msg) . '</p>';
+            $plain .= "\n" . $msg;
+        }
 
-        return [ $html, $plain ];
+        return [$html, $plain];
     }
 }
