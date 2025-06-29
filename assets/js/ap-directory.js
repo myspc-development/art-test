@@ -12,6 +12,7 @@
     const mediumEl     = container.querySelector('.ap-filter-medium');
     const styleEl      = container.querySelector('.ap-filter-style');
     const locationEl   = container.querySelector('.ap-filter-location');
+    const keywordInput = container.querySelector('.ap-filter-keyword');
     const saleFilter   = container.dataset.forSale;
 
     if (!results || !limitInput || !applyBtn) return; // Safety check
@@ -94,6 +95,9 @@
       }
       if ( locationEl && locationEl.value ) {
         params.append('location', locationEl.value);
+      }
+      if ( keywordInput && keywordInput.value ) {
+        params.append('keyword', keywordInput.value);
       }
       if ( typeof saleFilter !== 'undefined' && saleFilter !== '' ) {
         params.append('for_sale', saleFilter);
@@ -226,6 +230,7 @@ function createFollowButton(post, objectType) {
           medium: mediumEl?.value || '',
           style: styleEl?.value || '',
           location: locationEl?.value || '',
+          keyword: keywordInput?.value || '',
           for_sale: saleFilter || ''
         }
       }));
