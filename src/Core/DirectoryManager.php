@@ -169,6 +169,7 @@ class DirectoryManager {
             if ($type === 'event') {
                 $item['date']     = get_post_meta($p->ID, '_ap_event_date', true);
                 $item['location'] = get_post_meta($p->ID, '_ap_event_location', true);
+                $item['card_html'] = ap_get_event_card($p->ID);
             } elseif ($type === 'artist') {
                 $item['bio']    = get_post_meta($p->ID, '_ap_artist_bio', true);
                 $item['org_id'] = (int) get_post_meta($p->ID, '_ap_artist_org', true);

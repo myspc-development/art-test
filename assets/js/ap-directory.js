@@ -119,6 +119,16 @@
               results.appendChild(heading);
             }
 
+            if (post.card_html) {
+              const tmp = document.createElement('div');
+              tmp.innerHTML = post.card_html.trim();
+              const el = tmp.firstElementChild;
+              if (el) {
+                results.appendChild(el);
+              }
+              return;
+            }
+
             const div = document.createElement('div');
             div.className = 'portfolio-item';
 
