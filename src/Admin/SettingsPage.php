@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin;
 use ArtPulse\Admin\ImportExportTab;
 use ArtPulse\Admin\SettingsRegistry;
+use ArtPulse\Admin\FieldRenderer;
 
 class SettingsPage
 {
@@ -26,106 +27,134 @@ class SettingsPage
             'basic_fee' => [
                 'label' => __('Basic Member Fee ($)', 'artpulse'),
                 'desc'  => __('Monthly cost for Basic members. Leave blank to disable.', 'artpulse'),
+                'type'  => 'text',
             ],
             'pro_fee' => [
                 'label' => __('Pro Artist Fee ($)', 'artpulse'),
                 'desc'  => __('Subscription price for Pro Artists.', 'artpulse'),
+                'type'  => 'text',
             ],
             'org_fee' => [
                 'label' => __('Organization Fee ($)', 'artpulse'),
                 'desc'  => __('Fee charged to organizations.', 'artpulse'),
+                'type'  => 'text',
             ],
             'currency' => [
                 'label' => __('Currency (ISO)', 'artpulse'),
                 'desc'  => __('3-letter currency code (e.g., USD, EUR, GBP).', 'artpulse'),
+                'type'  => 'text',
             ],
             'stripe_enabled' => [
                 'label' => __('Enable Stripe Integration', 'artpulse'),
                 'desc'  => __('Enable Stripe to manage payments and subscriptions.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'stripe_pub_key' => [
                 'label' => __('Stripe Publishable Key', 'artpulse'),
                 'desc'  => __('Used for client-side Stripe operations.', 'artpulse'),
+                'type'  => 'text',
             ],
             'stripe_secret' => [
                 'label' => __('Stripe Secret Key', 'artpulse'),
                 'desc'  => __('Used for secure server-side API calls to Stripe.', 'artpulse'),
+                'type'  => 'text',
             ],
             'stripe_webhook_secret' => [
                 'label' => __('Stripe Webhook Secret', 'artpulse'),
                 'desc'  => __('Secret used to verify webhook calls from Stripe.', 'artpulse'),
+                'type'  => 'text',
             ],
             'payment_metrics_cache' => [
                 'label' => __('Payment Metrics Cache (minutes)', 'artpulse'),
                 'desc'  => __('How long to cache payment analytics data.', 'artpulse'),
+                'type'  => 'number',
             ],
             'service_worker_enabled' => [
                 'label' => __('Enable Service Worker', 'artpulse'),
                 'desc'  => __('Adds a service worker for basic offline caching.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'oauth_google_enabled' => [
                 'label' => __('Enable Google Login', 'artpulse'),
                 'desc'  => __('Show Google button on the login form.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'oauth_facebook_enabled' => [
                 'label' => __('Enable Facebook Login', 'artpulse'),
                 'desc'  => __('Show Facebook button on the login form.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'oauth_apple_enabled' => [
                 'label' => __('Enable Apple Login', 'artpulse'),
                 'desc'  => __('Show Apple button on the login form.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'enforce_two_factor' => [
                 'label' => __('Enforce Two-Factor', 'artpulse'),
                 'desc'  => __('Require users to enable two-factor authentication before logging in.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'override_artist_membership' => [
                 'label' => __('Override Artist Membership', 'artpulse'),
                 'desc'  => __('Allow administrators to bypass membership requirements and fees for artists.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'override_org_membership' => [
                 'label' => __('Override Organization Membership', 'artpulse'),
                 'desc'  => __('Allow administrators to bypass membership requirements and fees for organizations.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'override_member_membership' => [
                 'label' => __('Override Member Membership', 'artpulse'),
                 'desc'  => __('Allow administrators to bypass membership requirements and fees for regular members.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'auto_expire_events' => [
                 'label' => __('Auto-expire Past Events', 'artpulse'),
                 'desc'  => __('Move events to Draft when the end date has passed.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'enable_artworks_for_sale' => [
                 'label' => __('Enable Artworks for Sale', 'artpulse'),
                 'desc'  => __('Allow artworks to be marked for sale.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'disable_styles' => [
                 'label' => __('Disable Plugin Styles', 'artpulse'),
                 'desc'  => __('Do not load ArtPulse CSS on the frontend.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'default_rsvp_limit' => [
                 'label' => __('Default RSVP Limit', 'artpulse'),
                 'desc'  => __('Pre-filled limit for new events.', 'artpulse'),
+                'type'  => 'number',
             ],
             'min_rsvp_limit' => [
                 'label' => __('Minimum RSVP Limit', 'artpulse'),
                 'desc'  => __('Lowest allowed RSVP limit.', 'artpulse'),
+                'type'  => 'number',
             ],
             'max_rsvp_limit' => [
                 'label' => __('Maximum RSVP Limit', 'artpulse'),
                 'desc'  => __('Highest allowed RSVP limit.', 'artpulse'),
+                'type'  => 'number',
             ],
             'waitlists_enabled' => [
                 'label' => __('Enable Waitlists', 'artpulse'),
                 'desc'  => __('Allow events to use waitlists.', 'artpulse'),
+                'type'  => 'checkbox',
             ],
             'default_privacy_email' => [
                 'label' => __('Default Email Privacy', 'artpulse'),
                 'desc'  => __('Public or private visibility for new user emails.', 'artpulse'),
+                'type'    => 'select',
+                'options' => [ 'public' => 'Public', 'private' => 'Private' ],
             ],
             'default_privacy_location' => [
                 'label' => __('Default Location Privacy', 'artpulse'),
                 'desc'  => __('Public or private visibility for new user locations.', 'artpulse'),
+                'type'    => 'select',
+                'options' => [ 'public' => 'Public', 'private' => 'Private' ],
             ],
         ];
 
@@ -137,10 +166,12 @@ class SettingsPage
             'geonames_username' => [
                 'label' => __('Geonames Username', 'artpulse'),
                 'desc'  => __('Username for querying the Geonames API.', 'artpulse'),
+                'type'  => 'text',
             ],
             'google_places_key' => [
                 'label' => __('Google Places API Key', 'artpulse'),
                 'desc'  => __('Key for Google Places requests.', 'artpulse'),
+                'type'  => 'text',
             ],
         ];
         foreach ($location_fields as $key => $cfg) {
@@ -502,6 +533,7 @@ class SettingsPage
 
             $fields = apply_filters('artpulse_settings_fields_' . $slug, SettingsRegistry::get_fields($slug));
             foreach ($fields as $key => $config) {
+                $config['key'] = $key;
                 add_settings_field(
                     $key,
                     $config['label'],
@@ -510,7 +542,9 @@ class SettingsPage
                     $section,
                     [
                         'label_for'   => $key,
-                        'description' => $config['desc'] ?? ''
+                        'description' => $config['desc'] ?? '',
+                        'field'       => $config,
+                        'tab'         => $slug,
                     ]
                 );
             }
@@ -548,41 +582,10 @@ class SettingsPage
     }
     public static function renderField($args)
     {
-        $options = get_option('artpulse_settings');
-        $key     = $args['label_for'];
-        $value   = $options[$key] ?? '';
-        $desc    = $args['description'] ?? '';
-        if (in_array($key, [
-            'stripe_enabled',
-            'woocommerce_enabled',
-            'debug_logging',
-            'service_worker_enabled',
-            'override_artist_membership',
-            'override_org_membership',
-            'override_member_membership',
-            'auto_expire_events',
-            'enable_artworks_for_sale',
-            'disable_styles',
-            'waitlists_enabled',
-            'oauth_google_enabled',
-            'oauth_facebook_enabled',
-            'oauth_apple_enabled',
-            'enforce_two_factor'
-        ])) {
-            echo '<input type="checkbox" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="1"' . checked(1, $value, false) . ' />';
-        } elseif (in_array($key, ['default_rsvp_limit', 'min_rsvp_limit', 'max_rsvp_limit', 'payment_metrics_cache'])) {
-            echo '<input type="number" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" />';
-        } elseif (in_array($key, ['default_privacy_email', 'default_privacy_location'])) {
-            echo '<select id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']">';
-            foreach (["public", "private"] as $opt) {
-                echo '<option value="' . esc_attr($opt) . '"' . selected($value, $opt, false) . '>' . esc_html(ucfirst($opt)) . '</option>';
-            }
-            echo '</select>';
-        } else {
-            echo '<input type="text" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" />';
+        if (!isset($args['field'])) {
+            return;
         }
-        if ($desc) {
-            echo '<p class="description">' . esc_html($desc) . '</p>';
-        }
+
+        FieldRenderer::render($args['field'], $args['tab'] ?? '');
     }
 }
