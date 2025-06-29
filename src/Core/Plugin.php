@@ -199,6 +199,7 @@ class Plugin
         \ArtPulse\Core\MembershipNotifier::register();
         \ArtPulse\Core\MembershipCron::register();
         class_exists(\ArtPulse\Search\MetaFullTextSearch::class);
+        \ArtPulse\Search\ExternalSearch::register();
     }
 
     public function enqueue_frontend_scripts()

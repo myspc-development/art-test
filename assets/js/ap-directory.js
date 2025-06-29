@@ -9,6 +9,9 @@
     const selectEl     = container.querySelector('.ap-filter-event-type');
     const cityInput    = container.querySelector('.ap-filter-city');
     const regionInput  = container.querySelector('.ap-filter-region');
+    const mediumEl     = container.querySelector('.ap-filter-medium');
+    const styleEl      = container.querySelector('.ap-filter-style');
+    const locationEl   = container.querySelector('.ap-filter-location');
     const saleFilter   = container.dataset.forSale;
 
     if (!results || !limitInput || !applyBtn) return; // Safety check
@@ -27,6 +30,38 @@
         })
         .catch(() => {
           selectEl.innerHTML = '<option value="">(Failed to load)</option>';
+        });
+    }
+
+    if ( mediumEl ) {
+      wp.apiFetch({ path: '/wp/v2/artpulse_medium' })
+        .then(terms => {
+          mediumEl.innerHTML = '<option value="">All</option>';
+          terms.forEach(t => {
+            const o = document.createElement('option');
+            o.value = t.id;
+            o.textContent = t.name;
+            mediumEl.appendChild(o);
+          });
+        })
+        .catch(() => {
+          mediumEl.innerHTML = '<option value="">(Failed to load)</option>';
+        });
+    }
+
+    if ( styleEl ) {
+      wp.apiFetch({ path: '/wp/v2/artwork_style' })
+        .then(terms => {
+          styleEl.innerHTML = '<option value="">All</option>';
+          terms.forEach(t => {
+            const o = document.createElement('option');
+            o.value = t.id;
+            o.textContent = t.name;
+            styleEl.appendChild(o);
+          });
+        })
+        .catch(() => {
+          styleEl.innerHTML = '<option value="">(Failed to load)</option>';
         });
     }
 
@@ -50,6 +85,15 @@
       }
       if ( regionInput && regionInput.value ) {
         params.append('region', regionInput.value);
+      }
+      if ( mediumEl && mediumEl.value ) {
+        params.append('medium', mediumEl.value);
+      }
+      if ( styleEl && styleEl.value ) {
+        params.append('style', styleEl.value);
+      }
+      if ( locationEl && locationEl.value ) {
+        params.append('location', locationEl.value);
       }
       if ( typeof saleFilter !== 'undefined' && saleFilter !== '' ) {
         params.append('for_sale', saleFilter);
@@ -169,6 +213,9 @@ function createFollowButton(post, objectType) {
           event_type: selectEl?.value || '',
           city: cityInput?.value || '',
           region: regionInput?.value || '',
+          medium: mediumEl?.value || '',
+          style: styleEl?.value || '',
+          location: locationEl?.value || '',
           for_sale: saleFilter || ''
         }
       }));
