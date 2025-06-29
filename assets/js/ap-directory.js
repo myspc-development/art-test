@@ -169,6 +169,13 @@
             if ( !cityState && post.event_postcode ) addressParts.push(post.event_postcode);
             if ( addressParts.length ) {
               html += `<p class="ap-meta-address">${addressParts.join('<br>')}</p>`;
+            } else if ( post.address || post.website ) {
+              let addressHtml = post.address ? post.address : '';
+              if ( post.website ) {
+                const link = `<a href="${post.website}" target="_blank" rel="nofollow noopener">${post.website}</a>`;
+                addressHtml += (addressHtml ? '<br>' : '') + link;
+              }
+              html += `<p class="ap-meta-address">${addressHtml}</p>`;
             }
             if ( post.for_sale ) {
               html += `<span class="ap-badge-sale">For Sale</span>`;
