@@ -224,6 +224,10 @@ class Plugin
         \ArtPulse\Admin\SurveyManager::register();
         \ArtPulse\Admin\SegmentationManager::register();
         \ArtPulse\Admin\ReminderManager::register();
+        \ArtPulse\Monetization\TicketManager::register();
+        \ArtPulse\Monetization\PromoManager::register();
+        \ArtPulse\Monetization\MembershipManager::register();
+        \ArtPulse\Monetization\PaymentWebhookController::register();
         class_exists(\ArtPulse\Search\MetaFullTextSearch::class);
         \ArtPulse\Search\ExternalSearch::register();
         \ArtPulse\Personalization\RecommendationRestController::register();
