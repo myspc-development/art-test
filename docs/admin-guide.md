@@ -1,6 +1,6 @@
 # ArtPulse Admin Guide
 
-See the [User Guide](user-guide.md) for instructions that attendees follow when interacting with events and the calendar.
+See the [User Guide](user-guide.md) for instructions that attendees follow when interacting with events and the calendar. For a feature overview refer to the [README](../README.md).
 
 ## RSVP Management
 

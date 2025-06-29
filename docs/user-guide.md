@@ -1,5 +1,8 @@
 # ArtPulse User Guide
 
+For site management details see the [Admin Guide](admin-guide.md). A quick
+overview of features lives in the [README](../README.md).
+
 ## Event Cards
 
 Event listings across the site use a consistent card design. Each card includes

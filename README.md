@@ -1,5 +1,8 @@
 # ArtPulse Management Plugin
 
+For end‑user instructions see the [User Guide](docs/user-guide.md). Site
+administrators should consult the [Admin Guide](docs/admin-guide.md).
+
 ## Overview & Quick Reference
 
 ### RSVP & Favorite Features
