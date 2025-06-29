@@ -90,15 +90,23 @@ class EventListingShortcode
             $q_args['tax_query'] = $tax_query;
         }
 
-        if ($atts['orderby'] === 'rsvp_count') {
-            $q_args['orderby']  = 'meta_value_num';
-            $q_args['meta_key'] = 'ap_rsvp_count';
-        } elseif ($atts['orderby'] === 'favorite_count') {
+        if ($atts['orderby'] === 'favorite_count') {
             $q_args['orderby']  = 'meta_value_num';
             $q_args['meta_key'] = 'ap_favorite_count';
         }
 
         $query = new \WP_Query($q_args);
+
+        if ($atts['orderby'] === 'rsvp_count') {
+            usort($query->posts, function($a, $b) use ($atts) {
+                $a_count = count((array) get_post_meta($a->ID, 'event_rsvp_list', true));
+                $b_count = count((array) get_post_meta($b->ID, 'event_rsvp_list', true));
+                if ($a_count === $b_count) {
+                    return 0;
+                }
+                return $atts['order'] === 'ASC' ? $a_count <=> $b_count : $b_count <=> $a_count;
+            });
+        }
 
         ob_start();
         ?>

@@ -7,7 +7,8 @@ namespace ArtPulse\Frontend;
 
 function ap_render_rsvp_button(int $event_id): string
 {
-    $rsvp_count = intval(get_post_meta($event_id, 'ap_rsvp_count', true));
+    $list       = get_post_meta($event_id, 'event_rsvp_list', true);
+    $rsvp_count = is_array($list) ? count($list) : 0;
     $user_id = get_current_user_id();
     $rsvps = $user_id ? (array) get_user_meta($user_id, 'ap_rsvp_events', true) : [];
     $joined = in_array($event_id, $rsvps, true);
