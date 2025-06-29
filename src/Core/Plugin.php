@@ -50,6 +50,14 @@ class Plugin
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_add_upload_cap']);
         add_action('init', [\ArtPulse\Core\RoleSetup::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Community\FavoritesManager::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Community\FollowManager::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Community\ProfileLinkRequestManager::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Community\NotificationManager::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Admin\LoginEventsPage::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Core\UserEngagementLogger::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Core\ProfileMetrics::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Core\ArtworkEventLinkManager::class, 'maybe_install_table']);
     }
 
     public function activate()

@@ -74,6 +74,19 @@ class ProfileLinkRequestManager
     }
 
     /**
+     * Ensure the link request table exists.
+     */
+    public static function maybe_install_table(): void
+    {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_link_requests_meta';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_link_request_table();
+        }
+    }
+
+    /**
      * Create a new profile link request post.
      */
     public static function create(int $artist_user_id, int $org_id, string $message = ''): int

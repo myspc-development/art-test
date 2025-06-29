@@ -70,4 +70,17 @@ class NotificationManager {
             'user_id' => $user_id
         ]);
     }
+
+    /**
+     * Ensure the notifications table exists.
+     */
+    public static function maybe_install_table(): void
+    {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_notifications';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_notifications_table();
+        }
+    }
 }
