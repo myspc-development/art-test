@@ -182,22 +182,7 @@ class SettingsPage
             'artpulse-engagement',
             [EngagementDashboard::class, 'render']
         );
-        add_submenu_page(
-            'artpulse-settings',
-            __('Import/Export', 'artpulse'),
-            __('Import/Export', 'artpulse'),
-            'manage_options',
-            'artpulse-import-export',
-            [self::class, 'renderImportExportPage']
-        );
-        add_submenu_page(
-            'artpulse-settings',
-            __('Shortcode Pages', 'artpulse'),
-            __('Shortcode Pages', 'artpulse'),
-            'manage_options',
-            'artpulse-shortcode-pages',
-            [\ArtPulse\Admin\ShortcodePages::class, 'render']
-        );
+        // Additional admin pages can hook into 'admin_menu' to add more submenus.
     }
     public static function enqueueAdminAssets($hook)
     {
@@ -213,6 +198,13 @@ class SettingsPage
             true
         );
         wp_enqueue_script('ap-admin-dashboard', plugins_url('/assets/js/ap-admin-dashboard.js', ARTPULSE_PLUGIN_FILE), ['chart-js'], '1.0', true);
+        wp_enqueue_script(
+            'ap-settings-tabs',
+            plugins_url('/assets/js/ap-settings-tabs.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.0',
+            true
+        );
         $signup_data = self::getMonthlySignupsByLevel();
         wp_localize_script('ap-admin-dashboard', 'APAdminStats', $signup_data);
     }
@@ -413,8 +405,9 @@ class SettingsPage
         $webhook_status = get_option('artpulse_webhook_status', 'Unknown');
         $last_event     = get_option('artpulse_webhook_last_event', []);
         $log            = get_option('artpulse_webhook_log', []);
-        $current_tab    = sanitize_key($_GET['tab'] ?? 'general');
-        $base_url       = admin_url('admin.php?page=artpulse-settings');
+        $tabs           = apply_filters('artpulse_settings_tabs', SettingsRegistry::get_tabs());
+        $tab_keys       = array_keys($tabs);
+        $current_tab    = sanitize_key($_GET['tab'] ?? ($tab_keys[0] ?? 'general'));
 
         if (isset($_GET['ap_export_posts'])) {
             $type    = sanitize_key($_GET['ap_export_posts']);
@@ -426,75 +419,71 @@ class SettingsPage
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
-            <h2 class="nav-tab-wrapper">
-                <?php foreach (SettingsRegistry::get_tabs() as $slug => $label) : ?>
-                    <a href="<?php echo esc_url($base_url . '&tab=' . $slug); ?>" class="nav-tab <?php echo $current_tab === $slug ? 'nav-tab-active' : ''; ?>">
+            <h2 class="nav-tab-wrapper" id="ap-settings-nav">
+                <?php foreach ($tabs as $slug => $label) : ?>
+                    <a href="#<?php echo esc_attr($slug); ?>" class="nav-tab<?php echo $current_tab === $slug ? ' nav-tab-active' : ''; ?>" data-tab="<?php echo esc_attr($slug); ?>">
                         <?php echo esc_html($label); ?>
                     </a>
                 <?php endforeach; ?>
             </h2>
-            <form method="post" action="options.php">
-                <?php
-                settings_fields('artpulse_settings_group');
-                if ($current_tab === 'location') {
-                    do_settings_sections('artpulse-location');
-                } elseif ($current_tab === 'general') {
-                    do_settings_sections('artpulse-settings');
-                }
-                if (in_array($current_tab, ['general', 'location'], true)) {
-                    submit_button();
-                }
-                ?>
-            </form>
-            <?php if ($current_tab === 'general') : ?>
-            <hr>
-            <h2><?php esc_html_e('System Status', 'artpulse'); ?></h2>
-            <p>
-                <strong><?php esc_html_e('Webhook Status:', 'artpulse'); ?></strong>
-                <?php echo esc_html($webhook_status); ?><br>
-                <strong><?php esc_html_e('Last Webhook Event:', 'artpulse'); ?></strong>
-                <?php echo esc_html($last_event['type'] ?? 'None'); ?><br>
-                <strong><?php esc_html_e('Received At:', 'artpulse'); ?></strong>
-                <?php echo esc_html($last_event['time'] ?? 'N/A'); ?>
-            </p>
-            <h2><?php esc_html_e('Webhook Event Log', 'artpulse'); ?></h2>
-            <table class="widefat fixed striped">
-                <thead>
-                <tr>
-                    <th><?php esc_html_e('Timestamp', 'artpulse'); ?></th>
-                    <th><?php esc_html_e('Event Type', 'artpulse'); ?></th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                if (empty($log)) {
-                    echo '<tr><td colspan="2">' . esc_html__('No webhook events logged.', 'artpulse') . '</td></tr>';
-                } else {
-                    foreach (array_reverse($log) as $entry) {
-                        echo '<tr>';
-                        echo '<td>' . esc_html($entry['time']) . '</td>';
-                        echo '<td>' . esc_html($entry['type']) . '</td>';
-                        echo '</tr>';
-                    }
-                }
-                ?>
-                </tbody>
-            </table>
-            <form method="post" style="margin-top: 10px;">
-                <?php wp_nonce_field('ap_test_webhook_action'); ?>
-                <input type="submit" name="ap_test_webhook" class="button button-secondary" value="<?php esc_attr_e('Simulate Webhook Event', 'artpulse'); ?>">
-            </form>
-            <form method="post" style="margin-top: 10px;">
-                <?php wp_nonce_field('ap_clear_webhook_log_action'); ?>
-                <input type="submit" name="ap_clear_webhook_log" class="button button-secondary" value="<?php esc_attr_e('Clear Webhook Log', 'artpulse'); ?>">
-            </form>
-            <?php elseif ($current_tab === 'import_export') : ?>
-            <hr>
-            <?php ImportExportTab::render(); ?>
-            <?php elseif ($current_tab === 'shortcodes') : ?>
-            <hr>
-            <?php \ArtPulse\Admin\ShortcodePages::render(); ?>
-            <?php endif; ?>
+            <?php foreach ($tabs as $slug => $label) : ?>
+                <section id="ap-tab-<?php echo esc_attr($slug); ?>" class="ap-settings-section" data-tab="<?php echo esc_attr($slug); ?>" style="<?php echo $current_tab === $slug ? '' : 'display:none;'; ?>">
+                    <?php if ($slug === 'import_export') : ?>
+                        <?php ImportExportTab::render(); ?>
+                    <?php elseif ($slug === 'shortcodes') : ?>
+                        <?php \ArtPulse\Admin\ShortcodePages::render(); ?>
+                    <?php else : ?>
+                        <form method="post" action="options.php">
+                            <?php settings_fields('artpulse_settings_group'); ?>
+                            <?php do_settings_sections('artpulse-' . $slug); ?>
+                            <?php submit_button(); ?>
+                        </form>
+                        <?php if ($slug === 'general') : ?>
+                            <hr>
+                            <h2><?php esc_html_e('System Status', 'artpulse'); ?></h2>
+                            <p>
+                                <strong><?php esc_html_e('Webhook Status:', 'artpulse'); ?></strong>
+                                <?php echo esc_html($webhook_status); ?><br>
+                                <strong><?php esc_html_e('Last Webhook Event:', 'artpulse'); ?></strong>
+                                <?php echo esc_html($last_event['type'] ?? 'None'); ?><br>
+                                <strong><?php esc_html_e('Received At:', 'artpulse'); ?></strong>
+                                <?php echo esc_html($last_event['time'] ?? 'N/A'); ?>
+                            </p>
+                            <h2><?php esc_html_e('Webhook Event Log', 'artpulse'); ?></h2>
+                            <table class="widefat fixed striped">
+                                <thead>
+                                <tr>
+                                    <th><?php esc_html_e('Timestamp', 'artpulse'); ?></th>
+                                    <th><?php esc_html_e('Event Type', 'artpulse'); ?></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                if (empty($log)) {
+                                    echo '<tr><td colspan="2">' . esc_html__('No webhook events logged.', 'artpulse') . '</td></tr>';
+                                } else {
+                                    foreach (array_reverse($log) as $entry) {
+                                        echo '<tr>';
+                                        echo '<td>' . esc_html($entry['time']) . '</td>';
+                                        echo '<td>' . esc_html($entry['type']) . '</td>';
+                                        echo '</tr>';
+                                    }
+                                }
+                                ?>
+                                </tbody>
+                            </table>
+                            <form method="post" style="margin-top: 10px;">
+                                <?php wp_nonce_field('ap_test_webhook_action'); ?>
+                                <input type="submit" name="ap_test_webhook" class="button button-secondary" value="<?php esc_attr_e('Simulate Webhook Event', 'artpulse'); ?>">
+                            </form>
+                            <form method="post" style="margin-top: 10px;">
+                                <?php wp_nonce_field('ap_clear_webhook_log_action'); ?>
+                                <input type="submit" name="ap_clear_webhook_log" class="button button-secondary" value="<?php esc_attr_e('Clear Webhook Log', 'artpulse'); ?>">
+                            </form>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </section>
+            <?php endforeach; ?>
         </div>
         <?php
     }
@@ -505,45 +494,26 @@ class SettingsPage
             'artpulse_settings',
             ['sanitize_callback' => [self::class, 'sanitizeSettings']]
         );
-        add_settings_section(
-            'ap_general_section',
-            __('General Settings', 'artpulse'),
-            '__return_false',
-            'artpulse-settings'
-        );
-        add_settings_section(
-            'ap_location_api_section',
-            __('Location APIs', 'artpulse'),
-            '__return_false',
-            'artpulse-location'
-        );
 
-        foreach (SettingsRegistry::get_fields('general') as $key => $config) {
-            add_settings_field(
-                $key,
-                $config['label'],
-                [self::class, 'renderField'],
-                'artpulse-settings',
-                'ap_general_section',
-                [
-                    'label_for'   => $key,
-                    'description' => $config['desc'] ?? ''
-                ]
-            );
-        }
+        $tabs = apply_filters('artpulse_settings_tabs', SettingsRegistry::get_tabs());
+        foreach ($tabs as $slug => $label) {
+            $section = 'ap_' . $slug . '_section';
+            add_settings_section($section, $label, '__return_false', 'artpulse-' . $slug);
 
-        foreach (SettingsRegistry::get_fields('location') as $key => $config) {
-            add_settings_field(
-                $key,
-                $config['label'],
-                [self::class, 'renderField'],
-                'artpulse-location',
-                'ap_location_api_section',
-                [
-                    'label_for'   => $key,
-                    'description' => $config['desc'] ?? ''
-                ]
-            );
+            $fields = apply_filters('artpulse_settings_fields_' . $slug, SettingsRegistry::get_fields($slug));
+            foreach ($fields as $key => $config) {
+                add_settings_field(
+                    $key,
+                    $config['label'],
+                    [self::class, 'renderField'],
+                    'artpulse-' . $slug,
+                    $section,
+                    [
+                        'label_for'   => $key,
+                        'description' => $config['desc'] ?? ''
+                    ]
+                );
+            }
         }
     }
     public static function sanitizeSettings($input)
