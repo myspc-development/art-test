@@ -18,6 +18,7 @@
   --ap-soft-border-color: #ccc;
   --ap-light-bg-color: #f9f9f9;
   --ap-alt-bg-color: #fafafa;
+  --ap-accent-color: #f5ab35;
   --ap-danger-color: #d33;
   --ap-success-color: #28a745;
   --ap-disabled-color: #cccccc;
@@ -1144,6 +1145,8 @@ select.ap-input {
 .ap-event-card-content{padding:var(--ap-space-medium);display:flex;flex-direction:column;flex:1;}
 .ap-event-meta{margin-bottom:0.5rem;font-size:0.9em;color:var(--ap-muted-text-color);}
 .ap-event-meta p{margin:0.25rem 0;}
+.ap-event-labels{margin-bottom:0.5rem;}
+.ap-event-label{display:inline-block;background:var(--ap-accent-color);color:#fff;padding:0 0.35rem;border-radius:var(--ap-border-radius);margin-right:0.25rem;font-size:0.75em;line-height:1.4;}
 .ap-event-actions{display:flex;gap:0.5rem;align-items:center;margin-top:auto;}
 .ap-event-stats{display:flex;gap:0.5rem;font-size:0.8em;color:var(--ap-muted-text-color);margin-top:0.25rem;}
 .ap-directory-results .ap-event-card,.ap-events-slider .ap-event-card{height:100%;}

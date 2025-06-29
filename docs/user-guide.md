@@ -20,6 +20,7 @@
 - Favorited events are shown with a filled star (★).
 - The favorite count updates instantly.
 - All your favorited events are visible in your dashboard under "My Events."
+- Event cards in "My Events" include badges showing whether you RSVP’d or favorited them.
 
 ### "My Events" Dashboard
 
