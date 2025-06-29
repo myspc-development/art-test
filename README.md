@@ -40,7 +40,20 @@ The older `[ap_directory]` shortcode is still supported for backward compatibili
 
 ## Login Shortcode
 
-Use `[ap_login]` to display the front-end login form.
+Use `[ap_login]` to display the front-end login form. When the free
+[Nextend Social Login](https://wordpress.org/plugins/nextend-facebook-connect/)
+plugin is installed you can enable Google, Facebook and Apple buttons under
+**ArtPulse → Settings**. Any enabled providers will appear above the form and
+their access tokens are stored on the user after authentication.
+
+Enabling **Enforce Two-Factor** in the settings requires users to activate the
+[Two-Factor](https://wordpress.org/plugins/two-factor/) plugin before logging in.
+
+### OAuth Setup
+
+1. Install and activate the **Nextend Social Login** and **Two-Factor** plugins.
+2. Create API credentials with Google, Facebook and/or Apple as described in the Nextend documentation.
+3. Under **ArtPulse → Settings** enable the providers you wish to offer and optionally enforce two‑factor authentication.
 
 ## Registration Shortcode
 
@@ -90,6 +103,8 @@ Recent updates introduce new fields for location lookups and performance tweaks:
 - **Geonames Username** – Username for the Geonames API.
 - **Google Places API Key** – Key for Google Places requests.
 - **Enable Service Worker** – Adds a basic service worker for offline caching.
+- **Enable Google/Facebook/Apple Login** – Toggle OAuth providers for the login form.
+- **Enforce Two-Factor** – Require users to enable the Two-Factor plugin before logging in.
 
 For full usage details refer to the [Admin Guide](assets/docs/Admin_Help.md) and [Member Guide](assets/docs/Member_Help.md).
 

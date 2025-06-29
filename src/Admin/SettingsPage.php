@@ -429,6 +429,22 @@ class SettingsPage
                 'label' => __('Enable Service Worker', 'artpulse'),
                 'desc'  => __('Adds a service worker for basic offline caching.', 'artpulse'),
             ],
+            'oauth_google_enabled' => [
+                'label' => __('Enable Google Login', 'artpulse'),
+                'desc'  => __('Show Google button on the login form.', 'artpulse'),
+            ],
+            'oauth_facebook_enabled' => [
+                'label' => __('Enable Facebook Login', 'artpulse'),
+                'desc'  => __('Show Facebook button on the login form.', 'artpulse'),
+            ],
+            'oauth_apple_enabled' => [
+                'label' => __('Enable Apple Login', 'artpulse'),
+                'desc'  => __('Show Apple button on the login form.', 'artpulse'),
+            ],
+            'enforce_two_factor' => [
+                'label' => __('Enforce Two-Factor', 'artpulse'),
+                'desc'  => __('Require users to enable two-factor authentication before logging in.', 'artpulse'),
+            ],
             'override_artist_membership' => [
                 'label' => __('Override Artist Membership', 'artpulse'),
                 'desc'  => __('Allow administrators to bypass membership requirements and fees for artists.', 'artpulse'),
@@ -523,7 +539,11 @@ class SettingsPage
                 'auto_expire_events',
                 'enable_artworks_for_sale',
                 'disable_styles',
-                'waitlists_enabled'
+                'waitlists_enabled',
+                'oauth_google_enabled',
+                'oauth_facebook_enabled',
+                'oauth_apple_enabled',
+                'enforce_two_factor'
             ])) {
                 $output[$key] = isset($value) ? 1 : 0;
             } elseif ($key === 'payment_metrics_cache' || in_array($key, ['default_rsvp_limit', 'min_rsvp_limit', 'max_rsvp_limit'])) {
@@ -551,7 +571,11 @@ class SettingsPage
             'auto_expire_events',
             'enable_artworks_for_sale',
             'disable_styles',
-            'waitlists_enabled'
+            'waitlists_enabled',
+            'oauth_google_enabled',
+            'oauth_facebook_enabled',
+            'oauth_apple_enabled',
+            'enforce_two_factor'
         ])) {
             echo '<input type="checkbox" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="1"' . checked(1, $value, false) . ' />';
         } elseif (in_array($key, ['default_rsvp_limit', 'min_rsvp_limit', 'max_rsvp_limit', 'payment_metrics_cache'])) {

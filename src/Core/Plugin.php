@@ -136,6 +136,7 @@ class Plugin
         \ArtPulse\Frontend\PortfolioBuilder::register();
         PortfolioManager::register();
         \ArtPulse\Integration\PortfolioSync::register();
+        \ArtPulse\Integration\OAuthManager::register();
         \ArtPulse\Frontend\LoginShortcode::register();
         \ArtPulse\Frontend\RegistrationShortcode::register();
         \ArtPulse\Frontend\LogoutShortcode::register();
