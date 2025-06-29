@@ -33,6 +33,15 @@ class MetaBoxesRelationship
             'description'  => 'Select organizations participating in this event.',
         ],
         [
+            'id'           => 'ap_event_artists',
+            'title'        => 'Co-Host Artists',
+            'screen'       => 'artpulse_event', // Corrected CPT slug
+            'meta_key'     => '_ap_event_artists',
+            'related_type' => 'artpulse_artist', // Corrected CPT slug
+            'multiple'     => true,
+            'description'  => 'Select artists co-hosting this event.',
+        ],
+        [
             'id'           => 'ap_artwork_artist',
             'title'        => 'Artwork Artist',
             'screen'       => 'artpulse_artwork', // Corrected CPT slug

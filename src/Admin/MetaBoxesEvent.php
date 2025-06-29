@@ -146,6 +146,7 @@ class MetaBoxesEvent {
         return [
             'event_start_date'      => ['type' => 'date', 'label' => __('Start Date', 'artpulse-management')],
             'event_end_date'        => ['type' => 'date', 'label' => __('End Date', 'artpulse-management')],
+            'event_recurrence_rule' => ['type' => 'text', 'label' => __('Recurrence Rule', 'artpulse-management')],
             'venue_name'            => ['type' => 'text', 'label' => __('Venue Name', 'artpulse-management')],
             // Address fields (street_address, city, state, country, postcode) would
             // normally come from MetaBoxesAddress if it has been registered

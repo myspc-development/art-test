@@ -34,6 +34,7 @@ class EditEventShortcode {
         $location = esc_attr(get_post_meta($post_id, '_ap_event_location', true));
         $start    = esc_attr(get_post_meta($post_id, 'event_start_date', true));
         $end      = esc_attr(get_post_meta($post_id, 'event_end_date', true));
+        $recurrence = esc_attr(get_post_meta($post_id, 'event_recurrence_rule', true));
         $venue    = esc_attr(get_post_meta($post_id, 'venue_name', true));
         $street   = esc_attr(get_post_meta($post_id, 'event_street_address', true));
         $country  = esc_attr(get_post_meta($post_id, 'event_country', true));
@@ -44,6 +45,7 @@ class EditEventShortcode {
         $org_name = esc_attr(get_post_meta($post_id, 'event_organizer_name', true));
         $org_email = esc_attr(get_post_meta($post_id, 'event_organizer_email', true));
         $org_selected = intval(get_post_meta($post_id, '_ap_event_organization', true));
+        $artist_ids = (array) get_post_meta($post_id, '_ap_event_artists', true);
         $featured_checked = get_post_meta($post_id, 'event_featured', true) === '1' ? 'checked' : '';
         $rsvp_enabled_checked = get_post_meta($post_id, 'event_rsvp_enabled', true) === '1' ? 'checked' : '';
         $rsvp_limit = esc_attr(get_post_meta($post_id, 'event_rsvp_limit', true));
@@ -54,6 +56,12 @@ class EditEventShortcode {
         $orgs = get_posts([
             'post_type'   => 'artpulse_org',
             'author'      => $user_id,
+            'numberposts' => -1,
+        ]);
+
+        $artists = get_posts([
+            'post_type'   => 'artpulse_artist',
+            'post_status' => 'publish',
             'numberposts' => -1,
         ]);
 
@@ -104,6 +112,11 @@ class EditEventShortcode {
             <p>
                 <label class="ap-form-label">End Date<br>
                     <input class="ap-input" type="date" name="end_date" value="<?php echo $end; ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">Recurrence Rule (iCal)<br>
+                    <input class="ap-input" type="text" name="event_recurrence_rule" value="<?php echo $recurrence; ?>">
                 </label>
             </p>
             <p>
@@ -177,6 +190,15 @@ class EditEventShortcode {
                 </label>
             </p>
             <p>
+                <label class="ap-form-label">Co-Host Artists<br>
+                    <select class="ap-input" name="event_artists[]" multiple>
+                        <?php foreach ($artists as $artist): ?>
+                            <option value="<?php echo esc_attr($artist->ID); ?>" <?php echo in_array($artist->ID, $artist_ids, true) ? 'selected' : ''; ?>><?php echo esc_html($artist->post_title); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </p>
+            <p>
                 <label class="ap-form-label">Event Banner<br>
                     <input class="ap-input" type="file" name="event_banner">
                 </label>
@@ -240,6 +262,7 @@ class EditEventShortcode {
         $date           = sanitize_text_field($_POST['date']);
         $start_date     = sanitize_text_field($_POST['start_date'] ?? '');
         $end_date       = sanitize_text_field($_POST['end_date'] ?? '');
+        $recurrence     = sanitize_text_field($_POST['event_recurrence_rule'] ?? '');
         $location       = sanitize_text_field($_POST['location']);
         $venue          = sanitize_text_field($_POST['venue_name'] ?? '');
         $street         = sanitize_text_field($_POST['event_street_address'] ?? '');
@@ -251,6 +274,7 @@ class EditEventShortcode {
         $org_name       = sanitize_text_field($_POST['event_organizer_name'] ?? '');
         $org_email      = sanitize_email($_POST['event_organizer_email'] ?? '');
         $event_org      = intval($_POST['event_org'] ?? 0);
+        $event_artists  = isset($_POST['event_artists']) ? array_map('intval', (array) $_POST['event_artists']) : [];
         $event_type     = intval($_POST['event_type']);
         $featured       = isset($_POST['event_featured']) ? '1' : '0';
         $rsvp_enabled   = isset($_POST['event_rsvp_enabled']) ? '1' : '0';
@@ -271,6 +295,7 @@ class EditEventShortcode {
         update_post_meta($post_id, '_ap_event_location', $location);
         update_post_meta($post_id, 'event_start_date', $start_date);
         update_post_meta($post_id, 'event_end_date', $end_date);
+        update_post_meta($post_id, 'event_recurrence_rule', $recurrence);
         update_post_meta($post_id, 'venue_name', $venue);
         update_post_meta($post_id, 'event_street_address', $street);
         update_post_meta($post_id, 'event_country', $country);
@@ -281,6 +306,7 @@ class EditEventShortcode {
         update_post_meta($post_id, 'event_organizer_name', $org_name);
         update_post_meta($post_id, 'event_organizer_email', $org_email);
         update_post_meta($post_id, '_ap_event_organization', $event_org);
+        update_post_meta($post_id, '_ap_event_artists', $event_artists);
         update_post_meta($post_id, 'event_featured', $featured);
         update_post_meta($post_id, 'event_rsvp_enabled', $rsvp_enabled);
         update_post_meta($post_id, 'event_rsvp_limit', $rsvp_limit);
