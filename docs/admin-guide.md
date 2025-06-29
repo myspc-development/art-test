@@ -24,6 +24,10 @@ See the [User Guide](user-guide.md) for instructions that attendees follow when 
 
 Use the `[ap_event_calendar]` shortcode to place the calendar anywhere on the site. Shortcode attributes let you filter by venue, category, and date or change display options.
 
+## Embedding the Event Map
+
+Use the `[ap_event_map]` shortcode to display a Leaflet map of event locations. Each marker links back to the full event page.
+
 ## Accessibility & Mobile Notes
 
 All admin tools are responsive and keyboard accessible so you can manage events from any device.

@@ -162,6 +162,7 @@ class Plugin
         \ArtPulse\Frontend\EventsSliderShortcode::register();
         \ArtPulse\Frontend\EventListingShortcode::register();
         \ArtPulse\Frontend\EventCalendarShortcode::register();
+        \ArtPulse\Frontend\EventMapShortcode::register();
         \ArtPulse\Frontend\EventFilter::register();
         \ArtPulse\Admin\MetaBoxesRelationship::register();
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
@@ -171,6 +172,7 @@ class Plugin
         \ArtPulse\Admin\OrgUserManager::register();
         \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\LocationRestController::register();
+        \ArtPulse\Rest\EventMapController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
         \ArtPulse\Rest\ProfileMetricsController::register();
         \ArtPulse\Rest\PaymentReportsController::register();

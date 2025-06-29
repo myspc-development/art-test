@@ -79,9 +79,16 @@ For UI customization, white‑labeling and onboarding guidelines see the
 - You can also add filters or adjust display options via shortcode attributes.
 - **Tip:** Calendar updates instantly when new events are added or when filters are applied.
 
+### Event Map
+- Shows all published events on an interactive map with Leaflet markers.
+- Each marker links to the event page.
+- Embed anywhere with the shortcode:
+  [ap_event_map]
+
 ### Shortcodes & Widgets List
 - `[ap_event_directory]` — Show event directory with filters
 - `[ap_event_calendar]` — Show event calendar
+- `[ap_event_map]` — Display a map of event locations
 - `[ap_artist_directory]` — Show artist directory
 - `[ap_artwork_directory]` — Show artworks directory
 - `[ap_org_directory]` — Show organizations directory

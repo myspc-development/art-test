@@ -73,6 +73,7 @@ from any directory, calendar popover or dashboard list.
 
 - `[ap_event_directory]` — Show event directory with filters
 - `[ap_event_calendar]` — Show event calendar
+- `[ap_event_map]` — Show an interactive map of events
 - `[ap_artist_directory]` — Show artist directory
 - `[ap_artwork_directory]` — Show artworks directory
 - `[ap_org_directory]` — Show organizations directory
