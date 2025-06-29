@@ -59,6 +59,7 @@ class Plugin
         add_action('init', [\ArtPulse\Core\UserEngagementLogger::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ProfileMetrics::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ArtworkEventLinkManager::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Personalization\RecommendationEngine::class, 'maybe_install_table']);
     }
 
     public function activate()
@@ -80,6 +81,7 @@ class Plugin
             \ArtPulse\Core\UserEngagementLogger::install_table();
             \ArtPulse\Core\ProfileMetrics::install_table();
             \ArtPulse\Core\ArtworkEventLinkManager::install_table();
+            \ArtPulse\Personalization\RecommendationEngine::install_table();
             update_option($db_version_option, self::VERSION);
         }
 
@@ -214,6 +216,7 @@ class Plugin
         \ArtPulse\Core\MembershipCron::register();
         class_exists(\ArtPulse\Search\MetaFullTextSearch::class);
         \ArtPulse\Search\ExternalSearch::register();
+        \ArtPulse\Personalization\RecommendationRestController::register();
     }
 
     public function enqueue_frontend_scripts()
