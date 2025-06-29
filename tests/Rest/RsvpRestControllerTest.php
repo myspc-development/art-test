@@ -79,6 +79,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $this->assertSame(200, $res->get_status());
         $this->assertSame([$this->user1], get_post_meta($this->event_id, 'event_rsvp_list', true));
         $this->assertSame([$this->user2], get_post_meta($this->event_id, 'event_waitlist', true));
+        $this->assertEmpty(get_user_meta($this->user2, 'ap_rsvp_events', true));
     }
 
     public function test_cancel_promotes_waitlisted_user(): void
@@ -104,6 +105,26 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertEmpty(get_post_meta($this->event_id, 'event_waitlist', true));
+    }
+
+    public function test_join_stores_event_in_user_meta(): void
+    {
+        wp_set_current_user($this->user2);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req->set_param('event_id', $this->event_id);
+        rest_get_server()->dispatch($req);
+        $this->assertSame([$this->event_id], get_user_meta($this->user2, 'ap_rsvp_events', true));
+    }
+
+    public function test_cancel_removes_event_from_user_meta(): void
+    {
+        update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
+        update_user_meta($this->user1, 'ap_rsvp_events', [$this->event_id]);
+        wp_set_current_user($this->user1);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp/cancel');
+        $req->set_param('event_id', $this->event_id);
+        rest_get_server()->dispatch($req);
+        $this->assertEmpty(get_user_meta($this->user1, 'ap_rsvp_events', true));
     }
 
     public function test_get_attendees_returns_lists(): void
