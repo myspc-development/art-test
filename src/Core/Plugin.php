@@ -10,6 +10,7 @@ use ArtPulse\Rest\RestRelationships;
 use ArtPulse\Rest\TaxonomyRestFilters;
 use ArtPulse\Admin\EngagementDashboard;
 use ArtPulse\Core\ArtworkEventLinkManager;
+use ArtPulse\Engagement\DigestMailer;
 
 class Plugin
 {
@@ -97,12 +98,15 @@ class Plugin
         if (!wp_next_scheduled('ap_daily_expiry_check')) {
             wp_schedule_event(time(), 'daily', 'ap_daily_expiry_check');
         }
+
+        \ArtPulse\Engagement\DigestMailer::schedule_cron();
     }
 
     public function deactivate()
     {
         flush_rewrite_rules();
         wp_clear_scheduled_hook('ap_daily_expiry_check');
+        wp_clear_scheduled_hook('ap_daily_digest');
     }
 
     public function register_core_modules()
@@ -214,6 +218,7 @@ class Plugin
         \ArtPulse\Community\NotificationHooks::register();
         \ArtPulse\Core\MembershipNotifier::register();
         \ArtPulse\Core\MembershipCron::register();
+        \ArtPulse\Engagement\DigestMailer::register();
         class_exists(\ArtPulse\Search\MetaFullTextSearch::class);
         \ArtPulse\Search\ExternalSearch::register();
         \ArtPulse\Personalization\RecommendationRestController::register();
