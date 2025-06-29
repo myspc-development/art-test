@@ -415,6 +415,23 @@ class EnqueueAssets {
             true
         );
 
+        wp_enqueue_style(
+            'ap-event-filter-form',
+            $plugin_url . '/assets/css/ap-event-filter-form.css',
+            [],
+            '1.0.0'
+        );
+        wp_enqueue_script(
+            'ap-event-filter',
+            $plugin_url . '/assets/js/ap-event-filter.js',
+            ['jquery'],
+            '1.0.0',
+            true
+        );
+        wp_localize_script('ap-event-filter', 'APEventFilter', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+        ]);
+
         wp_enqueue_script(
             'ap-my-follows',
             $plugin_url . '/assets/js/ap-my-follows.js',
