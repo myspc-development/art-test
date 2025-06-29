@@ -148,6 +148,10 @@ class RsvpRestController
         $user_id = get_current_user_id();
 
         ['rsvps' => $rsvps, 'waitlist' => $waitlist] = self::get_lists($event_id);
+        $rsvp_data = get_post_meta($event_id, 'event_rsvp_data', true);
+        if (!is_array($rsvp_data)) {
+            $rsvp_data = [];
+        }
 
         // Remove from both lists first
         $rsvps    = array_values(array_diff($rsvps, [$user_id]));
@@ -168,6 +172,11 @@ class RsvpRestController
                 $rsvps[] = $user_id;
             }
         }
+
+        $rsvp_data[$user_id] = [
+            'date' => current_time('mysql')
+        ];
+        update_post_meta($event_id, 'event_rsvp_data', $rsvp_data);
 
         self::store_lists($event_id, $rsvps, $waitlist);
         self::log_rsvp($event_id);
@@ -277,9 +286,13 @@ class RsvpRestController
             return new WP_Error('rest_forbidden', 'Insufficient permissions.', ['status' => 403]);
         }
         ['rsvps' => $rsvps, 'waitlist' => $waitlist] = self::get_lists($event_id);
-        $attended = get_post_meta($event_id, 'event_attended', true);
+        $attended  = get_post_meta($event_id, 'event_attended', true);
         if (!is_array($attended)) {
             $attended = [];
+        }
+        $rsvp_data = get_post_meta($event_id, 'event_rsvp_data', true);
+        if (!is_array($rsvp_data)) {
+            $rsvp_data = [];
         }
 
         $attendees = [];
@@ -289,9 +302,12 @@ class RsvpRestController
                 continue;
             }
             $attendees[] = [
-                'ID'     => $uid,
-                'email'  => $user->user_email,
-                'status' => in_array($uid, $attended, true) ? 'Attended' : 'RSVP',
+                'ID'        => $uid,
+                'name'      => $user->display_name,
+                'email'     => $user->user_email,
+                'status'    => 'confirmed',
+                'rsvp_date' => $rsvp_data[$uid]['date'] ?? '',
+                'attended'  => in_array($uid, $attended, true),
             ];
         }
 
@@ -302,9 +318,12 @@ class RsvpRestController
                 continue;
             }
             $wl[] = [
-                'ID'     => $uid,
-                'email'  => $user->user_email,
-                'status' => 'Waitlist',
+                'ID'        => $uid,
+                'name'      => $user->display_name,
+                'email'     => $user->user_email,
+                'status'    => 'waitlist',
+                'rsvp_date' => $rsvp_data[$uid]['date'] ?? '',
+                'attended'  => in_array($uid, $attended, true),
             ];
         }
 
@@ -320,14 +339,19 @@ class RsvpRestController
         if (!current_user_can('edit_post', $event_id)) {
             return new WP_Error('rest_forbidden', 'Insufficient permissions.', ['status' => 403]);
         }
-        $date     = get_post_meta($event_id, '_ap_event_date', true);
-        $data     = self::get_attendees($request)->get_data();
+        $data = self::get_attendees($request)->get_data();
 
         $rows = array_merge($data['attendees'], $data['waitlist']);
         $stream = fopen('php://temp', 'w');
-        fputcsv($stream, ['user_id', 'email', 'status', 'date']);
+        fputcsv($stream, ['Name', 'Email', 'Status', 'RSVP Date', 'Attended']);
         foreach ($rows as $row) {
-            fputcsv($stream, [$row['ID'], $row['email'], $row['status'], $date]);
+            fputcsv($stream, [
+                $row['name'] ?? '',
+                $row['email'],
+                $row['status'],
+                $row['rsvp_date'] ?? '',
+                $row['attended'] ? 'Yes' : 'No'
+            ]);
         }
         rewind($stream);
         $csv = stream_get_contents($stream);

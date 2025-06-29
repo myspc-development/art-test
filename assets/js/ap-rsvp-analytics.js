@@ -32,5 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const pct = data.views ? ((data.total_rsvps / data.views) * 100).toFixed(1) : '0';
         document.getElementById('ap-rsvp-conversion').textContent = pct + '%';
       }
+
+      const total = document.getElementById('ap-total-rsvps');
+      if (total) total.textContent = data.total_rsvps || 0;
+      const fav = document.getElementById('ap-favorite-count');
+      if (fav) fav.textContent = data.favorites || 0;
+      const wait = document.getElementById('ap-waitlist-count');
+      if (wait) wait.textContent = data.waitlist || 0;
+      const attended = document.getElementById('ap-total-attended');
+      if (attended) attended.textContent = data.attended || 0;
     });
 });

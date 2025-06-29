@@ -232,6 +232,10 @@ class EditEventShortcode {
             <h3><?php esc_html_e('RSVP Analytics', 'artpulse'); ?></h3>
             <canvas id="ap-rsvp-analytics" height="120"></canvas>
             <p><?php esc_html_e('Conversion from page views:', 'artpulse'); ?> <span id="ap-rsvp-conversion">0%</span></p>
+            <p><?php esc_html_e('Total RSVPs:', 'artpulse'); ?> <span id="ap-total-rsvps">0</span></p>
+            <p><?php esc_html_e('Attended:', 'artpulse'); ?> <span id="ap-total-attended">0</span></p>
+            <p><?php esc_html_e('Waitlist:', 'artpulse'); ?> <span id="ap-waitlist-count">0</span></p>
+            <p><?php esc_html_e('Favorites:', 'artpulse'); ?> <span id="ap-favorite-count">0</span></p>
         <?php endif; ?>
         <?php
         return ob_get_clean();

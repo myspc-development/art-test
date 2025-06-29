@@ -42,7 +42,8 @@ if ( $country ) {
 $address = implode( "\n", $addr_parts );
 
 $fav_count  = intval( get_post_meta( $event_id, 'ap_favorite_count', true ) );
-$rsvp_count = intval( get_post_meta( $event_id, 'ap_rsvp_count', true ) );
+$rsvps      = get_post_meta( $event_id, 'event_rsvp_list', true );
+$rsvp_count = is_array( $rsvps ) ? count( $rsvps ) : 0;
 $user_id    = get_current_user_id();
 $favorited  = $user_id && function_exists('ap_user_has_favorited') ? ap_user_has_favorited( $user_id, $event_id ) : false;
 $rsvped     = false;
