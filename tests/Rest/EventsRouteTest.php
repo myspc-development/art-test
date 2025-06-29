@@ -23,6 +23,12 @@ class EventsRouteTest extends \WP_UnitTestCase
             'meta_input'  => [
                 'event_city'       => 'Los Angeles',
                 'event_state'      => 'CA',
+                'event_start_date' => '2024-02-01',
+                'event_end_date'   => '2024-02-02',
+                'venue_name'       => 'LA Venue',
+                'event_street_address' => '123 Main St',
+                'event_postcode'   => '90001',
+                'event_country'    => 'US',
                 '_ap_event_date'   => '2024-01-01',
                 '_ap_event_location'=> 'LA',
             ],
@@ -35,6 +41,12 @@ class EventsRouteTest extends \WP_UnitTestCase
             'meta_input'  => [
                 'event_city'       => 'New York City',
                 'event_state'      => 'NY',
+                'event_start_date' => '2024-03-01',
+                'event_end_date'   => '2024-03-02',
+                'venue_name'       => 'NY Venue',
+                'event_street_address' => '456 Broadway',
+                'event_postcode'   => '10001',
+                'event_country'    => 'US',
                 '_ap_event_date'   => '2024-01-01',
                 '_ap_event_location'=> 'NY',
             ],
@@ -100,6 +112,14 @@ class EventsRouteTest extends \WP_UnitTestCase
         $this->assertSame('1', $event['rsvp_enabled']);
         $this->assertSame('5', $event['rsvp_limit']);
         $this->assertSame('1', $event['waitlist_enabled']);
+        $this->assertSame('2024-02-01', $event['event_start_date']);
+        $this->assertSame('2024-02-02', $event['event_end_date']);
+        $this->assertSame('LA Venue', $event['venue_name']);
+        $this->assertSame('123 Main St', $event['event_street_address']);
+        $this->assertSame('Los Angeles', $event['event_city']);
+        $this->assertSame('CA', $event['event_state']);
+        $this->assertSame('90001', $event['event_postcode']);
+        $this->assertSame('US', $event['event_country']);
         $this->assertSame($org, intval($event['event_organization']));
         $this->assertIsArray($event['organization']);
         $this->assertSame('My Org', $event['organization']['name']);
