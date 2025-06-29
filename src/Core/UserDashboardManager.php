@@ -3,6 +3,7 @@ namespace ArtPulse\Core;
 
 use WP_REST_Request;
 use ArtPulse\Community\FavoritesManager;
+use Stripe\StripeClient;
 
 class UserDashboardManager
 {
@@ -284,14 +285,33 @@ class UserDashboardManager
             }
         }
 
-        // Upcoming payment/renewal date
-        $next_payment = get_user_meta($user_id, 'ap_membership_expires', true);
-        if (!$next_payment && class_exists('Stripe\Stripe')) {
-            // Placeholder: if using Stripe subscriptions you would fetch here
-            $next_payment = null;
-        }
-        $data['next_payment'] = $next_payment;
 
+        // Upcoming payment/renewal date
+        $next_payment = intval(get_user_meta($user_id, 'ap_membership_expires', true));
+        if (!$next_payment && class_exists(StripeClient::class)) {
+            $customer_id = get_user_meta($user_id, 'stripe_customer_id', true);
+            $settings    = get_option('artpulse_settings', []);
+            $secret      = $settings['stripe_secret'] ?? '';
+
+            if ($customer_id && $secret) {
+                try {
+                    $stripe = new StripeClient($secret);
+                    $subs   = $stripe->subscriptions->all([
+                        'customer' => $customer_id,
+                        'status'   => 'active',
+                        'limit'    => 1,
+                    ]);
+
+                    if (!empty($subs->data)) {
+                        $next_payment = (int) $subs->data[0]->current_period_end;
+                    }
+                } catch (\Exception $e) {
+                    error_log('Stripe error: ' . $e->getMessage());
+                }
+            }
+        }
+
+        $data['next_payment'] = $next_payment ?: null;
         // Recent transactions via WooCommerce or stored Stripe charge IDs
         $data['transactions'] = [];
         if (function_exists('wc_get_orders')) {
