@@ -34,7 +34,23 @@ class CustomFieldsManager
 
     public static function route_handler(\WP_REST_Request $request)
     {
-        // Placeholder only. Real logic would fetch/save fields.
-        return rest_ensure_response(['status' => 'custom fields placeholder']);
+        $event_id = absint($request->get_param('id'));
+        if (!$event_id) {
+            return new \WP_Error('invalid_event', 'Invalid event.', ['status' => 400]);
+        }
+
+        if ($request->get_method() === 'GET') {
+            $fields = get_post_meta($event_id, 'ap_rsvp_custom_fields', true);
+            return rest_ensure_response(is_array($fields) ? $fields : []);
+        }
+
+        $fields = (array) $request->get_param('fields');
+        $sanitized = [];
+        foreach ($fields as $key => $label) {
+            $sanitized[sanitize_key($key)] = sanitize_text_field($label);
+        }
+        update_post_meta($event_id, 'ap_rsvp_custom_fields', $sanitized);
+
+        return rest_ensure_response($sanitized);
     }
 }

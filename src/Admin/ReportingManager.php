@@ -39,7 +39,32 @@ class ReportingManager
      */
     public static function handle_export(\WP_REST_Request $request)
     {
-        // In a full implementation this would stream data via fputcsv().
-        return rest_ensure_response(['status' => 'export placeholder']);
+        $type     = sanitize_text_field($request->get_param('type'));
+        $event_id = absint($request->get_param('event_id'));
+
+        if ($type !== 'attendance') {
+            return new \WP_Error('invalid_type', 'Unsupported export type.', ['status' => 400]);
+        }
+        if (!$event_id) {
+            return new \WP_Error('invalid_event', 'Invalid event.', ['status' => 400]);
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_tickets';
+        $rows  = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE event_id = %d", $event_id), ARRAY_A);
+
+        $stream = fopen('php://temp', 'w');
+        fputcsv($stream, ['ticket_id', 'user_id', 'code', 'status', 'purchase_date']);
+        foreach ($rows as $row) {
+            fputcsv($stream, [$row['id'], $row['user_id'], $row['code'], $row['status'], $row['purchase_date']]);
+        }
+        rewind($stream);
+        $csv = stream_get_contents($stream);
+        fclose($stream);
+
+        return new \WP_REST_Response($csv, 200, [
+            'Content-Type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="export.csv"',
+        ]);
     }
 }
