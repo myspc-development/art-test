@@ -167,12 +167,14 @@ class UserDashboardManager
         }
 
         // Fetch favorited events
-        $favorites = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
-        foreach ( $favorites as $fav ) {
+        $favorite_events = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
+        $favorite_ids = [];
+        foreach ( $favorite_events as $fav ) {
             $post = get_post($fav->object_id);
             if ( ! $post ) {
                 continue;
             }
+            $favorite_ids[] = (int) $post->ID;
             $data['favorite_events'][] = [
                 'id'    => $post->ID,
                 'title' => $post->post_title,
@@ -182,27 +184,79 @@ class UserDashboardManager
         }
 
         $rsvp_ids = get_user_meta($user_id, 'ap_rsvp_events', true);
-        if (is_array($rsvp_ids)) {
-            foreach ($rsvp_ids as $eid) {
-                $post = get_post($eid);
-                if (!$post) {
-                    continue;
-                }
-                $date = get_post_meta($eid, '_ap_event_date', true);
-                if ($date && strtotime($date) < time()) {
-                    continue;
-                }
-                $data['rsvp_events'][] = [
-                    'id'    => $post->ID,
-                    'title' => $post->post_title,
-                    'link'  => get_permalink($post),
-                    'date'  => $date,
-                ];
+        if (!is_array($rsvp_ids)) {
+            $rsvp_ids = [];
+        }
+        foreach ($rsvp_ids as $eid) {
+            $post = get_post($eid);
+            if (!$post) {
+                continue;
             }
+            $date = get_post_meta($eid, '_ap_event_date', true);
+            if ($date && strtotime($date) < time()) {
+                continue;
+            }
+            $data['rsvp_events'][] = [
+                'id'    => $post->ID,
+                'title' => $post->post_title,
+                'link'  => get_permalink($post),
+                'date'  => $date,
+            ];
         }
 
         $data['favorite_count'] = count($data['favorite_events']);
         $data['rsvp_count']     = count($data['rsvp_events']);
+
+        // Consolidated my events list
+        $event_ids = array_unique(array_merge($favorite_ids, $rsvp_ids));
+        $my_events = [];
+        foreach ($event_ids as $eid) {
+            $post = get_post($eid);
+            if (!$post) {
+                continue;
+            }
+            $date = get_post_meta($eid, '_ap_event_date', true);
+            $my_events[] = [
+                'id'        => $post->ID,
+                'title'     => $post->post_title,
+                'link'      => get_permalink($post),
+                'date'      => $date,
+                'rsvped'    => in_array($eid, $rsvp_ids, true),
+                'favorited' => in_array($eid, $favorite_ids, true),
+            ];
+        }
+
+        usort($my_events, function ($a, $b) {
+            return strcmp($a['date'] ?? '', $b['date'] ?? '');
+        });
+        $data['my_events'] = $my_events;
+
+        // Determine next upcoming RSVP event
+        $next_event = null;
+        $soonest = PHP_INT_MAX;
+        foreach ($rsvp_ids as $eid) {
+            $date = get_post_meta($eid, '_ap_event_date', true);
+            if (!$date) {
+                continue;
+            }
+            $ts = strtotime($date);
+            if ($ts < time() || $ts >= $soonest) {
+                continue;
+            }
+            $post = get_post($eid);
+            if ($post) {
+                $soonest = $ts;
+                $next_event = [
+                    'id'        => $post->ID,
+                    'title'     => $post->post_title,
+                    'link'      => get_permalink($post),
+                    'date'      => $date,
+                    'rsvped'    => true,
+                    'favorited' => in_array($eid, $favorite_ids, true),
+                ];
+            }
+        }
+        $data['next_event'] = $next_event;
 
         // Previous support requests or tickets
         $history_ids = get_user_meta($user_id, 'ap_support_history', true);

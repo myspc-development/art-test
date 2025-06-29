@@ -37,6 +37,9 @@
     <div id="ap-favorite-events"></div>
     <h2 id="rsvps"><?php _e('My RSVPs','artpulse'); ?></h2>
     <div id="ap-rsvp-events"></div>
+    <h2 id="my-events"><?php _e('My Events','artpulse'); ?></h2>
+    <div id="ap-next-event"></div>
+    <div id="ap-my-events"></div>
     <canvas id="ap-trends-chart" height="150"></canvas>
     <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
     <div id="ap-events-feed"></div>
