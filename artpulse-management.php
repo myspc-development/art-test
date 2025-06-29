@@ -394,3 +394,33 @@ function ap_get_event_card(int $event_id): string {
     include $path;
     return ob_get_clean();
 }
+
+function ap_get_events_for_map() {
+    $query = new WP_Query([
+        'post_type'      => 'artpulse_event',
+        'post_status'    => 'publish',
+        'posts_per_page' => 100,
+        'meta_query'     => [
+            ['key' => 'event_lat', 'compare' => 'EXISTS'],
+            ['key' => 'event_lng', 'compare' => 'EXISTS'],
+        ],
+    ]);
+    $events = [];
+    while ($query->have_posts()) {
+        $query->the_post();
+        $lat = get_post_meta(get_the_ID(), 'event_lat', true);
+        $lng = get_post_meta(get_the_ID(), 'event_lng', true);
+        if ($lat === '' || $lng === '') {
+            continue;
+        }
+        $events[] = [
+            'id'    => get_the_ID(),
+            'title' => get_the_title(),
+            'lat'   => (float) $lat,
+            'lng'   => (float) $lng,
+            'url'   => get_permalink(),
+        ];
+    }
+    wp_reset_postdata();
+    return $events;
+}

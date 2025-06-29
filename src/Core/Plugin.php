@@ -163,6 +163,7 @@ class Plugin
         \ArtPulse\Frontend\EventsSliderShortcode::register();
         \ArtPulse\Frontend\EventListingShortcode::register();
         \ArtPulse\Frontend\EventCalendarShortcode::register();
+        \ArtPulse\Frontend\EventMapShortcode::register();
         \ArtPulse\Frontend\EventCommentsShortcode::register();
         \ArtPulse\Frontend\EventFilter::register();
         \ArtPulse\Admin\MetaBoxesRelationship::register();
