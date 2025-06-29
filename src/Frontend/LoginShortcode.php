@@ -45,6 +45,8 @@ class LoginShortcode
                 </p>
             </form>
 
+            <?php echo \ArtPulse\Integration\OAuthManager::render_buttons(); ?>
+
             <hr />
 
             <?php
@@ -72,6 +74,12 @@ class LoginShortcode
 
         if (is_wp_error($user)) {
             wp_send_json_error(['message' => $user->get_error_message()]);
+        }
+
+        $opts = get_option('artpulse_settings', []);
+        if (!empty($opts['enforce_two_factor']) && !get_user_meta($user->ID, 'two_factor_enabled', true)) {
+            wp_clear_auth_cookie();
+            wp_send_json_error(['message' => __('Two-factor authentication is required.', 'artpulse-management')]);
         }
 
         $roles  = (array) $user->roles;
