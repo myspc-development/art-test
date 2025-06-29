@@ -3,8 +3,11 @@
  * Registration form partial used by login and registration shortcodes.
  */
 ?>
-<div id="ap-register-message" class="ap-form-messages" role="status" aria-live="polite"></div>
-<form id="ap-register-form" class="ap-form-container">
+<div id="ap-register-message" class="ap-form-messages" role="status" aria-live="polite">
+    <?php if (method_exists('\\ArtPulse\\Frontend\\LoginShortcode', 'print_notices')) { \ArtPulse\Frontend\LoginShortcode::print_notices(); } ?>
+</div>
+<form id="ap-register-form" class="ap-form-container" method="post" action="<?php echo esc_url(add_query_arg('ap-register', '1')); ?>">
+    <?php wp_nonce_field('ap_register_form', 'ap_register_nonce'); ?>
     <p>
         <label class="ap-form-label" for="ap_reg_username"><?php esc_html_e('Username', 'artpulse-management'); ?></label>
         <input class="ap-input" id="ap_reg_username" type="text" name="username" required />
@@ -61,7 +64,7 @@
     </p>
     <input type="hidden" name="address_components" id="ap_address_components" />
     <p>
-        <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Register', 'artpulse-management'); ?></button>
+        <button class="ap-form-button nectar-button" type="submit" name="ap_register_submit"><?php esc_html_e('Register', 'artpulse-management'); ?></button>
     </p>
     <div id="ap-register-success" class="ap-form-messages" role="status" aria-live="polite"></div>
 </form>

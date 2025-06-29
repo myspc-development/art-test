@@ -3,6 +3,7 @@ namespace ArtPulse\Frontend;
 
 class LoginShortcode
 {
+    private const NOTICE_KEY = 'ap_register_notices';
     public static function register(): void
     {
         add_shortcode('ap_login', [self::class, 'render']);
@@ -11,6 +12,7 @@ class LoginShortcode
         add_action('wp_ajax_nopriv_ap_do_login', [self::class, 'ajax_login']);
         add_action('wp_ajax_ap_do_register', [self::class, 'ajax_register']);
         add_action('wp_ajax_nopriv_ap_do_register', [self::class, 'ajax_register']);
+        add_action('init', [self::class, 'handle_form']);
     }
 
     public static function enqueue_scripts(): void
@@ -191,5 +193,158 @@ class LoginShortcode
         wp_send_json_success([
             'message' => __('Registration successful. Redirecting to your dashboard…', 'artpulse-management'),
         ]);
+    }
+
+    public static function handle_form(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_GET['ap-register'])) {
+            return;
+        }
+
+        if (!isset($_POST['ap_register_nonce']) || !wp_verify_nonce($_POST['ap_register_nonce'], 'ap_register_form')) {
+            self::add_notice(__('Security check failed.', 'artpulse-management'));
+            self::maybe_redirect();
+            return;
+        }
+
+        if (!apply_filters('ap_registration_allowed', true)) {
+            self::add_notice(__('Registration is currently disabled.', 'artpulse-management'));
+            self::maybe_redirect();
+            return;
+        }
+
+        $username      = sanitize_user($_POST['username'] ?? '');
+        $email         = sanitize_email($_POST['email'] ?? '');
+        $password      = $_POST['password'] ?? '';
+        $display_name  = sanitize_text_field($_POST['display_name'] ?? '');
+        $bio           = sanitize_textarea_field($_POST['description'] ?? '');
+        $role          = sanitize_key($_POST['role'] ?? 'member');
+        $allowed_roles = ['member', 'artist', 'organization'];
+        if (!in_array($role, $allowed_roles, true)) {
+            $role = 'member';
+        }
+
+        $components = [];
+        if (!empty($_POST['address_components'])) {
+            $decoded = json_decode(stripslashes($_POST['address_components']), true);
+            if (is_array($decoded)) {
+                $components = $decoded;
+            }
+        }
+
+        $country = isset($components['country']) ? sanitize_text_field($components['country']) : '';
+        $state   = isset($components['state']) ? sanitize_text_field($components['state']) : '';
+        $city    = isset($components['city']) ? sanitize_text_field($components['city']) : '';
+
+        $opts               = get_option('artpulse_settings', []);
+        $default_email_priv = $opts['default_privacy_email'] ?? 'public';
+        $default_loc_priv   = $opts['default_privacy_location'] ?? 'public';
+        $email_privacy      = sanitize_text_field($_POST['ap_privacy_email'] ?? $default_email_priv);
+        $location_privacy   = sanitize_text_field($_POST['ap_privacy_location'] ?? $default_loc_priv);
+        if (!in_array($email_privacy, ['public', 'private'], true)) {
+            $email_privacy = $default_email_priv;
+        }
+        if (!in_array($location_privacy, ['public', 'private'], true)) {
+            $location_privacy = $default_loc_priv;
+        }
+
+        $min_length = (int) apply_filters('ap_min_password_length', 8);
+        if (
+            strlen($password) < $min_length ||
+            !preg_match('/[A-Za-z]/', $password) ||
+            !preg_match('/\d/', $password)
+        ) {
+            self::add_notice(sprintf(
+                /* translators: %d: minimum password length */
+                __('Password must be at least %d characters long and include both letters and numbers.', 'artpulse-management'),
+                $min_length
+            ));
+            self::maybe_redirect();
+            return;
+        }
+
+        $result = wp_create_user($username, $password, $email);
+        if (is_wp_error($result)) {
+            self::add_notice($result->get_error_message());
+            self::maybe_redirect();
+            return;
+        }
+
+        wp_update_user([
+            'ID'   => $result,
+            'role' => $role,
+        ]);
+
+        wp_set_current_user($result);
+        wp_set_auth_cookie($result);
+
+        if ($display_name) {
+            wp_update_user([
+                'ID'           => $result,
+                'display_name' => $display_name,
+            ]);
+        }
+        if ($bio !== '') {
+            update_user_meta($result, 'description', $bio);
+        }
+        if ($country !== '') {
+            update_user_meta($result, 'ap_country', $country);
+        }
+        if ($state !== '') {
+            update_user_meta($result, 'ap_state', $state);
+        }
+        if ($city !== '') {
+            update_user_meta($result, 'ap_city', $city);
+        }
+        update_user_meta($result, 'ap_privacy_email', $email_privacy);
+        update_user_meta($result, 'ap_privacy_location', $location_privacy);
+
+        $target = \ArtPulse\Core\Plugin::get_user_dashboard_url();
+        if ('organization' === $role) {
+            $target = \ArtPulse\Core\Plugin::get_org_dashboard_url();
+        } elseif ('artist' === $role) {
+            $target = \ArtPulse\Core\Plugin::get_artist_dashboard_url();
+        }
+
+        wp_safe_redirect($target);
+        exit;
+    }
+
+    public static function print_notices(): void
+    {
+        if (function_exists('wc_print_notices')) {
+            wc_print_notices();
+            return;
+        }
+
+        $notices = get_transient(self::NOTICE_KEY);
+        if ($notices) {
+            foreach ($notices as $notice) {
+                $type    = esc_attr($notice['type']);
+                $message = esc_html($notice['message']);
+                echo "<div class='notice {$type}'>{$message}</div>";
+            }
+            delete_transient(self::NOTICE_KEY);
+        }
+    }
+
+    private static function add_notice(string $message, string $type = 'error'): void
+    {
+        if (function_exists('wc_add_notice')) {
+            wc_add_notice($message, $type);
+            return;
+        }
+
+        $notices   = get_transient(self::NOTICE_KEY) ?: [];
+        $notices[] = ['message' => $message, 'type' => $type];
+        set_transient(self::NOTICE_KEY, $notices, defined('MINUTE_IN_SECONDS') ? MINUTE_IN_SECONDS : 60);
+    }
+
+    private static function maybe_redirect(): void
+    {
+        if (function_exists('wp_safe_redirect') && function_exists('wp_get_referer')) {
+            wp_safe_redirect(wp_get_referer());
+            exit;
+        }
     }
 }

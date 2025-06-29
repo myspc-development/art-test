@@ -91,5 +91,6 @@ bookmark or share a direct link to any section.
 ## Accessibility & Mobile
 
 - All features and filters work on mobile, tablet, and desktop.
+- User registration falls back to normal form submission if JavaScript is disabled.
 - Buttons and forms support keyboard navigation and screen readers.
 - Event cards and dashboards are designed for responsive display.
