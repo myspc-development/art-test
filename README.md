@@ -159,3 +159,4 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 - `{prefix}ap_link_requests_meta`
 - `{prefix}ap_roles`
 - `{prefix}ap_login_events`
+- `{prefix}ap_artwork_event_links`

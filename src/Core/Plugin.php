@@ -9,10 +9,11 @@ use ArtPulse\Rest\ArtistRestController;
 use ArtPulse\Rest\RestRelationships;
 use ArtPulse\Rest\TaxonomyRestFilters;
 use ArtPulse\Admin\EngagementDashboard;
+use ArtPulse\Core\ArtworkEventLinkManager;
 
 class Plugin
 {
-    private const VERSION = '1.3.5';
+    private const VERSION = '1.3.6';
 
     public function __construct()
     {
@@ -69,6 +70,7 @@ class Plugin
             \ArtPulse\Admin\LoginEventsPage::install_login_events_table();
             \ArtPulse\Core\UserEngagementLogger::install_table();
             \ArtPulse\Core\ProfileMetrics::install_table();
+            \ArtPulse\Core\ArtworkEventLinkManager::install_table();
             update_option($db_version_option, self::VERSION);
         }
 
