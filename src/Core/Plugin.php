@@ -47,7 +47,6 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\NotificationRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\FavoritesRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Rest\ReviewRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_add_upload_cap']);
         add_action('init', [\ArtPulse\Core\RoleSetup::class, 'maybe_install_table']);
@@ -68,7 +67,6 @@ class Plugin
             \ArtPulse\Community\ProfileLinkRequestManager::install_link_request_table();
             \ArtPulse\Community\FollowManager::install_follows_table();
             \ArtPulse\Community\NotificationManager::install_notifications_table();
-            \ArtPulse\Community\ReviewManager::install_reviews_table();
             \ArtPulse\Admin\LoginEventsPage::install_login_events_table();
             \ArtPulse\Core\UserEngagementLogger::install_table();
             \ArtPulse\Core\ProfileMetrics::install_table();
@@ -201,7 +199,6 @@ class Plugin
         \ArtPulse\Blocks\FilteredListShortcodeBlock::register();
         \ArtPulse\Blocks\TaxonomyFilterBlock::register();
         \ArtPulse\Community\FollowRestController::register();
-        \ArtPulse\Rest\ReviewRestController::register();
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
         \ArtPulse\Community\NotificationHooks::register();
         \ArtPulse\Core\MembershipNotifier::register();
