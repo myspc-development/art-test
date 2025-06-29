@@ -162,6 +162,15 @@ class RsvpRestController
         self::store_lists($event_id, $rsvps, $waitlist);
         self::log_rsvp($event_id);
 
+        $events = get_user_meta($user_id, 'ap_rsvp_events', true);
+        if (!is_array($events)) {
+            $events = [];
+        }
+        if (!in_array($event_id, $events, true)) {
+            $events[] = $event_id;
+            update_user_meta($user_id, 'ap_rsvp_events', $events);
+        }
+
         $user    = wp_get_current_user();
         $subject = sprintf(__('RSVP Confirmation for "%s"', 'artpulse'), get_the_title($event_id));
         $message = sprintf(__('Hi %s,\n\nYou have successfully RSVPed for "%s".', 'artpulse'), $user->display_name, get_the_title($event_id));
@@ -205,6 +214,12 @@ class RsvpRestController
         }
 
         self::store_lists($event_id, $rsvps, $waitlist);
+
+        $events = get_user_meta($user_id, 'ap_rsvp_events', true);
+        if (is_array($events)) {
+            $events = array_values(array_diff($events, [$event_id]));
+            update_user_meta($user_id, 'ap_rsvp_events', $events);
+        }
 
         return rest_ensure_response([
             'rsvp_count'     => count($rsvps),

@@ -25,7 +25,7 @@ class UserDashboardManager
         wp_enqueue_script(
             'ap-user-dashboard-js',
             plugins_url('assets/js/ap-user-dashboard.js', ARTPULSE_PLUGIN_FILE),
-            ['wp-api-fetch'],
+            ['wp-api-fetch', 'chart-js'],
             '1.0.0',
             true
         );
@@ -73,6 +73,16 @@ class UserDashboardManager
             'export_csv'          => __('Export CSV', 'artpulse'),
             'delete_account'      => __('Delete Account', 'artpulse'),
         ]);
+
+        if (is_user_logged_in()) {
+            $uid = get_current_user_id();
+            [$months, $rsvp_counts, $favorite_counts] = self::get_trend_data($uid);
+            wp_localize_script('ap-user-dashboard-js', 'APUserTrends', [
+                'months'         => $months,
+                'rsvpCounts'     => $rsvp_counts,
+                'favoriteCounts' => $favorite_counts,
+            ]);
+        }
 
         // Dashboard styles
         if (function_exists('ap_enqueue_global_styles')) {
@@ -137,6 +147,7 @@ class UserDashboardManager
             'artists'            => [],
             'artworks'           => [],
             'favorite_events'    => [],
+            'rsvp_events'        => [],
             'support_history'    => [],
         ];
 
@@ -169,6 +180,29 @@ class UserDashboardManager
                 'date'  => get_post_meta($post->ID, '_ap_event_date', true),
             ];
         }
+
+        $rsvp_ids = get_user_meta($user_id, 'ap_rsvp_events', true);
+        if (is_array($rsvp_ids)) {
+            foreach ($rsvp_ids as $eid) {
+                $post = get_post($eid);
+                if (!$post) {
+                    continue;
+                }
+                $date = get_post_meta($eid, '_ap_event_date', true);
+                if ($date && strtotime($date) < time()) {
+                    continue;
+                }
+                $data['rsvp_events'][] = [
+                    'id'    => $post->ID,
+                    'title' => $post->post_title,
+                    'link'  => get_permalink($post),
+                    'date'  => $date,
+                ];
+            }
+        }
+
+        $data['favorite_count'] = count($data['favorite_events']);
+        $data['rsvp_count']     = count($data['rsvp_events']);
 
         // Previous support requests or tickets
         $history_ids = get_user_meta($user_id, 'ap_support_history', true);
@@ -246,6 +280,45 @@ class UserDashboardManager
             update_user_meta($user_id, 'ap_city', sanitize_text_field($params['ap_city']));
         }
         return rest_ensure_response([ 'success' => true ]);
+    }
+
+    private static function get_trend_data(int $user_id): array
+    {
+        $months = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $months[] = date('Y-m', strtotime("-$i month"));
+        }
+
+        $rsvp_counts = array_fill(0, 6, 0);
+        $ids = get_user_meta($user_id, 'ap_rsvp_events', true);
+        if (is_array($ids)) {
+            foreach ($ids as $eid) {
+                $date = get_post_meta($eid, '_ap_event_date', true);
+                if (!$date) {
+                    continue;
+                }
+                $month = substr($date, 0, 7);
+                $index = array_search($month, $months, true);
+                if ($index !== false) {
+                    $rsvp_counts[$index]++;
+                }
+            }
+        }
+
+        $favorite_counts = array_fill(0, 6, 0);
+        $favs = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
+        foreach ($favs as $fav) {
+            if (empty($fav->favorited_on)) {
+                continue;
+            }
+            $month = substr($fav->favorited_on, 0, 7);
+            $index = array_search($month, $months, true);
+            if ($index !== false) {
+                $favorite_counts[$index]++;
+            }
+        }
+
+        return [$months, $rsvp_counts, $favorite_counts];
     }
 
     private static function get_org_submission_url(): string

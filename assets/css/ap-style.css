@@ -81,7 +81,8 @@ button:focus {
 #ap-transactions,
 #ap-user-content,
 #ap-local-events,
-#ap-favorite-events {
+#ap-favorite-events,
+#ap-rsvp-events {
   background: var(--ap-bg-color);
   padding: 1rem;
   border-radius: var(--ap-border-radius);
