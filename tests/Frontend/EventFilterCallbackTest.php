@@ -91,4 +91,14 @@ class EventFilterCallbackTest extends WP_UnitTestCase
         $this->assertStringContainsString('Second Event', $html);
         $this->assertStringNotContainsString('First Event', $html);
     }
+
+    public function test_category_parameter_sanitized(): void
+    {
+        $slug = get_term($this->cat2)->slug;
+        $html = $this->run_callback([
+            'category' => ' ' . $slug . '%$# ',
+        ]);
+        $this->assertStringContainsString('Second Event', $html);
+        $this->assertStringNotContainsString('First Event', $html);
+    }
 }

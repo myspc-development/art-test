@@ -60,7 +60,8 @@ function ap_filter_events_callback(): void
     $venue    = sanitize_text_field($_REQUEST['venue'] ?? '');
     $after    = sanitize_text_field($_REQUEST['after'] ?? '');
     $before   = sanitize_text_field($_REQUEST['before'] ?? '');
-    $category = sanitize_text_field($_REQUEST['category'] ?? '');
+    $category   = sanitize_text_field($_REQUEST['category'] ?? '');
+    $categories = array_map('sanitize_key', array_map('trim', explode(',', $category)));
     $keyword  = sanitize_text_field($_REQUEST['keyword'] ?? '');
 
     $meta_query = [];
@@ -93,7 +94,7 @@ function ap_filter_events_callback(): void
         $tax_query[] = [
             'taxonomy' => 'category',
             'field'    => 'slug',
-            'terms'    => array_map('trim', explode(',', $category)),
+            'terms'    => $categories,
         ];
     }
 
