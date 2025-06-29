@@ -17,6 +17,8 @@ class MembershipManager
         add_action('user_register', [ self::class, 'assignFreeMembership' ]);
         // Log registration details
         add_action('user_register', [ self::class, 'logRegistration' ]);
+        // Set default privacy preferences
+        add_action('user_register', [ self::class, 'setPrivacyDefaults' ]);
 
         // Register Stripe webhook endpoint
         add_action('rest_api_init', [ self::class, 'registerRestRoutes' ]);
@@ -86,6 +88,18 @@ class MembershipManager
         if (!empty($ip)) {
             update_user_meta($user_id, 'registered_ip', sanitize_text_field($ip));
         }
+    }
+
+    /**
+     * Set default privacy preferences for new users.
+     */
+    public static function setPrivacyDefaults($user_id): void
+    {
+        $opts   = get_option('artpulse_settings', []);
+        $email  = $opts['default_privacy_email'] ?? 'public';
+        $loc    = $opts['default_privacy_location'] ?? 'public';
+        add_user_meta($user_id, 'ap_privacy_email', $email, true);
+        add_user_meta($user_id, 'ap_privacy_location', $loc, true);
     }
 
     /**

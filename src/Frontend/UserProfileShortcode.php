@@ -36,6 +36,8 @@ class UserProfileShortcode {
         $country   = get_user_meta($user_id, 'ap_country', true);
         $state     = get_user_meta($user_id, 'ap_state', true);
         $city      = get_user_meta($user_id, 'ap_city', true);
+        $email_privacy    = get_user_meta($user_id, 'ap_privacy_email', true) ?: 'public';
+        $location_privacy = get_user_meta($user_id, 'ap_privacy_location', true) ?: 'public';
 
         if ($show_membership) {
             $level   = get_user_meta($user_id, 'ap_membership_level', true) ?: __('Free', 'artpulse');
@@ -87,6 +89,12 @@ class UserProfileShortcode {
                             <p><a href="<?php echo esc_url($website); ?>" target="_blank">Website</a></p>
                         <?php endif; ?>
                     </div>
+                <?php endif; ?>
+                <?php if ($email_privacy === 'public'): ?>
+                    <p class="ap-user-email"><strong><?php esc_html_e('Email:', 'artpulse'); ?></strong> <?php echo esc_html($user->user_email); ?></p>
+                <?php endif; ?>
+                <?php if ($location_privacy === 'public' && ($country || $state || $city)): ?>
+                    <p class="ap-user-location"><strong><?php esc_html_e('Location:', 'artpulse'); ?></strong> <?php echo esc_html(trim(implode(', ', array_filter([$city, $state, $country])))); ?></p>
                 <?php endif; ?>
 
                 <?php if ($show_completeness): ?>

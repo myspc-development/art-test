@@ -125,6 +125,18 @@ class LoginShortcode
         $state   = isset($components['state']) ? sanitize_text_field($components['state']) : '';
         $city    = isset($components['city']) ? sanitize_text_field($components['city']) : '';
 
+        $opts                = get_option('artpulse_settings', []);
+        $default_email_priv   = $opts['default_privacy_email'] ?? 'public';
+        $default_loc_priv     = $opts['default_privacy_location'] ?? 'public';
+        $email_privacy        = sanitize_text_field($_POST['ap_privacy_email'] ?? $default_email_priv);
+        $location_privacy     = sanitize_text_field($_POST['ap_privacy_location'] ?? $default_loc_priv);
+        if (!in_array($email_privacy, ['public', 'private'], true)) {
+            $email_privacy = $default_email_priv;
+        }
+        if (!in_array($location_privacy, ['public', 'private'], true)) {
+            $location_privacy = $default_loc_priv;
+        }
+
         $min_length = (int) apply_filters('ap_min_password_length', 8);
         if (
             strlen($password) < $min_length ||
@@ -173,6 +185,8 @@ class LoginShortcode
         if ($city !== '') {
             update_user_meta($result, 'ap_city', $city);
         }
+        update_user_meta($result, 'ap_privacy_email', $email_privacy);
+        update_user_meta($result, 'ap_privacy_location', $location_privacy);
 
         wp_send_json_success([
             'message' => __('Registration successful. Redirecting to your dashboard…', 'artpulse-management'),

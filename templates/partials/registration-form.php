@@ -45,6 +45,20 @@
         <label class="ap-form-label" for="ap_city"><?php esc_html_e('City', 'artpulse-management'); ?></label>
         <input class="ap-input ap-address-city ap-address-input" id="ap_city" type="text" name="ap_city" />
     </p>
+    <p>
+        <label class="ap-form-label" for="ap_privacy_email"><?php esc_html_e('Show Email', 'artpulse-management'); ?></label>
+        <select class="ap-input" id="ap_privacy_email" name="ap_privacy_email">
+            <option value="public"><?php esc_html_e('Public', 'artpulse-management'); ?></option>
+            <option value="private"><?php esc_html_e('Private', 'artpulse-management'); ?></option>
+        </select>
+    </p>
+    <p>
+        <label class="ap-form-label" for="ap_privacy_location"><?php esc_html_e('Show Location', 'artpulse-management'); ?></label>
+        <select class="ap-input" id="ap_privacy_location" name="ap_privacy_location">
+            <option value="public"><?php esc_html_e('Public', 'artpulse-management'); ?></option>
+            <option value="private"><?php esc_html_e('Private', 'artpulse-management'); ?></option>
+        </select>
+    </p>
     <input type="hidden" name="address_components" id="ap_address_components" />
     <p>
         <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Register', 'artpulse-management'); ?></button>

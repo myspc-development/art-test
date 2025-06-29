@@ -21,6 +21,8 @@ class Activator
                 'override_artist_membership'  => 0,
                 'override_org_membership'    => 0,
                 'override_member_membership' => 0,
+                'default_privacy_email'      => 'public',
+                'default_privacy_location'   => 'public',
             ]);
         }
 

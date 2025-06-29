@@ -484,6 +484,14 @@ class SettingsPage
             'waitlists_enabled' => [
                 'label' => __('Enable Waitlists', 'artpulse'),
                 'desc'  => __('Allow events to use waitlists.', 'artpulse'),
+            ],
+            'default_privacy_email' => [
+                'label' => __('Default Email Privacy', 'artpulse'),
+                'desc'  => __('Public or private visibility for new user emails.', 'artpulse'),
+            ],
+            'default_privacy_location' => [
+                'label' => __('Default Location Privacy', 'artpulse'),
+                'desc'  => __('Public or private visibility for new user locations.', 'artpulse'),
             ]
         ];
         foreach ($general_fields as $key => $config) {
@@ -580,6 +588,12 @@ class SettingsPage
             echo '<input type="checkbox" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="1"' . checked(1, $value, false) . ' />';
         } elseif (in_array($key, ['default_rsvp_limit', 'min_rsvp_limit', 'max_rsvp_limit', 'payment_metrics_cache'])) {
             echo '<input type="number" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" />';
+        } elseif (in_array($key, ['default_privacy_email', 'default_privacy_location'])) {
+            echo '<select id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']">';
+            foreach (["public", "private"] as $opt) {
+                echo '<option value="' . esc_attr($opt) . '"' . selected($value, $opt, false) . '>' . esc_html(ucfirst($opt)) . '</option>';
+            }
+            echo '</select>';
         } else {
             echo '<input type="text" id="' . esc_attr($key) . '" name="artpulse_settings[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" />';
         }

@@ -46,6 +46,8 @@ class ProfileEditShortcode {
         $country = get_user_meta($user_id, 'ap_country', true);
         $state   = get_user_meta($user_id, 'ap_state', true);
         $city    = get_user_meta($user_id, 'ap_city', true);
+        $email_privacy    = get_user_meta($user_id, 'ap_privacy_email', true) ?: 'public';
+        $location_privacy = get_user_meta($user_id, 'ap_privacy_location', true) ?: 'public';
 
         $output = '';
         if (isset($_GET['ap_updated'])) {
@@ -96,6 +98,20 @@ class ProfileEditShortcode {
                 <label class="ap-form-label" for="ap_city">City</label><br>
                 <input class="ap-input ap-address-city ap-address-input" id="ap_city" type="text" name="ap_city" data-selected="<?php echo esc_attr($city); ?>" />
             </p>
+            <p>
+                <label class="ap-form-label" for="ap_privacy_email"><?php esc_html_e('Show Email', 'artpulse'); ?></label><br>
+                <select class="ap-input" id="ap_privacy_email" name="ap_privacy_email">
+                    <option value="public" <?php selected($email_privacy, 'public'); ?>><?php esc_html_e('Public', 'artpulse'); ?></option>
+                    <option value="private" <?php selected($email_privacy, 'private'); ?>><?php esc_html_e('Private', 'artpulse'); ?></option>
+                </select>
+            </p>
+            <p>
+                <label class="ap-form-label" for="ap_privacy_location"><?php esc_html_e('Show Location', 'artpulse'); ?></label><br>
+                <select class="ap-input" id="ap_privacy_location" name="ap_privacy_location">
+                    <option value="public" <?php selected($location_privacy, 'public'); ?>><?php esc_html_e('Public', 'artpulse'); ?></option>
+                    <option value="private" <?php selected($location_privacy, 'private'); ?>><?php esc_html_e('Private', 'artpulse'); ?></option>
+                </select>
+            </p>
             <input type="hidden" name="address_components" id="ap-profile-address-components" value="<?php echo esc_attr(json_encode(['country' => $country, 'state' => $state, 'city' => $city])); ?>">
             <p>
                 <input class="ap-form-button nectar-button" type="submit" name="ap_profile_submit" value="Update Profile">
@@ -131,6 +147,8 @@ class ProfileEditShortcode {
         $country = isset($components['country']) ? sanitize_text_field($components['country']) : '';
         $state   = isset($components['state']) ? sanitize_text_field($components['state']) : '';
         $city    = isset($components['city']) ? sanitize_text_field($components['city']) : '';
+        $email_privacy    = sanitize_text_field($_POST['ap_privacy_email'] ?? 'public');
+        $location_privacy = sanitize_text_field($_POST['ap_privacy_location'] ?? 'public');
 
         wp_update_user([
             'ID' => $user_id,
@@ -144,6 +162,8 @@ class ProfileEditShortcode {
         update_user_meta($user_id, 'ap_country', $country);
         update_user_meta($user_id, 'ap_state', $state);
         update_user_meta($user_id, 'ap_city', $city);
+        update_user_meta($user_id, 'ap_privacy_email', $email_privacy);
+        update_user_meta($user_id, 'ap_privacy_location', $location_privacy);
 
         // Handle Avatar Upload or selected ID
         $avatar_id = isset($_POST['ap_avatar_id']) ? intval($_POST['ap_avatar_id']) : 0;
