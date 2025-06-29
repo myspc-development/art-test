@@ -67,6 +67,8 @@ from any directory, calendar popover or dashboard list.
 [ap_event_calendar]
 - You can also add filters or adjust display options via shortcode attributes (see below for full list).
 
+The calendar relies on the FullCalendar library. Scripts are loaded from the jsDelivr CDN with a bundled fallback if the CDN is unreachable.
+
 **Tip:** Calendar updates instantly when new events are added or when filters are applied.
 
 ## Shortcode Reference
