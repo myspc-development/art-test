@@ -83,11 +83,34 @@
                 <img src="${post.featured_media_url || ''}" alt="${post.title}" />
                 <h3>${post.title}</h3>
             `;
-            if ( post.date ) {
-              html += `<p class="ap-meta-date">${post.date}</p>`;
+            const start = post.event_start_date || post.start_date;
+            const end   = post.event_end_date   || post.end_date;
+            const formatDate = d => {
+              try {
+                return new Date(d).toLocaleDateString();
+              } catch(e) {
+                return d;
+              }
+            };
+            if ( start ) {
+              html += `<p class="ap-meta-date">${formatDate(start)}</p>`;
+            }
+            if ( end ) {
+              html += `<p class="ap-meta-date">${formatDate(end)}</p>`;
+            }
+            if ( post.venue_name ) {
+              html += `<p class="ap-meta-venue">${post.venue_name}</p>`;
             }
             if ( post.location ) {
               html += `<p class="ap-meta-location">${post.location}</p>`;
+            }
+            const addressParts = [];
+            if ( post.event_street_address ) addressParts.push(post.event_street_address);
+            const cityState = [post.event_city, post.event_state].filter(Boolean).join(', ');
+            if ( cityState ) addressParts.push(cityState + (post.event_postcode ? ' ' + post.event_postcode : ''));
+            if ( !cityState && post.event_postcode ) addressParts.push(post.event_postcode);
+            if ( addressParts.length ) {
+              html += `<p class="ap-meta-address">${addressParts.join('<br>')}</p>`;
             }
             if ( post.for_sale ) {
               html += `<span class="ap-badge-sale">For Sale</span>`;

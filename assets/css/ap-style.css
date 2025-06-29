@@ -573,7 +573,9 @@ select.ap-input {
 }
 
 .ap-meta-date,
-.ap-meta-location {
+.ap-meta-location,
+.ap-meta-venue,
+.ap-meta-address {
   display: block;
   font-size: 0.9em;
   color: var(--ap-muted-text-color);
