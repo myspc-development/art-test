@@ -82,6 +82,9 @@ class UserDashboardManager
                 'rsvpCounts'     => $rsvp_counts,
                 'favoriteCounts' => $favorite_counts,
             ]);
+
+            $stats = \ArtPulse\Core\UserEngagementLogger::get_stats($uid);
+            wp_localize_script('ap-user-dashboard-js', 'APUserStats', $stats);
         }
 
         // Dashboard styles

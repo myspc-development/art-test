@@ -14,6 +14,7 @@ class FavoritesManager {
             'object_type'  => $object_type,
             'favorited_on' => current_time('mysql')
         ]);
+        \ArtPulse\Core\UserEngagementLogger::log($user_id, 'favorite', $object_id);
 
         // --- Notify owner (if not self) ---
         $owner_id = self::get_owner_user_id($object_id, $object_type);

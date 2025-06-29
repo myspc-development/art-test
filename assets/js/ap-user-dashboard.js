@@ -161,11 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (myEvents.length) {
       renderCalendar(myEvents, 'ap-my-events');
     }
-    highlightNextEvent(nextEvent);
+  highlightNextEvent(nextEvent);
 
-    renderTrendsChart();
+  renderTrendsChart();
+  renderEngagementChart();
 
-    renderSupportHistory(supportHistory);
+  renderSupportHistory(supportHistory);
 
     fetchNotifications();
   });
@@ -549,6 +550,36 @@ function renderTrendsChart() {
           label: 'Favorites',
           data: APUserTrends.favoriteCounts,
           backgroundColor: 'rgba(245,171,53,0.5)'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
+}
+
+function renderEngagementChart() {
+  const canvas = document.getElementById('ap-user-engagement-chart');
+  if (!canvas || typeof Chart === 'undefined' || !window.APUserStats) return;
+
+  new Chart(canvas.getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: APUserStats.days,
+      datasets: [
+        {
+          label: 'RSVPs',
+          data: APUserStats.rsvp_daily,
+          borderColor: 'rgba(0,115,170,0.8)',
+          fill: false
+        },
+        {
+          label: 'Favorites',
+          data: APUserStats.favorite_daily,
+          borderColor: 'rgba(245,171,53,0.8)',
+          fill: false
         }
       ]
     },
