@@ -203,7 +203,7 @@ class Plugin
         }
 
         $opts = get_option('artpulse_settings', []);
-        if (!empty($opts['woo_enabled'])) {
+        if (!empty($opts['woocommerce_enabled'])) {
             \ArtPulse\Core\WooCommerceIntegration::register();
             \ArtPulse\Core\PurchaseShortcode::register();
         }

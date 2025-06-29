@@ -64,6 +64,11 @@ class SettingsPage
                 'desc'  => __('Secret used to verify webhook calls from Stripe.', 'artpulse'),
                 'type'  => 'text',
             ],
+            'woocommerce_enabled' => [
+                'label' => __('Enable WooCommerce Integration', 'artpulse'),
+                'desc'  => __('Use WooCommerce products for membership purchases.', 'artpulse'),
+                'type'  => 'checkbox',
+            ],
             'payment_metrics_cache' => [
                 'label' => __('Payment Metrics Cache (minutes)', 'artpulse'),
                 'desc'  => __('How long to cache payment analytics data.', 'artpulse'),

@@ -170,6 +170,10 @@ Use `[ap_register]` to display a standalone registration form for new users. Sig
 
 Use `[ap_logout]` to show a logout link. By default the link redirects to the site homepage after logging out. Provide a `redirect` attribute to send users elsewhere.
 
+## WooCommerce Membership Purchases
+
+Enable **WooCommerce Integration** under **ArtPulse → Settings** to sell memberships as WooCommerce products. The `[ap_membership_purchase]` shortcode outputs a link or coupon form directing users to the checkout page. Set the `level` attribute to `Basic`, `Pro` or `Org` and optionally pass a `coupon` code.
+
 ## AJAX Event Filter Form
 
 Display a live event search form anywhere using the `[ap_event_filter]` shortcode. Users can filter events by keyword, venue, date range and category. Results update below the form without reloading the page.
