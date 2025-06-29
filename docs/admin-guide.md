@@ -24,6 +24,13 @@ See the [User Guide](user-guide.md) for instructions that attendees follow when 
 
 Use the `[ap_event_calendar]` shortcode to place the calendar anywhere on the site. Shortcode attributes let you filter by venue, category, and date or change display options.
 
+## Settings Tab Layout
+
+All plugin options live under **ArtPulse → Settings** in the admin menu. The
+page is divided into tabs. Click **General**, **Location APIs**, **Import/Export**
+or **Shortcode Pages** to reveal the fields for each area. The active tab is
+tracked via the URL hash so you can share a direct link like `#/import_export`.
+
 ## Accessibility & Mobile Notes
 
 All admin tools are responsive and keyboard accessible so you can manage events from any device.

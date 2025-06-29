@@ -18,6 +18,32 @@ New users may be guided through setup screens after their first login. Onboardin
 
 Tooltips and help modals provide quick guidance throughout the dashboard. A registry of help snippets is maintained with `artpulse_register_help_item()`. Front‑end scripts display a help icon next to fields and widgets; clicking opens a modal with detailed instructions or contact links. Content can be overridden or translated via the `artpulse_help_content` filter. Optional integration with a chat provider keeps real‑time assistance one click away.
 
+## 5. Settings Registry
+
+The admin settings screen now uses a tabbed layout. Tabs and their fields are
+collected by a simple `SettingsRegistry` class before rendering. Managers call
+`SettingsRegistry::register_tab( $slug, $label )` to add a tab and
+`SettingsRegistry::register_field( $tab, $key, $config )` for each field.
+
+```php
+use ArtPulse\Admin\SettingsRegistry;
+
+SettingsRegistry::register_tab( 'membership', __( 'Membership', 'artpulse' ) );
+SettingsRegistry::register_field( 'membership', 'default_privacy_email', [
+    'label'   => __( 'Default Email Privacy', 'artpulse' ),
+    'type'    => 'select',
+    'options' => [ 'public' => 'Public', 'private' => 'Private' ],
+] );
+```
+
+Filters let developers modify these arrays before output:
+
+- `artpulse_settings_tabs` adjusts the final list of tab slugs and labels.
+- `artpulse_settings_fields_{slug}` filters the fields for a given tab.
+
+All registered tabs appear in a horizontal navigation bar. Selecting a tab shows
+only the associated form section.
+
 ## Best Practices
 
 All UI strings should be translatable. Save branding and layout changes via AJAX for instant feedback. Onboarding and help flows must be dismissible and accessible on mobile and for screen readers.
