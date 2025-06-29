@@ -28,6 +28,8 @@ if (!defined('ARTPULSE_PLUGIN_FILE')) {
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
+// Load shared frontend helpers
+require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 
 // 🔧 Boot the main plugin class (responsible for registering menus, settings, CPTs, etc.)
 $main = new Plugin();
@@ -258,11 +260,8 @@ function ap_render_favorite_portfolio() {
                     <a href="<?php the_permalink(); ?>">
                         <?php the_post_thumbnail('portfolio-thumb'); ?>
                         <h3><?php the_title(); ?></h3>
-                        <span class="ap-fav-count"><?php echo intval(get_post_meta(get_the_ID(), 'ap_favorite_count', true)); ?> Favorites</span>
                     </a>
-                    <button class="ap-fav-btn<?php echo ap_user_has_favorited($user_id, get_the_ID()) ? ' ap-favorited' : ''; ?>" data-post="<?php the_ID(); ?>">
-                        <?php echo ap_user_has_favorited($user_id, get_the_ID()) ? '★' : '☆'; ?>
-                    </button>
+                    <?php echo \ArtPulse\Frontend\ap_render_favorite_button( get_the_ID() ); ?>
                 </div>
 <?php
             }
