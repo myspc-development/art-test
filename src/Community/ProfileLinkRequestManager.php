@@ -72,4 +72,95 @@ class ProfileLinkRequestManager
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
     }
+
+    /**
+     * Create a new profile link request post.
+     */
+    public static function create(int $artist_user_id, int $org_id, string $message = ''): int
+    {
+        $post_id = wp_insert_post([
+            'post_type'   => 'ap_profile_link_request',
+            'post_status' => 'publish',
+            'post_title'  => 'Profile Link Request',
+            'post_author' => $artist_user_id,
+        ]);
+
+        if (is_wp_error($post_id)) {
+            return 0;
+        }
+
+        update_post_meta($post_id, 'artist_user_id', $artist_user_id);
+        update_post_meta($post_id, 'org_id', $org_id);
+        update_post_meta($post_id, 'message', $message);
+        update_post_meta($post_id, 'requested_on', current_time('mysql'));
+        update_post_meta($post_id, 'status', 'pending');
+
+        if (class_exists('\\ArtPulse\\Community\\NotificationManager')) {
+            $org_post = get_post($org_id);
+            $owner    = $org_post ? (int) $org_post->post_author : 0;
+            if ($owner) {
+                NotificationManager::add($owner, 'link_request_sent', $post_id, $artist_user_id, $message);
+            }
+        }
+
+        return (int) $post_id;
+    }
+
+    /**
+     * Approve a pending request and create a link post.
+     */
+    public static function approve(int $request_id, int $user_id): void
+    {
+        $request = get_post($request_id);
+        if (!$request || $request->post_type !== 'ap_profile_link_request') {
+            return;
+        }
+
+        $artist = (int) get_post_meta($request_id, 'artist_user_id', true);
+        $org    = (int) get_post_meta($request_id, 'org_id', true);
+
+        $link_id = wp_insert_post([
+            'post_type'   => 'ap_profile_link',
+            'post_status' => 'publish',
+            'post_title'  => 'Profile Link',
+            'post_author' => $user_id,
+        ]);
+
+        if (!is_wp_error($link_id)) {
+            update_post_meta($link_id, 'artist_user_id', $artist);
+            update_post_meta($link_id, 'org_id', $org);
+            update_post_meta($link_id, 'request_id', $request_id);
+            update_post_meta($link_id, 'requested_on', get_post_meta($request_id, 'requested_on', true));
+            update_post_meta($link_id, 'approved_on', current_time('mysql'));
+            update_post_meta($link_id, 'status', 'approved');
+        }
+
+        update_post_meta($request_id, 'status', 'approved');
+        update_post_meta($request_id, 'approved_on', current_time('mysql'));
+        update_post_meta($request_id, 'approved_by', $user_id);
+
+        if (class_exists('\\ArtPulse\\Community\\NotificationManager') && $artist) {
+            NotificationManager::add($artist, 'link_request_approved', $link_id, $org);
+        }
+    }
+
+    /**
+     * Deny a pending request.
+     */
+    public static function deny(int $request_id, int $user_id): void
+    {
+        $request = get_post($request_id);
+        if (!$request || $request->post_type !== 'ap_profile_link_request') {
+            return;
+        }
+
+        update_post_meta($request_id, 'status', 'denied');
+        update_post_meta($request_id, 'denied_on', current_time('mysql'));
+        update_post_meta($request_id, 'denied_by', $user_id);
+
+        $artist = (int) get_post_meta($request_id, 'artist_user_id', true);
+        if (class_exists('\\ArtPulse\\Community\\NotificationManager') && $artist) {
+            NotificationManager::add($artist, 'link_request_denied', $request_id, $user_id);
+        }
+    }
 }
