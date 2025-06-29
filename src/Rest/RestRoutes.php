@@ -112,6 +112,14 @@ class RestRoutes
             'rsvp_enabled'       => 'event_rsvp_enabled',
             'rsvp_limit'         => 'event_rsvp_limit',
             'waitlist_enabled'   => 'event_waitlist_enabled',
+            'event_start_date'   => 'event_start_date',
+            'event_end_date'     => 'event_end_date',
+            'venue_name'         => 'venue_name',
+            'event_street_address' => 'event_street_address',
+            'event_city'         => 'event_city',
+            'event_state'        => 'event_state',
+            'event_postcode'     => 'event_postcode',
+            'event_country'      => 'event_country',
         ], $args);
 
         foreach ($events as &$event) {
