@@ -13,8 +13,8 @@ class ProfileLinkRequestAdmin
     public static function register(): void
     {
         add_action('admin_menu', [self::class, 'add_link_request_menu']);
-        add_filter('manage_edit-ap_profile_link_request_columns', [self::class, 'custom_columns']);
-        add_action('manage_ap_profile_link_request_posts_custom_column', [self::class, 'render_custom_columns'], 10, 2);
+        add_filter('manage_edit-ap_profile_link_req_columns', [self::class, 'custom_columns']);
+        add_action('manage_ap_profile_link_req_posts_custom_column', [self::class, 'render_custom_columns'], 10, 2);
     }
 
     /**
@@ -23,11 +23,11 @@ class ProfileLinkRequestAdmin
     public static function add_link_request_menu(): void
     {
         add_submenu_page(
-            'edit.php?post_type=ap_profile_link_request',
+            'edit.php?post_type=ap_profile_link_req',
             __('Link Requests', 'artpulse'),
             __('Link Requests', 'artpulse'),
             'edit_users',
-            'edit.php?post_type=ap_profile_link_request'
+            'edit.php?post_type=ap_profile_link_req'
         );
     }
 
