@@ -2,6 +2,7 @@
 namespace ArtPulse\Core;
 
 use WP_REST_Request;
+use ArtPulse\Search\ExternalSearch;
 
 class DirectoryManager {
     public static function register() {
@@ -48,6 +49,9 @@ class DirectoryManager {
                 'type'       => [ 'type' => 'string',  'required' => true ],
                 'limit'      => [ 'type' => 'integer', 'default'  => 10 ],
                 'event_type' => [ 'type' => 'integer' ],
+                'medium'     => [ 'type' => 'integer' ],
+                'style'      => [ 'type' => 'integer' ],
+                'location'   => [ 'type' => 'string' ],
                 'city'       => [ 'type' => 'string' ],
                 'region'     => [ 'type' => 'string' ],
                 'for_sale'   => [ 'type' => 'boolean' ],
@@ -59,6 +63,9 @@ class DirectoryManager {
         $type       = sanitize_text_field( $request->get_param('type') );
         $limit      = intval( $request->get_param('limit') ?? 10 );
         $event_type = absint( $request->get_param('event_type') );
+        $medium     = absint( $request->get_param('medium') );
+        $style      = absint( $request->get_param('style') );
+        $location   = sanitize_text_field( $request->get_param('location') );
         $city       = sanitize_text_field( $request->get_param('city') );
         $region     = sanitize_text_field( $request->get_param('region') );
         $for_sale   = $request->has_param('for_sale') ? rest_sanitize_boolean( $request->get_param('for_sale') ) : null;
@@ -77,41 +84,80 @@ class DirectoryManager {
         $tax_query  = [];
         $meta_query = [];
 
-        if ( $type === 'event' ) {
-            if ( $event_type ) {
-                $tax_query[] = [
-                    'taxonomy' => 'artpulse_event_type',
-                    'field'    => 'term_id',
-                    'terms'    => $event_type,
+        $search_args = [
+            'limit'      => $limit,
+            'event_type' => $event_type,
+            'medium'     => $medium,
+            'style'      => $style,
+            'location'   => $location,
+            'city'       => $city,
+            'region'     => $region,
+            'for_sale'   => $for_sale,
+        ];
+
+        if ( ExternalSearch::is_enabled() ) {
+            $posts = ExternalSearch::search( $type, $search_args );
+        } else {
+            if ( $type === 'event' ) {
+                if ( $event_type ) {
+                    $tax_query[] = [
+                        'taxonomy' => 'artpulse_event_type',
+                        'field'    => 'term_id',
+                        'terms'    => $event_type,
+                    ];
+                }
+
+                if ( $city ) {
+                    $meta_query[] = [ 'key' => 'event_city',  'value' => $city ];
+                }
+
+                if ( $region ) {
+                    $meta_query[] = [ 'key' => 'event_state', 'value' => $region ];
+                }
+            }
+
+            if ( $type === 'artwork' && $for_sale !== null ) {
+                $meta_query[] = [
+                    'key'     => 'for_sale',
+                    'value'   => $for_sale ? '1' : '0',
+                    'compare' => '=',
                 ];
             }
 
-            if ( $city ) {
-                $meta_query[] = [ 'key' => 'event_city',  'value' => $city ];
+            if ( $medium ) {
+                $tax_query[] = [
+                    'taxonomy' => 'artpulse_medium',
+                    'field'    => 'term_id',
+                    'terms'    => $medium,
+                ];
             }
 
-            if ( $region ) {
-                $meta_query[] = [ 'key' => 'event_state', 'value' => $region ];
+            if ( $style ) {
+                $tax_query[] = [
+                    'taxonomy' => 'artwork_style',
+                    'field'    => 'term_id',
+                    'terms'    => $style,
+                ];
             }
-        }
 
-        if ( $type === 'artwork' && $for_sale !== null ) {
-            $meta_query[] = [
-                'key'     => 'for_sale',
-                'value'   => $for_sale ? '1' : '0',
-                'compare' => '=',
-            ];
-        }
+            if ( $location ) {
+                $meta_query[] = [
+                    'key'     => 'address_components',
+                    'value'   => $location,
+                    'compare' => 'LIKE',
+                ];
+            }
 
-        if ( ! empty( $tax_query ) ) {
-            $args['tax_query'] = $tax_query;
-        }
+            if ( ! empty( $tax_query ) ) {
+                $args['tax_query'] = $tax_query;
+            }
 
-        if ( ! empty( $meta_query ) ) {
-            $args['meta_query'] = $meta_query;
-        }
+            if ( ! empty( $meta_query ) ) {
+                $args['meta_query'] = $meta_query;
+            }
 
-        $posts = get_posts($args);
+            $posts = get_posts( $args );
+        }
 
         $data = array_map(function($p) use ($type) {
             $item = [
@@ -157,6 +203,11 @@ class DirectoryManager {
                     <input type="text" class="ap-filter-city" placeholder="<?php esc_attr_e('City','artpulse'); ?>" />
                     <input type="text" class="ap-filter-region" placeholder="<?php esc_attr_e('Region','artpulse'); ?>" />
                 <?php endif; ?>
+                <label><?php _e('Medium','artpulse'); ?>:</label>
+                <select class="ap-filter-medium"></select>
+                <label><?php _e('Style','artpulse'); ?>:</label>
+                <select class="ap-filter-style"></select>
+                <input type="text" class="ap-filter-location" placeholder="<?php esc_attr_e('Location','artpulse'); ?>" />
                 <label><?php _e('Limit','artpulse'); ?>:</label>
                 <input type="number" class="ap-filter-limit" value="<?php echo esc_attr($atts['limit']); ?>" />
                 <button class="ap-filter-apply"><?php _e('Apply','artpulse'); ?></button>
