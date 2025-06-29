@@ -67,6 +67,7 @@ class Plugin
             \ArtPulse\Community\FollowManager::install_follows_table();
             \ArtPulse\Community\NotificationManager::install_notifications_table();
             \ArtPulse\Admin\LoginEventsPage::install_login_events_table();
+            \ArtPulse\Core\UserEngagementLogger::install_table();
             update_option($db_version_option, self::VERSION);
         }
 
