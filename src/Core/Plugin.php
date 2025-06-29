@@ -68,6 +68,7 @@ class Plugin
             \ArtPulse\Community\NotificationManager::install_notifications_table();
             \ArtPulse\Admin\LoginEventsPage::install_login_events_table();
             \ArtPulse\Core\UserEngagementLogger::install_table();
+            \ArtPulse\Core\ProfileMetrics::install_table();
             update_option($db_version_option, self::VERSION);
         }
 
@@ -117,6 +118,7 @@ class Plugin
         \ArtPulse\Core\MyFollowsShortcode::register();
         \ArtPulse\Core\NotificationShortcode::register();
         \ArtPulse\Community\UserPreferencesRestController::register();
+        \ArtPulse\Core\ProfileMetrics::register();
         \ArtPulse\Admin\AdminListSorting::register();
         \ArtPulse\Rest\RestSortingSupport::register();
         \ArtPulse\Admin\AdminListColumns::register();
@@ -153,6 +155,7 @@ class Plugin
         \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
+        \ArtPulse\Rest\ProfileMetricsController::register();
         \ArtPulse\Rest\PaymentReportsController::register();
         \ArtPulse\Rest\UserAccountRestController::register();
         ArtistRestController::register();

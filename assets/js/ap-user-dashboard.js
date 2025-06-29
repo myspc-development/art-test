@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderTrendsChart();
   renderEngagementChart();
+  renderProfileMetricsChart();
 
   renderSupportHistory(supportHistory);
 
@@ -593,6 +594,32 @@ function renderEngagementChart() {
           borderColor: 'rgba(245,171,53,0.8)',
           fill: false
         }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
+}
+
+async function renderProfileMetricsChart() {
+  const canvas = document.getElementById('ap-profile-metrics-chart');
+  if (!canvas || typeof Chart === 'undefined' || !window.APProfileMetrics) return;
+
+  const headers = { 'X-WP-Nonce': APProfileMetrics.nonce };
+  const viewRes = await fetch(`${APProfileMetrics.endpoint}/${APProfileMetrics.profileId}?metric=view`, { headers });
+  const followRes = await fetch(`${APProfileMetrics.endpoint}/${APProfileMetrics.profileId}?metric=follow`, { headers });
+  const views = await viewRes.json();
+  const follows = await followRes.json();
+
+  new Chart(canvas.getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: views.days,
+      datasets: [
+        { label: 'Views', data: views.counts, borderColor: 'rgba(0,115,170,0.8)', fill: false },
+        { label: 'Follows', data: follows.counts, borderColor: 'rgba(200,80,80,0.8)', fill: false }
       ]
     },
     options: {

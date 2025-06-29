@@ -52,6 +52,7 @@
     <div id="ap-my-events"></div>
     <canvas id="ap-trends-chart" height="150"></canvas>
     <canvas id="ap-user-engagement-chart" height="150"></canvas>
+    <canvas id="ap-profile-metrics-chart" height="150"></canvas>
     <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
     <div id="ap-events-feed"></div>
     <?php if ($show_support_history) : ?>

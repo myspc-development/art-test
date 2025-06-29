@@ -15,6 +15,7 @@ $tables = [
     'ap_favorites',
     'ap_follows',
     'ap_notifications',
+    'ap_profile_metrics',
     'ap_link_requests_meta',
     'ap_roles',
     'ap_login_events',
