@@ -30,6 +30,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 }
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
+require_once __DIR__ . '/src/Frontend/ShareButtons.php';
 
 // 🔧 Boot the main plugin class (responsible for registering menus, settings, CPTs, etc.)
 $main = new Plugin();
