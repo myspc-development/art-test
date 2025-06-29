@@ -26,6 +26,14 @@
         <textarea class="ap-input" id="ap_reg_bio" name="description" rows="4"></textarea>
     </p>
     <p>
+        <label class="ap-form-label" for="ap_reg_role"><?php esc_html_e('Register As', 'artpulse-management'); ?></label>
+        <select class="ap-input" id="ap_reg_role" name="role">
+            <option value="member"><?php esc_html_e('User', 'artpulse-management'); ?></option>
+            <option value="artist"><?php esc_html_e('Artist', 'artpulse-management'); ?></option>
+            <option value="organization"><?php esc_html_e('Organization', 'artpulse-management'); ?></option>
+        </select>
+    </p>
+    <p>
         <label class="ap-form-label" for="ap_country"><?php esc_html_e('Country', 'artpulse-management'); ?></label>
         <input class="ap-input ap-address-country ap-address-input" id="ap_country" type="text" name="ap_country" />
     </p>

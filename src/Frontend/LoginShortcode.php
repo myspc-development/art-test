@@ -101,6 +101,11 @@ class LoginShortcode
         $password      = $_POST['password'] ?? '';
         $display_name  = sanitize_text_field($_POST['display_name'] ?? '');
         $bio           = sanitize_textarea_field($_POST['description'] ?? '');
+        $role          = sanitize_key($_POST['role'] ?? 'member');
+        $allowed_roles = ['member', 'artist', 'organization'];
+        if (!in_array($role, $allowed_roles, true)) {
+            $role = 'member';
+        }
         $components    = [];
         if (!empty($_POST['address_components'])) {
             $decoded = json_decode(stripslashes($_POST['address_components']), true);
@@ -131,6 +136,12 @@ class LoginShortcode
         if (is_wp_error($result)) {
             wp_send_json_error(['message' => $result->get_error_message()]);
         }
+
+        // Assign the selected role
+        wp_update_user([
+            'ID'   => $result,
+            'role' => $role,
+        ]);
 
         // Auto login the new user
         wp_set_current_user($result);

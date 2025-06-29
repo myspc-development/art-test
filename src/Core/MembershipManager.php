@@ -30,12 +30,40 @@ class MembershipManager
      */
     public static function assignFreeMembership($user_id)
     {
-        $user = get_userdata($user_id);
-        if (in_array('administrator', (array) $user->roles, true)) {
-            // Don't override admin privileges when registering
-            $user->add_role('member');
-        } else {
-            $user->set_role('member');
+        $user  = get_userdata($user_id);
+        $roles = (array) $user->roles;
+
+        if (!in_array('artist', $roles, true) && !in_array('organization', $roles, true)) {
+            if (in_array('administrator', $roles, true)) {
+                // Don't override admin privileges when registering
+                $user->add_role('member');
+            } else {
+                $user->set_role('member');
+            }
+        }
+
+        if (in_array('organization', $roles, true) && !get_user_meta($user_id, 'ap_pending_organization_id', true)) {
+            $org_id = wp_insert_post([
+                'post_type'   => 'artpulse_org',
+                'post_status' => 'pending',
+                'post_title'  => $user->display_name ?: $user->user_login,
+                'post_author' => $user_id,
+            ]);
+            if (!is_wp_error($org_id)) {
+                update_user_meta($user_id, 'ap_pending_organization_id', $org_id);
+            }
+        }
+
+        if (in_array('artist', $roles, true) && !get_user_meta($user_id, 'ap_pending_artist_request_id', true)) {
+            $req_id = wp_insert_post([
+                'post_type'   => 'ap_artist_request',
+                'post_status' => 'pending',
+                'post_title'  => 'Artist Upgrade: User ' . $user_id,
+                'post_author' => $user_id,
+            ]);
+            if (!is_wp_error($req_id)) {
+                update_user_meta($user_id, 'ap_pending_artist_request_id', $req_id);
+            }
         }
         update_user_meta($user_id, 'ap_membership_level', 'Free');
 
