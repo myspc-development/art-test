@@ -1,16 +1,151 @@
 <?php
 namespace ArtPulse\Admin;
 use ArtPulse\Admin\ImportExportTab;
+use ArtPulse\Admin\SettingsRegistry;
 
 class SettingsPage
 {
     public static function register()
     {
+        self::bootstrap_settings();
         add_action('admin_menu', [self::class, 'addMenu']);
         add_action('admin_init', [self::class, 'registerSettings']);
         add_action('wp_login', [self::class, 'trackLastLogin'], 10, 2);
         add_action('wp_logout', [self::class, 'trackLastLogout']);
         add_action('admin_enqueue_scripts', [self::class, 'enqueueAdminAssets']);
+    }
+
+    private static function bootstrap_settings(): void
+    {
+        SettingsRegistry::register_tab('general', __('General', 'artpulse'));
+        SettingsRegistry::register_tab('location', __('Location APIs', 'artpulse'));
+        SettingsRegistry::register_tab('import_export', __('Import/Export', 'artpulse'));
+        SettingsRegistry::register_tab('shortcodes', __('Shortcode Pages', 'artpulse'));
+
+        $general_fields = [
+            'basic_fee' => [
+                'label' => __('Basic Member Fee ($)', 'artpulse'),
+                'desc'  => __('Monthly cost for Basic members. Leave blank to disable.', 'artpulse'),
+            ],
+            'pro_fee' => [
+                'label' => __('Pro Artist Fee ($)', 'artpulse'),
+                'desc'  => __('Subscription price for Pro Artists.', 'artpulse'),
+            ],
+            'org_fee' => [
+                'label' => __('Organization Fee ($)', 'artpulse'),
+                'desc'  => __('Fee charged to organizations.', 'artpulse'),
+            ],
+            'currency' => [
+                'label' => __('Currency (ISO)', 'artpulse'),
+                'desc'  => __('3-letter currency code (e.g., USD, EUR, GBP).', 'artpulse'),
+            ],
+            'stripe_enabled' => [
+                'label' => __('Enable Stripe Integration', 'artpulse'),
+                'desc'  => __('Enable Stripe to manage payments and subscriptions.', 'artpulse'),
+            ],
+            'stripe_pub_key' => [
+                'label' => __('Stripe Publishable Key', 'artpulse'),
+                'desc'  => __('Used for client-side Stripe operations.', 'artpulse'),
+            ],
+            'stripe_secret' => [
+                'label' => __('Stripe Secret Key', 'artpulse'),
+                'desc'  => __('Used for secure server-side API calls to Stripe.', 'artpulse'),
+            ],
+            'stripe_webhook_secret' => [
+                'label' => __('Stripe Webhook Secret', 'artpulse'),
+                'desc'  => __('Secret used to verify webhook calls from Stripe.', 'artpulse'),
+            ],
+            'payment_metrics_cache' => [
+                'label' => __('Payment Metrics Cache (minutes)', 'artpulse'),
+                'desc'  => __('How long to cache payment analytics data.', 'artpulse'),
+            ],
+            'service_worker_enabled' => [
+                'label' => __('Enable Service Worker', 'artpulse'),
+                'desc'  => __('Adds a service worker for basic offline caching.', 'artpulse'),
+            ],
+            'oauth_google_enabled' => [
+                'label' => __('Enable Google Login', 'artpulse'),
+                'desc'  => __('Show Google button on the login form.', 'artpulse'),
+            ],
+            'oauth_facebook_enabled' => [
+                'label' => __('Enable Facebook Login', 'artpulse'),
+                'desc'  => __('Show Facebook button on the login form.', 'artpulse'),
+            ],
+            'oauth_apple_enabled' => [
+                'label' => __('Enable Apple Login', 'artpulse'),
+                'desc'  => __('Show Apple button on the login form.', 'artpulse'),
+            ],
+            'enforce_two_factor' => [
+                'label' => __('Enforce Two-Factor', 'artpulse'),
+                'desc'  => __('Require users to enable two-factor authentication before logging in.', 'artpulse'),
+            ],
+            'override_artist_membership' => [
+                'label' => __('Override Artist Membership', 'artpulse'),
+                'desc'  => __('Allow administrators to bypass membership requirements and fees for artists.', 'artpulse'),
+            ],
+            'override_org_membership' => [
+                'label' => __('Override Organization Membership', 'artpulse'),
+                'desc'  => __('Allow administrators to bypass membership requirements and fees for organizations.', 'artpulse'),
+            ],
+            'override_member_membership' => [
+                'label' => __('Override Member Membership', 'artpulse'),
+                'desc'  => __('Allow administrators to bypass membership requirements and fees for regular members.', 'artpulse'),
+            ],
+            'auto_expire_events' => [
+                'label' => __('Auto-expire Past Events', 'artpulse'),
+                'desc'  => __('Move events to Draft when the end date has passed.', 'artpulse'),
+            ],
+            'enable_artworks_for_sale' => [
+                'label' => __('Enable Artworks for Sale', 'artpulse'),
+                'desc'  => __('Allow artworks to be marked for sale.', 'artpulse'),
+            ],
+            'disable_styles' => [
+                'label' => __('Disable Plugin Styles', 'artpulse'),
+                'desc'  => __('Do not load ArtPulse CSS on the frontend.', 'artpulse'),
+            ],
+            'default_rsvp_limit' => [
+                'label' => __('Default RSVP Limit', 'artpulse'),
+                'desc'  => __('Pre-filled limit for new events.', 'artpulse'),
+            ],
+            'min_rsvp_limit' => [
+                'label' => __('Minimum RSVP Limit', 'artpulse'),
+                'desc'  => __('Lowest allowed RSVP limit.', 'artpulse'),
+            ],
+            'max_rsvp_limit' => [
+                'label' => __('Maximum RSVP Limit', 'artpulse'),
+                'desc'  => __('Highest allowed RSVP limit.', 'artpulse'),
+            ],
+            'waitlists_enabled' => [
+                'label' => __('Enable Waitlists', 'artpulse'),
+                'desc'  => __('Allow events to use waitlists.', 'artpulse'),
+            ],
+            'default_privacy_email' => [
+                'label' => __('Default Email Privacy', 'artpulse'),
+                'desc'  => __('Public or private visibility for new user emails.', 'artpulse'),
+            ],
+            'default_privacy_location' => [
+                'label' => __('Default Location Privacy', 'artpulse'),
+                'desc'  => __('Public or private visibility for new user locations.', 'artpulse'),
+            ],
+        ];
+
+        foreach ($general_fields as $key => $cfg) {
+            SettingsRegistry::register_field('general', $key, $cfg);
+        }
+
+        $location_fields = [
+            'geonames_username' => [
+                'label' => __('Geonames Username', 'artpulse'),
+                'desc'  => __('Username for querying the Geonames API.', 'artpulse'),
+            ],
+            'google_places_key' => [
+                'label' => __('Google Places API Key', 'artpulse'),
+                'desc'  => __('Key for Google Places requests.', 'artpulse'),
+            ],
+        ];
+        foreach ($location_fields as $key => $cfg) {
+            SettingsRegistry::register_field('location', $key, $cfg);
+        }
     }
     public static function addMenu()
     {
@@ -292,28 +427,23 @@ class SettingsPage
         <div class="wrap">
             <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
             <h2 class="nav-tab-wrapper">
-                <a href="<?php echo esc_url($base_url . '&tab=general'); ?>" class="nav-tab <?php echo $current_tab === 'general' ? 'nav-tab-active' : ''; ?>">
-                    <?php esc_html_e('General', 'artpulse'); ?>
-                </a>
-                <a href="<?php echo esc_url($base_url . '&tab=location'); ?>" class="nav-tab <?php echo $current_tab === 'location' ? 'nav-tab-active' : ''; ?>">
-                    <?php esc_html_e('Location APIs', 'artpulse'); ?>
-                </a>
-                <a href="<?php echo esc_url($base_url . '&tab=import_export'); ?>" class="nav-tab <?php echo $current_tab === 'import_export' ? 'nav-tab-active' : ''; ?>">
-                    <?php esc_html_e('Import/Export', 'artpulse'); ?>
-                </a>
-                <a href="<?php echo esc_url($base_url . '&tab=shortcodes'); ?>" class="nav-tab <?php echo $current_tab === 'shortcodes' ? 'nav-tab-active' : ''; ?>">
-                    <?php esc_html_e('Shortcode Pages', 'artpulse'); ?>
-                </a>
+                <?php foreach (SettingsRegistry::get_tabs() as $slug => $label) : ?>
+                    <a href="<?php echo esc_url($base_url . '&tab=' . $slug); ?>" class="nav-tab <?php echo $current_tab === $slug ? 'nav-tab-active' : ''; ?>">
+                        <?php echo esc_html($label); ?>
+                    </a>
+                <?php endforeach; ?>
             </h2>
             <form method="post" action="options.php">
                 <?php
                 settings_fields('artpulse_settings_group');
                 if ($current_tab === 'location') {
                     do_settings_sections('artpulse-location');
-                } else {
+                } elseif ($current_tab === 'general') {
                     do_settings_sections('artpulse-settings');
                 }
-                submit_button();
+                if (in_array($current_tab, ['general', 'location'], true)) {
+                    submit_button();
+                }
                 ?>
             </form>
             <?php if ($current_tab === 'general') : ?>
@@ -388,113 +518,7 @@ class SettingsPage
             'artpulse-location'
         );
 
-        $general_fields = [
-            'basic_fee' => [
-                'label' => __('Basic Member Fee ($)', 'artpulse'),
-                'desc'  => __('Monthly cost for Basic members. Leave blank to disable.', 'artpulse'),
-            ],
-            'pro_fee' => [
-                'label' => __('Pro Artist Fee ($)', 'artpulse'),
-                'desc'  => __('Subscription price for Pro Artists.', 'artpulse'),
-            ],
-            'org_fee' => [
-                'label' => __('Organization Fee ($)', 'artpulse'),
-                'desc'  => __('Fee charged to organizations.', 'artpulse'),
-            ],
-            'currency' => [
-                'label' => __('Currency (ISO)', 'artpulse'),
-                'desc'  => __('3-letter currency code (e.g., USD, EUR, GBP).', 'artpulse'),
-            ],
-            'stripe_enabled' => [
-                'label' => __('Enable Stripe Integration', 'artpulse'),
-                'desc'  => __('Enable Stripe to manage payments and subscriptions.', 'artpulse'),
-            ],
-            'stripe_pub_key' => [
-                'label' => __('Stripe Publishable Key', 'artpulse'),
-                'desc'  => __('Used for client-side Stripe operations.', 'artpulse'),
-            ],
-            'stripe_secret' => [
-                'label' => __('Stripe Secret Key', 'artpulse'),
-                'desc'  => __('Used for secure server-side API calls to Stripe.', 'artpulse'),
-            ],
-            'stripe_webhook_secret' => [
-                'label' => __('Stripe Webhook Secret', 'artpulse'),
-                'desc'  => __('Secret used to verify webhook calls from Stripe.', 'artpulse'),
-            ],
-            'payment_metrics_cache' => [
-                'label' => __('Payment Metrics Cache (minutes)', 'artpulse'),
-                'desc'  => __('How long to cache payment analytics data.', 'artpulse'),
-            ],
-            'service_worker_enabled' => [
-                'label' => __('Enable Service Worker', 'artpulse'),
-                'desc'  => __('Adds a service worker for basic offline caching.', 'artpulse'),
-            ],
-            'oauth_google_enabled' => [
-                'label' => __('Enable Google Login', 'artpulse'),
-                'desc'  => __('Show Google button on the login form.', 'artpulse'),
-            ],
-            'oauth_facebook_enabled' => [
-                'label' => __('Enable Facebook Login', 'artpulse'),
-                'desc'  => __('Show Facebook button on the login form.', 'artpulse'),
-            ],
-            'oauth_apple_enabled' => [
-                'label' => __('Enable Apple Login', 'artpulse'),
-                'desc'  => __('Show Apple button on the login form.', 'artpulse'),
-            ],
-            'enforce_two_factor' => [
-                'label' => __('Enforce Two-Factor', 'artpulse'),
-                'desc'  => __('Require users to enable two-factor authentication before logging in.', 'artpulse'),
-            ],
-            'override_artist_membership' => [
-                'label' => __('Override Artist Membership', 'artpulse'),
-                'desc'  => __('Allow administrators to bypass membership requirements and fees for artists.', 'artpulse'),
-            ],
-            'override_org_membership' => [
-                'label' => __('Override Organization Membership', 'artpulse'),
-                'desc'  => __('Allow administrators to bypass membership requirements and fees for organizations.', 'artpulse'),
-            ],
-            'override_member_membership' => [
-                'label' => __('Override Member Membership', 'artpulse'),
-                'desc'  => __('Allow administrators to bypass membership requirements and fees for regular members.', 'artpulse'),
-            ],
-            'auto_expire_events' => [
-                'label' => __('Auto-expire Past Events', 'artpulse'),
-                'desc'  => __('Move events to Draft when the end date has passed.', 'artpulse'),
-            ],
-            'enable_artworks_for_sale' => [
-                'label' => __('Enable Artworks for Sale', 'artpulse'),
-                'desc'  => __('Allow artworks to be marked for sale.', 'artpulse'),
-            ],
-            'disable_styles' => [
-                'label' => __('Disable Plugin Styles', 'artpulse'),
-                'desc'  => __('Do not load ArtPulse CSS on the frontend.', 'artpulse'),
-            ],
-            'default_rsvp_limit' => [
-                'label' => __('Default RSVP Limit', 'artpulse'),
-                'desc'  => __('Pre-filled limit for new events.', 'artpulse'),
-            ],
-            'min_rsvp_limit' => [
-                'label' => __('Minimum RSVP Limit', 'artpulse'),
-                'desc'  => __('Lowest allowed RSVP limit.', 'artpulse'),
-            ],
-            'max_rsvp_limit' => [
-                'label' => __('Maximum RSVP Limit', 'artpulse'),
-                'desc'  => __('Highest allowed RSVP limit.', 'artpulse'),
-            ],
-            'waitlists_enabled' => [
-                'label' => __('Enable Waitlists', 'artpulse'),
-                'desc'  => __('Allow events to use waitlists.', 'artpulse'),
-            ],
-            'default_privacy_email' => [
-                'label' => __('Default Email Privacy', 'artpulse'),
-                'desc'  => __('Public or private visibility for new user emails.', 'artpulse'),
-            ],
-            'default_privacy_location' => [
-                'label' => __('Default Location Privacy', 'artpulse'),
-                'desc'  => __('Public or private visibility for new user locations.', 'artpulse'),
-            ]
-        ];
-        foreach ($general_fields as $key => $config) {
+        foreach (SettingsRegistry::get_fields('general') as $key => $config) {
             add_settings_field(
                 $key,
                 $config['label'],
@@ -508,17 +532,7 @@ class SettingsPage
             );
         }
 
-        $location_fields = [
-            'geonames_username' => [
-                'label' => __('Geonames Username', 'artpulse'),
-                'desc'  => __('Username for querying the Geonames API.', 'artpulse'),
-            ],
-            'google_places_key' => [
-                'label' => __('Google Places API Key', 'artpulse'),
-                'desc'  => __('Key for Google Places requests.', 'artpulse'),
-            ],
-        ];
-        foreach ($location_fields as $key => $config) {
+        foreach (SettingsRegistry::get_fields('location') as $key => $config) {
             add_settings_field(
                 $key,
                 $config['label'],
