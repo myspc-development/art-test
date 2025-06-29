@@ -47,6 +47,7 @@ class Plugin
 
         add_action('rest_api_init', [\ArtPulse\Community\NotificationRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\FavoritesRestController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Community\EventCommentsController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_migrate_profile_link_request_slug']);
@@ -162,6 +163,7 @@ class Plugin
         \ArtPulse\Frontend\EventsSliderShortcode::register();
         \ArtPulse\Frontend\EventListingShortcode::register();
         \ArtPulse\Frontend\EventCalendarShortcode::register();
+        \ArtPulse\Frontend\EventCommentsShortcode::register();
         \ArtPulse\Frontend\EventFilter::register();
         \ArtPulse\Admin\MetaBoxesRelationship::register();
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
@@ -259,7 +261,20 @@ class Plugin
             true
         );
 
+        wp_enqueue_script(
+            'ap-event-comments-js',
+            plugins_url('assets/js/ap-event-comments.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
         wp_localize_script('ap-notifications-js', 'APNotifications', [
+            'apiRoot' => esc_url_raw(rest_url()),
+            'nonce'   => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_localize_script('ap-event-comments-js', 'APComments', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
         ]);
