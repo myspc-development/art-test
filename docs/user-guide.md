@@ -1,5 +1,12 @@
 # ArtPulse User Guide
 
+## Event Cards
+
+Event listings across the site use a consistent card design. Each card includes
+the featured image, title, venue, address, and formatted dates. RSVP and
+favorite buttons appear with their current counts so you can interact directly
+from any directory, calendar popover or dashboard list.
+
 ## RSVP & Favorites
 
 ### How to RSVP for an Event
