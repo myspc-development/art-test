@@ -45,6 +45,13 @@ $fav_count  = intval( get_post_meta( $event_id, 'ap_favorite_count', true ) );
 $rsvp_count = intval( get_post_meta( $event_id, 'ap_rsvp_count', true ) );
 $user_id    = get_current_user_id();
 $favorited  = $user_id && function_exists('ap_user_has_favorited') ? ap_user_has_favorited( $user_id, $event_id ) : false;
+$rsvped     = false;
+if ( $user_id ) {
+    $rsvp_ids = get_user_meta( $user_id, 'ap_rsvp_events', true );
+    if ( is_array( $rsvp_ids ) ) {
+        $rsvped = in_array( $event_id, $rsvp_ids, true );
+    }
+}
 ?>
 <article class="ap-event-card ap-widget" id="post-<?php echo esc_attr( $event_id ); ?>">
     <?php if ( $image ) : ?>
@@ -60,6 +67,21 @@ $favorited  = $user_id && function_exists('ap_user_has_favorited') ? ap_user_has
             <?php if ( $start ) : ?><p class="ap-event-start"><?php echo esc_html( $start ); ?></p><?php endif; ?>
             <?php if ( $end ) : ?><p class="ap-event-end"><?php echo esc_html( $end ); ?></p><?php endif; ?>
         </div>
+        <?php
+            $labels = [];
+            if ( $rsvped ) {
+                $labels[] = __( 'RSVP\'d', 'artpulse' );
+            }
+            if ( $favorited ) {
+                $labels[] = __( 'Favorited', 'artpulse' );
+            }
+            if ( $labels ) : ?>
+        <div class="ap-event-labels">
+            <?php foreach ( $labels as $lbl ) : ?>
+                <span class="ap-event-label"><?php echo esc_html( $lbl ); ?></span>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
         <?php if ( $excerpt ) : ?><div class="ap-event-excerpt"><?php echo wp_kses_post( wpautop( $excerpt ) ); ?></div><?php endif; ?>
         <div class="ap-event-actions">
             <?php echo \ArtPulse\Frontend\ap_render_rsvp_button( $event_id ); ?>
