@@ -42,6 +42,30 @@ class FavoriteRestController
         ];
     }
 
+    private static function adjust_favorite_count(int $post_id, int $delta): void
+    {
+        if (!get_post($post_id)) {
+            return;
+        }
+
+        global $wpdb;
+        $meta_key = 'ap_favorite_count';
+
+        $updated = $wpdb->query(
+            $wpdb->prepare(
+                "UPDATE {$wpdb->postmeta} SET meta_value = GREATEST(CAST(meta_value AS SIGNED) + %d, 0) WHERE post_id = %d AND meta_key = %s",
+                $delta,
+                $post_id,
+                $meta_key
+            )
+        );
+
+        if (!$updated) {
+            $value = max(0, $delta);
+            add_post_meta($post_id, $meta_key, $value, true);
+        }
+    }
+
     public static function handle_request(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         $user_id    = get_current_user_id();
@@ -55,9 +79,11 @@ class FavoriteRestController
 
         if ($action === 'add') {
             FavoritesManager::add_favorite($user_id, $object_id, $object_type);
+            self::adjust_favorite_count($object_id, 1);
             $status = 'added';
         } elseif ($action === 'remove') {
             FavoritesManager::remove_favorite($user_id, $object_id, $object_type);
+            self::adjust_favorite_count($object_id, -1);
             $status = 'removed';
         } else {
             return new WP_Error('invalid_action', 'Invalid action.', ['status' => 400]);
