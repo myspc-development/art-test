@@ -1115,3 +1115,5 @@ select.ap-input {
 .ap-events-slider .ap-event-end,
 .ap-events-slider .ap-event-venue,
 .ap-events-slider .ap-event-address{display:block;font-size:0.9em;color:var(--ap-muted-text-color);margin-top:0.25em;}
+
+#ap-event-calendar {\n  margin-bottom: 2em;\n  background: #fff;\n  border-radius: 16px;\n  box-shadow: 0 4px 32px rgba(0,0,0,0.09);\n  padding: 2rem;\n}

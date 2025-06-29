@@ -328,3 +328,47 @@ function ap_favorites_analytics_widget() {
     return ob_get_clean();
 }
 add_shortcode('ap_favorites_analytics', 'ap_favorites_analytics_widget');
+
+function ap_enqueue_event_calendar_assets() {
+    if (is_page('events') || is_singular('artpulse_event')) {
+        wp_enqueue_style('fullcalendar-css', 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css');
+        wp_enqueue_script('fullcalendar-js', 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.js', [], null, true);
+        wp_enqueue_script('ap-event-calendar', plugin_dir_url(__FILE__) . 'assets/js/ap-event-calendar.js', ['fullcalendar-js', 'jquery'], '1.0', true);
+        wp_localize_script('ap-event-calendar', 'APCalendar', [
+            'events' => ap_get_events_for_calendar(),
+        ]);
+    }
+}
+add_action('wp_enqueue_scripts', 'ap_enqueue_event_calendar_assets');
+
+function ap_get_events_for_calendar() {
+    $query = new WP_Query([
+        'post_type'      => 'artpulse_event',
+        'post_status'    => 'publish',
+        'posts_per_page' => 100,
+        'meta_query'     => [
+            ['key' => 'event_start_date', 'compare' => 'EXISTS'],
+        ],
+    ]);
+    $events = [];
+    while ($query->have_posts()) {
+        $query->the_post();
+        $start = get_post_meta(get_the_ID(), 'event_start_date', true);
+        $end   = get_post_meta(get_the_ID(), 'event_end_date', true);
+        $venue = get_post_meta(get_the_ID(), 'venue_name', true);
+        $address = get_post_meta(get_the_ID(), 'event_street_address', true);
+        $events[] = [
+            'id'    => get_the_ID(),
+            'title' => get_the_title(),
+            'start' => $start,
+            'end'   => $end,
+            'url'   => get_permalink(),
+            'extendedProps' => [
+                'venue'   => $venue,
+                'address' => $address,
+            ],
+        ];
+    }
+    wp_reset_postdata();
+    return $events;
+}

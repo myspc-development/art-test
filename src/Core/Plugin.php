@@ -140,6 +140,7 @@ class Plugin
         \ArtPulse\Frontend\LogoutShortcode::register();
         \ArtPulse\Frontend\EventsSliderShortcode::register();
         \ArtPulse\Frontend\EventListingShortcode::register();
+        \ArtPulse\Frontend\EventCalendarShortcode::register();
         \ArtPulse\Admin\MetaBoxesRelationship::register();
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
         \ArtPulse\Admin\ApprovalManager::register();
