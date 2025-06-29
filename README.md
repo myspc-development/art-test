@@ -84,6 +84,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 - `[ap_event_directory]` — Show event directory with filters
  - `[ap_event_calendar]` — Show event calendar
  - `[ap_event_map]` — Map view of events
+- `[ap_events_slider]` — Carousel of upcoming events
 - `[ap_artist_directory]` — Show artist directory
 - `[ap_artwork_directory]` — Show artworks directory
 - `[ap_org_directory]` — Show organizations directory
@@ -93,6 +94,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 - `[ap_event_filter]` — AJAX search and filter form
 - `[ap_user_dashboard]` — Member dashboard with stats
 - `[ap_portfolio_builder]` — Portfolio item builder
+- `[ap_org_event_form]` — Organization event submission form
 - `[ap_directory]` — Legacy directory shortcode
 
 ## CSV Import/Export
@@ -175,6 +177,14 @@ Display a live event search form anywhere using the `[ap_event_filter]` shortcod
 ```
 [ap_event_filter]
 ```
+
+## Events Slider Shortcode
+
+Use `[ap_events_slider]` to display a sliding carousel of upcoming events. The slider loads events via the REST API and uses Swiper for navigation.
+
+## Organization Event Form
+
+The `[ap_org_event_form]` shortcode lets logged-in organizations submit new events from the front end. Submissions are saved as pending posts until reviewed.
 
 
 ## Stripe Radar
