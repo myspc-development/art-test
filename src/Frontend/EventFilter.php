@@ -118,29 +118,7 @@ function ap_filter_events_callback(): void
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
-            $start   = get_post_meta(get_the_ID(), 'event_start_date', true);
-            $end     = get_post_meta(get_the_ID(), 'event_end_date', true);
-            $venue_m = get_post_meta(get_the_ID(), 'venue_name', true);
-            $location= get_post_meta(get_the_ID(), '_ap_event_location', true);
-            echo '<div class="portfolio-item">';
-            echo '<a href="' . esc_url(get_permalink()) . '">';
-            if (has_post_thumbnail()) {
-                the_post_thumbnail('medium');
-            }
-            echo '<h3>' . esc_html(get_the_title()) . '</h3>';
-            if ($start) {
-                echo '<p class="ap-meta-date">' . esc_html($start) . '</p>';
-            }
-            if ($end) {
-                echo '<p class="ap-meta-date">' . esc_html($end) . '</p>';
-            }
-            if ($venue_m) {
-                echo '<p class="ap-meta-venue">' . esc_html($venue_m) . '</p>';
-            }
-            if ($location) {
-                echo '<p class="ap-meta-location">' . esc_html($location) . '</p>';
-            }
-            echo '</a></div>';
+            echo ap_get_event_card(get_the_ID());
         }
         wp_reset_postdata();
     } else {

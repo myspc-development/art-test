@@ -248,8 +248,12 @@ function ap_render_favorite_portfolio() {
             'posts_per_page' => 12
         ]);
         echo '<div class="row portfolio-items">';
-        while($fav_query->have_posts()) : $fav_query->the_post(); ?>
-            <div class="col span_4">
+        while($fav_query->have_posts()) : $fav_query->the_post();
+            echo '<div class="col span_4">';
+            if (get_post_type() === 'artpulse_event') {
+                echo ap_get_event_card(get_the_ID());
+            } else {
+?>
                 <div class="nectar-portfolio-item">
                     <a href="<?php the_permalink(); ?>">
                         <?php the_post_thumbnail('portfolio-thumb'); ?>
@@ -260,8 +264,10 @@ function ap_render_favorite_portfolio() {
                         <?php echo ap_user_has_favorited($user_id, get_the_ID()) ? '★' : '☆'; ?>
                     </button>
                 </div>
-            </div>
-        <?php endwhile;
+<?php
+            }
+            echo '</div>';
+        endwhile;
         echo '</div>';
         wp_reset_postdata();
     } else {
@@ -371,4 +377,17 @@ function ap_get_events_for_calendar() {
     }
     wp_reset_postdata();
     return $events;
+}
+
+function ap_get_event_card(int $event_id): string {
+    $path = locate_template('templates/event-card.php');
+    if (!$path) {
+        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/event-card.php';
+    }
+    if (!file_exists($path)) {
+        return '';
+    }
+    ob_start();
+    include $path;
+    return ob_get_clean();
 }

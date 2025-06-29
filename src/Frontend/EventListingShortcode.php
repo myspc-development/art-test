@@ -114,20 +114,7 @@ class EventListingShortcode
         if ($query->have_posts()) {
             while ($query->have_posts()) {
                 $query->the_post();
-                $date     = get_post_meta(get_the_ID(), '_ap_event_date', true);
-                $location = get_post_meta(get_the_ID(), '_ap_event_location', true);
-                ?>
-                <div class="ap-event-item">
-                    <?php the_post_thumbnail('medium'); ?>
-                    <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-                    <?php if ($date) : ?>
-                        <p class="ap-meta-date"><?php echo esc_html($date); ?></p>
-                    <?php endif; ?>
-                    <?php if ($location) : ?>
-                        <p class="ap-meta-location"><?php echo esc_html($location); ?></p>
-                    <?php endif; ?>
-                </div>
-                <?php
+                echo ap_get_event_card(get_the_ID());
             }
             wp_reset_postdata();
         } else {

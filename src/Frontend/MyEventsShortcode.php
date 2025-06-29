@@ -32,8 +32,6 @@ class MyEventsShortcode {
         ob_start();
         echo '<div class="ap-my-events-list">';
         foreach ($events as $event) {
-            $date     = get_post_meta($event->ID, '_ap_event_date', true);
-            $location = get_post_meta($event->ID, '_ap_event_location', true);
             $status   = ucfirst($event->post_status);
             $edit_url = get_edit_post_link($event->ID);
             $delete_url = add_query_arg([
@@ -42,13 +40,11 @@ class MyEventsShortcode {
             ], get_permalink());
 
             echo '<div class="ap-my-event">';
-            echo "<h3><a href=\"" . esc_url(get_permalink($event->ID)) . "\">" . esc_html($event->post_title) . "</a> <span class=\"ap-status\">(" . esc_html($status) . ")</span></h3>";
-            if ($date) echo "<p><strong>Date:</strong> " . esc_html($date) . "</p>";
-            if ($location) echo "<p><strong>Location:</strong> " . esc_html($location) . "</p>";
-
+            echo ap_get_event_card($event->ID);
             echo '<div class="ap-event-actions">';
             echo '<a href="' . esc_url($edit_url) . '" class="ap-edit-link">Edit</a> | ';
             echo '<a href="' . esc_url($delete_url) . '" class="ap-delete-link" onclick="return confirm(\'Are you sure you want to delete this event?\');">Delete</a>';
+            echo ' <span class="ap-status">(' . esc_html($status) . ')</span>';
             echo '</div>';
             echo '</div>';
         }
