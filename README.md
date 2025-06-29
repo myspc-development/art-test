@@ -50,6 +50,17 @@ Use `[ap_register]` to display a standalone registration form for new users. Sig
 
 Use `[ap_logout]` to show a logout link. By default the link redirects to the site homepage after logging out. Provide a `redirect` attribute to send users elsewhere.
 
+## AJAX Event Filter Form
+
+Display a live event search form anywhere using the `[ap_event_filter]` shortcode. Users can filter events by keyword, venue, date range and category. Results update below the form without reloading the page.
+
+```
+[ap_event_filter]
+```
+
+![Screenshot: AJAX event filter form](assets/docs/images/event_filter_form.png)
+
+
 
 ## Stripe Radar
 
@@ -87,6 +98,13 @@ For full usage details refer to the [Admin Guide](assets/docs/Admin_Help.md) and
 Administrators can assign badges to users directly from their profile pages. Edit a user and enter any badge slugs as a comma-separated list in the **User Badges** field.
 
 A new **Login Heatmap** submenu under **ArtPulse → Settings** displays hourly login counts for the last seven days so you can quickly spot peak activity times.
+
+## User Dashboard Features
+
+Place `[ap_user_dashboard]` on a page to expose the member dashboard. The dashboard displays calendars for **My Favorites** and **My RSVPs** along with a bar chart of monthly engagement stats. Users can quickly access profile tools, download their data and review upcoming events.
+
+![Screenshot: member dashboard](assets/docs/images/member_dashboard.png)
+
 
 ## Submission Meta Fields
 
