@@ -493,7 +493,23 @@ class OrganizationDashboardShortcode {
             wp_set_post_terms($event_id, [$event_type], 'artpulse_event_type');
         }
 
-        wp_send_json_success(['message' => 'Updated']);
+        // Reload the event list for this organization
+        $org_id = intval(get_post_meta($event_id, '_ap_event_organization', true));
+        ob_start();
+        $events = get_posts([
+            'post_type'   => 'artpulse_event',
+            'post_status' => ['publish','pending','draft'],
+            'meta_key'    => '_ap_event_organization',
+            'meta_value'  => $org_id,
+        ]);
+        foreach ($events as $event) {
+            echo '<li>' . esc_html($event->post_title)
+                 . ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>'
+                 . ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
+        }
+        $html = ob_get_clean();
+
+        wp_send_json_success(['updated_list_html' => $html]);
     }
 
     public static function handle_ajax_delete_event() {
