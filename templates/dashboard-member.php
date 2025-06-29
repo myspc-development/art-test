@@ -33,8 +33,11 @@
     <?php endif; ?>
     <h2 id="local-events"><?php _e('Events Near You','artpulse'); ?></h2>
     <div id="ap-local-events"></div>
-    <h2 id="favorites"><?php _e('Your Favorited Events','artpulse'); ?></h2>
+    <h2 id="favorites"><?php _e('My Favorites','artpulse'); ?></h2>
     <div id="ap-favorite-events"></div>
+    <h2 id="rsvps"><?php _e('My RSVPs','artpulse'); ?></h2>
+    <div id="ap-rsvp-events"></div>
+    <canvas id="ap-trends-chart" height="150"></canvas>
     <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
     <div id="ap-events-feed"></div>
     <?php if ($show_support_history) : ?>

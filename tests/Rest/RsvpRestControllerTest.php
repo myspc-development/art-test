@@ -66,6 +66,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $this->assertSame(200, $res->get_status());
         $this->assertSame([$this->user1], get_post_meta($this->event_id, 'event_rsvp_list', true));
         $this->assertEmpty(get_post_meta($this->event_id, 'event_waitlist', true));
+        $this->assertSame([$this->event_id], get_user_meta($this->user1, 'ap_rsvp_events', true));
     }
 
     public function test_join_when_full_adds_to_waitlist(): void
@@ -91,6 +92,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $this->assertSame(200, $res->get_status());
         $this->assertSame([$this->user2], get_post_meta($this->event_id, 'event_rsvp_list', true));
         $this->assertEmpty(get_post_meta($this->event_id, 'event_waitlist', true));
+        $this->assertEmpty(get_user_meta($this->user1, 'ap_rsvp_events', true));
     }
 
     public function test_remove_from_waitlist(): void

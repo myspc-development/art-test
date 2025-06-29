@@ -1,4 +1,5 @@
 let favoriteEvents = [];
+let rsvpEvents = [];
 document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-dashboard');
   if (!dash) return;
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   .then(res => res.json())
   .then(data => {
     favoriteEvents = data.favorite_events || [];
+    rsvpEvents = data.rsvp_events || [];
     const supportHistory = data.support_history || [];
     // Membership
     const info = document.getElementById('ap-membership-info');
@@ -156,9 +158,16 @@ document.addEventListener('DOMContentLoaded', () => {
       renderEventsFeed([]);
     }
 
+
     if (favoriteEvents.length) {
       renderCalendar(favoriteEvents, 'ap-favorite-events', true);
     }
+
+    if (rsvpEvents.length) {
+      renderCalendar(rsvpEvents, 'ap-rsvp-events');
+    }
+
+    renderTrendsChart();
 
     renderSupportHistory(supportHistory);
 
@@ -467,4 +476,32 @@ function deleteUserData() {
         if (spinner) spinner.remove();
       }
     });
+}
+
+function renderTrendsChart() {
+  const canvas = document.getElementById('ap-trends-chart');
+  if (!canvas || typeof Chart === 'undefined' || !window.APUserTrends) return;
+
+  new Chart(canvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: APUserTrends.months,
+      datasets: [
+        {
+          label: 'RSVPs',
+          data: APUserTrends.rsvpCounts,
+          backgroundColor: 'rgba(0,115,170,0.5)'
+        },
+        {
+          label: 'Favorites',
+          data: APUserTrends.favoriteCounts,
+          backgroundColor: 'rgba(245,171,53,0.5)'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
 }
