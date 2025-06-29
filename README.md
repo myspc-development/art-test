@@ -208,6 +208,16 @@ These indexes improve lookups for membership-related keys like `ap_organization_
 
 Under **Settings → Shortcode Pages** you can automatically generate WordPress pages containing any of the plugin's shortcodes. Choose the shortcodes you want and the plugin creates and manages the corresponding pages for you.
 
+## Settings Registry
+
+The settings screen uses horizontal tabs such as **General**, **Location APIs**,
+**Import/Export** and **Shortcode Pages**. Tabs and their fields are gathered via
+`SettingsRegistry` before rendering. A manager registers a tab using
+`SettingsRegistry::register_tab( $slug, $label )` and then calls
+`SettingsRegistry::register_field( $tab, $key, $config )` for each option. The
+final arrays can be filtered with `artpulse_settings_tabs` and
+`artpulse_settings_fields_{slug}` if you need to add or modify options.
+
 ## Additional Settings
 
 Recent updates introduce new fields for location lookups and performance tweaks:

@@ -78,6 +78,14 @@ from any directory, calendar popover or dashboard list.
 - `[ap_org_directory]` — Show organizations directory
 See the [README](../README.md) for more shortcode examples.
 
+## Settings Tab Layout
+
+Administrators manage plugin options on a dedicated **ArtPulse → Settings**
+screen. Settings are organized into horizontal tabs such as **General**,
+**Location APIs** and **Import/Export**. Use the links at the top of the page to
+switch between tabs. The URL hash changes (for example `#general`) so you can
+bookmark or share a direct link to any section.
+
 ## Accessibility & Mobile
 
 - All features and filters work on mobile, tablet, and desktop.
