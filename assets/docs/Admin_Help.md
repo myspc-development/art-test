@@ -103,6 +103,7 @@ The plugin registers the following shortcodes:
 | `[ap_org_directory]` | Directory listing organizations. |
 | `[ap_edit_event id="123"]` | Form to edit an event. |
 | `[ap_events]` | List events. |
+| `[ap_event_listing]` | List events with filter options. |
 | `[ap_filtered_list]` | Display posts filtered by taxonomy. |
 | `[ap_login]` | Front-end login and registration form. |
 | `[ap_register]` | Standalone user registration form granting the Free membership level. |

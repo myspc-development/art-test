@@ -86,6 +86,7 @@ Members approaching upload limits will see an upgrade callout on their dashboard
 ## Using the Directory
 - Browse or search for artists, events and organizations using the directory filters.
 - Filters help you narrow results by category, location or keyword.
+- The `[ap_event_listing]` shortcode also includes a form to filter events by venue, date range and category.
 
 ## FAQs and Troubleshooting
 - **Why can’t I see “for sale” options?** This feature may be disabled by the site admin. Ask your administrator if you need it enabled.
