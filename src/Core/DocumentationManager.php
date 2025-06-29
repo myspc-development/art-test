@@ -16,7 +16,7 @@ class DocumentationManager
             return;
         }
         $screen = get_current_screen();
-        $docsPath = plugin_dir_path(__DIR__ . '/../../') . 'assets/docs/';
+        $docsPath = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/docs/';
         $parsedown = new Parsedown();
         $parsedown->setSafeMode(true);
 
