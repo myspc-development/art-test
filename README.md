@@ -82,7 +82,8 @@ For UI customization, white‑labeling and onboarding guidelines see the
 
 ### Shortcodes & Widgets List
 - `[ap_event_directory]` — Show event directory with filters
-- `[ap_event_calendar]` — Show event calendar
+ - `[ap_event_calendar]` — Show event calendar
+ - `[ap_event_map]` — Map view of events
 - `[ap_artist_directory]` — Show artist directory
 - `[ap_artwork_directory]` — Show artworks directory
 - `[ap_org_directory]` — Show organizations directory
