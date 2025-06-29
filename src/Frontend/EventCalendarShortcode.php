@@ -35,7 +35,8 @@ class EventCalendarShortcode
         );
 
         wp_localize_script('ap-event-calendar', 'APCalendar', [
-            'events' => ap_get_events_for_calendar(),
+            'events'    => ap_get_events_for_calendar(),
+            'rest_root' => esc_url_raw(rest_url()),
         ]);
     }
 
