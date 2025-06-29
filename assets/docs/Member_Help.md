@@ -83,6 +83,9 @@ To update an existing event from the frontend, place the `[ap_edit_event id="123
 
 ### Upgrade Callout and Email Notifications
 Members approaching upload limits will see an upgrade callout on their dashboard. Important account updates and submission status are also sent via email so be sure your address is current.
+
+## RSVPs and Favorites
+Click **RSVP** on an event page to reserve your spot. Your RSVPs and favorites appear in your dashboard calendars. Organizers may contact you, so keep your email address up to date.
 ## Using the Directory
 - Browse or search for artists, events and organizations using the directory filters.
 - Filters help you narrow results by category, location or keyword.

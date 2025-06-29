@@ -78,6 +78,16 @@ class RsvpRestController
                 'event_id' => [ 'validate_callback' => 'is_numeric' ],
             ],
         ]);
+
+        register_rest_route('artpulse/v1', '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/message', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'email_attendee'],
+            'permission_callback' => [self::class, 'check_permissions'],
+            'args'                => [
+                'event_id' => [ 'validate_callback' => 'is_numeric' ],
+                'user_id'  => [ 'validate_callback' => 'is_numeric' ],
+            ],
+        ]);
     }
 
     protected static function get_lists(int $event_id): array
@@ -408,5 +418,32 @@ class RsvpRestController
         }
 
         return rest_ensure_response(['sent' => $sent]);
+    }
+
+    public static function email_attendee(WP_REST_Request $request): WP_REST_Response|WP_Error
+    {
+        $event_id = absint($request->get_param('event_id'));
+        $user_id  = absint($request->get_param('user_id'));
+        if (!self::validate_event($event_id) || !$user_id) {
+            return new WP_Error('invalid_params', 'Invalid parameters.', ['status' => 400]);
+        }
+
+        $subject = sanitize_text_field($request->get_param('subject'));
+        if (!$subject) {
+            $subject = sprintf(__('Message regarding "%s"', 'artpulse'), get_the_title($event_id));
+        }
+        $message = sanitize_textarea_field($request->get_param('message'));
+        if (!$message) {
+            $message = __('Hello from your event organizer.', 'artpulse');
+        }
+
+        $user = get_userdata($user_id);
+        if (!$user || !is_email($user->user_email)) {
+            return new WP_Error('invalid_user', 'Invalid user.', ['status' => 404]);
+        }
+
+        wp_mail($user->user_email, $subject, $message);
+
+        return rest_ensure_response(['sent' => [$user->user_email]]);
     }
 }

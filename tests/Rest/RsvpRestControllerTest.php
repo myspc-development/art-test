@@ -190,6 +190,19 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $this->assertCount(2, $this->emails);
     }
 
+    public function test_email_single_attendee(): void
+    {
+        update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
+        wp_set_current_user($this->user1);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/attendees/' . $this->user1 . '/message');
+        $req->set_param('event_id', $this->event_id);
+        $req->set_param('user_id', $this->user1);
+        $req->set_param('subject', 'Hi');
+        $req->set_param('message', 'Hello');
+        rest_get_server()->dispatch($req);
+        $this->assertCount(1, $this->emails);
+    }
+
     public function test_join_fails_when_rsvp_disabled(): void
     {
         update_post_meta($this->event_id, 'event_rsvp_enabled', '0');

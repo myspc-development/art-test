@@ -136,6 +136,9 @@ When an organization submission is approved in the admin area, the organization
 post is linked to the submitting user's account. This lets the user manage the
 organization from the front‑end dashboard.
 
+## Event RSVP Tools
+Open an event's **Attendees** list to see everyone who RSVPed. Here you can mark attendance, remove users or export the list to CSV. Use the **Message All** button to email every RSVP, or click **Message** next to an attendee to send an individual note.
+
 ## Custom Admin Columns & Sorting
 Post lists display extra columns like dates and membership level. Columns can be sorted or hidden using **Screen Options**.
 

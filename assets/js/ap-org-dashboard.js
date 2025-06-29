@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const attendeeContent = document.getElementById('ap-attendee-content');
   const attendeeClose = document.getElementById('ap-attendee-close');
   const attendeeExport = document.getElementById('ap-attendee-export');
+  const attendeeMessageAll = document.getElementById('ap-attendee-message-all');
+  const messageModal = document.getElementById('ap-message-modal');
+  const messageClose = document.getElementById('ap-message-close');
+  const messageForm = document.getElementById('ap-message-form');
+  const messageSubject = document.getElementById('ap-message-subject');
+  const messageBody = document.getElementById('ap-message-body');
   const kanbanContainer = document.getElementById('kanban-board');
 
   if (kanbanContainer && Array.isArray(APOrgDashboard.projectStages)) {
@@ -108,6 +114,38 @@ document.addEventListener('DOMContentLoaded', () => {
         a.click();
         URL.revokeObjectURL(url);
       });
+  });
+
+  attendeeMessageAll?.addEventListener('click', () => {
+    messageForm.dataset.event = attendeeMessageAll.dataset.event;
+    messageForm.dataset.user = '';
+    messageModal?.classList.add('open');
+  });
+
+  messageClose?.addEventListener('click', () => messageModal?.classList.remove('open'));
+
+  messageForm?.addEventListener('submit', e => {
+    e.preventDefault();
+    const eventId = messageForm.dataset.event;
+    const userId = messageForm.dataset.user;
+    const body = messageBody.value;
+    const subject = messageSubject.value;
+    if (!eventId) return;
+    const url = userId
+      ? `${APOrgDashboard.rest_root}artpulse/v1/event/${eventId}/attendees/${userId}/message`
+      : `${APOrgDashboard.rest_root}artpulse/v1/event/${eventId}/email-rsvps`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-WP-Nonce': APOrgDashboard.rest_nonce
+      },
+      body: new URLSearchParams({ event_id: eventId, user_id: userId, subject, message: body })
+    }).then(() => {
+      messageModal?.classList.remove('open');
+      messageSubject.value = '';
+      messageBody.value = '';
+    });
   });
 
   form?.addEventListener('submit', (e) => {
@@ -227,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const ul = document.createElement('ul');
             list.forEach(a => {
               const li = document.createElement('li');
-              li.innerHTML = `${a.email} - ${a.status} <button class="ap-mark-attended" data-event="${eventId}" data-user="${a.ID}">${a.status === 'Attended' ? 'Unmark' : 'Mark Attended'}</button> <button class="ap-remove-attendee" data-event="${eventId}" data-user="${a.ID}">Remove</button>`;
+              li.innerHTML = `${a.email} - ${a.status} <button class="ap-mark-attended" data-event="${eventId}" data-user="${a.ID}">${a.status === 'Attended' ? 'Unmark' : 'Mark Attended'}</button> <button class="ap-remove-attendee" data-event="${eventId}" data-user="${a.ID}">Remove</button> <button class="ap-message-attendee" data-event="${eventId}" data-user="${a.ID}">Message</button>`;
               ul.appendChild(li);
             });
             wrap.appendChild(ul);
@@ -268,6 +306,13 @@ document.addEventListener('DOMContentLoaded', () => {
           // reload list
           document.querySelector(`.ap-view-attendees[data-id="${eventId}"]`)?.click();
         });
+    }
+    if (e.target.matches('.ap-message-attendee')) {
+      const user = e.target.dataset.user;
+      const eventId = e.target.dataset.event;
+      messageForm.dataset.event = eventId;
+      messageForm.dataset.user = user;
+      messageModal?.classList.add('open');
     }
   });
 
