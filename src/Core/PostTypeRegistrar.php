@@ -39,6 +39,22 @@ class PostTypeRegistrar
                 'show_in_rest'=> true,
                 'supports'   => ['title'],
             ],
+            'ap_profile_link_request' => [
+                'label'       => __('Profile Link Requests', 'artpulse'),
+                'public'      => false,
+                'show_ui'     => true,
+                'show_in_menu'=> false,
+                'show_in_rest'=> true,
+                'supports'    => ['title'],
+            ],
+            'ap_profile_link' => [
+                'label'       => __('Profile Links', 'artpulse'),
+                'public'      => false,
+                'show_ui'     => true,
+                'show_in_menu'=> false,
+                'show_in_rest'=> true,
+                'supports'    => ['title'],
+            ],
             'artpulse_artwork' => [
                 'label'      => __('Artworks', 'artpulse'),
                 'rewrite'    => ['slug' => 'artworks'],
