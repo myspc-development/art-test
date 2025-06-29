@@ -7,7 +7,7 @@ the featured image, title, venue, address, and formatted dates. RSVP and
 favorite buttons appear with their current counts so you can interact directly
 from any directory, calendar popover or dashboard list.
 
-## RSVP & Favorites
+## RSVP and Favorite Events
 
 ### How to RSVP for an Event
 
@@ -29,15 +29,19 @@ from any directory, calendar popover or dashboard list.
 - All your favorited events are visible in your dashboard under "My Events."
 - Event cards in "My Events" include badges showing whether you RSVP’d or favorited them.
 
-### "My Events" Dashboard
+## My Events Dashboard
 
-- Go to your dashboard to see:
-  - **All RSVP’d events**
-  - **All favorited events**
-  - Your **next upcoming RSVP** is highlighted
-  - Engagement stats and trends (chart)
+- Open your **My Events** dashboard from the main menu.
+- The list shows every event you have RSVPd to or favorited.
+- Your next upcoming RSVP is highlighted at the top.
 
-## AJAX-Powered Search & Filtering
+## Analytics in Your Dashboard
+
+- Charts visualize your total RSVPs and favorites over time.
+- See which events generated the most engagement at a glance.
+
+
+## Searching and Filtering Events
 
 - Use the search and filter form above the event/artwork/artist directories to narrow results instantly.
 - Filters include: **venue, date, category, and keyword.**
@@ -46,7 +50,7 @@ from any directory, calendar popover or dashboard list.
 
 **Tip:** All filters are available on mobile and desktop.
 
-## Event Calendar
+## Using the Event Calendar
 
 ### Viewing Events on the Calendar
 
@@ -69,6 +73,7 @@ from any directory, calendar popover or dashboard list.
 - `[ap_artist_directory]` — Show artist directory
 - `[ap_artwork_directory]` — Show artworks directory
 - `[ap_org_directory]` — Show organizations directory
+See the [README](../README.md) for more shortcode examples.
 
 ## Accessibility & Mobile
 
