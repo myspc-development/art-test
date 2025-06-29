@@ -15,8 +15,7 @@ function ap_render_rsvp_button(int $event_id): string
     $label = $joined ? __('Cancel RSVP', 'artpulse') : __('RSVP', 'artpulse');
     ob_start();
     ?>
-    <button class="ap-rsvp-btn<?php echo $joined ? ' ap-rsvped' : ''; ?> ap-form-button" data-event="<?php echo esc_attr($event_id); ?>"><?php echo esc_html($label); ?></button>
-    <span class="ap-rsvp-count"><?php echo esc_html($rsvp_count); ?></span>
+    <button class="ap-rsvp-btn<?php echo $joined ? ' ap-rsvped' : ''; ?> ap-form-button" data-event="<?php echo esc_attr($event_id); ?>" aria-label="<?php echo esc_attr($label); ?>"><?php echo esc_html($label); ?></button>
     <?php
     return trim(ob_get_clean());
 }
@@ -27,10 +26,10 @@ function ap_render_favorite_button(int $event_id): string
     $user_id = get_current_user_id();
     $favorited = $user_id && function_exists('ap_user_has_favorited') ? ap_user_has_favorited($user_id, $event_id) : false;
     $star = $favorited ? '★' : '☆';
+    $label = $favorited ? __('Remove favorite', 'artpulse') : __('Add to favorites', 'artpulse');
     ob_start();
     ?>
-    <button class="ap-fav-btn<?php echo $favorited ? ' ap-favorited' : ''; ?>" data-post="<?php echo esc_attr($event_id); ?>"><?php echo $star; ?></button>
-    <span class="ap-fav-count"><?php echo esc_html($fav_count); ?></span>
+    <button class="ap-fav-btn<?php echo $favorited ? ' ap-favorited' : ''; ?>" data-post="<?php echo esc_attr($event_id); ?>" aria-label="<?php echo esc_attr($label); ?>"><?php echo $star; ?></button>
     <?php
     return trim(ob_get_clean());
 }

@@ -1130,3 +1130,18 @@ select.ap-input {
 .ap-event-popover {position:absolute;z-index:1000;max-width:300px;background:#fff;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.2);display:none;padding:1rem;}
 .ap-event-popover.open{display:block;}
 .ap-event-popover-close{float:right;margin-left:0.5rem;}
+
+/* Event card layout */
+.ap-event-card{background:var(--ap-bg-color);border:1px solid var(--ap-border-color);border-radius:var(--ap-border-radius);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.05);}
+.ap-event-thumb img{width:100%;height:auto;display:block;}
+.ap-event-card-content{padding:var(--ap-space-medium);display:flex;flex-direction:column;flex:1;}
+.ap-event-meta{margin-bottom:0.5rem;font-size:0.9em;color:var(--ap-muted-text-color);}
+.ap-event-meta p{margin:0.25rem 0;}
+.ap-event-actions{display:flex;gap:0.5rem;align-items:center;margin-top:auto;}
+.ap-event-stats{display:flex;gap:0.5rem;font-size:0.8em;color:var(--ap-muted-text-color);margin-top:0.25rem;}
+.ap-directory-results .ap-event-card,.ap-events-slider .ap-event-card{height:100%;}
+@media (min-width:600px){
+  .ap-dashboard .ap-event-card{flex-direction:row;}
+  .ap-dashboard .ap-event-thumb{width:200px;flex-shrink:0;}
+  .ap-dashboard .ap-event-card-content{padding:var(--ap-space-medium);}
+}

@@ -54,14 +54,20 @@ $favorited  = $user_id && function_exists('ap_user_has_favorited') ? ap_user_has
     <?php endif; ?>
     <div class="ap-event-card-content">
         <h3 class="ap-event-title"><a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $title ); ?></a></h3>
-        <?php if ( $venue ) : ?><p class="ap-event-venue"><?php echo esc_html( $venue ); ?></p><?php endif; ?>
-        <?php if ( $address ) : ?><p class="ap-event-address"><?php echo nl2br( esc_html( $address ) ); ?></p><?php endif; ?>
-        <?php if ( $start ) : ?><p class="ap-event-start"><?php echo esc_html( $start ); ?></p><?php endif; ?>
-        <?php if ( $end ) : ?><p class="ap-event-end"><?php echo esc_html( $end ); ?></p><?php endif; ?>
+        <div class="ap-event-meta">
+            <?php if ( $venue ) : ?><p class="ap-event-venue"><?php echo esc_html( $venue ); ?></p><?php endif; ?>
+            <?php if ( $address ) : ?><p class="ap-event-address"><?php echo nl2br( esc_html( $address ) ); ?></p><?php endif; ?>
+            <?php if ( $start ) : ?><p class="ap-event-start"><?php echo esc_html( $start ); ?></p><?php endif; ?>
+            <?php if ( $end ) : ?><p class="ap-event-end"><?php echo esc_html( $end ); ?></p><?php endif; ?>
+        </div>
         <?php if ( $excerpt ) : ?><div class="ap-event-excerpt"><?php echo wp_kses_post( wpautop( $excerpt ) ); ?></div><?php endif; ?>
         <div class="ap-event-actions">
             <?php echo \ArtPulse\Frontend\ap_render_rsvp_button( $event_id ); ?>
             <?php echo \ArtPulse\Frontend\ap_render_favorite_button( $event_id ); ?>
+        </div>
+        <div class="ap-event-stats">
+            <span class="ap-rsvp-count"><?php echo esc_html( $rsvp_count ); ?></span>
+            <span class="ap-fav-count"><?php echo esc_html( $fav_count ); ?></span>
         </div>
     </div>
 </article>
