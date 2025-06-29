@@ -219,6 +219,11 @@ class Plugin
         \ArtPulse\Core\MembershipNotifier::register();
         \ArtPulse\Core\MembershipCron::register();
         \ArtPulse\Engagement\DigestMailer::register();
+        \ArtPulse\Admin\ReportingManager::register();
+        \ArtPulse\Admin\CustomFieldsManager::register();
+        \ArtPulse\Admin\SurveyManager::register();
+        \ArtPulse\Admin\SegmentationManager::register();
+        \ArtPulse\Admin\ReminderManager::register();
         class_exists(\ArtPulse\Search\MetaFullTextSearch::class);
         \ArtPulse\Search\ExternalSearch::register();
         \ArtPulse\Personalization\RecommendationRestController::register();

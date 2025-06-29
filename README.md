@@ -2,6 +2,8 @@
 
 For end‑user instructions see the [User Guide](docs/user-guide.md). Site
 administrators should consult the [Admin Guide](docs/admin-guide.md).
+Developers extending reporting or reminder features can reference the
+[Admin & Analytics Codex](docs/admin-analytics-codex.md).
 
 ## Overview & Quick Reference
 
