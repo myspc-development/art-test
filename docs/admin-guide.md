@@ -1,49 +1,29 @@
 # ArtPulse Admin Guide
 
-## Managing RSVPs & Attendees
+See the [User Guide](user-guide.md) for instructions that attendees follow when interacting with events and the calendar.
 
-### Viewing and Exporting RSVPs
+## RSVP Management
 
-- In your dashboard, go to the event you are managing.
-- Click "View RSVPs" to see all attendee details (name, email, RSVP date, attendance status).
-- Click "Export RSVPs to CSV" to download a spreadsheet of attendees.
+- Open the event in your dashboard and click **View RSVPs**.
+- Mark each attendee as **Attended** or leave unchecked.
+- Use **Export RSVPs to CSV** to download a spreadsheet of all responses.
 
-### Marking Attendance
+## Attendee Messaging
 
-- Check/uncheck the "Attended" box next to each attendee.
-- Attendance stats update in real time and appear in event analytics.
+- Click **Message All** to email every RSVP'd user.
+- Use the message icon next to any attendee to send a single message.
+- Emails use your configured notification settings.
 
-### Messaging Attendees
+## Event Analytics
 
-- Use the "Message All" button to email all RSVP’d users at once.
-- Use the mail/message icon next to any attendee to send a message to a single user.
-- Messages use your default notification settings.
+- Dashboards visualize total RSVPs, favorites and attendance.
+- Charts show trends over time and top events at a glance.
+- Data can be exported as CSV for further analysis.
 
-### Waitlist (If Enabled)
+## Embedding the Event Calendar
 
-- If an event is full, new RSVPs are added to a waitlist.
-- When a slot opens, waitlisted users are notified automatically.
-
-## Engagement Analytics
-
-- Analytics dashboards appear for both users and organizers.
-- Widgets show:
-  - **Total RSVPs** (overall and per event)
-  - **Favorites** (total and per event)
-  - **Attendance** (marked "attended" for each event)
-  - **Current waitlist count**
-  - **Trends over time** (line/bar charts powered by Chart.js)
-
-### How to Read Analytics
-
-- Hover over any point on a chart to see exact counts.
-- View "top events" by RSVP/favorite count in the analytics list.
-- Export data as CSV for your own reporting.
-
-## Event Calendar Embeds
-
-Use the shortcode `ap_event_calendar` to add a calendar anywhere on the site. Calendar options can be customized via shortcode attributes to control filters and display.
+Use the `[ap_event_calendar]` shortcode to place the calendar anywhere on the site. Shortcode attributes let you filter by venue, category, and date or change display options.
 
 ## Accessibility & Mobile Notes
 
-All admin tools are built with responsive layouts. Forms, buttons and lists can be managed via keyboard navigation and screen readers.
+All admin tools are responsive and keyboard accessible so you can manage events from any device.
