@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     if (favoriteEvents.length) {
-      renderCalendar(favoriteEvents, 'ap-favorite-events', true);
+      renderCalendar(favoriteEvents, 'ap-favorite-events');
     }
 
     if (rsvpEvents.length) {
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-function renderCalendar(events, containerId = 'ap-favorite-events', allowRemove = false) {
+function renderCalendar(events, containerId = 'ap-favorite-events') {
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -226,22 +226,29 @@ function renderCalendar(events, containerId = 'ap-favorite-events', allowRemove 
           const dayEvents = events.filter(e => e.date === dateStr);
           cell.classList.toggle('has-events', dayEvents.length > 0);
           if (dayEvents.length) {
-            const ul = document.createElement('ul');
-            dayEvents.forEach(ev => {
-              const li = document.createElement('li');
-              const a = document.createElement('a');
-              a.href = ev.link;
-              a.textContent = ev.title;
-              li.appendChild(a);
-              if (allowRemove && ev.id) {
-                const btn = document.createElement('button');
-                btn.textContent = 'Remove';
-                btn.onclick = () => unfavoriteEvent(ev.id);
-                li.append(' ', btn);
-              }
-              ul.appendChild(li);
-            });
-            cell.appendChild(ul);
+            if (containerId === 'ap-favorite-events' || containerId === 'ap-rsvp-events') {
+              dayEvents.forEach(ev => {
+                const wrap = document.createElement('div');
+                fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${ev.id}`)
+                  .then(r => r.text())
+                  .then(html => {
+                    wrap.innerHTML = html;
+                    initCardInteractions(wrap);
+                  });
+                cell.appendChild(wrap);
+              });
+            } else {
+              const ul = document.createElement('ul');
+              dayEvents.forEach(ev => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = ev.link;
+                a.textContent = ev.title;
+                li.appendChild(a);
+                ul.appendChild(li);
+              });
+              cell.appendChild(ul);
+            }
           }
           date++;
         }
@@ -267,18 +274,16 @@ function renderEventsFeed(events) {
     feed.textContent = 'No upcoming events.';
     return;
   }
-  const ul = document.createElement('ul');
   events.forEach(ev => {
-    const li = document.createElement('li');
-    const date = ev.date ? new Date(ev.date).toLocaleDateString() : '';
-    const a = document.createElement('a');
-    a.href = ev.link;
-    a.textContent = ev.title;
-    li.appendChild(a);
-    if (date) li.append(' ', date);
-    ul.appendChild(li);
+    const wrap = document.createElement('div');
+    fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${ev.id}`)
+      .then(r => r.text())
+      .then(html => {
+        wrap.innerHTML = html;
+        initCardInteractions(wrap);
+      });
+    feed.appendChild(wrap);
   });
-  feed.appendChild(ul);
 }
 
 function renderSupportHistory(list) {
@@ -369,6 +374,63 @@ function markAllNotificationsRead() {
   });
 }
 
+function refreshDashboardEvents() {
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/user/dashboard`, {
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+  })
+    .then(r => r.json())
+    .then(data => {
+      favoriteEvents = data.favorite_events || [];
+      rsvpEvents = data.rsvp_events || [];
+      document.getElementById('ap-favorite-events').innerHTML = '';
+      document.getElementById('ap-rsvp-events').innerHTML = '';
+      if (favoriteEvents.length) {
+        renderCalendar(favoriteEvents, 'ap-favorite-events');
+      }
+      if (rsvpEvents.length) {
+        renderCalendar(rsvpEvents, 'ap-rsvp-events');
+      }
+    });
+}
+
+function initCardInteractions(el) {
+  el.querySelectorAll('.ap-fav-btn').forEach(btn => {
+    btn.addEventListener('click', ev => {
+      ev.preventDefault();
+      const id = btn.dataset.post;
+      const action = btn.classList.contains('ap-favorited') ? 'remove' : 'add';
+      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/favorite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': ArtPulseDashboardApi.nonce
+        },
+        body: JSON.stringify({ object_id: id, object_type: 'artpulse_event', action })
+      })
+        .then(r => r.json())
+        .then(res => { if (res.success) refreshDashboardEvents(); });
+    });
+  });
+  el.querySelectorAll('.ap-rsvp-btn').forEach(btn => {
+    btn.addEventListener('click', ev => {
+      ev.preventDefault();
+      const id = btn.dataset.event;
+      const joining = !btn.classList.contains('ap-rsvped');
+      const endpoint = joining ? 'rsvp' : 'rsvp/cancel';
+      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': ArtPulseDashboardApi.nonce
+        },
+        body: JSON.stringify({ event_id: id })
+      })
+        .then(r => r.json())
+        .then(res => { if (!res.code) refreshDashboardEvents(); });
+    });
+  });
+}
+
 function toggleMembership(action, btn) {
   fetch(`${ArtPulseDashboardApi.root}artpulse/v1/membership/${action}`, {
     method: 'POST',
@@ -389,24 +451,6 @@ function toggleMembership(action, btn) {
     });
 }
 
-function unfavoriteEvent(id) {
-  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/favorites`, {
-    method: 'DELETE',
-    headers: {
-      'X-WP-Nonce': ArtPulseDashboardApi.nonce,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ object_id: id, object_type: 'artpulse_event' })
-  })
-    .then(res => res.json())
-    .then(() => {
-      favoriteEvents = favoriteEvents.filter(ev => ev.id !== id);
-      renderCalendar(favoriteEvents, 'ap-favorite-events', true);
-    })
-    .catch(() => {
-      alert('Failed to remove favorite');
-    });
-}
 
 // Uses endpoints registered in UserAccountRestController::register_routes().
 function exportUserData(format) {
