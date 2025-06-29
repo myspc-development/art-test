@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     closeBtn = document.createElement('button');
     closeBtn.type = 'button';
     closeBtn.className = 'ap-event-popover-close ap-form-button';
-    closeBtn.textContent = 'Close';
+    closeBtn.textContent = (window.APCalendar && window.APCalendar.close_text) || 'Close';
     closeBtn.addEventListener('click', hidePopover);
     popContent = document.createElement('div');
     popover.appendChild(closeBtn);
