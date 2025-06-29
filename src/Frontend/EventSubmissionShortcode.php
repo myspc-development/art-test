@@ -78,6 +78,12 @@ class EventSubmissionShortcode {
             'numberposts' => -1,
         ]);
 
+        $artists = get_posts([
+            'post_type'   => 'artpulse_artist',
+            'post_status' => 'publish',
+            'numberposts' => -1,
+        ]);
+
         ob_start();
         ?>
         <div class="ap-form-messages" role="status" aria-live="polite">
@@ -109,6 +115,11 @@ class EventSubmissionShortcode {
             <p>
                 <label class="ap-form-label" for="ap_event_end_date">End Date</label>
                 <input class="ap-input" id="ap_event_end_date" type="date" name="event_end_date" />
+            </p>
+
+            <p>
+                <label class="ap-form-label" for="ap_event_recurrence">Recurrence Rule (iCal)</label>
+                <input class="ap-input" id="ap_event_recurrence" type="text" name="event_recurrence_rule" />
             </p>
 
             <p>
@@ -181,6 +192,15 @@ class EventSubmissionShortcode {
             </p>
 
             <p>
+                <label class="ap-form-label" for="ap_event_artists">Co-Host Artists</label>
+                <select class="ap-input" id="ap_event_artists" name="event_artists[]" multiple>
+                    <?php foreach ($artists as $artist): ?>
+                        <option value="<?= esc_attr($artist->ID) ?>"><?= esc_html($artist->post_title) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </p>
+
+            <p>
                 <label class="ap-form-label" for="ap_event_banner">Event Banner</label>
                 <input class="ap-input" id="ap_event_banner" type="file" name="event_banner" />
             </p>
@@ -224,6 +244,7 @@ class EventSubmissionShortcode {
         $event_date = sanitize_text_field($_POST['event_date']);
         $start_date = sanitize_text_field($_POST['event_start_date'] ?? '');
         $end_date   = sanitize_text_field($_POST['event_end_date'] ?? '');
+        $recurrence  = sanitize_text_field($_POST['event_recurrence_rule'] ?? '');
         $event_location = sanitize_text_field($_POST['event_location']);
         $venue_name = sanitize_text_field($_POST['venue_name'] ?? '');
         $street = sanitize_text_field($_POST['event_street_address'] ?? '');
@@ -235,6 +256,7 @@ class EventSubmissionShortcode {
         $organizer_name = sanitize_text_field($_POST['event_organizer_name'] ?? '');
         $organizer_email = sanitize_email($_POST['event_organizer_email'] ?? '');
         $event_org = intval($_POST['event_org']);
+        $event_artists = isset($_POST['event_artists']) ? array_map('intval', (array) $_POST['event_artists']) : [];
         $event_type = intval($_POST['event_type'] ?? 0);
         $featured = isset($_POST['event_featured']) ? '1' : '0';
 
@@ -310,6 +332,7 @@ class EventSubmissionShortcode {
         update_post_meta($post_id, '_ap_event_date', $event_date);
         update_post_meta($post_id, 'event_start_date', $start_date);
         update_post_meta($post_id, 'event_end_date', $end_date);
+        update_post_meta($post_id, 'event_recurrence_rule', $recurrence);
         update_post_meta($post_id, '_ap_event_location', $event_location);
         update_post_meta($post_id, 'venue_name', $venue_name);
         update_post_meta($post_id, 'event_street_address', $street);
@@ -321,6 +344,7 @@ class EventSubmissionShortcode {
         update_post_meta($post_id, 'event_organizer_name', $organizer_name);
         update_post_meta($post_id, 'event_organizer_email', $organizer_email);
         update_post_meta($post_id, '_ap_event_organization', $event_org);
+        update_post_meta($post_id, '_ap_event_artists', $event_artists);
         update_post_meta($post_id, 'event_featured', $featured);
 
         if ($event_type) {

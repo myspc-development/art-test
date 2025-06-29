@@ -116,12 +116,14 @@ class RestRoutes
             'waitlist_enabled'   => 'event_waitlist_enabled',
             'event_start_date'   => 'event_start_date',
             'event_end_date'     => 'event_end_date',
+            'event_recurrence_rule' => 'event_recurrence_rule',
             'venue_name'         => 'venue_name',
             'event_street_address' => 'event_street_address',
             'event_city'         => 'event_city',
             'event_state'        => 'event_state',
             'event_postcode'     => 'event_postcode',
             'event_country'      => 'event_country',
+            'event_artists'      => '_ap_event_artists',
         ], $args);
 
         foreach ($events as &$event) {

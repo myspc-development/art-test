@@ -165,6 +165,12 @@ class PostTypeRegistrar
             'type'         => 'string',
         ]);
 
+        register_post_meta('artpulse_event', 'event_recurrence_rule', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
         register_post_meta('artpulse_event', 'venue_name', [
             'show_in_rest' => true,
             'single'       => true,
@@ -217,6 +223,17 @@ class PostTypeRegistrar
             'show_in_rest' => true,
             'single'       => true,
             'type'         => 'integer',
+        ]);
+
+        register_post_meta('artpulse_event', '_ap_event_artists', [
+            'show_in_rest' => [
+                'schema' => [
+                    'type'  => 'array',
+                    'items' => ['type' => 'integer'],
+                ],
+            ],
+            'single'       => true,
+            'type'         => 'array',
         ]);
 
         register_post_meta('artpulse_event', 'event_banner_id', [

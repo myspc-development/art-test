@@ -12,6 +12,7 @@ class RestRelationships
             '_ap_artist_artworks'     => 'artpulse_artist',
             '_ap_event_artworks'      => 'artpulse_event',
             '_ap_event_organizations' => 'artpulse_event',
+            '_ap_event_artists'       => 'artpulse_event',
             '_ap_artwork_artist'      => 'artpulse_artwork',
             '_ap_org_artists'         => 'artpulse_org',
         ];

@@ -38,6 +38,11 @@ Use the new directory shortcodes to display listings without specifying a type a
 
 The older `[ap_directory]` shortcode is still supported for backward compatibility.
 
+## Event Enhancements
+
+Events can now include multiple co-host artists via a "Co-Host Artists" selector.
+A new "Recurrence Rule" field accepts iCal strings for repeating events.
+
 ## Login Shortcode
 
 Use `[ap_login]` to display the front-end login form. When the free
