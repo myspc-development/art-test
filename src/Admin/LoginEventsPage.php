@@ -92,6 +92,19 @@ class LoginEventsPage
         dbDelta($sql);
     }
 
+    /**
+     * Ensure the login events table exists.
+     */
+    public static function maybe_install_table(): void
+    {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_login_events';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_login_events_table();
+        }
+    }
+
     public static function add_event($user_id, $ip)
     {
         global $wpdb;

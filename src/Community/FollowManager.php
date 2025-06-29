@@ -124,4 +124,17 @@ class FollowManager {
         }
         return '';
     }
+
+    /**
+     * Ensure the follows table exists.
+     */
+    public static function maybe_install_table(): void
+    {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_follows';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_follows_table();
+        }
+    }
 }

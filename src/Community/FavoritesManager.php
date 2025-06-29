@@ -115,4 +115,17 @@ class FavoritesManager {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
     }
+
+    /**
+     * Ensure the favorites table exists.
+     */
+    public static function maybe_install_table(): void
+    {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_favorites';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_favorites_table();
+        }
+    }
 }

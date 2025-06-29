@@ -21,6 +21,19 @@ class ArtworkEventLinkManager
         dbDelta($sql);
     }
 
+    /**
+     * Ensure the artwork event link table exists.
+     */
+    public static function maybe_install_table(): void
+    {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_artwork_event_links';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_table();
+        }
+    }
+
     public static function link(int $artwork_id, int $event_id, ?string $exhibited_at = null): void
     {
         global $wpdb;

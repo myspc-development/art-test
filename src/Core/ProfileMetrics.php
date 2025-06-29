@@ -20,6 +20,19 @@ class ProfileMetrics
         dbDelta($sql);
     }
 
+    /**
+     * Ensure the profile metrics table exists.
+     */
+    public static function maybe_install_table(): void
+    {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_profile_metrics';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_table();
+        }
+    }
+
     public static function register(): void
     {
         add_action('wp', [self::class, 'track_view']);

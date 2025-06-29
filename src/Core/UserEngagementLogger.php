@@ -23,6 +23,19 @@ class UserEngagementLogger
         dbDelta($sql);
     }
 
+    /**
+     * Ensure the engagement log table exists.
+     */
+    public static function maybe_install_table(): void
+    {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_user_engagement_log';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_table();
+        }
+    }
+
     public static function log(int $user_id, string $type, int $event_id): void
     {
         global $wpdb;
