@@ -45,7 +45,7 @@ class UserDashboardDataTest extends \WP_UnitTestCase
         $this->assertSame(1, $data['rsvp_count']);
     }
 
-    public function test_dashboard_data_includes_rsvp_events_and_engagement(): void
+    public function test_dashboard_data_includes_event_lists(): void
     {
         $request = new WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
         $response = rest_get_server()->dispatch($request);
@@ -58,5 +58,13 @@ class UserDashboardDataTest extends \WP_UnitTestCase
         $this->assertSame($this->event_id, $data['favorite_events'][0]['id']);
         $this->assertSame(1, $data['favorite_count']);
         $this->assertSame(1, $data['rsvp_count']);
+
+        $this->assertIsArray($data['my_events']);
+        $this->assertCount(1, $data['my_events']);
+        $this->assertSame($this->event_id, $data['my_events'][0]['id']);
+        $this->assertTrue($data['my_events'][0]['rsvped']);
+        $this->assertTrue($data['my_events'][0]['favorited']);
+        $this->assertIsArray($data['next_event']);
+        $this->assertSame($this->event_id, $data['next_event']['id']);
     }
 }

@@ -82,7 +82,9 @@ button:focus {
 #ap-user-content,
 #ap-local-events,
 #ap-favorite-events,
-#ap-rsvp-events {
+#ap-rsvp-events,
+#ap-my-events,
+#ap-next-event {
   background: var(--ap-bg-color);
   padding: 1rem;
   border-radius: var(--ap-border-radius);

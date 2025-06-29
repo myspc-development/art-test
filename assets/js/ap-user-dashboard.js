@@ -1,5 +1,5 @@
-let favoriteEvents = [];
-let rsvpEvents = [];
+let myEvents = [];
+let nextEvent = null;
 document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-dashboard');
   if (!dash) return;
@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
   })
   .then(res => res.json())
   .then(data => {
-    favoriteEvents = data.favorite_events || [];
-    rsvpEvents = data.rsvp_events || [];
+    myEvents = data.my_events || [];
+    nextEvent = data.next_event || null;
     const supportHistory = data.support_history || [];
     // Membership
     const info = document.getElementById('ap-membership-info');
@@ -144,28 +144,24 @@ document.addEventListener('DOMContentLoaded', () => {
           })
           .catch(() => renderEventsFeed([]));
       }, () => {
-        if (favoriteEvents.length) {
-          renderCalendar(favoriteEvents, 'ap-local-events');
-          renderEventsFeed(favoriteEvents);
+        if (myEvents.length) {
+          renderCalendar(myEvents, 'ap-local-events');
+          renderEventsFeed(myEvents);
         } else {
           renderEventsFeed([]);
         }
       });
-    } else if (favoriteEvents.length) {
-      renderCalendar(favoriteEvents, 'ap-local-events');
-      renderEventsFeed(favoriteEvents);
+    } else if (myEvents.length) {
+      renderCalendar(myEvents, 'ap-local-events');
+      renderEventsFeed(myEvents);
     } else {
       renderEventsFeed([]);
     }
 
-
-    if (favoriteEvents.length) {
-      renderCalendar(favoriteEvents, 'ap-favorite-events');
+    if (myEvents.length) {
+      renderCalendar(myEvents, 'ap-my-events');
     }
-
-    if (rsvpEvents.length) {
-      renderCalendar(rsvpEvents, 'ap-rsvp-events');
-    }
+    highlightNextEvent(nextEvent);
 
     renderTrendsChart();
 
@@ -175,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-function renderCalendar(events, containerId = 'ap-favorite-events') {
+function renderCalendar(events, containerId = 'ap-my-events') {
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -226,7 +222,7 @@ function renderCalendar(events, containerId = 'ap-favorite-events') {
           const dayEvents = events.filter(e => e.date === dateStr);
           cell.classList.toggle('has-events', dayEvents.length > 0);
           if (dayEvents.length) {
-            if (containerId === 'ap-favorite-events' || containerId === 'ap-rsvp-events') {
+            if (containerId === 'ap-my-events') {
               dayEvents.forEach(ev => {
                 const wrap = document.createElement('div');
                 fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${ev.id}`)
@@ -380,16 +376,14 @@ function refreshDashboardEvents() {
   })
     .then(r => r.json())
     .then(data => {
-      favoriteEvents = data.favorite_events || [];
-      rsvpEvents = data.rsvp_events || [];
-      document.getElementById('ap-favorite-events').innerHTML = '';
-      document.getElementById('ap-rsvp-events').innerHTML = '';
-      if (favoriteEvents.length) {
-        renderCalendar(favoriteEvents, 'ap-favorite-events');
+      myEvents = data.my_events || [];
+      nextEvent = data.next_event || null;
+      document.getElementById('ap-my-events').innerHTML = '';
+      document.getElementById('ap-next-event').innerHTML = '';
+      if (myEvents.length) {
+        renderCalendar(myEvents, 'ap-my-events');
       }
-      if (rsvpEvents.length) {
-        renderCalendar(rsvpEvents, 'ap-rsvp-events');
-      }
+      highlightNextEvent(nextEvent);
     });
 }
 
@@ -449,6 +443,21 @@ function toggleMembership(action, btn) {
       alert('Request failed');
       btn.disabled = false;
     });
+}
+
+function highlightNextEvent(ev) {
+  const container = document.getElementById('ap-next-event');
+  if (!container) return;
+  container.innerHTML = '';
+  if (!ev) return;
+  const wrap = document.createElement('div');
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${ev.id}`)
+    .then(r => r.text())
+    .then(html => {
+      wrap.innerHTML = html;
+      initCardInteractions(wrap);
+    });
+  container.appendChild(wrap);
 }
 
 
