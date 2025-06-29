@@ -100,5 +100,6 @@ if ( $user_id ) {
             <span class="ap-rsvp-count"><?php echo esc_html( $rsvp_count ); ?></span>
             <span class="ap-fav-count"><?php echo esc_html( $fav_count ); ?></span>
         </div>
+        <?php echo \ArtPulse\Frontend\ap_event_share_buttons( $event_id ); ?>
     </div>
 </div>
