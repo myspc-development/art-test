@@ -43,6 +43,11 @@ The older `[ap_directory]` shortcode is still supported for backward compatibili
 Events can now include multiple co-host artists via a "Co-Host Artists" selector.
 A new "Recurrence Rule" field accepts iCal strings for repeating events.
 
+All event listings share a unified card layout. Each card shows the featured
+image, title, venue, address and formatted dates, along with RSVP and favorite
+buttons. The same markup powers directories, calendar popovers and dashboard
+lists so the look and functionality remain consistent across the site.
+
 ## Login Shortcode
 
 Use `[ap_login]` to display the front-end login form. When the free

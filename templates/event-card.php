@@ -53,19 +53,27 @@ if ( $user_id ) {
     }
 }
 ?>
-<article class="ap-event-card ap-widget" id="post-<?php echo esc_attr( $event_id ); ?>">
-    <?php if ( $image ) : ?>
-        <a href="<?php echo esc_url( $permalink ); ?>" class="ap-event-thumb">
+<div class="ap-event-card nectar-box ap-widget" id="post-<?php echo esc_attr( $event_id ); ?>">
+    <a href="<?php echo esc_url( $permalink ); ?>" class="ap-event-thumb">
+        <?php if ( $image ) : ?>
             <?php echo $image; ?>
-        </a>
-    <?php endif; ?>
+        <?php endif; ?>
+        <h3 class="ap-event-title"><?php echo esc_html( $title ); ?></h3>
+    </a>
     <div class="ap-event-card-content">
-        <h3 class="ap-event-title"><a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $title ); ?></a></h3>
         <div class="ap-event-meta">
-            <?php if ( $venue ) : ?><p class="ap-event-venue"><?php echo esc_html( $venue ); ?></p><?php endif; ?>
-            <?php if ( $address ) : ?><p class="ap-event-address"><?php echo nl2br( esc_html( $address ) ); ?></p><?php endif; ?>
-            <?php if ( $start ) : ?><p class="ap-event-start"><?php echo esc_html( $start ); ?></p><?php endif; ?>
-            <?php if ( $end ) : ?><p class="ap-event-end"><?php echo esc_html( $end ); ?></p><?php endif; ?>
+            <?php if ( $venue ) : ?>
+                <div><strong><?php esc_html_e( 'Venue:', 'artpulse' ); ?></strong> <?php echo esc_html( $venue ); ?></div>
+            <?php endif; ?>
+            <?php if ( $address ) : ?>
+                <div><strong><?php esc_html_e( 'Address:', 'artpulse' ); ?></strong> <?php echo nl2br( esc_html( $address ) ); ?></div>
+            <?php endif; ?>
+            <?php if ( $start ) : ?>
+                <div><strong><?php esc_html_e( 'Starts:', 'artpulse' ); ?></strong> <?php echo esc_html( date_i18n( 'M d, Y H:i', strtotime( $start ) ) ); ?></div>
+            <?php endif; ?>
+            <?php if ( $end ) : ?>
+                <div><strong><?php esc_html_e( 'Ends:', 'artpulse' ); ?></strong> <?php echo esc_html( date_i18n( 'M d, Y H:i', strtotime( $end ) ) ); ?></div>
+            <?php endif; ?>
         </div>
         <?php
             $labels = [];
@@ -92,4 +100,4 @@ if ( $user_id ) {
             <span class="ap-fav-count"><?php echo esc_html( $fav_count ); ?></span>
         </div>
     </div>
-</article>
+</div>
