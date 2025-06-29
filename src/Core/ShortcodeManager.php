@@ -25,19 +25,7 @@ class ShortcodeManager
         ob_start();
         echo '<div class="ap-portfolio-grid">';
         foreach ($query->posts as $post_id) {
-            $date     = get_post_meta($post_id, '_ap_event_date', true);
-            $location = get_post_meta($post_id, '_ap_event_location', true);
-
-            echo '<div class="portfolio-item">';
-            echo get_the_post_thumbnail($post_id, 'medium');
-            echo '<h3><a href="' . esc_url(get_permalink($post_id)) . '">' . esc_html(get_the_title($post_id)) . '</a></h3>';
-            if ($date) {
-                echo '<p class="ap-meta-date">' . esc_html($date) . '</p>';
-            }
-            if ($location) {
-                echo '<p class="ap-meta-location">' . esc_html($location) . '</p>';
-            }
-            echo '</div>';
+            echo ap_get_event_card($post_id);
         }
         echo '</div>';
         return ob_get_clean();
