@@ -167,11 +167,21 @@ class DirectoryManager {
         }
 
         $data = array_map(function($p) use ($type) {
+            $featured = get_the_post_thumbnail_url($p, 'medium');
+            if ($type === 'org' && empty($featured)) {
+                $logo_id   = get_post_meta($p->ID, 'ead_org_logo_id', true);
+                $banner_id = get_post_meta($p->ID, 'ead_org_banner_id', true);
+                $attachment_id = $logo_id ?: $banner_id;
+                if ($attachment_id) {
+                    $featured = wp_get_attachment_image_url($attachment_id, 'medium');
+                }
+            }
+
             $item = [
                 'id'      => $p->ID,
                 'title'   => $p->post_title,
                 'link'    => get_permalink($p),
-                'featured_media_url' => get_the_post_thumbnail_url($p, 'medium'),
+                'featured_media_url' => $featured,
             ];
             if ($type === 'event') {
                 $item['date']     = get_post_meta($p->ID, '_ap_event_date', true);

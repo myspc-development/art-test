@@ -1,0 +1,51 @@
+<?php
+namespace ArtPulse\Rest\Tests;
+
+use WP_REST_Request;
+use ArtPulse\Core\DirectoryManager;
+
+/**
+ * @group restapi
+ */
+class DirectoryManagerTest extends \WP_UnitTestCase
+{
+    private int $org_id;
+    private int $logo_id;
+
+    public function set_up(): void
+    {
+        parent::set_up();
+        // create a dummy image file for the logo
+        $upload_dir = wp_upload_dir();
+        $filename   = $upload_dir['basedir'] . '/test-logo.jpg';
+        if (!file_exists($filename)) {
+            file_put_contents($filename, 'logo');
+        }
+        $this->logo_id = self::factory()->attachment->create_upload_object($filename);
+
+        $this->org_id = wp_insert_post([
+            'post_title'  => 'Org',
+            'post_type'   => 'artpulse_org',
+            'post_status' => 'publish',
+            'meta_input'  => [
+                'ead_org_logo_id' => $this->logo_id,
+            ],
+        ]);
+
+        DirectoryManager::register();
+        do_action('rest_api_init');
+    }
+
+    public function test_org_logo_populates_featured_media_url(): void
+    {
+        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req->set_param('type', 'org');
+        $res = rest_get_server()->dispatch($req);
+
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertCount(1, $data);
+        $this->assertNotEmpty($data[0]['featured_media_url']);
+        $this->assertStringContainsString('test-logo.jpg', $data[0]['featured_media_url']);
+    }
+}
