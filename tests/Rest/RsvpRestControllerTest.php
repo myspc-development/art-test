@@ -138,7 +138,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
         $this->assertCount(1, $data['attendees']);
-        $this->assertSame('Attended', $data['attendees'][0]['status']);
+        $this->assertSame('confirmed', $data['attendees'][0]['status']);
         $this->assertCount(1, $data['waitlist']);
     }
 
