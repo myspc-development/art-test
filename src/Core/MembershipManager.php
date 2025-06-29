@@ -4,15 +4,39 @@ namespace ArtPulse\Core;
 use Stripe\StripeClient;
 use WP_REST_Request;
 use WP_Error;
+use ArtPulse\Admin\SettingsRegistry;
 
 class MembershipManager
 {
     public const LEVELS = ['Free', 'Pro', 'Org'];
+
+    /**
+     * Register settings tab and fields.
+     */
+    public static function register_settings(): void
+    {
+        SettingsRegistry::register_tab('membership', __('Membership', 'artpulse'));
+
+        SettingsRegistry::register_field('membership', 'default_privacy_email', [
+            'label'   => __('Default Email Privacy', 'artpulse'),
+            'desc'    => __('Public or private visibility for new user emails.', 'artpulse'),
+            'type'    => 'select',
+            'options' => [ 'public' => 'Public', 'private' => 'Private' ],
+        ]);
+
+        SettingsRegistry::register_field('membership', 'default_privacy_location', [
+            'label'   => __('Default Location Privacy', 'artpulse'),
+            'desc'    => __('Public or private visibility for new user locations.', 'artpulse'),
+            'type'    => 'select',
+            'options' => [ 'public' => 'Public', 'private' => 'Private' ],
+        ]);
+    }
     /**
      * Hook all actions.
      */
     public static function register()
     {
+        self::register_settings();
         // Assign free membership on user registration
         add_action('user_register', [ self::class, 'assignFreeMembership' ]);
         // Log registration details

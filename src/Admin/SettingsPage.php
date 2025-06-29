@@ -144,18 +144,6 @@ class SettingsPage
                 'desc'  => __('Allow events to use waitlists.', 'artpulse'),
                 'type'  => 'checkbox',
             ],
-            'default_privacy_email' => [
-                'label' => __('Default Email Privacy', 'artpulse'),
-                'desc'  => __('Public or private visibility for new user emails.', 'artpulse'),
-                'type'    => 'select',
-                'options' => [ 'public' => 'Public', 'private' => 'Private' ],
-            ],
-            'default_privacy_location' => [
-                'label' => __('Default Location Privacy', 'artpulse'),
-                'desc'  => __('Public or private visibility for new user locations.', 'artpulse'),
-                'type'    => 'select',
-                'options' => [ 'public' => 'Public', 'private' => 'Private' ],
-            ],
         ];
 
         foreach ($general_fields as $key => $cfg) {
