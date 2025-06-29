@@ -229,4 +229,21 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
     }
+
+    public function test_export_attendees_csv(): void
+    {
+        update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
+        update_post_meta($this->event_id, 'event_rsvp_data', [
+            $this->user1 => ['date' => '2024-01-01 10:00:00']
+        ]);
+        update_post_meta($this->event_id, 'event_attended', [$this->user1]);
+        wp_set_current_user($this->user1);
+        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees/export');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $csv = $res->get_data();
+        $this->assertStringContainsString('Name,Email,Status,RSVP Date,Attended', $csv);
+        $user = get_userdata($this->user1);
+        $this->assertStringContainsString($user->user_email, $csv);
+    }
 }

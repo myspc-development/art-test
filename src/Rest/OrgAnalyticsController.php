@@ -78,11 +78,19 @@ class OrgAnalyticsController {
             $history = [];
         }
         ksort($history);
+        $favorites     = (int) get_post_meta($event_id, 'ap_favorite_count', true);
+        $waitlist      = get_post_meta($event_id, 'event_waitlist', true);
+        $attended      = get_post_meta($event_id, 'event_attended', true);
+        $waitlist_ct   = is_array($waitlist) ? count($waitlist) : 0;
+        $attended_ct   = is_array($attended) ? count($attended) : 0;
         return rest_ensure_response([
             'dates'       => array_keys($history),
             'counts'      => array_values($history),
             'views'       => (int) get_post_meta($event_id, 'view_count', true),
             'total_rsvps' => array_sum($history),
+            'favorites'   => $favorites,
+            'waitlist'    => $waitlist_ct,
+            'attended'    => $attended_ct,
         ]);
     }
 }

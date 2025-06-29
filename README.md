@@ -76,9 +76,6 @@ Display a live event search form anywhere using the `[ap_event_filter]` shortcod
 [ap_event_filter]
 ```
 
-![Screenshot: AJAX event filter form](assets/docs/images/event_filter_form.png)
-
-
 
 ## Stripe Radar
 
@@ -122,8 +119,6 @@ A new **Login Heatmap** submenu under **ArtPulse → Settings** displays hourly 
 ## User Dashboard Features
 
 Place `[ap_user_dashboard]` on a page to expose the member dashboard. The dashboard displays calendars for **My Favorites** and **My RSVPs** along with charts of engagement statistics. A bar chart shows monthly trends while a new line chart visualizes daily activity over the last 30 days. Users can quickly access profile tools, download their data and review upcoming events.
-
-![Screenshot: member dashboard](assets/docs/images/member_dashboard.png)
 
 
 ## Submission Meta Fields

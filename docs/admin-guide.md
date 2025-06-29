@@ -31,6 +31,7 @@
   - **Total RSVPs** (overall and per event)
   - **Favorites** (total and per event)
   - **Attendance** (marked "attended" for each event)
+  - **Current waitlist count**
   - **Trends over time** (line/bar charts powered by Chart.js)
 
 ### How to Read Analytics
