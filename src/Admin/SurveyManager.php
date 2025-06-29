@@ -28,6 +28,33 @@ class SurveyManager
 
     public static function handle(\WP_REST_Request $request)
     {
-        return rest_ensure_response(['status' => 'survey placeholder']);
+        $event_id = absint($request->get_param('id'));
+        if (!$event_id) {
+            return new \WP_Error('invalid_event', 'Invalid event.', ['status' => 400]);
+        }
+
+        if ($request->get_method() === 'GET') {
+            $responses = get_post_meta($event_id, 'ap_survey_responses', true);
+            return rest_ensure_response(is_array($responses) ? $responses : []);
+        }
+
+        $answers = (array) $request->get_param('answers');
+        if (empty($answers)) {
+            return new \WP_Error('invalid_data', 'No answers provided.', ['status' => 400]);
+        }
+
+        $responses = get_post_meta($event_id, 'ap_survey_responses', true);
+        if (!is_array($responses)) {
+            $responses = [];
+        }
+        $responses[] = [
+            'user_id' => get_current_user_id(),
+            'answers' => $answers,
+        ];
+        update_post_meta($event_id, 'ap_survey_responses', $responses);
+
+        do_action('artpulse_survey_submitted', get_current_user_id(), $event_id, $answers);
+
+        return rest_ensure_response(['submitted' => true]);
     }
 }
