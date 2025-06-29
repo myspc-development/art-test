@@ -111,7 +111,7 @@ Recent updates introduce new fields for location lookups and performance tweaks:
 - **Enable Google/Facebook/Apple Login** – Toggle OAuth providers for the login form.
 - **Enforce Two-Factor** – Require users to enable the Two-Factor plugin before logging in.
 
-For full usage details refer to the [Admin Guide](assets/docs/Admin_Help.md) and [Member Guide](assets/docs/Member_Help.md).
+For full usage details refer to the [Admin Guide](docs/admin-guide.md) and [User Guide](docs/user-guide.md).
 
 ## Member Badges and Login Heatmap
 
@@ -165,3 +165,114 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 - `{prefix}ap_roles`
 - `{prefix}ap_login_events`
 - `{prefix}ap_artwork_event_links`
+
+## RSVP & Favorites
+
+### How to RSVP for an Event
+
+- Click the **RSVP** button on any event card, calendar modal, or event page.
+- If you are logged in and RSVP is open, the button will say "RSVP."  
+- After clicking, the button changes to "Cancel RSVP."  
+- The RSVP count updates in real-time.
+
+### Canceling Your RSVP
+
+- Click "Cancel RSVP" on the event card or page.
+- The count updates instantly.
+
+### How to Favorite an Event
+
+- Click the star (☆) on the event card, event page, or calendar.
+- Favorited events are shown with a filled star (★).
+- The favorite count updates instantly.
+- All your favorited events are visible in your dashboard under "My Events."
+
+### "My Events" Dashboard
+
+- Go to your dashboard to see:
+  - **All RSVP’d events**
+  - **All favorited events**
+  - Your **next upcoming RSVP** is highlighted
+  - Engagement stats and trends (chart)
+
+## AJAX-Powered Search & Filtering
+
+- Use the search and filter form above the event/artwork/artist directories to narrow results instantly.
+- Filters include: **venue, date, category, and keyword.**
+- The event list updates live—no page reload needed.
+- Click "Reset" to see all results again.
+
+**Tip:** All filters are available on mobile and desktop.
+
+## Managing RSVPs & Attendees (For Organizers/Admins)
+
+### Viewing and Exporting RSVPs
+
+- In your dashboard, go to the event you are managing.
+- Click "View RSVPs" to see all attendee details (name, email, RSVP date, attendance status).
+- Click "Export RSVPs to CSV" to download a spreadsheet of attendees.
+
+### Marking Attendance
+
+- Check/uncheck the "Attended" box next to each attendee.
+- Attendance stats update in real time and appear in event analytics.
+
+### Messaging Attendees
+
+- Use the "Message All" button to email all RSVP’d users at once.
+- Use the mail/message icon next to any attendee to send a message to a single user.
+- Messages use your default notification settings.
+
+### Waitlist (If Enabled)
+
+- If an event is full, new RSVPs are added to a waitlist.
+- When a slot opens, waitlisted users are notified automatically.
+
+## Engagement Analytics
+
+- Analytics dashboards appear for both users and organizers.
+- Widgets show:
+  - **Total RSVPs** (overall and per event)
+  - **Favorites** (total and per event)
+  - **Attendance** (marked "attended" for each event)
+  - **Trends over time** (line/bar charts powered by Chart.js)
+
+### How to Read Analytics
+
+- Hover over any point on a chart to see exact counts.
+- View "top events" by RSVP/favorite count in the analytics list.
+- Export data as CSV for your own reporting.
+
+## Event Calendar
+
+### Viewing Events on the Calendar
+
+- The calendar view shows all upcoming events by day.
+- Click any event to see a popup with venue, address, time, and RSVP/favorite options.
+- Filter events by venue, category, or date using the filter bar above the calendar.
+
+### Embedding the Calendar
+
+- To embed the calendar on any page, use the shortcode:  
+[ap_event_calendar]
+
+- You can also add filters or adjust display options via shortcode attributes (see below for full list).
+
+**Tip:** Calendar updates instantly when new events are added or when filters are applied.
+
+## Shortcode Reference
+
+- `[ap_event_directory]` — Show event directory with filters
+- `[ap_event_calendar]` — Show event calendar
+- `[ap_artist_directory]` — Show artist directory
+- `[ap_artwork_directory]` — Show artworks directory
+- `[ap_org_directory]` — Show organizations directory
+
+See docs/user-guide.md for all shortcode options and attributes.
+
+## Accessibility & Mobile
+
+- All features and filters work on mobile, tablet, and desktop.
+- Buttons and forms support keyboard navigation and screen readers.
+- Event cards and dashboards are designed for responsive display.
+
