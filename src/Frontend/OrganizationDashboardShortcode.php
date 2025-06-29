@@ -249,7 +249,19 @@ class OrganizationDashboardShortcode {
             <div id="ap-attendee-modal" class="ap-org-modal container">
                 <button id="ap-attendee-close" type="button" class="ap-form-button nectar-button">Close</button>
                 <button id="ap-attendee-export" type="button" class="ap-form-button nectar-button">Export CSV</button>
+                <button id="ap-attendee-message-all" type="button" class="ap-form-button nectar-button">Message All</button>
                 <div id="ap-attendee-content"></div>
+            </div>
+
+            <div id="ap-message-modal" class="ap-org-modal container">
+                <button id="ap-message-close" type="button" class="ap-form-button nectar-button">Close</button>
+                <form id="ap-message-form" class="ap-form-container">
+                    <label class="ap-form-label" for="ap-message-subject">Subject</label>
+                    <input id="ap-message-subject" class="ap-input" type="text" required>
+                    <label class="ap-form-label" for="ap-message-body">Message</label>
+                    <textarea id="ap-message-body" class="ap-input" required></textarea>
+                    <button class="ap-form-button nectar-button" type="submit">Send</button>
+                </form>
             </div>
 
             <div id="kanban-board"></div>
