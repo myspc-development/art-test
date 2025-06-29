@@ -11,8 +11,25 @@ document.addEventListener('DOMContentLoaded', () => {
           const slide = document.createElement('div');
           slide.className = 'swiper-slide';
           const img = evt.featured_media_url ? `<img src="${evt.featured_media_url}" alt="${evt.title}" />` : '';
-          const date = evt.event_date ? `<p class="ap-event-date">${evt.event_date}</p>` : '';
-          const loc = evt.event_location ? `<p class="ap-event-location">${evt.event_location}</p>` : '';
+          const formatDate = d => {
+            try {
+              return new Date(d).toLocaleDateString();
+            } catch (e) {
+              return d;
+            }
+          };
+          const start = evt.event_start_date ? `<p class="ap-event-start">${formatDate(evt.event_start_date)}</p>` : '';
+          const end   = evt.event_end_date ? `<p class="ap-event-end">${formatDate(evt.event_end_date)}</p>` : '';
+          const date  = evt.event_date ? `<p class="ap-event-date">${evt.event_date}</p>` : '';
+          const venue = evt.venue_name ? `<p class="ap-event-venue">${evt.venue_name}</p>` : '';
+          const loc   = evt.event_location ? `<p class="ap-event-location">${evt.event_location}</p>` : '';
+          const addressParts = [];
+          if (evt.event_street_address) addressParts.push(evt.event_street_address);
+          const cityState = [evt.event_city, evt.event_state].filter(Boolean).join(', ');
+          if (cityState) addressParts.push(cityState + (evt.event_postcode ? ' ' + evt.event_postcode : ''));
+          if (!cityState && evt.event_postcode) addressParts.push(evt.event_postcode);
+          if (evt.event_country) addressParts.push(evt.event_country);
+          const address = addressParts.length ? `<p class="ap-event-address">${addressParts.join('<br>')}</p>` : '';
           const org = evt.organization && evt.organization.name ? `<p class="ap-event-org">${evt.organization.name}</p>` : '';
           const rsvp = evt.rsvp_enabled ? `<p class="ap-event-rsvp">RSVP ${evt.rsvp_limit ? `${evt.rsvp_limit} max` : 'open'}</p>` : '';
           slide.innerHTML = `
@@ -20,6 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
               ${img}
               <div class="ap-event-info">
                 <h3>${evt.title}</h3>
+                ${start}
+                ${end}
+                ${venue}
+                ${address}
                 ${date}
                 ${loc}
                 ${org}
