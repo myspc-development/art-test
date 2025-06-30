@@ -15,6 +15,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Event Template & Duplication Codex](docs/event-template-duplication-codex.md) covers template storage and cloning helpers.
 [Messaging & Communication Codex](docs/messaging-communication-codex.md) covers direct messaging, reminders and comment moderation.
 [Finance & Payout Codex](docs/financial-overview-codex.md) explains revenue summaries, transaction filtering and payout history.
+[Internal Notes & Task Tracking Codex](docs/internal-notes-tasks-codex.md) covers collaboration features.
 
 ## Overview & Quick Reference
 
