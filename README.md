@@ -9,6 +9,7 @@ implementing ticket sales or memberships can read the
 For UI customization, white‑labeling and onboarding guidelines see the
 [UI/UX Polish Codex](docs/ui-ux-polish-codex.md).
 [Event Comments Codex](docs/event-comments-codex.md) describes the REST routes used for event discussions.
+[Event Management Upgrades Codex](docs/event-management-upgrades-codex.md) explains calendar and bulk actions.
 
 ## Overview & Quick Reference
 

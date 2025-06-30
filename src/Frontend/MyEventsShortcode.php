@@ -7,6 +7,7 @@ class MyEventsShortcode {
     public static function register() {
         add_shortcode('ap_my_events', [self::class, 'render']);
         add_action('init', [self::class, 'handle_deletion']);
+        add_action('init', [self::class, 'handle_bulk_actions']);
     }
 
     public static function render($atts) {
@@ -29,26 +30,58 @@ class MyEventsShortcode {
             return '<p>You haven’t submitted any events yet.</p>';
         }
 
-        ob_start();
-        echo '<div class="ap-my-events-list">';
-        foreach ($events as $event) {
-            $status   = ucfirst($event->post_status);
-            $edit_url = get_edit_post_link($event->ID);
-            $delete_url = add_query_arg([
-                'ap_delete_event' => $event->ID,
-                'ap_nonce'        => wp_create_nonce('ap_delete_event_' . $event->ID),
-            ], get_permalink());
+        wp_enqueue_style('fullcalendar-css', 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css');
+        wp_enqueue_script('fullcalendar-js', 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.js', [], null, true);
+        wp_enqueue_script('ap-dashboard-calendar', plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-dashboard-calendar.js', ['fullcalendar-js'], '1.0', true);
+        wp_localize_script('ap-dashboard-calendar', 'APArtistCalendar', [
+            'rest_root' => esc_url_raw(rest_url())
+        ]);
 
-            echo '<div class="ap-my-event">';
-            echo ap_get_event_card($event->ID);
-            echo '<div class="ap-event-actions">';
-            echo '<a href="' . esc_url($edit_url) . '" class="ap-edit-link">Edit</a> | ';
-            echo '<a href="' . esc_url($delete_url) . '" class="ap-delete-link" onclick="return confirm(\'Are you sure you want to delete this event?\');">Delete</a>';
-            echo ' <span class="ap-status">(' . esc_html($status) . ')</span>';
-            echo '</div>';
-            echo '</div>';
-        }
-        echo '</div>';
+        ob_start();
+        ?>
+        <div id="artist-events-calendar"></div>
+        <form id="ap-bulk-event-actions" method="post">
+            <?php wp_nonce_field('ap_bulk_events', 'ap_bulk_nonce'); ?>
+            <select name="ap_bulk_action">
+                <option value=""><?php esc_html_e('Bulk Actions', 'artpulse'); ?></option>
+                <option value="close_rsvps"><?php esc_html_e('Close RSVPs', 'artpulse'); ?></option>
+                <option value="duplicate"><?php esc_html_e('Duplicate', 'artpulse'); ?></option>
+                <option value="delete"><?php esc_html_e('Delete', 'artpulse'); ?></option>
+                <option value="export"><?php esc_html_e('Export Attendees', 'artpulse'); ?></option>
+            </select>
+            <button type="submit">Apply</button>
+            <table class="ap-my-events-table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="ap-check-all" /></th>
+                        <th><?php esc_html_e('Event Title', 'artpulse'); ?></th>
+                        <th><?php esc_html_e('Date', 'artpulse'); ?></th>
+                        <th><?php esc_html_e('Status', 'artpulse'); ?></th>
+                        <th><?php esc_html_e('Actions', 'artpulse'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($events as $event):
+                    $edit_url = get_edit_post_link($event->ID);
+                ?>
+                    <tr>
+                        <td><input type="checkbox" name="event_ids[]" value="<?php echo esc_attr($event->ID); ?>" /></td>
+                        <td><?php echo esc_html($event->post_title); ?></td>
+                        <td><?php echo esc_html(get_post_meta($event->ID, '_ap_event_date', true)); ?></td>
+                        <td><?php echo esc_html(ucfirst($event->post_status)); ?></td>
+                        <td><a href="<?php echo esc_url($edit_url); ?>">Edit</a></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </form>
+        <script>
+        document.getElementById('ap-check-all').addEventListener('change', function(e){
+            var boxes = document.querySelectorAll('#ap-bulk-event-actions input[name="event_ids[]"]');
+            for (var i=0; i<boxes.length; i++) { boxes[i].checked = e.target.checked; }
+        });
+        </script>
+        <?php
         return ob_get_clean();
     }
 
@@ -74,5 +107,62 @@ class MyEventsShortcode {
             wp_safe_redirect(remove_query_arg(['ap_delete_event', 'ap_nonce']));
             exit;
         }
+    }
+
+    public static function handle_bulk_actions() {
+        if (
+            !is_user_logged_in() ||
+            !isset($_POST['ap_bulk_action']) ||
+            empty($_POST['event_ids'])
+        ) {
+            return;
+        }
+
+        $nonce = sanitize_text_field($_POST['ap_bulk_nonce'] ?? '');
+        if (!wp_verify_nonce($nonce, 'ap_bulk_events')) {
+            return;
+        }
+
+        $action    = sanitize_text_field($_POST['ap_bulk_action']);
+        $event_ids = array_map('intval', (array) $_POST['event_ids']);
+
+        foreach ($event_ids as $id) {
+            $event = get_post($id);
+            if (!$event || $event->post_type !== 'artpulse_event' || $event->post_author != get_current_user_id()) {
+                continue;
+            }
+            switch ($action) {
+                case 'close_rsvps':
+                    update_post_meta($id, 'event_rsvp_enabled', '0');
+                    break;
+                case 'duplicate':
+                    $new_id = wp_insert_post([
+                        'post_type'   => 'artpulse_event',
+                        'post_status' => 'draft',
+                        'post_title'  => $event->post_title,
+                        'post_content'=> $event->post_content,
+                        'post_author' => $event->post_author,
+                    ]);
+                    if (!is_wp_error($new_id)) {
+                        $meta_keys = [ '_ap_event_date', 'event_start_date', 'event_end_date', 'event_recurrence_rule' ];
+                        foreach ($meta_keys as $key) {
+                            $val = get_post_meta($id, $key, true);
+                            if ($val) {
+                                update_post_meta($new_id, $key, maybe_unserialize($val));
+                            }
+                        }
+                    }
+                    break;
+                case 'delete':
+                    wp_trash_post($id);
+                    break;
+                case 'export':
+                    // Not implemented
+                    break;
+            }
+        }
+
+        wp_safe_redirect(wp_get_referer() ?: home_url());
+        exit;
     }
 }

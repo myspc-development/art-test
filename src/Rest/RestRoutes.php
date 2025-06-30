@@ -54,6 +54,8 @@ class RestRoutes
             \ArtPulse\Rest\RsvpRestController::register();
             // Provide event card markup via REST
             \ArtPulse\Rest\EventCardController::register();
+            // Artist-specific events for dashboards
+            \ArtPulse\Rest\ArtistEventsController::register();
         });
 
         $post_types = ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org'];
