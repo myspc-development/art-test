@@ -2,6 +2,9 @@
 
 ## 1.3.7
 - Adjusted table creation statements to use explicit PRIMARY KEY clause.
+- Added follower REST endpoints and `[ap_my_follows]` shortcode.
+- Introduced engagement feed and drag-and-drop dashboard widgets with dark mode.
+- Cleared scheduled message cron jobs on plugin deactivation.
 
 ## 1.3.6
 - Added `ap_artwork_event_links` table for linking artworks to events.

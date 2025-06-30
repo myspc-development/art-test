@@ -8,6 +8,7 @@ Thank you for joining the ArtPulse community. This guide highlights the basics o
 - Location-aware calendar with proximity highlights and legend.
 - Price history and trends for artworks for sale.
 - Refined admin and member notifications.
+- Dashboard widgets can be rearranged and a dark mode option is available.
 
 ### User Journey
 ```mermaid

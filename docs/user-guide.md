@@ -32,11 +32,17 @@ from any directory, calendar popover or dashboard list.
 - All your favorited events are visible in your dashboard under "My Events."
 - Event cards in "My Events" include badges showing whether you RSVP’d or favorited them.
 
+### Following Artists and Organizations
+- Click the **Follow** button on an artist, organization or event page to add it to your follows list.
+- Your followed items appear in the `[ap_my_follows]` page if enabled by the site admin.
+- Following creators allows you to receive notifications about new content.
+
 ## My Events Dashboard
 
 - Open your **My Events** dashboard from the main menu.
 - The list shows every event you have RSVPd to or favorited.
 - Your next upcoming RSVP is highlighted at the top.
+- Use the **Toggle Dark Mode** button or drag widgets by their handle to customize the layout.
 
 ## Analytics in Your Dashboard
 

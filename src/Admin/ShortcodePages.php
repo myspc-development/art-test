@@ -66,6 +66,7 @@ class ShortcodePages
             '[ap_edit_event]'            => __('Edit Event', 'artpulse'),
             '[ap_filtered_list]'         => __('Filtered List', 'artpulse'),
             '[ap_org_profile_edit]'      => __('Edit Organization Profile', 'artpulse'),
+            '[ap_org_profile]'           => __('Organization Profile', 'artpulse'),
         ];
     }
 

@@ -111,6 +111,7 @@ Additional resources:
 - `[ap_portfolio_builder]` — Portfolio item builder
 - `[ap_org_event_form]` — Organization event submission form
 - `[ap_directory]` — Legacy directory shortcode
+- `[ap_my_follows]` — List artists, events or organizations you follow
 
 ## CSV Import/Export
 
@@ -258,6 +259,8 @@ A new **Login Heatmap** submenu under **ArtPulse → Settings** displays hourly 
 ## User Dashboard Features
 
 Place `[ap_user_dashboard]` on a page to expose the member dashboard. The dashboard displays calendars for **My Favorites** and **My RSVPs** along with charts of engagement statistics. A bar chart shows monthly trends while a new line chart visualizes daily activity over the last 30 days. Users can quickly access profile tools, download their data and review upcoming events.
+
+Recent updates introduce an optional dark mode and draggable dashboard widgets. An onboarding banner guides new users through the interface. The `[ap_my_follows]` shortcode and follow buttons let members keep track of artists, events and organizations they follow.
 
 
 ## Submission Meta Fields
