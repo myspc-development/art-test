@@ -29,7 +29,8 @@ class UserProfileShortcode {
         \ArtPulse\Core\ProfileMetrics::log_metric($user_id, 'view');
 
         $bio       = get_user_meta($user_id, 'description', true);
-        $followers = self::countFollowers($user_id);
+        $followers = (int) get_user_meta($user_id, 'ap_follower_count', true);
+        $following = (int) get_user_meta($user_id, 'ap_following_count', true);
         $avatar    = get_user_meta($user_id, 'ap_custom_avatar', true);
         $twitter   = get_user_meta($user_id, 'ap_social_twitter', true);
         $instagram = get_user_meta($user_id, 'ap_social_instagram', true);
@@ -69,6 +70,7 @@ class UserProfileShortcode {
                     <p class="ap-user-bio"><?php echo esc_html($bio); ?></p>
                 <?php endif; ?>
                 <p><strong>Followers:</strong> <?php echo intval($followers); ?></p>
+                <p><strong>Following:</strong> <?php echo intval($following); ?></p>
                 <?php if ($show_membership): ?>
                     <p class="ap-user-membership">
                         <strong><?php esc_html_e('Membership Level', 'artpulse'); ?>:</strong>
@@ -111,12 +113,6 @@ class UserProfileShortcode {
     }
 
     public static function countFollowers($user_id) {
-        global $wpdb;
-        $meta_key = 'ap_following';
-        $like = '%' . $wpdb->esc_like($user_id) . '%';
-        return $wpdb->get_var($wpdb->prepare("
-            SELECT COUNT(*) FROM {$wpdb->usermeta}
-            WHERE meta_key = %s AND meta_value LIKE %s
-        ", $meta_key, $like));
+        return (int) get_user_meta($user_id, "ap_follower_count", true);
     }
 } 
