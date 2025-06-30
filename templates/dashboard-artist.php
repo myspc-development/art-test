@@ -53,6 +53,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <a href="#local-events"><span class="dashicons dashicons-location-alt"></span><?php esc_html_e('Local Events', 'artpulse'); ?></a>
         <a href="#favorites"><span class="dashicons dashicons-heart"></span><?php esc_html_e('Favorites', 'artpulse'); ?></a>
         <a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a>
+        <a href="#engagement"><span class="dashicons dashicons-format-status"></span><?php esc_html_e('Activity', 'artpulse'); ?></a>
         <a href="#account-tools"><span class="dashicons dashicons-download"></span><?php esc_html_e('Account', 'artpulse'); ?></a>
         <?php if ( $show_notifications ) : ?>
         <a href="#notifications"><span class="dashicons dashicons-megaphone"></span><?php esc_html_e('Notifications', 'artpulse'); ?></a>
@@ -69,6 +70,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
             <label><input type="checkbox" value="local-events" checked> <?php esc_html_e('Local Events', 'artpulse'); ?></label>
             <label><input type="checkbox" value="favorites" checked> <?php esc_html_e('Favorites', 'artpulse'); ?></label>
             <label><input type="checkbox" value="rsvps" checked> <?php esc_html_e('RSVPs', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="engagement" checked> <?php esc_html_e('Activity', 'artpulse'); ?></label>
             <label><input type="checkbox" value="my-events" checked> <?php esc_html_e('My Events', 'artpulse'); ?></label>
             <label><input type="checkbox" value="events" checked> <?php esc_html_e('Events', 'artpulse'); ?></label>
             <?php if ($show_support_history) : ?>
@@ -117,6 +119,11 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
     <div class="dashboard-widget" data-widget="rsvps">
         <h2 id="rsvps"><?php _e('My RSVPs','artpulse'); ?></h2>
         <div id="ap-rsvp-events"></div>
+    </div>
+    <div class="dashboard-widget" data-widget="engagement">
+        <h2 id="engagement"><?php _e('Recent Activity','artpulse'); ?></h2>
+        <div id="ap-engagement-feed"></div>
+        <button id="ap-engagement-load-more" class="ap-form-button"><?php esc_html_e('Load More','artpulse'); ?></button>
     </div>
     <div class="dashboard-widget" data-widget="my-events">
         <h2 id="my-events"><?php _e('My Events','artpulse'); ?></h2>

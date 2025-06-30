@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Community;
 
+use ArtPulse\Core\UserEngagementLogger;
+
 class FollowManager {
     /**
      * Create the follows table if not exists.
@@ -34,6 +36,8 @@ class FollowManager {
             'object_type'  => $object_type,
             'followed_on'  => current_time('mysql')
         ]);
+
+        UserEngagementLogger::log($user_id, 'follow', $object_id);
 
         // --- Maintain following/follower counts ---
         $following = (int) get_user_meta($user_id, 'ap_following_count', true);

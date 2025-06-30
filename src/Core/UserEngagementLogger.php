@@ -49,6 +49,54 @@ class UserEngagementLogger
         ]);
     }
 
+    public static function get_feed(int $user_id, int $limit = 10, int $offset = 0): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_user_engagement_log';
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT type, event_id, logged_at FROM {$table} WHERE user_id = %d ORDER BY logged_at DESC LIMIT %d OFFSET %d",
+                $user_id,
+                $limit,
+                $offset
+            )
+        );
+
+        $items = [];
+        foreach ($rows as $row) {
+            $title = '';
+            $link  = '';
+            if ($row->type === 'follow') {
+                $user = get_user_by('id', $row->event_id);
+                if ($user) {
+                    $title = $user->display_name;
+                    $link  = get_author_posts_url($user->ID);
+                } else {
+                    $post = get_post($row->event_id);
+                    if ($post) {
+                        $title = $post->post_title;
+                        $link  = get_permalink($post);
+                    }
+                }
+            } else {
+                $post = get_post($row->event_id);
+                if ($post) {
+                    $title = $post->post_title;
+                    $link  = get_permalink($post);
+                }
+            }
+
+            $items[] = [
+                'type' => $row->type,
+                'title' => $title,
+                'link' => $link,
+                'date' => $row->logged_at,
+            ];
+        }
+
+        return $items;
+    }
+
     public static function get_stats(int $user_id): array
     {
         global $wpdb;
