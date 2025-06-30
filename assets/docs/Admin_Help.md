@@ -8,6 +8,7 @@ This guide covers the essential administration tasks for the ArtPulse plugin.
 - Location-aware calendar with proximity highlights and legend.
 - Price history and trends for artworks for sale.
 - Refined admin and member notifications.
+- Drag-and-drop dashboard widgets with an optional dark mode toggle.
 
 For an overview of how a user interacts with ArtPulse, see the User Journey diagram below:
 
