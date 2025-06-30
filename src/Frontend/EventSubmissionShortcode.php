@@ -217,6 +217,13 @@ class EventSubmissionShortcode {
             </p>
 
             <p>
+                <label><input type="radio" name="event_status" value="publish" checked> Publish Now</label>
+                <label><input type="radio" name="event_status" value="draft"> Save as Draft</label>
+                <label><input type="radio" name="event_status" value="future"> Schedule</label>
+                <input type="datetime-local" name="event_publish_date" value="">
+            </p>
+
+            <p>
                 <button class="ap-form-button nectar-button" type="submit" name="ap_submit_event">Submit Event</button>
             </p>
         </form>
@@ -314,13 +321,36 @@ class EventSubmissionShortcode {
             return;
         }
 
-        $post_id = wp_insert_post([
+        $status_choice = sanitize_text_field($_POST['event_status'] ?? 'publish');
+        $publish_date  = sanitize_text_field($_POST['event_publish_date'] ?? '');
+        $post_status   = 'publish';
+        $post_date     = null;
+
+        if ($status_choice === 'draft') {
+            $post_status = 'draft';
+        } elseif ($status_choice === 'future') {
+            $post_status = 'future';
+            if ($publish_date) {
+                $post_date = $publish_date;
+            } else {
+                self::add_notice('Please provide a publish date.', 'error');
+                self::maybe_redirect();
+                return;
+            }
+        }
+
+        $post_args = [
             'post_type'   => 'artpulse_event',
-            'post_status' => 'pending',
+            'post_status' => $post_status,
             'post_title'  => $event_title,
             'post_content'=> $event_description,
             'post_author' => $user_id,
-        ]);
+        ];
+        if ($post_date) {
+            $post_args['post_date'] = $publish_date;
+        }
+
+        $post_id = wp_insert_post($post_args);
 
         if (is_wp_error($post_id)) {
             error_log('Error creating event post: ' . $post_id->get_error_message());
