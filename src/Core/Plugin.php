@@ -87,6 +87,7 @@ class Plugin
             \ArtPulse\Core\ArtworkEventLinkManager::install_table();
             \ArtPulse\Personalization\RecommendationEngine::install_table();
             \ArtPulse\Core\ActivityLogger::install_table();
+            \ArtPulse\Core\FeedbackManager::install_table();
             \ArtPulse\Core\DelegatedAccessManager::install_table();
             update_option($db_version_option, self::VERSION);
         }

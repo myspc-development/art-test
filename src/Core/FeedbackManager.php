@@ -10,25 +10,38 @@ class FeedbackManager
         add_action('wp_ajax_nopriv_ap_submit_feedback', [self::class, 'handle_submission']);
     }
 
+    /**
+     * Ensure the feedback table exists.
+     */
+    public static function install_table(): void
+    {
+        global $wpdb;
+        $table   = $wpdb->prefix . 'ap_feedback';
+        $charset = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE $table (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT NULL,
+            type VARCHAR(50) NOT NULL,
+            description TEXT NOT NULL,
+            email VARCHAR(100) DEFAULT NULL,
+            tags VARCHAR(255) DEFAULT NULL,
+            context TEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            KEY user_id (user_id)
+        ) $charset;";
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta($sql);
+    }
+
     public static function maybe_install_table(): void
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'ap_feedback';
+        $table  = $wpdb->prefix . 'ap_feedback';
         $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
         if ($exists !== $table) {
-            $charset = $wpdb->get_charset_collate();
-            $sql = "CREATE TABLE $table (
-                id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                user_id BIGINT NULL,
-                type VARCHAR(20) NOT NULL,
-                description TEXT NOT NULL,
-                email VARCHAR(255) NULL,
-                context TEXT NULL,
-                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                KEY user_id (user_id)
-            ) $charset;";
-            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-            dbDelta($sql);
+            self::install_table();
         }
     }
 
@@ -39,6 +52,7 @@ class FeedbackManager
         $type = sanitize_text_field($_POST['type'] ?? 'general');
         $description = sanitize_textarea_field($_POST['description'] ?? '');
         $email = sanitize_email($_POST['email'] ?? '');
+        $tags = sanitize_text_field($_POST['tags'] ?? '');
         $context = sanitize_text_field($_POST['context'] ?? '');
         if (empty($description)) {
             wp_send_json_error(['message' => __('Description required.', 'artpulse')]);
@@ -51,6 +65,7 @@ class FeedbackManager
             'type'        => $type,
             'description' => $description,
             'email'       => $email,
+            'tags'        => $tags,
             'context'     => $context,
             'created_at'  => current_time('mysql'),
         ]);
