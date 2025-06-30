@@ -2,8 +2,49 @@
 /**
  * Artist dashboard template.
  */
+
+use ArtPulse\Core\ArtistDashboardHome;
+
+$current_user = wp_get_current_user();
+$profile_image = get_user_meta($current_user->ID, 'profile_image', true);
+if (!$profile_image) {
+    $profile_image = get_avatar_url($current_user->ID, ['size' => 96]);
+}
+
+$total_events     = ArtistDashboardHome::get_artist_event_count($current_user->ID);
+$upcoming_events  = ArtistDashboardHome::get_artist_upcoming_event_count($current_user->ID);
+$total_rsvps      = ArtistDashboardHome::get_artist_total_rsvps($current_user->ID);
+$total_favorites  = ArtistDashboardHome::get_artist_total_favorites($current_user->ID);
+$recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_user->ID, 5);
 ?>
 <div id="nectar-outer"><div class="container-wrap"><div class="container"><div class="row"><div class="col-md-8 col-md-offset-2"><div class="ap-dashboard">
+    <div class="artist-dashboard-header">
+        <img src="<?php echo esc_url($profile_image); ?>" alt="" class="artist-avatar" />
+        <h2><?php printf(esc_html__('Welcome back, %s!', 'artpulse'), esc_html($current_user->display_name)); ?></h2>
+    </div>
+    <div class="artist-stats-grid">
+        <div class="stat-card"><span class="stat-label"><?php esc_html_e('Events Hosted', 'artpulse'); ?></span><span class="stat-value"><?php echo intval($total_events); ?></span></div>
+        <div class="stat-card"><span class="stat-label"><?php esc_html_e('Upcoming Events', 'artpulse'); ?></span><span class="stat-value"><?php echo intval($upcoming_events); ?></span></div>
+        <div class="stat-card"><span class="stat-label"><?php esc_html_e('Total RSVPs', 'artpulse'); ?></span><span class="stat-value"><?php echo intval($total_rsvps); ?></span></div>
+        <div class="stat-card"><span class="stat-label"><?php esc_html_e('Favorites', 'artpulse'); ?></span><span class="stat-value"><?php echo intval($total_favorites); ?></span></div>
+    </div>
+    <div class="artist-quick-actions">
+        <a href="<?php echo esc_url(ArtPulse\Core\Plugin::get_event_submission_url()); ?>" class="btn btn-primary"><?php esc_html_e('Create New Event', 'artpulse'); ?></a>
+        <a href="<?php echo esc_url(ArtPulse\Core\Plugin::get_artist_dashboard_url()); ?>" class="btn btn-secondary"><?php esc_html_e('View My Events', 'artpulse'); ?></a>
+        <a href="<?php echo esc_url($profile_edit_url); ?>" class="btn btn-secondary"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
+        <a href="<?php echo esc_url(ArtPulse\Core\Plugin::get_artist_dashboard_url()); ?>#analytics" class="btn btn-secondary"><?php esc_html_e('View Analytics', 'artpulse'); ?></a>
+    </div>
+    <?php if ($recent_activity) : ?>
+    <ul class="artist-activity-feed">
+        <?php foreach ($recent_activity as $activity) : ?>
+        <li>
+            <span class="activity-icon"><?php echo esc_html($activity['icon']); ?></span>
+            <span class="activity-text"><?php echo esc_html($activity['message']); ?></span>
+            <span class="activity-date"><?php echo esc_html($activity['date']); ?></span>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
     <nav class="dashboard-nav">
         <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
         <a href="#upgrade"><span class="dashicons dashicons-star-filled"></span><?php esc_html_e('Upgrade', 'artpulse'); ?></a>
