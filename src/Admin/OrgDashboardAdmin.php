@@ -3,6 +3,7 @@ namespace ArtPulse\Admin;
 
 use Stripe\StripeClient;
 use Dompdf\Dompdf;
+use ArtPulse\Admin\OrgCommunicationsCenter;
 
 class OrgDashboardAdmin {
     public static function register() {
@@ -119,6 +120,7 @@ class OrgDashboardAdmin {
         self::render_linked_artists();
         self::render_org_artworks();
         self::render_org_events();
+        self::render_org_communications();
         self::render_org_analytics();
         self::render_billing_history();
         echo '</div>';
@@ -295,6 +297,35 @@ class OrgDashboardAdmin {
             echo '<tr><td>' . $event->ID . '</td><td>' . esc_html(get_the_title($event)) . '</td></tr>';
         }
         echo '</tbody></table>';
+    }
+
+    // --- SECTION: Communications ---
+    private static function render_org_communications(): void
+    {
+        echo '<h2>Communications</h2>';
+        $org_id = self::get_current_org_id();
+        if (!$org_id) {
+            echo '<p>No organization assigned to your user.</p>';
+            return;
+        }
+        $messages = OrgCommunicationsCenter::get_messages_for_org($org_id);
+        echo '<div class="org-communications-center">';
+        echo '<h3>Inbox</h3>';
+        echo '<ul class="message-list">';
+        foreach ($messages as $msg) {
+            $unread = ($msg["status"] ?? '') === 'unread' ? 'unread' : '';
+            echo '<li class="message-summary ' . $unread . '">';
+            echo '<span class="msg-sender">' . esc_html($msg['user_from'] ?? '') . '</span>';
+            echo '<span class="msg-subject">' . esc_html($msg['subject'] ?? '') . '</span>';
+            echo '<span class="msg-event">' . esc_html($msg['event_id'] ?? '') . '</span>';
+            echo '<span class="msg-date">' . esc_html($msg['created_at'] ?? '') . '</span>';
+            echo '</li>';
+        }
+        if (empty($messages)) {
+            echo '<li>' . esc_html__('No messages found.', 'artpulse') . '</li>';
+        }
+        echo '</ul>';
+        echo '</div>';
     }
 
     // --- SECTION: Org Analytics (stub) ---
