@@ -3,6 +3,7 @@ namespace ArtPulse\Admin;
 use ArtPulse\Admin\ImportExportTab;
 use ArtPulse\Admin\SettingsRegistry;
 use ArtPulse\Admin\FieldRenderer;
+use ArtPulse\Core\ActivityLogger;
 
 class SettingsPage
 {
@@ -302,6 +303,14 @@ class SettingsPage
         if (class_exists('\\ArtPulse\\Admin\\LoginEventsPage')) {
             \ArtPulse\Admin\LoginEventsPage::add_event($user->ID, $ip);
         }
+        if (class_exists('\\ArtPulse\\Core\\ActivityLogger')) {
+            ActivityLogger::log(
+                intval(get_user_meta($user->ID, 'ap_organization_id', true)),
+                $user->ID,
+                'login',
+                'User logged in'
+            );
+        }
     }
 
     public static function trackLastLogout(): void
@@ -313,6 +322,14 @@ class SettingsPage
             update_user_meta($user_id, 'last_logout_ip', $ip);
             if (class_exists('\\ArtPulse\\Admin\\LoginEventsPage') && method_exists('\\ArtPulse\\Admin\\LoginEventsPage', 'record_logout')) {
                 \ArtPulse\Admin\LoginEventsPage::record_logout($user_id);
+            }
+            if (class_exists('\\ArtPulse\\Core\\ActivityLogger')) {
+                ActivityLogger::log(
+                    intval(get_user_meta($user_id, 'ap_organization_id', true)),
+                    $user_id,
+                    'logout',
+                    'User logged out'
+                );
             }
         }
     }
