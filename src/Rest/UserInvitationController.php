@@ -50,6 +50,11 @@ class UserInvitationController
     {
         $params = $request->get_json_params();
         $emails = $params['emails'] ?? null;
+        $role   = sanitize_key($params['role'] ?? 'viewer');
+        $valid  = ['org_admin','event_manager','viewer'];
+        if (!in_array($role, $valid, true)) {
+            $role = 'viewer';
+        }
         if (!is_array($emails) || empty($emails)) {
             return new WP_Error('invalid_emails', 'Invalid emails', ['status' => 400]);
         }
@@ -61,9 +66,14 @@ class UserInvitationController
                 return new WP_Error('invalid_emails', 'Invalid emails', ['status' => 400]);
             }
             wp_mail($email, 'Invitation', 'You are invited to organization ' . $org_id);
+            $user = get_user_by('email', $email);
+            if ($user) {
+                update_user_meta($user->ID, 'ap_organization_id', $org_id);
+                update_user_meta($user->ID, 'ap_org_role', $role);
+            }
             $invited[] = $email;
         }
-        return rest_ensure_response(['invited' => $invited]);
+        return rest_ensure_response(['invited' => $invited, 'role' => $role]);
     }
 
     public static function batch_users(WP_REST_Request $request): WP_REST_Response|WP_Error
