@@ -62,6 +62,8 @@ class Plugin
         add_action('init', [\ArtPulse\Core\ProfileMetrics::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ArtworkEventLinkManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Personalization\RecommendationEngine::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Core\ActivityLogger::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Core\DelegatedAccessManager::class, 'maybe_install_table']);
     }
 
     public function activate()
@@ -84,6 +86,8 @@ class Plugin
             \ArtPulse\Core\ProfileMetrics::install_table();
             \ArtPulse\Core\ArtworkEventLinkManager::install_table();
             \ArtPulse\Personalization\RecommendationEngine::install_table();
+            \ArtPulse\Core\ActivityLogger::install_table();
+            \ArtPulse\Core\DelegatedAccessManager::install_table();
             update_option($db_version_option, self::VERSION);
         }
 
@@ -139,6 +143,8 @@ class Plugin
         \ArtPulse\Community\UserPreferencesRestController::register();
         \ArtPulse\Core\ProfileMetrics::register();
         \ArtPulse\Core\RoleAuditLogger::register();
+        \ArtPulse\Core\ActivityLogger::register();
+        \ArtPulse\Core\DelegatedAccessManager::register();
         \ArtPulse\Admin\AdminListSorting::register();
         \ArtPulse\Rest\RestSortingSupport::register();
         \ArtPulse\Admin\AdminListColumns::register();
