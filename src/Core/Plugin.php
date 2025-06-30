@@ -89,6 +89,7 @@ class Plugin
 
         // Register CPTs and flush rewrite rules
         \ArtPulse\Core\PostTypeRegistrar::register();
+        \ArtPulse\Integration\CalendarExport::add_rewrite_rules();
         flush_rewrite_rules();
 
         // ✅ Fix: ensure roles/caps are installed
@@ -158,6 +159,7 @@ class Plugin
         PortfolioManager::register();
         \ArtPulse\Integration\PortfolioSync::register();
         \ArtPulse\Integration\OAuthManager::register();
+        \ArtPulse\Integration\CalendarExport::register();
         \ArtPulse\Frontend\LoginShortcode::register();
         \ArtPulse\Frontend\RegistrationShortcode::register();
         \ArtPulse\Frontend\LogoutShortcode::register();
