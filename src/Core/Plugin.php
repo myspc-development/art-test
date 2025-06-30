@@ -240,6 +240,7 @@ class Plugin
         \ArtPulse\Monetization\PaymentWebhookController::register();
         \ArtPulse\Monetization\SalesOverview::register();
         \ArtPulse\Monetization\PayoutManager::register();
+        \ArtPulse\Integration\WebhookManager::register();
         \ArtPulse\Monetization\EventPromotionManager::register();
         class_exists(\ArtPulse\Search\MetaFullTextSearch::class);
         \ArtPulse\Search\ExternalSearch::register();
