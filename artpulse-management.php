@@ -41,6 +41,7 @@ $plugin = new WooCommerceIntegration();
 register_activation_hook(__FILE__, function () {
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     artpulse_create_custom_table();
+    \ArtPulse\Core\FeedbackManager::install_table();
     Activator::activate(); // WooCommerceIntegration has no activate() method
 });
 
