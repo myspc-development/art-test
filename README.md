@@ -13,6 +13,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Event Comments Codex](docs/event-comments-codex.md) describes the REST routes used for event discussions.
 [Event Management Upgrades Codex](docs/event-management-upgrades-codex.md) explains calendar and bulk actions.
 [Messaging & Communication Codex](docs/messaging-communication-codex.md) covers direct messaging, reminders and comment moderation.
+[Finance & Payout Codex](docs/financial-overview-codex.md) explains revenue summaries, transaction filtering and payout history.
 
 ## Overview & Quick Reference
 
