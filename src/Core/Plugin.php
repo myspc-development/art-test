@@ -114,6 +114,7 @@ class Plugin
         flush_rewrite_rules();
         wp_clear_scheduled_hook('ap_daily_expiry_check');
         wp_clear_scheduled_hook('ap_daily_digest');
+        wp_clear_scheduled_hook('ap_process_scheduled_messages');
     }
 
     public function register_core_modules()

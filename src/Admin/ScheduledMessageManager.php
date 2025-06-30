@@ -15,10 +15,7 @@ class ScheduledMessageManager
     {
         add_action('admin_init', [self::class, 'maybe_install_table']);
         add_action('ap_process_scheduled_messages', [self::class, 'process_due_messages']);
-
-        if (!wp_next_scheduled('ap_process_scheduled_messages')) {
-            wp_schedule_event(time(), 'hourly', 'ap_process_scheduled_messages');
-        }
+        self::schedule_cron();
     }
 
     /**
@@ -59,6 +56,24 @@ class ScheduledMessageManager
         if ($exists !== $table) {
             self::install_scheduled_table();
         }
+    }
+
+    /**
+     * Schedule the cron event for processing messages.
+     */
+    public static function schedule_cron(): void
+    {
+        if (!wp_next_scheduled('ap_process_scheduled_messages')) {
+            wp_schedule_event(time(), 'hourly', 'ap_process_scheduled_messages');
+        }
+    }
+
+    /**
+     * Clear the cron event.
+     */
+    public static function clear_cron(): void
+    {
+        wp_clear_scheduled_hook('ap_process_scheduled_messages');
     }
 
     /**
