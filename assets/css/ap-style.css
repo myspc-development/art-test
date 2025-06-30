@@ -24,6 +24,20 @@
   --ap-disabled-color: #cccccc;
   --ap-dark-text-color: #000;
   --ap-subtext-color: #555;
+  /* Dark mode palette */
+  --ap-bg-color-dark: #1b1b1b;
+  --ap-text-color-dark: #e0e0e0;
+  --ap-heading-color-dark: #fff;
+  --ap-border-color-dark: #444;
+  --ap-light-bg-color-dark: #222;
+}
+
+body[data-theme="dark"] {
+  --ap-bg-color: var(--ap-bg-color-dark);
+  --ap-text-color: var(--ap-text-color-dark);
+  --ap-heading-color: var(--ap-heading-color-dark);
+  --ap-border-color: var(--ap-border-color-dark);
+  --ap-light-bg-color: var(--ap-light-bg-color-dark);
 }
 
 
@@ -234,7 +248,7 @@ button:focus {
 .ap-user-profile {
   border: 1px solid var(--ap-border-color);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 2rem;
   max-width: 500px;
   margin: 1.5rem auto;
   background: var(--ap-bg-color);
@@ -278,6 +292,15 @@ button:focus {
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
+}
+
+.ap-user-profile input,
+.ap-user-profile textarea {
+  width: 100%;
+  padding: var(--ap-input-padding);
+  border-radius: var(--ap-border-radius);
+  border: 1px solid var(--ap-border-color);
+  margin-bottom: 0.75rem;
 }
 
 .ap-user-social-links a:hover {
@@ -1113,7 +1136,11 @@ select.ap-input {
     font-size: 1.8em;
     cursor: pointer;
     color: #ccc;
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.2s;
+}
+.ap-fav-btn:hover,
+.ap-fav-btn:focus {
+    transform: scale(1.15);
 }
 .ap-fav-btn.ap-favorited { color: #f5ab35; }
 .ap-analytics-widget li { margin-bottom: 2em; }
@@ -1123,7 +1150,11 @@ select.ap-input {
     border: none;
     cursor: pointer;
     color: #ccc;
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.2s;
+}
+.ap-rsvp-btn:hover,
+.ap-rsvp-btn:focus {
+    transform: scale(1.15);
 }
 .ap-rsvp-btn.ap-rsvped { color: #5cb85c; }
 .ap-rsvp-count { color: #888; font-size: 0.9em; margin-left: 0.7em; }
@@ -1160,7 +1191,12 @@ select.ap-input {
   .ap-dashboard .ap-event-thumb{width:200px;flex-shrink:0;}
   .ap-dashboard .ap-event-card-content{padding:var(--ap-space-medium);}
 }
-.dashboard-widget{width:100%;max-width:500px;margin:var(--ap-space-medium) auto;}
+.dashboard-widget{position:relative;width:100%;max-width:500px;margin:var(--ap-space-medium) auto;}
+.ap-widget-handle{position:absolute;top:0.5rem;right:0.5rem;cursor:move;color:var(--ap-muted-text-color);font-size:1.2em;}
 @media (max-width:600px){.dashboard-widget{max-width:100%;font-size:1rem;}}
+.dashboard-controls{margin:1rem 0;display:flex;gap:0.5rem;}
+#ap-layout-controls{display:none;margin-bottom:1rem;}
+.ap-onboarding-banner{background:var(--ap-accent-color);color:#fff;padding:0.75rem 1rem;border-radius:var(--ap-border-radius);display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.ap-onboarding-banner button{margin-left:0.5rem;}
 .skip-link{position:absolute;top:-40px;left:0;background:var(--ap-primary-color);color:#fff;padding:.5rem 1rem;z-index:100}
 .skip-link:focus{top:0}
