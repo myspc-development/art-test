@@ -18,6 +18,12 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Internal Notes & Task Tracking Codex](docs/internal-notes-tasks-codex.md) covers collaboration features.
 [Webhook Automations Codex](docs/webhook-automation-codex.md) describes webhook management and payload delivery.
 
+Additional resources:
+
+- [API Reference](docs/api-reference.md)
+- [Testing Strategy](docs/testing-strategy.md)
+- [Help Resources](docs/help-resources.md)
+
 ## Overview & Quick Reference
 
 ### RSVP & Favorite Features
