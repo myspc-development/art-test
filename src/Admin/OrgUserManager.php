@@ -65,6 +65,11 @@ class OrgUserManager
         echo '<form id="ap-org-invite-form" method="post" enctype="multipart/form-data">';
         echo '<input type="file" id="ap-invite-csv" accept=".csv" />';
         echo '<textarea id="ap-invite-emails" rows="3" style="width:100%;max-width:600px" placeholder="email@example.com"></textarea>';
+        echo '<select id="ap-invite-role">';
+        echo '<option value="event_manager">' . esc_html__('Event Manager', 'artpulse') . '</option>';
+        echo '<option value="viewer">' . esc_html__('Viewer', 'artpulse') . '</option>';
+        echo '<option value="org_admin">' . esc_html__('Admin', 'artpulse') . '</option>';
+        echo '</select> ';
         echo '<button class="button button-primary" type="submit">' . esc_html__('Send Invites', 'artpulse') . '</button>';
         echo '</form>';
 
@@ -86,12 +91,13 @@ class OrgUserManager
         echo '</select> ';
         echo '<button class="button" type="submit">' . esc_html__('Apply', 'artpulse') . '</button>';
         echo '<table class="widefat striped" style="margin-top:10px">';
-        echo '<thead><tr><th><input type="checkbox" id="ap-select-all" /></th><th>' . esc_html__('User', 'artpulse') . '</th><th>' . esc_html__('Email', 'artpulse') . '</th></tr></thead><tbody>';
+        echo '<thead><tr><th><input type="checkbox" id="ap-select-all" /></th><th>' . esc_html__('User', 'artpulse') . '</th><th>' . esc_html__('Email', 'artpulse') . '</th><th>' . esc_html__('Role', 'artpulse') . '</th></tr></thead><tbody>';
         foreach ($users as $user) {
-            echo '<tr><td><input type="checkbox" class="ap-user-select" value="' . esc_attr($user->ID) . '" /></td><td>' . esc_html($user->display_name ?: $user->user_login) . '</td><td>' . esc_html($user->user_email) . '</td></tr>';
+            $role = get_user_meta($user->ID, 'ap_org_role', true) ?: 'viewer';
+            echo '<tr><td><input type="checkbox" class="ap-user-select" value="' . esc_attr($user->ID) . '" /></td><td>' . esc_html($user->display_name ?: $user->user_login) . '</td><td>' . esc_html($user->user_email) . '</td><td>' . esc_html(ucfirst($role)) . '</td></tr>';
         }
         if (empty($users)) {
-            echo '<tr><td colspan="3">' . esc_html__('No users found.', 'artpulse') . '</td></tr>';
+            echo '<tr><td colspan="4">' . esc_html__('No users found.', 'artpulse') . '</td></tr>';
         }
         echo '</tbody></table></form></div>';
     }

@@ -19,6 +19,9 @@ function update_user_meta(int $user_id, string $key, $value) {
     \ArtPulse\Rest\Tests\Stub::$user_meta[$user_id][$key] = $value;
     return true;
 }
+function get_user_by(string $field, string $value) {
+    return \ArtPulse\Rest\Tests\Stub::get_user_by($field, $value);
+}
 function wp_delete_user(int $user_id) {
     \ArtPulse\Rest\Tests\Stub::$deleted_users[] = $user_id;
     return true;
@@ -83,6 +86,7 @@ class Stub {
     public static array $user_meta = [];
     public static array $sent_emails = [];
     public static array $deleted_users = [];
+    public static array $users = [];
 
     public static function reset(): void {
         self::$can = true;
@@ -90,6 +94,16 @@ class Stub {
         self::$user_meta = [];
         self::$sent_emails = [];
         self::$deleted_users = [];
+        self::$users = [];
+    }
+
+    public static function get_user_by(string $field, string $value) {
+        foreach (self::$users as $id => $data) {
+            if ($field === 'email' && $data['user_email'] === $value) {
+                return (object)['ID' => $id];
+            }
+        }
+        return false;
     }
 }
 
@@ -103,10 +117,13 @@ class UserInvitationControllerTest extends TestCase
     public function test_invite_success(): void
     {
         Stub::$user_meta[1]['ap_organization_id'] = 5;
-        $req = new WP_REST_Request(['id' => 5], ['emails' => ['a@test.com', 'b@test.com']]);
+        Stub::$users = [2 => ['user_email' => 'a@test.com']];
+        $req = new WP_REST_Request(['id' => 5], ['emails' => ['a@test.com', 'b@test.com'], 'role' => 'event_manager']);
         $res = UserInvitationController::invite($req);
-        $this->assertSame(['invited' => ['a@test.com', 'b@test.com']], $res);
+        $this->assertSame(['invited' => ['a@test.com', 'b@test.com'], 'role' => 'event_manager'], $res);
         $this->assertCount(2, Stub::$sent_emails);
+        $this->assertSame(5, Stub::$user_meta[2]['ap_organization_id']);
+        $this->assertSame('event_manager', Stub::$user_meta[2]['ap_org_role']);
     }
 
     public function test_invite_permission_failure(): void

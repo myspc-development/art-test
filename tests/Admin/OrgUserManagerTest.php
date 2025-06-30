@@ -53,5 +53,7 @@ class OrgUserManagerTest extends TestCase
         OrgUserManager::render();
         $out = ob_get_clean();
         $this->assertStringContainsString('ap-org-invite-form', $out);
+        $this->assertStringContainsString('ap-invite-role', $out);
+        $this->assertStringContainsString('Role', $out);
     }
 }

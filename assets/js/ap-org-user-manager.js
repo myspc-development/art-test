@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const emailInput = document.getElementById('ap-invite-emails');
   const userForm = document.getElementById('ap-org-user-list');
   const selectAll = document.getElementById('ap-select-all');
+  const roleSelect = document.getElementById('ap-invite-role');
 
   inviteForm?.addEventListener('submit', e => {
     e.preventDefault();
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Content-Type': 'application/json',
         'X-WP-Nonce': APOrgUserManager.nonce
       },
-      body: JSON.stringify({ emails })
+      body: JSON.stringify({ emails, role: roleSelect ? roleSelect.value : 'viewer' })
     }).then(() => {
       if (emailInput) emailInput.value = '';
       if (csvInput) csvInput.value = '';
