@@ -172,6 +172,7 @@ class Plugin
         \ArtPulse\Admin\PendingSubmissionsPage::register();
         \ArtPulse\Admin\LoginEventsPage::register();
         \ArtPulse\Admin\OrgUserManager::register();
+        \ArtPulse\Admin\OrgCommunicationsCenter::register();
         \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
