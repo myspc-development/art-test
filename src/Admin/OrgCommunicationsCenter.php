@@ -77,4 +77,62 @@ class OrgCommunicationsCenter
         );
         return $results ?: [];
     }
+
+    /**
+     * Insert a new message row.
+     *
+     * @param array<string,mixed> $data
+     * @return int Inserted ID
+     */
+    public static function insert_message(array $data): int
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_org_messages';
+
+        $wpdb->insert($table, [
+            'org_id'    => $data['org_id'] ?? 0,
+            'event_id'  => $data['event_id'] ?? null,
+            'user_from' => $data['user_from'] ?? null,
+            'user_to'   => $data['user_to'] ?? null,
+            'subject'   => $data['subject'] ?? '',
+            'body'      => $data['body'] ?? '',
+            'thread_id' => $data['thread_id'] ?? null,
+            'status'    => $data['status'] ?? 'unread',
+            'created_at'=> current_time('mysql'),
+        ]);
+
+        return (int) $wpdb->insert_id;
+    }
+
+    /**
+     * Mark a message as read.
+     */
+    public static function mark_read(int $id): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_org_messages';
+        $wpdb->update($table, ['status' => 'read'], ['id' => $id]);
+    }
+
+    /**
+     * Retrieve messages in a thread ordered by date.
+     *
+     * @param int $thread_id
+     * @param int $limit
+     * @return array<int, array<string,mixed>>
+     */
+    public static function get_thread_messages(int $thread_id, int $limit = 50): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_org_messages';
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM $table WHERE thread_id = %d ORDER BY created_at ASC LIMIT %d",
+                $thread_id,
+                $limit
+            ),
+            ARRAY_A
+        );
+        return $results ?: [];
+    }
 }

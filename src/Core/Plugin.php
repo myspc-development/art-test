@@ -174,6 +174,7 @@ class Plugin
         \ArtPulse\Admin\LoginEventsPage::register();
         \ArtPulse\Admin\OrgUserManager::register();
         \ArtPulse\Admin\OrgCommunicationsCenter::register();
+        \ArtPulse\Admin\ScheduledMessageManager::register();
         \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
