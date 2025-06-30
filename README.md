@@ -6,6 +6,8 @@ Developers extending reporting or reminder features can reference the
 [Admin & Analytics Codex](docs/admin-analytics-codex.md). Developers
 implementing ticket sales or memberships can read the
 [Monetization & Ticketing Codex](docs/monetization-ticketing-codex.md).
+For artist dashboards and audience metrics see the
+[Analytics & Insights Codex](docs/analytics-insights-codex.md).
 For UI customization, white‑labeling and onboarding guidelines see the
 [UI/UX Polish Codex](docs/ui-ux-polish-codex.md).
 [Event Comments Codex](docs/event-comments-codex.md) describes the REST routes used for event discussions.
