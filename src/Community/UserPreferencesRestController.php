@@ -35,6 +35,13 @@ class UserPreferencesRestController
             'show_in_rest'      => true,
             'sanitize_callback' => 'rest_sanitize_boolean',
         ]);
+
+        register_meta('user', 'ap_dashboard_theme', [
+            'type'              => 'string',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'sanitize_text_field',
+        ]);
     }
 
     public static function register_routes(): void
@@ -47,6 +54,7 @@ class UserPreferencesRestController
                 'push_token'   => [ 'type' => 'string', 'required' => false ],
                 'phone_number' => [ 'type' => 'string', 'required' => false ],
                 'sms_opt_in'   => [ 'type' => 'boolean', 'required' => false ],
+                'dashboard_theme' => [ 'type' => 'string', 'required' => false ],
             ],
         ]);
     }
@@ -65,6 +73,10 @@ class UserPreferencesRestController
 
         if ($request->has_param('sms_opt_in')) {
             update_user_meta($user_id, 'ap_sms_opt_in', $request['sms_opt_in'] ? 1 : 0);
+        }
+
+        if ($request->has_param('dashboard_theme')) {
+            update_user_meta($user_id, 'ap_dashboard_theme', sanitize_text_field($request['dashboard_theme']));
         }
 
         return rest_ensure_response(['status' => 'saved']);

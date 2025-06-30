@@ -69,4 +69,13 @@ class UserDashboardDataTest extends \WP_UnitTestCase
         $this->assertIsArray($data['next_event']);
         $this->assertSame($this->event_id, $data['next_event']['id']);
     }
+
+    public function test_dashboard_data_returns_theme(): void
+    {
+        update_user_meta($this->user_id, 'ap_dashboard_theme', 'dark');
+        $request = new WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
+        $response = rest_get_server()->dispatch($request);
+        $data = $response->get_data();
+        $this->assertSame('dark', $data['dashboard_theme']);
+    }
 }
