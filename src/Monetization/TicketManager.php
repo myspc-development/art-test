@@ -189,11 +189,27 @@ class TicketManager
 
         $user = wp_get_current_user();
         if ($user && is_email($user->user_email)) {
+            $pdf = \ArtPulse\Core\DocumentGenerator::generate_ticket_pdf([
+                'event_title' => get_the_title($event_id),
+                'ticket_code' => $code,
+            ]);
+
+            $body    = sprintf(__('Your ticket code is %s', 'artpulse'), $code);
+            $message = \ArtPulse\Core\EmailTemplateManager::render($body, [
+                'username'    => $user->user_login,
+                'event_title' => get_the_title($event_id),
+            ]);
+            $headers = ['Content-Type: text/html; charset=UTF-8'];
             wp_mail(
                 $user->user_email,
                 sprintf(__('Ticket for %s', 'artpulse'), get_the_title($event_id)),
-                sprintf(__('Your ticket code is %s', 'artpulse'), $code)
+                $message,
+                $headers,
+                $pdf ? [$pdf] : []
             );
+            if ($pdf) {
+                unlink($pdf);
+            }
         }
 
         do_action('artpulse_ticket_purchased', $user_id, $event_id, $ticket_id, $qty);

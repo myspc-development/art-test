@@ -83,6 +83,14 @@ Endpoint:
 POST /wp-json/artpulse/v1/event/{id}/feature
 ```
 
+## 7. PDF Tickets & Receipts
+
+`DocumentGenerator` creates simple PDF tickets after a purchase. The generated
+file includes the event title and ticket code. `TicketManager` emails the PDF as
+an attachment using `EmailTemplateManager` for branding. Developers may
+customize the HTML via the `artpulse_email_template_html` filter or override the
+`generate_ticket_pdf()` method.
+
 ## Extensibility
 
 Filters such as `artpulse_ticket_providers` or `artpulse_membership_levels`
