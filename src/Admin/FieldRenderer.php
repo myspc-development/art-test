@@ -26,6 +26,14 @@ class FieldRenderer
                 );
                 break;
 
+            case 'textarea':
+                printf(
+                    '<textarea id="%1$s" name="artpulse_settings[%1$s]" rows="5" class="large-text">%2$s</textarea>',
+                    esc_attr($key),
+                    esc_textarea($value)
+                );
+                break;
+
             case 'number':
                 printf(
                     '<input type="number" id="%1$s" name="artpulse_settings[%1$s]" value="%2$s" class="regular-text" />',

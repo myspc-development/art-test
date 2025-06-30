@@ -151,6 +151,11 @@ class SettingsPage
                 'desc'  => __('Allow events to use waitlists.', 'artpulse'),
                 'type'  => 'checkbox',
             ],
+            'default_email_template' => [
+                'label' => __('Default Email Template', 'artpulse'),
+                'desc'  => __('HTML with placeholders like {{content}}', 'artpulse'),
+                'type'  => 'textarea',
+            ],
         ];
 
         foreach ($general_fields as $key => $cfg) {
@@ -619,6 +624,8 @@ class SettingsPage
             } elseif ($key === 'search_service') {
                 $allowed = ['algolia', 'elasticpress'];
                 $output[$key] = in_array($value, $allowed, true) ? $value : '';
+            } elseif ($key === 'default_email_template') {
+                $output[$key] = sanitize_textarea_field($value);
             } else {
                 $output[$key] = sanitize_text_field($value);
             }

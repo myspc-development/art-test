@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.8
+- Added EmailTemplateManager and customizable template field.
+- Ticket purchases now send a PDF ticket attachment.
+- DocumentGenerator utility introduced for simple PDF generation.
+
 ## 1.3.7
 - Adjusted table creation statements to use explicit PRIMARY KEY clause.
 - Added follower REST endpoints and `[ap_my_follows]` shortcode.

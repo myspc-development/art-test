@@ -13,12 +13,14 @@ See the [User Guide](user-guide.md) for instructions that attendees follow when 
 - Click **Message All** to email every RSVP'd user.
 - Use the message icon next to any attendee to send a single message.
 - Emails use your configured notification settings.
+- Customize the default email template under **ArtPulse → Settings**.
 
 ## Event Analytics
 
 - Dashboards visualize total RSVPs, favorites and attendance.
 - Charts show trends over time and top events at a glance.
 - Data can be exported as CSV for further analysis.
+- Ticket purchases automatically email a PDF ticket to the buyer.
 
 ## Embedding the Event Calendar
 
