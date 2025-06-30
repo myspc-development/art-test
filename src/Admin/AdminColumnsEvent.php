@@ -23,6 +23,7 @@ class AdminColumnsEvent
                 $new['event_venue']     = __( 'Venue',   'artpulse' );
                 $new['event_org']       = __( 'Organization', 'artpulse' );
                 $new['event_featured']  = __( '⭐ Featured', 'artpulse' );
+                $new['open_tasks']     = __( 'Open Tasks', 'artpulse' );
             }
             $new[ $key ] = $label;
         }
@@ -96,6 +97,14 @@ class AdminColumnsEvent
             case 'event_featured':
                 $flag = get_post_meta( $post_id, 'event_featured', true );
                 echo '1' === $flag ? '⭐' : '&mdash;';
+                break;
+            case 'open_tasks':
+                if ( class_exists('\\ArtPulse\\Admin\\EventNotesTasks') ) {
+                    $tasks = \ArtPulse\Admin\EventNotesTasks::get_open_count( $post_id );
+                    echo intval( $tasks );
+                } else {
+                    echo '0';
+                }
                 break;
         }
     }

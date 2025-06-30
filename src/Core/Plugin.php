@@ -213,6 +213,7 @@ class Plugin
 
         \ArtPulse\Admin\AdminColumnsTaxonomies::register();
         \ArtPulse\Admin\MemberEnhancements::register();
+        \ArtPulse\Admin\EventNotesTasks::register();
         \ArtPulse\Admin\ProfileLinkRequestAdmin::register();
         class_exists(\ArtPulse\Admin\OrgDashboardAdmin::class);
         \ArtPulse\Blocks\AdvancedTaxonomyFilterBlock::register();
@@ -240,6 +241,7 @@ class Plugin
         class_exists(\ArtPulse\Search\MetaFullTextSearch::class);
         \ArtPulse\Search\ExternalSearch::register();
         \ArtPulse\Personalization\RecommendationRestController::register();
+        \ArtPulse\Rest\EventManagementController::register();
     }
 
     public function enqueue_frontend_scripts()

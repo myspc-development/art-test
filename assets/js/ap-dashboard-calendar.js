@@ -9,7 +9,21 @@ document.addEventListener('DOMContentLoaded', function() {
       if (info.event.extendedProps.edit) {
         window.location.href = info.event.extendedProps.edit;
       }
-    }
+    },
+    editable: true,
+    eventDrop: updateEvent,
+    eventResize: updateEvent
   });
   calendar.render();
+
+  function updateEvent(info) {
+    fetch(APArtistCalendar.rest_root + 'artpulse/v1/event/' + info.event.id + '/dates', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WP-Nonce': APArtistCalendar.nonce
+      },
+      body: JSON.stringify({start: info.event.startStr, end: info.event.endStr})
+    });
+  }
 });

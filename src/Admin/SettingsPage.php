@@ -22,6 +22,7 @@ class SettingsPage
         SettingsRegistry::register_tab('location', __('Location APIs', 'artpulse'));
         SettingsRegistry::register_tab('import_export', __('Import/Export', 'artpulse'));
         SettingsRegistry::register_tab('shortcodes', __('Shortcode Pages', 'artpulse'));
+        SettingsRegistry::register_tab('search', __('Search', 'artpulse'));
 
         $general_fields = [
             'basic_fee' => [
@@ -153,6 +154,37 @@ class SettingsPage
 
         foreach ($general_fields as $key => $cfg) {
             SettingsRegistry::register_field('general', $key, $cfg);
+        }
+
+        $search_fields = [
+            'search_service' => [
+                'label'   => __('Search Provider', 'artpulse'),
+                'desc'    => __('Select Algolia or ElasticPress.', 'artpulse'),
+                'type'    => 'select',
+                'options' => [
+                    ''             => __('None', 'artpulse'),
+                    'algolia'      => 'Algolia',
+                    'elasticpress' => 'ElasticPress'
+                ],
+            ],
+            'algolia_app_id' => [
+                'label' => __('Algolia App ID', 'artpulse'),
+                'desc'  => __('Your Algolia application ID.', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'algolia_api_key' => [
+                'label' => __('Algolia API Key', 'artpulse'),
+                'desc'  => __('Search-only API key.', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'elasticpress_host' => [
+                'label' => __('ElasticPress Host', 'artpulse'),
+                'desc'  => __('Elasticsearch endpoint URL.', 'artpulse'),
+                'type'  => 'text',
+            ],
+        ];
+        foreach ($search_fields as $key => $cfg) {
+            SettingsRegistry::register_field('search', $key, $cfg);
         }
 
         $location_fields = [
@@ -567,6 +599,9 @@ class SettingsPage
                 $output[$key] = isset($value) ? 1 : 0;
             } elseif ($key === 'payment_metrics_cache' || in_array($key, ['default_rsvp_limit', 'min_rsvp_limit', 'max_rsvp_limit'])) {
                 $output[$key] = absint($value);
+            } elseif ($key === 'search_service') {
+                $allowed = ['algolia', 'elasticpress'];
+                $output[$key] = in_array($value, $allowed, true) ? $value : '';
             } else {
                 $output[$key] = sanitize_text_field($value);
             }

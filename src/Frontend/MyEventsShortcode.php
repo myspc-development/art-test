@@ -34,7 +34,8 @@ class MyEventsShortcode {
         wp_enqueue_script('fullcalendar-js', 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.js', [], null, true);
         wp_enqueue_script('ap-dashboard-calendar', plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-dashboard-calendar.js', ['fullcalendar-js'], '1.0', true);
         wp_localize_script('ap-dashboard-calendar', 'APArtistCalendar', [
-            'rest_root' => esc_url_raw(rest_url())
+            'rest_root' => esc_url_raw(rest_url()),
+            'nonce'     => wp_create_nonce('wp_rest')
         ]);
 
         ob_start();
@@ -48,6 +49,8 @@ class MyEventsShortcode {
                 <option value="duplicate"><?php esc_html_e('Duplicate', 'artpulse'); ?></option>
                 <option value="delete"><?php esc_html_e('Delete', 'artpulse'); ?></option>
                 <option value="export"><?php esc_html_e('Export Attendees', 'artpulse'); ?></option>
+                <option value="publish"><?php esc_html_e('Publish', 'artpulse'); ?></option>
+                <option value="draft"><?php esc_html_e('Mark Draft', 'artpulse'); ?></option>
             </select>
             <button type="submit">Apply</button>
             <table class="ap-my-events-table">
@@ -157,7 +160,18 @@ class MyEventsShortcode {
                     wp_trash_post($id);
                     break;
                 case 'export':
-                    // Not implemented
+                    $request = new \WP_REST_Request('GET');
+                    $request->set_param('id', $id);
+                    $resp = \ArtPulse\Rest\RsvpRestController::export_attendees($request);
+                    header('Content-Type: text/csv');
+                    header('Content-Disposition: attachment; filename="event-' . $id . '-attendees.csv"');
+                    echo $resp->get_data();
+                    exit;
+                case 'publish':
+                    wp_update_post(['ID' => $id, 'post_status' => 'publish']);
+                    break;
+                case 'draft':
+                    wp_update_post(['ID' => $id, 'post_status' => 'draft']);
                     break;
             }
         }
