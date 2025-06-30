@@ -155,6 +155,7 @@ class UserDashboardManager
             'membership_level'   => get_user_meta($user_id, 'ap_membership_level', true),
             'membership_expires' => get_user_meta($user_id, 'ap_membership_expires', true),
             'membership_paused'  => (bool) get_user_meta($user_id, 'ap_membership_paused', true),
+            'dashboard_theme'   => get_user_meta($user_id, 'ap_dashboard_theme', true),
             'country'            => get_user_meta($user_id, 'ap_country', true),
             'state'              => get_user_meta($user_id, 'ap_state', true),
             'city'               => get_user_meta($user_id, 'ap_city', true),

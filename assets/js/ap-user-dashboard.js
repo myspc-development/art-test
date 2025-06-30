@@ -1,6 +1,7 @@
 let myEvents = [];
 let nextEvent = null;
 let engagementPage = 1;
+const applyTheme = t => { document.body.dataset.theme = t; };
 document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-dashboard');
   if (!dash) return;
@@ -43,13 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const themeToggle = document.getElementById('ap-toggle-theme');
   if (themeToggle) {
-    const applyTheme = t => { document.body.dataset.theme = t; };
     const saved = localStorage.getItem('apTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     applyTheme(saved);
     themeToggle.addEventListener('click', () => {
       const next = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
       applyTheme(next);
       localStorage.setItem('apTheme', next);
+      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/user-preferences`, {
+        method: 'POST',
+        headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dashboard_theme: next })
+      });
     });
   }
 
@@ -85,6 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
   })
   .then(res => res.json())
   .then(data => {
+    if (data.dashboard_theme) {
+      applyTheme(data.dashboard_theme);
+      localStorage.setItem('apTheme', data.dashboard_theme);
+    }
     myEvents = data.my_events || [];
     nextEvent = data.next_event || null;
     const statsBox = document.getElementById('ap-dashboard-stats');
@@ -498,6 +507,10 @@ function refreshDashboardEvents() {
   })
     .then(r => r.json())
     .then(data => {
+      if (data.dashboard_theme) {
+        applyTheme(data.dashboard_theme);
+        localStorage.setItem('apTheme', data.dashboard_theme);
+      }
       myEvents = data.my_events || [];
       nextEvent = data.next_event || null;
       const statsBox = document.getElementById('ap-dashboard-stats');
