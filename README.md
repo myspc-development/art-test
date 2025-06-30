@@ -12,6 +12,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [UI/UX Polish Codex](docs/ui-ux-polish-codex.md).
 [Event Comments Codex](docs/event-comments-codex.md) describes the REST routes used for event discussions.
 [Event Management Upgrades Codex](docs/event-management-upgrades-codex.md) explains calendar and bulk actions.
+[Event Template & Duplication Codex](docs/event-template-duplication-codex.md) covers template storage and cloning helpers.
 [Messaging & Communication Codex](docs/messaging-communication-codex.md) covers direct messaging, reminders and comment moderation.
 
 ## Overview & Quick Reference
