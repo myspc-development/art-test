@@ -307,3 +307,38 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 - Buttons and forms support keyboard navigation and screen readers.
 - Event cards and dashboards are designed for responsive display.
 
+## Development Setup
+
+Install Composer dependencies and WordPress PHPUnit tools:
+
+```bash
+composer install
+```
+
+Install Node packages used for building JavaScript and SCSS assets:
+
+```bash
+npm install
+```
+
+Run the test suite and coding standards checks with:
+
+```bash
+composer test
+composer sniff
+```
+
+The `package.json` file defines scripts for building production assets. To compile CSS and bundle blocks run:
+
+```bash
+npm run build
+```
+
+To create a distributable archive execute the Composer `zip` script:
+
+```bash
+composer zip
+```
+
+The zip file is placed in the `release/` directory.
+
