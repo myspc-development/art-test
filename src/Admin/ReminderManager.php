@@ -56,10 +56,16 @@ class ReminderManager
 
     public static function send_reminder(int $event_id, string $message): void
     {
-        $author = get_post_field('post_author', $event_id);
-        $user   = $author ? get_userdata($author) : null;
-        if ($user && is_email($user->user_email)) {
-            wp_mail($user->user_email, __('Event Reminder', 'artpulse'), $message);
+        $rsvps = get_post_meta($event_id, 'event_rsvp_list', true);
+        if (!is_array($rsvps)) {
+            $rsvps = [];
+        }
+
+        foreach ($rsvps as $uid) {
+            $user = get_userdata($uid);
+            if ($user && is_email($user->user_email)) {
+                wp_mail($user->user_email, __('Event Reminder', 'artpulse'), $message);
+            }
         }
     }
 }
