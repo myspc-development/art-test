@@ -46,6 +46,43 @@ Endpoint:
 GET/POST /wp-json/artpulse/v1/user/membership
 ```
 
+## 4. Sales Overview
+
+`SalesOverview` aggregates ticket purchases for the current artist. The
+endpoint returns total revenue, tickets sold and a daily trend array. Results
+can be filtered by event ID and date range.
+
+Endpoint:
+
+```
+GET /wp-json/artpulse/v1/user/sales?event_id=123&from=2024-01-01&to=2024-02-01
+```
+
+## 5. Payout Tracking
+
+`PayoutManager` stores payouts in the `ap_payouts` table and exposes a REST
+route for viewing payout history and current balance. Artists may update their
+payout method via a settings route.
+
+Endpoints:
+
+```
+GET  /wp-json/artpulse/v1/user/payouts
+POST /wp-json/artpulse/v1/user/payouts/settings
+```
+
+## 6. Event Promotion
+
+`EventPromotionManager` offers a simple route to feature an event after payment
+processing. The route sets a `ap_featured` meta flag which themes can use to
+boost visibility.
+
+Endpoint:
+
+```
+POST /wp-json/artpulse/v1/event/{id}/feature
+```
+
 ## Extensibility
 
 Filters such as `artpulse_ticket_providers` or `artpulse_membership_levels`
