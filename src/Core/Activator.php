@@ -35,6 +35,7 @@ class Activator
         // Ensure role hierarchy table exists and populated
         RoleSetup::maybe_install_table();
         OrgCommunicationsCenter::install_messages_table();
+        \ArtPulse\Admin\ScheduledMessageManager::install_scheduled_table();
 
         // Create indexes to speed up membership lookups
         self::maybe_add_meta_indexes();
