@@ -68,6 +68,14 @@ class PostTypeRegistrar
                 'rewrite'    => ['slug' => 'organizations'],
                 'menu_icon'  => 'dashicons-building',
             ],
+            'ap_event_template' => [
+                'label'       => __('Event Templates', 'artpulse'),
+                'public'      => false,
+                'show_ui'     => true,
+                'show_in_menu'=> 'edit.php?post_type=artpulse_event',
+                'supports'    => ['title', 'editor'],
+                'menu_icon'   => 'dashicons-calendar-alt',
+            ],
         ];
 
         $opts              = get_option('artpulse_settings', []);
