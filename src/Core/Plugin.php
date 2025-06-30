@@ -237,6 +237,9 @@ class Plugin
         \ArtPulse\Core\MembershipNotifier::register();
         \ArtPulse\Core\MembershipCron::register();
         \ArtPulse\Engagement\DigestMailer::register();
+        \ArtPulse\Core\FeedbackManager::register();
+        \ArtPulse\Frontend\FeedbackWidget::register();
+        \ArtPulse\Admin\FeedbackPage::register();
         \ArtPulse\Admin\ReportingManager::register();
         \ArtPulse\Admin\CustomFieldsManager::register();
         \ArtPulse\Admin\SurveyManager::register();
