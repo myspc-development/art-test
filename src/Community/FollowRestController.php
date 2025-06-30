@@ -28,6 +28,28 @@ class FollowRestController
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => self::get_schema(),
         ]);
+
+        register_rest_route('artpulse/v1', '/follows', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'list_follows'],
+            'permission_callback' => fn() => is_user_logged_in(),
+            'args'                => [
+                'post_type' => [
+                    'type'     => 'string',
+                    'required' => false,
+                    'enum'     => ['artpulse_artist', 'artpulse_event', 'artpulse_org', 'user'],
+                ],
+            ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/followers/(?P<user_id>\\d+)', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'get_followers'],
+            'permission_callback' => '__return_true',
+            'args'                => [
+                'user_id' => [ 'type' => 'integer', 'required' => true ],
+            ],
+        ]);
     }
 
     public static function get_schema(): array
@@ -63,6 +85,8 @@ class FollowRestController
             update_user_meta($user_id, '_ap_follows', $follows);
         }
 
+        FollowManager::add_follow($user_id, $post_id, $post_type);
+
         return rest_ensure_response(['status' => 'following', 'follows' => $follows]);
     }
 
@@ -77,6 +101,24 @@ class FollowRestController
             update_user_meta($user_id, '_ap_follows', array_values($follows));
         }
 
+        FollowManager::remove_follow($user_id, $post_id, $request['post_type']);
+
         return rest_ensure_response(['status' => 'unfollowed', 'follows' => $follows]);
+    }
+
+    public static function list_follows(WP_REST_Request $request): WP_REST_Response
+    {
+        $user_id   = get_current_user_id();
+        $type      = $request['post_type'] ? sanitize_key($request['post_type']) : null;
+
+        $rows = FollowManager::get_user_follows($user_id, $type);
+        return rest_ensure_response($rows);
+    }
+
+    public static function get_followers(WP_REST_Request $request): WP_REST_Response
+    {
+        $user_id = absint($request['user_id']);
+        $followers = FollowManager::get_followers($user_id);
+        return rest_ensure_response(['user_id' => $user_id, 'followers' => $followers]);
     }
 }

@@ -35,6 +35,15 @@ class FollowManager {
             'followed_on'  => current_time('mysql')
         ]);
 
+        // --- Maintain following/follower counts ---
+        $following = (int) get_user_meta($user_id, 'ap_following_count', true);
+        update_user_meta($user_id, 'ap_following_count', $following + 1);
+
+        if ($object_type === 'user') {
+            $followers = (int) get_user_meta($object_id, 'ap_follower_count', true);
+            update_user_meta($object_id, 'ap_follower_count', $followers + 1);
+        }
+
         /**
          * Action triggered after a follow is added.
          */
@@ -60,11 +69,21 @@ class FollowManager {
     public static function remove_follow($user_id, $object_id, $object_type) {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_follows';
-        $wpdb->delete($table, [
+        $deleted = $wpdb->delete($table, [
             'user_id'     => $user_id,
             'object_id'   => $object_id,
             'object_type' => $object_type,
         ]);
+
+        if ($deleted) {
+            $following = max(0, (int) get_user_meta($user_id, 'ap_following_count', true) - 1);
+            update_user_meta($user_id, 'ap_following_count', $following);
+
+            if ($object_type === 'user') {
+                $followers = max(0, (int) get_user_meta($object_id, 'ap_follower_count', true) - 1);
+                update_user_meta($object_id, 'ap_follower_count', $followers);
+            }
+        }
 
         /**
          * Action triggered after a follow is removed.
@@ -101,6 +120,25 @@ class FollowManager {
         }
         $sql .= " ORDER BY followed_on DESC";
         return $wpdb->get_results($wpdb->prepare($sql, ...$params));
+    }
+
+    /**
+     * Get followers of a user.
+     *
+     * @param int $user_id
+     * @return array<int>
+     */
+    public static function get_followers(int $user_id): array {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_follows';
+        $rows  = $wpdb->get_col(
+            $wpdb->prepare(
+                "SELECT user_id FROM $table WHERE object_id = %d AND object_type = %s ORDER BY followed_on DESC",
+                $user_id,
+                'user'
+            )
+        );
+        return array_map('intval', $rows);
     }
 
     /**
