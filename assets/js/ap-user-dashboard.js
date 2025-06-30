@@ -4,6 +4,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-dashboard');
   if (!dash) return;
 
+  const widgetArea = document.getElementById('ap-dashboard-widgets');
+  if (widgetArea && window.Sortable) {
+    new Sortable(widgetArea, {
+      animation: 150,
+      onEnd: saveLayoutOrder
+    });
+    applySavedLayout();
+  }
+
+  const toggles = document.querySelectorAll('#ap-widget-toggles input[type="checkbox"]');
+  toggles.forEach(cb => {
+    cb.addEventListener('change', () => {
+      const target = document.querySelector(`[data-widget="${cb.value}"]`);
+      if (target) target.style.display = cb.checked ? '' : 'none';
+      saveVisibility();
+    });
+  });
+  applySavedVisibility();
+
+  const resetBtn = document.getElementById('ap-reset-layout');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      localStorage.removeItem('apDashboardLayout');
+      localStorage.removeItem('apWidgetVisibility');
+      window.location.reload();
+    });
+  }
+
   const exportJsonBtn = document.getElementById('ap-export-json');
   if (exportJsonBtn) exportJsonBtn.onclick = () => exportUserData('json');
   const exportCsvBtn = document.getElementById('ap-export-csv');
@@ -627,4 +655,46 @@ async function renderProfileMetricsChart() {
       scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
     }
   });
+}
+
+function saveLayoutOrder() {
+  const area = document.getElementById('ap-dashboard-widgets');
+  if (!area) return;
+  const ids = Array.from(area.querySelectorAll('[data-widget]')).map(w => w.dataset.widget);
+  localStorage.setItem('apDashboardLayout', JSON.stringify(ids));
+}
+
+function applySavedLayout() {
+  const area = document.getElementById('ap-dashboard-widgets');
+  const saved = localStorage.getItem('apDashboardLayout');
+  if (!area || !saved) return;
+  try {
+    const order = JSON.parse(saved);
+    order.forEach(id => {
+      const el = area.querySelector(`[data-widget="${id}"]`);
+      if (el) area.appendChild(el);
+    });
+  } catch (e) {}
+}
+
+function saveVisibility() {
+  const vis = {};
+  document.querySelectorAll('#ap-widget-toggles input[type="checkbox"]').forEach(cb => {
+    vis[cb.value] = cb.checked;
+  });
+  localStorage.setItem('apWidgetVisibility', JSON.stringify(vis));
+}
+
+function applySavedVisibility() {
+  const saved = localStorage.getItem('apWidgetVisibility');
+  if (!saved) return;
+  try {
+    const vis = JSON.parse(saved);
+    Object.keys(vis).forEach(id => {
+      const widget = document.querySelector(`[data-widget="${id}"]`);
+      const cb = document.querySelector(`#ap-widget-toggles input[value="${id}"]`);
+      if (cb) cb.checked = vis[id];
+      if (widget) widget.style.display = vis[id] ? '' : 'none';
+    });
+  } catch (e) {}
 }

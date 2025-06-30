@@ -12,6 +12,19 @@
   color: var(--ap-text-color);
 }
 
+.dashboard-widget {
+  width: 100%;
+  max-width: 500px;
+  margin: var(--ap-space-medium) auto;
+}
+
+@media (max-width: 600px) {
+  .dashboard-widget {
+    max-width: 100%;
+    font-size: 1rem;
+  }
+}
+
 #ap-membership-info,
 #ap-next-payment,
 #ap-transactions,
