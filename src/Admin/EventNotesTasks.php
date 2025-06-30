@@ -104,10 +104,29 @@ class EventNotesTasks
         ) $charset");
     }
 
+    /**
+     * Determine if a table exists in the database.
+     *
+     * These checks avoid queries failing on fresh installs where the
+     * tables may not have been created yet.
+     */
+    private static function table_exists(string $table): bool
+    {
+        global $wpdb;
+        return (bool) $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+    }
+
     private static function get_notes(int $event_id): array
     {
         global $wpdb;
         $table = $wpdb->prefix.'ap_event_notes';
+        // Ensure the notes table exists to avoid errors on new installs.
+        if (!self::table_exists($table)) {
+            self::maybe_install_tables();
+            if (!self::table_exists($table)) {
+                return [];
+            }
+        }
         return $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE event_id=%d ORDER BY created_at DESC", $event_id), ARRAY_A) ?: [];
     }
 
@@ -115,6 +134,13 @@ class EventNotesTasks
     {
         global $wpdb;
         $table = $wpdb->prefix.'ap_event_tasks';
+        // Ensure the tasks table exists to avoid errors on new installs.
+        if (!self::table_exists($table)) {
+            self::maybe_install_tables();
+            if (!self::table_exists($table)) {
+                return [];
+            }
+        }
         return $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE event_id=%d ORDER BY created_at DESC", $event_id), ARRAY_A) ?: [];
     }
 
@@ -122,6 +148,13 @@ class EventNotesTasks
     {
         global $wpdb;
         $table = $wpdb->prefix.'ap_event_notes';
+        // Skip if the table is missing to prevent insert errors on fresh installs.
+        if (!self::table_exists($table)) {
+            self::maybe_install_tables();
+            if (!self::table_exists($table)) {
+                return;
+            }
+        }
         $wpdb->insert($table, [
             'event_id' => $event_id,
             'user_id' => $user_id,
@@ -134,6 +167,13 @@ class EventNotesTasks
     {
         global $wpdb;
         $table = $wpdb->prefix.'ap_event_tasks';
+        // Skip if the table is missing to prevent insert errors on fresh installs.
+        if (!self::table_exists($table)) {
+            self::maybe_install_tables();
+            if (!self::table_exists($table)) {
+                return;
+            }
+        }
         $wpdb->insert($table, [
             'event_id' => $event_id,
             'title' => $title,
@@ -148,6 +188,13 @@ class EventNotesTasks
     {
         global $wpdb;
         $table = $wpdb->prefix.'ap_event_tasks';
+        // Avoid SELECT errors if tables have not been created yet.
+        if (!self::table_exists($table)) {
+            self::maybe_install_tables();
+            if (!self::table_exists($table)) {
+                return 0;
+            }
+        }
         return (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE event_id=%d AND status='open'", $event_id));
     }
 
