@@ -20,7 +20,8 @@ class FeedbackManager
         $charset = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT AUTO_INCREMENT,
+            PRIMARY KEY (id),
             user_id BIGINT NULL,
             type VARCHAR(50) NOT NULL,
             description TEXT NOT NULL,

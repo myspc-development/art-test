@@ -9,7 +9,8 @@ class UserEngagementLogger
         $table = $wpdb->prefix . 'ap_user_engagement_log';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT AUTO_INCREMENT,
+            PRIMARY KEY (id),
             user_id BIGINT NOT NULL,
             type VARCHAR(20) NOT NULL,
             event_id BIGINT NOT NULL,

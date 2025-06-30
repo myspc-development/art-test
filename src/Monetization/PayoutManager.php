@@ -42,7 +42,8 @@ class PayoutManager
         if ($exists !== $table) {
             $charset = $wpdb->get_charset_collate();
             $sql = "CREATE TABLE $table (
-                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                id BIGINT AUTO_INCREMENT,
+            PRIMARY KEY (id),
                 artist_id BIGINT NOT NULL,
                 amount DECIMAL(10,2) NOT NULL DEFAULT 0,
                 status VARCHAR(20) NOT NULL DEFAULT 'pending',
