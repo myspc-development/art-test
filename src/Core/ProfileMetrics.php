@@ -9,7 +9,8 @@ class ProfileMetrics
         $table   = $wpdb->prefix . 'ap_profile_metrics';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT AUTO_INCREMENT,
+            PRIMARY KEY (id),
             profile_id BIGINT NOT NULL,
             metric VARCHAR(20) NOT NULL,
             day DATE NOT NULL,

@@ -10,7 +10,8 @@ class NotificationManager {
         $table = $wpdb->prefix . 'ap_notifications';
         $charset_collate = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT AUTO_INCREMENT,
+            PRIMARY KEY (id),
             user_id BIGINT NOT NULL,
             type VARCHAR(40) NOT NULL,
             object_id BIGINT NULL,

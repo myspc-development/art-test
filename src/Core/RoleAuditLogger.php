@@ -18,7 +18,8 @@ class RoleAuditLogger
         }
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT AUTO_INCREMENT,
+            PRIMARY KEY (id),
             org_id BIGINT NOT NULL,
             user_id BIGINT NOT NULL,
             admin_id BIGINT NOT NULL,

@@ -15,7 +15,8 @@ function artpulse_install_favorites_table() {
     }
 
     $sql = "CREATE TABLE $table (
-        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        id BIGINT AUTO_INCREMENT,
+            PRIMARY KEY (id),
         user_id BIGINT NOT NULL,
         object_id BIGINT NOT NULL,
         object_type VARCHAR(32) NOT NULL,

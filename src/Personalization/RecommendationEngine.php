@@ -21,7 +21,8 @@ class RecommendationEngine
         $table = $wpdb->prefix . 'ap_user_activity';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT AUTO_INCREMENT,
+            PRIMARY KEY (id),
             user_id BIGINT NOT NULL,
             object_type VARCHAR(20) NOT NULL,
             object_id BIGINT NOT NULL,
