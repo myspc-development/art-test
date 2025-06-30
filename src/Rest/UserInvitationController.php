@@ -51,14 +51,14 @@ class UserInvitationController
         $params = $request->get_json_params();
         $emails = $params['emails'] ?? null;
         $role   = sanitize_key($params['role'] ?? 'viewer');
-        $valid  = ['org_admin','event_manager','viewer'];
+        $org_id  = absint($request->get_param('id'));
+        $valid   = array_keys(\ArtPulse\Core\OrgRoleManager::get_roles($org_id));
         if (!in_array($role, $valid, true)) {
             $role = 'viewer';
         }
         if (!is_array($emails) || empty($emails)) {
             return new WP_Error('invalid_emails', 'Invalid emails', ['status' => 400]);
         }
-        $org_id  = absint($request->get_param('id'));
         $invited = [];
         foreach ($emails as $email) {
             $email = sanitize_email($email);
@@ -69,7 +69,7 @@ class UserInvitationController
             $user = get_user_by('email', $email);
             if ($user) {
                 update_user_meta($user->ID, 'ap_organization_id', $org_id);
-                update_user_meta($user->ID, 'ap_org_role', $role);
+                \ArtPulse\Core\OrgRoleManager::assign_roles($user->ID, [$role]);
             }
             $invited[] = $email;
         }

@@ -138,6 +138,7 @@ class Plugin
         \ArtPulse\Core\NotificationShortcode::register();
         \ArtPulse\Community\UserPreferencesRestController::register();
         \ArtPulse\Core\ProfileMetrics::register();
+        \ArtPulse\Core\RoleAuditLogger::register();
         \ArtPulse\Admin\AdminListSorting::register();
         \ArtPulse\Rest\RestSortingSupport::register();
         \ArtPulse\Admin\AdminListColumns::register();
@@ -175,6 +176,7 @@ class Plugin
         \ArtPulse\Admin\PendingSubmissionsPage::register();
         \ArtPulse\Admin\LoginEventsPage::register();
         \ArtPulse\Admin\OrgUserManager::register();
+        \ArtPulse\Admin\OrgRolesPage::register();
         \ArtPulse\Admin\OrgCommunicationsCenter::register();
         \ArtPulse\Admin\ScheduledMessageManager::register();
         \ArtPulse\Rest\RestRoutes::register();
