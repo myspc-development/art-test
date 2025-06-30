@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const controls = filterBlock.querySelectorAll('.ap-ajax-filter-controls input[type="checkbox"]');
   const resultsList = filterBlock.querySelector('.ap-ajax-filter-results ul');
   const resultsMessage = filterBlock.querySelector('.ap-ajax-filter-results p');
+  resultsList.setAttribute('role', 'list');
+  resultsMessage.setAttribute('role', 'status');
+  resultsMessage.setAttribute('aria-live', 'polite');
   const prevBtn = filterBlock.querySelector('.ap-ajax-filter-pagination .prev');
   const nextBtn = filterBlock.querySelector('.ap-ajax-filter-pagination .next');
 
@@ -13,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function fetchResults(page = 1) {
     resultsList.innerHTML = '';
+    resultsList.setAttribute('aria-busy', 'true');
     resultsMessage.textContent = 'Loading...';
 
     // Gather selected filters
@@ -35,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsList.innerHTML = '';
         if (!data.posts || data.posts.length === 0) {
           resultsMessage.textContent = 'No results found.';
+          resultsList.removeAttribute('aria-busy');
           prevBtn.disabled = true;
           nextBtn.disabled = true;
           return;
@@ -43,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         data.posts.forEach(post => {
           const li = document.createElement('li');
+          li.setAttribute('role', 'listitem');
           const a = document.createElement('a');
           a.href = post.link;
           a.textContent = post.title;
@@ -53,9 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPage = data.page || 1;
         prevBtn.disabled = currentPage <= 1;
         nextBtn.disabled = currentPage >= data.max_page;
+        resultsList.removeAttribute('aria-busy');
       })
       .catch(() => {
         resultsMessage.textContent = 'Error loading results.';
+        resultsList.removeAttribute('aria-busy');
       });
   }
 

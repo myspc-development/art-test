@@ -76,6 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const resultsDiv = document.createElement('div');
         resultsDiv.className = 'ap-ajax-filter-results';
+        resultsDiv.setAttribute('role', 'status');
+        resultsDiv.setAttribute('aria-live', 'polite');
 
         container.appendChild(filterDiv);
         container.appendChild(resultsDiv);
@@ -112,10 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             resultsDiv.innerHTML = '<p>Loading…</p>';
+            resultsDiv.setAttribute('aria-busy', 'true');
 
             wp.apiFetch({ path }).then(data => {
                 if (!data.posts.length) {
                     resultsDiv.innerHTML = '<p>No posts found.</p>';
+                    resultsDiv.removeAttribute('aria-busy');
                     return;
                 }
 
@@ -158,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     resultsDiv.appendChild(paginationDiv);
                 }
+                resultsDiv.removeAttribute('aria-busy');
             });
         }
     });

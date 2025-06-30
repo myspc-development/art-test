@@ -784,6 +784,11 @@ select.ap-input {
   font-size: 1rem;
 }
 
+.ap-ajax-filter-results a:focus-visible {
+  outline: 2px solid var(--ap-primary-color);
+  outline-offset: 2px;
+}
+
 /* Pagination container */
 .ap-ajax-filter-pagination {
   margin-top: 15px;
