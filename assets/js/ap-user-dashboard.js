@@ -1,5 +1,6 @@
 let myEvents = [];
 let nextEvent = null;
+let engagementPage = 1;
 document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-dashboard');
   if (!dash) return;
@@ -204,6 +205,14 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSupportHistory(supportHistory);
 
     fetchNotifications();
+    fetchEngagementFeed(engagementPage);
+    const loadMoreBtn = document.getElementById('ap-engagement-load-more');
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => {
+        engagementPage++;
+        fetchEngagementFeed(engagementPage);
+      });
+    }
   });
 });
 
@@ -404,6 +413,43 @@ function markAllNotificationsRead() {
     .catch(() => {
     alert('Failed to mark all as read');
   });
+}
+
+function fetchEngagementFeed(page = 1) {
+  const container = document.getElementById('ap-engagement-feed');
+  const moreBtn = document.getElementById('ap-engagement-load-more');
+  if (!container) return;
+  if (page === 1) container.textContent = '';
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/user/engagement?page=${page}`, {
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+  })
+    .then(res => res.json())
+    .then(items => {
+      if (page === 1 && (!items || !items.length)) {
+        container.textContent = 'No activity.';
+        if (moreBtn) moreBtn.style.display = 'none';
+        return;
+      }
+      let ul = container.querySelector('ul');
+      if (!ul) {
+        ul = document.createElement('ul');
+        container.appendChild(ul);
+      }
+      items.forEach(it => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = it.link;
+        a.textContent = it.title || it.type;
+        li.appendChild(a);
+        const date = document.createElement('time');
+        date.textContent = new Date(it.date).toLocaleDateString();
+        li.append(' ', date);
+        ul.appendChild(li);
+      });
+      if (moreBtn) {
+        moreBtn.style.display = items.length < 10 ? 'none' : '';
+      }
+    });
 }
 
 function refreshDashboardEvents() {

@@ -3,6 +3,7 @@ namespace ArtPulse\Core;
 
 use WP_REST_Request;
 use ArtPulse\Community\FavoritesManager;
+use ArtPulse\Core\UserEngagementLogger;
 use Stripe\StripeClient;
 
 class UserDashboardManager
@@ -129,6 +130,18 @@ class UserDashboardManager
             'permission_callback' => function() {
                 return is_user_logged_in();
             },
+        ]);
+
+        register_rest_route('artpulse/v1', '/user/engagement', [
+            'methods'             => 'GET',
+            'callback'            => [ self::class, 'getEngagementFeed' ],
+            'permission_callback' => function() {
+                return is_user_logged_in() && current_user_can('view_artpulse_dashboard');
+            },
+            'args' => [
+                'page' => [ 'type' => 'integer', 'default' => 1 ],
+                'per_page' => [ 'type' => 'integer', 'default' => 10 ],
+            ],
         ]);
     }
 
@@ -364,6 +377,21 @@ class UserDashboardManager
             update_user_meta($user_id, 'ap_city', sanitize_text_field($params['ap_city']));
         }
         return rest_ensure_response([ 'success' => true ]);
+    }
+
+    public static function getEngagementFeed(WP_REST_Request $request)
+    {
+        if (!current_user_can('view_artpulse_dashboard')) {
+            return new \WP_Error('forbidden', __('You do not have permission to view this dashboard.', 'artpulse'), ['status' => 403]);
+        }
+
+        $user_id  = get_current_user_id();
+        $page     = max(1, (int) $request->get_param('page'));
+        $per_page = max(1, (int) $request->get_param('per_page'));
+        $offset   = ($page - 1) * $per_page;
+
+        $items = UserEngagementLogger::get_feed($user_id, $per_page, $offset);
+        return rest_ensure_response($items);
     }
 
     private static function get_trend_data(int $user_id): array
