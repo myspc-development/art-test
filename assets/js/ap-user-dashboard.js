@@ -33,6 +33,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const layoutBtn = document.getElementById('ap-customize-layout');
+  const layoutControls = document.getElementById('ap-layout-controls');
+  if (layoutBtn && layoutControls) {
+    layoutBtn.addEventListener('click', () => {
+      layoutControls.style.display = layoutControls.style.display === 'block' ? 'none' : 'block';
+    });
+  }
+
+  const themeToggle = document.getElementById('ap-toggle-theme');
+  if (themeToggle) {
+    const applyTheme = t => { document.body.dataset.theme = t; };
+    const saved = localStorage.getItem('apTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(saved);
+    themeToggle.addEventListener('click', () => {
+      const next = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      localStorage.setItem('apTheme', next);
+    });
+  }
+
+  const banner = document.getElementById('ap-onboarding-banner');
+  if (banner && localStorage.getItem('apTourDismissed')) {
+    banner.remove();
+  }
+  const dismissTour = document.getElementById('ap-dismiss-tour');
+  if (dismissTour) {
+    dismissTour.addEventListener('click', () => {
+      localStorage.setItem('apTourDismissed', '1');
+      banner.remove();
+    });
+  }
+  const startTour = document.getElementById('ap-start-tour');
+  if (startTour) {
+    startTour.addEventListener('click', () => {
+      localStorage.setItem('apTourDismissed', '1');
+      banner.remove();
+      // integrate tour library here
+    });
+  }
+
   const exportJsonBtn = document.getElementById('ap-export-json');
   if (exportJsonBtn) exportJsonBtn.onclick = () => exportUserData('json');
   const exportCsvBtn = document.getElementById('ap-export-csv');
@@ -623,6 +663,10 @@ function renderTrendsChart() {
   const canvas = document.getElementById('ap-trends-chart');
   if (!canvas || typeof Chart === 'undefined' || !window.APUserTrends) return;
 
+  const styles = getComputedStyle(document.documentElement);
+  const rsvpColor = styles.getPropertyValue('--ap-primary-color').trim();
+  const favColor = styles.getPropertyValue('--ap-accent-color').trim();
+
   new Chart(canvas.getContext('2d'), {
     type: 'bar',
     data: {
@@ -631,12 +675,12 @@ function renderTrendsChart() {
         {
           label: 'RSVPs',
           data: APUserTrends.rsvpCounts,
-          backgroundColor: 'rgba(0,115,170,0.5)'
+          backgroundColor: rsvpColor
         },
         {
           label: 'Favorites',
           data: APUserTrends.favoriteCounts,
-          backgroundColor: 'rgba(245,171,53,0.5)'
+          backgroundColor: favColor
         }
       ]
     },
@@ -651,6 +695,10 @@ function renderEngagementChart() {
   const canvas = document.getElementById('ap-user-engagement-chart');
   if (!canvas || typeof Chart === 'undefined' || !window.APUserStats) return;
 
+  const styles = getComputedStyle(document.documentElement);
+  const rsvpColor = styles.getPropertyValue('--ap-primary-color').trim();
+  const favColor = styles.getPropertyValue('--ap-accent-color').trim();
+
   new Chart(canvas.getContext('2d'), {
     type: 'line',
     data: {
@@ -659,13 +707,13 @@ function renderEngagementChart() {
         {
           label: 'RSVPs',
           data: APUserStats.rsvp_daily,
-          borderColor: 'rgba(0,115,170,0.8)',
+          borderColor: rsvpColor,
           fill: false
         },
         {
           label: 'Favorites',
           data: APUserStats.favorite_daily,
-          borderColor: 'rgba(245,171,53,0.8)',
+          borderColor: favColor,
           fill: false
         }
       ]
@@ -681,6 +729,10 @@ async function renderProfileMetricsChart() {
   const canvas = document.getElementById('ap-profile-metrics-chart');
   if (!canvas || typeof Chart === 'undefined' || !window.APProfileMetrics) return;
 
+  const styles = getComputedStyle(document.documentElement);
+  const viewColor = styles.getPropertyValue('--ap-primary-color').trim();
+  const followColor = styles.getPropertyValue('--ap-accent-color').trim();
+
   const headers = { 'X-WP-Nonce': APProfileMetrics.nonce };
   const viewRes = await fetch(`${APProfileMetrics.endpoint}/${APProfileMetrics.profileId}?metric=view`, { headers });
   const followRes = await fetch(`${APProfileMetrics.endpoint}/${APProfileMetrics.profileId}?metric=follow`, { headers });
@@ -692,8 +744,8 @@ async function renderProfileMetricsChart() {
     data: {
       labels: views.days,
       datasets: [
-        { label: 'Views', data: views.counts, borderColor: 'rgba(0,115,170,0.8)', fill: false },
-        { label: 'Follows', data: follows.counts, borderColor: 'rgba(200,80,80,0.8)', fill: false }
+        { label: 'Views', data: views.counts, borderColor: viewColor, fill: false },
+        { label: 'Follows', data: follows.counts, borderColor: followColor, fill: false }
       ]
     },
     options: {

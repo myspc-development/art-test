@@ -35,6 +35,15 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <a href="<?php echo esc_url($profile_edit_url); ?>" class="btn btn-secondary"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
         <a href="<?php echo esc_url(ArtPulse\Core\Plugin::get_artist_dashboard_url()); ?>#analytics" class="btn btn-secondary"><?php esc_html_e('View Analytics', 'artpulse'); ?></a>
     </div>
+    <?php if (!get_user_meta($current_user->ID, 'ap_onboarding_completed', true)) : ?>
+    <div class="ap-onboarding-banner" id="ap-onboarding-banner">
+        <p><?php esc_html_e('New here? Start the tour to learn the basics.', 'artpulse'); ?></p>
+        <div>
+            <button id="ap-start-tour" class="ap-form-button"><?php esc_html_e('Start Tour', 'artpulse'); ?></button>
+            <button id="ap-dismiss-tour" class="ap-form-button"><?php esc_html_e('Dismiss', 'artpulse'); ?></button>
+        </div>
+    </div>
+    <?php endif; ?>
     <?php if ($recent_activity) : ?>
     <ul class="artist-activity-feed">
         <?php foreach ($recent_activity as $activity) : ?>
@@ -46,6 +55,10 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <?php endforeach; ?>
     </ul>
     <?php endif; ?>
+    <div class="dashboard-controls">
+        <button id="ap-toggle-theme" class="ap-form-button"><?php esc_html_e('Toggle Dark Mode', 'artpulse'); ?></button>
+        <button id="ap-customize-layout" class="ap-form-button"><?php esc_html_e('Customize Layout', 'artpulse'); ?></button>
+    </div>
     <nav class="dashboard-nav">
         <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
         <a href="#upgrade"><span class="dashicons dashicons-star-filled"></span><?php esc_html_e('Upgrade', 'artpulse'); ?></a>
@@ -86,6 +99,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
     <div id="ap-dashboard-widgets">
 
     <div class="dashboard-widget" data-widget="membership">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="membership"><?php _e('Subscription Status','artpulse'); ?></h2>
         <div id="ap-membership-info"></div>
         <?php if ( !empty($badges) ) : ?>
@@ -95,6 +109,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <a class="ap-edit-profile-link ap-form-button nectar-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
     </div>
     <div class="dashboard-widget" data-widget="upgrade">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="upgrade"><?php _e('Upgrade Your Account','artpulse'); ?></h2>
         <div id="ap-upgrade-options"></div>
         <?php if ($show_forms) : ?>
@@ -105,27 +120,33 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <?php endif; ?>
     </div>
     <div class="dashboard-widget" data-widget="content">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="content"><?php _e('Your Content','artpulse'); ?></h2>
         <div id="ap-user-content"></div>
     </div>
     <div class="dashboard-widget" data-widget="local-events">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="local-events"><?php _e('Events Near You','artpulse'); ?></h2>
         <div id="ap-local-events"></div>
     </div>
     <div class="dashboard-widget" data-widget="favorites">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="favorites"><?php _e('My Favorites','artpulse'); ?></h2>
         <div id="ap-favorite-events"></div>
     </div>
     <div class="dashboard-widget" data-widget="rsvps">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="rsvps"><?php _e('My RSVPs','artpulse'); ?></h2>
         <div id="ap-rsvp-events"></div>
     </div>
     <div class="dashboard-widget" data-widget="engagement">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="engagement"><?php _e('Recent Activity','artpulse'); ?></h2>
         <div id="ap-engagement-feed"></div>
         <button id="ap-engagement-load-more" class="ap-form-button"><?php esc_html_e('Load More','artpulse'); ?></button>
     </div>
     <div class="dashboard-widget" data-widget="my-events">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="my-events"><?php _e('My Events','artpulse'); ?></h2>
         <div id="ap-dashboard-stats" class="ap-dashboard-stats"></div>
         <div id="ap-next-event"></div>
@@ -135,11 +156,13 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <canvas id="ap-profile-metrics-chart" height="150"></canvas>
     </div>
     <div class="dashboard-widget" data-widget="events">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
         <div id="ap-events-feed"></div>
     </div>
     <?php if ($show_support_history) : ?>
     <div class="dashboard-widget" data-widget="support-history">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <section id="support-history">
             <h2><?php _e('Support History','artpulse'); ?></h2>
             <div id="ap-support-history"></div>
@@ -148,11 +171,13 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
     <?php endif; ?>
     <?php if ($show_notifications) : ?>
     <div class="dashboard-widget" data-widget="notifications">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="notifications"><?php _e('Notifications','artpulse'); ?></h2>
         <div id="ap-dashboard-notifications"></div>
     </div>
     <?php endif; ?>
     <div class="dashboard-widget" data-widget="account-tools">
+        <span class="ap-widget-handle" aria-hidden="true">&#9776;</span>
         <h2 id="account-tools"><?php _e('Account Tools','artpulse'); ?></h2>
         <div id="ap-account-tools">
             <button id="ap-export-json" class="ap-form-button nectar-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
