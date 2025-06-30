@@ -1155,3 +1155,7 @@ select.ap-input {
   .ap-dashboard .ap-event-thumb{width:200px;flex-shrink:0;}
   .ap-dashboard .ap-event-card-content{padding:var(--ap-space-medium);}
 }
+.dashboard-widget{width:100%;max-width:500px;margin:var(--ap-space-medium) auto;}
+@media (max-width:600px){.dashboard-widget{max-width:100%;font-size:1rem;}}
+.skip-link{position:absolute;top:-40px;left:0;background:var(--ap-primary-color);color:#fff;padding:.5rem 1rem;z-index:100}
+.skip-link:focus{top:0}
