@@ -5,21 +5,15 @@
 ?>
 <div id="nectar-outer"><div class="container-wrap"><div class="container"><div class="row"><div class="col-md-8 col-md-offset-2"><div class="ap-dashboard">
     <a href="#main-content" class="skip-link"><?php esc_html_e('Skip to main content', 'artpulse'); ?></a>
-    <nav class="dashboard-nav">
-        <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
-        <a href="#next-payment"><span class="dashicons dashicons-money"></span><?php esc_html_e('Next Payment', 'artpulse'); ?></a>
-        <a href="#transactions"><span class="dashicons dashicons-list-view"></span><?php esc_html_e('Transactions', 'artpulse'); ?></a>
-        <a href="#upgrade"><span class="dashicons dashicons-star-filled"></span><?php esc_html_e('Upgrade', 'artpulse'); ?></a>
-        <a href="#content"><span class="dashicons dashicons-media-default"></span><?php esc_html_e('Content', 'artpulse'); ?></a>
-        <a href="#local-events"><span class="dashicons dashicons-location-alt"></span><?php esc_html_e('Local Events', 'artpulse'); ?></a>
-        <a href="#favorites"><span class="dashicons dashicons-heart"></span><?php esc_html_e('Favorites', 'artpulse'); ?></a>
-        <a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a>
-        <a href="#engagement"><span class="dashicons dashicons-format-status"></span><?php esc_html_e('Activity', 'artpulse'); ?></a>
-        <a href="#account-tools"><span class="dashicons dashicons-download"></span><?php esc_html_e('Account', 'artpulse'); ?></a>
-        <?php if ( $show_notifications ) : ?>
-        <a href="#notifications"><span class="dashicons dashicons-megaphone"></span><?php esc_html_e('Notifications', 'artpulse'); ?></a>
-        <?php endif; ?>
-    </nav>
+    <?php
+    $nav_template = locate_template('partials/dashboard-nav.php');
+    if (!$nav_template) {
+        $nav_template = plugin_dir_path(__FILE__) . 'partials/dashboard-nav.php';
+    }
+    if (file_exists($nav_template)) {
+        include $nav_template;
+    }
+    ?>
 
     <div id="ap-layout-controls">
         <button id="ap-reset-layout" class="ap-form-button"><?php esc_html_e('Reset Layout', 'artpulse'); ?></button>
