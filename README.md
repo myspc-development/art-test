@@ -23,6 +23,7 @@ Additional resources:
 - [API Reference](docs/api-reference.md)
 - [Testing Strategy](docs/testing-strategy.md)
 - [Help Resources](docs/help-resources.md)
+- [Tailwind Integration Guide](tailwind-integration.md)
 
 ## Overview & Quick Reference
 
