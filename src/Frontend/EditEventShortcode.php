@@ -274,7 +274,8 @@ class EditEventShortcode {
         $state          = sanitize_text_field($_POST['event_state'] ?? '');
         $city           = sanitize_text_field($_POST['event_city'] ?? '');
         $postcode       = sanitize_text_field($_POST['event_postcode'] ?? '');
-        $addr_comp      = sanitize_text_field($_POST['address_components'] ?? '');
+        $addr_json      = wp_unslash($_POST['address_components'] ?? '');
+        $addr_comp      = json_decode($addr_json, true);
         $org_name       = sanitize_text_field($_POST['event_organizer_name'] ?? '');
         $org_email      = sanitize_email($_POST['event_organizer_email'] ?? '');
         $event_org      = intval($_POST['event_org'] ?? 0);
@@ -306,7 +307,9 @@ class EditEventShortcode {
         update_post_meta($post_id, 'event_state', $state);
         update_post_meta($post_id, 'event_city', $city);
         update_post_meta($post_id, 'event_postcode', $postcode);
-        update_post_meta($post_id, 'address_components', $addr_comp);
+        if (is_array($addr_comp)) {
+            update_post_meta($post_id, 'address_components', wp_json_encode($addr_comp));
+        }
         update_post_meta($post_id, 'event_organizer_name', $org_name);
         update_post_meta($post_id, 'event_organizer_email', $org_email);
         update_post_meta($post_id, '_ap_event_organization', $event_org);

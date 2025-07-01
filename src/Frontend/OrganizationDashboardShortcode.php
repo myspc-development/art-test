@@ -321,7 +321,8 @@ class OrganizationDashboardShortcode {
         $state            = sanitize_text_field($_POST['ap_event_state'] ?? '');
         $city             = sanitize_text_field($_POST['ap_event_city'] ?? '');
         $postcode         = sanitize_text_field($_POST['ap_event_postcode'] ?? '');
-        $address_components = sanitize_text_field($_POST['address_components'] ?? '');
+        $address_json     = wp_unslash($_POST['address_components'] ?? '');
+        $address_components = json_decode($address_json, true);
         $organizer_name   = sanitize_text_field($_POST['ap_event_organizer_name'] ?? '');
         $organizer_email  = sanitize_email($_POST['ap_event_organizer_email'] ?? '');
         $event_type       = intval($_POST['ap_event_type'] ?? 0);
@@ -369,7 +370,9 @@ class OrganizationDashboardShortcode {
         update_post_meta($event_id, 'event_state', $state);
         update_post_meta($event_id, 'event_city', $city);
         update_post_meta($event_id, 'event_postcode', $postcode);
-        update_post_meta($event_id, 'address_components', $address_components);
+        if (is_array($address_components)) {
+            update_post_meta($event_id, 'address_components', wp_json_encode($address_components));
+        }
         update_post_meta($event_id, 'event_organizer_name', $organizer_name);
         update_post_meta($event_id, 'event_organizer_email', $organizer_email);
         update_post_meta($event_id, '_ap_event_organization', $org_id);
@@ -457,7 +460,8 @@ class OrganizationDashboardShortcode {
         $state            = sanitize_text_field($_POST['ap_event_state'] ?? '');
         $city             = sanitize_text_field($_POST['ap_event_city'] ?? '');
         $postcode         = sanitize_text_field($_POST['ap_event_postcode'] ?? '');
-        $address_components = sanitize_text_field($_POST['address_components'] ?? '');
+        $address_json     = wp_unslash($_POST['address_components'] ?? '');
+        $address_components = json_decode($address_json, true);
         $organizer_name   = sanitize_text_field($_POST['ap_event_organizer_name'] ?? '');
         $organizer_email  = sanitize_email($_POST['ap_event_organizer_email'] ?? '');
         $event_type       = intval($_POST['ap_event_type'] ?? 0);
@@ -481,7 +485,9 @@ class OrganizationDashboardShortcode {
         update_post_meta($event_id, 'event_state', $state);
         update_post_meta($event_id, 'event_city', $city);
         update_post_meta($event_id, 'event_postcode', $postcode);
-        update_post_meta($event_id, 'address_components', $address_components);
+        if (is_array($address_components)) {
+            update_post_meta($event_id, 'address_components', wp_json_encode($address_components));
+        }
         update_post_meta($event_id, 'event_organizer_name', $organizer_name);
         update_post_meta($event_id, 'event_organizer_email', $organizer_email);
         update_post_meta($event_id, 'event_featured', $featured);
