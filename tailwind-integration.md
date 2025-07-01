@@ -19,7 +19,7 @@ Create (or edit) assets/css/tailwind.css and add:
 
 ### Update Your Build Process
 
-Configure your bundler (Webpack, Vite, etc.) to process Tailwind’s CSS file and output to `public/tailwind.css` so it matches the plugin's enqueue path.
+Configure your bundler (Webpack, Vite, etc.) to process Tailwind’s CSS file and output to `public/tailwind.build.css` so it matches the plugin's enqueue path.
 
 Update tailwind.config.js to include all relevant file paths:
 
@@ -36,7 +36,7 @@ For a simple setup you can use the Tailwind CLI directly. Add a script to
 
 ```json
 "scripts": {
-  "watch:tailwind": "npx tailwindcss -i assets/css/tailwind.css -o public/tailwind.css --watch"
+  "watch:tailwind": "npx tailwindcss -i assets/css/tailwind.css -o public/tailwind.build.css --watch"
 }
 ```
 
@@ -54,7 +54,7 @@ In your plugin's main file, enqueue the compiled stylesheet:
 add_action('wp_enqueue_scripts', function() {
     wp_enqueue_style(
         'ap-tailwind',
-        plugin_dir_url(__FILE__) . 'public/tailwind.css',
+        plugin_dir_url(__FILE__) . 'public/tailwind.build.css',
         [],
         '1.0'
     );

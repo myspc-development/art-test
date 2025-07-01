@@ -162,7 +162,7 @@ function ap_enqueue_global_styles() {
         );
         wp_enqueue_style(
             'ap-tailwind',
-            plugin_dir_url(__FILE__) . 'public/tailwind.css',
+            plugin_dir_url(__FILE__) . 'public/tailwind.build.css',
             [],
             '1.0'
         );
