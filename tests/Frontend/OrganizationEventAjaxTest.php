@@ -52,6 +52,8 @@ class OrganizationEventAjaxTest extends TestCase
             (object)['ID' => 8, 'post_title' => 'Second'],
         ];
 
+        $addr = [ 'country' => 'US', 'state' => 'CA', 'city' => 'LA' ];
+
         $_POST = [
             'nonce' => 'n',
             'ap_event_id' => 7,
@@ -66,7 +68,7 @@ class OrganizationEventAjaxTest extends TestCase
             'ap_event_state' => '',
             'ap_event_city' => '',
             'ap_event_postcode' => '',
-            'address_components' => '',
+            'address_components' => json_encode($addr),
             'ap_event_organizer_name' => '',
             'ap_event_organizer_email' => '',
         ];
@@ -78,5 +80,8 @@ class OrganizationEventAjaxTest extends TestCase
         $html = self::$json['updated_list_html'] ?? '';
         $this->assertStringContainsString('First', $html);
         $this->assertStringContainsString('Second', $html);
+
+        $expected_meta = [7, 'address_components', json_encode($addr)];
+        $this->assertContains($expected_meta, self::$meta_updates);
     }
 }
