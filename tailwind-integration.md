@@ -48,9 +48,18 @@ npm run watch:tailwind
 
 ### Enqueue the Compiled CSS in WordPress
 
-In functions.php:
+In your plugin's main file, enqueue the compiled stylesheet:
 
-wp_enqueue_style('tailwind', plugin_dir_url(__FILE__) . 'assets/css/tailwind.css', [], '1.0');
+```php
+add_action('wp_enqueue_scripts', function() {
+    wp_enqueue_style(
+        'ap-tailwind',
+        plugin_dir_url(__FILE__) . 'public/tailwind.css',
+        [],
+        '1.0'
+    );
+});
+```
 
 ## Refactoring Dashboard Pages
 
