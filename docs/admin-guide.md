@@ -33,6 +33,13 @@ page is divided into tabs. Click **General**, **Location APIs**, **Import/Export
 or **Shortcode Pages** to reveal the fields for each area. The active tab is
 tracked via the URL hash so you can share a direct link like `#/import_export`.
 
+### Shortcode Pages
+
+The **Shortcode Pages** tab lets you quickly generate WordPress pages
+containing any of the plugin's shortcodes. Check the shortcodes you want
+to test and click **Create Pages**. You can then enable or disable the
+generated pages with a single click when verifying new features.
+
 ## Accessibility & Mobile Notes
 
 All admin tools are responsive and keyboard accessible so you can manage events from any device.
