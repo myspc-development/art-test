@@ -59,15 +59,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <button id="ap-toggle-theme" class="ap-form-button"><?php esc_html_e('Toggle Dark Mode', 'artpulse'); ?></button>
         <button id="ap-customize-layout" class="ap-form-button"><?php esc_html_e('Customize Layout', 'artpulse'); ?></button>
     </div>
-    <?php
-    $nav_template = locate_template('partials/dashboard-nav.php');
-    if (!$nav_template) {
-        $nav_template = plugin_dir_path(__FILE__) . 'partials/dashboard-nav.php';
-    }
-    if (file_exists($nav_template)) {
-        include $nav_template;
-    }
-    ?>
+    <div id="ap-dashboard-root"></div>
 
     <div id="ap-layout-controls">
         <button id="ap-reset-layout" class="ap-form-button"><?php esc_html_e('Reset Layout', 'artpulse'); ?></button>
