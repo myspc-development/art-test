@@ -39,7 +39,11 @@ wp_enqueue_style('tailwind', get_template_directory_uri() . '/public/tailwind.cs
 
 ### Step-by-Step Checklist
 
-
+- Audit existing dashboard templates and note legacy CSS classes.
+- Replace layout wrappers with Tailwind flex or grid utilities.
+- Convert common widgets to partials using Tailwind components.
+- Remove deprecated stylesheets once Tailwind equivalents are in place.
+- Verify responsive behavior and accessibility on each page.
 
 ## Codex: Tailwind Conventions for Devs
 
