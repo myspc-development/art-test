@@ -5,15 +5,7 @@
 ?>
 <div id="nectar-outer"><div class="container-wrap"><div class="container"><div class="row"><div class="col-md-8 col-md-offset-2"><div class="ap-dashboard">
     <a href="#main-content" class="skip-link"><?php esc_html_e('Skip to main content', 'artpulse'); ?></a>
-    <?php
-    $nav_template = locate_template('partials/dashboard-nav.php');
-    if (!$nav_template) {
-        $nav_template = plugin_dir_path(__FILE__) . 'partials/dashboard-nav.php';
-    }
-    if (file_exists($nav_template)) {
-        include $nav_template;
-    }
-    ?>
+    <div id="ap-dashboard-root"></div>
 
     <div id="ap-layout-controls">
         <button id="ap-reset-layout" class="ap-form-button"><?php esc_html_e('Reset Layout', 'artpulse'); ?></button>

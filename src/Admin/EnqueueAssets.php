@@ -194,6 +194,18 @@ class EnqueueAssets {
                 '1.0.0',
                 true
             );
+            wp_enqueue_script(
+                'ap-dashboard',
+                $plugin_url . '/assets/js/ap-dashboard.js',
+                ['wp-element'],
+                '1.0.0',
+                true
+            );
+            $user = wp_get_current_user();
+            $role = $user->roles[0] ?? '';
+            wp_localize_script('ap-dashboard', 'APDashboard', [
+                'role' => $role,
+            ]);
         }
          if (!wp_script_is('ap-analytics', 'enqueued')) {
              wp_enqueue_script(
@@ -525,6 +537,19 @@ class EnqueueAssets {
             '1.0.0',
             true
         );
+
+        wp_enqueue_script(
+            'ap-dashboard',
+            $plugin_url . '/assets/js/ap-dashboard.js',
+            ['wp-element'],
+            '1.0.0',
+            true
+        );
+        $user = wp_get_current_user();
+        $role = $user->roles[0] ?? '';
+        wp_localize_script('ap-dashboard', 'APDashboard', [
+            'role' => $role,
+        ]);
 
 
         $opts = get_option('artpulse_settings', []);

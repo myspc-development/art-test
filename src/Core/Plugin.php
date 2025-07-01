@@ -383,6 +383,20 @@ class Plugin
             'dashboardUrl'    => self::get_user_dashboard_url(),
         ]);
 
+        wp_enqueue_script(
+            'ap-dashboard',
+            plugins_url('assets/js/ap-dashboard.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-element'],
+            '1.0.0',
+            true
+        );
+
+        $user = wp_get_current_user();
+        $role = $user->roles[0] ?? '';
+        wp_localize_script('ap-dashboard', 'APDashboard', [
+            'role' => $role,
+        ]);
+
         if (function_exists('ap_enqueue_global_styles')) {
             ap_enqueue_global_styles();
         }
