@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build:css": "sass assets/scss:assets/css --no-source-map",
-    "build": "npm run build:css && npx tailwindcss -i assets/css/tailwind.css -o public/tailwind.build.css && wp-scripts build && npx babel assets/js/OrganizationSubmissionForm.jsx -o assets/js/ap-org-submission.js",
+    "build": "npm run build:css && npx tailwindcss -i assets/css/tailwind.css -o public/tailwind.build.css && wp-scripts build && npx babel assets/js/OrganizationSubmissionForm.jsx -o assets/js/ap-org-submission.js && npx babel assets/js/SidebarMenu.jsx -o assets/js/sidebar-menu.js && npx babel assets/js/dashboard.jsx -o assets/js/ap-dashboard.js",
     "start": "wp-scripts start",
     "release": "standard-version",
     "watch:tailwind": "npx tailwindcss -i assets/css/tailwind.css -o public/tailwind.build.css --watch"
