@@ -167,9 +167,6 @@ button:focus {
     align-items: flex-start;
   }
 
-  .ap-dashboard .dashboard-nav {
-    flex-direction: column;
-  }
 
   #ap-events-feed,
   #ap-dashboard-notifications {
@@ -209,32 +206,6 @@ button:focus {
   font-weight: 600;
 }
 
-.ap-dashboard .dashboard-nav {
-  margin-bottom: 1.5rem;
-  display: flex;
-  gap: 1rem;
-}
-
-.ap-dashboard .dashboard-nav a {
-  text-decoration: none;
-  color: var(--ap-primary-color);
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-}
-
-.ap-dashboard .dashboard-nav a:focus {
-  outline: 2px solid var(--ap-primary-color);
-  outline-offset: 2px;
-}
-
-.ap-dashboard .dashboard-nav a:hover {
-  text-decoration: underline;
-}
-
-.ap-dashboard .dashboard-nav .dashicons {
-  margin-right: 0.25rem;
-}
 
 .ap-dashboard .dashboard-content {
   background-color: var(--ap-bg-color);
@@ -916,35 +887,6 @@ select.ap-input {
   color: inherit;
 }
 
-.ap-dashboard .dashboard-nav {
-  margin-bottom: 1.5rem;
-  display: flex;
-  gap: 1rem;
-}
-
-.ap-dashboard .dashboard-nav a {
-  text-decoration: none;
-  color: var(--ap-primary-color);
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-}
-.ap-dashboard .dashboard-nav a:focus {
-  outline: 2px solid var(--ap-primary-color);
-  outline-offset: 2px;
-}
-.ap-dashboard .dashboard-nav a:hover {
-  text-decoration: underline;
-}
-.ap-dashboard .dashboard-nav .dashicons {
-  margin-right: 0.25rem;
-}
-
-.ap-dashboard .dashboard-nav a.active {
-  background-color: var(--ap-primary-color);
-  color: #fff;
-  border-color: var(--ap-primary-color);
-}
 
 
 
@@ -1058,8 +1000,7 @@ select.ap-input {
     gap: 1.25rem;
   }
 
-  .ap-dashboard > h1,
-  .ap-dashboard .dashboard-nav {
+  .ap-dashboard > h1 {
     grid-column: 1 / -1;
   }
 

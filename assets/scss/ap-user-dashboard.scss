@@ -103,9 +103,6 @@
     align-items: flex-start;
   }
 
-  .ap-user-dashboard .dashboard-nav {
-    flex-direction: column;
-  }
 
   #ap-events-feed,
   #ap-dashboard-notifications {
@@ -145,32 +142,6 @@
   font-weight: 600;
 }
 
-.ap-user-dashboard .dashboard-nav {
-  margin-bottom: 1.5rem;
-  display: flex;
-  gap: 1rem;
-}
-
-.ap-user-dashboard .dashboard-nav a {
-  text-decoration: none;
-  color: var(--ap-primary-color);
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-}
-
-.ap-user-dashboard .dashboard-nav a:focus {
-  outline: 2px solid var(--ap-primary-color);
-  outline-offset: 2px;
-}
-
-.ap-user-dashboard .dashboard-nav a:hover {
-  text-decoration: underline;
-}
-
-.ap-user-dashboard .dashboard-nav .dashicons {
-  margin-right: 0.25rem;
-}
 
 .ap-user-dashboard .dashboard-content {
   background-color: var(--ap-bg-color);
