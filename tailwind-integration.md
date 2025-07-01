@@ -29,6 +29,23 @@ content: [
   "./src/Frontend/**/*.php"
 ]
 
+### Example Tailwind CLI Script
+
+For a simple setup you can use the Tailwind CLI directly. Add a script to
+`package.json`:
+
+```json
+"scripts": {
+  "watch:tailwind": "npx tailwindcss -i assets/css/tailwind.css -o public/tailwind.css --watch"
+}
+```
+
+Run it during development with:
+
+```bash
+npm run watch:tailwind
+```
+
 ### Enqueue the Compiled CSS in WordPress
 
 In functions.php:
