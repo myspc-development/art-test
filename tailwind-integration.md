@@ -19,7 +19,7 @@ Create (or edit) assets/css/tailwind.css and add:
 
 ### Update Your Build Process
 
-Configure your bundler (Webpack, Vite, etc.) to process Tailwind’s CSS file and output to `public/tailwind.build.css` so it matches the plugin's enqueue path.
+Compile `assets/css/tailwind.css` to `public/tailwind.build.css` so it matches the plugin's enqueue path. The `npm run build` script handles this compilation for release builds.
 
 Update tailwind.config.js to include all relevant file paths:
 
@@ -44,6 +44,12 @@ Run it during development with:
 
 ```bash
 npm run watch:tailwind
+```
+
+For production releases run:
+
+```bash
+npm run build
 ```
 
 ### Enqueue the Compiled CSS in WordPress
@@ -113,5 +119,5 @@ Legacy styles live in `assets/scss/` and compile to `assets/css/ap-style.css`.
 As dashboard views are refactored to Tailwind, convert the matching SCSS file
 into utility classes directly in the templates and components. Remove the SCSS
 file and its compiled CSS once the Tailwind version matches the original
-appearance. When all modules are updated, delete `ap-style.css` and the entire
-`assets/scss` directory and drop the `build:css` step from `package.json`.
+appearance.
+
