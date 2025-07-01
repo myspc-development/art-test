@@ -9,6 +9,9 @@
     "release": "standard-version",
     "watch:tailwind": "npx tailwindcss -i assets/css/tailwind.css -o public/tailwind.build.css --watch"
   },
+  "dependencies": {
+    "lucide-react": "^0.346.0"
+  },
   "devDependencies": {
     "@wordpress/scripts": "^19.2.4",
     "standard-version": "^9.5.0",
