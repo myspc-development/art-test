@@ -25,7 +25,13 @@ class ShortcodePages
         return array_map('intval', (array) get_option('ap_shortcode_page_ids', []));
     }
 
-    private static function get_shortcode_map(): array
+    /**
+     * Return the mapping of shortcode tags to page titles.
+     *
+     * Keeping this list public makes it easier for tests and
+     * integrations to verify all available shortcodes.
+     */
+    public static function get_shortcode_map(): array
     {
         // Keep this list in sync with any new shortcodes that are introduced.
         return [
