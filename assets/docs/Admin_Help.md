@@ -126,6 +126,13 @@ The plugin registers the following shortcodes:
 | `[ap_submit_artist]` | Form to submit a new artist profile. |
 | `[ap_user_dashboard]` | Member dashboard with calendar and favorites. Accepts `show_forms` to embed submission forms. |
 | `[ap_user_profile id="1" show_social="true" show_membership="true" show_completeness="true"]` | Display a user profile with optional sections. |
+| `[ap_event_calendar]` | Event calendar view. |
+| `[ap_event_map]` | Map of events. |
+| `[ap_events_slider]` | Carousel of upcoming events. |
+| `[ap_event_comments id="123"]` | Event comment list/form. |
+| `[ap_event_filter]` | AJAX search/filter form. |
+| `[ap_org_event_form]` | Organization event submission form. |
+| `[ap_org_profile]` | Public organization profile. |
 
 `[ap_edit_event]` requires an `id` attribute identifying the event post. `[ap_events]` accepts `limit` to control how many events are listed.
 
