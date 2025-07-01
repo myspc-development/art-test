@@ -160,6 +160,12 @@ function ap_enqueue_global_styles() {
             [],
             '1.0'
         );
+        wp_enqueue_style(
+            'ap-tailwind',
+            plugin_dir_url(__FILE__) . 'public/tailwind.css',
+            [],
+            '1.0'
+        );
 
         $accent = ap_get_accent_color();
         $hover  = ap_adjust_color_brightness($accent, -0.1);
