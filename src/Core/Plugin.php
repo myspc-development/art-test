@@ -162,6 +162,7 @@ class Plugin
         \ArtPulse\Frontend\ArtistDashboardShortcode::register();
         \ArtPulse\Frontend\UserProfileShortcode::register();
         \ArtPulse\Frontend\ProfileEditShortcode::register();
+        \ArtPulse\Frontend\ArtistProfileFormShortcode::register();
         \ArtPulse\Frontend\OrgProfileEditShortcode::register();
         \ArtPulse\Frontend\OrgPublicProfileShortcode::register();
         \ArtPulse\Frontend\PortfolioBuilder::register();
