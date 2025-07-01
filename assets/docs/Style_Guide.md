@@ -1,6 +1,8 @@
 # ArtPulse Style Guide
 
-All styling for ArtPulse is centralized in `assets/css/ap-style.css`.
+Legacy styling is defined in `assets/css/ap-style.css` and compiled from
+`assets/scss/`. New features should rely on Tailwind utility classes instead.
+As Tailwind equivalents are implemented this stylesheet will be removed.
 
 Use the following standard classes for all dashboards, widgets and forms:
 

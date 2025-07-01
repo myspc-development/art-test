@@ -319,7 +319,8 @@ Install Composer dependencies and WordPress PHPUnit tools:
 composer install
 ```
 
-Install Node packages used for building JavaScript and SCSS assets:
+Install Node packages used for building JavaScript and CSS assets. The SCSS
+compile step will be removed once all styles are migrated to Tailwind:
 
 ```bash
 npm install

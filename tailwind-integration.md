@@ -97,3 +97,12 @@ Tailwind CSS Documentation
 Heroicons for icons
 
 shadcn/ui for reusable React components
+
+## Migrating Existing SCSS and `ap-style.css`
+
+Legacy styles live in `assets/scss/` and compile to `assets/css/ap-style.css`.
+As dashboard views are refactored to Tailwind, convert the matching SCSS file
+into utility classes directly in the templates and components. Remove the SCSS
+file and its compiled CSS once the Tailwind version matches the original
+appearance. When all modules are updated, delete `ap-style.css` and the entire
+`assets/scss` directory and drop the `build:css` step from `package.json`.
