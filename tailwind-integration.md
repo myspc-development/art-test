@@ -1,0 +1,76 @@
+1. Installation & Setup
+
+A. Install Tailwind and Dependencies
+
+From the project root:
+
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init
+
+B. Create Your Tailwind CSS Entry File
+
+Create (or edit) assets/css/tailwind.css and add:
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+C. Update Your Build Process
+
+Configure your bundler (Webpack, Vite, etc.) to process Tailwind’s CSS file and output to public/tailwind.css.
+
+Update tailwind.config.js to include all relevant file paths:
+
+content: [
+  "./assets/js/**/*.{js,jsx,ts,tsx}",
+  "./templates/**/*.php",
+  "./src/Frontend/**/*.php"
+]
+
+D. Enqueue the Compiled CSS in WordPress
+
+In functions.php:
+
+wp_enqueue_style('tailwind', get_template_directory_uri() . '/public/tailwind.css', [], '1.0');
+
+2. Refactoring Dashboard Pages
+
+Step-by-Step Checklist
+
+
+
+3. Codex: Tailwind Conventions for Devs
+
+Prefer Tailwind utility classes for all layout and UI.
+
+Use bg-white rounded-2xl shadow p-6 for dashboard cards.
+
+Use text-lg font-semibold mb-2 for section headings.
+
+For navigation, use flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-indigo-50.
+
+For primary buttons, use bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700.
+
+Keep layout responsive using Tailwind’s grid/flex and breakpoints (md:, lg:).
+
+Always test for accessibility (skip links, keyboard nav, contrast).
+
+Do not use Bootstrap or legacy SCSS/CSS in new or refactored code.
+
+4. Troubleshooting
+
+If styles aren’t applying, check that:
+
+The build process is running and outputting the CSS
+
+Paths in tailwind.config.js cover all your templates/components
+
+PurgeCSS isn’t too aggressive (adjust content paths if needed)
+
+5. Resources
+
+Tailwind CSS Documentation
+
+Heroicons for icons
+
+shadcn/ui for reusable React components
