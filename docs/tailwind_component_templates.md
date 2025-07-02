@@ -1,6 +1,8 @@
 # Tailwind Component Templates for ArtPulse
 
-Reusable Tailwind-styled components for the ArtPulse plugin.
+Reusable Tailwind-styled components for the ArtPulse plugin. See the
+[Tailwind Design Guide](tailwind-design-guide.md) for overall layout and
+button conventions.
 
 ---
 

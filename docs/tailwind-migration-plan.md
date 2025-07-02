@@ -2,7 +2,8 @@
 
 The project currently relies on SCSS files in `assets/scss/` which compile into
 `assets/css/ap-style.css`. We are migrating these styles to Tailwind utility
-classes.
+classes. Standard layout and component conventions are summarized in the
+[Tailwind Design Guide](tailwind-design-guide.md).
 
 ## Goals
 - Replace each SCSS module with Tailwind classes directly in templates and

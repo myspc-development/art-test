@@ -1,7 +1,7 @@
 # Tailwind Styling Upgrade Guide for ArtPulse Plugin
 
 ## ✨ Overview
-This guide outlines the complete process for upgrading the ArtPulse WordPress plugin to use Tailwind CSS for modern, responsive, and maintainable styling.
+This guide outlines the complete process for upgrading the ArtPulse WordPress plugin to use Tailwind CSS for modern, responsive, and maintainable styling. For layout and component conventions see the [Tailwind Design Guide](tailwind-design-guide.md).
 
 ---
 
@@ -129,7 +129,7 @@ npm run build:css
 ## 📚 Phase 6: Documentation
 
 ### 12. Add Tailwind Design Guide
-New file: `docs/tailwind-design-guide.md`
+New file: `docs/tailwind-design-guide.md` ([view here](tailwind-design-guide.md))
 Include:
 - Layout patterns
 - Button/alert components

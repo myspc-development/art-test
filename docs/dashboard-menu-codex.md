@@ -25,6 +25,7 @@ Each role array can include any number of items. Use icon names from `lucide-rea
 ## 3. `<SidebarMenu>` Example
 
 `SidebarMenu.jsx` comes with Tailwind classes for layout and highlighting. Use it inside a dashboard layout like this:
+See also the [Tailwind Design Guide](tailwind-design-guide.md) for consistent layout utilities.
 
 ```jsx
 import { useState } from 'react';
