@@ -1,135 +1,24 @@
-<?php
-/**
- * Member dashboard template.
- */
-?>
-<div id="nectar-outer"><div class="container-wrap"><div class="container"><div class="row"><div class="col-md-8 col-md-offset-2"><div class="ap-dashboard">
-    <a href="#main-content" class="skip-link"><?php esc_html_e('Skip to main content', 'artpulse'); ?></a>
-    <div id="ap-dashboard-root"></div>
-
-    <div id="ap-layout-controls">
-        <button id="ap-reset-layout" class="ap-form-button"><?php esc_html_e('Reset Layout', 'artpulse'); ?></button>
-        <fieldset id="ap-widget-toggles">
-            <legend class="screen-reader-text"><?php esc_html_e('Toggle widgets', 'artpulse'); ?></legend>
-            <label><input type="checkbox" value="membership" checked> <?php esc_html_e('Membership', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="upgrade" checked> <?php esc_html_e('Upgrade', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="local-events" checked> <?php esc_html_e('Local Events', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="favorites" checked> <?php esc_html_e('Favorites', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="rsvps" checked> <?php esc_html_e('RSVPs', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="engagement" checked> <?php esc_html_e('Activity', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="my-events" checked> <?php esc_html_e('My Events', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="events" checked> <?php esc_html_e('Events', 'artpulse'); ?></label>
-            <?php if ($show_support_history) : ?>
-            <label><input type="checkbox" value="support-history" checked> <?php esc_html_e('Support History', 'artpulse'); ?></label>
-            <?php endif; ?>
-            <?php if ($show_notifications) : ?>
-            <label><input type="checkbox" value="notifications" checked> <?php esc_html_e('Notifications', 'artpulse'); ?></label>
-            <?php endif; ?>
-            <label><input type="checkbox" value="account-tools" checked> <?php esc_html_e('Account Tools', 'artpulse'); ?></label>
-        </fieldset>
-    </div>
-
-    <div id="ap-dashboard-widgets">
-
-    <div class="dashboard-widget" data-widget="membership">
-        <h2 id="membership"><?php _e('Subscription Status','artpulse'); ?></h2>
-        <div id="ap-membership-info"></div>
-        <?php if ( !empty($badges) ) : ?>
-        <div class="ap-badges"></div>
-        <?php endif; ?>
-        <div id="ap-membership-actions"></div>
-        <a class="ap-edit-profile-link ap-form-button nectar-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
-    </div>
-    <div class="dashboard-widget" data-widget="upgrade">
-        <h2 id="upgrade"><?php _e('Upgrade Your Account','artpulse'); ?></h2>
-        <div id="ap-upgrade-options"></div>
-        <?php if ($show_forms) : ?>
-        <div class="ap-dashboard-forms">
-            <?php echo $artist_form; ?>
-            <?php echo $org_form; ?>
-        </div>
-        <?php endif; ?>
-    </div>
-    <div class="dashboard-widget" data-widget="local-events">
-        <h2 id="local-events"><?php _e('Events Near You','artpulse'); ?></h2>
-        <div id="ap-local-events"></div>
-    </div>
-    <div class="dashboard-widget" data-widget="favorites">
-        <h2 id="favorites"><?php _e('My Favorites','artpulse'); ?></h2>
-        <div id="ap-favorite-events"></div>
-    </div>
-    <div class="dashboard-widget" data-widget="rsvps">
-        <h2 id="rsvps"><?php _e('My RSVPs','artpulse'); ?></h2>
-        <div id="ap-rsvp-events"></div>
-    </div>
-    <div class="dashboard-widget" data-widget="engagement">
-        <h2 id="engagement"><?php _e('Recent Activity','artpulse'); ?></h2>
-        <div id="ap-engagement-feed"></div>
-        <button id="ap-engagement-load-more" class="ap-form-button"><?php esc_html_e('Load More','artpulse'); ?></button>
-    </div>
-    <div class="dashboard-widget" data-widget="my-events">
-        <h2 id="my-events"><?php _e('My Events','artpulse'); ?></h2>
-        <div id="ap-dashboard-stats" class="ap-dashboard-stats"></div>
-        <div id="ap-next-event"></div>
-        <div id="ap-my-events"></div>
-        <canvas id="ap-trends-chart" height="150"></canvas>
-        <canvas id="ap-user-engagement-chart" height="150"></canvas>
-        <canvas id="ap-profile-metrics-chart" height="150"></canvas>
-    </div>
-    <div class="dashboard-widget" data-widget="events">
-        <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
-        <div id="ap-events-feed"></div>
-    </div>
-    <?php if ($show_support_history) : ?>
-    <div class="dashboard-widget" data-widget="support-history">
-        <section id="support-history">
-            <h2><?php _e('Support History','artpulse'); ?></h2>
-            <div id="ap-support-history"></div>
-        </section>
-    </div>
-    <?php endif; ?>
-    <?php if ($show_notifications) : ?>
-    <div class="dashboard-widget" data-widget="notifications">
-        <h2 id="notifications"><?php _e('Notifications','artpulse'); ?></h2>
-        <div id="ap-dashboard-notifications"></div>
-    </div>
-    <?php endif; ?>
-    <div class="dashboard-widget" data-widget="account-tools">
-        <h2 id="account-tools"><?php _e('Account Tools','artpulse'); ?></h2>
-        <div id="ap-account-tools">
-            <button id="ap-export-json" class="ap-form-button nectar-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
-            <button id="ap-export-csv" class="ap-form-button nectar-button"><?php esc_html_e('Export CSV','artpulse'); ?></button>
-            <button id="ap-delete-account" class="ap-form-button nectar-button"><?php esc_html_e('Delete Account','artpulse'); ?></button>
-        </div>
-    </div>
-    </div>
-</div></div></div></div></div>
-
-<div class="ap-dashboard-wrapper">
+<div class="dashboard-wrapper">
 
   <!-- Sidebar Navigation -->
-  <aside class="ap-dashboard-sidebar">
+  <aside class="dashboard-sidebar">
     <ul>
-      <li><a href="#"><span class="ap-icon dashicons dashicons-admin-users"></span>Profile</a></li>
-      <li><a href="#"><span class="ap-icon dashicons dashicons-format-gallery"></span>Submissions</a></li>
-      <li><a href="#"><span class="ap-icon dashicons dashicons-calendar-alt"></span>Events</a></li>
-      <li><a href="#"><span class="ap-icon dashicons dashicons-email-alt"></span>Messages</a></li>
+      <li><a href="#"><span class="ap-icon dashicons dashicons-admin-users"></span> Profile</a></li>
+      <li><a href="#"><span class="ap-icon dashicons dashicons-format-gallery"></span> Submissions</a></li>
+      <li><a href="#"><span class="ap-icon dashicons dashicons-calendar-alt"></span> Events</a></li>
+      <li><a href="#"><span class="ap-icon dashicons dashicons-feedback"></span> Messages</a></li>
     </ul>
   </aside>
 
-  <!-- Main Dashboard Panels -->
-  <main class="ap-dashboard-main">
-    <div class="ap-dashboard-card">
-      <h3>Upcoming Event</h3>
-      <p>You're exhibiting at the <strong>XYZ Gallery</strong> on July 10.</p>
+  <!-- Main Content Area -->
+  <main class="dashboard-main">
+    <div class="dashboard-card">
+      <h3>Welcome back!</h3>
+      <p>Your dashboard is ready to go.</p>
     </div>
-    <div class="ap-dashboard-card">
-      <h3>Messages</h3>
-      <p>You have 2 unread messages.</p>
-    </div>
-    <div class="ap-dashboard-card">
-      <h3>Profile Status</h3>
-      <p>Your portfolio is 80% complete.</p>
+    <div class="dashboard-card">
+      <h3>Next Steps</h3>
+      <p>Review your submissions, update your profile, or schedule events.</p>
     </div>
   </main>
 
