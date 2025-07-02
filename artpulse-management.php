@@ -196,6 +196,7 @@ function ap_enqueue_main_style() {
     );
 }
 add_action('wp_enqueue_scripts', 'ap_enqueue_main_style');
+add_action('admin_enqueue_scripts', 'ap_enqueue_main_style');
 
 /**
  * Optionally enqueue styles for the admin area.
