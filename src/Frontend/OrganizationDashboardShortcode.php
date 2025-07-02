@@ -183,7 +183,7 @@ class OrganizationDashboardShortcode {
                     <label class="ap-form-label" for="ap_event_type">Event Type</label>
                     <select class="ap-input" id="ap_event_type" name="ap_event_type">
                         <?php
-                        $terms = get_terms('artpulse_event_type', ['hide_empty' => false]);
+                        $terms = get_terms('event_type', ['hide_empty' => false]);
                         foreach ($terms as $term) {
                             echo '<option value="' . esc_attr($term->term_id) . '">' . esc_html($term->name) . '</option>';
                         }
@@ -379,7 +379,7 @@ class OrganizationDashboardShortcode {
         update_post_meta($event_id, 'event_featured', $featured);
 
         if ($event_type) {
-            wp_set_post_terms($event_id, [$event_type], 'artpulse_event_type');
+            wp_set_post_terms($event_id, [$event_type], 'event_type');
         }
 
         // Reload the event list
@@ -427,7 +427,7 @@ class OrganizationDashboardShortcode {
             'address_components'      => get_post_meta($event_id, 'address_components', true),
             'ap_event_organizer_name' => get_post_meta($event_id, 'event_organizer_name', true),
             'ap_event_organizer_email'=> get_post_meta($event_id, 'event_organizer_email', true),
-            'ap_event_type'           => current($terms = wp_get_post_terms($event_id, 'artpulse_event_type', ['fields' => 'ids'])) ?: '',
+            'ap_event_type'           => current($terms = wp_get_post_terms($event_id, 'event_type', ['fields' => 'ids'])) ?: '',
             'ap_event_featured'       => get_post_meta($event_id, 'event_featured', true),
             'ap_event_rsvp_enabled'   => get_post_meta($event_id, 'event_rsvp_enabled', true),
             'ap_event_rsvp_limit'     => get_post_meta($event_id, 'event_rsvp_limit', true),
@@ -496,7 +496,7 @@ class OrganizationDashboardShortcode {
         update_post_meta($event_id, 'event_waitlist_enabled', $waitlist_enabled);
 
         if ($event_type) {
-            wp_set_post_terms($event_id, [$event_type], 'artpulse_event_type');
+            wp_set_post_terms($event_id, [$event_type], 'event_type');
         }
 
         // Reload the event list for this organization
