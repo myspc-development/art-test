@@ -13,6 +13,14 @@ class SubmissionForms
     public static function register(): void
     {
         add_shortcode('ap_submission_form', [__CLASS__, 'render_form']);
+        add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
+    }
+
+    public static function enqueue_styles(): void
+    {
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
+        }
     }
 
     /**

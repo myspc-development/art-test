@@ -7,6 +7,13 @@ class OrganizationEventForm {
     public static function register() {
         // Use a unique shortcode to avoid clashing with EventSubmissionShortcode
         add_shortcode('ap_org_event_form', [self::class, 'render']);
+        add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
+    }
+
+    public static function enqueue_styles(): void {
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
+        }
     }
 
     public static function render() {

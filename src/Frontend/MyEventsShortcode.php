@@ -8,6 +8,13 @@ class MyEventsShortcode {
         add_shortcode('ap_my_events', [self::class, 'render']);
         add_action('init', [self::class, 'handle_deletion']);
         add_action('init', [self::class, 'handle_bulk_actions']);
+        add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
+    }
+
+    public static function enqueue_styles(): void {
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
+        }
     }
 
     public static function render($atts) {

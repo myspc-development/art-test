@@ -5,6 +5,13 @@ class UserProfileShortcode {
 
     public static function register() {
         add_shortcode('ap_user_profile', [self::class, 'render']);
+        add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
+    }
+
+    public static function enqueue_styles(): void {
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
+        }
     }
 
     public static function render($atts) {

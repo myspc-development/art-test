@@ -10,6 +10,13 @@ class OrganizationDashboardShortcode {
         add_action('wp_ajax_ap_get_org_event', [self::class, 'handle_ajax_get_event']);
         add_action('wp_ajax_ap_update_org_event', [self::class, 'handle_ajax_update_event']);
         add_action('wp_ajax_ap_delete_org_event', [self::class, 'handle_ajax_delete_event']);
+        add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
+    }
+
+    public static function enqueue_styles(): void {
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
+        }
     }
 
     /**
