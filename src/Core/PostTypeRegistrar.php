@@ -130,6 +130,43 @@ class PostTypeRegistrar
                 'rewrite'      => ['slug' => 'medium'],
             ]
         );
+
+        register_taxonomy(
+            'art_type',
+            'artpulse_artwork',
+            [
+                'label'        => __('Art Types', 'artpulse-community'),
+                'public'       => true,
+                'show_in_rest' => true,
+                'hierarchical' => true,
+                'rewrite'      => ['slug' => 'art-type'],
+            ]
+        );
+
+        add_action('init', [self::class, 'insert_default_art_types'], 21);
+    }
+
+    public static function insert_default_art_types() {
+        $types = [
+            'painting'     => __('Painting', 'artpulse-community'),
+            'drawing'      => __('Drawing', 'artpulse-community'),
+            'sculpture'    => __('Sculpture', 'artpulse-community'),
+            'installation' => __('Installation', 'artpulse-community'),
+            'photography'  => __('Photography', 'artpulse-community'),
+            'print'        => __('Print', 'artpulse-community'),
+            'digital-art'  => __('Digital Art', 'artpulse-community'),
+            'video'        => __('Video', 'artpulse-community'),
+            'mixed-media'  => __('Mixed Media', 'artpulse-community'),
+            'performance'  => __('Performance', 'artpulse-community'),
+            'textile'      => __('Textile', 'artpulse-community'),
+            'illustration' => __('Illustration', 'artpulse-community'),
+            'other'        => __('Other', 'artpulse-community'),
+        ];
+        foreach ($types as $slug => $name) {
+            if (!term_exists($name, 'art_type')) {
+                wp_insert_term($name, 'art_type', ['slug' => $slug]);
+            }
+        }
     }
 
     private static function register_meta_boxes()
