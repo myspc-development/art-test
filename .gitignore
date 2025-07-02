@@ -24,3 +24,6 @@ release/
 *.log
 .cache/
 .phpunit.result.cache
+
+public/tailwind.build.css
+assets/dist/
