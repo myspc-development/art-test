@@ -9,13 +9,13 @@ function DashboardApp({ role }) {
   );
 
   return (
-    <div className="ap-dashboard-react flex gap-6">
+    <div className="ap-dashboard-wrapper">
       <SidebarMenu
         role={role}
         activeSection={activeSection}
         setActiveSection={setActiveSection}
       />
-      <div className="flex-1">
+      <div className="ap-dashboard-main">
         {(rolesMenus[role] || []).map((item) => (
           <section
             key={item.section}
