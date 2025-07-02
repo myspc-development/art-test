@@ -1,8 +1,9 @@
 # ArtPulse Style Guide
 
 Legacy styling is defined in `assets/css/ap-style.css` and compiled from
-`assets/scss/`. New features should rely on Tailwind utility classes instead.
-As Tailwind equivalents are implemented this stylesheet will be removed.
+`assets/scss/`. New layouts rely on the Salient theme and WPBakery
+components. As modules are modernized this stylesheet will eventually be
+retired.
 
 Use the following standard classes for all dashboards, widgets and forms:
 
@@ -18,3 +19,7 @@ Use the following standard classes for all dashboards, widgets and forms:
 
 No other CSS files should be loaded or referenced. Any new shortcodes or features
 must use these classes so the UI remains consistent.
+
+Layouts should be constructed using WPBakery row and column elements. The
+Salient theme provides additional utility classes which can be combined with
+the plugin-specific classes above.

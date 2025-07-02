@@ -24,8 +24,10 @@ Additional resources:
 - [API Reference](docs/api-reference.md)
 - [Testing Strategy](docs/testing-strategy.md)
 - [Help Resources](docs/help-resources.md)
-- [Tailwind Integration Guide](tailwind-integration.md)
-- [Tailwind Design Guide](docs/tailwind-design-guide.md)
+
+Styling now relies on the Salient theme and WPBakery builder. See
+[`assets/docs/Style_Guide.md`](assets/docs/Style_Guide.md) for
+recommended class names when extending layouts.
 
 ## Overview & Quick Reference
 
@@ -321,8 +323,8 @@ Install Composer dependencies and WordPress PHPUnit tools:
 composer install
 ```
 
-Install Node packages used for building JavaScript and CSS assets. The SCSS
-compile step will be removed once all styles are migrated to Tailwind:
+Install Node packages used for bundling JavaScript and compiling SCSS.
+The styles now integrate with the Salient theme and WPBakery modules:
 
 ```bash
 npm install
@@ -335,7 +337,7 @@ composer test
 composer sniff
 ```
 
-The `package.json` file defines scripts for building production assets. To compile CSS and bundle blocks run:
+The `package.json` file defines scripts for building production assets. To compile the SCSS and bundle blocks run:
 
 ```bash
 npm run build
@@ -348,16 +350,4 @@ composer zip
 ```
 
 The zip file is placed in the `release/` directory.
-
-### UI Mode Toggle
-
-The plugin includes a simple toggle between React and Tailwind UIs.
-Run the following scripts to build the assets:
-
-```bash
-npm run build:css
-npm run build:react
-```
-
-Use the `[ap_render_ui]` shortcode in a post or page to display the current UI.
 
