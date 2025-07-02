@@ -14,7 +14,7 @@ class MetaBoxesEvent {
     public static function add_event_meta_boxes() {
         add_meta_box(
             'ead_event_details',
-            __('Event Details', 'artpulse-management'),
+            __('Event Details', 'artpulse'),
             [self::class, 'render_event_details'],
             'artpulse_event', // Corrected CPT slug
             'normal',
@@ -61,7 +61,7 @@ class MetaBoxesEvent {
                     break;
                 case 'checkbox': // 'boolean' is more consistent with other files, but 'checkbox' works
                     if ($key === 'event_waitlist_enabled' && !$def_wait) {
-                        echo '<input type="hidden" name="' . esc_attr($key) . '" value="0" />' . esc_html__('Waitlists disabled', 'artpulse-management');
+                        echo '<input type="hidden" name="' . esc_attr($key) . '" value="0" />' . esc_html__('Waitlists disabled', 'artpulse');
                     } else {
                         echo '<input type="checkbox" name="' . esc_attr($key) . '" value="1" ' . checked($value, '1', false) . ' />';
                     }
@@ -70,7 +70,7 @@ class MetaBoxesEvent {
                     echo '<textarea name="' . esc_attr($key) . '" rows="4" class="large-text">' . esc_textarea($value) . '</textarea>';
                     break;
                 case 'media': // This is usually a number (attachment ID)
-                    echo '<input type="number" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" placeholder="' . __('Media Library ID', 'artpulse-management') . '" />';
+                    echo '<input type="number" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" placeholder="' . __('Media Library ID', 'artpulse') . '" />';
                     // Consider adding a media uploader button here for better UX
                     break;
                 case 'post_select':
@@ -81,7 +81,7 @@ class MetaBoxesEvent {
                         'post_status' => 'publish',
                     ]);
                     echo '<select name="' . esc_attr($key) . '" class="regular-text">';
-                    echo '<option value="">' . esc_html__('Select', 'artpulse-management') . '</option>';
+                    echo '<option value="">' . esc_html__('Select', 'artpulse') . '</option>';
                     foreach ($posts as $p) {
                         echo '<option value="' . esc_attr($p->ID) . '"' . selected((int)$value, $p->ID, false) . '>' . esc_html($p->post_title) . '</option>';
                     }
@@ -144,26 +144,26 @@ class MetaBoxesEvent {
         // not registered here by default. If your event needs an address meta box
         // you can manually call MetaBoxesAddress::register(['artpulse_event']).
         return [
-            'event_start_date'      => ['type' => 'date', 'label' => __('Start Date', 'artpulse-management')],
-            'event_end_date'        => ['type' => 'date', 'label' => __('End Date', 'artpulse-management')],
-            'event_recurrence_rule' => ['type' => 'text', 'label' => __('Recurrence Rule', 'artpulse-management')],
-            'venue_name'            => ['type' => 'text', 'label' => __('Venue Name', 'artpulse-management')],
+            'event_start_date'      => ['type' => 'date', 'label' => __('Start Date', 'artpulse')],
+            'event_end_date'        => ['type' => 'date', 'label' => __('End Date', 'artpulse')],
+            'event_recurrence_rule' => ['type' => 'text', 'label' => __('Recurrence Rule', 'artpulse')],
+            'venue_name'            => ['type' => 'text', 'label' => __('Venue Name', 'artpulse')],
             // Address fields (street_address, city, state, country, postcode) would
             // normally come from MetaBoxesAddress if it has been registered
             '_ap_event_organization' => [
                 'type'      => 'post_select',
-                'label'     => __('Main Organization', 'artpulse-management'),
+                'label'     => __('Main Organization', 'artpulse'),
                 'post_type' => 'artpulse_org'
             ],
-            'event_organizer_name'  => ['type' => 'text', 'label' => __('Organizer Name', 'artpulse-management')],
-            'event_organizer_email' => ['type' => 'email', 'label' => __('Organizer Email', 'artpulse-management')],
-            'event_banner_id'       => ['type' => 'media', 'label' => __('Event Banner (Media Library ID)', 'artpulse-management')],
-            'event_featured'        => ['type' => 'checkbox', 'label' => __('Request Featured', 'artpulse-management')],
-            'event_rsvp_enabled'    => ['type' => 'checkbox', 'label' => __('Enable RSVPs', 'artpulse-management')],
-            'event_rsvp_limit'      => ['type' => 'number',   'label' => __('RSVP Limit', 'artpulse-management')],
-            'event_waitlist_enabled'=> ['type' => 'checkbox', 'label' => __('Enable Waitlist', 'artpulse-management')],
-            'event_rsvp_list'       => ['type' => 'textarea', 'label' => __('RSVP List', 'artpulse-management')],
-            'event_waitlist'        => ['type' => 'textarea', 'label' => __('Waitlist', 'artpulse-management')],
+            'event_organizer_name'  => ['type' => 'text', 'label' => __('Organizer Name', 'artpulse')],
+            'event_organizer_email' => ['type' => 'email', 'label' => __('Organizer Email', 'artpulse')],
+            'event_banner_id'       => ['type' => 'media', 'label' => __('Event Banner (Media Library ID)', 'artpulse')],
+            'event_featured'        => ['type' => 'checkbox', 'label' => __('Request Featured', 'artpulse')],
+            'event_rsvp_enabled'    => ['type' => 'checkbox', 'label' => __('Enable RSVPs', 'artpulse')],
+            'event_rsvp_limit'      => ['type' => 'number',   'label' => __('RSVP Limit', 'artpulse')],
+            'event_waitlist_enabled'=> ['type' => 'checkbox', 'label' => __('Enable Waitlist', 'artpulse')],
+            'event_rsvp_list'       => ['type' => 'textarea', 'label' => __('RSVP List', 'artpulse')],
+            'event_waitlist'        => ['type' => 'textarea', 'label' => __('Waitlist', 'artpulse')],
         ];
     }
 
@@ -188,7 +188,7 @@ class MetaBoxesEvent {
         if (!$screen || $screen->post_type !== 'artpulse_event') return; // Corrected CPT slug
         $selected = $_GET['event_featured'] ?? '';
         echo '<select name="event_featured">
-            <option value="">' . __('Filter by Featured', 'artpulse-management') . '</option>
+            <option value="">' . __('Filter by Featured', 'artpulse') . '</option>
             <option value="1"' . selected($selected, '1', false) . '>Yes</option>
             <option value="0"' . selected($selected, '0', false) . '>No</option>
         </select>';

@@ -20,6 +20,6 @@ class LogoutShortcode
 
         $url = wp_logout_url(esc_url_raw($atts['redirect']));
 
-        return '<a class="ap-logout-link" href="' . esc_url($url) . '">' . esc_html__('Log Out', 'artpulse-management') . '</a>';
+        return '<a class="ap-logout-link" href="' . esc_url($url) . '">' . esc_html__('Log Out', 'artpulse') . '</a>';
     }
 }

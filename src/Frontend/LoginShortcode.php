@@ -26,7 +26,7 @@ class LoginShortcode
     public static function render(): string
     {
         if (is_user_logged_in()) {
-            return '<p>' . esc_html__('You are already logged in.', 'artpulse-management') . '</p>';
+            return '<p>' . esc_html__('You are already logged in.', 'artpulse') . '</p>';
         }
 
         ob_start();
@@ -35,15 +35,15 @@ class LoginShortcode
             <div id="ap-login-message" class="ap-form-messages" role="status" aria-live="polite"></div>
             <form id="ap-login-form" class="ap-form-container">
                 <p>
-                    <label class="ap-form-label" for="ap_login_username"><?php esc_html_e('Username or Email', 'artpulse-management'); ?></label>
+                    <label class="ap-form-label" for="ap_login_username"><?php esc_html_e('Username or Email', 'artpulse'); ?></label>
                     <input class="ap-input" id="ap_login_username" type="text" name="username" required />
                 </p>
                 <p>
-                    <label class="ap-form-label" for="ap_login_password"><?php esc_html_e('Password', 'artpulse-management'); ?></label>
+                    <label class="ap-form-label" for="ap_login_password"><?php esc_html_e('Password', 'artpulse'); ?></label>
                     <input class="ap-input" id="ap_login_password" type="password" name="password" required />
                 </p>
                 <p>
-                    <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Login', 'artpulse-management'); ?></button>
+                    <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Login', 'artpulse'); ?></button>
                 </p>
             </form>
 
@@ -81,7 +81,7 @@ class LoginShortcode
         $opts = get_option('artpulse_settings', []);
         if (!empty($opts['enforce_two_factor']) && !get_user_meta($user->ID, 'two_factor_enabled', true)) {
             wp_clear_auth_cookie();
-            wp_send_json_error(['message' => __('Two-factor authentication is required.', 'artpulse-management')]);
+            wp_send_json_error(['message' => __('Two-factor authentication is required.', 'artpulse')]);
         }
 
         $roles  = (array) $user->roles;
@@ -93,7 +93,7 @@ class LoginShortcode
         }
 
         wp_send_json_success([
-            'message'       => __('Login successful', 'artpulse-management'),
+            'message'       => __('Login successful', 'artpulse'),
             'dashboardUrl'  => $target,
         ]);
     }
@@ -103,7 +103,7 @@ class LoginShortcode
         check_ajax_referer('ap_login_nonce', 'nonce');
 
         if (!apply_filters('ap_registration_allowed', true)) {
-            wp_send_json_error(['message' => __('Registration is currently disabled.', 'artpulse-management')]);
+            wp_send_json_error(['message' => __('Registration is currently disabled.', 'artpulse')]);
         }
 
         $username      = sanitize_user($_POST['username'] ?? '');
@@ -148,7 +148,7 @@ class LoginShortcode
             wp_send_json_error([
                 'message' => sprintf(
                     /* translators: %d: minimum password length */
-                    __('Password must be at least %d characters long and include both letters and numbers.', 'artpulse-management'),
+                    __('Password must be at least %d characters long and include both letters and numbers.', 'artpulse'),
                     $min_length
                 ),
             ]);
@@ -191,7 +191,7 @@ class LoginShortcode
         update_user_meta($result, 'ap_privacy_location', $location_privacy);
 
         wp_send_json_success([
-            'message' => __('Registration successful. Redirecting to your dashboard…', 'artpulse-management'),
+            'message' => __('Registration successful. Redirecting to your dashboard…', 'artpulse'),
         ]);
     }
 
@@ -202,13 +202,13 @@ class LoginShortcode
         }
 
         if (!isset($_POST['ap_register_nonce']) || !wp_verify_nonce($_POST['ap_register_nonce'], 'ap_register_form')) {
-            self::add_notice(__('Security check failed.', 'artpulse-management'));
+            self::add_notice(__('Security check failed.', 'artpulse'));
             self::maybe_redirect();
             return;
         }
 
         if (!apply_filters('ap_registration_allowed', true)) {
-            self::add_notice(__('Registration is currently disabled.', 'artpulse-management'));
+            self::add_notice(__('Registration is currently disabled.', 'artpulse'));
             self::maybe_redirect();
             return;
         }
@@ -256,7 +256,7 @@ class LoginShortcode
         ) {
             self::add_notice(sprintf(
                 /* translators: %d: minimum password length */
-                __('Password must be at least %d characters long and include both letters and numbers.', 'artpulse-management'),
+                __('Password must be at least %d characters long and include both letters and numbers.', 'artpulse'),
                 $min_length
             ));
             self::maybe_redirect();

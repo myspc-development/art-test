@@ -14,7 +14,7 @@ class MetaBoxesArtist {
     public static function add_artist_meta_boxes() {
         add_meta_box(
             'ead_artist_details',
-            __('Artist Details', 'artpulse-management'),
+            __('Artist Details', 'artpulse'),
             [self::class, 'render_artist_details'],
             'artpulse_artist', // Corrected CPT slug
             'normal',
@@ -111,7 +111,7 @@ class MetaBoxesArtist {
         if (!$screen || $screen->post_type !== 'artpulse_artist') return; // Corrected CPT slug
         $selected = $_GET['artist_featured'] ?? '';
         echo '<select name="artist_featured">';
-        echo '<option value="">' . __('Filter by Featured', 'artpulse-management') . '</option>';
+        echo '<option value="">' . __('Filter by Featured', 'artpulse') . '</option>';
         echo '<option value="1" ' . selected($selected, '1', false) . '>Yes</option>';
         echo '<option value="0" ' . selected($selected, '0', false) . '>No</option>';
         echo '</select>';
@@ -127,18 +127,18 @@ class MetaBoxesArtist {
 
     private static function get_registered_artist_meta_fields() {
         return [
-            'artist_name'         => ['text', __('Artist Name', 'artpulse-management')],
-            'artist_bio'          => ['textarea', __('Biography', 'artpulse-management')],
-            'artist_email'        => ['email', __('Email', 'artpulse-management')],
-            'artist_phone'        => ['text', __('Phone', 'artpulse-management')],
-            'artist_website'      => ['url', __('Website', 'artpulse-management')],
-            'artist_facebook'     => ['url', __('Facebook', 'artpulse-management')],
-            'artist_instagram'    => ['text', __('Instagram', 'artpulse-management')],
-            'artist_twitter'      => ['text', __('Twitter', 'artpulse-management')],
-            'artist_linkedin'     => ['url', __('LinkedIn', 'artpulse-management')],
-            'artist_portrait'     => ['number', __('Portrait ID (Media Library ID)', 'artpulse-management')],
-            'artist_specialties'  => ['text', __('Specialties', 'artpulse-management')],
-            'artist_featured'     => ['boolean', __('Featured', 'artpulse-management')]
+            'artist_name'         => ['text', __('Artist Name', 'artpulse')],
+            'artist_bio'          => ['textarea', __('Biography', 'artpulse')],
+            'artist_email'        => ['email', __('Email', 'artpulse')],
+            'artist_phone'        => ['text', __('Phone', 'artpulse')],
+            'artist_website'      => ['url', __('Website', 'artpulse')],
+            'artist_facebook'     => ['url', __('Facebook', 'artpulse')],
+            'artist_instagram'    => ['text', __('Instagram', 'artpulse')],
+            'artist_twitter'      => ['text', __('Twitter', 'artpulse')],
+            'artist_linkedin'     => ['url', __('LinkedIn', 'artpulse')],
+            'artist_portrait'     => ['number', __('Portrait ID (Media Library ID)', 'artpulse')],
+            'artist_specialties'  => ['text', __('Specialties', 'artpulse')],
+            'artist_featured'     => ['boolean', __('Featured', 'artpulse')]
         ];
     }
 }

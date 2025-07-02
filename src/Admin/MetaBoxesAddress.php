@@ -27,7 +27,7 @@ class MetaBoxesAddress {
             add_action("add_meta_boxes_{$post_type}", function($post) use ($post_type, $prefix) {
                 add_meta_box(
                     'ead_address_meta_box_' . $post_type, // Unique ID per post type
-                    __('Address', 'artpulse-management'),
+                    __('Address', 'artpulse'),
                     function($post_object) use ($prefix) {
                         self::render_address_meta_box($post_object, $prefix);
                     },
@@ -116,11 +116,11 @@ class MetaBoxesAddress {
         $prefix = $prefix !== '' ? rtrim($prefix, '_') . '_' : '';
 
         return [
-            $prefix . 'street_address' => __('Street Address', 'artpulse-management'),
-            $prefix . 'city'           => __('City', 'artpulse-management'),
-            $prefix . 'state'          => __('State / Province', 'artpulse-management'),
-            $prefix . 'postcode'       => __('Postcode / Zip Code', 'artpulse-management'),
-            $prefix . 'country'        => __('Country', 'artpulse-management'),
+            $prefix . 'street_address' => __('Street Address', 'artpulse'),
+            $prefix . 'city'           => __('City', 'artpulse'),
+            $prefix . 'state'          => __('State / Province', 'artpulse'),
+            $prefix . 'postcode'       => __('Postcode / Zip Code', 'artpulse'),
+            $prefix . 'country'        => __('Country', 'artpulse'),
         ];
     }
 }

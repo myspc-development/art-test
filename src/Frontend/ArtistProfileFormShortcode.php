@@ -18,7 +18,7 @@ class ArtistProfileFormShortcode {
 
     public static function render_form(): string {
         if (!is_user_logged_in()) {
-            return '<p>' . esc_html__('You must be logged in to edit your profile.', 'artpulse-management') . '</p>';
+            return '<p>' . esc_html__('You must be logged in to edit your profile.', 'artpulse') . '</p>';
         }
 
         $user_id  = get_current_user_id();
@@ -33,49 +33,49 @@ class ArtistProfileFormShortcode {
 
         ob_start();
         if (isset($_GET['ap_updated'])) {
-            echo '<div class="notice success">' . esc_html__('Profile updated successfully.', 'artpulse-management') . '</div>';
+            echo '<div class="notice success">' . esc_html__('Profile updated successfully.', 'artpulse') . '</div>';
         }
         ?>
         <form method="post" enctype="multipart/form-data" class="ap-artist-profile-form ap-form-container bg-white rounded-2xl shadow p-6 space-y-4">
             <?php wp_nonce_field('ap_artist_profile_form', 'ap_artist_profile_nonce'); ?>
             <div>
-                <label class="ap-form-label" for="ap_description"><?php esc_html_e('Bio', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_description"><?php esc_html_e('Bio', 'artpulse'); ?></label>
                 <textarea class="ap-input" id="ap_description" name="description" rows="5"><?php echo esc_textarea($bio); ?></textarea>
             </div>
             <div>
-                <label class="ap-form-label" for="ap_avatar"><?php esc_html_e('Profile Picture', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_avatar"><?php esc_html_e('Profile Picture', 'artpulse'); ?></label>
                 <?php if ($avatar): ?>
                     <img id="ap-avatar-preview" src="<?php echo esc_url($avatar); ?>" alt="" class="mb-2 w-24 h-24 object-cover rounded-full" />
                 <?php endif; ?>
                 <input class="ap-input" type="file" name="ap_avatar" id="ap_avatar" accept="image/*" />
             </div>
             <div>
-                <label class="ap-form-label" for="ap_social_twitter"><?php esc_html_e('Twitter URL', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_social_twitter"><?php esc_html_e('Twitter URL', 'artpulse'); ?></label>
                 <input class="ap-input" type="url" name="ap_social_twitter" id="ap_social_twitter" value="<?php echo esc_url($twitter); ?>" />
             </div>
             <div>
-                <label class="ap-form-label" for="ap_social_instagram"><?php esc_html_e('Instagram URL', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_social_instagram"><?php esc_html_e('Instagram URL', 'artpulse'); ?></label>
                 <input class="ap-input" type="url" name="ap_social_instagram" id="ap_social_instagram" value="<?php echo esc_url($instagram); ?>" />
             </div>
             <div>
-                <label class="ap-form-label" for="ap_social_website"><?php esc_html_e('Website URL', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_social_website"><?php esc_html_e('Website URL', 'artpulse'); ?></label>
                 <input class="ap-input" type="url" name="ap_social_website" id="ap_social_website" value="<?php echo esc_url($website); ?>" />
             </div>
             <div>
-                <label class="ap-form-label" for="ap_country"><?php esc_html_e('Country', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_country"><?php esc_html_e('Country', 'artpulse'); ?></label>
                 <input class="ap-input ap-address-country ap-address-input" id="ap_country" type="text" name="ap_country" data-selected="<?php echo esc_attr($country); ?>" />
             </div>
             <div>
-                <label class="ap-form-label" for="ap_state"><?php esc_html_e('State/Province', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_state"><?php esc_html_e('State/Province', 'artpulse'); ?></label>
                 <input class="ap-input ap-address-state ap-address-input" id="ap_state" type="text" name="ap_state" data-selected="<?php echo esc_attr($state); ?>" />
             </div>
             <div>
-                <label class="ap-form-label" for="ap_city"><?php esc_html_e('City', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_city"><?php esc_html_e('City', 'artpulse'); ?></label>
                 <input class="ap-input ap-address-city ap-address-input" id="ap_city" type="text" name="ap_city" data-selected="<?php echo esc_attr($city); ?>" />
             </div>
             <input type="hidden" name="address_components" id="ap-address-components" value="<?php echo esc_attr(json_encode(['country'=>$country,'state'=>$state,'city'=>$city])); ?>" />
             <div>
-                <button class="ap-form-button nectar-button" type="submit" name="ap_artist_profile_submit"><?php esc_html_e('Save Profile', 'artpulse-management'); ?></button>
+                <button class="ap-form-button nectar-button" type="submit" name="ap_artist_profile_submit"><?php esc_html_e('Save Profile', 'artpulse'); ?></button>
             </div>
         </form>
         <?php
@@ -129,7 +129,7 @@ class ArtistProfileFormShortcode {
         }
 
         if (function_exists('wc_add_notice')) {
-            wc_add_notice(__('Profile updated successfully.', 'artpulse-management'), 'success');
+            wc_add_notice(__('Profile updated successfully.', 'artpulse'), 'success');
         }
 
         wp_safe_redirect(add_query_arg('ap_updated', '1', wp_get_referer()));

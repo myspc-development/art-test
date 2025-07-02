@@ -46,7 +46,7 @@ class Shortcodes {
         $query = new \WP_Query($query_args);
 
         if (empty($query->posts)) {
-            return '<p>' . __('No items found.', 'artpulse-management') . '</p>';
+            return '<p>' . __('No items found.', 'artpulse') . '</p>';
         }
 
         ob_start();
