@@ -107,7 +107,7 @@ echo '<div class="bg-white p-4 rounded-lg shadow ap-wrapper">';
 
 ### 10. Add a Toggle in Settings
 Allow switching between legacy and Tailwind styles:
-- On: Load `tailwind.build.css`
+- On: Load `public/tailwind.build.css`
 - Off: Fallback to original styles
 
 ---
