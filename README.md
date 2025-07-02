@@ -355,7 +355,7 @@ The plugin includes a simple toggle between React and Tailwind UIs.
 Run the following scripts to build the assets:
 
 ```bash
-npm run build:tailwind
+npm run build:css
 npm run build:react
 ```
 
