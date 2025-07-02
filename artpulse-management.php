@@ -188,11 +188,12 @@ add_action('wp_enqueue_scripts', function () {
  * Enqueue the base plugin stylesheet.
  */
 function ap_enqueue_main_style() {
+    $css_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/css/main.min.css';
     wp_enqueue_style(
         'ap-main-style',
-        plugin_dir_url(__FILE__) . 'assets/css/main.min.css',
+        plugins_url('assets/css/main.min.css', ARTPULSE_PLUGIN_FILE),
         [],
-        '6.8.1'
+        file_exists($css_path) ? filemtime($css_path) : null
     );
 }
 add_action('wp_enqueue_scripts', 'ap_enqueue_main_style');
