@@ -61,7 +61,7 @@ class TaxonomyFilterBlock {
         $query = new \WP_Query($args);
 
         if (empty($query->posts)) {
-            return '<p>' . __('No posts found.', 'artpulse-management') . '</p>';
+            return '<p>' . __('No posts found.', 'artpulse') . '</p>';
         }
 
         ob_start();

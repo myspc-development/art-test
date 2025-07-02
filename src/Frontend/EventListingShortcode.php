@@ -115,7 +115,7 @@ class EventListingShortcode
             <input type="date" name="after" value="<?php echo esc_attr($atts['after']); ?>">
             <input type="date" name="before" value="<?php echo esc_attr($atts['before']); ?>">
             <input type="text" name="category" placeholder="Category" value="<?php echo esc_attr($atts['category']); ?>">
-            <button type="submit"><?php esc_html_e('Filter', 'artpulse-management'); ?></button>
+            <button type="submit"><?php esc_html_e('Filter', 'artpulse'); ?></button>
         </form>
         <div class="ap-event-listing">
         <?php
@@ -126,7 +126,7 @@ class EventListingShortcode
             }
             wp_reset_postdata();
         } else {
-            echo '<p>' . esc_html__('No events found.', 'artpulse-management') . '</p>';
+            echo '<p>' . esc_html__('No events found.', 'artpulse') . '</p>';
         }
         ?>
         </div>

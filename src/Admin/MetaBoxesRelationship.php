@@ -77,7 +77,7 @@ class MetaBoxesRelationship
             }
             add_meta_box(
                 $box['id'],
-                __($box['title'], 'artpulse-management'),
+                __($box['title'], 'artpulse'),
                 [self::class, 'render_relationship_meta_box'],
                 $box['screen'], // This is the CPT slug where the meta box appears
                 $box['multiple'] ? 'normal' : 'side', // 'side' for single select is often better UX
@@ -102,7 +102,7 @@ class MetaBoxesRelationship
             $selected_ids = !empty($selected_ids) ? (int)$selected_ids : '';
         }
 
-        echo '<p>' . esc_html__($box['description'], 'artpulse-management') . '</p>';
+        echo '<p>' . esc_html__($box['description'], 'artpulse') . '</p>';
 
         $multiple_attr = $box['multiple'] ? 'multiple="multiple"' : '';
         // Use the meta_key for the name attribute for easier saving, or keep box id if preferred and handle in save
@@ -110,7 +110,7 @@ class MetaBoxesRelationship
         $class_attr = 'ap-related-posts regular-text'; // Add regular-text for WP styling
         $data_post_type = esc_attr($box['related_type']); // The CPT we are searching for
 
-        echo '<select id="' . esc_attr($box['id']) . '" name="' . $name_attr . '" ' . $multiple_attr . ' style="width:100%;" class="' . esc_attr($class_attr) . '" data-post-type="' . $data_post_type . '" data-placeholder="' . __('Search for items...', 'artpulse-management') . '">';
+        echo '<select id="' . esc_attr($box['id']) . '" name="' . $name_attr . '" ' . $multiple_attr . ' style="width:100%;" class="' . esc_attr($class_attr) . '" data-post-type="' . $data_post_type . '" data-placeholder="' . __('Search for items...', 'artpulse') . '">';
 
         if ($box['multiple']) {
             if (!empty($selected_ids)) {
@@ -267,7 +267,7 @@ class MetaBoxesRelationship
         wp_localize_script('ap-admin-relationship', 'apAdminRelationship', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('ap_ajax_nonce'), // This nonce should be for your AJAX action
-            'placeholder_text' => __('Search for items...', 'artpulse-management'), // For Select2 placeholder
+            'placeholder_text' => __('Search for items...', 'artpulse'), // For Select2 placeholder
         ]);
     }
 

@@ -18,8 +18,8 @@ class AdminListColumns
     // --- Artists ---
     public static function artist_columns($columns)
     {
-        $columns['artist_name'] = __('Artist Name', 'artpulse-management');
-        $columns['artist_featured'] = __('Featured?', 'artpulse-management');
+        $columns['artist_name'] = __('Artist Name', 'artpulse');
+        $columns['artist_featured'] = __('Featured?', 'artpulse');
         return $columns;
     }
 
@@ -38,9 +38,9 @@ class AdminListColumns
     // --- Artworks ---
     public static function artwork_columns($columns)
     {
-        $columns['artwork_title'] = __('Artwork Title', 'artpulse-management');
-        $columns['artwork_artist'] = __('Artist', 'artpulse-management');
-        $columns['artwork_featured'] = __('Featured?', 'artpulse-management');
+        $columns['artwork_title'] = __('Artwork Title', 'artpulse');
+        $columns['artwork_artist'] = __('Artist', 'artpulse');
+        $columns['artwork_featured'] = __('Featured?', 'artpulse');
         return $columns;
     }
 
@@ -62,9 +62,9 @@ class AdminListColumns
     // --- Events ---
     public static function event_columns($columns)
     {
-        $columns['event_start_date'] = __('Start Date', 'artpulse-management');
-        $columns['event_organizer_name'] = __('Organizer', 'artpulse-management');
-        $columns['event_featured'] = __('Featured?', 'artpulse-management');
+        $columns['event_start_date'] = __('Start Date', 'artpulse');
+        $columns['event_organizer_name'] = __('Organizer', 'artpulse');
+        $columns['event_featured'] = __('Featured?', 'artpulse');
         return $columns;
     }
 

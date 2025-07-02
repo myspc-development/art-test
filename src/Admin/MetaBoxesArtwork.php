@@ -14,7 +14,7 @@ class MetaBoxesArtwork {
     public static function add_artwork_meta_boxes() {
         add_meta_box(
             'ead_artwork_details',
-            __('Artwork Details', 'artpulse-management'),
+            __('Artwork Details', 'artpulse'),
             [self::class, 'render_artwork_details'],
             'artpulse_artwork', // Corrected CPT slug
             'normal',
@@ -142,7 +142,7 @@ class MetaBoxesArtwork {
 
         $selected = $_GET['artwork_featured'] ?? '';
         echo '<select name="artwork_featured">
-            <option value="">' . __('Filter by Featured', 'artpulse-management') . '</option>
+            <option value="">' . __('Filter by Featured', 'artpulse') . '</option>
             <option value="1"' . selected($selected, '1', false) . '>Yes</option>
             <option value="0"' . selected($selected, '0', false) . '>No</option>
         </select>';
@@ -159,21 +159,21 @@ class MetaBoxesArtwork {
 
     private static function get_registered_artwork_meta_fields() {
         return [
-            'artwork_title'       => ['text', __('Title of the artwork', 'artpulse-management')],
+            'artwork_title'       => ['text', __('Title of the artwork', 'artpulse')],
             // 'artwork_artist' field is better handled by MetaBoxesRelationship
-            'artwork_medium'      => ['text', __('Medium used (e.g. oil on canvas)', 'artpulse-management')],
-            'artwork_dimensions'  => ['text', __('Dimensions (e.g. 100x120cm)', 'artpulse-management')],
-            'artwork_year'        => ['text', __('Year created (YYYY)', 'artpulse-management')],
-            'artwork_materials'   => ['textarea', __('List of materials', 'artpulse-management')],
-            'artwork_price'       => ['text', __('Asking price (e.g. $2000 or POA)', 'artpulse-management')],
-            'artwork_provenance'  => ['textarea', __('Provenance or exhibition history', 'artpulse-management')],
-            'artwork_edition'     => ['text', __('Edition/number (e.g. 1/10)', 'artpulse-management')],
-            'artwork_tags'        => ['text', __('Tags (comma-separated)', 'artpulse-management')],
-            'artwork_description' => ['textarea', __('Artwork description', 'artpulse-management')],
-            'artwork_image'       => ['number', __('Featured image ID (Media Library ID)', 'artpulse-management')], // This usually refers to the post thumbnail, consider if a separate field is needed.
-            'artwork_video_url'   => ['url', __('Video URL (e.g., YouTube, Vimeo)', 'artpulse-management')],
-            'artwork_featured'    => ['boolean', __('Mark as featured', 'artpulse-management')],
-            'artwork_styles'      => ['text', __('Styles (comma-separated)', 'artpulse-management')],
+            'artwork_medium'      => ['text', __('Medium used (e.g. oil on canvas)', 'artpulse')],
+            'artwork_dimensions'  => ['text', __('Dimensions (e.g. 100x120cm)', 'artpulse')],
+            'artwork_year'        => ['text', __('Year created (YYYY)', 'artpulse')],
+            'artwork_materials'   => ['textarea', __('List of materials', 'artpulse')],
+            'artwork_price'       => ['text', __('Asking price (e.g. $2000 or POA)', 'artpulse')],
+            'artwork_provenance'  => ['textarea', __('Provenance or exhibition history', 'artpulse')],
+            'artwork_edition'     => ['text', __('Edition/number (e.g. 1/10)', 'artpulse')],
+            'artwork_tags'        => ['text', __('Tags (comma-separated)', 'artpulse')],
+            'artwork_description' => ['textarea', __('Artwork description', 'artpulse')],
+            'artwork_image'       => ['number', __('Featured image ID (Media Library ID)', 'artpulse')], // This usually refers to the post thumbnail, consider if a separate field is needed.
+            'artwork_video_url'   => ['url', __('Video URL (e.g., YouTube, Vimeo)', 'artpulse')],
+            'artwork_featured'    => ['boolean', __('Mark as featured', 'artpulse')],
+            'artwork_styles'      => ['text', __('Styles (comma-separated)', 'artpulse')],
         ];
     }
 }

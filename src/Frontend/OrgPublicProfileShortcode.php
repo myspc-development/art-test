@@ -21,12 +21,12 @@ class OrgPublicProfileShortcode {
         }
 
         if (!$org_id) {
-            return '<p>' . esc_html__('Organization not found.', 'artpulse-management') . '</p>';
+            return '<p>' . esc_html__('Organization not found.', 'artpulse') . '</p>';
         }
 
         $published = get_post_meta($org_id, 'ap_org_profile_published', true);
         if ($published !== '1') {
-            return '<p>' . esc_html__('Organization profile is private.', 'artpulse-management') . '</p>';
+            return '<p>' . esc_html__('Organization profile is private.', 'artpulse') . '</p>';
         }
 
         $org      = get_post($org_id);
@@ -76,7 +76,7 @@ class OrgPublicProfileShortcode {
             <?php endif; ?>
             <?php if ($featured_ids): ?>
                 <div class="ap-org-featured-events">
-                    <h3><?php esc_html_e('Featured Events', 'artpulse-management'); ?></h3>
+                    <h3><?php esc_html_e('Featured Events', 'artpulse'); ?></h3>
                     <ul>
                         <?php foreach ($featured_ids as $eid): ?>
                             <li><a href="<?php echo esc_url(get_permalink($eid)); ?>"><?php echo esc_html(get_the_title($eid)); ?></a></li>

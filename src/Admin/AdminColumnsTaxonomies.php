@@ -33,19 +33,19 @@ class AdminColumnsTaxonomies {
     // Columns registration
 
     public static function artist_columns($columns) {
-        $columns['artist_specialty'] = __('Specialties', 'artpulse-management');
+        $columns['artist_specialty'] = __('Specialties', 'artpulse');
         return $columns;
     }
     public static function artwork_columns($columns) {
-        $columns['artwork_style'] = __('Styles', 'artpulse-management');
+        $columns['artwork_style'] = __('Styles', 'artpulse');
         return $columns;
     }
     public static function event_columns($columns) {
-        $columns['event_type'] = __('Event Types', 'artpulse-management');
+        $columns['event_type'] = __('Event Types', 'artpulse');
         return $columns;
     }
     public static function org_columns($columns) {
-        $columns['organization_category'] = __('Categories', 'artpulse-management');
+        $columns['organization_category'] = __('Categories', 'artpulse');
         return $columns;
     }
 
@@ -94,7 +94,7 @@ class AdminColumnsTaxonomies {
     private static function render_taxonomy_terms($post_id, $taxonomy) {
         $terms = get_the_terms($post_id, $taxonomy);
         if (empty($terms) || is_wp_error($terms)) {
-            echo __('—', 'artpulse-management');
+            echo __('—', 'artpulse');
             return;
         }
         $term_links = [];

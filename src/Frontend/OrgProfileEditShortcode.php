@@ -45,19 +45,19 @@ class OrgProfileEditShortcode {
             <?php wp_nonce_field('ap_org_profile_edit_action', 'ap_org_profile_nonce'); ?>
             <div class="ap-form-messages" role="status" aria-live="polite"></div>
             <div class="form-group">
-                <label class="ap-form-label" for="post_title"><?php esc_html_e('Organization Name', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="post_title"><?php esc_html_e('Organization Name', 'artpulse'); ?></label>
                 <input class="ap-input" type="text" id="post_title" name="post_title" value="<?php echo esc_attr($org_post->post_title); ?>" required>
             </div>
             <div class="form-group">
-                <label class="ap-form-label" for="ap_org_country"><?php esc_html_e('Country', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_org_country"><?php esc_html_e('Country', 'artpulse'); ?></label>
                 <input class="ap-input ap-address-country ap-address-input" id="ap_org_country" type="text" name="ap_org_country" data-selected="<?php echo esc_attr($country); ?>" />
             </div>
             <div class="form-group">
-                <label class="ap-form-label" for="ap_org_state"><?php esc_html_e('State/Province', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_org_state"><?php esc_html_e('State/Province', 'artpulse'); ?></label>
                 <input class="ap-input ap-address-state ap-address-input" id="ap_org_state" type="text" name="ap_org_state" data-selected="<?php echo esc_attr($state); ?>" />
             </div>
             <div class="form-group">
-                <label class="ap-form-label" for="ap_org_city"><?php esc_html_e('City', 'artpulse-management'); ?></label>
+                <label class="ap-form-label" for="ap_org_city"><?php esc_html_e('City', 'artpulse'); ?></label>
                 <input class="ap-input ap-address-city ap-address-input" id="ap_org_city" type="text" name="ap_org_city" data-selected="<?php echo esc_attr($city); ?>" />
             </div>
             <input class="ap-input" type="hidden" name="address_components" id="ap-org-address-components" value="<?php echo esc_attr(json_encode(['country' => $country, 'state' => $state, 'city' => $city])); ?>">
@@ -79,7 +79,7 @@ class OrgProfileEditShortcode {
                             if ($key === 'ead_org_type') {
                                 $opts = ['gallery','museum','studio','collective','non-profit','commercial-gallery','public-art-space','educational-institution','other'];
                                 echo '<select class="ap-input" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '">';
-                                echo '<option value="">' . esc_html__('Select', 'artpulse-management') . '</option>';
+                                echo '<option value="">' . esc_html__('Select', 'artpulse') . '</option>';
                                 foreach ($opts as $opt) {
                                     echo '<option value="' . esc_attr($opt) . '" ' . selected($value, $opt, false) . '>' . esc_html(ucfirst(str_replace('-', ' ', $opt))) . '</option>';
                                 }
@@ -108,7 +108,7 @@ class OrgProfileEditShortcode {
                 </div>
             <?php } ?>
             <div class="form-group">
-                <input class="ap-input" type="submit" name="ap_org_profile_submit" value="<?php esc_attr_e('Update Organization', 'artpulse-management'); ?>">
+                <input class="ap-input" type="submit" name="ap_org_profile_submit" value="<?php esc_attr_e('Update Organization', 'artpulse'); ?>">
             </div>
         </form>
         <?php

@@ -20,7 +20,7 @@ class RegistrationShortcode
     public static function render(): string
     {
         if (is_user_logged_in()) {
-            return '<p>' . esc_html__('You are already logged in.', 'artpulse-management') . '</p>';
+            return '<p>' . esc_html__('You are already logged in.', 'artpulse') . '</p>';
         }
 
         ob_start();

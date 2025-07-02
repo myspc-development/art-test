@@ -84,7 +84,7 @@ class RelatedItemsSelectorBlock
 
         $related = get_post_meta($post->ID, $meta_key, true);
         if (!$related) {
-            return '<p>' . __('No related items selected.', 'artpulse-management') . '</p>';
+            return '<p>' . __('No related items selected.', 'artpulse') . '</p>';
         }
 
         if (is_array($related)) {

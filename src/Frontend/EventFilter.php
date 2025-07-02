@@ -42,12 +42,12 @@ class EventFilter
         ob_start();
         ?>
         <form id="ap-event-filter-form" class="ap-event-filter-form">
-            <input type="text" name="keyword" placeholder="<?php esc_attr_e('Keyword', 'artpulse-management'); ?>" />
-            <input type="text" name="venue" placeholder="<?php esc_attr_e('Venue', 'artpulse-management'); ?>" />
+            <input type="text" name="keyword" placeholder="<?php esc_attr_e('Keyword', 'artpulse'); ?>" />
+            <input type="text" name="venue" placeholder="<?php esc_attr_e('Venue', 'artpulse'); ?>" />
             <input type="date" name="after" />
             <input type="date" name="before" />
-            <input type="text" name="category" placeholder="<?php esc_attr_e('Category', 'artpulse-management'); ?>" />
-            <button type="submit" class="ap-form-button"><?php esc_html_e('Filter', 'artpulse-management'); ?></button>
+            <input type="text" name="category" placeholder="<?php esc_attr_e('Category', 'artpulse'); ?>" />
+            <button type="submit" class="ap-form-button"><?php esc_html_e('Filter', 'artpulse'); ?></button>
         </form>
         <div id="ap-event-filter-results" class="ap-directory-results" role="status" aria-live="polite"></div>
         <?php
@@ -123,7 +123,7 @@ function ap_filter_events_callback(): void
         }
         wp_reset_postdata();
     } else {
-        echo '<div class="ap-empty">' . esc_html__('No events found.', 'artpulse-management') . '</div>';
+        echo '<div class="ap-empty">' . esc_html__('No events found.', 'artpulse') . '</div>';
     }
     $html = ob_get_clean();
     echo $html;
