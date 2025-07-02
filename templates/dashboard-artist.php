@@ -17,8 +17,23 @@ $total_rsvps      = ArtistDashboardHome::get_artist_total_rsvps($current_user->I
 $total_favorites  = ArtistDashboardHome::get_artist_total_favorites($current_user->ID);
 $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_user->ID, 5);
 ?>
-<div id="nectar-outer"><div class="container-wrap"><div class="container"><div class="row"><div class="col-md-8 col-md-offset-2"><div class="ap-dashboard">
-    <a href="#main-content" class="skip-link"><?php esc_html_e('Skip to main content', 'artpulse'); ?></a>
+<a href="#main-content" class="skip-link"><?php esc_html_e('Skip to main content', 'artpulse'); ?></a>
+<div class="dashboard-wrapper">
+    <aside class="dashboard-sidebar">
+        <ul>
+            <li><a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a></li>
+            <li><a href="#upgrade"><span class="dashicons dashicons-star-filled"></span><?php esc_html_e('Upgrade', 'artpulse'); ?></a></li>
+            <li><a href="#content"><span class="dashicons dashicons-media-default"></span><?php esc_html_e('Content', 'artpulse'); ?></a></li>
+            <li><a href="#local-events"><span class="dashicons dashicons-location-alt"></span><?php esc_html_e('Local Events', 'artpulse'); ?></a></li>
+            <li><a href="#favorites"><span class="dashicons dashicons-heart"></span><?php esc_html_e('Favorites', 'artpulse'); ?></a></li>
+            <li><a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a></li>
+            <li><a href="#account-tools"><span class="dashicons dashicons-download"></span><?php esc_html_e('Account', 'artpulse'); ?></a></li>
+            <?php if ( $show_notifications ) : ?>
+            <li><a href="#notifications"><span class="dashicons dashicons-megaphone"></span><?php esc_html_e('Notifications', 'artpulse'); ?></a></li>
+            <?php endif; ?>
+        </ul>
+    </aside>
+    <div class="dashboard-main">
     <div class="artist-dashboard-header">
         <img src="<?php echo esc_url($profile_image); ?>" alt="" class="artist-avatar" />
         <h2><?php printf(esc_html__('Welcome back, %s!', 'artpulse'), esc_html($current_user->display_name)); ?></h2>
@@ -83,7 +98,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
 
     <div id="ap-dashboard-widgets">
 
-    <div class="dashboard-widget" data-widget="membership">
+    <div class="dashboard-card" data-widget="membership">
         <h2 id="membership"><?php _e('Subscription Status','artpulse'); ?></h2>
         <div id="ap-membership-info"></div>
         <?php if ( !empty($badges) ) : ?>
@@ -92,7 +107,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <div id="ap-membership-actions"></div>
         <a class="ap-edit-profile-link ap-form-button nectar-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
     </div>
-    <div class="dashboard-widget" data-widget="upgrade">
+    <div class="dashboard-card" data-widget="upgrade">
         <h2 id="upgrade"><?php _e('Upgrade Your Account','artpulse'); ?></h2>
         <div id="ap-upgrade-options"></div>
         <?php if ($show_forms) : ?>
@@ -102,23 +117,23 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         </div>
         <?php endif; ?>
     </div>
-    <div class="dashboard-widget" data-widget="content">
+    <div class="dashboard-card" data-widget="content">
         <h2 id="content"><?php _e('Your Content','artpulse'); ?></h2>
         <div id="ap-user-content"></div>
     </div>
-    <div class="dashboard-widget" data-widget="local-events">
+    <div class="dashboard-card" data-widget="local-events">
         <h2 id="local-events"><?php _e('Events Near You','artpulse'); ?></h2>
         <div id="ap-local-events"></div>
     </div>
-    <div class="dashboard-widget" data-widget="favorites">
+    <div class="dashboard-card" data-widget="favorites">
         <h2 id="favorites"><?php _e('My Favorites','artpulse'); ?></h2>
         <div id="ap-favorite-events"></div>
     </div>
-    <div class="dashboard-widget" data-widget="rsvps">
+    <div class="dashboard-card" data-widget="rsvps">
         <h2 id="rsvps"><?php _e('My RSVPs','artpulse'); ?></h2>
         <div id="ap-rsvp-events"></div>
     </div>
-    <div class="dashboard-widget" data-widget="my-events">
+    <div class="dashboard-card" data-widget="my-events">
         <h2 id="my-events"><?php _e('My Events','artpulse'); ?></h2>
         <div id="ap-dashboard-stats" class="ap-dashboard-stats"></div>
         <div id="ap-next-event"></div>
@@ -127,12 +142,12 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <canvas id="ap-user-engagement-chart" height="150"></canvas>
         <canvas id="ap-profile-metrics-chart" height="150"></canvas>
     </div>
-    <div class="dashboard-widget" data-widget="events">
+    <div class="dashboard-card" data-widget="events">
         <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
         <div id="ap-events-feed"></div>
     </div>
     <?php if ($show_support_history) : ?>
-    <div class="dashboard-widget" data-widget="support-history">
+    <div class="dashboard-card" data-widget="support-history">
         <section id="support-history">
             <h2><?php _e('Support History','artpulse'); ?></h2>
             <div id="ap-support-history"></div>
@@ -140,12 +155,12 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
     </div>
     <?php endif; ?>
     <?php if ($show_notifications) : ?>
-    <div class="dashboard-widget" data-widget="notifications">
+    <div class="dashboard-card" data-widget="notifications">
         <h2 id="notifications"><?php _e('Notifications','artpulse'); ?></h2>
         <div id="ap-dashboard-notifications"></div>
     </div>
     <?php endif; ?>
-    <div class="dashboard-widget" data-widget="account-tools">
+    <div class="dashboard-card" data-widget="account-tools">
         <h2 id="account-tools"><?php _e('Account Tools','artpulse'); ?></h2>
         <div id="ap-account-tools">
             <button id="ap-export-json" class="ap-form-button nectar-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
@@ -154,4 +169,4 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         </div>
     </div>
     </div>
-</div></div></div></div></div>
+</div></div>
