@@ -5,7 +5,6 @@
   "scripts": {
     "build:sass": "sass assets/scss:assets/css --no-source-map",
     "build:css": "tailwindcss -i ./assets/css/tailwind.css -o ./public/tailwind.build.css --minify",
-    "build:tailwind": "postcss assets/css/ap-tailwind-input.css -o assets/dist/tailwind.css",
     "build:react": "vite build",
     "dev": "vite",
     "build": "npm run build:sass && npm run build:css && wp-scripts build && npx babel assets/js/OrganizationSubmissionForm.jsx -o assets/js/ap-org-submission.js && npx babel assets/js/SidebarMenu.jsx -o assets/js/sidebar-menu.js && npx babel assets/js/dashboard.jsx -o assets/js/ap-dashboard.js",

@@ -442,7 +442,7 @@ add_action('wp_enqueue_scripts', function () {
     if ($ui_mode === 'react') {
         wp_enqueue_script('ap-react', plugin_dir_url(__FILE__) . 'assets/dist/react-app.js', [], null, true);
     } else {
-        wp_enqueue_style('ap-tailwind', plugin_dir_url(__FILE__) . 'assets/dist/tailwind.css');
+        wp_enqueue_style('ap-tailwind', plugin_dir_url(__FILE__) . 'public/tailwind.build.css');
     }
 });
 
