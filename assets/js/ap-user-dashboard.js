@@ -109,7 +109,7 @@ if (el) {
   el.innerHTML = '...';
 }
 
-
+  const info = document.getElementById('ap-some-info');
     info.innerHTML = `<p>${apL10n.membership_level}: ${data.membership_level}</p>` +
                      `<p>${apL10n.expires}: ${data.membership_expires ? new Date(data.membership_expires * 1000).toLocaleDateString() : apL10n.never}</p>`;
 
