@@ -2,6 +2,8 @@
 
 ## Installation & Setup
 
+For layout and component patterns see the [Tailwind Design Guide](docs/tailwind-design-guide.md).
+
 ### Install Tailwind and Dependencies
 
 From the project root:
@@ -108,6 +110,8 @@ PurgeCSS isn’t too aggressive (adjust content paths if needed)
 ## Resources
 
 Tailwind CSS Documentation
+
+[Tailwind Design Guide](docs/tailwind-design-guide.md)
 
 Heroicons for icons
 

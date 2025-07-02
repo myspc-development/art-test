@@ -1,6 +1,7 @@
 # Tailwind UI Extensions for ArtPulse
 
-Reusable Tailwind UI patterns for advanced interactivity.
+Reusable Tailwind UI patterns for advanced interactivity. Refer to the
+[Tailwind Design Guide](tailwind-design-guide.md) for base component styles.
 
 ---
 

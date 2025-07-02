@@ -25,6 +25,7 @@ Additional resources:
 - [Testing Strategy](docs/testing-strategy.md)
 - [Help Resources](docs/help-resources.md)
 - [Tailwind Integration Guide](tailwind-integration.md)
+- [Tailwind Design Guide](docs/tailwind-design-guide.md)
 
 ## Overview & Quick Reference
 
