@@ -4,13 +4,11 @@
   "private": true,
   "scripts": {
     "build:sass": "sass assets/scss:assets/css --no-source-map",
-    "build:css": "tailwindcss -i ./assets/css/tailwind.css -o ./public/tailwind.build.css --minify",
     "build:react": "vite build",
     "dev": "vite",
-    "build": "npm run build:sass && npm run build:css && wp-scripts build && npx babel assets/js/OrganizationSubmissionForm.jsx -o assets/js/ap-org-submission.js && npx babel assets/js/SidebarMenu.jsx -o assets/js/sidebar-menu.js && npx babel assets/js/dashboard.jsx -o assets/js/ap-dashboard.js",
+    "build": "npm run build:sass && wp-scripts build && npx babel assets/js/OrganizationSubmissionForm.jsx -o assets/js/ap-org-submission.js && npx babel assets/js/SidebarMenu.jsx -o assets/js/sidebar-menu.js && npx babel assets/js/dashboard.jsx -o assets/js/ap-dashboard.js",
     "start": "wp-scripts start",
-    "release": "standard-version",
-    "watch:tailwind": "npx tailwindcss -i assets/css/tailwind.css -o public/tailwind.build.css --watch"
+    "release": "standard-version"
   },
   "dependencies": {
     "lucide-react": "^0.346.0"
@@ -18,9 +16,6 @@
   "devDependencies": {
     "@wordpress/scripts": "^19.2.4",
     "standard-version": "^9.5.0",
-    "sass": "^1.69.5",
-    "tailwindcss": "^3.4.4",
-    "postcss": "^8.4.38",
-    "autoprefixer": "^10.4.17"
+    "sass": "^1.69.5"
   }
 }
