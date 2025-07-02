@@ -275,6 +275,13 @@ matching meta field. The artist form sets `artist_name`, while organization
 submissions populate `ead_org_name`. This makes it easier to search by name in
 the admin area and via the REST API.
 
+## Review System
+
+The plugin registers a `review` post type for feedback on artists, events,
+artworks and organizations. Each review stores a `_reviewed_id` meta value along
+with a `reviewed_type` term identifying the subject. Queries can filter reviews
+by both fields to display relevant feedback anywhere on the site.
+
 ## Portfolio Builder
 
 Use `[ap_portfolio_builder]` to allow members to create portfolio items. Drag items in the saved list to reorder them; changes are saved automatically.

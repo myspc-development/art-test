@@ -8,6 +8,7 @@ class TaxonomiesRegistrar {
         add_action('init', [self::class, 'register_event_types']);
         add_action('init', [self::class, 'register_org_categories']);
         add_action('init', [self::class, 'register_project_stages']);
+        add_action('init', [self::class, 'register_reviewed_type']);
         add_action('init', [self::class, 'insert_default_event_types'], 20);
     }
 
@@ -117,6 +118,19 @@ class TaxonomiesRegistrar {
             'show_ui' => true,
             'show_admin_column' => true,
             'rewrite' => ['slug' => 'project-stage'],
+            'show_in_rest' => true,
+        ]);
+    }
+
+    public static function register_reviewed_type() {
+        $labels = [
+            'name'          => __('Reviewed Types', 'artpulse'),
+            'singular_name' => __('Reviewed Type', 'artpulse'),
+        ];
+        register_taxonomy('reviewed_type', 'review', [
+            'hierarchical' => false,
+            'labels'       => $labels,
+            'show_ui'      => true,
             'show_in_rest' => true,
         ]);
     }
