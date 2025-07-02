@@ -30,7 +30,7 @@ module.exports = {
 ```
 
 ### 3. Create Tailwind Entry CSS File
-**assets/css/style.css**
+**assets/css/tailwind.css**
 ```css
 @tailwind base;
 @tailwind components;
@@ -41,7 +41,7 @@ module.exports = {
 **package.json**
 ```json
 "scripts": {
-  "build:css": "tailwindcss -i ./assets/css/style.css -o ./assets/css/tailwind.css --minify"
+  "build:css": "tailwindcss -i ./assets/css/tailwind.css -o ./public/tailwind.build.css --minify"
 }
 ```
 
@@ -56,7 +56,7 @@ Add to `artpulse-management.php`:
 function ap_enqueue_tailwind_styles() {
     wp_enqueue_style(
         'ap-tailwind',
-        plugin_dir_url(__FILE__) . 'assets/css/tailwind.css',
+        plugin_dir_url(__FILE__) . 'public/tailwind.build.css',
         [],
         ARTPULSE_VERSION
     );
@@ -107,7 +107,7 @@ echo '<div class="bg-white p-4 rounded-lg shadow ap-wrapper">';
 
 ### 10. Add a Toggle in Settings
 Allow switching between legacy and Tailwind styles:
-- On: Load `tailwind.css`
+- On: Load `tailwind.build.css`
 - Off: Fallback to original styles
 
 ---
