@@ -15,7 +15,7 @@ add_action('admin_menu', function () {
                         <th scope="row">UI Mode</th>
                         <td>
                             <select name="ap_ui_mode">
-                                <option value="tailwind" <?php selected(get_option('ap_ui_mode'), 'tailwind'); ?>>Tailwind</option>
+                                <option value="salient" <?php selected(get_option('ap_ui_mode'), 'salient'); ?>>Salient / WordPress Bakery</option>
                                 <option value="react" <?php selected(get_option('ap_ui_mode'), 'react'); ?>>React</option>
                             </select>
                         </td>
