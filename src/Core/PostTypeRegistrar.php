@@ -76,6 +76,12 @@ class PostTypeRegistrar
                 'supports'    => ['title', 'editor'],
                 'menu_icon'   => 'dashicons-calendar-alt',
             ],
+            'review' => [
+                'label'      => __('Reviews', 'artpulse'),
+                'rewrite'    => ['slug' => 'reviews'],
+                'supports'   => ['title', 'editor', 'author'],
+                'menu_icon'  => 'dashicons-star-filled',
+            ],
         ];
 
         $opts              = get_option('artpulse_settings', []);
@@ -114,6 +120,16 @@ class PostTypeRegistrar
                         'items' => [ 'type' => 'integer' ],
                     ],
                 ],
+            ]
+        );
+
+        register_post_meta(
+            'review',
+            '_reviewed_id',
+            [
+                'type'         => 'integer',
+                'single'       => true,
+                'show_in_rest' => true,
             ]
         );
 
