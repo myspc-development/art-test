@@ -6,6 +6,13 @@ class ArtistDashboardShortcode {
         add_shortcode('ap_artist_dashboard', [self::class, 'render']);
         add_action('wp_ajax_ap_delete_artwork', [self::class, 'handle_ajax_delete_artwork']);
         add_action('wp_ajax_save_artwork_order', [self::class, 'handle_save_artwork_order']);
+        add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
+    }
+
+    public static function enqueue_styles(): void {
+        if (function_exists('ap_enqueue_global_styles')) {
+            ap_enqueue_global_styles();
+        }
     }
 
     public static function render(): string {
