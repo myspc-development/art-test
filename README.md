@@ -349,3 +349,15 @@ composer zip
 
 The zip file is placed in the `release/` directory.
 
+### UI Mode Toggle
+
+The plugin includes a simple toggle between React and Tailwind UIs.
+Run the following scripts to build the assets:
+
+```bash
+npm run build:tailwind
+npm run build:react
+```
+
+Use the `[ap_render_ui]` shortcode in a post or page to display the current UI.
+
