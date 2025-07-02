@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.9
+- Introduced Social Auto-Posting with Facebook, Instagram, Twitter/X and Pinterest support.
+- New settings tab allows per-post-type toggles and API credentials.
+
 ## 1.3.8
 - Added EmailTemplateManager and customizable template field.
 - Ticket purchases now send a PDF ticket attachment.

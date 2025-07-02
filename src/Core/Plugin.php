@@ -14,7 +14,7 @@ use ArtPulse\Engagement\DigestMailer;
 
 class Plugin
 {
-    private const VERSION = '1.3.7';
+    private const VERSION = '1.3.9';
 
     public function __construct()
     {
@@ -170,6 +170,7 @@ class Plugin
         \ArtPulse\Integration\PortfolioSync::register();
         \ArtPulse\Integration\OAuthManager::register();
         \ArtPulse\Integration\CalendarExport::register();
+        \ArtPulse\Integration\SocialAutoPoster::register();
         \ArtPulse\Frontend\LoginShortcode::register();
         \ArtPulse\Frontend\RegistrationShortcode::register();
         \ArtPulse\Frontend\LogoutShortcode::register();
