@@ -486,6 +486,25 @@ add_shortcode('ap_render_ui', function () {
     return ob_get_clean();
 });
 
+add_action('rest_api_init', function() {
+    register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/attendees', [
+        'methods'  => 'GET',
+        'callback' => function($request) {
+            $event_id = $request['id'];
+            // Replace this with your actual attendee query logic:
+            if (!get_post($event_id)) {
+                return new WP_Error('event_not_found', 'Event not found', array('status' => 404));
+            }
+            // Example: get attendees from meta, or whatever storage
+            $attendees = get_post_meta($event_id, '_attendees', true);
+            $attendees = is_array($attendees) ? $attendees : [];
+            return rest_ensure_response($attendees);
+        },
+        'permission_callback' => '__return_true'
+    ]);
+});
+
+
 add_action('wp_footer', function () {
     echo '<div style="padding:1em;"><strong>UI Mode:</strong>
         <a href="?ui_mode=tailwind">Tailwind</a> |
