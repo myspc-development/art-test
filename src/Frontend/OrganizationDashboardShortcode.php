@@ -96,33 +96,36 @@ class OrganizationDashboardShortcode {
 
         ob_start();
         ?>
-        <div class="ap-dashboard">
-            <h1><?php esc_html_e('Organization Dashboard','artpulse'); ?></h1>
-            <nav class="dashboard-nav">
-                <a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a>
-                <a href="#billing"><span class="dashicons dashicons-money"></span><?php esc_html_e('Billing', 'artpulse'); ?></a>
-                <a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a>
-                <?php if ($show_analytics) : ?>
-                <a href="#analytics"><span class="dashicons dashicons-chart-bar"></span><?php esc_html_e('Analytics', 'artpulse'); ?></a>
-                <?php endif; ?>
-                <a href="#profile"><span class="dashicons dashicons-admin-settings"></span><?php esc_html_e('Profile', 'artpulse'); ?></a>
-            </nav>
+        <h1><?php esc_html_e('Organization Dashboard','artpulse'); ?></h1>
+        <div class="dashboard-wrapper">
+            <aside class="dashboard-sidebar">
+                <ul>
+                    <li><a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a></li>
+                    <li><a href="#billing"><span class="dashicons dashicons-money"></span><?php esc_html_e('Billing', 'artpulse'); ?></a></li>
+                    <li><a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a></li>
+                    <?php if ($show_analytics) : ?>
+                    <li><a href="#analytics"><span class="dashicons dashicons-chart-bar"></span><?php esc_html_e('Analytics', 'artpulse'); ?></a></li>
+                    <?php endif; ?>
+                    <li><a href="#profile"><span class="dashicons dashicons-admin-settings"></span><?php esc_html_e('Profile', 'artpulse'); ?></a></li>
+                </ul>
+            </aside>
+            <div class="dashboard-main">
 
-            <details class="ap-widget" id="membership-section" open>
-                <summary><h2 id="membership"><?php _e('Membership','artpulse'); ?></h2></summary>
+            <div class="dashboard-card" id="membership-section">
+                <h2 id="membership"><?php _e('Membership','artpulse'); ?></h2>
                 <div id="ap-membership-info"></div>
                 <div id="ap-membership-actions"></div>
-            </details>
+            </div>
 
-            <details class="ap-widget" id="billing-section" open>
-                <summary><h2 id="billing"><?php _e('Next Payment','artpulse'); ?></h2></summary>
+            <div class="dashboard-card" id="billing-section">
+                <h2 id="billing"><?php _e('Next Payment','artpulse'); ?></h2>
                 <div id="ap-next-payment"></div>
                 <h3 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h3>
                 <div id="ap-transactions"></div>
-            </details>
+            </div>
 
-            <details class="ap-widget" id="events-section" open>
-                <summary><h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2></summary>
+            <div class="dashboard-card" id="events-section">
+                <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
                 <?php if (current_user_can('edit_posts')) : ?>
                 <button id="ap-add-event-btn" class="ap-form-button nectar-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
                 <?php endif; ?>
@@ -244,7 +247,7 @@ class OrganizationDashboardShortcode {
                 'total'   => $query->max_num_pages,
             ]);
             ?>
-            </details>
+            </div>
 
             <div id="ap-attendee-modal" class="ap-org-modal container">
                 <button id="ap-attendee-close" type="button" class="ap-form-button nectar-button">Close</button>
@@ -267,14 +270,14 @@ class OrganizationDashboardShortcode {
             <div id="kanban-board"></div>
 
             <?php if ($show_analytics) : ?>
-            <details class="ap-widget" id="analytics-section" open>
-                <summary><h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2></summary>
+            <div class="dashboard-card" id="analytics-section">
+                <h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2>
                 <div id="ap-org-analytics"></div>
-            </details>
+            </div>
             <?php endif; ?>
 
-            <details class="ap-widget" id="profile-section" open>
-                <summary><h2 id="profile"><?php _e('Profile','artpulse'); ?></h2></summary>
+            <div class="dashboard-card" id="profile-section">
+                <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
                 <?php
                 $days  = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
                 $hours = [];
@@ -297,7 +300,8 @@ class OrganizationDashboardShortcode {
                 }
                 ?>
                 <?php echo do_shortcode('[ap_org_profile_edit]'); ?>
-            </details>
+            </div>
+        </div>
         </div>
         <?php
         return ob_get_clean();
