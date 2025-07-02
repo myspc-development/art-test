@@ -185,6 +185,19 @@ add_action('wp_enqueue_scripts', function () {
 });
 
 /**
+ * Enqueue the base plugin stylesheet.
+ */
+function ap_enqueue_main_style() {
+    wp_enqueue_style(
+        'main',
+        plugin_dir_url(__FILE__) . 'assets/css/main.min.css',
+        [],
+        '6.8.1'
+    );
+}
+add_action('wp_enqueue_scripts', 'ap_enqueue_main_style');
+
+/**
  * Optionally enqueue styles for the admin area.
  *
  * @param string $hook Current admin page hook.
