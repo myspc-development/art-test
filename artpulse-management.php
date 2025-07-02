@@ -208,6 +208,19 @@ function ap_enqueue_admin_styles($hook) {
 }
 add_action('admin_enqueue_scripts', 'ap_enqueue_admin_styles');
 
+// Enqueue the full SortableJS library on dashboard pages.
+add_action('wp_enqueue_scripts', function () {
+    if (is_page('dashboard') || is_page('organization-dashboard')) {
+        wp_enqueue_script(
+            'sortablejs',
+            'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js',
+            [],
+            '1.15.0',
+            true
+        );
+    }
+});
+
 add_action('wp_ajax_ap_toggle_favorite', function() {
     if (!is_user_logged_in() || !isset($_POST['post_id'])) {
         wp_send_json_error(['error' => 'Unauthorized']);

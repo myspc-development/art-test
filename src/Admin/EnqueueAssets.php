@@ -510,17 +510,19 @@ class EnqueueAssets {
                 null,
                 true
             );
+            // Ensure the SortableJS library is available for drag and drop
+            // interactions on the artist dashboard.
             wp_enqueue_script(
-                'sortable-js',
-                plugins_url('assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE),
+                'sortablejs',
+                'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js',
                 [],
-                null,
+                '1.15.0',
                 true
             );
             wp_enqueue_script(
                 'ap-artist-dashboard',
                 $artist_dashboard_url,
-                ['jquery', 'chart-js', 'sortable-js'],
+                ['jquery', 'chart-js', 'sortablejs'],
                 '1.0.0',
                 true
             );
