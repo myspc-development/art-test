@@ -181,6 +181,16 @@ function ap_enqueue_dashboard_styles() {
 }
 add_action('wp_enqueue_scripts', 'ap_enqueue_dashboard_styles');
 
+// Load modern frontend UI styles for Salient/WPBakery integration
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_style(
+        'ap-frontend-styles',
+        plugin_dir_url(__FILE__) . 'assets/css/ap-frontend-styles.css',
+        [],
+        filemtime(plugin_dir_path(__FILE__) . 'assets/css/ap-frontend-styles.css')
+    );
+});
+
 /**
  * Optionally enqueue styles for the admin area.
  *
