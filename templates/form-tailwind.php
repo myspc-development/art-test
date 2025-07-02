@@ -1,4 +1,5 @@
-<form class="p-4 bg-white rounded shadow-md">
-    <label class="block mb-2 text-sm font-medium">Name</label>
-    <input type="text" class="w-full p-2 border rounded" placeholder="Your name" />
+<form class="ap-form-container">
+    <label class="ap-form-label">Name</label>
+    <input type="text" class="ap-input" placeholder="Your name" />
+    <button type="submit" class="ap-form-button nectar-button">Submit</button>
 </form>

@@ -28,10 +28,10 @@
     const menu = rolesMenus[role] || [];
     return createElement(
       'nav',
-      { className: 'w-full md:w-60 bg-white shadow-md py-6 px-3 rounded-2xl' },
+      { className: 'ap-dashboard-sidebar' },
       createElement(
         'ul',
-        { className: 'space-y-2' },
+        null,
         menu.map(function(item){
           const active = item.section === activeSection;
           return createElement(
@@ -42,7 +42,7 @@
               {
                 type: 'button',
                 onClick: function(){ setActiveSection(item.section); },
-                className: 'w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left ' + (active ? 'bg-indigo-100 font-medium' : 'hover:bg-indigo-50')
+                className: 'ap-sidebar-link ' + (active ? 'active' : '')
               },
               item.label
             )
@@ -56,11 +56,11 @@
     const [activeSection, setActiveSection] = useState((rolesMenus[role] && rolesMenus[role][0] ? rolesMenus[role][0].section : ''));
     return createElement(
       'div',
-      { className: 'ap-dashboard-react flex gap-6' },
+      { className: 'ap-dashboard-wrapper' },
       createElement(SidebarMenu, { role, activeSection, setActiveSection }),
       createElement(
         'div',
-        { className: 'flex-1' },
+        { className: 'ap-dashboard-main' },
         (rolesMenus[role] || []).map(function(item){
           return createElement(
             'section',
