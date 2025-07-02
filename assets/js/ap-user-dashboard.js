@@ -103,25 +103,24 @@ document.addEventListener('DOMContentLoaded', () => {
       statsBox.textContent = `RSVPs: ${rsvps} \u00b7 Favorites: ${favs}`;
     }
     const supportHistory = data.support_history || [];
-    // Membership
-    const el = document.getElementById('some-id');
-if (el) {
-  el.innerHTML = '...';
+// Membership
+const info = document.getElementById('ap-membership-info');
+
+if (info) {
+  info.innerHTML = `<p>${apL10n.membership_level}: ${data.membership_level}</p>` +
+                   `<p>${apL10n.expires}: ${data.membership_expires ? new Date(data.membership_expires * 1000).toLocaleDateString() : apL10n.never}</p>`;
 }
 
-  const info = document.getElementById('ap-some-info');
-    info.innerHTML = `<p>${apL10n.membership_level}: ${data.membership_level}</p>` +
-                     `<p>${apL10n.expires}: ${data.membership_expires ? new Date(data.membership_expires * 1000).toLocaleDateString() : apL10n.never}</p>`;
+const badgeWrap = document.querySelector('.ap-badges');
+if (badgeWrap) {
+  badgeWrap.textContent = '';
+  (data.user_badges || []).forEach(slug => {
+    const b = document.createElement('div');
+    b.className = `badge badge-${slug}`;
+    badgeWrap.appendChild(b);
+  });
+}
 
-    const badgeWrap = document.querySelector('.ap-badges');
-    if (badgeWrap) {
-      badgeWrap.textContent = '';
-      (data.user_badges || []).forEach(slug => {
-        const b = document.createElement('div');
-        b.className = `badge badge-${slug}`;
-        badgeWrap.appendChild(b);
-      });
-    }
     const actions = document.getElementById('ap-membership-actions');
     if (actions && data.membership_level && data.membership_level !== 'Free') {
       actions.textContent = '';
