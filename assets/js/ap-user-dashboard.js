@@ -104,7 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const supportHistory = data.support_history || [];
     // Membership
-    const info = document.getElementById('ap-membership-info');
+    const el = document.getElementById('some-id');
+if (el) {
+  el.innerHTML = '...';
+}
+
 
     info.innerHTML = `<p>${apL10n.membership_level}: ${data.membership_level}</p>` +
                      `<p>${apL10n.expires}: ${data.membership_expires ? new Date(data.membership_expires * 1000).toLocaleDateString() : apL10n.never}</p>`;
