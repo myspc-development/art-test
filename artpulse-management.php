@@ -485,4 +485,31 @@ add_action('wp_footer', function () {
         <a href="?ui_mode=react">React</a></div>';
 });
 
+// Expose event comments via REST
+add_action('rest_api_init', function () {
+    register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
+        'methods'  => 'GET',
+        'callback' => function ($request) {
+            $event_id = $request['id'];
+            $args     = [
+                'post_id' => $event_id,
+                'status'  => 'approve',
+            ];
+            $comments = get_comments($args);
+
+            $data = array_map(function ($c) {
+                return [
+                    'id'      => $c->comment_ID,
+                    'author'  => $c->comment_author,
+                    'content' => $c->comment_content,
+                    'date'    => $c->comment_date,
+                ];
+            }, $comments);
+
+            return rest_ensure_response($data);
+        },
+        'permission_callback' => '__return_true',
+    ]);
+});
+
 
