@@ -1,0 +1,60 @@
+/* === Dashboard Layout === */
+.ap-dashboard-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.ap-dashboard-sidebar {
+  flex: 1 1 250px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1.5rem;
+}
+
+.ap-dashboard-main {
+  flex: 3 1 700px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.ap-dashboard-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  transition: transform 0.2s ease;
+}
+.ap-dashboard-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Sidebar Links */
+.ap-dashboard-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.ap-dashboard-sidebar li {
+  margin-bottom: 0.8rem;
+}
+.ap-dashboard-sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #333;
+  font-weight: 500;
+  text-decoration: none;
+}
+.ap-dashboard-sidebar a:hover {
+  color: #0c75af;
+}
+
+/* Icon support */
+.ap-icon {
+  font-size: 1.2em;
+  vertical-align: middle;
+}
