@@ -189,7 +189,7 @@ add_action('wp_enqueue_scripts', function () {
  */
 function ap_enqueue_main_style() {
     wp_enqueue_style(
-        'main',
+        'ap-main-style',
         plugin_dir_url(__FILE__) . 'assets/css/main.min.css',
         [],
         '6.8.1'
