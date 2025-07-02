@@ -180,22 +180,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Content
-    const content = document.getElementById('ap-user-content');
-    ['events','artists','artworks'].forEach(type => {
-      if (data[type].length) {
-        const ul = document.createElement('ul');
-        data[type].forEach(item => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = item.link;
-          a.textContent = item.title;
-          li.appendChild(a);
-          ul.appendChild(li);
-        });
-        content.appendChild(document.createElement('h3')).textContent = apL10n[type];
-        content.appendChild(ul);
-      }
-    });
+   const content = document.getElementById('ap-user-content');
+if (content) {
+  ['events','artists','artworks'].forEach(type => {
+    if (data[type].length) {
+      const ul = document.createElement('ul');
+      data[type].forEach(item => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = item.link;
+        a.textContent = item.title;
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      const h3 = document.createElement('h3');
+      h3.textContent = apL10n[type];
+      content.appendChild(h3);
+      content.appendChild(ul);
+    }
+  });
+}
+
 
     const hasLocation = data.city || data.state;
     if (hasLocation) {
