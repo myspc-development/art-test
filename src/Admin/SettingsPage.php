@@ -510,6 +510,8 @@ class SettingsPage
                         <?php ImportExportTab::render(); ?>
                     <?php elseif ($slug === 'shortcodes') : ?>
                         <?php \ArtPulse\Admin\ShortcodePages::render(); ?>
+                    <?php elseif ($slug === 'social_auto') : ?>
+                        <?php \ArtPulse\Integration\SocialAutoPoster::render_settings(); ?>
                     <?php else : ?>
                         <form method="post" action="options.php">
                             <?php settings_fields('artpulse_settings_group'); ?>
