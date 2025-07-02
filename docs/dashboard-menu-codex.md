@@ -24,8 +24,7 @@ Each role array can include any number of items. Use icon names from `lucide-rea
 
 ## 3. `<SidebarMenu>` Example
 
-`SidebarMenu.jsx` comes with Tailwind classes for layout and highlighting. Use it inside a dashboard layout like this:
-See also the [Tailwind Design Guide](tailwind-design-guide.md) for consistent layout utilities.
+`SidebarMenu.jsx` outputs markup styled to match the Salient theme. Use it inside a WPBakery row or column like this:
 
 ```jsx
 import { useState } from 'react';
@@ -52,4 +51,4 @@ function DashboardExample({ role }) {
 }
 ```
 
-The sidebar `<nav>` uses classes like `bg-white`, `shadow-md`, `py-6`, `px-3` and `rounded-2xl`. Menu buttons highlight the active section using conditional classes.
+The sidebar `<nav>` inherits panel styles from Salient and highlights the active section by toggling a class on each menu button.
