@@ -26,7 +26,8 @@
       });
     })
     .catch(() => {
-      infoDiv.textContent = ArtPulseApi.i18n.errorFetching;
+      // Safe error message fallback (modern optional chaining)
+      infoDiv.textContent = ArtPulseApi?.i18n?.errorFetching || 'Error fetching account information.';
     });
 
     // Notification logic
