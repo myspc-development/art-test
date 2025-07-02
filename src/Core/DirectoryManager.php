@@ -104,7 +104,7 @@ class DirectoryManager {
             if ( $type === 'event' ) {
                 if ( $event_type ) {
                     $tax_query[] = [
-                        'taxonomy' => 'artpulse_event_type',
+                        'taxonomy' => 'event_type',
                         'field'    => 'term_id',
                         'terms'    => $event_type,
                     ];

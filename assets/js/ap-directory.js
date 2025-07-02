@@ -19,7 +19,7 @@
 
     // Load Event Type terms if needed
     if ( selectEl ) {
-      wp.apiFetch({ path: '/wp/v2/artpulse_event_type' })
+      wp.apiFetch({ path: '/wp/v2/event_type' })
         .then(terms => {
           selectEl.innerHTML = '<option value="">All</option>';
           terms.forEach(t => {

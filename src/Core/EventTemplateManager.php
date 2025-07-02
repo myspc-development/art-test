@@ -67,9 +67,9 @@ class EventTemplateManager
             }
         }
 
-        $terms = wp_get_object_terms($event_id, 'artpulse_event_type', ['fields' => 'ids']);
+        $terms = wp_get_object_terms($event_id, 'event_type', ['fields' => 'ids']);
         if (!empty($terms) && !is_wp_error($terms)) {
-            wp_set_object_terms($new_id, $terms, 'artpulse_event_type');
+            wp_set_object_terms($new_id, $terms, 'event_type');
         }
 
         return (int) $new_id;
@@ -97,7 +97,7 @@ class EventTemplateManager
         foreach (self::EVENT_META_FIELDS as $key) {
             $data['meta'][$key] = get_post_meta($event_id, $key, true);
         }
-        $terms = wp_get_object_terms($event_id, 'artpulse_event_type', ['fields' => 'ids']);
+        $terms = wp_get_object_terms($event_id, 'event_type', ['fields' => 'ids']);
         if (!is_wp_error($terms)) {
             $data['terms'] = $terms;
         }
@@ -136,7 +136,7 @@ class EventTemplateManager
         }
 
         if (!empty($data['terms'])) {
-            wp_set_object_terms($event_id, $data['terms'], 'artpulse_event_type');
+            wp_set_object_terms($event_id, $data['terms'], 'event_type');
         }
 
         return (int) $event_id;

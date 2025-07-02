@@ -29,7 +29,7 @@ class PostTypeRegistrar
             'label'           => __('Events', 'artpulse'),
             'supports'        => ['title','editor','thumbnail','excerpt'],
             'rewrite'         => ['slug'=>'events'],
-            'taxonomies'      => ['artpulse_event_type'],
+            'taxonomies'      => ['event_type'],
             'capability_type' => 'artpulse_event',
             'capabilities'    => [
                 'edit_post'           => 'edit_artpulse_event',
@@ -98,7 +98,7 @@ class PostTypeRegistrar
         ]));
 
         // Taxonomies
-        register_taxonomy('artpulse_event_type','artpulse_event',[
+        register_taxonomy('event_type','artpulse_event',[
             'label'=>__('Event Types','artpulse'),
             'public'=>true,'show_in_rest'=>true,'hierarchical'=>true,'rewrite'=>['slug'=>'event-types'],
         ]);

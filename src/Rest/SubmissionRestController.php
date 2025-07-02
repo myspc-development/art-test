@@ -118,7 +118,7 @@ class SubmissionRestController
         if ( isset( $params['event_type'] ) ) {
             $term_id = absint( $params['event_type'] );
             if ( $term_id ) {
-                wp_set_post_terms( $post_id, [ $term_id ], 'artpulse_event_type' );
+                wp_set_post_terms( $post_id, [ $term_id ], 'event_type' );
             }
         }
 

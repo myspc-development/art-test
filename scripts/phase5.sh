@@ -112,7 +112,7 @@ cat > "$JS_DIR/ap-directory.js" << 'EOF'
 
         // Load taxonomy terms for events
         if(selectEl){
-            wp.apiFetch({ path: '/wp/v2/artpulse_event_type' }).then(terms=>{
+            wp.apiFetch({ path: '/wp/v2/event_type' }).then(terms=>{
                 selectEl.innerHTML = '<option value=\"\">All</option>';
                 terms.forEach(t=>{
                     const o = document.createElement('option');

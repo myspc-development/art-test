@@ -26,7 +26,7 @@ class PostTypeRegistrar
             'supports'     => ['title','editor','thumbnail','excerpt'],
             'has_archive'  => true,
             'rewrite'      => ['slug' => 'events'],
-            'taxonomies'   => ['artpulse_event_type'],
+            'taxonomies'   => ['event_type'],
         ]);
 
         // Artists
@@ -60,7 +60,7 @@ class PostTypeRegistrar
         ]);
 
         // Event Types taxonomy
-        register_taxonomy('artpulse_event_type', 'artpulse_event', [
+        register_taxonomy('event_type', 'artpulse_event', [
             'label'        => __('Event Types', 'artpulse'),
             'public'       => true,
             'show_in_rest' => true,

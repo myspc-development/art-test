@@ -174,7 +174,7 @@ class EventSubmissionShortcode {
                 <select class="ap-input" id="ap_event_type" name="event_type">
                 <option value="">Select Type</option>
                 <?php
-                $terms = get_terms(['taxonomy' => 'artpulse_event_type', 'hide_empty' => false]);
+                $terms = get_terms(['taxonomy' => 'event_type', 'hide_empty' => false]);
                 foreach ($terms as $term) {
                     echo '<option value="' . esc_attr($term->term_id) . '">' . esc_html($term->name) . '</option>';
                 }
@@ -378,7 +378,7 @@ class EventSubmissionShortcode {
         update_post_meta($post_id, 'event_featured', $featured);
 
         if ($event_type) {
-            wp_set_post_terms($post_id, [$event_type], 'artpulse_event_type');
+            wp_set_post_terms($post_id, [$event_type], 'event_type');
         }
         // Handle banner and additional image uploads
         $image_ids = [];

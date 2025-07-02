@@ -22,7 +22,7 @@ class PostTypeRegistrar
             'artpulse_event' => [
                 'label'      => __('Events', 'artpulse'),
                 'rewrite'    => ['slug' => 'events'],
-                'taxonomies' => ['artpulse_event_type'],
+                'taxonomies' => ['event_type'],
                 'menu_icon'  => 'dashicons-calendar',
             ],
             'artpulse_artist' => [
@@ -118,17 +118,6 @@ class PostTypeRegistrar
         );
 
         // Taxonomies
-        register_taxonomy(
-            'artpulse_event_type',
-            'artpulse_event',
-            [
-                'label'        => __('Event Types', 'artpulse'),
-                'public'       => true,
-                'show_in_rest' => true,
-                'hierarchical' => true,
-                'rewrite'      => ['slug' => 'event-types'],
-            ]
-        );
 
         register_taxonomy(
             'artpulse_medium',

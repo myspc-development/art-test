@@ -18,7 +18,7 @@ class EventTemplateManagerTest extends WP_UnitTestCase
         ]);
         update_post_meta($this->event_id, '_ap_event_date', '2025-01-01');
         update_post_meta($this->event_id, '_ap_event_location', 'Location');
-        wp_set_object_terms($this->event_id, [1], 'artpulse_event_type');
+        wp_set_object_terms($this->event_id, [1], 'event_type');
     }
 
     public function test_duplicate_event_creates_draft_copy(): void

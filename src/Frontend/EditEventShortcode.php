@@ -50,7 +50,7 @@ class EditEventShortcode {
         $rsvp_enabled_checked = get_post_meta($post_id, 'event_rsvp_enabled', true) === '1' ? 'checked' : '';
         $rsvp_limit = esc_attr(get_post_meta($post_id, 'event_rsvp_limit', true));
         $waitlist_checked = get_post_meta($post_id, 'event_waitlist_enabled', true) === '1' ? 'checked' : '';
-        $event_type   = wp_get_post_terms($post_id, 'artpulse_event_type', ['fields' => 'ids']);
+        $event_type   = wp_get_post_terms($post_id, 'event_type', ['fields' => 'ids']);
         $event_type_id = !empty($event_type) ? $event_type[0] : '';
 
         $orgs = get_posts([
@@ -159,7 +159,7 @@ class EditEventShortcode {
                 <label class="ap-form-label">Event Type<br>
                     <?php
                     wp_dropdown_categories([
-                        'taxonomy' => 'artpulse_event_type',
+                        'taxonomy' => 'event_type',
                         'name' => 'event_type',
                         'selected' => $event_type_id,
                         'show_option_none' => 'Select type',
@@ -341,7 +341,7 @@ class EditEventShortcode {
         }
 
         if ($event_type) {
-            wp_set_post_terms($post_id, [$event_type], 'artpulse_event_type');
+            wp_set_post_terms($post_id, [$event_type], 'event_type');
         }
 
         wp_send_json_success(['message' => 'Event updated.']);

@@ -8,6 +8,7 @@ class TaxonomiesRegistrar {
         add_action('init', [self::class, 'register_event_types']);
         add_action('init', [self::class, 'register_org_categories']);
         add_action('init', [self::class, 'register_project_stages']);
+        add_action('init', [self::class, 'insert_default_event_types'], 20);
     }
 
     public static function register_artist_specialties() {
@@ -118,5 +119,23 @@ class TaxonomiesRegistrar {
             'rewrite' => ['slug' => 'project-stage'],
             'show_in_rest' => true,
         ]);
+    }
+
+    public static function insert_default_event_types() {
+        $types = [
+            'exhibition'  => __('Exhibition', 'artpulse'),
+            'opening'     => __('Opening Reception', 'artpulse'),
+            'workshop'    => __('Workshop', 'artpulse'),
+            'lecture'     => __('Lecture', 'artpulse'),
+            'performance' => __('Performance', 'artpulse'),
+            'screening'   => __('Screening', 'artpulse'),
+            'tour'        => __('Tour', 'artpulse'),
+            'other'       => __('Other', 'artpulse'),
+        ];
+        foreach ( $types as $slug => $name ) {
+            if ( ! term_exists( $name, 'event_type' ) ) {
+                wp_insert_term( $name, 'event_type', [ 'slug' => $slug ] );
+            }
+        }
     }
 }
