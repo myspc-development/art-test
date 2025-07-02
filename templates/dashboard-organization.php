@@ -117,3 +117,33 @@
     </div>
     </div>
 </div></div></div></div></div>
+
+<div class="ap-dashboard-wrapper">
+
+  <!-- Sidebar Navigation -->
+  <aside class="ap-dashboard-sidebar">
+    <ul>
+      <li><a href="#"><span class="ap-icon dashicons dashicons-admin-users"></span>Profile</a></li>
+      <li><a href="#"><span class="ap-icon dashicons dashicons-format-gallery"></span>Submissions</a></li>
+      <li><a href="#"><span class="ap-icon dashicons dashicons-calendar-alt"></span>Events</a></li>
+      <li><a href="#"><span class="ap-icon dashicons dashicons-email-alt"></span>Messages</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Dashboard Panels -->
+  <main class="ap-dashboard-main">
+    <div class="ap-dashboard-card">
+      <h3>Upcoming Event</h3>
+      <p>You're exhibiting at the <strong>XYZ Gallery</strong> on July 10.</p>
+    </div>
+    <div class="ap-dashboard-card">
+      <h3>Messages</h3>
+      <p>You have 2 unread messages.</p>
+    </div>
+    <div class="ap-dashboard-card">
+      <h3>Profile Status</h3>
+      <p>Your portfolio is 80% complete.</p>
+    </div>
+  </main>
+
+</div>

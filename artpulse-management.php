@@ -177,6 +177,16 @@ function ap_enqueue_global_styles() {
 }
 add_action('wp_enqueue_scripts', 'ap_enqueue_global_styles');
 
+function ap_enqueue_dashboard_styles() {
+    wp_enqueue_style(
+        'ap-dashboard-modern',
+        plugin_dir_url(__FILE__) . 'assets/css/ap-dashboard-modern.css',
+        [],
+        filemtime(plugin_dir_path(__FILE__) . 'assets/css/ap-dashboard-modern.css')
+    );
+}
+add_action('wp_enqueue_scripts', 'ap_enqueue_dashboard_styles');
+
 /**
  * Optionally enqueue styles for the admin area.
  *
