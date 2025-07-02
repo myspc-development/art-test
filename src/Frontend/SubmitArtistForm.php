@@ -19,26 +19,26 @@ class SubmitArtistForm {
 
         ob_start();
         ?>
-        <form class="ap-artist-submission-form ap-form-container" enctype="multipart/form-data">
-            <div class="form-group">
-                <label class="ap-form-label" for="ap-artist-title"><?php esc_html_e('Artist Name', 'artpulse'); ?></label>
-                <input class="ap-input" id="ap-artist-title" type="text" name="title" required />
-            </div>
-            <div class="form-group">
-                <label class="ap-form-label" for="ap-artist-bio"><?php esc_html_e('Biography', 'artpulse'); ?></label>
-                <textarea class="ap-input" id="ap-artist-bio" name="artist_bio" required></textarea>
-            </div>
-            <div class="form-group">
-                <label class="ap-form-label" for="ap-artist-org"><?php esc_html_e('Organization ID', 'artpulse'); ?></label>
-                <input class="ap-input" id="ap-artist-org" type="number" name="artist_org" />
-            </div>
-            <div class="form-group">
-                <label class="ap-form-label" for="ap-artist-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label>
-                <input class="ap-input" id="ap-artist-images" type="file" name="images[]" accept="image/*" multiple />
-            </div>
-            <div class="form-group">
-                <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
-            </div>
+        <form class="submission-form ap-artist-submission-form" enctype="multipart/form-data">
+            <fieldset class="form-section">
+                <legend>Contact Info</legend>
+                <label for="ap-artist-title"><?php esc_html_e('Artist Name', 'artpulse'); ?></label>
+                <input id="ap-artist-title" type="text" name="title">
+
+                <label for="ap-artist-org"><?php esc_html_e('Organization ID', 'artpulse'); ?></label>
+                <input id="ap-artist-org" type="number" name="artist_org">
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>Details</legend>
+                <label for="ap-artist-bio"><?php esc_html_e('Biography', 'artpulse'); ?></label>
+                <textarea id="ap-artist-bio" name="artist_bio"></textarea>
+
+                <label for="ap-artist-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label>
+                <input id="ap-artist-images" type="file" name="images[]" accept="image/*" multiple>
+            </fieldset>
+
+            <button type="submit" class="button-primary"><?php esc_html_e('Submit', 'artpulse'); ?></button>
         </form>
         <div class="ap-form-messages" role="status" aria-live="polite"></div>
         <?php
