@@ -431,3 +431,33 @@ function ap_get_events_for_map() {
     wp_reset_postdata();
     return $events;
 }
+
+// === UI Toggle Demo ===
+require_once plugin_dir_path(__FILE__) . 'includes/helpers.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin-settings.php';
+
+add_action('wp_enqueue_scripts', function () {
+    $ui_mode = ap_get_ui_mode();
+
+    if ($ui_mode === 'react') {
+        wp_enqueue_script('ap-react', plugin_dir_url(__FILE__) . 'assets/dist/react-app.js', [], null, true);
+    } else {
+        wp_enqueue_style('ap-tailwind', plugin_dir_url(__FILE__) . 'assets/dist/tailwind.css');
+    }
+});
+
+add_shortcode('ap_render_ui', function () {
+    ob_start();
+    $ui_mode = ap_get_ui_mode();
+    $template = $ui_mode === 'react' ? 'form-react.php' : 'form-tailwind.php';
+    include plugin_dir_path(__FILE__) . "templates/{$template}";
+    return ob_get_clean();
+});
+
+add_action('wp_footer', function () {
+    echo '<div style="padding:1em;"><strong>UI Mode:</strong>
+        <a href="?ui_mode=tailwind">Tailwind</a> |
+        <a href="?ui_mode=react">React</a></div>';
+});
+
+
