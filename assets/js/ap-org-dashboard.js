@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!data) return;
           const wrap = document.createElement('div');
           const makeSection = (title, list) => {
-            if (!list.length) return;
+            if (!Array.isArray(list) || !list.length) return;
             const h = document.createElement('h3');
             h.textContent = title;
             wrap.appendChild(h);
