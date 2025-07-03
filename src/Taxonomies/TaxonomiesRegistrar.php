@@ -2,13 +2,13 @@
 namespace ArtPulse\Taxonomies;
 class TaxonomiesRegistrar {
     public static function register() {
-        add_action('init', [self::class, 'register_artist_specialties']);
-        add_action('init', [self::class, 'register_artwork_styles']);
-        add_action('init', [self::class, 'register_event_types']);
-        add_action('init', [self::class, 'register_org_categories']);
-        add_action('init', [self::class, 'register_project_stages']);
-        add_action('init', [self::class, 'register_reviewed_type']);
-        add_action('init', [self::class, 'insert_default_event_types'], 20);
+        self::register_artist_specialties();
+        self::register_artwork_styles();
+        self::register_event_types();
+        self::register_org_categories();
+        self::register_project_stages();
+        self::register_reviewed_type();
+        self::insert_default_event_types();
     }
     public static function register_artist_specialties() {
         $labels = [
