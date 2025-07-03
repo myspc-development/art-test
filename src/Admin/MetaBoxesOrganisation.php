@@ -50,6 +50,31 @@ class MetaBoxesOrganisation {
                 case 'media':
                     echo '<input type="number" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" placeholder="' . __('Media Library ID', 'artpulse') . '" />';
                     break;
+                case 'select':
+                    $options = [];
+                    if ($key === 'ead_org_type') {
+                        $options = [
+                            'gallery',
+                            'museum',
+                            'art-fair',
+                            'studio',
+                            'collective',
+                            'non-profit',
+                            'commercial-gallery',
+                            'public-art-space',
+                            'educational-institution',
+                            'other'
+                        ];
+                    } elseif ($key === 'ead_org_size') {
+                        $options = ['small', 'medium', 'large'];
+                    }
+
+                    echo '<select name="' . esc_attr($key) . '">';
+                    foreach ($options as $option) {
+                        echo '<option value="' . esc_attr($option) . '" ' . selected($value, $option, false) . '>' . ucfirst(str_replace('-', ' ', $option)) . '</option>';
+                    }
+                    echo '</select>';
+                    break;
                 default:
                     echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" />';
             }
