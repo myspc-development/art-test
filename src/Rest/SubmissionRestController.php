@@ -122,6 +122,36 @@ class SubmissionRestController
             }
         }
 
+        if ( isset( $params['artwork_medium'] ) ) {
+            $medium_terms = array_filter( array_map( 'trim', explode( ',', sanitize_text_field( $params['artwork_medium'] ) ) ) );
+            $medium_ids   = [];
+            foreach ( $medium_terms as $name ) {
+                $term = term_exists( $name, 'artpulse_medium' );
+                if ( ! $term ) {
+                    $term = wp_insert_term( $name, 'artpulse_medium' );
+                }
+                if ( ! is_wp_error( $term ) ) {
+                    $medium_ids[] = (int) ( $term['term_id'] ?? $term );
+                }
+            }
+            wp_set_post_terms( $post_id, $medium_ids, 'artpulse_medium', false );
+        }
+
+        if ( isset( $params['artwork_styles'] ) ) {
+            $style_terms = array_filter( array_map( 'trim', explode( ',', sanitize_text_field( $params['artwork_styles'] ) ) ) );
+            $style_ids   = [];
+            foreach ( $style_terms as $name ) {
+                $term = term_exists( $name, 'artwork_style' );
+                if ( ! $term ) {
+                    $term = wp_insert_term( $name, 'artwork_style' );
+                }
+                if ( ! is_wp_error( $term ) ) {
+                    $style_ids[] = (int) ( $term['term_id'] ?? $term );
+                }
+            }
+            wp_set_post_terms( $post_id, $style_ids, 'artwork_style', false );
+        }
+
         $saved_image_ids = [];
         if ( ! empty( $params['image_ids'] ) && is_array( $params['image_ids'] ) ) {
             $ids       = array_slice( array_map( 'absint', $params['image_ids'] ), 0, 5 );
