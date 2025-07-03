@@ -41,6 +41,10 @@ if ( $country ) {
 }
 $address = implode( "\n", $addr_parts );
 
+$types    = get_the_terms( $event_id, 'event_type' );
+$org_name  = get_post_meta( $event_id, 'event_organizer_name', true );
+$org_email = get_post_meta( $event_id, 'event_organizer_email', true );
+
 $fav_count  = intval( get_post_meta( $event_id, 'ap_favorite_count', true ) );
 $rsvps      = get_post_meta( $event_id, 'event_rsvp_list', true );
 $rsvp_count = is_array( $rsvps ) ? count( $rsvps ) : 0;
@@ -74,6 +78,12 @@ if ( $user_id ) {
             <?php endif; ?>
             <?php if ( $end ) : ?>
                 <div><strong><?php esc_html_e( 'Ends:', 'artpulse' ); ?></strong> <?php echo esc_html( date_i18n( 'M d, Y H:i', strtotime( $end ) ) ); ?></div>
+            <?php endif; ?>
+            <?php if ( $types ) : ?>
+                <div><strong><?php esc_html_e( 'Type:', 'artpulse' ); ?></strong> <?php echo esc_html( implode( ', ', wp_list_pluck( $types, 'name' ) ) ); ?></div>
+            <?php endif; ?>
+            <?php if ( $org_name || $org_email ) : ?>
+                <div><strong><?php esc_html_e( 'Organizer:', 'artpulse' ); ?></strong> <?php echo esc_html( $org_name ); ?><?php if ( $org_email ) : ?> (<?php echo esc_html( antispambot( $org_email ) ); ?>)<?php endif; ?></div>
             <?php endif; ?>
         </div>
         <?php
