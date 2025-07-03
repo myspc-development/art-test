@@ -87,6 +87,32 @@ class RelatedItemsSelectorBlock
             return '<p>' . __('No related items selected.', 'artpulse') . '</p>';
         }
 
+        $ids = is_array($related) ? $related : [$related];
+
+        $is_event = isset($attributes['postType']) && $attributes['postType'] === 'artpulse_event';
+        if (!$is_event) {
+            foreach ($ids as $rid) {
+                if (get_post_type($rid) === 'artpulse_event') {
+                    $is_event = true;
+                    break;
+                }
+            }
+        }
+
+        if ($is_event) {
+            $cards = [];
+            foreach ($ids as $rid) {
+                $rid = intval($rid);
+                if ($rid) {
+                    $cards[] = ap_get_event_card($rid);
+                }
+            }
+            if ($cards) {
+                return '<div class="ap-related-events-grid ap-directory-results">' . implode('', $cards) . '</div>';
+            }
+            return '';
+        }
+
         if (is_array($related)) {
             $items = [];
             foreach ($related as $id) {
