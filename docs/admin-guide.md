@@ -43,3 +43,11 @@ generated pages with a single click when verifying new features.
 ## Accessibility & Mobile Notes
 
 All admin tools are responsive and keyboard accessible so you can manage events from any device.
+
+## Refresh Permalinks After Updates
+
+When upgrading the plugin or making changes to custom taxonomies, WordPress may
+not immediately register the updated rewrite rules. To avoid 404 errors on REST
+endpoints like `/wp/v2/artwork_style` and `/wp/v2/event_type`, either
+reactivate the plugin or visit **Settings → Permalinks**. This flushes rewrite
+rules so the new routes work correctly.
