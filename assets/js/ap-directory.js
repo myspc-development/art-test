@@ -11,9 +11,12 @@
     const regionInput  = container.querySelector('.ap-filter-region');
     const mediumEl     = container.querySelector('.ap-filter-medium');
     const styleEl      = container.querySelector('.ap-filter-style');
+    const orgTypeEl    = container.querySelector('.ap-filter-org-type');
     const locationEl   = container.querySelector('.ap-filter-location');
     const keywordInput = container.querySelector('.ap-filter-keyword');
     const saleFilter   = container.dataset.forSale;
+
+    const ORG_TYPES = ['gallery','museum','art-fair','studio','collective','non-profit','commercial-gallery','public-art-space','educational-institution','other'];
 
     if (!results || !limitInput || !applyBtn) return; // Safety check
 
@@ -66,6 +69,16 @@
         });
     }
 
+    if ( orgTypeEl ) {
+      orgTypeEl.innerHTML = '<option value="">All</option>';
+      ORG_TYPES.forEach(t => {
+        const o = document.createElement('option');
+        o.value = t;
+        o.textContent = t.replace(/-/g, ' ');
+        orgTypeEl.appendChild(o);
+      });
+    }
+
     // Show spinner during loading
     function showLoading() {
       results.innerHTML = '<div class="ap-loading"><span class="screen-reader-text">Loading...</span><span class="ap-spinner" aria-hidden="true"></span></div>';
@@ -92,6 +105,9 @@
       }
       if ( styleEl && styleEl.value ) {
         params.append('style', styleEl.value);
+      }
+      if ( orgTypeEl && orgTypeEl.value ) {
+        params.append('org_type', orgTypeEl.value);
       }
       if ( locationEl && locationEl.value ) {
         params.append('location', locationEl.value);
@@ -239,6 +255,7 @@ function createFollowButton(post, objectType) {
           region: regionInput?.value || '',
           medium: mediumEl?.value || '',
           style: styleEl?.value || '',
+          org_type: orgTypeEl?.value || '',
           location: locationEl?.value || '',
           keyword: keywordInput?.value || '',
           for_sale: saleFilter || ''

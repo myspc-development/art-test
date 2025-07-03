@@ -51,6 +51,7 @@ class DirectoryManager {
                 'event_type' => [ 'type' => 'integer' ],
                 'medium'     => [ 'type' => 'integer' ],
                 'style'      => [ 'type' => 'integer' ],
+                'org_type'   => [ 'type' => 'string' ],
                 'location'   => [ 'type' => 'string' ],
                 'city'       => [ 'type' => 'string' ],
                 'region'     => [ 'type' => 'string' ],
@@ -66,6 +67,7 @@ class DirectoryManager {
         $event_type = absint( $request->get_param('event_type') );
         $medium     = absint( $request->get_param('medium') );
         $style      = absint( $request->get_param('style') );
+        $org_type   = sanitize_text_field( $request->get_param('org_type') );
         $location   = sanitize_text_field( $request->get_param('location') );
         $city       = sanitize_text_field( $request->get_param('city') );
         $region     = sanitize_text_field( $request->get_param('region') );
@@ -91,6 +93,7 @@ class DirectoryManager {
             'event_type' => $event_type,
             'medium'     => $medium,
             'style'      => $style,
+            'org_type'  => $org_type,
             'location'   => $location,
             'city'       => $city,
             'region'     => $region,
@@ -140,6 +143,13 @@ class DirectoryManager {
                     'taxonomy' => 'artwork_style',
                     'field'    => 'term_id',
                     'terms'    => $style,
+                ];
+            }
+
+            if ( $type === 'org' && $org_type ) {
+                $meta_query[] = [
+                    'key'   => 'ead_org_type',
+                    'value' => $org_type,
                 ];
             }
 
@@ -222,10 +232,22 @@ class DirectoryManager {
                     <input type="text" class="ap-filter-city" placeholder="<?php esc_attr_e('City','artpulse'); ?>" />
                     <input type="text" class="ap-filter-region" placeholder="<?php esc_attr_e('Region','artpulse'); ?>" />
                 <?php endif; ?>
-                <label><?php _e('Medium','artpulse'); ?>:</label>
-                <select class="ap-filter-medium"></select>
-                <label><?php _e('Style','artpulse'); ?>:</label>
-                <select class="ap-filter-style"></select>
+                <?php if ($atts['type'] === 'org'): ?>
+                    <label><?php _e('Organization Type','artpulse'); ?>:</label>
+                    <select class="ap-filter-org-type">
+                        <option value=""><?php esc_html_e('All','artpulse'); ?></option>
+                        <?php
+                        foreach (['gallery','museum','art-fair','studio','collective','non-profit','commercial-gallery','public-art-space','educational-institution','other'] as $t) {
+                            echo '<option value="' . esc_attr($t) . '">' . esc_html(ucfirst(str_replace('-', ' ', $t))) . '</option>';
+                        }
+                        ?>
+                    </select>
+                <?php else: ?>
+                    <label><?php _e('Medium','artpulse'); ?>:</label>
+                    <select class="ap-filter-medium"></select>
+                    <label><?php _e('Style','artpulse'); ?>:</label>
+                    <select class="ap-filter-style"></select>
+                <?php endif; ?>
                 <input type="text" class="ap-filter-location" placeholder="<?php esc_attr_e('Location','artpulse'); ?>" />
                 <input type="text" class="ap-filter-keyword" placeholder="<?php esc_attr_e('Keyword','artpulse'); ?>" />
                 <label><?php _e('Limit','artpulse'); ?>:</label>
