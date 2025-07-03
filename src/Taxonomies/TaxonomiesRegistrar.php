@@ -1,6 +1,5 @@
 <?php
 namespace ArtPulse\Taxonomies;
-
 class TaxonomiesRegistrar {
     public static function register() {
         add_action('init', [self::class, 'register_artist_specialties']);
@@ -11,7 +10,6 @@ class TaxonomiesRegistrar {
         add_action('init', [self::class, 'register_reviewed_type']);
         add_action('init', [self::class, 'insert_default_event_types'], 20);
     }
-
     public static function register_artist_specialties() {
         $labels = [
             'name' => __('Artist Specialties', 'artpulse'),
@@ -33,7 +31,6 @@ class TaxonomiesRegistrar {
             'show_in_rest' => true,
         ]);
     }
-
     public static function register_artwork_styles() {
         $labels = [
             'name' => __('Artwork Styles', 'artpulse'),
@@ -55,7 +52,6 @@ class TaxonomiesRegistrar {
             'show_in_rest' => true,
         ]);
     }
-
     public static function register_event_types() {
         $labels = [
             'name' => __('Event Types', 'artpulse'),
@@ -77,7 +73,6 @@ class TaxonomiesRegistrar {
             'show_in_rest' => true,
         ]);
     }
-
     public static function register_org_categories() {
         $labels = [
             'name' => __('Organization Categories', 'artpulse'),
@@ -99,7 +94,6 @@ class TaxonomiesRegistrar {
             'show_in_rest' => true,
         ]);
     }
-
     public static function register_project_stages() {
         $labels = [
             'name' => __('Project Stages', 'artpulse'),
@@ -121,7 +115,6 @@ class TaxonomiesRegistrar {
             'show_in_rest' => true,
         ]);
     }
-
     public static function register_reviewed_type() {
         $labels = [
             'name'          => __('Reviewed Types', 'artpulse'),
@@ -134,7 +127,6 @@ class TaxonomiesRegistrar {
             'show_in_rest' => true,
         ]);
     }
-
     public static function insert_default_event_types() {
         $types = [
             'exhibition'  => __('Exhibition', 'artpulse'),
@@ -153,3 +145,29 @@ class TaxonomiesRegistrar {
         }
     }
 }
+
+add_action('init', function() {
+    // Attach these to your actual post type slugs. For example: 'event', 'artwork'
+    register_taxonomy('event_type', ['event'], [
+        'labels' => [
+            'name' => 'Event Types',
+        ],
+        'hierarchical' => true,
+        'public' => true,
+        'show_ui' => true,
+        'show_admin_column' => true,
+        'show_in_rest' => true, // ← THIS IS CRITICAL!
+        'rewrite' => ['slug' => 'event-type'],
+    ]);
+    register_taxonomy('artwork_style', ['artwork'], [
+        'labels' => [
+            'name' => 'Artwork Styles',
+        ],
+        'hierarchical' => true,
+        'public' => true,
+        'show_ui' => true,
+        'show_admin_column' => true,
+        'show_in_rest' => true, // ← THIS IS CRITICAL!
+        'rewrite' => ['slug' => 'artwork-style'],
+    ]);
+});
