@@ -38,7 +38,8 @@
     }
 
     if ( mediumEl ) {
-      wp.apiFetch({ path: '/wp/v2/artpulse_medium' })
+      const mediumPath = type === 'artist' ? '/wp/v2/artist_specialty' : '/wp/v2/artpulse_medium';
+      wp.apiFetch({ path: mediumPath })
         .then(terms => {
           mediumEl.innerHTML = '<option value="">All</option>';
           terms.forEach(t => {
@@ -180,6 +181,16 @@
             }
             if ( post.org_type ) {
               html += `<p class="ap-meta-org-type">${post.org_type}</p>`;
+            }
+            if ( type === 'artist' ) {
+              if ( post.medium && post.medium.length ) {
+                const val = Array.isArray(post.medium) ? post.medium.join(', ') : post.medium;
+                html += `<p class="ap-meta-medium">${val}</p>`;
+              }
+              if ( post.style && post.style.length ) {
+                const val = Array.isArray(post.style) ? post.style.join(', ') : post.style;
+                html += `<p class="ap-meta-style">${val}</p>`;
+              }
             }
             const addressParts = [];
             if ( post.event_street_address ) addressParts.push(post.event_street_address);

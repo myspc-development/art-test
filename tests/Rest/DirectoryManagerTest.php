@@ -48,4 +48,56 @@ class DirectoryManagerTest extends \WP_UnitTestCase
         $this->assertNotEmpty($data[0]['featured_media_url']);
         $this->assertStringContainsString('test-logo.jpg', $data[0]['featured_media_url']);
     }
+
+    public function test_filter_artists_by_medium(): void
+    {
+        $medium = wp_insert_term('Painting', 'artist_specialty');
+        $style  = wp_insert_term('Modern', 'artwork_style');
+
+        $artist = wp_insert_post([
+            'post_title'  => 'Painter',
+            'post_type'   => 'artpulse_artist',
+            'post_status' => 'publish',
+        ]);
+        wp_set_object_terms($artist, [$medium['term_id']], 'artist_specialty');
+        wp_set_object_terms($artist, [$style['term_id']], 'artwork_style');
+
+        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req->set_param('type', 'artist');
+        $req->set_param('medium', $medium['term_id']);
+        $res = rest_get_server()->dispatch($req);
+
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertCount(1, $data);
+        $this->assertSame($artist, $data[0]['id']);
+        $this->assertSame(['Painting'], $data[0]['medium']);
+        $this->assertSame(['Modern'], $data[0]['style']);
+    }
+
+    public function test_filter_artists_by_style(): void
+    {
+        $medium = wp_insert_term('Sculpture', 'artist_specialty');
+        $style  = wp_insert_term('Abstract', 'artwork_style');
+
+        $artist = wp_insert_post([
+            'post_title'  => 'Sculptor',
+            'post_type'   => 'artpulse_artist',
+            'post_status' => 'publish',
+        ]);
+        wp_set_object_terms($artist, [$medium['term_id']], 'artist_specialty');
+        wp_set_object_terms($artist, [$style['term_id']], 'artwork_style');
+
+        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req->set_param('type', 'artist');
+        $req->set_param('style', $style['term_id']);
+        $res = rest_get_server()->dispatch($req);
+
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertCount(1, $data);
+        $this->assertSame($artist, $data[0]['id']);
+        $this->assertSame(['Sculpture'], $data[0]['medium']);
+        $this->assertSame(['Abstract'], $data[0]['style']);
+    }
 }
