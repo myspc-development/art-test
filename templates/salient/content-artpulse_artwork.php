@@ -17,17 +17,30 @@ while ( have_posts() ) : the_post(); ?>
   <h1 class="entry-title"><?php the_title(); ?></h1>
   <div class="entry-content"><?php the_content(); ?></div>
   <?php
-    $medium     = get_post_meta(get_the_ID(),'_ap_artwork_medium',true);
-    $dimensions = get_post_meta(get_the_ID(),'_ap_artwork_dimensions',true);
-    $materials  = get_post_meta(get_the_ID(),'_ap_artwork_materials',true);
+    $medium_meta  = get_post_meta(get_the_ID(),'_ap_artwork_medium',true);
+    $dimensions   = get_post_meta(get_the_ID(),'_ap_artwork_dimensions',true);
+    $materials    = get_post_meta(get_the_ID(),'_ap_artwork_materials',true);
+    $medium_terms = get_the_terms(get_the_ID(), 'artpulse_medium');
+    $medium_names = $medium_terms && ! is_wp_error($medium_terms)
+      ? implode(', ', wp_list_pluck($medium_terms, 'name'))
+      : '';
+    $medium       = $medium_names ?: $medium_meta;
+    $style_terms  = get_the_terms(get_the_ID(), 'artwork_style');
+    $style_meta   = get_post_meta(get_the_ID(),'artwork_styles',true);
+    $style        = ($style_terms && ! is_wp_error($style_terms))
+      ? implode(', ', wp_list_pluck($style_terms, 'name'))
+      : $style_meta;
     $for_sale   = get_post_meta(get_the_ID(),'for_sale',true);
     $price      = get_post_meta(get_the_ID(),'price',true);
     $buy_link   = get_post_meta(get_the_ID(),'buy_link',true);
     $sale_enabled = get_option('ap_enable_artworks_for_sale');
-    if($medium||$dimensions||$materials||($sale_enabled&&$for_sale&&($price||$buy_link))): ?>
+    if($medium||$style||$dimensions||$materials||($sale_enabled&&$for_sale&&($price||$buy_link))): ?>
     <ul class="portfolio-meta">
       <?php if($medium): ?>
         <li><strong><?php esc_html_e('Medium:','artpulse'); ?></strong> <?php echo esc_html($medium); ?></li>
+      <?php endif; ?>
+      <?php if($style): ?>
+        <li><strong><?php esc_html_e('Style:','artpulse'); ?></strong> <?php echo esc_html($style); ?></li>
       <?php endif; ?>
       <?php if($dimensions): ?>
         <li><strong><?php esc_html_e('Dimensions:','artpulse'); ?></strong> <?php echo esc_html($dimensions); ?></li>
