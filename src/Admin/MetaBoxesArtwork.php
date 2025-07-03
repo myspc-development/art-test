@@ -108,6 +108,42 @@ class MetaBoxesArtwork {
 
             update_post_meta($post_id, $field, $value);
         }
+
+        $medium_value  = get_post_meta($post_id, 'artwork_medium', true);
+        $medium_terms  = array_filter(array_map('trim', explode(',', $medium_value)));
+        $medium_ids    = [];
+        foreach ($medium_terms as $name) {
+            $term = term_exists($name, 'artpulse_medium');
+            if (!$term) {
+                $term = wp_insert_term($name, 'artpulse_medium');
+            }
+            if (!is_wp_error($term)) {
+                $medium_ids[] = (int) ($term['term_id'] ?? $term);
+            }
+        }
+        if ($medium_ids) {
+            wp_set_object_terms($post_id, $medium_ids, 'artpulse_medium', false);
+        } else {
+            wp_set_object_terms($post_id, [], 'artpulse_medium', false);
+        }
+
+        $style_value  = get_post_meta($post_id, 'artwork_styles', true);
+        $style_terms  = array_filter(array_map('trim', explode(',', $style_value)));
+        $style_ids    = [];
+        foreach ($style_terms as $name) {
+            $term = term_exists($name, 'artwork_style');
+            if (!$term) {
+                $term = wp_insert_term($name, 'artwork_style');
+            }
+            if (!is_wp_error($term)) {
+                $style_ids[] = (int) ($term['term_id'] ?? $term);
+            }
+        }
+        if ($style_ids) {
+            wp_set_object_terms($post_id, $style_ids, 'artwork_style', false);
+        } else {
+            wp_set_object_terms($post_id, [], 'artwork_style', false);
+        }
     }
 
     public static function register_rest_fields() {
