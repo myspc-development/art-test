@@ -39,6 +39,14 @@ class EventFilter
 
     public static function render(): string
     {
+        $event_types = get_terms([
+            'taxonomy'   => 'event_type',
+            'hide_empty' => false,
+        ]);
+        if (is_wp_error($event_types)) {
+            $event_types = [];
+        }
+
         ob_start();
         ?>
         <form id="ap-event-filter-form" class="ap-event-filter-form">
@@ -47,6 +55,12 @@ class EventFilter
             <input type="date" name="after" />
             <input type="date" name="before" />
             <input type="text" name="category" placeholder="<?php esc_attr_e('Category', 'artpulse'); ?>" />
+            <select name="event_type">
+                <option value=""><?php esc_html_e('All Types', 'artpulse'); ?></option>
+                <?php foreach ($event_types as $type) : ?>
+                    <option value="<?php echo esc_attr($type->slug); ?>"><?php echo esc_html($type->name); ?></option>
+                <?php endforeach; ?>
+            </select>
             <button type="submit" class="ap-form-button"><?php esc_html_e('Filter', 'artpulse'); ?></button>
         </form>
         <div id="ap-event-filter-results" class="ap-directory-results" role="status" aria-live="polite"></div>
@@ -57,12 +71,13 @@ class EventFilter
 
 function ap_filter_events_callback(): void
 {
-    $venue    = sanitize_text_field($_REQUEST['venue'] ?? '');
-    $after    = sanitize_text_field($_REQUEST['after'] ?? '');
-    $before   = sanitize_text_field($_REQUEST['before'] ?? '');
+    $venue      = sanitize_text_field($_REQUEST['venue'] ?? '');
+    $after      = sanitize_text_field($_REQUEST['after'] ?? '');
+    $before     = sanitize_text_field($_REQUEST['before'] ?? '');
     $category   = sanitize_text_field($_REQUEST['category'] ?? '');
+    $event_type = sanitize_text_field($_REQUEST['event_type'] ?? '');
     $categories = array_map('sanitize_key', array_map('trim', explode(',', $category)));
-    $keyword  = sanitize_text_field($_REQUEST['keyword'] ?? '');
+    $keyword    = sanitize_text_field($_REQUEST['keyword'] ?? '');
 
     $meta_query = [];
     if ($venue !== '') {
@@ -95,6 +110,13 @@ function ap_filter_events_callback(): void
             'taxonomy' => 'category',
             'field'    => 'slug',
             'terms'    => $categories,
+        ];
+    }
+    if ($event_type !== '') {
+        $tax_query[] = [
+            'taxonomy' => 'event_type',
+            'field'    => 'slug',
+            'terms'    => [$event_type],
         ];
     }
 

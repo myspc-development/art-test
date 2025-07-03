@@ -31,11 +31,12 @@ class EventListingShortcode
             'after'          => '',
             'before'         => '',
             'category'       => '',
+            'event_type'     => '',
             'orderby'        => 'date',
             'order'          => 'DESC'
         ], $atts, 'ap_event_listing');
 
-        foreach (['venue', 'after', 'before', 'category', 'orderby'] as $field) {
+        foreach (['venue', 'after', 'before', 'category', 'event_type', 'orderby'] as $field) {
             if (isset($_GET[$field])) {
                 $atts[$field] = sanitize_text_field(wp_unslash($_GET[$field]));
             }
@@ -74,6 +75,13 @@ class EventListingShortcode
                 'terms'    => array_map('trim', explode(',', $atts['category'])),
             ];
         }
+        if (!empty($atts['event_type'])) {
+            $tax_query[] = [
+                'taxonomy' => 'event_type',
+                'field'    => 'slug',
+                'terms'    => array_map('trim', explode(',', $atts['event_type'])),
+            ];
+        }
 
         $q_args = [
             'post_type'      => 'artpulse_event',
@@ -108,6 +116,14 @@ class EventListingShortcode
             });
         }
 
+        $event_types = get_terms([
+            'taxonomy'   => 'event_type',
+            'hide_empty' => false,
+        ]);
+        if (is_wp_error($event_types)) {
+            $event_types = [];
+        }
+
         ob_start();
         ?>
         <form class="ap-event-filter-form" method="get">
@@ -115,6 +131,12 @@ class EventListingShortcode
             <input type="date" name="after" value="<?php echo esc_attr($atts['after']); ?>">
             <input type="date" name="before" value="<?php echo esc_attr($atts['before']); ?>">
             <input type="text" name="category" placeholder="Category" value="<?php echo esc_attr($atts['category']); ?>">
+            <select name="event_type">
+                <option value=""><?php esc_html_e('All Types', 'artpulse'); ?></option>
+                <?php foreach ($event_types as $type) : ?>
+                    <option value="<?php echo esc_attr($type->slug); ?>" <?php selected($atts['event_type'], $type->slug); ?>><?php echo esc_html($type->name); ?></option>
+                <?php endforeach; ?>
+            </select>
             <button type="submit"><?php esc_html_e('Filter', 'artpulse'); ?></button>
         </form>
         <div class="ap-event-listing">
