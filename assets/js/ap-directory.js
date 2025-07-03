@@ -38,7 +38,9 @@
     }
 
     if ( mediumEl ) {
-      const mediumPath = type === 'artist' ? '/wp/v2/artist_specialty' : '/wp/v2/artpulse_medium';
+      const mediumPath = type === 'artist'
+        ? '/wp/v2/artist_specialty?per_page=100'
+        : '/wp/v2/artpulse_medium?per_page=100';
       wp.apiFetch({ path: mediumPath })
         .then(terms => {
           mediumEl.innerHTML = '<option value="">All</option>';
@@ -55,7 +57,7 @@
     }
 
     if ( styleEl ) {
-      wp.apiFetch({ path: '/wp/v2/artwork_style' })
+      wp.apiFetch({ path: '/wp/v2/artwork_style?per_page=100' })
         .then(terms => {
           styleEl.innerHTML = '<option value="">All</option>';
           terms.forEach(t => {
