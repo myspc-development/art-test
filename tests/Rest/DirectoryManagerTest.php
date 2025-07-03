@@ -100,4 +100,34 @@ class DirectoryManagerTest extends \WP_UnitTestCase
         $this->assertSame(['Sculpture'], $data[0]['medium']);
         $this->assertSame(['Abstract'], $data[0]['style']);
     }
+
+    public function test_filter_artworks_by_medium_and_style(): void
+    {
+        $medium = wp_insert_term('Oil', 'artpulse_medium');
+        $style  = wp_insert_term('Impressionism', 'artwork_style');
+
+        $artwork = wp_insert_post([
+            'post_title'  => 'Oil Painting',
+            'post_type'   => 'artpulse_artwork',
+            'post_status' => 'publish',
+            'meta_input'  => [
+                '_ap_artwork_medium' => 'Oil',
+            ],
+        ]);
+        wp_set_object_terms($artwork, [$medium['term_id']], 'artpulse_medium');
+        wp_set_object_terms($artwork, [$style['term_id']], 'artwork_style');
+
+        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req->set_param('type', 'artwork');
+        $req->set_param('medium', $medium['term_id']);
+        $req->set_param('style', $style['term_id']);
+        $res = rest_get_server()->dispatch($req);
+
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertCount(1, $data);
+        $this->assertSame($artwork, $data[0]['id']);
+        $this->assertSame('Oil', $data[0]['medium']);
+        $this->assertSame('Impressionism', $data[0]['style']);
+    }
 }
