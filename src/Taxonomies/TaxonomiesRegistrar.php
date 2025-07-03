@@ -24,6 +24,7 @@ class TaxonomiesRegistrar {
         ];
         register_taxonomy('artist_specialty', 'artpulse_artist', [
             'hierarchical' => true,
+            'public'       => true,
             'labels' => $labels,
             'show_ui' => true,
             'show_admin_column' => true,
@@ -45,6 +46,7 @@ class TaxonomiesRegistrar {
         ];
         register_taxonomy('artwork_style', ['artpulse_artwork', 'artwork'], [
             'hierarchical' => true,
+            'public'       => true,
             'labels' => $labels,
             'show_ui' => true,
             'show_admin_column' => true,
@@ -66,6 +68,7 @@ class TaxonomiesRegistrar {
         ];
         register_taxonomy('event_type', ['artpulse_event', 'event'], [
             'hierarchical' => true,
+            'public'       => true,
             'labels' => $labels,
             'show_ui' => true,
             'show_admin_column' => true,
@@ -87,6 +90,7 @@ class TaxonomiesRegistrar {
         ];
         register_taxonomy('organization_category', 'artpulse_org', [
             'hierarchical' => true,
+            'public'       => true,
             'labels' => $labels,
             'show_ui' => true,
             'show_admin_column' => true,
@@ -108,6 +112,7 @@ class TaxonomiesRegistrar {
         ];
         register_taxonomy('ap_project_stage', 'artpulse_artwork', [
             'hierarchical' => true,
+            'public'       => true,
             'labels' => $labels,
             'show_ui' => true,
             'show_admin_column' => true,
@@ -122,6 +127,7 @@ class TaxonomiesRegistrar {
         ];
         register_taxonomy('reviewed_type', 'review', [
             'hierarchical' => false,
+            'public'       => true,
             'labels'       => $labels,
             'show_ui'      => true,
             'show_in_rest' => true,
