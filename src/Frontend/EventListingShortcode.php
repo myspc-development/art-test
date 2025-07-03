@@ -124,13 +124,26 @@ class EventListingShortcode
             $event_types = [];
         }
 
+        $categories = get_terms([
+            'taxonomy'   => 'category',
+            'hide_empty' => false,
+        ]);
+        if (is_wp_error($categories)) {
+            $categories = [];
+        }
+
         ob_start();
         ?>
         <form class="ap-event-filter-form" method="get">
             <input type="text" name="venue" placeholder="Venue" value="<?php echo esc_attr($atts['venue']); ?>">
             <input type="date" name="after" value="<?php echo esc_attr($atts['after']); ?>">
             <input type="date" name="before" value="<?php echo esc_attr($atts['before']); ?>">
-            <input type="text" name="category" placeholder="Category" value="<?php echo esc_attr($atts['category']); ?>">
+            <select name="category">
+                <option value=""><?php esc_html_e('All Categories', 'artpulse'); ?></option>
+                <?php foreach ($categories as $cat) : ?>
+                    <option value="<?php echo esc_attr($cat->slug); ?>" <?php selected($atts['category'], $cat->slug); ?>><?php echo esc_html($cat->name); ?></option>
+                <?php endforeach; ?>
+            </select>
             <select name="event_type">
                 <option value=""><?php esc_html_e('All Types', 'artpulse'); ?></option>
                 <?php foreach ($event_types as $type) : ?>
