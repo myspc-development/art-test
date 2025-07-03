@@ -162,6 +162,9 @@
             if ( post.location ) {
               html += `<p class="ap-meta-location">${post.location}</p>`;
             }
+            if ( post.org_type ) {
+              html += `<p class="ap-meta-org-type">${post.org_type}</p>`;
+            }
             const addressParts = [];
             if ( post.event_street_address ) addressParts.push(post.event_street_address);
             const cityState = [post.event_city, post.event_state].filter(Boolean).join(', ');
