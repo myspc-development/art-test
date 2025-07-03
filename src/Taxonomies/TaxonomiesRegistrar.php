@@ -146,28 +146,3 @@ class TaxonomiesRegistrar {
     }
 }
 
-add_action('init', function() {
-    // Attach these to your actual post type slugs. For example: 'event', 'artwork'
-    register_taxonomy('event_type', ['event'], [
-        'labels' => [
-            'name' => 'Event Types',
-        ],
-        'hierarchical' => true,
-        'public' => true,
-        'show_ui' => true,
-        'show_admin_column' => true,
-        'show_in_rest' => true, // ← THIS IS CRITICAL!
-        'rewrite' => ['slug' => 'event-type'],
-    ]);
-    register_taxonomy('artwork_style', ['artwork'], [
-        'labels' => [
-            'name' => 'Artwork Styles',
-        ],
-        'hierarchical' => true,
-        'public' => true,
-        'show_ui' => true,
-        'show_admin_column' => true,
-        'show_in_rest' => true, // ← THIS IS CRITICAL!
-        'rewrite' => ['slug' => 'artwork-style'],
-    ]);
-});
