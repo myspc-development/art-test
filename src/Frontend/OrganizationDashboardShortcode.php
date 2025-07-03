@@ -73,6 +73,30 @@ class OrganizationDashboardShortcode {
         return array_values($groups);
     }
 
+    /**
+     * Build the markup for a single event list item with RSVP counts
+     * and action buttons.
+     */
+    protected static function build_event_list_item(\WP_Post $event): string {
+        $rsvps      = get_post_meta($event->ID, 'event_rsvp_list', true);
+        $waitlist   = get_post_meta($event->ID, 'event_waitlist', true);
+        $limit      = intval(get_post_meta($event->ID, 'event_rsvp_limit', true));
+        $rsvp_count = is_array($rsvps) ? count($rsvps) : 0;
+        $wait_count = is_array($waitlist) ? count($waitlist) : 0;
+
+        ob_start();
+        echo '<li data-event="' . $event->ID . '">' . esc_html($event->post_title);
+        echo ' <span class="ap-rsvp-count">(' . $rsvp_count . '/' . ($limit ?: '&infin;') . ')</span>';
+        if ($wait_count) {
+            echo ' <span class="ap-waitlist-count">' . intval($wait_count) . ' WL</span>';
+        }
+        echo ' <a href="#" class="ap-view-attendees" data-id="' . $event->ID . '">Attendees</a>';
+        echo ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>';
+        echo ' <button class="ap-config-rsvp" data-id="' . $event->ID . '">Configure RSVP</button>';
+        echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
+        return ob_get_clean();
+    }
+
     public static function render($atts) {
         if (!is_user_logged_in()) return '<p>You must be logged in to view this dashboard.</p>';
 
@@ -402,9 +426,7 @@ class OrganizationDashboardShortcode {
             'meta_value'  => $org_id,
         ]);
         foreach ($events as $event) {
-            echo '<li>' . esc_html($event->post_title);
-            echo ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>';
-            echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
+            echo self::build_event_list_item($event);
         }
         $html = ob_get_clean();
 
@@ -520,9 +542,7 @@ class OrganizationDashboardShortcode {
             'meta_value'  => $org_id,
         ]);
         foreach ($events as $event) {
-            echo '<li>' . esc_html($event->post_title)
-                 . ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>'
-                 . ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
+            echo self::build_event_list_item($event);
         }
         $html = ob_get_clean();
 
@@ -562,9 +582,7 @@ class OrganizationDashboardShortcode {
             'meta_value'  => $user_org,
         ]);
         foreach ($events as $event) {
-            echo '<li>' . esc_html($event->post_title);
-            echo ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>';
-            echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
+            echo self::build_event_list_item($event);
         }
         $html = ob_get_clean();
 
