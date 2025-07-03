@@ -46,7 +46,7 @@ class TaxonomiesRegistrar {
             'new_item_name' => __('New Style Name', 'artpulse'),
             'menu_name' => __('Artwork Styles', 'artpulse'),
         ];
-        register_taxonomy('artwork_style', 'artpulse_artwork', [
+        register_taxonomy('artwork_style', ['artpulse_artwork', 'artwork'], [
             'hierarchical' => true,
             'labels' => $labels,
             'show_ui' => true,
@@ -68,7 +68,7 @@ class TaxonomiesRegistrar {
             'new_item_name' => __('New Event Type Name', 'artpulse'),
             'menu_name' => __('Event Types', 'artpulse'),
         ];
-        register_taxonomy('event_type', 'artpulse_event', [
+        register_taxonomy('event_type', ['artpulse_event', 'event'], [
             'hierarchical' => true,
             'labels' => $labels,
             'show_ui' => true,
