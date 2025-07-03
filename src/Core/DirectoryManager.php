@@ -202,6 +202,13 @@ class DirectoryManager {
                 $item['org_id'] = (int) get_post_meta($p->ID, '_ap_artist_org', true);
             } elseif ($type === 'artwork') {
                 $item['medium']     = get_post_meta($p->ID, '_ap_artwork_medium', true);
+                $terms = get_the_terms($p->ID, 'artwork_style');
+                if ($terms && !is_wp_error($terms)) {
+                    $names = wp_list_pluck($terms, 'name');
+                    $item['style'] = implode(', ', $names);
+                } else {
+                    $item['style'] = '';
+                }
                 $item['dimensions'] = get_post_meta($p->ID, '_ap_artwork_dimensions', true);
                 $item['materials']  = get_post_meta($p->ID, '_ap_artwork_materials', true);
                 $item['for_sale']   = (bool) get_post_meta($p->ID, 'for_sale', true);
