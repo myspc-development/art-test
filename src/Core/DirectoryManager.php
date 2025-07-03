@@ -132,7 +132,7 @@ class DirectoryManager {
 
             if ( $medium ) {
                 $tax_query[] = [
-                    'taxonomy' => 'artpulse_medium',
+                    'taxonomy' => $type === 'artist' ? 'artist_specialty' : 'artpulse_medium',
                     'field'    => 'term_id',
                     'terms'    => $medium,
                 ];
@@ -200,6 +200,10 @@ class DirectoryManager {
             } elseif ($type === 'artist') {
                 $item['bio']    = get_post_meta($p->ID, '_ap_artist_bio', true);
                 $item['org_id'] = (int) get_post_meta($p->ID, '_ap_artist_org', true);
+                $medium_terms   = get_the_terms($p->ID, 'artist_specialty');
+                $style_terms    = get_the_terms($p->ID, 'artwork_style');
+                $item['medium'] = $medium_terms && !is_wp_error($medium_terms) ? wp_list_pluck($medium_terms, 'name') : [];
+                $item['style']  = $style_terms && !is_wp_error($style_terms) ? wp_list_pluck($style_terms, 'name') : [];
             } elseif ($type === 'artwork') {
                 $item['medium']     = get_post_meta($p->ID, '_ap_artwork_medium', true);
                 $item['dimensions'] = get_post_meta($p->ID, '_ap_artwork_dimensions', true);

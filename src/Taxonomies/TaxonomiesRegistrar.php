@@ -44,7 +44,7 @@ class TaxonomiesRegistrar {
             'new_item_name' => __('New Style Name', 'artpulse'),
             'menu_name' => __('Artwork Styles', 'artpulse'),
         ];
-        register_taxonomy('artwork_style', ['artpulse_artwork', 'artwork'], [
+        register_taxonomy('artwork_style', ['artpulse_artwork', 'artwork', 'artpulse_artist'], [
             'hierarchical' => true,
             'public'       => true,
             'labels' => $labels,
