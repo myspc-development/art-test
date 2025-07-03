@@ -56,4 +56,17 @@ class OrgDirectoryTest extends \WP_UnitTestCase
         $this->assertNotEmpty($org['featured_media_url']);
         $this->assertStringContainsString('test-logo.jpg', $org['featured_media_url']);
     }
+
+    public function test_filter_by_org_type(): void
+    {
+        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req->set_param('type', 'org');
+        $req->set_param('org_type', $this->org_type);
+        $res = rest_get_server()->dispatch($req);
+
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertCount(1, $data);
+        $this->assertSame($this->org_type, $data[0]['org_type']);
+    }
 }
