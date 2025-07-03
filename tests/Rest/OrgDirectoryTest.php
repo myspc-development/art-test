@@ -31,6 +31,7 @@ class OrgDirectoryTest extends \WP_UnitTestCase
                 'ead_org_logo_id'        => $this->logo_id,
                 'ead_org_street_address' => '123 Main St',
                 'ead_org_website_url'    => 'http://example.com',
+                'ead_org_type'           => 'museum',
             ],
         ]);
 
@@ -50,6 +51,7 @@ class OrgDirectoryTest extends \WP_UnitTestCase
         $org = $data[0];
         $this->assertSame('123 Main St', $org['address']);
         $this->assertSame('http://example.com', $org['website']);
+        $this->assertSame('museum', $org['org_type']);
         $this->assertNotEmpty($org['featured_media_url']);
         $this->assertStringContainsString('test-logo.jpg', $org['featured_media_url']);
     }

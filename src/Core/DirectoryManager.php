@@ -199,6 +199,7 @@ class DirectoryManager {
             } elseif ($type === 'org') {
                 $item['address'] = get_post_meta($p->ID, 'ead_org_street_address', true);
                 $item['website'] = get_post_meta($p->ID, 'ead_org_website_url', true);
+                $item['org_type'] = get_post_meta($p->ID, 'ead_org_type', true);
             }
             return $item;
         }, $posts);
