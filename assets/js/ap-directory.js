@@ -196,6 +196,14 @@
               }
               html += `<p class="ap-meta-address">${addressHtml}</p>`;
             }
+            if ( type === 'artwork' ) {
+              if ( post.medium ) {
+                html += `<p class="ap-meta-medium">${post.medium}</p>`;
+              }
+              if ( post.style ) {
+                html += `<p class="ap-meta-style">${post.style}</p>`;
+              }
+            }
             if ( post.for_sale ) {
               html += `<span class="ap-badge-sale">For Sale</span>`;
             }

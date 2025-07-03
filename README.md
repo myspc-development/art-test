@@ -156,6 +156,10 @@ Use the new directory shortcodes to display listings without specifying a type a
 
 The older `[ap_directory]` shortcode is still supported for backward compatibility.
 
+## Artwork Directory Shortcode
+
+The `[ap_artwork_directory]` shortcode displays artwork posts in a filterable grid. Each listing now outputs the work's medium and style beneath the title when those values are available.
+
 ## Event Enhancements
 
 Events can now include multiple co-host artists via a "Co-Host Artists" selector.

@@ -579,7 +579,9 @@ select.ap-input {
 .ap-meta-location,
 .ap-meta-venue,
 .ap-meta-address,
-.ap-meta-org-type {
+.ap-meta-org-type,
+.ap-meta-medium,
+.ap-meta-style {
   display: block;
   font-size: 0.9em;
   color: var(--ap-muted-text-color);
