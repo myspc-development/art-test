@@ -20,10 +20,15 @@ class EventTemplateManager
         'event_organizer_email',
         'event_banner_id',
         '_ap_submission_images',
+        '_ap_event_organization',
+        '_ap_event_artists',
         'event_featured',
         'event_rsvp_enabled',
         'event_rsvp_limit',
         'event_waitlist_enabled',
+        'event_rsvp_list',
+        'event_waitlist',
+        'event_attended',
     ];
 
     public static function register(): void

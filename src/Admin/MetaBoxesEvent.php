@@ -146,6 +146,8 @@ class MetaBoxesEvent {
         // not registered here by default. If your event needs an address meta box
         // you can manually call MetaBoxesAddress::register(['artpulse_event']).
         return [
+            '_ap_event_date'        => ['type' => 'date', 'label' => __('Event Date', 'artpulse')],
+            '_ap_event_location'    => ['type' => 'text', 'label' => __('Location', 'artpulse')],
             'event_start_date'      => ['type' => 'date', 'label' => __('Start Date', 'artpulse')],
             'event_end_date'        => ['type' => 'date', 'label' => __('End Date', 'artpulse')],
             'event_recurrence_rule' => ['type' => 'text', 'label' => __('Recurrence Rule', 'artpulse')],
@@ -164,8 +166,10 @@ class MetaBoxesEvent {
             'event_rsvp_enabled'    => ['type' => 'checkbox', 'label' => __('Enable RSVPs', 'artpulse')],
             'event_rsvp_limit'      => ['type' => 'number',   'label' => __('RSVP Limit', 'artpulse')],
             'event_waitlist_enabled'=> ['type' => 'checkbox', 'label' => __('Enable Waitlist', 'artpulse')],
+            '_ap_event_artists'     => ['type' => 'text', 'label' => __('Co‑Host Artists', 'artpulse')],
             'event_rsvp_list'       => ['type' => 'textarea', 'label' => __('RSVP List', 'artpulse')],
             'event_waitlist'        => ['type' => 'textarea', 'label' => __('Waitlist', 'artpulse')],
+            'event_attended'        => ['type' => 'textarea', 'label' => __('Attended', 'artpulse')],
         ];
     }
 

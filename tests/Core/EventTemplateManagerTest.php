@@ -18,6 +18,7 @@ class EventTemplateManagerTest extends WP_UnitTestCase
         ]);
         update_post_meta($this->event_id, '_ap_event_date', '2025-01-01');
         update_post_meta($this->event_id, '_ap_event_location', 'Location');
+        update_post_meta($this->event_id, '_ap_event_organization', 99);
         wp_set_object_terms($this->event_id, [1], 'event_type');
     }
 
@@ -28,6 +29,7 @@ class EventTemplateManagerTest extends WP_UnitTestCase
         $this->assertSame('draft', $post->post_status);
         $this->assertSame('Original Event (Copy)', $post->post_title);
         $this->assertSame('Location', get_post_meta($copy, '_ap_event_location', true));
+        $this->assertSame('99', get_post_meta($copy, '_ap_event_organization', true));
     }
 
     public function test_template_round_trip(): void
@@ -37,6 +39,7 @@ class EventTemplateManagerTest extends WP_UnitTestCase
         $this->assertNotEquals(0, $new_event);
         $this->assertSame('draft', get_post_status($new_event));
         $this->assertSame('Location', get_post_meta($new_event, '_ap_event_location', true));
+        $this->assertSame('99', get_post_meta($new_event, '_ap_event_organization', true));
     }
 }
 
