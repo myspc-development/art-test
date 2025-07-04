@@ -40,6 +40,14 @@ containing any of the plugin's shortcodes. Check the shortcodes you want
 to test and click **Create Pages**. You can then enable or disable the
 generated pages with a single click when verifying new features.
 
+### Copy Templates to Child Theme
+
+The **Copy Templates to Child Theme** button on the Settings page copies the
+default event templates from the plugin into your active child theme. After
+clicking it, the files appear under `templates/salient/` inside the child
+theme directory so you can customize them without modifying the plugin
+directly.
+
 ## Accessibility & Mobile Notes
 
 All admin tools are responsive and keyboard accessible so you can manage events from any device.
