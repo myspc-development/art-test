@@ -87,7 +87,8 @@ class LocationRestController {
         $opts = get_option('artpulse_settings', []);
         $key = $opts['google_places_key'] ?? '';
         if (!$key) {
-            return new WP_Error('missing_key', 'Google Places key not set.', ['status' => 400]);
+            // Gracefully degrade when no API key is configured
+            return rest_ensure_response([]);
         }
         $query = urlencode($req->get_param('query'));
         $url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={$query}&key={$key}";
