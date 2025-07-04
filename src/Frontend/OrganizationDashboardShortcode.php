@@ -208,6 +208,21 @@ class OrganizationDashboardShortcode {
 
                     <input type="hidden" name="address_components" id="ap_address_components">
 
+                    <label class="ap-form-label" for="ap_event_address">Address</label>
+                    <input class="ap-input" id="ap_event_address" type="text" name="ap_event_address">
+
+                    <label class="ap-form-label" for="ap_event_start_time">Start Time</label>
+                    <input class="ap-input" id="ap_event_start_time" type="time" name="ap_event_start_time">
+
+                    <label class="ap-form-label" for="ap_event_end_time">End Time</label>
+                    <input class="ap-input" id="ap_event_end_time" type="time" name="ap_event_end_time">
+
+                    <label class="ap-form-label" for="ap_event_contact">Contact Info</label>
+                    <input class="ap-input" id="ap_event_contact" type="text" name="ap_event_contact">
+
+                    <label class="ap-form-label" for="ap_event_rsvp">RSVP URL</label>
+                    <input class="ap-input" id="ap_event_rsvp" type="url" name="ap_event_rsvp_url">
+
                     <label class="ap-form-label" for="ap_event_organizer_name">Organizer Name</label>
                     <input class="ap-input" id="ap_event_organizer_name" type="text" name="ap_event_organizer_name">
 
@@ -358,6 +373,11 @@ class OrganizationDashboardShortcode {
         $postcode         = sanitize_text_field($_POST['ap_event_postcode'] ?? '');
         $address_json     = wp_unslash($_POST['address_components'] ?? '');
         $address_components = json_decode($address_json, true);
+        $address_full     = sanitize_text_field($_POST['ap_event_address'] ?? '');
+        $start_time       = sanitize_text_field($_POST['ap_event_start_time'] ?? '');
+        $end_time         = sanitize_text_field($_POST['ap_event_end_time'] ?? '');
+        $contact_info     = sanitize_text_field($_POST['ap_event_contact'] ?? '');
+        $rsvp_url         = sanitize_text_field($_POST['ap_event_rsvp_url'] ?? '');
         $organizer_name   = sanitize_text_field($_POST['ap_event_organizer_name'] ?? '');
         $organizer_email  = sanitize_email($_POST['ap_event_organizer_email'] ?? '');
         $event_type       = intval($_POST['ap_event_type'] ?? 0);
@@ -408,6 +428,11 @@ class OrganizationDashboardShortcode {
         if (is_array($address_components)) {
             update_post_meta($event_id, 'address_components', wp_json_encode($address_components));
         }
+        update_post_meta($event_id, '_ap_event_address', $address_full);
+        update_post_meta($event_id, '_ap_event_start_time', $start_time);
+        update_post_meta($event_id, '_ap_event_end_time', $end_time);
+        update_post_meta($event_id, '_ap_event_contact', $contact_info);
+        update_post_meta($event_id, '_ap_event_rsvp', $rsvp_url);
         update_post_meta($event_id, 'event_organizer_name', $organizer_name);
         update_post_meta($event_id, 'event_organizer_email', $organizer_email);
         update_post_meta($event_id, '_ap_event_organization', $org_id);
@@ -458,6 +483,11 @@ class OrganizationDashboardShortcode {
             'ap_event_city'           => get_post_meta($event_id, 'event_city', true),
             'ap_event_postcode'       => get_post_meta($event_id, 'event_postcode', true),
             'address_components'      => get_post_meta($event_id, 'address_components', true),
+            'ap_event_address'        => get_post_meta($event_id, '_ap_event_address', true),
+            'ap_event_start_time'     => get_post_meta($event_id, '_ap_event_start_time', true),
+            'ap_event_end_time'       => get_post_meta($event_id, '_ap_event_end_time', true),
+            'ap_event_contact'        => get_post_meta($event_id, '_ap_event_contact', true),
+            'ap_event_rsvp_url'       => get_post_meta($event_id, '_ap_event_rsvp', true),
             'ap_event_organizer_name' => get_post_meta($event_id, 'event_organizer_name', true),
             'ap_event_organizer_email'=> get_post_meta($event_id, 'event_organizer_email', true),
             'ap_event_type'           => current($terms = wp_get_post_terms($event_id, 'event_type', ['fields' => 'ids'])) ?: '',
@@ -492,10 +522,15 @@ class OrganizationDashboardShortcode {
         $country          = sanitize_text_field($_POST['ap_event_country'] ?? '');
         $state            = sanitize_text_field($_POST['ap_event_state'] ?? '');
         $city             = sanitize_text_field($_POST['ap_event_city'] ?? '');
-        $postcode         = sanitize_text_field($_POST['ap_event_postcode'] ?? '');
-        $address_json     = wp_unslash($_POST['address_components'] ?? '');
-        $address_components = json_decode($address_json, true);
-        $organizer_name   = sanitize_text_field($_POST['ap_event_organizer_name'] ?? '');
+       $postcode         = sanitize_text_field($_POST['ap_event_postcode'] ?? '');
+       $address_json     = wp_unslash($_POST['address_components'] ?? '');
+       $address_components = json_decode($address_json, true);
+        $address_full     = sanitize_text_field($_POST['ap_event_address'] ?? '');
+        $start_time       = sanitize_text_field($_POST['ap_event_start_time'] ?? '');
+        $end_time         = sanitize_text_field($_POST['ap_event_end_time'] ?? '');
+        $contact_info     = sanitize_text_field($_POST['ap_event_contact'] ?? '');
+        $rsvp_url         = sanitize_text_field($_POST['ap_event_rsvp_url'] ?? '');
+       $organizer_name   = sanitize_text_field($_POST['ap_event_organizer_name'] ?? '');
         $organizer_email  = sanitize_email($_POST['ap_event_organizer_email'] ?? '');
         $event_type       = intval($_POST['ap_event_type'] ?? 0);
         $featured         = isset($_POST['ap_event_featured']) ? '1' : '0';
@@ -521,6 +556,11 @@ class OrganizationDashboardShortcode {
         if (is_array($address_components)) {
             update_post_meta($event_id, 'address_components', wp_json_encode($address_components));
         }
+        update_post_meta($event_id, '_ap_event_address', $address_full);
+        update_post_meta($event_id, '_ap_event_start_time', $start_time);
+        update_post_meta($event_id, '_ap_event_end_time', $end_time);
+        update_post_meta($event_id, '_ap_event_contact', $contact_info);
+        update_post_meta($event_id, '_ap_event_rsvp', $rsvp_url);
         update_post_meta($event_id, 'event_organizer_name', $organizer_name);
         update_post_meta($event_id, 'event_organizer_email', $organizer_email);
         update_post_meta($event_id, 'event_featured', $featured);

@@ -115,6 +115,16 @@ class EditEventShortcode {
                 </label>
             </p>
             <p>
+                <label class="ap-form-label">Start Time<br>
+                    <input class="ap-input" type="time" name="event_start_time" value="<?php echo esc_attr($start_time = get_post_meta($post_id, '_ap_event_start_time', true)); ?>">
+                </label>
+            </p>
+            <p>
+                <label class="ap-form-label">End Time<br>
+                    <input class="ap-input" type="time" name="event_end_time" value="<?php echo esc_attr($end_time_meta = get_post_meta($post_id, '_ap_event_end_time', true)); ?>">
+                </label>
+            </p>
+            <p>
                 <label class="ap-form-label">Recurrence Rule (iCal)<br>
                     <input class="ap-input" type="text" name="event_recurrence_rule" value="<?php echo $recurrence; ?>">
                 </label>
@@ -150,6 +160,24 @@ class EditEventShortcode {
                 </label>
             </p>
             <input type="hidden" name="address_components" id="ap_address_components" value="<?php echo $addr_comp; ?>">
+
+            <p>
+                <label class="ap-form-label">Address<br>
+                    <input class="ap-input" type="text" name="event_address" value="<?php echo esc_attr(get_post_meta($post_id, '_ap_event_address', true)); ?>">
+                </label>
+            </p>
+
+            <p>
+                <label class="ap-form-label">Contact Info<br>
+                    <input class="ap-input" type="text" name="event_contact" value="<?php echo esc_attr(get_post_meta($post_id, '_ap_event_contact', true)); ?>">
+                </label>
+            </p>
+
+            <p>
+                <label class="ap-form-label">RSVP URL<br>
+                    <input class="ap-input" type="url" name="event_rsvp_url" value="<?php echo esc_attr(get_post_meta($post_id, '_ap_event_rsvp', true)); ?>">
+                </label>
+            </p>
             <p>
                 <label class="ap-form-label">Location<br>
                     <input class="ap-input" type="text" name="location" class="ap-google-autocomplete" value="<?php echo $location; ?>">
@@ -276,6 +304,11 @@ class EditEventShortcode {
         $postcode       = sanitize_text_field($_POST['event_postcode'] ?? '');
         $addr_json      = wp_unslash($_POST['address_components'] ?? '');
         $addr_comp      = json_decode($addr_json, true);
+        $address_full   = sanitize_text_field($_POST['event_address'] ?? '');
+        $start_time     = sanitize_text_field($_POST['event_start_time'] ?? '');
+        $end_time_meta  = sanitize_text_field($_POST['event_end_time'] ?? '');
+        $contact_info   = sanitize_text_field($_POST['event_contact'] ?? '');
+        $rsvp_url       = sanitize_text_field($_POST['event_rsvp_url'] ?? '');
         $org_name       = sanitize_text_field($_POST['event_organizer_name'] ?? '');
         $org_email      = sanitize_email($_POST['event_organizer_email'] ?? '');
         $event_org      = intval($_POST['event_org'] ?? 0);
@@ -310,6 +343,11 @@ class EditEventShortcode {
         if (is_array($addr_comp)) {
             update_post_meta($post_id, 'address_components', wp_json_encode($addr_comp));
         }
+        update_post_meta($post_id, '_ap_event_address', $address_full);
+        update_post_meta($post_id, '_ap_event_start_time', $start_time);
+        update_post_meta($post_id, '_ap_event_end_time', $end_time_meta);
+        update_post_meta($post_id, '_ap_event_contact', $contact_info);
+        update_post_meta($post_id, '_ap_event_rsvp', $rsvp_url);
         update_post_meta($post_id, 'event_organizer_name', $org_name);
         update_post_meta($post_id, 'event_organizer_email', $org_email);
         update_post_meta($post_id, '_ap_event_organization', $event_org);

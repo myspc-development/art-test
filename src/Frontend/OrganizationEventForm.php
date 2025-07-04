@@ -52,6 +52,12 @@ class OrganizationEventForm {
             <label class="ap-form-label" for="ap_org_event_end_date">End Date</label>
             <input class="ap-input" id="ap_org_event_end_date" type="date" name="event_end_date">
 
+            <label class="ap-form-label" for="ap_org_event_start_time">Start Time</label>
+            <input class="ap-input" id="ap_org_event_start_time" type="time" name="event_start_time">
+
+            <label class="ap-form-label" for="ap_org_event_end_time">End Time</label>
+            <input class="ap-input" id="ap_org_event_end_time" type="time" name="event_end_time">
+
             <label class="ap-form-label" for="ap_org_event_location">Location*</label>
             <input class="ap-input ap-google-autocomplete" id="ap_org_event_location" type="text" name="event_location" required>
 
@@ -74,6 +80,15 @@ class OrganizationEventForm {
             <input class="ap-input" id="ap_org_event_postcode" type="text" name="event_postcode">
 
             <input type="hidden" name="address_components" id="ap_org_address_components">
+
+            <label class="ap-form-label" for="ap_org_event_address">Address</label>
+            <input class="ap-input" id="ap_org_event_address" type="text" name="event_address">
+
+            <label class="ap-form-label" for="ap_org_event_contact">Contact Info</label>
+            <input class="ap-input" id="ap_org_event_contact" type="text" name="event_contact">
+
+            <label class="ap-form-label" for="ap_org_event_rsvp">RSVP URL</label>
+            <input class="ap-input" id="ap_org_event_rsvp" type="url" name="event_rsvp_url">
 
             <label class="ap-form-label" for="ap_org_event_organizer_name">Organizer Name</label>
             <input class="ap-input" id="ap_org_event_organizer_name" type="text" name="event_organizer_name">
@@ -138,6 +153,11 @@ class OrganizationEventForm {
         $postcode = sanitize_text_field($_POST['event_postcode'] ?? '');
         $address_json = wp_unslash($_POST['address_components'] ?? '');
         $address_components = json_decode($address_json, true);
+        $address_full = sanitize_text_field($_POST['event_address'] ?? '');
+        $start_time = sanitize_text_field($_POST['event_start_time'] ?? '');
+        $end_time = sanitize_text_field($_POST['event_end_time'] ?? '');
+        $contact_info = sanitize_text_field($_POST['event_contact'] ?? '');
+        $rsvp_url = sanitize_text_field($_POST['event_rsvp_url'] ?? '');
         $organizer_name = sanitize_text_field($_POST['event_organizer_name'] ?? '');
         $organizer_email = sanitize_email($_POST['event_organizer_email'] ?? '');
         $type = intval($_POST['event_type']);
@@ -169,6 +189,11 @@ class OrganizationEventForm {
         if (is_array($address_components)) {
             update_post_meta($post_id, 'address_components', wp_json_encode($address_components));
         }
+        update_post_meta($post_id, '_ap_event_address', $address_full);
+        update_post_meta($post_id, '_ap_event_start_time', $start_time);
+        update_post_meta($post_id, '_ap_event_end_time', $end_time);
+        update_post_meta($post_id, '_ap_event_contact', $contact_info);
+        update_post_meta($post_id, '_ap_event_rsvp', $rsvp_url);
         update_post_meta($post_id, 'event_organizer_name', $organizer_name);
         update_post_meta($post_id, 'event_organizer_email', $organizer_email);
         update_post_meta($post_id, 'event_featured', $featured);

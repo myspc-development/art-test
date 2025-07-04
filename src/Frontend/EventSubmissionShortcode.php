@@ -118,6 +118,16 @@ class EventSubmissionShortcode {
             </p>
 
             <p>
+                <label class="ap-form-label" for="ap_event_start_time">Start Time</label>
+                <input class="ap-input" id="ap_event_start_time" type="time" name="event_start_time" />
+            </p>
+
+            <p>
+                <label class="ap-form-label" for="ap_event_end_time">End Time</label>
+                <input class="ap-input" id="ap_event_end_time" type="time" name="event_end_time" />
+            </p>
+
+            <p>
                 <label class="ap-form-label" for="ap_event_recurrence">Recurrence Rule (iCal)</label>
                 <input class="ap-input" id="ap_event_recurrence" type="text" name="event_recurrence_rule" />
             </p>
@@ -154,10 +164,25 @@ class EventSubmissionShortcode {
 
             <p>
                 <label class="ap-form-label" for="ap_event_postcode">Postcode</label>
-                <input class="ap-input" id="ap_event_postcode" type="text" name="event_postcode" />
+            <input class="ap-input" id="ap_event_postcode" type="text" name="event_postcode" />
             </p>
 
             <input type="hidden" name="address_components" id="ap_address_components" />
+
+            <p>
+                <label class="ap-form-label" for="ap_event_address">Address</label>
+                <input class="ap-input" id="ap_event_address" type="text" name="event_address" />
+            </p>
+
+            <p>
+                <label class="ap-form-label" for="ap_event_contact">Contact Info</label>
+                <input class="ap-input" id="ap_event_contact" type="text" name="event_contact" />
+            </p>
+
+            <p>
+                <label class="ap-form-label" for="ap_event_rsvp">RSVP URL</label>
+                <input class="ap-input" id="ap_event_rsvp" type="url" name="event_rsvp_url" />
+            </p>
 
             <p>
                 <label class="ap-form-label" for="ap_event_organizer_name">Organizer Name</label>
@@ -260,6 +285,11 @@ class EventSubmissionShortcode {
         $city = sanitize_text_field($_POST['event_city'] ?? '');
         $postcode = sanitize_text_field($_POST['event_postcode'] ?? '');
         $address_components = sanitize_text_field($_POST['address_components'] ?? '');
+        $address_full = sanitize_text_field($_POST['event_address'] ?? '');
+        $start_time = sanitize_text_field($_POST['event_start_time'] ?? '');
+        $end_time = sanitize_text_field($_POST['event_end_time'] ?? '');
+        $contact_info = sanitize_text_field($_POST['event_contact'] ?? '');
+        $rsvp_url = sanitize_text_field($_POST['event_rsvp_url'] ?? '');
         $organizer_name = sanitize_text_field($_POST['event_organizer_name'] ?? '');
         $organizer_email = sanitize_email($_POST['event_organizer_email'] ?? '');
         $event_org = intval($_POST['event_org']);
@@ -371,6 +401,11 @@ class EventSubmissionShortcode {
         update_post_meta($post_id, 'event_city', $city);
         update_post_meta($post_id, 'event_postcode', $postcode);
         update_post_meta($post_id, 'address_components', $address_components);
+        update_post_meta($post_id, '_ap_event_address', $address_full);
+        update_post_meta($post_id, '_ap_event_start_time', $start_time);
+        update_post_meta($post_id, '_ap_event_end_time', $end_time);
+        update_post_meta($post_id, '_ap_event_contact', $contact_info);
+        update_post_meta($post_id, '_ap_event_rsvp', $rsvp_url);
         update_post_meta($post_id, 'event_organizer_name', $organizer_name);
         update_post_meta($post_id, 'event_organizer_email', $organizer_email);
         update_post_meta($post_id, '_ap_event_organization', $event_org);
