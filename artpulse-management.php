@@ -88,7 +88,7 @@ add_action('admin_init', function () {
     check_admin_referer('artpulse_copy_templates');
 
     $src_files = [
-        plugin_dir_path(__FILE__) . 'templates/salient/content‐artpulse_event.php',
+        plugin_dir_path(__FILE__) . 'templates/salient/content-artpulse_event.php',
         plugin_dir_path(__FILE__) . 'templates/salient/archive-artpulse_event.php',
     ];
     $dest_dir = trailingslashit(get_stylesheet_directory()) . 'templates/salient';
