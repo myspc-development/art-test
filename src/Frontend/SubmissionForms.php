@@ -115,6 +115,7 @@ class SubmissionForms
                 <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
             </p>
         </form>
+        <div class="ap-form-messages" role="status" aria-live="polite"></div>
         <ul class="ap-submissions-list"></ul>
         <?php
         return ob_get_clean();
