@@ -96,6 +96,7 @@ class EventSubmissionShortcode {
 
         <form method="post" enctype="multipart/form-data" class="ap-form-container" data-no-ajax="true">
             <?php wp_nonce_field('ap_submit_event', 'ap_event_nonce'); ?>
+            <input type="hidden" name="ap_submit_event" value="1" />
 
             <p>
                 <label class="ap-form-label" for="ap_event_title">Event Title</label>
