@@ -51,6 +51,7 @@ class MetaBoxesEvent {
                 case 'date':
                 case 'email':
                 case 'text':
+                case 'url':
                     echo '<input type="' . esc_attr($type) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="regular-text" />';
                     break;
                 case 'number':
@@ -124,6 +125,11 @@ class MetaBoxesEvent {
                 $value = is_numeric($value) ? intval($value) : 0;
             } elseif ($type === 'textarea') {
                 $value = sanitize_textarea_field($value);
+            } elseif ($type === 'url' && !empty($value)) {
+                if (!filter_var($value, FILTER_VALIDATE_URL)) {
+                    continue; // Skip if URL is invalid
+                }
+                $value = esc_url_raw($value);
             }
 
             if ($type === 'textarea') {
@@ -135,6 +141,8 @@ class MetaBoxesEvent {
                 }
             } elseif ($type === 'number') {
                 update_post_meta($post_id, $field, $value);
+            } elseif ($type === 'url') {
+                update_post_meta($post_id, $field, esc_url_raw($value));
             } else {
                 update_post_meta($post_id, $field, sanitize_text_field($value));
             }
@@ -142,12 +150,16 @@ class MetaBoxesEvent {
     }
 
     private static function get_registered_event_meta_fields() {
-        // Note: Address fields are managed by the MetaBoxesAddress helper and are
-        // not registered here by default. If your event needs an address meta box
-        // you can manually call MetaBoxesAddress::register(['artpulse_event']).
+        // Note: Additional address fields are managed by the MetaBoxesAddress helper.
+        // The basic `_ap_event_address` field is provided here for convenience.
         return [
             '_ap_event_date'        => ['type' => 'date', 'label' => __('Event Date', 'artpulse')],
             '_ap_event_location'    => ['type' => 'text', 'label' => __('Location', 'artpulse')],
+            '_ap_event_address'     => ['type' => 'text', 'label' => __('Address', 'artpulse')],
+            '_ap_event_start_time'  => ['type' => 'text', 'label' => __('Start Time', 'artpulse')],
+            '_ap_event_end_time'    => ['type' => 'text', 'label' => __('End Time', 'artpulse')],
+            '_ap_event_contact'     => ['type' => 'text', 'label' => __('Contact', 'artpulse')],
+            '_ap_event_rsvp'        => ['type' => 'url',  'label' => __('RSVP URL', 'artpulse')],
             'event_start_date'      => ['type' => 'date', 'label' => __('Start Date', 'artpulse')],
             'event_end_date'        => ['type' => 'date', 'label' => __('End Date', 'artpulse')],
             'event_recurrence_rule' => ['type' => 'text', 'label' => __('Recurrence Rule', 'artpulse')],
@@ -177,7 +189,11 @@ class MetaBoxesEvent {
         foreach (self::get_registered_event_meta_fields() as $field => $args) {
             register_rest_field('artpulse_event', $field, [ // Corrected CPT slug
                 'get_callback'    => fn($object) => get_post_meta($object['id'], $field, true),
-                'update_callback' => fn($value, $object) => update_post_meta($object->ID, $field, sanitize_text_field($value)), // Consider type-specific sanitization
+                'update_callback' => fn($value, $object) => update_post_meta(
+                    $object->ID,
+                    $field,
+                    $args['type'] === 'url' ? esc_url_raw($value) : sanitize_text_field($value)
+                ),
                 'schema'          => [
                     'type' => match ($args['type']) {
                         'checkbox'                => 'boolean',
