@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     eventLocation = parts.join(', ');
     form.querySelector('[name="event_location"]').value = eventLocation;
   }
-  const images = form.querySelector('#ap-images').files;
+  const imagesInput = form.querySelector('#ap-images');
+  const images = imagesInput ? imagesInput.files : [];
   const bannerInput = form.querySelector('#ap-banner');
   const bannerFile = bannerInput && bannerInput.files.length ? bannerInput.files[0] : null;
 
