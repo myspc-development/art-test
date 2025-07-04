@@ -22,11 +22,11 @@ class SubmitArtistForm {
 
         ob_start();
         ?>
-        <form class="submission-form ap-artist-submission-form" enctype="multipart/form-data" data-no-ajax="true">
+        <form class="submission-form ap-artist-submission-form ap-form-container" enctype="multipart/form-data" data-post-type="artpulse_event">
             <fieldset class="form-section">
                 <legend>Contact Info</legend>
                 <label for="ap-artist-title"><?php esc_html_e('Artist Name', 'artpulse'); ?></label>
-                <input id="ap-artist-title" type="text" name="title">
+                <input id="ap-artist-title" type="text" name="title" required>
 
                 <label for="ap-artist-org"><?php esc_html_e('Organization ID', 'artpulse'); ?></label>
                 <input id="ap-artist-org" type="number" name="artist_org">
