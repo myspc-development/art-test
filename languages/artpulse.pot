@@ -348,7 +348,7 @@ msgstr ""
 msgid "Website:"
 msgstr ""
 
-#: templates/salient/content‐artpulse_event.php:41
+#: templates/salient/content-artpulse_event.php:41
 msgid "Date:"
 msgstr ""
 
