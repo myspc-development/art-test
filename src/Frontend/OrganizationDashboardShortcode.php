@@ -356,7 +356,7 @@ class OrganizationDashboardShortcode {
     public static function handle_ajax_add_event() {
         check_ajax_referer('ap_org_dashboard_nonce', 'nonce');
 
-        if (!current_user_can('create_artpulse_event')) {
+        if (!current_user_can('create_artpulse_events')) {
             wp_send_json_error(['message' => 'Insufficient permissions.']);
         }
 
