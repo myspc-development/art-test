@@ -36,7 +36,7 @@ class ArtistProfileFormShortcode {
             echo '<div class="notice success">' . esc_html__('Profile updated successfully.', 'artpulse') . '</div>';
         }
         ?>
-        <form method="post" enctype="multipart/form-data" class="ap-artist-profile-form ap-form-container bg-white rounded-2xl shadow p-6 space-y-4">
+        <form method="post" enctype="multipart/form-data" class="ap-artist-profile-form ap-form-container bg-white rounded-2xl shadow p-6 space-y-4" data-no-ajax="true">
             <?php wp_nonce_field('ap_artist_profile_form', 'ap_artist_profile_nonce'); ?>
             <div>
                 <label class="ap-form-label" for="ap_description"><?php esc_html_e('Bio', 'artpulse'); ?></label>

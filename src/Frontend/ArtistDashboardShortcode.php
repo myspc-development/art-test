@@ -64,7 +64,7 @@ class ArtistDashboardShortcode {
             </ul>
 
             <h2 id="upload-artwork"><?php esc_html_e('Upload New Artwork', 'artpulse'); ?></h2>
-            <form class="ap-artwork-upload-form ap-form-container" enctype="multipart/form-data">
+            <form class="ap-artwork-upload-form ap-form-container" enctype="multipart/form-data" data-no-ajax="true">
                 <div class="form-group">
                     <label class="ap-form-label" for="ap-artwork-title"><?php esc_html_e('Title', 'artpulse'); ?></label>
                     <input class="ap-input" id="ap-artwork-title" type="text" name="title" required />

@@ -88,7 +88,7 @@ class EditEventShortcode {
 
         ob_start();
         ?>
-        <form id="ap-edit-event-form" class="ap-form-container" enctype="multipart/form-data" data-post-id="<?php echo $post_id; ?>">
+        <form id="ap-edit-event-form" class="ap-form-container" enctype="multipart/form-data" data-post-id="<?php echo $post_id; ?>" data-no-ajax="true">
             <p>
                 <label class="ap-form-label">Title<br>
                     <input class="ap-input" type="text" name="title" value="<?php echo $title; ?>" required>

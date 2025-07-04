@@ -168,7 +168,7 @@ export default function OrganizationSubmissionForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="ap-form-container" encType="multipart/form-data">
+    <form onSubmit={handleSubmit} className="ap-form-container" encType="multipart/form-data" data-no-ajax="true">
       <div className="ap-form-messages" role="status" aria-live="polite">{message}</div>
 
       <div className="form-group">

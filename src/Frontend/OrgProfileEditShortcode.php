@@ -41,7 +41,7 @@ class OrgProfileEditShortcode {
         $output = '';
         ob_start();
         ?>
-        <form method="post" enctype="multipart/form-data" class="ap-org-profile-edit-form ap-form-container">
+        <form method="post" enctype="multipart/form-data" class="ap-org-profile-edit-form ap-form-container" data-no-ajax="true">
             <?php wp_nonce_field('ap_org_profile_edit_action', 'ap_org_profile_nonce'); ?>
             <div class="ap-form-messages" role="status" aria-live="polite"></div>
             <div class="form-group">

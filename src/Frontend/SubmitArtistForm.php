@@ -22,7 +22,7 @@ class SubmitArtistForm {
 
         ob_start();
         ?>
-        <form class="submission-form ap-artist-submission-form" enctype="multipart/form-data">
+        <form class="submission-form ap-artist-submission-form" enctype="multipart/form-data" data-no-ajax="true">
             <fieldset class="form-section">
                 <legend>Contact Info</legend>
                 <label for="ap-artist-title"><?php esc_html_e('Artist Name', 'artpulse'); ?></label>
