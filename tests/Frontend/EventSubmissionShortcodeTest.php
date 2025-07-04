@@ -16,7 +16,9 @@ function wp_die($msg) { EventSubmissionShortcodeTest::$notice = $msg; }
 
 // Minimal stubs for unused functions to avoid errors if called
 function wp_insert_post($arr) { EventSubmissionShortcodeTest::$inserted = $arr; return 1; }
-function update_post_meta(...$args) {}
+function update_post_meta(...$args) { EventSubmissionShortcodeTest::$meta_updates[] = $args; }
+function media_handle_upload($file, $post_id) { return EventSubmissionShortcodeTest::$media_ids[$file] ?? 0; }
+function set_post_thumbnail($post_id, $thumb_id) { EventSubmissionShortcodeTest::$thumbnail = $thumb_id; }
 function is_wp_error($obj) { return false; }
 function wp_set_post_terms(...$args) {}
 function function_exists($name) { return $name === 'wc_add_notice'; }
@@ -32,6 +34,9 @@ class EventSubmissionShortcodeTest extends TestCase
     public static array $user_meta = [];
     public static string $notice = '';
     public static array $inserted = [];
+    public static array $meta_updates = [];
+    public static array $media_ids = [];
+    public static int $thumbnail = 0;
 
     protected function setUp(): void
     {
@@ -39,6 +44,9 @@ class EventSubmissionShortcodeTest extends TestCase
         self::$user_meta = [];
         self::$notice = '';
         self::$inserted = [];
+        self::$meta_updates = [];
+        self::$media_ids = [];
+        self::$thumbnail = 0;
 
         // Required POST fields
         $_POST = [
@@ -75,5 +83,26 @@ class EventSubmissionShortcodeTest extends TestCase
 
         $this->assertSame('Start date cannot be later than end date.', self::$notice);
         $this->assertEmpty(self::$inserted);
+    }
+
+    public function test_banner_included_in_submission_images(): void
+    {
+        // Valid organization
+        self::$user_meta[1]['ap_organization_id'] = 99;
+
+        // Pretend banner uploaded and media handler returns ID 55
+        self::$media_ids = ['event_banner' => 55];
+        $_FILES['event_banner'] = ['name' => 'b.jpg', 'tmp_name' => '/tmp/b', 'type' => 'image/jpeg', 'error' => 0, 'size' => 1];
+
+        EventSubmissionShortcode::maybe_handle_form();
+
+        $gallery = null;
+        foreach (self::$meta_updates as $args) {
+            if ($args[1] === '_ap_submission_images') {
+                $gallery = $args[2];
+            }
+        }
+
+        $this->assertSame([55], $gallery);
     }
 }

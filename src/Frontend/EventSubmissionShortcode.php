@@ -504,12 +504,8 @@ class EventSubmissionShortcode {
             $final_image_ids = $image_ids;
         }
 
-       // Update Post Meta with Image IDs (excluding the banner if present)
-        $gallery_image_ids = array_filter($final_image_ids, function($id) use ($post_id) {
-            $banner_id = get_post_meta($post_id, 'event_banner_id', true);
-            return (int)$id !== (int)$banner_id; // Exclude banner ID from gallery
-        });
-        update_post_meta($post_id, '_ap_submission_images', $gallery_image_ids);
+        // Update Post Meta with Image IDs (including banner when present)
+        update_post_meta($post_id, '_ap_submission_images', $final_image_ids);
 
 
 
