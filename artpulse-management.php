@@ -32,6 +32,37 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
 
+/**
+ * Copy bundled Salient templates to the active child theme.
+ */
+function ap_copy_templates_to_child_theme() {
+    $source_dir  = plugin_dir_path(__FILE__) . 'templates/salient/';
+    $target_root = get_stylesheet_directory();
+    $target_dir  = trailingslashit($target_root) . 'templates/salient/';
+
+    if (!file_exists($target_dir)) {
+        wp_mkdir_p($target_dir);
+    }
+
+    $files = [
+        'single-artpulse_event.php',
+        'content-artpulse_event.php',
+        'archive-artpulse_event.php',
+    ];
+
+    foreach ($files as $file) {
+        $source = $source_dir . $file;
+        if (!file_exists($source)) {
+            continue;
+        }
+        $destination = ($file === 'single-artpulse_event.php')
+            ? trailingslashit($target_root) . $file
+            : $target_dir . $file;
+
+        copy($source, $destination);
+    }
+}
+
 // 🔧 Boot the main plugin class (responsible for registering menus, settings, CPTs, etc.)
 $main = new Plugin();
 // Instantiate WooCommerce integration (if needed for runtime)
