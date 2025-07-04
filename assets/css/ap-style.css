@@ -1144,3 +1144,21 @@ select.ap-input {
 .ap-onboarding-banner button{margin-left:0.5rem;}
 .skip-link{position:absolute;top:-40px;left:0;background:var(--ap-primary-color);color:#fff;padding:.5rem 1rem;z-index:100}
 .skip-link:focus{top:0}
+
+/* Event portfolio styling */
+.event-meta.styled-box {
+  background: #f9f9f9;
+  padding: 1em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.event-meta li {
+  margin: 0.5em 0;
+}
+
+.event-title {
+  font-size: 2em;
+  margin-top: 1em;
+}
