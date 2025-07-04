@@ -54,6 +54,6 @@ class TemplateCopyTest extends WP_UnitTestCase
         do_action('admin_init');
 
         $this->assertFileExists($this->childDir . '/templates/salient/content-artpulse_event.php');
-        $this->assertFileExists($this->childDir . '/templates/salient/archive-artpulse_event.php');
+        $this->assertFileExists($this->childDir . '/single-artpulse_event.php');
     }
 }
