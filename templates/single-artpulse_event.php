@@ -1,6 +1,6 @@
 <?php
 /**
- * Full single template for ArtPulse Events using custom layout.
+ * Single template for ArtPulse Events.
  */
 
 get_header();
