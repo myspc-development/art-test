@@ -86,7 +86,7 @@ class SubmissionRestController
 
         $meta_fields = self::get_meta_fields_for( $post_type );
         $meta_input  = [];
-        $boolean_fields = [ 'event_featured', 'for_sale' ];
+        $boolean_fields = [ 'event_featured', 'for_sale', 'event_rsvp_enabled', 'event_waitlist_enabled' ];
         foreach ( $meta_fields as $field_key => $meta_key ) {
             if ( isset( $params[ $field_key ] ) ) {
                 $value = $params[ $field_key ];
@@ -296,6 +296,21 @@ class SubmissionRestController
                 'required'    => false,
                 'description' => 'Attachment ID of the event banner.',
             ],
+            'event_rsvp_enabled' => [
+                'type'        => 'boolean',
+                'required'    => false,
+                'description' => 'Whether RSVPs are enabled for the event.',
+            ],
+            'event_rsvp_limit' => [
+                'type'        => 'integer',
+                'required'    => false,
+                'description' => 'Maximum number of RSVPs allowed.',
+            ],
+            'event_waitlist_enabled' => [
+                'type'        => 'boolean',
+                'required'    => false,
+                'description' => 'Whether the waitlist is enabled when RSVPs are full.',
+            ],
             'event_featured' => [
                 'type'        => 'boolean',
                 'required'    => false,
@@ -363,6 +378,9 @@ class SubmissionRestController
                 'event_organizer_name'  => 'event_organizer_name',
                 'event_organizer_email' => 'event_organizer_email',
                 'event_banner_id'       => 'event_banner_id',
+                'event_rsvp_enabled'    => 'event_rsvp_enabled',
+                'event_rsvp_limit'      => 'event_rsvp_limit',
+                'event_waitlist_enabled' => 'event_waitlist_enabled',
                 'event_featured'        => 'event_featured',
                 'address_components'    => 'address_components',
             ],
