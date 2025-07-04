@@ -4,7 +4,9 @@ namespace ArtPulse\Admin;
 class MetaBoxesEvent {
 
     public static function register() {
-        add_action('add_meta_boxes', [self::class, 'add_event_meta_boxes']);
+        // Use the post type specific hook so the meta box is always added even
+        // if this class registers after the generic `add_meta_boxes` action runs.
+        add_action('add_meta_boxes_artpulse_event', [self::class, 'add_event_meta_boxes']);
         add_action('save_post_artpulse_event', [self::class, 'save_event_meta'], 10, 2); // Corrected CPT slug
         add_action('rest_api_init', [self::class, 'register_rest_fields']);
         add_action('restrict_manage_posts', [self::class, 'add_admin_filters']);
