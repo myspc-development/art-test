@@ -48,6 +48,12 @@ clicking it, the files appear under `templates/salient/` inside the child
 theme directory so you can customize them without modifying the plugin
 directly.
 
+### Location APIs
+
+Use this tab to configure geocoding services. Enter your **Google Places API
+Key** here so the autocomplete endpoint can query Google. If the key is missing
+requests to `/wp-json/artpulse/v1/location/google` return a 400 error.
+
 ## Accessibility & Mobile Notes
 
 All admin tools are responsive and keyboard accessible so you can manage events from any device.
