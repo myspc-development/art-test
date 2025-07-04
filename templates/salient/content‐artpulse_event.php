@@ -1,8 +1,7 @@
 <?php
 /**
- * Content template for ArtPulse Events using get_post_meta.
- * Place this file in: /wp-content/themes/salient-child/templates/salient/content-artpulse_event.php
- */
+ * Template for displaying single ArtPulse Event content
+ * Fetches event details from post meta.
 
 error_log('📦 content-artpulse_event.php loaded');
 
