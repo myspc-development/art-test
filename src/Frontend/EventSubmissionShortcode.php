@@ -45,7 +45,11 @@ class EventSubmissionShortcode {
      */
     protected static function maybe_redirect(): void {
         if (function_exists('wp_safe_redirect') && function_exists('wp_get_referer')) {
-            wp_safe_redirect(wp_get_referer());
+            $target = wp_get_referer();
+            if (!$target) {
+                $target = \ArtPulse\Core\Plugin::get_event_submission_url();
+            }
+            wp_safe_redirect($target);
             exit;
         }
     }
@@ -284,7 +288,8 @@ class EventSubmissionShortcode {
         $state = sanitize_text_field($_POST['event_state'] ?? '');
         $city = sanitize_text_field($_POST['event_city'] ?? '');
         $postcode = sanitize_text_field($_POST['event_postcode'] ?? '');
-        $address_components = sanitize_text_field($_POST['address_components'] ?? '');
+        $address_json = wp_unslash($_POST['address_components'] ?? '');
+        $address_components = json_decode($address_json, true);
         $address_full = sanitize_text_field($_POST['event_address'] ?? '');
         $start_time = sanitize_text_field($_POST['event_start_time'] ?? '');
         $end_time = sanitize_text_field($_POST['event_end_time'] ?? '');
@@ -403,7 +408,11 @@ class EventSubmissionShortcode {
         update_post_meta($post_id, 'event_state', $state);
         update_post_meta($post_id, 'event_city', $city);
         update_post_meta($post_id, 'event_postcode', $postcode);
-        update_post_meta($post_id, 'address_components', $address_components);
+        if (is_array($address_components)) {
+            update_post_meta($post_id, 'address_components', wp_json_encode($address_components));
+        } else {
+            update_post_meta($post_id, 'address_components', $address_json);
+        }
         update_post_meta($post_id, '_ap_event_address', $address_full);
         update_post_meta($post_id, '_ap_event_start_time', $start_time);
         update_post_meta($post_id, '_ap_event_end_time', $end_time);

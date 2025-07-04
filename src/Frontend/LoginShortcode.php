@@ -343,7 +343,11 @@ class LoginShortcode
     private static function maybe_redirect(): void
     {
         if (function_exists('wp_safe_redirect') && function_exists('wp_get_referer')) {
-            wp_safe_redirect(wp_get_referer());
+            $target = wp_get_referer();
+            if (!$target) {
+                $target = \ArtPulse\Core\Plugin::get_user_dashboard_url();
+            }
+            wp_safe_redirect($target);
             exit;
         }
     }

@@ -371,6 +371,7 @@ class EnqueueAssets {
             'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
             'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
             'nonce'         => wp_create_nonce('wp_rest'),
+            'dashboardUrl'  => \ArtPulse\Core\Plugin::get_user_dashboard_url(),
         ]);
 
         wp_enqueue_script(
@@ -384,6 +385,7 @@ class EnqueueAssets {
             'endpoint'      => esc_url_raw(rest_url('artpulse/v1/submissions')),
             'mediaEndpoint' => esc_url_raw(rest_url('wp/v2/media')),
             'nonce'         => wp_create_nonce('wp_rest'),
+            'dashboardUrl'  => \ArtPulse\Core\Plugin::get_user_dashboard_url(),
         ]);
 
         wp_enqueue_script(
