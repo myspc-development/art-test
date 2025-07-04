@@ -57,7 +57,9 @@ class EventSubmissionShortcode {
     public static function register() {
         add_shortcode('ap_submit_event', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_scripts']); // Enqueue scripts and styles
-        add_action('init', [self::class, 'maybe_handle_form']); // Handle form submission
+        // Use a later priority so the handler runs during the same request
+        // even though this callback is added while the `init` action is firing.
+        add_action('init', [self::class, 'maybe_handle_form'], 20); // Handle form submission
     }
 
     public static function enqueue_scripts() {
