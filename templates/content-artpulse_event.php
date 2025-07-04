@@ -1,64 +1,91 @@
 <?php
 /**
- * Default organization single template with gallery slider.
+ * Template for displaying single ArtPulse Event content
+ * Fetches event details from post meta.
  */
-get_header();
-while ( have_posts() ) : the_post();
-  if ( has_post_thumbnail() ) {
-    echo '<div class="nectar-portfolio-single-media">';
-    the_post_thumbnail('full', ['class' => 'img-responsive']);
-    echo '</div>';
-  }
+error_log('📦 content-artpulse_event.php loaded');
+?>
 
-  $gallery_ids = get_post_meta(get_the_ID(), '_ap_submission_images', true);
-  if ( is_array($gallery_ids) && count($gallery_ids) > 0 ) {
-    echo '<div class="event-gallery swiper">';
-    echo '<div class="swiper-wrapper">';
-    foreach ( $gallery_ids as $img_id ) {
-      echo '<div class="swiper-slide">' . wp_get_attachment_image($img_id, 'large') . '</div>';
-    }
-    echo '</div><div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div>';
-  }
+<div class="container-wrap">
+  <div class="container">
+    <div class="row">
+      <div class="col span_12">
 
-  echo '<h1 class="entry-title">' . get_the_title() . '</h1>';
-  echo '<div class="entry-content">';
-  the_content();
-  echo '</div>';
+        <?php if (has_post_thumbnail()) : ?>
+          <div class="event-featured-image nectar-portfolio-single-media">
+            <?php the_post_thumbnail('large', ['class' => 'img-responsive', 'alt' => get_the_title()]); ?>
+          </div>
+        <?php endif; ?>
 
-  $address = get_post_meta(get_the_ID(), 'ead_org_street_address', true);
-  $website = get_post_meta(get_the_ID(), 'ead_org_website_url', true);
-  if ( $address || $website ) {
-    echo '<ul class="portfolio-meta">';
-    if ( $address ) {
-      echo '<li><strong>' . esc_html__('Address:', 'artpulse') . '</strong> ' . esc_html($address) . '</li>';
-    }
-    if ( $website ) {
-      echo '<li><strong>' . esc_html__('Website:', 'artpulse') . '</strong> <a href="' . esc_url($website) . '" target="_blank">' . esc_html($website) . '</a></li>';
-    }
-    echo '</ul>';
-  }
+        <h1 class="event-title"><?php the_title(); ?></h1>
 
-  $days  = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
-  $hours = [];
-  foreach ( $days as $day ) {
-    $start  = get_post_meta(get_the_ID(), "ead_org_{$day}_start_time", true);
-    $end    = get_post_meta(get_the_ID(), "ead_org_{$day}_end_time", true);
-    $closed = get_post_meta(get_the_ID(), "ead_org_{$day}_closed", true);
-    if ( $start || $end || $closed ) {
-      $hours[$day] = [
-        'start'  => $start,
-        'end'    => $end,
-        'closed' => $closed,
-      ];
-    }
-  }
-  if ( ! empty($hours) ) {
-    echo '<h2>' . esc_html__('Opening Hours', 'artpulse') . '</h2>';
-    echo '<ul class="portfolio-meta opening-hours">';
-    foreach ( $hours as $day => $vals ) {
-      echo '<li><strong>' . esc_html(ucfirst($day) . ':') . '</strong> ' . ($vals['closed'] ? esc_html__('Closed', 'artpulse') : esc_html(trim($vals['start'] . ' - ' . $vals['end']))) . '</li>';
-    }
-    echo '</ul>';
-  }
-endwhile;
-get_footer();
+        <?php
+          // Fetch core event meta
+          $date     = get_post_meta(get_the_ID(), '_ap_event_date', true);
+          $venue    = get_post_meta(get_the_ID(), '_ap_event_venue', true);
+          $address  = get_post_meta(get_the_ID(), '_ap_event_address', true);
+          $start    = get_post_meta(get_the_ID(), '_ap_event_start_time', true);
+          $end      = get_post_meta(get_the_ID(), '_ap_event_end_time', true);
+          $contact  = get_post_meta(get_the_ID(), '_ap_event_contact', true);
+          $rsvp     = get_post_meta(get_the_ID(), '_ap_event_rsvp', true);
+
+          // Optional: organizer and location details
+          $organizer = get_post_meta(get_the_ID(), '_ap_event_organizer_name', true);
+          $email     = get_post_meta(get_the_ID(), '_ap_event_organizer_email', true);
+          $city      = get_post_meta(get_the_ID(), '_ap_event_city', true);
+          $state     = get_post_meta(get_the_ID(), '_ap_event_state', true);
+          $country   = get_post_meta(get_the_ID(), '_ap_event_country', true);
+        ?>
+
+        <?php if ($date || $venue || $address || $start || $end || $contact || $rsvp || $organizer || $email || $city || $state || $country) : ?>
+          <ul class="event-meta styled-box">
+            <?php if ($date): ?>
+              <li><strong>Date:</strong> <?= esc_html($date); ?></li>
+            <?php endif; ?>
+            <?php if ($venue): ?>
+              <li><strong>Venue:</strong> <?= esc_html($venue); ?></li>
+            <?php endif; ?>
+            <?php if ($address): ?>
+              <li><strong>Address:</strong> <?= esc_html($address); ?></li>
+            <?php endif; ?>
+            <?php if ($start || $end): ?>
+              <li><strong>Time:</strong>
+                <?= esc_html($start); ?>
+                <?= ($start && $end) ? ' – ' : ''; ?>
+                <?= esc_html($end); ?>
+              </li>
+            <?php endif; ?>
+            <?php if ($organizer): ?>
+              <li><strong>Organizer:</strong> <?= esc_html($organizer); ?></li>
+            <?php endif; ?>
+            <?php if ($email): ?>
+              <li><strong>Email:</strong> <?= esc_html($email); ?></li>
+            <?php endif; ?>
+            <?php if ($contact): ?>
+              <li><strong>Contact:</strong> <?= esc_html($contact); ?></li>
+            <?php endif; ?>
+            <?php if ($rsvp): ?>
+              <li><strong>RSVP:</strong> <a href="<?= esc_url($rsvp); ?>" target="_blank">Reserve Now</a></li>
+            <?php endif; ?>
+            <?php if ($city || $state || $country): ?>
+              <li><strong>Location:</strong>
+                <?= esc_html(trim("{$city}, {$state}, {$country}", ", ")); ?>
+              </li>
+            <?php endif; ?>
+          </ul>
+        <?php endif; ?>
+
+        <div class="event-description">
+          <?php
+          if (trim(get_the_content())) {
+            the_content();
+          } else {
+            echo '<p>No description provided.</p>';
+          }
+          ?>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
