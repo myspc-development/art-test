@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('.ap-form-container');
   const messageBox = document.querySelector('.ap-form-messages');
 
-  if (!form) return;
+  if (!form || form.hasAttribute('data-no-ajax')) return;
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();

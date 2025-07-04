@@ -56,7 +56,7 @@ class ProfileEditShortcode {
 
         ob_start();
         ?>
-        <form method="post" enctype="multipart/form-data" class="ap-profile-edit-form ap-form-container">
+        <form method="post" enctype="multipart/form-data" class="ap-profile-edit-form ap-form-container" data-no-ajax="true">
             <?php wp_nonce_field('ap_profile_edit_action', 'ap_profile_nonce'); ?>
             <p>
                 <label class="ap-form-label" for="display_name">Display Name</label><br>

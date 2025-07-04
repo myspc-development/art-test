@@ -197,7 +197,7 @@ export default function SubmissionForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="ap-form-container">
+    <form onSubmit={handleSubmit} className="ap-form-container" data-no-ajax="true">
       <div className="ap-form-messages" role="status" aria-live="polite">{message}</div>
 
       <p>

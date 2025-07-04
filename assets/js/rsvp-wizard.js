@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="ap-rsvp-wrap">
         <button id="ap-rsvp-close" type="button" class="ap-form-button nectar-button">Close</button>
         <div id="ap-rsvp-msg" class="ap-form-messages" role="status" aria-live="polite"></div>
-        <form id="ap-rsvp-form" class="ap-form-container">
+        <form id="ap-rsvp-form" class="ap-form-container" data-no-ajax="true">
           <input type="hidden" name="ap_event_id" id="ap_rsvp_event_id">
           <div class="ap-rsvp-step" data-step="0">
             <label class="ap-form-label"><input type="checkbox" name="ap_event_rsvp_enabled" value="1"> Enable RSVP</label>
