@@ -37,7 +37,7 @@ class EventCardTaxonomyTest extends WP_UnitTestCase
     public function test_single_template_outputs_meta(): void
     {
         $this->go_to(get_permalink($this->event_id));
-        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/salient/content‐artpulse_event.php';
+        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/salient/content-artpulse_event.php';
         $html = $this->get_echo(static function() use ($path) {
             include $path;
         });
