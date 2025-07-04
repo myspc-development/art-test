@@ -623,7 +623,7 @@ add_action('rest_api_init', function () {
 // Force plugin template for single artpulse_event posts
 add_filter('template_include', function ($template) {
     if (is_singular('artpulse_event')) {
-        $custom_template = plugin_dir_path(__FILE__) . 'templates/single-artpulse_event.php';
+        $custom_template = plugin_dir_path(__FILE__) . 'templates/salient/single-artpulse_event.php';
         if (file_exists($custom_template)) {
             error_log('✅ Plugin forcing use of single-artpulse_event.php');
             return $custom_template;
