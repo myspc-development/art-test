@@ -1,4 +1,61 @@
 <?php
+/**
+ * Full single template for ArtPulse Events using custom layout.
+ */
+
 get_header();
-get_template_part('templates/salient/content', 'artpulse_event');
+error_log('✅ Template rendering started.');
+
+if ( have_posts() ) :
+  while ( have_posts() ) : the_post();
+    echo '<div class="container single-event-content">';
+
+    // Featured image
+    if ( has_post_thumbnail() ) {
+      echo '<div class="event-featured-image nectar-portfolio-single-media">';
+      the_post_thumbnail('large', ['class' => 'img-responsive']);
+      echo '</div>';
+    }
+
+    // Event title
+    echo '<h1 class="entry-title event-title">' . get_the_title() . '</h1>';
+
+    // Event meta
+    $date     = get_post_meta(get_the_ID(), '_ap_event_date', true);
+    $location = get_post_meta(get_the_ID(), '_ap_event_location', true);
+    $address  = get_field('event_address');
+    $start    = get_field('event_start_time');
+    $end      = get_field('event_end_time');
+    $contact  = get_field('event_contact');
+    $rsvp     = get_field('event_rsvp');
+
+    echo '<div class="event-meta styled-box"><ul class="event-meta-list">';
+
+    if ($date)     echo '<li><strong>Date:</strong> ' . esc_html($date) . '</li>';
+    if ($start || $end) {
+      echo '<li><strong>Time:</strong> ';
+      echo esc_html($start);
+      echo ($start && $end) ? ' – ' : '';
+      echo esc_html($end);
+      echo '</li>';
+    }
+    if ($location) echo '<li><strong>Venue:</strong> ' . esc_html($location) . '</li>';
+    if ($address)  echo '<li><strong>Address:</strong> ' . esc_html($address) . '</li>';
+    if ($contact)  echo '<li><strong>Contact:</strong> ' . esc_html($contact) . '</li>';
+    if ($rsvp)     echo '<li><strong>RSVP:</strong> <a href="' . esc_url($rsvp) . '" target="_blank">Reserve Now</a></li>';
+
+    echo '</ul></div>'; // close .event-meta
+
+    // Event content
+    echo '<div class="entry-content">';
+    the_content();
+    echo '</div>';
+
+    echo '</div>'; // close .container
+  endwhile;
+else :
+  echo '<p>No event found.</p>';
+endif;
+
 get_footer();
+?>
