@@ -23,11 +23,11 @@ if ( have_posts() ) :
     // Event meta
     $date     = get_post_meta(get_the_ID(), '_ap_event_date', true);
     $location = get_post_meta(get_the_ID(), '_ap_event_location', true);
-    $address  = get_field('event_address');
-    $start    = get_field('event_start_time');
-    $end      = get_field('event_end_time');
-    $contact  = get_field('event_contact');
-    $rsvp     = get_field('event_rsvp');
+    $address  = get_post_meta(get_the_ID(), '_ap_event_address', true);
+    $start    = get_post_meta(get_the_ID(), '_ap_event_start_time', true);
+    $end      = get_post_meta(get_the_ID(), '_ap_event_end_time', true);
+    $contact  = get_post_meta(get_the_ID(), '_ap_event_contact', true);
+    $rsvp     = get_post_meta(get_the_ID(), '_ap_event_rsvp', true);
 
     echo '<div class="event-meta styled-box"><ul class="event-meta-list">';
 
