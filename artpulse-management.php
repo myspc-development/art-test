@@ -119,10 +119,12 @@ add_action('admin_init', function () {
 
     check_admin_referer('artpulse_copy_templates');
 
-    ap_copy_templates_to_child_theme();}
+    ap_copy_templates_to_child_theme();
 
     add_action('admin_notices', function () {
-        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Templates copied to child theme.', 'artpulse') . '</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p>' .
+             esc_html__('Templates copied to child theme.', 'artpulse') .
+             '</p></div>';
     });
 });
 
