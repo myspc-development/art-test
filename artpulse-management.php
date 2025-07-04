@@ -45,6 +45,63 @@ register_activation_hook(__FILE__, function () {
     Activator::activate(); // WooCommerceIntegration has no activate() method
 });
 
+
+// Add ArtPulse Settings page in the Settings menu
+add_action('admin_menu', function () {
+    add_options_page(
+        __('ArtPulse Settings', 'artpulse'),
+        __('ArtPulse', 'artpulse'),
+        'manage_options',
+        'artpulse-settings',
+        'artpulse_settings_page'
+    );
+});
+
+/**
+ * Render the ArtPulse Settings page.
+ */
+function artpulse_settings_page() {
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
+        <form method="post">
+            <?php wp_nonce_field('artpulse_copy_templates'); ?>
+            <p>
+                <input type="submit" class="button button-primary" name="ap_copy_templates" value="<?php esc_attr_e('Copy Templates to Child Theme', 'artpulse'); ?>" />
+            </p>
+        </form>
+    </div>
+    <?php
+}
+
+// Handle template copy action
+add_action('admin_init', function () {
+    if (!isset($_POST['ap_copy_templates'])) {
+        return;
+    }
+
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    check_admin_referer('artpulse_copy_templates');
+
+    $src_files = [
+        plugin_dir_path(__FILE__) . 'templates/salient/content‐artpulse_event.php',
+        plugin_dir_path(__FILE__) . 'templates/salient/archive-artpulse_event.php',
+    ];
+    $dest_dir = trailingslashit(get_stylesheet_directory()) . 'templates/salient';
+    wp_mkdir_p($dest_dir);
+
+    foreach ($src_files as $src) {
+        copy($src, $dest_dir . '/' . basename($src));
+    }
+
+    add_action('admin_notices', function () {
+        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Templates copied to child theme.', 'artpulse') . '</p></div>';
+    });
+});
+
 // ✅ Hook for deactivation
 //register_deactivation_hook(__FILE__, [$plugin, 'deactivate']);
 
