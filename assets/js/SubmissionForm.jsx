@@ -151,12 +151,12 @@ export default function SubmissionForm() {
          event_organizer_name: organizerName,
          event_organizer_email: organizerEmail,
           event_rsvp_enabled: rsvpEnabled ? '1' : '0',
-          event_rsvp_limit: rsvpLimit,
           event_waitlist_enabled: waitlistEnabled ? '1' : '0',
           event_featured: featured ? '1' : '0',
           image_ids: imageIds,
           address_components: addressComponents,
-          ...(bannerId ? { event_banner_id: bannerId } : {})
+          ...(bannerId ? { event_banner_id: bannerId } : {}),
+          ...(rsvpLimit ? { event_rsvp_limit: parseInt(rsvpLimit, 10) } : {})
         })
       });
 
