@@ -74,6 +74,7 @@ register_activation_hook(__FILE__, function () {
     artpulse_create_custom_table();
     \ArtPulse\Core\FeedbackManager::install_table();
     Activator::activate(); // WooCommerceIntegration has no activate() method
+    ap_copy_templates_to_child_theme();
 });
 
 
