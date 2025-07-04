@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ✅ Required fields
     submission.post_type = form.dataset.postType || 'artpulse_event';
-    submission.title = formData.get('title');
+    submission.title = formData.get('event_title') || formData.get('title');
 
     // 🚨 Skip submission if required fields are missing
     if (!submission.title || !submission.post_type) {
