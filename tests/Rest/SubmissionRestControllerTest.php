@@ -92,6 +92,12 @@ class SubmissionRestControllerTest extends TestCase
         $this->assertSame('string', $args['price']['type']);
         $this->assertArrayHasKey('buy_link', $args);
         $this->assertSame('string', $args['buy_link']['type']);
+        $this->assertArrayHasKey('event_rsvp_enabled', $args);
+        $this->assertSame('boolean', $args['event_rsvp_enabled']['type']);
+        $this->assertArrayHasKey('event_rsvp_limit', $args);
+        $this->assertSame('integer', $args['event_rsvp_limit']['type']);
+        $this->assertArrayHasKey('event_waitlist_enabled', $args);
+        $this->assertSame('boolean', $args['event_waitlist_enabled']['type']);
     }
 
     public function test_check_permissions_valid_nonce_and_capability(): void
