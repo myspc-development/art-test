@@ -46,6 +46,7 @@ register_activation_hook(__FILE__, function () {
 });
 
 
+
 // Add ArtPulse Settings page in the Settings menu
 add_action('admin_menu', function () {
     add_options_page(
@@ -595,5 +596,17 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true',
     ]);
 });
+
+// Force plugin template for single artpulse_event posts
+add_filter('template_include', function ($template) {
+    if (is_singular('artpulse_event')) {
+        $custom_template = plugin_dir_path(__FILE__) . 'templates/single-artpulse_event.php';
+        if (file_exists($custom_template)) {
+            error_log('✅ Plugin forcing use of single-artpulse_event.php');
+            return $custom_template;
+        }
+    }
+    return $template;
+}, 999);
 
 
