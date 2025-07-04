@@ -16,7 +16,6 @@ class EventSubmissionShortcode {
             wc_add_notice($message, $type);
             return;
         }
-
         $notices   = get_transient(self::NOTICE_KEY) ?: [];
         $notices[] = [ 'message' => $message, 'type' => $type ];
         set_transient(self::NOTICE_KEY, $notices, defined('MINUTE_IN_SECONDS') ? MINUTE_IN_SECONDS : 60);
@@ -30,7 +29,6 @@ class EventSubmissionShortcode {
             wc_print_notices();
             return;
         }
-
         $notices = get_transient(self::NOTICE_KEY);
         if ($notices) {
             foreach ($notices as $notice) {
@@ -89,6 +87,7 @@ class EventSubmissionShortcode {
         <div class="ap-form-messages" role="status" aria-live="polite">
             <?php self::print_notices(); ?>
         </div>
+
         <form method="post" enctype="multipart/form-data" class="ap-form-container">
             <?php wp_nonce_field('ap_submit_event', 'ap_event_nonce'); ?>
 
@@ -164,7 +163,7 @@ class EventSubmissionShortcode {
 
             <p>
                 <label class="ap-form-label" for="ap_event_postcode">Postcode</label>
-            <input class="ap-input" id="ap_event_postcode" type="text" name="event_postcode" />
+                <input class="ap-input" id="ap_event_postcode" type="text" name="event_postcode" />
             </p>
 
             <input type="hidden" name="address_components" id="ap_address_components" />
@@ -197,14 +196,15 @@ class EventSubmissionShortcode {
             <p>
                 <label class="ap-form-label" for="ap_event_type">Event Type</label>
                 <select class="ap-input" id="ap_event_type" name="event_type">
-                <option value="">Select Type</option>
-                <?php
-                $terms = get_terms(['taxonomy' => 'event_type', 'hide_empty' => false]);
-                foreach ($terms as $term) {
-                    echo '<option value="' . esc_attr($term->term_id) . '">' . esc_html($term->name) . '</option>';
-                }
-                ?>
-            </select>
+                    <option value="">Select Type</option>
+                    <?php
+                    $terms = get_terms(['taxonomy' => 'event_type', 'hide_empty' => false]);
+                    foreach ($terms as $term) {
+                        echo '<option value="' . esc_attr($term->term_id) . '">' . esc_html($term->name) . '</option>';
+                    }
+                    ?>
+                </select>
+            </p>
 
             <p>
                 <label class="ap-form-label" for="ap_event_org">Organization</label>
@@ -314,7 +314,8 @@ class EventSubmissionShortcode {
             self::maybe_redirect();
             return;
         }
-          // Validate the date format
+
+        // Validate the date format
         if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $event_date)) {
             self::add_notice('Please enter a valid date in YYYY-MM-DD format.', 'error');
             self::maybe_redirect();
@@ -345,6 +346,7 @@ class EventSubmissionShortcode {
         if ($meta_org) {
             $authorized[] = $meta_org;
         }
+
         if (!in_array($event_org, $authorized, true)) {
             self::add_notice('Invalid organization selected.', 'error');
             self::maybe_redirect();
@@ -376,6 +378,7 @@ class EventSubmissionShortcode {
             'post_content'=> $event_description,
             'post_author' => $user_id,
         ];
+
         if ($post_date) {
             $post_args['post_date'] = $publish_date;
         }
@@ -415,67 +418,100 @@ class EventSubmissionShortcode {
         if ($event_type) {
             wp_set_post_terms($post_id, [$event_type], 'event_type');
         }
+
         // Handle banner and additional image uploads
         $image_ids = [];
-
         $image_order = [];
-        if ( isset( $_POST['image_order'] ) ) {
-            $image_order = array_map( 'intval', array_filter( explode( ',', (string) $_POST['image_order'] ) ) );
+
+        if (isset($_POST['image_order'])) {
+            $image_order = array_map('intval', array_filter(explode(',', (string) $_POST['image_order'])));
         }
 
-        if (! function_exists('media_handle_upload')) {
+        if (!function_exists('media_handle_upload')) {
             require_once ABSPATH . 'wp-admin/includes/image.php';
             require_once ABSPATH . 'wp-admin/includes/file.php';
             require_once ABSPATH . 'wp-admin/includes/media.php';
         }
 
+        // Handle Banner Upload
         if (!empty($_FILES['event_banner']['name'])) {
             $attachment_id = media_handle_upload('event_banner', $post_id);
+
             if (!is_wp_error($attachment_id)) {
                 $image_ids[] = $attachment_id;
+                // Set the featured image
+                set_post_thumbnail($post_id, $attachment_id);
+                update_post_meta($post_id, 'event_banner_id', $attachment_id); // Store banner ID separately
             } else {
-                error_log('Error uploading image: ' . $attachment_id->get_error_message());
+                error_log('Error uploading banner: ' . $attachment_id->get_error_message());
                 self::add_notice('Error uploading banner. Please try again.', 'error');
                 self::maybe_redirect();
                 return;
             }
         }
 
+        // Handle Additional Images Upload
         if (!empty($_FILES['images']['name'][0])) {
-            $limit   = min(count($_FILES['images']['name']), 5);
-            $indices = range(0, $limit - 1);
-            $order   = array_values(array_unique(array_intersect($image_order, $indices)));
-            foreach ($indices as $idx) {
-                if (!in_array($idx, $order, true)) {
-                    $order[] = $idx;
+            $files = $_FILES['images'];
+            $limit = min(count($files['name']), 5); // Limit to 5 images
+
+            for ($i = 0; $i < $limit; $i++) {
+                if (!empty($files['name'][$i])) {
+                    $file = array(
+                        'name'     => $files['name'][$i],
+                        'type'     => $files['type'][$i],
+                        'tmp_name' => $files['tmp_name'][$i],
+                        'error'    => $files['error'][$i],
+                        'size'     => $files['size'][$i]
+                    );
+
+                    $_FILES['ap_image'] = $file; // Rename to avoid conflicts
+
+                    $attachment_id = media_handle_upload('ap_image', $post_id);
+
+                    if (!is_wp_error($attachment_id)) {
+                        $image_ids[] = $attachment_id;
+                    } else {
+                        error_log('Error uploading additional image: ' . $attachment_id->get_error_message());
+                        self::add_notice('Error uploading additional image. Please try again.', 'error');
+                        self::maybe_redirect();
+                        return;
+                    }
+                }
+            }
+            unset($_FILES['ap_image']); // Clean up
+        }
+
+        // Handle Image Order (reordering logic)
+        $final_image_ids = [];
+
+        if (!empty($image_order)) {
+            // Reorder images based on user-defined order
+            foreach ($image_order as $image_id) {
+                if (in_array($image_id, $image_ids)) {
+                    $final_image_ids[] = $image_id;
                 }
             }
 
-            foreach ($order as $i) {
-                if (empty($_FILES['images']['name'][$i])) {
-                    continue;
-                }
-                $_FILES['ap_image'] = [
-                    'name'     => $_FILES['images']['name'][$i],
-                    'type'     => $_FILES['images']['type'][$i],
-                    'tmp_name' => $_FILES['images']['tmp_name'][$i],
-                    'error'    => $_FILES['images']['error'][$i],
-                    'size'     => $_FILES['images']['size'][$i],
-                ];
-
-                $id = media_handle_upload('ap_image', $post_id);
-                if (!is_wp_error($id)) {
-                    $image_ids[] = $id;
+            // Add any remaining images that weren't in the order (append them)
+            foreach ($image_ids as $image_id) {
+                if (!in_array($image_id, $final_image_ids)) {
+                    $final_image_ids[] = $image_id;
                 }
             }
-            unset($_FILES['ap_image']);
+        } else {
+            // No order specified, use the order images were uploaded
+            $final_image_ids = $image_ids;
         }
 
-        if ($image_ids) {
-            update_post_meta($post_id, '_ap_submission_images', $image_ids);
-            update_post_meta($post_id, 'event_banner_id', $image_ids[0]);
-            set_post_thumbnail($post_id, $image_ids[0]);
-        }
+       // Update Post Meta with Image IDs (excluding the banner if present)
+        $gallery_image_ids = array_filter($final_image_ids, function($id) use ($post_id) {
+            $banner_id = get_post_meta($post_id, 'event_banner_id', true);
+            return (int)$id !== (int)$banner_id; // Exclude banner ID from gallery
+        });
+        update_post_meta($post_id, '_ap_submission_images', $gallery_image_ids);
+
+
 
         // Success message and redirect
         self::add_notice('Event submitted successfully! It is awaiting review.', 'success');
