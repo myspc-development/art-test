@@ -32,7 +32,7 @@ class LocationRestController {
         $state = sanitize_text_field($req->get_param('state'));
 
         if ($type === 'countries') {
-            $url = "http://api.geonames.org/countryInfoJSON?maxRows=1000&username={$user}";
+            $url = "https://api.geonames.org/countryInfoJSON?maxRows=1000&username={$user}";
             $resp = wp_remote_get($url);
             if (is_wp_error($resp)) return $resp;
             $data = json_decode(wp_remote_retrieve_body($resp), true);
@@ -48,7 +48,7 @@ class LocationRestController {
         }
 
         if ($type === 'states' && $country) {
-            $url = "http://api.geonames.org/searchJSON?featureCode=ADM1&country={$country}&maxRows=1000&username={$user}";
+            $url = "https://api.geonames.org/searchJSON?featureCode=ADM1&country={$country}&maxRows=1000&username={$user}";
             $resp = wp_remote_get($url);
             if (is_wp_error($resp)) return $resp;
             $data = json_decode(wp_remote_retrieve_body($resp), true);
@@ -65,7 +65,7 @@ class LocationRestController {
         }
 
         if ($type === 'cities' && $country && $state) {
-            $url = "http://api.geonames.org/searchJSON?featureClass=P&country={$country}&adminCode1={$state}&maxRows=1000&username={$user}";
+            $url = "https://api.geonames.org/searchJSON?featureClass=P&country={$country}&adminCode1={$state}&maxRows=1000&username={$user}";
             $resp = wp_remote_get($url);
             if (is_wp_error($resp)) return $resp;
             $data = json_decode(wp_remote_retrieve_body($resp), true);
