@@ -6,6 +6,15 @@ document.addEventListener('DOMContentLoaded', function() {
   var events = (window.APCalendar && window.APCalendar.events) ? window.APCalendar.events : [];
   var restRoot = (window.APCalendar && window.APCalendar.rest_root) || (window.wpApiSettings && window.wpApiSettings.root) || '/wp-json/';
 
+  var params = new URLSearchParams(window.location.search);
+  if (!params.has('lat') && navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(pos){
+      params.set('lat', pos.coords.latitude);
+      params.set('lng', pos.coords.longitude);
+      window.location.search = params.toString();
+    });
+  }
+
   var popover, popContent, closeBtn, lastFocus;
 
   function createPopover() {
@@ -63,6 +72,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(function(){ window.open(info.event.url, '_blank'); });
     },
     eventDidMount: function(info) {
+      if (info.event.extendedProps.favorited) {
+        info.el.classList.add('event-favorited');
+      }
+      if (info.event.extendedProps.rsvpd) {
+        info.el.classList.add('event-rsvpd');
+      }
       var title = info.event.title;
       var venue = info.event.extendedProps.venue;
       var address = info.event.extendedProps.address;

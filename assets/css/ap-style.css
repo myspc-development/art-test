@@ -1119,6 +1119,9 @@ select.ap-input {
 .ap-event-popover.open{display:block;}
 .ap-event-popover-close{float:right;margin-left:0.5rem;}
 
+.fc-event.event-favorited{border-left:4px solid red;}
+.fc-event.event-rsvpd{background-color:#e0f7fa;}
+
 /* Event card layout */
 .ap-event-card{background:var(--ap-bg-color);border:1px solid var(--ap-border-color);border-radius:var(--ap-border-radius);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.05);}
 .ap-event-thumb img{width:100%;height:auto;display:block;}
