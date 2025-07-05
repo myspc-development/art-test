@@ -283,3 +283,18 @@
   background-color: var(--ap-primary-hover);
   box-shadow: 0 0 0 2px var(--ap-primary-color);
 }
+
+/* Favorites list styles */
+.favorites-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: var(--ap-space-medium);
+}
+
+.favorites-list li {
+  padding: 0.25rem 0;
+}
+
+.favorite-group {
+  margin-bottom: var(--ap-space-medium);
+}

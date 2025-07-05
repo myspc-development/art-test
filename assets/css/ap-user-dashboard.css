@@ -1,0 +1,12 @@
+@import url("ap-style.css");
+.favorites-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: var(--ap-space-medium);
+}
+.favorites-list li {
+  padding: 0.25rem 0;
+}
+.favorite-group {
+  margin-bottom: var(--ap-space-medium);
+}
