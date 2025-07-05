@@ -5,6 +5,7 @@ while ( have_posts() ) : the_post(); ?>
     <?php the_post_thumbnail('full',['class'=>'img-responsive']); ?>
   </div>
   <h1 class="entry-title"><?php the_title(); ?></h1>
+  <?php echo \ArtPulse\Frontend\ap_render_favorite_button( get_the_ID(), 'artpulse_org' ); ?>
   <div class="entry-content"><?php the_content(); ?></div>
   <?php
     $address = get_post_meta(get_the_ID(),'ead_org_street_address',true);

@@ -15,6 +15,7 @@ while ( have_posts() ) : the_post(); ?>
     endif;
   ?>
   <h1 class="entry-title"><?php the_title(); ?></h1>
+  <?php echo \ArtPulse\Frontend\ap_render_favorite_button( get_the_ID(), 'artpulse_artwork' ); ?>
   <div class="entry-content"><?php the_content(); ?></div>
   <?php
     $medium_meta  = get_post_meta(get_the_ID(),'_ap_artwork_medium',true);
