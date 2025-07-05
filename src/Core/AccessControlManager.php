@@ -17,18 +17,26 @@ class AccessControlManager
             $user     = wp_get_current_user();
             $roles    = (array) $user->roles;
 
-            if (
-                (!empty($settings['override_artist_membership']) && in_array('artist', $roles, true)) ||
-                (!empty($settings['override_org_membership']) && in_array('organization', $roles, true)) ||
-                (!empty($settings['override_member_membership']) && in_array('member', $roles, true))
-            ) {
-                return;
-            }
-
-            if ($level === 'Free') {
+            if (self::needsRedirect($roles, $level, $settings)) {
                 wp_redirect(home_url());
                 exit;
             }
         }
+    }
+
+    /**
+     * Determine if a user viewing a protected post should be redirected.
+     */
+    public static function needsRedirect(array $roles, string $level, array $settings): bool
+    {
+        if (
+            (!empty($settings['override_artist_membership']) && in_array('artist', $roles, true)) ||
+            (!empty($settings['override_org_membership']) && in_array('organization', $roles, true)) ||
+            (!empty($settings['override_member_membership']) && in_array('member', $roles, true))
+        ) {
+            return false;
+        }
+
+        return $level === 'Free';
     }
 }
