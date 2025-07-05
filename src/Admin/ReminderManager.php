@@ -64,7 +64,11 @@ class ReminderManager
         foreach ($rsvps as $uid) {
             $user = get_userdata($uid);
             if ($user && is_email($user->user_email)) {
-                wp_mail($user->user_email, __('Event Reminder', 'artpulse'), $message);
+                \ArtPulse\Core\EmailService::send(
+                    $user->user_email,
+                    __('Event Reminder', 'artpulse'),
+                    $message
+                );
             }
         }
     }

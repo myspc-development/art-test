@@ -269,14 +269,14 @@ class OrganizationEventForm {
             get_current_user_id(),
             admin_url("post.php?post={$post_id}&action=edit")
         );
-        wp_mail($admin_email, $subject, $message);
+        \ArtPulse\Core\EmailService::send($admin_email, $subject, $message);
 
         // User confirmation
         $current_user = wp_get_current_user();
         $user_email = $current_user->user_email;
         $user_subject = 'Thanks for submitting your event';
         $user_message = "Hi {$current_user->display_name},\n\nThanks for submitting your event \"{$title}\". It is now pending review.";
-        wp_mail($user_email, $user_subject, $user_message);
+        \ArtPulse\Core\EmailService::send($user_email, $user_subject, $user_message);
 
         if (function_exists('wc_add_notice')) {
             wc_add_notice('Event submitted successfully!', 'success');

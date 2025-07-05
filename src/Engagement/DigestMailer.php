@@ -84,7 +84,12 @@ class DigestMailer
             __('Unsubscribe', 'artpulse')
         );
 
-        wp_mail($user->user_email, $subject, $content, $headers);
+        \ArtPulse\Core\EmailService::send(
+            $user->user_email,
+            $subject,
+            $content,
+            $headers
+        );
     }
 
     /**

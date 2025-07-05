@@ -20,7 +20,7 @@ class MembershipNotifier
             $user->display_name
         );
 
-        wp_mail($to, $subject, $message);
+        \ArtPulse\Core\EmailService::send($to, $subject, $message);
     }
 
     public static function sendExpiryWarningEmail($user)
@@ -33,6 +33,6 @@ class MembershipNotifier
             get_user_meta($user->ID, 'ap_membership_expires', true)
         );
 
-        wp_mail($to, $subject, $message);
+        \ArtPulse\Core\EmailService::send($to, $subject, $message);
     }
 }

@@ -73,10 +73,10 @@ class WooCommerceIntegration
         update_user_meta( $user_id, 'ap_membership_level', 'Free' );
         update_user_meta( $user_id, 'ap_membership_expires', current_time('timestamp') );
 
-        wp_mail(
+        \ArtPulse\Core\EmailService::send(
             $user->user_email,
-            __('Your ArtPulse membership has been cancelled','artpulse'),
-            __('We detected a refund or cancellation. You have been moved to Free membership.','artpulse')
+            __('Your ArtPulse membership has been cancelled', 'artpulse'),
+            __('We detected a refund or cancellation. You have been moved to Free membership.', 'artpulse')
         );
 
         delete_transient('ap_payment_metrics');
@@ -101,11 +101,11 @@ class WooCommerceIntegration
         $expiry = strtotime( "+{$days} days", current_time('timestamp') );
         update_user_meta( $user_id, 'ap_membership_expires', $expiry );
 
-        wp_mail(
+        \ArtPulse\Core\EmailService::send(
             $user->user_email,
-            sprintf( __('Your ArtPulse membership is now %s','artpulse'), $level ),
+            sprintf( __('Your ArtPulse membership is now %s', 'artpulse'), $level ),
             sprintf(
-                __('Thank you! Your membership level is set to %s and expires on %s.','artpulse'),
+                __('Thank you! Your membership level is set to %s and expires on %s.', 'artpulse'),
                 $level,
                 date_i18n( get_option('date_format'), $expiry )
             )

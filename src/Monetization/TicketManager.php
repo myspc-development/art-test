@@ -200,7 +200,7 @@ class TicketManager
                 'event_title' => get_the_title($event_id),
             ]);
             $headers = ['Content-Type: text/html; charset=UTF-8'];
-            wp_mail(
+            \ArtPulse\Core\EmailService::send(
                 $user->user_email,
                 sprintf(__('Ticket for %s', 'artpulse'), get_the_title($event_id)),
                 $message,

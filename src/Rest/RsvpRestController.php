@@ -196,14 +196,14 @@ class RsvpRestController
         $subject = sprintf(__('RSVP Confirmation for "%s"', 'artpulse'), get_the_title($event_id));
         $message = sprintf(__('Hi %s,\n\nYou have successfully RSVPed for "%s".', 'artpulse'), $user->display_name, get_the_title($event_id));
         if ($user && is_email($user->user_email)) {
-            wp_mail($user->user_email, $subject, $message);
+            \ArtPulse\Core\EmailService::send($user->user_email, $subject, $message);
         }
 
         $org_email = get_post_meta($event_id, 'event_organizer_email', true);
         if ($org_email && is_email($org_email)) {
             $org_subject = sprintf(__('New RSVP for "%s"', 'artpulse'), get_the_title($event_id));
             $org_message = sprintf(__('%s (%s) just RSVPed.', 'artpulse'), $user->display_name, $user->user_email);
-            wp_mail($org_email, $org_subject, $org_message);
+            \ArtPulse\Core\EmailService::send($org_email, $org_subject, $org_message);
         }
 
         return rest_ensure_response([
@@ -437,7 +437,7 @@ class RsvpRestController
         foreach ($rsvps as $uid) {
             $user = get_userdata($uid);
             if ($user && is_email($user->user_email)) {
-                wp_mail($user->user_email, $subject, $message);
+                \ArtPulse\Core\EmailService::send($user->user_email, $subject, $message);
                 $sent[] = $user->user_email;
             }
         }
@@ -467,7 +467,7 @@ class RsvpRestController
             return new WP_Error('invalid_user', 'Invalid user.', ['status' => 404]);
         }
 
-        wp_mail($user->user_email, $subject, $message);
+        \ArtPulse\Core\EmailService::send($user->user_email, $subject, $message);
 
         return rest_ensure_response(['sent' => [$user->user_email]]);
     }
