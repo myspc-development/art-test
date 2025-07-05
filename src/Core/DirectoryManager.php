@@ -250,16 +250,18 @@ class DirectoryManager {
 
         ob_start(); ?>
         <div class="ap-directory" data-type="<?php echo esc_attr($atts['type']); ?>" data-limit="<?php echo esc_attr($atts['limit']); ?>">
-            <div class="ap-directory-filters">
+            <form class="ap-directory-filters" aria-controls="ap-directory-results">
                 <?php if ($atts['type'] === 'event'): ?>
-                    <label><?php _e('Filter by Event Type','artpulse'); ?>:</label>
-                    <select class="ap-filter-event-type"></select>
-                    <input type="text" class="ap-filter-city" placeholder="<?php esc_attr_e('City','artpulse'); ?>" />
-                    <input type="text" class="ap-filter-region" placeholder="<?php esc_attr_e('Region','artpulse'); ?>" />
+                    <label for="ap-filter-event-type"><?php _e('Filter by Event Type','artpulse'); ?>:</label>
+                    <select id="ap-filter-event-type" class="ap-filter-event-type"></select>
+                    <label for="ap-filter-city" class="screen-reader-text"><?php esc_html_e('City','artpulse'); ?></label>
+                    <input id="ap-filter-city" type="text" class="ap-filter-city" placeholder="<?php esc_attr_e('City','artpulse'); ?>" />
+                    <label for="ap-filter-region" class="screen-reader-text"><?php esc_html_e('Region','artpulse'); ?></label>
+                    <input id="ap-filter-region" type="text" class="ap-filter-region" placeholder="<?php esc_attr_e('Region','artpulse'); ?>" />
                 <?php endif; ?>
                 <?php if ($atts['type'] === 'org'): ?>
-                    <label><?php _e('Organization Type','artpulse'); ?>:</label>
-                    <select class="ap-filter-org-type">
+                    <label for="ap-filter-org-type"><?php _e('Organization Type','artpulse'); ?>:</label>
+                    <select id="ap-filter-org-type" class="ap-filter-org-type">
                         <option value=""><?php esc_html_e('All','artpulse'); ?></option>
                         <?php
                         foreach (['gallery','museum','art-fair','studio','collective','non-profit','commercial-gallery','public-art-space','educational-institution','other'] as $t) {
@@ -268,18 +270,20 @@ class DirectoryManager {
                         ?>
                     </select>
                 <?php else: ?>
-                    <label><?php _e('Medium','artpulse'); ?>:</label>
-                    <select class="ap-filter-medium"></select>
-                    <label><?php _e('Style','artpulse'); ?>:</label>
-                    <select class="ap-filter-style"></select>
+                    <label for="ap-filter-medium"><?php _e('Medium','artpulse'); ?>:</label>
+                    <select id="ap-filter-medium" class="ap-filter-medium"></select>
+                    <label for="ap-filter-style"><?php _e('Style','artpulse'); ?>:</label>
+                    <select id="ap-filter-style" class="ap-filter-style"></select>
                 <?php endif; ?>
-                <input type="text" class="ap-filter-location" placeholder="<?php esc_attr_e('Location','artpulse'); ?>" />
-                <input type="text" class="ap-filter-keyword" placeholder="<?php esc_attr_e('Keyword','artpulse'); ?>" />
-                <label><?php _e('Limit','artpulse'); ?>:</label>
-                <input type="number" class="ap-filter-limit" value="<?php echo esc_attr($atts['limit']); ?>" />
+                <label for="ap-filter-location" class="screen-reader-text"><?php esc_html_e('Location','artpulse'); ?></label>
+                <input id="ap-filter-location" type="text" class="ap-filter-location" placeholder="<?php esc_attr_e('Location','artpulse'); ?>" />
+                <label for="ap-filter-keyword" class="screen-reader-text"><?php esc_html_e('Keyword','artpulse'); ?></label>
+                <input id="ap-filter-keyword" type="text" class="ap-filter-keyword" placeholder="<?php esc_attr_e('Keyword','artpulse'); ?>" />
+                <label for="ap-filter-limit"><?php _e('Limit','artpulse'); ?>:</label>
+                <input id="ap-filter-limit" type="number" class="ap-filter-limit" value="<?php echo esc_attr($atts['limit']); ?>" />
                 <button class="ap-filter-apply"><?php _e('Apply','artpulse'); ?></button>
-            </div>
-            <div class="ap-directory-results" role="status" aria-live="polite"></div>
+            </form>
+            <div id="ap-directory-results" class="ap-directory-results" role="status" aria-live="polite"></div>
         </div>
         <?php
         return ob_get_clean();
