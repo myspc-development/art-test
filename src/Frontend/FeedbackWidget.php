@@ -24,9 +24,11 @@ class FeedbackWidget
                 true
             );
             wp_localize_script('ap-feedback', 'APFeedback', [
-                'ajaxUrl' => admin_url('admin-ajax.php'),
-                'nonce'   => wp_create_nonce('ap_feedback_nonce'),
-                'thanks'  => __('Thanks for your feedback!', 'artpulse'),
+                'ajaxUrl'   => admin_url('admin-ajax.php'),
+                'nonce'     => wp_create_nonce('ap_feedback_nonce'),
+                'thanks'    => __('Thanks for your feedback!', 'artpulse'),
+                'apiRoot'   => esc_url_raw(rest_url()),
+                'restNonce' => wp_create_nonce('wp_rest'),
             ]);
             $css = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . '/assets/css/ap-feedback.css';
             wp_enqueue_style('ap-feedback', $css, [], '1.0');
@@ -59,6 +61,7 @@ class FeedbackWidget
                 <button type="submit"><?php esc_html_e('Send Feedback', 'artpulse'); ?></button>
             </form>
             <div id="ap-feedback-message" role="status" aria-live="polite"></div>
+            <ul id="ap-feedback-list" class="ap-feedback-list"></ul>
         </div>
         <?php
     }

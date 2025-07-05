@@ -53,6 +53,8 @@ class RestRoutes
             \ArtPulse\Rest\UserInvitationController::register();
             // Register RSVP endpoints for events
             \ArtPulse\Rest\RsvpRestController::register();
+            // Feedback endpoints for suggestions and voting
+            \ArtPulse\Rest\FeedbackRestController::register();
             // Provide event card markup via REST
             \ArtPulse\Rest\EventCardController::register();
             // Artist-specific events for dashboards

@@ -28,12 +28,27 @@ class FeedbackManager
             email VARCHAR(100) DEFAULT NULL,
             tags VARCHAR(255) DEFAULT NULL,
             context TEXT DEFAULT NULL,
+            votes INT NOT NULL DEFAULT 0,
+            status VARCHAR(20) NOT NULL DEFAULT 'planned',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
             KEY user_id (user_id)
         ) $charset;";
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta($sql);
+
+        $comments = $wpdb->prefix . 'ap_feedback_comments';
+        $sql2 = "CREATE TABLE $comments (
+            id BIGINT AUTO_INCREMENT,
+            PRIMARY KEY(id),
+            feedback_id BIGINT NOT NULL,
+            user_id BIGINT NULL,
+            comment TEXT NOT NULL,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            KEY feedback_id (feedback_id),
+            KEY user_id (user_id)
+        ) $charset;";
+        dbDelta($sql2);
     }
 
     public static function maybe_install_table(): void
@@ -71,5 +86,60 @@ class FeedbackManager
             'created_at'  => current_time('mysql'),
         ]);
         wp_send_json_success();
+    }
+
+    public static function upvote(int $id, int $user_id): int
+    {
+        $voted = get_user_meta($user_id, 'ap_feedback_votes', true);
+        if (!is_array($voted)) {
+            $voted = [];
+        }
+        if (in_array($id, $voted, true)) {
+            return self::get_votes($id);
+        }
+        $voted[] = $id;
+        update_user_meta($user_id, 'ap_feedback_votes', $voted);
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_feedback';
+        $wpdb->query($wpdb->prepare("UPDATE $table SET votes = votes + 1 WHERE id = %d", $id));
+
+        return self::get_votes($id);
+    }
+
+    public static function get_votes(int $id): int
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_feedback';
+        return (int) $wpdb->get_var($wpdb->prepare("SELECT votes FROM $table WHERE id = %d", $id));
+    }
+
+    public static function add_comment(int $feedback_id, int $user_id, string $comment): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_feedback_comments';
+        $wpdb->insert($table, [
+            'feedback_id' => $feedback_id,
+            'user_id'     => $user_id ?: null,
+            'comment'     => $comment,
+            'created_at'  => current_time('mysql'),
+        ]);
+    }
+
+    public static function get_comments(int $feedback_id): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_feedback_comments';
+        $rows = $wpdb->get_results($wpdb->prepare("SELECT user_id, comment, created_at FROM $table WHERE feedback_id = %d ORDER BY created_at ASC", $feedback_id), ARRAY_A);
+
+        return array_map(static function($row) {
+            $user = $row['user_id'] ? get_userdata((int) $row['user_id']) : null;
+            return [
+                'user_id'    => (int) $row['user_id'],
+                'author'     => $user ? $user->display_name : '',
+                'comment'    => $row['comment'],
+                'created_at' => $row['created_at'],
+            ];
+        }, $rows);
     }
 }
