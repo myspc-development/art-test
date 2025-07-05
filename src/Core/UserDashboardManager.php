@@ -171,6 +171,9 @@ class UserDashboardManager
             'artists'            => [],
             'artworks'           => [],
             'favorite_events'    => [],
+            'favorite_artists'   => [],
+            'favorite_orgs'      => [],
+            'favorite_artworks'  => [],
             'rsvp_events'        => [],
             'support_history'    => [],
         ];
@@ -193,9 +196,9 @@ class UserDashboardManager
         // Fetch favorited events
         $favorite_events = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
         $favorite_ids = [];
-        foreach ( $favorite_events as $fav ) {
+        foreach ($favorite_events as $fav) {
             $post = get_post($fav->object_id);
-            if ( ! $post ) {
+            if (!$post) {
                 continue;
             }
             $favorite_ids[] = (int) $post->ID;
@@ -205,6 +208,28 @@ class UserDashboardManager
                 'link'  => get_permalink($post),
                 'date'  => get_post_meta($post->ID, '_ap_event_date', true),
             ];
+        }
+
+        // Fetch favorited artists, orgs and artworks
+        $favorite_types = [
+            'artpulse_artist'   => 'favorite_artists',
+            'artpulse_org'      => 'favorite_orgs',
+            'artpulse_artwork'  => 'favorite_artworks',
+        ];
+
+        foreach ($favorite_types as $post_type => $key) {
+            $favorites = FavoritesManager::get_user_favorites($user_id, $post_type);
+            foreach ($favorites as $fav) {
+                $post = get_post($fav->object_id);
+                if (!$post) {
+                    continue;
+                }
+                $data[$key][] = [
+                    'id'    => $post->ID,
+                    'title' => $post->post_title,
+                    'link'  => get_permalink($post),
+                ];
+            }
         }
 
         $rsvp_ids = get_user_meta($user_id, 'ap_rsvp_events', true);
@@ -228,7 +253,10 @@ class UserDashboardManager
             ];
         }
 
-        $data['favorite_count'] = count($data['favorite_events']);
+        $data['favorite_count'] = count($data['favorite_events'])
+            + count($data['favorite_artists'])
+            + count($data['favorite_orgs'])
+            + count($data['favorite_artworks']);
         $data['rsvp_count']     = count($data['rsvp_events']);
 
         // Consolidated my events list
