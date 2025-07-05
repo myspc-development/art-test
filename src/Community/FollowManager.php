@@ -38,6 +38,7 @@ class FollowManager {
         ]);
 
         UserEngagementLogger::log($user_id, 'follow', $object_id);
+        \ArtPulse\Personalization\RecommendationEngine::log($user_id, $object_type, $object_id, 'follow');
 
         // --- Maintain following/follower counts ---
         $following = (int) get_user_meta($user_id, 'ap_following_count', true);
