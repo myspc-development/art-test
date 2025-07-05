@@ -73,6 +73,8 @@ class RoleSetup
             ],
             'artist' => [
                 'read',
+                'edit_ap_collections',
+                'create_ap_collections',
                 'create_artpulse_artists',
                 'edit_artpulse_artist', 'read_artpulse_artist', 'delete_artpulse_artist',
                 'edit_artpulse_artists', 'edit_others_artpulse_artists',
@@ -83,6 +85,8 @@ class RoleSetup
             ],
             'organization' => [
                 'read',
+                'edit_ap_collections',
+                'create_ap_collections',
                 'create_artpulse_orgs',
                 'edit_artpulse_org', 'read_artpulse_org', 'delete_artpulse_org',
                 'edit_artpulse_orgs', 'edit_others_artpulse_orgs',
@@ -93,7 +97,14 @@ class RoleSetup
                 'view_artpulse_dashboard',
                 'upload_files',
             ],
-            'administrator' => [],
+            'curator' => [
+                'edit_ap_collections',
+                'create_ap_collections',
+            ],
+            'administrator' => [
+                'edit_ap_collections',
+                'create_ap_collections',
+            ],
         ];
 
         // Add full capabilities for each CPT to administrator
