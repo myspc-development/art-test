@@ -103,7 +103,7 @@ class DigestMailer
             if (isset($seen[$event_id])) {
                 return;
             }
-            $date = get_post_meta($event_id, '_ap_event_date', true);
+            $date = get_post_meta($event_id, 'event_start_date', true);
             if (!$date || strtotime($date) < strtotime($today)) {
                 return;
             }
@@ -139,7 +139,7 @@ class DigestMailer
                                 'compare' => 'LIKE',
                             ],
                             [
-                                'key'     => '_ap_event_date',
+                                'key'     => 'event_start_date',
                                 'value'   => $today,
                                 'type'    => 'DATE',
                                 'compare' => '>=',
@@ -169,7 +169,7 @@ class DigestMailer
                                 ],
                             ],
                             [
-                                'key'     => '_ap_event_date',
+                                'key'     => 'event_start_date',
                                 'value'   => $today,
                                 'type'    => 'DATE',
                                 'compare' => '>=',
@@ -189,7 +189,7 @@ class DigestMailer
         if ($city || $state) {
             $meta_query = [
                 [
-                    'key'     => '_ap_event_date',
+                    'key'     => 'event_start_date',
                     'value'   => $today,
                     'type'    => 'DATE',
                     'compare' => '>=',
