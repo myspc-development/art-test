@@ -102,4 +102,28 @@ class TicketManagerTest extends \WP_UnitTestCase
         $this->assertCount(1, $this->emails);
         $this->assertSame('buyer@test.com', $this->emails[0][0]);
     }
+
+    public function test_private_link_email_triggered_on_order_hook(): void
+    {
+        $tier_id = $this->create_ticket_tier(1, 0);
+        update_post_meta($this->event_id, '_ap_virtual_event_url', 'http://example.com');
+        update_post_meta($this->event_id, '_ap_virtual_access_enabled', 1);
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_tickets';
+        $wpdb->insert($table, [
+            'user_id'        => $this->user_id,
+            'event_id'       => $this->event_id,
+            'ticket_tier_id' => $tier_id,
+            'code'           => 'HOOKCODE',
+            'purchase_date'  => current_time('mysql'),
+            'status'         => 'active',
+        ]);
+        $ticket_id = $wpdb->insert_id;
+
+        TicketManager::handle_completed_order($this->user_id, $ticket_id, 1);
+
+        $this->assertCount(1, $this->emails);
+        $this->assertSame('buyer@test.com', $this->emails[0][0]);
+    }
 }
