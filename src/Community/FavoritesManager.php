@@ -77,6 +77,35 @@ class FavoritesManager {
         return $wpdb->get_results($wpdb->prepare($sql, ...$params));
     }
 
+    /**
+     * Get all favorites for a user grouped by simplified type names.
+     */
+    public static function get_favorites(int $user_id): array
+    {
+        $favorites = [
+            'event'        => [],
+            'artist'       => [],
+            'organization' => [],
+            'artwork'      => [],
+        ];
+
+        foreach (self::get_user_favorites($user_id) as $fav) {
+            $type = match ($fav->object_type) {
+                'artpulse_event'   => 'event',
+                'artpulse_artist'  => 'artist',
+                'artpulse_org'     => 'organization',
+                'artpulse_artwork' => 'artwork',
+                default            => null,
+            };
+
+            if ($type) {
+                $favorites[$type][] = (int) $fav->object_id;
+            }
+        }
+
+        return $favorites;
+    }
+
     // 🔽🔽 Helper to get the owner of an object (post author, etc)
     private static function get_owner_user_id($object_id, $object_type) {
         // You may want to map object_type to post types, etc.

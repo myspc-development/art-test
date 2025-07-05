@@ -42,4 +42,38 @@ class FavoritesManagerTest extends WP_UnitTestCase
         $this->assertSame($this->user_id, (int) $rows[1]['user_id']);
         $this->assertSame('favorite_added', $rows[1]['type']);
     }
+
+    public function test_get_favorites_groups_by_type(): void
+    {
+        $artist_id  = wp_insert_post([
+            'post_title'  => 'Artist',
+            'post_type'   => 'artpulse_artist',
+            'post_status' => 'publish',
+            'post_author' => $this->owner_id,
+        ]);
+        $org_id     = wp_insert_post([
+            'post_title'  => 'Org',
+            'post_type'   => 'artpulse_org',
+            'post_status' => 'publish',
+            'post_author' => $this->owner_id,
+        ]);
+        $artwork_id = wp_insert_post([
+            'post_title'  => 'Art',
+            'post_type'   => 'artpulse_artwork',
+            'post_status' => 'publish',
+            'post_author' => $this->owner_id,
+        ]);
+
+        FavoritesManager::add_favorite($this->user_id, $this->event_id, 'artpulse_event');
+        FavoritesManager::add_favorite($this->user_id, $artist_id, 'artpulse_artist');
+        FavoritesManager::add_favorite($this->user_id, $org_id, 'artpulse_org');
+        FavoritesManager::add_favorite($this->user_id, $artwork_id, 'artpulse_artwork');
+
+        $result = FavoritesManager::get_favorites($this->user_id);
+
+        $this->assertSame([$this->event_id], $result['event']);
+        $this->assertSame([$artist_id], $result['artist']);
+        $this->assertSame([$org_id], $result['organization']);
+        $this->assertSame([$artwork_id], $result['artwork']);
+    }
 }
