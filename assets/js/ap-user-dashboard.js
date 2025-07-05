@@ -80,6 +80,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const nextBtn = document.getElementById('ap-onboarding-next');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/user/onboarding`, {
+        method: 'POST',
+        headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ step: nextBtn.dataset.step || 'profile' })
+      }).then(() => window.location.reload());
+    });
+  }
+  const skipBtn = document.getElementById('ap-onboarding-skip');
+  if (skipBtn) {
+    skipBtn.addEventListener('click', () => {
+      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/user/onboarding`, {
+        method: 'POST',
+        headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ step: 'skip' })
+      }).then(() => window.location.reload());
+    });
+  }
+
   const exportJsonBtn = document.getElementById('ap-export-json');
   if (exportJsonBtn) exportJsonBtn.onclick = () => exportUserData('json');
   const exportCsvBtn = document.getElementById('ap-export-csv');
