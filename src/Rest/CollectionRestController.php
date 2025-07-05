@@ -61,10 +61,33 @@ class CollectionRestController
 
         $data = [];
         foreach ($posts as $id) {
+            $post = get_post($id);
+            if (!$post) {
+                continue;
+            }
+
+            $item_ids = get_post_meta($id, 'ap_collection_items', true) ?: [];
+            $items    = [];
+            foreach ($item_ids as $pid) {
+                $p = get_post($pid);
+                if (!$p) {
+                    continue;
+                }
+                $items[] = [
+                    'type'      => $p->post_type,
+                    'id'        => $p->ID,
+                    'title'     => $p->post_title,
+                    'excerpt'   => get_the_excerpt($p),
+                    'thumbnail' => get_the_post_thumbnail_url($p, 'thumbnail') ?: '',
+                ];
+            }
+
             $data[] = [
-                'id'    => $id,
-                'title' => get_the_title($id),
-                'items' => get_post_meta($id, 'ap_collection_items', true) ?: [],
+                'id'          => $post->ID,
+                'title'       => $post->post_title,
+                'description' => $post->post_content,
+                'thumbnail'   => get_the_post_thumbnail_url($post, 'thumbnail') ?: '',
+                'items'       => $items,
             ];
         }
         return rest_ensure_response($data);
@@ -111,10 +134,28 @@ class CollectionRestController
             return new WP_REST_Response(['message' => 'Collection not found'], 404);
         }
 
+        $item_ids = get_post_meta($post->ID, 'ap_collection_items', true) ?: [];
+        $items    = [];
+        foreach ($item_ids as $pid) {
+            $p = get_post($pid);
+            if (!$p) {
+                continue;
+            }
+            $items[] = [
+                'type'      => $p->post_type,
+                'id'        => $p->ID,
+                'title'     => $p->post_title,
+                'excerpt'   => get_the_excerpt($p),
+                'thumbnail' => get_the_post_thumbnail_url($p, 'thumbnail') ?: '',
+            ];
+        }
+
         $data = [
-            'id'    => $post->ID,
-            'title' => $post->post_title,
-            'items' => get_post_meta($post->ID, 'ap_collection_items', true) ?: [],
+            'id'          => $post->ID,
+            'title'       => $post->post_title,
+            'description' => $post->post_content,
+            'thumbnail'   => get_the_post_thumbnail_url($post, 'thumbnail') ?: '',
+            'items'       => $items,
         ];
         return rest_ensure_response($data);
     }
