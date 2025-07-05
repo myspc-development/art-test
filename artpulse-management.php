@@ -247,7 +247,14 @@ function ap_enqueue_global_styles() {
 }
 add_action('wp_enqueue_scripts', 'ap_enqueue_global_styles');
 
+/**
+ * Enqueue dashboard styles only when a page uses an ArtPulse shortcode.
+ */
 function ap_enqueue_dashboard_styles() {
+    if (!ap_page_has_artpulse_shortcode()) {
+        return;
+    }
+
     wp_enqueue_style(
         'ap-complete-dashboard-style',
         plugin_dir_url(__FILE__) . 'assets/css/ap-complete-dashboard-frontend.css',
