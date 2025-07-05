@@ -92,6 +92,7 @@ The administration screens follow the WordPress style guide, utilizing system fo
 
 ## Shortcodes & Forms
 The plugin registers the following shortcodes:
+Attributes shown in the examples below are optional parameters and may be omitted.
 
 | Shortcode | Purpose |
 |-----------|---------|
@@ -133,8 +134,12 @@ The plugin registers the following shortcodes:
 | `[ap_event_filter]` | AJAX search/filter form. |
 | `[ap_org_event_form]` | Organization event submission form. |
 | `[ap_org_profile]` | Public organization profile. |
+| `[ap_event_comments]` | Event comment list/form for the current event. |
+| `[ap_membership_purchase]` | Link to purchase the default membership. |
+| `[ap_user_profile]` | Display the current user's profile. |
 
 `[ap_edit_event]` requires an `id` attribute identifying the event post. `[ap_events]` accepts `limit` to control how many events are listed.
+Except where noted, the attributes used above are optional parameters.
 
 Copy any of these into a page or post to expose ArtPulse functionality.
 
