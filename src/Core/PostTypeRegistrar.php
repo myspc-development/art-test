@@ -257,6 +257,18 @@ class PostTypeRegistrar
             'type'         => 'string',
         ]);
 
+        register_post_meta('artpulse_event', 'event_lat', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'number',
+        ]);
+
+        register_post_meta('artpulse_event', 'event_lng', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'number',
+        ]);
+
         register_post_meta('artpulse_event', 'event_organizer_name', [
             'show_in_rest' => true,
             'single'       => true,

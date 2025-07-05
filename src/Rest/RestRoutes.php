@@ -19,6 +19,7 @@ class RestRoutes
                     'region' => [ 'type' => 'string', 'required' => false ],
                     'lat'    => [ 'type' => 'number', 'required' => false ],
                     'lng'    => [ 'type' => 'number', 'required' => false ],
+                    'radius' => [ 'type' => 'number', 'required' => false ],
                 ],
             ]);
 
@@ -73,20 +74,7 @@ class RestRoutes
         $region = sanitize_text_field($request->get_param('region'));
         $lat    = $request->get_param('lat');
         $lng    = $request->get_param('lng');
-
-        if ((null === $city || $city === '') || (null === $region || $region === '')) {
-            if (is_numeric($lat) && is_numeric($lng)) {
-                $nearest = self::nearest_city(floatval($lat), floatval($lng));
-                if ($nearest) {
-                    if (!$city) {
-                        $city = $nearest['name'];
-                    }
-                    if (!$region) {
-                        $region = $nearest['state'];
-                    }
-                }
-            }
-        }
+        $radius = $request->get_param('radius');
 
         $args = [];
         $meta_query = [];
@@ -102,6 +90,24 @@ class RestRoutes
             $meta_query[] = [
                 'key'   => 'event_state',
                 'value' => $region,
+            ];
+        }
+
+        if (!$city && !$region && is_numeric($lat) && is_numeric($lng)) {
+            $r = is_numeric($radius) ? floatval($radius) : 0.5;
+            $lat = floatval($lat);
+            $lng = floatval($lng);
+            $meta_query[] = [
+                'key'     => 'event_lat',
+                'value'   => [ $lat - $r, $lat + $r ],
+                'compare' => 'BETWEEN',
+                'type'    => 'numeric',
+            ];
+            $meta_query[] = [
+                'key'     => 'event_lng',
+                'value'   => [ $lng - $r, $lng + $r ],
+                'compare' => 'BETWEEN',
+                'type'    => 'numeric',
             ];
         }
 
@@ -126,6 +132,8 @@ class RestRoutes
             'event_postcode'     => 'event_postcode',
             'event_country'      => 'event_country',
             'event_artists'      => '_ap_event_artists',
+            'event_lat'          => 'event_lat',
+            'event_lng'          => 'event_lng',
         ], $args);
 
         foreach ($events as &$event) {

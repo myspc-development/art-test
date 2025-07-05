@@ -87,11 +87,14 @@ class SubmissionRestController
         $meta_fields = self::get_meta_fields_for( $post_type );
         $meta_input  = [];
         $boolean_fields = [ 'event_featured', 'for_sale', 'event_rsvp_enabled', 'event_waitlist_enabled' ];
+        $float_fields   = [ 'event_lat', 'event_lng' ];
         foreach ( $meta_fields as $field_key => $meta_key ) {
             if ( isset( $params[ $field_key ] ) ) {
                 $value = $params[ $field_key ];
                 if ( in_array( $field_key, $boolean_fields, true ) ) {
                     $meta_input[ $meta_key ] = rest_sanitize_boolean( $value );
+                } elseif ( in_array( $field_key, $float_fields, true ) ) {
+                    $meta_input[ $meta_key ] = floatval( $value );
                 } else {
                     $meta_input[ $meta_key ] = sanitize_text_field( $value );
                 }
@@ -281,6 +284,16 @@ class SubmissionRestController
                 'required'    => false,
                 'description' => 'Postal code for the event.',
             ],
+            'event_lat' => [
+                'type'        => 'number',
+                'required'    => false,
+                'description' => 'Latitude of the event location.',
+            ],
+            'event_lng' => [
+                'type'        => 'number',
+                'required'    => false,
+                'description' => 'Longitude of the event location.',
+            ],
             'event_organizer_name' => [
                 'type'        => 'string',
                 'required'    => false,
@@ -375,6 +388,8 @@ class SubmissionRestController
                 'event_state'          => 'event_state',
                 'event_country'        => 'event_country',
                 'event_postcode'       => 'event_postcode',
+                'event_lat'            => 'event_lat',
+                'event_lng'            => 'event_lng',
                 'event_organizer_name'  => 'event_organizer_name',
                 'event_organizer_email' => 'event_organizer_email',
                 'event_banner_id'       => 'event_banner_id',
