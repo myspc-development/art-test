@@ -180,6 +180,7 @@ class Plugin
         \ArtPulse\Frontend\EventCalendarShortcode::register();
         \ArtPulse\Frontend\EventMapShortcode::register();
         \ArtPulse\Frontend\EventCommentsShortcode::register();
+        \ArtPulse\Frontend\RestListShortcodes::register();
         \ArtPulse\Frontend\EventFilter::register();
         \ArtPulse\Frontend\OrgRsvpDashboard::register();
         \ArtPulse\Frontend\EventRsvpHandler::register();
