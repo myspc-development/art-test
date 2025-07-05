@@ -34,5 +34,5 @@ function ap_notify_author_on_rejection($new_status, $old_status, $post) {
         $message .= "\n\n" . __('Reason:', 'artpulse') . "\n" . $reason;
     }
 
-    wp_mail($user->user_email, $subject, $message);
+    \ArtPulse\Community\EmailNotifier::send($user->user_email, $subject, $message);
 }

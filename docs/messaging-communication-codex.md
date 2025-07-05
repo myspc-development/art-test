@@ -11,7 +11,7 @@ POST /wp-json/artpulse/v1/event/{id}/email-rsvps
 POST /wp-json/artpulse/v1/event/{id}/attendees/{user_id}/message
 ```
 
-Handlers verify the organizer's permission. If `user_id` is omitted, the message goes to all RSVP'd users. Emails are sent with `wp_mail()` and can also be logged through `NotificationManager`.
+Handlers verify the organizer's permission. If `user_id` is omitted, the message goes to all RSVP'd users. Emails are sent with `EmailNotifier::send()` and can also be logged through `NotificationManager`.
 
 ## 2. Automated Reminders
 

@@ -31,7 +31,7 @@ class EmailService
                 case 'sendgrid':
                     return self::send_sendgrid($to, $subject, $message, $options['sendgrid_api_key'] ?? '', $from_name, $from_address);
                 default:
-                    return wp_mail($to, $subject, $message, $headers, $attachments);
+                    return \ArtPulse\Community\EmailNotifier::send($to, $subject, $message, $headers);
             }
         } finally {
             if ($from_cb) {
