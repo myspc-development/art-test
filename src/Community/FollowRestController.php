@@ -63,7 +63,7 @@ class FollowRestController
             'post_type' => [
                 'type'        => 'string',
                 'required'    => true,
-                'enum'        => ['artpulse_artist', 'artpulse_event', 'artpulse_org'],
+                'enum'        => ['artpulse_artist', 'artpulse_event', 'artpulse_org', 'user'],
                 'description' => 'The post type being followed.',
             ],
         ];
@@ -75,8 +75,14 @@ class FollowRestController
         $post_id   = absint($request['post_id']);
         $post_type = sanitize_key($request['post_type']);
 
-        if (!get_post($post_id)) {
-            return new WP_Error('invalid_post', 'Post not found.', ['status' => 404]);
+        if ($post_type === 'user') {
+            if (!get_user_by('id', $post_id)) {
+                return new WP_Error('invalid_post', 'User not found.', ['status' => 404]);
+            }
+        } else {
+            if (!get_post($post_id)) {
+                return new WP_Error('invalid_post', 'Post not found.', ['status' => 404]);
+            }
         }
 
         $follows = get_user_meta($user_id, '_ap_follows', true) ?: [];
@@ -92,8 +98,19 @@ class FollowRestController
 
     public static function remove_follow(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
-        $user_id = get_current_user_id();
-        $post_id = absint($request['post_id']);
+        $user_id   = get_current_user_id();
+        $post_id   = absint($request['post_id']);
+        $post_type = sanitize_key($request['post_type']);
+
+        if ($post_type === 'user') {
+            if (!get_user_by('id', $post_id)) {
+                return new WP_Error('invalid_post', 'User not found.', ['status' => 404]);
+            }
+        } else {
+            if (!get_post($post_id)) {
+                return new WP_Error('invalid_post', 'Post not found.', ['status' => 404]);
+            }
+        }
 
         $follows = get_user_meta($user_id, '_ap_follows', true) ?: [];
         if (($key = array_search($post_id, $follows)) !== false) {
@@ -101,7 +118,7 @@ class FollowRestController
             update_user_meta($user_id, '_ap_follows', array_values($follows));
         }
 
-        FollowManager::remove_follow($user_id, $post_id, $request['post_type']);
+        FollowManager::remove_follow($user_id, $post_id, $post_type);
 
         return rest_ensure_response(['status' => 'unfollowed', 'follows' => $follows]);
     }
