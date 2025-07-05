@@ -13,6 +13,8 @@ class DirectoryManager {
         add_shortcode('ap_org_directory',    [ self::class, 'renderOrgDirectory' ]);
         add_action('wp_enqueue_scripts',[ self::class, 'enqueueAssets'  ]);
         add_action('rest_api_init',     [ self::class, 'register_routes' ]);
+        add_action('save_post',         [ self::class, 'clear_cache' ], 10, 3);
+        add_action('deleted_post',      [ self::class, 'clear_cache' ]);
     }
 
     public static function enqueueAssets() {
@@ -93,7 +95,7 @@ class DirectoryManager {
             'event_type' => $event_type,
             'medium'     => $medium,
             'style'      => $style,
-            'org_type'  => $org_type,
+            'org_type'   => $org_type,
             'location'   => $location,
             'city'       => $city,
             'region'     => $region,
@@ -101,8 +103,19 @@ class DirectoryManager {
             'keyword'    => $keyword,
         ];
 
-        if ( ExternalSearch::is_enabled() ) {
+        $cache_key = self::get_cache_key( array_merge( [ 'type' => $type ], $search_args ) );
+        $cached_ids = get_transient( $cache_key );
+
+        if ( $cached_ids !== false ) {
+            $posts = get_posts( [
+                'post_type'      => 'artpulse_' . $type,
+                'post__in'       => $cached_ids,
+                'orderby'        => 'post__in',
+                'posts_per_page' => $limit,
+            ] );
+        } elseif ( ExternalSearch::is_enabled() ) {
             $posts = ExternalSearch::search( $type, $search_args );
+            set_transient( $cache_key, wp_list_pluck( $posts, 'ID' ), 5 * MINUTE_IN_SECONDS );
         } else {
             if ( $type === 'event' ) {
                 if ( $event_type ) {
@@ -174,6 +187,7 @@ class DirectoryManager {
             }
 
             $posts = get_posts( $args );
+            set_transient( $cache_key, wp_list_pluck( $posts, 'ID' ), 5 * MINUTE_IN_SECONDS );
         }
 
         $data = array_map(function($p) use ($type) {
@@ -289,5 +303,39 @@ class DirectoryManager {
     public static function renderOrgDirectory($atts) {
         $atts['type'] = 'org';
         return self::renderDirectory($atts);
+    }
+
+    /**
+     * Generate a cache key for filter requests.
+     *
+     * @param array<string,mixed> $params Request parameters.
+     * @return string
+     */
+    public static function get_cache_key(array $params): string
+    {
+        ksort($params);
+        return 'ap_dir_' . md5(serialize($params));
+    }
+
+    /**
+     * Clear all directory filter transients when a related post is updated.
+     */
+    public static function clear_cache(int $post_id, ?\WP_Post $post = null, bool $update = true): void
+    {
+        if (wp_is_post_revision($post_id)) {
+            return;
+        }
+
+        if (!$post) {
+            $post = get_post($post_id);
+        }
+
+        if ($post && in_array($post->post_type, ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org'], true)) {
+            global $wpdb;
+            $like = $wpdb->esc_like('_transient_ap_dir_') . '%';
+            $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $like));
+            $like = $wpdb->esc_like('_transient_timeout_ap_dir_') . '%';
+            $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $like));
+        }
     }
 }
