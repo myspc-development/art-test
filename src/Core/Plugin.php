@@ -235,7 +235,9 @@ class Plugin
         \ArtPulse\Admin\MemberEnhancements::register();
         \ArtPulse\Admin\EventNotesTasks::register();
         \ArtPulse\Admin\ProfileLinkRequestAdmin::register();
-        class_exists(\ArtPulse\Admin\OrgDashboardAdmin::class);
+        add_action('admin_menu', [\ArtPulse\Admin\OrgDashboardAdmin::class, 'register']);
+        add_action('admin_menu', [\ArtPulse\Admin\OrgDashboardAdmin::class, 'hide_org_menu'], 999);
+        add_action('save_post', [\ArtPulse\Admin\OrgDashboardAdmin::class, 'clear_cache'], 10, 3);
         \ArtPulse\Blocks\AdvancedTaxonomyFilterBlock::register();
         \ArtPulse\Blocks\AjaxFilterBlock::register();
         \ArtPulse\Blocks\FilteredListShortcodeBlock::register();
