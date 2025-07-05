@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const regSuccess = document.getElementById('ap-register-success');
   const displayName = document.getElementById('ap_reg_display_name');
   const bio = document.getElementById('ap_reg_bio');
+  const password = document.getElementById('ap_reg_pass');
+  const passConfirm = document.getElementById('ap_reg_confirm');
   const country = document.getElementById('ap_country');
   const state = document.getElementById('ap_state');
   const city = document.getElementById('ap_city');
@@ -16,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (action === 'ap_do_register') {
       if (displayName) formData.set('display_name', displayName.value);
       if (bio) formData.set('description', bio.value);
+      if (password) formData.set('password', password.value);
+      if (passConfirm) formData.set('password_confirm', passConfirm.value);
       if (country || state || city) {
         let comp = addr ? addr.value : '';
         if (!comp) {

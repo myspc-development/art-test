@@ -98,5 +98,6 @@ bookmark or share a direct link to any section.
 
 - All features and filters work on mobile, tablet, and desktop.
 - User registration falls back to normal form submission if JavaScript is disabled.
+- The registration form requires entering the password twice for confirmation.
 - Buttons and forms support keyboard navigation and screen readers.
 - Event cards and dashboards are designed for responsive display.

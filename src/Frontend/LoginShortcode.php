@@ -109,6 +109,7 @@ class LoginShortcode
         $username      = sanitize_user($_POST['username'] ?? '');
         $email         = sanitize_email($_POST['email'] ?? '');
         $password      = $_POST['password'] ?? '';
+        $confirm       = $_POST['password_confirm'] ?? '';
         $display_name  = sanitize_text_field($_POST['display_name'] ?? '');
         $bio           = sanitize_textarea_field($_POST['description'] ?? '');
         $role          = sanitize_key($_POST['role'] ?? 'member');
@@ -151,6 +152,12 @@ class LoginShortcode
                     __('Password must be at least %d characters long and include both letters and numbers.', 'artpulse'),
                     $min_length
                 ),
+            ]);
+        }
+
+        if ($confirm !== '' && $confirm !== $password) {
+            wp_send_json_error([
+                'message' => __('Passwords do not match.', 'artpulse'),
             ]);
         }
 
@@ -216,6 +223,7 @@ class LoginShortcode
         $username      = sanitize_user($_POST['username'] ?? '');
         $email         = sanitize_email($_POST['email'] ?? '');
         $password      = $_POST['password'] ?? '';
+        $confirm       = $_POST['password_confirm'] ?? '';
         $display_name  = sanitize_text_field($_POST['display_name'] ?? '');
         $bio           = sanitize_textarea_field($_POST['description'] ?? '');
         $role          = sanitize_key($_POST['role'] ?? 'member');
@@ -259,6 +267,12 @@ class LoginShortcode
                 __('Password must be at least %d characters long and include both letters and numbers.', 'artpulse'),
                 $min_length
             ));
+            self::maybe_redirect();
+            return;
+        }
+
+        if ($confirm !== '' && $confirm !== $password) {
+            self::add_notice(__('Passwords do not match.', 'artpulse'));
             self::maybe_redirect();
             return;
         }
