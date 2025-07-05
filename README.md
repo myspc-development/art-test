@@ -19,6 +19,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Internal Notes & Task Tracking Codex](docs/internal-notes-tasks-codex.md) covers collaboration features.
 [Webhook Automations Codex](docs/webhook-automation-codex.md) describes webhook management and payload delivery.
 [Dashboard Menu Codex](docs/dashboard-menu-codex.md) explains how the sidebar menu is generated.
+[Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.
 
 Additional resources:
 
