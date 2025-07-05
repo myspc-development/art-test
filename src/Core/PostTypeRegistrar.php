@@ -85,7 +85,7 @@ class PostTypeRegistrar
             'ap_collection' => [
                 'label'      => __('Collections', 'artpulse'),
                 'rewrite'    => ['slug' => 'collections'],
-                'supports'   => ['title', 'editor', 'thumbnail'],
+                'supports'   => ['title', 'editor', 'thumbnail', 'author'],
                 'menu_icon'  => 'dashicons-screenoptions',
             ],
         ];
