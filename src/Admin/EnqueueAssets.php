@@ -339,13 +339,13 @@ class EnqueueAssets {
         wp_enqueue_script(
             'ap-favorite-toggle',
             $plugin_url . '/assets/js/ap-favorite-toggle.js',
-            ['jquery'],
+            [],
             '1.0.0',
             true
         );
-        wp_localize_script('ap-favorite-toggle', 'apFav', [
-            'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce'   => wp_create_nonce('ap_toggle_favorite_nonce'),
+        wp_localize_script('ap-favorite-toggle', 'APFavorites', [
+            'apiRoot' => esc_url_raw(rest_url()),
+            'nonce'   => wp_create_nonce('wp_rest'),
         ]);
 
         wp_enqueue_script(

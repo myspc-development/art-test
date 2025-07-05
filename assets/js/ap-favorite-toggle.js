@@ -1,15 +1,32 @@
-jQuery(document).ready(function($) {
-    $('.ap-fav-btn').on('click', function(e){
-        e.preventDefault();
-        var $btn = $(this);
-        var objectId = $btn.data('object-id');
-        var objectType = $btn.data('object-type');
-        $.post(apFav.ajaxurl, {action: 'ap_toggle_favorite', post_id: objectId, nonce: apFav.nonce, object_type: objectType}, function(resp){
-            if (resp.success) {
-                $btn.toggleClass('ap-favorited', resp.data.added);
-                $btn.text(resp.data.added ? '★' : '☆');
-            }
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.ap-fav-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const objectId   = btn.dataset.objectId;
+      const objectType = btn.dataset.objectType;
+      const isActive   = btn.classList.contains('ap-favorited');
+
+      fetch(APFavorites.apiRoot + 'artpulse/v1/favorite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': APFavorites.nonce
+        },
+        body: JSON.stringify({
+          object_id: objectId,
+          object_type: objectType,
+          action: isActive ? 'remove' : 'add'
+        })
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            const added = data.status === 'added';
+            btn.classList.toggle('ap-favorited', added);
+            btn.textContent = added ? '★' : '☆';
+          }
         });
     });
+  });
 });
 
