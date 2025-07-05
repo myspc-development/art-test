@@ -41,18 +41,14 @@ class TicketManagerTest extends \WP_UnitTestCase
         return true;
     }
 
-    private function create_ticket_tier(int $inventory, int $sold = 0): int
+    private function create_ticket_tier(int $inventory, int $sold = 0, int $product_id = 0): int
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'ap_event_tickets';
-        $wpdb->insert($table, [
-            'event_id' => $this->event_id,
-            'name'     => 'General',
-            'price'    => 0,
-            'inventory'=> $inventory,
-            'sold'     => $sold,
-        ]);
-        return $wpdb->insert_id;
+        $id = TicketManager::create_ticket_tier($this->event_id, 'General', 0.0, $inventory, $product_id);
+        if ($sold) {
+            $wpdb->update($wpdb->prefix . 'ap_event_tickets', ['sold' => $sold], ['id' => $id]);
+        }
+        return $id;
     }
 
     public function test_inventory_check_blocks_over_purchase(): void
@@ -101,5 +97,27 @@ class TicketManagerTest extends \WP_UnitTestCase
         rest_get_server()->dispatch($req);
         $this->assertCount(1, $this->emails);
         $this->assertSame('buyer@test.com', $this->emails[0][0]);
+    }
+
+    public function test_product_based_purchase_creates_order(): void
+    {
+        $ticket_id = $this->create_ticket_tier(5, 0, 10);
+        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
+        $req->set_param('ticket_id', $ticket_id);
+        $req->set_param('quantity', 1);
+        $res = rest_get_server()->dispatch($req);
+        $data = $res->get_data();
+        $this->assertArrayHasKey('order_id', $data);
+        $this->assertSame(0, $this->get_ticket_count($ticket_id));
+
+        do_action('woocommerce_order_status_completed', $data['order_id']);
+
+        $this->assertSame(1, $this->get_ticket_count($ticket_id));
+    }
+
+    private function get_ticket_count(int $ticket_id): int
+    {
+        global $wpdb;
+        return (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}ap_tickets WHERE ticket_tier_id = %d", $ticket_id));
     }
 }
