@@ -91,6 +91,15 @@ an attachment using `EmailTemplateManager` for branding. Developers may
 customize the HTML via the `artpulse_email_template_html` filter or override the
 `generate_ticket_pdf()` method.
 
+## 8. Virtual Event Links
+
+Set `_ap_virtual_event_url` on an event and enable `_ap_virtual_access_enabled`
+to distribute a private streaming link. When a ticket is purchased via the REST
+endpoint or WooCommerce integration, `TicketManager` includes the link in the
+confirmation email. Themes may verify access using
+`TicketManager::user_has_ticket()` and embed the video or display a join link
+only for valid buyers.
+
 ## Extensibility
 
 Filters such as `artpulse_ticket_providers` or `artpulse_membership_levels`

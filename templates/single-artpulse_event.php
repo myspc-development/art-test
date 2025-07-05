@@ -46,6 +46,27 @@ if ( have_posts() ) :
 
     echo '</ul></div>'; // close .event-meta
 
+    $v_enabled = get_post_meta(get_the_ID(), '_ap_virtual_access_enabled', true);
+    $v_url     = get_post_meta(get_the_ID(), '_ap_virtual_event_url', true);
+    if ($v_enabled && $v_url) {
+      $has_access = false;
+      if (is_user_logged_in()) {
+        $has_access = \ArtPulse\Monetization\TicketManager::user_has_ticket(get_current_user_id(), get_the_ID());
+      }
+      echo '<div class="virtual-event-section">';
+      if ($has_access) {
+        $embed = wp_oembed_get($v_url);
+        if ($embed) {
+          echo $embed;
+        } else {
+          echo '<a href="' . esc_url($v_url) . '" target="_blank">' . esc_html__('Join Event', 'artpulse') . '</a>';
+        }
+      } else {
+        echo '<p>' . esc_html__('Purchase a ticket to access the virtual event.', 'artpulse') . '</p>';
+      }
+      echo '</div>';
+    }
+
     // Event content
     echo '<div class="entry-content">';
     the_content();
