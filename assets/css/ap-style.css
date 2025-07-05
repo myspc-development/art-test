@@ -1146,6 +1146,8 @@ select.ap-input {
 @media (max-width:600px){.dashboard-widget{max-width:100%;font-size:1rem;}}
 .dashboard-controls{margin:1rem 0;display:flex;gap:0.5rem;}
 #ap-layout-controls{display:none;margin-bottom:1rem;}
+.ap-layout-tip{margin-bottom:.5rem;color:var(--ap-muted-text-color);font-size:.9em;}
+.ap-widget-toggle-dropdown summary{cursor:pointer;font-weight:600;margin-bottom:.5rem;}
 .ap-onboarding-banner{background:var(--ap-accent-color);color:#fff;padding:0.75rem 1rem;border-radius:var(--ap-border-radius);display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
 .ap-onboarding-banner button{margin-left:0.5rem;}
 .skip-link{position:absolute;top:-40px;left:0;background:var(--ap-primary-color);color:#fff;padding:.5rem 1rem;z-index:100}

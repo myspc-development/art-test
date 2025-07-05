@@ -25,7 +25,10 @@
     <div class="dashboard-main">
 
     <div id="ap-layout-controls">
+        <p class="ap-layout-tip"><?php esc_html_e('Drag cards to rearrange them. Use the menu to show or hide widgets.', 'artpulse'); ?></p>
         <button id="ap-reset-layout" class="ap-form-button"><?php esc_html_e('Reset Layout', 'artpulse'); ?></button>
+        <details class="ap-widget-toggle-dropdown">
+        <summary><?php esc_html_e('Show/Hide Widgets', 'artpulse'); ?></summary>
         <fieldset id="ap-widget-toggles">
             <legend class="screen-reader-text"><?php esc_html_e('Toggle widgets', 'artpulse'); ?></legend>
             <label><input type="checkbox" value="membership" checked> <?php esc_html_e('Membership', 'artpulse'); ?></label>
@@ -44,6 +47,7 @@
             <?php endif; ?>
             <label><input type="checkbox" value="account-tools" checked> <?php esc_html_e('Account Tools', 'artpulse'); ?></label>
         </fieldset>
+        </details>
     </div>
 
     <div id="ap-dashboard-widgets">

@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetBtn = document.getElementById('ap-reset-layout');
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
+      const msg = apL10n?.reset_confirm || 'Reset dashboard layout?';
+      if (!confirm(msg)) return;
       localStorage.removeItem('apDashboardLayout');
       localStorage.removeItem('apWidgetVisibility');
       window.location.reload();
