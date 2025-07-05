@@ -61,3 +61,11 @@ get_header(); ?>
 
           endwhile;
           ?>
+        </div> <!-- .col-md-8 -->
+      </div> <!-- .row -->
+    </div> <!-- .container -->
+  </div> <!-- .container-wrap -->
+</div> <!-- #nectar-outer -->
+
+<?php
+get_footer();
