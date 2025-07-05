@@ -49,6 +49,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\FavoritesRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\EventCommentsController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\EventChatController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Community\ForumRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_migrate_profile_link_request_slug']);
@@ -337,6 +338,14 @@ class Plugin
             true
         );
 
+        wp_enqueue_script(
+            'ap-forum-js',
+            plugins_url('assets/js/ap-forum.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-element', 'wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
         wp_localize_script('ap-notifications-js', 'APNotifications', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
@@ -361,6 +370,12 @@ class Plugin
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
             'poll'    => true,
+        ]);
+
+        wp_localize_script('ap-forum-js', 'APForum', [
+            'rest_url'    => esc_url_raw(rest_url()),
+            'nonce'       => wp_create_nonce('wp_rest'),
+            'can_comment' => is_user_logged_in(),
         ]);
 
         wp_enqueue_script(

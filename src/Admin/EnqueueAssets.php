@@ -372,6 +372,13 @@ class EnqueueAssets {
             '1.0.0',
             true
         );
+        wp_enqueue_script(
+            'ap-forum-js',
+            $plugin_url . '/assets/js/ap-forum.js',
+            ['wp-element', 'wp-api-fetch'],
+            '1.0.0',
+            true
+        );
         wp_localize_script('ap-notifications-js', 'APNotifications', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
@@ -384,6 +391,11 @@ class EnqueueAssets {
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
             'pollId'  => 0,
+        ]);
+        wp_localize_script('ap-forum-js', 'APForum', [
+            'rest_url'    => esc_url_raw(rest_url()),
+            'nonce'       => wp_create_nonce('wp_rest'),
+            'can_comment' => is_user_logged_in(),
         ]);
 
         wp_enqueue_script(
