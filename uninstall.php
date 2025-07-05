@@ -30,6 +30,7 @@ $tables = [
     'ap_link_requests_meta',
     'ap_roles',
     'ap_login_events',
+    'ap_messages',
     'ap_artwork_event_links',
 ];
 
