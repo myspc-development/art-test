@@ -224,6 +224,14 @@ class TicketManager
     }
 
     /**
+     * Handle a completed WooCommerce order.
+     */
+    public static function handle_completed_order(int $user_id, int $ticket_id, int $qty): void
+    {
+        do_action('artpulse_ticket_purchased', $user_id, 0, $ticket_id, $qty);
+    }
+
+    /**
      * Send a virtual access link when a ticket purchase is confirmed.
      */
     public static function send_private_link_email(int $user_id, int $event_id, int $ticket_id, int $qty): void
