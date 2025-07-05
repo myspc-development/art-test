@@ -118,7 +118,7 @@ The plugin registers the following shortcodes:
 | `[ap_org_dashboard]` | Dashboard for an organization with event management. |
 | `[ap_org_profile_edit]` | Form to edit an organization profile. |
 | `[ap_organizations]` | List organizations. |
-| `[ap_portfolio_builder]` | Manage a member portfolio. |
+| `[ap_portfolio_builder]` | Manage a member portfolio. Included within the organization dashboard for easy editing. |
 | `[ap_profile_edit]` | Form for members to edit their profile. |
 | `[ap_submission_form]` | Generic submission form (`post_type` attribute selects type). |
 | `[ap_submit_event]` | Form to submit a new event. |

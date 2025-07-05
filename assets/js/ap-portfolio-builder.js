@@ -36,7 +36,17 @@ jQuery(function ($) {
 
     $.post(APPortfolio.ajaxUrl, data, function (res) {
       $('#ap-portfolio-message').text(res.data.message);
+      if (res.success && res.data.id) {
+        const item = $('#ap-saved-items').find(`[data-id="${res.data.id}"]`);
+        if (item.length) {
+          item.find('strong').text(res.data.title);
+        } else {
+          // Reload list if new item
+          window.location.reload();
+        }
+      }
       $('#ap-portfolio-form')[0].reset();
+      imageUrl = '';
       $('#ap-preview').hide();
     }).fail(() => {
       $('#ap-portfolio-message').text('Error saving item.');
@@ -63,4 +73,65 @@ jQuery(function ($) {
       }
     });
   }
+
+  $(savedList).on('click', '.edit-item', function (e) {
+    e.preventDefault();
+    const wrap = $(this).closest('.ap-saved-item');
+    const id = wrap.data('id');
+    $.get(APPortfolio.ajaxUrl, {
+      action: 'ap_get_portfolio_item',
+      nonce: APPortfolio.nonce,
+      post_id: id
+    }, function (res) {
+      if (!res || !res.success) return;
+      const d = res.data;
+      $('input[name="title"]').val(d.title);
+      $('select[name="category"]').val(d.category);
+      $('textarea[name="description"]').val(d.description);
+      $('input[name="link"]').val(d.link);
+      $('select[name="visibility"]').val(d.visibility);
+      $('input[name="post_id"]').val(d.id);
+      imageUrl = d.image || '';
+      if (imageUrl) {
+        $('#ap-preview').attr('src', imageUrl).show();
+      }
+      document.getElementById('ap-portfolio-form').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  $(savedList).on('click', '.toggle-visibility', function (e) {
+    e.preventDefault();
+    const btn = $(this);
+    const wrap = btn.closest('.ap-saved-item');
+    const id = wrap.data('id');
+    const newVis = btn.data('new');
+    $.post(APPortfolio.ajaxUrl, {
+      action: 'ap_toggle_visibility',
+      nonce: APPortfolio.nonce,
+      post_id: id,
+      visibility: newVis
+    }, function (res) {
+      if (res && res.success) {
+        const next = newVis === 'public' ? 'private' : 'public';
+        btn.data('new', next);
+        btn.text(newVis.charAt(0).toUpperCase() + newVis.slice(1));
+      }
+    });
+  });
+
+  $(savedList).on('click', '.delete-item', function (e) {
+    e.preventDefault();
+    if (!confirm('Delete this item?')) return;
+    const wrap = $(this).closest('.ap-saved-item');
+    const id = wrap.data('id');
+    $.post(APPortfolio.ajaxUrl, {
+      action: 'ap_delete_portfolio_item',
+      nonce: APPortfolio.nonce,
+      post_id: id
+    }, function (res) {
+      if (res && res.success) {
+        wrap.remove();
+      }
+    });
+  });
 });

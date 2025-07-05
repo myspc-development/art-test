@@ -134,6 +134,7 @@ class OrganizationDashboardShortcode {
                     <li><a href="#membership"><span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?></a></li>
                     <li><a href="#billing"><span class="dashicons dashicons-money"></span><?php esc_html_e('Billing', 'artpulse'); ?></a></li>
                     <li><a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a></li>
+                    <li><a href="#portfolio"><span class="dashicons dashicons-portfolio"></span><?php esc_html_e('Portfolio', 'artpulse'); ?></a></li>
                     <?php if ($show_analytics) : ?>
                     <li><a href="#analytics"><span class="dashicons dashicons-chart-bar"></span><?php esc_html_e('Analytics', 'artpulse'); ?></a></li>
                     <?php endif; ?>
@@ -314,6 +315,11 @@ class OrganizationDashboardShortcode {
             </div>
 
             <div id="kanban-board"></div>
+
+            <div class="dashboard-card" id="portfolio-section">
+                <h2 id="portfolio"><?php _e('Portfolio','artpulse'); ?></h2>
+                <?php echo do_shortcode('[ap_portfolio_builder]'); ?>
+            </div>
 
             <?php if ($show_analytics) : ?>
             <div class="dashboard-card" id="analytics-section">
