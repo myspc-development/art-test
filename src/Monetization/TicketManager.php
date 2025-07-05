@@ -13,6 +13,7 @@ class TicketManager
     {
         add_action('rest_api_init', [self::class, 'register_routes']);
         add_action('init', [self::class, 'maybe_install_tables']);
+        add_action('woocommerce_order_status_completed', [self::class, 'handle_completed_order'], 10, 1);
     }
 
     /**
@@ -105,6 +106,28 @@ class TicketManager
         dbDelta($sql);
     }
 
+    /**
+     * Insert a ticket tier and optionally link a WooCommerce product.
+     */
+    public static function create_ticket_tier(int $event_id, string $name, float $price = 0.0, int $inventory = 0, int $product_id = 0): int
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_event_tickets';
+        $wpdb->insert($table, [
+            'event_id'   => $event_id,
+            'name'       => $name,
+            'price'      => $price,
+            'inventory'  => $inventory,
+            'product_id' => $product_id,
+        ]);
+
+        if ($product_id) {
+            update_post_meta($event_id, '_event_ticket_product_id', $product_id);
+        }
+
+        return (int) $wpdb->insert_id;
+    }
+
     public static function list_tickets(\WP_REST_Request $req)
     {
         $event_id = absint($req->get_param('id'));
@@ -154,6 +177,22 @@ class TicketManager
 
         if ($ticket['inventory'] > 0 && ($ticket['sold'] + $qty) > $ticket['inventory']) {
             return new \WP_Error('sold_out', 'Not enough inventory.', ['status' => 409]);
+        }
+
+        if (!empty($ticket['product_id']) && function_exists('wc_create_order')) {
+            $order = wc_create_order(['customer_id' => $user_id]);
+            if (method_exists($order, 'add_product')) {
+                $product = function_exists('wc_get_product') ? wc_get_product($ticket['product_id']) : (object)['id' => $ticket['product_id']];
+                $order->add_product($product, $qty);
+            }
+            if (method_exists($order, 'calculate_totals')) {
+                $order->calculate_totals();
+            }
+            if (method_exists($order, 'save')) {
+                $order->save();
+            }
+
+            return rest_ensure_response(['order_id' => method_exists($order, 'get_id') ? $order->get_id() : 0]);
         }
 
         $wpdb->query('START TRANSACTION');
@@ -215,5 +254,80 @@ class TicketManager
         do_action('artpulse_ticket_purchased', $user_id, $event_id, $ticket_id, $qty);
 
         return rest_ensure_response(['ticket_code' => $code]);
+    }
+
+    /**
+     * Handle WooCommerce order completion and record attendance.
+     */
+    public static function handle_completed_order($order_id): void
+    {
+        if (!function_exists('wc_get_order')) {
+            return;
+        }
+
+        $order = wc_get_order($order_id);
+        if (!$order) {
+            return;
+        }
+
+        $user_id = method_exists($order, 'get_user_id') ? $order->get_user_id() : 0;
+        foreach ($order->get_items() as $item) {
+            $product_id = method_exists($item, 'get_product_id') ? $item->get_product_id() : ($item->product_id ?? 0);
+            $qty        = method_exists($item, 'get_quantity') ? $item->get_quantity() : ($item->qty ?? 1);
+
+            $event_id = self::get_event_id_by_product($product_id);
+            if (!$event_id) {
+                continue;
+            }
+
+            global $wpdb;
+            $tier_table = $wpdb->prefix . 'ap_event_tickets';
+            $ticket_id  = $wpdb->get_var($wpdb->prepare("SELECT id FROM $tier_table WHERE event_id = %d AND product_id = %d", $event_id, $product_id));
+            if (!$ticket_id) {
+                continue;
+            }
+
+            $wpdb->query($wpdb->prepare("UPDATE $tier_table SET sold = sold + %d WHERE id = %d", $qty, $ticket_id));
+
+            $ticket_table = $wpdb->prefix . 'ap_tickets';
+            for ($i = 0; $i < $qty; $i++) {
+                $wpdb->insert($ticket_table, [
+                    'user_id'        => $user_id,
+                    'event_id'       => $event_id,
+                    'ticket_tier_id' => $ticket_id,
+                    'code'           => wp_generate_password(12, false, false),
+                    'purchase_date'  => current_time('mysql'),
+                    'status'         => 'active',
+                ]);
+            }
+
+            $attended = get_post_meta($event_id, 'event_attended', true);
+            if (!is_array($attended)) {
+                $attended = [];
+            }
+            if ($user_id && !in_array($user_id, $attended, true)) {
+                $attended[] = $user_id;
+                update_post_meta($event_id, 'event_attended', $attended);
+            }
+
+            do_action('artpulse_ticket_purchased', $user_id, $event_id, $ticket_id, $qty);
+        }
+    }
+
+    /**
+     * Get event ID associated with a WooCommerce product.
+     */
+    protected static function get_event_id_by_product(int $product_id): int
+    {
+        $posts = get_posts([
+            'post_type'  => 'artpulse_event',
+            'post_status'=> 'any',
+            'meta_key'   => '_event_ticket_product_id',
+            'meta_value' => $product_id,
+            'fields'     => 'ids',
+            'numberposts'=> 1,
+        ]);
+
+        return $posts ? (int) $posts[0] : 0;
     }
 }

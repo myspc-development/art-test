@@ -46,6 +46,24 @@ if ( have_posts() ) :
 
     echo '</ul></div>'; // close .event-meta
 
+    $product = get_post_meta(get_the_ID(), '_event_ticket_product_id', true);
+    if ($product && function_exists('wc_get_product')) {
+      $p = wc_get_product($product);
+      if ($p) {
+        global $product; // WooCommerce expects $product global
+        $product = $p;
+        echo '<div class="ap-ticket-purchase">';
+        do_action('woocommerce_before_add_to_cart_form');
+        if (function_exists('woocommerce_template_single_add_to_cart')) {
+          woocommerce_template_single_add_to_cart();
+        } else {
+          echo '<a href="' . esc_url(add_query_arg('add-to-cart', $p->get_id())) . '" class="button">' . esc_html__('Buy Ticket', 'artpulse') . '</a>';
+        }
+        do_action('woocommerce_after_add_to_cart_form');
+        echo '</div>';
+      }
+    }
+
     // Event content
     echo '<div class="entry-content">';
     the_content();

@@ -7,6 +7,7 @@ class Stub
     public static array $orders = [];
     public static array $charges = [];
     public static array $subs = [];
+    public static array $created_orders = [];
     public static array $options = [];
     public static int $wc_calls = 0;
     public static int $stripe_charge_calls = 0;
@@ -21,6 +22,7 @@ class Stub
         self::$orders = [];
         self::$charges = [];
         self::$subs = [];
+        self::$created_orders = [];
         self::$options = [];
         self::$wc_calls = 0;
         self::$stripe_charge_calls = 0;
@@ -49,20 +51,51 @@ class OrderDate
     public function getTimestamp(): int { return $this->ts; }
 }
 
+class WC_Order_Item
+{
+    public int $product_id;
+    public int $qty;
+    public function __construct(int $product_id, int $qty)
+    {
+        $this->product_id = $product_id;
+        $this->qty        = $qty;
+    }
+    public function get_product_id(): int { return $this->product_id; }
+    public function get_quantity(): int { return $this->qty; }
+}
+
 class WC_Order
 {
     private int $ts;
     private float $total;
     private string $status;
-    public function __construct(int $ts, float $total, string $status)
+    private int $id;
+    private int $user_id = 0;
+    private array $items = [];
+    public function __construct(int $ts = 0, float $total = 0.0, string $status = '')
     {
-        $this->ts = $ts;
-        $this->total = $total;
+        $this->ts     = $ts;
+        $this->total  = $total;
         $this->status = $status;
+        $this->id     = count(Stub::$created_orders) + 1;
     }
+    public function get_id(): int { return $this->id; }
     public function get_date_created(): OrderDate { return new OrderDate($this->ts); }
     public function get_total(): float { return $this->total; }
     public function get_status(): string { return $this->status; }
+    public function get_user_id(): int { return $this->user_id; }
+    public function add_product($product, int $qty): void { $this->items[] = new WC_Order_Item($product->get_id(), $qty); }
+    public function calculate_totals(): void {}
+    public function save(): void { Stub::$created_orders[$this->id] = $this; }
+    public function get_items(): array { return $this->items; }
+    public function set_customer_id(int $id): void { $this->user_id = $id; }
+}
+
+class WC_Product_Simple
+{
+    private int $id;
+    public function __construct(int $id) { $this->id = $id; }
+    public function get_id(): int { return $this->id; }
 }
 
 
@@ -126,6 +159,28 @@ function current_time(string $type = 'timestamp') {
 
 function date_i18n(string $format, int $timestamp) {
     return date($format, $timestamp);
+}
+
+namespace ArtPulse\Monetization;
+use ArtPulse\Admin\Tests\Stub;
+use ArtPulse\Admin\WC_Order;
+use ArtPulse\Admin\WC_Product_Simple;
+
+function wc_create_order(array $args = []) {
+    $order = new WC_Order();
+    if (isset($args['customer_id'])) {
+        $order->set_customer_id($args['customer_id']);
+    }
+    $order->save();
+    return $order;
+}
+
+function wc_get_order($order_id) {
+    return Stub::$created_orders[$order_id] ?? null;
+}
+
+function wc_get_product($product_id) {
+    return new WC_Product_Simple($product_id);
 }
 
 namespace ArtPulse\Core;
