@@ -553,6 +553,7 @@ function ap_get_events_for_map() {
 // === UI Toggle Demo ===
 require_once plugin_dir_path(__FILE__) . 'includes/helpers.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-settings.php';
+require_once plugin_dir_path(__FILE__) . 'includes/post-status-hooks.php';
 
 add_action('wp_enqueue_scripts', function () {
     $ui_mode = ap_get_ui_mode();
