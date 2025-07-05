@@ -128,6 +128,9 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
     <div class="dashboard-card" data-widget="favorites">
         <h2 id="favorites"><?php _e('My Favorites','artpulse'); ?></h2>
         <div id="ap-favorite-events"></div>
+        <div id="ap-favorite-artists"></div>
+        <div id="ap-favorite-orgs"></div>
+        <div id="ap-favorite-artworks"></div>
     </div>
     <div class="dashboard-card" data-widget="rsvps">
         <h2 id="rsvps"><?php _e('My RSVPs','artpulse'); ?></h2>
