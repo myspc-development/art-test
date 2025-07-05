@@ -367,3 +367,19 @@ composer zip
 
 The zip file is placed in the `release/` directory.
 
+### Test Environment Variables
+
+Database credentials for the WordPress test suite can be supplied via
+environment variables. Define these before running `setup-tests.sh` or
+`composer test`:
+
+- `DB_NAME` – name of the test database
+- `DB_USER` – database user
+- `DB_PASSWORD` – user password
+- `DB_HOST` – database host (defaults to `127.0.0.1`)
+- `DB_CHARSET` – optional character set (defaults to `utf8mb4`)
+- `DB_COLLATE` – optional collation (defaults to empty)
+
+If any variables are omitted the fallback values in `wp-tests-config.php`
+will be used.
+
