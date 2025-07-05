@@ -242,9 +242,12 @@ if (content) {
       fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`)
         .then(res => res.json())
         .then(events => {
-          if (events && events.length) {
-            renderCalendar(events, 'ap-local-events');
-            renderEventsFeed(events);
+          const normalized = Array.isArray(events)
+            ? events.map(ev => ({ ...ev, date: ev.event_start_date || ev.event_date }))
+            : [];
+          if (normalized.length) {
+            renderCalendar(normalized, 'ap-local-events');
+            renderEventsFeed(normalized);
           } else {
             renderEventsFeed([]);
           }
@@ -256,9 +259,12 @@ if (content) {
         fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`)
           .then(res => res.json())
           .then(events => {
-            if (events && events.length) {
-              renderCalendar(events, 'ap-local-events');
-              renderEventsFeed(events);
+            const normalized = Array.isArray(events)
+              ? events.map(ev => ({ ...ev, date: ev.event_start_date || ev.event_date }))
+              : [];
+            if (normalized.length) {
+              renderCalendar(normalized, 'ap-local-events');
+              renderEventsFeed(normalized);
             } else {
               renderEventsFeed([]);
             }
