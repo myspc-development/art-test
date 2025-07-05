@@ -24,6 +24,14 @@ class SubmissionRestController
      */
     public static function register(): void
     {
+        add_action('rest_api_init', [self::class, 'register_routes']);
+    }
+
+    /**
+     * Alias to maintain consistency with other controllers.
+     */
+    public static function register_routes(): void
+    {
         register_rest_route(
             'artpulse/v1',
             '/submissions',
@@ -45,14 +53,6 @@ class SubmissionRestController
                 'permission_callback' => '__return_true',
             ]
         );
-    }
-
-    /**
-     * Alias to maintain consistency with other controllers.
-     */
-    public static function register_routes(): void
-    {
-        self::register();
     }
 
     /**

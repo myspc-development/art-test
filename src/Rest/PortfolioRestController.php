@@ -6,6 +6,11 @@ class PortfolioRestController
 {
     public static function register()
     {
+        add_action('rest_api_init', [self::class, 'register_routes']);
+    }
+
+    public static function register_routes(): void
+    {
         register_rest_route('artpulse/v1', '/portfolio/(?P<user_id>\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_portfolio'],

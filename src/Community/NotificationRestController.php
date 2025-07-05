@@ -11,6 +11,11 @@ class NotificationRestController
 {
     public static function register(): void
     {
+        add_action('rest_api_init', [self::class, 'register_routes']);
+    }
+
+    public static function register_routes(): void
+    {
         register_rest_route('artpulse/v1', '/notifications', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
