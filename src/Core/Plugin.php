@@ -51,6 +51,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\EventChatController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\ForumRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Rest\CompetitionRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_migrate_profile_link_request_slug']);
         add_action('init', [$this, 'maybe_add_upload_cap']);
@@ -70,6 +71,8 @@ class Plugin
         add_action('init', [\ArtPulse\Core\ActivityLogger::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\DelegatedAccessManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\EventChatController::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Core\CompetitionEntryManager::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Frontend\CompetitionDashboardShortcode::class, 'register']);
     }
 
     public function activate()
@@ -96,6 +99,7 @@ class Plugin
             \ArtPulse\Core\ActivityLogger::install_table();
             \ArtPulse\Core\FeedbackManager::install_table();
             \ArtPulse\Core\DelegatedAccessManager::install_table();
+            \ArtPulse\Core\CompetitionEntryManager::install_table();
             update_option($db_version_option, self::VERSION);
         }
 

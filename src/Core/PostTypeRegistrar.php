@@ -94,6 +94,12 @@ class PostTypeRegistrar
                 'supports'   => ['title', 'editor', 'author', 'comments'],
                 'menu_icon'  => 'dashicons-format-chat',
             ],
+            'ap_competition' => [
+                'label'      => __('Competitions', 'artpulse'),
+                'rewrite'    => ['slug' => 'competitions'],
+                'supports'   => ['title', 'editor', 'thumbnail'],
+                'menu_icon'  => 'dashicons-awards',
+            ],
         ];
 
         $opts              = get_option('artpulse_settings', []);
@@ -470,6 +476,38 @@ class PostTypeRegistrar
             'show_in_rest' => true,
             'single'       => true,
             'type'         => 'string',
+        ]);
+
+        // Competition fields
+        register_post_meta('ap_competition', 'competition_theme', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('ap_competition', 'competition_deadline', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('ap_competition', 'competition_rules', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('ap_competition', 'competition_prizes', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('ap_competition', 'voting_method', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+            'default'      => 'community',
         ]);
 
         register_post_meta('ap_collection', 'ap_collection_items', [
