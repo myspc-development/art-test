@@ -26,3 +26,5 @@ release/
 .phpunit.result.cache
 
 assets/dist/
+.env
+
