@@ -180,6 +180,8 @@ class Plugin
         \ArtPulse\Frontend\EventMapShortcode::register();
         \ArtPulse\Frontend\EventCommentsShortcode::register();
         \ArtPulse\Frontend\EventFilter::register();
+        \ArtPulse\Frontend\OrgRsvpDashboard::register();
+        \ArtPulse\Frontend\EventRsvpHandler::register();
         \ArtPulse\Admin\MetaBoxesRelationship::register();
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
         \ArtPulse\Admin\ApprovalManager::register();
@@ -203,6 +205,7 @@ class Plugin
         \ArtPulse\Admin\MetaBoxesArtist::register();
         \ArtPulse\Admin\MetaBoxesArtwork::register();
         \ArtPulse\Admin\MetaBoxesEvent::register();
+        \ArtPulse\Admin\EventRsvpToggle::register();
         \ArtPulse\Admin\MetaBoxesAddress::register(['artpulse_event']);
         \ArtPulse\Admin\MetaBoxesOrganisation::register();
 
