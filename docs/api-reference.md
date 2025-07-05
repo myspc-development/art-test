@@ -210,3 +210,35 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
 
 See the [Webhook Automations Codex](webhook-automation-codex.md) for event payloads and retry logic.
 
+
+### `GET /artpulse/v1/recommendations`
+
+Provide recommended events, artists or organizations for a user.
+
+Parameters:
+- `type` (string, required) – item category to recommend
+- `user_id` (int, required)
+- `limit` (int, default `5`)
+
+Example request:
+
+```bash
+curl '/wp-json/artpulse/v1/recommendations?type=events&user_id=7&limit=3'
+```
+
+Example response:
+
+```json
+[
+  {
+    "id": 15,
+    "title": "Emerging Artists Exhibit",
+    "permalink": "https://example.com/events/emerging-artists-exhibit"
+  },
+  {
+    "id": 27,
+    "title": "Pop Art Retrospective",
+    "permalink": "https://example.com/events/pop-art-retrospective"
+  }
+]
+```
