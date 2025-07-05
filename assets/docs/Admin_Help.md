@@ -48,7 +48,7 @@ Enable this option in **Settings → General** to hide events automatically afte
 - Find the “Enable Artworks for Sale” checkbox.
 - When ON: artists/organizations see “For Sale?” toggle, price, and contact/buy fields in their dashboards and artwork forms.
 - When OFF: all sale-related fields are hidden from dashboards and the public site, but stored data is preserved.
-- ![Screenshot: Settings page with toggle highlighted](images/settings_artworks_for_sale.png) — see the [Admin Guide](../../docs/admin-guide.md) for setup details.
+- See the [Admin Guide](../../docs/admin-guide.md) for setup details.
 
 ## Gutenberg Relationship Blocks
 Blocks for **Artist ↔ Event** and **Artwork ↔ Organization** help you link related content in the editor.
@@ -63,7 +63,7 @@ Open **ArtPulse → Engagement** to track member activity. The dashboard offers 
 - Dashboards for artists, orgs, and members now show personalized stats, quick links, and recent activity.
 - Use the admin panel to preview dashboards for each role.
 - All major actions (add/edit artworks, manage events, upgrade membership) are one click away.
-- ![Screenshot: Artist dashboard overview](images/dashboard_overview.png) — dashboard options are explained in the [Admin Guide](../../docs/admin-guide.md).
+- Dashboard options are explained in the [Admin Guide](../../docs/admin-guide.md).
 
 ## Member Badges
 Edit any user profile to assign badges. Enter badge slugs separated by commas in the **User Badges** field. Badges display on member dashboards and in directories.
@@ -80,10 +80,10 @@ In the **Events** list a new **Gallery** column displays thumbnails of uploaded 
 - The event calendar now displays events with location-based color highlights.
 - A legend shows distance categories: <10km (green), <25km (yellow), <50km (blue).
 - Admins can set or edit event locations (lat/lng, address, region) on the event form.
-- ![Screenshot: Calendar page with colored events and legend](images/calendar_proximity.png) — the [Admin Guide](../../docs/admin-guide.md) covers calendar configuration.
+- The [Admin Guide](../../docs/admin-guide.md) covers calendar configuration.
 
 ## Admin Module Walkthrough
-The administration screens follow the WordPress style guide, utilizing system fonts and the default blue (#2271b1) button color. A screenshot (`images/admin_modules_walkthrough.png`) labels the primary modules. See the [Admin Guide](../../docs/admin-guide.md) for a full tour.
+The administration screens follow the WordPress style guide, utilizing system fonts and the default blue (#2271b1) button color. See the [Admin Guide](../../docs/admin-guide.md) for a full tour of the primary modules.
 
 ## Styling Guidelines
 - Use headings that match core WP admin (H2 for primary sections).
