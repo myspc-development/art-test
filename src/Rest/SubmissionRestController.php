@@ -82,7 +82,7 @@ class SubmissionRestController
 
         $user    = wp_get_current_user();
         $is_artist = in_array('artist', (array) $user->roles, true);
-        $status = ( 'artpulse_org' === $post_type || ( 'artpulse_artist' === $post_type && ! $is_artist ) ) ? 'pending' : 'publish';
+        $status = 'pending';
 
         $meta_fields = self::get_meta_fields_for( $post_type );
         $meta_input  = [];
