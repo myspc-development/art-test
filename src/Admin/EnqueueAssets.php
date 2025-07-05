@@ -190,7 +190,7 @@ class EnqueueAssets {
             wp_enqueue_script(
                 'ap-user-dashboard-js',
                 $plugin_url . '/assets/js/ap-user-dashboard.js',
-                [],
+                ['wp-api-fetch', 'chart-js'],
                 '1.0.0',
                 true
             );
@@ -542,14 +542,6 @@ class EnqueueAssets {
                 'nonce'    => wp_create_nonce('ap_artist_dashboard_nonce'),
             ]);
         }
-
-        wp_enqueue_script(
-            'ap-user-dashboard-js',
-            $plugin_url . '/assets/js/ap-user-dashboard.js',
-            ['jquery'],
-            '1.0.0',
-            true
-        );
 
         wp_enqueue_script(
             'ap-dashboard',
