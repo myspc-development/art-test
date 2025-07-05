@@ -109,7 +109,7 @@ recommended class names when extending layouts.
 - `[ap_artwork_directory]` — Show artworks directory
 - `[ap_org_directory]` — Show organizations directory
 - `[ap_login]` — Front-end login form with optional OAuth buttons
-- `[ap_register]` — Standalone registration form
+- `[ap_register]` — Standalone registration form with password confirmation
 - `[ap_logout]` — Logout link
 - `[ap_event_filter]` — AJAX search and filter form
 - `[ap_user_dashboard]` — Member dashboard with stats
@@ -189,7 +189,7 @@ Enabling **Enforce Two-Factor** in the settings requires users to activate the
 
 ## Registration Shortcode
 
-Use `[ap_register]` to display a standalone registration form for new users. Signing up through this form automatically grants the “Free” membership level. After submitting the form a confirmation message appears and the user is redirected to their dashboard.
+Use `[ap_register]` to display a standalone registration form for new users. The form collects username, email, a password and confirmation. Signing up through this form automatically grants the “Free” membership level. After submitting the form a confirmation message appears and the user is redirected to their dashboard.
 
 ## Logout Shortcode
 

@@ -6,6 +6,10 @@
     <input id="ap_reg_username" name="username" type="text">
     <label for="ap_reg_email">Email</label>
     <input id="ap_reg_email" name="email" type="email">
+    <label for="ap_reg_pass">Password</label>
+    <input id="ap_reg_pass" name="password" type="password">
+    <label for="ap_reg_confirm">Confirm Password</label>
+    <input id="ap_reg_confirm" name="password_confirm" type="password">
   </fieldset>
   <fieldset class="form-section">
     <legend>Details</legend>
