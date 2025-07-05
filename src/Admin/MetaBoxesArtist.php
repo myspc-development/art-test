@@ -138,7 +138,10 @@ class MetaBoxesArtist {
             'artist_linkedin'     => ['url', __('LinkedIn', 'artpulse')],
             'artist_portrait'     => ['number', __('Portrait ID (Media Library ID)', 'artpulse')],
             'artist_specialties'  => ['text', __('Specialties', 'artpulse')],
-            'artist_featured'     => ['boolean', __('Featured', 'artpulse')]
+            'artist_featured'     => ['boolean', __('Featured', 'artpulse')],
+            'artist_spotlight'    => ['boolean', __('Spotlight', 'artpulse')],
+            'spotlight_start_date'=> ['date', __('Spotlight Start', 'artpulse')],
+            'spotlight_end_date'  => ['date', __('Spotlight End', 'artpulse')]
         ];
     }
 }

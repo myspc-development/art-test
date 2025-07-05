@@ -8,6 +8,7 @@ class AdminListSorting {
         // Make columns sortable
         add_filter('manage_edit-artpulse_artist_sortable_columns', function ($columns) {
             $columns['artist_featured'] = 'artist_featured';
+            $columns['artist_spotlight'] = 'artist_spotlight';
             return $columns;
         });
 
@@ -34,6 +35,7 @@ class AdminListSorting {
 
         $sortable_meta_keys = [
             'artist_featured',
+            'artist_spotlight',
             'artwork_featured',
             'event_featured',
             'ead_org_type',

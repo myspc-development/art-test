@@ -198,6 +198,7 @@ class Plugin
         \ArtPulse\Blocks\RelatedItemsSelectorBlock::register();
         \ArtPulse\Admin\ApprovalManager::register();
         \ArtPulse\Admin\PendingSubmissionsPage::register();
+        \ArtPulse\Admin\SpotlightManager::register();
         \ArtPulse\Admin\LoginEventsPage::register();
         \ArtPulse\Admin\OrgUserManager::register();
         \ArtPulse\Admin\OrgRolesPage::register();
@@ -214,6 +215,7 @@ class Plugin
         \ArtPulse\Rest\UserAccountRestController::register();
         \ArtPulse\Rest\CollectionRestController::register();
         \ArtPulse\Rest\ArtworkAuctionController::register();
+        \ArtPulse\Rest\SpotlightRestController::register();
         ArtistRestController::register();
         RestRelationships::register();
         TaxonomyRestFilters::register();
@@ -258,6 +260,7 @@ class Plugin
         \ArtPulse\Blocks\AdvancedTaxonomyFilterBlock::register();
         \ArtPulse\Blocks\AjaxFilterBlock::register();
         \ArtPulse\Blocks\FilteredListShortcodeBlock::register();
+        \ArtPulse\Blocks\SpotlightBlock::register();
         \ArtPulse\Blocks\TaxonomyFilterBlock::register();
         \ArtPulse\Community\FollowRestController::register();
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
