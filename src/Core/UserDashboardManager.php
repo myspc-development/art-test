@@ -41,6 +41,14 @@ class UserDashboardManager
             true
         );
 
+        wp_enqueue_script(
+            'ap-event-analytics',
+            plugins_url('assets/js/event-analytics.js', ARTPULSE_PLUGIN_FILE),
+            ['ap-user-dashboard-js'],
+            '1.0.0',
+            true
+        );
+
         // Localize dashboard REST endpoint
         wp_localize_script('ap-user-dashboard-js', 'ArtPulseDashboardApi', [
             'root'             => esc_url_raw(rest_url()),
@@ -92,6 +100,12 @@ class UserDashboardManager
                 'endpoint'   => esc_url_raw(rest_url('artpulse/v1/profile-metrics')),
                 'profileId' => $uid,
                 'nonce'     => wp_create_nonce('wp_rest'),
+            ]);
+
+            wp_localize_script('ap-event-analytics', 'APEventAnalytics', [
+                'endpoint' => esc_url_raw(rest_url('artpulse/v1/analytics')),
+                'eventId'  => 0,
+                'nonce'    => wp_create_nonce('wp_rest'),
             ]);
         }
 

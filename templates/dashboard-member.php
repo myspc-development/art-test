@@ -111,6 +111,7 @@ use ArtPulse\Community\FavoritesManager;
         <canvas id="ap-trends-chart" height="150"></canvas>
         <canvas id="ap-user-engagement-chart" height="150"></canvas>
         <canvas id="ap-profile-metrics-chart" height="150"></canvas>
+        <canvas id="ap-event-analytics-chart" height="150"></canvas>
     </div>
     <div class="dashboard-card" data-widget="events">
         <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>

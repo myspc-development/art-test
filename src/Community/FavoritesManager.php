@@ -41,6 +41,8 @@ class FavoritesManager {
                 sprintf('You favorited the %s "%s".', $object_type, $title)
             );
         }
+
+        do_action('ap_favorite_added', $user_id, $object_id, $object_type);
     }
 
     public static function remove_favorite($user_id, $object_id, $object_type) {
@@ -52,6 +54,8 @@ class FavoritesManager {
             'object_type' => $object_type,
         ]);
         // No notification on unfavorite (usually)
+
+        do_action('ap_favorite_removed', $user_id, $object_id, $object_type);
     }
 
     public static function is_favorited($user_id, $object_id, $object_type) {
