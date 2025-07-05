@@ -359,6 +359,10 @@ class EnqueueAssets {
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
         ]);
+        wp_localize_script('ap-notifications-js', 'APNotifyData', [
+            'rest_url' => esc_url_raw(rest_url()),
+            'nonce'    => wp_create_nonce('wp_rest'),
+        ]);
 
         wp_enqueue_script(
             'ap-submission-form-js',
@@ -490,6 +494,10 @@ class EnqueueAssets {
                 'rest_root'    => esc_url_raw(rest_url()),
                 'rest_nonce'   => wp_create_nonce('wp_rest'),
                 'projectStages'=> $stage_groups,
+            ]);
+            wp_localize_script('ap-org-dashboard', 'APDashboardData', [
+                'rest_url' => esc_url_raw(rest_url()),
+                'nonce'    => wp_create_nonce('wp_rest'),
             ]);
 
             $wizard_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/rsvp-wizard.js';

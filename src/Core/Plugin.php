@@ -129,6 +129,7 @@ class Plugin
         \ArtPulse\Core\CapabilitiesManager::register();
         \ArtPulse\Core\AdminAccessManager::register();
         \ArtPulse\Core\LoginRedirectManager::register();
+        \ArtPulse\Core\DashboardAccessManager::register();
         \ArtPulse\Core\DirectoryManager::register();
         \ArtPulse\Core\UserDashboardManager::register();
         \ArtPulse\Core\OrgDashboardManager::register();
@@ -304,6 +305,10 @@ class Plugin
         wp_localize_script('ap-notifications-js', 'APNotifications', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
+        ]);
+        wp_localize_script('ap-notifications-js', 'APNotifyData', [
+            'rest_url' => esc_url_raw(rest_url()),
+            'nonce'    => wp_create_nonce('wp_rest'),
         ]);
 
         wp_localize_script('ap-event-comments-js', 'APComments', [
@@ -491,6 +496,25 @@ class Plugin
         }
 
         return home_url('/');
+    }
+
+    /**
+     * Locate the page containing the login shortcode.
+     */
+    public static function get_login_url(): string
+    {
+        $pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_login]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($pages)) {
+            return get_permalink($pages[0]->ID);
+        }
+
+        return wp_login_url();
     }
 
     /**

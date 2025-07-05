@@ -49,8 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Load dashboard data
-  fetch(`${APOrgDashboard.rest_root}artpulse/v1/org/dashboard`, {
-    headers: { 'X-WP-Nonce': APOrgDashboard.rest_nonce }
+  fetch(APDashboardData.rest_url + 'artpulse/v1/org/dashboard', {
+    method: 'GET',
+    headers: {
+      'X-WP-Nonce': APDashboardData.nonce
+    },
+    credentials: 'same-origin'
   })
     .then(res => res.ok ? res.json() : null)
     .then(data => {

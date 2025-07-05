@@ -1,10 +1,10 @@
 (function($){
   function loadNotifications() {
     $.ajax({
-      url: ArtPulseApi.root + 'artpulse/v1/notifications',
+      url: APNotifyData.rest_url + 'artpulse/v1/notifications',
       method: 'GET',
       beforeSend: function(xhr) {
-        xhr.setRequestHeader('X-WP-Nonce', ArtPulseApi.nonce);
+        xhr.setRequestHeader('X-WP-Nonce', APNotifyData.nonce);
       },
       success: function(data) {
         var $list = $('#ap-notification-list');
@@ -31,10 +31,10 @@
 
   function markAsRead(id, li) {
     $.ajax({
-      url: ArtPulseApi.root + 'artpulse/v1/notifications/' + id + '/read',
+      url: APNotifyData.rest_url + 'artpulse/v1/notifications/' + id + '/read',
       method: 'POST',
       beforeSend: function(xhr) {
-        xhr.setRequestHeader('X-WP-Nonce', ArtPulseApi.nonce);
+        xhr.setRequestHeader('X-WP-Nonce', APNotifyData.nonce);
       },
       success: function() {
         li.fadeOut(300, function(){ $(this).remove(); });
