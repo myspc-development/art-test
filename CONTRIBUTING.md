@@ -8,6 +8,17 @@ npm install
 bash scripts/setup-env.sh
 ```
 
+`setup-tests.sh` relies on database credentials supplied via environment
+variables. Export these variables or create a `.env` file before running the
+script:
+
+```bash
+DB_NAME=your_test_db
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_HOST=localhost
+```
+
 Run the automated test suite and coding standards checks with:
 
 ```bash
