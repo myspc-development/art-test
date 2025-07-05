@@ -82,7 +82,9 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $convos = new WP_REST_Request('GET', '/artpulse/v1/conversations');
         $res = rest_get_server()->dispatch($convos);
         $this->assertSame(200, $res->get_status());
-        $this->assertSame([$this->user2], $res->get_data());
+        $this->assertSame([
+            ['user_id' => $this->user2, 'unread' => 1]
+        ], $res->get_data());
 
         wp_set_current_user($this->user2);
         $read = new WP_REST_Request('POST', '/artpulse/v1/message/read');

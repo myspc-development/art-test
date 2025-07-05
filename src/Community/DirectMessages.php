@@ -145,15 +145,24 @@ class DirectMessages
     {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
-        $sql   = "SELECT DISTINCT CASE WHEN sender_id = %d THEN recipient_id ELSE sender_id END AS other_id FROM $table WHERE sender_id = %d OR recipient_id = %d";
-        $rows  = $wpdb->get_col($wpdb->prepare($sql, $user_id, $user_id, $user_id));
-        return array_map('intval', $rows);
+        $sql = "SELECT CASE WHEN sender_id = %d THEN recipient_id ELSE sender_id END AS other_id,
+                       SUM(CASE WHEN recipient_id = %d AND is_read = 0 THEN 1 ELSE 0 END) AS unread
+                FROM $table
+                WHERE sender_id = %d OR recipient_id = %d
+                GROUP BY other_id";
+        $rows = $wpdb->get_results($wpdb->prepare($sql, $user_id, $user_id, $user_id, $user_id), ARRAY_A);
+        return array_map(static function($row){
+            return [
+                'user_id' => (int) $row['other_id'],
+                'unread'  => (int) $row['unread'],
+            ];
+        }, $rows);
     }
 
     public static function rest_list_conversations(WP_REST_Request $req): WP_REST_Response
     {
         $user_id = get_current_user_id();
-        $list    = self::list_conversations($user_id);
+        $list = self::list_conversations($user_id);
         return rest_ensure_response($list);
     }
 
