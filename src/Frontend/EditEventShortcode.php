@@ -41,6 +41,8 @@ class EditEventShortcode {
         $state    = esc_attr(get_post_meta($post_id, 'event_state', true));
         $city     = esc_attr(get_post_meta($post_id, 'event_city', true));
         $postcode = esc_attr(get_post_meta($post_id, 'event_postcode', true));
+        $lat      = esc_attr(get_post_meta($post_id, 'event_lat', true));
+        $lng      = esc_attr(get_post_meta($post_id, 'event_lng', true));
         $addr_comp = esc_attr(get_post_meta($post_id, 'address_components', true));
         $org_name = esc_attr(get_post_meta($post_id, 'event_organizer_name', true));
         $org_email = esc_attr(get_post_meta($post_id, 'event_organizer_email', true));
@@ -160,6 +162,8 @@ class EditEventShortcode {
                 </label>
             </p>
             <input type="hidden" name="address_components" id="ap_address_components" value="<?php echo $addr_comp; ?>">
+            <input type="hidden" name="event_lat" id="ap_lat" value="<?php echo $lat; ?>">
+            <input type="hidden" name="event_lng" id="ap_lng" value="<?php echo $lng; ?>">
 
             <p>
                 <label class="ap-form-label">Address<br>
@@ -302,6 +306,8 @@ class EditEventShortcode {
         $state          = sanitize_text_field($_POST['event_state'] ?? '');
         $city           = sanitize_text_field($_POST['event_city'] ?? '');
         $postcode       = sanitize_text_field($_POST['event_postcode'] ?? '');
+        $lat            = sanitize_text_field($_POST['event_lat'] ?? '');
+        $lng            = sanitize_text_field($_POST['event_lng'] ?? '');
         $addr_json      = wp_unslash($_POST['address_components'] ?? '');
         $addr_comp      = json_decode($addr_json, true);
         $address_full   = sanitize_text_field($_POST['event_address'] ?? '');
@@ -340,6 +346,8 @@ class EditEventShortcode {
         update_post_meta($post_id, 'event_state', $state);
         update_post_meta($post_id, 'event_city', $city);
         update_post_meta($post_id, 'event_postcode', $postcode);
+        update_post_meta($post_id, 'event_lat', $lat);
+        update_post_meta($post_id, 'event_lng', $lng);
         if (is_array($addr_comp)) {
             update_post_meta($post_id, 'address_components', wp_json_encode($addr_comp));
         }

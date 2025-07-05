@@ -223,7 +223,7 @@ if (content) {
         .catch(() => renderEventsFeed([]));
     } else if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos => {
-        const params = new URLSearchParams({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        const params = new URLSearchParams({ lat: pos.coords.latitude, lng: pos.coords.longitude, radius: 0.5 });
         fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`)
           .then(res => res.json())
           .then(events => {

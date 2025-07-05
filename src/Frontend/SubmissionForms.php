@@ -89,6 +89,8 @@ class SubmissionForms
             </p>
             <input class="ap-input" id="ap-location" type="hidden" name="event_location" />
             <input class="ap-input" type="hidden" name="address_components" id="ap-address-components" />
+            <input class="ap-input" type="hidden" name="event_lat" id="ap-lat" />
+            <input class="ap-input" type="hidden" name="event_lng" id="ap-lng" />
             <p>
                 <label class="ap-form-label" for="ap-organizer-name"><?php esc_html_e('Organizer Name', 'artpulse'); ?></label><br>
                 <input class="ap-input" id="ap-organizer-name" type="text" name="event_organizer_name" />

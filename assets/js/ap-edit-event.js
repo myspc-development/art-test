@@ -1,8 +1,37 @@
 jQuery(function ($) {
-    $('#ap-edit-event-form').on('submit', function (e) {
+    async function ensureLatLng(data, form) {
+        if (data.get('event_lat') && data.get('event_lng')) return;
+        if (navigator.geolocation) {
+            try {
+                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej));
+                if (!data.get('event_lat')) data.set('event_lat', pos.coords.latitude);
+                if (!data.get('event_lng')) data.set('event_lng', pos.coords.longitude);
+            } catch (e) {}
+        }
+        if (!data.get('event_lat') || !data.get('event_lng')) {
+            const parts = [
+                $(form).find('[name="event_street_address"]').val(),
+                $(form).find('[name="event_city"]').val(),
+                $(form).find('[name="event_state"]').val(),
+                $(form).find('[name="event_country"]').val()
+            ].filter(Boolean).join(', ');
+            if (parts) {
+                try {
+                    const resp = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(parts));
+                    const json = await resp.json();
+                    if (json && json[0]) {
+                        if (!data.get('event_lat')) data.set('event_lat', json[0].lat);
+                        if (!data.get('event_lng')) data.set('event_lng', json[0].lon);
+                    }
+                } catch (e) {}
+            }
+        }
+    }
+    $('#ap-edit-event-form').on('submit', async function (e) {
         e.preventDefault();
         const form = this;
         const data = new FormData(form);
+        await ensureLatLng(data, form);
         data.append('action', 'ap_save_event');
         data.append('nonce', APEditEvent.nonce);
         data.append('post_id', $(form).data('post-id'));

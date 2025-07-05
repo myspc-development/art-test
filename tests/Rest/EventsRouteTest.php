@@ -29,6 +29,8 @@ class EventsRouteTest extends \WP_UnitTestCase
                 'event_street_address' => '123 Main St',
                 'event_postcode'   => '90001',
                 'event_country'    => 'US',
+                'event_lat'        => '34.05',
+                'event_lng'        => '-118.25',
                 '_ap_event_date'   => '2024-01-01',
                 '_ap_event_location'=> 'LA',
             ],
@@ -47,6 +49,8 @@ class EventsRouteTest extends \WP_UnitTestCase
                 'event_street_address' => '456 Broadway',
                 'event_postcode'   => '10001',
                 'event_country'    => 'US',
+                'event_lat'        => '40.71',
+                'event_lng'        => '-74.00',
                 '_ap_event_date'   => '2024-01-01',
                 '_ap_event_location'=> 'NY',
             ],
@@ -56,11 +60,12 @@ class EventsRouteTest extends \WP_UnitTestCase
         do_action('rest_api_init');
     }
 
-    public function test_query_by_coordinates_returns_nearest_city_events(): void
+    public function test_query_by_coordinates_returns_events_within_radius(): void
     {
         $req = new WP_REST_Request('GET', '/artpulse/v1/events');
         $req->set_param('lat', 34.05);
         $req->set_param('lng', -118.25);
+        $req->set_param('radius', 0.5);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $ids = wp_list_pluck($res->get_data(), 'id');
@@ -120,6 +125,8 @@ class EventsRouteTest extends \WP_UnitTestCase
         $this->assertSame('CA', $event['event_state']);
         $this->assertSame('90001', $event['event_postcode']);
         $this->assertSame('US', $event['event_country']);
+        $this->assertSame('34.05', $event['event_lat']);
+        $this->assertSame('-118.25', $event['event_lng']);
         $this->assertSame($org, intval($event['event_organization']));
         $this->assertIsArray($event['organization']);
         $this->assertSame('My Org', $event['organization']['name']);
