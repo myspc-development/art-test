@@ -14,7 +14,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Event Chat Codex](docs/event-chat-codex.md) explains the real-time chat module.
 [Event Management Upgrades Codex](docs/event-management-upgrades-codex.md) explains calendar and bulk actions.
 [Event Template & Duplication Codex](docs/event-template-duplication-codex.md) covers template storage and cloning helpers.
-[Messaging & Communication Codex](docs/messaging-communication-codex.md) covers direct messaging, reminders and comment moderation.
+[Messaging & Communication Codex](docs/messaging-communication-codex.md) covers direct messaging (see the new `/messages` REST API section), reminders and comment moderation.
 [Finance & Payout Codex](docs/financial-overview-codex.md) explains revenue summaries, transaction filtering and payout history.
 [Internal Notes & Task Tracking Codex](docs/internal-notes-tasks-codex.md) covers collaboration features.
 [Webhook Automations Codex](docs/webhook-automation-codex.md) describes webhook management and payload delivery.
