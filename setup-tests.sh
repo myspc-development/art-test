@@ -3,6 +3,15 @@
 
 set -e
 
+# Ensure required environment variables are set.
+REQUIRED_VARS=(DB_NAME DB_USER DB_PASSWORD DB_HOST)
+for var in "${REQUIRED_VARS[@]}"; do
+    if [ -z "${!var}" ]; then
+        echo "Error: $var environment variable is not set." >&2
+        exit 1
+    fi
+done
+
 echo "=== Downloading WordPress core into ./wordpress ==="
 mkdir -p wordpress
 curl -O https://wordpress.org/latest.tar.gz
@@ -15,22 +24,22 @@ cat > wp-tests-config.php << 'EOF'
 // DB settings for your test database.
 // Credentials can be provided via environment variables.
 if ( ! defined( 'DB_NAME' ) ) {
-    define( 'DB_NAME', getenv( 'DB_NAME' ) ?: 'sql_192_168_88_3' );
+    define( 'DB_NAME', getenv( 'DB_NAME' ) );
 }
 if ( ! defined( 'DB_USER' ) ) {
-    define( 'DB_USER', getenv( 'DB_USER' ) ?: 'sql_192_168_88_3' );
+    define( 'DB_USER', getenv( 'DB_USER' ) );
 }
 if ( ! defined( 'DB_PASSWORD' ) ) {
-    define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) ?: 'beca2446d15b1' );
+    define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) );
 }
 if ( ! defined( 'DB_HOST' ) ) {
-    define( 'DB_HOST', getenv( 'DB_HOST' ) ?: '127.0.0.1' );
+    define( 'DB_HOST', getenv( 'DB_HOST' ) );
 }
 if ( ! defined( 'DB_CHARSET' ) ) {
-    define( 'DB_CHARSET', getenv( 'DB_CHARSET' ) ?: 'utf8mb4' );
+    define( 'DB_CHARSET', getenv( 'DB_CHARSET' ) );
 }
 if ( ! defined( 'DB_COLLATE' ) ) {
-    define( 'DB_COLLATE', getenv( 'DB_COLLATE' ) ?: '' );
+    define( 'DB_COLLATE', getenv( 'DB_COLLATE' ) );
 }
 
 // Site constants required by WP test suite
