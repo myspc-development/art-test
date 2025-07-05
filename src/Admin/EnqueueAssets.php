@@ -365,6 +365,13 @@ class EnqueueAssets {
             '1.0.0',
             true
         );
+        wp_enqueue_script(
+            'ap-messages-js',
+            $plugin_url . '/assets/js/ap-messages.js',
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
         wp_localize_script('ap-notifications-js', 'APNotifications', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
@@ -372,6 +379,11 @@ class EnqueueAssets {
         wp_localize_script('ap-notifications-js', 'APNotifyData', [
             'rest_url' => esc_url_raw(rest_url()),
             'nonce'    => wp_create_nonce('wp_rest'),
+        ]);
+        wp_localize_script('ap-messages-js', 'APMessages', [
+            'apiRoot' => esc_url_raw(rest_url()),
+            'nonce'   => wp_create_nonce('wp_rest'),
+            'pollId'  => 0,
         ]);
 
         wp_enqueue_script(
