@@ -130,4 +130,34 @@ class FollowRestControllerTest extends \WP_UnitTestCase
         $this->assertContains($this->user1, $data['followers']);
         $this->assertSame(1, (int) get_user_meta($this->user2, 'ap_follower_count', true));
     }
+
+    public function test_follow_user_post_and_delete(): void
+    {
+        $post = new WP_REST_Request('POST', '/artpulse/v1/follows');
+        $post->set_param('post_id', $this->user2);
+        $post->set_param('post_type', 'user');
+        $res = rest_get_server()->dispatch($post);
+        $this->assertSame(200, $res->get_status());
+
+        $delete = new WP_REST_Request('DELETE', '/artpulse/v1/follows');
+        $delete->set_param('post_id', $this->user2);
+        $delete->set_param('post_type', 'user');
+        $res = rest_get_server()->dispatch($delete);
+        $this->assertSame(200, $res->get_status());
+    }
+
+    public function test_follow_user_invalid_id_returns_404(): void
+    {
+        $invalid = new WP_REST_Request('POST', '/artpulse/v1/follows');
+        $invalid->set_param('post_id', 999999);
+        $invalid->set_param('post_type', 'user');
+        $res = rest_get_server()->dispatch($invalid);
+        $this->assertSame(404, $res->get_status());
+
+        $invalid = new WP_REST_Request('DELETE', '/artpulse/v1/follows');
+        $invalid->set_param('post_id', 999999);
+        $invalid->set_param('post_type', 'user');
+        $res = rest_get_server()->dispatch($invalid);
+        $this->assertSame(404, $res->get_status());
+    }
 }
