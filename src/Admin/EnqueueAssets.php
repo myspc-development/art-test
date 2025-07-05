@@ -240,6 +240,16 @@ class EnqueueAssets {
         $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
 
+        $enqueue_rest_lists = false;
+        if (!is_admin()) {
+            global $post;
+            if ($post instanceof \WP_Post) {
+                if (has_shortcode($post->post_content, 'ap_recommendations') || has_shortcode($post->post_content, 'ap_collection')) {
+                    $enqueue_rest_lists = true;
+                }
+            }
+        }
+
         if (is_singular('artpulse_event')) {
             $swiper_css_path = $plugin_dir . '/assets/libs/swiper/swiper-bundle.min.css';
             wp_enqueue_style(
@@ -577,6 +587,20 @@ class EnqueueAssets {
             wp_localize_script('ap-sw-loader', 'APServiceWorker', [
                 'url'     => $plugin_url . '/assets/js/service-worker.js',
                 'enabled' => true,
+            ]);
+        }
+
+        if ($enqueue_rest_lists) {
+            wp_enqueue_script(
+                'ap-rest-lists',
+                $plugin_url . '/assets/js/ap-rest-lists.js',
+                ['wp-api-fetch'],
+                '1.0.0',
+                true
+            );
+            wp_localize_script('ap-rest-lists', 'APRestLists', [
+                'root'  => esc_url_raw(rest_url()),
+                'nonce' => wp_create_nonce('wp_rest'),
             ]);
         }
     }
