@@ -157,6 +157,11 @@ class SettingsPage
                 'desc'  => __('HTML with placeholders like {{content}}', 'artpulse'),
                 'type'  => 'textarea',
             ],
+            'keep_data_on_uninstall' => [
+                'label' => __('Keep Data on Uninstall', 'artpulse'),
+                'desc'  => __('Preserve settings and custom tables when removing the plugin.', 'artpulse'),
+                'type'  => 'checkbox',
+            ],
         ];
 
         foreach ($general_fields as $key => $cfg) {
@@ -647,6 +652,7 @@ class SettingsPage
                 'enable_artworks_for_sale',
                 'disable_styles',
                 'waitlists_enabled',
+                'keep_data_on_uninstall',
                 'oauth_google_enabled',
                 'oauth_facebook_enabled',
                 'oauth_apple_enabled',
