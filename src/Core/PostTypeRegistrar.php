@@ -82,6 +82,12 @@ class PostTypeRegistrar
                 'supports'   => ['title', 'editor', 'author'],
                 'menu_icon'  => 'dashicons-star-filled',
             ],
+            'ap_collection' => [
+                'label'      => __('Collections', 'artpulse'),
+                'rewrite'    => ['slug' => 'collections'],
+                'supports'   => ['title', 'editor', 'thumbnail'],
+                'menu_icon'  => 'dashicons-screenoptions',
+            ],
         ];
 
         $opts              = get_option('artpulse_settings', []);
@@ -426,6 +432,17 @@ class PostTypeRegistrar
             'show_in_rest' => true,
             'single'       => true,
             'type'         => 'string',
+        ]);
+
+        register_post_meta('ap_collection', 'ap_collection_items', [
+            'show_in_rest' => [
+                'schema' => [
+                    'type'  => 'array',
+                    'items' => ['type' => 'integer'],
+                ],
+            ],
+            'single'       => true,
+            'type'         => 'array',
         ]);
     }
 
