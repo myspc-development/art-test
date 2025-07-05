@@ -24,6 +24,13 @@ class FeedbackPage
     {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_feedback';
+        if (isset($_POST['ap_feedback_status']) && check_admin_referer('ap_feedback_status')) {
+            $id = absint($_POST['id']);
+            $status = sanitize_text_field($_POST['status']);
+            if (in_array($status, ['planned', 'in_progress', 'completed'], true)) {
+                $wpdb->update($table, ['status' => $status], ['id' => $id]);
+            }
+        }
         $items = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC LIMIT 200");
         ?>
         <div class="wrap">
@@ -36,6 +43,8 @@ class FeedbackPage
                         <th><?php esc_html_e('User/Email', 'artpulse'); ?></th>
                         <th><?php esc_html_e('Description', 'artpulse'); ?></th>
                         <th><?php esc_html_e('Context', 'artpulse'); ?></th>
+                        <th><?php esc_html_e('Votes', 'artpulse'); ?></th>
+                        <th><?php esc_html_e('Status', 'artpulse'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,10 +55,23 @@ class FeedbackPage
                         <td><?php echo esc_html($item->email ?: ($item->user_id ? get_user_by('ID', $item->user_id)->user_email : '')); ?></td>
                         <td><?php echo esc_html(wp_trim_words($item->description, 20)); ?></td>
                         <td><?php echo esc_html($item->context); ?></td>
+                        <td><?php echo esc_html($item->votes); ?></td>
+                        <td>
+                            <form method="post" style="display:inline-block;">
+                                <?php wp_nonce_field('ap_feedback_status'); ?>
+                                <input type="hidden" name="id" value="<?php echo esc_attr($item->id); ?>">
+                                <select name="status">
+                                    <option value="planned" <?php selected($item->status, 'planned'); ?>><?php esc_html_e('Planned', 'artpulse'); ?></option>
+                                    <option value="in_progress" <?php selected($item->status, 'in_progress'); ?>><?php esc_html_e('In Progress', 'artpulse'); ?></option>
+                                    <option value="completed" <?php selected($item->status, 'completed'); ?>><?php esc_html_e('Completed', 'artpulse'); ?></option>
+                                </select>
+                                <button type="submit" name="ap_feedback_status" class="button">Update</button>
+                            </form>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 <?php if (empty($items)): ?>
-                    <tr><td colspan="5"><?php esc_html_e('No feedback found.', 'artpulse'); ?></td></tr>
+                    <tr><td colspan="7"><?php esc_html_e('No feedback found.', 'artpulse'); ?></td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>
