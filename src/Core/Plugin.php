@@ -53,6 +53,7 @@ class Plugin
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_migrate_profile_link_request_slug']);
         add_action('init', [$this, 'maybe_add_upload_cap']);
+        add_action('init', [$this, 'maybe_add_collection_cap']);
         add_action('init', [\ArtPulse\Core\RoleSetup::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\FavoritesManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\FollowManager::class, 'maybe_install_table']);
@@ -647,5 +648,17 @@ class Plugin
         \ArtPulse\Core\RoleSetup::install();
 
         update_option('ap_member_upload_cap_added', 1);
+    }
+
+    public function maybe_add_collection_cap()
+    {
+        if (get_option('ap_collection_cap_added')) {
+            return;
+        }
+
+        require_once ARTPULSE_PLUGIN_DIR . 'src/Core/RoleSetup.php';
+        \ArtPulse\Core\RoleSetup::assign_capabilities();
+
+        update_option('ap_collection_cap_added', 1);
     }
 }

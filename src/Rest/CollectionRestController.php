@@ -26,7 +26,7 @@ class CollectionRestController
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [self::class, 'create_or_update'],
             'permission_callback' => function () {
-                return current_user_can('edit_posts');
+                return current_user_can('edit_ap_collections');
             },
             'args'                => [
                 'id' => [ 'type' => 'integer', 'required' => false ],

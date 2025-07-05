@@ -16,6 +16,7 @@ class CollectionRestControllerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        do_action('init');
 
         $this->event_id = self::factory()->post->create([
             'post_type'   => 'artpulse_event',
@@ -97,5 +98,18 @@ class CollectionRestControllerTest extends \WP_UnitTestCase
         $id = $res->get_data()['id'];
         $this->assertNotEmpty($id);
         $this->assertEquals([ $this->event_id ], get_post_meta($id, 'ap_collection_items', true));
+    }
+
+    public function test_artist_can_create_collection(): void
+    {
+        $user = self::factory()->user->create(['role' => 'artist']);
+        wp_set_current_user($user);
+
+        $req = new WP_REST_Request('POST', '/artpulse/v1/collections');
+        $req->set_param('title', 'Artist Collection');
+        $req->set_param('items', [ $this->event_id ]);
+        $res = rest_get_server()->dispatch($req);
+
+        $this->assertSame(200, $res->get_status());
     }
 }
