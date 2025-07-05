@@ -388,7 +388,7 @@ function ap_render_favorite_portfolio() {
                         <h3><?php the_title(); ?></h3>
                     </a>
                     <div class="ap-event-actions">
-                        <?php echo \ArtPulse\Frontend\ap_render_favorite_button( get_the_ID() ); ?>
+                        <?php echo \ArtPulse\Frontend\ap_render_favorite_button( get_the_ID(), get_post_type() ); ?>
                         <span class="ap-fav-count"><?php echo intval( get_post_meta( get_the_ID(), 'ap_favorite_count', true ) ); ?></span>
                     </div>
                 </div>

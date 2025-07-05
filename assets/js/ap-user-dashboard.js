@@ -567,7 +567,8 @@ function initCardInteractions(el) {
   el.querySelectorAll('.ap-fav-btn').forEach(btn => {
     btn.addEventListener('click', ev => {
       ev.preventDefault();
-      const id = btn.dataset.post;
+      const id = btn.dataset.objectId;
+      const type = btn.dataset.objectType;
       const action = btn.classList.contains('ap-favorited') ? 'remove' : 'add';
       fetch(`${ArtPulseDashboardApi.root}artpulse/v1/favorite`, {
         method: 'POST',
@@ -575,7 +576,7 @@ function initCardInteractions(el) {
           'Content-Type': 'application/json',
           'X-WP-Nonce': ArtPulseDashboardApi.nonce
         },
-        body: JSON.stringify({ object_id: id, object_type: 'artpulse_event', action })
+        body: JSON.stringify({ object_id: id, object_type: type, action })
       })
         .then(r => r.json())
         .then(res => { if (res.success) refreshDashboardEvents(); });
