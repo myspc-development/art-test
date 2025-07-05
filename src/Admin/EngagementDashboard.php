@@ -130,6 +130,7 @@ class EngagementDashboard
                 <a href="<?php echo esc_url(add_query_arg(['activity' => $activity_filter, 'ap_export_csv' => 1])); ?>" class="button button-secondary">Export CSV</a>
             </form>
 
+            <?php if (current_user_can('ap_premium_member')) : ?>
             <!-- Inline Data Passing -->
             <script>
                 window.apWeeklyLogins = <?php echo json_encode($weekly_logins); ?>;
@@ -224,6 +225,9 @@ class EngagementDashboard
                     ?>
                 </div>
             </div>
+            <?php else : ?>
+                <p><?php esc_html_e('Upgrade to access premium analytics.', 'artpulse'); ?></p>
+            <?php endif; ?>
         </div>
         <?php
     }

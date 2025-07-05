@@ -117,6 +117,7 @@ class RoleSetup
             'moderate_link_requests',
             'view_artpulse_dashboard',
             'manage_artpulse_settings',
+            'ap_premium_member',
         ];
 
         foreach (['administrator', 'editor'] as $admin_role) {
