@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const country = document.getElementById('ap_country');
   const state = document.getElementById('ap_state');
   const city = document.getElementById('ap_city');
+  const suburb = document.getElementById('ap_suburb');
+  const street = document.getElementById('ap_street');
   const addr = document.getElementById('ap_address_components');
 
   async function submitForm(form, action, msgEl) {
@@ -20,13 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (bio) formData.set('description', bio.value);
       if (password) formData.set('password', password.value);
       if (passConfirm) formData.set('password_confirm', passConfirm.value);
-      if (country || state || city) {
+      if (country || state || city || suburb || street) {
         let comp = addr ? addr.value : '';
         if (!comp) {
           comp = JSON.stringify({
             country: country ? country.value : '',
             state: state ? state.value : '',
-            city: city ? city.value : ''
+            city: city ? city.value : '',
+            suburb: suburb ? suburb.value : '',
+            street: street ? street.value : ''
           });
           if (addr) addr.value = comp;
         }

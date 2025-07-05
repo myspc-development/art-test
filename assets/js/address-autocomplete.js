@@ -38,12 +38,16 @@
     const c = form.querySelector('.ap-address-country');
     const s = form.querySelector('.ap-address-state');
     const ci = form.querySelector('.ap-address-city');
+    const sub = form.querySelector('#ap_suburb');
+    const st = form.querySelector('#ap_street');
     const hidden = form.querySelector('[name="address_components"]');
     if(hidden){
       hidden.value = JSON.stringify({
         country: c ? (c.dataset.code || c.value) : '',
         state: s ? (s.dataset.code || s.value) : '',
-        city: ci ? ci.value : ''
+        city: ci ? ci.value : '',
+        suburb: sub ? sub.value : '',
+        street: st ? st.value : ''
       });
     }
   }
