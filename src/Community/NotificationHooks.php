@@ -14,6 +14,9 @@ class NotificationHooks {
 
         // 🔔 Membership payment events
         add_action('ap_membership_payment', [self::class, 'notify_on_payment'], 10, 4);
+
+        // 🔔 RSVP added to an event
+        add_action('ap_event_rsvp_added', [self::class, 'notify_on_rsvp'], 10, 2);
     }
 
     /**
@@ -68,6 +71,28 @@ class NotificationHooks {
             null,
             null,
             sprintf('Payment %s: %s.', esc_html($event_type), esc_html($amount_display))
+        );
+    }
+
+    /**
+     * Notify event organizer when an RSVP is added.
+     */
+    public static function notify_on_rsvp($event_id, $rsvping_user_id) {
+        $event = get_post($event_id);
+        if (!$event || $event->post_type !== 'artpulse_event') {
+            return;
+        }
+
+        $organizer_id = intval($event->post_author);
+        if (!$organizer_id || $organizer_id === intval($rsvping_user_id)) {
+            return;
+        }
+
+        NotificationManager::add(
+            $organizer_id,
+            'rsvp_received',
+            $event_id,
+            $rsvping_user_id
         );
     }
 }
