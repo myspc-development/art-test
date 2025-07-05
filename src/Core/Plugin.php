@@ -189,6 +189,7 @@ class Plugin
         \ArtPulse\Admin\OrgRolesPage::register();
         \ArtPulse\Admin\OrgCommunicationsCenter::register();
         \ArtPulse\Admin\ScheduledMessageManager::register();
+        \ArtPulse\Admin\PostStatusRejected::register();
         \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
