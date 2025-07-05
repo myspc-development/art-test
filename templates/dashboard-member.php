@@ -19,6 +19,7 @@ use ArtPulse\Community\FavoritesManager;
             <?php endif; ?>
         </ul>
     </aside>
+    <main id="main-content">
     <div class="dashboard-main">
 
     <div id="ap-layout-controls">
@@ -134,4 +135,5 @@ use ArtPulse\Community\FavoritesManager;
         </div>
     </div>
     </div>
+    </main>
 </div>
