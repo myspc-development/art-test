@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const restRoot = cfg.root || (window.wpApiSettings && window.wpApiSettings.root) || '';
   const nonce = cfg.nonce || '';
   const headers = nonce ? { 'X-WP-Nonce': nonce } : {};
+  const noItemsText = cfg.noItemsText || 'No items found.';
 
   const fetchCard = id => {
     return fetch(restRoot + 'artpulse/v1/event-card/' + id, { headers })
@@ -82,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(list => {
         container.innerHTML = '';
         if (!list.length) {
-          container.innerHTML = '<p>No items found.</p>';
+          container.innerHTML = '<p>' + noItemsText + '</p>';
           return;
         }
         list.forEach(item => {
