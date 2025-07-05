@@ -1,0 +1,17 @@
+# Event Chat
+
+This module provides a lightweight real‑time chat for event pages.
+
+## REST Endpoints
+
+`GET  /wp-json/artpulse/v1/event/{id}/chat`
+: Retrieve recent chat messages for an event.
+
+`POST /wp-json/artpulse/v1/event/{id}/chat`
+: Post a new chat message. Requires authentication and the user must be RSVP'd for the event.
+
+## Shortcode
+
+Insert `[ap_event_chat id="123"]` on any page to display the chat widget.
+The included `ap-event-chat.js` script polls the REST endpoint every few seconds
+and submits messages via AJAX.
