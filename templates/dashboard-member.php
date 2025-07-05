@@ -21,6 +21,15 @@ use ArtPulse\Community\FavoritesManager;
     </aside>
     <main id="main-content">
     <div class="dashboard-main">
+    <?php if ( ! get_user_meta( get_current_user_id(), 'ap_onboarding_completed', true ) ) : ?>
+    <div id="ap-onboarding-banner" class="ap-onboarding-banner">
+        <span><?php esc_html_e( 'Get started with a quick tour.', 'artpulse' ); ?></span>
+        <div>
+            <button id="ap-start-tour" class="ap-form-button"><?php esc_html_e( 'Start Tour', 'artpulse' ); ?></button>
+            <button id="ap-dismiss-tour" class="ap-form-button"><?php esc_html_e( 'Dismiss', 'artpulse' ); ?></button>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <div id="ap-layout-controls">
         <p class="ap-layout-tip"><?php esc_html_e('Drag cards to rearrange them. Use the menu to show or hide widgets.', 'artpulse'); ?></p>
