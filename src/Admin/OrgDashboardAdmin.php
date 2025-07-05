@@ -429,6 +429,3 @@ class OrgDashboardAdmin {
     }
 }
 
-add_action('admin_menu', ['\\ArtPulse\\Admin\\OrgDashboardAdmin', 'register']);
-add_action('admin_menu', ['\\ArtPulse\\Admin\\OrgDashboardAdmin', 'hide_org_menu'], 999);
-add_action('save_post', ['\\ArtPulse\\Admin\\OrgDashboardAdmin', 'clear_cache'], 10, 3);
