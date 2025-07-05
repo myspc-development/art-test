@@ -231,6 +231,8 @@ if (content) {
       container.appendChild(ul);
     });
 
+    renderRsvpEvents(data.rsvp_events || []);
+
 
     const hasLocation = data.city || data.state;
     if (hasLocation) {
@@ -411,6 +413,26 @@ function renderEventsFeed(events) {
   });
 }
 
+function renderRsvpEvents(list) {
+  const container = document.getElementById('ap-rsvp-events');
+  if (!container) return;
+  container.innerHTML = '';
+  if (!list || !list.length) {
+    container.textContent = 'No RSVPs.';
+    return;
+  }
+  list.forEach(ev => {
+    const wrap = document.createElement('div');
+    fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${ev.id}`)
+      .then(r => r.text())
+      .then(html => {
+        wrap.innerHTML = html;
+        initCardInteractions(wrap);
+      });
+    container.appendChild(wrap);
+  });
+}
+
 function renderSupportHistory(list) {
   const container = document.getElementById('ap-support-history');
   if (!container) return;
@@ -554,6 +576,7 @@ function refreshDashboardEvents() {
         const favs = data.favorite_count || 0;
         statsBox.textContent = `RSVPs: ${rsvps} \u00b7 Favorites: ${favs}`;
       }
+      renderRsvpEvents(data.rsvp_events || []);
       document.getElementById('ap-my-events').innerHTML = '';
       document.getElementById('ap-next-event').innerHTML = '';
       if (myEvents.length) {
