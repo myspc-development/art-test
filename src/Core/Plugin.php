@@ -199,6 +199,7 @@ class Plugin
         \ArtPulse\Rest\ProfileMetricsController::register();
         \ArtPulse\Rest\PaymentReportsController::register();
         \ArtPulse\Rest\UserAccountRestController::register();
+        \ArtPulse\Rest\CollectionRestController::register();
         ArtistRestController::register();
         RestRelationships::register();
         TaxonomyRestFilters::register();
@@ -206,6 +207,7 @@ class Plugin
         \ArtPulse\Admin\MetaBoxesArtist::register();
         \ArtPulse\Admin\MetaBoxesArtwork::register();
         \ArtPulse\Admin\MetaBoxesEvent::register();
+        \ArtPulse\Admin\MetaBoxesCollection::register();
         \ArtPulse\Admin\EventRsvpToggle::register();
         \ArtPulse\Admin\MetaBoxesAddress::register(['artpulse_event']);
         \ArtPulse\Admin\MetaBoxesOrganisation::register();
