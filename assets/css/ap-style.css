@@ -1166,6 +1166,8 @@ select.ap-input {
 .ap-widget-toggle-dropdown summary{cursor:pointer;font-weight:600;margin-bottom:.5rem;}
 .ap-onboarding-banner{background:var(--ap-accent-color);color:#fff;padding:0.75rem 1rem;border-radius:var(--ap-border-radius);display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
 .ap-onboarding-banner button{margin-left:0.5rem;}
+.ap-onboarding-wizard{background:var(--ap-bg-color);border:1px solid var(--ap-border-color);padding:var(--ap-space-medium);border-radius:var(--ap-border-radius);margin-bottom:1rem;}
+.ap-onboarding-actions{margin-top:0.5rem;}
 .skip-link{position:absolute;top:-40px;left:0;background:var(--ap-primary-color);color:#fff;padding:.5rem 1rem;z-index:100}
 .skip-link:focus{top:0}
 

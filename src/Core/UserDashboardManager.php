@@ -157,6 +157,15 @@ class UserDashboardManager
                 'per_page' => [ 'type' => 'integer', 'default' => 10 ],
             ],
         ]);
+
+        register_rest_route('artpulse/v1', '/user/onboarding', [
+            'methods'             => 'POST',
+            'callback'            => [ self::class, 'saveOnboardingProgress' ],
+            'permission_callback' => fn() => is_user_logged_in(),
+            'args'                => [
+                'step' => [ 'type' => 'string', 'required' => true ],
+            ],
+        ]);
     }
 
     public static function getDashboardData(WP_REST_Request $request)
@@ -537,6 +546,34 @@ class UserDashboardManager
         return home_url('/');
     }
 
+    public static function saveOnboardingProgress(WP_REST_Request $request)
+    {
+        $user_id = get_current_user_id();
+        $step    = sanitize_key($request->get_param('step'));
+
+        if ($step === 'skip') {
+            update_user_meta($user_id, 'ap_onboarding_completed', 1);
+            return rest_ensure_response(['completed' => true]);
+        }
+
+        $steps = get_user_meta($user_id, 'ap_onboarding_steps', true);
+        if (!is_array($steps)) {
+            $steps = [];
+        }
+        if (!in_array($step, $steps, true)) {
+            $steps[] = $step;
+            update_user_meta($user_id, 'ap_onboarding_steps', $steps);
+        }
+
+        $all = apply_filters('artpulse_onboarding_steps', ['profile']);
+        $completed = empty(array_diff($all, $steps));
+        if ($completed) {
+            update_user_meta($user_id, 'ap_onboarding_completed', 1);
+        }
+
+        return rest_ensure_response(['completed' => $completed]);
+    }
+
     public static function addBadge(int $user_id, string $slug): void
     {
         $badges = get_user_meta($user_id, 'user_badges', true);
@@ -607,14 +644,27 @@ class UserDashboardManager
             'badges'              => $badges,
         ];
 
+        $onboarding_html = '';
+        $completed = get_user_meta(get_current_user_id(), 'ap_onboarding_completed', true);
+        if (!$completed) {
+            if (in_array('artist', $roles, true) && isset($_GET['onboarding'])) {
+                $onboarding_html = self::load_template('onboarding-artist.php');
+            } else {
+                $onboarding_html = '<div id="ap-onboarding-banner" class="ap-onboarding-banner">'
+                    . '<span>' . esc_html__('Get started with a quick tour.', 'artpulse') . '</span>'
+                    . '<div><button id="ap-start-tour" class="ap-form-button">' . esc_html__('Start', 'artpulse') . '</button>'
+                    . '<button id="ap-dismiss-tour" class="ap-form-button">' . esc_html__('Dismiss', 'artpulse') . '</button></div></div>';
+            }
+        }
+
         if (in_array('organization', $roles, true) || in_array('administrator', $roles, true)) {
-            return self::load_template('dashboard-organization.php', $vars);
+            return $onboarding_html . self::load_template('dashboard-organization.php', $vars);
         }
 
         if (in_array('artist', $roles, true)) {
-            return self::load_template('dashboard-artist.php', $vars);
+            return $onboarding_html . self::load_template('dashboard-artist.php', $vars);
         }
 
-        return self::load_template('dashboard-member.php', $vars);
+        return $onboarding_html . self::load_template('dashboard-member.php', $vars);
     }
 }

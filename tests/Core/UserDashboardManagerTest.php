@@ -101,4 +101,27 @@ class UserDashboardManagerTest extends TestCase
         $html = UserDashboardManager::renderDashboard([]);
         $this->assertStringContainsString('class="ap-badges"', $html);
     }
+
+    public function test_onboarding_banner_shown_when_not_completed() {
+        Stub::$roles = ['artist'];
+        Stub::$meta = [];
+        $html = UserDashboardManager::renderDashboard([]);
+        $this->assertStringContainsString('id="ap-onboarding-banner"', $html);
+    }
+
+    public function test_onboarding_template_when_query_set() {
+        Stub::$roles = ['artist'];
+        Stub::$meta = [];
+        $_GET['onboarding'] = '1';
+        $html = UserDashboardManager::renderDashboard([]);
+        unset($_GET['onboarding']);
+        $this->assertStringContainsString('id="ap-onboarding-next"', $html);
+    }
+
+    public function test_no_onboarding_when_completed() {
+        Stub::$roles = ['artist'];
+        Stub::$meta = ['ap_onboarding_completed' => 1];
+        $html = UserDashboardManager::renderDashboard([]);
+        $this->assertStringNotContainsString('ap-onboarding-banner', $html);
+    }
 }
