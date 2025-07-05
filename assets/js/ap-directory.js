@@ -228,6 +228,8 @@
             html += '</a>';
 
             div.innerHTML = html;
+            const followBtn = createFollowButton(post, type);
+            div.appendChild(followBtn);
             results.appendChild(div);
           });
 
@@ -246,8 +248,9 @@
     // For each post result, add a follow button:
 function createFollowButton(post, objectType) {
     const btn = document.createElement('button');
-    btn.textContent = post.is_following ? 'Unfollow' : 'Follow';
+    btn.innerHTML = post.is_following ? '&#10003; Following' : '&#43; Follow';
     btn.className = 'ap-follow-btn';
+    btn.classList.toggle('ap-following', post.is_following);
     btn.addEventListener('click', function(e){
         e.preventDefault();
         wp.apiFetch({
@@ -259,8 +262,9 @@ function createFollowButton(post, objectType) {
                 action: post.is_following ? 'unfollow' : 'follow'
             }
         }).then(resp => {
-            btn.textContent = resp.following ? 'Unfollow' : 'Follow';
             post.is_following = resp.following;
+            btn.innerHTML = resp.following ? '&#10003; Following' : '&#43; Follow';
+            btn.classList.toggle('ap-following', resp.following);
         });
     });
     return btn;

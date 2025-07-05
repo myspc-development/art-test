@@ -36,6 +36,7 @@ from any directory, calendar popover or dashboard list.
 - Click the **Follow** button on an artist, organization or event page to add it to your follows list.
 - Your followed items appear in the `[ap_my_follows]` page if enabled by the site admin.
 - Following creators allows you to receive notifications about new content.
+- Favoriting is for single events or artworks you like right now. Following a creator keeps you updated on everything they publish going forward.
 
 ## My Events Dashboard
 
