@@ -210,6 +210,10 @@ class MetaBoxesArtwork {
             'artwork_video_url'   => ['url', __('Video URL (e.g., YouTube, Vimeo)', 'artpulse')],
             'artwork_featured'    => ['boolean', __('Mark as featured', 'artpulse')],
             'artwork_styles'      => ['text', __('Styles (comma-separated)', 'artpulse')],
+            'artwork_stock'       => ['number', __('Stock quantity', 'artpulse')],
+            'artwork_auction_enabled' => ['boolean', __('Enable auction', 'artpulse')],
+            'artwork_auction_start'   => ['text', __('Auction start (Y-m-d H:i)', 'artpulse')],
+            'artwork_auction_end'     => ['text', __('Auction end (Y-m-d H:i)', 'artpulse')],
         ];
     }
 }

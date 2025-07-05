@@ -10,6 +10,7 @@
 
 use ArtPulse\Core\Plugin;
 use ArtPulse\Core\WooCommerceIntegration;
+use ArtPulse\Core\ArtworkWooSync;
 use ArtPulse\Core\Activator;
 use ArtPulse\Admin\EnqueueAssets;
 
@@ -67,6 +68,7 @@ function ap_copy_templates_to_child_theme() {
 $main = new Plugin();
 // Instantiate WooCommerce integration (if needed for runtime)
 $plugin = new WooCommerceIntegration();
+$artworkSync = new ArtworkWooSync();
 
 // ✅ Hook for activation
 register_activation_hook(__FILE__, function () {
