@@ -21,6 +21,7 @@
             <?php endif; ?>
         </ul>
     </aside>
+    <main id="main-content">
     <div class="dashboard-main">
 
     <div id="ap-layout-controls">
@@ -129,4 +130,6 @@
         </div>
     </div>
     </div>
-</div></div>
+    </div>
+    </main>
+</div>

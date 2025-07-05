@@ -33,6 +33,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
             <?php endif; ?>
         </ul>
     </aside>
+    <main id="main-content">
     <div class="dashboard-main">
     <div class="artist-dashboard-header">
         <img src="<?php echo esc_url($profile_image); ?>" alt="" class="artist-avatar" />
@@ -172,4 +173,6 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         </div>
     </div>
     </div>
-</div></div>
+    </div>
+    </main>
+</div>
