@@ -1108,6 +1108,20 @@ select.ap-input {
 .ap-rsvp-btn.ap-rsvped { color: #5cb85c; }
 .ap-rsvp-count { color: #888; font-size: 0.9em; margin-left: 0.7em; }
 
+.ap-follow-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 1.6em;
+    transition: color 0.2s, transform 0.2s;
+}
+.ap-follow-btn:hover,
+.ap-follow-btn:focus {
+    transform: scale(1.15);
+}
+.ap-follow-btn.ap-following { color: var(--ap-accent-color); }
+
 .ap-rsvp-step { display: none; }
 .ap-rsvp-step.active { display: block; }
 
