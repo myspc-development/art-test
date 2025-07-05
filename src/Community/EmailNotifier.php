@@ -20,7 +20,8 @@ class EmailNotifier {
         'membership_expired',
         'payment_paid',
         'payment_failed',
-        'payment_refunded'
+        'payment_refunded',
+        'rsvp_received'
     ];
 
     /**
@@ -61,6 +62,7 @@ class EmailNotifier {
             'payment_paid'         => 'Payment Received',
             'payment_failed'       => 'Payment Failed',
             'payment_refunded'     => 'Payment Refunded',
+            'rsvp_received'        => 'New RSVP Received',
         ];
         return $map[$type] ?? wp_strip_all_tags($fallback);
     }

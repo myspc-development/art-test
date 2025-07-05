@@ -55,6 +55,7 @@ class SMSNotifier {
             'payment_paid'         => 'Payment received.',
             'payment_failed'       => 'Payment failed.',
             'payment_refunded'     => 'Payment refunded.',
+            'rsvp_received'        => 'New RSVP received.',
         ];
 
         return $map[$type] ?? wp_strip_all_tags($fallback);
