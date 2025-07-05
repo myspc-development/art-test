@@ -346,6 +346,10 @@ The styles now integrate with the Salient theme and WPBakery modules:
 npm install
 ```
 
+The `scripts/` directory stores optional scaffolding and release helpers
+used during early development. These scripts are **not** required when
+setting up the plugin from source.
+
 Run the test suite and coding standards checks with:
 
 ```bash
