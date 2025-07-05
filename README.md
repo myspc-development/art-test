@@ -313,7 +313,7 @@ Artist, artwork, event **and organization** posts automatically create or update
 
 ## Uninstall Cleanup
 
-When the plugin is uninstalled through the WordPress admin, all tables created by ArtPulse are removed automatically. The following tables are dropped along with the `artpulse_settings` option:
+When the plugin is uninstalled through the WordPress admin, all tables created by ArtPulse are removed automatically. Administrators can enable **Keep Data on Uninstall** under Settings → General to preserve these tables and the `artpulse_settings` option. Developers may also define `ARTPULSE_REMOVE_DATA_ON_UNINSTALL` in `wp-config.php` to force removal or preservation. When data removal is enabled, the following tables are dropped:
 
 - `{prefix}artpulse_data`
 - `{prefix}ap_favorites`

@@ -30,6 +30,7 @@ class Activator
                 'sendgrid_api_key'    => '',
                 'email_from_name'     => '',
                 'email_from_address'  => '',
+                'keep_data_on_uninstall' => 0,
             ]);
         }
 

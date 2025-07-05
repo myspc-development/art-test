@@ -4,6 +4,17 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
 }
 
+$opts   = get_option( 'artpulse_settings', [] );
+$remove = empty( $opts['keep_data_on_uninstall'] );
+
+if ( defined( 'ARTPULSE_REMOVE_DATA_ON_UNINSTALL' ) ) {
+    $remove = (bool) ARTPULSE_REMOVE_DATA_ON_UNINSTALL;
+}
+
+if ( ! $remove ) {
+    return;
+}
+
 // Delete plugin options.
 delete_option( 'artpulse_settings' );
 
