@@ -18,6 +18,22 @@ Example endpoint:
 GET /wp-json/artpulse/v1/analytics?event_id=123&from=2024-01-01&to=2024-02-01
 ```
 
+### Trend Data
+
+Retrieve daily counts for views, favorites and ticket sales:
+
+```
+GET /wp-json/artpulse/v1/analytics/trends?event_id=123&days=30
+```
+
+### CSV Export
+
+Download the same data as CSV:
+
+```
+GET /wp-json/artpulse/v1/analytics/export?event_id=123&days=30
+```
+
 ## 2. Audience Demographics Visualization
 
 If RSVP data includes fields like age or location, aggregate them for charts such as pie charts or maps. Only expose demographics when enough RSVP records exist to preserve privacy.

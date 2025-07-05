@@ -62,6 +62,7 @@ class Plugin
         add_action('init', [\ArtPulse\Admin\LoginEventsPage::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\UserEngagementLogger::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ProfileMetrics::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Core\EventMetrics::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ArtworkEventLinkManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Personalization\RecommendationEngine::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ActivityLogger::class, 'maybe_install_table']);
@@ -87,6 +88,7 @@ class Plugin
             \ArtPulse\Admin\LoginEventsPage::install_login_events_table();
             \ArtPulse\Core\UserEngagementLogger::install_table();
             \ArtPulse\Core\ProfileMetrics::install_table();
+            \ArtPulse\Core\EventMetrics::install_table();
             \ArtPulse\Core\ArtworkEventLinkManager::install_table();
             \ArtPulse\Personalization\RecommendationEngine::install_table();
             \ArtPulse\Core\ActivityLogger::install_table();
@@ -202,6 +204,8 @@ class Plugin
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
         \ArtPulse\Rest\ProfileMetricsController::register();
+        \ArtPulse\Rest\AnalyticsRestController::register();
+        \ArtPulse\Rest\ShareController::register();
         \ArtPulse\Rest\PaymentReportsController::register();
         \ArtPulse\Rest\UserAccountRestController::register();
         \ArtPulse\Rest\CollectionRestController::register();

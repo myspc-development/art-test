@@ -38,6 +38,8 @@ class ProfileMetrics
     {
         add_action('wp', [self::class, 'track_view']);
         add_action('ap_follow_added', [self::class, 'track_follow'], 10, 3);
+        add_action('ap_favorite_added', [self::class, 'track_favorite'], 10, 3);
+        add_action('ap_profile_shared', [self::class, 'track_share'], 10, 2);
     }
 
     public static function track_view(): void
@@ -55,6 +57,18 @@ class ProfileMetrics
         if ($object_type === 'user') {
             self::log_metric($object_id, 'follow');
         }
+    }
+
+    public static function track_favorite(int $user_id, int $object_id, string $object_type): void
+    {
+        if ($object_type === 'user') {
+            self::log_metric($object_id, 'favorite');
+        }
+    }
+
+    public static function track_share(int $profile_id): void
+    {
+        self::log_metric($profile_id, 'share');
     }
 
     public static function log_metric(int $profile_id, string $metric, int $amount = 1): void
