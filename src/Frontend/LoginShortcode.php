@@ -127,6 +127,8 @@ class LoginShortcode
         $country = isset($components['country']) ? sanitize_text_field($components['country']) : '';
         $state   = isset($components['state']) ? sanitize_text_field($components['state']) : '';
         $city    = isset($components['city']) ? sanitize_text_field($components['city']) : '';
+        $suburb  = isset($components['suburb']) ? sanitize_text_field($components['suburb']) : '';
+        $street  = isset($components['street']) ? sanitize_text_field($components['street']) : '';
 
         $opts                = get_option('artpulse_settings', []);
         $default_email_priv   = $opts['default_privacy_email'] ?? 'public';
@@ -193,6 +195,12 @@ class LoginShortcode
         }
         if ($city !== '') {
             update_user_meta($result, 'ap_city', $city);
+        }
+        if ($suburb !== '') {
+            update_user_meta($result, 'ap_suburb', $suburb);
+        }
+        if ($street !== '') {
+            update_user_meta($result, 'ap_street', $street);
         }
         update_user_meta($result, 'ap_privacy_email', $email_privacy);
         update_user_meta($result, 'ap_privacy_location', $location_privacy);
@@ -309,6 +317,12 @@ class LoginShortcode
         }
         if ($city !== '') {
             update_user_meta($result, 'ap_city', $city);
+        }
+        if ($suburb !== '') {
+            update_user_meta($result, 'ap_suburb', $suburb);
+        }
+        if ($street !== '') {
+            update_user_meta($result, 'ap_street', $street);
         }
         update_user_meta($result, 'ap_privacy_email', $email_privacy);
         update_user_meta($result, 'ap_privacy_location', $location_privacy);
