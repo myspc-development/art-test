@@ -12,6 +12,8 @@ class Stub
     public static int $stripe_charge_calls = 0;
     public static int $stripe_subs_calls = 0;
     public static int $current_time = 0;
+    public static string $upload_path = '';
+    public static string $password = 'password';
 
     public static function reset(): void
     {
@@ -24,6 +26,8 @@ class Stub
         self::$stripe_charge_calls = 0;
         self::$stripe_subs_calls = 0;
         self::$current_time = time();
+        self::$upload_path = sys_get_temp_dir();
+        self::$password = 'password';
     }
 
     public static function get_orders(array $args): array
@@ -122,5 +126,16 @@ function current_time(string $type = 'timestamp') {
 
 function date_i18n(string $format, int $timestamp) {
     return date($format, $timestamp);
+}
+
+namespace ArtPulse\Core;
+use ArtPulse\Admin\Tests\Stub;
+
+function wp_upload_dir(): array {
+    return ['path' => Stub::$upload_path, 'basedir' => Stub::$upload_path];
+}
+
+function wp_generate_password(int $length = 12, bool $special_chars = false): string {
+    return Stub::$password;
 }
 
