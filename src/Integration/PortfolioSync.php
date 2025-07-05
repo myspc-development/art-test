@@ -84,6 +84,23 @@ class PortfolioSync
                     delete_post_thumbnail($portfolio_id);
                 }
             }
+
+            if ($post->post_type === 'artpulse_event') {
+                $meta_keys = [
+                    '_ap_event_date',
+                    '_ap_event_venue',
+                    '_ap_event_start_time',
+                    '_ap_event_end_time',
+                ];
+                foreach ($meta_keys as $key) {
+                    $val = get_post_meta($post_id, $key, true);
+                    if ($val !== '') {
+                        update_post_meta($portfolio_id, $key, $val);
+                    } else {
+                        delete_post_meta($portfolio_id, $key);
+                    }
+                }
+            }
         }
     }
 

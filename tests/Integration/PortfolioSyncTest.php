@@ -56,7 +56,9 @@ class PortfolioSyncTest extends \WP_UnitTestCase
             'post_author' => $user_id,
         ]);
 
-        update_post_meta($event_id, 'event_city', 'UpdatedCity');
+        update_post_meta($event_id, '_ap_event_date', '2030-01-01');
+        update_post_meta($event_id, '_ap_event_venue', 'The Venue');
+        update_post_meta($event_id, '_ap_event_start_time', '20:00');
 
         wp_update_post(['ID' => $event_id]);
 
@@ -71,10 +73,9 @@ class PortfolioSyncTest extends \WP_UnitTestCase
 
         $this->assertCount(1, $portfolio);
         $portfolio_id = $portfolio[0];
-        $this->assertSame(
-            'UpdatedCity',
-            get_post_meta($portfolio_id, 'event_city', true)
-        );
+        $this->assertSame('2030-01-01', get_post_meta($portfolio_id, '_ap_event_date', true));
+        $this->assertSame('The Venue', get_post_meta($portfolio_id, '_ap_event_venue', true));
+        $this->assertSame('20:00', get_post_meta($portfolio_id, '_ap_event_start_time', true));
     }
 
     public function test_gallery_meta_copied_to_portfolio(): void
