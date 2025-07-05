@@ -19,6 +19,8 @@
   --ap-light-bg-color: #f9f9f9;
   --ap-alt-bg-color: #fafafa;
   --ap-accent-color: #f5ab35;
+  /* Contrast notes: heading color #222 vs white has ratio > 12:1; button color
+     #0073aa with white text has ratio > 5:1, satisfying WCAG AA */
   --ap-danger-color: #d33;
   --ap-success-color: #28a745;
   --ap-disabled-color: #cccccc;

@@ -84,6 +84,7 @@
 
     // Show spinner during loading
     function showLoading() {
+      results.setAttribute('aria-busy', 'true');
       results.innerHTML = '<div class="ap-loading"><span class="screen-reader-text">Loading...</span><span class="ap-spinner" aria-hidden="true"></span></div>';
     }
 
@@ -127,6 +128,7 @@
           results.innerHTML = '';
           if (!posts.length) {
             results.innerHTML = '<div class="ap-empty">No results found.</div>';
+            results.removeAttribute('aria-busy');
             return;
           }
 
@@ -233,9 +235,11 @@
           container.dispatchEvent(new CustomEvent('ap:loaded', {
             detail: { type, limit: limitInput.value }
           }));
+          results.removeAttribute('aria-busy');
         })
         .catch(() => {
           results.innerHTML = '<div class="ap-error">Failed to load directory. Please try again.</div>';
+          results.removeAttribute('aria-busy');
         });
     }
 
