@@ -312,48 +312,14 @@ add_action('wp_enqueue_scripts', function () {
     }
 });
 
-add_action('wp_ajax_ap_toggle_favorite', function() {
-    if (!is_user_logged_in() || !isset($_POST['post_id'])) {
-        wp_send_json_error(['error' => 'Unauthorized']);
-    }
-
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'ap_toggle_favorite_nonce')) {
-        wp_send_json_error(['error' => 'Invalid nonce']);
-    }
-
-    $user_id = get_current_user_id();
-    $post_id = intval($_POST['post_id']);
-    $type = get_post_type($post_id);
-    $meta_key = ($type === 'artpulse_event') ? 'ap_favorite_events' : 'ap_favorite_artworks';
-    $favs = get_user_meta($user_id, $meta_key, true) ?: [];
-    $added = false;
-
-    $trend = get_post_meta($post_id, 'ap_favorite_trend', true) ?: [];
-    $today = date('Y-m-d');
-
-    if (in_array($post_id, $favs)) {
-        $favs = array_diff($favs, [$post_id]);
-        $fav_count = max(0, intval(get_post_meta($post_id, 'ap_favorite_count', true)) - 1);
-        $trend[$today] = max(0, ($trend[$today] ?? 1) - 1);
-    } else {
-        $favs[] = $post_id;
-        $added = true;
-        $fav_count = intval(get_post_meta($post_id, 'ap_favorite_count', true)) + 1;
-        $trend[$today] = ($trend[$today] ?? 0) + 1;
-    }
-
-    update_user_meta($user_id, $meta_key, array_values($favs));
-    update_post_meta($post_id, 'ap_favorite_count', $fav_count);
-    update_post_meta($post_id, 'ap_favorite_trend', $trend);
-
-    wp_send_json_success([
-        'added' => $added,
-        'count' => $fav_count,
-    ]);
-});
+// Deprecated: use REST endpoint /artpulse/v1/favorite instead
 
 function ap_user_has_favorited($user_id, $post_id) {
-    $meta_key = (get_post_type($post_id) == 'artpulse_event') ? 'ap_favorite_events' : 'ap_favorite_artworks';
+    $post_type = get_post_type($post_id);
+    if (class_exists('\\ArtPulse\\Community\\FavoritesManager') && $post_type) {
+        return \ArtPulse\Community\FavoritesManager::is_favorited($user_id, $post_id, $post_type);
+    }
+    $meta_key = ($post_type == 'artpulse_event') ? 'ap_favorite_events' : 'ap_favorite_artworks';
     $favs = get_user_meta($user_id, $meta_key, true) ?: [];
     return in_array($post_id, $favs);
 }
@@ -363,9 +329,14 @@ function ap_render_favorite_portfolio() {
         return '<p>' . __('Please log in to view your favorites.', 'artpulse') . '</p>';
     }
     $user_id = get_current_user_id();
-    $fav_events = get_user_meta($user_id, 'ap_favorite_events', true) ?: [];
-    $fav_artworks = get_user_meta($user_id, 'ap_favorite_artworks', true) ?: [];
-    $favorite_ids = array_merge($fav_events, $fav_artworks);
+    if (class_exists('\\ArtPulse\\Community\\FavoritesManager')) {
+        $favs = \ArtPulse\Community\FavoritesManager::get_user_favorites($user_id);
+        $favorite_ids = array_map(fn($f) => $f->object_id, $favs);
+    } else {
+        $fav_events = get_user_meta($user_id, 'ap_favorite_events', true) ?: [];
+        $fav_artworks = get_user_meta($user_id, 'ap_favorite_artworks', true) ?: [];
+        $favorite_ids = array_merge($fav_events, $fav_artworks);
+    }
 
     ob_start();
     if ($favorite_ids) {
