@@ -182,6 +182,7 @@ class RsvpRestController
         do_action('ap_event_rsvp_added', $event_id, get_current_user_id());
         self::log_rsvp($event_id);
         \ArtPulse\Core\UserEngagementLogger::log($user_id, 'rsvp', $event_id);
+        \ArtPulse\Personalization\RecommendationEngine::log($user_id, 'event', $event_id, 'rsvp');
 
         $events = get_user_meta($user_id, 'ap_rsvp_events', true);
         if (!is_array($events)) {
