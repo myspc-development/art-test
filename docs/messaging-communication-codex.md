@@ -49,3 +49,44 @@ Use the endpoints described in [Event Comments Codex](event-comments-codex.md) t
 
 Accessibility tips: add ARIA labels to modal forms and display a confirmation notice after sending messages or scheduling a reminder.
 
+## 9. User Messaging REST API
+
+A dedicated `/messages` endpoint allows members to exchange direct messages.
+Messages are stored in the `ap_messages` table:
+
+| Column       | Type        | Notes                                |
+|--------------|-------------|--------------------------------------|
+| `id`         | BIGINT PK   | Auto increment primary key           |
+| `sender_id`  | BIGINT      | ID of the user sending the message   |
+| `recipient_id`| BIGINT     | ID of the user receiving the message |
+| `content`    | TEXT        | Message body (sanitized HTML)        |
+| `created_at` | DATETIME    | Timestamp when inserted              |
+| `is_read`    | TINYINT(1)  | 0 = unread, 1 = read                 |
+
+### Routes
+
+```text
+POST /wp-json/artpulse/v1/messages
+GET  /wp-json/artpulse/v1/messages?with={user_id}
+GET  /wp-json/artpulse/v1/conversations
+POST /wp-json/artpulse/v1/message/read
+```
+
+`POST /messages` requires `recipient_id` and `content`. It saves the row
+and emails the recipient. `GET /messages` returns the full thread between
+the current user and another user identified by the `with` parameter.
+`/conversations` lists user IDs that the current user has messaged.
+`/message/read` marks specific message IDs as read.
+
+### Examples
+
+```bash
+# Send a message
+curl -X POST -H 'Content-Type: application/json' -u alice:pass \
+  -d '{"recipient_id": 5, "content": "Hi!"}' \
+  https://example.com/wp-json/artpulse/v1/messages
+
+# Retrieve the thread
+curl -H 'Content-Type: application/json' -u alice:pass \
+  'https://example.com/wp-json/artpulse/v1/messages?with=5'
+```
