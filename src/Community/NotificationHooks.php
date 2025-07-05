@@ -17,6 +17,9 @@ class NotificationHooks {
 
         // 🔔 RSVP added to an event
         add_action('ap_event_rsvp_added', [self::class, 'notify_on_rsvp'], 10, 2);
+
+        // 🔔 Event status transitions
+        add_action('transition_post_status', [self::class, 'notify_on_event_status'], 10, 3);
     }
 
     /**
@@ -94,5 +97,28 @@ class NotificationHooks {
             $event_id,
             $rsvping_user_id
         );
+    }
+
+    /**
+     * Notify event organizer when an event status changes.
+     */
+    public static function notify_on_event_status($new_status, $old_status, $post) {
+        if ($post->post_type !== 'artpulse_event') {
+            return;
+        }
+
+        if ($old_status === 'pending' && $new_status === 'publish') {
+            NotificationManager::add(
+                $post->post_author,
+                'event_approved',
+                $post->ID
+            );
+        } elseif ($old_status === 'pending' && in_array($new_status, ['trash', 'rejected'], true)) {
+            NotificationManager::add(
+                $post->post_author,
+                'event_rejected',
+                $post->ID
+            );
+        }
     }
 }

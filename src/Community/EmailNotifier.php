@@ -21,7 +21,9 @@ class EmailNotifier {
         'payment_paid',
         'payment_failed',
         'payment_refunded',
-        'rsvp_received'
+        'rsvp_received',
+        'event_approved',
+        'event_rejected'
     ];
 
     /**
