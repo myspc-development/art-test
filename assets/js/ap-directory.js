@@ -22,7 +22,10 @@
 
     // Load Event Type terms if needed
     if ( selectEl ) {
-      wp.apiFetch({ path: '/wp/v2/event_type' })
+      wp.apiFetch({
+        path: '/wp/v2/event_type',
+        headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+      })
         .then(terms => {
           selectEl.innerHTML = '<option value="">All</option>';
           terms.forEach(t => {
@@ -41,7 +44,10 @@
       const mediumPath = type === 'artist'
         ? '/wp/v2/artist_specialty?per_page=100'
         : '/wp/v2/artpulse_medium?per_page=100';
-      wp.apiFetch({ path: mediumPath })
+      wp.apiFetch({
+        path: mediumPath,
+        headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+      })
         .then(terms => {
           mediumEl.innerHTML = '<option value="">All</option>';
           terms.forEach(t => {
@@ -57,7 +63,10 @@
     }
 
     if ( styleEl ) {
-      wp.apiFetch({ path: '/wp/v2/artwork_style?per_page=100' })
+      wp.apiFetch({
+        path: '/wp/v2/artwork_style?per_page=100',
+        headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+      })
         .then(terms => {
           styleEl.innerHTML = '<option value="">All</option>';
           terms.forEach(t => {
@@ -123,7 +132,10 @@
         params.append('for_sale', saleFilter);
       }
 
-      wp.apiFetch({ path: '/artpulse/v1/filter?' + params.toString() })
+      wp.apiFetch({
+        path: '/artpulse/v1/filter?' + params.toString(),
+        headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+      })
         .then(posts => {
           results.innerHTML = '';
           if (!posts.length) {
@@ -253,18 +265,19 @@ function createFollowButton(post, objectType) {
     btn.classList.toggle('ap-following', post.is_following);
     btn.addEventListener('click', function(e){
         e.preventDefault();
-        wp.apiFetch({
-            path: '/artpulse/v1/follow',
-            method: 'POST',
+        const options = {
+            path: '/artpulse/v1/follows',
+            method: post.is_following ? 'DELETE' : 'POST',
             data: {
-                object_id: post.id,
-                object_type: objectType,
-                action: post.is_following ? 'unfollow' : 'follow'
-            }
-        }).then(resp => {
-            post.is_following = resp.following;
-            btn.innerHTML = resp.following ? '&#10003; Following' : '&#43; Follow';
-            btn.classList.toggle('ap-following', resp.following);
+                post_id: post.id,
+                post_type: objectType
+            },
+            headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+        };
+        wp.apiFetch(options).then(resp => {
+            post.is_following = resp.status === 'following';
+            btn.innerHTML = post.is_following ? '&#10003; Following' : '&#43; Follow';
+            btn.classList.toggle('ap-following', post.is_following);
         });
     });
     return btn;
