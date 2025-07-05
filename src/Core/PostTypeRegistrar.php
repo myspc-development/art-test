@@ -88,6 +88,12 @@ class PostTypeRegistrar
                 'supports'   => ['title', 'editor', 'thumbnail', 'author'],
                 'menu_icon'  => 'dashicons-screenoptions',
             ],
+            'ap_forum_thread' => [
+                'label'      => __('Forum Threads', 'artpulse'),
+                'rewrite'    => ['slug' => 'forum'],
+                'supports'   => ['title', 'editor', 'author', 'comments'],
+                'menu_icon'  => 'dashicons-format-chat',
+            ],
         ];
 
         $opts              = get_option('artpulse_settings', []);
