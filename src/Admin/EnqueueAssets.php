@@ -612,7 +612,8 @@ class EnqueueAssets {
             );
             wp_localize_script('ap-rest-lists', 'APRestLists', [
                 'root'  => esc_url_raw(rest_url()),
-                'nonce' => wp_create_nonce('wp_rest'),
+                'nonce'        => wp_create_nonce('wp_rest'),
+                'noItemsText'  => __('No items found.', 'artpulse'),
             ]);
         }
     }
