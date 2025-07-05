@@ -104,7 +104,7 @@ if ( $user_id ) {
         <?php if ( $excerpt ) : ?><div class="ap-event-excerpt"><?php echo wp_kses_post( wpautop( $excerpt ) ); ?></div><?php endif; ?>
         <div class="ap-event-actions">
             <?php echo \ArtPulse\Frontend\ap_render_rsvp_button( $event_id ); ?>
-            <?php echo \ArtPulse\Frontend\ap_render_favorite_button( $event_id ); ?>
+            <?php echo \ArtPulse\Frontend\ap_render_favorite_button( $event_id, 'artpulse_event' ); ?>
         </div>
         <div class="ap-event-stats">
             <span class="ap-rsvp-count"><?php echo esc_html( $rsvp_count ); ?></span>
