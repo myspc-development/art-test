@@ -400,6 +400,25 @@ class PostTypeRegistrar
             'type'         => 'integer',
         ]);
 
+        register_post_meta('artpulse_artist', 'artist_spotlight', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+            'default'      => false,
+        ]);
+
+        register_post_meta('artpulse_artist', 'spotlight_start_date', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_artist', 'spotlight_end_date', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
         register_post_meta('artpulse_artwork', '_ap_artwork_medium', [
             'show_in_rest' => true,
             'single'       => true,

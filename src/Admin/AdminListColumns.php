@@ -20,6 +20,7 @@ class AdminListColumns
     {
         $columns['artist_name'] = __('Artist Name', 'artpulse');
         $columns['artist_featured'] = __('Featured?', 'artpulse');
+        $columns['artist_spotlight'] = __('Spotlight?', 'artpulse');
         return $columns;
     }
 
@@ -31,6 +32,9 @@ class AdminListColumns
                 break;
             case 'artist_featured':
                 echo get_post_meta($post_id, 'artist_featured', true) === '1' ? '✅' : '—';
+                break;
+            case 'artist_spotlight':
+                echo get_post_meta($post_id, 'artist_spotlight', true) === '1' ? '⭐' : '—';
                 break;
         }
     }
