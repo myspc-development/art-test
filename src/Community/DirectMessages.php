@@ -64,6 +64,18 @@ class DirectMessages
                 'with' => [ 'type' => 'integer', 'required' => true ],
             ],
         ]);
+
+        register_rest_route('artpulse/v1', '/conversations', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'rest_list_conversations'],
+            'permission_callback' => fn() => is_user_logged_in(),
+        ]);
+
+        register_rest_route('artpulse/v1', '/message/read', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'mark_read'],
+            'permission_callback' => fn() => is_user_logged_in(),
+        ]);
     }
 
     public static function send(WP_REST_Request $req): WP_REST_Response|WP_Error
@@ -127,5 +139,44 @@ class DirectMessages
             $row['is_read'] = (int) $row['is_read'];
             return $row;
         }, $rows);
+    }
+
+    public static function list_conversations(int $user_id): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $sql   = "SELECT DISTINCT CASE WHEN sender_id = %d THEN recipient_id ELSE sender_id END AS other_id FROM $table WHERE sender_id = %d OR recipient_id = %d";
+        $rows  = $wpdb->get_col($wpdb->prepare($sql, $user_id, $user_id, $user_id));
+        return array_map('intval', $rows);
+    }
+
+    public static function rest_list_conversations(WP_REST_Request $req): WP_REST_Response
+    {
+        $user_id = get_current_user_id();
+        $list    = self::list_conversations($user_id);
+        return rest_ensure_response($list);
+    }
+
+    public static function mark_read(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        $ids = $req->get_param('ids');
+        if (!is_array($ids)) {
+            $id  = $req->get_param('id');
+            $ids = $id ? [$id] : [];
+        }
+        $ids = array_map('intval', $ids);
+        if (!$ids) {
+            return new WP_Error('invalid_params', 'No message IDs', ['status' => 400]);
+        }
+
+        global $wpdb;
+        $table   = $wpdb->prefix . 'ap_messages';
+        $user_id = get_current_user_id();
+        $place   = implode(',', array_fill(0, count($ids), '%d'));
+        $args    = array_merge($ids, [$user_id]);
+        $sql     = "UPDATE $table SET is_read = 1 WHERE id IN ($place) AND recipient_id = %d";
+        $wpdb->query($wpdb->prepare($sql, ...$args));
+
+        return rest_ensure_response(['updated' => count($ids)]);
     }
 }
