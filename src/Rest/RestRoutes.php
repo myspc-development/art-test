@@ -79,6 +79,13 @@ class RestRoutes
         $args = [];
         $meta_query = [];
 
+        $meta_query[] = [
+            'key'     => 'event_start_date',
+            'value'   => current_time('Y-m-d'),
+            'compare' => '>=',
+            'type'    => 'DATE',
+        ];
+
         if ($city) {
             $meta_query[] = [
                 'key'   => 'event_city',

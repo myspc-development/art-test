@@ -28,7 +28,7 @@ class ArtistDashboardHome
             'fields'         => 'ids',
             'meta_query'     => [
                 [
-                    'key'     => '_ap_event_date',
+                    'key'     => 'event_start_date',
                     'value'   => $today,
                     'compare' => '>=',
                     'type'    => 'DATE',

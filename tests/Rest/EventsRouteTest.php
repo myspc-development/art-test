@@ -11,10 +11,14 @@ class EventsRouteTest extends \WP_UnitTestCase
 {
     private int $la_event;
     private int $ny_event;
+    private int $past_event;
 
     public function set_up(): void
     {
         parent::set_up();
+
+        $future1 = date('Y-m-d', strtotime('+1 day'));
+        $future2 = date('Y-m-d', strtotime('+2 days'));
 
         $this->la_event = wp_insert_post([
             'post_title'  => 'LA Event',
@@ -23,15 +27,15 @@ class EventsRouteTest extends \WP_UnitTestCase
             'meta_input'  => [
                 'event_city'       => 'Los Angeles',
                 'event_state'      => 'CA',
-                'event_start_date' => '2024-02-01',
-                'event_end_date'   => '2024-02-02',
+                'event_start_date' => $future1,
+                'event_end_date'   => $future1,
                 'venue_name'       => 'LA Venue',
                 'event_street_address' => '123 Main St',
                 'event_postcode'   => '90001',
                 'event_country'    => 'US',
                 'event_lat'        => '34.05',
                 'event_lng'        => '-118.25',
-                '_ap_event_date'   => '2024-01-01',
+                '_ap_event_date'   => $future1,
                 '_ap_event_location'=> 'LA',
             ],
         ]);
@@ -43,16 +47,31 @@ class EventsRouteTest extends \WP_UnitTestCase
             'meta_input'  => [
                 'event_city'       => 'New York City',
                 'event_state'      => 'NY',
-                'event_start_date' => '2024-03-01',
-                'event_end_date'   => '2024-03-02',
+                'event_start_date' => $future2,
+                'event_end_date'   => $future2,
                 'venue_name'       => 'NY Venue',
                 'event_street_address' => '456 Broadway',
                 'event_postcode'   => '10001',
                 'event_country'    => 'US',
                 'event_lat'        => '40.71',
                 'event_lng'        => '-74.00',
-                '_ap_event_date'   => '2024-01-01',
+                '_ap_event_date'   => $future2,
                 '_ap_event_location'=> 'NY',
+            ],
+        ]);
+
+        $this->past_event = wp_insert_post([
+            'post_title'  => 'Past Event',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+            'meta_input'  => [
+                'event_city'       => 'Los Angeles',
+                'event_state'      => 'CA',
+                'event_start_date' => date('Y-m-d', strtotime('-1 day')),
+                'event_end_date'   => date('Y-m-d', strtotime('-1 day')),
+                'venue_name'       => 'Old Venue',
+                '_ap_event_date'   => date('Y-m-d', strtotime('-1 day')),
+                '_ap_event_location'=> 'LA',
             ],
         ]);
 
@@ -117,8 +136,9 @@ class EventsRouteTest extends \WP_UnitTestCase
         $this->assertSame('1', $event['rsvp_enabled']);
         $this->assertSame('5', $event['rsvp_limit']);
         $this->assertSame('1', $event['waitlist_enabled']);
-        $this->assertSame('2024-02-01', $event['event_start_date']);
-        $this->assertSame('2024-02-02', $event['event_end_date']);
+        $future1 = date('Y-m-d', strtotime('+1 day'));
+        $this->assertSame($future1, $event['event_start_date']);
+        $this->assertSame($future1, $event['event_end_date']);
         $this->assertSame('LA Venue', $event['venue_name']);
         $this->assertSame('123 Main St', $event['event_street_address']);
         $this->assertSame('Los Angeles', $event['event_city']);
@@ -136,5 +156,15 @@ class EventsRouteTest extends \WP_UnitTestCase
         $this->assertSame('a@example.com', $event['organization']['contact_email']);
         $this->assertSame('555', $event['organization']['contact_phone']);
         $this->assertSame('Lead', $event['organization']['contact_role']);
+    }
+
+    public function test_past_events_are_excluded(): void
+    {
+        $req = new WP_REST_Request('GET', '/artpulse/v1/events');
+        $res = rest_get_server()->dispatch($req);
+        $ids = wp_list_pluck($res->get_data(), 'id');
+        $this->assertContains($this->la_event, $ids);
+        $this->assertContains($this->ny_event, $ids);
+        $this->assertNotContains($this->past_event, $ids);
     }
 }
