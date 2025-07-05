@@ -350,6 +350,13 @@ The `scripts/` directory stores optional scaffolding and release helpers
 used during early development. These scripts are **not** required when
 setting up the plugin from source.
 
+Before running the tests for the first time, execute the environment
+setup script to fetch WordPress and install dependencies:
+
+```bash
+bash scripts/setup-env.sh
+```
+
 Run the test suite and coding standards checks with:
 
 ```bash
@@ -373,17 +380,18 @@ The zip file is placed in the `release/` directory.
 
 ### Test Environment Variables
 
-Database credentials for the WordPress test suite can be supplied via
-environment variables. Define these before running `setup-tests.sh` or
-`composer test`:
+Database credentials for the WordPress test suite must be supplied via
+environment variables. Define these before running `bash scripts/setup-env.sh`
+or `composer test`:
 
 - `DB_NAME` – name of the test database
 - `DB_USER` – database user
 - `DB_PASSWORD` – user password
-- `DB_HOST` – database host (defaults to `127.0.0.1`)
-- `DB_CHARSET` – optional character set (defaults to `utf8mb4`)
-- `DB_COLLATE` – optional collation (defaults to empty)
+- `DB_HOST` – database host
+- `DB_CHARSET` – optional character set
+- `DB_COLLATE` – optional collation
 
-If any variables are omitted the fallback values in `wp-tests-config.php`
-will be used.
+You may also set `WORDPRESS_TARBALL` to the path of a local WordPress archive
+if you need an offline setup. If any variables are omitted the test bootstrap
+will fail to connect to the database.
 
