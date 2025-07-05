@@ -57,6 +57,7 @@ class Plugin
         add_action('init', [\ArtPulse\Community\FollowManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\ProfileLinkRequestManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\NotificationManager::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Community\DirectMessages::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Admin\LoginEventsPage::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\UserEngagementLogger::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ProfileMetrics::class, 'maybe_install_table']);
@@ -248,6 +249,7 @@ class Plugin
         \ArtPulse\Community\FollowRestController::register();
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
         \ArtPulse\Community\NotificationHooks::register();
+        \ArtPulse\Community\DirectMessages::register();
         \ArtPulse\Core\MembershipNotifier::register();
         \ArtPulse\Core\MembershipCron::register();
         \ArtPulse\Engagement\DigestMailer::register();
@@ -300,6 +302,14 @@ class Plugin
         );
 
         wp_enqueue_script(
+            'ap-messages-js',
+            plugins_url('assets/js/ap-messages.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_enqueue_script(
             'ap-event-comments-js',
             plugins_url('assets/js/ap-event-comments.js', ARTPULSE_PLUGIN_FILE),
             ['wp-api-fetch'],
@@ -314,6 +324,12 @@ class Plugin
         wp_localize_script('ap-notifications-js', 'APNotifyData', [
             'rest_url' => esc_url_raw(rest_url()),
             'nonce'    => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_localize_script('ap-messages-js', 'APMessages', [
+            'apiRoot' => esc_url_raw(rest_url()),
+            'nonce'   => wp_create_nonce('wp_rest'),
+            'pollId'  => 0,
         ]);
 
         wp_localize_script('ap-event-comments-js', 'APComments', [
