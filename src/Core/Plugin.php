@@ -188,6 +188,7 @@ class Plugin
         \ArtPulse\Frontend\EventCommentsShortcode::register();
         \ArtPulse\Frontend\EventChatShortcode::register();
         \ArtPulse\Frontend\RestListShortcodes::register();
+        \ArtPulse\Frontend\CollectionsShortcode::register();
         \ArtPulse\Frontend\EventFilter::register();
         \ArtPulse\Frontend\OrgRsvpDashboard::register();
         \ArtPulse\Frontend\EventRsvpHandler::register();

@@ -34,9 +34,18 @@ class RestListShortcodes
             return '';
         }
 
-        return sprintf(
-            '<div class="ap-rest-list ap-collection" data-id="%d"></div>',
-            $id
-        );
+        $post = get_post($id);
+        if (!$post || $post->post_type !== 'ap_collection') {
+            return '';
+        }
+
+        ob_start();
+        ?>
+        <div class="ap-collection-detail">
+            <h2 class="ap-collection-title"><?php echo esc_html($post->post_title); ?></h2>
+            <div class="ap-rest-list ap-collection" data-id="<?php echo esc_attr($id); ?>"></div>
+        </div>
+        <?php
+        return ob_get_clean();
     }
 }

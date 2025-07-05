@@ -549,6 +549,19 @@ function ap_get_event_card(int $event_id): string {
     return ob_get_clean();
 }
 
+function ap_get_collection_card(int $collection_id): string {
+    $path = locate_template('templates/collection-card.php');
+    if (!$path) {
+        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/collection-card.php';
+    }
+    if (!file_exists($path)) {
+        return '';
+    }
+    ob_start();
+    include $path;
+    return ob_get_clean();
+}
+
 function ap_get_events_for_map() {
     $query = new WP_Query([
         'post_type'      => 'artpulse_event',

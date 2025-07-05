@@ -10,7 +10,8 @@ export const rolesMenus = {
     { label: "Edit Profile", icon: "User", section: "profile" },
     { label: "My Artworks", icon: "Image", section: "artworks" },
     { label: "Add Artwork", icon: "Plus", section: "add-artwork" },
-    { label: "My Events", icon: "Calendar", section: "events" }
+    { label: "My Events", icon: "Calendar", section: "events" },
+    { label: "My Collections", icon: "Folder", section: "collections" }
   ],
   organization: [
     { label: "Org Dashboard", icon: "Building2", section: "dashboard" },
@@ -18,6 +19,11 @@ export const rolesMenus = {
     { label: "Members", icon: "Users", section: "members" },
     { label: "Add Member", icon: "UserPlus", section: "add-member" },
     { label: "Org Events", icon: "Calendar", section: "events" },
-    { label: "Add Event", icon: "Plus", section: "add-event" }
+    { label: "Add Event", icon: "Plus", section: "add-event" },
+    { label: "My Collections", icon: "Folder", section: "collections" }
+  ],
+  curator: [
+    { label: "Curator Dashboard", icon: "LayoutGrid", section: "dashboard" },
+    { label: "My Collections", icon: "Folder", section: "collections" }
   ]
 };
