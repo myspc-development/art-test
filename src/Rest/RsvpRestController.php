@@ -179,6 +179,7 @@ class RsvpRestController
         update_post_meta($event_id, 'event_rsvp_data', $rsvp_data);
 
         self::store_lists($event_id, $rsvps, $waitlist);
+        do_action('ap_event_rsvp_added', $event_id, get_current_user_id());
         self::log_rsvp($event_id);
         \ArtPulse\Core\UserEngagementLogger::log($user_id, 'rsvp', $event_id);
 

@@ -31,9 +31,11 @@ class EventRsvpHandler
         if (!is_array($existing)) {
             $existing = [];
         }
+
         if (!in_array($user_id, $existing, true)) {
             $existing[] = $user_id;
             update_post_meta($event_id, 'ap_event_rsvps', $existing);
+            do_action('ap_event_rsvp_added', $event_id, get_current_user_id());
         }
 
         wp_safe_redirect(get_permalink($event_id));
