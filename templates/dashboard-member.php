@@ -50,7 +50,7 @@ use ArtPulse\Community\FavoritesManager;
     <div id="ap-dashboard-widgets">
 
     <div class="dashboard-card" data-widget="membership">
-        <h2 id="membership"><?php _e('Subscription Status','artpulse'); ?></h2>
+        <h2 id="membership"><?php esc_html_e('Subscription Status','artpulse'); ?></h2>
         <div id="ap-membership-info"></div>
         <?php if ( !empty($badges) ) : ?>
         <div class="ap-badges"></div>
@@ -59,7 +59,7 @@ use ArtPulse\Community\FavoritesManager;
         <a class="ap-edit-profile-link ap-form-button nectar-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
     </div>
     <div class="dashboard-card" data-widget="upgrade">
-        <h2 id="upgrade"><?php _e('Upgrade Your Account','artpulse'); ?></h2>
+        <h2 id="upgrade"><?php esc_html_e('Upgrade Your Account','artpulse'); ?></h2>
         <div id="ap-upgrade-options"></div>
         <?php if ($show_forms) : ?>
         <div class="ap-dashboard-forms">
@@ -69,11 +69,11 @@ use ArtPulse\Community\FavoritesManager;
         <?php endif; ?>
     </div>
     <div class="dashboard-card" data-widget="local-events">
-        <h2 id="local-events"><?php _e('Events Near You','artpulse'); ?></h2>
+        <h2 id="local-events"><?php esc_html_e('Events Near You','artpulse'); ?></h2>
         <div id="ap-local-events"></div>
     </div>
     <div class="dashboard-card" data-widget="favorites">
-        <h2 id="favorites"><?php _e('My Favorites','artpulse'); ?></h2>
+        <h2 id="favorites"><?php esc_html_e('My Favorites','artpulse'); ?></h2>
         <?php
         use ArtPulse\Community\FavoritesManager;
 
@@ -100,11 +100,11 @@ use ArtPulse\Community\FavoritesManager;
         ?>
     </div>
     <div class="dashboard-card" data-widget="rsvps">
-        <h2 id="rsvps"><?php _e('My RSVPs','artpulse'); ?></h2>
+        <h2 id="rsvps"><?php esc_html_e('My RSVPs','artpulse'); ?></h2>
         <div id="ap-rsvp-events"></div>
     </div>
     <div class="dashboard-card" data-widget="my-events">
-        <h2 id="my-events"><?php _e('My Events','artpulse'); ?></h2>
+        <h2 id="my-events"><?php esc_html_e('My Events','artpulse'); ?></h2>
         <div id="ap-dashboard-stats" class="ap-dashboard-stats"></div>
         <div id="ap-next-event"></div>
         <div id="ap-my-events"></div>
@@ -114,25 +114,25 @@ use ArtPulse\Community\FavoritesManager;
         <canvas id="ap-event-analytics-chart" height="150"></canvas>
     </div>
     <div class="dashboard-card" data-widget="events">
-        <h2 id="events"><?php _e('Upcoming Events','artpulse'); ?></h2>
+        <h2 id="events"><?php esc_html_e('Upcoming Events','artpulse'); ?></h2>
         <div id="ap-events-feed"></div>
     </div>
     <?php if ($show_support_history) : ?>
     <div class="dashboard-card" data-widget="support-history">
         <section id="support-history">
-            <h2><?php _e('Support History','artpulse'); ?></h2>
+            <h2><?php esc_html_e('Support History','artpulse'); ?></h2>
             <div id="ap-support-history"></div>
         </section>
     </div>
     <?php endif; ?>
     <?php if ($show_notifications) : ?>
     <div class="dashboard-card" data-widget="notifications">
-        <h2 id="notifications"><?php _e('Notifications','artpulse'); ?></h2>
+        <h2 id="notifications"><?php esc_html_e('Notifications','artpulse'); ?></h2>
         <div id="ap-dashboard-notifications"></div>
     </div>
     <?php endif; ?>
     <div class="dashboard-card" data-widget="account-tools">
-        <h2 id="account-tools"><?php _e('Account Tools','artpulse'); ?></h2>
+        <h2 id="account-tools"><?php esc_html_e('Account Tools','artpulse'); ?></h2>
         <div id="ap-account-tools">
             <button id="ap-export-json" class="ap-form-button nectar-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
             <button id="ap-export-csv" class="ap-form-button nectar-button"><?php esc_html_e('Export CSV','artpulse'); ?></button>
