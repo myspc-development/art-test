@@ -12,6 +12,9 @@ class UserDashboardDataTest extends \WP_UnitTestCase
 {
     private int $user_id;
     private int $event_id;
+    private int $artist_id;
+    private int $org_id;
+    private int $artwork_id;
 
     public function set_up(): void
     {
@@ -30,6 +33,25 @@ class UserDashboardDataTest extends \WP_UnitTestCase
         update_post_meta($this->event_id, '_ap_event_date', date('Y-m-d', strtotime('+1 day')));
         update_user_meta($this->user_id, 'ap_rsvp_events', [$this->event_id]);
         FavoritesManager::add_favorite($this->user_id, $this->event_id, 'artpulse_event');
+
+        $this->artist_id = wp_insert_post([
+            'post_title'  => 'Sample Artist',
+            'post_type'   => 'artpulse_artist',
+            'post_status' => 'publish',
+        ]);
+        $this->org_id = wp_insert_post([
+            'post_title'  => 'Sample Org',
+            'post_type'   => 'artpulse_org',
+            'post_status' => 'publish',
+        ]);
+        $this->artwork_id = wp_insert_post([
+            'post_title'  => 'Sample Artwork',
+            'post_type'   => 'artpulse_artwork',
+            'post_status' => 'publish',
+        ]);
+        FavoritesManager::add_favorite($this->user_id, $this->artist_id, 'artpulse_artist');
+        FavoritesManager::add_favorite($this->user_id, $this->org_id, 'artpulse_org');
+        FavoritesManager::add_favorite($this->user_id, $this->artwork_id, 'artpulse_artwork');
         UserDashboardManager::register();
         do_action('rest_api_init');
     }
@@ -41,7 +63,7 @@ class UserDashboardDataTest extends \WP_UnitTestCase
         $this->assertSame(200, $response->get_status());
         $data = $response->get_data();
         $this->assertSame(['gold'], $data['user_badges']);
-        $this->assertSame(1, $data['favorite_count']);
+        $this->assertSame(4, $data['favorite_count']);
         $this->assertSame(1, $data['rsvp_count']);
         $this->assertSame(1, $data['my_event_count']);
     }
@@ -57,7 +79,16 @@ class UserDashboardDataTest extends \WP_UnitTestCase
         $this->assertIsArray($data['favorite_events']);
         $this->assertCount(1, $data['favorite_events']);
         $this->assertSame($this->event_id, $data['favorite_events'][0]['id']);
-        $this->assertSame(1, $data['favorite_count']);
+        $this->assertIsArray($data['favorite_artists']);
+        $this->assertCount(1, $data['favorite_artists']);
+        $this->assertSame($this->artist_id, $data['favorite_artists'][0]['id']);
+        $this->assertIsArray($data['favorite_orgs']);
+        $this->assertCount(1, $data['favorite_orgs']);
+        $this->assertSame($this->org_id, $data['favorite_orgs'][0]['id']);
+        $this->assertIsArray($data['favorite_artworks']);
+        $this->assertCount(1, $data['favorite_artworks']);
+        $this->assertSame($this->artwork_id, $data['favorite_artworks'][0]['id']);
+        $this->assertSame(4, $data['favorite_count']);
         $this->assertSame(1, $data['rsvp_count']);
         $this->assertSame(1, $data['my_event_count']);
 

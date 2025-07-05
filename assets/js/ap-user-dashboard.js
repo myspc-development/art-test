@@ -204,6 +204,33 @@ if (content) {
   });
 }
 
+    const favMap = {
+      favorite_events: 'ap-favorite-events',
+      favorite_artists: 'ap-favorite-artists',
+      favorite_orgs: 'ap-favorite-orgs',
+      favorite_artworks: 'ap-favorite-artworks'
+    };
+    Object.entries(favMap).forEach(([key, id]) => {
+      const container = document.getElementById(id);
+      if (!container) return;
+      const items = data[key] || [];
+      container.innerHTML = '';
+      if (!items.length) {
+        container.textContent = 'No favorites.';
+        return;
+      }
+      const ul = document.createElement('ul');
+      items.forEach(item => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = item.link;
+        a.textContent = item.title;
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    });
+
 
     const hasLocation = data.city || data.state;
     if (hasLocation) {
