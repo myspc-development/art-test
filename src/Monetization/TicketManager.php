@@ -13,6 +13,7 @@ class TicketManager
     {
         add_action('rest_api_init', [self::class, 'register_routes']);
         add_action('init', [self::class, 'maybe_install_tables']);
+        add_action('artpulse_ticket_purchased', [self::class, 'send_private_link_email'], 10, 4);
     }
 
     /**
@@ -195,6 +196,11 @@ class TicketManager
             ]);
 
             $body    = sprintf(__('Your ticket code is %s', 'artpulse'), $code);
+            $virtual = get_post_meta($event_id, '_ap_virtual_event_url', true);
+            $enabled = get_post_meta($event_id, '_ap_virtual_access_enabled', true);
+            if ($enabled && $virtual) {
+                $body .= '<br/><br/>' . sprintf(__('Join here: %s', 'artpulse'), esc_url($virtual));
+            }
             $message = \ArtPulse\Core\EmailTemplateManager::render($body, [
                 'username'    => $user->user_login,
                 'event_title' => get_the_title($event_id),
@@ -215,5 +221,55 @@ class TicketManager
         do_action('artpulse_ticket_purchased', $user_id, $event_id, $ticket_id, $qty);
 
         return rest_ensure_response(['ticket_code' => $code]);
+    }
+
+    /**
+     * Send a virtual access link when a ticket purchase is confirmed.
+     */
+    public static function send_private_link_email(int $user_id, int $event_id, int $ticket_id, int $qty): void
+    {
+        // avoid duplicate emails when REST purchase already handled
+        if ($event_id) {
+            return;
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_tickets';
+        $event_id = intval($wpdb->get_var($wpdb->prepare("SELECT event_id FROM $table WHERE id = %d", $ticket_id)));
+
+        $virtual = get_post_meta($event_id, '_ap_virtual_event_url', true);
+        $enabled = get_post_meta($event_id, '_ap_virtual_access_enabled', true);
+        $user    = get_user_by('id', $user_id);
+        if (!$user || !$enabled || !$virtual || !is_email($user->user_email)) {
+            return;
+        }
+
+        $body = sprintf(__('Access your event here: %s', 'artpulse'), esc_url($virtual));
+        $message = \ArtPulse\Core\EmailTemplateManager::render($body, [
+            'username'    => $user->user_login,
+            'event_title' => get_the_title($event_id),
+        ]);
+        $headers = ['Content-Type: text/html; charset=UTF-8'];
+        \ArtPulse\Core\EmailService::send(
+            $user->user_email,
+            sprintf(__('Access link for %s', 'artpulse'), get_the_title($event_id)),
+            $message,
+            $headers
+        );
+    }
+
+    /**
+     * Check if a user has a valid ticket for an event.
+     */
+    public static function user_has_ticket(int $user_id, int $event_id): bool
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_tickets';
+        $count = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM $table WHERE user_id = %d AND event_id = %d AND status = 'active'",
+            $user_id,
+            $event_id
+        ));
+        return intval($count) > 0;
     }
 }

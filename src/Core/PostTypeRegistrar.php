@@ -369,6 +369,19 @@ class PostTypeRegistrar
             'type'         => 'array',
         ]);
 
+        register_post_meta('artpulse_event', '_ap_virtual_event_url', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_event', '_ap_virtual_access_enabled', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+            'default'      => false,
+        ]);
+
         register_post_meta('artpulse_artist', '_ap_artist_bio', [
             'show_in_rest' => true,
             'single'       => true,
