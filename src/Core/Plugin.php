@@ -201,6 +201,7 @@ class Plugin
         \ArtPulse\Rest\PaymentReportsController::register();
         \ArtPulse\Rest\UserAccountRestController::register();
         \ArtPulse\Rest\CollectionRestController::register();
+        \ArtPulse\Rest\ArtworkAuctionController::register();
         ArtistRestController::register();
         RestRelationships::register();
         TaxonomyRestFilters::register();
@@ -232,6 +233,7 @@ class Plugin
         if (!empty($opts['woocommerce_enabled'])) {
             \ArtPulse\Core\WooCommerceIntegration::register();
             \ArtPulse\Core\PurchaseShortcode::register();
+            \ArtPulse\Core\ArtworkWooSync::register();
         }
 
         \ArtPulse\Admin\AdminColumnsTaxonomies::register();
