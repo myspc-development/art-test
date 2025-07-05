@@ -113,13 +113,28 @@ class RecommendationEngine
             if (!$recs) {
                 $query = new \WP_Query([
                     'post_type'      => 'artpulse_event',
-                    'posts_per_page' => $limit,
-                    'orderby'        => 'meta_value_num',
-                    'meta_key'       => 'view_count',
-                    'order'          => 'DESC',
+                    'post_status'    => 'publish',
+                    'posts_per_page' => -1,
                     'no_found_rows'  => true,
                 ]);
-                foreach ($query->posts as $post) {
+                $events = $query->posts;
+                usort($events, function($a, $b) {
+                    $fav_a = (int) get_post_meta($a->ID, 'ap_favorite_count', true);
+                    $fav_b = (int) get_post_meta($b->ID, 'ap_favorite_count', true);
+                    if ($fav_a === $fav_b) {
+                        $rsvp_a = count((array) get_post_meta($a->ID, 'event_rsvp_list', true));
+                        $rsvp_b = count((array) get_post_meta($b->ID, 'event_rsvp_list', true));
+                        if ($rsvp_a === $rsvp_b) {
+                            $view_a = (int) get_post_meta($a->ID, 'view_count', true);
+                            $view_b = (int) get_post_meta($b->ID, 'view_count', true);
+                            return $view_b <=> $view_a;
+                        }
+                        return $rsvp_b <=> $rsvp_a;
+                    }
+                    return $fav_b <=> $fav_a;
+                });
+                $events = array_slice($events, 0, $limit);
+                foreach ($events as $post) {
                     $recs[] = [
                         'id'     => $post->ID,
                         'title'  => $post->post_title,
