@@ -289,7 +289,7 @@ by both fields to display relevant feedback anywhere on the site.
 
 ## Portfolio Builder
 
-Use `[ap_portfolio_builder]` to allow members to create portfolio items. Drag items in the saved list to reorder them; changes are saved automatically.
+Use `[ap_portfolio_builder]` to allow members to create portfolio items. Drag items in the saved list to reorder them; changes are saved automatically. The builder now appears inside the Organization Dashboard so organizations can manage their portfolio without leaving the page. Clicking **Edit** loads the item into the form for instant title updates.
 
 ## Portfolio Meta Migration
 

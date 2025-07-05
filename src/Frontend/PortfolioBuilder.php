@@ -168,7 +168,11 @@ class PortfolioBuilder
         update_post_meta($post_id, 'portfolio_visibility', $visibility);
         update_post_meta($post_id, 'portfolio_image', $image);
 
-        wp_send_json_success(['message' => 'Saved successfully.']);
+        wp_send_json_success([
+            'message' => 'Saved successfully.',
+            'id'      => $post_id,
+            'title'   => $title,
+        ]);
     }
 
     public static function get_item()
