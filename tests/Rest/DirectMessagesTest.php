@@ -65,4 +65,32 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $this->assertCount(1, $data);
         $this->assertSame('Hello', $data[0]['content']);
     }
+
+    public function test_list_conversations_and_mark_read(): void
+    {
+        $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
+        $post->set_param('recipient_id', $this->user2);
+        $post->set_param('content', 'Hi there');
+        $res = rest_get_server()->dispatch($post);
+        $this->assertSame(200, $res->get_status());
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $row   = $wpdb->get_row("SELECT * FROM $table", ARRAY_A);
+        $msg_id = (int) $row['id'];
+
+        $convos = new WP_REST_Request('GET', '/artpulse/v1/conversations');
+        $res = rest_get_server()->dispatch($convos);
+        $this->assertSame(200, $res->get_status());
+        $this->assertSame([$this->user2], $res->get_data());
+
+        wp_set_current_user($this->user2);
+        $read = new WP_REST_Request('POST', '/artpulse/v1/message/read');
+        $read->set_param('ids', [$msg_id]);
+        $res = rest_get_server()->dispatch($read);
+        $this->assertSame(200, $res->get_status());
+
+        $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE id = %d", $msg_id), ARRAY_A);
+        $this->assertSame('1', $row['is_read']);
+    }
 }
