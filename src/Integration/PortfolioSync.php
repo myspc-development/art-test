@@ -11,7 +11,7 @@ class PortfolioSync
      */
     public static function register()
     {
-        $types = ['artpulse_artist', 'artpulse_artwork', 'artpulse_event'];
+        $types = ['artpulse_artist', 'artpulse_artwork', 'artpulse_event', 'artpulse_org'];
         foreach ($types as $type) {
             add_action("save_post_{$type}", [self::class, 'sync_portfolio'], 10, 2);
         }
@@ -34,7 +34,7 @@ class PortfolioSync
         }
 
         $ids = [];
-        if (in_array($post->post_type, ['artpulse_artwork', 'artpulse_event'], true)) {
+        if (in_array($post->post_type, ['artpulse_artwork', 'artpulse_event', 'artpulse_org'], true)) {
             $ids = get_post_meta($post_id, '_ap_submission_images', true);
             if (!is_array($ids)) {
                 $ids = [];
@@ -101,6 +101,24 @@ class PortfolioSync
                     }
                 }
             }
+
+            if ($post->post_type === 'artpulse_org') {
+                $org_keys = [
+                    'ead_org_logo_id',
+                    'ead_org_banner_id',
+                    'ead_org_website_url',
+                    'ead_org_street_address',
+                    'ead_org_type',
+                ];
+                foreach ($org_keys as $key) {
+                    $val = get_post_meta($post_id, $key, true);
+                    if ($val !== '') {
+                        update_post_meta($portfolio_id, $key, $val);
+                    } else {
+                        delete_post_meta($portfolio_id, $key);
+                    }
+                }
+            }
         }
     }
 
@@ -112,7 +130,7 @@ class PortfolioSync
     public static function delete_portfolio($post_id)
     {
         $type = get_post_type($post_id);
-        if (!in_array($type, ['artpulse_artist', 'artpulse_artwork', 'artpulse_event'], true)) {
+        if (!in_array($type, ['artpulse_artist', 'artpulse_artwork', 'artpulse_event', 'artpulse_org'], true)) {
             return;
         }
 

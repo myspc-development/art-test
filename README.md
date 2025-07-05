@@ -306,6 +306,10 @@ Organization posts reuse this system. The same `ap-event-gallery-front.js` scrip
 
 Portfolio posts mirror this functionality. When a portfolio item contains multiple IDs in the `_ap_submission_images` meta field, each ID after the featured image outputs as a slide. The front-end script `ap-portfolio-gallery-front.js` initializes Swiper on single portfolio pages. If no gallery images are present a short “No gallery images available.” message is displayed.
 
+## Portfolio synchronization
+
+Artist, artwork, event **and organization** posts automatically create or update a corresponding portfolio entry when saved. These portfolio items are used by the directory shortcodes. Deleting the source post removes the portfolio entry as well.
+
 ## Uninstall Cleanup
 
 When the plugin is uninstalled through the WordPress admin, all tables created by ArtPulse are removed automatically. The following tables are dropped along with the `artpulse_settings` option:
