@@ -109,4 +109,33 @@ class UserDashboardDataTest extends \WP_UnitTestCase
         $data = $response->get_data();
         $this->assertSame('dark', $data['dashboard_theme']);
     }
+
+    public function test_dashboard_lists_favorites_for_all_types(): void
+    {
+        $request = new WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
+        $response = rest_get_server()->dispatch($request);
+        $this->assertSame(200, $response->get_status());
+        $data = $response->get_data();
+
+        $map = [
+            'favorite_events'   => $this->event_id,
+            'favorite_artists'  => $this->artist_id,
+            'favorite_orgs'     => $this->org_id,
+            'favorite_artworks' => $this->artwork_id,
+        ];
+
+        foreach ($map as $key => $id) {
+            $this->assertIsArray($data[$key]);
+            $this->assertCount(1, $data[$key]);
+            $first = $data[$key][0];
+            $this->assertSame($id, $first['id']);
+            $this->assertArrayHasKey('title', $first);
+            $this->assertArrayHasKey('link', $first);
+            if ($key === 'favorite_events') {
+                $this->assertArrayHasKey('date', $first);
+            }
+        }
+
+        $this->assertSame(4, $data['favorite_count']);
+    }
 }
