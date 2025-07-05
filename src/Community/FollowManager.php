@@ -54,16 +54,30 @@ class FollowManager {
         do_action('ap_follow_added', $user_id, $object_id, $object_type);
 
         // --- Notify the owner (if not following self) ---
-        $owner_id = self::get_owner_user_id($object_id, $object_type);
-        if ($owner_id && $owner_id !== $user_id && class_exists('\ArtPulse\Community\NotificationManager')) {
-            $title = self::get_object_title($object_id, $object_type);
-            \ArtPulse\Community\NotificationManager::add(
-                $owner_id,
-                'follower',
-                $object_id,
-                $user_id,
-                sprintf('You have a new follower on your %s "%s".', $object_type, $title)
-            );
+        if (class_exists('\ArtPulse\Community\NotificationManager')) {
+            if ($object_type === 'user') {
+                if ($object_id !== $user_id) {
+                    \ArtPulse\Community\NotificationManager::add(
+                        $object_id,
+                        'follower',
+                        $object_id,
+                        $user_id,
+                        'You have a new follower.'
+                    );
+                }
+            } else {
+                $owner_id = self::get_owner_user_id($object_id, $object_type);
+                if ($owner_id && $owner_id !== $user_id) {
+                    $title = self::get_object_title($object_id, $object_type);
+                    \ArtPulse\Community\NotificationManager::add(
+                        $owner_id,
+                        'follower',
+                        $object_id,
+                        $user_id,
+                        sprintf('You have a new follower on your %s "%s".', $object_type, $title)
+                    );
+                }
+            }
         }
     }
 
@@ -149,6 +163,10 @@ class FollowManager {
      * Helper: Get the owner user ID of an object.
      */
     private static function get_owner_user_id($object_id, $object_type) {
+        if ($object_type === 'user') {
+            return (int) $object_id;
+        }
+
         // For all post types, the post_author is the owner
         if (post_type_exists($object_type)) {
             $post = get_post($object_id);
