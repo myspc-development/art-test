@@ -94,10 +94,10 @@ class MembershipManager
         update_user_meta($user_id, 'ap_membership_level', 'Free');
 
         // Optional: send welcome email
-        wp_mail(
+        \ArtPulse\Core\EmailService::send(
             $user->user_email,
-            __('Welcome to ArtPulse – Free Membership','artpulse'),
-            __('Thanks for joining! You now have Free membership.','artpulse')
+            __('Welcome to ArtPulse – Free Membership', 'artpulse'),
+            __('Thanks for joining! You now have Free membership.', 'artpulse')
         );
     }
 
@@ -275,7 +275,11 @@ class MembershipManager
                         $ids = array_map(static function ($w) { return $w->id; }, $warnings);
                         $message .= 'Early fraud warnings: ' . implode(', ', $ids) . "\n";
                     }
-                    wp_mail($admin_email, 'ArtPulse: Stripe Fraud Alert', $message);
+                    \ArtPulse\Core\EmailService::send(
+                        $admin_email,
+                        'ArtPulse: Stripe Fraud Alert',
+                        $message
+                    );
                     error_log($message);
                 }
 
@@ -306,10 +310,10 @@ class MembershipManager
                     update_user_meta($user_id, 'ap_membership_expires', current_time('timestamp'));
 
                     // notify user
-                    wp_mail(
+                    \ArtPulse\Core\EmailService::send(
                         $usr->user_email,
-                        __('Your ArtPulse membership has been cancelled','artpulse'),
-                        __('Your subscription has ended or payment failed. You are now on Free membership.','artpulse')
+                        __('Your ArtPulse membership has been cancelled', 'artpulse'),
+                        __('Your subscription has ended or payment failed. You are now on Free membership.', 'artpulse')
                     );
 
                     $amount   = isset($obj->amount_due) ? $obj->amount_due / 100 : 0;
@@ -443,10 +447,10 @@ class MembershipManager
             update_user_meta($user->ID, 'ap_membership_level', 'Free');
 
             // Optionally notify
-            wp_mail(
+            \ArtPulse\Core\EmailService::send(
                 $user->user_email,
-                __('Your ArtPulse membership has expired','artpulse'),
-                __('Your Pro membership has expired and you have been moved to Free level.','artpulse')
+                __('Your ArtPulse membership has expired', 'artpulse'),
+                __('Your Pro membership has expired and you have been moved to Free level.', 'artpulse')
             );
         }
     }

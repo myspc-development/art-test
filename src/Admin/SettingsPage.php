@@ -24,6 +24,7 @@ class SettingsPage
         SettingsRegistry::register_tab('import_export', __('Import/Export', 'artpulse'));
         SettingsRegistry::register_tab('shortcodes', __('Shortcode Pages', 'artpulse'));
         SettingsRegistry::register_tab('search', __('Search', 'artpulse'));
+        SettingsRegistry::register_tab('emails', __('Email Delivery', 'artpulse'));
 
         $general_fields = [
             'basic_fee' => [
@@ -207,6 +208,37 @@ class SettingsPage
         ];
         foreach ($location_fields as $key => $cfg) {
             SettingsRegistry::register_field('location', $key, $cfg);
+        }
+
+        $email_fields = [
+            'email_method' => [
+                'label'   => __('Email Method', 'artpulse'),
+                'type'    => 'select',
+                'options' => [
+                    'wp_mail' => 'wp_mail',
+                    'mailgun' => 'mailgun',
+                    'sendgrid' => 'sendgrid'
+                ],
+            ],
+            'mailgun_api_key' => [
+                'label' => __('Mailgun API Key', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'sendgrid_api_key' => [
+                'label' => __('SendGrid API Key', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'email_from_name' => [
+                'label' => __('From Name', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'email_from_address' => [
+                'label' => __('From Address', 'artpulse'),
+                'type'  => 'text',
+            ],
+        ];
+        foreach ($email_fields as $key => $cfg) {
+            SettingsRegistry::register_field('emails', $key, $cfg);
         }
     }
     public static function addMenu()
@@ -626,6 +658,13 @@ class SettingsPage
             } elseif ($key === 'search_service') {
                 $allowed = ['algolia', 'elasticpress'];
                 $output[$key] = in_array($value, $allowed, true) ? $value : '';
+            } elseif ($key === 'email_method') {
+                $allowed = ['wp_mail', 'mailgun', 'sendgrid'];
+                $output[$key] = in_array($value, $allowed, true) ? $value : 'wp_mail';
+            } elseif ($key === 'email_from_address') {
+                $output[$key] = sanitize_email($value);
+            } elseif (in_array($key, ['mailgun_api_key', 'sendgrid_api_key', 'email_from_name'], true)) {
+                $output[$key] = sanitize_text_field($value);
             } elseif ($key === 'default_email_template') {
                 $output[$key] = sanitize_textarea_field($value);
             } else {

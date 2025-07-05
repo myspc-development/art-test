@@ -65,7 +65,11 @@ class UserInvitationController
             if (!$email || !is_email($email)) {
                 return new WP_Error('invalid_emails', 'Invalid emails', ['status' => 400]);
             }
-            wp_mail($email, 'Invitation', 'You are invited to organization ' . $org_id);
+            \ArtPulse\Core\EmailService::send(
+                $email,
+                'Invitation',
+                'You are invited to organization ' . $org_id
+            );
             $user = get_user_by('email', $email);
             if ($user) {
                 update_user_meta($user->ID, 'ap_organization_id', $org_id);

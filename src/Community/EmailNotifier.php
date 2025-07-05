@@ -43,7 +43,12 @@ class EmailNotifier {
         $body    = self::generate_body($user, $content);
         $headers = ['Content-Type: text/html; charset=UTF-8'];
 
-        wp_mail($user->user_email, $subject, $body, $headers);
+        \ArtPulse\Core\EmailService::send(
+            $user->user_email,
+            $subject,
+            $body,
+            $headers
+        );
     }
 
     /**
