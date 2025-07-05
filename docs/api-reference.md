@@ -27,6 +27,17 @@ curl '/wp-json/artpulse/v1/filtered-posts?post_type=artpulse_artist&taxonomy=art
 
 The response includes an array of post IDs, titles and permalinks along with pagination information.
 
+### `GET /artpulse/v1/filter`
+
+Retrieve directory items (events, artists, artworks or orgs) with optional filters.
+
+Parameters mirror the shortcode filters:
+`type`, `limit`, `event_type`, `medium`, `style`, `org_type`, `location`,
+`city`, `region`, `for_sale` and `keyword`.
+
+Results are cached for five minutes using a transient keyed by the request
+parameters. The cache is flushed whenever related posts are updated.
+
 ### `GET /artpulse/v1/event/{id}/comments`
 
 Retrieve approved comments for an event.

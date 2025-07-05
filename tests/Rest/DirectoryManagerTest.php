@@ -130,4 +130,50 @@ class DirectoryManagerTest extends \WP_UnitTestCase
         $this->assertSame('Oil', $data[0]['medium']);
         $this->assertSame('Impressionism', $data[0]['style']);
     }
+
+    public function test_filter_results_are_cached(): void
+    {
+        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req->set_param('type', 'org');
+        rest_get_server()->dispatch($req);
+
+        $key = DirectoryManager::get_cache_key([
+            'type'       => 'org',
+            'limit'      => 10,
+            'event_type' => 0,
+            'medium'     => 0,
+            'style'      => 0,
+            'org_type'   => '',
+            'location'   => '',
+            'city'       => '',
+            'region'     => '',
+            'for_sale'   => null,
+            'keyword'    => '',
+        ]);
+
+        $this->assertIsArray(get_transient($key));
+    }
+
+    public function test_clear_cache_deletes_transients(): void
+    {
+        $key = DirectoryManager::get_cache_key([
+            'type'       => 'org',
+            'limit'      => 10,
+            'event_type' => 0,
+            'medium'     => 0,
+            'style'      => 0,
+            'org_type'   => '',
+            'location'   => '',
+            'city'       => '',
+            'region'     => '',
+            'for_sale'   => null,
+            'keyword'    => '',
+        ]);
+
+        set_transient($key, [$this->org_id], MINUTE_IN_SECONDS * 5);
+
+        DirectoryManager::clear_cache($this->org_id, get_post($this->org_id), true);
+
+        $this->assertFalse(get_transient($key));
+    }
 }
