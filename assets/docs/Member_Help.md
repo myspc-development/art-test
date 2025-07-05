@@ -49,6 +49,7 @@ graph TD
 - Track your artworks, events, and membership status at a glance.
 - Edit your profile and see recent notifications.
 - Earn badges for engagement. Any badges granted by admins appear below your membership details.
+- Drag widgets by their headers to rearrange them. Use the visibility menu to show or hide sections.
 - ![Screenshot: Member dashboard](images/member_dashboard.png) — see the [User Guide](../../docs/user-guide.md) for dashboard features.
 
 ## Event Calendar
