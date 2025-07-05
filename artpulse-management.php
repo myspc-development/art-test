@@ -254,6 +254,15 @@ function ap_enqueue_dashboard_styles() {
         [],
         filemtime(plugin_dir_path(__FILE__) . 'assets/css/ap-complete-dashboard-frontend.css')
     );
+    $user_css = plugin_dir_path(__FILE__) . 'assets/css/ap-user-dashboard.css';
+    if (file_exists($user_css)) {
+        wp_enqueue_style(
+            'ap-user-dashboard-style',
+            plugin_dir_url(__FILE__) . 'assets/css/ap-user-dashboard.css',
+            ['ap-complete-dashboard-style'],
+            filemtime($user_css)
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'ap_enqueue_dashboard_styles');
 
