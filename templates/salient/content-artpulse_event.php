@@ -1,10 +1,9 @@
-check my code.  <?php
+<?php
 /**
  * Template for displaying single ArtPulse Event content
  * Fetches event details from post meta.
  */
 
-error_log('📦 content-artpulse_event.php loaded');
 ?>
 
 <div class="container-wrap">
