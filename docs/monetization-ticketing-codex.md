@@ -40,6 +40,9 @@ POST /wp-json/artpulse/v1/event/{id}/promo-code/apply
 updating a user's membership level. Hooks allow restricting VIP events or
 applying automatic discounts.
 
+Premium dashboards can check for the `ap_premium_member` capability to display
+advanced widgets. Grant this capability when upgrading a user's plan.
+
 Endpoint:
 
 ```
