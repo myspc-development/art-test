@@ -92,6 +92,8 @@ class FavoritesManager {
             'artist'       => [],
             'organization' => [],
             'artwork'      => [],
+            'forum'        => [],
+            'competition_entry' => [],
         ];
 
         foreach (self::get_user_favorites($user_id) as $fav) {
@@ -100,6 +102,8 @@ class FavoritesManager {
                 'artpulse_artist'  => 'artist',
                 'artpulse_org'     => 'organization',
                 'artpulse_artwork' => 'artwork',
+                'ap_forum_thread'  => 'forum',
+                'ap_competition_entry' => 'competition_entry',
                 default            => null,
             };
 
@@ -114,20 +118,35 @@ class FavoritesManager {
     // 🔽🔽 Helper to get the owner of an object (post author, etc)
     private static function get_owner_user_id($object_id, $object_type) {
         // You may want to map object_type to post types, etc.
-        if (in_array($object_type, ['artpulse_artwork', 'artpulse_event', 'artpulse_artist', 'artpulse_org'])) {
+        if (in_array($object_type, ['artpulse_artwork', 'artpulse_event', 'artpulse_artist', 'artpulse_org', 'ap_forum_thread'])) {
             $post = get_post($object_id);
             return $post ? (int)$post->post_author : 0;
         }
-        // Extend for other types if needed
+
+        if ($object_type === 'ap_competition_entry') {
+            global $wpdb;
+            $table = $wpdb->prefix . 'ap_competition_entries';
+            return (int) $wpdb->get_var($wpdb->prepare("SELECT user_id FROM $table WHERE id = %d", $object_id));
+        }
+
         return 0;
     }
 
     // 🔽🔽 Helper to get the title of the favorited object
     private static function get_object_title($object_id, $object_type) {
-        if (in_array($object_type, ['artpulse_artwork', 'artpulse_event', 'artpulse_artist', 'artpulse_org'])) {
+        if (in_array($object_type, ['artpulse_artwork', 'artpulse_event', 'artpulse_artist', 'artpulse_org', 'ap_forum_thread'])) {
             $post = get_post($object_id);
             return $post ? $post->post_title : '';
         }
+
+        if ($object_type === 'ap_competition_entry') {
+            global $wpdb;
+            $table = $wpdb->prefix . 'ap_competition_entries';
+            $art_id = $wpdb->get_var($wpdb->prepare("SELECT artwork_id FROM $table WHERE id = %d", $object_id));
+            $post = $art_id ? get_post($art_id) : null;
+            return $post ? $post->post_title : '';
+        }
+
         return '';
     }
 

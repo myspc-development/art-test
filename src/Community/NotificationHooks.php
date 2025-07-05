@@ -43,6 +43,19 @@ class NotificationHooks {
                 sprintf('New comment on your post "%s".', $post->post_title)
             );
         }
+
+        // Notify mentioned users
+        foreach (self::parse_user_mentions($commentdata['comment_content']) as $uid) {
+            if ($uid !== $commenter_id) {
+                NotificationManager::add(
+                    $uid,
+                    'mention',
+                    $post->ID,
+                    $commenter_id,
+                    sprintf('%s mentioned you in a comment.', $commentdata['comment_author'])
+                );
+            }
+        }
     }
 
     /**
@@ -120,5 +133,18 @@ class NotificationHooks {
                 $post->ID
             );
         }
+    }
+
+    private static function parse_user_mentions(string $content): array
+    {
+        preg_match_all('/@([A-Za-z0-9_]+)/', $content, $m);
+        $ids = [];
+        foreach (array_unique($m[1] ?? []) as $name) {
+            $user = get_user_by('slug', $name) ?: get_user_by('login', $name);
+            if ($user) {
+                $ids[] = (int) $user->ID;
+            }
+        }
+        return $ids;
     }
 }
