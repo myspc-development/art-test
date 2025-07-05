@@ -52,12 +52,11 @@
         const oid = e.target.dataset.oid;
         const otype = e.target.dataset.otype;
         wp.apiFetch({
-          path: '/artpulse/v1/follow',
-          method: 'POST',
+          path: '/artpulse/v1/follows',
+          method: 'DELETE',
           data: {
-            object_id: oid,
-            object_type: otype,
-            action: 'unfollow'
+            post_id: oid,
+            post_type: otype
           },
           headers: { 'X-WP-Nonce': ArtPulseFollowsApi.nonce }
         }).then(() => {
