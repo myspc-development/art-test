@@ -27,7 +27,7 @@ class ScheduledMessageManager
         $table          = $wpdb->prefix . 'ap_scheduled_messages';
         $charset_collate = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             org_id BIGINT NOT NULL,
             sender_id BIGINT NOT NULL,

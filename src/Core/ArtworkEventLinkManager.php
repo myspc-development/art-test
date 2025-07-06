@@ -9,7 +9,7 @@ class ArtworkEventLinkManager
         $table   = $wpdb->prefix . 'ap_artwork_event_links';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             artwork_id BIGINT NOT NULL,
             event_id BIGINT NOT NULL,
