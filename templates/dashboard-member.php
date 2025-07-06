@@ -47,107 +47,13 @@ use ArtPulse\Community\FavoritesManager;
     </div>
 
     <div id="ap-dashboard-widgets">
-    <?php foreach ($widgets as $wid => $_cb) : ?>
-        <?php switch ($wid) { case 'membership': ?>
-        <div class="dashboard-card" data-widget="membership">
-            <h2 id="membership"><?php esc_html_e('Subscription Status','artpulse'); ?></h2>
-            <div id="ap-membership-info"></div>
-            <?php if ( !empty($badges) ) : ?>
-            <div class="ap-badges"></div>
-            <?php endif; ?>
-            <div id="ap-membership-actions"></div>
-            <a class="ap-edit-profile-link ap-form-button nectar-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
-        </div>
-        <?php break; case 'upgrade': ?>
-        <div class="dashboard-card" data-widget="upgrade">
-            <h2 id="upgrade"><?php esc_html_e('Upgrade Your Account','artpulse'); ?></h2>
-            <div id="ap-upgrade-options"></div>
-            <?php if ($show_forms) : ?>
-            <div class="ap-dashboard-forms">
-                <?php echo $artist_form; ?>
-                <?php echo $org_form; ?>
-            </div>
-            <?php endif; ?>
-        </div>
-        <?php break; case 'local-events': ?>
-        <div class="dashboard-card" data-widget="local-events">
-            <h2 id="local-events"><?php esc_html_e('Events Near You','artpulse'); ?></h2>
-            <div id="ap-local-events"></div>
-        </div>
-        <?php break; case 'favorites': ?>
-        <div class="dashboard-card" data-widget="favorites">
-            <h2 id="favorites"><?php esc_html_e('My Favorites','artpulse'); ?></h2>
-            <?php
-            $user_id   = get_current_user_id();
-            $favorites = FavoritesManager::get_favorites($user_id);
-            if (empty($favorites)) {
-                echo '<p>' . esc_html__('You haven\xE2\x80\x99t favorited any content yet.', 'artpulse') . '</p>';
-            } else {
-                foreach (['event', 'artist', 'organization', 'artwork'] as $type) {
-                    if (!empty($favorites[$type])) {
-                        echo '<div class="favorite-group favorite-group-' . esc_attr($type) . '">';
-                        echo '<h3>' . esc_html(ucfirst($type)) . 's</h3>';
-                        echo '<ul class="favorites-list">';
-                        foreach ($favorites[$type] as $post_id) {
-                            $title = get_the_title($post_id);
-                            $link  = get_permalink($post_id);
-                            echo '<li><a href="' . esc_url($link) . '">' . esc_html($title) . '</a></li>';
-                        }
-                        echo '</ul></div>';
-                    }
-                }
-            }
-            ?>
-        </div>
-        <?php break; case 'rsvps': ?>
-        <div class="dashboard-card" data-widget="rsvps">
-            <h2 id="rsvps"><?php esc_html_e('My RSVPs','artpulse'); ?></h2>
-            <div id="ap-rsvp-events"></div>
-        </div>
-        <?php break; case 'my-events': ?>
-        <div class="dashboard-card" data-widget="my-events">
-            <h2 id="my-events"><?php esc_html_e('My Events','artpulse'); ?></h2>
-            <div id="ap-dashboard-stats" class="ap-dashboard-stats"></div>
-            <div id="ap-next-event"></div>
-            <div id="ap-my-events"></div>
-            <canvas id="ap-trends-chart" height="150"></canvas>
-            <canvas id="ap-user-engagement-chart" height="150"></canvas>
-            <canvas id="ap-profile-metrics-chart" height="150"></canvas>
-            <canvas id="ap-event-analytics-chart" height="150"></canvas>
-        </div>
-        <?php break; case 'events': ?>
-        <div class="dashboard-card" data-widget="events">
-            <h2 id="events"><?php esc_html_e('Upcoming Events','artpulse'); ?></h2>
-            <div id="ap-events-feed"></div>
-        </div>
-        <?php break; case 'support-history': ?>
-        <div class="dashboard-card" data-widget="support-history">
-            <section id="support-history">
-                <h2><?php esc_html_e('Support History','artpulse'); ?></h2>
-                <div id="ap-support-history"></div>
-            </section>
-        </div>
-        <?php break; case 'notifications': ?>
-        <div class="dashboard-card" data-widget="notifications">
-            <h2 id="notifications"><?php esc_html_e('Notifications','artpulse'); ?></h2>
-            <div id="ap-dashboard-notifications"></div>
-        </div>
-        <?php break; case 'messages': ?>
-        <div class="dashboard-card" data-widget="messages">
-            <h2 id="messages"><?php esc_html_e('Messages','artpulse'); ?></h2>
-            <?php echo do_shortcode('[ap_messages]'); ?>
-        </div>
-        <?php break; case 'account-tools': ?>
-        <div class="dashboard-card" data-widget="account-tools">
-            <h2 id="account-tools"><?php esc_html_e('Account Tools','artpulse'); ?></h2>
-            <div id="ap-account-tools">
-                <button id="ap-export-json" class="ap-form-button nectar-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
-                <button id="ap-export-csv" class="ap-form-button nectar-button"><?php esc_html_e('Export CSV','artpulse'); ?></button>
-                <button id="ap-delete-account" class="ap-form-button nectar-button"><?php esc_html_e('Delete Account','artpulse'); ?></button>
-            </div>
-        </div>
-        <?php break; } ?>
-    <?php endforeach; ?>
+    <?php foreach ($widgets as $wid => $cb) :
+        if ($wid === 'notifications' && !$show_notifications) { continue; }
+        if ($wid === 'support-history' && !$show_support_history) { continue; }
+        if (is_callable($cb)) {
+            echo call_user_func($cb, get_defined_vars());
+        }
+    endforeach; ?>
     </div>
     </main>
 </div>

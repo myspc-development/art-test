@@ -19,7 +19,7 @@ class UserDashboardManager
             __('Membership', 'artpulse'),
             'users',
             __('Subscription status and badges.', 'artpulse'),
-            '__return_null',
+            'ap_widget_membership',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -27,7 +27,7 @@ class UserDashboardManager
             __('Upgrade', 'artpulse'),
             'star',
             __('Upgrade options for the account.', 'artpulse'),
-            '__return_null',
+            'ap_widget_upgrade',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -35,7 +35,7 @@ class UserDashboardManager
             __('Local Events', 'artpulse'),
             'map-pin',
             __('Shows events near the user.', 'artpulse'),
-            '__return_null',
+            'ap_widget_local_events',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -43,7 +43,7 @@ class UserDashboardManager
             __('Favorites', 'artpulse'),
             'heart',
             __('Favorited content lists.', 'artpulse'),
-            '__return_null',
+            'ap_widget_favorites',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -51,7 +51,7 @@ class UserDashboardManager
             __('RSVPs', 'artpulse'),
             'calendar',
             __('User RSVP history.', 'artpulse'),
-            '__return_null',
+            'ap_widget_rsvps',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -59,7 +59,7 @@ class UserDashboardManager
             __('My Events', 'artpulse'),
             'clock',
             __('Events created by the user.', 'artpulse'),
-            '__return_null',
+            'ap_widget_my_events',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -67,7 +67,7 @@ class UserDashboardManager
             __('Upcoming Events', 'artpulse'),
             'calendar',
             __('Global upcoming events.', 'artpulse'),
-            '__return_null',
+            'ap_widget_events',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -75,7 +75,7 @@ class UserDashboardManager
             __('Messages', 'artpulse'),
             'mail',
             __('Private messages inbox.', 'artpulse'),
-            '__return_null',
+            'ap_widget_messages',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -83,7 +83,7 @@ class UserDashboardManager
             __('Account Tools', 'artpulse'),
             'settings',
             __('Export and deletion options.', 'artpulse'),
-            '__return_null',
+            'ap_widget_account_tools',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -91,7 +91,7 @@ class UserDashboardManager
             __('Support History', 'artpulse'),
             'life-buoy',
             __('Previous support tickets.', 'artpulse'),
-            '__return_null',
+            'ap_widget_support_history',
             'view_artpulse_dashboard'
         );
         DashboardWidgetRegistry::register(
@@ -99,7 +99,7 @@ class UserDashboardManager
             __('Notifications', 'artpulse'),
             'bell',
             __('Recent notifications.', 'artpulse'),
-            '__return_null',
+            'ap_widget_notifications',
             'view_artpulse_dashboard'
         );
     }
@@ -803,6 +803,29 @@ class UserDashboardManager
         $show_support_history = is_array($support_history) && !empty($support_history);
         $badges = self::getBadges(get_current_user_id());
 
+        $widgets = DashboardWidgetRegistry::get_widgets($roles[0] ?? 'subscriber');
+        $layout = get_user_meta(get_current_user_id(), 'ap_dashboard_layout', true);
+        if (!is_array($layout) || empty($layout)) {
+            $config = get_option('ap_dashboard_widget_config', []);
+            foreach ($roles as $r) {
+                if (!empty($config[$r]) && is_array($config[$r])) {
+                    $layout = array_map('sanitize_key', $config[$r]);
+                    break;
+                }
+            }
+            if (!is_array($layout)) {
+                $layout = [];
+            }
+        }
+        $ordered = [];
+        foreach ($layout as $id) {
+            if (isset($widgets[$id])) {
+                $ordered[$id] = $widgets[$id];
+                unset($widgets[$id]);
+            }
+        }
+        $widgets = $ordered + $widgets;
+
         $vars = [
             'artist_form'         => $artist_form,
             'org_form'            => $org_form,
@@ -811,7 +834,7 @@ class UserDashboardManager
             'show_notifications'  => $show_notifications,
             'show_support_history'=> $show_support_history,
             'badges'              => $badges,
-            'widgets'             => DashboardWidgetRegistry::get_widgets($roles[0] ?? 'subscriber'),
+            'widgets'             => $widgets,
         ];
 
         $onboarding_html = '';
