@@ -635,7 +635,8 @@ class UserDashboardManager
         $uid = get_current_user_id();
 
         if ($request->has_param('layout')) {
-            $layout = array_map('sanitize_text_field', (array) $request->get_param('layout'));
+            $layout_raw = (array) $request->get_param('layout');
+            $layout = array_map('sanitize_key', $layout_raw);
             update_user_meta($uid, 'ap_dashboard_layout', $layout);
         }
 
