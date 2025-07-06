@@ -73,6 +73,19 @@ class ShortcodePages
             '[ap_filtered_list]'         => __('Filtered List', 'artpulse'),
             '[ap_org_profile_edit]'      => __('Edit Organization Profile', 'artpulse'),
             '[ap_org_profile]'           => __('Organization Profile', 'artpulse'),
+            '[ap_artist_profile_form]'   => __('Artist Profile Form', 'artpulse'),
+            '[ap_collection]'            => __('Collection Detail', 'artpulse'),
+            '[ap_collections]'           => __('Collections Grid', 'artpulse'),
+            '[ap_competition_dashboard]' => __('Competition Dashboard', 'artpulse'),
+            '[ap_event_chat]'            => __('Event Chat', 'artpulse'),
+            '[ap_favorite_portfolio]'    => __('Favorite Portfolio', 'artpulse'),
+            '[ap_favorites_analytics]'   => __('Favorites Analytics', 'artpulse'),
+            '[ap_messages]'              => __('Messages Inbox', 'artpulse'),
+            '[ap_org_rsvp_dashboard]'    => __('RSVP Dashboard', 'artpulse'),
+            '[ap_payouts]'               => __('Payouts', 'artpulse'),
+            '[ap_recommendations]'       => __('Recommendations', 'artpulse'),
+            '[ap_render_ui]'             => __('Render UI', 'artpulse'),
+            '[ap_spotlights]'            => __('Spotlights', 'artpulse'),
         ];
     }
 
