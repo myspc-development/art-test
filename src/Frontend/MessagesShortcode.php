@@ -31,10 +31,11 @@ class MessagesShortcode
                 <ul id="ap-conversation-list"></ul>
             </div>
             <div class="ap-thread">
-                <ul id="ap-message-list"></ul>
+                <ul id="ap-message-list" aria-live="polite"></ul>
                 <form id="ap-message-form" style="display:none;">
                     <input type="hidden" name="recipient_id" value="">
-                    <textarea name="content" required></textarea>
+                    <label for="ap-message-content"><?php esc_html_e('Message', 'artpulse'); ?></label>
+                    <textarea id="ap-message-content" name="content" required></textarea>
                     <button type="submit"><?php esc_html_e('Send', 'artpulse'); ?></button>
                 </form>
             </div>

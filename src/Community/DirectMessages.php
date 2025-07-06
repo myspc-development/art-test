@@ -152,10 +152,14 @@ class DirectMessages
                 WHERE sender_id = %d OR recipient_id = %d
                 GROUP BY other_id";
         $rows = $wpdb->get_results($wpdb->prepare($sql, $user_id, $user_id, $user_id, $user_id), ARRAY_A);
-        return array_map(static function($row){
+        return array_map(static function($row) {
+            $other_id = (int) $row['other_id'];
+            $user     = get_user_by('id', $other_id);
             return [
-                'user_id' => (int) $row['other_id'],
-                'unread'  => (int) $row['unread'],
+                'user_id'      => $other_id,
+                'unread'       => (int) $row['unread'],
+                'display_name' => $user ? $user->display_name : '',
+                'avatar'       => $user ? get_avatar_url($other_id, ['size' => 48]) : '',
             ];
         }, $rows);
     }

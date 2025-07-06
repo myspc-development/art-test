@@ -29,10 +29,11 @@ function DashboardApp({ role }) {
                   <ul id="ap-conversation-list"></ul>
                 </div>
                 <div className="ap-thread">
-                  <ul id="ap-message-list"></ul>
+                  <ul id="ap-message-list" aria-live="polite"></ul>
                   <form id="ap-message-form" style={{ display: 'none' }}>
                     <input type="hidden" name="recipient_id" value="" />
-                    <textarea name="content" required></textarea>
+                    <label htmlFor="ap-message-content">Message</label>
+                    <textarea id="ap-message-content" name="content" required></textarea>
                     <button type="submit">Send</button>
                   </form>
                 </div>

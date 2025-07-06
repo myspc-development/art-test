@@ -13,9 +13,16 @@
           return;
         }
         data.forEach(function(item){
-          var text = 'User ' + item.user_id;
-          if(item.unread){ text += ' (' + item.unread + ')'; }
-          var li = $('<li>').text(text).attr('data-id', item.user_id);
+          var li = $('<li>').attr('data-id', item.user_id);
+          if(item.avatar){
+            li.append($('<img>').attr('src', item.avatar).attr('alt', '').addClass('ap-avatar'));
+          }
+          var name = item.display_name ? item.display_name : 'User ' + item.user_id;
+          var label = $('<span>').text(name);
+          li.append(label);
+          if(item.unread){
+            li.append(' (' + item.unread + ')');
+          }
           li.on('click', function(){
             $(document).trigger('ap-show-messages', item.user_id);
           });
