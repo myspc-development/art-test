@@ -34,6 +34,11 @@ class EmailNotifier {
             return;
         }
 
+        $prefs = get_user_meta($user_id, 'ap_notification_prefs', true);
+        if (is_array($prefs) && array_key_exists('email', $prefs) && !$prefs['email']) {
+            return;
+        }
+
         $user = get_user_by('id', $user_id);
         if (!$user || !is_email($user->user_email)) {
             return;

@@ -183,6 +183,7 @@ class Plugin
         \ArtPulse\Frontend\OrgProfileEditShortcode::register();
         \ArtPulse\Frontend\OrgPublicProfileShortcode::register();
         \ArtPulse\Frontend\PayoutsPage::register();
+        \ArtPulse\Frontend\AccountSettingsPage::register();
         \ArtPulse\Frontend\PortfolioBuilder::register();
         PortfolioManager::register();
         \ArtPulse\Integration\PortfolioSync::register();
@@ -319,6 +320,14 @@ class Plugin
             true
         );
 
+        wp_enqueue_script(
+            'ap-account-settings-js',
+            plugins_url('assets/js/ap-account-settings.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
         wp_localize_script('ap-payouts-js', 'APPayouts', [
             'root'  => esc_url_raw(rest_url()),
             'nonce' => wp_create_nonce('wp_rest'),
@@ -327,6 +336,12 @@ class Plugin
                 'noHistory'    => __('No payouts found.', 'artpulse'),
                 'updated'      => __('Settings updated.', 'artpulse'),
             ],
+        ]);
+
+        wp_localize_script('ap-account-settings-js', 'APAccountSettings', [
+            'root'  => esc_url_raw(rest_url()),
+            'nonce' => wp_create_nonce('wp_rest'),
+            'i18n'  => [ 'saved' => __('Settings saved.', 'artpulse') ],
         ]);
 
         wp_enqueue_script(

@@ -264,3 +264,9 @@ Each item contains:
 
 Use `POST /artpulse/v1/inbox/read` with parameters `type` and `id` (or `ids[]`)
 to mark items read. `POST /artpulse/v1/inbox/unread` reverts the state.
+
+## User Meta Fields
+
+Several endpoints store preferences using user meta. Keys of interest:
+
+- `ap_notification_prefs` – associative array with boolean `email`, `push` and `sms` values saved via `POST /artpulse/v1/user-preferences`.
