@@ -94,6 +94,7 @@ class UserDashboardManager
             'export_json'         => __('Export JSON', 'artpulse'),
             'export_csv'          => __('Export CSV', 'artpulse'),
             'delete_account'      => __('Delete Account', 'artpulse'),
+            'reset_confirm'       => __('Reset dashboard layout?', 'artpulse'),
         ]);
 
         if (is_user_logged_in()) {
