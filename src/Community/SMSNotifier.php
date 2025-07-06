@@ -15,6 +15,11 @@ class SMSNotifier {
         $opt_in = get_user_meta($user_id, 'ap_sms_opt_in', true);
         $phone  = get_user_meta($user_id, 'ap_phone_number', true);
 
+        $prefs  = get_user_meta($user_id, 'ap_notification_prefs', true);
+        if (is_array($prefs) && array_key_exists('sms', $prefs) && !$prefs['sms']) {
+            return;
+        }
+
         if (!$opt_in || !$phone) {
             return;
         }

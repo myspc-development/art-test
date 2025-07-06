@@ -36,6 +36,13 @@ class UserPreferencesRestController
             'sanitize_callback' => 'rest_sanitize_boolean',
         ]);
 
+        register_meta('user', 'ap_notification_prefs', [
+            'type'              => 'object',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => [self::class, 'sanitize_prefs'],
+        ]);
+
         register_meta('user', 'ap_dashboard_theme', [
             'type'              => 'string',
             'single'            => true,
@@ -51,10 +58,11 @@ class UserPreferencesRestController
             'callback'            => [self::class, 'save_preferences'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [
-                'push_token'   => [ 'type' => 'string', 'required' => false ],
-                'phone_number' => [ 'type' => 'string', 'required' => false ],
-                'sms_opt_in'   => [ 'type' => 'boolean', 'required' => false ],
-                'dashboard_theme' => [ 'type' => 'string', 'required' => false ],
+                'push_token'        => [ 'type' => 'string', 'required' => false ],
+                'phone_number'      => [ 'type' => 'string', 'required' => false ],
+                'sms_opt_in'        => [ 'type' => 'boolean', 'required' => false ],
+                'dashboard_theme'   => [ 'type' => 'string', 'required' => false ],
+                'notification_prefs'=> [ 'type' => 'object', 'required' => false ],
             ],
         ]);
     }
@@ -79,6 +87,22 @@ class UserPreferencesRestController
             update_user_meta($user_id, 'ap_dashboard_theme', sanitize_text_field($request['dashboard_theme']));
         }
 
+        if ($request->has_param('notification_prefs')) {
+            $prefs = self::sanitize_prefs($request['notification_prefs']);
+            update_user_meta($user_id, 'ap_notification_prefs', $prefs);
+        }
+
         return rest_ensure_response(['status' => 'saved']);
+    }
+
+    public static function sanitize_prefs($value): array
+    {
+        $raw    = (array) $value;
+        $prefs  = [
+            'email' => !empty($raw['email']),
+            'push'  => !empty($raw['push']),
+            'sms'   => !empty($raw['sms']),
+        ];
+        return $prefs;
     }
 }
