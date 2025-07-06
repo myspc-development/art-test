@@ -664,7 +664,8 @@
       })), /*#__PURE__*/React.createElement("div", {
         className: "ap-thread"
       }, /*#__PURE__*/React.createElement("ul", {
-        id: "ap-message-list"
+        id: "ap-message-list",
+        "aria-live": "polite"
       }), /*#__PURE__*/React.createElement("form", {
         id: "ap-message-form",
         style: {
@@ -674,7 +675,10 @@
         type: "hidden",
         name: "recipient_id",
         value: ""
-      }), /*#__PURE__*/React.createElement("textarea", {
+      }), /*#__PURE__*/React.createElement("label", {
+        htmlFor: "ap-message-content"
+      }, "Message"), /*#__PURE__*/React.createElement("textarea", {
+        id: "ap-message-content",
         name: "content",
         required: true
       }), /*#__PURE__*/React.createElement("button", {
