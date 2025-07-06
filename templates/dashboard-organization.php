@@ -15,6 +15,7 @@
             <li><a href="#local-events"><span class="dashicons dashicons-location-alt"></span><?php esc_html_e('Local Events', 'artpulse'); ?></a></li>
             <li><a href="#favorites"><span class="dashicons dashicons-heart"></span><?php esc_html_e('Favorites', 'artpulse'); ?></a></li>
             <li><a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a></li>
+            <li><a href="#messages"><span class="dashicons dashicons-email"></span><?php esc_html_e('Messages', 'artpulse'); ?></a></li>
             <li><a href="#webhooks"><span class="dashicons dashicons-admin-links"></span><?php esc_html_e('Webhooks', 'artpulse'); ?></a></li>
             <li><a href="#account-tools"><span class="dashicons dashicons-download"></span><?php esc_html_e('Account', 'artpulse'); ?></a></li>
             <?php if ( $show_notifications ) : ?>
@@ -49,6 +50,7 @@
             <label><input type="checkbox" value="local-events" checked> <?php esc_html_e('Local Events', 'artpulse'); ?></label>
             <label><input type="checkbox" value="favorites" checked> <?php esc_html_e('Favorites', 'artpulse'); ?></label>
             <label><input type="checkbox" value="events" checked> <?php esc_html_e('Events', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="messages" checked> <?php esc_html_e('Messages', 'artpulse'); ?></label>
             <?php if ($show_support_history) : ?>
             <label><input type="checkbox" value="support-history" checked> <?php esc_html_e('Support History', 'artpulse'); ?></label>
             <?php endif; ?>
@@ -123,6 +125,10 @@
     <div class="dashboard-card" data-widget="events">
         <h2 id="events"><?php esc_html_e('Upcoming Events','artpulse'); ?></h2>
         <div id="ap-events-feed"></div>
+    </div>
+    <div class="dashboard-card" data-widget="messages">
+        <h2 id="messages"><?php esc_html_e('Messages','artpulse'); ?></h2>
+        <?php echo do_shortcode('[ap_messages]'); ?>
     </div>
     <div class="dashboard-card" data-widget="webhooks">
         <h2 id="webhooks"><?php esc_html_e('Webhooks','artpulse'); ?></h2>
