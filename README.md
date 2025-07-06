@@ -260,6 +260,10 @@ Recent updates introduce new fields for location lookups and performance tweaks:
 - **Enforce Two-Factor** – Require users to enable the Two-Factor plugin before logging in.
 - **Social Auto-Posting** – Automatically share new content to Facebook, Instagram, Twitter/X and Pinterest.
 
+### Service Worker Integration
+
+Check **Enable Service Worker** under *ArtPulse → Settings → General* to register the plugin’s worker. The loader script `assets/js/sw-loader.js` registers `assets/js/service-worker.js` after the page loads. The worker caches the homepage for offline access and handles basic push notifications. Modify `assets/js/service-worker.js` to cache more URLs or adjust the notification logic, then refresh or unregister the old worker in your browser to apply the changes.
+
 For full usage details refer to the [Admin Guide](docs/admin-guide.md) and [User Guide](docs/user-guide.md).
 
 ## Member Badges and Login Heatmap
