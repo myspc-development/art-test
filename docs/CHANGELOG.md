@@ -5,6 +5,10 @@
 - New settings tab allows per-post-type toggles and API credentials.
 - Removed unused `src/Community/installer.php` in favor of `FavoritesManager::install_favorites_table()`.
 
+## 1.3.10
+- Added bundled `lucide-react` UMD build and registered it as a dependency for
+  `ap-dashboard.js` to fix "lucideReact is not defined" errors.
+
 ## 1.3.8
 - Added EmailTemplateManager and customizable template field.
 - Ticket purchases now send a PDF ticket attachment.
