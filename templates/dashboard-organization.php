@@ -64,118 +64,13 @@
     </div>
 
     <div id="ap-dashboard-widgets">
-
-    <div class="dashboard-card" data-widget="membership">
-        <h2 id="membership"><?php esc_html_e('Subscription Status','artpulse'); ?></h2>
-        <div id="ap-membership-info"></div>
-        <?php if ( !empty($badges) ) : ?>
-        <div class="ap-badges"></div>
-        <?php endif; ?>
-        <div id="ap-membership-actions"></div>
-    </div>
-    <div class="dashboard-card" data-widget="next-payment">
-        <h2 id="next-payment"><?php esc_html_e('Next Payment','artpulse'); ?></h2>
-        <div id="ap-next-payment"></div>
-        <p><a href="<?php echo esc_url(ArtPulse\Core\Plugin::get_payouts_url()); ?>" class="nectar-button small"><?php esc_html_e('View Payouts','artpulse'); ?></a></p>
-    </div>
-    <div class="dashboard-card" data-widget="transactions">
-        <h2 id="transactions"><?php esc_html_e('Recent Transactions','artpulse'); ?></h2>
-        <div id="ap-transactions"></div>
-    </div>
-    <a class="ap-edit-profile-link ap-form-button nectar-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
-    <div class="dashboard-card" data-widget="upgrade">
-        <h2 id="upgrade"><?php esc_html_e('Upgrade Your Account','artpulse'); ?></h2>
-        <div id="ap-upgrade-options"></div>
-        <?php if ($show_forms) : ?>
-        <div class="ap-dashboard-forms">
-            <?php echo $artist_form; ?>
-            <?php echo $org_form; ?>
-        </div>
-        <?php endif; ?>
-    </div>
-    <div class="dashboard-card" data-widget="content">
-        <h2 id="content"><?php esc_html_e('Your Content','artpulse'); ?></h2>
-        <div id="ap-user-content"></div>
-    </div>
-    <div class="dashboard-card" data-widget="local-events">
-        <h2 id="local-events"><?php esc_html_e('Events Near You','artpulse'); ?></h2>
-        <div id="ap-local-events"></div>
-    </div>
-    <div class="dashboard-card" data-widget="favorites">
-        <h2 id="favorites"><?php esc_html_e('My Favorites','artpulse'); ?></h2>
-        <div id="ap-favorite-events"></div>
-        <div id="ap-favorite-artists"></div>
-        <div id="ap-favorite-orgs"></div>
-        <div id="ap-favorite-artworks"></div>
-    </div>
-    <div class="dashboard-card" data-widget="rsvps">
-        <h2 id="rsvps"><?php esc_html_e('My RSVPs','artpulse'); ?></h2>
-        <div id="ap-rsvp-events"></div>
-    </div>
-    <div class="dashboard-card" data-widget="my-events">
-        <h2 id="my-events"><?php esc_html_e('My Events','artpulse'); ?></h2>
-        <div id="ap-dashboard-stats" class="ap-dashboard-stats"></div>
-        <div id="ap-next-event"></div>
-        <div id="ap-my-events"></div>
-        <canvas id="ap-trends-chart" height="150"></canvas>
-        <canvas id="ap-user-engagement-chart" height="150"></canvas>
-        <canvas id="ap-profile-metrics-chart" height="150"></canvas>
-        <canvas id="ap-event-analytics-chart" height="150"></canvas>
-    </div>
-    <div class="dashboard-card" data-widget="events">
-        <h2 id="events"><?php esc_html_e('Upcoming Events','artpulse'); ?></h2>
-        <div id="ap-events-feed"></div>
-    </div>
-    <div class="dashboard-card" data-widget="messages">
-        <h2 id="messages"><?php esc_html_e('Messages','artpulse'); ?></h2>
-        <?php echo do_shortcode('[ap_messages]'); ?>
-    </div>
-    <div class="dashboard-card" data-widget="webhooks">
-        <h2 id="webhooks"><?php esc_html_e('Webhooks','artpulse'); ?></h2>
-        <div id="ap-webhook-controls">
-            <button id="ap-add-webhook" class="ap-form-button nectar-button"><?php esc_html_e('Add Webhook','artpulse'); ?></button>
-        </div>
-        <ul id="ap-webhook-list"></ul>
-        <div id="ap-webhook-modal" class="ap-org-modal" style="display:none">
-            <button id="ap-webhook-close" type="button" class="ap-form-button nectar-button"><?php esc_html_e('Close','artpulse'); ?></button>
-            <div id="ap-webhook-msg" class="ap-form-messages" role="status" aria-live="polite"></div>
-            <form id="ap-webhook-form" class="ap-form-container" data-no-ajax="true">
-                <input type="hidden" id="ap_webhook_id" name="id">
-                <label class="ap-form-label" for="ap_webhook_url"><?php esc_html_e('Endpoint URL','artpulse'); ?></label>
-                <input class="ap-input" id="ap_webhook_url" type="url" name="url" required>
-                <fieldset>
-                    <legend><?php esc_html_e('Events','artpulse'); ?></legend>
-                    <label><input type="checkbox" value="ticket_sold" name="events[]"> <?php esc_html_e('Ticket Sold','artpulse'); ?></label>
-                    <label><input type="checkbox" value="rsvp_created" name="events[]"> <?php esc_html_e('RSVP Created','artpulse'); ?></label>
-                    <label><input type="checkbox" value="payout_processed" name="events[]"> <?php esc_html_e('Payout Processed','artpulse'); ?></label>
-                </fieldset>
-                <label class="ap-form-label"><input type="checkbox" id="ap_webhook_active" name="active" value="1" checked> <?php esc_html_e('Active','artpulse'); ?></label>
-                <button type="submit" class="ap-form-button nectar-button"><?php esc_html_e('Save','artpulse'); ?></button>
-            </form>
-        </div>
-    </div>
-    <?php if ($show_support_history) : ?>
-    <div class="dashboard-card" data-widget="support-history">
-        <section id="support-history">
-            <h2><?php esc_html_e('Support History','artpulse'); ?></h2>
-            <div id="ap-support-history"></div>
-        </section>
-    </div>
-    <?php endif; ?>
-    <?php if ($show_notifications) : ?>
-    <div class="dashboard-card" data-widget="notifications">
-        <h2 id="notifications"><?php esc_html_e('Notifications','artpulse'); ?></h2>
-        <div id="ap-dashboard-notifications"></div>
-    </div>
-    <?php endif; ?>
-    <div class="dashboard-card" data-widget="account-tools">
-        <h2 id="account-tools"><?php esc_html_e('Account Tools','artpulse'); ?></h2>
-        <div id="ap-account-tools">
-            <button id="ap-export-json" class="ap-form-button nectar-button"><?php esc_html_e('Export JSON','artpulse'); ?></button>
-            <button id="ap-export-csv" class="ap-form-button nectar-button"><?php esc_html_e('Export CSV','artpulse'); ?></button>
-            <button id="ap-delete-account" class="ap-form-button nectar-button"><?php esc_html_e('Delete Account','artpulse'); ?></button>
-        </div>
-    </div>
+    <?php foreach ($widgets as $wid => $cb) :
+        if ($wid === 'notifications' && !$show_notifications) { continue; }
+        if ($wid === 'support-history' && !$show_support_history) { continue; }
+        if (is_callable($cb)) {
+            echo call_user_func($cb, get_defined_vars());
+        }
+    endforeach; ?>
     </div>
     </div>
     </main>
