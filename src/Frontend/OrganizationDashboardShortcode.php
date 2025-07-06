@@ -17,6 +17,7 @@ class OrganizationDashboardShortcode {
         if (function_exists('ap_enqueue_global_styles')) {
             ap_enqueue_global_styles();
         }
+        wp_enqueue_script('ap-messages-js');
     }
 
     /**
@@ -138,6 +139,7 @@ class OrganizationDashboardShortcode {
                     <?php if ($show_analytics) : ?>
                     <li><a href="#analytics"><span class="dashicons dashicons-chart-bar"></span><?php esc_html_e('Analytics', 'artpulse'); ?></a></li>
                     <?php endif; ?>
+                    <li><a href="#messages"><span class="dashicons dashicons-email"></span><?php esc_html_e('Messages', 'artpulse'); ?></a></li>
                     <li><a href="#profile"><span class="dashicons dashicons-admin-settings"></span><?php esc_html_e('Profile', 'artpulse'); ?></a></li>
                 </ul>
             </aside>
@@ -327,6 +329,11 @@ class OrganizationDashboardShortcode {
                 <div id="ap-org-analytics"></div>
             </div>
             <?php endif; ?>
+
+            <div class="dashboard-card" id="messages-section">
+                <h2 id="messages"><?php _e('Messages','artpulse'); ?></h2>
+                <?php echo do_shortcode('[ap_messages]'); ?>
+            </div>
 
             <div class="dashboard-card" id="profile-section">
                 <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
