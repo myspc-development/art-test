@@ -39,12 +39,12 @@ class PortfolioBuilder
 
         wp_enqueue_media();
 
-        // Load the SortableJS library from CDN for drag and drop ordering.
+        // Load the SortableJS library locally for drag and drop ordering.
         wp_enqueue_script(
             'sortablejs',
-            'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js',
+            plugins_url('assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE),
             [],
-            '1.15.0',
+            null,
             true
         );
 

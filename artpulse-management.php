@@ -322,9 +322,9 @@ add_action('wp_enqueue_scripts', function () {
     if (is_page('dashboard') || is_page('organization-dashboard')) {
         wp_enqueue_script(
             'sortablejs',
-            'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js',
+            plugins_url('assets/libs/sortablejs/Sortable.min.js', __FILE__),
             [],
-            '1.15.0',
+            null,
             true
         );
     }

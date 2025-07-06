@@ -574,9 +574,9 @@ class EnqueueAssets {
             // interactions on the artist dashboard.
             wp_enqueue_script(
                 'sortablejs',
-                'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js',
+                plugins_url('assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE),
                 [],
-                '1.15.0',
+                null,
                 true
             );
             wp_enqueue_script(
