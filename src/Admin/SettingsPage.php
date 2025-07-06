@@ -582,6 +582,11 @@ class SettingsPage
                     <?php elseif ($slug === 'config_backup') : ?>
                         <?php ConfigBackupTab::render(); ?>
                     <?php elseif ($slug === 'updates') : ?>
+                        <form method="post" action="options.php">
+                            <?php settings_fields('artpulse_settings_group'); ?>
+                            <?php do_settings_sections('artpulse-updates'); ?>
+                            <?php submit_button(); ?>
+                        </form>
                         <?php UpdatesTab::render(); ?>
                     <?php elseif ($slug === 'social_auto') : ?>
                         <?php \ArtPulse\Integration\SocialAutoPoster::render_settings(); ?>
