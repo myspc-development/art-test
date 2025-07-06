@@ -371,6 +371,11 @@ The `package.json` file defines scripts for building production assets. To compi
 ```bash
 npm run build
 ```
+This command compiles the SCSS, bundles blocks and transpiles the admin
+scripts located in `assets/js`. Run it whenever files such as
+`sidebar-taxonomies.jsx`, `advanced-taxonomy-filter-block.jsx`,
+`filtered-list-shortcode-block.jsx` or `ajax-filter-block.jsx` are
+modified so the corresponding `.js` files are regenerated.
 
 To create a distributable archive execute the Composer `zip` script:
 

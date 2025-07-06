@@ -6,7 +6,7 @@
     "build:sass": "sass assets/scss:assets/css --no-source-map",
     "build:react": "vite build",
     "dev": "vite",
-    "build": "npm run build:sass && wp-scripts build && npx babel assets/js/OrganizationSubmissionForm.jsx -o assets/js/ap-org-submission.js && npx babel assets/js/SidebarMenu.jsx -o assets/js/sidebar-menu.js && npx babel assets/js/dashboard.jsx -o assets/js/ap-dashboard.js",
+    "build": "npm run build:sass && wp-scripts build && npx babel assets/js/OrganizationSubmissionForm.jsx -o assets/js/ap-org-submission.js && npx babel assets/js/SidebarMenu.jsx -o assets/js/sidebar-menu.js && npx babel assets/js/dashboard.jsx -o assets/js/ap-dashboard.js && npx babel assets/js/sidebar-taxonomies.jsx -o assets/js/sidebar-taxonomies.js && npx babel assets/js/advanced-taxonomy-filter-block.jsx -o assets/js/advanced-taxonomy-filter-block.js && npx babel assets/js/filtered-list-shortcode-block.jsx -o assets/js/filtered-list-shortcode-block.js && npx babel assets/js/ajax-filter-block.jsx -o assets/js/ajax-filter-block.js",
     "start": "wp-scripts start",
     "release": "standard-version"
   },
