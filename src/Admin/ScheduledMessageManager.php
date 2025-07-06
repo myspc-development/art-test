@@ -42,7 +42,7 @@ class ScheduledMessageManager
             KEY send_at (send_at)
         ) $charset_collate;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        error_log($sql);
+        if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
         dbDelta($sql);
     }
 

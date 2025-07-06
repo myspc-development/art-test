@@ -18,7 +18,7 @@ class ProfileMetrics
             UNIQUE KEY profile_metric_day (profile_id, metric, day)
         ) $charset;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        error_log($sql);
+        if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
         dbDelta($sql);
     }
 

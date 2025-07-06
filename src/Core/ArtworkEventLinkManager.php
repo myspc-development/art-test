@@ -19,7 +19,7 @@ class ArtworkEventLinkManager
             KEY event_id (event_id)
         ) $charset;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        error_log($sql);
+        if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
         dbDelta($sql);
     }
 
