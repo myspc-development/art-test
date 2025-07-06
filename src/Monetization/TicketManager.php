@@ -66,7 +66,7 @@ class TicketManager
         $table   = $wpdb->prefix . 'ap_event_tickets';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             event_id BIGINT NOT NULL,
             name VARCHAR(100) NOT NULL,
@@ -90,7 +90,7 @@ class TicketManager
         $table   = $wpdb->prefix . 'ap_tickets';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             user_id BIGINT NOT NULL,
             event_id BIGINT NOT NULL,

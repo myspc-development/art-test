@@ -9,7 +9,7 @@ class CompetitionEntryManager
         $table   = $wpdb->prefix . 'ap_competition_entries';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             competition_id BIGINT NOT NULL,
             artwork_id BIGINT NOT NULL,

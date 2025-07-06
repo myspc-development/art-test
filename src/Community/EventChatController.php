@@ -29,7 +29,7 @@ class EventChatController
         $table   = $wpdb->prefix . 'ap_event_chat';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             event_id BIGINT NOT NULL,
             user_id BIGINT NOT NULL,

@@ -80,7 +80,7 @@ class LoginEventsPage
         $table = $wpdb->prefix . 'ap_login_events';
         $charset_collate = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            id BIGINT AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             user_id BIGINT NOT NULL,
             ip_address VARCHAR(45) NOT NULL,

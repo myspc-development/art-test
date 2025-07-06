@@ -64,7 +64,7 @@ class WebhookManager
         if ($exists !== $table) {
             $charset = $wpdb->get_charset_collate();
             $sql = "CREATE TABLE $table (
-                id BIGINT AUTO_INCREMENT,
+                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
                 org_id BIGINT NOT NULL,
                 url VARCHAR(255) NOT NULL,

@@ -79,7 +79,7 @@ class EventNotesTasks
         $charset = $wpdb->get_charset_collate();
         require_once ABSPATH.'wp-admin/includes/upgrade.php';
         dbDelta("CREATE TABLE $notes (
-            id BIGINT AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             event_id BIGINT NOT NULL,
             user_id BIGINT NOT NULL,
@@ -89,7 +89,7 @@ class EventNotesTasks
             KEY event_id (event_id)
         ) $charset");
         dbDelta("CREATE TABLE $tasks (
-            id BIGINT AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             event_id BIGINT NOT NULL,
             title VARCHAR(255) NOT NULL,
