@@ -5,6 +5,7 @@ use ArtPulse\Admin\SettingsRegistry;
 use ArtPulse\Admin\FieldRenderer;
 use ArtPulse\Admin\ConfigBackupTab;
 use ArtPulse\Admin\UpdatesTab;
+use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Core\ActivityLogger;
 
 class SettingsPage
@@ -14,6 +15,7 @@ class SettingsPage
         self::bootstrap_settings();
         ConfigBackupTab::register();
         UpdatesTab::register();
+        DashboardWidgetTools::register();
         add_action('admin_menu', [self::class, 'addMenu']);
         add_action('admin_init', [self::class, 'registerSettings']);
         add_action('wp_login', [self::class, 'trackLastLogin'], 10, 2);
@@ -745,5 +747,6 @@ class SettingsPage
     public static function renderDashboardWidgetsPage(): void
     {
         echo '<div id="ap-dashboard-widgets-canvas"></div>';
+        DashboardWidgetTools::render();
     }
 }
