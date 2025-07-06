@@ -163,6 +163,7 @@ class Plugin
         \ArtPulse\Core\MyFollowsShortcode::register();
         \ArtPulse\Core\NotificationShortcode::register();
         \ArtPulse\Community\UserPreferencesRestController::register();
+        \ArtPulse\Rest\WidgetSettingsRestController::register();
         \ArtPulse\Core\ProfileMetrics::register();
         \ArtPulse\Core\RoleAuditLogger::register();
         \ArtPulse\Core\ActivityLogger::register();

@@ -27,4 +27,5 @@ use ArtPulse\Community\FavoritesManager;
         }
     }
     ?>
+    <button class="ap-widget-settings-btn ap-form-button nectar-button" data-widget-settings="favorites"><?php esc_html_e('Settings', 'artpulse'); ?></button>
 </div>

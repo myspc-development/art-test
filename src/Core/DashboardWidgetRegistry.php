@@ -9,7 +9,7 @@ use WP_Roles;
 class DashboardWidgetRegistry
 {
     /**
-     * @var array<string,array{label:string,icon:string,description:string,callback:callable,capability:string}>
+     * @var array<string,array{label:string,icon:string,description:string,callback:callable,capability:string,settings:array}>
      */
     private static array $widgets = [];
 
@@ -22,7 +22,8 @@ class DashboardWidgetRegistry
         string $icon,
         string $description,
         callable $callback,
-        string $capability = 'read'
+        string $capability = 'read',
+        array $settings_schema = []
     ): void {
         self::$widgets[$id] = [
             'label'       => $label,
@@ -30,6 +31,7 @@ class DashboardWidgetRegistry
             'description' => $description,
             'callback'    => $callback,
             'capability'  => $capability,
+            'settings'    => $settings_schema,
         ];
     }
 
@@ -65,6 +67,14 @@ class DashboardWidgetRegistry
         }
 
         return apply_filters('ap_dashboard_widget_definitions', $defs);
+    }
+
+    /**
+     * Get the settings schema for a widget.
+     */
+    public static function get_widget_schema(string $id): array
+    {
+        return self::$widgets[$id]['settings'] ?? [];
     }
 
     /**

@@ -156,3 +156,42 @@ if (resetBtn) {
   });
 }
 ```
+
+## 6. Widget Settings
+
+Each widget may expose configurable options. The `DashboardWidgetRegistry::register()`
+method accepts a `settings` array describing each field:
+
+```php
+DashboardWidgetRegistry::register(
+    'favorites',
+    __('Favorites', 'artpulse'),
+    'heart',
+    __('Favorited content lists.', 'artpulse'),
+    'ap_widget_favorites',
+    'view_artpulse_dashboard',
+    [
+        [ 'key' => 'limit', 'label' => __('Items to Show', 'artpulse'), 'type' => 'number', 'default' => 5 ]
+    ]
+);
+```
+
+Settings are stored in `ap_widget_settings_{id}` user meta or options when the
+`global` flag is provided. The REST endpoint `/artpulse/v1/widget-settings/{id}`
+loads and saves values:
+
+```php
+// Get current user settings
+GET  /wp-json/artpulse/v1/widget-settings/favorites
+
+// Save settings for the user
+POST /wp-json/artpulse/v1/widget-settings/favorites
+{
+  "settings": { "limit": 10 }
+}
+
+// Administrators can pass ?global=1 to modify site defaults
+```
+
+Responses include the field schema and current values so the dashboard can
+render a simple form.

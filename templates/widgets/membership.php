@@ -13,4 +13,5 @@
     <?php if (!empty($profile_edit_url)) : ?>
     <a class="ap-edit-profile-link ap-form-button nectar-button" href="<?php echo esc_url($profile_edit_url); ?>"><?php esc_html_e('Edit Profile', 'artpulse'); ?></a>
     <?php endif; ?>
+    <button class="ap-widget-settings-btn ap-form-button nectar-button" data-widget-settings="membership"><?php esc_html_e('Settings', 'artpulse'); ?></button>
 </div>
