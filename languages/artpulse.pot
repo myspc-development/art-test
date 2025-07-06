@@ -389,3 +389,7 @@ msgstr ""
 #: src/Admin/SettingsPage.php
 msgid "Allow artworks to be marked for sale."
 msgstr ""
+
+#: src/Core/UserDashboardManager.php
+msgid "Reset dashboard layout?"
+msgstr ""
