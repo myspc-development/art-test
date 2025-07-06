@@ -178,6 +178,22 @@ class UserDashboardManager
                 'step' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
+
+        register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
+            'methods'             => 'GET',
+            'callback'            => [ self::class, 'getDashboardLayout' ],
+            'permission_callback' => fn() => is_user_logged_in(),
+        ]);
+
+        register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
+            'methods'             => 'POST',
+            'callback'            => [ self::class, 'saveDashboardLayout' ],
+            'permission_callback' => fn() => is_user_logged_in(),
+            'args'                => [
+                'layout'     => [ 'type' => 'array', 'required' => false ],
+                'visibility' => [ 'type' => 'object', 'required' => false ],
+            ],
+        ]);
     }
 
     public static function getDashboardData(WP_REST_Request $request)
@@ -584,6 +600,45 @@ class UserDashboardManager
         }
 
         return rest_ensure_response(['completed' => $completed]);
+    }
+
+    public static function getDashboardLayout(): \WP_REST_Response
+    {
+        $uid   = get_current_user_id();
+        $layout = get_user_meta($uid, 'ap_dashboard_layout', true);
+        if (!is_array($layout)) {
+            $layout = [];
+        }
+        $vis = get_user_meta($uid, 'ap_widget_visibility', true);
+        if (!is_array($vis)) {
+            $vis = [];
+        }
+
+        return rest_ensure_response([
+            'layout'     => $layout,
+            'visibility' => $vis,
+        ]);
+    }
+
+    public static function saveDashboardLayout(WP_REST_Request $request): \WP_REST_Response
+    {
+        $uid = get_current_user_id();
+
+        if ($request->has_param('layout')) {
+            $layout = array_map('sanitize_text_field', (array) $request->get_param('layout'));
+            update_user_meta($uid, 'ap_dashboard_layout', $layout);
+        }
+
+        if ($request->has_param('visibility')) {
+            $vis_raw = (array) $request->get_param('visibility');
+            $vis = [];
+            foreach ($vis_raw as $key => $val) {
+                $vis[sanitize_key($key)] = (bool) $val;
+            }
+            update_user_meta($uid, 'ap_widget_visibility', $vis);
+        }
+
+        return rest_ensure_response(['saved' => true]);
     }
 
     public static function addBadge(int $user_id, string $slug): void

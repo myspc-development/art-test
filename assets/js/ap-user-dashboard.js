@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       animation: 150,
       onEnd: saveLayoutOrder
     });
-    applySavedLayout();
+    loadDashboardLayout();
   }
 
   const toggles = document.querySelectorAll('#ap-widget-toggles input[type="checkbox"]');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
       saveVisibility();
     });
   });
-  applySavedVisibility();
+  // apply visibility after loading layout
 
   const resetBtn = document.getElementById('ap-reset-layout');
   if (resetBtn) {
@@ -32,7 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!confirm(msg)) return;
       localStorage.removeItem('apDashboardLayout');
       localStorage.removeItem('apWidgetVisibility');
-      window.location.reload();
+      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap_dashboard_layout`, {
+        method: 'POST',
+        headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ layout: [], visibility: {} })
+      }).finally(() => window.location.reload());
     });
   }
 
@@ -884,19 +888,27 @@ function saveLayoutOrder() {
   if (!area) return;
   const ids = Array.from(area.querySelectorAll('[data-widget]')).map(w => w.dataset.widget);
   localStorage.setItem('apDashboardLayout', JSON.stringify(ids));
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap_dashboard_layout`, {
+    method: 'POST',
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ layout: ids })
+  });
 }
 
-function applySavedLayout() {
+function applySavedLayout(order) {
   const area = document.getElementById('ap-dashboard-widgets');
-  const saved = localStorage.getItem('apDashboardLayout');
-  if (!area || !saved) return;
-  try {
-    const order = JSON.parse(saved);
-    order.forEach(id => {
-      const el = area.querySelector(`[data-widget="${id}"]`);
-      if (el) area.appendChild(el);
-    });
-  } catch (e) {}
+  if (!area) return;
+  let layout = order;
+  if (!layout) {
+    const saved = localStorage.getItem('apDashboardLayout');
+    if (!saved) return;
+    try { layout = JSON.parse(saved); } catch (e) { return; }
+  }
+  if (!Array.isArray(layout)) return;
+  layout.forEach(id => {
+    const el = area.querySelector(`[data-widget="${id}"]`);
+    if (el) area.appendChild(el);
+  });
 }
 
 function saveVisibility() {
@@ -905,18 +917,49 @@ function saveVisibility() {
     vis[cb.value] = cb.checked;
   });
   localStorage.setItem('apWidgetVisibility', JSON.stringify(vis));
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap_dashboard_layout`, {
+    method: 'POST',
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ visibility: vis })
+  });
 }
 
-function applySavedVisibility() {
-  const saved = localStorage.getItem('apWidgetVisibility');
-  if (!saved) return;
+function applySavedVisibility(vis) {
+  let settings = vis;
+  if (!settings) {
+    const saved = localStorage.getItem('apWidgetVisibility');
+    if (!saved) return;
+    try { settings = JSON.parse(saved); } catch (e) { return; }
+  }
+  Object.keys(settings || {}).forEach(id => {
+    const widget = document.querySelector(`[data-widget="${id}"]`);
+    const cb = document.querySelector(`#ap-widget-toggles input[value="${id}"]`);
+    if (cb) cb.checked = settings[id];
+    if (widget) widget.style.display = settings[id] ? '' : 'none';
+  });
+}
+
+async function loadDashboardLayout() {
   try {
-    const vis = JSON.parse(saved);
-    Object.keys(vis).forEach(id => {
-      const widget = document.querySelector(`[data-widget="${id}"]`);
-      const cb = document.querySelector(`#ap-widget-toggles input[value="${id}"]`);
-      if (cb) cb.checked = vis[id];
-      if (widget) widget.style.display = vis[id] ? '' : 'none';
+    const res = await fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap_dashboard_layout`, {
+      headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
     });
-  } catch (e) {}
+    if (!res.ok) throw new Error('fail');
+    const data = await res.json();
+    if (data.layout) {
+      localStorage.setItem('apDashboardLayout', JSON.stringify(data.layout));
+      applySavedLayout(data.layout);
+    } else {
+      applySavedLayout();
+    }
+    if (data.visibility) {
+      localStorage.setItem('apWidgetVisibility', JSON.stringify(data.visibility));
+      applySavedVisibility(data.visibility);
+    } else {
+      applySavedVisibility();
+    }
+  } catch (e) {
+    applySavedLayout();
+    applySavedVisibility();
+  }
 }
