@@ -14,17 +14,94 @@ class UserDashboardManager
         add_shortcode('ap_user_dashboard', [ self::class, 'renderDashboard' ]);
         add_action('wp_enqueue_scripts',   [ self::class, 'enqueueAssets' ]);
         add_action('rest_api_init',        [ self::class, 'register_routes' ]);
-        DashboardWidgetRegistry::register('membership', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('upgrade', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('local-events', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('favorites', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('rsvps', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('my-events', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('events', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('messages', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('account-tools', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('support-history', '__return_null', 'view_artpulse_dashboard');
-        DashboardWidgetRegistry::register('notifications', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register(
+            'membership',
+            __('Membership', 'artpulse'),
+            'users',
+            __('Subscription status and badges.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'upgrade',
+            __('Upgrade', 'artpulse'),
+            'star',
+            __('Upgrade options for the account.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'local-events',
+            __('Local Events', 'artpulse'),
+            'map-pin',
+            __('Shows events near the user.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'favorites',
+            __('Favorites', 'artpulse'),
+            'heart',
+            __('Favorited content lists.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'rsvps',
+            __('RSVPs', 'artpulse'),
+            'calendar',
+            __('User RSVP history.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'my-events',
+            __('My Events', 'artpulse'),
+            'clock',
+            __('Events created by the user.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'events',
+            __('Upcoming Events', 'artpulse'),
+            'calendar',
+            __('Global upcoming events.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'messages',
+            __('Messages', 'artpulse'),
+            'mail',
+            __('Private messages inbox.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'account-tools',
+            __('Account Tools', 'artpulse'),
+            'settings',
+            __('Export and deletion options.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'support-history',
+            __('Support History', 'artpulse'),
+            'life-buoy',
+            __('Previous support tickets.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
+        DashboardWidgetRegistry::register(
+            'notifications',
+            __('Notifications', 'artpulse'),
+            'bell',
+            __('Recent notifications.', 'artpulse'),
+            '__return_null',
+            'view_artpulse_dashboard'
+        );
     }
 
     // Aliased method for compatibility with provided code snippet
