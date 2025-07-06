@@ -317,6 +317,14 @@ class SettingsPage
             'artpulse-engagement',
             [EngagementDashboard::class, 'render']
         );
+        add_submenu_page(
+            'artpulse-settings',
+            __('Dashboard Widgets', 'artpulse'),
+            __('Dashboard Widgets', 'artpulse'),
+            'manage_options',
+            'artpulse-dashboard-widgets',
+            [self::class, 'renderDashboardWidgetsPage']
+        );
         // Additional admin pages can hook into 'admin_menu' to add more submenus.
     }
     public static function enqueueAdminAssets($hook)
@@ -732,5 +740,10 @@ class SettingsPage
         }
 
         FieldRenderer::render($args['field'], $args['tab'] ?? '');
+    }
+
+    public static function renderDashboardWidgetsPage(): void
+    {
+        echo '<div id="ap-dashboard-widgets-admin"></div>';
     }
 }

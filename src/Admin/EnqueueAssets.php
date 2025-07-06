@@ -149,6 +149,27 @@ class EnqueueAssets {
             }
         }
 
+        if ($screen->base === 'artpulse-settings_page_artpulse-dashboard-widgets') {
+            $script_path = $plugin_dir . '/assets/js/admin-dashboard-customizer.js';
+            $script_url  = $plugin_url . '/assets/js/admin-dashboard-customizer.js';
+            if (file_exists($script_path)) {
+                wp_enqueue_script(
+                    'ap-dashboard-customizer',
+                    $script_url,
+                    ['wp-element'],
+                    filemtime($script_path),
+                    true
+                );
+                wp_localize_script('ap-dashboard-customizer', 'APDashboardCustomizer', [
+                    'widgets' => ap_get_all_widget_definitions(),
+                    'config'  => get_option('ap_dashboard_widget_config', []),
+                    'roles'   => wp_roles()->roles,
+                    'nonce'   => wp_create_nonce('ap_dashboard_widget_config'),
+                    'ajaxUrl' => admin_url('admin-ajax.php'),
+                ]);
+            }
+        }
+
         if (
             ($screen->base === 'toplevel_page_artpulse-settings' && ($_GET['tab'] ?? '') === 'import_export') ||
             $screen->base === 'artpulse-settings_page_artpulse-import-export'

@@ -606,8 +606,18 @@ class UserDashboardManager
     {
         $uid   = get_current_user_id();
         $layout = get_user_meta($uid, 'ap_dashboard_layout', true);
-        if (!is_array($layout)) {
-            $layout = [];
+        if (!is_array($layout) || empty($layout)) {
+            $roles = wp_get_current_user()->roles;
+            $config = get_option('ap_dashboard_widget_config', []);
+            foreach ($roles as $r) {
+                if (!empty($config[$r]) && is_array($config[$r])) {
+                    $layout = array_map('sanitize_key', $config[$r]);
+                    break;
+                }
+            }
+            if (!is_array($layout)) {
+                $layout = [];
+            }
         }
         $vis = get_user_meta($uid, 'ap_widget_visibility', true);
         if (!is_array($vis)) {

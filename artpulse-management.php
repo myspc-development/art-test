@@ -32,6 +32,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
+require_once __DIR__ . '/includes/dashboard-widgets.php';
 
 /**
  * Copy bundled Salient templates to the active child theme.
