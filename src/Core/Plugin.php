@@ -178,6 +178,7 @@ class Plugin
         \ArtPulse\Frontend\ArtistProfileFormShortcode::register();
         \ArtPulse\Frontend\OrgProfileEditShortcode::register();
         \ArtPulse\Frontend\OrgPublicProfileShortcode::register();
+        \ArtPulse\Frontend\PayoutsPage::register();
         \ArtPulse\Frontend\PortfolioBuilder::register();
         PortfolioManager::register();
         \ArtPulse\Integration\PortfolioSync::register();
@@ -305,6 +306,24 @@ class Plugin
             '1.0.0',
             true
         );
+
+        wp_enqueue_script(
+            'ap-payouts-js',
+            plugins_url('assets/js/ap-payouts.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-payouts-js', 'APPayouts', [
+            'root'  => esc_url_raw(rest_url()),
+            'nonce' => wp_create_nonce('wp_rest'),
+            'i18n'  => [
+                'balanceLabel' => __('Current Balance', 'artpulse'),
+                'noHistory'    => __('No payouts found.', 'artpulse'),
+                'updated'      => __('Settings updated.', 'artpulse'),
+            ],
+        ]);
 
         wp_enqueue_script(
             'ap-favorites-js',
@@ -596,6 +615,25 @@ class Plugin
             'post_type'   => 'page',
             'post_status' => 'publish',
             's'           => '[ap_submit_event]',
+            'numberposts' => 1,
+        ]);
+
+        if (!empty($pages)) {
+            return get_permalink($pages[0]->ID);
+        }
+
+        return home_url('/');
+    }
+
+    /**
+     * Locate the page containing the payouts shortcode.
+     */
+    public static function get_payouts_url(): string
+    {
+        $pages = get_posts([
+            'post_type'   => 'page',
+            'post_status' => 'publish',
+            's'           => '[ap_payouts]',
             'numberposts' => 1,
         ]);
 
