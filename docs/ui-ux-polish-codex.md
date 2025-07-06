@@ -5,6 +5,7 @@ This guide outlines optional modules for customizing dashboards, branding the pl
 ## 1. Customizable Dashboards
 
 Widgets on user dashboards are rendered as individual components. A small registry defines each widget ID, label and required capability. User preferences are stored in `ap_dashboard_layout` user meta as an ordered list of widget IDs. A JavaScript drag‑and‑drop library such as SortableJS can update the order. Layout changes are saved via AJAX and loaded whenever the dashboard renders. Developers may register additional widgets with the `artpulse_register_dashboard_widget` hook. Call `DashboardWidgetRegistry::register( $id, $callback, $capability )` inside that hook to make widgets available in the editor.
+See the [Widget Settings Codex](widget-settings-codex.md) for schema details and per-user storage.
 
 ```php
 add_action('artpulse_register_dashboard_widget', function () {
