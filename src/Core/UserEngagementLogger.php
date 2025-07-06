@@ -21,6 +21,7 @@ class UserEngagementLogger
             KEY logged_at (logged_at)
         ) $charset;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        error_log($sql);
         dbDelta($sql);
     }
 

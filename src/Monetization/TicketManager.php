@@ -81,6 +81,7 @@ class TicketManager
             KEY event_id (event_id)
         ) $charset;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        error_log($sql);
         dbDelta($sql);
     }
 
@@ -103,6 +104,7 @@ class TicketManager
             KEY event_id (event_id)
         ) $charset;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        error_log($sql);
         dbDelta($sql);
     }
 

@@ -167,6 +167,7 @@ class FavoritesManager {
             UNIQUE KEY user_object (user_id, object_id, object_type)
         ) $charset_collate;";
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        error_log($sql);
         dbDelta($sql);
     }
 

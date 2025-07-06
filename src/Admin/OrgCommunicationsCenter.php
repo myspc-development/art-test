@@ -41,6 +41,7 @@ class OrgCommunicationsCenter
             KEY thread_id (thread_id)
         ) $charset_collate;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        error_log($sql);
         dbDelta($sql);
     }
 

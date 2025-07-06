@@ -35,6 +35,7 @@ class FeedbackManager
         ) $charset;";
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        error_log($sql);
         dbDelta($sql);
 
         $comments = $wpdb->prefix . 'ap_feedback_comments';
@@ -48,6 +49,7 @@ class FeedbackManager
             KEY feedback_id (feedback_id),
             KEY user_id (user_id)
         ) $charset;";
+        error_log($sql2);
         dbDelta($sql2);
     }
 
