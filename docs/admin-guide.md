@@ -29,9 +29,15 @@ Use the `[ap_event_calendar]` shortcode to place the calendar anywhere on the si
 ## Settings Tab Layout
 
 All plugin options live under **ArtPulse → Settings** in the admin menu. The
-page is divided into tabs. Click **General**, **Location APIs**, **Import/Export**
-or **Shortcode Pages** to reveal the fields for each area. The active tab is
+page is divided into tabs. Click **General**, **Location APIs**, **Import/Export**,
+**Config Backup** or **Shortcode Pages** to reveal the fields for each area. The active tab is
 tracked via the URL hash so you can share a direct link like `#/import_export`.
+
+### Config Backup
+
+The **Config Backup** tab lets you download a JSON file of all plugin options or
+restore settings from a previous backup. Click **Download Backup** to export the
+current configuration and use the upload form to import a saved file.
 
 ### Shortcode Pages
 
