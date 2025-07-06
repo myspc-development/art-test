@@ -4,6 +4,7 @@ export const rolesMenus = {
     { label: "My Profile", icon: "User", section: "profile" },
     { label: "Events", icon: "Calendar", section: "events" },
     { label: "Favorites", icon: "Heart", section: "favorites" },
+    { label: "Messages", icon: "MessageCircle", section: "messages" },
     { label: "Forum", icon: "MessageCircle", section: "forum" }
   ],
   artist: [
@@ -13,6 +14,7 @@ export const rolesMenus = {
     { label: "Add Artwork", icon: "Plus", section: "add-artwork" },
     { label: "My Events", icon: "Calendar", section: "events" },
     { label: "My Collections", icon: "Folder", section: "collections" },
+    { label: "Messages", icon: "MessageCircle", section: "messages" },
     { label: "Forum", icon: "MessageCircle", section: "forum" }
   ],
   organization: [
@@ -23,6 +25,7 @@ export const rolesMenus = {
     { label: "Org Events", icon: "Calendar", section: "events" },
     { label: "Add Event", icon: "Plus", section: "add-event" },
     { label: "My Collections", icon: "Folder", section: "collections" },
+    { label: "Messages", icon: "MessageCircle", section: "messages" },
     { label: "Forum", icon: "MessageCircle", section: "forum" }
   ],
   curator: [

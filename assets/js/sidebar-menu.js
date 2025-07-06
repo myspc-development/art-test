@@ -19,6 +19,10 @@ var APSidebarMenu = (function (React) {
       icon: "Heart",
       section: "favorites"
     }, {
+      label: "Messages",
+      icon: "MessageCircle",
+      section: "messages"
+    }, {
       label: "Forum",
       icon: "MessageCircle",
       section: "forum"
@@ -47,6 +51,10 @@ var APSidebarMenu = (function (React) {
       label: "My Collections",
       icon: "Folder",
       section: "collections"
+    }, {
+      label: "Messages",
+      icon: "MessageCircle",
+      section: "messages"
     }, {
       label: "Forum",
       icon: "MessageCircle",
@@ -80,6 +88,10 @@ var APSidebarMenu = (function (React) {
       label: "My Collections",
       icon: "Folder",
       section: "collections"
+    }, {
+      label: "Messages",
+      icon: "MessageCircle",
+      section: "messages"
     }, {
       label: "Forum",
       icon: "MessageCircle",
