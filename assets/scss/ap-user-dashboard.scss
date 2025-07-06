@@ -1,5 +1,5 @@
-@import url("ap-style.css");
 @use 'variables';
+@import url("ap-style.css");
 /* User dashboard styles */
 /* General user dashboard styling */
 
@@ -184,6 +184,7 @@
   font-size: clamp(1.5rem, 2.5vw, 2rem);
   font-weight: 600;
   margin: 0;
+}
 
 .ap-user-profile-body {
   font-size: 1rem;
