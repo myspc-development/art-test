@@ -82,6 +82,9 @@ class Plugin
     {
         $db_version_option = 'artpulse_db_version';
 
+        // Track installed plugin version
+        update_option('ap_plugin_version', self::VERSION);
+
         // Init settings
         $settings = get_option('artpulse_settings', []);
         $settings['version'] = self::VERSION;
@@ -244,6 +247,7 @@ class Plugin
         \ArtPulse\Admin\AdminColumnsEvent::register();
         \ArtPulse\Admin\AdminColumnsOrganisation::register();
         \ArtPulse\Admin\QuickStartGuide::register();
+        \ArtPulse\Admin\ReleaseNotes::register();
         DocumentationManager::register();
         \ArtPulse\Taxonomies\TaxonomiesRegistrar::register();
         \ArtPulse\Core\EventExpiryCron::register();
