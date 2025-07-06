@@ -43,7 +43,9 @@ function WidgetConfig(_ref) {
     var form = new FormData();
     form.append('action', 'ap_save_dashboard_widget_config');
     form.append('nonce', nonce);
-    form.append('config[' + activeRole + '][]', layout.join(','));
+    layout.forEach(function (id) {
+      return form.append('config[' + activeRole + '][]', id);
+    });
     fetch(ajaxUrl, { method: 'POST', body: form }).then(function (r) {
       return r.json();
     }).then(function () {
