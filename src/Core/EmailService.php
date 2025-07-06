@@ -27,7 +27,15 @@ class EmailService
         try {
             switch ($method) {
                 case 'mailgun':
-                    return self::send_mailgun($to, $subject, $message, $options['mailgun_api_key'] ?? '', $from_name, $from_address);
+                    return self::send_mailgun(
+                        $to,
+                        $subject,
+                        $message,
+                        $options['mailgun_api_key'] ?? '',
+                        $options['mailgun_domain'] ?? '',
+                        $from_name,
+                        $from_address
+                    );
                 case 'sendgrid':
                     return self::send_sendgrid($to, $subject, $message, $options['sendgrid_api_key'] ?? '', $from_name, $from_address);
                 default:
@@ -43,16 +51,24 @@ class EmailService
         }
     }
 
-    private static function send_mailgun($to, string $subject, string $message, string $api_key, string $from_name, string $from_address): bool
+    private static function send_mailgun(
+        $to,
+        string $subject,
+        string $message,
+        string $api_key,
+        string $domain,
+        string $from_name,
+        string $from_address
+    ): bool
     {
-        if (!$api_key) {
+        if (!$api_key || !$domain) {
             return false;
         }
         $from = $from_address;
         if ($from_name) {
             $from = sprintf('%s <%s>', $from_name, $from_address);
         }
-        $response = wp_remote_post('https://api.mailgun.net/v3/messages', [
+        $response = wp_remote_post("https://api.mailgun.net/v3/{$domain}/messages", [
             'headers' => [
                 'Authorization' => 'Basic ' . base64_encode('api:' . $api_key),
             ],

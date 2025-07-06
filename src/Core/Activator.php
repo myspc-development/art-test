@@ -27,6 +27,7 @@ class Activator
                 'default_privacy_location'   => 'public',
                 'email_method'        => 'wp_mail',
                 'mailgun_api_key'     => '',
+                'mailgun_domain'      => '',
                 'sendgrid_api_key'    => '',
                 'email_from_name'     => '',
                 'email_from_address'  => '',

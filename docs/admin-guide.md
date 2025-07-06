@@ -14,6 +14,7 @@ See the [User Guide](user-guide.md) for instructions that attendees follow when 
 - Use the message icon next to any attendee to send a single message.
 - Emails use your configured notification settings.
 - Customize the default email template under **ArtPulse → Settings**.
+- When using the Mailgun method, enter your domain and API key under **Settings → Emails**.
 
 ## Event Analytics
 
