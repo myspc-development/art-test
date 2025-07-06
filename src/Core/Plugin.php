@@ -52,6 +52,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\EventChatController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\ForumRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\LeaderboardRestController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Community\UnifiedInboxController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\CompetitionRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
