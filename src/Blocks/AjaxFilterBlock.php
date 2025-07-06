@@ -24,7 +24,7 @@ class AjaxFilterBlock {
 
         wp_register_script(
             'artpulse-ajax-filter-block',
-            plugins_url('assets/js/ajax-filter-block.js', dirname(__DIR__, 3) . '/artpulse-management.php'),
+            plugins_url('assets/js/ajax-filter-block.js', ARTPULSE_PLUGIN_FILE),
             ['wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-api-fetch'],
             filemtime(__DIR__ . '/../../assets/js/ajax-filter-block.js')
         );
