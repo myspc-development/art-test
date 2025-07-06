@@ -268,6 +268,10 @@ Administrators can assign badges to users directly from their profile pages. Edi
 
 A new **Login Heatmap** submenu under **ArtPulse → Settings** displays hourly login counts for the last seven days so you can quickly spot peak activity times.
 
+## Admin Pages
+
+**Roles & Permissions** – Manage organization roles and capabilities. Access the screen via `wp-admin/admin.php?page=ap-org-roles` from the Organization Dashboard menu. Visiting `/wp-admin/ap-org-roles` directly will return a 404 because the route is handled through `admin.php`.
+
 ## User Dashboard Features
 
 Place `[ap_user_dashboard]` on a page to expose the member dashboard. The dashboard displays calendars for **My Favorites** and **My RSVPs** along with charts of engagement statistics. A bar chart shows monthly trends while a new line chart visualizes daily activity over the last 30 days. Users can quickly access profile tools, download their data and review upcoming events.
