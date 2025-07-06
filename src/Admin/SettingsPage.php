@@ -4,6 +4,7 @@ use ArtPulse\Admin\ImportExportTab;
 use ArtPulse\Admin\SettingsRegistry;
 use ArtPulse\Admin\FieldRenderer;
 use ArtPulse\Admin\ConfigBackupTab;
+use ArtPulse\Admin\UpdatesTab;
 use ArtPulse\Core\ActivityLogger;
 
 class SettingsPage
@@ -12,6 +13,7 @@ class SettingsPage
     {
         self::bootstrap_settings();
         ConfigBackupTab::register();
+        UpdatesTab::register();
         add_action('admin_menu', [self::class, 'addMenu']);
         add_action('admin_init', [self::class, 'registerSettings']);
         add_action('wp_login', [self::class, 'trackLastLogin'], 10, 2);
@@ -28,6 +30,7 @@ class SettingsPage
         SettingsRegistry::register_tab('shortcodes', __('Shortcode Pages', 'artpulse'));
         SettingsRegistry::register_tab('search', __('Search', 'artpulse'));
         SettingsRegistry::register_tab('emails', __('Email Delivery', 'artpulse'));
+        SettingsRegistry::register_tab('updates', __('Updates', 'artpulse'));
 
         $general_fields = [
             'basic_fee' => [
@@ -247,6 +250,32 @@ class SettingsPage
         ];
         foreach ($email_fields as $key => $cfg) {
             SettingsRegistry::register_field('emails', $key, $cfg);
+        }
+
+        $update_fields = [
+            'update_repo_url' => [
+                'label' => __('Repository URL', 'artpulse'),
+                'desc'  => __('GitHub repository to pull updates from.', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'update_branch' => [
+                'label' => __('Branch/Release', 'artpulse'),
+                'desc'  => __('Branch or release to track.', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'update_access_token' => [
+                'label' => __('Access Token', 'artpulse'),
+                'desc'  => __('Personal access token for private repos.', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'auto_update_enabled' => [
+                'label' => __('Auto-Update', 'artpulse'),
+                'desc'  => __('Check and apply updates daily.', 'artpulse'),
+                'type'  => 'checkbox',
+            ],
+        ];
+        foreach ($update_fields as $key => $cfg) {
+            SettingsRegistry::register_field('updates', $key, $cfg);
         }
     }
     public static function addMenu()
@@ -552,6 +581,8 @@ class SettingsPage
                         <?php \ArtPulse\Admin\ShortcodePages::render(); ?>
                     <?php elseif ($slug === 'config_backup') : ?>
                         <?php ConfigBackupTab::render(); ?>
+                    <?php elseif ($slug === 'updates') : ?>
+                        <?php UpdatesTab::render(); ?>
                     <?php elseif ($slug === 'social_auto') : ?>
                         <?php \ArtPulse\Integration\SocialAutoPoster::render_settings(); ?>
                     <?php else : ?>
@@ -661,7 +692,8 @@ class SettingsPage
                 'oauth_google_enabled',
                 'oauth_facebook_enabled',
                 'oauth_apple_enabled',
-                'enforce_two_factor'
+                'enforce_two_factor',
+                'auto_update_enabled'
             ])) {
                 $output[$key] = isset($value) ? 1 : 0;
             } elseif ($key === 'payment_metrics_cache' || in_array($key, ['default_rsvp_limit', 'min_rsvp_limit', 'max_rsvp_limit'])) {
