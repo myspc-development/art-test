@@ -44,5 +44,17 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         $this->assertSame(['a', 'b', 'c'], get_user_meta($this->user_id, 'ap_dashboard_layout', true));
         $this->assertSame(['a' => false, 'b' => true], get_user_meta($this->user_id, 'ap_widget_visibility', true));
     }
+
+    public function test_post_sanitizes_layout_values(): void
+    {
+        $req = new WP_REST_Request('POST', '/artpulse/v1/ap_dashboard_layout');
+        $req->set_body_params([
+            'layout' => ['A-', 'B C', 'in valid/slug'],
+        ]);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $expected = ['a-', 'bc', 'invalidslug'];
+        $this->assertSame($expected, get_user_meta($this->user_id, 'ap_dashboard_layout', true));
+    }
 }
 
