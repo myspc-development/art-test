@@ -4,19 +4,47 @@ This guide outlines optional modules for customizing dashboards, branding the pl
 
 ## 1. Customizable Dashboards
 
-Widgets on user dashboards are rendered as individual components. A small registry defines each widget ID, label and required capability. User preferences are stored in `ap_dashboard_layout` user meta as an ordered list of widget IDs. A JavaScript drag‑and‑drop library such as SortableJS can update the order. Layout changes are saved via AJAX and loaded whenever the dashboard renders. Developers may register additional widgets with the `artpulse_register_dashboard_widget` hook.
+Widgets on user dashboards are rendered as individual components. A small registry defines each widget ID, label and required capability. User preferences are stored in `ap_dashboard_layout` user meta as an ordered list of widget IDs. A JavaScript drag‑and‑drop library such as SortableJS can update the order. Layout changes are saved via AJAX and loaded whenever the dashboard renders. Developers may register additional widgets with the `artpulse_register_dashboard_widget` hook. Call `DashboardWidgetRegistry::register( $id, $callback, $capability )` inside that hook to make widgets available in the editor.
 
 ```php
 add_action('artpulse_register_dashboard_widget', function () {
     \ArtPulse\Core\DashboardWidgetRegistry::register(
         'my-widget',
-        '__return_null',
+        'my_widget_callback',
         'view_artpulse_dashboard'
     );
 });
 ```
 
-Default layouts can be configured in the admin. Visit **ArtPulse → Settings → Dashboard Widgets** to arrange widgets for each role. Definitions are pulled from `ap_get_all_widget_definitions()` and the selections are stored in the `ap_dashboard_widget_config` option. Roles include `member`, `artist`, `organization` and any additional roles registered with `RoleSetup`.
+`DashboardWidgetRegistry::register()` accepts the widget slug, a callback that renders
+the widget, and an optional capability required to view it. Any callable may be
+used for the callback—functions, object methods or an anonymous closure.
+
+Default layouts can be configured in the admin. Visit **ArtPulse → Settings → Dashboard Widgets** to arrange widgets for each role. Definitions are pulled from `ap_get_all_widget_definitions()` and the selections are stored in the `ap_dashboard_widget_config` option. Roles include `member`, `artist`, `organization` and any custom roles you register.
+
+Any role added via WordPress' `add_role()` function will automatically appear in the editor because the settings page reads `wp_roles()->roles`. When using the plugin's role hierarchy you may register roles on activation:
+
+```php
+register_activation_hook(__FILE__, function () {
+    add_role('curator', 'Curator', ['view_artpulse_dashboard' => true]);
+});
+```
+
+### Example: Drag‑and‑Drop Editor
+
+The Dashboard Widgets screen outputs two sortable lists named **Available** and
+**Active**. SortableJS powers the drag‑and‑drop behavior. A simplified excerpt of
+the React component shows the setup:
+
+```jsx
+import Sortable from 'sortablejs';
+
+Sortable.create(activeRef.current, { group: 'widgets', animation: 150 });
+Sortable.create(availRef.current, { group: 'widgets', animation: 150 });
+```
+
+Widgets can be moved between columns and reordered. Clicking **Save** persists
+the layout to `ap_dashboard_widget_config` via AJAX.
 
 ## 2. White‑Labeling
 
