@@ -6,6 +6,16 @@ This guide outlines optional modules for customizing dashboards, branding the pl
 
 Widgets on user dashboards are rendered as individual components. A small registry defines each widget ID, label and required capability. User preferences are stored in `ap_dashboard_layout` user meta as an ordered list of widget IDs. A JavaScript drag‑and‑drop library such as SortableJS can update the order. Layout changes are saved via AJAX and loaded whenever the dashboard renders. Developers may register additional widgets with the `artpulse_register_dashboard_widget` hook.
 
+```php
+add_action('artpulse_register_dashboard_widget', function () {
+    \ArtPulse\Core\DashboardWidgetRegistry::register(
+        'my-widget',
+        '__return_null',
+        'view_artpulse_dashboard'
+    );
+});
+```
+
 ## 2. White‑Labeling
 
 Organizations can brand the dashboard and emails. A **Branding** tab under **ArtPulse → Settings** allows admins to upload a logo, choose primary and secondary colors and set email footer details. These settings are stored in site options and injected as CSS variables when the dashboard loads. Email templates swap in the logo and colors so that outbound notifications match the chosen branding. Filters like `artpulse_branding_logo_url` let developers override values.
