@@ -80,7 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
     startTour.addEventListener('click', () => {
       localStorage.setItem('apTourDismissed', '1');
       banner.remove();
-      // integrate tour library here
+      if (typeof startDashboardTour === 'function') {
+        startDashboardTour();
+      }
     });
   }
 

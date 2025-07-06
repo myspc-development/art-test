@@ -180,6 +180,12 @@ class UserDashboardManager
             ],
         ]);
 
+        register_rest_route('artpulse/v1', '/dashboard-tour', [
+            'methods'             => 'POST',
+            'callback'            => [ self::class, 'completeDashboardTour' ],
+            'permission_callback' => fn() => is_user_logged_in(),
+        ]);
+
         register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getDashboardLayout' ],
@@ -653,6 +659,13 @@ class UserDashboardManager
         return rest_ensure_response(['saved' => true]);
     }
 
+    public static function completeDashboardTour(WP_REST_Request $request): \WP_REST_Response
+    {
+        $uid = get_current_user_id();
+        update_user_meta($uid, 'ap_dashboard_tour_complete', 1);
+        return rest_ensure_response(['completed' => true]);
+    }
+
     public static function addBadge(int $user_id, string $slug): void
     {
         $badges = get_user_meta($user_id, 'user_badges', true);
@@ -726,7 +739,34 @@ class UserDashboardManager
 
         $onboarding_html = '';
         $completed = get_user_meta(get_current_user_id(), 'ap_onboarding_completed', true);
-        if (!$completed) {
+        $tour_done = get_user_meta(get_current_user_id(), 'ap_dashboard_tour_complete', true);
+        if (!$completed && !$tour_done) {
+            wp_enqueue_script(
+                'intro-js',
+                'https://unpkg.com/intro.js/minified/intro.min.js',
+                [],
+                '4.2.2',
+                true
+            );
+            wp_enqueue_style(
+                'intro-js',
+                'https://unpkg.com/intro.js/minified/introjs.min.css',
+                [],
+                '4.2.2'
+            );
+            wp_enqueue_script(
+                'ap-dashboard-tour',
+                plugins_url('assets/js/ap-dashboard-tour.js', ARTPULSE_PLUGIN_FILE),
+                ['intro-js', 'ap-user-dashboard-js'],
+                '1.0.0',
+                true
+            );
+            wp_localize_script('ap-dashboard-tour', 'APDashboardTour', [
+                'endpoint' => esc_url_raw(rest_url('artpulse/v1/dashboard-tour')),
+                'nonce'    => wp_create_nonce('wp_rest'),
+            ]);
+        }
+        if (!$completed && !$tour_done) {
             if (in_array('artist', $roles, true) && isset($_GET['onboarding'])) {
                 $onboarding_html = self::load_template('onboarding-artist.php');
             } else {

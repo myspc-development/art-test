@@ -124,4 +124,11 @@ class UserDashboardManagerTest extends TestCase
         $html = UserDashboardManager::renderDashboard([]);
         $this->assertStringNotContainsString('ap-onboarding-banner', $html);
     }
+
+    public function test_no_banner_when_tour_completed() {
+        Stub::$roles = ['artist'];
+        Stub::$meta = ['ap_dashboard_tour_complete' => 1];
+        $html = UserDashboardManager::renderDashboard([]);
+        $this->assertStringNotContainsString('ap-onboarding-banner', $html);
+    }
 }
