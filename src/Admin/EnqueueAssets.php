@@ -168,7 +168,7 @@ class EnqueueAssets {
                     true
                 );
                 wp_localize_script('ap-dashboard-widgets-editor', 'APDashboardWidgetsEditor', [
-                    'widgets' => ap_get_all_widget_definitions(),
+                    'widgets' => \ArtPulse\Core\DashboardWidgetRegistry::get_definitions(),
                     'config'  => get_option('ap_dashboard_widget_config', []),
                     'roles'   => wp_roles()->roles,
                     'nonce'   => wp_create_nonce('ap_dashboard_widget_config'),

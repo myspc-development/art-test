@@ -8,21 +8,33 @@ use WP_Roles;
  */
 class DashboardWidgetRegistry
 {
+    /**
+     * @var array<string,array{label:string,icon:string,description:string,callback:callable,capability:string}>
+     */
     private static array $widgets = [];
 
     /**
-     * Register a widget.
+     * Register a widget and its settings.
      */
-    public static function register(string $id, callable $callback, string $capability = 'read'): void
-    {
+    public static function register(
+        string $id,
+        string $label,
+        string $icon,
+        string $description,
+        callable $callback,
+        string $capability = 'read'
+    ): void {
         self::$widgets[$id] = [
-            'callback'   => $callback,
-            'capability' => $capability,
+            'label'       => $label,
+            'icon'        => $icon,
+            'description' => $description,
+            'callback'    => $callback,
+            'capability'  => $capability,
         ];
     }
 
     /**
-     * Get widgets allowed for a user role.
+     * Get widget callbacks allowed for a user role.
      */
     public static function get_widgets(string $user_role): array
     {
@@ -35,6 +47,24 @@ class DashboardWidgetRegistry
             }
         }
         return $allowed;
+    }
+
+    /**
+     * Return full widget definitions.
+     */
+    public static function get_definitions(): array
+    {
+        $defs = [];
+        foreach (self::$widgets as $id => $config) {
+            $defs[] = [
+                'id'          => $id,
+                'name'        => $config['label'],
+                'icon'        => $config['icon'],
+                'description' => $config['description'],
+            ];
+        }
+
+        return apply_filters('ap_dashboard_widget_definitions', $defs);
     }
 
     /**
