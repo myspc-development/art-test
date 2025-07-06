@@ -29,8 +29,9 @@ composer sniff
 These tools are described in the [Development Setup](README.md#development-setup) section of the README. For more details on the testing workflow see [docs/testing-strategy.md](docs/testing-strategy.md).
 
 When working on JavaScript sources or block files make sure to rebuild the
-compiled assets so `wp_enqueue_script()` loads valid code. Run the following
-command and commit the updated files under `assets/js`:
+compiled assets so `wp_enqueue_script()` loads valid code. React components are
+bundled with Rollup. Run the following command and commit the updated files under
+`assets/js`:
 
 ```bash
 npm run build

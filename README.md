@@ -374,13 +374,12 @@ composer test
 composer sniff
 ```
 
-The `package.json` file defines scripts for building production assets. To compile the SCSS and bundle blocks run:
+The `package.json` file defines scripts for building production assets. To compile the SCSS, bundle the React sources and build blocks run:
 
 ```bash
 npm run build
 ```
-This command compiles the SCSS, bundles blocks and transpiles the admin
-scripts located in `assets/js`. Run it whenever files such as
+This command compiles the SCSS, bundles blocks and packages the React-based admin scripts via Rollup. Run it whenever files such as
 `sidebar-taxonomies.jsx`, `advanced-taxonomy-filter-block.jsx`,
 `filtered-list-shortcode-block.jsx` or `ajax-filter-block.jsx` are
 modified so the corresponding `.js` files are regenerated.
