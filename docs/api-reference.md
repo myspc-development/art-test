@@ -242,3 +242,25 @@ Example response:
   }
 ]
 ```
+
+### `GET /artpulse/v1/inbox`
+
+Return unified inbox items for the current user. Results include notifications,
+direct messages and RSVP activity sorted by date.
+
+Example request:
+
+```bash
+curl -H 'X-WP-Nonce: <nonce>' '/wp-json/artpulse/v1/inbox'
+```
+
+Each item contains:
+
+- `id` – record identifier
+- `type` – `message`, `notification` or `rsvp`
+- `content` – text summary
+- `timestamp` – MySQL datetime string
+- `read` – boolean read state
+
+Use `POST /artpulse/v1/inbox/read` with parameters `type` and `id` (or `ids[]`)
+to mark items read. `POST /artpulse/v1/inbox/unread` reverts the state.

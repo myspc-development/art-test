@@ -183,14 +183,34 @@ class DirectMessages
             return new WP_Error('invalid_params', 'No message IDs', ['status' => 400]);
         }
 
-        global $wpdb;
-        $table   = $wpdb->prefix . 'ap_messages';
-        $user_id = get_current_user_id();
-        $place   = implode(',', array_fill(0, count($ids), '%d'));
-        $args    = array_merge($ids, [$user_id]);
-        $sql     = "UPDATE $table SET is_read = 1 WHERE id IN ($place) AND recipient_id = %d";
-        $wpdb->query($wpdb->prepare($sql, ...$args));
+        self::mark_read_ids($ids, get_current_user_id());
 
         return rest_ensure_response(['updated' => count($ids)]);
+    }
+
+    public static function mark_read_ids(array $ids, int $user_id): void
+    {
+        if (!$ids) {
+            return;
+        }
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $place = implode(',', array_fill(0, count($ids), '%d'));
+        $args  = array_merge($ids, [$user_id]);
+        $sql   = "UPDATE $table SET is_read = 1 WHERE id IN ($place) AND recipient_id = %d";
+        $wpdb->query($wpdb->prepare($sql, ...$args));
+    }
+
+    public static function mark_unread_ids(array $ids, int $user_id): void
+    {
+        if (!$ids) {
+            return;
+        }
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $place = implode(',', array_fill(0, count($ids), '%d'));
+        $args  = array_merge($ids, [$user_id]);
+        $sql   = "UPDATE $table SET is_read = 0 WHERE id IN ($place) AND recipient_id = %d";
+        $wpdb->query($wpdb->prepare($sql, ...$args));
     }
 }

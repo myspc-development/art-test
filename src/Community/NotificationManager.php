@@ -73,6 +73,15 @@ class NotificationManager {
         ]);
     }
 
+    public static function mark_unread($notification_id, $user_id) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_notifications';
+        $wpdb->update($table, ['status' => 'unread'], [
+            'id'      => $notification_id,
+            'user_id' => $user_id
+        ]);
+    }
+
     /**
      * Ensure the notifications table exists.
      */
