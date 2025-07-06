@@ -10,6 +10,7 @@ class OrgRolesPage
     {
         add_action('admin_menu', [self::class, 'addMenu']);
         add_action('admin_post_ap_save_org_roles', [self::class, 'handleForm']);
+        add_action('admin_init', [self::class, 'maybe_redirect_slug']);
     }
 
     public static function addMenu(): void
@@ -22,6 +23,16 @@ class OrgRolesPage
             'ap-org-roles',
             [self::class, 'render']
         );
+    }
+
+    public static function maybe_redirect_slug(): void
+    {
+        $uri  = $_SERVER['REQUEST_URI'] ?? '';
+        $path = parse_url($uri, PHP_URL_PATH);
+        if ($path === '/wp-admin/ap-org-roles') {
+            wp_safe_redirect(admin_url('admin.php?page=ap-org-roles'));
+            exit;
+        }
     }
 
     private static function get_current_org_id(): int
