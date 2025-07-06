@@ -11,10 +11,13 @@ class MessagesShortcode
 
     public static function enqueue(): void
     {
-        if (function_exists('ap_enqueue_global_styles')) {
-            ap_enqueue_global_styles();
+        $post = get_post();
+        if ($post instanceof \WP_Post && has_shortcode($post->post_content, 'ap_messages')) {
+            if (function_exists('ap_enqueue_global_styles')) {
+                ap_enqueue_global_styles();
+            }
+            wp_enqueue_script('ap-messages-js');
         }
-        wp_enqueue_script('ap-messages-js');
     }
 
     public static function render(): string
