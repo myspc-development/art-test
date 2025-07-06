@@ -10,7 +10,7 @@ function WidgetConfig({ widgets, config, roles, nonce, ajaxUrl }) {
     const form = new FormData();
     form.append('action', 'ap_save_dashboard_widget_config');
     form.append('nonce', nonce);
-    form.append('config[' + activeRole + '][]', layout.join(','));
+    layout.forEach(id => form.append(`config[${activeRole}][]`, id));
     fetch(ajaxUrl, { method: 'POST', body: form })
       .then(r => r.json())
       .then(() => alert('Saved'));
