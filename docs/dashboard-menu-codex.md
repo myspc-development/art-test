@@ -6,6 +6,8 @@ This guide explains how sidebar menus are defined for the React dashboards.
 
 `assets/js/rolesMenus.js` exports a `rolesMenus` object mapping user roles to arrays of menu items. Each item contains a `label`, a `lucide-react` icon name, and a `section` key used to toggle dashboard content. `<SidebarMenu>` reads this object to build the navigation for the current role.
 
+Icon components are imported from `lucide-react` as ES modules and bundled with the dashboard scripts, so no global icon script is needed.
+
 ## 2. Adding Roles and Menu Items
 
 To add a new role or modify the menu for an existing role, edit `rolesMenus.js`:
