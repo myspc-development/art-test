@@ -6,8 +6,8 @@
 - Removed unused `src/Community/installer.php` in favor of `FavoritesManager::install_favorites_table()`.
 
 ## 1.3.10
-- Added bundled `lucide-react` UMD build and registered it as a dependency for
-  `ap-dashboard.js` to fix "lucideReact is not defined" errors.
+- Icons from `lucide-react` are now bundled with `ap-dashboard.js` using ES
+  module imports, eliminating the need for a global `lucideReact` script.
 
 ## 1.3.8
 - Added EmailTemplateManager and customizable template field.
