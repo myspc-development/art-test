@@ -53,7 +53,7 @@ class RoleSetup
         }
     }
 
-    private static function assign_capabilities(): void
+    public static function assign_capabilities(): void
     {
         $cpt_caps = [
             'artpulse_event',
