@@ -56,4 +56,27 @@ class ShortcodePagesTest extends TestCase
         $this->assertCount(count($map), self::$inserted);
         $this->assertSame(range(1, count($map)), self::$updated['ap_shortcode_page_ids']);
     }
+
+    public function test_shortcode_map_includes_new_shortcodes(): void
+    {
+        $map = ShortcodePages::get_shortcode_map();
+        $expected = [
+            '[ap_artist_profile_form]',
+            '[ap_collection]',
+            '[ap_collections]',
+            '[ap_competition_dashboard]',
+            '[ap_event_chat]',
+            '[ap_favorite_portfolio]',
+            '[ap_favorites_analytics]',
+            '[ap_messages]',
+            '[ap_org_rsvp_dashboard]',
+            '[ap_payouts]',
+            '[ap_recommendations]',
+            '[ap_render_ui]',
+            '[ap_spotlights]',
+        ];
+        foreach ($expected as $code) {
+            $this->assertArrayHasKey($code, $map);
+        }
+    }
 }
