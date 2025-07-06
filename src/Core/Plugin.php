@@ -148,6 +148,7 @@ class Plugin
         \ArtPulse\Core\AnalyticsManager::register();
         \ArtPulse\Core\AnalyticsDashboard::register();
         \ArtPulse\Admin\PaymentAnalyticsDashboard::register();
+        \ArtPulse\Admin\PaymentReportsPage::register();
         EngagementDashboard::register();
         AdminDashboard::register();
         \ArtPulse\Core\FrontendMembershipPage::register();
