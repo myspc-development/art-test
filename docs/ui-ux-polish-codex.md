@@ -16,6 +16,8 @@ add_action('artpulse_register_dashboard_widget', function () {
 });
 ```
 
+Default layouts can be configured in the admin. Visit **ArtPulse → Settings → Dashboard Widgets** to arrange widgets for each role. Definitions are pulled from `ap_get_all_widget_definitions()` and the selections are stored in the `ap_dashboard_widget_config` option. Roles include `member`, `artist`, `organization` and any additional roles registered with `RoleSetup`.
+
 ## 2. White‑Labeling
 
 Organizations can brand the dashboard and emails. A **Branding** tab under **ArtPulse → Settings** allows admins to upload a logo, choose primary and secondary colors and set email footer details. These settings are stored in site options and injected as CSS variables when the dashboard loads. Email templates swap in the logo and colors so that outbound notifications match the chosen branding. Filters like `artpulse_branding_logo_url` let developers override values.
