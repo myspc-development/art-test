@@ -4,7 +4,7 @@ This guide outlines optional modules for advanced reporting, custom RSVP fields,
 
 ## 1. Advanced Reporting
 
-An `ReportingManager` class provides CSV exports and REST endpoints. Available types include attendance, engagement, demographics, feedback and time‑series trends.
+A `ReportingManager` class provides CSV exports and REST endpoints. Available types include attendance, engagement, demographics, feedback and time‑series trends.
 
 Example endpoint:
 
