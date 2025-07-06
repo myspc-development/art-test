@@ -393,3 +393,31 @@ msgstr ""
 #: src/Core/UserDashboardManager.php
 msgid "Reset dashboard layout?"
 msgstr ""
+
+#: assets/js/admin-dashboard-widgets-editor.jsx
+msgid "Available Widgets"
+msgstr ""
+
+#: assets/js/admin-dashboard-widgets-editor.jsx
+msgid "Active Widgets"
+msgstr ""
+
+#: assets/js/admin-dashboard-widgets-editor.jsx
+msgid "Save"
+msgstr ""
+
+#: assets/js/admin-dashboard-widgets-editor.jsx
+msgid "Preview"
+msgstr ""
+
+#: assets/js/admin-dashboard-widgets-editor.jsx
+msgid "Reset to Default"
+msgstr ""
+
+#: assets/js/admin-dashboard-widgets-editor.jsx
+msgid "Widget order saved."
+msgstr ""
+
+#: assets/js/admin-dashboard-widgets-editor.jsx
+msgid "Error saving widget order."
+msgstr ""

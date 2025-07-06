@@ -173,6 +173,15 @@ class EnqueueAssets {
                     'roles'   => wp_roles()->roles,
                     'nonce'   => wp_create_nonce('ap_dashboard_widget_config'),
                     'ajaxUrl' => admin_url('admin-ajax.php'),
+                    'l10n'    => [
+                        'availableWidgets' => __('Available Widgets', 'artpulse'),
+                        'activeWidgets'    => __('Active Widgets', 'artpulse'),
+                        'save'            => __('Save', 'artpulse'),
+                        'preview'         => __('Preview', 'artpulse'),
+                        'resetDefault'    => __('Reset to Default', 'artpulse'),
+                        'saveSuccess'     => __('Widget order saved.', 'artpulse'),
+                        'saveError'       => __('Error saving widget order.', 'artpulse'),
+                    ],
                 ]);
             }
         }
