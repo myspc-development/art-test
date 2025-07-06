@@ -744,6 +744,6 @@ class SettingsPage
 
     public static function renderDashboardWidgetsPage(): void
     {
-        echo '<div id="ap-dashboard-widgets-admin"></div>';
+        echo '<div id="ap-dashboard-widgets-canvas"></div>';
     }
 }
