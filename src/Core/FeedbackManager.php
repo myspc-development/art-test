@@ -41,7 +41,7 @@ class FeedbackManager
         $comments = $wpdb->prefix . 'ap_feedback_comments';
         $sql2 = "CREATE TABLE $comments (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            PRIMARY KEY(id),
+            PRIMARY KEY (id),
             feedback_id BIGINT NOT NULL,
             user_id BIGINT NULL,
             comment TEXT NOT NULL,
@@ -49,7 +49,9 @@ class FeedbackManager
             KEY feedback_id (feedback_id),
             KEY user_id (user_id)
         ) $charset;";
-        error_log($sql2);
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log($sql2);
+        }
         dbDelta($sql2);
     }
 
