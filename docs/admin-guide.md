@@ -65,3 +65,10 @@ not immediately register the updated rewrite rules. To avoid 404 errors on REST
 endpoints like `/wp/v2/artwork_style` and `/wp/v2/event_type`, either
 reactivate the plugin or visit **Settings → Permalinks**. This flushes rewrite
 rules so the new routes work correctly.
+
+## Admin Pages
+
+**Roles & Permissions** – Manage organization roles and capabilities. Access the
+screen via `wp-admin/admin.php?page=ap-org-roles` from the Organization
+Dashboard menu. Visiting `/wp-admin/ap-org-roles` directly will return a 404
+because the route is handled through `admin.php`.
