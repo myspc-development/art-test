@@ -16,6 +16,10 @@
   "devDependencies": {
     "@wordpress/scripts": "^19.2.4",
     "standard-version": "^9.5.0",
-    "sass": "^1.69.5"
+    "sass": "^1.69.5",
+    "@babel/cli": "^7.22.20",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-env": "^7.22.20",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0"
   }
 }

@@ -1,194 +1,576 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('.ap-org-submission-form');
-  const messageBox = document.querySelector('.ap-form-messages');
-  if (!form) return;
+"use strict";
 
-  const fileInput = form.querySelector('#ap-org-images');
-  const previewWrap = document.createElement('div');
-  previewWrap.className = 'ap-image-previews';
-  fileInput.insertAdjacentElement('afterend', previewWrap);
-  const orderInput = document.createElement('input');
-  orderInput.type = 'hidden';
-  orderInput.name = 'image_order';
-  form.appendChild(orderInput);
-
-  const submitBtn = form.querySelector('button[type="submit"]');
-  let progressBars = [];
-
-  let files = [];
-  let order = [];
-
-  fileInput.addEventListener('change', () => {
-    files = Array.from(fileInput.files).slice(0, 5);
-    order = files.map((_, i) => i);
-    progressBars = [];
-    renderPreviews();
-    updateOrderInput();
-  });
-
-  let dragIndex = null;
-  function renderPreviews() {
-    previewWrap.innerHTML = '';
-    files.forEach((file, i) => {
-      const wrapper = document.createElement('div');
-      wrapper.style.display = 'inline-block';
-      wrapper.style.marginRight = '0.5rem';
-      const img = document.createElement('img');
-      img.src = URL.createObjectURL(file);
-      img.className = 'ap-image-preview';
-      img.draggable = true;
-      img.dataset.index = i;
-      img.addEventListener('dragstart', () => { dragIndex = i; });
-      img.addEventListener('dragover', e => e.preventDefault());
-      img.addEventListener('drop', e => {
-        e.preventDefault();
-        const target = parseInt(e.currentTarget.dataset.index, 10);
-        if (dragIndex === null || dragIndex === target) return;
-        const [f] = files.splice(dragIndex, 1);
-        const [o] = order.splice(dragIndex, 1);
-        files.splice(target, 0, f);
-        order.splice(target, 0, o);
-        progressBars = [];
-        renderPreviews();
-        updateOrderInput();
-      });
-      const progress = document.createElement('progress');
-      progress.value = 0;
-      progress.max = 100;
-      progress.className = 'ap-upload-progress';
-      wrapper.appendChild(img);
-      wrapper.appendChild(progress);
-      previewWrap.appendChild(wrapper);
-      progressBars[i] = progress;
-    });
-  }
-
-  function updateOrderInput() {
-    orderInput.value = order.join(',');
-  }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (submitBtn) submitBtn.disabled = true;
-
-    const formData = new FormData(form);
-    const title = formData.get('title');
-  const images = files;
-  const logoFile = form.querySelector('#ead_org_logo_id') ? form.querySelector('#ead_org_logo_id').files[0] : null;
-  const bannerFile = form.querySelector('#ead_org_banner_id') ? form.querySelector('#ead_org_banner_id').files[0] : null;
-  const addressComponentsInput = form.querySelector('[name="address_components"]');
-  let addressComponents = addressComponentsInput ? addressComponentsInput.value : '';
-  const countrySel = form.querySelector('.ap-address-country');
-  const stateSel = form.querySelector('.ap-address-state');
-  const citySel = form.querySelector('.ap-address-city');
-  if (!addressComponents && countrySel) {
-    addressComponents = JSON.stringify({
-      country: countrySel.value,
-      state: stateSel ? stateSel.value : '',
-      city: citySel ? citySel.value : ''
-    });
-    if (addressComponentsInput) addressComponentsInput.value = addressComponents;
-  }
-
-  const submission = {
-    post_type: 'artpulse_org',
-    title,
-    ead_org_name: title
-  };
-  formData.delete('title');
-  formData.delete('images[]');
-  formData.delete('ead_org_logo_id');
-  formData.delete('ead_org_banner_id');
-    for (const [key, value] of formData.entries()) {
-      submission[key] = value;
-    }
-    document.querySelectorAll('.ap-org-submission-form input[type="checkbox"]').forEach(cb => {
-      if (!formData.has(cb.name)) submission[cb.name] = '0';
-    });
-
-    const imageIds = [];
-    if (messageBox) messageBox.textContent = '';
-
-    try {
-      for (let i = 0; i < images.slice(0, 5).length; i++) {
-        if (messageBox) messageBox.textContent = `Uploading image ${i + 1} of ${images.length}`;
-        const id = await uploadMedia(images[i], i);
-        imageIds.push(id);
-      }
-
-      if (messageBox) messageBox.textContent = 'Uploading logo/banner...';
-      let logoId = null;
-      if (logoFile) logoId = await uploadMedia(logoFile, images.length);
-      let bannerId = null;
-      if (bannerFile) bannerId = await uploadMedia(bannerFile, images.length + 1);
-
-      if (messageBox) messageBox.textContent = 'Submitting form...';
-
-      submission.image_ids = imageIds;
-  if (logoId) submission.ead_org_logo_id = logoId;
-  if (bannerId) submission.ead_org_banner_id = bannerId;
-  if (addressComponents) submission.address_components = addressComponents;
-
-      const res = await fetch(APSubmission.endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-WP-Nonce': APSubmission.nonce
-        },
-        body: JSON.stringify(submission)
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        if (messageBox) messageBox.textContent = 'Submission successful!';
-        form.reset();
-        files = [];
-        order = [];
-        previewWrap.innerHTML = '';
-        if (form.querySelector('#ap-org-images')) form.querySelector('#ap-org-images').value = '';
-        if (form.querySelector('#ead_org_logo_id')) form.querySelector('#ead_org_logo_id').value = '';
-        if (form.querySelector('#ead_org_banner_id')) form.querySelector('#ead_org_banner_id').value = '';
-        updateOrderInput();
-        setTimeout(() => {
-          window.location.href = APSubmission.dashboardUrl;
-        }, 3000);
-      } else {
-        if (messageBox) messageBox.textContent = data.message || 'Submission failed.';
-      }
-    } catch (err) {
-      console.error(err);
-      if (messageBox) messageBox.textContent = 'Error: ' + err.message;
-    } finally {
-      if (submitBtn) submitBtn.disabled = false;
-    }
-  });
-
-  function uploadMedia(file, index) {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', APSubmission.mediaEndpoint);
-      xhr.setRequestHeader('X-WP-Nonce', APSubmission.nonce);
-      xhr.upload.addEventListener('progress', (e) => {
-        if (e.lengthComputable && progressBars[index]) {
-          progressBars[index].value = e.loaded;
-          progressBars[index].max = e.total;
-        }
-      });
-      xhr.onload = () => {
-        let result = {};
-        try { result = JSON.parse(xhr.responseText); } catch (_) {}
-        if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(result.id);
-        } else {
-          reject(new Error(result.message || 'Image upload failed'));
-        }
-      };
-      xhr.onerror = () => reject(new Error('Image upload failed'));
-      xhr.send(formData);
-    });
-  }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
+exports["default"] = OrganizationSubmissionForm;
+var _react = _interopRequireWildcard(require("react"));
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, "default": e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t3 in e) "default" !== _t3 && {}.hasOwnProperty.call(e, _t3) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t3)) && (i.get || i.set) ? o(f, _t3, i) : f[_t3] = e[_t3]); return f; })(e, t); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+var ORG_FIELDS = [{
+  name: 'ead_org_description',
+  type: 'textarea',
+  label: 'Description',
+  required: true
+}, {
+  name: 'ead_org_website_url',
+  type: 'url',
+  label: 'Website'
+}, {
+  name: 'ead_org_logo_id',
+  type: 'media',
+  label: 'Logo'
+}, {
+  name: 'ead_org_banner_id',
+  type: 'media',
+  label: 'Banner'
+}, {
+  name: 'ead_org_type',
+  type: 'select',
+  label: 'Organization Type'
+}, {
+  name: 'ead_org_size',
+  type: 'text',
+  label: 'Organization Size'
+}, {
+  name: 'ead_org_facebook_url',
+  type: 'url',
+  label: 'Facebook URL'
+}, {
+  name: 'ead_org_twitter_url',
+  type: 'url',
+  label: 'Twitter URL'
+}, {
+  name: 'ead_org_instagram_url',
+  type: 'url',
+  label: 'Instagram URL'
+}, {
+  name: 'ead_org_linkedin_url',
+  type: 'url',
+  label: 'LinkedIn URL'
+}, {
+  name: 'ead_org_artsy_url',
+  type: 'url',
+  label: 'Artsy URL'
+}, {
+  name: 'ead_org_pinterest_url',
+  type: 'url',
+  label: 'Pinterest URL'
+}, {
+  name: 'ead_org_youtube_url',
+  type: 'url',
+  label: 'YouTube URL'
+}, {
+  name: 'ead_org_primary_contact_name',
+  type: 'text',
+  label: 'Primary Contact Name'
+}, {
+  name: 'ead_org_primary_contact_email',
+  type: 'email',
+  label: 'Primary Contact Email',
+  required: true
+}, {
+  name: 'ead_org_primary_contact_phone',
+  type: 'text',
+  label: 'Primary Contact Phone'
+}, {
+  name: 'ead_org_primary_contact_role',
+  type: 'text',
+  label: 'Primary Contact Role'
+}, {
+  name: 'ead_org_street_address',
+  type: 'text',
+  label: 'Street Address'
+}, {
+  name: 'ead_org_postal_address',
+  type: 'text',
+  label: 'Postal Address'
+}, {
+  name: 'ead_org_venue_address',
+  type: 'text',
+  label: 'Venue Address'
+}, {
+  name: 'ead_org_venue_email',
+  type: 'email',
+  label: 'Venue Email'
+}, {
+  name: 'ead_org_venue_phone',
+  type: 'text',
+  label: 'Venue Phone'
+}, {
+  name: 'ead_org_monday_start_time',
+  type: 'time',
+  label: 'Monday Opening Time'
+}, {
+  name: 'ead_org_monday_end_time',
+  type: 'time',
+  label: 'Monday Closing Time'
+}, {
+  name: 'ead_org_monday_closed',
+  type: 'checkbox',
+  label: 'Closed on Monday'
+}, {
+  name: 'ead_org_tuesday_start_time',
+  type: 'time',
+  label: 'Tuesday Opening Time'
+}, {
+  name: 'ead_org_tuesday_end_time',
+  type: 'time',
+  label: 'Tuesday Closing Time'
+}, {
+  name: 'ead_org_tuesday_closed',
+  type: 'checkbox',
+  label: 'Closed on Tuesday'
+}, {
+  name: 'ead_org_wednesday_start_time',
+  type: 'time',
+  label: 'Wednesday Opening Time'
+}, {
+  name: 'ead_org_wednesday_end_time',
+  type: 'time',
+  label: 'Wednesday Closing Time'
+}, {
+  name: 'ead_org_wednesday_closed',
+  type: 'checkbox',
+  label: 'Closed on Wednesday'
+}, {
+  name: 'ead_org_thursday_start_time',
+  type: 'time',
+  label: 'Thursday Opening Time'
+}, {
+  name: 'ead_org_thursday_end_time',
+  type: 'time',
+  label: 'Thursday Closing Time'
+}, {
+  name: 'ead_org_thursday_closed',
+  type: 'checkbox',
+  label: 'Closed on Thursday'
+}, {
+  name: 'ead_org_friday_start_time',
+  type: 'time',
+  label: 'Friday Opening Time'
+}, {
+  name: 'ead_org_friday_end_time',
+  type: 'time',
+  label: 'Friday Closing Time'
+}, {
+  name: 'ead_org_friday_closed',
+  type: 'checkbox',
+  label: 'Closed on Friday'
+}, {
+  name: 'ead_org_saturday_start_time',
+  type: 'time',
+  label: 'Saturday Opening Time'
+}, {
+  name: 'ead_org_saturday_end_time',
+  type: 'time',
+  label: 'Saturday Closing Time'
+}, {
+  name: 'ead_org_saturday_closed',
+  type: 'checkbox',
+  label: 'Closed on Saturday'
+}, {
+  name: 'ead_org_sunday_start_time',
+  type: 'time',
+  label: 'Sunday Opening Time'
+}, {
+  name: 'ead_org_sunday_end_time',
+  type: 'time',
+  label: 'Sunday Closing Time'
+}, {
+  name: 'ead_org_sunday_closed',
+  type: 'checkbox',
+  label: 'Closed on Sunday'
+}];
+var ORG_TYPES = ['gallery', 'museum', 'studio', 'collective', 'non-profit', 'commercial-gallery', 'public-art-space', 'educational-institution', 'other'];
+function OrganizationSubmissionForm() {
+  var _useState = (0, _react.useState)(''),
+    _useState2 = _slicedToArray(_useState, 2),
+    title = _useState2[0],
+    setTitle = _useState2[1];
+  var _useState3 = (0, _react.useState)([]),
+    _useState4 = _slicedToArray(_useState3, 2),
+    images = _useState4[0],
+    setImages = _useState4[1];
+  var _useState5 = (0, _react.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    logo = _useState6[0],
+    setLogo = _useState6[1];
+  var _useState7 = (0, _react.useState)(null),
+    _useState8 = _slicedToArray(_useState7, 2),
+    banner = _useState8[0],
+    setBanner = _useState8[1];
+  var _useState9 = (0, _react.useState)(''),
+    _useState0 = _slicedToArray(_useState9, 2),
+    addressComponents = _useState0[0],
+    setAddressComponents = _useState0[1];
+  var _useState1 = (0, _react.useState)(''),
+    _useState10 = _slicedToArray(_useState1, 2),
+    country = _useState10[0],
+    setCountry = _useState10[1];
+  var _useState11 = (0, _react.useState)(''),
+    _useState12 = _slicedToArray(_useState11, 2),
+    stateProv = _useState12[0],
+    setStateProv = _useState12[1];
+  var _useState13 = (0, _react.useState)(''),
+    _useState14 = _slicedToArray(_useState13, 2),
+    city = _useState14[0],
+    setCity = _useState14[1];
+  var _useState15 = (0, _react.useState)([]),
+    _useState16 = _slicedToArray(_useState15, 2),
+    previews = _useState16[0],
+    setPreviews = _useState16[1];
+  var _useState17 = (0, _react.useState)(false),
+    _useState18 = _slicedToArray(_useState17, 2),
+    loading = _useState18[0],
+    setLoading = _useState18[1];
+  var _useState19 = (0, _react.useState)(''),
+    _useState20 = _slicedToArray(_useState19, 2),
+    message = _useState20[0],
+    setMessage = _useState20[1];
+  var handleFileChange = function handleFileChange(e) {
+    var files = Array.from(e.target.files).slice(0, 5);
+    setImages(files);
+    setPreviews(files.map(function (file) {
+      return URL.createObjectURL(file);
+    }));
+  };
+  var handleLogoChange = function handleLogoChange(e) {
+    setLogo(e.target.files[0] || null);
+  };
+  var handleBannerChange = function handleBannerChange(e) {
+    setBanner(e.target.files[0] || null);
+  };
+  (0, _react.useEffect)(function () {
+    setAddressComponents(JSON.stringify({
+      country: country,
+      state: stateProv,
+      city: city
+    }));
+  }, [country, stateProv, city]);
+  var uploadMedia = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(file) {
+      var formData, res, json;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.n) {
+          case 0:
+            formData = new FormData();
+            formData.append('file', file);
+            _context.n = 1;
+            return fetch(APSubmission.mediaEndpoint, {
+              method: 'POST',
+              headers: {
+                'X-WP-Nonce': APSubmission.nonce
+              },
+              body: formData
+            });
+          case 1:
+            res = _context.v;
+            _context.n = 2;
+            return res.json();
+          case 2:
+            json = _context.v;
+            if (res.ok) {
+              _context.n = 3;
+              break;
+            }
+            throw new Error(json.message || 'Upload failed');
+          case 3:
+            return _context.a(2, json.id);
+        }
+      }, _callee);
+    }));
+    return function uploadMedia(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  var handleSubmit = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(e) {
+      var imageIds, _iterator, _step, file, id, logoId, bannerId, payload, fd, _iterator2, _step2, _step2$value, key, value, res, json, _t, _t2;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.n) {
+          case 0:
+            e.preventDefault();
+            setLoading(true);
+            setMessage('');
+            _context2.p = 1;
+            imageIds = [];
+            _iterator = _createForOfIteratorHelper(images);
+            _context2.p = 2;
+            _iterator.s();
+          case 3:
+            if ((_step = _iterator.n()).done) {
+              _context2.n = 6;
+              break;
+            }
+            file = _step.value;
+            _context2.n = 4;
+            return uploadMedia(file);
+          case 4:
+            id = _context2.v;
+            imageIds.push(id);
+          case 5:
+            _context2.n = 3;
+            break;
+          case 6:
+            _context2.n = 8;
+            break;
+          case 7:
+            _context2.p = 7;
+            _t = _context2.v;
+            _iterator.e(_t);
+          case 8:
+            _context2.p = 8;
+            _iterator.f();
+            return _context2.f(8);
+          case 9:
+            logoId = null;
+            if (!logo) {
+              _context2.n = 11;
+              break;
+            }
+            _context2.n = 10;
+            return uploadMedia(logo);
+          case 10:
+            logoId = _context2.v;
+          case 11:
+            bannerId = null;
+            if (!banner) {
+              _context2.n = 13;
+              break;
+            }
+            _context2.n = 12;
+            return uploadMedia(banner);
+          case 12:
+            bannerId = _context2.v;
+          case 13:
+            payload = {
+              post_type: 'artpulse_org',
+              title: title
+            };
+            fd = new FormData(e.target);
+            fd["delete"]('title');
+            fd["delete"]('images[]');
+            fd["delete"]('ead_org_logo_id');
+            fd["delete"]('ead_org_banner_id');
+            _iterator2 = _createForOfIteratorHelper(fd.entries());
+            try {
+              for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+                _step2$value = _slicedToArray(_step2.value, 2), key = _step2$value[0], value = _step2$value[1];
+                payload[key] = value;
+              }
+            } catch (err) {
+              _iterator2.e(err);
+            } finally {
+              _iterator2.f();
+            }
+            document.querySelectorAll('form input[type="checkbox"]').forEach(function (cb) {
+              if (!fd.has(cb.name)) payload[cb.name] = '0';
+            });
+            payload.image_ids = imageIds;
+            if (logoId) payload.ead_org_logo_id = logoId;
+            if (bannerId) payload.ead_org_banner_id = bannerId;
+            if (addressComponents) payload.address_components = addressComponents;
+            _context2.n = 14;
+            return fetch(APSubmission.endpoint, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-WP-Nonce': APSubmission.nonce
+              },
+              body: JSON.stringify(payload)
+            });
+          case 14:
+            res = _context2.v;
+            _context2.n = 15;
+            return res.json();
+          case 15:
+            json = _context2.v;
+            if (res.ok) {
+              _context2.n = 16;
+              break;
+            }
+            throw new Error(json.message || 'Submission failed');
+          case 16:
+            setMessage('Submission successful!');
+            setTimeout(function () {
+              window.location.href = APSubmission.dashboardUrl;
+            }, 3000);
+            setTitle('');
+            setImages([]);
+            setPreviews([]);
+            setLogo(null);
+            setBanner(null);
+            setCountry('');
+            setStateProv('');
+            setCity('');
+            setAddressComponents('');
+            _context2.n = 18;
+            break;
+          case 17:
+            _context2.p = 17;
+            _t2 = _context2.v;
+            console.error(_t2);
+            setMessage("Error: ".concat(_t2.message));
+          case 18:
+            _context2.p = 18;
+            setLoading(false);
+            return _context2.f(18);
+          case 19:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[2, 7, 8, 9], [1, 17, 18, 19]]);
+    }));
+    return function handleSubmit(_x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+  return /*#__PURE__*/_react["default"].createElement("form", {
+    onSubmit: handleSubmit,
+    className: "ap-form-container",
+    encType: "multipart/form-data",
+    "data-no-ajax": "true"
+  }, /*#__PURE__*/_react["default"].createElement("div", {
+    className: "ap-form-messages",
+    role: "status",
+    "aria-live": "polite"
+  }, message), /*#__PURE__*/_react["default"].createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/_react["default"].createElement("label", {
+    className: "ap-form-label",
+    htmlFor: "ap_org_title"
+  }, "Organization Name"), /*#__PURE__*/_react["default"].createElement("input", {
+    id: "ap_org_title",
+    className: "ap-input",
+    type: "text",
+    value: title,
+    onChange: function onChange(e) {
+      return setTitle(e.target.value);
+    },
+    required: true
+  })), /*#__PURE__*/_react["default"].createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/_react["default"].createElement("label", {
+    className: "ap-form-label",
+    htmlFor: "ap_org_country"
+  }, "Country"), /*#__PURE__*/_react["default"].createElement("input", {
+    id: "ap_org_country",
+    className: "ap-input ap-address-country",
+    type: "text",
+    value: country,
+    onChange: function onChange(e) {
+      return setCountry(e.target.value);
+    },
+    required: true
+  })), /*#__PURE__*/_react["default"].createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/_react["default"].createElement("label", {
+    className: "ap-form-label",
+    htmlFor: "ap_org_state"
+  }, "State/Province"), /*#__PURE__*/_react["default"].createElement("input", {
+    id: "ap_org_state",
+    className: "ap-input ap-address-state",
+    type: "text",
+    value: stateProv,
+    onChange: function onChange(e) {
+      return setStateProv(e.target.value);
+    }
+  })), /*#__PURE__*/_react["default"].createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/_react["default"].createElement("label", {
+    className: "ap-form-label",
+    htmlFor: "ap_org_city"
+  }, "City"), /*#__PURE__*/_react["default"].createElement("input", {
+    id: "ap_org_city",
+    className: "ap-input ap-address-city",
+    type: "text",
+    value: city,
+    onChange: function onChange(e) {
+      return setCity(e.target.value);
+    }
+  })), ORG_FIELDS.map(function (field) {
+    return /*#__PURE__*/_react["default"].createElement("div", {
+      className: "form-group",
+      key: field.name
+    }, /*#__PURE__*/_react["default"].createElement("label", {
+      className: "ap-form-label",
+      htmlFor: field.name
+    }, field.label), field.type === 'textarea' && /*#__PURE__*/_react["default"].createElement("textarea", {
+      id: field.name,
+      name: field.name,
+      className: "ap-input",
+      required: field.required
+    }), field.type === 'checkbox' && /*#__PURE__*/_react["default"].createElement("input", {
+      id: field.name,
+      className: "ap-input",
+      type: "checkbox",
+      name: field.name,
+      value: "1"
+    }), field.type === 'select' && field.name === 'ead_org_type' && /*#__PURE__*/_react["default"].createElement("select", {
+      id: field.name,
+      name: field.name,
+      className: "ap-input"
+    }, /*#__PURE__*/_react["default"].createElement("option", {
+      value: ""
+    }, "Select"), ORG_TYPES.map(function (t) {
+      return /*#__PURE__*/_react["default"].createElement("option", {
+        key: t,
+        value: t
+      }, t.replace('-', ' '));
+    })), field.type === 'media' && /*#__PURE__*/_react["default"].createElement("input", {
+      id: field.name,
+      className: "ap-input",
+      type: "file",
+      name: field.name,
+      accept: "image/*",
+      onChange: field.name === 'ead_org_logo_id' ? handleLogoChange : handleBannerChange
+    }), ['textarea', 'checkbox', 'select', 'media'].indexOf(field.type) === -1 && /*#__PURE__*/_react["default"].createElement("input", {
+      id: field.name,
+      className: "ap-input",
+      type: field.type,
+      name: field.name,
+      required: field.required
+    }));
+  }), /*#__PURE__*/_react["default"].createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/_react["default"].createElement("label", {
+    className: "ap-form-label",
+    htmlFor: "ap_org_images"
+  }, "Images (max 5)"), /*#__PURE__*/_react["default"].createElement("input", {
+    id: "ap_org_images",
+    className: "ap-input",
+    type: "file",
+    multiple: true,
+    accept: "image/*",
+    onChange: handleFileChange
+  })), /*#__PURE__*/_react["default"].createElement("input", {
+    type: "hidden",
+    value: addressComponents,
+    readOnly: true,
+    name: "address_components"
+  }), /*#__PURE__*/_react["default"].createElement("div", {
+    className: "ap-form-group"
+  }, previews.map(function (src, i) {
+    return /*#__PURE__*/_react["default"].createElement("img", {
+      key: i,
+      src: src,
+      alt: "",
+      className: "ap-image-preview"
+    });
+  })), /*#__PURE__*/_react["default"].createElement("button", {
+    className: "ap-form-button",
+    type: "submit",
+    disabled: loading
+  }, loading ? 'Submitting...' : 'Submit'));
+}
