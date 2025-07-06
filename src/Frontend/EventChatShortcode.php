@@ -32,10 +32,18 @@ class EventChatShortcode
         <div class="ap-event-chat" data-event-id="<?= esc_attr($event_id); ?>">
             <ul class="ap-chat-list" role="status" aria-live="polite"></ul>
             <?php if (is_user_logged_in()): ?>
-                <form class="ap-chat-form">
-                    <input type="text" name="content" required>
-                    <button type="submit">Send</button>
-                </form>
+                <?php
+                $req = new \WP_REST_Request('POST', '/');
+                $req->set_param('id', $event_id);
+                if (\ArtPulse\Community\EventChatController::can_post($req)):
+                ?>
+                    <form class="ap-chat-form">
+                        <input type="text" name="content" required>
+                        <button type="submit">Send</button>
+                    </form>
+                <?php else: ?>
+                    <p><?php esc_html_e('Only attendees can post messages', 'artpulse'); ?></p>
+                <?php endif; ?>
             <?php else: ?>
                 <p><?php esc_html_e('Please log in to chat.', 'artpulse'); ?></p>
             <?php endif; ?>
