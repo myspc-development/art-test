@@ -15,11 +15,15 @@ class OrgRolesPage
 
     public static function addMenu(): void
     {
+        $capability = current_user_can('view_artpulse_dashboard')
+            ? 'view_artpulse_dashboard'
+            : 'manage_options';
+
         add_submenu_page(
             'ap-org-dashboard',
             __('Roles & Permissions', 'artpulse'),
             __('Roles & Permissions', 'artpulse'),
-            'view_artpulse_dashboard',
+            $capability,
             'ap-org-roles',
             [self::class, 'render']
         );
@@ -46,7 +50,7 @@ class OrgRolesPage
 
     public static function render(): void
     {
-        if (!current_user_can('view_artpulse_dashboard')) {
+        if (!current_user_can('view_artpulse_dashboard') && !current_user_can('manage_options')) {
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
         $org_id = self::get_current_org_id();
@@ -73,7 +77,7 @@ class OrgRolesPage
 
     public static function handleForm(): void
     {
-        if (!current_user_can('view_artpulse_dashboard')) {
+        if (!current_user_can('view_artpulse_dashboard') && !current_user_can('manage_options')) {
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
         check_admin_referer('ap_save_org_roles');
