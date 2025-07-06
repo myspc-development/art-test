@@ -140,6 +140,10 @@
       icon: "Heart",
       section: "favorites"
     }, {
+      label: "Messages",
+      icon: "MessageCircle",
+      section: "messages"
+    }, {
       label: "Forum",
       icon: "MessageCircle",
       section: "forum"
@@ -168,6 +172,10 @@
       label: "My Collections",
       icon: "Folder",
       section: "collections"
+    }, {
+      label: "Messages",
+      icon: "MessageCircle",
+      section: "messages"
     }, {
       label: "Forum",
       icon: "MessageCircle",
@@ -201,6 +209,10 @@
       label: "My Collections",
       icon: "Folder",
       section: "collections"
+    }, {
+      label: "Messages",
+      icon: "MessageCircle",
+      section: "messages"
     }, {
       label: "Forum",
       icon: "MessageCircle",
@@ -639,10 +651,35 @@
     }, (rolesMenus[role] || []).map(function (item) {
       return /*#__PURE__*/React.createElement("section", {
         key: item.section,
+        id: "ap-".concat(item.section),
         style: {
           display: activeSection === item.section ? 'block' : 'none'
         }
+      }, item.section === 'messages' ? /*#__PURE__*/React.createElement("div", {
+        className: "ap-messages"
       }, /*#__PURE__*/React.createElement("div", {
+        className: "ap-conversations"
+      }, /*#__PURE__*/React.createElement("h3", null, "Conversations"), /*#__PURE__*/React.createElement("ul", {
+        id: "ap-conversation-list"
+      })), /*#__PURE__*/React.createElement("div", {
+        className: "ap-thread"
+      }, /*#__PURE__*/React.createElement("ul", {
+        id: "ap-message-list"
+      }), /*#__PURE__*/React.createElement("form", {
+        id: "ap-message-form",
+        style: {
+          display: 'none'
+        }
+      }, /*#__PURE__*/React.createElement("input", {
+        type: "hidden",
+        name: "recipient_id",
+        value: ""
+      }), /*#__PURE__*/React.createElement("textarea", {
+        name: "content",
+        required: true
+      }), /*#__PURE__*/React.createElement("button", {
+        type: "submit"
+      }, "Send")))) : /*#__PURE__*/React.createElement("div", {
         id: "ap-".concat(item.section)
       }));
     })));

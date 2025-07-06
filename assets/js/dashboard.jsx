@@ -19,9 +19,27 @@ function DashboardApp({ role }) {
         {(rolesMenus[role] || []).map((item) => (
           <section
             key={item.section}
+            id={`ap-${item.section}`}
             style={{ display: activeSection === item.section ? 'block' : 'none' }}
           >
-            <div id={`ap-${item.section}`}></div>
+            {item.section === 'messages' ? (
+              <div className="ap-messages">
+                <div className="ap-conversations">
+                  <h3>Conversations</h3>
+                  <ul id="ap-conversation-list"></ul>
+                </div>
+                <div className="ap-thread">
+                  <ul id="ap-message-list"></ul>
+                  <form id="ap-message-form" style={{ display: 'none' }}>
+                    <input type="hidden" name="recipient_id" value="" />
+                    <textarea name="content" required></textarea>
+                    <button type="submit">Send</button>
+                  </form>
+                </div>
+              </div>
+            ) : (
+              <div id={`ap-${item.section}`}></div>
+            )}
           </section>
         ))}
       </div>
