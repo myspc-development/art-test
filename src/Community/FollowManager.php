@@ -21,7 +21,7 @@ class FollowManager {
             UNIQUE KEY user_object (user_id, object_id, object_type)
         ) $charset_collate;";
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        error_log($sql);
+        if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
         dbDelta($sql);
     }
 
