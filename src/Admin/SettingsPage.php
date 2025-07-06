@@ -3,6 +3,7 @@ namespace ArtPulse\Admin;
 use ArtPulse\Admin\ImportExportTab;
 use ArtPulse\Admin\SettingsRegistry;
 use ArtPulse\Admin\FieldRenderer;
+use ArtPulse\Admin\ConfigBackupTab;
 use ArtPulse\Core\ActivityLogger;
 
 class SettingsPage
@@ -10,6 +11,7 @@ class SettingsPage
     public static function register()
     {
         self::bootstrap_settings();
+        ConfigBackupTab::register();
         add_action('admin_menu', [self::class, 'addMenu']);
         add_action('admin_init', [self::class, 'registerSettings']);
         add_action('wp_login', [self::class, 'trackLastLogin'], 10, 2);
@@ -22,6 +24,7 @@ class SettingsPage
         SettingsRegistry::register_tab('general', __('General', 'artpulse'));
         SettingsRegistry::register_tab('location', __('Location APIs', 'artpulse'));
         SettingsRegistry::register_tab('import_export', __('Import/Export', 'artpulse'));
+        SettingsRegistry::register_tab('config_backup', __('Config Backup', 'artpulse'));
         SettingsRegistry::register_tab('shortcodes', __('Shortcode Pages', 'artpulse'));
         SettingsRegistry::register_tab('search', __('Search', 'artpulse'));
         SettingsRegistry::register_tab('emails', __('Email Delivery', 'artpulse'));
@@ -547,6 +550,8 @@ class SettingsPage
                         <?php ImportExportTab::render(); ?>
                     <?php elseif ($slug === 'shortcodes') : ?>
                         <?php \ArtPulse\Admin\ShortcodePages::render(); ?>
+                    <?php elseif ($slug === 'config_backup') : ?>
+                        <?php ConfigBackupTab::render(); ?>
                     <?php elseif ($slug === 'social_auto') : ?>
                         <?php \ArtPulse\Integration\SocialAutoPoster::render_settings(); ?>
                     <?php else : ?>
