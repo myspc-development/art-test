@@ -55,8 +55,10 @@ class FeedbackManager
     {
         global $wpdb;
         $table  = $wpdb->prefix . 'ap_feedback';
-        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
-        if ($exists !== $table) {
+        $comments = $wpdb->prefix . 'ap_feedback_comments';
+        $exists  = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        $exists2 = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $comments));
+        if ($exists !== $table || $exists2 !== $comments) {
             self::install_table();
         }
     }
