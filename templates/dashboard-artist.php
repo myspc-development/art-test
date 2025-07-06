@@ -27,6 +27,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
             <li><a href="#local-events"><span class="dashicons dashicons-location-alt"></span><?php esc_html_e('Local Events', 'artpulse'); ?></a></li>
             <li><a href="#favorites"><span class="dashicons dashicons-heart"></span><?php esc_html_e('Favorites', 'artpulse'); ?></a></li>
             <li><a href="#events"><span class="dashicons dashicons-calendar"></span><?php esc_html_e('Events', 'artpulse'); ?></a></li>
+            <li><a href="#messages"><span class="dashicons dashicons-email"></span><?php esc_html_e('Messages', 'artpulse'); ?></a></li>
             <li><a href="#account-tools"><span class="dashicons dashicons-download"></span><?php esc_html_e('Account', 'artpulse'); ?></a></li>
             <?php if ( $show_notifications ) : ?>
             <li><a href="#notifications"><span class="dashicons dashicons-megaphone"></span><?php esc_html_e('Notifications', 'artpulse'); ?></a></li>
@@ -90,6 +91,7 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
             <label><input type="checkbox" value="rsvps" checked> <?php esc_html_e('RSVPs', 'artpulse'); ?></label>
             <label><input type="checkbox" value="my-events" checked> <?php esc_html_e('My Events', 'artpulse'); ?></label>
             <label><input type="checkbox" value="events" checked> <?php esc_html_e('Events', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="messages" checked> <?php esc_html_e('Messages', 'artpulse'); ?></label>
             <?php if ($show_support_history) : ?>
             <label><input type="checkbox" value="support-history" checked> <?php esc_html_e('Support History', 'artpulse'); ?></label>
             <?php endif; ?>
@@ -169,6 +171,10 @@ $recent_activity  = ArtistDashboardHome::get_artist_recent_activity($current_use
         <div id="ap-dashboard-notifications"></div>
     </div>
     <?php endif; ?>
+    <div class="dashboard-card" data-widget="messages">
+        <h2 id="messages"><?php esc_html_e('Messages','artpulse'); ?></h2>
+        <?php echo do_shortcode('[ap_messages]'); ?>
+    </div>
     <div class="dashboard-card" data-widget="account-tools">
         <h2 id="account-tools"><?php esc_html_e('Account Tools','artpulse'); ?></h2>
         <div id="ap-account-tools">
