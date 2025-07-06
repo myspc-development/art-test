@@ -5,6 +5,7 @@ use WP_REST_Request;
 use ArtPulse\Community\FavoritesManager;
 use ArtPulse\Core\UserEngagementLogger;
 use Stripe\StripeClient;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 class UserDashboardManager
 {
@@ -13,6 +14,17 @@ class UserDashboardManager
         add_shortcode('ap_user_dashboard', [ self::class, 'renderDashboard' ]);
         add_action('wp_enqueue_scripts',   [ self::class, 'enqueueAssets' ]);
         add_action('rest_api_init',        [ self::class, 'register_routes' ]);
+        DashboardWidgetRegistry::register('membership', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('upgrade', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('local-events', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('favorites', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('rsvps', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('my-events', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('events', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('messages', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('account-tools', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('support-history', '__return_null', 'view_artpulse_dashboard');
+        DashboardWidgetRegistry::register('notifications', '__return_null', 'view_artpulse_dashboard');
     }
 
     // Aliased method for compatibility with provided code snippet
@@ -642,6 +654,7 @@ class UserDashboardManager
             'show_notifications'  => $show_notifications,
             'show_support_history'=> $show_support_history,
             'badges'              => $badges,
+            'widgets'             => DashboardWidgetRegistry::get_widgets($roles[0] ?? 'subscriber'),
         ];
 
         $onboarding_html = '';

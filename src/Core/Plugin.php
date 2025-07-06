@@ -5,6 +5,7 @@ namespace ArtPulse\Core;
 use ArtPulse\Core\PortfolioManager;
 use ArtPulse\Core\AdminDashboard;
 use ArtPulse\Core\DocumentationManager;
+use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Rest\ArtistRestController;
 use ArtPulse\Rest\RestRelationships;
 use ArtPulse\Rest\TaxonomyRestFilters;
@@ -139,6 +140,7 @@ class Plugin
         \ArtPulse\Core\MembershipManager::register();
         \ArtPulse\Core\AccessControlManager::register();
         \ArtPulse\Core\CapabilitiesManager::register();
+        DashboardWidgetRegistry::init();
         \ArtPulse\Core\AdminAccessManager::register();
         \ArtPulse\Core\LoginRedirectManager::register();
         \ArtPulse\Core\DashboardAccessManager::register();
