@@ -18,6 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const messageSubject = document.getElementById('ap-message-subject');
   const messageBody = document.getElementById('ap-message-body');
   const kanbanContainer = document.getElementById('kanban-board');
+  const webhookList = document.getElementById('ap-webhook-list');
+  const webhookModal = document.getElementById('ap-webhook-modal');
+  const webhookForm = document.getElementById('ap-webhook-form');
+  const webhookClose = document.getElementById('ap-webhook-close');
+  const webhookBtn = document.getElementById('ap-add-webhook');
+  const webhookMsg = document.getElementById('ap-webhook-msg');
+  const webhookId = document.getElementById('ap_webhook_id');
+  const webhookUrl = document.getElementById('ap_webhook_url');
+  const webhookActive = document.getElementById('ap_webhook_active');
+  let webhooks = [];
 
   if (kanbanContainer && Array.isArray(APOrgDashboard.projectStages)) {
     const board = document.createElement('div');
@@ -47,6 +57,90 @@ document.addEventListener('DOMContentLoaded', () => {
   if (attendeeModal) {
     attendeeModal.style.display = '';
   }
+
+  function loadWebhooks() {
+    if (!webhookList) return;
+    fetch(`${APOrgWebhooks.apiRoot}artpulse/v1/org/${APOrgWebhooks.orgId}/webhooks`, {
+      headers: { 'X-WP-Nonce': APOrgWebhooks.nonce }
+    })
+      .then(res => res.ok ? res.json() : [])
+      .then(data => {
+        webhooks = Array.isArray(data) ? data : [];
+        webhookList.innerHTML = '';
+        if (!webhooks.length) {
+          webhookList.innerHTML = '<li>No webhooks</li>';
+          return;
+        }
+        webhooks.forEach(h => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${h.url}</strong> [${h.events}] ${h.active ? '' : '(inactive)'} ` +
+            `<button class="ap-edit-webhook" data-id="${h.id}">Edit</button> ` +
+            `<button class="ap-delete-webhook" data-id="${h.id}">Delete</button>`;
+          webhookList.appendChild(li);
+        });
+      });
+  }
+
+  function openWebhookModal(hook) {
+    webhookMsg.textContent = '';
+    webhookForm.reset();
+    webhookId.value = hook ? hook.id : '';
+    if (hook) {
+      webhookUrl.value = hook.url || '';
+      webhookActive.checked = hook.active == 1 || hook.active === true;
+      const events = (hook.events || '').split(',');
+      webhookForm.querySelectorAll('[name="events[]"]').forEach(cb => {
+        cb.checked = events.includes(cb.value);
+      });
+    } else {
+      webhookForm.querySelectorAll('[name="events[]"]').forEach(cb => cb.checked = false);
+      webhookActive.checked = true;
+    }
+    webhookModal.classList.add('open');
+  }
+
+  webhookBtn?.addEventListener('click', () => openWebhookModal());
+  webhookClose?.addEventListener('click', () => webhookModal.classList.remove('open'));
+
+  webhookForm?.addEventListener('submit', e => {
+    e.preventDefault();
+    const id = webhookId.value;
+    const data = {
+      url: webhookUrl.value,
+      events: Array.from(webhookForm.querySelectorAll('[name="events[]"]:checked')).map(el => el.value),
+      active: webhookActive.checked ? 1 : 0
+    };
+    const method = id ? 'PUT' : 'POST';
+    const url = id ?
+      `${APOrgWebhooks.apiRoot}artpulse/v1/org/${APOrgWebhooks.orgId}/webhooks/${id}` :
+      `${APOrgWebhooks.apiRoot}artpulse/v1/org/${APOrgWebhooks.orgId}/webhooks`;
+    fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': APOrgWebhooks.nonce },
+      body: JSON.stringify(data)
+    }).then(res => res.ok ? res.json() : null)
+      .then(() => {
+        webhookModal.classList.remove('open');
+        loadWebhooks();
+      });
+  });
+
+  webhookList?.addEventListener('click', e => {
+    if (e.target.matches('.ap-edit-webhook')) {
+      const hook = webhooks.find(w => String(w.id) === e.target.dataset.id);
+      if (hook) openWebhookModal(hook);
+    }
+    if (e.target.matches('.ap-delete-webhook')) {
+      const id = e.target.dataset.id;
+      if (!confirm('Delete webhook?')) return;
+      fetch(`${APOrgWebhooks.apiRoot}artpulse/v1/org/${APOrgWebhooks.orgId}/webhooks/${id}`, {
+        method: 'DELETE',
+        headers: { 'X-WP-Nonce': APOrgWebhooks.nonce }
+      }).then(() => loadWebhooks());
+    }
+  });
+
+  loadWebhooks();
 
   // Load dashboard data
   fetch(APDashboardData.rest_url + 'artpulse/v1/org/dashboard', {

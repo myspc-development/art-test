@@ -513,6 +513,7 @@ class EnqueueAssets {
             );
 
             $stage_groups = [];
+            $org_id = 0;
             if (is_user_logged_in()) {
                 $uid    = get_current_user_id();
                 $org_id = get_user_meta($uid, 'ap_organization_id', true);
@@ -532,6 +533,12 @@ class EnqueueAssets {
             wp_localize_script('ap-org-dashboard', 'APDashboardData', [
                 'rest_url' => esc_url_raw(rest_url()),
                 'nonce'    => wp_create_nonce('wp_rest'),
+            ]);
+
+            wp_localize_script('ap-org-dashboard', 'APOrgWebhooks', [
+                'apiRoot' => esc_url_raw(rest_url()),
+                'nonce'   => wp_create_nonce('wp_rest'),
+                'orgId'   => absint($org_id),
             ]);
 
             $wizard_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/rsvp-wizard.js';
