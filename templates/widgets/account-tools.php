@@ -10,4 +10,5 @@
         <button id="ap-export-csv" class="ap-form-button nectar-button"><?php esc_html_e('Export CSV','artpulse'); ?></button>
         <button id="ap-delete-account" class="ap-form-button nectar-button"><?php esc_html_e('Delete Account','artpulse'); ?></button>
     </div>
+    <button class="ap-widget-settings-btn ap-form-button nectar-button" data-widget-settings="account-tools"><?php esc_html_e('Settings', 'artpulse'); ?></button>
 </div>
