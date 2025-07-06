@@ -8,6 +8,9 @@
 ## 1.3.10
 - Icons from `lucide-react` are now bundled with `ap-dashboard.js` using ES
   module imports, eliminating the need for a global `lucideReact` script.
+- The installed plugin version is saved in `ap_plugin_version`. When this value
+  differs from the plugin header version a modal with release notes is shown to
+  administrators until dismissed.
 
 ## 1.3.8
 - Added EmailTemplateManager and customizable template field.
