@@ -79,12 +79,13 @@ class EmailDeliveryTest extends WP_UnitTestCase
         update_option('artpulse_settings', [
             'email_method' => 'mailgun',
             'mailgun_api_key' => 'key',
+            'mailgun_domain' => 'mg.test.com',
             'email_from_name' => 'Admin',
             'email_from_address' => 'admin@test.com',
         ]);
         NotificationManager::add($this->user_id, 'comment', null, null, 'Hi');
         $this->assertCount(1, $this->requests);
-        $this->assertStringContainsString('mailgun', $this->requests[0][0]);
+        $this->assertStringContainsString('mg.test.com/messages', $this->requests[0][0]);
     }
 
     public function test_sendgrid_method_sends_request(): void

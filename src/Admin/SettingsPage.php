@@ -235,6 +235,10 @@ class SettingsPage
                 'label' => __('Mailgun API Key', 'artpulse'),
                 'type'  => 'text',
             ],
+            'mailgun_domain' => [
+                'label' => __('Mailgun Domain', 'artpulse'),
+                'type'  => 'text',
+            ],
             'sendgrid_api_key' => [
                 'label' => __('SendGrid API Key', 'artpulse'),
                 'type'  => 'text',
@@ -711,7 +715,7 @@ class SettingsPage
                 $output[$key] = in_array($value, $allowed, true) ? $value : 'wp_mail';
             } elseif ($key === 'email_from_address') {
                 $output[$key] = sanitize_email($value);
-            } elseif (in_array($key, ['mailgun_api_key', 'sendgrid_api_key', 'email_from_name'], true)) {
+            } elseif (in_array($key, ['mailgun_api_key', 'mailgun_domain', 'sendgrid_api_key', 'email_from_name'], true)) {
                 $output[$key] = sanitize_text_field($value);
             } elseif ($key === 'default_email_template') {
                 $output[$key] = sanitize_textarea_field($value);
