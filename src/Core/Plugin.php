@@ -14,7 +14,7 @@ use ArtPulse\Engagement\DigestMailer;
 
 class Plugin
 {
-    private const VERSION = '1.3.9';
+    private const VERSION = '1.3.10';
 
     public function __construct()
     {
