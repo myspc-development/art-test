@@ -484,16 +484,9 @@ class Plugin
         ]);
 
         wp_enqueue_script(
-            'lucide-react',
-            plugins_url('assets/libs/lucide-react/lucide-react.production.min.js', ARTPULSE_PLUGIN_FILE),
-            [],
-            '0.346.0',
-            true
-        );
-        wp_enqueue_script(
             'ap-dashboard',
             plugins_url('assets/js/ap-dashboard.js', ARTPULSE_PLUGIN_FILE),
-            ['wp-element', 'lucide-react'],
+            ['wp-element'],
             '1.0.0',
             true
         );
