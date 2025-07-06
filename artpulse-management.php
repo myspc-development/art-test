@@ -633,6 +633,9 @@ add_action('rest_api_init', function() {
 
 
 add_action('wp_footer', function () {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
     echo '<div style="padding:1em;"><strong>UI Mode:</strong>
         <a href="?ui_mode=tailwind">Tailwind</a> |
         <a href="?ui_mode=react">React</a></div>';
