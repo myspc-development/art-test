@@ -25,7 +25,7 @@ class FilteredListShortcodeBlock {
 
         wp_register_script(
             'artpulse-filtered-list-shortcode-block',
-            plugins_url('assets/js/filtered-list-shortcode-block.js', dirname(__DIR__, 3) . '/artpulse-management.php'),
+            plugins_url('assets/js/filtered-list-shortcode-block.js', ARTPULSE_PLUGIN_FILE),
             ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components'],
             filemtime(__DIR__ . '/../../assets/js/filtered-list-shortcode-block.js')
         );

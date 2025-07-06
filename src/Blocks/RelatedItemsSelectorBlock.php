@@ -11,7 +11,7 @@ class RelatedItemsSelectorBlock
         // Register block editor script (adjust the path accordingly)
         wp_register_script(
             'artpulse-related-items-selector',
-            plugins_url('assets/js/blocks/related-items-selector.js', dirname(__DIR__, 3) . '/artpulse-management.php'),
+            plugins_url('assets/js/blocks/related-items-selector.js', ARTPULSE_PLUGIN_FILE),
             [
                 'wp-blocks',
                 'wp-element',

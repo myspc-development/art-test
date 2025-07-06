@@ -24,7 +24,7 @@ class TaxonomyFilterBlock {
 
         wp_register_script(
             'artpulse-taxonomy-filter-block',
-            plugins_url('assets/js/taxonomy-filter-block.js', dirname(__DIR__, 3) . '/artpulse-management.php'),
+            plugins_url('assets/js/taxonomy-filter-block.js', ARTPULSE_PLUGIN_FILE),
             ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch'],
             filemtime(__DIR__ . '/../../assets/js/taxonomy-filter-block.js')
         );
