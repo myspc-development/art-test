@@ -163,7 +163,7 @@ class EnqueueAssets {
                 wp_enqueue_script(
                     'ap-dashboard-widgets-editor',
                     $script_url,
-                    ['wp-element', 'sortablejs'],
+                    ['wp-element', 'wp-data', 'sortablejs'],
                     filemtime($script_path),
                     true
                 );
