@@ -24,6 +24,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Webhook Automations Codex](docs/webhook-automation-codex.md) describes webhook management and payload delivery.
 [Dashboard Menu Codex](docs/dashboard-menu-codex.md) explains how the sidebar menu is generated.
 [Widget Settings Codex](docs/widget-settings-codex.md) describes widget schemas and per-user storage.
+[Dashboard Widgets per Role](docs/dashboard-widgets-per-role.md) summarizes widget registration, per-role layouts and JSON import/export.
 [Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.
 
 Additional resources:
