@@ -195,5 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <WidgetsEditor {...APDashboardWidgetsEditor} />,
       el
     );
+  } else {
+    console.error('WidgetsEditor failed: container or data missing');
   }
 });
