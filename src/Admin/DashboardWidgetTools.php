@@ -3,6 +3,27 @@ namespace ArtPulse\Admin;
 
 class DashboardWidgetTools
 {
+    /**
+     * Return a registry of available dashboard widgets.
+     */
+    public static function get_available_widgets(): array
+    {
+        return [
+            'admin_stats' => [
+                'title'    => __('Admin Stats', 'artpulse'),
+                'callback' => [self::class, 'render_admin_stats'],
+            ],
+            'artist_profile' => [
+                'title'    => __('Artist Profile', 'artpulse'),
+                'callback' => [self::class, 'render_artist_profile'],
+            ],
+            'quick_links' => [
+                'title'    => __('Quick Links', 'artpulse'),
+                'callback' => [self::class, 'render_quick_links'],
+            ],
+        ];
+    }
+
     public static function register(): void
     {
         add_action('wp_dashboard_setup', [self::class, 'add_dashboard_widgets']);
@@ -12,11 +33,48 @@ class DashboardWidgetTools
 
     public static function add_dashboard_widgets(): void
     {
-        wp_add_dashboard_widget(
-            'artpulse_dashboard_widget',
-            __('ArtPulse Dashboard', 'artpulse'),
-            [self::class, 'render']
-        );
+        $registry  = self::get_available_widgets();
+        $by_role   = get_option('artpulse_dashboard_widgets_by_role', []);
+        $roles     = wp_get_current_user()->roles;
+        $to_render = [];
+
+        foreach ($roles as $role) {
+            if (isset($by_role[$role]) && is_array($by_role[$role])) {
+                foreach ($by_role[$role] as $id) {
+                    if (isset($registry[$id]) && !in_array($id, $to_render, true)) {
+                        $to_render[] = $id;
+                    }
+                }
+            }
+        }
+
+        if (empty($to_render)) {
+            $to_render = array_keys($registry);
+        }
+
+        foreach ($to_render as $id) {
+            $widget = $registry[$id];
+            wp_add_dashboard_widget(
+                'artpulse_' . $id,
+                $widget['title'],
+                $widget['callback']
+            );
+        }
+    }
+
+    public static function render_admin_stats(): void
+    {
+        echo '<p>' . esc_html__('Admin statistics placeholder.', 'artpulse') . '</p>';
+    }
+
+    public static function render_artist_profile(): void
+    {
+        echo '<p>' . esc_html__('Artist profile overview placeholder.', 'artpulse') . '</p>';
+    }
+
+    public static function render_quick_links(): void
+    {
+        echo '<p>' . esc_html__('Quick links placeholder.', 'artpulse') . '</p>';
     }
 
     public static function render(): void
