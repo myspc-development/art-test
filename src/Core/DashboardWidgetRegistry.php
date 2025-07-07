@@ -53,20 +53,34 @@ class DashboardWidgetRegistry
 
     /**
      * Return full widget definitions.
+     *
+     * @param bool $include_schema Include the settings schema for each widget.
      */
-    public static function get_definitions(): array
+    public static function get_definitions(bool $include_schema = false): array
     {
         $defs = [];
         foreach (self::$widgets as $id => $config) {
-            $defs[] = [
+            $def = [
                 'id'          => $id,
                 'name'        => $config['label'],
                 'icon'        => $config['icon'],
                 'description' => $config['description'],
             ];
+            if ($include_schema) {
+                $def['settings'] = $config['settings'];
+            }
+            $defs[] = $def;
         }
 
         return apply_filters('ap_dashboard_widget_definitions', $defs);
+    }
+
+    /**
+     * Get a single widget callback by ID.
+     */
+    public static function get_widget_callback(string $id): ?callable
+    {
+        return self::$widgets[$id]['callback'] ?? null;
     }
 
     /**
