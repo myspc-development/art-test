@@ -40,6 +40,11 @@ function WidgetsEditor(_ref) {
     _useState8 = _slicedToArray(_useState7, 2),
     showPreview = _useState8[0],
     setShowPreview = _useState8[1];
+  var _useState9 = (0, _react.useState)(function () {
+      return JSON.parse(JSON.stringify(config));
+    }),
+    _useState0 = _slicedToArray(_useState9, 1),
+    defaults = _useState0[0];
   var activeRef = (0, _react.useRef)(null);
   var availRef = (0, _react.useRef)(null);
   (0, _react.useEffect)(function () {
@@ -165,7 +170,7 @@ function WidgetsEditor(_ref) {
     });
   }
   function handleReset() {
-    var activeIds = config[activeRole] || [];
+    var activeIds = defaults[activeRole] || [];
     setActive(widgets.filter(function (w) {
       return activeIds.includes(w.id);
     }));

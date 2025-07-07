@@ -7,6 +7,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
   const [active, setActive] = useState([]);
   const [available, setAvailable] = useState([]);
   const [showPreview, setShowPreview] = useState(false);
+  const [defaults] = useState(() => JSON.parse(JSON.stringify(config)));
   const activeRef = useRef(null);
   const availRef = useRef(null);
 
@@ -108,7 +109,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
   }
 
   function handleReset() {
-    const activeIds = config[activeRole] || [];
+    const activeIds = defaults[activeRole] || [];
     setActive(widgets.filter(w => activeIds.includes(w.id)));
     setAvailable(widgets.filter(w => !activeIds.includes(w.id)));
   }
