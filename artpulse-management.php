@@ -330,6 +330,19 @@ function ap_enqueue_admin_styles($hook) {
 }
 add_action('admin_enqueue_scripts', 'ap_enqueue_admin_styles');
 
+add_action('admin_enqueue_scripts', function ($hook) {
+    error_log($hook); // debug the hook name
+    if (strpos($hook, 'artpulse-dashboard') !== false) {
+        wp_enqueue_script(
+            'ap-dashboard-editor',
+            plugin_dir_url(__FILE__) . 'assets/dist/dashboard-editor.js',
+            ['wp-element', 'wp-api-fetch'],
+            filemtime(plugin_dir_path(__FILE__) . 'assets/dist/dashboard-editor.js'),
+            true
+        );
+    }
+});
+
 // Enqueue the full SortableJS library on dashboard pages.
 add_action('wp_enqueue_scripts', function () {
     if (is_page('dashboard') || is_page('organization-dashboard')) {
