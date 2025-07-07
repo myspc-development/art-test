@@ -248,6 +248,7 @@ class Plugin
         \ArtPulse\Admin\AdminColumnsEvent::register();
         \ArtPulse\Admin\AdminColumnsOrganisation::register();
         \ArtPulse\Admin\QuickStartGuide::register();
+        \ArtPulse\Admin\DashboardWidgetSettingsPage::register();
         \ArtPulse\Admin\ReleaseNotes::register();
         DocumentationManager::register();
         \ArtPulse\Taxonomies\TaxonomiesRegistrar::register();
