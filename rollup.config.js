@@ -26,4 +26,5 @@ module.exports = [
     'assets/js/SidebarMenu.jsx': 'APSidebarMenu',
     'assets/js/rolesMenus.js': 'rolesMenus'
   }, ['react', 'react-dom', 'assets/js/SidebarMenu.jsx', 'assets/js/rolesMenus.js']),
+  createConfig('assets/js/admin-dashboard-widgets-editor.jsx', 'assets/js/admin-dashboard-widgets-editor.js', 'APDashboardWidgetsEditor', { react: 'React', 'react-dom': 'ReactDOM' }),
 ];
