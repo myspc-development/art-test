@@ -124,19 +124,27 @@
       _useState4 = _slicedToArray(_useState3, 2),
       values = _useState4[0],
       setValues = _useState4[1];
+    var _useState5 = React.useState(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      error = _useState6[0],
+      setError = _useState6[1];
     var restRoot = window.wpApiSettings && window.wpApiSettings.root || '';
     var restNonce = window.wpApiSettings && window.wpApiSettings.nonce || '';
     React.useEffect(function () {
       if (!id) return;
+      setError(false);
       fetch("".concat(restRoot, "artpulse/v1/widget-settings/").concat(id), {
         headers: {
           'X-WP-Nonce': restNonce
         }
       }).then(function (r) {
+        if (!r.ok) throw new Error('Request failed');
         return r.json();
       }).then(function (data) {
         setSchema(data.schema || []);
         setValues(data.settings || {});
+      })["catch"](function () {
+        return setError(true);
       });
     }, [id]);
     function updateField(key, val) {
@@ -181,7 +189,7 @@
       type: "button",
       className: "ap-form-button",
       onClick: onClose
-    }, l10n.close || 'Close'), /*#__PURE__*/React.createElement("form", {
+    }, l10n.close || 'Close'), error && /*#__PURE__*/React.createElement("p", null, "Unable to load widget settings."), /*#__PURE__*/React.createElement("form", {
       onSubmit: handleSubmit
     }, schema.map(function (field) {
       var _values$field$key;
@@ -223,31 +231,31 @@
       _ref2$l10n = _ref2.l10n,
       l10n = _ref2$l10n === void 0 ? {} : _ref2$l10n;
     var roleKeys = Object.keys(roles);
-    var _useState5 = React.useState(roleKeys[0] || ''),
-      _useState6 = _slicedToArray(_useState5, 2),
-      activeRole = _useState6[0],
-      setActiveRole = _useState6[1];
-    var _useState7 = React.useState([]),
+    var _useState7 = React.useState(roleKeys[0] || ''),
       _useState8 = _slicedToArray(_useState7, 2),
-      active = _useState8[0],
-      setActive = _useState8[1];
+      activeRole = _useState8[0],
+      setActiveRole = _useState8[1];
     var _useState9 = React.useState([]),
       _useState0 = _slicedToArray(_useState9, 2),
-      available = _useState0[0],
-      setAvailable = _useState0[1];
-    var _useState1 = React.useState(false),
+      active = _useState0[0],
+      setActive = _useState0[1];
+    var _useState1 = React.useState([]),
       _useState10 = _slicedToArray(_useState1, 2),
-      showPreview = _useState10[0],
-      setShowPreview = _useState10[1];
-    var _useState11 = React.useState(null),
+      available = _useState10[0],
+      setAvailable = _useState10[1];
+    var _useState11 = React.useState(false),
       _useState12 = _slicedToArray(_useState11, 2),
-      selectedWidget = _useState12[0],
-      setSelectedWidget = _useState12[1];
-    var _useState13 = React.useState(function () {
+      showPreview = _useState12[0],
+      setShowPreview = _useState12[1];
+    var _useState13 = React.useState(null),
+      _useState14 = _slicedToArray(_useState13, 2),
+      selectedWidget = _useState14[0],
+      setSelectedWidget = _useState14[1];
+    var _useState15 = React.useState(function () {
         return JSON.parse(JSON.stringify(config));
       }),
-      _useState14 = _slicedToArray(_useState13, 1),
-      defaults = _useState14[0];
+      _useState16 = _slicedToArray(_useState15, 1),
+      defaults = _useState16[0];
     var activeRef = React.useRef(null);
     var availRef = React.useRef(null);
     React.useEffect(function () {
