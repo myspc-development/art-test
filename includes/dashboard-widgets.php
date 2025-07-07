@@ -9,9 +9,9 @@ if (!defined('ABSPATH')) {
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-function ap_get_all_widget_definitions(): array
+function ap_get_all_widget_definitions(bool $include_schema = false): array
 {
-    return DashboardWidgetRegistry::get_definitions();
+    return DashboardWidgetRegistry::get_definitions($include_schema);
 }
 
 
