@@ -176,6 +176,7 @@ class EnqueueAssets {
                     'l10n'    => [
                         'availableWidgets' => __('Available Widgets', 'artpulse'),
                         'activeWidgets'    => __('Active Widgets', 'artpulse'),
+                        'selectRole'      => __('Select Role', 'artpulse'),
                         'save'            => __('Save', 'artpulse'),
                         'preview'         => __('Preview', 'artpulse'),
                         'resetDefault'    => __('Reset to Default', 'artpulse'),
