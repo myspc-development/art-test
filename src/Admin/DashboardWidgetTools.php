@@ -21,22 +21,25 @@ class DashboardWidgetTools
             echo '<div class="notice notice-error"><p>' . esc_html__('Invalid layout file.', 'artpulse') . '</p></div>';
         }
         ?>
-        <h2><?php esc_html_e('Export Layouts', 'artpulse'); ?></h2>
-        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-            <?php wp_nonce_field('ap_export_widget_config'); ?>
-            <input type="hidden" name="action" value="ap_export_widget_config" />
-            <button type="submit" class="button"><?php esc_html_e('Download JSON', 'artpulse'); ?></button>
-        </form>
-        <hr/>
-        <h2><?php esc_html_e('Import Layouts', 'artpulse'); ?></h2>
-        <form method="post" enctype="multipart/form-data" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-            <?php wp_nonce_field('ap_import_widget_config'); ?>
-            <input type="hidden" name="action" value="ap_import_widget_config" />
-            <input type="file" name="ap_widget_file" accept=".json" required />
-            <button type="submit" class="button button-primary" style="margin-top:10px;">
-                <?php esc_html_e('Upload', 'artpulse'); ?>
-            </button>
-        </form>
+        <details>
+            <summary><?php esc_html_e('Advanced: Import/Export JSON', 'artpulse'); ?></summary>
+            <h2><?php esc_html_e('Export Layouts', 'artpulse'); ?></h2>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                <?php wp_nonce_field('ap_export_widget_config'); ?>
+                <input type="hidden" name="action" value="ap_export_widget_config" />
+                <button type="submit" class="button"><?php esc_html_e('Download JSON', 'artpulse'); ?></button>
+            </form>
+            <hr/>
+            <h2><?php esc_html_e('Import Layouts', 'artpulse'); ?></h2>
+            <form method="post" enctype="multipart/form-data" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                <?php wp_nonce_field('ap_import_widget_config'); ?>
+                <input type="hidden" name="action" value="ap_import_widget_config" />
+                <input type="file" name="ap_widget_file" accept=".json" required />
+                <button type="submit" class="button button-primary" style="margin-top:10px;">
+                    <?php esc_html_e('Upload', 'artpulse'); ?>
+                </button>
+            </form>
+        </details>
         <?php
     }
 
