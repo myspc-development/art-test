@@ -1,0 +1,144 @@
+@import url("ap-style.css");
+/*
+Theme Name: ArtPulse Forms
+Description: Styles for ArtPulse plugin forms.
+Version: 1.0.0
+*/
+/* General Form Styling */
+.ap-form-container {
+  margin-bottom: 20px;
+}
+
+.ap-form-group {
+  margin-bottom: 15px;
+}
+
+.ap-form-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--ap-dark-text-color);
+}
+
+.ap-input,
+input.ap-input,
+textarea.ap-input,
+select.ap-input,
+.ap-form-input,
+.ap-form-textarea,
+.ap-form-select {
+  width: 100%;
+  padding: var(--ap-input-padding);
+  border: 2px solid var(--ap-primary-color);
+  border-radius: var(--ap-border-radius);
+  background-color: var(--ap-bg-color);
+  color: var(--ap-dark-text-color);
+  box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+  font-size: 16px;
+}
+
+.ap-input:focus,
+input.ap-input:focus,
+textarea.ap-input:focus,
+select.ap-input:focus,
+.ap-form-input:focus,
+.ap-form-textarea:focus,
+.ap-form-select:focus {
+  outline: 2px solid var(--ap-primary-color);
+  outline-offset: 2px;
+}
+
+.ap-form-textarea,
+textarea.ap-input {
+  resize: vertical; /* Allows vertical resizing */
+  min-height: 100px;
+}
+
+.ap-form-select,
+select.ap-input {
+  height: 36px; /* Adjust height to match input */
+}
+
+/* Button Styling */
+.ap-form-button,
+.ap-form-button.nectar-button {
+  background-color: var(--ap-primary-color);
+  border: none;
+  color: var(--ap-bg-color);
+  padding: calc(var(--ap-button-padding) * 1.2);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: var(--ap-border-radius);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ap-form-button:hover,
+.ap-form-button:focus,
+.ap-form-button.nectar-button:hover,
+.ap-form-button.nectar-button:focus {
+  background-color: var(--ap-primary-hover);
+  box-shadow: 0 0 0 2px var(--ap-primary-color);
+}
+
+/* Error and Success Messages */
+.ap-form-error {
+  color: var(--ap-danger-color);
+  margin-top: 5px;
+}
+
+.ap-form-success {
+  color: var(--ap-success-color);
+  margin-top: 5px;
+}
+
+.ap-form-input[type=email] {
+  /* Example: Style email inputs */
+}
+
+.ap-form-input[type=number] {
+  /* Example: Style number inputs */
+}
+
+/* Responsive Design (Example - Adjust breakpoints as needed) */
+@media (max-width: 768px) {
+  .ap-input,
+  input.ap-input,
+  textarea.ap-input,
+  select.ap-input,
+  .ap-form-input,
+  .ap-form-textarea,
+  .ap-form-select {
+    font-size: 14px;
+  }
+  .ap-form-button {
+    font-size: 14px;
+    padding: var(--ap-button-padding);
+  }
+}
+/* Custom Styles (Add your specific styles below) */
+/* Example: Style a specific form with ID "my-custom-form" */
+#my-custom-form .ap-form-label {
+  color: var(--ap-text-color);
+}
+
+#my-custom-form .ap-form-input {
+  border-color: var(--ap-muted-text-color);
+}
+
+/* Example: Style a specific class of form elements */
+.ap-form-highlighted {
+  background-color: var(--ap-bg-color);
+}
+
+.ap-upload-progress {
+  width: 100%;
+  height: 6px;
+  margin-top: 0.25rem;
+  display: block;
+}

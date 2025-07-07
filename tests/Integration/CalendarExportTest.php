@@ -1,0 +1,83 @@
+<?php
+namespace ArtPulse\Integration\Tests;
+
+use ArtPulse\Integration\CalendarExport;
+
+class CalendarExportTest extends \WP_UnitTestCase
+{
+    public function set_up(): void
+    {
+        parent::set_up();
+        CalendarExport::register();
+        do_action('init');
+    }
+
+    public function test_event_calendar_export_builds_ics(): void
+    {
+        $id = wp_insert_post([
+            'post_title'  => 'Export Event',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+            'post_content'=> 'An event description.',
+        ]);
+        update_post_meta($id, 'event_start_date', '2030-01-01');
+        update_post_meta($id, 'event_end_date', '2030-01-02');
+        update_post_meta($id, 'venue_name', 'Main Hall');
+
+        $ref    = new \ReflectionMethod(CalendarExport::class, 'build_event_ics');
+        $ref->setAccessible(true);
+        $ics    = $ref->invoke(null, get_post($id));
+
+        $this->assertStringContainsString('BEGIN:VCALENDAR', $ics);
+        $this->assertStringContainsString('SUMMARY:Export Event', $ics);
+        $this->assertStringContainsString('DESCRIPTION:An event description.', $ics);
+        $this->assertStringContainsString('LOCATION:Main Hall', $ics);
+        $this->assertStringContainsString('URL:' . get_permalink($id), $ics);
+
+        $filename = sanitize_title('Export Event') . '.ics';
+        $this->assertSame('export-event.ics', $filename);
+    }
+
+    public function test_org_calendar_export_builds_ics_for_events(): void
+    {
+        $org = wp_insert_post([
+            'post_title'  => 'My Org',
+            'post_type'   => 'artpulse_org',
+            'post_status' => 'publish',
+        ]);
+        $id1 = wp_insert_post([
+            'post_title'  => 'First Event',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+            'post_content'=> 'First description',
+            'meta_input'  => ['_ap_event_organization' => $org, 'event_start_date' => '2031-01-01'],
+        ]);
+        $id2 = wp_insert_post([
+            'post_title'  => 'Second Event',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+            'post_content'=> 'Second description',
+            'meta_input'  => ['_ap_event_organization' => $org, 'event_start_date' => '2031-02-01'],
+        ]);
+
+        $events = get_posts([
+            'post_type'      => 'artpulse_event',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'meta_key'       => '_ap_event_organization',
+            'meta_value'     => $org,
+        ]);
+
+        $ref = new \ReflectionMethod(CalendarExport::class, 'build_org_ics');
+        $ref->setAccessible(true);
+        $ics = $ref->invoke(null, $events);
+
+        $this->assertStringContainsString('BEGIN:VCALENDAR', $ics);
+        $this->assertStringContainsString('SUMMARY:First Event', $ics);
+        $this->assertStringContainsString('SUMMARY:Second Event', $ics);
+        $this->assertStringContainsString('END:VCALENDAR', $ics);
+
+        $filename = 'organization-' . $org . '.ics';
+        $this->assertSame('organization-' . $org . '.ics', $filename);
+    }
+}

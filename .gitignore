@@ -1,0 +1,32 @@
+# Node and package manager output
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Composer artifacts
+vendor/
+composer.phar
+composer-setup.php
+
+# Build output
+build/
+dist/
+release/
+*.zip
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+
+# Logs and caches
+*.log
+.cache/
+.phpunit.result.cache
+
+assets/dist/
+.env
+
+
+wordpress/

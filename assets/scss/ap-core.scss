@@ -1,0 +1,78 @@
+@use 'variables';
+
+/* Core shared variables and utilities */
+:root {
+  --ap-primary-color: #{variables.$ap-primary-color};
+  --ap-primary-hover: #{variables.$ap-primary-hover};
+  --ap-border-radius: #{variables.$ap-border-radius};
+  --ap-space-medium: #{variables.$ap-space-medium};
+  --ap-font-family-base: #{variables.$ap-font-family-base};
+  /* New shared color variables */
+  --ap-bg-color: #{variables.$ap-bg-color};
+  --ap-text-color: #{variables.$ap-text-color};
+  --ap-heading-color: #{variables.$ap-heading-color};
+  --ap-muted-text-color: #{variables.$ap-muted-text-color};
+  --ap-light-text-color: #{variables.$ap-light-text-color};
+  --ap-border-color: #{variables.$ap-border-color};
+  --ap-soft-border-color: #{variables.$ap-soft-border-color};
+  --ap-light-bg-color: #{variables.$ap-light-bg-color};
+  --ap-alt-bg-color: #{variables.$ap-alt-bg-color};
+  --ap-danger-color: #{variables.$ap-danger-color};
+  --ap-success-color: #{variables.$ap-success-color};
+  --ap-disabled-color: #{variables.$ap-disabled-color};
+  --ap-dark-text-color: #{variables.$ap-dark-text-color};
+  --ap-subtext-color: #{variables.$ap-subtext-color};
+}
+
+
+.ap-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #{variables.$ap-soft-border-color};
+  border-top-color: #{variables.$ap-text-color};
+  border-radius: 50%;
+  animation: ap-spin 0.6s linear infinite;
+  margin-left: 0.5em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ap-spinner {
+    animation: none;
+  }
+}
+
+@keyframes ap-spin {
+  to { transform: rotate(360deg); }
+}
+
+.screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+button:focus {
+  outline: 2px solid var(--ap-primary-color);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--ap-primary-color);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 100;
+}
+.skip-link:focus {
+  top: 0;
+}
+
