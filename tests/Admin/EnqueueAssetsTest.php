@@ -21,6 +21,8 @@ function wp_localize_script($handle, $name, $data) {
     \ArtPulse\Admin\Tests\EnqueueAssetsTest::$localize_calls[] = [$handle, $name, $data];
 }
 function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$options[$key] ?? $default; }
+function update_option($key, $value) { \ArtPulse\Admin\Tests\EnqueueAssetsTest::$options[$key] = $value; }
+function wp_roles() { return (object)['roles' => ['administrator' => [], 'subscriber' => []]]; }
 function ap_styles_disabled() { return false; }
 function wp_script_is($h, $list) { return false; }
 
@@ -118,5 +120,28 @@ class EnqueueAssetsTest extends TestCase
         $this->assertSame(['administrator' => ['foo']], $data['config']);
         $this->assertSame('nonce', $data['nonce']);
         $this->assertSame('admin-ajax.php', $data['ajaxUrl']);
+    }
+
+    public function test_dashboard_widgets_config_fallback_created(): void
+    {
+        if (!defined('ARTPULSE_PLUGIN_FILE')) {
+            define('ARTPULSE_PLUGIN_FILE', __FILE__);
+        }
+        self::$current_screen = (object)[
+            'id'   => 'artpulse-settings_page_artpulse-dashboard-widgets',
+            'base' => 'artpulse-settings_page_artpulse-dashboard-widgets',
+        ];
+
+        EnqueueAssets::enqueue_admin();
+
+        $expected_ids = array_column(\ArtPulse\Core\DashboardWidgetRegistry::get_definitions(), 'id');
+        $expected     = [];
+        foreach (wp_roles()->roles as $role_key => $data) {
+            $expected[$role_key] = $expected_ids;
+        }
+
+        $this->assertSame($expected, self::$options['ap_dashboard_widget_config']);
+        [$handle, $name, $data] = self::$localize_calls[0];
+        $this->assertSame($expected, $data['config']);
     }
 }
