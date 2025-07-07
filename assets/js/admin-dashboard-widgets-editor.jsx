@@ -12,19 +12,25 @@ if ( ! window.APDashboardWidgetsEditor || ! window.APDashboardWidgetsEditor.conf
 function WidgetSettingsForm({ id, onClose, l10n = {} }) {
   const [schema, setSchema] = useState([]);
   const [values, setValues] = useState({});
+  const [error, setError] = useState(false);
   const restRoot = (window.wpApiSettings && window.wpApiSettings.root) || '';
   const restNonce = (window.wpApiSettings && window.wpApiSettings.nonce) || '';
 
   useEffect(() => {
     if (!id) return;
+    setError(false);
     fetch(`${restRoot}artpulse/v1/widget-settings/${id}`, {
       headers: { 'X-WP-Nonce': restNonce }
     })
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error('Request failed');
+        return r.json();
+      })
       .then(data => {
         setSchema(data.schema || []);
         setValues(data.settings || {});
-      });
+      })
+      .catch(() => setError(true));
   }, [id]);
 
   function updateField(key, val) {
@@ -55,6 +61,7 @@ function WidgetSettingsForm({ id, onClose, l10n = {} }) {
     <div className="ap-org-modal open" id="ap-widget-settings-modal">
       <div id="ap-widget-settings-content">
         <button type="button" className="ap-form-button" onClick={onClose}>{l10n.close || 'Close'}</button>
+        {error && <p>Unable to load widget settings.</p>}
         <form onSubmit={handleSubmit}>
           {schema.map(field => {
             if (!field.key) return null;
