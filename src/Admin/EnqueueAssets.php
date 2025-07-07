@@ -167,9 +167,19 @@ class EnqueueAssets {
                     filemtime($script_path),
                     true
                 );
+                $config = get_option('ap_dashboard_widget_config', false);
+                if (false === $config) {
+                    $definitions = \ArtPulse\Core\DashboardWidgetRegistry::get_definitions();
+                    $all_ids     = array_column($definitions, 'id');
+                    $config      = [];
+                    foreach (wp_roles()->roles as $role_key => $role_data) {
+                        $config[$role_key] = $all_ids;
+                    }
+                    update_option('ap_dashboard_widget_config', $config);
+                }
                 wp_localize_script('ap-dashboard-widgets-editor', 'APDashboardWidgetsEditor', [
                     'widgets' => \ArtPulse\Core\DashboardWidgetRegistry::get_definitions(),
-                    'config'  => get_option('ap_dashboard_widget_config', []),
+                    'config'  => $config,
                     'roles'   => wp_roles()->roles,
                     'nonce'   => wp_create_nonce('ap_dashboard_widget_config'),
                     'ajaxUrl' => admin_url('admin-ajax.php'),
