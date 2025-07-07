@@ -14,6 +14,8 @@ composer-setup.php
 dist/
 release/
 *.zip
+!assets/dist/
+!assets/dist/admin-dashboard-widgets-editor.js
 
 # IDE and OS files
 .vscode/
@@ -40,6 +42,5 @@ wordpress/
 +!build/index.asset.php
 
  # …
- assets/dist/
-+!assets/js/admin-dashboard-widgets-editor.js
+!assets/js/admin-dashboard-widgets-editor.js
 
