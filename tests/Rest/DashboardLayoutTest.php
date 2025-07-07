@@ -56,5 +56,20 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         $expected = ['a-', 'bc', 'invalidslug'];
         $this->assertSame($expected, get_user_meta($this->user_id, 'ap_dashboard_layout', true));
     }
+
+    public function test_get_uses_role_default_when_no_user_meta(): void
+    {
+        $uid = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($uid);
+        update_option('ap_dashboard_widget_config', ['member' => ['membership', 'upgrade']]);
+
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
+        $res = rest_get_server()->dispatch($req);
+
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertSame(['membership', 'upgrade'], $data['layout']);
+        $this->assertSame([], $data['visibility']);
+    }
 }
 
