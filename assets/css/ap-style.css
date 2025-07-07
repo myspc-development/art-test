@@ -1196,3 +1196,7 @@ select.ap-input {
 .ap-widgets-columns li{padding:4px 8px;border:1px solid var(--ap-soft-border-color);margin-bottom:4px;cursor:move;}
 .ap-widgets-preview{border:1px solid var(--ap-border-color);background:var(--ap-light-bg-color);padding:.5rem;margin-top:1rem;}
 .ap-widgets-help{font-size:.875rem;font-style:italic;margin-bottom:.5rem;}
+@media (max-width:600px){
+    .ap-widgets-columns{flex-direction:column;}
+    .ap-widgets-columns ul{max-height:200px;overflow-y:auto;}
+}
