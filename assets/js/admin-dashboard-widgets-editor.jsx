@@ -9,12 +9,93 @@ if ( ! window.APDashboardWidgetsEditor || ! window.APDashboardWidgetsEditor.conf
   };
 }
 
+function WidgetSettingsForm({ id, onClose, l10n = {} }) {
+  const [schema, setSchema] = useState([]);
+  const [values, setValues] = useState({});
+  const restRoot = (window.wpApiSettings && window.wpApiSettings.root) || '';
+  const restNonce = (window.wpApiSettings && window.wpApiSettings.nonce) || '';
+
+  useEffect(() => {
+    if (!id) return;
+    fetch(`${restRoot}artpulse/v1/widget-settings/${id}`, {
+      headers: { 'X-WP-Nonce': restNonce }
+    })
+      .then(r => r.json())
+      .then(data => {
+        setSchema(data.schema || []);
+        setValues(data.settings || {});
+      });
+  }, [id]);
+
+  function updateField(key, val) {
+    setValues(v => ({ ...v, [key]: val }));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    fetch(`${restRoot}artpulse/v1/widget-settings/${id}`, {
+      method: 'POST',
+      headers: { 'X-WP-Nonce': restNonce, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ settings: values })
+    })
+      .then(() => {
+        if (window.wp?.data?.dispatch) {
+          wp.data.dispatch('core/notices').createNotice('success', l10n.saveSuccess || 'Saved', { isDismissible: true });
+        }
+        onClose();
+      })
+      .catch(() => {
+        if (window.wp?.data?.dispatch) {
+          wp.data.dispatch('core/notices').createNotice('error', l10n.saveError || 'Error', { isDismissible: true });
+        }
+      });
+  }
+
+  return (
+    <div className="ap-org-modal open" id="ap-widget-settings-modal">
+      <div id="ap-widget-settings-content">
+        <button type="button" className="ap-form-button" onClick={onClose}>{l10n.close || 'Close'}</button>
+        <form onSubmit={handleSubmit}>
+          {schema.map(field => {
+            if (!field.key) return null;
+            const val = values[field.key] ?? (field.type === 'checkbox' ? false : '');
+            if (field.type === 'checkbox') {
+              return (
+                <label key={field.key} className="ap-form-label">
+                  <input
+                    type="checkbox"
+                    checked={!!val}
+                    onChange={e => updateField(field.key, e.target.checked)}
+                  />
+                  {field.label || field.key}
+                </label>
+              );
+            }
+            return (
+              <label key={field.key} className="ap-form-label">
+                {field.label || field.key}
+                <input
+                  type={field.type || 'text'}
+                  value={val}
+                  onChange={e => updateField(field.key, e.target.value)}
+                />
+              </label>
+            );
+          })}
+          <button type="submit" className="ap-form-button">{l10n.save || 'Save'}</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
   const roleKeys = Object.keys(roles);
   const [activeRole, setActiveRole] = useState(roleKeys[0] || '');
   const [active, setActive] = useState([]);
   const [available, setAvailable] = useState([]);
   const [showPreview, setShowPreview] = useState(false);
+  const [selectedWidget, setSelectedWidget] = useState(null);
   const [defaults] = useState(() => JSON.parse(JSON.stringify(config)));
   const activeRef = useRef(null);
   const availRef = useRef(null);
@@ -145,6 +226,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
                 data-id={w.id}
                 tabIndex={0}
                 role="option"
+                onClick={() => setSelectedWidget(w.id)}
                 onKeyDown={e => handleKeyDown(e, i, 'available')}
               >
                 {w.name}
@@ -161,6 +243,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
                 data-id={w.id}
                 tabIndex={0}
                 role="option"
+                onClick={() => setSelectedWidget(w.id)}
                 onKeyDown={e => handleKeyDown(e, i, 'active')}
               >
                 {w.name}
@@ -183,6 +266,13 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
             ))}
           </ol>
         </div>
+      )}
+      {selectedWidget && (
+        <WidgetSettingsForm
+          id={selectedWidget}
+          onClose={() => setSelectedWidget(null)}
+          l10n={l10n}
+        />
       )}
     </div>
   );

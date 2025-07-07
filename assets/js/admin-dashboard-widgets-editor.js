@@ -111,36 +111,143 @@
       config: {}
     });
   }
-  function WidgetsEditor(_ref) {
-    var widgets = _ref.widgets,
-      config = _ref.config,
-      roles = _ref.roles,
-      nonce = _ref.nonce,
-      ajaxUrl = _ref.ajaxUrl,
+  function WidgetSettingsForm(_ref) {
+    var id = _ref.id,
+      onClose = _ref.onClose,
       _ref$l10n = _ref.l10n,
       l10n = _ref$l10n === void 0 ? {} : _ref$l10n;
-    var roleKeys = Object.keys(roles);
-    var _useState = React.useState(roleKeys[0] || ''),
+    var _useState = React.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
-      activeRole = _useState2[0],
-      setActiveRole = _useState2[1];
-    var _useState3 = React.useState([]),
+      schema = _useState2[0],
+      setSchema = _useState2[1];
+    var _useState3 = React.useState({}),
       _useState4 = _slicedToArray(_useState3, 2),
-      active = _useState4[0],
-      setActive = _useState4[1];
-    var _useState5 = React.useState([]),
+      values = _useState4[0],
+      setValues = _useState4[1];
+    var restRoot = window.wpApiSettings && window.wpApiSettings.root || '';
+    var restNonce = window.wpApiSettings && window.wpApiSettings.nonce || '';
+    React.useEffect(function () {
+      if (!id) return;
+      fetch("".concat(restRoot, "artpulse/v1/widget-settings/").concat(id), {
+        headers: {
+          'X-WP-Nonce': restNonce
+        }
+      }).then(function (r) {
+        return r.json();
+      }).then(function (data) {
+        setSchema(data.schema || []);
+        setValues(data.settings || {});
+      });
+    }, [id]);
+    function updateField(key, val) {
+      setValues(function (v) {
+        return _objectSpread2(_objectSpread2({}, v), {}, _defineProperty({}, key, val));
+      });
+    }
+    function handleSubmit(e) {
+      e.preventDefault();
+      fetch("".concat(restRoot, "artpulse/v1/widget-settings/").concat(id), {
+        method: 'POST',
+        headers: {
+          'X-WP-Nonce': restNonce,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          settings: values
+        })
+      }).then(function () {
+        var _window$wp, _window$wp$data;
+        if ((_window$wp = window.wp) !== null && _window$wp !== void 0 && (_window$wp$data = _window$wp.data) !== null && _window$wp$data !== void 0 && _window$wp$data.dispatch) {
+          wp.data.dispatch('core/notices').createNotice('success', l10n.saveSuccess || 'Saved', {
+            isDismissible: true
+          });
+        }
+        onClose();
+      })["catch"](function () {
+        var _window$wp2, _window$wp2$data;
+        if ((_window$wp2 = window.wp) !== null && _window$wp2 !== void 0 && (_window$wp2$data = _window$wp2.data) !== null && _window$wp2$data !== void 0 && _window$wp2$data.dispatch) {
+          wp.data.dispatch('core/notices').createNotice('error', l10n.saveError || 'Error', {
+            isDismissible: true
+          });
+        }
+      });
+    }
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ap-org-modal open",
+      id: "ap-widget-settings-modal"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "ap-widget-settings-content"
+    }, /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      className: "ap-form-button",
+      onClick: onClose
+    }, l10n.close || 'Close'), /*#__PURE__*/React.createElement("form", {
+      onSubmit: handleSubmit
+    }, schema.map(function (field) {
+      var _values$field$key;
+      if (!field.key) return null;
+      var val = (_values$field$key = values[field.key]) !== null && _values$field$key !== void 0 ? _values$field$key : field.type === 'checkbox' ? false : '';
+      if (field.type === 'checkbox') {
+        return /*#__PURE__*/React.createElement("label", {
+          key: field.key,
+          className: "ap-form-label"
+        }, /*#__PURE__*/React.createElement("input", {
+          type: "checkbox",
+          checked: !!val,
+          onChange: function onChange(e) {
+            return updateField(field.key, e.target.checked);
+          }
+        }), field.label || field.key);
+      }
+      return /*#__PURE__*/React.createElement("label", {
+        key: field.key,
+        className: "ap-form-label"
+      }, field.label || field.key, /*#__PURE__*/React.createElement("input", {
+        type: field.type || 'text',
+        value: val,
+        onChange: function onChange(e) {
+          return updateField(field.key, e.target.value);
+        }
+      }));
+    }), /*#__PURE__*/React.createElement("button", {
+      type: "submit",
+      className: "ap-form-button"
+    }, l10n.save || 'Save'))));
+  }
+  function WidgetsEditor(_ref2) {
+    var widgets = _ref2.widgets,
+      config = _ref2.config,
+      roles = _ref2.roles,
+      nonce = _ref2.nonce,
+      ajaxUrl = _ref2.ajaxUrl,
+      _ref2$l10n = _ref2.l10n,
+      l10n = _ref2$l10n === void 0 ? {} : _ref2$l10n;
+    var roleKeys = Object.keys(roles);
+    var _useState5 = React.useState(roleKeys[0] || ''),
       _useState6 = _slicedToArray(_useState5, 2),
-      available = _useState6[0],
-      setAvailable = _useState6[1];
-    var _useState7 = React.useState(false),
+      activeRole = _useState6[0],
+      setActiveRole = _useState6[1];
+    var _useState7 = React.useState([]),
       _useState8 = _slicedToArray(_useState7, 2),
-      showPreview = _useState8[0],
-      setShowPreview = _useState8[1];
-    var _useState9 = React.useState(function () {
+      active = _useState8[0],
+      setActive = _useState8[1];
+    var _useState9 = React.useState([]),
+      _useState0 = _slicedToArray(_useState9, 2),
+      available = _useState0[0],
+      setAvailable = _useState0[1];
+    var _useState1 = React.useState(false),
+      _useState10 = _slicedToArray(_useState1, 2),
+      showPreview = _useState10[0],
+      setShowPreview = _useState10[1];
+    var _useState11 = React.useState(null),
+      _useState12 = _slicedToArray(_useState11, 2),
+      selectedWidget = _useState12[0],
+      setSelectedWidget = _useState12[1];
+    var _useState13 = React.useState(function () {
         return JSON.parse(JSON.stringify(config));
       }),
-      _useState0 = _slicedToArray(_useState9, 1),
-      defaults = _useState0[0];
+      _useState14 = _slicedToArray(_useState13, 1),
+      defaults = _useState14[0];
     var activeRef = React.useRef(null);
     var availRef = React.useRef(null);
     React.useEffect(function () {
@@ -238,8 +345,8 @@
         return r.json();
       }).then(function (res) {
         if (res.success) {
-          var _window$wp, _window$wp$data;
-          if ((_window$wp = window.wp) !== null && _window$wp !== void 0 && (_window$wp$data = _window$wp.data) !== null && _window$wp$data !== void 0 && _window$wp$data.dispatch) {
+          var _window$wp3, _window$wp3$data;
+          if ((_window$wp3 = window.wp) !== null && _window$wp3 !== void 0 && (_window$wp3$data = _window$wp3.data) !== null && _window$wp3$data !== void 0 && _window$wp3$data.dispatch) {
             wp.data.dispatch('core/notices').createNotice('success', l10n.saveSuccess || 'Saved', {
               isDismissible: true
             });
@@ -248,17 +355,17 @@
             return w.id;
           });
         } else {
-          var _res$data, _window$wp2, _window$wp2$data;
+          var _res$data, _window$wp4, _window$wp4$data;
           var msg = ((_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.message) || l10n.saveError || 'Error';
-          if ((_window$wp2 = window.wp) !== null && _window$wp2 !== void 0 && (_window$wp2$data = _window$wp2.data) !== null && _window$wp2$data !== void 0 && _window$wp2$data.dispatch) {
+          if ((_window$wp4 = window.wp) !== null && _window$wp4 !== void 0 && (_window$wp4$data = _window$wp4.data) !== null && _window$wp4$data !== void 0 && _window$wp4$data.dispatch) {
             wp.data.dispatch('core/notices').createNotice('error', msg, {
               isDismissible: true
             });
           }
         }
       })["catch"](function () {
-        var _window$wp3, _window$wp3$data;
-        if ((_window$wp3 = window.wp) !== null && _window$wp3 !== void 0 && (_window$wp3$data = _window$wp3.data) !== null && _window$wp3$data !== void 0 && _window$wp3$data.dispatch) {
+        var _window$wp5, _window$wp5$data;
+        if ((_window$wp5 = window.wp) !== null && _window$wp5 !== void 0 && (_window$wp5$data = _window$wp5.data) !== null && _window$wp5$data !== void 0 && _window$wp5$data.dispatch) {
           wp.data.dispatch('core/notices').createNotice('error', l10n.saveError || 'Error', {
             isDismissible: true
           });
@@ -308,6 +415,9 @@
         "data-id": w.id,
         tabIndex: 0,
         role: "option",
+        onClick: function onClick() {
+          return setSelectedWidget(w.id);
+        },
         onKeyDown: function onKeyDown(e) {
           return handleKeyDown(e, i, 'available');
         }
@@ -326,6 +436,9 @@
         "data-id": w.id,
         tabIndex: 0,
         role: "option",
+        onClick: function onClick() {
+          return setSelectedWidget(w.id);
+        },
         onKeyDown: function onKeyDown(e) {
           return handleKeyDown(e, i, 'active');
         }
@@ -349,7 +462,13 @@
       return /*#__PURE__*/React.createElement("li", {
         key: w.id
       }, w.name);
-    }))));
+    }))), selectedWidget && /*#__PURE__*/React.createElement(WidgetSettingsForm, {
+      id: selectedWidget,
+      onClose: function onClose() {
+        return setSelectedWidget(null);
+      },
+      l10n: l10n
+    }));
   }
   document.addEventListener('DOMContentLoaded', function () {
     var el = document.getElementById('ap-dashboard-widgets-canvas');
