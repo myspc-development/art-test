@@ -1,6 +1,6 @@
 # Widget Settings Codex
 
-This guide explains how dashboard widgets are defined, configured and stored for each user.
+This guide explains how dashboard widgets are defined, configured and stored for each user. For per-role layouts and import/export tools see [Dashboard Widgets per Role](dashboard-widgets-per-role.md).
 
 ## 1. Widget Definitions
 
