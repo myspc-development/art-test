@@ -78,6 +78,18 @@ register_activation_hook(__FILE__, function () {
     \ArtPulse\Core\FeedbackManager::install_table();
     Activator::activate(); // WooCommerceIntegration has no activate() method
     ap_copy_templates_to_child_theme();
+
+    // Initialize default dashboard widget layout if missing
+    if (false === get_option('ap_dashboard_widget_config', false)) {
+        $roles       = array_keys(wp_roles()->roles);
+        $definitions = \ArtPulse\Core\DashboardWidgetRegistry::get_definitions();
+        $all_ids     = array_column($definitions, 'id');
+        $default     = [];
+        foreach ($roles as $role) {
+            $default[$role] = $all_ids;
+        }
+        add_option('ap_dashboard_widget_config', $default);
+    }
 });
 
 
