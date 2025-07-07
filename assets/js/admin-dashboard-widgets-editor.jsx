@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
+if ( ! window.APDashboardWidgetsEditor || ! window.APDashboardWidgetsEditor.config ) {
+  console.error("APDashboardWidgetsEditor.config is missing; initializing empty layout.");
+  window.APDashboardWidgetsEditor = {
+    ...window.APDashboardWidgetsEditor,
+    config: {}
+  };
+}
+
 function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
   const roleKeys = Object.keys(roles);
   const [activeRole, setActiveRole] = useState(roleKeys[0] || '');
