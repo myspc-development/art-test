@@ -130,3 +130,198 @@ function ap_widget_webhooks(array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/webhooks.php', $vars);
 }
+
+/**
+ * Register core dashboard widgets.
+ */
+function ap_register_core_dashboard_widgets(): void
+{
+    DashboardWidgetRegistry::register(
+        'membership',
+        __('Membership', 'artpulse'),
+        'users',
+        __('Subscription status and badges.', 'artpulse'),
+        'ap_widget_membership',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'show_badges',
+                'label'   => __('Show Badges', 'artpulse'),
+                'type'    => 'checkbox',
+                'default' => true,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'upgrade',
+        __('Upgrade', 'artpulse'),
+        'star',
+        __('Upgrade options for the account.', 'artpulse'),
+        'ap_widget_upgrade',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'show_forms',
+                'label'   => __('Show Forms', 'artpulse'),
+                'type'    => 'checkbox',
+                'default' => true,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'local-events',
+        __('Local Events', 'artpulse'),
+        'map-pin',
+        __('Shows events near the user.', 'artpulse'),
+        'ap_widget_local_events',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'limit',
+                'label'   => __('Number of Events', 'artpulse'),
+                'type'    => 'number',
+                'default' => 5,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'favorites',
+        __('Favorites', 'artpulse'),
+        'heart',
+        __('Favorited content lists.', 'artpulse'),
+        'ap_widget_favorites',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'limit',
+                'label'   => __('Items to Show', 'artpulse'),
+                'type'    => 'number',
+                'default' => 5,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'rsvps',
+        __('RSVPs', 'artpulse'),
+        'calendar',
+        __('User RSVP history.', 'artpulse'),
+        'ap_widget_rsvps',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'limit',
+                'label'   => __('Items to Show', 'artpulse'),
+                'type'    => 'number',
+                'default' => 5,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'my-events',
+        __('My Events', 'artpulse'),
+        'clock',
+        __('Events created by the user.', 'artpulse'),
+        'ap_widget_my_events',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'limit',
+                'label'   => __('Items to Show', 'artpulse'),
+                'type'    => 'number',
+                'default' => 5,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'events',
+        __('Upcoming Events', 'artpulse'),
+        'calendar',
+        __('Global upcoming events.', 'artpulse'),
+        'ap_widget_events',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'limit',
+                'label'   => __('Items to Show', 'artpulse'),
+                'type'    => 'number',
+                'default' => 5,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'messages',
+        __('Messages', 'artpulse'),
+        'mail',
+        __('Private messages inbox.', 'artpulse'),
+        'ap_widget_messages',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'limit',
+                'label'   => __('Items to Show', 'artpulse'),
+                'type'    => 'number',
+                'default' => 5,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'account-tools',
+        __('Account Tools', 'artpulse'),
+        'settings',
+        __('Export and deletion options.', 'artpulse'),
+        'ap_widget_account_tools',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'show_export',
+                'label'   => __('Show Export Links', 'artpulse'),
+                'type'    => 'checkbox',
+                'default' => true,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'support-history',
+        __('Support History', 'artpulse'),
+        'life-buoy',
+        __('Previous support tickets.', 'artpulse'),
+        'ap_widget_support_history',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'limit',
+                'label'   => __('Items to Show', 'artpulse'),
+                'type'    => 'number',
+                'default' => 5,
+            ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'notifications',
+        __('Notifications', 'artpulse'),
+        'bell',
+        __('Recent notifications.', 'artpulse'),
+        'ap_widget_notifications',
+        'view_artpulse_dashboard',
+        [
+            [
+                'key'     => 'limit',
+                'label'   => __('Items to Show', 'artpulse'),
+                'type'    => 'number',
+                'default' => 5,
+            ],
+        ]
+    );
+}
+
+add_action('artpulse_register_dashboard_widget', 'ap_register_core_dashboard_widgets');
