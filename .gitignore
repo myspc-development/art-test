@@ -10,7 +10,7 @@ composer.phar
 composer-setup.php
 
 # Build output
-build/
+#build/
 dist/
 release/
 *.zip
@@ -25,8 +25,21 @@ release/
 .cache/
 .phpunit.result.cache
 
-assets/dist/
+#assets/dist/
 .env
 
 
 wordpress/
+
+ # Build output
+ build/
+ dist/
+ release/
+ *.zip
++!build/index.js
++!build/index.asset.php
+
+ # …
+ assets/dist/
++!assets/js/admin-dashboard-widgets-editor.js
+
