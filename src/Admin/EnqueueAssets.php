@@ -182,6 +182,7 @@ class EnqueueAssets {
                         'resetDefault'    => __('Reset to Default', 'artpulse'),
                         'saveSuccess'     => __('Widget order saved.', 'artpulse'),
                         'saveError'       => __('Error saving widget order.', 'artpulse'),
+                        'instructions'    => __('Drag widgets to add, remove, or reorder. Changes are saved for each role.', 'artpulse'),
                     ],
                 ]);
             }

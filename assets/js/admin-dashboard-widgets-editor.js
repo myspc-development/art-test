@@ -189,7 +189,9 @@ function WidgetsEditor(_ref) {
       key: r,
       value: r
     }, roles[r].name || r);
-  })), /*#__PURE__*/_react["default"].createElement("div", {
+  })), /*#__PURE__*/_react["default"].createElement("p", {
+    className: "ap-widgets-help"
+  }, l10n.instructions), /*#__PURE__*/_react["default"].createElement("div", {
     className: "ap-widgets-columns"
   }, /*#__PURE__*/_react["default"].createElement("div", {
     className: "ap-widgets-available"
