@@ -403,6 +403,10 @@ msgid "Active Widgets"
 msgstr ""
 
 #: assets/js/admin-dashboard-widgets-editor.jsx
+msgid "Select Role"
+msgstr ""
+
+#: assets/js/admin-dashboard-widgets-editor.jsx
 msgid "Save"
 msgstr ""
 
