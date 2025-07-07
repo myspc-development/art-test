@@ -175,7 +175,11 @@ function WidgetsEditor(_ref) {
   }
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "ap-widgets-editor"
-  }, /*#__PURE__*/_react["default"].createElement("select", {
+  }, /*#__PURE__*/_react["default"].createElement("label", {
+    className: "screen-reader-text",
+    htmlFor: "ap-role-select"
+  }, l10n.selectRole || 'Select Role'), /*#__PURE__*/_react["default"].createElement("select", {
+    id: "ap-role-select",
     value: activeRole,
     onChange: function onChange(e) {
       return setActiveRole(e.target.value);

@@ -115,7 +115,12 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
 
   return (
     <div className="ap-widgets-editor">
-      <select value={activeRole} onChange={e => setActiveRole(e.target.value)}>
+      <label className="screen-reader-text" htmlFor="ap-role-select">{l10n.selectRole || 'Select Role'}</label>
+      <select
+        id="ap-role-select"
+        value={activeRole}
+        onChange={e => setActiveRole(e.target.value)}
+      >
         {roleKeys.map(r => (
           <option key={r} value={r}>{roles[r].name || r}</option>
         ))}
