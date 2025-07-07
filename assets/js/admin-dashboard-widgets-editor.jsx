@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 if ( ! window.APDashboardWidgetsEditor || ! window.APDashboardWidgetsEditor.config ) {
   console.error("APDashboardWidgetsEditor.config is missing; initializing empty layout.");
@@ -279,12 +279,12 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const el = document.getElementById('ap-dashboard-widgets-canvas');
-  if (el && window.APDashboardWidgetsEditor) {
-    ReactDOM.render(
-      <WidgetsEditor {...APDashboardWidgetsEditor} />,
-      el
+  const container = document.getElementById('ap-dashboard-widgets-canvas');
+  if (container && window.APDashboardWidgetsEditor) {
+    createRoot(container).render(
+      <WidgetsEditor {...APDashboardWidgetsEditor} />
     );
+    console.log('Editor loaded');
   } else {
     console.error('WidgetsEditor failed: container or data missing');
   }

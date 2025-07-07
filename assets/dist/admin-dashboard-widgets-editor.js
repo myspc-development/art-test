@@ -1,4 +1,4 @@
-(function (React, ReactDOM) {
+(function (React, client) {
   'use strict';
 
   function _arrayLikeToArray(r, a) {
@@ -471,12 +471,13 @@
     }));
   }
   document.addEventListener('DOMContentLoaded', function () {
-    var el = document.getElementById('ap-dashboard-widgets-canvas');
-    if (el && window.APDashboardWidgetsEditor) {
-      ReactDOM.render(/*#__PURE__*/React.createElement(WidgetsEditor, APDashboardWidgetsEditor), el);
+    var container = document.getElementById('ap-dashboard-widgets-canvas');
+    if (container && window.APDashboardWidgetsEditor) {
+      client.createRoot(container).render(/*#__PURE__*/React.createElement(WidgetsEditor, APDashboardWidgetsEditor));
+      console.log('Editor loaded');
     } else {
       console.error('WidgetsEditor failed: container or data missing');
     }
   });
 
-})(React, ReactDOM);
+})(React, client);
