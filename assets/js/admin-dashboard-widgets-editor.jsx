@@ -125,6 +125,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
           <option key={r} value={r}>{roles[r].name || r}</option>
         ))}
       </select>
+      <p className="ap-widgets-help">{l10n.instructions}</p>
       <div className="ap-widgets-columns">
         <div className="ap-widgets-available">
           <h4 id="ap-available-label">{l10n.availableWidgets || 'Available Widgets'}</h4>
