@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Admin;
 
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 class DashboardWidgetTools
 {
     public static function register(): void
@@ -104,5 +106,40 @@ class DashboardWidgetTools
         update_option('ap_dashboard_widget_config', $sanitized);
         wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=artpulse-dashboard-widgets')));
         exit;
+    }
+
+    /**
+     * Retrieve the default widget layout for a role.
+     */
+    public static function get_default_layout(string $role): array
+    {
+        $config = get_option('ap_dashboard_widget_config', []);
+        if (isset($config[$role]) && is_array($config[$role])) {
+            return array_map('sanitize_key', $config[$role]);
+        }
+
+        $defs = DashboardWidgetRegistry::get_definitions();
+        return array_column($defs, 'id');
+    }
+
+    /**
+     * Output dashboard widgets for the current user.
+     */
+    public static function render_dashboard_widgets(string $role): void
+    {
+        $uid    = get_current_user_id();
+        $layout = get_user_meta($uid, 'ap_dashboard_layout', true);
+        if (!is_array($layout) || empty($layout)) {
+            $layout = self::get_default_layout($role);
+        }
+
+        foreach ($layout as $id) {
+            $cb = DashboardWidgetRegistry::get_widget_callback($id);
+            if (is_callable($cb)) {
+                echo '<div class="ap-widget">';
+                echo call_user_func($cb);
+                echo '</div>';
+            }
+        }
     }
 }
