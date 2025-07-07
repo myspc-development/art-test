@@ -747,6 +747,30 @@ class SettingsPage
     public static function renderDashboardWidgetsPage(): void
     {
         echo '<div id="ap-dashboard-widgets-canvas"></div>';
+        echo '<noscript><div class="notice notice-error"><p>' . esc_html__(
+            'This page requires JavaScript to manage dashboard widgets.',
+            'artpulse'
+        ) . '</p></div></noscript>';
+        ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof window.APDashboardWidgetsEditor === 'undefined') {
+                    var canvas = document.getElementById('ap-dashboard-widgets-canvas');
+                    var notice = document.createElement('div');
+                    notice.className = 'notice notice-error';
+                    notice.innerHTML = '<p><?php echo esc_js(
+                        __( 'Dashboard Widgets editor could not be loaded. Please refresh the page and try again.',
+                            'artpulse' )
+                    ); ?></p>';
+                    if (canvas && canvas.parentNode) {
+                        canvas.parentNode.insertBefore(notice, canvas);
+                    } else {
+                        document.body.insertBefore(notice, document.body.firstChild);
+                    }
+                }
+            });
+        </script>
+        <?php
         DashboardWidgetTools::render();
     }
 }
