@@ -16,7 +16,11 @@ function get_current_user_id() { return 1; }
 function get_user_meta($uid, $key, $single = false) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$user_meta[$uid][$key] ?? ''; }
 function get_posts($args = []) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$posts; }
 function get_the_terms($post_id, $tax) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$terms[$post_id] ?? false; }
-function wp_localize_script($handle, $name, $data) { \ArtPulse\Admin\Tests\EnqueueAssetsTest::$localized = $data; }
+function wp_localize_script($handle, $name, $data) {
+    \ArtPulse\Admin\Tests\EnqueueAssetsTest::$localized = $data;
+    \ArtPulse\Admin\Tests\EnqueueAssetsTest::$localize_calls[] = [$handle, $name, $data];
+}
+function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$options[$key] ?? $default; }
 function ap_styles_disabled() { return false; }
 function wp_script_is($h, $list) { return false; }
 
@@ -35,6 +39,8 @@ class EnqueueAssetsTest extends TestCase
     public static array $posts = [];
     public static array $terms = [];
     public static array $scripts = [];
+    public static array $localize_calls = [];
+    public static array $options = [];
     public static $current_screen = null;
 
     protected function setUp(): void
@@ -44,6 +50,8 @@ class EnqueueAssetsTest extends TestCase
         self::$posts = [];
         self::$terms = [];
         self::$scripts = [];
+        self::$localize_calls = [];
+        self::$options = [];
         self::$current_screen = null;
     }
 
@@ -84,5 +92,31 @@ class EnqueueAssetsTest extends TestCase
         self::$current_screen = null;
         EnqueueAssets::enqueue_block_editor_assets();
         $this->assertSame([], self::$scripts);
+    }
+
+    public function test_dashboard_widgets_scripts_and_localization(): void
+    {
+        if (!defined('ARTPULSE_PLUGIN_FILE')) {
+            define('ARTPULSE_PLUGIN_FILE', __FILE__);
+        }
+        self::$current_screen = (object)[
+            'id' => 'artpulse-settings_page_artpulse-dashboard-widgets',
+            'base' => 'artpulse-settings_page_artpulse-dashboard-widgets',
+        ];
+        self::$options['ap_dashboard_widget_config'] = ['administrator' => ['foo']];
+        EnqueueAssets::enqueue_admin();
+
+        $handles = array_map(fn($a) => $a[0] ?? '', self::$scripts);
+        $this->assertContains('sortablejs', $handles);
+        $this->assertContains('ap-dashboard-widgets-editor', $handles);
+
+        $this->assertNotEmpty(self::$localize_calls);
+        [$handle, $name, $data] = self::$localize_calls[0];
+        $this->assertSame('ap-dashboard-widgets-editor', $handle);
+        $this->assertSame('APDashboardWidgetsEditor', $name);
+        $this->assertArrayHasKey('widgets', $data);
+        $this->assertSame(['administrator' => ['foo']], $data['config']);
+        $this->assertSame('nonce', $data['nonce']);
+        $this->assertSame('admin-ajax.php', $data['ajaxUrl']);
     }
 }
