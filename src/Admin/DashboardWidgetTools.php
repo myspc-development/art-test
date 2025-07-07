@@ -13,7 +13,7 @@ class DashboardWidgetTools
     public static function add_dashboard_widgets(): void
     {
         wp_add_dashboard_widget(
-            'artpulse_custom_dashboard_widget',
+            'artpulse_dashboard_widget',
             __('ArtPulse Dashboard', 'artpulse'),
             [self::class, 'render']
         );
@@ -24,6 +24,11 @@ class DashboardWidgetTools
         if (!current_user_can('manage_options')) {
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
+
+        echo '<div class="wrap">';
+        echo '<h3>' . esc_html__('Welcome to the ArtPulse Dashboard', 'artpulse') . '</h3>';
+        echo '<p>' . esc_html__('This is your custom dashboard widget. You can add stats, charts, quick links, etc.', 'artpulse') . '</p>';
+        echo '</div>';
 
         if (isset($_GET['dw_import_success'])) {
             echo '<div class="notice notice-success"><p>' . esc_html__('Widget layouts imported.', 'artpulse') . '</p></div>';
