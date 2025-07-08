@@ -42,6 +42,29 @@ add_action('init', function () {
     }
 });
 
+// Redirect users to role-specific dashboards when accessing wp-admin dashboard
+add_action('admin_init', function () {
+    if (!is_admin()) {
+        return;
+    }
+
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if ($screen && $screen->id === 'dashboard') {
+        $user = wp_get_current_user();
+        $roles = (array) $user->roles;
+        if (in_array('artist', $roles, true)) {
+            wp_redirect(site_url('/dashboard-artist'));
+            exit;
+        } elseif (in_array('member', $roles, true)) {
+            wp_redirect(site_url('/dashboard-member'));
+            exit;
+        } elseif (in_array('organization', $roles, true)) {
+            wp_redirect(site_url('/dashboard-organization'));
+            exit;
+        }
+    }
+});
+
 // Load sample widgets for testing
 add_action('init', function () {
     if (class_exists('\\ArtPulse\\Sample\\SampleWidgets')) {
