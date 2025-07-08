@@ -50,4 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+  document.getElementById('toggle-preview')?.addEventListener('click', () => {
+    const preview = document.getElementById('ap-widget-preview-area');
+    if (preview) {
+      preview.style.display = (preview.style.display === 'none') ? 'block' : 'none';
+    }
+  });
 });
