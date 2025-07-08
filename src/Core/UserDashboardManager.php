@@ -646,6 +646,9 @@ class UserDashboardManager
         if ($request->has_param('layout')) {
             $layout_raw = (array) $request->get_param('layout');
             $layout = array_map('sanitize_key', $layout_raw);
+            $layout = array_values(array_unique($layout));
+            $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+            $layout = array_values(array_intersect($layout, $valid_ids));
             update_user_meta($uid, 'ap_dashboard_layout', $layout);
         }
 
