@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Admin\UserLayoutManager;
 
 class DashboardWidgetTools
 {
@@ -31,9 +32,31 @@ class DashboardWidgetTools
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
 
+        $all_roles = wp_roles()->roles;
+        $selected  = isset($_GET['ap_role']) ? sanitize_key($_GET['ap_role']) : (array_key_first($all_roles) ?: '');
+        if (isset($_POST['ap_save_role_layout'])) {
+            check_admin_referer('ap_save_role_layout');
+            $selected = sanitize_key($_POST['ap_role']);
+            $layout   = UserLayoutManager::get_layout(get_current_user_id());
+            UserLayoutManager::save_role_layout($selected, $layout);
+            echo '<div class="notice notice-success"><p>' . esc_html__('Layout saved for role.', 'artpulse') . '</p></div>';
+        }
+
         echo '<div class="wrap">';
         echo '<h3>' . esc_html__('Welcome to the ArtPulse Dashboard', 'artpulse') . '</h3>';
-        echo '<p>' . esc_html__('This is your custom dashboard widget. You can add stats, charts, quick links, etc.', 'artpulse') . '</p>';
+        echo '<form method="post" style="margin-bottom:10px">';
+        wp_nonce_field('ap_save_role_layout');
+        echo '<select name="ap_role">';
+        foreach ($all_roles as $key => $role) {
+            $sel = selected($selected, $key, false);
+            $label = $role['name'] ?? $key;
+            echo "<option value='" . esc_attr($key) . "' $sel>" . esc_html($label) . "</option>";
+        }
+        echo '</select> ';
+        echo '<button type="submit" name="ap_save_role_layout" class="button">' . esc_html__('Save Role Layout', 'artpulse') . '</button>';
+        echo '</form>';
+
+        self::render_dashboard_widgets($selected);
         echo '</div>';
 
         if (isset($_GET['dw_import_success'])) {
@@ -151,14 +174,13 @@ class DashboardWidgetTools
 
     /**
      * Output dashboard widgets for the current user.
+     * Layouts are loaded via UserLayoutManager with
+     * role and registry fallbacks.
      */
     public static function render_dashboard_widgets(string $role): void
     {
         $uid    = get_current_user_id();
-        $layout = get_user_meta($uid, 'ap_dashboard_layout', true);
-        if (!is_array($layout) || empty($layout)) {
-            $layout = self::get_default_layout($role);
-        }
+        $layout = UserLayoutManager::get_layout($uid);
 
         foreach ($layout as $id) {
             $cb = DashboardWidgetRegistry::get_widget_callback($id);
