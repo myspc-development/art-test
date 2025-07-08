@@ -56,7 +56,12 @@ class UserLayoutManagerTest extends TestCase
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
         DashboardWidgetRegistry::register('bar', 'Bar', '', '', '__return_null');
 
-        UserLayoutManager::save_layout(1, ['bar', 'foo', 'foo', 'invalid']);
+        UserLayoutManager::save_layout(1, [
+            ['id' => 'bar'],
+            ['id' => 'foo'],
+            ['id' => 'foo'],
+            'invalid'
+        ]);
 
         $expected_saved = [
             ['id' => 'bar', 'visible' => true],

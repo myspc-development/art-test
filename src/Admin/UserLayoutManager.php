@@ -67,13 +67,6 @@ class UserLayoutManager
      */
     public static function save_layout(int $user_id, array $layout): void
     {
-        if (!empty($layout) && is_string($layout[0] ?? null)) {
-            $layout = array_map(
-                fn($id) => ['id' => $id, 'visible' => true],
-                $layout
-            );
-        }
-
         $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
         $ordered = [];
         foreach ($layout as $item) {
