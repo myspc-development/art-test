@@ -63,7 +63,7 @@ class UpdatesTab
         $info = self::get_repo_info();
         if (empty($info['url'])) {
             if (!$silent) {
-                wp_safe_redirect(add_query_arg('update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
+                wp_safe_redirect(add_query_arg('ap_update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
                 exit;
             }
             return false;
@@ -71,7 +71,7 @@ class UpdatesTab
         [$owner, $repo] = self::parse_repo($info['url']);
         if (empty($owner) || empty($repo)) {
             if (!$silent) {
-                wp_safe_redirect(add_query_arg('update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
+                wp_safe_redirect(add_query_arg('ap_update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
                 exit;
             }
             return false;
@@ -89,7 +89,7 @@ class UpdatesTab
         $response = wp_remote_get($api, $args);
         if (is_wp_error($response)) {
             if (!$silent) {
-                wp_safe_redirect(add_query_arg('update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
+                wp_safe_redirect(add_query_arg('ap_update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
                 exit;
             }
             return false;
@@ -97,7 +97,7 @@ class UpdatesTab
         $body = json_decode(wp_remote_retrieve_body($response), true);
         if (!isset($body['sha'])) {
             if (!$silent) {
-                wp_safe_redirect(add_query_arg('update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
+                wp_safe_redirect(add_query_arg('ap_update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
                 exit;
             }
             return false;
@@ -134,7 +134,7 @@ class UpdatesTab
         [$owner, $repo] = self::parse_repo($info['url']);
         if (empty($owner) || empty($repo)) {
             if (!$silent) {
-                wp_safe_redirect(add_query_arg('update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
+                wp_safe_redirect(add_query_arg('ap_update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
                 exit;
             }
             return;
@@ -153,7 +153,7 @@ class UpdatesTab
         $tmp = download_url($zip, 300, '', $args);
         if (is_wp_error($tmp)) {
             if (!$silent) {
-                wp_safe_redirect(add_query_arg('update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
+                wp_safe_redirect(add_query_arg('ap_update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
                 exit;
             }
             return;
@@ -163,7 +163,7 @@ class UpdatesTab
         unlink($tmp);
         if (is_wp_error($result)) {
             if (!$silent) {
-                wp_safe_redirect(add_query_arg('update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
+                wp_safe_redirect(add_query_arg('ap_update_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
                 exit;
             }
             return;
@@ -171,7 +171,7 @@ class UpdatesTab
         update_option('ap_current_repo_sha', get_option('ap_update_remote_sha'));
         update_option('ap_last_update_time', current_time('mysql'));
         if (!$silent) {
-            wp_safe_redirect(add_query_arg('update_success', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
+            wp_safe_redirect(add_query_arg('ap_update_success', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-settings#updates')));
             exit;
         }
     }
@@ -181,6 +181,15 @@ class UpdatesTab
         if (!current_user_can('manage_options')) {
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
+
+        if (isset($_GET['ap_update_success']) && $_GET['ap_update_success'] === '1') {
+            echo '<div class="notice notice-success"><p>✅ Plugin updated successfully.</p></div>';
+        }
+
+        if (isset($_GET['ap_update_error'])) {
+            echo '<div class="notice notice-error"><p>❌ Update failed: ' . esc_html($_GET['ap_update_error']) . '</p></div>';
+        }
+
         $last_check  = get_option('ap_update_last_check');
         $last_update = get_option('ap_last_update_time');
         ?>
@@ -193,7 +202,10 @@ class UpdatesTab
         <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin-top:10px;">
             <?php wp_nonce_field('ap_run_update'); ?>
             <input type="hidden" name="action" value="ap_run_update" />
-            <button type="submit" class="button button-primary"><?php esc_html_e('Update Now', 'artpulse'); ?></button>
+            <button type="submit" id="ap-update-btn" class="button button-primary">
+                <?php esc_html_e('Update Now', 'artpulse'); ?>
+                <span class="spinner" style="float: none; margin-left: 6px;"></span>
+            </button>
         </form>
         <p style="margin-top:10px;">
             <?php if ($last_check) : ?>

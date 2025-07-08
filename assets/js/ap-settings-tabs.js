@@ -24,4 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
       history.replaceState(null, '', '#' + tab);
     }
   });
+
+  const updateBtn = document.getElementById('ap-update-btn');
+  if (updateBtn) {
+    updateBtn.addEventListener('click', () => {
+      const spinner = updateBtn.querySelector('.spinner');
+      if (spinner) spinner.classList.add('is-active');
+    });
+  }
 });
