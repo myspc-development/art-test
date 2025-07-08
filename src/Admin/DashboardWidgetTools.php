@@ -173,14 +173,13 @@ class DashboardWidgetTools
     }
 
     /**
-     * Output dashboard widgets for the current user.
-     * Layouts are loaded via UserLayoutManager with
-     * role and registry fallbacks.
+     * Output dashboard widgets for a specific role.
+     * Layouts are loaded via UserLayoutManager based on
+     * the provided role.
      */
     public static function render_dashboard_widgets(string $role): void
     {
-        $uid    = get_current_user_id();
-        $layout = UserLayoutManager::get_layout($uid);
+        $layout = UserLayoutManager::get_role_layout($role);
 
         foreach ($layout as $id) {
             $cb = DashboardWidgetRegistry::get_widget_callback($id);
