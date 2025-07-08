@@ -66,7 +66,20 @@ function ap_save_dashboard_widget_config(): void {
 }
 ```
 
-## 4. Per‑User Preferences
+## 4. Widget Layout Editor
+
+Visit **ArtPulse → Settings → Dashboard Widgets** to open the layout editor. The
+page loads `assets/js/admin-dashboard-widgets-editor.js` which renders a React
+interface powered by SortableJS for drag‑and‑drop ordering. Two columns labeled
+**Available** and **Active** let you move widgets between them. Choose a role
+from the drop‑down, arrange the widgets, then click **Save** to store the layout
+in the `ap_dashboard_widget_config` option.
+
+Use the **Reset to Default** button in this editor to restore the saved order for
+the current role. Individual users may also click **Reset Layout** on their
+dashboard to revert to the default configuration described below.
+
+## 5. Per‑User Preferences
 
 The REST endpoint `/artpulse/v1/ap_dashboard_layout` loads and saves each user's preferences. When no user meta exists, the defaults from `ap_dashboard_widget_config` are used:
 
@@ -136,7 +149,7 @@ User meta keys used:
 - `ap_dashboard_layout` – ordered list of widget IDs.
 - `ap_widget_visibility` – array of booleans for each widget.
 
-## 5. Resetting to Defaults
+## 6. Resetting to Defaults
 
 The dashboard includes a **Reset Layout** button. Its click handler clears local storage and posts empty settings so the next load falls back to the defaults:
 
@@ -157,7 +170,7 @@ if (resetBtn) {
 }
 ```
 
-## 6. Widget Settings
+## 7. Widget Settings
 
 Each widget may expose configurable options. The `DashboardWidgetRegistry::register()`
 method accepts a `settings` array describing each field:
