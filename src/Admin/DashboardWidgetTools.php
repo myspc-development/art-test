@@ -8,22 +8,19 @@ class DashboardWidgetTools
 {
     public static function register(): void
     {
-        add_action('wp_dashboard_setup', [self::class, 'add_dashboard_widgets']);
+        add_action('wp_dashboard_setup', function () {
+            if (!current_user_can('manage_options')) {
+                return;
+            }
+
+            wp_add_dashboard_widget(
+                'artpulse_dashboard_widget',
+                __('ArtPulse Dashboard', 'artpulse'),
+                [self::class, 'render']
+            );
+        });
         add_action('admin_post_ap_export_widget_config', [self::class, 'handle_export']);
         add_action('admin_post_ap_import_widget_config', [self::class, 'handle_import']);
-    }
-
-    public static function add_dashboard_widgets(): void
-    {
-        if (!current_user_can('manage_options')) {
-            return;
-        }
-
-        wp_add_dashboard_widget(
-            'artpulse_dashboard_widget',
-            __('ArtPulse Dashboard', 'artpulse'),
-            [self::class, 'render']
-        );
     }
 
     public static function render(): void

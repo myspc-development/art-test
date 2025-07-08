@@ -35,6 +35,30 @@ require_once __DIR__ . '/src/Frontend/ShareButtons.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
 
+add_action('plugins_loaded', function () {
+    \ArtPulse\Admin\DashboardWidgetTools::register();
+
+    \ArtPulse\Core\DashboardWidgetRegistry::register(
+        'hello-world',
+        __('Hello World', 'artpulse'),
+        'smiley',
+        __('Example hello world widget.', 'artpulse'),
+        static function () {
+            return '<p>Hello World!</p>';
+        }
+    );
+
+    \ArtPulse\Core\DashboardWidgetRegistry::register(
+        'php-version',
+        __('PHP Version', 'artpulse'),
+        'admin-site-alt3',
+        __('Displays current PHP version.', 'artpulse'),
+        static function () {
+            return '<p>PHP ' . phpversion() . '</p>';
+        }
+    );
+});
+
 /**
  * Copy bundled Salient templates to the active child theme.
  */
