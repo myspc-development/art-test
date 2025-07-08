@@ -390,21 +390,26 @@ class DashboardWidgetTools
         $layout   = UserLayoutManager::get_layout_for_user($user_id);
         $registry = DashboardWidgetRegistry::get_all();
 
-        foreach ($layout as $item) {
-            $id      = is_array($item) ? $item['id'] : $item;
-            $visible = is_array($item) ? ($item['visible'] ?? true) : true;
-
+        $columns = ['column-1' => [], 'column-2' => []];
+        foreach ($layout as $i => $widget) {
+            $id      = is_array($widget) ? $widget['id'] : $widget;
+            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
             if (!$visible || !isset($registry[$id])) {
                 continue;
             }
+            $column = $i % 2 === 0 ? 'column-1' : 'column-2';
+            $columns[$column][] = $id;
+        }
 
-            $widget = $registry[$id];
-            echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
-            echo '<div class="ap-widget-header drag-handle">&#9776; ' . esc_html($widget['label']) . '</div>';
-            if (isset($widget['callback']) && is_callable($widget['callback'])) {
+        foreach ($columns as $column => $widgets) {
+            echo '<div class="column" id="' . esc_attr($column) . '">';
+            foreach ($widgets as $id) {
+                $widget = $registry[$id];
+                echo '<div class="ap-widget-card postbox" data-id="' . esc_attr($id) . '">';
+                echo '<div class="ap-widget-header handlediv"><h2 class="hndle">&#9776; ' . esc_html($widget['label']) . '</h2></div>';
+                echo '<div class="inside">';
                 call_user_func($widget['callback']);
-            } else {
-                echo '<p><em>Widget "' . esc_html($id) . '" is missing a valid callback.</em></p>';
+                echo '</div></div>';
             }
             echo '</div>';
         }
