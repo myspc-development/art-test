@@ -381,4 +381,33 @@ class DashboardWidgetTools
             echo '</div>';
         }
     }
+
+    /**
+     * Render the dashboard for a user based on their saved layout.
+     */
+    public static function render_user_dashboard(int $user_id): void
+    {
+        $layout   = UserLayoutManager::get_layout_for_user($user_id);
+        $registry = DashboardWidgetRegistry::get_all();
+
+        echo '<div class="ap-widget-grid">';
+        foreach ($layout as $item) {
+            $id      = is_array($item) ? $item['id'] : $item;
+            $visible = is_array($item) ? ($item['visible'] ?? true) : true;
+
+            if (!$visible || !isset($registry[$id])) {
+                continue;
+            }
+
+            $widget = $registry[$id];
+            echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '">';
+            if (isset($widget['callback']) && is_callable($widget['callback'])) {
+                call_user_func($widget['callback']);
+            } else {
+                echo '<p><em>Widget "' . esc_html($id) . '" is missing a valid callback.</em></p>';
+            }
+            echo '</div>';
+        }
+        echo '</div>';
+    }
 }
