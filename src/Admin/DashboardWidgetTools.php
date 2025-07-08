@@ -297,6 +297,10 @@ class DashboardWidgetTools
      */
     public static function render_preview_dashboard(string $role): void
     {
+        if (!current_user_can('manage_options') && !current_user_can($role)) {
+            return;
+        }
+
         $layout  = UserLayoutManager::get_role_layout($role);
 
         echo '<div class="ap-preview-dashboard">';

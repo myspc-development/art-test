@@ -40,6 +40,18 @@ require_once __DIR__ . '/src/Frontend/ShareButtons.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
 
+// Grant custom capabilities to administrators for dashboard access
+add_action('admin_init', function () {
+    $admin = get_role('administrator');
+    if ($admin) {
+        foreach (['artist', 'member', 'organization'] as $cap) {
+            if (!$admin->has_cap($cap)) {
+                $admin->add_cap($cap);
+            }
+        }
+    }
+});
+
 // Handle user dashboard reset
 add_action('init', function () {
     if (isset($_POST['reset_user_layout']) && check_admin_referer('ap_reset_user_layout')) {
@@ -192,6 +204,10 @@ function ap_render_dashboard_preview_page() {
     <?php
 
     $role = $_GET['role'] ?? null;
+
+    if ($role && !current_user_can($role) && !current_user_can('manage_options')) {
+        wp_die('You are not allowed to view this dashboard.');
+    }
 
     if ($role && in_array($role, ['member', 'artist', 'organization'])) {
         echo '<h2>Previewing: ' . ucfirst($role) . ' Dashboard</h2>';
