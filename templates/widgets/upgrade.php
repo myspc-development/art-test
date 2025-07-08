@@ -3,7 +3,7 @@
  * Dashboard widget: Upgrade account.
  */
 ?>
-<div class="dashboard-card" data-widget="upgrade">
+<div class="dashboard-card" data-widget="upgrade" <?php echo $visible ? '' : 'style="display:none"'; ?>>
     <h2 id="upgrade"><?php esc_html_e('Upgrade Your Account','artpulse'); ?></h2>
     <div id="ap-upgrade-options"></div>
     <?php if (!empty($show_forms)) : ?>

@@ -3,7 +3,7 @@
  * Dashboard widget: Membership.
  */
 ?>
-<div class="dashboard-card" data-widget="membership">
+<div class="dashboard-card" data-widget="membership" <?php echo $visible ? '' : 'style="display:none"'; ?>>
     <h2 id="membership"><?php esc_html_e('Subscription Status','artpulse'); ?></h2>
     <div id="ap-membership-info"></div>
     <?php if (!empty($badges)) : ?>
