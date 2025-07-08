@@ -107,9 +107,9 @@ class DashboardWidgetTools
             $visible = $item['visible'] ?? true;
             $cb = DashboardWidgetRegistry::get_widget_callback($id);
             if (is_callable($cb)) {
-                echo '<div id="' . esc_attr($id) . '" class="ap-widget salient-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+                echo '<div class="ap-widget salient-widget-card' . ($visible ? '' : ' is-hidden') . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
                 echo '<div class="widget-handle widget-title">' . esc_html($defs_by_id[$id]['name'] ?? $id);
-                echo ' <button type="button" class="widget-toggle button small" title="Toggle Visibility">👁</button>';
+                echo ' <button type="button" class="widget-toggle" title="Toggle Visibility" data-visible="' . ($visible ? '1' : '0') . '">' . ($visible ? '👁' : '🚫') . '</button>';
                 echo ' <button type="button" class="widget-remove button small" title="Remove Widget">❌</button>';
                 echo '</div>';
                 if ($visible) {
@@ -258,6 +258,27 @@ class DashboardWidgetTools
 
         wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=artpulse-dashboard-widgets')));
         exit;
+    }
+
+    /**
+     * Render widget selection cards for the Add Widget modal.
+     *
+     * @param array $available_widgets
+     */
+    public static function render_add_widget_modal(array $available_widgets): void
+    {
+        foreach ($available_widgets as $id => $def) {
+            echo '<div class="widget-card" ' .
+                'data-id="' . esc_attr($id) . '" ' .
+                'data-name="' . esc_attr($def['label']) . '" ' .
+                'data-desc="' . esc_attr($def['description']) . '" ' .
+                'data-category="' . esc_attr($def['category'] ?? '') . '">';
+
+            echo '<span class="widget-icon">' . esc_html($def['icon']) . '</span>';
+            echo '<strong class="widget-label">' . esc_html($def['label']) . '</strong>';
+            echo '<p class="widget-description">' . esc_html($def['description']) . '</p>';
+            echo '</div>';
+        }
     }
 
     /**

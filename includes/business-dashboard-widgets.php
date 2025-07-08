@@ -32,7 +32,10 @@ function ap_register_business_dashboard_widgets(): void
         'chart-bar',
         __('Overall site traffic and engagement metrics.', 'artpulse'),
         'ap_widget_site_stats',
-        'manage_options'
+        [
+            'category' => 'analytics',
+            'roles'    => ['administrator'],
+        ]
     );
 
     DashboardWidgetRegistry::register(
@@ -41,7 +44,10 @@ function ap_register_business_dashboard_widgets(): void
         'megaphone',
         __('Recent leads collected from forms.', 'artpulse'),
         'ap_widget_lead_capture',
-        'manage_options'
+        [
+            'category' => 'marketing',
+            'roles'    => ['administrator'],
+        ]
     );
 
     DashboardWidgetRegistry::register(
@@ -50,7 +56,10 @@ function ap_register_business_dashboard_widgets(): void
         'chart-pie',
         __('Sales totals for the selected period.', 'artpulse'),
         'ap_widget_sales_summary',
-        'manage_options'
+        [
+            'category' => 'commerce',
+            'roles'    => ['administrator'],
+        ]
     );
 }
 add_action('artpulse_register_dashboard_widget', 'ap_register_business_dashboard_widgets');

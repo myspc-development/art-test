@@ -25,8 +25,9 @@ class WidgetSettingsRestControllerTest extends \WP_UnitTestCase
             'star',
             'desc',
             '__return_null',
-            'read',
-            [ ['key' => 'limit', 'type' => 'number', 'default' => 5] ]
+            [
+                'settings' => [ ['key' => 'limit', 'type' => 'number', 'default' => 5] ]
+            ]
         );
         WidgetSettingsRestController::register();
         do_action('rest_api_init');

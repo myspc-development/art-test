@@ -10,17 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Toggle widget visibility
   document.querySelectorAll('.widget-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
-      const card = btn.closest('.ap-widget');
-      const visible = card.dataset.visible === '1';
-      card.dataset.visible = visible ? '0' : '1';
-      btn.textContent = visible ? '👁 Show' : '🙈 Hide';
-      const content = card.querySelector('.widget-content');
-      if (content) content.style.display = visible ? 'none' : 'block';
-      if (!visible) {
-        card.classList.add('is-hidden');
-      } else {
-        card.classList.remove('is-hidden');
-      }
+      const widget = btn.closest('.ap-widget');
+      const visible = widget.dataset.visible === '1';
+      widget.dataset.visible = visible ? '0' : '1';
+      btn.textContent = visible ? '🚫' : '👁';
+      widget.classList.toggle('is-hidden', !visible);
     });
   });
 
