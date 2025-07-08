@@ -12,54 +12,12 @@ class UserLayoutManager
     public const ROLE_KEY_PREFIX = 'ap_dashboard_layout_role_';
     /**
      * Get a user's widget layout with fallbacks.
+     *
+     * @deprecated Use get_layout_for_user() instead.
      */
     public static function get_layout(int $user_id): array
     {
-        $layout = get_user_meta($user_id, self::META_KEY, true);
-
-        if (is_array($layout) && !empty($layout)) {
-            // Convert legacy flat array format.
-            if (is_string($layout[0] ?? null)) {
-                $layout = array_map(
-                    fn($id) => ['id' => sanitize_key($id), 'visible' => true],
-                    $layout
-                );
-            }
-
-            $valid  = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-            $ordered = [];
-            foreach ($layout as $item) {
-                if (is_array($item) && isset($item['id'])) {
-                    $id  = sanitize_key($item['id']);
-                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
-                } else {
-                    $id  = sanitize_key($item);
-                    $vis = true;
-                }
-                if (in_array($id, $valid, true)) {
-                    $ordered[] = ['id' => $id, 'visible' => $vis];
-                }
-            }
-            if ($ordered) {
-                return $ordered;
-            }
-        }
-
-        $user = get_userdata($user_id);
-        if ($user && !empty($user->roles)) {
-            foreach ($user->roles as $role) {
-                $role_layout = self::get_role_layout($role);
-                if ($role_layout) {
-                    return $role_layout;
-                }
-            }
-        }
-
-        $defs = DashboardWidgetRegistry::get_definitions();
-        return array_map(
-            fn($def) => ['id' => $def['id'], 'visible' => true],
-            $defs
-        );
+        return self::get_layout_for_user($user_id);
     }
 
     /**
@@ -158,4 +116,46 @@ class UserLayoutManager
         }
         return false;
     }
+
+    /**
+     * Retrieve the raw dashboard layout for a user.
+     */
+    public static function get_user_layout(int $user_id): array
+    {
+        $layout = get_user_meta($user_id, self::META_KEY, true);
+        return is_array($layout) ? $layout : [];
+    }
+
+    /**
+     * Determine a user's dashboard layout with fallbacks.
+     */
+    public static function get_layout_for_user(int $user_id): array
+    {
+        $layout = self::get_user_layout($user_id);
+        if (!empty($layout)) {
+            return $layout;
+        }
+
+        $role = self::get_primary_role($user_id);
+        $layout = self::get_role_layout($role);
+        if (!empty($layout)) {
+            return $layout;
+        }
+
+        $defs = DashboardWidgetRegistry::get_definitions();
+        return array_map(
+            fn($def) => ['id' => $def['id'], 'visible' => true],
+            $defs
+        );
+    }
+
+    /**
+     * Get a user's primary role.
+     */
+    private static function get_primary_role(int $user_id): string
+    {
+        $user = get_userdata($user_id);
+        return $user && !empty($user->roles) ? sanitize_key($user->roles[0]) : 'subscriber';
+    }
+
 }

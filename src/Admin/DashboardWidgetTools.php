@@ -159,25 +159,7 @@ class DashboardWidgetTools
         echo '<button type="button" id="toggle-preview" class="button">Toggle Preview</button>';
         echo '<h3 style="margin-top: 40px;">Preview Dashboard for ' . esc_html(ucfirst($selected)) . '</h3>';
         echo '<div id="ap-widget-preview-area" class="ap-widget-preview-wrap">';
-        $definitions = DashboardWidgetRegistry::get_definitions();
-        foreach ($current as $widget) {
-            $id = is_array($widget) ? $widget['id'] : $widget;
-            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
-
-            if (!$visible || !isset($definitions[$id])) {
-                continue;
-            }
-            if (!isset($definitions[$id]['callback']) || !is_callable($definitions[$id]['callback'])) {
-                continue;
-            }
-
-            echo '<div class="ap-widget-preview-card">';
-            echo '<h4>' . esc_html($definitions[$id]['name']) . '</h4>';
-            echo '<div class="widget-preview-box">';
-            call_user_func($definitions[$id]['callback']);
-            echo '</div>';
-            echo '</div>';
-        }
+        self::render_preview_dashboard();
         echo '</div>';
 
         echo '</div>';
@@ -294,6 +276,42 @@ class DashboardWidgetTools
         ob_start();
         call_user_func($cb);
         return ob_get_clean();
+    }
+
+    /**
+     * Render a preview dashboard for the current user.
+     */
+    public static function render_preview_dashboard(): void
+    {
+        $user_id = get_current_user_id();
+        $layout  = UserLayoutManager::get_layout_for_user($user_id);
+
+        echo '<div class="ap-preview-dashboard">';
+        $defs = DashboardWidgetRegistry::get_definitions();
+        foreach ($layout as $widget) {
+            $id = is_array($widget) ? $widget['id'] : $widget;
+            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
+
+            if (!$visible || !isset($defs[$id])) {
+                continue;
+            }
+
+            $cb = DashboardWidgetRegistry::get_widget_callback($id);
+            if (!is_callable($cb)) {
+                continue;
+            }
+
+            echo '<div class="ap-preview-widget">';
+            echo '<h4>' . esc_html($defs[$id]['name']) . '</h4>';
+            echo '<div class="ap-preview-content">';
+            try {
+                call_user_func($cb);
+            } catch (\Throwable $e) {
+                echo '<em>Error loading widget.</em>';
+            }
+            echo '</div></div>';
+        }
+        echo '</div>';
     }
 
     /**

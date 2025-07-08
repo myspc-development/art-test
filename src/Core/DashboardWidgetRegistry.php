@@ -53,6 +53,24 @@ class DashboardWidgetRegistry
     }
 
     /**
+     * Return all registered widgets.
+     *
+     * @return array<string,array>
+     */
+    public static function get_all(): array
+    {
+        return self::$widgets;
+    }
+
+    /**
+     * Get a single widget configuration by ID.
+     */
+    public static function get(string $id): ?array
+    {
+        return self::$widgets[$id] ?? null;
+    }
+
+    /**
      * Get widget callbacks allowed for a user role.
      */
     public static function get_widgets(string $user_role): array
