@@ -19,8 +19,25 @@ class DashboardWidgetTools
                 [self::class, 'render']
             );
         });
+        add_action('admin_menu', function () {
+            add_submenu_page(
+                'index.php',
+                'Dashboard Layout Help',
+                'Layout Help',
+                'manage_options',
+                'dashboard-layout-help',
+                [self::class, 'render_help_page']
+            );
+        });
         add_action('admin_post_ap_export_widget_config', [self::class, 'handle_export']);
         add_action('admin_post_ap_import_widget_config', [self::class, 'handle_import']);
+    }
+
+    public static function render_help_page(): void
+    {
+        echo '<div class="wrap"><h1>Dashboard Layout Help</h1>';
+        include plugin_dir_path(__FILE__) . '/partials/help-guide.php';
+        echo '</div>';
     }
 
     public static function render(): void
@@ -59,6 +76,7 @@ class DashboardWidgetTools
         $unused   = array_diff($all_ids, $current_ids);
 
         echo '<div class="wrap">';
+        echo '<p><a href="' . admin_url('index.php?page=dashboard-layout-help') . '" class="button">📘 View Help Guide</a></p>';
         echo '<h3>' . esc_html__('Dashboard Widget Manager', 'artpulse') . '</h3>';
         echo '<form method="post" id="widget-layout-form" style="margin-bottom:10px">';
         wp_nonce_field('ap_save_role_layout');
