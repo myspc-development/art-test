@@ -44,6 +44,14 @@ class UserLayoutManager
     }
 
     /**
+     * Alias for save_layout for backward compatibility.
+     */
+    public static function save_user_layout(int $user_id, array $layout): void
+    {
+        self::save_layout($user_id, $layout);
+    }
+
+    /**
      * Get the default layout for a role.
      */
     public static function get_role_layout(string $role): array
