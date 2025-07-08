@@ -335,9 +335,9 @@ add_action('admin_enqueue_scripts', function ($hook) {
     if (strpos($hook, 'artpulse-dashboard') !== false) {
         wp_enqueue_script(
             'ap-dashboard-editor',
-            plugin_dir_url(__FILE__) . 'assets/dist/dashboard-editor.js',
+            plugin_dir_url(__FILE__) . 'assets/dist/admin-dashboard-widgets-editor.js',
             ['wp-element', 'wp-api-fetch'],
-            filemtime(plugin_dir_path(__FILE__) . 'assets/dist/dashboard-editor.js'),
+            filemtime(plugin_dir_path(__FILE__) . 'assets/dist/admin-dashboard-widgets-editor.js'),
             true
         );
     }
