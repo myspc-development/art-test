@@ -64,6 +64,19 @@ body[data-theme="dark"] {
   to { transform: rotate(360deg); }
 }
 
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #ccc;
+  border-top: 2px solid #333;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .screen-reader-text {
   position: absolute;
   width: 1px;
@@ -904,6 +917,10 @@ select.ap-input {
   border-radius: var(--ap-border-radius);
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   margin-bottom: var(--ap-space-medium);
+}
+.ap-widget.is-hidden {
+  opacity: 0.4;
+  background-image: repeating-linear-gradient(45deg, #eee, #eee 10px, #fff 10px, #fff 20px);
 }
 
 .ap-widget h2,

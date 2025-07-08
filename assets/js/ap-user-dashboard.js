@@ -19,7 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
   toggles.forEach(cb => {
     cb.addEventListener('change', () => {
       const target = document.querySelector(`[data-widget="${cb.value}"]`);
-      if (target) target.style.display = cb.checked ? '' : 'none';
+      if (target) {
+        target.style.display = cb.checked ? '' : 'none';
+        if (!cb.checked) {
+          target.classList.add('is-hidden');
+        } else {
+          target.classList.remove('is-hidden');
+        }
+      }
       saveVisibility();
     });
   });
@@ -937,7 +944,14 @@ function applySavedVisibility(vis) {
     const widget = document.querySelector(`[data-widget="${id}"]`);
     const cb = document.querySelector(`#ap-widget-toggles input[value="${id}"]`);
     if (cb) cb.checked = settings[id];
-    if (widget) widget.style.display = settings[id] ? '' : 'none';
+    if (widget) {
+      widget.style.display = settings[id] ? '' : 'none';
+      if (!settings[id]) {
+        widget.classList.add('is-hidden');
+      } else {
+        widget.classList.remove('is-hidden');
+      }
+    }
   });
 }
 
