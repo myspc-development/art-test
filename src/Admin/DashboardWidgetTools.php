@@ -124,7 +124,7 @@ class DashboardWidgetTools
 
         echo '<div class="ap-add-widget" style="margin-top:15px;">';
         echo '<h3>' . esc_html__('Add Widget', 'artpulse') . '</h3>';
-        echo '<input type="text" id="widget-search" placeholder="Search widgets..." class="regular-text" style="margin-bottom: 10px;">';
+        echo '<input type="text" id="ap-widget-search" placeholder="Search widgets..." oninput="apSearchWidgets(this.value)" class="regular-text" style="margin-bottom: 10px;">';
         $categories = array_unique(array_filter(array_column($defs, 'category')));
         if ($categories) {
             echo '<select id="ap-widget-category-filter" onchange="apFilterWidgetsByCategory(this.value)" style="margin-left:5px;">';
@@ -144,7 +144,9 @@ class DashboardWidgetTools
                 $preview  = self::render_widget_preview($def['id']);
                 $icon     = esc_html($def['icon']);
                 $category = esc_attr($def['category'] ?? '');
-                echo '<li class="widget-card" data-category="' . $category . '"><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> ';
+                $name_attr = esc_attr($def['name']);
+                $desc_attr = esc_attr($def['description']);
+                echo '<li class="widget-card" data-category="' . $category . '" data-name="' . $name_attr . '" data-desc="' . $desc_attr . '"><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> ';
                 echo '<span class="widget-icon">' . $icon . '</span> <strong>' . esc_html($def['name']) . '</strong>';
                 echo '<div class="widget-preview-box">' . $preview . '</div>';
                 echo '<small>' . esc_html($def['description']) . '</small></label></li>';

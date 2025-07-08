@@ -56,32 +56,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const search = document.getElementById('widget-search');
   const categoryFilter = document.getElementById('ap-widget-category-filter');
 
   const saveBtn = document.getElementById('save-layout-btn');
 
   window.apFilterWidgetsByCategory = function(cat) {
-    document.querySelectorAll('.widget-card').forEach(card => {
-      card.style.display = (!cat || card.dataset.category === cat) ? 'block' : 'none';
-    });
+    if (categoryFilter) {
+      categoryFilter.value = cat;
+    }
+    const query = document.getElementById('ap-widget-search')?.value || '';
+    apSearchWidgets(query);
   };
 
-  function filterWidgets() {
-    const textFilter = search ? search.value.toLowerCase() : '';
-    const catFilter = categoryFilter ? categoryFilter.value : '';
-    document.querySelectorAll('#add-widget-panel li').forEach(li => {
-      const text = li.textContent.toLowerCase();
-      const cat = li.dataset.category || '';
-      const matchText = text.includes(textFilter);
-      const matchCat = !catFilter || cat === catFilter;
-      li.style.display = matchText && matchCat ? '' : 'none';
-    });
-  }
-
-  if (search) {
-    search.addEventListener('input', filterWidgets);
-  }
+  document.getElementById('ap-widget-search')?.addEventListener('input', e => {
+    apSearchWidgets(e.target.value);
+  });
   document.getElementById('toggle-preview')?.addEventListener('click', () => {
     const preview = document.getElementById('ap-widget-preview-area');
     if (preview) {
@@ -89,3 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+function apSearchWidgets(query) {
+  query = (query || '').toLowerCase();
+  const cat = document.getElementById('ap-widget-category-filter')?.value || '';
+  document.querySelectorAll('.widget-card').forEach(card => {
+    const name = (card.dataset.name || '').toLowerCase();
+    const desc = (card.dataset.desc || '').toLowerCase();
+    const matchText = name.includes(query) || desc.includes(query);
+    const matchCat = !cat || card.dataset.category === cat;
+    card.style.display = matchText && matchCat ? 'block' : 'none';
+  });
+}
