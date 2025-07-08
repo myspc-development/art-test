@@ -407,4 +407,33 @@ class DashboardWidgetTools
             echo '</div></div>';
         }
     }
+
+    /**
+     * Render the dashboard layout for a specific role without
+     * requiring a user account switch.
+     */
+    public static function render_role_dashboard_preview(string $role): void
+    {
+        $registry = \ArtPulse\Core\DashboardWidgetRegistry::get_all();
+        $layout   = \ArtPulse\Admin\RoleLayoutManager::get_layout_for_role($role);
+
+        foreach ($layout as $widget) {
+            $id      = is_array($widget) ? $widget['id'] : $widget;
+            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
+
+            if (!$visible || !isset($registry[$id])) {
+                continue;
+            }
+
+            $w = $registry[$id];
+
+            echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+            echo '<div class="ap-widget-header drag-handle">';
+            echo '<span class="widget-title">' . esc_html($w['label']) . '</span>';
+            echo '</div>';
+            echo '<div class="inside">';
+            call_user_func($w['callback']);
+            echo '</div></div>';
+        }
+    }
 }
