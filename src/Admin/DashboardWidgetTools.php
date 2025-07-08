@@ -390,7 +390,7 @@ class DashboardWidgetTools
         $layout   = UserLayoutManager::get_layout_for_user($user_id);
         $registry = DashboardWidgetRegistry::get_all();
 
-        echo '<div class="ap-widget-grid">';
+        echo '<div id="ap-user-dashboard">';
         foreach ($layout as $item) {
             $id      = is_array($item) ? $item['id'] : $item;
             $visible = is_array($item) ? ($item['visible'] ?? true) : true;
@@ -400,7 +400,8 @@ class DashboardWidgetTools
             }
 
             $widget = $registry[$id];
-            echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '">';
+            echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+            echo '<div class="ap-widget-header drag-handle">&#9776; ' . esc_html($widget['label']) . '</div>';
             if (isset($widget['callback']) && is_callable($widget['callback'])) {
                 call_user_func($widget['callback']);
             } else {

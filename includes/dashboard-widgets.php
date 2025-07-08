@@ -19,6 +19,7 @@ add_action('wp_ajax_ap_save_dashboard_widget_config', 'ap_save_dashboard_widget_
 
 add_action('wp_ajax_ap_save_widget_layout', 'ap_save_widget_layout');
 add_action('wp_ajax_ap_save_role_layout', 'ap_save_role_layout');
+add_action('wp_ajax_ap_save_user_layout', 'ap_save_user_layout');
 
 function ap_save_dashboard_widget_config(): void
 {
@@ -96,6 +97,22 @@ function ap_save_role_layout(): void
 
     \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $layout);
     wp_send_json_success(['saved' => true]);
+}
+
+function ap_save_user_layout(): void
+{
+    check_ajax_referer('ap_save_user_layout', 'nonce');
+
+    $input   = json_decode(file_get_contents('php://input'), true);
+    $layout  = $input['layout'] ?? [];
+    $user_id = get_current_user_id();
+
+    if ($user_id && is_array($layout)) {
+        \ArtPulse\Admin\UserLayoutManager::save_user_layout($user_id, $layout);
+        wp_send_json_success(['message' => 'Layout saved']);
+    }
+
+    wp_send_json_error(['message' => 'Invalid data']);
 }
 
 function ap_load_dashboard_template(string $template, array $vars = []): string
