@@ -52,21 +52,25 @@ function ap_save_widget_layout(): void
     $uid = get_current_user_id();
 
     if (isset($_POST['layout'])) {
-        $layout_raw = (array) $_POST['layout'];
-        $layout = array_map('sanitize_key', $layout_raw);
-        $layout = array_values(array_unique($layout));
-        $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-        $layout = array_values(array_intersect($layout, $valid_ids));
-        update_user_meta($uid, 'ap_dashboard_layout', $layout);
-    }
-
-    if (isset($_POST['visibility'])) {
-        $vis_raw = (array) $_POST['visibility'];
-        $vis = [];
-        foreach ($vis_raw as $key => $val) {
-            $vis[sanitize_key($key)] = filter_var($val, FILTER_VALIDATE_BOOLEAN);
+        $layout_raw = $_POST['layout'];
+        if (is_string($layout_raw)) {
+            $layout_raw = json_decode($layout_raw, true);
         }
-        update_user_meta($uid, 'ap_widget_visibility', $vis);
+        $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+        $ordered = [];
+        foreach ((array) $layout_raw as $item) {
+            if (is_array($item) && isset($item['id'])) {
+                $id  = sanitize_key($item['id']);
+                $vis = isset($item['visible']) ? filter_var($item['visible'], FILTER_VALIDATE_BOOLEAN) : true;
+            } else {
+                $id  = sanitize_key($item);
+                $vis = true;
+            }
+            if (in_array($id, $valid_ids, true)) {
+                $ordered[] = ['id' => $id, 'visible' => $vis];
+            }
+        }
+        update_user_meta($uid, 'ap_dashboard_layout', $ordered);
     }
 
     wp_send_json_success(['saved' => true]);

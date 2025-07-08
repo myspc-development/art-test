@@ -101,19 +101,25 @@ class DashboardWidgetTools
         }
         echo '</form>';
 
-        echo '<div id="custom-widgets">';
+        echo '<div id="ap-widget-list">';
         foreach ($current as $item) {
             $id = $item['id'];
             $visible = $item['visible'] ?? true;
             $cb = DashboardWidgetRegistry::get_widget_callback($id);
             if (is_callable($cb)) {
-                echo '<div class="ap-widget salient-widget-card' . ($visible ? '' : ' is-hidden') . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
-                echo '<div class="widget-handle widget-title">' . esc_html($defs_by_id[$id]['name'] ?? $id);
-                echo ' <button type="button" class="widget-toggle" title="Show or hide this widget" aria-label="Toggle Widget Visibility" data-visible="' . ($visible ? '1' : '0') . '">' . ($visible ? '👁️' : '🚫') . '</button>';
-                echo ' <button type="button" class="widget-remove button small" title="Remove Widget">❌</button>';
-                echo '</div>';
+                $icon = esc_html($defs_by_id[$id]['icon'] ?? '');
+                $title = esc_html($defs_by_id[$id]['name'] ?? $id);
+                echo '<div class="ap-widget-card' . ($visible ? '' : ' is-hidden') . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+                echo '<div class="ap-widget-header">';
+                echo '<span class="drag-handle" title="Drag to reorder">&#9776;</span>';
+                echo '<span class="ap-widget-icon">' . $icon . '</span>';
+                echo '<span class="ap-widget-title">' . $title . '</span>';
+                echo '<div class="ap-widget-controls">';
+                echo '<label class="toggle-switch"><input type="checkbox" class="widget-toggle"' . checked($visible, true, false) . ' /><span class="slider"></span></label>';
+                echo '<button type="button" class="widget-remove" title="Remove Widget">&#x2716;</button>';
+                echo '</div></div>';
                 if ($visible) {
-                    echo '<div class="widget-content">';
+                    echo '<div class="ap-widget-content">';
                     echo call_user_func($cb);
                     echo '</div>';
                 }

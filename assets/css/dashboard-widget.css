@@ -17,6 +17,15 @@
   cursor: pointer;
 }
 
+.drag-handle {
+  cursor: move;
+  padding-right: 8px;
+  opacity: 0.6;
+}
+.drag-handle:hover {
+  opacity: 1;
+}
+
 .widget-handle {
     position: absolute;
     top: 0.5rem;
@@ -108,6 +117,45 @@
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 20px;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle-switch .slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 20px;
+}
+.toggle-switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+.toggle-switch input:checked + .slider {
+  background-color: #2271b1;
+}
+.toggle-switch input:checked + .slider:before {
+  transform: translateX(18px);
 }
 
 .ap-preview-empty {
