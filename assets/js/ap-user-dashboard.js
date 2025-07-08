@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = document.querySelector(`[data-widget="${cb.value}"]`);
       if (target) {
         target.style.display = cb.checked ? '' : 'none';
+        target.dataset.visible = cb.checked ? '1' : '0';
         if (!cb.checked) {
           target.classList.add('is-hidden');
         } else {
@@ -895,12 +896,15 @@ async function renderEventAnalyticsChart() {
 function saveLayoutOrder() {
   const area = document.getElementById('ap-dashboard-widgets');
   if (!area) return;
-  const ids = Array.from(area.querySelectorAll('[data-widget]')).map(w => w.dataset.widget);
-  localStorage.setItem('apDashboardLayout', JSON.stringify(ids));
+  const layout = Array.from(area.querySelectorAll('[data-widget]')).map(w => ({
+    id: w.dataset.widget,
+    visible: w.dataset.visible !== '0'
+  }));
+  localStorage.setItem('apDashboardLayout', JSON.stringify(layout));
   fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap_dashboard_layout`, {
     method: 'POST',
     headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ layout: ids })
+    body: JSON.stringify({ layout })
   });
 }
 
@@ -914,9 +918,17 @@ function applySavedLayout(order) {
     try { layout = JSON.parse(saved); } catch (e) { return; }
   }
   if (!Array.isArray(layout)) return;
-  layout.forEach(id => {
+  layout.forEach(item => {
+    const id = typeof item === 'string' ? item : item.id;
     const el = area.querySelector(`[data-widget="${id}"]`);
-    if (el) area.appendChild(el);
+    if (el) {
+      area.appendChild(el);
+      if (item && typeof item === 'object') {
+        el.dataset.visible = item.visible ? '1' : '0';
+      } else {
+        el.dataset.visible = '1';
+      }
+    }
   });
 }
 
@@ -946,6 +958,7 @@ function applySavedVisibility(vis) {
     if (cb) cb.checked = settings[id];
     if (widget) {
       widget.style.display = settings[id] ? '' : 'none';
+      widget.dataset.visible = settings[id] ? '1' : '0';
       if (!settings[id]) {
         widget.classList.add('is-hidden');
       } else {

@@ -40,7 +40,7 @@ use ArtPulse\Community\FavoritesManager;
         <fieldset id="ap-widget-toggles">
             <legend class="screen-reader-text"><?php esc_html_e('Toggle widgets', 'artpulse'); ?></legend>
             <?php foreach ($widgets as $wid => $_cb) : ?>
-            <label><input type="checkbox" value="<?php echo esc_attr($wid); ?>" <?php checked($visibility[$wid] ?? true); ?>> <?php echo esc_html(ucwords(str_replace('-', ' ', $wid))); ?></label>
+            <label><input type="checkbox" value="<?php echo esc_attr($wid); ?>" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility[$wid] ?? true); ?>> <?php echo esc_html(ucwords(str_replace('-', ' ', $wid))); ?></label>
             <?php endforeach; ?>
         </fieldset>
         </details>
