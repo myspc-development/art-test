@@ -161,8 +161,10 @@ class UpdatesTab
             return;
         }
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
-        $result = unzip_file($tmp, $plugin_dir);
-        $files = [];
+        $temp_dir   = trailingslashit(get_temp_dir()) . 'ap_update_' . wp_generate_password(8, false);
+        wp_mkdir_p($temp_dir);
+        $result = unzip_file($tmp, $temp_dir);
+        $files  = [];
         if (!is_wp_error($result)) {
             $zip = new \ZipArchive();
             if ($zip->open($tmp) === true) {
@@ -176,6 +178,15 @@ class UpdatesTab
                 $zip->close();
             }
         }
+        if (!is_wp_error($result)) {
+            $entries = array_values(array_filter(scandir($temp_dir), function ($e) { return $e !== '.' && $e !== '..'; }));
+            $src = $temp_dir;
+            if (count($entries) === 1 && is_dir($temp_dir . '/' . $entries[0])) {
+                $src = $temp_dir . '/' . $entries[0];
+            }
+            self::copy_recursive($src, $plugin_dir);
+        }
+        self::delete_recursive($temp_dir);
         unlink($tmp);
         if (is_wp_error($result)) {
             if (!$silent) {
@@ -240,5 +251,42 @@ class UpdatesTab
             <?php endif; ?>
         </p>
         <?php
+    }
+
+    private static function copy_recursive(string $src, string $dest): void
+    {
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($src, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach ($iterator as $item) {
+            $target = $dest . '/' . $iterator->getSubPathName();
+            if ($item->isDir()) {
+                if (!is_dir($target)) {
+                    mkdir($target, 0755, true);
+                }
+            } else {
+                copy($item->getPathname(), $target);
+            }
+        }
+    }
+
+    private static function delete_recursive(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+        $items = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($items as $item) {
+            if ($item->isDir()) {
+                rmdir($item->getPathname());
+            } else {
+                unlink($item->getPathname());
+            }
+        }
+        rmdir($dir);
     }
 }

@@ -327,9 +327,13 @@ Portfolio posts mirror this functionality. When a portfolio item contains multip
 
 Artist, artwork, event **and organization** posts automatically create or update a corresponding portfolio entry when saved. These portfolio items are used by the directory shortcodes. Deleting the source post removes the portfolio entry as well.
 
+## Plugin Updates
+
+Upload new versions over the existing `artpulse-management` folder or use the **Updates** tab inside Settings. Since uninstall hooks only run when deleting the plugin, all options and data remain intact during a standard upgrade. The **Keep Data on Uninstall** setting protects content if you ever remove the plugin entirely. Export a configuration backup from the **Config Backup** tab before updating so you can easily restore the options if needed.
+
 ## Uninstall Cleanup
 
-When the plugin is uninstalled through the WordPress admin, all tables created by ArtPulse are removed automatically. Administrators can enable **Keep Data on Uninstall** under Settings → General to preserve these tables and the `artpulse_settings` option. Developers may also define `ARTPULSE_REMOVE_DATA_ON_UNINSTALL` in `wp-config.php` to force removal or preservation. When data removal is enabled, the following tables are dropped:
+When the plugin is uninstalled through the WordPress admin, all tables created by ArtPulse are removed automatically. Administrators can enable **Keep Data on Uninstall** under Settings → General to preserve these tables and the `artpulse_settings` option. This toggle now defaults to **on** so data survives a reinstall. Developers may also define `ARTPULSE_REMOVE_DATA_ON_UNINSTALL` in `wp-config.php` to force removal or preservation. When data removal is enabled, the following tables are dropped:
 
 - `{prefix}artpulse_data`
 - `{prefix}ap_favorites`
