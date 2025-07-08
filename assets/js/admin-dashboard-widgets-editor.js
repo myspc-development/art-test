@@ -488,4 +488,4 @@
     }
   });
 
-})(React, client);
+})(React, ReactDOM);
