@@ -96,6 +96,9 @@ function ap_save_role_layout(): void
     }
 
     \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $layout);
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log('Saved role layout for ' . $role . ': ' . wp_json_encode($layout));
+    }
     wp_send_json_success(['saved' => true]);
 }
 
