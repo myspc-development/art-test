@@ -351,14 +351,15 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 Install Composer dependencies and WordPress PHPUnit tools:
 
 ```bash
-composer install
+composer install    # PHP libraries
 ```
 
-Install Node packages used for bundling JavaScript and compiling SCSS.
-The styles now integrate with the Salient theme and WPBakery modules:
+Install Node packages used for bundling JavaScript and compiling SCSS, then
+build the bundled assets:
 
 ```bash
 npm install
+npm run build
 ```
 
 The `scripts/` directory stores optional scaffolding and release helpers
@@ -371,11 +372,13 @@ setup script to fetch WordPress and install dependencies:
 ```bash
 bash scripts/setup-env.sh
 ```
+This script downloads WordPress and installs Composer dependencies. When the
+`CI` environment variable is present it runs `composer install` with non‑interactive options, making it suitable for automated pipelines.
 
 Run the test suite and coding standards checks with:
 
 ```bash
-composer test
+vendor/bin/phpunit
 composer sniff
 ```
 
@@ -401,7 +404,7 @@ The zip file is placed in the `release/` directory.
 
 Database credentials for the WordPress test suite must be supplied via
 environment variables. Define these before running `bash scripts/setup-env.sh`
-or `composer test`:
+or `vendor/bin/phpunit`:
 
 - `DB_NAME` – name of the test database
 - `DB_USER` – database user

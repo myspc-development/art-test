@@ -21,8 +21,13 @@ else
     echo "WordPress already present in $WORDPRESS_DIR"
 fi
 
-echo "Installing Composer dependencies..."
-composer install
+if [ -n "$CI" ]; then
+    echo "CI detected: installing Composer dependencies..."
+    composer install --prefer-dist --no-interaction --no-progress
+else
+    echo "Installing Composer dependencies..."
+    composer install
+fi
 
 echo "Installing Node dependencies..."
 npm install

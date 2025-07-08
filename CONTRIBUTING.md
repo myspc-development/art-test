@@ -1,12 +1,16 @@
 # Contributing
 
-Thank you for your interest in contributing to ArtPulse. Development requires **PHP 8.2 or higher** and WordPress 6.8. The following commands install dependencies and bootstrap the local environment.
+Thank you for your interest in contributing to ArtPulse. Development requires **PHP 8.2 or higher** and WordPress 6.8. To get started clone the repository and install the PHP and Node dependencies:
 
 ```bash
-composer install
-npm install
+composer install       # install PHP libraries
+npm install            # install Node packages
+npm run build          # compile JavaScript assets
 bash scripts/setup-env.sh
 ```
+The `setup-env.sh` script will also install Composer dependencies when the
+`CI` environment variable is present, allowing automated test pipelines to run
+without a separate install step.
 
 `setup-tests.sh` relies on database credentials supplied via environment
 variables. Export these variables or create a `.env` file before running the
@@ -22,7 +26,7 @@ DB_HOST=localhost
 Run the automated test suite and coding standards checks with:
 
 ```bash
-composer test
+vendor/bin/phpunit
 composer sniff
 ```
 
