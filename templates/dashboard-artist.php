@@ -1,7 +1,7 @@
 <?php
 use ArtPulse\Admin\DashboardWidgetTools;
 
-if (!current_user_can('artist') && !current_user_can('manage_options')) {
+if (!ap_user_can_edit_layout('artist')) {
     wp_die('Access denied');
 }
 

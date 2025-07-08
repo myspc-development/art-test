@@ -9,7 +9,7 @@ add_action('wp_enqueue_scripts', function () {
     }
 });
 
-if (!current_user_can('member') && !current_user_can('manage_options')) {
+if (!ap_user_can_edit_layout('member')) {
     wp_die('Access denied');
 }
 
