@@ -91,5 +91,15 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         $this->assertSame(['membership', 'upgrade'], $data['layout']);
         $this->assertSame([], $data['visibility']);
     }
+
+    public function test_get_sanitizes_layout_values(): void
+    {
+        update_user_meta($this->user_id, 'ap_dashboard_layout', ['A-', 'B C', 'in valid/slug']);
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $expected = ['a-', 'bc', 'invalidslug'];
+        $this->assertSame($expected, $res->get_data()['layout']);
+    }
 }
 

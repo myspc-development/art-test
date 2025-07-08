@@ -615,6 +615,9 @@ class UserDashboardManager
     {
         $uid   = get_current_user_id();
         $layout = get_user_meta($uid, 'ap_dashboard_layout', true);
+        if (is_array($layout)) {
+            $layout = array_map('sanitize_key', $layout);
+        }
         if (!is_array($layout) || empty($layout)) {
             $roles = wp_get_current_user()->roles;
             $config = get_option('ap_dashboard_widget_config', []);
