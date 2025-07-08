@@ -109,7 +109,7 @@ class DashboardWidgetTools
             if (is_callable($cb)) {
                 echo '<div class="ap-widget salient-widget-card' . ($visible ? '' : ' is-hidden') . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
                 echo '<div class="widget-handle widget-title">' . esc_html($defs_by_id[$id]['name'] ?? $id);
-                echo ' <button type="button" class="widget-toggle" title="Toggle Visibility" data-visible="' . ($visible ? '1' : '0') . '">' . ($visible ? '👁' : '🚫') . '</button>';
+                echo ' <button type="button" class="widget-toggle" title="Show or hide this widget" aria-label="Toggle Widget Visibility" data-visible="' . ($visible ? '1' : '0') . '">' . ($visible ? '👁️' : '🚫') . '</button>';
                 echo ' <button type="button" class="widget-remove button small" title="Remove Widget">❌</button>';
                 echo '</div>';
                 if ($visible) {
@@ -288,6 +288,7 @@ class DashboardWidgetTools
 
         echo '<div class="ap-preview-dashboard">';
         $defs = DashboardWidgetRegistry::get_definitions();
+        $has_visible = false;
         foreach ($layout as $widget) {
             $id = is_array($widget) ? $widget['id'] : $widget;
             $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
@@ -295,6 +296,8 @@ class DashboardWidgetTools
             if (!$visible || !isset($defs[$id])) {
                 continue;
             }
+
+            $has_visible = true;
 
             $cb = DashboardWidgetRegistry::get_widget_callback($id);
             if (!is_callable($cb)) {
@@ -311,6 +314,11 @@ class DashboardWidgetTools
             }
             echo '</div></div>';
         }
+
+        if (!$has_visible) {
+            echo '<div class="ap-preview-empty notice notice-info"><p>No widgets are currently visible for this layout.</p></div>';
+        }
+
         echo '</div>';
     }
 
