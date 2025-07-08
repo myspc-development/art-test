@@ -758,6 +758,13 @@ class SettingsPage
             '1.0',
             true
         );
+        wp_localize_script(
+            'ap-widget-editor',
+            'apWidget',
+            [
+                'nonce' => wp_create_nonce('ap_save_widget_layout'),
+            ]
+        );
         DashboardWidgetTools::render();
     }
 }
