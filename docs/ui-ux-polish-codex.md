@@ -47,6 +47,19 @@ Sortable.create(availRef.current, { group: 'widgets', animation: 150 });
 Widgets can be moved between columns and reordered. Clicking **Save** persists
 the layout to `ap_dashboard_widget_config` via AJAX.
 
+### Widget Editor Enhancements
+
+Recent updates add small quality-of-life features for admins arranging the
+dashboard:
+
+- Each entry in the **Add Widget** panel now includes a live preview rendered by
+  `DashboardWidgetTools::render_widget_preview()`, giving a quick look at the
+  widget output.
+- A search box filters available widgets as you type so large sites remain
+  manageable.
+- Widget cards display a hamburger-style drag handle icon to signal that they
+  can be reordered via drag and drop.
+
 ## 2. White‑Labeling
 
 Organizations can brand the dashboard and emails. A **Branding** tab under **ArtPulse → Settings** allows admins to upload a logo, choose primary and secondary colors and set email footer details. These settings are stored in site options and injected as CSS variables when the dashboard loads. Email templates swap in the logo and colors so that outbound notifications match the chosen branding. Filters like `artpulse_branding_logo_url` let developers override values.
