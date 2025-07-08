@@ -176,10 +176,7 @@ class UserLayoutManagerTest extends TestCase
         UserLayoutManager::save_role_layout('subscriber', [ ['id' => 'foo'] ]);
 
         $expected = json_encode([
-            'role'   => 'subscriber',
-            'layout' => [
-                ['id' => 'foo', 'visible' => true]
-            ]
+            ['id' => 'foo', 'visible' => true]
         ], JSON_PRETTY_PRINT);
         $this->assertSame($expected, UserLayoutManager::export_layout('subscriber'));
     }
@@ -190,11 +187,8 @@ class UserLayoutManagerTest extends TestCase
         DashboardWidgetRegistry::register('bar', 'Bar', '', '', '__return_null');
 
         $json = json_encode([
-            'role'   => 'subscriber',
-            'layout' => [
-                ['id' => 'bar'],
-                ['id' => 'foo']
-            ]
+            ['id' => 'bar'],
+            ['id' => 'foo']
         ]);
         UserLayoutManager::import_layout('subscriber', $json);
 

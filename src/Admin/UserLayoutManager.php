@@ -153,30 +153,16 @@ class UserLayoutManager
 
     public static function export_layout(string $role): string
     {
-        $layout = self::get_role_layout($role);
-        return json_encode([
-            'role'   => $role,
-            'layout' => $layout,
-        ], JSON_PRETTY_PRINT);
+        return json_encode(self::get_role_layout($role), JSON_PRETTY_PRINT);
     }
 
     public static function import_layout(string $role, string $json): bool
     {
-        $data = json_decode($json, true);
-        if (!is_array($data)) {
-            return false;
+        $decoded = json_decode($json, true);
+        if (is_array($decoded)) {
+            self::save_role_layout($role, $decoded);
+            return true;
         }
-
-        if (isset($data['role']) && isset($data['layout'])) {
-            $role  = sanitize_key($data['role']);
-            $data  = $data['layout'];
-        }
-
-        if (!is_array($data)) {
-            return false;
-        }
-
-        self::save_role_layout($role, $data);
-        return true;
+        return false;
     }
 }
