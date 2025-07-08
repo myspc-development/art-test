@@ -17,6 +17,11 @@ class Plugin
 {
     private const VERSION = '1.3.10';
 
+    public static function register(): void
+    {
+        new self();
+    }
+
     public function __construct()
     {
         $this->define_constants();
