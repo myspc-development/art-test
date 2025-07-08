@@ -95,6 +95,7 @@ class DashboardWidgetTools
             wp_safe_redirect(add_query_arg('dw_import_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
             exit;
         }
+        $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
         $sanitized = [];
         foreach ($data as $role => $widgets) {
             if (!is_array($widgets)) {
@@ -103,7 +104,10 @@ class DashboardWidgetTools
             $role_key = sanitize_key($role);
             $ordered  = [];
             foreach ($widgets as $w) {
-                $ordered[] = sanitize_key($w);
+                $key = sanitize_key($w);
+                if (in_array($key, $valid_ids, true)) {
+                    $ordered[] = $key;
+                }
             }
             $sanitized[$role_key] = $ordered;
         }
