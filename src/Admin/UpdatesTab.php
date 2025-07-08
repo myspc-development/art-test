@@ -166,6 +166,7 @@ class UpdatesTab
         if (!is_wp_error($result)) {
             $zip = new \ZipArchive();
             if ($zip->open($tmp) === true) {
+                // Gather a flat list of files from the archive.
                 for ($i = 0; $i < $zip->numFiles; $i++) {
                     $name = $zip->getNameIndex($i);
                     if (!str_ends_with($name, '/')) {
