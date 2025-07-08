@@ -390,7 +390,6 @@ class DashboardWidgetTools
         $layout   = UserLayoutManager::get_layout_for_user($user_id);
         $registry = DashboardWidgetRegistry::get_all();
 
-        echo '<div id="ap-user-dashboard">';
         foreach ($layout as $item) {
             $id      = is_array($item) ? $item['id'] : $item;
             $visible = is_array($item) ? ($item['visible'] ?? true) : true;
@@ -409,6 +408,5 @@ class DashboardWidgetTools
             }
             echo '</div>';
         }
-        echo '</div>';
     }
 }
