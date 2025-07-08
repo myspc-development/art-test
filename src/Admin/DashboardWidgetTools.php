@@ -30,11 +30,11 @@ class DashboardWidgetTools
         }
 
         $roles    = wp_roles()->roles;
-        $selected = isset($_GET['ap_role']) ? sanitize_key($_GET['ap_role']) : (array_key_first($roles) ?: '');
+        $selected = isset($_POST['ap_dashboard_role']) ? sanitize_key($_POST['ap_dashboard_role']) : (isset($_GET['ap_dashboard_role']) ? sanitize_key($_GET['ap_dashboard_role']) : (array_key_first($roles) ?: ''));
 
         if (isset($_POST['layout'])) {
             check_admin_referer('ap_save_role_layout');
-            $selected = sanitize_key($_POST['ap_role'] ?? $selected);
+            $selected = sanitize_key($_POST['ap_dashboard_role'] ?? $selected);
             $layout   = json_decode(wp_unslash($_POST['layout']), true) ?: [];
             if (is_array($layout)) {
                 UserLayoutManager::save_role_layout($selected, $layout);
@@ -62,7 +62,7 @@ class DashboardWidgetTools
         echo '<h3>' . esc_html__('Dashboard Widget Manager', 'artpulse') . '</h3>';
         echo '<form method="post" id="widget-layout-form" style="margin-bottom:10px">';
         wp_nonce_field('ap_save_role_layout');
-        echo '<select name="ap_role">';
+        echo '<select name="ap_dashboard_role" onchange="this.form.submit()">';
         foreach ($roles as $key => $role) {
             $sel   = selected($selected, $key, false);
             $label = $role['name'] ?? $key;
@@ -117,6 +117,27 @@ class DashboardWidgetTools
         }
         echo '</ul>';
         echo '</div>';
+        echo '</div>';
+
+        echo '<div class="ap-live-preview" style="margin-top:20px;">';
+        echo '<h3>' . sprintf(esc_html__('Live Preview for %s', 'artpulse'), esc_html(ucfirst($selected))) . '</h3>';
+        foreach ($current as $item) {
+            $id = $item['id'];
+            $visible = $item['visible'] ?? true;
+            if (!$visible) {
+                continue;
+            }
+            $cb = DashboardWidgetRegistry::get_widget_callback($id);
+            if (is_callable($cb)) {
+                echo '<div class="ap-widget-preview">';
+                echo '<strong>' . esc_html($defs_by_id[$id]['name'] ?? $id) . '</strong>';
+                echo '<div class="widget-preview-box">';
+                echo call_user_func($cb);
+                echo '</div></div>';
+            }
+        }
+        echo '</div>';
+
         echo '</div>';
     }
 
