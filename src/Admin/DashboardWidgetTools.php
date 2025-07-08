@@ -64,54 +64,73 @@ class DashboardWidgetTools
         <?php
     }
 
+    /**
+     * Export the saved dashboard widget layout as JSON.
+     */
     public static function handle_export(): void
     {
         if (!current_user_can('manage_options')) {
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
+
         check_admin_referer('ap_export_widget_config');
 
         $config = get_option('ap_dashboard_widget_config', []);
         $json   = wp_json_encode($config, JSON_PRETTY_PRINT);
+
         header('Content-Type: application/json');
         header('Content-Disposition: attachment; filename="ap-dashboard-widgets.json"');
         echo $json;
         exit;
     }
 
+    /**
+     * Parse an uploaded JSON file and update the widget layout option.
+     */
     public static function handle_import(): void
     {
         if (!current_user_can('manage_options')) {
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
+
         check_admin_referer('ap_import_widget_config');
+
         if (!isset($_FILES['ap_widget_file']) || empty($_FILES['ap_widget_file']['tmp_name'])) {
             wp_safe_redirect(add_query_arg('dw_import_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
             exit;
         }
+
         $json = file_get_contents($_FILES['ap_widget_file']['tmp_name']);
         $data = json_decode($json, true);
+
         if (!is_array($data)) {
             wp_safe_redirect(add_query_arg('dw_import_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
             exit;
         }
+
         $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
         $sanitized = [];
+
         foreach ($data as $role => $widgets) {
             if (!is_array($widgets)) {
                 continue;
             }
+
             $role_key = sanitize_key($role);
             $ordered  = [];
+
             foreach ($widgets as $w) {
                 $key = sanitize_key($w);
                 if (in_array($key, $valid_ids, true)) {
                     $ordered[] = $key;
                 }
             }
+
             $sanitized[$role_key] = $ordered;
         }
+
         update_option('ap_dashboard_widget_config', $sanitized);
+
         wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=artpulse-dashboard-widgets')));
         exit;
     }
