@@ -128,8 +128,10 @@ class DashboardWidgetTools
             if (in_array($def['id'], $unused, true)) {
                 $id      = esc_attr($def['id']);
                 $preview = self::render_widget_preview($def['id']);
-                echo '<li><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> <strong>' . esc_html($def['name']) . '</strong>';
-                echo '<div class="preview-box">' . $preview . '</div>';
+                $icon    = esc_html($def['icon']);
+                echo '<li><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> ';
+                echo '<span class="widget-icon">' . $icon . '</span> <strong>' . esc_html($def['name']) . '</strong>';
+                echo '<div class="widget-preview-box">' . $preview . '</div>';
                 echo '<small>' . esc_html($def['description']) . '</small></label></li>';
             }
         }
