@@ -152,6 +152,8 @@ class EnqueueAssets {
         if ($screen->base === 'artpulse-settings_page_artpulse-dashboard-widgets') {
             $script_path = $plugin_dir . '/assets/dist/admin-dashboard-widgets-editor.js';
             $script_url  = $plugin_url . '/assets/dist/admin-dashboard-widgets-editor.js';
+            $style_path  = $plugin_dir . '/assets/css/dashboard-widget.css';
+            $style_url   = $plugin_url . '/assets/css/dashboard-widget.css';
             if (file_exists($script_path)) {
                 wp_enqueue_script(
                     'sortablejs',
@@ -167,6 +169,14 @@ class EnqueueAssets {
                     filemtime($script_path),
                     true
                 );
+                if (file_exists($style_path)) {
+                    wp_enqueue_style(
+                        'ap-dashboard-widget',
+                        $style_url,
+                        [],
+                        filemtime($style_path)
+                    );
+                }
                 $config = get_option('ap_dashboard_widget_config', false);
                 if (false === $config) {
                     $definitions = \ArtPulse\Core\DashboardWidgetRegistry::get_definitions();
