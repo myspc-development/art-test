@@ -14,6 +14,9 @@ namespace {
     function unzip_file($file, $dest) { \ArtPulse\Admin\Tests\UpdatesTabTest::$unzipped = [$file, $dest]; return true; }
     function is_wp_error($thing) { return false; }
     function plugin_dir_path($file) { return '/dest'; }
+    function get_temp_dir() { return sys_get_temp_dir(); }
+    function wp_generate_password($length = 12, $special_chars = false) { return 'pass'; }
+    function wp_mkdir_p($dir) { mkdir($dir, 0777, true); }
     function update_option($key, $value) { \ArtPulse\Admin\Tests\UpdatesTabTest::$options[$key] = $value; }
     function get_option($key, $default = '') { return \ArtPulse\Admin\Tests\UpdatesTabTest::$options[$key] ?? $default; }
     function current_time($type = 'mysql') { return 'now'; }
@@ -77,7 +80,8 @@ class UpdatesTabTest extends TestCase
         }
         $this->assertSame('/admin.php?page=artpulse-settings?ap_update_success=1#updates', self::$redirect);
         $this->assertSame(['file1.txt', 'dir/file2.php'], self::$options['ap_updated_files'] ?? []);
-        $this->assertSame([self::$zip, '/dest'], self::$unzipped);
+        $this->assertSame(self::$zip, self::$unzipped[0]);
+        $this->assertStringStartsWith(sys_get_temp_dir(), self::$unzipped[1]);
     }
 
     public function test_render_outputs_summary_and_clears_option(): void

@@ -38,15 +38,19 @@ tracked via the URL hash so you can share a direct link like `#/import_export`.
 
 The **Config Backup** tab lets you download a JSON file of all plugin options or
 restore settings from a previous backup. Click **Download Backup** to export the
-current configuration and use the upload form to import a saved file.
+current configuration and use the upload form to import a saved file. Export a
+backup before upgrading so you can quickly restore the configuration if needed.
 
 ### Updates
 
 The **Updates** tab allows administrators to pull the latest plugin code
 directly from a GitHub repository. Specify the repository URL, branch or
 release and optional access token. You can manually check for updates or enable
-automatic daily checks. After each successful update, an unordered list of
-the files that changed appears beneath the success notice.
+automatic daily checks. Upload new versions over the existing plugin folder or
+use this tab—settings are preserved because the uninstall process never runs
+during an upgrade. The **Keep Data on Uninstall** option ensures content
+remains if you remove the plugin entirely. After each successful update, an
+unordered list of the files that changed appears beneath the success notice.
 
 ### Shortcode Pages
 
