@@ -141,5 +141,25 @@ class UserLayoutManagerTest extends TestCase
         $this->expectOutputString($expected_json);
         DashboardWidgetTools::handle_export();
     }
+
+    public function test_export_layout_returns_pretty_json(): void
+    {
+        DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
+        UserLayoutManager::save_role_layout('subscriber', ['foo']);
+
+        $expected = json_encode(['foo'], JSON_PRETTY_PRINT);
+        $this->assertSame($expected, UserLayoutManager::export_layout('subscriber'));
+    }
+
+    public function test_import_layout_decodes_and_saves(): void
+    {
+        DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
+        DashboardWidgetRegistry::register('bar', 'Bar', '', '', '__return_null');
+
+        $json = json_encode(['bar', 'foo']);
+        UserLayoutManager::import_layout('subscriber', $json);
+
+        $this->assertSame(['bar', 'foo'], self::$options['ap_dashboard_widget_config']['subscriber']);
+    }
 }
 
