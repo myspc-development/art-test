@@ -32,59 +32,66 @@ class DashboardWidgetTools
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
 
-        $all_roles = wp_roles()->roles;
-        $selected  = isset($_GET['ap_role']) ? sanitize_key($_GET['ap_role']) : (array_key_first($all_roles) ?: '');
-        if (isset($_POST['ap_save_role_layout'])) {
+        $roles    = wp_roles()->roles;
+        $selected = isset($_GET['ap_role']) ? sanitize_key($_GET['ap_role']) : (array_key_first($roles) ?: '');
+
+        if (isset($_POST['layout_input'])) {
             check_admin_referer('ap_save_role_layout');
-            $selected = sanitize_key($_POST['ap_role']);
-            $layout   = UserLayoutManager::get_layout(get_current_user_id());
-            UserLayoutManager::save_role_layout($selected, $layout);
-            echo '<div class="notice notice-success"><p>' . esc_html__('Layout saved for role.', 'artpulse') . '</p></div>';
+            $selected = sanitize_key($_POST['ap_role'] ?? $selected);
+            $layout   = json_decode(wp_unslash($_POST['layout_input']), true) ?: [];
+            if (is_array($layout)) {
+                UserLayoutManager::save_role_layout($selected, $layout);
+                echo '<div class="notice notice-success"><p>' . esc_html__('Layout saved for role.', 'artpulse') . '</p></div>';
+            }
         }
 
+        $current  = UserLayoutManager::get_role_layout($selected);
+        $defs     = DashboardWidgetRegistry::get_definitions();
+        $all_ids  = array_column($defs, 'id');
+        $unused   = array_diff($all_ids, $current);
+
         echo '<div class="wrap">';
-        echo '<h3>' . esc_html__('Welcome to the ArtPulse Dashboard', 'artpulse') . '</h3>';
-        echo '<form method="post" style="margin-bottom:10px">';
+        echo '<h3>' . esc_html__('Dashboard Widget Manager', 'artpulse') . '</h3>';
+        echo '<form method="post" id="widget-layout-form" style="margin-bottom:10px">';
         wp_nonce_field('ap_save_role_layout');
         echo '<select name="ap_role">';
-        foreach ($all_roles as $key => $role) {
-            $sel = selected($selected, $key, false);
+        foreach ($roles as $key => $role) {
+            $sel   = selected($selected, $key, false);
             $label = $role['name'] ?? $key;
             echo "<option value='" . esc_attr($key) . "' $sel>" . esc_html($label) . "</option>";
         }
         echo '</select> ';
-        echo '<button type="submit" name="ap_save_role_layout" class="button">' . esc_html__('Save Role Layout', 'artpulse') . '</button>';
+        echo '<button type="submit" name="reset_layout" class="button">' . esc_html__('Reset Layout', 'artpulse') . '</button> ';
+        echo '<button type="button" id="export-layout" class="button">' . esc_html__('Export', 'artpulse') . '</button> ';
+        echo '<label for="import-layout" class="button" style="margin-right:5px;">' . esc_html__('Import', 'artpulse') . '</label>';
+        echo '<input type="file" id="import-layout" style="display:none" />';
+        echo '<textarea id="layout_input" name="layout_input" hidden></textarea>';
         echo '</form>';
 
-        self::render_dashboard_widgets($selected);
+        echo '<div id="custom-widgets">';
+        foreach ($current as $id) {
+            $cb = DashboardWidgetRegistry::get_widget_callback($id);
+            if (is_callable($cb)) {
+                echo '<div class="ap-widget" data-id="' . esc_attr($id) . '">';
+                echo call_user_func($cb);
+                echo '</div>';
+            }
+        }
         echo '</div>';
 
-        if (isset($_GET['dw_import_success'])) {
-            echo '<div class="notice notice-success"><p>' . esc_html__('Widget layouts imported.', 'artpulse') . '</p></div>';
-        } elseif (isset($_GET['dw_import_error'])) {
-            echo '<div class="notice notice-error"><p>' . esc_html__('Invalid layout file.', 'artpulse') . '</p></div>';
+        echo '<div class="ap-add-widget" style="margin-top:15px;">';
+        echo '<h3>' . esc_html__('Add Widget', 'artpulse') . '</h3>';
+        foreach ($defs as $def) {
+            if (in_array($def['id'], $unused, true)) {
+                $id    = esc_attr($def['id']);
+                $label = esc_html($def['name']);
+                echo '<label style="display:block;margin-bottom:4px;">';
+                echo '<input type="checkbox" value="' . $id . '" /> ' . $label;
+                echo '</label>';
+            }
         }
-        ?>
-        <details>
-            <summary><?php esc_html_e('Advanced: Import/Export JSON', 'artpulse'); ?></summary>
-            <h2><?php esc_html_e('Export Layouts', 'artpulse'); ?></h2>
-            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                <?php wp_nonce_field('ap_export_widget_config'); ?>
-                <input type="hidden" name="action" value="ap_export_widget_config" />
-                <button type="submit" class="button"><?php esc_html_e('Download JSON', 'artpulse'); ?></button>
-            </form>
-            <hr/>
-            <h2><?php esc_html_e('Import Layouts', 'artpulse'); ?></h2>
-            <form method="post" enctype="multipart/form-data" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                <?php wp_nonce_field('ap_import_widget_config'); ?>
-                <input type="hidden" name="action" value="ap_import_widget_config" />
-                <input type="file" name="ap_widget_file" accept=".json" required />
-                <button type="submit" class="button button-primary" style="margin-top:10px;">
-                    <?php esc_html_e('Upload', 'artpulse'); ?>
-                </button>
-            </form>
-        </details>
-        <?php
+        echo '</div>';
+        echo '</div>';
     }
 
     /**
