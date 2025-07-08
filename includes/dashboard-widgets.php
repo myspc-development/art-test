@@ -18,6 +18,7 @@ function ap_get_all_widget_definitions(bool $include_schema = false): array
 add_action('wp_ajax_ap_save_dashboard_widget_config', 'ap_save_dashboard_widget_config');
 
 add_action('wp_ajax_ap_save_widget_layout', 'ap_save_widget_layout');
+add_action('wp_ajax_ap_save_role_layout', 'ap_save_role_layout');
 
 function ap_save_dashboard_widget_config(): void
 {
@@ -73,6 +74,27 @@ function ap_save_widget_layout(): void
         update_user_meta($uid, 'ap_dashboard_layout', $ordered);
     }
 
+    wp_send_json_success(['saved' => true]);
+}
+
+function ap_save_role_layout(): void
+{
+    check_ajax_referer('ap_save_role_layout', 'nonce');
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(['message' => __('Permission denied', 'artpulse')]);
+        return;
+    }
+
+    $role   = sanitize_key($_POST['role'] ?? '');
+    $layout = $_POST['layout'] ?? [];
+    if (is_string($layout)) {
+        $layout = json_decode($layout, true);
+    }
+    if (!is_array($layout)) {
+        $layout = [];
+    }
+
+    \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $layout);
     wp_send_json_success(['saved' => true]);
 }
 

@@ -117,6 +117,16 @@ class UserLayoutManager
         return false;
     }
 
+    public static function reset_layout_for_role(string $role): void
+    {
+        $config = get_option('ap_dashboard_widget_config', []);
+        $role_key = sanitize_key($role);
+        if (isset($config[$role_key])) {
+            unset($config[$role_key]);
+            update_option('ap_dashboard_widget_config', $config);
+        }
+    }
+
     /**
      * Retrieve the raw dashboard layout for a user.
      */

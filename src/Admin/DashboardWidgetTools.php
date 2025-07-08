@@ -59,6 +59,13 @@ class DashboardWidgetTools
             }
         }
 
+        if (isset($_POST['reset_layout'])) {
+            check_admin_referer('ap_save_role_layout');
+            $selected = sanitize_key($_POST['ap_dashboard_role'] ?? $selected);
+            UserLayoutManager::reset_layout_for_role($selected);
+            echo '<div class="notice notice-success"><p>' . esc_html__('Layout reset for role.', 'artpulse') . '</p></div>';
+        }
+
         if (isset($_POST['import_role_layout']) && current_user_can('manage_options')) {
             $import_result = UserLayoutManager::import_layout($selected, stripslashes($_POST['import_json'] ?? ''));
             echo '<div class="notice ' . ($import_result ? 'notice-success' : 'notice-error') . '"><p>'
@@ -80,13 +87,14 @@ class DashboardWidgetTools
         echo '<h3>' . esc_html__('Dashboard Widget Manager', 'artpulse') . '</h3>';
         echo '<form method="post" id="widget-layout-form" style="margin-bottom:10px">';
         wp_nonce_field('ap_save_role_layout');
-        echo '<select name="ap_dashboard_role" onchange="this.form.submit()">';
+        echo '<select id="ap-role-selector" name="ap_dashboard_role">';
         foreach ($roles as $key => $role) {
             $sel   = selected($selected, $key, false);
             $label = $role['name'] ?? $key;
             echo "<option value='" . esc_attr($key) . "' $sel>" . esc_html($label) . "</option>";
         }
         echo '</select> ';
+        echo '<span class="description">Drag to reorder. Toggle visibility. Click save to store layout.</span>';
         echo '<button type="submit" name="reset_layout" class="button">' . esc_html__('Reset Layout', 'artpulse') . '</button> ';
         echo '<button type="button" id="export-layout" class="button">' . esc_html__('Export', 'artpulse') . '</button> ';
         echo '<label for="import-layout" class="button" style="margin-right:5px;">' . esc_html__('Import', 'artpulse') . '</label>';
@@ -165,7 +173,7 @@ class DashboardWidgetTools
         echo '<button type="button" id="toggle-preview" class="button">Toggle Preview</button>';
         echo '<h3 style="margin-top: 40px;">Preview Dashboard for ' . esc_html(ucfirst($selected)) . '</h3>';
         echo '<div id="ap-widget-preview-area" class="ap-widget-preview-wrap">';
-        self::render_preview_dashboard();
+        self::render_preview_dashboard($selected);
         echo '</div>';
 
         echo '</div>';
@@ -285,12 +293,11 @@ class DashboardWidgetTools
     }
 
     /**
-     * Render a preview dashboard for the current user.
+     * Render a preview dashboard for a role.
      */
-    public static function render_preview_dashboard(): void
+    public static function render_preview_dashboard(string $role): void
     {
-        $user_id = get_current_user_id();
-        $layout  = UserLayoutManager::get_layout_for_user($user_id);
+        $layout  = UserLayoutManager::get_role_layout($role);
 
         echo '<div class="ap-preview-dashboard">';
         $defs = DashboardWidgetRegistry::get_definitions();
@@ -316,7 +323,7 @@ class DashboardWidgetTools
             try {
                 call_user_func($cb);
             } catch (\Throwable $e) {
-                echo '<em>Error loading widget.</em>';
+                echo '<div class="notice notice-error"><p>Error rendering widget: ' . esc_html($e->getMessage()) . '</p></div>';
             }
             echo '</div></div>';
         }
