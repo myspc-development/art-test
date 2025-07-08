@@ -1,6 +1,10 @@
 <?php
 use ArtPulse\Admin\DashboardWidgetTools;
 
+if (!current_user_can('organization') && !current_user_can('manage_options')) {
+    wp_die('Access denied');
+}
+
 get_header();
 ?>
 
