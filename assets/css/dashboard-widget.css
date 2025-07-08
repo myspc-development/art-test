@@ -1,0 +1,30 @@
+.salient-widget-card {
+    background: var(--ap-bg-color, #fff);
+    border: 1px solid var(--ap-border-color, #ddd);
+    border-radius: var(--ap-border-radius, 4px);
+    padding: var(--ap-space-medium, 1rem);
+    margin-bottom: var(--ap-space-medium, 1rem);
+    position: relative;
+}
+
+.widget-handle {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    cursor: move;
+    color: var(--ap-muted-text-color, #666);
+    font-size: 1.2em;
+}
+
+.widget-toggle {
+    display: block;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+#add-widget-panel {
+    border: 1px solid var(--ap-soft-border-color, #ccc);
+    background: var(--ap-alt-bg-color, #fafafa);
+    padding: var(--ap-space-medium, 1rem);
+    margin-bottom: var(--ap-space-medium, 1rem);
+}
