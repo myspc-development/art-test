@@ -10,6 +10,7 @@ class UserLayoutManager
 {
     public const META_KEY = 'ap_dashboard_layout';
     public const ROLE_KEY_PREFIX = 'ap_dashboard_layout_role_';
+    public const VIS_META_KEY = 'ap_widget_visibility';
     /**
      * Get a user's widget layout with fallbacks.
      *
@@ -133,6 +134,15 @@ class UserLayoutManager
             unset($config[$role_key]);
             update_option('ap_dashboard_widget_config', $config);
         }
+    }
+
+    /**
+     * Remove a user's saved dashboard layout and visibility.
+     */
+    public static function reset_user_layout(int $user_id): void
+    {
+        delete_user_meta($user_id, self::META_KEY);
+        delete_user_meta($user_id, self::VIS_META_KEY);
     }
 
     /**

@@ -11,6 +11,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  document.querySelectorAll('.widget-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.ap-widget-card');
+      const isVisible = card.dataset.visible === '1';
+      card.dataset.visible = isVisible ? '0' : '1';
+      btn.innerText = isVisible ? '🙈' : '👁️';
+      saveLayout();
+    });
+  });
+
+  document.querySelectorAll('.collapse-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.ap-widget-card');
+      card.classList.toggle('collapsed');
+    });
+  });
+
   function saveLayout() {
     const layout = [];
 
@@ -21,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cards.forEach(card => {
         layout.push({
           id: card.dataset.id,
-          visible: true
+          visible: card.dataset.visible === '1'
         });
       });
     });
