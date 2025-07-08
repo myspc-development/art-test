@@ -35,6 +35,8 @@ Additional resources:
 Styling now relies on the Salient theme and WPBakery builder. See
 [`assets/docs/Style_Guide.md`](assets/docs/Style_Guide.md) for
 recommended class names when extending layouts.
+Dashboard widget markup and CSS are documented in the
+[`Dashboard Widget Design Codex`](docs/dashboard-widget-design-codex.md).
 
 ## Overview & Quick Reference
 

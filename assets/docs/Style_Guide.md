@@ -11,6 +11,12 @@ Use the following standard classes for all dashboards, widgets and forms:
 - `.ap-widget` – card or widget container
 - `.ap-widget-header` – optional header section inside a widget
 - `.ap-widget-body` – body content of a widget
+- `.ap-widget-card` – standard wrapper for dashboard widgets
+- `.ap-widget-icon` – small icon displayed in the header
+- `.ap-widget-title` – widget title element
+- `.ap-widget-controls` – wrapper for toggle/remove buttons
+- `.ap-widget-content` – main widget output area
+- `.ap-widget-tag` – visual tag or category label
 - `.dashboard-nav` – dashboard navigation links
 - `.ap-form-container` – form wrapper
 - `.ap-form-label` – form labels
