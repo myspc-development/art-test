@@ -8,13 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Toggle widget visibility
-  document.querySelectorAll('.widget-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const widget = btn.closest('.ap-widget');
-      const visible = widget.dataset.visible === '1';
-      widget.dataset.visible = visible ? '0' : '1';
-      btn.textContent = visible ? '🚫' : '👁';
-      widget.classList.toggle('is-hidden', !visible);
+  document.querySelectorAll('.widget-toggle').forEach(button => {
+    button.addEventListener('click', () => {
+      const widget = button.closest('.ap-widget');
+      const isVisible = widget.dataset.visible === '1';
+      widget.dataset.visible = isVisible ? '0' : '1';
+      button.innerText = isVisible ? '🚫' : '👁️';
+
+      if (isVisible) {
+        widget.classList.add('is-hidden');
+      } else {
+        widget.classList.remove('is-hidden');
+      }
     });
   });
 
