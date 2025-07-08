@@ -45,10 +45,14 @@ function ap_save_dashboard_widget_config(): void
 
 function ap_save_widget_layout(): void
 {
-    check_ajax_referer('ap_dashboard_layout', 'nonce');
-    if (!current_user_can('view_artpulse_dashboard') && !current_user_can('manage_options')) {
-        wp_send_json_error(['message' => __('Permission denied', 'artpulse')]);
+    $role = sanitize_key($_POST['role'] ?? '');
+    check_ajax_referer('ap_save_widget_layout', 'nonce');
+    if (!current_user_can($role) && !current_user_can('manage_options')) {
+        wp_send_json_error(['message' => __('Permission denied', 'artpulse')], 403);
         return;
+    }
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log('Saving widget layout for user ' . get_current_user_id());
     }
 
     $uid = get_current_user_id();
