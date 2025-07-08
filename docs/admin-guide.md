@@ -45,7 +45,8 @@ current configuration and use the upload form to import a saved file.
 The **Updates** tab allows administrators to pull the latest plugin code
 directly from a GitHub repository. Specify the repository URL, branch or
 release and optional access token. You can manually check for updates or enable
-automatic daily checks.
+automatic daily checks. After each successful update, a brief summary of the
+files that changed appears beneath the success notice.
 
 ### Shortcode Pages
 

@@ -162,6 +162,19 @@ class UpdatesTab
         }
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
         $result = unzip_file($tmp, $plugin_dir);
+        $files = [];
+        if (!is_wp_error($result)) {
+            $zip = new \ZipArchive();
+            if ($zip->open($tmp) === true) {
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    $name = $zip->getNameIndex($i);
+                    if (!str_ends_with($name, '/')) {
+                        $files[] = $name;
+                    }
+                }
+                $zip->close();
+            }
+        }
         unlink($tmp);
         if (is_wp_error($result)) {
             if (!$silent) {
@@ -171,6 +184,7 @@ class UpdatesTab
         }
         update_option('ap_current_repo_sha', get_option('ap_update_remote_sha'));
         update_option('ap_last_update_time', current_time('mysql'));
+        update_option('ap_updated_files', $files);
         if (!$silent) {
             self::redirect_to_updates(['ap_update_success' => '1']);
         }
@@ -184,6 +198,15 @@ class UpdatesTab
 
         if (isset($_GET['ap_update_success']) && $_GET['ap_update_success'] === '1') {
             echo '<div class="notice notice-success"><p>✅ Plugin updated successfully.</p></div>';
+            $files = get_option('ap_updated_files', []);
+            if ($files) {
+                echo '<ul style="margin-top:10px;">';
+                foreach ($files as $f) {
+                    echo '<li>' . esc_html($f) . '</li>';
+                }
+                echo '</ul>';
+            }
+            delete_option('ap_updated_files');
         }
 
         if (isset($_GET['ap_update_error'])) {
