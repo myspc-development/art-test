@@ -158,6 +158,48 @@ register_activation_hook(__FILE__, function () {
 });
 
 
+// Register Dashboard Preview admin page
+add_action('admin_menu', function () {
+    add_menu_page(
+        'Dashboard Preview',
+        'Dashboard Preview',
+        'manage_options',
+        'dashboard-preview',
+        'ap_render_dashboard_preview_page',
+        'dashicons-visibility',
+        80
+    );
+});
+
+function ap_render_dashboard_preview_page() {
+    ?>
+    <div class="wrap">
+        <h1>Dashboard Preview</h1>
+        <form method="get">
+            <input type="hidden" name="page" value="dashboard-preview" />
+            <select name="role">
+                <option value="">Select Role</option>
+                <option value="member" <?= selected($_GET['role'] ?? '', 'member') ?>>Member</option>
+                <option value="artist" <?= selected($_GET['role'] ?? '', 'artist') ?>>Artist</option>
+                <option value="organization" <?= selected($_GET['role'] ?? '', 'organization') ?>>Organization</option>
+            </select>
+            <button class="button button-primary">Preview</button>
+        </form>
+        <hr>
+    <?php
+
+    $role = $_GET['role'] ?? null;
+
+    if ($role && in_array($role, ['member', 'artist', 'organization'])) {
+        echo '<h2>Previewing: ' . ucfirst($role) . ' Dashboard</h2>';
+        echo '<div id="ap-user-dashboard" class="ap-dashboard-columns">';
+        \ArtPulse\Admin\DashboardWidgetTools::render_role_dashboard_preview($role);
+        echo '</div>';
+    }
+
+    echo '</div>';
+}
+
 
 // Add ArtPulse Settings page in the Settings menu
 add_action('admin_menu', function () {
@@ -422,6 +464,18 @@ add_action('admin_enqueue_scripts', function ($hook) {
             [],
             '1.0'
         );
+    }
+});
+
+add_action('admin_enqueue_scripts', function ($hook) {
+    if ($hook === 'toplevel_page_dashboard-preview') {
+        wp_enqueue_script('sortablejs', plugin_dir_url(__FILE__) . 'assets/js/Sortable.min.js', [], null, true);
+        wp_enqueue_script('ap-role-dashboard', plugin_dir_url(__FILE__) . 'assets/js/role-dashboard.js', ['sortablejs'], null, true);
+        wp_localize_script('ap-role-dashboard', 'APLayout', [
+            'nonce'    => wp_create_nonce('ap_save_user_layout'),
+            'ajax_url' => admin_url('admin-ajax.php')
+        ]);
+        wp_enqueue_style('ap-dashboard-style', plugin_dir_url(__FILE__) . 'assets/css/dashboard-widget.css');
     }
 });
 
