@@ -1,11 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 
-if ( ! window.APDashboardWidgetsEditor || ! window.APDashboardWidgetsEditor.config ) {
-  console.error("APDashboardWidgetsEditor.config is missing; initializing empty layout.");
+if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.config) {
+  console.error(
+    'APDashboardWidgetsEditor.config is missing; initializing empty layout.'
+  );
   window.APDashboardWidgetsEditor = {
     ...window.APDashboardWidgetsEditor,
-    config: {}
+    config: {},
+  };
+}
+
+if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.roles) {
+  console.error('APDashboardWidgetsEditor.roles is missing; using empty roles.');
+  window.APDashboardWidgetsEditor = {
+    ...window.APDashboardWidgetsEditor,
+    roles: {},
   };
 }
 

@@ -111,6 +111,12 @@
       config: {}
     });
   }
+  if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.roles) {
+    console.error("APDashboardWidgetsEditor.roles is missing; using empty roles.");
+    window.APDashboardWidgetsEditor = _objectSpread2(_objectSpread2({}, window.APDashboardWidgetsEditor), {}, {
+      roles: {}
+    });
+  }
   function WidgetSettingsForm(_ref) {
     var id = _ref.id,
       onClose = _ref.onClose,
