@@ -175,13 +175,15 @@ function ap_register_core_dashboard_widgets(): void
         'users',
         __('Subscription status and badges.', 'artpulse'),
         'ap_widget_membership',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'show_badges',
-                'label'   => __('Show Badges', 'artpulse'),
-                'type'    => 'checkbox',
-                'default' => true,
+            'category' => 'engagement',
+            'settings' => [
+                [
+                    'key'     => 'show_badges',
+                    'label'   => __('Show Badges', 'artpulse'),
+                    'type'    => 'checkbox',
+                    'default' => true,
+                ],
             ],
         ]
     );
@@ -192,13 +194,15 @@ function ap_register_core_dashboard_widgets(): void
         'star',
         __('Upgrade options for the account.', 'artpulse'),
         'ap_widget_upgrade',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'show_forms',
-                'label'   => __('Show Forms', 'artpulse'),
-                'type'    => 'checkbox',
-                'default' => true,
+            'category' => 'account',
+            'settings' => [
+                [
+                    'key'     => 'show_forms',
+                    'label'   => __('Show Forms', 'artpulse'),
+                    'type'    => 'checkbox',
+                    'default' => true,
+                ],
             ],
         ]
     );
@@ -209,13 +213,15 @@ function ap_register_core_dashboard_widgets(): void
         'map-pin',
         __('Shows events near the user.', 'artpulse'),
         'ap_widget_local_events',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'limit',
-                'label'   => __('Number of Events', 'artpulse'),
-                'type'    => 'number',
-                'default' => 5,
+            'category' => 'community',
+            'settings' => [
+                [
+                    'key'     => 'limit',
+                    'label'   => __('Number of Events', 'artpulse'),
+                    'type'    => 'number',
+                    'default' => 5,
+                ],
             ],
         ]
     );
@@ -226,13 +232,15 @@ function ap_register_core_dashboard_widgets(): void
         'heart',
         __('Favorited content lists.', 'artpulse'),
         'ap_widget_favorites',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'limit',
-                'label'   => __('Items to Show', 'artpulse'),
-                'type'    => 'number',
-                'default' => 5,
+            'category' => 'engagement',
+            'settings' => [
+                [
+                    'key'     => 'limit',
+                    'label'   => __('Items to Show', 'artpulse'),
+                    'type'    => 'number',
+                    'default' => 5,
+                ],
             ],
         ]
     );
@@ -243,13 +251,15 @@ function ap_register_core_dashboard_widgets(): void
         'calendar',
         __('User RSVP history.', 'artpulse'),
         'ap_widget_rsvps',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'limit',
-                'label'   => __('Items to Show', 'artpulse'),
-                'type'    => 'number',
-                'default' => 5,
+            'category' => 'events',
+            'settings' => [
+                [
+                    'key'     => 'limit',
+                    'label'   => __('Items to Show', 'artpulse'),
+                    'type'    => 'number',
+                    'default' => 5,
+                ],
             ],
         ]
     );
@@ -260,13 +270,15 @@ function ap_register_core_dashboard_widgets(): void
         'clock',
         __('Events created by the user.', 'artpulse'),
         'ap_widget_my_events',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'limit',
-                'label'   => __('Items to Show', 'artpulse'),
-                'type'    => 'number',
-                'default' => 5,
+            'category' => 'events',
+            'settings' => [
+                [
+                    'key'     => 'limit',
+                    'label'   => __('Items to Show', 'artpulse'),
+                    'type'    => 'number',
+                    'default' => 5,
+                ],
             ],
         ]
     );
@@ -277,13 +289,15 @@ function ap_register_core_dashboard_widgets(): void
         'calendar',
         __('Global upcoming events.', 'artpulse'),
         'ap_widget_events',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'limit',
-                'label'   => __('Items to Show', 'artpulse'),
-                'type'    => 'number',
-                'default' => 5,
+            'category' => 'events',
+            'settings' => [
+                [
+                    'key'     => 'limit',
+                    'label'   => __('Items to Show', 'artpulse'),
+                    'type'    => 'number',
+                    'default' => 5,
+                ],
             ],
         ]
     );
@@ -294,13 +308,15 @@ function ap_register_core_dashboard_widgets(): void
         'mail',
         __('Private messages inbox.', 'artpulse'),
         'ap_widget_messages',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'limit',
-                'label'   => __('Items to Show', 'artpulse'),
-                'type'    => 'number',
-                'default' => 5,
+            'category' => 'engagement',
+            'settings' => [
+                [
+                    'key'     => 'limit',
+                    'label'   => __('Items to Show', 'artpulse'),
+                    'type'    => 'number',
+                    'default' => 5,
+                ],
             ],
         ]
     );
@@ -311,13 +327,15 @@ function ap_register_core_dashboard_widgets(): void
         'settings',
         __('Export and deletion options.', 'artpulse'),
         'ap_widget_account_tools',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'show_export',
-                'label'   => __('Show Export Links', 'artpulse'),
-                'type'    => 'checkbox',
-                'default' => true,
+            'category' => 'account',
+            'settings' => [
+                [
+                    'key'     => 'show_export',
+                    'label'   => __('Show Export Links', 'artpulse'),
+                    'type'    => 'checkbox',
+                    'default' => true,
+                ],
             ],
         ]
     );
@@ -328,13 +346,15 @@ function ap_register_core_dashboard_widgets(): void
         'life-buoy',
         __('Previous support tickets.', 'artpulse'),
         'ap_widget_support_history',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'limit',
-                'label'   => __('Items to Show', 'artpulse'),
-                'type'    => 'number',
-                'default' => 5,
+            'category' => 'support',
+            'settings' => [
+                [
+                    'key'     => 'limit',
+                    'label'   => __('Items to Show', 'artpulse'),
+                    'type'    => 'number',
+                    'default' => 5,
+                ],
             ],
         ]
     );
@@ -345,13 +365,15 @@ function ap_register_core_dashboard_widgets(): void
         'bell',
         __('Recent notifications.', 'artpulse'),
         'ap_widget_notifications',
-        'view_artpulse_dashboard',
         [
-            [
-                'key'     => 'limit',
-                'label'   => __('Items to Show', 'artpulse'),
-                'type'    => 'number',
-                'default' => 5,
+            'category' => 'engagement',
+            'settings' => [
+                [
+                    'key'     => 'limit',
+                    'label'   => __('Items to Show', 'artpulse'),
+                    'type'    => 'number',
+                    'default' => 5,
+                ],
             ],
         ]
     );

@@ -14,10 +14,9 @@ class DashboardWidgetRegistry
      *     icon:string,
      *     description:string,
      *     callback:callable,
-     *     capability:string,
-     *     settings:array,
      *     category?:string,
-     *     roles?:array
+     *     roles?:array,
+     *     settings?:array
      * }>
      */
     private static array $widgets = [];
@@ -34,40 +33,23 @@ class DashboardWidgetRegistry
         string $icon,
         string $description,
         callable $callback,
-        $capability_or_options = 'read',
-        array $settings_schema = []
+        array $options = [] // supports 'category', 'roles' and optional 'settings'
     ): void {
         // Callback must be valid to render the widget.
         if (!is_callable($callback)) {
             trigger_error('Dashboard widget callback not callable: ' . $id, E_USER_WARNING);
             return;
         }
-        $capability = 'read';
-        $extra       = [];
 
-        if (is_string($capability_or_options)) {
-            $capability = $capability_or_options;
-        } elseif (is_array($capability_or_options)) {
-            $extra = $capability_or_options;
-        }
-
-        $entry = [
+        self::$widgets[$id] = [
             'label'       => $label,
             'icon'        => $icon,
             'description' => $description,
             'callback'    => $callback,
-            'capability'  => $capability,
-            'settings'    => $settings_schema,
+            'category'    => $options['category'] ?? '',
+            'roles'       => $options['roles'] ?? [],
+            'settings'    => $options['settings'] ?? [],
         ];
-
-        if (!empty($extra['category'])) {
-            $entry['category'] = $extra['category'];
-        }
-        if (!empty($extra['roles'])) {
-            $entry['roles'] = (array) $extra['roles'];
-        }
-
-        self::$widgets[$id] = $entry;
     }
 
     /**
@@ -75,14 +57,14 @@ class DashboardWidgetRegistry
      */
     public static function get_widgets(string $user_role): array
     {
-        $role = wp_roles()->get_role($user_role);
         $allowed = [];
         foreach (self::$widgets as $id => $config) {
-            $cap = $config['capability'] ?? '';
-            if (!$cap || ($role && !empty($role->capabilities[$cap]))) {
-                $allowed[$id] = $config['callback'];
+            if (!empty($config['roles']) && !in_array($user_role, (array) $config['roles'], true)) {
+                continue;
             }
+            $allowed[$id] = $config['callback'];
         }
+
         return $allowed;
     }
 
@@ -108,9 +90,9 @@ class DashboardWidgetRegistry
                 $def['roles'] = $config['roles'];
             }
             if ($include_schema) {
-                $def['settings'] = $config['settings'];
+                $def['settings'] = $config['settings'] ?? [];
             }
-            $defs[] = $def;
+            $defs[$id] = $def;
         }
 
         return apply_filters('ap_dashboard_widget_definitions', $defs);

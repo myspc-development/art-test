@@ -89,3 +89,21 @@
   font-size: 16px;
 }
 
+.ap-widget.is-hidden {
+  opacity: 0.5;
+  background: repeating-linear-gradient(
+    45deg,
+    #eee,
+    #eee 10px,
+    #fff 10px,
+    #fff 20px
+  );
+}
+
+.widget-toggle {
+  float: right;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
