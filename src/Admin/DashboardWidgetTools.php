@@ -119,22 +119,27 @@ class DashboardWidgetTools
         echo '</div>';
         echo '</div>';
 
-        echo '<div class="ap-live-preview" style="margin-top:20px;">';
-        echo '<h3>' . sprintf(esc_html__('Live Preview for %s', 'artpulse'), esc_html(ucfirst($selected))) . '</h3>';
-        foreach ($current as $item) {
-            $id = $item['id'];
-            $visible = $item['visible'] ?? true;
-            if (!$visible) {
+        echo '<button type="button" id="toggle-preview" class="button">Toggle Preview</button>';
+        echo '<h3 style="margin-top: 40px;">Preview Dashboard for ' . esc_html(ucfirst($selected)) . '</h3>';
+        echo '<div id="ap-widget-preview-area" class="ap-widget-preview-wrap">';
+        $definitions = DashboardWidgetRegistry::get_definitions();
+        foreach ($current as $widget) {
+            $id = is_array($widget) ? $widget['id'] : $widget;
+            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
+
+            if (!$visible || !isset($definitions[$id])) {
                 continue;
             }
-            $cb = DashboardWidgetRegistry::get_widget_callback($id);
-            if (is_callable($cb)) {
-                echo '<div class="ap-widget-preview">';
-                echo '<strong>' . esc_html($defs_by_id[$id]['name'] ?? $id) . '</strong>';
-                echo '<div class="widget-preview-box">';
-                echo call_user_func($cb);
-                echo '</div></div>';
+            if (!isset($definitions[$id]['callback']) || !is_callable($definitions[$id]['callback'])) {
+                continue;
             }
+
+            echo '<div class="ap-widget-preview-card">';
+            echo '<h4>' . esc_html($definitions[$id]['name']) . '</h4>';
+            echo '<div class="widget-preview-box">';
+            call_user_func($definitions[$id]['callback']);
+            echo '</div>';
+            echo '</div>';
         }
         echo '</div>';
 
