@@ -37,6 +37,7 @@ if (file_exists($autoload_path)) {
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
+require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
 
@@ -205,7 +206,7 @@ function ap_render_dashboard_preview_page() {
 
     $role = $_GET['role'] ?? null;
 
-    if ($role && !current_user_can($role) && !current_user_can('manage_options')) {
+    if ($role && !ap_user_can_edit_layout($role)) {
         wp_die('You are not allowed to view this dashboard.');
     }
 

@@ -46,7 +46,7 @@ function ap_save_dashboard_widget_config(): void
 function ap_save_widget_layout(): void
 {
     check_ajax_referer('ap_dashboard_layout', 'nonce');
-    if (!current_user_can('view_artpulse_dashboard')) {
+    if (!current_user_can('view_artpulse_dashboard') && !current_user_can('manage_options')) {
         wp_send_json_error(['message' => __('Permission denied', 'artpulse')]);
         return;
     }

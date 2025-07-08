@@ -297,7 +297,7 @@ class DashboardWidgetTools
      */
     public static function render_preview_dashboard(string $role): void
     {
-        if (!current_user_can('manage_options') && !current_user_can($role)) {
+        if (!ap_user_can_edit_layout($role)) {
             return;
         }
 
