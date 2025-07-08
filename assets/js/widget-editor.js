@@ -39,4 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('layout_input').value = JSON.stringify(layout);
     });
   }
+
+  const search = document.getElementById('widget-search');
+  if (search) {
+    search.addEventListener('input', function () {
+      const filter = this.value.toLowerCase();
+      document.querySelectorAll('#add-widget-panel li').forEach(li => {
+        const text = li.textContent.toLowerCase();
+        li.style.display = text.includes(filter) ? '' : 'none';
+      });
+    });
+  }
 });
