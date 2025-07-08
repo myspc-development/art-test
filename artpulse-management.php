@@ -40,6 +40,9 @@ add_action('init', function () {
     if (class_exists('\\ArtPulse\\Sample\\SampleWidgets')) {
         \ArtPulse\Sample\SampleWidgets::register();
     }
+    if (class_exists('\\ArtPulse\\Sample\\RoleBasedWidgets')) {
+        \ArtPulse\Sample\RoleBasedWidgets::register();
+    }
 });
 
 add_action('plugins_loaded', function () {

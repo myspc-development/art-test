@@ -41,14 +41,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const search = document.getElementById('widget-search');
-  if (search) {
-    search.addEventListener('input', function () {
-      const filter = this.value.toLowerCase();
-      document.querySelectorAll('#add-widget-panel li').forEach(li => {
-        const text = li.textContent.toLowerCase();
-        li.style.display = text.includes(filter) ? '' : 'none';
-      });
+  const categoryFilter = document.getElementById('widget-category-filter');
+
+  function filterWidgets() {
+    const textFilter = search ? search.value.toLowerCase() : '';
+    const catFilter = categoryFilter ? categoryFilter.value : '';
+    document.querySelectorAll('#add-widget-panel li').forEach(li => {
+      const text = li.textContent.toLowerCase();
+      const cat = li.dataset.category || '';
+      const matchText = text.includes(textFilter);
+      const matchCat = !catFilter || cat === catFilter;
+      li.style.display = matchText && matchCat ? '' : 'none';
     });
+  }
+
+  if (search) {
+    search.addEventListener('input', filterWidgets);
+  }
+  if (categoryFilter) {
+    categoryFilter.addEventListener('change', filterWidgets);
   }
   document.getElementById('toggle-preview')?.addEventListener('click', () => {
     const preview = document.getElementById('ap-widget-preview-area');

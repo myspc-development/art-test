@@ -9,7 +9,16 @@ use WP_Roles;
 class DashboardWidgetRegistry
 {
     /**
-     * @var array<string,array{label:string,icon:string,description:string,callback:callable,capability:string,settings:array}>
+     * @var array<string,array{
+     *     label:string,
+     *     icon:string,
+     *     description:string,
+     *     callback:callable,
+     *     capability:string,
+     *     settings:array,
+     *     category?:string,
+     *     roles?:array
+     * }>
      */
     private static array $widgets = [];
 
@@ -25,7 +34,7 @@ class DashboardWidgetRegistry
         string $icon,
         string $description,
         callable $callback,
-        string $capability = 'read',
+        $capability_or_options = 'read',
         array $settings_schema = []
     ): void {
         // Callback must be valid to render the widget.
@@ -33,7 +42,16 @@ class DashboardWidgetRegistry
             trigger_error('Dashboard widget callback not callable: ' . $id, E_USER_WARNING);
             return;
         }
-        self::$widgets[$id] = [
+        $capability = 'read';
+        $extra       = [];
+
+        if (is_string($capability_or_options)) {
+            $capability = $capability_or_options;
+        } elseif (is_array($capability_or_options)) {
+            $extra = $capability_or_options;
+        }
+
+        $entry = [
             'label'       => $label,
             'icon'        => $icon,
             'description' => $description,
@@ -41,6 +59,15 @@ class DashboardWidgetRegistry
             'capability'  => $capability,
             'settings'    => $settings_schema,
         ];
+
+        if (!empty($extra['category'])) {
+            $entry['category'] = $extra['category'];
+        }
+        if (!empty($extra['roles'])) {
+            $entry['roles'] = (array) $extra['roles'];
+        }
+
+        self::$widgets[$id] = $entry;
     }
 
     /**
@@ -74,6 +101,12 @@ class DashboardWidgetRegistry
                 'icon'        => $config['icon'],
                 'description' => $config['description'],
             ];
+            if (isset($config['category'])) {
+                $def['category'] = $config['category'];
+            }
+            if (isset($config['roles'])) {
+                $def['roles'] = $config['roles'];
+            }
             if ($include_schema) {
                 $def['settings'] = $config['settings'];
             }
