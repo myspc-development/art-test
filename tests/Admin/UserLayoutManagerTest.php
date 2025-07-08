@@ -58,10 +58,15 @@ class UserLayoutManagerTest extends TestCase
 
         UserLayoutManager::save_layout(1, ['bar', 'foo', 'foo', 'invalid']);
 
-        $this->assertSame(['bar', 'foo'], self::$meta[1]['ap_dashboard_layout']);
+        $expected_saved = [
+            ['id' => 'bar', 'visible' => true],
+            ['id' => 'foo', 'visible' => true],
+        ];
+
+        $this->assertSame($expected_saved, self::$meta[1]['ap_dashboard_layout']);
 
         $layout = UserLayoutManager::get_layout(1);
-        $this->assertSame(['bar', 'foo'], $layout);
+        $this->assertSame($expected_saved, $layout);
     }
 
     public function test_get_layout_falls_back_to_role_then_registry(): void
@@ -85,7 +90,7 @@ class UserLayoutManagerTest extends TestCase
 
         self::$meta[2]['ap_dashboard_layout'] = ['a'];
         $layout = UserLayoutManager::get_layout(2);
-        $this->assertSame(['a'], $layout);
+        $this->assertSame([['id' => 'a', 'visible' => true]], $layout);
     }
 
     public function test_save_role_layout_sanitizes_and_updates_option(): void
