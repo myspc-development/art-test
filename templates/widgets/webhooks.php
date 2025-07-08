@@ -3,7 +3,7 @@
  * Dashboard widget: Webhooks.
  */
 ?>
-<div class="dashboard-card" data-widget="webhooks">
+<div class="dashboard-card" data-widget="webhooks" <?php echo $visible ? '' : 'style="display:none"'; ?>>
     <h2 id="webhooks"><?php esc_html_e('Webhooks','artpulse'); ?></h2>
     <div id="ap-webhook-controls">
         <button id="ap-add-webhook" class="ap-form-button nectar-button"><?php esc_html_e('Add Webhook','artpulse'); ?></button>

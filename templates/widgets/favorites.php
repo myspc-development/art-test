@@ -4,7 +4,7 @@
  */
 use ArtPulse\Community\FavoritesManager;
 ?>
-<div class="dashboard-card" data-widget="favorites">
+<div class="dashboard-card" data-widget="favorites" <?php echo $visible ? '' : 'style="display:none"'; ?>>
     <h2 id="favorites"><?php esc_html_e('My Favorites','artpulse'); ?></h2>
     <?php
     $user_id   = get_current_user_id();

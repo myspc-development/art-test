@@ -3,7 +3,7 @@
  * Dashboard widget: My Events.
  */
 ?>
-<div class="dashboard-card" data-widget="my-events">
+<div class="dashboard-card" data-widget="my-events" <?php echo $visible ? '' : 'style="display:none"'; ?>>
     <h2 id="my-events"><?php esc_html_e('My Events','artpulse'); ?></h2>
     <div id="ap-dashboard-stats" class="ap-dashboard-stats"></div>
     <div id="ap-next-event"></div>
