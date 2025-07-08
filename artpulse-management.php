@@ -26,9 +26,14 @@ if (!defined('ARTPULSE_PLUGIN_FILE')) {
 }
 
 // Load Composer autoloader
-if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-    require_once __DIR__ . '/vendor/autoload.php';
+$autoload_path = __DIR__ . '/vendor/autoload.php';
+if (file_exists($autoload_path)) {
+    require_once $autoload_path;
+} else {
+    wp_die('Autoloader missing. Run `composer install` in the plugin directory.');
 }
+
+\ArtPulse\Core\Plugin::register();
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
@@ -130,8 +135,6 @@ function ap_copy_templates_to_child_theme() {
     }
 }
 
-// 🔧 Boot the main plugin class (responsible for registering menus, settings, CPTs, etc.)
-$main = new Plugin();
 // Instantiate WooCommerce integration (if needed for runtime)
 $plugin = new WooCommerceIntegration();
 $artworkSync = new ArtworkWooSync();
