@@ -17,6 +17,8 @@ function ap_get_all_widget_definitions(bool $include_schema = false): array
 
 add_action('wp_ajax_ap_save_dashboard_widget_config', 'ap_save_dashboard_widget_config');
 
+add_action('wp_ajax_ap_save_widget_layout', 'ap_save_widget_layout');
+
 function ap_save_dashboard_widget_config(): void
 {
     check_ajax_referer('ap_dashboard_widget_config', 'nonce');
@@ -36,6 +38,37 @@ function ap_save_dashboard_widget_config(): void
     }
 
     update_option('ap_dashboard_widget_config', $sanitized);
+    wp_send_json_success(['saved' => true]);
+}
+
+function ap_save_widget_layout(): void
+{
+    check_ajax_referer('ap_dashboard_layout', 'nonce');
+    if (!current_user_can('view_artpulse_dashboard')) {
+        wp_send_json_error(['message' => __('Permission denied', 'artpulse')]);
+        return;
+    }
+
+    $uid = get_current_user_id();
+
+    if (isset($_POST['layout'])) {
+        $layout_raw = (array) $_POST['layout'];
+        $layout = array_map('sanitize_key', $layout_raw);
+        $layout = array_values(array_unique($layout));
+        $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+        $layout = array_values(array_intersect($layout, $valid_ids));
+        update_user_meta($uid, 'ap_dashboard_layout', $layout);
+    }
+
+    if (isset($_POST['visibility'])) {
+        $vis_raw = (array) $_POST['visibility'];
+        $vis = [];
+        foreach ($vis_raw as $key => $val) {
+            $vis[sanitize_key($key)] = filter_var($val, FILTER_VALIDATE_BOOLEAN);
+        }
+        update_user_meta($uid, 'ap_widget_visibility', $vis);
+    }
+
     wp_send_json_success(['saved' => true]);
 }
 
