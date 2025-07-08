@@ -16,8 +16,33 @@ class UserLayoutManager
     public static function get_layout(int $user_id): array
     {
         $layout = get_user_meta($user_id, self::META_KEY, true);
+
         if (is_array($layout) && !empty($layout)) {
-            return array_map('sanitize_key', $layout);
+            // Convert legacy flat array format.
+            if (is_string($layout[0] ?? null)) {
+                $layout = array_map(
+                    fn($id) => ['id' => sanitize_key($id), 'visible' => true],
+                    $layout
+                );
+            }
+
+            $valid  = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+            $ordered = [];
+            foreach ($layout as $item) {
+                if (is_array($item) && isset($item['id'])) {
+                    $id  = sanitize_key($item['id']);
+                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+                } else {
+                    $id  = sanitize_key($item);
+                    $vis = true;
+                }
+                if (in_array($id, $valid, true)) {
+                    $ordered[] = ['id' => $id, 'visible' => $vis];
+                }
+            }
+            if ($ordered) {
+                return $ordered;
+            }
         }
 
         $user = get_userdata($user_id);
@@ -31,7 +56,10 @@ class UserLayoutManager
         }
 
         $defs = DashboardWidgetRegistry::get_definitions();
-        return array_column($defs, 'id');
+        return array_map(
+            fn($def) => ['id' => $def['id'], 'visible' => true],
+            $defs
+        );
     }
 
     /**
@@ -39,10 +67,29 @@ class UserLayoutManager
      */
     public static function save_layout(int $user_id, array $layout): void
     {
-        $layout = array_map('sanitize_key', $layout);
-        $valid  = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-        $layout = array_values(array_intersect(array_unique($layout), $valid));
-        update_user_meta($user_id, self::META_KEY, $layout);
+        if (!empty($layout) && is_string($layout[0] ?? null)) {
+            $layout = array_map(
+                fn($id) => ['id' => $id, 'visible' => true],
+                $layout
+            );
+        }
+
+        $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+        $ordered = [];
+        foreach ($layout as $item) {
+            if (is_array($item) && isset($item['id'])) {
+                $id  = sanitize_key($item['id']);
+                $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+            } else {
+                $id  = sanitize_key($item);
+                $vis = true;
+            }
+            if (in_array($id, $valid, true)) {
+                $ordered[] = ['id' => $id, 'visible' => $vis];
+            }
+        }
+
+        update_user_meta($user_id, self::META_KEY, $ordered);
     }
 
     /**

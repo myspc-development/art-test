@@ -238,8 +238,13 @@ class DashboardWidgetTools
     {
         $layout = UserLayoutManager::get_role_layout($role);
 
-        foreach ($layout as $item) {
-            $id = $item['id'];
+        foreach ($layout as $widget) {
+            $id = is_array($widget) ? $widget['id'] : $widget;
+            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
+            if (!$visible) {
+                continue;
+            }
+
             $cb = DashboardWidgetRegistry::get_widget_callback($id);
             if (is_callable($cb)) {
                 echo '<div class="ap-widget">';
