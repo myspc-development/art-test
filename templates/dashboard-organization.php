@@ -11,7 +11,7 @@ get_header();
     <input type="hidden" name="reset_user_layout" value="1" />
     <button class="button">♻ Reset My Dashboard</button>
   </form>
-  <div class="ap-dashboard-columns">
+  <div id="ap-user-dashboard" class="ap-dashboard-columns">
     <?php DashboardWidgetTools::render_user_dashboard(get_current_user_id()); ?>
   </div>
 </div>
