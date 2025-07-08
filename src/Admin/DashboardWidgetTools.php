@@ -14,6 +14,10 @@ class DashboardWidgetTools
 
     public static function add_dashboard_widgets(): void
     {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
         wp_add_dashboard_widget(
             'artpulse_dashboard_widget',
             __('ArtPulse Dashboard', 'artpulse'),
