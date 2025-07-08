@@ -111,6 +111,12 @@
       config: {}
     });
   }
+  if (!window.APDashboardWidgetsEditor || !Array.isArray(window.APDashboardWidgetsEditor.widgets)) {
+    console.error("APDashboardWidgetsEditor.widgets is missing; using empty list.");
+    window.APDashboardWidgetsEditor = _objectSpread2(_objectSpread2({}, window.APDashboardWidgetsEditor), {}, {
+      widgets: []
+    });
+  }
   function WidgetSettingsForm(_ref) {
     var id = _ref.id,
       onClose = _ref.onClose,

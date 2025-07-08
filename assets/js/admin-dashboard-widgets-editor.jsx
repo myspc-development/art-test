@@ -19,6 +19,14 @@ if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.roles) 
   };
 }
 
+if (!window.APDashboardWidgetsEditor || !Array.isArray(window.APDashboardWidgetsEditor.widgets)) {
+  console.error('APDashboardWidgetsEditor.widgets is missing; using empty list.');
+  window.APDashboardWidgetsEditor = {
+    ...window.APDashboardWidgetsEditor,
+    widgets: [],
+  };
+}
+
 function WidgetSettingsForm({ id, onClose, l10n = {} }) {
   const [schema, setSchema] = useState([]);
   const [values, setValues] = useState({});
