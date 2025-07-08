@@ -92,6 +92,7 @@ class DashboardWidgetTools
         echo '<label for="import-layout" class="button" style="margin-right:5px;">' . esc_html__('Import', 'artpulse') . '</label>';
         echo '<input type="file" id="import-layout" style="display:none" />';
         echo '<input type="hidden" id="layout_input" name="layout">';
+        echo '<p><button type="submit" id="save-layout-btn" class="button button-primary">💾 Save Layout</button></p>';
         if (current_user_can('manage_options')) {
             echo '<br><textarea name="import_json" rows="6" cols="60" placeholder="Paste layout JSON..."></textarea><br>';
             echo '<button name="import_role_layout" type="submit" class="button">Import Layout</button> ';
@@ -108,7 +109,8 @@ class DashboardWidgetTools
             if (is_callable($cb)) {
                 echo '<div id="' . esc_attr($id) . '" class="ap-widget salient-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
                 echo '<div class="widget-handle widget-title">' . esc_html($defs_by_id[$id]['name'] ?? $id);
-                echo ' <button type="button" class="widget-toggle button small">' . ($visible ? '🙈 Hide' : '👁 Show') . '</button>';
+                echo ' <button type="button" class="widget-toggle button small" title="Toggle Visibility">👁</button>';
+                echo ' <button type="button" class="widget-remove button small" title="Remove Widget">❌</button>';
                 echo '</div>';
                 if ($visible) {
                     echo '<div class="widget-content">';
@@ -125,7 +127,7 @@ class DashboardWidgetTools
         echo '<input type="text" id="widget-search" placeholder="Search widgets..." class="regular-text" style="margin-bottom: 10px;">';
         $categories = array_unique(array_filter(array_column($defs, 'category')));
         if ($categories) {
-            echo '<select id="widget-category-filter" style="margin-left:5px;">';
+            echo '<select id="ap-widget-category-filter" onchange="apFilterWidgetsByCategory(this.value)" style="margin-left:5px;">';
             echo '<option value="">' . esc_html__('All Categories', 'artpulse') . '</option>';
             foreach ($categories as $cat) {
                 echo '<option value="' . esc_attr($cat) . '">' . esc_html(ucfirst($cat)) . '</option>';
@@ -142,7 +144,7 @@ class DashboardWidgetTools
                 $preview  = self::render_widget_preview($def['id']);
                 $icon     = esc_html($def['icon']);
                 $category = esc_attr($def['category'] ?? '');
-                echo '<li data-category="' . $category . '"><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> ';
+                echo '<li class="widget-card" data-category="' . $category . '"><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> ';
                 echo '<span class="widget-icon">' . $icon . '</span> <strong>' . esc_html($def['name']) . '</strong>';
                 echo '<div class="widget-preview-box">' . $preview . '</div>';
                 echo '<small>' . esc_html($def['description']) . '</small></label></li>';

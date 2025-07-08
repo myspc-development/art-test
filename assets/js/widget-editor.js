@@ -16,6 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.textContent = visible ? '👁 Show' : '🙈 Hide';
       const content = card.querySelector('.widget-content');
       if (content) content.style.display = visible ? 'none' : 'block';
+      if (!visible) {
+        card.classList.add('is-hidden');
+      } else {
+        card.classList.remove('is-hidden');
+      }
+    });
+  });
+
+  document.querySelectorAll('.widget-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.ap-widget');
+      if (card) card.remove();
     });
   });
 
@@ -37,11 +49,23 @@ document.addEventListener('DOMContentLoaded', () => {
         visible: el.dataset.visible === '1'
       }));
       document.getElementById('layout_input').value = JSON.stringify(layout);
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span class="spinner"></span> Saving...';
+      }
     });
   }
 
   const search = document.getElementById('widget-search');
-  const categoryFilter = document.getElementById('widget-category-filter');
+  const categoryFilter = document.getElementById('ap-widget-category-filter');
+
+  const saveBtn = document.getElementById('save-layout-btn');
+
+  window.apFilterWidgetsByCategory = function(cat) {
+    document.querySelectorAll('.widget-card').forEach(card => {
+      card.style.display = (!cat || card.dataset.category === cat) ? 'block' : 'none';
+    });
+  };
 
   function filterWidgets() {
     const textFilter = search ? search.value.toLowerCase() : '';
@@ -57,9 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (search) {
     search.addEventListener('input', filterWidgets);
-  }
-  if (categoryFilter) {
-    categoryFilter.addEventListener('change', filterWidgets);
   }
   document.getElementById('toggle-preview')?.addEventListener('click', () => {
     const preview = document.getElementById('ap-widget-preview-area');

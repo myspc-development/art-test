@@ -6,6 +6,16 @@
     margin-bottom: var(--ap-space-medium, 1rem);
     position: relative;
 }
+.widget-card {
+  border: 1px solid var(--ap-border-color, #ddd);
+  padding: var(--ap-space-medium, 1rem);
+  margin-bottom: var(--ap-space-medium, 1rem);
+  background: var(--ap-bg-color, #fff);
+}
+.widget-remove {
+  margin-left: 5px;
+  cursor: pointer;
+}
 
 .widget-handle {
     position: absolute;
