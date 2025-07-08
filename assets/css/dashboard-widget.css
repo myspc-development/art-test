@@ -268,3 +268,28 @@
 .inside {
   padding: 12px;
 }
+/* Minimal role dashboard styles */
+.ap-dashboard-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ap-widget-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.ap-widget-header {
+  background: #f9f9f9;
+  padding: 8px 12px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: grab;
+}
+.inside {
+  padding: 12px;
+}

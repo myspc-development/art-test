@@ -390,37 +390,21 @@ class DashboardWidgetTools
         $layout   = UserLayoutManager::get_layout_for_user($user_id);
         $registry = DashboardWidgetRegistry::get_all();
 
-        $columns = ['column-1' => [], 'column-2' => []];
-        foreach ($layout as $i => $widget) {
+        foreach ($layout as $widget) {
             $id      = is_array($widget) ? $widget['id'] : $widget;
             if (!isset($registry[$id])) {
                 continue;
             }
-            $column = $i % 2 === 0 ? 'column-1' : 'column-2';
-            $columns[$column][] = [
-                'id'      => $id,
-                'visible' => is_array($widget) ? ($widget['visible'] ?? true) : true,
-            ];
-        }
+            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
+            $def     = $registry[$id];
 
-        foreach ($columns as $column => $widgets) {
-            echo '<div class="column" id="' . esc_attr($column) . '">';
-            foreach ($widgets as $item) {
-                $id  = $item['id'];
-                $vis = $item['visible'];
-                $widget = $registry[$id];
-                echo '<div class="ap-widget-card postbox" data-id="' . esc_attr($id) . '" data-visible="' . ($vis ? '1' : '0') . '">';
-                echo '<div class="ap-widget-header">';
-                echo '<span class="drag-handle">&#9776;</span>';
-                echo '<span class="widget-title">' . esc_html($widget['label']) . '</span>';
-                echo '<button class="widget-toggle" title="Toggle Visibility" data-id="' . esc_attr($id) . '">' . ($vis ? '👁️' : '🙈') . '</button>';
-                echo '<button class="collapse-toggle" title="Collapse Widget">🔽</button>';
-                echo '</div>';
-                echo '<div class="inside">';
-                call_user_func($widget['callback']);
-                echo '</div></div>';
-            }
+            echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+            echo '<div class="ap-widget-header drag-handle">';
+            echo '<span class="widget-title">' . esc_html($def['label']) . '</span>';
             echo '</div>';
+            echo '<div class="inside">';
+            call_user_func($def['callback']);
+            echo '</div></div>';
         }
     }
 }
