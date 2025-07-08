@@ -53,11 +53,30 @@ class UserLayoutManager
         $config = get_option('ap_dashboard_widget_config', []);
         $layout = $config[$role] ?? [];
         if (is_array($layout) && !empty($layout)) {
-            return array_map('sanitize_key', $layout);
+            $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+            $ordered = [];
+            foreach ($layout as $item) {
+                if (is_array($item) && isset($item['id'])) {
+                    $id  = sanitize_key($item['id']);
+                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+                } else {
+                    $id  = sanitize_key($item);
+                    $vis = true;
+                }
+                if (in_array($id, $valid, true)) {
+                    $ordered[] = ['id' => $id, 'visible' => $vis];
+                }
+            }
+            if ($ordered) {
+                return $ordered;
+            }
         }
 
         $defs = DashboardWidgetRegistry::get_definitions();
-        return array_column($defs, 'id');
+        return array_map(
+            fn($def) => ['id' => $def['id'], 'visible' => true],
+            $defs
+        );
     }
 
     /**
@@ -65,11 +84,23 @@ class UserLayoutManager
      */
     public static function save_role_layout(string $role, array $layout): void
     {
-        $layout = array_map('sanitize_key', $layout);
         $valid  = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-        $layout = array_values(array_intersect(array_unique($layout), $valid));
+        $ordered = [];
+        foreach ($layout as $item) {
+            if (is_array($item) && isset($item['id'])) {
+                $id  = sanitize_key($item['id']);
+                $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+            } else {
+                $id  = sanitize_key($item);
+                $vis = true;
+            }
+            if (in_array($id, $valid, true)) {
+                $ordered[] = ['id' => $id, 'visible' => $vis];
+            }
+        }
+
         $config = get_option('ap_dashboard_widget_config', []);
-        $config[sanitize_key($role)] = $layout;
+        $config[sanitize_key($role)] = $ordered;
         update_option('ap_dashboard_widget_config', $config);
     }
 
@@ -85,16 +116,7 @@ class UserLayoutManager
             return false;
         }
 
-        $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-        $layout  = [];
-        foreach ($data as $w) {
-            $key = sanitize_key($w);
-            if (in_array($key, $valid, true)) {
-                $layout[] = $key;
-            }
-        }
-
-        self::save_role_layout($role, $layout);
+        self::save_role_layout($role, $data);
         return true;
     }
 }
