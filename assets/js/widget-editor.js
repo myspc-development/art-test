@@ -93,7 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
     apSearchWidgets(e.target.value);
   });
   roleSelect?.addEventListener('change', e => {
-    window.location.href = '?page=dashboard_widgets&role=' + e.target.value;
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', 'artpulse-dashboard-widgets');
+    params.set('ap_dashboard_role', e.target.value);
+    window.location.search = params.toString();
   });
   document.getElementById('toggle-preview')?.addEventListener('click', () => {
     const preview = document.getElementById('ap-widget-preview-area');

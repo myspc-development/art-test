@@ -42,12 +42,23 @@ class DashboardWidgetTools
 
     public static function render(): void
     {
-        if (!current_user_can('manage_options')) {
-            wp_die(__('Insufficient permissions', 'artpulse'));
+        $roles    = wp_roles()->roles;
+        $selected = isset($_POST['ap_dashboard_role'])
+            ? sanitize_key($_POST['ap_dashboard_role'])
+            : (isset($_GET['ap_dashboard_role']) ? sanitize_key($_GET['ap_dashboard_role']) : (array_key_first($roles) ?: ''));
+
+        if (!in_array($selected, ['member', 'artist', 'organization'], true)) {
+            wp_die('Invalid role.');
         }
 
-        $roles    = wp_roles()->roles;
-        $selected = isset($_POST['ap_dashboard_role']) ? sanitize_key($_POST['ap_dashboard_role']) : (isset($_GET['ap_dashboard_role']) ? sanitize_key($_GET['ap_dashboard_role']) : (array_key_first($roles) ?: ''));
+        if (!current_user_can($selected) && !current_user_can('manage_options')) {
+            wp_die(__('Access denied.', 'artpulse'));
+        }
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('Widget Manager accessed by user: ' . get_current_user_id());
+            error_log('User roles: ' . wp_json_encode(wp_get_current_user()->roles));
+        }
 
         if (isset($_POST['layout'])) {
             check_admin_referer('ap_save_role_layout');
