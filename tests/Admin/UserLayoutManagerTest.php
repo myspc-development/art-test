@@ -85,6 +85,37 @@ class UserLayoutManagerTest extends TestCase
         $this->assertSame(['a'], $layout);
     }
 
+    public function test_save_role_layout_sanitizes_and_updates_option(): void
+    {
+        DashboardWidgetRegistry::register('sr_one', 'One', '', '', '__return_null');
+        DashboardWidgetRegistry::register('sr_two', 'Two', '', '', '__return_null');
+
+        UserLayoutManager::save_role_layout('editor<script>', ['sr_two', 'sr_one', 'sr_one', 'invalid']);
+
+        $expected = [
+            'editorscript' => ['sr_two', 'sr_one'],
+        ];
+
+        $this->assertSame($expected, self::$options['ap_dashboard_widget_config'] ?? null);
+    }
+
+    public function test_get_role_layout_returns_saved_or_fallback(): void
+    {
+        DashboardWidgetRegistry::register('gr_one', 'One', '', '', '__return_null');
+        DashboardWidgetRegistry::register('gr_two', 'Two', '', '', '__return_null');
+
+        self::$options['ap_dashboard_widget_config'] = [
+            'subscriber' => ['gr_two', 'GR_ONE'],
+        ];
+
+        $layout = UserLayoutManager::get_role_layout('subscriber');
+        $this->assertSame(['gr_two', 'gr_one'], $layout);
+
+        self::$options['ap_dashboard_widget_config'] = [];
+        $expected = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+        $this->assertSame($expected, UserLayoutManager::get_role_layout('subscriber'));
+    }
+
     /**
      * @runInSeparateProcess
      */
