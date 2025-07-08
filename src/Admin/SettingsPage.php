@@ -753,7 +753,7 @@ class SettingsPage
         ) . '</p></div></noscript>';
         wp_enqueue_script(
             'ap-widget-editor',
-            plugin_dir_url(__FILE__) . 'assets/js/widget-editor.js',
+            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/widget-editor.js',
             ['sortablejs'],
             '1.0',
             true
