@@ -42,23 +42,23 @@
         <summary><?php esc_html_e('Show/Hide Widgets', 'artpulse'); ?></summary>
         <fieldset id="ap-widget-toggles">
             <legend class="screen-reader-text"><?php esc_html_e('Toggle widgets', 'artpulse'); ?></legend>
-            <label><input type="checkbox" value="membership" <?php checked($visibility['membership'] ?? true); ?>> <?php esc_html_e('Membership', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="next-payment" <?php checked($visibility['next-payment'] ?? true); ?>> <?php esc_html_e('Next Payment', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="transactions" <?php checked($visibility['transactions'] ?? true); ?>> <?php esc_html_e('Transactions', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="upgrade" <?php checked($visibility['upgrade'] ?? true); ?>> <?php esc_html_e('Upgrade', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="content" <?php checked($visibility['content'] ?? true); ?>> <?php esc_html_e('Content', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="local-events" <?php checked($visibility['local-events'] ?? true); ?>> <?php esc_html_e('Local Events', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="favorites" <?php checked($visibility['favorites'] ?? true); ?>> <?php esc_html_e('Favorites', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="events" <?php checked($visibility['events'] ?? true); ?>> <?php esc_html_e('Events', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="messages" <?php checked($visibility['messages'] ?? true); ?>> <?php esc_html_e('Messages', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="membership" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['membership'] ?? true); ?>> <?php esc_html_e('Membership', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="next-payment" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['next-payment'] ?? true); ?>> <?php esc_html_e('Next Payment', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="transactions" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['transactions'] ?? true); ?>> <?php esc_html_e('Transactions', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="upgrade" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['upgrade'] ?? true); ?>> <?php esc_html_e('Upgrade', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="content" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['content'] ?? true); ?>> <?php esc_html_e('Content', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="local-events" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['local-events'] ?? true); ?>> <?php esc_html_e('Local Events', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="favorites" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['favorites'] ?? true); ?>> <?php esc_html_e('Favorites', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="events" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['events'] ?? true); ?>> <?php esc_html_e('Events', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="messages" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['messages'] ?? true); ?>> <?php esc_html_e('Messages', 'artpulse'); ?></label>
             <?php if ($show_support_history) : ?>
-            <label><input type="checkbox" value="support-history" <?php checked($visibility['support-history'] ?? true); ?>> <?php esc_html_e('Support History', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="support-history" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['support-history'] ?? true); ?>> <?php esc_html_e('Support History', 'artpulse'); ?></label>
             <?php endif; ?>
             <?php if ($show_notifications) : ?>
-            <label><input type="checkbox" value="notifications" <?php checked($visibility['notifications'] ?? true); ?>> <?php esc_html_e('Notifications', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="notifications" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['notifications'] ?? true); ?>> <?php esc_html_e('Notifications', 'artpulse'); ?></label>
             <?php endif; ?>
-            <label><input type="checkbox" value="webhooks" <?php checked($visibility['webhooks'] ?? true); ?>> <?php esc_html_e('Webhooks', 'artpulse'); ?></label>
-            <label><input type="checkbox" value="account-tools" <?php checked($visibility['account-tools'] ?? true); ?>> <?php esc_html_e('Account Tools', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="webhooks" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['webhooks'] ?? true); ?>> <?php esc_html_e('Webhooks', 'artpulse'); ?></label>
+            <label><input type="checkbox" value="account-tools" title="Toggle Widget" aria-label="Toggle Widget" <?php checked($visibility['account-tools'] ?? true); ?>> <?php esc_html_e('Account Tools', 'artpulse'); ?></label>
         </fieldset>
         </details>
     </div>

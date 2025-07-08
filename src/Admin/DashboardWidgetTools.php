@@ -123,7 +123,7 @@ class DashboardWidgetTools
                 echo '<span class="ap-widget-icon">' . $icon . '</span>';
                 echo '<span class="ap-widget-title">' . $title . '</span>';
                 echo '<div class="ap-widget-controls">';
-                echo '<label class="toggle-switch"><input type="checkbox" class="widget-toggle"' . checked($visible, true, false) . ' /><span class="slider"></span></label>';
+                echo '<label class="toggle-switch" title="Toggle Widget"><input type="checkbox" class="widget-toggle" aria-label="Toggle Widget"' . checked($visible, true, false) . ' /><span class="slider"></span></label>';
                 echo '<button type="button" class="widget-remove" title="Remove Widget">&#x2716;</button>';
                 echo '</div></div>';
                 if ($visible) {
