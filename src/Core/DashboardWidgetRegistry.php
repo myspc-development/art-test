@@ -15,6 +15,9 @@ class DashboardWidgetRegistry
 
     /**
      * Register a widget and its settings.
+     *
+     * @param callable $callback Callback used to render the widget. Must be
+     *                           callable.
      */
     public static function register(
         string $id,
@@ -25,6 +28,11 @@ class DashboardWidgetRegistry
         string $capability = 'read',
         array $settings_schema = []
     ): void {
+        // Callback must be valid to render the widget.
+        if (!is_callable($callback)) {
+            trigger_error('Dashboard widget callback not callable: ' . $id, E_USER_WARNING);
+            return;
+        }
         self::$widgets[$id] = [
             'label'       => $label,
             'icon'        => $icon,
