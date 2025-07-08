@@ -152,20 +152,20 @@ class UserLayoutManager
             return $layout;
         }
 
-        $defs = DashboardWidgetRegistry::get_definitions();
+        $all = DashboardWidgetRegistry::get_all();
         return array_map(
-            fn($def) => ['id' => $def['id'], 'visible' => true],
-            $defs
+            fn($id) => ['id' => $id, 'visible' => true],
+            array_keys($all)
         );
     }
 
     /**
      * Get a user's primary role.
      */
-    private static function get_primary_role(int $user_id): string
+    public static function get_primary_role(int $user_id): string
     {
         $user = get_userdata($user_id);
-        return $user && !empty($user->roles) ? sanitize_key($user->roles[0]) : 'subscriber';
+        return $user && !empty($user->roles) ? $user->roles[0] : 'subscriber';
     }
 
 }

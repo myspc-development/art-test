@@ -359,21 +359,26 @@ class DashboardWidgetTools
      */
     public static function render_dashboard_widgets(string $role): void
     {
-        $layout = UserLayoutManager::get_role_layout($role);
+        $user_id = get_current_user_id();
+        $layout  = UserLayoutManager::get_layout_for_user($user_id);
 
         foreach ($layout as $widget) {
             $id = is_array($widget) ? $widget['id'] : $widget;
             $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
+
             if (!$visible) {
                 continue;
             }
 
-            $cb = DashboardWidgetRegistry::get_widget_callback($id);
-            if (is_callable($cb)) {
-                echo '<div class="ap-widget">';
-                echo call_user_func($cb);
-                echo '</div>';
+            $definition = DashboardWidgetRegistry::get($id);
+            if (!$definition) {
+                error_log("Missing widget: " . $id);
+                continue;
             }
+
+            echo '<div class="dashboard-widget">';
+            call_user_func($definition['callback']);
+            echo '</div>';
         }
     }
 }
