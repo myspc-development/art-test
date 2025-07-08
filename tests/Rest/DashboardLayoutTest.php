@@ -3,6 +3,7 @@ namespace ArtPulse\Rest\Tests;
 
 use WP_REST_Request;
 use ArtPulse\Core\UserDashboardManager;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
  * @group restapi
@@ -17,6 +18,14 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         $this->user_id = self::factory()->user->create();
         wp_set_current_user($this->user_id);
         UserDashboardManager::register();
+        DashboardWidgetRegistry::register('one', 'one', '', '', '__return_null');
+        DashboardWidgetRegistry::register('two', 'two', '', '', '__return_null');
+        DashboardWidgetRegistry::register('a', 'a', '', '', '__return_null');
+        DashboardWidgetRegistry::register('b', 'b', '', '', '__return_null');
+        DashboardWidgetRegistry::register('c', 'c', '', '', '__return_null');
+        DashboardWidgetRegistry::register('a-', 'a-', '', '', '__return_null');
+        DashboardWidgetRegistry::register('bc', 'bc', '', '', '__return_null');
+        DashboardWidgetRegistry::register('invalidslug', 'invalid', '', '', '__return_null');
         do_action('rest_api_init');
     }
 
@@ -55,6 +64,17 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         $this->assertSame(200, $res->get_status());
         $expected = ['a-', 'bc', 'invalidslug'];
         $this->assertSame($expected, get_user_meta($this->user_id, 'ap_dashboard_layout', true));
+    }
+
+    public function test_post_ignores_duplicates_and_invalid_ids(): void
+    {
+        $req = new WP_REST_Request('POST', '/artpulse/v1/ap_dashboard_layout');
+        $req->set_body_params([
+            'layout' => ['a', 'b', 'a', 'invalid'],
+        ]);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $this->assertSame(['a', 'b'], get_user_meta($this->user_id, 'ap_dashboard_layout', true));
     }
 
     public function test_get_uses_role_default_when_no_user_meta(): void
