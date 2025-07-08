@@ -202,5 +202,16 @@ class UserLayoutManagerTest extends TestCase
             ['id' => 'foo', 'visible' => true]
         ], self::$options['ap_dashboard_widget_config']['subscriber']);
     }
+
+    public function test_reset_layout_for_role_removes_config(): void
+    {
+        self::$options['ap_dashboard_widget_config'] = [
+            'subscriber' => [ ['id' => 'foo'] ]
+        ];
+
+        UserLayoutManager::reset_layout_for_role('subscriber');
+
+        $this->assertArrayNotHasKey('subscriber', self::$options['ap_dashboard_widget_config']);
+    }
 }
 

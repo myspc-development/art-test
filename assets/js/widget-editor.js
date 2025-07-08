@@ -1,13 +1,19 @@
 // Dashboard widget layout editor
 // Requires SortableJS
 
+let roleSelect;
+let nonceField;
+
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('#ap-widget-list');
   if (container && typeof Sortable !== 'undefined') {
     Sortable.create(container, {
       handle: '.drag-handle',
       animation: 150,
-      onEnd: saveLayoutOrderToStorage
+      onEnd: () => {
+        saveLayoutOrderToStorage();
+        saveLayoutAjax();
+      }
     });
   }
 
@@ -23,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         widget.classList.add('is-hidden');
       }
       saveLayoutOrderToStorage();
+      saveLayoutAjax();
     });
   });
 
@@ -32,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (card) {
         card.remove();
         saveLayoutOrderToStorage();
+        saveLayoutAjax();
       }
     });
   });
@@ -48,22 +56,30 @@ document.addEventListener('DOMContentLoaded', () => {
   // Submit layout data
   const form = document.getElementById('widget-layout-form');
   if (form) {
-    form.addEventListener('submit', () => {
-      const layout = Array.from(container.children).map(el => ({
-        id: el.dataset.id,
-        visible: el.dataset.visible === '1'
-      }));
-      document.getElementById('layout_input').value = JSON.stringify(layout);
-      if (saveBtn) {
-        saveBtn.disabled = true;
-        saveBtn.innerHTML = '<span class="spinner"></span> Saving...';
-      }
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner"></span> Saving...';
+      const payload = new URLSearchParams({
+        action: 'ap_save_role_layout',
+        nonce: nonceField?.value || '',
+        role: roleSelect?.value || '',
+        layout: JSON.stringify(getCurrentLayout())
+      });
+      fetch(ajaxurl, { method: 'POST', body: payload })
+        .then(r => r.json())
+        .then(() => {
+          saveBtn.innerHTML = '💾 Save Layout';
+          saveBtn.disabled = false;
+        });
     });
   }
 
   const categoryFilter = document.getElementById('ap-widget-category-filter');
 
   const saveBtn = document.getElementById('save-layout-btn');
+  roleSelect = document.getElementById('ap-role-selector');
+  nonceField = document.querySelector('#widget-layout-form input[name="_wpnonce"]');
 
   window.apFilterWidgetsByCategory = function(cat) {
     if (categoryFilter) {
@@ -75,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('ap-widget-search')?.addEventListener('input', e => {
     apSearchWidgets(e.target.value);
+  });
+  roleSelect?.addEventListener('change', e => {
+    window.location.href = '?page=dashboard_widgets&role=' + e.target.value;
   });
   document.getElementById('toggle-preview')?.addEventListener('click', () => {
     const preview = document.getElementById('ap-widget-preview-area');
@@ -104,4 +123,23 @@ function saveLayoutOrderToStorage() {
     visible: el.dataset.visible === '1'
   }));
   localStorage.setItem('apDashboardWidgetLayout', JSON.stringify(ids));
+}
+
+function getCurrentLayout() {
+  const list = document.querySelectorAll('#ap-widget-list .ap-widget-card');
+  return Array.from(list).map(el => ({
+    id: el.dataset.id,
+    visible: el.dataset.visible === '1'
+  }));
+}
+
+function saveLayoutAjax() {
+  if (!nonceField) return;
+  const payload = new URLSearchParams({
+    action: 'ap_save_role_layout',
+    nonce: nonceField.value,
+    role: roleSelect?.value || '',
+    layout: JSON.stringify(getCurrentLayout())
+  });
+  fetch(ajaxurl, { method: 'POST', body: payload });
 }
