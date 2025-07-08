@@ -2,31 +2,37 @@
 // Requires SortableJS
 
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('custom-widgets');
+  const container = document.querySelector('#ap-widget-list');
   if (container && typeof Sortable !== 'undefined') {
-    Sortable.create(container, { handle: '.widget-handle', animation: 150 });
+    Sortable.create(container, {
+      handle: '.drag-handle',
+      animation: 150,
+      onEnd: saveLayoutOrderToStorage
+    });
   }
 
   // Toggle widget visibility
-  document.querySelectorAll('.widget-toggle').forEach(button => {
-    button.addEventListener('click', () => {
-      const widget = button.closest('.ap-widget');
-      const isVisible = widget.dataset.visible === '1';
-      widget.dataset.visible = isVisible ? '0' : '1';
-      button.innerText = isVisible ? '🚫' : '👁️';
-
+  document.querySelectorAll('.widget-toggle').forEach(input => {
+    input.addEventListener('change', () => {
+      const widget = input.closest('.ap-widget-card');
+      const isVisible = input.checked;
+      widget.dataset.visible = isVisible ? '1' : '0';
       if (isVisible) {
-        widget.classList.add('is-hidden');
-      } else {
         widget.classList.remove('is-hidden');
+      } else {
+        widget.classList.add('is-hidden');
       }
+      saveLayoutOrderToStorage();
     });
   });
 
   document.querySelectorAll('.widget-remove').forEach(btn => {
     btn.addEventListener('click', () => {
-      const card = btn.closest('.ap-widget');
-      if (card) card.remove();
+      const card = btn.closest('.ap-widget-card');
+      if (card) {
+        card.remove();
+        saveLayoutOrderToStorage();
+      }
     });
   });
 
@@ -88,4 +94,14 @@ function apSearchWidgets(query) {
     const matchCat = !cat || card.dataset.category === cat;
     card.style.display = matchText && matchCat ? 'block' : 'none';
   });
+}
+
+function saveLayoutOrderToStorage() {
+  const list = document.querySelector('#ap-widget-list');
+  if (!list) return;
+  const ids = Array.from(list.querySelectorAll('.ap-widget-card')).map(el => ({
+    id: el.dataset.id,
+    visible: el.dataset.visible === '1'
+  }));
+  localStorage.setItem('apDashboardWidgetLayout', JSON.stringify(ids));
 }

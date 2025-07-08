@@ -48,13 +48,22 @@ class WidgetLayoutAjaxTest extends TestCase
     public function test_save_widget_layout_sanitizes_and_saves(): void
     {
         $_POST['nonce'] = 'n';
-        $_POST['layout'] = ['c', 'b', 'a', 'a', 'bad'];
-        $_POST['visibility'] = ['a' => '1', 'b' => false];
+        $_POST['layout'] = [
+            ['id' => 'c', 'visible' => true],
+            ['id' => 'b', 'visible' => false],
+            ['id' => 'a', 'visible' => true],
+            ['id' => 'a'],
+            'bad'
+        ];
 
         ap_save_widget_layout();
 
-        $this->assertSame(['c', 'b', 'a'], self::$meta[self::$uid]['ap_dashboard_layout'] ?? null);
-        $this->assertSame(['a' => true, 'b' => false], self::$meta[self::$uid]['ap_widget_visibility'] ?? null);
+        $expected = [
+            ['id' => 'c', 'visible' => true],
+            ['id' => 'b', 'visible' => false],
+            ['id' => 'a', 'visible' => true]
+        ];
+        $this->assertSame($expected, self::$meta[self::$uid]['ap_dashboard_layout'] ?? null);
         $this->assertSame(['saved' => true], self::$json_success);
         $this->assertNull(self::$json_error);
     }

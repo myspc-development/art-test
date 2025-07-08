@@ -614,31 +614,56 @@ class UserDashboardManager
     public static function getDashboardLayout(): \WP_REST_Response
     {
         $uid   = get_current_user_id();
-        $layout = get_user_meta($uid, 'ap_dashboard_layout', true);
-        if (is_array($layout)) {
-            $layout = array_map('sanitize_key', $layout);
+        $layout_meta = get_user_meta($uid, 'ap_dashboard_layout', true);
+        $layout = [];
+        $visibility = [];
+        if (is_array($layout_meta)) {
+            if (isset($layout_meta[0]) && is_array($layout_meta[0])) {
+                $valid = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+                foreach ($layout_meta as $item) {
+                    $id = sanitize_key($item['id'] ?? '');
+                    if (!in_array($id, $valid, true)) {
+                        continue;
+                    }
+                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+                    $layout[] = $id;
+                    $visibility[$id] = $vis;
+                }
+            } else {
+                $layout = array_map('sanitize_key', $layout_meta);
+            }
         }
-        if (!is_array($layout) || empty($layout)) {
+
+        if (empty($layout)) {
             $roles = wp_get_current_user()->roles;
             $config = get_option('ap_dashboard_widget_config', []);
             foreach ($roles as $r) {
                 if (!empty($config[$r]) && is_array($config[$r])) {
-                    $layout = array_map('sanitize_key', $config[$r]);
+                    foreach ($config[$r] as $item) {
+                        if (is_array($item)) {
+                            $id = sanitize_key($item['id'] ?? '');
+                            $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+                        } else {
+                            $id = sanitize_key($item);
+                            $vis = true;
+                        }
+                        $layout[] = $id;
+                        $visibility[$id] = $vis;
+                    }
                     break;
                 }
             }
-            if (!is_array($layout)) {
-                $layout = [];
-            }
         }
-        $vis = get_user_meta($uid, 'ap_widget_visibility', true);
-        if (!is_array($vis)) {
-            $vis = [];
+        if (empty($visibility)) {
+            $vis_meta = get_user_meta($uid, 'ap_widget_visibility', true);
+            if (is_array($vis_meta)) {
+                $visibility = array_map('boolval', $vis_meta);
+            }
         }
 
         return rest_ensure_response([
             'layout'     => $layout,
-            'visibility' => $vis,
+            'visibility' => $visibility,
         ]);
     }
 
@@ -647,21 +672,44 @@ class UserDashboardManager
         $uid = get_current_user_id();
 
         if ($request->has_param('layout')) {
-            $layout_raw = (array) $request->get_param('layout');
-            $layout = array_map('sanitize_key', $layout_raw);
-            $layout = array_values(array_unique($layout));
-            $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-            $layout = array_values(array_intersect($layout, $valid_ids));
-            update_user_meta($uid, 'ap_dashboard_layout', $layout);
-        }
-
-        if ($request->has_param('visibility')) {
-            $vis_raw = (array) $request->get_param('visibility');
-            $vis = [];
-            foreach ($vis_raw as $key => $val) {
-                $vis[sanitize_key($key)] = (bool) $val;
+            $layout_raw = $request->get_param('layout');
+            if (is_string($layout_raw)) {
+                $layout_raw = json_decode($layout_raw, true);
             }
-            update_user_meta($uid, 'ap_widget_visibility', $vis);
+            $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+            $ordered = [];
+            foreach ((array) $layout_raw as $item) {
+                if (is_array($item) && isset($item['id'])) {
+                    $id  = sanitize_key($item['id']);
+                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+                } else {
+                    $id  = sanitize_key($item);
+                    $vis = true;
+                }
+                if (in_array($id, $valid_ids, true)) {
+                    $ordered[] = ['id' => $id, 'visible' => $vis];
+                }
+            }
+            update_user_meta($uid, 'ap_dashboard_layout', $ordered);
+        } elseif ($request->has_param('visibility')) {
+            $vis_raw = (array) $request->get_param('visibility');
+            $current = get_user_meta($uid, 'ap_dashboard_layout', true);
+            if (!is_array($current)) {
+                $current = [];
+            }
+            $updated = [];
+            foreach ($current as $item) {
+                if (is_array($item) && isset($item['id'])) {
+                    $id = sanitize_key($item['id']);
+                    $vis = isset($vis_raw[$id]) ? (bool) $vis_raw[$id] : ($item['visible'] ?? true);
+                    $updated[] = ['id' => $id, 'visible' => $vis];
+                } elseif (is_string($item)) {
+                    $id = sanitize_key($item);
+                    $vis = isset($vis_raw[$id]) ? (bool) $vis_raw[$id] : true;
+                    $updated[] = ['id' => $id, 'visible' => $vis];
+                }
+            }
+            update_user_meta($uid, 'ap_dashboard_layout', $updated);
         }
 
         return rest_ensure_response(['saved' => true]);
