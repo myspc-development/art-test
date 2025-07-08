@@ -393,20 +393,29 @@ class DashboardWidgetTools
         $columns = ['column-1' => [], 'column-2' => []];
         foreach ($layout as $i => $widget) {
             $id      = is_array($widget) ? $widget['id'] : $widget;
-            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
-            if (!$visible || !isset($registry[$id])) {
+            if (!isset($registry[$id])) {
                 continue;
             }
             $column = $i % 2 === 0 ? 'column-1' : 'column-2';
-            $columns[$column][] = $id;
+            $columns[$column][] = [
+                'id'      => $id,
+                'visible' => is_array($widget) ? ($widget['visible'] ?? true) : true,
+            ];
         }
 
         foreach ($columns as $column => $widgets) {
             echo '<div class="column" id="' . esc_attr($column) . '">';
-            foreach ($widgets as $id) {
+            foreach ($widgets as $item) {
+                $id  = $item['id'];
+                $vis = $item['visible'];
                 $widget = $registry[$id];
-                echo '<div class="ap-widget-card postbox" data-id="' . esc_attr($id) . '">';
-                echo '<div class="ap-widget-header handlediv"><h2 class="hndle">&#9776; ' . esc_html($widget['label']) . '</h2></div>';
+                echo '<div class="ap-widget-card postbox" data-id="' . esc_attr($id) . '" data-visible="' . ($vis ? '1' : '0') . '">';
+                echo '<div class="ap-widget-header">';
+                echo '<span class="drag-handle">&#9776;</span>';
+                echo '<span class="widget-title">' . esc_html($widget['label']) . '</span>';
+                echo '<button class="widget-toggle" title="Toggle Visibility" data-id="' . esc_attr($id) . '">' . ($vis ? '👁️' : '🙈') . '</button>';
+                echo '<button class="collapse-toggle" title="Collapse Widget">🔽</button>';
+                echo '</div>';
                 echo '<div class="inside">';
                 call_user_func($widget['callback']);
                 echo '</div></div>';

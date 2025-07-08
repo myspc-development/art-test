@@ -178,6 +178,9 @@
   border-radius: 6px;
   overflow: hidden;
 }
+.ap-widget-card.collapsed .inside {
+  display: none;
+}
 
 .ap-widget-card[data-visible="0"] {
   opacity: 0.4;

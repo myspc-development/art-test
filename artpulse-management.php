@@ -35,6 +35,13 @@ require_once __DIR__ . '/src/Frontend/ShareButtons.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
 
+// Handle user dashboard reset
+add_action('init', function () {
+    if (isset($_POST['reset_user_layout']) && check_admin_referer('ap_reset_user_layout')) {
+        \ArtPulse\Admin\UserLayoutManager::reset_user_layout(get_current_user_id());
+    }
+});
+
 // Load sample widgets for testing
 add_action('init', function () {
     if (class_exists('\\ArtPulse\\Sample\\SampleWidgets')) {
