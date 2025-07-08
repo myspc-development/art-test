@@ -16,6 +16,12 @@
     font-size: 1.2em;
 }
 
+.widget-handle::before {
+    content: "\2630"; /* Hamburger icon */
+    margin-right: 8px;
+    display: inline-block;
+}
+
 .widget-toggle {
     display: block;
     margin-bottom: 0.5rem;
@@ -27,4 +33,18 @@
     background: var(--ap-alt-bg-color, #fafafa);
     padding: var(--ap-space-medium, 1rem);
     margin-bottom: var(--ap-space-medium, 1rem);
+}
+
+.preview-box {
+    background: #f9f9f9;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #e1e1e1;
+    font-size: 0.9em;
+}
+
+#widget-search {
+    width: 100%;
+    padding: 6px;
+    font-size: 14px;
 }

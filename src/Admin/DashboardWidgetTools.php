@@ -104,15 +104,18 @@ class DashboardWidgetTools
 
         echo '<div class="ap-add-widget" style="margin-top:15px;">';
         echo '<h3>' . esc_html__('Add Widget', 'artpulse') . '</h3>';
+        echo '<input type="text" id="widget-search" placeholder="Search widgets..." class="regular-text" style="margin-bottom: 10px;">';
+        echo '<ul id="add-widget-panel">';
         foreach ($defs as $def) {
             if (in_array($def['id'], $unused, true)) {
-                $id    = esc_attr($def['id']);
-                $label = esc_html($def['name']);
-                echo '<label style="display:block;margin-bottom:4px;">';
-                echo '<input type="checkbox" value="' . $id . '" /> ' . $label;
-                echo '</label>';
+                $id      = esc_attr($def['id']);
+                $preview = self::render_widget_preview($def['id']);
+                echo '<li><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> <strong>' . esc_html($def['name']) . '</strong>';
+                echo '<div class="preview-box">' . $preview . '</div>';
+                echo '<small>' . esc_html($def['description']) . '</small></label></li>';
             }
         }
+        echo '</ul>';
         echo '</div>';
         echo '</div>';
     }
@@ -192,6 +195,21 @@ class DashboardWidgetTools
 
         wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=artpulse-dashboard-widgets')));
         exit;
+    }
+
+    /**
+     * Render the preview HTML for a widget by ID.
+     */
+    public static function render_widget_preview(string $id): string
+    {
+        $cb = DashboardWidgetRegistry::get_widget_callback($id);
+        if (!is_callable($cb)) {
+            return '';
+        }
+
+        ob_start();
+        call_user_func($cb);
+        return ob_get_clean();
     }
 
     /**
