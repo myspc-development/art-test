@@ -70,14 +70,17 @@ class UserLayoutManagerTest extends TestCase
         DashboardWidgetRegistry::register('b', 'B', '', '', '__return_null');
 
         self::$users[2] = (object)['roles' => ['subscriber']];
-        self::$options['ap_dashboard_widget_config'] = ['subscriber' => ['b']];
+        self::$options['ap_dashboard_widget_config'] = ['subscriber' => [ ['id' => 'b'] ]];
 
         $layout = UserLayoutManager::get_layout(2);
-        $this->assertSame(['b'], $layout);
+        $this->assertSame([['id' => 'b', 'visible' => true]], $layout);
 
         self::$options['ap_dashboard_widget_config'] = [];
         $layout = UserLayoutManager::get_layout(2);
-        $expected = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+        $expected = array_map(
+            fn($id) => ['id' => $id, 'visible' => true],
+            array_column(DashboardWidgetRegistry::get_definitions(), 'id')
+        );
         $this->assertSame($expected, $layout);
 
         self::$meta[2]['ap_dashboard_layout'] = ['a'];
@@ -90,10 +93,18 @@ class UserLayoutManagerTest extends TestCase
         DashboardWidgetRegistry::register('sr_one', 'One', '', '', '__return_null');
         DashboardWidgetRegistry::register('sr_two', 'Two', '', '', '__return_null');
 
-        UserLayoutManager::save_role_layout('editor<script>', ['sr_two', 'sr_one', 'sr_one', 'invalid']);
+        UserLayoutManager::save_role_layout('editor<script>', [
+            ['id' => 'sr_two'],
+            ['id' => 'sr_one'],
+            ['id' => 'sr_one'],
+            'invalid'
+        ]);
 
         $expected = [
-            'editorscript' => ['sr_two', 'sr_one'],
+            'editorscript' => [
+                ['id' => 'sr_two', 'visible' => true],
+                ['id' => 'sr_one', 'visible' => true],
+            ],
         ];
 
         $this->assertSame($expected, self::$options['ap_dashboard_widget_config'] ?? null);
@@ -105,14 +116,23 @@ class UserLayoutManagerTest extends TestCase
         DashboardWidgetRegistry::register('gr_two', 'Two', '', '', '__return_null');
 
         self::$options['ap_dashboard_widget_config'] = [
-            'subscriber' => ['gr_two', 'GR_ONE'],
+            'subscriber' => [
+                ['id' => 'gr_two'],
+                ['id' => 'GR_ONE']
+            ],
         ];
 
         $layout = UserLayoutManager::get_role_layout('subscriber');
-        $this->assertSame(['gr_two', 'gr_one'], $layout);
+        $this->assertSame([
+            ['id' => 'gr_two', 'visible' => true],
+            ['id' => 'gr_one', 'visible' => true],
+        ], $layout);
 
         self::$options['ap_dashboard_widget_config'] = [];
-        $expected = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+        $expected = array_map(
+            fn($id) => ['id' => $id, 'visible' => true],
+            array_column(DashboardWidgetRegistry::get_definitions(), 'id')
+        );
         $this->assertSame($expected, UserLayoutManager::get_role_layout('subscriber'));
     }
 
@@ -124,7 +144,10 @@ class UserLayoutManagerTest extends TestCase
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
         DashboardWidgetRegistry::register('bar', 'Bar', '', '', '__return_null');
 
-        $import = ['administrator' => ['bar', 'foo']];
+        $import = ['administrator' => [
+            ['id' => 'bar'],
+            ['id' => 'foo', 'visible' => false]
+        ]];
         self::$file_contents = json_encode($import, JSON_PRETTY_PRINT);
         $_FILES['ap_widget_file'] = ['tmp_name' => '/tmp/test'];
 
@@ -145,9 +168,11 @@ class UserLayoutManagerTest extends TestCase
     public function test_export_layout_returns_pretty_json(): void
     {
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
-        UserLayoutManager::save_role_layout('subscriber', ['foo']);
+        UserLayoutManager::save_role_layout('subscriber', [ ['id' => 'foo'] ]);
 
-        $expected = json_encode(['foo'], JSON_PRETTY_PRINT);
+        $expected = json_encode([
+            ['id' => 'foo', 'visible' => true]
+        ], JSON_PRETTY_PRINT);
         $this->assertSame($expected, UserLayoutManager::export_layout('subscriber'));
     }
 
@@ -156,10 +181,16 @@ class UserLayoutManagerTest extends TestCase
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
         DashboardWidgetRegistry::register('bar', 'Bar', '', '', '__return_null');
 
-        $json = json_encode(['bar', 'foo']);
+        $json = json_encode([
+            ['id' => 'bar'],
+            ['id' => 'foo']
+        ]);
         UserLayoutManager::import_layout('subscriber', $json);
 
-        $this->assertSame(['bar', 'foo'], self::$options['ap_dashboard_widget_config']['subscriber']);
+        $this->assertSame([
+            ['id' => 'bar', 'visible' => true],
+            ['id' => 'foo', 'visible' => true]
+        ], self::$options['ap_dashboard_widget_config']['subscriber']);
     }
 }
 

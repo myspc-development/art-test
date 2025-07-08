@@ -32,20 +32,31 @@ class DashboardWidgetTools
         $roles    = wp_roles()->roles;
         $selected = isset($_GET['ap_role']) ? sanitize_key($_GET['ap_role']) : (array_key_first($roles) ?: '');
 
-        if (isset($_POST['layout_input'])) {
+        if (isset($_POST['layout'])) {
             check_admin_referer('ap_save_role_layout');
             $selected = sanitize_key($_POST['ap_role'] ?? $selected);
-            $layout   = json_decode(wp_unslash($_POST['layout_input']), true) ?: [];
+            $layout   = json_decode(wp_unslash($_POST['layout']), true) ?: [];
             if (is_array($layout)) {
                 UserLayoutManager::save_role_layout($selected, $layout);
                 echo '<div class="notice notice-success"><p>' . esc_html__('Layout saved for role.', 'artpulse') . '</p></div>';
             }
         }
 
+        if (isset($_POST['import_role_layout']) && current_user_can('manage_options')) {
+            $import_result = UserLayoutManager::import_layout($selected, stripslashes($_POST['import_json'] ?? ''));
+            echo '<div class="notice ' . ($import_result ? 'notice-success' : 'notice-error') . '"><p>'
+                . ($import_result ? 'Layout imported successfully.' : 'Invalid layout JSON.') . '</p></div>';
+        }
+
         $current  = UserLayoutManager::get_role_layout($selected);
         $defs     = DashboardWidgetRegistry::get_definitions();
+        $defs_by_id = [];
+        foreach ($defs as $def) {
+            $defs_by_id[$def['id']] = $def;
+        }
         $all_ids  = array_column($defs, 'id');
-        $unused   = array_diff($all_ids, $current);
+        $current_ids = array_column($current, 'id');
+        $unused   = array_diff($all_ids, $current_ids);
 
         echo '<div class="wrap">';
         echo '<h3>' . esc_html__('Dashboard Widget Manager', 'artpulse') . '</h3>';
@@ -62,15 +73,30 @@ class DashboardWidgetTools
         echo '<button type="button" id="export-layout" class="button">' . esc_html__('Export', 'artpulse') . '</button> ';
         echo '<label for="import-layout" class="button" style="margin-right:5px;">' . esc_html__('Import', 'artpulse') . '</label>';
         echo '<input type="file" id="import-layout" style="display:none" />';
-        echo '<textarea id="layout_input" name="layout_input" hidden></textarea>';
+        echo '<input type="hidden" id="layout_input" name="layout">';
+        if (current_user_can('manage_options')) {
+            echo '<br><textarea name="import_json" rows="6" cols="60" placeholder="Paste layout JSON..."></textarea><br>';
+            echo '<button name="import_role_layout" type="submit" class="button">Import Layout</button> ';
+            echo '<button type="button" class="button" onclick="copyExportedLayout()">Copy Export</button>';
+            echo '<textarea id="export_json" rows="6" cols="60" readonly>' . esc_textarea(UserLayoutManager::export_layout($selected)) . '</textarea>';
+        }
         echo '</form>';
 
         echo '<div id="custom-widgets">';
-        foreach ($current as $id) {
+        foreach ($current as $item) {
+            $id = $item['id'];
+            $visible = $item['visible'] ?? true;
             $cb = DashboardWidgetRegistry::get_widget_callback($id);
             if (is_callable($cb)) {
-                echo '<div class="ap-widget" data-id="' . esc_attr($id) . '">';
-                echo call_user_func($cb);
+                echo '<div id="' . esc_attr($id) . '" class="ap-widget salient-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+                echo '<div class="widget-handle widget-title">' . esc_html($defs_by_id[$id]['name'] ?? $id);
+                echo ' <button type="button" class="widget-toggle button small">' . ($visible ? '🙈 Hide' : '👁 Show') . '</button>';
+                echo '</div>';
+                if ($visible) {
+                    echo '<div class="widget-content">';
+                    echo call_user_func($cb);
+                    echo '</div>';
+                }
                 echo '</div>';
             }
         }
@@ -146,10 +172,16 @@ class DashboardWidgetTools
             $role_key = sanitize_key($role);
             $ordered  = [];
 
-            foreach ($widgets as $w) {
-                $key = sanitize_key($w);
-                if (in_array($key, $valid_ids, true)) {
-                    $ordered[] = $key;
+            foreach ($widgets as $item) {
+                if (is_array($item) && isset($item['id'])) {
+                    $id  = sanitize_key($item['id']);
+                    $vis = isset($item['visible']) ? filter_var($item['visible'], FILTER_VALIDATE_BOOLEAN) : true;
+                } else {
+                    $id  = sanitize_key($item);
+                    $vis = true;
+                }
+                if (in_array($id, $valid_ids, true)) {
+                    $ordered[] = ['id' => $id, 'visible' => $vis];
                 }
             }
 
@@ -169,11 +201,14 @@ class DashboardWidgetTools
     {
         $config = get_option('ap_dashboard_widget_config', []);
         if (isset($config[$role]) && is_array($config[$role])) {
-            return array_map('sanitize_key', $config[$role]);
+            return $config[$role];
         }
 
         $defs = DashboardWidgetRegistry::get_definitions();
-        return array_column($defs, 'id');
+        return array_map(
+            fn($def) => ['id' => $def['id'], 'visible' => true],
+            $defs
+        );
     }
 
     /**
@@ -185,7 +220,8 @@ class DashboardWidgetTools
     {
         $layout = UserLayoutManager::get_role_layout($role);
 
-        foreach ($layout as $id) {
+        foreach ($layout as $item) {
+            $id = $item['id'];
             $cb = DashboardWidgetRegistry::get_widget_callback($id);
             if (is_callable($cb)) {
                 echo '<div class="ap-widget">';

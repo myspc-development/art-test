@@ -26,7 +26,10 @@ class DashboardWidgetToolsRenderTest extends TestCase
         DashboardWidgetRegistry::register('beta', 'Beta', '', '', function () { return 'beta'; });
 
         self::$options['ap_dashboard_widget_config'] = [
-            'subscriber' => ['beta', 'alpha'],
+            'subscriber' => [
+                ['id' => 'beta'],
+                ['id' => 'alpha']
+            ],
         ];
 
         ob_start();

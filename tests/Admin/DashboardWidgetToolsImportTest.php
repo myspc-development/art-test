@@ -43,7 +43,11 @@ class DashboardWidgetToolsImportTest extends TestCase
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
         DashboardWidgetRegistry::register('bar', 'Bar', '', '', '__return_null');
         self::$file_contents = json_encode([
-            'administrator' => ['foo', 'invalid', 'bar']
+            'administrator' => [
+                ['id' => 'foo'],
+                ['id' => 'invalid'],
+                ['id' => 'bar', 'visible' => false]
+            ]
         ]);
         $_FILES['ap_widget_file'] = ['tmp_name' => '/tmp/test'];
 
@@ -53,7 +57,10 @@ class DashboardWidgetToolsImportTest extends TestCase
             $this->assertSame('redirect', $e->getMessage());
         }
 
-        $expected = ['administrator' => ['foo', 'bar']];
+        $expected = ['administrator' => [
+            ['id' => 'foo', 'visible' => true],
+            ['id' => 'bar', 'visible' => false]
+        ]];
         $this->assertSame($expected, self::$options['ap_dashboard_widget_config'] ?? null);
     }
 }
