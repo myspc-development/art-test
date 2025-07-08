@@ -735,18 +735,15 @@ class UserDashboardManager
         $badges = self::getBadges(get_current_user_id());
 
         $widgets = DashboardWidgetRegistry::get_widgets($roles[0] ?? 'subscriber');
-        $layout = get_user_meta(get_current_user_id(), 'ap_dashboard_layout', true);
-        if (!is_array($layout) || empty($layout)) {
-            $config = get_option('ap_dashboard_widget_config', []);
-            foreach ($roles as $r) {
-                if (!empty($config[$r]) && is_array($config[$r])) {
-                    $layout = array_map('sanitize_key', $config[$r]);
-                    break;
-                }
-            }
-            if (!is_array($layout)) {
-                $layout = [];
-            }
+        $layout_resp  = self::getDashboardLayout();
+        $layout_data  = method_exists($layout_resp, 'get_data') ? $layout_resp->get_data() : (array) $layout_resp;
+        $layout       = $layout_data['layout'] ?? [];
+        $visibility   = $layout_data['visibility'] ?? [];
+        if (!is_array($layout)) {
+            $layout = [];
+        }
+        if (!is_array($visibility)) {
+            $visibility = [];
         }
         $ordered = [];
         foreach ($layout as $id) {
@@ -766,6 +763,7 @@ class UserDashboardManager
             'show_support_history'=> $show_support_history,
             'badges'              => $badges,
             'widgets'             => $widgets,
+            'visibility'          => $visibility,
         ];
 
         $onboarding_html = '';
