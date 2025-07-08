@@ -1,46 +1,55 @@
-# Node and package manager output
+# ===============================
+# 📦 PACKAGE MANAGERS
+# ===============================
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Composer artifacts
-vendor/
+# ===============================
+# ⚙️ COMPOSER
+# ===============================
+# Don't ignore vendor/ — we deploy with autoloader
+!vendor/
+vendor/bin/
 composer.phar
 composer-setup.php
 
-# Build output
-#build/
+# ===============================
+# 🧱 BUILD OUTPUT
+# ===============================
+build/
 dist/
 release/
 *.zip
+
+# Allow specific built assets
 !assets/dist/
 !assets/dist/admin-dashboard-widgets-editor.js
+!build/index.js
+!build/index.asset.php
+!assets/js/admin-dashboard-widgets-editor.js
 
-# IDE and OS files
+# ===============================
+# 🧠 IDE + OS FILES
+# ===============================
 .vscode/
 .idea/
 .DS_Store
 
-# Logs and caches
+# ===============================
+# 📝 LOGS & CACHES
+# ===============================
 *.log
 .cache/
 .phpunit.result.cache
 
-#assets/dist/
+# ===============================
+# 🔐 ENVIRONMENT
+# ===============================
 .env
 
-
+# ===============================
+# 🧹 WORDPRESS ROOT (optional, if excluded)
+# ===============================
 wordpress/
-
- # Build output
- build/
- dist/
- release/
- *.zip
-+!build/index.js
-+!build/index.asset.php
-
- # …
-!assets/js/admin-dashboard-widgets-editor.js
-
