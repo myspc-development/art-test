@@ -70,6 +70,9 @@ class UpdatesTab
             }
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
+        if (!$silent) {
+            check_admin_referer('ap_check_updates');
+        }
         $info = self::get_repo_info();
         if (empty($info['url'])) {
             if (!$silent) {
@@ -133,6 +136,9 @@ class UpdatesTab
                 return;
             }
             wp_die(__('Insufficient permissions', 'artpulse'));
+        }
+        if (!$silent) {
+            check_admin_referer('ap_run_update');
         }
         $info = self::get_repo_info();
         [$owner, $repo] = self::parse_repo($info['url']);

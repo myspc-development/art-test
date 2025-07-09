@@ -25,6 +25,16 @@ namespace {
     function esc_html_e($text, $domain = '') { echo $text; }
     function wp_nonce_field($action) {}
     function esc_url($url) { return $url; }
+    function wp_die($msg = '') { \ArtPulse\Admin\Tests\UpdatesTabTest::$died = $msg ?: true; }
+    function check_admin_referer($action) {
+        \ArtPulse\Admin\Tests\UpdatesTabTest::$checked_action = $action;
+        if (($_REQUEST['_wpnonce'] ?? '') !== 'valid') {
+            wp_die('invalid');
+            throw new \Exception('die');
+        }
+    }
+    function wp_remote_get($url, $args = []) { return ['body' => json_encode(['sha' => 'def'])]; }
+    function wp_remote_retrieve_body($res) { return $res['body']; }
 }
 
 namespace ArtPulse\Admin\Tests;
@@ -38,6 +48,8 @@ class UpdatesTabTest extends TestCase
     public static string $redirect = '';
     public static array $options = [];
     public static array $unzipped = [];
+    public static $died = null;
+    public static string $checked_action = '';
     private static string $zip = '';
 
     public static function create_zip(): string
@@ -57,6 +69,9 @@ class UpdatesTabTest extends TestCase
         self::$redirect = '';
         self::$options = ['ap_update_remote_sha' => 'abc'];
         self::$unzipped = [];
+        self::$died = null;
+        self::$checked_action = '';
+        $_REQUEST = [];
         if (!is_dir(ABSPATH . 'wp-admin/includes')) {
             mkdir(ABSPATH . 'wp-admin/includes', 0777, true);
             file_put_contents(ABSPATH . 'wp-admin/includes/file.php', '<?php');
@@ -73,11 +88,13 @@ class UpdatesTabTest extends TestCase
 
     public function test_run_update_stores_file_list_and_redirects(): void
     {
+        $_REQUEST['_wpnonce'] = 'valid';
         try {
             UpdatesTab::run_update();
         } catch (\Exception $e) {
             $this->assertSame('redirect', $e->getMessage());
         }
+        $this->assertSame('ap_run_update', self::$checked_action);
         $this->assertSame('/admin.php?page=artpulse-settings?ap_update_success=1#updates', self::$redirect);
         $this->assertSame(['file1.txt', 'dir/file2.php'], self::$options['ap_updated_files'] ?? []);
         $this->assertSame(self::$zip, self::$unzipped[0]);
@@ -93,5 +110,43 @@ class UpdatesTabTest extends TestCase
         $html = ob_get_clean();
         $this->assertStringContainsString('<li>foo.php</li>', $html);
         $this->assertArrayNotHasKey('ap_updated_files', self::$options);
+    }
+
+    public function test_run_update_invalid_nonce_dies(): void
+    {
+        $_REQUEST['_wpnonce'] = 'bad';
+        try {
+            UpdatesTab::run_update();
+        } catch (\Exception $e) {
+            $this->assertSame('die', $e->getMessage());
+        }
+        $this->assertSame('ap_run_update', self::$checked_action);
+        $this->assertNotNull(self::$died);
+    }
+
+    public function test_check_updates_valid_nonce(): void
+    {
+        $_REQUEST['_wpnonce'] = 'valid';
+        self::$options['artpulse_settings'] = ['update_repo_url' => 'https://github.com/foo/bar'];
+        try {
+            UpdatesTab::check_updates();
+        } catch (\Exception $e) {
+            $this->assertSame('redirect', $e->getMessage());
+        }
+        $this->assertSame('ap_check_updates', self::$checked_action);
+        $this->assertSame(1, self::$options['ap_update_available'] ?? null);
+    }
+
+    public function test_check_updates_invalid_nonce_dies(): void
+    {
+        $_REQUEST['_wpnonce'] = 'bad';
+        self::$options['artpulse_settings'] = ['update_repo_url' => 'https://github.com/foo/bar'];
+        try {
+            UpdatesTab::check_updates();
+        } catch (\Exception $e) {
+            $this->assertSame('die', $e->getMessage());
+        }
+        $this->assertSame('ap_check_updates', self::$checked_action);
+        $this->assertNotNull(self::$died);
     }
 }
