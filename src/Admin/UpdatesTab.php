@@ -24,8 +24,11 @@ class UpdatesTab
         if (empty($opts['auto_update_enabled'])) {
             return;
         }
-        if (self::check_updates(true)) {
+        $result = self::check_updates(true);
+        if ($result === true) {
             self::run_update(true);
+        } elseif (is_wp_error($result)) {
+            error_log('🔧 Update check failed: ' . $result->get_error_message());
         }
     }
 
@@ -62,7 +65,13 @@ class UpdatesTab
         exit;
     }
 
-    public static function check_updates(bool $silent = false): bool
+    /**
+     * Check if an update is available.
+     *
+     * @param bool $silent Whether to suppress redirects/messages.
+     * @return bool|\WP_Error True if update available, false if not, WP_Error on failure.
+     */
+    public static function check_updates(bool $silent = false)
     {
         if (!current_user_can('manage_options')) {
             if ($silent) {
@@ -75,17 +84,19 @@ class UpdatesTab
         }
         $info = self::get_repo_info();
         if (empty($info['url'])) {
+            $err = new \WP_Error('missing_repo', 'Repository URL not configured');
             if (!$silent) {
-                self::redirect_to_updates(['ap_update_error' => '1']);
+                self::redirect_to_updates(['ap_update_error' => urlencode($err->get_error_message())]);
             }
-            return false;
+            return $err;
         }
         [$owner, $repo] = self::parse_repo($info['url']);
         if (empty($owner) || empty($repo)) {
+            $err = new \WP_Error('invalid_repo', 'Invalid repository URL');
             if (!$silent) {
-                self::redirect_to_updates(['ap_update_error' => '1']);
+                self::redirect_to_updates(['ap_update_error' => urlencode($err->get_error_message())]);
             }
-            return false;
+            return $err;
         }
         $api = "https://api.github.com/repos/{$owner}/{$repo}/commits/{$info['branch']}";
         $args = [
@@ -98,18 +109,20 @@ class UpdatesTab
             $args['headers']['Authorization'] = 'token ' . $info['token'];
         }
         $response = wp_remote_get($api, $args);
+        error_log('🔧 GitHub response: ' . print_r($response, true));
         if (is_wp_error($response)) {
             if (!$silent) {
-                self::redirect_to_updates(['ap_update_error' => '1']);
+                self::redirect_to_updates(['ap_update_error' => urlencode($response->get_error_message())]);
             }
-            return false;
+            return $response;
         }
         $body = json_decode(wp_remote_retrieve_body($response), true);
         if (!isset($body['sha'])) {
+            $err = new \WP_Error('invalid_response', 'Invalid response from GitHub');
             if (!$silent) {
-                self::redirect_to_updates(['ap_update_error' => '1']);
+                self::redirect_to_updates(['ap_update_error' => urlencode($err->get_error_message())]);
             }
-            return false;
+            return $err;
         }
         $remote_sha = $body['sha'];
         $current_sha = get_option('ap_current_repo_sha');
@@ -129,24 +142,32 @@ class UpdatesTab
         return false;
     }
 
-    public static function run_update(bool $silent = false): void
+    /**
+     * Perform the plugin update.
+     *
+     * @param bool $silent Whether to suppress redirects/messages.
+     * @return bool|\WP_Error True on success, WP_Error on failure.
+     */
+    public static function run_update(bool $silent = false)
     {
         if (!current_user_can('manage_options')) {
             if ($silent) {
-                return;
+                return new \WP_Error('permission_denied', 'Insufficient permissions');
             }
             wp_die(__('Insufficient permissions', 'artpulse'));
         }
         if (!$silent) {
             check_admin_referer('ap_run_update');
         }
+        error_log('🔧 Starting update...');
         $info = self::get_repo_info();
         [$owner, $repo] = self::parse_repo($info['url']);
         if (empty($owner) || empty($repo)) {
+            $err = new \WP_Error('invalid_repo', 'Invalid repository URL');
             if (!$silent) {
-                self::redirect_to_updates(['ap_update_error' => '1']);
+                self::redirect_to_updates(['ap_update_error' => urlencode($err->get_error_message())]);
             }
-            return;
+            return $err;
         }
         $zip = "https://codeload.github.com/{$owner}/{$repo}/zip/refs/heads/{$info['branch']}";
         $args = [
@@ -162,9 +183,11 @@ class UpdatesTab
         $tmp = download_url($zip, 300, '', $args);
         if (is_wp_error($tmp)) {
             if (!$silent) {
-                self::redirect_to_updates(['ap_update_error' => '1']);
+                $msg = $tmp->get_error_message();
+                error_log('🔧 Update failed: ' . print_r($tmp, true));
+                self::redirect_to_updates(['ap_update_error' => urlencode($msg)]);
             }
-            return;
+            return $tmp;
         }
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
         $temp_dir   = trailingslashit(get_temp_dir()) . 'ap_update_' . wp_generate_password(8, false);
@@ -196,9 +219,11 @@ class UpdatesTab
         unlink($tmp);
         if (is_wp_error($result)) {
             if (!$silent) {
-                self::redirect_to_updates(['ap_update_error' => '1']);
+                $msg = $result->get_error_message();
+                error_log('🔧 Update failed: ' . print_r($result, true));
+                self::redirect_to_updates(['ap_update_error' => urlencode($msg)]);
             }
-            return;
+            return $result;
         }
         update_option('ap_current_repo_sha', get_option('ap_update_remote_sha'));
         update_option('ap_last_update_time', current_time('mysql'));
@@ -206,6 +231,7 @@ class UpdatesTab
         if (!$silent) {
             self::redirect_to_updates(['ap_update_success' => '1']);
         }
+        return true;
     }
 
     public static function render(): void
