@@ -42,18 +42,19 @@ class DashboardWidgetTools
 
     public static function render(): void
     {
-        $valid_roles = ['member', 'artist', 'organization'];
+        $roles       = get_editable_roles();
         $selected    = sanitize_text_field($_GET['ap_dashboard_role'] ?? '');
 
         if (isset($_POST['ap_dashboard_role'])) {
             $selected = sanitize_text_field($_POST['ap_dashboard_role']);
         }
 
-        if (!in_array($selected, $valid_roles, true)) {
-            wp_die('Invalid role.');
+        $editable = array_keys($roles);
+        if (!in_array($selected, $editable, true) && !current_user_can('manage_options')) {
+            wp_die('Invalid role');
         }
 
-        if (!current_user_can($selected) && !current_user_can('manage_options')) {
+        if (!ap_user_can_edit_layout($selected)) {
             wp_die(__('Access denied.', 'artpulse'));
         }
 

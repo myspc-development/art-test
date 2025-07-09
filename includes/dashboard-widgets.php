@@ -46,6 +46,10 @@ function ap_save_dashboard_widget_config(): void
 function ap_save_widget_layout(): void
 {
     $role = sanitize_key($_POST['role'] ?? '');
+    if (!get_role($role) && !current_user_can('manage_options')) {
+        wp_send_json_error(['message' => __('Invalid role', 'artpulse')], 400);
+        return;
+    }
     check_ajax_referer('ap_save_widget_layout', 'nonce');
     if (!current_user_can($role) && !current_user_can('manage_options')) {
         wp_send_json_error(['message' => __('Permission denied', 'artpulse')], 403);
@@ -91,6 +95,10 @@ function ap_save_role_layout(): void
     }
 
     $role   = sanitize_key($_POST['role'] ?? '');
+    if (!get_role($role)) {
+        wp_send_json_error(['message' => __('Invalid role', 'artpulse')]);
+        return;
+    }
     $layout = $_POST['layout'] ?? [];
     if (is_string($layout)) {
         $layout = json_decode($layout, true);
