@@ -319,12 +319,11 @@ class SettingsPage
             'artpulse-engagement',
             [EngagementDashboard::class, 'render']
         );
-        $cap = apply_filters('ap_dashboard_widgets_capability', 'manage_options');
         add_submenu_page(
             'artpulse-settings',
             __('Dashboard Widgets', 'artpulse'),
             __('Dashboard Widgets', 'artpulse'),
-            $cap,
+            'manage_options',
             'artpulse-dashboard-widgets',
             [self::class, 'renderDashboardWidgetsPage']
         );
