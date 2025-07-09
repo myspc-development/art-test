@@ -42,12 +42,14 @@ class DashboardWidgetTools
 
     public static function render(): void
     {
-        $roles    = wp_roles()->roles;
-        $selected = isset($_POST['ap_dashboard_role'])
-            ? sanitize_key($_POST['ap_dashboard_role'])
-            : (isset($_GET['ap_dashboard_role']) ? sanitize_key($_GET['ap_dashboard_role']) : (array_key_first($roles) ?: ''));
+        $valid_roles = ['member', 'artist', 'organization'];
+        $selected    = sanitize_text_field($_GET['ap_dashboard_role'] ?? '');
 
-        if (!in_array($selected, ['member', 'artist', 'organization'], true)) {
+        if (isset($_POST['ap_dashboard_role'])) {
+            $selected = sanitize_text_field($_POST['ap_dashboard_role']);
+        }
+
+        if (!in_array($selected, $valid_roles, true)) {
             wp_die('Invalid role.');
         }
 
