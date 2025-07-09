@@ -41,6 +41,19 @@ require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
 
+// Ensure custom roles exist on every load
+add_action('init', function () {
+    if (!get_role('member')) {
+        add_role('member', 'Member', ['read' => true]);
+    }
+    if (!get_role('artist')) {
+        add_role('artist', 'Artist', ['read' => true]);
+    }
+    if (!get_role('organization')) {
+        add_role('organization', 'Organization', ['read' => true]);
+    }
+});
+
 // Grant custom capabilities to administrators for dashboard access
 add_action('admin_init', function () {
     $admin = get_role('administrator');
@@ -195,22 +208,27 @@ function ap_render_dashboard_preview_page() {
             <input type="hidden" name="page" value="dashboard-preview" />
             <select name="role">
                 <option value="">Select Role</option>
-                <option value="member" <?= selected($_GET['role'] ?? '', 'member') ?>>Member</option>
-                <option value="artist" <?= selected($_GET['role'] ?? '', 'artist') ?>>Artist</option>
-                <option value="organization" <?= selected($_GET['role'] ?? '', 'organization') ?>>Organization</option>
+                <?php foreach (array_keys(get_editable_roles()) as $r): ?>
+                    <option value="<?= esc_attr($r) ?>" <?= selected($_GET['role'] ?? '', $r) ?>><?= esc_html(ucfirst($r)) ?></option>
+                <?php endforeach; ?>
             </select>
             <button class="button button-primary">Preview</button>
         </form>
         <hr>
     <?php
 
-    $role = $_GET['role'] ?? null;
+    $role = sanitize_text_field($_GET['role'] ?? '');
+    $editable = array_keys(get_editable_roles());
+
+    if ($role && !in_array($role, $editable, true)) {
+        wp_die('Invalid role');
+    }
 
     if ($role && !ap_user_can_edit_layout($role)) {
         wp_die('You are not allowed to view this dashboard.');
     }
 
-    if ($role && in_array($role, ['member', 'artist', 'organization'])) {
+    if ($role) {
         echo '<h2>Previewing: ' . ucfirst($role) . ' Dashboard</h2>';
         echo '<div id="ap-user-dashboard" class="ap-dashboard-columns">';
         \ArtPulse\Admin\DashboardWidgetTools::render_role_dashboard_preview($role);
