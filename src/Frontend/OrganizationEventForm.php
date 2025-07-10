@@ -108,11 +108,11 @@ class OrganizationEventForm {
             </select>
 
             <label class="ap-form-label" for="ap_org_event_banner">Event Banner</label>
-            <input class="ap-input" id="ap_org_event_banner" type="file" name="event_banner">
+            <input class="ap-input" id="ap_org_event_banner" type="file" name="event_banner" accept="image/*">
 
             <label class="ap-form-label">Additional Images (max 5)</label>
             <?php for ($i = 1; $i <= 5; $i++) : ?>
-            <input class="ap-input" id="ap_org_event_image_<?php echo $i; ?>" type="file" name="image_<?php echo $i; ?>">
+            <input class="ap-input" id="ap_org_event_image_<?php echo $i; ?>" type="file" name="image_<?php echo $i; ?>" accept="image/*">
             <?php endfor; ?>
 
             <label class="ap-form-label">
