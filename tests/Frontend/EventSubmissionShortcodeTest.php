@@ -1,6 +1,10 @@
 <?php
 namespace ArtPulse\Frontend;
 
+if (!defined('ABSPATH')) {
+    define('ABSPATH', __DIR__ . '/');
+}
+
 // WordPress function stubs
 function is_user_logged_in() { return true; }
 function wp_verify_nonce($nonce, $action) { return true; }
@@ -8,18 +12,20 @@ function get_current_user_id() { return 1; }
 function sanitize_text_field($value) { return is_string($value) ? trim($value) : $value; }
 function wp_kses_post($value) { return $value; }
 function sanitize_email($value) { return $value; }
-function get_posts($args) { return EventSubmissionShortcodeTest::$posts_return; }
-function get_user_meta($uid, $key, $single = false) { return EventSubmissionShortcodeTest::$user_meta[$uid][$key] ?? ''; }
+function get_posts($args) { return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$posts_return; }
+function get_user_meta($uid, $key, $single = false) { return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$user_meta[$uid][$key] ?? ''; }
 function wp_list_pluck($input, $field) { return array_map(fn($i) => is_object($i) ? $i->$field : $i[$field], $input); }
-function wc_add_notice($msg, $type = '') { EventSubmissionShortcodeTest::$notice = $msg; }
-function wp_die($msg) { EventSubmissionShortcodeTest::$notice = $msg; }
+function wc_add_notice($msg, $type = '') { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$notice = $msg; }
+function wp_die($msg) { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$notice = $msg; }
 
 // Minimal stubs for unused functions to avoid errors if called
-function wp_insert_post($arr) { EventSubmissionShortcodeTest::$inserted = $arr; return 1; }
-function update_post_meta(...$args) { EventSubmissionShortcodeTest::$meta_updates[] = $args; }
-function media_handle_upload($file, $post_id) { return EventSubmissionShortcodeTest::$media_ids[$file] ?? 0; }
-function set_post_thumbnail($post_id, $thumb_id) { EventSubmissionShortcodeTest::$thumbnail = $thumb_id; }
+function wp_insert_post($arr) { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$inserted = $arr; return 1; }
+function update_post_meta(...$args) { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$meta_updates[] = $args; }
+function media_handle_upload($file, $post_id) { return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$media_ids[$file] ?? 0; }
+function set_post_thumbnail($post_id, $thumb_id) { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$thumbnail = $thumb_id; }
+function get_post_thumbnail_id($post_id) { return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$thumbnail; }
 function is_wp_error($obj) { return false; }
+function wp_unslash($value) { return $value; }
 function wp_set_post_terms(...$args) {}
 function function_exists($name) { return $name === 'wc_add_notice'; }
 
@@ -47,6 +53,14 @@ class EventSubmissionShortcodeTest extends TestCase
         self::$meta_updates = [];
         self::$media_ids = [];
         self::$thumbnail = 0;
+        $_FILES = [];
+
+        if (!is_dir(ABSPATH . '/wp-admin/includes')) {
+            mkdir(ABSPATH . '/wp-admin/includes', 0777, true);
+            file_put_contents(ABSPATH . '/wp-admin/includes/image.php', '<?php');
+            file_put_contents(ABSPATH . '/wp-admin/includes/file.php', '<?php');
+            file_put_contents(ABSPATH . '/wp-admin/includes/media.php', '<?php');
+        }
 
         // Required POST fields
         $_POST = [
@@ -55,6 +69,7 @@ class EventSubmissionShortcodeTest extends TestCase
             'event_title'     => 'title',
             'event_description'=> 'desc',
             'event_date'      => '2024-01-01',
+            'event_location'  => '',
             'event_org'       => 99,
         ];
     }
@@ -104,5 +119,32 @@ class EventSubmissionShortcodeTest extends TestCase
         }
 
         $this->assertSame([55], $gallery);
+    }
+
+    public function test_first_gallery_image_used_as_banner_when_missing(): void
+    {
+        // Valid organization
+        self::$user_meta[1]['ap_organization_id'] = 99;
+
+        // Upload a single additional image
+        self::$media_ids = ['ap_image' => 11];
+        $_FILES['image_1'] = ['name' => 'a.jpg', 'tmp_name' => '/tmp/a', 'type' => 'image/jpeg', 'error' => 0, 'size' => 1];
+
+        EventSubmissionShortcode::maybe_handle_form();
+
+        $gallery = null;
+        $banner_meta_found = false;
+        foreach (self::$meta_updates as $args) {
+            if ($args[1] === '_ap_submission_images') {
+                $gallery = $args[2];
+            }
+            if ($args[1] === 'event_banner_id' && $args[2] === 11) {
+                $banner_meta_found = true;
+            }
+        }
+
+        $this->assertSame([11], $gallery);
+        $this->assertTrue($banner_meta_found);
+        $this->assertSame(11, self::$thumbnail);
     }
 }

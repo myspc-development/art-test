@@ -527,6 +527,12 @@ class EventSubmissionShortcode {
             $final_image_ids = $image_ids;
         }
 
+        // If no banner was uploaded, use the first gallery image as the banner
+        if (!empty($final_image_ids) && !get_post_thumbnail_id($post_id)) {
+            set_post_thumbnail($post_id, $final_image_ids[0]);
+            update_post_meta($post_id, 'event_banner_id', $final_image_ids[0]);
+        }
+
         // Update Post Meta with Image IDs (including banner when present)
         update_post_meta($post_id, '_ap_submission_images', $final_image_ids);
 
