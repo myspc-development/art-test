@@ -12,6 +12,10 @@
   differs from the plugin header version a modal with release notes is shown to
   administrators until dismissed.
 
+## 1.3.11
+- Five image slots with drag-and-drop ordering.
+- Organization event form now supports individual image uploads.
+
 ## 1.3.8
 - Added EmailTemplateManager and customizable template field.
 - Ticket purchases now send a PDF ticket attachment.
