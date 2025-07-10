@@ -13,11 +13,11 @@ export default function SubmissionForm() {
   const [country, setCountry] = useState('');
   const [postcode, setPostcode] = useState('');
   const [addressComponents, setAddressComponents] = useState('');
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(Array(5).fill(null));
   const [banner, setBanner] = useState(null);
-  const [previews, setPreviews] = useState([]);
-  const [progresses, setProgresses] = useState([]);
-  const [order, setOrder] = useState([]);
+  const [previews, setPreviews] = useState(Array(5).fill(null));
+  const [progresses, setProgresses] = useState(Array(5).fill(0));
+  const [order, setOrder] = useState([0,1,2,3,4]);
   const [dragIndex, setDragIndex] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -29,12 +29,23 @@ export default function SubmissionForm() {
   const [waitlistEnabled, setWaitlistEnabled] = useState(false);
   const orderRef = useRef(null);
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files).slice(0, 5);
-    setImages(files);
-    setPreviews(files.map(file => URL.createObjectURL(file)));
-    setOrder(files.map((_, i) => i));
-    setProgresses(files.map(() => 0));
+  const handleImageChange = index => (e) => {
+    const file = e.target.files[0] || null;
+    setImages(prev => {
+      const arr = [...prev];
+      arr[index] = file;
+      return arr;
+    });
+    setPreviews(prev => {
+      const arr = [...prev];
+      arr[index] = file ? URL.createObjectURL(file) : null;
+      return arr;
+    });
+    setProgresses(prev => {
+      const arr = [...prev];
+      arr[index] = 0;
+      return arr;
+    });
   };
 
   const handleBannerChange = (e) => {
@@ -54,22 +65,12 @@ export default function SubmissionForm() {
   const handleDragStart = (i) => setDragIndex(i);
   const handleDrop = (i) => {
     if (dragIndex === null || dragIndex === i) return;
-    const imgs = [...images];
-    const prevs = [...previews];
-    const progs = [...progresses];
-    const ord = [...order];
-    const [f] = imgs.splice(dragIndex, 1);
-    const [p] = prevs.splice(dragIndex, 1);
-    const [g] = progs.splice(dragIndex, 1);
-    const [o] = ord.splice(dragIndex, 1);
-    imgs.splice(i, 0, f);
-    prevs.splice(i, 0, p);
-    progs.splice(i, 0, g);
-    ord.splice(i, 0, o);
-    setImages(imgs);
-    setPreviews(prevs);
-    setProgresses(progs);
-    setOrder(ord);
+    setOrder((prev) => {
+      const ord = [...prev];
+      const [o] = ord.splice(dragIndex, 1);
+      ord.splice(i, 0, o);
+      return ord;
+    });
     setDragIndex(null);
   };
 
@@ -116,9 +117,11 @@ export default function SubmissionForm() {
 
     try {
       const imageIds = [];
-      for (let i = 0; i < images.length; i++) {
-        setMessage(`Uploading image ${i + 1} of ${images.length}`);
-        const id = await uploadMedia(images[i], i);
+      for (const idx of order) {
+        const file = images[idx];
+        if (!file) continue;
+        setMessage(`Uploading image ${imageIds.length + 1}`);
+        const id = await uploadMedia(file, idx);
         imageIds.push(id);
       }
       let bannerId = null;
@@ -184,9 +187,9 @@ export default function SubmissionForm() {
       setRsvpEnabled(false);
       setRsvpLimit('');
       setWaitlistEnabled(false);
-      setImages([]);
-      setPreviews([]);
-      setProgresses([]);
+      setImages(Array(5).fill(null));
+      setPreviews(Array(5).fill(null));
+      setProgresses(Array(5).fill(0));
       setBanner(null);
     } catch (err) {
       console.error(err);
@@ -401,36 +404,40 @@ export default function SubmissionForm() {
       </label>
 
       <p>
-        <label className="ap-form-label" htmlFor="ap_images">Images (max 5)</label>
-        <input
-          id="ap_images"
-          className="ap-input"
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={handleFileChange}
-        />
+        <label className="ap-form-label">Images (max 5)</label>
+        {[0,1,2,3,4].map(i => (
+          <input
+            key={i}
+            id={`ap_image_${i+1}`}
+            className="ap-input"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange(i)}
+          />
+        ))}
         <input type="hidden" name="image_order" ref={orderRef} readOnly />
       </p>
 
       <div className="flex gap-2 flex-wrap">
-        {previews.map((src, i) => (
-          <div key={i} className="w-24 text-center">
-            <img
-              src={src}
-              alt=""
-              className="w-24 h-24 object-cover rounded border"
-              draggable
-              onDragStart={() => handleDragStart(i)}
-              onDragOver={e => e.preventDefault()}
-              onDrop={() => handleDrop(i)}
-            />
-            <progress
-              className="ap-upload-progress w-full"
-              value={progresses[i] || 0}
-              max="100"
-            />
-          </div>
+        {order.map((idx, i) => (
+          previews[idx] ? (
+            <div key={idx} className="w-24 text-center">
+              <img
+                src={previews[idx]}
+                alt=""
+                className="w-24 h-24 object-cover rounded border"
+                draggable
+                onDragStart={() => handleDragStart(i)}
+                onDragOver={e => e.preventDefault()}
+                onDrop={() => handleDrop(i)}
+              />
+              <progress
+                className="ap-upload-progress w-full"
+                value={progresses[idx] || 0}
+                max="100"
+              />
+            </div>
+          ) : null
         ))}
       </div>
 

@@ -110,8 +110,10 @@ class OrganizationEventForm {
             <label class="ap-form-label" for="ap_org_event_banner">Event Banner</label>
             <input class="ap-input" id="ap_org_event_banner" type="file" name="event_banner">
 
-            <label class="ap-form-label" for="ap_org_event_images">Additional Images (max 5)</label>
-            <input class="ap-input" id="ap_org_event_images" type="file" name="images[]" multiple>
+            <label class="ap-form-label">Additional Images (max 5)</label>
+            <?php for ($i = 1; $i <= 5; $i++) : ?>
+            <input class="ap-input" id="ap_org_event_image_<?php echo $i; ?>" type="file" name="image_<?php echo $i; ?>">
+            <?php endfor; ?>
 
             <label class="ap-form-label">
                 <input class="ap-input" type="checkbox" name="event_rsvp_enabled" value="1"> Enable RSVP
@@ -224,29 +226,36 @@ class OrganizationEventForm {
             }
         }
 
-        if (!empty($_FILES['images']['name'][0])) {
-            $limit   = min(count($_FILES['images']['name']), 5);
-            $indices = range(0, $limit - 1);
-            $order   = array_values(array_unique(array_intersect($image_order, $indices)));
+        $files   = [];
+        $indices = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $key = 'image_' . $i;
+            if (!empty($_FILES[$key]['tmp_name'])) {
+                $files[$i - 1] = [
+                    'name'     => $_FILES[$key]['name'],
+                    'type'     => $_FILES[$key]['type'],
+                    'tmp_name' => $_FILES[$key]['tmp_name'],
+                    'error'    => $_FILES[$key]['error'],
+                    'size'     => $_FILES[$key]['size'],
+                ];
+                $indices[] = $i - 1;
+            }
+        }
+
+        if ($files) {
+            $order = array_values(array_unique(array_intersect($image_order, $indices)));
             foreach ($indices as $idx) {
                 if (!in_array($idx, $order, true)) {
                     $order[] = $idx;
                 }
             }
 
-            foreach ($order as $i) {
-                if (empty($_FILES['images']['name'][$i])) {
+            foreach ($order as $idx) {
+                if (!isset($files[$idx])) {
                     continue;
                 }
-                $_FILES['ap_image'] = [
-                    'name'     => $_FILES['images']['name'][$i],
-                    'type'     => $_FILES['images']['type'][$i],
-                    'tmp_name' => $_FILES['images']['tmp_name'][$i],
-                    'error'    => $_FILES['images']['error'][$i],
-                    'size'     => $_FILES['images']['size'][$i],
-                ];
-
-                $id = media_handle_upload('ap_image', $post_id);
+                $_FILES['ap_image'] = $files[$idx];
+                $id                 = media_handle_upload('ap_image', $post_id);
                 if (!is_wp_error($id)) {
                     $image_ids[] = $id;
                 }

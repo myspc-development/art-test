@@ -238,8 +238,10 @@ class EventSubmissionShortcode {
             </p>
 
             <p>
-                <label class="ap-form-label" for="ap_event_images">Additional Images (max 5)</label>
-                <input class="ap-input" id="ap_event_images" type="file" name="images[]" multiple />
+                <label class="ap-form-label">Additional Images (max 5)</label>
+                <?php for ($i = 1; $i <= 5; $i++) : ?>
+                <input class="ap-input" id="ap_event_image_<?php echo $i; ?>" type="file" name="image_<?php echo $i; ?>" />
+                <?php endfor; ?>
             </p>
 
             <p>
@@ -463,36 +465,45 @@ class EventSubmissionShortcode {
         }
 
         // Handle Additional Images Upload
-        if (!empty($_FILES['images']['name'][0])) {
-            $files = $_FILES['images'];
-            $limit = min(count($files['name']), 5); // Limit to 5 images
-
-            for ($i = 0; $i < $limit; $i++) {
-                if (!empty($files['name'][$i])) {
-                    $file = array(
-                        'name'     => $files['name'][$i],
-                        'type'     => $files['type'][$i],
-                        'tmp_name' => $files['tmp_name'][$i],
-                        'error'    => $files['error'][$i],
-                        'size'     => $files['size'][$i]
-                    );
-
-                    $_FILES['ap_image'] = $file; // Rename to avoid conflicts
-
-                    $attachment_id = media_handle_upload('ap_image', $post_id);
-
-                    if (!is_wp_error($attachment_id)) {
-                        $image_ids[] = $attachment_id;
-                    } else {
-                        error_log('Error uploading additional image: ' . $attachment_id->get_error_message());
-                        self::add_notice('Error uploading additional image. Please try again.', 'error');
-                        self::maybe_redirect();
-                        return;
-                    }
-                }
+        $files   = [];
+        $indices = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $key = 'image_' . $i;
+            if (!empty($_FILES[$key]['tmp_name'])) {
+                $files[$i - 1] = [
+                    'name'     => $_FILES[$key]['name'],
+                    'type'     => $_FILES[$key]['type'],
+                    'tmp_name' => $_FILES[$key]['tmp_name'],
+                    'error'    => $_FILES[$key]['error'],
+                    'size'     => $_FILES[$key]['size'],
+                ];
+                $indices[] = $i - 1;
             }
-            unset($_FILES['ap_image']); // Clean up
         }
+
+        $order = array_values(array_unique(array_intersect($image_order, $indices)));
+        foreach ($indices as $idx) {
+            if (!in_array($idx, $order, true)) {
+                $order[] = $idx;
+            }
+        }
+
+        foreach ($order as $idx) {
+            if (!isset($files[$idx])) {
+                continue;
+            }
+            $_FILES['ap_image'] = $files[$idx];
+            $attachment_id      = media_handle_upload('ap_image', $post_id);
+            if (!is_wp_error($attachment_id)) {
+                $image_ids[] = $attachment_id;
+            } else {
+                error_log('Error uploading additional image: ' . $attachment_id->get_error_message());
+                self::add_notice('Error uploading additional image. Please try again.', 'error');
+                self::maybe_redirect();
+                return;
+            }
+        }
+        unset($_FILES['ap_image']);
 
         // Handle Image Order (reordering logic)
         $final_image_ids = [];

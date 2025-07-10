@@ -110,8 +110,10 @@ class SubmissionForms
                 </label>
             </p>
             <p>
-                <label class="ap-form-label" for="ap-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label><br>
-                <input class="ap-input" id="ap-images" type="file" name="images[]" accept="image/*" multiple />
+                <label class="ap-form-label"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label><br>
+                <?php for ($i = 1; $i <= 5; $i++) : ?>
+                <input class="ap-input" id="ap-image-<?php echo $i; ?>" type="file" name="image_<?php echo $i; ?>" accept="image/*" />
+                <?php endfor; ?>
             </p>
             <p>
                 <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
