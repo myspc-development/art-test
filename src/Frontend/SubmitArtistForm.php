@@ -37,8 +37,10 @@ class SubmitArtistForm {
                 <label for="ap-artist-bio"><?php esc_html_e('Biography', 'artpulse'); ?></label>
                 <textarea id="ap-artist-bio" name="artist_bio"></textarea>
 
-                <label for="ap-artist-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label>
-                <input id="ap-artist-images" type="file" name="images[]" accept="image/*" multiple>
+                <label><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label>
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <input id="ap-artist-image<?php echo $i; ?>" class="ap-artist-image" type="file" name="image_<?php echo $i; ?>" accept="image/*">
+                <?php endfor; ?>
             </fieldset>
 
             <button type="submit" class="button-primary"><?php esc_html_e('Submit', 'artpulse'); ?></button>

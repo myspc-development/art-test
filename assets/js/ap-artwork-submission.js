@@ -15,6 +15,27 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleFields();
   }
 
+  const imageInputs = Array.from(form.querySelectorAll('.ap-artwork-image'));
+  const previews = [];
+  imageInputs.forEach((input, idx) => {
+    const preview = document.createElement('img');
+    preview.className = 'ap-image-preview';
+    preview.style.display = 'none';
+    input.insertAdjacentElement('afterend', preview);
+    previews[idx] = preview;
+
+    input.addEventListener('change', () => {
+      const file = input.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = '';
+      } else {
+        preview.src = '';
+        preview.style.display = 'none';
+      }
+    });
+  });
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -26,14 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const forSale = saleCheckbox ? saleCheckbox.checked : false;
     const price = formData.get('price');
     const buyLink = formData.get('buy_link');
-    const images = form.querySelector('#ap-artwork-images').files;
+    const files = imageInputs.map(i => i.files[0]).filter(Boolean).slice(0, 5);
 
     const imageIds = [];
     if (messageBox) messageBox.textContent = '';
 
     try {
-      for (const file of Array.from(images).slice(0, 5)) {
-        const id = await uploadMedia(file);
+      for (let i = 0; i < files.length; i++) {
+        const id = await uploadMedia(files[i]);
         imageIds.push(id);
       }
 
@@ -67,7 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         if (messageBox) messageBox.textContent = 'Submission successful!';
         form.reset();
-        if (form.querySelector('#ap-artwork-images')) form.querySelector('#ap-artwork-images').value = '';
+        previews.forEach(p => { p.src = ''; p.style.display = 'none'; });
+        imageInputs.forEach(i => { i.value = ''; });
         setTimeout(() => { window.location.reload(); }, 2000);
       } else if (messageBox) {
         messageBox.textContent = data.message || 'Submission failed.';
