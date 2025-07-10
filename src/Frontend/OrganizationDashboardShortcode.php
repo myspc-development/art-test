@@ -173,7 +173,7 @@ class OrganizationDashboardShortcode {
                 <div id="ap-org-modal" class="ap-org-modal container">
                     <button id="ap-modal-close" type="button" class="ap-form-button nectar-button">Close</button>
                     <div id="ap-status-message" class="ap-form-messages" role="status" aria-live="polite"></div>
-                <form id="ap-org-event-form" class="ap-form-container">
+                <form id="ap-org-event-form" class="ap-form-container" enctype="multipart/form-data">
                     <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('ap_org_dashboard_nonce'); ?>">
 
                     <label class="ap-form-label" for="ap_event_title">Event Title</label>
@@ -241,6 +241,14 @@ class OrganizationDashboardShortcode {
                         }
                         ?>
                     </select>
+
+                    <label class="ap-form-label" for="ap_event_banner">Event Banner</label>
+                    <input class="ap-input" id="ap_event_banner" type="file" name="event_banner" accept="image/*">
+
+                    <label class="ap-form-label"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label>
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <input class="ap-input" id="ap_event_image_<?php echo $i; ?>" type="file" name="image_<?php echo $i; ?>" accept="image/*">
+                    <?php endfor; ?>
 
                     <label class="ap-form-label">
                         <input class="ap-input" type="checkbox" name="ap_event_featured" value="1"> Request Featured
@@ -451,6 +459,37 @@ class OrganizationDashboardShortcode {
         update_post_meta($event_id, '_ap_event_organization', $org_id);
         update_post_meta($event_id, 'event_featured', $featured);
 
+        if (! function_exists('media_handle_upload')) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        }
+
+        $image_ids = [];
+
+        if (!empty($_FILES['event_banner']['tmp_name'])) {
+            $attachment_id = media_handle_upload('event_banner', $event_id);
+            if (!is_wp_error($attachment_id)) {
+                $image_ids[] = $attachment_id;
+            }
+        }
+
+        for ($i = 1; $i <= 5; $i++) {
+            $key = 'image_' . $i;
+            if (!empty($_FILES[$key]['tmp_name'])) {
+                $id = media_handle_upload($key, $event_id);
+                if (!is_wp_error($id)) {
+                    $image_ids[] = $id;
+                }
+            }
+        }
+
+        if ($image_ids) {
+            update_post_meta($event_id, '_ap_submission_images', $image_ids);
+            update_post_meta($event_id, 'event_banner_id', $image_ids[0]);
+            set_post_thumbnail($event_id, $image_ids[0]);
+        }
+
         if ($event_type) {
             wp_set_post_terms($event_id, [$event_type], 'event_type');
         }
@@ -583,6 +622,40 @@ class OrganizationDashboardShortcode {
 
         if ($event_type) {
             wp_set_post_terms($event_id, [$event_type], 'event_type');
+        }
+
+        if (! function_exists('media_handle_upload')) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        }
+
+        $image_ids = get_post_meta($event_id, '_ap_submission_images', true);
+        if (!is_array($image_ids)) {
+            $image_ids = [];
+        }
+
+        if (!empty($_FILES['event_banner']['tmp_name'])) {
+            $attachment_id = media_handle_upload('event_banner', $event_id);
+            if (!is_wp_error($attachment_id)) {
+                $image_ids[] = $attachment_id;
+                update_post_meta($event_id, 'event_banner_id', $attachment_id);
+                set_post_thumbnail($event_id, $attachment_id);
+            }
+        }
+
+        for ($i = 1; $i <= 5; $i++) {
+            $key = 'image_' . $i;
+            if (!empty($_FILES[$key]['tmp_name'])) {
+                $id = media_handle_upload($key, $event_id);
+                if (!is_wp_error($id)) {
+                    $image_ids[] = $id;
+                }
+            }
+        }
+
+        if ($image_ids) {
+            update_post_meta($event_id, '_ap_submission_images', $image_ids);
         }
 
         // Reload the event list for this organization
