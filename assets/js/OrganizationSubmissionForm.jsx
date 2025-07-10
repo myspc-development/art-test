@@ -50,21 +50,29 @@ const ORG_TYPES = ['gallery','museum','studio','collective','non-profit','commer
 
 export default function OrganizationSubmissionForm() {
   const [title, setTitle] = useState('');
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(Array(5).fill(null));
   const [logo, setLogo] = useState(null);
   const [banner, setBanner] = useState(null);
   const [addressComponents, setAddressComponents] = useState('');
   const [country, setCountry] = useState('');
   const [stateProv, setStateProv] = useState('');
   const [city, setCity] = useState('');
-  const [previews, setPreviews] = useState([]);
+  const [previews, setPreviews] = useState(Array(5).fill(null));
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files).slice(0, 5);
-    setImages(files);
-    setPreviews(files.map(file => URL.createObjectURL(file)));
+  const handleImageChange = index => e => {
+    const file = e.target.files[0] || null;
+    setImages(prev => {
+      const arr = [...prev];
+      arr[index] = file;
+      return arr;
+    });
+    setPreviews(prev => {
+      const arr = [...prev];
+      arr[index] = file ? URL.createObjectURL(file) : null;
+      return arr;
+    });
   };
 
   const handleLogoChange = (e) => {
@@ -108,6 +116,7 @@ export default function OrganizationSubmissionForm() {
     try {
       const imageIds = [];
       for (const file of images) {
+        if (!file) continue;
         const id = await uploadMedia(file);
         imageIds.push(id);
       }
@@ -120,7 +129,9 @@ export default function OrganizationSubmissionForm() {
       const payload = { post_type: 'artpulse_org', title };
       const fd = new FormData(e.target);
       fd.delete('title');
-      fd.delete('images[]');
+      for (let i = 1; i <= 5; i++) {
+        fd.delete(`image_${i}`);
+      }
       fd.delete('ead_org_logo_id');
       fd.delete('ead_org_banner_id');
       for (const [key, value] of fd.entries()) {
@@ -151,8 +162,8 @@ export default function OrganizationSubmissionForm() {
         window.location.href = APSubmission.dashboardUrl;
       }, 3000);
       setTitle('');
-      setImages([]);
-      setPreviews([]);
+      setImages(Array(5).fill(null));
+      setPreviews(Array(5).fill(null));
       setLogo(null);
       setBanner(null);
       setCountry('');
@@ -251,21 +262,23 @@ export default function OrganizationSubmissionForm() {
       ))}
 
       <div className="form-group">
-        <label className="ap-form-label" htmlFor="ap_org_images">Images (max 5)</label>
-        <input
-          id="ap_org_images"
-          className="ap-input"
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={handleFileChange}
-        />
+        <label className="ap-form-label">Images (max 5)</label>
+        {[0,1,2,3,4].map(i => (
+          <input
+            key={i}
+            id={`ap_org_image_${i+1}`}
+            className="ap-input"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange(i)}
+          />
+        ))}
       </div>
       <input type="hidden" value={addressComponents} readOnly name="address_components" />
 
       <div className="ap-form-group">
         {previews.map((src, i) => (
-          <img key={i} src={src} alt="" className="ap-image-preview" />
+          src ? <img key={i} src={src} alt="" className="ap-image-preview" /> : null
         ))}
       </div>
 
