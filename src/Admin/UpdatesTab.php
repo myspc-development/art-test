@@ -26,7 +26,10 @@ class UpdatesTab
         }
         $result = self::check_updates(true);
         if ($result === true) {
-            self::run_update(true);
+            $update_result = self::run_update(true);
+            if (is_wp_error($update_result)) {
+                error_log('🔧 Auto update failed: ' . $update_result->get_error_message());
+            }
         } elseif (is_wp_error($result)) {
             error_log('🔧 Update check failed: ' . $result->get_error_message());
         }
