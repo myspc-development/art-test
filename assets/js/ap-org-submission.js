@@ -9,6 +9,9 @@ var APOrgSubmission = (function (React) {
   function _arrayWithHoles(r) {
     if (Array.isArray(r)) return r;
   }
+  function _arrayWithoutHoles(r) {
+    if (Array.isArray(r)) return _arrayLikeToArray(r);
+  }
   function asyncGeneratorStep(n, t, e, r, o, a, c) {
     try {
       var i = n[a](c),
@@ -82,6 +85,9 @@ var APOrgSubmission = (function (React) {
       }
     };
   }
+  function _iterableToArray(r) {
+    if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
+  }
   function _iterableToArrayLimit(r, l) {
     var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
     if (null != t) {
@@ -108,6 +114,9 @@ var APOrgSubmission = (function (React) {
   }
   function _nonIterableRest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
   function _regenerator() {
     /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
@@ -221,6 +230,9 @@ var APOrgSubmission = (function (React) {
   }
   function _slicedToArray(r, e) {
     return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
+  }
+  function _toConsumableArray(r) {
+    return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread();
   }
   function _unsupportedIterableToArray(r, a) {
     if (r) {
@@ -411,7 +423,7 @@ var APOrgSubmission = (function (React) {
       _useState2 = _slicedToArray(_useState, 2),
       title = _useState2[0],
       setTitle = _useState2[1];
-    var _useState3 = React.useState([]),
+    var _useState3 = React.useState(Array(5).fill(null)),
       _useState4 = _slicedToArray(_useState3, 2),
       images = _useState4[0],
       setImages = _useState4[1];
@@ -439,7 +451,7 @@ var APOrgSubmission = (function (React) {
       _useState14 = _slicedToArray(_useState13, 2),
       city = _useState14[0],
       setCity = _useState14[1];
-    var _useState15 = React.useState([]),
+    var _useState15 = React.useState(Array(5).fill(null)),
       _useState16 = _slicedToArray(_useState15, 2),
       previews = _useState16[0],
       setPreviews = _useState16[1];
@@ -451,12 +463,20 @@ var APOrgSubmission = (function (React) {
       _useState20 = _slicedToArray(_useState19, 2),
       message = _useState20[0],
       setMessage = _useState20[1];
-    var handleFileChange = function handleFileChange(e) {
-      var files = Array.from(e.target.files).slice(0, 5);
-      setImages(files);
-      setPreviews(files.map(function (file) {
-        return URL.createObjectURL(file);
-      }));
+    var handleImageChange = function handleImageChange(index) {
+      return function (e) {
+        var file = e.target.files[0] || null;
+        setImages(function (prev) {
+          var arr = _toConsumableArray(prev);
+          arr[index] = file;
+          return arr;
+        });
+        setPreviews(function (prev) {
+          var arr = _toConsumableArray(prev);
+          arr[index] = file ? URL.createObjectURL(file) : null;
+          return arr;
+        });
+      };
     };
     var handleLogoChange = function handleLogoChange(e) {
       setLogo(e.target.files[0] || null);
@@ -509,7 +529,7 @@ var APOrgSubmission = (function (React) {
     }();
     var handleSubmit = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(e) {
-        var imageIds, _iterator, _step, file, id, logoId, bannerId, payload, fd, _iterator2, _step2, _step2$value, key, value, res, json, _t, _t2;
+        var imageIds, _iterator, _step, file, id, logoId, bannerId, payload, fd, i, _iterator2, _step2, _step2$value, key, value, res, json, _t, _t2;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.n) {
             case 0:
@@ -523,57 +543,65 @@ var APOrgSubmission = (function (React) {
               _iterator.s();
             case 3:
               if ((_step = _iterator.n()).done) {
-                _context2.n = 6;
+                _context2.n = 7;
                 break;
               }
               file = _step.value;
-              _context2.n = 4;
-              return uploadMedia(file);
+              if (file) {
+                _context2.n = 4;
+                break;
+              }
+              return _context2.a(3, 6);
             case 4:
+              _context2.n = 5;
+              return uploadMedia(file);
+            case 5:
               id = _context2.v;
               imageIds.push(id);
-            case 5:
+            case 6:
               _context2.n = 3;
               break;
-            case 6:
-              _context2.n = 8;
-              break;
             case 7:
-              _context2.p = 7;
-              _t = _context2.v;
-              _iterator.e(_t);
+              _context2.n = 9;
+              break;
             case 8:
               _context2.p = 8;
-              _iterator.f();
-              return _context2.f(8);
+              _t = _context2.v;
+              _iterator.e(_t);
             case 9:
+              _context2.p = 9;
+              _iterator.f();
+              return _context2.f(9);
+            case 10:
               logoId = null;
               if (!logo) {
-                _context2.n = 11;
+                _context2.n = 12;
                 break;
               }
-              _context2.n = 10;
+              _context2.n = 11;
               return uploadMedia(logo);
-            case 10:
-              logoId = _context2.v;
             case 11:
+              logoId = _context2.v;
+            case 12:
               bannerId = null;
               if (!banner) {
-                _context2.n = 13;
+                _context2.n = 14;
                 break;
               }
-              _context2.n = 12;
+              _context2.n = 13;
               return uploadMedia(banner);
-            case 12:
-              bannerId = _context2.v;
             case 13:
+              bannerId = _context2.v;
+            case 14:
               payload = {
                 post_type: 'artpulse_org',
                 title: title
               };
               fd = new FormData(e.target);
               fd["delete"]('title');
-              fd["delete"]('images[]');
+              for (i = 1; i <= 5; i++) {
+                fd["delete"]("image_".concat(i));
+              }
               fd["delete"]('ead_org_logo_id');
               fd["delete"]('ead_org_banner_id');
               _iterator2 = _createForOfIteratorHelper(fd.entries());
@@ -594,7 +622,7 @@ var APOrgSubmission = (function (React) {
               if (logoId) payload.ead_org_logo_id = logoId;
               if (bannerId) payload.ead_org_banner_id = bannerId;
               if (addressComponents) payload.address_components = addressComponents;
-              _context2.n = 14;
+              _context2.n = 15;
               return fetch(APSubmission.endpoint, {
                 method: 'POST',
                 headers: {
@@ -603,46 +631,46 @@ var APOrgSubmission = (function (React) {
                 },
                 body: JSON.stringify(payload)
               });
-            case 14:
-              res = _context2.v;
-              _context2.n = 15;
-              return res.json();
             case 15:
+              res = _context2.v;
+              _context2.n = 16;
+              return res.json();
+            case 16:
               json = _context2.v;
               if (res.ok) {
-                _context2.n = 16;
+                _context2.n = 17;
                 break;
               }
               throw new Error(json.message || 'Submission failed');
-            case 16:
+            case 17:
               setMessage('Submission successful!');
               setTimeout(function () {
                 window.location.href = APSubmission.dashboardUrl;
               }, 3000);
               setTitle('');
-              setImages([]);
-              setPreviews([]);
+              setImages(Array(5).fill(null));
+              setPreviews(Array(5).fill(null));
               setLogo(null);
               setBanner(null);
               setCountry('');
               setStateProv('');
               setCity('');
               setAddressComponents('');
-              _context2.n = 18;
+              _context2.n = 19;
               break;
-            case 17:
-              _context2.p = 17;
+            case 18:
+              _context2.p = 18;
               _t2 = _context2.v;
               console.error(_t2);
               setMessage("Error: ".concat(_t2.message));
-            case 18:
-              _context2.p = 18;
-              setLoading(false);
-              return _context2.f(18);
             case 19:
+              _context2.p = 19;
+              setLoading(false);
+              return _context2.f(19);
+            case 20:
               return _context2.a(2);
           }
-        }, _callee2, null, [[2, 7, 8, 9], [1, 17, 18, 19]]);
+        }, _callee2, null, [[2, 8, 9, 10], [1, 18, 19, 20]]);
       }));
       return function handleSubmit(_x2) {
         return _ref2.apply(this, arguments);
@@ -757,15 +785,16 @@ var APOrgSubmission = (function (React) {
     }), /*#__PURE__*/React.createElement("div", {
       className: "form-group"
     }, /*#__PURE__*/React.createElement("label", {
-      className: "ap-form-label",
-      htmlFor: "ap_org_images"
-    }, "Images (max 5)"), /*#__PURE__*/React.createElement("input", {
-      id: "ap_org_images",
-      className: "ap-input",
-      type: "file",
-      multiple: true,
-      accept: "image/*",
-      onChange: handleFileChange
+      className: "ap-form-label"
+    }, "Images (max 5)"), [0, 1, 2, 3, 4].map(function (i) {
+      return /*#__PURE__*/React.createElement("input", {
+        key: i,
+        id: "ap_org_image_".concat(i + 1),
+        className: "ap-input",
+        type: "file",
+        accept: "image/*",
+        onChange: handleImageChange(i)
+      });
     })), /*#__PURE__*/React.createElement("input", {
       type: "hidden",
       value: addressComponents,
@@ -774,12 +803,12 @@ var APOrgSubmission = (function (React) {
     }), /*#__PURE__*/React.createElement("div", {
       className: "ap-form-group"
     }, previews.map(function (src, i) {
-      return /*#__PURE__*/React.createElement("img", {
+      return src ? /*#__PURE__*/React.createElement("img", {
         key: i,
         src: src,
         alt: "",
         className: "ap-image-preview"
-      });
+      }) : null;
     })), /*#__PURE__*/React.createElement("button", {
       className: "ap-form-button",
       type: "submit",
