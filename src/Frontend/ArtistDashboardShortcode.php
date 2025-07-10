@@ -100,8 +100,10 @@ class ArtistDashboardShortcode {
                 </div>
                 <?php endif; ?>
                 <div class="form-group">
-                    <label class="ap-form-label" for="ap-artwork-images"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label>
-                    <input class="ap-input" id="ap-artwork-images" type="file" name="images[]" accept="image/*" multiple />
+                    <label class="ap-form-label"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label>
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <input class="ap-input ap-artwork-image" id="ap-artwork-image<?php echo $i; ?>" type="file" name="image_<?php echo $i; ?>" accept="image/*" />
+                    <?php endfor; ?>
                 </div>
                 <div class="form-group">
                     <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
