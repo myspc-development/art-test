@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     ArtPulse Management
  * Description:     Management plugin for ArtPulse.
- * Version:         1.3.10
+ * Version:         1.3.11
  * Author:          craig
  * Text Domain:     artpulse
  * License:         GPL2

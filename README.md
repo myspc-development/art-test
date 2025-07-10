@@ -223,6 +223,7 @@ Use `[ap_events_slider]` to display a sliding carousel of upcoming events. The s
 ## Organization Event Form
 
 The `[ap_org_event_form]` shortcode lets logged-in organizations submit new events from the front end. Submissions are saved as pending posts until reviewed.
+Event submission forms support up to five images and thumbnails can be reordered via drag-and-drop.
 
 
 ## Stripe Radar
