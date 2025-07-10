@@ -20,7 +20,11 @@ class ImportRestController
 
     public static function register(): void
     {
-        add_action('rest_api_init', [self::class, 'register_routes']);
+        if (did_action('rest_api_init')) {
+            self::register_routes();
+        } else {
+            add_action('rest_api_init', [self::class, 'register_routes']);
+        }
     }
 
     public static function register_routes(): void
