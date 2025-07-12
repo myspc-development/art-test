@@ -14,18 +14,22 @@ if (!ap_user_can_edit_layout('member')) {
 }
 
 get_header();
+
+$dashboard_class = 'member-dashboard';
+$dashboard_title = '📋 ' . __('Member Dashboard', 'artpulse');
+
+include __DIR__ . '/partials/dashboard-wrapper-start.php';
+include __DIR__ . '/partials/dashboard-nav.php';
+
+$stats  = [];
+$events = [];
+include __DIR__ . '/partials/dashboard-stats.php';
+include __DIR__ . '/partials/dashboard-events.php';
 ?>
-
-<div class="ap-dashboard-wrap member-dashboard">
-  <h2>📋 Member Dashboard</h2>
-  <form method="post" style="margin-bottom:1em;">
-    <?php wp_nonce_field('ap_reset_user_layout'); ?>
-    <input type="hidden" name="reset_user_layout" value="1" />
-    <button class="button">♻ Reset My Dashboard</button>
-  </form>
-  <div id="ap-user-dashboard" class="ap-dashboard-columns">
-    <?php DashboardWidgetTools::render_user_dashboard(get_current_user_id()); ?>
-  </div>
+<div id="ap-user-dashboard" class="ap-dashboard-columns">
+  <?php DashboardWidgetTools::render_user_dashboard(get_current_user_id()); ?>
 </div>
-
-<?php get_footer(); ?>
+<?php
+include __DIR__ . '/partials/dashboard-wrapper-end.php';
+get_footer();
+?>
