@@ -84,6 +84,7 @@ class Plugin
         add_action('init', [\ArtPulse\Community\EventChatController::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\CompetitionEntryManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Frontend\CompetitionDashboardShortcode::class, 'register']);
+        add_filter('script_loader_tag', [self::class, 'add_defer'], 10, 3);
     }
 
     public function activate()
@@ -94,11 +95,7 @@ class Plugin
         update_option('ap_plugin_version', self::VERSION);
 
         // Init settings with defaults
-        $defaults = [
-            'theme'            => 'default',
-            'enable_reporting' => true,
-            'admin_email'      => get_option('admin_email'),
-        ];
+        $defaults = function_exists('artpulse_get_default_settings') ? artpulse_get_default_settings() : [];
         $settings = get_option('artpulse_settings', []);
         foreach ($defaults as $key => $value) {
             if (!isset($settings[$key])) {
@@ -300,6 +297,7 @@ class Plugin
         \ArtPulse\Blocks\AjaxFilterBlock::register();
         \ArtPulse\Blocks\FilteredListShortcodeBlock::register();
         \ArtPulse\Blocks\SpotlightBlock::register();
+        \ArtPulse\Blocks\FavoritePortfolioBlock::register();
         \ArtPulse\Blocks\TaxonomyFilterBlock::register();
         WidgetEmbedShortcode::register();
         WidgetEmbedBlock::register();
@@ -813,5 +811,18 @@ class Plugin
             $opts['plugin_version'] = self::VERSION;
             update_option('artpulse_settings', $opts);
         }
+    }
+
+    public static function add_defer(string $tag, string $handle, string $src): string
+    {
+        $defer = [
+            'ap-membership-account-js',
+            'ap-payouts-js',
+            'ap-account-settings-js'
+        ];
+        if (in_array($handle, $defer, true)) {
+            return str_replace(' src', ' defer src', $tag);
+        }
+        return $tag;
     }
 }

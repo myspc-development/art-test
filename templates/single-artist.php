@@ -19,7 +19,7 @@ if ( have_posts() ) :
       echo '<div class="event-gallery swiper">';
       echo '<div class="swiper-wrapper">';
       foreach ( array_slice( $gallery_ids, 1 ) as $img_id ) {
-        echo '<div class="swiper-slide">' . wp_get_attachment_image( $img_id, 'large' ) . '</div>';
+        echo '<div class="swiper-slide">' . wp_get_attachment_image( $img_id, 'large', false, ['loading' => 'lazy'] ) . '</div>';
       }
       echo '</div><div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div>';
     } else {

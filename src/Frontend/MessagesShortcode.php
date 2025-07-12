@@ -6,6 +6,8 @@ class MessagesShortcode
     public static function register(): void
     {
         add_shortcode('ap_messages', [self::class, 'render']);
+        add_shortcode('ap_inbox', [self::class, 'render']);
+        add_shortcode('ap_message_form', [self::class, 'render_form']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 
@@ -43,6 +45,24 @@ class MessagesShortcode
                 </form>
             </div>
         </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public static function render_form(): string
+    {
+        if (!is_user_logged_in()) {
+            return '';
+        }
+
+        ob_start();
+        ?>
+        <form id="ap-message-form-shortcode">
+            <input type="hidden" name="recipient_id" value="">
+            <label for="ap-message-content-sc"><?php esc_html_e('Message', 'artpulse'); ?></label>
+            <textarea id="ap-message-content-sc" name="content" required></textarea>
+            <button type="submit"><?php esc_html_e('Send', 'artpulse'); ?></button>
+        </form>
         <?php
         return ob_get_clean();
     }
