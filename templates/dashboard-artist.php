@@ -1,6 +1,8 @@
 <?php
 $user_role = 'artist';
 
+include locate_template('templates/partials/dashboard-nav.php');
+
 add_action('wp_enqueue_scripts', function () use ($user_role) {
     if (ap_user_can_edit_layout($user_role)) {
         wp_enqueue_script("{$user_role}-dashboard-js", plugin_dir_url(__FILE__) . "../assets/js/{$user_role}-dashboard.js", ['jquery-ui-sortable', 'dark-mode-toggle'], null, true);
@@ -12,5 +14,10 @@ add_action('wp_enqueue_scripts', function () use ($user_role) {
     }
 });
 
-include locate_template('partials/dashboard-generic.php');
+?>
+<div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard">
+  <h2><?= ucfirst($user_role) ?> Dashboard</h2>
+  <?php include locate_template('templates/partials/dashboard-generic.php'); ?>
+</div>
+
 
