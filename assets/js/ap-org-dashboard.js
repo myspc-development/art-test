@@ -150,7 +150,17 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     credentials: 'same-origin'
   })
-    .then(res => res.ok ? res.json() : null)
+    .then(res => {
+      if (res.ok) return res.json();
+      if (res.status === 401) {
+        const info = document.getElementById('ap-membership-info');
+        if (info) {
+          info.innerHTML = '<a href="/wp-login.php">Please log in to view dashboard.</a>';
+        }
+        return null;
+      }
+      return null;
+    })
     .then(data => {
       if (!data) return;
       const info = document.getElementById('ap-membership-info');

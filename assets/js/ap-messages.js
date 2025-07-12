@@ -1,4 +1,5 @@
 (function($){
+  var pollInterval = null;
   function listConversations(){
     $.ajax({
       url: APMessages.apiRoot + 'artpulse/v1/conversations',
@@ -28,6 +29,18 @@
           });
           $list.append(li);
         });
+      },
+      error: function(jqXHR){
+        if(jqXHR.status === 401){
+          var $list = $('#ap-conversation-list');
+          if($list.length){
+            $list.empty().append('<li>Please log in to view messages.</li>');
+          }
+          if(pollInterval){
+            clearInterval(pollInterval);
+            pollInterval = null;
+          }
+        }
       }
     });
   }
@@ -39,6 +52,18 @@
       beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(data){
         if (cb) cb(data);
+      },
+      error: function(jqXHR){
+        if(jqXHR.status === 401){
+          var $box = $('#ap-message-list');
+          if($box.length){
+            $box.empty().append('<li>Please log in to view messages.</li>');
+          }
+          if(pollInterval){
+            clearInterval(pollInterval);
+            pollInterval = null;
+          }
+        }
       }
     });
   }
@@ -101,7 +126,7 @@
   });
 
   if(APMessages.pollId){
-    setInterval(function(){
+    pollInterval = setInterval(function(){
       loadMessages(APMessages.pollId);
     }, 5000);
   }
