@@ -42,6 +42,7 @@ require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
 require_once __DIR__ . '/includes/user-actions.php';
+require_once __DIR__ . '/admin/page-dashboard-widgets.php';
 
 // Ensure custom roles exist on every load
 add_action('init', function () {

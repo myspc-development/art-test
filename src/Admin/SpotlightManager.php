@@ -98,6 +98,8 @@ class SpotlightManager
                     'type'    => 'DATE',
                 ],
             ],
+            'orderby'   => [ 'meta_value_num' => 'DESC', 'date' => 'DESC' ],
+            'meta_key'  => 'is_pinned',
         ];
 
         if ($category) {

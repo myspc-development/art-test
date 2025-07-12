@@ -1,5 +1,6 @@
 <?php
 namespace ArtPulse\Taxonomies;
+use ArtPulse\Taxonomies\SpotlightCategory;
 class TaxonomiesRegistrar {
     public static function register() {
         self::register_artist_specialties();
@@ -8,6 +9,7 @@ class TaxonomiesRegistrar {
         self::register_org_categories();
         self::register_project_stages();
         self::register_reviewed_type();
+        SpotlightCategory::register();
         self::insert_default_event_types();
     }
     public static function register_artist_specialties() {
