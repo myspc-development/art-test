@@ -40,13 +40,22 @@ class WidgetEmbedShortcode
         }
 
         ob_start();
+        $shortcode = get_post_meta($post->ID, 'widget_shortcode', true);
+        $atts_str  = get_post_meta($post->ID, 'widget_shortcode_atts', true);
         ?>
         <div class="ap-widget <?php echo esc_attr(get_post_meta($post->ID, 'widget_class', true)); ?>">
             <div class="ap-widget-header">
                 <?php echo esc_html(get_the_title($post)); ?>
             </div>
             <div class="ap-widget-body">
-                <?php echo apply_filters('the_content', $post->post_content); ?>
+                <?php
+                if ($shortcode) {
+                    $tag = trim($shortcode);
+                    echo do_shortcode($tag . ($atts_str ? ' ' . $atts_str : ''));
+                } else {
+                    echo apply_filters('the_content', $post->post_content);
+                }
+                ?>
             </div>
         </div>
         <?php

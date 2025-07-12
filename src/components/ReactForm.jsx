@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ReactForm = () => {
+const ReactForm = ({ type = 'default' }) => {
   const [formData, setFormData] = useState({ name: '', email: '' });
   const [status, setStatus] = useState('');
 
@@ -22,7 +22,7 @@ const ReactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} data-type={type}>
       <input
         type="text"
         name="name"
@@ -38,7 +38,7 @@ const ReactForm = () => {
         onChange={e => setFormData({ ...formData, email: e.target.value })}
       />
       <button type="submit">Submit</button>
-      <p>{status}</p>
+      <p>{status} {type !== 'default' ? `(${type})` : ''}</p>
     </form>
   );
 };

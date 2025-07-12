@@ -38,6 +38,7 @@ add_action('init', ['ArtPulse\\Core\\DashboardWidgetRegistry', 'init']);
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
+require_once __DIR__ . '/includes/widgets/class-ap-widget.php';
 require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
@@ -355,6 +356,20 @@ function ap_page_has_artpulse_shortcode() {
 }
 
 /**
+ * Check if the current page contains a specific shortcode.
+ */
+function ap_page_has_shortcode(string $tag): bool {
+    if (!is_singular()) {
+        return false;
+    }
+    global $post;
+    if (!$post || empty($post->post_content)) {
+        return false;
+    }
+    return has_shortcode($post->post_content, $tag);
+}
+
+/**
  * Get the active theme accent color.
  *
  * @return string Hex color string.
@@ -560,10 +575,23 @@ function ap_user_has_favorited($user_id, $post_id) {
     return in_array($post_id, $favs);
 }
 
-function ap_render_favorite_portfolio() {
+function ap_render_favorite_portfolio($atts = []) {
     if (!is_user_logged_in()) {
-        return '<p>' . __('Please log in to view your favorites.', 'artpulse') . '</p>';
+        return '<p>' . esc_html__('Please log in to view your favorites.', 'artpulse') . '</p>';
     }
+
+    $atts = shortcode_atts([
+        'category' => '',
+        'limit'    => 12,
+        'sort'     => 'date',
+        'page'     => 1,
+    ], $atts, 'ap_favorite_portfolio');
+
+    $cat  = sanitize_text_field($atts['category']);
+    $limit = max(1, intval($atts['limit']));
+    $sort  = sanitize_key($atts['sort']);
+    $paged = max(1, intval($atts['page']));
+
     $user_id = get_current_user_id();
     if (class_exists('\\ArtPulse\\Community\\FavoritesManager')) {
         $favs = \ArtPulse\Community\FavoritesManager::get_user_favorites($user_id);
@@ -576,13 +604,22 @@ function ap_render_favorite_portfolio() {
 
     ob_start();
     if ($favorite_ids) {
-        $fav_query = new WP_Query([
-            'post_type' => ['artpulse_event', 'artpulse_artwork'],
-            'post__in' => $favorite_ids,
-            'orderby' => 'post__in',
-            'posts_per_page' => 12
-        ]);
-        echo '<div class="row portfolio-items">';
+        $args = [
+            'post_type'      => ['artpulse_event', 'artpulse_artwork'],
+            'post__in'       => $favorite_ids,
+            'orderby'        => $sort === 'random' ? 'rand' : 'post__in',
+            'posts_per_page' => $limit,
+            'paged'          => $paged,
+        ];
+        if ($cat) {
+            $args['tax_query'] = [[
+                'taxonomy' => 'category',
+                'field'    => 'slug',
+                'terms'    => $cat,
+            ]];
+        }
+        $fav_query = new WP_Query($args);
+        echo '<div class="ap-fav-portfolio row portfolio-items">';
         while($fav_query->have_posts()) : $fav_query->the_post();
             echo '<div class="col span_4">';
             if (get_post_type() === 'artpulse_event') {
@@ -604,23 +641,59 @@ function ap_render_favorite_portfolio() {
             echo '</div>';
         endwhile;
         echo '</div>';
+        $pagination = paginate_links([
+            'total'   => $fav_query->max_num_pages,
+            'current' => $paged,
+            'type'    => 'list',
+        ]);
+        if ($pagination) {
+            echo '<nav class="ap-fav-pagination">' . $pagination . '</nav>';
+        }
         wp_reset_postdata();
     } else {
-        echo '<p>' . __('No favorites yet. Click the star on any event or artwork to add it to your favorites!', 'artpulse') . '</p>';
+        echo '<p>' . esc_html__('No favorites yet. Click the star on any event or artwork to add it to your favorites!', 'artpulse') . '</p>';
     }
     return ob_get_clean();
 }
 add_shortcode('ap_favorite_portfolio', 'ap_render_favorite_portfolio');
 
-function ap_favorites_analytics_widget() {
+function ap_favorites_analytics_widget($atts = []) {
+    $atts = shortcode_atts([
+        'type'       => 'summary',
+        'user_id'    => 0,
+        'admin_only' => false,
+        'roles'      => '',
+    ], $atts, 'ap_favorites_analytics');
+
+    $admin_only = filter_var($atts['admin_only'], FILTER_VALIDATE_BOOLEAN);
+    $roles      = array_filter(array_map('trim', explode(',', $atts['roles'])));
+    $user_id    = intval($atts['user_id']);
+
+    if ($admin_only && !current_user_can('manage_options')) {
+        return '';
+    }
+    if ($roles) {
+        $user = wp_get_current_user();
+        if (!array_intersect($user->roles, $roles)) {
+            return '';
+        }
+    }
+
+    wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], null);
+
+    $limit = $atts['type'] === 'detailed' ? 20 : 5;
+
     ob_start();
     $args = [
-        'post_type' => ['artpulse_event', 'artpulse_artwork'],
-        'meta_key' => 'ap_favorite_count',
-        'orderby' => 'meta_value_num',
-        'order' => 'DESC',
-        'posts_per_page' => 5
+        'post_type'      => ['artpulse_event', 'artpulse_artwork'],
+        'meta_key'       => 'ap_favorite_count',
+        'orderby'        => 'meta_value_num',
+        'order'          => 'DESC',
+        'posts_per_page' => $limit,
     ];
+    if ($user_id) {
+        $args['author'] = $user_id;
+    }
     $query = new WP_Query($args);
     echo '<h4>Top Favorited Events/Artworks</h4><ul class="ap-analytics-widget">';
     while($query->have_posts()) : $query->the_post();
@@ -634,7 +707,7 @@ function ap_favorites_analytics_widget() {
         ?>
         <li>
             <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-            <span><?php echo intval(get_post_meta(get_the_ID(), 'ap_favorite_count', true)); ?> favorites</span>
+            <span><?php echo intval(get_post_meta(get_the_ID(), 'ap_favorite_count', true)); ?> <?php echo esc_html__('favorites', 'artpulse'); ?></span>
             <canvas id="favTrendChart-<?php the_ID(); ?>" width="300" height="80"></canvas>
             <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -911,6 +984,9 @@ add_filter('template_include', function ($template) {
 
 // === React Form Demo ===
 function artpulse_enqueue_react_form() {
+    if (!ap_page_has_shortcode('react_form')) {
+        return;
+    }
     wp_enqueue_script(
         'artpulse-react-form',
         plugin_dir_url(__FILE__) . 'dist/react-form.js',
@@ -925,8 +1001,10 @@ function artpulse_enqueue_react_form() {
 }
 add_action('wp_enqueue_scripts', 'artpulse_enqueue_react_form');
 
-function artpulse_render_react_form() {
-    return '<div id="react-form-root"></div>';
+function artpulse_render_react_form($atts = []) {
+    $atts = shortcode_atts(['type' => 'default'], $atts, 'react_form');
+    $type = sanitize_key($atts['type']);
+    return '<div id="react-form-root" data-type="' . esc_attr($type) . '"></div>';
 }
 add_shortcode('react_form', 'artpulse_render_react_form');
 
@@ -964,6 +1042,10 @@ add_action('wp_ajax_ap_reset_layout', function () {
     delete_user_meta($user_id, 'ap_dashboard_layout');
 
     wp_send_json_success(['message' => 'Layout reset.']);
+});
+
+add_action('widgets_init', function () {
+    register_widget('AP_Widget');
 });
 
 

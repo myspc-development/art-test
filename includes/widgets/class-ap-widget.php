@@ -1,0 +1,44 @@
+<?php
+if (!class_exists('AP_Widget') && class_exists('WP_Widget')) {
+    class AP_Widget extends WP_Widget {
+        public function __construct() {
+            parent::__construct(
+                'ap_shortcode_widget',
+                __('AP Shortcode Widget', 'artpulse'),
+                ['description' => __('Render a shortcode inside a widget.', 'artpulse')]
+            );
+        }
+
+        public function widget($args, $instance) {
+            echo $args['before_widget'] ?? '';
+            $shortcode = $instance['shortcode'] ?? '';
+            $atts = $instance['atts'] ?? '';
+            if ($shortcode) {
+                echo do_shortcode($shortcode . ($atts ? ' ' . $atts : ''));
+            }
+            echo $args['after_widget'] ?? '';
+        }
+
+        public function form($instance) {
+            $shortcode = esc_attr($instance['shortcode'] ?? '');
+            $atts = esc_attr($instance['atts'] ?? '');
+            ?>
+            <p>
+                <label><?php _e('Shortcode:', 'artpulse'); ?></label>
+                <input class="widefat" name="<?php echo $this->get_field_name('shortcode'); ?>" type="text" value="<?php echo $shortcode; ?>" />
+            </p>
+            <p>
+                <label><?php _e('Attributes:', 'artpulse'); ?></label>
+                <input class="widefat" name="<?php echo $this->get_field_name('atts'); ?>" type="text" value="<?php echo $atts; ?>" />
+            </p>
+            <?php
+        }
+
+        public function update($new_instance, $old_instance) {
+            return [
+                'shortcode' => sanitize_text_field($new_instance['shortcode'] ?? ''),
+                'atts'      => sanitize_text_field($new_instance['atts'] ?? ''),
+            ];
+        }
+    }
+}

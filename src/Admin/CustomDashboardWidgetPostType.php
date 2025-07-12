@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Admin;
 
+use ArtPulse\Admin\ShortcodePages;
+
 class CustomDashboardWidgetPostType
 {
     public static function register(): void
@@ -38,9 +40,12 @@ class CustomDashboardWidgetPostType
     {
         $roles     = ['artist', 'organization', 'member'];
         $current   = get_post_meta($post->ID, 'visible_to_roles', true) ?: [];
-        $icon      = get_post_meta($post->ID, 'widget_icon', true);
-        $order     = get_post_meta($post->ID, 'widget_order', true);
-        $css_class = get_post_meta($post->ID, 'widget_class', true);
+        $icon       = get_post_meta($post->ID, 'widget_icon', true);
+        $order      = get_post_meta($post->ID, 'widget_order', true);
+        $css_class  = get_post_meta($post->ID, 'widget_class', true);
+        $shortcode  = get_post_meta($post->ID, 'widget_shortcode', true);
+        $short_atts = get_post_meta($post->ID, 'widget_shortcode_atts', true);
+        $codes      = array_keys(ShortcodePages::get_shortcode_map());
         ?>
         <p><label><?php _e('Roles', 'artpulse'); ?></label><br>
         <?php foreach ($roles as $role): ?>
@@ -50,6 +55,15 @@ class CustomDashboardWidgetPostType
         <p><label><?php _e('Icon', 'artpulse'); ?> <input type="text" name="widget_icon" value="<?= esc_attr($icon) ?>" class="regular-text"></label></p>
         <p><label><?php _e('Order', 'artpulse'); ?> <input type="number" name="widget_order" value="<?= esc_attr($order ?: 1) ?>" class="small-text"></label></p>
         <p><label><?php _e('CSS Class', 'artpulse'); ?> <input type="text" name="widget_class" value="<?= esc_attr($css_class) ?>" class="regular-text"></label></p>
+        <p><label><?php _e('Shortcode', 'artpulse'); ?>
+            <select name="widget_shortcode">
+                <option value="">—</option>
+                <?php foreach ($codes as $code) : ?>
+                    <option value="<?= esc_attr($code) ?>" <?= selected($shortcode, $code, false) ?>><?= esc_html($code) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label></p>
+        <p><label><?php _e('Shortcode Attributes', 'artpulse'); ?> <input type="text" name="widget_shortcode_atts" value="<?= esc_attr($short_atts) ?>" class="regular-text"></label></p>
         <?php
     }
 
@@ -59,6 +73,8 @@ class CustomDashboardWidgetPostType
         update_post_meta($post_id, 'widget_icon', sanitize_text_field($_POST['widget_icon'] ?? ''));
         update_post_meta($post_id, 'widget_order', intval($_POST['widget_order'] ?? 1));
         update_post_meta($post_id, 'widget_class', sanitize_text_field($_POST['widget_class'] ?? ''));
+        update_post_meta($post_id, 'widget_shortcode', sanitize_text_field($_POST['widget_shortcode'] ?? ''));
+        update_post_meta($post_id, 'widget_shortcode_atts', sanitize_text_field($_POST['widget_shortcode_atts'] ?? ''));
     }
 
     public static function add_admin_filters(): void

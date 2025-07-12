@@ -300,8 +300,9 @@
 
   var container = document.getElementById('react-form-root');
   if (container) {
+    var props = { type: container.dataset.type || 'default' };
     var root = client.createRoot(container);
-    root.render(/*#__PURE__*/React.createElement(ReactForm, null));
+    root.render(/*#__PURE__*/React.createElement(ReactForm, props));
   }
 
 })(React, ReactDOM);
