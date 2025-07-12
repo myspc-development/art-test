@@ -28,12 +28,13 @@ if (!defined('ARTPULSE_PLUGIN_FILE')) {
 // Load Composer autoloader
 $autoload_path = __DIR__ . '/vendor/autoload.php';
 if (file_exists($autoload_path)) {
-    require_once $autoload_path;
+require_once $autoload_path;
 } else {
     wp_die('Autoloader missing. Run `composer install` in the plugin directory.');
 }
 
 \ArtPulse\Core\Plugin::register();
+add_action('init', ['ArtPulse\\Core\\DashboardWidgetRegistry', 'init']);
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';

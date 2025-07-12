@@ -1,6 +1,7 @@
 <?php
 use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Core\DashboardController;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 if (!isset($user_role) || !ap_user_can_edit_layout($user_role)) {
     wp_die(__('Access denied', 'artpulse'));
@@ -39,25 +40,24 @@ include locate_template('partials/dashboard-wrapper-start.php');
     <?= __('Dark Mode', 'artpulse'); ?>
   </label>
 
-  <div id="ap-user-dashboard" class="ap-dashboard-columns" role="region" tabindex="0" aria-label="User Dashboard Widgets">
-    <?php echo DashboardController::render_for_user(get_current_user_id()); ?>
+<?php
+$layout = DashboardController::get_user_dashboard_layout(get_current_user_id());
+if (empty($layout)) {
+    echo '<div class="ap-empty-state">No widgets available. Load a preset or reset layout.</div>';
+} else {
+    echo '<div id="ap-widget-sortable" class="ap-widget-grid" data-role="' . esc_attr(DashboardController::get_role(get_current_user_id())) . '">';
+    foreach ($layout as $widget) {
+        $id = $widget['id'];
+        $config = DashboardWidgetRegistry::get_widget($id);
+        if (!$config || empty($config['template'])) continue;
 
-    <?php
-    $custom_widgets = DashboardController::get_custom_widgets_for_user(get_current_user_id());
-    foreach ($custom_widgets as $widget):
-        $icon = get_post_meta($widget->ID, 'widget_icon', true);
-        $css  = get_post_meta($widget->ID, 'widget_class', true);
-    ?>
-        <div class="ap-widget <?= esc_attr($css) ?>">
-          <div class="ap-widget-header">
-            <?= $icon ? esc_html($icon) . ' ' : '' ?><?= esc_html(get_the_title($widget)) ?>
-          </div>
-          <div class="ap-widget-body">
-            <?= apply_filters('the_content', $widget->post_content) ?>
-          </div>
-        </div>
-    <?php endforeach; ?>
-  </div>
+        echo '<div class="ap-widget-block" data-id="' . esc_attr($id) . '">';
+        include locate_template('templates/' . $config['template']);
+        echo '</div>';
+    }
+    echo '</div>';
+}
+?>
 
 <?php
 include locate_template('partials/dashboard-wrapper-end.php');

@@ -53,6 +53,22 @@ class DashboardWidgetRegistry
     }
 
     /**
+     * Simplified widget registration used by generic dashboards.
+     */
+    public static function register_widget(string $id, array $args): void
+    {
+        self::$widgets[$id] = $args;
+    }
+
+    /**
+     * Retrieve a widget configuration by ID.
+     */
+    public static function get_widget(string $id): ?array
+    {
+        return self::$widgets[$id] ?? null;
+    }
+
+    /**
      * Return all registered widgets.
      *
      * @return array<string,array>
@@ -133,12 +149,30 @@ class DashboardWidgetRegistry
     }
 
     /**
-     * Fire the registration hook.
+     * Register default widgets and fire registration hook.
      */
     public static function init(): void
     {
-        add_action('init', function () {
-            do_action('artpulse_register_dashboard_widget');
-        });
+        $register = [self::class, 'register_widget'];
+
+        $register('widget_news', [
+            'template' => 'widgets/widget-news.php',
+            'title'    => 'News',
+            'roles'    => ['member', 'artist'],
+        ]);
+
+        $register('widget_events', [
+            'template' => 'widgets/widget-events.php',
+            'title'    => 'Upcoming Events',
+            'roles'    => ['member', 'organization'],
+        ]);
+
+        $register('widget_favorites', [
+            'template' => 'widgets/widget-favorites.php',
+            'title'    => 'Saved Artists',
+            'roles'    => ['member'],
+        ]);
+
+        do_action('artpulse_register_dashboard_widget');
     }
 }
