@@ -103,9 +103,18 @@ class DashboardController {
         }
     }
 
-    public static function get_role($user_id) {
-        $user = get_user_by('id', $user_id);
-        return $user ? ($user->roles[0] ?? 'member') : 'guest';
+    public static function get_role($user_id): string {
+        // Allow preview via ?ap_preview_role=artist for admin users
+        if (current_user_can('manage_options') && isset($_GET['ap_preview_role'])) {
+            return sanitize_text_field($_GET['ap_preview_role']);
+        }
+
+        $user = get_userdata($user_id);
+        if (!$user || empty($user->roles)) {
+            return 'member';
+        }
+
+        return $user->roles[0];
     }
 
     /**
