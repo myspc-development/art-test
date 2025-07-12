@@ -370,6 +370,19 @@ class Plugin
         );
 
         wp_enqueue_script(
+            'ap-follow-feed-js',
+            plugins_url('assets/js/favorites.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-follow-feed-js', 'ArtPulseFavoritesFeed', [
+            'apiRoot' => esc_url_raw(rest_url()),
+            'nonce'   => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_enqueue_script(
             'ap-notifications-js',
             plugins_url('assets/js/ap-notifications.js', ARTPULSE_PLUGIN_FILE),
             ['wp-api-fetch'],
