@@ -33,7 +33,7 @@ Retrieve directory items (events, artists, artworks or orgs) with optional filte
 
 Parameters mirror the shortcode filters:
 `type`, `limit`, `event_type`, `medium`, `style`, `org_type`, `location`,
-`city`, `region`, `for_sale` and `keyword`.
+`city`, `region`, `for_sale`, `keyword`, `tags`, `price_type`, `lat`, `lng` and `radius`.
 
 Results are cached for five minutes using a transient keyed by the request
 parameters. The cache is flushed whenever related posts are updated.
