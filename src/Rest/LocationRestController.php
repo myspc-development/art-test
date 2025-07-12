@@ -99,15 +99,20 @@ class LocationRestController {
     }
 
     private static function merge_into_dataset(string $key, array $items): void {
+        $upload = wp_upload_dir();
+        $dir    = trailingslashit($upload['basedir']) . 'artpulse-data';
+        if (!is_dir($dir)) {
+            wp_mkdir_p($dir);
+        }
         switch ($key) {
             case 'countries':
-                $file = ARTPULSE_PLUGIN_DIR . '/data/countries.json';
+                $file = $dir . '/countries.json';
                 break;
             case 'states':
-                $file = ARTPULSE_PLUGIN_DIR . '/data/states.json';
+                $file = $dir . '/states.json';
                 break;
             case 'cities':
-                $file = ARTPULSE_PLUGIN_DIR . '/data/cities.json';
+                $file = $dir . '/cities.json';
                 break;
             default:
                 return;
