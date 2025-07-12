@@ -881,4 +881,35 @@ add_filter('template_include', function ($template) {
     return $template;
 }, 999);
 
+// === React Form Demo ===
+function artpulse_enqueue_react_form() {
+    wp_enqueue_script(
+        'artpulse-react-form',
+        plugin_dir_url(__FILE__) . 'dist/react-form.js',
+        array('wp-element'),
+        '1.0.0',
+        true
+    );
+    wp_add_inline_script(
+        'artpulse-react-form',
+        'var ajaxurl = "' . admin_url('admin-ajax.php') . '";'
+    );
+}
+add_action('wp_enqueue_scripts', 'artpulse_enqueue_react_form');
+
+function artpulse_render_react_form() {
+    return '<div id="react-form-root"></div>';
+}
+add_shortcode('react_form', 'artpulse_render_react_form');
+
+function artpulse_handle_react_form() {
+    $name  = sanitize_text_field($_POST['name'] ?? '');
+    $email = sanitize_email($_POST['email'] ?? '');
+
+    // Placeholder logic for submission handling
+    wp_send_json_success(['message' => 'Form submitted successfully!']);
+}
+add_action('wp_ajax_submit_react_form', 'artpulse_handle_react_form');
+add_action('wp_ajax_nopriv_submit_react_form', 'artpulse_handle_react_form');
+
 

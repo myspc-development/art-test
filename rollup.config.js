@@ -33,6 +33,12 @@ const configs = [
     'APDashboardWidgetsEditor',
     { react: 'React', 'react-dom/client': 'ReactDOM' }
   ),
+  createConfig(
+    'src/index.js',
+    'dist/react-form.js',
+    'APReactForm',
+    { react: 'React', 'react-dom/client': 'ReactDOM' }
+  ),
 ];
 
 configs.push({
