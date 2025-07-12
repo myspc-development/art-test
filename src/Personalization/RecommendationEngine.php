@@ -92,8 +92,15 @@ class RecommendationEngine
                     'post_type'      => 'artpulse_event',
                     'post__not_in'   => $seed_ids,
                     'tax_query'      => [
+                        'relation' => 'OR',
                         [
                             'taxonomy' => 'artpulse_category',
+                            'field'    => 'term_id',
+                            'terms'    => $terms,
+                            'operator' => 'IN',
+                        ],
+                        [
+                            'taxonomy' => 'post_tag',
                             'field'    => 'term_id',
                             'terms'    => $terms,
                             'operator' => 'IN',
