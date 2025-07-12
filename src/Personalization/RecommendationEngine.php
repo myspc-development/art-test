@@ -64,9 +64,10 @@ class RecommendationEngine
         return array_map('intval', $wpdb->get_col($wpdb->prepare($sql, $user_id, $object_type, $since)));
     }
 
-    public static function get_recommendations(int $user_id, string $type = 'event', int $limit = 5): array
+    public static function get_recommendations(int $user_id, string $type = 'event', int $limit = 5, $location = null): array
     {
-        $cache_key = "ap_rec_{$type}_{$user_id}";
+        $cache_suffix = $location ? md5(json_encode($location)) : 'none';
+        $cache_key    = "ap_rec_{$type}_{$user_id}_{$cache_suffix}";
         $cached    = get_transient($cache_key);
         if ($cached !== false) {
             return $cached;
@@ -146,7 +147,57 @@ class RecommendationEngine
             }
         }
 
+        $coords = self::parse_location($location);
+        if ($coords) {
+            foreach ($recs as &$rec) {
+                $lat = get_post_meta($rec['id'], 'event_lat', true);
+                $lng = get_post_meta($rec['id'], 'event_lng', true);
+                if ($lat && $lng) {
+                    $dist = self::haversine_distance($coords['lat'], $coords['lng'], floatval($lat), floatval($lng));
+                    $rec['distance'] = $dist;
+                    $rec['score']    = $rec['score'] / (1 + $dist);
+                }
+            }
+            usort($recs, fn($a, $b) => ($b['score'] <=> $a['score']));
+        }
+
         set_transient($cache_key, $recs, 15 * MINUTE_IN_SECONDS);
         return $recs;
+    }
+
+    private static function parse_location($location): ?array
+    {
+        if (is_array($location) && isset($location['lat'], $location['lng'])) {
+            return [
+                'lat' => floatval($location['lat']),
+                'lng' => floatval($location['lng']),
+            ];
+        }
+        if (is_string($location)) {
+            $location = trim($location);
+            if (preg_match('/^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/', $location)) {
+                [$lat, $lng] = array_map('floatval', array_map('trim', explode(',', $location)));
+                return ['lat' => $lat, 'lng' => $lng];
+            }
+            if (preg_match('/^\d{5}$/', $location)) {
+                $zips = [
+                    '90001' => ['lat' => 34.05, 'lng' => -118.25],
+                    '10001' => ['lat' => 40.71, 'lng' => -74.00],
+                ];
+                return $zips[$location] ?? null;
+            }
+        }
+        return null;
+    }
+
+    private static function haversine_distance(float $lat1, float $lng1, float $lat2, float $lng2): float
+    {
+        $earth = 6371;
+        $dLat  = deg2rad($lat2 - $lat1);
+        $dLon  = deg2rad($lng2 - $lng1);
+        $a     = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) * sin($dLon / 2);
+        $c     = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        return $earth * $c;
     }
 }
