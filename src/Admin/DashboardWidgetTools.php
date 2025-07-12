@@ -131,7 +131,7 @@ class DashboardWidgetTools
             if (is_callable($cb)) {
                 $icon = esc_html($defs_by_id[$id]['icon'] ?? '');
                 $title = esc_html($defs_by_id[$id]['name'] ?? $id);
-                echo '<div class="ap-widget-card' . ($visible ? '' : ' is-hidden') . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+                echo '<div class="ap-widget-card' . ($visible ? '' : ' is-hidden') . '" role="group" aria-label="Widget: ' . $title . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
                 echo '<div class="ap-widget-header">';
                 echo '<span class="drag-handle" title="Drag to reorder">&#9776;</span>';
                 echo '<span class="ap-widget-icon">' . $icon . '</span>';
@@ -433,7 +433,7 @@ class DashboardWidgetTools
             $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
             $def     = $registry[$id];
 
-            echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+            echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($def['label']) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
             echo '<div class="ap-widget-header drag-handle">';
             echo '<span class="widget-title">' . esc_html($def['label']) . '</span>';
             echo '</div>';
@@ -462,7 +462,7 @@ class DashboardWidgetTools
 
             $w = $registry[$id];
 
-            echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+            echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($w['label']) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
             echo '<div class="ap-widget-header drag-handle">';
             echo '<span class="widget-title">' . esc_html($w['label']) . '</span>';
             echo '</div>';

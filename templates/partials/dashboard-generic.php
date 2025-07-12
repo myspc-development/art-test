@@ -43,7 +43,7 @@ get_header();
     <?= __('Dark Mode', 'artpulse'); ?>
   </label>
 
-  <div id="ap-user-dashboard" class="ap-dashboard-columns" role="region" tabindex="0" aria-label="<?= esc_attr($user_role) ?> widgets">
+  <div id="ap-user-dashboard" class="ap-dashboard-columns" role="region" tabindex="0" aria-label="User Dashboard Widgets">
     <?php DashboardWidgetTools::render_user_dashboard(get_current_user_id()); ?>
   </div>
 </div>

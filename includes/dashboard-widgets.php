@@ -20,6 +20,7 @@ add_action('wp_ajax_ap_save_dashboard_widget_config', 'ap_save_dashboard_widget_
 add_action('wp_ajax_ap_save_widget_layout', 'ap_save_widget_layout');
 add_action('wp_ajax_ap_save_role_layout', 'ap_save_role_layout');
 add_action('wp_ajax_ap_save_user_layout', 'ap_save_user_layout');
+add_action('wp_ajax_save_widget_order', 'ap_save_widget_order');
 
 function ap_save_dashboard_widget_config(): void
 {
@@ -128,6 +129,14 @@ function ap_save_user_layout(): void
     }
 
     wp_send_json_error(['message' => 'Invalid data']);
+}
+
+function ap_save_widget_order(): void
+{
+    check_ajax_referer('ap_widget_order', 'nonce');
+    $order = isset($_POST['order']) ? json_decode(stripslashes($_POST['order']), true) : [];
+    update_user_meta(get_current_user_id(), 'ap_widget_order', $order);
+    wp_send_json_success();
 }
 
 function ap_load_dashboard_template(string $template, array $vars = []): string
