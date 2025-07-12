@@ -1,5 +1,6 @@
 const babel = require('@rollup/plugin-babel').default;
 const nodeResolve = require('@rollup/plugin-node-resolve').nodeResolve;
+const postcss = require('rollup-plugin-postcss');
 
 const extensions = ['.js', '.jsx'];
 
@@ -17,7 +18,7 @@ function createConfig(input, file, name, globals = {}, external = Object.keys(gl
   };
 }
 
-module.exports = [
+const configs = [
   createConfig('assets/js/OrganizationSubmissionForm.jsx', 'assets/js/ap-org-submission.js', 'APOrgSubmission', { react: 'React' }),
   createConfig('assets/js/SidebarMenu.jsx', 'assets/js/sidebar-menu.js', 'APSidebarMenu', { react: 'React' }),
   createConfig('assets/js/dashboard.jsx', 'assets/js/ap-dashboard.js', 'APDashboard', {
@@ -33,3 +34,20 @@ module.exports = [
     { react: 'React', 'react-dom/client': 'ReactDOM' }
   ),
 ];
+
+configs.push({
+  input: 'assets/css/main.css',
+  output: {
+    file: 'dist/bundle.css',
+    format: 'es'
+  },
+  plugins: [
+    postcss({
+      extract: true,
+      minimize: true,
+      plugins: []
+    })
+  ]
+});
+
+module.exports = configs;
