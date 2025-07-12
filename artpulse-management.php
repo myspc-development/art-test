@@ -41,6 +41,7 @@ require_once __DIR__ . '/src/Frontend/ShareButtons.php';
 require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
+require_once __DIR__ . '/includes/user-actions.php';
 
 // Ensure custom roles exist on every load
 add_action('init', function () {
@@ -160,6 +161,7 @@ function ap_copy_templates_to_child_theme() {
         'single-artpulse_event.php',
         'content-artpulse_event.php',
         'archive-artpulse_event.php',
+        'single-artpulse_artist.php',
     ];
 
     foreach ($files as $file) {
@@ -894,6 +896,17 @@ add_filter('template_include', function ($template) {
     }
     return $template;
 }, 999);
+
+// Force plugin template for single artpulse_artist posts
+add_filter('template_include', function ($template) {
+    if (is_singular('artpulse_artist')) {
+        $custom_template = plugin_dir_path(__FILE__) . 'templates/single-artpulse_artist.php';
+        if (file_exists($custom_template)) {
+            return $custom_template;
+        }
+    }
+    return $template;
+}, 998);
 
 // === React Form Demo ===
 function artpulse_enqueue_react_form() {
