@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 }
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardController;
 
 function ap_get_all_widget_definitions(bool $include_schema = false): array
 {
@@ -248,6 +249,28 @@ function ap_widget_webhooks(array $vars = []): string
 
 function ap_widget_role_spotlight(array $vars = []): string
 {
+    $vars['role'] = DashboardController::get_role(get_current_user_id());
+    return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
+}
+
+function ap_widget_spotlight_calls(array $vars = []): string
+{
+    $vars['role']     = DashboardController::get_role(get_current_user_id());
+    $vars['category'] = 'calls';
+    return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
+}
+
+function ap_widget_spotlight_events(array $vars = []): string
+{
+    $vars['role']     = DashboardController::get_role(get_current_user_id());
+    $vars['category'] = 'events';
+    return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
+}
+
+function ap_widget_spotlight_features(array $vars = []): string
+{
+    $vars['role']     = DashboardController::get_role(get_current_user_id());
+    $vars['category'] = 'featured';
     return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
 }
 
@@ -483,6 +506,39 @@ function ap_register_core_dashboard_widgets(): void
         'star-filled',
         __('Role based spotlights.', 'artpulse'),
         'ap_widget_role_spotlight',
+        [
+            'roles' => ['member', 'artist', 'organization'],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'widget_spotlight_events',
+        __('Event Spotlights', 'artpulse'),
+        'calendar',
+        __('Event related highlights.', 'artpulse'),
+        'ap_widget_spotlight_events',
+        [
+            'roles' => ['member', 'organization'],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'widget_spotlight_calls',
+        __('Call Spotlights', 'artpulse'),
+        'phone',
+        __('Calls to artists or members.', 'artpulse'),
+        'ap_widget_spotlight_calls',
+        [
+            'roles' => ['member', 'artist', 'organization'],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'widget_spotlight_features',
+        __('Featured Spotlights', 'artpulse'),
+        'star-filled',
+        __('General featured items.', 'artpulse'),
+        'ap_widget_spotlight_features',
         [
             'roles' => ['member', 'artist', 'organization'],
         ]

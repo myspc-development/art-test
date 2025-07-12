@@ -70,13 +70,14 @@ class SpotlightManager
     /**
      * Retrieve spotlight posts for a dashboard role view.
      */
-    public static function get_dashboard_spotlights(string $role): array
+    public static function get_dashboard_spotlights(string $role, ?string $category = null): array
     {
         $today = current_time('Y-m-d');
 
         $args = [
             'post_type'      => 'spotlight',
             'posts_per_page' => 5,
+            'tax_query'      => [],
             'meta_query'     => [
                 'relation' => 'AND',
                 [
@@ -98,6 +99,14 @@ class SpotlightManager
                 ],
             ],
         ];
+
+        if ($category) {
+            $args['tax_query'][] = [
+                'taxonomy' => 'spotlight_category',
+                'field'    => 'slug',
+                'terms'    => [$category],
+            ];
+        }
 
         return get_posts($args);
     }

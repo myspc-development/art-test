@@ -382,6 +382,16 @@ body.dark-mode, body[data-theme="dark"] { background:#1b1b1b; color:#e0e0e0; }
   margin-bottom: 12px;
 }
 
+.spotlight-tag {
+  display: inline-block;
+  background: #e2e8f0;
+  color: #333;
+  padding: 3px 6px;
+  font-size: 12px;
+  border-radius: 4px;
+  margin-bottom: 0.5em;
+}
+
 .ap-spotlight-card .cta-button {
   margin-top: 0.75em;
   display: inline-block;
