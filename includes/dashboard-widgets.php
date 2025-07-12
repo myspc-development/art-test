@@ -21,6 +21,16 @@ add_action('wp_ajax_ap_save_widget_layout', 'ap_save_widget_layout');
 add_action('wp_ajax_ap_save_role_layout', 'ap_save_role_layout');
 add_action('wp_ajax_ap_save_user_layout', 'ap_save_user_layout');
 add_action('wp_ajax_save_widget_order', 'ap_save_widget_order');
+add_action('wp_ajax_save_dashboard_layout', function () {
+    check_ajax_referer('ap_widget_nonce', 'nonce');
+    $layout = json_decode(stripslashes($_POST['layout'] ?? ''), true);
+    if (!is_array($layout)) {
+        wp_send_json_error('Invalid layout');
+    }
+
+    update_user_meta(get_current_user_id(), 'ap_dashboard_layout', $layout);
+    wp_send_json_success();
+});
 
 function ap_save_dashboard_widget_config(): void
 {

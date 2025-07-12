@@ -3,6 +3,7 @@ namespace ArtPulse\Admin;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\Core\DashboardController;
 
 class DashboardWidgetTools
 {
@@ -405,7 +406,7 @@ class DashboardWidgetTools
      */
     public static function render_user_dashboard(int $user_id): void
     {
-        $layout   = UserLayoutManager::get_layout_for_user($user_id);
+        $layout   = DashboardController::get_user_dashboard_layout($user_id);
         $registry = DashboardWidgetRegistry::get_all();
 
         $has_visible = false;

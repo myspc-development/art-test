@@ -69,22 +69,19 @@ add_action('admin_init', function () {
 // Handle user dashboard reset
 add_action('init', function () {
     if (isset($_POST['reset_user_layout']) && check_admin_referer('ap_reset_user_layout')) {
-        \ArtPulse\Admin\UserLayoutManager::reset_user_layout(get_current_user_id());
+        \ArtPulse\Core\DashboardController::reset_user_dashboard_layout(get_current_user_id());
         wp_redirect(add_query_arg('layout_reset', '1', wp_get_referer()));
         exit;
     }
 
     if (!empty($_POST['load_preset']) && check_admin_referer('ap_reset_user_layout')) {
         $role   = sanitize_key($_POST['preset_role'] ?? '');
-        $file   = plugin_dir_path(__FILE__) . 'data/preset-' . $role . '.json';
-        if (file_exists($file)) {
-            $json   = file_get_contents($file);
-            $layout = json_decode($json, true);
-            if (is_array($layout)) {
-                \ArtPulse\Admin\UserLayoutManager::save_user_layout(get_current_user_id(), $layout);
-                wp_redirect(add_query_arg('preset_loaded', '1', wp_get_referer()));
-                exit;
-            }
+        $preset = sanitize_key($_POST['load_preset']);
+        $layout = \ArtPulse\Core\DashboardController::load_preset_layout($role, $preset);
+        if ($layout) {
+            update_user_meta(get_current_user_id(), 'ap_dashboard_layout', $layout);
+            wp_redirect(add_query_arg('preset_loaded', '1', wp_get_referer()));
+            exit;
         }
     }
 });
