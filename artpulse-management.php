@@ -46,6 +46,7 @@ require_once __DIR__ . '/includes/user-actions.php';
 require_once __DIR__ . '/admin/page-dashboard-widgets.php';
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
+require_once __DIR__ . '/auto-tagger.php';
 
 // Ensure custom roles exist on every load
 add_action('init', function () {
