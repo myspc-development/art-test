@@ -12,6 +12,8 @@ use ArtPulse\Rest\TaxonomyRestFilters;
 use ArtPulse\Admin\EngagementDashboard;
 use ArtPulse\Core\ArtworkEventLinkManager;
 use ArtPulse\Engagement\DigestMailer;
+use ArtPulse\Frontend\WidgetEmbedShortcode;
+use ArtPulse\Blocks\WidgetEmbedBlock;
 
 class Plugin
 {
@@ -285,6 +287,8 @@ class Plugin
         \ArtPulse\Blocks\FilteredListShortcodeBlock::register();
         \ArtPulse\Blocks\SpotlightBlock::register();
         \ArtPulse\Blocks\TaxonomyFilterBlock::register();
+        WidgetEmbedShortcode::register();
+        WidgetEmbedBlock::register();
         \ArtPulse\Community\FollowRestController::register();
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
         \ArtPulse\Community\NotificationHooks::register();
