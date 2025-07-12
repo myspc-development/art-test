@@ -17,6 +17,11 @@ class SpotlightBlock
         register_block_type('artpulse/spotlights', [
             'editor_script'   => 'artpulse-spotlight-block',
             'render_callback' => [self::class, 'render_callback'],
+            'attributes'      => [
+                'title'     => ['type' => 'string'],
+                'image'     => ['type' => 'string'],
+                'visibleTo' => ['type' => 'array', 'default' => ['member', 'artist']],
+            ],
         ]);
 
         wp_register_script(
@@ -27,8 +32,23 @@ class SpotlightBlock
         );
     }
 
-    public static function render_callback(): string
+    public static function render_callback($attributes): string
     {
-        return do_shortcode('[ap_spotlights]');
+        if (is_admin()) {
+            return sprintf(
+                '<div class="ap-spotlight-preview"><strong>%s</strong><br><em>Visible to: %s</em></div>',
+                esc_html($attributes['title'] ?? ''),
+                isset($attributes['visibleTo']) ? implode(', ', (array) $attributes['visibleTo']) : ''
+            );
+        }
+
+        $user  = wp_get_current_user();
+        $roles = (array) $user->roles;
+
+        if (!array_intersect($roles, (array) ($attributes['visibleTo'] ?? []))) {
+            return '';
+        }
+
+        return sprintf('<div class="ap-spotlight">%s</div>', esc_html($attributes['title'] ?? ''));
     }
 }

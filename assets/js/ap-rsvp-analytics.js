@@ -43,3 +43,30 @@ document.addEventListener('DOMContentLoaded', () => {
       if (attended) attended.textContent = data.attended || 0;
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.ap-rsvp-chart').forEach(container => {
+    if (typeof Chart === 'undefined') return;
+    const data = JSON.parse(container.dataset.chart || '[]');
+    if (!data.length) return;
+    const canvas = document.createElement('canvas');
+    container.appendChild(canvas);
+    new Chart(canvas.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: data.map(d => d.date),
+        datasets: [{
+          label: 'RSVPs',
+          data: data.map(d => d.count),
+          borderColor: '#0073aa',
+          backgroundColor: 'rgba(0,115,170,0.3)',
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+      }
+    });
+  });
+});
