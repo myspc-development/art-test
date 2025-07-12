@@ -628,7 +628,18 @@ function ap_render_favorite_portfolio($atts = []) {
 ?>
                 <div class="nectar-portfolio-item">
                     <a href="<?php the_permalink(); ?>">
-                        <?php the_post_thumbnail('portfolio-thumb'); ?>
+<?php
+                        $gallery_ids = get_post_meta(get_the_ID(), '_ap_submission_images', true);
+                        if (is_array($gallery_ids) && $gallery_ids) {
+                            echo '<div class="event-gallery swiper"><div class="swiper-wrapper">';
+                            foreach ($gallery_ids as $img_id) {
+                                echo '<div class="swiper-slide">' . wp_get_attachment_image($img_id, 'portfolio-thumb') . '</div>';
+                            }
+                            echo '</div><div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div>';
+                        } else {
+                            the_post_thumbnail('portfolio-thumb');
+                        }
+?>
                         <h3><?php the_title(); ?></h3>
                     </a>
                     <div class="ap-event-actions">
@@ -887,6 +898,7 @@ function ap_get_events_for_map() {
 require_once plugin_dir_path(__FILE__) . 'includes/helpers.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/post-status-hooks.php';
+require_once plugin_dir_path(__FILE__) . 'includes/artist-meta-box.php';
 
 add_action('wp_enqueue_scripts', function () {
     $ui_mode = ap_get_ui_mode();

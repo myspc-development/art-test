@@ -53,6 +53,15 @@ class PortfolioManager
     {
         add_meta_box('ap_portfolio_link', __('External Link', 'artpulse'), [self::class, 'renderLinkMetaBox'], 'artpulse_portfolio', 'normal', 'default');
         add_meta_box('ap_portfolio_visibility', __('Visibility', 'artpulse'), [self::class, 'renderVisibilityMetaBox'], 'artpulse_portfolio', 'side', 'default');
+
+        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'includes/artist-meta-box.php';
+        if (file_exists($path)) {
+            require_once $path;
+            if (function_exists('ap_artist_portfolio_metaboxes_register')) {
+                ap_artist_portfolio_metaboxes_register();
+                add_action('save_post_artpulse_portfolio', 'ap_save_artist_portfolio_meta', 10, 2);
+            }
+        }
     }
 
     public static function renderLinkMetaBox($post)
