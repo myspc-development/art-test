@@ -220,6 +220,7 @@ class Plugin
         \ArtPulse\Admin\PendingSubmissionsPage::register();
         \ArtPulse\Admin\SpotlightManager::register();
         \ArtPulse\Admin\SpotlightPostType::register();
+        \ArtPulse\Admin\CustomDashboardWidgetPostType::register();
         \ArtPulse\Admin\LoginEventsPage::register();
         \ArtPulse\Admin\OrgUserManager::register();
         \ArtPulse\Admin\OrgRolesPage::register();
