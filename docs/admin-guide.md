@@ -76,6 +76,12 @@ Use this tab to configure geocoding services. Enter your **Google Places API
 Key** here so the autocomplete endpoint can query Google. If the key is missing
 requests to `/wp-json/artpulse/v1/location/google` return a 400 error.
 
+### Webhook Event Log
+
+The **General** tab displays a **Webhook Event Log** table listing each received
+event by timestamp and type. Use **Simulate Webhook Event** to generate a test
+entry or **Clear Webhook Log** to wipe the list when troubleshooting.
+
 ## Accessibility & Mobile Notes
 
 All admin tools are responsive and keyboard accessible so you can manage events from any device.
