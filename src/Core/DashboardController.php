@@ -11,7 +11,7 @@ class DashboardController {
     private static array $role_widgets = [
         'artist'       => ['widget_profile', 'widget_recent_events', 'widget_sales'],
         'organization' => ['widget_members', 'widget_finance', 'widget_rsvp'],
-        'member'       => ['widget_news', 'widget_events', 'widget_favorites'],
+        'member'       => ['widget_news', 'widget_events', 'widget_favorites', 'instagram_widget'],
     ];
 
     /**
@@ -28,6 +28,7 @@ class DashboardController {
                     ['id' => 'widget_news'],
                     ['id' => 'widget_favorites'],
                     ['id' => 'widget_events'],
+                    ['id' => 'instagram_widget'],
                 ],
             ],
             'artist_default' => [

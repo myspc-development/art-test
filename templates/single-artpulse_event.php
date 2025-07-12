@@ -71,6 +71,13 @@ if ( have_posts() ) :
     echo '<div class="entry-content">';
     the_content();
     echo '</div>';
+    ?>
+    <form class="ap-newsletter-optin">
+      <input type="email" placeholder="<?php esc_attr_e('Your email','artpulse'); ?>" required>
+      <button type="submit"><?php esc_html_e('Subscribe','artpulse'); ?></button>
+      <span class="ap-optin-message"></span>
+    </form>
+    <?php
 
     echo '</div>'; // close .container
   endwhile;

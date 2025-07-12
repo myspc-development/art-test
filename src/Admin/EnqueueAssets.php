@@ -694,6 +694,22 @@ class EnqueueAssets {
                 'noItemsText'  => __('No items found.', 'artpulse'),
             ]);
         }
+
+        if (is_singular('artpulse_artist') || is_singular('artpulse_event')) {
+            wp_enqueue_script(
+                'ap-newsletter-optin',
+                $plugin_url . '/assets/js/newsletter-optin.js',
+                [],
+                '1.0.0',
+                true
+            );
+            wp_localize_script('ap-newsletter-optin', 'APNewsletter', [
+                'endpoint'    => esc_url_raw(rest_url('artpulse/v1/newsletter-optin')),
+                'nonce'       => wp_create_nonce('wp_rest'),
+                'successText' => __('Subscribed!', 'artpulse'),
+                'errorText'   => __('Subscription failed.', 'artpulse'),
+            ]);
+        }
     }
 
     private static function get_org_submission_url(): string
