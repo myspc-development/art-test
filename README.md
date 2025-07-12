@@ -31,6 +31,7 @@ Additional resources:
 - [API Reference](docs/api-reference.md)
 - [Testing Strategy](docs/testing-strategy.md)
 - [Help Resources](docs/help-resources.md)
+- [Sprint Workflow Codex](docs/sprint-workflow-codex.md)
 
 Styling now relies on the Salient theme and WPBakery builder. See
 [`assets/docs/Style_Guide.md`](assets/docs/Style_Guide.md) for
