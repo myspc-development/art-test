@@ -29,6 +29,7 @@ class Plugin
         $this->define_constants();
         add_action('init', [$this, 'load_textdomain']);
         $this->register_hooks();
+        add_action('plugins_loaded', [$this, 'check_plugin_version']);
     }
 
     private function define_constants()
@@ -92,9 +93,19 @@ class Plugin
         // Track installed plugin version
         update_option('ap_plugin_version', self::VERSION);
 
-        // Init settings
+        // Init settings with defaults
+        $defaults = [
+            'theme'            => 'default',
+            'enable_reporting' => true,
+            'admin_email'      => get_option('admin_email'),
+        ];
         $settings = get_option('artpulse_settings', []);
-        $settings['version'] = self::VERSION;
+        foreach ($defaults as $key => $value) {
+            if (!isset($settings[$key])) {
+                $settings[$key] = $value;
+            }
+        }
+        $settings['plugin_version'] = self::VERSION;
         update_option('artpulse_settings', $settings);
 
         // DB setup
@@ -791,5 +802,16 @@ class Plugin
         \ArtPulse\Core\RoleSetup::assign_capabilities();
 
         update_option('ap_collection_cap_added', 1);
+    }
+
+    public function check_plugin_version(): void
+    {
+        $opts    = get_option('artpulse_settings', []);
+        $stored  = $opts['plugin_version'] ?? null;
+        if ($stored !== self::VERSION) {
+            do_action('artpulse_upgrade', $stored, self::VERSION);
+            $opts['plugin_version'] = self::VERSION;
+            update_option('artpulse_settings', $opts);
+        }
     }
 }
