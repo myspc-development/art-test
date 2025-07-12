@@ -1,7 +1,8 @@
 <?php
 use ArtPulse\Admin\SpotlightManager;
 
-$spotlights = SpotlightManager::get_dashboard_spotlights($args['role'] ?? 'member');
+$category   = $args['category'] ?? null;
+$spotlights = SpotlightManager::get_dashboard_spotlights($args['role'] ?? 'member', $category);
 
 if (empty($spotlights)) {
     echo '<p class="ap-empty-state">' . esc_html__('No featured content available right now.', 'artpulse') . '</p>';
@@ -14,6 +15,12 @@ if (empty($spotlights)) {
   <div class="ap-widget-body">
     <?php foreach ($spotlights as $post): ?>
       <div class="ap-spotlight-card">
+        <?php
+        $terms = get_the_terms($post, 'spotlight_category');
+        if (!empty($terms)) {
+            echo '<span class="spotlight-tag">' . esc_html($terms[0]->name) . '</span>';
+        }
+        ?>
         <strong><?= esc_html($post->post_title) ?></strong><br>
         <p><?= wp_trim_words($post->post_content, 20); ?></p>
         <?php

@@ -9,6 +9,7 @@ class SpotlightPostType
     public static function register(): void
     {
         add_action('init', [self::class, 'register_cpt']);
+        add_action('init', __NAMESPACE__ . '\\ap_register_spotlight_taxonomy');
         add_action('add_meta_boxes', [self::class, 'add_meta_boxes']);
         add_action('save_post_spotlight', [self::class, 'save_meta']);
     }
@@ -126,4 +127,16 @@ class SpotlightPostType
         update_post_meta($post_id, 'cta_url', esc_url_raw($_POST['cta_url'] ?? ''));
         update_post_meta($post_id, 'cta_target', sanitize_text_field($_POST['cta_target'] ?? ''));
     }
+}
+
+function ap_register_spotlight_taxonomy(): void
+{
+    register_taxonomy('spotlight_category', 'spotlight', [
+        'label'        => 'Spotlight Categories',
+        'public'       => true,
+        'hierarchical' => false,
+        'show_ui'      => true,
+        'show_in_rest' => true,
+        'rewrite'      => ['slug' => 'spotlight-category'],
+    ]);
 }
