@@ -329,3 +329,40 @@ body.dark-mode, body[data-theme="dark"] { background:#1b1b1b; color:#e0e0e0; }
   z-index: 1000;
 }
 
+/* Dashboard wrapper layout */
+.ap-dashboard-layout {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.ap-dashboard-sidebar {
+  width: 220px;
+  min-width: 180px;
+}
+
+.ap-dashboard-main {
+  flex-grow: 1;
+}
+
+.dashboard-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.dashboard-nav a:hover {
+  background: #e2e8f0;
+}
+
