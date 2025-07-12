@@ -14,26 +14,36 @@ $dashboard_title = ucfirst($user_role) . ' Dashboard';
 include locate_template('partials/dashboard-wrapper-start.php');
 ?>
 
-  <?php if (isset($_GET['layout_reset'])): ?>
-    <div class="notice notice-success is-dismissible">
-      <p><?= __('Dashboard layout reset!', 'artpulse'); ?></p>
-    </div>
-  <?php endif; ?>
-  <?php if (isset($_GET['preset_loaded'])): ?>
-    <div class="notice notice-success is-dismissible">
-      <p><?= __('Preset layout loaded.', 'artpulse'); ?></p>
-    </div>
-  <?php endif; ?>
+<?php if (isset($_GET['layout_reset'])): ?>
+  <div class="notice notice-success is-dismissible">
+    <p><?= __('Dashboard layout reset!', 'artpulse'); ?></p>
+  </div>
+<?php endif; ?>
+<?php if (isset($_GET['preset_loaded'])): ?>
+  <div class="notice notice-success is-dismissible">
+    <p><?= __('Preset layout loaded.', 'artpulse'); ?></p>
+  </div>
+<?php endif; ?>
 
-  <form method="post" style="margin-bottom:1em;">
-    <?php wp_nonce_field('ap_reset_user_layout'); ?>
-    <input type="hidden" name="preset_role" value="<?= esc_attr($user_role) ?>" />
-    <select name="load_preset">
-      <option value=""><?= __('Load Preset Layout...', 'artpulse'); ?></option>
-      <option value="default"><?= __('Default', 'artpulse'); ?></option>
+  <form id="ap-preset-loader" method="post" style="margin-bottom:1em;">
+    <input type="hidden" name="_ajax_nonce" value="<?= wp_create_nonce('ap_dashboard_nonce') ?>" />
+    <select name="preset_key" id="preset-select">
+      <option value="">Apply Preset Layout…</option>
+      <?php foreach (\ArtPulse\Core\DashboardController::get_default_presets() as $key => $preset): ?>
+        <?php if ($preset['role'] === DashboardController::get_role(get_current_user_id())): ?>
+          <option value="<?= esc_attr($key) ?>"><?= esc_html($preset['title']) ?></option>
+        <?php endif; ?>
+      <?php endforeach; ?>
     </select>
-    <button class="button">⤵ <?= __('Apply Preset', 'artpulse'); ?></button>
+    <button type="submit">Apply</button>
   </form>
+
+  <form id="ap-reset-layout" method="post" style="margin-top: 1em;">
+    <input type="hidden" name="_ajax_nonce" value="<?= wp_create_nonce('ap_dashboard_nonce') ?>" />
+    <button type="submit">Reset Layout</button>
+  </form>
+
+  <div id="ap-dashboard-message" style="margin-top: 1em;"></div>
 
   <label style="display:block;margin-bottom:1em;">
     <input type="checkbox" id="ap-toggle-dark-mode" />

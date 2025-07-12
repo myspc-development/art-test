@@ -15,6 +15,33 @@ class DashboardController {
     ];
 
     /**
+     * Default layout presets keyed by unique identifier.
+     *
+     * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
+     */
+    public static function get_default_presets(): array {
+        return [
+            'member_default' => [
+                'title'  => 'Member Default',
+                'role'   => 'member',
+                'layout' => [
+                    ['id' => 'widget_news'],
+                    ['id' => 'widget_favorites'],
+                    ['id' => 'widget_events'],
+                ],
+            ],
+            'artist_default' => [
+                'title'  => 'Artist Default',
+                'role'   => 'artist',
+                'layout' => [
+                    ['id' => 'widget_spotlights'],
+                    ['id' => 'widget_applications'],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Get the widgets assigned to a role.
      */
     public static function get_widgets_for_role(string $role): array

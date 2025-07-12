@@ -14,4 +14,28 @@ jQuery(document).ready(function () {
       });
     }
   });
+
+  jQuery('#ap-preset-loader').on('submit', function (e) {
+    e.preventDefault();
+    const preset = jQuery('#preset-select').val();
+    if (!preset) return;
+
+    jQuery.post(ajaxurl, {
+      action: 'ap_apply_preset',
+      preset_key: preset,
+      _ajax_nonce: jQuery(this).find('input[name="_ajax_nonce"]').val()
+    }, function (res) {
+      if (res.success) window.location.reload();
+    });
+  });
+
+  jQuery('#ap-reset-layout').on('submit', function (e) {
+    e.preventDefault();
+    jQuery.post(ajaxurl, {
+      action: 'ap_reset_layout',
+      _ajax_nonce: jQuery(this).find('input[name="_ajax_nonce"]').val()
+    }, function (res) {
+      if (res.success) window.location.reload();
+    });
+  });
 });
