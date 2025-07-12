@@ -408,6 +408,23 @@ class DashboardWidgetTools
         $layout   = UserLayoutManager::get_layout_for_user($user_id);
         $registry = DashboardWidgetRegistry::get_all();
 
+        $has_visible = false;
+        foreach ($layout as $widget) {
+            $id      = is_array($widget) ? $widget['id'] : $widget;
+            if (!isset($registry[$id])) {
+                continue;
+            }
+            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
+            if ($visible) {
+                $has_visible = true;
+            }
+        }
+
+        if (!$has_visible) {
+            echo '<p class="ap-empty-state">' . __('No widgets found. Start by adding one.', 'artpulse') . '</p>';
+            return;
+        }
+
         foreach ($layout as $widget) {
             $id      = is_array($widget) ? $widget['id'] : $widget;
             if (!isset($registry[$id])) {

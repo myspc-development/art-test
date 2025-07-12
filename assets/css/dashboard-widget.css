@@ -307,3 +307,7 @@
     font-weight: 600;
     border-bottom: 1px solid #ddd;
 }
+
+body.dark-mode .ap-dashboard-columns, body[data-theme="dark"] .ap-dashboard-columns { background:#222; }
+body.dark-mode, body[data-theme="dark"] { background:#1b1b1b; color:#e0e0e0; }
+

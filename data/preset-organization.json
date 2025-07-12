@@ -1,0 +1,5 @@
+[
+  {"id":"webhooks","visible":true},
+  {"id":"events","visible":true},
+  {"id":"rsvps","visible":true}
+]
