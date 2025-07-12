@@ -5,6 +5,7 @@ Thank you for your interest in contributing to ArtPulse. Development requires **
 ```bash
 composer install       # install PHP libraries
 npm install            # install Node packages
+npx husky install      # activate Git hooks
 npm run build          # compile JavaScript assets
 bash scripts/setup-env.sh
 ```
