@@ -13,3 +13,12 @@
     <button class="button"><?php esc_html_e('♻ Reset My Dashboard', 'artpulse'); ?></button>
   </form>
 
+  <div class="ap-dashboard-layout">
+    <aside class="ap-dashboard-sidebar">
+      <?php
+      $show_notifications = true; // Optional logic to toggle certain links
+      include locate_template('partials/dashboard-nav.php');
+      ?>
+    </aside>
+    <main class="ap-dashboard-main">
+
