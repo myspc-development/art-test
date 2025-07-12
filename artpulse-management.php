@@ -1,4 +1,5 @@
 <?php
+if (!defined('ABSPATH')) { exit; }
 /**
  * Plugin Name:     ArtPulse Management
  * Description:     Management plugin for ArtPulse.
