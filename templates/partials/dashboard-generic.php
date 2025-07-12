@@ -1,5 +1,6 @@
 <?php
 use ArtPulse\Admin\DashboardWidgetTools;
+use ArtPulse\Core\DashboardController;
 
 if (!isset($user_role) || !ap_user_can_edit_layout($user_role)) {
     wp_die(__('Access denied', 'artpulse'));
@@ -39,7 +40,7 @@ include locate_template('partials/dashboard-wrapper-start.php');
   </label>
 
   <div id="ap-user-dashboard" class="ap-dashboard-columns" role="region" tabindex="0" aria-label="User Dashboard Widgets">
-    <?php DashboardWidgetTools::render_user_dashboard(get_current_user_id()); ?>
+    <?php echo DashboardController::render_for_user(get_current_user_id()); ?>
   </div>
 
 <?php

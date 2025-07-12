@@ -4,8 +4,8 @@
  */
 use ArtPulse\Community\FavoritesManager;
 ?>
-<div class="dashboard-card" data-widget="favorites" <?php echo $visible ? '' : 'style="display:none"'; ?>>
-    <h2 id="favorites"><?php esc_html_e('My Favorites','artpulse'); ?></h2>
+<section id="favorites" class="ap-dashboard-section dashboard-card" data-widget="favorites" <?php echo $visible ? '' : 'style="display:none"'; ?>>
+    <h2><?php esc_html_e('My Favorites','artpulse'); ?></h2>
     <?php
     $user_id   = get_current_user_id();
     $favorites = FavoritesManager::get_favorites($user_id);
@@ -28,4 +28,4 @@ use ArtPulse\Community\FavoritesManager;
     }
     ?>
     <button class="ap-widget-settings-btn ap-form-button nectar-button" data-widget-settings="favorites"><?php esc_html_e('Settings', 'artpulse'); ?></button>
-</div>
+</section>
