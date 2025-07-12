@@ -127,6 +127,8 @@ Dashboard widget markup and CSS are documented in the
 - `[ap_org_event_form]` — Organization event submission form
 - `[ap_directory]` — Legacy directory shortcode
 - `[ap_my_follows]` — List artists, events or organizations you follow
+- `[ap_favorite_portfolio]` — Display a portfolio of favorited events/artworks
+- `[ap_favorites_analytics]` — Show analytics for favorite counts
 
 ## CSV Import/Export
 
