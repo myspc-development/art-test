@@ -76,6 +76,12 @@ Use this tab to configure geocoding services. Enter your **Google Places API
 Key** here so the autocomplete endpoint can query Google. If the key is missing
 requests to `/wp-json/artpulse/v1/location/google` return a 400 error.
 
+### Social Auto-Posting
+
+The **Social Auto-Posting** tab lets you connect Facebook, Instagram,
+Twitter/X and Pinterest accounts. See the [Social Auto-Posting Setup](social-auto-posting.md)
+guide for the required API keys and per-post-type toggles.
+
 ## Accessibility & Mobile Notes
 
 All admin tools are responsive and keyboard accessible so you can manage events from any device.

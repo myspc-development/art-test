@@ -267,7 +267,7 @@ Recent updates introduce new fields for location lookups and performance tweaks:
 - **Enable Service Worker** – Adds a basic service worker for offline caching.
 - **Enable Google/Facebook/Apple Login** – Toggle OAuth providers for the login form.
 - **Enforce Two-Factor** – Require users to enable the Two-Factor plugin before logging in.
-- **Social Auto-Posting** – Automatically share new content to Facebook, Instagram, Twitter/X and Pinterest.
+- **Social Auto-Posting** – Automatically share new content to Facebook, Instagram, Twitter/X and Pinterest. See [Social Auto-Posting Setup](docs/social-auto-posting.md).
 
 ### Service Worker Integration
 
