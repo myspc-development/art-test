@@ -66,4 +66,30 @@ class SpotlightManager
         submit_button(__('Save Spotlights', 'artpulse'));
         echo '</form></div>';
     }
+
+    /**
+     * Retrieve spotlight posts for a dashboard role view.
+     */
+    public static function get_dashboard_spotlights(string $role): array
+    {
+        $args = [
+            'post_type'      => 'spotlight',
+            'posts_per_page' => 5,
+            'meta_query'     => [
+                [
+                    'key'     => 'visible_to_roles',
+                    'value'   => $role,
+                    'compare' => 'LIKE',
+                ],
+                [
+                    'key'     => 'expires_at',
+                    'value'   => current_time('Y-m-d'),
+                    'compare' => '>=',
+                    'type'    => 'DATE',
+                ],
+            ],
+        ];
+
+        return get_posts($args);
+    }
 }

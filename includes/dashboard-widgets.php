@@ -246,6 +246,11 @@ function ap_widget_webhooks(array $vars = []): string
     return ap_load_dashboard_template('widgets/webhooks.php', $vars);
 }
 
+function ap_widget_role_spotlight(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
+}
+
 /**
  * Register core dashboard widgets.
  */
@@ -469,6 +474,17 @@ function ap_register_core_dashboard_widgets(): void
                     'default' => 5,
                 ],
             ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'role-spotlight',
+        __('Featured Spotlight', 'artpulse'),
+        'star-filled',
+        __('Role based spotlights.', 'artpulse'),
+        'ap_widget_role_spotlight',
+        [
+            'roles' => ['member', 'artist', 'organization'],
         ]
     );
 }

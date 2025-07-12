@@ -375,3 +375,24 @@ body.dark-mode, body[data-theme="dark"] { background:#1b1b1b; color:#e0e0e0; }
   color: #fff;
 }
 
+.ap-spotlight-card {
+  border: 1px solid #e1e1e1;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.ap-spotlight-card .cta-button {
+  margin-top: 0.75em;
+  display: inline-block;
+  background: #0073aa;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.ap-spotlight-card .cta-button:hover {
+  background: #005c8e;
+}
