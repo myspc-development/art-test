@@ -14,6 +14,7 @@ use ArtPulse\Core\ArtworkEventLinkManager;
 use ArtPulse\Engagement\DigestMailer;
 use ArtPulse\Frontend\WidgetEmbedShortcode;
 use ArtPulse\Blocks\WidgetEmbedBlock;
+use ArtPulse\Blocks\BioSummaryBlock;
 
 class Plugin
 {
@@ -290,6 +291,7 @@ class Plugin
         \ArtPulse\Blocks\TaxonomyFilterBlock::register();
         WidgetEmbedShortcode::register();
         WidgetEmbedBlock::register();
+        BioSummaryBlock::register();
         \ArtPulse\Community\FollowRestController::register();
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
         \ArtPulse\Community\NotificationHooks::register();
