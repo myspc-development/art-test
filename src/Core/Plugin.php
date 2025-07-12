@@ -311,6 +311,7 @@ class Plugin
         \ArtPulse\Monetization\PaymentWebhookController::register();
         \ArtPulse\Monetization\SalesOverview::register();
         \ArtPulse\Monetization\PayoutManager::register();
+        \ArtPulse\Monetization\TipManager::register();
         \ArtPulse\Integration\WebhookManager::register();
         \ArtPulse\Monetization\EventPromotionManager::register();
         \ArtPulse\Search\MetaFullTextSearch::register();
