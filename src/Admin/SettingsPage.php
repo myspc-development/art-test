@@ -596,13 +596,6 @@ class SettingsPage
         $tab_keys       = array_keys($tabs);
         $current_tab    = sanitize_key($_GET['tab'] ?? ($tab_keys[0] ?? 'general'));
 
-        if (isset($_GET['ap_export_posts'])) {
-            $type    = sanitize_key($_GET['ap_export_posts']);
-            $allowed = ['artpulse_org', 'artpulse_event', 'artpulse_artist', 'artpulse_artwork'];
-            if (in_array($type, $allowed, true)) {
-                ImportExportTab::exportPostsCsv($type);
-            }
-        }
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
