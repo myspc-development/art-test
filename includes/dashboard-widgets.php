@@ -257,6 +257,11 @@ function ap_widget_webhooks(array $vars = []): string
     return ap_load_dashboard_template('widgets/webhooks.php', $vars);
 }
 
+function ap_widget_instagram(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/instagram-widget.php', $vars);
+}
+
 function ap_widget_role_spotlight(array $vars = []): string
 {
     $vars['role'] = DashboardController::get_role(get_current_user_id());
@@ -541,6 +546,36 @@ function ap_register_core_dashboard_widgets(): void
         [
             'roles'    => ['member', 'artist', 'organization'],
             'category' => 'recommended',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'instagram_widget',
+        __('Instagram Feed', 'artpulse'),
+        'instagram',
+        __('Recent Instagram posts.', 'artpulse'),
+        'ap_widget_instagram',
+        [
+            'category' => 'social',
+            'roles'    => ['member', 'artist'],
+            'settings' => [
+                [
+                    'key'   => 'access_token',
+                    'label' => __('Access Token', 'artpulse'),
+                    'type'  => 'text',
+                ],
+                [
+                    'key'   => 'urls',
+                    'label' => __('Post URLs', 'artpulse'),
+                    'type'  => 'text',
+                ],
+                [
+                    'key'     => 'count',
+                    'label'   => __('Items to Show', 'artpulse'),
+                    'type'    => 'number',
+                    'default' => 3,
+                ],
+            ],
         ]
     );
 

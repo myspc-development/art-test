@@ -245,6 +245,14 @@ class SettingsPage
                 'label' => __('SendGrid API Key', 'artpulse'),
                 'type'  => 'text',
             ],
+            'mailchimp_api_key' => [
+                'label' => __('Mailchimp API Key', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'mailchimp_list_id' => [
+                'label' => __('Mailchimp List ID', 'artpulse'),
+                'type'  => 'text',
+            ],
             'email_from_name' => [
                 'label' => __('From Name', 'artpulse'),
                 'type'  => 'text',
@@ -741,7 +749,7 @@ class SettingsPage
                 $output[$key] = in_array($value, $allowed, true) ? $value : 'auto';
             } elseif ($key === 'email_from_address') {
                 $output[$key] = sanitize_email($value);
-            } elseif (in_array($key, ['mailgun_api_key', 'mailgun_domain', 'sendgrid_api_key', 'email_from_name'], true)) {
+            } elseif (in_array($key, ['mailgun_api_key', 'mailgun_domain', 'sendgrid_api_key', 'mailchimp_api_key', 'mailchimp_list_id', 'email_from_name'], true)) {
                 $output[$key] = sanitize_text_field($value);
             } elseif ($key === 'default_email_template') {
                 $output[$key] = sanitize_textarea_field($value);

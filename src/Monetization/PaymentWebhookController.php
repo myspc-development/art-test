@@ -27,6 +27,19 @@ class PaymentWebhookController
         $ticket_id = absint($req->get_param('ticket_id'));
         $user_id   = absint($req->get_param('user_id'));
 
+        if ($provider === 'stripe') {
+            $opts      = get_option('artpulse_settings', []);
+            $secret    = $opts['stripe_webhook_secret'] ?? '';
+            $sigHeader = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '';
+            if ($secret && class_exists('\\Stripe\\Webhook')) {
+                try {
+                    \Stripe\Webhook::constructEvent($req->get_body(), $sigHeader, $secret);
+                } catch (\Exception $e) {
+                    return new \WP_Error('invalid_signature', 'Invalid signature', ['status' => 400]);
+                }
+            }
+        }
+
         if ($status !== 'success' || !$ticket_id || !$user_id) {
             return rest_ensure_response(['ignored' => true]);
         }

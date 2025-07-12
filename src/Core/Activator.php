@@ -29,6 +29,8 @@ class Activator
                 'mailgun_api_key'     => '',
                 'mailgun_domain'      => '',
                 'sendgrid_api_key'    => '',
+                'mailchimp_api_key'   => '',
+                'mailchimp_list_id'   => '',
                 'email_from_name'     => '',
                 'email_from_address'  => '',
                 'keep_data_on_uninstall' => 1,
