@@ -72,18 +72,27 @@ class SpotlightManager
      */
     public static function get_dashboard_spotlights(string $role): array
     {
+        $today = current_time('Y-m-d');
+
         $args = [
             'post_type'      => 'spotlight',
             'posts_per_page' => 5,
             'meta_query'     => [
+                'relation' => 'AND',
                 [
                     'key'     => 'visible_to_roles',
                     'value'   => $role,
                     'compare' => 'LIKE',
                 ],
                 [
+                    'key'     => 'start_at',
+                    'value'   => $today,
+                    'compare' => '<=',
+                    'type'    => 'DATE',
+                ],
+                [
                     'key'     => 'expires_at',
-                    'value'   => current_time('Y-m-d'),
+                    'value'   => $today,
                     'compare' => '>=',
                     'type'    => 'DATE',
                 ],
