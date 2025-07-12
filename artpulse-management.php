@@ -128,7 +128,7 @@ add_action('init', function () {
     }
 });
 
-add_action('plugins_loaded', function () {
+add_action('init', function () {
     \ArtPulse\Admin\DashboardWidgetTools::register();
 
     \ArtPulse\Core\DashboardWidgetRegistry::register(
