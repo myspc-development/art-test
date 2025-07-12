@@ -55,12 +55,19 @@ class SpotlightPostType
             'single'       => true,
             'type'         => 'string',
         ]);
+
+        register_post_meta('spotlight', 'is_pinned', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+        ]);
     }
 
     public static function add_meta_boxes(): void
     {
         add_meta_box('spotlight_roles', __('Visible To Roles', 'artpulse'), [self::class, 'render_roles_meta'], 'spotlight', 'side');
         add_meta_box('spotlight_schedule', __('Visibility Schedule', 'artpulse'), [self::class, 'render_schedule_meta'], 'spotlight', 'side');
+        add_meta_box('spotlight_pin', __('Pin Spotlight', 'artpulse'), [self::class, 'render_pin_meta'], 'spotlight', 'side');
         add_meta_box('spotlight_cta', __('Call to Action', 'artpulse'), [self::class, 'render_cta_meta'], 'spotlight', 'normal');
     }
 
@@ -85,6 +92,15 @@ class SpotlightPostType
 
         <p><label><?php _e('End Date', 'artpulse'); ?><br>
             <input type="date" name="expires_at" value="<?= esc_attr($end) ?>" class="widefat" /></label></p>
+        <?php
+    }
+
+    public static function render_pin_meta($post): void
+    {
+        $pinned = get_post_meta($post->ID, 'is_pinned', true);
+        ?>
+        <p><label><input type="checkbox" name="is_pinned" value="1" <?= $pinned ? 'checked' : '' ?> />
+            <?php _e('Pin this spotlight', 'artpulse'); ?></label></p>
         <?php
     }
 
@@ -126,6 +142,12 @@ class SpotlightPostType
         update_post_meta($post_id, 'cta_text', sanitize_text_field($_POST['cta_text'] ?? ''));
         update_post_meta($post_id, 'cta_url', esc_url_raw($_POST['cta_url'] ?? ''));
         update_post_meta($post_id, 'cta_target', sanitize_text_field($_POST['cta_target'] ?? ''));
+
+        if (isset($_POST['is_pinned'])) {
+            update_post_meta($post_id, 'is_pinned', '1');
+        } else {
+            delete_post_meta($post_id, 'is_pinned');
+        }
     }
 }
 
