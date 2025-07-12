@@ -406,3 +406,16 @@ body.dark-mode, body[data-theme="dark"] { background:#1b1b1b; color:#e0e0e0; }
 .ap-spotlight-card .cta-button:hover {
   background: #005c8e;
 }
+
+
+.ap-widget.highlighted {
+  border-left: 4px solid #007cba;
+}
+.ap-widget.alert {
+  background: #fff3f3;
+  border-left: 4px solid #cc1818;
+}
+.ap-widget.info {
+  background: #f0f8ff;
+  border-left: 4px solid #0073aa;
+}

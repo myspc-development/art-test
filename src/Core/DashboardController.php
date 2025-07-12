@@ -80,4 +80,27 @@ class DashboardController {
         $user = get_user_by('id', $user_id);
         return $user ? ($user->roles[0] ?? 'member') : 'guest';
     }
+
+    /**
+     * Retrieve custom dashboard widget posts visible to the user's role.
+     */
+    public static function get_custom_widgets_for_user(int $user_id): array
+    {
+        $role = self::get_role($user_id);
+
+        $args = [
+            'post_type'      => 'dashboard_widget',
+            'posts_per_page' => -1,
+            'orderby'        => 'meta_value_num',
+            'meta_key'       => 'widget_order',
+            'order'          => 'ASC',
+            'meta_query'     => [[
+                'key'     => 'visible_to_roles',
+                'value'   => $role,
+                'compare' => 'LIKE',
+            ]],
+        ];
+
+        return get_posts($args);
+    }
 }

@@ -41,6 +41,22 @@ include locate_template('partials/dashboard-wrapper-start.php');
 
   <div id="ap-user-dashboard" class="ap-dashboard-columns" role="region" tabindex="0" aria-label="User Dashboard Widgets">
     <?php echo DashboardController::render_for_user(get_current_user_id()); ?>
+
+    <?php
+    $custom_widgets = DashboardController::get_custom_widgets_for_user(get_current_user_id());
+    foreach ($custom_widgets as $widget):
+        $icon = get_post_meta($widget->ID, 'widget_icon', true);
+        $css  = get_post_meta($widget->ID, 'widget_class', true);
+    ?>
+        <div class="ap-widget <?= esc_attr($css) ?>">
+          <div class="ap-widget-header">
+            <?= $icon ? esc_html($icon) . ' ' : '' ?><?= esc_html(get_the_title($widget)) ?>
+          </div>
+          <div class="ap-widget-body">
+            <?= apply_filters('the_content', $widget->post_content) ?>
+          </div>
+        </div>
+    <?php endforeach; ?>
   </div>
 
 <?php
