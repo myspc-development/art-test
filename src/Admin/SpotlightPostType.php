@@ -29,6 +29,11 @@ class SpotlightPostType
             'single'       => true,
             'type'         => 'array',
         ]);
+        register_post_meta('spotlight', 'start_at', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
         register_post_meta('spotlight', 'expires_at', [
             'show_in_rest' => true,
             'single'       => true,
@@ -54,6 +59,7 @@ class SpotlightPostType
     public static function add_meta_boxes(): void
     {
         add_meta_box('spotlight_roles', __('Visible To Roles', 'artpulse'), [self::class, 'render_roles_meta'], 'spotlight', 'side');
+        add_meta_box('spotlight_schedule', __('Visibility Schedule', 'artpulse'), [self::class, 'render_schedule_meta'], 'spotlight', 'side');
         add_meta_box('spotlight_cta', __('Call to Action', 'artpulse'), [self::class, 'render_cta_meta'], 'spotlight', 'normal');
     }
 
@@ -65,8 +71,20 @@ class SpotlightPostType
             $checked = in_array($role, (array) $selected, true) ? 'checked' : '';
             echo "<label><input type='checkbox' name='visible_to_roles[]' value='{$role}' {$checked} /> " . esc_html($role) . "</label><br>";
         }
-        $expires = get_post_meta($post->ID, 'expires_at', true);
-        echo '<p><label>' . __('Expires At', 'artpulse') . '<br><input type="date" name="expires_at" value="' . esc_attr($expires) . '" /></label></p>';
+        // Scheduling is handled in a separate meta box.
+    }
+
+    public static function render_schedule_meta($post): void
+    {
+        $start = get_post_meta($post->ID, 'start_at', true);
+        $end   = get_post_meta($post->ID, 'expires_at', true);
+        ?>
+        <p><label><?php _e('Start Date', 'artpulse'); ?><br>
+            <input type="date" name="start_at" value="<?= esc_attr($start) ?>" class="widefat" /></label></p>
+
+        <p><label><?php _e('End Date', 'artpulse'); ?><br>
+            <input type="date" name="expires_at" value="<?= esc_attr($end) ?>" class="widefat" /></label></p>
+        <?php
     }
 
     public static function render_cta_meta($post): void
@@ -90,6 +108,12 @@ class SpotlightPostType
             update_post_meta($post_id, 'visible_to_roles', array_map('sanitize_text_field', (array) $_POST['visible_to_roles']));
         } else {
             delete_post_meta($post_id, 'visible_to_roles');
+        }
+
+        if (isset($_POST['start_at'])) {
+            update_post_meta($post_id, 'start_at', sanitize_text_field($_POST['start_at']));
+        } else {
+            delete_post_meta($post_id, 'start_at');
         }
 
         if (isset($_POST['expires_at'])) {
