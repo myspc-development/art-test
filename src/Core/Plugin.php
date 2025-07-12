@@ -171,6 +171,7 @@ class Plugin
         \ArtPulse\Core\NotificationShortcode::register();
         \ArtPulse\Community\UserPreferencesRestController::register();
         \ArtPulse\Rest\WidgetSettingsRestController::register();
+        \ArtPulse\Rest\LayoutSaveEndpoint::register();
         \ArtPulse\Core\ProfileMetrics::register();
         \ArtPulse\Core\RoleAuditLogger::register();
         \ArtPulse\Core\ActivityLogger::register();
