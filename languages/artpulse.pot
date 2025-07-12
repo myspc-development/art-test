@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: ArtPulse Management 1.3.7\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/artpulse\n"
+"Project-Id-Version: ArtPulse Management 1.3.11\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/art-test\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-18T12:53:31+08:00\n"
+"POT-Creation-Date: 2025-07-12T15:26:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: artpulse\n"
@@ -29,12 +29,446 @@ msgstr ""
 msgid "craig"
 msgstr ""
 
+#: admin/page-dashboard-widgets.php:7
+msgid "Widget Manager"
+msgstr ""
+
+#: admin/page-dashboard-widgets.php:8
+msgid "Widgets"
+msgstr ""
+
+#: admin/page-dashboard-widgets.php:17
+#: src/Admin/ApprovalManager.php:74
+#: src/Admin/ApprovalManager.php:111
+#: src/Admin/ConfigBackupTab.php:15
+#: src/Admin/ConfigBackupTab.php:55
+#: src/Admin/ConfigBackupTab.php:69
+#: src/Admin/DashboardWidgetTools.php:203
+#: src/Admin/DashboardWidgetTools.php:223
+#: src/Admin/OrgRolesPage.php:54
+#: src/Admin/OrgRolesPage.php:81
+#: src/Admin/OrgUserManager.php:59
+#: src/Admin/PendingSubmissionsPage.php:67
+#: src/Admin/ShortcodePages.php:145
+#: src/Admin/SpotlightManager.php:26
+#: src/Admin/UpdatesTab.php:310
+#: src/Integration/SocialAutoPoster.php:66
+msgid "Insufficient permissions"
+msgstr ""
+
+#: admin/page-dashboard-widgets.php:20
+#: src/Admin/CustomDashboardWidgetPostType.php:20
+#: src/Admin/SettingsPage.php:350
+#: src/Admin/SettingsPage.php:351
+msgid "Dashboard Widgets"
+msgstr ""
+
+#: admin/page-dashboard-widgets.php:22
+msgid "ID"
+msgstr ""
+
+#: admin/page-dashboard-widgets.php:23
+#: src/Admin/AdminColumnsArtwork.php:20
+#: src/Admin/PendingSubmissionsPage.php:34
+#: src/Frontend/ArtistDashboardShortcode.php:69
+msgid "Title"
+msgstr ""
+
+#: admin/page-dashboard-widgets.php:24
+#: src/Admin/CustomDashboardWidgetPostType.php:50
+msgid "Roles"
+msgstr ""
+
+#: admin/page-dashboard-widgets.php:25
+msgid "Template"
+msgstr ""
+
+#: artpulse-management.php:136
+msgid "Hello World"
+msgstr ""
+
+#: artpulse-management.php:138
+msgid "Example hello world widget."
+msgstr ""
+
+#: artpulse-management.php:146
+msgid "PHP Version"
+msgstr ""
+
+#: artpulse-management.php:148
+msgid "Displays current PHP version."
+msgstr ""
+
+#: artpulse-management.php:268
+#: artpulse-management.php:282
+#: src/Admin/SettingsPage.php:608
+msgid "ArtPulse Settings"
+msgstr ""
+
+#: artpulse-management.php:269
+#: src/Admin/SettingsPage.php:316
+#: src/Admin/SettingsPage.php:317
+#: src/Core/AdminDashboard.php:14
+#: src/Core/AdminDashboard.php:15
+msgid "ArtPulse"
+msgstr ""
+
+#: artpulse-management.php:286
+msgid "Copy Templates to Child Theme"
+msgstr ""
+
+#: artpulse-management.php:309
+msgid "Templates copied to child theme."
+msgstr ""
+
+#: artpulse-management.php:585
+msgid "Please log in to view your favorites."
+msgstr ""
+
+#: artpulse-management.php:673
+msgid "No favorites yet. Click the star on any event or artwork to add it to your favorites!"
+msgstr ""
+
+#: artpulse-management.php:729
+msgid "favorites"
+msgstr ""
+
+#: inc/comments/artist-comments.php:16
+msgid "Log in to comment"
+msgstr ""
+
+#: includes/admin-settings.php:10
+msgid "Rejection Reason"
+msgstr ""
+
+#: includes/artist-meta-box.php:9
+msgid "Artist Badges"
+msgstr ""
+
+#: includes/artist-meta-box.php:16
+msgid "Gallery Images"
+msgstr ""
+
+#: includes/artist-meta-box.php:27
+#: src/Admin/MetaBoxesArtist.php:141
+msgid "Featured"
+msgstr ""
+
+#: includes/artist-meta-box.php:28
+#: src/Admin/MetaBoxesArtist.php:142
+#: src/Admin/SpotlightManager.php:53
+msgid "Spotlight"
+msgstr ""
+
+#: includes/artist-meta-box.php:37
+msgid "Gallery image IDs (comma separated):"
+msgstr ""
+
+#: includes/business-dashboard-widgets.php:31
+#: templates/widgets/site-stats.php:7
+msgid "Site Stats"
+msgstr ""
+
+#: includes/business-dashboard-widgets.php:33
+msgid "Overall site traffic and engagement metrics."
+msgstr ""
+
+#: includes/business-dashboard-widgets.php:43
+#: templates/widgets/lead-capture.php:7
+msgid "Lead Capture"
+msgstr ""
+
+#: includes/business-dashboard-widgets.php:45
+msgid "Recent leads collected from forms."
+msgstr ""
+
+#: includes/business-dashboard-widgets.php:55
+#: templates/widgets/sales-summary.php:7
+msgid "Sales Summary"
+msgstr ""
+
+#: includes/business-dashboard-widgets.php:57
+msgid "Sales totals for the selected period."
+msgstr ""
+
+#: includes/dashboard-widgets.php:40
+#: includes/dashboard-widgets.php:67
+#: includes/dashboard-widgets.php:105
+msgid "Permission denied"
+msgstr ""
+
+#: includes/dashboard-widgets.php:62
+#: includes/dashboard-widgets.php:111
+msgid "Invalid role"
+msgstr ""
+
+#: includes/dashboard-widgets.php:299
+#: src/Core/MembershipManager.php:18
+#: src/Frontend/OrganizationDashboardShortcode.php:135
+#: src/Frontend/OrganizationDashboardShortcode.php:149
+#: templates/partials/dashboard-nav.php:14
+msgid "Membership"
+msgstr ""
+
+#: includes/dashboard-widgets.php:301
+msgid "Subscription status and badges."
+msgstr ""
+
+#: includes/dashboard-widgets.php:308
+msgid "Show Badges"
+msgstr ""
+
+#: includes/dashboard-widgets.php:318
+#: templates/partials/dashboard-nav.php:27
+msgid "Upgrade"
+msgstr ""
+
+#: includes/dashboard-widgets.php:320
+msgid "Upgrade options for the account."
+msgstr ""
+
+#: includes/dashboard-widgets.php:327
+msgid "Show Forms"
+msgstr ""
+
+#: includes/dashboard-widgets.php:337
+#: templates/partials/dashboard-nav.php:37
+msgid "Local Events"
+msgstr ""
+
+#: includes/dashboard-widgets.php:339
+msgid "Shows events near the user."
+msgstr ""
+
+#: includes/dashboard-widgets.php:346
+msgid "Number of Events"
+msgstr ""
+
+#: includes/dashboard-widgets.php:356
+#: templates/partials/dashboard-nav.php:40
+msgid "Favorites"
+msgstr ""
+
+#: includes/dashboard-widgets.php:358
+msgid "Favorited content lists."
+msgstr ""
+
+#: includes/dashboard-widgets.php:365
+#: includes/dashboard-widgets.php:395
+#: includes/dashboard-widgets.php:426
+#: includes/dashboard-widgets.php:445
+#: includes/dashboard-widgets.php:464
+#: includes/dashboard-widgets.php:502
+#: includes/dashboard-widgets.php:521
+#: includes/dashboard-widgets.php:574
+msgid "Items to Show"
+msgstr ""
+
+#: includes/dashboard-widgets.php:375
+#: src/Admin/ShortcodePages.php:50
+#: templates/widgets/my-follows.php:5
+msgid "My Follows"
+msgstr ""
+
+#: includes/dashboard-widgets.php:377
+msgid "Artists and events you follow."
+msgstr ""
+
+#: includes/dashboard-widgets.php:386
+msgid "RSVPs"
+msgstr ""
+
+#: includes/dashboard-widgets.php:388
+msgid "User RSVP history."
+msgstr ""
+
+#: includes/dashboard-widgets.php:405
+#: templates/widgets/rsvp-stats.php:8
+msgid "RSVP Stats"
+msgstr ""
+
+#: includes/dashboard-widgets.php:407
+msgid "RSVP summary for your events."
+msgstr ""
+
+#: includes/dashboard-widgets.php:417
+#: src/Admin/ShortcodePages.php:49
+#: templates/widgets/my-events.php:7
+msgid "My Events"
+msgstr ""
+
+#: includes/dashboard-widgets.php:419
+msgid "Events created by the user."
+msgstr ""
+
+#: includes/dashboard-widgets.php:436
+#: templates/partials/dashboard-events.php:9
+#: templates/widgets/events.php:7
+msgid "Upcoming Events"
+msgstr ""
+
+#: includes/dashboard-widgets.php:438
+msgid "Global upcoming events."
+msgstr ""
+
+#: includes/dashboard-widgets.php:455
+#: src/Frontend/OrganizationDashboardShortcode.php:142
+#: src/Frontend/OrganizationDashboardShortcode.php:342
+#: templates/widgets/messages.php:7
+msgid "Messages"
+msgstr ""
+
+#: includes/dashboard-widgets.php:457
+msgid "Private messages inbox."
+msgstr ""
+
+#: includes/dashboard-widgets.php:474
+#: templates/widgets/account-tools.php:7
+msgid "Account Tools"
+msgstr ""
+
+#: includes/dashboard-widgets.php:476
+msgid "Export and deletion options."
+msgstr ""
+
+#: includes/dashboard-widgets.php:483
+msgid "Show Export Links"
+msgstr ""
+
+#: includes/dashboard-widgets.php:493
+#: templates/widgets/support-history.php:7
+msgid "Support History"
+msgstr ""
+
+#: includes/dashboard-widgets.php:495
+msgid "Previous support tickets."
+msgstr ""
+
+#: includes/dashboard-widgets.php:512
+#: src/Admin/ShortcodePages.php:51
+#: templates/partials/dashboard-nav.php:53
+#: templates/widgets/notifications.php:7
+msgid "Notifications"
+msgstr ""
+
+#: includes/dashboard-widgets.php:514
+msgid "Recent notifications."
+msgstr ""
+
+#: includes/dashboard-widgets.php:531
+msgid "Featured Spotlight"
+msgstr ""
+
+#: includes/dashboard-widgets.php:533
+msgid "Role based spotlights."
+msgstr ""
+
+#: includes/dashboard-widgets.php:542
+#: templates/widgets/widget-for-you.php:23
+msgid "For You"
+msgstr ""
+
+#: includes/dashboard-widgets.php:544
+msgid "Personalized recommendations."
+msgstr ""
+
+#: includes/dashboard-widgets.php:554
+msgid "Instagram Feed"
+msgstr ""
+
+#: includes/dashboard-widgets.php:556
+msgid "Recent Instagram posts."
+msgstr ""
+
+#: includes/dashboard-widgets.php:564
+#: src/Admin/SettingsPage.php:299
+msgid "Access Token"
+msgstr ""
+
+#: includes/dashboard-widgets.php:569
+msgid "Post URLs"
+msgstr ""
+
+#: includes/dashboard-widgets.php:584
+msgid "Event Spotlights"
+msgstr ""
+
+#: includes/dashboard-widgets.php:586
+msgid "Event related highlights."
+msgstr ""
+
+#: includes/dashboard-widgets.php:595
+msgid "Call Spotlights"
+msgstr ""
+
+#: includes/dashboard-widgets.php:597
+msgid "Calls to artists or members."
+msgstr ""
+
+#: includes/dashboard-widgets.php:606
+msgid "Featured Spotlights"
+msgstr ""
+
+#: includes/dashboard-widgets.php:608
+msgid "General featured items."
+msgstr ""
+
+#: includes/post-status-hooks.php:26
+#, php-format
+msgid "Your submission \"%s\" was rejected"
+msgstr ""
+
+#: includes/post-status-hooks.php:30
+#, php-format
+msgid "Your submission \"%s\" has been rejected."
+msgstr ""
+
+#: includes/post-status-hooks.php:34
+msgid "Reason:"
+msgstr ""
+
+#: includes/user-actions.php:15
+#: includes/user-actions.php:28
+msgid "Login required"
+msgstr ""
+
+#: includes/user-actions.php:20
+#: includes/user-actions.php:33
+msgid "Invalid data"
+msgstr ""
+
+#: includes/widgets/class-ap-widget.php:7
+msgid "AP Shortcode Widget"
+msgstr ""
+
+#: includes/widgets/class-ap-widget.php:8
+msgid "Render a shortcode inside a widget."
+msgstr ""
+
+#: includes/widgets/class-ap-widget.php:27
+msgid "Shortcode:"
+msgstr ""
+
+#: includes/widgets/class-ap-widget.php:31
+msgid "Attributes:"
+msgstr ""
+
+#: includes/widgets/class-favorite-portfolio-widget.php:7
+msgid "AP Favorite Portfolio"
+msgstr ""
+
+#: includes/widgets/class-favorite-portfolio-widget.php:8
+msgid "Display the user's favorite portfolio."
+msgstr ""
+
 #: src/Admin/AdminColumnsArtist.php:19
 msgid "Portrait"
 msgstr ""
 
 #: src/Admin/AdminColumnsArtist.php:20
 #: src/Admin/AdminColumnsOrganisation.php:20
+#: src/Admin/EngagementDashboard.php:177
+#: src/Admin/SettingsPage.php:513
 msgid "Name"
 msgstr ""
 
@@ -42,44 +476,59 @@ msgstr ""
 msgid "Image"
 msgstr ""
 
-#: src/Admin/AdminColumnsArtwork.php:20
-msgid "Title"
-msgstr ""
-
-#: src/Admin/AdminColumnsEvent.php:19
+#: src/Admin/AdminColumnsEvent.php:20
+#: src/Admin/AdminColumnsOrganisation.php:24
+#: src/Admin/MetaBoxesOrganisation.php:185
 msgid "Banner"
 msgstr ""
 
-#: src/Admin/AdminColumnsEvent.php:20
-msgid "Dates"
-msgstr ""
-
 #: src/Admin/AdminColumnsEvent.php:21
-msgid "Venue"
+msgid "Gallery"
 msgstr ""
 
 #: src/Admin/AdminColumnsEvent.php:22
+msgid "Dates"
+msgstr ""
+
+#: src/Admin/AdminColumnsEvent.php:23
+#: src/Frontend/EventFilter.php:54
+msgid "Venue"
+msgstr ""
+
+#: src/Admin/AdminColumnsEvent.php:24
+msgid "Organization"
+msgstr ""
+
+#: src/Admin/AdminColumnsEvent.php:25
 msgid "⭐ Featured"
 msgstr ""
 
+#: src/Admin/AdminColumnsEvent.php:26
+msgid "Open Tasks"
+msgstr ""
+
 #: src/Admin/AdminColumnsOrganisation.php:19
+#: src/Admin/MetaBoxesOrganisation.php:184
 msgid "Logo"
 msgstr ""
 
 #: src/Admin/AdminColumnsOrganisation.php:21
+#: src/Admin/FeedbackPage.php:44
+#: src/Admin/MetaBoxesOrganisation.php:182
+#: src/Frontend/FeedbackWidget.php:56
 msgid "Description"
 msgstr ""
 
 #: src/Admin/AdminColumnsOrganisation.php:22
+#: src/Admin/FeedbackPage.php:42
+#: src/Admin/PendingSubmissionsPage.php:34
+#: templates/page-event-directory.php:48
 msgid "Type"
 msgstr ""
 
 #: src/Admin/AdminColumnsOrganisation.php:23
+#: src/Admin/MetaBoxesArtist.php:134
 msgid "Website"
-msgstr ""
-
-#: src/Admin/AdminColumnsOrganisation.php:24
-msgid "Banner"
 msgstr ""
 
 #: src/Admin/AdminColumnsOrganisation.php:25
@@ -90,24 +539,1163 @@ msgstr ""
 msgid "Longitude"
 msgstr ""
 
-#: src/Admin/ApprovalManager.php:30
+#: src/Admin/AdminColumnsTaxonomies.php:36
+#: src/Admin/MetaBoxesArtist.php:140
+msgid "Specialties"
+msgstr ""
+
+#: src/Admin/AdminColumnsTaxonomies.php:40
+msgid "Styles"
+msgstr ""
+
+#: src/Admin/AdminColumnsTaxonomies.php:44
+#: src/Taxonomies/TaxonomiesRegistrar.php:61
+#: src/Taxonomies/TaxonomiesRegistrar.php:69
+msgid "Event Types"
+msgstr ""
+
+#: src/Admin/AdminColumnsTaxonomies.php:48
+msgid "Categories"
+msgstr ""
+
+#: src/Admin/AdminColumnsTaxonomies.php:97
+msgid "—"
+msgstr ""
+
+#: src/Admin/AdminListColumns.php:21
+#: src/Admin/MetaBoxesArtist.php:130
+#: src/Frontend/SubmitArtistForm.php:28
+msgid "Artist Name"
+msgstr ""
+
+#: src/Admin/AdminListColumns.php:22
+#: src/Admin/AdminListColumns.php:47
+#: src/Admin/AdminListColumns.php:71
+msgid "Featured?"
+msgstr ""
+
+#: src/Admin/AdminListColumns.php:23
+msgid "Spotlight?"
+msgstr ""
+
+#: src/Admin/AdminListColumns.php:45
+msgid "Artwork Title"
+msgstr ""
+
+#: src/Admin/AdminListColumns.php:46
+#: src/Admin/SpotlightManager.php:53
+msgid "Artist"
+msgstr ""
+
+#: src/Admin/AdminListColumns.php:69
+#: src/Admin/MetaBoxesEvent.php:163
+#: src/Admin/PaymentAnalyticsDashboard.php:60
+#: src/Admin/SpotlightPostType.php:90
+msgid "Start Date"
+msgstr ""
+
+#: src/Admin/AdminListColumns.php:70
+msgid "Organizer"
+msgstr ""
+
+#: src/Admin/ApprovalManager.php:31
 msgid "Submission Approval"
 msgstr ""
 
-#: src/Admin/ApprovalManager.php:45
+#: src/Admin/ApprovalManager.php:46
 msgid "This submission is already reviewed."
 msgstr ""
 
-#: src/Admin/ApprovalManager.php:55
-msgid "Approve Submission"
+#: src/Admin/ApprovalManager.php:57
+#: src/Admin/PendingSubmissionsPage.php:49
+msgid "Approve"
 msgstr ""
 
-#: src/Admin/ApprovalManager.php:66
-msgid "Insufficient permissions"
+#: src/Admin/ApprovalManager.php:63
+#: src/Admin/PendingSubmissionsPage.php:54
+msgid "Reject"
 msgstr ""
 
-#: src/Admin/ApprovalManager.php:70
+#: src/Admin/ApprovalManager.php:78
+#: src/Admin/ApprovalManager.php:117
+#: src/Admin/PendingSubmissionsPage.php:72
 msgid "Security check failed"
+msgstr ""
+
+#: src/Admin/ConfigBackupTab.php:19
+msgid "Settings imported."
+msgstr ""
+
+#: src/Admin/ConfigBackupTab.php:21
+msgid "Invalid backup file."
+msgstr ""
+
+#: src/Admin/ConfigBackupTab.php:24
+msgid "Export Settings"
+msgstr ""
+
+#: src/Admin/ConfigBackupTab.php:28
+msgid "Download Backup"
+msgstr ""
+
+#: src/Admin/ConfigBackupTab.php:31
+msgid "Import Settings"
+msgstr ""
+
+#: src/Admin/ConfigBackupTab.php:36
+msgid "Upload"
+msgstr ""
+
+#: src/Admin/CustomDashboardWidgetPostType.php:36
+msgid "Widget Options"
+msgstr ""
+
+#: src/Admin/CustomDashboardWidgetPostType.php:55
+msgid "Icon"
+msgstr ""
+
+#: src/Admin/CustomDashboardWidgetPostType.php:56
+msgid "Order"
+msgstr ""
+
+#: src/Admin/CustomDashboardWidgetPostType.php:57
+msgid "CSS Class"
+msgstr ""
+
+#: src/Admin/CustomDashboardWidgetPostType.php:58
+msgid "Shortcode"
+msgstr ""
+
+#: src/Admin/CustomDashboardWidgetPostType.php:66
+msgid "Shortcode Attributes"
+msgstr ""
+
+#: src/Admin/CustomDashboardWidgetPostType.php:88
+#: src/Admin/DashboardWidgetTools.php:160
+#: src/Frontend/EventListingShortcode.php:142
+msgid "All Categories"
+msgstr ""
+
+#: src/Admin/CustomDashboardWidgetPostType.php:95
+#: templates/page-artist-directory.php:41
+msgid "Tag"
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:19
+#: src/Core/AdminDashboard.php:54
+msgid "ArtPulse Dashboard"
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:59
+msgid "Access denied."
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:73
+msgid "Layout saved for role."
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:81
+msgid "Layout reset for role."
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:102
+msgid "Dashboard Widget Manager"
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:113
+msgid "Reset Layout"
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:114
+msgid "Export"
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:115
+msgid "Import"
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:155
+msgid "Add Widget"
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:425
+msgid "No widgets found. Start by adding one."
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:28
+#: src/Admin/SettingsPage.php:342
+msgid "Engagement Dashboard"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:29
+#: src/Admin/SettingsPage.php:343
+msgid "Engagement"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:120
+msgid "Member Engagement Dashboard"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:126
+msgid "Active Only"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:127
+msgid "Inactive Only"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:178
+#: src/Admin/SettingsPage.php:517
+msgid "Last Login"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:179
+#: src/Core/AdminDashboard.php:38
+#: src/Core/AdminDashboard.php:39
+#: src/Core/PostTypeRegistrar.php:61
+#: src/Core/UserDashboardManager.php:79
+msgid "Artworks"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:180
+#: src/Core/AdminDashboard.php:24
+#: src/Core/AdminDashboard.php:25
+#: src/Core/PostTypeRegistrar.php:23
+#: src/Core/UserDashboardManager.php:77
+#: src/Frontend/OrganizationDashboardShortcode.php:137
+#: templates/partials/dashboard-nav.php:43
+#: templates/widgets/webhooks.php:20
+#: templates/widgets/widget-for-you.php:34
+msgid "Events"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:181
+msgid "Followers"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:182
+msgid "Following"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:183
+msgid "Score"
+msgstr ""
+
+#: src/Admin/EngagementDashboard.php:229
+msgid "Upgrade to access premium analytics."
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:197
+msgid "Available Widgets"
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:198
+msgid "Active Widgets"
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:199
+msgid "Select Role"
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:200
+#: templates/account-settings.php:16
+#: templates/payouts.php:17
+#: templates/widgets/webhooks.php:26
+msgid "Save"
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:201
+msgid "Preview"
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:202
+msgid "Reset to Default"
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:203
+msgid "Widget order saved."
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:204
+msgid "Error saving widget order."
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:205
+msgid "Drag widgets to add, remove, or reorder. Changes are saved for each role."
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:694
+#: src/Frontend/Shortcodes.php:56
+msgid "No items found."
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:709
+msgid "Subscribed!"
+msgstr ""
+
+#: src/Admin/EnqueueAssets.php:710
+msgid "Subscription failed."
+msgstr ""
+
+#: src/Admin/EventNotesTasks.php:19
+msgid "Internal Notes"
+msgstr ""
+
+#: src/Admin/EventNotesTasks.php:20
+msgid "Tasks"
+msgstr ""
+
+#: src/Admin/EventNotesTasks.php:25
+msgid "Add note..."
+msgstr ""
+
+#: src/Admin/EventNotesTasks.php:40
+msgid "Task title"
+msgstr ""
+
+#: src/Admin/EventNotesTasks.php:41
+msgid "Assignee"
+msgstr ""
+
+#: src/Admin/EventNotesTasks.php:42
+msgid "Due Date"
+msgstr ""
+
+#: src/Admin/EventNotesTasks.php:48
+msgid "Unassigned"
+msgstr ""
+
+#: src/Admin/EventRsvpToggle.php:16
+msgid "RSVP Settings"
+msgstr ""
+
+#: src/Admin/EventRsvpToggle.php:26
+msgid "Requires RSVP"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:15
+#: src/Admin/FeedbackPage.php:37
+msgid "User Feedback"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:16
+#: src/Frontend/FeedbackWidget.php:45
+msgid "Feedback"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:41
+#: src/Frontend/MyEventsShortcode.php:68
+#: templates/page-event-directory.php:49
+msgid "Date"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:43
+msgid "User/Email"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:45
+msgid "Context"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:46
+msgid "Votes"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:47
+#: src/Frontend/MyEventsShortcode.php:69
+msgid "Status"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:64
+msgid "Planned"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:65
+msgid "In Progress"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:66
+msgid "Completed"
+msgstr ""
+
+#: src/Admin/FeedbackPage.php:74
+msgid "No feedback found."
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:41
+msgid "Import CSV"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:44
+msgid "File has header row"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:47
+msgid "Delimiter"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:52
+msgid "Custom"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:57
+msgid "Rows to skip"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:61
+msgid "Trim whitespace from values"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:65
+msgid "Save Mapping Template"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:67
+msgid "Start Import"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:70
+msgid "Export Posts"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:72
+msgid "Export Organizations"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:73
+msgid "Export Events"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:74
+msgid "Export Artists"
+msgstr ""
+
+#: src/Admin/ImportExportTab.php:75
+msgid "Export Artworks"
+msgstr ""
+
+#: src/Admin/LoginEventsPage.php:15
+#: src/Admin/LoginEventsPage.php:16
+msgid "Login Events"
+msgstr ""
+
+#: src/Admin/LoginEventsPage.php:48
+msgid "Recent Login Events"
+msgstr ""
+
+#: src/Admin/LoginEventsPage.php:53
+#: src/Admin/OrgUserManager.php:96
+#: src/Admin/ProfileLinkRequestAdmin.php:39
+msgid "User"
+msgstr ""
+
+#: src/Admin/LoginEventsPage.php:54
+#: src/Admin/ShortcodePages.php:38
+#: src/Frontend/LoginShortcode.php:46
+msgid "Login"
+msgstr ""
+
+#: src/Admin/LoginEventsPage.php:55
+#: src/Admin/ShortcodePages.php:40
+msgid "Logout"
+msgstr ""
+
+#: src/Admin/LoginEventsPage.php:56
+msgid "IP Address"
+msgstr ""
+
+#: src/Admin/LoginEventsPage.php:69
+msgid "No login events found."
+msgstr ""
+
+#: src/Admin/MemberEnhancements.php:52
+msgid "User Badges"
+msgstr ""
+
+#: src/Admin/MemberEnhancements.php:54
+msgid "Comma-separated badge slugs."
+msgstr ""
+
+#: src/Admin/MemberEnhancements.php:71
+#: src/Admin/MemberEnhancements.php:72
+#: src/Admin/MemberEnhancements.php:105
+msgid "Login Heatmap"
+msgstr ""
+
+#: src/Admin/MemberEnhancements.php:107
+msgid "Day/Hour"
+msgstr ""
+
+#: src/Admin/MetaBoxesAddress.php:30
+#: src/Admin/MetaBoxesEvent.php:158
+msgid "Address"
+msgstr ""
+
+#: src/Admin/MetaBoxesAddress.php:119
+#: src/Admin/MetaBoxesOrganisation.php:203
+#: src/Frontend/SubmissionForms.php:71
+msgid "Street Address"
+msgstr ""
+
+#: src/Admin/MetaBoxesAddress.php:120
+#: src/Core/DirectoryManager.php:257
+#: src/Core/DirectoryManager.php:258
+#: src/Frontend/ArtistProfileFormShortcode.php:73
+#: src/Frontend/OrganizationSubmissionForm.php:47
+#: src/Frontend/OrgProfileEditShortcode.php:60
+#: src/Frontend/SubmissionForms.php:83
+msgid "City"
+msgstr ""
+
+#: src/Admin/MetaBoxesAddress.php:121
+msgid "State / Province"
+msgstr ""
+
+#: src/Admin/MetaBoxesAddress.php:122
+msgid "Postcode / Zip Code"
+msgstr ""
+
+#: src/Admin/MetaBoxesAddress.php:123
+#: src/Frontend/ArtistProfileFormShortcode.php:65
+#: src/Frontend/OrganizationSubmissionForm.php:41
+#: src/Frontend/OrgProfileEditShortcode.php:52
+msgid "Country"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:17
+msgid "Artist Details"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:114
+#: src/Admin/MetaBoxesArtwork.php:181
+#: src/Admin/MetaBoxesEvent.php:213
+msgid "Filter by Featured"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:131
+#: src/Frontend/SubmitArtistForm.php:37
+msgid "Biography"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:132
+#: src/Admin/OrgUserManager.php:96
+#: src/Admin/SettingsPage.php:514
+msgid "Email"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:133
+msgid "Phone"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:135
+msgid "Facebook"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:136
+#: templates/widgets/instagram-widget.php:21
+msgid "Instagram"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:137
+msgid "Twitter"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:138
+msgid "LinkedIn"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:139
+msgid "Portrait ID (Media Library ID)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:143
+msgid "Spotlight Start"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtist.php:144
+msgid "Spotlight End"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:17
+msgid "Artwork Details"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:198
+msgid "Title of the artwork"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:200
+msgid "Medium used (e.g. oil on canvas)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:201
+msgid "Dimensions (e.g. 100x120cm)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:202
+msgid "Year created (YYYY)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:203
+msgid "List of materials"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:204
+msgid "Asking price (e.g. $2000 or POA)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:205
+msgid "Provenance or exhibition history"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:206
+msgid "Edition/number (e.g. 1/10)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:207
+msgid "Tags (comma-separated)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:208
+msgid "Artwork description"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:209
+msgid "Featured image ID (Media Library ID)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:210
+msgid "Video URL (e.g., YouTube, Vimeo)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:211
+msgid "Mark as featured"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:212
+msgid "Styles (comma-separated)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:213
+msgid "Stock quantity"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:214
+msgid "Enable auction"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:215
+msgid "Auction start (Y-m-d H:i)"
+msgstr ""
+
+#: src/Admin/MetaBoxesArtwork.php:216
+msgid "Auction end (Y-m-d H:i)"
+msgstr ""
+
+#: src/Admin/MetaBoxesCollection.php:15
+msgid "Collection Items"
+msgstr ""
+
+#: src/Admin/MetaBoxesCollection.php:30
+msgid "Search items..."
+msgstr ""
+
+#: src/Admin/MetaBoxesCollection.php:96
+#: src/Admin/MetaBoxesRelationship.php:113
+#: src/Admin/MetaBoxesRelationship.php:270
+msgid "Search for items..."
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:19
+#: src/Core/MetaBoxRegistrar.php:31
+msgid "Event Details"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:67
+msgid "Waitlists disabled"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:76
+#: src/Admin/MetaBoxesOrganisation.php:51
+msgid "Media Library ID"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:87
+#: src/Frontend/OrgProfileEditShortcode.php:82
+msgid "Select"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:156
+msgid "Event Date"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:157
+#: src/Core/DirectoryManager.php:278
+#: src/Core/DirectoryManager.php:279
+#: templates/page-artist-directory.php:42
+#: templates/page-event-directory.php:50
+msgid "Location"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:159
+msgid "Start Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:160
+msgid "End Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:161
+msgid "Contact"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:162
+msgid "RSVP URL"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:164
+#: src/Admin/PaymentAnalyticsDashboard.php:63
+#: src/Admin/SpotlightPostType.php:93
+#: src/Frontend/SubmissionForms.php:63
+msgid "End Date"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:165
+msgid "Recurrence Rule"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:166
+#: src/Frontend/SubmissionForms.php:67
+msgid "Venue Name"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:171
+msgid "Main Organization"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:174
+#: src/Frontend/SubmissionForms.php:95
+msgid "Organizer Name"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:175
+#: src/Frontend/SubmissionForms.php:99
+msgid "Organizer Email"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:176
+msgid "Event Banner (Media Library ID)"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:177
+#: src/Frontend/SubmissionForms.php:109
+msgid "Request Featured"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:178
+msgid "Enable RSVPs"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:179
+msgid "RSVP Limit"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:180
+msgid "Enable Waitlist"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:181
+msgid "Co‑Host Artists"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:182
+msgid "RSVP List"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:183
+msgid "Waitlist"
+msgstr ""
+
+#: src/Admin/MetaBoxesEvent.php:184
+msgid "Attended"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:17
+msgid "Organization Details"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:159
+msgid "Filter by Type"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:181
+#: src/Frontend/OrganizationSubmissionForm.php:38
+#: src/Frontend/OrgProfileEditShortcode.php:48
+msgid "Organization Name"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:183
+#: src/Frontend/ArtistProfileFormShortcode.php:61
+msgid "Website URL"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:186
+msgid "Tagline"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:187
+msgid "Theme Color"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:188
+msgid "Make Profile Public"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:189
+msgid "Featured Event IDs"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:190
+#: src/Core/DirectoryManager.php:263
+msgid "Organization Type"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:191
+msgid "Organization Size"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:192
+msgid "Facebook URL"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:193
+#: src/Frontend/ArtistProfileFormShortcode.php:53
+msgid "Twitter URL"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:194
+#: src/Frontend/ArtistProfileFormShortcode.php:57
+msgid "Instagram URL"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:195
+msgid "LinkedIn URL"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:196
+msgid "Artsy URL"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:197
+msgid "Pinterest URL"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:198
+msgid "YouTube URL"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:199
+msgid "Primary Contact Name"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:200
+msgid "Primary Contact Email"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:201
+msgid "Primary Contact Phone"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:202
+msgid "Primary Contact Role"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:204
+msgid "Postal Address"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:205
+msgid "Venue Address"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:206
+msgid "Venue Email"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:207
+msgid "Venue Phone"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:209
+msgid "Monday Opening Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:210
+msgid "Monday Closing Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:211
+msgid "Closed on Monday"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:212
+msgid "Tuesday Opening Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:213
+msgid "Tuesday Closing Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:214
+msgid "Closed on Tuesday"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:215
+msgid "Wednesday Opening Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:216
+msgid "Wednesday Closing Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:217
+msgid "Closed on Wednesday"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:218
+msgid "Thursday Opening Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:219
+msgid "Thursday Closing Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:220
+msgid "Closed on Thursday"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:221
+msgid "Friday Opening Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:222
+msgid "Friday Closing Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:223
+msgid "Closed on Friday"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:224
+msgid "Saturday Opening Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:225
+msgid "Saturday Closing Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:226
+msgid "Closed on Saturday"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:227
+msgid "Sunday Opening Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:228
+msgid "Sunday Closing Time"
+msgstr ""
+
+#: src/Admin/MetaBoxesOrganisation.php:229
+msgid "Closed on Sunday"
+msgstr ""
+
+#: src/Admin/OrgDashboardAdmin.php:325
+msgid "No messages found."
+msgstr ""
+
+#: src/Admin/OrgDashboardAdmin.php:377
+#: src/Admin/SettingsPage.php:508
+#: src/Core/UserDashboardManager.php:85
+#: templates/widgets/account-tools.php:10
+msgid "Export CSV"
+msgstr ""
+
+#: src/Admin/OrgDashboardAdmin.php:378
+msgid "Export PDF"
+msgstr ""
+
+#: src/Admin/OrgRolesPage.php:24
+#: src/Admin/OrgRolesPage.php:25
+#: src/Admin/OrgRolesPage.php:59
+msgid "Roles & Permissions"
+msgstr ""
+
+#: src/Admin/OrgRolesPage.php:63
+#: src/Admin/OrgUserManager.php:96
+msgid "Role"
+msgstr ""
+
+#: src/Admin/OrgRolesPage.php:63
+msgid "Permissions"
+msgstr ""
+
+#: src/Admin/OrgRolesPage.php:74
+msgid "Save Roles"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:16
+msgid "Org User Manager"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:17
+msgid "Org Users"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:63
+msgid "Organization Users"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:64
+msgid "Invite Users"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:75
+msgid "Send Invites"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:86
+msgid "Organization Members"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:89
+msgid "Bulk Action"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:90
+msgid "Update"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:91
+msgid "Suspend"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:92
+#: src/Frontend/MyEventsShortcode.php:57
+msgid "Delete"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:94
+#: src/Core/DirectoryManager.php:284
+msgid "Apply"
+msgstr ""
+
+#: src/Admin/OrgUserManager.php:103
+msgid "No users found."
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:17
+#: src/Admin/PaymentAnalyticsDashboard.php:56
+msgid "Payment Analytics"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:18
+msgid "Payments"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:66
+#: src/Admin/SettingsPage.php:507
+#: src/Frontend/EventFilter.php:72
+#: src/Frontend/EventListingShortcode.php:153
+#: templates/page-artist-directory.php:43
+#: templates/page-event-directory.php:51
+msgid "Filter"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:79
+msgid "Metric"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:80
+msgid "Value"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:85
+msgid "WooCommerce Revenue"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:89
+msgid "Stripe Revenue"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:93
+msgid "Active Subscriptions"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:97
+msgid "Churn Rate"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:101
+msgid "Monthly Revenue Growth"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:105
+msgid "Monthly Subscription Growth"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:109
+msgid "Payment Success Rate"
+msgstr ""
+
+#: src/Admin/PaymentAnalyticsDashboard.php:113
+msgid "Payment Failure Rate"
+msgstr ""
+
+#: src/Admin/PaymentReportsPage.php:16
+#: src/Admin/PaymentReportsPage.php:17
+#: src/Admin/PaymentReportsPage.php:48
+msgid "Payment Reports"
+msgstr ""
+
+#: src/Admin/PendingSubmissionsPage.php:15
+#: src/Admin/PendingSubmissionsPage.php:33
+msgid "Pending Submissions"
+msgstr ""
+
+#: src/Admin/PendingSubmissionsPage.php:16
+msgid "Pending"
+msgstr ""
+
+#: src/Admin/PendingSubmissionsPage.php:34
+#: src/Admin/SettingsPage.php:520
+#: src/Frontend/MyEventsShortcode.php:70
+msgid "Actions"
+msgstr ""
+
+#: src/Admin/PendingSubmissionsPage.php:37
+msgid "No pending submissions."
+msgstr ""
+
+#: src/Admin/PendingSubmissionsPage.php:54
+msgid "Are you sure?"
+msgstr ""
+
+#: src/Admin/PostStatusRejected.php:17
+msgctxt "post"
+msgid "Rejected"
+msgstr ""
+
+#: src/Admin/PostStatusRejected.php:22
+#, php-format
+msgid "Rejected <span class=\"count\">(%s)</span>"
+msgid_plural "Rejected <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/PostStatusRejected.php:30
+#: src/Admin/PostStatusRejected.php:47
+msgid "Rejected"
 msgstr ""
 
 #: src/Admin/ProfileLinkRequestAdmin.php:27
@@ -115,46 +1703,921 @@ msgstr ""
 msgid "Link Requests"
 msgstr ""
 
-#: src/Admin/ProfileLinkRequestAdmin.php:39
-msgid "User"
-msgstr ""
-
 #: src/Admin/ProfileLinkRequestAdmin.php:40
 msgid "Requested Org/Artist"
 msgstr ""
 
-#: src/Core/AdminDashboard.php:14
-#: src/Core/AdminDashboard.php:15
-#: src/Core/SettingsPage.php:16
-msgid "ArtPulse"
+#: src/Admin/QuickStartGuide.php:19
+#: src/Admin/QuickStartGuide.php:20
+msgid "Quick Start"
 msgstr ""
 
-#: src/Core/AdminDashboard.php:24
-#: src/Core/AdminDashboard.php:25
-#: src/Core/PostTypeRegistrar.php:23
-msgid "Events"
+#: src/Admin/QuickStartGuide.php:36
+msgid "ArtPulse Quick Start"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:39
+msgid "Admin Guide"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:41
+msgid "Install and configure settings"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:42
+msgid "Import or export data via CSV"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:43
+msgid "Manage members and events"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:46
+#: src/Admin/QuickStartGuide.php:59
+msgid "Open Full Guide"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:53
+msgid "Member Guide"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:55
+msgid "Create your profile and register artworks"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:56
+msgid "Submit events for promotion"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:57
+msgid "Browse the calendar and upgrade when ready"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:68
+#: src/Admin/ReleaseNotes.php:60
+#: src/Frontend/EventCalendarShortcode.php:75
+#: templates/widgets/webhooks.php:13
+msgid "Close"
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:83
+#, php-format
+msgid "Welcome to ArtPulse! Visit the %sQuick Start Guide%s."
+msgstr ""
+
+#: src/Admin/QuickStartGuide.php:83
+#: src/Core/UserDashboardManager.php:861
+msgid "Dismiss"
+msgstr ""
+
+#: src/Admin/ReminderManager.php:69
+msgid "Event Reminder"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:28
+msgid "General"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:29
+msgid "Location APIs"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:30
+#: src/Admin/SettingsPage.php:570
+msgid "Import/Export"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:31
+msgid "Config Backup"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:32
+#: src/Admin/ShortcodePages.php:15
+#: src/Admin/ShortcodePages.php:16
+#: src/Admin/ShortcodePages.php:165
+msgid "Shortcode Pages"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:33
+msgid "Search"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:34
+msgid "Email Delivery"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:35
+msgid "Updates"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:39
+msgid "Basic Member Fee ($)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:40
+msgid "Monthly cost for Basic members. Leave blank to disable."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:44
+msgid "Pro Artist Fee ($)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:45
+msgid "Subscription price for Pro Artists."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:49
+msgid "Organization Fee ($)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:50
+msgid "Fee charged to organizations."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:54
+msgid "Currency (ISO)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:55
+msgid "3-letter currency code (e.g., USD, EUR, GBP)."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:59
+msgid "Enable Stripe Integration"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:60
+msgid "Enable Stripe to manage payments and subscriptions."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:64
+msgid "Stripe Publishable Key"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:65
+msgid "Used for client-side Stripe operations."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:69
+msgid "Stripe Secret Key"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:70
+msgid "Used for secure server-side API calls to Stripe."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:74
+msgid "Stripe Webhook Secret"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:75
+msgid "Secret used to verify webhook calls from Stripe."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:79
+msgid "Enable WooCommerce Integration"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:80
+msgid "Use WooCommerce products for membership purchases."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:84
+msgid "Payment Metrics Cache (minutes)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:85
+msgid "How long to cache payment analytics data."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:89
+msgid "Enable Service Worker"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:90
+msgid "Adds a service worker for basic offline caching."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:94
+msgid "OpenAI API Key"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:95
+msgid "Used for auto-tagging and summaries."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:99
+msgid "Enable Google Login"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:100
+msgid "Show Google button on the login form."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:104
+msgid "Enable Facebook Login"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:105
+msgid "Show Facebook button on the login form."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:109
+msgid "Enable Apple Login"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:110
+msgid "Show Apple button on the login form."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:114
+msgid "Enforce Two-Factor"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:115
+msgid "Require users to enable two-factor authentication before logging in."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:119
+msgid "Override Artist Membership"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:120
+msgid "Allow administrators to bypass membership requirements and fees for artists."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:124
+msgid "Override Organization Membership"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:125
+msgid "Allow administrators to bypass membership requirements and fees for organizations."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:129
+msgid "Override Member Membership"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:130
+msgid "Allow administrators to bypass membership requirements and fees for regular members."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:134
+msgid "Auto-expire Past Events"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:135
+msgid "Move events to Draft when the end date has passed."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:139
+msgid "Enable Artworks for Sale"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:140
+msgid "Allow artworks to be marked for sale."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:144
+msgid "Disable Plugin Styles"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:145
+msgid "Do not load ArtPulse CSS on the frontend."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:149
+msgid "Default RSVP Limit"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:150
+msgid "Pre-filled limit for new events."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:154
+msgid "Minimum RSVP Limit"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:155
+msgid "Lowest allowed RSVP limit."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:159
+msgid "Maximum RSVP Limit"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:160
+msgid "Highest allowed RSVP limit."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:164
+msgid "Enable Waitlists"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:165
+msgid "Allow events to use waitlists."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:169
+msgid "Default Email Template"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:170
+msgid "HTML with placeholders like {{content}}"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:174
+msgid "Keep Data on Uninstall"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:175
+msgid "Preserve settings and custom tables when removing the plugin."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:186
+msgid "Search Provider"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:187
+msgid "Select Algolia or ElasticPress."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:190
+msgid "None"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:196
+msgid "Algolia App ID"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:197
+msgid "Your Algolia application ID."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:201
+msgid "Algolia API Key"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:202
+msgid "Search-only API key."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:206
+msgid "ElasticPress Host"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:207
+msgid "Elasticsearch endpoint URL."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:217
+msgid "Geonames Username"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:218
+msgid "Username for querying the Geonames API."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:222
+msgid "Google Places API Key"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:223
+msgid "Key for Google Places requests."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:233
+msgid "Email Method"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:242
+msgid "Mailgun API Key"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:246
+msgid "Mailgun Domain"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:250
+msgid "SendGrid API Key"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:254
+msgid "Mailchimp API Key"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:258
+msgid "Mailchimp List ID"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:262
+msgid "From Name"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:266
+msgid "From Address"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:276
+#: templates/payouts.php:9
+msgid "Update Method"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:279
+msgid "Auto-detect"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:280
+msgid "ZIP download"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:281
+msgid "Git pull"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:285
+msgid "GitHub Repo (owner/repo)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:289
+msgid "Repository URL"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:290
+msgid "GitHub repository to pull updates from."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:294
+msgid "Branch/Release"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:295
+msgid "Branch or release to track."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:300
+msgid "Personal access token for private repos."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:304
+msgid "Auto-Update"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:305
+msgid "Check and apply updates daily."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:326
+#: src/Admin/SettingsPage.php:327
+#: templates/widgets/account-tools.php:13
+#: templates/widgets/events.php:9
+#: templates/widgets/favorites.php:30
+#: templates/widgets/local-events.php:9
+#: templates/widgets/membership.php:16
+#: templates/widgets/messages.php:9
+#: templates/widgets/my-events.php:15
+#: templates/widgets/notifications.php:9
+#: templates/widgets/rsvps.php:9
+#: templates/widgets/support-history.php:9
+#: templates/widgets/upgrade.php:15
+msgid "Settings"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:334
+#: src/Admin/SettingsPage.php:335
+msgid "Members"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:497
+msgid "ArtPulse Members"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:500
+msgid "Search users..."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:502
+msgid "All Levels"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:515
+msgid "Level"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:516
+msgid "Submissions"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:518
+msgid "Registered At"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:519
+#: src/Core/UserDashboardManager.php:67
+#: src/Frontend/UserProfileShortcode.php:86
+msgid "Expires"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:540
+msgid "View"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:543
+msgid "Reset Password"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:550
+msgid "No members found."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:586
+msgid "Webhook simulated successfully."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:590
+msgid "Webhook log cleared."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:641
+msgid "System Status"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:643
+msgid "Webhook Status:"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:645
+msgid "Last Webhook Event:"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:647
+msgid "Received At:"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:650
+msgid "Webhook Event Log"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:654
+msgid "Timestamp"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:655
+#: src/Taxonomies/TaxonomiesRegistrar.php:62
+msgid "Event Type"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:661
+msgid "No webhook events logged."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:675
+msgid "Simulate Webhook Event"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:679
+msgid "Clear Webhook Log"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:779
+msgid "This page requires JavaScript to manage dashboard widgets."
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:39
+msgid "Register"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:41
+msgid "Member Dashboard"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:42
+#: templates/widgets/membership.php:14
+msgid "Edit Profile"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:43
+#: src/Core/UserDashboardManager.php:72
+msgid "Submit Organization"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:44
+msgid "Submit Artist"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:45
+#: src/Frontend/OrganizationDashboardShortcode.php:131
+msgid "Organization Dashboard"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:46
+#: src/Frontend/ArtistDashboardShortcode.php:46
+msgid "Artist Dashboard"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:47
+msgid "Submit Event"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:48
+msgid "Portfolio Builder"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:52
+msgid "Membership Account"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:53
+msgid "Membership Purchase"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:54
+msgid "User Profile"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:55
+msgid "Events List"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:56
+msgid "Event Calendar"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:57
+msgid "Events Slider"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:58
+msgid "Event Comments"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:59
+msgid "Event Filter"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:60
+msgid "Event Listing"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:61
+msgid "Event Map"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:62
+msgid "Artists List"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:63
+msgid "Artworks List"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:64
+msgid "Event Directory"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:65
+msgid "Artist Directory"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:66
+msgid "Artwork Directory"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:67
+msgid "Organization Directory"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:68
+msgid "Organization Event Form"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:69
+msgid "Legacy Directory"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:70
+msgid "Organizations List"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:71
+msgid "Submission Form"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:72
+msgid "Edit Event"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:73
+msgid "Filtered List"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:74
+msgid "Edit Organization Profile"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:75
+msgid "Organization Profile"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:76
+msgid "Artist Profile Form"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:77
+msgid "Collection Detail"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:78
+msgid "Collections Grid"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:79
+msgid "Competition Dashboard"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:80
+msgid "Event Chat"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:81
+#: assets/js/favorite-portfolio-block.js:5
+msgid "Favorite Portfolio"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:82
+msgid "Favorites Analytics"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:83
+msgid "Messages Inbox"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:84
+msgid "RSVP Dashboard"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:85
+#: templates/payouts.php:5
+msgid "Payouts"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:86
+msgid "Recommendations"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:87
+msgid "Render UI"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:88
+#: src/Admin/SpotlightManager.php:16
+#: src/Admin/SpotlightPostType.php:20
+#: templates/widgets/widget-for-you.php:26
+#: templates/widgets/widget-spotlights.php:10
+msgid "Spotlights"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:151
+msgid "Pages created."
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:156
+msgid "Pages enabled."
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:161
+msgid "Pages disabled."
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:169
+msgid "Select Shortcodes"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:176
+msgid "Create Pages"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:180
+msgid "Enable Pages"
+msgstr ""
+
+#: src/Admin/ShortcodePages.php:181
+msgid "Disable Pages"
+msgstr ""
+
+#: src/Admin/SpotlightManager.php:15
+#: src/Admin/SpotlightManager.php:50
+#: assets/js/spotlight-block.js:6
+msgid "Artist Spotlights"
+msgstr ""
+
+#: src/Admin/SpotlightManager.php:39
+msgid "Spotlights updated."
+msgstr ""
+
+#: src/Admin/SpotlightManager.php:53
+#: src/Core/UserDashboardManager.php:860
+msgid "Start"
+msgstr ""
+
+#: src/Admin/SpotlightManager.php:53
+msgid "End"
+msgstr ""
+
+#: src/Admin/SpotlightManager.php:66
+msgid "Save Spotlights"
+msgstr ""
+
+#: src/Admin/SpotlightPostType.php:68
+msgid "Visible To Roles"
+msgstr ""
+
+#: src/Admin/SpotlightPostType.php:69
+msgid "Visibility Schedule"
+msgstr ""
+
+#: src/Admin/SpotlightPostType.php:70
+msgid "Pin Spotlight"
+msgstr ""
+
+#: src/Admin/SpotlightPostType.php:71
+msgid "Call to Action"
+msgstr ""
+
+#: src/Admin/SpotlightPostType.php:103
+msgid "Pin this spotlight"
+msgstr ""
+
+#: src/Admin/SpotlightPostType.php:113
+msgid "Button Text"
+msgstr ""
+
+#: src/Admin/SpotlightPostType.php:115
+msgid "URL"
+msgstr ""
+
+#: src/Admin/SpotlightPostType.php:118
+msgid "Open in new tab"
+msgstr ""
+
+#: src/Admin/UpdatesTab.php:108
+#: src/Admin/UpdatesTab.php:111
+#: src/Admin/UpdatesTab.php:190
+#: src/Admin/UpdatesTab.php:193
+msgid "Unauthorized"
+msgstr ""
+
+#: src/Admin/UpdatesTab.php:333
+msgid "Manual Update"
+msgstr ""
+
+#: src/Admin/UpdatesTab.php:337
+msgid "Check for Updates"
+msgstr ""
+
+#: src/Admin/UpdatesTab.php:343
+msgid "Update Now"
+msgstr ""
+
+#: src/Admin/UpdatesTab.php:349
+msgid "Last Checked:"
+msgstr ""
+
+#: src/Admin/UpdatesTab.php:352
+msgid "Last Updated:"
+msgstr ""
+
+#: src/Blocks/RelatedItemsSelectorBlock.php:87
+msgid "No related items selected."
+msgstr ""
+
+#: src/Blocks/TaxonomyFilterBlock.php:64
+#: templates/salient/content-portfolio-archive.php:77
+msgid "No posts found."
+msgstr ""
+
+#: src/Community/UnifiedInboxController.php:104
+#: src/Core/ArtistDashboardHome.php:90
+#: src/Rest/RsvpRestController.php:214
+#, php-format
+msgid "New RSVP for \"%s\""
+msgstr ""
+
+#: src/Community/UnifiedInboxController.php:104
+msgid "New RSVP"
 msgstr ""
 
 #: src/Core/AdminDashboard.php:31
 #: src/Core/AdminDashboard.php:32
-#: src/Core/PostTypeRegistrar.php:28
+#: src/Core/PostTypeRegistrar.php:29
+#: src/Core/UserDashboardManager.php:78
 msgid "Artists"
-msgstr ""
-
-#: src/Core/AdminDashboard.php:38
-#: src/Core/AdminDashboard.php:39
-#: src/Core/PostTypeRegistrar.php:33
-msgid "Artworks"
 msgstr ""
 
 #: src/Core/AdminDashboard.php:45
 #: src/Core/AdminDashboard.php:46
-#: src/Core/PostTypeRegistrar.php:38
+#: src/Core/PostTypeRegistrar.php:67
 msgid "Organizations"
-msgstr ""
-
-#: src/Core/AdminDashboard.php:54
-msgid "ArtPulse Dashboard"
 msgstr ""
 
 #: src/Core/AdminDashboard.php:55
@@ -162,6 +2625,7 @@ msgid "Quick links to manage Events, Artists, Artworks, and Organizations."
 msgstr ""
 
 #: src/Core/AdminDashboard.php:57
+#: templates/widgets/rsvp-stats.php:17
 msgid "Manage Events"
 msgstr ""
 
@@ -183,6 +2647,8 @@ msgid "ArtPulse Analytics"
 msgstr ""
 
 #: src/Core/AnalyticsDashboard.php:22
+#: src/Frontend/OrganizationDashboardShortcode.php:140
+#: src/Frontend/OrganizationDashboardShortcode.php:336
 msgid "Analytics"
 msgstr ""
 
@@ -190,24 +2656,90 @@ msgstr ""
 msgid "Please enable and configure your Analytics Dashboard Embed URL on the ArtPulse Settings page first."
 msgstr ""
 
-#: src/Core/DirectoryManager.php:109
+#: src/Core/ArtistDashboardHome.php:89
+#, php-format
+msgid "New favorite on \"%s\""
+msgstr ""
+
+#: src/Core/ArtworkWooSync.php:54
+msgid "Tracking Provider"
+msgstr ""
+
+#: src/Core/ArtworkWooSync.php:59
+msgid "Tracking Number"
+msgstr ""
+
+#: src/Core/ArtworkWooSync.php:92
+#, php-format
+msgid "Tracking: %s %s"
+msgstr ""
+
+#: src/Core/ArtworkWooSync.php:94
+#, php-format
+msgid "Artwork %s purchased."
+msgstr ""
+
+#: src/Core/ArtworkWooSync.php:95
+msgid "Artwork Sold"
+msgstr ""
+
+#: src/Core/ArtworkWooSync.php:96
+msgid "Purchase Complete"
+msgstr ""
+
+#: src/Core/DirectoryManager.php:255
 msgid "Filter by Event Type"
 msgstr ""
 
-#: src/Core/DirectoryManager.php:112
+#: src/Core/DirectoryManager.php:259
+#: src/Core/DirectoryManager.php:260
+msgid "Region"
+msgstr ""
+
+#: src/Core/DirectoryManager.php:265
+msgid "All"
+msgstr ""
+
+#: src/Core/DirectoryManager.php:273
+#: src/Core/PostTypeRegistrar.php:160
+#: src/Frontend/ArtistDashboardShortcode.php:73
+msgid "Medium"
+msgstr ""
+
+#: src/Core/DirectoryManager.php:275
+#: src/Taxonomies/TaxonomiesRegistrar.php:40
+msgid "Style"
+msgstr ""
+
+#: src/Core/DirectoryManager.php:280
+#: src/Core/DirectoryManager.php:281
+#: src/Frontend/EventFilter.php:53
+msgid "Keyword"
+msgstr ""
+
+#: src/Core/DirectoryManager.php:282
 msgid "Limit"
 msgstr ""
 
-#: src/Core/DirectoryManager.php:114
-msgid "Apply"
-msgstr ""
-
-#: src/Core/DocumentationManager.php:28
+#: src/Core/DocumentationManager.php:29
 msgid "Admin Help"
 msgstr ""
 
-#: src/Core/DocumentationManager.php:47
+#: src/Core/DocumentationManager.php:48
 msgid "Member Help"
+msgstr ""
+
+#: src/Core/DocumentGenerator.php:26
+msgid "Ticket Code:"
+msgstr ""
+
+#: src/Core/EventTemplateManager.php:42
+#: src/Core/PostTypeRegistrar.php:72
+msgid "Event Templates"
+msgstr ""
+
+#: src/Core/FeedbackManager.php:80
+msgid "Description required."
 msgstr ""
 
 #: src/Core/FrontendMembershipPage.php:32
@@ -219,35 +2751,81 @@ msgid "My Membership"
 msgstr ""
 
 #: src/Core/FrontendMembershipPage.php:56
+#: src/Core/UserDashboardManager.php:68
+#: src/Frontend/UserProfileShortcode.php:55
 msgid "Never"
 msgstr ""
 
-#: src/Core/MembershipManager.php:37
+#: src/Core/MembershipManager.php:21
+msgid "Default Email Privacy"
+msgstr ""
+
+#: src/Core/MembershipManager.php:22
+msgid "Public or private visibility for new user emails."
+msgstr ""
+
+#: src/Core/MembershipManager.php:28
+msgid "Default Location Privacy"
+msgstr ""
+
+#: src/Core/MembershipManager.php:29
+msgid "Public or private visibility for new user locations."
+msgstr ""
+
+#: src/Core/MembershipManager.php:99
 msgid "Welcome to ArtPulse – Free Membership"
 msgstr ""
 
-#: src/Core/MembershipManager.php:38
+#: src/Core/MembershipManager.php:100
 msgid "Thanks for joining! You now have Free membership."
 msgstr ""
 
-#: src/Core/MembershipManager.php:133
+#: src/Core/MembershipManager.php:315
+#: src/Core/WooCommerceIntegration.php:78
 msgid "Your ArtPulse membership has been cancelled"
 msgstr ""
 
-#: src/Core/MembershipManager.php:134
+#: src/Core/MembershipManager.php:316
 msgid "Your subscription has ended or payment failed. You are now on Free membership."
 msgstr ""
 
-#: src/Core/MembershipManager.php:169
+#: src/Core/MembershipManager.php:452
 msgid "Your ArtPulse membership has expired"
 msgstr ""
 
-#: src/Core/MembershipManager.php:170
+#: src/Core/MembershipManager.php:453
 msgid "Your Pro membership has expired and you have been moved to Free level."
 msgstr ""
 
-#: src/Core/MetaBoxRegistrar.php:31
-msgid "Event Details"
+#: src/Core/MembershipNotifier.php:17
+msgid "Welcome to Pro Membership!"
+msgstr ""
+
+#: src/Core/MembershipNotifier.php:19
+#, php-format
+msgid ""
+"Hi %s,\n"
+"\n"
+"Your ArtPulse membership has been upgraded to Pro. Enjoy your new features!\n"
+"\n"
+"Thanks,\n"
+"ArtPulse Team"
+msgstr ""
+
+#: src/Core/MembershipNotifier.php:29
+msgid "Your ArtPulse membership is expiring soon"
+msgstr ""
+
+#: src/Core/MembershipNotifier.php:31
+#, php-format
+msgid ""
+"Hi %s,\n"
+"\n"
+"Just a heads up that your Pro membership will expire on %s.\n"
+"Please renew to avoid interruption.\n"
+"\n"
+"Thanks,\n"
+"ArtPulse"
 msgstr ""
 
 #: src/Core/MetaBoxRegistrar.php:56
@@ -255,173 +2833,1276 @@ msgid "Event Date:"
 msgstr ""
 
 #: src/Core/MetaBoxRegistrar.php:62
-#: templates/salient/content-artpulse_event.php:44
+#: src/Frontend/UserProfileShortcode.php:108
+#: templates/salient/content-portfolio-archive.php:67
+#: templates/salient/content-portfolio.php:57
 msgid "Location:"
 msgstr ""
 
-#: src/Core/PostTypeRegistrar.php:67
-msgid "Event Types"
+#: src/Core/Plugin.php:365
+msgid "Current Balance"
 msgstr ""
 
-#: src/Core/PostTypeRegistrar.php:79
-msgid "Medium"
+#: src/Core/Plugin.php:366
+msgid "No payouts found."
 msgstr ""
 
-#: src/Core/SettingsPage.php:15
-#: src/Core/SettingsPage.php:141
-msgid "ArtPulse Settings"
+#: src/Core/Plugin.php:367
+msgid "Settings updated."
 msgstr ""
 
-#: src/Core/SettingsPage.php:33
-msgid "Membership & Notifications"
+#: src/Core/Plugin.php:374
+#: src/Frontend/AccountSettingsPage.php:27
+msgid "Settings saved."
 msgstr ""
 
-#: src/Core/UserDashboardManager.php:114
-msgid "Please log in to view your dashboard."
+#: src/Core/Plugin.php:449
+msgid "Follow"
 msgstr ""
 
-#: src/Core/UserDashboardManager.php:118
-msgid "Your Membership"
+#: src/Core/Plugin.php:450
+msgid "Unfollow"
 msgstr ""
 
-#: src/Core/UserDashboardManager.php:120
-msgid "Your Content"
+#: src/Core/PortfolioManager.php:22
+msgid "Portfolios"
 msgstr ""
 
-#: src/Frontend/SubmissionForms.php:43
-msgid "Title*"
+#: src/Core/PortfolioManager.php:23
+#: src/Frontend/OrganizationDashboardShortcode.php:138
+#: src/Frontend/OrganizationDashboardShortcode.php:330
+msgid "Portfolio"
 msgstr ""
 
-#: src/Frontend/SubmissionForms.php:44
-msgid "Title is required"
+#: src/Core/PortfolioManager.php:24
+msgid "Add New"
 msgstr ""
 
-#: src/Frontend/SubmissionForms.php:47
-msgid "Date*"
+#: src/Core/PortfolioManager.php:25
+msgid "Add New Portfolio"
 msgstr ""
 
-#: src/Frontend/SubmissionForms.php:48
-msgid "Date is required"
+#: src/Core/PortfolioManager.php:26
+msgid "Edit Portfolio"
 msgstr ""
 
-#: src/Frontend/SubmissionForms.php:51
-msgid "Location*"
+#: src/Core/PortfolioManager.php:27
+msgid "New Portfolio"
 msgstr ""
 
-#: src/Frontend/SubmissionForms.php:52
-msgid "Location is required"
+#: src/Core/PortfolioManager.php:28
+msgid "View Portfolio"
 msgstr ""
 
-#: src/Frontend/SubmissionForms.php:55
-msgid "Images (max 5)"
+#: src/Core/PortfolioManager.php:29
+msgid "All Portfolios"
 msgstr ""
 
-#: src/Frontend/SubmissionForms.php:59
-msgid "Submit"
+#: src/Core/PortfolioManager.php:44
+msgid "Portfolio Categories"
 msgstr ""
 
-#: templates/salient/content-artpulse_artist.php:15
-msgid "Biography:"
+#: src/Core/PortfolioManager.php:54
+msgid "External Link"
 msgstr ""
 
-#: templates/salient/content-artpulse_artist.php:18
-msgid "Organization ID:"
+#: src/Core/PortfolioManager.php:55
+msgid "Visibility"
 msgstr ""
 
-#: templates/salient/content-artpulse_artwork.php:16
-msgid "Medium:"
+#: src/Core/PortfolioManager.php:79
+#: src/Frontend/ProfileEditShortcode.php:104
+#: src/Frontend/ProfileEditShortcode.php:111
+msgid "Public"
 msgstr ""
 
-#: templates/salient/content-artpulse_artwork.php:19
-msgid "Dimensions:"
+#: src/Core/PortfolioManager.php:80
+msgid "Private (admin only)"
 msgstr ""
 
-#: templates/salient/content-artpulse_artwork.php:22
-msgid "Materials:"
+#: src/Core/PortfolioManager.php:81
+msgid "Members Only"
 msgstr ""
 
-#: templates/salient/content-artpulse_org.php:15
-msgid "Address:"
+#: src/Core/PostTypeRegistrar.php:35
+msgid "Artist Upgrade Requests"
 msgstr ""
 
-#: templates/salient/content-artpulse_org.php:18
-msgid "Website:"
+#: src/Core/PostTypeRegistrar.php:43
+msgid "Profile Link Requests"
 msgstr ""
 
-#: templates/salient/content-artpulse_event.php:41
-msgid "Date:"
+#: src/Core/PostTypeRegistrar.php:52
+msgid "Profile Links"
 msgstr ""
 
-#: scripts/src/Blocks/Account/block.json
-msgctxt "block title"
-msgid "ArtPulse My Membership"
+#: src/Core/PostTypeRegistrar.php:80
+msgid "Reviews"
 msgstr ""
 
-#: scripts/src/Blocks/Directory/block.json
-msgctxt "block title"
-msgid "ArtPulse Directory"
+#: src/Core/PostTypeRegistrar.php:86
+msgid "Collections"
 msgstr ""
 
-#: src/Core/UserDashboardManager.php
+#: src/Core/PostTypeRegistrar.php:92
+msgid "Forum Threads"
+msgstr ""
+
+#: src/Core/PostTypeRegistrar.php:98
+msgid "Competitions"
+msgstr ""
+
+#: src/Core/PurchaseShortcode.php:32
+#, php-format
+msgid "Purchase %s membership"
+msgstr ""
+
+#: src/Core/PurchaseShortcode.php:35
+msgid "Coupon code"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php:66
+#: src/Frontend/UserProfileShortcode.php:83
+msgid "Membership Level"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php:69
+msgid "Request Artist Upgrade"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php:70
+msgid "Artist upgrade request pending."
+msgstr ""
+
+#: src/Core/UserDashboardManager.php:71
+msgid "Request submitted"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php:73
+msgid "Upgrade to Organization"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php:74
+msgid "Organization upgrade request pending."
+msgstr ""
+
+#: src/Core/UserDashboardManager.php:75
+msgid "Pause Membership"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php:76
+msgid "Resume Membership"
+msgstr ""
+
+#: src/Core/UserDashboardManager.php:80
+#: templates/widgets/membership.php:7
 msgid "Subscription Status"
 msgstr ""
 
-#: src/Core/UserDashboardManager.php
+#: src/Core/UserDashboardManager.php:81
+#: src/Frontend/OrganizationDashboardShortcode.php:155
+#: templates/partials/dashboard-nav.php:19
+#: templates/widgets/next-payment.php:8
 msgid "Next Payment"
 msgstr ""
 
-#: src/Core/UserDashboardManager.php
+#: src/Core/UserDashboardManager.php:82
+#: src/Frontend/OrganizationDashboardShortcode.php:157
+#: templates/widgets/transactions.php:7
 msgid "Recent Transactions"
 msgstr ""
 
-#: src/Core/UserDashboardManager.php
+#: src/Core/UserDashboardManager.php:83
 msgid "No transactions found."
 msgstr ""
 
-#: src/Frontend/OrganizationDashboardShortcode.php
-msgid "Use the <a href=\"%s\">Event Submission</a> page to submit a new event for admin approval."
+#: src/Core/UserDashboardManager.php:84
+#: templates/widgets/account-tools.php:9
+msgid "Export JSON"
 msgstr ""
 
-#: src/Admin/SettingsPage.php
-msgid "Enable Artworks for Sale"
+#: src/Core/UserDashboardManager.php:86
+#: templates/widgets/account-tools.php:11
+msgid "Delete Account"
 msgstr ""
 
-#: src/Admin/SettingsPage.php
-msgid "Allow artworks to be marked for sale."
-msgstr ""
-
-#: src/Core/UserDashboardManager.php
+#: src/Core/UserDashboardManager.php:87
 msgid "Reset dashboard layout?"
 msgstr ""
 
-#: assets/js/admin-dashboard-widgets-editor.jsx
-msgid "Available Widgets"
+#: src/Core/UserDashboardManager.php:219
+#: src/Core/UserDashboardManager.php:482
+msgid "You do not have permission to view this dashboard."
 msgstr ""
 
-#: assets/js/admin-dashboard-widgets-editor.jsx
-msgid "Active Widgets"
+#: src/Core/UserDashboardManager.php:773
+msgid "Please log in to view your dashboard."
 msgstr ""
 
-#: assets/js/admin-dashboard-widgets-editor.jsx
-msgid "Select Role"
+#: src/Core/UserDashboardManager.php:859
+msgid "Get started with a quick tour."
 msgstr ""
 
-#: assets/js/admin-dashboard-widgets-editor.jsx
-msgid "Save"
+#: src/Core/WooCommerceIntegration.php:79
+msgid "We detected a refund or cancellation. You have been moved to Free membership."
 msgstr ""
 
-#: assets/js/admin-dashboard-widgets-editor.jsx
-msgid "Preview"
+#: src/Core/WooCommerceIntegration.php:106
+#, php-format
+msgid "Your ArtPulse membership is now %s"
 msgstr ""
 
-#: assets/js/admin-dashboard-widgets-editor.jsx
-msgid "Reset to Default"
+#: src/Core/WooCommerceIntegration.php:108
+#, php-format
+msgid "Thank you! Your membership level is set to %s and expires on %s."
 msgstr ""
 
-#: assets/js/admin-dashboard-widgets-editor.jsx
-msgid "Widget order saved."
+#: src/Engagement/DigestMailer.php:77
+msgid "Your ArtPulse Digest"
 msgstr ""
 
-#: assets/js/admin-dashboard-widgets-editor.jsx
-msgid "Error saving widget order."
+#: src/Engagement/DigestMailer.php:84
+msgid "Unsubscribe"
+msgstr ""
+
+#: src/Engagement/DigestMailer.php:232
+msgid "ArtPulse Digest"
+msgstr ""
+
+#: src/Engagement/DigestMailer.php:236
+#: src/Engagement/DigestMailer.php:237
+msgid "Here are upcoming events you may be interested in:"
+msgstr ""
+
+#: src/Engagement/DigestMailer.php:256
+msgid "No upcoming events found."
+msgstr ""
+
+#: src/Frontend/AccountSettingsPage.php:34
+msgid "Please log in to manage your account."
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:20
+msgid "You must be logged in to view this dashboard."
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:51
+msgid "Your Artworks"
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:66
+msgid "Upload New Artwork"
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:77
+msgid "Dimensions"
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:81
+msgid "Materials"
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:88
+msgid "For Sale?"
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:93
+msgid "Price"
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:97
+msgid "Buy Link"
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:103
+#: src/Frontend/OrganizationDashboardShortcode.php:248
+#: src/Frontend/OrganizationSubmissionForm.php:50
+#: src/Frontend/SubmissionForms.php:113
+#: src/Frontend/SubmitArtistForm.php:40
+msgid "Images (max 5)"
+msgstr ""
+
+#: src/Frontend/ArtistDashboardShortcode.php:109
+#: src/Frontend/OrganizationSubmissionForm.php:56
+#: src/Frontend/SubmissionForms.php:119
+#: src/Frontend/SubmitArtistForm.php:46
+msgid "Submit"
+msgstr ""
+
+#: src/Frontend/ArtistProfileFormShortcode.php:21
+msgid "You must be logged in to edit your profile."
+msgstr ""
+
+#: src/Frontend/ArtistProfileFormShortcode.php:36
+#: src/Frontend/ArtistProfileFormShortcode.php:132
+msgid "Profile updated successfully."
+msgstr ""
+
+#: src/Frontend/ArtistProfileFormShortcode.php:42
+msgid "Bio"
+msgstr ""
+
+#: src/Frontend/ArtistProfileFormShortcode.php:46
+msgid "Profile Picture"
+msgstr ""
+
+#: src/Frontend/ArtistProfileFormShortcode.php:69
+#: src/Frontend/OrgProfileEditShortcode.php:56
+#: src/Frontend/SubmissionForms.php:79
+msgid "State/Province"
+msgstr ""
+
+#: src/Frontend/ArtistProfileFormShortcode.php:78
+msgid "Save Profile"
+msgstr ""
+
+#: src/Frontend/CollectionsShortcode.php:41
+msgid "No collections found."
+msgstr ""
+
+#: src/Frontend/CompetitionDashboardShortcode.php:42
+msgid "Open Competitions"
+msgstr ""
+
+#: src/Frontend/CompetitionDashboardShortcode.php:46
+msgid "Results"
+msgstr ""
+
+#: src/Frontend/EditEventShortcode.php:264
+msgid "RSVP Analytics"
+msgstr ""
+
+#: src/Frontend/EditEventShortcode.php:266
+msgid "Conversion from page views:"
+msgstr ""
+
+#: src/Frontend/EditEventShortcode.php:267
+msgid "Total RSVPs:"
+msgstr ""
+
+#: src/Frontend/EditEventShortcode.php:268
+msgid "Attended:"
+msgstr ""
+
+#: src/Frontend/EditEventShortcode.php:269
+msgid "Waitlist:"
+msgstr ""
+
+#: src/Frontend/EditEventShortcode.php:270
+msgid "Favorites:"
+msgstr ""
+
+#: src/Frontend/EventChatShortcode.php:45
+msgid "Only attendees can post messages"
+msgstr ""
+
+#: src/Frontend/EventChatShortcode.php:48
+msgid "Please log in to chat."
+msgstr ""
+
+#: src/Frontend/EventFilter.php:57
+msgid "Category"
+msgstr ""
+
+#: src/Frontend/EventFilter.php:59
+#: src/Frontend/EventListingShortcode.php:148
+msgid "All Types"
+msgstr ""
+
+#: src/Frontend/EventFilter.php:64
+msgid "Tags"
+msgstr ""
+
+#: src/Frontend/EventFilter.php:66
+msgid "Any Price"
+msgstr ""
+
+#: src/Frontend/EventFilter.php:67
+#: src/Frontend/UserProfileShortcode.php:53
+msgid "Free"
+msgstr ""
+
+#: src/Frontend/EventFilter.php:68
+msgid "Paid"
+msgstr ""
+
+#: src/Frontend/EventFilter.php:70
+msgid "Lat,Lon"
+msgstr ""
+
+#: src/Frontend/EventFilter.php:71
+msgid "Radius"
+msgstr ""
+
+#: src/Frontend/EventFilter.php:192
+#: src/Frontend/EventListingShortcode.php:164
+#: templates/page-event-directory.php:64
+#: templates/salient/archive-artpulse_event.php:56
+msgid "No events found."
+msgstr ""
+
+#: src/Frontend/EventHelpers.php:16
+msgid "Cancel RSVP"
+msgstr ""
+
+#: src/Frontend/EventHelpers.php:16
+msgid "RSVP"
+msgstr ""
+
+#: src/Frontend/EventHelpers.php:34
+msgid "Remove favorite"
+msgstr ""
+
+#: src/Frontend/EventHelpers.php:34
+msgid "Add to favorites"
+msgstr ""
+
+#: src/Frontend/EventHelpers.php:49
+msgid "RSVP to this Event"
+msgstr ""
+
+#: src/Frontend/FeedbackWidget.php:29
+msgid "Thanks for your feedback!"
+msgstr ""
+
+#: src/Frontend/FeedbackWidget.php:44
+msgid "Give Feedback"
+msgstr ""
+
+#: src/Frontend/FeedbackWidget.php:50
+msgid "Type of Feedback"
+msgstr ""
+
+#: src/Frontend/FeedbackWidget.php:52
+msgid "Bug Report"
+msgstr ""
+
+#: src/Frontend/FeedbackWidget.php:53
+msgid "Feature Request"
+msgstr ""
+
+#: src/Frontend/FeedbackWidget.php:54
+msgid "General Feedback"
+msgstr ""
+
+#: src/Frontend/FeedbackWidget.php:58
+msgid "Email (optional)"
+msgstr ""
+
+#: src/Frontend/FeedbackWidget.php:61
+msgid "Send Feedback"
+msgstr ""
+
+#: src/Frontend/LoginShortcode.php:29
+#: src/Frontend/RegistrationShortcode.php:23
+msgid "You are already logged in."
+msgstr ""
+
+#: src/Frontend/LoginShortcode.php:38
+msgid "Username or Email"
+msgstr ""
+
+#: src/Frontend/LoginShortcode.php:42
+msgid "Password"
+msgstr ""
+
+#: src/Frontend/LoginShortcode.php:84
+msgid "Two-factor authentication is required."
+msgstr ""
+
+#: src/Frontend/LoginShortcode.php:96
+msgid "Login successful"
+msgstr ""
+
+#: src/Frontend/LoginShortcode.php:106
+#: src/Frontend/LoginShortcode.php:226
+msgid "Registration is currently disabled."
+msgstr ""
+
+#. translators: %d: minimum password length
+#: src/Frontend/LoginShortcode.php:154
+#: src/Frontend/LoginShortcode.php:275
+#, php-format
+msgid "Password must be at least %d characters long and include both letters and numbers."
+msgstr ""
+
+#: src/Frontend/LoginShortcode.php:162
+#: src/Frontend/LoginShortcode.php:283
+msgid "Passwords do not match."
+msgstr ""
+
+#: src/Frontend/LoginShortcode.php:209
+msgid "Registration successful. Redirecting to your dashboard…"
+msgstr ""
+
+#: src/Frontend/LoginShortcode.php:220
+msgid "Security check failed."
+msgstr ""
+
+#: src/Frontend/LogoutShortcode.php:31
+msgid "Log Out"
+msgstr ""
+
+#: src/Frontend/MessagesShortcode.php:28
+msgid "Please log in to view your messages."
+msgstr ""
+
+#: src/Frontend/MessagesShortcode.php:35
+msgid "Conversations"
+msgstr ""
+
+#: src/Frontend/MessagesShortcode.php:42
+#: src/Frontend/MessagesShortcode.php:62
+msgid "Message"
+msgstr ""
+
+#: src/Frontend/MessagesShortcode.php:44
+#: src/Frontend/MessagesShortcode.php:64
+msgid "Send"
+msgstr ""
+
+#: src/Frontend/MyEventsShortcode.php:54
+msgid "Bulk Actions"
+msgstr ""
+
+#: src/Frontend/MyEventsShortcode.php:55
+msgid "Close RSVPs"
+msgstr ""
+
+#: src/Frontend/MyEventsShortcode.php:56
+msgid "Duplicate"
+msgstr ""
+
+#: src/Frontend/MyEventsShortcode.php:58
+msgid "Export Attendees"
+msgstr ""
+
+#: src/Frontend/MyEventsShortcode.php:59
+msgid "Publish"
+msgstr ""
+
+#: src/Frontend/MyEventsShortcode.php:60
+msgid "Mark Draft"
+msgstr ""
+
+#: src/Frontend/MyEventsShortcode.php:67
+msgid "Event Title"
+msgstr ""
+
+#: src/Frontend/OrganizationDashboardShortcode.php:63
+msgid "Uncategorized"
+msgstr ""
+
+#: src/Frontend/OrganizationDashboardShortcode.php:136
+msgid "Billing"
+msgstr ""
+
+#: src/Frontend/OrganizationDashboardShortcode.php:143
+#: src/Frontend/OrganizationDashboardShortcode.php:347
+msgid "Profile"
+msgstr ""
+
+#: src/Frontend/OrganizationDashboardShortcode.php:162
+msgid "Organization Events"
+msgstr ""
+
+#: src/Frontend/OrganizationDashboardShortcode.php:164
+msgid "Add New Event"
+msgstr ""
+
+#: src/Frontend/OrganizationDashboardShortcode.php:168
+#, php-format
+msgid "Use the <a href=\"%s\">Event Submission</a> page to submit a new event for admin approval."
+msgstr ""
+
+#: src/Frontend/OrganizationDashboardShortcode.php:360
+#: templates/salient/content-artpulse_org.php:43
+msgid "Opening Hours"
+msgstr ""
+
+#: src/Frontend/OrganizationDashboardShortcode.php:363
+#: templates/salient/content-artpulse_org.php:47
+msgid "Closed"
+msgstr ""
+
+#: src/Frontend/OrgProfileEditShortcode.php:111
+msgid "Update Organization"
+msgstr ""
+
+#: src/Frontend/OrgPublicProfileShortcode.php:31
+msgid "Organization not found."
+msgstr ""
+
+#: src/Frontend/OrgPublicProfileShortcode.php:36
+msgid "Organization profile is private."
+msgstr ""
+
+#: src/Frontend/OrgPublicProfileShortcode.php:86
+msgid "Featured Events"
+msgstr ""
+
+#: src/Frontend/OrgRsvpDashboard.php:31
+msgid "No RSVPs yet"
+msgstr ""
+
+#: src/Frontend/PayoutsPage.php:23
+msgid "Please log in to view payouts."
+msgstr ""
+
+#: src/Frontend/ProfileEditShortcode.php:75
+msgid "Choose from Library"
+msgstr ""
+
+#: src/Frontend/ProfileEditShortcode.php:102
+msgid "Show Email"
+msgstr ""
+
+#: src/Frontend/ProfileEditShortcode.php:105
+#: src/Frontend/ProfileEditShortcode.php:112
+msgid "Private"
+msgstr ""
+
+#: src/Frontend/ProfileEditShortcode.php:109
+msgid "Show Location"
+msgstr ""
+
+#: src/Frontend/ShareButtons.php:23
+msgid "Check out this event:"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:51
+msgid "Title*"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:52
+msgid "Title is required"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:55
+msgid "Date*"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:56
+msgid "Date is required"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:59
+msgid "Start Date*"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:60
+msgid "Start date is required"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:75
+msgid "Country*"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:76
+msgid "Country is required"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:87
+msgid "Postcode"
+msgstr ""
+
+#: src/Frontend/SubmissionForms.php:103
+msgid "Event Banner"
+msgstr ""
+
+#: src/Frontend/SubmitArtistForm.php:31
+msgid "Organization ID"
+msgstr ""
+
+#: src/Frontend/UserProfileShortcode.php:105
+msgid "Email:"
+msgstr ""
+
+#: src/Frontend/UserProfileShortcode.php:113
+#, php-format
+msgid "Profile completeness: %s%%"
+msgstr ""
+
+#: src/Integration/SocialAutoPoster.php:28
+#: src/Integration/SocialAutoPoster.php:72
+msgid "Social Auto-Posting"
+msgstr ""
+
+#: src/Integration/SocialAutoPoster.php:78
+msgid "Enable"
+msgstr ""
+
+#: src/Integration/SocialAutoPoster.php:81
+msgid "API Key/Token:"
+msgstr ""
+
+#: src/Integration/SocialAutoPoster.php:86
+msgid "Page ID:"
+msgstr ""
+
+#: src/Integration/SocialAutoPoster.php:92
+msgid "Board Name/ID:"
+msgstr ""
+
+#: src/Integration/SocialAutoPoster.php:99
+msgid "Enable auto-posting for these post types:"
+msgstr ""
+
+#: src/Monetization/TicketManager.php:200
+#, php-format
+msgid "Your ticket code is %s"
+msgstr ""
+
+#: src/Monetization/TicketManager.php:204
+#, php-format
+msgid "Join here: %s"
+msgstr ""
+
+#: src/Monetization/TicketManager.php:213
+#, php-format
+msgid "Ticket for %s"
+msgstr ""
+
+#: src/Monetization/TicketManager.php:257
+#, php-format
+msgid "Access your event here: %s"
+msgstr ""
+
+#: src/Monetization/TicketManager.php:265
+#, php-format
+msgid "Access link for %s"
+msgstr ""
+
+#: src/Personalization/RecommendationEngine.php:110
+msgid "Based on your favorites"
+msgstr ""
+
+#: src/Personalization/RecommendationEngine.php:144
+msgid "Trending"
+msgstr ""
+
+#: src/Rest/RsvpRestController.php:206
+#, php-format
+msgid "RSVP Confirmation for \"%s\""
+msgstr ""
+
+#: src/Rest/RsvpRestController.php:207
+#, php-format
+msgid "Hi %s,\\n\\nYou have successfully RSVPed for \"%s\"."
+msgstr ""
+
+#: src/Rest/RsvpRestController.php:215
+#, php-format
+msgid "%s (%s) just RSVPed."
+msgstr ""
+
+#: src/Rest/RsvpRestController.php:438
+#, php-format
+msgid "Reminder for \"%s\""
+msgstr ""
+
+#: src/Rest/RsvpRestController.php:442
+msgid "This is a reminder for your upcoming event."
+msgstr ""
+
+#: src/Rest/RsvpRestController.php:468
+#, php-format
+msgid "Message regarding \"%s\""
+msgstr ""
+
+#: src/Rest/RsvpRestController.php:472
+msgid "Hello from your event organizer."
+msgstr ""
+
+#: src/Taxonomies/SpotlightCategory.php:10
+msgid "Spotlight Categories"
+msgstr ""
+
+#: src/Taxonomies/SpotlightCategory.php:11
+msgid "Spotlight Category"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:17
+#: src/Taxonomies/TaxonomiesRegistrar.php:25
+msgid "Artist Specialties"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:18
+msgid "Specialty"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:19
+msgid "Search Specialties"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:20
+msgid "All Specialties"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:21
+msgid "Edit Specialty"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:22
+msgid "Update Specialty"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:23
+msgid "Add New Specialty"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:24
+msgid "New Specialty Name"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:39
+#: src/Taxonomies/TaxonomiesRegistrar.php:47
+msgid "Artwork Styles"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:41
+msgid "Search Styles"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:42
+msgid "All Styles"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:43
+msgid "Edit Style"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:44
+msgid "Update Style"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:45
+msgid "Add New Style"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:46
+msgid "New Style Name"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:63
+msgid "Search Event Types"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:64
+msgid "All Event Types"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:65
+msgid "Edit Event Type"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:66
+msgid "Update Event Type"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:67
+msgid "Add New Event Type"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:68
+msgid "New Event Type Name"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:83
+#: src/Taxonomies/TaxonomiesRegistrar.php:91
+msgid "Organization Categories"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:84
+msgid "Organization Category"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:85
+msgid "Search Organization Categories"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:86
+msgid "All Organization Categories"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:87
+msgid "Edit Organization Category"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:88
+msgid "Update Organization Category"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:89
+msgid "Add New Organization Category"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:90
+msgid "New Organization Category Name"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:105
+#: src/Taxonomies/TaxonomiesRegistrar.php:113
+msgid "Project Stages"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:106
+msgid "Project Stage"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:107
+msgid "Search Stages"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:108
+msgid "All Stages"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:109
+msgid "Edit Stage"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:110
+msgid "Update Stage"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:111
+msgid "Add New Stage"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:112
+msgid "New Stage Name"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:127
+msgid "Reviewed Types"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:128
+msgid "Reviewed Type"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:140
+msgid "Exhibition"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:141
+msgid "Opening Reception"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:142
+msgid "Workshop"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:143
+msgid "Lecture"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:144
+msgid "Performance"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:145
+msgid "Screening"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:146
+msgid "Tour"
+msgstr ""
+
+#: src/Taxonomies/TaxonomiesRegistrar.php:147
+msgid "Other"
+msgstr ""
+
+#: templates/account-settings.php:2
+msgid "Account Settings"
+msgstr ""
+
+#: templates/account-settings.php:6
+msgid "Email Notifications"
+msgstr ""
+
+#: templates/account-settings.php:10
+msgid "Push Notifications"
+msgstr ""
+
+#: templates/account-settings.php:14
+msgid "SMS Notifications"
+msgstr ""
+
+#: templates/collection-card.php:31
+#, php-format
+msgid "Curated by %s"
+msgstr ""
+
+#: templates/event-card.php:71
+msgid "Venue:"
+msgstr ""
+
+#: templates/event-card.php:74
+#: templates/salient/content-artpulse_org.php:16
+#: templates/salient/content-portfolio-archive.php:30
+msgid "Address:"
+msgstr ""
+
+#: templates/event-card.php:77
+msgid "Starts:"
+msgstr ""
+
+#: templates/event-card.php:80
+msgid "Ends:"
+msgstr ""
+
+#: templates/event-card.php:83
+msgid "Type:"
+msgstr ""
+
+#: templates/event-card.php:86
+msgid "Organizer:"
+msgstr ""
+
+#: templates/event-card.php:92
+msgid "RSVP'd"
+msgstr ""
+
+#: templates/event-card.php:95
+msgid "Favorited"
+msgstr ""
+
+#: templates/onboarding-artist.php:7
+msgid "Welcome to ArtPulse!"
+msgstr ""
+
+#: templates/onboarding-artist.php:8
+msgid "Let's complete your profile to get started."
+msgstr ""
+
+#: templates/onboarding-artist.php:10
+msgid "Next"
+msgstr ""
+
+#: templates/onboarding-artist.php:11
+msgid "Skip"
+msgstr ""
+
+#: templates/page-artist-directory.php:57
+msgid "No artists found."
+msgstr ""
+
+#: templates/partials/content-artpulse-item.php:44
+msgid "For Sale"
+msgstr ""
+
+#: templates/partials/dashboard-empty-state.php:6
+msgid "Nothing to display."
+msgstr ""
+
+#: templates/partials/dashboard-generic.php:7
+msgid "Access denied"
+msgstr ""
+
+#: templates/partials/dashboard-generic.php:54
+msgid "Dashboard layout reset!"
+msgstr ""
+
+#: templates/partials/dashboard-generic.php:59
+msgid "Preset layout loaded."
+msgstr ""
+
+#: templates/partials/dashboard-generic.php:85
+msgid "Dark Mode"
+msgstr ""
+
+#: templates/partials/dashboard-nav.php:22
+msgid "Transactions"
+msgstr ""
+
+#: templates/partials/dashboard-nav.php:32
+msgid "Content"
+msgstr ""
+
+#: templates/partials/dashboard-nav.php:46
+msgid "Activity"
+msgstr ""
+
+#: templates/partials/dashboard-nav.php:49
+msgid "Account"
+msgstr ""
+
+#: templates/partials/dashboard-wrapper-start.php:9
+msgid "Dashboard"
+msgstr ""
+
+#: templates/partials/dashboard-wrapper-start.php:13
+msgid "♻ Reset My Dashboard"
+msgstr ""
+
+#: templates/payouts.php:11
+msgid "Method"
+msgstr ""
+
+#: templates/payouts.php:15
+msgid "Bank Transfer"
+msgstr ""
+
+#: templates/payouts.php:20
+msgid "History"
+msgstr ""
+
+#: templates/salient/content-artpulse_artist.php:24
+#: templates/salient/content-portfolio-archive.php:40
+msgid "Biography:"
+msgstr ""
+
+#: templates/salient/content-artpulse_artist.php:27
+#: templates/salient/content-portfolio-archive.php:43
+msgid "Organization ID:"
+msgstr ""
+
+#: templates/salient/content-artpulse_artist.php:30
+msgid "Specialties:"
+msgstr ""
+
+#: templates/salient/content-artpulse_artist.php:33
+msgid "Styles:"
+msgstr ""
+
+#: templates/salient/content-artpulse_artwork.php:41
+#: templates/salient/content-portfolio-archive.php:51
+msgid "Medium:"
+msgstr ""
+
+#: templates/salient/content-artpulse_artwork.php:44
+msgid "Style:"
+msgstr ""
+
+#: templates/salient/content-artpulse_artwork.php:47
+#: templates/salient/content-portfolio-archive.php:54
+msgid "Dimensions:"
+msgstr ""
+
+#: templates/salient/content-artpulse_artwork.php:50
+#: templates/salient/content-portfolio-archive.php:57
+msgid "Materials:"
+msgstr ""
+
+#: templates/salient/content-artpulse_artwork.php:53
+msgid "Price:"
+msgstr ""
+
+#: templates/salient/content-artpulse_artwork.php:56
+msgid "Buy Now"
+msgstr ""
+
+#: templates/salient/content-artpulse_org.php:19
+#: templates/salient/content-portfolio-archive.php:33
+msgid "Website:"
+msgstr ""
+
+#: templates/salient/content-portfolio-archive.php:64
+#: templates/salient/content-portfolio.php:54
+msgid "Date:"
+msgstr ""
+
+#: templates/salient/content-portfolio.php:36
+#: templates/single-artist.php:26
+msgid "No gallery images available."
+msgstr ""
+
+#: templates/single-artist.php:37
+msgid "No artist found."
+msgstr ""
+
+#: templates/single-artpulse_artist.php:13
+msgid "followers"
+msgstr ""
+
+#: templates/single-artpulse_artist.php:19
+#: templates/single-artpulse_event.php:76
+msgid "Your email"
+msgstr ""
+
+#: templates/single-artpulse_artist.php:20
+#: templates/single-artpulse_event.php:77
+msgid "Subscribe"
+msgstr ""
+
+#: templates/single-artpulse_event.php:62
+msgid "Join Event"
+msgstr ""
+
+#: templates/single-artpulse_event.php:65
+msgid "Purchase a ticket to access the virtual event."
+msgstr ""
+
+#: templates/widgets/content.php:7
+msgid "Your Content"
+msgstr ""
+
+#: templates/widgets/favorites.php:8
+msgid "My Favorites"
+msgstr ""
+
+#: templates/widgets/favorites.php:13
+msgid "You haven\\xE2\\x80\\x99t favorited any content yet."
+msgstr ""
+
+#: templates/widgets/local-events.php:7
+msgid "Events Near You"
+msgstr ""
+
+#: templates/widgets/next-payment.php:10
+msgid "View Payouts"
+msgstr ""
+
+#: templates/widgets/rsvps.php:7
+msgid "My RSVPs"
+msgstr ""
+
+#: templates/widgets/spotlight-dashboard.php:8
+msgid "No featured content available right now."
+msgstr ""
+
+#: templates/widgets/spotlight-dashboard.php:14
+msgid "Featured for You"
+msgstr ""
+
+#: templates/widgets/upgrade.php:7
+msgid "Upgrade Your Account"
+msgstr ""
+
+#: templates/widgets/webhooks.php:7
+msgid "Webhooks"
+msgstr ""
+
+#: templates/widgets/webhooks.php:9
+msgid "Add Webhook"
+msgstr ""
+
+#: templates/widgets/webhooks.php:17
+msgid "Endpoint URL"
+msgstr ""
+
+#: templates/widgets/webhooks.php:21
+msgid "Ticket Sold"
+msgstr ""
+
+#: templates/widgets/webhooks.php:22
+msgid "RSVP Created"
+msgstr ""
+
+#: templates/widgets/webhooks.php:23
+msgid "Payout Processed"
+msgstr ""
+
+#: templates/widgets/webhooks.php:25
+msgid "Active"
+msgstr ""
+
+#: templates/widgets/widget-favorites.php:8
+msgid "No favorites yet."
+msgstr ""
+
+#: assets/js/favorite-portfolio-block.js:14
+msgid "Favorite portfolio will render on the front-end."
 msgstr ""
