@@ -292,3 +292,21 @@
 .favorite-group {
   margin-bottom: var(--ap-space-medium);
 }
+
+.ap-empty-state {
+  text-align: center;
+  padding: 2em;
+  color: #777;
+  font-style: italic;
+}
+
+.ap-toast {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  background: #333;
+  color: #fff;
+  padding: 0.75em 1em;
+  border-radius: 3px;
+  z-index: 1000;
+}
