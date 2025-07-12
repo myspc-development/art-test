@@ -299,6 +299,7 @@ class Plugin
         \ArtPulse\Engagement\DigestMailer::register();
         \ArtPulse\Core\FeedbackManager::register();
         \ArtPulse\Frontend\FeedbackWidget::register();
+        \ArtPulse\Frontend\NewsletterOptinEndpoint::register();
         \ArtPulse\Admin\FeedbackPage::register();
         \ArtPulse\Admin\ReportingManager::register();
         \ArtPulse\Admin\CustomFieldsManager::register();
