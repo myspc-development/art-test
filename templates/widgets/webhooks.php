@@ -3,8 +3,8 @@
  * Dashboard widget: Webhooks.
  */
 ?>
-<div class="dashboard-card" data-widget="webhooks" <?php echo $visible ? '' : 'style="display:none"'; ?>>
-    <h2 id="webhooks"><?php esc_html_e('Webhooks','artpulse'); ?></h2>
+<section id="webhooks" class="ap-dashboard-section dashboard-card" data-widget="webhooks" <?php echo $visible ? '' : 'style="display:none"'; ?>>
+    <h2><?php esc_html_e('Webhooks','artpulse'); ?></h2>
     <div id="ap-webhook-controls">
         <button id="ap-add-webhook" class="ap-form-button nectar-button"><?php esc_html_e('Add Webhook','artpulse'); ?></button>
     </div>
@@ -26,4 +26,4 @@
             <button type="submit" class="ap-form-button nectar-button"><?php esc_html_e('Save','artpulse'); ?></button>
         </form>
     </div>
-</div>
+</section>

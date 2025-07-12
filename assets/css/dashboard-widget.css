@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .salient-widget-card {
     background: var(--ap-bg-color, #fff);
     border: 1px solid var(--ap-border-color, #ddd);
@@ -364,5 +368,10 @@ body.dark-mode, body[data-theme="dark"] { background:#1b1b1b; color:#e0e0e0; }
 
 .dashboard-nav a:hover {
   background: #e2e8f0;
+}
+
+.dashboard-link.active {
+  background-color: #007cba;
+  color: #fff;
 }
 
