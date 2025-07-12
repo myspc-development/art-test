@@ -1,4 +1,4 @@
-Document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
   const sections = document.querySelectorAll('.ap-dashboard-section');
   const links = document.querySelectorAll('.dashboard-link');
 
