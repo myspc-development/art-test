@@ -409,6 +409,21 @@ class Plugin
             true
         );
 
+        wp_enqueue_script(
+            'ap-follow-js',
+            plugins_url('assets/js/follow.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-follow-js', 'APFollow', [
+            'ajaxurl'      => admin_url('admin-ajax.php'),
+            'nonce'        => wp_create_nonce('wp_rest'),
+            'followText'   => __('Follow', 'artpulse'),
+            'unfollowText' => __('Unfollow', 'artpulse'),
+        ]);
+
         wp_localize_script('ap-notifications-js', 'APNotifications', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),

@@ -202,6 +202,11 @@ function ap_widget_favorites(array $vars = []): string
     return ap_load_dashboard_template('widgets/favorites.php', $vars);
 }
 
+function ap_widget_my_follows(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/my-follows.php', $vars);
+}
+
 function ap_widget_rsvps(array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/rsvps.php', $vars);
@@ -357,6 +362,17 @@ function ap_register_core_dashboard_widgets(): void
                     'default' => 5,
                 ],
             ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'my-follows',
+        __('My Follows', 'artpulse'),
+        'visibility',
+        __('Artists and events you follow.', 'artpulse'),
+        'ap_widget_my_follows',
+        [
+            'category' => 'engagement',
         ]
     );
 

@@ -1,0 +1,21 @@
+<?php
+/** Single template for ArtPulse Artist with comments and follow button */
+get_header();
+if (have_posts()) :
+  while (have_posts()) : the_post();
+    echo '<div class="container single-artist-content">';
+    if (has_post_thumbnail()) {
+      echo '<div class="artist-featured-image">';
+      the_post_thumbnail('large');
+      echo '</div>';
+    }
+    $followers = (int) get_user_meta(get_the_author_meta('ID'), 'ap_follower_count', true);
+    echo '<h1 class="entry-title artist-title">' . get_the_title() . ' <span class="ap-followers-badge">' . esc_html($followers) . ' ' . __('followers','artpulse') . '</span></h1>';
+    echo '<div class="entry-content">';
+    the_content();
+    echo '</div>';
+    comments_template('/inc/comments/artist-comments.php');
+    echo '</div>';
+  endwhile;
+endif;
+get_footer();
