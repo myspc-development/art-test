@@ -16,6 +16,11 @@
 - Five image slots with drag-and-drop ordering.
 - Organization event form now supports individual image uploads.
 
+## 1.3.12
+- Introduced OpenAI-powered auto tagging when posts are saved.
+- Added `/bio-summary/{id}` REST endpoint with GPT summaries for artist bios.
+- New `bio-summary.js` renders summaries on artist pages.
+
 ## 1.3.8
 - Added EmailTemplateManager and customizable template field.
 - Ticket purchases now send a PDF ticket attachment.

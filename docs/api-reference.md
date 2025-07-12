@@ -265,6 +265,22 @@ Each item contains:
 Use `POST /artpulse/v1/inbox/read` with parameters `type` and `id` (or `ids[]`)
 to mark items read. `POST /artpulse/v1/inbox/unread` reverts the state.
 
+### `GET /artpulse/v1/bio-summary/{id}`
+
+Return a short GPT-generated summary of an artist biography.
+
+Example request:
+
+```bash
+curl '/wp-json/artpulse/v1/bio-summary/42'
+```
+
+Example response:
+
+```json
+{ "summary": "Award-winning painter based in NYC." }
+```
+
 ## User Meta Fields
 
 Several endpoints store preferences using user meta. Keys of interest:

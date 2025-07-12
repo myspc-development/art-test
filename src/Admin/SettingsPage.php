@@ -90,6 +90,11 @@ class SettingsPage
                 'desc'  => __('Adds a service worker for basic offline caching.', 'artpulse'),
                 'type'  => 'checkbox',
             ],
+            'openai_api_key' => [
+                'label' => __('OpenAI API Key', 'artpulse'),
+                'desc'  => __('Used for auto-tagging and summaries.', 'artpulse'),
+                'type'  => 'text',
+            ],
             'oauth_google_enabled' => [
                 'label' => __('Enable Google Login', 'artpulse'),
                 'desc'  => __('Show Google button on the login form.', 'artpulse'),
@@ -749,7 +754,7 @@ class SettingsPage
                 $output[$key] = in_array($value, $allowed, true) ? $value : 'auto';
             } elseif ($key === 'email_from_address') {
                 $output[$key] = sanitize_email($value);
-            } elseif (in_array($key, ['mailgun_api_key', 'mailgun_domain', 'sendgrid_api_key', 'mailchimp_api_key', 'mailchimp_list_id', 'email_from_name'], true)) {
+            } elseif (in_array($key, ['mailgun_api_key', 'mailgun_domain', 'sendgrid_api_key', 'mailchimp_api_key', 'mailchimp_list_id', 'email_from_name', 'openai_api_key'], true)) {
                 $output[$key] = sanitize_text_field($value);
             } elseif ($key === 'default_email_template') {
                 $output[$key] = sanitize_textarea_field($value);

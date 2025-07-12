@@ -202,6 +202,8 @@ class Plugin
         \ArtPulse\Integration\OAuthManager::register();
         \ArtPulse\Integration\CalendarExport::register();
         \ArtPulse\Integration\SocialAutoPoster::register();
+        \ArtPulse\AI\AutoTagger::register();
+        \ArtPulse\AI\BioSummaryRestController::register();
         \ArtPulse\Frontend\LoginShortcode::register();
         \ArtPulse\Frontend\RegistrationShortcode::register();
         \ArtPulse\Frontend\LogoutShortcode::register();

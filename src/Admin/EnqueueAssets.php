@@ -710,6 +710,20 @@ class EnqueueAssets {
                 'errorText'   => __('Subscription failed.', 'artpulse'),
             ]);
         }
+
+        if (is_singular('artpulse_artist')) {
+            wp_enqueue_script(
+                'ap-bio-summary',
+                $plugin_url . '/assets/js/bio-summary.js',
+                ['wp-api-fetch'],
+                '1.0.0',
+                true
+            );
+            wp_localize_script('ap-bio-summary', 'APBioSummary', [
+                'root'  => esc_url_raw(rest_url()),
+                'nonce' => wp_create_nonce('wp_rest'),
+            ]);
+        }
     }
 
     private static function get_org_submission_url(): string
