@@ -8,6 +8,8 @@ class CustomDashboardWidgetPostType
         add_action('init', [self::class, 'register_cpt']);
         add_action('add_meta_boxes', [self::class, 'add_meta_boxes']);
         add_action('save_post_dashboard_widget', [self::class, 'save_meta']);
+        add_action('restrict_manage_posts', [self::class, 'add_admin_filters']);
+        add_filter('pre_get_posts', [self::class, 'filter_admin_query']);
     }
 
     public static function register_cpt(): void
@@ -19,8 +21,12 @@ class CustomDashboardWidgetPostType
             'menu_icon'    => 'dashicons-screenoptions',
             'supports'     => ['title', 'editor'],
             'show_in_rest' => true,
+            'taxonomies'   => ['category', 'post_tag'],
             'menu_position'=> 25,
         ]);
+
+        register_taxonomy_for_object_type('category', 'dashboard_widget');
+        register_taxonomy_for_object_type('post_tag', 'dashboard_widget');
     }
 
     public static function add_meta_boxes(): void
@@ -53,5 +59,33 @@ class CustomDashboardWidgetPostType
         update_post_meta($post_id, 'widget_icon', sanitize_text_field($_POST['widget_icon'] ?? ''));
         update_post_meta($post_id, 'widget_order', intval($_POST['widget_order'] ?? 1));
         update_post_meta($post_id, 'widget_class', sanitize_text_field($_POST['widget_class'] ?? ''));
+    }
+
+    public static function add_admin_filters(): void
+    {
+        $screen = get_current_screen();
+        if (!$screen || $screen->post_type !== 'dashboard_widget') {
+            return;
+        }
+        $selected_cat = $_GET['cat'] ?? '';
+        wp_dropdown_categories([
+            'show_option_all' => __('All Categories', 'artpulse'),
+            'taxonomy'        => 'category',
+            'name'            => 'cat',
+            'selected'        => $selected_cat,
+            'hide_empty'      => false,
+        ]);
+        $selected_tag = $_GET['tag'] ?? '';
+        echo '<input type="text" name="tag" value="' . esc_attr($selected_tag) . '" placeholder="' . esc_attr__('Tag','artpulse') . '" />';
+    }
+
+    public static function filter_admin_query($query): void
+    {
+        if (!is_admin() || !$query->is_main_query() || $query->get('post_type') !== 'dashboard_widget') {
+            return;
+        }
+        if (!empty($_GET['tag'])) {
+            $query->set('tag', sanitize_text_field($_GET['tag']));
+        }
     }
 }

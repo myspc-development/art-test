@@ -237,6 +237,11 @@ function ap_widget_messages(array $vars = []): string
     return ap_load_dashboard_template('widgets/messages.php', $vars);
 }
 
+function ap_widget_for_you(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/widget-for-you.php', $vars);
+}
+
 function ap_widget_account_tools(array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/account-tools.php', $vars);
@@ -508,6 +513,18 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_role_spotlight',
         [
             'roles' => ['member', 'artist', 'organization'],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'widget_for_you',
+        __('For You', 'artpulse'),
+        'sparkles',
+        __('Personalized recommendations.', 'artpulse'),
+        'ap_widget_for_you',
+        [
+            'roles'    => ['member', 'artist', 'organization'],
+            'category' => 'recommended',
         ]
     );
 

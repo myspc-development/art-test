@@ -149,6 +149,47 @@ class DashboardWidgetRegistry
     }
 
     /**
+     * Get widgets definitions filtered by role.
+     */
+    public static function get_widgets_by_role(string $role): array
+    {
+        $defs = [];
+        foreach (self::$widgets as $id => $cfg) {
+            if (!empty($cfg['roles']) && !in_array($role, (array) $cfg['roles'], true)) {
+                continue;
+            }
+            $defs[$id] = $cfg;
+        }
+        return $defs;
+    }
+
+    /**
+     * Get a random subset of widgets for a role.
+     */
+    public static function get_random(string $role, int $limit = 1): array
+    {
+        $widgets = self::get_widgets_by_role($role);
+        if (!$widgets) {
+            return [];
+        }
+        $keys = array_keys($widgets);
+        shuffle($keys);
+        $keys = array_slice($keys, 0, $limit);
+        return array_intersect_key($widgets, array_flip($keys));
+    }
+
+    /**
+     * Get widgets that belong to a specific category.
+     */
+    public static function get_by_category(string $category): array
+    {
+        return array_filter(
+            self::$widgets,
+            static fn($cfg) => isset($cfg['category']) && $cfg['category'] === $category
+        );
+    }
+
+    /**
      * Register default widgets and fire registration hook.
      */
     public static function init(): void
