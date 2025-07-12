@@ -926,4 +926,30 @@ function artpulse_handle_react_form() {
 add_action('wp_ajax_submit_react_form', 'artpulse_handle_react_form');
 add_action('wp_ajax_nopriv_submit_react_form', 'artpulse_handle_react_form');
 
+// Dashboard preset loader via AJAX
+add_action('wp_ajax_ap_apply_preset', function () {
+    check_ajax_referer('ap_dashboard_nonce');
+
+    $user_id = get_current_user_id();
+    $key     = sanitize_text_field($_POST['preset_key'] ?? '');
+    $presets = \ArtPulse\Core\DashboardController::get_default_presets();
+
+    if (!isset($presets[$key])) {
+        wp_send_json_error('Invalid preset.');
+    }
+
+    update_user_meta($user_id, 'ap_dashboard_layout', $presets[$key]['layout']);
+    wp_send_json_success(['message' => 'Preset applied.']);
+});
+
+// Dashboard layout reset via AJAX
+add_action('wp_ajax_ap_reset_layout', function () {
+    check_ajax_referer('ap_dashboard_nonce');
+
+    $user_id = get_current_user_id();
+    delete_user_meta($user_id, 'ap_dashboard_layout');
+
+    wp_send_json_success(['message' => 'Layout reset.']);
+});
+
 
