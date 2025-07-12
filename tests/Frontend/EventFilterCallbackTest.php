@@ -11,6 +11,8 @@ class EventFilterCallbackTest extends WP_UnitTestCase
     private int $event2;
     private int $cat1;
     private int $cat2;
+    private int $tag1;
+    private int $tag2;
 
     public function set_up(): void
     {
@@ -19,6 +21,8 @@ class EventFilterCallbackTest extends WP_UnitTestCase
 
         $this->cat1 = wp_create_category('Music');
         $this->cat2 = wp_create_category('Art');
+        $this->tag1 = wp_insert_term('Indie', 'post_tag')['term_id'];
+        $this->tag2 = wp_insert_term('Gallery', 'post_tag')['term_id'];
 
         $this->event1 = wp_insert_post([
             'post_title'  => 'First Event',
@@ -28,7 +32,11 @@ class EventFilterCallbackTest extends WP_UnitTestCase
         update_post_meta($this->event1, 'venue_name', 'Venue A');
         update_post_meta($this->event1, 'event_start_date', '2024-01-10');
         update_post_meta($this->event1, 'event_end_date', '2024-01-11');
+        update_post_meta($this->event1, 'price_type', 'free');
+        update_post_meta($this->event1, 'event_lat', '34.05');
+        update_post_meta($this->event1, 'event_lng', '-118.25');
         wp_set_post_terms($this->event1, [$this->cat1], 'category');
+        wp_set_post_terms($this->event1, [$this->tag1], 'post_tag');
 
         $this->event2 = wp_insert_post([
             'post_title'  => 'Second Event',
@@ -38,7 +46,11 @@ class EventFilterCallbackTest extends WP_UnitTestCase
         update_post_meta($this->event2, 'venue_name', 'Venue B');
         update_post_meta($this->event2, 'event_start_date', '2024-08-10');
         update_post_meta($this->event2, 'event_end_date', '2024-08-11');
+        update_post_meta($this->event2, 'price_type', 'paid');
+        update_post_meta($this->event2, 'event_lat', '40.71');
+        update_post_meta($this->event2, 'event_lng', '-74.00');
         wp_set_post_terms($this->event2, [$this->cat2], 'category');
+        wp_set_post_terms($this->event2, [$this->tag2], 'post_tag');
     }
 
     public function tear_down(): void
@@ -100,5 +112,32 @@ class EventFilterCallbackTest extends WP_UnitTestCase
         ]);
         $this->assertStringContainsString('Second Event', $html);
         $this->assertStringNotContainsString('First Event', $html);
+    }
+
+    public function test_filter_by_tag(): void
+    {
+        $slug = get_term($this->tag1)->slug;
+        $html = $this->run_callback([
+            'tags' => $slug,
+        ]);
+        $this->assertStringContainsString('First Event', $html);
+        $this->assertStringNotContainsString('Second Event', $html);
+    }
+
+    public function test_filter_by_price_type(): void
+    {
+        $html = $this->run_callback(['price_type' => 'free']);
+        $this->assertStringContainsString('First Event', $html);
+        $this->assertStringNotContainsString('Second Event', $html);
+    }
+
+    public function test_filter_by_location_radius(): void
+    {
+        $html = $this->run_callback([
+            'location' => '34.05,-118.25',
+            'radius'   => 0.1,
+        ]);
+        $this->assertStringContainsString('First Event', $html);
+        $this->assertStringNotContainsString('Second Event', $html);
     }
 }

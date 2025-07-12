@@ -27,7 +27,7 @@ class EventFilter
         );
         wp_enqueue_script(
             'ap-event-filter',
-            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-event-filter.js',
+            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/event-filters.js',
             ['jquery'],
             '1.0.0',
             true
@@ -61,6 +61,14 @@ class EventFilter
                     <option value="<?php echo esc_attr($type->slug); ?>"><?php echo esc_html($type->name); ?></option>
                 <?php endforeach; ?>
             </select>
+            <input type="text" name="tags" placeholder="<?php esc_attr_e('Tags', 'artpulse'); ?>" />
+            <select name="price_type">
+                <option value=""><?php esc_html_e('Any Price', 'artpulse'); ?></option>
+                <option value="free"><?php esc_html_e('Free', 'artpulse'); ?></option>
+                <option value="paid"><?php esc_html_e('Paid', 'artpulse'); ?></option>
+            </select>
+            <input type="text" name="location" placeholder="<?php esc_attr_e('Lat,Lon', 'artpulse'); ?>" />
+            <input type="number" step="0.1" name="radius" placeholder="<?php esc_attr_e('Radius', 'artpulse'); ?>" />
             <button type="submit" class="ap-form-button"><?php esc_html_e('Filter', 'artpulse'); ?></button>
         </form>
         <div id="ap-event-filter-results" class="ap-directory-results" role="status" aria-live="polite"></div>
@@ -76,7 +84,12 @@ function ap_filter_events_callback(): void
     $before     = sanitize_text_field($_REQUEST['before'] ?? '');
     $category   = sanitize_text_field($_REQUEST['category'] ?? '');
     $event_type = sanitize_text_field($_REQUEST['event_type'] ?? '');
+    $tags       = sanitize_text_field($_REQUEST['tags'] ?? '');
+    $price_type = sanitize_text_field($_REQUEST['price_type'] ?? '');
+    $location   = sanitize_text_field($_REQUEST['location'] ?? '');
+    $radius     = sanitize_text_field($_REQUEST['radius'] ?? '');
     $categories = array_map('sanitize_key', array_map('trim', explode(',', $category)));
+    $tag_terms  = array_map('sanitize_key', array_map('trim', explode(',', $tags)));
     $keyword    = sanitize_text_field($_REQUEST['keyword'] ?? '');
 
     $meta_query = [];
@@ -103,6 +116,30 @@ function ap_filter_events_callback(): void
             'compare' => '<=',
         ];
     }
+    if ($price_type !== '') {
+        $meta_query[] = [
+            'key'   => 'price_type',
+            'value' => $price_type,
+        ];
+    }
+    if ($location !== '' && is_numeric($radius)) {
+        [$lat, $lng] = array_pad(array_map('floatval', explode(',', $location)), 2, 0.0);
+        $r = floatval($radius);
+        if ($lat && $lng && $r > 0) {
+            $meta_query[] = [
+                'key'     => 'event_lat',
+                'value'   => [ $lat - $r, $lat + $r ],
+                'compare' => 'BETWEEN',
+                'type'    => 'numeric',
+            ];
+            $meta_query[] = [
+                'key'     => 'event_lng',
+                'value'   => [ $lng - $r, $lng + $r ],
+                'compare' => 'BETWEEN',
+                'type'    => 'numeric',
+            ];
+        }
+    }
 
     $tax_query = [];
     if ($category !== '') {
@@ -117,6 +154,13 @@ function ap_filter_events_callback(): void
             'taxonomy' => 'event_type',
             'field'    => 'slug',
             'terms'    => [$event_type],
+        ];
+    }
+    if ($tags !== '') {
+        $tax_query[] = [
+            'taxonomy' => 'post_tag',
+            'field'    => 'slug',
+            'terms'    => $tag_terms,
         ];
     }
 
