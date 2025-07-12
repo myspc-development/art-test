@@ -1,0 +1,5 @@
+[
+  {"id":"membership","visible":true},
+  {"id":"favorites","visible":true},
+  {"id":"local-events","visible":true}
+]

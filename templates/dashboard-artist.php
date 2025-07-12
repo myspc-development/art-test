@@ -1,27 +1,14 @@
 <?php
-use ArtPulse\Admin\DashboardWidgetTools;
+$user_role = 'artist';
 
-if (!ap_user_can_edit_layout('artist')) {
-    wp_die('Access denied');
-}
+add_action('wp_enqueue_scripts', function () use ($user_role) {
+    if (ap_user_can_edit_layout($user_role)) {
+        wp_enqueue_script('sortablejs', plugin_dir_url(__FILE__) . '../assets/js/Sortable.min.js', [], '1.14', true);
+        wp_enqueue_script("{$user_role}-dashboard-js", plugin_dir_url(__FILE__) . "../assets/js/{$user_role}-dashboard.js", ['sortablejs', 'dark-mode-toggle'], null, true);
+        wp_enqueue_script('dark-mode-toggle', plugin_dir_url(__FILE__) . '../assets/js/dark-mode-toggle.js', [], null, true);
+        wp_enqueue_style('dashboard-style', plugin_dir_url(__FILE__) . '../assets/css/dashboard-widget.css');
+    }
+});
 
-get_header();
+include locate_template('partials/dashboard-generic.php');
 
-$dashboard_class = 'artist-dashboard';
-$dashboard_title = '🎨 ' . __('Artist Dashboard', 'artpulse');
-
-include __DIR__ . '/partials/dashboard-wrapper-start.php';
-include __DIR__ . '/partials/dashboard-nav.php';
-
-$stats  = [];
-$events = [];
-include __DIR__ . '/partials/dashboard-stats.php';
-include __DIR__ . '/partials/dashboard-events.php';
-?>
-<div id="ap-user-dashboard" class="ap-dashboard-columns">
-  <?php DashboardWidgetTools::render_user_dashboard(get_current_user_id()); ?>
-</div>
-<?php
-include __DIR__ . '/partials/dashboard-wrapper-end.php';
-get_footer();
-?>
