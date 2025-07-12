@@ -41,4 +41,18 @@ class EventRsvpHandler
         wp_safe_redirect(get_permalink($event_id));
         exit;
     }
+
+    public static function get_rsvp_summary_for_user($user_id): array
+    {
+        // Sample dummy data - replace with real query
+        return [
+            'going' => 5,
+            'interested' => 12,
+            'trend' => [
+                ['date' => '2024-07-01', 'count' => 1],
+                ['date' => '2024-07-02', 'count' => 2],
+                ['date' => '2024-07-03', 'count' => 4],
+            ],
+        ];
+    }
 }

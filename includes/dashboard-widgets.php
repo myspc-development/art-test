@@ -206,6 +206,11 @@ function ap_widget_rsvps(array $vars = []): string
     return ap_load_dashboard_template('widgets/rsvps.php', $vars);
 }
 
+function ap_widget_rsvp_stats(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/rsvp-stats.php', $vars);
+}
+
 function ap_widget_my_events(array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/my-events.php', $vars);
@@ -338,6 +343,18 @@ function ap_register_core_dashboard_widgets(): void
                     'default' => 5,
                 ],
             ],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'rsvp_stats',
+        __('RSVP Stats', 'artpulse'),
+        'calendar',
+        __('RSVP summary for your events.', 'artpulse'),
+        'ap_widget_rsvp_stats',
+        [
+            'category' => 'events',
+            'roles'    => ['organization', 'member'],
         ]
     );
 
