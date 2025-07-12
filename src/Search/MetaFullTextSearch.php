@@ -112,5 +112,3 @@ class MetaFullTextSearch {
     }
 }
 
-// Register on plugin load
-add_action('init', [MetaFullTextSearch::class, 'register']);

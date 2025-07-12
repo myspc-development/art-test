@@ -313,7 +313,7 @@ class Plugin
         \ArtPulse\Monetization\PayoutManager::register();
         \ArtPulse\Integration\WebhookManager::register();
         \ArtPulse\Monetization\EventPromotionManager::register();
-        class_exists(\ArtPulse\Search\MetaFullTextSearch::class);
+        \ArtPulse\Search\MetaFullTextSearch::register();
         \ArtPulse\Search\ExternalSearch::register();
         \ArtPulse\Personalization\RecommendationRestController::register();
         \ArtPulse\Rest\EventManagementController::register();
