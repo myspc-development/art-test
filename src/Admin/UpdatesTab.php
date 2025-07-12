@@ -35,10 +35,34 @@ class UpdatesTab
         }
     }
 
+    /**
+     * Execute an update using either a ZIP release download or git pull.
+     *
+     * @return bool|\WP_Error
+     */
+    private static function do_update()
+    {
+        $opts   = self::get_repo_info();
+        $method = $opts['method'];
+        $repo   = $opts['url'];
+
+        $is_git_repo = is_dir(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '.git');
+
+        if ($method === 'git' || ($method === 'auto' && $is_git_repo)) {
+            return self::git_pull_update();
+        }
+
+        return self::zip_release_update($repo);
+    }
+
     private static function parse_repo(string $url): array
     {
-        $url = rtrim($url, '/');
-        $url = preg_replace('/\.git$/', '', $url);
+        if (!str_contains($url, '://') && substr_count($url, '/') === 1) {
+            return explode('/', $url, 2);
+        }
+
+        $url  = rtrim($url, '/');
+        $url  = preg_replace('/\.git$/', '', $url);
         $parts = parse_url($url);
         $path  = trim($parts['path'] ?? '', '/');
         if (strpos($path, '/') === false) {
@@ -52,9 +76,10 @@ class UpdatesTab
     {
         $opts = get_option('artpulse_settings', []);
         return [
-            'url'    => $opts['update_repo_url'] ?? '',
+            'url'    => $opts['github_repo'] ?? ($opts['update_repo_url'] ?? ''),
             'branch' => $opts['update_branch'] ?? 'main',
             'token'  => $opts['update_access_token'] ?? '',
+            'method' => $opts['update_method'] ?? 'auto',
         ];
     }
 
@@ -168,37 +193,57 @@ class UpdatesTab
             wp_die(__('Unauthorized', 'artpulse'));
         }
         error_log('🔧 Starting update...');
-        $info = self::get_repo_info();
-        [$owner, $repo] = self::parse_repo($info['url']);
-        if (empty($owner) || empty($repo)) {
-            $err = new \WP_Error('invalid_repo', 'Invalid repository URL');
-            update_option('ap_update_log', '❌ Update failed: ' . $err->get_error_message());
+        $result = self::do_update();
+
+        if ($result === true) {
+            update_option('ap_last_update_time', current_time('mysql'));
+            update_option('ap_update_log', '✅ Updated successfully on ' . current_time('mysql'));
             if (!$silent) {
-                self::redirect_to_updates(['ap_update_error' => urlencode($err->get_error_message())]);
+                self::redirect_to_updates(['ap_update_success' => '1']);
             }
-            return $err;
+            return true;
         }
-        $zip = "https://codeload.github.com/{$owner}/{$repo}/zip/refs/heads/{$info['branch']}";
-        $args = [
-            'headers' => [
-                'User-Agent' => 'ArtPulse-Updater',
-            ],
-        ];
-        if (!empty($info['token'])) {
-            $args['headers']['Authorization'] = 'token ' . $info['token'];
+
+        update_option('ap_update_log', '❌ ' . $result->get_error_message());
+        if (!$silent) {
+            self::redirect_to_updates(['ap_update_error' => urlencode($result->get_error_message())]);
         }
+        return $result;
+    }
+
+    /**
+     * Download the latest GitHub release ZIP and replace plugin files.
+     */
+    private static function zip_release_update(string $repo)
+    {
+        if (empty($repo)) {
+            return new \WP_Error('no_repo', 'GitHub repo not configured.');
+        }
+
+        $response = wp_remote_get(
+            "https://api.github.com/repos/{$repo}/releases/latest",
+            [
+                'headers' => [
+                    'Accept'     => 'application/vnd.github+json',
+                    'User-Agent' => 'ArtPulse-Updater',
+                ],
+            ]
+        );
+        if (is_wp_error($response)) {
+            return $response;
+        }
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (empty($body['zipball_url'])) {
+            return new \WP_Error('bad_api', 'Invalid release response.');
+        }
+
         include_once ABSPATH . 'wp-admin/includes/file.php';
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
-        $tmp = download_url($zip, 300, '', $args);
+        $tmp = download_url($body['zipball_url']);
         if (is_wp_error($tmp)) {
-            update_option('ap_update_log', '❌ Update failed: ' . $tmp->get_error_message());
-            if (!$silent) {
-                $msg = $tmp->get_error_message();
-                error_log('🔧 Update failed: ' . print_r($tmp, true));
-                self::redirect_to_updates(['ap_update_error' => urlencode($msg)]);
-            }
             return $tmp;
         }
+
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
         $temp_dir   = trailingslashit(get_temp_dir()) . 'ap_update_' . wp_generate_password(8, false);
         wp_mkdir_p($temp_dir);
@@ -207,7 +252,6 @@ class UpdatesTab
         if (!is_wp_error($result)) {
             $zip = new \ZipArchive();
             if ($zip->open($tmp) === true) {
-                // Gather a flat list of files from the archive.
                 for ($i = 0; $i < $zip->numFiles; $i++) {
                     $name = $zip->getNameIndex($i);
                     if (!str_ends_with($name, '/')) {
@@ -218,7 +262,7 @@ class UpdatesTab
             }
         }
         if (!is_wp_error($result)) {
-            $entries = array_values(array_filter(scandir($temp_dir), function ($e) { return $e !== '.' && $e !== '..'; }));
+            $entries = array_values(array_filter(scandir($temp_dir), fn($e) => $e !== '.' && $e !== '..'));
             $src = $temp_dir;
             if (count($entries) === 1 && is_dir($temp_dir . '/' . $entries[0])) {
                 $src = $temp_dir . '/' . $entries[0];
@@ -227,22 +271,36 @@ class UpdatesTab
         }
         self::delete_recursive($temp_dir);
         unlink($tmp);
+
         if (is_wp_error($result)) {
-            update_option('ap_update_log', '❌ Update failed: ' . $result->get_error_message());
-            if (!$silent) {
-                $msg = $result->get_error_message();
-                error_log('🔧 Update failed: ' . print_r($result, true));
-                self::redirect_to_updates(['ap_update_error' => urlencode($msg)]);
-            }
             return $result;
         }
-        update_option('ap_current_repo_sha', get_option('ap_update_remote_sha'));
-        update_option('ap_last_update_time', current_time('mysql'));
-        update_option('ap_update_log', '✅ Update checked at ' . current_time('mysql'));
         update_option('ap_updated_files', $files);
-        if (!$silent) {
-            self::redirect_to_updates(['ap_update_success' => '1']);
+        return true;
+    }
+
+    /**
+     * Run `git pull` inside the plugin directory.
+     */
+    private static function git_pull_update()
+    {
+        $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
+        if (!is_dir($plugin_dir . '.git')) {
+            return new \WP_Error('no_git', '.git directory not found.');
         }
+        if (!function_exists('shell_exec')) {
+            return new \WP_Error('no_shell', 'shell_exec disabled.');
+        }
+
+        $cmd = sprintf('cd %s && git pull 2>&1', escapeshellarg($plugin_dir));
+        $out = shell_exec($cmd);
+        if (strpos($out, 'Already up to date.') !== false) {
+            return new \WP_Error('up_to_date', trim($out));
+        }
+        if (strpos($out, 'fatal') !== false) {
+            return new \WP_Error('git_error', trim($out));
+        }
+
         return true;
     }
 

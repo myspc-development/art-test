@@ -259,6 +259,19 @@ class SettingsPage
         }
 
         $update_fields = [
+            'update_method' => [
+                'label'   => __('Update Method', 'artpulse'),
+                'type'    => 'select',
+                'options' => [
+                    'auto' => __('Auto-detect', 'artpulse'),
+                    'zip'  => __('ZIP download', 'artpulse'),
+                    'git'  => __('Git pull', 'artpulse'),
+                ],
+            ],
+            'github_repo' => [
+                'label' => __('GitHub Repo (owner/repo)', 'artpulse'),
+                'type'  => 'text',
+            ],
             'update_repo_url' => [
                 'label' => __('Repository URL', 'artpulse'),
                 'desc'  => __('GitHub repository to pull updates from.', 'artpulse'),
@@ -723,6 +736,9 @@ class SettingsPage
             } elseif ($key === 'email_method') {
                 $allowed = ['wp_mail', 'mailgun', 'sendgrid'];
                 $output[$key] = in_array($value, $allowed, true) ? $value : 'wp_mail';
+            } elseif ($key === 'update_method') {
+                $allowed = ['zip', 'git', 'auto'];
+                $output[$key] = in_array($value, $allowed, true) ? $value : 'auto';
             } elseif ($key === 'email_from_address') {
                 $output[$key] = sanitize_email($value);
             } elseif (in_array($key, ['mailgun_api_key', 'mailgun_domain', 'sendgrid_api_key', 'email_from_name'], true)) {

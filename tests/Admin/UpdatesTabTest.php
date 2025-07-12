@@ -162,7 +162,7 @@ class UpdatesTabTest extends TestCase
     public function test_check_updates_valid_nonce(): void
     {
         $_REQUEST['_wpnonce'] = 'valid';
-        self::$options['artpulse_settings'] = ['update_repo_url' => 'https://github.com/foo/bar'];
+        self::$options['artpulse_settings'] = ['github_repo' => 'foo/bar'];
         try {
             UpdatesTab::check_updates();
         } catch (\Exception $e) {
@@ -175,7 +175,7 @@ class UpdatesTabTest extends TestCase
     public function test_check_updates_invalid_nonce_dies(): void
     {
         $_REQUEST['_wpnonce'] = 'bad';
-        self::$options['artpulse_settings'] = ['update_repo_url' => 'https://github.com/foo/bar'];
+        self::$options['artpulse_settings'] = ['github_repo' => 'foo/bar'];
         try {
             UpdatesTab::check_updates();
         } catch (\Exception $e) {
@@ -206,7 +206,7 @@ class UpdatesTabTest extends TestCase
 
     public function test_check_updates_remote_error_returns_error_and_redirects(): void
     {
-        self::$options['artpulse_settings'] = ['update_repo_url' => 'https://github.com/foo/bar'];
+        self::$options['artpulse_settings'] = ['github_repo' => 'foo/bar'];
         self::$remote_error = new \WP_Error('remote_fail', 'remote failed');
 
         $err = UpdatesTab::check_updates(true);
