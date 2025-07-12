@@ -34,6 +34,11 @@ class RecommendationRestController
                     'type'    => 'integer',
                     'default' => 6,
                 ],
+                'location' => [
+                    'type'     => 'string',
+                    'required' => false,
+                    'description' => 'ZIP code or "lat,lng" pair',
+                ],
             ],
         ]);
     }
@@ -48,9 +53,10 @@ class RecommendationRestController
             return new WP_Error('invalid_user', 'User not specified', ['status' => 400]);
         }
 
-        $type  = sanitize_key($request->get_param('type'));
-        $limit = absint($request->get_param('limit'));
-        $data  = RecommendationEngine::get_recommendations((int)$user_id, $type, $limit);
+        $type     = sanitize_key($request->get_param('type'));
+        $limit    = absint($request->get_param('limit'));
+        $location = $request->get_param('location');
+        $data  = RecommendationEngine::get_recommendations((int)$user_id, $type, $limit, $location);
         return rest_ensure_response($data);
     }
 }

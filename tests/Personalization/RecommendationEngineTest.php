@@ -64,4 +64,35 @@ class RecommendationEngineTest extends WP_UnitTestCase
         $this->assertCount(3, $recs);
         $this->assertSame([$e1, $e2, $e3], array_column($recs, 'id'));
     }
+
+    public function test_location_weights_event_order(): void
+    {
+        $la = wp_insert_post([
+            'post_title'  => 'LA',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+        ]);
+        $ny = wp_insert_post([
+            'post_title'  => 'NY',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+        ]);
+
+        foreach ([$la, $ny] as $id) {
+            update_post_meta($id, 'ap_favorite_count', 1);
+            update_post_meta($id, 'event_rsvp_list', []);
+            update_post_meta($id, 'view_count', 1);
+        }
+
+        update_post_meta($la, 'event_lat', '34.05');
+        update_post_meta($la, 'event_lng', '-118.25');
+        update_post_meta($ny, 'event_lat', '40.71');
+        update_post_meta($ny, 'event_lng', '-74.00');
+
+        delete_transient('ap_rec_event_' . $this->user_id . '_' . md5('34.05,-118.25'));
+        $recs = RecommendationEngine::get_recommendations($this->user_id, 'event', 2, '34.05,-118.25');
+
+        $this->assertCount(2, $recs);
+        $this->assertSame($la, $recs[0]['id']);
+    }
 }
