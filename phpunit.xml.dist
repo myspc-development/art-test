@@ -12,6 +12,9 @@
     <testsuites>
         <testsuite name="Plugin Test Suite">
             <directory suffix="Test.php">./tests</directory>
+            <file>./tests/Integration/DashboardWidgetSaveTest.php</file>
+            <file>./tests/Integration/EventCreationFilteringTest.php</file>
+            <file>./tests/Integration/ArtistProfileUpdateTest.php</file>
         </testsuite>
     </testsuites>
 
