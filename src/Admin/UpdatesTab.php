@@ -36,21 +36,14 @@ class UpdatesTab
     }
 
     /**
-     * Execute an update using either a ZIP release download or git pull.
+     * Execute an update using the latest GitHub release ZIP.
      *
      * @return bool|\WP_Error
      */
     private static function do_update()
     {
-        $opts   = self::get_repo_info();
-        $method = $opts['method'];
-        $repo   = $opts['url'];
-
-        $is_git_repo = is_dir(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '.git');
-
-        if ($method === 'git' || ($method === 'auto' && $is_git_repo)) {
-            return self::git_pull_update();
-        }
+        $opts = self::get_repo_info();
+        $repo = $opts['url'];
 
         return self::zip_release_update($repo);
     }
@@ -79,7 +72,6 @@ class UpdatesTab
             'url'    => $opts['github_repo'] ?? ($opts['update_repo_url'] ?? ''),
             'branch' => $opts['update_branch'] ?? 'main',
             'token'  => $opts['update_access_token'] ?? '',
-            'method' => $opts['update_method'] ?? 'auto',
         ];
     }
 
@@ -279,30 +271,6 @@ class UpdatesTab
         return true;
     }
 
-    /**
-     * Run `git pull` inside the plugin directory.
-     */
-    private static function git_pull_update()
-    {
-        $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
-        if (!is_dir($plugin_dir . '.git')) {
-            return new \WP_Error('no_git', '.git directory not found.');
-        }
-        if (!function_exists('shell_exec')) {
-            return new \WP_Error('no_shell', 'shell_exec disabled.');
-        }
-
-        $cmd = sprintf('cd %s && git pull 2>&1', escapeshellarg($plugin_dir));
-        $out = shell_exec($cmd);
-        if (strpos($out, 'Already up to date.') !== false) {
-            return new \WP_Error('up_to_date', trim($out));
-        }
-        if (strpos($out, 'fatal') !== false) {
-            return new \WP_Error('git_error', trim($out));
-        }
-
-        return true;
-    }
 
     public static function render(): void
     {
@@ -357,6 +325,12 @@ class UpdatesTab
 
     private static function copy_recursive(string $src, string $dest): void
     {
+        global $wp_filesystem;
+        if (!$wp_filesystem) {
+            include_once ABSPATH . 'wp-admin/includes/file.php';
+            WP_Filesystem();
+        }
+
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($src, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::SELF_FIRST
@@ -364,31 +338,23 @@ class UpdatesTab
         foreach ($iterator as $item) {
             $target = $dest . '/' . $iterator->getSubPathName();
             if ($item->isDir()) {
-                if (!is_dir($target)) {
-                    mkdir($target, 0755, true);
+                if (!$wp_filesystem->is_dir($target)) {
+                    $wp_filesystem->mkdir($target, FS_CHMOD_DIR);
                 }
             } else {
-                copy($item->getPathname(), $target);
+                $wp_filesystem->copy($item->getPathname(), $target, true, FS_CHMOD_FILE);
             }
         }
     }
 
     private static function delete_recursive(string $dir): void
     {
-        if (!is_dir($dir)) {
-            return;
+        global $wp_filesystem;
+        if (!$wp_filesystem) {
+            include_once ABSPATH . 'wp-admin/includes/file.php';
+            WP_Filesystem();
         }
-        $items = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-        foreach ($items as $item) {
-            if ($item->isDir()) {
-                rmdir($item->getPathname());
-            } else {
-                unlink($item->getPathname());
-            }
-        }
-        rmdir($dir);
+
+        $wp_filesystem->delete($dir, true);
     }
 }

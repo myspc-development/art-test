@@ -43,12 +43,10 @@ backup before upgrading so you can quickly restore the configuration if needed.
 
 ### Updates
 
-The **Updates** tab allows administrators to pull the latest plugin code from
-GitHub using either a ZIP download or a `git pull`. Enter the **GitHub Repo** in
-`owner/repo` format and choose an **Update Method** of ZIP, Git or Auto-detect.
-Auto-detect uses `git pull` when the plugin folder is a Git clone and falls back
-to downloading the latest release ZIP otherwise. You can manually check for
-updates or enable automatic daily checks. Upload new versions over the existing
+The **Updates** tab downloads the latest plugin code from GitHub using the
+release ZIP. Enter the **GitHub Repo** in `owner/repo` format and optionally
+enable automatic daily checks. You can manually check for updates at any time.
+Upload new versions over the existing
 plugin folder or use this tab—settings are preserved because the uninstall
 process never runs during an upgrade. The **Keep Data on Uninstall** option
 ensures content remains if you remove the plugin entirely. After each successful
