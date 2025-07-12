@@ -601,7 +601,7 @@ class SettingsPage
                             <?php do_settings_sections('artpulse-updates'); ?>
                             <?php submit_button(); ?>
                         </form>
-                        <?php UpdatesTab::render(); ?>
+                        <?php include ARTPULSE_PLUGIN_DIR . 'templates/admin/settings-tab-updates.php'; ?>
                     <?php elseif ($slug === 'social_auto') : ?>
                         <?php \ArtPulse\Integration\SocialAutoPoster::render_settings(); ?>
                     <?php else : ?>

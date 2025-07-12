@@ -80,14 +80,15 @@ class UpdatesTab
             if ($silent) {
                 return false;
             }
-            wp_die(__('Insufficient permissions', 'artpulse'));
+            wp_die(__('Unauthorized', 'artpulse'));
         }
-        if (!$silent) {
-            check_admin_referer('ap_check_updates');
+        if (!$silent && !check_admin_referer('ap_check_updates')) {
+            wp_die(__('Unauthorized', 'artpulse'));
         }
         $info = self::get_repo_info();
         if (empty($info['url'])) {
             $err = new \WP_Error('missing_repo', 'Repository URL not configured');
+            update_option('ap_update_log', '❌ Update failed: ' . $err->get_error_message());
             if (!$silent) {
                 self::redirect_to_updates(['ap_update_error' => urlencode($err->get_error_message())]);
             }
@@ -96,6 +97,7 @@ class UpdatesTab
         [$owner, $repo] = self::parse_repo($info['url']);
         if (empty($owner) || empty($repo)) {
             $err = new \WP_Error('invalid_repo', 'Invalid repository URL');
+            update_option('ap_update_log', '❌ Update failed: ' . $err->get_error_message());
             if (!$silent) {
                 self::redirect_to_updates(['ap_update_error' => urlencode($err->get_error_message())]);
             }
@@ -114,6 +116,7 @@ class UpdatesTab
         $response = wp_remote_get($api, $args);
         error_log('🔧 GitHub response: ' . print_r($response, true));
         if (is_wp_error($response)) {
+            update_option('ap_update_log', '❌ Update failed: ' . $response->get_error_message());
             if (!$silent) {
                 self::redirect_to_updates(['ap_update_error' => urlencode($response->get_error_message())]);
             }
@@ -122,6 +125,7 @@ class UpdatesTab
         $body = json_decode(wp_remote_retrieve_body($response), true);
         if (!isset($body['sha'])) {
             $err = new \WP_Error('invalid_response', 'Invalid response from GitHub');
+            update_option('ap_update_log', '❌ Update failed: ' . $err->get_error_message());
             if (!$silent) {
                 self::redirect_to_updates(['ap_update_error' => urlencode($err->get_error_message())]);
             }
@@ -130,6 +134,7 @@ class UpdatesTab
         $remote_sha = $body['sha'];
         $current_sha = get_option('ap_current_repo_sha');
         update_option('ap_update_last_check', current_time('mysql'));
+        update_option('ap_update_log', '✅ Update checked at ' . current_time('mysql'));
         if ($remote_sha !== $current_sha) {
             update_option('ap_update_available', 1);
             update_option('ap_update_remote_sha', $remote_sha);
@@ -157,16 +162,17 @@ class UpdatesTab
             if ($silent) {
                 return new \WP_Error('permission_denied', 'Insufficient permissions');
             }
-            wp_die(__('Insufficient permissions', 'artpulse'));
+            wp_die(__('Unauthorized', 'artpulse'));
         }
-        if (!$silent) {
-            check_admin_referer('ap_run_update');
+        if (!$silent && !check_admin_referer('ap_run_update')) {
+            wp_die(__('Unauthorized', 'artpulse'));
         }
         error_log('🔧 Starting update...');
         $info = self::get_repo_info();
         [$owner, $repo] = self::parse_repo($info['url']);
         if (empty($owner) || empty($repo)) {
             $err = new \WP_Error('invalid_repo', 'Invalid repository URL');
+            update_option('ap_update_log', '❌ Update failed: ' . $err->get_error_message());
             if (!$silent) {
                 self::redirect_to_updates(['ap_update_error' => urlencode($err->get_error_message())]);
             }
@@ -185,6 +191,7 @@ class UpdatesTab
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
         $tmp = download_url($zip, 300, '', $args);
         if (is_wp_error($tmp)) {
+            update_option('ap_update_log', '❌ Update failed: ' . $tmp->get_error_message());
             if (!$silent) {
                 $msg = $tmp->get_error_message();
                 error_log('🔧 Update failed: ' . print_r($tmp, true));
@@ -221,6 +228,7 @@ class UpdatesTab
         self::delete_recursive($temp_dir);
         unlink($tmp);
         if (is_wp_error($result)) {
+            update_option('ap_update_log', '❌ Update failed: ' . $result->get_error_message());
             if (!$silent) {
                 $msg = $result->get_error_message();
                 error_log('🔧 Update failed: ' . print_r($result, true));
@@ -230,6 +238,7 @@ class UpdatesTab
         }
         update_option('ap_current_repo_sha', get_option('ap_update_remote_sha'));
         update_option('ap_last_update_time', current_time('mysql'));
+        update_option('ap_update_log', '✅ Update checked at ' . current_time('mysql'));
         update_option('ap_updated_files', $files);
         if (!$silent) {
             self::redirect_to_updates(['ap_update_success' => '1']);
