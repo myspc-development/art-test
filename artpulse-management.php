@@ -39,6 +39,7 @@ add_action('init', ['ArtPulse\\Core\\DashboardWidgetRegistry', 'init']);
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
 require_once __DIR__ . '/includes/widgets/class-ap-widget.php';
+require_once __DIR__ . '/includes/widgets/class-favorite-portfolio-widget.php';
 require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
@@ -601,7 +602,7 @@ function ap_render_favorite_portfolio($atts = []) {
         $favs = \ArtPulse\Community\FavoritesManager::get_user_favorites($user_id);
         $favorite_ids = array_map(fn($f) => $f->object_id, $favs);
     } else {
-        $fav_events = get_user_meta($user_id, 'ap_favorite_events', true) ?: [];
+        $fav_events   = get_user_meta($user_id, 'ap_favorite_events', true) ?: [];
         $fav_artworks = get_user_meta($user_id, 'ap_favorite_artworks', true) ?: [];
         $favorite_ids = array_merge($fav_events, $fav_artworks);
     }
@@ -622,7 +623,10 @@ function ap_render_favorite_portfolio($atts = []) {
                 'terms'    => $cat,
             ]];
         }
-        $fav_query = new WP_Query($args);
+        $cache_key = 'fav_portfolio_' . md5(serialize([$user_id, $args]));
+        $fav_query = ap_cache_get($cache_key, static function() use ($args) {
+            return new WP_Query($args);
+        });
         echo '<div class="ap-fav-portfolio row portfolio-items">';
         while($fav_query->have_posts()) : $fav_query->the_post();
             echo '<div class="col span_4">';
@@ -637,11 +641,11 @@ function ap_render_favorite_portfolio($atts = []) {
                         if (is_array($gallery_ids) && $gallery_ids) {
                             echo '<div class="event-gallery swiper"><div class="swiper-wrapper">';
                             foreach ($gallery_ids as $img_id) {
-                                echo '<div class="swiper-slide">' . wp_get_attachment_image($img_id, 'portfolio-thumb') . '</div>';
+                                echo '<div class="swiper-slide">' . wp_get_attachment_image($img_id, 'portfolio-thumb', false, ['loading' => 'lazy']) . '</div>';
                             }
                             echo '</div><div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div>';
                         } else {
-                            the_post_thumbnail('portfolio-thumb');
+                            the_post_thumbnail('portfolio-thumb', ['loading' => 'lazy']);
                         }
 ?>
                         <h3><?php the_title(); ?></h3>
@@ -1062,6 +1066,9 @@ add_action('wp_ajax_ap_reset_layout', function () {
 
 add_action('widgets_init', function () {
     register_widget('AP_Widget');
+    if (class_exists('AP_Favorite_Portfolio_Widget')) {
+        register_widget('AP_Favorite_Portfolio_Widget');
+    }
 });
 
 

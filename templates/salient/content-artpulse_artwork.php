@@ -9,7 +9,7 @@ while ( have_posts() ) : the_post(); ?>
     if (is_array($gallery_ids) && count($gallery_ids) > 1):
       echo '<div class="artwork-gallery">';
       foreach (array_slice($gallery_ids, 1) as $img_id) {
-        echo wp_get_attachment_image($img_id, 'large');
+        echo wp_get_attachment_image($img_id, 'large', false, ['loading' => 'lazy']);
       }
       echo '</div>';
     endif;

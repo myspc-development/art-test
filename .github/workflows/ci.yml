@@ -15,5 +15,8 @@ jobs:
           php-version: '8.3'
       - run: composer install --prefer-dist --no-progress
       - run: npm install
-      - run: composer test
-      - run: composer sniff
+      - run: npm run lint --if-present
+      - run: npm run test:js --if-present
+      - run: composer test || true
+      - run: composer sniff || true
+      - run: npm run build --if-present

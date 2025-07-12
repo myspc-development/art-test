@@ -10,7 +10,9 @@
     "bundle:react": "rollup -c",
     "build:css": "rollup -c",
     "start": "wp-scripts start",
-    "release": "standard-version"
+    "release": "standard-version",
+    "test:js": "jest",
+    "lint": "eslint assets/js"
   },
   "dependencies": {
     "lucide-react": "^0.346.0",
