@@ -175,6 +175,7 @@ class ComposerStaticInita473d3f3862fb4a1e679260c12c04875
         'ArtPulse\\Admin\\UpdatesTab' => __DIR__ . '/../..' . '/src/Admin/UpdatesTab.php',
         'ArtPulse\\Admin\\UserLayoutManager' => __DIR__ . '/../..' . '/src/Admin/UserLayoutManager.php',
         'ArtPulse\\Ajax\\FrontendFilterHandler' => __DIR__ . '/../..' . '/src/Ajax/FrontendFilterHandler.php',
+        'ArtPulse\\Ajax\\OrgRoles' => __DIR__ . '/../..' . '/src/Ajax/OrgRoles.php',
         'ArtPulse\\Blocks\\AdvancedTaxonomyFilterBlock' => __DIR__ . '/../..' . '/src/Blocks/AdvancedTaxonomyFilterBlock.php',
         'ArtPulse\\Blocks\\AjaxFilterBlock' => __DIR__ . '/../..' . '/src/Blocks/AjaxFilterBlock.php',
         'ArtPulse\\Blocks\\FavoritePortfolioBlock' => __DIR__ . '/../..' . '/src/Blocks/FavoritePortfolioBlock.php',

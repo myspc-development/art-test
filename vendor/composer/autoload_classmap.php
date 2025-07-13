@@ -62,6 +62,7 @@ return array(
     'ArtPulse\\Admin\\UpdatesTab' => $baseDir . '/src/Admin/UpdatesTab.php',
     'ArtPulse\\Admin\\UserLayoutManager' => $baseDir . '/src/Admin/UserLayoutManager.php',
     'ArtPulse\\Ajax\\FrontendFilterHandler' => $baseDir . '/src/Ajax/FrontendFilterHandler.php',
+    'ArtPulse\\Ajax\\OrgRoles' => $baseDir . '/src/Ajax/OrgRoles.php',
     'ArtPulse\\Blocks\\AdvancedTaxonomyFilterBlock' => $baseDir . '/src/Blocks/AdvancedTaxonomyFilterBlock.php',
     'ArtPulse\\Blocks\\AjaxFilterBlock' => $baseDir . '/src/Blocks/AjaxFilterBlock.php',
     'ArtPulse\\Blocks\\FavoritePortfolioBlock' => $baseDir . '/src/Blocks/FavoritePortfolioBlock.php',
