@@ -87,9 +87,14 @@ class PayoutManager
         $sql = "SELECT SUM(et.price) FROM $tickets t JOIN $tiers et ON t.ticket_tier_id = et.id JOIN $posts p ON t.event_id = p.ID WHERE p.post_author = %d AND t.status = 'active'";
         $sales_total = floatval($wpdb->get_var($wpdb->prepare($sql, $artist_id)));
 
-        $payout_total = floatval($wpdb->get_var($wpdb->prepare("SELECT SUM(amount) FROM {$wpdb->prefix}ap_payouts WHERE artist_id = %d AND status = 'paid'", $artist_id)));
+        $payouts = $wpdb->prefix . 'ap_payouts';
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $payouts)) !== $payouts) {
+            return 0.0;
+        }
 
-        return $sales_total - $payout_total;
+        $payout_total = floatval($wpdb->get_var($wpdb->prepare("SELECT SUM(amount) FROM $payouts WHERE artist_id = %d AND status = 'paid'", $artist_id)));
+
+        return (float) ($sales_total - $payout_total);
     }
 
     public static function update_settings(WP_REST_Request $req)

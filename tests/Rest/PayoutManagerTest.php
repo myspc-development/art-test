@@ -48,4 +48,17 @@ class PayoutManagerTest extends \WP_UnitTestCase
         $this->assertSame(200, $res->get_status());
         $this->assertSame('bank', get_user_meta($this->artist_id, 'ap_payout_method', true));
     }
+
+    public function test_get_balance_returns_zero_when_table_missing(): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_payouts';
+        $wpdb->query("DROP TABLE IF EXISTS $table");
+
+        $balance = PayoutManager::get_balance($this->artist_id);
+        $this->assertSame(0.0, $balance);
+
+        // Recreate table for other tests.
+        PayoutManager::maybe_install_table();
+    }
 }
