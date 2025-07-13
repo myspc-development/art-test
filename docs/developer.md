@@ -23,3 +23,19 @@ DashboardWidgetRegistry::register(
 
 ## Export and Import
 Call `UserLayoutManager::export_layout( $role )` to get JSON. Use `UserLayoutManager::import_layout( $role, $json )` to load it.
+
+## Messaging
+
+Direct messages are managed via REST endpoints registered by `DirectMessages`.
+Routes:
+
+```text
+POST /wp-json/artpulse/v1/messages
+GET  /wp-json/artpulse/v1/messages?with={user_id}
+GET  /wp-json/artpulse/v1/conversations
+POST /wp-json/artpulse/v1/message/read
+```
+
+Include a `nonce` parameter using the value from the `APMessages.nonce` script
+localization. The bundled `assets/js/ap-messages.js` helper handles polling and
+sending messages via `wp.apiFetch` style requests.

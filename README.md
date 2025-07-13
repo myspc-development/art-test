@@ -129,6 +129,8 @@ Dashboard widget markup and CSS are documented in the
 - `[ap_my_follows]` — List artists, events or organizations you follow
 - `[ap_favorite_portfolio]` — Display a portfolio of favorited events/artworks
 - `[ap_favorites_analytics]` — Show analytics for favorite counts
+- `[ap_messages]` — Render threaded inbox
+- `[ap_message_form]` — Standalone message compose form
 
 ## CSV Import/Export
 

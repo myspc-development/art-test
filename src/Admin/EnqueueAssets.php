@@ -457,9 +457,10 @@ class EnqueueAssets {
             'nonce'    => wp_create_nonce('wp_rest'),
         ]);
         wp_localize_script('ap-messages-js', 'APMessages', [
-            'apiRoot' => esc_url_raw(rest_url()),
-            'nonce'   => wp_create_nonce('wp_rest'),
-            'pollId'  => 0,
+            'apiRoot'  => esc_url_raw(rest_url()),
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('ap_messages_nonce'),
+            'pollId'   => 0,
         ]);
         wp_localize_script('ap-forum-js', 'APForum', [
             'rest_url'    => esc_url_raw(rest_url()),
