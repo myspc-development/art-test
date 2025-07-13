@@ -32,6 +32,25 @@ class DashboardWidgetTools
         $all   = self::get_role_widgets();
         return $all[$role] ?? [];
     }
+
+    public static function register_default_widgets_for_role(string $role): void
+    {
+        $defaults = [
+            'member' => [
+                ['id' => 'welcome_box', 'label' => 'Welcome', 'callback' => [\ArtPulse\Widgets::class, 'render_welcome_box']],
+            ],
+            'artist' => [
+                ['id' => 'portfolio_preview', 'label' => 'Portfolio', 'callback' => [\ArtPulse\Widgets::class, 'render_portfolio_box']],
+            ],
+            'organization' => [
+                ['id' => 'org_insights', 'label' => 'Insights', 'callback' => [\ArtPulse\Widgets::class, 'render_org_insights_box']],
+            ],
+        ];
+
+        foreach ($defaults[$role] ?? [] as $widget) {
+            update_user_meta(get_current_user_id(), "ap_widget_{$role}_{$widget['id']}", $widget);
+        }
+    }
     public static function register(): void
     {
         add_action('wp_dashboard_setup', function () {

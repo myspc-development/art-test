@@ -308,6 +308,7 @@ class Plugin
         \ArtPulse\Blocks\SpotlightBlock::register();
         \ArtPulse\Blocks\FavoritePortfolioBlock::register();
         \ArtPulse\Blocks\TaxonomyFilterBlock::register();
+        \ArtPulse\Blocks\PortfolioPreviewBlock::register();
         WidgetEmbedShortcode::register();
         WidgetEmbedBlock::register();
         \ArtPulse\Blocks\FavoritesWidgetBlock::register();

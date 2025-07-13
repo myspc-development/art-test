@@ -55,6 +55,17 @@ class EnqueueAssets {
             );
         }
 
+        $sidebar_plugin_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/admin/sidebar.js';
+        $sidebar_plugin_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'admin/sidebar.js';
+        if (file_exists($sidebar_plugin_path)) {
+            wp_enqueue_script(
+                'artpulse-sidebar',
+                $sidebar_plugin_url,
+                ['wp-edit-post'],
+                filemtime($sidebar_plugin_path)
+            );
+        }
+
         // Advanced taxonomy filter block script
         $advanced_script_path = $plugin_dir . '/assets/js/advanced-taxonomy-filter-block.js';
         $advanced_script_url = $plugin_url . '/assets/js/advanced-taxonomy-filter-block.js';
