@@ -16,7 +16,9 @@ class OrgRolesController {
         register_rest_route('artpulse/v1', '/org-roles', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_roles'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => static function () {
+                return current_user_can('read');
+            },
         ]);
     }
 
@@ -33,10 +35,7 @@ class OrgRolesController {
             'ap-org-roles',
             'ArtPulseOrgRoles',
             [
-                'ajax_url' => admin_url('admin-ajax.php'),
-                'root'     => esc_url_raw(rest_url()),
-                'nonce'    => wp_create_nonce('ap_org_roles_nonce'),
-                'user_id'  => get_current_user_id(),
+                'api_url' => rest_url('artpulse/v1/org-roles'),
             ]
         );
     }
