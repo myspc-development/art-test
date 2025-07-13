@@ -293,9 +293,6 @@ class RsvpRestController
     public static function get_attendees(WP_REST_Request $request): WP_REST_Response
     {
         $event_id = absint($request->get_param('id'));
-        if (!current_user_can('edit_post', $event_id)) {
-            return new WP_Error('rest_forbidden', 'Insufficient permissions.', ['status' => 403]);
-        }
         ['rsvps' => $rsvps, 'waitlist' => $waitlist] = self::get_lists($event_id);
         $attended  = get_post_meta($event_id, 'event_attended', true);
         if (!is_array($attended)) {
@@ -347,9 +344,6 @@ class RsvpRestController
     public static function export_attendees(WP_REST_Request $request): WP_REST_Response
     {
         $event_id = absint($request->get_param('id'));
-        if (!current_user_can('edit_post', $event_id)) {
-            return new WP_Error('rest_forbidden', 'Insufficient permissions.', ['status' => 403]);
-        }
         $data = self::get_attendees($request)->get_data();
 
         $rows = array_merge($data['attendees'], $data['waitlist']);
