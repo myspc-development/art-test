@@ -101,3 +101,39 @@ only the associated form section.
 ## Best Practices
 
 All UI strings should be translatable. Save branding and layout changes via AJAX for instant feedback. Onboarding and help flows must be dismissible and accessible on mobile and for screen readers.
+
+## Performance Optimization
+
+Avoid synchronous layout reads and writes that trigger forced reflows. Separate
+DOM measurements from style changes:
+
+```js
+// Bad: read and write intermixed
+const height = element.offsetHeight;
+element.style.height = height + 10 + 'px';
+
+// Good: split the write into a new frame
+const currentHeight = element.offsetHeight;
+requestAnimationFrame(() => {
+  element.style.height = currentHeight + 10 + 'px';
+});
+```
+
+Batch multiple updates in `requestAnimationFrame` or `requestIdleCallback` and
+debounce expensive listeners for smoother scrolling and interaction.
+
+### Font Optimization
+
+On slow connections or internal networks, host fonts locally rather than using
+Google Fonts. Serve the files from `assets/fonts/` and declare them with
+`@font-face`:
+
+```css
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../fonts/OpenSans-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+```
+
+Use `font-display: swap` so text is visible while fonts load.

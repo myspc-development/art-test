@@ -94,3 +94,24 @@ curl -H 'Content-Type: application/json' -u alice:pass \
 ### Dashboard Shortcode
 
 Use the `[ap_messages]` shortcode to embed a simple inbox. It lists each conversation with an unread count and loads the message thread via AJAX. A message form lets logged‑in users send new messages without refreshing the page.
+
+### Handling REST Errors Gracefully
+
+When a request fails with 403 or 404, display a helpful message rather than
+silently failing:
+
+```js
+fetch(`${apiBase}/conversations?_wpnonce=${nonce}`)
+  .then(response => {
+    if (!response.ok) throw new Error(`Error: ${response.status}`);
+    return response.json();
+  })
+  .then(data => renderConversations(data))
+  .catch(err => {
+    console.error('Failed to fetch conversations:', err);
+    alert('Unable to load conversations. Please check your permissions.');
+  });
+```
+
+Provide fallback text or alternate UI for unauthorized users and consider
+pagination or debounced polling when dealing with large data sets.
