@@ -2,7 +2,7 @@
 /*
 Plugin Name: ArtPulse Management
 Description: Event, analytics, and messaging management for creative organizations.
-Version: 1.0.0
+Version: 1.3.11
 Author: Your Team
 */
 if (!defined('ABSPATH')) { exit; }
