@@ -302,6 +302,7 @@ class Plugin
         \ArtPulse\Blocks\TaxonomyFilterBlock::register();
         WidgetEmbedShortcode::register();
         WidgetEmbedBlock::register();
+        \ArtPulse\Blocks\FavoritesWidgetBlock::register();
         \ArtPulse\Community\FollowRestController::register();
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
         \ArtPulse\Community\NotificationHooks::register();

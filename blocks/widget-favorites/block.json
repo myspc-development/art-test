@@ -1,0 +1,10 @@
+{
+  "apiVersion": 2,
+  "name": "artpulse/widget-favorites",
+  "title": "Favorites Widget",
+  "category": "widgets",
+  "icon": "star-filled",
+  "supports": {"html": false},
+  "editorScript": "file:./editor.js",
+  "render": "file:./render.php"
+}

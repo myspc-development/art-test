@@ -6,19 +6,14 @@
         return;
     }
 
-    const { ajax_url, nonce, user_id } = ArtPulseOrgRoles;
+    const { root, nonce, user_id } = ArtPulseOrgRoles;
 
     async function loadOrgRoles() {
         try {
-            const formData = new FormData();
-            formData.append('action', 'ap_get_org_roles');
-            formData.append('nonce', nonce);
-            formData.append('user_id', user_id);
-
-            const res = await fetch(ajax_url, {
-                method: 'POST',
+            const url = `${root}artpulse/v1/org-roles?user_id=${user_id}`;
+            const res = await fetch(url, {
                 credentials: 'same-origin',
-                body: formData,
+                headers: { 'X-WP-Nonce': nonce },
             });
 
             if (!res.ok) throw new Error(`HTTP ${res.status}`);

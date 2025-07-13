@@ -1,5 +1,5 @@
 <?php
-$visible = $visible ?? true;
+extract(ap_template_context($args ?? [], ['visible' => true]));
 /**
  * Dashboard widget: Upcoming events.
  */
