@@ -106,20 +106,20 @@ class DirectMessages
         register_rest_route('artpulse/v1', '/messages', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'fetch'],
-            'permission_callback' => static function () {
-                return current_user_can('read');
-            },
+            'permission_callback' => [self::class, 'permission_view'],
             'args'                => [
-                'with' => [ 'type' => 'integer', 'required' => true ],
+                'with'  => [ 'type' => 'integer', 'required' => true ],
+                'nonce' => [ 'type' => 'string',  'required' => true ],
             ],
         ]);
 
         register_rest_route('artpulse/v1', '/conversations', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'rest_list_conversations'],
-            'permission_callback' => static function () {
-                return is_user_logged_in();
-            },
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'nonce' => [ 'type' => 'string', 'required' => true ],
+            ],
         ]);
 
         register_rest_route('artpulse/v1', '/message/read', [
@@ -226,7 +226,8 @@ class DirectMessages
 
     public static function permission_view(WP_REST_Request $req): bool
     {
-        return is_user_logged_in();
+        check_ajax_referer('ap_messages_nonce', 'nonce');
+        return current_user_can('read');
     }
 
     public static function permission_send(WP_REST_Request $req): bool

@@ -105,4 +105,84 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE id = %d", $msg_id), ARRAY_A);
         $this->assertSame('1', $row['is_read']);
     }
+
+    public function test_send_requires_valid_nonce(): void
+    {
+        $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
+        $post->set_param('recipient_id', $this->user2);
+        $post->set_param('content', 'Hey');
+        try {
+            rest_get_server()->dispatch($post);
+            $this->fail('Expected die for missing nonce');
+        } catch (\WPDieException $e) {
+            // Expected.
+        }
+
+        $post->set_param('nonce', 'bad');
+        try {
+            rest_get_server()->dispatch($post);
+            $this->fail('Expected die for bad nonce');
+        } catch (\WPDieException $e) {
+            // Expected.
+        }
+    }
+
+    public function test_mark_read_requires_valid_nonce(): void
+    {
+        $read = new WP_REST_Request('POST', '/artpulse/v1/message/read');
+        $read->set_param('ids', [1]);
+        try {
+            rest_get_server()->dispatch($read);
+            $this->fail('Expected die for missing nonce');
+        } catch (\WPDieException $e) {
+            // Expected.
+        }
+
+        $read->set_param('nonce', 'bad');
+        try {
+            rest_get_server()->dispatch($read);
+            $this->fail('Expected die for bad nonce');
+        } catch (\WPDieException $e) {
+            // Expected.
+        }
+    }
+
+    public function test_fetch_requires_nonce(): void
+    {
+        $get = new WP_REST_Request('GET', '/artpulse/v1/messages');
+        $get->set_param('with', $this->user2);
+        try {
+            rest_get_server()->dispatch($get);
+            $this->fail('Expected die for missing nonce');
+        } catch (\WPDieException $e) {
+            // Expected.
+        }
+
+        $get->set_param('nonce', 'bad');
+        try {
+            rest_get_server()->dispatch($get);
+            $this->fail('Expected die for bad nonce');
+        } catch (\WPDieException $e) {
+            // Expected.
+        }
+    }
+
+    public function test_conversations_requires_nonce(): void
+    {
+        $list = new WP_REST_Request('GET', '/artpulse/v1/conversations');
+        try {
+            rest_get_server()->dispatch($list);
+            $this->fail('Expected die for missing nonce');
+        } catch (\WPDieException $e) {
+            // Expected.
+        }
+
+        $list->set_param('nonce', 'bad');
+        try {
+            rest_get_server()->dispatch($list);
+            $this->fail('Expected die for bad nonce');
+        } catch (\WPDieException $e) {
+            // Expected.
+        }
+    }
 }
