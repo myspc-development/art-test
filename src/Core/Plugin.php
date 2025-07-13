@@ -506,6 +506,10 @@ class Plugin
             'poll'    => true,
         ]);
 
+        wp_localize_script('ap-event-chat-js', 'ArtPulseChatVars', [
+            'event_id' => get_the_ID(),
+        ]);
+
         wp_localize_script('ap-forum-js', 'APForum', [
             'rest_url'    => esc_url_raw(rest_url()),
             'nonce'       => wp_create_nonce('wp_rest'),
