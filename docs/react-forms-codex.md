@@ -20,11 +20,14 @@ const ReactForm = () => {
     e.preventDefault();
     setStatus('Submitting...');
 
+    const { ajaxurl, nonce } = window.apReactForm || {};
+
     const response = await fetch(ajaxurl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         action: 'submit_react_form',
+        _ajax_nonce: nonce,
         ...formData,
       }),
     });
@@ -100,9 +103,13 @@ function artpulse_enqueue_react_form() {
         '1.0.0',
         true
     );
-    wp_add_inline_script(
+    wp_localize_script(
         'artpulse-react-form',
-        'var ajaxurl = "' . admin_url('admin-ajax.php') . '";'
+        'apReactForm',
+        [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('ap_react_form'),
+        ]
     );
 }
 add_action('wp_enqueue_scripts', 'artpulse_enqueue_react_form');
@@ -113,13 +120,18 @@ function artpulse_render_react_form() {
 add_shortcode('react_form', 'artpulse_render_react_form');
 ```
 
+The localized `apReactForm` object exposes `ajaxurl` and a security
+`nonce` that must be sent with each AJAX request.
+
 Use `[react_form]` in any post or page to display the form.
 
 ## 5. AJAX handler
-Add an admin‑ajax endpoint that processes the form values:
+Add an admin‑ajax endpoint that processes the form values. The handler
+verifies the `ap_react_form` nonce sent by the component:
 
 ```php
 function artpulse_handle_react_form() {
+    check_ajax_referer('ap_react_form');
     $name  = sanitize_text_field($_POST['name'] ?? '');
     $email = sanitize_email($_POST['email'] ?? '');
 
