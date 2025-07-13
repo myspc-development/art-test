@@ -358,6 +358,9 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 
 ## Development Setup
 
+ArtPulse currently supports **PHP 8.2–8.4**. Ensure a compatible PHP version is
+installed before continuing.
+
 Install Composer dependencies and WordPress PHPUnit tools:
 
 ```bash
