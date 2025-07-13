@@ -36,6 +36,9 @@ require_once $autoload_path;
     wp_die('Autoloader missing. Run `composer install` in the plugin directory.');
 }
 
+// Setup automatic plugin updates from GitHub
+require_once __DIR__ . '/includes/update-checker.php';
+
 Plugin::register();
 OrgRolesController::register();
 add_action('init', [DashboardWidgetRegistry::class, 'init']);
