@@ -1,0 +1,131 @@
+
+# 🧑‍💻 ArtPulse Developer Onboarding Guide
+
+Welcome to the **ArtPulse Management Plugin** development team! This document provides all the essential information to get started with development, debugging, and contributing.
+
+---
+
+## 📦 Project Overview
+
+**Plugin Name:** ArtPulse Management  
+**Purpose:** Event, messaging, analytics, and user management for creative organizations.  
+**Stack:**  
+- Backend: PHP (WordPress Plugin)  
+- Frontend: jQuery, Vanilla JS (migrating to modern stack planned)  
+- REST API: WordPress `register_rest_route()`  
+- Styling: WordPress admin styles + custom CSS
+
+---
+
+## 🚀 Getting Started
+
+### 1. **System Requirements**
+- PHP 7.4+
+- WordPress 5.8+
+- MySQL 5.7+ or MariaDB 10.3+
+- Node.js (for asset builds, optional)
+
+### 2. **Installation (Dev Environment)**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-org/artpulse.git
+   ```
+2. Copy to your plugins directory:
+   ```bash
+   cp -r artpulse /wp-content/plugins/artpulse
+   ```
+3. Activate the plugin in the WordPress Admin (`Plugins > ArtPulse > Activate`).
+
+---
+
+## 🛠️ Development Environment
+
+### File Structure
+```
+/artpulse
+│
+├── artpulse.php                # Plugin bootstrap
+├── artpulse-management.php     # Admin features
+├── auto-tagger.php             # Content metadata utility
+├── js/                         # JS files (e.g., ap-messages.js)
+├── css/                        # Custom styles
+├── docs/                       # Developer Codex (read these!)
+├── templates/                  # Admin page markup
+├── tests/                      # PHPUnit or JS tests
+└── README.md                   # Main overview
+```
+
+---
+
+## 🔐 Authentication & API Usage
+
+- **REST Routes:** Begin with `/wp-json/artpulse/v1/`
+- **Nonce Handling:**
+  - Use `wp_create_nonce('artpulse_nonce')` in PHP.
+  - Pass nonce via `wp_localize_script()` to JS.
+- **Permissions:**
+  - REST endpoints should validate using `current_user_can()`.
+
+---
+
+## 🧪 Testing
+
+- Enable debugging:
+  ```php
+  define('WP_DEBUG', true);
+  define('WP_DEBUG_LOG', true);
+  ```
+- View logs at: `wp-content/debug.log`
+
+### PHPUnit Setup
+```bash
+cd wp-content/plugins/artpulse
+composer install
+./vendor/bin/phpunit
+```
+
+---
+
+## 🧰 Helpful Scripts
+
+- **Lint JS:** `npm run lint`
+- **Build Assets:** `npm run build`
+- **Check Git Ignore:** `bash check-git-ignore.sh`
+
+---
+
+## 📚 Key Documentation Files
+
+| File / Section | Purpose |
+|----------------|---------|
+| `docs/admin-guide.md` | Site admin setup |
+| `docs/user-guide.md` | End-user functionality |
+| `docs/api-reference.md` | REST endpoints |
+| `docs/messaging-communication-codex.md` | JS messaging & inbox logic |
+| `docs/ui-ux-polish-codex.md` | Styling and onboarding customization |
+
+---
+
+## 💬 Communication
+
+- Slack: `#artpulse-dev`
+- Weekly check-ins: Wednesdays at 2pm GMT
+- Code Review: All PRs require 1 reviewer approval
+
+---
+
+## 🧼 Contribution Guidelines
+
+- Branch naming: `feature/`, `fix/`, `hotfix/`
+- Pull requests should:
+  - Reference an issue
+  - Include screenshots or test steps
+  - Pass lint and test checks
+
+---
+
+## 🔚 Final Notes
+
+- Run `npm install` after pulling new changes if JS/CSS changed.
+- Review the Codex for modular features and architecture.
+- Ask if you’re unsure — the team is here to help!
