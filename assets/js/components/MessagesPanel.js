@@ -5,8 +5,12 @@ export default function MessagesPanel() {
 
   useEffect(() => {
     fetch('/wp-json/artpulse/v1/dashboard/messages')
-      .then(res => res.json())
-      .then(setMessages);
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(setMessages)
+      .catch(err => console.error('Messages load error:', err));
   }, []);
 
   return (
