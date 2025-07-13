@@ -224,47 +224,8 @@ register_activation_hook(__FILE__, function () {
 });
 
 function ap_install_tables() {
-    global $wpdb;
-    $charset_collate = $wpdb->get_charset_collate();
-    $sql = "CREATE TABLE {$wpdb->prefix}ap_payouts (
-        id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        artist_id BIGINT,
-        amount DECIMAL(10,2),
-        payout_date DATETIME,
-        status VARCHAR(20)
-    ) $charset_collate;";
-    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-    dbDelta($sql);
-
-    // Safely add AUTO_INCREMENT without redefining the primary key if the table
-    // already exists from a previous installation.
-    if ($wpdb->get_var("SHOW KEYS FROM {$wpdb->prefix}ap_payouts WHERE Key_name = 'PRIMARY'") ) {
-        $wpdb->query("ALTER TABLE {$wpdb->prefix}ap_payouts CHANGE id id BIGINT AUTO_INCREMENT");
-    }
-
-    // Log whether all required tables exist after activation.
-    $required_tables = [
-        $wpdb->prefix . 'ap_roles',
-        $wpdb->prefix . 'ap_feedback',
-        $wpdb->prefix . 'ap_feedback_comments',
-        $wpdb->prefix . 'ap_org_messages',
-        $wpdb->prefix . 'ap_scheduled_messages',
-        $wpdb->prefix . 'ap_payouts',
-    ];
-
-    foreach ($required_tables as $table) {
-        if ($wpdb->get_var("SHOW TABLES LIKE '{$table}'") !== $table) {
-            error_log("❌ Missing table: {$table}");
-        } else {
-            error_log("✅ Table exists: {$table}");
-        }
-    }
-
-    update_option('artpulse_installed', true);
-    update_option('artpulse_version', defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : null);
-    if (!get_option('artpulse_install_time')) {
-        update_option('artpulse_install_time', current_time('mysql'));
-    }
+    require_once __DIR__ . '/includes/db-schema.php';
+    \ArtPulse\DB\create_monetization_tables();
 }
 register_activation_hook(__FILE__, 'ap_install_tables');
 
