@@ -46,7 +46,7 @@ class EventChatController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/chat', [
+        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/chat', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
             'permission_callback' => function () {
@@ -55,7 +55,7 @@ class EventChatController
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
 
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/chat', [
+        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/chat', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'add'],
             'permission_callback' => [self::class, 'can_post'],

@@ -14,14 +14,14 @@ class EventCommentsController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
+        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/comments', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
 
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
+        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/comments', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'add'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -31,7 +31,7 @@ class EventCommentsController
             ],
         ]);
 
-        register_rest_route('artpulse/v1', '/event/comment/(?P<comment_id>\\d+)/moderate', [
+        register_rest_route('artpulse/v1', '/event/comment/(?P<comment_id>\d+)/moderate', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'moderate'],
             'permission_callback' => fn() => current_user_can('moderate_comments'),
