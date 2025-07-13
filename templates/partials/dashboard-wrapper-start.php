@@ -21,4 +21,13 @@
       ?>
     </aside>
     <main class="ap-dashboard-main">
+      <?php
+      $user    = wp_get_current_user();
+      $followed = \ArtPulse\Community\FollowManager::get_user_follows($user->ID, 'artist');
+      $follows = is_array($followed) ? count($followed) : 0;
+      $summary = \ArtPulse\Frontend\EventRsvpHandler::get_rsvp_summary_for_user($user->ID);
+      $events  = $summary['going'] ?? 0;
+      ?>
+      <h2>Welcome back, <?= esc_html($user->display_name) ?> 👋</h2>
+      <p>You're following <?= $follows ?> artists. You’ve RSVP’d to <?= $events ?> events.</p>
 

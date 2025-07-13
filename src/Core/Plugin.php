@@ -251,6 +251,7 @@ class Plugin
         \ArtPulse\Rest\CollectionRestController::register();
         \ArtPulse\Rest\ArtworkAuctionController::register();
         \ArtPulse\Rest\SpotlightRestController::register();
+        \ArtPulse\Rest\SpotlightAnalyticsController::register();
         ArtistRestController::register();
         RestRelationships::register();
         TaxonomyRestFilters::register();
