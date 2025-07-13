@@ -6,27 +6,19 @@
         return;
     }
 
-    const { ajax_url, nonce, user_id } = ArtPulseOrgRoles;
+    const { api_url } = ArtPulseOrgRoles;
 
     async function loadOrgRoles() {
         try {
-            const res = await fetch(ajax_url, {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    action: 'ap_get_org_roles',
-                    nonce,
-                    user_id,
-                }),
-            });
+            const res = await fetch(api_url);
 
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const json = await res.json();
-            if (!json.success || !Array.isArray(json.data.roles)) {
-                throw new Error(json.data || 'Invalid data format');
+            const roles = json.roles || json;
+            if (!Array.isArray(roles)) {
+                throw new Error('Invalid data format');
             }
-            renderRoles(json.data.roles);
+            renderRoles(roles);
         } catch (err) {
             console.error('OrgRoles AJAX failed:', err);
             renderError(err.message);
