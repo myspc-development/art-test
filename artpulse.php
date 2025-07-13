@@ -35,3 +35,10 @@ add_action('plugins_loaded', function () {
         update_option('artpulse_db_version', ARTPULSE_VERSION);
     }
 });
+
+add_action('plugins_loaded', function () {
+    if (defined('ARTPULSE_VERSION') && get_option('artpulse_version') !== ARTPULSE_VERSION) {
+        ArtPulse\DB\create_monetization_tables();
+        update_option('artpulse_version', ARTPULSE_VERSION);
+    }
+});

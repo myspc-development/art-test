@@ -61,6 +61,12 @@ function create_monetization_tables() {
     }
 
     validate_monetization_tables();
+
+    update_option('artpulse_installed', true);
+    update_option('artpulse_version', defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : null);
+    if (!get_option('artpulse_install_time')) {
+        update_option('artpulse_install_time', current_time('mysql'));
+    }
 }
 
 function validate_monetization_tables(): void {
