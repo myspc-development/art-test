@@ -4,7 +4,7 @@ This guide explains how dashboard widgets are defined, configured and stored for
 
 ## 1. Widget Definitions
 
-`ap_get_all_widget_definitions()` returns an array of widget metadata filtered by `ap_dashboard_widget_definitions`. Each entry contains an ID, name, icon and description:
+`ap_get_all_widget_definitions()` returns an array of widget metadata filtered by `ap_dashboard_widget_definitions`. Each entry contains an ID, name, icon and description. The snippet below is a simplified example:
 
 ```php
 function ap_get_all_widget_definitions(): array {
@@ -43,29 +43,17 @@ add_action('artpulse_register_dashboard_widget', function () {
 
 Admins arrange default widget layouts under **ArtPulse → Settings → Dashboard Widgets**. The selected order for each role is stored in the `ap_dashboard_widget_config` option. Changes are saved via AJAX:
 
+
 ```php
 add_action('wp_ajax_ap_save_dashboard_widget_config', 'ap_save_dashboard_widget_config');
 
 function ap_save_dashboard_widget_config(): void {
-    check_ajax_referer('ap_dashboard_widget_config', 'nonce');
-    if (!current_user_can('manage_options')) {
-        wp_send_json_error(['message' => __('Permission denied', 'artpulse')]);
-    }
-    $raw = $_POST['config'] ?? [];
-    $sanitized = [];
-    foreach ($raw as $role => $widgets) {
-        $role_key = sanitize_key($role);
-        $ordered = [];
-        foreach ((array) $widgets as $w) {
-            $ordered[] = sanitize_key($w);
-        }
-        $sanitized[$role_key] = $ordered;
-    }
-    update_option('ap_dashboard_widget_config', $sanitized);
-    wp_send_json_success(['saved' => true]);
+    // Verify nonce and capability
+    // Sanitize the widget order
+    // Save to the `ap_dashboard_widget_config` option
+    // Send a JSON success response
 }
 ```
-
 ## 4. Widget Layout Editor
 
 Visit **ArtPulse → Settings → Dashboard Widgets** to open the layout editor. The
@@ -85,62 +73,15 @@ The REST endpoint `/artpulse/v1/ap_dashboard_layout` loads and saves each user's
 
 ```php
 register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
-    'methods'  => 'GET',
-    'callback' => [ self::class, 'getDashboardLayout' ],
+    'methods'  => ['GET', 'POST'],
+    'callback' => [ self::class, 'handleDashboardLayout' ],
     'permission_callback' => fn() => is_user_logged_in(),
 ]);
 
-register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
-    'methods'  => 'POST',
-    'callback' => [ self::class, 'saveDashboardLayout' ],
-    'permission_callback' => fn() => is_user_logged_in(),
-    'args'     => [
-        'layout'     => [ 'type' => 'array',  'required' => false ],
-        'visibility' => [ 'type' => 'object', 'required' => false ],
-    ],
-]);
-
-public static function getDashboardLayout() {
-    $uid   = get_current_user_id();
-    $layout = get_user_meta($uid, 'ap_dashboard_layout', true);
-    if (!is_array($layout) || empty($layout)) {
-        $roles  = wp_get_current_user()->roles;
-        $config = get_option('ap_dashboard_widget_config', []);
-        foreach ($roles as $r) {
-            if (!empty($config[$r]) && is_array($config[$r])) {
-                $layout = array_map('sanitize_key', $config[$r]);
-                break;
-            }
-        }
-        if (!is_array($layout)) {
-            $layout = [];
-        }
-    }
-    $vis = get_user_meta($uid, 'ap_widget_visibility', true);
-    if (!is_array($vis)) {
-        $vis = [];
-    }
-    return rest_ensure_response([
-        'layout'     => $layout,
-        'visibility' => $vis,
-    ]);
-}
-
-public static function saveDashboardLayout( WP_REST_Request $request ) {
-    $uid = get_current_user_id();
-    if ($request->has_param('layout')) {
-        $layout = array_map('sanitize_text_field', (array) $request->get_param('layout'));
-        update_user_meta($uid, 'ap_dashboard_layout', $layout);
-    }
-    if ($request->has_param('visibility')) {
-        $vis_raw = (array) $request->get_param('visibility');
-        $vis = [];
-        foreach ($vis_raw as $key => $val) {
-            $vis[sanitize_key($key)] = (bool) $val;
-        }
-        update_user_meta($uid, 'ap_widget_visibility', $vis);
-    }
-    return rest_ensure_response(['saved' => true]);
+public static function handleDashboardLayout( WP_REST_Request $request ) {
+    // Load or save layout and visibility settings
+    // Fall back to role defaults when none exist
+    // Return data in a REST response
 }
 ```
 
@@ -172,7 +113,7 @@ if (resetBtn) {
 
 ## 7. Widget Settings
 
-Each widget may expose configurable options. The `DashboardWidgetRegistry::register()`
+Each widget may expose configurable options. The snippet below shows a sample registration. The `DashboardWidgetRegistry::register()`
 method accepts a `settings` array describing each field:
 
 ```php

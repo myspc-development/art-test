@@ -102,7 +102,8 @@ to the proper `admin.php` URL.
 ### Fixing 404 on `/wp-admin/ap-org-roles`
 
 If navigating directly to `/wp-admin/ap-org-roles` shows a 404 error, make sure
-the admin page is registered with the correct slug:
+the admin page is registered with the correct slug: The snippet below shows a minimal example.
+
 
 ```php
 add_action('admin_menu', 'ap_register_admin_pages');
@@ -118,19 +119,10 @@ function ap_register_admin_pages() {
         26
     );
 }
-```
 
-`ap_render_org_roles_page()` outputs the page markup. A minimal layout might
-look like:
-
-```php
 function ap_render_org_roles_page() {
-    echo '<div class="wrap">';
-    echo '<h1>Organization Roles</h1>';
-    echo '<p>Manage capabilities for each role here.</p>';
-    echo '</div>';
+    // Output HTML for managing capabilities
 }
 ```
-
 Use the same slug `ap-org-roles` in menu links, `admin.php?page=` URLs and the
 callback registration so WordPress can route requests properly.
