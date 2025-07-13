@@ -27,7 +27,7 @@ function ap_cache_get(string $key, callable $callback, int $expires = HOUR_IN_SE
  * @param string $url Feed URL.
  * @return array|SimplePie
  */
-function get_feed($url) {
+function ap_get_feed($url) {
     include_once ABSPATH . WPINC . '/feed.php';
 
     $feed = fetch_feed($url);
