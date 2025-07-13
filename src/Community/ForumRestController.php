@@ -31,14 +31,14 @@ class ForumRestController
             ],
         ]);
 
-        register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments', [
+        register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\d+)/comments', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_comments'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
 
-        register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments', [
+        register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\d+)/comments', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [self::class, 'add_comment'],
             'permission_callback' => fn() => is_user_logged_in(),

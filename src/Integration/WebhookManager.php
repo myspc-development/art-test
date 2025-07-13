@@ -19,19 +19,19 @@ class WebhookManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', [
+        register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/webhooks', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_webhooks'],
             'permission_callback' => [self::class, 'check_manage_org'],
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
-        register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', [
+        register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/webhooks', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_webhook'],
             'permission_callback' => [self::class, 'check_manage_org'],
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
-        register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', [
+        register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/webhooks/(?P<hid>\d+)', [
             'methods'  => 'PUT',
             'callback' => [self::class, 'update_webhook'],
             'permission_callback' => [self::class, 'check_manage_org'],
@@ -40,7 +40,7 @@ class WebhookManager
                 'hid' => ['validate_callback' => 'absint'],
             ],
         ]);
-        register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', [
+        register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/webhooks/(?P<hid>\d+)', [
             'methods'  => 'DELETE',
             'callback' => [self::class, 'delete_webhook'],
             'permission_callback' => [self::class, 'check_manage_org'],

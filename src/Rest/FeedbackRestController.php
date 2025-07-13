@@ -29,19 +29,19 @@ class FeedbackRestController
             'callback'            => [self::class, 'list'],
             'permission_callback' => fn () => is_user_logged_in(),
         ]);
-        register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/vote', [
+        register_rest_route('artpulse/v1', '/feedback/(?P<id>\d+)/vote', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'vote'],
             'permission_callback' => fn () => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
-        register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/comments', [
+        register_rest_route('artpulse/v1', '/feedback/(?P<id>\d+)/comments', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'comments'],
             'permission_callback' => fn () => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
-        register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/comments', [
+        register_rest_route('artpulse/v1', '/feedback/(?P<id>\d+)/comments', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'add_comment'],
             'permission_callback' => fn () => is_user_logged_in(),

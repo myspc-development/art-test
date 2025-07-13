@@ -5,7 +5,7 @@ use WP_Error;
 use WP_REST_Request;
 
 add_action('rest_api_init', function () {
-    register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/chat', [
+    register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/chat', [
         'methods'             => 'GET',
         'callback'            => __NAMESPACE__ . '\\ap_rest_get_event_chat',
         'permission_callback' => function () {

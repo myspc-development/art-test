@@ -22,7 +22,7 @@ class NotificationRestController
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
 
-        register_rest_route('artpulse/v1', '/notifications/(?P<id>\\d+)/read', [
+        register_rest_route('artpulse/v1', '/notifications/(?P<id>\d+)/read', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'mark_read'],
             'permission_callback' => fn() => is_user_logged_in(),

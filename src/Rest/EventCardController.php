@@ -19,7 +19,7 @@ class EventCardController
     {
         register_rest_route(
             'artpulse/v1',
-            '/event-card/(?P<id>\\d+)',
+            '/event-card/(?P<id>\d+)',
             [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_card'],

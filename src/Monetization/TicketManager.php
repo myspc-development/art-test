@@ -21,14 +21,14 @@ class TicketManager
      */
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/tickets', [
+        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/tickets', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_tickets'],
             'permission_callback' => [self::class, 'check_logged_in'],
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
 
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/buy-ticket', [
+        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/buy-ticket', [
             'methods'  => 'POST',
             'callback' => [self::class, 'buy_ticket'],
             'permission_callback' => [self::class, 'check_logged_in'],

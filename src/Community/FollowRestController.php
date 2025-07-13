@@ -42,7 +42,7 @@ class FollowRestController
             ],
         ]);
 
-        register_rest_route('artpulse/v1', '/followers/(?P<user_id>\\d+)', [
+        register_rest_route('artpulse/v1', '/followers/(?P<user_id>\d+)', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_followers'],
             'permission_callback' => fn() => is_user_logged_in(),

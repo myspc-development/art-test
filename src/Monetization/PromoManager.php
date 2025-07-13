@@ -13,7 +13,7 @@ class PromoManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/promo-code/apply', [
+        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/promo-code/apply', [
             'methods'  => 'POST',
             'callback' => [self::class, 'apply_code'],
             'permission_callback' => fn() => is_user_logged_in(),
