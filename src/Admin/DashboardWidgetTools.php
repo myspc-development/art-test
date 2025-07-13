@@ -169,12 +169,12 @@ class DashboardWidgetTools
                 if (!empty($def['roles']) && !in_array($selected, (array) $def['roles'], true)) {
                     continue;
                 }
-                $id       = esc_attr($def['id']);
-                $preview  = self::render_widget_preview($def['id']);
-                $icon     = esc_html($def['icon']);
-                $category = esc_attr($def['category'] ?? '');
-                $name_attr = esc_attr($def['name']);
-                $desc_attr = esc_attr($def['description']);
+                $id        = esc_attr($def['id']);
+                $preview   = self::render_widget_preview($def['id']);
+                $icon      = esc_html($def['icon'] ?? '');
+                $category  = esc_attr($def['category'] ?? '');
+                $name_attr = esc_attr($def['name'] ?? $def['id']);
+                $desc_attr = esc_attr($def['description'] ?? '');
                 echo '<li class="widget-card" data-category="' . $category . '" data-name="' . $name_attr . '" data-desc="' . $desc_attr . '"><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> ';
                 echo '<span class="widget-icon">' . $icon . '</span> <strong>' . esc_html($def['name']) . '</strong>';
                 echo '<div class="widget-preview-box">' . $preview . '</div>';
@@ -279,15 +279,20 @@ class DashboardWidgetTools
     public static function render_add_widget_modal(array $available_widgets): void
     {
         foreach ($available_widgets as $id => $def) {
+            $label       = isset($def['label']) ? $def['label'] : 'Untitled';
+            $description = $def['description'] ?? '';
+            $icon        = $def['icon'] ?? '';
+            $category    = $def['category'] ?? '';
+
             echo '<div class="widget-card" ' .
                 'data-id="' . esc_attr($id) . '" ' .
-                'data-name="' . esc_attr($def['label']) . '" ' .
-                'data-desc="' . esc_attr($def['description']) . '" ' .
-                'data-category="' . esc_attr($def['category'] ?? '') . '">';
+                'data-name="' . esc_attr($label) . '" ' .
+                'data-desc="' . esc_attr($description) . '" ' .
+                'data-category="' . esc_attr($category) . '">';
 
-            echo '<span class="widget-icon">' . esc_html($def['icon']) . '</span>';
-            echo '<strong class="widget-label">' . esc_html($def['label']) . '</strong>';
-            echo '<p class="widget-description">' . esc_html($def['description']) . '</p>';
+            echo '<span class="widget-icon">' . esc_html($icon) . '</span>';
+            echo '<strong class="widget-label">' . esc_html($label) . '</strong>';
+            echo '<p class="widget-description">' . esc_html($description) . '</p>';
             echo '</div>';
         }
     }
@@ -438,9 +443,10 @@ class DashboardWidgetTools
             $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
             $def     = $registry[$id];
 
-            echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($def['label']) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+            $label = isset($def['label']) ? $def['label'] : 'Untitled';
+            echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($label) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
             echo '<div class="ap-widget-header drag-handle">';
-            echo '<span class="widget-title">' . esc_html($def['label']) . '</span>';
+            echo '<span class="widget-title">' . esc_html($label) . '</span>';
             echo '</div>';
             echo '<div class="inside">';
             if (isset($def['callback']) && is_callable($def['callback'])) {
@@ -469,11 +475,12 @@ class DashboardWidgetTools
                 continue;
             }
 
-            $w = $registry[$id];
+            $w     = $registry[$id];
+            $label = isset($w['label']) ? $w['label'] : 'Untitled';
 
-            echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($w['label']) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+            echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($label) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
             echo '<div class="ap-widget-header drag-handle">';
-            echo '<span class="widget-title">' . esc_html($w['label']) . '</span>';
+            echo '<span class="widget-title">' . esc_html($label) . '</span>';
             echo '</div>';
             echo '<div class="inside">';
             if (isset($w['callback']) && is_callable($w['callback'])) {
