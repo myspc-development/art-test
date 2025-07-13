@@ -92,6 +92,40 @@ class DashboardWidgetRegistry
         echo '<p><strong>Widget callback is missing or invalid.</strong></p>';
     }
 
+    private static function include_template(string $template): void
+    {
+        $path = locate_template($template);
+        if (!$path) {
+            $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/' . $template;
+        }
+
+        if (file_exists($path)) {
+            include $path;
+        } else {
+            echo '<p>' . esc_html__('No content available.', 'artpulse') . '</p>';
+        }
+    }
+
+    public static function render_widget_news(): void
+    {
+        self::include_template('widgets/widget-news.php');
+    }
+
+    public static function render_widget_events(): void
+    {
+        self::include_template('widgets/widget-events.php');
+    }
+
+    public static function render_widget_favorites(): void
+    {
+        self::include_template('widgets/widget-favorites.php');
+    }
+
+    public static function render_widget_for_you(): void
+    {
+        self::include_template('widgets/widget-for-you.php');
+    }
+
     /**
      * Retrieve a widget configuration by ID.
      */
@@ -234,27 +268,39 @@ class DashboardWidgetRegistry
         $register = [self::class, 'register_widget'];
 
         $register('widget_news', [
-            'template' => 'widgets/widget-news.php',
-            'title'    => 'News',
-            'roles'    => ['member', 'artist'],
+            'id'          => 'widget_news',
+            'label'       => __('News', 'artpulse'),
+            'icon'        => 'dashicons-megaphone',
+            'description' => __('Latest updates from ArtPulse.', 'artpulse'),
+            'callback'    => [self::class, 'render_widget_news'],
+            'roles'       => ['member', 'artist'],
         ]);
 
         $register('widget_events', [
-            'template' => 'widgets/widget-events.php',
-            'title'    => 'Upcoming Events',
-            'roles'    => ['member', 'organization'],
+            'id'          => 'widget_events',
+            'label'       => __('Upcoming Events', 'artpulse'),
+            'icon'        => 'dashicons-calendar-alt',
+            'description' => __('Events happening soon.', 'artpulse'),
+            'callback'    => [self::class, 'render_widget_events'],
+            'roles'       => ['member', 'organization'],
         ]);
 
         $register('widget_favorites', [
-            'template' => 'widgets/widget-favorites.php',
-            'title'    => 'Saved Artists',
-            'roles'    => ['member'],
+            'id'          => 'widget_favorites',
+            'label'       => __('Favorites Overview', 'artpulse'),
+            'icon'        => 'dashicons-star-filled',
+            'description' => __('Artists you have saved.', 'artpulse'),
+            'callback'    => [self::class, 'render_widget_favorites'],
+            'roles'       => ['member'],
         ]);
 
         $register('widget_for_you', [
-            'template' => 'widgets/widget-for-you.php',
-            'title'    => 'For You',
-            'roles'    => ['member', 'artist'],
+            'id'          => 'widget_for_you',
+            'label'       => __('For You', 'artpulse'),
+            'icon'        => 'dashicons-thumbs-up',
+            'description' => __('Recommended content.', 'artpulse'),
+            'callback'    => [self::class, 'render_widget_for_you'],
+            'roles'       => ['member', 'artist'],
         ]);
 
         do_action('artpulse_register_dashboard_widget');
