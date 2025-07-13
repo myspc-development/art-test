@@ -1,4 +1,11 @@
 (function(){
+  function debounce(fn, delay){
+    let to;
+    return function(...args){
+      clearTimeout(to);
+      to = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
   async function fetchSuggestions(query){
     if(!window.APLocation || !APLocation.googleEndpoint) return [];
     const resp = await fetch(APLocation.googleEndpoint + '?query=' + encodeURIComponent(query));
@@ -21,17 +28,19 @@
       document.body.appendChild(list);
     }
     input.setAttribute('list', listId);
-    input.addEventListener('input', async () => {
+    input.addEventListener('input', debounce(async () => {
       const q = input.value.trim();
       if(q.length < 3) return;
       const suggestions = await fetchSuggestions(q);
-      list.innerHTML = '';
-      suggestions.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s;
-        list.appendChild(opt);
+      requestAnimationFrame(() => {
+        list.innerHTML = '';
+        suggestions.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s;
+          list.appendChild(opt);
+        });
       });
-    });
+    }, 300));
   }
 
   document.addEventListener('DOMContentLoaded', () => {

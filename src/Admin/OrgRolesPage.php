@@ -19,13 +19,14 @@ class OrgRolesPage
             ? 'view_artpulse_dashboard'
             : 'manage_options';
 
-        add_submenu_page(
-            'ap-org-dashboard',
-            __('Roles & Permissions', 'artpulse'),
-            __('Roles & Permissions', 'artpulse'),
+        add_menu_page(
+            __('Organization Roles', 'artpulse'),
+            __('Org Roles', 'artpulse'),
             $capability,
             'ap-org-roles',
-            'ap_render_org_roles_page'
+            'ap_render_org_roles_page',
+            'dashicons-groups',
+            26
         );
     }
 
@@ -94,6 +95,13 @@ class OrgRolesPage
         RoleAuditLogger::log($org_id, 0, get_current_user_id(), $old, $roles);
         wp_redirect(admin_url('admin.php?page=ap-org-roles&updated=1'));
         exit;
+    }
+}
+
+namespace {
+    function ap_render_org_roles_page(): void
+    {
+        \ArtPulse\Admin\OrgRolesPage::render();
     }
 }
 

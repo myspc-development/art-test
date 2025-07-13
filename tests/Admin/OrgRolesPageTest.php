@@ -3,7 +3,7 @@ namespace ArtPulse\Admin;
 
 // --- WordPress stubs ---
 function add_action($hook, $callback, $priority = 10, $args = 1) {}
-function add_submenu_page(...$args) { \ArtPulse\Admin\Tests\OrgRolesPageTest::$submenu = $args; }
+function add_menu_page(...$args) { \ArtPulse\Admin\Tests\OrgRolesPageTest::$menu = $args; }
 function current_user_can($cap) { return \ArtPulse\Admin\Tests\OrgRolesPageTest::$caps[$cap] ?? false; }
 function wp_die($msg = '') { \ArtPulse\Admin\Tests\OrgRolesPageTest::$died = true; }
 function get_current_user_id() { return 1; }
@@ -38,7 +38,7 @@ class OrgRolesPageTest extends TestCase
 {
     public static array $caps = [];
     public static bool $died = false;
-    public static array $submenu = [];
+    public static array $menu = [];
     public static array $saved = [];
     public static string $redirect = '';
 
@@ -46,7 +46,7 @@ class OrgRolesPageTest extends TestCase
     {
         self::$caps = ['view_artpulse_dashboard' => true, 'manage_options' => true];
         self::$died = false;
-        self::$submenu = [];
+        self::$menu = [];
         self::$saved = [];
         self::$redirect = '';
         $_POST = [];
@@ -57,7 +57,7 @@ class OrgRolesPageTest extends TestCase
     {
         self::$caps['view_artpulse_dashboard'] = false;
         OrgRolesPage::addMenu();
-        $this->assertSame('manage_options', self::$submenu[2] ?? null);
+        $this->assertSame('manage_options', self::$menu[2] ?? null);
     }
 
     public function test_render_allows_manage_options(): void
