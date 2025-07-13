@@ -28,7 +28,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
         wp_set_current_user($this->user1);
         $user = new \WP_User($this->user1);
         $user->add_cap('ap_send_messages');
-        $this->nonce = wp_create_nonce('ap_messages_nonce');
+        $this->nonce = wp_create_nonce('wp_rest');
         add_filter('pre_wp_mail', [$this, 'capture_mail'], 10, 6);
     }
 
