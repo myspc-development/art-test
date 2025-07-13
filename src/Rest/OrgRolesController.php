@@ -8,6 +8,8 @@ class OrgRolesController {
     public static function register(): void {
         add_action('rest_api_init', [self::class, 'register_routes']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_script']);
+        add_action('wp_ajax_ap_get_org_roles', [self::class, 'ajax_get_roles']);
+        add_action('wp_ajax_nopriv_ap_get_org_roles', [self::class, 'ajax_get_roles']);
     }
 
     public static function register_routes(): void {
@@ -31,9 +33,10 @@ class OrgRolesController {
             'ap-org-roles',
             'ArtPulseOrgRoles',
             [
-                'root'  => esc_url_raw(rest_url()),
-                'nonce' => wp_create_nonce('wp_rest'),
-                'user_id' => get_current_user_id(),
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'root'     => esc_url_raw(rest_url()),
+                'nonce'    => wp_create_nonce('ap_org_roles_nonce'),
+                'user_id'  => get_current_user_id(),
             ]
         );
     }
@@ -46,5 +49,25 @@ class OrgRolesController {
             ['id' => 3, 'name' => 'Patron'],
         ];
         return rest_ensure_response(['roles' => $roles]);
+    }
+
+    /**
+     * AJAX callback for retrieving organization roles.
+     */
+    public static function ajax_get_roles(): void {
+        check_ajax_referer('ap_org_roles_nonce', 'nonce');
+
+        $user_id = absint($_POST['user_id'] ?? 0);
+        if (!$user_id) {
+            wp_send_json_error('Missing user_id');
+        }
+
+        // Example static data. Replace with real lookup when available.
+        $roles = [
+            ['id' => 1, 'label' => 'Curator'],
+            ['id' => 2, 'label' => 'Artist'],
+        ];
+
+        wp_send_json_success(['roles' => $roles]);
     }
 }
