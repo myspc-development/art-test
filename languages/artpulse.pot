@@ -4106,3 +4106,35 @@ msgstr ""
 #: assets/js/favorite-portfolio-block.js:14
 msgid "Favorite portfolio will render on the front-end."
 msgstr ""
+
+#: templates/widgets/widget-favorites.php:2
+msgid "Saved Artists"
+msgstr ""
+
+#: templates/widgets/widget-news.php:2
+msgid "Latest News"
+msgstr ""
+
+#: templates/widgets/rsvp-stats.php:10
+msgid "Going"
+msgstr ""
+
+#: templates/widgets/rsvp-stats.php:11
+msgid "Interested"
+msgstr ""
+
+#: templates/widgets/favorites.php:18
+msgid "Events"
+msgstr ""
+
+#: templates/widgets/favorites.php:19
+msgid "Artists"
+msgstr ""
+
+#: templates/widgets/favorites.php:20
+msgid "Organizations"
+msgstr ""
+
+#: templates/widgets/favorites.php:21
+msgid "Artworks"
+msgstr ""
