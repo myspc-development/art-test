@@ -396,7 +396,11 @@ class DashboardWidgetTools
             }
 
             echo '<div class="dashboard-widget">';
-            call_user_func($definition['callback']);
+            if (isset($definition['callback']) && is_callable($definition['callback'])) {
+                call_user_func($definition['callback']);
+            } else {
+                echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
+            }
             echo '</div>';
         }
     }
@@ -439,7 +443,11 @@ class DashboardWidgetTools
             echo '<span class="widget-title">' . esc_html($def['label']) . '</span>';
             echo '</div>';
             echo '<div class="inside">';
-            call_user_func($def['callback']);
+            if (isset($def['callback']) && is_callable($def['callback'])) {
+                call_user_func($def['callback']);
+            } else {
+                echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
+            }
             echo '</div></div>';
         }
     }
@@ -468,7 +476,11 @@ class DashboardWidgetTools
             echo '<span class="widget-title">' . esc_html($w['label']) . '</span>';
             echo '</div>';
             echo '<div class="inside">';
-            call_user_func($w['callback']);
+            if (isset($w['callback']) && is_callable($w['callback'])) {
+                call_user_func($w['callback']);
+            } else {
+                echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
+            }
             echo '</div></div>';
         }
     }
