@@ -460,6 +460,20 @@ class Plugin
             'unfollowText' => __('Unfollow', 'artpulse'),
         ]);
 
+        wp_enqueue_script(
+            'ap-donations-js',
+            plugins_url('assets/js/donations.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-donations-js', 'APDonations', [
+            'root'  => esc_url_raw(rest_url()),
+            'nonce' => wp_create_nonce('wp_rest'),
+            'thanks' => __('Thank you for your support!', 'artpulse'),
+        ]);
+
         wp_localize_script('ap-notifications-js', 'APNotifications', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),

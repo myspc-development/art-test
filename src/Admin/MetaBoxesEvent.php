@@ -175,6 +175,7 @@ class MetaBoxesEvent {
             'event_organizer_email' => ['type' => 'email', 'label' => __('Organizer Email', 'artpulse')],
             'event_banner_id'       => ['type' => 'media', 'label' => __('Event Banner (Media Library ID)', 'artpulse')],
             'event_featured'        => ['type' => 'checkbox', 'label' => __('Request Featured', 'artpulse')],
+            'is_featured'          => ['type' => 'checkbox', 'label' => __('Featured Listing', 'artpulse')],
             'event_rsvp_enabled'    => ['type' => 'checkbox', 'label' => __('Enable RSVPs', 'artpulse')],
             'event_rsvp_limit'      => ['type' => 'number',   'label' => __('RSVP Limit', 'artpulse')],
             'event_waitlist_enabled'=> ['type' => 'checkbox', 'label' => __('Enable Waitlist', 'artpulse')],

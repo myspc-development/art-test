@@ -61,6 +61,12 @@ class SpotlightPostType
             'single'       => true,
             'type'         => 'boolean',
         ]);
+
+        register_post_meta('spotlight', '_is_featured', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+        ]);
     }
 
     public static function add_meta_boxes(): void
@@ -68,6 +74,7 @@ class SpotlightPostType
         add_meta_box('spotlight_roles', __('Visible To Roles', 'artpulse'), [self::class, 'render_roles_meta'], 'spotlight', 'side');
         add_meta_box('spotlight_schedule', __('Visibility Schedule', 'artpulse'), [self::class, 'render_schedule_meta'], 'spotlight', 'side');
         add_meta_box('spotlight_pin', __('Pin Spotlight', 'artpulse'), [self::class, 'render_pin_meta'], 'spotlight', 'side');
+        add_meta_box('spotlight_feature', __('Feature Spotlight', 'artpulse'), [self::class, 'render_feature_meta'], 'spotlight', 'side');
         add_meta_box('spotlight_cta', __('Call to Action', 'artpulse'), [self::class, 'render_cta_meta'], 'spotlight', 'normal');
     }
 
@@ -101,6 +108,15 @@ class SpotlightPostType
         ?>
         <p><label><input type="checkbox" name="is_pinned" value="1" <?= $pinned ? 'checked' : '' ?> />
             <?php _e('Pin this spotlight', 'artpulse'); ?></label></p>
+        <?php
+    }
+
+    public static function render_feature_meta($post): void
+    {
+        $featured = get_post_meta($post->ID, '_is_featured', true);
+        ?>
+        <p><label><input type="checkbox" name="_is_featured" value="1" <?= $featured ? 'checked' : '' ?> />
+            <?php _e('Featured Listing', 'artpulse'); ?></label></p>
         <?php
     }
 
@@ -147,6 +163,12 @@ class SpotlightPostType
             update_post_meta($post_id, 'is_pinned', '1');
         } else {
             delete_post_meta($post_id, 'is_pinned');
+        }
+
+        if (isset($_POST['_is_featured'])) {
+            update_post_meta($post_id, '_is_featured', '1');
+        } else {
+            delete_post_meta($post_id, '_is_featured');
         }
     }
 }
