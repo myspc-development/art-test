@@ -54,10 +54,10 @@ function create_monetization_tables() {
         KEY event_id (event_id)
     ) $charset_collate;");
 
-    // Ensure AUTO_INCREMENT is properly set for existing installs
-    $has_pk = $wpdb->get_var("SHOW KEYS FROM $payouts WHERE Key_name = 'PRIMARY'");
-    if ($has_pk === 'PRIMARY') {
-        $wpdb->query("ALTER TABLE $payouts CHANGE id id BIGINT AUTO_INCREMENT");
+    // Ensure AUTO_INCREMENT is properly set for existing installs without
+    // attempting to redefine the primary key.
+    if ($wpdb->get_var("SHOW KEYS FROM {$wpdb->prefix}ap_payouts WHERE Key_name = 'PRIMARY'")) {
+        $wpdb->query("ALTER TABLE {$wpdb->prefix}ap_payouts CHANGE id id BIGINT AUTO_INCREMENT");
     }
 
     validate_monetization_tables();
@@ -76,9 +76,9 @@ function validate_monetization_tables(): void {
 
     foreach ($required_tables as $tbl) {
         if ($wpdb->get_var("SHOW TABLES LIKE '{$tbl}'") !== $tbl) {
-            error_log("❌ ArtPulse install: missing table {$tbl}");
+            error_log("❌ Missing: {$tbl}");
         } else {
-            error_log("✅ ArtPulse install: table {$tbl} verified");
+            error_log("✅ Present: {$tbl}");
         }
     }
 }
