@@ -22,9 +22,10 @@ if (current_user_can('administrator') && isset($_GET['repair_artpulse_db'])) {
 }
 
 // Load translations at the proper time
-add_action('init', function () {
-    load_plugin_textdomain('artpulse', false, dirname(plugin_basename(__FILE__)) . '/languages');
-});
+function ap_load_textdomain() {
+    load_plugin_textdomain('artpulse', false, basename(dirname(__FILE__)) . '/languages');
+}
+add_action('plugins_loaded', 'ap_load_textdomain');
 
 // Ensure tables stay up to date when plugin updates
 add_action('plugins_loaded', function () {

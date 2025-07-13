@@ -13,10 +13,16 @@ use ArtPulse\Community\FavoritesManager;
     if (empty($favorites)) {
         echo '<p>' . esc_html__('You haven\xE2\x80\x99t favorited any content yet.', 'artpulse') . '</p>';
     } else {
+        $labels = [
+            'event'        => __('Events', 'artpulse'),
+            'artist'       => __('Artists', 'artpulse'),
+            'organization' => __('Organizations', 'artpulse'),
+            'artwork'      => __('Artworks', 'artpulse'),
+        ];
         foreach (['event', 'artist', 'organization', 'artwork'] as $type) {
             if (!empty($favorites[$type])) {
                 echo '<div class="favorite-group favorite-group-' . esc_attr($type) . '">';
-                echo '<h3>' . esc_html(ucfirst($type)) . 's</h3>';
+                echo '<h3>' . esc_html($labels[$type]) . '</h3>';
                 echo '<ul class="favorites-list">';
                 foreach ($favorites[$type] as $post_id) {
                     $title = get_the_title($post_id);

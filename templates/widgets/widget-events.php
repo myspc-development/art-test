@@ -1,5 +1,5 @@
-<div class="ap-widget">
-  <div class="ap-widget-header">🎟 Upcoming Events</div>
+<div class="ap-widget notice notice-info p-4 rounded">
+  <div class="ap-widget-header">🎟 <?php esc_html_e( 'Upcoming Events', 'artpulse' ); ?></div>
   <div class="ap-widget-body">
     <?php
     $events = get_posts(['post_type' => 'artpulse_event', 'numberposts' => 3]);

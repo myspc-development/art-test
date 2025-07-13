@@ -1,5 +1,5 @@
-<div class="ap-widget">
-  <div class="ap-widget-header">⭐ Saved Artists</div>
+<div class="ap-widget notice notice-info p-4 rounded">
+  <div class="ap-widget-header">⭐ <?php esc_html_e( 'Saved Artists', 'artpulse' ); ?></div>
   <div class="ap-widget-body">
     <?php
     $user_id = get_current_user_id();

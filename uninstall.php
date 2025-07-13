@@ -55,3 +55,9 @@ $tables = [
 foreach ( $tables as $table ) {
     $wpdb->query( sprintf( 'DROP TABLE IF EXISTS %s', $wpdb->prefix . $table ) );
 }
+
+// Remove plugin transients.
+$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_ap_%'" );
+$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_ap_%'" );
+$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_site_transient_ap_%'" );
+$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_site_transient_timeout_ap_%'" );
