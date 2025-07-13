@@ -42,6 +42,16 @@ Double‑check that generated SQL statements never include empty table, column o
 
 Activation hooks should abort gracefully if table creation fails. Use error logging to capture the failure, but avoid executing partially constructed SQL statements.
 
+## Manual Database Repair
+
+If the monetization tables become corrupted or are missing entirely, you can recreate them without reinstalling the plugin. While logged in as an administrator, append `?repair_artpulse_db` to any dashboard URL. The request will run `create_monetization_tables()` and output a confirmation message once the tables exist.
+
+```
+https://example.com/wp-admin/plugins.php?repair_artpulse_db
+```
+
+Only users with administrator privileges can trigger the repair routine.
+
 ---
 
 Following these practices helps prevent undefined index warnings and broken SQL during plugin installs or upgrades.
