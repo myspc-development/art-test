@@ -61,6 +61,9 @@ class PayoutManager
         $user_id = get_current_user_id();
         global $wpdb;
         $table = $wpdb->prefix . 'ap_payouts';
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table)) !== $table) {
+            return rest_ensure_response(['payouts' => [], 'balance' => 0]);
+        }
         $rows  = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE artist_id = %d ORDER BY payout_date DESC", $user_id), ARRAY_A);
 
         $balance = self::get_balance($user_id);
@@ -77,6 +80,10 @@ class PayoutManager
         $tickets = $wpdb->prefix . 'ap_tickets';
         $tiers   = $wpdb->prefix . 'ap_event_tickets';
         $posts   = $wpdb->posts;
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $tickets)) !== $tickets ||
+            $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $tiers)) !== $tiers) {
+            return 0.0;
+        }
         $sql = "SELECT SUM(et.price) FROM $tickets t JOIN $tiers et ON t.ticket_tier_id = et.id JOIN $posts p ON t.event_id = p.ID WHERE p.post_author = %d AND t.status = 'active'";
         $sales_total = floatval($wpdb->get_var($wpdb->prepare($sql, $artist_id)));
 

@@ -15,6 +15,12 @@ register_activation_hook(__FILE__, function () {
 // Setup monetization tables on activation
 register_activation_hook(__FILE__, 'ArtPulse\\DB\\create_monetization_tables');
 
+// Optional manual repair: create tables via ?repair_artpulse_db
+if (current_user_can('administrator') && isset($_GET['repair_artpulse_db'])) {
+    ArtPulse\DB\create_monetization_tables();
+    echo '✅ ArtPulse DB tables created.';
+}
+
 // Load translations at the proper time
 add_action('init', function () {
     load_plugin_textdomain('artpulse', false, dirname(plugin_basename(__FILE__)) . '/languages');
