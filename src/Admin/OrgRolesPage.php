@@ -25,7 +25,7 @@ class OrgRolesPage
             __('Roles & Permissions', 'artpulse'),
             $capability,
             'ap-org-roles',
-            [self::class, 'render']
+            'ap_render_org_roles_page'
         );
     }
 
@@ -97,17 +97,3 @@ class OrgRolesPage
     }
 }
 
-add_action('admin_menu', function () {
-    add_menu_page(
-        'Org Roles Manager',
-        'Org Roles',
-        'manage_options',
-        'ap-org-roles',
-        'render_ap_org_roles_page'
-    );
-});
-
-function render_ap_org_roles_page() {
-    echo '<div id="ap-org-roles-root"></div>';
-    wp_enqueue_script('ap-org-roles');
-}

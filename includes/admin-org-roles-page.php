@@ -1,24 +1,13 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 
-add_action('admin_menu', function () {
-    add_menu_page(
-        'Organization Roles',
-        'Org Roles',
-        'manage_options',
-        'ap-org-roles',
-        'ap_render_org_roles_page',
-        'dashicons-groups',
-        60
-    );
-});
 
 function ap_render_org_roles_page() {
     echo '<div id="ap-org-roles-root"></div>';
 }
 
 add_action('admin_enqueue_scripts', function ($hook) {
-    if ($hook !== 'toplevel_page_ap-org-roles') {
+    if ($hook !== 'ap-org-dashboard_page_ap-org-roles') {
         return;
     }
 
