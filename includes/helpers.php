@@ -18,3 +18,22 @@ function ap_cache_get(string $key, callable $callback, int $expires = HOUR_IN_SE
     }
     return $value;
 }
+
+/**
+ * Fetch and parse an RSS feed.
+ *
+ * Wraps WordPress fetch_feed() with basic error handling.
+ *
+ * @param string $url Feed URL.
+ * @return array|SimplePie
+ */
+function get_feed($url) {
+    include_once ABSPATH . WPINC . '/feed.php';
+
+    $feed = fetch_feed($url);
+    if (is_wp_error($feed)) {
+        return [];
+    }
+
+    return $feed;
+}
