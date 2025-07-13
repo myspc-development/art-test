@@ -7,6 +7,8 @@ use ArtPulse\Core\AdminDashboard;
 use ArtPulse\Core\DocumentationManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Rest\ArtistRestController;
+use ArtPulse\Rest\CurrentUserController;
+use ArtPulse\Rest\DashboardMessagesController;
 use ArtPulse\Rest\RestRelationships;
 use ArtPulse\Rest\TaxonomyRestFilters;
 use ArtPulse\Admin\EngagementDashboard;
@@ -14,6 +16,7 @@ use ArtPulse\Core\ArtworkEventLinkManager;
 use ArtPulse\Engagement\DigestMailer;
 use ArtPulse\Frontend\WidgetEmbedShortcode;
 use ArtPulse\Blocks\WidgetEmbedBlock;
+use ArtPulse\Frontend\ReactDashboardShortcode;
 
 class Plugin
 {
@@ -224,6 +227,7 @@ class Plugin
         \ArtPulse\Frontend\EventCommentsShortcode::register();
         \ArtPulse\Frontend\EventChatShortcode::register();
         \ArtPulse\Frontend\MessagesShortcode::register();
+        \ArtPulse\Frontend\ReactDashboardShortcode::register();
         \ArtPulse\Frontend\RestListShortcodes::register();
         \ArtPulse\Frontend\CollectionsShortcode::register();
         \ArtPulse\Frontend\EventFilter::register();
@@ -254,6 +258,8 @@ class Plugin
         \ArtPulse\Rest\ArtworkAuctionController::register();
         \ArtPulse\Rest\SpotlightRestController::register();
         \ArtPulse\Rest\SpotlightAnalyticsController::register();
+        \ArtPulse\Rest\CurrentUserController::register();
+        \ArtPulse\Rest\DashboardMessagesController::register();
         ArtistRestController::register();
         RestRelationships::register();
         TaxonomyRestFilters::register();

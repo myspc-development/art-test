@@ -39,6 +39,12 @@ const configs = [
     'APReactForm',
     { react: 'React', 'react-dom/client': 'ReactDOM' }
   ),
+  createConfig(
+    'assets/js/AppDashboard.js',
+    'assets/js/app-dashboard.js',
+    'APDashboardApp',
+    { react: 'React', 'react-dom': 'ReactDOM' }
+  ),
 ];
 
 configs.push({

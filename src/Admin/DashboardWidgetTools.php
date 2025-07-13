@@ -7,6 +7,31 @@ use ArtPulse\Core\DashboardController;
 
 class DashboardWidgetTools
 {
+    public static function get_role_widgets(): array
+    {
+        return [
+            'artist' => [
+                [
+                    'id'       => 'favorites',
+                    'callback' => [\ArtPulse\Core\DashboardWidgetRegistry::class, 'render_widget_favorites'],
+                ],
+                [
+                    'id'   => 'messages',
+                    'rest' => 'artpulse/v1/dashboard/messages',
+                ],
+            ],
+            'organization' => [],
+            'member' => [],
+        ];
+    }
+
+    public static function get_role_widgets_for_current_user(): array
+    {
+        $user  = wp_get_current_user();
+        $role  = $user->roles[0] ?? 'member';
+        $all   = self::get_role_widgets();
+        return $all[$role] ?? [];
+    }
     public static function register(): void
     {
         add_action('wp_dashboard_setup', function () {
