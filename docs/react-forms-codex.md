@@ -6,7 +6,7 @@ simple admin‑ajax endpoint processes submissions. Follow these steps when
 adding new dynamic forms.
 
 ## 1. Component
-Create `src/components/ReactForm.jsx` containing the form logic. The example
+Create `src/components/ReactForm.js` containing the form logic. The example
 below submits to the `submit_react_form` action:
 
 ```jsx
