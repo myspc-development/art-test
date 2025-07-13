@@ -265,6 +265,53 @@ Each item contains:
 Use `POST /artpulse/v1/inbox/read` with parameters `type` and `id` (or `ids[]`)
 to mark items read. `POST /artpulse/v1/inbox/unread` reverts the state.
 
+### `POST /artpulse/v1/messages`
+
+Send a direct message to another user.
+Parameters:
+- `recipient_id` (int, required)
+- `content` (string, required)
+
+Example request:
+
+```bash
+curl -X POST -H 'X-WP-Nonce: <nonce>' -d 'recipient_id=5&content=Hi' \
+  '/wp-json/artpulse/v1/messages'
+```
+
+### `GET /artpulse/v1/messages`
+
+Retrieve conversation history with another user.
+Parameters:
+- `with` (int, required) – user ID to load messages with
+
+```bash
+curl -H 'X-WP-Nonce: <nonce>' \
+  '/wp-json/artpulse/v1/messages?with=5'
+```
+
+Example JS:
+
+```js
+fetch('/wp-json/artpulse/v1/messages?with=5', {
+  headers: { 'X-WP-Nonce': wpApiSettings.nonce }
+}).then(r => r.json()).then(console.log);
+```
+
+### `GET /artpulse/v1/conversations`
+
+List conversation partners and unread counts for the logged-in user.
+
+```bash
+curl -H 'X-WP-Nonce: <nonce>' '/wp-json/artpulse/v1/conversations'
+```
+
+```js
+fetch('/wp-json/artpulse/v1/conversations', {
+  headers: { 'X-WP-Nonce': wpApiSettings.nonce }
+}).then(r => r.json());
+```
+
 ### `GET /artpulse/v1/bio-summary/{id}`
 
 Return a short GPT-generated summary of an artist biography.

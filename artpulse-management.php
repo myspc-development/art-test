@@ -1,13 +1,6 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
-/**
- * Plugin Name:     ArtPulse Management
- * Description:     Management plugin for ArtPulse.
- * Version:         1.3.11
- * Author:          craig
- * Text Domain:     artpulse
- * License:         GPL2
- */
+// Plugin metadata moved to artpulse.php
 
 use ArtPulse\Core\Plugin;
 use ArtPulse\Core\WooCommerceIntegration;
