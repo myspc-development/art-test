@@ -6,7 +6,6 @@ class EngagementDashboard
 {
     public static function register()
     {
-        add_action('admin_menu', [self::class, 'addMenu']);
         add_action('admin_enqueue_scripts', [self::class, 'enqueueAssets']);
     }
 
@@ -21,17 +20,6 @@ class EngagementDashboard
         );
     }
 
-    public static function addMenu()
-    {
-        add_submenu_page(
-            'artpulse',
-            __('Engagement Dashboard', 'artpulse'),
-            __('Engagement', 'artpulse'),
-            'manage_options',
-            'artpulse-engagement',
-            [self::class, 'render']
-        );
-    }
 
     public static function render()
     {
