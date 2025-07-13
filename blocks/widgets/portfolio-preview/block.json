@@ -1,0 +1,9 @@
+{
+  "apiVersion": 2,
+  "name": "artpulse/portfolio-preview",
+  "title": "Portfolio Preview",
+  "category": "widgets",
+  "icon": "portfolio",
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}

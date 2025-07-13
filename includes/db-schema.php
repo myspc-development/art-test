@@ -53,4 +53,32 @@ function create_monetization_tables() {
         PRIMARY KEY (id),
         KEY event_id (event_id)
     ) $charset_collate;");
+
+    // Ensure AUTO_INCREMENT is properly set for existing installs
+    $has_pk = $wpdb->get_var("SHOW KEYS FROM $payouts WHERE Key_name = 'PRIMARY'");
+    if ($has_pk === 'PRIMARY') {
+        $wpdb->query("ALTER TABLE $payouts CHANGE id id BIGINT AUTO_INCREMENT");
+    }
+
+    validate_monetization_tables();
+}
+
+function validate_monetization_tables(): void {
+    global $wpdb;
+    $required_tables = [
+        $wpdb->prefix . 'ap_roles',
+        $wpdb->prefix . 'ap_feedback',
+        $wpdb->prefix . 'ap_feedback_comments',
+        $wpdb->prefix . 'ap_org_messages',
+        $wpdb->prefix . 'ap_scheduled_messages',
+        $wpdb->prefix . 'ap_payouts',
+    ];
+
+    foreach ($required_tables as $tbl) {
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$tbl}'") !== $tbl) {
+            error_log("❌ ArtPulse install: missing table {$tbl}");
+        } else {
+            error_log("✅ ArtPulse install: table {$tbl} verified");
+        }
+    }
 }

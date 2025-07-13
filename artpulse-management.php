@@ -250,6 +250,15 @@ add_action('admin_menu', function () {
         'dashicons-visibility',
         80
     );
+
+    add_submenu_page(
+        'artpulse-dashboard',
+        __('Diagnostics', 'artpulse'),
+        __('Diagnostics', 'artpulse'),
+        'manage_options',
+        'ap-diagnostics',
+        'ap_render_diagnostics_page'
+    );
 });
 
 function ap_render_dashboard_preview_page() {
@@ -319,6 +328,21 @@ function artpulse_settings_page() {
     <?php
 }
 
+function ap_render_diagnostics_page() {
+    global $wpdb;
+    $tables = ['ap_roles','ap_feedback','ap_feedback_comments','ap_org_messages','ap_scheduled_messages','ap_payouts'];
+    echo '<div class="wrap"><h1>Diagnostics</h1>';
+    foreach ($tables as $t) {
+        $full = $wpdb->prefix . $t;
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$full}'") === $full) {
+            echo "<p style='color:green'>✅ Present: {$full}</p>";
+        } else {
+            echo "<p style='color:red'>❌ Missing: {$full}</p>";
+        }
+    }
+    echo '</div>';
+}
+
 // Handle template copy action
 add_action('admin_init', function () {
     if (!isset($_POST['ap_copy_templates'])) {
@@ -347,6 +371,7 @@ add_action('admin_init', function () {
 add_action('rest_api_init', function () {
     \ArtPulse\Rest\PortfolioRestController::register();
     \ArtPulse\Rest\UserAccountRestController::register();
+    \ArtPulse\Rest\DashboardPreviewController::register();
 });
 
 

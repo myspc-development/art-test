@@ -17,6 +17,7 @@ if ( ! $remove ) {
 
 // Delete plugin options.
 delete_option( 'artpulse_settings' );
+delete_option('artpulse_version');
 
 // Drop custom DB tables.
 global $wpdb;
