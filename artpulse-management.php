@@ -991,7 +991,9 @@ add_filter('template_include', function ($template) {
     if (is_singular('artpulse_event')) {
         $custom_template = plugin_dir_path(__FILE__) . 'templates/salient/single-artpulse_event.php';
         if (file_exists($custom_template)) {
-            error_log('✅ Plugin forcing use of single-artpulse_event.php');
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('✅ Plugin forcing use of single-artpulse_event.php');
+            }
             return $custom_template;
         }
     }

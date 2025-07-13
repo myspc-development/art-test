@@ -4,7 +4,9 @@
  */
 
 get_header();
-error_log('✅ Template rendering started.');
+if (defined('WP_DEBUG') && WP_DEBUG) {
+    error_log('✅ Template rendering started.');
+}
 
 if ( have_posts() ) :
   while ( have_posts() ) : the_post();
