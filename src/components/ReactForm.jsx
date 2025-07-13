@@ -8,11 +8,14 @@ const ReactForm = ({ type = 'default' }) => {
     e.preventDefault();
     setStatus('Submitting...');
 
+    const { ajaxurl, nonce } = window.apReactForm || {};
+
     const response = await fetch(ajaxurl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         action: 'submit_react_form',
+        _ajax_nonce: nonce,
         ...formData,
       }),
     });

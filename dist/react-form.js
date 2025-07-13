@@ -225,7 +225,9 @@
     }
   }
 
-  var ReactForm = function ReactForm() {
+  var ReactForm = function ReactForm(_ref) {
+    var _ref$type = _ref.type,
+      type = _ref$type === void 0 ? 'default' : _ref$type;
     var _useState = React.useState({
         name: '',
         email: ''
@@ -238,13 +240,14 @@
       status = _useState4[0],
       setStatus = _useState4[1];
     var handleSubmit = /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(e) {
-        var response, result;
+      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(e) {
+        var _ref3, ajaxurl, nonce, response, result;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.n) {
             case 0:
               e.preventDefault();
               setStatus('Submitting...');
+              _ref3 = window.apReactForm || {}, ajaxurl = _ref3.ajaxurl, nonce = _ref3.nonce;
               _context.n = 1;
               return fetch(ajaxurl, {
                 method: 'POST',
@@ -252,7 +255,8 @@
                   'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams(_objectSpread2({
-                  action: 'submit_react_form'
+                  action: 'submit_react_form',
+                  _ajax_nonce: nonce
                 }, formData))
               });
             case 1:
@@ -268,11 +272,12 @@
         }, _callee);
       }));
       return function handleSubmit(_x) {
-        return _ref.apply(this, arguments);
+        return _ref2.apply(this, arguments);
       };
     }();
     return /*#__PURE__*/React.createElement("form", {
-      onSubmit: handleSubmit
+      onSubmit: handleSubmit,
+      "data-type": type
     }, /*#__PURE__*/React.createElement("input", {
       type: "text",
       name: "name",
@@ -295,12 +300,14 @@
       }
     }), /*#__PURE__*/React.createElement("button", {
       type: "submit"
-    }, "Submit"), /*#__PURE__*/React.createElement("p", null, status));
+    }, "Submit"), /*#__PURE__*/React.createElement("p", null, status, " ", type !== 'default' ? "(".concat(type, ")") : ''));
   };
 
   var container = document.getElementById('react-form-root');
   if (container) {
-    var props = { type: container.dataset.type || 'default' };
+    var props = {
+      type: container.dataset.type || 'default'
+    };
     var root = client.createRoot(container);
     root.render(/*#__PURE__*/React.createElement(ReactForm, props));
   }

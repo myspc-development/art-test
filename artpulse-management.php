@@ -1019,9 +1019,13 @@ function artpulse_enqueue_react_form() {
         '1.0.0',
         true
     );
-    wp_add_inline_script(
+    wp_localize_script(
         'artpulse-react-form',
-        'var ajaxurl = "' . admin_url('admin-ajax.php') . '";'
+        'apReactForm',
+        [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('ap_react_form'),
+        ]
     );
 }
 add_action('wp_enqueue_scripts', 'artpulse_enqueue_react_form');
@@ -1034,6 +1038,7 @@ function artpulse_render_react_form($atts = []) {
 add_shortcode('react_form', 'artpulse_render_react_form');
 
 function artpulse_handle_react_form() {
+    check_ajax_referer('ap_react_form');
     $name  = sanitize_text_field($_POST['name'] ?? '');
     $email = sanitize_email($_POST['email'] ?? '');
 
