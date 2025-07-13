@@ -214,6 +214,12 @@ class DashboardWidgetRegistry
             'roles'    => ['member'],
         ]);
 
+        $register('widget_for_you', [
+            'template' => 'widgets/widget-for-you.php',
+            'title'    => 'For You',
+            'roles'    => ['member', 'artist'],
+        ]);
+
         do_action('artpulse_register_dashboard_widget');
     }
 }

@@ -1,42 +1,19 @@
 <?php
-use ArtPulse\Admin\SpotlightManager;
-use ArtPulse\Core\DashboardController;
-
+use ArtPulse\Services\RecommendationService;
 $user_id = get_current_user_id();
-$role    = DashboardController::get_role($user_id);
-
-$spotlights = SpotlightManager::get_dashboard_spotlights($role);
-$city      = get_user_meta($user_id, 'ap_city', true);
-$event_args = [
-    'post_type'      => 'artpulse_event',
-    'numberposts'    => 3,
-];
-if ($city) {
-    $event_args['meta_query'][] = [
-        'key'   => 'event_city',
-        'value' => $city,
-    ];
-}
-$events = get_posts($event_args);
+$items   = RecommendationService::get_for_user($user_id);
 ?>
-<div class="ap-widget">
+<div class="ap-widget" id="ap-widget-for-you">
   <div class="ap-widget-header">🎯 <?php _e('For You','artpulse'); ?></div>
   <div class="ap-widget-body">
-    <?php if ($spotlights): ?>
-      <h4><?php _e('Spotlights','artpulse'); ?></h4>
+    <?php if ($items): ?>
       <ul>
-        <?php foreach ($spotlights as $p): ?>
-          <li><a href="<?php echo esc_url(get_permalink($p)); ?>"><?php echo esc_html($p->post_title); ?></a></li>
+        <?php foreach ($items as $item): ?>
+          <li><a href="<?php echo esc_url($item['link']); ?>"><?php echo esc_html($item['title']); ?></a></li>
         <?php endforeach; ?>
       </ul>
-    <?php endif; ?>
-    <?php if ($events): ?>
-      <h4><?php _e('Events','artpulse'); ?></h4>
-      <ul>
-        <?php foreach ($events as $e): ?>
-          <li><a href="<?php echo esc_url(get_permalink($e)); ?>"><?php echo esc_html($e->post_title); ?></a></li>
-        <?php endforeach; ?>
-      </ul>
+    <?php else: ?>
+      <p><?php esc_html_e('No recommendations found.','artpulse'); ?></p>
     <?php endif; ?>
   </div>
 </div>
