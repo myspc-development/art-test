@@ -1,4 +1,5 @@
 <?php
+$visible = $visible ?? true;
 /**
  * Dashboard widget: My Events.
  */
