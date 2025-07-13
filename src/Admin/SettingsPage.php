@@ -33,6 +33,7 @@ class SettingsPage
         SettingsRegistry::register_tab('search', __('Search', 'artpulse'));
         SettingsRegistry::register_tab('emails', __('Email Delivery', 'artpulse'));
         SettingsRegistry::register_tab('updates', __('Updates', 'artpulse'));
+        SettingsRegistry::register_tab('widgets', __('Dashboard Widgets', 'artpulse'));
         SettingsRegistry::register_tab('monetization', __('Monetization', 'artpulse'));
 
         $general_fields = [
@@ -643,6 +644,8 @@ class SettingsPage
                             <?php submit_button(); ?>
                         </form>
                         <?php include ARTPULSE_PLUGIN_DIR . 'templates/admin/settings-tab-updates.php'; ?>
+                    <?php elseif ($slug === 'widgets') : ?>
+                        <?php include ARTPULSE_PLUGIN_DIR . 'templates/admin/settings-tab-widgets.php'; ?>
                     <?php elseif ($slug === 'social_auto') : ?>
                         <?php \ArtPulse\Integration\SocialAutoPoster::render_settings(); ?>
                     <?php else : ?>
