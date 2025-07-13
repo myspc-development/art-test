@@ -37,3 +37,7 @@ function ap_get_feed($url) {
 
     return $feed;
 }
+
+function ap_template_context(array $args = [], array $defaults = []): array {
+    return wp_parse_args($args, $defaults);
+}

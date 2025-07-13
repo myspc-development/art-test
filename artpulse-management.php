@@ -15,7 +15,7 @@ use ArtPulse\Core\ArtworkWooSync;
 use ArtPulse\Core\Activator;
 use ArtPulse\Admin\EnqueueAssets;
 use ArtPulse\Core\DashboardWidgetRegistry;
-use ArtPulse\Ajax\OrgRoles;
+use ArtPulse\Rest\OrgRolesController;
 
 // Suppress deprecated notices if WP_DEBUG enabled
 if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -37,7 +37,7 @@ require_once $autoload_path;
 }
 
 Plugin::register();
-OrgRoles::init();
+OrgRolesController::register();
 add_action('init', [DashboardWidgetRegistry::class, 'init']);
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';

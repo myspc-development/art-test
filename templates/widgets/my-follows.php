@@ -1,5 +1,5 @@
 <?php
-$visible = $visible ?? true;
+extract(ap_template_context($args ?? [], ['visible' => true]));
 /** Dashboard widget: My Follows */
 ?>
 <section id="my-follows" class="ap-dashboard-section dashboard-card" data-widget="my_follows" <?php echo $visible ? '' : 'style="display:none"'; ?>>
