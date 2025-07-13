@@ -38,8 +38,12 @@ class ActivityFeed
         $favorites_table= $wpdb->prefix . 'ap_favorites';
 
         if ($follow_users) {
-            $ids = implode(',', array_map('intval', $follow_users));
-            $rows = $wpdb->get_results("SELECT ID, post_title, post_date FROM {$posts_table} WHERE post_author IN ($ids) AND post_type = 'artpulse_event' AND post_status = 'publish' ORDER BY post_date DESC LIMIT {$limit}");
+            $placeholders = implode(',', array_fill(0, count($follow_users), '%d'));
+            $sql = $wpdb->prepare(
+                "SELECT ID, post_title, post_date FROM {$posts_table} WHERE post_author IN ($placeholders) AND post_type = 'artpulse_event' AND post_status = 'publish' ORDER BY post_date DESC LIMIT %d",
+                array_merge($follow_users, [$limit])
+            );
+            $rows = $wpdb->get_results($sql);
             foreach ($rows as $r) {
                 $items[] = [
                     'type'  => 'event',
@@ -49,7 +53,11 @@ class ActivityFeed
                 ];
             }
 
-            $rows = $wpdb->get_results("SELECT comment_ID, comment_content, comment_date, comment_post_ID FROM {$comments_table} WHERE user_id IN ($ids) AND comment_approved = '1' ORDER BY comment_date DESC LIMIT {$limit}");
+            $sql = $wpdb->prepare(
+                "SELECT comment_ID, comment_content, comment_date, comment_post_ID FROM {$comments_table} WHERE user_id IN ($placeholders) AND comment_approved = '1' ORDER BY comment_date DESC LIMIT %d",
+                array_merge($follow_users, [$limit])
+            );
+            $rows = $wpdb->get_results($sql);
             foreach ($rows as $c) {
                 $items[] = [
                     'type'    => 'comment',
@@ -60,7 +68,11 @@ class ActivityFeed
                 ];
             }
 
-            $rows = $wpdb->get_results("SELECT object_id, object_type, favorited_on FROM {$favorites_table} WHERE user_id IN ($ids) ORDER BY favorited_on DESC LIMIT {$limit}");
+            $sql = $wpdb->prepare(
+                "SELECT object_id, object_type, favorited_on FROM {$favorites_table} WHERE user_id IN ($placeholders) ORDER BY favorited_on DESC LIMIT %d",
+                array_merge($follow_users, [$limit])
+            );
+            $rows = $wpdb->get_results($sql);
             foreach ($rows as $f) {
                 $title = '';
                 if (post_type_exists($f->object_type)) {
@@ -79,8 +91,12 @@ class ActivityFeed
         }
 
         if ($follow_posts) {
-            $ids = implode(',', array_map('intval', $follow_posts));
-            $rows = $wpdb->get_results("SELECT comment_ID, comment_content, comment_date, comment_post_ID FROM {$comments_table} WHERE comment_post_ID IN ($ids) AND comment_approved = '1' ORDER BY comment_date DESC LIMIT {$limit}");
+            $placeholders = implode(',', array_fill(0, count($follow_posts), '%d'));
+            $sql = $wpdb->prepare(
+                "SELECT comment_ID, comment_content, comment_date, comment_post_ID FROM {$comments_table} WHERE comment_post_ID IN ($placeholders) AND comment_approved = '1' ORDER BY comment_date DESC LIMIT %d",
+                array_merge($follow_posts, [$limit])
+            );
+            $rows = $wpdb->get_results($sql);
             foreach ($rows as $c) {
                 $items[] = [
                     'type'    => 'comment',
