@@ -737,7 +737,9 @@ class SettingsPage
     }
     public static function sanitizeSettings($input)
     {
-        $output = [];
+        // Load existing settings so values from other tabs are not lost
+        $existing = get_option('artpulse_settings', []);
+        $output   = [];
         foreach ($input as $key => $value) {
             if (in_array($key, [
                 'stripe_enabled',
@@ -777,7 +779,8 @@ class SettingsPage
                 $output[$key] = sanitize_text_field($value);
             }
         }
-        return $output;
+        // Merge sanitized settings with the existing option so untouched keys remain
+        return array_merge($existing, $output);
     }
     public static function renderField($args)
     {
