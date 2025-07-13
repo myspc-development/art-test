@@ -259,6 +259,12 @@ function ap_install_tables() {
             error_log("✅ Table exists: {$table}");
         }
     }
+
+    update_option('artpulse_installed', true);
+    update_option('artpulse_version', defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : null);
+    if (!get_option('artpulse_install_time')) {
+        update_option('artpulse_install_time', current_time('mysql'));
+    }
 }
 register_activation_hook(__FILE__, 'ap_install_tables');
 
@@ -354,15 +360,32 @@ function artpulse_settings_page() {
 
 function ap_render_diagnostics_page() {
     global $wpdb;
-    $tables = ['ap_roles','ap_feedback','ap_feedback_comments','ap_org_messages','ap_scheduled_messages','ap_payouts'];
-    echo '<div class="wrap"><h1>Diagnostics</h1>';
+    $tables  = ['ap_roles','ap_feedback','ap_feedback_comments','ap_org_messages','ap_scheduled_messages','ap_payouts'];
+    $missing = false;
+    echo '<div class="wrap"><h1>ArtPulse Diagnostics</h1>';
+
+    echo '<p><strong>Plugin Version:</strong> ' . esc_html(defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : '') . '</p>';
+    echo '<p><strong>Installed:</strong> ' . esc_html(get_option('artpulse_install_time', 'N/A')) . '</p>';
+
     foreach ($tables as $t) {
-        $full = $wpdb->prefix . $t;
-        if ($wpdb->get_var("SHOW TABLES LIKE '{$full}'") === $full) {
-            echo "<p style='color:green'>✅ Present: {$full}</p>";
+        $tbl = $wpdb->prefix . $t;
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$tbl}'") !== $tbl) {
+            echo "<p style='color:red'>❌ Missing: {$tbl}</p>";
+            $missing = true;
         } else {
-            echo "<p style='color:red'>❌ Missing: {$full}</p>";
+            echo "<p style='color:green'>✅ Present: {$tbl}</p>";
         }
+    }
+
+    if (!$missing) {
+        echo "<div style='margin-top:1em;padding:10px;background:#e6ffed;border-left:5px solid #28a745;'>✅ All ArtPulse database tables are installed and verified.</div>";
+    }
+
+    $resp = wp_remote_get(rest_url('artpulse/v1/status'));
+    if (is_wp_error($resp)) {
+        echo "<p style='color:red'>❌ REST status route unreachable.</p>";
+    } else {
+        echo "<p style='color:green'>✅ REST status route responding.</p>";
     }
     echo '</div>';
 }
