@@ -6,11 +6,16 @@
         return;
     }
 
-    const { api_url } = ArtPulseOrgRoles;
+    const { api_url, nonce } = ArtPulseOrgRoles;
 
     async function loadOrgRoles() {
         try {
-            const res = await fetch(api_url);
+            const res = await fetch(api_url, {
+                method: 'GET',
+                headers: {
+                    'X-WP-Nonce': nonce || ''
+                }
+            });
 
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const json = await res.json();

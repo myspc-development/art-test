@@ -96,5 +96,5 @@ rules so the new routes work correctly.
 
 **Roles & Permissions** – Manage organization roles and capabilities. Access the
 screen via `wp-admin/admin.php?page=ap-org-roles` from the Organization
-Dashboard menu. Visiting `/wp-admin/ap-org-roles` directly will return a 404
-because the route is handled through `admin.php`.
+Dashboard menu. Requests to `/wp-admin/ap-org-roles` are automatically redirected
+to the proper `admin.php` URL.

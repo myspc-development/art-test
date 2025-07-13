@@ -36,6 +36,7 @@ class OrgRolesController {
             'ArtPulseOrgRoles',
             [
                 'api_url' => rest_url('artpulse/v1/org-roles'),
+                'nonce'   => wp_create_nonce('wp_rest'),
             ]
         );
     }
