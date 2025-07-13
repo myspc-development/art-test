@@ -73,6 +73,7 @@ class EventFilterCallbackTest extends WP_UnitTestCase
     private function run_callback(array $params): string
     {
         $_REQUEST = $params;
+        $_REQUEST['_ajax_nonce'] = wp_create_nonce('ap_event_filter_nonce');
         ob_start();
         ap_filter_events_callback();
         return ob_get_clean();

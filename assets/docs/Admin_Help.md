@@ -131,7 +131,7 @@ Attributes shown in the examples below are optional parameters and may be omitte
 | `[ap_event_map]` | Map of events. |
 | `[ap_events_slider]` | Carousel of upcoming events. |
 | `[ap_event_comments id="123"]` | Event comment list/form. |
-| `[ap_event_filter]` | AJAX search/filter form. |
+| `[ap_event_filter]` | AJAX search/filter form, includes a security nonce. |
 | `[ap_org_event_form]` | Organization event submission form. |
 | `[ap_org_profile]` | Public organization profile. |
 | `[ap_event_comments]` | Event comment list/form for the current event. |

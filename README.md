@@ -67,7 +67,7 @@ Dashboard widget markup and CSS are documented in the
   - Engagement stats and trends (chart)
 
 ### AJAX Search & Filtering
-- Display a live event search form anywhere using `[ap_event_filter]`. Users can filter events by keyword, venue, date range and category. Results update below the form without reloading the page.
+- Display a live event search form anywhere using `[ap_event_filter]`. Users can filter events by keyword, venue, date range and category. Results update below the form without reloading the page. Requests are secured with a nonce automatically added to the page.
 - Use the search and filter form above directories to narrow results instantly.
 - Filters include: **venue, date, category, and keyword.**
 - Click "Reset" to see all results again.
@@ -121,7 +121,7 @@ Dashboard widget markup and CSS are documented in the
 - `[ap_login]` — Front-end login form with optional OAuth buttons
 - `[ap_register]` — Standalone registration form with password confirmation
 - `[ap_logout]` — Logout link
-- `[ap_event_filter]` — AJAX search and filter form
+ - `[ap_event_filter]` — AJAX search and filter form (secured with a nonce)
 - `[ap_user_dashboard]` — Member dashboard with stats
 - `[ap_portfolio_builder]` — Portfolio item builder
 - `[ap_org_event_form]` — Organization event submission form
@@ -214,6 +214,7 @@ Enable **WooCommerce Integration** under **ArtPulse → Settings** to sell membe
 ## AJAX Event Filter Form
 
 Display a live event search form anywhere using the `[ap_event_filter]` shortcode. Users can filter events by keyword, venue, date range and category. Results update below the form without reloading the page.
+The form includes a nonce so only legitimate pages can run the AJAX query.
 
 ```
 [ap_event_filter]

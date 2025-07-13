@@ -34,6 +34,7 @@ class EventFilter
         );
         wp_localize_script('ap-event-filter', 'APEventFilter', [
             'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('ap_event_filter_nonce'),
         ]);
     }
 
@@ -79,6 +80,7 @@ class EventFilter
 
 function ap_filter_events_callback(): void
 {
+    check_ajax_referer('ap_event_filter_nonce');
     $venue      = sanitize_text_field($_REQUEST['venue'] ?? '');
     $after      = sanitize_text_field($_REQUEST['after'] ?? '');
     $before     = sanitize_text_field($_REQUEST['before'] ?? '');
