@@ -133,6 +133,11 @@
 
   $(document).ready(function(){
     listConversations();
+    const recipientId = window.currentRecipientId || 0;
+    if(recipientId){
+      APMessages.pollId = recipientId;
+      $(document).trigger('ap-show-messages', recipientId);
+    }
   });
 
   if(APMessages.pollId){

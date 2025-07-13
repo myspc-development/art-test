@@ -151,6 +151,10 @@ class DirectMessages
     {
         $user_id  = get_current_user_id();
         $other_id = absint($req['with']);
+        error_log(print_r($req->get_params(), true));
+        if ($other_id <= 0) {
+            return new WP_REST_Response(['error' => 'Missing or invalid user ID (with param).'], 400);
+        }
 
         $messages = self::get_conversation($user_id, $other_id);
 

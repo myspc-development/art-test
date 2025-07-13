@@ -243,6 +243,15 @@ add_action('admin_menu', function () {
     );
 });
 
+add_action('admin_init', function () {
+    $uri  = $_SERVER['REQUEST_URI'] ?? '';
+    $path = parse_url($uri, PHP_URL_PATH);
+    if ($path === '/wp-admin/ap-diagnostics') {
+        wp_safe_redirect(admin_url('admin.php?page=ap-diagnostics'));
+        exit;
+    }
+});
+
 function ap_render_dashboard_preview_page() {
     ?>
     <div class="wrap">
