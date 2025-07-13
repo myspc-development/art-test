@@ -26,6 +26,7 @@ All REST endpoints are summarized in the [API Reference](docs/api-reference.md).
 [Webhook Automations Codex](docs/webhook-automation-codex.md) describes webhook management and payload delivery.
 [Dashboard Menu Codex](docs/dashboard-menu-codex.md) explains how the sidebar menu is generated.
 [Widget Settings Codex](docs/widget-settings-codex.md) describes widget schemas and per-user storage.
+[Execution Order Codex](docs/execution-order-codex.md) explains why user functions must run inside hooks.
 [Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.
 
 Additional resources:
