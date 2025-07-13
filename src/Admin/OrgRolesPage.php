@@ -98,10 +98,12 @@ class OrgRolesPage
     }
 }
 
-namespace;
+namespace {
 
 function ap_render_org_roles_page(): void
 {
     \ArtPulse\Admin\OrgRolesPage::render();
+}
+
 }
 
