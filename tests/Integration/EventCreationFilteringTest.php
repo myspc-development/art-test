@@ -39,7 +39,10 @@ class EventCreationFilteringTest extends \WP_UnitTestCase
         $this->assertSame('2030-01-01', get_post_meta($id, '_ap_event_date', true));
 
         // Filter helper
-        $_REQUEST = ['keyword' => 'Filter Event'];
+        $_REQUEST = [
+            'keyword'     => 'Filter Event',
+            '_ajax_nonce' => wp_create_nonce('ap_event_filter_nonce'),
+        ];
         ob_start();
         try {
             \ap_filter_events_callback();
