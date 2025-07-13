@@ -13,7 +13,7 @@ class PaymentAnalyticsDashboard
     public static function addMenu(): void
     {
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Payment Analytics', 'artpulse'),
             __('Payments', 'artpulse'),
             'manage_options',

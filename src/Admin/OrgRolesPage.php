@@ -19,14 +19,14 @@ class OrgRolesPage
             ? 'view_artpulse_dashboard'
             : 'manage_options';
 
-        add_menu_page(
+        add_submenu_page(
+            'artpulse',
             __('Organization Roles', 'artpulse'),
             __('Org Roles', 'artpulse'),
             $capability,
             'ap-org-roles',
             'ap_render_org_roles_page',
-            'dashicons-groups',
-            26
+            40
         );
     }
 

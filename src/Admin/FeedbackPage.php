@@ -11,7 +11,7 @@ class FeedbackPage
     public static function add_menu(): void
     {
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('User Feedback', 'artpulse'),
             __('Feedback', 'artpulse'),
             'manage_options',

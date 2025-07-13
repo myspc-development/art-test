@@ -335,17 +335,8 @@ class SettingsPage
     }
     public static function addMenu()
     {
-        add_menu_page(
-            __('ArtPulse', 'artpulse'),
-            __('ArtPulse', 'artpulse'),
-            'manage_options',
-            'artpulse-settings',
-            [self::class, 'render'],
-            'dashicons-admin-generic',
-            56
-        );
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Settings', 'artpulse'),
             __('Settings', 'artpulse'),
             'manage_options',
@@ -353,7 +344,7 @@ class SettingsPage
             [self::class, 'render']
         );
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Members', 'artpulse'),
             __('Members', 'artpulse'),
             'manage_options',
@@ -361,7 +352,7 @@ class SettingsPage
             [self::class, 'renderMembersPage']
         );
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Engagement Dashboard', 'artpulse'),
             __('Engagement', 'artpulse'),
             'manage_options',
@@ -369,7 +360,7 @@ class SettingsPage
             [EngagementDashboard::class, 'render']
         );
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Dashboard Widgets', 'artpulse'),
             __('Dashboard Widgets', 'artpulse'),
             'manage_options',
@@ -381,7 +372,7 @@ class SettingsPage
     public static function enqueueAdminAssets($hook)
     {
         global $current_screen;
-        if (isset($current_screen->id) && $current_screen->id != 'toplevel_page_artpulse-settings') {
+        if (isset($current_screen->id) && $current_screen->id != 'artpulse_page_artpulse-settings') {
             return;
         }
         wp_enqueue_script(

@@ -25,34 +25,34 @@ class AdminDashboard
             __('ArtPulse', 'artpulse'),
             __('ArtPulse', 'artpulse'),
             'manage_options',
-            'artpulse-dashboard',
+            'artpulse',
             [ self::class, 'renderDashboard' ],
             'dashicons-art', // choose an appropriate dashicon
             60
         );
         add_submenu_page(
-            'artpulse-dashboard',
+            'artpulse',
             __('Events','artpulse'),
             __('Events','artpulse'),
             'edit_artpulse_events',
             'edit.php?post_type=artpulse_event'
         );
         add_submenu_page(
-            'artpulse-dashboard',
+            'artpulse',
             __('Artists','artpulse'),
             __('Artists','artpulse'),
             'edit_artpulse_artists',
             'edit.php?post_type=artpulse_artist'
         );
         add_submenu_page(
-            'artpulse-dashboard',
+            'artpulse',
             __('Artworks','artpulse'),
             __('Artworks','artpulse'),
             'edit_artpulse_artworks',
             'edit.php?post_type=artpulse_artwork'
         );
         add_submenu_page(
-            'artpulse-dashboard',
+            'artpulse',
             __('Organizations','artpulse'),
             __('Organizations','artpulse'),
             'edit_artpulse_orgs',

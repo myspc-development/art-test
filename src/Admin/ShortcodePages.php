@@ -11,7 +11,7 @@ class ShortcodePages
     public static function addMenu(): void
     {
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Shortcode Pages', 'artpulse'),
             __('Shortcode Pages', 'artpulse'),
             'manage_options',

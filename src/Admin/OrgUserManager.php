@@ -12,7 +12,7 @@ class OrgUserManager
     public static function addMenu(): void
     {
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Org User Manager', 'artpulse'),
             __('Org Users', 'artpulse'),
             'view_artpulse_dashboard',
@@ -23,7 +23,7 @@ class OrgUserManager
 
     public static function enqueue(string $hook): void
     {
-        if ($hook !== 'artpulse-settings_page_ap-org-user-manager') {
+        if ($hook !== 'artpulse_page_ap-org-user-manager') {
             return;
         }
         $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-org-user-manager.js';
