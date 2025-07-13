@@ -1,0 +1,4 @@
+[
+  {"user_login": "artist1", "user_email": "artist1@example.com"},
+  {"user_login": "orgadmin", "user_email": "org@example.com"}
+]

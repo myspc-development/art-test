@@ -18,6 +18,8 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Event Template & Duplication Codex](docs/event-template-duplication-codex.md) covers template storage and cloning helpers.
 [Messaging & Communication Codex](docs/messaging-communication-codex.md) covers direct messaging (see the new `/messages` REST API section), reminders and comment moderation.
 [Unified Inbox](/docs/api-reference.md#get-artpulsev1inbox) aggregates notifications, messages and RSVP activity via `/inbox`.
+Sample JSON data for quick testing lives in the [`data/`](data) directory.
+All REST endpoints are summarized in the [API Reference](docs/api-reference.md).
 [Enhanced Notifications Codex](docs/enhanced-notifications-codex.md) details the inbox endpoints, notification preferences and onboarding tour.
 [Finance & Payout Codex](docs/financial-overview-codex.md) explains revenue summaries, transaction filtering and payout history.
 [Internal Notes & Task Tracking Codex](docs/internal-notes-tasks-codex.md) covers collaboration features.
@@ -444,4 +446,12 @@ or `vendor/bin/phpunit`:
 You may also set `WORDPRESS_TARBALL` to the path of a local WordPress archive
 if you need an offline setup. If any variables are omitted the test bootstrap
 will fail to connect to the database.
+
+Run `bash scripts/check-debug-log.sh` to quickly view the last entries of the
+`debug.log` file when troubleshooting.
+
+## Support / Contact
+
+For questions or bug reports please open an issue on the project repository or
+email `support@example.com`.
 

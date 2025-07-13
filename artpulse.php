@@ -1,4 +1,10 @@
 <?php
+/*
+Plugin Name: ArtPulse Management
+Description: Event, analytics, and messaging management for creative organizations.
+Version: 1.0.0
+Author: Your Team
+*/
 if (!defined('ABSPATH')) { exit; }
 /**
  * Plugin loader with version migration.
