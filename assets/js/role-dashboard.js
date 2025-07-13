@@ -11,14 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
         visible: card.dataset.visible === "1"
       }));
 
+      const payload = new URLSearchParams({
+        action: 'ap_save_user_layout',
+        nonce: APLayout.nonce,
+        layout: JSON.stringify(layout)
+      });
       fetch(APLayout.ajax_url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'ap_save_user_layout',
-          nonce: APLayout.nonce,
-          layout: layout
-        })
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: payload
       });
     }
   });

@@ -130,8 +130,22 @@ function ap_save_user_layout(): void
 {
     check_ajax_referer('ap_save_user_layout', 'nonce');
 
-    $input   = json_decode(file_get_contents('php://input'), true);
-    $layout  = $input['layout'] ?? [];
+    $layout = [];
+
+    // Prefer POST parameter when the request is form encoded
+    if (isset($_POST['layout'])) {
+        $layout_raw = $_POST['layout'];
+        if (is_string($layout_raw)) {
+            $layout = json_decode(stripslashes($layout_raw), true);
+        }
+    } else {
+        // Fallback to JSON body when sent via fetch()
+        $input  = json_decode(file_get_contents('php://input'), true);
+        if (is_array($input) && isset($input['layout'])) {
+            $layout = $input['layout'];
+        }
+    }
+
     $user_id = get_current_user_id();
 
     if ($user_id && is_array($layout)) {
