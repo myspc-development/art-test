@@ -1,16 +1,6 @@
 <?php
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-add_action('admin_menu', function() {
-    add_submenu_page(
-        'artpulse',
-        __('Widget Manager', 'artpulse'),
-        __('Widgets', 'artpulse'),
-        'manage_options',
-        'ap-dashboard-widgets',
-        'ap_render_dashboard_widget_manager'
-    );
-});
 
 function ap_render_dashboard_widget_manager(): void {
     if (!current_user_can('manage_options')) {
