@@ -11,7 +11,6 @@
     $.ajax({
       url: APMessages.apiRoot + 'artpulse/v1/conversations',
       method: 'GET',
-      data: { nonce: APMessages.nonce },
       beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(data){
         var $list = $('#ap-conversation-list');
@@ -58,7 +57,7 @@
     $.ajax({
       url: APMessages.apiRoot + 'artpulse/v1/messages',
       method: 'GET',
-      data: { with: id, nonce: APMessages.nonce },
+      data: { with: id },
       beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(data){
         if (cb) cb(data);
@@ -83,7 +82,7 @@
     $.ajax({
       url: APMessages.apiRoot + 'artpulse/v1/message/read',
       method: 'POST',
-      data: { ids: ids, nonce: APMessages.nonce },
+      data: { ids: ids },
       beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); }
     });
   }
@@ -119,7 +118,7 @@
     var content = $(this).find('textarea[name="content"]').val().trim();
     if(!id || !content) return;
     $.ajax({
-      url: APMessages.apiRoot + 'artpulse/v1/messages?nonce=' + APMessages.nonce,
+      url: APMessages.apiRoot + 'artpulse/v1/messages',
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({ recipient_id: parseInt(id,10), content: content }),

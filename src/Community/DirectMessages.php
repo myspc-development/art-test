@@ -226,7 +226,13 @@ class DirectMessages
 
     public static function permission_view(WP_REST_Request $req): bool
     {
-        check_ajax_referer('ap_messages_nonce', 'nonce');
+        $nonce = $req->get_header('X-WP-Nonce');
+        if (!$nonce) {
+            $nonce = $req->get_param('nonce');
+        }
+        if (!$nonce || !wp_verify_nonce($nonce, 'wp_rest')) {
+            return false;
+        }
         return current_user_can('read');
     }
 
