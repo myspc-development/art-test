@@ -420,6 +420,14 @@ class Plugin
         );
 
         wp_enqueue_script(
+            'ap-comment-js',
+            plugins_url('assets/js/comment.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_enqueue_script(
             'ap-event-chat-js',
             plugins_url('assets/js/ap-event-chat.js', ARTPULSE_PLUGIN_FILE),
             ['wp-api-fetch'],
@@ -466,6 +474,11 @@ class Plugin
         ]);
 
         wp_localize_script('ap-event-comments-js', 'APComments', [
+            'apiRoot' => esc_url_raw(rest_url()),
+            'nonce'   => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_localize_script('ap-comment-js', 'APArtistComments', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
         ]);
