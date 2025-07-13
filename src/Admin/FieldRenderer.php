@@ -20,6 +20,7 @@ class FieldRenderer
         switch ($type) {
             case 'checkbox':
                 printf(
+                    '<input type="hidden" name="artpulse_settings[%1$s]" value="0" />' .
                     '<input type="checkbox" id="%1$s" name="artpulse_settings[%1$s]" value="1"%2$s />',
                     esc_attr($key),
                     checked(1, $value, false)

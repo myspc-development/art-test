@@ -760,7 +760,7 @@ class SettingsPage
                 'enforce_two_factor',
                 'auto_update_enabled'
             ])) {
-                $output[$key] = isset($value) ? 1 : 0;
+                $output[$key] = absint($value);
             } elseif ($key === 'payment_metrics_cache' || in_array($key, ['default_rsvp_limit', 'min_rsvp_limit', 'max_rsvp_limit'])) {
                 $output[$key] = absint($value);
             } elseif ($key === 'search_service') {
