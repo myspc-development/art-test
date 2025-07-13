@@ -39,6 +39,18 @@ recommended class names when extending layouts.
 Dashboard widget markup and CSS are documented in the
 [`Dashboard Widget Design Codex`](docs/dashboard-widget-design-codex.md).
 
+## Installation
+
+This plugin uses [Composer](https://getcomposer.org/) for its PHP libraries.
+Run the following command in the plugin directory **before** activating it so
+`vendor/autoload.php` is generated:
+
+```bash
+composer install --no-dev --optimize-autoloader
+```
+
+WordPress will display an “unexpected output” warning if this file is missing.
+
 ## Overview & Quick Reference
 
 ### RSVP & Favorite Features
