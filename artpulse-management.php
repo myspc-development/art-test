@@ -235,6 +235,30 @@ function ap_install_tables() {
     ) $charset_collate;";
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     dbDelta($sql);
+
+    // Safely add AUTO_INCREMENT without redefining the primary key if the table
+    // already exists from a previous installation.
+    if ($wpdb->get_var("SHOW KEYS FROM {$wpdb->prefix}ap_payouts WHERE Key_name = 'PRIMARY'") ) {
+        $wpdb->query("ALTER TABLE {$wpdb->prefix}ap_payouts CHANGE id id BIGINT AUTO_INCREMENT");
+    }
+
+    // Log whether all required tables exist after activation.
+    $required_tables = [
+        $wpdb->prefix . 'ap_roles',
+        $wpdb->prefix . 'ap_feedback',
+        $wpdb->prefix . 'ap_feedback_comments',
+        $wpdb->prefix . 'ap_org_messages',
+        $wpdb->prefix . 'ap_scheduled_messages',
+        $wpdb->prefix . 'ap_payouts',
+    ];
+
+    foreach ($required_tables as $table) {
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$table}'") !== $table) {
+            error_log("❌ Missing table: {$table}");
+        } else {
+            error_log("✅ Table exists: {$table}");
+        }
+    }
 }
 register_activation_hook(__FILE__, 'ap_install_tables');
 
