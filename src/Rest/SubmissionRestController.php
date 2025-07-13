@@ -54,7 +54,7 @@ class SubmissionRestController
             [
                 'methods'             => 'GET',
                 'callback'            => fn() => rest_ensure_response(['message' => 'Use POST to submit a form.']),
-                'permission_callback' => '__return_true',
+                'permission_callback' => fn() => is_user_logged_in(),
             ]
         );
     }

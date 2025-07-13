@@ -134,7 +134,7 @@ class MembershipManager
         register_rest_route('artpulse/v1', '/stripe-webhook', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'handleStripeWebhook' ],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
         ]);
 
         register_rest_route('artpulse/v1', '/membership/pause', [

@@ -32,9 +32,9 @@ class AjaxFilterBlock {
 
     public static function register_rest_routes() {
         register_rest_route('artpulse/v1', '/filtered-posts', [
-            'methods' => 'GET',
+            'methods'  => 'GET',
             'callback' => [self::class, 'rest_filtered_posts'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
             'args' => [
                 'post_type' => ['required' => true],
                 'taxonomy'  => ['required' => true],

@@ -20,7 +20,7 @@ class SpotlightAnalyticsController
         register_rest_route('art/v1', '/spotlight/view', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'log_view'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [
                 'id' => [
                     'validate_callback' => 'is_numeric',

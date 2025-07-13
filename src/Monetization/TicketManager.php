@@ -24,7 +24,7 @@ class TicketManager
         register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/tickets', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_tickets'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => [self::class, 'check_logged_in'],
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
 

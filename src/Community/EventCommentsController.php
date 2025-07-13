@@ -17,7 +17,7 @@ class EventCommentsController
         register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
 

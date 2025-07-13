@@ -46,7 +46,7 @@ class DirectoryManager {
         register_rest_route('artpulse/v1', '/filter', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'handleFilter' ],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
             'args' => [
                 'type'       => [ 'type' => 'string',  'required' => true ],
                 'limit'      => [ 'type' => 'integer', 'default'  => 10 ],

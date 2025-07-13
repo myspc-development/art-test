@@ -11,12 +11,12 @@ class LocationRestController {
             register_rest_route('artpulse/v1', '/location/geonames', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'geonames'],
-                'permission_callback' => '__return_true',
+                'permission_callback' => fn() => is_user_logged_in(),
             ]);
             register_rest_route('artpulse/v1', '/location/google', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'google'],
-                'permission_callback' => '__return_true',
+                'permission_callback' => fn() => is_user_logged_in(),
             ]);
         });
     }

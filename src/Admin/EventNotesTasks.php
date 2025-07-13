@@ -209,7 +209,10 @@ class EventNotesTasks
                 }
                 return rest_ensure_response(self::get_notes($id));
             },
-            'permission_callback' => '__return_true'
+            'permission_callback' => function (WP_REST_Request $req) {
+                $id = intval($req['id']);
+                return current_user_can('edit_post', $id);
+            }
         ]);
         register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/tasks', [
             'methods' => 'GET',
@@ -220,7 +223,10 @@ class EventNotesTasks
                 }
                 return rest_ensure_response(self::get_tasks($id));
             },
-            'permission_callback' => '__return_true'
+            'permission_callback' => function (WP_REST_Request $req) {
+                $id = intval($req['id']);
+                return current_user_can('edit_post', $id);
+            }
         ]);
     }
 }

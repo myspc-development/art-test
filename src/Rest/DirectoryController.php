@@ -13,13 +13,13 @@ class DirectoryController
         register_rest_route('art/v1', '/artists', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_artists'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
         ]);
 
         register_rest_route('art/v1', '/events', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_events'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
         ]);
     }
 
