@@ -22,6 +22,7 @@ add_action('wp_ajax_ap_save_widget_layout', 'ap_save_widget_layout');
 add_action('wp_ajax_ap_save_role_layout', 'ap_save_role_layout');
 add_action('wp_ajax_ap_save_user_layout', 'ap_save_user_layout');
 add_action('wp_ajax_save_widget_order', 'ap_save_widget_order');
+add_action('wp_ajax_ap_save_dashboard_order', 'ap_save_dashboard_order_callback');
 add_action('wp_ajax_save_dashboard_layout', function () {
     check_ajax_referer('ap_widget_nonce', 'nonce');
     $layout = json_decode(stripslashes($_POST['layout'] ?? ''), true);
@@ -162,6 +163,20 @@ function ap_save_widget_order(): void
     $order = isset($_POST['order']) ? json_decode(stripslashes($_POST['order']), true) : [];
     update_user_meta(get_current_user_id(), 'ap_widget_order', $order);
     wp_send_json_success();
+}
+
+function ap_save_dashboard_order_callback(): void
+{
+    check_ajax_referer('ap_dashboard_nonce', 'nonce');
+
+    $order = json_decode(stripslashes($_POST['order'] ?? '[]'), true);
+    if (!is_array($order)) {
+        wp_send_json_error(['message' => 'Invalid format.']);
+    }
+
+    update_user_meta(get_current_user_id(), 'ap_dashboard_order', $order);
+
+    wp_send_json_success(['message' => 'Dashboard order saved.']);
 }
 
 function ap_load_dashboard_template(string $template, array $vars = []): string

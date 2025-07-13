@@ -533,15 +533,15 @@ add_action('admin_enqueue_scripts', function ($hook) {
             true
         );
         wp_enqueue_script(
-            'ap-role-dashboard',
+            'role-dashboard',
             plugin_dir_url(__FILE__) . 'assets/js/role-dashboard.js',
-            ['sortablejs'],
-            '1.0',
+            ['jquery', 'sortablejs'],
+            '1.0.0',
             true
         );
-        wp_localize_script('ap-role-dashboard', 'APLayout', [
-            'nonce'    => wp_create_nonce('ap_save_user_layout'),
+        wp_localize_script('role-dashboard', 'ArtPulseDashboard', [
             'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('ap_dashboard_nonce'),
         ]);
         wp_enqueue_style(
             'ap-dashboard-style',
@@ -555,10 +555,10 @@ add_action('admin_enqueue_scripts', function ($hook) {
 add_action('admin_enqueue_scripts', function ($hook) {
     if ($hook === 'toplevel_page_dashboard-preview') {
         wp_enqueue_script('sortablejs', plugin_dir_url(__FILE__) . 'assets/js/Sortable.min.js', [], null, true);
-        wp_enqueue_script('ap-role-dashboard', plugin_dir_url(__FILE__) . 'assets/js/role-dashboard.js', ['sortablejs'], null, true);
-        wp_localize_script('ap-role-dashboard', 'APLayout', [
-            'nonce'    => wp_create_nonce('ap_save_user_layout'),
-            'ajax_url' => admin_url('admin-ajax.php')
+        wp_enqueue_script('role-dashboard', plugin_dir_url(__FILE__) . 'assets/js/role-dashboard.js', ['jquery', 'sortablejs'], '1.0.0', true);
+        wp_localize_script('role-dashboard', 'ArtPulseDashboard', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('ap_dashboard_nonce')
         ]);
         wp_enqueue_style('ap-dashboard-style', plugin_dir_url(__FILE__) . 'assets/css/dashboard-widget.css');
     }
