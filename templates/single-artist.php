@@ -30,6 +30,7 @@ if ( have_posts() ) :
     echo '<div class="entry-content">';
     the_content();
     echo '</div>';
+    echo '<button class="ap-support-btn nectar-button" data-id="' . get_the_ID() . '">' . esc_html__('Support', 'artpulse') . '</button>';
 
     echo '</div>';
   endwhile;

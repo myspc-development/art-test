@@ -328,6 +328,18 @@ class PostTypeRegistrar
             'type'         => 'boolean',
         ]);
 
+        register_post_meta('artpulse_event', 'is_featured', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+        ]);
+
+        register_post_meta('artpulse_event', 'ap_featured', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'boolean',
+        ]);
+
         register_post_meta('artpulse_event', 'event_rsvp_enabled', [
             'show_in_rest' => true,
             'single'       => true,

@@ -33,6 +33,7 @@ class SettingsPage
         SettingsRegistry::register_tab('search', __('Search', 'artpulse'));
         SettingsRegistry::register_tab('emails', __('Email Delivery', 'artpulse'));
         SettingsRegistry::register_tab('updates', __('Updates', 'artpulse'));
+        SettingsRegistry::register_tab('monetization', __('Monetization', 'artpulse'));
 
         $general_fields = [
             'basic_fee' => [
@@ -299,6 +300,36 @@ class SettingsPage
         ];
         foreach ($update_fields as $key => $cfg) {
             SettingsRegistry::register_field('updates', $key, $cfg);
+        }
+
+        $monetization_fields = [
+            'stripe_pub_key'       => [
+                'label' => __('Stripe Publishable Key', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'stripe_secret_key'    => [
+                'label' => __('Stripe Secret Key', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'paypal_client_id'     => [
+                'label' => __('PayPal Client ID', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'paypal_secret'        => [
+                'label' => __('PayPal Secret', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'feature_price_event'     => [
+                'label' => __('Feature Event Price', 'artpulse'),
+                'type'  => 'number',
+            ],
+            'feature_price_spotlight' => [
+                'label' => __('Feature Spotlight Price', 'artpulse'),
+                'type'  => 'number',
+            ],
+        ];
+        foreach ($monetization_fields as $key => $cfg) {
+            SettingsRegistry::register_field('monetization', $key, $cfg);
         }
     }
     public static function addMenu()
