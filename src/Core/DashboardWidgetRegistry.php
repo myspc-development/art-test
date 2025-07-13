@@ -111,11 +111,16 @@ class DashboardWidgetRegistry
     {
         $defs = [];
         foreach (self::$widgets as $id => $config) {
+            // Sanitize widget configuration to avoid undefined index warnings.
+            $label       = isset($config['label']) ? $config['label'] : 'Unnamed Widget';
+            $icon        = isset($config['icon']) ? $config['icon'] : 'dashicons-admin-generic';
+            $description = isset($config['description']) ? $config['description'] : '';
+
             $def = [
                 'id'          => $id,
-                'name'        => $config['label'],
-                'icon'        => $config['icon'],
-                'description' => $config['description'],
+                'name'        => $label,
+                'icon'        => $icon,
+                'description' => $description,
             ];
             if (isset($config['category'])) {
                 $def['category'] = $config['category'];
