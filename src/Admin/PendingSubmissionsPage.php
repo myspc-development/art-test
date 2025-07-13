@@ -6,7 +6,8 @@ class PendingSubmissionsPage
     public static function register()
     {
         add_action('admin_menu', [self::class, 'addMenu']);
-        add_action('admin_post_ap_reject_submission', [self::class, 'handleRejection']);
+        // Delegate rejection handling to ApprovalManager
+        add_action('admin_post_ap_reject_submission', [ApprovalManager::class, 'handleRejection']);
     }
 
     public static function addMenu()
@@ -61,18 +62,4 @@ class PendingSubmissionsPage
         echo '</tbody></table></div>';
     }
 
-    public static function handleRejection()
-    {
-        if (!current_user_can('delete_posts')) {
-            wp_die(__('Insufficient permissions', 'artpulse'));
-        }
-        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
-        $nonce   = $_POST['nonce'] ?? '';
-        if (!wp_verify_nonce($nonce, 'ap_reject_' . $post_id)) {
-            wp_die(__('Security check failed', 'artpulse'));
-        }
-        wp_trash_post($post_id);
-        wp_safe_redirect(admin_url('admin.php?page=ap-pending-submissions'));
-        exit;
-    }
 }
