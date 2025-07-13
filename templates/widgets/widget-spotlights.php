@@ -56,7 +56,7 @@ $spot_query = new WP_Query($query_args);
 <script>
 document.querySelectorAll('.ap-spotlight-view').forEach(btn => {
   btn.addEventListener('click', () => {
-    fetch('/wp-json/art/v1/spotlight/view', {
+    fetch('/wp-json/artpulse/v1/spotlight/view', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: btn.dataset.spotId })
