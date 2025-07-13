@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use ArtPulse\Core\OrgRoleManager;
 
 class OrgRolesController {
     public static function register(): void {
@@ -42,12 +43,14 @@ class OrgRolesController {
     }
 
     public static function get_roles(WP_REST_Request $request): WP_REST_Response {
-        // TODO: Replace with real lookup.
-        $roles = [
-            ['id' => 1, 'name' => 'Curator'],
-            ['id' => 2, 'name' => 'Artist'],
-            ['id' => 3, 'name' => 'Patron'],
-        ];
+        $org_id = absint($request->get_param('org_id'));
+        if (!$org_id) {
+            $user_id = get_current_user_id();
+            $org_id  = intval(get_user_meta($user_id, 'ap_organization_id', true));
+        }
+
+        $roles = OrgRoleManager::get_roles($org_id);
+
         return rest_ensure_response(['roles' => $roles]);
     }
 
@@ -57,16 +60,13 @@ class OrgRolesController {
     public static function ajax_get_roles(): void {
         check_ajax_referer('ap_org_roles_nonce', 'nonce');
 
-        $user_id = absint($_POST['user_id'] ?? 0);
-        if (!$user_id) {
-            wp_send_json_error('Missing user_id');
+        $org_id = absint($_POST['org_id'] ?? 0);
+        if (!$org_id) {
+            $user_id = get_current_user_id();
+            $org_id  = intval(get_user_meta($user_id, 'ap_organization_id', true));
         }
 
-        // Example static data. Replace with real lookup when available.
-        $roles = [
-            ['id' => 1, 'label' => 'Curator'],
-            ['id' => 2, 'label' => 'Artist'],
-        ];
+        $roles = OrgRoleManager::get_roles($org_id);
 
         wp_send_json_success(['roles' => $roles]);
     }
