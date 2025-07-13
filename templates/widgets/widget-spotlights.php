@@ -39,7 +39,13 @@ $spot_query = new WP_Query($query_args);
           ?>
           <strong><?php the_title(); ?></strong>
           <p><?php echo wp_trim_words(get_the_excerpt(), 20); ?></p>
-          <a href="<?php the_permalink(); ?>" class="button small"><?php esc_html_e('View', 'artpulse'); ?></a>
+          <a href="<?php the_permalink(); ?>" class="button small ap-spotlight-view" data-spot-id="<?php echo get_the_ID(); ?>"><?php esc_html_e('View', 'artpulse'); ?></a>
+          <div class="spotlight-share">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(get_permalink()); ?>" target="_blank" rel="noopener" class="share-facebook">FB</a>
+            <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode(get_permalink()); ?>" target="_blank" rel="noopener" class="share-twitter">Tw</a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode(get_permalink()); ?>" target="_blank" rel="noopener" class="share-linkedin">In</a>
+            <a href="mailto:?subject=<?php echo rawurlencode(get_the_title()); ?>&body=<?php echo urlencode(get_permalink()); ?>" class="share-email">Email</a>
+          </div>
         </div>
       <?php endwhile; wp_reset_postdata(); ?>
     <?php else : ?>
@@ -47,3 +53,14 @@ $spot_query = new WP_Query($query_args);
     <?php endif; ?>
   </div>
 </div>
+<script>
+document.querySelectorAll('.ap-spotlight-view').forEach(btn => {
+  btn.addEventListener('click', () => {
+    fetch('/wp-json/art/v1/spotlight/view', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: btn.dataset.spotId })
+    });
+  });
+});
+</script>
