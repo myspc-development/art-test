@@ -1,46 +1,32 @@
-(function(){
-  document.addEventListener('DOMContentLoaded', function(){
-    document.querySelectorAll('.ap-event-chat').forEach(function(container){
-      var eventId = container.dataset.eventId;
-      var listEl = container.querySelector('.ap-chat-list');
-      var form = container.querySelector('.ap-chat-form');
+function loadChat() {
+    const eventId =
+        typeof ArtPulseChatVars !== 'undefined' ? ArtPulseChatVars.event_id : 2312;
 
-      function load(){
-        fetch(APChat.apiRoot + 'artpulse/v1/event/' + eventId + '/chat')
-          .then(r => r.json())
-          .then(function(data){
-            listEl.innerHTML = '';
-            data.forEach(function(m){
-              var li = document.createElement('li');
-              li.textContent = m.author + ': ' + m.content;
-              listEl.appendChild(li);
-            });
-          });
-      }
+    fetch(`/wp-json/artpulse/v1/event/${eventId}/chat`)
+        .then(res => {
+            if (!res.ok) throw new Error(`Failed to load chat: HTTP ${res.status}`);
+            return res.json();
+        })
+        .then(data => {
+            if (!Array.isArray(data)) throw new Error('Invalid chat format');
 
-      load();
-      if(APChat.poll){
-        setInterval(load, 5000);
-      }
+            const container = document.getElementById('ap-event-chat');
+            if (!container) return;
 
-      if(form){
-        form.addEventListener('submit', function(e){
-          e.preventDefault();
-          var txt = form.querySelector('[name="content"]').value.trim();
-          if(!txt) return;
-          fetch(APChat.apiRoot + 'artpulse/v1/event/' + eventId + '/chat', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-WP-Nonce': APChat.nonce
-            },
-            body: JSON.stringify({content: txt})
-          }).then(function(){
-            form.reset();
-            load();
-          });
+            container.innerHTML = data.map(entry => `
+                <div class="chat-message">
+                    <strong>${entry.user}:</strong> ${entry.msg}
+                </div>
+            `).join('');
+        })
+        .catch(err => {
+            console.error('Chat load error:', err.message);
+            const container = document.getElementById('ap-event-chat');
+            if (container) container.innerHTML = `<p class="error">${err.message}</p>`;
         });
-      }
-    });
-  });
-})();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadChat();
+    setInterval(loadChat, 10000); // poll every 10s
+});
