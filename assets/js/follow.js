@@ -4,10 +4,12 @@
       e.preventDefault();
       const btn = e.target;
       if(!window.APFollow){ return; }
+      const following = btn.classList.contains('ap-following');
       const data = new FormData();
-      data.append('action', btn.classList.contains('following') ? 'ap_unfollow_post' : 'ap_follow_post');
-      data.append('post_id', btn.dataset.postId);
-      data.append('post_type', btn.dataset.postType);
+      data.append('action', 'ap_follow_toggle');
+      data.append('object_id', btn.dataset.id);
+      data.append('object_type', btn.dataset.type);
+      data.append('following', following ? '1' : '0');
       fetch(APFollow.ajaxurl, {
         method: 'POST',
         credentials: 'same-origin',
@@ -15,8 +17,9 @@
         body: data
       }).then(r => r.json()).then(res => {
         if(res.success){
-          btn.classList.toggle('following');
-          btn.textContent = btn.classList.contains('following') ? APFollow.unfollowText : APFollow.followText;
+          const isFollowing = res.state === 'following';
+          btn.classList.toggle('ap-following', isFollowing);
+          btn.textContent = isFollowing ? APFollow.unfollowText : APFollow.followText;
         }
       });
     }
