@@ -3,12 +3,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Load the Plugin Update Checker library.
-if (!class_exists('Puc_v5p6_Factory')) {
-    require_once __DIR__ . '/../vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php';
-}
+use YahnisElsts\PluginUpdateChecker\v5p6\PucFactory;
 
-$updateChecker = Puc_v5p6_Factory::buildUpdateChecker(
+$updateChecker = PucFactory::buildUpdateChecker(
     'https://github.com/your-org/artpulse-plugin',
     ARTPULSE_PLUGIN_FILE,
     'artpulse-management'
