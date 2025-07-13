@@ -1,5 +1,5 @@
 <?php
-namespace ArtPulse\Admin;
+namespace ArtPulse\Admin {
 
 use ArtPulse\Core\OrgRoleManager;
 use ArtPulse\Core\RoleAuditLogger;
@@ -96,6 +96,8 @@ class OrgRolesPage
         wp_redirect(admin_url('admin.php?page=ap-org-roles&updated=1'));
         exit;
     }
+}
+
 }
 
 namespace {
