@@ -61,6 +61,8 @@ include_once __DIR__ . '/shortcodes/widget-embed.php';
 include_once __DIR__ . '/shortcodes/artist-comments.php';
 require_once __DIR__ . '/includes/admin-org-roles-page.php';
 require_once __DIR__ . '/includes/rest/org-roles.php';
+require_once __DIR__ . '/includes/rest/artist.php';
+require_once __DIR__ . '/includes/rest/status.php';
 
 // Ensure custom roles exist on every load
 add_action('init', function () {

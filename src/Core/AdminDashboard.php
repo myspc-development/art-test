@@ -6,6 +6,7 @@ class AdminDashboard
     public static function register()
     {
         add_action('admin_menu', [ self::class, 'addMenus' ]);
+        add_action('admin_enqueue_scripts', [ self::class, 'enqueue' ]);
     }
 
     public static function addMenus()
@@ -49,15 +50,38 @@ class AdminDashboard
         );
     }
 
+    public static function enqueue(string $hook): void
+    {
+        if ($hook !== 'toplevel_page_artpulse-dashboard') {
+            return;
+        }
+
+        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-dashboard.js';
+        $url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-dashboard.js';
+
+        if (file_exists($path)) {
+            wp_enqueue_script(
+                'ap-dashboard-app',
+                $url,
+                ['wp-element', 'wp-api-fetch'],
+                filemtime($path),
+                true
+            );
+
+            wp_localize_script(
+                'ap-dashboard-app',
+                'ArtPulseDashboardData',
+                [
+                    'nonce'    => wp_create_nonce('wp_rest'),
+                    'rest_url' => rest_url('artpulse/v1/'),
+                ]
+            );
+        }
+    }
+
     public static function renderDashboard()
     {
-        echo '<div class="wrap"><h1>' . __('ArtPulse Dashboard','artpulse') . '</h1>';
-        echo '<p>' . __('Quick links to manage Events, Artists, Artworks, and Organizations.','artpulse') . '</p>';
-        echo '<ul>';
-        echo '<li><a href="' . admin_url('edit.php?post_type=artpulse_event') . '">' . __('Manage Events','artpulse') . '</a></li>';
-        echo '<li><a href="' . admin_url('edit.php?post_type=artpulse_artist') . '">' . __('Manage Artists','artpulse') . '</a></li>';
-        echo '<li><a href="' . admin_url('edit.php?post_type=artpulse_artwork') . '">' . __('Manage Artworks','artpulse') . '</a></li>';
-        echo '<li><a href="' . admin_url('edit.php?post_type=artpulse_org') . '">' . __('Manage Organizations','artpulse') . '</a></li>';
-        echo '</ul></div>';
+        echo '<div class="wrap"><h1>' . esc_html__('ArtPulse Dashboard','artpulse') . '</h1>';
+        echo '<div id="ap-dashboard-root"></div></div>';
     }
 }
