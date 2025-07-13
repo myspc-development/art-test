@@ -22,12 +22,12 @@ class FeedbackRestController
         register_rest_route('artpulse/v1', '/feedback', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'submit'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn () => is_user_logged_in(),
         ]);
         register_rest_route('artpulse/v1', '/feedback', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn () => is_user_logged_in(),
         ]);
         register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/vote', [
             'methods'             => 'POST',
@@ -38,7 +38,7 @@ class FeedbackRestController
         register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/comments', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'comments'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn () => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
         register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/comments', [

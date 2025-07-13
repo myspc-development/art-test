@@ -42,7 +42,7 @@ class ArtistRestController extends WP_REST_Controller
             [
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => [ $this, 'get_artists' ],
-                'permission_callback' => '__return_true',
+                'permission_callback' => fn() => is_user_logged_in(),
             ]
         );
 
@@ -52,7 +52,7 @@ class ArtistRestController extends WP_REST_Controller
             [
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => [ $this, 'get_artist' ],
-                'permission_callback' => '__return_true',
+                'permission_callback' => fn() => is_user_logged_in(),
                 'args'                => [
                     'id' => [
                         'validate_callback' => 'is_numeric',

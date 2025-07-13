@@ -18,7 +18,7 @@ class ForumRestController
         register_rest_route('artpulse/v1', '/forum/threads', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'list_threads'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
         ]);
 
         register_rest_route('artpulse/v1', '/forum/threads', [
@@ -34,7 +34,7 @@ class ForumRestController
         register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_comments'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
 

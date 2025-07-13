@@ -17,7 +17,7 @@ class PortfolioBuilder
             register_rest_route('artpulse/v1', '/portfolio/(?P<user_id>\d+)', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'rest_get_portfolio'],
-                'permission_callback' => '__return_true',
+                'permission_callback' => fn() => is_user_logged_in(),
                 'args' => [
                     'user_id' => [
                         'validate_callback' => 'is_numeric',

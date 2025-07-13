@@ -23,7 +23,7 @@ class EventCardController
             [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_card'],
-                'permission_callback' => '__return_true',
+                'permission_callback' => fn() => is_user_logged_in(),
                 'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
             ]
         );

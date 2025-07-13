@@ -16,7 +16,7 @@ class PromoManager
         register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/promo-code/apply', [
             'methods'  => 'POST',
             'callback' => [self::class, 'apply_code'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
     }

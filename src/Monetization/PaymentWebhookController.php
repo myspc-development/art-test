@@ -16,7 +16,7 @@ class PaymentWebhookController
         register_rest_route('artpulse/v1', '/payment/webhook', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => fn() => is_user_logged_in(),
         ]);
     }
 
