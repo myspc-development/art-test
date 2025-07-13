@@ -12,7 +12,7 @@ class PaymentReportsPage
     public static function addMenu(): void
     {
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Payment Reports', 'artpulse'),
             __('Payment Reports', 'artpulse'),
             'manage_options',
@@ -23,7 +23,7 @@ class PaymentReportsPage
 
     public static function enqueue(string $hook): void
     {
-        if ($hook !== 'artpulse-settings_page_ap-payment-reports') {
+        if ($hook !== 'artpulse_page_ap-payment-reports') {
             return;
         }
         $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/payment-reports.js';

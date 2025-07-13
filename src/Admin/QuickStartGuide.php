@@ -15,7 +15,7 @@ class QuickStartGuide
     public static function addMenu()
     {
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Quick Start', 'artpulse'),
             __('Quick Start', 'artpulse'),
             'manage_options',

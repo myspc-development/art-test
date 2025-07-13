@@ -7,13 +7,14 @@ use ArtPulse\Admin\OrgCommunicationsCenter;
 
 class OrgDashboardAdmin {
     public static function register() {
-        add_menu_page(
+        add_submenu_page(
+            'artpulse',
             'Organization Dashboard',
             'Org Dashboard',
             'view_artpulse_dashboard',
             'ap-org-dashboard',
             [self::class, 'render'],
-            'dashicons-building'
+            30
         );
         add_action('admin_init', [self::class, 'handleExports']);
     }

@@ -11,7 +11,7 @@ class SpotlightManager
     public static function add_menu(): void
     {
         add_submenu_page(
-            'artpulse-dashboard',
+            'artpulse',
             __('Artist Spotlights', 'artpulse'),
             __('Spotlights', 'artpulse'),
             'edit_artpulse_artists',

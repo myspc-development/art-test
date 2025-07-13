@@ -129,7 +129,7 @@ class EnqueueAssets {
         $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
 
-        if ($screen->base === 'artpulse-settings_page_artpulse-engagement') {
+        if ($screen->base === 'artpulse_page_artpulse-engagement') {
             $custom_js_path = $plugin_dir . '/assets/js/ap-engagement-dashboard.js';
             $custom_js_url = $plugin_url . '/assets/js/ap-engagement-dashboard.js';
             if (file_exists($custom_js_path)) {
@@ -143,7 +143,7 @@ class EnqueueAssets {
             }
         }
 
-        if ($screen->base === 'artpulse-settings_page_artpulse-quickstart') {
+        if ($screen->base === 'artpulse_page_artpulse-quickstart') {
             $qs_path = $plugin_dir . '/assets/js/ap-quickstart.js';
             $qs_url  = $plugin_url . '/assets/js/ap-quickstart.js';
             if (file_exists($qs_path)) {
@@ -160,7 +160,7 @@ class EnqueueAssets {
             }
         }
 
-        if ($screen->base === 'artpulse-settings_page_ap-dashboard-widgets') {
+        if ($screen->base === 'artpulse_page_ap-dashboard-widgets') {
             $script_path = $plugin_dir . '/assets/dist/admin-dashboard-widgets-editor.js';
             $script_url  = $plugin_url . '/assets/dist/admin-dashboard-widgets-editor.js';
             $style_path  = $plugin_dir . '/assets/css/dashboard-widget.css';
@@ -220,8 +220,8 @@ class EnqueueAssets {
         }
 
         if (
-            ($screen->base === 'toplevel_page_artpulse-settings' && ($_GET['tab'] ?? '') === 'import_export') ||
-            $screen->base === 'artpulse-settings_page_artpulse-import-export'
+            ($screen->base === 'artpulse_page_artpulse-settings' && ($_GET['tab'] ?? '') === 'import_export') ||
+            $screen->base === 'artpulse_page_artpulse-import-export'
         ) {
             wp_enqueue_script(
                 'papaparse',

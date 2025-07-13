@@ -11,7 +11,7 @@ class LoginEventsPage
     public static function addMenu()
     {
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Login Events', 'artpulse'),
             __('Login Events', 'artpulse'),
             'manage_options',

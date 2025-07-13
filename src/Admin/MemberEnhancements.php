@@ -67,7 +67,7 @@ class MemberEnhancements
     public static function addHeatmapMenu(): void
     {
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Login Heatmap', 'artpulse'),
             __('Login Heatmap', 'artpulse'),
             'manage_options',

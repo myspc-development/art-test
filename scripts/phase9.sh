@@ -43,7 +43,7 @@ class DocumentationManager
         $parsedown->setSafeMode(true);
 
         // Admin Help on Dashboard
-        if ($screen->id === 'toplevel_page_artpulse-dashboard') {
+        if ($screen->id === 'toplevel_page_artpulse') {
             $md = file_get_contents($docsPath . 'Admin_Help.md');
             $content = '<div class="ap-doc">' . $parsedown->text($md) . '</div>';
             $screen->add_help_tab([

@@ -234,7 +234,7 @@ add_action('admin_menu', function () {
     );
 
     add_submenu_page(
-        'artpulse-dashboard',
+        'artpulse',
         __('Diagnostics', 'artpulse'),
         __('Diagnostics', 'artpulse'),
         'manage_options',

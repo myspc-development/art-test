@@ -3,7 +3,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 add_action('admin_menu', function() {
     add_submenu_page(
-        'artpulse-dashboard',
+        'artpulse',
         __('Widget Manager', 'artpulse'),
         __('Widgets', 'artpulse'),
         'manage_options',

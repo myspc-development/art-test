@@ -24,7 +24,7 @@ class EngagementDashboard
     public static function addMenu()
     {
         add_submenu_page(
-            'artpulse-settings',
+            'artpulse',
             __('Engagement Dashboard', 'artpulse'),
             __('Engagement', 'artpulse'),
             'manage_options',
