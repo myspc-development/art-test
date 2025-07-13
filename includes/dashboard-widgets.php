@@ -247,6 +247,11 @@ function ap_widget_for_you(array $vars = []): string
     return ap_load_dashboard_template('widgets/widget-for-you.php', $vars);
 }
 
+function ap_widget_followed_artists(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/widget-followed-artists.php', $vars);
+}
+
 function ap_widget_account_tools(array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/account-tools.php', $vars);
@@ -546,6 +551,17 @@ function ap_register_core_dashboard_widgets(): void
         [
             'roles'    => ['member', 'artist', 'organization'],
             'category' => 'recommended',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'widget_followed_artists',
+        __('Followed Artists', 'artpulse'),
+        'groups',
+        __('Artists the user follows.', 'artpulse'),
+        'ap_widget_followed_artists',
+        [
+            'roles' => ['member', 'artist'],
         ]
     );
 

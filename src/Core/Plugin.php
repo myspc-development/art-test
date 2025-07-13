@@ -329,6 +329,7 @@ class Plugin
         \ArtPulse\Search\MetaFullTextSearch::register();
         \ArtPulse\Search\ExternalSearch::register();
         \ArtPulse\Personalization\RecommendationRestController::register();
+        add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
         \ArtPulse\Rest\EventManagementController::register();
     }
 

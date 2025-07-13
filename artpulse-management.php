@@ -14,6 +14,7 @@ use ArtPulse\Core\WooCommerceIntegration;
 use ArtPulse\Core\ArtworkWooSync;
 use ArtPulse\Core\Activator;
 use ArtPulse\Admin\EnqueueAssets;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 // Suppress deprecated notices if WP_DEBUG enabled
 if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -34,8 +35,8 @@ require_once $autoload_path;
     wp_die('Autoloader missing. Run `composer install` in the plugin directory.');
 }
 
-\ArtPulse\Core\Plugin::register();
-add_action('init', ['ArtPulse\\Core\\DashboardWidgetRegistry', 'init']);
+Plugin::register();
+add_action('init', [DashboardWidgetRegistry::class, 'init']);
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
