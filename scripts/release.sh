@@ -24,19 +24,21 @@ composer install --no-dev --optimize-autoloader
 # 3. Build assets
 npm run build
 
-# 4. Copy plugin files to temp directory
+# 4. Ensure optimized autoloader for packaging
+composer install --no-dev --optimize-autoloader
+
+# 5. Copy plugin files to temp directory
 TMPDIR=$(mktemp -d)
 echo "📂 Copying files to temp dir $TMPDIR"
 rsync -a --exclude 'scripts' --exclude 'tests' --exclude '.git' --exclude 'phpunit.xml.dist' "$PLUGIN_DIR/" "$TMPDIR/"
-
-# 5. Create ZIP archive
+# 6. Create ZIP archive
 cd "$TMPDIR"
 zip -r "$RELEASE_DIR/$ZIP_FILE" .
 cd -
 
 echo "✅ Release package created: $RELEASE_DIR/$ZIP_FILE"
 
-# 6. Cleanup
+# 7. Cleanup
 rm -rf "$TMPDIR"
 
 echo "🎉 Release script complete!"
