@@ -132,6 +132,8 @@ class Plugin
         // ✅ Fix: ensure roles/caps are installed
         require_once ARTPULSE_PLUGIN_DIR . 'src/Core/RoleSetup.php';
         \ArtPulse\Core\RoleSetup::install();
+        $role = get_role('artist');
+        $role?->add_cap('ap_send_messages');
 
         // Schedule cron
         if (!wp_next_scheduled('ap_daily_expiry_check')) {
@@ -485,9 +487,10 @@ class Plugin
         ]);
 
         wp_localize_script('ap-messages-js', 'APMessages', [
-            'apiRoot' => esc_url_raw(rest_url()),
-            'nonce'   => wp_create_nonce('wp_rest'),
-            'pollId'  => 0,
+            'apiRoot'  => esc_url_raw(rest_url()),
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('ap_messages_nonce'),
+            'pollId'   => 0,
         ]);
 
         wp_localize_script('ap-event-comments-js', 'APComments', [

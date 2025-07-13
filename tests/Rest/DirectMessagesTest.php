@@ -12,11 +12,13 @@ class DirectMessagesTest extends \WP_UnitTestCase
     private int $user1;
     private int $user2;
     private array $mails = [];
+    private string $nonce;
 
     public function set_up(): void
     {
         parent::set_up();
         DirectMessages::install_table();
+        DirectMessages::install_flags_table();
         DirectMessages::register();
         do_action('rest_api_init');
 
@@ -24,6 +26,9 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $this->user2 = self::factory()->user->create(['user_email' => 'u2@test.com']);
 
         wp_set_current_user($this->user1);
+        $user = new \WP_User($this->user1);
+        $user->add_cap('ap_send_messages');
+        $this->nonce = wp_create_nonce('ap_messages_nonce');
         add_filter('pre_wp_mail', [$this, 'capture_mail'], 10, 6);
     }
 
@@ -44,6 +49,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
         $post->set_param('recipient_id', $this->user2);
         $post->set_param('content', 'Hello');
+        $post->set_param('nonce', $this->nonce);
         $res = rest_get_server()->dispatch($post);
         $this->assertSame(200, $res->get_status());
 
@@ -59,6 +65,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
 
         $get = new WP_REST_Request('GET', '/artpulse/v1/messages');
         $get->set_param('with', $this->user2);
+        $get->set_param('nonce', $this->nonce);
         $res = rest_get_server()->dispatch($get);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -71,6 +78,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
         $post->set_param('recipient_id', $this->user2);
         $post->set_param('content', 'Hi there');
+        $post->set_param('nonce', $this->nonce);
         $res = rest_get_server()->dispatch($post);
         $this->assertSame(200, $res->get_status());
 
@@ -80,6 +88,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $msg_id = (int) $row['id'];
 
         $convos = new WP_REST_Request('GET', '/artpulse/v1/conversations');
+        $convos->set_param('nonce', $this->nonce);
         $res = rest_get_server()->dispatch($convos);
         $this->assertSame(200, $res->get_status());
         $this->assertSame([
@@ -89,6 +98,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
         wp_set_current_user($this->user2);
         $read = new WP_REST_Request('POST', '/artpulse/v1/message/read');
         $read->set_param('ids', [$msg_id]);
+        $read->set_param('nonce', $this->nonce);
         $res = rest_get_server()->dispatch($read);
         $this->assertSame(200, $res->get_status());
 

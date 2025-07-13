@@ -50,6 +50,7 @@ This table was auto-generated from `ShortcodePages::get_shortcode_map()`.
 | `[ap_favorite_portfolio]` | category, limit, sort, page | [ap_favorite_portfolio limit="12"] |
 | `[ap_favorites_analytics]` | type, user_id, admin_only, roles | [ap_favorites_analytics type="detailed"] |
 | `[ap_messages]` | — | [ap_messages] |
+| `[ap_message_form]` | — | [ap_message_form] |
 | `[ap_org_rsvp_dashboard]` | — | [ap_org_rsvp_dashboard] |
 | `[ap_payouts]` | — | [ap_payouts] |
 | `[ap_recommendations]` | — | [ap_recommendations] |

@@ -11,6 +11,7 @@ class DirectMessages
     public static function register(): void
     {
         add_action('init', [self::class, 'maybe_install_table']);
+        add_action('init', [self::class, 'maybe_install_flags_table']);
         add_action('rest_api_init', [self::class, 'register_routes']);
     }
 
@@ -45,37 +46,89 @@ class DirectMessages
         dbDelta($sql);
     }
 
+    public static function maybe_install_flags_table(): void
+    {
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_message_flags';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            self::install_flags_table();
+        }
+    }
+
+    public static function install_flags_table(): void
+    {
+        global $wpdb;
+        $table   = $wpdb->prefix . 'ap_message_flags';
+        $charset = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE $table (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY (id),
+            message_id BIGINT NOT NULL,
+            user_id BIGINT NOT NULL,
+            action VARCHAR(20) NOT NULL,
+            note TEXT NULL,
+            logged_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            KEY message_id (message_id),
+            KEY user_id (user_id)
+        ) $charset;";
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
+        dbDelta($sql);
+    }
+
+    public static function log_flag(int $message_id, int $user_id, string $action, string $note = ''): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_message_flags';
+        $wpdb->insert($table, [
+            'message_id' => $message_id,
+            'user_id'    => $user_id,
+            'action'     => $action,
+            'note'       => $note,
+            'logged_at'  => current_time('mysql'),
+        ]);
+    }
+
     public static function register_routes(): void
     {
         register_rest_route('artpulse/v1', '/messages', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'send'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => [self::class, 'permission_send'],
             'args'                => [
                 'recipient_id' => [ 'type' => 'integer', 'required' => true ],
                 'content'      => [ 'type' => 'string',  'required' => true ],
+                'nonce'        => [ 'type' => 'string',  'required' => true ],
             ],
         ]);
 
         register_rest_route('artpulse/v1', '/messages', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'fetch'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => [self::class, 'permission_view'],
             'args'                => [
-                'with' => [ 'type' => 'integer', 'required' => true ],
+                'with'  => [ 'type' => 'integer', 'required' => true ],
+                'nonce' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
 
         register_rest_route('artpulse/v1', '/conversations', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'rest_list_conversations'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'nonce' => [ 'type' => 'string', 'required' => true ],
+            ],
         ]);
 
         register_rest_route('artpulse/v1', '/message/read', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'mark_read'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'nonce' => [ 'type' => 'string', 'required' => true ],
+            ],
         ]);
     }
 
@@ -169,6 +222,16 @@ class DirectMessages
         $user_id = get_current_user_id();
         $list = self::list_conversations($user_id);
         return rest_ensure_response($list);
+    }
+
+    public static function permission_view(WP_REST_Request $req): bool
+    {
+        return is_user_logged_in() && (bool) check_ajax_referer('ap_messages_nonce', 'nonce', false);
+    }
+
+    public static function permission_send(WP_REST_Request $req): bool
+    {
+        return current_user_can('ap_send_messages') && self::permission_view($req);
     }
 
     public static function mark_read(WP_REST_Request $req): WP_REST_Response|WP_Error
