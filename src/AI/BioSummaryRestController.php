@@ -21,7 +21,9 @@ class BioSummaryRestController
         register_rest_route('artpulse/v1', '/bio-summary/(?P<id>\d+)', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_summary'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args'                => [
                 'id' => [
                     'type' => 'integer',

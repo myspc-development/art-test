@@ -223,6 +223,21 @@ register_activation_hook(__FILE__, function () {
     }
 });
 
+function ap_install_tables() {
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE {$wpdb->prefix}ap_payouts (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        artist_id BIGINT,
+        amount DECIMAL(10,2),
+        payout_date DATETIME,
+        status VARCHAR(20)
+    ) $charset_collate;";
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    dbDelta($sql);
+}
+register_activation_hook(__FILE__, 'ap_install_tables');
+
 
 // Register Dashboard Preview admin page
 add_action('admin_menu', function () {
@@ -387,6 +402,13 @@ function ap_page_has_shortcode(string $tag): bool {
     }
     return has_shortcode($post->post_content, $tag);
 }
+
+add_action('wp_enqueue_scripts', function () {
+    global $post;
+    if ($post && has_shortcode($post->post_content, 'ap_favorite_portfolio')) {
+        wp_enqueue_style('ap-frontend', plugins_url('/assets/css/frontend.css', __FILE__));
+    }
+});
 
 /**
  * Get the active theme accent color.

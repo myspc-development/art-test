@@ -57,6 +57,13 @@ class DashboardWidgetRegistry
      */
     public static function register_widget(string $id, array $args): void
     {
+        $id = sanitize_key($id);
+        if (!$id) {
+            return;
+        }
+
+        $args['label'] = $args['label'] ?? 'Untitled';
+
         if (empty($args['callback']) && isset($args['template'])) {
             $template = $args['template'];
             $args['callback'] = static function () use ($template) {
@@ -71,7 +78,18 @@ class DashboardWidgetRegistry
             };
         }
 
+        if (empty($args['callback']) || !is_callable($args['callback'])) {
+            $args['callback'] = [self::class, 'render_widget_fallback'];
+        }
+
+        $args['id'] = $id;
+
         self::$widgets[$id] = $args;
+    }
+
+    public static function render_widget_fallback(): void
+    {
+        echo '<p><strong>Widget callback is missing or invalid.</strong></p>';
     }
 
     /**

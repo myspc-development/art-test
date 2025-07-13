@@ -61,7 +61,7 @@ class AdminDashboard
 
         if (file_exists($path)) {
             wp_enqueue_script(
-                'ap-dashboard-app',
+                'ap-dashboard-js',
                 $url,
                 ['wp-element', 'wp-api-fetch'],
                 filemtime($path),
@@ -69,7 +69,7 @@ class AdminDashboard
             );
 
             wp_localize_script(
-                'ap-dashboard-app',
+                'ap-dashboard-js',
                 'ArtPulseDashboardData',
                 [
                     'nonce'    => wp_create_nonce('wp_rest'),
@@ -83,5 +83,6 @@ class AdminDashboard
     {
         echo '<div class="wrap"><h1>' . esc_html__('ArtPulse Dashboard','artpulse') . '</h1>';
         echo '<div id="ap-dashboard-root"></div></div>';
+        wp_enqueue_script('ap-dashboard-js');
     }
 }

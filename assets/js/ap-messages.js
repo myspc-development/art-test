@@ -1,5 +1,12 @@
 (function($){
   var pollInterval = null;
+  function showError(msg){
+    var box = $('#ap-messages-error');
+    if(!box.length){
+      box = $('<div id="ap-messages-error" class="ap-error"/>').insertBefore('#ap-message-list');
+    }
+    box.text(msg).show();
+  }
   function listConversations(){
     $.ajax({
       url: APMessages.apiRoot + 'artpulse/v1/conversations',
@@ -32,7 +39,8 @@
         });
       },
       error: function(jqXHR){
-        if(jqXHR.status === 401){
+        if(jqXHR.status === 401 || jqXHR.status === 403){
+          showError("You must be logged in to use messaging.");
           var $list = $('#ap-conversation-list');
           if($list.length){
             $list.empty().append('<li>Please log in to view messages.</li>');
@@ -56,7 +64,8 @@
         if (cb) cb(data);
       },
       error: function(jqXHR){
-        if(jqXHR.status === 401){
+        if(jqXHR.status === 401 || jqXHR.status === 403){
+          showError("You must be logged in to use messaging.");
           var $box = $('#ap-message-list');
           if($box.length){
             $box.empty().append('<li>Please log in to view messages.</li>');
