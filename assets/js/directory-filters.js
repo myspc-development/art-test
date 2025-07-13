@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container) return;
 
   fetch('/wp-json/artpulse/v1/artists')
-    .then(r => r.json())
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
     .then(list => {
       container.innerHTML = '';
       list.forEach(item => {

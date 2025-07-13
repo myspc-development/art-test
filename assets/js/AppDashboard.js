@@ -8,8 +8,12 @@ export default function AppDashboard() {
 
   useEffect(() => {
     fetch('/wp-json/artpulse/v1/me')
-      .then(res => res.json())
-      .then(data => setRole(data.role));
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(data => setRole(data.role))
+      .catch(err => console.error('Profile fetch error:', err));
   }, []);
 
   const logout = () => (window.location.href = '/wp-login.php?action=logout');

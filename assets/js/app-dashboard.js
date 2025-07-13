@@ -78,8 +78,11 @@ var APDashboardApp = (function (React$1, ReactDOM) {
       setMessages = _useState2[1];
     React$1.useEffect(function () {
       fetch('/wp-json/artpulse/v1/dashboard/messages').then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
-      }).then(setMessages);
+      }).then(setMessages).catch(function (err) {
+        return console.error('Messages load error:', err);
+      });
     }, []);
     return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widget bg-white p-4 rounded shadow mb-4"
@@ -97,9 +100,12 @@ var APDashboardApp = (function (React$1, ReactDOM) {
       setRole = _useState2[1];
     React$1.useEffect(function () {
       fetch('/wp-json/artpulse/v1/me').then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       }).then(function (data) {
         return setRole(data.role);
+      }).catch(function (err) {
+        return console.error('Profile fetch error:', err);
       });
     }, []);
     var logout = function logout() {

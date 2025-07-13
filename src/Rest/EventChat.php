@@ -8,11 +8,37 @@ add_action('rest_api_init', function () {
     register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/chat', [
         'methods'             => 'GET',
         'callback'            => __NAMESPACE__ . '\\ap_rest_get_event_chat',
-        'permission_callback' => function () {
-            return is_user_logged_in();
-        },
+        'permission_callback' => __NAMESPACE__ . '\\ap_rest_can_view_chat',
+        'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
+    ]);
+
+    register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/chat', [
+        'methods'             => 'POST',
+        'callback'            => __NAMESPACE__ . '\\ap_rest_post_event_chat',
+        'permission_callback' => __NAMESPACE__ . '\\ap_rest_can_post_chat',
+        'args'                => [
+            'id'      => [ 'validate_callback' => 'is_numeric' ],
+            'content' => [ 'type' => 'string', 'required' => true ],
+        ],
     ]);
 });
+
+function ap_rest_can_view_chat(): bool
+{
+    return is_user_logged_in();
+}
+
+function ap_rest_can_post_chat(WP_REST_Request $req): bool
+{
+    if (!is_user_logged_in()) {
+        return false;
+    }
+
+    $event_id = absint($req['id']);
+    $list     = get_post_meta($event_id, 'event_rsvp_list', true);
+
+    return is_array($list) && in_array(get_current_user_id(), $list, true);
+}
 
 function ap_rest_get_event_chat(WP_REST_Request $request) {
     $event_id = (int) $request['id'];
@@ -43,4 +69,29 @@ function ap_rest_get_event_chat(WP_REST_Request $request) {
     }, $rows);
 
     return rest_ensure_response($chat);
+}
+
+function ap_rest_post_event_chat(WP_REST_Request $request) {
+    $event_id = (int) $request['id'];
+
+    if (!get_post($event_id)) {
+        return new WP_Error('event_not_found', 'Event not found', ['status' => 404]);
+    }
+
+    $content = sanitize_text_field($request['content']);
+    if ($content === '') {
+        return new WP_Error('empty_content', 'Message content required.', ['status' => 400]);
+    }
+
+    global $wpdb;
+    $table = $wpdb->prefix . 'ap_event_chat';
+
+    $wpdb->insert($table, [
+        'event_id'   => $event_id,
+        'user_id'    => get_current_user_id(),
+        'content'    => $content,
+        'created_at' => current_time('mysql'),
+    ]);
+
+    return rest_ensure_response(['status' => 'ok']);
 }
