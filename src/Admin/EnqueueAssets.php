@@ -292,6 +292,16 @@ class EnqueueAssets {
                 '1.0.0',
                 true
             );
+            wp_localize_script(
+                'ap-my-follows-js',
+                'ArtPulseFollowsApi',
+                [
+                    'root'     => esc_url_raw(rest_url()),
+                    'nonce'    => wp_create_nonce('wp_rest'),
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'user_id'  => get_current_user_id(),
+                ]
+            );
          }
     }
 
@@ -558,6 +568,16 @@ class EnqueueAssets {
             ['jquery'],
             '1.0.0',
             true
+        );
+        wp_localize_script(
+            'ap-my-follows',
+            'ArtPulseFollowsApi',
+            [
+                'root'     => esc_url_raw(rest_url()),
+                'nonce'    => wp_create_nonce('wp_rest'),
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'user_id'  => get_current_user_id(),
+            ]
         );
 
         $org_dashboard_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . '/assets/js/ap-org-dashboard.js';
