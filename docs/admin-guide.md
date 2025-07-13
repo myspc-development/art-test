@@ -98,3 +98,39 @@ rules so the new routes work correctly.
 screen via `wp-admin/admin.php?page=ap-org-roles` from the Organization
 Dashboard menu. Requests to `/wp-admin/ap-org-roles` are automatically redirected
 to the proper `admin.php` URL.
+
+### Fixing 404 on `/wp-admin/ap-org-roles`
+
+If navigating directly to `/wp-admin/ap-org-roles` shows a 404 error, make sure
+the admin page is registered with the correct slug:
+
+```php
+add_action('admin_menu', 'ap_register_admin_pages');
+
+function ap_register_admin_pages() {
+    add_menu_page(
+        'Org Roles',
+        'Org Roles',
+        'manage_options',
+        'ap-org-roles',
+        'ap_render_org_roles_page',
+        'dashicons-admin-users',
+        26
+    );
+}
+```
+
+`ap_render_org_roles_page()` outputs the page markup. A minimal layout might
+look like:
+
+```php
+function ap_render_org_roles_page() {
+    echo '<div class="wrap">';
+    echo '<h1>Organization Roles</h1>';
+    echo '<p>Manage capabilities for each role here.</p>';
+    echo '</div>';
+}
+```
+
+Use the same slug `ap-org-roles` in menu links, `admin.php?page=` URLs and the
+callback registration so WordPress can route requests properly.
