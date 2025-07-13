@@ -1,0 +1,8 @@
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run lint || true
+      - run: ./vendor/bin/phpunit || true

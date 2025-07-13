@@ -96,3 +96,18 @@ class OrgRolesPage
         exit;
     }
 }
+
+add_action('admin_menu', function () {
+    add_menu_page(
+        'Org Roles Manager',
+        'Org Roles',
+        'manage_options',
+        'ap-org-roles',
+        'render_ap_org_roles_page'
+    );
+});
+
+function render_ap_org_roles_page() {
+    echo '<div id="ap-org-roles-root"></div>';
+    wp_enqueue_script('ap-org-roles');
+}

@@ -17,7 +17,9 @@ class ShareController
         register_rest_route('artpulse/v1', '/share', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'log_share'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args'                => [
                 'object_id' => [ 'type' => 'integer', 'required' => true ],
                 'object_type' => [ 'type' => 'string', 'required' => true ],

@@ -49,7 +49,9 @@ class EventChatController
         register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/chat', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return is_user_logged_in();
+            },
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
 

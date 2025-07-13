@@ -17,7 +17,9 @@ class ArtworkAuctionController
         register_rest_route('artpulse/v1', '/artwork/(?P<id>\d+)/auction', [
             'methods'  => 'GET',
             'callback' => [self::class, 'status'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args' => ['id' => ['validate_callback' => 'is_numeric']],
         ]);
         register_rest_route('artpulse/v1', '/artwork/(?P<id>\d+)/bid', [

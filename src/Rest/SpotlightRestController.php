@@ -19,7 +19,9 @@ class SpotlightRestController
         register_rest_route(self::NAMESPACE, '/spotlights', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_current'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
         ]);
     }
 

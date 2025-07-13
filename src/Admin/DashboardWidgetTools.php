@@ -304,7 +304,7 @@ class DashboardWidgetTools
     {
         $cb = DashboardWidgetRegistry::get_widget_callback($id);
         if (!is_callable($cb)) {
-            return '';
+            $cb = [DashboardWidgetRegistry::class, 'render_widget_fallback'];
         }
 
         ob_start();

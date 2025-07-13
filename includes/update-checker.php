@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 use YahnisElsts\PluginUpdateChecker\v5p6\PucFactory;
 
 $updateChecker = PucFactory::buildUpdateChecker(
-    'https://github.com/your-org/artpulse-plugin',
+    'https://github.com/example/artpulse-plugin',
     ARTPULSE_PLUGIN_FILE,
     'artpulse-management'
 );

@@ -13,7 +13,9 @@ class RestRoutes
             register_rest_route('artpulse/v1', '/events', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_events'],
-                'permission_callback' => '__return_true',
+                'permission_callback' => function () {
+                    return current_user_can('read');
+                },
                 'args'                => [
                     'city'   => [ 'type' => 'string', 'required' => false ],
                     'region' => [ 'type' => 'string', 'required' => false ],
@@ -26,19 +28,25 @@ class RestRoutes
             register_rest_route('artpulse/v1', '/artists', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_artists'],
-                'permission_callback' => '__return_true',
+                'permission_callback' => function () {
+                    return current_user_can('read');
+                },
             ]);
 
             register_rest_route('artpulse/v1', '/artworks', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_artworks'],
-                'permission_callback' => '__return_true',
+                'permission_callback' => function () {
+                    return current_user_can('read');
+                },
             ]);
 
             register_rest_route('artpulse/v1', '/orgs', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_orgs'],
-                'permission_callback' => '__return_true',
+                'permission_callback' => function () {
+                    return current_user_can('read');
+                },
             ]);
 
             // ✅ Register the new SubmissionRestController endpoint

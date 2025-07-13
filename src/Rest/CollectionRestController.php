@@ -19,7 +19,9 @@ class CollectionRestController
         register_rest_route(self::NAMESPACE, '/collections', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_collections'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
         ]);
 
         register_rest_route(self::NAMESPACE, '/collections', [
@@ -42,7 +44,9 @@ class CollectionRestController
         register_rest_route(self::NAMESPACE, '/collection/(?P<id>\d+)', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_collection'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args'                => [
                 'id' => [ 'validate_callback' => 'is_numeric' ],
             ],
