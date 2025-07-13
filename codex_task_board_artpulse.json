@@ -1,0 +1,176 @@
+{
+  "title": "ArtPulse Plugin Remediation Board",
+  "version": "1.1.0",
+  "tasks": [
+    {
+      "category": "Dashboard Widgets",
+      "tasks": [
+        {
+          "title": "Validate all dashboard widgets",
+          "status": "pending"
+        },
+        {
+          "title": "Add fallback renderers for missing callbacks",
+          "status": "pending"
+        },
+        {
+          "title": "Ensure each widget has a unique ID and label",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "category": "React Dashboard Panels",
+      "tasks": [
+        {
+          "title": "Integrate ArtistOverviewPanel, OrgRolesPanel, SystemStatusPanel",
+          "status": "in_progress"
+        },
+        {
+          "title": "Ensure REST data returned from /artist, /org-roles, /status",
+          "status": "in_progress"
+        },
+        {
+          "title": "Remove or disable legacy PHP widgets if React panels exist",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "category": "REST API",
+      "tasks": [
+        {
+          "title": "Add permission_callback to all REST endpoints",
+          "status": "in_progress"
+        },
+        {
+          "title": "Ensure /messages and /conversations block unauth users",
+          "status": "pending"
+        },
+        {
+          "title": "Test all endpoints manually with REST console",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "category": "Messaging System",
+      "tasks": [
+        {
+          "title": "Fix 403 REST errors on message endpoints",
+          "status": "pending"
+        },
+        {
+          "title": "Add error UI fallback for unauthorized users",
+          "status": "pending"
+        },
+        {
+          "title": "Use retry or debounce in polling logic",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "category": "Database Tables",
+      "tasks": [
+        {
+          "title": "Create wp_ap_payouts, wp_ap_tickets tables",
+          "status": "pending"
+        },
+        {
+          "title": "Wrap queries with existence checks",
+          "status": "pending"
+        },
+        {
+          "title": "Log install results in install.log",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "category": "Admin Pages",
+      "tasks": [
+        {
+          "title": "Add /wp-admin/ap-org-roles page with add_menu_page()",
+          "status": "in_progress"
+        },
+        {
+          "title": "Mount React app in ap-org-roles.js",
+          "status": "in_progress"
+        },
+        {
+          "title": "Ensure REST route connects to UI",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "category": "Shortcodes",
+      "tasks": [
+        {
+          "title": "Document all shortcodes in README",
+          "status": "done"
+        },
+        {
+          "title": "Move inline Swiper styles to external CSS",
+          "status": "in_progress"
+        },
+        {
+          "title": "Enforce nonce in shortcode JS logic",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "category": "Gutenberg Blocks",
+      "tasks": [
+        {
+          "title": "Create block.json for all relevant blocks",
+          "status": "pending"
+        },
+        {
+          "title": "Use render_callback to reuse PHP output",
+          "status": "pending"
+        },
+        {
+          "title": "Enqueue editor assets only when editing",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "category": "Testing & QA",
+      "tasks": [
+        {
+          "title": "Add PHPUnit tests for REST & widgets",
+          "status": "pending"
+        },
+        {
+          "title": "Add Cypress dashboard integration tests",
+          "status": "pending"
+        },
+        {
+          "title": "Enable WP_DEBUG and validate logs",
+          "status": "in_progress"
+        }
+      ]
+    },
+    {
+      "category": "DevOps & Packaging",
+      "tasks": [
+        {
+          "title": "Fix GitHub update release response",
+          "status": "pending"
+        },
+        {
+          "title": "Add uninstall.php cleanup",
+          "status": "pending"
+        },
+        {
+          "title": "Add CHANGELOG.md and bump version",
+          "status": "pending"
+        }
+      ]
+    }
+  ]
+}
