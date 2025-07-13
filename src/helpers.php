@@ -15,7 +15,7 @@ function ap_user_can_edit_layout(string $role): bool
  * @param string $url Feed URL.
  * @return array|SimplePie
  */
-function get_feed($url) {
+function ap_get_feed($url) {
     include_once ABSPATH . WPINC . '/feed.php';
 
     $feed = fetch_feed($url);
