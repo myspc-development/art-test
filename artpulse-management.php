@@ -59,6 +59,8 @@ require_once __DIR__ . '/seo-meta.php';
 require_once __DIR__ . '/auto-tagger.php';
 include_once __DIR__ . '/shortcodes/widget-embed.php';
 include_once __DIR__ . '/shortcodes/artist-comments.php';
+require_once __DIR__ . '/includes/admin-org-roles-page.php';
+require_once __DIR__ . '/includes/rest/org-roles.php';
 
 // Ensure custom roles exist on every load
 add_action('init', function () {
