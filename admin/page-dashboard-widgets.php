@@ -7,7 +7,7 @@ add_action('admin_menu', function() {
         __('Widget Manager', 'artpulse'),
         __('Widgets', 'artpulse'),
         'manage_options',
-        'artpulse-dashboard-widgets',
+        'ap-dashboard-widgets',
         'ap_render_dashboard_widget_manager'
     );
 });

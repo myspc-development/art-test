@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   roleSelect?.addEventListener('change', e => {
     const params = new URLSearchParams(window.location.search);
-    params.set('page', 'artpulse-dashboard-widgets');
+    params.set('page', 'ap-dashboard-widgets');
     params.set('ap_dashboard_role', e.target.value);
     window.location.search = params.toString();
   });

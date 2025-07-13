@@ -373,7 +373,7 @@ class SettingsPage
             __('Dashboard Widgets', 'artpulse'),
             __('Dashboard Widgets', 'artpulse'),
             'manage_options',
-            'artpulse-dashboard-widgets',
+            'ap-dashboard-widgets',
             [self::class, 'renderDashboardWidgetsPage']
         );
         // Additional admin pages can hook into 'admin_menu' to add more submenus.

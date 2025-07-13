@@ -270,7 +270,7 @@ class DashboardWidgetTools
         check_admin_referer('ap_import_widget_config');
 
         if (!isset($_FILES['ap_widget_file']) || empty($_FILES['ap_widget_file']['tmp_name'])) {
-            wp_safe_redirect(add_query_arg('dw_import_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
+            wp_safe_redirect(add_query_arg('dw_import_error', '1', wp_get_referer() ?: admin_url('admin.php?page=ap-dashboard-widgets')));
             exit;
         }
 
@@ -278,7 +278,7 @@ class DashboardWidgetTools
         $data = json_decode($json, true);
 
         if (!is_array($data)) {
-            wp_safe_redirect(add_query_arg('dw_import_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
+            wp_safe_redirect(add_query_arg('dw_import_error', '1', wp_get_referer() ?: admin_url('admin.php?page=ap-dashboard-widgets')));
             exit;
         }
 
@@ -311,7 +311,7 @@ class DashboardWidgetTools
 
         update_option('ap_dashboard_widget_config', $sanitized);
 
-        wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=artpulse-dashboard-widgets')));
+        wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=ap-dashboard-widgets')));
         exit;
     }
 
