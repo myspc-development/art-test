@@ -40,6 +40,7 @@ class DirectMessages
             context_id BIGINT NULL,
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             is_read TINYINT(1) NOT NULL DEFAULT 0,
+            is_delivered TINYINT(1) NOT NULL DEFAULT 1,
             KEY sender_id (sender_id),
             KEY recipient_id (recipient_id),
             KEY context (context_type, context_id)
@@ -95,6 +96,18 @@ class DirectMessages
 
     public static function register_routes(): void
     {
+        register_rest_route('artpulse/v1', '/messages/send', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'send_v2'],
+            'permission_callback' => [self::class, 'permission_send'],
+            'args'                => [
+                'recipient_id' => [ 'type' => 'integer', 'required' => true ],
+                'content'      => [ 'type' => 'string',  'required' => true ],
+                'context_type' => [ 'type' => 'string',  'required' => false ],
+                'context_id'   => [ 'type' => 'integer', 'required' => false ],
+            ],
+        ]);
+
         register_rest_route('artpulse/v1', '/messages', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'send'],
@@ -116,6 +129,34 @@ class DirectMessages
             },
             'args'                => [
                 'with' => [ 'type' => 'integer', 'required' => true ],
+            ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/messages/updates', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'updates'],
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'since'       => [ 'type' => 'string', 'required' => true ],
+                'context_id'  => [ 'type' => 'integer', 'required' => false ],
+            ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/messages/seen', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'seen'],
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'message_ids' => [ 'type' => 'array', 'required' => true ],
+            ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/messages/search', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'search'],
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'q' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
 
@@ -175,12 +216,70 @@ class DirectMessages
         return rest_ensure_response(['status' => 'sent']);
     }
 
+    public static function send_v2(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        $sender_id    = get_current_user_id();
+        $recipient_id = absint($req['recipient_id']);
+        $content      = wp_kses_post($req['content']);
+        $context_type = $req->get_param('context_type') ? sanitize_key($req['context_type']) : null;
+        $context_id   = $req->get_param('context_id') ? absint($req['context_id']) : null;
+
+        if (!$recipient_id || $content === '' || !get_user_by('id', $recipient_id)) {
+            return new WP_Error('invalid_params', 'Invalid recipient or content.', ['status' => 400]);
+        }
+
+        if (class_exists(__NAMESPACE__ . '\\BlockedUsers')) {
+            if (BlockedUsers::is_blocked($recipient_id, $sender_id) || BlockedUsers::is_blocked($sender_id, $recipient_id)) {
+                return new WP_Error('blocked', 'User has blocked messages.', ['status' => 403]);
+            }
+        }
+
+        $id = self::add_message($sender_id, $recipient_id, $content, $context_type, $context_id);
+        $row = self::get_message($id);
+
+        return rest_ensure_response($row);
+    }
+
     public static function fetch(WP_REST_Request $req): WP_REST_Response
     {
         $user_id  = get_current_user_id();
         $other_id = absint($req['with']);
 
         $messages = self::get_conversation($user_id, $other_id);
+
+        return rest_ensure_response($messages);
+    }
+
+    public static function updates(WP_REST_Request $req): WP_REST_Response
+    {
+        $user_id = get_current_user_id();
+        $since   = $req->get_param('since');
+        $context_id = $req->get_param('context_id') ? absint($req['context_id']) : null;
+
+        if (is_numeric($since)) {
+            $since = gmdate('Y-m-d H:i:s', (int) $since);
+        } else {
+            $since = sanitize_text_field($since);
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $sql = "SELECT * FROM $table WHERE created_at > %s AND (sender_id = %d OR recipient_id = %d)";
+        $args = [$since, $user_id, $user_id];
+        if ($context_id) {
+            $sql .= " AND context_id = %d";
+            $args[] = $context_id;
+        }
+        $sql .= " ORDER BY created_at ASC";
+        $rows = $wpdb->get_results($wpdb->prepare($sql, ...$args), ARRAY_A);
+        $messages = array_map(static function($row){
+            $row['id'] = (int) $row['id'];
+            $row['sender_id'] = (int) $row['sender_id'];
+            $row['recipient_id'] = (int) $row['recipient_id'];
+            $row['is_read'] = (int) $row['is_read'];
+            $row['is_delivered'] = isset($row['is_delivered']) ? (int) $row['is_delivered'] : 1;
+            return $row;
+        }, $rows);
 
         return rest_ensure_response($messages);
     }
@@ -197,6 +296,7 @@ class DirectMessages
             'context_id'   => $context_id,
             'created_at'   => current_time('mysql'),
             'is_read'      => 0,
+            'is_delivered' => 1,
         ]);
         $id = (int) $wpdb->insert_id;
 
@@ -210,6 +310,22 @@ class DirectMessages
         return $id;
     }
 
+    public static function get_message(int $id): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE id = %d", $id), ARRAY_A);
+        if (!$row) {
+            return [];
+        }
+        $row['id'] = (int) $row['id'];
+        $row['sender_id'] = (int) $row['sender_id'];
+        $row['recipient_id'] = (int) $row['recipient_id'];
+        $row['is_read'] = (int) $row['is_read'];
+        $row['is_delivered'] = isset($row['is_delivered']) ? (int) $row['is_delivered'] : 1;
+        return $row;
+    }
+
     public static function get_conversation(int $user_id, int $other_user): array
     {
         global $wpdb;
@@ -221,6 +337,7 @@ class DirectMessages
             $row['sender_id'] = (int) $row['sender_id'];
             $row['recipient_id'] = (int) $row['recipient_id'];
             $row['is_read'] = (int) $row['is_read'];
+            $row['is_delivered'] = isset($row['is_delivered']) ? (int) $row['is_delivered'] : 1;
             return $row;
         }, $rows);
     }
@@ -236,6 +353,7 @@ class DirectMessages
             $row['sender_id'] = (int) $row['sender_id'];
             $row['recipient_id'] = (int) $row['recipient_id'];
             $row['is_read'] = (int) $row['is_read'];
+            $row['is_delivered'] = isset($row['is_delivered']) ? (int) $row['is_delivered'] : 1;
             return $row;
         }, $rows);
     }
@@ -296,6 +414,18 @@ class DirectMessages
         return rest_ensure_response(['updated' => count($ids)]);
     }
 
+    public static function seen(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        $ids = $req->get_param('message_ids');
+        if (!is_array($ids)) {
+            return new WP_Error('invalid_params', 'message_ids must be array', ['status' => 400]);
+        }
+        $ids = array_map('intval', $ids);
+        self::mark_read_ids($ids, get_current_user_id());
+
+        return rest_ensure_response(['updated' => count($ids)]);
+    }
+
     public static function mark_read_ids(array $ids, int $user_id): void
     {
         if (!$ids) {
@@ -320,6 +450,28 @@ class DirectMessages
         $args  = array_merge($ids, [$user_id]);
         $sql   = "UPDATE $table SET is_read = 0 WHERE id IN ($place) AND recipient_id = %d";
         $wpdb->query($wpdb->prepare($sql, ...$args));
+    }
+
+    public static function search(WP_REST_Request $req): WP_REST_Response
+    {
+        $user_id = get_current_user_id();
+        $term    = sanitize_text_field($req->get_param('q'));
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $like  = '%' . $wpdb->esc_like($term) . '%';
+        $sql = "SELECT * FROM (SELECT *, CASE WHEN sender_id = %d THEN recipient_id ELSE sender_id END AS other_id FROM $table WHERE (sender_id = %d OR recipient_id = %d) AND content LIKE %s ORDER BY created_at DESC) t GROUP BY other_id";
+        $rows = $wpdb->get_results($wpdb->prepare($sql, $user_id, $user_id, $user_id, $like), ARRAY_A);
+        $messages = array_map(static function($row){
+            $row['id'] = (int) $row['id'];
+            $row['sender_id'] = (int) $row['sender_id'];
+            $row['recipient_id'] = (int) $row['recipient_id'];
+            $row['is_read'] = (int) $row['is_read'];
+            $row['is_delivered'] = isset($row['is_delivered']) ? (int) $row['is_delivered'] : 1;
+            return $row;
+        }, $rows);
+
+        return rest_ensure_response($messages);
     }
 
     public static function fetch_context(WP_REST_Request $req): WP_REST_Response
