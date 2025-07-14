@@ -251,6 +251,10 @@ add_action('admin_init', function () {
         wp_safe_redirect(admin_url('admin.php?page=ap-diagnostics'));
         exit;
     }
+    if ($path === '/wp-admin/artpulse-settings') {
+        wp_safe_redirect(admin_url('admin.php?page=artpulse-settings'));
+        exit;
+    }
 });
 
 function ap_render_dashboard_preview_page() {

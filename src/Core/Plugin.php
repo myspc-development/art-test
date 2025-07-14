@@ -493,7 +493,7 @@ class Plugin
             'nonce'    => wp_create_nonce('wp_rest'),
         ]);
 
-        wp_localize_script('ap-messages', 'ApMsgs', [
+        wp_localize_script('ap-messages', 'APMessages', [
             'restUrl' => esc_url_raw(rest_url('artpulse/v1/messages')),
             'nonce'   => wp_create_nonce('wp_rest'),
         ]);

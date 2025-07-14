@@ -1,4 +1,8 @@
 (function($){
+  if (typeof APMessages === 'undefined') {
+    console.error("APMessages is not defined.");
+    return;
+  }
   var pollInterval = null;
   function showError(msg){
     var box = $('#ap-messages-error');
@@ -9,10 +13,10 @@
   }
   function listConversations(){
     $.ajax({
-      url: ApMsgs.restUrl.replace('messages', 'conversations'),
+      url: APMessages.restUrl.replace('messages', 'conversations'),
       method: 'GET',
-      data: { _wpnonce: ApMsgs.nonce },
-      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', ApMsgs.nonce); },
+      data: { _wpnonce: APMessages.nonce },
+      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(data){
         var $list = $('#ap-conversation-list');
         if(!$list.length) return;
@@ -56,9 +60,9 @@
 
   function loadMessages(id, cb){
     $.get({
-      url: ApMsgs.restUrl,
-      data: { with: id, _wpnonce: ApMsgs.nonce },
-      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', ApMsgs.nonce); },
+      url: APMessages.restUrl,
+      data: { with: id, _wpnonce: APMessages.nonce },
+      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(data){
         if (cb) cb(data);
       },
@@ -80,15 +84,15 @@
 
   function markRead(ids){
     $.ajax({
-      url: ApMsgs.restUrl.replace('messages', 'message/read'),
+      url: APMessages.restUrl.replace('messages', 'message/read'),
       method: 'POST',
-      data: { ids: ids, _wpnonce: ApMsgs.nonce },
-      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', ApMsgs.nonce); }
+      data: { ids: ids, _wpnonce: APMessages.nonce },
+      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); }
     });
   }
 
   $(document).on('ap-show-messages', function(e, id){
-    ApMsgs.pollId = id;
+    APMessages.pollId = id;
     var $form = $('#ap-message-form');
     if($form.length){
       $form.show();
@@ -118,11 +122,11 @@
     var content = $(this).find('textarea[name="content"]').val().trim();
     if(!id || !content) return;
     $.ajax({
-      url: ApMsgs.restUrl,
+      url: APMessages.restUrl,
       method: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({ recipient_id: parseInt(id,10), content: content, _wpnonce: ApMsgs.nonce }),
-      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', ApMsgs.nonce); },
+      data: JSON.stringify({ recipient_id: parseInt(id,10), content: content, _wpnonce: APMessages.nonce }),
+      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(){
         $('#ap-message-form textarea[name="content"]').val('');
         $(document).trigger('ap-show-messages', id);
@@ -135,14 +139,14 @@
     listConversations();
     const recipientId = window.currentRecipientId || 0;
     if(recipientId){
-      ApMsgs.pollId = recipientId;
+      APMessages.pollId = recipientId;
       $(document).trigger('ap-show-messages', recipientId);
     }
   });
 
-  if(ApMsgs.pollId){
+  if(APMessages.pollId){
     pollInterval = setInterval(function(){
-      loadMessages(ApMsgs.pollId);
+      loadMessages(APMessages.pollId);
     }, 5000);
   }
 })(jQuery);
