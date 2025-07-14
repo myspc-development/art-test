@@ -26,7 +26,12 @@ add_action('rest_api_init', function () {
 
             return ['status' => 'ok', 'roles' => $user->roles];
         },
-        'permission_callback' => '__return_true',
+        'permission_callback' => function () {
+            if (current_user_can('edit_users')) {
+                return true;
+            }
+            return new WP_Error('rest_forbidden', 'Forbidden', ['status' => 403]);
+        },
     ]);
 
     register_rest_route('artpulse/v1', '/roles/batch', [
@@ -54,7 +59,12 @@ add_action('rest_api_init', function () {
 
             return ['status' => 'ok'];
         },
-        'permission_callback' => '__return_true',
+        'permission_callback' => function () {
+            if (current_user_can('edit_users')) {
+                return true;
+            }
+            return new WP_Error('rest_forbidden', 'Forbidden', ['status' => 403]);
+        },
     ]);
 
     register_rest_route('artpulse/v1', '/roles/seed', [
@@ -92,6 +102,11 @@ add_action('rest_api_init', function () {
 
             return compact('users', 'roles', 'matrix');
         },
-        'permission_callback' => '__return_true',
+        'permission_callback' => function () {
+            if (current_user_can('edit_users')) {
+                return true;
+            }
+            return new WP_Error('rest_forbidden', 'Forbidden', ['status' => 403]);
+        },
     ]);
 });
