@@ -104,12 +104,19 @@ class DirectMessages
         ]);
 
         register_rest_route('artpulse/v1', '/messages', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'fetch'],
-            'permission_callback' => [self::class, 'permission_view'],
-            'args'                => [
-                'with'  => [ 'type' => 'integer', 'required' => true ],
-                'nonce' => [ 'type' => 'string',  'required' => true ],
+            'methods'  => 'GET',
+            'callback' => [self::class, 'fetch'],
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
+            'args'     => [
+                'with' => [
+                    'required'          => false,
+                    'sanitize_callback' => 'absint',
+                    'validate_callback' => static function ($param) {
+                        return is_numeric($param) && $param >= 0;
+                    },
+                ],
             ],
         ]);
 
@@ -150,15 +157,15 @@ class DirectMessages
     public static function fetch(WP_REST_Request $req): WP_REST_Response
     {
         $user_id  = get_current_user_id();
-        $other_id = absint($req['with']);
-        error_log(print_r($req->get_params(), true));
-        if ($other_id <= 0) {
-            return new WP_REST_Response(['error' => 'Missing or invalid user ID (with param).'], 400);
+        $other_id = absint($req->get_param('with') ?? 0);
+
+        if ($other_id > 0) {
+            $messages = self::get_conversation($user_id, $other_id);
+        } else {
+            $messages = [];
         }
 
-        $messages = self::get_conversation($user_id, $other_id);
-
-        return rest_ensure_response($messages);
+        return rest_ensure_response(["messages" => $messages]);
     }
 
     public static function add_message(int $sender_id, int $recipient_id, string $content): int

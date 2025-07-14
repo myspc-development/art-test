@@ -416,9 +416,9 @@ class Plugin
         );
 
         wp_enqueue_script(
-            'ap-messages-js',
+            'ap-messages',
             plugins_url('assets/js/ap-messages.js', ARTPULSE_PLUGIN_FILE),
-            ['wp-api-fetch'],
+            ['jquery'],
             '1.0.0',
             true
         );
@@ -493,11 +493,9 @@ class Plugin
             'nonce'    => wp_create_nonce('wp_rest'),
         ]);
 
-        wp_localize_script('ap-messages-js', 'APMessages', [
-            'apiRoot'  => esc_url_raw(rest_url()),
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('wp_rest'),
-            'pollId'   => 0,
+        wp_localize_script('ap-messages', 'ApMsgs', [
+            'restUrl' => esc_url_raw(rest_url('artpulse/v1/messages')),
+            'nonce'   => wp_create_nonce('wp_rest'),
         ]);
 
         wp_localize_script('ap-event-comments-js', 'APComments', [

@@ -294,19 +294,21 @@ function ap_render_dashboard_preview_page() {
 
 // Add ArtPulse Settings page in the Settings menu
 add_action('admin_menu', function () {
-    add_options_page(
-        __('ArtPulse Settings', 'artpulse'),
-        __('ArtPulse', 'artpulse'),
+    add_menu_page(
+        'ArtPulse Settings',
+        'ArtPulse',
         'manage_options',
         'artpulse-settings',
-        'artpulse_settings_page'
+        'ap_render_settings_page',
+        'dashicons-admin-generic',
+        26
     );
 });
 
 /**
  * Render the ArtPulse Settings page.
  */
-function artpulse_settings_page() {
+function ap_render_settings_page() {
     ?>
     <div class="wrap">
         <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
