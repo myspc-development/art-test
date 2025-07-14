@@ -1,5 +1,6 @@
 const babel = require('@rollup/plugin-babel').default;
 const nodeResolve = require('@rollup/plugin-node-resolve').nodeResolve;
+const commonjs = require('@rollup/plugin-commonjs');
 const postcss = require('rollup-plugin-postcss');
 
 const extensions = ['.js', '.jsx'];
@@ -14,7 +15,11 @@ function createConfig(input, file, name, globals = {}, external = Object.keys(gl
       globals,
     },
     external,
-    plugins: [nodeResolve({ extensions }), babel({ babelHelpers: 'bundled', extensions })],
+    plugins: [
+      nodeResolve({ extensions }),
+      babel({ babelHelpers: 'bundled', extensions }),
+      commonjs(),
+    ],
   };
 }
 
@@ -44,6 +49,12 @@ const configs = [
     'assets/js/app-dashboard.js',
     'APDashboardApp',
     { react: 'React', 'react-dom': 'ReactDOM', 'chart.js/auto': 'Chart' }
+  ),
+  createConfig(
+    'assets/react/RoleMatrix.jsx',
+    'dist/role-matrix.js',
+    'APRoleMatrix',
+    { react: 'React', 'react-dom': 'ReactDOM' }
   ),
 ];
 
