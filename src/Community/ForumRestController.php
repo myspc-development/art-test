@@ -110,6 +110,9 @@ class ForumRestController
         ]);
 
         $data = array_map(function($c) {
+            if (get_comment_meta($c->comment_ID, 'ap_hidden', true)) {
+                return null;
+            }
             return [
                 'id'      => $c->comment_ID,
                 'author'  => $c->comment_author,
@@ -118,7 +121,7 @@ class ForumRestController
             ];
         }, $comments);
 
-        return rest_ensure_response($data);
+        return rest_ensure_response(array_values(array_filter($data)));
     }
 
     public static function add_comment(WP_REST_Request $request): WP_REST_Response|WP_Error

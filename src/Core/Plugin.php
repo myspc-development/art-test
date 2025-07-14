@@ -64,8 +64,10 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\NotificationRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\FavoritesRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\EventCommentsController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Community\ArtworkCommentsController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\EventChatController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\ForumRestController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Community\CommentReportRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\LeaderboardRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\UnifiedInboxController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
@@ -81,6 +83,7 @@ class Plugin
         add_action('init', [\ArtPulse\Community\NotificationManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\DirectMessages::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\BlockedUsers::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Community\CommentReports::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Admin\LoginEventsPage::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\UserEngagementLogger::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ProfileMetrics::class, 'maybe_install_table']);
@@ -126,6 +129,7 @@ class Plugin
             \ArtPulse\Core\ArtworkEventLinkManager::install_table();
             \ArtPulse\Personalization\RecommendationEngine::install_table();
             \ArtPulse\Core\ActivityLogger::install_table();
+            \ArtPulse\Community\CommentReports::install_table();
             TrendingManager::install_table();
             \ArtPulse\Core\FeedbackManager::install_table();
             \ArtPulse\Core\DelegatedAccessManager::install_table();
@@ -231,6 +235,7 @@ class Plugin
         \ArtPulse\Frontend\EventCalendarShortcode::register();
         \ArtPulse\Frontend\EventMapShortcode::register();
         \ArtPulse\Frontend\EventCommentsShortcode::register();
+        \ArtPulse\Frontend\ArtworkCommentsShortcode::register();
         \ArtPulse\Frontend\EventChatShortcode::register();
         \ArtPulse\Frontend\MessagesShortcode::register();
         \ArtPulse\Frontend\ReactDashboardShortcode::register();
