@@ -278,9 +278,12 @@ class EnqueueAssets {
                 $plugin_url . '/assets/js/ap-dashboard.js',
                 ['wp-element', 'wp-api-fetch'],
                 '1.0.0',
-                true
+                [
+                    'strategy'  => 'defer',
+                    'type'      => 'module',
+                    'in_footer' => true,
+                ]
             );
-            wp_script_add_data('ap-dashboard', 'type', 'module');
             $user = wp_get_current_user();
             $role = $user->roles[0] ?? '';
             wp_localize_script('ap-dashboard', 'APDashboard', [
@@ -689,9 +692,12 @@ class EnqueueAssets {
             $plugin_url . '/assets/js/ap-dashboard.js',
             ['wp-element', 'wp-api-fetch'],
             '1.0.0',
-            true
+            [
+                'strategy'  => 'defer',
+                'type'      => 'module',
+                'in_footer' => true,
+            ]
         );
-        wp_script_add_data('ap-dashboard', 'type', 'module');
         $user = wp_get_current_user();
         $role = $user->roles[0] ?? '';
         wp_localize_script('ap-dashboard', 'APDashboard', [
