@@ -18,7 +18,7 @@ class OrgRolesController {
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_roles'],
             'permission_callback' => static function () {
-                return current_user_can('read');
+                return current_user_can('manage_options');
             },
         ]);
     }
@@ -49,9 +49,32 @@ class OrgRolesController {
             $org_id  = intval(get_user_meta($user_id, 'ap_organization_id', true));
         }
 
-        $roles = OrgRoleManager::get_roles($org_id);
+        $roles  = OrgRoleManager::get_roles($org_id);
+        $result = [];
+        foreach ($roles as $key => $r) {
+            $label = $r['name'] ?? $key;
+            $desc  = $r['description'] ?? '';
+            $count = count(get_users([
+                'meta_key'   => 'ap_org_roles',
+                'meta_value' => $key,
+                'fields'     => 'ID',
+            ]));
+            if (!$count) {
+                $count = count(get_users([
+                    'meta_key'   => 'ap_org_role',
+                    'meta_value' => $key,
+                    'fields'     => 'ID',
+                ]));
+            }
+            $result[] = [
+                'key'         => $key,
+                'label'       => $label,
+                'description' => $desc,
+                'user_count'  => $count,
+            ];
+        }
 
-        return rest_ensure_response(['roles' => $roles]);
+        return rest_ensure_response($result);
     }
 
     /**
@@ -66,8 +89,31 @@ class OrgRolesController {
             $org_id  = intval(get_user_meta($user_id, 'ap_organization_id', true));
         }
 
-        $roles = OrgRoleManager::get_roles($org_id);
+        $roles  = OrgRoleManager::get_roles($org_id);
+        $result = [];
+        foreach ($roles as $key => $r) {
+            $label = $r['name'] ?? $key;
+            $desc  = $r['description'] ?? '';
+            $count = count(get_users([
+                'meta_key'   => 'ap_org_roles',
+                'meta_value' => $key,
+                'fields'     => 'ID',
+            ]));
+            if (!$count) {
+                $count = count(get_users([
+                    'meta_key'   => 'ap_org_role',
+                    'meta_value' => $key,
+                    'fields'     => 'ID',
+                ]));
+            }
+            $result[] = [
+                'key'         => $key,
+                'label'       => $label,
+                'description' => $desc,
+                'user_count'  => $count,
+            ];
+        }
 
-        wp_send_json_success(['roles' => $roles]);
+        wp_send_json_success($result);
     }
 }

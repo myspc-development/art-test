@@ -56,7 +56,15 @@ class OrgRolesControllerTest extends TestCase {
         self::$user_meta[1]['ap_organization_id'] = 10;
         $req = new WP_REST_Request();
         $res = OrgRolesController::get_roles($req);
-        $this->assertSame(['roles' => OrgRoleManager::$roles], $res);
+        $expected = [
+            [
+                'key'         => 'viewer',
+                'label'       => 'Viewer',
+                'description' => '',
+                'user_count'  => 0,
+            ],
+        ];
+        $this->assertSame($expected, $res);
         $this->assertSame([10], OrgRoleManager::$received);
     }
 
@@ -64,7 +72,15 @@ class OrgRolesControllerTest extends TestCase {
         self::$user_meta[1]['ap_organization_id'] = 10;
         $req = new WP_REST_Request(['org_id' => 5]);
         $res = OrgRolesController::get_roles($req);
-        $this->assertSame(['roles' => OrgRoleManager::$roles], $res);
+        $expected = [
+            [
+                'key'         => 'viewer',
+                'label'       => 'Viewer',
+                'description' => '',
+                'user_count'  => 0,
+            ],
+        ];
+        $this->assertSame($expected, $res);
         $this->assertSame([5], OrgRoleManager::$received);
     }
 
@@ -72,14 +88,30 @@ class OrgRolesControllerTest extends TestCase {
         self::$user_meta[1]['ap_organization_id'] = 7;
         $_POST = ['nonce' => 'n'];
         OrgRolesController::ajax_get_roles();
-        $this->assertSame(['roles' => OrgRoleManager::$roles], self::$json_success);
+        $expected = [
+            [
+                'key'         => 'viewer',
+                'label'       => 'Viewer',
+                'description' => '',
+                'user_count'  => 0,
+            ],
+        ];
+        $this->assertSame($expected, self::$json_success);
         $this->assertSame([7], OrgRoleManager::$received);
     }
 
     public function test_ajax_get_roles_uses_post_org_id(): void {
         $_POST = ['nonce' => 'n', 'org_id' => 3];
         OrgRolesController::ajax_get_roles();
-        $this->assertSame(['roles' => OrgRoleManager::$roles], self::$json_success);
+        $expected = [
+            [
+                'key'         => 'viewer',
+                'label'       => 'Viewer',
+                'description' => '',
+                'user_count'  => 0,
+            ],
+        ];
+        $this->assertSame($expected, self::$json_success);
         $this->assertSame([3], OrgRoleManager::$received);
     }
 }
