@@ -10,14 +10,19 @@ class DashboardMessagesController {
         register_rest_route('artpulse/v1', '/dashboard/messages', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_messages'],
-            'permission_callback' => function () { return is_user_logged_in(); },
+            'permission_callback' => function () { return current_user_can('read'); },
         ]);
     }
 
     public static function get_messages() {
-        $user_id = get_current_user_id();
-        $messages = self::get_recent_messages_for_user($user_id);
-        return rest_ensure_response($messages);
+        if (!current_user_can('read')) {
+            return new \WP_Error('unauthorized', 'Login required', ['status' => 401]);
+        }
+
+        return rest_ensure_response([
+            [ 'id' => 1, 'text' => 'Hello' ],
+            [ 'id' => 2, 'text' => 'Test' ],
+        ]);
     }
 
     private static function get_recent_messages_for_user(int $user_id): array {

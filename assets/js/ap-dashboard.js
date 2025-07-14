@@ -5,6 +5,7 @@
  *   { nonce: '', rest_url: '' }
  */
 
+console.log("Dashboard script loaded.");
 const { render, useEffect, useState } = wp.element;
 const apiFetch = wp.apiFetch;
 

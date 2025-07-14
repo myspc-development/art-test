@@ -15,12 +15,17 @@ add_action('wp_dashboard_setup', function () {
 
 add_action('admin_enqueue_scripts', function($hook) {
     if ($hook === 'index.php') {
+        $handle = 'ap-dashboard-messages';
         wp_enqueue_script(
-            'ap-dashboard-messages',
+            $handle,
             plugin_dir_url(__FILE__) . '../assets/js/dashboard-messages.js',
             [],
             null,
             true
         );
+
+        wp_localize_script($handle, 'ArtPulseData', [
+            'nonce' => wp_create_nonce('wp_rest')
+        ]);
     }
 });

@@ -171,7 +171,7 @@
 
             let html = `
               <a href="${post.link}">
-                <img src="${post.featured_media_url || ''}" alt="${post.title}" />
+                <img src="${post.featured_media_url || ''}" alt="${post.title}" onerror="this.onerror=null;this.src='/wp-content/uploads/fallback.jpg';"/>
                 <h3>${post.title}</h3>
             `;
             const start = post.event_start_date || post.start_date;
