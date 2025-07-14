@@ -1,7 +1,6 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 
-use WP_REST_Request;
 use ArtPulse\Core\OrgRoleManager;
 
 add_action('rest_api_init', function () {
