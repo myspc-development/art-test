@@ -13,12 +13,18 @@ function ap_register_roles() {
         'edit_dashboard_widgets' => false,
         'view_analytics' => true,
     ]);
+
+    add_role('org_viewer', 'Organization Viewer', [
+        'read' => true,
+        'edit_dashboard_widgets' => false,
+        'view_analytics' => false,
+    ]);
 }
 
 register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ap_register_roles');
 
 add_action('init', function () {
-    if (!get_role('org_manager') || !get_role('org_editor')) {
+    if (!get_role('org_manager') || !get_role('org_editor') || !get_role('org_viewer')) {
         ap_register_roles();
     }
 });
