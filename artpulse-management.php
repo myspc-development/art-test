@@ -68,6 +68,9 @@ require_once __DIR__ . '/includes/rest/artist.php';
 require_once __DIR__ . '/includes/rest/status.php';
 require_once __DIR__ . '/includes/rest-messages.php';
 require_once __DIR__ . '/includes/rest-role-matrix.php';
+require_once __DIR__ . '/includes/http-hooks.php';
+require_once __DIR__ . '/includes/rest-update-diagnostics.php';
+require_once __DIR__ . '/admin/page-settings.php';
 require_once __DIR__ . '/includes/hooks.php';
 require_once __DIR__ . '/includes/roles.php';
 require_once __DIR__ . '/includes/profile-roles.php';
@@ -307,26 +310,14 @@ add_action('admin_menu', function () {
         __('ArtPulse', 'artpulse'),
         'manage_options',
         'artpulse-settings',
-        'artpulse_settings_page'
+        'ap_render_settings_page'
     );
 });
 
 /**
  * Render the ArtPulse Settings page.
  */
-function artpulse_settings_page() {
-    ?>
-    <div class="wrap">
-        <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
-        <form method="post">
-            <?php wp_nonce_field('artpulse_copy_templates'); ?>
-            <p>
-                <input type="submit" class="button button-primary" name="ap_copy_templates" value="<?php esc_attr_e('Copy Templates to Child Theme', 'artpulse'); ?>" />
-            </p>
-        </form>
-    </div>
-    <?php
-}
+// Legacy page replaced by new settings interface in admin/page-settings.php
 
 function ap_render_diagnostics_page() {
     global $wpdb;

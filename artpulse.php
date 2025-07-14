@@ -1,4 +1,9 @@
 <?php
+/*
+Plugin Name: ArtPulse
+Plugin URI: https://example.com
+Update URI: https://github.com/your-org/artpulse-plugin
+*/
 if (!defined('ABSPATH')) { exit; }
 /**
  * Plugin loader with version migration.
