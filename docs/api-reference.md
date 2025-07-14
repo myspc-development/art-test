@@ -281,6 +281,29 @@ Example response:
 { "summary": "Award-winning painter based in NYC." }
 ```
 
+### `GET /artpulse/v1/promoted`
+
+Retrieve active artwork promotions ordered by priority.
+
+Example request:
+
+```bash
+curl '/wp-json/artpulse/v1/promoted'
+```
+
+### `POST /artpulse/v1/promote`
+
+Create a promotion for an artwork. Requires authentication with the
+`edit_posts` capability.
+
+Parameters:
+
+- `artwork_id` (int, required)
+- `start_date` (YYYY-MM-DD, required)
+- `end_date` (YYYY-MM-DD, required)
+- `type` (`featured` default)
+- `priority_level` (int)
+
 ## User Meta Fields
 
 Several endpoints store preferences using user meta. Keys of interest:

@@ -339,6 +339,7 @@ class Plugin
         \ArtPulse\Monetization\TipManager::register();
         \ArtPulse\Marketplace\MarketplaceManager::register();
         \ArtPulse\Marketplace\AuctionManager::register();
+        \ArtPulse\Marketplace\PromotionManager::register();
         \ArtPulse\Integration\WebhookManager::register();
         \ArtPulse\Monetization\EventPromotionManager::register();
         \ArtPulse\Search\MetaFullTextSearch::register();
