@@ -1,0 +1,311 @@
+(function(){
+  document.querySelectorAll('.ap-directory').forEach(initDirectory);
+
+  function initDirectory(container){
+    const type         = container.dataset.type;
+    const results      = container.querySelector('.ap-directory-results');
+    const limitInput   = container.querySelector('.ap-filter-limit');
+    const applyBtn     = container.querySelector('.ap-filter-apply');
+    const selectEl     = container.querySelector('.ap-filter-event-type');
+    const cityInput    = container.querySelector('.ap-filter-city');
+    const regionInput  = container.querySelector('.ap-filter-region');
+    const mediumEl     = container.querySelector('.ap-filter-medium');
+    const styleEl      = container.querySelector('.ap-filter-style');
+    const orgTypeEl    = container.querySelector('.ap-filter-org-type');
+    const locationEl   = container.querySelector('.ap-filter-location');
+    const keywordInput = container.querySelector('.ap-filter-keyword');
+    const saleFilter   = container.dataset.forSale;
+
+    const ORG_TYPES = ['gallery','museum','art-fair','studio','collective','non-profit','commercial-gallery','public-art-space','educational-institution','other'];
+
+    if (!results || !limitInput || !applyBtn) return; // Safety check
+
+    // Load Event Type terms if needed
+    if ( selectEl ) {
+      wp.apiFetch({
+        path: '/wp/v2/event_type',
+        headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+      })
+        .then(terms => {
+          selectEl.innerHTML = '<option value="">All</option>';
+          terms.forEach(t => {
+            const o = document.createElement('option');
+            o.value = t.id;
+            o.textContent = t.name;
+            selectEl.appendChild(o);
+          });
+        })
+        .catch(() => {
+          selectEl.innerHTML = '<option value="">(Failed to load)</option>';
+        });
+    }
+
+    if ( mediumEl ) {
+      const mediumPath = type === 'artist'
+        ? '/wp/v2/artist_specialty?per_page=100'
+        : '/wp/v2/artpulse_medium?per_page=100';
+      wp.apiFetch({
+        path: mediumPath,
+        headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+      })
+        .then(terms => {
+          mediumEl.innerHTML = '<option value="">All</option>';
+          terms.forEach(t => {
+            const o = document.createElement('option');
+            o.value = t.id;
+            o.textContent = t.name;
+            mediumEl.appendChild(o);
+          });
+        })
+        .catch(() => {
+          mediumEl.innerHTML = '<option value="">(Failed to load)</option>';
+        });
+    }
+
+    if ( styleEl ) {
+      wp.apiFetch({
+        path: '/wp/v2/artwork_style?per_page=100',
+        headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+      })
+        .then(terms => {
+          styleEl.innerHTML = '<option value="">All</option>';
+          terms.forEach(t => {
+            const o = document.createElement('option');
+            o.value = t.id;
+            o.textContent = t.name;
+            styleEl.appendChild(o);
+          });
+        })
+        .catch(() => {
+          styleEl.innerHTML = '<option value="">(Failed to load)</option>';
+        });
+    }
+
+    if ( orgTypeEl ) {
+      orgTypeEl.innerHTML = '<option value="">All</option>';
+      ORG_TYPES.forEach(t => {
+        const o = document.createElement('option');
+        o.value = t;
+        o.textContent = t.replace(/-/g, ' ');
+        orgTypeEl.appendChild(o);
+      });
+    }
+
+    // Show spinner during loading
+    function showLoading() {
+      results.setAttribute('aria-busy', 'true');
+      results.innerHTML = '<div class="ap-loading"><span class="screen-reader-text">Loading...</span><span class="ap-spinner" aria-hidden="true"></span></div>';
+    }
+
+    // Core data-loading function
+    function loadData() {
+      showLoading();
+      const params = new URLSearchParams({
+        type,
+        limit: limitInput.value
+      });
+      if ( selectEl && selectEl.value ) {
+        params.append('event_type', selectEl.value);
+      }
+      if ( cityInput && cityInput.value ) {
+        params.append('city', cityInput.value);
+      }
+      if ( regionInput && regionInput.value ) {
+        params.append('region', regionInput.value);
+      }
+      if ( mediumEl && mediumEl.value ) {
+        params.append('medium', mediumEl.value);
+      }
+      if ( styleEl && styleEl.value ) {
+        params.append('style', styleEl.value);
+      }
+      if ( orgTypeEl && orgTypeEl.value ) {
+        params.append('org_type', orgTypeEl.value);
+      }
+      if ( locationEl && locationEl.value ) {
+        params.append('location', locationEl.value);
+      }
+      if ( keywordInput && keywordInput.value ) {
+        params.append('keyword', keywordInput.value);
+      }
+      if ( typeof saleFilter !== 'undefined' && saleFilter !== '' ) {
+        params.append('for_sale', saleFilter);
+      }
+
+      wp.apiFetch({
+        path: '/artpulse/v1/filter?' + params.toString(),
+        headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+      })
+        .then(posts => {
+          results.innerHTML = '';
+          if (!posts.length) {
+            results.innerHTML = '<div class="ap-empty">No results found.</div>';
+            results.removeAttribute('aria-busy');
+            return;
+          }
+
+          let currentLetter = '';
+
+          posts.forEach(post => {
+            const firstLetter = (post.title || '').charAt(0).toUpperCase();
+            if (firstLetter && firstLetter !== currentLetter) {
+              currentLetter = firstLetter;
+              const heading = document.createElement('h2');
+              heading.className = 'ap-letter-heading';
+              heading.textContent = currentLetter;
+              results.appendChild(heading);
+            }
+
+            if (post.card_html) {
+              const tmp = document.createElement('div');
+              tmp.innerHTML = post.card_html.trim();
+              const el = tmp.firstElementChild;
+              if (el) {
+                results.appendChild(el);
+              }
+              return;
+            }
+
+            const div = document.createElement('div');
+            div.className = 'portfolio-item';
+
+            let html = `
+              <a href="${post.link}">
+                <img src="${post.featured_media_url || ''}" alt="${post.title}" />
+                <h3>${post.title}</h3>
+            `;
+            const start = post.event_start_date || post.start_date;
+            const end   = post.event_end_date   || post.end_date;
+            const formatDate = d => {
+              try {
+                return new Date(d).toLocaleDateString();
+              } catch(e) {
+                return d;
+              }
+            };
+            if ( start ) {
+              html += `<p class="ap-meta-date">${formatDate(start)}</p>`;
+            }
+            if ( end ) {
+              html += `<p class="ap-meta-date">${formatDate(end)}</p>`;
+            }
+            if ( post.venue_name ) {
+              html += `<p class="ap-meta-venue">${post.venue_name}</p>`;
+            }
+            if ( post.location ) {
+              html += `<p class="ap-meta-location">${post.location}</p>`;
+            }
+            if ( post.org_type ) {
+              html += `<p class="ap-meta-org-type">${post.org_type}</p>`;
+            }
+            if ( type === 'artist' ) {
+              if ( post.medium && post.medium.length ) {
+                const val = Array.isArray(post.medium) ? post.medium.join(', ') : post.medium;
+                html += `<p class="ap-meta-medium">${val}</p>`;
+              }
+              if ( post.style && post.style.length ) {
+                const val = Array.isArray(post.style) ? post.style.join(', ') : post.style;
+                html += `<p class="ap-meta-style">${val}</p>`;
+              }
+            }
+            const addressParts = [];
+            if ( post.event_street_address ) addressParts.push(post.event_street_address);
+            const cityState = [post.event_city, post.event_state].filter(Boolean).join(', ');
+            if ( cityState ) addressParts.push(cityState + (post.event_postcode ? ' ' + post.event_postcode : ''));
+            if ( !cityState && post.event_postcode ) addressParts.push(post.event_postcode);
+            if ( addressParts.length ) {
+              html += `<p class="ap-meta-address">${addressParts.join('<br>')}</p>`;
+            } else if ( post.address || post.website ) {
+              let addressHtml = post.address ? post.address : '';
+              if ( post.website ) {
+                const link = `<a href="${post.website}" target="_blank" rel="nofollow noopener">${post.website}</a>`;
+                addressHtml += (addressHtml ? '<br>' : '') + link;
+              }
+              html += `<p class="ap-meta-address">${addressHtml}</p>`;
+            }
+            if ( type === 'artwork' ) {
+              if ( post.medium ) {
+                html += `<p class="ap-meta-medium">${post.medium}</p>`;
+              }
+              if ( post.style ) {
+                html += `<p class="ap-meta-style">${post.style}</p>`;
+              }
+            }
+            if ( post.for_sale ) {
+              html += `<span class="ap-badge-sale">For Sale</span>`;
+            }
+            if ( post.price ) {
+              html += `<p class="ap-meta-price">${post.price}</p>`;
+            }
+            html += '</a>';
+
+            div.innerHTML = html;
+            const followBtn = createFollowButton(post, type);
+            div.appendChild(followBtn);
+            results.appendChild(div);
+          });
+
+          // Dispatch custom events
+          container.dispatchEvent(new CustomEvent('ap:loaded', {
+            detail: { type, limit: limitInput.value }
+          }));
+          results.removeAttribute('aria-busy');
+        })
+        .catch(() => {
+          results.innerHTML = '<div class="ap-error">Failed to load directory. Please try again.</div>';
+          results.removeAttribute('aria-busy');
+        });
+    }
+
+    // For each post result, add a follow button:
+function createFollowButton(post, objectType) {
+    const btn = document.createElement('button');
+    btn.innerHTML = post.is_following ? '&#10003; Following' : '&#43; Follow';
+    btn.className = 'ap-follow-btn';
+    btn.classList.toggle('ap-following', post.is_following);
+    btn.addEventListener('click', function(e){
+        e.preventDefault();
+        const options = {
+            path: '/artpulse/v1/follows',
+            method: post.is_following ? 'DELETE' : 'POST',
+            data: {
+                post_id: post.id,
+                post_type: objectType
+            },
+            headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
+        };
+        wp.apiFetch(options).then(resp => {
+            post.is_following = resp.status === 'following';
+            btn.innerHTML = post.is_following ? '&#10003; Following' : '&#43; Follow';
+            btn.classList.toggle('ap-following', post.is_following);
+        });
+    });
+    return btn;
+}
+
+
+    // Bind Apply button once
+    applyBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      loadData();
+      container.dispatchEvent(new CustomEvent('ap:filter_applied', {
+        detail: {
+          type,
+          limit: limitInput.value,
+          event_type: selectEl?.value || '',
+          city: cityInput?.value || '',
+          region: regionInput?.value || '',
+          medium: mediumEl?.value || '',
+          style: styleEl?.value || '',
+          org_type: orgTypeEl?.value || '',
+          location: locationEl?.value || '',
+          keyword: keywordInput?.value || '',
+          for_sale: saleFilter || ''
+        }
+      }));
+    });
+
+    // Initial load
+    loadData();
+  }
+})();

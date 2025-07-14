@@ -1,0 +1,57 @@
+# ===============================
+# 📦 PACKAGE MANAGERS
+# ===============================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===============================
+# ⚙️ COMPOSER
+# ===============================
+# Don't ignore vendor/ — we deploy with autoloader
+!vendor/
+vendor/bin/
+composer.phar
+composer-setup.php
+
+# ===============================
+# 🧱 BUILD OUTPUT
+# ===============================
+build/
+dist/
+!dist/
+!dist/bundle.css
+release/
+*.zip
+
+# Allow specific built assets
+!assets/dist/
+!assets/dist/admin-dashboard-widgets-editor.js
+!build/index.js
+!build/index.asset.php
+!assets/js/admin-dashboard-widgets-editor.js
+
+# ===============================
+# 🧠 IDE + OS FILES
+# ===============================
+.vscode/
+.idea/
+.DS_Store
+
+# ===============================
+# 📝 LOGS & CACHES
+# ===============================
+*.log
+.cache/
+.phpunit.result.cache
+
+# ===============================
+# 🔐 ENVIRONMENT
+# ===============================
+.env
+
+# ===============================
+# 🧹 WORDPRESS ROOT (optional, if excluded)
+# ===============================
+wordpress/

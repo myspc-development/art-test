@@ -1,0 +1,42 @@
+<?php
+namespace ArtPulse\Rest;
+
+use WP_REST_Request;
+use WP_Error;
+
+class EventCardController
+{
+    public static function register(): void
+    {
+        if (did_action('rest_api_init')) {
+            self::register_routes();
+        } else {
+            add_action('rest_api_init', [self::class, 'register_routes']);
+        }
+    }
+
+    public static function register_routes(): void
+    {
+        register_rest_route(
+            'artpulse/v1',
+            '/event-card/(?P<id>\\d+)',
+            [
+                'methods'             => 'GET',
+                'callback'            => [self::class, 'get_card'],
+                'permission_callback' => fn() => is_user_logged_in(),
+                'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
+            ]
+        );
+    }
+
+    public static function get_card(WP_REST_Request $request)
+    {
+        $id = absint($request->get_param('id'));
+        if (!$id || get_post_type($id) !== 'artpulse_event') {
+            return new WP_Error('invalid_event', 'Invalid event.', ['status' => 404]);
+        }
+
+        $html = ap_get_event_card($id);
+        return rest_ensure_response($html);
+    }
+}
