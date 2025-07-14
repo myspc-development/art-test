@@ -174,6 +174,7 @@ class Plugin
         \ArtPulse\Core\MembershipManager::register();
         \ArtPulse\Core\AccessControlManager::register();
         \ArtPulse\Core\CapabilitiesManager::register();
+        \ArtPulse\Curator\CuratorManager::register();
         DashboardWidgetRegistry::init();
         \ArtPulse\Core\AdminAccessManager::register();
         \ArtPulse\Core\LoginRedirectManager::register();
@@ -242,6 +243,7 @@ class Plugin
         \ArtPulse\Frontend\ReactDashboardShortcode::register();
         \ArtPulse\Frontend\RestListShortcodes::register();
         \ArtPulse\Frontend\CollectionsShortcode::register();
+        \ArtPulse\Frontend\CuratorProfileShortcode::register();
         \ArtPulse\Frontend\EventFilter::register();
         \ArtPulse\Frontend\OrgRsvpDashboard::register();
         \ArtPulse\Frontend\EventRsvpHandler::register();
@@ -272,6 +274,7 @@ class Plugin
         \ArtPulse\Rest\SpotlightAnalyticsController::register();
         \ArtPulse\Rest\CurrentUserController::register();
         \ArtPulse\Rest\DashboardMessagesController::register();
+        \ArtPulse\Rest\CuratorRestController::register();
         \ArtPulse\Rest\CommunityAnalyticsController::register();
         ArtistRestController::register();
         RestRelationships::register();
