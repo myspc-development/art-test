@@ -1,5 +1,5 @@
 <?php
-namespace {
+namespace ArtPulse\Admin {
     if (!defined('ABSPATH')) {
         define('ABSPATH', sys_get_temp_dir() . '/aptests/');
     }
