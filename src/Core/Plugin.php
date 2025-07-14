@@ -18,6 +18,7 @@ use ArtPulse\Frontend\WidgetEmbedShortcode;
 use ArtPulse\Blocks\WidgetEmbedBlock;
 use ArtPulse\Frontend\ReactDashboardShortcode;
 use ArtPulse\Marketplace\MarketplaceManager;
+use ArtPulse\Marketplace\AuctionManager;
 
 class Plugin
 {
@@ -337,6 +338,7 @@ class Plugin
         \ArtPulse\Monetization\PayoutManager::register();
         \ArtPulse\Monetization\TipManager::register();
         \ArtPulse\Marketplace\MarketplaceManager::register();
+        \ArtPulse\Marketplace\AuctionManager::register();
         \ArtPulse\Integration\WebhookManager::register();
         \ArtPulse\Monetization\EventPromotionManager::register();
         \ArtPulse\Search\MetaFullTextSearch::register();

@@ -10,6 +10,8 @@ function create_monetization_tables() {
     $payouts       = "{$wpdb->prefix}ap_payouts";
     $tickets       = "{$wpdb->prefix}ap_tickets";
     $event_tickets = "{$wpdb->prefix}ap_event_tickets";
+    $auctions      = "{$wpdb->prefix}ap_auctions";
+    $bids          = "{$wpdb->prefix}ap_bids";
 
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -54,6 +56,29 @@ function create_monetization_tables() {
         KEY event_id (event_id)
     ) $charset_collate;");
 
+    dbDelta("CREATE TABLE $auctions (
+        artwork_id BIGINT NOT NULL,
+        start_time DATETIME NOT NULL,
+        end_time DATETIME NOT NULL,
+        reserve_price DECIMAL(10,2) NULL,
+        buy_now_price DECIMAL(10,2) NULL,
+        min_increment DECIMAL(10,2) NOT NULL DEFAULT 1,
+        starting_bid DECIMAL(10,2) NOT NULL DEFAULT 0,
+        is_active TINYINT(1) NOT NULL DEFAULT 1,
+        PRIMARY KEY (artwork_id)
+    ) $charset_collate;");
+
+    dbDelta("CREATE TABLE $bids (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        user_id BIGINT NOT NULL,
+        artwork_id BIGINT NOT NULL,
+        amount DECIMAL(10,2) NOT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        KEY artwork_id (artwork_id),
+        KEY user_id (user_id)
+    ) $charset_collate;");
+
     // Ensure AUTO_INCREMENT is properly set for existing installs without
     // attempting to redefine the primary key.
     if ($wpdb->get_var("SHOW KEYS FROM {$wpdb->prefix}ap_payouts WHERE Key_name = 'PRIMARY'")) {
@@ -78,6 +103,8 @@ function validate_monetization_tables(): void {
         $wpdb->prefix . 'ap_org_messages',
         $wpdb->prefix . 'ap_scheduled_messages',
         $wpdb->prefix . 'ap_payouts',
+        $wpdb->prefix . 'ap_auctions',
+        $wpdb->prefix . 'ap_bids',
     ];
 
     foreach ($required_tables as $tbl) {
