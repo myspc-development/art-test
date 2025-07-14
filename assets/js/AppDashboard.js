@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import DashboardNavbar from './components/DashboardNavbar';
 import MessagesPanel from './components/MessagesPanel';
+import CommunityAnalyticsPanel from './components/CommunityAnalyticsPanel';
 
 export default function AppDashboard() {
   const [role, setRole] = useState(null);
@@ -20,6 +21,7 @@ export default function AppDashboard() {
       <main className="p-4">
         {/* Render panels conditionally here */}
         <MessagesPanel />
+        <CommunityAnalyticsPanel />
       </main>
     </div>
   );

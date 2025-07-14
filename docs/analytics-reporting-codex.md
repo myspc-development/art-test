@@ -25,6 +25,9 @@ Expose aggregated statistics via the `/analytics` namespace. Endpoints respect u
 - `GET /wp-json/artpulse/v1/analytics/event/{id}` – summary counts for an event.
 - `GET /wp-json/artpulse/v1/analytics/trends?event_id=1&days=30` – time series data.
 - `GET /wp-json/artpulse/v1/analytics/user/{id}` – individual engagement history.
+- `GET /wp-json/artpulse/v1/analytics/community/messaging` – message volume and top users.
+- `GET /wp-json/artpulse/v1/analytics/community/comments` – comment counts and flagged totals.
+- `GET /wp-json/artpulse/v1/analytics/community/forums` – forum thread and reply metrics.
 
 Results can be cached using transients. When exporting, stream CSV data with a `fputcsv()` loop to avoid memory issues.
 

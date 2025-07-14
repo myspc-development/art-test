@@ -88,3 +88,15 @@ email a CSV or PDF summary daily, weekly or monthly.
 ## 8. Extensibility
 
 Hooks like `artpulse_register_analytics_widget` allow themes or plugins to add widgets to the dashboard. When adding new metrics (e.g. revenue or social sharing), update this guide and keep the API responses backwards compatible.
+
+## 9. Community Engagement Dashboard
+
+Moderators can view messaging, comment and forum statistics via new endpoints:
+
+```
+GET /wp-json/artpulse/v1/analytics/community/messaging
+GET /wp-json/artpulse/v1/analytics/community/comments
+GET /wp-json/artpulse/v1/analytics/community/forums
+```
+
+These return totals and leaderboards to populate the Community Analytics panel in the dashboard.
