@@ -1,5 +1,5 @@
 <?php
-namespace ArtPulse\Admin;
+namespace {
 
 // Stub WordPress functions and constants
 function add_action($hook, $callback, $priority = 10, $args = 1) {}
@@ -15,8 +15,6 @@ function get_post_meta($post_id, $key, $single = false) { return \ArtPulse\Admin
 if (!defined('MINUTE_IN_SECONDS')) {
     define('MINUTE_IN_SECONDS', 60);
 }
-
-namespace {
     class WP_Post {
         public $post_type;
         public $ID;
@@ -27,7 +25,7 @@ namespace {
     }
 }
 
-namespace ArtPulse\Admin\Tests;
+namespace ArtPulse\Admin\Tests {
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\OrgDashboardAdmin;
@@ -117,4 +115,5 @@ class OrgDashboardAdminTest extends TestCase
         $this->assertArrayNotHasKey('ap_dash_stats_artworks_10', Stub::$transients);
         $this->assertArrayNotHasKey('ap_org_metrics_10', Stub::$transients);
     }
+}
 }
