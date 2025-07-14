@@ -1,7 +1,9 @@
 <?php
-function nsl_init() {}
+namespace {
+    function nsl_init() {}
+}
 
-namespace ArtPulse\Integration\Tests;
+namespace ArtPulse\Integration\Tests {
 
 use ArtPulse\Integration\OAuthManager;
 
@@ -55,4 +57,5 @@ class OAuthManagerTest extends \WP_UnitTestCase
         $expected = '[nextend_social_login provider="google"][nextend_social_login provider="apple"]';
         $this->assertSame($expected, $output);
     }
+}
 }
