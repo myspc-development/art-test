@@ -59,6 +59,7 @@ require_once __DIR__ . '/admin/page-community-roles.php';
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
 require_once __DIR__ . '/auto-tagger.php';
+require_once __DIR__ . '/pwa-manifest.php';
 include_once __DIR__ . '/shortcodes/widget-embed.php';
 include_once __DIR__ . '/shortcodes/artist-comments.php';
 require_once __DIR__ . '/includes/admin-org-roles-page.php';
