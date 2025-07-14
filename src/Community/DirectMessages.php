@@ -36,10 +36,13 @@ class DirectMessages
             sender_id BIGINT NOT NULL,
             recipient_id BIGINT NOT NULL,
             content TEXT NOT NULL,
+            context_type VARCHAR(32) NULL,
+            context_id BIGINT NULL,
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             is_read TINYINT(1) NOT NULL DEFAULT 0,
             KEY sender_id (sender_id),
-            KEY recipient_id (recipient_id)
+            KEY recipient_id (recipient_id),
+            KEY context (context_type, context_id)
         ) $charset;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
@@ -100,6 +103,8 @@ class DirectMessages
                 'recipient_id' => [ 'type' => 'integer', 'required' => true ],
                 'content'      => [ 'type' => 'string',  'required' => true ],
                 'nonce'        => [ 'type' => 'string',  'required' => true ],
+                'context_type' => [ 'type' => 'string',  'required' => false ],
+                'context_id'   => [ 'type' => 'integer', 'required' => false ],
             ],
         ]);
 
@@ -111,6 +116,21 @@ class DirectMessages
             },
             'args'                => [
                 'with' => [ 'type' => 'integer', 'required' => true ],
+            ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\d+)', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'fetch_context'],
+            'permission_callback' => [self::class, 'permission_view'],
+        ]);
+
+        register_rest_route('artpulse/v1', '/messages/block', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'block_user'],
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'user_id' => [ 'type' => 'integer', 'required' => true ],
             ],
         ]);
 
@@ -137,12 +157,20 @@ class DirectMessages
         $sender_id    = get_current_user_id();
         $recipient_id = absint($req['recipient_id']);
         $content      = wp_kses_post($req['content']);
+        $context_type = $req->get_param('context_type') ? sanitize_key($req['context_type']) : null;
+        $context_id   = $req->get_param('context_id') ? absint($req['context_id']) : null;
 
         if (!$recipient_id || $content === '' || !get_user_by('id', $recipient_id)) {
             return new WP_Error('invalid_params', 'Invalid recipient or content.', ['status' => 400]);
         }
 
-        self::add_message($sender_id, $recipient_id, $content);
+        if (class_exists(__NAMESPACE__ . '\\BlockedUsers')) {
+            if (BlockedUsers::is_blocked($recipient_id, $sender_id) || BlockedUsers::is_blocked($sender_id, $recipient_id)) {
+                return new WP_Error('blocked', 'User has blocked messages.', ['status' => 403]);
+            }
+        }
+
+        self::add_message($sender_id, $recipient_id, $content, $context_type, $context_id);
 
         return rest_ensure_response(['status' => 'sent']);
     }
@@ -157,7 +185,7 @@ class DirectMessages
         return rest_ensure_response($messages);
     }
 
-    public static function add_message(int $sender_id, int $recipient_id, string $content): int
+    public static function add_message(int $sender_id, int $recipient_id, string $content, ?string $context_type = null, ?int $context_id = null): int
     {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
@@ -165,6 +193,8 @@ class DirectMessages
             'sender_id'    => $sender_id,
             'recipient_id' => $recipient_id,
             'content'      => $content,
+            'context_type' => $context_type,
+            'context_id'   => $context_id,
             'created_at'   => current_time('mysql'),
             'is_read'      => 0,
         ]);
@@ -186,6 +216,21 @@ class DirectMessages
         $table = $wpdb->prefix . 'ap_messages';
         $sql = "SELECT * FROM $table WHERE (sender_id = %d AND recipient_id = %d) OR (sender_id = %d AND recipient_id = %d) ORDER BY created_at ASC";
         $rows = $wpdb->get_results($wpdb->prepare($sql, $user_id, $other_user, $other_user, $user_id), ARRAY_A);
+        return array_map(static function($row){
+            $row['id'] = (int) $row['id'];
+            $row['sender_id'] = (int) $row['sender_id'];
+            $row['recipient_id'] = (int) $row['recipient_id'];
+            $row['is_read'] = (int) $row['is_read'];
+            return $row;
+        }, $rows);
+    }
+
+    public static function get_context_conversation(int $user_id, string $context_type, int $context_id): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $sql = "SELECT * FROM $table WHERE context_type = %s AND context_id = %d AND (sender_id = %d OR recipient_id = %d) ORDER BY created_at ASC";
+        $rows = $wpdb->get_results($wpdb->prepare($sql, $context_type, $context_id, $user_id, $user_id), ARRAY_A);
         return array_map(static function($row){
             $row['id'] = (int) $row['id'];
             $row['sender_id'] = (int) $row['sender_id'];
@@ -275,5 +320,28 @@ class DirectMessages
         $args  = array_merge($ids, [$user_id]);
         $sql   = "UPDATE $table SET is_read = 0 WHERE id IN ($place) AND recipient_id = %d";
         $wpdb->query($wpdb->prepare($sql, ...$args));
+    }
+
+    public static function fetch_context(WP_REST_Request $req): WP_REST_Response
+    {
+        $user_id = get_current_user_id();
+        $type    = sanitize_key($req['type']);
+        $id      = absint($req['id']);
+        $messages = self::get_context_conversation($user_id, $type, $id);
+        return rest_ensure_response($messages);
+    }
+
+    public static function block_user(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        $user_id  = get_current_user_id();
+        $block_id = absint($req['user_id']);
+        if (!$block_id || !get_user_by('id', $block_id)) {
+            return new WP_Error('invalid_user', 'Invalid user ID', ['status' => 400]);
+        }
+        if (!class_exists(__NAMESPACE__ . '\\BlockedUsers')) {
+            return new WP_Error('missing_feature', 'Blocking not available', ['status' => 500]);
+        }
+        BlockedUsers::add($user_id, $block_id);
+        return rest_ensure_response(['status' => 'blocked', 'user_id' => $block_id]);
     }
 }

@@ -105,4 +105,27 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE id = %d", $msg_id), ARRAY_A);
         $this->assertSame('1', $row['is_read']);
     }
+
+    public function test_context_and_block(): void
+    {
+        $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
+        $post->set_param('recipient_id', $this->user2);
+        $post->set_param('content', 'Context hello');
+        $post->set_param('context_type', 'artwork');
+        $post->set_param('context_id', 55);
+        $post->set_param('nonce', $this->nonce);
+        $res = rest_get_server()->dispatch($post);
+        $this->assertSame(200, $res->get_status());
+
+        $get = new WP_REST_Request('GET', '/artpulse/v1/messages/context/artwork/55');
+        $res = rest_get_server()->dispatch($get);
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertCount(1, $data);
+
+        $block = new WP_REST_Request('POST', '/artpulse/v1/messages/block');
+        $block->set_param('user_id', $this->user2);
+        $res = rest_get_server()->dispatch($block);
+        $this->assertSame(200, $res->get_status());
+    }
 }
