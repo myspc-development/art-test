@@ -56,6 +56,15 @@ const configs = [
     'APRoleMatrix',
     { react: 'React', 'react-dom': 'ReactDOM' }
   ),
+  createConfig(
+    'assets/js/ap-org-roles.js',
+    'assets/js/ap-org-roles.bundle.js',
+    'APOrgRoles',
+    {
+      '@wordpress/element': 'wp.element',
+      '@wordpress/api-fetch': 'wp.apiFetch'
+    }
+  ),
 ];
 
 configs.push({
