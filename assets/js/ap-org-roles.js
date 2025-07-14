@@ -1,68 +1,84 @@
-import { render, useEffect, useState } from '@wordpress/element';
-import apiFetch from '@wordpress/api-fetch';
+(() => {
+    const { createElement, render, useEffect, useState } = wp.element;
+    const apiFetch = wp.apiFetch;
 
-apiFetch.use(apiFetch.createNonceMiddleware(ArtPulseOrgRoles.nonce));
+    apiFetch.use(apiFetch.createNonceMiddleware(ArtPulseOrgRoles.nonce));
 
-const LoadingSpinner = () => (
-    <p className="ap-org-roles-loading">Loading…</p>
-);
+    const LoadingSpinner = () =>
+        createElement('p', { className: 'ap-org-roles-loading' }, 'Loading…');
 
-const ErrorMessage = ({ message }) => (
-    <p className="ap-org-roles-error" style={{ color: 'red' }}>Error: {message}</p>
-);
+    const ErrorMessage = ({ message }) =>
+        createElement(
+            'p',
+            { className: 'ap-org-roles-error', style: { color: 'red' } },
+            'Error: ',
+            message
+        );
 
-const RoleTableRow = ({ role }) => (
-    <tr>
-        <td>{role.label}</td>
-        <td>{role.description || ''}</td>
-        <td style={{ textAlign: 'center' }}>{role.user_count ?? 0}</td>
-    </tr>
-);
+    const RoleTableRow = ({ role }) =>
+        createElement(
+            'tr',
+            null,
+            createElement('td', null, role.label),
+            createElement('td', null, role.description || ''),
+            createElement(
+                'td',
+                { style: { textAlign: 'center' } },
+                role.user_count ?? 0
+            )
+        );
 
-function OrgRolesPanel() {
-    const [roles, setRoles] = useState(null);
-    const [error, setError] = useState('');
+    function OrgRolesPanel() {
+        const [roles, setRoles] = useState(null);
+        const [error, setError] = useState('');
 
-    useEffect(() => {
-        apiFetch({ path: ArtPulseOrgRoles.api_url })
-            .then(setRoles)
-            .catch((e) => setError(e.message));
-    }, []);
+        useEffect(() => {
+            apiFetch({ path: ArtPulseOrgRoles.api_url })
+                .then(setRoles)
+                .catch((e) => setError(e.message));
+        }, []);
 
-    if (error) {
-        return <ErrorMessage message={error} />;
+        if (error) {
+            return createElement(ErrorMessage, { message: error });
+        }
+
+        if (!roles) {
+            return createElement(LoadingSpinner);
+        }
+
+        return createElement(
+            'table',
+            { className: 'widefat striped' },
+            createElement(
+                'thead',
+                null,
+                createElement(
+                    'tr',
+                    null,
+                    createElement('th', null, 'Role Name'),
+                    createElement('th', null, 'Description'),
+                    createElement('th', null, 'Members')
+                )
+            ),
+            createElement(
+                'tbody',
+                null,
+                roles.map((r) =>
+                    createElement(RoleTableRow, { key: r.key, role: r })
+                )
+            )
+        );
     }
 
-    if (!roles) {
-        return <LoadingSpinner />;
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof ArtPulseOrgRoles === 'undefined') {
+            console.error('ArtPulseOrgRoles not localised');
+            return;
+        }
 
-    return (
-        <table className="widefat striped">
-            <thead>
-                <tr>
-                    <th>Role Name</th>
-                    <th>Description</th>
-                    <th>Members</th>
-                </tr>
-            </thead>
-            <tbody>
-                {roles.map((r) => (
-                    <RoleTableRow key={r.key} role={r} />
-                ))}
-            </tbody>
-        </table>
-    );
-}
+        const root = document.getElementById('ap-org-roles-root');
+        if (!root) return;
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof ArtPulseOrgRoles === 'undefined') {
-        console.error('ArtPulseOrgRoles not localised');
-        return;
-    }
-
-    const root = document.getElementById('ap-org-roles-root');
-    if (!root) return;
-
-    render(<OrgRolesPanel />, root);
-});
+        render(createElement(OrgRolesPanel), root);
+    });
+})();
