@@ -67,6 +67,7 @@ require_once __DIR__ . '/includes/rest/org-roles.php';
 require_once __DIR__ . '/includes/rest/artist.php';
 require_once __DIR__ . '/includes/rest/status.php';
 require_once __DIR__ . '/includes/rest-messages.php';
+require_once __DIR__ . '/includes/rest-role-matrix.php';
 require_once __DIR__ . '/includes/hooks.php';
 require_once __DIR__ . '/includes/roles.php';
 require_once __DIR__ . '/includes/profile-roles.php';

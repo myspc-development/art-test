@@ -14,10 +14,21 @@ add_action('admin_menu', function () {
         'ap-org-roles',
         function () { include __DIR__ . '/page-org-roles.php'; }
     );
+
+    add_menu_page(
+        'Org Role Matrix',
+        'Org Role Matrix',
+        'manage_options',
+        'ap-org-roles-matrix',
+        function () { include __DIR__ . '/page-org-roles-matrix.php'; }
+    );
 });
 
 add_action('admin_enqueue_scripts', function ($hook) {
     if ($hook === 'toplevel_page_ap-user-inbox') {
         wp_enqueue_script('ap-messages-js', plugin_dir_url(__FILE__) . '../assets/js/messages.js', [], false, true);
+    }
+    if ($hook === 'toplevel_page_ap-org-roles-matrix') {
+        wp_enqueue_script('ap-role-matrix-js', plugin_dir_url(__FILE__) . '../assets/js/role-matrix.js', [], false, true);
     }
 });
