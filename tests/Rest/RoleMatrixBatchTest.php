@@ -1,0 +1,32 @@
+<?php
+namespace ArtPulse\Rest\Tests;
+
+use WP_REST_Request;
+
+/**
+ * @group restapi
+ */
+class RoleMatrixBatchTest extends \WP_UnitTestCase {
+    private int $admin;
+    private int $user;
+
+    public function set_up(): void {
+        parent::set_up();
+        require_once __DIR__ . '/../../includes/rest-role-matrix.php';
+        do_action('rest_api_init');
+        $this->admin = self::factory()->user->create(['role' => 'administrator']);
+        $this->user  = self::factory()->user->create(['role' => 'subscriber']);
+        wp_set_current_user($this->admin);
+    }
+
+    public function test_batch_endpoint_updates_roles(): void {
+        $req = new WP_REST_Request('POST', '/artpulse/v1/roles/batch');
+        $req->set_body_params([
+            $this->user => [ 'org_manager' => true ]
+        ]);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $u = get_userdata($this->user);
+        $this->assertContains('org_manager', $u->roles);
+    }
+}

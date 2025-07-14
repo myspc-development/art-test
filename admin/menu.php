@@ -29,6 +29,6 @@ add_action('admin_enqueue_scripts', function ($hook) {
         wp_enqueue_script('ap-messages-js', plugin_dir_url(__FILE__) . '../assets/js/messages.js', [], false, true);
     }
     if ($hook === 'toplevel_page_ap-org-roles-matrix') {
-        wp_enqueue_script('ap-role-matrix-js', plugin_dir_url(__FILE__) . '../assets/js/role-matrix.js', [], false, true);
+        wp_enqueue_script('ap-role-matrix-bundle', plugin_dir_url(__FILE__) . '../dist/role-matrix.js', ['react', 'react-dom'], filemtime(plugin_dir_path(__FILE__) . '../dist/role-matrix.js'), true);
     }
 });

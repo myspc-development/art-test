@@ -28,4 +28,70 @@ add_action('rest_api_init', function () {
         },
         'permission_callback' => '__return_true',
     ]);
+
+    register_rest_route('artpulse/v1', '/roles/batch', [
+        'methods'  => 'POST',
+        'callback' => function (WP_REST_Request $req) {
+            if (!current_user_can('edit_users')) {
+                return new WP_Error('forbidden', 'Access denied', ['status' => 403]);
+            }
+
+            $data = $req->get_json_params(); // { user_id: { role: boolean } }
+
+            foreach ($data as $user_id => $map) {
+                $user = get_user_by('ID', (int) $user_id);
+                if (!$user) {
+                    continue;
+                }
+                foreach ($map as $role => $checked) {
+                    if ($checked) {
+                        $user->add_role(sanitize_key($role));
+                    } else {
+                        $user->remove_role(sanitize_key($role));
+                    }
+                }
+            }
+
+            return ['status' => 'ok'];
+        },
+        'permission_callback' => '__return_true',
+    ]);
+
+    register_rest_route('artpulse/v1', '/roles/seed', [
+        'methods'  => 'GET',
+        'callback' => function () {
+            if (!current_user_can('edit_users')) {
+                return new WP_Error('forbidden', 'Access denied', ['status' => 403]);
+            }
+
+            $users = array_map(
+                function ($u) {
+                    return [
+                        'ID'           => $u->ID,
+                        'display_name' => $u->display_name,
+                    ];
+                },
+                get_users()
+            );
+
+            $roles = [];
+            foreach (wp_roles()->roles as $key => $r) {
+                $roles[] = [
+                    'key'  => $key,
+                    'name' => $r['name'],
+                    'caps' => array_keys($r['capabilities']),
+                ];
+            }
+
+            $matrix = [];
+            foreach (get_users() as $u) {
+                foreach ($roles as $r) {
+                    $matrix[$u->ID][$r['key']] = in_array($r['key'], $u->roles, true);
+                }
+            }
+
+            return compact('users', 'roles', 'matrix');
+        },
+        'permission_callback' => '__return_true',
+    ]);
 });
