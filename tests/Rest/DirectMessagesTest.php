@@ -128,4 +128,35 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $res = rest_get_server()->dispatch($block);
         $this->assertSame(200, $res->get_status());
     }
+
+    public function test_send_v2_updates_seen_and_search(): void
+    {
+        $post = new WP_REST_Request('POST', '/artpulse/v1/messages/send');
+        $post->set_param('recipient_id', $this->user2);
+        $post->set_param('content', 'Hey, I love your recent artwork!');
+        $res = rest_get_server()->dispatch($post);
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertSame('Hey, I love your recent artwork!', $data['content']);
+
+        $updates = new WP_REST_Request('GET', '/artpulse/v1/messages/updates');
+        $updates->set_param('since', '1970-01-01 00:00:00');
+        $res = rest_get_server()->dispatch($updates);
+        $this->assertSame(200, $res->get_status());
+        $list = $res->get_data();
+        $this->assertNotEmpty($list);
+        $msg_id = $list[0]['id'];
+
+        $seen = new WP_REST_Request('POST', '/artpulse/v1/messages/seen');
+        $seen->set_param('message_ids', [$msg_id]);
+        $res = rest_get_server()->dispatch($seen);
+        $this->assertSame(200, $res->get_status());
+
+        $search = new WP_REST_Request('GET', '/artpulse/v1/messages/search');
+        $search->set_param('q', 'recent artwork');
+        $res = rest_get_server()->dispatch($search);
+        $this->assertSame(200, $res->get_status());
+        $found = $res->get_data();
+        $this->assertNotEmpty($found);
+    }
 }
