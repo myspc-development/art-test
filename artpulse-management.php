@@ -321,12 +321,35 @@ add_action('admin_menu', function () {
 
 function ap_render_diagnostics_page() {
     global $wpdb;
+
     $tables  = ['ap_roles','ap_feedback','ap_feedback_comments','ap_org_messages','ap_scheduled_messages','ap_payouts'];
     $missing = false;
-    echo '<div class="wrap"><h1>ArtPulse Diagnostics</h1>';
 
-    echo '<p><strong>Plugin Version:</strong> ' . esc_html(defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : '') . '</p>';
-    echo '<p><strong>Installed:</strong> ' . esc_html(get_option('artpulse_install_time', 'N/A')) . '</p>';
+    $opts    = get_option('artpulse_settings', []);
+    $update  = get_option('ap_update_available');
+
+    $rows = [
+        [__('Plugin Version', 'artpulse'), defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : ''],
+        [__('Installed', 'artpulse'), get_option('artpulse_install_time', 'N/A')],
+        [__('PHP Version', 'artpulse'), phpversion()],
+        [__('Memory Limit', 'artpulse'), ini_get('memory_limit')],
+        [__('REST Enabled', 'artpulse'), rest_url() !== '' ? '✅' : '❌'],
+        [__('HTTPS Active', 'artpulse'), is_ssl() ? '✅' : '❌'],
+        [__('Update Available', 'artpulse'), $update ? '✅' : '❌'],
+    ];
+
+    $stripe_status = (!empty($opts['stripe_enabled']) && class_exists('\\Stripe\\StripeClient')) ? '✅' : '❌';
+    $rows[] = [__('Stripe Configured', 'artpulse'), $stripe_status];
+
+    $discord_status = !empty(get_option('ap_discord_webhook_url')) ? '✅' : '❌';
+    $rows[] = [__('Discord Configured', 'artpulse'), $discord_status];
+
+    echo '<div class="wrap"><h1>ArtPulse Diagnostics</h1>';
+    echo '<table class="form-table"><tbody>';
+    foreach ($rows as $r) {
+        echo '<tr><th scope="row">' . esc_html($r[0]) . '</th><td>' . esc_html($r[1]) . '</td></tr>';
+    }
+    echo '</tbody></table>';
 
     foreach ($tables as $t) {
         $tbl = $wpdb->prefix . $t;
@@ -348,8 +371,91 @@ function ap_render_diagnostics_page() {
     } else {
         echo "<p style='color:green'>✅ REST status route responding.</p>";
     }
+
+    ?>
+    <h2><?php esc_html_e('Manual Tools', 'artpulse'); ?></h2>
+    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin-right:10px;">
+        <?php wp_nonce_field('ap_flush_github_cache'); ?>
+        <input type="hidden" name="action" value="ap_flush_github_cache" />
+        <button type="submit" class="button">🔄 <?php esc_html_e('Flush GitHub cache', 'artpulse'); ?></button>
+    </form>
+    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin-right:10px;">
+        <?php wp_nonce_field('ap_ping_apis'); ?>
+        <input type="hidden" name="action" value="ap_ping_apis" />
+        <button type="submit" class="button">🧪 <?php esc_html_e('Ping external APIs', 'artpulse'); ?></button>
+    </form>
+    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;">
+        <?php wp_nonce_field('ap_export_diagnostic_report'); ?>
+        <input type="hidden" name="action" value="ap_export_diagnostic_report" />
+        <button type="submit" class="button">📥 <?php esc_html_e('Export report', 'artpulse'); ?></button>
+    </form>
+    <?php
     echo '</div>';
 }
+
+function ap_flush_github_cache() {
+    if (!current_user_can('manage_options')) {
+        wp_die(__('Unauthorized', 'artpulse'));
+    }
+    check_admin_referer('ap_flush_github_cache');
+    delete_option('ap_update_remote_sha');
+    delete_option('ap_update_last_check');
+    delete_option('ap_update_available');
+    wp_safe_redirect(add_query_arg('cache_flushed', '1', admin_url('admin.php?page=ap-diagnostics')));
+    exit;
+}
+add_action('admin_post_ap_flush_github_cache', 'ap_flush_github_cache');
+
+function ap_ping_apis() {
+    if (!current_user_can('manage_options')) {
+        wp_die(__('Unauthorized', 'artpulse'));
+    }
+    check_admin_referer('ap_ping_apis');
+    $results = [];
+    $resp = wp_remote_get('https://api.github.com', ['timeout' => 5]);
+    $results['github'] = is_wp_error($resp) ? $resp->get_error_message() : wp_remote_retrieve_response_code($resp);
+    $opts = get_option('artpulse_settings', []);
+    if (!empty($opts['stripe_secret']) && class_exists('\\Stripe\\StripeClient')) {
+        try {
+            $stripe = new \Stripe\StripeClient($opts['stripe_secret']);
+            $stripe->charges->all(['limit' => 1]);
+            $results['stripe'] = 'OK';
+        } catch (\Exception $e) {
+            $results['stripe'] = $e->getMessage();
+        }
+    }
+    if ($discord = get_option('ap_discord_webhook_url')) {
+        $discordResp = wp_remote_post($discord, ['body' => ['content' => 'Ping'], 'timeout' => 5]);
+        $results['discord'] = is_wp_error($discordResp) ? $discordResp->get_error_message() : wp_remote_retrieve_response_code($discordResp);
+    }
+    update_option('ap_api_ping_results', $results);
+    wp_safe_redirect(add_query_arg('ping', '1', admin_url('admin.php?page=ap-diagnostics')));
+    exit;
+}
+add_action('admin_post_ap_ping_apis', 'ap_ping_apis');
+
+function ap_export_diagnostic_report() {
+    if (!current_user_can('manage_options')) {
+        wp_die(__('Unauthorized', 'artpulse'));
+    }
+    check_admin_referer('ap_export_diagnostic_report');
+    $data = [
+        'plugin_version'     => defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : '',
+        'installed'          => get_option('artpulse_install_time', 'N/A'),
+        'php_version'        => phpversion(),
+        'memory_limit'       => ini_get('memory_limit'),
+        'rest_enabled'       => rest_url() !== '',
+        'https'             => is_ssl(),
+        'update_available'   => (bool) get_option('ap_update_available'),
+        'stripe_configured'  => !empty(get_option('artpulse_settings', [])['stripe_enabled']),
+        'discord_configured' => (bool) get_option('ap_discord_webhook_url'),
+    ];
+    header('Content-Type: application/json');
+    header('Content-Disposition: attachment; filename="ap-diagnostics.json"');
+    echo wp_json_encode($data, JSON_PRETTY_PRINT);
+    exit;
+}
+add_action('admin_post_ap_export_diagnostic_report', 'ap_export_diagnostic_report');
 
 // Handle template copy action
 add_action('admin_init', function () {
