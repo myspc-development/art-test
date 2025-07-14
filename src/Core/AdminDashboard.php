@@ -67,6 +67,7 @@ class AdminDashboard
                 filemtime($path),
                 true
             );
+            wp_script_add_data('ap-dashboard-js', 'type', 'module');
 
             wp_localize_script(
                 'ap-dashboard-js',
