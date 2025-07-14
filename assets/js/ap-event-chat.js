@@ -2,7 +2,11 @@ function loadChat() {
     const eventId =
         typeof ArtPulseChatVars !== 'undefined' ? ArtPulseChatVars.event_id : 2312;
 
-    fetch(`/wp-json/artpulse/v1/event/${eventId}/chat`)
+    fetch(`/wp-json/artpulse/v1/event/${eventId}/chat`, {
+        headers: {
+            'X-WP-Nonce': typeof APChat !== 'undefined' ? APChat.nonce : ''
+        }
+    })
         .then(res => {
             if (!res.ok) throw new Error(`Failed to load chat: HTTP ${res.status}`);
             return res.json();
