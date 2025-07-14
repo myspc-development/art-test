@@ -1,18 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const reasons = ['Spam', 'Abuse', 'Off-topic', 'Other'];
 
-export default function ReportDialog({ onClose }) {
+export default function ReportDialog({ onClose, onSubmit }) {
   const [reason, setReason] = useState(reasons[0]);
   const [details, setDetails] = useState('');
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    const node = dialogRef.current;
+    if (!node) return;
+    const focusable = node.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    first?.focus();
+    const handleKeyDown = e => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const handleSubmit = e => {
     e.preventDefault();
-    // placeholder submit
+    if (onSubmit) onSubmit(reason, details);
     onClose();
   };
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-4 rounded w-80" role="dialog" aria-modal="true">
+      <div
+        ref={dialogRef}
+        className="bg-white p-4 rounded w-80" role="dialog" aria-modal="true"
+      >
         <h3 className="text-lg font-semibold mb-2">Report</h3>
         <form onSubmit={handleSubmit} className="space-y-3">
           <select

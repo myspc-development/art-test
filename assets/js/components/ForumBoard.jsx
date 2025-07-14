@@ -1,20 +1,22 @@
 import React from 'react';
 
-export default function ForumBoard({ threads = [], categories = [] }) {
+export default function ForumBoard({ threads = [], categories = [], canCreate = false }) {
   return (
     <div className="ap-forum-board space-y-6">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {categories.map(cat => (
           <button
             key={cat}
-            className="px-3 py-1 bg-gray-200 rounded text-sm"
+            className="px-3 py-1 bg-gray-200 rounded text-sm hover:bg-gray-300"
           >
             {cat}
           </button>
         ))}
-        <button className="ml-auto px-4 py-2 bg-blue-600 text-white rounded">
-          Start New Thread
-        </button>
+        {canCreate && (
+          <button className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Start New Thread
+          </button>
+        )}
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         {threads.map(t => (
