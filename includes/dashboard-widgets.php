@@ -24,6 +24,10 @@ add_action('wp_ajax_ap_save_user_layout', 'ap_save_user_layout');
 add_action('wp_ajax_save_widget_order', 'ap_save_widget_order');
 add_action('wp_ajax_ap_save_dashboard_order', 'ap_save_dashboard_order_callback');
 add_action('wp_ajax_save_dashboard_layout', function () {
+    check_admin_referer('save_dashboard_layout');
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( __( 'Cheatin&#8217; uh?' ) );
+    }
     check_ajax_referer('ap_widget_nonce', 'nonce');
     $layout = json_decode(stripslashes($_POST['layout'] ?? ''), true);
     if (!is_array($layout)) {
@@ -36,10 +40,11 @@ add_action('wp_ajax_save_dashboard_layout', function () {
 
 function ap_save_dashboard_widget_config(): void
 {
-    check_ajax_referer('ap_dashboard_widget_config', 'nonce');
-    if (!current_user_can('manage_options')) {
-        wp_send_json_error(['message' => __('Permission denied', 'artpulse')]);
+    check_admin_referer('ap_save_dashboard_widget_config');
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( __( 'Cheatin&#8217; uh?' ) );
     }
+    check_ajax_referer('ap_dashboard_widget_config', 'nonce');
 
     $raw = $_POST['config'] ?? [];
     $sanitized = [];
@@ -58,6 +63,10 @@ function ap_save_dashboard_widget_config(): void
 
 function ap_save_widget_layout(): void
 {
+    check_admin_referer('ap_save_widget_layout');
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( __( 'Cheatin&#8217; uh?' ) );
+    }
     $role = sanitize_key($_POST['role'] ?? '');
     if (!get_role($role) && !current_user_can('manage_options')) {
         wp_send_json_error(['message' => __('Invalid role', 'artpulse')], 400);
@@ -101,11 +110,11 @@ function ap_save_widget_layout(): void
 
 function ap_save_role_layout(): void
 {
-    check_ajax_referer('ap_save_role_layout', 'nonce');
-    if (!current_user_can('manage_options')) {
-        wp_send_json_error(['message' => __('Permission denied', 'artpulse')]);
-        return;
+    check_admin_referer('ap_save_role_layout');
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( __( 'Cheatin&#8217; uh?' ) );
     }
+    check_ajax_referer('ap_save_role_layout', 'nonce');
 
     $role   = sanitize_key($_POST['role'] ?? '');
     if (!get_role($role)) {
@@ -129,6 +138,10 @@ function ap_save_role_layout(): void
 
 function ap_save_user_layout(): void
 {
+    check_admin_referer('ap_save_user_layout');
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( __( 'Cheatin&#8217; uh?' ) );
+    }
     check_ajax_referer('ap_save_user_layout', 'nonce');
 
     $layout = [];
@@ -159,6 +172,10 @@ function ap_save_user_layout(): void
 
 function ap_save_widget_order(): void
 {
+    check_admin_referer('ap_save_widget_order');
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( __( 'Cheatin&#8217; uh?' ) );
+    }
     check_ajax_referer('ap_widget_order', 'nonce');
     $order = isset($_POST['order']) ? json_decode(stripslashes($_POST['order']), true) : [];
     update_user_meta(get_current_user_id(), 'ap_widget_order', $order);
@@ -167,6 +184,10 @@ function ap_save_widget_order(): void
 
 function ap_save_dashboard_order_callback(): void
 {
+    check_admin_referer('ap_save_dashboard_order_callback');
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( __( 'Cheatin&#8217; uh?' ) );
+    }
     check_ajax_referer('ap_dashboard_nonce', 'nonce');
 
     $order = json_decode(stripslashes($_POST['order'] ?? '[]'), true);
