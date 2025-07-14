@@ -12,6 +12,7 @@ function create_monetization_tables() {
     $event_tickets = "{$wpdb->prefix}ap_event_tickets";
     $auctions      = "{$wpdb->prefix}ap_auctions";
     $bids          = "{$wpdb->prefix}ap_bids";
+    $promotions    = "{$wpdb->prefix}ap_promotions";
 
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -79,6 +80,18 @@ function create_monetization_tables() {
         KEY user_id (user_id)
     ) $charset_collate;");
 
+    dbDelta("CREATE TABLE $promotions (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        artwork_id BIGINT NOT NULL,
+        start_date DATE NOT NULL,
+        end_date DATE NOT NULL,
+        type VARCHAR(20) NOT NULL DEFAULT 'featured',
+        priority_level TINYINT NOT NULL DEFAULT 0,
+        PRIMARY KEY (id),
+        KEY artwork_id (artwork_id),
+        KEY start_end (start_date, end_date)
+    ) $charset_collate;");
+
     // Ensure AUTO_INCREMENT is properly set for existing installs without
     // attempting to redefine the primary key.
     if ($wpdb->get_var("SHOW KEYS FROM {$wpdb->prefix}ap_payouts WHERE Key_name = 'PRIMARY'")) {
@@ -105,6 +118,7 @@ function validate_monetization_tables(): void {
         $wpdb->prefix . 'ap_payouts',
         $wpdb->prefix . 'ap_auctions',
         $wpdb->prefix . 'ap_bids',
+        $wpdb->prefix . 'ap_promotions',
     ];
 
     foreach ($required_tables as $tbl) {
