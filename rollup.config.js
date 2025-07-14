@@ -43,7 +43,7 @@ const configs = [
     'assets/js/AppDashboard.js',
     'assets/js/app-dashboard.js',
     'APDashboardApp',
-    { react: 'React', 'react-dom': 'ReactDOM' }
+    { react: 'React', 'react-dom': 'ReactDOM', 'chart.js/auto': 'Chart' }
   ),
 ];
 

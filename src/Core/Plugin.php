@@ -272,6 +272,7 @@ class Plugin
         \ArtPulse\Rest\SpotlightAnalyticsController::register();
         \ArtPulse\Rest\CurrentUserController::register();
         \ArtPulse\Rest\DashboardMessagesController::register();
+        \ArtPulse\Rest\CommunityAnalyticsController::register();
         ArtistRestController::register();
         RestRelationships::register();
         TaxonomyRestFilters::register();

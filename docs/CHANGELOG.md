@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.13
+- Added community analytics dashboard with REST endpoints for messages, comments and forums.
+
 ## 1.3.9
 - Introduced Social Auto-Posting with Facebook, Instagram, Twitter/X and Pinterest support.
 - New settings tab allows per-post-type toggles and API credentials.
