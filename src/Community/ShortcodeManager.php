@@ -1,3 +1,4 @@
+<?php
 namespace ArtPulse\Community;
 
 use ArtPulse\Community\NotificationManager;
@@ -19,7 +20,18 @@ class CommunityShortcodeManager {
             <h3>Your Notifications</h3>
             <button id="ap-refresh-notifications">🔄 Refresh</button>
             <ul id="ap-notification-list" role="status" aria-live="polite">
-                <li class="ap-loading"><span class="screen-reader-text">Loading...</span><span class="ap-spinner" aria-hidden="true"></span></li>
+                <?php if (empty($notifications)): ?>
+                    <li>No notifications.</li>
+                <?php else: ?>
+                    <?php foreach ($notifications as $notif): ?>
+                        <li data-id="<?= esc_attr($notif->id) ?>">
+                            <span><?= esc_html($notif->content ?: $notif->type) ?></span>
+                            <?php if ($notif->status !== 'read'): ?>
+                                <button class="mark-read">Mark as read</button>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </ul>
         </div>
         <?php
