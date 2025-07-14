@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
+use ArtPulse\Community\CommunityRoles;
 
 class ForumRestController
 {
@@ -24,7 +25,7 @@ class ForumRestController
         register_rest_route('artpulse/v1', '/forum/threads', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [self::class, 'create_thread'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => fn() => CommunityRoles::can_post_thread(get_current_user_id()),
             'args'                => [
                 'title'   => [ 'type' => 'string', 'required' => true ],
                 'content' => [ 'type' => 'string', 'required' => false ],

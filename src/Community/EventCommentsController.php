@@ -4,6 +4,7 @@ namespace ArtPulse\Community;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Community\CommunityRoles;
 
 class EventCommentsController
 {
@@ -34,7 +35,7 @@ class EventCommentsController
         register_rest_route('artpulse/v1', '/event/comment/(?P<comment_id>\\d+)/moderate', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'moderate'],
-            'permission_callback' => fn() => current_user_can('moderate_comments'),
+            'permission_callback' => fn() => CommunityRoles::can_moderate(get_current_user_id()),
             'args'                => [
                 'comment_id' => [ 'validate_callback' => 'is_numeric' ],
                 'status'     => [ 'type' => 'string', 'enum' => ['approve','spam','trash'], 'required' => true ],

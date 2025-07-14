@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Core\EmailService;
+use ArtPulse\Community\CommunityRoles;
 
 class DirectMessages
 {
@@ -169,7 +170,7 @@ class DirectMessages
         register_rest_route('artpulse/v1', '/messages/block', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'block_user'],
-            'permission_callback' => [self::class, 'permission_view'],
+            'permission_callback' => fn() => CommunityRoles::can_block(get_current_user_id()),
             'args'                => [
                 'user_id' => [ 'type' => 'integer', 'required' => true ],
             ],
