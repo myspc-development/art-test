@@ -80,6 +80,7 @@ class Plugin
         add_action('init', [\ArtPulse\Community\ProfileLinkRequestManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\NotificationManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\DirectMessages::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Community\BlockedUsers::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Admin\LoginEventsPage::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\UserEngagementLogger::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ProfileMetrics::class, 'maybe_install_table']);

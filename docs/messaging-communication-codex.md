@@ -61,6 +61,8 @@ Messages are stored in the `ap_messages` table:
 | `recipient_id`| BIGINT     | ID of the user receiving the message |
 | `content`    | TEXT        | Message body (sanitized HTML)        |
 | `created_at` | DATETIME    | Timestamp when inserted              |
+| `context_type` | VARCHAR(32) | Optional context key (e.g. artwork)  |
+| `context_id` | BIGINT      | ID for the context object            |
 | `is_read`    | TINYINT(1)  | 0 = unread, 1 = read                 |
 
 ### Routes
@@ -68,8 +70,10 @@ Messages are stored in the `ap_messages` table:
 ```text
 POST /wp-json/artpulse/v1/messages
 GET  /wp-json/artpulse/v1/messages?with={user_id}
+GET  /wp-json/artpulse/v1/messages/context/{type}/{id}
 GET  /wp-json/artpulse/v1/conversations
 POST /wp-json/artpulse/v1/message/read
+POST /wp-json/artpulse/v1/messages/block
 ```
 
 `POST /messages` requires `recipient_id` and `content`. It saves the row
@@ -77,6 +81,8 @@ and emails the recipient. `GET /messages` returns the full thread between
 the current user and another user identified by the `with` parameter.
 `/conversations` lists user IDs that the current user has messaged.
 `/message/read` marks specific message IDs as read.
+`/messages/context/{type}/{id}` loads messages tied to a specific context such as an artwork or event.
+`/messages/block` blocks a user from further direct messages.
 
 ### Examples
 
