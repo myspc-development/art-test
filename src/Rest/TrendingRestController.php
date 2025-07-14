@@ -1,0 +1,30 @@
+<?php
+namespace ArtPulse\Rest;
+
+use WP_REST_Request;
+use ArtPulse\Discovery\TrendingManager;
+
+class TrendingRestController {
+    public static function register(): void {
+        add_action('rest_api_init', [self::class, 'register_routes']);
+    }
+
+    public static function register_routes(): void {
+        register_rest_route('artpulse/v1', '/trending', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'get_trending'],
+            'permission_callback' => '__return_true',
+            'args'                => [
+                'type'  => [ 'type' => 'string', 'default' => 'artwork' ],
+                'limit' => [ 'type' => 'integer', 'default' => 20 ],
+            ],
+        ]);
+    }
+
+    public static function get_trending(WP_REST_Request $request) {
+        $type  = sanitize_key($request['type']);
+        $limit = max(1, min(50, (int) $request['limit']));
+        $items = TrendingManager::get_trending($limit, $type);
+        return rest_ensure_response($items);
+    }
+}

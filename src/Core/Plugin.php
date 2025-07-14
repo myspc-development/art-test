@@ -11,6 +11,8 @@ use ArtPulse\Rest\CurrentUserController;
 use ArtPulse\Rest\DashboardMessagesController;
 use ArtPulse\Rest\RestRelationships;
 use ArtPulse\Rest\TaxonomyRestFilters;
+use ArtPulse\Discovery\TrendingManager;
+use ArtPulse\Rest\TrendingRestController;
 use ArtPulse\Admin\EngagementDashboard;
 use ArtPulse\Core\ArtworkEventLinkManager;
 use ArtPulse\Engagement\DigestMailer;
@@ -123,6 +125,7 @@ class Plugin
             \ArtPulse\Core\ArtworkEventLinkManager::install_table();
             \ArtPulse\Personalization\RecommendationEngine::install_table();
             \ArtPulse\Core\ActivityLogger::install_table();
+            TrendingManager::install_table();
             \ArtPulse\Core\FeedbackManager::install_table();
             \ArtPulse\Core\DelegatedAccessManager::install_table();
             \ArtPulse\Core\CompetitionEntryManager::install_table();
@@ -344,6 +347,8 @@ class Plugin
         \ArtPulse\Monetization\EventPromotionManager::register();
         \ArtPulse\Search\MetaFullTextSearch::register();
         \ArtPulse\Search\ExternalSearch::register();
+        TrendingManager::register();
+        TrendingRestController::register();
         \ArtPulse\Personalization\RecommendationRestController::register();
         add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
         \ArtPulse\Rest\EventManagementController::register();
@@ -410,6 +415,19 @@ class Plugin
         wp_localize_script('ap-follow-feed-js', 'ArtPulseFavoritesFeed', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_enqueue_script(
+            'ap-discovery-feed',
+            plugins_url('assets/js/components/DiscoveryFeed.jsx', ARTPULSE_PLUGIN_FILE),
+            ['wp-element'],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-discovery-feed', 'APDiscoveryFeed', [
+            'root'  => esc_url_raw(rest_url()),
+            'nonce' => wp_create_nonce('wp_rest'),
         ]);
 
         wp_enqueue_script(
