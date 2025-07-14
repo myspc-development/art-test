@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.13
+- Messaging AJAX requests now send `nonce` instead of `_wpnonce` while still using the `X-WP-Nonce` header.
+
 ## 1.3.9
 - Introduced Social Auto-Posting with Facebook, Instagram, Twitter/X and Pinterest support.
 - New settings tab allows per-post-type toggles and API credentials.

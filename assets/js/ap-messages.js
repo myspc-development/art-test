@@ -18,7 +18,7 @@
     }
     $.get({
       url: APMessages.restUrl,
-      data: { _wpnonce: APMessages.nonce },
+      data: { nonce: APMessages.nonce },
       success: function(data){
         console.log('Conversations:', data);
         var $list = $('#ap-conversation-list');
@@ -65,7 +65,7 @@
   function loadMessages(id, cb){
     $.get({
       url: APMessages.restUrl,
-      data: { with: id, _wpnonce: APMessages.nonce },
+      data: { with: id, nonce: APMessages.nonce },
       beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(data){
         if (cb) cb(data);
@@ -90,7 +90,7 @@
     $.ajax({
       url: APMessages.restUrl.replace('messages', 'message/read'),
       method: 'POST',
-      data: { ids: ids, _wpnonce: APMessages.nonce },
+      data: { ids: ids, nonce: APMessages.nonce },
       beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); }
     });
   }
@@ -129,7 +129,7 @@
       url: APMessages.restUrl,
       method: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({ recipient_id: parseInt(id,10), content: content, _wpnonce: APMessages.nonce }),
+      data: JSON.stringify({ recipient_id: parseInt(id,10), content: content, nonce: APMessages.nonce }),
       beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(){
         $('#ap-message-form textarea[name="content"]').val('');
