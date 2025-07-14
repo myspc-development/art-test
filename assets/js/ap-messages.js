@@ -9,10 +9,10 @@
   }
   function listConversations(){
     $.ajax({
-      url: APMessages.apiRoot + 'artpulse/v1/conversations',
+      url: ApMsgs.restUrl.replace('messages', 'conversations'),
       method: 'GET',
-      data: { nonce: APMessages.nonce },
-      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
+      data: { _wpnonce: ApMsgs.nonce },
+      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', ApMsgs.nonce); },
       success: function(data){
         var $list = $('#ap-conversation-list');
         if(!$list.length) return;
@@ -55,11 +55,10 @@
   }
 
   function loadMessages(id, cb){
-    $.ajax({
-      url: APMessages.apiRoot + 'artpulse/v1/messages',
-      method: 'GET',
-      data: { with: id, nonce: APMessages.nonce },
-      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
+    $.get({
+      url: ApMsgs.restUrl,
+      data: { with: id, _wpnonce: ApMsgs.nonce },
+      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', ApMsgs.nonce); },
       success: function(data){
         if (cb) cb(data);
       },
@@ -81,15 +80,15 @@
 
   function markRead(ids){
     $.ajax({
-      url: APMessages.apiRoot + 'artpulse/v1/message/read',
+      url: ApMsgs.restUrl.replace('messages', 'message/read'),
       method: 'POST',
-      data: { ids: ids, nonce: APMessages.nonce },
-      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); }
+      data: { ids: ids, _wpnonce: ApMsgs.nonce },
+      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', ApMsgs.nonce); }
     });
   }
 
   $(document).on('ap-show-messages', function(e, id){
-    APMessages.pollId = id;
+    ApMsgs.pollId = id;
     var $form = $('#ap-message-form');
     if($form.length){
       $form.show();
@@ -119,11 +118,11 @@
     var content = $(this).find('textarea[name="content"]').val().trim();
     if(!id || !content) return;
     $.ajax({
-      url: APMessages.apiRoot + 'artpulse/v1/messages',
+      url: ApMsgs.restUrl,
       method: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({ recipient_id: parseInt(id,10), content: content, nonce: APMessages.nonce }),
-      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
+      data: JSON.stringify({ recipient_id: parseInt(id,10), content: content, _wpnonce: ApMsgs.nonce }),
+      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', ApMsgs.nonce); },
       success: function(){
         $('#ap-message-form textarea[name="content"]').val('');
         $(document).trigger('ap-show-messages', id);
@@ -136,14 +135,14 @@
     listConversations();
     const recipientId = window.currentRecipientId || 0;
     if(recipientId){
-      APMessages.pollId = recipientId;
+      ApMsgs.pollId = recipientId;
       $(document).trigger('ap-show-messages', recipientId);
     }
   });
 
-  if(APMessages.pollId){
+  if(ApMsgs.pollId){
     pollInterval = setInterval(function(){
-      loadMessages(APMessages.pollId);
+      loadMessages(ApMsgs.pollId);
     }, 5000);
   }
 })(jQuery);

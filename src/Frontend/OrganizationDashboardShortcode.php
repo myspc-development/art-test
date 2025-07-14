@@ -17,7 +17,7 @@ class OrganizationDashboardShortcode {
         if (function_exists('ap_enqueue_global_styles')) {
             ap_enqueue_global_styles();
         }
-        wp_enqueue_script('ap-messages-js');
+        wp_enqueue_script('ap-messages');
     }
 
     /**
