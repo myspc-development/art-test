@@ -33,6 +33,12 @@ function ap_output_seo_meta(): void
 
     $url = get_permalink($post);
 
+    if ($post->post_status !== 'publish') {
+        echo '<meta name="robots" content="noindex" />' . "\n";
+    }
+
+    echo '<link rel="canonical" href="' . esc_url($url) . '" />' . "\n";
+
     echo '<meta property="og:title" content="' . esc_attr($title) . '" />' . "\n";
     echo '<meta property="og:description" content="' . esc_attr($desc) . '" />' . "\n";
     echo '<meta property="og:url" content="' . esc_url($url) . '" />' . "\n";

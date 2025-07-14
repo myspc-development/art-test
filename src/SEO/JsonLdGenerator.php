@@ -26,6 +26,8 @@ class JsonLdGenerator
             $schema = self::event_schema($post);
         } elseif ($post->post_type === 'artpulse_artist') {
             $schema = self::artist_schema($post);
+        } elseif ($post->post_type === 'artpulse_artwork') {
+            $schema = self::artwork_schema($post);
         } else {
             return;
         }
@@ -49,6 +51,8 @@ class JsonLdGenerator
         $address = get_post_meta($post->ID, '_ap_event_address', true);
         $desc    = $post->post_excerpt ?: wp_trim_words($post->post_content, 50);
 
+        $image = get_the_post_thumbnail_url($post, 'full');
+
         $data = [
             '@context'   => 'https://schema.org',
             '@type'      => 'Event',
@@ -57,6 +61,7 @@ class JsonLdGenerator
             'endDate'    => $end ?: $start,
             'url'        => get_permalink($post),
             'description'=> wp_strip_all_tags($desc),
+            'image'      => $image,
         ];
 
         if ($loc || $address) {
@@ -110,5 +115,42 @@ class JsonLdGenerator
         }
 
         return $data;
+    }
+
+    /**
+     * Build VisualArtwork schema data.
+     */
+    private static function artwork_schema(WP_Post $post): array
+    {
+        $artist_id   = get_post_meta($post->ID, '_ap_artwork_artist', true);
+        $artist_name = $artist_id ? get_the_title($artist_id) : '';
+
+        $desc = $post->post_excerpt ?: wp_trim_words($post->post_content, 50);
+
+        $tags = wp_get_post_tags($post->ID, ['fields' => 'names']);
+
+        $image = get_the_post_thumbnail_url($post, 'full');
+
+        $data = [
+            '@context'   => 'https://schema.org',
+            '@type'      => 'VisualArtwork',
+            'name'       => get_the_title($post),
+            'image'      => $image,
+            'description'=> wp_strip_all_tags($desc),
+            'url'        => get_permalink($post),
+        ];
+
+        if ($artist_name) {
+            $data['creator'] = [
+                '@type' => 'Person',
+                'name'  => $artist_name,
+            ];
+        }
+
+        if ($tags) {
+            $data['keywords'] = $tags;
+        }
+
+        return array_filter($data);
     }
 }
