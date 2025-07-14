@@ -5,8 +5,8 @@
  *   { nonce: '', rest_url: '' }
  */
 
-import { render, useEffect, useState } from '@wordpress/element';
-import apiFetch from '@wordpress/api-fetch';
+const { render, useEffect, useState } = wp.element;
+const apiFetch = wp.apiFetch;
 
 // Attach nonce to all REST requests
 apiFetch.use(apiFetch.createNonceMiddleware(ArtPulseDashboardData.nonce));

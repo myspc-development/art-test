@@ -67,7 +67,6 @@ class AdminDashboard
                 filemtime($path),
                 [
                     'strategy'  => 'defer',
-                    'type'      => 'module',
                     'in_footer' => true,
                 ]
             );
