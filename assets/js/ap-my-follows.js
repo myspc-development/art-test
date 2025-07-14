@@ -26,7 +26,7 @@
           div.className = 'portfolio-item';
           div.innerHTML = `
             <a href="${follow.permalink}">
-              ${follow.featured_media_url ? `<img src="${follow.featured_media_url}" alt="${follow.title}" />` : ''}
+              ${follow.featured_media_url ? `<img src="${follow.featured_media_url}" alt="${follow.title}" onerror="this.onerror=null;this.src='/wp-content/uploads/fallback.jpg';" />` : ''}
               <h3>${follow.title}</h3>
             </a>
             <div>
