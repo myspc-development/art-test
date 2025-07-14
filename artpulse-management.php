@@ -288,35 +288,7 @@ function ap_render_dashboard_preview_page() {
 }
 
 
-// Add ArtPulse Settings page in the Settings menu
-add_action('admin_menu', function () {
-    add_menu_page(
-        'ArtPulse Settings',
-        'ArtPulse',
-        'manage_options',
-        'artpulse-settings',
-        'ap_render_settings_page',
-        'dashicons-admin-generic',
-        26
-    );
-});
-
-/**
- * Render the ArtPulse Settings page.
- */
-function ap_render_settings_page() {
-    ?>
-    <div class="wrap">
-        <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
-        <form method="post">
-            <?php wp_nonce_field('artpulse_copy_templates'); ?>
-            <p>
-                <input type="submit" class="button button-primary" name="ap_copy_templates" value="<?php esc_attr_e('Copy Templates to Child Theme', 'artpulse'); ?>" />
-            </p>
-        </form>
-    </div>
-    <?php
-}
+// The Settings submenu is registered via SettingsPage::addMenu().
 
 function ap_render_diagnostics_page() {
     global $wpdb;
