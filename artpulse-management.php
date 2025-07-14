@@ -50,6 +50,7 @@ require_once __DIR__ . '/includes/widgets/class-favorite-portfolio-widget.php';
 require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
+require_once __DIR__ . '/includes/dashboard-messages-widget.php';
 require_once __DIR__ . '/includes/user-actions.php';
 require_once __DIR__ . '/includes/settings-register.php';
 require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';
