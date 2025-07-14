@@ -430,7 +430,7 @@ class Plugin
 
         wp_enqueue_script(
             'ap-discovery-feed',
-            plugins_url('assets/js/components/DiscoveryFeed.jsx', ARTPULSE_PLUGIN_FILE),
+            plugins_url('assets/js/components/DiscoveryFeed.js', ARTPULSE_PLUGIN_FILE),
             ['wp-element'],
             '1.0.0',
             true
