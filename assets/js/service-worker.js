@@ -1,5 +1,9 @@
 const CACHE_NAME = 'artpulse-cache-v1';
-const OFFLINE_URLS = ['/'];
+const OFFLINE_URLS = [
+  '/',
+  '/offline.html',
+  // Icons are embedded in the manifest
+];
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -20,7 +24,16 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+    caches.match(event.request).then(response => {
+      return (
+        response ||
+        fetch(event.request).catch(() => {
+          if (event.request.mode === 'navigate') {
+            return caches.match('/offline.html');
+          }
+        })
+      );
+    })
   );
 });
 
