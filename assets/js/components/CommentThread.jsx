@@ -43,7 +43,7 @@ function Comment({ comment, onReply }) {
   );
 }
 
-export default function CommentThread({ comments = [] }) {
+export default function CommentThread({ comments = [], onReport }) {
   const [activeReport, setActiveReport] = useState(null);
   const handleAction = (type, comment, text) => {
     if (type === 'report') {
@@ -52,6 +52,12 @@ export default function CommentThread({ comments = [] }) {
       // placeholder for reply callback
       console.log('reply to', comment.id, text);
     }
+  };
+  const handleReportSubmit = (reason, notes) => {
+    if (onReport && activeReport) {
+      onReport(activeReport, reason, notes);
+    }
+    setActiveReport(null);
   };
 
   return (
@@ -63,7 +69,10 @@ export default function CommentThread({ comments = [] }) {
         ))}
       </ul>
       {activeReport && (
-        <ReportDialog onClose={() => setActiveReport(null)} />
+        <ReportDialog
+          onSubmit={handleReportSubmit}
+          onClose={() => setActiveReport(null)}
+        />
       )}
     </div>
   );

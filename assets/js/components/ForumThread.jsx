@@ -33,11 +33,17 @@ function Post({ post, onReply }) {
   );
 }
 
-export default function ForumThread({ title, posts = [] }) {
+export default function ForumThread({ title, posts = [], onReport }) {
   const [activeReport, setActiveReport] = useState(null);
   const handle = (type, post, text) => {
     if (type === 'report') setActiveReport(post);
     else if (type === 'reply') console.log('reply to', post.id, text);
+  };
+  const handleReportSubmit = (reason, notes) => {
+    if (onReport && activeReport) {
+      onReport(activeReport, reason, notes);
+    }
+    setActiveReport(null);
   };
   return (
     <div className="ap-forum-thread space-y-4">
@@ -49,7 +55,10 @@ export default function ForumThread({ title, posts = [] }) {
         <CommentForm onSubmit={text => handle('reply', { id: null }, text)} />
       </div>
       {activeReport && (
-        <ReportDialog onClose={() => setActiveReport(null)} />
+        <ReportDialog
+          onSubmit={handleReportSubmit}
+          onClose={() => setActiveReport(null)}
+        />
       )}
     </div>
   );
