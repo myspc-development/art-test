@@ -11,11 +11,11 @@ add_action('admin_enqueue_scripts', function ($hook) {
         return;
     }
 
-    $script_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-org-roles.js';
+    $script_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-org-roles.bundle.js';
 
     wp_enqueue_script(
         'ap-org-roles',
-        plugins_url('assets/js/ap-org-roles.js', ARTPULSE_PLUGIN_FILE),
+        plugins_url('assets/js/ap-org-roles.bundle.js', ARTPULSE_PLUGIN_FILE),
         ['wp-element', 'wp-api-fetch'],
         filemtime($script_path),
         true
