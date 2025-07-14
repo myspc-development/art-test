@@ -245,13 +245,11 @@ add_action('admin_menu', function () {
 });
 
 add_action('admin_init', function () {
-    $uri  = $_SERVER['REQUEST_URI'] ?? '';
-    $path = parse_url($uri, PHP_URL_PATH);
-    if ($path === '/wp-admin/ap-diagnostics') {
+    if (isset($_GET['page']) && $_GET['page'] === 'ap-diagnostics') {
         wp_safe_redirect(admin_url('admin.php?page=ap-diagnostics'));
         exit;
     }
-    if ($path === '/wp-admin/artpulse-settings') {
+    if (isset($_GET['page']) && $_GET['page'] === 'artpulse-settings') {
         wp_safe_redirect(admin_url('admin.php?page=artpulse-settings'));
         exit;
     }
