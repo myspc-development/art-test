@@ -12,6 +12,7 @@
     "start": "wp-scripts start",
     "release": "standard-version",
     "test:js": "jest",
+    "test:e2e": "node tests/e2e/monetization-workflow.js",
     "lint": "eslint assets/js",
     "ws": "node server/ws-server.js"
   },
@@ -40,6 +41,7 @@
     "rollup": "^4.44.2",
     "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.69.5",
-    "standard-version": "^9.5.0"
+    "standard-version": "^9.5.0",
+    "puppeteer": "^21.5.3"
   }
 }
