@@ -198,6 +198,7 @@ class Plugin
         \ArtPulse\Core\ProfileMetrics::register();
         \ArtPulse\Core\RoleAuditLogger::register();
         \ArtPulse\Core\ActivityLogger::register();
+        \ArtPulse\Community\CommunityRoles::register();
         \ArtPulse\Core\DelegatedAccessManager::register();
         \ArtPulse\Admin\AdminListSorting::register();
         \ArtPulse\Rest\RestSortingSupport::register();
@@ -550,9 +551,11 @@ class Plugin
         ]);
 
         wp_localize_script('ap-forum-js', 'APForum', [
-            'rest_url'    => esc_url_raw(rest_url()),
-            'nonce'       => wp_create_nonce('wp_rest'),
-            'can_comment' => is_user_logged_in(),
+            'rest_url'       => esc_url_raw(rest_url()),
+            'nonce'          => wp_create_nonce('wp_rest'),
+            'can_comment'    => is_user_logged_in(),
+            'can_start'      => \ArtPulse\Community\CommunityRoles::can_post_thread(get_current_user_id()),
+            'can_tag'        => \ArtPulse\Community\CommunityRoles::can_tag(get_current_user_id()),
         ]);
 
         wp_enqueue_script(

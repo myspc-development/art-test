@@ -55,6 +55,7 @@ require_once __DIR__ . '/includes/user-actions.php';
 require_once __DIR__ . '/includes/settings-register.php';
 require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';
 require_once __DIR__ . '/admin/page-dashboard-widgets.php';
+require_once __DIR__ . '/admin/page-community-roles.php';
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
 require_once __DIR__ . '/auto-tagger.php';

@@ -8,17 +8,37 @@
         .then(r => r.json())
         .then(setThreads);
     }, []);
+
+    function createThread() {
+      const title = prompt('Thread title');
+      if (!title) return;
+      fetch(APForum.rest_url + 'artpulse/v1/forum/threads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': APForum.nonce },
+        body: JSON.stringify({ title })
+      }).then(() => {
+        fetch(APForum.rest_url + 'artpulse/v1/forum/threads')
+          .then(r => r.json())
+          .then(setThreads);
+      });
+    }
     return createElement(
-      'ul',
-      { className: 'ap-thread-list' },
-      threads.map(t =>
-        createElement(
-          'li',
-          { key: t.id },
+      'div',
+      null,
+      APForum.can_start &&
+        createElement('button', { type: 'button', onClick: createThread }, 'New Thread'),
+      createElement(
+        'ul',
+        { className: 'ap-thread-list' },
+        threads.map(t =>
           createElement(
-            'button',
-            { type: 'button', onClick: () => onSelect(t.id) },
-            t.title
+            'li',
+            { key: t.id },
+            createElement(
+              'button',
+              { type: 'button', onClick: () => onSelect(t.id) },
+              t.title
+            )
           )
         )
       )
