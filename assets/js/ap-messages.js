@@ -12,12 +12,15 @@
     box.text(msg).show();
   }
   function listConversations(){
-    $.ajax({
-      url: APMessages.restUrl.replace('messages', 'conversations'),
-      method: 'GET',
+    if (typeof APMessages === 'undefined') {
+      console.error('APMessages is not defined');
+      return;
+    }
+    $.get({
+      url: APMessages.restUrl,
       data: { _wpnonce: APMessages.nonce },
-      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(data){
+        console.log('Conversations:', data);
         var $list = $('#ap-conversation-list');
         if(!$list.length) return;
         $list.empty();
@@ -42,8 +45,9 @@
           $list.append(li);
         });
       },
-      error: function(jqXHR){
-        if(jqXHR.status === 401 || jqXHR.status === 403){
+      error: function(xhr){
+        console.error('REST error:', xhr.responseText);
+        if(xhr.status === 401 || xhr.status === 403){
           showError("You must be logged in to use messaging.");
           var $list = $('#ap-conversation-list');
           if($list.length){
