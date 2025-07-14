@@ -13,6 +13,7 @@ function create_monetization_tables() {
     $auctions      = "{$wpdb->prefix}ap_auctions";
     $bids          = "{$wpdb->prefix}ap_bids";
     $promotions    = "{$wpdb->prefix}ap_promotions";
+    $messages      = "{$wpdb->prefix}ap_messages";
 
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -92,6 +93,15 @@ function create_monetization_tables() {
         KEY start_end (start_date, end_date)
     ) $charset_collate;");
 
+    dbDelta("CREATE TABLE $messages (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        sender_id BIGINT UNSIGNED NOT NULL,
+        receiver_id BIGINT UNSIGNED NOT NULL,
+        content TEXT NOT NULL,
+        is_read TINYINT(1) DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    ) $charset_collate;");
+
     // Ensure AUTO_INCREMENT is properly set for existing installs without
     // attempting to redefine the primary key.
     if ($wpdb->get_var("SHOW KEYS FROM {$wpdb->prefix}ap_payouts WHERE Key_name = 'PRIMARY'")) {
@@ -102,6 +112,7 @@ function create_monetization_tables() {
 
     update_option('artpulse_installed', true);
     update_option('artpulse_version', defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : null);
+    update_option('artpulse_db_version', '1.4.0');
     if (!get_option('artpulse_install_time')) {
         update_option('artpulse_install_time', current_time('mysql'));
     }
@@ -119,6 +130,7 @@ function validate_monetization_tables(): void {
         $wpdb->prefix . 'ap_auctions',
         $wpdb->prefix . 'ap_bids',
         $wpdb->prefix . 'ap_promotions',
+        $wpdb->prefix . 'ap_messages',
     ];
 
     foreach ($required_tables as $tbl) {

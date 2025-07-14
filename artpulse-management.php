@@ -66,6 +66,9 @@ require_once __DIR__ . '/includes/admin-org-roles-page.php';
 require_once __DIR__ . '/includes/rest/org-roles.php';
 require_once __DIR__ . '/includes/rest/artist.php';
 require_once __DIR__ . '/includes/rest/status.php';
+require_once __DIR__ . '/includes/rest-messages.php';
+require_once __DIR__ . '/includes/hooks.php';
+require_once __DIR__ . '/admin/menu.php';
 
 // Ensure custom roles exist on every load
 add_action('init', function () {
