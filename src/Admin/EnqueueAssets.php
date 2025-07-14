@@ -468,7 +468,7 @@ class EnqueueAssets {
             'nonce'    => wp_create_nonce('wp_rest'),
         ]);
         wp_localize_script('ap-messages', 'APMessages', [
-            'restUrl' => esc_url_raw(rest_url('artpulse/v1/messages')),
+            'restUrl' => esc_url_raw(rest_url('artpulse/v1/conversations')),
             'nonce'   => wp_create_nonce('wp_rest'),
         ]);
         wp_localize_script('ap-forum-js', 'APForum', [
