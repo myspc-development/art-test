@@ -30,6 +30,7 @@ Additional resources:
 
 - [API Reference](docs/api-reference.md)
 - [Testing Strategy](docs/testing-strategy.md)
+- [End-to-End Testing Guide](docs/End_to_End_Testing_Guide.md)
 - [Help Resources](docs/help-resources.md)
 - [Sprint Workflow Codex](docs/sprint-workflow-codex.md)
 
