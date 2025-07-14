@@ -17,6 +17,7 @@ use ArtPulse\Engagement\DigestMailer;
 use ArtPulse\Frontend\WidgetEmbedShortcode;
 use ArtPulse\Blocks\WidgetEmbedBlock;
 use ArtPulse\Frontend\ReactDashboardShortcode;
+use ArtPulse\Marketplace\MarketplaceManager;
 
 class Plugin
 {
@@ -335,6 +336,7 @@ class Plugin
         \ArtPulse\Monetization\SalesOverview::register();
         \ArtPulse\Monetization\PayoutManager::register();
         \ArtPulse\Monetization\TipManager::register();
+        \ArtPulse\Marketplace\MarketplaceManager::register();
         \ArtPulse\Integration\WebhookManager::register();
         \ArtPulse\Monetization\EventPromotionManager::register();
         \ArtPulse\Search\MetaFullTextSearch::register();
