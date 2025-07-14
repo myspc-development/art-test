@@ -16,7 +16,7 @@ if (!defined('MINUTE_IN_SECONDS')) {
     define('MINUTE_IN_SECONDS', 60);
 }
 
-namespace {
+namespace ArtPulse\Admin {
     class WP_Post {
         public $post_type;
         public $ID;

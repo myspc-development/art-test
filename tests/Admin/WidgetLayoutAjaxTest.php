@@ -1,5 +1,5 @@
 <?php
-namespace {
+namespace ArtPulse\Admin {
     if (!defined('ABSPATH')) {
         define('ABSPATH', __DIR__);
     }
