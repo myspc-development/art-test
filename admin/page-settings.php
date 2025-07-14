@@ -15,6 +15,7 @@ function ap_render_settings_page() {
         <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
         <h2 class="nav-tab-wrapper" id="ap-settings-nav">
             <a href="#advanced" class="nav-tab nav-tab-active" data-tab="advanced">Advanced</a>
+            <a href="#updates" class="nav-tab" data-tab="updates">Updates</a>
         </h2>
         <section class="ap-settings-section" data-tab="advanced">
             <form method="post">
@@ -33,6 +34,9 @@ function ap_render_settings_page() {
                 </table>
                 <?php submit_button(); ?>
             </form>
+        </section>
+        <section class="ap-settings-section" data-tab="updates" style="display:none;">
+            <?php include __DIR__ . '/tab-updates.php'; ?>
         </section>
     </div>
     <?php
