@@ -65,9 +65,12 @@ class AdminDashboard
                 $url,
                 ['wp-element', 'wp-api-fetch'],
                 filemtime($path),
-                true
+                [
+                    'strategy'  => 'defer',
+                    'type'      => 'module',
+                    'in_footer' => true,
+                ]
             );
-            wp_script_add_data('ap-dashboard-js', 'type', 'module');
 
             wp_localize_script(
                 'ap-dashboard-js',
