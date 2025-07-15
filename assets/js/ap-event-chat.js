@@ -1,36 +1,52 @@
-function loadChat() {
-    const eventId =
-        typeof ArtPulseChatVars !== 'undefined' ? ArtPulseChatVars.event_id : 2312;
-
-    fetch(`/wp-json/artpulse/v1/event/${eventId}/chat`, {
-        headers: {
-            'X-WP-Nonce': typeof APChat !== 'undefined' ? APChat.nonce : ''
-        }
-    })
-        .then(res => {
-            if (!res.ok) throw new Error(`Failed to load chat: HTTP ${res.status}`);
-            return res.json();
-        })
-        .then(data => {
-            if (!Array.isArray(data)) throw new Error('Invalid chat format');
-
-            const container = document.getElementById('ap-event-chat');
-            if (!container) return;
-
-            container.innerHTML = data.map(entry => `
-                <div class="chat-message">
-                    <strong>${entry.user}:</strong> ${entry.msg}
-                </div>
-            `).join('');
-        })
-        .catch(err => {
-            console.error('Chat load error:', err.message);
-            const container = document.getElementById('ap-event-chat');
-            if (container) container.innerHTML = `<p class="error">${err.message}</p>`;
-        });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    loadChat();
-    setInterval(loadChat, 10000); // poll every 10s
+    document.querySelectorAll('.ap-event-chat').forEach(container => {
+        const eventId = container.dataset.eventId || (typeof ArtPulseChatVars !== 'undefined' ? ArtPulseChatVars.event_id : 0);
+        const list = container.querySelector('.ap-chat-list');
+        const form = container.querySelector('.ap-chat-form');
+        let autoScroll = true;
+
+        container.addEventListener('mouseenter', () => { autoScroll = false; });
+        container.addEventListener('mouseleave', () => { autoScroll = true; list.scrollTop = list.scrollHeight; });
+
+        function render(msgs) {
+            list.innerHTML = '';
+            msgs.forEach(msg => {
+                const li = document.createElement('li');
+                const time = new Intl.DateTimeFormat('en', { timeStyle: 'short' }).format(new Date(msg.created_at));
+                li.innerHTML = `<img class="ap-chat-avatar" src="${msg.avatar}" alt=""> <span class="ap-chat-author">${msg.author}</span> <span class="ap-chat-time">${time}</span> <p class="ap-chat-content">${msg.content}</p>`;
+                list.appendChild(li);
+            });
+            if (autoScroll) list.scrollTop = list.scrollHeight;
+        }
+
+        function load() {
+            fetch(`/wp-json/artpulse/v1/event/${eventId}/chat`, {
+                headers: { 'X-WP-Nonce': typeof APChat !== 'undefined' ? APChat.nonce : '' }
+            })
+                .then(r => r.json())
+                .then(render)
+                .catch(err => {
+                    console.error('Chat load error', err);
+                });
+        }
+
+        load();
+        setInterval(load, 10000);
+
+        if (form) {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                const txt = form.querySelector('input[name="content"]').value.trim();
+                if (!txt) return;
+                fetch(`/wp-json/artpulse/v1/event/${eventId}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': APChat.nonce
+                    },
+                    body: JSON.stringify({ content: txt })
+                }).then(() => { form.reset(); load(); });
+            });
+        }
+    });
 });

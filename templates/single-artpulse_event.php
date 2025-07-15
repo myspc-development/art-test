@@ -21,6 +21,7 @@ if ( have_posts() ) :
 
     // Event title
     echo '<h1 class="entry-title event-title">' . get_the_title() . '</h1>';
+    echo '<button class="ap-event-vote" data-event-id="' . get_the_ID() . '">⭐ ' . esc_html__('Mark as Memorable','artpulse') . '</button> <span class="ap-event-vote-count"></span>';
 
     // Event meta
     $date     = get_post_meta(get_the_ID(), '_ap_event_date', true);

@@ -67,6 +67,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\EventCommentsController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\ArtworkCommentsController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\EventChatController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Community\EventVoteRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\ForumRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\CommentReportRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\LeaderboardRestController::class, 'register']);
@@ -94,6 +95,7 @@ class Plugin
         add_action('init', [\ArtPulse\Core\ActivityLogger::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\DelegatedAccessManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\EventChatController::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Community\EventVoteManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\CompetitionEntryManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Frontend\CompetitionDashboardShortcode::class, 'register']);
         add_filter('script_loader_tag', [self::class, 'add_defer'], 10, 3);
@@ -131,6 +133,7 @@ class Plugin
             \ArtPulse\Personalization\RecommendationEngine::install_table();
             \ArtPulse\Core\ActivityLogger::install_table();
             \ArtPulse\Community\CommentReports::install_table();
+            \ArtPulse\Community\EventVoteManager::install_table();
             TrendingManager::install_table();
             \ArtPulse\Core\FeedbackManager::install_table();
             \ArtPulse\Core\DelegatedAccessManager::install_table();
@@ -335,12 +338,17 @@ class Plugin
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
         \ArtPulse\Community\NotificationHooks::register();
         \ArtPulse\Community\DirectMessages::register();
+        \ArtPulse\Community\EventVoteManager::register();
+        \ArtPulse\Community\EventVoteRestController::register();
         \ArtPulse\Core\MembershipNotifier::register();
         \ArtPulse\Core\MembershipCron::register();
         \ArtPulse\Engagement\DigestMailer::register();
         \ArtPulse\Core\FeedbackManager::register();
-        \ArtPulse\Frontend\FeedbackWidget::register();
-        \ArtPulse\Frontend\NewsletterOptinEndpoint::register();
+       \ArtPulse\Frontend\FeedbackWidget::register();
+       \ArtPulse\Frontend\NewsletterOptinEndpoint::register();
+        \ArtPulse\Community\QaThreadPostType::register();
+        \ArtPulse\Community\QaThreadRestController::register();
+        \ArtPulse\Frontend\QaThreadShortcode::register();
         \ArtPulse\Admin\FeedbackPage::register();
         \ArtPulse\Admin\ReportingManager::register();
         \ArtPulse\Admin\CustomFieldsManager::register();
@@ -487,6 +495,22 @@ class Plugin
         );
 
         wp_enqueue_script(
+            'ap-event-vote-js',
+            plugins_url('assets/js/ap-event-vote.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_enqueue_script(
+            'ap-qa-thread',
+            plugins_url('assets/js/ap-qa-thread.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_enqueue_script(
             'ap-forum-js',
             plugins_url('assets/js/ap-forum.js', ARTPULSE_PLUGIN_FILE),
             ['wp-element', 'wp-api-fetch'],
@@ -557,6 +581,16 @@ class Plugin
 
         wp_localize_script('ap-event-chat-js', 'ArtPulseChatVars', [
             'event_id' => get_the_ID(),
+        ]);
+
+        wp_localize_script('ap-event-vote-js', 'APEventVote', [
+            'apiRoot' => esc_url_raw(rest_url()),
+            'nonce'   => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_localize_script('ap-qa-thread', 'APQa', [
+            'apiRoot' => esc_url_raw(rest_url()),
+            'nonce'   => wp_create_nonce('wp_rest'),
         ]);
 
         wp_localize_script('ap-forum-js', 'APForum', [

@@ -14,6 +14,12 @@ class EventChatShortcode
         if (function_exists('ap_enqueue_global_styles')) {
             ap_enqueue_global_styles();
         }
+        wp_enqueue_style(
+            'ap-chat-style',
+            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/css/ap-chat.css',
+            [],
+            filemtime(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/css/ap-chat.css')
+        );
     }
 
     public static function render($atts = []): string
