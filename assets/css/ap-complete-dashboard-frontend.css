@@ -70,14 +70,14 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--ap-gap);
 }
-.dashboard-card {
+.ap-card {
   background: var(--ap-bg);
   border-radius: var(--ap-radius);
   box-shadow: var(--ap-shadow);
   padding: 1.5rem;
   transition: transform 0.2s ease;
 }
-.dashboard-card:hover {
+.ap-card:hover {
   transform: translateY(-4px);
 }
 
