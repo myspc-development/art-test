@@ -126,7 +126,25 @@ WordPress will display an “unexpected output” warning if this file is missin
   [ap_event_calendar]
 - You can also add filters or adjust display options via shortcode attributes.
 - **Tip:** Calendar updates instantly when new events are added or when filters are applied.
-- Export any event as an `.ics` file via `/events/{id}/export.ics`, download an organization's full schedule from `/org/{id}/calendar.ics`, or fetch a specific artist feed from `/artist/{id}/events.ics`. iCal downloads now include local timezone details.
+ - Export any event as an `.ics` file via `/events/{id}/export.ics`, download an organization's full schedule from `/org/{id}/calendar.ics`, or fetch a specific artist feed from `/artist/{id}/events.ics`. iCal downloads now include local timezone details.
+
+### Embeddable Event Widget
+Embed a list of events on any site with a script tag:
+
+```html
+<script src="https://example.com/wp-json/widgets/embed.js?type=artist&id=42&color=%23c0392b&layout=horizontal"></script>
+```
+
+Parameters:
+
+| Name | Description |
+|------|-------------|
+| `type` | `artist` or `gallery` |
+| `id` | Artist or organization ID |
+| `color` | Hex color for link text |
+| `layout` | `list` (default) or `horizontal` |
+
+The script injects an iframe served from `/wp-json/widgets/render` with the same parameters. Responses are cached for an hour.
 
 ### Shortcodes & Widgets List
 - `[ap_event_directory]` — Show event directory with filters
