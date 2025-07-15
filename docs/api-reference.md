@@ -9,6 +9,28 @@ Include the `X-WP-Nonce` header when calling endpoints from JavaScript.
 
 ## Endpoints
 
+### `GET /artpulse/v1/status`
+
+Returns the installed plugin version and database schema version. Useful for
+health checks and debugging deployment issues.
+
+Example request:
+
+```bash
+curl '/wp-json/artpulse/v1/status'
+```
+
+Response:
+
+```json
+{
+  "plugin_version": "1.3.13",
+  "db_version": "1.4.0",
+  "cache": "Enabled",
+  "debug": false
+}
+```
+
 ### `GET /artpulse/v1/filtered-posts`
 
 Retrieve a list of posts filtered by taxonomy terms.
