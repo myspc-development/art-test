@@ -1,22 +1,20 @@
 <?php
-namespace ArtPulse\Admin;
-
-// Stub WordPress functions and constants
-function add_action($hook, $callback, $priority = 10, $args = 1) {}
-function remove_menu_page($slug) {}
-function add_menu_page(...$args) {}
-function current_user_can($cap) { return true; }
-function get_transient($key) { return \ArtPulse\Admin\Tests\Stub::$transients[$key] ?? false; }
-function set_transient($key, $value, $expire = 0) { \ArtPulse\Admin\Tests\Stub::$transients[$key] = $value; return true; }
-function delete_transient($key) { unset(\ArtPulse\Admin\Tests\Stub::$transients[$key]); return true; }
-function get_posts($args) { return \ArtPulse\Admin\Tests\Stub::get_posts($args); }
-function wp_is_post_revision($id) { return false; }
-function get_post_meta($post_id, $key, $single = false) { return \ArtPulse\Admin\Tests\Stub::get_post_meta($post_id, $key); }
-if (!defined('MINUTE_IN_SECONDS')) {
-    define('MINUTE_IN_SECONDS', 60);
-}
-
 namespace ArtPulse\Admin {
+    // Stub WordPress functions and constants
+    function add_action($hook, $callback, $priority = 10, $args = 1) {}
+    function remove_menu_page($slug) {}
+    function add_menu_page(...$args) {}
+    function current_user_can($cap) { return true; }
+    function get_transient($key) { return \ArtPulse\Admin\Tests\Stub::$transients[$key] ?? false; }
+    function set_transient($key, $value, $expire = 0) { \ArtPulse\Admin\Tests\Stub::$transients[$key] = $value; return true; }
+    function delete_transient($key) { unset(\ArtPulse\Admin\Tests\Stub::$transients[$key]); return true; }
+    function get_posts($args) { return \ArtPulse\Admin\Tests\Stub::get_posts($args); }
+    function wp_is_post_revision($id) { return false; }
+    function get_post_meta($post_id, $key, $single = false) { return \ArtPulse\Admin\Tests\Stub::get_post_meta($post_id, $key); }
+    if (!defined('MINUTE_IN_SECONDS')) {
+        define('MINUTE_IN_SECONDS', 60);
+    }
+
     class WP_Post {
         public $post_type;
         public $ID;
@@ -27,7 +25,7 @@ namespace ArtPulse\Admin {
     }
 }
 
-namespace ArtPulse\Admin\Tests;
+namespace ArtPulse\Admin\Tests {
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\OrgDashboardAdmin;
@@ -117,4 +115,5 @@ class OrgDashboardAdminTest extends TestCase
         $this->assertArrayNotHasKey('ap_dash_stats_artworks_10', Stub::$transients);
         $this->assertArrayNotHasKey('ap_org_metrics_10', Stub::$transients);
     }
+}
 }

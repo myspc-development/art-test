@@ -14,7 +14,7 @@ namespace ArtPulse\Admin {
     function __($text, $domain = null) { return $text; }
 }
 
-namespace ArtPulse\Admin\Tests;
+namespace ArtPulse\Admin\Tests {
 
 use PHPUnit\Framework\TestCase;
 
@@ -69,4 +69,5 @@ class DashboardWidgetConfigAjaxTest extends TestCase
         $this->assertNull(self::$json_success);
         $this->assertSame(['message' => 'Permission denied'], self::$json_error);
     }
+}
 }
