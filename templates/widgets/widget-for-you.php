@@ -3,9 +3,9 @@ use ArtPulse\Services\RecommendationService;
 $user_id = get_current_user_id();
 $items   = RecommendationService::get_for_user($user_id);
 ?>
-<div class="ap-widget" id="ap-widget-for-you">
-  <div class="ap-widget-header">🎯 <?php _e('For You','artpulse'); ?></div>
-  <div class="ap-widget-body">
+<div id="ap-widget-for-you" class="ap-card" role="region" aria-labelledby="ap-widget-for-you-title">
+  <h2 id="ap-widget-for-you-title" class="ap-card__title">🎯 <?php _e('For You','artpulse'); ?></h2>
+  <div>
     <?php if ($items): ?>
       <ul>
         <?php foreach ($items as $item): ?>

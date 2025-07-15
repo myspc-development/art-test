@@ -1,0 +1,26 @@
+@use "../css/tokens.css";
+
+.ap-dashboard-grid {
+  display: grid;
+  gap: var(--ap-space);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  align-items: start;
+}
+
+.ap-card {
+  background: var(--ap-surface);
+  border: 1px solid var(--ap-border-color);
+  border-radius: var(--ap-radius);
+  padding: var(--ap-space);
+  box-shadow: var(--ap-shadow);
+}
+
+.ap-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 calc(var(--ap-space) * 0.75);
+}
+
+.ap-card:where(:hover, :focus-visible) {
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.07);
+}

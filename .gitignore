@@ -30,6 +30,8 @@ release/
 !assets/dist/admin-dashboard-widgets-editor.js
 !build/index.js
 !build/index.asset.php
+!build/css/widgets.css
+!build/js/dashboard.js
 !assets/js/admin-dashboard-widgets-editor.js
 
 # ===============================

@@ -4,13 +4,13 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
  * Dashboard widget: Webhooks.
  */
 ?>
-<section id="webhooks" class="ap-dashboard-section dashboard-card" data-widget="webhooks" <?php echo $visible ? '' : 'style="display:none"'; ?>>
-    <h2><?php esc_html_e('Webhooks','artpulse'); ?></h2>
+<div id="webhooks" class="ap-card" role="region" aria-labelledby="webhooks-title" data-widget="webhooks" <?php echo $visible ? '' : 'hidden'; ?>>
+    <h2 id="webhooks-title" class="ap-card__title"><?php esc_html_e('Webhooks','artpulse'); ?></h2>
     <div id="ap-webhook-controls">
         <button id="ap-add-webhook" class="ap-form-button nectar-button"><?php esc_html_e('Add Webhook','artpulse'); ?></button>
     </div>
     <ul id="ap-webhook-list"></ul>
-    <div id="ap-webhook-modal" class="ap-org-modal" style="display:none">
+    <div id="ap-webhook-modal" class="ap-org-modal" hidden>
         <button id="ap-webhook-close" type="button" class="ap-form-button nectar-button"><?php esc_html_e('Close','artpulse'); ?></button>
         <div id="ap-webhook-msg" class="ap-form-messages" role="status" aria-live="polite"></div>
         <form id="ap-webhook-form" class="ap-form-container" data-no-ajax="true">
@@ -27,4 +27,4 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
             <button type="submit" class="ap-form-button nectar-button"><?php esc_html_e('Save','artpulse'); ?></button>
         </form>
     </div>
-</section>
+</div>

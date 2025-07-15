@@ -4,7 +4,7 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
  * Dashboard widget: Content list.
  */
 ?>
-<section id="content" class="ap-dashboard-section dashboard-card" data-widget="content" <?php echo $visible ? '' : 'style="display:none"'; ?>>
-    <h2><?php esc_html_e('Your Content','artpulse'); ?></h2>
+<div id="content" class="ap-card" role="region" aria-labelledby="content-title" data-widget="content" <?php echo $visible ? '' : 'hidden'; ?>>
+    <h2 id="content-title" class="ap-card__title"><?php esc_html_e('Your Content','artpulse'); ?></h2>
     <div id="ap-user-content"></div>
-</section>
+</div>

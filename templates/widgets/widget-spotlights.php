@@ -24,9 +24,9 @@ if ($category) {
 
 $spot_query = new WP_Query($query_args);
 ?>
-<div class="ap-widget">
-  <div class="ap-widget-header">🌟 <?php _e('Spotlights','artpulse'); ?></div>
-  <div class="ap-widget-body">
+<div id="ap-widget-spotlights" class="ap-card" role="region" aria-labelledby="ap-widget-spotlights-title">
+  <h2 id="ap-widget-spotlights-title" class="ap-card__title">🌟 <?php _e('Spotlights','artpulse'); ?></h2>
+  <div>
     <?php if ($spot_query->have_posts()) : ?>
       <?php while ($spot_query->have_posts()) : $spot_query->the_post(); ?>
         <div class="ap-spotlight-card<?php echo get_post_meta(get_the_ID(), 'is_pinned', true) ? ' is-pinned' : ''; ?>">

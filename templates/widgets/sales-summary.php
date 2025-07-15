@@ -4,7 +4,7 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
  * Dashboard widget: Sales Summary.
  */
 ?>
-<section id="sales-summary" class="ap-dashboard-section dashboard-card" data-widget="sales_summary" <?php echo $visible ? '' : 'style="display:none"'; ?>>
-    <h2><?php esc_html_e('Sales Summary','artpulse'); ?></h2>
+<div id="sales-summary" class="ap-card" role="region" aria-labelledby="sales-summary-title" data-widget="sales_summary" <?php echo $visible ? '' : 'hidden'; ?>>
+    <h2 id="sales-summary-title" class="ap-card__title"><?php esc_html_e('Sales Summary','artpulse'); ?></h2>
     <div id="ap-sales-summary"></div>
-</section>
+</div>

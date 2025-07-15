@@ -4,7 +4,7 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
  * Dashboard widget: Site Stats.
  */
 ?>
-<section id="site-stats" class="ap-dashboard-section dashboard-card" data-widget="site_stats" <?php echo $visible ? '' : 'style="display:none"'; ?>>
-    <h2><?php esc_html_e('Site Stats','artpulse'); ?></h2>
+<div id="site-stats" class="ap-card" role="region" aria-labelledby="site-stats-title" data-widget="site_stats" <?php echo $visible ? '' : 'hidden'; ?>>
+    <h2 id="site-stats-title" class="ap-card__title"><?php esc_html_e('Site Stats','artpulse'); ?></h2>
     <div id="ap-site-stats"></div>
-</section>
+</div>

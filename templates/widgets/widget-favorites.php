@@ -1,6 +1,6 @@
-<div class="ap-widget notice notice-info p-4 rounded">
-  <div class="ap-widget-header">⭐ <?php esc_html_e( 'Saved Artists', 'artpulse' ); ?></div>
-  <div class="ap-widget-body">
+<div id="ap-widget-favorites" class="ap-card" role="region" aria-labelledby="ap-widget-favorites-title">
+  <h2 id="ap-widget-favorites-title" class="ap-card__title">⭐ <?php esc_html_e( 'Saved Artists', 'artpulse' ); ?></h2>
+  <div>
     <?php
     $user_id = get_current_user_id();
     $artists = get_user_meta($user_id, 'favorite_artists', true);

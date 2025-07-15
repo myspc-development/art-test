@@ -1,6 +1,6 @@
-<div class="ap-widget notice notice-info p-4 rounded">
-  <div class="ap-widget-header">📰 <?php esc_html_e( 'Latest News', 'artpulse' ); ?></div>
-  <div class="ap-widget-body">
+<div id="ap-widget-news" class="ap-card" role="region" aria-labelledby="ap-widget-news-title">
+  <h2 id="ap-widget-news-title" class="ap-card__title">📰 <?php esc_html_e( 'Latest News', 'artpulse' ); ?></h2>
+  <div>
     <?php
     $recent_posts = get_posts(['post_type' => 'post', 'numberposts' => 3]);
     foreach ($recent_posts as $post) {
