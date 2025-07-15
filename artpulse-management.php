@@ -78,6 +78,7 @@ require_once __DIR__ . '/includes/rest-update-diagnostics.php';
 require_once plugin_dir_path(__FILE__) . 'src/Rest/EventChat.php';
 require_once __DIR__ . '/admin/page-settings.php';
 require_once __DIR__ . '/includes/hooks.php';
+require_once __DIR__ . '/includes/registration-hooks.php';
 require_once __DIR__ . '/includes/roles.php';
 require_once __DIR__ . '/includes/profile-roles.php';
 require_once __DIR__ . '/admin/menu.php';
