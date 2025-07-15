@@ -2,8 +2,8 @@
 
 .ap-dashboard-grid {
   display: grid;
-  gap: var(--ap-space);
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--ap-space, 1rem);
   align-items: start;
 }
 
