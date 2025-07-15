@@ -21,6 +21,12 @@ if (have_posts()) :
       <span class="ap-optin-message"></span>
     </form>
     <?php
+    $donate = \ArtPulse\Frontend\ap_render_donate_button(get_the_author_meta('ID'));
+    if ($donate) {
+        echo $donate;
+    }
+    ?>
+    <?php
     comments_template('/inc/comments/artist-comments.php');
     echo '</div>';
   endwhile;

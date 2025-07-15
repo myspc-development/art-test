@@ -1224,3 +1224,17 @@ select.ap-input {
     .ap-widgets-columns{flex-direction:column;}
     .ap-widgets-columns ul{max-height:200px;overflow-y:auto;}
 }
+
+.ap-donate-btn{
+    display:inline-block;
+    padding:0.4em 0.8em;
+    border:1px solid var(--ap-accent-color);
+    border-radius:var(--ap-border-radius);
+    color:var(--ap-accent-color);
+    text-decoration:none;
+    font-weight:600;
+}
+.ap-donate-btn:hover,.ap-donate-btn:focus{
+    background:var(--ap-accent-color);
+    color:#fff;
+}

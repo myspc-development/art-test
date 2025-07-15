@@ -65,30 +65,21 @@ function ap_event_calendar_links(int $event_id): string
     $end_str   = gmdate('Ymd\THis\Z', strtotime($end));
 
     $google = sprintf(
-        'https://calendar.google.com/calendar/r/eventedit?text=%s&dates=%s/%s&details=%s&location=%s',
+        'https://calendar.google.com/calendar/render?action=TEMPLATE&text=%s&dates=%s/%s&details=%s',
         rawurlencode($event->post_title),
         $start_str,
         $end_str,
-        rawurlencode(wp_strip_all_tags($event->post_content)),
-        rawurlencode(get_post_meta($event_id, 'venue_name', true))
+        rawurlencode(get_permalink($event_id))
     );
 
     $ics    = home_url('/events/' . $event_id . '/export.ics');
-    $yahoo  = sprintf(
-        'https://calendar.yahoo.com/?v=60&view=d&type=20&title=%s&st=%s&et=%s&desc=%s&in_loc=%s',
-        rawurlencode($event->post_title),
-        $start_str,
-        $end_str,
-        rawurlencode(wp_strip_all_tags($event->post_content)),
-        rawurlencode(get_post_meta($event_id, 'venue_name', true))
-    );
 
     ob_start();
     ?>
     <div class="ap-calendar-links" role="group">
         <a class="ap-calendar-google" href="<?php echo esc_url($google); ?>" target="_blank" rel="noopener noreferrer">Google</a>
-        <a class="ap-calendar-ics" href="<?php echo esc_url($ics); ?>">ICS</a>
-        <a class="ap-calendar-yahoo" href="<?php echo esc_url($yahoo); ?>" target="_blank" rel="noopener noreferrer">Yahoo</a>
+        <a class="ap-calendar-outlook" href="<?php echo esc_url($ics); ?>">Outlook</a>
+        <a class="ap-calendar-ics" href="<?php echo esc_url($ics); ?>">Apple (.ics)</a>
     </div>
     <?php
     return trim(ob_get_clean());
