@@ -43,3 +43,15 @@ function ap_get_feed(string $url): array|SimplePie {
 function ap_template_context(array $args = [], array $defaults = []): array {
     return wp_parse_args($args, $defaults);
 }
+
+function ap_safe_include(string $relative_template, string $fallback_path): void {
+    $template = locate_template($relative_template);
+    if (!$template) {
+        $template = $fallback_path;
+    }
+    if ($template && file_exists($template)) {
+        include $template;
+    } else {
+        error_log("ArtPulse: Missing template → $relative_template or fallback.");
+    }
+}

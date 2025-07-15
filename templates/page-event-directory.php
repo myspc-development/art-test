@@ -56,7 +56,10 @@ $query = new WP_Query($args);
   <?php while ($query->have_posts()): $query->the_post(); ?>
     <?php $event_id = get_the_ID(); ?>
     <div class="ap-event-card-wrap">
-      <?php $event_id = get_the_ID(); include locate_template('templates/event-card.php'); ?>
+      <?php
+      $event_id = get_the_ID();
+      ap_safe_include('templates/event-card.php', plugin_dir_path(__FILE__) . 'event-card.php');
+      ?>
     </div>
   <?php endwhile; ?>
   <?php wp_reset_postdata(); ?>

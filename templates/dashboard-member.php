@@ -1,15 +1,7 @@
 <?php
 $user_role = 'member';
 
-$template = locate_template('templates/partials/dashboard-nav.php');
-if (!$template) {
-    $template = plugin_dir_path(__FILE__) . 'partials/dashboard-nav.php';
-}
-if ($template && file_exists($template)) {
-    include $template;
-} else {
-    error_log('ArtPulse: Missing template → dashboard-nav.php');
-}
+ap_safe_include('templates/partials/dashboard-nav.php', plugin_dir_path(__FILE__) . 'partials/dashboard-nav.php');
 
 add_action('wp_enqueue_scripts', function () use ($user_role) {
     if (ap_user_can_edit_layout($user_role)) {
@@ -26,27 +18,11 @@ add_action('wp_enqueue_scripts', function () use ($user_role) {
 <div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard">
   <h2><?= ucfirst($user_role) ?> Dashboard</h2>
 <?php
-  $template = locate_template('templates/partials/dashboard-generic.php');
-  if (!$template) {
-      $template = plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php';
-  }
-  if ($template && file_exists($template)) {
-      include $template;
-  } else {
-      error_log('ArtPulse: Missing template → dashboard-generic.php');
-  }
+  ap_safe_include('templates/partials/dashboard-generic.php', plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php');
 ?>
   <div class="ap-quickstart-wrapper">
     <?php
-    $template = locate_template('templates/partials/quickstart-member-guide.php');
-    if (!$template) {
-        $template = plugin_dir_path(__FILE__) . 'partials/quickstart-member-guide.php';
-    }
-    if ($template && file_exists($template)) {
-        include $template;
-    } else {
-        error_log('ArtPulse: Missing template → quickstart-member-guide.php');
-    }
+    ap_safe_include('templates/partials/quickstart-member-guide.php', plugin_dir_path(__FILE__) . 'partials/quickstart-member-guide.php');
     ?>
   </div>
 </div>

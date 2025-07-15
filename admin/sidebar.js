@@ -1,6 +1,6 @@
 wp.plugins.registerPlugin('artpulse-sidebar', {
   render: () => (
-    wp.editPost.PluginSidebar({
+    wp.editor.PluginSidebar({
       name: 'artpulse-sidebar',
       title: 'ArtPulse Tools',
       icon: 'admin-generic',

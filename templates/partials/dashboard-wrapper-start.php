@@ -17,15 +17,7 @@
     <aside class="ap-dashboard-sidebar">
       <?php
       $show_notifications = true; // Optional logic to toggle certain links
-      $template = locate_template('partials/dashboard-nav.php');
-      if (!$template) {
-          $template = plugin_dir_path(__FILE__) . 'dashboard-nav.php';
-      }
-      if ($template && file_exists($template)) {
-          include $template;
-      } else {
-          error_log('ArtPulse: Missing template → dashboard-nav.php');
-      }
+      ap_safe_include('partials/dashboard-nav.php', plugin_dir_path(__FILE__) . 'dashboard-nav.php');
       ?>
     </aside>
     <main class="ap-dashboard-main">
