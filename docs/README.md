@@ -6,6 +6,7 @@
 - [Sprint 4: Polish + Documentation](./codex-sprint-4-polish-docs.md)
 - [Phase F: Launch, Feedback & Scale](./codex-phase-f-launch-feedback-scale.md)
 - [OpenAPI Specification](./openapi.yaml)
+- [Public Beta Setup](./public-beta-setup-codex.md)
 
 ### Developer Checklist
 
