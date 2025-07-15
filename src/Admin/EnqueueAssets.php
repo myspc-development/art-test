@@ -124,10 +124,34 @@ class EnqueueAssets {
 
     public static function enqueue_admin() {
         $screen = get_current_screen();
-        if (!isset($screen->id)) return;
+        if (!$screen) {
+            return;
+        }
+
+        // Only load admin assets on ArtPulse-related screens
+        if (strpos($screen->id, 'artpulse') === false) {
+            return;
+        }
 
         $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
+
+        // Dashboard logic for plugin admin pages
+        $dashboard_path = $plugin_dir . 'assets/js/ap-dashboard.js';
+        if (file_exists($dashboard_path)) {
+            wp_enqueue_script(
+                'ap-dashboard',
+                $plugin_url . 'assets/js/ap-dashboard.js',
+                ['wp-element', 'wp-api-fetch'],
+                filemtime($dashboard_path),
+                true
+            );
+
+            wp_localize_script('ap-dashboard', 'ArtPulseDashboardData', [
+                'nonce'    => wp_create_nonce('wp_rest'),
+                'rest_url' => esc_url_raw(rest_url('artpulse/v1/')),
+            ]);
+        }
 
         if ($screen->base === 'artpulse-settings_page_artpulse-engagement') {
             $custom_js_path = $plugin_dir . '/assets/js/ap-engagement-dashboard.js';
@@ -272,22 +296,6 @@ class EnqueueAssets {
                 'artistEndpoint'   => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
                 'exportEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/export')),
                 'deleteEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/delete')),
-            ]);
-            wp_enqueue_script(
-                'ap-dashboard',
-                $plugin_url . '/assets/js/ap-dashboard.js',
-                ['wp-element', 'wp-api-fetch'],
-                '1.0.0',
-                [
-                    'strategy'  => 'defer',
-                    'type'      => 'module',
-                    'in_footer' => true,
-                ]
-            );
-            $user = wp_get_current_user();
-            $role = $user->roles[0] ?? '';
-            wp_localize_script('ap-dashboard', 'APDashboard', [
-                'role' => $role,
             ]);
         }
          if (!wp_script_is('ap-analytics', 'enqueued')) {
