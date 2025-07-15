@@ -1,5 +1,4 @@
 <?php
-if (!defined('ABSPATH')) { exit; }
 /**
  * Plugin Name:     ArtPulse Management
  * Description:     Management plugin for ArtPulse.
@@ -8,6 +7,10 @@ if (!defined('ABSPATH')) { exit; }
  * Text Domain:     artpulse
  * License:         GPL2
  */
+
+require_once plugin_dir_path(__FILE__) . 'artpulse.php';
+
+if (!defined('ABSPATH')) { exit; }
 
 use ArtPulse\Core\Plugin;
 use ArtPulse\Core\WooCommerceIntegration;
