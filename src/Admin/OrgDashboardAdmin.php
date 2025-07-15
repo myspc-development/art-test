@@ -103,6 +103,10 @@ class OrgDashboardAdmin {
     public static function render() {
         echo '<div class="wrap"><h1>Organization Dashboard</h1>';
 
+        echo '<div class="ap-quickstart-wrapper">';
+        include plugin_dir_path(__FILE__) . '/partials/quickstart-admin-guide.php';
+        echo '</div>';
+
         // Show org select dropdown for super admins only
         if (current_user_can('administrator')) {
             $all_orgs = self::get_all_orgs();
