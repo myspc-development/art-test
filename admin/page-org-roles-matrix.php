@@ -16,6 +16,6 @@ wp_localize_script('ap-role-matrix-bundle', 'AP_RoleMatrix', [
 <?php
 add_action('admin_footer', function () {
     if (get_current_screen()->id === 'toplevel_page_ap-org-roles-matrix') {
-        echo "<script>ReactDOM.render(React.createElement(APRoleMatrix), document.getElementById('ap-role-matrix-root'));</script>";
+        echo "<script>const { createElement, render } = wp.element; render(createElement(APRoleMatrix), document.getElementById('ap-role-matrix-root'));</script>";
     }
 });
