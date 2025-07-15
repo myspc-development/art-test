@@ -222,6 +222,19 @@ class RestRoutes
             'age_range'          => 'age_range',
         ], $args);
 
+        if (!$city && !$region && is_numeric($lat) && is_numeric($lng) && is_numeric($within_km)) {
+            $lat = floatval($lat);
+            $lng = floatval($lng);
+            $km  = floatval($within_km);
+            $events = array_values(array_filter($events, function($e) use ($lat, $lng, $km) {
+                if ($e['event_lat'] === '' || $e['event_lng'] === '') {
+                    return false;
+                }
+                $d = self::geodesic_distance($lat, $lng, floatval($e['event_lat']), floatval($e['event_lng']));
+                return $d <= $km;
+            }));
+        }
+
         foreach ($events as &$event) {
             $org_id = intval($event['event_organization']);
             if ($org_id) {
