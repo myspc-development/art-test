@@ -10,7 +10,7 @@ add_action('wp_enqueue_scripts', function () use ($user_role) {
             'nonce'    => wp_create_nonce('ap_dashboard_nonce'),
         ]);
         wp_enqueue_script('dark-mode-toggle', plugin_dir_url(__FILE__) . '../assets/js/dark-mode-toggle.js', [], null, true);
-        wp_enqueue_style('dashboard-style', plugin_dir_url(__FILE__) . '../assets/css/dashboard-widget.css');
+        wp_enqueue_style('ap-dashboard', plugin_dir_url(__FILE__) . '../assets/css/dashboard-widget.css', [], '1.0.0');
     }
 });
 
