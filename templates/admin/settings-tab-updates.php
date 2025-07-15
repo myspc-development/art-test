@@ -17,3 +17,7 @@
   <h3>Update Log</h3>
   <pre><?php echo esc_html($log); ?></pre>
 <?php endif; ?>
+
+<hr>
+<h2>Advanced Update Diagnostics</h2>
+<div id="ap-update-output">Loading…</div>
