@@ -9,19 +9,16 @@
         const [users, setUsers] = useState([]);
         const [matrix, setMatrix] = useState({});
 
+        const base = `${ArtPulseOrgRoles.base}/orgs/${ArtPulseOrgRoles.orgId}/roles`;
+
         useEffect(() => {
-            apiFetch({ path: ArtPulseOrgRoles.api_path })
-                .then(setRoles)
-                .catch(() => {});
-            apiFetch({ path: ArtPulseOrgRoles.api_path + '/users' })
+            apiFetch({ path: base })
                 .then((list) => {
                     setUsers(list);
+                    setRoles(['admin','editor','curator','promoter']);
                     const m = {};
-                    list.forEach((u) => {
-                        m[u.ID] = {};
-                        (u.roles || []).forEach((r) => {
-                            m[u.ID][r] = true;
-                        });
+                    list.forEach((row) => {
+                        m[row.user_id] = { [row.role]: true };
                     });
                     setMatrix(m);
                 })
@@ -35,9 +32,9 @@
             const newMatrix = { ...matrix, [uid]: current };
             setMatrix(newMatrix);
             apiFetch({
-                path: ArtPulseOrgRoles.api_path + '/assign',
+                path: base,
                 method: 'POST',
-                data: { user_id: uid, roles: Object.keys(current).filter((k) => current[k]) },
+                data: { user_id: uid, role },
             });
         };
 

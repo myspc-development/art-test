@@ -25,6 +25,7 @@ use ArtPulse\Marketplace\AuctionManager;
 use ArtPulse\Core\VisitTracker;
 use ArtPulse\Core\MultiOrgRoles;
 use ArtPulse\Rest\VisitRestController;
+use ArtPulse\Rest\OrgUserRolesController;
 
 class Plugin
 {
@@ -273,6 +274,7 @@ class Plugin
         \ArtPulse\Admin\ScheduledMessageManager::register();
         \ArtPulse\Admin\PostStatusRejected::register();
         \ArtPulse\Rest\RestRoutes::register();
+        \ArtPulse\Rest\OrgUserRolesController::register();
         VisitRestController::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();

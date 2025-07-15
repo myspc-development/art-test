@@ -37,6 +37,7 @@ function create_monetization_tables() {
     $bids          = "{$wpdb->prefix}ap_bids";
     $promotions    = "{$wpdb->prefix}ap_promotions";
     $messages      = "{$wpdb->prefix}ap_messages";
+    $org_user_roles = "{$wpdb->prefix}ap_org_user_roles";
 
     ap_maybe_create_table($payouts, "
         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -135,6 +136,17 @@ function create_monetization_tables() {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     ");
 
+    ap_maybe_create_table($org_user_roles, "
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        org_id INT NOT NULL,
+        user_id BIGINT NOT NULL,
+        role ENUM('admin','editor','curator','promoter') DEFAULT 'editor',
+        status ENUM('active','pending','invited') DEFAULT 'active',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        KEY org_user (org_id, user_id)
+    ");
+
     // Ensure AUTO_INCREMENT is properly set for existing installs without
     // attempting to redefine the primary key.
     $has_pk = $wpdb->get_var(
@@ -172,6 +184,7 @@ function validate_monetization_tables(): void {
         $wpdb->prefix . 'ap_donations',
         $wpdb->prefix . 'ap_promotions',
         $wpdb->prefix . 'ap_messages',
+        $wpdb->prefix . 'ap_org_user_roles',
     ];
 
     foreach ($required_tables as $tbl) {
