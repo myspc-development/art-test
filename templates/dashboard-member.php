@@ -18,5 +18,8 @@ add_action('wp_enqueue_scripts', function () use ($user_role) {
 <div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard">
   <h2><?= ucfirst($user_role) ?> Dashboard</h2>
 <?php include locate_template('templates/partials/dashboard-generic.php'); ?>
+  <div class="ap-quickstart-wrapper">
+    <?php include locate_template('templates/partials/quickstart-member-guide.php'); ?>
+  </div>
 </div>
 

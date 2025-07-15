@@ -11,6 +11,16 @@ class EnqueueAssets {
         add_action('enqueue_block_editor_styles', [self::class, 'enqueue_block_editor_styles']);
         add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_frontend']);
+        add_action('admin_enqueue_scripts', function ($hook) {
+            if (in_array($hook, ['toplevel_page_ap-dashboard', 'toplevel_page_ap-org-dashboard'], true)) {
+                wp_enqueue_style(
+                    'ap-quickstart-guides',
+                    plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/css/ap-quickstart-guides.css',
+                    [],
+                    filemtime(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/css/ap-quickstart-guides.css')
+                );
+            }
+        });
     }
 
     public static function enqueue_block_editor_assets() {
