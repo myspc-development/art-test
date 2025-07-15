@@ -6,8 +6,19 @@ function ap_render_org_roles_page() {
     echo '<div id="ap-org-roles-root"></div>';
 }
 
+add_action('admin_menu', function () {
+    add_submenu_page(
+        'ap-org-dashboard',
+        'Roles Matrix',
+        'Roles Matrix',
+        'manage_options',
+        'ap-org-roles-matrix',
+        'ap_render_org_roles_page'
+    );
+});
+
 add_action('admin_enqueue_scripts', function ($hook) {
-    if ($hook !== 'ap-org-dashboard_page_ap-org-roles') {
+    if ($hook !== 'ap-org-dashboard_page_ap-org-roles-matrix') {
         return;
     }
 
