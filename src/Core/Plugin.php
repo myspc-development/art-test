@@ -695,7 +695,9 @@ class Plugin
             'dashboardUrl'    => self::get_user_dashboard_url(),
         ]);
 
-        $use_wp_menu = apply_filters('ap_use_wp_nav_menu', false);
+        $opts        = get_option('artpulse_settings', []);
+        $use_wp_menu = !empty($opts['use_wp_nav_menu']);
+        $use_wp_menu = apply_filters('ap_use_wp_nav_menu', $use_wp_menu);
 
         if (!$use_wp_menu) {
             $sidebar_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/sidebar-menu.js';
