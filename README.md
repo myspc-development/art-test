@@ -6,6 +6,8 @@ Developers extending reporting or reminder features can reference the
 [Admin & Analytics Codex](docs/admin-analytics-codex.md). Developers
 implementing ticket sales or memberships can read the
 [Monetization & Ticketing Codex](docs/monetization-ticketing-codex.md).
+For artist monetization options see the
+[Artist Monetization Tools Codex](docs/artist-monetization-tools-codex.md).
 For artist dashboards and audience metrics see the
 [Analytics & Insights Codex](docs/analytics-insights-codex.md).
 For admin and organization reporting plus per-user metrics see the
