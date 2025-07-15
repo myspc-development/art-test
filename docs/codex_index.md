@@ -12,6 +12,14 @@
 
 ---
 
+## ⚙️ Core Infrastructure & Foundation (Phase A)
+
+| Document | Sprints Covered | Status | Audience |
+|----------|-----------------|--------|----------|
+| [`codex-phase-a-core-foundation.md`](./codex-phase-a-core-foundation.md) | 1, H2, J1 | 🟢 | Dev, PM |
+
+---
+
 ## 📦 Growth & Distribution (Phase L)
 
 | Document | Sprints Covered | Status | Audience |
