@@ -57,7 +57,7 @@
 
 | Planned File | Target Sprints | Status | Notes |
 |--------------|----------------|--------|-------|
-| `codex_institutional_toolkit.md` | N1–N3 | 🔴 | Class visits, programs, RSVP upgrades |
+| `codex_institutional_toolkit.md` | N1–N3 | 🟢 | Class visits, programs, RSVP upgrades |
 | `codex_reporting_exports.md` | O1–O2 | 🔴 | Grant-ready CSVs, dashboard snapshots |
 | `codex_curation_badges.md` | M6–M7 | 🔴 | Curator trust, creator reputation |
 

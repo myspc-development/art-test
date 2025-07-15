@@ -58,3 +58,35 @@ paths:
       responses:
         '200':
           description: Ticket information
+  /checkin:
+    post:
+      summary: Record a visit check-in
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: institution
+          schema:
+            type: string
+        - in: query
+          name: group_size
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+  /event/{id}/visits/export:
+    get:
+      summary: Export visit records as CSV
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: CSV download

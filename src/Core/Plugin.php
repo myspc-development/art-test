@@ -22,6 +22,8 @@ use ArtPulse\Blocks\WidgetEmbedBlock;
 use ArtPulse\Frontend\ReactDashboardShortcode;
 use ArtPulse\Marketplace\MarketplaceManager;
 use ArtPulse\Marketplace\AuctionManager;
+use ArtPulse\Core\VisitTracker;
+use ArtPulse\Rest\VisitRestController;
 
 class Plugin
 {
@@ -74,6 +76,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\UnifiedInboxController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\CompetitionRestController::class, 'register']);
+        add_action('rest_api_init', [VisitRestController::class, 'register']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_migrate_profile_link_request_slug']);
         add_action('init', [$this, 'maybe_add_upload_cap']);
@@ -97,6 +100,7 @@ class Plugin
         add_action('init', [\ArtPulse\Community\EventChatController::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\EventVoteManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\CompetitionEntryManager::class, 'maybe_install_table']);
+        add_action('init', [VisitTracker::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Frontend\CompetitionDashboardShortcode::class, 'register']);
         add_filter('script_loader_tag', [self::class, 'add_defer'], 10, 3);
     }
@@ -134,6 +138,7 @@ class Plugin
             \ArtPulse\Core\ActivityLogger::install_table();
             \ArtPulse\Community\CommentReports::install_table();
             \ArtPulse\Community\EventVoteManager::install_table();
+            VisitTracker::install_table();
             TrendingManager::install_table();
             \ArtPulse\Core\FeedbackManager::install_table();
             \ArtPulse\Core\DelegatedAccessManager::install_table();
@@ -266,6 +271,7 @@ class Plugin
         \ArtPulse\Admin\ScheduledMessageManager::register();
         \ArtPulse\Admin\PostStatusRejected::register();
         \ArtPulse\Rest\RestRoutes::register();
+        VisitRestController::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
         \ArtPulse\Rest\ProfileMetricsController::register();
