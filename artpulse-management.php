@@ -58,6 +58,7 @@ require_once __DIR__ . '/includes/business-dashboard-widgets.php';
 require_once __DIR__ . '/includes/dashboard-messages-widget.php';
 require_once __DIR__ . '/includes/user-actions.php';
 require_once __DIR__ . '/includes/settings-register.php';
+require_once __DIR__ . '/includes/help-doc-renderer.php';
 require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';
 require_once __DIR__ . '/admin/page-dashboard-widgets.php';
 require_once __DIR__ . '/admin/page-community-roles.php';
@@ -1205,6 +1206,24 @@ add_action('widgets_init', function () {
     if (class_exists('AP_Favorite_Portfolio_Widget')) {
         register_widget('AP_Favorite_Portfolio_Widget');
     }
+});
+
+// --- Help Guide Shortcodes & Styles ---
+add_action('admin_enqueue_scripts', function ($hook) {
+    wp_enqueue_style(
+        'ap-help-style',
+        plugin_dir_url(__FILE__) . 'assets/css/ap-help.css',
+        [],
+        filemtime(plugin_dir_path(__FILE__) . 'assets/css/ap-help.css')
+    );
+});
+
+add_shortcode('ap_admin_guide', function () {
+    return ap_render_help_markdown('Admin_Help.md');
+});
+
+add_shortcode('ap_member_guide', function () {
+    return ap_render_help_markdown('Member_Help.md');
 });
 
 
