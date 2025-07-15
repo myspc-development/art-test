@@ -21,6 +21,22 @@ class OrgRolesController {
                 return current_user_can('manage_options');
             },
         ]);
+
+        register_rest_route('artpulse/v1', '/org-roles/users', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'get_users_with_roles'],
+            'permission_callback' => static function () {
+                return current_user_can('manage_options');
+            },
+        ]);
+
+        register_rest_route('artpulse/v1', '/org-roles/assign', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'assign_roles_to_user'],
+            'permission_callback' => static function () {
+                return current_user_can('manage_options');
+            },
+        ]);
     }
 
     public static function enqueue_script(): void {
@@ -115,5 +131,42 @@ class OrgRolesController {
         }
 
         wp_send_json_success($result);
+    }
+
+    public static function get_users_with_roles(WP_REST_Request $request): WP_REST_Response {
+        $org_id = absint($request->get_param('org_id'));
+        if (!$org_id) {
+            $user_id = get_current_user_id();
+            $org_id  = intval(get_user_meta($user_id, 'ap_organization_id', true));
+        }
+
+        $users = get_users([
+            'meta_key'   => 'ap_organization_id',
+            'meta_value' => $org_id,
+        ]);
+
+        $data = [];
+        foreach ($users as $u) {
+            $data[] = [
+                'ID'           => $u->ID,
+                'display_name' => $u->display_name,
+                'roles'        => OrgRoleManager::get_user_roles($u->ID),
+            ];
+        }
+
+        return rest_ensure_response($data);
+    }
+
+    public static function assign_roles_to_user(WP_REST_Request $request): WP_REST_Response {
+        $user_id = absint($request['user_id']);
+        $roles   = array_map('sanitize_key', (array) $request['roles']);
+
+        if (!$user_id || empty($roles)) {
+            return new WP_REST_Response(['error' => 'Invalid user or roles'], 400);
+        }
+
+        OrgRoleManager::assign_roles($user_id, $roles);
+
+        return new WP_REST_Response(['success' => true]);
     }
 }

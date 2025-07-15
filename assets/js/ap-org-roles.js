@@ -4,46 +4,45 @@
 
     apiFetch.use(apiFetch.createNonceMiddleware(ArtPulseOrgRoles.nonce));
 
-    const LoadingSpinner = () =>
-        createElement('p', { className: 'ap-org-roles-loading' }, 'Loading…');
-
-    const ErrorMessage = ({ message }) =>
-        createElement(
-            'p',
-            { className: 'ap-org-roles-error', style: { color: 'red' } },
-            'Error: ',
-            message
-        );
-
-    const RoleTableRow = ({ role }) =>
-        createElement(
-            'tr',
-            null,
-            createElement('td', null, role.label),
-            createElement('td', null, role.description || ''),
-            createElement(
-                'td',
-                { style: { textAlign: 'center' } },
-                role.user_count ?? 0
-            )
-        );
-
-    function OrgRolesPanel() {
-        const [roles, setRoles] = useState(null);
-        const [error, setError] = useState('');
+    function OrgRolesMatrix() {
+        const [roles, setRoles] = useState([]);
+        const [users, setUsers] = useState([]);
+        const [matrix, setMatrix] = useState({});
 
         useEffect(() => {
             apiFetch({ path: ArtPulseOrgRoles.api_url })
                 .then(setRoles)
-                .catch((e) => setError(e.message));
+                .catch(() => {});
+            apiFetch({ path: ArtPulseOrgRoles.api_url + '/users' })
+                .then((list) => {
+                    setUsers(list);
+                    const m = {};
+                    list.forEach((u) => {
+                        m[u.ID] = {};
+                        (u.roles || []).forEach((r) => {
+                            m[u.ID][r] = true;
+                        });
+                    });
+                    setMatrix(m);
+                })
+                .catch(() => {});
         }, []);
 
-        if (error) {
-            return createElement(ErrorMessage, { message: error });
-        }
+        const toggle = (uid, role) => {
+            const checked = !matrix[uid]?.[role];
+            const current = { ...(matrix[uid] || {}) };
+            current[role] = checked;
+            const newMatrix = { ...matrix, [uid]: current };
+            setMatrix(newMatrix);
+            apiFetch({
+                path: ArtPulseOrgRoles.api_url + '/assign',
+                method: 'POST',
+                data: { user_id: uid, roles: Object.keys(current).filter((k) => current[k]) },
+            });
+        };
 
-        if (!roles) {
-            return createElement(LoadingSpinner);
+        if (!roles.length || !users.length) {
+            return createElement('p', null, 'Loading…');
         }
 
         return createElement(
@@ -55,30 +54,37 @@
                 createElement(
                     'tr',
                     null,
-                    createElement('th', null, 'Role Name'),
-                    createElement('th', null, 'Description'),
-                    createElement('th', null, 'Members')
+                    createElement('th', null, 'User'),
+                    roles.map((r) => createElement('th', { key: r.key }, r.label))
                 )
             ),
             createElement(
                 'tbody',
                 null,
-                roles.map((r) =>
-                    createElement(RoleTableRow, { key: r.key, role: r })
+                users.map((u) =>
+                    createElement(
+                        'tr',
+                        { key: u.ID },
+                        createElement('td', null, u.display_name),
+                        roles.map((r) =>
+                            createElement('td', { key: r.key, style: { textAlign: 'center' } },
+                                createElement('input', {
+                                    type: 'checkbox',
+                                    checked: matrix[u.ID]?.[r.key] || false,
+                                    onChange: () => toggle(u.ID, r.key),
+                                })
+                            )
+                        )
+                    )
                 )
             )
         );
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        if (typeof ArtPulseOrgRoles === 'undefined') {
-            console.error('ArtPulseOrgRoles not localised');
-            return;
-        }
-
         const root = document.getElementById('ap-org-roles-root');
-        if (!root) return;
-
-        render(createElement(OrgRolesPanel), root);
+        if (root) {
+            render(createElement(OrgRolesMatrix), root);
+        }
     });
 })();

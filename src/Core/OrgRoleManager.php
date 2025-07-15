@@ -6,35 +6,35 @@ use ArtPulse\Core\RoleAuditLogger;
 class OrgRoleManager
 {
     /**
-     * Map org roles to capabilities.
-     * @var array<string,array<int,string>>
+     * Default role definitions loaded when an organization has none saved.
+     *
+     * @return array<string,array<string,mixed>>
      */
-    private const DEFAULT_ROLES = [
-        'org_admin' => [
-            'manage_org',
-            'manage_events',
-            'manage_users',
-            'manage_finances',
-            'export_data',
-            'view_events',
-            'view_finance',
-            'view_analytics',
-        ],
-        'event_manager' => [
-            'manage_events',
-            'view_events',
-            'view_analytics',
-        ],
-        'finance_manager' => [
-            'view_finance',
-            'manage_finances',
-            'export_data',
-        ],
-        'viewer' => [
-            'view_events',
-            'view_analytics',
-        ],
-    ];
+    private static function default_roles(): array
+    {
+        $file = dirname(ARTPULSE_PLUGIN_FILE) . '/config/roles.php';
+        if (file_exists($file)) {
+            $roles = include $file;
+            if (is_array($roles)) {
+                return $roles;
+            }
+        }
+
+        return [
+            'admin'   => [
+                'name'        => 'Org Admin',
+                'description' => 'Full access',
+            ],
+            'curator' => [
+                'name'        => 'Curator',
+                'description' => 'Manages exhibitions',
+            ],
+            'editor'  => [
+                'name'        => 'Content Editor',
+                'description' => 'Edits org posts',
+            ],
+        ];
+    }
 
     /**
      * List of all capabilities that can be assigned.
@@ -57,13 +57,7 @@ class OrgRoleManager
     {
         $roles = get_post_meta($org_id, 'ap_org_roles', true);
         if (!is_array($roles) || empty($roles)) {
-            $roles = [];
-            foreach (self::DEFAULT_ROLES as $key => $caps) {
-                $roles[$key] = [
-                    'name' => ucwords(str_replace('_', ' ', $key)),
-                    'caps' => $caps,
-                ];
-            }
+            $roles = self::default_roles();
         }
         return $roles;
     }
