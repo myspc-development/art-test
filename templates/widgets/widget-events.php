@@ -1,6 +1,6 @@
-<div class="ap-widget notice notice-info p-4 rounded">
-  <div class="ap-widget-header">🎟 <?php esc_html_e( 'Upcoming Events', 'artpulse' ); ?></div>
-  <div class="ap-widget-body">
+<div id="ap-widget-events" class="ap-card" role="region" aria-labelledby="ap-widget-events-title">
+  <h2 id="ap-widget-events-title" class="ap-card__title">🎟 <?php esc_html_e( 'Upcoming Events', 'artpulse' ); ?></h2>
+  <div>
     <?php
     $events = get_posts(['post_type' => 'artpulse_event', 'numberposts' => 3]);
     foreach ($events as $event) {

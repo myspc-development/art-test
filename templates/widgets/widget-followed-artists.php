@@ -7,9 +7,9 @@ $ids = get_user_meta($user_id, 'followed_artists', true);
 $ids = array_filter(array_map('intval', (array)$ids));
 $artists = $ids ? get_users(['include' => $ids]) : [];
 ?>
-<div class="ap-widget">
-  <div class="ap-widget-header">🎨 <?php _e('Followed Artists','artpulse'); ?></div>
-  <div class="ap-widget-body">
+<div id="ap-widget-followed-artists" class="ap-card" role="region" aria-labelledby="ap-widget-followed-artists-title">
+  <h2 id="ap-widget-followed-artists-title" class="ap-card__title">🎨 <?php _e('Followed Artists','artpulse'); ?></h2>
+  <div>
     <?php if ($artists): ?>
       <div class="ap-grid">
         <?php foreach ($artists as $artist): ?>

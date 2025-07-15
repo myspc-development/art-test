@@ -54,6 +54,7 @@ require_once __DIR__ . '/src/Frontend/DonationHelpers.php';
 require_once __DIR__ . '/includes/widgets/class-ap-widget.php';
 require_once __DIR__ . '/includes/widgets/class-favorite-portfolio-widget.php';
 require_once __DIR__ . '/src/helpers.php';
+require_once __DIR__ . '/inc/dashboard-registry.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/guide-dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
