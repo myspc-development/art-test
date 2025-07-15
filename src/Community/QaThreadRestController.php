@@ -69,6 +69,14 @@ class QaThreadRestController {
         if (($start && $now < $start) || ($end && $now > $end)) {
             return new WP_Error('closed', 'Thread closed', ['status' => 403]);
         }
+        $participants = get_post_meta($thread->ID, 'participants', true);
+        if (is_array($participants) && !empty($participants)) {
+            $uid = get_current_user_id();
+            $allowed = array_map('intval', $participants);
+            if (!in_array($uid, $allowed, true)) {
+                return new WP_Error('forbidden', 'Not allowed', ['status' => 403]);
+            }
+        }
         $content = sanitize_text_field($req['content']);
         if ($content === '') {
             return new WP_Error('empty', 'Content required', ['status' => 400]);
