@@ -31,4 +31,5 @@ Example response:
 - All forms show clear error/success messages.
 - Widgets respect dark mode and load quickly.
 - Documentation compiled and available in `/docs`.
+- `openapi.yaml` generated for partner integrations.
 

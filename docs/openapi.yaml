@@ -1,0 +1,60 @@
+openapi: 3.0.1
+info:
+  title: ArtPulse Partner API
+  version: "1.0.0"
+servers:
+  - url: /wp-json/artpulse/v1
+paths:
+  /status:
+    get:
+      summary: Get plugin and database versions
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  plugin_version:
+                    type: string
+                  db_version:
+                    type: string
+                  cache:
+                    type: string
+                  debug:
+                    type: boolean
+  /filtered-posts:
+    get:
+      summary: Retrieve posts filtered by taxonomy terms
+      parameters:
+        - in: query
+          name: post_type
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: taxonomy
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: terms
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: A list of posts
+  /event/{id}/tickets:
+    get:
+      summary: List available ticket tiers for an event
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ticket information
