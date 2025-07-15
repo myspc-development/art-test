@@ -1,0 +1,56 @@
+<?php
+/**
+ * Dashboard widgets that display the Admin and Member guides.
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+use ArtPulse\Core\DashboardWidgetRegistry;
+
+function ap_widget_admin_guide(array $vars = []): string
+{
+    $doc = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/docs/Admin_Help.md';
+    $parsedown = new Parsedown();
+    $parsedown->setSafeMode(true);
+    $content = file_exists($doc) ? $parsedown->text(file_get_contents($doc)) : '<p>' . esc_html__('Guide not found.', 'artpulse') . '</p>';
+    $vars['id'] = 'admin-guide';
+    $vars['title'] = __('Admin Guide', 'artpulse');
+    $vars['content'] = $content;
+    return ap_load_dashboard_template('widgets/guide.php', $vars);
+}
+
+function ap_widget_member_guide(array $vars = []): string
+{
+    $doc = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/docs/Member_Help.md';
+    $parsedown = new Parsedown();
+    $parsedown->setSafeMode(true);
+    $content = file_exists($doc) ? $parsedown->text(file_get_contents($doc)) : '<p>' . esc_html__('Guide not found.', 'artpulse') . '</p>';
+    $vars['id'] = 'member-guide';
+    $vars['title'] = __('Member Guide', 'artpulse');
+    $vars['content'] = $content;
+    return ap_load_dashboard_template('widgets/guide.php', $vars);
+}
+
+function ap_register_guide_widgets(): void
+{
+    DashboardWidgetRegistry::register(
+        'admin_guide',
+        __('Admin Guide', 'artpulse'),
+        'book-open',
+        __('Getting started instructions for administrators.', 'artpulse'),
+        'ap_widget_admin_guide',
+        [ 'roles' => ['administrator', 'organization'] ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'member_guide',
+        __('Member Guide', 'artpulse'),
+        'book',
+        __('Getting started instructions for members.', 'artpulse'),
+        'ap_widget_member_guide',
+        [ 'roles' => ['member', 'artist', 'organization'] ]
+    );
+}
+add_action('artpulse_register_dashboard_widget', 'ap_register_guide_widgets');
