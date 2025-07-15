@@ -11,15 +11,7 @@ get_header();
 
 $dashboard_class = $user_role . '-dashboard';
 $dashboard_title = ucfirst($user_role) . ' Dashboard';
-$template = locate_template('partials/dashboard-wrapper-start.php');
-if (!$template) {
-    $template = plugin_dir_path(__FILE__) . 'dashboard-wrapper-start.php';
-}
-if ($template && file_exists($template)) {
-    include $template;
-} else {
-    error_log('ArtPulse: Missing template → dashboard-wrapper-start.php');
-}
+ap_safe_include('partials/dashboard-wrapper-start.php', plugin_dir_path(__FILE__) . 'dashboard-wrapper-start.php');
 
 // Admin preview selector
 if (current_user_can('manage_options')): ?>
@@ -121,14 +113,6 @@ if (empty($layout)) {
 ?>
 
 <?php
-$template = locate_template('partials/dashboard-wrapper-end.php');
-if (!$template) {
-    $template = plugin_dir_path(__FILE__) . 'dashboard-wrapper-end.php';
-}
-if ($template && file_exists($template)) {
-    include $template;
-} else {
-    error_log('ArtPulse: Missing template → dashboard-wrapper-end.php');
-}
+ap_safe_include('partials/dashboard-wrapper-end.php', plugin_dir_path(__FILE__) . 'dashboard-wrapper-end.php');
 get_footer();
 ?>
