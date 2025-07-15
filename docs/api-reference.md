@@ -304,6 +304,21 @@ Parameters:
 - `type` (`featured` default)
 - `priority_level` (int)
 
+### `POST /artpulse/v1/profile/{id}/verify`
+
+Mark a profile as verified. Administrator access required.
+
+Parameters:
+
+- `id` (int, required)
+
+Example request:
+
+```bash
+curl -X POST -H 'X-WP-Nonce: <nonce>' \
+  '/wp-json/artpulse/v1/profile/42/verify'
+```
+
 ## User Meta Fields
 
 Several endpoints store preferences using user meta. Keys of interest:

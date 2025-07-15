@@ -280,6 +280,7 @@ class Plugin
         \ArtPulse\Rest\DashboardMessagesController::register();
         \ArtPulse\Rest\MessagesController::register();
         \ArtPulse\Rest\CuratorRestController::register();
+        \ArtPulse\Rest\ProfileVerificationController::register();
         \ArtPulse\Rest\CommunityAnalyticsController::register();
         ArtistRestController::register();
         RestRelationships::register();
