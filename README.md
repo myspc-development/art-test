@@ -39,6 +39,7 @@ Additional resources:
 - [End-to-End Testing Guide](docs/End_to_End_Testing_Guide.md)
 - [Help Resources](docs/help-resources.md)
 - [Sprint Workflow Codex](docs/sprint-workflow-codex.md)
+- [Sprint 4 Polish & Documentation Codex](docs/sprint4-polish-documentation-codex.md)
 
 Styling now relies on the Salient theme and WPBakery builder. See
 [`assets/docs/Style_Guide.md`](assets/docs/Style_Guide.md) for
