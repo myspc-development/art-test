@@ -14,18 +14,28 @@ apiFetch.use(apiFetch.createNonceMiddleware(ArtPulseDashboardData.nonce));
 
 /* ----------------  Shared Components ---------------- */
 
-const Box = ({ title, children }) => (
-  <div style={{
-    margin: '16px 0', padding: '16px',
-    border: '1px solid #ccd0d4', borderRadius: '6px',
-    background: '#fff'
-  }}>
-    <h2 style={{ marginTop: 0 }}>{title}</h2>
-    {children}
-  </div>
-);
+const Box = ({ title, children }) => {
+  const id = `box-${title.replace(/\s+/g, '-').toLowerCase()}`;
+  return (
+    <section
+      aria-labelledby={id}
+      style={{
+        margin: '16px 0',
+        padding: '16px',
+        border: '1px solid #ccd0d4',
+        borderRadius: '6px',
+        background: '#fff'
+      }}
+    >
+      <h2 id={id} style={{ marginTop: 0 }}>{title}</h2>
+      {children}
+    </section>
+  );
+};
 
-const Loading = () => <p>Loading…</p>;
+const Loading = () => (
+  <p role="status" aria-live="polite">Loading…</p>
+);
 const ErrorMsg = ({ msg }) => <p style={{ color: 'red' }}>Error: {msg}</p>;
 
 /* ----------------  Artist Overview Panel ------------- */
@@ -100,7 +110,8 @@ const SystemStatusPanel = () => {
       {err && <ErrorMsg msg={err} />}
       {status && (
         <ul>
-          <li>Plugin Version: {status.version}</li>
+          <li>Plugin Version: {status.plugin_version}</li>
+          <li>Database Version: {status.db_version}</li>
           <li>Cache: {status.cache}</li>
           <li>Debug Mode: {status.debug ? 'On' : 'Off'}</li>
         </ul>

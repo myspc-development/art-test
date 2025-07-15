@@ -38,15 +38,17 @@ export default function SidebarMenu({ role, activeSection, setActiveSection }) {
   const menu = rolesMenus[role] || [];
 
   return (
-    <nav className="ap-dashboard-sidebar">
-      <ul>
+    <nav className="ap-dashboard-sidebar" aria-label="Dashboard sections">
+      <ul role="menu">
         {menu.map(item => {
           const Icon = icons[item.icon] || (() => null);
           const active = item.section === activeSection;
           return (
-            <li key={item.section}>
+            <li key={item.section} role="none">
               <button
                 type="button"
+                role="menuitem"
+                aria-current={active ? 'page' : undefined}
                 onClick={() => setActiveSection(item.section)}
                 className={`ap-sidebar-link ${active ? 'active' : ''}`}
               >
