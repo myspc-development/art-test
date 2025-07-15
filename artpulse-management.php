@@ -8,9 +8,15 @@
  * License:         GPL2
  */
 
-require_once plugin_dir_path(__FILE__) . 'artpulse.php';
-
 if (!defined('ABSPATH')) { exit; }
+
+// Define ARTPULSE_PLUGIN_FILE constant before loading dependencies
+if (!defined('ARTPULSE_PLUGIN_FILE')) {
+    define('ARTPULSE_PLUGIN_FILE', __FILE__);
+}
+
+// Load main plugin logic
+require_once plugin_dir_path(__FILE__) . 'artpulse.php';
 
 use ArtPulse\Core\Plugin;
 use ArtPulse\Core\WooCommerceIntegration;
@@ -24,11 +30,6 @@ use ArtPulse\Rest\OrgRolesController;
 if (defined('WP_DEBUG') && WP_DEBUG) {
     @ini_set('display_errors', '0');
     @error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
-}
-
-// Define ARTPULSE_PLUGIN_FILE constant (THIS IS CRUCIAL - MUST BE DEFINED CORRECTLY)
-if (!defined('ARTPULSE_PLUGIN_FILE')) {
-    define('ARTPULSE_PLUGIN_FILE', __FILE__);
 }
 
 // Load Composer autoloader
@@ -220,7 +221,7 @@ $plugin = new WooCommerceIntegration();
 $artworkSync = new ArtworkWooSync();
 
 // ✅ Hook for activation
-register_activation_hook(__FILE__, function () {
+register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     artpulse_create_custom_table();
     \ArtPulse\Core\FeedbackManager::install_table();
@@ -248,7 +249,7 @@ function ap_install_tables() {
         update_option('ap_db_version', '1.4.0');
     }
 }
-register_activation_hook(__FILE__, 'ap_install_tables');
+register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ap_install_tables');
 
 
 // Register Dashboard Preview admin page

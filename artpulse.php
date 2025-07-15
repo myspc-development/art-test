@@ -3,17 +3,17 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Plugin loader with version migration.
  */
-require_once __DIR__ . '/artpulse-management.php';
+// Core management bootstrap is loaded by artpulse-management.php
 require_once __DIR__ . '/includes/db-schema.php';
 
-register_activation_hook(__FILE__, function () {
+register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
     $settings = get_option('artpulse_settings', []);
     $settings = array_merge(artpulse_get_default_settings(), $settings);
     update_option('artpulse_settings', $settings);
 });
 
 // Setup monetization tables on activation
-register_activation_hook(__FILE__, 'ArtPulse\\DB\\create_monetization_tables');
+register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ArtPulse\\DB\\create_monetization_tables');
 
 // Optional manual repair: create tables via ?repair_artpulse_db
 add_action('plugins_loaded', function () {
