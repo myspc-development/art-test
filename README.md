@@ -24,6 +24,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Finance & Payout Codex](docs/financial-overview-codex.md) explains revenue summaries, transaction filtering and payout history.
 [Internal Notes & Task Tracking Codex](docs/internal-notes-tasks-codex.md) covers collaboration features.
 [Moderation & Flagging Codex](docs/moderation-flagging-codex.md) details the optional reporting workflow and admin review screens.
+[Mapping & Q&A Threads Codex](docs/mapping-qa-codex.md) covers the new discovery map and event discussion threads.
 [Webhook Automations Codex](docs/webhook-automation-codex.md) describes webhook management and payload delivery.
 [Dashboard Menu Codex](docs/dashboard-menu-codex.md) explains how the sidebar menu is generated.
 [Widget Settings Codex](docs/widget-settings-codex.md) describes widget schemas and per-user storage.
