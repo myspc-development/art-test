@@ -111,7 +111,7 @@ class OrgDashboardAdmin {
         if (current_user_can('administrator')) {
             $all_orgs = self::get_all_orgs();
             $selected_org = self::get_current_org_id();
-            echo '<form method="get" style="margin-bottom:1em;"><input type="hidden" name="page" value="ap-org-dashboard" />';
+            echo '<form method="get"><input type="hidden" name="page" value="ap-org-dashboard" />';
             echo '<label for="ap-org-select"><strong>Select Organization: </strong></label>';
             echo '<select name="org_id" id="ap-org-select" onchange="this.form.submit()">';
             foreach ($all_orgs as $org) {
@@ -133,7 +133,7 @@ class OrgDashboardAdmin {
 
     // --- SECTION: Linked Artists ---
     private static function render_linked_artists() {
-        echo '<h2>Linked Artists</h2>';
+        echo '<h2 class="ap-card__title">Linked Artists</h2>';
         $org_id = self::get_current_org_id();
         if (!$org_id) {
             echo '<p>No organization assigned to your user.</p>';
@@ -257,7 +257,7 @@ class OrgDashboardAdmin {
 
     // --- SECTION: Org Artworks ---
     private static function render_org_artworks() {
-        echo '<h2>Artworks</h2>';
+        echo '<h2 class="ap-card__title">Artworks</h2>';
         $org_id = self::get_current_org_id();
         if (!$org_id) {
             echo '<p>No organization assigned to your user.</p>';
@@ -281,7 +281,7 @@ class OrgDashboardAdmin {
 
     // --- SECTION: Org Events ---
     private static function render_org_events() {
-        echo '<h2>Events</h2>';
+        echo '<h2 class="ap-card__title">Events</h2>';
         $org_id = self::get_current_org_id();
         if (!$org_id) {
             echo '<p>No organization assigned to your user.</p>';
@@ -306,7 +306,7 @@ class OrgDashboardAdmin {
     // --- SECTION: Communications ---
     private static function render_org_communications(): void
     {
-        echo '<h2>Communications</h2>';
+        echo '<h2 class="ap-card__title">Communications</h2>';
         $org_id = self::get_current_org_id();
         if (!$org_id) {
             echo '<p>No organization assigned to your user.</p>';
@@ -334,7 +334,7 @@ class OrgDashboardAdmin {
 
     // --- SECTION: Org Analytics (stub) ---
     private static function render_org_analytics() {
-        echo '<h2>Analytics</h2>';
+        echo '<h2 class="ap-card__title">Analytics</h2>';
         // Example analytics: total views and favorites from artworks
         $org_id = self::get_current_org_id();
         if (!$org_id) {
@@ -364,7 +364,7 @@ class OrgDashboardAdmin {
 
     // --- SECTION: Billing History ---
     private static function render_billing_history() {
-        echo '<h2>Billing History</h2>';
+        echo '<h2 class="ap-card__title">Billing History</h2>';
         $org_id = self::get_current_org_id();
         if (!$org_id) {
             echo '<p>No organization assigned to your user.</p>';

@@ -2,7 +2,7 @@ html {
   scroll-behavior: smooth;
 }
 
-.salient-widget-card {
+.ap-card {
     background: var(--ap-bg-color, #fff);
     border: 1px solid var(--ap-border-color, #ddd);
     border-radius: var(--ap-border-radius, 4px);

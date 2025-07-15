@@ -38,9 +38,9 @@ class ImportExportTab
     {
         ?>
         <div id="ap-import-export">
-            <h2><?php esc_html_e('Import CSV', 'artpulse'); ?></h2>
+            <h2 class="ap-card__title"><?php esc_html_e('Import CSV', 'artpulse'); ?></h2>
             <input type="file" id="ap-csv-file" accept=".csv" />
-            <p style="margin-top:10px;">
+            <p>
                 <label><input type="checkbox" id="ap-csv-has-header" checked> <?php esc_html_e('File has header row', 'artpulse'); ?></label>
             </p>
             <p>
@@ -51,23 +51,23 @@ class ImportExportTab
                     <option value="tab">Tab</option>
                     <option value="custom"><?php esc_html_e('Custom', 'artpulse'); ?></option>
                 </select>
-                <input type="text" id="ap-csv-delimiter-custom" style="width:40px;display:none;" maxlength="1" />
+                <input type="text" id="ap-csv-delimiter-custom" maxlength="1" />
             </p>
             <p>
                 <label for="ap-csv-skip"><?php esc_html_e('Rows to skip', 'artpulse'); ?></label>
-                <input type="number" id="ap-csv-skip" value="0" min="0" style="width:60px;" />
+                <input type="number" id="ap-csv-skip" value="0" min="0" />
             </p>
             <p>
                 <label><input type="checkbox" id="ap-trim-whitespace" /> <?php esc_html_e('Trim whitespace from values', 'artpulse'); ?></label>
             </p>
-            <div id="ap-mapping-step" style="margin-top:20px;"></div>
-            <p style="margin-top:10px;">
+            <div id="ap-mapping-step"></div>
+            <p>
                 <button id="ap-save-template" class="button"><?php esc_html_e('Save Mapping Template', 'artpulse'); ?></button>
             </p>
             <button id="ap-start-import" class="button button-primary" disabled><?php esc_html_e('Start Import', 'artpulse'); ?></button>
             <pre id="ap-import-status"></pre>
             <hr>
-            <h2><?php esc_html_e('Export Posts', 'artpulse'); ?></h2>
+            <h2 class="ap-card__title"><?php esc_html_e('Export Posts', 'artpulse'); ?></h2>
             <p>
                 <a href="<?php echo esc_url(add_query_arg('ap_export_posts', 'artpulse_org')); ?>" class="button"><?php esc_html_e('Export Organizations', 'artpulse'); ?></a>
                 <a href="<?php echo esc_url(add_query_arg('ap_export_posts', 'artpulse_event')); ?>" class="button"><?php esc_html_e('Export Events', 'artpulse'); ?></a>

@@ -1,5 +1,5 @@
 <div class="ap-quickstart-guide">
-  <h2>Member Quickstart Guide</h2>
+  <h2 class="ap-card__title">Member Quickstart Guide</h2>
   <section>
     <h3>1. Create Profile</h3>
     <ul>

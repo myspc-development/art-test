@@ -1,5 +1,5 @@
 <div class="ap-account-settings">
-    <h2><?php esc_html_e('Account Settings', 'artpulse'); ?></h2>
+    <h2 class="ap-card__title"><?php esc_html_e('Account Settings', 'artpulse'); ?></h2>
     <form id="ap-notification-prefs" class="ap-form-container">
         <label>
             <input type="checkbox" name="email" <?php checked($email); ?>>

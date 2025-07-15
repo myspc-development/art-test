@@ -37,7 +37,7 @@ class AdminColumnsOrganisation
                 $url = get_post_meta( $post_id, 'ead_org_logo_url', true );
                 if ( $url ) {
                     printf(
-                        '<a href="%1$s" target="_blank"><img src="%1$s" style="max-width:80px;height:auto;" /></a>',
+                        '<a href="%1$s" target="_blank"><img src="%1$s" /></a>',
                         esc_url( $url )
                     );
                 } else {
@@ -73,7 +73,7 @@ class AdminColumnsOrganisation
                 $url = get_post_meta( $post_id, 'ead_org_banner_url', true );
                 if ( $url ) {
                     printf(
-                        '<a href="%1$s" target="_blank"><img src="%1$s" style="max-width:80px;height:auto;" /></a>',
+                        '<a href="%1$s" target="_blank"><img src="%1$s" /></a>',
                         esc_url( $url )
                     );
                 } else {

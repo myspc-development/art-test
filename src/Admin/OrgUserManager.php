@@ -61,10 +61,10 @@ class OrgUserManager
         $org_id = self::get_current_org_id();
         echo '<div class="wrap">';
         echo '<h1>' . esc_html__('Organization Users', 'artpulse') . '</h1>';
-        echo '<h2>' . esc_html__('Invite Users', 'artpulse') . '</h2>';
+        echo '<h2 class="ap-card__title">' . esc_html__('Invite Users', 'artpulse') . '</h2>';
         echo '<form id="ap-org-invite-form" method="post" enctype="multipart/form-data">';
         echo '<input type="file" id="ap-invite-csv" accept=".csv" />';
-        echo '<textarea id="ap-invite-emails" rows="3" style="width:100%;max-width:600px" placeholder="email@example.com"></textarea>';
+        echo '<textarea id="ap-invite-emails" rows="3" placeholder="email@example.com"></textarea>';
         $roles = \ArtPulse\Core\OrgRoleManager::get_roles($org_id);
         echo '<select id="ap-invite-role">';
         foreach ($roles as $key => $data) {
@@ -83,7 +83,7 @@ class OrgUserManager
             'order'      => 'DESC',
         ]);
 
-        echo '<h2>' . esc_html__('Organization Members', 'artpulse') . '</h2>';
+        echo '<h2 class="ap-card__title">' . esc_html__('Organization Members', 'artpulse') . '</h2>';
         echo '<form id="ap-org-user-list">';
         echo '<select id="ap-org-bulk-action">';
         echo '<option value="">' . esc_html__('Bulk Action', 'artpulse') . '</option>';
@@ -92,7 +92,7 @@ class OrgUserManager
         echo '<option value="delete">' . esc_html__('Delete', 'artpulse') . '</option>';
         echo '</select> ';
         echo '<button class="button" type="submit">' . esc_html__('Apply', 'artpulse') . '</button>';
-        echo '<table class="widefat striped" style="margin-top:10px">';
+        echo '<table class="widefat striped">';
         echo '<thead><tr><th><input type="checkbox" id="ap-select-all" /></th><th>' . esc_html__('User', 'artpulse') . '</th><th>' . esc_html__('Email', 'artpulse') . '</th><th>' . esc_html__('Role', 'artpulse') . '</th></tr></thead><tbody>';
         foreach ($users as $user) {
             $roles = \ArtPulse\Core\OrgRoleManager::get_user_roles($user->ID);

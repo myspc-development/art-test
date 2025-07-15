@@ -6,7 +6,7 @@
  */
 ?>
 <div class="ap-dashboard-wrap <?php echo esc_attr($dashboard_class ?? ''); ?>">
-  <h2><?php echo esc_html($dashboard_title ?? __('Dashboard', 'artpulse')); ?></h2>
+  <h2 class="ap-card__title"><?php echo esc_html($dashboard_title ?? __('Dashboard', 'artpulse')); ?></h2>
   <form method="post" class="ap-dashboard-reset ap-inline-form">
     <?php wp_nonce_field('ap_reset_user_layout'); ?>
     <input type="hidden" name="reset_user_layout" value="1" />
@@ -28,6 +28,6 @@
       $summary = \ArtPulse\Frontend\EventRsvpHandler::get_rsvp_summary_for_user($user->ID);
       $events  = $summary['going'] ?? 0;
       ?>
-      <h2>Welcome back, <?= esc_html($user->display_name) ?> 👋</h2>
+      <h2 class="ap-card__title">Welcome back, <?= esc_html($user->display_name) ?> 👋</h2>
       <p>You're following <?= $follows ?> artists. You’ve RSVP’d to <?= $events ?> events.</p>
 

@@ -27,7 +27,7 @@ class MemberEnhancements
 
         $note = get_user_meta($user->ID, 'ap_admin_note', true);
 
-        echo '<h2>Admin Notes</h2>';
+        echo '<h2 class="ap-card__title">Admin Notes</h2>';
         echo '<textarea name="ap_admin_note" rows="5" cols="70">' . esc_textarea($note) . '</textarea>';
         echo '<p class="description">Visible only to site administrators.</p>';
     }
@@ -49,7 +49,7 @@ class MemberEnhancements
             $badges = [];
         }
 
-        echo '<h2>' . esc_html__('User Badges', 'artpulse') . '</h2>';
+        echo '<h2 class="ap-card__title">' . esc_html__('User Badges', 'artpulse') . '</h2>';
         echo '<input type="text" name="user_badges" value="' . esc_attr(implode(',', $badges)) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Comma-separated badge slugs.', 'artpulse') . '</p>';
     }
@@ -115,7 +115,7 @@ class MemberEnhancements
                 $count = $data[$d][$h];
                 $opacity = $max ? ($count / $max) : 0;
                 $style = 'background-color: rgba(0,123,255,' . $opacity . ')';
-                echo '<td style="' . esc_attr($style) . '">' . ($count ? $count : '') . '</td>';
+                echo '<td>' . ($count ? $count : '') . '</td>';
             }
             echo '</tr>';
         }

@@ -52,7 +52,7 @@ class AnalyticsDashboard
             width="100%" 
             height="800" 
             frameborder="0" 
-            style="border:0"
+           
             allowfullscreen>
           </iframe>
         </div>

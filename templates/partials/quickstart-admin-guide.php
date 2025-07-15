@@ -1,5 +1,5 @@
 <div class="ap-quickstart-guide">
-  <h2>Organization Admin Quickstart</h2>
+  <h2 class="ap-card__title">Organization Admin Quickstart</h2>
   <section>
     <h3>1. Review Artists</h3>
     <ul>

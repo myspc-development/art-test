@@ -34,7 +34,7 @@ class FrontendMembershipPage
 
         ob_start(); ?>
         <div class="ap-membership-account">
-            <h2><?php _e('My Membership','artpulse'); ?></h2>
+            <h2 class="ap-card__title"><?php _e('My Membership','artpulse'); ?></h2>
             <div id="ap-account-info"></div>
             <div id="ap-account-actions"></div>
         </div>

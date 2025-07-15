@@ -71,7 +71,7 @@ class WidgetsController
             echo '.ap-item{border:none;margin-right:8px}';
         }
         echo '.ap-item a{color:' . esc_attr($color) . ';text-decoration:none}';
-        echo '</style></head><body><div style="' . esc_attr($container_style) . '">';
+        echo '</style></head><body><div>';
         foreach ($events as $event) {
             echo '<div class="ap-item">';
             echo '<a href="' . esc_url(get_permalink($event)) . '" target="_blank">' . esc_html($event->post_title) . '</a>';

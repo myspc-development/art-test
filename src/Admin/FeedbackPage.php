@@ -57,7 +57,7 @@ class FeedbackPage
                         <td><?php echo esc_html($item->context); ?></td>
                         <td><?php echo esc_html($item->votes); ?></td>
                         <td>
-                            <form method="post" style="display:inline-block;">
+                            <form method="post">
                                 <?php wp_nonce_field('ap_feedback_status'); ?>
                                 <input type="hidden" name="id" value="<?php echo esc_attr($item->id); ?>">
                                 <select name="status">

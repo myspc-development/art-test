@@ -32,7 +32,11 @@ function artpulse_register_dashboard_widgets() {
 
     foreach ($widgets as $id => $widget) {
         if (in_array($id, $enabled, true)) {
-            wp_add_dashboard_widget("artpulse_{$id}", $widget['title'], $widget['callback']);
+            ap_register_dashboard_widget([
+                'id'     => "artpulse_{$id}",
+                'title'  => $widget['title'],
+                'render' => $widget['callback'],
+            ]);
         }
     }
 }

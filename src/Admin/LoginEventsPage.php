@@ -46,7 +46,7 @@ class LoginEventsPage
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Recent Login Events', 'artpulse'); ?></h1>
-            <a href="<?php echo esc_url(add_query_arg('ap_export_csv', 1)); ?>" class="button button-secondary" style="margin-bottom:10px;">Export CSV</a>
+            <a href="<?php echo esc_url(add_query_arg('ap_export_csv', 1)); ?>" class="button button-secondary">Export CSV</a>
             <table class="widefat fixed striped">
                 <thead>
                     <tr>

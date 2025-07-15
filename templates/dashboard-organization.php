@@ -10,13 +10,12 @@ add_action('wp_enqueue_scripts', function () use ($user_role) {
             'nonce'    => wp_create_nonce('ap_dashboard_nonce'),
         ]);
         wp_enqueue_script('dark-mode-toggle', plugin_dir_url(__FILE__) . '../assets/js/dark-mode-toggle.js', [], null, true);
-        wp_enqueue_style('ap-dashboard', plugin_dir_url(__FILE__) . '../build/css/widgets.css', [], '1.0.0');
     }
 });
 
 ?>
 <div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard">
-  <h2><?= ucfirst($user_role) ?> Dashboard</h2>
+  <h2 class="ap-card__title"><?= ucfirst($user_role) ?> Dashboard</h2>
   <?php
   ap_safe_include('templates/partials/dashboard-generic.php', plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php');
   ?>

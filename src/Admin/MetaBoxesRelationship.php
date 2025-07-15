@@ -110,7 +110,7 @@ class MetaBoxesRelationship
         $class_attr = 'ap-related-posts regular-text'; // Add regular-text for WP styling
         $data_post_type = esc_attr($box['related_type']); // The CPT we are searching for
 
-        echo '<select id="' . esc_attr($box['id']) . '" name="' . $name_attr . '" ' . $multiple_attr . ' style="width:100%;" class="' . esc_attr($class_attr) . '" data-post-type="' . $data_post_type . '" data-placeholder="' . __('Search for items...', 'artpulse') . '">';
+        echo '<select id="' . esc_attr($box['id']) . '" name="' . $name_attr . '" ' . $multiple_attr . ' class="' . esc_attr($class_attr) . '" data-post-type="' . $data_post_type . '" data-placeholder="' . __('Search for items...', 'artpulse') . '">';
 
         if ($box['multiple']) {
             if (!empty($selected_ids)) {

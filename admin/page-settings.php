@@ -35,7 +35,7 @@ function ap_render_settings_page() {
                 <?php submit_button(); ?>
             </form>
         </section>
-        <section class="ap-settings-section" data-tab="updates" style="display:none;">
+        <section class="ap-settings-section" data-tab="updates">
             <?php include __DIR__ . '/tab-updates.php'; ?>
         </section>
     </div>

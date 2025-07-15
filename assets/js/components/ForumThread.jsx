@@ -47,7 +47,7 @@ export default function ForumThread({ title, posts = [], onReport }) {
   };
   return (
     <div className="ap-forum-thread space-y-4">
-      <h2 className="text-2xl font-bold mb-4">{title}</h2>
+      <h2 class="ap-card__title" className="text-2xl font-bold mb-4">{title}</h2>
       {posts.map(p => (
         <Post key={p.id} post={p} onReply={handle} />
       ))}

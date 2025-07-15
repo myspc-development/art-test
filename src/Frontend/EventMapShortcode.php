@@ -41,6 +41,6 @@ class EventMapShortcode
 
     public static function render(): string
     {
-        return '<div id="ap-event-map" style="height:400px"></div>';
+        return '<div id="ap-event-map"></div>';
     }
 }

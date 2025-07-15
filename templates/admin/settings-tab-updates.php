@@ -1,4 +1,4 @@
-<h2>Plugin Updates</h2>
+<h2 class="ap-card__title">Plugin Updates</h2>
 <p>Current Version: <strong><?php echo esc_html(ARTPULSE_VERSION); ?></strong></p>
 
 <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
@@ -19,5 +19,5 @@
 <?php endif; ?>
 
 <hr>
-<h2>Advanced Update Diagnostics</h2>
+<h2 class="ap-card__title">Advanced Update Diagnostics</h2>
 <div id="ap-update-output">Loading…</div>

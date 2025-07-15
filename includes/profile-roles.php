@@ -8,7 +8,7 @@ function ap_show_extra_roles($user) {
     if (!current_user_can('manage_options')) return;
     $roles = wp_roles()->roles;
     ?>
-    <h2><?php esc_html_e('Organization Role', 'artpulse'); ?></h2>
+    <h2 class="ap-card__title"><?php esc_html_e('Organization Role', 'artpulse'); ?></h2>
     <select name="role">
         <?php foreach ($roles as $key => $r): ?>
             <option value="<?= esc_attr($key) ?>" <?= in_array($key, $user->roles) ? 'selected' : '' ?>>

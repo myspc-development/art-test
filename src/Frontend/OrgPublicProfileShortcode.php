@@ -64,7 +64,7 @@ class OrgPublicProfileShortcode {
 
         ob_start();
         ?>
-        <div class="ap-org-profile" style="<?php echo $theme ? 'background:' . esc_attr($theme) . ';' : ''; ?>">
+        <div class="ap-org-profile">
             <?php if ($banner): ?>
                 <img src="<?php echo esc_url($banner); ?>" class="ap-org-banner" alt="Organization banner">
             <?php endif; ?>
@@ -72,7 +72,7 @@ class OrgPublicProfileShortcode {
                 <img src="<?php echo esc_url($logo); ?>" class="ap-org-logo" alt="Organization logo">
             <?php endif; ?>
             <h1><?php echo esc_html($org->post_title); ?></h1>
-            <?php if ($tagline): ?><h2><?php echo esc_html($tagline); ?></h2><?php endif; ?>
+            <?php if ($tagline): ?><h2 class="ap-card__title"><?php echo esc_html($tagline); ?></h2><?php endif; ?>
             <?php if ($about): ?><div class="ap-org-about"><?php echo wpautop(esc_html($about)); ?></div><?php endif; ?>
             <?php if ($social): ?>
                 <div class="ap-org-social">
