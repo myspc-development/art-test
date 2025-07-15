@@ -12,5 +12,6 @@ function artpulse_get_default_settings(): array {
         'theme'            => 'default',
         'enable_reporting' => true,
         'admin_email'      => get_option('admin_email'),
+        'use_wp_nav_menu'  => false,
     ];
 }
