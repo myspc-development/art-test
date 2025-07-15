@@ -41,7 +41,7 @@ require_once $autoload_path;
 }
 
 // Setup automatic plugin updates from GitHub
-require_once plugin_dir_path(__FILE__) . 'vendor/plugin-update-checker/plugin-update-checker.php';
+require_once plugin_dir_path(__FILE__) . 'vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php';
 require_once __DIR__ . '/includes/update-checker.php';
 
 Plugin::register();
