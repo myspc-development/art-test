@@ -54,3 +54,25 @@ function DashboardExample({ role }) {
 ```
 
 The sidebar `<nav>` inherits panel styles from Salient and highlights the active section by toggling a class on each menu button.
+
+## 4. Verifying Role Menu Entries
+
+If links disappear from the dashboard, confirm that `assets/js/rolesMenus.js` defines arrays for **artist**, **member** and **organization**. Each array should list the sidebar items you expect for that role:
+
+```js
+export const rolesMenus = {
+  artist: [/* ... */],
+  member: [/* ... */],
+  organization: [/* ... */]
+};
+```
+
+Add or restore missing menu objects to the appropriate array and save the file.
+
+After updating `rolesMenus.js` rebuild the bundled scripts so WordPress picks up the changes:
+
+```bash
+npm run build
+```
+
+Run the command from the plugin root to regenerate the production JavaScript files.
