@@ -11,6 +11,7 @@ $tables = [
     'ap_org_messages',
     'ap_scheduled_messages',
     'ap_payouts',
+    'ap_org_roles',
 ];
 
 foreach ($tables as $t) {
