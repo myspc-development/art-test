@@ -33,7 +33,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
     );
 
     wp_localize_script('ap-org-roles', 'ArtPulseOrgRoles', [
-        'api_url' => rest_url('artpulse/v1/org-roles'),
-        'nonce'   => wp_create_nonce('wp_rest')
+        'api_path' => 'artpulse/v1/org-roles',
+        'nonce'    => wp_create_nonce('wp_rest'),
     ]);
 });

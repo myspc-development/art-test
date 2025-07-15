@@ -101,3 +101,21 @@ public function test_org_roles_route() {
 }
 ```
 
+Example requests:
+
+```
+GET /wp-json/artpulse/v1/org-roles
+GET /wp-json/artpulse/v1/org-roles/users
+GET /wp-json/artpulse/v1/org-roles/export.csv
+```
+
+The CSV export returns a table of users and their roles:
+
+```
+Name,Email,Roles
+Sarah O’Neill,sarah@org.com,"curator,artist"
+```
+
+When `dompdf` is available, `/wp-json/artpulse/v1/org-roles/export.pdf` streams
+the same dataset as a PDF file.
+
