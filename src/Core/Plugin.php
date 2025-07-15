@@ -364,6 +364,8 @@ class Plugin
         TrendingManager::register();
         TrendingRestController::register();
         \ArtPulse\Personalization\RecommendationRestController::register();
+        \ArtPulse\Rest\FollowVenueCuratorController::register();
+        \ArtPulse\Personalization\WeeklyRecommendations::register();
         add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
         \ArtPulse\Rest\EventManagementController::register();
     }

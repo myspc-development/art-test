@@ -17,11 +17,17 @@ class RestRoutes
                     return current_user_can('read');
                 },
                 'args'                => [
-                    'city'   => [ 'type' => 'string', 'required' => false ],
-                    'region' => [ 'type' => 'string', 'required' => false ],
-                    'lat'    => [ 'type' => 'number', 'required' => false ],
-                    'lng'    => [ 'type' => 'number', 'required' => false ],
-                    'radius' => [ 'type' => 'number', 'required' => false ],
+                    'city'          => [ 'type' => 'string',  'required' => false ],
+                    'region'        => [ 'type' => 'string',  'required' => false ],
+                    'lat'           => [ 'type' => 'number',  'required' => false ],
+                    'lng'           => [ 'type' => 'number',  'required' => false ],
+                    'radius'        => [ 'type' => 'number',  'required' => false ],
+                    'within_km'     => [ 'type' => 'number',  'required' => false ],
+                    'genre'         => [ 'type' => 'array',   'required' => false, 'items' => ['type' => 'string'] ],
+                    'medium'        => [ 'type' => 'array',   'required' => false, 'items' => ['type' => 'string'] ],
+                    'vibe'          => [ 'type' => 'string',  'required' => false ],
+                    'accessibility' => [ 'type' => 'array',   'required' => false, 'items' => ['type' => 'string'] ],
+                    'age_range'     => [ 'type' => 'string',  'required' => false ],
                 ],
             ]);
 
@@ -80,11 +86,17 @@ class RestRoutes
 
     public static function get_events(\WP_REST_Request $request)
     {
-        $city   = sanitize_text_field($request->get_param('city'));
-        $region = sanitize_text_field($request->get_param('region'));
-        $lat    = $request->get_param('lat');
-        $lng    = $request->get_param('lng');
-        $radius = $request->get_param('radius');
+        $city          = sanitize_text_field($request->get_param('city'));
+        $region        = sanitize_text_field($request->get_param('region'));
+        $lat           = $request->get_param('lat');
+        $lng           = $request->get_param('lng');
+        $radius        = $request->get_param('radius');
+        $within_km     = $request->get_param('within_km');
+        $genres        = (array) $request->get_param('genre');
+        $media         = (array) $request->get_param('medium');
+        $vibe          = sanitize_text_field($request->get_param('vibe'));
+        $accessibility = (array) $request->get_param('accessibility');
+        $age_range     = sanitize_text_field($request->get_param('age_range'));
 
         $args = [];
         $meta_query = [];
@@ -111,7 +123,12 @@ class RestRoutes
         }
 
         if (!$city && !$region && is_numeric($lat) && is_numeric($lng)) {
-            $r = is_numeric($radius) ? floatval($radius) : 0.5;
+            $r = 0.5;
+            if (is_numeric($within_km)) {
+                $r = floatval($within_km) / 111.0;
+            } elseif (is_numeric($radius)) {
+                $r = floatval($radius);
+            }
             $lat = floatval($lat);
             $lng = floatval($lng);
             $meta_query[] = [
@@ -125,6 +142,53 @@ class RestRoutes
                 'value'   => [ $lng - $r, $lng + $r ],
                 'compare' => 'BETWEEN',
                 'type'    => 'numeric',
+            ];
+        }
+
+        foreach ($genres as $g) {
+            $g = sanitize_text_field($g);
+            if ($g !== '') {
+                $meta_query[] = [
+                    'key'     => 'genre',
+                    'value'   => $g,
+                    'compare' => 'LIKE',
+                ];
+            }
+        }
+
+        foreach ($media as $m) {
+            $m = sanitize_text_field($m);
+            if ($m !== '') {
+                $meta_query[] = [
+                    'key'     => 'medium',
+                    'value'   => $m,
+                    'compare' => 'LIKE',
+                ];
+            }
+        }
+
+        if ($vibe !== '') {
+            $meta_query[] = [
+                'key'   => 'vibe',
+                'value' => $vibe,
+            ];
+        }
+
+        foreach ($accessibility as $a) {
+            $a = sanitize_text_field($a);
+            if ($a !== '') {
+                $meta_query[] = [
+                    'key'     => 'accessibility',
+                    'value'   => $a,
+                    'compare' => 'LIKE',
+                ];
+            }
+        }
+
+        if ($age_range !== '') {
+            $meta_query[] = [
+                'key'   => 'age_range',
+                'value' => $age_range,
             ];
         }
 
@@ -151,6 +215,11 @@ class RestRoutes
             'event_artists'      => '_ap_event_artists',
             'event_lat'          => 'event_lat',
             'event_lng'          => 'event_lng',
+            'genre'              => 'genre',
+            'medium'             => 'medium',
+            'vibe'               => 'vibe',
+            'accessibility'      => 'accessibility',
+            'age_range'          => 'age_range',
         ], $args);
 
         foreach ($events as &$event) {
