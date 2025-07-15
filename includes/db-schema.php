@@ -30,6 +30,7 @@ function create_monetization_tables() {
 
     global $wpdb;
     $payouts       = "{$wpdb->prefix}ap_payouts";
+    $donations     = "{$wpdb->prefix}ap_donations";
     $tickets       = "{$wpdb->prefix}ap_tickets";
     $event_tickets = "{$wpdb->prefix}ap_event_tickets";
     $auctions      = "{$wpdb->prefix}ap_auctions";
@@ -46,6 +47,18 @@ function create_monetization_tables() {
         payout_date DATETIME NOT NULL,
         PRIMARY KEY (id),
         KEY artist_id (artist_id)
+    ");
+
+    ap_maybe_create_table($donations, "
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        user_id BIGINT NOT NULL,
+        artist_id BIGINT NOT NULL,
+        amount DECIMAL(10,2) NOT NULL DEFAULT 0,
+        note TEXT NULL,
+        created_at DATETIME NOT NULL,
+        PRIMARY KEY (id),
+        KEY artist_id (artist_id),
+        KEY user_id (user_id)
     ");
 
     ap_maybe_create_table($tickets, "
@@ -156,6 +169,7 @@ function validate_monetization_tables(): void {
         $wpdb->prefix . 'ap_payouts',
         $wpdb->prefix . 'ap_auctions',
         $wpdb->prefix . 'ap_bids',
+        $wpdb->prefix . 'ap_donations',
         $wpdb->prefix . 'ap_promotions',
         $wpdb->prefix . 'ap_messages',
     ];

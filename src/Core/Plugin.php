@@ -239,6 +239,7 @@ class Plugin
         \ArtPulse\Frontend\EventsSliderShortcode::register();
         \ArtPulse\Frontend\EventListingShortcode::register();
         \ArtPulse\Frontend\EventCalendarShortcode::register();
+        \ArtPulse\Rest\CalendarFeedController::register();
         \ArtPulse\Frontend\EventMapShortcode::register();
         \ArtPulse\Frontend\EventCommentsShortcode::register();
         \ArtPulse\Frontend\ArtworkCommentsShortcode::register();
@@ -364,6 +365,7 @@ class Plugin
         \ArtPulse\Monetization\SalesOverview::register();
         \ArtPulse\Monetization\PayoutManager::register();
         \ArtPulse\Monetization\DonationLink::register();
+        \ArtPulse\Monetization\DonationManager::register();
         \ArtPulse\Monetization\TipManager::register();
         \ArtPulse\Marketplace\MarketplaceManager::register();
         \ArtPulse\Marketplace\AuctionManager::register();
