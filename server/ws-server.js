@@ -2,7 +2,15 @@ const http = require('http');
 const socketio = require('socket.io');
 const jwt = require('jsonwebtoken');
 
-const SECRET = process.env.JWT_SECRET || 'change-me';
+const SECRET = process.env.JWT_SECRET;
+if (!SECRET) {
+  console.error('JWT_SECRET environment variable is required');
+  process.exit(1);
+}
+if (SECRET.length < 10) {
+  console.error('JWT_SECRET must be at least 10 characters long');
+  process.exit(1);
+}
 const server = http.createServer();
 const io = socketio(server, { cors: { origin: '*' } });
 

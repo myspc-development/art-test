@@ -456,6 +456,13 @@ composer zip
 
 The zip file is placed in the `release/` directory.
 
+### WebSocket Server
+
+The real-time message server uses a JWT for authentication. Set the
+`JWT_SECRET` environment variable to a long random string before running
+`server/ws-server.js`. Startup aborts if this variable is missing or
+shorter than ten characters.
+
 ### Test Environment Variables
 
 Database credentials for the WordPress test suite must be supplied via
