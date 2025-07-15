@@ -5,8 +5,8 @@
  * Expected variable: $events (array of event objects with ->name).
  */
 ?>
-<div class="dashboard-card" id="ap-events">
-  <h2><?php esc_html_e('Upcoming Events', 'artpulse'); ?></h2>
+<div class="ap-card" role="region" aria-labelledby="ap-events-title" id="ap-events">
+  <h2 id="ap-events-title" class="ap-card__title"><?php esc_html_e('Upcoming Events', 'artpulse'); ?></h2>
 <?php if (!empty($events)) : ?>
   <ul class="ap-events-list">
   <?php foreach ($events as $event) : ?>

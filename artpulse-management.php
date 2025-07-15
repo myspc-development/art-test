@@ -656,7 +656,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
         ]);
         wp_enqueue_style(
             'ap-dashboard',
-            plugin_dir_url(__FILE__) . 'assets/css/dashboard-widget.css',
+            plugin_dir_url(__FILE__) . 'build/css/widgets.css',
             [],
             '1.0.0'
         );
@@ -671,7 +671,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('ap_dashboard_nonce')
         ]);
-        wp_enqueue_style('ap-dashboard', plugin_dir_url(__FILE__) . 'assets/css/dashboard-widget.css', [], '1.0.0');
+        wp_enqueue_style('ap-dashboard', plugin_dir_url(__FILE__) . 'build/css/widgets.css', [], '1.0.0');
     }
 });
 

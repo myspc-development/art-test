@@ -1,4 +1,12 @@
 <?php
+
+function ap_render_card( $id, $title, $content_callback ) {
+    echo '<div class="ap-card" role="region" aria-labelledby="' . esc_attr( $id ) . '-title">';
+    echo '<h2 id="' . esc_attr( $id ) . '-title" class="ap-card__title">' . esc_html( $title ) . '</h2>';
+    call_user_func( $content_callback );
+    echo '</div>';
+}
+
 function ap_register_dashboard_widget( array $args ) {
     $defaults = [
         'id'       => '',
@@ -18,14 +26,11 @@ function ap_register_dashboard_widget( array $args ) {
         'id'       => $args['id'],
         'title'    => $args['title'],
         'callback' => function () use ( $args ) {
-            echo '<div class="ap-card" role="region" aria-labelledby="' . esc_attr( $args['id'] ) . '-title">';
-            echo '<h2 id="' . esc_attr( $args['id'] ) . '-title" class="ap-card__title">' . esc_html( $args['title'] ) . '</h2>';
-            if ( is_callable( $args['render'] ) ) {
-                call_user_func( $args['render'] );
-            } else {
-                locate_template( $args['render'], true );
-            }
-            echo '</div>';
+            $cb = is_callable( $args['render'] )
+                ? $args['render']
+                : static function () use ( $args ) { locate_template( $args['render'], true ); };
+
+            ap_render_card( $args['id'], $args['title'], $cb );
         },
     ];
 }

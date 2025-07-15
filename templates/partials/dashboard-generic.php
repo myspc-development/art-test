@@ -15,7 +15,7 @@ ap_safe_include('partials/dashboard-wrapper-start.php', plugin_dir_path(__FILE__
 
 // Admin preview selector
 if (current_user_can('manage_options')): ?>
-  <form method="get" id="ap-preview-switcher" style="margin-bottom: 1rem;">
+  <form method="get" id="ap-preview-switcher" class="ap-inline-form">
     <label>🔍 Preview Dashboard As:</label>
     <select name="ap_preview_role">
       <option value="">— Select Role —</option>
@@ -29,12 +29,12 @@ if (current_user_can('manage_options')): ?>
 <?php endif; ?>
 
 <?php if (current_user_can('manage_options') && isset($_GET['ap_preview_role'])): ?>
-  <div style="background: #fefcbf; padding: 0.75em; border-left: 4px solid #d69e2e; margin-bottom: 1em;">
+  <div class="ap-admin-preview">
     <strong>Previewing Dashboard as:</strong> <?= esc_html($_GET['ap_preview_role']) ?>
   </div>
 <?php endif; ?>
 <?php if (current_user_can('manage_options') && isset($_GET['ap_preview_user'])): ?>
-  <div style="background: #fefcbf; padding: 0.75em; border-left: 4px solid #d69e2e; margin-bottom: 1em;">
+  <div class="ap-admin-preview">
     <strong>Previewing Dashboard for User ID:</strong> <?= (int) $_GET['ap_preview_user'] ?>
   </div>
 <?php endif; ?>
@@ -60,7 +60,7 @@ if (current_user_can('manage_options') && isset($_GET['ap_preview_user'])) {
   </div>
 <?php endif; ?>
 
-  <form id="ap-preset-loader" method="post" style="margin-bottom:1em;">
+  <form id="ap-preset-loader" method="post" class="ap-inline-form">
     <input type="hidden" name="_ajax_nonce" value="<?= wp_create_nonce('ap_dashboard_nonce') ?>" />
     <select name="preset_key" id="preset-select">
       <option value="">Apply Preset Layout…</option>
@@ -73,14 +73,14 @@ if (current_user_can('manage_options') && isset($_GET['ap_preview_user'])) {
     <button type="submit">Apply</button>
   </form>
 
-  <form id="ap-reset-layout" method="post" style="margin-top: 1em;">
+  <form id="ap-reset-layout" method="post" class="ap-inline-form--mt">
     <input type="hidden" name="_ajax_nonce" value="<?= wp_create_nonce('ap_dashboard_nonce') ?>" />
     <button type="submit">Reset Layout</button>
   </form>
 
-  <div id="ap-dashboard-message" style="margin-top: 1em;"></div>
+  <div id="ap-dashboard-message" class="ap-dashboard-message"></div>
 
-  <label style="display:block;margin-bottom:1em;">
+  <label class="ap-form-group">
     <input type="checkbox" id="ap-toggle-dark-mode" />
     <?= __('Dark Mode', 'artpulse'); ?>
   </label>
