@@ -11,7 +11,7 @@ class MultiOrgRoles
     public static function maybe_install_table(): void
     {
         global $wpdb;
-        $table  = $wpdb->prefix . 'ap_org_roles';
+        $table  = $wpdb->prefix . 'ap_org_user_roles';
         $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
         if ($exists !== $table) {
             self::install_table();
@@ -21,16 +21,18 @@ class MultiOrgRoles
     public static function install_table(): void
     {
         global $wpdb;
-        $table   = $wpdb->prefix . 'ap_org_roles';
+        $table   = $wpdb->prefix . 'ap_org_user_roles';
         $charset = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            org_id INT NOT NULL,
             user_id BIGINT NOT NULL,
-            org_id BIGINT NOT NULL,
-            role varchar(191) NOT NULL,
-            site_id BIGINT NULL,
-            assigned_at DATETIME NULL,
-            PRIMARY KEY  (user_id, org_id, role)
+            role ENUM('admin','editor','curator','promoter') DEFAULT 'editor',
+            status ENUM('active','pending','invited') DEFAULT 'active',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY org_user (org_id, user_id)
         ) $charset;";
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -40,18 +42,17 @@ class MultiOrgRoles
     public static function assign_roles(int $user_id, int $org_id, array $roles): void
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'ap_org_roles';
+        $table = $wpdb->prefix . 'ap_org_user_roles';
 
         $wpdb->delete($table, ['user_id' => $user_id, 'org_id' => $org_id]);
         foreach ($roles as $role) {
             $wpdb->insert(
                 $table,
                 [
-                    'user_id'     => $user_id,
-                    'org_id'      => $org_id,
-                    'role'        => sanitize_key($role),
-                    'site_id'     => is_multisite() ? get_current_blog_id() : null,
-                    'assigned_at' => current_time('mysql'),
+                    'user_id' => $user_id,
+                    'org_id'  => $org_id,
+                    'role'    => sanitize_key($role),
+                    'status'  => 'active',
                 ]
             );
         }
@@ -60,7 +61,7 @@ class MultiOrgRoles
     public static function get_user_roles(int $user_id, int $org_id): array
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'ap_org_roles';
+        $table = $wpdb->prefix . 'ap_org_user_roles';
 
         return (array) $wpdb->get_col(
             $wpdb->prepare(
@@ -70,12 +71,32 @@ class MultiOrgRoles
             )
         );
     }
+
+    public static function remove_role(int $user_id, int $org_id): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_org_user_roles';
+        $wpdb->delete($table, [
+            'user_id' => $user_id,
+            'org_id'  => $org_id,
+        ]);
+    }
+
+    public static function get_user_orgs(int $user_id): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_org_user_roles';
+        return (array) $wpdb->get_results(
+            $wpdb->prepare("SELECT org_id, role, status FROM $table WHERE user_id = %d", $user_id),
+            ARRAY_A
+        );
+    }
 }
 
 function ap_user_has_org_role(int $user_id, int $org_id, ?string $role = null): bool
 {
     global $wpdb;
-    $table = $wpdb->prefix . 'ap_org_roles';
+    $table = $wpdb->prefix . 'ap_org_user_roles';
     $sql   = "SELECT COUNT(*) FROM $table WHERE user_id = %d AND org_id = %d";
     $args  = [$user_id, $org_id];
     if ($role) {
@@ -85,5 +106,28 @@ function ap_user_has_org_role(int $user_id, int $org_id, ?string $role = null): 
 
     $count = (int) $wpdb->get_var($wpdb->prepare($sql, ...$args));
     return $count > 0;
+}
+
+function ap_user_has_org_capability(int $user_id, int $org_id, string $capability): bool
+{
+    if (user_can($user_id, $capability)) {
+        return true;
+    }
+
+    $map = [
+        'edit_events'      => ['admin', 'editor'],
+        'curator_threads'  => ['curator', 'admin'],
+        'build_feed'       => ['admin', 'promoter'],
+        'view_analytics'   => ['admin'],
+    ];
+
+    $roles = MultiOrgRoles::get_user_roles($user_id, $org_id);
+    foreach ($roles as $role) {
+        if (isset($map[$capability]) && in_array($role, $map[$capability], true)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 

@@ -1,0 +1,92 @@
+<?php
+namespace ArtPulse\Rest;
+
+use WP_REST_Request;
+use WP_REST_Response;
+use ArtPulse\Core\MultiOrgRoles;
+use function ArtPulse\Core\ap_user_has_org_role;
+
+class OrgUserRolesController
+{
+    public static function register(): void
+    {
+        add_action('rest_api_init', [self::class, 'register_routes']);
+    }
+
+    public static function register_routes(): void
+    {
+        register_rest_route('artpulse/v1', '/orgs/(?P<id>\d+)/roles', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'list_roles'],
+            'permission_callback' => [self::class, 'can_view'],
+        ]);
+
+        register_rest_route('artpulse/v1', '/orgs/(?P<id>\d+)/roles', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'add_role'],
+            'permission_callback' => [self::class, 'can_manage'],
+        ]);
+
+        register_rest_route('artpulse/v1', '/orgs/(?P<id>\d+)/roles/(?P<user_id>\d+)', [
+            'methods'             => 'DELETE',
+            'callback'            => [self::class, 'remove_role'],
+            'permission_callback' => [self::class, 'can_manage'],
+        ]);
+
+        register_rest_route('artpulse/v1', '/users/me/orgs', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'my_orgs'],
+            'permission_callback' => function () { return is_user_logged_in(); },
+        ]);
+    }
+
+    public static function can_manage(WP_REST_Request $request): bool
+    {
+        $org_id = absint($request['id']);
+        $user_id = get_current_user_id();
+        return ap_user_has_org_role($user_id, $org_id, 'admin') || user_can($user_id, 'manage_options');
+    }
+
+    public static function can_view(WP_REST_Request $request): bool
+    {
+        $org_id = absint($request['id']);
+        $user_id = get_current_user_id();
+        return ap_user_has_org_role($user_id, $org_id) || user_can($user_id, 'manage_options');
+    }
+
+    public static function list_roles(WP_REST_Request $request): WP_REST_Response
+    {
+        global $wpdb;
+        $org_id = absint($request['id']);
+        $table = $wpdb->prefix . 'ap_org_user_roles';
+        $rows = $wpdb->get_results($wpdb->prepare("SELECT user_id, role, status FROM $table WHERE org_id = %d", $org_id), ARRAY_A);
+        return rest_ensure_response($rows);
+    }
+
+    public static function add_role(WP_REST_Request $request): WP_REST_Response
+    {
+        $org_id = absint($request['id']);
+        $user_id = absint($request->get_param('user_id'));
+        $role = sanitize_key($request->get_param('role'));
+        if (!$user_id || !$role) {
+            return new WP_REST_Response(['error' => 'invalid'], 400);
+        }
+        MultiOrgRoles::assign_roles($user_id, $org_id, [$role]);
+        return rest_ensure_response(['success' => true]);
+    }
+
+    public static function remove_role(WP_REST_Request $request): WP_REST_Response
+    {
+        $org_id = absint($request['id']);
+        $user_id = absint($request['user_id']);
+        MultiOrgRoles::remove_role($user_id, $org_id);
+        return rest_ensure_response(['success' => true]);
+    }
+
+    public static function my_orgs(WP_REST_Request $request): WP_REST_Response
+    {
+        $user_id = get_current_user_id();
+        $data = MultiOrgRoles::get_user_orgs($user_id);
+        return rest_ensure_response($data);
+    }
+}
