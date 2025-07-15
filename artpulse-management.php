@@ -654,10 +654,10 @@ add_action('admin_enqueue_scripts', function ($hook) {
             'nonce'    => wp_create_nonce('ap_dashboard_nonce'),
         ]);
         wp_enqueue_style(
-            'ap-dashboard-style',
+            'ap-dashboard',
             plugin_dir_url(__FILE__) . 'assets/css/dashboard-widget.css',
             [],
-            '1.0'
+            '1.0.0'
         );
     }
 });
@@ -670,7 +670,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('ap_dashboard_nonce')
         ]);
-        wp_enqueue_style('ap-dashboard-style', plugin_dir_url(__FILE__) . 'assets/css/dashboard-widget.css');
+        wp_enqueue_style('ap-dashboard', plugin_dir_url(__FILE__) . 'assets/css/dashboard-widget.css', [], '1.0.0');
     }
 });
 
