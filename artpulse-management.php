@@ -241,8 +241,12 @@ register_activation_hook(__FILE__, function () {
 });
 
 function ap_install_tables() {
-    require_once __DIR__ . '/includes/db-schema.php';
-    \ArtPulse\DB\create_monetization_tables();
+    $installed = get_option('ap_db_version', '0.0.0');
+    if (version_compare($installed, '1.4.0', '<')) {
+        require_once __DIR__ . '/includes/db-schema.php';
+        \ArtPulse\DB\create_monetization_tables();
+        update_option('ap_db_version', '1.4.0');
+    }
 }
 register_activation_hook(__FILE__, 'ap_install_tables');
 
