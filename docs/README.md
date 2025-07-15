@@ -5,6 +5,7 @@
 - [Sprint 3: Event Ranking + API](./codex-sprint-3-ranking-api.md)
 - [Sprint 4: Polish + Documentation](./codex-sprint-4-polish-docs.md)
 - [OpenAPI Specification](./openapi.yaml)
+- [Public Beta Setup](./public-beta-setup-codex.md)
 
 ### Developer Checklist
 
