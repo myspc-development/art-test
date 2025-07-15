@@ -83,6 +83,7 @@ class ArtistRestController extends WP_REST_Controller
                 'id'    => $post_id,
                 'title' => get_the_title($post_id),
                 'link'  => get_permalink($post_id),
+                'is_verified' => (bool) get_post_meta($post_id, '_ap_is_verified', true),
             ];
             $data[] = $this->prepare_item_for_response($item, get_post($post_id));
         }
@@ -112,6 +113,7 @@ class ArtistRestController extends WP_REST_Controller
                 'org' => get_post_meta($post->ID, '_ap_artist_org', true),
             ],
             'link'    => get_permalink($post),
+            'is_verified' => (bool) get_post_meta($post->ID, '_ap_is_verified', true),
         ];
 
         return rest_ensure_response($item);

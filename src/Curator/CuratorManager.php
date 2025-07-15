@@ -22,6 +22,7 @@ class CuratorManager
             bio TEXT NULL,
             website VARCHAR(255) NULL,
             social_links TEXT NULL,
+            is_verified TINYINT(1) NOT NULL DEFAULT 0,
             UNIQUE KEY slug (slug),
             KEY user_id (user_id)
         ) $charset;";
@@ -53,5 +54,26 @@ class CuratorManager
         global $wpdb;
         $table = $wpdb->prefix . 'ap_curators';
         return $wpdb->get_results("SELECT * FROM $table ORDER BY name ASC", ARRAY_A);
+    }
+
+    /**
+     * Fetch curator row by ID.
+     */
+    public static function get_by_id(int $id): ?array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_curators';
+        $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE id = %d", $id), ARRAY_A);
+        return $row ?: null;
+    }
+
+    /**
+     * Mark a curator as verified.
+     */
+    public static function verify(int $id): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_curators';
+        $wpdb->update($table, ['is_verified' => 1], ['id' => $id]);
     }
 }
