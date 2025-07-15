@@ -66,8 +66,8 @@ function ap_enqueue_org_roles_assets($hook)
 
     // Pass REST url + nonce to the bundle
     wp_localize_script($handle, 'ArtPulseOrgRoles', [
-        'api_url' => rest_url('artpulse/v1'),
-        'nonce'   => wp_create_nonce('wp_rest'),
+        'api_path' => 'artpulse/v1',
+        'nonce'    => wp_create_nonce('wp_rest'),
     ]);
 
     // Optional: enqueue CSS for the matrix UI
