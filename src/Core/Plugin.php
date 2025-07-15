@@ -23,6 +23,7 @@ use ArtPulse\Frontend\ReactDashboardShortcode;
 use ArtPulse\Marketplace\MarketplaceManager;
 use ArtPulse\Marketplace\AuctionManager;
 use ArtPulse\Core\VisitTracker;
+use ArtPulse\Core\MultiOrgRoles;
 use ArtPulse\Rest\VisitRestController;
 
 class Plugin
@@ -207,6 +208,7 @@ class Plugin
         \ArtPulse\Rest\LayoutSaveEndpoint::register();
         \ArtPulse\Core\ProfileMetrics::register();
         \ArtPulse\Core\RoleAuditLogger::register();
+        MultiOrgRoles::register();
         \ArtPulse\Core\ActivityLogger::register();
         \ArtPulse\Community\CommunityRoles::register();
         \ArtPulse\Core\DelegatedAccessManager::register();
