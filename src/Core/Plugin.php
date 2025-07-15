@@ -24,7 +24,7 @@ use ArtPulse\Marketplace\AuctionManager;
 
 class Plugin
 {
-    private const VERSION = '1.3.11';
+    private const VERSION = '1.3.13';
 
     public static function register(): void
     {
