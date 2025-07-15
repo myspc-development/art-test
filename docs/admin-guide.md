@@ -94,7 +94,6 @@ rules so the new routes work correctly.
 
 ## Admin Pages
 
-**Roles & Permissions** – Manage organization roles and capabilities. Access the
-screen via `wp-admin/admin.php?page=ap-org-roles` from the Organization
-Dashboard menu. Requests to `/wp-admin/ap-org-roles` are automatically redirected
-to the proper `admin.php` URL.
+**Roles & Permissions** – Manage organization roles and capabilities under the
+**Roles** tab at `wp-admin/admin.php?page=ap-org-roles-matrix`. Any requests to
+`/wp-admin/ap-org-roles` redirect to the new page automatically.
