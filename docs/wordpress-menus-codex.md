@@ -57,6 +57,19 @@ function hide_artpulse_plugin_menu() {
 add_action( 'admin_menu', 'hide_artpulse_plugin_menu', 99 );
 ```
 
+## Switch to WordPress Menus
+
+The plugin normally loads a React sidebar menu. To disable it and rely solely on
+your WordPress navigation menu, add this filter in a small plugin or
+`functions.php`:
+
+```php
+add_filter( 'ap_use_wp_nav_menu', '__return_true' );
+```
+
+When the filter returns `true`, `SidebarMenu.jsx` is not enqueued and the React
+dashboard receives `useWpNavMenu` set to `true`.
+
 ## Result
 
 - Dashboards and forms still use ArtPulse shortcodes.

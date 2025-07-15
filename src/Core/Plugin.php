@@ -695,6 +695,21 @@ class Plugin
             'dashboardUrl'    => self::get_user_dashboard_url(),
         ]);
 
+        $use_wp_menu = apply_filters('ap_use_wp_nav_menu', false);
+
+        if (!$use_wp_menu) {
+            $sidebar_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/sidebar-menu.js';
+            if (file_exists($sidebar_path)) {
+                wp_enqueue_script(
+                    'ap-sidebar-menu',
+                    plugins_url('assets/js/sidebar-menu.js', ARTPULSE_PLUGIN_FILE),
+                    ['wp-element'],
+                    filemtime($sidebar_path),
+                    true
+                );
+            }
+        }
+
         wp_enqueue_script(
             'ap-dashboard',
             plugins_url('assets/js/ap-dashboard.js', ARTPULSE_PLUGIN_FILE),
@@ -710,7 +725,8 @@ class Plugin
         $user = wp_get_current_user();
         $role = $user->roles[0] ?? '';
         wp_localize_script('ap-dashboard', 'APDashboard', [
-            'role' => $role,
+            'role'         => $role,
+            'useWpNavMenu' => $use_wp_menu,
         ]);
 
         if (function_exists('ap_enqueue_global_styles')) {
