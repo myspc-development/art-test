@@ -127,6 +127,9 @@ WordPress will display an “unexpected output” warning if this file is missin
 - Use the mail/message icon next to any attendee to send a message to a single user.
 - Messages use your default notification settings.
 
+### Class Visit Check-Ins
+Institutions can scan a QR code or submit a form to log visits. Each check-in records the institution name and group size for the event organizer. Visit logs can be exported as CSV from the dashboard for grant reports.
+
 ### Event Calendar
 - The calendar view shows all upcoming events by day.
 - Click any event to see a popup with venue, address, time, and RSVP/favorite options.
