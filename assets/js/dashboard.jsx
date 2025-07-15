@@ -3,18 +3,20 @@ import ReactDOM from 'react-dom';
 import SidebarMenu from './SidebarMenu';
 import { rolesMenus } from './rolesMenus';
 
-function DashboardApp({ role }) {
+function DashboardApp({ role, useWpMenu }) {
   const [activeSection, setActiveSection] = useState(
     rolesMenus[role]?.[0]?.section || ''
   );
 
   return (
     <div className="ap-dashboard-wrapper">
-      <SidebarMenu
-        role={role}
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-      />
+      {!useWpMenu && (
+        <SidebarMenu
+          role={role}
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+        />
+      )}
       <div className="ap-dashboard-main">
         {(rolesMenus[role] || []).map((item) => (
           <section
@@ -56,6 +58,12 @@ function DashboardApp({ role }) {
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('ap-dashboard-root');
   if (root) {
-    ReactDOM.render(<DashboardApp role={APDashboard.role} />, root);
+    ReactDOM.render(
+      <DashboardApp
+        role={APDashboard.role}
+        useWpMenu={APDashboard.useWpNavMenu}
+      />,
+      root
+    );
   }
 });
