@@ -6,15 +6,7 @@ add_action('admin_menu', function () {
         include __DIR__ . '/page-user-inbox.php';
     });
 
-    add_submenu_page(
-        'ap-user-inbox',
-        __('Org Roles', 'artpulse'),
-        __('Org Roles', 'artpulse'),
-        'manage_options',
-        'ap-org-roles',
-        function () { include __DIR__ . '/page-org-roles.php'; }
-    );
-
+    // Org Roles now lives under the Org Role Matrix page as a tab.
     add_menu_page(
         'Org Role Matrix',
         'Org Role Matrix',
@@ -23,6 +15,14 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-org-roles-matrix.php'; }
     );
 
+});
+
+// Redirect legacy Org Roles slug to the new tabbed page
+add_action('admin_init', function () {
+    if (isset($_GET['page']) && $_GET['page'] === 'ap-org-roles') {
+        wp_safe_redirect(admin_url('admin.php?page=ap-org-roles-matrix&view=roles'));
+        exit;
+    }
 });
 
 add_action('admin_enqueue_scripts', function ($hook) {

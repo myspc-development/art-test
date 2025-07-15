@@ -301,7 +301,7 @@ A new **Login Heatmap** submenu under **ArtPulse → Settings** displays hourly 
 
 ## Admin Pages
 
-- **Roles & Permissions** – Manage organization roles and capabilities. Access the screen via `wp-admin/admin.php?page=ap-org-roles` from the Organization Dashboard menu. Requests to `/wp-admin/ap-org-roles` are automatically redirected to the correct `admin.php` URL.
+- **Roles & Permissions** – Manage organization roles and capabilities. Use the **Roles** tab under `wp-admin/admin.php?page=ap-org-roles-matrix`. The legacy `ap-org-roles` slug now redirects here.
 - **Diagnostics** – View plugin status and run maintenance tasks. Visit `wp-admin/admin.php?page=ap-diagnostics` or use `/wp-admin/ap-diagnostics` which redirects automatically.
 
 ## User Dashboard Features

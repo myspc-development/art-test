@@ -12,7 +12,7 @@ if (isset($_POST['ap_update_user_role']) && check_admin_referer('ap_change_role_
 $users = get_users();
 $roles = wp_roles()->roles;
 ?>
-<div class="wrap">
+<div class="ap-org-roles-container">
   <h1><?php esc_html_e('Organization Roles', 'artpulse'); ?></h1>
   <table class="wp-list-table widefat">
     <thead><tr><th><?php esc_html_e('User', 'artpulse'); ?></th><th><?php esc_html_e('Role', 'artpulse'); ?></th><th><?php esc_html_e('Change', 'artpulse'); ?></th></tr></thead>
