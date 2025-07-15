@@ -11,7 +11,15 @@ get_header();
 
 $dashboard_class = $user_role . '-dashboard';
 $dashboard_title = ucfirst($user_role) . ' Dashboard';
-include locate_template('partials/dashboard-wrapper-start.php');
+$template = locate_template('partials/dashboard-wrapper-start.php');
+if (!$template) {
+    $template = plugin_dir_path(__FILE__) . 'dashboard-wrapper-start.php';
+}
+if ($template && file_exists($template)) {
+    include $template;
+} else {
+    error_log('ArtPulse: Missing template → dashboard-wrapper-start.php');
+}
 
 // Admin preview selector
 if (current_user_can('manage_options')): ?>
@@ -97,7 +105,15 @@ if (empty($layout)) {
         if (!$config || empty($config['template'])) continue;
 
         echo '<div class="ap-widget-block" data-id="' . esc_attr($id) . '">';
-        include locate_template('templates/' . $config['template']);
+        $template = locate_template('templates/' . $config['template']);
+        if (!$template) {
+            $template = plugin_dir_path(__FILE__) . '../' . $config['template'];
+        }
+        if ($template && file_exists($template)) {
+            include $template;
+        } else {
+            error_log('ArtPulse: Missing widget template → ' . $config['template']);
+        }
         echo '</div>';
     }
     echo '</div>';
@@ -105,6 +121,14 @@ if (empty($layout)) {
 ?>
 
 <?php
-include locate_template('partials/dashboard-wrapper-end.php');
+$template = locate_template('partials/dashboard-wrapper-end.php');
+if (!$template) {
+    $template = plugin_dir_path(__FILE__) . 'dashboard-wrapper-end.php';
+}
+if ($template && file_exists($template)) {
+    include $template;
+} else {
+    error_log('ArtPulse: Missing template → dashboard-wrapper-end.php');
+}
 get_footer();
 ?>
