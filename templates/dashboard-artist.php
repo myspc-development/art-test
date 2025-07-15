@@ -14,25 +14,25 @@ $user_name = esc_html($current_user->display_name);
     <p class="text-gray-600 mt-1">Welcome back, <?php echo $user_name; ?>!</p>
   </header>
 
-  <div class="dashboard-grid">
+  <div class="ap-dashboard-grid">
     <!-- Profile Summary -->
-    <div class="dashboard-card">
-      <h3 class="card-title">👤 Profile Summary</h3>
+    <div class="ap-card" role="region" aria-labelledby="profile-summary-title">
+      <h2 id="profile-summary-title" class="ap-card__title">👤 Profile Summary</h2>
       <p>Name: <?php echo $user_name; ?></p>
       <p>Role: Artist</p>
       <a href="/edit-profile" class="card-link">Edit Profile</a>
     </div>
 
     <!-- Upload Artwork -->
-    <div class="dashboard-card">
-      <h3 class="card-title">🖼 Upload Artwork</h3>
+    <div class="ap-card" role="region" aria-labelledby="upload-artwork-title">
+      <h2 id="upload-artwork-title" class="ap-card__title">🖼 Upload Artwork</h2>
       <p>Submit new pieces to your portfolio.</p>
       <button class="btn-primary">Upload</button>
     </div>
 
     <!-- Exhibitions -->
-    <div class="dashboard-card">
-      <h3 class="card-title">🏛 Upcoming Exhibitions</h3>
+    <div class="ap-card" role="region" aria-labelledby="exhibitions-title">
+      <h2 id="exhibitions-title" class="ap-card__title">🏛 Upcoming Exhibitions</h2>
       <ul>
         <li>Urban Light – Aug 2025</li>
         <li>Local Visions – Sep 2025</li>
@@ -41,8 +41,8 @@ $user_name = esc_html($current_user->display_name);
     </div>
 
     <!-- Stats -->
-    <div class="dashboard-card">
-      <h3 class="card-title">📈 Engagement Stats</h3>
+    <div class="ap-card" role="region" aria-labelledby="engagement-stats-title">
+      <h2 id="engagement-stats-title" class="ap-card__title">📈 Engagement Stats</h2>
       <p>Views: 4,203</p>
       <p>Likes: 327</p>
       <p>Inquiries: 22</p>
