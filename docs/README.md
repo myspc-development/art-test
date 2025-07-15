@@ -12,6 +12,7 @@
 - [Feedback & Monitoring Layer](./feedback-monitoring-layer-codex.md)
 - [OpenAPI Specification](./openapi.yaml)
 - [Public Beta Setup](./public-beta-setup-codex.md)
+- [Phase M: Creator & Curator Module](./codex-phase-m-creator-curator-codex.md)
 
 ### Developer Checklist
 
