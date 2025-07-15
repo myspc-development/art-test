@@ -64,6 +64,7 @@ Artists may link to an external donation URL or embed a Stripe-hosted donation p
 
 * Store the `donation_url` in `user_meta`.
 * Display a **Support this Artist** button on profiles and event pages.
+* `donation_url` is returned with user objects via the REST API.
 * Expose a configuration route:
   ```http
   GET /artpulse/v1/users/{id}/donate

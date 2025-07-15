@@ -363,6 +363,7 @@ class Plugin
         \ArtPulse\Monetization\PaymentWebhookController::register();
         \ArtPulse\Monetization\SalesOverview::register();
         \ArtPulse\Monetization\PayoutManager::register();
+        \ArtPulse\Monetization\DonationLink::register();
         \ArtPulse\Monetization\TipManager::register();
         \ArtPulse\Marketplace\MarketplaceManager::register();
         \ArtPulse\Marketplace\AuctionManager::register();

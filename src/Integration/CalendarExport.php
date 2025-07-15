@@ -15,6 +15,9 @@ class CalendarExport
         add_rewrite_rule('^events/([0-9]+)/export\\.ics$', 'index.php?ap_ics_event=$matches[1]', 'top');
         add_rewrite_rule('^org/([0-9]+)/calendar\\.ics$', 'index.php?ap_ics_org=$matches[1]', 'top');
         add_rewrite_rule('^artist/([0-9]+)/events\\.ics$', 'index.php?ap_ics_artist=$matches[1]', 'top');
+        add_rewrite_rule('^feeds/ical/artist/([0-9]+)\\.ics$', 'index.php?ap_ics_artist=$matches[1]', 'top');
+        add_rewrite_rule('^feeds/ical/gallery/([0-9]+)\\.ics$', 'index.php?ap_ics_org=$matches[1]', 'top');
+        add_rewrite_rule('^feeds/ical/all\\.ics$', 'index.php?ap_ics_all=1', 'top');
     }
 
     public static function register_query_vars(array $vars): array
@@ -22,6 +25,7 @@ class CalendarExport
         $vars[] = 'ap_ics_event';
         $vars[] = 'ap_ics_org';
         $vars[] = 'ap_ics_artist';
+        $vars[] = 'ap_ics_all';
         return $vars;
     }
 
@@ -30,6 +34,7 @@ class CalendarExport
         $event_id  = get_query_var('ap_ics_event');
         $org_id    = get_query_var('ap_ics_org');
         $artist_id = get_query_var('ap_ics_artist');
+        $all_feed  = get_query_var('ap_ics_all');
 
         if ($event_id) {
             self::output_event(intval($event_id));
@@ -37,6 +42,8 @@ class CalendarExport
             self::output_org(intval($org_id));
         } elseif ($artist_id) {
             self::output_artist(intval($artist_id));
+        } elseif ($all_feed) {
+            self::output_all();
         }
     }
 
@@ -85,6 +92,21 @@ class CalendarExport
         $filename = 'artist-' . $artist_id . '.ics';
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         echo self::build_artist_ics($events);
+        exit;
+    }
+
+    private static function output_all(): void
+    {
+        $events = get_posts([
+            'post_type'      => 'artpulse_event',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+        ]);
+
+        header('Content-Type: text/calendar; charset=utf-8');
+        $filename = 'all-events.ics';
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        echo self::build_all_ics($events);
         exit;
     }
 
@@ -159,6 +181,39 @@ class CalendarExport
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
             'PRODID:-//ArtPulse//Artist//EN',
+            'BEGIN:VTIMEZONE',
+            'TZID:' . $tz,
+            'END:VTIMEZONE',
+        ];
+        foreach ($events as $event) {
+            $lines[] = 'BEGIN:VEVENT';
+            $lines[] = 'UID:event-' . $event->ID . '@' . parse_url(home_url(), PHP_URL_HOST);
+            $start   = get_post_meta($event->ID, 'event_start_date', true);
+            $end     = get_post_meta($event->ID, 'event_end_date', true) ?: $start;
+            $ds      = self::format_date($start);
+            $de      = self::format_date($end);
+            $lines[] = 'DTSTAMP:' . gmdate('Ymd\THis\Z');
+            $lines[] = 'DTSTART;TZID=' . $ds['tzid'] . ':' . $ds['local'];
+            $lines[] = 'DTSTART:' . $ds['utc'];
+            $lines[] = 'DTEND;TZID=' . $de['tzid'] . ':' . $de['local'];
+            $lines[] = 'DTEND:' . $de['utc'];
+            $lines[] = 'SUMMARY:' . self::escape($event->post_title);
+            $lines[] = 'DESCRIPTION:' . self::escape(wp_strip_all_tags($event->post_content));
+            $lines[] = 'LOCATION:' . self::escape(get_post_meta($event->ID, 'venue_name', true));
+            $lines[] = 'URL:' . get_permalink($event->ID);
+            $lines[] = 'END:VEVENT';
+        }
+        $lines[] = 'END:VCALENDAR';
+        return implode("\r\n", $lines);
+    }
+
+    private static function build_all_ics(array $events): string
+    {
+        $tz = wp_timezone_string() ?: 'UTC';
+        $lines = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//ArtPulse//AllEvents//EN',
             'BEGIN:VTIMEZONE',
             'TZID:' . $tz,
             'END:VTIMEZONE',

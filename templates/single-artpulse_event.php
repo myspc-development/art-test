@@ -74,6 +74,19 @@ if ( have_posts() ) :
     echo '<div class="entry-content">';
     the_content();
     echo '</div>';
+    echo \ArtPulse\Frontend\ap_event_calendar_links(get_the_ID());
+    $owner = get_post_field('post_author', get_the_ID());
+    $donate = \ArtPulse\Frontend\ap_render_donate_button($owner);
+    if (!$donate) {
+        $org = get_post_meta(get_the_ID(), '_ap_event_organization', true);
+        if ($org) {
+            $org_owner = get_post_field('post_author', $org);
+            $donate = \ArtPulse\Frontend\ap_render_donate_button($org_owner);
+        }
+    }
+    if ($donate) {
+        echo $donate;
+    }
     ?>
     <form class="ap-newsletter-optin">
       <input type="email" placeholder="<?php esc_attr_e('Your email','artpulse'); ?>" required>

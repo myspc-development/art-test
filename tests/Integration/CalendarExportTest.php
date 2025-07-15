@@ -109,4 +109,34 @@ class CalendarExportTest extends \WP_UnitTestCase
         $this->assertStringContainsString('SUMMARY:Artist Event', $ics);
         $this->assertStringContainsString('END:VCALENDAR', $ics);
     }
+
+    public function test_all_calendar_export_builds_ics_for_all_events(): void
+    {
+        $id1 = wp_insert_post([
+            'post_title'  => 'First Global',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+            'meta_input'  => ['event_start_date' => '2033-01-01'],
+        ]);
+        $id2 = wp_insert_post([
+            'post_title'  => 'Second Global',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+            'meta_input'  => ['event_start_date' => '2033-02-01'],
+        ]);
+
+        $events = get_posts([
+            'post_type'      => 'artpulse_event',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+        ]);
+
+        $ref = new \ReflectionMethod(CalendarExport::class, 'build_all_ics');
+        $ref->setAccessible(true);
+        $ics = $ref->invoke(null, $events);
+
+        $this->assertStringContainsString('SUMMARY:First Global', $ics);
+        $this->assertStringContainsString('SUMMARY:Second Global', $ics);
+        $this->assertStringContainsString('PRODID:-//ArtPulse//AllEvents//EN', $ics);
+    }
 }

@@ -41,3 +41,15 @@ Event forms may offer three publishing states:
 In the dashboard and calendar, clearly mark draft or scheduled events. When saving, set `post_status` and optionally `post_date` according to the selected option.
 
 Update this codex whenever new statuses or actions are added.
+
+## Calendar Feeds
+
+Users can subscribe to upcoming events via iCal. Endpoints return `.ics` files:
+
+| Feed | Path |
+|------|------|
+| Artist | `/feeds/ical/artist/{id}.ics` |
+| Gallery | `/feeds/ical/gallery/{id}.ics` |
+| All Events | `/feeds/ical/all.ics` |
+
+Buttons on event pages link to Google Calendar and an `.ics` download for Apple or Outlook.

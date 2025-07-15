@@ -50,6 +50,7 @@ add_action('init', [DashboardWidgetRegistry::class, 'init']);
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
+require_once __DIR__ . '/src/Frontend/DonationHelpers.php';
 require_once __DIR__ . '/includes/widgets/class-ap-widget.php';
 require_once __DIR__ . '/includes/widgets/class-favorite-portfolio-widget.php';
 require_once __DIR__ . '/src/helpers.php';
