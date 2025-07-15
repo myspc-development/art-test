@@ -37,9 +37,11 @@ class WidgetsController
 
     public static function render(WP_REST_Request $request): WP_REST_Response
     {
-        $type  = sanitize_key($request['type']);
-        $id    = (int) $request['id'];
-        $style = sanitize_key($request['style']);
+        $type   = sanitize_key($request['type']);
+        $id     = (int) $request['id'];
+        $style  = sanitize_key($request['style']);
+        $color  = sanitize_hex_color($request['color'] ?? '#333');
+        $layout = sanitize_key($request['layout'] ?? 'list');
 
         $events = [];
         if ($type === 'artist') {
@@ -59,14 +61,23 @@ class WidgetsController
             ]);
         }
 
+        $container_style = $layout === 'horizontal' ? 'display:flex;flex-wrap:wrap' : '';
+
         ob_start();
-        echo '<html><head><meta charset="utf-8"><style>body{margin:0;font-family:sans-serif}</style></head><body>';
+        echo '<html><head><meta charset="utf-8">';
+        echo '<style>body{margin:0;font-family:sans-serif}';
+        echo '.ap-item{padding:8px;border-bottom:1px solid #eee}';
+        if ($layout === 'horizontal') {
+            echo '.ap-item{border:none;margin-right:8px}';
+        }
+        echo '.ap-item a{color:' . esc_attr($color) . ';text-decoration:none}';
+        echo '</style></head><body><div style="' . esc_attr($container_style) . '">';
         foreach ($events as $event) {
-            echo '<div style="padding:8px;border-bottom:1px solid #eee">';
+            echo '<div class="ap-item">';
             echo '<a href="' . esc_url(get_permalink($event)) . '" target="_blank">' . esc_html($event->post_title) . '</a>';
             echo '</div>';
         }
-        echo '</body></html>';
+        echo '</div></body></html>';
         $html = ob_get_clean();
         $headers = ['Cache-Control' => 'public,max-age=3600'];
         return new WP_REST_Response($html, 200, $headers);
