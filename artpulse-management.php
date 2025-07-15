@@ -255,14 +255,6 @@ add_action('admin_menu', function () {
         80
     );
 
-    add_submenu_page(
-        'artpulse-dashboard',
-        __('Diagnostics', 'artpulse'),
-        __('Diagnostics', 'artpulse'),
-        'manage_options',
-        'ap-diagnostics',
-        'ap_render_diagnostics_page'
-    );
 });
 
 add_action('admin_init', 'ap_maybe_redirect_diagnostics_slug');
@@ -332,79 +324,6 @@ add_action('admin_menu', function () {
  */
 // Legacy page replaced by new settings interface in admin/page-settings.php
 
-function ap_render_diagnostics_page() {
-    global $wpdb;
-
-    $tables  = ['ap_roles','ap_feedback','ap_feedback_comments','ap_org_messages','ap_scheduled_messages','ap_payouts'];
-    $missing = false;
-
-    $opts    = get_option('artpulse_settings', []);
-    $update  = get_option('ap_update_available');
-
-    $rows = [
-        [__('Plugin Version', 'artpulse'), defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : ''],
-        [__('Installed', 'artpulse'), get_option('artpulse_install_time', 'N/A')],
-        [__('PHP Version', 'artpulse'), phpversion()],
-        [__('Memory Limit', 'artpulse'), ini_get('memory_limit')],
-        [__('REST Enabled', 'artpulse'), rest_url() !== '' ? '✅' : '❌'],
-        [__('HTTPS Active', 'artpulse'), is_ssl() ? '✅' : '❌'],
-        [__('Update Available', 'artpulse'), $update ? '✅' : '❌'],
-    ];
-
-    $stripe_status = (!empty($opts['stripe_enabled']) && class_exists('\\Stripe\\StripeClient')) ? '✅' : '❌';
-    $rows[] = [__('Stripe Configured', 'artpulse'), $stripe_status];
-
-    $discord_status = !empty(get_option('ap_discord_webhook_url')) ? '✅' : '❌';
-    $rows[] = [__('Discord Configured', 'artpulse'), $discord_status];
-
-    echo '<div class="wrap"><h1>ArtPulse Diagnostics</h1>';
-    echo '<table class="form-table"><tbody>';
-    foreach ($rows as $r) {
-        echo '<tr><th scope="row">' . esc_html($r[0]) . '</th><td>' . esc_html($r[1]) . '</td></tr>';
-    }
-    echo '</tbody></table>';
-
-    foreach ($tables as $t) {
-        $tbl = $wpdb->prefix . $t;
-        if ($wpdb->get_var("SHOW TABLES LIKE '{$tbl}'") !== $tbl) {
-            echo "<p style='color:red'>❌ Missing: {$tbl}</p>";
-            $missing = true;
-        } else {
-            echo "<p style='color:green'>✅ Present: {$tbl}</p>";
-        }
-    }
-
-    if (!$missing) {
-        echo "<div style='margin-top:1em;padding:10px;background:#e6ffed;border-left:5px solid #28a745;'>✅ All ArtPulse database tables are installed and verified.</div>";
-    }
-
-    $resp = wp_remote_get(rest_url('artpulse/v1/status'));
-    if (is_wp_error($resp)) {
-        echo "<p style='color:red'>❌ REST status route unreachable.</p>";
-    } else {
-        echo "<p style='color:green'>✅ REST status route responding.</p>";
-    }
-
-    ?>
-    <h2><?php esc_html_e('Manual Tools', 'artpulse'); ?></h2>
-    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin-right:10px;">
-        <?php wp_nonce_field('ap_flush_github_cache'); ?>
-        <input type="hidden" name="action" value="ap_flush_github_cache" />
-        <button type="submit" class="button">🔄 <?php esc_html_e('Flush GitHub cache', 'artpulse'); ?></button>
-    </form>
-    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin-right:10px;">
-        <?php wp_nonce_field('ap_ping_apis'); ?>
-        <input type="hidden" name="action" value="ap_ping_apis" />
-        <button type="submit" class="button">🧪 <?php esc_html_e('Ping external APIs', 'artpulse'); ?></button>
-    </form>
-    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;">
-        <?php wp_nonce_field('ap_export_diagnostic_report'); ?>
-        <input type="hidden" name="action" value="ap_export_diagnostic_report" />
-        <button type="submit" class="button">📥 <?php esc_html_e('Export report', 'artpulse'); ?></button>
-    </form>
-    <?php
-    echo '</div>';
-}
 
 function ap_flush_github_cache() {
     if (!current_user_can('manage_options')) {
