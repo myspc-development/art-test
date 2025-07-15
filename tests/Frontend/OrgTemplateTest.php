@@ -14,7 +14,7 @@ namespace {
     function esc_url($url){ return $url; }
 }
 
-namespace ArtPulse\Frontend\Tests;
+namespace ArtPulse\Frontend\Tests {
 
 use PHPUnit\Framework\TestCase;
 
@@ -43,4 +43,5 @@ class OrgTemplateTest extends TestCase
         $this->assertStringContainsString('Monday', $html);
         $this->assertStringContainsString('09:00 - 17:00', $html);
     }
+}
 }

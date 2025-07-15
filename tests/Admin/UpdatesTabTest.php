@@ -66,7 +66,7 @@ namespace ArtPulse\Admin {
     function error_log($msg) { \ArtPulse\Admin\Tests\UpdatesTabTest::$logs[] = $msg; }
 }
 
-namespace ArtPulse\Admin\Tests;
+namespace ArtPulse\Admin\Tests {
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UpdatesTab;
@@ -221,4 +221,5 @@ class UpdatesTabTest extends TestCase
         }
         $this->assertStringContainsString('ap_update_error=' . urlencode('remote failed'), self::$redirect);
     }
+}
 }
