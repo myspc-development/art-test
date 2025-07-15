@@ -85,15 +85,24 @@ class EventChatController
         }
         global $wpdb;
         $table = $wpdb->prefix . 'ap_event_chat';
-        $rows = $wpdb->get_results($wpdb->prepare(
-            "SELECT user_id, content, created_at FROM $table WHERE event_id = %d ORDER BY created_at ASC LIMIT 50",
-            $event_id
-        ), ARRAY_A);
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT user_id, content, created_at FROM $table WHERE event_id = %d ORDER BY created_at ASC LIMIT 50",
+                $event_id
+            ),
+            ARRAY_A
+        );
         $messages = array_map(static function($row) {
-            $user = get_userdata((int) $row['user_id']);
+            $user   = get_userdata((int) $row['user_id']);
+            $avatar = get_avatar_url((int) $row['user_id'], ['size' => 48]);
+            if (!$avatar) {
+                $initial = $user ? strtoupper(substr($user->display_name, 0, 1)) : '?';
+                $avatar  = 'https://via.placeholder.com/48?text=' . rawurlencode($initial);
+            }
             return [
                 'user_id'    => (int) $row['user_id'],
                 'author'     => $user ? $user->display_name : '',
+                'avatar'     => $avatar,
                 'content'    => $row['content'],
                 'created_at' => $row['created_at'],
             ];
