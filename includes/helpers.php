@@ -1,5 +1,7 @@
 <?php
-function ap_get_ui_mode() {
+declare(strict_types=1);
+
+function ap_get_ui_mode(): string {
     if (isset($_GET['ui_mode'])) {
         return sanitize_text_field($_GET['ui_mode']);
     }
@@ -27,7 +29,7 @@ function ap_cache_get(string $key, callable $callback, int $expires = HOUR_IN_SE
  * @param string $url Feed URL.
  * @return array|SimplePie
  */
-function ap_get_feed($url) {
+function ap_get_feed(string $url): array|SimplePie {
     include_once ABSPATH . WPINC . '/feed.php';
 
     $feed = fetch_feed($url);
