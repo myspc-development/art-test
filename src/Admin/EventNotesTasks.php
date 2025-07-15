@@ -78,30 +78,34 @@ class EventNotesTasks
         $tasks = $wpdb->prefix.'ap_event_tasks';
         $charset = $wpdb->get_charset_collate();
         require_once ABSPATH.'wp-admin/includes/upgrade.php';
-        dbDelta("CREATE TABLE $notes (
-            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            PRIMARY KEY (id),
-            event_id BIGINT NOT NULL,
-            user_id BIGINT NOT NULL,
-            note TEXT NOT NULL,
-            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME NULL DEFAULT NULL,
-            KEY event_id (event_id)
-        ) $charset");
-        dbDelta("CREATE TABLE $tasks (
-            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            PRIMARY KEY (id),
-            event_id BIGINT NOT NULL,
-            title VARCHAR(255) NOT NULL,
-            description TEXT NULL,
-            assignee BIGINT NULL,
-            due_date DATE NULL,
-            status VARCHAR(20) NOT NULL DEFAULT 'open',
-            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME NULL DEFAULT NULL,
-            KEY event_id (event_id),
-            KEY status (status)
-        ) $charset");
+        if (!$wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $notes))) {
+            dbDelta("CREATE TABLE $notes (
+                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+                PRIMARY KEY (id),
+                event_id BIGINT NOT NULL,
+                user_id BIGINT NOT NULL,
+                note TEXT NOT NULL,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NULL DEFAULT NULL,
+                KEY event_id (event_id)
+            ) $charset");
+        }
+        if (!$wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $tasks))) {
+            dbDelta("CREATE TABLE $tasks (
+                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+                PRIMARY KEY (id),
+                event_id BIGINT NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT NULL,
+                assignee BIGINT NULL,
+                due_date DATE NULL,
+                status VARCHAR(20) NOT NULL DEFAULT 'open',
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NULL DEFAULT NULL,
+                KEY event_id (event_id),
+                KEY status (status)
+            ) $charset");
+        }
     }
 
     /**
