@@ -4,7 +4,7 @@
 - [Sprint 2: Donations + Calendar](./codex-sprint-2-donations-calendar.md)
 - [Sprint 3: Event Ranking + API](./codex-sprint-3-ranking-api.md)
 - [Sprint 4: Polish + Documentation](./codex-sprint-4-polish-docs.md)
-- [Sprint I1: Pricing Engine + Upgrade UI](./codex-sprint-i1-pricing-engine.md)
+
 - [Phase F: Launch, Feedback & Scale](./codex-phase-f-launch-feedback-scale.md)
 - [Feedback & Monitoring Layer](./feedback-monitoring-layer-codex.md)
 - [OpenAPI Specification](./openapi.yaml)
