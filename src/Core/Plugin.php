@@ -335,6 +335,7 @@ class Plugin
         WidgetEmbedShortcode::register();
         WidgetEmbedBlock::register();
         \ArtPulse\Blocks\FavoritesWidgetBlock::register();
+        \ArtPulse\Frontend\WidgetsController::register();
         \ArtPulse\Community\FollowRestController::register();
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
         \ArtPulse\Community\NotificationHooks::register();
@@ -371,7 +372,9 @@ class Plugin
         \ArtPulse\Search\MetaFullTextSearch::register();
         \ArtPulse\Search\ExternalSearch::register();
         TrendingManager::register();
+        \ArtPulse\Discovery\EventRankingManager::register();
         TrendingRestController::register();
+        \ArtPulse\Rest\PartnerApiController::register();
         \ArtPulse\Personalization\RecommendationRestController::register();
         \ArtPulse\Rest\FollowVenueCuratorController::register();
         \ArtPulse\Personalization\WeeklyRecommendations::register();

@@ -30,6 +30,8 @@ class CalendarExportTest extends \WP_UnitTestCase
 
         $this->assertStringContainsString('BEGIN:VCALENDAR', $ics);
         $this->assertStringContainsString('SUMMARY:Export Event', $ics);
+        $this->assertStringContainsString('VTIMEZONE', $ics);
+        $this->assertStringContainsString('DTSTART;TZID=', $ics);
         $this->assertStringContainsString('DESCRIPTION:An event description.', $ics);
         $this->assertStringContainsString('LOCATION:Main Hall', $ics);
         $this->assertStringContainsString('URL:' . get_permalink($id), $ics);
@@ -79,5 +81,32 @@ class CalendarExportTest extends \WP_UnitTestCase
 
         $filename = 'organization-' . $org . '.ics';
         $this->assertSame('organization-' . $org . '.ics', $filename);
+    }
+
+    public function test_artist_calendar_export_builds_ics_for_events(): void
+    {
+        $artist = self::factory()->user->create(['role' => 'author']);
+        $id = wp_insert_post([
+            'post_title'  => 'Artist Event',
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+            'post_author' => $artist,
+            'meta_input'  => ['event_start_date' => '2032-03-01'],
+        ]);
+
+        $events = get_posts([
+            'post_type'      => 'artpulse_event',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'author'         => $artist,
+        ]);
+
+        $ref = new \ReflectionMethod(CalendarExport::class, 'build_artist_ics');
+        $ref->setAccessible(true);
+        $ics = $ref->invoke(null, $events);
+
+        $this->assertStringContainsString('BEGIN:VCALENDAR', $ics);
+        $this->assertStringContainsString('SUMMARY:Artist Event', $ics);
+        $this->assertStringContainsString('END:VCALENDAR', $ics);
     }
 }
