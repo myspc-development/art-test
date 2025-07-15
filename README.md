@@ -33,6 +33,11 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.
 [Member Registration Codex](docs/member-registration-codex.md) explains native registration hooks.
 [Artist & Gallery Tools Codex](docs/artist-gallery-tools-codex.md) details self-serve portals, AI tagging, CRM features and grant-ready reports.
+[Mobile ArtWalk Guide](docs/mobile-artwalk.md) explains the PWA, nearby feed and crawl planner.
+[QR Check-Ins Codex](docs/qr-checkins.md) covers attendance scanning and logs.
+[Curator Feedback Codex](docs/curator-feedback.md) details private notes and ratings.
+[Reporting & Export Codex](docs/reporting-exports.md) summarizes analytics exports.
+[Partnership Deployment Codex](docs/partnership-deployment.md) walks through onboarding city partners.
 
 Additional resources:
 
