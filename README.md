@@ -125,7 +125,7 @@ WordPress will display an “unexpected output” warning if this file is missin
   [ap_event_calendar]
 - You can also add filters or adjust display options via shortcode attributes.
 - **Tip:** Calendar updates instantly when new events are added or when filters are applied.
-- Export any event as an `.ics` file via `/events/{id}/export.ics` or download an organization's full schedule from `/org/{id}/calendar.ics`.
+- Export any event as an `.ics` file via `/events/{id}/export.ics`, download an organization's full schedule from `/org/{id}/calendar.ics`, or fetch a specific artist feed from `/artist/{id}/events.ics`. iCal downloads now include local timezone details.
 
 ### Shortcodes & Widgets List
 - `[ap_event_directory]` — Show event directory with filters
