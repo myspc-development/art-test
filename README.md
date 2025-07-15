@@ -26,6 +26,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Widget Settings Codex](docs/widget-settings-codex.md) describes widget schemas and per-user storage.
 [Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.
 [Member Registration Codex](docs/member-registration-codex.md) explains native registration hooks.
+[Artist & Gallery Tools Codex](docs/artist-gallery-tools-codex.md) details self-serve portals, AI tagging, CRM features and grant-ready reports.
 
 Additional resources:
 
