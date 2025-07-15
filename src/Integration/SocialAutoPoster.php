@@ -69,7 +69,7 @@ class SocialAutoPoster
         ?>
         <form method="post" action="options.php" class="ap-settings-form">
             <?php settings_fields('ap_social_auto_post_settings_group'); ?>
-            <h2><?php esc_html_e('Social Auto-Posting', 'artpulse'); ?></h2>
+            <h2 class="ap-card__title"><?php esc_html_e('Social Auto-Posting', 'artpulse'); ?></h2>
             <?php foreach (self::NETWORKS as $network) : ?>
                 <fieldset class="ap-fieldset">
                     <legend><?php echo esc_html(ucfirst($network)); ?></legend>

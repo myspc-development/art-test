@@ -1,5 +1,5 @@
 <div class="ap-quickstart-guide">
-  <h2>Admin Quickstart Guide</h2>
+  <h2 class="ap-card__title">Admin Quickstart Guide</h2>
   <section>
     <h3>1. Configure Settings</h3>
     <ul>

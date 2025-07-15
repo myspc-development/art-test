@@ -16,7 +16,7 @@ add_action('add_meta_boxes', function () {
 function ap_render_rejection_reason_meta_box(WP_Post $post)
 {
     $value = get_post_meta($post->ID, 'ap_rejection_reason', true);
-    echo '<textarea style="width:100%" rows="4" name="ap_rejection_reason">' . esc_textarea($value) . '</textarea>';
+    echo '<textarea rows="4" name="ap_rejection_reason">' . esc_textarea($value) . '</textarea>';
 }
 
 add_action('save_post_artpulse_event', function ($post_id, WP_Post $post) {

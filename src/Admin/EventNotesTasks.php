@@ -22,10 +22,10 @@ class EventNotesTasks
 
     public static function render_notes_box(\WP_Post $post): void
     {
-        echo '<textarea style="width:100%" name="ap_new_note" rows="3" placeholder="'.esc_attr__('Add note...','artpulse').'"></textarea>';
+        echo '<textarea name="ap_new_note" rows="3" placeholder="'.esc_attr__('Add note...','artpulse').'"></textarea>';
         $notes = self::get_notes($post->ID);
         if ($notes) {
-            echo '<ul style="margin-top:10px">';
+            echo '<ul>';
             foreach ($notes as $n) {
                 $user = get_userdata($n['user_id']);
                 $author = $user ? $user->display_name : $n['user_id'];
@@ -37,12 +37,12 @@ class EventNotesTasks
 
     public static function render_tasks_box(\WP_Post $post): void
     {
-        echo '<p><input type="text" name="ap_task_title" placeholder="'.esc_attr__('Task title','artpulse').'" style="width:100%"></p>';
-        echo '<p><label>'.__('Assignee','artpulse').': <input type="number" name="ap_task_assignee" style="width:80px"></label></p>';
+        echo '<p><input type="text" name="ap_task_title" placeholder="'.esc_attr__('Task title','artpulse').'"></p>';
+        echo '<p><label>'.__('Assignee','artpulse').': <input type="number" name="ap_task_assignee"></label></p>';
         echo '<p><label>'.__('Due Date','artpulse').': <input type="date" name="ap_task_due" ></label></p>';
         $tasks = self::get_tasks($post->ID);
         if ($tasks) {
-            echo '<ul style="margin-top:10px">';
+            echo '<ul>';
             foreach ($tasks as $t) {
                 $user = $t['assignee'] ? get_userdata($t['assignee']) : null;
                 $name = $user ? $user->display_name : __('Unassigned','artpulse');

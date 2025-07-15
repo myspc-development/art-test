@@ -119,7 +119,7 @@ class EngagementDashboard
         <div class="wrap">
             <h1><?php esc_html_e('Member Engagement Dashboard', 'artpulse'); ?></h1>
 
-            <form method="get" style="margin-bottom: 20px;">
+            <form method="get">
                 <input type="hidden" name="page" value="artpulse-engagement" />
                 <select name="activity">
                     <option value="" <?php selected($activity_filter, ''); ?>>All Users</option>
@@ -195,9 +195,9 @@ class EngagementDashboard
                         <td>
                             <?php echo esc_html($user->ap_score); ?>
                             <?php if ($user->ap_score >= 5): ?>
-                                <span style="color:green">↑</span>
+                                <span>↑</span>
                             <?php elseif ($user->ap_score == 0): ?>
-                                <span style="color:red">↓</span>
+                                <span>↓</span>
                             <?php endif; ?>
                         </td>
                     </tr>

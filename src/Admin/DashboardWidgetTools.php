@@ -58,11 +58,11 @@ class DashboardWidgetTools
                 return;
             }
 
-            wp_add_dashboard_widget(
-                'artpulse_dashboard_widget',
-                __('ArtPulse Dashboard', 'artpulse'),
-                [self::class, 'render']
-            );
+            ap_register_dashboard_widget([
+                'id'    => 'artpulse_dashboard_widget',
+                'title' => __('ArtPulse Dashboard', 'artpulse'),
+                'render' => [self::class, 'render'],
+            ]);
         });
         add_action('admin_menu', function () {
             add_submenu_page(
@@ -144,7 +144,7 @@ class DashboardWidgetTools
         echo '<div class="wrap">';
         echo '<p><a href="' . admin_url('index.php?page=dashboard-layout-help') . '" class="button">📘 View Help Guide</a></p>';
         echo '<h3>' . esc_html__('Dashboard Widget Manager', 'artpulse') . '</h3>';
-        echo '<form method="post" id="widget-layout-form" style="margin-bottom:10px">';
+        echo '<form method="post" id="widget-layout-form">';
         wp_nonce_field('ap_save_role_layout');
         echo '<select id="ap-role-selector" name="ap_dashboard_role">';
         foreach ($roles as $key => $role) {
@@ -156,8 +156,8 @@ class DashboardWidgetTools
         echo '<span class="description">Drag to reorder. Toggle visibility. Click save to store layout.</span>';
         echo '<button type="submit" name="reset_layout" class="button">' . esc_html__('Reset Layout', 'artpulse') . '</button> ';
         echo '<button type="button" id="export-layout" class="button">' . esc_html__('Export', 'artpulse') . '</button> ';
-        echo '<label for="import-layout" class="button" style="margin-right:5px;">' . esc_html__('Import', 'artpulse') . '</label>';
-        echo '<input type="file" id="import-layout" style="display:none" />';
+        echo '<label for="import-layout" class="button">' . esc_html__('Import', 'artpulse') . '</label>';
+        echo '<input type="file" id="import-layout" />';
         echo '<input type="hidden" id="layout_input" name="layout">';
         echo '<p><button type="submit" id="save-layout-btn" class="button button-primary">💾 Save Layout</button></p>';
         if (current_user_can('manage_options')) {
@@ -195,12 +195,12 @@ class DashboardWidgetTools
         }
         echo '</div>';
 
-        echo '<div class="ap-add-widget" style="margin-top:15px;">';
+        echo '<div class="ap-add-widget">';
         echo '<h3>' . esc_html__('Add Widget', 'artpulse') . '</h3>';
-        echo '<input type="text" id="ap-widget-search" placeholder="Search widgets..." oninput="apSearchWidgets(this.value)" class="regular-text" style="margin-bottom: 10px;">';
+        echo '<input type="text" id="ap-widget-search" placeholder="Search widgets..." oninput="apSearchWidgets(this.value)" class="regular-text">';
         $categories = array_unique(array_filter(array_column($defs, 'category')));
         if ($categories) {
-            echo '<select id="ap-widget-category-filter" onchange="apFilterWidgetsByCategory(this.value)" style="margin-left:5px;">';
+            echo '<select id="ap-widget-category-filter" onchange="apFilterWidgetsByCategory(this.value)">';
             echo '<option value="">' . esc_html__('All Categories', 'artpulse') . '</option>';
             foreach ($categories as $cat) {
                 echo '<option value="' . esc_attr($cat) . '">' . esc_html(ucfirst($cat)) . '</option>';
@@ -230,7 +230,7 @@ class DashboardWidgetTools
         echo '</div>';
 
         echo '<button type="button" id="toggle-preview" class="button">Toggle Preview</button>';
-        echo '<h3 style="margin-top: 40px;">Preview Dashboard for ' . esc_html(ucfirst($selected)) . '</h3>';
+        echo '<h3>Preview Dashboard for ' . esc_html(ucfirst($selected)) . '</h3>';
         echo '<div id="ap-widget-preview-area" class="ap-widget-preview-wrap">';
         self::render_preview_dashboard($selected);
         echo '</div>';

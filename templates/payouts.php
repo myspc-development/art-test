@@ -2,7 +2,7 @@
 use ArtPulse\Core\Plugin;
 ?>
 <div class="ap-payouts">
-    <h2><?php esc_html_e('Payouts', 'artpulse'); ?></h2>
+    <h2 class="ap-card__title"><?php esc_html_e('Payouts', 'artpulse'); ?></h2>
     <div id="ap-payout-summary">
         <p id="ap-payout-balance"></p>
     </div>

@@ -16,28 +16,15 @@ fetch('/wp-json/artpulse/v1/dashboard/messages', {
       const time = new Date(msg.timestamp).toLocaleString();
       const isUnread = msg.status === 'unread';
       return `
-        <div class="ap-message-card" style="padding: 8px; border-bottom: 1px solid #ddd;">
-          <div style="display: flex; justify-content: space-between;">
+        <div class="ap-message-card">
+          <div>
             <strong>${msg.sender_name}</strong>
-            <span style="font-size: 12px; color: #666;">${time}</span>
+            <span>${time}</span>
           </div>
-          <div style="margin: 6px 0;">${msg.content}</div>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="badge ${isUnread ? 'badge-unread' : 'badge-read'}" style="
-              padding: 2px 6px; font-size: 11px;
-              color: white;
-              background-color: ${isUnread ? '#d9534f' : '#5cb85c'};
-              border-radius: 4px;
-            ">${isUnread ? 'Unread' : 'Read'}</span>
-            <button class="reply-button" data-msg-id="${msg.id}" style="
-              background-color: #0073aa;
-              border: none;
-              color: white;
-              padding: 4px 8px;
-              font-size: 12px;
-              border-radius: 3px;
-              cursor: pointer;
-            ">Reply</button>
+          <div>${msg.content}</div>
+          <div>
+            <span class="badge ${isUnread ? 'badge-unread' : 'badge-read'}">${isUnread ? 'Unread' : 'Read'}</span>
+            <button class="reply-button" data-msg-id="${msg.id}">Reply</button>
           </div>
         </div>
       `;

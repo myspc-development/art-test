@@ -146,20 +146,20 @@ class OrganizationDashboardShortcode {
             <div class="dashboard-main">
 
             <div class="dashboard-card" id="membership-section">
-                <h2 id="membership"><?php _e('Membership','artpulse'); ?></h2>
+                <h2 class="ap-card__title" id="membership"><?php _e('Membership','artpulse'); ?></h2>
                 <div id="ap-membership-info"></div>
                 <div id="ap-membership-actions"></div>
             </div>
 
             <div class="dashboard-card" id="billing-section">
-                <h2 id="billing"><?php _e('Next Payment','artpulse'); ?></h2>
+                <h2 class="ap-card__title" id="billing"><?php _e('Next Payment','artpulse'); ?></h2>
                 <div id="ap-next-payment"></div>
                 <h3 id="transactions"><?php _e('Recent Transactions','artpulse'); ?></h3>
                 <div id="ap-transactions"></div>
             </div>
 
             <div class="dashboard-card" id="events-section">
-                <h2 id="events"><?php _e('Organization Events','artpulse'); ?></h2>
+                <h2 class="ap-card__title" id="events"><?php _e('Organization Events','artpulse'); ?></h2>
                 <?php if (current_user_can('edit_posts')) : ?>
                 <button id="ap-add-event-btn" class="ap-form-button nectar-button" type="button"><?php esc_html_e('Add New Event','artpulse'); ?></button>
                 <?php endif; ?>
@@ -327,24 +327,24 @@ class OrganizationDashboardShortcode {
             <div id="kanban-board"></div>
 
             <div class="dashboard-card" id="portfolio-section">
-                <h2 id="portfolio"><?php _e('Portfolio','artpulse'); ?></h2>
+                <h2 class="ap-card__title" id="portfolio"><?php _e('Portfolio','artpulse'); ?></h2>
                 <?php echo do_shortcode('[ap_portfolio_builder]'); ?>
             </div>
 
             <?php if ($show_analytics) : ?>
             <div class="dashboard-card" id="analytics-section">
-                <h2 id="analytics"><?php _e('Analytics','artpulse'); ?></h2>
+                <h2 class="ap-card__title" id="analytics"><?php _e('Analytics','artpulse'); ?></h2>
                 <div id="ap-org-analytics"></div>
             </div>
             <?php endif; ?>
 
             <div class="dashboard-card" id="messages-section">
-                <h2 id="messages"><?php _e('Messages','artpulse'); ?></h2>
+                <h2 class="ap-card__title" id="messages"><?php _e('Messages','artpulse'); ?></h2>
                 <?php echo do_shortcode('[ap_messages]'); ?>
             </div>
 
             <div class="dashboard-card" id="profile-section">
-                <h2 id="profile"><?php _e('Profile','artpulse'); ?></h2>
+                <h2 class="ap-card__title" id="profile"><?php _e('Profile','artpulse'); ?></h2>
                 <?php
                 $days  = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
                 $hours = [];

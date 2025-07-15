@@ -536,7 +536,7 @@ class SettingsPage
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('ArtPulse Members', 'artpulse'); ?></h1>
-            <form method="get" style="margin-bottom: 20px;">
+            <form method="get">
                 <input type="hidden" name="page" value="artpulse-members" />
                 <input type="text" name="ap_search" placeholder="<?php esc_attr_e('Search users...', 'artpulse'); ?>" value="<?php echo esc_attr($search_query); ?>" />
                 <select name="ap_level">
@@ -648,7 +648,7 @@ class SettingsPage
                 <?php endforeach; ?>
             </h2>
             <?php foreach ($tabs as $slug => $label) : ?>
-                <section id="<?php echo esc_attr($slug === 'updates' ? 'updates' : 'ap-tab-' . $slug); ?>" class="ap-settings-section" data-tab="<?php echo esc_attr($slug); ?>" style="<?php echo $current_tab === $slug ? '' : 'display:none;'; ?>">
+                <section id="<?php echo esc_attr($slug === 'updates' ? 'updates' : 'ap-tab-' . $slug); ?>" class="ap-settings-section" data-tab="<?php echo esc_attr($slug); ?>">
                     <?php if ($slug === 'import_export') : ?>
                         <?php ImportExportTab::render(); ?>
                     <?php elseif ($slug === 'shortcodes') : ?>
@@ -674,7 +674,7 @@ class SettingsPage
                         </form>
                         <?php if ($slug === 'general') : ?>
                             <hr>
-                            <h2><?php esc_html_e('System Status', 'artpulse'); ?></h2>
+                            <h2 class="ap-card__title"><?php esc_html_e('System Status', 'artpulse'); ?></h2>
                             <p>
                                 <strong><?php esc_html_e('Webhook Status:', 'artpulse'); ?></strong>
                                 <?php echo esc_html($webhook_status); ?><br>
@@ -683,7 +683,7 @@ class SettingsPage
                                 <strong><?php esc_html_e('Received At:', 'artpulse'); ?></strong>
                                 <?php echo esc_html($last_event['time'] ?? 'N/A'); ?>
                             </p>
-                            <h2><?php esc_html_e('Webhook Event Log', 'artpulse'); ?></h2>
+                            <h2 class="ap-card__title"><?php esc_html_e('Webhook Event Log', 'artpulse'); ?></h2>
                             <table class="widefat fixed striped">
                                 <thead>
                                 <tr>
@@ -706,11 +706,11 @@ class SettingsPage
                                 ?>
                                 </tbody>
                             </table>
-                            <form method="post" style="margin-top: 10px;">
+                            <form method="post">
                                 <?php wp_nonce_field('ap_test_webhook_action'); ?>
                                 <input type="submit" name="ap_test_webhook" class="button button-secondary" value="<?php esc_attr_e('Simulate Webhook Event', 'artpulse'); ?>">
                             </form>
-                            <form method="post" style="margin-top: 10px;">
+                            <form method="post">
                                 <?php wp_nonce_field('ap_clear_webhook_log_action'); ?>
                                 <input type="submit" name="ap_clear_webhook_log" class="button button-secondary" value="<?php esc_attr_e('Clear Webhook Log', 'artpulse'); ?>">
                             </form>

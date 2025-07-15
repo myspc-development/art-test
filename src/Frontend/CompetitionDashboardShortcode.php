@@ -39,11 +39,11 @@ class CompetitionDashboardShortcode
 
         ob_start();
         echo '<div class="ap-competition-dashboard">';
-        echo '<h2>' . esc_html__('Open Competitions', 'artpulse') . '</h2><ul>';
+        echo '<h2 class="ap-card__title">' . esc_html__('Open Competitions', 'artpulse') . '</h2><ul>';
         foreach ($open as $c) {
             echo '<li><a href="' . get_permalink($c) . '">' . esc_html($c->post_title) . '</a></li>';
         }
-        echo '</ul><h2>' . esc_html__('Results', 'artpulse') . '</h2><ul>';
+        echo '</ul><h2 class="ap-card__title">' . esc_html__('Results', 'artpulse') . '</h2><ul>';
         foreach ($closed as $c) {
             echo '<li>' . esc_html($c->post_title) . '<ul>';
             $entries = CompetitionEntryManager::get_entries($c->ID);

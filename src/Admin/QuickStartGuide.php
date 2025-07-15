@@ -36,7 +36,7 @@ class QuickStartGuide
         echo '<h1>' . esc_html__('ArtPulse Quick Start', 'artpulse') . '</h1>';
 
         echo '<section class="ap-widget" id="ap-qs-admin">';
-        echo '<h2>' . esc_html__('Admin Guide', 'artpulse') . '</h2>';
+        echo '<h2 class="ap-card__title">' . esc_html__('Admin Guide', 'artpulse') . '</h2>';
         echo '<ol class="ap-qs-steps">';
         echo '<li>' . esc_html__('Install and configure settings', 'artpulse') . '</li>';
         echo '<li>' . esc_html__('Import or export data via CSV', 'artpulse') . '</li>';
@@ -50,7 +50,7 @@ class QuickStartGuide
         echo '</section>';
 
         echo '<section class="ap-widget" id="ap-qs-member">';
-        echo '<h2>' . esc_html__('Member Guide', 'artpulse') . '</h2>';
+        echo '<h2 class="ap-card__title">' . esc_html__('Member Guide', 'artpulse') . '</h2>';
         echo '<ol class="ap-qs-steps">';
         echo '<li>' . esc_html__('Create your profile and register artworks', 'artpulse') . '</li>';
         echo '<li>' . esc_html__('Submit events for promotion', 'artpulse') . '</li>';

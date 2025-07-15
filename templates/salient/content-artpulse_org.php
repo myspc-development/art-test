@@ -40,7 +40,7 @@ while ( have_posts() ) : the_post(); ?>
     }
     if(!empty($hours)):
   ?>
-    <h2><?php esc_html_e('Opening Hours','artpulse'); ?></h2>
+    <h2 class="ap-card__title"><?php esc_html_e('Opening Hours','artpulse'); ?></h2>
     <ul class="portfolio-meta opening-hours">
       <?php foreach($hours as $day=>$vals): ?>
         <li><strong><?php echo esc_html(ucfirst($day).':'); ?></strong>

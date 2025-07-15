@@ -66,7 +66,7 @@ class OrgRolesPage
             echo '<tr><td><input type="text" name="roles[' . esc_attr($key) . '][name]" value="' . esc_attr($data['name'] ?? $key) . '" /></td><td>';
             foreach ($caps as $cap) {
                 $checked = in_array($cap, $perms, true) ? 'checked' : '';
-                echo '<label style="margin-right:10px"><input type="checkbox" name="roles[' . esc_attr($key) . '][caps][]" value="' . esc_attr($cap) . '" ' . $checked . ' /> ' . esc_html($cap) . '</label>';
+                echo '<label><input type="checkbox" name="roles[' . esc_attr($key) . '][caps][]" value="' . esc_attr($cap) . '" ' . $checked . ' /> ' . esc_html($cap) . '</label>';
             }
             echo '</td></tr>';
         }

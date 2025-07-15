@@ -282,7 +282,7 @@ class UpdatesTab
             echo '<div class="notice notice-success"><p>✅ Plugin updated successfully.</p></div>';
             $files = get_option('ap_updated_files', []);
             if ($files) {
-                echo '<ul style="margin-top:10px;">';
+                echo '<ul>';
                 foreach ($files as $f) {
                     echo '<li>' . esc_html($f) . '</li>';
                 }
@@ -298,21 +298,21 @@ class UpdatesTab
         $last_check  = get_option('ap_update_last_check');
         $last_update = get_option('ap_last_update_time');
         ?>
-        <h2><?php esc_html_e('Manual Update', 'artpulse'); ?></h2>
+        <h2 class="ap-card__title"><?php esc_html_e('Manual Update', 'artpulse'); ?></h2>
         <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
             <?php wp_nonce_field('ap_check_updates'); ?>
             <input type="hidden" name="action" value="ap_check_updates" />
             <button type="submit" class="button"><?php esc_html_e('Check for Updates', 'artpulse'); ?></button>
         </form>
-        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin-top:10px;">
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
             <?php wp_nonce_field('ap_run_update'); ?>
             <input type="hidden" name="action" value="ap_run_update" />
             <button type="submit" id="ap-update-btn" class="button button-primary">
                 <?php esc_html_e('Update Now', 'artpulse'); ?>
-                <span class="spinner" style="float: none; margin-left: 6px;"></span>
+                <span class="spinner"></span>
             </button>
         </form>
-        <p style="margin-top:10px;">
+        <p>
             <?php if ($last_check) : ?>
                 <?php esc_html_e('Last Checked:', 'artpulse'); ?> <?php echo esc_html($last_check); ?><br />
             <?php endif; ?>

@@ -48,7 +48,7 @@ class ArtistDashboardShortcode {
                 <?php echo do_shortcode('[ap_user_profile]'); ?>
             </div>
 
-            <h2><?php esc_html_e('Your Artworks', 'artpulse'); ?></h2>
+            <h2 class="ap-card__title"><?php esc_html_e('Your Artworks', 'artpulse'); ?></h2>
             <ul class="ap-artwork-list">
                 <?php foreach ($artworks as $artwork) : ?>
                     <li>
@@ -63,7 +63,7 @@ class ArtistDashboardShortcode {
                 <?php endforeach; ?>
             </ul>
 
-            <h2 id="upload-artwork"><?php esc_html_e('Upload New Artwork', 'artpulse'); ?></h2>
+            <h2 class="ap-card__title" id="upload-artwork"><?php esc_html_e('Upload New Artwork', 'artpulse'); ?></h2>
             <form class="ap-artwork-upload-form ap-form-container" enctype="multipart/form-data" data-no-ajax="true">
                 <div class="form-group">
                     <label class="ap-form-label" for="ap-artwork-title"><?php esc_html_e('Title', 'artpulse'); ?></label>
@@ -88,7 +88,7 @@ class ArtistDashboardShortcode {
                         <?php esc_html_e('For Sale?', 'artpulse'); ?>
                     </label>
                 </div>
-                <div class="ap-sale-fields" style="display:none;">
+                <div class="ap-sale-fields">
                     <div class="form-group">
                         <label class="ap-form-label" for="ap-artwork-price"><?php esc_html_e('Price', 'artpulse'); ?></label>
                         <input class="ap-input" id="ap-artwork-price" type="text" name="price" />

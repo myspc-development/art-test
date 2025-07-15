@@ -34,6 +34,7 @@
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@wordpress/scripts": "^19.2.4",
     "autoprefixer": "^10.4.21",
+    "glob": "^11.0.3",
     "cssnano": "^6.0.1",
     "postcss": "^8.4.38",
     "postcss-import": "^16.1.1",

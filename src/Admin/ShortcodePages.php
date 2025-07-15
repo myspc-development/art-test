@@ -163,12 +163,12 @@ class ShortcodePages
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Shortcode Pages', 'artpulse'); ?></h1>
-            <form method="post" style="margin-bottom:10px;">
+            <form method="post">
                 <?php wp_nonce_field('ap_create_shortcode_pages'); ?>
                 <fieldset>
                     <legend class="screen-reader-text"><?php esc_html_e('Select Shortcodes', 'artpulse'); ?></legend>
                     <?php foreach (self::get_shortcode_map() as $code => $label) : ?>
-                        <label style="display:block;margin:2px 0;">
+                        <label>
                             <input type="checkbox" name="ap_shortcodes[]" value="<?php echo esc_attr($code); ?>" checked> <?php echo esc_html($label . ' ' . $code); ?>
                         </label>
                     <?php endforeach; ?>

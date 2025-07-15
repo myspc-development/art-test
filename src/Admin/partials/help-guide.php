@@ -1,4 +1,4 @@
-<h2>Admin Dashboard Widgets Editor – Help Guide</h2>
+<h2 class="ap-card__title">Admin Dashboard Widgets Editor – Help Guide</h2>
 <h3>👋 Overview</h3>
 <p>This tool allows administrators to customize the WordPress Dashboard for different types of users — such as members, artists, or organizations. You can reorder, show or hide widgets, and preview layouts per role.</p>
 

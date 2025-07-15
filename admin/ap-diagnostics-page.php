@@ -23,7 +23,7 @@ $user_caps = array_keys((array) wp_get_current_user()->allcaps);
 ?>
 <div class="wrap">
     <h1><?php esc_html_e('ArtPulse Diagnostics', 'artpulse'); ?></h1>
-    <h2><?php esc_html_e('System Information', 'artpulse'); ?></h2>
+    <h2 class="ap-card__title"><?php esc_html_e('System Information', 'artpulse'); ?></h2>
     <table class="form-table">
         <tbody>
         <?php foreach ($info as $label => $value): ?>
@@ -35,20 +35,20 @@ $user_caps = array_keys((array) wp_get_current_user()->allcaps);
         </tbody>
     </table>
 
-    <h2><?php esc_html_e('AJAX Test', 'artpulse'); ?></h2>
+    <h2 class="ap-card__title"><?php esc_html_e('AJAX Test', 'artpulse'); ?></h2>
     <p id="ap-ajax-result"></p>
     <p>
         <button id="ap-ajax-test" class="button button-secondary"><?php esc_html_e('Run AJAX Test', 'artpulse'); ?></button>
     </p>
 
-    <h2><?php esc_html_e('Capabilities', 'artpulse'); ?></h2>
+    <h2 class="ap-card__title"><?php esc_html_e('Capabilities', 'artpulse'); ?></h2>
     <ul>
         <?php foreach ($user_caps as $cap): ?>
             <li><?php echo esc_html($cap); ?></li>
         <?php endforeach; ?>
     </ul>
 
-    <h2><?php esc_html_e('Active Plugins', 'artpulse'); ?></h2>
+    <h2 class="ap-card__title"><?php esc_html_e('Active Plugins', 'artpulse'); ?></h2>
     <ul>
         <?php foreach ($active_plugins as $plugin): ?>
             <li><?php echo esc_html($plugin); ?></li>

@@ -312,7 +312,7 @@ function ap_render_dashboard_preview_page() {
     }
 
     if ($role) {
-        echo '<h2>Previewing: ' . ucfirst($role) . ' Dashboard</h2>';
+        echo '<h2 class="ap-card__title">Previewing: ' . ucfirst($role) . ' Dashboard</h2>';
         echo '<div id="ap-user-dashboard" class="ap-dashboard-columns">';
         \ArtPulse\Admin\DashboardWidgetTools::render_role_dashboard_preview($role);
         echo '</div>';
@@ -654,12 +654,6 @@ add_action('admin_enqueue_scripts', function ($hook) {
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('ap_dashboard_nonce'),
         ]);
-        wp_enqueue_style(
-            'ap-dashboard',
-            plugin_dir_url(__FILE__) . 'build/css/widgets.css',
-            [],
-            '1.0.0'
-        );
     }
 });
 
@@ -671,7 +665,6 @@ add_action('admin_enqueue_scripts', function ($hook) {
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('ap_dashboard_nonce')
         ]);
-        wp_enqueue_style('ap-dashboard', plugin_dir_url(__FILE__) . 'build/css/widgets.css', [], '1.0.0');
     }
 });
 
@@ -1080,7 +1073,7 @@ add_action('wp_footer', function () {
     if (!current_user_can('manage_options')) {
         return;
     }
-    echo '<div style="padding:1em;"><strong>UI Mode:</strong>
+    echo '<div><strong>UI Mode:</strong>
         <a href="?ui_mode=tailwind">Tailwind</a> |
         <a href="?ui_mode=react">React</a></div>';
 });

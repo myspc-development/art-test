@@ -43,12 +43,12 @@ class PendingSubmissionsPage
                 echo '<td><a href="' . esc_url(get_edit_post_link($post->ID)) . '">' . esc_html(get_the_title($post)) . '</a></td>';
                 echo '<td>' . esc_html($post->post_type) . '</td>';
                 echo '<td>';
-                echo '<form method="post" action="' . esc_url($approve_url) . '" style="display:inline">';
+                echo '<form method="post" action="' . esc_url($approve_url) . '">';
                 echo '<input type="hidden" name="post_id" value="' . intval($post->ID) . '" />';
                 echo '<input type="hidden" name="nonce" value="' . wp_create_nonce('ap_approve_' . $post->ID) . '" />';
                 submit_button(__('Approve', 'artpulse'), 'primary', 'submit', false);
                 echo '</form> ';
-                echo '<form method="post" action="' . esc_url($reject_url) . '" style="display:inline">';
+                echo '<form method="post" action="' . esc_url($reject_url) . '">';
                 echo '<input type="hidden" name="post_id" value="' . intval($post->ID) . '" />';
                 echo '<input type="hidden" name="nonce" value="' . wp_create_nonce('ap_reject_' . $post->ID) . '" />';
                 submit_button(__('Reject', 'artpulse'), 'secondary', 'submit', false, ['onclick' => 'return confirm("' . esc_js(__('Are you sure?', 'artpulse')) . '");']);

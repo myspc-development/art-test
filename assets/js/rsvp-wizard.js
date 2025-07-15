@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p id="ap-rsvp-counts"></p>
             <button type="button" class="ap-next ap-form-button nectar-button">Next</button>
           </div>
-          <div class="ap-rsvp-step" data-step="1" style="display:none">
+          <div class="ap-rsvp-step" data-step="1">
             <label class="ap-form-label" for="ap_event_rsvp_limit">RSVP Limit
               <input class="ap-input" id="ap_event_rsvp_limit" type="number" name="ap_event_rsvp_limit">
             </label>

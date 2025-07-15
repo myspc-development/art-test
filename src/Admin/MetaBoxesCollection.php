@@ -27,7 +27,7 @@ class MetaBoxesCollection {
             $selected = [];
         }
         echo '<div id="ap-collection-metabox">';
-        echo '<select id="ap-collection-search" class="ap-related-posts" style="width:100%" data-placeholder="' . esc_attr__('Search items...', 'artpulse') . '"></select>';
+        echo '<select id="ap-collection-search" class="ap-related-posts" data-placeholder="' . esc_attr__('Search items...', 'artpulse') . '"></select>';
         echo '<ul id="ap-collection-items">';
         foreach ($selected as $id) {
             $title = get_the_title($id);

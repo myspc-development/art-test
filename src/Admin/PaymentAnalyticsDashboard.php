@@ -55,7 +55,7 @@ class PaymentAnalyticsDashboard
         <div class="wrap">
             <h1><?php esc_html_e('Payment Analytics', 'artpulse'); ?></h1>
 
-            <form method="get" style="margin-bottom:20px;">
+            <form method="get">
                 <input type="hidden" name="page" value="artpulse-payment-analytics" />
                 <label><?php esc_html_e('Start Date', 'artpulse'); ?>
                     <input type="date" name="start_date" value="<?php echo esc_attr($start_date); ?>" />
@@ -66,10 +66,10 @@ class PaymentAnalyticsDashboard
                 <button class="button" type="submit"><?php esc_html_e('Filter', 'artpulse'); ?></button>
             </form>
 
-            <div style="max-width:800px;margin-bottom:20px;">
+            <div>
                 <canvas id="ap-payment-revenue-chart" height="120"></canvas>
             </div>
-            <div style="max-width:800px;margin-bottom:20px;">
+            <div>
                 <canvas id="ap-payment-subscriptions-chart" height="120"></canvas>
             </div>
 

@@ -50,7 +50,7 @@ class ApprovalManager
         $approve_nonce = wp_create_nonce('ap_approve_' . $post->ID);
         $reject_nonce  = wp_create_nonce('ap_reject_' . $post->ID);
         ?>
-        <form method="post" action="<?php echo esc_url($approve_url); ?>" style="margin-bottom:6px;">
+        <form method="post" action="<?php echo esc_url($approve_url); ?>">
             <input type="hidden" name="action" value="ap_approve_submission" />
             <input type="hidden" name="post_id" value="<?php echo esc_attr($post->ID); ?>" />
             <input type="hidden" name="nonce" value="<?php echo esc_attr($approve_nonce); ?>" />
