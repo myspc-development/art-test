@@ -349,6 +349,7 @@ function ap_widget_spotlight_features(array $vars = []): string
  */
 function ap_register_core_dashboard_widgets(): void
 {
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'membership',
         __('Membership', 'artpulse'),
@@ -368,6 +369,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'upgrade',
         __('Upgrade', 'artpulse'),
@@ -387,6 +389,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'local-events',
         __('Local Events', 'artpulse'),
@@ -406,6 +409,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'favorites',
         __('Favorites', 'artpulse'),
@@ -425,6 +429,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'my-follows',
         __('My Follows', 'artpulse'),
@@ -436,6 +441,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'rsvps',
         __('RSVPs', 'artpulse'),
@@ -455,6 +461,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to organization and member dashboards
     DashboardWidgetRegistry::register(
         'rsvp_stats',
         __('RSVP Stats', 'artpulse'),
@@ -467,6 +474,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'my-events',
         __('My Events', 'artpulse'),
@@ -486,6 +494,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'events',
         __('Upcoming Events', 'artpulse'),
@@ -505,6 +514,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'messages',
         __('Messages', 'artpulse'),
@@ -524,6 +534,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'account-tools',
         __('Account Tools', 'artpulse'),
@@ -543,6 +554,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'support-history',
         __('Support History', 'artpulse'),
@@ -562,6 +574,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to all dashboards
     DashboardWidgetRegistry::register(
         'notifications',
         __('Notifications', 'artpulse'),
@@ -581,6 +594,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to member, artist and organization dashboards
     DashboardWidgetRegistry::register(
         'role-spotlight',
         __('Featured Spotlight', 'artpulse'),
@@ -592,6 +606,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to member, artist and organization dashboards
     DashboardWidgetRegistry::register(
         'widget_for_you',
         __('For You', 'artpulse'),
@@ -604,6 +619,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to member and artist dashboards
     DashboardWidgetRegistry::register(
         'widget_followed_artists',
         __('Followed Artists', 'artpulse'),
@@ -615,6 +631,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to member and artist dashboards
     DashboardWidgetRegistry::register(
         'instagram_widget',
         __('Instagram Feed', 'artpulse'),
@@ -645,6 +662,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to member and organization dashboards
     DashboardWidgetRegistry::register(
         'widget_spotlight_events',
         __('Event Spotlights', 'artpulse'),
@@ -656,6 +674,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to member, artist and organization dashboards
     DashboardWidgetRegistry::register(
         'widget_spotlight_calls',
         __('Call Spotlights', 'artpulse'),
@@ -667,6 +686,7 @@ function ap_register_core_dashboard_widgets(): void
         ]
     );
 
+    // visible to member, artist and organization dashboards
     DashboardWidgetRegistry::register(
         'widget_spotlight_features',
         __('Featured Spotlights', 'artpulse'),
