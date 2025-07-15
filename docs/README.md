@@ -13,6 +13,7 @@
 - [OpenAPI Specification](./openapi.yaml)
 - [Public Beta Setup](./public-beta-setup-codex.md)
 - [Phase M: Creator & Curator Module](./codex-phase-m-creator-curator-codex.md)
+- [WordPress Menus with Shortcodes](./wordpress-menus-codex.md)
 
 ### Developer Checklist
 
