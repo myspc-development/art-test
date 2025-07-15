@@ -45,10 +45,34 @@ fetch('/wp-json/artpulse/v1/dashboard/messages', {
 
     container.innerHTML = html;
 
+    let activeMessageId = null;
+
+    document.getElementById('ap-cancel-reply').onclick = () => {
+      document.getElementById('ap-message-modal').style.display = 'none';
+    };
+
+    document.getElementById('ap-send-reply').onclick = () => {
+      const text = document.getElementById('ap-reply-text').value;
+      fetch(`/wp-json/artpulse/v1/messages/${activeMessageId}/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': ArtPulseData.nonce
+        },
+        body: JSON.stringify({ message: text })
+      })
+        .then(res => res.json())
+        .then(() => {
+          alert('Reply sent!');
+          document.getElementById('ap-message-modal').style.display = 'none';
+        });
+    };
+
     container.querySelectorAll('.reply-button').forEach(button => {
       button.addEventListener('click', (e) => {
-        const id = e.target.getAttribute('data-msg-id');
-        alert(`Reply to message ID: ${id}`);
+        activeMessageId = e.target.getAttribute('data-msg-id');
+        document.getElementById('ap-reply-text').value = '';
+        document.getElementById('ap-message-modal').style.display = 'block';
       });
     });
   })

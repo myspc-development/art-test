@@ -9,6 +9,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Rest\ArtistRestController;
 use ArtPulse\Rest\CurrentUserController;
 use ArtPulse\Rest\DashboardMessagesController;
+use ArtPulse\Rest\MessagesController;
 use ArtPulse\Rest\RestRelationships;
 use ArtPulse\Rest\TaxonomyRestFilters;
 use ArtPulse\Discovery\TrendingManager;
@@ -274,6 +275,7 @@ class Plugin
         \ArtPulse\Rest\SpotlightAnalyticsController::register();
         \ArtPulse\Rest\CurrentUserController::register();
         \ArtPulse\Rest\DashboardMessagesController::register();
+        \ArtPulse\Rest\MessagesController::register();
         \ArtPulse\Rest\CuratorRestController::register();
         \ArtPulse\Rest\CommunityAnalyticsController::register();
         ArtistRestController::register();
