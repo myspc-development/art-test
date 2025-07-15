@@ -399,6 +399,19 @@ class SettingsPage
             '1.0',
             true
         );
+        if (isset($_GET['page']) && $_GET['page'] === 'artpulse-settings') {
+            wp_enqueue_script(
+                'ap-update-diagnostics',
+                plugins_url('/assets/js/update-diagnostics.js', ARTPULSE_PLUGIN_FILE),
+                ['wp-api-fetch'],
+                '1.0.0',
+                true
+            );
+            wp_localize_script('ap-update-diagnostics', 'AP_UpdateData', [
+                'endpoint' => rest_url('artpulse/v1/update/diagnostics'),
+                'nonce'    => wp_create_nonce('wp_rest'),
+            ]);
+        }
         $signup_data = self::getMonthlySignupsByLevel();
         wp_localize_script('ap-admin-dashboard', 'APAdminStats', $signup_data);
     }
@@ -630,7 +643,7 @@ class SettingsPage
                 <?php endforeach; ?>
             </h2>
             <?php foreach ($tabs as $slug => $label) : ?>
-                <section id="ap-tab-<?php echo esc_attr($slug); ?>" class="ap-settings-section" data-tab="<?php echo esc_attr($slug); ?>" style="<?php echo $current_tab === $slug ? '' : 'display:none;'; ?>">
+                <section id="<?php echo esc_attr($slug === 'updates' ? 'updates' : 'ap-tab-' . $slug); ?>" class="ap-settings-section" data-tab="<?php echo esc_attr($slug); ?>" style="<?php echo $current_tab === $slug ? '' : 'display:none;'; ?>">
                     <?php if ($slug === 'import_export') : ?>
                         <?php ImportExportTab::render(); ?>
                     <?php elseif ($slug === 'shortcodes') : ?>

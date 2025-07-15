@@ -23,9 +23,6 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-org-roles-matrix.php'; }
     );
 
-    add_menu_page('Update Diagnostics', 'Update Status', 'manage_options', 'ap-update-diagnostics', function () {
-        include __DIR__ . '/page-update-diagnostics.php';
-    });
 });
 
 add_action('admin_enqueue_scripts', function ($hook) {
@@ -34,8 +31,5 @@ add_action('admin_enqueue_scripts', function ($hook) {
     }
     if ($hook === 'toplevel_page_ap-org-roles-matrix') {
         wp_enqueue_script('ap-role-matrix-bundle', plugin_dir_url(__FILE__) . '../dist/role-matrix.js', ['react', 'react-dom'], filemtime(plugin_dir_path(__FILE__) . '../dist/role-matrix.js'), true);
-    }
-    if ($hook === 'toplevel_page_ap-update-diagnostics') {
-        wp_enqueue_script('ap-update-diagnostics', plugin_dir_url(__FILE__) . '../assets/js/update-diagnostics.js', [], false, true);
     }
 });
