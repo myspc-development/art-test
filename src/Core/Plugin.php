@@ -296,6 +296,7 @@ class Plugin
         \ArtPulse\Admin\AdminColumnsOrganisation::register();
         \ArtPulse\Admin\QuickStartGuide::register();
         \ArtPulse\Admin\ReleaseNotes::register();
+        \ArtPulse\Admin\DashboardPageCheck::register();
         DocumentationManager::register();
         \ArtPulse\Taxonomies\TaxonomiesRegistrar::register();
         \ArtPulse\Core\EventExpiryCron::register();
