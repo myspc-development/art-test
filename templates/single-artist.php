@@ -30,7 +30,10 @@ if ( have_posts() ) :
     echo '<div class="entry-content">';
     the_content();
     echo '</div>';
-    echo '<button class="ap-support-btn nectar-button" data-id="' . get_the_ID() . '">' . esc_html__('Support', 'artpulse') . '</button>';
+    $donate = \ArtPulse\Frontend\ap_render_donate_button(get_post_field('post_author', get_the_ID()));
+    if ($donate) {
+        echo $donate;
+    }
 
     echo '</div>';
   endwhile;

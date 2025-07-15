@@ -103,6 +103,13 @@ REST endpoint:
 
 Use `fpdf` or `PhpSpreadsheet` for PDF/CSV generation and add a download button to the admin UI.
 
+## Donations
+
+Allow supporters to contribute directly to artists or galleries.
+
+- Add a `donation_url` field to user profiles.
+- Show a **Support this Artist** button when a URL is configured.
+
 **Codex QA Checklist**
 
 - Report generates in under 5 seconds
