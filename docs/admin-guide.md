@@ -44,8 +44,10 @@ backup before upgrading so you can quickly restore the configuration if needed.
 ### Updates
 
 The **Updates** tab downloads the latest plugin code from GitHub using the
-release ZIP. Enter the **GitHub Repo** in `owner/repo` format and optionally
+release ZIP. Enter the **GitHub Repo URL** (for example,
+`https://github.com/your-org/artpulse-plugin`) and optionally
 enable automatic daily checks. You can manually check for updates at any time.
+Leaving the field blank disables update checking.
 Upload new versions over the existing
 plugin folder or use this tab—settings are preserved because the uninstall
 process never runs during an upgrade. The **Keep Data on Uninstall** option

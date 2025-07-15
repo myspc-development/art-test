@@ -6,8 +6,14 @@ if (!defined('ABSPATH')) {
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 add_action('plugins_loaded', function () {
+    $repo = get_option('ap_github_repo_url');
+    if (empty($repo)) {
+        return;
+    }
+    $repo          = rtrim(trim($repo), '/') . '/';
+
     $updateChecker = PucFactory::buildUpdateChecker(
-        'https://github.com/YOUR-ORG/artpulse/',
+        $repo,
         ARTPULSE_PLUGIN_FILE,
         'artpulse-management'
     );
