@@ -38,13 +38,47 @@ add_action('admin_enqueue_scripts', function ($hook) {
             'nonce' => wp_create_nonce('wp_rest'),
         ]);
     }
-    if ($hook === 'toplevel_page_ap-org-roles-matrix') {
-        wp_enqueue_script(
-            'ap-role-matrix-bundle',
-            plugin_dir_url(__FILE__) . '../dist/role-matrix.js',
-            ['wp-element'],
-            filemtime(plugin_dir_path(__FILE__) . '../dist/role-matrix.js'),
-            true
+});
+
+/**
+ * Enqueue Org‑Roles Matrix assets
+ */
+function ap_enqueue_org_roles_assets($hook)
+{
+    // Only load on the Org‑Roles Matrix admin page
+    if ($hook !== 'toplevel_page_ap-org-roles-matrix') {
+        return;
+    }
+
+    $handle    = 'ap-org-roles-bundle';
+    $src       = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-org-roles.bundle.js';
+    $deps      = [
+        'wp-element',
+        'wp-i18n',
+        'wp-api-fetch',
+        'wp-components',
+        'wp-data',
+    ];
+    $ver       = filemtime(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-org-roles.bundle.js');
+    $in_footer = true;
+
+    wp_enqueue_script($handle, $src, $deps, $ver, $in_footer);
+
+    // Pass REST url + nonce to the bundle
+    wp_localize_script($handle, 'ArtPulseOrgRoles', [
+        'api_url' => rest_url('artpulse/v1'),
+        'nonce'   => wp_create_nonce('wp_rest'),
+    ]);
+
+    // Optional: enqueue CSS for the matrix UI
+    $css_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/css/org-roles.css';
+    if (file_exists($css_path)) {
+        wp_enqueue_style(
+            'ap-org-roles-style',
+            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/css/org-roles.css',
+            [],
+            filemtime($css_path)
         );
     }
-});
+}
+add_action('admin_enqueue_scripts', 'ap_enqueue_org_roles_assets');
