@@ -317,6 +317,11 @@ function ap_widget_instagram(array $vars = []): string
     return ap_load_dashboard_template('widgets/instagram-widget.php', $vars);
 }
 
+function ap_widget_cat_fact(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/cat-fact.php', $vars);
+}
+
 function ap_widget_role_spotlight(array $vars = []): string
 {
     $vars['role'] = DashboardController::get_role(get_current_user_id());
@@ -628,6 +633,18 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_followed_artists',
         [
             'roles' => ['member', 'artist'],
+        ]
+    );
+
+    // visible to all dashboards
+    DashboardWidgetRegistry::register(
+        'cat_fact',
+        __('Cat Fact', 'artpulse'),
+        'smiley',
+        __('Random cat facts from catfact.ninja.', 'artpulse'),
+        'ap_widget_cat_fact',
+        [
+            'category' => 'fun',
         ]
     );
 
