@@ -8,7 +8,18 @@ Finalizes UI polish and packages documentation for partners and developers.
 - Publish Codex modules for each sprint.
 
 ## REST Routes
-- `GET /status` – Simple build/version endpoint.
+- `GET /status` – Returns build information.
+
+Example response:
+
+```json
+{
+  "plugin_version": "1.3.13",
+  "db_version": "1.4.0",
+  "cache": "Enabled",
+  "debug": false
+}
+```
 
 ## Database Changes
 - None for this sprint.
@@ -20,4 +31,5 @@ Finalizes UI polish and packages documentation for partners and developers.
 - All forms show clear error/success messages.
 - Widgets respect dark mode and load quickly.
 - Documentation compiled and available in `/docs`.
+- `openapi.yaml` generated for partner integrations.
 

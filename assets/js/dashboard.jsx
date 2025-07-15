@@ -20,8 +20,13 @@ function DashboardApp({ role }) {
           <section
             key={item.section}
             id={`ap-${item.section}`}
+            aria-labelledby={`heading-${item.section}`}
+            role="region"
             style={{ display: activeSection === item.section ? 'block' : 'none' }}
           >
+            <h3 id={`heading-${item.section}`} className="screen-reader-text">
+              {item.label}
+            </h3>
             {item.section === 'messages' ? (
               <div className="ap-messages">
                 <div className="ap-conversations">

@@ -12,13 +12,15 @@ add_action('rest_api_init', function () {
 });
 
 function ap_get_system_status() {
-    $version = defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : '1.0.0';
-    $cache   = (defined('WP_CACHE') && WP_CACHE) ? 'Enabled' : 'Disabled';
-    $debug   = defined('WP_DEBUG') && WP_DEBUG;
+    $plugin_version = defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : '1.0.0';
+    $db_version     = get_option('artpulse_db_version', '0.0.0');
+    $cache          = (defined('WP_CACHE') && WP_CACHE) ? 'Enabled' : 'Disabled';
+    $debug          = defined('WP_DEBUG') && WP_DEBUG;
 
     return [
-        'version' => $version,
-        'cache'   => $cache,
-        'debug'   => $debug,
+        'plugin_version' => $plugin_version,
+        'db_version'     => $db_version,
+        'cache'          => $cache,
+        'debug'          => $debug,
     ];
 }

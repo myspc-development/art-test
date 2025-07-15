@@ -55,7 +55,7 @@ Package internal implementation and integration documentation for dev onboarding
 
 ### Packaging Instructions
 - Generate `.md` versions from Codex for GitHub `/docs/`.
-- Create `swagger.json` or `openapi.yaml` for public/partner API.
+- Create `swagger.json` or `openapi.yaml` for public/partner API. A generated `openapi.yaml` is available under `/docs`.
 - Include architecture diagrams:
   - REST structure
   - Table relationships
@@ -84,7 +84,7 @@ Package internal implementation and integration documentation for dev onboarding
 | Mobile responsiveness tested site-wide | ☐ |
 | Accessibility reviewed and ARIA added | ☐ |
 | Codex split into Markdown chapters | ☐ |
-| Partner API doc (Swagger/OpenAPI) generated | ☐ |
+| Partner API doc (Swagger/OpenAPI) generated | ✅ |
 | Diagrams added (UML, flowcharts) | ☐ |
 
 ### Bonus Suggestions
