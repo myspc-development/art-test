@@ -49,3 +49,34 @@ add_action('plugins_loaded', function () {
         update_option('artpulse_version', ARTPULSE_VERSION);
     }
 });
+
+// Register Diagnostics admin page
+add_action('admin_menu', function () {
+    add_menu_page(
+        'ArtPulse Diagnostics',
+        'AP Diagnostics',
+        'manage_options',
+        'ap-diagnostics',
+        'ap_diagnostics_page_loader',
+        'dashicons-admin-tools',
+        99
+    );
+});
+
+function ap_diagnostics_page_loader() {
+    $path = plugin_dir_path(__FILE__) . 'admin/ap-diagnostics-page.php';
+    if (file_exists($path)) {
+        include $path;
+    } else {
+        echo '<div class="notice notice-error"><p>Diagnostics file not found.</p></div>';
+    }
+}
+
+// AJAX handler for diagnostics test
+add_action('wp_ajax_ap_ajax_test', function () {
+    check_ajax_referer('ap_diagnostics_test', 'nonce');
+
+    wp_send_json_success([
+        'message' => 'AJAX is working, nonce is valid, and you are authenticated.'
+    ]);
+});
