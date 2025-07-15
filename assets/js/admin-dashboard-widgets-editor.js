@@ -106,13 +106,19 @@
   }
 
   if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.config) {
-    console.error("APDashboardWidgetsEditor.config is missing; initializing empty layout.");
+    console.error('APDashboardWidgetsEditor.config is missing; initializing empty layout.');
     window.APDashboardWidgetsEditor = _objectSpread2(_objectSpread2({}, window.APDashboardWidgetsEditor), {}, {
       config: {}
     });
   }
+  if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.roles) {
+    console.error('APDashboardWidgetsEditor.roles is missing; using empty roles.');
+    window.APDashboardWidgetsEditor = _objectSpread2(_objectSpread2({}, window.APDashboardWidgetsEditor), {}, {
+      roles: {}
+    });
+  }
   if (!window.APDashboardWidgetsEditor || !Array.isArray(window.APDashboardWidgetsEditor.widgets)) {
-    console.error("APDashboardWidgetsEditor.widgets is missing; using empty list.");
+    console.error('APDashboardWidgetsEditor.widgets is missing; using empty list.');
     window.APDashboardWidgetsEditor = _objectSpread2(_objectSpread2({}, window.APDashboardWidgetsEditor), {}, {
       widgets: []
     });

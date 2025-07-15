@@ -613,16 +613,22 @@ var APSidebarMenu = (function (React) {
       setActiveSection = _ref.setActiveSection;
     var menu = rolesMenus[role] || [];
     return /*#__PURE__*/React.createElement("nav", {
-      className: "ap-dashboard-sidebar"
-    }, /*#__PURE__*/React.createElement("ul", null, menu.map(function (item) {
+      className: "ap-dashboard-sidebar",
+      "aria-label": "Dashboard sections"
+    }, /*#__PURE__*/React.createElement("ul", {
+      role: "menu"
+    }, menu.map(function (item) {
       var Icon = icons[item.icon] || function () {
         return null;
       };
       var active = item.section === activeSection;
       return /*#__PURE__*/React.createElement("li", {
-        key: item.section
+        key: item.section,
+        role: "none"
       }, /*#__PURE__*/React.createElement("button", {
         type: "button",
+        role: "menuitem",
+        "aria-current": active ? 'page' : undefined,
         onClick: function onClick() {
           return setActiveSection(item.section);
         },

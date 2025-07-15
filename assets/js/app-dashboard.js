@@ -1,4 +1,4 @@
-var APDashboardApp = (function (React$1, ReactDOM) {
+var APDashboardApp = (function (React$1, ReactDOM, Chart) {
   'use strict';
 
   function _arrayLikeToArray(r, a) {
@@ -90,6 +90,137 @@ var APDashboardApp = (function (React$1, ReactDOM) {
     }));
   }
 
+  function AnalyticsCard(_ref) {
+    var label = _ref.label,
+      value = _ref.value;
+    return /*#__PURE__*/React$1.createElement("div", {
+      className: "border rounded p-4 text-center"
+    }, /*#__PURE__*/React$1.createElement("div", {
+      className: "text-2xl font-bold"
+    }, value !== null && value !== void 0 ? value : 0), /*#__PURE__*/React$1.createElement("div", {
+      className: "text-sm text-gray-500"
+    }, label));
+  }
+
+  function TopUsersTable(_ref) {
+    var _ref$users = _ref.users,
+      users = _ref$users === void 0 ? [] : _ref$users;
+    return /*#__PURE__*/React$1.createElement("table", {
+      className: "min-w-full text-sm"
+    }, /*#__PURE__*/React$1.createElement("thead", null, /*#__PURE__*/React$1.createElement("tr", null, /*#__PURE__*/React$1.createElement("th", {
+      className: "text-left"
+    }, "User"), /*#__PURE__*/React$1.createElement("th", {
+      className: "text-right"
+    }, "Count"))), /*#__PURE__*/React$1.createElement("tbody", null, users.map(function (u) {
+      return /*#__PURE__*/React$1.createElement("tr", {
+        key: u.user_id,
+        className: "border-b"
+      }, /*#__PURE__*/React$1.createElement("td", null, u.user_id), /*#__PURE__*/React$1.createElement("td", {
+        className: "text-right"
+      }, u.c));
+    })));
+  }
+
+  function ActivityGraph(_ref) {
+    var _ref$data = _ref.data,
+      data = _ref$data === void 0 ? [] : _ref$data;
+    var canvasRef = React$1.useRef(null);
+    React$1.useEffect(function () {
+      if (!canvasRef.current || !data.length) return;
+      var chart = new Chart(canvasRef.current.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: data.map(function (d) {
+            return d.day;
+          }),
+          datasets: [{
+            label: 'Count',
+            data: data.map(function (d) {
+              return d.c;
+            }),
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37,99,235,0.2)',
+            fill: false
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                precision: 0
+              }
+            }
+          }
+        }
+      });
+      return function () {
+        return chart.destroy();
+      };
+    }, [data]);
+    return /*#__PURE__*/React$1.createElement("canvas", {
+      ref: canvasRef
+    });
+  }
+
+  function FlaggedActivityLog(_ref) {
+    var _ref$items = _ref.items,
+      items = _ref$items === void 0 ? [] : _ref$items;
+    return /*#__PURE__*/React$1.createElement("ul", {
+      className: "space-y-1 text-sm"
+    }, items.map(function (i) {
+      return /*#__PURE__*/React$1.createElement("li", {
+        key: i.post_id || i.thread_id,
+        className: "border-b pb-1"
+      }, i.post_id || i.thread_id, " - ", i.c, " flags");
+    }));
+  }
+
+  function CommunityAnalyticsPanel() {
+    var _useState = React$1.useState('messaging'),
+      _useState2 = _slicedToArray(_useState, 2),
+      tab = _useState2[0],
+      setTab = _useState2[1];
+    var _useState3 = React$1.useState({}),
+      _useState4 = _slicedToArray(_useState3, 2),
+      data = _useState4[0],
+      setData = _useState4[1];
+    React$1.useEffect(function () {
+      fetch("/wp-json/artpulse/v1/analytics/community/".concat(tab)).then(function (res) {
+        return res.ok ? res.json() : {};
+      }).then(setData);
+    }, [tab]);
+    return /*#__PURE__*/React$1.createElement("div", {
+      className: "ap-widget bg-white p-4 rounded shadow mb-4"
+    }, /*#__PURE__*/React$1.createElement("div", {
+      className: "flex gap-4 mb-4"
+    }, ['messaging', 'comments', 'forums'].map(function (t) {
+      return /*#__PURE__*/React$1.createElement("button", {
+        key: t,
+        onClick: function onClick() {
+          return setTab(t);
+        },
+        className: tab === t ? 'font-semibold' : ''
+      }, t.charAt(0).toUpperCase() + t.slice(1));
+    })), /*#__PURE__*/React$1.createElement("div", {
+      className: "grid gap-4 md:grid-cols-2 mb-4"
+    }, /*#__PURE__*/React$1.createElement(AnalyticsCard, {
+      label: "Total",
+      value: data.total
+    }), data.flagged_count !== undefined && /*#__PURE__*/React$1.createElement(AnalyticsCard, {
+      label: "Flagged",
+      value: data.flagged_count
+    })), data.per_day && /*#__PURE__*/React$1.createElement(ActivityGraph, {
+      data: data.per_day
+    }), tab === 'messaging' && data.top_users && /*#__PURE__*/React$1.createElement(TopUsersTable, {
+      users: data.top_users
+    }), tab !== 'messaging' && data.top_posts && /*#__PURE__*/React$1.createElement(FlaggedActivityLog, {
+      items: data.top_posts
+    }), tab === 'forums' && data.top_threads && /*#__PURE__*/React$1.createElement(FlaggedActivityLog, {
+      items: data.top_threads
+    }));
+  }
+
   function AppDashboard() {
     var _useState = React$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
@@ -112,7 +243,7 @@ var APDashboardApp = (function (React$1, ReactDOM) {
       onLogout: logout
     }), /*#__PURE__*/React$1.createElement("main", {
       className: "p-4"
-    }, /*#__PURE__*/React$1.createElement(MessagesPanel, null)));
+    }, /*#__PURE__*/React$1.createElement(MessagesPanel, null), /*#__PURE__*/React$1.createElement(CommunityAnalyticsPanel, null)));
   }
   document.addEventListener('DOMContentLoaded', function () {
     var rootEl = document.getElementById('ap-dashboard-root');
@@ -123,4 +254,4 @@ var APDashboardApp = (function (React$1, ReactDOM) {
 
   return AppDashboard;
 
-})(React, ReactDOM);
+})(React, ReactDOM, Chart);

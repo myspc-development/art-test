@@ -1,24 +1,5 @@
-var APRoleMatrix = (function (React$1) {
+var APRoleMatrix = (function (react, solid) {
   'use strict';
-
-  function _interopNamespaceDefault(e) {
-    var n = Object.create(null);
-    if (e) {
-      Object.keys(e).forEach(function (k) {
-        if (k !== 'default') {
-          var d = Object.getOwnPropertyDescriptor(e, k);
-          Object.defineProperty(n, k, d.get ? d : {
-            enumerable: true,
-            get: function () { return e[k]; }
-          });
-        }
-      });
-    }
-    n.default = e;
-    return Object.freeze(n);
-  }
-
-  var React__namespace = /*#__PURE__*/_interopNamespaceDefault(React$1);
 
   function _arrayLikeToArray(r, a) {
     (null == a || a > r.length) && (a = r.length);
@@ -108,26 +89,6 @@ var APRoleMatrix = (function (React$1) {
       });
     }
     return e;
-  }
-  function _objectWithoutProperties(e, t) {
-    if (null == e) return {};
-    var o,
-      r,
-      i = _objectWithoutPropertiesLoose(e, t);
-    if (Object.getOwnPropertySymbols) {
-      var n = Object.getOwnPropertySymbols(e);
-      for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
-    }
-    return i;
-  }
-  function _objectWithoutPropertiesLoose(r, e) {
-    if (null == r) return {};
-    var t = {};
-    for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-      if (-1 !== e.indexOf(n)) continue;
-      t[n] = r[n];
-    }
-    return t;
   }
   function _regenerator() {
     /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
@@ -264,66 +225,20 @@ var APRoleMatrix = (function (React$1) {
     }
   }
 
-  var _excluded$1 = ["title", "titleId"];
-  function CheckIcon(_ref, svgRef) {
-    var title = _ref.title,
-      titleId = _ref.titleId,
-      props = _objectWithoutProperties(_ref, _excluded$1);
-    return /*#__PURE__*/React__namespace.createElement("svg", Object.assign({
-      xmlns: "http://www.w3.org/2000/svg",
-      viewBox: "0 0 24 24",
-      fill: "currentColor",
-      "aria-hidden": "true",
-      "data-slot": "icon",
-      ref: svgRef,
-      "aria-labelledby": titleId
-    }, props), title ? /*#__PURE__*/React__namespace.createElement("title", {
-      id: titleId
-    }, title) : null, /*#__PURE__*/React__namespace.createElement("path", {
-      fillRule: "evenodd",
-      d: "M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z",
-      clipRule: "evenodd"
-    }));
-  }
-  var ForwardRef$1 = /*#__PURE__*/React__namespace.forwardRef(CheckIcon);
-
-  var _excluded = ["title", "titleId"];
-  function XMarkIcon(_ref, svgRef) {
-    var title = _ref.title,
-      titleId = _ref.titleId,
-      props = _objectWithoutProperties(_ref, _excluded);
-    return /*#__PURE__*/React__namespace.createElement("svg", Object.assign({
-      xmlns: "http://www.w3.org/2000/svg",
-      viewBox: "0 0 24 24",
-      fill: "currentColor",
-      "aria-hidden": "true",
-      "data-slot": "icon",
-      ref: svgRef,
-      "aria-labelledby": titleId
-    }, props), title ? /*#__PURE__*/React__namespace.createElement("title", {
-      id: titleId
-    }, title) : null, /*#__PURE__*/React__namespace.createElement("path", {
-      fillRule: "evenodd",
-      d: "M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z",
-      clipRule: "evenodd"
-    }));
-  }
-  var ForwardRef = /*#__PURE__*/React__namespace.forwardRef(XMarkIcon);
-
   function RoleMatrix() {
-    var _useState = React$1.useState([]),
+    var _useState = react.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       users = _useState2[0],
       setUsers = _useState2[1];
-    var _useState3 = React$1.useState([]),
+    var _useState3 = react.useState([]),
       _useState4 = _slicedToArray(_useState3, 2),
       roles = _useState4[0],
       setRoles = _useState4[1];
-    var _useState5 = React$1.useState({}),
+    var _useState5 = react.useState({}),
       _useState6 = _slicedToArray(_useState5, 2),
       matrix = _useState6[0],
       setMatrix = _useState6[1];
-    React$1.useEffect(function () {
+    react.useEffect(function () {
       _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
         var res, json;
         return _regenerator().w(function (_context) {
@@ -402,9 +317,9 @@ var APRoleMatrix = (function (React$1) {
             return toggle(u.ID, r.key);
           },
           className: "border p-2 cursor-pointer text-center"
-        }, (_matrix$u$ID = matrix[u.ID]) !== null && _matrix$u$ID !== void 0 && _matrix$u$ID[r.key] ? /*#__PURE__*/React.createElement(ForwardRef$1, {
+        }, (_matrix$u$ID = matrix[u.ID]) !== null && _matrix$u$ID !== void 0 && _matrix$u$ID[r.key] ? /*#__PURE__*/React.createElement(solid.CheckIcon, {
           className: "mx-auto h-5 w-5 text-green-600"
-        }) : /*#__PURE__*/React.createElement(ForwardRef, {
+        }) : /*#__PURE__*/React.createElement(solid.XMarkIcon, {
           className: "mx-auto h-5 w-5 text-red-500"
         }));
       }));
@@ -416,4 +331,4 @@ var APRoleMatrix = (function (React$1) {
 
   return RoleMatrix;
 
-})(React);
+})(React, solid);
