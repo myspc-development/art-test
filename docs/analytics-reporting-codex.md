@@ -62,3 +62,42 @@ These endpoints use `current_user_can( 'read' )` checks and only expose data rel
 
 Document any new REST routes in the API Reference and update the README. Developers can hook into `artpulse_analytics_process_log` to transform events before they are stored and add new widgets with `artpulse_register_dashboard_widget`.
 
+
+## 8. 🔧 REST API Integration for Organization Role Matrix
+
+The Organization Role Matrix tab in the admin uses a React interface to load role data from custom REST endpoints. When localizing script data for this component, pass a relative `api_path` so `apiFetch()` can correctly prefix it with `wp-json/`.
+
+```php
+wp_localize_script( 'ap-org-roles', 'ArtPulseOrgRoles', [
+    'api_path' => 'artpulse/v1/org-roles',
+    'nonce'    => wp_create_nonce( 'wp_rest' ),
+] );
+```
+
+Fetch the endpoints in JavaScript using the `path` property:
+
+```js
+apiFetch( { path: ArtPulseOrgRoles.api_path } );
+apiFetch( { path: ArtPulseOrgRoles.api_path + '/users' } );
+```
+
+If you prefer to localize the full URL, use the `url` option so WordPress does not prepend `wp-json/` twice:
+
+```php
+'api_url' => rest_url( 'artpulse/v1/org-roles' )
+```
+
+```js
+apiFetch( { url: ArtPulseOrgRoles.api_url } );
+apiFetch( { url: ArtPulseOrgRoles.api_url + '/users' } );
+```
+
+Validate the routes with `wp rest route list | grep org-roles` and ensure a 200 response:
+
+```php
+public function test_org_roles_route() {
+    $response = rest_do_request( '/artpulse/v1/org-roles' );
+    $this->assertSame( 200, $response->get_status() );
+}
+```
+
