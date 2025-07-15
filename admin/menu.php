@@ -27,7 +27,16 @@ add_action('admin_menu', function () {
 
 add_action('admin_enqueue_scripts', function ($hook) {
     if ($hook === 'toplevel_page_ap-user-inbox') {
-        wp_enqueue_script('ap-messages-js', plugin_dir_url(__FILE__) . '../assets/js/messages.js', [], false, true);
+        wp_enqueue_script(
+            'ap-messages-js',
+            plugin_dir_url(__FILE__) . '../assets/js/messages.js',
+            ['wp-api-fetch'],
+            false,
+            true
+        );
+        wp_localize_script('ap-messages-js', 'wpApiSettings', [
+            'nonce' => wp_create_nonce('wp_rest'),
+        ]);
     }
     if ($hook === 'toplevel_page_ap-org-roles-matrix') {
         wp_enqueue_script('ap-role-matrix-bundle', plugin_dir_url(__FILE__) . '../dist/role-matrix.js', ['react', 'react-dom'], filemtime(plugin_dir_path(__FILE__) . '../dist/role-matrix.js'), true);
