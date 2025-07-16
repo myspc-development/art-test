@@ -174,12 +174,12 @@ class DashboardWidgetTools
             $visible = $item['visible'] ?? true;
             $cb = DashboardWidgetRegistry::get_widget_callback($id);
             if (is_callable($cb)) {
-                $icon = esc_html($defs_by_id[$id]['icon'] ?? '');
+                $icon  = $defs_by_id[$id]['icon'] ?? '';
                 $title = esc_html($defs_by_id[$id]['name'] ?? $id);
                 echo '<div class="ap-widget-card' . ($visible ? '' : ' is-hidden') . '" role="group" aria-label="Widget: ' . $title . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
                 echo '<div class="ap-widget-header">';
                 echo '<span class="drag-handle" title="Drag to reorder">&#9776;</span>';
-                echo '<span class="ap-widget-icon">' . $icon . '</span>';
+                echo '<span class="ap-widget-icon">' . artpulse_dashicon($icon) . '</span>';
                 echo '<span class="ap-widget-title">' . $title . '</span>';
                 echo '<div class="ap-widget-controls">';
                 echo '<label class="toggle-switch" title="Toggle Widget"><input type="checkbox" class="widget-toggle" aria-label="Toggle Widget"' . checked($visible, true, false) . ' /><span class="slider"></span></label>';
@@ -489,8 +489,9 @@ class DashboardWidgetTools
 
             $label = isset($def['label']) ? $def['label'] : 'Untitled';
             echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($label) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+            $icon = $def['icon'] ?? '';
             echo '<div class="ap-widget-header drag-handle">';
-            echo '<span class="widget-title">' . esc_html($label) . '</span>';
+            echo '<span class="widget-title">' . artpulse_dashicon($icon, ['style' => 'margin-right:6px;']) . esc_html($label) . '</span>';
             echo '</div>';
             echo '<div class="inside">';
             if (isset($def['callback']) && is_callable($def['callback'])) {
@@ -523,8 +524,9 @@ class DashboardWidgetTools
             $label = isset($w['label']) ? $w['label'] : 'Untitled';
 
             echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($label) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+            $icon = $w['icon'] ?? '';
             echo '<div class="ap-widget-header drag-handle">';
-            echo '<span class="widget-title">' . esc_html($label) . '</span>';
+            echo '<span class="widget-title">' . artpulse_dashicon($icon, ['style' => 'margin-right:6px;']) . esc_html($label) . '</span>';
             echo '</div>';
             echo '<div class="inside">';
             if (isset($w['callback']) && is_callable($w['callback'])) {

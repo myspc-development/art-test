@@ -32,19 +32,19 @@ function artpulse_add_wp_widget(string $id, string $title, callable $cb): void {
 function artpulse_wp_register_widgets() {
     artpulse_add_wp_widget(
         'artpulse_widget_overview',
-        '<span class="dashicons dashicons-admin-home"></span> ' . __( 'Site Overview', 'artpulse' ),
+        artpulse_dashicon('admin-home', ['style' => 'margin-right:6px;']) . __( 'Site Overview', 'artpulse' ),
         'artpulse_widget_overview_render'
     );
 
     artpulse_add_wp_widget(
         'artpulse_widget_events',
-        '<span class="dashicons dashicons-calendar-alt"></span> ' . __( 'Upcoming Events', 'artpulse' ),
+        artpulse_dashicon('calendar-alt', ['style' => 'margin-right:6px;']) . __( 'Upcoming Events', 'artpulse' ),
         'artpulse_widget_events_render'
     );
 
     artpulse_add_wp_widget(
         'artpulse_widget_tags',
-        '<span class="dashicons dashicons-tag"></span> ' . __( 'Trending Tags', 'artpulse' ),
+        artpulse_dashicon('tag', ['style' => 'margin-right:6px;']) . __( 'Trending Tags', 'artpulse' ),
         'artpulse_widget_tags_render'
     );
 
