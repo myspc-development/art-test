@@ -1,0 +1,1 @@
+This directory should contain image assets used by the plugin. To keep the repository lightweight, the actual binary files are not included. Add your own `default-avatar.png` and the quickstart screenshots under `assets/images/quickstart/` before deploying.
