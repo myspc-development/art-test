@@ -16,7 +16,7 @@ class WidgetEmbedShortcode
             if ($post && has_shortcode($post->post_content, 'ap_widget')) {
                 wp_enqueue_style(
                     'ap-dashboard',
-                    plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'build/css/dashboard.css',
+                    plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/css/min/dashboard-widget.css',
                     [],
                     '1.0.0'
                 );

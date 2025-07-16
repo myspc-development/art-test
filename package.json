@@ -6,22 +6,23 @@
     "build:sass": "sass assets/scss:assets/css --no-source-map",
     "build:react": "vite build",
     "dev": "vite",
-    "build": "npm run build:sass && wp-scripts build && npm run bundle:react && npx babel assets/js/sidebar-taxonomies.jsx -o assets/js/sidebar-taxonomies.js && npx babel assets/js/advanced-taxonomy-filter-block.jsx -o assets/js/advanced-taxonomy-filter-block.js && npx babel assets/js/filtered-list-shortcode-block.jsx -o assets/js/filtered-list-shortcode-block.js && npx babel assets/js/ajax-filter-block.jsx -o assets/js/ajax-filter-block.js",
+    "build": "npm run build:sass && npm run build:css && wp-scripts build && npm run bundle:react && npx babel assets/js/sidebar-taxonomies.jsx -o assets/js/sidebar-taxonomies.js && npx babel assets/js/advanced-taxonomy-filter-block.jsx -o assets/js/advanced-taxonomy-filter-block.js && npx babel assets/js/filtered-list-shortcode-block.jsx -o assets/js/filtered-list-shortcode-block.js && npx babel assets/js/ajax-filter-block.jsx -o assets/js/ajax-filter-block.js",
     "bundle:react": "rollup -c",
-    "build:css": "rollup -c",
+    "build:css": "postcss assets/css/*.css -d assets/css/min/",
     "start": "wp-scripts start",
     "release": "standard-version",
     "test:js": "jest",
     "test:e2e": "node tests/e2e/monetization-workflow.js",
     "lint": "eslint assets/js",
-    "ws": "node server/ws-server.js"
+    "ws": "node server/ws-server.js",
+    "build:dev": "NODE_ENV=development npm run build"
   },
   "dependencies": {
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.346.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "socket.io": "^4.7.2",
-    "jsonwebtoken": "^9.0.2"
+    "socket.io": "^4.7.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.20",
@@ -34,17 +35,18 @@
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@wordpress/scripts": "^19.2.4",
     "autoprefixer": "^10.4.21",
-    "glob": "^11.0.3",
     "cssnano": "^6.0.1",
+    "glob": "^11.0.3",
     "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.1",
     "postcss-import": "^16.1.1",
     "postcss-nested": "^7.0.2",
+    "puppeteer": "^21.5.3",
     "purgecss": "^4.1.3",
     "rollup": "^4.44.2",
     "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.69.5",
     "standard-version": "^9.5.0",
-    "vite": "^5.0.11",
-    "puppeteer": "^21.5.3"
+    "vite": "^5.0.11"
   }
 }

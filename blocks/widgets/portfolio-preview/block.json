@@ -5,6 +5,6 @@
   "category": "widgets",
   "icon": "portfolio",
   "supports": { "html": false },
-  "style": "file:../../../build/css/dashboard.css",
+  "style": "file:../../../assets/css/min/dashboard-widget.css",
   "render": "file:./render.php"
 }
