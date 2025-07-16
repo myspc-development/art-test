@@ -23,7 +23,6 @@ function wp_localize_script($handle, $name, $data) {
 function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$options[$key] ?? $default; }
 function update_option($key, $value) { \ArtPulse\Admin\Tests\EnqueueAssetsTest::$options[$key] = $value; }
 function wp_roles() { return (object)['roles' => ['administrator' => [], 'subscriber' => []]]; }
-function ap_styles_disabled() { return false; }
 function wp_script_is($h, $list) { return false; }
 
 namespace ArtPulse\Core;
@@ -53,7 +52,7 @@ class EnqueueAssetsTest extends TestCase
         self::$terms = [];
         self::$scripts = [];
         self::$localize_calls = [];
-        self::$options = [];
+        self::$options = ['artpulse_settings' => ['disable_styles' => true]];
         self::$current_screen = null;
     }
 
