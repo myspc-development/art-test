@@ -11,11 +11,11 @@
         },
         {
           "title": "Add fallback renderers for missing callbacks",
-          "status": "pending"
+          "status": "done"
         },
         {
           "title": "Ensure each widget has a unique ID and label",
-          "status": "pending"
+          "status": "done"
         }
       ]
     },
@@ -147,7 +147,7 @@
         },
         {
           "title": "Add Cypress dashboard integration tests",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "title": "Enable WP_DEBUG and validate logs",
