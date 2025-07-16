@@ -377,7 +377,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const tbody = document.createElement('tbody');
             list.forEach(a => {
               const tr = document.createElement('tr');
-              tr.innerHTML = `<td>${a.name || ''}</td><td>${a.email}</td><td>${a.status}</td><td>${a.rsvp_date || ''}</td><td>${a.attended ? 'Yes' : 'No'}</td><td><button class="ap-mark-attended" data-event="${eventId}" data-user="${a.ID}">${a.attended ? 'Unmark' : 'Mark Attended'}</button> <button class="ap-remove-attendee" data-event="${eventId}" data-user="${a.ID}">Remove</button> <button class="ap-message-attendee" data-event="${eventId}" data-user="${a.ID}">Message</button></td>`;
+              const nameTd = document.createElement('td');
+              nameTd.textContent = a.name || '';
+              const emailTd = document.createElement('td');
+              emailTd.textContent = a.email;
+              const statusTd = document.createElement('td');
+              statusTd.textContent = a.status;
+              const dateTd = document.createElement('td');
+              dateTd.textContent = a.rsvp_date || '';
+              const attTd = document.createElement('td');
+              attTd.textContent = a.attended ? 'Yes' : 'No';
+              const actionsTd = document.createElement('td');
+              actionsTd.innerHTML = `<button class="ap-mark-attended" data-event="${eventId}" data-user="${a.ID}">${a.attended ? 'Unmark' : 'Mark Attended'}</button> <button class="ap-remove-attendee" data-event="${eventId}" data-user="${a.ID}">Remove</button> <button class="ap-message-attendee" data-event="${eventId}" data-user="${a.ID}">Message</button>`;
+              tr.append(nameTd, emailTd, statusTd, dateTd, attTd, actionsTd);
               tbody.appendChild(tr);
             });
             table.appendChild(tbody);

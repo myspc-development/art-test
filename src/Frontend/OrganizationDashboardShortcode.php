@@ -86,15 +86,17 @@ class OrganizationDashboardShortcode {
         $wait_count = is_array($waitlist) ? count($waitlist) : 0;
 
         ob_start();
-        echo '<li data-event="' . $event->ID . '">' . esc_html($event->post_title);
-        echo ' <span class="ap-rsvp-count">(' . $rsvp_count . '/' . ($limit ?: '&infin;') . ')</span>';
-        if ($wait_count) {
-            echo ' <span class="ap-waitlist-count">' . intval($wait_count) . ' WL</span>';
+        echo '<li data-event="' . esc_attr($event->ID) . '">' . esc_html($event->post_title);
+        if (current_user_can('edit_post', $event->ID)) {
+            echo ' <span class="ap-rsvp-count">(' . esc_html($rsvp_count) . '/' . esc_html($limit ?: '&infin;') . ')</span>';
+            if ($wait_count) {
+                echo ' <span class="ap-waitlist-count">' . intval($wait_count) . ' WL</span>';
+            }
+            echo ' <a href="#" class="ap-view-attendees" data-id="' . esc_attr($event->ID) . '">Attendees</a>';
+            echo ' <button class="ap-config-rsvp" data-id="' . esc_attr($event->ID) . '">Configure RSVP</button>';
         }
-        echo ' <a href="#" class="ap-view-attendees" data-id="' . $event->ID . '">Attendees</a>';
-        echo ' <a href="#" class="ap-inline-edit" data-id="' . $event->ID . '">Edit</a>';
-        echo ' <button class="ap-config-rsvp" data-id="' . $event->ID . '">Configure RSVP</button>';
-        echo ' <button class="ap-delete-event" data-id="' . $event->ID . '">Delete</button></li>';
+        echo ' <a href="#" class="ap-inline-edit" data-id="' . esc_attr($event->ID) . '">Edit</a>';
+        echo ' <button class="ap-delete-event" data-id="' . esc_attr($event->ID) . '">Delete</button></li>';
         return ob_get_clean();
     }
 
@@ -501,6 +503,7 @@ class OrganizationDashboardShortcode {
             'post_status' => ['publish','pending','draft'],
             'meta_key'    => '_ap_event_organization',
             'meta_value'  => $org_id,
+            'numberposts' => 50,
         ]);
         foreach ($events as $event) {
             echo self::build_event_list_item($event);
@@ -666,6 +669,7 @@ class OrganizationDashboardShortcode {
             'post_status' => ['publish','pending','draft'],
             'meta_key'    => '_ap_event_organization',
             'meta_value'  => $org_id,
+            'numberposts' => 50,
         ]);
         foreach ($events as $event) {
             echo self::build_event_list_item($event);
@@ -706,6 +710,7 @@ class OrganizationDashboardShortcode {
             'post_status' => ['publish','pending','draft'],
             'meta_key'    => '_ap_event_organization',
             'meta_value'  => $user_org,
+            'numberposts' => 50,
         ]);
         foreach ($events as $event) {
             echo self::build_event_list_item($event);
