@@ -64,6 +64,7 @@ require_once __DIR__ . '/includes/settings-register.php';
 require_once __DIR__ . '/includes/help-doc-renderer.php';
 require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';
 require_once __DIR__ . '/admin/page-dashboard-widgets.php';
+require_once __DIR__ . '/admin/page-widget-ui.php';
 require_once __DIR__ . '/admin/page-community-roles.php';
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
@@ -225,12 +226,16 @@ function ap_copy_templates_to_child_theme() {
 $plugin = new WooCommerceIntegration();
 $artworkSync = new ArtworkWooSync();
 
+function artpulse_activate() {
+    \ArtPulse\Core\Activator::activate();
+}
+
 // ✅ Hook for activation
 register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     artpulse_create_custom_table();
     \ArtPulse\Core\FeedbackManager::install_table();
-    Activator::activate(); // WooCommerceIntegration has no activate() method
+    artpulse_activate(); // WooCommerceIntegration has no activate() method
     ap_copy_templates_to_child_theme();
 
     // Initialize default dashboard widget layout if missing
