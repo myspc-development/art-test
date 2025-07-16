@@ -45,7 +45,9 @@ class AuctionManager
         register_rest_route('artpulse/v1', '/bids/(?P<artwork_id>\\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_bids'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args' => [
                 'artwork_id' => ['validate_callback' => 'absint'],
             ],
@@ -54,7 +56,9 @@ class AuctionManager
         register_rest_route('artpulse/v1', '/auctions/live', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_live'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
         ]);
     }
 

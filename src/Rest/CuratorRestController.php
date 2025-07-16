@@ -18,13 +18,17 @@ class CuratorRestController
         register_rest_route('artpulse/v1', '/curators', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_curators'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
         ]);
 
         register_rest_route('artpulse/v1', '/curator/(?P<slug>[a-z0-9-]+)', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_curator'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args'                => [
                 'slug' => ['sanitize_callback' => 'sanitize_title'],
             ],

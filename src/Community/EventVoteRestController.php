@@ -20,13 +20,17 @@ class EventVoteRestController {
         register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/votes', [
             'methods'  => 'GET',
             'callback' => [self::class, 'count'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args'     => ['id' => ['validate_callback' => 'is_numeric']],
         ]);
         register_rest_route('artpulse/v1', '/leaderboards/top-events', [
             'methods' => 'GET',
             'callback' => [self::class, 'top_events'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
         ]);
     }
 

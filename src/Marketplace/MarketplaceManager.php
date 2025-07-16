@@ -89,12 +89,16 @@ class MarketplaceManager
         register_rest_route('artpulse/v1', '/artworks', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_artworks'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
         ]);
         register_rest_route('artpulse/v1', '/artworks/(?P<id>\\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_artwork'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
         register_rest_route('artpulse/v1', '/orders', [

@@ -22,7 +22,9 @@ class VisitRestController
         register_rest_route('artpulse/v1', '/checkin', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'checkin'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args'                => [
                 'event_id'   => [ 'validate_callback' => 'is_numeric', 'required' => true ],
                 'institution'=> [ 'sanitize_callback' => 'sanitize_text_field' ],

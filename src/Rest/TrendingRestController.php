@@ -13,7 +13,9 @@ class TrendingRestController {
         register_rest_route('artpulse/v1', '/trending', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_trending'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
             'args'                => [
                 'type'  => [ 'type' => 'string', 'default' => 'artwork' ],
                 'limit' => [ 'type' => 'integer', 'default' => 20 ],

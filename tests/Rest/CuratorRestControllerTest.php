@@ -18,6 +18,7 @@ class CuratorRestControllerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        wp_set_current_user(self::factory()->user->create());
         CuratorManager::install_table();
         CuratorRestController::register();
         do_action('rest_api_init');
