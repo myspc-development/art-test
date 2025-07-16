@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createRoot } from 'react-dom/client';
 
 const config = window.APDashboardWidgetsEditor?.config || [];
@@ -129,19 +129,44 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
   const [activeRole, setActiveRole] = useState(roleKeys[0] || '');
   const [active, setActive] = useState([]);
   const [available, setAvailable] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const categories = useMemo(() => {
+    const set = new Set();
+    widgets.forEach(w => { if (w.category) set.add(w.category); });
+    return Array.from(set);
+  }, [widgets]);
   const [showPreview, setShowPreview] = useState(false);
   const [selectedWidget, setSelectedWidget] = useState(null);
   const [defaults] = useState(() => JSON.parse(JSON.stringify(config)));
   const activeRef = useRef(null);
   const availRef = useRef(null);
 
+  const presets = {
+    new_artist: ['membership', 'widget_for_you', 'instagram_widget', 'my-events'],
+    event_organizer: ['membership', 'events', 'rsvps', 'rsvp_stats', 'local-events']
+  };
+
+  function applyPreset(key) {
+    const ids = presets[key] || [];
+    setActive(widgets.filter(w => ids.includes(w.id)));
+    setAvailable(
+      widgets.filter(
+        w => !ids.includes(w.id) && (activeCategory === 'all' || w.category === activeCategory)
+      )
+    );
+  }
+
   useEffect(() => {
     const activeIds = config[activeRole] || [];
     const activeWidgets = widgets.filter(w => activeIds.includes(w.id));
-    const availWidgets = widgets.filter(w => !activeIds.includes(w.id));
+    const availWidgets = widgets.filter(
+      w =>
+        !activeIds.includes(w.id) &&
+        (activeCategory === 'all' || w.category === activeCategory)
+    );
     setActive(activeWidgets);
     setAvailable(availWidgets);
-  }, [activeRole]);
+  }, [activeRole, activeCategory]);
 
   useEffect(() => {
     if (typeof Sortable === 'undefined') return;
@@ -235,7 +260,11 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
   function handleReset() {
     const activeIds = defaults[activeRole] || [];
     setActive(widgets.filter(w => activeIds.includes(w.id)));
-    setAvailable(widgets.filter(w => !activeIds.includes(w.id)));
+    setAvailable(
+      widgets.filter(
+        w => !activeIds.includes(w.id) && (activeCategory === 'all' || w.category === activeCategory)
+      )
+    );
   }
 
   return (
@@ -254,6 +283,17 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
       <div className="ap-widgets-columns">
         <div className="ap-widgets-available">
           <h4 id="ap-available-label">{l10n.availableWidgets || 'Available Widgets'}</h4>
+          <label className="screen-reader-text" htmlFor="ap-category-select">{l10n.filterCategory}</label>
+          <select
+            id="ap-category-select"
+            value={activeCategory}
+            onChange={e => setActiveCategory(e.target.value)}
+          >
+            <option value="all">{l10n.allCategories || 'All'}</option>
+            {categories.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
           <ul ref={availRef} role="listbox" aria-labelledby="ap-available-label">
             {available.map((w, i) => (
               <li
@@ -263,6 +303,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
                 role="option"
                 onClick={() => setSelectedWidget(w.id)}
                 onKeyDown={e => handleKeyDown(e, i, 'available')}
+                className={w.settings?.length ? 'ap-widget-configurable' : ''}
               >
                 {w.name}
               </li>
@@ -280,6 +321,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
                 role="option"
                 onClick={() => setSelectedWidget(w.id)}
                 onKeyDown={e => handleKeyDown(e, i, 'active')}
+                className={w.settings?.length ? 'ap-widget-configurable' : ''}
               >
                 {w.name}
               </li>
@@ -288,6 +330,16 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
         </div>
       </div>
       <div className="ap-widgets-actions">
+        <label className="screen-reader-text" htmlFor="ap-preset-select">{l10n.presetLabel}</label>
+        <select
+          id="ap-preset-select"
+          defaultValue=""
+          onChange={e => { if (e.target.value) { applyPreset(e.target.value); e.target.value = ''; } }}
+        >
+          <option value="">{l10n.presetLabel || 'Apply Preset'}</option>
+          <option value="new_artist">{l10n.presetArtist || 'New Artist'}</option>
+          <option value="event_organizer">{l10n.presetOrganizer || 'Event Organizer'}</option>
+        </select>
         <button className="ap-form-button" onClick={handleSave}>{l10n.save || 'Save'}</button>
         <button className="ap-form-button" onClick={() => setShowPreview(!showPreview)}>{l10n.preview || 'Preview'}</button>
         <button className="ap-form-button" onClick={handleReset}>{l10n.resetDefault || 'Reset to Default'}</button>
