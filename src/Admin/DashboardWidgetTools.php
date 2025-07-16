@@ -518,6 +518,10 @@ class DashboardWidgetTools
                 continue;
             }
 
+            if ($id === 'artpulse_dashboard_widget') {
+                continue; // exclude manager from preview
+            }
+
             $w     = $registry[$id];
             $label = isset($w['label']) ? $w['label'] : 'Untitled';
 
