@@ -23,6 +23,7 @@ if ($category) {
 }
 
 $spot_query = new WP_Query($query_args);
+wp_enqueue_script('ap-share-js');
 ?>
 <div id="ap-widget-spotlights" class="ap-card" role="region" aria-labelledby="ap-widget-spotlights-title">
   <h2 id="ap-widget-spotlights-title" class="ap-card__title">🌟 <?php _e('Spotlights','artpulse'); ?></h2>
@@ -40,12 +41,7 @@ $spot_query = new WP_Query($query_args);
           <strong><?php the_title(); ?></strong>
           <p><?php echo wp_trim_words(get_the_excerpt(), 20); ?></p>
           <a href="<?php the_permalink(); ?>" class="button small ap-spotlight-view" data-spot-id="<?php echo get_the_ID(); ?>"><?php esc_html_e('View', 'artpulse'); ?></a>
-          <div class="spotlight-share">
-            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(get_permalink()); ?>" target="_blank" rel="noopener" class="share-facebook">FB</a>
-            <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode(get_permalink()); ?>" target="_blank" rel="noopener" class="share-twitter">Tw</a>
-            <a href="https://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode(get_permalink()); ?>" target="_blank" rel="noopener" class="share-linkedin">In</a>
-            <a href="mailto:?subject=<?php echo rawurlencode(get_the_title()); ?>&body=<?php echo urlencode(get_permalink()); ?>" class="share-email">Email</a>
-          </div>
+          <?php echo \ArtPulse\Frontend\ap_share_buttons(get_the_ID()); ?>
         </div>
       <?php endwhile; wp_reset_postdata(); ?>
     <?php else : ?>
