@@ -9,20 +9,39 @@ if (!defined('ABSPATH')) {
 /**
  * Register three sample widgets on the main dashboard screen.
  */
+function artpulse_add_wp_widget(string $id, string $title, callable $cb): void {
+    static $ids = [];
+
+    $id = sanitize_key($id);
+    if (!$id || in_array($id, $ids, true)) {
+        trigger_error('Duplicate or invalid dashboard widget ID: ' . $id, E_USER_WARNING);
+        return;
+    }
+
+    $title = trim(strip_tags($title));
+    if ($title === '') {
+        trigger_error('Dashboard widget missing title for ID: ' . $id, E_USER_WARNING);
+        return;
+    }
+
+    wp_add_dashboard_widget($id, $title, $cb);
+    $ids[] = $id;
+}
+
 function artpulse_wp_register_widgets() {
-    wp_add_dashboard_widget(
+    artpulse_add_wp_widget(
         'artpulse_widget_summary',
         __('ArtPulse Summary', 'artpulse'),
         'artpulse_widget_summary_render'
     );
 
-    wp_add_dashboard_widget(
+    artpulse_add_wp_widget(
         'artpulse_widget_events',
         __('Upcoming Events', 'artpulse'),
         'artpulse_widget_events_render'
     );
 
-    wp_add_dashboard_widget(
+    artpulse_add_wp_widget(
         'artpulse_widget_tags',
         __('Trending Tags', 'artpulse'),
         'artpulse_widget_tags_render'
