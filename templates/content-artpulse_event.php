@@ -85,7 +85,7 @@ error_log('📦 content-artpulse_event.php loaded');
           ?>
         </div>
 
-        <?php echo \ArtPulse\Frontend\ap_share_buttons( get_permalink(), get_the_title(), 'event' ); ?>
+        <?php echo \ArtPulse\Frontend\ap_share_buttons( get_permalink(), get_the_title(), get_post_type(), get_the_ID() ); ?>
 
       </div>
     </div>
