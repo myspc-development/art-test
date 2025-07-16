@@ -122,11 +122,11 @@ Admin UI tab: “Delivery Logs”.
 
 ## Developer Sprint Checklist
 - [x] `ap_webhook_subscriptions` table live
-- [ ] `ap_trigger_webhooks()` global
-- [ ] Signature + HMAC verified
-- [ ] Admin UI for org webhook settings
-- [ ] Sample payloads documented
-- [ ] Logs + retry engine built
+- [x] `ap_trigger_webhooks()` global
+- [x] Signature + HMAC verified
+- [x] Admin UI for org webhook settings
+- [x] Sample payloads documented
+- [x] Logs + retry engine built
 
 ## Codex Docs to Update
 - Partner Integration – Webhook Setup, Signature Spec, Supported Events
