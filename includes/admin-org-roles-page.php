@@ -36,4 +36,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
         'api_path' => 'artpulse/v1/org-roles',
         'nonce'    => wp_create_nonce('wp_rest'),
     ]);
+    wp_localize_script('ap-org-roles', 'wpApiSettings', [
+        'nonce' => wp_create_nonce('wp_rest'),
+    ]);
 });

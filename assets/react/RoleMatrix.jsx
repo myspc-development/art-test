@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 export default function RoleMatrix({ selectedOrg = 0 }) {
   const [roles, setRoles] = useState([]);
   const [users, setUsers] = useState([]);
-  const [pendingRoles, setPendingRoles] = useState({});
+  const [changes, setChanges] = useState({});
 
   useEffect(() => {
     fetch(`/wp-json/artpulse/v1/org-roles?org_id=${selectedOrg}`)
@@ -14,16 +14,19 @@ export default function RoleMatrix({ selectedOrg = 0 }) {
       });
   }, [selectedOrg]);
 
-  function assignRole(userId, roleSlug) {
-    setPendingRoles(prev => ({ ...prev, [userId]: roleSlug }));
+  function updateMatrix(userId, roleSlug) {
+    setChanges(prev => ({ ...prev, [userId]: roleSlug }));
     setUsers(prev => prev.map(u => (u.id === userId ? { ...u, role: roleSlug } : u)));
   }
 
   const saveChanges = () => {
     fetch('/wp-json/artpulse/v1/org-roles/update', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ org_id: selectedOrg, roles: pendingRoles }),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WP-Nonce': window.wpApiSettings.nonce,
+      },
+      body: JSON.stringify({ org_id: selectedOrg, roles: changes }),
     });
   };
 
@@ -49,7 +52,7 @@ export default function RoleMatrix({ selectedOrg = 0 }) {
                   <input
                     type="radio"
                     checked={user.role === role.slug}
-                    onChange={() => assignRole(user.id, role.slug)}
+                    onChange={() => updateMatrix(user.id, role.slug)}
                   />
                 </td>
               ))}
