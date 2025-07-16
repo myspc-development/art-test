@@ -48,15 +48,47 @@ class EventRsvpHandler
 
     public static function get_rsvp_summary_for_user($user_id): array
     {
-        // Sample dummy data - replace with real query
+        $event_ids = get_user_meta($user_id, 'ap_rsvp_events', true);
+        if (!is_array($event_ids)) {
+            $event_ids = [];
+        }
+
+        $going      = 0;
+        $interested = 0;
+        $trend_map  = [];
+
+        $today = strtotime('today');
+
+        foreach ($event_ids as $eid) {
+            $date = get_post_meta($eid, '_ap_event_date', true);
+            $ts   = $date ? strtotime($date) : false;
+            if ($ts !== false && $ts >= $today) {
+                $going++;
+            } else {
+                $interested++;
+            }
+
+            $history = get_post_meta($eid, 'event_rsvp_history', true);
+            if (is_array($history)) {
+                foreach ($history as $day => $count) {
+                    if (!isset($trend_map[$day])) {
+                        $trend_map[$day] = 0;
+                    }
+                    $trend_map[$day] += (int) $count;
+                }
+            }
+        }
+
+        ksort($trend_map);
+        $trend = [];
+        foreach ($trend_map as $day => $count) {
+            $trend[] = ['date' => $day, 'count' => $count];
+        }
+
         return [
-            'going' => 5,
-            'interested' => 12,
-            'trend' => [
-                ['date' => '2024-07-01', 'count' => 1],
-                ['date' => '2024-07-02', 'count' => 2],
-                ['date' => '2024-07-03', 'count' => 4],
-            ],
+            'going'      => $going,
+            'interested' => $interested,
+            'trend'      => $trend,
         ];
     }
 }
