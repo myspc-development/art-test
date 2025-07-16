@@ -6,11 +6,26 @@ export default function RoleMatrix({ selectedOrg = 0 }) {
   const [changes, setChanges] = useState({});
 
   useEffect(() => {
-    fetch(`/wp-json/artpulse/v1/org-roles?org_id=${selectedOrg}`)
-      .then(res => res.json())
+    fetch(`/wp-json/artpulse/v1/org-roles?org_id=${selectedOrg}`, {
+      headers: {
+        'X-WP-Nonce': window.ArtPulseOrgRoles?.rest_nonce,
+      },
+    })
+      .then(res => {
+        if (!res.ok) throw new Error(`API Error: ${res.status}`);
+        return res.json();
+      })
       .then(data => {
+        if (!data || !Array.isArray(data.roles) || !Array.isArray(data.users)) {
+          throw new Error('Invalid response format');
+        }
         setRoles(data.roles);
         setUsers(data.users);
+      })
+      .catch(err => {
+        console.error('Failed to load org roles:', err);
+        setRoles([]);
+        setUsers([]);
       });
   }, [selectedOrg]);
 
@@ -30,7 +45,9 @@ export default function RoleMatrix({ selectedOrg = 0 }) {
     });
   };
 
-  if (!roles.length) return <p>Loading…</p>;
+  if (!roles || !Array.isArray(roles) || roles.length === 0) {
+    return <p>No roles found or unauthorized.</p>;
+  }
 
   return (
     <div>

@@ -8,7 +8,7 @@ add_action('rest_api_init', function () {
         'methods'             => 'GET',
         'callback'            => 'ap_get_org_roles',
         'permission_callback' => function () {
-            return current_user_can('manage_options');
+            return current_user_can('edit_posts');
         }
     ]);
 });
