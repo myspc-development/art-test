@@ -8,7 +8,7 @@ export default function RoleMatrix({ selectedOrg = 0 }) {
   useEffect(() => {
     fetch(`/wp-json/artpulse/v1/org-roles?org_id=${selectedOrg}`, {
       headers: {
-        'X-WP-Nonce': window.ArtPulseOrgRoles?.rest_nonce,
+        'X-WP-Nonce': ArtPulseData.rest_nonce,
       },
     })
       .then(res => {
@@ -39,7 +39,7 @@ export default function RoleMatrix({ selectedOrg = 0 }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-WP-Nonce': window.wpApiSettings.nonce,
+        'X-WP-Nonce': ArtPulseData.rest_nonce,
       },
       body: JSON.stringify({ org_id: selectedOrg, roles: changes }),
     });

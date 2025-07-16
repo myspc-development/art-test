@@ -106,11 +106,23 @@ var APRoleMatrix = (function (react) {
       changes = _useState6[0],
       setChanges = _useState6[1];
     react.useEffect(function () {
-      fetch("/wp-json/artpulse/v1/org-roles?org_id=".concat(selectedOrg)).then(function (res) {
+      fetch("/wp-json/artpulse/v1/org-roles?org_id=".concat(selectedOrg), {
+        headers: {
+          'X-WP-Nonce': ArtPulseData.rest_nonce
+        }
+      }).then(function (res) {
+        if (!res.ok) throw new Error("API Error: ".concat(res.status));
         return res.json();
       }).then(function (data) {
+        if (!data || !Array.isArray(data.roles) || !Array.isArray(data.users)) {
+          throw new Error('Invalid response format');
+        }
         setRoles(data.roles);
         setUsers(data.users);
+      })["catch"](function (err) {
+        console.error('Failed to load org roles:', err);
+        setRoles([]);
+        setUsers([]);
       });
     }, [selectedOrg]);
     function updateMatrix(userId, roleSlug) {
@@ -130,7 +142,7 @@ var APRoleMatrix = (function (react) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-WP-Nonce': window.wpApiSettings.nonce
+          'X-WP-Nonce': ArtPulseData.rest_nonce
         },
         body: JSON.stringify({
           org_id: selectedOrg,
@@ -138,7 +150,9 @@ var APRoleMatrix = (function (react) {
         })
       });
     };
-    if (!roles.length) return /*#__PURE__*/React.createElement("p", null, "Loading\u2026");
+    if (!roles || !Array.isArray(roles) || roles.length === 0) {
+      return /*#__PURE__*/React.createElement("p", null, "No roles found or unauthorized.");
+    }
     return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "User"), roles.map(function (role) {
       return /*#__PURE__*/React.createElement("th", {
         key: role.slug

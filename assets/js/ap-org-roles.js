@@ -10,11 +10,23 @@
         const [changes, setChanges] = useState({});
 
         useEffect(() => {
-            fetch(`/wp-json/artpulse/v1/org-roles?org_id=${ArtPulseOrgRoles.orgId}`)
-                .then((res) => res.json())
+            fetch(`/wp-json/artpulse/v1/org-roles?org_id=${ArtPulseOrgRoles.orgId}`, {
+                headers: {
+                    'X-WP-Nonce': ArtPulseData.rest_nonce,
+                },
+            })
+                .then((res) => {
+                    if (!res.ok) throw new Error(`API returned ${res.status}`);
+                    return res.json();
+                })
                 .then((data) => {
-                    setRoles(data.roles);
-                    setUsers(data.users);
+                    setRoles(Array.isArray(data.roles) ? data.roles : []);
+                    setUsers(Array.isArray(data.users) ? data.users : []);
+                })
+                .catch((err) => {
+                    console.error('Failed to load roles:', err);
+                    setRoles([]);
+                    setUsers([]);
                 });
         }, []);
 
@@ -28,14 +40,14 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-WP-Nonce': window.wpApiSettings.nonce,
+                    'X-WP-Nonce': ArtPulseData.rest_nonce,
                 },
                 body: JSON.stringify({ org_id: ArtPulseOrgRoles.orgId, roles: changes }),
             });
         };
 
-        if (!roles.length) {
-            return createElement('p', null, 'Loading…');
+        if (!Array.isArray(roles) || roles.length === 0) {
+            return createElement('p', null, 'No roles loaded or unauthorized.');
         }
 
         return createElement(

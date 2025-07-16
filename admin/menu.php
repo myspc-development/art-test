@@ -74,6 +74,9 @@ function ap_enqueue_org_roles_assets($hook)
     wp_localize_script($handle, 'wpApiSettings', [
         'nonce' => wp_create_nonce('wp_rest'),
     ]);
+    wp_localize_script($handle, 'ArtPulseData', [
+        'rest_nonce' => wp_create_nonce('wp_rest'),
+    ]);
 
     // Optional: enqueue CSS for the matrix UI
     $css_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/css/org-roles.css';
