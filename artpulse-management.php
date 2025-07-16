@@ -633,6 +633,8 @@ function ap_enqueue_main_style() {
 }
 add_action('wp_enqueue_scripts', 'ap_enqueue_main_style');
 add_action('admin_enqueue_scripts', 'ap_enqueue_main_style');
+add_action('admin_enqueue_scripts', fn() => wp_enqueue_style('dashicons'));
+add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('dashicons'));
 
 /**
  * Optionally enqueue styles for the admin area.
@@ -1048,6 +1050,7 @@ function ap_get_events_for_map() {
 
 // === UI Toggle Demo ===
 require_once plugin_dir_path(__FILE__) . 'includes/helpers.php';
+require_once plugin_dir_path(__FILE__) . 'includes/helpers-ui.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/post-status-hooks.php';
 require_once plugin_dir_path(__FILE__) . 'includes/artist-meta-box.php';
