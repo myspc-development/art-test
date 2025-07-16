@@ -437,6 +437,7 @@ add_action('rest_api_init', function () {
     \ArtPulse\Rest\PortfolioRestController::register();
     \ArtPulse\Rest\UserAccountRestController::register();
     \ArtPulse\Rest\DashboardPreviewController::register();
+    \ArtPulse\Reporting\BudgetExportController::register();
 });
 
 
