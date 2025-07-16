@@ -142,6 +142,26 @@ class UserDashboardManager
             'nonce' => wp_create_nonce('wp_rest'),
         ]);
 
+        // Enable drag-and-drop layout editing
+        wp_enqueue_script(
+            'sortablejs',
+            plugins_url('assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.15.0',
+            true
+        );
+        wp_enqueue_script(
+            'user-dashboard-layout',
+            plugins_url('assets/js/user-dashboard-layout.js', ARTPULSE_PLUGIN_FILE),
+            ['sortablejs'],
+            '1.0.0',
+            true
+        );
+        wp_localize_script('user-dashboard-layout', 'APLayout', [
+            'nonce'    => wp_create_nonce('ap_save_user_layout'),
+            'ajax_url' => admin_url('admin-ajax.php'),
+        ]);
+
         wp_enqueue_script(
             'ap-dashboard-nav',
             plugins_url('assets/js/dashboard-nav.js', ARTPULSE_PLUGIN_FILE),
