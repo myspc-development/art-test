@@ -12,6 +12,12 @@
 
 ---
 
+### Summary Documents
+- [Completion Plan](./completion-plan.md)
+- [Codex Cleanup Report](./codex_cleanup_report.md)
+- [Codex Sprint Readiness](./codex_sprint_readiness.md)
+
+
 ## ⚙️ Core Infrastructure & Foundation (Phase A)
 
 | Document | Sprints Covered | Status | Audience |

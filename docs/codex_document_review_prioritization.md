@@ -39,7 +39,7 @@ After cleanup, evaluate readiness of these groups:
 
 ## Optional Output Deliverables
 Create these summaries when the audit is complete:
-- `codex_index.md` listing modules, sprint status and intended user.
-- `codex_cleanup_report.md` describing merged files and renamed titles.
-- `codex_sprint_readiness.md` marking which sprints are spec-complete or blocked.
+- [`codex_index.md`](./codex_index.md) listing modules, sprint status and intended user.
+- [`codex_cleanup_report.md`](./codex_cleanup_report.md) describing merged files and renamed titles.
+- [`codex_sprint_readiness.md`](./codex_sprint_readiness.md) marking which sprints are spec-complete or blocked.
 
