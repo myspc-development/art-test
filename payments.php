@@ -9,13 +9,23 @@ add_action('rest_api_init', function () {
     register_rest_route('artpulse/v1', '/payment/intent', [
         'methods'  => 'POST',
         'callback' => 'ap_create_payment_intent',
-        'permission_callback' => function() { return is_user_logged_in(); },
+        'permission_callback' => function () {
+            if (!current_user_can('read')) {
+                return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+            }
+            return true;
+        },
     ]);
 
     register_rest_route('artpulse/v1', '/payment/checkout', [
         'methods'  => 'POST',
         'callback' => 'ap_create_checkout_session',
-        'permission_callback' => function() { return is_user_logged_in(); },
+        'permission_callback' => function () {
+            if (!current_user_can('read')) {
+                return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+            }
+            return true;
+        },
     ]);
 });
 

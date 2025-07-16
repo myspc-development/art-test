@@ -18,7 +18,10 @@ class PaymentReportsController
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_reports'],
             'permission_callback' => function () {
-                return current_user_can('manage_options');
+                if (!current_user_can('manage_options')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
             },
         ]);
     }

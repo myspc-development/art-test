@@ -6,7 +6,10 @@ add_action('rest_api_init', function () {
         'methods'             => 'GET',
         'callback'            => 'ap_get_artist_overview',
         'permission_callback' => function () {
-            return current_user_can('read');
+            if (!current_user_can('read')) {
+                return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+            }
+            return true;
         },
     ]);
 });

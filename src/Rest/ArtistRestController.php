@@ -42,7 +42,12 @@ class ArtistRestController extends WP_REST_Controller
             [
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => [ $this, 'get_artists' ],
-                'permission_callback' => fn() => is_user_logged_in(),
+                'permission_callback' => function() {
+                    if (!current_user_can('read')) {
+                        return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                    }
+                    return true;
+                },
             ]
         );
 
@@ -52,7 +57,12 @@ class ArtistRestController extends WP_REST_Controller
             [
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => [ $this, 'get_artist' ],
-                'permission_callback' => fn() => is_user_logged_in(),
+                'permission_callback' => function() {
+                    if (!current_user_can('read')) {
+                        return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                    }
+                    return true;
+                },
                 'args'                => [
                     'id' => [
                         'validate_callback' => 'is_numeric',

@@ -17,7 +17,12 @@ class PortfolioBuilder
             register_rest_route('artpulse/v1', '/portfolio/(?P<user_id>\d+)', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'rest_get_portfolio'],
-                'permission_callback' => fn() => is_user_logged_in(),
+                'permission_callback' => function() {
+                    if (!current_user_can('read')) {
+                        return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                    }
+                    return true;
+                },
                 'args' => [
                     'user_id' => [
                         'validate_callback' => 'is_numeric',

@@ -17,7 +17,12 @@ class NewsletterOptinEndpoint
         register_rest_route('artpulse/v1', '/newsletter-optin', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args' => [
                 'email' => [ 'type' => 'string', 'required' => true ],
             ],

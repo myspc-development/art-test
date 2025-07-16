@@ -157,7 +157,10 @@ class UserDashboardManager
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getDashboardData' ],
             'permission_callback' => function() {
-                return is_user_logged_in() && current_user_can('view_artpulse_dashboard');
+                if (!is_user_logged_in() || !current_user_can('view_artpulse_dashboard')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
             },
         ]);
 
@@ -165,7 +168,10 @@ class UserDashboardManager
             'methods'             => 'POST',
             'callback'            => [ self::class, 'updateProfile' ],
             'permission_callback' => function() {
-                return is_user_logged_in();
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
             },
         ]);
 
@@ -173,7 +179,10 @@ class UserDashboardManager
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getEngagementFeed' ],
             'permission_callback' => function() {
-                return is_user_logged_in() && current_user_can('view_artpulse_dashboard');
+                if (!is_user_logged_in() || !current_user_can('view_artpulse_dashboard')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
             },
             'args' => [
                 'page' => [ 'type' => 'integer', 'default' => 1 ],
@@ -184,7 +193,12 @@ class UserDashboardManager
         register_rest_route('artpulse/v1', '/user/onboarding', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'saveOnboardingProgress' ],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args'                => [
                 'step' => [ 'type' => 'string', 'required' => true ],
             ],
@@ -193,19 +207,34 @@ class UserDashboardManager
         register_rest_route('artpulse/v1', '/dashboard-tour', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'completeDashboardTour' ],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
         ]);
 
         register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getDashboardLayout' ],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
         ]);
 
         register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'saveDashboardLayout' ],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args'                => [
                 'layout'     => [ 'type' => 'array', 'required' => false ],
                 'visibility' => [ 'type' => 'object', 'required' => false ],

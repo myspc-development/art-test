@@ -215,7 +215,10 @@ class EventNotesTasks
             },
             'permission_callback' => function (WP_REST_Request $req) {
                 $id = intval($req['id']);
-                return current_user_can('edit_post', $id);
+                if (!current_user_can('edit_post', $id)) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
             }
         ]);
         register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/tasks', [
@@ -229,7 +232,10 @@ class EventNotesTasks
             },
             'permission_callback' => function (WP_REST_Request $req) {
                 $id = intval($req['id']);
-                return current_user_can('edit_post', $id);
+                if (!current_user_can('edit_post', $id)) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
             }
         ]);
     }

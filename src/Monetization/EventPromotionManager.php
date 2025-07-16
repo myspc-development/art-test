@@ -23,10 +23,13 @@ class EventPromotionManager
         ]);
     }
 
-    public static function can_edit(WP_REST_Request $req): bool
+    public static function can_edit(WP_REST_Request $req)
     {
         $id = absint($req->get_param('id'));
-        return current_user_can('edit_post', $id);
+        if (!current_user_can('edit_post', $id)) {
+            return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+        }
+        return true;
     }
 
     public static function feature_event(WP_REST_Request $req)

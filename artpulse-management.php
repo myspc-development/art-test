@@ -294,6 +294,7 @@ function ap_render_dashboard_preview_page() {
     <div class="wrap">
         <h1>Dashboard Preview</h1>
         <form method="get">
+            <?php wp_nonce_field('artpulse_admin_action', 'artpulse_nonce'); ?>
             <input type="hidden" name="page" value="dashboard-preview" />
             <select name="role">
                 <option value="">Select Role</option>
@@ -305,6 +306,14 @@ function ap_render_dashboard_preview_page() {
         </form>
         <hr>
     <?php
+    if (isset($_GET['role'])) {
+        if (
+            !isset($_GET['artpulse_nonce']) ||
+            !check_admin_referer('artpulse_admin_action', 'artpulse_nonce')
+        ) {
+            wp_die('Security check failed. Please try again.');
+        }
+    }
 
     $role = sanitize_text_field($_GET['role'] ?? '');
     $editable = array_keys(get_editable_roles());

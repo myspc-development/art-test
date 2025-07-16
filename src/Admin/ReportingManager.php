@@ -29,9 +29,12 @@ class ReportingManager
     /**
      * Check current user capability.
      */
-    public static function can_export(): bool
+    public static function can_export()
     {
-        return current_user_can('manage_options');
+        if (!current_user_can('manage_options')) {
+            return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+        }
+        return true;
     }
 
     /**

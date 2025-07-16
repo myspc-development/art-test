@@ -22,7 +22,10 @@ add_action('rest_api_init', function () {
             ];
         },
         'permission_callback' => function () {
-            return current_user_can('update_plugins');
+            if (!current_user_can('update_plugins')) {
+                return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+            }
+            return true;
         }
     ]);
 });
