@@ -70,6 +70,20 @@ class ProfileMetrics
     public static function track_share(int $profile_id): void
     {
         self::log_metric($profile_id, 'share');
+
+        global $wpdb;
+        $meta_key = 'share_count';
+        $table    = $wpdb->usermeta;
+        $updated = $wpdb->query(
+            $wpdb->prepare(
+                "UPDATE {$table} SET meta_value = GREATEST(CAST(meta_value AS SIGNED) + 1, 0) WHERE user_id = %d AND meta_key = %s",
+                $profile_id,
+                $meta_key
+            )
+        );
+        if (!$updated) {
+            add_user_meta($profile_id, $meta_key, 1, true);
+        }
     }
 
     public static function log_metric(int $profile_id, string $metric, int $amount = 1): void
