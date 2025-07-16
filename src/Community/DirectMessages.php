@@ -39,12 +39,16 @@ class DirectMessages
             content TEXT NOT NULL,
             context_type VARCHAR(32) NULL,
             context_id BIGINT NULL,
+            parent_id BIGINT NULL,
+            attachments TEXT NULL,
+            tags TEXT NULL,
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             is_read TINYINT(1) NOT NULL DEFAULT 0,
             is_delivered TINYINT(1) NOT NULL DEFAULT 1,
             KEY sender_id (sender_id),
             KEY recipient_id (recipient_id),
-            KEY context (context_type, context_id)
+            KEY context (context_type, context_id),
+            KEY parent_id (parent_id)
         ) $charset;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
@@ -106,6 +110,9 @@ class DirectMessages
                 'content'      => [ 'type' => 'string',  'required' => true ],
                 'context_type' => [ 'type' => 'string',  'required' => false ],
                 'context_id'   => [ 'type' => 'integer', 'required' => false ],
+                'parent_id'    => [ 'type' => 'integer', 'required' => false ],
+                'attachments'  => [ 'type' => 'array',   'required' => false ],
+                'tags'         => [ 'type' => 'array',   'required' => false ],
             ],
         ]);
 
@@ -176,6 +183,37 @@ class DirectMessages
             ],
         ]);
 
+        register_rest_route('artpulse/v1', '/messages/label', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'label'],
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'id'     => [ 'type' => 'integer', 'required' => true ],
+                'tag'    => [ 'type' => 'string',  'required' => true ],
+                'action' => [ 'type' => 'string',  'required' => false ],
+            ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/messages/thread', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'thread'],
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'id' => [ 'type' => 'integer', 'required' => true ],
+            ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/messages/bulk', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'bulk_action'],
+            'permission_callback' => [self::class, 'permission_view'],
+            'args'                => [
+                'ids'    => [ 'type' => 'array',  'required' => true ],
+                'action' => [ 'type' => 'string', 'required' => true ],
+                'tag'    => [ 'type' => 'string', 'required' => false ],
+            ],
+        ]);
+
         register_rest_route('artpulse/v1', '/conversations', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'rest_list_conversations'],
@@ -201,6 +239,11 @@ class DirectMessages
         $content      = wp_kses_post($req['content']);
         $context_type = $req->get_param('context_type') ? sanitize_key($req['context_type']) : null;
         $context_id   = $req->get_param('context_id') ? absint($req['context_id']) : null;
+        $parent_id    = $req->get_param('parent_id') ? absint($req['parent_id']) : null;
+        $attachments  = $req->get_param('attachments');
+        $attachments  = is_array($attachments) ? array_map('intval', $attachments) : [];
+        $tags         = $req->get_param('tags');
+        $tags         = is_array($tags) ? array_map('sanitize_key', $tags) : [];
 
         if (!$recipient_id || $content === '' || !get_user_by('id', $recipient_id)) {
             return new WP_Error('invalid_params', 'Invalid recipient or content.', ['status' => 400]);
@@ -235,7 +278,16 @@ class DirectMessages
             }
         }
 
-        $id = self::add_message($sender_id, $recipient_id, $content, $context_type, $context_id);
+        $id = self::add_message(
+            $sender_id,
+            $recipient_id,
+            $content,
+            $context_type,
+            $context_id,
+            $parent_id,
+            $attachments,
+            $tags
+        );
         $row = self::get_message($id);
 
         return rest_ensure_response($row);
@@ -285,7 +337,16 @@ class DirectMessages
         return rest_ensure_response($messages);
     }
 
-    public static function add_message(int $sender_id, int $recipient_id, string $content, ?string $context_type = null, ?int $context_id = null): int
+    public static function add_message(
+        int $sender_id,
+        int $recipient_id,
+        string $content,
+        ?string $context_type = null,
+        ?int $context_id = null,
+        ?int $parent_id = null,
+        array $attachments = [],
+        array $tags = []
+    ): int
     {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
@@ -295,6 +356,9 @@ class DirectMessages
             'content'      => $content,
             'context_type' => $context_type,
             'context_id'   => $context_id,
+            'parent_id'    => $parent_id,
+            'attachments'  => $attachments ? implode(',', array_map('intval', $attachments)) : null,
+            'tags'         => $tags ? implode(',', array_map('sanitize_key', $tags)) : null,
             'created_at'   => current_time('mysql'),
             'is_read'      => 0,
             'is_delivered' => 1,
@@ -324,6 +388,13 @@ class DirectMessages
         $row['recipient_id'] = (int) $row['recipient_id'];
         $row['is_read'] = (int) $row['is_read'];
         $row['is_delivered'] = isset($row['is_delivered']) ? (int) $row['is_delivered'] : 1;
+        $row['parent_id'] = isset($row['parent_id']) ? (int) $row['parent_id'] : null;
+        $row['attachments'] = isset($row['attachments']) && $row['attachments'] !== ''
+            ? array_map('intval', explode(',', $row['attachments']))
+            : [];
+        $row['tags'] = isset($row['tags']) && $row['tags'] !== ''
+            ? array_map('sanitize_key', explode(',', $row['tags']))
+            : [];
         return $row;
     }
 
@@ -339,6 +410,13 @@ class DirectMessages
             $row['recipient_id'] = (int) $row['recipient_id'];
             $row['is_read'] = (int) $row['is_read'];
             $row['is_delivered'] = isset($row['is_delivered']) ? (int) $row['is_delivered'] : 1;
+            $row['parent_id'] = isset($row['parent_id']) ? (int) $row['parent_id'] : null;
+            $row['attachments'] = isset($row['attachments']) && $row['attachments'] !== ''
+                ? array_map('intval', explode(',', $row['attachments']))
+                : [];
+            $row['tags'] = isset($row['tags']) && $row['tags'] !== ''
+                ? array_map('sanitize_key', explode(',', $row['tags']))
+                : [];
             return $row;
         }, $rows);
     }
@@ -355,6 +433,13 @@ class DirectMessages
             $row['recipient_id'] = (int) $row['recipient_id'];
             $row['is_read'] = (int) $row['is_read'];
             $row['is_delivered'] = isset($row['is_delivered']) ? (int) $row['is_delivered'] : 1;
+            $row['parent_id'] = isset($row['parent_id']) ? (int) $row['parent_id'] : null;
+            $row['attachments'] = isset($row['attachments']) && $row['attachments'] !== ''
+                ? array_map('intval', explode(',', $row['attachments']))
+                : [];
+            $row['tags'] = isset($row['tags']) && $row['tags'] !== ''
+                ? array_map('sanitize_key', explode(',', $row['tags']))
+                : [];
             return $row;
         }, $rows);
     }
@@ -496,5 +581,77 @@ class DirectMessages
         }
         BlockedUsers::add($user_id, $block_id);
         return rest_ensure_response(['status' => 'blocked', 'user_id' => $block_id]);
+    }
+
+    public static function label(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        $id     = absint($req['id']);
+        $tag    = sanitize_key($req['tag']);
+        $action = $req->get_param('action') ? sanitize_key($req['action']) : 'add';
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $row   = $wpdb->get_row($wpdb->prepare("SELECT tags FROM $table WHERE id = %d AND (sender_id = %d OR recipient_id = %d)", $id, get_current_user_id(), get_current_user_id()), ARRAY_A);
+        if (!$row) {
+            return new WP_Error('not_found', 'Message not found', ['status' => 404]);
+        }
+        $tags = $row['tags'] ? explode(',', $row['tags']) : [];
+        if ($action === 'add') {
+            if (!in_array($tag, $tags, true)) { $tags[] = $tag; }
+        } elseif ($action === 'remove') {
+            $tags = array_diff($tags, [$tag]);
+        }
+        $wpdb->update($table, ['tags' => implode(',', $tags)], ['id' => $id]);
+
+        return rest_ensure_response(['tags' => $tags]);
+    }
+
+    public static function thread(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        $id = absint($req['id']);
+        $msg = self::get_message($id);
+        if (!$msg) {
+            return new WP_Error('not_found', 'Message not found', ['status' => 404]);
+        }
+        $thread_id = $msg['parent_id'] ? $msg['parent_id'] : $msg['id'];
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $rows = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE id = %d OR parent_id = %d ORDER BY created_at ASC", $thread_id, $thread_id), ARRAY_A);
+        $messages = array_map([self::class, 'get_message'], wp_list_pluck($rows, 'id'));
+        return rest_ensure_response($messages);
+    }
+
+    public static function bulk_action(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        $ids    = $req->get_param('ids');
+        $action = sanitize_key($req['action']);
+        $tag    = $req->get_param('tag');
+        $ids = array_map('intval', (array) $ids);
+
+        if ($action === 'read') {
+            self::mark_read_ids($ids, get_current_user_id());
+        } elseif ($action === 'unread') {
+            self::mark_unread_ids($ids, get_current_user_id());
+        } elseif ($action === 'label-add' && $tag) {
+            foreach ($ids as $id) {
+                $r = new WP_REST_Request('POST', '/');
+                $r->set_param('id', $id);
+                $r->set_param('tag', $tag);
+                $r->set_param('action', 'add');
+                self::label($r);
+            }
+        } elseif ($action === 'label-remove' && $tag) {
+            foreach ($ids as $id) {
+                $r = new WP_REST_Request('POST', '/');
+                $r->set_param('id', $id);
+                $r->set_param('tag', $tag);
+                $r->set_param('action', 'remove');
+                self::label($r);
+            }
+        } else {
+            return new WP_Error('invalid_action', 'Unknown bulk action', ['status' => 400]);
+        }
+
+        return rest_ensure_response(['updated' => count($ids)]);
     }
 }
