@@ -35,10 +35,21 @@ class DashboardWidgetRegistry
         callable $callback,
         array $options = [] // supports 'category', 'roles' and optional 'settings'
     ): void {
+        // Prevent duplicate IDs or labels.
+        if (isset(self::$widgets[$id])) {
+            trigger_error('Dashboard widget ID already registered: ' . $id, E_USER_WARNING);
+            return;
+        }
+        foreach (self::$widgets as $w) {
+            if ($w['label'] === $label) {
+                trigger_error('Dashboard widget label already registered: ' . $label, E_USER_WARNING);
+                return;
+            }
+        }
+
         // Callback must be valid to render the widget.
         if (!is_callable($callback)) {
-            trigger_error('Dashboard widget callback not callable: ' . $id, E_USER_WARNING);
-            return;
+            $callback = [self::class, 'render_widget_fallback'];
         }
 
         self::$widgets[$id] = [
@@ -62,7 +73,19 @@ class DashboardWidgetRegistry
             return;
         }
 
-        $args['label'] = $args['label'] ?? 'Untitled';
+        if (isset(self::$widgets[$id])) {
+            trigger_error('Dashboard widget ID already registered: ' . $id, E_USER_WARNING);
+            return;
+        }
+
+        $label = $args['label'] ?? 'Untitled';
+        foreach (self::$widgets as $w) {
+            if (($w['label'] ?? '') === $label) {
+                trigger_error('Dashboard widget label already registered: ' . $label, E_USER_WARNING);
+                return;
+            }
+        }
+        $args['label'] = $label;
 
         if (empty($args['callback']) && isset($args['template'])) {
             $template = $args['template'];
