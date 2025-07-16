@@ -96,8 +96,7 @@ class EventChatController
             $user   = get_userdata((int) $row['user_id']);
             $avatar = get_avatar_url((int) $row['user_id'], ['size' => 48]);
             if (!$avatar) {
-                $initial = $user ? strtoupper(substr($user->display_name, 0, 1)) : '?';
-                $avatar  = 'https://via.placeholder.com/48?text=' . rawurlencode($initial);
+                $avatar = plugins_url('assets/images/default-avatar.png', ARTPULSE_PLUGIN_FILE);
             }
             return [
                 'user_id'    => (int) $row['user_id'],

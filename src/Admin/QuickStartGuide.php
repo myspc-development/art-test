@@ -28,9 +28,8 @@ class QuickStartGuide
     {
         $admin_doc  = plugins_url('assets/docs/Admin_Help.md', ARTPULSE_PLUGIN_FILE);
         $member_doc = plugins_url('assets/docs/Member_Help.md', ARTPULSE_PLUGIN_FILE);
-        // Images were previously served from the plugin but removed to keep the repository lightweight.
-        // Use remote placeholders to demonstrate modal viewing without bundling binaries.
-        $img_base   = 'https://via.placeholder.com/300?text=';
+        // base URL for local placeholder images bundled with the plugin
+        $img_base   = plugins_url('assets/images/quickstart/', ARTPULSE_PLUGIN_FILE);
 
         echo '<div class="wrap ap-dashboard">';
         echo '<h1>' . esc_html__('ArtPulse Quick Start', 'artpulse') . '</h1>';
