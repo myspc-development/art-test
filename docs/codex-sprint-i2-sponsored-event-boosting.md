@@ -51,7 +51,7 @@ CREATE TABLE ap_event_boosts (
 - Stripe webhook completes with no errors
 
 ## Developer Sprint Checklist
-- [ ] `ap_event_boosts` table created
+- [x] `ap_event_boosts` table created
 - [ ] REST endpoints for checkout and webhook
 - [ ] Ranking integration updated
 - [ ] Boost UI and badges implemented

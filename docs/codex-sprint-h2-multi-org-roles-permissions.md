@@ -65,8 +65,8 @@ Check this instead of `current_user_can()` for org-scoped actions.
 - Curator of Org A cannot access Org B
 
 ## Developer Sprint Checklist
-- [ ] `ap_org_roles` table live
-- [ ] REST routes for assign/list
+- [x] `ap_org_roles` table live
+- [x] REST routes for assign/list
 - [ ] Scoped permission checks
 - [ ] Org dashboard context switcher
 - [ ] Invite flow per org
