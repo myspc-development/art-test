@@ -1,0 +1,16 @@
+# WordPress Dashboard Widgets
+
+This plugin adds simple widgets to the native WordPress dashboard. Widgets are registered via `wp_add_dashboard_widget()` so users can drag and drop them just like the default WordPress boxes. Each user's arrangement is stored automatically in `metaboxorder_dashboard` user meta.
+
+## Widgets
+- **ArtPulse Summary** – placeholder content welcoming the user
+- **Upcoming Events** – shows upcoming events (currently static text)
+- **Trending Tags** – placeholder area for trending tags
+
+The **Trending Tags** widget is placed in the sidebar column by default, while the other two appear in the main column. You can drag the widgets between columns or reorder them. WordPress persists the layout per user without any additional code.
+
+## Layout CSS
+The stylesheet `assets/css/wp-dashboard-layout.css` provides a flexible two‑column layout. Columns collapse to full width on smaller screens. The CSS is enqueued only on the dashboard screen.
+
+## Extending
+Developers can replace the placeholder callbacks in `includes/wp-dashboard-manager.php` or add new widgets using the same `wp_add_dashboard_widget()` function. For a richer experience you could create a React interface using a grid library and save the layout via `update_user_meta()`.
