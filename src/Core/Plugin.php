@@ -24,6 +24,11 @@ use ArtPulse\Marketplace\MarketplaceManager;
 use ArtPulse\Marketplace\AuctionManager;
 use ArtPulse\Core\VisitTracker;
 use ArtPulse\Core\MultiOrgRoles;
+use ArtPulse\Core\OrgContext;
+use ArtPulse\Monetization\EventBoostManager;
+use ArtPulse\Core\OrgCrmManager;
+use ArtPulse\Core\ReportSubscriptionManager;
+use ArtPulse\AI\GrantAssistant;
 use ArtPulse\Rest\VisitRestController;
 use ArtPulse\Rest\OrgUserRolesController;
 
@@ -209,6 +214,7 @@ class Plugin
         \ArtPulse\Rest\LayoutSaveEndpoint::register();
         \ArtPulse\Core\ProfileMetrics::register();
         \ArtPulse\Core\RoleAuditLogger::register();
+        OrgContext::register();
         MultiOrgRoles::register();
         \ArtPulse\Core\ActivityLogger::register();
         \ArtPulse\Community\CommunityRoles::register();
@@ -392,6 +398,10 @@ class Plugin
         \ArtPulse\Personalization\RecommendationRestController::register();
         \ArtPulse\Rest\FollowVenueCuratorController::register();
         \ArtPulse\Personalization\WeeklyRecommendations::register();
+        EventBoostManager::register();
+        OrgCrmManager::register();
+        ReportSubscriptionManager::register();
+        GrantAssistant::register();
         add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
         \ArtPulse\Rest\EventManagementController::register();
     }
