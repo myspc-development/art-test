@@ -10,4 +10,4 @@ Use this table to record progress across major features. Update the `Status` col
 | Subscription Reports | I4 | Pending |
 | Webhook Sync Framework | J1 | Complete |
 | AI Grant Assistant | J3 | Pending |
-| Budget & Impact Templates | J4 | In Progress |
+| Budget & Impact Templates | J4 | Complete |

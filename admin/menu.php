@@ -15,6 +15,15 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-org-roles-matrix.php'; }
     );
 
+    // Simple organization reports page for exporting budgets
+    add_menu_page(
+        'Organization Reports',
+        'Org Reports',
+        'manage_options',
+        'ap-org-reports',
+        function () { include __DIR__ . '/page-org-reports.php'; }
+    );
+
 });
 
 // Redirect legacy Org Roles slug to the new tabbed page
