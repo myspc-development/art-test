@@ -44,6 +44,7 @@ function ap_render_basic_rsvp_form(int $event_id): string
     ob_start();
     ?>
     <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+      <?php wp_nonce_field('ap_rsvp_event'); ?>
       <input type="hidden" name="action" value="ap_rsvp_event">
       <input type="hidden" name="event_id" value="<?php echo esc_attr($event_id); ?>">
       <button type="submit"><?php esc_html_e('RSVP to this Event', 'artpulse'); ?></button>

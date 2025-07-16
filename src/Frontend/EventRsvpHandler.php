@@ -15,6 +15,10 @@ class EventRsvpHandler
             return;
         }
 
+        if (!check_admin_referer('ap_rsvp_event')) {
+            wp_die(__('Invalid nonce', 'artpulse'));
+        }
+
         $event_id = isset($_POST['event_id']) ? intval($_POST['event_id']) : 0;
         if (!$event_id) {
             return;
