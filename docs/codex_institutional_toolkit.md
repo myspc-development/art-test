@@ -1,5 +1,9 @@
 # Institutional RSVP & Visit Tracking
 
+Audience: Dev, PM
+
+Status: [🚧 Sprint Needed]
+
 This module extends the standard RSVP features so schools and other institutions can register group visits and record on‑site attendance.
 
 ## REST Endpoints

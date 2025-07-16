@@ -1,4 +1,6 @@
-# Codex: Document Review & Sprint Prioritization
+# Codex Documentation Workflow
+
+Audience: Dev, PM
 
 ## Overview
 These instructions guide the development team when auditing and unifying the Creator & Growth Codex documentation. Follow this process before each milestone to keep the knowledge base usable and sprint-ready.
@@ -37,9 +39,20 @@ After cleanup, evaluate readiness of these groups:
 - **K5: Crawl Mode MVP** – Connects nearby map, QR flows and field logging.
 - **O1: Reporting Snapshot Builder** – Provides admins quick grant reporting.
 
+## Latest Cleanup Summary
+This summary lists documentation updates completed during the latest audit.
+
+### Merged Files
+- `codex_growth_stack.md` merged into `growth-stack-overview.md`
+- `codex_basic_widgets.md` merged into `embed-widgets.md`
+- `codex_permissions_overview.md` merged into `multi-org-roles-permissions.md`
+
+### Renamed Documents
+- `codex-creator-tools.md` → `codex-phase-m-creator-curator-codex.md`
+- `mobile-pwa-guide.md` → `mobile-artwalk.md`
+
 ## Optional Output Deliverables
 Create these summaries when the audit is complete:
 - [`codex_index.md`](./codex_index.md) listing modules, sprint status and intended user.
-- [`codex_cleanup_report.md`](./codex_cleanup_report.md) describing merged files and renamed titles.
 - [`codex_sprint_readiness.md`](./codex_sprint_readiness.md) marking which sprints are spec-complete or blocked.
 
