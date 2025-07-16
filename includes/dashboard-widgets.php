@@ -146,10 +146,7 @@ function ap_save_role_layout(): void
 
 function ap_save_user_layout(): void
 {
-    check_admin_referer('ap_save_user_layout');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
+    // Verify request nonce
     check_ajax_referer('ap_save_user_layout', 'nonce');
 
     $layout = [];
@@ -162,7 +159,7 @@ function ap_save_user_layout(): void
         }
     } else {
         // Fallback to JSON body when sent via fetch()
-        $input  = json_decode(file_get_contents('php://input'), true);
+        $input = json_decode(file_get_contents('php://input'), true);
         if (is_array($input) && isset($input['layout'])) {
             $layout = $input['layout'];
         }

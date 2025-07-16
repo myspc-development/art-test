@@ -90,13 +90,15 @@ $layout = DashboardController::get_user_dashboard_layout($user_id);
 if (empty($layout)) {
     echo '<div class="ap-empty-state">No widgets available. Load a preset or reset layout.</div>';
 } else {
-    echo '<div id="ap-widget-sortable" class="ap-widget-grid" data-role="' . esc_attr(DashboardController::get_role($user_id)) . '">';
+    echo '<div id="ap-user-dashboard" class="ap-dashboard-grid" data-role="' . esc_attr(DashboardController::get_role($user_id)) . '">';
     foreach ($layout as $widget) {
-        $id = $widget['id'];
-        $config = DashboardWidgetRegistry::get_widget($id);
+        $id      = $widget['id'];
+        $visible = $widget['visible'] ?? true;
+        $config  = DashboardWidgetRegistry::get_widget($id);
         if (!$config || empty($config['template'])) continue;
 
-        echo '<div class="ap-widget-block" data-id="' . esc_attr($id) . '">';
+        echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+        echo '<span class="drag-handle" aria-hidden="true"></span>';
         $template = locate_template('templates/' . $config['template']);
         if (!$template) {
             $template = plugin_dir_path(__FILE__) . '../' . $config['template'];

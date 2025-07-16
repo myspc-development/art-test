@@ -14,7 +14,7 @@ $user_name = esc_html($current_user->display_name);
     <p class="text-gray-600 mt-1">Welcome back, <?php echo $user_name; ?>!</p>
   </header>
 
-  <div class="ap-dashboard-grid">
+  <div id="ap-user-dashboard" class="ap-dashboard-grid">
     <!-- Profile Summary -->
     <div class="ap-card" role="region" aria-labelledby="profile-summary-title">
       <h2 id="profile-summary-title" class="ap-card__title">👤 Profile Summary</h2>
