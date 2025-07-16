@@ -1,4 +1,4 @@
-var APRoleMatrix = (function (react, solid) {
+var APRoleMatrix = (function (react) {
   'use strict';
 
   function _arrayLikeToArray(r, a) {
@@ -8,31 +8,6 @@ var APRoleMatrix = (function (react, solid) {
   }
   function _arrayWithHoles(r) {
     if (Array.isArray(r)) return r;
-  }
-  function asyncGeneratorStep(n, t, e, r, o, a, c) {
-    try {
-      var i = n[a](c),
-        u = i.value;
-    } catch (n) {
-      return void e(n);
-    }
-    i.done ? t(u) : Promise.resolve(u).then(r, o);
-  }
-  function _asyncToGenerator(n) {
-    return function () {
-      var t = this,
-        e = arguments;
-      return new Promise(function (r, o) {
-        var a = n.apply(t, e);
-        function _next(n) {
-          asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-        }
-        function _throw(n) {
-          asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-        }
-        _next(void 0);
-      });
-    };
   }
   function _defineProperty(e, r, t) {
     return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
@@ -90,116 +65,6 @@ var APRoleMatrix = (function (react, solid) {
     }
     return e;
   }
-  function _regenerator() {
-    /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
-    var e,
-      t,
-      r = "function" == typeof Symbol ? Symbol : {},
-      n = r.iterator || "@@iterator",
-      o = r.toStringTag || "@@toStringTag";
-    function i(r, n, o, i) {
-      var c = n && n.prototype instanceof Generator ? n : Generator,
-        u = Object.create(c.prototype);
-      return _regeneratorDefine(u, "_invoke", function (r, n, o) {
-        var i,
-          c,
-          u,
-          f = 0,
-          p = o || [],
-          y = false,
-          G = {
-            p: 0,
-            n: 0,
-            v: e,
-            a: d,
-            f: d.bind(e, 4),
-            d: function (t, r) {
-              return i = t, c = 0, u = e, G.n = r, a;
-            }
-          };
-        function d(r, n) {
-          for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) {
-            var o,
-              i = p[t],
-              d = G.p,
-              l = i[2];
-            r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0));
-          }
-          if (o || r > 1) return a;
-          throw y = true, n;
-        }
-        return function (o, p, l) {
-          if (f > 1) throw TypeError("Generator is already running");
-          for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) {
-            i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
-            try {
-              if (f = 2, i) {
-                if (c || (o = "next"), t = i[o]) {
-                  if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object");
-                  if (!t.done) return t;
-                  u = t.value, c < 2 && (c = 0);
-                } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1);
-                i = e;
-              } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break;
-            } catch (t) {
-              i = e, c = 1, u = t;
-            } finally {
-              f = 1;
-            }
-          }
-          return {
-            value: t,
-            done: y
-          };
-        };
-      }(r, o, i), true), u;
-    }
-    var a = {};
-    function Generator() {}
-    function GeneratorFunction() {}
-    function GeneratorFunctionPrototype() {}
-    t = Object.getPrototypeOf;
-    var c = [][n] ? t(t([][n]())) : (_regeneratorDefine(t = {}, n, function () {
-        return this;
-      }), t),
-      u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c);
-    function f(e) {
-      return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e;
-    }
-    return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine(u), _regeneratorDefine(u, o, "Generator"), _regeneratorDefine(u, n, function () {
-      return this;
-    }), _regeneratorDefine(u, "toString", function () {
-      return "[object Generator]";
-    }), (_regenerator = function () {
-      return {
-        w: i,
-        m: f
-      };
-    })();
-  }
-  function _regeneratorDefine(e, r, n, t) {
-    var i = Object.defineProperty;
-    try {
-      i({}, "", {});
-    } catch (e) {
-      i = 0;
-    }
-    _regeneratorDefine = function (e, r, n, t) {
-      if (r) i ? i(e, r, {
-        value: n,
-        enumerable: !t,
-        configurable: !t,
-        writable: !t
-      }) : e[r] = n;else {
-        function o(r, n) {
-          _regeneratorDefine(e, r, function (e) {
-            return this._invoke(r, n, e);
-          });
-        }
-        o("next", 0), o("throw", 1), o("return", 2);
-      }
-    }, _regeneratorDefine(e, r, n, t);
-  }
   function _slicedToArray(r, e) {
     return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
   }
@@ -225,110 +90,77 @@ var APRoleMatrix = (function (react, solid) {
     }
   }
 
-  function RoleMatrix() {
+  function RoleMatrix(_ref) {
+    var _ref$selectedOrg = _ref.selectedOrg,
+      selectedOrg = _ref$selectedOrg === void 0 ? 0 : _ref$selectedOrg;
     var _useState = react.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
-      users = _useState2[0],
-      setUsers = _useState2[1];
+      roles = _useState2[0],
+      setRoles = _useState2[1];
     var _useState3 = react.useState([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      roles = _useState4[0],
-      setRoles = _useState4[1];
+      users = _useState4[0],
+      setUsers = _useState4[1];
     var _useState5 = react.useState({}),
       _useState6 = _slicedToArray(_useState5, 2),
-      matrix = _useState6[0],
-      setMatrix = _useState6[1];
+      pendingRoles = _useState6[0],
+      setPendingRoles = _useState6[1];
     react.useEffect(function () {
-      _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var res, json;
-        return _regenerator().w(function (_context) {
-          while (1) switch (_context.n) {
-            case 0:
-              _context.n = 1;
-              return fetch(AP_RoleMatrix.rest_seed);
-            case 1:
-              res = _context.v;
-              _context.n = 2;
-              return res.json();
-            case 2:
-              json = _context.v;
-              setUsers(json.users);
-              setRoles(json.roles);
-              setMatrix(json.matrix);
-            case 3:
-              return _context.a(2);
-          }
-        }, _callee);
-      }))();
-    }, []);
-    var toggle = function toggle(u, r) {
-      return setMatrix(function (m) {
-        return _objectSpread2(_objectSpread2({}, m), {}, _defineProperty({}, u, _objectSpread2(_objectSpread2({}, m[u]), {}, _defineProperty({}, r, !m[u][r]))));
+      fetch("/wp-json/artpulse/v1/org-roles?org_id=".concat(selectedOrg)).then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        setRoles(data.roles);
+        setUsers(data.users);
+      });
+    }, [selectedOrg]);
+    function assignRole(userId, roleSlug) {
+      setPendingRoles(function (prev) {
+        return _objectSpread2(_objectSpread2({}, prev), {}, _defineProperty({}, userId, roleSlug));
+      });
+      setUsers(function (prev) {
+        return prev.map(function (u) {
+          return u.id === userId ? _objectSpread2(_objectSpread2({}, u), {}, {
+            role: roleSlug
+          }) : u;
+        });
+      });
+    }
+    var saveChanges = function saveChanges() {
+      fetch('/wp-json/artpulse/v1/org-roles/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          org_id: selectedOrg,
+          roles: pendingRoles
+        })
       });
     };
-    var saveAll = /*#__PURE__*/function () {
-      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        return _regenerator().w(function (_context2) {
-          while (1) switch (_context2.n) {
-            case 0:
-              _context2.n = 1;
-              return fetch(AP_RoleMatrix.rest_batch, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  "X-WP-Nonce": AP_RoleMatrix.nonce
-                },
-                body: JSON.stringify(matrix)
-              });
-            case 1:
-              alert("Roles saved!");
-            case 2:
-              return _context2.a(2);
-          }
-        }, _callee2);
-      }));
-      return function saveAll() {
-        return _ref2.apply(this, arguments);
-      };
-    }();
-    if (!users.length) return /*#__PURE__*/React.createElement("p", null, "Loading\u2026");
-    return /*#__PURE__*/React.createElement("div", {
-      className: "space-y-4"
-    }, /*#__PURE__*/React.createElement("table", {
-      className: "min-w-full border text-sm"
-    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
-      className: "border p-2 text-left"
-    }, "User"), roles.map(function (role) {
+    if (!roles.length) return /*#__PURE__*/React.createElement("p", null, "Loading\u2026");
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "User"), roles.map(function (role) {
       return /*#__PURE__*/React.createElement("th", {
-        key: role.key,
-        className: "border p-2",
-        title: role.caps.join(", ")
+        key: role.slug
       }, role.name);
-    }))), /*#__PURE__*/React.createElement("tbody", null, users.map(function (u) {
+    }))), /*#__PURE__*/React.createElement("tbody", null, users.map(function (user) {
       return /*#__PURE__*/React.createElement("tr", {
-        key: u.ID
-      }, /*#__PURE__*/React.createElement("td", {
-        className: "border p-2"
-      }, u.display_name), roles.map(function (r) {
-        var _matrix$u$ID;
+        key: user.id
+      }, /*#__PURE__*/React.createElement("td", null, user.name), roles.map(function (role) {
         return /*#__PURE__*/React.createElement("td", {
-          key: r.key,
-          onClick: function onClick() {
-            return toggle(u.ID, r.key);
-          },
-          className: "border p-2 cursor-pointer text-center"
-        }, (_matrix$u$ID = matrix[u.ID]) !== null && _matrix$u$ID !== void 0 && _matrix$u$ID[r.key] ? /*#__PURE__*/React.createElement(solid.CheckIcon, {
-          className: "mx-auto h-5 w-5 text-green-600"
-        }) : /*#__PURE__*/React.createElement(solid.XMarkIcon, {
-          className: "mx-auto h-5 w-5 text-red-500"
+          key: role.slug
+        }, /*#__PURE__*/React.createElement("input", {
+          type: "radio",
+          checked: user.role === role.slug,
+          onChange: function onChange() {
+            return assignRole(user.id, role.slug);
+          }
         }));
       }));
     }))), /*#__PURE__*/React.createElement("button", {
-      onClick: saveAll,
-      className: "rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-    }, "Save All"));
+      onClick: saveChanges
+    }, "Save"));
   }
 
   return RoleMatrix;
 
-})(React, solid);
+})(React);
