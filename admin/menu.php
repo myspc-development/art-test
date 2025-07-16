@@ -25,10 +25,10 @@ add_action('admin_menu', function () {
 
 });
 
-// Redirect legacy Org Roles slug to the new tabbed page
+// Redirect old Roles Matrix slug to the modern page
 add_action('admin_init', function () {
-    if (isset($_GET['page']) && $_GET['page'] === 'ap-org-roles') {
-        wp_safe_redirect(admin_url('admin.php?page=ap-org-roles-matrix&view=roles'));
+    if (isset($_GET['page']) && $_GET['page'] === 'ap-org-roles-matrix') {
+        wp_safe_redirect(admin_url('admin.php?page=ap-org-roles'));
         exit;
     }
 });
