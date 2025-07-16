@@ -62,8 +62,6 @@ require_once __DIR__ . '/includes/user-actions.php';
 require_once __DIR__ . '/includes/settings-register.php';
 require_once __DIR__ . '/includes/help-doc-renderer.php';
 require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';
-require_once __DIR__ . '/admin/page-dashboard-widgets.php';
-require_once __DIR__ . '/admin/page-widget-editor-react.php';
 require_once __DIR__ . '/admin/page-community-roles.php';
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
@@ -71,7 +69,6 @@ require_once __DIR__ . '/auto-tagger.php';
 require_once __DIR__ . '/pwa-manifest.php';
 include_once __DIR__ . '/shortcodes/widget-embed.php';
 include_once __DIR__ . '/shortcodes/artist-comments.php';
-require_once __DIR__ . '/includes/admin-org-roles-page.php';
 require_once __DIR__ . '/includes/rest/org-roles.php';
 require_once __DIR__ . '/includes/rest/artist.php';
 require_once __DIR__ . '/includes/rest/status.php';
@@ -82,7 +79,6 @@ require_once __DIR__ . '/includes/http-hooks.php';
 require_once __DIR__ . '/includes/rest-update-diagnostics.php';
 require_once __DIR__ . '/includes/wp-dashboard-manager.php';
 require_once plugin_dir_path(__FILE__) . 'src/Rest/EventChat.php';
-require_once __DIR__ . '/admin/page-settings.php';
 require_once __DIR__ . '/includes/hooks.php';
 require_once __DIR__ . '/includes/registration-hooks.php';
 require_once __DIR__ . '/includes/roles.php';
@@ -337,21 +333,7 @@ function ap_render_dashboard_preview_page() {
 }
 
 
-// Add ArtPulse Settings page in the Settings menu
-add_action('admin_menu', function () {
-    add_options_page(
-        __('ArtPulse Settings', 'artpulse'),
-        __('ArtPulse', 'artpulse'),
-        'manage_options',
-        'artpulse-settings',
-        'ap_render_settings_page'
-    );
-});
 
-/**
- * Render the ArtPulse Settings page.
- */
-// Legacy page replaced by new settings interface in admin/page-settings.php
 
 
 function ap_flush_github_cache() {
