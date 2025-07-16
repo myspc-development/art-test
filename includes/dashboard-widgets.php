@@ -15,6 +15,14 @@ function ap_get_all_widget_definitions(bool $include_schema = false): array
     return DashboardWidgetRegistry::get_definitions($include_schema);
 }
 
+/**
+ * Wrapper used by front-end scripts to load widget definitions with icons.
+ */
+function artpulse_get_dashboard_widgets(bool $include_schema = true): array
+{
+    return DashboardWidgetRegistry::get_definitions($include_schema);
+}
+
 
 add_action('wp_ajax_ap_save_dashboard_widget_config', 'ap_save_dashboard_widget_config');
 

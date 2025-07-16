@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createRoot } from 'react-dom/client';
+import Dashicon from './components/ui/Dashicon';
 
 const config = window.APDashboardWidgetsEditor?.config || [];
 const widgets = window.APDashboardWidgetsEditor?.widgets || [];
@@ -305,6 +306,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
                 onKeyDown={e => handleKeyDown(e, i, 'available')}
                 className={w.settings?.length ? 'ap-widget-configurable' : ''}
               >
+                <Dashicon icon={w.icon} style={{ marginRight: 6 }} />
                 {w.name}
               </li>
             ))}
@@ -323,6 +325,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
                 onKeyDown={e => handleKeyDown(e, i, 'active')}
                 className={w.settings?.length ? 'ap-widget-configurable' : ''}
               >
+                <Dashicon icon={w.icon} style={{ marginRight: 6 }} />
                 {w.name}
               </li>
             ))}
@@ -349,7 +352,10 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
           <h4>{l10n.preview || 'Preview'}</h4>
           <ol>
             {active.map(w => (
-              <li key={w.id}>{w.name}</li>
+              <li key={w.id}>
+                <Dashicon icon={w.icon} style={{ marginRight: 6 }} />
+                {w.name}
+              </li>
             ))}
           </ol>
         </div>

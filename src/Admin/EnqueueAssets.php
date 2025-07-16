@@ -233,7 +233,7 @@ class EnqueueAssets {
                     update_option('ap_dashboard_widget_config', $config);
                 }
                 wp_localize_script('ap-dashboard-widgets-editor', 'APDashboardWidgetsEditor', [
-                    'widgets' => \ArtPulse\Core\DashboardWidgetRegistry::get_definitions(true),
+                    'widgets' => artpulse_get_dashboard_widgets(true),
                     'config'  => $config,
                     'roles'   => wp_roles()->roles,
                     'nonce'   => wp_create_nonce('ap_dashboard_widget_config'),
