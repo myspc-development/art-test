@@ -14,7 +14,9 @@ class QaThreadRestController {
         register_rest_route('artpulse/v1', '/qa-thread/(?P<event_id>\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_thread'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
         ]);
         register_rest_route('artpulse/v1', '/qa-thread/(?P<event_id>\d+)/post', [
             'methods'  => 'POST',

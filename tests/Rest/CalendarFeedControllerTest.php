@@ -14,6 +14,7 @@ class CalendarFeedControllerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        wp_set_current_user(self::factory()->user->create());
         $this->event_id = wp_insert_post([
             'post_title'  => 'Calendar Event',
             'post_type'   => 'artpulse_event',

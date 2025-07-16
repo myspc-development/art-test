@@ -1121,7 +1121,9 @@ add_action('rest_api_init', function () {
 
             return rest_ensure_response($data);
         },
-        'permission_callback' => '__return_true',
+        'permission_callback' => function () {
+            return current_user_can('read');
+        },
     ]);
 });
 

@@ -33,7 +33,9 @@ class PromotionManager
         register_rest_route('artpulse/v1', '/promoted', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_promoted'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
         ]);
 
         register_rest_route('artpulse/v1', '/promote', [

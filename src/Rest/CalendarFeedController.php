@@ -15,7 +15,9 @@ class CalendarFeedController
         register_rest_route('artpulse/v1', '/calendar', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_feed'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
         ]);
     }
 
