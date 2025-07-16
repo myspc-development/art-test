@@ -105,6 +105,19 @@
     }
   }
 
+  var _window$APDashboardWi, _window$APDashboardWi2, _window$APDashboardWi3;
+  var config = ((_window$APDashboardWi = window.APDashboardWidgetsEditor) === null || _window$APDashboardWi === void 0 ? void 0 : _window$APDashboardWi.config) || [];
+  var widgets = ((_window$APDashboardWi2 = window.APDashboardWidgetsEditor) === null || _window$APDashboardWi2 === void 0 ? void 0 : _window$APDashboardWi2.widgets) || [];
+  var roles = ((_window$APDashboardWi3 = window.APDashboardWidgetsEditor) === null || _window$APDashboardWi3 === void 0 ? void 0 : _window$APDashboardWi3.roles) || [];
+  if (!document.getElementById('admin-dashboard-widgets-editor')) {
+    console.error('Missing root container');
+  } else {
+    window.APDashboardWidgetsEditor = {
+      config: config,
+      widgets: widgets,
+      roles: roles
+    };
+  }
   if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.config) {
     console.error('APDashboardWidgetsEditor.config is missing; initializing empty layout.');
     window.APDashboardWidgetsEditor = _objectSpread2(_objectSpread2({}, window.APDashboardWidgetsEditor), {}, {
@@ -255,32 +268,56 @@
       _useState10 = _slicedToArray(_useState1, 2),
       available = _useState10[0],
       setAvailable = _useState10[1];
-    var _useState11 = React.useState(false),
+    var _useState11 = React.useState('all'),
       _useState12 = _slicedToArray(_useState11, 2),
-      showPreview = _useState12[0],
-      setShowPreview = _useState12[1];
-    var _useState13 = React.useState(null),
+      activeCategory = _useState12[0],
+      setActiveCategory = _useState12[1];
+    var categories = React.useMemo(function () {
+      var set = new Set();
+      widgets.forEach(function (w) {
+        if (w.category) set.add(w.category);
+      });
+      return Array.from(set);
+    }, [widgets]);
+    var _useState13 = React.useState(false),
       _useState14 = _slicedToArray(_useState13, 2),
-      selectedWidget = _useState14[0],
-      setSelectedWidget = _useState14[1];
-    var _useState15 = React.useState(function () {
+      showPreview = _useState14[0],
+      setShowPreview = _useState14[1];
+    var _useState15 = React.useState(null),
+      _useState16 = _slicedToArray(_useState15, 2),
+      selectedWidget = _useState16[0],
+      setSelectedWidget = _useState16[1];
+    var _useState17 = React.useState(function () {
         return JSON.parse(JSON.stringify(config));
       }),
-      _useState16 = _slicedToArray(_useState15, 1),
-      defaults = _useState16[0];
+      _useState18 = _slicedToArray(_useState17, 1),
+      defaults = _useState18[0];
     var activeRef = React.useRef(null);
     var availRef = React.useRef(null);
+    var presets = {
+      new_artist: ['membership', 'widget_for_you', 'instagram_widget', 'my-events'],
+      event_organizer: ['membership', 'events', 'rsvps', 'rsvp_stats', 'local-events']
+    };
+    function applyPreset(key) {
+      var ids = presets[key] || [];
+      setActive(widgets.filter(function (w) {
+        return ids.includes(w.id);
+      }));
+      setAvailable(widgets.filter(function (w) {
+        return !ids.includes(w.id) && (activeCategory === 'all' || w.category === activeCategory);
+      }));
+    }
     React.useEffect(function () {
       var activeIds = config[activeRole] || [];
       var activeWidgets = widgets.filter(function (w) {
         return activeIds.includes(w.id);
       });
       var availWidgets = widgets.filter(function (w) {
-        return !activeIds.includes(w.id);
+        return !activeIds.includes(w.id) && (activeCategory === 'all' || w.category === activeCategory);
       });
       setActive(activeWidgets);
       setAvailable(availWidgets);
-    }, [activeRole]);
+    }, [activeRole, activeCategory]);
     React.useEffect(function () {
       if (typeof Sortable === 'undefined') return;
       if (!activeRef.current || !availRef.current) return;
@@ -398,7 +435,7 @@
         return activeIds.includes(w.id);
       }));
       setAvailable(widgets.filter(function (w) {
-        return !activeIds.includes(w.id);
+        return !activeIds.includes(w.id) && (activeCategory === 'all' || w.category === activeCategory);
       }));
     }
     return /*#__PURE__*/React.createElement("div", {
@@ -425,11 +462,28 @@
       className: "ap-widgets-available"
     }, /*#__PURE__*/React.createElement("h4", {
       id: "ap-available-label"
-    }, l10n.availableWidgets || 'Available Widgets'), /*#__PURE__*/React.createElement("ul", {
+    }, l10n.availableWidgets || 'Available Widgets'), /*#__PURE__*/React.createElement("label", {
+      className: "screen-reader-text",
+      htmlFor: "ap-category-select"
+    }, l10n.filterCategory), /*#__PURE__*/React.createElement("select", {
+      id: "ap-category-select",
+      value: activeCategory,
+      onChange: function onChange(e) {
+        return setActiveCategory(e.target.value);
+      }
+    }, /*#__PURE__*/React.createElement("option", {
+      value: "all"
+    }, l10n.allCategories || 'All'), categories.map(function (c) {
+      return /*#__PURE__*/React.createElement("option", {
+        key: c,
+        value: c
+      }, c);
+    })), /*#__PURE__*/React.createElement("ul", {
       ref: availRef,
       role: "listbox",
       "aria-labelledby": "ap-available-label"
     }, available.map(function (w, i) {
+      var _w$settings;
       return /*#__PURE__*/React.createElement("li", {
         key: w.id,
         "data-id": w.id,
@@ -440,7 +494,8 @@
         },
         onKeyDown: function onKeyDown(e) {
           return handleKeyDown(e, i, 'available');
-        }
+        },
+        className: (_w$settings = w.settings) !== null && _w$settings !== void 0 && _w$settings.length ? 'ap-widget-configurable' : ''
       }, w.name);
     }))), /*#__PURE__*/React.createElement("div", {
       className: "ap-widgets-active"
@@ -451,6 +506,7 @@
       role: "listbox",
       "aria-labelledby": "ap-active-label"
     }, active.map(function (w, i) {
+      var _w$settings2;
       return /*#__PURE__*/React.createElement("li", {
         key: w.id,
         "data-id": w.id,
@@ -461,11 +517,30 @@
         },
         onKeyDown: function onKeyDown(e) {
           return handleKeyDown(e, i, 'active');
-        }
+        },
+        className: (_w$settings2 = w.settings) !== null && _w$settings2 !== void 0 && _w$settings2.length ? 'ap-widget-configurable' : ''
       }, w.name);
     })))), /*#__PURE__*/React.createElement("div", {
       className: "ap-widgets-actions"
-    }, /*#__PURE__*/React.createElement("button", {
+    }, /*#__PURE__*/React.createElement("label", {
+      className: "screen-reader-text",
+      htmlFor: "ap-preset-select"
+    }, l10n.presetLabel), /*#__PURE__*/React.createElement("select", {
+      id: "ap-preset-select",
+      defaultValue: "",
+      onChange: function onChange(e) {
+        if (e.target.value) {
+          applyPreset(e.target.value);
+          e.target.value = '';
+        }
+      }
+    }, /*#__PURE__*/React.createElement("option", {
+      value: ""
+    }, l10n.presetLabel || 'Apply Preset'), /*#__PURE__*/React.createElement("option", {
+      value: "new_artist"
+    }, l10n.presetArtist || 'New Artist'), /*#__PURE__*/React.createElement("option", {
+      value: "event_organizer"
+    }, l10n.presetOrganizer || 'Event Organizer')), /*#__PURE__*/React.createElement("button", {
       className: "ap-form-button",
       onClick: handleSave
     }, l10n.save || 'Save'), /*#__PURE__*/React.createElement("button", {
@@ -491,7 +566,7 @@
     }));
   }
   document.addEventListener('DOMContentLoaded', function () {
-    var container = document.getElementById('ap-dashboard-widgets-canvas');
+    var container = document.getElementById('admin-dashboard-widgets-editor');
     if (container && window.APDashboardWidgetsEditor) {
       client.createRoot(container).render(/*#__PURE__*/React.createElement(WidgetsEditor, APDashboardWidgetsEditor));
       console.log('Editor loaded');
