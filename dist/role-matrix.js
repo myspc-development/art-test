@@ -103,8 +103,8 @@ var APRoleMatrix = (function (react) {
       setUsers = _useState4[1];
     var _useState5 = react.useState({}),
       _useState6 = _slicedToArray(_useState5, 2),
-      pendingRoles = _useState6[0],
-      setPendingRoles = _useState6[1];
+      changes = _useState6[0],
+      setChanges = _useState6[1];
     react.useEffect(function () {
       fetch("/wp-json/artpulse/v1/org-roles?org_id=".concat(selectedOrg)).then(function (res) {
         return res.json();
@@ -113,8 +113,8 @@ var APRoleMatrix = (function (react) {
         setUsers(data.users);
       });
     }, [selectedOrg]);
-    function assignRole(userId, roleSlug) {
-      setPendingRoles(function (prev) {
+    function updateMatrix(userId, roleSlug) {
+      setChanges(function (prev) {
         return _objectSpread2(_objectSpread2({}, prev), {}, _defineProperty({}, userId, roleSlug));
       });
       setUsers(function (prev) {
@@ -129,11 +129,12 @@ var APRoleMatrix = (function (react) {
       fetch('/wp-json/artpulse/v1/org-roles/update', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': window.wpApiSettings.nonce
         },
         body: JSON.stringify({
           org_id: selectedOrg,
-          roles: pendingRoles
+          roles: changes
         })
       });
     };
@@ -152,7 +153,7 @@ var APRoleMatrix = (function (react) {
           type: "radio",
           checked: user.role === role.slug,
           onChange: function onChange() {
-            return assignRole(user.id, role.slug);
+            return updateMatrix(user.id, role.slug);
           }
         }));
       }));

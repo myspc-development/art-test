@@ -109,66 +109,65 @@
         setUsers = _useState4[1];
       var _useState5 = useState({}),
         _useState6 = _slicedToArray(_useState5, 2),
-        matrix = _useState6[0],
-        setMatrix = _useState6[1];
-      var base = "".concat(ArtPulseOrgRoles.base, "/orgs/").concat(ArtPulseOrgRoles.orgId, "/roles");
+        changes = _useState6[0],
+        setChanges = _useState6[1];
       useEffect(function () {
-        apiFetch({
-          path: base
-        }).then(function (list) {
-          setUsers(list);
-          setRoles(['admin', 'editor', 'curator', 'promoter']);
-          var m = {};
-          list.forEach(function (row) {
-            m[row.user_id] = _defineProperty({}, row.role, true);
-          });
-          setMatrix(m);
-        })["catch"](function () {});
+        fetch("/wp-json/artpulse/v1/org-roles?org_id=".concat(ArtPulseOrgRoles.orgId)).then(function (res) {
+          return res.json();
+        }).then(function (data) {
+          setRoles(data.roles);
+          setUsers(data.users);
+        });
       }, []);
-      var toggle = function toggle(uid, role) {
-        var _matrix$uid;
-        var checked = !((_matrix$uid = matrix[uid]) !== null && _matrix$uid !== void 0 && _matrix$uid[role]);
-        var current = _objectSpread2({}, matrix[uid] || {});
-        current[role] = checked;
-        var newMatrix = _objectSpread2(_objectSpread2({}, matrix), {}, _defineProperty({}, uid, current));
-        setMatrix(newMatrix);
-        apiFetch({
-          path: base,
-          method: 'POST',
-          data: {
-            user_id: uid,
-            role: role
-          }
+      var updateMatrix = function updateMatrix(uid, role) {
+        setChanges(function (prev) {
+          return _objectSpread2(_objectSpread2({}, prev), {}, _defineProperty({}, uid, role));
+        });
+        setUsers(function (prev) {
+          return prev.map(function (u) {
+            return u.id === uid ? _objectSpread2(_objectSpread2({}, u), {}, {
+              role: role
+            }) : u;
+          });
         });
       };
-      if (!roles.length || !users.length) {
+      var saveChanges = function saveChanges() {
+        fetch('/wp-json/artpulse/v1/org-roles/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': window.wpApiSettings.nonce
+          },
+          body: JSON.stringify({
+            org_id: ArtPulseOrgRoles.orgId,
+            roles: changes
+          })
+        });
+      };
+      if (!roles.length) {
         return createElement('p', null, 'Loading…');
       }
-      return createElement('table', {
-        className: 'widefat striped'
-      }, createElement('thead', null, createElement('tr', null, createElement('th', null, 'User'), roles.map(function (r) {
+      return createElement('div', null, createElement('table', null, createElement('thead', null, createElement('tr', null, createElement('th', null, 'User'), roles.map(function (r) {
         return createElement('th', {
-          key: r.key
-        }, r.label);
+          key: r.slug
+        }, r.name);
       }))), createElement('tbody', null, users.map(function (u) {
         return createElement('tr', {
-          key: u.ID
-        }, createElement('td', null, u.display_name), roles.map(function (r) {
-          var _matrix$u$ID;
+          key: u.id
+        }, createElement('td', null, u.name), roles.map(function (r) {
           return createElement('td', {
-            key: r.key,
-            style: {
-              textAlign: 'center'
-            }
+            key: r.slug
           }, createElement('input', {
-            type: 'checkbox',
-            checked: ((_matrix$u$ID = matrix[u.ID]) === null || _matrix$u$ID === void 0 ? void 0 : _matrix$u$ID[r.key]) || false,
+            type: 'radio',
+            checked: u.role === r.slug,
             onChange: function onChange() {
-              return toggle(u.ID, r.key);
+              return updateMatrix(u.id, r.slug);
             }
           }));
         }));
-      })));
+      }))), createElement('button', {
+        onClick: saveChanges
+      }, 'Save'));
     }
     document.addEventListener('DOMContentLoaded', function () {
       var root = document.getElementById('ap-org-roles-root');

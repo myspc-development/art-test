@@ -23,7 +23,7 @@ class OrgRolesController {
         register_rest_route('artpulse/v1', '/org-roles/update', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'update_roles'],
-            'permission_callback' => [self::class, 'check_permissions'],
+            'permission_callback' => [self::class, 'can_manage_roles'],
         ]);
 
         register_rest_route('artpulse/v1', '/org-roles/users', [
@@ -177,6 +177,12 @@ class OrgRolesController {
     public static function check_permissions(): bool
     {
         return current_user_can('manage_org_roles');
+    }
+
+    public static function can_manage_roles(WP_REST_Request $request): bool
+    {
+        return current_user_can('manage_org_roles') &&
+               check_ajax_referer('wp_rest', '_wpnonce', false);
     }
 
     public static function get_roles_for_org(WP_REST_Request $request): WP_REST_Response

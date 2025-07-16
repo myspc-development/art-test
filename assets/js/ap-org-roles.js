@@ -7,73 +7,80 @@
     function OrgRolesMatrix() {
         const [roles, setRoles] = useState([]);
         const [users, setUsers] = useState([]);
-        const [matrix, setMatrix] = useState({});
-
-        const base = `${ArtPulseOrgRoles.base}/orgs/${ArtPulseOrgRoles.orgId}/roles`;
+        const [changes, setChanges] = useState({});
 
         useEffect(() => {
-            apiFetch({ path: base })
-                .then((list) => {
-                    setUsers(list);
-                    setRoles(['admin','editor','curator','promoter']);
-                    const m = {};
-                    list.forEach((row) => {
-                        m[row.user_id] = { [row.role]: true };
-                    });
-                    setMatrix(m);
-                })
-                .catch(() => {});
+            fetch(`/wp-json/artpulse/v1/org-roles?org_id=${ArtPulseOrgRoles.orgId}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    setRoles(data.roles);
+                    setUsers(data.users);
+                });
         }, []);
 
-        const toggle = (uid, role) => {
-            const checked = !matrix[uid]?.[role];
-            const current = { ...(matrix[uid] || {}) };
-            current[role] = checked;
-            const newMatrix = { ...matrix, [uid]: current };
-            setMatrix(newMatrix);
-            apiFetch({
-                path: base,
+        const updateMatrix = (uid, role) => {
+            setChanges((prev) => ({ ...prev, [uid]: role }));
+            setUsers((prev) => prev.map((u) => (u.id === uid ? { ...u, role } : u)));
+        };
+
+        const saveChanges = () => {
+            fetch('/wp-json/artpulse/v1/org-roles/update', {
                 method: 'POST',
-                data: { user_id: uid, role },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': window.wpApiSettings.nonce,
+                },
+                body: JSON.stringify({ org_id: ArtPulseOrgRoles.orgId, roles: changes }),
             });
         };
 
-        if (!roles.length || !users.length) {
+        if (!roles.length) {
             return createElement('p', null, 'Loading…');
         }
 
         return createElement(
-            'table',
-            { className: 'widefat striped' },
+            'div',
+            null,
             createElement(
-                'thead',
+                'table',
                 null,
                 createElement(
-                    'tr',
+                    'thead',
                     null,
-                    createElement('th', null, 'User'),
-                    roles.map((r) => createElement('th', { key: r.key }, r.label))
-                )
-            ),
-            createElement(
-                'tbody',
-                null,
-                users.map((u) =>
                     createElement(
                         'tr',
-                        { key: u.ID },
-                        createElement('td', null, u.display_name),
-                        roles.map((r) =>
-                            createElement('td', { key: r.key, style: { textAlign: 'center' } },
-                                createElement('input', {
-                                    type: 'checkbox',
-                                    checked: matrix[u.ID]?.[r.key] || false,
-                                    onChange: () => toggle(u.ID, r.key),
-                                })
+                        null,
+                        createElement('th', null, 'User'),
+                        roles.map((r) => createElement('th', { key: r.slug }, r.name))
+                    )
+                ),
+                createElement(
+                    'tbody',
+                    null,
+                    users.map((u) =>
+                        createElement(
+                            'tr',
+                            { key: u.id },
+                            createElement('td', null, u.name),
+                            roles.map((r) =>
+                                createElement(
+                                    'td',
+                                    { key: r.slug },
+                                    createElement('input', {
+                                        type: 'radio',
+                                        checked: u.role === r.slug,
+                                        onChange: () => updateMatrix(u.id, r.slug),
+                                    })
+                                )
                             )
                         )
                     )
                 )
+            ),
+            createElement(
+                'button',
+                { onClick: saveChanges },
+                'Save'
             )
         );
     }
