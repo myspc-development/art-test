@@ -42,4 +42,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
     wp_localize_script('ap-org-roles', 'wpApiSettings', [
         'nonce' => $nonce,
     ]);
+    wp_localize_script('ap-org-roles', 'ArtPulseData', [
+        'rest_nonce' => $nonce,
+    ]);
 });
