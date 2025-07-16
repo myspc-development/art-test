@@ -82,8 +82,8 @@ add_filter('rest_pre_dispatch', function($result, $server, $request) {
 
 ## Developer Sprint Checklist
 
-- [ ] `ap_event_rankings` created & scores update
-- [ ] REST `/events?orderby=rank` works
+- [x] `ap_event_rankings` created & scores update
+- [x] REST `/events?orderby=rank` works
 - [ ] Admin UI for API keys live
 - [ ] Bearer token auth & key hash check
 - [ ] `/api/v1/events` documented

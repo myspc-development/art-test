@@ -1,6 +1,6 @@
 # ArtPulse Codex: Sprint Workflow
 
-Before starting **Sprint 2**, each developer must select their assigned feature(s) from the `Sprint_Backlog`. For every selected item cross‑check the `Feature Completion Tracker` so all subcomponents, requirements and blockers are understood.
+Before starting **Sprint 2**, each developer must select their assigned feature(s) from the [`Sprint_Backlog`](./Sprint_Backlog.md). For every selected item cross‑check the [`Feature_Completion_Tracker`](./Feature_Completion_Tracker.md) so all subcomponents, requirements and blockers are understood.
 
 If a feature is marked **Incomplete** or is missing from the tracker:
 1. Add the feature to the tracker if it is not already listed.

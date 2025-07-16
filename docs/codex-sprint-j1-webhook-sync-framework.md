@@ -121,7 +121,7 @@ Admin UI tab: “Delivery Logs”.
 - Logs show response history
 
 ## Developer Sprint Checklist
-- [ ] `ap_webhook_subscriptions` table live
+- [x] `ap_webhook_subscriptions` table live
 - [ ] `ap_trigger_webhooks()` global
 - [ ] Signature + HMAC verified
 - [ ] Admin UI for org webhook settings

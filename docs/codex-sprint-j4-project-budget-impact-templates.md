@@ -30,7 +30,7 @@ Admins can copy this table when creating a new event or project. Totals update a
 Use this template after each event to summarize reach and engagement. Reports can be combined across multiple events for grant applications.
 
 ## QA Checklist
-- [ ] Budget worksheet saves line items
+- [x] Budget worksheet saves line items
 - [ ] Export includes all totals
 - [ ] Impact reports generate PDF/CSV
 - [ ] Data merges across events when requested

@@ -24,7 +24,7 @@
 
 | Document | Sprints Covered | Status | Audience |
 |----------|------------------|--------|----------|
-| [`codex_growth_stack.md`](./codex_growth_stack.md) | L1–L3 (Embeds, Digests, Feeds) | 🟢 | PM, Partners |
+| [`growth-stack-overview.md`](./growth-stack-overview.md) | L1–L3 (Embeds, Digests, Feeds) | 🟢 | PM, Partners |
 | [`embed-widgets.md`](./embed-widgets.md) | L1 | 🟢 | Dev, Partners |
 | [`email-digests.md`](./email-digests.md) | L2 | 🟢 | Dev, PM |
 | [`feeds-reference.md`](./feeds-reference.md) | L3 | 🟡 | Dev |
@@ -76,7 +76,7 @@
 ```plaintext
 /docs/
   codex_index.md
-  codex_growth_stack.md
+  growth-stack-overview.md
   codex_creator_curator.md
   embed-widgets.md
   email-digests.md
