@@ -1,6 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 
+const config = window.APDashboardWidgetsEditor?.config || [];
+const widgets = window.APDashboardWidgetsEditor?.widgets || [];
+const roles = window.APDashboardWidgetsEditor?.roles || [];
+
+if (!document.getElementById('admin-dashboard-widgets-editor')) {
+  console.error('Missing root container');
+} else {
+  window.APDashboardWidgetsEditor = { config, widgets, roles };
+}
+
 if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.config) {
   console.error(
     'APDashboardWidgetsEditor.config is missing; initializing empty layout.'
@@ -304,7 +314,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('ap-dashboard-widgets-canvas');
+  const container = document.getElementById('admin-dashboard-widgets-editor');
   if (container && window.APDashboardWidgetsEditor) {
     createRoot(container).render(
       <WidgetsEditor {...APDashboardWidgetsEditor} />
