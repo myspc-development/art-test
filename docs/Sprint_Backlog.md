@@ -4,9 +4,9 @@ The following items are considered high priority for the upcoming sprint. Progre
 
 | Category | Task | Status |
 | --- | --- | --- |
-| REST API | Add `permission_callback` to all REST endpoints | In Progress |
+| REST API | Add `permission_callback` to all REST endpoints | Complete |
 | REST API | Block unauthenticated users on `/messages` and `/conversations` | Complete |
 | Admin Pages | `/wp-admin/ap-org-roles` page with React UI | Complete |
-| Admin Pages | Connect REST route to org roles UI | In Progress |
+| Admin Pages | Connect REST route to org roles UI | Complete |
 | Testing & QA | Add PHPUnit tests for REST & widgets | In Progress |
 | Testing & QA | Add Cypress dashboard integration tests | Pending |

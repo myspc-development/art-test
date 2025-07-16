@@ -32,11 +32,13 @@ add_action('admin_enqueue_scripts', function ($hook) {
         true
     );
 
-    $nonce = wp_create_nonce('wp_rest');
+    $nonce    = wp_create_nonce('wp_rest');
+    $current_org = absint(get_user_meta(get_current_user_id(), 'ap_organization_id', true));
 
     wp_localize_script('ap-org-roles', 'ArtPulseOrgRoles', [
         'api_path'   => 'artpulse/v1/org-roles',
         'rest_nonce' => $nonce,
+        'orgId'      => $current_org,
     ]);
 
     wp_localize_script('ap-org-roles', 'wpApiSettings', [
