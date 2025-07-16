@@ -16,10 +16,14 @@ class OrgRolesController {
     public static function register_routes(): void {
         register_rest_route('artpulse/v1', '/org-roles', [
             'methods'             => 'GET',
-            'callback'            => [self::class, 'get_roles'],
-            'permission_callback' => static function () {
-                return current_user_can('manage_options');
-            },
+            'callback'            => [self::class, 'get_roles_for_org'],
+            'permission_callback' => [self::class, 'check_permissions'],
+        ]);
+
+        register_rest_route('artpulse/v1', '/org-roles/update', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'update_roles'],
+            'permission_callback' => [self::class, 'check_permissions'],
         ]);
 
         register_rest_route('artpulse/v1', '/org-roles/users', [
@@ -168,5 +172,66 @@ class OrgRolesController {
         OrgRoleManager::assign_roles($user_id, $roles);
 
         return new WP_REST_Response(['success' => true]);
+    }
+
+    public static function check_permissions(): bool
+    {
+        return current_user_can('manage_org_roles');
+    }
+
+    public static function get_roles_for_org(WP_REST_Request $request): WP_REST_Response
+    {
+        $org_id = absint($request->get_param('org_id'));
+        if (!$org_id) {
+            $user_id = get_current_user_id();
+            $org_id  = intval(get_user_meta($user_id, 'ap_organization_id', true));
+        }
+
+        $roles = [];
+        foreach (OrgRoleManager::get_roles($org_id) as $slug => $info) {
+            $roles[] = [
+                'slug' => $slug,
+                'name' => $info['name'] ?? $slug,
+            ];
+        }
+
+        $users = [];
+        $members = get_users([
+            'meta_key'   => 'ap_organization_id',
+            'meta_value' => $org_id,
+        ]);
+        foreach ($members as $u) {
+            $users[] = [
+                'id'   => $u->ID,
+                'name' => $u->display_name,
+                'role' => OrgRoleManager::get_user_org_role($u->ID, $org_id),
+            ];
+        }
+
+        return rest_ensure_response([
+            'org_id' => $org_id,
+            'roles'  => $roles,
+            'users'  => $users,
+        ]);
+    }
+
+    public static function update_roles(WP_REST_Request $request): WP_REST_Response
+    {
+        $params = $request->get_json_params();
+        $org_id = absint($params['org_id'] ?? 0);
+        $map    = $params['roles'] ?? [];
+
+        if (!$org_id || !is_array($map)) {
+            return new WP_REST_Response(['error' => 'invalid'], 400);
+        }
+
+        foreach ($map as $user => $role) {
+            $uid = absint($user);
+            if ($uid) {
+                OrgRoleManager::assign_roles($uid, [sanitize_key($role)]);
+            }
+        }
+
+        return rest_ensure_response(['success' => true]);
     }
 }
