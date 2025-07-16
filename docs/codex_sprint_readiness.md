@@ -1,5 +1,7 @@
 # Codex Sprint Readiness
 
+Audience: PM
+
 | Sprint Module | Status | Notes |
 |--------------|--------|-------|
 | N1 Class Visit Tracking | ready | spec complete |

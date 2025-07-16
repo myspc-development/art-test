@@ -14,7 +14,7 @@
 
 ### Summary Documents
 - [Completion Plan](./completion-plan.md)
-- [Codex Cleanup Report](./codex_cleanup_report.md)
+- [Codex Documentation Workflow](./codex_documentation_workflow.md)
 - [Codex Sprint Readiness](./codex_sprint_readiness.md)
 
 

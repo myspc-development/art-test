@@ -1,5 +1,9 @@
 # ArtPulse Codex: Reporting Snapshot Builder
 
+Audience: Dev, Admin
+
+Status: [🚧 Sprint Needed]
+
 This document outlines the O1 sprint goal of creating quick reporting snapshots for grant documentation.
 
 ## REST Endpoints
@@ -9,7 +13,7 @@ This document outlines the O1 sprint goal of creating quick reporting snapshots 
 
 ## Developer Checklist
 - `SnapshotBuilder` aggregates event metrics such as RSVPs, check-ins and revenue.
-- `SnapshotBuilder::generate_pdf()` uses `DocumentGenerator` when available.
+- `SnapshotBuilder::generate_pdf()` uses `DocumentGenerator` when available. <!-- REVIEW: unclear -->
 - `SnapshotBuilder::generate_csv()` streams rows with `fputcsv()`.
 - Endpoints require `manage_options` capability before exporting.
 
