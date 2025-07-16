@@ -276,7 +276,8 @@ if (content) {
       const params = new URLSearchParams();
       if (data.city) params.append('city', data.city);
       if (data.state) params.append('region', data.state);
-      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`)
+      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`,
+        { headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce } })
         .then(res => res.json())
         .then(events => {
           const normalized = Array.isArray(events)
@@ -293,7 +294,8 @@ if (content) {
     } else if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos => {
         const params = new URLSearchParams({ lat: pos.coords.latitude, lng: pos.coords.longitude, radius: 0.5 });
-        fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`)
+        fetch(`${ArtPulseDashboardApi.root}artpulse/v1/events?${params.toString()}`,
+          { headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce } })
           .then(res => res.json())
           .then(events => {
             const normalized = Array.isArray(events)
