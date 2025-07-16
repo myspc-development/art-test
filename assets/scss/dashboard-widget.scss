@@ -44,3 +44,13 @@
   }
 
 }
+
+@media (max-width: 480px) {
+  .ap-dashboard-wrap {
+    padding: 12px;
+
+    .ap-dashboard-grid {
+      gap: calc(var(--ap-space, 1rem) / 2);
+    }
+  }
+}
