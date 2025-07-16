@@ -41,7 +41,7 @@
 
 | Document | Sprints Covered | Status | Audience |
 |----------|------------------|--------|----------|
-| [`codex_creator_curator.md`](./codex_creator_curator.md) | M1–M4 (Artist collab, threads, curator tools) | 🟢 | Dev, PM, Curators |
+| [`codex-phase-m-creator-curator-codex.md`](./codex-phase-m-creator-curator-codex.md) | M1–M4 (Artist collab, threads, curator tools) | 🟢 | Dev, PM, Curators |
 | [`artist-collab.md`](./artist-collab.md) | M1 | 🟢 | Dev |
 | [`thread-formatting.md`](./thread-formatting.md) | M2 | 🟡 | PM, Curators |
 | [`curator-tools.md`](./curator-tools.md) | M3–M4 | 🟡 | Dev, Admins |
@@ -83,7 +83,7 @@
 /docs/
   codex_index.md
   growth-stack-overview.md
-  codex_creator_curator.md
+  codex-phase-m-creator-curator-codex.md
   embed-widgets.md
   email-digests.md
   feeds-reference.md
