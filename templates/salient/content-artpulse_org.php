@@ -48,6 +48,7 @@ while ( have_posts() ) : the_post(); ?>
         </li>
       <?php endforeach; ?>
     </ul>
-  <?php endif;
-  endwhile;
+  <?php endif; ?>
+  <?php echo \ArtPulse\Frontend\ap_share_buttons( get_permalink(), get_the_title(), 'organization' ); ?>
+<?php endwhile; ?>
 get_footer();

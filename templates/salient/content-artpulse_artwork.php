@@ -56,6 +56,7 @@ while ( have_posts() ) : the_post(); ?>
         <li><a class="ap-buy-link" href="<?php echo esc_url($buy_link); ?>" target="_blank"><?php esc_html_e('Buy Now','artpulse'); ?></a></li>
       <?php endif; ?>
     </ul>
-  <?php endif;
-endwhile;
+  <?php endif; ?>
+  <?php echo \ArtPulse\Frontend\ap_share_buttons( get_permalink(), get_the_title(), 'artwork' ); ?>
+<?php endwhile; ?>
 get_footer();
