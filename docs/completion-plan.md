@@ -3,6 +3,11 @@
 This outline lists remaining tasks for the upcoming milestone.
 
 ## In Progress
+- Sponsored Event Boosting module
+- CRM & Donor Tools integration
+- Subscription Reports dashboard
+- AI Grant Assistant prototype
+- PHPUnit tests for REST & widgets
 
 ## Completed
 - Multi‑Org Roles & Permissions dashboard wiring
@@ -14,7 +19,5 @@ This outline lists remaining tasks for the upcoming milestone.
 - Curator call UI design
 
 ## Not Started
-- Sponsored Event Boosting
-- AI Grant Assistant
-- Subscription Reports
+- Cypress dashboard integration tests
 

@@ -48,7 +48,6 @@ class EventViewCounter
     {
         EventMetrics::log_metric($event_id, 'share');
 
-        $count = (int) get_post_meta($event_id, 'share_count', true);
-        update_post_meta($event_id, 'share_count', $count + 1);
+
     }
 }

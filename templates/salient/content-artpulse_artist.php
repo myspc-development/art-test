@@ -33,6 +33,7 @@ while ( have_posts() ) : the_post(); ?>
         <li><strong><?php esc_html_e('Styles:','artpulse'); ?></strong> <?php echo esc_html($styles); ?></li>
       <?php endif; ?>
     </ul>
-  <?php endif;
-endwhile;
+  <?php endif; ?>
+  <?php echo \ArtPulse\Frontend\ap_share_buttons( get_permalink(), get_the_title(), 'artist' ); ?>
+<?php endwhile; ?>
 get_footer();

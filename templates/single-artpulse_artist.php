@@ -25,6 +25,8 @@ if (have_posts()) :
     if ($donate) {
         echo $donate;
     }
+
+    echo \ArtPulse\Frontend\ap_share_buttons( get_permalink(), get_the_title(), 'artist' );
     ?>
     <?php
     comments_template('/inc/comments/artist-comments.php');

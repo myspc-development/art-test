@@ -2,6 +2,57 @@
 namespace ArtPulse\Frontend;
 
 /**
+ * Render social sharing buttons for any object.
+ *
+ * @param string $url         URL to share.
+ * @param string $title       Title or text for the share.
+ * @param string $object_type Optional type for filtering hooks.
+ * @return string HTML markup for share buttons.
+ */
+function ap_share_buttons(string $url, string $title, string $object_type = ''): string
+{
+    if (!$url || !$title) {
+        return '';
+    }
+
+    $networks = [
+        'facebook' => sprintf('https://www.facebook.com/sharer/sharer.php?u=%s', urlencode($url)),
+        'twitter'  => sprintf('https://twitter.com/share?url=%s&text=%s', urlencode($url), rawurlencode($title)),
+        'whatsapp' => sprintf('https://wa.me/?text=%s%%20%s', rawurlencode($title), urlencode($url)),
+        'email'    => sprintf('mailto:?subject=%s&body=%s%%20%s', rawurlencode($title), rawurlencode(__('Check this out:', 'artpulse')), urlencode($url)),
+    ];
+
+    /**
+     * Filter the share network links for all types.
+     *
+     * @param array  $networks    Key/value pairs of network => URL.
+     * @param string $object_type Type of object being shared.
+     * @param string $url         URL being shared.
+     * @param string $title       Title or text being shared.
+     */
+    $networks = apply_filters('ap_share_networks', $networks, $object_type, $url, $title);
+
+    if ($object_type) {
+        /** This filter is documented above as 'ap_event_share_networks'. */
+        $networks = apply_filters("ap_{$object_type}_share_networks", $networks, $url, $title);
+    }
+
+    ob_start();
+    echo '<div class="ap-share-buttons" role="group">';
+    foreach ($networks as $name => $link) {
+        $label = ucfirst($name);
+        printf(
+            '<a class="ap-share-%1$s" href="%2$s" target="_blank" rel="noopener noreferrer" aria-label="%3$s">%3$s</a>',
+            esc_attr($name),
+            esc_url($link),
+            esc_html($label)
+        );
+    }
+    echo '</div>';
+    return trim(ob_get_clean());
+}
+
+/**
  * Helper to render social sharing buttons for an event.
  *
  * @param int $event_id Event post ID.
@@ -12,38 +63,7 @@ function ap_event_share_buttons(int $event_id): string
     $url   = get_permalink($event_id);
     $title = get_the_title($event_id);
 
-    if (!$url || !$title) {
-        return '';
-    }
-
-    $networks = [
-        'facebook' => sprintf('https://www.facebook.com/sharer/sharer.php?u=%s', urlencode($url)),
-        'twitter'  => sprintf('https://twitter.com/share?url=%s&text=%s', urlencode($url), rawurlencode($title)),
-        'whatsapp' => sprintf('https://wa.me/?text=%s%%20%s', rawurlencode($title), urlencode($url)),
-        'email'    => sprintf('mailto:?subject=%s&body=%s%%20%s', rawurlencode($title), rawurlencode(__('Check out this event:', 'artpulse')), urlencode($url)),
-    ];
-
-    /**
-     * Filter the share network links.
-     *
-     * @param array  $networks Key/value pairs of network => URL.
-     * @param int    $event_id Event ID.
-     */
-    $networks = apply_filters('ap_event_share_networks', $networks, $event_id);
-
-    ob_start();
-    echo '<div class="ap-share-buttons" role="group">';
-    foreach ($networks as $name => $link) {
-        $label = ucfirst($name);
-        $attr  = esc_url($link);
-        printf('<a class="ap-share-%1$s" href="%2$s" target="_blank" rel="noopener noreferrer" aria-label="%3$s">%3$s</a>',
-            esc_attr($name),
-            $attr,
-            esc_html($label)
-        );
-    }
-    echo '</div>';
-    return trim(ob_get_clean());
+    return ap_share_buttons($url ?: '', $title ?: '', 'event');
 }
 
 /**

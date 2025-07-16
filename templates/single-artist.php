@@ -35,6 +35,8 @@ if ( have_posts() ) :
         echo $donate;
     }
 
+    echo \ArtPulse\Frontend\ap_share_buttons( get_permalink(), get_the_title(), 'artist' );
+
     echo '</div>';
   endwhile;
 else :
