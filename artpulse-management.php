@@ -46,7 +46,6 @@ require_once __DIR__ . '/includes/update-checker.php';
 
 Plugin::register();
 OrgRolesController::register();
-add_action('init', [DashboardWidgetRegistry::class, 'init']);
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
