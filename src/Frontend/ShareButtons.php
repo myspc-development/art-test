@@ -7,9 +7,10 @@ namespace ArtPulse\Frontend;
  * @param string $url         URL to share.
  * @param string $title       Title or text for the share.
  * @param string $object_type Optional type for filtering hooks.
+ * @param int    $object_id   Optional object ID for analytics.
  * @return string HTML markup for share buttons.
  */
-function ap_share_buttons(string $url, string $title, string $object_type = ''): string
+function ap_share_buttons(string $url, string $title, string $object_type = '', int $object_id = 0): string
 {
     if (!$url || !$title) {
         return '';
@@ -42,10 +43,12 @@ function ap_share_buttons(string $url, string $title, string $object_type = ''):
     foreach ($networks as $name => $link) {
         $label = ucfirst($name);
         printf(
-            '<a class="ap-share-%1$s" href="%2$s" target="_blank" rel="noopener noreferrer" aria-label="%3$s">%3$s</a>',
+            '<a class="ap-share-%1$s" href="%2$s" target="_blank" rel="noopener noreferrer" aria-label="%3$s" data-object-id="%4$d" data-object-type="%5$s">%3$s</a>',
             esc_attr($name),
             esc_url($link),
-            esc_html($label)
+            esc_html($label),
+            $object_id,
+            esc_attr($object_type)
         );
     }
     echo '</div>';
@@ -63,7 +66,7 @@ function ap_event_share_buttons(int $event_id): string
     $url   = get_permalink($event_id);
     $title = get_the_title($event_id);
 
-    return ap_share_buttons($url ?: '', $title ?: '', 'event');
+    return ap_share_buttons($url ?: '', $title ?: '', 'artpulse_event', $event_id);
 }
 
 /**
