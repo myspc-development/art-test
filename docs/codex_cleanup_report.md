@@ -8,6 +8,6 @@ This summary lists documentation updates completed during the latest audit.
 - `codex_permissions_overview.md` merged into `multi-org-roles-permissions.md`
 
 ## Renamed Documents
-- `codex-creator-tools.md` → `codex_creator_curator.md`
+- `codex-creator-tools.md` → `codex-phase-m-creator-curator-codex.md`
 - `mobile-pwa-guide.md` → `mobile-artwalk.md`
 
