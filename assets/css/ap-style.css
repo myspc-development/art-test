@@ -1218,6 +1218,7 @@ select.ap-input {
 .ap-widgets-columns{display:flex;gap:1rem;}
 .ap-widgets-columns ul{list-style:none;margin:0;padding:.5rem;background:var(--ap-alt-bg-color);border:1px solid var(--ap-border-color);min-width:200px;}
 .ap-widgets-columns li{padding:4px 8px;border:1px solid var(--ap-soft-border-color);margin-bottom:4px;cursor:move;}
+.ap-widgets-columns li.ap-widget-configurable::after{content:"\2699";margin-left:4px;font-size:.9em;}
 .ap-widgets-preview{border:1px solid var(--ap-border-color);background:var(--ap-light-bg-color);padding:.5rem;margin-top:1rem;}
 .ap-widgets-help{font-size:.875rem;font-style:italic;margin-bottom:.5rem;}
 @media (max-width:600px){
