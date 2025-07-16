@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: new URLSearchParams({
           action: 'ap_save_dashboard_order',
           nonce: ArtPulseDashboard.nonce,
+          _wpnonce: ArtPulseDashboard.nonce,
           order: JSON.stringify(newOrder)
         })
       })
