@@ -22,8 +22,8 @@ class EventRsvpToggle
 
     public static function render(\WP_Post $post): void
     {
-        $enabled = get_post_meta($post->ID, 'ap_event_requires_rsvp', true);
-        echo '<label><input type="checkbox" name="ap_event_requires_rsvp" value="1" ' . checked($enabled, '1', false) . '> ' . esc_html__('Requires RSVP', 'artpulse') . '</label>';
+        $enabled = get_post_meta($post->ID, 'event_rsvp_enabled', true);
+        echo '<label><input type="checkbox" name="event_rsvp_enabled" value="1" ' . checked($enabled, '1', false) . '> ' . esc_html__('Requires RSVP', 'artpulse') . '</label>';
     }
 
     public static function save_meta(int $post_id): void
@@ -34,6 +34,6 @@ class EventRsvpToggle
         if (!current_user_can('edit_post', $post_id)) {
             return;
         }
-        update_post_meta($post_id, 'ap_event_requires_rsvp', isset($_POST['ap_event_requires_rsvp']) ? '1' : '');
+        update_post_meta($post_id, 'event_rsvp_enabled', isset($_POST['event_rsvp_enabled']) ? '1' : '');
     }
 }

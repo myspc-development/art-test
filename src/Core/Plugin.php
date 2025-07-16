@@ -84,6 +84,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\CompetitionRestController::class, 'register']);
         add_action('rest_api_init', [VisitRestController::class, 'register']);
+        add_action('init', [\ArtPulse\Core\EventRsvpMetaMigration::class, 'maybe_migrate']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_migrate_profile_link_request_slug']);
         add_action('init', [$this, 'maybe_add_upload_cap']);

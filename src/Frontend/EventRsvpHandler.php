@@ -24,21 +24,21 @@ class EventRsvpHandler
             return;
         }
 
-        $enabled = get_post_meta($event_id, 'ap_event_requires_rsvp', true);
+        $enabled = get_post_meta($event_id, 'event_rsvp_enabled', true);
         if (!$enabled) {
             wp_safe_redirect(get_permalink($event_id));
             exit;
         }
 
         $user_id = get_current_user_id();
-        $existing = get_post_meta($event_id, 'ap_event_rsvps', true);
+        $existing = get_post_meta($event_id, 'event_rsvp_list', true);
         if (!is_array($existing)) {
             $existing = [];
         }
 
         if (!in_array($user_id, $existing, true)) {
             $existing[] = $user_id;
-            update_post_meta($event_id, 'ap_event_rsvps', $existing);
+            update_post_meta($event_id, 'event_rsvp_list', $existing);
             do_action('ap_event_rsvp_added', $event_id, get_current_user_id());
         }
 
