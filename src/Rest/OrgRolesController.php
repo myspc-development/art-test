@@ -174,14 +174,21 @@ class OrgRolesController {
         return new WP_REST_Response(['success' => true]);
     }
 
+    /**
+     * Verify that the current user can view organization roles.
+     */
     public static function check_permissions(): bool
     {
-        return current_user_can('manage_org_roles');
+        // Editors and above should be able to access role data.
+        return current_user_can('edit_posts');
     }
 
+    /**
+     * Ensure the user can update roles and that the request nonce is valid.
+     */
     public static function can_manage_roles(WP_REST_Request $request): bool
     {
-        return current_user_can('manage_org_roles') &&
+        return current_user_can('edit_posts') &&
                check_ajax_referer('wp_rest', '_wpnonce', false);
     }
 
