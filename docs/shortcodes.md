@@ -56,3 +56,34 @@ This table was auto-generated from `ShortcodePages::get_shortcode_map()`.
 | `[ap_recommendations]` | — | [ap_recommendations] |
 | `[ap_render_ui]` | — | [ap_render_ui] |
 | `[ap_spotlights]` | — | [ap_spotlights] |
+
+## `[ap_org_rsvp_dashboard]`
+
+This shortcode displays a lightweight RSVP management dashboard for event
+organizers. When added to a page it lists every event created by the
+logged‑in user that has RSVP tracking enabled (`ap_event_requires_rsvp` meta
+set to `1`).
+
+### Expected Markup
+
+For each event the shortcode outputs an `<h3>` heading with the event title
+followed by an unordered list of attendee names and email addresses. If an
+event has no RSVPs the list contains a single “No RSVPs yet” item.
+
+### Required Capabilities
+
+Visitors must be logged in to view this dashboard. Only events authored by
+the current user are queried, so organization admins or artists with the
+ability to publish events will see results.
+
+### Example
+
+```no-highlight
+[ap_org_rsvp_dashboard]
+```
+
+### Filters and Hooks
+
+There are no dedicated filters for this shortcode. Developers may rely on
+standard WordPress hooks such as `pre_get_posts` to adjust the event query
+or modify output via `the_content`.
