@@ -136,12 +136,12 @@ class DashboardWidgetRegistry
 
     public static function render_widget_events(): void
     {
-        self::include_template('widgets/widget-events.php');
+        self::include_template('widgets/events.php');
     }
 
     public static function render_widget_favorites(): void
     {
-        self::include_template('widgets/widget-favorites.php');
+        self::include_template('widgets/favorites.php');
     }
 
     public static function render_widget_for_you(): void
