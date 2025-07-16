@@ -44,12 +44,16 @@ class ArtistDashboardShortcode {
         ?>
         <div class="ap-dashboard ap-artist-dashboard">
             <h1><?php esc_html_e('Artist Dashboard', 'artpulse'); ?></h1>
-            <div class="ap-dashboard-profile">
-                <?php echo do_shortcode('[ap_user_profile]'); ?>
-            </div>
+            <div class="ap-dashboard-grid">
+                <div class="ap-card">
+                    <div class="ap-dashboard-profile">
+                        <?php echo do_shortcode('[ap_user_profile]'); ?>
+                    </div>
+                </div>
 
-            <h2 class="ap-card__title"><?php esc_html_e('Your Artworks', 'artpulse'); ?></h2>
-            <ul class="ap-artwork-list">
+                <div class="ap-card">
+                    <h2 class="ap-card__title"><?php esc_html_e('Your Artworks', 'artpulse'); ?></h2>
+                    <ul class="ap-artwork-list">
                 <?php foreach ($artworks as $artwork) : ?>
                     <li>
                         <a href="<?php echo esc_url(get_permalink($artwork)); ?>">
@@ -61,14 +65,16 @@ class ArtistDashboardShortcode {
                         <button class="ap-delete-artwork" data-id="<?php echo intval($artwork->ID); ?>">Delete</button>
                     </li>
                 <?php endforeach; ?>
-            </ul>
-
-            <h2 class="ap-card__title" id="upload-artwork"><?php esc_html_e('Upload New Artwork', 'artpulse'); ?></h2>
-            <form class="ap-artwork-upload-form ap-form-container" enctype="multipart/form-data" data-no-ajax="true">
-                <div class="form-group">
-                    <label class="ap-form-label" for="ap-artwork-title"><?php esc_html_e('Title', 'artpulse'); ?></label>
-                    <input class="ap-input" id="ap-artwork-title" type="text" name="title" required />
+                    </ul>
                 </div>
+
+                <div class="ap-card">
+                    <h2 class="ap-card__title" id="upload-artwork"><?php esc_html_e('Upload New Artwork', 'artpulse'); ?></h2>
+                    <form class="ap-artwork-upload-form ap-form-container" enctype="multipart/form-data" data-no-ajax="true">
+                        <div class="form-group">
+                            <label class="ap-form-label" for="ap-artwork-title"><?php esc_html_e('Title', 'artpulse'); ?></label>
+                            <input class="ap-input" id="ap-artwork-title" type="text" name="title" required />
+                        </div>
                 <div class="form-group">
                     <label class="ap-form-label" for="ap-artwork-medium"><?php esc_html_e('Medium', 'artpulse'); ?></label>
                     <input class="ap-input" id="ap-artwork-medium" type="text" name="artwork_medium" />
@@ -105,11 +111,13 @@ class ArtistDashboardShortcode {
                         <input class="ap-input ap-artwork-image" id="ap-artwork-image<?php echo $i; ?>" type="file" name="image_<?php echo $i; ?>" accept="image/*" />
                     <?php endfor; ?>
                 </div>
-                <div class="form-group">
-                    <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
+                        <div class="form-group">
+                            <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
+                        </div>
+                    </form>
+                    <div class="ap-form-messages" role="status" aria-live="polite"></div>
                 </div>
-            </form>
-            <div class="ap-form-messages" role="status" aria-live="polite"></div>
+            </div>
         </div>
         <?php
         wp_enqueue_script('ap-artwork-submission-js');
