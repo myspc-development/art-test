@@ -64,7 +64,6 @@ require_once __DIR__ . '/includes/settings-register.php';
 require_once __DIR__ . '/includes/help-doc-renderer.php';
 require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';
 require_once __DIR__ . '/admin/page-dashboard-widgets.php';
-require_once __DIR__ . '/admin/page-widget-ui.php';
 require_once __DIR__ . '/admin/page-widget-editor-react.php';
 require_once __DIR__ . '/admin/page-community-roles.php';
 require_once __DIR__ . '/follow-api.php';
