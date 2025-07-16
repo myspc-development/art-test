@@ -56,19 +56,21 @@ function artpulse_widget_followers() {
  *
  * @return array[]
  */
-function artpulse_get_dashboard_widgets(): array {
-    return [
-        [
-            'id'    => 'artpulse_summary',
-            'title' => 'Summary',
-            'icon'  => 'admin-home',
-        ],
-        [
-            'id'    => 'artpulse_calendar',
-            'title' => 'Events',
-            'icon'  => 'calendar-alt',
-        ],
-    ];
+if (!function_exists('artpulse_get_dashboard_widgets')) {
+    function artpulse_get_dashboard_widgets(): array {
+        return [
+            [
+                'id'    => 'artpulse_summary',
+                'title' => 'Summary',
+                'icon'  => 'admin-home',
+            ],
+            [
+                'id'    => 'artpulse_calendar',
+                'title' => 'Events',
+                'icon'  => 'calendar-alt',
+            ],
+        ];
+    }
 }
 
 /**
