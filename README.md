@@ -457,6 +457,8 @@ The `package.json` file defines scripts for building production assets. To compi
 ```bash
 npm run build
 ```
+PostCSS reads `postcss.config.js` from the repository root, so no additional
+configuration is required under `wp-content/plugins`.
 This command compiles the SCSS, bundles blocks and packages the React-based admin scripts via Rollup. Run it whenever files such as
 `sidebar-taxonomies.jsx`, `advanced-taxonomy-filter-block.jsx`,
 `filtered-list-shortcode-block.jsx` or `ajax-filter-block.jsx` are
