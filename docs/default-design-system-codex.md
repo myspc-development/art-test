@@ -23,7 +23,6 @@ plugin-root/
 │     ├─ render.php
 │     └─ style.scss
 ├─ inc/
-│  ├─ dashboard-registry.php
 │  └─ helpers.php
 ├─ templates/
 │  └─ card-wrapper.php
