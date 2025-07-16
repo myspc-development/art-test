@@ -1,29 +1,5 @@
-@use "../css/tokens.css";
-
-.ap-dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--ap-space, 1rem);
-  align-items: start;
-}
-
-.ap-card {
-  background: var(--ap-surface);
-  border: 1px solid var(--ap-border-color);
-  border-radius: var(--ap-radius);
-  padding: var(--ap-space);
-  box-shadow: var(--ap-shadow);
-}
-
-.ap-card__title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 calc(var(--ap-space) * 0.75);
-}
-
-.ap-card:where(:hover, :focus-visible) {
-  box-shadow: 0 2px 4px rgb(0 0 0 / 0.07);
-}
+@import "./tokens.css";
+@import "./dashboard.css";
 
 .ap-inline-form {
   margin-bottom: var(--ap-space);

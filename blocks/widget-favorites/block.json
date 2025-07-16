@@ -6,6 +6,6 @@
   "icon": "star-filled",
   "supports": {"html": false},
   "editorScript": "file:./editor.js",
-  "style": "file:../../build/css/widgets.css",
+  "style": "file:../../build/css/dashboard.css",
   "render": "file:./render.php"
 }

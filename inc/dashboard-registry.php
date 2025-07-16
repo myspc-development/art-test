@@ -39,5 +39,5 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
     if ( 'index.php' !== $hook ) {
         return;
     }
-    wp_enqueue_style( 'ap-dashboard', plugins_url( '../build/css/widgets.css', __FILE__ ), [], '1.0' );
+    wp_enqueue_style( 'ap-dashboard', plugins_url( '../build/css/dashboard.css', __FILE__ ), [], '1.0' );
 } );
