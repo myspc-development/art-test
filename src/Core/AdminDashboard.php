@@ -73,7 +73,7 @@ class AdminDashboard
 
             wp_localize_script(
                 'ap-dashboard-js',
-                'ArtPulseDashboardData',
+                'APDashboard',
                 [
                     'nonce'    => wp_create_nonce('wp_rest'),
                     'rest_url' => rest_url('artpulse/v1/'),
