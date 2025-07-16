@@ -22,27 +22,28 @@ add_action('admin_enqueue_scripts', function () {
     if (!$screen || $screen->id !== 'toplevel_page_artpulse-widget-editor') {
         return;
     }
+
+    $handle = 'ap-dashboard-widgets-editor';
     wp_enqueue_script(
-        'artpulse-react-editor-core',
+        $handle,
         plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/dist/admin-dashboard-widgets-editor.js',
-        ['wp-element', 'wp-data'],
-        null,
+        ['wp-element'],
+        '1.0.0',
         true
     );
 
-    $widget_config = get_user_meta(get_current_user_id(), 'artpulse_dashboard_layout', true);
-    $widget_list   = \ArtPulse\Core\DashboardWidgetRegistry::get_definitions(true);
-    $user_roles    = wp_get_current_user()->roles;
-
-    wp_localize_script('artpulse-react-editor-core', 'APDashboardWidgetsEditor', [
-        'config'  => $widget_config ?: [],
-        'widgets' => $widget_list,
-        'roles'   => $user_roles,
+    wp_localize_script($handle, 'APDashboardWidgetsEditor', [
+        'widgets' => artpulse_get_dashboard_widgets(),
+        'config'  => [
+            'can_edit' => current_user_can('edit_dashboard'),
+        ],
+        'roles'   => artpulse_get_dashboard_roles(),
     ]);
+
     wp_enqueue_script(
         'artpulse-react-editor',
         plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/widget-editor.js',
-        ['artpulse-react-editor-core'],
+        [$handle],
         null,
         true
     );

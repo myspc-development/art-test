@@ -50,3 +50,30 @@ function artpulse_widget_favorites() {
 function artpulse_widget_followers() {
     echo "<p>You gained 8 new followers this week.</p>";
 }
+
+/**
+ * Return a list of dashboard widgets for the editor.
+ *
+ * @return array[]
+ */
+function artpulse_get_dashboard_widgets(): array {
+    return [
+        [
+            'id'    => 'artpulse_summary',
+            'title' => 'Summary',
+            'icon'  => 'admin-home',
+        ],
+        [
+            'id'    => 'artpulse_calendar',
+            'title' => 'Events',
+            'icon'  => 'calendar-alt',
+        ],
+    ];
+}
+
+/**
+ * Optional helper to expose role keys in the editor.
+ */
+function artpulse_get_dashboard_roles(): array {
+    return array_keys(wp_roles()->roles);
+}
