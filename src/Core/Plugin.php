@@ -253,6 +253,7 @@ class Plugin
         \ArtPulse\Frontend\ArtworkCommentsShortcode::register();
         \ArtPulse\Frontend\EventChatShortcode::register();
         \ArtPulse\Frontend\MessagesShortcode::register();
+        \ArtPulse\Frontend\InboxReact::register();
         \ArtPulse\Frontend\ReactDashboardShortcode::register();
         \ArtPulse\Frontend\RestListShortcodes::register();
         \ArtPulse\Frontend\CollectionsShortcode::register();
