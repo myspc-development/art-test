@@ -14,7 +14,7 @@ add_action('admin_menu', function () {
 });
 
 function artpulse_render_widget_editor_page() {
-    echo '<div id="artpulse-widget-editor-root"></div>';
+    echo '<div id="admin-dashboard-widgets-editor"></div>';
 }
 
 add_action('admin_enqueue_scripts', function () {
@@ -29,6 +29,16 @@ add_action('admin_enqueue_scripts', function () {
         null,
         true
     );
+
+    $widget_config = get_user_meta(get_current_user_id(), 'artpulse_dashboard_layout', true);
+    $widget_list   = \ArtPulse\Core\DashboardWidgetRegistry::get_definitions(true);
+    $user_roles    = wp_get_current_user()->roles;
+
+    wp_localize_script('artpulse-react-editor-core', 'APDashboardWidgetsEditor', [
+        'config'  => $widget_config ?: [],
+        'widgets' => $widget_list,
+        'roles'   => $user_roles,
+    ]);
     wp_enqueue_script(
         'artpulse-react-editor',
         plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/widget-editor.js',

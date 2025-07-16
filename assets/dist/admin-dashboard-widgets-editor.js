@@ -1,6 +1,15 @@
 (function (React, client) {
   'use strict';
 
+  var config = window.APDashboardWidgetsEditor && window.APDashboardWidgetsEditor.config || [];
+  var widgets = window.APDashboardWidgetsEditor && window.APDashboardWidgetsEditor.widgets || [];
+  var roles = window.APDashboardWidgetsEditor && window.APDashboardWidgetsEditor.roles || [];
+  if (!document.getElementById('admin-dashboard-widgets-editor')) {
+    console.error('Missing root container');
+    return;
+  }
+  window.APDashboardWidgetsEditor = { config: config, widgets: widgets, roles: roles };
+
   function _arrayLikeToArray(r, a) {
     (null == a || a > r.length) && (a = r.length);
     for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
@@ -483,7 +492,7 @@
     }));
   }
   document.addEventListener('DOMContentLoaded', function () {
-    var container = document.getElementById('ap-dashboard-widgets-canvas');
+    var container = document.getElementById('admin-dashboard-widgets-editor');
     if (container && window.APDashboardWidgetsEditor) {
       client.createRoot(container).render(/*#__PURE__*/React.createElement(WidgetsEditor, APDashboardWidgetsEditor));
       console.log('Editor loaded');
