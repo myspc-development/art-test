@@ -3,9 +3,9 @@
 This plugin adds simple widgets to the native WordPress dashboard. Widgets are registered via `wp_add_dashboard_widget()` so users can drag and drop them just like the default WordPress boxes. Each user's arrangement is stored automatically in `metaboxorder_dashboard` user meta.
 
 ## Widgets
-- **ArtPulse Summary** – placeholder content welcoming the user
-- **Upcoming Events** – shows upcoming events (currently static text)
-- **Trending Tags** – placeholder area for trending tags
+- **Site Overview** – quick summary of recent activity. Title uses `dashicons-admin-home`.
+- **Upcoming Events** – shows upcoming events (currently static text) with `dashicons-calendar-alt`.
+- **Trending Tags** – placeholder area for trending tags with a `dashicons-tag` icon.
 
 The **Trending Tags** widget is placed in the sidebar column by default, while the other two appear in the main column. You can drag the widgets between columns or reorder them. WordPress persists the layout per user without any additional code.
 
