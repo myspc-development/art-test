@@ -46,20 +46,18 @@ class ApprovalManager
             echo '<p>' . __('This submission is already reviewed.', 'artpulse') . '</p>';
             return;
         }
-        $approve_url   = admin_url('admin-post.php');
-        $approve_nonce = wp_create_nonce('ap_approve_' . $post->ID);
-        $reject_nonce  = wp_create_nonce('ap_reject_' . $post->ID);
+        $approve_url = admin_url('admin-post.php');
         ?>
         <form method="post" action="<?php echo esc_url($approve_url); ?>">
+            <?php wp_nonce_field('ap_approve_submission_' . $post->ID, 'ap_approve_nonce'); ?>
             <input type="hidden" name="action" value="ap_approve_submission" />
             <input type="hidden" name="post_id" value="<?php echo esc_attr($post->ID); ?>" />
-            <input type="hidden" name="nonce" value="<?php echo esc_attr($approve_nonce); ?>" />
             <?php submit_button(__('Approve', 'artpulse'), 'primary', 'submit', false); ?>
         </form>
         <form method="post" action="<?php echo esc_url($approve_url); ?>">
+            <?php wp_nonce_field('ap_reject_submission_' . $post->ID, 'ap_reject_nonce'); ?>
             <input type="hidden" name="action" value="ap_reject_submission" />
             <input type="hidden" name="post_id" value="<?php echo esc_attr($post->ID); ?>" />
-            <input type="hidden" name="nonce" value="<?php echo esc_attr($reject_nonce); ?>" />
             <?php submit_button(__('Reject', 'artpulse'), 'secondary', 'submit', false); ?>
         </form>
         <?php
@@ -73,9 +71,7 @@ class ApprovalManager
         if ( ! current_user_can('publish_posts') ) {
             wp_die(__('Insufficient permissions', 'artpulse'));        }
         $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
-        $nonce   = $_POST['nonce'] ?? '';
-        if ( ! wp_verify_nonce($nonce, 'ap_approve_' . $post_id) ) {
-            wp_die(__('Security check failed', 'artpulse'));        }
+        check_admin_referer('ap_approve_submission_' . $post_id, 'ap_approve_nonce');
         $post = get_post($post_id);
         if ($post && in_array($post->post_type, ['ap_artist_request', 'artpulse_artist'], true)) {
             $user = get_user_by('id', $post->post_author);
@@ -112,10 +108,7 @@ class ApprovalManager
         }
 
         $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
-        $nonce   = $_POST['nonce'] ?? '';
-        if ( ! wp_verify_nonce($nonce, 'ap_reject_' . $post_id) ) {
-            wp_die(__('Security check failed', 'artpulse'));
-        }
+        check_admin_referer('ap_reject_submission_' . $post_id, 'ap_reject_nonce');
 
         wp_trash_post($post_id);
 

@@ -1069,7 +1069,9 @@ add_action('rest_api_init', function() {
             $attendees = is_array($attendees) ? $attendees : [];
             return rest_ensure_response($attendees);
         },
-        'permission_callback' => '__return_true'
+        'permission_callback' => function() {
+            return current_user_can('edit_posts');
+        }
     ]);
 });
 
