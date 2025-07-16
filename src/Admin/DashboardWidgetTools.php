@@ -53,16 +53,14 @@ class DashboardWidgetTools
     }
     public static function register(): void
     {
-        add_action('wp_dashboard_setup', function () {
-            if (!current_user_can('manage_options')) {
-                return;
-            }
-
-            ap_register_dashboard_widget([
-                'id'    => 'artpulse_dashboard_widget',
-                'title' => __('ArtPulse Dashboard', 'artpulse'),
-                'render' => [self::class, 'render'],
-            ]);
+        add_action('artpulse_register_dashboard_widget', function () {
+            DashboardWidgetRegistry::register(
+                'artpulse_dashboard_widget',
+                __('ArtPulse Dashboard', 'artpulse'),
+                'layout',
+                __('Manage dashboard layouts.', 'artpulse'),
+                [self::class, 'render']
+            );
         });
         add_action('admin_menu', function () {
             add_submenu_page(

@@ -3,14 +3,18 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-add_action('wp_dashboard_setup', function () {
-    ap_register_dashboard_widget([
-        'id'    => 'ap_messages_widget',
-        'title' => 'Recent Messages',
-        'render' => function () {
+use ArtPulse\Core\DashboardWidgetRegistry;
+
+add_action('artpulse_register_dashboard_widget', function () {
+    DashboardWidgetRegistry::register(
+        'ap_messages_widget',
+        'Recent Messages',
+        'mail',
+        '',
+        function () {
             echo '<div id="ap-messages-dashboard-widget">Loading messages...</div>';
-        },
-    ]);
+        }
+    );
 });
 
 add_action('admin_enqueue_scripts', function($hook) {
