@@ -38,6 +38,14 @@ from any directory, calendar popover or dashboard list.
 - Following creators allows you to receive notifications about new content.
 - Favoriting is for single events or artworks you like right now. Following a creator keeps you updated on everything they publish going forward.
 
+## Sharing Events and Profiles
+
+- Click **Share** on an event, artwork or user profile to reveal quick links.
+- Facebook, Twitter/X, WhatsApp and email are supported out of the box.
+- If your browser supports it, a **Native Share** button appears for one-tap sharing via the device menu.
+- Share buttons are shown on event cards, individual artwork pages and artist/organization profiles.
+- Each share is logged and contributes to the item’s trending score.
+
 ## My Events Dashboard
 
 - Open your **My Events** dashboard from the main menu.
