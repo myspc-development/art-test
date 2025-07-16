@@ -13,7 +13,12 @@ add_action('rest_api_init', function () {
             $items = ActivityFeed::get_feed(get_current_user_id(), $limit);
             return rest_ensure_response($items);
         },
-        'permission_callback' => fn() => is_user_logged_in(),
+        'permission_callback' => function () {
+            if (!current_user_can('read')) {
+                return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+            }
+            return true;
+        },
         'args'                => [ 'limit' => [ 'type' => 'integer', 'default' => 20 ] ],
     ]);
 });

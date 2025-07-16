@@ -21,9 +21,12 @@ class SurveyManager
         ]);
     }
 
-    public static function check_permission(): bool
+    public static function check_permission()
     {
-        return is_user_logged_in();
+        if (!current_user_can('read')) {
+            return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+        }
+        return true;
     }
 
     public static function handle(\WP_REST_Request $request)

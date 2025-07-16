@@ -23,7 +23,12 @@ class UserAccountRestController
         register_rest_route('artpulse/v1', '/user/export', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'export_user_data'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args'                => [
                 'format' => [
                     'type'    => 'string',
@@ -36,7 +41,12 @@ class UserAccountRestController
         register_rest_route('artpulse/v1', '/user/delete', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'delete_user_data'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
         ]);
     }
 

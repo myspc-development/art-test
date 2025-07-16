@@ -54,7 +54,12 @@ class SubmissionRestController
             [
                 'methods'             => 'GET',
                 'callback'            => fn() => rest_ensure_response(['message' => 'Use POST to submit a form.']),
-                'permission_callback' => fn() => is_user_logged_in(),
+                'permission_callback' => function() {
+                    if (!current_user_can('read')) {
+                        return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                    }
+                    return true;
+                },
             ]
         );
     }
@@ -62,18 +67,21 @@ class SubmissionRestController
     /**
      * Permission callback for the submission endpoint.
      */
-    public static function check_permissions( WP_REST_Request $request ): bool
+    public static function check_permissions( WP_REST_Request $request )
     {
         $nonce = $request->get_header( 'X-WP-Nonce' ) ?: $request->get_param( '_wpnonce' );
 
         if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return false;
+            return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
         }
 
         // Allow any logged in user with upload permissions to submit content.
         // Members are granted this capability on registration so they can
         // request upgrades without needing edit privileges.
-        return current_user_can( 'upload_files' );
+        if (!current_user_can( 'upload_files' )) {
+            return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+        }
+        return true;
     }
 
     /**

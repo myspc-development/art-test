@@ -16,7 +16,12 @@ class PromoManager
         register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/promo-code/apply', [
             'methods'  => 'POST',
             'callback' => [self::class, 'apply_code'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
     }

@@ -46,7 +46,12 @@ class DirectoryManager {
         register_rest_route('artpulse/v1', '/filter', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'handleFilter' ],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args' => [
                 'type'       => [ 'type' => 'string',  'required' => true ],
                 'limit'      => [ 'type' => 'integer', 'default'  => 10 ],

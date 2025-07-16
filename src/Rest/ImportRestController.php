@@ -40,9 +40,12 @@ class ImportRestController
         );
     }
 
-    public static function check_permissions(): bool
+    public static function check_permissions()
     {
-        return current_user_can('manage_options');
+        if (!current_user_can('manage_options')) {
+            return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+        }
+        return true;
     }
 
     public static function handle_import(WP_REST_Request $request): WP_REST_Response

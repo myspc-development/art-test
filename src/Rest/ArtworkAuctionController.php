@@ -18,14 +18,22 @@ class ArtworkAuctionController
             'methods'  => 'GET',
             'callback' => [self::class, 'status'],
             'permission_callback' => function () {
-                return current_user_can('read');
+                if (!current_user_can('read')) {
+                    return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
             },
             'args' => ['id' => ['validate_callback' => 'is_numeric']],
         ]);
         register_rest_route('artpulse/v1', '/artwork/(?P<id>\d+)/bid', [
             'methods'  => 'POST',
             'callback' => [self::class, 'bid'],
-            'permission_callback' => function () { return is_user_logged_in(); },
+            'permission_callback' => function () {
+                if (!current_user_can('read')) {
+                    return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args' => [
                 'id'     => ['validate_callback' => 'is_numeric'],
                 'amount' => ['validate_callback' => 'is_numeric'],

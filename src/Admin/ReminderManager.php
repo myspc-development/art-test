@@ -21,9 +21,12 @@ class ReminderManager
         ]);
     }
 
-    public static function check_permission(): bool
+    public static function check_permission()
     {
-        return current_user_can('manage_options');
+        if (!current_user_can('manage_options')) {
+            return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+        }
+        return true;
     }
 
     public static function handle(\WP_REST_Request $request)

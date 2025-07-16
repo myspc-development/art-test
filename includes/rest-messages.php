@@ -17,7 +17,10 @@ add_action('rest_api_init', function () {
             return rest_ensure_response(['message_id' => $id]);
         },
         'permission_callback' => function () {
-            return current_user_can('read');
+            if (!current_user_can('read')) {
+                return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+            }
+            return true;
         },
     ]);
 
@@ -27,7 +30,10 @@ add_action('rest_api_init', function () {
             return rest_ensure_response(AP_Message::get_inbox(get_current_user_id()));
         },
         'permission_callback' => function () {
-            return current_user_can('read');
+            if (!current_user_can('read')) {
+                return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+            }
+            return true;
         },
     ]);
 
@@ -38,7 +44,10 @@ add_action('rest_api_init', function () {
             return rest_ensure_response(['status' => 'read']);
         },
         'permission_callback' => function () {
-            return current_user_can('read');
+            if (!current_user_can('read')) {
+                return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+            }
+            return true;
         },
     ]);
 });

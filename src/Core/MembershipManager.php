@@ -134,19 +134,34 @@ class MembershipManager
         register_rest_route('artpulse/v1', '/stripe-webhook', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'handleStripeWebhook' ],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => function () {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
         ]);
 
         register_rest_route('artpulse/v1', '/membership/pause', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'pauseMembership' ],
-            'permission_callback' => function() { return is_user_logged_in(); },
+            'permission_callback' => function () {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
         ]);
 
         register_rest_route('artpulse/v1', '/membership/resume', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'resumeMembership' ],
-            'permission_callback' => function() { return is_user_logged_in(); },
+            'permission_callback' => function () {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
         ]);
     }
 

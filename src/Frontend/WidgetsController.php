@@ -16,12 +16,22 @@ class WidgetsController
         register_rest_route('widgets', '/embed.js', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'embed'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
         ]);
         register_rest_route('widgets', '/render', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'render'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function() {
+                if (!current_user_can('read')) {
+                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
         ]);
     }
 

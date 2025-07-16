@@ -23,7 +23,12 @@ class ArtistEventsController
             [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_events'],
-                'permission_callback' => 'is_user_logged_in',
+                'permission_callback' => function() {
+                    if (!current_user_can('read')) {
+                        return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                    }
+                    return true;
+                },
             ]
         );
     }

@@ -21,7 +21,12 @@ class RsvpRestController
         register_rest_route('artpulse/v1', '/rsvp', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'join'],
-            'permission_callback' => function () { return is_user_logged_in(); },
+            'permission_callback' => function () {
+                if (!current_user_can('read')) {
+                    return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args'                => [
                 'event_id' => [ 'validate_callback' => 'is_numeric' ],
             ],
@@ -30,7 +35,12 @@ class RsvpRestController
         register_rest_route('artpulse/v1', '/rsvp/cancel', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'cancel'],
-            'permission_callback' => function () { return is_user_logged_in(); },
+            'permission_callback' => function () {
+                if (!current_user_can('read')) {
+                    return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args'                => [
                 'event_id' => [ 'validate_callback' => 'is_numeric' ],
             ],
@@ -39,7 +49,12 @@ class RsvpRestController
         register_rest_route('artpulse/v1', '/waitlist/remove', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'remove_waitlist'],
-            'permission_callback' => function () { return is_user_logged_in(); },
+            'permission_callback' => function () {
+                if (!current_user_can('read')) {
+                    return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                }
+                return true;
+            },
             'args'                => [
                 'event_id' => [ 'validate_callback' => 'is_numeric' ],
             ],
@@ -278,16 +293,19 @@ class RsvpRestController
         ]);
     }
 
-    public static function check_permissions(WP_REST_Request $request): bool
+    public static function check_permissions(WP_REST_Request $request)
     {
         $event_id = absint($request->get_param('id') ?: $request->get_param('event_id'));
         if (!$event_id) {
-            return false;
+            return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
         }
         $user_id  = get_current_user_id();
         $user_org = intval(get_user_meta($user_id, 'ap_organization_id', true));
         $event_org = intval(get_post_meta($event_id, '_ap_event_organization', true));
-        return $user_org && $event_org && $user_org === $event_org && current_user_can('view_artpulse_dashboard');
+        if ($user_org && $event_org && $user_org === $event_org && current_user_can('view_artpulse_dashboard')) {
+            return true;
+        }
+        return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
     }
 
     public static function get_attendees(WP_REST_Request $request): WP_REST_Response
