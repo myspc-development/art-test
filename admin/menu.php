@@ -24,6 +24,15 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-org-reports.php'; }
     );
 
+    // Partner API key management
+    add_menu_page(
+        'API Keys',
+        'API Keys',
+        'manage_options',
+        'ap-api-keys',
+        function () { include __DIR__ . '/page-api-keys.php'; }
+    );
+
 });
 
 // Redirect legacy Org Roles slug to the new tabbed page

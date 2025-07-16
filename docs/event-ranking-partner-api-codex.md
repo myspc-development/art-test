@@ -84,7 +84,7 @@ add_filter('rest_pre_dispatch', function($result, $server, $request) {
 
 - [x] `ap_event_rankings` created & scores update
 - [x] REST `/events?orderby=rank` works
-- [ ] Admin UI for API keys live
+- [x] Admin UI for API keys live
 - [ ] Bearer token auth & key hash check
 - [ ] `/api/v1/events` documented
 
