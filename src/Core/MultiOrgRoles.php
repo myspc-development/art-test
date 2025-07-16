@@ -91,6 +91,16 @@ class MultiOrgRoles
             ARRAY_A
         );
     }
+
+    public static function get_org_users(int $org_id): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_org_user_roles';
+        return (array) $wpdb->get_results(
+            $wpdb->prepare("SELECT user_id, role FROM $table WHERE org_id = %d", $org_id),
+            ARRAY_A
+        );
+    }
 }
 
 function ap_user_has_org_role(int $user_id, int $org_id, ?string $role = null): bool

@@ -3,6 +3,7 @@ namespace ArtPulse\Admin;
 
 use ArtPulse\Core\OrgRoleManager;
 use ArtPulse\Core\RoleAuditLogger;
+use ArtPulse\Core\OrgContext;
 
 class OrgRolesPage
 {
@@ -44,8 +45,7 @@ class OrgRolesPage
         if (current_user_can('administrator') && isset($_GET['org_id'])) {
             return absint($_GET['org_id']);
         }
-        $user_id = get_current_user_id();
-        return absint(get_user_meta($user_id, 'ap_organization_id', true));
+        return OrgContext::get_active_org();
     }
 
     public static function render(): void

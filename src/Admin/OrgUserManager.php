@@ -1,6 +1,9 @@
 <?php
 namespace ArtPulse\Admin;
 
+use ArtPulse\Core\OrgContext;
+use ArtPulse\Core\MultiOrgRoles;
+
 class OrgUserManager
 {
     public static function register(): void
@@ -49,8 +52,7 @@ class OrgUserManager
         if (current_user_can('administrator') && isset($_GET['org_id'])) {
             return absint($_GET['org_id']);
         }
-        $user_id = get_current_user_id();
-        return absint(get_user_meta($user_id, 'ap_organization_id', true));
+        return OrgContext::get_active_org();
     }
 
     public static function render(): void
@@ -75,13 +77,9 @@ class OrgUserManager
         echo '<button class="button button-primary" type="submit">' . esc_html__('Send Invites', 'artpulse') . '</button>';
         echo '</form>';
 
-        $users = get_users([
-            'meta_key'   => 'ap_organization_id',
-            'meta_value' => $org_id,
-            'number'     => 100,
-            'orderby'    => 'registered',
-            'order'      => 'DESC',
-        ]);
+        $rows = \ArtPulse\Core\MultiOrgRoles::get_org_users($org_id);
+        $ids  = wp_list_pluck($rows, 'user_id');
+        $users = $ids ? get_users(['include' => $ids]) : [];
 
         echo '<h2 class="ap-card__title">' . esc_html__('Organization Members', 'artpulse') . '</h2>';
         echo '<form id="ap-org-user-list">';
@@ -95,7 +93,7 @@ class OrgUserManager
         echo '<table class="widefat striped">';
         echo '<thead><tr><th><input type="checkbox" id="ap-select-all" /></th><th>' . esc_html__('User', 'artpulse') . '</th><th>' . esc_html__('Email', 'artpulse') . '</th><th>' . esc_html__('Role', 'artpulse') . '</th></tr></thead><tbody>';
         foreach ($users as $user) {
-            $roles = \ArtPulse\Core\OrgRoleManager::get_user_roles($user->ID);
+            $roles = MultiOrgRoles::get_user_roles($user->ID, $org_id);
             $label = $roles ? implode(', ', array_map('ucfirst', $roles)) : 'viewer';
             echo '<tr><td><input type="checkbox" class="ap-user-select" value="' . esc_attr($user->ID) . '" /></td><td>' . esc_html($user->display_name ?: $user->user_login) . '</td><td>' . esc_html($user->user_email) . '</td><td>' . esc_html($label) . '</td></tr>';
         }

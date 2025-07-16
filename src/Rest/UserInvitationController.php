@@ -48,8 +48,7 @@ class UserInvitationController
             return false;
         }
         $user_id  = get_current_user_id();
-        $user_org = intval(get_user_meta($user_id, 'ap_organization_id', true));
-        if ($user_org !== $org_id) {
+        if (!\ArtPulse\Core\ap_user_has_org_role($user_id, $org_id, 'admin')) {
             return false;
         }
         return current_user_can('view_artpulse_dashboard');
@@ -81,8 +80,7 @@ class UserInvitationController
             );
             $user = get_user_by('email', $email);
             if ($user) {
-                update_user_meta($user->ID, 'ap_organization_id', $org_id);
-                \ArtPulse\Core\OrgRoleManager::assign_roles($user->ID, [$role]);
+                \ArtPulse\Core\MultiOrgRoles::assign_roles($user->ID, $org_id, [$role]);
             }
             $invited[] = $email;
         }

@@ -67,10 +67,10 @@ Check this instead of `current_user_can()` for org-scoped actions.
 ## Developer Sprint Checklist
 - [x] `ap_org_roles` table live
 - [x] REST routes for assign/list
-- [ ] Scoped permission checks
-- [ ] Org dashboard context switcher
-- [ ] Invite flow per org
-- [ ] Codex docs updated
+- [x] Scoped permission checks
+- [x] Org dashboard context switcher
+- [x] Invite flow per org
+- [x] Codex docs updated
 
 ## Codex Docs to Update
 - Roles & Permissions

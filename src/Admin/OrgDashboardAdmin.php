@@ -4,6 +4,7 @@ namespace ArtPulse\Admin;
 use Stripe\StripeClient;
 use Dompdf\Dompdf;
 use ArtPulse\Admin\OrgCommunicationsCenter;
+use ArtPulse\Core\OrgContext;
 
 class OrgDashboardAdmin {
     public static function register() {
@@ -48,7 +49,6 @@ class OrgDashboardAdmin {
             if (isset($_GET['org_id'])) {
                 return intval($_GET['org_id']);
             }
-            // Optionally default to first org
             $orgs = get_posts([
                 'post_type' => 'artpulse_org',
                 'numberposts' => 1,
@@ -56,9 +56,7 @@ class OrgDashboardAdmin {
             ]);
             return $orgs ? $orgs[0]->ID : 0;
         }
-        // For org admins, load from user meta (example key: ap_organization_id)
-        $org_id = intval(get_user_meta(get_current_user_id(), 'ap_organization_id', true));
-        return $org_id;
+        return OrgContext::get_active_org();
     }
 
     /**
