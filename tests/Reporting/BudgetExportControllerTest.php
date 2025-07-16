@@ -1,0 +1,57 @@
+<?php
+namespace ArtPulse\Reporting\Tests;
+
+use WP_REST_Request;
+use ArtPulse\Reporting\BudgetExportController;
+use ArtPulse\Admin\Tests\Stub;
+
+/**
+ * @group restapi
+ */
+class BudgetExportControllerTest extends \WP_UnitTestCase
+{
+    private int $event_id;
+
+    public function set_up(): void
+    {
+        parent::set_up();
+        Stub::reset();
+
+        $this->event_id = self::factory()->post->create([
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+        ]);
+
+        update_post_meta($this->event_id, 'ap_budget_lines', [
+            ['estimated' => 100, 'actual' => 90],
+            ['estimated' => 50,  'actual' => 60],
+        ]);
+
+        if (!class_exists('Dompdf\\Dompdf')) {
+            eval('namespace Dompdf; class Dompdf { public function loadHtml($h){} public function setPaper($p){} public function render(){} public function output(){ return "PDF"; } }');
+        }
+
+        BudgetExportController::register();
+        do_action('rest_api_init');
+    }
+
+    public function test_export_pdf_returns_pdf_response(): void
+    {
+        $req = new WP_REST_Request('GET', '/artpulse/v1/budget/export');
+        $req->set_param('event_id', $this->event_id);
+        $req->set_param('format', 'pdf');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $this->assertSame('application/pdf', $res->get_headers()['Content-Type']);
+    }
+
+    public function test_export_csv_returns_csv_response(): void
+    {
+        $req = new WP_REST_Request('GET', '/artpulse/v1/budget/export');
+        $req->set_param('event_id', $this->event_id);
+        $req->set_param('format', 'csv');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $this->assertSame('text/csv', $res->get_headers()['Content-Type']);
+    }
+}

@@ -31,15 +31,15 @@ Use this template after each event to summarize reach and engagement. Reports ca
 
 ## QA Checklist
 - [x] Budget worksheet saves line items
-- [ ] Export includes all totals
-- [ ] Impact reports generate PDF/CSV
+- [x] Export includes all totals
+- [x] Impact reports generate PDF/CSV
 - [ ] Data merges across events when requested
 
 ## Developer Sprint Checklist
 - [ ] Template storage API live
 - [ ] Editing UI with formula support
-- [ ] Export pipeline for budget & impact tables
-- [ ] Documentation updated
+- [x] Export pipeline for budget & impact tables
+- [x] Documentation updated
 
 ## Codex Docs to Update
 - Budget & Impact Templates Guide
