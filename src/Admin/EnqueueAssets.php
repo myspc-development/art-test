@@ -197,8 +197,8 @@ class EnqueueAssets {
         if ($screen->base === 'artpulse-settings_page_artpulse-dashboard-widgets') {
             $script_path = $plugin_dir . '/assets/dist/admin-dashboard-widgets-editor.js';
             $script_url  = $plugin_url . '/assets/dist/admin-dashboard-widgets-editor.js';
-            $style_path  = $plugin_dir . '/build/css/widgets.css';
-            $style_url   = $plugin_url . '/build/css/widgets.css';
+            $style_path  = $plugin_dir . '/build/css/dashboard.css';
+            $style_url   = $plugin_url . '/build/css/dashboard.css';
             if (file_exists($script_path)) {
                 wp_enqueue_script(
                     'sortablejs',

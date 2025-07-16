@@ -2,13 +2,14 @@
 
 This codex explains how to implement, use, and extend the Default Design System Recommendation for your WordPress dashboard plugin. Follow it as an internal README for contributors and as a step‑by‑step guide when you scaffold new widgets.
 
-1. **Folder Structure**
+## 1. Folder Structure
 
-```
+```text
 plugin-root/
 ├─ src/
 │  ├─ css/
 │  │  ├─ tokens.css
+│  │  ├─ dashboard.css      # ✅ Unified Dashboard Styling (NEW)
 │  │  └─ widgets.scss
 │  └─ js/
 │     └─ dashboard.js
@@ -29,7 +30,7 @@ plugin-root/
 └─ package.json
 ```
 
-2. **Design Tokens (`src/css/tokens.css`)**
+## 2. Design Tokens (`src/css/tokens.css`)
 
 ```css
 :root {
@@ -49,43 +50,86 @@ plugin-root/
     --ap-muted: #a0a0a0;
   }
 }
+```
 
-/* Import this file at the top of all SCSS modules */
+Import this file at the top of all SCSS modules:
+
+```scss
 @use "../css/tokens.css";
 ```
 
-3. **Global Layout & Card Styles (`src/css/widgets.scss`)**
+### 2.1 Unified Dashboard Styling (`src/css/dashboard.css`)
 
 ```css
+@import "./tokens.css";
+
 .ap-dashboard-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--ap-space);
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   align-items: start;
 }
 
 .ap-card {
-  background: var(--ap-surface);
+  background-color: var(--ap-surface);
   border: 1px solid var(--ap-border-color);
   border-radius: var(--ap-radius);
   padding: var(--ap-space);
   box-shadow: var(--ap-shadow);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.ap-card:where(:hover, :focus-within) {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
 }
 
 .ap-card__title {
   font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 calc(var(--ap-space) * 0.75);
+  margin-bottom: 0.75rem;
 }
 
-.ap-card:where(:hover, :focus-visible) {
-  box-shadow: 0 2px 4px rgb(0 0 0 / 0.07);
+.ap-muted {
+  color: var(--ap-muted);
+  font-size: 0.875rem;
+}
+
+.ap-card__button {
+  background-color: var(--ap-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--ap-radius);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.ap-card__button:hover {
+  background-color: #0064a6;
 }
 ```
 
-**Important:** All widgets must use `.ap-card` for layout and `.ap-card__title` for headings. No inline styles or custom class variants should override these base styles.
+Compile the styles with `npm run build` which outputs `build/css/dashboard.css`.
 
-4. **Build Setup (`package.json`)**
+Enqueue globally:
+
+```php
+wp_enqueue_style( 'ap-dashboard', plugins_url( '../build/css/dashboard.css', __FILE__ ), [], '1.0' );
+```
+
+This ensures all dashboards use the same grid layout and card styling system.
+
+## 3. Global Layout & Card Styles (`src/css/widgets.scss`)
+
+```scss
+@import "./tokens.css";
+@import "./dashboard.css";
+```
+
+Only widget-specific overrides or utility classes should go here. All shared layout components now come from `dashboard.css`.
+
+## 4. Build Setup (`package.json`)
 
 ```json
 {
@@ -99,99 +143,45 @@ plugin-root/
 }
 ```
 
-Run `npm run start` to auto-watch files. Commit only compiled `build/` output.
+## 5. Final Setup Completion
 
-5. **PHP Dashboard Registry Helper (`inc/dashboard-registry.php`)**
+Follow these actions to implement the system:
 
-```php
-function ap_register_dashboard_widget( array $args ) {
-    $defaults = [
-        'id'       => '',
-        'title'    => '',
-        'render'   => '',
-        'cap'      => 'read',
-    ];
-    $args = wp_parse_args( $args, $defaults );
+1. **Migrate markup to use shared CSS classes**
 
-    if ( ! current_user_can( $args['cap'] ) ) return;
+   Replace old wrappers like `.dashboard-overview-card`, `.widget-box`, or `.card` with:
 
-    global $wp_meta_boxes;
+   ```html
+   <div class="ap-card">
+     <h2 class="ap-card__title">Widget title</h2>
+     ...
+   </div>
+   ```
 
-    $wp_meta_boxes['dashboard']['normal']['core'][ $args['id'] ] = [
-        'id'     => $args['id'],
-        'title'  => $args['title'],
-        'callback' => function () use ( $args ) {
-            echo '<div class="ap-card" role="region" aria-labelledby="' . esc_attr( $args['id'] ) . '-title">';
-            echo '<h2 id="' . esc_attr( $args['id'] ) . '-title" class="ap-card__title">' . esc_html( $args['title'] ) . '</h2>';
-            if ( is_callable( $args['render'] ) ) {
-                call_user_func( $args['render'] );
-            } else {
-                locate_template( $args['render'], true );
-            }
-            echo '</div>';
-        },
-    ];
-}
+   Wrap collections in:
 
-add_action( 'admin_enqueue_scripts', function( $hook ) {
-    if ( 'index.php' !== $hook ) return;
-    wp_enqueue_style( 'ap-dashboard', plugins_url( '../build/css/widgets.css', __FILE__ ), [], '1.0' );
-} );
-```
+   ```html
+   <div class="ap-dashboard-grid">
+     <!-- Cards go here -->
+   </div>
+   ```
 
-6. **Dashboard JS (`src/js/dashboard.js`)**
+2. **Remove inline styles**
 
-```javascript
-import { on } from '@wordpress/dom-ready';
+   Delete any `style="padding:..."`, `style="border:..."`, etc. All layout/spacing must come from CSS classes.
 
-on(() => {
-  document.querySelectorAll('.ap-card').forEach(card => {
-    const toggle = document.createElement('button');
-    toggle.className   = 'dashicons dashicons-arrow-down';
-    toggle.ariaLabel   = 'Collapse widget';
-    toggle.onclick     = () => {
-      card.classList.toggle('is-collapsed');
-      localStorage.setItem(card.id + ':collapsed', card.classList.contains('is-collapsed'));
-    };
-    card.prepend(toggle);
+3. **Audit dashboards**
 
-    if (localStorage.getItem(card.id + ':collapsed') === 'true') {
-      card.classList.add('is-collapsed');
-    }
-  });
-});
-```
+   Ensure templates like `dashboard-artist.php`, `dashboard-member.php`, etc.:
 
-7. **Widget Block Template (`blocks/widget-foo/`)**
+   - Use `.ap-dashboard-grid`
+   - Contain only `.ap-card` widgets
+   - Include `widgets.css` or `dashboard.css`
 
-See the example block in this folder for how to wire up a dashboard widget block with build files for scripts and styles.
+4. **Recompile styles**
 
-8. **Accessibility Checklist**
+   ```bash
+   npm run build
+   ```
 
-- Use `role="region"` and `aria-labelledby` for all widget containers.
-- Apply `:focus-visible` outlines on interactive elements.
-- Maintain at least 4.5:1 color contrast.
-- Provide descriptive `aria-label` values on icons (collapse, drag handles, etc.).
-
-9. **Theming and Overrides**
-
-```css
-:root {
-  --ap-accent: #ff006e;
-  --ap-surface: #fafafa;
-}
-```
-
-Enqueue these overrides after the core styles to update default tokens.
-
-**Final Setup Completion Instructions**
-
-- Audit each widget and replace old classes with `.ap-card`.
-- Enqueue `build/css/widgets.css` globally.
-- Standardize PHP widgets via `ap_register_dashboard_widget()`.
-- Remove inline styles and hardcoded padding/margins.
-- Test in wp-admin to confirm cards look uniform.
-
-```
-Once these instructions are followed, your dashboard UI will be fully unified and easily themeable across all widgets.
-```
+   Make sure the output CSS reflects `dashboard.css` changes.

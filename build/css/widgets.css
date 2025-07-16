@@ -15,45 +15,26 @@
     --ap-muted: #a0a0a0;
   }
 }
-.ap-dashboard-grid {
-  display: grid;
-  gap: var(--ap-space);
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  align-items: start;
-}
 
-.ap-card {
-  background: var(--ap-surface);
-  border: 1px solid var(--ap-border-color);
-  border-radius: var(--ap-radius);
-  padding: var(--ap-space);
-  box-shadow: var(--ap-shadow);
-}
-
-.ap-card__title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 calc(var(--ap-space) * 0.75);
-}
-
-.ap-card:where(:hover, :focus-visible) {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
-}
 .ap-inline-form {
   margin-bottom: var(--ap-space);
 }
+
 .ap-inline-form--mt {
   margin-top: var(--ap-space);
 }
+
 .ap-admin-preview {
   background: #fefcbf;
   padding: 0.75em;
   border-left: 4px solid #d69e2e;
   margin-bottom: var(--ap-space);
 }
+
 .ap-dashboard-message {
   margin-top: var(--ap-space);
 }
+
 .ap-form-group {
   display: block;
   margin-bottom: var(--ap-space);
