@@ -47,5 +47,21 @@ class EventViewCounter
     public static function track_share(int $event_id): void
     {
         EventMetrics::log_metric($event_id, 'share');
+
+        $post = get_post($event_id);
+        if ($post && in_array($post->post_type, ['artpulse_event', 'artpulse_artwork'], true)) {
+            global $wpdb;
+            $meta_key = 'share_count';
+            $updated = $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE {$wpdb->postmeta} SET meta_value = GREATEST(CAST(meta_value AS SIGNED) + 1, 0) WHERE post_id = %d AND meta_key = %s",
+                    $event_id,
+                    $meta_key
+                )
+            );
+            if (!$updated) {
+                add_post_meta($event_id, $meta_key, 1, true);
+            }
+        }
     }
 }
