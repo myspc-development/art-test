@@ -46,6 +46,45 @@ require_once __DIR__ . '/includes/update-checker.php';
 
 Plugin::register();
 OrgRolesController::register();
+
+/**
+ * Ensure core database tables exist on activation.
+ */
+function ap_create_all_tables() {
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $tables   = [];
+    $tables[] = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}ap_org_user_roles (
+        org_id BIGINT NOT NULL,
+        user_id BIGINT NOT NULL,
+        role VARCHAR(100) NOT NULL,
+        status VARCHAR(50) DEFAULT 'active',
+        PRIMARY KEY (org_id, user_id)
+    ) $charset_collate;";
+
+    $tables[] = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}ap_roles (
+        role_key varchar(191) NOT NULL,
+        parent_role_key varchar(191) NULL,
+        display_name varchar(191) NOT NULL,
+        PRIMARY KEY  (role_key)
+    ) $charset_collate;";
+
+    $tables[] = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}ap_feedback (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+        user_id BIGINT NOT NULL,
+        note TEXT NOT NULL,
+        created_at DATETIME NOT NULL,
+        PRIMARY KEY (id),
+        KEY user_id (user_id)
+    ) $charset_collate;";
+
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    foreach ($tables as $sql) {
+        dbDelta($sql);
+    }
+}
+register_activation_hook(__FILE__, 'ap_create_all_tables');
 // Load shared frontend helpers
 require_once __DIR__ . '/src/Frontend/EventHelpers.php';
 require_once __DIR__ . '/src/Frontend/ShareButtons.php';
