@@ -1,6 +1,6 @@
 # ArtPulse Plugin – Features & Functions Report
 
-Version: 1.3.14
+Version: 1.3.15
 Platform: WordPress (React + PHP REST)
 Use Case: Manage creative events, memberships and engagement for artists and organizations.
 
