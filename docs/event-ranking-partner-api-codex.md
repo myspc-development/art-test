@@ -73,6 +73,34 @@ add_filter('rest_pre_dispatch', function($result, $server, $request) {
 | `/api/v1/events?region=brooklyn&tag=installation` | `read:events` | Filtered feed |
 | `/api/v1/analytics/events` | `read:analytics` | Optional analytics summary |
 
+#### `GET /api/v1/events`
+
+Returns upcoming events sorted by ranking. Optional `region` parameter filters by location.
+
+Example request:
+
+```bash
+curl -H 'Authorization: Bearer <token>' \
+  'https://example.com/wp-json/api/v1/events?region=brooklyn'
+```
+
+Example response:
+
+```json
+[
+  {
+    "id": 42,
+    "title": "Emerging Artists Exhibit",
+    "link": "https://example.com/events/emerging-artists-exhibit"
+  },
+  {
+    "id": 55,
+    "title": "Pop Art Retrospective",
+    "link": "https://example.com/events/pop-art-retrospective"
+  }
+]
+```
+
 ### QA Checklist
 
 - Valid API key returns JSON
@@ -85,8 +113,8 @@ add_filter('rest_pre_dispatch', function($result, $server, $request) {
 - [x] `ap_event_rankings` created & scores update
 - [x] REST `/events?orderby=rank` works
 - [x] Admin UI for API keys live
-- [ ] Bearer token auth & key hash check
-- [ ] `/api/v1/events` documented
+- [x] Bearer token auth & key hash check
+- [x] `/api/v1/events` documented
 
 ## Docs To Update
 

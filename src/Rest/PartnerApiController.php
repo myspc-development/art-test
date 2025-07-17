@@ -20,6 +20,11 @@ class PartnerApiController
         $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
         if ($exists !== $table) {
             self::install_table();
+        } else {
+            $col = $wpdb->get_var($wpdb->prepare("SHOW COLUMNS FROM $table WHERE Field = %s", 'key_hash'));
+            if (!$col) {
+                self::install_table();
+            }
         }
     }
 
@@ -31,12 +36,12 @@ class PartnerApiController
         $sql = "CREATE TABLE $table (
             id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
             org_id BIGINT NULL,
-            api_key VARCHAR(64) NOT NULL,
+            key_hash VARCHAR(64) NOT NULL,
             scopes VARCHAR(255) NOT NULL,
             created_at DATETIME NOT NULL,
             usage INT NOT NULL DEFAULT 0,
             PRIMARY KEY (id),
-            UNIQUE KEY api_key (api_key)
+            UNIQUE KEY key_hash (key_hash)
         ) $charset;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta($sql);
@@ -69,10 +74,11 @@ class PartnerApiController
         if (!$header || !str_starts_with(strtolower($header), 'bearer ')) {
             return new WP_Error('unauthorized', 'Missing token', ['status' => 401]);
         }
-        $key = trim(substr($header, 7));
+        $token = trim(substr($header, 7));
+        $hash  = hash('sha256', $token);
         global $wpdb;
         $table = $wpdb->prefix . 'ap_api_keys';
-        $row   = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE api_key = %s", $key));
+        $row   = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE key_hash = %s", $hash));
         if (!$row) {
             return new WP_Error('unauthorized', 'Invalid token', ['status' => 401]);
         }
@@ -80,16 +86,16 @@ class PartnerApiController
         if (!in_array($scope, $scopes, true)) {
             return new WP_Error('unauthorized', 'Insufficient scope', ['status' => 403]);
         }
-        $dayCount = (int) get_transient('ap_api_day_' . $key);
+        $dayCount = (int) get_transient('ap_api_day_' . $hash);
         if ($dayCount >= 1000) {
             return new WP_Error('rate_limit', 'Daily limit exceeded', ['status' => 429]);
         }
-        $secCount = (int) get_transient('ap_api_sec_' . $key);
+        $secCount = (int) get_transient('ap_api_sec_' . $hash);
         if ($secCount >= 10) {
             return new WP_Error('rate_limit', 'Rate limit exceeded', ['status' => 429]);
         }
-        set_transient('ap_api_day_' . $key, $dayCount + 1, DAY_IN_SECONDS);
-        set_transient('ap_api_sec_' . $key, $secCount + 1, 1);
+        set_transient('ap_api_day_' . $hash, $dayCount + 1, DAY_IN_SECONDS);
+        set_transient('ap_api_sec_' . $hash, $secCount + 1, 1);
         return $row;
     }
 

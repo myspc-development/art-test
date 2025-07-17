@@ -22,8 +22,20 @@ paths:
                     type: string
                   cache:
                     type: string
-                  debug:
-                    type: boolean
+          debug:
+            type: boolean
+  /events:
+    get:
+      summary: Retrieve ranked events
+      parameters:
+        - in: query
+          name: region
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: Event list
   /filtered-posts:
     get:
       summary: Retrieve posts filtered by taxonomy terms
