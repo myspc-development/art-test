@@ -54,7 +54,10 @@ class ReportingManager
 
         global $wpdb;
         $table = $wpdb->prefix . 'ap_tickets';
-        $rows  = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE event_id = %d", $event_id), ARRAY_A);
+        $rows  = [];
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table)) === $table) {
+            $rows = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE event_id = %d", $event_id), ARRAY_A);
+        }
 
         $stream = fopen('php://temp', 'w');
         fputcsv($stream, ['ticket_id', 'user_id', 'code', 'status', 'purchase_date']);

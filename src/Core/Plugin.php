@@ -605,6 +605,7 @@ class Plugin
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('wp_rest'),
             'pollId'   => 0,
+            'loggedIn' => is_user_logged_in(),
         ]);
 
         wp_localize_script('ap-event-comments-js', 'APComments', [

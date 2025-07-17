@@ -511,6 +511,7 @@ class EnqueueAssets {
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('wp_rest'),
             'pollId'   => 0,
+            'loggedIn' => is_user_logged_in(),
         ]);
         wp_localize_script('ap-forum-js', 'APForum', [
             'rest_url'    => esc_url_raw(rest_url()),

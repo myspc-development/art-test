@@ -86,6 +86,11 @@ class TicketManager
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
         dbDelta($sql);
+        file_put_contents(
+            plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'install.log',
+            '[' . current_time('mysql') . "] Created table $table\n",
+            FILE_APPEND
+        );
     }
 
     public static function install_purchases_table(): void
@@ -109,6 +114,11 @@ class TicketManager
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
         dbDelta($sql);
+        file_put_contents(
+            plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'install.log',
+            '[' . current_time('mysql') . "] Created table $table\n",
+            FILE_APPEND
+        );
     }
 
     public static function list_tickets(\WP_REST_Request $req)

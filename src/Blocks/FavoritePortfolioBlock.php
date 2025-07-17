@@ -11,26 +11,10 @@ class FavoritePortfolioBlock {
             return;
         }
 
-        register_block_type('artpulse/favorite-portfolio', [
-            'editor_script'   => 'artpulse-favorite-portfolio-block',
-            'render_callback' => [self::class, 'render_callback'],
-            'attributes'      => [
-                'category' => ['type' => 'string'],
-                'limit'    => ['type' => 'number', 'default' => 12],
-                'sort'     => ['type' => 'string', 'default' => 'date'],
-                'page'     => ['type' => 'number', 'default' => 1],
-            ],
-        ]);
-
-        wp_register_script(
-            'artpulse-favorite-portfolio-block',
-            plugins_url('assets/js/favorite-portfolio-block.js', ARTPULSE_PLUGIN_FILE),
-            ['wp-blocks', 'wp-element', 'wp-i18n'],
-            filemtime(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/favorite-portfolio-block.js')
+        register_block_type_from_metadata(
+            __DIR__ . '/../../blocks/favorite-portfolio',
+            [ 'render_callback' => 'render_favorite_portfolio_block' ]
         );
     }
 
-    public static function render_callback(array $attrs): string {
-        return ap_render_favorite_portfolio($attrs);
-    }
 }

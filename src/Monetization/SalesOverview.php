@@ -41,6 +41,10 @@ class SalesOverview
         global $wpdb;
         $tickets = $wpdb->prefix . 'ap_tickets';
         $tiers   = $wpdb->prefix . 'ap_event_tickets';
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $tickets)) !== $tickets ||
+            $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $tiers)) !== $tiers) {
+            return rest_ensure_response(['tickets_sold' => 0, 'total_revenue' => 0, 'trend' => []]);
+        }
         $posts   = $wpdb->posts;
 
         $where  = $wpdb->prepare("p.post_author = %d", $user_id);

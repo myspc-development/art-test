@@ -1,5 +1,7 @@
 (function($){
   var pollInterval = null;
+  var retryCount = 0;
+  var maxRetries = 3;
   function showError(msg){
     var box = $('#ap-messages-error');
     if(!box.length){
@@ -14,6 +16,7 @@
       data: { nonce: APMessages.nonce },
       beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(data){
+        retryCount = 0;
         var $list = $('#ap-conversation-list');
         if(!$list.length) return;
         $list.empty();
@@ -49,6 +52,9 @@
             clearInterval(pollInterval);
             pollInterval = null;
           }
+        } else if(retryCount < maxRetries){
+          retryCount++;
+          setTimeout(listConversations, 3000);
         }
       }
     });
@@ -61,6 +67,7 @@
       data: { with: id, nonce: APMessages.nonce },
       beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', APMessages.nonce); },
       success: function(data){
+        retryCount = 0;
         if (cb) cb(data);
       },
       error: function(jqXHR){
@@ -74,6 +81,9 @@
             clearInterval(pollInterval);
             pollInterval = null;
           }
+        } else if(retryCount < maxRetries){
+          retryCount++;
+          setTimeout(function(){ loadMessages(id, cb); }, 3000);
         }
       }
     });
@@ -133,6 +143,10 @@
   });
 
   $(document).ready(function(){
+    if(!APMessages.loggedIn){
+      showError('Please log in to view messages.');
+      return;
+    }
     listConversations();
   });
 
