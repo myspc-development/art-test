@@ -7,7 +7,7 @@ class SampleWidgets {
     public static function register(): void {
         DashboardWidgetRegistry::register(
             'sample_welcome_widget',
-            'Welcome Message',
+            'Welcome Message (Sample)',
             '👋',
             'Intro greeting for new users.',
             function () {

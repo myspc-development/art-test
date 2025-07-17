@@ -143,7 +143,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
   const availRef = useRef(null);
 
   const presets = {
-    new_artist: ['membership', 'widget_for_you', 'instagram_widget', 'my-events'],
+    new_artist: ['membership', 'widget_for_you_all', 'instagram_widget', 'my-events'],
     event_organizer: ['membership', 'events', 'rsvps', 'rsvp_stats', 'local-events']
   };
 

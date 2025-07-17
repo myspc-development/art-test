@@ -8,7 +8,7 @@ class RoleBasedWidgets {
         // ---------- MEMBER WIDGETS ----------
         DashboardWidgetRegistry::register(
             'welcome_widget',
-            'Welcome Message',
+            'Welcome Message (Role)',
             '👋',
             'Personalized welcome message for the user.',
             function () {
@@ -31,7 +31,7 @@ class RoleBasedWidgets {
 
         DashboardWidgetRegistry::register(
             'upcoming_events',
-            'Upcoming Events',
+            'Upcoming Events (Sample)',
             '📅',
             'List of upcoming community events.',
             function () {
@@ -66,7 +66,7 @@ class RoleBasedWidgets {
 
         DashboardWidgetRegistry::register(
             'artist_sales',
-            'Sales Summary',
+            'Sales Summary (Artist)',
             '💰',
             'Monthly art sales total.',
             function () {

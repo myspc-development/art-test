@@ -316,7 +316,7 @@ class DashboardWidgetRegistry {
         ] );
         $register( 'widget_events', [
             'id'          => 'widget_events',
-            'label'       => __( 'Upcoming Events', 'artpulse' ),
+            'label'       => __( 'Upcoming Events (Member)', 'artpulse' ),
             'icon'        => 'dashicons-calendar-alt',
             'description' => __( 'Events happening soon.', 'artpulse' ),
             'callback'    => [ self::class, 'render_widget_events' ],
@@ -330,9 +330,9 @@ class DashboardWidgetRegistry {
             'callback'    => [ self::class, 'render_widget_favorites' ],
             'roles'       => [ 'member' ],
         ] );
-        $register( 'widget_for_you', [
-            'id'          => 'widget_for_you',
-            'label'       => __( 'For You', 'artpulse' ),
+        $register( 'widget_for_you_member', [
+            'id'          => 'widget_for_you_member',
+            'label'       => __( 'For You (Member)', 'artpulse' ),
             'icon'        => 'dashicons-thumbs-up',
             'description' => __( 'Recommended content.', 'artpulse' ),
             'callback'    => [ self::class, 'render_widget_for_you' ],

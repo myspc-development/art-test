@@ -523,7 +523,7 @@ function ap_register_core_dashboard_widgets(): void
     // visible to all dashboards
     DashboardWidgetRegistry::register(
         'events',
-        __('Upcoming Events', 'artpulse'),
+        __('Upcoming Events (Global)', 'artpulse'),
         'calendar',
         __('Global upcoming events.', 'artpulse'),
         'ap_widget_events',
@@ -634,8 +634,8 @@ function ap_register_core_dashboard_widgets(): void
 
     // visible to member, artist and organization dashboards
     DashboardWidgetRegistry::register(
-        'widget_for_you',
-        __('For You', 'artpulse'),
+        'widget_for_you_all',
+        __('For You (All)', 'artpulse'),
         'sparkles',
         __('Personalized recommendations.', 'artpulse'),
         'ap_widget_for_you',
