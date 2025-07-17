@@ -79,7 +79,10 @@ var APDashboardApp = (function (React$1, ReactDOM, Chart) {
     React$1.useEffect(function () {
       fetch('/wp-json/artpulse/v1/dashboard/messages').then(function (res) {
         if (res.status === 401 || res.status === 403) {
-          setMessages([{ id: 0, content: 'Please log in to view messages.' }]);
+          setMessages([{
+            id: 0,
+            content: 'Please log in to view messages.'
+          }]);
           return Promise.reject('unauthorized');
         }
         return res.json();

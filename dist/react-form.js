@@ -282,6 +282,7 @@
       type: "text",
       name: "name",
       placeholder: "Name",
+      "aria-label": "Your name",
       value: formData.name,
       onChange: function onChange(e) {
         return setFormData(_objectSpread2(_objectSpread2({}, formData), {}, {
@@ -292,6 +293,7 @@
       type: "email",
       name: "email",
       placeholder: "Email",
+      "aria-label": "Email address",
       value: formData.email,
       onChange: function onChange(e) {
         return setFormData(_objectSpread2(_objectSpread2({}, formData), {}, {

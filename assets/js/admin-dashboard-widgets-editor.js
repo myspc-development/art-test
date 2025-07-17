@@ -1,4 +1,4 @@
-(function (React, client) {
+(function (React$1, client) {
   'use strict';
 
   function _arrayLikeToArray(r, a) {
@@ -105,6 +105,18 @@
     }
   }
 
+  var Dashicon = function Dashicon(_ref) {
+    var icon = _ref.icon,
+      _ref$className = _ref.className,
+      className = _ref$className === void 0 ? '' : _ref$className,
+      _ref$style = _ref.style,
+      style = _ref$style === void 0 ? {} : _ref$style;
+    return /*#__PURE__*/React.createElement("span", {
+      className: "dashicons dashicons-".concat(icon, " ").concat(className),
+      style: style
+    });
+  };
+
   var _window$APDashboardWi, _window$APDashboardWi2, _window$APDashboardWi3;
   var config = ((_window$APDashboardWi = window.APDashboardWidgetsEditor) === null || _window$APDashboardWi === void 0 ? void 0 : _window$APDashboardWi.config) || [];
   var widgets = ((_window$APDashboardWi2 = window.APDashboardWidgetsEditor) === null || _window$APDashboardWi2 === void 0 ? void 0 : _window$APDashboardWi2.widgets) || [];
@@ -141,21 +153,21 @@
       onClose = _ref.onClose,
       _ref$l10n = _ref.l10n,
       l10n = _ref$l10n === void 0 ? {} : _ref$l10n;
-    var _useState = React.useState([]),
+    var _useState = React$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       schema = _useState2[0],
       setSchema = _useState2[1];
-    var _useState3 = React.useState({}),
+    var _useState3 = React$1.useState({}),
       _useState4 = _slicedToArray(_useState3, 2),
       values = _useState4[0],
       setValues = _useState4[1];
-    var _useState5 = React.useState(false),
+    var _useState5 = React$1.useState(false),
       _useState6 = _slicedToArray(_useState5, 2),
       error = _useState6[0],
       setError = _useState6[1];
     var restRoot = window.wpApiSettings && window.wpApiSettings.root || '';
     var restNonce = window.wpApiSettings && window.wpApiSettings.nonce || '';
-    React.useEffect(function () {
+    React$1.useEffect(function () {
       if (!id) return;
       setError(false);
       fetch("".concat(restRoot, "artpulse/v1/widget-settings/").concat(id), {
@@ -205,26 +217,26 @@
         }
       });
     }
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-org-modal open",
       id: "ap-widget-settings-modal"
-    }, /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React$1.createElement("div", {
       id: "ap-widget-settings-content"
-    }, /*#__PURE__*/React.createElement("button", {
+    }, /*#__PURE__*/React$1.createElement("button", {
       type: "button",
       className: "ap-form-button",
       onClick: onClose
-    }, l10n.close || 'Close'), error && /*#__PURE__*/React.createElement("p", null, "Unable to load widget settings."), /*#__PURE__*/React.createElement("form", {
+    }, l10n.close || 'Close'), error && /*#__PURE__*/React$1.createElement("p", null, "Unable to load widget settings."), /*#__PURE__*/React$1.createElement("form", {
       onSubmit: handleSubmit
     }, schema.map(function (field) {
       var _values$field$key;
       if (!field.key) return null;
       var val = (_values$field$key = values[field.key]) !== null && _values$field$key !== void 0 ? _values$field$key : field.type === 'checkbox' ? false : '';
       if (field.type === 'checkbox') {
-        return /*#__PURE__*/React.createElement("label", {
+        return /*#__PURE__*/React$1.createElement("label", {
           key: field.key,
           className: "ap-form-label"
-        }, /*#__PURE__*/React.createElement("input", {
+        }, /*#__PURE__*/React$1.createElement("input", {
           type: "checkbox",
           checked: !!val,
           onChange: function onChange(e) {
@@ -232,17 +244,17 @@
           }
         }), field.label || field.key);
       }
-      return /*#__PURE__*/React.createElement("label", {
+      return /*#__PURE__*/React$1.createElement("label", {
         key: field.key,
         className: "ap-form-label"
-      }, field.label || field.key, /*#__PURE__*/React.createElement("input", {
+      }, field.label || field.key, /*#__PURE__*/React$1.createElement("input", {
         type: field.type || 'text',
         value: val,
         onChange: function onChange(e) {
           return updateField(field.key, e.target.value);
         }
       }));
-    }), /*#__PURE__*/React.createElement("button", {
+    }), /*#__PURE__*/React$1.createElement("button", {
       type: "submit",
       className: "ap-form-button"
     }, l10n.save || 'Save'))));
@@ -256,44 +268,44 @@
       _ref2$l10n = _ref2.l10n,
       l10n = _ref2$l10n === void 0 ? {} : _ref2$l10n;
     var roleKeys = Object.keys(roles);
-    var _useState7 = React.useState(roleKeys[0] || ''),
+    var _useState7 = React$1.useState(roleKeys[0] || ''),
       _useState8 = _slicedToArray(_useState7, 2),
       activeRole = _useState8[0],
       setActiveRole = _useState8[1];
-    var _useState9 = React.useState([]),
+    var _useState9 = React$1.useState([]),
       _useState0 = _slicedToArray(_useState9, 2),
       active = _useState0[0],
       setActive = _useState0[1];
-    var _useState1 = React.useState([]),
+    var _useState1 = React$1.useState([]),
       _useState10 = _slicedToArray(_useState1, 2),
       available = _useState10[0],
       setAvailable = _useState10[1];
-    var _useState11 = React.useState('all'),
+    var _useState11 = React$1.useState('all'),
       _useState12 = _slicedToArray(_useState11, 2),
       activeCategory = _useState12[0],
       setActiveCategory = _useState12[1];
-    var categories = React.useMemo(function () {
+    var categories = React$1.useMemo(function () {
       var set = new Set();
       widgets.forEach(function (w) {
         if (w.category) set.add(w.category);
       });
       return Array.from(set);
     }, [widgets]);
-    var _useState13 = React.useState(false),
+    var _useState13 = React$1.useState(false),
       _useState14 = _slicedToArray(_useState13, 2),
       showPreview = _useState14[0],
       setShowPreview = _useState14[1];
-    var _useState15 = React.useState(null),
+    var _useState15 = React$1.useState(null),
       _useState16 = _slicedToArray(_useState15, 2),
       selectedWidget = _useState16[0],
       setSelectedWidget = _useState16[1];
-    var _useState17 = React.useState(function () {
+    var _useState17 = React$1.useState(function () {
         return JSON.parse(JSON.stringify(config));
       }),
       _useState18 = _slicedToArray(_useState17, 1),
       defaults = _useState18[0];
-    var activeRef = React.useRef(null);
-    var availRef = React.useRef(null);
+    var activeRef = React$1.useRef(null);
+    var availRef = React$1.useRef(null);
     var presets = {
       new_artist: ['membership', 'widget_for_you', 'instagram_widget', 'my-events'],
       event_organizer: ['membership', 'events', 'rsvps', 'rsvp_stats', 'local-events']
@@ -307,7 +319,7 @@
         return !ids.includes(w.id) && (activeCategory === 'all' || w.category === activeCategory);
       }));
     }
-    React.useEffect(function () {
+    React$1.useEffect(function () {
       var activeIds = config[activeRole] || [];
       var activeWidgets = widgets.filter(function (w) {
         return activeIds.includes(w.id);
@@ -318,7 +330,7 @@
       setActive(activeWidgets);
       setAvailable(availWidgets);
     }, [activeRole, activeCategory]);
-    React.useEffect(function () {
+    React$1.useEffect(function () {
       if (typeof Sortable === 'undefined') return;
       if (!activeRef.current || !availRef.current) return;
       var opts = {
@@ -438,53 +450,53 @@
         return !activeIds.includes(w.id) && (activeCategory === 'all' || w.category === activeCategory);
       }));
     }
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widgets-editor"
-    }, /*#__PURE__*/React.createElement("label", {
+    }, /*#__PURE__*/React$1.createElement("label", {
       className: "screen-reader-text",
       htmlFor: "ap-role-select"
-    }, l10n.selectRole || 'Select Role'), /*#__PURE__*/React.createElement("select", {
+    }, l10n.selectRole || 'Select Role'), /*#__PURE__*/React$1.createElement("select", {
       id: "ap-role-select",
       value: activeRole,
       onChange: function onChange(e) {
         return setActiveRole(e.target.value);
       }
     }, roleKeys.map(function (r) {
-      return /*#__PURE__*/React.createElement("option", {
+      return /*#__PURE__*/React$1.createElement("option", {
         key: r,
         value: r
       }, roles[r].name || r);
-    })), /*#__PURE__*/React.createElement("p", {
+    })), /*#__PURE__*/React$1.createElement("p", {
       className: "ap-widgets-help"
-    }, l10n.instructions), /*#__PURE__*/React.createElement("div", {
+    }, l10n.instructions), /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widgets-columns"
-    }, /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widgets-available"
-    }, /*#__PURE__*/React.createElement("h4", {
+    }, /*#__PURE__*/React$1.createElement("h4", {
       id: "ap-available-label"
-    }, l10n.availableWidgets || 'Available Widgets'), /*#__PURE__*/React.createElement("label", {
+    }, l10n.availableWidgets || 'Available Widgets'), /*#__PURE__*/React$1.createElement("label", {
       className: "screen-reader-text",
       htmlFor: "ap-category-select"
-    }, l10n.filterCategory), /*#__PURE__*/React.createElement("select", {
+    }, l10n.filterCategory), /*#__PURE__*/React$1.createElement("select", {
       id: "ap-category-select",
       value: activeCategory,
       onChange: function onChange(e) {
         return setActiveCategory(e.target.value);
       }
-    }, /*#__PURE__*/React.createElement("option", {
+    }, /*#__PURE__*/React$1.createElement("option", {
       value: "all"
     }, l10n.allCategories || 'All'), categories.map(function (c) {
-      return /*#__PURE__*/React.createElement("option", {
+      return /*#__PURE__*/React$1.createElement("option", {
         key: c,
         value: c
       }, c);
-    })), /*#__PURE__*/React.createElement("ul", {
+    })), /*#__PURE__*/React$1.createElement("ul", {
       ref: availRef,
       role: "listbox",
       "aria-labelledby": "ap-available-label"
     }, available.map(function (w, i) {
       var _w$settings;
-      return /*#__PURE__*/React.createElement("li", {
+      return /*#__PURE__*/React$1.createElement("li", {
         key: w.id,
         "data-id": w.id,
         tabIndex: 0,
@@ -496,18 +508,23 @@
           return handleKeyDown(e, i, 'available');
         },
         className: (_w$settings = w.settings) !== null && _w$settings !== void 0 && _w$settings.length ? 'ap-widget-configurable' : ''
-      }, w.name);
-    }))), /*#__PURE__*/React.createElement("div", {
+      }, /*#__PURE__*/React$1.createElement(Dashicon, {
+        icon: w.icon,
+        style: {
+          marginRight: 6
+        }
+      }), w.name);
+    }))), /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widgets-active"
-    }, /*#__PURE__*/React.createElement("h4", {
+    }, /*#__PURE__*/React$1.createElement("h4", {
       id: "ap-active-label"
-    }, l10n.activeWidgets || 'Active Widgets'), /*#__PURE__*/React.createElement("ul", {
+    }, l10n.activeWidgets || 'Active Widgets'), /*#__PURE__*/React$1.createElement("ul", {
       ref: activeRef,
       role: "listbox",
       "aria-labelledby": "ap-active-label"
     }, active.map(function (w, i) {
       var _w$settings2;
-      return /*#__PURE__*/React.createElement("li", {
+      return /*#__PURE__*/React$1.createElement("li", {
         key: w.id,
         "data-id": w.id,
         tabIndex: 0,
@@ -519,13 +536,18 @@
           return handleKeyDown(e, i, 'active');
         },
         className: (_w$settings2 = w.settings) !== null && _w$settings2 !== void 0 && _w$settings2.length ? 'ap-widget-configurable' : ''
-      }, w.name);
-    })))), /*#__PURE__*/React.createElement("div", {
+      }, /*#__PURE__*/React$1.createElement(Dashicon, {
+        icon: w.icon,
+        style: {
+          marginRight: 6
+        }
+      }), w.name);
+    })))), /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widgets-actions"
-    }, /*#__PURE__*/React.createElement("label", {
+    }, /*#__PURE__*/React$1.createElement("label", {
       className: "screen-reader-text",
       htmlFor: "ap-preset-select"
-    }, l10n.presetLabel), /*#__PURE__*/React.createElement("select", {
+    }, l10n.presetLabel), /*#__PURE__*/React$1.createElement("select", {
       id: "ap-preset-select",
       defaultValue: "",
       onChange: function onChange(e) {
@@ -534,30 +556,35 @@
           e.target.value = '';
         }
       }
-    }, /*#__PURE__*/React.createElement("option", {
+    }, /*#__PURE__*/React$1.createElement("option", {
       value: ""
-    }, l10n.presetLabel || 'Apply Preset'), /*#__PURE__*/React.createElement("option", {
+    }, l10n.presetLabel || 'Apply Preset'), /*#__PURE__*/React$1.createElement("option", {
       value: "new_artist"
-    }, l10n.presetArtist || 'New Artist'), /*#__PURE__*/React.createElement("option", {
+    }, l10n.presetArtist || 'New Artist'), /*#__PURE__*/React$1.createElement("option", {
       value: "event_organizer"
-    }, l10n.presetOrganizer || 'Event Organizer')), /*#__PURE__*/React.createElement("button", {
+    }, l10n.presetOrganizer || 'Event Organizer')), /*#__PURE__*/React$1.createElement("button", {
       className: "ap-form-button",
       onClick: handleSave
-    }, l10n.save || 'Save'), /*#__PURE__*/React.createElement("button", {
+    }, l10n.save || 'Save'), /*#__PURE__*/React$1.createElement("button", {
       className: "ap-form-button",
       onClick: function onClick() {
         return setShowPreview(!showPreview);
       }
-    }, l10n.preview || 'Preview'), /*#__PURE__*/React.createElement("button", {
+    }, l10n.preview || 'Preview'), /*#__PURE__*/React$1.createElement("button", {
       className: "ap-form-button",
       onClick: handleReset
-    }, l10n.resetDefault || 'Reset to Default')), showPreview && /*#__PURE__*/React.createElement("div", {
+    }, l10n.resetDefault || 'Reset to Default')), showPreview && /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widgets-preview"
-    }, /*#__PURE__*/React.createElement("h4", null, l10n.preview || 'Preview'), /*#__PURE__*/React.createElement("ol", null, active.map(function (w) {
-      return /*#__PURE__*/React.createElement("li", {
+    }, /*#__PURE__*/React$1.createElement("h4", null, l10n.preview || 'Preview'), /*#__PURE__*/React$1.createElement("ol", null, active.map(function (w) {
+      return /*#__PURE__*/React$1.createElement("li", {
         key: w.id
-      }, w.name);
-    }))), selectedWidget && /*#__PURE__*/React.createElement(WidgetSettingsForm, {
+      }, /*#__PURE__*/React$1.createElement(Dashicon, {
+        icon: w.icon,
+        style: {
+          marginRight: 6
+        }
+      }), w.name);
+    }))), selectedWidget && /*#__PURE__*/React$1.createElement(WidgetSettingsForm, {
       id: selectedWidget,
       onClose: function onClose() {
         return setSelectedWidget(null);
@@ -568,7 +595,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     var container = document.getElementById('admin-dashboard-widgets-editor');
     if (container && window.APDashboardWidgetsEditor) {
-      client.createRoot(container).render(/*#__PURE__*/React.createElement(WidgetsEditor, APDashboardWidgetsEditor));
+      client.createRoot(container).render(/*#__PURE__*/React$1.createElement(WidgetsEditor, APDashboardWidgetsEditor));
       console.log('Editor loaded');
     } else {
       console.error('WidgetsEditor failed: container or data missing');
