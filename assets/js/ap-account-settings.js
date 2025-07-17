@@ -17,7 +17,11 @@
       fetch(root + 'artpulse/v1/user-preferences', {
         method: 'POST',
         headers,
-        body: JSON.stringify({ notification_prefs: prefs })
+        body: JSON.stringify({
+          notification_prefs: prefs,
+          digest_frequency: form.digest_frequency.value,
+          digest_topics: form.digest_topics.value
+        })
       }).then(r => r.json()).then(() => {
         if (status) status.textContent = cfg.i18n?.saved || 'Saved';
       });

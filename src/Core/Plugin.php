@@ -31,6 +31,7 @@ use ArtPulse\Core\ReportSubscriptionManager;
 use ArtPulse\AI\GrantAssistant;
 use ArtPulse\Rest\VisitRestController;
 use ArtPulse\Rest\OrgUserRolesController;
+use ArtPulse\Core\FeedAccessLogger;
 
 class Plugin
 {
@@ -108,6 +109,7 @@ class Plugin
         add_action('init', [\ArtPulse\Community\EventChatController::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\EventVoteManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\CompetitionEntryManager::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Core\FeedAccessLogger::class, 'maybe_install_table']);
         add_action('init', [VisitTracker::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Frontend\CompetitionDashboardShortcode::class, 'register']);
         add_filter('script_loader_tag', [self::class, 'add_defer'], 10, 3);
@@ -151,6 +153,7 @@ class Plugin
             \ArtPulse\Core\FeedbackManager::install_table();
             \ArtPulse\Core\DelegatedAccessManager::install_table();
             \ArtPulse\Core\CompetitionEntryManager::install_table();
+            \ArtPulse\Core\FeedAccessLogger::install_table();
             update_option($db_version_option, self::VERSION);
         }
 
@@ -177,7 +180,7 @@ class Plugin
     {
         flush_rewrite_rules();
         wp_clear_scheduled_hook('ap_daily_expiry_check');
-        wp_clear_scheduled_hook('ap_daily_digest');
+        wp_clear_scheduled_hook('ap_send_digests');
         wp_clear_scheduled_hook('ap_process_scheduled_messages');
     }
 
@@ -218,6 +221,7 @@ class Plugin
         OrgContext::register();
         MultiOrgRoles::register();
         \ArtPulse\Core\ActivityLogger::register();
+        FeedAccessLogger::register();
         \ArtPulse\Community\CommunityRoles::register();
         \ArtPulse\Core\DelegatedAccessManager::register();
         \ArtPulse\Admin\AdminListSorting::register();

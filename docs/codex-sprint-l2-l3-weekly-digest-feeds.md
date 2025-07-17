@@ -95,6 +95,10 @@ END:VEVENT
 | Feed URLs | Public (cached) |
 | Admin previews & metrics | Staff, Partner‑tier orgs |
 
+### Implementation Notes
+- Feed responses are cached for 15 minutes via WordPress transients to reduce load.
+- Each feed request records an entry in `ap_feed_logs` for analytics charts.
+
 ## Codex Docs to Update
 - `email-digest.md`
 - `digest-preferences.md`
@@ -102,8 +106,8 @@ END:VEVENT
 - `partner-syndication-guide.md`
 
 ## Developer Sprint Checklist
-- [ ] Digest generator cron + template
-- [ ] Preferences panel live
-- [ ] iCal/JSON/RSS endpoints
-- [ ] Feed filter handling + caching
-- [ ] Analytics logs + charts
+- [x] Digest generator cron + template
+- [x] Preferences panel live
+- [x] iCal/JSON/RSS endpoints
+- [x] Feed filter handling + caching
+- [x] Analytics logs + charts
