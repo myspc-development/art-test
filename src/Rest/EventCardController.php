@@ -23,10 +23,16 @@ class EventCardController
             [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_card'],
-                'permission_callback' => fn() => is_user_logged_in(),
+                'permission_callback' => [self::class, 'check_permission'],
                 'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
             ]
         );
+    }
+
+    public static function check_permission(WP_REST_Request $request): bool
+    {
+        $nonce = $request->get_header('X-WP-Nonce');
+        return is_user_logged_in() && wp_verify_nonce($nonce, 'wp_rest');
     }
 
     public static function get_card(WP_REST_Request $request)

@@ -2,6 +2,12 @@ let myEvents = [];
 let nextEvent = null;
 let engagementPage = 1;
 const applyTheme = t => { document.body.dataset.theme = t; };
+
+function fetchEventCard(id) {
+  return fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${id}`, {
+    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+  }).then(r => r.text());
+}
 document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-dashboard');
   if (!dash) return;
@@ -402,8 +408,7 @@ function renderCalendar(events, containerId = 'ap-my-events') {
             if (containerId === 'ap-my-events') {
               dayEvents.forEach(ev => {
                 const wrap = document.createElement('div');
-                fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${ev.id}`)
-                  .then(r => r.text())
+                fetchEventCard(ev.id)
                   .then(html => {
                     wrap.innerHTML = html;
                     initCardInteractions(wrap);
@@ -449,8 +454,7 @@ function renderEventsFeed(events) {
   }
   events.forEach(ev => {
     const wrap = document.createElement('div');
-    fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${ev.id}`)
-      .then(r => r.text())
+    fetchEventCard(ev.id)
       .then(html => {
         wrap.innerHTML = html;
         initCardInteractions(wrap);
@@ -469,8 +473,7 @@ function renderRsvpEvents(list) {
   }
   list.forEach(ev => {
     const wrap = document.createElement('div');
-    fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${ev.id}`)
-      .then(r => r.text())
+    fetchEventCard(ev.id)
       .then(html => {
         wrap.innerHTML = html;
         initCardInteractions(wrap);
@@ -697,8 +700,7 @@ function highlightNextEvent(ev) {
   container.innerHTML = '';
   if (!ev) return;
   const wrap = document.createElement('div');
-  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${ev.id}`)
-    .then(r => r.text())
+  fetchEventCard(ev.id)
     .then(html => {
       wrap.innerHTML = html;
       initCardInteractions(wrap);
