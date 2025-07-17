@@ -116,6 +116,12 @@ import GridLayout from "react-grid-layout";
 </GridLayout>
 ```
 
+The plugin implementation instead uses the lightweight
+[SortableJS](https://sortablejs.github.io/Sortable/) library. The
+`assets/js/user-dashboard-layout.js` script initializes Sortable on the
+`#ap-user-dashboard` container and posts layout changes to the
+`ap_save_user_layout` AJAX action.
+
 ### 2. 💾 Store User Layout Preferences
 **Goals**
 
