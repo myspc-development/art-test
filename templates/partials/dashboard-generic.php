@@ -98,7 +98,7 @@ if (empty($layout)) {
         if (!$config || empty($config['template'])) continue;
 
         echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
-        echo '<span class="drag-handle" aria-hidden="true"></span>';
+        echo '<span class="drag-handle" role="button" tabindex="0" aria-label="Move widget"></span>';
         $template = locate_template('templates/' . $config['template']);
         if (!$template) {
             $template = plugin_dir_path(__FILE__) . '../' . $config['template'];
