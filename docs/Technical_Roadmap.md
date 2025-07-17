@@ -22,3 +22,26 @@
 ## Phase 5: QA and Deployment
 - 🔲 Write unit and integration tests
 - 🔲 Configure CI/CD for automated testing and deployment
+
+## Sprint Plan (Phase 2–5)
+
+### Sprint 5 – Auto‑Tagger & Multilingual
+- Finalize Auto‑Tagger improvements
+- Add multilingual model support
+
+### Sprint 6 – Membership & Monetization
+- Implement Ticketing & Membership systems
+- Develop Monetization tools (tip jar, Stripe/PayPal integration)
+
+### Sprint 7 – Analytics Dashboard Builder
+- Dashboard widget builder
+- Artist & org‑level insights
+- Frontend visualizations
+
+### Sprint 8 – Accessibility & Internationalization
+- Accessibility enhancements (WCAG compliance)
+- Translation file setup
+
+### Sprint 9 – Testing & Deployment
+- Write unit and integration tests
+- Configure CI/CD for automated testing and deployment
