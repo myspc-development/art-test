@@ -62,11 +62,11 @@
         },
         {
           "title": "Add error UI fallback for unauthorized users",
-          "status": "in_progress"
+          "status": "complete"
         },
         {
           "title": "Use retry or debounce in polling logic",
-          "status": "in_progress"
+          "status": "complete"
         }
       ]
     },
@@ -75,15 +75,15 @@
       "tasks": [
         {
           "title": "Create wp_ap_payouts, wp_ap_tickets tables",
-          "status": "in_progress"
+          "status": "complete"
         },
         {
           "title": "Wrap queries with existence checks",
-          "status": "in_progress"
+          "status": "complete"
         },
         {
           "title": "Log install results in install.log",
-          "status": "in_progress"
+          "status": "complete"
         }
       ]
     },
@@ -100,7 +100,7 @@
         },
         {
           "title": "Ensure REST route connects to UI",
-          "status": "in_progress"
+          "status": "complete"
         }
       ]
     },
@@ -113,11 +113,11 @@
         },
         {
           "title": "Move inline Swiper styles to external CSS",
-          "status": "in_progress"
+          "status": "complete"
         },
         {
           "title": "Enforce nonce in shortcode JS logic",
-          "status": "in_progress"
+          "status": "complete"
         }
       ]
     },
@@ -126,15 +126,15 @@
       "tasks": [
         {
           "title": "Create block.json for all relevant blocks",
-          "status": "in_progress"
+          "status": "complete"
         },
         {
           "title": "Use render_callback to reuse PHP output",
-          "status": "in_progress"
+          "status": "complete"
         },
         {
           "title": "Enqueue editor assets only when editing",
-          "status": "in_progress"
+          "status": "complete"
         }
       ]
     },
@@ -147,11 +147,11 @@
         },
         {
           "title": "Add Cypress dashboard integration tests",
-          "status": "in_progress"
+          "status": "complete"
         },
         {
           "title": "Enable WP_DEBUG and validate logs",
-          "status": "in_progress"
+          "status": "complete"
         }
       ]
     },
