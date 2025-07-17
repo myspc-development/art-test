@@ -65,18 +65,18 @@ class UserInvitationController
             $role = 'viewer';
         }
         if (!is_array($emails) || empty($emails)) {
-            return new WP_Error('invalid_emails', 'Invalid emails', ['status' => 400]);
+            return new WP_Error('invalid_emails', __('Invalid emails', 'artpulse'), ['status' => 400]);
         }
         $invited = [];
         foreach ($emails as $email) {
             $email = sanitize_email($email);
             if (!$email || !is_email($email)) {
-                return new WP_Error('invalid_emails', 'Invalid emails', ['status' => 400]);
+                return new WP_Error('invalid_emails', __('Invalid emails', 'artpulse'), ['status' => 400]);
             }
             \ArtPulse\Core\EmailService::send(
                 $email,
-                'Invitation',
-                'You are invited to organization ' . $org_id
+                __('Invitation', 'artpulse'),
+                sprintf(__('You are invited to organization %d', 'artpulse'), $org_id)
             );
             $user = get_user_by('email', $email);
             if ($user) {

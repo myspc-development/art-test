@@ -29,18 +29,18 @@ class AnalyticsPilotController
     {
         $email = sanitize_email($request['email']);
         if (!is_email($email)) {
-            return new WP_Error('invalid_email', 'Invalid email', ['status' => 400]);
+            return new WP_Error('invalid_email', __('Invalid email', 'artpulse'), ['status' => 400]);
         }
         $user = get_user_by('email', $email);
         if (!$user) {
             $user_id = wp_create_user($email, wp_generate_password(), $email);
             if (is_wp_error($user_id)) {
-                return new WP_Error('cannot_create', 'User creation failed', ['status' => 500]);
+                return new WP_Error('cannot_create', __('User creation failed', 'artpulse'), ['status' => 500]);
             }
             $user = get_user_by('id', $user_id);
         }
         if (!$user) {
-            return new WP_Error('user_error', 'User lookup failed', ['status' => 500]);
+            return new WP_Error('user_error', __('User lookup failed', 'artpulse'), ['status' => 500]);
         }
         $user->add_cap('ap_premium_member');
         EmailService::send($user->user_email, 'Analytics Pilot Access', 'You have been invited to the analytics pilot.');

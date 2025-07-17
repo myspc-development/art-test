@@ -125,7 +125,14 @@ class AutoTagger
     public static function add_suggested_tags_box(): void
     {
         foreach (['artpulse_event', 'artpulse_artist', 'post'] as $pt) {
-            add_meta_box('artpulse_suggested_tags', 'AI Suggested Tags', [self::class, 'render_suggested_tags_box'], $pt, 'side', 'high');
+            add_meta_box(
+                'artpulse_suggested_tags',
+                esc_html__('AI Suggested Tags', 'artpulse'),
+                [self::class, 'render_suggested_tags_box'],
+                $pt,
+                'side',
+                'high'
+            );
         }
     }
 
@@ -137,9 +144,9 @@ class AutoTagger
         $tags = get_post_meta($post->ID, '_suggested_tags', true);
         if ($tags && is_array($tags)) {
             echo '<p>Suggested Tags: ' . esc_html(implode(', ', $tags)) . '</p>';
-            echo '<button type="submit" name="apply_suggested_tags" class="button">Apply Suggested Tags</button>';
+            echo '<button type="submit" name="apply_suggested_tags" class="button">' . esc_html__('Apply Suggested Tags', 'artpulse') . '</button>';
         } else {
-            echo '<p>No tags suggested yet.</p>';
+            echo '<p>' . esc_html__('No tags suggested yet.', 'artpulse') . '</p>';
         }
     }
 
