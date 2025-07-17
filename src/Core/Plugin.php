@@ -415,6 +415,7 @@ class Plugin
         \ArtPulse\Personalization\WeeklyRecommendations::register();
         EventBoostManager::register();
         OrgCrmManager::register();
+        \ArtPulse\Admin\SnapshotPage::register();
         ReportSubscriptionManager::register();
         \ArtPulse\Reporting\OrgReportController::register();
         GrantAssistant::register();

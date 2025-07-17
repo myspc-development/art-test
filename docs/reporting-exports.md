@@ -13,6 +13,8 @@ Use these tools to capture real attendance numbers and generate grant-ready logs
 ## 3. Export Formats
 - CSV download for spreadsheets.
 - PDF snapshot for monthly grant reports.
+- Scheduled reports email these files automatically each week or month.
+- Manual snapshots can be generated under **ArtPulse → Settings → Snapshots**.
 
 ## Developer Checklist
 - `/analytics` endpoints expose turnout and engagement data.
