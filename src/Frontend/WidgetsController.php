@@ -16,22 +16,12 @@ class WidgetsController
         register_rest_route('widgets', '/embed.js', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'embed'],
-            'permission_callback' => function() {
-                if (!current_user_can('read')) {
-                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                }
-                return true;
-            },
+            'permission_callback' => '__return_true',
         ]);
         register_rest_route('widgets', '/render', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'render'],
-            'permission_callback' => function() {
-                if (!current_user_can('read')) {
-                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                }
-                return true;
-            },
+            'permission_callback' => '__return_true',
         ]);
     }
 
@@ -47,49 +37,37 @@ class WidgetsController
 
     public static function render(WP_REST_Request $request): WP_REST_Response
     {
-        $type   = sanitize_key($request['type']);
-        $id     = (int) $request['id'];
-        $style  = sanitize_key($request['style']);
-        $color  = sanitize_hex_color($request['color'] ?? '#333');
-        $layout = sanitize_key($request['layout'] ?? 'list');
+        $org    = absint($request->get_param('org'));
+        $tag    = sanitize_text_field($request->get_param('tag'));
+        $region = sanitize_text_field($request->get_param('region'));
+        $limit  = min(20, absint($request->get_param('limit') ?: 5));
+        $theme  = $request->get_param('theme') === 'dark' ? 'dark' : 'light';
+        $layout = in_array($request->get_param('layout'), ['cards','grid','list'], true) ? $request->get_param('layout') : 'list';
+        $compact = filter_var($request->get_param('compact'), FILTER_VALIDATE_BOOLEAN);
 
-        $events = [];
-        if ($type === 'artist') {
-            $events = get_posts([
-                'post_type'      => 'artpulse_event',
-                'post_status'    => 'publish',
-                'posts_per_page' => 5,
-                'author'         => $id,
-            ]);
-        } elseif ($type === 'gallery') {
-            $events = get_posts([
-                'post_type'      => 'artpulse_event',
-                'post_status'    => 'publish',
-                'posts_per_page' => 5,
-                'meta_key'       => '_ap_event_organization',
-                'meta_value'     => $id,
-            ]);
+        $args = [
+            'post_type'      => 'artpulse_event',
+            'post_status'    => 'publish',
+            'posts_per_page' => $limit,
+        ];
+        $meta_query = [];
+        if ($org) {
+            $meta_query[] = [ 'key' => '_ap_event_organization', 'value' => $org ];
         }
-
-        $container_style = $layout === 'horizontal' ? 'display:flex;flex-wrap:wrap' : '';
+        if ($region) {
+            $meta_query[] = [ 'key' => 'event_state', 'value' => $region ];
+        }
+        if ($meta_query) { $args['meta_query'] = $meta_query; }
+        if ($tag) { $args['tag'] = $tag; }
+        $events = get_posts($args);
 
         ob_start();
-        echo '<html><head><meta charset="utf-8">';
-        echo '<style>body{margin:0;font-family:sans-serif}';
-        echo '.ap-item{padding:8px;border-bottom:1px solid #eee}';
-        if ($layout === 'horizontal') {
-            echo '.ap-item{border:none;margin-right:8px}';
+        $template = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/embed/' . $layout . '.php';
+        if (file_exists($template)) {
+            include $template;
         }
-        echo '.ap-item a{color:' . esc_attr($color) . ';text-decoration:none}';
-        echo '</style></head><body><div>';
-        foreach ($events as $event) {
-            echo '<div class="ap-item">';
-            echo '<a href="' . esc_url(get_permalink($event)) . '" target="_blank">' . esc_html($event->post_title) . '</a>';
-            echo '</div>';
-        }
-        echo '</div></body></html>';
         $html = ob_get_clean();
-        $headers = ['Cache-Control' => 'public,max-age=3600'];
-        return new WP_REST_Response($html, 200, $headers);
+        \ArtPulse\Analytics\EmbedAnalytics::log(md5($org.$tag.$region.$layout.$limit), 0, 'view');
+        return new WP_REST_Response($html, 200, ['Cache-Control' => 'public,max-age=3600']);
     }
 }

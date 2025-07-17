@@ -64,18 +64,18 @@ CREATE TABLE ap_embed_logs (
 - Stats available at `/wp-admin?page=org-embed-stats`
 
 ## QA Checklist
-- [ ] Embed loads without login
-- [ ] Filters work (e.g. organization only)
-- [ ] Style reflects parameters
-- [ ] Clicks tracked properly
-- [ ] Admin preview matches embed
+- [x] Embed loads without login
+- [x] Filters work (e.g. organization only)
+- [x] Style reflects parameters
+- [x] Clicks tracked properly
+- [x] Admin preview matches embed
 
 ## Developer Sprint Checklist
-- [ ] Widget iframe/script endpoint
-- [ ] Filter parser for query parameters
-- [ ] Layout templates built
-- [ ] Embed builder UI page
-- [ ] Analytics log and stats view
+- [x] Widget iframe/script endpoint
+- [x] Filter parser for query parameters
+- [x] Layout templates built
+- [x] Embed builder UI page
+- [x] Analytics log and stats view
 
 ## Codex Docs to Update
 - `embed-widgets.md`

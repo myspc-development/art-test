@@ -23,6 +23,24 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-api-keys.php'; }
     );
 
+    add_submenu_page(
+        'tools.php',
+        'Embed Builder',
+        'Embed Builder',
+        'manage_options',
+        'ap-embed-builder',
+        function () { include __DIR__ . '/page-embed-builder.php'; }
+    );
+
+    add_submenu_page(
+        'tools.php',
+        'Embed Stats',
+        'Embed Stats',
+        'manage_options',
+        'ap-embed-stats',
+        function () { include __DIR__ . '/page-embed-stats.php'; }
+    );
+
 });
 
 // Redirect old Roles Matrix slug to the modern page
