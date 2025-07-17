@@ -42,10 +42,11 @@ class UpdatesTab
      */
     private static function do_update()
     {
-        $opts = self::get_repo_info();
-        $repo = $opts['url'];
+        $opts  = self::get_repo_info();
+        $repo  = $opts['url'];
+        $token = $opts['token'];
 
-        return self::zip_release_update($repo);
+        return self::zip_release_update($repo, $token);
     }
 
     private static function parse_repo(string $url): array
@@ -67,11 +68,14 @@ class UpdatesTab
 
     private static function get_repo_info(): array
     {
-        $opts = get_option('artpulse_settings', []);
+        $opts      = get_option('artpulse_settings', []);
+        $legacyUrl = $opts['github_repo'] ?? ($opts['update_repo_url'] ?? '');
+        $legacyTok = $opts['update_access_token'] ?? '';
+
         return [
-            'url'    => $opts['github_repo'] ?? ($opts['update_repo_url'] ?? ''),
+            'url'    => get_option('ap_github_repo_url') ?: $legacyUrl,
             'branch' => $opts['update_branch'] ?? 'main',
-            'token'  => $opts['update_access_token'] ?? '',
+            'token'  => get_option('ap_github_token') ?: $legacyTok,
         ];
     }
 
@@ -206,19 +210,24 @@ class UpdatesTab
     /**
      * Download the latest GitHub release ZIP and replace plugin files.
      */
-    private static function zip_release_update(string $repo)
+    private static function zip_release_update(string $repo, string $token = '')
     {
         if (empty($repo)) {
             return new \WP_Error('no_repo', 'GitHub repo not configured.');
         }
 
+        $headers = [
+            'Accept'     => 'application/vnd.github+json',
+            'User-Agent' => 'ArtPulse-Updater',
+        ];
+        if ($token) {
+            $headers['Authorization'] = 'token ' . $token;
+        }
+
         $response = wp_remote_get(
             "https://api.github.com/repos/{$repo}/releases/latest",
             [
-                'headers' => [
-                    'Accept'     => 'application/vnd.github+json',
-                    'User-Agent' => 'ArtPulse-Updater',
-                ],
+                'headers' => $headers,
             ]
         );
         if (is_wp_error($response)) {
@@ -235,7 +244,7 @@ class UpdatesTab
 
         include_once ABSPATH . 'wp-admin/includes/file.php';
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
-        $tmp = download_url($download);
+        $tmp = download_url($download, 300, '', ['headers' => $headers]);
         if (is_wp_error($tmp)) {
             return $tmp;
         }

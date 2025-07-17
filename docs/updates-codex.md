@@ -5,6 +5,7 @@ This guide outlines how the plugin's Updates tab downloads new versions from Git
 ## Settings
 - **GitHub Repo URL** – full repository link such as
   `https://github.com/your-org/artpulse-plugin`.
+- **GitHub Access Token** – optional token for private repositories.
 - **Auto-Update** – if enabled, a daily cron job calls the updater.
   Leaving the URL blank disables update checks.
 
@@ -15,8 +16,9 @@ This guide outlines how the plugin's Updates tab downloads new versions from Git
 
 ```php
 private static function do_update(): bool|\WP_Error {
-    $repo = get_option('ap_github_repo_url');
-    return self::zip_release_update($repo);
+    $repo  = get_option('ap_github_repo_url');
+    $token = get_option('ap_github_token');
+    return self::zip_release_update($repo, $token);
 }
 ```
 
