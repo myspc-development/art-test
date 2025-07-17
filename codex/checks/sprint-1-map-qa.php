@@ -1,5 +1,24 @@
 <?php
-require_once dirname(__DIR__, 2) . '/wp-load.php';
+$plugin_root = dirname(__DIR__, 2);
+$wp_candidates = [
+    $plugin_root . '/wordpress/wp-load.php',
+    $plugin_root . '/wp-load.php',
+    dirname($plugin_root) . '/wp-load.php',
+    dirname($plugin_root, 2) . '/wp-load.php',
+    dirname($plugin_root, 3) . '/wp-load.php',
+];
+$wp_loaded = false;
+foreach ( $wp_candidates as $candidate ) {
+    if ( file_exists( $candidate ) ) {
+        require_once $candidate;
+        $wp_loaded = true;
+        break;
+    }
+}
+if ( ! $wp_loaded ) {
+    fwrite( STDERR, "Could not locate wp-load.php\n" );
+    exit( 1 );
+}
 
 $errors = [];
 
