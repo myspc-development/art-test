@@ -479,9 +479,29 @@ The zip file is placed in the `release/` directory.
 ### WebSocket Server
 
 The real-time message server uses a JWT for authentication. Set the
-`JWT_SECRET` environment variable to a long random string before running
-`server/ws-server.js`. Startup aborts if this variable is missing or
-shorter than ten characters.
+`JWT_SECRET` environment variable to a long random string before running the
+server. You can start it with `node server/ws-server.js` or via the npm script
+`npm run ws`.
+
+To configure the server create a `.env` file in the project root. Define the
+secret and optionally the port:
+
+```bash
+JWT_SECRET=change_me_to_a_long_random_string
+# PORT=3001
+```
+
+`JWT_SECRET` must be at least ten characters long or the server will abort at
+startup. If `PORT` is omitted the server defaults to `3001`.
+
+#### Troubleshooting
+
+- **Cannot connect:** ensure the server is running and that clients are using
+  the correct WebSocket URL including the port value.
+- **Unauthorized errors:** verify the JWT used by the client was signed with the
+  same `JWT_SECRET` set for the server.
+- **Connection closed immediately:** some corporate proxies and firewalls block
+  WebSocket traffic. Try another network or adjust proxy settings.
 
 ### Test Environment Variables
 
