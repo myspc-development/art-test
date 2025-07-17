@@ -7,6 +7,8 @@
 - [Sprint L1: Embeddable Widgets](./codex-sprint-l1-embeddable-widgets.md)
 - [Widget Chapters](./codex-chapters/README.md)
 - [User Dashboard Customization](./user-dashboard-customization.md)
+- [ArtPulse Member Dashboard Roadmap](./ArtPulse_Member_Dashboard_Roadmap.md)
+- [Organizer Dashboard Roadmap](./Organizer_Dashboard_Roadmap.md)
 
 
 

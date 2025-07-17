@@ -62,6 +62,24 @@ Parameters mirror the shortcode filters:
 Results are cached for five minutes using a transient keyed by the request
 parameters. The cache is flushed whenever related posts are updated.
 
+### `GET /artpulse/v1/events/nearby`
+
+Return events within a geographic radius.
+
+Parameters:
+- `lat` (number, required) – latitude
+- `lng` (number, required) – longitude
+- `radius` (number, default `50`) – search radius in kilometers
+- `limit` (int, default `20`)
+
+Example request:
+
+```bash
+curl '/wp-json/artpulse/v1/events/nearby?lat=40.7&lng=-74.0&radius=10'
+```
+
+Each event includes the distance in kilometers.
+
 ### `GET /artpulse/v1/event/{id}/comments`
 
 Retrieve approved comments for an event.
