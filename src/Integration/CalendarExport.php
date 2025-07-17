@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Integration;
 
+use ArtPulse\Core\FeedAccessLogger;
+
 class CalendarExport
 {
     public static function register(): void
@@ -18,6 +20,8 @@ class CalendarExport
         add_rewrite_rule('^feeds/ical/artist/([0-9]+)\\.ics$', 'index.php?ap_ics_artist=$matches[1]', 'top');
         add_rewrite_rule('^feeds/ical/gallery/([0-9]+)\\.ics$', 'index.php?ap_ics_org=$matches[1]', 'top');
         add_rewrite_rule('^feeds/ical/all\\.ics$', 'index.php?ap_ics_all=1', 'top');
+        add_rewrite_rule('^feeds/events\\.json$', 'index.php?ap_json_feed=1', 'top');
+        add_rewrite_rule('^feeds/events\\.xml$', 'index.php?ap_rss_feed=1', 'top');
     }
 
     public static function register_query_vars(array $vars): array
@@ -26,6 +30,8 @@ class CalendarExport
         $vars[] = 'ap_ics_org';
         $vars[] = 'ap_ics_artist';
         $vars[] = 'ap_ics_all';
+        $vars[] = 'ap_json_feed';
+        $vars[] = 'ap_rss_feed';
         return $vars;
     }
 
@@ -35,6 +41,8 @@ class CalendarExport
         $org_id    = get_query_var('ap_ics_org');
         $artist_id = get_query_var('ap_ics_artist');
         $all_feed  = get_query_var('ap_ics_all');
+        $json_feed = get_query_var('ap_json_feed');
+        $rss_feed  = get_query_var('ap_rss_feed');
 
         if ($event_id) {
             self::output_event(intval($event_id));
@@ -44,6 +52,10 @@ class CalendarExport
             self::output_artist(intval($artist_id));
         } elseif ($all_feed) {
             self::output_all();
+        } elseif ($json_feed) {
+            self::output_json_feed();
+        } elseif ($rss_feed) {
+            self::output_rss_feed();
         }
     }
 
@@ -97,17 +109,113 @@ class CalendarExport
 
     private static function output_all(): void
     {
-        $events = get_posts([
-            'post_type'      => 'artpulse_event',
-            'post_status'    => 'publish',
-            'posts_per_page' => -1,
-        ]);
+        $events = self::query_events();
 
         header('Content-Type: text/calendar; charset=utf-8');
         $filename = 'all-events.ics';
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         echo self::build_all_ics($events);
         exit;
+    }
+
+    private static function output_json_feed(): void
+    {
+        $hash = md5($_SERVER['REQUEST_URI']);
+        $cached = get_transient('ap_feed_' . $hash);
+        if ($cached !== false) {
+            header('Content-Type: application/json');
+            echo $cached;
+            FeedAccessLogger::log('json', $hash, get_current_user_id());
+            exit;
+        }
+        $events = self::query_events();
+        $items = [];
+        foreach ($events as $event) {
+            $items[] = [
+                'id'    => $event->ID,
+                'title' => $event->post_title,
+                'start' => get_post_meta($event->ID, 'event_start_date', true),
+                'end'   => get_post_meta($event->ID, 'event_end_date', true),
+                'url'   => get_permalink($event),
+            ];
+        }
+        $json = wp_json_encode($items);
+        set_transient('ap_feed_' . $hash, $json, 15 * MINUTE_IN_SECONDS);
+        header('Content-Type: application/json');
+        echo $json;
+        FeedAccessLogger::log('json', $hash, get_current_user_id());
+        exit;
+    }
+
+    private static function output_rss_feed(): void
+    {
+        $hash = md5($_SERVER['REQUEST_URI']);
+        $cached = get_transient('ap_feed_' . $hash);
+        if ($cached !== false) {
+            header('Content-Type: application/rss+xml; charset=utf-8');
+            echo $cached;
+            FeedAccessLogger::log('rss', $hash, get_current_user_id());
+            exit;
+        }
+        $events = self::query_events();
+        ob_start();
+        echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        echo "<rss version=\"2.0\"><channel>";
+        echo '<title>ArtPulse Events</title>';
+        echo '<link>' . esc_url(home_url()) . '</link>';
+        foreach ($events as $event) {
+            echo '<item>';
+            echo '<title>' . esc_html($event->post_title) . '</title>';
+            echo '<link>' . esc_url(get_permalink($event)) . '</link>';
+            $date = get_post_meta($event->ID, 'event_start_date', true);
+            echo '<pubDate>' . gmdate('r', strtotime($date)) . '</pubDate>';
+            echo '<description>' . esc_html(wp_trim_words($event->post_content, 20)) . '</description>';
+            echo '</item>';
+        }
+        echo '</channel></rss>';
+        $rss = ob_get_clean();
+        set_transient('ap_feed_' . $hash, $rss, 15 * MINUTE_IN_SECONDS);
+        header('Content-Type: application/rss+xml; charset=utf-8');
+        echo $rss;
+        FeedAccessLogger::log('rss', $hash, get_current_user_id());
+        exit;
+    }
+
+    private static function query_events(): array
+    {
+        $args = [
+            'post_type'      => 'artpulse_event',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'meta_query'     => [],
+            'tax_query'      => [],
+        ];
+        if (!empty($_GET['org'])) {
+            $args['meta_query'][] = [
+                'key'   => '_ap_event_organization',
+                'value' => absint($_GET['org']),
+            ];
+        }
+        if (!empty($_GET['region'])) {
+            $args['meta_query'][] = [
+                'key'   => 'event_state',
+                'value' => sanitize_text_field($_GET['region']),
+            ];
+        }
+        if (!empty($_GET['tag'])) {
+            $args['tax_query'][] = [
+                'taxonomy' => 'post_tag',
+                'field'    => 'slug',
+                'terms'    => sanitize_text_field($_GET['tag']),
+            ];
+        }
+        if (empty($args['tax_query'])) {
+            unset($args['tax_query']);
+        }
+        if (empty($args['meta_query'])) {
+            unset($args['meta_query']);
+        }
+        return get_posts($args);
     }
 
     private static function build_event_ics(\WP_Post $event): string
