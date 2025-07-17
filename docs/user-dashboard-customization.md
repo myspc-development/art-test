@@ -2,6 +2,8 @@
 
 This document explains how ArtPulse stores each user's dashboard layout, which REST and AJAX actions are involved, and the expected widget schema. It supplements the [User Dashboard Layout Codex](./user-dashboard-layout-codex.md).
 
+Dashboards for members, artists and organizations are all rendered through the `[ap_user_dashboard]` shortcode. Each role has a default widget order but individual users can rearrange and hide widgets to suit their needs. The saved layout is restored whenever they return to their dashboard.
+
 ## Layout Storage
 
 - **Per user:** Layouts are stored in the `ap_dashboard_layout` user meta key. Visibility settings live in `ap_widget_visibility`.
