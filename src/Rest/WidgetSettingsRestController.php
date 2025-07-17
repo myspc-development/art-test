@@ -39,7 +39,7 @@ class WidgetSettingsRestController
         $schema = DashboardWidgetRegistry::get_widget_schema($id);
 
         if (empty($schema)) {
-            return new WP_Error('invalid_widget', 'Unknown widget.', ['status' => 404]);
+            return new WP_Error('invalid_widget', __('Unknown widget.', 'artpulse'), ['status' => 404]);
         }
 
         $settings = $global
@@ -68,7 +68,7 @@ class WidgetSettingsRestController
         $schema = DashboardWidgetRegistry::get_widget_schema($id);
 
         if (empty($schema)) {
-            return new WP_Error('invalid_widget', 'Unknown widget.', ['status' => 404]);
+            return new WP_Error('invalid_widget', __('Unknown widget.', 'artpulse'), ['status' => 404]);
         }
 
         $raw = (array) $request->get_param('settings');
@@ -92,7 +92,7 @@ class WidgetSettingsRestController
 
         if ($global) {
             if (!current_user_can('manage_options')) {
-                return new WP_Error('forbidden', 'Permission denied', ['status' => 403]);
+                return new WP_Error('forbidden', __('Permission denied', 'artpulse'), ['status' => 403]);
             }
             update_option('ap_widget_settings_' . $id, $sanitized);
         } else {

@@ -51,7 +51,7 @@ class VisitRestController
     {
         $event_id = absint($req->get_param('event_id'));
         if (!$event_id || get_post_type($event_id) !== 'artpulse_event') {
-            return new WP_Error('invalid_event', 'Invalid event.', ['status' => 400]);
+            return new WP_Error('invalid_event', __('Invalid event.', 'artpulse'), ['status' => 400]);
         }
         $institution = sanitize_text_field($req->get_param('institution') ?: '');
         $group_size  = absint($req->get_param('group_size') ?: 1);
