@@ -12,4 +12,11 @@ class PortfolioPreviewBlock {
         }
         register_block_type_from_metadata(__DIR__ . '/../../blocks/widgets/portfolio-preview');
     }
+
+    public static function render_callback($attributes) {
+        if (class_exists('ArtPulse\\Widgets')) {
+            return \ArtPulse\Widgets::render_portfolio_box();
+        }
+        return '';
+    }
 }

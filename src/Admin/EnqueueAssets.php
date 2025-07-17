@@ -29,7 +29,7 @@ class EnqueueAssets {
         }
 
         $screen = get_current_screen();
-        if (!$screen) {
+        if (!$screen || (method_exists($screen, 'is_block_editor') && !$screen->is_block_editor())) {
             return;
         }
 
@@ -115,6 +115,11 @@ class EnqueueAssets {
 
     public static function enqueue_block_editor_styles() {
         if (!defined('ARTPULSE_PLUGIN_FILE')) {
+            return;
+        }
+
+        $screen = get_current_screen();
+        if (!$screen || (method_exists($screen, 'is_block_editor') && !$screen->is_block_editor())) {
             return;
         }
 

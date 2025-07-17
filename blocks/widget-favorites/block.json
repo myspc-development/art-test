@@ -7,5 +7,5 @@
   "supports": {"html": false},
   "editorScript": "file:./editor.js",
   "style": "file:../../assets/css/min/dashboard-widget.css",
-  "render": "file:./render.php"
+  "render": "ArtPulse\\Blocks\\FavoritesWidgetBlock::render_callback"
 }
