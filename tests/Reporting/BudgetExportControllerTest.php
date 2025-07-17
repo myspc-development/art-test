@@ -54,4 +54,24 @@ class BudgetExportControllerTest extends \WP_UnitTestCase
         $this->assertSame(200, $res->get_status());
         $this->assertSame('text/csv', $res->get_headers()['Content-Type']);
     }
+
+    public function test_merge_across_events_sums_totals(): void
+    {
+        $id2 = self::factory()->post->create([
+            'post_type'   => 'artpulse_event',
+            'post_status' => 'publish',
+        ]);
+        update_post_meta($id2, 'ap_budget_lines', [
+            ['estimated' => 200, 'actual' => 200],
+        ]);
+
+        $req = new WP_REST_Request('GET', '/artpulse/v1/budget/export');
+        $req->set_param('event_ids', $this->event_id . ',' . $id2);
+        $req->set_param('format', 'csv');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $csv = $res->get_data();
+        $this->assertStringContainsString('Estimated Total', $csv);
+        $this->assertStringContainsString('350', $csv);
+    }
 }

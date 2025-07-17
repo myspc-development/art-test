@@ -33,11 +33,11 @@ Use this template after each event to summarize reach and engagement. Reports ca
 - [x] Budget worksheet saves line items
 - [x] Export includes all totals
 - [x] Impact reports generate PDF/CSV
-- [ ] Data merges across events when requested
+- [x] Data merges across events when requested
 
 ## Developer Sprint Checklist
-- [ ] Template storage API live
-- [ ] Editing UI with formula support
+- [x] Template storage API live
+- [x] Editing UI with formula support
 - [x] Export pipeline for budget & impact tables
 - [x] Documentation updated
 

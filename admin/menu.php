@@ -32,6 +32,15 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-api-keys.php'; }
     );
 
+    // Budget & Impact templates page
+    add_menu_page(
+        'Report Templates',
+        'Report Templates',
+        'manage_options',
+        'ap-report-templates',
+        function () { include __DIR__ . '/page-report-templates.php'; }
+    );
+
 });
 
 // Redirect old Roles Matrix slug to the modern page
@@ -52,6 +61,18 @@ add_action('admin_enqueue_scripts', function ($hook) {
             true
         );
         wp_localize_script('ap-messages-js', 'wpApiSettings', [
+            'nonce' => wp_create_nonce('wp_rest'),
+        ]);
+    } elseif ($hook === 'toplevel_page_ap-report-templates') {
+        wp_enqueue_script(
+            'ap-report-template-editor',
+            plugin_dir_url(__FILE__) . '../assets/js/report-template-editor.js',
+            ['jquery'],
+            false,
+            true
+        );
+        wp_localize_script('ap-report-template-editor', 'wpApiSettings', [
+            'root'  => esc_url_raw(rest_url()),
             'nonce' => wp_create_nonce('wp_rest'),
         ]);
     }
