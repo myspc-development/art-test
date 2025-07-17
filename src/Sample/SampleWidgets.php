@@ -6,7 +6,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 class SampleWidgets {
     public static function register(): void {
         DashboardWidgetRegistry::register(
-            'welcome_widget',
+            'sample_welcome_widget',
             'Welcome Message',
             '👋',
             'Intro greeting for new users.',
