@@ -22,6 +22,8 @@ use ArtPulse\Blocks\WidgetEmbedBlock;
 use ArtPulse\Frontend\ReactDashboardShortcode;
 use ArtPulse\Marketplace\MarketplaceManager;
 use ArtPulse\Marketplace\AuctionManager;
+use ArtPulse\Community\ReferralManager;
+use ArtPulse\Core\BadgeRules;
 use ArtPulse\Core\VisitTracker;
 use ArtPulse\Core\MultiOrgRoles;
 use ArtPulse\Core\OrgContext;
@@ -385,6 +387,8 @@ class Plugin
         \ArtPulse\Monetization\DonationLink::register();
         \ArtPulse\Monetization\DonationManager::register();
         \ArtPulse\Monetization\TipManager::register();
+        ReferralManager::register();
+        BadgeRules::register();
         \ArtPulse\Marketplace\MarketplaceManager::register();
         \ArtPulse\Marketplace\AuctionManager::register();
         \ArtPulse\Marketplace\PromotionManager::register();
