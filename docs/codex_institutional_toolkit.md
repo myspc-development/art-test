@@ -58,7 +58,7 @@ All endpoints return JSON objects with success or error messages. The export rou
 
 The first screen appears on the event edit page for organizers to quickly record class attendance. The second is a paginated log listing all visits with an export button.
 
-## Developer Checklist
+## Dev Checklist
 - Table `ap_event_checkins` stores event ID, user ID, institution, group size and timestamp.
 - `VisitTracker` installs the table on activation and logs visits.
 - `VisitRestController` exposes the REST routes above.

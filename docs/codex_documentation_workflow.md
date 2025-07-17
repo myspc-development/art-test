@@ -33,12 +33,6 @@ After cleanup, evaluate readiness of these groups:
 | **K5–K6** | Mobile Crawl Night Add-ons | Verify check-ins and route saving integration |
 | **O1–O2** | Metrics & Export Engine | Ensure event logs support analytics and CSV exports |
 
-### Recommended Focus Choices
-- **N1: Class Visit Tracking** – Extends existing check-in logic for schools.
-- **M5: Curator Call for Submissions** – Builds upon curator tools for open curation.
-- **K5: Crawl Mode MVP** – Connects nearby map, QR flows and field logging.
-- **O1: Reporting Snapshot Builder** – Provides admins quick grant reporting.
-
 ## Latest Cleanup Summary
 This summary lists documentation updates completed during the latest audit.
 
@@ -56,3 +50,7 @@ Create these summaries when the audit is complete:
 - [`codex_index.md`](./codex_index.md) listing modules, sprint status and intended user.
 - [`codex_sprint_readiness.md`](./codex_sprint_readiness.md) marking which sprints are spec-complete or blocked.
 
+## Dev Checklist
+- Generate updated `codex_index.md` after each merge
+- Remove duplicate sprint tables across docs
+- Flag files that still contain `[🚧 Sprint Needed]`
