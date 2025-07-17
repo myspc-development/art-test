@@ -6,6 +6,7 @@
 - [Sprint 4: Polish + Documentation](./codex-sprint-4-polish-docs.md)
 - [Sprint L1: Embeddable Widgets](./codex-sprint-l1-embeddable-widgets.md)
 - [Widget Chapters](./codex-chapters/README.md)
+- [User Dashboard Customization](./user-dashboard-customization.md)
 
 
 
