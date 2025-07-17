@@ -6,6 +6,7 @@ class OrgCrmManager
     public static function register(): void
     {
         add_action('init', [self::class, 'maybe_install_tables']);
+        add_action('init', [\ArtPulse\Crm\TaggingRules::class, 'register']);
     }
 
     public static function install_tables(): void

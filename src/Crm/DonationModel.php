@@ -14,6 +14,8 @@ class DonationModel
             'method'     => sanitize_text_field($method),
             'donated_at' => current_time('mysql'),
         ]);
+
+        do_action('ap_donation_recorded', $org_id, $user_id, $amount);
     }
 
     public static function get_by_org(int $org_id): array

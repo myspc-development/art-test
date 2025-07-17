@@ -135,6 +135,9 @@ WordPress will display an “unexpected output” warning if this file is missin
 ### Class Visit Check-Ins
 Institutions can scan a QR code or submit a form to log visits. Each check-in records the institution name and group size for the event organizer. Visit logs can be exported as CSV from the dashboard for grant reports.
 
+### CRM & Donor Tools
+Contacts are automatically logged when members interact with your organization. RSVPs add the `rsvp` tag, follows add the `follower` tag and donations add the `donor` tag. View and export these contacts from the CRM tab in the dashboard.
+
 ### Event Calendar
 - The calendar view shows all upcoming events by day.
 - Click any event to see a popup with venue, address, time, and RSVP/favorite options.
