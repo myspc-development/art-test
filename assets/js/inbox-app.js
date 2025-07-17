@@ -18,7 +18,13 @@
       if (APInbox.threadId) {
         fetch(APInbox.apiRoot + 'artpulse/v1/messages/thread?id=' + APInbox.threadId, {
           headers: { 'X-WP-Nonce': APInbox.nonce }
-        }).then(r => r.json()).then(setMessages);
+        }).then(res => {
+          if (res.status === 401 || res.status === 403) {
+            setMessages([{ id: 0, content: 'Please log in to view this thread.' }]);
+            return Promise.reject('unauthorized');
+          }
+          return res.json();
+        }).then(setMessages).catch(() => {});
       }
     }, []);
 

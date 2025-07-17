@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const inbox = document.getElementById("ap-inbox");
 
-  const maxRetries = 3;
-  let attempt = 0;
+
 
   function loadMessages(delay = 0) {
     setTimeout(() => {
