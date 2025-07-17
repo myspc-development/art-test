@@ -168,6 +168,14 @@ class DashboardWidgetRegistry {
         self::include_template( 'widgets/widget-for-you.php' );
     }
 
+    public static function render_widget_nearby_events_map(): void {
+        self::include_template( 'widgets/nearby-events-map.php' );
+    }
+
+    public static function render_widget_my_favorites(): void {
+        self::include_template( 'widgets/my-favorites.php' );
+    }
+
     /**
      * Retrieve a widget configuration by ID.
      */
@@ -328,6 +336,22 @@ class DashboardWidgetRegistry {
             'icon'        => 'dashicons-thumbs-up',
             'description' => __( 'Recommended content.', 'artpulse' ),
             'callback'    => [ self::class, 'render_widget_for_you' ],
+            'roles'       => [ 'member', 'artist' ],
+        ] );
+        $register( 'widget_nearby_events_map', [
+            'id'          => 'widget_nearby_events_map',
+            'label'       => __( 'Nearby Events', 'artpulse' ),
+            'icon'        => 'dashicons-location-alt',
+            'description' => __( 'Events around your location.', 'artpulse' ),
+            'callback'    => [ self::class, 'render_widget_nearby_events_map' ],
+            'roles'       => [ 'member', 'artist' ],
+        ] );
+        $register( 'widget_my_favorites', [
+            'id'          => 'widget_my_favorites',
+            'label'       => __( 'My Favorite Events', 'artpulse' ),
+            'icon'        => 'dashicons-star-empty',
+            'description' => __( 'Your saved events.', 'artpulse' ),
+            'callback'    => [ self::class, 'render_widget_my_favorites' ],
             'roles'       => [ 'member', 'artist' ],
         ] );
         do_action( 'artpulse_register_dashboard_widget' );

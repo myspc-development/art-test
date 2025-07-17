@@ -35,6 +35,7 @@ use ArtPulse\AI\GrantAssistant;
 use ArtPulse\Rest\VisitRestController;
 use ArtPulse\Rest\OrgUserRolesController;
 use ArtPulse\Core\FeedAccessLogger;
+use ArtPulse\Rest\NearbyEventsController;
 
 class Plugin
 {
@@ -306,6 +307,7 @@ class Plugin
         \ArtPulse\Rest\UserAccountRestController::register();
         \ArtPulse\Rest\CollectionRestController::register();
         \ArtPulse\Rest\ArtworkAuctionController::register();
+        \ArtPulse\Rest\NearbyEventsController::register();
         \ArtPulse\Rest\SpotlightRestController::register();
         \ArtPulse\Rest\SpotlightAnalyticsController::register();
         \ArtPulse\Rest\CurrentUserController::register();

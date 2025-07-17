@@ -100,6 +100,21 @@ class PostTypeRegistrar
                 'supports'   => ['title', 'editor', 'thumbnail'],
                 'menu_icon'  => 'dashicons-awards',
             ],
+            'ap_message' => [
+                'label'      => __('Messages', 'artpulse'),
+                'rewrite'    => ['slug' => 'messages'],
+                'supports'   => ['title', 'editor', 'author'],
+                'show_in_rest' => true,
+                'menu_icon'  => 'dashicons-email',
+            ],
+            'ap_news_item' => [
+                'label'      => __('News Items', 'artpulse'),
+                'rewrite'    => ['slug' => 'news'],
+                'supports'   => ['title', 'editor', 'thumbnail'],
+                'show_in_rest' => true,
+                'public'     => true,
+                'menu_icon'  => 'dashicons-megaphone',
+            ],
         ];
 
         $opts              = get_option('artpulse_settings', []);

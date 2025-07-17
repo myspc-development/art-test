@@ -96,3 +96,33 @@
 - [ ] RSS Feed ingestion for external art news
 - [ ] iCal export for RSVP’d events
 - [ ] Mentioning other users in comments via `@username` autocomplete
+
+---
+
+## Implementation Notes
+
+- **Backend setup:** Register the new post types in `src/Core/Plugin.php` and add
+  custom meta fields for geolocation, capacity and RSVP status.  REST routes can
+  be defined in `UserDashboardManager::registerRestRoutes()` or a dedicated
+  route class.
+- **Widget integration:** Build the React widgets under `assets/js/widgets/` and
+  register them with `DashboardWidgetRegistry::register()`. They will then be
+  available in the admin Widget Editor.
+- **Dashboard layout:** The file `assets/js/user-dashboard-layout.js` already
+  initializes SortableJS. Layout changes are saved via the
+  `/wp-json/artpulse/v1/ap_dashboard_layout` endpoint as described in
+  `docs/user-dashboard-customization.md`.
+- **Testing:** Extend PHPUnit tests under `tests/` for new endpoints and add
+  Jest/Cypress tests for the widgets.
+- **Documentation:** Update the Admin Widget Editor Guide and User Guide whenever
+  new widgets or endpoints are added.
+
+## Completion Plan
+
+1. Implement the Phase 1 post types and REST endpoints.
+2. Develop the discovery and favorites widgets from Phase 2 and register them in
+   the dashboard.
+3. Add messaging functionality and RSVP controls as outlined in Phase 3.
+4. Include sharing widgets (Phase 4) and feed recommendations (Phase 5).
+5. Expand test coverage and finalize documentation during Phase 6.
+6. Evaluate and implement optional enhancements as resources allow.

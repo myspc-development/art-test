@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import ChatWidget from './components/ChatWidget.jsx';
 import QaWidget from './components/QaWidget.jsx';
 import TicketWidget from './components/TicketWidget.jsx';
+import initNearbyEventsMapWidget from './widgets/NearbyEventsMapWidget.jsx';
+import initMyFavoritesWidget from './widgets/MyFavoritesWidget.jsx';
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.ap-event-chat[data-event-id]').forEach(el => {
@@ -20,5 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.ap-tickets[data-event-id]').forEach(el => {
     const root = createRoot(el);
     root.render(<TicketWidget eventId={el.dataset.eventId} />);
+  });
+
+  document.querySelectorAll('.ap-nearby-events-widget[data-api-root]').forEach(el => {
+    initNearbyEventsMapWidget(el);
+  });
+
+  document.querySelectorAll('.ap-favorites-widget[data-api-root]').forEach(el => {
+    initMyFavoritesWidget(el);
   });
 });
