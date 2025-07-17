@@ -5,13 +5,16 @@ add_action('admin_menu', function () {
     add_menu_page('Inbox', 'Inbox', 'read', 'ap-user-inbox', function () {
         include __DIR__ . '/page-user-inbox.php';
     });
+
     // Simple organization reports page for exporting budgets
     add_menu_page(
         'Organization Reports',
         'Org Reports',
         'manage_options',
         'ap-org-reports',
-        function () { include __DIR__ . '/page-org-reports.php'; }
+        function () {
+            include __DIR__ . '/page-org-reports.php';
+        }
     );
 
     // Organization CRM dashboard
@@ -20,7 +23,9 @@ add_action('admin_menu', function () {
         'CRM',
         'manage_options',
         'ap-org-crm',
-        function () { include __DIR__ . '/page-org-crm.php'; }
+        function () {
+            include __DIR__ . '/page-org-crm.php';
+        }
     );
 
     // Partner API key management
@@ -29,12 +34,10 @@ add_action('admin_menu', function () {
         'API Keys',
         'manage_options',
         'ap-api-keys',
-        function () { include __DIR__ . '/page-api-keys.php'; }
+        function () {
+            include __DIR__ . '/page-api-keys.php';
+        }
     );
-
-
-    );
-
 });
 
 // Redirect old Roles Matrix slug to the modern page
@@ -71,4 +74,3 @@ add_action('admin_enqueue_scripts', function ($hook) {
         ]);
     }
 });
-
