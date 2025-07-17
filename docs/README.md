@@ -20,8 +20,28 @@
 
 | Task | Status |
 | --- | --- |
-| Audit script run with no failures | ❌ (missing wp-load) |
+| Audit script run with no failures | ✅ after setup |
 | Missing items implemented or logged | ❌ |
 | Markdown created with required sections | ✅ |
 | Partner version exported (PDF/Google Doc) | ✅ |
 | Linked in Codex index | ✅ |
+
+### Running Codex Audit Checks
+
+The PHP scripts under `codex/checks/` verify each sprint module. They need a
+WordPress installation so that `wp-load.php` can be loaded. Run the environment
+setup script from the plugin root to download WordPress and install dependencies:
+
+```bash
+./scripts/setup-env.sh
+```
+
+After this completes you can run a check with:
+
+```bash
+php codex/checks/sprint-1-map-qa.php
+```
+
+Each script automatically searches for `wp-load.php` relative to the plugin
+directory, so the checks work both inside an existing WordPress site and in a
+local environment created with the setup script.
