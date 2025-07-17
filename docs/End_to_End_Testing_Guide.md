@@ -1,7 +1,7 @@
 # ArtPulse End-to-End Testing Guide
 
 This guide explains how to run the automated browser tests powered by
-[Puppeteer](https://pptr.dev/). These tests simulate common user flows so you
+[Cypress](https://www.cypress.io/). These tests simulate common user flows so you
 can verify that the plugin works correctly across updates.
 
 ## Prerequisites
@@ -19,22 +19,30 @@ npm install
 
 ## Running the Tests
 
-Set environment variables for your WordPress user and then run the test script:
+Set environment variables for your WordPress user and then run Cypress:
 
 ```bash
-WP_USER=admin WP_PASS=password npm run test:e2e
+CYPRESS_WP_USER=admin CYPRESS_WP_PASS=password npx cypress run
 ```
 
-The script launches a headless browser, logs in and visits a sample artist
-profile. It verifies that the tip jar modal is accessible. Logs are printed to
-stdout and the browser closes automatically when the test finishes.
+Or open the interactive runner:
+
+```bash
+npx cypress open
+```
+
+If you need seed data such as sample messages run:
+
+```bash
+wp db import data/message-seed.sql
+```
 
 ## Notes
 
-- The tests assume your site is reachable at `http://localhost:8000`. Set the
-  `BASE_URL` environment variable to use a different address.
+- The tests assume your site is reachable at `http://localhost:8000`. Set
+  `CYPRESS_BASE_URL` to use a different address.
 - Ensure your site has a page available at `/artists/sample-artist/` or update
-  the test script accordingly.
-- When developing new features, extend the Puppeteer script with additional
+  the tests accordingly.
+- When developing new features, extend the Cypress suite with additional
   checks for monetization workflows such as requesting commissions or managing
   subscriptions.
