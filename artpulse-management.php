@@ -203,8 +203,8 @@ add_action('init', function () {
 });
 
 add_action('init', function () {
-    \ArtPulse\Admin\DashboardWidgetTools::register();
-
+    // DashboardWidgetTools::register() already runs via SettingsPage::register()
+    // so avoid calling it twice here to prevent duplicate menu entries.
     \ArtPulse\Core\DashboardWidgetRegistry::register(
         'hello-world',
         __('Hello World', 'artpulse'),
