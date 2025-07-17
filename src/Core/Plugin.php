@@ -403,6 +403,7 @@ class Plugin
         OrgCrmManager::register();
         ReportSubscriptionManager::register();
         GrantAssistant::register();
+        \ArtPulse\Rest\GrantReportController::register();
         add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
         \ArtPulse\Rest\EventManagementController::register();
     }

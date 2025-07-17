@@ -14,6 +14,15 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-org-reports.php'; }
     );
 
+    // Organization CRM dashboard
+    add_menu_page(
+        'CRM',
+        'CRM',
+        'manage_options',
+        'ap-org-crm',
+        function () { include __DIR__ . '/page-org-crm.php'; }
+    );
+
     // Partner API key management
     add_menu_page(
         'API Keys',
