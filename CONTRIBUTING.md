@@ -9,6 +9,7 @@ npx husky install      # activate Git hooks
 npm run build          # compile JavaScript assets
 bash scripts/setup-env.sh
 ```
+The script uses `svn` to download WordPress. Install Subversion if the command is missing.
 The `setup-env.sh` script will also install Composer dependencies when the
 `CI` environment variable is present, allowing automated test pipelines to run
 without a separate install step.

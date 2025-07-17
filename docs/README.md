@@ -36,6 +36,7 @@ setup script from the plugin root to download WordPress and install dependencies
 ```bash
 ./scripts/setup-env.sh
 ```
+This script requires the `svn` command to download the WordPress test suite. Install Subversion if it is not available.
 
 After this completes you can run a check with:
 

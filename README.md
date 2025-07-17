@@ -448,6 +448,7 @@ setup script to fetch WordPress and install dependencies:
 ```bash
 bash scripts/setup-env.sh
 ```
+The script requires the `svn` command. Install Subversion if it is not available.
 This script downloads WordPress and installs Composer dependencies. When the
 `CI` environment variable is present it runs `composer install` with non‑interactive options, making it suitable for automated pipelines.
 
