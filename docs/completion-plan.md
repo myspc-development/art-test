@@ -3,7 +3,9 @@
 This outline lists remaining tasks for the upcoming milestone.
 
 ## In Progress
-_(none)_
+- Reporting snapshot builder
+- Curator call UI design
+- Cypress dashboard integration tests
 
 ## Completed
 - Multi‑Org Roles & Permissions dashboard wiring
@@ -16,9 +18,8 @@ _(none)_
 - PHPUnit tests for REST & widgets
 
 ## Blocked
-- Reporting snapshot builder
-- Curator call UI design
+(none)
 
 ## Not Started
-- Cypress dashboard integration tests
+(none)
 
