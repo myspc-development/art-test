@@ -234,6 +234,11 @@ class DirectMessages
 
     public static function send(WP_REST_Request $req): WP_REST_Response|WP_Error
     {
+        $nonce = $req->get_param('nonce');
+        if (!$nonce || !wp_verify_nonce($nonce, 'wp_rest')) {
+            return new WP_Error('rest_forbidden', 'Unauthorized.', ['status' => 403]);
+        }
+
         $sender_id    = get_current_user_id();
         $recipient_id = absint($req['recipient_id']);
         $content      = wp_kses_post($req['content']);

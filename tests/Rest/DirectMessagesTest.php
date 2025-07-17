@@ -73,6 +73,16 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $this->assertSame('Hello', $data[0]['content']);
     }
 
+    public function test_send_rejects_invalid_nonce(): void
+    {
+        $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
+        $post->set_param('recipient_id', $this->user2);
+        $post->set_param('content', 'Hello');
+        $post->set_param('nonce', 'bad');
+        $res = rest_get_server()->dispatch($post);
+        $this->assertSame(403, $res->get_status());
+    }
+
     public function test_list_conversations_and_mark_read(): void
     {
         $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
