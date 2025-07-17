@@ -73,6 +73,7 @@ class EventCalendarShortcode
             'events'    => ap_get_events_for_calendar(),
             'rest_root' => esc_url_raw(rest_url()),
             'close_text' => __('Close', 'artpulse'),
+            'nonce'      => wp_create_nonce('wp_rest'),
         ]);
     }
 

@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var events = (window.APCalendar && window.APCalendar.events) ? window.APCalendar.events : [];
   var restRoot = (window.APCalendar && window.APCalendar.rest_root) || (window.wpApiSettings && window.wpApiSettings.root) || '/wp-json/';
+  var nonce = (window.APCalendar && window.APCalendar.nonce) || '';
 
   var params = new URLSearchParams(window.location.search);
   if (!params.has('lat') && navigator.geolocation) {
@@ -66,7 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
     events: events,
     eventClick: function(info) {
       info.jsEvent.preventDefault();
-      fetch(restRoot + 'artpulse/v1/event-card/' + info.event.id)
+      fetch(restRoot + 'artpulse/v1/event-card/' + info.event.id, {
+        headers: nonce ? { 'X-WP-Nonce': nonce } : {}
+      })
         .then(function(res){ return res.text(); })
         .then(function(html){ showPopover(html, info.jsEvent.pageX, info.jsEvent.pageY, info.event.url); })
         .catch(function(){ window.open(info.event.url, '_blank'); });
