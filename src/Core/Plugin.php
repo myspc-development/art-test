@@ -297,6 +297,7 @@ class Plugin
         \ArtPulse\Rest\OrgAnalyticsController::register();
         \ArtPulse\Rest\ProfileMetricsController::register();
         \ArtPulse\Rest\AnalyticsRestController::register();
+        \ArtPulse\Rest\AnalyticsPilotController::register();
         \ArtPulse\Rest\ShareController::register();
         \ArtPulse\Rest\PaymentReportsController::register();
         \ArtPulse\Rest\UserAccountRestController::register();
