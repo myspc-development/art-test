@@ -13,8 +13,8 @@ This phase introduces mechanisms that encourage long-term usage and loyalty acro
 Send a weekly email with nearby or followed events.
 
 ### Implementation
-- Opt-in user meta `digest_enabled`
-- Weekly cron `ap_send_weekly_digest`
+- Opt-in user meta `ap_digest_frequency`
+- Daily cron `ap_daily_digest` checks frequency
 - Match events by follows, tags and region
 - Email template listing title, image and RSVP button
 
@@ -42,7 +42,7 @@ Central hub for mentions, follows and admin messages.
 
 ### Components
 - `ap_notifications` table
-- REST: `GET /artpulse/v1/inbox`, `POST /artpulse/v1/inbox/mark-read`
+- REST: `GET /artpulse/v1/inbox`, `POST /artpulse/v1/inbox/read`, `POST /artpulse/v1/inbox/unread`
 - `InboxPanel.jsx` lists messages with links to events or profiles
 
 ## G5. Creator Toolkit
@@ -57,8 +57,8 @@ Shown when creators have
 Offers actions like featuring an event or embedding a widget.
 
 ## Developer Checklist
-- [ ] Weekly digest email + opt-in
-- [ ] Badge rules and display
-- [ ] Referral codes and tracking
-- [ ] Notifications REST and inbox UI
-- [ ] Creator tips component
+- [x] Weekly digest email + opt-in
+- [x] Badge rules and display
+- [x] Referral codes and tracking
+- [x] Notifications REST and inbox UI
+- [x] Creator tips component
