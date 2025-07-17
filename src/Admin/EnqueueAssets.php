@@ -365,6 +365,12 @@ class EnqueueAssets {
                 [],
                 file_exists($swiper_css_path) ? filemtime($swiper_css_path) : null
             );
+            wp_enqueue_style(
+                'ap-swiper',
+                plugins_url('assets/css/swiper.css', ARTPULSE_PLUGIN_FILE),
+                ['swiper-css'],
+                filemtime($plugin_dir . '/assets/css/swiper.css')
+            );
             wp_enqueue_script(
                 'swiper-js',
                 plugins_url('assets/libs/swiper/swiper-bundle.min.js', ARTPULSE_PLUGIN_FILE),
@@ -389,6 +395,12 @@ class EnqueueAssets {
                 [],
                 file_exists($swiper_css_path) ? filemtime($swiper_css_path) : null
             );
+            wp_enqueue_style(
+                'ap-swiper',
+                plugins_url('assets/css/swiper.css', ARTPULSE_PLUGIN_FILE),
+                ['swiper-css'],
+                filemtime($plugin_dir . '/assets/css/swiper.css')
+            );
             wp_enqueue_script(
                 'swiper-js',
                 plugins_url('assets/libs/swiper/swiper-bundle.min.js', ARTPULSE_PLUGIN_FILE),
@@ -412,6 +424,12 @@ class EnqueueAssets {
                 plugins_url('assets/libs/swiper/swiper-bundle.min.css', ARTPULSE_PLUGIN_FILE),
                 [],
                 file_exists($swiper_css_path) ? filemtime($swiper_css_path) : null
+            );
+            wp_enqueue_style(
+                'ap-swiper',
+                plugins_url('assets/css/swiper.css', ARTPULSE_PLUGIN_FILE),
+                ['swiper-css'],
+                filemtime($plugin_dir . '/assets/css/swiper.css')
             );
             wp_enqueue_script(
                 'swiper-js',
