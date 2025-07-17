@@ -183,6 +183,23 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
 
 For detailed purchase flows see the [Monetization & Ticketing Codex](monetization-ticketing-codex.md).
 
+### `POST /artpulse/v1/event/{id}/ticket-tier`
+
+Create a new ticket tier for an event.
+Parameters:
+- `id` (int, required)
+- `name` (string, required)
+- `price` (decimal, default `0`)
+- `inventory` (int, default `0`)
+
+### `PUT /artpulse/v1/ticket-tier/{tier_id}`
+
+Update an existing ticket tier. Accepts the same parameters as the POST route but all are optional.
+
+### `DELETE /artpulse/v1/ticket-tier/{tier_id}`
+
+Delete a ticket tier.
+
 ### `GET /artpulse/v1/user/payouts`
 
 Return payout history and current balance for the logged in artist.
@@ -207,6 +224,18 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' -d 'method=stripe' \
 ```
 
 Refer to the [Financial Overview & Payout Codex](financial-overview-codex.md) for reporting and payout processing.
+
+### `GET /artpulse/v1/membership-levels`
+
+Return configured membership levels. Requires admin permissions.
+
+### `POST /artpulse/v1/membership-levels`
+
+Add a new membership level. Parameter `level` is required.
+
+### `DELETE /artpulse/v1/membership-levels/{level}`
+
+Remove the specified membership level.
 
 ### `GET /artpulse/v1/org/{id}/webhooks`
 
