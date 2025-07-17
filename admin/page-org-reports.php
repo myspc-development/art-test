@@ -40,6 +40,27 @@ function ap_render_org_reports_page() {
                 </tbody>
             </table>
         <?php endif; ?>
+
+        <h2><?php esc_html_e('Manual Report Download', 'artpulse'); ?></h2>
+        <form method="get" action="<?php echo esc_url(rest_url('artpulse/v1/orgs/' . $org_id . '/report')); ?>">
+            <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('wp_rest')); ?>" />
+            <label><?php esc_html_e('Type', 'artpulse'); ?>
+                <select name="type">
+                    <option value="engagement">Engagement</option>
+                    <option value="donors">Donors</option>
+                    <option value="grant">Grant</option>
+                </select>
+            </label>
+            <label><?php esc_html_e('Format', 'artpulse'); ?>
+                <select name="format">
+                    <option value="csv">CSV</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </label>
+            <label><?php esc_html_e('From', 'artpulse'); ?> <input type="date" name="from"></label>
+            <label><?php esc_html_e('To', 'artpulse'); ?> <input type="date" name="to"></label>
+            <button class="button button-primary" type="submit"><?php esc_html_e('Download', 'artpulse'); ?></button>
+        </form>
     </div>
     <?php
 }
