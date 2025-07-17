@@ -34,6 +34,10 @@ class EventViewCounter
 
         if (is_singular('artpulse_event')) {
             EventMetrics::log_metric($post->ID, 'view');
+            if (\ArtPulse\Monetization\EventBoostManager::is_boosted($post->ID)) {
+                $b = (int) get_post_meta($post->ID, 'boosted_views', true);
+                update_post_meta($post->ID, 'boosted_views', $b + 1);
+            }
         }
     }
 
