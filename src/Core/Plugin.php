@@ -410,6 +410,7 @@ class Plugin
         ReportSubscriptionManager::register();
         \ArtPulse\Reporting\OrgReportController::register();
         GrantAssistant::register();
+        \ArtPulse\Rest\GrantReportController::register();
         add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
         \ArtPulse\Rest\EventManagementController::register();
     }
