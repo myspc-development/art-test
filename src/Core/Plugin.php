@@ -555,6 +555,14 @@ class Plugin
         );
 
         wp_enqueue_script(
+            'ap-react-widgets',
+            plugins_url('assets/js/react-widgets.bundle.js', ARTPULSE_PLUGIN_FILE),
+            ['react', 'react-dom', 'wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_enqueue_script(
             'ap-forum-js',
             plugins_url('assets/js/ap-forum.js', ARTPULSE_PLUGIN_FILE),
             ['wp-element', 'wp-api-fetch'],
@@ -634,6 +642,11 @@ class Plugin
         ]);
 
         wp_localize_script('ap-qa-thread', 'APQa', [
+            'apiRoot' => esc_url_raw(rest_url()),
+            'nonce'   => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_localize_script('ap-react-widgets', 'APTickets', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
         ]);

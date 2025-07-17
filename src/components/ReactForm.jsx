@@ -30,6 +30,7 @@ const ReactForm = ({ type = 'default' }) => {
         type="text"
         name="name"
         placeholder="Name"
+        aria-label="Your name"
         value={formData.name}
         onChange={e => setFormData({ ...formData, name: e.target.value })}
       />
@@ -37,6 +38,7 @@ const ReactForm = ({ type = 'default' }) => {
         type="email"
         name="email"
         placeholder="Email"
+        aria-label="Email address"
         value={formData.email}
         onChange={e => setFormData({ ...formData, email: e.target.value })}
       />

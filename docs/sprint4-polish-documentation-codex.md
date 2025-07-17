@@ -80,12 +80,12 @@ Package internal implementation and integration documentation for dev onboarding
 ### Developer Sprint Checklist
 | Task | Status |
 | --- | --- |
-| React UI polished for chat, ticketing, Q&A | ☐ |
-| Mobile responsiveness tested site-wide | ☐ |
-| Accessibility reviewed and ARIA added | ☐ |
-| Codex split into Markdown chapters | ☐ |
+| React UI polished for chat, ticketing, Q&A | ✅ |
+| Mobile responsiveness tested site-wide | ✅ |
+| Accessibility reviewed and ARIA added | ✅ |
+| Codex split into Markdown chapters | ✅ |
 | Partner API doc (Swagger/OpenAPI) generated | ✅ |
-| Diagrams added (UML, flowcharts) | ☐ |
+| Diagrams added (UML, flowcharts) | ✅ |
 
 ### Bonus Suggestions
 - Add `/status` endpoint: shows build version, DB migrations.

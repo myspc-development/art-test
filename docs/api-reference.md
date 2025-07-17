@@ -2,6 +2,8 @@
 
 This guide documents the REST API endpoints available for third-party integration.
 
+Additional examples are organized by topic under [API Chapters](api-chapters/README.md).
+
 ## Authentication
 
 Use WordPress nonce authentication for logged-in users or application passwords for external services.

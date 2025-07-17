@@ -57,6 +57,12 @@ const configs = [
     { react: 'React', 'react-dom': 'ReactDOM' }
   ),
   createConfig(
+    'assets/js/react-widgets.js',
+    'assets/js/react-widgets.bundle.js',
+    'APReactWidgets',
+    { react: 'React', 'react-dom/client': 'ReactDOM' }
+  ),
+  createConfig(
     'assets/js/ap-org-roles.js',
     'assets/js/ap-org-roles.bundle.js',
     'APOrgRoles',

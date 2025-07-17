@@ -28,9 +28,10 @@ class QaThreadShortcode {
         $atts = shortcode_atts(['id' => get_the_ID()], $atts, 'ap_event_qa');
         $event_id = intval($atts['id']);
         if (!$event_id) return '';
+        $can_post = is_user_logged_in();
         ob_start();
         ?>
-        <div class="ap-qa-thread" data-event-id="<?= esc_attr($event_id); ?>">
+        <div class="ap-qa-thread" data-event-id="<?= esc_attr($event_id); ?>" data-can-post="<?= $can_post ? '1' : '0'; ?>">
             <ul class="ap-qa-list"></ul>
             <?php if (is_user_logged_in()): ?>
                 <form class="ap-qa-form"><textarea required name="content"></textarea><button type="submit">Post</button></form>
