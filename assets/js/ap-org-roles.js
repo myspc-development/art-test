@@ -10,15 +10,9 @@
         const [changes, setChanges] = useState({});
 
         useEffect(() => {
-            fetch(`/wp-json/artpulse/v1/org-roles?org_id=${ArtPulseOrgRoles.orgId}`, {
-                headers: {
-                    'X-WP-Nonce': ArtPulseData.rest_nonce,
-                },
+            apiFetch({
+                path: `${ArtPulseOrgRoles.api_path}?org_id=${ArtPulseOrgRoles.orgId}`,
             })
-                .then((res) => {
-                    if (!res.ok) throw new Error(`API returned ${res.status}`);
-                    return res.json();
-                })
                 .then((data) => {
                     setRoles(Array.isArray(data.roles) ? data.roles : []);
                     setUsers(Array.isArray(data.users) ? data.users : []);
@@ -36,13 +30,10 @@
         };
 
         const saveChanges = () => {
-            fetch('/wp-json/artpulse/v1/org-roles/update', {
+            apiFetch({
+                path: ArtPulseOrgRoles.api_path + '/update',
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-WP-Nonce': ArtPulseData.rest_nonce,
-                },
-                body: JSON.stringify({ org_id: ArtPulseOrgRoles.orgId, roles: changes }),
+                data: { org_id: ArtPulseOrgRoles.orgId, roles: changes },
             });
         };
 

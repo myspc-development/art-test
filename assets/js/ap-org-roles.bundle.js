@@ -112,13 +112,8 @@
         changes = _useState6[0],
         setChanges = _useState6[1];
       useEffect(function () {
-        fetch("/wp-json/artpulse/v1/org-roles?org_id=".concat(ArtPulseOrgRoles.orgId), {
-          headers: {
-            'X-WP-Nonce': ArtPulseData.rest_nonce
-          }
-        }).then(function (res) {
-          if (!res.ok) throw new Error("API returned ".concat(res.status));
-          return res.json();
+        apiFetch({
+          path: "".concat(ArtPulseOrgRoles.api_path, "?org_id=").concat(ArtPulseOrgRoles.orgId)
         }).then(function (data) {
           setRoles(Array.isArray(data.roles) ? data.roles : []);
           setUsers(Array.isArray(data.users) ? data.users : []);
@@ -141,16 +136,13 @@
         });
       };
       var saveChanges = function saveChanges() {
-        fetch('/wp-json/artpulse/v1/org-roles/update', {
+        apiFetch({
+          path: ArtPulseOrgRoles.api_path + '/update',
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WP-Nonce': ArtPulseData.rest_nonce
-          },
-          body: JSON.stringify({
+          data: {
             org_id: ArtPulseOrgRoles.orgId,
             roles: changes
-          })
+          }
         });
       };
       if (!Array.isArray(roles) || roles.length === 0) {
