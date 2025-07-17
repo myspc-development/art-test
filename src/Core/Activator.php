@@ -45,6 +45,8 @@ class Activator
         // Ensure role hierarchy table exists and populated
         RoleSetup::maybe_install_table();
         OrgCommunicationsCenter::install_messages_table();
+        require_once ARTPULSE_PLUGIN_DIR . 'includes/db-schema.php';
+        \ArtPulse\DB\create_monetization_tables();
         \ArtPulse\Admin\ScheduledMessageManager::install_scheduled_table();
 
         // Create indexes to speed up membership lookups
