@@ -84,12 +84,12 @@ Only `org_admin` or `report_manager` roles may manage subscriptions or trigger e
 - Multiple subscribers per org supported
 
 ## Developer Sprint Checklist
-- [ ] `ap_org_report_subscriptions` table created
-- [ ] Report generator for three types
-- [ ] Scheduled delivery cron live
+- [x] `ap_org_report_subscriptions` table created
+- [x] Report generator for three types
+- [x] Scheduled delivery cron live
 - [ ] PDF generator for grant reports
-- [ ] Admin UI for managing subscriptions
-- [ ] REST route for manual download
+- [x] Admin UI for managing subscriptions
+- [x] REST route for manual download
 
 ## Codex Docs to Update
 - Reporting System
