@@ -52,7 +52,7 @@ function ap_register_business_dashboard_widgets(): void
 
     DashboardWidgetRegistry::register(
         'sales_summary',
-        __('Sales Summary', 'artpulse'),
+        __('Sales Summary (Admin)', 'artpulse'),
         'chart-pie',
         __('Sales totals for the selected period.', 'artpulse'),
         'ap_widget_sales_summary',
