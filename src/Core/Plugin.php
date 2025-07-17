@@ -38,7 +38,7 @@ use ArtPulse\Core\FeedAccessLogger;
 
 class Plugin
 {
-    private const VERSION = '1.3.13';
+    private const VERSION = '1.3.14';
 
     public static function register(): void
     {

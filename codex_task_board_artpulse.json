@@ -7,7 +7,7 @@
       "tasks": [
         {
           "title": "Validate all dashboard widgets",
-          "status": "in_progress"
+          "status": "done"
         },
         {
           "title": "Add fallback renderers for missing callbacks",
@@ -24,7 +24,7 @@
       "tasks": [
         {
           "title": "Integrate ArtistOverviewPanel, OrgRolesPanel, SystemStatusPanel",
-          "status": "in_progress"
+          "status": "done"
         },
         {
           "title": "Ensure REST data returned from /artist, /org-roles, /status",
@@ -32,7 +32,7 @@
         },
         {
           "title": "Remove or disable legacy PHP widgets if React panels exist",
-          "status": "pending"
+          "status": "done"
         }
       ]
     },
@@ -41,7 +41,7 @@
       "tasks": [
         {
           "title": "Add permission_callback to all REST endpoints",
-          "status": "in_progress"
+          "status": "done"
         },
         {
           "title": "Ensure /messages and /conversations block unauth users",
@@ -49,7 +49,7 @@
         },
         {
           "title": "Test all endpoints manually with REST console",
-          "status": "pending"
+          "status": "done"
         }
       ]
     },
@@ -58,15 +58,15 @@
       "tasks": [
         {
           "title": "Fix 403 REST errors on message endpoints",
-          "status": "pending"
+          "status": "done"
         },
         {
           "title": "Add error UI fallback for unauthorized users",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "title": "Use retry or debounce in polling logic",
-          "status": "pending"
+          "status": "in_progress"
         }
       ]
     },
@@ -75,15 +75,15 @@
       "tasks": [
         {
           "title": "Create wp_ap_payouts, wp_ap_tickets tables",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "title": "Wrap queries with existence checks",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "title": "Log install results in install.log",
-          "status": "pending"
+          "status": "in_progress"
         }
       ]
     },
@@ -117,7 +117,7 @@
         },
         {
           "title": "Enforce nonce in shortcode JS logic",
-          "status": "pending"
+          "status": "in_progress"
         }
       ]
     },
@@ -126,15 +126,15 @@
       "tasks": [
         {
           "title": "Create block.json for all relevant blocks",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "title": "Use render_callback to reuse PHP output",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "title": "Enqueue editor assets only when editing",
-          "status": "pending"
+          "status": "in_progress"
         }
       ]
     },
@@ -143,7 +143,7 @@
       "tasks": [
         {
           "title": "Add PHPUnit tests for REST & widgets",
-          "status": "in_progress"
+          "status": "done"
         },
         {
           "title": "Add Cypress dashboard integration tests",
@@ -168,7 +168,7 @@
         },
         {
           "title": "Add CHANGELOG.md and bump version",
-          "status": "in_progress"
+          "status": "done"
         }
       ]
     }

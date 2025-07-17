@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.14
+- Documentation updates and task status refinements.
+
 ## 1.3.13
 - Added community analytics dashboard with REST endpoints for messages, comments and forums.
 

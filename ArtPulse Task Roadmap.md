@@ -15,8 +15,8 @@ A living document to track major tasks across the project.
 
 | Task ID | Task Title | Description | Status |
 |--------|-------------|-------------|--------|
-| NLP1 | Improve Tag Suggestions | Refine algorithm for style and genre detection. | 🔲 |
-| NLP2 | Multilingual Support | Train models for additional languages. | 🔲 |
+| NLP1 | Improve Tag Suggestions | Refine algorithm for style and genre detection. | ⏳ |
+| NLP2 | Multilingual Support | Train models for additional languages. | ⏳ |
 
 ---
 
@@ -34,7 +34,7 @@ A living document to track major tasks across the project.
 | Task ID | Task Title | Description | Status |
 |--------|-------------|-------------|--------|
 | TE1 | Setup PHPUnit & Bootstrap | Create `phpunit.xml` and bootstrap WordPress testing framework. | ✅ |
-| TE2 | Write Unit Tests | Add tests for post tagging and plugin activation. | ⏳ |
+| TE2 | Write Unit Tests | Add tests for post tagging and plugin activation. | ✅ |
 
 ---
 
@@ -43,7 +43,7 @@ A living document to track major tasks across the project.
 | Task ID | Task Title | Description | Status |
 |--------|-------------|-------------|--------|
 | I1 | Add Language Files | Include `.pot` and translation files. | ✅ |
-| A1 | Keyboard Navigation | Ensure admin pages are fully keyboard-accessible. | 🔲 |
+| A1 | Keyboard Navigation | Ensure admin pages are fully keyboard-accessible. | ⏳ |
 
 ---
 
@@ -51,7 +51,7 @@ A living document to track major tasks across the project.
 
 | Task ID | Task Title | Description | Status |
 |--------|-------------|-------------|--------|
-| R1 | CHANGELOG Updates | Document all notable changes for release. | ⏳ |
+| R1 | CHANGELOG Updates | Document all notable changes for release. | ✅ |
 | R2 | Uninstall Cleanup | Remove plugin data on uninstall. | ✅ |
 
-Last updated: July 16, 2025
+Last updated: July 17, 2025
