@@ -22,10 +22,10 @@ class EventsSliderShortcode
             null
         );
         wp_enqueue_style(
-            'ap-swiper-shortcodes',
-            $plugin_url . 'assets/css/swiper-shortcodes.css',
+            'ap-swiper',
+            $plugin_url . 'assets/css/swiper.css',
             ['swiper-css'],
-            filemtime(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/css/swiper-shortcodes.css')
+            filemtime(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/css/swiper.css')
         );
         wp_enqueue_script(
             'swiper-js',
