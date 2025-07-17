@@ -14,7 +14,7 @@ Example response:
 
 ```json
 {
-  "plugin_version": "1.3.14",
+  "plugin_version": "1.3.15",
   "db_version": "1.4.0",
   "cache": "Enabled",
   "debug": false
