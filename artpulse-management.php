@@ -252,6 +252,25 @@ function ap_install_tables() {
     if (version_compare($installed, '1.4.0', '<')) {
         require_once __DIR__ . '/includes/db-schema.php';
         \ArtPulse\DB\create_monetization_tables();
+        \ArtPulse\Core\MultiOrgRoles::maybe_install_table();
+
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_org_user_roles';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            error_log("❌ Failed to create table $table");
+            add_action('admin_notices', static function () use ($table) {
+                printf(
+                    '<div class="notice notice-error"><p>%s</p></div>',
+                    esc_html(sprintf(
+                        /* translators: %s: table name */
+                        __('ArtPulse table %s could not be created. Check database permissions.', 'artpulse'),
+                        $table
+                    ))
+                );
+            });
+        }
+
         update_option('ap_db_version', '1.4.0');
     }
 }
