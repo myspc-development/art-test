@@ -16,8 +16,9 @@ function ap_render_api_keys_page()
     if (isset($_POST['ap_create_api_key']) && check_admin_referer('ap_create_api_key')) {
         $scopes = sanitize_text_field($_POST['scopes'] ?? 'read:events');
         $key    = bin2hex(random_bytes(16));
+        $hash   = hash('sha256', $key);
         $wpdb->insert($table, [
-            'api_key'    => $key,
+            'key_hash'   => $hash,
             'scopes'     => $scopes,
             'created_at' => current_time('mysql'),
         ]);
@@ -39,7 +40,8 @@ function ap_render_api_keys_page()
     $view_scopes = '';
     if (isset($_POST['ap_view_scopes']) && check_admin_referer('ap_view_scopes')) {
         $key = sanitize_text_field($_POST['key']);
-        $sql = $wpdb->prepare("SELECT scopes FROM $table WHERE api_key = %s", $key);
+        $hash = hash('sha256', $key);
+        $sql  = $wpdb->prepare("SELECT scopes FROM $table WHERE key_hash = %s", $hash);
         $view_scopes = $wpdb->get_var($sql);
         if ($view_scopes === null) {
             ap_add_admin_notice(__('Key not found.', 'artpulse'), 'error');
@@ -77,7 +79,7 @@ function ap_render_api_keys_page()
             <?php foreach ($keys as $k) : ?>
                 <tr>
                     <td><?php echo esc_html($k->id); ?></td>
-                    <td><code><?php echo esc_html($k->api_key); ?></code></td>
+                    <td><code><?php echo esc_html(substr($k->key_hash, 0, 10)); ?>...</code></td>
                     <td><?php echo esc_html($k->scopes); ?></td>
                     <td><?php echo esc_html($k->created_at); ?></td>
                     <td>
