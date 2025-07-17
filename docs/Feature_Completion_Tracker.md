@@ -5,9 +5,9 @@ Use this table to record progress across major features. Update the `Status` col
 | Feature | Sprint | Status |
 | --- | --- | --- |
 | Multi‑Org Roles & Permissions | H2 | Complete |
-| Sponsored Event Boosting | I2 | In Progress |
-| CRM & Donor Tools | I3 | In Progress |
-| Subscription Reports | I4 | In Progress |
+| Sponsored Event Boosting | I2 | Complete |
+| CRM & Donor Tools | I3 | Complete |
+| Subscription Reports | I4 | Complete |
 | Webhook Sync Framework | J1 | Complete |
-| AI Grant Assistant | J3 | In Progress |
+| AI Grant Assistant | J3 | Complete |
 | Budget & Impact Templates | J4 | Complete |
