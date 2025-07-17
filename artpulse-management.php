@@ -83,7 +83,6 @@ require_once __DIR__ . '/includes/hooks.php';
 require_once __DIR__ . '/includes/registration-hooks.php';
 require_once __DIR__ . '/includes/roles.php';
 require_once __DIR__ . '/includes/profile-roles.php';
-require_once __DIR__ . '/admin/menu.php';
 
 // Ensure custom roles exist on every load
 add_action('init', function () {
