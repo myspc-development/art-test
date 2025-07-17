@@ -47,6 +47,8 @@ Additional resources:
 - [Testing Strategy](docs/testing-strategy.md)
 - [End-to-End Testing Guide](docs/End_to_End_Testing_Guide.md)
 - [CI/CD Workflow Guide](docs/ci-workflow.md)
+- [ArtPulse Member Dashboard Roadmap](docs/ArtPulse_Member_Dashboard_Roadmap.md)
+- [Organizer Dashboard Roadmap](docs/Organizer_Dashboard_Roadmap.md)
 - [Help Resources](docs/help-resources.md)
 - [Sprint Workflow Codex](docs/sprint-workflow-codex.md)
 - [Sprint 4 Polish & Documentation Codex](docs/sprint4-polish-documentation-codex.md)
