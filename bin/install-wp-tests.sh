@@ -40,6 +40,10 @@ install_test_suite() {
   if [ ! -d "$WP_TESTS_DIR" ]; then
     mkdir -p "$WP_TESTS_DIR"
     echo "⬇️ Installing WP test suite..."
+    if ! command -v svn >/dev/null 2>&1; then
+      echo "❌ 'svn' command not found. Please install Subversion to continue."
+      exit 1
+    fi
     svn co --quiet https://develop.svn.wordpress.org/tags/"$WP_VERSION"/tests/phpunit/includes/ "$WP_TESTS_DIR"/includes
     download https://develop.svn.wordpress.org/tags/"$WP_VERSION"/wp-tests-config-sample.php "$WP_TESTS_DIR"/wp-tests-config.php
     sed -i "s:dirname( __FILE__ ) . '/src/':'$WP_CORE_DIR':" "$WP_TESTS_DIR"/wp-tests-config.php
