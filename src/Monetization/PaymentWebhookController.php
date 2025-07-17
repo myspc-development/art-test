@@ -51,7 +51,9 @@ class PaymentWebhookController
 
         global $wpdb;
         $table = $wpdb->prefix . 'ap_tickets';
-        $wpdb->update($table, ['status' => 'active'], ['id' => $ticket_id, 'user_id' => $user_id]);
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table)) === $table) {
+            $wpdb->update($table, ['status' => 'active'], ['id' => $ticket_id, 'user_id' => $user_id]);
+        }
 
         do_action('artpulse_ticket_purchased', $user_id, 0, 0, 1);
         return rest_ensure_response(['status' => 'ok']);

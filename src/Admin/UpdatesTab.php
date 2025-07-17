@@ -225,13 +225,17 @@ class UpdatesTab
             return $response;
         }
         $body = json_decode(wp_remote_retrieve_body($response), true);
-        if (empty($body['zipball_url'])) {
+        $download = $body['zipball_url'] ?? '';
+        if (!$download && !empty($body['assets'][0]['browser_download_url'])) {
+            $download = $body['assets'][0]['browser_download_url'];
+        }
+        if (!$download) {
             return new \WP_Error('bad_api', 'Invalid release response.');
         }
 
         include_once ABSPATH . 'wp-admin/includes/file.php';
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
-        $tmp = download_url($body['zipball_url']);
+        $tmp = download_url($download);
         if (is_wp_error($tmp)) {
             return $tmp;
         }

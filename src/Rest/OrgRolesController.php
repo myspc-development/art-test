@@ -9,6 +9,7 @@ class OrgRolesController {
     public static function register(): void {
         add_action('rest_api_init', [self::class, 'register_routes']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_script']);
+        add_action('admin_enqueue_scripts', [self::class, 'enqueue_script']);
         add_action('wp_ajax_ap_get_org_roles', [self::class, 'ajax_get_roles']);
         add_action('wp_ajax_nopriv_ap_get_org_roles', [self::class, 'ajax_get_roles']);
     }
@@ -58,6 +59,7 @@ class OrgRolesController {
             [
                 'api_path' => 'artpulse/v1/org-roles',
                 'nonce'    => wp_create_nonce('wp_rest'),
+                'orgId'    => \ArtPulse\Core\OrgContext::get_active_org(),
             ]
         );
     }

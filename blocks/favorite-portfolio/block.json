@@ -1,0 +1,10 @@
+{
+  "apiVersion": 2,
+  "name": "artpulse/favorite-portfolio",
+  "title": "Favorite Portfolio",
+  "category": "widgets",
+  "icon": "heart",
+  "supports": { "html": false },
+  "editorScript": "file:../../assets/js/favorite-portfolio-block.js",
+  "render": "file:../../src/Blocks/render-favorite-portfolio.php"
+}

@@ -1,10 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   const sliders = document.querySelectorAll('.ap-events-slider');
-  if (!sliders.length || typeof wp === 'undefined' || !wp.apiFetch) return;
+  if (!sliders.length || typeof wp === 'undefined' || !wp.apiFetch || typeof APEventsSlider === 'undefined') return;
 
   sliders.forEach(container => {
     const wrapper = container.querySelector('.swiper-wrapper');
-    wp.apiFetch({ path: '/artpulse/v1/events' })
+    wp.apiFetch({
+      path: APEventsSlider.endpoint.replace(location.origin, ''),
+      headers: { 'X-WP-Nonce': APEventsSlider.nonce }
+    })
       .then(events => {
         wrapper.innerHTML = '';
         events.forEach(evt => {
