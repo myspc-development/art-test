@@ -10,6 +10,8 @@ define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) );
 define( 'DB_HOST', getenv( 'DB_HOST' ) );
 define( 'DB_CHARSET', getenv( 'DB_CHARSET' ) );
 define( 'DB_COLLATE', getenv( 'DB_COLLATE' ) );
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
 
 // Site constants required by WP test suite
 define( 'WP_TESTS_DOMAIN', 'example.org' );
