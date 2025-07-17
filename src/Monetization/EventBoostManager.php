@@ -47,6 +47,11 @@ class EventBoostManager
             'callback' => [self::class, 'create_checkout'],
             'permission_callback' => function () { return is_user_logged_in(); },
         ]);
+        register_rest_route('artpulse/v1', '/boost/webhook', [
+            'methods'  => 'POST',
+            'callback' => [self::class, 'handle_webhook'],
+            'permission_callback' => '__return_true',
+        ]);
     }
 
     public static function create_checkout(WP_REST_Request $req)
@@ -57,5 +62,54 @@ class EventBoostManager
         }
         // Placeholder: integration with Stripe would go here.
         return rest_ensure_response(['checkout_url' => '#']);
+    }
+
+    public static function handle_webhook(WP_REST_Request $req)
+    {
+        $payload    = $req->get_body();
+        $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '';
+        $settings   = get_option('artpulse_settings', []);
+        $secret     = $settings['stripe_webhook_secret'] ?? '';
+
+        try {
+            $event = \Stripe\Webhook::constructEvent($payload, $sig_header, $secret);
+        } catch (\Exception $e) {
+            return new \WP_Error('invalid_signature', 'Invalid signature', ['status' => 400]);
+        }
+
+        if ($event->type === 'checkout.session.completed') {
+            $session   = $event->data->object;
+            $event_id  = absint($session->metadata->event_id ?? 0);
+            $user_id   = absint($session->client_reference_id ?? 0);
+            $amount    = isset($session->amount_total) ? $session->amount_total / 100 : 0;
+            if ($event_id && $user_id) {
+                self::record_boost($event_id, $user_id, $amount, 'stripe');
+            }
+        }
+
+        return rest_ensure_response(['received' => true]);
+    }
+
+    public static function record_boost(int $event_id, int $user_id, float $amount, string $method): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_event_boosts';
+        $wpdb->insert($table, [
+            'post_id'    => $event_id,
+            'user_id'    => $user_id,
+            'amount'     => $amount,
+            'method'     => $method,
+            'boosted_at' => current_time('mysql'),
+            'expires_at' => date('Y-m-d H:i:s', strtotime('+7 days')),
+        ]);
+    }
+
+    public static function is_boosted(int $event_id): bool
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_event_boosts';
+        $now   = current_time('mysql');
+        $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE post_id = %d AND expires_at > %s", $event_id, $now));
+        return $count > 0;
     }
 }

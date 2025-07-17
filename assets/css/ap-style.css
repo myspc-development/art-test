@@ -1239,3 +1239,12 @@ select.ap-input {
     background:var(--ap-accent-color);
     color:#fff;
 }
+
+.badge-boosted{
+    background:var(--ap-accent-color);
+    color:#fff;
+    padding:0.1rem 0.4rem;
+    border-radius:var(--ap-border-radius);
+    font-size:0.75rem;
+    margin-left:0.25rem;
+}
