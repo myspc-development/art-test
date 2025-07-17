@@ -85,3 +85,95 @@ The flow above shows how a dashboard is rendered and personalized. Users drag wi
 ---
 
 For additional design guidelines and example code, see the [Widget Settings Codex](./widget-settings-codex.md) and the [Dashboard Widget Design Codex](./dashboard-widget-design-codex.md).
+
+## User Dashboard Customization Codex
+
+### Overview
+This section outlines how to implement drag‑and‑drop dashboards with role specific layouts. User preferences should persist and the interface must be usable on mobile devices.
+
+### 1. 🎛️ Enable Front-End Widget Arrangement
+**Goals**
+
+- Allow users to customize the dashboard layout using drag and drop.
+- Provide a responsive experience across desktop and mobile devices.
+
+**Implementation**
+
+Use `react-grid-layout` or `Gridstack.js` to render draggable and resizable widgets. Mount the editor on the dashboard page template or the `[artpulse_user_dashboard]` shortcode.
+
+```jsx
+import GridLayout from "react-grid-layout";
+
+<GridLayout
+  className="layout"
+  cols={12}
+  rowHeight={30}
+  width={1200}
+  onLayoutChange={handleLayoutChange}
+>
+  <div key="widget1">Messages</div>
+  <div key="widget2">Ticket Stats</div>
+</GridLayout>
+```
+
+### 2. 💾 Store User Layout Preferences
+**Goals**
+
+- Persist widget positions per user.
+- Fall back to role defaults if a user has no saved layout.
+
+**WordPress Integration**
+
+Save the layout JSON to a user meta key:
+
+```php
+update_user_meta( $user_id, '_artpulse_dashboard_layout', json_encode( $layout_data ) );
+```
+
+Retrieve the stored value:
+
+```php
+$layout = json_decode( get_user_meta( $user_id, '_artpulse_dashboard_layout', true ), true );
+```
+
+If nothing is saved, load an option with role defaults:
+
+```php
+get_option( '_artpulse_role_layout_artist' );
+```
+
+### 3. 🔐 Admin Widget Visibility Rules
+**Goals**
+
+- Give administrators control over which widgets appear for which roles.
+
+Extend the widget registration array with a `visibility` list:
+
+```php
+$registered_widgets[] = [
+  'id'        => 'artist_overview',
+  'title'     => 'Artist Overview',
+  'component' => 'ArtistOverviewPanel',
+  'visibility' => [ 'admin', 'artist' ],
+];
+```
+
+Filter widgets when rendering based on the current role:
+
+```php
+$current_role = wp_get_current_user()->roles[0];
+$allowed      = array_filter( $widgets, fn( $w ) => in_array( $current_role, $w['visibility'], true ) );
+```
+
+### 4. 📱 Responsive & Mobile-Friendly Layout
+Use a responsive grid system such as Tailwind or Bootstrap so widgets stack on narrow screens. Enable touch dragging with a library like `react-draggable`, and provide an "Edit Mode" toggle on mobile if required.
+
+### 5. 📄 Codex Documentation Requirements
+Documentation should describe:
+
+- Widget JSON structure.
+- User meta key names.
+- REST or AJAX endpoints (e.g. `GET /user-layout`, `POST /user-layout`).
+- Role fallback behaviour.
+- Screenshots or mockups for desktop and mobile views.
+- Error handling for invalid JSON and fallback logic.
