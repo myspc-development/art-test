@@ -160,7 +160,7 @@
       "tasks": [
         {
           "title": "Fix GitHub update release response",
-          "status": "pending"
+          "status": "done"
         },
         {
           "title": "Add uninstall.php cleanup",
