@@ -34,7 +34,7 @@ class OrgRolesPage
     {
         $uri  = $_SERVER['REQUEST_URI'] ?? '';
         $path = parse_url($uri, PHP_URL_PATH);
-        if ($path === '/wp-admin/ap-org-roles') {
+        if ($path === '/wp-admin/ap-org-roles' || $path === '/wp-admin/ap-org-roles-matrix') {
             wp_safe_redirect(admin_url('admin.php?page=ap-org-roles'));
             exit;
         }
