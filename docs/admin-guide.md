@@ -21,6 +21,7 @@ See the [User Guide](user-guide.md) for instructions that attendees follow when 
 - Dashboards visualize total RSVPs, favorites and attendance.
 - Charts show trends over time and top events at a glance.
 - Data can be exported as CSV for further analysis.
+- The **Snapshots** submenu under **ArtPulse → Settings** lets you generate a quick PDF or CSV report at any time.
 - Ticket purchases automatically email a PDF ticket to the buyer.
 
 ## Embedding the Event Calendar

@@ -90,6 +90,12 @@ GET /artpulse/v1/orgs/{org_id}/report?type=grant&from=2025-01-01&to=2025-07-31
 ```
 Returns a CSV or PDF file depending on the request.
 
+### Snapshot Builder Admin Page
+Administrators can also generate quick snapshots through the dashboard. Navigate
+to **ArtPulse → Settings → Snapshots** and enter a title and format. On submit
+the file downloads immediately using the same `SnapshotBuilder` engine that the
+scheduled reports rely on.
+
 ## 5. Access Control
 Only `org_admin` or `report_manager` roles may manage subscriptions or trigger exports. Recurring setup is limited to Partner-tier organizations.
 
