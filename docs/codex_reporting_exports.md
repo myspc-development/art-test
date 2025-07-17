@@ -11,7 +11,7 @@ This document outlines the O1 sprint goal of creating quick reporting snapshots 
 - `GET /wp-json/artpulse/v1/reporting/snapshot.csv?org_id={id}&period=YYYY-MM` – Stream CSV export.
 - `GET /wp-json/artpulse/v1/reporting/snapshot.pdf?org_id={id}&period=YYYY-MM` – Download PDF table via `Dompdf`.
 
-## Developer Checklist
+## Dev Checklist
 - `SnapshotBuilder` aggregates event metrics such as RSVPs, check-ins and revenue.
 - `SnapshotBuilder::generate_pdf()` wraps `Dompdf` logic. When the
   `ArtPulse\Core\DocumentGenerator` helper is available the HTML table is

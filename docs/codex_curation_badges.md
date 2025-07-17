@@ -2,7 +2,7 @@
 
 Audience: Dev, PM, Curators
 
-Status: [🚧 Placeholder]
+Status: [🚧 Sprint Needed]
 
 This document will detail the reputation and trust badge system for curators and creators. It provides guidelines on how badges are earned and displayed across profiles and event listings.
 
