@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.15
+- Added admin pages for managing ticket tiers and membership levels.
+- Introduced REST endpoints for ticket tier CRUD and membership level settings.
+- WooCommerce hooks now register automatically when enabled.
+
 ## 1.3.14
 - Documentation updates and task status refinements.
 

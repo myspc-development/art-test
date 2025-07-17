@@ -8,7 +8,16 @@ use ArtPulse\Admin\SettingsRegistry;
 
 class MembershipManager
 {
-    public const LEVELS = ['Free', 'Pro', 'Org'];
+    public const DEFAULT_LEVELS = ['Free', 'Pro', 'Org'];
+
+    public static function getLevels(): array
+    {
+        $levels = get_option('ap_membership_levels', []);
+        if (empty($levels)) {
+            $levels = self::DEFAULT_LEVELS;
+        }
+        return array_values(array_unique($levels));
+    }
 
     /**
      * Register settings tab and fields.
@@ -162,6 +171,24 @@ class MembershipManager
                 }
                 return true;
             },
+        ]);
+
+        register_rest_route('artpulse/v1', '/membership-levels', [
+            'methods'             => 'GET',
+            'callback'            => [ self::class, 'getLevelsEndpoint' ],
+            'permission_callback' => [ self::class, 'checkManageMemberships' ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/membership-levels', [
+            'methods'             => 'POST',
+            'callback'            => [ self::class, 'addLevel' ],
+            'permission_callback' => [ self::class, 'checkManageMemberships' ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/membership-levels/(?P<level>[^/]+)', [
+            'methods'             => 'DELETE',
+            'callback'            => [ self::class, 'deleteLevel' ],
+            'permission_callback' => [ self::class, 'checkManageMemberships' ],
         ]);
     }
 
@@ -437,6 +464,39 @@ class MembershipManager
         }
 
         return rest_ensure_response(['success' => true]);
+    }
+
+    public static function checkManageMemberships()
+    {
+        if (!current_user_can('manage_options')) {
+            return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+        }
+        return true;
+    }
+
+    public static function getLevelsEndpoint()
+    {
+        return rest_ensure_response(self::getLevels());
+    }
+
+    public static function addLevel(WP_REST_Request $req)
+    {
+        $level = sanitize_text_field($req->get_param('level'));
+        if (!$level) {
+            return new WP_Error('invalid_level', 'Invalid level', ['status' => 400]);
+        }
+        $levels   = self::getLevels();
+        $levels[] = $level;
+        update_option('ap_membership_levels', array_values(array_unique($levels)));
+        return rest_ensure_response(['levels' => $levels]);
+    }
+
+    public static function deleteLevel(WP_REST_Request $req)
+    {
+        $level  = sanitize_text_field($req['level']);
+        $levels = array_values(array_diff(self::getLevels(), [$level]));
+        update_option('ap_membership_levels', $levels);
+        return rest_ensure_response(['levels' => $levels]);
     }
 
     /**

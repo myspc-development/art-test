@@ -34,11 +34,37 @@ class TicketManager
             'permission_callback' => [self::class, 'check_logged_in'],
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
+
+        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/ticket-tier', [
+            'methods'             => 'POST',
+            'callback'            => [self::class, 'create_ticket_tier'],
+            'permission_callback' => [self::class, 'check_manage'],
+        ]);
+
+        register_rest_route('artpulse/v1', '/ticket-tier/(?P<tier_id>\\d+)', [
+            'methods'             => 'PUT',
+            'callback'            => [self::class, 'update_ticket_tier'],
+            'permission_callback' => [self::class, 'check_manage'],
+        ]);
+
+        register_rest_route('artpulse/v1', '/ticket-tier/(?P<tier_id>\\d+)', [
+            'methods'             => 'DELETE',
+            'callback'            => [self::class, 'delete_ticket_tier'],
+            'permission_callback' => [self::class, 'check_manage'],
+        ]);
     }
 
     public static function check_logged_in()
     {
         if (!current_user_can('read')) {
+            return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+        }
+        return true;
+    }
+
+    public static function check_manage()
+    {
+        if (!current_user_can('manage_options')) {
             return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
         }
         return true;
@@ -294,5 +320,57 @@ class TicketManager
             $event_id
         ));
         return intval($count) > 0;
+    }
+
+    public static function create_ticket_tier(\WP_REST_Request $req)
+    {
+        $event_id = absint($req->get_param('id'));
+        $name     = sanitize_text_field($req->get_param('name'));
+        $price    = floatval($req->get_param('price'));
+        $inv      = intval($req->get_param('inventory'));
+
+        if (!$event_id || !$name) {
+            return new \WP_Error('invalid_params', 'Invalid parameters', ['status' => 400]);
+        }
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_event_tickets';
+        $wpdb->insert($table, [
+            'event_id' => $event_id,
+            'name'     => $name,
+            'price'    => $price,
+            'inventory'=> $inv,
+        ]);
+        return rest_ensure_response(['id' => $wpdb->insert_id]);
+    }
+
+    public static function update_ticket_tier(\WP_REST_Request $req)
+    {
+        $tier_id = absint($req['tier_id']);
+        $data    = [];
+        if ($req->get_param('name') !== null) {
+            $data['name'] = sanitize_text_field($req->get_param('name'));
+        }
+        if ($req->get_param('price') !== null) {
+            $data['price'] = floatval($req->get_param('price'));
+        }
+        if ($req->get_param('inventory') !== null) {
+            $data['inventory'] = intval($req->get_param('inventory'));
+        }
+        if (empty($data)) {
+            return new \WP_Error('no_data', 'No data provided', ['status' => 400]);
+        }
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_event_tickets';
+        $wpdb->update($table, $data, ['id' => $tier_id]);
+        return rest_ensure_response(['updated' => true]);
+    }
+
+    public static function delete_ticket_tier(\WP_REST_Request $req)
+    {
+        $tier_id = absint($req['tier_id']);
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_event_tickets';
+        $wpdb->delete($table, ['id' => $tier_id]);
+        return rest_ensure_response(['deleted' => true]);
     }
 }
