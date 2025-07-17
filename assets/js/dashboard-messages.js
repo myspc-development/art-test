@@ -3,7 +3,16 @@ fetch('/wp-json/artpulse/v1/dashboard/messages', {
     'X-WP-Nonce': ArtPulseData.nonce
   }
 })
-  .then(res => res.json())
+  .then(res => {
+    if (res.status === 401 || res.status === 403) {
+      const container = document.getElementById('ap-messages-dashboard-widget');
+      if (container) {
+        container.textContent = 'Please log in to view messages.';
+      }
+      throw new Error('unauthorized');
+    }
+    return res.json();
+  })
   .then(data => {
     if (!Array.isArray(data)) {
       throw new Error('Invalid response format');

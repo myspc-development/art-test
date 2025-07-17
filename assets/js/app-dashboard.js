@@ -78,8 +78,12 @@ var APDashboardApp = (function (React$1, ReactDOM, Chart) {
       setMessages = _useState2[1];
     React$1.useEffect(function () {
       fetch('/wp-json/artpulse/v1/dashboard/messages').then(function (res) {
+        if (res.status === 401 || res.status === 403) {
+          setMessages([{ id: 0, content: 'Please log in to view messages.' }]);
+          return Promise.reject('unauthorized');
+        }
         return res.json();
-      }).then(setMessages);
+      }).then(setMessages)["catch"](function () {});
     }, []);
     return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widget bg-white p-4 rounded shadow mb-4"
