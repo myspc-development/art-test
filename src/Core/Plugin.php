@@ -163,6 +163,7 @@ class Plugin
         // Register CPTs and flush rewrite rules
         \ArtPulse\Core\PostTypeRegistrar::register();
         \ArtPulse\Integration\CalendarExport::add_rewrite_rules();
+        \ArtPulse\Frontend\EmbedRewrite::add_rules();
         flush_rewrite_rules();
 
         // ✅ Fix: ensure roles/caps are installed
@@ -363,6 +364,8 @@ class Plugin
         WidgetEmbedBlock::register();
         \ArtPulse\Blocks\FavoritesWidgetBlock::register();
         \ArtPulse\Frontend\WidgetsController::register();
+        \ArtPulse\Frontend\EmbedRewrite::register();
+        \ArtPulse\Analytics\EmbedAnalytics::register();
         \ArtPulse\Community\FollowRestController::register();
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
         \ArtPulse\Community\NotificationHooks::register();

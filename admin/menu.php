@@ -32,13 +32,7 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-api-keys.php'; }
     );
 
-    // Budget & Impact templates page
-    add_menu_page(
-        'Report Templates',
-        'Report Templates',
-        'manage_options',
-        'ap-report-templates',
-        function () { include __DIR__ . '/page-report-templates.php'; }
+
     );
 
 });
