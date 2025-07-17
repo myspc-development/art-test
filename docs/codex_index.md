@@ -16,6 +16,8 @@
 - [Completion Plan](./completion-plan.md)
 - [Codex Documentation Workflow](./codex_documentation_workflow.md)
 - [Codex Sprint Readiness](./codex_sprint_readiness.md)
+- [Partner PDFs](./partner-pdf/)
+- [API Reference Chapters](./api-chapters)
 
 
 ## ⚙️ Core Infrastructure & Foundation (Phase A)

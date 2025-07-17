@@ -19,8 +19,8 @@
 
 | Task | Status |
 | --- | --- |
-| Audit script run with no failures | ☐ |
-| Missing items implemented or logged | ☐ |
-| Markdown created with required sections | ☐ |
-| Partner version exported (PDF/Google Doc) | ☐ |
-| Linked in Codex index | ☐ |
+| Audit script run with no failures | ❌ (missing wp-load) |
+| Missing items implemented or logged | ❌ |
+| Markdown created with required sections | ✅ |
+| Partner version exported (PDF/Google Doc) | ✅ |
+| Linked in Codex index | ✅ |
