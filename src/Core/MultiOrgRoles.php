@@ -5,7 +5,8 @@ class MultiOrgRoles
 {
     public static function register(): void
     {
-        add_action('init', [self::class, 'maybe_install_table']);
+        // Run very early so other init callbacks can assume the table exists.
+        add_action('init', [self::class, 'maybe_install_table'], 0);
     }
 
     public static function maybe_install_table(): void
