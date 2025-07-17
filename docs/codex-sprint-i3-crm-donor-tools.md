@@ -40,11 +40,16 @@ CREATE TABLE ap_donations (
 ```
 
 ## 1. Contact Capture & Auto-Tagging
-- **Trigger on RSVP or Follow** → log as interested
-- **Donation** → log as supporter
-- **Event feedback** → log as engaged
-- Auto-create record when email and org context exist.
-- Example tag helper:
+Contacts are automatically created whenever an email address can be
+associated with an organization. Tags are added based on activity:
+
+- **RSVP** → `rsvp`
+- **Follow an artist/org** → `follower`
+- **Donation** → `donor`
+- **Event feedback** → `engaged`
+
+Developers may also call the helper directly:
+
 ```php
 ap_crm_add_tag($org_id, $email, 'follower');
 ```
@@ -91,7 +96,7 @@ Only users with the role `admin` or `crm_manager` for the matching org may view 
 
 ## Developer Sprint Checklist
 - [x] CRM table & model live
-- [ ] Auto-tagging from activity
+- [x] Auto-tagging from activity
 - [x] CRM dashboard UI + filters
 - [x] CSV export works
 - [x] Donor table + dashboard
