@@ -80,6 +80,16 @@ END:VEVENT
 }
 ```
 
+### D. Filtered Feed Links
+
+Use `ap_filtered_feed_link()` to build newsletter or CMS feeds with filters.
+
+```php
+$link = ArtPulse\Frontend\ap_filtered_feed_link(['org' => 44, 'tag' => 'print']);
+```
+
+This returns a URL such as `https://example.com/feeds/events.ics?org=44&tag=print`.
+
 ## Shared Features & UI
 | Feature | Location |
 | --- | --- |

@@ -24,10 +24,15 @@
       <?php
       $user    = wp_get_current_user();
       $followed = \ArtPulse\Community\FollowManager::get_user_follows($user->ID, 'artist');
-      $follows = is_array($followed) ? count($followed) : 0;
+      $follows  = is_array($followed) ? count($followed) : 0;
+      $orgs     = \ArtPulse\Community\FollowManager::get_user_follows($user->ID, 'artpulse_org');
+      $org_count = is_array($orgs) ? count($orgs) : 0;
       $summary = \ArtPulse\Frontend\EventRsvpHandler::get_rsvp_summary_for_user($user->ID);
       $events  = $summary['going'] ?? 0;
       ?>
       <h2 class="ap-card__title">Welcome back, <?= esc_html($user->display_name) ?> 👋</h2>
-      <p>You're following <?= $follows ?> artists. You’ve RSVP’d to <?= $events ?> events.</p>
+      <p>You're following <?= $follows ?> artists and <?= $org_count ?> organizations. You’ve RSVP’d to <?= $events ?> events.</p>
+      <?php if ($org_count === 0): ?>
+        <p><?php esc_html_e('Follow organizations to see more events in your digest.', 'artpulse'); ?></p>
+      <?php endif; ?>
 

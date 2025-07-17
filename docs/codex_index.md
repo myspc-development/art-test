@@ -36,6 +36,7 @@
 | [`embed-widgets.md`](./embed-widgets.md) | L1 | 🟢 | Dev, Partners |
 | [`email-digests.md`](./email-digests.md) | L2 | 🟢 | Dev, PM |
 | [`feeds-reference.md`](./feeds-reference.md) | L3 | 🟡 | Dev |
+| [`analytics-pilot.md`](./analytics-pilot.md) | L3 | 🟢 | Partners |
 
 ---
 

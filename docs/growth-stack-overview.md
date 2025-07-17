@@ -105,9 +105,9 @@ Use cases include syncing to Google Calendar, auto‑publishing on civic sites o
 ## ✅ Activation Checklist for New Partners
 
 - [x] Add widget to homepage or “Events” tab.
-- [ ] Encourage users to follow the organization (activates digest).
-- [ ] Create a filtered feed (e.g., iCal link for newsletters).
-- [ ] Join analytics pilot (dashboard access).
+- [x] Encourage users to follow the organization (activates digest).
+- [x] Create a filtered feed (e.g., iCal link for newsletters).
+- [x] Join analytics pilot (dashboard access).
 
 ## Outcomes
 
