@@ -78,6 +78,23 @@ class WebhookManager
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);
         }
+
+        $log_table  = $wpdb->prefix . 'ap_webhook_logs';
+        $exists_log = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $log_table));
+        if ($exists_log !== $log_table) {
+            $charset = $wpdb->get_charset_collate();
+            $sql2 = "CREATE TABLE $log_table (
+                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+                PRIMARY KEY (id),
+                subscription_id BIGINT NOT NULL,
+                status_code VARCHAR(20) DEFAULT NULL,
+                response_body TEXT NULL,
+                timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                KEY sub_id (subscription_id)
+            ) $charset;";
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+            dbDelta($sql2);
+        }
     }
 
     public static function list_webhooks(WP_REST_Request $req): WP_REST_Response
@@ -158,15 +175,8 @@ class WebhookManager
 
     public static function trigger_event(string $event, int $org_id, array $data): void
     {
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_webhooks';
-        $rows  = $wpdb->get_results($wpdb->prepare(
-            "SELECT * FROM $table WHERE org_id = %d AND active = 1 AND FIND_IN_SET(%s, events)",
-            $org_id,
-            $event
-        ));
-        foreach ($rows as $row) {
-            self::send_webhook($row, $event, $data);
+        if (function_exists('ap_trigger_webhooks')) {
+            ap_trigger_webhooks($event, $org_id, $data);
         }
     }
 

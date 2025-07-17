@@ -63,22 +63,40 @@ Partners verify the signature before trusting the payload.
 Helper example:
 
 ```php
-function ap_trigger_webhooks($event_type, $data) {
-  global $wpdb;
-  $subs = $wpdb->get_results($wpdb->prepare(
-    "SELECT * FROM ap_webhook_subscriptions WHERE event_type = %s AND active = 1",
-    $event_type
-  ));
+function ap_trigger_webhooks(string $event, int $org_id, array $data) {
+    global $wpdb;
+    $subs = $wpdb->get_results($wpdb->prepare(
+        "SELECT * FROM {$wpdb->prefix}ap_webhooks WHERE org_id = %d AND active = 1 AND FIND_IN_SET(%s, events)",
+        $org_id,
+        $event
+    ));
 
-  foreach ($subs as $sub) {
-    $payload = json_encode($data);
-    $sig = hash_hmac('sha256', $payload, $sub->secret_token);
+    foreach ($subs as $sub) {
+        $json = wp_json_encode([
+            'event'     => $event,
+            'timestamp' => current_time('mysql'),
+            'data'      => $data,
+        ]);
+        $sig = hash_hmac('sha256', $json, $sub->secret);
 
-    wp_remote_post($sub->target_url, [
-      'headers' => ['X-Artpulse-Signature' => 'sha256=' . $sig],
-      'body'    => $payload,
-    ]);
-  }
+        for ($i = 0; $i < 3; $i++) {
+            $res = wp_remote_post($sub->url, [
+                'body'    => $json,
+                'headers' => [
+                    'Content-Type'        => 'application/json',
+                    'X-ArtPulse-Signature' => 'sha256=' . $sig,
+                ],
+                'timeout' => 5,
+            ]);
+            $code = is_wp_error($res) ? 0 : (int) wp_remote_retrieve_response_code($res);
+            if ($code >= 200 && $code < 300) {
+                break;
+            }
+            if ($code < 500) {
+                break; // don't retry on client errors
+            }
+        }
+    }
 }
 ```
 
@@ -92,6 +110,28 @@ Payload example for `event.created`:
   "org_id": 44,
   "location": "Downtown Arts Plaza",
   "url": "https://artpulse.io/event/123"
+}
+```
+
+Payload example for `rsvp.created`:
+
+```json
+{
+  "rsvp_id": 42,
+  "event_id": 123,
+  "user_id": 567,
+  "status": "going"
+}
+```
+
+Payload example for `ticket_sold`:
+
+```json
+{
+  "ticket_id": 77,
+  "event_id": 123,
+  "buyer_id": 890,
+  "quantity": 2
 }
 ```
 
@@ -122,11 +162,11 @@ Admin UI tab: “Delivery Logs”.
 
 ## Developer Sprint Checklist
 - [x] `ap_webhook_subscriptions` table live
-- [ ] `ap_trigger_webhooks()` global
-- [ ] Signature + HMAC verified
-- [ ] Admin UI for org webhook settings
-- [ ] Sample payloads documented
-- [ ] Logs + retry engine built
+- [x] `ap_trigger_webhooks()` global
+- [x] Signature + HMAC verified
+- [x] Admin UI for org webhook settings
+- [x] Sample payloads documented
+- [x] Logs + retry engine built
 
 ## Codex Docs to Update
 - Partner Integration – Webhook Setup, Signature Spec, Supported Events
