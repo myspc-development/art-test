@@ -116,6 +116,8 @@ Only users with the **`manage_options`** capability (typically administrators) c
 
 - Layouts are stored in `wp_options` per role (and `user_meta` if per-user layouts are enabled)
 - Format: `[{ id: "widget_id", visible: true }]`
+- The dashboard widget manager itself (`artpulse_dashboard_widget`) is never
+  included in the default layout.
 - Supports drag-and-drop reordering with [SortableJS]
 - Custom widgets can be registered via:
 ```php

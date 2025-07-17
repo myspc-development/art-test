@@ -213,5 +213,22 @@ class UserLayoutManagerTest extends TestCase
 
         $this->assertArrayNotHasKey('subscriber', self::$options['ap_dashboard_widget_config']);
     }
+
+    public function test_default_role_layout_omits_manager_widget(): void
+    {
+        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
+        $prop = $ref->getProperty('widgets');
+        $prop->setAccessible(true);
+        $prop->setValue(null, []);
+
+        DashboardWidgetRegistry::register('artpulse_dashboard_widget', 'Manager', '', '', '__return_null');
+        DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
+
+        $layout = UserLayoutManager::get_role_layout('subscriber');
+        $ids = array_column($layout, 'id');
+
+        $this->assertContains('foo', $ids);
+        $this->assertNotContains('artpulse_dashboard_widget', $ids);
+    }
 }
 

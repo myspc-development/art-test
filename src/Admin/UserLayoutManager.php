@@ -80,6 +80,11 @@ class UserLayoutManager
         }
 
         $defs = DashboardWidgetRegistry::get_definitions();
+        $defs = array_filter(
+            $defs,
+            fn($def) => $def['id'] !== 'artpulse_dashboard_widget'
+        );
+
         return array_map(
             fn($def) => ['id' => $def['id'], 'visible' => true],
             $defs
