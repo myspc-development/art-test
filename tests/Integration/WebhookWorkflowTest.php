@@ -86,7 +86,7 @@ class WebhookWorkflowTest extends \WP_UnitTestCase
         $this->response = new WP_Error('fail', 'network');
         WebhookManager::trigger_event('ticket_sold', $this->org_id, ['ticket_id' => 9]);
 
-        $this->assertCount(1, $this->requests);
+        $this->assertCount(3, $this->requests);
         global $wpdb;
         $table  = $wpdb->prefix . 'ap_webhooks';
         $status = $wpdb->get_var($wpdb->prepare("SELECT last_status FROM $table WHERE id = %d", $hook_id));

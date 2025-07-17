@@ -90,12 +90,12 @@ Only users with the role `admin` or `crm_manager` for the matching org may view 
 - Access limited to scoped org admin
 
 ## Developer Sprint Checklist
-- [ ] CRM table & model live
+- [x] CRM table & model live
 - [ ] Auto-tagging from activity
-- [ ] CRM dashboard UI + filters
-- [ ] CSV export works
-- [ ] Donor table + dashboard
-- [ ] Grant export route added
+- [x] CRM dashboard UI + filters
+- [x] CSV export works
+- [x] Donor table + dashboard
+- [x] Grant export route added
 
 ## Codex Docs to Update
 - CRM System

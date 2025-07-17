@@ -63,6 +63,8 @@ class RestRoutes
             \ArtPulse\Rest\ImportRestController::register();
             // Register template endpoints for CSV imports
             \ArtPulse\Rest\ImportTemplateController::register();
+            // Templates for budgets and impact reports
+            \ArtPulse\Rest\ReportTemplateController::register();
             // Register organization user management endpoints
             \ArtPulse\Rest\UserInvitationController::register();
             // Register RSVP endpoints for events

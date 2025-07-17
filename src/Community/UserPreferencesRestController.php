@@ -49,6 +49,20 @@ class UserPreferencesRestController
             'show_in_rest'      => true,
             'sanitize_callback' => 'sanitize_text_field',
         ]);
+
+        register_meta('user', 'ap_digest_frequency', [
+            'type'              => 'string',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'sanitize_text_field',
+        ]);
+
+        register_meta('user', 'ap_digest_topics', [
+            'type'              => 'string',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'sanitize_text_field',
+        ]);
     }
 
     public static function register_routes(): void
@@ -63,6 +77,8 @@ class UserPreferencesRestController
                 'sms_opt_in'        => [ 'type' => 'boolean', 'required' => false ],
                 'dashboard_theme'   => [ 'type' => 'string', 'required' => false ],
                 'notification_prefs'=> [ 'type' => 'object', 'required' => false ],
+                'digest_frequency'  => [ 'type' => 'string', 'required' => false ],
+                'digest_topics'     => [ 'type' => 'string', 'required' => false ],
             ],
         ]);
     }
@@ -90,6 +106,14 @@ class UserPreferencesRestController
         if ($request->has_param('notification_prefs')) {
             $prefs = self::sanitize_prefs($request['notification_prefs']);
             update_user_meta($user_id, 'ap_notification_prefs', $prefs);
+        }
+
+        if ($request->has_param('digest_frequency')) {
+            update_user_meta($user_id, 'ap_digest_frequency', sanitize_text_field($request['digest_frequency']));
+        }
+
+        if ($request->has_param('digest_topics')) {
+            update_user_meta($user_id, 'ap_digest_topics', sanitize_text_field($request['digest_topics']));
         }
 
         return rest_ensure_response(['status' => 'saved']);

@@ -87,10 +87,10 @@ Write a 150-word public benefit summary for a community arts grant. Include them
 
 ## Developer Sprint Checklist
 - [x] Grant generation UI page
-- [ ] API endpoints `/generate-grant-copy` and `/rewrite`
-- [ ] Output rendering with copy/download
-- [ ] Optional draft storage table
-- [ ] Prompt templates & tone support
+- [x] API endpoints `/generate-grant-copy` and `/rewrite`
+- [x] Output rendering with copy/download
+- [x] Optional draft storage table
+- [x] Prompt templates & tone support
 
 ## Codex Docs to Update
 - AI Tools

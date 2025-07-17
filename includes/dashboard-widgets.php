@@ -262,6 +262,11 @@ function ap_widget_my_follows(array $vars = []): string
     return ap_load_dashboard_template('widgets/my-follows.php', $vars);
 }
 
+function ap_widget_creator_tips(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/widget-creator-tips.php', $vars);
+}
+
 function ap_widget_rsvps(array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/rsvps.php', $vars);
@@ -446,6 +451,17 @@ function ap_register_core_dashboard_widgets(): void
         'visibility',
         __('Artists and events you follow.', 'artpulse'),
         'ap_widget_my_follows',
+        [
+            'category' => 'engagement',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'creator-tips',
+        __('Creator Tips', 'artpulse'),
+        'lightbulb',
+        __('Contextual suggestions for creators.', 'artpulse'),
+        'ap_widget_creator_tips',
         [
             'category' => 'engagement',
         ]

@@ -37,6 +37,8 @@ class AccountSettingsPage
         $email = !is_array($prefs) || !array_key_exists('email', $prefs) || $prefs['email'];
         $push  = !is_array($prefs) || !array_key_exists('push', $prefs) || $prefs['push'];
         $sms   = is_array($prefs) && isset($prefs['sms']) ? (bool) $prefs['sms'] : false;
+        $digest_frequency = get_user_meta(get_current_user_id(), 'ap_digest_frequency', true) ?: 'none';
+        $digest_topics    = get_user_meta(get_current_user_id(), 'ap_digest_topics', true);
 
         ob_start();
         $template = plugin_dir_path(__FILE__) . '../../templates/account-settings.php';

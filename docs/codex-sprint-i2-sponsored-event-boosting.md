@@ -52,11 +52,11 @@ CREATE TABLE ap_event_boosts (
 
 ## Developer Sprint Checklist
 - [x] `ap_event_boosts` table created
-- [ ] REST endpoints for checkout and webhook
-- [ ] Ranking integration updated
-- [ ] Boost UI and badges implemented
-- [ ] Stats logging added
-- [ ] Codex docs updated
+- [x] REST endpoints for checkout and webhook
+- [x] Ranking integration updated
+- [x] Boost UI and badges implemented
+- [x] Stats logging added
+- [x] Codex docs updated
 
 ## Codex Docs to Update
 - Monetization

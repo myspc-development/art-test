@@ -22,15 +22,19 @@ use ArtPulse\Blocks\WidgetEmbedBlock;
 use ArtPulse\Frontend\ReactDashboardShortcode;
 use ArtPulse\Marketplace\MarketplaceManager;
 use ArtPulse\Marketplace\AuctionManager;
+use ArtPulse\Community\ReferralManager;
+use ArtPulse\Core\BadgeRules;
 use ArtPulse\Core\VisitTracker;
 use ArtPulse\Core\MultiOrgRoles;
 use ArtPulse\Core\OrgContext;
 use ArtPulse\Monetization\EventBoostManager;
 use ArtPulse\Core\OrgCrmManager;
 use ArtPulse\Core\ReportSubscriptionManager;
+use ArtPulse\Reporting\OrgReportController;
 use ArtPulse\AI\GrantAssistant;
 use ArtPulse\Rest\VisitRestController;
 use ArtPulse\Rest\OrgUserRolesController;
+use ArtPulse\Core\FeedAccessLogger;
 
 class Plugin
 {
@@ -108,6 +112,7 @@ class Plugin
         add_action('init', [\ArtPulse\Community\EventChatController::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\EventVoteManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\CompetitionEntryManager::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Core\FeedAccessLogger::class, 'maybe_install_table']);
         add_action('init', [VisitTracker::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Frontend\CompetitionDashboardShortcode::class, 'register']);
         add_filter('script_loader_tag', [self::class, 'add_defer'], 10, 3);
@@ -151,6 +156,7 @@ class Plugin
             \ArtPulse\Core\FeedbackManager::install_table();
             \ArtPulse\Core\DelegatedAccessManager::install_table();
             \ArtPulse\Core\CompetitionEntryManager::install_table();
+            \ArtPulse\Core\FeedAccessLogger::install_table();
             update_option($db_version_option, self::VERSION);
         }
 
@@ -178,7 +184,7 @@ class Plugin
     {
         flush_rewrite_rules();
         wp_clear_scheduled_hook('ap_daily_expiry_check');
-        wp_clear_scheduled_hook('ap_daily_digest');
+        wp_clear_scheduled_hook('ap_send_digests');
         wp_clear_scheduled_hook('ap_process_scheduled_messages');
     }
 
@@ -204,6 +210,7 @@ class Plugin
         \ArtPulse\Core\AnalyticsDashboard::register();
         \ArtPulse\Admin\PaymentAnalyticsDashboard::register();
         \ArtPulse\Admin\PaymentReportsPage::register();
+        \ArtPulse\Admin\WebhookLogsPage::register();
         EngagementDashboard::register();
         AdminDashboard::register();
         \ArtPulse\Core\FrontendMembershipPage::register();
@@ -219,6 +226,7 @@ class Plugin
         OrgContext::register();
         MultiOrgRoles::register();
         \ArtPulse\Core\ActivityLogger::register();
+        FeedAccessLogger::register();
         \ArtPulse\Community\CommunityRoles::register();
         \ArtPulse\Core\DelegatedAccessManager::register();
         \ArtPulse\Admin\AdminListSorting::register();
@@ -388,6 +396,8 @@ class Plugin
         \ArtPulse\Monetization\DonationLink::register();
         \ArtPulse\Monetization\DonationManager::register();
         \ArtPulse\Monetization\TipManager::register();
+        ReferralManager::register();
+        BadgeRules::register();
         \ArtPulse\Marketplace\MarketplaceManager::register();
         \ArtPulse\Marketplace\AuctionManager::register();
         \ArtPulse\Marketplace\PromotionManager::register();
@@ -405,7 +415,9 @@ class Plugin
         EventBoostManager::register();
         OrgCrmManager::register();
         ReportSubscriptionManager::register();
+        \ArtPulse\Reporting\OrgReportController::register();
         GrantAssistant::register();
+        \ArtPulse\Rest\GrantReportController::register();
         add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
         \ArtPulse\Rest\EventManagementController::register();
     }

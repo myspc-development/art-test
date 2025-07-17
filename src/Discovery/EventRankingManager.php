@@ -2,6 +2,7 @@
 namespace ArtPulse\Discovery;
 
 use ArtPulse\Core\EventMetrics;
+use ArtPulse\Monetization\EventBoostManager;
 
 class EventRankingManager
 {
@@ -69,10 +70,12 @@ class EventRankingManager
             $saves   = self::metric_sum($event_id, 'favorite', 7);
             $verified = get_post_meta($event_id, '_ap_verified_host', true) ? 1 : 0;
             $artist_score = (float) get_post_meta($event_id, '_ap_artist_score', true);
+            $boost_bonus = EventBoostManager::is_boosted($event_id) ? 25 : 0;
             $score = 0.35 * log1p($views7d)
                    + 0.25 * log1p($saves)
                    + 0.20 * $verified
-                   + 0.10 * $artist_score;
+                   + 0.10 * $artist_score
+                   + $boost_bonus;
             $score = max(0, min(100, $score * 10));
 
             $wpdb->replace($table, [

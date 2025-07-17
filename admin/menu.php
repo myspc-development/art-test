@@ -14,6 +14,15 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-org-reports.php'; }
     );
 
+    // Organization CRM dashboard
+    add_menu_page(
+        'CRM',
+        'CRM',
+        'manage_options',
+        'ap-org-crm',
+        function () { include __DIR__ . '/page-org-crm.php'; }
+    );
+
     // Partner API key management
     add_menu_page(
         'API Keys',
@@ -23,22 +32,7 @@ add_action('admin_menu', function () {
         function () { include __DIR__ . '/page-api-keys.php'; }
     );
 
-    add_submenu_page(
-        'tools.php',
-        'Embed Builder',
-        'Embed Builder',
-        'manage_options',
-        'ap-embed-builder',
-        function () { include __DIR__ . '/page-embed-builder.php'; }
-    );
 
-    add_submenu_page(
-        'tools.php',
-        'Embed Stats',
-        'Embed Stats',
-        'manage_options',
-        'ap-embed-stats',
-        function () { include __DIR__ . '/page-embed-stats.php'; }
     );
 
 });
@@ -61,6 +55,18 @@ add_action('admin_enqueue_scripts', function ($hook) {
             true
         );
         wp_localize_script('ap-messages-js', 'wpApiSettings', [
+            'nonce' => wp_create_nonce('wp_rest'),
+        ]);
+    } elseif ($hook === 'toplevel_page_ap-report-templates') {
+        wp_enqueue_script(
+            'ap-report-template-editor',
+            plugin_dir_url(__FILE__) . '../assets/js/report-template-editor.js',
+            ['jquery'],
+            false,
+            true
+        );
+        wp_localize_script('ap-report-template-editor', 'wpApiSettings', [
+            'root'  => esc_url_raw(rest_url()),
             'nonce' => wp_create_nonce('wp_rest'),
         ]);
     }

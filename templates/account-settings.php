@@ -13,6 +13,18 @@
             <input type="checkbox" name="sms" <?php checked($sms); ?>>
             <?php esc_html_e('SMS Notifications', 'artpulse'); ?>
         </label>
+        <p>
+            <label for="ap_digest_frequency" class="ap-form-label"><?php esc_html_e('Digest Frequency', 'artpulse'); ?></label><br>
+            <select id="ap_digest_frequency" name="digest_frequency" class="ap-input">
+                <option value="none" <?php selected($digest_frequency, 'none'); ?>><?php esc_html_e('None', 'artpulse'); ?></option>
+                <option value="weekly" <?php selected($digest_frequency, 'weekly'); ?>><?php esc_html_e('Weekly', 'artpulse'); ?></option>
+                <option value="monthly" <?php selected($digest_frequency, 'monthly'); ?>><?php esc_html_e('Monthly', 'artpulse'); ?></option>
+            </select>
+        </p>
+        <p>
+            <label for="ap_digest_topics" class="ap-form-label"><?php esc_html_e('Digest Topics', 'artpulse'); ?></label><br>
+            <input type="text" id="ap_digest_topics" name="digest_topics" class="ap-input" value="<?php echo esc_attr($digest_topics); ?>" placeholder="painting, sculpture">
+        </p>
         <button type="submit" class="ap-form-button nectar-button"><?php esc_html_e('Save', 'artpulse'); ?></button>
     </form>
     <div id="ap-notification-status" class="ap-form-messages" role="status" aria-live="polite"></div>

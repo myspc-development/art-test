@@ -65,6 +65,9 @@ if ( $user_id ) {
         <?php endif; ?>
         <h3 class="ap-event-title"><?php echo esc_html( $title ); ?></h3>
     </a>
+    <?php if ( \ArtPulse\Monetization\EventBoostManager::is_boosted( $event_id ) ) : ?>
+        <span class="badge-boosted">🔥 Boosted</span>
+    <?php endif; ?>
     <div class="ap-event-card-content">
         <div class="ap-event-meta">
             <?php if ( $venue ) : ?>

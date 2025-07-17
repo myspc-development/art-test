@@ -12,7 +12,8 @@ class DigestMailer
     public static function register(): void
     {
         add_action('init', [self::class, 'schedule_cron']);
-        add_action('ap_daily_digest', [self::class, 'send_digests']);
+        add_filter('cron_schedules', [self::class, 'add_weekly_schedule']);
+        add_action('ap_send_digests', [self::class, 'send_digests']);
     }
 
     /**
@@ -20,9 +21,21 @@ class DigestMailer
      */
     public static function schedule_cron(): void
     {
-        if (!wp_next_scheduled('ap_daily_digest')) {
-            wp_schedule_event(strtotime('midnight'), 'daily', 'ap_daily_digest');
+        if (!wp_next_scheduled('ap_send_digests')) {
+            $time = strtotime('next Sunday 7am');
+            wp_schedule_event($time, 'weekly', 'ap_send_digests');
         }
+    }
+
+    public static function add_weekly_schedule(array $schedules): array
+    {
+        if (!isset($schedules['weekly'])) {
+            $schedules['weekly'] = [
+                'interval' => WEEK_IN_SECONDS,
+                'display'  => __('Once Weekly'),
+            ];
+        }
+        return $schedules;
     }
 
     /**
