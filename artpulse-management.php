@@ -1033,6 +1033,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/helpers-ui.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/post-status-hooks.php';
 require_once plugin_dir_path(__FILE__) . 'includes/artist-meta-box.php';
+require_once plugin_dir_path(__FILE__) . 'includes/webhook-functions.php';
 
 add_action('wp_enqueue_scripts', function () {
     $ui_mode = ap_get_ui_mode();
