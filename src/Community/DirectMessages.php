@@ -267,6 +267,11 @@ class DirectMessages
         $content      = wp_kses_post($req['content']);
         $context_type = $req->get_param('context_type') ? sanitize_key($req['context_type']) : null;
         $context_id   = $req->get_param('context_id') ? absint($req['context_id']) : null;
+        $parent_id    = $req->get_param('parent_id') ? absint($req['parent_id']) : null;
+        $attachments  = $req->get_param('attachments');
+        $attachments  = is_array($attachments) ? array_map('intval', $attachments) : [];
+        $tags         = $req->get_param('tags');
+        $tags         = is_array($tags) ? array_map('sanitize_key', $tags) : [];
 
         if (!$recipient_id || $content === '' || !get_user_by('id', $recipient_id)) {
             return new WP_Error('invalid_params', 'Invalid recipient or content.', ['status' => 400]);
