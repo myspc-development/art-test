@@ -5,8 +5,15 @@ export default function MessagesPanel() {
 
   useEffect(() => {
     fetch('/wp-json/artpulse/v1/dashboard/messages')
-      .then(res => res.json())
-      .then(setMessages);
+      .then(res => {
+        if (res.status === 401 || res.status === 403) {
+          setMessages([{ id: 0, content: 'Please log in to view messages.' }]);
+          return Promise.reject('unauthorized');
+        }
+        return res.json();
+      })
+      .then(setMessages)
+      .catch(() => {});
   }, []);
 
   return (

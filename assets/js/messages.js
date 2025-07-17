@@ -6,7 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
       'X-WP-Nonce': window.wpApiSettings.nonce
     }
   })
-    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401 || res.status === 403) {
+        inbox.textContent = 'Please log in to view messages.';
+        throw new Error('unauthorized');
+      }
+      return res.json();
+    })
     .then(messages => {
       if (!Array.isArray(messages)) {
         throw new Error('API did not return an array');
