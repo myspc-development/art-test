@@ -27,6 +27,6 @@ This phase lays the groundwork for ArtPulse by implementing essential systems fo
 - Delivery logs to track response codes.
 
 ## Developer Checklist
-- [ ] Map and Q&A endpoints return expected data.
-- [ ] Multi‑org assignments persisted in `ap_org_roles`.
-- [ ] Webhook payloads verified with partner tools.
+- [x] Map and Q&A endpoints return expected data.
+- [x] Multi‑org assignments persisted in `ap_org_roles`.
+- [x] Webhook payloads verified with partner tools.
