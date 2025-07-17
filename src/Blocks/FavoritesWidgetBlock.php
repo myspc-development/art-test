@@ -12,4 +12,11 @@ class FavoritesWidgetBlock {
         }
         register_block_type_from_metadata(__DIR__ . '/../../blocks/widget-favorites');
     }
+
+    public static function render_callback($attributes) {
+        if (function_exists('ap_widget_favorites')) {
+            return ap_widget_favorites();
+        }
+        return '';
+    }
 }

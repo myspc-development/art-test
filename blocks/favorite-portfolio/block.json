@@ -6,5 +6,5 @@
   "icon": "heart",
   "supports": { "html": false },
   "editorScript": "file:../../assets/js/favorite-portfolio-block.js",
-  "render": "file:../../src/Blocks/render-favorite-portfolio.php"
+  "render": "ArtPulse\\Blocks\\FavoritePortfolioBlock::render_callback"
 }

@@ -79,7 +79,10 @@ class EnqueueAssetsTest extends TestCase
         if (!defined('ARTPULSE_PLUGIN_FILE')) {
             define('ARTPULSE_PLUGIN_FILE', __FILE__);
         }
-        self::$current_screen = (object)['id' => 'edit-artpulse_event'];
+        self::$current_screen = (object)[
+            'id' => 'edit-artpulse_event',
+            'is_block_editor' => true,
+        ];
         EnqueueAssets::enqueue_block_editor_assets();
         $handles = array_map(fn($a) => $a[0] ?? '', self::$scripts);
         $this->assertContains('ap-event-gallery', $handles);
