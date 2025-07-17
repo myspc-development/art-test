@@ -33,9 +33,13 @@ class EventChatShortcode
             return '';
         }
 
+        $req      = new \WP_REST_Request('POST', '/');
+        $req->set_param('id', $event_id);
+        $can_post = is_user_logged_in() && \ArtPulse\Community\EventChatController::can_post($req);
+
         ob_start();
         ?>
-        <div class="ap-event-chat" data-event-id="<?= esc_attr($event_id); ?>">
+        <div class="ap-event-chat" data-event-id="<?= esc_attr($event_id); ?>" data-can-post="<?= $can_post ? '1' : '0'; ?>">
             <ul class="ap-chat-list" role="status" aria-live="polite"></ul>
             <?php if (is_user_logged_in()): ?>
                 <?php
