@@ -169,4 +169,23 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $found = $res->get_data();
         $this->assertNotEmpty($found);
     }
+
+    public function test_send_v2_with_parent_attachments_and_tags(): void
+    {
+        $post = new WP_REST_Request('POST', '/artpulse/v1/messages/send');
+        $post->set_param('recipient_id', $this->user2);
+        $post->set_param('content', 'extras');
+        $post->set_param('parent_id', 9);
+        $post->set_param('attachments', [5, '6']);
+        $post->set_param('tags', ['Foo', 'bar']);
+        $res = rest_get_server()->dispatch($post);
+        $this->assertSame(200, $res->get_status());
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        $row   = $wpdb->get_row("SELECT * FROM $table ORDER BY id DESC", ARRAY_A);
+        $this->assertSame('9', $row['parent_id']);
+        $this->assertSame('5,6', $row['attachments']);
+        $this->assertSame('foo,bar', $row['tags']);
+    }
 }
