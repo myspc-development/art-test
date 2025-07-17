@@ -54,7 +54,7 @@
 
 | Document | Sprints Covered | Status | Audience |
 |----------|------------------|--------|----------|
-| [`codex_artwalk_fieldtools.md`](./codex_artwalk_fieldtools.md) | K1–K3 (PWA, check-ins, curator logs) | 🟢 | Dev, Institutional |
+| [`mobile-artwalk.md`](./mobile-artwalk.md) | K1–K3 (PWA, check-ins, curator logs) | 🟢 | Dev, Institutional |
 
 ---
 
@@ -64,8 +64,8 @@
 |----------|------------------|--------|----------|
 | `codex_webhooks.md` | J1 | 🟡 | Dev |
 | `codex_grants_ai.md` | J3 | 🟡 | Dev, PM |
-| `codex_pricing_engine.md` | I1–I4 | 🟡 | Admin, Dev |
-| `codex_donations_crm.md` | I3 | 🟡 | Dev, Org Admin |
+| [`codex-sprint-i1-pricing-engine.md`](./codex-sprint-i1-pricing-engine.md) | I1–I4 | 🟡 | Admin, Dev |
+| [`codex-sprint-i3-crm-donor-tools.md`](./codex-sprint-i3-crm-donor-tools.md) | I3 | 🟡 | Dev, Org Admin |
 
 ---
 
@@ -92,11 +92,11 @@
   artist-collab.md
   curator-tools.md
   thread-formatting.md
-  codex_artwalk_fieldtools.md
+  mobile-artwalk.md
   codex_webhooks.md
   codex_grants_ai.md
-  codex_pricing_engine.md
-  codex_donations_crm.md
+  codex-sprint-i1-pricing-engine.md
+  codex-sprint-i3-crm-donor-tools.md
 ```
 📌 Next Steps
 ✅ Review 🟡 documents for readiness or updates
