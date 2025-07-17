@@ -35,4 +35,29 @@ class DocumentGenerator
         file_put_contents($path, $dompdf->output());
         return $path;
     }
+
+    /**
+     * Generate a PDF file from raw HTML.
+     *
+     * @param string $html HTML markup to render.
+     * @param string $slug File name slug without extension.
+     * @return string Path to generated PDF or empty string if Dompdf missing.
+     */
+    public static function generate_pdf_from_html(string $html, string $slug): string
+    {
+        if (!class_exists(Dompdf::class)) {
+            return '';
+        }
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4');
+        $dompdf->render();
+
+        $upload = wp_upload_dir();
+        $slug   = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $slug ?: wp_generate_password(8, false)));
+        $path   = trailingslashit($upload['path']) . $slug . '.pdf';
+        file_put_contents($path, $dompdf->output());
+        return $path;
+    }
 }

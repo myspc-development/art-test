@@ -421,6 +421,7 @@ class Plugin
         \ArtPulse\Admin\SnapshotPage::register();
         ReportSubscriptionManager::register();
         \ArtPulse\Reporting\OrgReportController::register();
+        \ArtPulse\Reporting\SnapshotExportController::register();
         GrantAssistant::register();
         \ArtPulse\Rest\GrantReportController::register();
         add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
