@@ -45,6 +45,7 @@ Additional resources:
 - [API Reference](docs/api-reference.md)
 - [Testing Strategy](docs/testing-strategy.md)
 - [End-to-End Testing Guide](docs/End_to_End_Testing_Guide.md)
+- [CI/CD Workflow Guide](docs/ci-workflow.md)
 - [Help Resources](docs/help-resources.md)
 - [Sprint Workflow Codex](docs/sprint-workflow-codex.md)
 - [Sprint 4 Polish & Documentation Codex](docs/sprint4-polish-documentation-codex.md)
@@ -499,4 +500,12 @@ or `vendor/bin/phpunit`:
 You may also set `WORDPRESS_TARBALL` to the path of a local WordPress archive
 if you need an offline setup. If any variables are omitted the test bootstrap
 will fail to connect to the database.
+
+### CI Workflow
+
+The `plugin-release.yml` workflow in `.github/workflows/` installs Composer and
+npm dependencies, runs unit tests and builds production assets. Composer caches
+are stored under `~/.composer/cache` while npm caches use `~/.npm`. The cache
+keys include `composer.lock` and `package-lock.json` so dependencies are
+re-downloaded only when these files change.
 
