@@ -32,10 +32,16 @@ collects real‑world feedback, and ensures stability for future growth.
 - **Artist checklist** outlining preparations before a first show
 
 ## QA Checklist
-- [ ] Login as artist, create event
-- [ ] Follow curator, check feed
-- [ ] Export org matrix
-- [ ] Upvote an event
+- [x] Login as artist, create event
+- [x] Follow curator, check feed
+- [x] Export org matrix
+- [x] Upvote an event
+
+### QA Results
+- Event creation via the submission endpoint returned a published `artpulse_event` post.
+- Following a curator succeeded with a 200 response and metadata updated.
+- The org matrix export route produced CSV output with user names and roles.
+- Favoriting an event returned `status: added` and incremented the favorite count.
 
 ## Execution Plan
 - **F1** – Public beta with limited user invites
