@@ -82,7 +82,16 @@ class ReportSubscriptionManager
                 'Org ID' => $sub->org_id,
                 'Type'   => $sub->report_type,
             ];
-            if ($sub->format === 'csv') {
+            if ($sub->report_type === 'grant' && $sub->format === 'pdf') {
+                $path = \ArtPulse\Reporting\GrantReportBuilder::generate_pdf([
+                    'title'   => 'Grant Report',
+                    'summary' => [
+                        'Org ID' => $sub->org_id,
+                    ],
+                    'events'  => [],
+                    'donors'  => [],
+                ]);
+            } elseif ($sub->format === 'csv') {
                 $path = \ArtPulse\Reporting\SnapshotBuilder::generate_csv([
                     'title' => 'Org Report',
                     'data'  => $data,

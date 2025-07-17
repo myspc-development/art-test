@@ -64,7 +64,24 @@ The PDF includes:
 - Top 5 event highlights
 - Donor summary table
 - Audience growth chart (RSVP trend)
-Use Dompdf or a similar library.
+Use Dompdf or a similar library. Grant PDF generation is handled by the
+`GrantReportBuilder` class which outputs a simple summary table along with
+top event and donor sections.
+
+### Sample Output
+```
+Grant Report
+============
+Summary
+- Events: 5
+- Reach: 350
+
+Top Events
+- Open Studio (120 RSVPs)
+
+Donors
+- Alice - $100
+```
 
 ## 4. One-Off Manual Export
 Organizations can also manually download reports via REST:
@@ -87,7 +104,7 @@ Only `org_admin` or `report_manager` roles may manage subscriptions or trigger e
 - [x] `ap_org_report_subscriptions` table created
 - [x] Report generator for three types
 - [x] Scheduled delivery cron live
-- [ ] PDF generator for grant reports
+ - [x] PDF generator for grant reports
 - [x] Admin UI for managing subscriptions
 - [x] REST route for manual download
 

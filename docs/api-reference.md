@@ -341,6 +341,25 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   '/wp-json/artpulse/v1/profile/42/verify'
 ```
 
+### `GET /artpulse/v1/orgs/{id}/report`
+
+Download an organization report. Types include `engagement`, `donors` and
+`grant`. Format may be `csv` or `pdf`.
+
+Parameters:
+
+- `id` (int, required)
+- `type` (string, required)
+- `format` (`csv`|`pdf`, default `csv`)
+- `from` (YYYY-MM-DD)
+- `to` (YYYY-MM-DD)
+
+Example request:
+
+```bash
+curl '/wp-json/artpulse/v1/orgs/5/report?type=grant&format=pdf'
+```
+
 ## User Meta Fields
 
 Several endpoints store preferences using user meta. Keys of interest:
