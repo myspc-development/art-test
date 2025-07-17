@@ -47,7 +47,10 @@ class AutoTagger
         $prompts = [
             'en' => 'You are an art domain expert. Analyze the following text and suggest three descriptive tags focusing on artistic genre, medium, and cultural theme. Return the tags as a comma-separated list.',
             'es' => 'Sugiere tres etiquetas para este contenido artístico (género, medio o estilo).',
-            'ru' => 'Предложите три тега для этого художественного контента (жанр, техника, стиль).'
+            'ru' => 'Предложите три тега для этого художественного контента (жанр, техника, стиль).',
+            'fr' => 'Suggérez trois tags pour ce contenu artistique (genre, technique, style).',
+            'de' => 'Schlage drei Tags für diesen künstlerischen Inhalt vor (Genre, Technik, Stil).',
+            'zh' => '为此艺术内容推荐三个标签（题材、媒介或风格）。'
         ];
         $prompt = ($prompts[$lang] ?? $prompts['en']) . ' ' . $content;
 
@@ -103,6 +106,15 @@ class AutoTagger
         }
         if (preg_match('/[а-яё]/iu', $text)) {
             return 'ru';
+        }
+        if (preg_match('/[àâçéèêëîïôûùüÿœ]/i', $text)) {
+            return 'fr';
+        }
+        if (preg_match('/[äöüß]/i', $text)) {
+            return 'de';
+        }
+        if (preg_match('/[\x{4e00}-\x{9fff}]/u', $text)) {
+            return 'zh';
         }
         return 'en';
     }
