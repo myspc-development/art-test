@@ -633,13 +633,12 @@ class SettingsPage
         $webhook_status = get_option('artpulse_webhook_status', 'Unknown');
         $last_event     = get_option('artpulse_webhook_last_event', []);
         $log            = get_option('artpulse_webhook_log', []);
-        $tabs           = apply_filters('artpulse_settings_tabs', SettingsRegistry::get_tabs());
-        $tab_keys       = array_keys($tabs);
-        $current_tab    = sanitize_key($_GET['tab'] ?? ($tab_keys[0] ?? 'general'));
+        $tabs        = apply_filters('artpulse_settings_tabs', SettingsRegistry::get_tabs());
+        $tab_keys    = array_keys($tabs);
+        $current_tab = sanitize_key($_GET['tab'] ?? ($tab_keys[0] ?? 'general'));
 
         // Fire a hook specific to the active tab so custom handlers can render
         // additional content or enqueue scripts.
-        $current_tab = sanitize_key($_GET['tab'] ?? 'general');
         do_action("artpulse_render_settings_tab_{$current_tab}");
 
         ?>
