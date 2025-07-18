@@ -74,6 +74,9 @@ Run the following command in the plugin directory **before** activating it so
 composer install --no-dev --optimize-autoloader
 ```
 
+ArtPulse requires **PHP 8.2 or higher**. Ensure your server meets this
+requirement before activating the plugin.
+
 WordPress will display an “unexpected output” warning if this file is missing.
 
 ## Overview & Quick Reference
