@@ -117,17 +117,19 @@
     });
   };
 
-  var _window$APDashboardWi, _window$APDashboardWi2, _window$APDashboardWi3;
+  var _window$APDashboardWi, _window$APDashboardWi2, _window$APDashboardWi3, _window$APDashboardWi4;
   var config = ((_window$APDashboardWi = window.APDashboardWidgetsEditor) === null || _window$APDashboardWi === void 0 ? void 0 : _window$APDashboardWi.config) || [];
   var widgets = ((_window$APDashboardWi2 = window.APDashboardWidgetsEditor) === null || _window$APDashboardWi2 === void 0 ? void 0 : _window$APDashboardWi2.widgets) || [];
   var roles = ((_window$APDashboardWi3 = window.APDashboardWidgetsEditor) === null || _window$APDashboardWi3 === void 0 ? void 0 : _window$APDashboardWi3.roles) || [];
+  var adminNonce = ((_window$APDashboardWi4 = window.APDashboardWidgetsEditor) === null || _window$APDashboardWi4 === void 0 ? void 0 : _window$APDashboardWi4.adminNonce) || '';
   if (!document.getElementById('admin-dashboard-widgets-editor')) {
     console.error('Missing root container');
   } else {
     window.APDashboardWidgetsEditor = {
       config: config,
       widgets: widgets,
-      roles: roles
+      roles: roles,
+      adminNonce: adminNonce
     };
   }
   if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.config) {
@@ -146,6 +148,12 @@
     console.error('APDashboardWidgetsEditor.widgets is missing; using empty list.');
     window.APDashboardWidgetsEditor = _objectSpread2(_objectSpread2({}, window.APDashboardWidgetsEditor), {}, {
       widgets: []
+    });
+  }
+  if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.adminNonce) {
+    console.error('APDashboardWidgetsEditor.adminNonce is missing; AJAX requests may fail.');
+    window.APDashboardWidgetsEditor = _objectSpread2(_objectSpread2({}, window.APDashboardWidgetsEditor), {}, {
+      adminNonce: adminNonce
     });
   }
   function WidgetSettingsForm(_ref) {
@@ -264,6 +272,7 @@
       config = _ref2.config,
       roles = _ref2.roles,
       nonce = _ref2.nonce,
+      adminNonce = _ref2.adminNonce,
       ajaxUrl = _ref2.ajaxUrl,
       _ref2$l10n = _ref2.l10n,
       l10n = _ref2$l10n === void 0 ? {} : _ref2$l10n;
@@ -404,6 +413,7 @@
       var form = new FormData();
       form.append('action', 'ap_save_dashboard_widget_config');
       form.append('nonce', nonce);
+      form.append('_wpnonce', adminNonce);
       active.forEach(function (w) {
         return form.append("config[".concat(activeRole, "][]"), w.id);
       });
