@@ -147,4 +147,7 @@ the tab identifier.
 add_action( 'artpulse_render_settings_tab_widgets', function () {
     echo '<p>Widgets tab content</p>';
 } );
+
+// DashboardWidgetTools loads its admin interface when this hook fires
+// and includes `templates/admin/settings-tab-widgets.php`.
 ```
