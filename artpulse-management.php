@@ -25,7 +25,6 @@ use ArtPulse\Core\ArtworkWooSync;
 use ArtPulse\Core\Activator;
 use ArtPulse\Admin\EnqueueAssets;
 use ArtPulse\Core\DashboardWidgetRegistry;
-use ArtPulse\Rest\OrgRolesController;
 
 // Suppress deprecated notices if WP_DEBUG enabled
 if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -57,7 +56,6 @@ require_once plugin_dir_path(__FILE__) . 'vendor/yahnis-elsts/plugin-update-chec
 require_once __DIR__ . '/includes/update-checker.php';
 
 Plugin::register();
-OrgRolesController::register();
 
 /**
  * Ensure core database tables exist on activation.
@@ -122,6 +120,7 @@ require_once __DIR__ . '/includes/i18n.php';
 include_once __DIR__ . '/shortcodes/widget-embed.php';
 include_once __DIR__ . '/shortcodes/artist-comments.php';
 require_once __DIR__ . '/includes/rest/org-roles.php';
+require_once __DIR__ . '/includes/rest/OrgRolesController.php';
 require_once __DIR__ . '/includes/rest/artist.php';
 require_once __DIR__ . '/includes/rest/status.php';
 require_once __DIR__ . '/includes/rest-messages.php';
@@ -135,6 +134,11 @@ require_once __DIR__ . '/includes/hooks.php';
 require_once __DIR__ . '/includes/registration-hooks.php';
 require_once __DIR__ . '/includes/roles.php';
 require_once __DIR__ . '/includes/profile-roles.php';
+
+add_action('rest_api_init', function () {
+    $controller = new \ArtPulse\Rest\OrgRolesController();
+    $controller->register_routes();
+});
 
 // Ensure custom roles exist on every load
 add_action('init', function () {
