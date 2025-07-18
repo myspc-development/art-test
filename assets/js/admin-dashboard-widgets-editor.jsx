@@ -5,11 +5,12 @@ import Dashicon from './components/ui/Dashicon';
 const config = window.APDashboardWidgetsEditor?.config || [];
 const widgets = window.APDashboardWidgetsEditor?.widgets || [];
 const roles = window.APDashboardWidgetsEditor?.roles || [];
+const adminNonce = window.APDashboardWidgetsEditor?.adminNonce || '';
 
 if (!document.getElementById('admin-dashboard-widgets-editor')) {
   console.error('Missing root container');
 } else {
-  window.APDashboardWidgetsEditor = { config, widgets, roles };
+  window.APDashboardWidgetsEditor = { config, widgets, roles, adminNonce };
 }
 
 if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.config) {
@@ -35,6 +36,14 @@ if (!window.APDashboardWidgetsEditor || !Array.isArray(window.APDashboardWidgets
   window.APDashboardWidgetsEditor = {
     ...window.APDashboardWidgetsEditor,
     widgets: [],
+  };
+}
+
+if (!window.APDashboardWidgetsEditor || !window.APDashboardWidgetsEditor.adminNonce) {
+  console.error('APDashboardWidgetsEditor.adminNonce is missing; AJAX requests may fail.');
+  window.APDashboardWidgetsEditor = {
+    ...window.APDashboardWidgetsEditor,
+    adminNonce: adminNonce,
   };
 }
 
@@ -125,7 +134,7 @@ function WidgetSettingsForm({ id, onClose, l10n = {} }) {
   );
 }
 
-function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
+function WidgetsEditor({ widgets, config, roles, nonce, adminNonce, ajaxUrl, l10n = {} }) {
   const roleKeys = Object.keys(roles);
   const [activeRole, setActiveRole] = useState(roleKeys[0] || '');
   const [active, setActive] = useState([]);
@@ -235,6 +244,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, ajaxUrl, l10n = {} }) {
     const form = new FormData();
     form.append('action', 'ap_save_dashboard_widget_config');
     form.append('nonce', nonce);
+    form.append('_wpnonce', adminNonce);
     active.forEach(w => form.append(`config[${activeRole}][]`, w.id));
     fetch(ajaxUrl, { method: 'POST', body: form })
       .then(r => r.json())

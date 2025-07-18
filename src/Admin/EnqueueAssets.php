@@ -242,6 +242,7 @@ class EnqueueAssets {
                     'config'  => $config,
                     'roles'   => wp_roles()->roles,
                     'nonce'   => wp_create_nonce('ap_dashboard_widget_config'),
+                    'adminNonce' => wp_create_nonce('ap_save_dashboard_widget_config'),
                     'ajaxUrl' => admin_url('admin-ajax.php'),
                     'l10n'    => [
                         'availableWidgets' => __('Available Widgets', 'artpulse'),
