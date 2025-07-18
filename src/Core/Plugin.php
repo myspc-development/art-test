@@ -35,6 +35,7 @@ use ArtPulse\AI\GrantAssistant;
 use ArtPulse\Rest\VisitRestController;
 use ArtPulse\Rest\OrgUserRolesController;
 use ArtPulse\Core\FeedAccessLogger;
+use ArtPulse\Core\OrgRoleMetaMigration;
 use ArtPulse\Rest\NearbyEventsController;
 
 class Plugin
@@ -90,6 +91,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Rest\CompetitionRestController::class, 'register']);
         add_action('rest_api_init', [VisitRestController::class, 'register']);
         add_action('init', [\ArtPulse\Core\EventRsvpMetaMigration::class, 'maybe_migrate']);
+        add_action('init', [OrgRoleMetaMigration::class, 'maybe_migrate']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
         add_action('init', [$this, 'maybe_migrate_profile_link_request_slug']);
         add_action('init', [$this, 'maybe_add_upload_cap']);
