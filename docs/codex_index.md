@@ -38,6 +38,17 @@
 | [`feeds-reference.md`](./feeds-reference.md) | L3 | 🟡 [🚧 Sprint Needed] | Dev |
 | [`analytics-pilot.md`](./analytics-pilot.md) | L3 | 🟢 | Partners |
 
+## 🧩 Dashboard Widget Manager
+
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| [`widget-manager-data-layer-guide.md`](./widget-manager-data-layer-guide.md) | Layout storage & retrieval | Dev |
+| [`dashboard-editor-developer-guide.md`](./dashboard-editor-developer-guide.md) | Admin drag-and-drop editor | Dev |
+| [`widget-registry-reference.md`](./widget-registry-reference.md) | Widget registration metadata | Dev |
+| [`rest-api-and-ajax-endpoint-spec.md`](./rest-api-and-ajax-endpoint-spec.md) | REST and AJAX endpoints | Dev |
+| [`widget-layout-import-export-guide.md`](./widget-layout-import-export-guide.md) | Import/export JSON | Dev |
+| [`widget-manager-testing-checklist.md`](./widget-manager-testing-checklist.md) | Testing & access control | QA, Dev |
+
 ---
 
 ## 🎨 Creator & Curator Tools (Phase M)
