@@ -9,7 +9,7 @@ class DashboardController {
      * @var array<string,string[]>
      */
     private static array $role_widgets = [
-        'artist'       => ['widget_profile', 'widget_recent_events', 'widget_sales'],
+        'artist'       => ['membership', 'rsvps', 'sales_summary'],
         'organization' => ['widget_members', 'widget_finance', 'widget_rsvp'],
         'member'       => ['widget_news', 'widget_events', 'widget_favorites', 'instagram_widget'],
     ];
