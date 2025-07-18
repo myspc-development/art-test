@@ -1,3 +1,6 @@
+<?php
+defined('ABSPATH') || exit;
+
 namespace ArtPulse\Rest;
 
 use WP_REST_Controller;
