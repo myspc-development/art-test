@@ -219,6 +219,9 @@ function WidgetsEditor(_ref2) {
     defaults = _useState18[0];
   var activeRef = (0, _react.useRef)(null);
   var availRef = (0, _react.useRef)(null);
+  var renderCount = (0, _react.useRef)(0);
+  renderCount.current += 1;
+  console.log('Render count:', renderCount.current);
   var presets = {
     new_artist: ['membership', 'widget_for_you_all', 'instagram_widget', 'my-events'],
     event_organizer: ['membership', 'events', 'rsvps', 'rsvp_stats', 'local-events']

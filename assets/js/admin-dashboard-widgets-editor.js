@@ -315,6 +315,9 @@
       defaults = _useState18[0];
     var activeRef = React$1.useRef(null);
     var availRef = React$1.useRef(null);
+    var renderCount = React$1.useRef(0);
+    renderCount.current += 1;
+    console.log('Render count:', renderCount.current);
     var presets = {
       new_artist: ['membership', 'widget_for_you_all', 'instagram_widget', 'my-events'],
       event_organizer: ['membership', 'events', 'rsvps', 'rsvp_stats', 'local-events']
