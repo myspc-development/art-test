@@ -121,7 +121,7 @@ class DashboardWidgetTools
             echo '<div class="notice notice-error"><p>' . esc_html($msg) . '</p></div>';
         }
 
-        if (defined('WP_DEBUG') && WP_DEBUG) {
+        if (defined('ARTPULSE_DEBUG') && ARTPULSE_DEBUG) {
             error_log('Widget Manager accessed by user: ' . get_current_user_id());
             error_log('User roles: ' . wp_json_encode(wp_get_current_user()->roles));
         }
