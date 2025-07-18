@@ -104,6 +104,22 @@ class DashboardWidgetTools
             wp_die(__('Access denied.', 'artpulse'));
         }
 
+        if (isset($_GET['dw_import_success'])) {
+            echo '<div class="notice notice-success"><p>' . esc_html__('Widget configuration imported.', 'artpulse') . '</p></div>';
+        } elseif (isset($_GET['dw_import_error'])) {
+            $err  = sanitize_text_field($_GET['dw_import_error']);
+            switch ($err) {
+                case 'no_file':
+                    $msg = __('No file was uploaded.', 'artpulse');
+                    break;
+                case 'invalid_json':
+                default:
+                    $msg = __('Uploaded file contains invalid JSON.', 'artpulse');
+                    break;
+            }
+            echo '<div class="notice notice-error"><p>' . esc_html($msg) . '</p></div>';
+        }
+
         if (defined('WP_DEBUG') && WP_DEBUG) {
             error_log('Widget Manager accessed by user: ' . get_current_user_id());
             error_log('User roles: ' . wp_json_encode(wp_get_current_user()->roles));
@@ -271,15 +287,21 @@ class DashboardWidgetTools
         check_admin_referer('ap_import_widget_config');
 
         if (!isset($_FILES['ap_widget_file']) || empty($_FILES['ap_widget_file']['tmp_name'])) {
-            wp_safe_redirect(add_query_arg('dw_import_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('[DashboardWidgetTools] Import failed: missing file');
+            }
+            wp_safe_redirect(add_query_arg('dw_import_error', 'no_file', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
             exit;
         }
 
         $json = file_get_contents($_FILES['ap_widget_file']['tmp_name']);
         $data = json_decode($json, true);
 
-        if (!is_array($data)) {
-            wp_safe_redirect(add_query_arg('dw_import_error', '1', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('[DashboardWidgetTools] Invalid JSON import: ' . json_last_error_msg());
+            }
+            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_json', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
             exit;
         }
 
