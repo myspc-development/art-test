@@ -66,6 +66,7 @@ For production deployments the server should run behind a TLS‑terminating prox
 - **Cannot connect:** ensure the server is running and that clients are using the correct WebSocket URL including the port value.
 - **Unauthorized errors:** verify the JWT used by the client was signed with the same `JWT_SECRET` set for the server.
 - **Connection closed immediately:** some corporate proxies and firewalls block WebSocket traffic. Try another network or adjust proxy settings.
+- **500 errors on admin pages:** the plugin's `vendor/` directory is missing. Run `composer install` in the plugin root before activating it as noted in the [README](../README.md).
 
 ## Test Environment Variables
 
