@@ -13,7 +13,7 @@ function ap_widget_shortcode($atts) {
 
     $current_user = wp_get_current_user();
     $roles = $widget['roles'] ?? [];
-    if (!array_intersect($current_user->roles, $roles)) {
+    if ($roles && !array_intersect($current_user->roles, $roles)) {
         return '';
     }
 
