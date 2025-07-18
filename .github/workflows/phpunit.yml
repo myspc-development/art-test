@@ -1,0 +1,58 @@
+name: Run Plugin PHPUnit Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          extensions: zip, mysqli, dom
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Configure WordPress Tests
+        run: |
+          cp wp-tests-config.php wp-tests-config.ci.php
+          sed -i "s/localhost/127.0.0.1/" wp-tests-config.ci.php
+          echo "define( 'ABSPATH', '/tmp/wordpress/' );" >> wp-tests-config.ci.php
+
+      - name: Download WordPress
+        run: |
+          mkdir -p /tmp/wordpress
+          curl -o /tmp/wordpress.tar.gz https://wordpress.org/latest.tar.gz
+          tar -xzf /tmp/wordpress.tar.gz -C /tmp
+          mv /tmp/wordpress /tmp/wordpress-core
+
+      - name: Run PHPUnit
+        env:
+          WP_TESTS_CONFIG: wp-tests-config.ci.php
+        run: |
+          vendor/bin/phpunit
