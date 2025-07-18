@@ -1,14 +1,24 @@
 <?php
+/**
+ * Instagram widget template.
+ */
 $token = $args['access_token'] ?? '';
 $count = isset($args['count']) ? (int) $args['count'] : 3;
 $urls  = [];
 $posts = [];
 
 if ($token) {
-    $resp = wp_remote_get("https://graph.instagram.com/me/media?fields=permalink,media_url,caption&access_token={$token}&limit={$count}");
-    if (!is_wp_error($resp)) {
-        $data = json_decode(wp_remote_retrieve_body($resp), true);
-        $posts = $data['data'] ?? [];
+    $cache_key = 'ap_instagram_posts_' . md5($token . '|' . $count);
+    $posts     = get_transient($cache_key);
+    if (false === $posts) {
+        $resp = wp_remote_get("https://graph.instagram.com/me/media?fields=permalink,media_url,caption&access_token={$token}&limit={$count}");
+        if (!is_wp_error($resp)) {
+            $data  = json_decode(wp_remote_retrieve_body($resp), true);
+            $posts = $data['data'] ?? [];
+            set_transient($cache_key, $posts, HOUR_IN_SECONDS);
+        } else {
+            $posts = [];
+        }
     }
 } elseif (!empty($args['urls'])) {
     $urls = array_slice((array) $args['urls'], 0, $count);
@@ -18,7 +28,7 @@ if ($token) {
 }
 ?>
 <div class="ap-widget">
-  <div class="ap-widget-header">📷 <?php _e('Instagram','artpulse'); ?></div>
+  <div class="ap-widget-header">📷 <?php _e('Instagram', 'artpulse'); ?></div>
   <div class="ap-widget-body">
     <?php foreach ($posts as $post) : ?>
       <div class="ap-instagram-post">
