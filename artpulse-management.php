@@ -112,6 +112,7 @@ require_once __DIR__ . '/includes/help-doc-renderer.php';
 require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';
 require_once __DIR__ . '/admin/page-community-roles.php';
 require_once __DIR__ . '/admin/page-org-roles.php';
+require_once __DIR__ . '/admin/page-roles-editor.php';
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
 require_once __DIR__ . '/auto-tagger.php';
@@ -738,6 +739,22 @@ add_action('admin_enqueue_scripts', function ($hook) {
         wp_localize_script('role-dashboard', 'ArtPulseDashboard', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('ap_dashboard_nonce')
+        ]);
+    }
+});
+
+add_action('admin_enqueue_scripts', function ($hook) {
+    if ($hook === 'toplevel_page_artpulse_roles') {
+        wp_enqueue_script(
+            'artpulse-roles-editor',
+            plugins_url('assets/js/roles-editor.js', __FILE__),
+            ['wp-api-fetch', 'wp-element', 'wp-components'],
+            filemtime(plugin_dir_path(__FILE__) . 'assets/js/roles-editor.js'),
+            true
+        );
+        wp_localize_script('artpulse-roles-editor', 'ArtPulseRoles', [
+            'apiNonce' => wp_create_nonce('wp_rest'),
+            'restUrl'  => rest_url('artpulse/v1/roles'),
         ]);
     }
 });
