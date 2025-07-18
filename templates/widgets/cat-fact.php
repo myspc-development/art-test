@@ -1,12 +1,16 @@
 <?php
-// Fetch a random cat fact from the catfact.ninja API.
-$fact = '';
-$response = wp_remote_get('https://catfact.ninja/fact');
-if (!is_wp_error($response)) {
-    $body = wp_remote_retrieve_body($response);
-    $data = json_decode($body, true);
-    if (isset($data['fact'])) {
-        $fact = $data['fact'];
+// Fetch a random cat fact from the catfact.ninja API with caching.
+$cache_key = 'ap_cat_fact';
+$fact      = get_transient($cache_key);
+if ($fact === false) {
+    $response = wp_remote_get('https://catfact.ninja/fact');
+    if (!is_wp_error($response)) {
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+        if (isset($data['fact'])) {
+            $fact = $data['fact'];
+            set_transient($cache_key, $fact, HOUR_IN_SECONDS);
+        }
     }
 }
 ?>
