@@ -1,5 +1,5 @@
 [
-  {"id": "widget_profile"},
-  {"id": "widget_recent_events"},
-  {"id": "widget_sales"}
+  {"id": "membership"},
+  {"id": "rsvps"},
+  {"id": "sales_summary"}
 ]

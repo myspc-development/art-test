@@ -9,12 +9,12 @@ Provide a callback that outputs the widget markup.
 
 ```php
 DashboardWidgetRegistry::register(
-    'profile_overview',
-    __('Profile Overview', 'artpulse'),
-    'admin-users',
-    __('Shows basic account info and avatar.', 'artpulse'),
-    'ap_widget_profile_overview',
-    ['category' => 'profile', 'roles' => ['member', 'artist']]
+    'membership',
+    __('Membership', 'artpulse'),
+    'users',
+    __('Subscription status and badges.', 'artpulse'),
+    'ap_widget_membership',
+    ['category' => 'engagement', 'roles' => ['member', 'artist']]
 );
 ```
 
