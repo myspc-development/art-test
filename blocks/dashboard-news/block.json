@@ -1,0 +1,10 @@
+{
+  "apiVersion": 2,
+  "name": "artpulse/dashboard-news",
+  "title": "Dashboard News",
+  "category": "widgets",
+  "icon": "megaphone",
+  "supports": { "html": false },
+  "style": "file:../../assets/css/min/dashboard-widget.css",
+  "render": "ArtPulse\\Blocks\\DashboardNewsBlock::render_callback"
+}
