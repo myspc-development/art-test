@@ -133,6 +133,14 @@ DashboardWidgetRegistry::register('id', 'Title', 'Icon', 'Description', $callbac
 - Preview each layout after changes
 - Use browser DevTools to check for JS errors if things don't update
 
+## ❓ Troubleshooting
+
+- **500 error when opening the editor:** Make sure `src/helpers.php` is loaded.
+  The `ap_user_can_edit_layout()` function is defined in that file and is
+  required via `artpulse-management.php`. Some older docs referenced
+  `includes/dashboard-widget-functions.php`, but that file is no longer used.
+
+
 ---
 
 ## 📬 Support
