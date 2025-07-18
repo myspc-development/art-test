@@ -45,11 +45,21 @@ if (version_compare(PHP_VERSION, '8.2', '<')) {
 
 // Load Composer autoloader
 $autoload_path = __DIR__ . '/vendor/autoload.php';
-if (file_exists($autoload_path)) {
-require_once $autoload_path;
-} else {
-    wp_die('Autoloader missing. Run `composer install` in the plugin directory.');
+if (!file_exists($autoload_path)) {
+    if (is_admin()) {
+        add_action('admin_notices', static function () {
+            echo '<div class="notice notice-error"><p>' .
+                esc_html__('ArtPulse Management plugin is missing the Composer autoloader. Run `composer install` in the plugin directory and activate the plugin again.', 'artpulse') .
+                '</p></div>';
+        });
+    }
+    if (!function_exists('deactivate_plugins')) {
+        include_once ABSPATH . 'wp-admin/includes/plugin.php';
+    }
+    deactivate_plugins(plugin_basename(__FILE__));
+    return;
 }
+require_once $autoload_path;
 
 // Setup automatic plugin updates from GitHub
 require_once plugin_dir_path(__FILE__) . 'vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php';

@@ -78,6 +78,8 @@ ArtPulse requires **PHP 8.2 or higher**. Ensure your server meets this
 requirement before activating the plugin.
 
 WordPress will display an “unexpected output” warning if this file is missing.
+If you skip `composer install` before activating the plugin, admin pages may
+return HTTP 500 errors because the required classes cannot be loaded.
 
 ## Overview & Quick Reference
 
