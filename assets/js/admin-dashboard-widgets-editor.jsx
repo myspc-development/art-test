@@ -150,6 +150,7 @@ function WidgetsEditor({ widgets, config, roles, nonce, adminNonce, ajaxUrl, l10
   const [defaults] = useState(() => JSON.parse(JSON.stringify(config)));
   const activeRef = useRef(null);
   const availRef = useRef(null);
+  console.log('Rendering WidgetEditor');
 
   const presets = {
     new_artist: ['membership', 'widget_for_you_all', 'instagram_widget', 'my-events'],
