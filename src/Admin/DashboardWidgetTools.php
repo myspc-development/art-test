@@ -97,11 +97,19 @@ class DashboardWidgetTools
 
         $editable = array_keys($roles);
         if (!in_array($selected, $editable, true) && !current_user_can('manage_options')) {
-            wp_die('Invalid role');
+            wp_die(
+                __('Invalid role.', 'artpulse'),
+                '',
+                ['response' => 403]
+            );
         }
 
         if (!ap_user_can_edit_layout($selected)) {
-            wp_die(__('Access denied.', 'artpulse'));
+            wp_die(
+                __('Access denied.', 'artpulse'),
+                '',
+                ['response' => 403]
+            );
         }
 
         if (isset($_GET['dw_import_success'])) {
@@ -261,7 +269,11 @@ class DashboardWidgetTools
     public static function handle_export(): void
     {
         if (!current_user_can('manage_options')) {
-            wp_die(__('Insufficient permissions', 'artpulse'));
+            wp_die(
+                __('Insufficient permissions', 'artpulse'),
+                '',
+                ['response' => 403]
+            );
         }
 
         check_admin_referer('ap_export_widget_config');
@@ -281,7 +293,11 @@ class DashboardWidgetTools
     public static function handle_import(): void
     {
         if (!current_user_can('manage_options')) {
-            wp_die(__('Insufficient permissions', 'artpulse'));
+            wp_die(
+                __('Insufficient permissions', 'artpulse'),
+                '',
+                ['response' => 403]
+            );
         }
 
         check_admin_referer('ap_import_widget_config');
