@@ -7,8 +7,8 @@ Dashboards for members, artists and organizations are all rendered through the `
 ## Layout Storage
 
 - **Per user:** Layouts are stored in the `ap_dashboard_layout` user meta key. Visibility settings live in `ap_widget_visibility`.
-- **Per role:** Default layouts are saved in the `ap_dashboard_widget_config` option.
-- The layout array contains ordered entries describing each widget:
+- **Per role:** Default layouts are saved in the `ap_dashboard_widget_config` option as block pattern markup keyed by role.
+- Legacy exports may contain arrays describing each widget. Example:
 
 ```json
 [
