@@ -12,11 +12,13 @@
 ## Suggested Features
 - [ ] AI-enhanced style/genre detection
 - [ ] Multilingual NLP model integration
-- [ ] Ticketing & Membership system (WooCommerce or Custom)
+- [x] Ticketing & Membership system (WooCommerce or Custom)
 - [ ] Admin Dashboard with analytics widgets
 - [ ] Event Comments REST routes (moderation, threading)
-- [ ] Monetization tools: donation modules, payout integration
+- [x] Monetization tools: donation modules, payout integration
 - [ ] UI/UX polish & accessibility (WCAG)
-- [ ] Internationalization support (.pot/.mo files)
-- [ ] Automated testing (PHPUnit, Jest)
-- [ ] CI/CD workflow (GitHub Actions)
+- [x] Internationalization support (.pot/.mo files)
+- [x] Automated testing (PHPUnit, Jest)
+- [x] CI/CD workflow (GitHub Actions)
+
+Last updated: July 18, 2025

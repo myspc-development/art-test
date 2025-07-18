@@ -43,7 +43,7 @@ A living document to track major tasks across the project.
 | Task ID | Task Title | Description | Status |
 |--------|-------------|-------------|--------|
 | I1 | Add Language Files | Include `.pot` and translation files. | ✅ |
-| A1 | Keyboard Navigation | Ensure admin pages are fully keyboard-accessible. | ⏳ |
+| A1 | Keyboard Navigation | Ensure admin pages are fully keyboard-accessible. | ✅ |
 
 ---
 
@@ -54,4 +54,4 @@ A living document to track major tasks across the project.
 | R1 | CHANGELOG Updates | Document all notable changes for release. | ✅ |
 | R2 | Uninstall Cleanup | Remove plugin data on uninstall. | ✅ |
 
-Last updated: July 17, 2025
+Last updated: July 18, 2025
