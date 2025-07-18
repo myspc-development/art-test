@@ -12,3 +12,9 @@ $table_prefix = 'wptests_';
 
 // Required for some wp-phpunit setups
 define( 'WP_TESTS_DIR', __DIR__ . '/vendor/wp-phpunit/wp-phpunit' );
+// Path to the WordPress installation used by the test suite.
+if ( getenv( 'WP_CORE_DIR' ) ) {
+    define( 'ABSPATH', rtrim( getenv( 'WP_CORE_DIR' ), '/' ) . '/' );
+} else {
+    define( 'ABSPATH', __DIR__ . '/wordpress/' );
+}
