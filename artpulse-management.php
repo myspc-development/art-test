@@ -33,6 +33,17 @@ if (defined('WP_DEBUG') && WP_DEBUG) {
     @error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 }
 
+// Ensure PHP 8.2 or newer
+if (version_compare(PHP_VERSION, '8.2', '<')) {
+    if (function_exists('deactivate_plugins')) {
+        deactivate_plugins(plugin_basename(__FILE__));
+    }
+    wp_die(sprintf(
+        esc_html__('ArtPulse requires PHP 8.2 or higher. You are running %s.', 'artpulse'),
+        PHP_VERSION
+    ));
+}
+
 // Load Composer autoloader
 $autoload_path = __DIR__ . '/vendor/autoload.php';
 if (file_exists($autoload_path)) {
