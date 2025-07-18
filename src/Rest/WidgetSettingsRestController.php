@@ -22,14 +22,27 @@ class WidgetSettingsRestController
         register_rest_route('artpulse/v1', '/widget-settings/(?P<id>[a-z0-9_-]+)', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_settings'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => fn() => current_user_can('read'),
         ]);
 
         register_rest_route('artpulse/v1', '/widget-settings/(?P<id>[a-z0-9_-]+)', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'save_settings'],
-            'permission_callback' => fn() => is_user_logged_in(),
+            'permission_callback' => [self::class, 'can_save'],
         ]);
+    }
+
+    /**
+     * Verify nonce and user capability for saving settings.
+     */
+    public static function can_save(WP_REST_Request $request): bool
+    {
+        $nonce = $request->get_header('X-WP-Nonce');
+        if ($nonce) {
+            $_REQUEST['X-WP-Nonce'] = $nonce;
+        }
+
+        return current_user_can('read') && check_ajax_referer('wp_rest', 'X-WP-Nonce', false);
     }
 
     public static function get_settings(WP_REST_Request $request): WP_REST_Response|WP_Error

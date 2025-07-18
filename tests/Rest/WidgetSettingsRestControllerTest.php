@@ -36,6 +36,7 @@ class WidgetSettingsRestControllerTest extends \WP_UnitTestCase
     public function test_save_and_get_settings(): void
     {
         $req = new WP_REST_Request('POST', '/artpulse/v1/widget-settings/test-widget');
+        $req->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));
         $req->set_body_params(['settings' => ['limit' => 8]]);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
