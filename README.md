@@ -174,43 +174,13 @@ Parameters:
 
 The script injects an iframe served from `/wp-json/widgets/render` with the same parameters. Responses are cached for an hour.
 
-### Shortcodes & Widgets List
-- `[ap_event_directory]` — Show event directory with filters
- - `[ap_event_calendar]` — Show event calendar
- - `[ap_event_map]` — Map view of events
-- `[ap_events_slider]` — Carousel of upcoming events
-- `[ap_artist_directory]` — Show artist directory
-- `[ap_artwork_directory]` — Show artworks directory
-- `[ap_org_directory]` — Show organizations directory
-- `[ap_login]` — Front-end login form with optional OAuth buttons
-- `[ap_register]` — Standalone registration form with password confirmation
-- `[ap_logout]` — Logout link
- - `[ap_event_filter]` — AJAX search and filter form (secured with a nonce)
-- `[ap_user_dashboard]` — Member dashboard with stats
-- `[ap_portfolio_builder]` — Portfolio item builder
-- `[ap_org_event_form]` — Organization event submission form
-- `[ap_directory]` — Legacy directory shortcode
-- `[ap_my_follows]` — List artists, events or organizations you follow
-- `[ap_favorite_portfolio]` — Display a portfolio of favorited events/artworks
-- `[ap_favorites_analytics]` — Show analytics for favorite counts
-- `[ap_messages]` — Render threaded inbox
-- `[ap_message_form]` — Standalone message compose form
+### Shortcodes & Widgets
+
+See [Shortcodes & Widgets Overview](docs/shortcodes-overview.md) for the complete list of available shortcodes and widgets.
 
 ## CSV Import/Export
 
-An Import/Export tab is available under **ArtPulse → Settings**. From this tab administrators can:
-
-- Upload a CSV file and map its columns to post fields or meta keys. After selecting the mappings a preview of the first few rows is displayed before importing.
-- Import data in chunks via the REST API endpoint `artpulse/v1/import`.
-- Download CSV exports for organizations, events, artists and artworks.
-
-During import you can configure:
-
-* Whether the uploaded file contains a header row.
-* Which delimiter to use (comma, semicolon, tab or a custom character).
-* How many initial rows should be skipped before parsing.
-
-Only users with the `manage_options` capability may perform imports. PapaParse is used client side for parsing CSV files.
+Instructions for uploading CSV files, mapping columns and downloading exports have moved to [docs/import-export.md](docs/import-export.md).
 ## Membership Overrides
 
 The **ArtPulse → Settings** page includes options allowing administrators to bypass membership checks and fees for specific user types. Enabling these checkboxes disables enforcement for the corresponding role:
@@ -426,120 +396,5 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 
 ## Development Setup
 
-ArtPulse currently supports **PHP 8.2–8.4**. Ensure a compatible PHP version is
-installed before continuing.
-
-Install Composer dependencies and WordPress PHPUnit tools:
-
-```bash
-composer install    # PHP libraries
-```
-
-Install Node packages used for bundling JavaScript and compiling SCSS, then
-build the bundled assets:
-
-```bash
-npm install
-npm run build
-```
-
-The `scripts/` directory stores optional scaffolding and release helpers
-used during early development. These scripts are **not** required when
-setting up the plugin from source.
-
-Before running the tests for the first time, execute the environment
-setup script to fetch WordPress and install dependencies:
-
-```bash
-bash scripts/setup-env.sh
-```
-The script requires the `svn` command. Install Subversion if it is not available.
-This script downloads WordPress and installs Composer dependencies. When the
-`CI` environment variable is present it runs `composer install` with non‑interactive options, making it suitable for automated pipelines.
-
-Run the test suite and coding standards checks with:
-
-```bash
-vendor/bin/phpunit
-composer sniff
-```
-
-The `package.json` file defines scripts for building production assets. To compile the SCSS, bundle the React sources and build blocks run:
-
-```bash
-npm run build
-```
-PostCSS reads `postcss.config.js` from the repository root, so no additional
-configuration is required under `wp-content/plugins`.
-This command compiles the SCSS, bundles blocks and packages the React-based admin scripts via Rollup. Run it whenever files such as
-`sidebar-taxonomies.jsx`, `advanced-taxonomy-filter-block.jsx`,
-`filtered-list-shortcode-block.jsx` or `ajax-filter-block.jsx` are
-modified so the corresponding `.js` files are regenerated.
-
-To create a distributable archive execute the Composer `zip` script:
-
-```bash
-composer zip
-```
-
-The zip file is placed in the `release/` directory.
-
-### WebSocket Server
-
-The real-time message server uses a JWT for authentication. Set the
-`JWT_SECRET` environment variable to a long random string before running the
-server. You can start it with `node server/ws-server.js` or via the npm script
-`npm run ws`.
-
-To configure the server create a `.env` file in the project root. Define the
-secret and optionally the port:
-
-```bash
-JWT_SECRET=change_me_to_a_long_random_string
-# PORT=3001
-```
-
-`JWT_SECRET` must be at least ten characters long or the server will abort at
-startup. Tokens sent by clients **must** include an `exp` claim which controls
-when the token expires. If `PORT` is omitted the server defaults to `3001`.
-
-For production deployments the server should run behind a TLS‑terminating proxy
-(such as Nginx) or be updated to serve over HTTPS with valid certificates.
-Define `JWT_SECRET` and optional `PORT` values in your `.env` file and
-configure the proxy to forward WebSocket requests to this port. See
-[`server/README.md`](server/README.md) for a brief deployment overview.
-
-#### Troubleshooting
-
-- **Cannot connect:** ensure the server is running and that clients are using
-  the correct WebSocket URL including the port value.
-- **Unauthorized errors:** verify the JWT used by the client was signed with the
-  same `JWT_SECRET` set for the server.
-- **Connection closed immediately:** some corporate proxies and firewalls block
-  WebSocket traffic. Try another network or adjust proxy settings.
-
-### Test Environment Variables
-
-Database credentials for the WordPress test suite must be supplied via
-environment variables. Define these before running `bash scripts/setup-env.sh`
-or `vendor/bin/phpunit`:
-
-- `DB_NAME` – name of the test database
-- `DB_USER` – database user
-- `DB_PASSWORD` – user password
-- `DB_HOST` – database host
-- `DB_CHARSET` – optional character set
-- `DB_COLLATE` – optional collation
-
-You may also set `WORDPRESS_TARBALL` to the path of a local WordPress archive
-if you need an offline setup. If any variables are omitted the test bootstrap
-will fail to connect to the database.
-
-### CI Workflow
-
-The `plugin-release.yml` workflow in `.github/workflows/` installs Composer and
-npm dependencies, runs unit tests and builds production assets. Composer caches
-are stored under `~/.composer/cache` while npm caches use `~/.npm`. The cache
-keys include `composer.lock` and `package-lock.json` so dependencies are
-re-downloaded only when these files change.
+Developer environment steps, WebSocket configuration and CI instructions are documented in [docs/development-setup.md](docs/development-setup.md).
 
