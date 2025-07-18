@@ -11,15 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
         visible: el.dataset.visible === '1'
       }));
 
-      fetch(APLayout.ajax_url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'ap_save_user_layout',
-          nonce: APLayout.nonce,
-          layout: layout
-        })
-      }).then(r => r.json()).then(res => {
+      fetch(
+        `${APLayout.ajax_url}?action=ap_save_user_layout&nonce=${encodeURIComponent(APLayout.nonce)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ layout })
+        }
+      ).then(r => r.json()).then(res => {
         if (res.success) {
           console.log('Layout saved.');
         } else {
