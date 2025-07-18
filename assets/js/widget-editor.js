@@ -1,5 +1,6 @@
 // Dashboard widget layout editor
 // Requires SortableJS
+console.log('Widget Editor JS loaded');
 
 let roleSelect;
 let nonceField;
