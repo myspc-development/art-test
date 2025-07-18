@@ -500,6 +500,12 @@ JWT_SECRET=change_me_to_a_long_random_string
 startup. Tokens sent by clients **must** include an `exp` claim which controls
 when the token expires. If `PORT` is omitted the server defaults to `3001`.
 
+For production deployments the server should run behind a TLS‑terminating proxy
+(such as Nginx) or be updated to serve over HTTPS with valid certificates.
+Define `JWT_SECRET` and optional `PORT` values in your `.env` file and
+configure the proxy to forward WebSocket requests to this port. See
+[`server/README.md`](server/README.md) for a brief deployment overview.
+
 #### Troubleshooting
 
 - **Cannot connect:** ensure the server is running and that clients are using
