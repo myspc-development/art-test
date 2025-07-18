@@ -3,7 +3,7 @@
         'name' => 'myspc-development/artpulse-management-plugin',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '2ce3404be212ce9f04968e67b9f31c55ee0fdb18',
+        'reference' => 'ac70e8b613bb3147ac0454530b88be7445c1b6f5',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -121,7 +121,7 @@
         'myspc-development/artpulse-management-plugin' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '2ce3404be212ce9f04968e67b9f31c55ee0fdb18',
+            'reference' => 'ac70e8b613bb3147ac0454530b88be7445c1b6f5',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
