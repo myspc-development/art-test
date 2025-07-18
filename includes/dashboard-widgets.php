@@ -332,6 +332,12 @@ function ap_widget_cat_fact(array $vars = []): string
     return ap_load_dashboard_template('widgets/cat-fact.php', $vars);
 }
 
+function ap_widget_spotlights(array $vars = []): string
+{
+    $vars['role'] = DashboardController::get_role(get_current_user_id());
+    return ap_load_dashboard_template('widgets/widget-spotlights.php', $vars);
+}
+
 function ap_widget_role_spotlight(array $vars = []): string
 {
     $vars['role'] = DashboardController::get_role(get_current_user_id());
@@ -733,6 +739,17 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_spotlight_features',
         [
             'roles' => ['member', 'artist', 'organization'],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'widget_spotlights',
+        __('Spotlights', 'artpulse'),
+        'star',
+        __('Curated spotlights for artists.', 'artpulse'),
+        'ap_widget_spotlights',
+        [
+            'roles' => ['artist'],
         ]
     );
 }
