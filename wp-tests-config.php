@@ -1,28 +1,14 @@
 <?php
-/**
- * WordPress test suite configuration file.
- */
-
-// Database credentials must be supplied via environment variables.
-define( 'DB_NAME', getenv( 'DB_NAME' ) );
-define( 'DB_USER', getenv( 'DB_USER' ) );
-define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) );
-define( 'DB_HOST', getenv( 'DB_HOST' ) );
-define( 'DB_CHARSET', getenv( 'DB_CHARSET' ) );
-define( 'DB_COLLATE', getenv( 'DB_COLLATE' ) );
-define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', true );
-
-// Site constants required by WP test suite
 define( 'WP_TESTS_DOMAIN', 'example.org' );
 define( 'WP_TESTS_EMAIL', 'admin@example.org' );
 define( 'WP_TESTS_TITLE', 'Test Blog' );
+define( 'WP_PHP_BINARY', 'php' ); // Adjust if using PHP 8.1+
 
-// PHP binary for running tests
-define( 'WP_PHP_BINARY', 'php' );
+define( 'DB_NAME', 'wordpress_test' );
+define( 'DB_USER', 'root' );
+define( 'DB_PASSWORD', '' );
+define( 'DB_HOST', 'localhost' );
+$table_prefix = 'wptests_';
 
-// Path to WordPress source
-define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress' );
-
-// Bootstrap the WordPress environment for testing
-require_once ABSPATH . '/wp-settings.php';
+// Required for some wp-phpunit setups
+define( 'WP_TESTS_DIR', __DIR__ . '/vendor/wp-phpunit/wp-phpunit' );
