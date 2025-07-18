@@ -1,11 +1,21 @@
 <?php
 
 // Define required WP test constants
-define( 'WP_TESTS_DOMAIN', 'example.org' );
-define( 'WP_TESTS_EMAIL', 'admin@example.org' );
-define( 'WP_TESTS_TITLE', 'Test Blog' );
-define( 'WP_PHP_BINARY', 'php' );
-define( 'WP_TESTS_DIR', dirname(__DIR__) . '/vendor/wp-phpunit/wp-phpunit' );
+if ( ! defined( 'WP_TESTS_DOMAIN' ) ) {
+    define( 'WP_TESTS_DOMAIN', 'example.org' );
+}
+if ( ! defined( 'WP_TESTS_EMAIL' ) ) {
+    define( 'WP_TESTS_EMAIL', 'admin@example.org' );
+}
+if ( ! defined( 'WP_TESTS_TITLE' ) ) {
+    define( 'WP_TESTS_TITLE', 'Test Blog' );
+}
+if ( ! defined( 'WP_PHP_BINARY' ) ) {
+    define( 'WP_PHP_BINARY', 'php' );
+}
+if ( ! defined( 'WP_TESTS_DIR' ) ) {
+    define( 'WP_TESTS_DIR', dirname(__DIR__) . '/vendor/wp-phpunit/wp-phpunit' );
+}
 // Ensure the core bootstrap can locate the configuration file.
 if ( ! defined( 'WP_TESTS_CONFIG_FILE_PATH' ) ) {
     define( 'WP_TESTS_CONFIG_FILE_PATH', dirname( __DIR__ ) . '/wp-tests-config.php' );
