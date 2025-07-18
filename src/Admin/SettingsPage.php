@@ -637,6 +637,11 @@ class SettingsPage
         $tab_keys       = array_keys($tabs);
         $current_tab    = sanitize_key($_GET['tab'] ?? ($tab_keys[0] ?? 'general'));
 
+        // Fire a hook specific to the active tab so custom handlers can render
+        // additional content or enqueue scripts.
+        $current_tab = sanitize_key($_GET['tab'] ?? 'general');
+        do_action("artpulse_render_settings_tab_{$current_tab}");
+
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('ArtPulse Settings', 'artpulse'); ?></h1>
@@ -663,7 +668,7 @@ class SettingsPage
                         </form>
                         <?php include ARTPULSE_PLUGIN_DIR . 'templates/admin/settings-tab-updates.php'; ?>
                     <?php elseif ($slug === 'widgets') : ?>
-                        <?php include ARTPULSE_PLUGIN_DIR . 'templates/admin/settings-tab-widgets.php'; ?>
+                        <?php do_action('artpulse_render_settings_tab_widgets'); ?>
                     <?php elseif ($slug === 'social_auto') : ?>
                         <?php \ArtPulse\Integration\SocialAutoPoster::render_settings(); ?>
                     <?php else : ?>
