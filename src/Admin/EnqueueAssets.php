@@ -199,7 +199,7 @@ class EnqueueAssets {
             }
         }
 
-        if ($screen->base === 'artpulse-settings_page_artpulse-dashboard-widgets') {
+        if ($screen->base === 'artpulse-settings_page_artpulse-widget-editor') {
             $script_path = $plugin_dir . '/assets/dist/admin-dashboard-widgets-editor.js';
             $script_url  = $plugin_url . '/assets/dist/admin-dashboard-widgets-editor.js';
             $style_path  = $plugin_dir . '/assets/css/min/dashboard-widget.css';

@@ -6,6 +6,7 @@ use ArtPulse\Core\PortfolioManager;
 use ArtPulse\Core\AdminDashboard;
 use ArtPulse\Core\DocumentationManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Rest\ArtistRestController;
 use ArtPulse\Rest\CurrentUserController;
 use ArtPulse\Rest\DashboardMessagesController;
@@ -203,6 +204,7 @@ class Plugin
         \ArtPulse\Core\CapabilitiesManager::register();
         \ArtPulse\Curator\CuratorManager::register();
         DashboardWidgetRegistry::init();
+        DashboardWidgetManager::register();
         \ArtPulse\Core\AdminAccessManager::register();
         \ArtPulse\Core\LoginRedirectManager::register();
         \ArtPulse\Core\DashboardAccessManager::register();

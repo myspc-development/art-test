@@ -2,9 +2,8 @@
 namespace ArtPulse\Admin;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
-use ArtPulse\Admin\UserLayoutManager;
-use ArtPulse\Admin\RoleLayoutManager;
 use ArtPulse\Core\DashboardController;
+use ArtPulse\Core\DashboardWidgetManager;
 
 class DashboardWidgetTools
 {
@@ -131,7 +130,7 @@ class DashboardWidgetTools
             $selected = sanitize_key($_POST['ap_dashboard_role'] ?? $selected);
             $layout   = json_decode(wp_unslash($_POST['layout']), true) ?: [];
             if (is_array($layout)) {
-                UserLayoutManager::save_role_layout($selected, $layout);
+                DashboardWidgetManager::saveRoleLayout($selected, $layout);
                 echo '<div class="notice notice-success"><p>' . esc_html__('Layout saved for role.', 'artpulse') . '</p></div>';
             }
         }
@@ -139,17 +138,17 @@ class DashboardWidgetTools
         if (isset($_POST['reset_layout'])) {
             check_admin_referer('ap_save_role_layout');
             $selected = sanitize_key($_POST['ap_dashboard_role'] ?? $selected);
-            UserLayoutManager::reset_layout_for_role($selected);
+            DashboardWidgetManager::saveRoleLayout($selected, []);
             echo '<div class="notice notice-success"><p>' . esc_html__('Layout reset for role.', 'artpulse') . '</p></div>';
         }
 
         if (isset($_POST['import_role_layout']) && current_user_can('manage_options')) {
-            $import_result = UserLayoutManager::import_layout($selected, stripslashes($_POST['import_json'] ?? ''));
+            $import_result = DashboardWidgetManager::importRoleLayout($selected, stripslashes($_POST['import_json'] ?? ''));
             echo '<div class="notice ' . ($import_result ? 'notice-success' : 'notice-error') . '"><p>'
                 . ($import_result ? 'Layout imported successfully.' : 'Invalid layout JSON.') . '</p></div>';
         }
 
-        $current  = UserLayoutManager::get_role_layout($selected);
+        $current  = DashboardWidgetManager::getRoleLayout($selected);
         $defs     = DashboardWidgetRegistry::get_definitions();
         $defs_by_id = [];
         foreach ($defs as $def) {
@@ -182,7 +181,7 @@ class DashboardWidgetTools
             echo '<br><textarea name="import_json" rows="6" cols="60" placeholder="Paste layout JSON..."></textarea><br>';
             echo '<button name="import_role_layout" type="submit" class="button">Import Layout</button> ';
             echo '<button type="button" class="button" onclick="copyExportedLayout()">Copy Export</button>';
-            echo '<textarea id="export_json" rows="6" cols="60" readonly>' . esc_textarea(UserLayoutManager::export_layout($selected)) . '</textarea>';
+            echo '<textarea id="export_json" rows="6" cols="60" readonly>' . esc_textarea(DashboardWidgetManager::exportRoleLayout($selected)) . '</textarea>';
         }
         echo '</form>';
 
@@ -292,7 +291,7 @@ class DashboardWidgetTools
             if (function_exists('ap_add_admin_notice')) {
                 \ap_add_admin_notice(__('No file was uploaded.', 'artpulse'), 'error');
             }
-            wp_safe_redirect(add_query_arg('dw_import_error', 'no_file', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
+            wp_safe_redirect(add_query_arg('dw_import_error', 'no_file', wp_get_referer() ?: admin_url('admin.php?page=artpulse-widget-editor')));
             exit;
         }
 
@@ -304,7 +303,7 @@ class DashboardWidgetTools
             if (function_exists('ap_add_admin_notice')) {
                 \ap_add_admin_notice(__('Uploaded file contains invalid JSON.', 'artpulse'), 'error');
             }
-            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_json', wp_get_referer() ?: admin_url('admin.php?page=artpulse-dashboard-widgets')));
+            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_json', wp_get_referer() ?: admin_url('admin.php?page=artpulse-widget-editor')));
             exit;
         }
 
@@ -337,7 +336,7 @@ class DashboardWidgetTools
 
         update_option('ap_dashboard_widget_config', $sanitized);
 
-        wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=artpulse-dashboard-widgets')));
+        wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=artpulse-widget-editor')));
         exit;
     }
 
@@ -391,7 +390,7 @@ class DashboardWidgetTools
             return;
         }
 
-        $layout  = UserLayoutManager::get_role_layout($role);
+        $layout  = DashboardWidgetManager::getRoleLayout($role);
 
         echo '<div class="ap-preview-dashboard">';
         $defs = DashboardWidgetRegistry::get_definitions();
@@ -459,10 +458,10 @@ class DashboardWidgetTools
     public static function render_dashboard_widgets(string $role = ''): void
     {
         if ($role !== '') {
-            $layout = RoleLayoutManager::get_layout_for_role($role);
+            $layout = DashboardWidgetManager::getRoleLayout($role);
         } else {
             $user_id = get_current_user_id();
-            $layout  = UserLayoutManager::get_layout_for_user($user_id);
+            $layout  = DashboardWidgetManager::getUserLayout($user_id);
         }
 
         foreach ($layout as $widget) {
@@ -545,7 +544,7 @@ class DashboardWidgetTools
     public static function render_role_dashboard_preview(string $role): void
     {
         $registry = \ArtPulse\Core\DashboardWidgetRegistry::get_all();
-        $layout   = \ArtPulse\Admin\RoleLayoutManager::get_layout_for_role($role);
+        $layout   = DashboardWidgetManager::getRoleLayout($role);
 
         foreach ($layout as $widget) {
             $id      = is_array($widget) ? $widget['id'] : $widget;

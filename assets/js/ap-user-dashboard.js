@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!confirm(msg)) return;
       localStorage.removeItem('apDashboardLayout');
       localStorage.removeItem('apWidgetVisibility');
-      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap_dashboard_layout`, {
+      fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap/layout/reset`, {
         method: 'POST',
         headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ layout: [], visibility: {} })
+        body: JSON.stringify({})
       }).finally(() => window.location.reload());
     });
   }
@@ -905,7 +905,7 @@ function saveLayoutOrder() {
     visible: w.dataset.visible !== '0'
   }));
   localStorage.setItem('apDashboardLayout', JSON.stringify(layout));
-  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap_dashboard_layout`, {
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap/layout/save`, {
     method: 'POST',
     headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
     body: JSON.stringify({ layout })
@@ -942,7 +942,7 @@ function saveVisibility() {
     vis[cb.value] = cb.checked;
   });
   localStorage.setItem('apWidgetVisibility', JSON.stringify(vis));
-  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap_dashboard_layout`, {
+  fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap/layout/save`, {
     method: 'POST',
     headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
     body: JSON.stringify({ visibility: vis })
@@ -974,7 +974,7 @@ function applySavedVisibility(vis) {
 
 async function loadDashboardLayout() {
   try {
-    const res = await fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap_dashboard_layout`, {
+    const res = await fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap/layout`, {
       headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
     });
     if (!res.ok) throw new Error('fail');

@@ -36,7 +36,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
             ['id' => 'two', 'visible' => true],
         ]);
         update_user_meta($this->user_id, 'ap_widget_visibility', ['one' => true]);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -46,7 +46,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
 
     public function test_post_saves_layout_and_visibility(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/ap_dashboard_layout');
+        $req = new WP_REST_Request('POST', '/artpulse/v1/ap/layout/save');
         $req->set_body_params([
             'layout' => [
                 ['id' => 'a', 'visible' => false],
@@ -66,7 +66,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
 
     public function test_post_sanitizes_layout_values(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/ap_dashboard_layout');
+        $req = new WP_REST_Request('POST', '/artpulse/v1/ap/layout/save');
         $req->set_body_params([
             'layout' => [
                 ['id' => 'A-'],
@@ -86,7 +86,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
 
     public function test_post_ignores_duplicates_and_invalid_ids(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/ap_dashboard_layout');
+        $req = new WP_REST_Request('POST', '/artpulse/v1/ap/layout/save');
         $req->set_body_params([
             'layout' => [
                 ['id' => 'a'],
@@ -110,7 +110,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         wp_set_current_user($uid);
         update_option('ap_dashboard_widget_config', ['member' => ['membership', 'upgrade']]);
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
         $res = rest_get_server()->dispatch($req);
 
         $this->assertSame(200, $res->get_status());
@@ -126,7 +126,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
             ['id' => 'B C'],
             ['id' => 'in valid/slug']
         ]);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $expected = ['a-', 'bc', 'invalidslug'];

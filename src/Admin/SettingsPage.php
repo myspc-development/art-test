@@ -33,7 +33,7 @@ class SettingsPage
         SettingsRegistry::register_tab('search', __('Search', 'artpulse'));
         SettingsRegistry::register_tab('emails', __('Email Delivery', 'artpulse'));
         SettingsRegistry::register_tab('updates', __('Updates', 'artpulse'));
-        SettingsRegistry::register_tab('widgets', __('Dashboard Widgets', 'artpulse'));
+        SettingsRegistry::register_tab('widgets', __('Widget Editor', 'artpulse'));
         SettingsRegistry::register_tab('monetization', __('Monetization', 'artpulse'));
 
         $general_fields = [
@@ -375,10 +375,10 @@ class SettingsPage
         );
         add_submenu_page(
             'artpulse-settings',
-            __('Dashboard Widgets', 'artpulse'),
-            __('Dashboard Widgets', 'artpulse'),
+            __('Widget Editor', 'artpulse'),
+            __('Widget Editor', 'artpulse'),
             'manage_options',
-            'artpulse-dashboard-widgets',
+            'artpulse-widget-editor',
             [self::class, 'renderDashboardWidgetsPage']
         );
         // Additional admin pages can hook into 'admin_menu' to add more submenus.

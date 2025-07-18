@@ -9,10 +9,11 @@ if (!defined('ABSPATH')) {
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
+use ArtPulse\Core\DashboardWidgetManager;
 
 function ap_get_all_widget_definitions(bool $include_schema = false): array
 {
-    return DashboardWidgetRegistry::get_definitions($include_schema);
+    return DashboardWidgetManager::getWidgetDefinitions($include_schema);
 }
 
 /**
@@ -20,7 +21,7 @@ function ap_get_all_widget_definitions(bool $include_schema = false): array
  */
 function artpulse_get_dashboard_widgets(bool $include_schema = true): array
 {
-    return DashboardWidgetRegistry::get_definitions($include_schema);
+    return DashboardWidgetManager::getWidgetDefinitions($include_schema);
 }
 
 
@@ -137,7 +138,7 @@ function ap_save_role_layout(): void
         $layout = [];
     }
 
-    \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $layout);
+    DashboardWidgetManager::saveRoleLayout($role, $layout);
     if (defined('WP_DEBUG') && WP_DEBUG) {
         error_log('Saved role layout for ' . $role . ': ' . wp_json_encode($layout));
     }
@@ -168,7 +169,7 @@ function ap_save_user_layout(): void
     $user_id = get_current_user_id();
 
     if ($user_id && is_array($layout)) {
-        \ArtPulse\Admin\UserLayoutManager::save_user_layout($user_id, $layout);
+        DashboardWidgetManager::saveUserLayout($user_id, $layout);
         wp_send_json_success(['message' => 'Layout saved']);
     }
 
