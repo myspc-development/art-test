@@ -17,7 +17,6 @@ $tables = [
     'ap_org_messages',
     'ap_scheduled_messages',
     'ap_payouts',
-    'ap_org_roles',
     'ap_donations',
     'ap_tickets',
     'ap_event_tickets',
