@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-function WidgetConfig({ widgets, config, roles, nonce, ajaxUrl }) {
+function WidgetConfig({ widgets, config, roles, nonce, adminNonce, ajaxUrl }) {
   const roleKeys = Object.keys(roles);
   const [activeRole, setActiveRole] = useState(roleKeys[0] || '');
   const [layout, setLayout] = useState(config[activeRole] || widgets.map(w => w.id));
@@ -10,6 +10,9 @@ function WidgetConfig({ widgets, config, roles, nonce, ajaxUrl }) {
     const form = new FormData();
     form.append('action', 'ap_save_dashboard_widget_config');
     form.append('nonce', nonce);
+    if (adminNonce) {
+      form.append('_wpnonce', adminNonce);
+    }
     layout.forEach(id => form.append(`config[${activeRole}][]`, id));
     fetch(ajaxUrl, { method: 'POST', body: form })
       .then(r => r.json())

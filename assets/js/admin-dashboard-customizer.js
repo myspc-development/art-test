@@ -19,6 +19,7 @@ function WidgetConfig(_ref) {
   var config = _ref.config;
   var roles = _ref.roles;
   var nonce = _ref.nonce;
+  var adminNonce = _ref.adminNonce;
   var ajaxUrl = _ref.ajaxUrl;
 
   var roleKeys = Object.keys(roles);
@@ -43,6 +44,9 @@ function WidgetConfig(_ref) {
     var form = new FormData();
     form.append('action', 'ap_save_dashboard_widget_config');
     form.append('nonce', nonce);
+    if (adminNonce) {
+      form.append('_wpnonce', adminNonce);
+    }
     layout.forEach(function (id) {
       return form.append('config[' + activeRole + '][]', id);
     });
