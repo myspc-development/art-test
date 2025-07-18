@@ -128,7 +128,6 @@ require_once __DIR__ . '/seo-meta.php';
 require_once __DIR__ . '/auto-tagger.php';
 require_once __DIR__ . '/pwa-manifest.php';
 require_once __DIR__ . '/includes/i18n.php';
-include_once __DIR__ . '/shortcodes/widget-embed.php';
 include_once __DIR__ . '/shortcodes/artist-comments.php';
 require_once __DIR__ . '/includes/rest/org-roles.php';
 require_once __DIR__ . '/includes/rest/OrgRolesController.php';
