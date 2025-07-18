@@ -74,6 +74,14 @@ Run the following command in the plugin directory **before** activating it so
 composer install --no-dev --optimize-autoloader
 ```
 
+Install the Node dependencies if you need to compile JavaScript or run the test
+suite. If Chrome cannot be downloaded for Puppeteer-based tests, set
+`PUPPETEER_SKIP_DOWNLOAD=1` before running `npm install`:
+
+```bash
+PUPPETEER_SKIP_DOWNLOAD=1 npm install
+```
+
 ArtPulse requires **PHP 8.2 or higher**. Ensure your server meets this
 requirement before activating the plugin.
 
