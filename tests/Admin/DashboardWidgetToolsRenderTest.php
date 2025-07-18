@@ -12,7 +12,9 @@ if (!function_exists(__NAMESPACE__ . '\\get_current_user_id')) {
     function get_current_user_id() { return 1; }
 }
 if (!function_exists(__NAMESPACE__ . '\\get_user_meta')) {
-    function get_user_meta($uid, $key, $single = false) { return []; }
+    function get_user_meta($uid, $key, $single = false) {
+        return \ArtPulse\Admin\Tests\DashboardWidgetToolsRenderTest::$meta[$uid][$key] ?? [];
+    }
 }
 if (!function_exists(__NAMESPACE__ . '\\get_userdata')) {
     function get_userdata($uid) { return (object)['roles' => ['subscriber']]; }
@@ -41,10 +43,12 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 class DashboardWidgetToolsRenderTest extends TestCase
 {
     public static array $options = [];
+    public static array $meta = [];
 
     protected function setUp(): void
     {
         self::$options = [];
+        self::$meta = [];
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
@@ -86,5 +90,33 @@ class DashboardWidgetToolsRenderTest extends TestCase
 
         $this->assertStringContainsString('role="button"', $html);
         $this->assertStringContainsString('aria-label="Drag to reorder"', $html);
+    }
+
+    public function test_render_dashboard_widgets_uses_role_layout_when_provided(): void
+    {
+        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', function () { echo 'alpha'; });
+
+        self::$options['ap_dashboard_widget_config'] = [
+            'subscriber' => [ ['id' => 'alpha'] ],
+        ];
+
+        ob_start();
+        DashboardWidgetTools::render_dashboard_widgets('subscriber');
+        $html = ob_get_clean();
+
+        $this->assertStringContainsString('alpha', $html);
+    }
+
+    public function test_render_dashboard_widgets_falls_back_to_user_layout(): void
+    {
+        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', function () { echo 'alpha'; });
+
+        self::$meta[1]['ap_dashboard_layout'] = [ ['id' => 'alpha'] ];
+
+        ob_start();
+        DashboardWidgetTools::render_dashboard_widgets('');
+        $html = ob_get_clean();
+
+        $this->assertStringContainsString('alpha', $html);
     }
 }

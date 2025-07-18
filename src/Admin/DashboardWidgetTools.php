@@ -3,6 +3,7 @@ namespace ArtPulse\Admin;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\Admin\RoleLayoutManager;
 use ArtPulse\Core\DashboardController;
 
 class DashboardWidgetTools
@@ -451,14 +452,18 @@ class DashboardWidgetTools
     }
 
     /**
-     * Output dashboard widgets for a specific role.
-     * Layouts are loaded via UserLayoutManager based on
-     * the provided role.
+     * Output dashboard widgets.
+     * If a role is provided, that role's layout will be used.
+     * Otherwise the current user's layout is loaded.
      */
-    public static function render_dashboard_widgets(string $role): void
+    public static function render_dashboard_widgets(string $role = ''): void
     {
-        $user_id = get_current_user_id();
-        $layout  = UserLayoutManager::get_layout_for_user($user_id);
+        if ($role !== '') {
+            $layout = RoleLayoutManager::get_layout_for_role($role);
+        } else {
+            $user_id = get_current_user_id();
+            $layout  = UserLayoutManager::get_layout_for_user($user_id);
+        }
 
         foreach ($layout as $widget) {
             $id = is_array($widget) ? $widget['id'] : $widget;
