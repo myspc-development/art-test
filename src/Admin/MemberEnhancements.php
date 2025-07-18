@@ -115,7 +115,7 @@ class MemberEnhancements
                 $count = $data[$d][$h];
                 $opacity = $max ? ($count / $max) : 0;
                 $style = 'background-color: rgba(0,123,255,' . $opacity . ')';
-                echo '<td>' . ($count ? $count : '') . '</td>';
+                echo '<td style="' . esc_attr($style) . '">' . ($count ? $count : '') . '</td>';
             }
             echo '</tr>';
         }
