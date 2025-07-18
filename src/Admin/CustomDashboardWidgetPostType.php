@@ -69,7 +69,8 @@ class CustomDashboardWidgetPostType
 
     public static function save_meta(int $post_id): void
     {
-        update_post_meta($post_id, 'visible_to_roles', $_POST['visible_to_roles'] ?? []);
+        $roles = array_map('sanitize_key', (array) ($_POST['visible_to_roles'] ?? []));
+        update_post_meta($post_id, 'visible_to_roles', $roles);
         update_post_meta($post_id, 'widget_icon', sanitize_text_field($_POST['widget_icon'] ?? ''));
         update_post_meta($post_id, 'widget_order', intval($_POST['widget_order'] ?? 1));
         update_post_meta($post_id, 'widget_class', sanitize_text_field($_POST['widget_class'] ?? ''));
