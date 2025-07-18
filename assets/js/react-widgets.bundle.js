@@ -246,6 +246,83 @@
     })));
   }
 
+  function NearbyEventsMapWidget(_ref) {
+    var apiRoot = _ref.apiRoot;
+      _ref.nonce;
+      var lat = _ref.lat,
+      lng = _ref.lng;
+    var _useState = React.useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      events = _useState2[0],
+      setEvents = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng)).then(function (r) {
+        return r.json();
+      }).then(setEvents);
+    }, [lat, lng]);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ap-nearby-events-widget"
+    }, /*#__PURE__*/React.createElement("ul", null, events.map(function (ev) {
+      return /*#__PURE__*/React.createElement("li", {
+        key: ev.id
+      }, /*#__PURE__*/React.createElement("a", {
+        href: ev.link
+      }, ev.title), " (", ev.distance, " km)");
+    })));
+  }
+  function initNearbyEventsMapWidget(el) {
+    var root = client.createRoot(el);
+    var _el$dataset = el.dataset,
+      lat = _el$dataset.lat,
+      lng = _el$dataset.lng,
+      apiRoot = _el$dataset.apiRoot,
+      nonce = _el$dataset.nonce;
+    root.render(/*#__PURE__*/React.createElement(NearbyEventsMapWidget, {
+      apiRoot: apiRoot,
+      nonce: nonce,
+      lat: lat,
+      lng: lng
+    }));
+  }
+
+  function MyFavoritesWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce;
+    var _useState = React.useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      items = _useState2[0],
+      setItems = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/follows?post_type=artpulse_event"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(setItems);
+    }, []);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ap-favorites-widget"
+    }, /*#__PURE__*/React.createElement("ul", null, items.map(function (i) {
+      return /*#__PURE__*/React.createElement("li", {
+        key: i.post_id
+      }, /*#__PURE__*/React.createElement("a", {
+        href: i.link
+      }, i.title));
+    })));
+  }
+  function initMyFavoritesWidget(el) {
+    var root = client.createRoot(el);
+    var _el$dataset = el.dataset,
+      apiRoot = _el$dataset.apiRoot,
+      nonce = _el$dataset.nonce;
+    root.render(/*#__PURE__*/React.createElement(MyFavoritesWidget, {
+      apiRoot: apiRoot,
+      nonce: nonce
+    }));
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.ap-event-chat[data-event-id]').forEach(function (el) {
       var root = client.createRoot(el);
@@ -268,6 +345,12 @@
       root.render(/*#__PURE__*/React.createElement(TicketWidget, {
         eventId: el.dataset.eventId
       }));
+    });
+    document.querySelectorAll('.ap-nearby-events-widget[data-api-root]').forEach(function (el) {
+      initNearbyEventsMapWidget(el);
+    });
+    document.querySelectorAll('.ap-favorites-widget[data-api-root]').forEach(function (el) {
+      initMyFavoritesWidget(el);
     });
   });
 

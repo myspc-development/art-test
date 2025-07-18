@@ -27,6 +27,31 @@ var APSidebarMenu = (function (React) {
       icon: "MessageCircle",
       section: "forum"
     }],
+    member: [{
+      label: "Dashboard",
+      icon: "Home",
+      section: "dashboard"
+    }, {
+      label: "My Profile",
+      icon: "User",
+      section: "profile"
+    }, {
+      label: "Events",
+      icon: "Calendar",
+      section: "events"
+    }, {
+      label: "Favorites",
+      icon: "Heart",
+      section: "favorites"
+    }, {
+      label: "Messages",
+      icon: "MessageCircle",
+      section: "messages"
+    }, {
+      label: "Forum",
+      icon: "MessageCircle",
+      section: "forum"
+    }],
     artist: [{
       label: "Artist Dashboard",
       icon: "Palette",
@@ -101,6 +126,10 @@ var APSidebarMenu = (function (React) {
       label: "Curator Dashboard",
       icon: "LayoutGrid",
       section: "dashboard"
+    }, {
+      label: "Submissions",
+      icon: "Inbox",
+      section: "submissions"
     }, {
       label: "My Collections",
       icon: "Folder",
