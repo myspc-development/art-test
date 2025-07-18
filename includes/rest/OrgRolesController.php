@@ -1,5 +1,4 @@
 <?php
-defined('ABSPATH') || exit;
 
 namespace ArtPulse\Rest;
 
