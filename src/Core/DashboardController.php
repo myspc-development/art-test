@@ -36,7 +36,6 @@ class DashboardController {
                 'role'   => 'artist',
                 'layout' => [
                     ['id' => 'widget_spotlights'],
-                    ['id' => 'widget_applications'],
                 ],
             ],
         ];
