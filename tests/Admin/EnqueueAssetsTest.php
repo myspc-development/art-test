@@ -104,8 +104,8 @@ class EnqueueAssetsTest extends TestCase
             define('ARTPULSE_PLUGIN_FILE', __FILE__);
         }
         self::$current_screen = (object)[
-            'id' => 'artpulse-settings_page_artpulse-dashboard-widgets',
-            'base' => 'artpulse-settings_page_artpulse-dashboard-widgets',
+            'id' => 'artpulse-settings_page_artpulse-widget-editor',
+            'base' => 'artpulse-settings_page_artpulse-widget-editor',
         ];
         self::$options['ap_dashboard_widget_config'] = ['administrator' => ['foo']];
         EnqueueAssets::enqueue_admin();
@@ -130,8 +130,8 @@ class EnqueueAssetsTest extends TestCase
             define('ARTPULSE_PLUGIN_FILE', __FILE__);
         }
         self::$current_screen = (object)[
-            'id'   => 'artpulse-settings_page_artpulse-dashboard-widgets',
-            'base' => 'artpulse-settings_page_artpulse-dashboard-widgets',
+            'id'   => 'artpulse-settings_page_artpulse-widget-editor',
+            'base' => 'artpulse-settings_page_artpulse-widget-editor',
         ];
 
         EnqueueAssets::enqueue_admin();

@@ -6,6 +6,7 @@ use ArtPulse\Community\FavoritesManager;
 use ArtPulse\Core\UserEngagementLogger;
 use Stripe\StripeClient;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetManager;
 
 class UserDashboardManager
 {
@@ -235,27 +236,57 @@ class UserDashboardManager
             },
         ]);
 
-        register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
+        register_rest_route('artpulse/v1', '/ap/widgets/available', [
+            'methods'             => 'GET',
+            'callback'            => [ self::class, 'getAvailableWidgets' ],
+            'permission_callback' => function() {
+                return current_user_can('read');
+            },
+            'args' => [
+                'role' => [ 'type' => 'string', 'required' => false ],
+            ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/ap/layout', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getDashboardLayout' ],
             'permission_callback' => function() {
-                if (!current_user_can('read')) {
-                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                }
-                return true;
+                return current_user_can('read');
             },
         ]);
 
-        register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
+        register_rest_route('artpulse/v1', '/ap/layout/save', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'saveDashboardLayout' ],
             'permission_callback' => function() {
-                if (!current_user_can('read')) {
-                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                }
-                return true;
+                return current_user_can('read');
             },
             'args'                => [
+                'layout'     => [ 'type' => 'array', 'required' => false ],
+                'visibility' => [ 'type' => 'object', 'required' => false ],
+            ],
+        ]);
+
+        register_rest_route('artpulse/v1', '/ap/layout/reset', [
+            'methods'             => 'POST',
+            'callback'            => [ self::class, 'resetDashboardLayout' ],
+            'permission_callback' => function() {
+                return current_user_can('read');
+            },
+        ]);
+
+        // Temporary aliases for backward compatibility
+        register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
+            'methods'  => 'GET',
+            'callback' => [ self::class, 'getDashboardLayout' ],
+            'permission_callback' => function() { return current_user_can('read'); },
+        ]);
+
+        register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
+            'methods'  => 'POST',
+            'callback' => [ self::class, 'saveDashboardLayout' ],
+            'permission_callback' => function() { return current_user_can('read'); },
+            'args'     => [
                 'layout'     => [ 'type' => 'array', 'required' => false ],
                 'visibility' => [ 'type' => 'object', 'required' => false ],
             ],
@@ -722,6 +753,29 @@ class UserDashboardManager
             'layout'     => $layout,
             'visibility' => $visibility,
         ]);
+    }
+
+    public static function resetDashboardLayout(): \WP_REST_Response
+    {
+        $uid = get_current_user_id();
+        \ArtPulse\Core\DashboardWidgetManager::resetUserLayout($uid);
+        return rest_ensure_response(['reset' => true]);
+    }
+
+    public static function getAvailableWidgets(WP_REST_Request $request): \WP_REST_Response
+    {
+        $role = sanitize_key($request->get_param('role') ?? 'member');
+        $defs = DashboardWidgetRegistry::get_widgets_by_role($role);
+        $formatted = array_map(
+            fn($d) => [
+                'id'          => $d['id'],
+                'name'        => $d['label'],
+                'icon'        => $d['icon'],
+                'description' => $d['description'],
+            ],
+            $defs
+        );
+        return rest_ensure_response(array_values($formatted));
     }
 
     public static function saveDashboardLayout(WP_REST_Request $request): \WP_REST_Response
