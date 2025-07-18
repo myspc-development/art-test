@@ -497,7 +497,8 @@ JWT_SECRET=change_me_to_a_long_random_string
 ```
 
 `JWT_SECRET` must be at least ten characters long or the server will abort at
-startup. If `PORT` is omitted the server defaults to `3001`.
+startup. Tokens sent by clients **must** include an `exp` claim which controls
+when the token expires. If `PORT` is omitted the server defaults to `3001`.
 
 #### Troubleshooting
 

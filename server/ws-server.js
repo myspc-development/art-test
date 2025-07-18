@@ -2,6 +2,8 @@ const http = require('http');
 const socketio = require('socket.io');
 const jwt = require('jsonwebtoken');
 
+// JWTs must include an expiration (`exp`) claim which will be validated on
+// each connection.
 const SECRET = process.env.JWT_SECRET;
 if (!SECRET) {
   console.error('JWT_SECRET environment variable is required');
@@ -20,10 +22,16 @@ io.use((socket, next) => {
   const token = socket.handshake.auth && socket.handshake.auth.token;
   if (!token) return next(new Error('unauthorized'));
   try {
-    const payload = jwt.verify(token, SECRET);
+    const payload = jwt.verify(token, SECRET, { algorithms: ['HS256'] });
+    if (!payload.exp) {
+      return next(new Error('missing exp claim'));
+    }
     socket.userId = payload.user_id;
     return next();
   } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      return next(new Error('token expired'));
+    }
     return next(new Error('unauthorized'));
   }
 });
