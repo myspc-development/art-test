@@ -6,6 +6,10 @@ define( 'WP_TESTS_EMAIL', 'admin@example.org' );
 define( 'WP_TESTS_TITLE', 'Test Blog' );
 define( 'WP_PHP_BINARY', 'php' );
 define( 'WP_TESTS_DIR', dirname(__DIR__) . '/vendor/wp-phpunit/wp-phpunit' );
+// Ensure the core bootstrap can locate the configuration file.
+if ( ! defined( 'WP_TESTS_CONFIG_FILE_PATH' ) ) {
+    define( 'WP_TESTS_CONFIG_FILE_PATH', dirname( __DIR__ ) . '/wp-tests-config.php' );
+}
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
