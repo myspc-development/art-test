@@ -10,6 +10,10 @@ use ArtPulse\Core\ActivityLogger;
 
 class SettingsPage
 {
+    public static function renderWidgetEditorPage() {
+    echo '<div class="wrap"><h1>Widget Editor</h1><p>Widget editor coming soon.</p></div>';
+}
+
     public static function register()
     {
         self::bootstrap_settings();
