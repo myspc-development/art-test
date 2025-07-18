@@ -74,6 +74,9 @@ class DashboardWidgetTools
         });
         add_action('admin_post_ap_export_widget_config', [self::class, 'handle_export']);
         add_action('admin_post_ap_import_widget_config', [self::class, 'handle_import']);
+        add_action('artpulse_render_settings_tab_widgets', function () {
+            include ARTPULSE_PLUGIN_DIR . 'templates/admin/settings-tab-widgets.php';
+        });
     }
 
     public static function render_help_page(): void

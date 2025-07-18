@@ -135,3 +135,16 @@ admin/
 * Use nonces if switching to custom POST handlers.
 * Wrap settings logic in role checks using `current_user_can()`.
 * Group related options into arrays if you have many fields.
+
+### Dynamic Tab Hooks
+
+When the settings page loads the plugin triggers a dynamic action based on the
+active tab. Use this to render custom tab content or enqueue assets. The hook
+name follows the pattern `artpulse_render_settings_tab_{slug}` where `{slug}` is
+the tab identifier.
+
+```php
+add_action( 'artpulse_render_settings_tab_widgets', function () {
+    echo '<p>Widgets tab content</p>';
+} );
+```
