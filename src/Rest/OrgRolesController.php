@@ -72,22 +72,18 @@ class OrgRolesController {
         }
 
         $roles  = OrgRoleManager::get_roles($org_id);
+        $rows   = \ArtPulse\Core\MultiOrgRoles::get_org_users($org_id);
+        $counts = [];
+        foreach ($rows as $row) {
+            $r = $row['role'];
+            $counts[$r] = ($counts[$r] ?? 0) + 1;
+        }
+
         $result = [];
         foreach ($roles as $key => $r) {
             $label = $r['name'] ?? $key;
             $desc  = $r['description'] ?? '';
-            $count = count(get_users([
-                'meta_key'   => 'ap_org_roles',
-                'meta_value' => $key,
-                'fields'     => 'ID',
-            ]));
-            if (!$count) {
-                $count = count(get_users([
-                    'meta_key'   => 'ap_org_role',
-                    'meta_value' => $key,
-                    'fields'     => 'ID',
-                ]));
-            }
+            $count = $counts[$key] ?? 0;
             $result[] = [
                 'key'         => $key,
                 'label'       => $label,
@@ -112,22 +108,18 @@ class OrgRolesController {
         }
 
         $roles  = OrgRoleManager::get_roles($org_id);
+        $rows   = \ArtPulse\Core\MultiOrgRoles::get_org_users($org_id);
+        $counts = [];
+        foreach ($rows as $row) {
+            $r = $row['role'];
+            $counts[$r] = ($counts[$r] ?? 0) + 1;
+        }
+
         $result = [];
         foreach ($roles as $key => $r) {
             $label = $r['name'] ?? $key;
             $desc  = $r['description'] ?? '';
-            $count = count(get_users([
-                'meta_key'   => 'ap_org_roles',
-                'meta_value' => $key,
-                'fields'     => 'ID',
-            ]));
-            if (!$count) {
-                $count = count(get_users([
-                    'meta_key'   => 'ap_org_role',
-                    'meta_value' => $key,
-                    'fields'     => 'ID',
-                ]));
-            }
+            $count = $counts[$key] ?? 0;
             $result[] = [
                 'key'         => $key,
                 'label'       => $label,
@@ -146,17 +138,21 @@ class OrgRolesController {
             $org_id  = intval(get_user_meta($user_id, 'ap_organization_id', true));
         }
 
-        $users = get_users([
-            'meta_key'   => 'ap_organization_id',
-            'meta_value' => $org_id,
-        ]);
+        $rows = \ArtPulse\Core\MultiOrgRoles::get_org_users($org_id);
+        $ids  = wp_list_pluck($rows, 'user_id');
+        $users = $ids ? get_users(['include' => $ids]) : [];
+
+        $map = [];
+        foreach ($rows as $r) {
+            $map[$r['user_id']][] = $r['role'];
+        }
 
         $data = [];
         foreach ($users as $u) {
             $data[] = [
                 'ID'           => $u->ID,
                 'display_name' => $u->display_name,
-                'roles'        => OrgRoleManager::get_user_roles($u->ID),
+                'roles'        => $map[$u->ID] ?? [],
             ];
         }
 
@@ -165,13 +161,14 @@ class OrgRolesController {
 
     public static function assign_roles_to_user(WP_REST_Request $request): WP_REST_Response {
         $user_id = absint($request['user_id']);
+        $org_id  = absint($request['org_id'] ?? 0);
         $roles   = array_map('sanitize_key', (array) $request['roles']);
 
-        if (!$user_id || empty($roles)) {
+        if (!$user_id || !$org_id || empty($roles)) {
             return new WP_REST_Response(['error' => 'Invalid user or roles'], 400);
         }
 
-        OrgRoleManager::assign_roles($user_id, $roles);
+        \ArtPulse\Core\MultiOrgRoles::assign_roles($user_id, $org_id, $roles);
 
         return new WP_REST_Response(['success' => true]);
     }
@@ -210,16 +207,21 @@ class OrgRolesController {
             ];
         }
 
+        $rows = \ArtPulse\Core\MultiOrgRoles::get_org_users($org_id);
+        $ids  = wp_list_pluck($rows, 'user_id');
+        $members = $ids ? get_users(['include' => $ids]) : [];
+
+        $map = [];
+        foreach ($rows as $r) {
+            $map[$r['user_id']] = $r['role'];
+        }
+
         $users = [];
-        $members = get_users([
-            'meta_key'   => 'ap_organization_id',
-            'meta_value' => $org_id,
-        ]);
         foreach ($members as $u) {
             $users[] = [
                 'id'   => $u->ID,
                 'name' => $u->display_name,
-                'role' => OrgRoleManager::get_user_org_role($u->ID, $org_id),
+                'role' => $map[$u->ID] ?? '',
             ];
         }
 
@@ -243,7 +245,7 @@ class OrgRolesController {
         foreach ($map as $user => $role) {
             $uid = absint($user);
             if ($uid) {
-                OrgRoleManager::assign_roles($uid, [sanitize_key($role)]);
+                \ArtPulse\Core\MultiOrgRoles::assign_roles($uid, $org_id, [sanitize_key($role)]);
             }
         }
 

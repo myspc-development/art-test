@@ -29,6 +29,12 @@ class OrgRoleManager {
     }
 }
 
+class MultiOrgRoles {
+    public static function get_org_users(int $org_id): array {
+        return [];
+    }
+}
+
 namespace ArtPulse\Rest\Tests;
 
 use PHPUnit\Framework\TestCase;
