@@ -6,6 +6,7 @@
  * Author:          craig
  * Text Domain:     artpulse
  * License:         GPL2
+ * Requires PHP:    8.2
  */
 
 if (!defined('ABSPATH')) { exit; }
