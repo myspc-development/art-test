@@ -3,6 +3,11 @@
 
 This guide explains how to use the Admin Dashboard Widgets Editor to build custom WordPress dashboard layouts for specific user roles such as **members**, **artists**, and **organizations**.
 
+Open this editor from **ArtPulse → Widget Editor** (submenu slug
+`artpulse-widget-editor`). To control which widgets are available to each role,
+see the [Widget Matrix instructions](./WIDGET-MATRIX-INSTRUCTIONS.md) available
+under **ArtPulse → Widget Matrix** (slug `artpulse-widget-matrix`).
+
 ---
 
 ## 🧩 Editing Layouts per Role

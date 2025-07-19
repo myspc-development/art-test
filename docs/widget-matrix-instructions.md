@@ -3,6 +3,11 @@
 ## 🎯 Goal
 Build a UI in the WordPress admin panel that allows admins to define which widgets are visible for each user role.
 
+The admin page appears under **ArtPulse → Widget Matrix** with the submenu slug
+`artpulse-widget-matrix`. To change widget placement and ordering, use the
+[Admin Dashboard Widgets Editor Guide](./Admin_Dashboard_Widgets_Editor_Guide.md)
+via **ArtPulse → Widget Editor** (`artpulse-widget-editor`).
+
 ---
 
 ## ✅ 1. Refactor and Prepare the Codebase
