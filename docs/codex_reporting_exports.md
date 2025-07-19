@@ -2,7 +2,7 @@
 
 Audience: Dev, Admin
 
-Status: [🚧 Sprint Needed]
+Status: Ready
 
 This document outlines the O1 sprint goal of creating quick reporting snapshots for grant documentation.
 

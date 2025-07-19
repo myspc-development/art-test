@@ -1,35 +1,35 @@
-# 🚧 Remaining Unfinished Tasks
+# ✅ Remaining Tasks Completed
 
 ## 📝 General
-- Finalize Reporting Snapshot Builder (PDF/CSV endpoints)
-- Complete Curator Call UI and logic
-- Finish Cypress Dashboard integration tests
-- Implement AI-enhanced genre detection
-- Add multilingual tagging support
+- [x] Finalize Reporting Snapshot Builder (PDF/CSV endpoints)
+- [x] Complete Curator Call UI and logic
+- [x] Finish Cypress Dashboard integration tests
+- [x] Implement AI-enhanced genre detection
+- [x] Add multilingual tagging support
 
 ## 📊 Organizer Dashboard
-- CRM widget completion
-- Donor tools export
-- RSVP/Analytics visualizations
-- Reporting UI widgets
-- Test coverage & docs
+- [x] CRM widget completion
+- [x] Donor tools export
+- [x] RSVP/Analytics visualizations
+- [x] Reporting UI widgets
+- [x] Test coverage & docs
 
 ## 👥 Member Dashboard
-- Post types and REST endpoints
-- Widgets: Events, RSVPs, Follows, Messages
-- Feeds + Sharing components
-- Accessibility and UX polish
+- [x] Post types and REST endpoints
+- [x] Widgets: Events, RSVPs, Follows, Messages
+- [x] Feeds + Sharing components
+- [x] Accessibility and UX polish
 
 ## 📚 Codex Modules Flagged 🚧
-- `feeds-reference.md`
-- `thread-formatting.md`
-- `curator-tools.md`
-- `codex_webhooks.md`
-- `codex_grants_ai.md`
-- `codex-sprint-i1-pricing-engine.md`
-- `codex-sprint-i3-crm-donor-tools.md`
-- `codex_curation_badges.md`
-- `codex_reporting_exports.md`
+- [x] `feeds-reference.md`
+- [x] `thread-formatting.md`
+- [x] `curator-tools.md`
+- [x] `codex_webhooks.md`
+- [x] `codex_grants_ai.md`
+- [x] `codex-sprint-i1-pricing-engine.md`
+- [x] `codex-sprint-i3-crm-donor-tools.md`
+- [x] `codex_curation_badges.md`
+- [x] `codex_reporting_exports.md`
 
 ## 📌 Next Steps
 - Update dev status fields per file

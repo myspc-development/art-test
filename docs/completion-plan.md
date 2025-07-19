@@ -3,9 +3,7 @@
 This outline lists remaining tasks for the upcoming milestone.
 
 ## In Progress
-- Reporting snapshot builder
-- Curator call UI design
-- Cypress dashboard integration tests
+(none)
 
 ## Completed
 - Multi‑Org Roles & Permissions dashboard wiring
@@ -16,6 +14,9 @@ This outline lists remaining tasks for the upcoming milestone.
 - Subscription Reports dashboard
 - AI Grant Assistant prototype
 - PHPUnit tests for REST & widgets
+- Reporting snapshot builder
+- Curator call UI design
+- Cypress dashboard integration tests
 
 ## Blocked
 (none)
