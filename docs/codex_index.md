@@ -52,6 +52,7 @@
 | [`WIDGET-EDITOR-VERIFICATION.md`](./WIDGET-EDITOR-VERIFICATION.md) | Verification checklist | Dev |
 | [`widget-settings-codex.md`](./widget-settings-codex.md) | Per-user widget settings | Dev |
 | [`user-dashboard-layout-codex.md`](./user-dashboard-layout-codex.md) | Drag-and-drop layout guide | Dev |
+| [`widget-matrix-instructions.md`](./widget-matrix-instructions.md) | Role matrix admin UI & REST | Dev |
 
 ---
 
