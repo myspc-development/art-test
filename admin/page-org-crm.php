@@ -4,6 +4,20 @@ if (!defined('ABSPATH')) { exit; }
 use ArtPulse\Crm\ContactModel;
 use ArtPulse\Crm\DonationModel;
 
+add_action('admin_menu', 'ap_register_org_crm_page');
+
+function ap_register_org_crm_page(): void
+{
+    add_submenu_page(
+        'ap-org-dashboard',
+        __('Organization CRM', 'artpulse'),
+        __('CRM', 'artpulse'),
+        'view_artpulse_dashboard',
+        'ap-org-crm',
+        'ap_render_org_crm_page'
+    );
+}
+
 function ap_render_org_crm_page() {
     $org_id = absint($_GET['org_id'] ?? get_user_meta(get_current_user_id(), 'ap_organization_id', true));
     $tag    = sanitize_text_field($_GET['tag'] ?? '');
@@ -58,5 +72,3 @@ function ap_render_org_crm_page() {
     </div>
     <?php
 }
-
-ap_render_org_crm_page();

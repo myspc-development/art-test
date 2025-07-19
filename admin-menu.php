@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 
 add_action('admin_menu', function () {
     add_submenu_page(
-        'artpulse',
+        'artpulse-settings',
         'Dashboard Widget Matrix',
         'Dashboard Widget Matrix',
         'manage_options',
@@ -15,7 +15,7 @@ add_action('admin_menu', function () {
 });
 
 add_action('admin_enqueue_scripts', function ($hook) {
-    if ($hook !== 'artpulse_page_artpulse-widget-matrix') {
+    if ($hook !== 'artpulse-settings_page_artpulse-widget-matrix') {
         return;
     }
     wp_enqueue_script(

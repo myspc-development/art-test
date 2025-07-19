@@ -3,6 +3,20 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+add_action('admin_menu', 'ap_register_api_keys_page');
+
+function ap_register_api_keys_page(): void
+{
+    add_submenu_page(
+        'artpulse-settings',
+        __('Partner API Keys', 'artpulse'),
+        __('API Keys', 'artpulse'),
+        'manage_options',
+        'ap-api-keys',
+        'ap_render_api_keys_page'
+    );
+}
+
 function ap_render_api_keys_page()
 {
     if (!current_user_can('manage_options')) {
@@ -108,5 +122,3 @@ function ap_render_api_keys_page()
     </div>
     <?php
 }
-
-ap_render_api_keys_page();
