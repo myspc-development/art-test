@@ -135,7 +135,6 @@ class UpdatesTab
             $args['headers']['Authorization'] = 'token ' . $info['token'];
         }
         $response = wp_remote_get($api, $args);
-        error_log('🔧 GitHub response: ' . print_r($response, true));
         if (is_wp_error($response)) {
             update_option('ap_update_log', '❌ Update failed: ' . $response->get_error_message());
             if (!$silent) {

@@ -19,9 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ layout })
         }
       ).then(r => r.json()).then(res => {
-        if (res.success) {
-          console.log('Layout saved.');
-        } else {
+        if (!res.success) {
           console.error('Save failed.');
         }
       });
