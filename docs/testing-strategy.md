@@ -18,9 +18,13 @@ downloaded for Puppeteer based tests, set `PUPPETEER_SKIP_DOWNLOAD=1` before run
   composer test
   ```
 - Coding standards are checked with PHP_CodeSniffer:
-  ```bash
-  composer sniff
-  ```
+```bash
+composer sniff
+```
+- Markdown files can be linted with:
+```bash
+npm run lint:md
+```
 - JavaScript functionality can be tested with Jest or Cypress.
 
 ## Manual Tests
