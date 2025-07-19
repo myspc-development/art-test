@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import WidgetCard from './WidgetCard';
 
 export default function WidgetList({ widgets, layout, setLayout }) {
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    if (!listRef.current || typeof Sortable === 'undefined') return;
+    const sortable = Sortable.create(listRef.current, {
+      animation: 150,
+      onEnd: evt => {
+        const copy = [...layout];
+        const [moved] = copy.splice(evt.oldIndex, 1);
+        copy.splice(evt.newIndex, 0, moved);
+        setLayout(copy);
+      },
+    });
+    return () => sortable.destroy();
+  }, [layout]);
+
   const toggleWidget = id => {
     setLayout(l =>
       l.map(w => (w.id === id ? { ...w, visible: !w.visible } : w))
@@ -11,7 +27,7 @@ export default function WidgetList({ widgets, layout, setLayout }) {
     setLayout(l => l.filter(w => w.id !== id));
   };
   return (
-    <div>
+    <div ref={listRef}>
       {layout.map(item => {
         const widget = widgets.find(w => w.id === item.id) || {};
         return (

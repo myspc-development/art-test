@@ -1,16 +1,31 @@
-const PREFIX = 'ap_widget_layout_';
+const REST_ROOT =
+  (window.wpApiSettings && window.wpApiSettings.root) || '/wp-json/';
+const REST_NONCE =
+  (window.wpApiSettings && window.wpApiSettings.nonce) || '';
 
-export function loadLayout(role) {
-  const json = localStorage.getItem(PREFIX + role);
-  if (!json) return null;
+export async function loadLayout(role) {
+  if (!role) return [];
   try {
-    return JSON.parse(json);
+    const res = await fetch(`${REST_ROOT}artpulse/v1/layout/${role}`);
+    if (!res.ok) return [];
+    return await res.json();
   } catch (e) {
-    return null;
+    return [];
   }
 }
 
-export function saveLayout(role, layout) {
+export async function saveLayout(role, layout) {
   if (!role) return;
-  localStorage.setItem(PREFIX + role, JSON.stringify(layout));
+  try {
+    await fetch(`${REST_ROOT}artpulse/v1/layout/${role}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WP-Nonce': REST_NONCE,
+      },
+      body: JSON.stringify({ layout }),
+    });
+  } catch (e) {
+    // ignore
+  }
 }
