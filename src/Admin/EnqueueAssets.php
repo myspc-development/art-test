@@ -221,6 +221,10 @@ class EnqueueAssets {
                     filemtime($react_path),
                     true
                 );
+                wp_localize_script('ap-widget-editor-ui', 'APWidgetEditor', [
+                    'root'  => esc_url_raw(rest_url()),
+                    'nonce' => wp_create_nonce('wp_rest'),
+                ]);
             }
             $style_path = $plugin_dir . '/src/admin/styles/editor.css';
             if (file_exists($style_path)) {
