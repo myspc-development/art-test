@@ -120,6 +120,12 @@ class DashboardWidgetTools
                 case 'no_file':
                     $msg = __('No file was uploaded.', 'artpulse');
                     break;
+                case 'file_size':
+                    $msg = __('Uploaded file exceeds the maximum size of 1 MB.', 'artpulse');
+                    break;
+                case 'invalid_mime':
+                    $msg = __('Invalid file type. Please upload a JSON file.', 'artpulse');
+                    break;
                 case 'invalid_json':
                 default:
                     $msg = __('Uploaded file contains invalid JSON.', 'artpulse');
@@ -289,6 +295,7 @@ class DashboardWidgetTools
 
     /**
      * Parse an uploaded JSON file and update the widget layout option.
+     * Validates file size and MIME type before processing.
      */
     public static function handle_import(): void
     {
@@ -308,6 +315,28 @@ class DashboardWidgetTools
                 \ap_add_admin_notice(__('No file was uploaded.', 'artpulse'), 'error');
             }
             wp_safe_redirect(add_query_arg('dw_import_error', 'no_file', wp_get_referer() ?: admin_url('admin.php?page=artpulse-widget-editor')));
+            exit;
+        }
+
+        $file       = $_FILES['ap_widget_file'];
+        $max_size   = 1024 * 1024; // 1 MB
+        $file_size  = $file['size'] ?? 0;
+        $file_mime  = mime_content_type($file['tmp_name']);
+        if ($file_size > $max_size) {
+            error_log('[DashboardWidgetTools] Import failed: file too large');
+            if (function_exists('ap_add_admin_notice')) {
+                \ap_add_admin_notice(__('Uploaded file exceeds the maximum size of 1 MB.', 'artpulse'), 'error');
+            }
+            wp_safe_redirect(add_query_arg('dw_import_error', 'file_size', wp_get_referer() ?: admin_url('admin.php?page=artpulse-widget-editor')));
+            exit;
+        }
+
+        if (!in_array($file_mime, ['application/json', 'text/plain'], true)) {
+            error_log('[DashboardWidgetTools] Import failed: invalid mime ' . $file_mime);
+            if (function_exists('ap_add_admin_notice')) {
+                \ap_add_admin_notice(__('Invalid file type. Please upload a JSON file.', 'artpulse'), 'error');
+            }
+            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_mime', wp_get_referer() ?: admin_url('admin.php?page=artpulse-widget-editor')));
             exit;
         }
 
