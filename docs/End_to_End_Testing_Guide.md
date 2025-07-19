@@ -19,10 +19,11 @@ npm install
 
 ## Running the Tests
 
-Set environment variables for your WordPress user and then run Cypress:
+Set environment variables for your WordPress user and then run Cypress via the
+provided npm script:
 
 ```bash
-CYPRESS_WP_USER=admin CYPRESS_WP_PASS=password npx cypress run
+CYPRESS_WP_USER=admin CYPRESS_WP_PASS=password npm run cypress:run
 ```
 
 Or open the interactive runner:
