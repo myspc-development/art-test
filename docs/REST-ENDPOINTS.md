@@ -3,7 +3,7 @@
 ## GET /wp-json/artpulse/v1/dashboard-config
 Returns:
 {
-  roles: { widgetId: [roles] },
+  widget_roles: { widgetId: [roles] },
   locked: [widgetIds]
 }
 
@@ -14,7 +14,7 @@ Requires:
 
 Payload:
 {
-  roles: { widgetId: [roles] },
+  widget_roles: { widgetId: [roles] },
   locked: [widgetIds]
 }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 interface Widget { id: string; name: string; roles?: string[]; }
+// REST responses use `widget_roles` for the matrix object
 interface Matrix { [key: string]: string[]; }
 
 export default function AdminWidgetMatrix() {
