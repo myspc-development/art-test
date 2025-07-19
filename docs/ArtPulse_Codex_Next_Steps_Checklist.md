@@ -8,18 +8,18 @@ These are immediate follow-up actions aligned with the roadmap to begin actual d
 ## 🔧 1. Backend Setup (WordPress PHP)
 
 ### a. Register Post Types
-- [ ] Create `event` and `message` post types with needed metadata fields (e.g. location, capacity).
-- [ ] Optional: `news_item` post type for feed integration.
+- [x] Create `event` and `message` post types with needed metadata fields (e.g. location, capacity).
+- [x] Optional: `news_item` post type for feed integration.
 
 ```php
 register_post_type('event', [ /* args with 'supports' => [title, editor, custom-fields] */ ]);
 ```
 
 ### b. Add REST API Endpoints
-- [ ] `/events/nearby` (GET) → with geolocation filtering
-- [ ] `/event/{id}/rsvp` (POST) → store RSVP status for user
-- [ ] `/user/{id}/follow` (POST) → manage following/favorites
-- [ ] `/event/{id}/message` (POST/GET) → post/view comments or questions
+- [x] `/events/nearby` (GET) → with geolocation filtering
+- [x] `/event/{id}/rsvp` (POST) → store RSVP status for user
+- [x] `/user/{id}/follow` (POST) → manage following/favorites
+- [x] `/event/{id}/message` (POST/GET) → post/view comments or questions
 
 ---
 
@@ -28,9 +28,9 @@ register_post_type('event', [ /* args with 'supports' => [title, editor, custom-
 ### a. Scaffold React Widgets
 Start from base components (or `create-react-app` build inside plugin folder).
 
-- [ ] `NearbyEventsMapWidget.jsx`
-- [ ] `RSVPButton.jsx`
-- [ ] `EventChatWidget.jsx`
+- [x] `NearbyEventsMapWidget.jsx`
+- [x] `RSVPButton.jsx`
+- [x] `EventChatWidget.jsx`
 
 Use:
 ```bash
@@ -40,36 +40,36 @@ npm install leaflet react-leaflet @testing-library/react
 ---
 
 ## 🎯 3. Widget Registration in WordPress
-- [ ] Register new widgets with WP dashboard
-- [ ] Expose widget configuration in Admin Widget Editor
-- [ ] Add visibility toggles and role targeting
+- [x] Register new widgets with WP dashboard
+- [x] Expose widget configuration in Admin Widget Editor
+- [x] Add visibility toggles and role targeting
 
 ---
 
 ## 🧪 4. Testing Framework Extensions
-- [ ] Extend `phpunit.xml` to cover new RSVP and follow APIs
-- [ ] Add test cases for REST permission validation and return structure
-- [ ] Create Jest test stubs for new widgets (render, prop usage, user interactions)
+- [x] Extend `phpunit.xml` to cover new RSVP and follow APIs
+- [x] Add test cases for REST permission validation and return structure
+- [x] Create Jest test stubs for new widgets (render, prop usage, user interactions)
 
 ---
 
 ## 🧩 5. UI Mockup & Data Binding
-- [ ] Create placeholder layout (e.g. mock dashboard page)
-- [ ] Bind real-time data to widgets from backend
-- [ ] Ensure widgets respect visibility rules from dashboard layout JSON
+- [x] Create placeholder layout (e.g. mock dashboard page)
+- [x] Bind real-time data to widgets from backend
+- [x] Ensure widgets respect visibility rules from dashboard layout JSON
 
 ---
 
 ## 🔐 6. Access Control
-- [ ] Ensure only logged-in users can:
+- [x] Ensure only logged-in users can:
   - RSVP
   - Message
   - Follow/Favorite
-- [ ] Use `wp_create_nonce()` and `check_ajax_referer()` in each AJAX endpoint
+- [x] Use `wp_create_nonce()` and `check_ajax_referer()` in each AJAX endpoint
 
 ---
 
 ## 📘 7. Developer Docs
-- [ ] Document each widget component (`.md` or JSDoc)
-- [ ] Include usage examples, props, data format, REST endpoints
-- [ ] Update `README.md` and `Widget Editor Guide` with new capabilities
+- [x] Document each widget component (`.md` or JSDoc)
+- [x] Include usage examples, props, data format, REST endpoints
+- [x] Update `README.md` and `Widget Editor Guide` with new capabilities

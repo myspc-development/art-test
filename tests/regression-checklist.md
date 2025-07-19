@@ -1,7 +1,7 @@
 # Regression Testing Checklist
 
-- [ ] Post tagging via admin interface
-- [ ] Follow/unfollow via API
-- [ ] Widget creation and saving
-- [ ] Plugin activation/deactivation
-- [ ] Uninstall cleanup and database cleanup
+- [x] Post tagging via admin interface
+- [x] Follow/unfollow via API
+- [x] Widget creation and saving
+- [x] Plugin activation/deactivation
+- [x] Uninstall cleanup and database cleanup
