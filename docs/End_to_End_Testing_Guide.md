@@ -37,6 +37,29 @@ If you need seed data such as sample messages run:
 wp db import data/message-seed.sql
 ```
 
+### Puppeteer Monetization Workflow
+
+The repository includes a simple Puppeteer script that validates the
+monetization interface. Install Node dependencies first so Puppeteer is
+available:
+
+```bash
+npm install
+```
+
+Run the test by providing your WordPress credentials and optional base URL:
+
+```bash
+BASE_URL=http://localhost:8000 \
+WP_USER=admin \
+WP_PASS=password \
+npm run test:e2e
+```
+
+The script launches the browser in headless mode with a 10 second default
+timeout. Adjust these options in `tests/e2e/monetization-workflow.js` if your
+environment requires different settings.
+
 ## Notes
 
 - The tests assume your site is reachable at `http://localhost:8000`. Set
