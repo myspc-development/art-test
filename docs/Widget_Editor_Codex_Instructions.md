@@ -2,7 +2,7 @@
 
 This document explains how to incorporate new dashboard widgets and layout features into the codex. Use it as a checklist when documenting or implementing updates to the drag‑and‑drop editor.
 
-For visibility settings, refer to the [Widget Matrix Implementation Guide](./WIDGET-MATRIX-INSTRUCTIONS.md)
+For visibility settings, refer to the [Widget Matrix Implementation Guide](./widget-matrix-instructions.md)
 which explains the **ArtPulse → Widget Matrix** screen (slug
 `artpulse-widget-matrix`). The editor described here is accessed via
 **ArtPulse → Widget Editor** (`artpulse-widget-editor`).

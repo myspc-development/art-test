@@ -5,7 +5,7 @@ This guide explains how to use the Admin Dashboard Widgets Editor to build custo
 
 Open this editor from **ArtPulse → Widget Editor** (submenu slug
 `artpulse-widget-editor`). To control which widgets are available to each role,
-see the [Widget Matrix instructions](./WIDGET-MATRIX-INSTRUCTIONS.md) available
+see the [Widget Matrix instructions](./widget-matrix-instructions.md) available
 under **ArtPulse → Widget Matrix** (slug `artpulse-widget-matrix`).
 
 ---
