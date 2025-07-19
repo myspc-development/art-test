@@ -1,0 +1,18 @@
+### Sprint 8: Artist Tools & Content Management
+**Duration:** 2 weeks
+
+**Goal:** Provide artist-facing features to manage profiles, content, and events.
+
+**Tasks:**
+- Allow artists to edit profiles, bios, and portfolios.
+- Implement event creation and scheduling.
+  - Add timezone support and recurrence options.
+- Add tagging, categorization, and featured content tools.
+- Provide preview and publish workflows.
+- Add artist dashboard widgets for content stats.
+- Include inline previews and drag-drop upload support for media.
+
+**Deliverables:**
+- Editable artist profiles.
+- Event and content management UI.
+- Artist-centric content dashboards with media preview features.

@@ -1,0 +1,19 @@
+### Sprint 2: Core Plugin Refactor & Modularization
+**Duration:** 2 weeks
+
+**Goal:** Audit and refactor the core plugin for scalability and maintainability.
+
+**Tasks:**
+- Identify logical modules: admin tools, monetization, analytics, etc.
+- Extract modules into individual classes or services.
+  - Define and document plugin architecture (e.g., diagram or flowchart).
+- Remove unused code, simplify large files.
+- Apply consistent naming conventions and folder structure.
+- Add plugin deactivation/uninstall routines.
+- Improve dependency management with Composer (PHP) and NPM (JS).
+
+**Deliverables:**
+- Clear and modular file organization.
+- Improved maintainability of the plugin core.
+- Plugin architecture documentation.
+- Proper cleanup routines on plugin uninstall.

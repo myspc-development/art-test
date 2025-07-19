@@ -1,0 +1,19 @@
+### Sprint 7: PWA & Offline Experience
+**Duration:** 2 weeks
+
+**Goal:** Improve offline accessibility and mobile optimization.
+
+**Tasks:**
+- Audit and enhance `pwa-manifest.php` and `offline.html`.
+- Implement service workers for caching static assets.
+- Enable background sync and offline data storage.
+- Test on low-bandwidth and offline scenarios.
+  - Include airplane mode and limited network simulations.
+- Ensure mobile-first responsiveness.
+- Add app icon, splash screen, and install prompt.
+- Run Lighthouse audits to validate PWA compliance.
+
+**Deliverables:**
+- Fully functional PWA.
+- Mobile-optimized UI.
+- Offline-compatible key features validated under real-world scenarios.

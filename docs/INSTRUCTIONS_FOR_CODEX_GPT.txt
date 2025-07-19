@@ -1,0 +1,17 @@
+
+# ArtPulse Plugin Sprint Bundle
+This package contains a set of 10 sprint documents for enhancing and maintaining the ArtPulse Management Plugin.
+
+## Instructions for Codex GPT Implementation
+
+1. Read each sprint document (Sprint_1 to Sprint_10) sequentially.
+2. For each sprint:
+   - Identify and implement tasks as code modules or patches.
+   - Use comments to explain architecture or decisions.
+   - Test changes according to described deliverables.
+3. Maintain modular, documented code with performance and security in mind.
+4. Where external services are mentioned (e.g., Stripe, Chart.js), mock or stub for testing.
+5. After each sprint, verify output against deliverables listed in the document.
+6. Prioritize maintainability, extensibility, and WordPress standards throughout.
+
+Good luck. Begin with Sprint_1_Environment_Setup.txt.

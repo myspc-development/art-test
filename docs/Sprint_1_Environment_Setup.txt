@@ -1,0 +1,19 @@
+### Sprint 1: Environment & Setup
+**Duration:** 2 weeks
+
+**Goal:** Establish local/dev environments, CI/CD, and baseline documentation.
+
+**Tasks:**
+- Setup WordPress dev instance and plugin activation guide.
+  - Include Docker or Vagrant setup instructions.
+- Configure PHPUnit, Jest, and Cypress for automated testing.
+- Add `.editorconfig`, `.eslintrc`, and PHP_CodeSniffer rules.
+- Write CONTRIBUTING.md with setup and workflow instructions.
+  - Link to Git branching strategy and coding standards.
+- Set up GitHub Actions or CI tool for lint/test pipeline.
+- Ensure all `.env`, `wp-tests-config.php`, and config files are documented.
+
+**Deliverables:**
+- Working development environment.
+- Automated test pipeline.
+- Contribution and setup documentation enriched with tooling guides.
