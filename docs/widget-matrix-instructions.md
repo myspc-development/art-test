@@ -2,7 +2,10 @@
 
 This guide explains how to build the **Widget Role Matrix** used to control which dashboard widgets are visible for each user role.
 
-Open the matrix from **ArtPulse → Widget Matrix** (`artpulse-widget-matrix`). To edit widget placement and ordering, use **ArtPulse → Widget Editor** (`artpulse-widget-editor`); see the [Admin Dashboard Widgets Editor Guide](./Admin_Dashboard_Widgets_Editor_Guide.md).
+Open the matrix from **ArtPulse → Settings → Widget Matrix** (submenu slug
+`artpulse-widget-matrix`). To edit widget placement and ordering, use
+**ArtPulse → Settings → Widget Editor** (`artpulse-widget-editor`); see the
+[Admin Dashboard Widgets Editor Guide](./Admin_Dashboard_Widgets_Editor_Guide.md).
 
 ---
 

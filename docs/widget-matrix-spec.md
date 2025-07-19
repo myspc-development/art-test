@@ -2,6 +2,9 @@
 
 This document defines the full technical and UX spec for implementing the **Admin Widget Role Matrix** for the ArtPulse dashboard system.
 
+The matrix screen lives under **ArtPulse → Settings → Widget Matrix** with slug
+`artpulse-widget-matrix`.
+
 ---
 
 ## 🎯 Objective

@@ -1,5 +1,8 @@
 # ✅ Widget Matrix Verification Checklist
 
+Access the matrix at **ArtPulse → Settings → Widget Matrix** (slug
+`artpulse-widget-matrix`).
+
 Verification is complete and all items have been tested.
 
 ## Admin UI

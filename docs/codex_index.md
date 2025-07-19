@@ -46,6 +46,7 @@
 | [`dashboard-editor-developer-guide.md`](./dashboard-editor-developer-guide.md) | Admin drag-and-drop editor | Dev |
 | [`widget-registry-reference.md`](./widget-registry-reference.md) | Widget registration metadata | Dev |
 | [`rest-api-and-ajax-endpoint-spec.md`](./rest-api-and-ajax-endpoint-spec.md) | REST and AJAX endpoints | Dev |
+| [`widget-matrix-instructions.md`](./widget-matrix-instructions.md) | Role matrix admin screen | Dev |
 | [`widget-layout-import-export-guide.md`](./widget-layout-import-export-guide.md) | Import/export JSON | Dev |
 | [`widget-manager-testing-checklist.md`](./widget-manager-testing-checklist.md) | Testing & access control | QA, Dev |
 | [Widget Editor Codex Instructions](./Widget_Editor_Codex_Instructions.md) | How to document new widgets | Dev |
