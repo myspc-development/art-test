@@ -2,6 +2,11 @@
 
 This document outlines the steps needed to build an admin interface for configuring which dashboard widgets are visible for each user role. Follow this checklist when implementing the feature.
 
+The UI lives under **ArtPulse → Widget Matrix** (submenu slug
+`artpulse-widget-matrix`). For layout editing functionality see the
+[Admin Dashboard Widgets Editor Guide](./Admin_Dashboard_Widgets_Editor_Guide.md)
+accessible via **ArtPulse → Widget Editor** (`artpulse-widget-editor`).
+
 ## 1. Refactor and Prepare the Codebase
 - **Centralize Widget Role Configuration**
   - Move any hardcoded role-based logic into a shared utility, for example `getWidgetRoles()`.
