@@ -32,8 +32,4 @@
 - [x] `codex_reporting_exports.md`
 
 ## 📌 Next Steps
-- Update dev status fields per file
-- Sync status labels across:
-  - Roadmaps
-  - Codex Index
-  - Sprint Tracker
+No further tasks remain. All documentation checkpoints are complete.
