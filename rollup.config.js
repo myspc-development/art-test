@@ -1,11 +1,12 @@
 const babel = require('@rollup/plugin-babel').default;
 const nodeResolve = require('@rollup/plugin-node-resolve').nodeResolve;
 const commonjs = require('@rollup/plugin-commonjs');
+const typescript = require('@rollup/plugin-typescript');
 const postcss = require('rollup-plugin-postcss');
 
-const extensions = ['.js', '.jsx'];
+const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
-function createConfig(input, file, name, globals = {}, external = Object.keys(globals)) {
+function createConfig(input, file, name, globals = {}, external = Object.keys(globals), useTS = false) {
   return {
     input,
     output: {
@@ -18,8 +19,9 @@ function createConfig(input, file, name, globals = {}, external = Object.keys(gl
     plugins: [
       nodeResolve({ extensions }),
       babel({ babelHelpers: 'bundled', extensions }),
+      useTS && typescript(),
       commonjs(),
-    ],
+    ].filter(Boolean),
   };
 }
 
@@ -60,7 +62,9 @@ const configs = [
     'assets/js/ap-widget-matrix.js',
     'dist/widget-matrix.js',
     'APWidgetMatrix',
-    { react: 'React', 'react-dom/client': 'ReactDOM' }
+    { react: 'React', 'react-dom/client': 'ReactDOM' },
+    undefined,
+    true
   ),
   createConfig(
     'assets/js/react-widgets.js',
