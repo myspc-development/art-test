@@ -408,3 +408,13 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 
 Developer environment steps, WebSocket configuration and CI instructions are documented in [docs/development-setup.md](docs/development-setup.md).
 
+## Running Tests
+
+PHPUnit requires the WordPress test library and core files. Run the environment setup script before executing the suite:
+
+```bash
+bash scripts/setup-env.sh
+composer test
+```
+
+See [docs/development-setup.md](docs/development-setup.md) for the required environment variables and instructions on using a local WordPress archive when working offline.
