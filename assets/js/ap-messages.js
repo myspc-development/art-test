@@ -150,9 +150,20 @@
     listConversations();
   });
 
-  if(APMessages.pollId){
-    pollInterval = setInterval(function(){
-      loadMessages(APMessages.pollId);
+  function pollMessages(){
+    if(!APMessages.pollId) return;
+    loadMessages(APMessages.pollId);
+    pollInterval = setTimeout(function(){
+      if(document.body.contains(document.getElementById('ap-message-list'))){
+        pollMessages();
+      }
     }, 5000);
+  }
+
+  if(APMessages.pollId){
+    pollMessages();
+    $(window).on('beforeunload', function(){
+      if(pollInterval) clearTimeout(pollInterval);
+    });
   }
 })(jQuery);

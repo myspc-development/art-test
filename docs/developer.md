@@ -38,5 +38,5 @@ POST /wp-json/artpulse/v1/message/read
 
 Include a `nonce` parameter using the value from the `APMessages.nonce` script
 localization. This value is produced by `wp_create_nonce('wp_rest')`. The
-bundled `assets/js/ap-messages.js` helper handles polling and sending messages
-via `wp.apiFetch` style requests.
+bundled `assets/js/ap-messages.js` helper polls the API using a recursive
+`setTimeout` loop and sends messages via `wp.apiFetch`‑style requests.

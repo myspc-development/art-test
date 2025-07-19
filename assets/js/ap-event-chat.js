@@ -30,8 +30,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         }
 
-        load();
-        setInterval(load, 10000);
+        let pollTimer;
+        function poll() {
+            load();
+            pollTimer = setTimeout(() => {
+                if (document.body.contains(container)) {
+                    poll();
+                }
+            }, 10000);
+        }
+
+        poll();
+
+        const cleanup = () => pollTimer && clearTimeout(pollTimer);
+        window.addEventListener('beforeunload', cleanup);
 
         if (form) {
             form.addEventListener('submit', e => {
