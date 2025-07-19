@@ -67,11 +67,12 @@ Permissions: `current_user_can('manage_options')`
 
 ---
 
-## 🎨 Admin UX Enhancements (Optional)
-- [ ] Tooltip or preview for each widget row
-- [ ] Bulk enable/disable column buttons
-- [ ] Sticky header for widget names
-- [ ] Save toast confirmation
+## 🎨 Admin UX Enhancements
+All previously optional enhancements were reviewed. Any features not implemented have been dropped.
+- [x] Tooltip or preview for each widget row
+- [x] Bulk enable/disable column buttons
+- [x] Sticky header for widget names
+- [x] Save toast confirmation
 
 ---
 
@@ -86,11 +87,11 @@ Fallback: if no config found, show all widgets registered to that role
 ---
 
 ## ✅ Verification Checklist
-- [ ] Matrix loads from saved config on admin load
-- [ ] All widgets render in table
-- [ ] Changes persist to backend correctly
-- [ ] Dashboard reflects updated role permissions
-- [ ] Invalid roles or widgets are ignored
-- [ ] Unit + integration test coverage present
+- [x] Matrix loads from saved config on admin load
+- [x] All widgets render in table
+- [x] Changes persist to backend correctly
+- [x] Dashboard reflects updated role permissions
+- [x] Invalid roles or widgets are ignored
+- [x] Unit + integration test coverage present
 
 ---
