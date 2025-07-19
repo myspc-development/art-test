@@ -33,8 +33,8 @@
 | Document | Sprints Covered | Status | Audience |
 |----------|------------------|--------|----------|
 | [`growth-stack-overview.md`](./growth-stack-overview.md) | L1–L3 (Embeds, Digests, Feeds) | 🟢 | PM, Partners |
-| [`embed-widgets.md`](./embed-widgets.md) | L1 | 🟢 | Dev, Partners |
-| [`email-digests.md`](./email-digests.md) | L2 | 🟢 | Dev, PM |
+| [`codex-sprint-l1-embeddable-widgets.md`](./codex-sprint-l1-embeddable-widgets.md) | L1 | 🟢 | Dev, Partners |
+| [`codex-sprint-l2-l3-weekly-digest-feeds.md`](./codex-sprint-l2-l3-weekly-digest-feeds.md) | L2–L3 | 🟢 | Dev, PM |
 | [`feeds-reference.md`](./feeds-reference.md) | L3 | 🟢 Ready | Dev |
 | [`analytics-pilot.md`](./analytics-pilot.md) | L3 | 🟢 | Partners |
 
@@ -49,6 +49,8 @@
 | [`widget-layout-import-export-guide.md`](./widget-layout-import-export-guide.md) | Import/export JSON | Dev |
 | [`widget-manager-testing-checklist.md`](./widget-manager-testing-checklist.md) | Testing & access control | QA, Dev |
 | [Widget Editor Codex Instructions](./Widget_Editor_Codex_Instructions.md) | How to document new widgets | Dev |
+| [`widget-settings-codex.md`](./widget-settings-codex.md) | Per-user widget settings | Dev |
+| [`user-dashboard-layout-codex.md`](./user-dashboard-layout-codex.md) | Drag-and-drop layout guide | Dev |
 
 ---
 
@@ -57,9 +59,15 @@
 | Document | Sprints Covered | Status | Audience |
 |----------|------------------|--------|----------|
 | [`codex-phase-m-creator-curator-codex.md`](./codex-phase-m-creator-curator-codex.md) | M1–M4 (Artist collab, threads, curator tools) | 🟢 | Dev, PM, Curators |
-| [`artist-collab.md`](./artist-collab.md) | M1 | 🟢 | Dev |
+| [`artist-gallery-tools-codex.md`](./artist-gallery-tools-codex.md) | M1 | 🟢 | Dev |
 | [`thread-formatting.md`](./thread-formatting.md) | M2 | 🟢 Ready | PM, Curators |
 | [`curator-tools.md`](./curator-tools.md) | M3–M4 | 🟢 Ready | Dev, Admins |
+| [`event-comments-codex.md`](./event-comments-codex.md) | M2 | 🟢 Ready | Dev |
+| [`event-chat-codex.md`](./event-chat-codex.md) | M2 | 🟢 Ready | Dev |
+| [`internal-notes-tasks-codex.md`](./internal-notes-tasks-codex.md) | M3 | 🟢 Ready | Dev, Admins |
+| [`moderation-flagging-codex.md`](./moderation-flagging-codex.md) | M3 | 🟢 Ready | Dev, Admins |
+| [`community-engagement-codex.md`](./community-engagement-codex.md) | M4 | 🟢 | Dev, PM |
+| [`event-management-upgrades-codex.md`](./event-management-upgrades-codex.md) | M4 | 🟢 | Dev |
 
 ---
 
@@ -79,6 +87,11 @@
 | `codex_grants_ai.md` | J3 | 🟢 Ready | Dev, PM |
 | [`codex-sprint-i1-pricing-engine.md`](./codex-sprint-i1-pricing-engine.md) | I1–I4 | 🟢 Ready | Admin, Dev |
 | [`codex-sprint-i3-crm-donor-tools.md`](./codex-sprint-i3-crm-donor-tools.md) | I3 | 🟢 Ready | Dev, Org Admin |
+| [`webhook-automation-codex.md`](./webhook-automation-codex.md) | J1 | 🟢 Ready | Dev |
+| [`plugin-install-upgrade-codex.md`](./plugin-install-upgrade-codex.md) | J2 | 🟢 | Dev |
+| [`updates-codex.md`](./updates-codex.md) | J2 | 🟢 | Dev |
+| [`audit-compliance-codex.md`](./audit-compliance-codex.md) | J3 | 🟢 | Dev, PM |
+| [`financial-overview-codex.md`](./financial-overview-codex.md) | I4 | 🟢 | Admin |
 
 ---
 
@@ -99,10 +112,10 @@
   codex_index.md
   growth-stack-overview.md
   codex-phase-m-creator-curator-codex.md
-  embed-widgets.md
-  email-digests.md
+  codex-sprint-l1-embeddable-widgets.md
+  codex-sprint-l2-l3-weekly-digest-feeds.md
   feeds-reference.md
-  artist-collab.md
+  artist-gallery-tools-codex.md
   curator-tools.md
   thread-formatting.md
   mobile-artwalk.md
@@ -110,6 +123,19 @@
   codex_grants_ai.md
   codex-sprint-i1-pricing-engine.md
   codex-sprint-i3-crm-donor-tools.md
+  webhook-automation-codex.md
+  plugin-install-upgrade-codex.md
+  updates-codex.md
+  audit-compliance-codex.md
+  financial-overview-codex.md
+  widget-settings-codex.md
+  user-dashboard-layout-codex.md
+  event-comments-codex.md
+  event-chat-codex.md
+  internal-notes-tasks-codex.md
+  moderation-flagging-codex.md
+  community-engagement-codex.md
+  event-management-upgrades-codex.md
 ```
 📌 Next Steps
 ✅ Review 🟡 documents for readiness or updates

@@ -15,8 +15,8 @@ A living document to track major tasks across the project.
 
 | Task ID | Task Title | Description | Status |
 |--------|-------------|-------------|--------|
-| NLP1 | Improve Tag Suggestions | Refine algorithm for style and genre detection. | ⏳ |
-| NLP2 | Multilingual Support | Train models for additional languages. | ⏳ |
+| NLP1 | Improve Tag Suggestions | Refine algorithm for style and genre detection. | ✅ |
+| NLP2 | Multilingual Support | Train models for additional languages. | ✅ |
 
 ---
 

@@ -4,10 +4,11 @@
 - ✅ Nonce validation on admin forms
 - ✅ REST API permission callbacks
 - ✅ Widget UI Editor with unique ID validation and React integration
+- ✅ Auto-Tagger improvements (style & genre detection)
+- ✅ Multilingual tagging support
 
 ## In Progress
-- 🔄 Auto-Tagger improvements (style & genre detection)
-- 🔄 Multilingual tagging support
+(none)
 
 ## Suggested Features
 - [ ] AI-enhanced style/genre detection
@@ -21,4 +22,4 @@
 - [x] Automated testing (PHPUnit, Jest)
 - [x] CI/CD workflow (GitHub Actions)
 
-Last updated: July 18, 2025
+Last updated: July 19, 2025
