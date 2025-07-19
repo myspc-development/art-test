@@ -200,67 +200,16 @@ class EnqueueAssets {
         }
 
         if ($screen->base === 'artpulse-settings_page_artpulse-widget-editor') {
-            $script_path = $plugin_dir . '/assets/dist/admin-dashboard-widgets-editor.js';
-            $script_url  = $plugin_url . '/assets/dist/admin-dashboard-widgets-editor.js';
-            $style_path  = $plugin_dir . '/assets/css/min/dashboard-widget.css';
-            $style_url   = $plugin_url . '/assets/css/min/dashboard-widget.css';
+            $script_path = $plugin_dir . '/build/widget-editor.js';
+            $script_url  = $plugin_url . '/build/widget-editor.js';
             if (file_exists($script_path)) {
                 wp_enqueue_script(
-                    'sortablejs',
-                    plugins_url('assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE),
-                    [],
-                    null,
-                    true
-                );
-                wp_enqueue_script(
-                    'ap-dashboard-widgets-editor',
+                    'ap-widget-editor-js',
                     $script_url,
-                    ['wp-element', 'wp-data', 'sortablejs'],
+                    ['wp-element'],
                     filemtime($script_path),
                     true
                 );
-                if (file_exists($style_path)) {
-                    wp_enqueue_style(
-                        'ap-dashboard-widget',
-                        $style_url,
-                        [],
-                        filemtime($style_path)
-                    );
-                }
-                $config = get_option('ap_dashboard_widget_config', false);
-                if (false === $config) {
-                    $definitions = \ArtPulse\Core\DashboardWidgetRegistry::get_definitions();
-                    $all_ids     = array_column($definitions, 'id');
-                    $config      = [];
-                    foreach (wp_roles()->roles as $role_key => $role_data) {
-                        $config[$role_key] = $all_ids;
-                    }
-                    update_option('ap_dashboard_widget_config', $config);
-                }
-                wp_localize_script('ap-dashboard-widgets-editor', 'APDashboardWidgetsEditor', [
-                    'widgets' => artpulse_get_dashboard_widgets(true),
-                    'config'  => $config,
-                    'roles'   => wp_roles()->roles,
-                    'nonce'   => wp_create_nonce('ap_dashboard_widget_config'),
-                    'adminNonce' => wp_create_nonce('ap_save_dashboard_widget_config'),
-                    'ajaxUrl' => admin_url('admin-ajax.php'),
-                    'l10n'    => [
-                        'availableWidgets' => __('Available Widgets', 'artpulse'),
-                        'activeWidgets'    => __('Active Widgets', 'artpulse'),
-                        'selectRole'      => __('Select Role', 'artpulse'),
-                        'filterCategory'  => __('Filter Category', 'artpulse'),
-                        'allCategories'   => __('All', 'artpulse'),
-                        'presetLabel'     => __('Apply Preset', 'artpulse'),
-                        'presetArtist'    => __('New Artist', 'artpulse'),
-                        'presetOrganizer' => __('Event Organizer', 'artpulse'),
-                        'save'            => __('Save', 'artpulse'),
-                        'preview'         => __('Preview', 'artpulse'),
-                        'resetDefault'    => __('Reset to Default', 'artpulse'),
-                        'saveSuccess'     => __('Widget order saved.', 'artpulse'),
-                        'saveError'       => __('Error saving widget order.', 'artpulse'),
-                        'instructions'    => __('Drag widgets to add, remove, or reorder. Changes are saved for each role.', 'artpulse'),
-                    ],
-                ]);
             }
         }
 
