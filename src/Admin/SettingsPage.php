@@ -820,11 +820,16 @@ class SettingsPage
 
     public static function renderDashboardWidgetsPage(): void
     {
-        echo '<div id="admin-dashboard-widgets-editor"></div>';
-        echo '<noscript><div class="notice notice-error"><p>' . esc_html__(
-            'This page requires JavaScript to manage dashboard widgets.',
-            'artpulse'
-        ) . '</p></div></noscript>';
-        DashboardWidgetTools::render();
+        $has_react = wp_script_is('ap-dashboard-widgets-editor', 'enqueued') ||
+            wp_script_is('ap-dashboard-widgets-editor', 'done');
+
+        if ($has_react) {
+            echo '<div id="admin-dashboard-widgets-editor"></div>';
+            echo '<noscript>';
+            DashboardWidgetTools::render();
+            echo '</noscript>';
+        } else {
+            DashboardWidgetTools::render();
+        }
     }
 }
