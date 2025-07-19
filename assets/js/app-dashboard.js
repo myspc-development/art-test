@@ -1,4 +1,4 @@
-var APDashboardApp = (function (React$1, ReactDOM, Chart) {
+var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
   'use strict';
 
   function _arrayLikeToArray(r, a) {
@@ -228,6 +228,142 @@ var APDashboardApp = (function (React$1, ReactDOM, Chart) {
     }));
   }
 
+  var m = require$$0;
+  if (process.env.NODE_ENV === 'production') {
+    m.createRoot;
+    m.hydrateRoot;
+  } else {
+    m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+  }
+
+  function NearbyEventsMapWidget(_ref) {
+    var apiRoot = _ref.apiRoot;
+      _ref.nonce;
+      var lat = _ref.lat,
+      lng = _ref.lng;
+    var _useState = React$1.useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      events = _useState2[0],
+      setEvents = _useState2[1];
+    React$1.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng)).then(function (r) {
+        return r.json();
+      }).then(setEvents);
+    }, [lat, lng]);
+    return /*#__PURE__*/React$1.createElement("div", {
+      className: "ap-nearby-events-widget"
+    }, /*#__PURE__*/React$1.createElement("ul", null, events.map(function (ev) {
+      return /*#__PURE__*/React$1.createElement("li", {
+        key: ev.id
+      }, /*#__PURE__*/React$1.createElement("a", {
+        href: ev.link
+      }, ev.title), " (", ev.distance, " km)");
+    })));
+  }
+
+  function MyFavoritesWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce;
+    var _useState = React$1.useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      items = _useState2[0],
+      setItems = _useState2[1];
+    React$1.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/follows?post_type=artpulse_event"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(setItems);
+    }, []);
+    return /*#__PURE__*/React$1.createElement("div", {
+      className: "ap-favorites-widget"
+    }, /*#__PURE__*/React$1.createElement("ul", null, items.map(function (i) {
+      return /*#__PURE__*/React$1.createElement("li", {
+        key: i.post_id
+      }, /*#__PURE__*/React$1.createElement("a", {
+        href: i.link
+      }, i.title));
+    })));
+  }
+
+  var registry = [{
+    id: 'nearby_events_map',
+    title: 'Nearby Events Map',
+    component: NearbyEventsMapWidget,
+    roles: ['member', 'artist']
+  }, {
+    id: 'my_favorites',
+    title: 'My Favorites',
+    component: MyFavoritesWidget,
+    roles: ['member', 'artist']
+  }];
+
+  function DashboardContainer(_ref) {
+    var _window$ArtPulseDashb, _window$ArtPulseDashb2;
+    var _ref$role = _ref.role,
+      role = _ref$role === void 0 ? 'member' : _ref$role;
+    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
+    var nonce = ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
+    var _useState = React$1.useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      layout = _useState2[0],
+      setLayout = _useState2[1];
+    var widgets = registry.filter(function (w) {
+      return !w.roles || w.roles.includes(role);
+    });
+    React$1.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout")).then(function (r) {
+        return r.json();
+      }).then(function (data) {
+        var ids = Array.isArray(data.layout) ? data.layout : [];
+        setLayout(ids.map(function (id, i) {
+          return {
+            i: id,
+            x: 0,
+            y: i,
+            w: 4,
+            h: 2
+          };
+        }));
+      });
+    }, [role]);
+    var handleLayoutChange = function handleLayoutChange(l) {
+      setLayout(l);
+      var ids = l.map(function (it) {
+        return it.i;
+      });
+      fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout"), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': nonce
+        },
+        body: JSON.stringify({
+          layout: ids
+        })
+      });
+    };
+    var widgetMap = Object.fromEntries(widgets.map(function (w) {
+      return [w.id, w.component];
+    }));
+    return /*#__PURE__*/React$1.createElement(GridLayout, {
+      layout: layout,
+      cols: 12,
+      rowHeight: 30,
+      width: 800,
+      onLayoutChange: handleLayoutChange
+    }, layout.map(function (item) {
+      var Comp = widgetMap[item.i];
+      return /*#__PURE__*/React$1.createElement("div", {
+        key: item.i,
+        "data-grid": item
+      }, Comp ? /*#__PURE__*/React$1.createElement(Comp, null) : item.i);
+    }));
+  }
+
   function AppDashboard() {
     var _useState = React$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
@@ -250,15 +386,17 @@ var APDashboardApp = (function (React$1, ReactDOM, Chart) {
       onLogout: logout
     }), /*#__PURE__*/React$1.createElement("main", {
       className: "p-4"
-    }, /*#__PURE__*/React$1.createElement(MessagesPanel, null), /*#__PURE__*/React$1.createElement(CommunityAnalyticsPanel, null)));
+    }, /*#__PURE__*/React$1.createElement(DashboardContainer, {
+      role: role
+    }), /*#__PURE__*/React$1.createElement(MessagesPanel, null), /*#__PURE__*/React$1.createElement(CommunityAnalyticsPanel, null)));
   }
   document.addEventListener('DOMContentLoaded', function () {
     var rootEl = document.getElementById('ap-dashboard-root');
     if (rootEl && window.ReactDOM) {
-      ReactDOM.render(/*#__PURE__*/React$1.createElement(AppDashboard, null), rootEl);
+      require$$0.render(/*#__PURE__*/React$1.createElement(AppDashboard, null), rootEl);
     }
   });
 
   return AppDashboard;
 
-})(React, ReactDOM, Chart);
+})(React, ReactDOM, Chart, GridLayout);
