@@ -48,6 +48,7 @@
 | [`rest-api-and-ajax-endpoint-spec.md`](./rest-api-and-ajax-endpoint-spec.md) | REST and AJAX endpoints | Dev |
 | [`widget-layout-import-export-guide.md`](./widget-layout-import-export-guide.md) | Import/export JSON | Dev |
 | [`widget-manager-testing-checklist.md`](./widget-manager-testing-checklist.md) | Testing & access control | QA, Dev |
+| [Widget Editor Codex Instructions](./Widget_Editor_Codex_Instructions.md) | How to document new widgets | Dev |
 
 ---
 

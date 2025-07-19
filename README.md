@@ -30,6 +30,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Event Ranking & Partner API Codex](docs/event-ranking-partner-api-codex.md) covers event scoring and partner access.
 [Dashboard Menu Codex](docs/dashboard-menu-codex.md) explains how the sidebar menu is generated.
 [Widget Settings Codex](docs/widget-settings-codex.md) describes widget schemas and per-user storage.
+[Widget Editor Codex Instructions](docs/Widget_Editor_Codex_Instructions.md) details how to document new widgets and update layout examples.
 [User Dashboard Customization](docs/user-dashboard-customization.md) explains per-user layout storage and REST endpoints.
 [Multi-org Roles & Permissions](docs/multi-org-roles-permissions.md) covers assigning members to multiple organizations.
 [Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.
