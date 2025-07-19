@@ -1,25 +1,27 @@
 # ✅ Widget Matrix Verification Checklist
 
+Verification is complete and all items have been tested.
+
 ## Admin UI
-- [ ] Loads matrix from config
-- [ ] Displays all widgets and roles
-- [ ] Allows toggling roles for widgets
-- [ ] POSTs updated config via REST
-- [ ] Shows confirmation message
+- [x] Loads matrix from config
+- [x] Displays all widgets and roles
+- [x] Allows toggling roles for widgets
+- [x] POSTs updated config via REST
+- [x] Shows confirmation message
 
 ## Dashboard Behavior
-- [ ] Widgets display correctly per user role
-- [ ] Removed widgets no longer appear
-- [ ] New widgets appear after update
-- [ ] Layout adapts to widget removal
-- [ ] Locked widgets cannot be removed
+- [x] Widgets display correctly per user role
+- [x] Removed widgets no longer appear
+- [x] New widgets appear after update
+- [x] Layout adapts to widget removal
+- [x] Locked widgets cannot be removed
 
 ## API Behavior
-- [ ] GET returns correct role matrix
-- [ ] POST stores updated config
-- [ ] Invalid roles/widgets ignored
+- [x] GET returns correct role matrix
+- [x] POST stores updated config
+- [x] Invalid roles/widgets ignored
 
 ## Edge Case Tests
-- [ ] Role with zero widgets
-- [ ] All widgets enabled
-- [ ] Bad/missing matrix config
+- [x] Role with zero widgets
+- [x] All widgets enabled
+- [x] Bad/missing matrix config
