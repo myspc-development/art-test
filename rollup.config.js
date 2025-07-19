@@ -6,7 +6,10 @@ const postcss = require('rollup-plugin-postcss');
 
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
-function createConfig(input, file, name, globals = {}, external = Object.keys(globals), useTS = false) {
+// Auto-detects TypeScript based on input filename
+function createConfig(input, file, name, globals = {}, external = Object.keys(globals)) {
+  const useTS = input.endsWith('.ts') || input.endsWith('.tsx');
+
   return {
     input,
     output: {
@@ -19,7 +22,7 @@ function createConfig(input, file, name, globals = {}, external = Object.keys(gl
     plugins: [
       nodeResolve({ extensions }),
       babel({ babelHelpers: 'bundled', extensions }),
-      useTS && typescript(),
+      useTS && typescript({ tsconfig: './tsconfig.json' }),
       commonjs(),
     ].filter(Boolean),
   };
@@ -33,68 +36,49 @@ const configs = [
     'react-dom': 'ReactDOM',
     'assets/js/SidebarMenu.jsx': 'APSidebarMenu',
     'assets/js/rolesMenus.js': 'rolesMenus'
-  }, ['react', 'react-dom', 'assets/js/SidebarMenu.jsx', 'assets/js/rolesMenus.js']),
-  createConfig(
-    'assets/js/admin-dashboard-widgets-editor.jsx',
-    'assets/js/admin-dashboard-widgets-editor.js',
-    'APDashboardWidgetsEditor',
-    { react: 'React', 'react-dom/client': 'ReactDOM' }
-  ),
-  createConfig(
-    'src/index.js',
-    'dist/react-form.js',
-    'APReactForm',
-    { react: 'React', 'react-dom/client': 'ReactDOM' }
-  ),
-  createConfig(
-    'assets/js/AppDashboard.js',
-    'assets/js/app-dashboard.js',
-    'APDashboardApp',
-    { react: 'React', 'react-dom': 'ReactDOM', 'chart.js/auto': 'Chart' }
-  ),
-  createConfig(
-    'assets/react/RoleMatrix.jsx',
-    'dist/role-matrix.js',
-    'APRoleMatrix',
-    { react: 'React', 'react-dom': 'ReactDOM' }
-  ),
-  createConfig(
-    'assets/js/ap-widget-matrix.js',
-    'dist/widget-matrix.js',
-    'APWidgetMatrix',
-    { react: 'React', 'react-dom/client': 'ReactDOM' },
-    undefined,
-    true
-  ),
-  createConfig(
-    'assets/js/react-widgets.js',
-    'assets/js/react-widgets.bundle.js',
-    'APReactWidgets',
-    { react: 'React', 'react-dom/client': 'ReactDOM' }
-  ),
-  createConfig(
-    'assets/js/ap-org-roles.js',
-    'assets/js/ap-org-roles.bundle.js',
-    'APOrgRoles',
-    {
-      '@wordpress/element': 'wp.element',
-      '@wordpress/api-fetch': 'wp.apiFetch'
-    }
-  ),
-  createConfig(
-    'src/admin/WidgetEditorApp.jsx',
-    'build/widget-editor-ui.js',
-    'APWidgetEditorUI',
-    { react: 'React', 'react-dom/client': 'ReactDOM', 'react-grid-layout': 'ReactGridLayout' }
-  ),
-  createConfig(
-    'assets/js/DashboardContainer.jsx',
-    'assets/js/dashboard-container.js',
-    'APDashboardContainer',
-    { react: 'React', 'react-dom/client': 'ReactDOM', 'react-grid-layout': 'ReactGridLayout' }
-  ),
+  }),
+  createConfig('assets/js/admin-dashboard-widgets-editor.jsx', 'assets/js/admin-dashboard-widgets-editor.js', 'APDashboardWidgetsEditor', {
+    react: 'React',
+    'react-dom/client': 'ReactDOM'
+  }),
+  createConfig('src/index.js', 'dist/react-form.js', 'APReactForm', {
+    react: 'React',
+    'react-dom/client': 'ReactDOM'
+  }),
+  createConfig('assets/js/AppDashboard.js', 'assets/js/app-dashboard.js', 'APDashboardApp', {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+    'chart.js/auto': 'Chart'
+  }),
+  createConfig('assets/react/RoleMatrix.jsx', 'dist/role-matrix.js', 'APRoleMatrix', {
+    react: 'React',
+    'react-dom': 'ReactDOM'
+  }),
+  createConfig('assets/js/ap-widget-matrix.js', 'dist/widget-matrix.js', 'APWidgetMatrix', {
+    react: 'React',
+    'react-dom/client': 'ReactDOM'
+  }),
+  createConfig('assets/js/react-widgets.js', 'assets/js/react-widgets.bundle.js', 'APReactWidgets', {
+    react: 'React',
+    'react-dom/client': 'ReactDOM'
+  }),
+  createConfig('assets/js/ap-org-roles.js', 'assets/js/ap-org-roles.bundle.js', 'APOrgRoles', {
+    '@wordpress/element': 'wp.element',
+    '@wordpress/api-fetch': 'wp.apiFetch'
+  }),
+  createConfig('src/admin/WidgetEditorApp.jsx', 'build/widget-editor-ui.js', 'APWidgetEditorUI', {
+    react: 'React',
+    'react-dom/client': 'ReactDOM',
+    'react-grid-layout': 'ReactGridLayout'
+  }),
+  createConfig('assets/js/DashboardContainer.jsx', 'assets/js/dashboard-container.js', 'APDashboardContainer', {
+    react: 'React',
+    'react-dom/client': 'ReactDOM',
+    'react-grid-layout': 'ReactGridLayout'
+  })
 ];
 
+// Add PostCSS config for CSS bundling
 configs.push({
   input: 'assets/css/main.css',
   output: {
