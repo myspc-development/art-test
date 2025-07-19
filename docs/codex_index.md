@@ -35,7 +35,7 @@
 | [`growth-stack-overview.md`](./growth-stack-overview.md) | L1–L3 (Embeds, Digests, Feeds) | 🟢 | PM, Partners |
 | [`embed-widgets.md`](./embed-widgets.md) | L1 | 🟢 | Dev, Partners |
 | [`email-digests.md`](./email-digests.md) | L2 | 🟢 | Dev, PM |
-| [`feeds-reference.md`](./feeds-reference.md) | L3 | 🟡 [🚧 Sprint Needed] | Dev |
+| [`feeds-reference.md`](./feeds-reference.md) | L3 | 🟢 Ready | Dev |
 | [`analytics-pilot.md`](./analytics-pilot.md) | L3 | 🟢 | Partners |
 
 ## 🧩 Dashboard Widget Manager
@@ -58,8 +58,8 @@
 |----------|------------------|--------|----------|
 | [`codex-phase-m-creator-curator-codex.md`](./codex-phase-m-creator-curator-codex.md) | M1–M4 (Artist collab, threads, curator tools) | 🟢 | Dev, PM, Curators |
 | [`artist-collab.md`](./artist-collab.md) | M1 | 🟢 | Dev |
-| [`thread-formatting.md`](./thread-formatting.md) | M2 | 🟡 [🚧 Sprint Needed] | PM, Curators |
-| [`curator-tools.md`](./curator-tools.md) | M3–M4 | 🟡 [🚧 Sprint Needed] | Dev, Admins |
+| [`thread-formatting.md`](./thread-formatting.md) | M2 | 🟢 Ready | PM, Curators |
+| [`curator-tools.md`](./curator-tools.md) | M3–M4 | 🟢 Ready | Dev, Admins |
 
 ---
 
@@ -75,10 +75,10 @@
 
 | Document | Sprints Covered | Status | Audience |
 |----------|------------------|--------|----------|
-| `codex_webhooks.md` | J1 | 🟡 [🚧 Sprint Needed] | Dev |
-| `codex_grants_ai.md` | J3 | 🟡 [🚧 Sprint Needed] | Dev, PM |
-| [`codex-sprint-i1-pricing-engine.md`](./codex-sprint-i1-pricing-engine.md) | I1–I4 | 🟡 [🚧 Sprint Needed] | Admin, Dev |
-| [`codex-sprint-i3-crm-donor-tools.md`](./codex-sprint-i3-crm-donor-tools.md) | I3 | 🟡 [🚧 Sprint Needed] | Dev, Org Admin |
+| `codex_webhooks.md` | J1 | 🟢 Ready | Dev |
+| `codex_grants_ai.md` | J3 | 🟢 Ready | Dev, PM |
+| [`codex-sprint-i1-pricing-engine.md`](./codex-sprint-i1-pricing-engine.md) | I1–I4 | 🟢 Ready | Admin, Dev |
+| [`codex-sprint-i3-crm-donor-tools.md`](./codex-sprint-i3-crm-donor-tools.md) | I3 | 🟢 Ready | Dev, Org Admin |
 
 ---
 
@@ -88,7 +88,7 @@
 |--------------|----------------|--------|-------|
 | `codex_institutional_toolkit.md` | N1–N3 | 🟢 Ready | Class visits, programs, RSVP upgrades |
 | `codex_reporting_exports.md` | O1–O2 | 🟢 | Grant-ready CSVs, dashboard snapshots |
-| `codex_curation_badges.md` | M6–M7 | 🔴 [🚧 Sprint Needed] | Curator trust, creator reputation |
+| `codex_curation_badges.md` | M6–M7 | 🟢 Ready | Curator trust, creator reputation |
 
 ---
 
