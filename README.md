@@ -432,7 +432,7 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 
 ## Development Setup
 
-Developer environment steps, WebSocket configuration and CI instructions are documented in [docs/development-setup.md](docs/development-setup.md).
+Developer environment steps, WebSocket configuration and CI instructions are documented in [docs/development-setup.md](docs/development-setup.md). To quickly spin up a local site with Docker follow [docs/Plugin_Activation_Guide.md](docs/Plugin_Activation_Guide.md).
 
 ## Running Tests
 
