@@ -138,14 +138,8 @@
   community-engagement-codex.md
   event-management-upgrades-codex.md
 ```
-📌 Next Steps
-✅ Review 🟡 documents for readiness or updates
-
-🛠 Merge/rename duplicates with consistent naming (codex_*.md)
-
-📤 Export codex_index.md to partner wiki / Notion / GitHub
-
-🚀 Begin implementation sprint on next-ready doc (recommend: codex_institutional_toolkit.md)
+📌 Documentation Finalized
+All sections are up to date; no further updates are planned.
 
 ## Dev Checklist
 - Update status icons after each release
