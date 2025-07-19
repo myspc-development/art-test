@@ -57,6 +57,12 @@ const configs = [
     { react: 'React', 'react-dom': 'ReactDOM' }
   ),
   createConfig(
+    'assets/js/ap-widget-matrix.js',
+    'dist/widget-matrix.js',
+    'APWidgetMatrix',
+    { react: 'React', 'react-dom/client': 'ReactDOM' }
+  ),
+  createConfig(
     'assets/js/react-widgets.js',
     'assets/js/react-widgets.bundle.js',
     'APReactWidgets',
