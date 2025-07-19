@@ -496,6 +496,27 @@ class DashboardWidgetTools
     }
 
     /**
+     * Iterate over a widget layout and output each widget using the provided renderer.
+     *
+     * @param array         $layout   Array of widget definitions in the saved order.
+     * @param callable      $renderer Callback invoked with the widget definition, id and visibility flag.
+     */
+    private static function render_layout_widgets(array $layout, callable $renderer): void
+    {
+        $registry = DashboardWidgetRegistry::get_all();
+
+        foreach ($layout as $widget) {
+            $id = is_array($widget) ? $widget['id'] : $widget;
+            if (!isset($registry[$id])) {
+                continue;
+            }
+
+            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
+            $renderer($registry[$id], $id, $visible);
+        }
+    }
+
+    /**
      * Output dashboard widgets.
      * If a role is provided, that role's layout will be used.
      * Otherwise the current user's layout is loaded.
@@ -508,29 +529,18 @@ class DashboardWidgetTools
             $user_id = get_current_user_id();
             $layout  = DashboardWidgetManager::getUserLayout($user_id);
         }
-
-        foreach ($layout as $widget) {
-            $id = is_array($widget) ? $widget['id'] : $widget;
-            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
-
-            if (!$visible) {
-                continue;
+        self::render_layout_widgets(
+            $layout,
+            function (array $def, string $id, bool $visible): void {
+                echo '<div class="dashboard-widget">';
+                if (isset($def['callback']) && is_callable($def['callback'])) {
+                    call_user_func($def['callback']);
+                } else {
+                    echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
+                }
+                echo '</div>';
             }
-
-            $definition = DashboardWidgetRegistry::get($id);
-            if (!$definition) {
-                error_log("Missing widget: " . $id);
-                continue;
-            }
-
-            echo '<div class="dashboard-widget">';
-            if (isset($definition['callback']) && is_callable($definition['callback'])) {
-                call_user_func($definition['callback']);
-            } else {
-                echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
-            }
-            echo '</div>';
-        }
+        );
     }
 
     /**
@@ -558,28 +568,24 @@ class DashboardWidgetTools
             return;
         }
 
-        foreach ($layout as $widget) {
-            $id      = is_array($widget) ? $widget['id'] : $widget;
-            if (!isset($registry[$id])) {
-                continue;
+        self::render_layout_widgets(
+            $layout,
+            function (array $def, string $id, bool $visible): void {
+                $label = isset($def['label']) ? $def['label'] : 'Untitled';
+                echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($label) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+                $icon = $def['icon'] ?? '';
+                echo '<div class="ap-widget-header drag-handle" role="button" tabindex="0" aria-label="Drag to reorder">';
+                echo '<span class="widget-title">' . artpulse_dashicon($icon, ['style' => 'margin-right:6px;']) . esc_html($label) . '</span>';
+                echo '</div>';
+                echo '<div class="inside">';
+                if (isset($def['callback']) && is_callable($def['callback'])) {
+                    call_user_func($def['callback']);
+                } else {
+                    echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
+                }
+                echo '</div></div>';
             }
-            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
-            $def     = $registry[$id];
-
-            $label = isset($def['label']) ? $def['label'] : 'Untitled';
-            echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($label) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
-            $icon = $def['icon'] ?? '';
-            echo '<div class="ap-widget-header drag-handle" role="button" tabindex="0" aria-label="Drag to reorder">';
-            echo '<span class="widget-title">' . artpulse_dashicon($icon, ['style' => 'margin-right:6px;']) . esc_html($label) . '</span>';
-            echo '</div>';
-            echo '<div class="inside">';
-            if (isset($def['callback']) && is_callable($def['callback'])) {
-                call_user_func($def['callback']);
-            } else {
-                echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
-            }
-            echo '</div></div>';
-        }
+        );
     }
 
     /**
