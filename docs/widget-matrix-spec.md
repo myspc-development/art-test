@@ -45,7 +45,8 @@ update_option('artpulse_widget_roles', $roleMatrix);
 ```
 GET /wp-json/artpulse/v1/dashboard-config
 ```
-Returns current matrix from WP `option`
+Returns current matrix from WP `option`.
+The JSON object includes a `widget_roles` property mapping widget IDs to allowed roles.
 
 ### POST Config
 ```

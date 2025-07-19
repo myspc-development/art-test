@@ -28,8 +28,8 @@ class DashboardConfigController {
         $locked = get_option('artpulse_locked_widgets', []);
 
         return rest_ensure_response([
-            'roles'  => $roles,
-            'locked' => array_values($locked),
+            'widget_roles' => $roles,
+            'locked'       => array_values($locked),
         ]);
     }
 
@@ -40,7 +40,7 @@ class DashboardConfigController {
         }
 
         $data   = $request->get_json_params();
-        $roles  = isset($data['roles']) && is_array($data['roles']) ? $data['roles'] : [];
+        $roles  = isset($data['widget_roles']) && is_array($data['widget_roles']) ? $data['widget_roles'] : [];
         $locked = isset($data['locked']) && is_array($data['locked']) ? $data['locked'] : [];
 
         update_option('artpulse_widget_roles', $roles);
