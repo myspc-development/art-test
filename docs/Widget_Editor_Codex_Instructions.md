@@ -36,3 +36,5 @@ Whenever the editor gains new controls or widgets, remember to update the [Admin
 ## 5. Reference in the Index
 
 After writing or revising widget editor notes, add a link in `codex_index.md` under the **Dashboard Widget Manager** table so developers can locate the instructions quickly.
+
+See the accompanying [Widget Editor Verification Checklist](./WIDGET-EDITOR-VERIFICATION.md) when confirming a new deployment.

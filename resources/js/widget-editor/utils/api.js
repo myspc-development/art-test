@@ -1,5 +1,7 @@
 const REST_ROOT =
-  (window.wpApiSettings && window.wpApiSettings.root) || '/wp-json/';
+  (window.APWidgetEditor && window.APWidgetEditor.root) ||
+  (window.wpApiSettings && window.wpApiSettings.root) ||
+  '/wp-json/';
 
 export async function fetchWidgets() {
   try {

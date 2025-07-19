@@ -1,7 +1,11 @@
 const REST_ROOT =
-  (window.wpApiSettings && window.wpApiSettings.root) || '/wp-json/';
+  (window.APWidgetEditor && window.APWidgetEditor.root) ||
+  (window.wpApiSettings && window.wpApiSettings.root) ||
+  '/wp-json/';
 const REST_NONCE =
-  (window.wpApiSettings && window.wpApiSettings.nonce) || '';
+  (window.APWidgetEditor && window.APWidgetEditor.nonce) ||
+  (window.wpApiSettings && window.wpApiSettings.nonce) ||
+  '';
 
 export async function loadLayout(role) {
   if (!role) return [];

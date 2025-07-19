@@ -49,6 +49,7 @@
 | [`widget-layout-import-export-guide.md`](./widget-layout-import-export-guide.md) | Import/export JSON | Dev |
 | [`widget-manager-testing-checklist.md`](./widget-manager-testing-checklist.md) | Testing & access control | QA, Dev |
 | [Widget Editor Codex Instructions](./Widget_Editor_Codex_Instructions.md) | How to document new widgets | Dev |
+| [`WIDGET-EDITOR-VERIFICATION.md`](./WIDGET-EDITOR-VERIFICATION.md) | Verification checklist | Dev |
 | [`widget-settings-codex.md`](./widget-settings-codex.md) | Per-user widget settings | Dev |
 | [`user-dashboard-layout-codex.md`](./user-dashboard-layout-codex.md) | Drag-and-drop layout guide | Dev |
 
