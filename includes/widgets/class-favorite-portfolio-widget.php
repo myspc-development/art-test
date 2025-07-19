@@ -1,4 +1,8 @@
 <?php
+/**
+ * AP_Favorite_Portfolio_Widget displays the current user's
+ * favorite portfolio items via a shortcode.
+ */
 if (!class_exists('AP_Favorite_Portfolio_Widget') && class_exists('WP_Widget')) {
     class AP_Favorite_Portfolio_Widget extends WP_Widget {
         public function __construct() {

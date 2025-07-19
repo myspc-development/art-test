@@ -1,4 +1,9 @@
 <?php
+/**
+ * AP_Widget allows administrators to render a shortcode inside
+ * a dashboard widget. It extends the base WP_Widget class and
+ * stores the shortcode and optional attributes.
+ */
 if (!class_exists('AP_Widget') && class_exists('WP_Widget')) {
     class AP_Widget extends WP_Widget {
         public function __construct() {
