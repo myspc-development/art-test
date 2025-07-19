@@ -10,6 +10,7 @@
 - [ArtPulse Member Dashboard Roadmap](./ArtPulse_Member_Dashboard_Roadmap.md)
 - [Organizer Dashboard Roadmap](./Organizer_Dashboard_Roadmap.md)
 - [Admin Dashboard Widgets Editor Guide](./Admin_Dashboard_Widgets_Editor_Guide.md)
+- [Dashboard Widget Editor Codex](./dashboard-widget-editor-codex.md)
 
 
 
