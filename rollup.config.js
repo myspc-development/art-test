@@ -21,6 +21,7 @@ function createConfig(input, file, name, globals = {}, external = Object.keys(gl
     external,
     plugins: [
       nodeResolve({ extensions }),
+      postcss({ inject: true, minimize: true }),
       babel({ babelHelpers: 'bundled', extensions }),
       useTS && typescript({ tsconfig: './tsconfig.json' }),
       commonjs(),
@@ -66,16 +67,28 @@ const configs = [
     '@wordpress/element': 'wp.element',
     '@wordpress/api-fetch': 'wp.apiFetch'
   }),
-  createConfig('src/admin/WidgetEditorApp.jsx', 'build/widget-editor-ui.js', 'APWidgetEditorUI', {
-    react: 'React',
-    'react-dom/client': 'ReactDOM',
-    'react-grid-layout': 'ReactGridLayout'
-  }),
-  createConfig('assets/js/DashboardContainer.jsx', 'assets/js/dashboard-container.js', 'APDashboardContainer', {
-    react: 'React',
-    'react-dom/client': 'ReactDOM',
-    'react-grid-layout': 'ReactGridLayout'
-  })
+  createConfig(
+    'src/admin/WidgetEditorApp.jsx',
+    'build/widget-editor-ui.js',
+    'APWidgetEditorUI',
+    {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+      'react-grid-layout': 'ReactGridLayout'
+    },
+    ['react', 'react-dom', 'react-grid-layout']
+  ),
+  createConfig(
+    'assets/js/DashboardContainer.jsx',
+    'assets/js/dashboard-container.js',
+    'APDashboardContainer',
+    {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+      'react-grid-layout': 'ReactGridLayout'
+    },
+    ['react', 'react-dom', 'react-grid-layout']
+  )
 ];
 
 // Add PostCSS config for CSS bundling
