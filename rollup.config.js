@@ -77,6 +77,12 @@ const configs = [
     'APWidgetEditorUI',
     { react: 'React', 'react-dom/client': 'ReactDOM', 'react-grid-layout': 'ReactGridLayout' }
   ),
+  createConfig(
+    'assets/js/DashboardContainer.jsx',
+    'assets/js/dashboard-container.js',
+    'APDashboardContainer',
+    { react: 'React', 'react-dom/client': 'ReactDOM', 'react-grid-layout': 'ReactGridLayout' }
+  ),
 ];
 
 configs.push({

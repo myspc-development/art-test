@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-function NearbyEventsMapWidget({ apiRoot, nonce, lat, lng }) {
+export function NearbyEventsMapWidget({ apiRoot, nonce, lat, lng }) {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
