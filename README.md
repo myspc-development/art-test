@@ -1,19 +1,19 @@
 # ArtPulse Management Plugin
 
-For end‑user instructions see the [User Guide](docs/user-guide.md). Site
-administrators should consult the [Admin Guide](docs/admin-guide.md).
+For end‑user instructions see the [User Guide](docs/guides/user/user-guide.md). Site
+administrators should consult the [Admin Guide](docs/guides/admin/admin-guide.md).
 Developers extending reporting or reminder features can reference the
-[Admin & Analytics Codex](docs/admin-analytics-codex.md). Developers
+[Admin & Analytics Codex](docs/guides/developer/admin-analytics-codex.md). Developers
 implementing ticket sales or memberships can read the
-[Monetization & Ticketing Codex](docs/monetization-ticketing-codex.md).
+[Monetization & Ticketing Codex](docs/guides/developer/monetization-ticketing-codex.md).
 For artist monetization options see the
-[Artist Monetization Tools Codex](docs/artist-monetization-tools-codex.md).
+[Artist Monetization Tools Codex](docs/guides/developer/artist-monetization-tools-codex.md).
 For artist dashboards and audience metrics see the
-[Analytics & Insights Codex](docs/analytics-insights-codex.md).
+[Analytics & Insights Codex](docs/guides/developer/analytics-insights-codex.md).
 For admin and organization reporting plus per-user metrics see the
-[Analytics & Reporting Codex](docs/analytics-reporting-codex.md).
+[Analytics & Reporting Codex](docs/guides/developer/analytics-reporting-codex.md).
 For UI customization, white‑labeling and onboarding guidelines see the
-[UI/UX Polish Codex](docs/ui-ux-polish-codex.md).
+[UI/UX Polish Codex](docs/guides/developer/ui-ux-polish-codex.md).
 [Widget Chapters](docs/codex-chapters/README.md) organize the chat, ticketing and Q&A widgets.
 [Event Comments Codex](docs/event-comments-codex.md) describes the REST routes used for event discussions.
 [Event Chat Codex](docs/event-chat-codex.md) explains the real-time chat module.
@@ -31,7 +31,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Dashboard Menu Codex](docs/dashboard-menu-codex.md) explains how the sidebar menu is generated.
 [Widget Settings Codex](docs/widget-settings-codex.md) describes widget schemas and per-user storage.
 [Widget Editor Codex Instructions](docs/Widget_Editor_Codex_Instructions.md) details how to document new widgets and update layout examples.
-[User Dashboard Customization](docs/user-dashboard-customization.md) explains per-user layout storage and REST endpoints.
+[User Dashboard Customization](docs/guides/user/dashboard-customization.md) explains per-user layout storage and REST endpoints.
 [Multi-org Roles & Permissions](docs/multi-org-roles-permissions.md) covers assigning members to multiple organizations.
 [Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.
 [Member Registration Codex](docs/member-registration-codex.md) explains native registration hooks.
