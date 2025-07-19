@@ -7,6 +7,12 @@ let nonceField;
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('#ap-widget-list');
+  if (container) {
+    loadLayoutFromStorage();
+    if (!localStorage.getItem('apDashboardWidgetLayout')) {
+      saveLayoutOrderToStorage();
+    }
+  }
   if (container && typeof Sortable !== 'undefined') {
     Sortable.create(container, {
       handle: '.drag-handle',
@@ -127,6 +133,35 @@ function saveLayoutOrderToStorage() {
     visible: el.dataset.visible === '1'
   }));
   localStorage.setItem('apDashboardWidgetLayout', JSON.stringify(ids));
+}
+
+function loadLayoutFromStorage() {
+  const list = document.querySelector('#ap-widget-list');
+  if (!list) return;
+  const saved = localStorage.getItem('apDashboardWidgetLayout');
+  if (!saved) return;
+  let layout;
+  try {
+    layout = JSON.parse(saved);
+  } catch (e) {
+    return;
+  }
+  if (!Array.isArray(layout)) return;
+  layout.forEach(item => {
+    const id = typeof item === 'string' ? item : item.id;
+    const card = list.querySelector(`[data-id="${id}"]`);
+    if (!card) return;
+    list.appendChild(card);
+    const visible = item && typeof item === 'object' ? !!item.visible : true;
+    card.dataset.visible = visible ? '1' : '0';
+    const toggle = card.querySelector('.widget-toggle');
+    if (toggle) toggle.checked = visible;
+    if (visible) {
+      card.classList.remove('is-hidden');
+    } else {
+      card.classList.add('is-hidden');
+    }
+  });
 }
 
 function getCurrentLayout() {
