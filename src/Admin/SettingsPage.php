@@ -820,16 +820,6 @@ class SettingsPage
 
     public static function renderDashboardWidgetsPage(): void
     {
-        $has_react = wp_script_is('ap-dashboard-widgets-editor', 'enqueued') ||
-            wp_script_is('ap-dashboard-widgets-editor', 'done');
-
-        if ($has_react) {
-            echo '<div id="admin-dashboard-widgets-editor"></div>';
-            echo '<noscript>';
-            DashboardWidgetTools::render();
-            echo '</noscript>';
-        } else {
-            DashboardWidgetTools::render();
-        }
+        echo '<div id="ap-widget-editor-root"></div>';
     }
 }
