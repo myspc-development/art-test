@@ -12,10 +12,7 @@
     "start": "wp-scripts start",
     "release": "standard-version",
     "test:js": "jest",
-    "test:e2e": "node tests/e2e/monetization-workflow.js",
-    "lint": "eslint assets/js",
-    "lint:md": "markdownlint '**/*.md'",
-    "ws": "node server/ws-server.js",
+
     "build:dev": "NODE_ENV=development npm run build"
   },
   "dependencies": {
@@ -38,6 +35,7 @@
     "@wordpress/scripts": "^19.2.4",
     "autoprefixer": "^10.4.21",
     "babel-jest": "^30.0.4",
+    "cypress": "^14.5.2",
     "cssnano": "^6.0.1",
     "glob": "^11.0.3",
     "jest": "^30.0.4",

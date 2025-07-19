@@ -443,6 +443,16 @@ bash scripts/setup-env.sh
 composer test
 ```
 
+End-to-end browser tests can be run with Cypress once the environment variables
+are set. Use the provided npm script:
+
+```bash
+npm run cypress:run
+```
+
+Refer to [docs/End_to_End_Testing_Guide.md](docs/End_to_End_Testing_Guide.md) for
+details on the required credentials and optional interactive mode.
+
 See [docs/development-setup.md](docs/development-setup.md) for the required environment variables and instructions on using a local WordPress archive when working offline.
 
 ## Sprint History
