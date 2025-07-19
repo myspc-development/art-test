@@ -42,3 +42,11 @@ bundled with Rollup. Run the following command and commit the updated files unde
 ```bash
 npm run build
 ```
+
+## Branching Strategy
+
+Create short-lived feature branches from `main` using the pattern `feature/<description>` or `bugfix/<description>`. Submit pull requests early for review and keep commits focused on a single change.
+
+## Coding Standards
+
+The project follows the [WordPress PHP Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/) and ESLint recommended rules. Run `composer sniff` to check PHP files and `npm run lint` to verify JavaScript code.
