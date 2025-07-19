@@ -65,6 +65,31 @@ When customizing SCSS or JavaScript be sure to run `npm run build` and
 commit the updated `build/` output so the admin screens load the latest
 compiled assets.
 
+## Project Vision & Goals
+
+ArtPulse aims to streamline event management and community engagement. The
+roadmap highlights priorities around security, NLP‑powered tagging,
+customizable dashboards and comprehensive testing to ensure reliable
+releases.
+
+## Quick Start
+
+```bash
+composer install
+npm install
+npm run dev
+```
+
+## Directory Structure
+
+- `src/` – PHP classes
+- `admin/` – admin pages and settings
+- `assets/` – JavaScript and CSS
+- `tests/` – PHPUnit and Jest tests
+- `docs/` – project documentation
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines.
+
 ## Installation
 
 This plugin uses [Composer](https://getcomposer.org/) for its PHP libraries.
