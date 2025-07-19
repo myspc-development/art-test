@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-function MyFavoritesWidget({ apiRoot, nonce }) {
+export function MyFavoritesWidget({ apiRoot, nonce }) {
   const [items, setItems] = useState([]);
 
   useEffect(() => {

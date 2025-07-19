@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import DashboardNavbar from './components/DashboardNavbar';
 import MessagesPanel from './components/MessagesPanel';
 import CommunityAnalyticsPanel from './components/CommunityAnalyticsPanel';
+import DashboardContainer from './DashboardContainer.jsx';
 
 export default function AppDashboard() {
   const [role, setRole] = useState(null);
@@ -19,7 +20,7 @@ export default function AppDashboard() {
     <div className="min-h-screen bg-gray-100">
       <DashboardNavbar userRole={role} onLogout={logout} />
       <main className="p-4">
-        {/* Render panels conditionally here */}
+        <DashboardContainer role={role} />
         <MessagesPanel />
         <CommunityAnalyticsPanel />
       </main>

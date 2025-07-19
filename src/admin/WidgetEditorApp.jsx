@@ -4,7 +4,7 @@ import DashboardCanvas from './DashboardCanvas';
 import PropertiesPanel from './PropertiesPanel';
 import PreviewToggle from './PreviewToggle';
 import PreviewWrapper from './PreviewWrapper';
-import widgetsData from './mock/widgetData.json';
+import registry from '../../assets/js/widgets/index.js';
 import 'react-grid-layout/css/styles.css';
 import './styles/editor.css';
 
@@ -16,7 +16,7 @@ export default function WidgetEditorApp() {
   const [preview, setPreview] = useState(false);
 
   useEffect(() => {
-    setWidgets(widgetsData);
+    setWidgets(registry);
   }, []);
 
   const addWidget = (def) => {
