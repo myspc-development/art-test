@@ -7,8 +7,10 @@ export default function AdminWidgetMatrix() {
   const [widgets, setWidgets] = useState<Widget[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
   const [matrix, setMatrix] = useState<Matrix>({});
-  const restRoot = window.wpApiSettings?.root || '/wp-json/';
-  const nonce = window.wpApiSettings?.nonce || '';
+  const restRoot =
+    window.APWidgetMatrix?.root || window.wpApiSettings?.root || '/wp-json/';
+  const nonce =
+    window.APWidgetMatrix?.nonce || window.wpApiSettings?.nonce || '';
 
   useEffect(() => {
     fetch(restRoot + 'artpulse/v1/widgets')
