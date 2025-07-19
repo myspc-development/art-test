@@ -51,7 +51,7 @@ define( 'WP_TESTS_TITLE', 'Test Blog' );
 define( 'WP_PHP_BINARY', 'php' );
 
 // Path to WordPress source
-define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress' );
+define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
 
 // Bootstrap the WordPress environment for testing
 require_once ABSPATH . '/wp-settings.php';

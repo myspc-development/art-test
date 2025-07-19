@@ -16,6 +16,6 @@ define( 'WP_TESTS_TITLE', 'Test Blog' );
 
 define( 'WP_PHP_BINARY', 'php' );
 
-define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress' );
+define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
 
 require_once ABSPATH . '/wp-settings.php';
