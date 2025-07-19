@@ -71,6 +71,12 @@ const configs = [
       '@wordpress/api-fetch': 'wp.apiFetch'
     }
   ),
+  createConfig(
+    'src/admin/WidgetEditorApp.jsx',
+    'build/widget-editor-ui.js',
+    'APWidgetEditorUI',
+    { react: 'React', 'react-dom/client': 'ReactDOM', 'react-grid-layout': 'ReactGridLayout' }
+  ),
 ];
 
 configs.push({

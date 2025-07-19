@@ -1,0 +1,20 @@
+[
+  {
+    "id": "calendar",
+    "label": "Event Calendar",
+    "icon": "calendar",
+    "defaultSize": { "w": 4, "h": 2 }
+  },
+  {
+    "id": "messages",
+    "label": "Messages",
+    "icon": "mail",
+    "defaultSize": { "w": 3, "h": 2 }
+  },
+  {
+    "id": "favorites",
+    "label": "Favorites",
+    "icon": "heart",
+    "defaultSize": { "w": 3, "h": 2 }
+  }
+]

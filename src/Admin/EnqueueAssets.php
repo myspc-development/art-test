@@ -211,6 +211,26 @@ class EnqueueAssets {
                     true
                 );
             }
+            $react_path = $plugin_dir . '/build/widget-editor-ui.js';
+            $react_url  = $plugin_url . '/build/widget-editor-ui.js';
+            if (file_exists($react_path)) {
+                wp_enqueue_script(
+                    'ap-widget-editor-ui',
+                    $react_url,
+                    ['react', 'react-dom/client', 'react-grid-layout'],
+                    filemtime($react_path),
+                    true
+                );
+            }
+            $style_path = $plugin_dir . '/src/admin/styles/editor.css';
+            if (file_exists($style_path)) {
+                wp_enqueue_style(
+                    'ap-widget-editor-style',
+                    plugins_url('src/admin/styles/editor.css', ARTPULSE_PLUGIN_FILE),
+                    [],
+                    filemtime($style_path)
+                );
+            }
         }
 
         if (
