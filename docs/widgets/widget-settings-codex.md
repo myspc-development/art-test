@@ -74,6 +74,19 @@ function ap_save_dashboard_widget_config(): void {
 }
 ```
 
+Each role entry may also include a `style` object describing base widget
+styling (background color, border and padding). The editor serializes this
+object alongside the layout list:
+
+```json
+{
+  "member": {
+    "layout": ["favorites", "rsvp_button"],
+    "style": {"background_color": "#fff", "padding": "M"}
+  }
+}
+```
+
 ## 4. Widget Layout Editor
 
 Visit **ArtPulse → Settings → Dashboard Widgets** to open the layout editor. The

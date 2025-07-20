@@ -57,7 +57,11 @@ class WidgetEditorController
     {
         $role = sanitize_key($req['role']);
         $layout = DashboardWidgetManager::getRoleLayout($role);
-        return rest_ensure_response($layout);
+        $style  = \ArtPulse\Admin\UserLayoutManager::get_role_style($role);
+        return rest_ensure_response([
+            'layout' => $layout,
+            'style'  => $style,
+        ]);
     }
 
     public static function save_layout(WP_REST_Request $req): WP_REST_Response|WP_Error
@@ -68,7 +72,11 @@ class WidgetEditorController
         if (!is_array($layout)) {
             return new WP_Error('invalid', 'Invalid layout', ['status' => 400]);
         }
+        $style = isset($data['style']) && is_array($data['style']) ? $data['style'] : [];
         DashboardWidgetManager::saveRoleLayout($role, $layout);
+        if ($style) {
+            \ArtPulse\Admin\UserLayoutManager::save_role_style($role, $style);
+        }
         return rest_ensure_response(['saved' => true]);
     }
 }

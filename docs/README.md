@@ -14,6 +14,7 @@ This directory groups all documentation by audience and feature area. Start with
 
 ### Admin Guides
 - [Admin Documentation](admin/README.md) – installation and dashboard settings.
+- [Dashboard Preview Mode Guide](dashboard-preview-mode-guide.md) – tips for role switching and style tweaks.
 
 ### Developer Guides
 - [Developer Guides](developer/README.md) – shortcodes, forms and coding standards.
