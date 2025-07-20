@@ -29,3 +29,5 @@ This guide covers tools for curators to record observations and scores during ev
 - `ap_event_notes` table stores `event_id`, `user_id`, `rating` and `note` text.
 - REST endpoints secured with capability checks.
 - Export route supports filters by date, curator or event.
+
+💬 Found something outdated? Submit Feedback

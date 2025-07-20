@@ -20,3 +20,4 @@ This folder collects every guide related to dashboard widgets. New developers sh
 Use these guides alongside the [Widget Manager Data Layer Guide](./widget-manager-data-layer-guide.md) when customizing layouts. The recommended read order ensures you first grasp the core spec before exploring advanced usage and deployment scenarios.
 See the [REST API reference](../api/rest-api-reference.md) for endpoints used by widgets. QA should consult the [Widget Editor Testing Checklist](../qa/widget-editor-testing-checklist.md).
 
+💬 Found something outdated? Submit Feedback

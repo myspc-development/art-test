@@ -56,3 +56,5 @@ Developers can alter default widget behavior with the `artpulse_widget_defaults`
 
 ## Related Reading
 For the full widget lifecycle refer to [Widget Lifecycle](./widget-lifecycle.md). To expose per-user settings check the [Widget Settings Codex](./widget-settings-codex.md). Administrators customizing layouts should review [Widget Layout Import Export Guide](./widget-layout-import-export-guide.md) for migrating configuration between sites.
+
+💬 Found something outdated? Submit Feedback

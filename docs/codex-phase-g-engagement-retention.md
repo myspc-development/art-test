@@ -69,3 +69,5 @@ Offers actions like featuring an event or embedding a widget.
 - [x] Referral codes and tracking
 - [x] Notifications REST and inbox UI
 - [x] Creator tips component
+
+💬 Found something outdated? Submit Feedback

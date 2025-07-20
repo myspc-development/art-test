@@ -82,3 +82,5 @@ Optionally send an email or dashboard notification to admins when a new flag is 
 - Auto-hide content flagged more than five times.
 - Block abusive flaggers to prevent trolling.
 - Use machine-learning signals to help triage reports.
+
+💬 Found something outdated? Submit Feedback

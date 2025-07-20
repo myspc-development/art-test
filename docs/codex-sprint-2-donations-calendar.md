@@ -29,3 +29,5 @@ Adds donation processing endpoints and a simple calendar feed.
 - Donations endpoint accepts POST requests.
 - Calendar feed returns valid JSON list.
 - Donation form displays success/failure states.
+
+💬 Found something outdated? Submit Feedback

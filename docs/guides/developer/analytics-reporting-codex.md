@@ -131,3 +131,5 @@ the same dataset as a PDF file.
 Scheduled exports call `SnapshotBuilder::generate_csv()` or `generate_pdf()`
 when weekly or monthly cron jobs run. Administrators can trigger the same logic
 manually from the **Snapshots** page under **ArtPulse → Settings**.
+
+💬 Found something outdated? Submit Feedback

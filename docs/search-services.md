@@ -30,3 +30,5 @@ Artists and organizations are indexed with the following metadata to support fac
 - **Tags** – any taxonomy terms attached to the post.
 
 External search services may use these fields to build facets or filters.
+
+💬 Found something outdated? Submit Feedback

@@ -54,3 +54,5 @@ Settings are stored in user meta such as `ap_notification_prefs`.
 ## 3. Onboarding Tour
 
 After registration, users see a brief tour highlighting key dashboard areas. Step completion is tracked in `ap_onboarding_steps` and the flag `ap_onboarding_completed`. Developers can modify the steps via the `artpulse_onboarding_steps` filter or provide custom templates in `templates/onboarding-*`.
+
+💬 Found something outdated? Submit Feedback

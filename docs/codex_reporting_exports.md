@@ -61,3 +61,5 @@ All snapshot endpoints use a `permission_callback` that verifies
 curl -H "X-WP-Nonce: <nonce>" \
   '/wp-json/artpulse/v1/reporting/snapshot.pdf?org_id=7&period=2025-04'
 ```
+
+💬 Found something outdated? Submit Feedback

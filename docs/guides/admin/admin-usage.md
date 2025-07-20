@@ -22,3 +22,5 @@ This document explains how site administrators manage role‑based dashboard lay
 ## Import / Export
 - Administrators can export the current layout JSON using the **Export** button.
 - Paste JSON into the import field and click **Import Layout** to restore a configuration.
+
+💬 Found something outdated? Submit Feedback

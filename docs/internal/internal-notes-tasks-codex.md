@@ -66,3 +66,5 @@ Implement basic notifications as needed.
 ## 8. Maintenance
 
 Admins may periodically clean up old completed tasks or notes and should document any schema changes for future integrations.
+
+💬 Found something outdated? Submit Feedback

@@ -20,3 +20,5 @@ During import you can configure:
 * How many initial rows should be skipped before parsing.
 
 Only users with the `manage_options` capability may perform imports. PapaParse is used client side for parsing CSV files.
+
+💬 Found something outdated? Submit Feedback

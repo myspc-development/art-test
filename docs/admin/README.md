@@ -16,3 +16,4 @@ Guides for site administrators configuring the ArtPulse plugin.
 - `admin-overview.md` – summary of admin features
 For implementation details see the [Developer Guides](../developer/README.md).
 
+💬 Found something outdated? Submit Feedback

@@ -33,3 +33,5 @@ This document summarizes how dashboard layouts and visibility settings are store
 3. Merge block markup with registered widget blocks so missing widgets are appended if needed.
 
 See [User Dashboard Customization](./user-dashboard-customization.md) for additional context.
+
+💬 Found something outdated? Submit Feedback

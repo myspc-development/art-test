@@ -21,3 +21,5 @@ The repository includes a GitHub Actions workflow that installs dependencies, ru
 Composer and npm dependencies are cached using the `actions/cache` action. The cache keys are derived from `composer.lock` and `package-lock.json` so caches are automatically invalidated when dependencies change.
 
 After installing dependencies the workflow runs `npm run lint`, `npm run test:js`, `composer test` and `composer sniff`. Assets are built with `npm run build` and the `scripts/release.sh` script creates a zip file in the `release/` directory. The archive is uploaded as a workflow artifact.
+
+💬 Found something outdated? Submit Feedback

@@ -72,3 +72,5 @@ The first screen appears on the event edit page for organizers to quickly record
 - CSV export streams rows with `fputcsv()`.
 
 See also: [qr-checkins.md](./qr-checkins.md), [reporting-exports.md](./reporting-exports.md)
+
+💬 Found something outdated? Submit Feedback

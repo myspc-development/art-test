@@ -29,3 +29,5 @@ The plugin uses the `ap_check_updates` cron job to poll the release endpoint onc
 If an upgrade fails, enable `WP_DEBUG` and inspect the PHP error log. Missing dependencies or outdated PHP versions are common culprits. You can roll back by restoring the previous plugin folder and database backup. Always verify that custom widgets still load correctly after an update.
 
 Refer to this codex whenever you publish a new version or modify the migration system. Consistent update practices keep the plugin secure and minimize downtime for users.
+
+💬 Found something outdated? Submit Feedback

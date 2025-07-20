@@ -24,3 +24,5 @@ An hourly worker stores scores in `ap_trending_rankings`. Scores use view, wishl
 ## Unified Home Feed
 
 The front end combines sections for nearby events, trending items and followed content. Each section can be toggled with feature flags.
+
+💬 Found something outdated? Submit Feedback

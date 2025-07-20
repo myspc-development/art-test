@@ -138,3 +138,5 @@ Allow supporters to contribute directly to artists or galleries.
 - Stats API returns expected shape
 - CRM invites tracked in `ap_org_contacts`
 - Reports export correctly for real orgs
+
+💬 Found something outdated? Submit Feedback

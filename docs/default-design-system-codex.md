@@ -191,3 +191,5 @@ Follow these actions to implement the system:
    ```
 
    Make sure the output CSS reflects `dashboard.css` changes.
+
+💬 Found something outdated? Submit Feedback

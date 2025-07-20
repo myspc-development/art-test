@@ -180,3 +180,5 @@ Admin UI tab: “Delivery Logs”.
 - Org Admin Tools – Webhook Panel, Test Ping
 - Developer Guide – Example syncing events to Airtable / Notion / Salesforce
 - Security – HMAC Signatures, Token Rotation Guide
+
+💬 Found something outdated? Submit Feedback

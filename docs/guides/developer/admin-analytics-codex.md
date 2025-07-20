@@ -56,3 +56,5 @@ If your deployment requires different KPIs, register a report class implementing
 Dashboards are only available to users with the `ap_premium_member` capability. See [Multi-Org Roles and Permissions](../../multi-org-roles-permissions.md) for the mapping between capabilities and partner tiers.
 
 By following these conventions you can customize metrics and automate reminders while ensuring admin screens remain performant.
+
+💬 Found something outdated? Submit Feedback

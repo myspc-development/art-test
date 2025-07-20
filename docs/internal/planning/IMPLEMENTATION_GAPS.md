@@ -12,3 +12,5 @@ status: draft
 - [✅] Admin page UI scaffold – *Completed*
 - [⚠️] Leaderboard metrics – *Complexity: Medium*
 - [❌] Case management API – *Complexity: High*
+
+💬 Found something outdated? Submit Feedback

@@ -83,3 +83,5 @@ dashboard receives `useWpNavMenu` set to `true`.
 - Dashboards and forms still use ArtPulse shortcodes.
 - Navigation is powered by WordPress menus.
 - Role‑based visibility works via the User Menus plugin.
+
+💬 Found something outdated? Submit Feedback

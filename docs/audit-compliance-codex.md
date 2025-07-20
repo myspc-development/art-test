@@ -41,3 +41,5 @@ A daily cron task invokes `DelegatedAccessManager::expire_access()` on the `ap_d
 ## 3. Reviewing Logs
 
 Admins can query or build a custom interface to filter and export entries from these tables. See the tests in `tests/Core` for usage examples.
+
+💬 Found something outdated? Submit Feedback

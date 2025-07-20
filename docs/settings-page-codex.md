@@ -61,3 +61,5 @@ foreach ( $tabs as $slug => $label ) {
 ```
 
 With the registry populated and `SettingsPage::register()` executed, the settings screen will display each registered tab and its fields automatically.
+
+💬 Found something outdated? Submit Feedback

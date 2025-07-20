@@ -14,3 +14,5 @@ This folder contains the API references and guides for the ArtPulse plugin.
 - `rest-api-reference.md` – REST endpoints and AJAX patterns
 - `api-org-roles.md` – Organization roles API usage
 - `guides/` – Additional developer guides
+
+💬 Found something outdated? Submit Feedback

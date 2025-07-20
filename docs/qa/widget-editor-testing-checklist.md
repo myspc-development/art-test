@@ -21,3 +21,5 @@ Merged from the Widget Manager testing checklist and verification notes.
 - Widget registry updated with role metadata
 - Dashboard layout endpoints registered
 - Admin editor loads roles and widgets via REST
+
+💬 Found something outdated? Submit Feedback

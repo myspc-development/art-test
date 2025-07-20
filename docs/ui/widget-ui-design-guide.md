@@ -57,3 +57,5 @@ and **Trending Tags** show how to structure menu nodes and widget blocks defined
 
 Use the reset controls to restore defaults or export/import JSON layouts when migrating
 settings.
+
+💬 Found something outdated? Submit Feedback

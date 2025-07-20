@@ -28,3 +28,5 @@ The editor exposes hooks so plugins can add controls or modify behavior. Use the
 Enable `SCRIPT_DEBUG` in `wp-config.php` to load unminified JavaScript. The editor logs layout actions to the browser console when the `AP_DEBUG` constant is true. If widgets fail to render, check the network tab for REST errors and confirm that permalinks are enabled.
 
 With these guidelines you can extend the dashboard editor and keep the user experience consistent across the ArtPulse plugin.
+
+💬 Found something outdated? Submit Feedback

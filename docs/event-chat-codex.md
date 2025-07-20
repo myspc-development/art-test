@@ -22,3 +22,5 @@ This module provides a lightweight real‑time chat for event pages.
 Insert `[ap_event_chat id="123"]` on any page to display the chat widget.
 The included `ap-event-chat.js` script polls the REST endpoint at regular intervals,
 scheduling each new request only after the previous one completes. Messages are still submitted via AJAX.
+
+💬 Found something outdated? Submit Feedback

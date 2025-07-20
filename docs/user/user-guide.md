@@ -107,3 +107,5 @@ echo '</div>';
 | Styled widgets | ✅ `.ap-widget-card` | ✅ Use same |
 | Layout saving | ✅ Per role | ✅ Per user via AJAX |
 | Fallback logic | ✅ Fully implemented | ✅ Working |
+
+💬 Found something outdated? Submit Feedback

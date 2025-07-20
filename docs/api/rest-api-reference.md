@@ -33,3 +33,5 @@ Persist widget order and visibility.
 
 ### POST /ap/layout/reset
 Delete user layout and fall back to defaults.
+
+💬 Found something outdated? Submit Feedback

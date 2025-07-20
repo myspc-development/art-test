@@ -122,3 +122,5 @@ Use cases include syncing to Google Calendar, auto‑publishing on civic sites o
 - Retained audiences lead to more revisits and attendance.
 - Platform stickiness increases follows, RSVPs and shares.
 - Partners gain independence with minimal setup per show.
+
+💬 Found something outdated? Submit Feedback

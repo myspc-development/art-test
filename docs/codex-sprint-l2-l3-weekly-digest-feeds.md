@@ -128,3 +128,5 @@ This returns a URL such as `https://example.com/feeds/events.ics?org=44&tag=prin
 - [x] iCal/JSON/RSS endpoints
 - [x] Feed filter handling + caching
 - [x] Analytics logs + charts
+
+💬 Found something outdated? Submit Feedback

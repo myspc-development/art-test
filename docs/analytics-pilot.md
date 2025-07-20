@@ -22,3 +22,5 @@ curl -X POST -d 'email=org@example.com' https://example.com/wp-json/artpulse/v1/
 ```
 
 This lightweight flow keeps the pilot manageable while gathering feedback on the new dashboards.
+
+💬 Found something outdated? Submit Feedback

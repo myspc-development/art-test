@@ -28,3 +28,5 @@ Welcome to the documentation portal. Select a section based on your role.
 - [User Guides](user/README.md)
 
 For additional docs see the [Codex Index](codex_index.md) or provide [feedback](feedback.md).
+
+💬 Found something outdated? Submit Feedback

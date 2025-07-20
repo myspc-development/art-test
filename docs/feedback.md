@@ -1,11 +1,17 @@
 ---
-title: Documentation Feedback
+title: Documentation Feedback Log
 category: docs
-role: all
+role: developer
 last_updated: 2025-07-20
 status: draft
 ---
 
-# Documentation Feedback
+# Documentation Feedback Log
 
-Have suggestions or found an error? Please open an issue on GitHub or start a discussion under the project repository. Include a link to the page you are referencing so we can respond quickly.
+Please use the [issue template](https://github.com/example/repo/issues/new?template=doc-feedback.md) to submit suggestions.
+
+| Date | From | File | Issue | Status |
+|------|------|------|-------|--------|
+| 2025-07-20 | QA | widget-editor-guide.md | Missing REST section | Pending |
+
+💬 Found something outdated? Submit Feedback

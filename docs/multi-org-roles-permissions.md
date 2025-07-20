@@ -18,3 +18,5 @@ Organizations may operate multiple groups or partner collectives under a single 
 - Capabilities map to WordPress permissions so third‑party extensions can check them with `current_user_can()`.
 
 Use the admin page at `wp-admin/admin.php?page=ap-org-roles` to review roles and assign members. The table lists each role, a description and the number of users with that role in the selected org.
+
+💬 Found something outdated? Submit Feedback

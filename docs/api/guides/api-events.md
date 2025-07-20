@@ -126,3 +126,5 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   -d 'url=https://example.com/webhook&events[]=ticket_sold' \
   '/wp-json/artpulse/v1/org/2/webhooks'
 ```
+
+💬 Found something outdated? Submit Feedback

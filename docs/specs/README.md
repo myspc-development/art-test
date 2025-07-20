@@ -9,3 +9,5 @@ status: draft
 # Specifications
 
 Archived technical specifications for the plugin.
+
+💬 Found something outdated? Submit Feedback

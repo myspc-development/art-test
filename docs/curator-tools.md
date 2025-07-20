@@ -20,3 +20,5 @@ Curators can attach private notes while reviewing shows. Notes are stored per ev
 
 ## 4. Roles and Permissions
 Curator tools require the `ap_curator` capability. Administrators can assign this role via the Users screen. Curators may view artist profiles, edit their own bundles and manage notes, but they cannot publish events or manage site settings.
+
+💬 Found something outdated? Submit Feedback

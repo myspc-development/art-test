@@ -47,3 +47,5 @@ GitHub Actions provides the default pipeline. Workflow `ci.yml` checks coding st
 ```
 
 Release archives are uploaded by `plugin-release.yml`. Adjust secrets for deployment targets as needed.
+
+💬 Found something outdated? Submit Feedback
