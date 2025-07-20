@@ -1,3 +1,10 @@
+---
+title: Codex: Sprint 1 – Mapping & Q&A
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex: Sprint 1 – Mapping & Q&A
 
 ## Overview
@@ -24,4 +31,3 @@ This sprint introduced geolocation search and basic Q&A threads for events.
 - `/qa-thread/{event}` route returns JSON.
 - Rankings table exists in database.
 - Widget script outputs an iframe.
-

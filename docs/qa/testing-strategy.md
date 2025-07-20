@@ -40,4 +40,3 @@ downloaded for Puppeteer based tests, set `PUPPETEER_SKIP_DOWNLOAD=1` before run
 ## Continuous Integration
 
 Automated tests are executed in the CI pipeline on every pull request so regressions are caught early.
-

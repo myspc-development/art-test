@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Artist & Gallery Tools
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Artist & Gallery Tools
 
 This guide describes optional tools empowering artists and galleries on the ArtPulse platform. The modules allow creators to manage events, gain insights, and reduce administrative overhead.
@@ -131,4 +138,3 @@ Allow supporters to contribute directly to artists or galleries.
 - Stats API returns expected shape
 - CRM invites tracked in `ap_org_contacts`
 - Reports export correctly for real orgs
-

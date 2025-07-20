@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Artist Monetization Tools
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Artist Monetization Tools
 
 This section outlines how artists and galleries can earn income via ticketed events, donations and digital passes. It covers database models, REST endpoints and Stripe integration.

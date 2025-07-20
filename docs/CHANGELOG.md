@@ -1,3 +1,10 @@
+---
+title: Changelog
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Changelog
 
 ## 1.3.15
@@ -54,4 +61,3 @@
 - Implemented favorites, engagement dashboards and inline event editing.
 - Extended event filtering with a FullCalendar view and reusable cards.
 - Added profile link requests, privacy options and OAuth login integration.
-

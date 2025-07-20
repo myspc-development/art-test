@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Analytics & Insights
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Analytics & Insights
 
 This guide describes how to present event performance metrics and audience engagement data to artists and organizations. The modules are optional and focus on visual dashboards powered by REST endpoints.

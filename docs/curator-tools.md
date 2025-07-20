@@ -1,3 +1,10 @@
+---
+title: Curator Tools Overview
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Curator Tools Overview
 
 This guide summarizes the dashboard utilities available to curators.

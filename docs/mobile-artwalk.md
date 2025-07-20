@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Mobile ArtWalk Guide
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Mobile ArtWalk Guide
 
 This guide details the PWA and mobile crawl features aimed at public art walks and museum nights.
@@ -22,4 +29,3 @@ This guide details the PWA and mobile crawl features aimed at public art walks a
 - PWA manifest and service worker registered.
 - `/events` endpoint accepts `lat` and `lng` for nearby filtering.
 - Crawl planner persists selected events in local storage.
-

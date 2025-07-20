@@ -1,3 +1,10 @@
+---
+title: User Dashboard Customization
+category: user
+role: user
+last_updated: 2025-07-20
+status: draft
+---
 # User Dashboard Customization
 
 This document explains how ArtPulse stores each user's dashboard layout, which REST and AJAX actions are involved, and the expected widget schema. It supplements the [User Dashboard Layout Codex](./user-dashboard-layout-codex.md).

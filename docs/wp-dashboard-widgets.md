@@ -1,3 +1,10 @@
+---
+title: WordPress Dashboard Widgets
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # WordPress Dashboard Widgets
 
 This plugin adds simple widgets to the native WordPress dashboard. Widgets are registered via `wp_add_dashboard_widget()` so users can drag and drop them just like the default WordPress boxes. Each user's arrangement is stored automatically in `metaboxorder_dashboard` user meta.

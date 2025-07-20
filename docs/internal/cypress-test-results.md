@@ -1,3 +1,10 @@
+---
+title: Cypress Dashboard Integration Test Results
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Cypress Dashboard Integration Test Results
 
 Date: 2025-07-17
@@ -18,4 +25,3 @@ Bundled Node version: not found
 ```
 
 Future runs require allowing access to download.cypress.io or preinstalling Cypress in the environment.
-

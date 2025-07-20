@@ -1,3 +1,10 @@
+---
+title: Codex: Sprint L1 – Embeddable Event Widgets
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex: Sprint L1 – Embeddable Event Widgets
 
 ## Overview

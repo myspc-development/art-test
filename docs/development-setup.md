@@ -1,3 +1,10 @@
+---
+title: Development Setup
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Development Setup
 
 ArtPulse currently supports **PHP 8.2–8.4**. Ensure a compatible PHP version is installed before continuing.
@@ -54,7 +61,7 @@ To configure the server create a `.env` file in the project root. Define the sec
 
 ```bash
 JWT_SECRET=change_me_to_a_long_random_string
-# PORT=3001
+## PORT=3001
 ```
 
 `JWT_SECRET` must be at least ten characters long or the server will abort at startup. Tokens sent by clients **must** include an `exp` claim which controls when the token expires. If `PORT` is omitted the server defaults to `3001`.

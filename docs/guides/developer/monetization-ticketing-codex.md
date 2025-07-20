@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Monetization & Ticketing
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Monetization & Ticketing
 
 This guide describes optional modules for selling event tickets, applying

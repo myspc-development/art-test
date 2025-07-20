@@ -1,3 +1,10 @@
+---
+title: ArtPulse Plugin – Features & Functions Report
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Plugin – Features & Functions Report
 
 Version: 1.3.15

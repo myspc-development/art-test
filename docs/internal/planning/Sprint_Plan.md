@@ -1,3 +1,10 @@
+---
+title: 🗓️ Sprint Plan – Divorce Organizer
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # 🗓️ Sprint Plan – Divorce Organizer
 
 ## Sprint 1: Core Infrastructure & Setup (1 week)

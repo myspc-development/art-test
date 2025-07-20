@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Financial Overview & Payout Management
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Financial Overview & Payout Management
 
 This guide covers optional modules for tracking revenue, refunds and payouts across all events. It focuses on dashboards, filtering tools and exports that organizations can enable in the admin area.

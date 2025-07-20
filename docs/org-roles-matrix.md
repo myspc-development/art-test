@@ -1,3 +1,10 @@
+---
+title: Organization Roles Matrix
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Organization Roles Matrix
 
 The roles matrix maps users to organizations with a single role per row. Roles are stored in the `ap_org_user_roles` table which is created on plugin activation.

@@ -1,3 +1,10 @@
+---
+title: Admin Dashboard Analytics Widgets
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Admin Dashboard Analytics Widgets
 
 **Priority:** Medium

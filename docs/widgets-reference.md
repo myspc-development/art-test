@@ -1,3 +1,10 @@
+---
+title: Widgets Reference
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Widgets Reference
 
 Below is a summary of built in dashboard widgets. Custom plugins can register additional entries.

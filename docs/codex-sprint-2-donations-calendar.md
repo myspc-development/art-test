@@ -1,3 +1,10 @@
+---
+title: Codex: Sprint 2 – Donations & Calendar
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex: Sprint 2 – Donations & Calendar
 
 ## Overview
@@ -22,4 +29,3 @@ Adds donation processing endpoints and a simple calendar feed.
 - Donations endpoint accepts POST requests.
 - Calendar feed returns valid JSON list.
 - Donation form displays success/failure states.
-

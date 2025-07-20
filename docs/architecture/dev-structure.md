@@ -1,3 +1,10 @@
+---
+title: Developer Structure Guide
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Developer Structure Guide
 
 This document provides an overview of the plugin code layout and how to extend it.
@@ -29,4 +36,3 @@ Use `wp_enqueue_script` and `wp_enqueue_style` with a version based on `filemtim
 ## Registering REST Endpoints
 
 Create a controller class under `src/Rest/` with a `register()` method hooking into `rest_api_init`. Use `register_rest_route()` to define endpoints and return data via `rest_ensure_response()`.
-

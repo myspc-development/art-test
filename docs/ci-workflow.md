@@ -1,3 +1,10 @@
+---
+title: CI/CD Workflow Guide
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # CI/CD Workflow Guide
 
 The repository includes a GitHub Actions workflow that installs dependencies, runs the test suite and packages the plugin for release. The workflow requires the following environment variables for the WordPress test environment:

@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Analytics & Reporting
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Analytics & Reporting
 
 This guide consolidates instructions for tracking engagement and generating reports for administrators and organizations. It also covers per-user insights available to artists or individual users. Each section is optional and focuses on how to enable or extend analytics modules.
@@ -124,4 +131,3 @@ the same dataset as a PDF file.
 Scheduled exports call `SnapshotBuilder::generate_csv()` or `generate_pdf()`
 when weekly or monthly cron jobs run. Administrators can trigger the same logic
 manually from the **Snapshots** page under **ArtPulse → Settings**.
-

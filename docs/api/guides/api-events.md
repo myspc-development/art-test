@@ -1,3 +1,10 @@
+---
+title: ArtPulse API: Events & Social
+category: api
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse API: Events & Social
 ```mermaid
 sequenceDiagram
@@ -119,4 +126,3 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   -d 'url=https://example.com/webhook&events[]=ticket_sold' \
   '/wp-json/artpulse/v1/org/2/webhooks'
 ```
-

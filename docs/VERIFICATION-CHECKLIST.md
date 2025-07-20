@@ -1,3 +1,10 @@
+---
+title: ✅ Codex Verification & Status Update Checklist
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ✅ Codex Verification & Status Update Checklist
 
 ## 🔍 Verification Tasks

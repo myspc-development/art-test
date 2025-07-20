@@ -1,3 +1,10 @@
+---
+title: UI/UX Polish & Accessibility
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # UI/UX Polish & Accessibility
 
 **Priority:** Medium

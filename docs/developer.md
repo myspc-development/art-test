@@ -1,3 +1,10 @@
+---
+title: Developer Guide
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Developer Guide
 
 This page lists hooks and helpers for extending the dashboard widget system.

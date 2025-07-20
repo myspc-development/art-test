@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Audit & Compliance
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Audit & Compliance
 
 This guide outlines optional modules for recording activity logs and managing delegated access. The code lives under `src/Core`.

@@ -1,3 +1,10 @@
+---
+title: 📚 Codex Index
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # 📚 Codex Index
 
 > Central directory for all ArtPulse Codex documents — organized by phase, feature module, and sprint scope.

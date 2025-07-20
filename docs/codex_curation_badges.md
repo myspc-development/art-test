@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Curation Badges
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Curation Badges
 
 Audience: Dev, PM, Curators

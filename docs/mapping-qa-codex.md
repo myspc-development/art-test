@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Mapping & Q&A Threads
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Mapping & Q&A Threads
 
 This codex outlines the sprint 1 features for interactive maps and time-bound Q&A threads.

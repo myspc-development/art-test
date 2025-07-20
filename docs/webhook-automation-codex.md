@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Webhook Automations
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Webhook Automations
 
 This guide describes the optional webhook system for integrating ArtPulse events with external services. Organization administrators can register webhook URLs that will receive JSON payloads whenever selected events occur.
