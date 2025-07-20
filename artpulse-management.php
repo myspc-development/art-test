@@ -139,12 +139,14 @@ require_once __DIR__ . '/includes/rest/status.php';
 require_once __DIR__ . '/includes/rest-messages.php';
 require_once __DIR__ . '/includes/rest-role-matrix.php';
 require_once __DIR__ . '/includes/rest/widget-layout.php';
+require_once __DIR__ . '/includes/class-artpulse-rest-controller.php';
 // The DashboardConfigController class provides this route.
 // require_once __DIR__ . '/api/dashboard-config.php';
 require_once __DIR__ . '/admin-menu.php';
 require_once __DIR__ . '/includes/http-hooks.php';
 require_once __DIR__ . '/includes/rest-update-diagnostics.php';
 require_once __DIR__ . '/includes/wp-dashboard-manager.php';
+require_once __DIR__ . '/widgets/ArtPulseNewsFeedWidget.php';
 require_once plugin_dir_path(__FILE__) . 'src/Rest/EventChat.php';
 require_once __DIR__ . '/includes/hooks.php';
 require_once __DIR__ . '/includes/registration-hooks.php';

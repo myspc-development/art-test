@@ -19,9 +19,9 @@ status: complete
 
 ### ✅ 2. Create/Update REST API Endpoints
 - [x] `GET /events/nearby`: Return events with geo + radius filter
-- [x] `POST /event/{id}/rsvp`: RSVP logic with user_id, status
-- [x] `POST /user/{id}/follow`: Follow/unfollow artist/org
-- [x] `POST /event/{id}/message`: Create message thread/comment
+- [~] `POST /event/{id}/rsvp`: RSVP logic with user_id, status
+- [~] `POST /user/{id}/follow`: Follow/unfollow artist/org
+- [~] `POST /event/{id}/message`: Create message thread/comment
 
 ---
 
@@ -47,7 +47,7 @@ status: complete
 ## PHASE 3: Messaging & Interaction
 
 ### 💬 Messaging
-- [x] `EventChatWidget.jsx`
+- [~] `EventChatWidget.jsx`
   - Pulls and posts messages related to events
   - Threads via `event_id`
 
@@ -55,7 +55,7 @@ status: complete
   - Previews recent messages to/from artists or orgs
 
 ### 📩 RSVP System
-- [x] `RSVPButton.jsx`
+- [~] `RSVPButton.jsx`
   - Toggle RSVP state with `/event/{id}/rsvp`
   - Show capacity and current attendance
 
@@ -67,7 +67,7 @@ status: complete
 ## PHASE 4: Sharing & Social Engagement
 
 ### 📢 Community Sharing
-- [x] `ShareThisEventWidget.jsx`
+- [~] `ShareThisEventWidget.jsx`
   - Social share buttons (Twitter/X, Facebook, LinkedIn)
   - Copy-to-clipboard event URL
 
@@ -79,7 +79,7 @@ status: complete
 ## PHASE 5: Feed & Content
 
 ### 📰 Feed Integration
-- [x] `ArtPulseNewsFeedWidget.php`
+- [~] `ArtPulseNewsFeedWidget.php`
   - Shows news and posts from followed artists/orgs
 
 - [x] `RecommendedForYouWidget.php`
