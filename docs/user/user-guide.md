@@ -108,4 +108,4 @@ echo '</div>';
 | Layout saving | ✅ Per role | ✅ Per user via AJAX |
 | Fallback logic | ✅ Fully implemented | ✅ Working |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

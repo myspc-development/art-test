@@ -29,4 +29,4 @@ Example export:
 
 Always validate the JSON structure before saving to avoid corrupt layouts.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

@@ -15,4 +15,4 @@ status: draft
 | Create CONTRIBUTING.md | Codex | ✅ Complete |
 | Add feedback.md & footer links | Codex | ✅ Complete |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

@@ -129,4 +129,4 @@ Example response:
 - REST API → Partner API scopes
 - Admin Features → API Key Manager
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

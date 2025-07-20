@@ -25,4 +25,4 @@ Below is a summary of built in dashboard widgets. Custom plugins can register ad
 | widget_nearby_events_map | Nearby Events | events | Events around your location. |
 | widget_my_favorites | My Favorite Events | events | Your saved events. |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

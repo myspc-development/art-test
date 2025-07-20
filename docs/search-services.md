@@ -31,4 +31,4 @@ Artists and organizations are indexed with the following metadata to support fac
 
 External search services may use these fields to build facets or filters.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

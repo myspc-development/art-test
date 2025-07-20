@@ -18,4 +18,4 @@ This document will detail the reputation and trust badge system for curators and
 - Render badges on profiles and event cards
 - Outline moderation or approval workflow
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

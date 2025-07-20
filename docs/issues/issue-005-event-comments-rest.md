@@ -11,4 +11,4 @@ status: draft
 
 Implement comment listing, submission and moderation endpoints per [Event Comments Codex](../event-comments-codex.md). Include threading and spam controls.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

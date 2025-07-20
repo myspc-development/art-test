@@ -42,7 +42,7 @@ export default [
 - Categories allow the **Add Widget** modal to filter by topic.
 - Register widgets on the `artpulse_register_dashboard_widget` action so they are available before layouts load. Core widgets reside in `src/Sample/RoleBasedWidgets.php`.
 
-See the [Dashboard Widget Design Codex](./dashboard-widget-design-codex.md) for styling guidelines.
+See the [Dashboard Widget Design Codex](../dashboard-widget-design-codex.md) for styling guidelines.
 
 To add or remove a widget from the React dashboard, edit `assets/js/widgets/index.js`
 and update the exported array. Roles may be adjusted by modifying the `roles`
@@ -57,4 +57,4 @@ Developers can alter default widget behavior with the `artpulse_widget_defaults`
 ## Related Reading
 For the full widget lifecycle refer to [Widget Lifecycle](./widget-lifecycle.md). To expose per-user settings check the [Widget Settings Codex](./widget-settings-codex.md). Administrators customizing layouts should review [Widget Layout Import Export Guide](./widget-layout-import-export-guide.md) for migrating configuration between sites.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

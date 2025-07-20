@@ -30,4 +30,4 @@ Adds donation processing endpoints and a simple calendar feed.
 - Calendar feed returns valid JSON list.
 - Donation form displays success/failure states.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

@@ -15,4 +15,4 @@ This folder contains the API references and guides for the ArtPulse plugin.
 - `api-org-roles.md` – Organization roles API usage
 - `guides/` – Additional developer guides
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

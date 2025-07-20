@@ -86,4 +86,4 @@ This phase unifies tools for artists, curators and collectives so ArtPulse becom
 | M7 | Reputation Scores & “Trusted Curator” badges |
 | M8 | Creator-to-Creator Messaging (opt-in, secure) |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

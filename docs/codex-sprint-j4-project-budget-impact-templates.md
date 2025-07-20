@@ -53,4 +53,4 @@ Use this template after each event to summarize reach and engagement. Reports ca
 - Grant Reporting Overview
 - Partner Handbook – “Tracking community impact”
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

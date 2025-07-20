@@ -83,4 +83,4 @@ npm install leaflet react-leaflet @testing-library/react
 - [x] Update `README.md` and `Widget Editor Guide` with new capabilities
 For more information on widgets see [Widget Registry Reference](widgets/widget-registry-reference.md) and [Widget Specification](widgets/widget-specification.md). Analytics guidelines live in the [Admin & Analytics Codex](guides/developer/admin-analytics-codex.md).
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

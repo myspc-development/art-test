@@ -24,4 +24,4 @@ The lead developer for each feature is responsible for keeping both the `Sprint_
 - Update both the `Sprint_Backlog` and `Feature Completion Tracker` at the end of each day or after significant progress.
 - Sync with QA and UI/UX before marking a feature as **Complete**.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

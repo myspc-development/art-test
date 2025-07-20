@@ -129,4 +129,4 @@ This returns a URL such as `https://example.com/feeds/events.ics?org=44&tag=prin
 - [x] Feed filter handling + caching
 - [x] Analytics logs + charts
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

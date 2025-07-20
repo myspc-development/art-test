@@ -27,4 +27,4 @@ This directory groups all documentation by audience and feature area. Start with
 
 Additional planning docs live under [internal/](internal/) and more detailed specifications are in [specs/](specs/). Navigate through each folder README to explore related articles in a logical order.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

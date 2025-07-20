@@ -73,4 +73,4 @@ If your plugin needs bespoke dashboard widgets or data views you can register ad
 - Shortcodes that rely on REST endpoints require permalinks to be enabled.
 - If output is blank, check user capabilities and that the `id` attribute references existing content.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

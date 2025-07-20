@@ -1,0 +1,24 @@
+name: Docs Lint
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - '.github/workflows/docs-lint.yml'
+      - 'scripts/docs_validate.py'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - '.github/workflows/docs-lint.yml'
+      - 'scripts/docs_validate.py'
+
+jobs:
+  docs-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Validate docs
+        run: python scripts/docs_validate.py

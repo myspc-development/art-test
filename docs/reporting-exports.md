@@ -28,4 +28,4 @@ Use these tools to capture real attendance numbers and generate grant-ready logs
 - CSV export uses `fputcsv()` to stream records.
 - PDF export relies on `Dompdf` with header and footer templates.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

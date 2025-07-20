@@ -11,4 +11,4 @@ status: draft
 - [Admin Guides](./admin/)
 - [Developer Codex](./developer/)
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

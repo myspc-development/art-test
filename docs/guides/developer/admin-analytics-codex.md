@@ -57,4 +57,4 @@ Dashboards are only available to users with the `ap_premium_member` capability. 
 
 By following these conventions you can customize metrics and automate reminders while ensuring admin screens remain performant.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

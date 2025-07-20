@@ -62,4 +62,4 @@ status: draft
 - Extended event filtering with a FullCalendar view and reusable cards.
 - Added profile link requests, privacy options and OAuth login integration.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

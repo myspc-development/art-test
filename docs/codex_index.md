@@ -49,17 +49,12 @@ status: draft
 
 | Document | Purpose | Audience |
 |----------|---------|----------|
-| [`widget-manager-data-layer-guide.md`](./widget-manager-data-layer-guide.md) | Layout storage & retrieval | Dev |
+| [`widget-manager-data-layer-guide.md`](widgets/widget-manager-data-layer-guide.md) | Layout storage & retrieval | Dev |
 | [`dashboard-editor-developer-guide.md`](./dashboard-editor-developer-guide.md) | Admin drag-and-drop editor | Dev |
-| [`widget-registry-reference.md`](./widget-registry-reference.md) | Widget registration metadata | Dev |
-| [`rest-api-and-ajax-endpoint-spec.md`](./rest-api-and-ajax-endpoint-spec.md) | REST and AJAX endpoints | Dev |
-| [`widget-matrix-instructions.md`](./widget-matrix-instructions.md) | Role matrix admin screen | Dev |
-| [`widget-layout-import-export-guide.md`](./widget-layout-import-export-guide.md) | Import/export JSON | Dev |
-| [`widget-manager-testing-checklist.md`](./widget-manager-testing-checklist.md) | Testing & access control | QA, Dev |
-| [Widget Editor Codex Instructions](./Widget_Editor_Codex_Instructions.md) | How to document new widgets | Dev |
-| [`WIDGET-EDITOR-VERIFICATION.md`](./WIDGET-EDITOR-VERIFICATION.md) | Verification checklist | Dev |
-| [`widget-settings-codex.md`](./widget-settings-codex.md) | Per-user widget settings | Dev |
-| [`user-dashboard-layout-codex.md`](./user-dashboard-layout-codex.md) | Drag-and-drop layout guide | Dev |
+| [`widget-registry-reference.md`](widgets/widget-registry-reference.md) | Widget registration metadata | Dev |
+| [`widget-layout-import-export-guide.md`](widgets/widget-layout-import-export-guide.md) | Import/export JSON | Dev |
+| [Widget Editor Codex Instructions](archive/Widget_Editor_Codex_Instructions.md) | How to document new widgets | Dev |
+| [`widget-settings-codex.md`](widgets/widget-settings-codex.md) | Per-user widget settings | Dev |
 
 ---
 
@@ -97,7 +92,7 @@ status: draft
 | [`codex-sprint-i1-pricing-engine.md`](./codex-sprint-i1-pricing-engine.md) | I1–I4 | 🟢 Ready | Admin, Dev |
 | [`codex-sprint-i3-crm-donor-tools.md`](./codex-sprint-i3-crm-donor-tools.md) | I3 | 🟢 Ready | Dev, Org Admin |
 | [`webhook-automation-codex.md`](./webhook-automation-codex.md) | J1 | 🟢 Ready | Dev |
-| [`plugin-install-upgrade-codex.md`](./plugin-install-upgrade-codex.md) | J2 | 🟢 | Dev |
+| [`plugin-install-upgrade-codex.md`](admin/plugin-installation-updates.md) | J2 | 🟢 | Dev |
 | [`updates-codex.md`](./updates-codex.md) | J2 | 🟢 | Dev |
 | [`audit-compliance-codex.md`](./audit-compliance-codex.md) | J3 | 🟢 | Dev, PM |
 | [`financial-overview-codex.md`](./financial-overview-codex.md) | I4 | 🟢 | Admin |
@@ -153,4 +148,4 @@ All sections are up to date; no further updates are planned.
 - Update status icons after each release
 - Highlight docs requiring [🚧 Sprint Needed]
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

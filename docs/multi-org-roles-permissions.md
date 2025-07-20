@@ -19,4 +19,4 @@ Organizations may operate multiple groups or partner collectives under a single 
 
 Use the admin page at `wp-admin/admin.php?page=ap-org-roles` to review roles and assign members. The table lists each role, a description and the number of users with that role in the selected org.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

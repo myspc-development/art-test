@@ -92,4 +92,4 @@ You may also set `WORDPRESS_TARBALL` to the path of a local WordPress archive if
 
 The `plugin-release.yml` workflow in `.github/workflows/` installs Composer and npm dependencies, runs unit tests and builds production assets. Composer caches are stored under `~/.composer/cache` while npm caches use `~/.npm`. The cache keys include `composer.lock` and `package-lock.json` so dependencies are re-downloaded only when these files change.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

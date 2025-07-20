@@ -54,4 +54,4 @@ status: draft
 4. Build analytics and reporting screens during Phase 4.
 5. Finalize tests and documentation to wrap up Phase 5.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

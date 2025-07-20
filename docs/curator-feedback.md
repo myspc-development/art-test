@@ -30,4 +30,4 @@ This guide covers tools for curators to record observations and scores during ev
 - REST endpoints secured with capability checks.
 - Export route supports filters by date, curator or event.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

@@ -113,7 +113,7 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   -d 'status=approve' '/wp-json/artpulse/v1/event/comment/7/moderate'
 ```
 
-See [Event Comments Codex](event-comments-codex.md) for details.
+See [Event Comments Codex](../../event-comments-codex.md) for details.
 
 ### `POST /artpulse/v1/favorite`
 
@@ -131,4 +131,4 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   '/wp-json/artpulse/v1/favorite'
 ```
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

@@ -90,4 +90,4 @@ CREATE TABLE ap_embed_logs (
 - `analytics.md`
 - `api-embed.md`
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

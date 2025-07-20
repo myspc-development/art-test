@@ -107,4 +107,4 @@ Write a 150-word public benefit summary for a community arts grant. Include them
 - Export Formats – sample public benefit and artist statement outputs
 - Security & Limits – rate limiting or upgrade tier requirement
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

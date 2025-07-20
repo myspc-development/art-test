@@ -29,4 +29,4 @@ The plugin supports optional competitions or challenges. Organizers create a com
 
 Follow buttons let users keep up with artists, events and organizations. Activity feeds show when followed creators publish new content. Sharing links appear on event and artwork pages so visitors can easily post them on external networks.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

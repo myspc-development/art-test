@@ -13,7 +13,7 @@ sequenceDiagram
   API-->>Org: webhook id
 ```
 
-See the [Webhook Automations Codex](webhook-automation-codex.md) for event payloads and retry logic.
+See the [Webhook Automations Codex](../../webhook-automation-codex.md) for event payloads and retry logic.
 
 
 ### `GET /artpulse/v1/recommendations`
@@ -130,4 +130,4 @@ Several endpoints store preferences using user meta. Keys of interest:
 
 - `ap_notification_prefs` – associative array with boolean `email`, `push` and `sms` values saved via `POST /artpulse/v1/user-preferences`.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

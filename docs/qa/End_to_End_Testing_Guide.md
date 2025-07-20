@@ -79,4 +79,4 @@ environment requires different settings.
   checks for monetization workflows such as requesting commissions or managing
   subscriptions.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

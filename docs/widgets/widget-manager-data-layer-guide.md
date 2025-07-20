@@ -32,6 +32,6 @@ This document summarizes how dashboard layouts and visibility settings are store
 2. If empty, load role layout from `ap_dashboard_widget_config`.
 3. Merge block markup with registered widget blocks so missing widgets are appended if needed.
 
-See [User Dashboard Customization](./user-dashboard-customization.md) for additional context.
+See [User Dashboard Customization](../user/README.md) for additional context.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

@@ -41,4 +41,4 @@ status: draft
 ## 📌 Next Steps
 No further tasks remain. All documentation checkpoints are complete.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

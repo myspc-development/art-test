@@ -32,4 +32,4 @@ All options live under **ArtPulse → Settings**. Tabs such as **General**, **Lo
 - The tools are responsive and keyboard accessible.
 - After plugin updates visit **Settings → Permalinks** to flush rewrite rules if needed.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

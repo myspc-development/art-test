@@ -9,7 +9,7 @@ status: draft
 
 This guide documents the REST API endpoints available for third-party integration.
 
-Additional examples are organized by topic under [API Chapters](api-chapters/README.md).
+Additional examples are organized by topic under [API Chapters](api/guides/README.md).
 
 ## Authentication
 
@@ -145,7 +145,7 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   '/wp-json/artpulse/v1/favorite'
 ```
 
-Favorite metrics are described in the [Analytics & Insights Codex](analytics-insights-codex.md).
+Favorite metrics are described in the [Analytics & Insights Codex](guides/developer/analytics-insights-codex.md).
 
 ### `POST /artpulse/v1/follows`
 
@@ -206,7 +206,7 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   '/wp-json/artpulse/v1/event/42/buy-ticket'
 ```
 
-For detailed purchase flows see the [Monetization & Ticketing Codex](monetization-ticketing-codex.md).
+For detailed purchase flows see the [Monetization & Ticketing Codex](guides/developer/monetization-ticketing-codex.md).
 
 ### `POST /artpulse/v1/event/{id}/ticket-tier`
 
@@ -448,4 +448,4 @@ Example response:
 ]
 ```
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

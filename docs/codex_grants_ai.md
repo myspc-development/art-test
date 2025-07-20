@@ -9,4 +9,4 @@ status: draft
 
 Overview of AI-powered tools assisting with grant writing and reporting for partner organizations.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

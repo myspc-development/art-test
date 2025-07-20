@@ -27,7 +27,7 @@ This document outlines the O1 sprint goal of creating quick reporting snapshots 
 - `SnapshotBuilder::generate_csv()` streams rows with `fputcsv()`.
 - Endpoints require `manage_options` capability before exporting.
 
-See also: [analytics-reporting-codex.md](./analytics-reporting-codex.md), [reporting-exports.md](./reporting-exports.md)
+See also: [Analytics Reporting Codex](guides/developer/analytics-reporting-codex.md), [reporting-exports.md](./reporting-exports.md)
 
 ## Implementation Details
 
@@ -62,4 +62,4 @@ curl -H "X-WP-Nonce: <nonce>" \
   '/wp-json/artpulse/v1/reporting/snapshot.pdf?org_id=7&period=2025-04'
 ```
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

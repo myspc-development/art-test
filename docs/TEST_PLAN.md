@@ -22,4 +22,4 @@ status: draft
 - PHPUnit
 - Jest (if JS/React components present)
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

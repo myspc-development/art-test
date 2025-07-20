@@ -18,4 +18,4 @@ The following items are considered high priority for the upcoming sprint. Progre
 | Testing & QA | Add PHPUnit tests for REST & widgets | Complete |
 | Testing & QA | Add Cypress dashboard integration tests | Complete |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

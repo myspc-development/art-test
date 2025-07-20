@@ -83,4 +83,4 @@ Optionally send an email or dashboard notification to admins when a new flag is 
 - Block abusive flaggers to prevent trolling.
 - Use machine-learning signals to help triage reports.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

@@ -7,7 +7,7 @@ status: draft
 ---
 # ArtPulse Codex: Enhanced Notifications
 
-This guide details the unified inbox REST routes, user notification preferences and the onboarding tour that walks new members through the dashboard. It complements the [Messaging & Communication Codex](messaging-communication-codex.md) and [UI/UX Polish Codex](ui-ux-polish-codex.md).
+This guide details the unified inbox REST routes, user notification preferences and the onboarding tour that walks new members through the dashboard. It complements the [Messaging & Communication Codex](messaging-communication-codex.md) and [UI/UX Polish Codex](ui/widget-ui-design-guide.md).
 
 ## 1. Unified Inbox Endpoints
 
@@ -55,4 +55,4 @@ Settings are stored in user meta such as `ap_notification_prefs`.
 
 After registration, users see a brief tour highlighting key dashboard areas. Step completion is tracked in `ap_onboarding_steps` and the flag `ap_onboarding_completed`. Developers can modify the steps via the `artpulse_onboarding_steps` filter or provide custom templates in `templates/onboarding-*`.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

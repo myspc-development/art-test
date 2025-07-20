@@ -16,4 +16,4 @@ layouts for different user roles.
 - Drag and drop widgets to build role-specific dashboards
 - Save or reset layouts for each role
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

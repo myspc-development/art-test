@@ -30,4 +30,4 @@ If an upgrade fails, enable `WP_DEBUG` and inspect the PHP error log. Missing de
 
 Refer to this codex whenever you publish a new version or modify the migration system. Consistent update practices keep the plugin secure and minimize downtime for users.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

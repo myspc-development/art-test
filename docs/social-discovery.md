@@ -25,4 +25,4 @@ An hourly worker stores scores in `ap_trending_rankings`. Scores use view, wishl
 
 The front end combines sections for nearby events, trending items and followed content. Each section can be toggled with feature flags.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

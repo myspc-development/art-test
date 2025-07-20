@@ -21,4 +21,4 @@ Each widget includes:
 The widget system registers components on the client and server. Refer to the
 original architecture spec for registration protocols and lifecycle events.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

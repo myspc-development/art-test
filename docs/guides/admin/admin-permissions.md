@@ -18,4 +18,4 @@ user's role grants the capability.
 | `build_feed` | admin, promoter |
 | `view_analytics` | admin |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

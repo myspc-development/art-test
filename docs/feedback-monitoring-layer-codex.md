@@ -92,4 +92,4 @@ An optional `GET /artpulse/v1/status` route can return build info and metrics.
 - Cron watchdog executing hourly
 - QA footer metadata displayed
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

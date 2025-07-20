@@ -48,4 +48,4 @@ localization. This value is produced by `wp_create_nonce('wp_rest')`. The
 bundled `assets/js/ap-messages.js` helper polls the API using a recursive
 `setTimeout` loop and sends messages via `wp.apiFetch`‑style requests.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

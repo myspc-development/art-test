@@ -62,4 +62,4 @@ Create these summaries when the audit is complete:
 - Remove duplicate sprint tables across docs
 - Flag files that still contain `[🚧 Sprint Needed]`
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

@@ -31,4 +31,4 @@ status: draft
 
 Last updated: July 19, 2025
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

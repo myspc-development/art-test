@@ -1,3 +1,11 @@
+---
+title: Validation Report
+category: docs
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
+
 # Documentation Validation Report
 
 | File | Frontmatter | Status | TODOs | H2 Sections | Links OK | ✅ Passed |
@@ -172,4 +180,4 @@
 | wordpress-menus-codex.md | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
 | wp-dashboard-widgets.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

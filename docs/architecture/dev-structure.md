@@ -37,4 +37,4 @@ Use `wp_enqueue_script` and `wp_enqueue_style` with a version based on `filemtim
 
 Create a controller class under `src/Rest/` with a `register()` method hooking into `rest_api_init`. Use `register_rest_route()` to define endpoints and return data via `rest_ensure_response()`.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

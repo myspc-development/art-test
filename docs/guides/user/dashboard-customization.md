@@ -7,7 +7,7 @@ status: draft
 ---
 # User Dashboard Customization
 
-This document explains how ArtPulse stores each user's dashboard layout, which REST and AJAX actions are involved, and the expected widget schema. It supplements the [User Dashboard Layout Codex](./user-dashboard-layout-codex.md).
+This document explains how ArtPulse stores each user's dashboard layout, which REST and AJAX actions are involved, and the expected widget schema. It supplements the [User Dashboard Layout Codex](../../widgets/widget-layout-import-export-guide.md).
 
 Dashboards for members, artists and organizations are all rendered through the `[ap_user_dashboard]` shortcode. Each role has a default widget order but individual users can rearrange and hide widgets to suit their needs. The saved layout is restored whenever they return to their dashboard.
 
@@ -93,7 +93,7 @@ The flow above shows how a dashboard is rendered and personalized. Users drag wi
 
 ---
 
-For additional design guidelines and example code, see the [Widget Settings Codex](./widget-settings-codex.md) and the [Dashboard Widget Design Codex](./dashboard-widget-design-codex.md).
+For additional design guidelines and example code, see the [Widget Settings Codex](../../widgets/widget-settings-codex.md) and the [Dashboard Widget Design Codex](../../dashboard-widget-design-codex.md).
 
 ## User Dashboard Customization Codex
 
@@ -193,4 +193,4 @@ Documentation should describe:
 - Screenshots or mockups for desktop and mobile views.
 - Error handling for invalid JSON and fallback logic.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

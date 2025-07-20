@@ -21,4 +21,4 @@ During import you can configure:
 
 Only users with the `manage_options` capability may perform imports. PapaParse is used client side for parsing CSV files.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

@@ -75,4 +75,4 @@ CREATE TABLE ap_event_boosts (
 - UI Components
 - Partner Toolkit – “How to Promote Your Event” guide
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

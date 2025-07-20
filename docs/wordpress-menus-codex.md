@@ -84,4 +84,4 @@ dashboard receives `useWpNavMenu` set to `true`.
 - Navigation is powered by WordPress menus.
 - Role‑based visibility works via the User Menus plugin.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*
