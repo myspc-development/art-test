@@ -14,3 +14,5 @@ Guides for site administrators configuring the ArtPulse plugin.
 - `admin-widget-editor-guide.md` – customizing dashboards per role
 - `plugin-installation-updates.md` – installation and update procedures
 - `admin-overview.md` – summary of admin features
+For implementation details see the [Developer Guides](../developer/README.md).
+

@@ -2,22 +2,22 @@
 
 | Term | Definition |
 |------|------------|
-| "Your Week in Art" | Definition of "Your Week in Art" |
-| $2,600 | Definition of $2,600 |
-| 100 RSVPs Club | Definition of 100 RSVPs Club |
-| 500 errors on admin pages: | Definition of 500 errors on admin pages: |
-| AI Rewrite Tool | Definition of AI Rewrite Tool |
-| Activate Plugin | Definition of Activate Plugin |
-| Active | Definition of Active |
-| Add Note | Definition of Add Note |
-| Add Page | Definition of Add Page |
-| Add Widget | Definition of Add Widget |
-| Admin Email | Definition of Admin Email |
-| Admin Review | Definition of Admin Review |
-| Admin controls | Definition of Admin controls |
-| Admin tab | Definition of Admin tab |
-| Algolia | Definition of Algolia |
-| Anyone can register | Definition of Anyone can register |
+| "Your Week in Art" | Weekly email digest summarizing upcoming events. |
+| $2,600 | Example yearly revenue target used in sample data. |
+| 100 RSVPs Club | Milestone for organizations that reach 100 RSVPs. |
+| 500 errors on admin pages: | Generic server error shown when PHP fails. |
+| AI Rewrite Tool | Feature that rewrites event descriptions using AI. |
+| Activate Plugin | Action to enable the plugin from the WordPress Plugins screen. |
+| Active | State of the plugin after successful activation. |
+| Add Note | Button that lets curators attach private notes to an event. |
+| Add Page | WordPress option to create a new page in the admin. |
+| Add Widget | Button to insert a widget into the dashboard layout. |
+| Admin Email | Site administrator's contact email address. |
+| Admin Review | Administrative review step for flagged content. |
+| Admin controls | UI controls visible only to administrators. |
+| Admin tab | The admin-only tab in dashboard settings. |
+| Algolia | Hosted search service powering quick results. |
+| Anyone can register | WordPress option allowing new users to sign up. |
 | Appearance → Menus | Definition of Appearance → Menus |
 | Appearance → Widgets | Definition of Appearance → Widgets |
 | ArtPulse | Definition of ArtPulse |
@@ -39,17 +39,12 @@
 | Available | Definition of Available |
 | Backend Tables | Definition of Backend Tables |
 | Backend setup: | Definition of Backend setup: |
-| Backlog.md) and guidelines in [README | Definition of Backlog.md) and guidelines in [README |
+| Backlog.md | Document tracking outstanding features and tasks. |
 | Boost badge & logging | Definition of Boost badge & logging |
 | Boost button | Definition of Boost button |
 | Branding | Definition of Branding |
 | Branding/Embed Kit | Definition of Branding/Embed Kit |
 | Bug reporter | Definition of Bug reporter |
-| COLLATE` – optional collation
-
-`WORDPRESS | Definition of COLLATE` – optional collation
-
-`WORDPRESS |
 | CRM & Donor Tools | Definition of CRM & Donor Tools |
 | CRM View | Definition of CRM View |
 | Cannot connect: | Definition of Cannot connect: |
