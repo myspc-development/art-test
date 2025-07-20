@@ -11,6 +11,9 @@ function fetchEventCard(id) {
 document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-dashboard');
   if (!dash) return;
+  if (window.ArtPulseWidgetLifecycle) {
+    ArtPulseWidgetLifecycle.init("dashboard", {});
+  }
 
   const widgetArea = document.getElementById('ap-dashboard-widgets');
   if (widgetArea && window.Sortable) {
