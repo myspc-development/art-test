@@ -27,19 +27,7 @@ class UserLayoutManager
     public static function save_layout(int $user_id, array $layout): void
     {
         $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-        $ordered = [];
-        foreach ($layout as $item) {
-            if (is_array($item) && isset($item['id'])) {
-                $id  = sanitize_key($item['id']);
-                $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
-            } else {
-                $id  = sanitize_key($item);
-                $vis = true;
-            }
-            if (in_array($id, $valid, true)) {
-                $ordered[] = ['id' => $id, 'visible' => $vis];
-            }
-        }
+        $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid);
 
         update_user_meta($user_id, self::META_KEY, $ordered);
     }
@@ -69,19 +57,7 @@ class UserLayoutManager
 
         if (is_array($layout) && !empty($layout)) {
             $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-            $ordered = [];
-            foreach ($layout as $item) {
-                if (is_array($item) && isset($item['id'])) {
-                    $id  = sanitize_key($item['id']);
-                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
-                } else {
-                    $id  = sanitize_key($item);
-                    $vis = true;
-                }
-                if (in_array($id, $valid, true)) {
-                    $ordered[] = ['id' => $id, 'visible' => $vis];
-                }
-            }
+            $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid);
             if ($ordered) {
                 return $ordered;
             }
@@ -105,19 +81,7 @@ class UserLayoutManager
     public static function save_role_layout(string $role, array $layout): void
     {
         $valid  = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-        $ordered = [];
-        foreach ($layout as $item) {
-            if (is_array($item) && isset($item['id'])) {
-                $id  = sanitize_key($item['id']);
-                $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
-            } else {
-                $id  = sanitize_key($item);
-                $vis = true;
-            }
-            if (in_array($id, $valid, true)) {
-                $ordered[] = ['id' => $id, 'visible' => $vis];
-            }
-        }
+        $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid);
 
         $config = get_option('ap_dashboard_widget_config', []);
         $role_key = sanitize_key($role);
