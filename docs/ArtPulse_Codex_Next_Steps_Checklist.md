@@ -1,3 +1,11 @@
+---
+title: ArtPulse Codex Next Steps Checklist
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
+
 
 # ✅ Next Tasks for Codex – ArtPulse Member Dashboard
 
@@ -73,3 +81,4 @@ npm install leaflet react-leaflet @testing-library/react
 - [x] Document each widget component (`.md` or JSDoc)
 - [x] Include usage examples, props, data format, REST endpoints
 - [x] Update `README.md` and `Widget Editor Guide` with new capabilities
+For more information on widgets see [Widget Registry Reference](widgets/widget-registry-reference.md) and [Widget Specification](widgets/widget-specification.md). Analytics guidelines live in the [Admin & Analytics Codex](guides/developer/admin-analytics-codex.md).
