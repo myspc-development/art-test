@@ -8,7 +8,7 @@ status: draft
 
 # Admin Settings UI
 
-This guide merges the "Admin Configuration UI" and "Settings Page Codex" documents.
+This guide merges the "Admin Configuration UI" and [Settings Page Codex](../settings-page-codex.md) documents.
 Administrators can manage dashboard widgets and plugin options from the Settings
 pages. The interface uses tabbed navigation and integrates with the WordPress
 menu system.
