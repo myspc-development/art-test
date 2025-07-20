@@ -3,7 +3,7 @@ title: Growth Stack Codex
 category: developer
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # Growth Stack Codex
 

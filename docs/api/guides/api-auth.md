@@ -3,7 +3,7 @@ title: ArtPulse API Basics & Authentication
 category: api
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # ArtPulse API Basics & Authentication
 

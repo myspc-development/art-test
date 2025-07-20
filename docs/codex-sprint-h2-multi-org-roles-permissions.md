@@ -3,7 +3,7 @@ title: Codex: Sprint H2 – Multi-Org Roles & Permissions
 category: developer
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # Codex: Sprint H2 – Multi-Org Roles & Permissions
 

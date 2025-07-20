@@ -3,7 +3,7 @@ title: Codex: Phase M – Creator & Curator Module
 category: developer
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # Codex: Phase M – Creator & Curator Module
 

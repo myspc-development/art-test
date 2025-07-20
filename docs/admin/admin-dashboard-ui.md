@@ -1,0 +1,51 @@
+---
+title: Admin Dashboard UI
+category: admin
+role: admin
+last_updated: 2025-07-20
+status: complete
+---
+
+# Admin Dashboard UI
+
+This guide details how administrators configure dashboard layouts for each user role. It builds on the [Admin Widget Editor Guide](./admin-widget-editor-guide.md) and covers saving behavior, widget management and REST updates.
+
+## Role Based Configuration
+
+Dashboard layouts are stored per role in the `ap_dashboard_widget_config` option. When the editor loads, it fetches the configuration for the selected role via `GET /wp-json/artpulse/v1/layout/{role}`. If none is found, it falls back to the default layout defined in the plugin.
+
+Admins choose a role from the **Role** dropdown before arranging widgets. Switching roles reloads the layout and available widgets for that role.
+
+```js
+// Example request
+fetch('/wp-json/artpulse/v1/layout/artist')
+  .then(r => r.json())
+  .then(layout => renderLayout(layout));
+```
+
+## Widgets and Layout Logic
+
+Widgets appear in the **Add Widget** panel. Drag widgets into the main grid to add them. Layouts use a simple 12 column system and widgets define their default width. The editor prevents overlaps and snaps widgets into rows.
+
+- **Lock Widget** toggles whether a widget can be removed by end users.
+- **Reset Layout** reverts to the plugin default for the current role.
+- **Save Layout** persists changes via a `PUT` request.
+
+## Saving and Resetting
+
+Clicking **Save** sends the updated layout to `PUT /wp-json/artpulse/v1/layout/{role}`. On success, a notice confirms the update. **Reset** deletes the stored layout so the next load falls back to defaults.
+
+```js
+await fetch('/wp-json/artpulse/v1/layout/member', {
+  method: 'PUT',
+  body: JSON.stringify(layout),
+  headers: { 'Content-Type': 'application/json' }
+});
+```
+
+## Related Links
+
+- [Admin Settings UI](./admin-settings-ui.md)
+- [Dashboard Editor Developer Guide](../dashboard-editor-developer-guide.md)
+
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

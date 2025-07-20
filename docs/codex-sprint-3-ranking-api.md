@@ -3,7 +3,7 @@ title: Codex: Sprint 3 – Event Ranking & API
 category: developer
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # Codex: Sprint 3 – Event Ranking & API
 

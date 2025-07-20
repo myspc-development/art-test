@@ -3,7 +3,7 @@ title: User Dashboard Customization
 category: user
 role: user
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # User Dashboard Customization
 

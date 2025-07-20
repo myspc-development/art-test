@@ -3,7 +3,7 @@ title: Contribution Guide
 category: docs
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Contribution Guide
@@ -26,7 +26,7 @@ title: New Guide Name
 category: widgets
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ```
 
 Update `last_updated` whenever you modify the document. Change the `status` to `complete` once the guide is finished.
@@ -43,7 +43,7 @@ title: New Guide Name
 category: widgets
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ```
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

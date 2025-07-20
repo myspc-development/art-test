@@ -3,7 +3,7 @@ title: Codex: Sprint 1 – Mapping & Q&A
 category: developer
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # Codex: Sprint 1 – Mapping & Q&A
 

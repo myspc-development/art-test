@@ -3,7 +3,7 @@ title: ArtPulse Codex: Messaging & Communication
 category: developer
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # ArtPulse Codex: Messaging & Communication
 

@@ -3,7 +3,7 @@ title: UI Guides
 category: ui
 role: designer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # UI Guides

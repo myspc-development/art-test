@@ -3,7 +3,7 @@ title: User Dashboard Guide
 category: user
 role: user
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Implementation Guide for Codex

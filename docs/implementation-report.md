@@ -3,7 +3,7 @@ title: Documentation Implementation Report
 category: docs
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Documentation Implementation Report
@@ -23,6 +23,8 @@ This report tracks key documentation components and their completion status.
 | `glossary.md` | ✅ | Contains more than ten terms |
 | `CONTRIBUTING.md` | ✅ | Includes template and style guide |
 | `feedback.md` | ✅ | Feedback log table present |
+| `admin/admin-dashboard-ui.md` | ✅ | New role-based layout guide |
+| `admin/role-preview-guide.md` | ✅ | Preview planned feature |
 | `validation-report.md` | ✅ | Updated via validation script |
 | `sidebar.md` | ✅ | Added frontmatter and links |
 | `index.html` | ✅ | Docsify configuration present |
