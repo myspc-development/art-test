@@ -14,3 +14,5 @@ Testing resources and checklists.
 - `widget-qa-checklist.md`
 - `testing-strategy.md`
 - `End_to_End_Testing_Guide.md`
+Refer to the [Widgets Documentation](../widgets/README.md) for implementation details used during testing.
+

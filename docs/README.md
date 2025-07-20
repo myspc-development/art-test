@@ -8,7 +8,7 @@ status: draft
 
 # ArtPulse Dashboard Implementation Codex
 
-This directory groups all documentation by audience and feature area. Start with the [Codex Index](./codex_index.md) for a high-level roadmap.
+This directory groups all documentation by audience and feature area. Start with the [Codex Index](./codex_index.md) or the [homepage](./index.md) for a high-level roadmap.
 
 ## Quick Index
 

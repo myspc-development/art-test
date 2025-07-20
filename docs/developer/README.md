@@ -13,3 +13,5 @@ Technical references and implementation docs.
 - `widget-editor-developer-guide.md`
 - `shortcodes-guide.md`
 - `react-forms-codex.md`
+Additional references: [API Overview](../api/README.md) and [Architecture Guide](../architecture/dev-structure.md).
+
