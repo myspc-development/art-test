@@ -14,4 +14,4 @@ Please use the [issue template](https://github.com/example/repo/issues/new?templ
 |------|------|------|-------|--------|
 | 2025-07-20 | QA | widget-editor-guide.md | Missing REST section | Pending |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

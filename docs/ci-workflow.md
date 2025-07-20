@@ -22,4 +22,4 @@ Composer and npm dependencies are cached using the `actions/cache` action. The c
 
 After installing dependencies the workflow runs `npm run lint`, `npm run test:js`, `composer test` and `composer sniff`. Assets are built with `npm run build` and the `scripts/release.sh` script creates a zip file in the `release/` directory. The archive is uploaded as a workflow artifact.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

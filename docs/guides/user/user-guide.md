@@ -22,8 +22,8 @@ from any directory, calendar popover or dashboard list.
 ### How to RSVP for an Event
 
 - Click the **RSVP** button on any event card, calendar modal, or event page.
-- If you are logged in and RSVP is open, the button will say "RSVP."  
-- After clicking, the button changes to "Cancel RSVP."  
+- If you are logged in and RSVP is open, the button will say "RSVP."
+- After clicking, the button changes to "Cancel RSVP."
 - The RSVP count updates in real-time.
 
 ### Canceling Your RSVP
@@ -85,7 +85,7 @@ from any directory, calendar popover or dashboard list.
 
 ### Embedding the Calendar
 
-- To embed the calendar on any page, use the shortcode:  
+- To embed the calendar on any page, use the shortcode:
 [ap_event_calendar]
 - You can also add filters or adjust display options via shortcode attributes (see below for full list).
 
@@ -118,4 +118,4 @@ bookmark or share a direct link to any section.
 - Buttons and forms support keyboard navigation and screen readers.
 - Event cards and dashboards are designed for responsive display.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

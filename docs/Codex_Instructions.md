@@ -34,7 +34,7 @@ status: complete
 - Start with an `H1` heading matching the title.
 - Use `H2` and `H3` headings to structure sections logically.
 - Include bullet points, tables and code blocks where helpful.
-- Refer to other docs using relative links. Example: `[Example Guide](path/to/example.md)`.
+- Refer to other docs using relative links. Example: `[Example Guide](./README.md)`.
 - When screenshots are needed, insert placeholders like `![placeholder](images/example.png)`.
 
 ## Review Checklist
@@ -51,4 +51,4 @@ Where possible cross-reference sections to avoid duplication. For example the [W
 ## Keeping Docs Current
 After each sprint check the [Verification Checklist](VERIFICATION-CHECKLIST.md) and update the `last_updated` frontmatter date. Remove obsolete TODOs and confirm all relative links resolve. Docs that fall below the 300-word threshold should be expanded with examples or screenshots so they remain comprehensive.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

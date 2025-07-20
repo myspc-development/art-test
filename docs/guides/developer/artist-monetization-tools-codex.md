@@ -118,4 +118,4 @@ GET /artpulse/v1/reports/tickets?month=2024-07
 - Add waitlist for sold-out events.
 - Add coupons or early-access for collectors.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

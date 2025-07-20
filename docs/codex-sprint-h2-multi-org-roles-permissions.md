@@ -87,4 +87,4 @@ Check this instead of `current_user_can()` for org-scoped actions.
 - Invite workflows
 - “Managing multiple institutions or venues” guide
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

@@ -108,4 +108,4 @@ GET /wp-json/artpulse/v1/analytics/community/forums
 
 These return totals and leaderboards to populate the Community Analytics panel in the dashboard.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

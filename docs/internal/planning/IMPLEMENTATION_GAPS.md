@@ -13,4 +13,4 @@ status: draft
 - [⚠️] Leaderboard metrics – *Complexity: Medium*
 - [❌] Case management API – *Complexity: High*
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

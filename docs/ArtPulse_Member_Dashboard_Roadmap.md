@@ -134,4 +134,4 @@ status: draft
 5. Expand test coverage and finalize documentation during Phase 6.
 6. Evaluate and implement optional enhancements as resources allow.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

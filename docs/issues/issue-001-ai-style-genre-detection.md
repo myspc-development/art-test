@@ -13,4 +13,4 @@ Track work for the AI-based classification engine referenced in [Feature_Backlog
 
 See suggestions in [README_Extension](../README_Extension.md) under *Auto-Tagger Enhancements*.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

@@ -123,4 +123,4 @@ Use cases include syncing to Google Calendar, auto‑publishing on civic sites o
 - Platform stickiness increases follows, RSVPs and shares.
 - Partners gain independence with minimal setup per show.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

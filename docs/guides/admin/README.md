@@ -10,4 +10,4 @@ status: draft
 - [Admin Usage](./admin-usage.md)
 - [Admin Permissions](./admin-permissions.md)
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

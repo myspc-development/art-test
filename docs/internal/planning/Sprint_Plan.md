@@ -40,4 +40,4 @@ status: draft
 - Add tests
 - Finalize user/dev documentation
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

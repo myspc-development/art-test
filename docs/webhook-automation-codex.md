@@ -41,4 +41,4 @@ The request contains `X-ArtPulse-Signature` with an HMAC SHA-256 digest of the J
 
 Failed deliveries update the webhook status but retries are handled by WordPress cron. Administrators can monitor the last response code for each endpoint.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

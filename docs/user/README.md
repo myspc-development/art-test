@@ -10,4 +10,4 @@ status: draft
 
 Instructions for end users customizing their dashboards.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

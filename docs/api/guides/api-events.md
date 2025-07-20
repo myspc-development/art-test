@@ -15,7 +15,7 @@ sequenceDiagram
 ```
 
 
-Favorite metrics are described in the [Analytics & Insights Codex](analytics-insights-codex.md).
+Favorite metrics are described in the [Analytics & Insights Codex](../../guides/developer/analytics-insights-codex.md).
 
 ### `POST /artpulse/v1/follows`
 
@@ -46,7 +46,7 @@ Optional query parameter `post_type` filters the type returned.
 
 Retrieve followers of a user by ID.
 
-Follower messaging workflows are covered in the [Messaging & Communication Codex](messaging-communication-codex.md).
+Follower messaging workflows are covered in the [Messaging & Communication Codex](../../messaging-communication-codex.md).
 
 ### `GET /artpulse/v1/event/{id}/tickets`
 
@@ -76,7 +76,7 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   '/wp-json/artpulse/v1/event/42/buy-ticket'
 ```
 
-For detailed purchase flows see the [Monetization & Ticketing Codex](monetization-ticketing-codex.md).
+For detailed purchase flows see the [Monetization & Ticketing Codex](../../guides/developer/monetization-ticketing-codex.md).
 
 ### `GET /artpulse/v1/user/payouts`
 
@@ -101,7 +101,7 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' -d 'method=stripe' \
   '/wp-json/artpulse/v1/user/payouts/settings'
 ```
 
-Refer to the [Financial Overview & Payout Codex](financial-overview-codex.md) for reporting and payout processing.
+Refer to the [Financial Overview & Payout Codex](../../financial-overview-codex.md) for reporting and payout processing.
 
 ### `GET /artpulse/v1/org/{id}/webhooks`
 
@@ -127,4 +127,4 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   '/wp-json/artpulse/v1/org/2/webhooks'
 ```
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

@@ -16,4 +16,4 @@ Use the unified styles defined in the [Default Design System Codex](default-desi
 
 These steps ensure every widget follows the same layout, theming variables, and accessibility hooks.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

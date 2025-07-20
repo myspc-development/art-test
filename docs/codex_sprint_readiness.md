@@ -20,4 +20,4 @@ Audience: PM
 - Confirm blocked modules each cycle
 - Move completed rows to archive
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

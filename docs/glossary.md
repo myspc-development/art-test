@@ -31,4 +31,4 @@ status: draft
 | ArtPulse Management | Definition of ArtPulse Management |
 | Snapshots | Definition of Snapshots |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

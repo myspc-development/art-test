@@ -29,4 +29,4 @@ Per‑user layouts can still be stored in user meta, but the markup is saved ins
 
 Administrators can compose dashboards using the block editor and save the generated markup to `ap_dashboard_widget_config`. Users receive the pattern for their role unless they have customized their own layout.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

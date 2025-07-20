@@ -33,4 +33,4 @@ status: draft
 - Add charts, CSV export
 - Visual summaries (engagement charts)
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

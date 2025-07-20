@@ -103,4 +103,4 @@ Update these codex modules when implementing:
 - Deployment & Config → Feature Flags
 - User Roles → Expand beta_user, onboarded
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

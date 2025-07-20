@@ -22,4 +22,4 @@ The matrix controls which widgets appear for each user role.
 - Permissions enforced for `manage_options`
 - Matrix updates reflected in widget registry
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

@@ -63,4 +63,4 @@ A living document to track major tasks across the project.
 
 Last updated: July 18, 2025
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

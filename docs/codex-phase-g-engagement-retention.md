@@ -70,4 +70,4 @@ Offers actions like featuring an event or embedding a widget.
 - [x] Notifications REST and inbox UI
 - [x] Creator tips component
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

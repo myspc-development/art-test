@@ -10,4 +10,4 @@ status: draft
 - [User Guide](./user-guide.md)
 - [Dashboard Customization](./dashboard-customization.md)
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

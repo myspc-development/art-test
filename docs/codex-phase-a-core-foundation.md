@@ -38,4 +38,4 @@ This phase lays the groundwork for ArtPulse by implementing essential systems fo
 - [x] Multi‑org assignments persisted in `ap_org_roles`.
 - [x] Webhook payloads verified with partner tools.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

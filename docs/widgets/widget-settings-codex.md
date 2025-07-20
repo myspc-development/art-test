@@ -217,4 +217,4 @@ POST /wp-json/artpulse/v1/widget-settings/favorites
 Responses include the field schema and current values so the dashboard can
 render a simple form.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

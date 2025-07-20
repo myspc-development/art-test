@@ -17,4 +17,4 @@ sequenceDiagram
 
 Attendees can submit questions which display in a threaded list.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

@@ -9,6 +9,6 @@ status: draft
 
 **Priority:** High
 
-Develop donation modules and payout integration based on the [Artist Monetization Tools Codex](../artist-monetization-tools-codex.md) and [Monetization & Ticketing Codex](../monetization-ticketing-codex.md).
+Develop donation modules and payout integration based on the [Artist Monetization Tools Codex](../guides/developer/artist-monetization-tools-codex.md) and [Monetization & Ticketing Codex](../guides/developer/monetization-ticketing-codex.md).
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

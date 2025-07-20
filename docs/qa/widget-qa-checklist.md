@@ -48,4 +48,4 @@ Status:
 - [ ] Verified
 - [ ] Needs Testing
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

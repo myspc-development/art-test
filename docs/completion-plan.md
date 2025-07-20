@@ -31,4 +31,4 @@ This outline lists remaining tasks for the upcoming milestone.
 ## Not Started
 (none)
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

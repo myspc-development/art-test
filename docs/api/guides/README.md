@@ -11,4 +11,4 @@ status: draft
 - [Organizations](./api-orgs.md)
 - [Authentication](./api-auth.md)
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

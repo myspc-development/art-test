@@ -19,4 +19,4 @@ Use this table to record progress across major features. Update the `Status` col
 | AI Grant Assistant | J3 | Complete |
 | Budget & Impact Templates | J4 | Complete |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

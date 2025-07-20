@@ -56,4 +56,4 @@ collects real‑world feedback, and ensures stability for future growth.
 - **F3** – Gallery/city onboarding pilot with embeddables and analytics
 - **F4** – Full release prep including docs, changelog and support coverage
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

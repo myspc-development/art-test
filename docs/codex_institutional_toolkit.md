@@ -73,4 +73,4 @@ The first screen appears on the event edit page for organizers to quickly record
 
 See also: [qr-checkins.md](./qr-checkins.md), [reporting-exports.md](./reporting-exports.md)
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

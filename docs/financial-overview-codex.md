@@ -89,4 +89,4 @@ Add **Export CSV** or **Export Excel** buttons above the transaction and payout 
 
 Restrict finance and payout screens to organization admins or finance roles. Use HTTPS and CSRF tokens for settings updates, and never expose full payment details in the UI or exports.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

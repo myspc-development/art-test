@@ -10,4 +10,4 @@ status: draft
 
 Planning documents and internal references.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

@@ -181,4 +181,4 @@ Admin UI tab: “Delivery Logs”.
 - Developer Guide – Example syncing events to Airtable / Notion / Salesforce
 - Security – HMAC Signatures, Token Rotation Guide
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

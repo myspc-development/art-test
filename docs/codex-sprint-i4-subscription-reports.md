@@ -132,4 +132,4 @@ Only `org_admin` or `report_manager` roles may manage subscriptions or trigger e
 - Report Preview
 - API Docs `/orgs/{id}/report`
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

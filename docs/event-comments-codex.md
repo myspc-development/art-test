@@ -24,4 +24,4 @@ This module enables user discussions on event posts using a small REST API and s
 
 Insert `[ap_event_comments id="123"]` on any page to display the comment list and a form for logged in users. The form submits via the REST endpoints above.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

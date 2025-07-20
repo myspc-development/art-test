@@ -30,4 +30,4 @@ This guide details the PWA and mobile crawl features aimed at public art walks a
 - `/events` endpoint accepts `lat` and `lng` for nearby filtering.
 - Crawl planner persists selected events in local storage.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

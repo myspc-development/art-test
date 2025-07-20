@@ -103,4 +103,4 @@ Package internal implementation and integration documentation for dev onboarding
 - Admin UX Guide – screenshots of improved widgets.
 - Partner Onboarding Guide – step-by-step API use.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

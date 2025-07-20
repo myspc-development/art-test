@@ -33,4 +33,4 @@ Where helpful, link directly to the React component or PHP rendering function in
 
 Following these instructions keeps widget documentation uniform and easy to navigate. When contributing a new widget, create the doc in a branch, add screenshots and reference the relevant release ticket so reviewers can verify everything works as described.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

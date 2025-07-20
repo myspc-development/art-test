@@ -9,4 +9,4 @@ status: draft
 
 Documentation for outgoing webhook events such as new posts, RSVPs and donations. Includes payload formats and authentication notes.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

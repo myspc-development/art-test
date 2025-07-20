@@ -10,4 +10,4 @@ status: draft
 
 Design standards for widgets and dashboard screens.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

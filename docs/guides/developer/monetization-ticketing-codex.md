@@ -116,4 +116,4 @@ Filters such as `artpulse_ticket_providers` or `artpulse_membership_levels`
 can be introduced to support additional payment gateways or custom member
 benefits.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

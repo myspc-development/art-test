@@ -10,4 +10,4 @@ status: draft
 
 Archived technical specifications for the plugin.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

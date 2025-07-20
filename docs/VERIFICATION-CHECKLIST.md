@@ -30,6 +30,6 @@ Verification Run: July 19, 2025 - Confirmed all "Sprint Needed" and "In Progress
 - [ ] Confirm every Markdown file begins with frontmatter.
 - [ ] Ensure docs exceed 300 words unless intentionally brief.
 - [ ] Test all relative links to verify they resolve.
-- [ ] Remove any remaining TODO markers.
+- [ ] Ensure no placeholders remain.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

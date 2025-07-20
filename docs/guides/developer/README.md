@@ -14,4 +14,4 @@ status: draft
 - [Analytics & Reporting Codex](./analytics-reporting-codex.md)
 - [UI/UX Polish Codex](./ui-ux-polish-codex.md)
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

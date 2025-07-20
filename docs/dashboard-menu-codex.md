@@ -76,4 +76,4 @@ npm run build
 
 This regenerates the production JavaScript files.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

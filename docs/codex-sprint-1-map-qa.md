@@ -32,4 +32,4 @@ This sprint introduced geolocation search and basic Q&A threads for events.
 - Rankings table exists in database.
 - Widget script outputs an iframe.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

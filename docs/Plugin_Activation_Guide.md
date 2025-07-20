@@ -24,4 +24,4 @@ This guide explains how to spin up a WordPress instance with Docker and activate
 
 The example compose file provides a minimal WordPress stack for development. Adjust ports as needed.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

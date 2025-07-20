@@ -13,6 +13,6 @@ See the full roadmap in the main document (canvas), including:
 - Sprint timing
 - Admin UI spec
 - Layout storage plan
-- Refer to [Widget UI Design Guide](ui/widget-ui-design-guide.md) and [Widget Architecture Spec](specs/widget-architecture-spec.md) for implementation details.
+- Refer to [Widget UI Design Guide](ui/widget-ui-design-guide.md) and [Widget Architecture Spec](widgets/widget-specification.md) for implementation details.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

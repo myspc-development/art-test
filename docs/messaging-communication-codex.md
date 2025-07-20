@@ -108,4 +108,4 @@ curl -H 'Content-Type: application/json' -u alice:pass \
 
 Use the `[ap_messages]` shortcode to embed a simple inbox. It lists each conversation with an unread count and loads the message thread via AJAX. A message form lets logged‑in users send new messages without refreshing the page.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

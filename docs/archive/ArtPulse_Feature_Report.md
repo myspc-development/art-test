@@ -78,4 +78,4 @@ Use Case: Manage creative events, memberships and engagement for artists and org
 | Milestones | `/docs/roadmap/` |
 | Assistant Guide | `ASSISTANT_INSTRUCTIONS.md` |
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

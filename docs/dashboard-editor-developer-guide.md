@@ -29,4 +29,4 @@ Enable `SCRIPT_DEBUG` in `wp-config.php` to load unminified JavaScript. The edit
 
 With these guidelines you can extend the dashboard editor and keep the user experience consistent across the ArtPulse plugin.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

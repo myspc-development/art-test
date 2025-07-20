@@ -43,4 +43,4 @@ Only users capable of managing events may create templates or duplicate events.
 Actions should be logged with the event or template ID and user ID so plugins can
 audit usage via hooks.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*

@@ -155,4 +155,4 @@ You may alternatively register a REST route instead of using admin‑ajax. The
 React component can fetch `/wp-json/your-namespace/v1/submit-form` for improved
 performance and structure.
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

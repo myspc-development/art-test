@@ -46,4 +46,4 @@ last_updated: 2025-07-20
 status: draft
 ```
 
-💬 Found something outdated? Submit Feedback
+> 💬 *Found something outdated? [Submit Feedback](feedback.md)*
