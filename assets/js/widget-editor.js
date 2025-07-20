@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const categoryFilter = document.getElementById('ap-widget-category-filter');
+  const roleFilter = document.getElementById('ap-widget-role-filter');
 
   const saveBtn = document.getElementById('save-layout-btn');
   roleSelect = document.getElementById('ap-role-selector');
@@ -98,6 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('ap-widget-search')?.addEventListener('input', e => {
     apSearchWidgets(e.target.value);
+  });
+  roleFilter?.addEventListener('change', () => {
+    const query = document.getElementById('ap-widget-search')?.value || '';
+    apSearchWidgets(query);
   });
   roleSelect?.addEventListener('change', e => {
     const params = new URLSearchParams(window.location.search);
@@ -116,12 +121,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function apSearchWidgets(query) {
   query = (query || '').toLowerCase();
   const cat = document.getElementById('ap-widget-category-filter')?.value || '';
+  const role = document.getElementById('ap-widget-role-filter')?.value || '';
   document.querySelectorAll('.widget-card').forEach(card => {
     const name = (card.dataset.name || '').toLowerCase();
     const desc = (card.dataset.desc || '').toLowerCase();
+    const roles = (card.dataset.roles || '').split(',');
     const matchText = name.includes(query) || desc.includes(query);
     const matchCat = !cat || card.dataset.category === cat;
-    card.style.display = matchText && matchCat ? 'block' : 'none';
+    const matchRole = !role || roles.includes(role);
+    card.style.display = matchText && matchCat && matchRole ? 'block' : 'none';
   });
 }
 

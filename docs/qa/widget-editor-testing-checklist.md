@@ -21,5 +21,7 @@ Merged from the Widget Manager testing checklist and verification notes.
 - Widget registry updated with role metadata
 - Dashboard layout endpoints registered
 - Admin editor loads roles and widgets via REST
+- Role filter dropdown limits Add Widget results
+- Role tags appear under each widget card
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
