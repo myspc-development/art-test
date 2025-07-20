@@ -14,7 +14,6 @@ export function EventChatWidget({ eventId, apiRoot, nonce }) {
   const [text, setText] = useState('');
 
   useEffect(() => {
-    // TODO: replace mock fetch with real DB query per roadmap
     fetch(`${apiRoot}artpulse/v1/event/${eventId}/chat`)
       .then(r => r.json())
       .then(setMessages);
@@ -31,8 +30,10 @@ export function EventChatWidget({ eventId, apiRoot, nonce }) {
       body: JSON.stringify({ content: text })
     });
     if (resp.ok) {
-      setMessages([...messages, { author: 'You', content: text }]);
       setText('');
+      fetch(`${apiRoot}artpulse/v1/event/${eventId}/chat`)
+        .then(r => r.json())
+        .then(setMessages);
     }
   };
 

@@ -13,15 +13,16 @@ export function RSVPButton({ eventId, apiRoot, nonce }) {
   const [rsvped, setRsvped] = useState(false);
 
   const toggle = async () => {
-    const url = `${apiRoot}artpulse/v1/event/${eventId}/rsvp`;
-    // TODO: connect to real RSVP endpoint per roadmap
+    const endpoint = rsvped ? 'rsvp/cancel' : 'rsvp';
+    const url = `${apiRoot}artpulse/v1/${endpoint}`;
     const resp = await fetch(url, {
       method: 'POST',
       headers: {
         'X-WP-Nonce': nonce,
         'Content-Type': 'application/json'
       },
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      body: JSON.stringify({ event_id: eventId })
     });
     if (resp.ok) {
       setRsvped(!rsvped);
