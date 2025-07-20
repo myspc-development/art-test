@@ -20,11 +20,13 @@ This report tracks key documentation components and their completion status.
 | `widgets/README.md` | ✅ | Orders widget guides |
 | `architecture/README.md` | ✅ | Added overview README |
 | `issues/README.md` | ✅ | New issues index |
+| `internal/README.md` | ✅ | Lists planning docs |
 | `glossary.md` | ✅ | Contains more than ten terms |
 | `CONTRIBUTING.md` | ✅ | Includes template and style guide |
 | `feedback.md` | ✅ | Feedback log table present |
 | `admin/admin-dashboard-ui.md` | ✅ | New role-based layout guide |
 | `admin/role-preview-guide.md` | ✅ | Preview planned feature |
+| `finalization-report.md` | ✅ | Sprint 1–3 summary |
 | `validation-report.md` | ✅ | Updated via validation script |
 | `sidebar.md` | ✅ | Added frontmatter and links |
 | `index.html` | ✅ | Docsify configuration present |

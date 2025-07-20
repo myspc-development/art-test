@@ -8,7 +8,7 @@ status: complete
 
 # Finalization Report
 
-All documentation for Sprints 1–3 has been reviewed and finalized. Metadata inconsistencies were corrected, missing feedback footers were added and incomplete READMEs were expanded. New admin UX guides cover dashboard configuration and upcoming role preview features.
+All documentation for Sprints 1–3 has been reviewed and finalized. Metadata inconsistencies were corrected, missing feedback footers were added and incomplete READMEs were expanded. New admin UX guides cover dashboard configuration and upcoming role preview features. The internal and user READMEs now list their contained docs for easier navigation.
 
 See the [Implementation Report](./implementation-report.md) and [Validation Report](./validation-report.md) for detailed status checks.
 
