@@ -75,8 +75,8 @@ class ApprovalManager
         $post = get_post($post_id);
         if ($post && in_array($post->post_type, ['ap_artist_request', 'artpulse_artist'], true)) {
             $user = get_user_by('id', $post->post_author);
-            if ($user && !in_array('artist', (array) $user->roles, true)) {
-                if (in_array('administrator', (array) $user->roles, true)) {
+            if ($user && !user_can($user, 'artist')) {
+                if (user_can($user, 'administrator')) {
                     // Preserve admin role when granting Artist capabilities
                     $user->add_role('artist');
                 } else {

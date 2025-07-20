@@ -31,7 +31,7 @@ class ArtistUpgradeRestController
         }
 
         $user = get_userdata($user_id);
-        if (!$user || in_array('artist', (array) $user->roles, true)) {
+        if (!$user || user_can($user, 'artist')) {
             return new WP_Error('already_artist', 'Already an artist', ['status' => 400]);
         }
 

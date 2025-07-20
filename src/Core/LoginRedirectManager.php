@@ -14,13 +14,11 @@ class LoginRedirectManager
             return $redirect_to;
         }
 
-        $roles = (array) $user->roles;
-
-        if (in_array('organization', $roles, true)) {
+        if (user_can($user, 'organization')) {
             return Plugin::get_org_dashboard_url();
         }
 
-        if (in_array('artist', $roles, true)) {
+        if (user_can($user, 'artist')) {
             return Plugin::get_artist_dashboard_url();
         }
 

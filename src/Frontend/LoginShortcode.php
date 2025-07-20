@@ -84,11 +84,10 @@ class LoginShortcode
             wp_send_json_error(['message' => __('Two-factor authentication is required.', 'artpulse')]);
         }
 
-        $roles  = (array) $user->roles;
         $target = \ArtPulse\Core\Plugin::get_user_dashboard_url();
-        if (in_array('organization', $roles, true)) {
+        if (user_can($user, 'organization')) {
             $target = \ArtPulse\Core\Plugin::get_org_dashboard_url();
-        } elseif (in_array('artist', $roles, true)) {
+        } elseif (user_can($user, 'artist')) {
             $target = \ArtPulse\Core\Plugin::get_artist_dashboard_url();
         }
 

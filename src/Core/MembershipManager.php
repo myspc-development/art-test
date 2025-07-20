@@ -66,10 +66,9 @@ class MembershipManager
     public static function assignFreeMembership($user_id)
     {
         $user  = get_userdata($user_id);
-        $roles = (array) $user->roles;
 
-        if (!in_array('artist', $roles, true) && !in_array('organization', $roles, true)) {
-            if (in_array('administrator', $roles, true)) {
+        if (!user_can($user, 'artist') && !user_can($user, 'organization')) {
+            if (user_can($user, 'administrator')) {
                 // Don't override admin privileges when registering
                 $user->add_role('member');
             } else {
@@ -77,7 +76,7 @@ class MembershipManager
             }
         }
 
-        if (in_array('organization', $roles, true) && !get_user_meta($user_id, 'ap_pending_organization_id', true)) {
+        if (user_can($user, 'organization') && !get_user_meta($user_id, 'ap_pending_organization_id', true)) {
             $org_id = wp_insert_post([
                 'post_type'   => 'artpulse_org',
                 'post_status' => 'pending',
@@ -89,7 +88,7 @@ class MembershipManager
             }
         }
 
-        if (in_array('artist', $roles, true) && !get_user_meta($user_id, 'ap_pending_artist_request_id', true)) {
+        if (user_can($user, 'artist') && !get_user_meta($user_id, 'ap_pending_artist_request_id', true)) {
             $req_id = wp_insert_post([
                 'post_type'   => 'ap_artist_request',
                 'post_status' => 'pending',
@@ -342,7 +341,7 @@ class MembershipManager
                     $user_id = $user[0];
                     // downgrade
                     $usr = get_userdata($user_id);
-                    if (in_array('administrator', (array) $usr->roles, true)) {
+                    if (user_can($usr, 'administrator')) {
                         // Administrators keep admin capabilities during downgrades
                         $usr->add_role('subscriber');
                     } else {
@@ -513,7 +512,7 @@ class MembershipManager
         ]);
 
         foreach ($expired as $user) {
-            if (in_array('administrator', (array) $user->roles, true)) {
+            if (user_can($user, 'administrator')) {
                 // Keep admin rights when membership expires
                 $user->add_role('subscriber');
             } else {

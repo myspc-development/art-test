@@ -36,12 +36,11 @@ class AdminAccessManager
         }
 
         $user   = wp_get_current_user();
-        $roles  = (array) $user->roles;
         $target = Plugin::get_user_dashboard_url();
 
-        if (in_array('organization', $roles, true)) {
+        if (user_can($user, 'organization')) {
             $target = Plugin::get_org_dashboard_url();
-        } elseif (in_array('artist', $roles, true)) {
+        } elseif (user_can($user, 'artist')) {
             $target = Plugin::get_artist_dashboard_url();
         }
 

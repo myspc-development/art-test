@@ -93,7 +93,7 @@ class SubmissionRestController
         $post_type = sanitize_key( $params['post_type'] ?? 'artpulse_event' );
 
         $user    = wp_get_current_user();
-        $is_artist = in_array('artist', (array) $user->roles, true);
+        $is_artist = user_can($user, 'artist');
         $status = 'pending';
 
         $meta_fields = self::get_meta_fields_for( $post_type );
