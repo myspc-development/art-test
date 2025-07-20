@@ -1,3 +1,11 @@
+---
+title: Plugin Activation Guide
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
+
 # Plugin Activation Guide
 
 This guide explains how to spin up a WordPress instance with Docker and activate the ArtPulse plugin.
