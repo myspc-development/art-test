@@ -1,3 +1,10 @@
+---
+title: ArtPulse Plugin – Feature Backlog
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Plugin – Feature Backlog
 
 ## Completed

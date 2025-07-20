@@ -1,3 +1,10 @@
+---
+title: Growth Stack Codex
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Growth Stack Codex
 
 Toolkit for Amplifying Reach, Retention & Distribution on ArtPulse.
@@ -115,4 +122,3 @@ Use cases include syncing to Google Calendar, auto‑publishing on civic sites o
 - Retained audiences lead to more revisits and attendance.
 - Platform stickiness increases follows, RSVPs and shares.
 - Partners gain independence with minimal setup per show.
-

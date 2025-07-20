@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Event Ranking & Partner API
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Event Ranking & Partner API
 
 This guide outlines Sprint 3 features that add intelligence to event listings and expose a partner-ready API. Implementors should refer to it when building ranking computations or issuing API keys.

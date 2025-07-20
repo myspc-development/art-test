@@ -1,3 +1,10 @@
+---
+title: ArtPulse Plugin – Technical Roadmap
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Plugin – Technical Roadmap
 
 ## Phase 1: Stabilization & Security

@@ -1,3 +1,10 @@
+---
+title: Codex: Sprint 4 – Polish & Documentation
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex: Sprint 4 – Polish & Documentation
 
 ## Overview
@@ -32,4 +39,3 @@ Example response:
 - Widgets respect dark mode and load quickly.
 - Documentation compiled and available in `/docs`.
 - `openapi.yaml` generated for partner integrations.
-

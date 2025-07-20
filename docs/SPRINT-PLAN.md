@@ -1,3 +1,10 @@
+---
+title: Sprint Plan for Dashboard Enhancements
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Sprint Plan for Dashboard Enhancements
 
 ## Sprint 1: Base Layout & Widget Registry

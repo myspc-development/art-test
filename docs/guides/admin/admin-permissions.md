@@ -1,3 +1,10 @@
+---
+title: Admin Permissions
+category: admin
+role: admin
+last_updated: 2025-07-20
+status: draft
+---
 # Admin Permissions
 
 Capability checks fall back to the role map stored per organization. The helper

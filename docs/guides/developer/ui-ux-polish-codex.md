@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: UI/UX Polish
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: UI/UX Polish
 
 This guide outlines optional modules for customizing dashboards, branding the plugin and guiding users through onboarding and contextual help. It is intended for developers implementing or extending these user experience features.

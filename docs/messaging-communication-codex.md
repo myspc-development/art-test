@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Messaging & Communication
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Messaging & Communication
 
 This guide covers how artists communicate with attendees. It explains the direct messaging endpoints, reminder scheduling, announcement scheduling and comment moderation tools. Recent updates add a unified inbox with read tracking.
@@ -87,12 +94,12 @@ the current user and another user identified by the `with` parameter.
 ### Examples
 
 ```bash
-# Send a message
+## Send a message
 curl -X POST -H 'Content-Type: application/json' -u alice:pass \
   -d '{"recipient_id": 5, "content": "Hi!"}' \
   https://example.com/wp-json/artpulse/v1/messages
 
-# Retrieve the thread
+## Retrieve the thread
 curl -H 'Content-Type: application/json' -u alice:pass \
   'https://example.com/wp-json/artpulse/v1/messages?with=5'
 ```

@@ -1,3 +1,10 @@
+---
+title: Codex Documentation Workflow
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex Documentation Workflow
 
 Audience: Dev, PM

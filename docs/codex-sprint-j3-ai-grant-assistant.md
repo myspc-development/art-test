@@ -1,3 +1,10 @@
+---
+title: Codex: Sprint J3 – AI Grant Assistant
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex: Sprint J3 – AI Grant Assistant
 
 ## Overview

@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Multi-Organization Management
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Multi-Organization Management
 
 ## Multi-org Roles + Permissions

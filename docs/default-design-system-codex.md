@@ -1,3 +1,10 @@
+---
+title: Default Design System Codex
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Default Design System Codex
 
 This codex explains how to implement, use, and extend the Default Design System Recommendation for your WordPress dashboard plugin. Follow it as an internal README for contributors and as a step‑by‑step guide when you scaffold new widgets.

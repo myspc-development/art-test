@@ -1,3 +1,10 @@
+---
+title: Q&A Widget
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Q&A Widget
 
 ```mermaid

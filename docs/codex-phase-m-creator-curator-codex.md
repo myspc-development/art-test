@@ -1,3 +1,10 @@
+---
+title: Codex: Phase M – Creator & Curator Module
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex: Phase M – Creator & Curator Module
 
 ## Overview
@@ -78,5 +85,4 @@ This phase unifies tools for artists, curators and collectives so ArtPulse becom
 | M6 | Artist Reels / Embedded Studio Visit Videos |
 | M7 | Reputation Scores & “Trusted Curator” badges |
 | M8 | Creator-to-Creator Messaging (opt-in, secure) |
-
 

@@ -1,3 +1,10 @@
+---
+title: Event Chat
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Event Chat
 
 This module provides a lightweight real‑time chat for event pages.

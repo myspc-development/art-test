@@ -1,3 +1,10 @@
+---
+title: 🧭 ArtPulse Member Dashboard – Implementation Roadmap
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 
 # 🧭 ArtPulse Member Dashboard – Implementation Roadmap
 

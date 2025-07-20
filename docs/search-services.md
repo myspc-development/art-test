@@ -1,3 +1,10 @@
+---
+title: Search Service Evaluation
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Search Service Evaluation
 
 This project evaluated two hosted search solutions for WordPress content: **Algolia** and **ElasticPress**. Both integrate with custom post types and can offload queries from the database.

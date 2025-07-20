@@ -1,3 +1,10 @@
+---
+title: CSV Import/Export
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # CSV Import/Export
 
 An Import/Export tab is available under **ArtPulse → Settings**. From this tab administrators can:

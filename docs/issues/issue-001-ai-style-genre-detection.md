@@ -1,3 +1,10 @@
+---
+title: AI-Enhanced Style/Genre Detection
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # AI-Enhanced Style/Genre Detection
 
 **Priority:** Medium

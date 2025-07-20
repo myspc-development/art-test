@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Sprint 4 — Polish & Documentation
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Sprint 4 — Polish & Documentation
 
 This sprint ensures that ArtPulse is usable, presentable and maintainable for pilot launches and partner onboarding.
@@ -95,4 +102,3 @@ Package internal implementation and integration documentation for dev onboarding
 - Sprint 1–3 integration status.
 - Admin UX Guide – screenshots of improved widgets.
 - Partner Onboarding Guide – step-by-step API use.
-

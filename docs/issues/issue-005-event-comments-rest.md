@@ -1,3 +1,10 @@
+---
+title: Event Comments REST Routes
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Event Comments REST Routes
 
 **Priority:** Medium

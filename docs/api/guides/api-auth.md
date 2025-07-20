@@ -1,3 +1,10 @@
+---
+title: ArtPulse API Basics & Authentication
+category: api
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse API Basics & Authentication
 
 This guide documents the REST API endpoints available for third-party integration.

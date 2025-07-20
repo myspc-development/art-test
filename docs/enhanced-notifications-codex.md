@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Enhanced Notifications
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Enhanced Notifications
 
 This guide details the unified inbox REST routes, user notification preferences and the onboarding tour that walks new members through the dashboard. It complements the [Messaging & Communication Codex](messaging-communication-codex.md) and [UI/UX Polish Codex](ui-ux-polish-codex.md).

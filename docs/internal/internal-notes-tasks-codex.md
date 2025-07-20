@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Internal Notes & Task Tracking
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Internal Notes & Task Tracking
 
 This guide outlines an optional collaboration module for teams managing events. It introduces private internal notes and assignable tasks that appear on each event's admin view.
@@ -59,4 +66,3 @@ Implement basic notifications as needed.
 ## 8. Maintenance
 
 Admins may periodically clean up old completed tasks or notes and should document any schema changes for future integrations.
-

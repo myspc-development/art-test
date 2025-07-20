@@ -1,3 +1,10 @@
+---
+title: Codex: Sprint J4 – Project Budget & Impact Templates
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex: Sprint J4 – Project Budget & Impact Templates
 
 ## Overview

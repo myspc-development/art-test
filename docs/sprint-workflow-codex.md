@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Sprint Workflow
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Sprint Workflow
 
 Before starting **Sprint 2**, each developer must select their assigned feature(s) from the [`Sprint_Backlog`](./Sprint_Backlog.md). For every selected item cross‑check the [`Feature_Completion_Tracker`](./Feature_Completion_Tracker.md) so all subcomponents, requirements and blockers are understood.

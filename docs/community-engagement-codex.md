@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Community Engagement
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Community Engagement
 
 This guide summarizes optional modules that encourage interaction and discovery.
@@ -21,4 +28,3 @@ The plugin supports optional competitions or challenges. Organizers create a com
 ## 5. Social Features
 
 Follow buttons let users keep up with artists, events and organizations. Activity feeds show when followed creators publish new content. Sharing links appear on event and artwork pages so visitors can easily post them on external networks.
-

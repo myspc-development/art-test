@@ -1,3 +1,10 @@
+---
+title: Analytics Pilot
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Analytics Pilot
 
 Partner organizations can request early access to the analytics dashboard. Access is granted per user and controlled by a new REST endpoint.

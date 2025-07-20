@@ -1,3 +1,10 @@
+---
+title: ArtPulse User Guide
+category: user
+role: user
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse User Guide
 
 For site management details see the [Admin Usage guide](../admin/admin-usage.md). A quick

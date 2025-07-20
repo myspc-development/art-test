@@ -1,3 +1,10 @@
+---
+title: Gutenberg Dashboard Editor
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Gutenberg Dashboard Editor
 
 This document describes the block‑based dashboard implementation. Widgets are now registered as Gutenberg blocks instead of custom PHP callbacks.
@@ -21,4 +28,3 @@ Per‑user layouts can still be stored in user meta, but the markup is saved ins
 ## Editing
 
 Administrators can compose dashboards using the block editor and save the generated markup to `ap_dashboard_widget_config`. Users receive the pattern for their role unless they have customized their own layout.
-

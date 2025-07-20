@@ -1,3 +1,10 @@
+---
+title: Social Discovery Layer
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Social Discovery Layer
 
 This module surfaces nearby events, followed artists and trending artworks to encourage exploration.

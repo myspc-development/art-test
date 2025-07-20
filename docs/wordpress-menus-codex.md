@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Implementing WordPress Menus with Shortcodes
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Implementing WordPress Menus with Shortcodes
 
 This guide explains how to use WordPress' built‑in menu system to navigate pages that display ArtPulse shortcodes.
@@ -76,4 +83,3 @@ dashboard receives `useWpNavMenu` set to `true`.
 - Dashboards and forms still use ArtPulse shortcodes.
 - Navigation is powered by WordPress menus.
 - Role‑based visibility works via the User Menus plugin.
-

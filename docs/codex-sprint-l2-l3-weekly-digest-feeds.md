@@ -1,3 +1,10 @@
+---
+title: Codex: Sprint L2 + L3 – Weekly Digests & Syndication Feeds
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex: Sprint L2 + L3 – Weekly Digests & Syndication Feeds
 
 ## Overview

@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Feedback & Monitoring Layer
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Feedback & Monitoring Layer
 
 This module gathers user feedback, captures bugs and keeps the platform healthy. It

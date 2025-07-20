@@ -1,3 +1,10 @@
+---
+title: Event Template & Duplication Tools
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Event Template & Duplication Tools
 
 This codex explains the optional module used for cloning events or saving them as reusable templates.
@@ -35,4 +42,3 @@ $event_id     = EventTemplateManager::create_from_template( $template_id );
 Only users capable of managing events may create templates or duplicate events.
 Actions should be logged with the event or template ID and user ID so plugins can
 audit usage via hooks.
-

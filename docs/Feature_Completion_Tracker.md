@@ -1,3 +1,10 @@
+---
+title: Feature Completion Tracker
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Feature Completion Tracker
 
 Use this table to record progress across major features. Update the `Status` column as code is committed and QA is verified.

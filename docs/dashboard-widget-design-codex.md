@@ -1,3 +1,10 @@
+---
+title: Dashboard Widget Design Codex
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Dashboard Widget Design Codex
 
 Use the unified styles defined in the [Default Design System Codex](default-design-system-codex.md) when creating or updating dashboard widgets.

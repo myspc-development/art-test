@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Event Management Upgrades
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Event Management Upgrades
 
 This guide describes optional modules for calendar integration, bulk actions and draft scheduling. It helps developers extend event workflows for artists.

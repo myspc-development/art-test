@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Moderation & Flagging
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Moderation & Flagging
 
 This guide describes how to implement the optional moderation system for handling user reports and abusive content. It outlines the database schema, REST endpoints and admin workflows to maintain community trust.
@@ -75,4 +82,3 @@ Optionally send an email or dashboard notification to admins when a new flag is 
 - Auto-hide content flagged more than five times.
 - Block abusive flaggers to prevent trolling.
 - Use machine-learning signals to help triage reports.
-

@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Member Registration
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Member Registration
 
 This guide explains how to enable WordPress registration for members and automatically route them to the member dashboard.

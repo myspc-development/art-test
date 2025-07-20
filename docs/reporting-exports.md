@@ -1,3 +1,10 @@
+---
+title: ArtPulse Codex: Reporting & Exports
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Codex: Reporting & Exports
 
 Use these tools to capture real attendance numbers and generate grant-ready logs.
@@ -20,4 +27,3 @@ Use these tools to capture real attendance numbers and generate grant-ready logs
 - `/analytics` endpoints expose turnout and engagement data.
 - CSV export uses `fputcsv()` to stream records.
 - PDF export relies on `Dompdf` with header and footer templates.
-

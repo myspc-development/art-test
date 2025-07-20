@@ -1,3 +1,10 @@
+---
+title: Codex Sprint Readiness
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Codex Sprint Readiness
 
 Audience: PM
@@ -12,4 +19,3 @@ Audience: PM
 ## Dev Checklist
 - Confirm blocked modules each cycle
 - Move completed rows to archive
-

@@ -1,3 +1,10 @@
+---
+title: Admin Usage Guide
+category: admin
+role: admin
+last_updated: 2025-07-20
+status: draft
+---
 # Admin Usage Guide
 
 This document explains how site administrators manage role‑based dashboard layouts.

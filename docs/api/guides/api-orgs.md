@@ -1,3 +1,10 @@
+---
+title: ArtPulse API: Organizations & Extras
+category: api
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse API: Organizations & Extras
 ```mermaid
 sequenceDiagram

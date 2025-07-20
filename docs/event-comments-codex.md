@@ -1,3 +1,10 @@
+---
+title: Event Comments
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Event Comments
 
 This module enables user discussions on event posts using a small REST API and shortcode.

@@ -1,3 +1,10 @@
+---
+title: Ticketing & Membership System
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Ticketing & Membership System
 
 **Priority:** High

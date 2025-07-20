@@ -1,3 +1,10 @@
+---
+title: ArtPulse API Reference
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse API Reference
 
 This guide documents the REST API endpoints available for third-party integration.

@@ -1,3 +1,10 @@
+---
+title: Automated Testing Suite
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # Automated Testing Suite
 
 **Priority:** Medium
