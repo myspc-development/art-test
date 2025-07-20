@@ -1,6 +1,6 @@
 # ArtPulse User Guide
 
-For site management details see the [Admin Guide](admin-guide.md). A quick
+For site management details see the [Admin Usage guide](../admin/admin-usage.md). A quick
 overview of features lives in the [README](../README.md).
 
 ## Event Cards
