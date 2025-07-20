@@ -3,7 +3,7 @@ title: Role Management Codex
 category: developer
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Role & Capability Management
@@ -42,3 +42,13 @@ if (get_role('artpulse_moderator')) {
 
 ***
 
+## Default Role Assignment
+
+New sign‑ups receive the `member` role. Users may request an upgrade to
+`artist` or `organization` which an admin grants by switching the role in the
+profile editor.
+
+## Removing Roles
+
+During uninstallation the plugin cleans up any custom roles it created. Use
+`remove_role()` for each role key to avoid leaving orphaned capabilities.
