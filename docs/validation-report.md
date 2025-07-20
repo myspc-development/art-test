@@ -44,6 +44,7 @@ status: draft
 | api/rest-api-reference.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | architecture/Technical_Roadmap.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | architecture/dev-structure.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| architecture/README.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | artist-gallery-tools-codex.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | audit-compliance-codex.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | ci-workflow.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
@@ -127,6 +128,7 @@ status: draft
 | internal/planning/IMPLEMENTATION_GAPS.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | internal/planning/ROADMAP.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | internal/planning/Sprint_Plan.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| issues/README.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | issues/issue-001-ai-style-genre-detection.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | issues/issue-002-multilingual-nlp-model.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | issues/issue-003-ticketing-membership.md | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
@@ -177,6 +179,7 @@ status: draft
 | widgets/widget-registry-reference.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
 | widgets/widget-settings-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | widgets/widget-specification.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| sidebar.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | wordpress-menus-codex.md | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
 | wp-dashboard-widgets.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
