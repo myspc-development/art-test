@@ -1,3 +1,11 @@
+---
+title: Widget Registry Reference
+category: widgets
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
+
 # Widget Registry Reference
 
 All dashboard widgets are registered via `DashboardWidgetRegistry::register()`.

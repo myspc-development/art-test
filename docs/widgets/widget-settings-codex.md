@@ -1,3 +1,11 @@
+---
+title: Widget Settings Codex
+category: widgets
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
+
 # Widget Settings Codex
 
 This guide explains how dashboard widgets are defined, configured and stored for each user.

@@ -1,3 +1,11 @@
+---
+title: ArtPulse Testing Strategy
+category: qa
+role: qa
+last_updated: 2025-07-20
+status: draft
+---
+
 # ArtPulse Testing Strategy
 
 This document outlines automated and manual testing practices used to ensure plugin quality.

@@ -1,3 +1,11 @@
+---
+title: Widget Manager Data Layer Guide
+category: widgets
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
+
 # Widget Manager Data Layer Guide
 
 This document summarizes how dashboard layouts and visibility settings are stored and retrieved.

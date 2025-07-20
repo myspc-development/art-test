@@ -1,3 +1,11 @@
+---
+title: End-to-End Testing Guide
+category: qa
+role: qa
+last_updated: 2025-07-20
+status: draft
+---
+
 # ArtPulse End-to-End Testing Guide
 
 This guide explains how to run the automated browser tests powered by

@@ -1,3 +1,11 @@
+---
+title: Org Roles REST API
+category: api
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
+
 # Org Roles REST API
 
 Routes exposed under `artpulse/v1` allow managing organization user roles.

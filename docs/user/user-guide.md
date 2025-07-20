@@ -1,3 +1,11 @@
+---
+title: User Dashboard Guide
+category: user
+role: user
+last_updated: 2025-07-20
+status: draft
+---
+
 # Implementation Guide for Codex
 
 The following instructions outline how to enable drag-and-drop layout editing for user dashboards using SortableJS.
