@@ -1,10 +1,13 @@
 # ArtPulse Management Plugin
 
-For end‑user instructions see the [User Guide](docs/guides/user/user-guide.md). Site
-administrators should consult the [Admin Guide](docs/guides/admin/admin-guide.md).
-Developers extending reporting or reminder features can reference the
-[Admin & Analytics Codex](docs/guides/developer/admin-analytics-codex.md). Developers
-implementing ticket sales or memberships can read the
+For end‑user instructions see the [User Guide](docs/guides/user/user-guide.md).
+Site administrators should consult the [Admin Guide](docs/guides/admin/admin-guide.md).
+
+## Documentation
+- [Architecture Docs](docs/architecture/)
+- [Guides](docs/guides/)
+- [Internal Docs](docs/internal/)
+
 [Monetization & Ticketing Codex](docs/guides/developer/monetization-ticketing-codex.md).
 For artist monetization options see the
 [Artist Monetization Tools Codex](docs/guides/developer/artist-monetization-tools-codex.md).
@@ -23,7 +26,7 @@ For UI customization, white‑labeling and onboarding guidelines see the
 [Unified Inbox](/docs/api-reference.md#get-artpulsev1inbox) aggregates notifications, messages and RSVP activity via `/inbox`.
 [Enhanced Notifications Codex](docs/enhanced-notifications-codex.md) details the inbox endpoints, notification preferences and onboarding tour.
 [Finance & Payout Codex](docs/financial-overview-codex.md) explains revenue summaries, transaction filtering and payout history.
-[Internal Notes & Task Tracking Codex](docs/internal-notes-tasks-codex.md) covers collaboration features.
+[Internal Notes & Task Tracking Codex](docs/internal/internal-notes-tasks-codex.md) covers collaboration features.
 [Moderation & Flagging Codex](docs/moderation-flagging-codex.md) details the optional reporting workflow and admin review screens.
 [Mapping & Q&A Threads Codex](docs/mapping-qa-codex.md) covers the new discovery map and event discussion threads.
 [Webhook Automations Codex](docs/webhook-automation-codex.md) describes webhook management and payload delivery.

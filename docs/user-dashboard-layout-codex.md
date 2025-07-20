@@ -7,7 +7,7 @@ The following instructions outline how to enable drag-and-drop layout editing fo
 ```php
 add_action('admin_enqueue_scripts', function ($hook) {
     if ($hook === 'index.php') {
-        wp_enqueue_script('sortablejs', plugin_dir_url(__FILE__) . 'assets/js/Sortable.min.js', [], '1.15.0', true);
+        wp_enqueue_script('sortablejs', plugin_dir_url(__FILE__) . 'assets/libs/sortablejs/Sortable.min.js', [], '1.15.0', true);
         wp_enqueue_script('user-dashboard-layout', plugin_dir_url(__FILE__) . 'assets/js/user-dashboard-layout.js', ['sortablejs'], '1.0', true);
         wp_localize_script('user-dashboard-layout', 'APLayout', [
             'nonce' => wp_create_nonce('ap_save_user_layout'),

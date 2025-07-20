@@ -66,7 +66,7 @@
 | [`curator-tools.md`](./curator-tools.md) | M3–M4 | 🟢 Ready | Dev, Admins |
 | [`event-comments-codex.md`](./event-comments-codex.md) | M2 | 🟢 Ready | Dev |
 | [`event-chat-codex.md`](./event-chat-codex.md) | M2 | 🟢 Ready | Dev |
-| [`internal-notes-tasks-codex.md`](./internal-notes-tasks-codex.md) | M3 | 🟢 Ready | Dev, Admins |
+| [`internal-notes-tasks-codex.md`](./internal/internal-notes-tasks-codex.md) | M3 | 🟢 Ready | Dev, Admins |
 | [`moderation-flagging-codex.md`](./moderation-flagging-codex.md) | M3 | 🟢 Ready | Dev, Admins |
 | [`community-engagement-codex.md`](./community-engagement-codex.md) | M4 | 🟢 | Dev, PM |
 | [`event-management-upgrades-codex.md`](./event-management-upgrades-codex.md) | M4 | 🟢 | Dev |
@@ -134,7 +134,7 @@
   user-dashboard-layout-codex.md
   event-comments-codex.md
   event-chat-codex.md
-  internal-notes-tasks-codex.md
+  internal/internal-notes-tasks-codex.md
   moderation-flagging-codex.md
   community-engagement-codex.md
   event-management-upgrades-codex.md
