@@ -28,9 +28,16 @@ class UserDashboardManager
     {
         // Core dashboard script
         wp_enqueue_script(
+            'ap-widget-lifecycle',
+            plugins_url('assets/js/widget-lifecycle.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.0.0',
+            true
+        );
+        wp_enqueue_script(
             'ap-user-dashboard-js',
             plugins_url('assets/js/ap-user-dashboard.js', ARTPULSE_PLUGIN_FILE),
-            ['wp-api-fetch', 'chart-js'],
+            ['wp-api-fetch', 'chart-js', 'ap-widget-lifecycle'],
             '1.0.0',
             true
         );
