@@ -10,6 +10,8 @@ status: complete
 
 This guide details how administrators configure dashboard layouts for each user role. It builds on the [Admin Widget Editor Guide](./admin-widget-editor-guide.md) and covers saving behavior, widget management and REST updates.
 
+🔗 View available widgets and role visibility in the [Widget Matrix](../widgets/widget-matrix-reference.md).
+
 ## Role Based Configuration
 
 Dashboard layouts are stored per role in the `ap_dashboard_widget_config` option. When the editor loads, it fetches the configuration for the selected role via `GET /wp-json/artpulse/v1/layout/{role}`. If none is found, it falls back to the default layout defined in the plugin.
@@ -22,6 +24,14 @@ fetch('/wp-json/artpulse/v1/layout/artist')
   .then(r => r.json())
   .then(layout => renderLayout(layout));
 ```
+
+### Artist Dashboard Example
+
+An Artist layout might include widgets for managing artworks, sales reports and audience insights. Enable monetization blocks like **Artwork Manager** and **Payout Summary** so artists can track revenue.
+
+### Organization Dashboard Example
+
+Organizations typically arrange widgets such as **Ticketing Overview**, **Event Analytics** and **Staff Notices**. Use the role dropdown to load the `organization` layout and configure widgets for event management.
 
 ## Widgets and Layout Logic
 
@@ -47,6 +57,7 @@ await fetch('/wp-json/artpulse/v1/layout/member', {
 
 - [Admin Settings UI](./admin-settings-ui.md)
 - [Dashboard Editor Developer Guide](../dashboard-editor-developer-guide.md)
+- [Widget Matrix Reference](../widgets/widget-matrix-reference.md)
 - [Sprint Plan – Dashboard Integration](../internal/planning/Sprint_Plan.md)
 - [Admin Feature Documentation Review](./admin-feature-review.md)
 

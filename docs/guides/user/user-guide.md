@@ -60,6 +60,8 @@ from any directory, calendar popover or dashboard list.
 - Your next upcoming RSVP is highlighted at the top.
 - Use the **Toggle Dark Mode** button or drag widgets by their handle to customize the layout.
 
+All dashboards for members, artists and organizations are rendered with the `[ap_user_dashboard]` shortcode. Default layouts for each role come from the `ap_dashboard_widget_config` option.
+
 ## Analytics in Your Dashboard
 
 - Charts visualize your total RSVPs and favorites over time.
