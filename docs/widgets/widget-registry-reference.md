@@ -47,3 +47,12 @@ See the [Dashboard Widget Design Codex](./dashboard-widget-design-codex.md) for 
 To add or remove a widget from the React dashboard, edit `assets/js/widgets/index.js`
 and update the exported array. Roles may be adjusted by modifying the `roles`
 property of each entry.
+
+## Updating Existing Widgets
+When plugin updates introduce new roles or capabilities, update both the PHP and JS registries. The server side uses the `artpulse_widget_registry` filter to modify entries programmatically. The JavaScript registry may also be extended via dynamic imports.
+
+## Registry Filters
+Developers can alter default widget behavior with the `artpulse_widget_defaults` filter. This filter accepts the widget ID and array of properties, allowing you to disable widgets by default or change categories. When used in combination with the role matrix from [Widget Matrix Reference](./widget-matrix-reference.md) the filter ensures consistent visibility across all dashboards.
+
+## Related Reading
+For the full widget lifecycle refer to [Widget Lifecycle](./widget-lifecycle.md). To expose per-user settings check the [Widget Settings Codex](./widget-settings-codex.md). Administrators customizing layouts should review [Widget Layout Import Export Guide](./widget-layout-import-export-guide.md) for migrating configuration between sites.
