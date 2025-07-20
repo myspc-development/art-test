@@ -32,5 +32,6 @@ The endpoint returns a nonce used to render widgets as if the admin had that rol
 
 - [Admin Feature Documentation Review](./admin-feature-review.md)
 - [Dashboard Editor Developer Guide](../dashboard-editor-developer-guide.md)
+- [Sprint Plan – Dashboard Integration](../internal/planning/Sprint_Plan.md)
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

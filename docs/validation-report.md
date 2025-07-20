@@ -171,6 +171,7 @@ status: complete
 | user/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | user/user-guide.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | validation-report.md | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| finalization-report.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | webhook-automation-codex.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | widgets-reference.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | widgets/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |

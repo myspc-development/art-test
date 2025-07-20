@@ -47,5 +47,7 @@ await fetch('/wp-json/artpulse/v1/layout/member', {
 
 - [Admin Settings UI](./admin-settings-ui.md)
 - [Dashboard Editor Developer Guide](../dashboard-editor-developer-guide.md)
+- [Sprint Plan – Dashboard Integration](../internal/planning/Sprint_Plan.md)
+- [Admin Feature Documentation Review](./admin-feature-review.md)
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

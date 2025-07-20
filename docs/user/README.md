@@ -8,7 +8,10 @@ status: complete
 
 # User Guides
 
-Instructions for end users customizing their dashboards.
-1. [User Dashboard Guide](./user-guide.md)
+This folder collects all instructions written for end users. Follow the
+documents below in order:
+
+1. [User Dashboard Guide](./user-guide.md) – explains how to customize and
+   rearrange dashboard widgets.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
