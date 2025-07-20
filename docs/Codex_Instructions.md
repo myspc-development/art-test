@@ -1,91 +1,46 @@
-Codex Instructions for Reviewing & Implementing Next Steps
-1. Codex Review Process
-Each codex file (found in docs/) covers a specific functional area. Use this process to review and plan work:
+---
+title: Codex Instructions
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: complete
+---
 
-✅ Step 1: Open relevant codex files:
+# Codex Instructions
 
-admin-analytics-codex.md
+This document defines the conventions used when writing or updating documentation for the ArtPulse plugin. Follow these guidelines whenever Codex GPT generates new files.
 
-analytics-insights-codex.md
+## File Organization
+- Place documents under the relevant audience folder: `admin/`, `developer/`, `qa/`, `user/`, `widgets/` and so on.
+- Use lowercase kebab-case for filenames, e.g. `widget-qa-checklist.md`.
+- Keep screenshots in an adjacent `images/` directory when available.
 
-monetization-ticketing-codex.md
+## Frontmatter Format
+Every Markdown file begins with YAML frontmatter:
 
-ui-ux-polish-codex.md
+```yaml
+title: Your Document Title
+category: [widgets|admin|developer|qa]
+role: [developer|admin|qa|user]
+last_updated: 2025-07-20
+status: complete
+```
 
-etc.
+- `category` matches the folder or feature area.
+- `role` describes the primary reader.
+- `status` is `draft` until the content is finalized.
 
-✅ Step 2: For each codex, evaluate:
+## Writing Style
+- Start with an `H1` heading matching the title.
+- Use `H2` and `H3` headings to structure sections logically.
+- Include bullet points, tables and code blocks where helpful.
+- Refer to other docs using relative links. Example: `[Example Guide](path/to/example.md)`.
+- When screenshots are needed, insert placeholders like `![placeholder](images/example.png)`.
 
-Does it clearly define REST endpoints, UI components, or data models?
+## Review Checklist
+1. Confirm REST endpoints, hooks and UI components are documented.
+2. Provide sample payloads and security notes.
+3. Note required user capabilities for each action.
+4. Update the changelog if the doc introduces new features.
 
-Is there a checklist or sample payload? If not, add one.
-
-Are permissions, validation, and nonce handling specified?
-
-✅ Step 3: Use the roadmap documents to mark items as:
-
-🔲 Not implemented
-
-🔄 In progress
-
-✅ Complete
-
-2. Suggested Implementation Order
-Start with higher-priority, foundational features:
-
-Auto-Tagger NLP (Docs: Future NLP Codex or update existing)
-
-Add architecture notes for tagging
-
-Include sample dataset or classification logic
-
-Define multilingual support expectations
-
-Ticketing & Membership (monetization-ticketing-codex.md)
-
-Describe data structure: CPTs, metadata
-
-Specify WooCommerce hooks (if used)
-
-Add UI examples (e.g., ticket selector)
-
-Analytics Dashboard (analytics-insights-codex.md)
-
-List widget types (e.g., follower growth, ticket sales)
-
-Define required data endpoints
-
-Include mock UI wireframes or embed link
-
-3. Update Codex Format Standards
-Ensure consistency across codex files by including:
-
-Endpoints Table:
-
-Method	Route	Permission Callback	Description
-
-UI Component Specs:
-
-Component name
-
-Props & structure
-
-Data dependencies
-
-Example JSON Payloads
-
-Security Notes: Nonce, roles, capabilities
-
-Internationalization Tips: Labels, translations
-
-4. Development Tasks From Codex Review
-As you complete codex reviews, translate missing specs into development tasks:
-
-Use the Feature_Backlog.md to track them
-
-Link codex section in task description
-
-Create GitHub issues (or Jira tickets) for each task
-
-Tag with priority (HIGH, MEDIUM, LOW)
-
+Following these conventions keeps the Codex consistent and easier to maintain.
