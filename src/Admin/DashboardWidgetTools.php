@@ -377,20 +377,7 @@ class DashboardWidgetTools
             }
 
             $role_key = sanitize_key($role);
-            $ordered  = [];
-
-            foreach ($widgets as $item) {
-                if (is_array($item) && isset($item['id'])) {
-                    $id  = sanitize_key($item['id']);
-                    $vis = isset($item['visible']) ? filter_var($item['visible'], FILTER_VALIDATE_BOOLEAN) : true;
-                } else {
-                    $id  = sanitize_key($item);
-                    $vis = true;
-                }
-                if (in_array($id, $valid_ids, true)) {
-                    $ordered[] = ['id' => $id, 'visible' => $vis];
-                }
-            }
+            $ordered  = \ArtPulse\Core\LayoutUtils::normalize_layout($widgets, $valid_ids);
 
             $sanitized[$role_key] = $ordered;
         }

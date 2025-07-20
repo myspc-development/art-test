@@ -39,15 +39,15 @@ Widgets appear in the **Add Widget** panel. Drag widgets into the main grid to a
 
 - **Lock Widget** toggles whether a widget can be removed by end users.
 - **Reset Layout** reverts to the plugin default for the current role.
-- **Save Layout** persists changes via a `PUT` request.
+- **Save Layout** persists changes via a `POST` request.
 
 ## Saving and Resetting
 
-Clicking **Save** sends the updated layout to `PUT /wp-json/artpulse/v1/layout/{role}`. On success, a notice confirms the update. **Reset** deletes the stored layout so the next load falls back to defaults.
+Clicking **Save** sends the updated layout to `POST /wp-json/artpulse/v1/layout/{role}`. On success, a notice confirms the update. **Reset** deletes the stored layout so the next load falls back to defaults.
 
 ```js
 await fetch('/wp-json/artpulse/v1/layout/member', {
-  method: 'PUT',
+  method: 'POST',
   body: JSON.stringify(layout),
   headers: { 'Content-Type': 'application/json' }
 });
