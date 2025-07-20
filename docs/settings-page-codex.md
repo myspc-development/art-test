@@ -1,8 +1,17 @@
+---
+title: Settings Page Codex
+category: widgets
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
 # ArtPulse Plugin Developer Codex: Full Settings Page with Tabs
 
 This guide shows how to build a comprehensive settings page in the WordPress dashboard. Administrators can manage multiple feature areas using tabs.
 
 ## 1. Hook into the Admin Menu
+
+![Settings Layout](path)
 
 ```php
 add_action('admin_menu', 'artpulse_register_settings_page');
@@ -84,6 +93,10 @@ Example for `admin/tabs/general.php`:
 
 ## 4. Register Settings
 
+| Key | Description |
+| --- | --- |
+| `artpulse_option_site_mode` | Mode string controlling site features |
+
 Create a registration file such as `includes/settings-register.php` and hook into `admin_init` to register fields:
 
 ```php
@@ -151,3 +164,5 @@ add_action( 'artpulse_render_settings_tab_widgets', function () {
 // DashboardWidgetTools loads its admin interface when this hook fires
 // and includes `templates/admin/settings-tab-widgets.php`.
 ```
+
+For details on how these options affect widgets see [Widget Settings Codex](widget-settings-codex.md).

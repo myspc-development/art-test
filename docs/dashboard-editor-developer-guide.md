@@ -1,21 +1,27 @@
+---
+title: Dashboard Editor Developer Guide
+category: widgets
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
+
 # Dashboard Editor Developer Guide
 
-This guide describes the React and SortableJS implementation of the admin dashboard editor.
+This document focuses on the APIs and hooks available for extending the React‑based dashboard editor.
 
-## Interface Overview
-- Role selector switches between **member**, **artist** and **organization** layouts.
-- Widgets are displayed in draggable cards powered by [SortableJS](https://sortablejs.github.io/Sortable/).
-- The editor provides **Add Widget**, **Save**, **Reset**, **Export** and **Import** controls.
+## Editor APIs
 
-## Key Scripts
-- `assets/js/admin-dashboard-widgets-editor.js` renders the React UI.
-- Layout data is fetched from `/wp-json/artpulse/v1/ap_dashboard_layout` with a `?user_id=0&role={role}` query when editing defaults.
+- `assets/js/admin-dashboard-widgets-editor.js` renders the React interface.
+- Layouts are retrieved from `/wp-json/artpulse/v1/ap_dashboard_layout` with a `?user_id=0&role={role}` query when editing defaults.
 - Updates post to the `ap_save_dashboard_widget_config` AJAX action using a nonce created on page load.
 
-## Live Preview
-The bottom of the editor embeds the `[ap_user_dashboard role="{role}"]` shortcode. As you reorder or toggle visibility, the preview updates automatically so admins can see the exact layout users will see.
+## Integration Hooks
 
-## Adding Widgets
-Open the **Add Widget** modal to search registered widgets by name or category. Each result shows a label, description and preview image when available. Selecting widgets appends them to the layout in the current order.
+Use `artpulse_render_settings_tab_widgets` to load custom controls within the editor tab. PHP modules can hook into `ap_dashboard_editor_register_widget` to expose additional widget blocks.
 
-For more on widget definitions see the [Widget Registry Reference](./widget-registry-reference.md).
+## Developer Functions
+
+`DashboardWidgetRegistry::register()` registers a new widget block and returns its unique ID. `UserLayoutManager::save_user_layout()` persists the ordering for a user or role.
+
+Refer to the [Widget UI Design Guide](ui/widget-ui-design-guide.md) for layout guidelines and examples.
