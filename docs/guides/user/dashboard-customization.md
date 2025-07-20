@@ -9,7 +9,7 @@ status: complete
 
 This document explains how ArtPulse stores each user's dashboard layout, which REST and AJAX actions are involved, and the expected widget schema. It supplements the [User Dashboard Layout Codex](../../widgets/widget-layout-import-export-guide.md).
 
-Dashboards for members, artists and organizations are all rendered through the `[ap_user_dashboard]` shortcode. Each role has a default widget order but individual users can rearrange and hide widgets to suit their needs. The saved layout is restored whenever they return to their dashboard.
+Dashboards for members, artists and organizations are all rendered through the `[ap_user_dashboard]` shortcode. Each role has a default widget order but individual users can rearrange and hide widgets to suit their needs. The saved layout is restored whenever they return to their dashboard. The **Add Widget** panel in the admin editor now lists role tags so administrators can quickly see which roles can access a widget and filter the list accordingly.
 
 ## Layout Storage
 

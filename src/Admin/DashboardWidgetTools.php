@@ -238,6 +238,12 @@ class DashboardWidgetTools
             }
             echo '</select>';
         }
+        $role_keys = array_keys($roles);
+        echo '<select id="ap-widget-role-filter"><option value="">' . esc_html__('All Roles', 'artpulse') . '</option>';
+        foreach ($role_keys as $role_key) {
+            echo '<option value="' . esc_attr($role_key) . '">' . esc_html(ucfirst($role_key)) . '</option>';
+        }
+        echo '</select>';
         echo '<ul id="add-widget-panel">';
         foreach ($defs as $def) {
             if (in_array($def['id'], $unused, true)) {
@@ -250,10 +256,19 @@ class DashboardWidgetTools
                 $category  = esc_attr($def['category'] ?? '');
                 $name_attr = esc_attr($def['name'] ?? $def['id']);
                 $desc_attr = esc_attr($def['description'] ?? '');
-                echo '<li class="widget-card" data-category="' . $category . '" data-name="' . $name_attr . '" data-desc="' . $desc_attr . '"><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> ';
+                $roles_attr = esc_attr(implode(',', $def['roles'] ?? []));
+                $roles_text = '';
+                if (!empty($def['roles'])) {
+                    $roles_text = sprintf(__('Only visible to: %s', 'artpulse'), implode(', ', array_map('ucfirst', (array) $def['roles'])));
+                }
+                echo '<li class="widget-card" data-category="' . $category . '" data-name="' . $name_attr . '" data-desc="' . $desc_attr . '" data-roles="' . $roles_attr . '"><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> ';
                 echo '<span class="widget-icon">' . $icon . '</span> <strong>' . esc_html($def['name']) . '</strong>';
                 echo '<div class="widget-preview-box">' . $preview . '</div>';
-                echo '<small>' . esc_html($def['description']) . '</small></label></li>';
+                echo '<small>' . esc_html($def['description']) . '</small>';
+                if ($roles_text) {
+                    echo '<br><small class="widget-roles">' . esc_html($roles_text) . '</small>';
+                }
+                echo '</label></li>';
             }
         }
         echo '</ul>';
