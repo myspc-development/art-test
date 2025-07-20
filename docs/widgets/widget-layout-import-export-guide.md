@@ -28,3 +28,5 @@ Example export:
 3. Unknown widget IDs are ignored so layouts from other sites remain compatible.
 
 Always validate the JSON structure before saving to avoid corrupt layouts.
+
+💬 Found something outdated? Submit Feedback

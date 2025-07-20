@@ -62,3 +62,5 @@ A living document to track major tasks across the project.
 | R2 | Uninstall Cleanup | Remove plugin data on uninstall. | ✅ |
 
 Last updated: July 18, 2025
+
+💬 Found something outdated? Submit Feedback

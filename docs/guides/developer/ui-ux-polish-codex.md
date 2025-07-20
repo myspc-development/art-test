@@ -108,3 +108,5 @@ only the associated form section.
 ## Best Practices
 
 All UI strings should be translatable. Save branding and layout changes via AJAX for instant feedback. Onboarding and help flows must be dismissible and accessible on mobile and for screen readers.
+
+💬 Found something outdated? Submit Feedback

@@ -15,3 +15,5 @@ layouts for different user roles.
 - Launch the editor under **ArtPulse → Settings → Widget Editor**
 - Drag and drop widgets to build role-specific dashboards
 - Save or reset layouts for each role
+
+💬 Found something outdated? Submit Feedback

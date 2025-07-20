@@ -50,3 +50,5 @@ Where possible cross-reference sections to avoid duplication. For example the [W
 
 ## Keeping Docs Current
 After each sprint check the [Verification Checklist](VERIFICATION-CHECKLIST.md) and update the `last_updated` frontmatter date. Remove obsolete TODOs and confirm all relative links resolve. Docs that fall below the 300-word threshold should be expanded with examples or screenshots so they remain comprehensive.
+
+💬 Found something outdated? Submit Feedback

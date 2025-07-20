@@ -31,3 +31,5 @@ This sprint introduced geolocation search and basic Q&A threads for events.
 - `/qa-thread/{event}` route returns JSON.
 - Rankings table exists in database.
 - Widget script outputs an iframe.
+
+💬 Found something outdated? Submit Feedback

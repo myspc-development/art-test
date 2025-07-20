@@ -129,3 +129,5 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
 Several endpoints store preferences using user meta. Keys of interest:
 
 - `ap_notification_prefs` – associative array with boolean `email`, `push` and `sms` values saved via `POST /artpulse/v1/user-preferences`.
+
+💬 Found something outdated? Submit Feedback

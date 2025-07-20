@@ -29,3 +29,5 @@ This guide explains how to generate event QR codes and track real-world turnout.
 - REST `/checkin` route validates the `event` parameter.
 - Logs stored in `ap_event_checkins` with `event_id`, `user_id` and timestamp.
 - Export handler streams CSV without loading all rows into memory.
+
+💬 Found something outdated? Submit Feedback

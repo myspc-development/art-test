@@ -51,3 +51,5 @@ Place this link anywhere to send visitors to the default registration form:
 ## 5. Optional Auto-login
 
 WordPress does not log users in after registration by default. If you want to log them in immediately, use a custom form like the `[ap_register]` shortcode and call `wp_set_current_user()` and `wp_set_auth_cookie()` after `wp_create_user()` succeeds.
+
+💬 Found something outdated? Submit Feedback

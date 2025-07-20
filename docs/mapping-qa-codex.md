@@ -54,3 +54,5 @@ This codex outlines the sprint 1 features for interactive maps and time-bound Q&
 - `qa_thread` post type registered with meta fields.
 - `QAThread.jsx` renders threads.
 - Lock logic implemented via cron or runtime.
+
+💬 Found something outdated? Submit Feedback

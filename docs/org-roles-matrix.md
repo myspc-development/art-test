@@ -27,3 +27,5 @@ Use `MultiOrgRoles::assign_roles()` and `MultiOrgRoles::get_user_roles()` to man
 ## Updating
 
 When upgrading from versions prior to 1.4.0 the plugin's update routine runs `create_monetization_tables()` followed by `MultiOrgRoles::maybe_install_table()`. This ensures the `ap_org_user_roles` table is installed even on existing sites.
+
+💬 Found something outdated? Submit Feedback

@@ -102,3 +102,5 @@ Package internal implementation and integration documentation for dev onboarding
 - Sprint 1–3 integration status.
 - Admin UX Guide – screenshots of improved widgets.
 - Partner Onboarding Guide – step-by-step API use.
+
+💬 Found something outdated? Submit Feedback

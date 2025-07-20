@@ -89,3 +89,5 @@ CREATE TABLE ap_embed_logs (
 - `partner-guides.md`
 - `analytics.md`
 - `api-embed.md`
+
+💬 Found something outdated? Submit Feedback

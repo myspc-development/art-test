@@ -16,3 +16,5 @@ sequenceDiagram
 ```
 
 This widget lists available ticket tiers and posts purchases to `/buy-ticket`.
+
+💬 Found something outdated? Submit Feedback

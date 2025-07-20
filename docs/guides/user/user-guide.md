@@ -117,3 +117,5 @@ bookmark or share a direct link to any section.
 - The registration form requires entering the password twice for confirmation.
 - Buttons and forms support keyboard navigation and screen readers.
 - Event cards and dashboards are designed for responsive display.
+
+💬 Found something outdated? Submit Feedback

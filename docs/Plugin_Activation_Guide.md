@@ -23,3 +23,5 @@ This guide explains how to spin up a WordPress instance with Docker and activate
 5. Activate **ArtPulse Management** from the Plugins screen.
 
 The example compose file provides a minimal WordPress stack for development. Adjust ports as needed.
+
+💬 Found something outdated? Submit Feedback

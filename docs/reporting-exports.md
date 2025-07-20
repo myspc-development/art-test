@@ -27,3 +27,5 @@ Use these tools to capture real attendance numbers and generate grant-ready logs
 - `/analytics` endpoints expose turnout and engagement data.
 - CSV export uses `fputcsv()` to stream records.
 - PDF export relies on `Dompdf` with header and footer templates.
+
+💬 Found something outdated? Submit Feedback

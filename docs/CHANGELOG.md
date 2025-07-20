@@ -61,3 +61,5 @@ status: draft
 - Implemented favorites, engagement dashboards and inline event editing.
 - Extended event filtering with a FullCalendar view and reusable cards.
 - Added profile link requests, privacy options and OAuth login integration.
+
+💬 Found something outdated? Submit Feedback

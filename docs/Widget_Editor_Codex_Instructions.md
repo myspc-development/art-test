@@ -32,3 +32,5 @@ Include a short changelog at the bottom of the widget doc if the implementation 
 Where helpful, link directly to the React component or PHP rendering function in the repository. Use GitHub permalinks so lines remain stable even if future commits refactor the code.
 
 Following these instructions keeps widget documentation uniform and easy to navigate. When contributing a new widget, create the doc in a branch, add screenshots and reference the relevant release ticket so reviewers can verify everything works as described.
+
+💬 Found something outdated? Submit Feedback

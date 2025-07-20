@@ -78,3 +78,5 @@ environment requires different settings.
 - When developing new features, extend the Cypress suite with additional
   checks for monetization workflows such as requesting commissions or managing
   subscriptions.
+
+💬 Found something outdated? Submit Feedback

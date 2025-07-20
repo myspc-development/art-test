@@ -32,3 +32,5 @@ curl -X POST -H "X-WP-Nonce: <nonce>" \
   -d 'user_id=5&role=editor' \
   /wp-json/artpulse/v1/orgs/12/roles
 ```
+
+💬 Found something outdated? Submit Feedback

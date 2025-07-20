@@ -17,3 +17,5 @@ This document will detail the reputation and trust badge system for curators and
 - Define badge taxonomy or user meta fields
 - Render badges on profiles and event cards
 - Outline moderation or approval workflow
+
+💬 Found something outdated? Submit Feedback

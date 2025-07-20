@@ -154,3 +154,5 @@ add_action('wp_ajax_nopriv_submit_react_form', 'artpulse_handle_react_form');
 You may alternatively register a REST route instead of using admin‑ajax. The
 React component can fetch `/wp-json/your-namespace/v1/submit-form` for improved
 performance and structure.
+
+💬 Found something outdated? Submit Feedback

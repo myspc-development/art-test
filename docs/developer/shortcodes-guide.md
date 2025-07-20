@@ -72,3 +72,5 @@ If your plugin needs bespoke dashboard widgets or data views you can register ad
 - Ensure scripts and styles are enqueued by viewing the page source for expected assets.
 - Shortcodes that rely on REST endpoints require permalinks to be enabled.
 - If output is blank, check user capabilities and that the `id` attribute references existing content.
+
+💬 Found something outdated? Submit Feedback

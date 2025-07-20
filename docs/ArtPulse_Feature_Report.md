@@ -77,3 +77,5 @@ Use Case: Manage creative events, memberships and engagement for artists and org
 | REST API Spec | `/docs/openapi.yaml` |
 | Milestones | `/docs/roadmap/` |
 | Assistant Guide | `ASSISTANT_INSTRUCTIONS.md` |
+
+💬 Found something outdated? Submit Feedback

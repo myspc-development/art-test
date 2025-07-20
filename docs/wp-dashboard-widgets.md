@@ -21,3 +21,5 @@ The stylesheet `assets/css/wp-dashboard-layout.css` provides a flexible two‑co
 
 ## Extending
 Developers can replace the placeholder callbacks in `includes/wp-dashboard-manager.php` or add new widgets using the same `wp_add_dashboard_widget()` function. For a richer experience you could create a React interface using a grid library and save the layout via `update_user_meta()`.
+
+💬 Found something outdated? Submit Feedback

@@ -24,3 +24,5 @@ Widgets appear in exported layout JSON and are restored via the import tool in t
 
 ## Test & Verify
 Follow the [Widget QA Checklist](../qa/widget-qa-checklist.md) to validate rendering and role visibility.
+
+💬 Found something outdated? Submit Feedback

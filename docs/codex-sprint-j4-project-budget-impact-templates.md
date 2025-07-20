@@ -52,3 +52,5 @@ Use this template after each event to summarize reach and engagement. Reports ca
 - Budget & Impact Templates Guide
 - Grant Reporting Overview
 - Partner Handbook – “Tracking community impact”
+
+💬 Found something outdated? Submit Feedback

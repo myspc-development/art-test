@@ -25,3 +25,5 @@ Bundled Node version: not found
 ```
 
 Future runs require allowing access to download.cypress.io or preinstalling Cypress in the environment.
+
+💬 Found something outdated? Submit Feedback

@@ -15,3 +15,5 @@ Use the unified styles defined in the [Default Design System Codex](default-desi
 - Rebuild assets with `npm run build` whenever you modify files under `src/` or `blocks/` and commit the updated `build/` output.
 
 These steps ensure every widget follows the same layout, theming variables, and accessibility hooks.
+
+💬 Found something outdated? Submit Feedback

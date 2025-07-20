@@ -29,3 +29,5 @@ Introduces event ranking algorithm and partner-facing API with bearer auth.
 - Ranking table populated and used by `/events?orderby=rank`.
 - API requests with a valid key succeed.
 - Requests without a key return 401 errors.
+
+💬 Found something outdated? Submit Feedback

@@ -17,3 +17,5 @@ user's role grants the capability.
 | `curator_threads` | curator, admin |
 | `build_feed` | admin, promoter |
 | `view_analytics` | admin |
+
+💬 Found something outdated? Submit Feedback

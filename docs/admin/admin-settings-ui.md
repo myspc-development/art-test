@@ -108,3 +108,5 @@ This tab lists every page that embeds one of the plugin shortcodes. Users with t
 
 ---
 Settings are visible to users with the `manage_options` capability unless otherwise noted. Most fields default to the values shown above and take effect immediately after clicking **Save Settings**.
+
+💬 Found something outdated? Submit Feedback

@@ -28,3 +28,5 @@ This document explains where end users can access help and how to request suppor
 ## Release Notes
 
 Administrators will see a modal dialog the first time they visit the dashboard after a plugin update. This dialog summarizes the latest changes from the changelog. Click **Close** to dismiss it; the dismissal is stored per user in the `ap_dismiss_release_notes` meta key.
+
+💬 Found something outdated? Submit Feedback

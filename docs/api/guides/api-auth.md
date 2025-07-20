@@ -130,3 +130,5 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
   -d 'object_id=10&object_type=artpulse_event&action=add' \
   '/wp-json/artpulse/v1/favorite'
 ```
+
+💬 Found something outdated? Submit Feedback

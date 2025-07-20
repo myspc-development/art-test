@@ -11,3 +11,5 @@ status: draft
 Combines implementation notes from the Dashboard Editor guide and Codex
 instructions. Covers adding new widgets, REST endpoints and verification
 checklists.
+
+💬 Found something outdated? Submit Feedback

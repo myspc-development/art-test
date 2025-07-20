@@ -23,3 +23,5 @@ The lead developer for each feature is responsible for keeping both the `Sprint_
 - Tag pull requests with `[Feature]`, `[Fix]` or `[Refactor]` and include the feature ID (`F-xxx`) and sprint ID (`SB-xxx`).
 - Update both the `Sprint_Backlog` and `Feature Completion Tracker` at the end of each day or after significant progress.
 - Sync with QA and UI/UX before marking a feature as **Complete**.
+
+💬 Found something outdated? Submit Feedback

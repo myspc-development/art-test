@@ -112,3 +112,5 @@ Logged-in users see a Stripe link to upgrade; others are prompted to log in.
 - Stripe Webhook Setup
 - Manual plan assignment UI
 - UI Components (UpgradeCompare.jsx, Pro Badge Renderer, Partner Onboarding)
+
+💬 Found something outdated? Submit Feedback

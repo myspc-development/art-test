@@ -16,3 +16,5 @@ sequenceDiagram
 ```
 
 The chat widget displays live messages and allows attendees to post updates during an event.
+
+💬 Found something outdated? Submit Feedback

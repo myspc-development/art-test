@@ -26,3 +26,5 @@ This directory groups all documentation by audience and feature area. Start with
 - [User Guides](user/README.md) – customizing dashboards and general usage tips.
 
 Additional planning docs live under [internal/](internal/) and more detailed specifications are in [specs/](specs/). Navigate through each folder README to explore related articles in a logical order.
+
+💬 Found something outdated? Submit Feedback

@@ -47,3 +47,5 @@ This list covers functional behavior as well as visual checks. Run through each 
 Status:
 - [ ] Verified
 - [ ] Needs Testing
+
+💬 Found something outdated? Submit Feedback

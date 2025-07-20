@@ -12,3 +12,5 @@ These chapters break down the core widgets used by ArtPulse. Each section includ
 - [Chat Widget](./chat-widget.md)
 - [Ticketing Widget](./ticketing-widget.md)
 - [Q&A Widget](./qa-widget.md)
+
+💬 Found something outdated? Submit Feedback

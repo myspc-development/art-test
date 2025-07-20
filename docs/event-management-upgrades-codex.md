@@ -60,3 +60,5 @@ Users can subscribe to upcoming events via iCal. Endpoints return `.ics` files:
 | All Events | `/feeds/ical/all.ics` |
 
 Buttons on event pages link to Google Calendar and an `.ics` download for Apple or Outlook.
+
+💬 Found something outdated? Submit Feedback

@@ -9,3 +9,5 @@ status: draft
 # UI Guides
 
 Design standards for widgets and dashboard screens.
+
+💬 Found something outdated? Submit Feedback
