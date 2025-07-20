@@ -1,3 +1,11 @@
+---
+title: Widget Layout Import  Export Guide
+category: widgets
+role: admin
+last_updated: 2025-07-20
+status: draft
+---
+
 # Widget Layout Import & Export Guide
 
 Admins can copy layouts between sites or create backups using the Import/Export tools in the dashboard editor.

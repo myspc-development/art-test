@@ -1,3 +1,11 @@
+---
+title: React Forms Codex
+category: developer
+role: developer
+last_updated: 2025-07-20
+status: draft
+---
+
 # React Forms Codex
 
 This guide explains how to replace legacy PHP form templates with a modern React

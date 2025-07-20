@@ -1,6 +1,6 @@
 ---
 title: Admin Overview
-category: widgets
+category: admin
 role: developer
 last_updated: 2025-07-20
 status: draft
