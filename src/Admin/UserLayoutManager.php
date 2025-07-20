@@ -58,7 +58,15 @@ class UserLayoutManager
     public static function get_role_layout(string $role): array
     {
         $config = get_option('ap_dashboard_widget_config', []);
-        $layout = $config[$role] ?? [];
+        $entry  = $config[$role] ?? [];
+        $layout = [];
+
+        if (is_array($entry) && isset($entry['layout'])) {
+            $layout = $entry['layout'];
+        } elseif (is_array($entry)) {
+            $layout = $entry;
+        }
+
         if (is_array($layout) && !empty($layout)) {
             $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
             $ordered = [];
@@ -112,7 +120,18 @@ class UserLayoutManager
         }
 
         $config = get_option('ap_dashboard_widget_config', []);
-        $config[sanitize_key($role)] = $ordered;
+        $role_key = sanitize_key($role);
+        $entry = $config[$role_key] ?? [];
+        $style = [];
+        if (is_array($entry) && isset($entry['style'])) {
+            $style = $entry['style'];
+        }
+
+        $config[$role_key] = [ 'layout' => $ordered ];
+        if ($style) {
+            $config[$role_key]['style'] = $style;
+        }
+
         update_option('ap_dashboard_widget_config', $config);
     }
 
@@ -129,6 +148,45 @@ class UserLayoutManager
             return true;
         }
         return false;
+    }
+
+    /**
+     * Get style configuration for a role.
+     */
+    public static function get_role_style(string $role): array
+    {
+        $config = get_option('ap_dashboard_widget_config', []);
+        $entry = $config[$role] ?? [];
+        if (is_array($entry) && isset($entry['style']) && is_array($entry['style'])) {
+            return $entry['style'];
+        }
+        return [];
+    }
+
+    /**
+     * Save style configuration for a role.
+     */
+    public static function save_role_style(string $role, array $style): void
+    {
+        $sanitized = [];
+        foreach ($style as $k => $v) {
+            $key = sanitize_key($k);
+            $val = is_string($v) ? sanitize_text_field($v) : $v;
+            $sanitized[$key] = $val;
+        }
+
+        $config = get_option('ap_dashboard_widget_config', []);
+        $role_key = sanitize_key($role);
+        $entry = $config[$role_key] ?? [];
+
+        if (!is_array($entry)) {
+            $entry = [ 'layout' => is_array($entry) ? $entry : [] ];
+        }
+
+        $entry['style'] = $sanitized;
+        $config[$role_key] = $entry;
+
+        update_option('ap_dashboard_widget_config', $config);
     }
 
     public static function reset_layout_for_role(string $role): void

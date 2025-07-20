@@ -4,6 +4,7 @@ namespace ArtPulse\Admin;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetManager;
+use ArtPulse\Admin\UserLayoutManager;
 
 class DashboardWidgetTools
 {
@@ -609,6 +610,29 @@ class DashboardWidgetTools
      */
     public static function render_role_dashboard_preview(string $role): void
     {
+        $style = UserLayoutManager::get_role_style($role);
+        if ($style) {
+            echo '<style id="ap-preview-style">';
+            echo '.ap-widget-card{';
+            if (!empty($style['background_color'])) {
+                echo 'background:' . esc_attr($style['background_color']) . ';';
+            }
+            if (!empty($style['border'])) {
+                echo 'border:' . esc_attr($style['border']) . ';';
+            }
+            if (!empty($style['padding'])) {
+                $pad = strtolower($style['padding']);
+                if ($pad === 's') { $pad = '4px'; }
+                elseif ($pad === 'm') { $pad = '8px'; }
+                elseif ($pad === 'l') { $pad = '16px'; }
+                echo 'padding:' . esc_attr($pad) . ';';
+            }
+            echo '}';
+            if (!empty($style['title_font_size'])) {
+                echo '.ap-widget-card .widget-title{font-size:' . esc_attr($style['title_font_size']) . ';}';
+            }
+            echo '</style>';
+        }
         $registry = \ArtPulse\Core\DashboardWidgetRegistry::get_all();
         $layout   = DashboardWidgetManager::getRoleLayout($role);
 

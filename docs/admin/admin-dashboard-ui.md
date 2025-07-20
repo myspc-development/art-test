@@ -53,6 +53,12 @@ await fetch('/wp-json/artpulse/v1/layout/member', {
 });
 ```
 
+## Preview Mode & Styling
+
+Dashboard Preview now loads the `[ap_user_dashboard]` shortcode in an iframe so administrators can switch roles and see the actual layout. A style panel lets you configure background color, border and padding presets. Saved values are stored under the `style` key in `ap_dashboard_widget_config`.
+
+Use the **Preview as…** dropdown to impersonate a role. Changes to layout or style can be saved directly from the preview window.
+
 ## Related Links
 
 - [Admin Settings UI](./admin-settings-ui.md)
