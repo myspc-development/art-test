@@ -1,0 +1,12 @@
+[
+  {"original": "assets/js/organization-dashboard.js", "dups": ["assets/js/artist-dashboard.js"]},
+  {"original": "assets/css/ap-complete-dashboard-frontend.css", "dups": ["assets/css/ap-dashboard-modern.css"]},
+  {"original": "assets/css/min/ap-complete-dashboard-frontend.css", "dups": ["assets/css/min/ap-dashboard-modern.css"]},
+  {"original": "assets/libs/sortablejs/Sortable.min.js", "dups": ["assets/js/Sortable.min.js"]},
+  {"original": "assets/css/min/editor-styles.css", "dups": ["assets/css/min/ap-style.css"]},
+  {"original": "templates/salient/archive-artpulse_artwork.php", "dups": ["templates/salient/archive-artpulse_artist.php", "templates/salient/archive-artpulse_org.php"]},
+  {"original": "assets/css/min/wp-dashboard-layout.css", "dups": ["assets/css/min/frontend.css"]},
+  {"original": "docs/planning/Sprint_Plan.md", "dups": ["Sprint_Plan.md"]},
+  {"original": "docs/guides/admin/admin-permissions.md", "dups": ["docs/admin/admin-permissions.md"]},
+  {"original": "docs/guides/admin/admin-usage.md", "dups": ["docs/admin/admin-usage.md"]}
+]

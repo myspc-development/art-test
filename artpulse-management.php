@@ -728,7 +728,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
     if ($hook === 'index.php' || strpos($hook, 'dashboard') !== false) {
         wp_enqueue_script(
             'sortablejs',
-            plugin_dir_url(__FILE__) . 'assets/js/Sortable.min.js',
+            plugin_dir_url(__FILE__) . 'assets/libs/sortablejs/Sortable.min.js',
             [],
             '1.15.0',
             true
@@ -749,7 +749,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
 
 add_action('admin_enqueue_scripts', function ($hook) {
     if ($hook === 'toplevel_page_dashboard-preview') {
-        wp_enqueue_script('sortablejs', plugin_dir_url(__FILE__) . 'assets/js/Sortable.min.js', [], null, true);
+        wp_enqueue_script('sortablejs', plugin_dir_url(__FILE__) . 'assets/libs/sortablejs/Sortable.min.js', [], null, true);
         wp_enqueue_script('role-dashboard', plugin_dir_url(__FILE__) . 'assets/js/role-dashboard.js', ['jquery', 'sortablejs'], '1.0.0', true);
         wp_localize_script('role-dashboard', 'ArtPulseDashboard', [
             'ajax_url' => admin_url('admin-ajax.php'),
