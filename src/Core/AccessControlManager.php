@@ -15,9 +15,8 @@ class AccessControlManager
             $level    = get_user_meta($user_id, 'ap_membership_level', true);
             $settings = get_option('artpulse_settings', []);
             $user     = wp_get_current_user();
-            $roles    = (array) $user->roles;
 
-            if (self::needsRedirect($roles, $level, $settings)) {
+            if (self::needsRedirect($user, $level, $settings)) {
                 wp_redirect(home_url());
                 exit;
             }
@@ -27,12 +26,12 @@ class AccessControlManager
     /**
      * Determine if a user viewing a protected post should be redirected.
      */
-    public static function needsRedirect(array $roles, string $level, array $settings): bool
+    public static function needsRedirect(\WP_User $user, string $level, array $settings): bool
     {
         if (
-            (!empty($settings['override_artist_membership']) && in_array('artist', $roles, true)) ||
-            (!empty($settings['override_org_membership']) && in_array('organization', $roles, true)) ||
-            (!empty($settings['override_member_membership']) && in_array('member', $roles, true))
+            (!empty($settings['override_artist_membership']) && user_can($user, 'artist')) ||
+            (!empty($settings['override_org_membership']) && user_can($user, 'organization')) ||
+            (!empty($settings['override_member_membership']) && user_can($user, 'member'))
         ) {
             return false;
         }

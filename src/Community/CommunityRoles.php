@@ -19,7 +19,7 @@ class CommunityRoles
         $role = get_user_meta($user_id, 'community_role', true);
         if (!$role) {
             $user = get_user_by('id', $user_id);
-            if ($user && in_array('administrator', (array) $user->roles, true)) {
+            if ($user && user_can($user, 'administrator')) {
                 return self::ADMINISTRATOR;
             }
             return self::PUBLIC_USER;

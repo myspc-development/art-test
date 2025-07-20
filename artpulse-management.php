@@ -210,14 +210,13 @@ add_action('admin_init', function () {
     $screen = function_exists('get_current_screen') ? get_current_screen() : null;
     if ($screen && $screen->id === 'dashboard') {
         $user = wp_get_current_user();
-        $roles = (array) $user->roles;
-        if (in_array('artist', $roles, true)) {
+        if (user_can($user, 'artist')) {
             wp_redirect(site_url('/dashboard-artist'));
             exit;
-        } elseif (in_array('member', $roles, true)) {
+        } elseif (user_can($user, 'member')) {
             wp_redirect(site_url('/dashboard-member'));
             exit;
-        } elseif (in_array('organization', $roles, true)) {
+        } elseif (user_can($user, 'organization')) {
             wp_redirect(site_url('/dashboard-organization'));
             exit;
         }

@@ -6,7 +6,7 @@
  */
 
 $current_user = wp_get_current_user();
-$roles        = (array) $current_user->roles;
+
 
 ?>
 <nav class="dashboard-nav" role="navigation" aria-label="Dashboard Navigation">
@@ -14,7 +14,7 @@ $roles        = (array) $current_user->roles;
         <span class="dashicons dashicons-admin-users"></span><?php esc_html_e('Membership', 'artpulse'); ?>
     </a>
 
-    <?php if (in_array('organization', $roles, true)) : ?>
+    <?php if (current_user_can('organization')) : ?>
     <a href="#next-payment" class="dashboard-link nectar-button wpb_button small" data-section="next-payment">
         <span class="dashicons dashicons-money"></span><?php esc_html_e('Next Payment', 'artpulse'); ?>
     </a>
@@ -27,7 +27,7 @@ $roles        = (array) $current_user->roles;
         <span class="dashicons dashicons-star-filled"></span><?php esc_html_e('Upgrade', 'artpulse'); ?>
     </a>
 
-    <?php if (in_array('artist', $roles, true) || in_array('organization', $roles, true)) : ?>
+    <?php if (current_user_can('artist') || current_user_can('organization')) : ?>
     <a href="#content" class="dashboard-link nectar-button wpb_button small" data-section="content">
         <span class="dashicons dashicons-media-default"></span><?php esc_html_e('Content', 'artpulse'); ?>
     </a>

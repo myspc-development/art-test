@@ -10,6 +10,7 @@ class CapabilitiesManager
     public static function register(): void
     {
         add_action('init', [self::class, 'add_capabilities']);
+        add_filter('map_meta_cap', [self::class, 'map_meta_cap'], 10, 4);
     }
 
     public static function add_capabilities(): void
@@ -51,5 +52,25 @@ class CapabilitiesManager
                 }
             }
         }
+    }
+
+    /**
+     * Map custom capabilities to meta checks.
+     *
+     * @param array  $caps    Primitive caps for the user.
+     * @param string $cap     Capability being checked.
+     * @param int    $user_id User ID.
+     * @return array Modified capabilities.
+     */
+    public static function map_meta_cap(array $caps, string $cap, int $user_id, array $args): array
+    {
+        if ($cap === 'ap_premium_member') {
+            $level = get_user_meta($user_id, 'ap_membership_level', true);
+            if ($level && $level !== 'Free') {
+                return ['read'];
+            }
+            return ['do_not_allow'];
+        }
+        return $caps;
     }
 }

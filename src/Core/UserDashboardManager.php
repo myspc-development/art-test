@@ -888,7 +888,7 @@ class UserDashboardManager
         $user             = wp_get_current_user();
         $roles            = (array) $user->roles;
         $profile_edit_url = self::get_profile_edit_url();
-        $show_notifications = !empty(array_intersect(['member','artist','organization','administrator'], $roles));
+        $show_notifications = current_user_can('member') || current_user_can('artist') || current_user_can('organization') || current_user_can('administrator');
         $support_history   = get_user_meta(get_current_user_id(), 'ap_support_history', true);
         $show_support_history = is_array($support_history) && !empty($support_history);
         $badges = self::getBadges(get_current_user_id());
@@ -955,7 +955,7 @@ class UserDashboardManager
             ]);
         }
         if (!$completed && !$tour_done) {
-            if (in_array('artist', $roles, true) && isset($_GET['onboarding'])) {
+            if (user_can($user, 'artist') && isset($_GET['onboarding'])) {
                 $onboarding_html = self::load_template('onboarding-artist.php');
             } else {
                 $onboarding_html = '<div id="ap-onboarding-banner" class="ap-onboarding-banner">'
@@ -965,11 +965,11 @@ class UserDashboardManager
             }
         }
 
-        if (in_array('organization', $roles, true) || in_array('administrator', $roles, true)) {
+        if (user_can($user, 'organization') || user_can($user, 'administrator')) {
             return $onboarding_html . self::load_template('dashboard-organization.php', $vars);
         }
 
-        if (in_array('artist', $roles, true)) {
+        if (user_can($user, 'artist')) {
             return $onboarding_html . self::load_template('dashboard-artist.php', $vars);
         }
 

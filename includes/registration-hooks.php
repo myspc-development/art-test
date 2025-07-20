@@ -18,7 +18,7 @@ add_filter('wp_registration_redirect', function ($redirect_to) {
 
 // Redirect members after first login as well
 add_filter('login_redirect', function ($redirect_to, $request, $user) {
-    if (isset($user->roles) && in_array('member', (array) $user->roles, true)) {
+    if ($user && user_can($user, 'member')) {
         return home_url('/dashboard/member');
     }
     return $redirect_to;

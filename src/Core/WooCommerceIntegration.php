@@ -64,7 +64,7 @@ class WooCommerceIntegration
 
         // Downgrade to Free
         $user = get_userdata( $user_id );
-        if (in_array('administrator', (array) $user->roles, true)) {
+        if (user_can($user, 'administrator')) {
             // Preserve admin role when adjusting membership
             $user->add_role('subscriber');
         } else {
@@ -88,7 +88,7 @@ class WooCommerceIntegration
     protected static function assignMembership( $user_id, $level )
     {
         $user = get_userdata( $user_id );
-        if (in_array('administrator', (array) $user->roles, true)) {
+        if (user_can($user, 'administrator')) {
             // Avoid stripping admin rights while granting membership
             $user->add_role('subscriber');
         } else {
