@@ -3,7 +3,7 @@ title: Validation Report
 category: docs
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Documentation Validation Report
@@ -32,6 +32,8 @@ status: draft
 | admin/admin-overview.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | admin/admin-settings-ui.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
 | admin/admin-widget-editor-guide.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| admin/admin-dashboard-ui.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| admin/role-preview-guide.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | admin/plugin-installation-updates.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | analytics-pilot.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | api-reference.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |

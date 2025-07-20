@@ -3,7 +3,7 @@ title: Widget Layout Import  Export Guide
 category: widgets
 role: admin
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Widget Layout Import & Export Guide

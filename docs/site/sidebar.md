@@ -1,3 +1,11 @@
+---
+title: Documentation Sidebar
+category: site
+role: developer
+last_updated: 2025-07-20
+status: complete
+---
+
 * [Home](../index.md)
 * **Admin**
   * [Overview](admin/README.md)
@@ -158,3 +166,4 @@
 * [widgets-reference.md](../widgets-reference.md)
 * [wordpress-menus-codex.md](../wordpress-menus-codex.md)
 * [wp-dashboard-widgets.md](../wp-dashboard-widgets.md)
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

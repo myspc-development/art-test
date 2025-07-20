@@ -3,7 +3,7 @@ title: Codex: Sprint I1 – Pricing Engine & Upgrade UI
 category: developer
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # Codex: Sprint I1 – Pricing Engine & Upgrade UI
 

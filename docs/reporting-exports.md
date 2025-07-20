@@ -3,7 +3,7 @@ title: ArtPulse Codex: Reporting & Exports
 category: developer
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 # ArtPulse Codex: Reporting & Exports
 

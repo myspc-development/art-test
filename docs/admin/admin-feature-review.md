@@ -3,7 +3,7 @@ title: Admin Feature Documentation Review
 category: admin
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Admin Feature Documentation Review
@@ -17,3 +17,6 @@ The table below summarizes documentation coverage for key admin-facing features.
 | Roles UI | ❌ | — | Create guide for managing layouts per role and describe fallback behavior |
 
 Use this checklist when updating docs to ensure all admin workflows are fully explained.
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
+
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

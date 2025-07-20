@@ -3,7 +3,7 @@ title: Widget Editor Testing Checklist
 category: qa
 role: qa
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Widget Editor Testing Checklist

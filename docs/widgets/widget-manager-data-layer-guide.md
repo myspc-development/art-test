@@ -3,7 +3,7 @@ title: Widget Manager Data Layer Guide
 category: widgets
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Widget Manager Data Layer Guide
