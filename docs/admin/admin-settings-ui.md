@@ -3,7 +3,7 @@ title: Admin Settings UI
 category: admin
 role: developer
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Admin Settings UI
@@ -62,3 +62,49 @@ Each section of the **ArtPulse → Settings** screen is organized into a tab. Th
 ```
 
 Settings are saved using the WordPress options API. Most forms submit with `wp_ajax` handlers so the page does not refresh. Success and error messages appear inline next to the form controls.
+## Settings Overview
+
+Below is a summary of the default configuration tabs and the fields found within each. Screenshots use placeholders so you can replace them with real images when documenting your own setup.
+
+### General
+![General Tab](images/settings-general.png)
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **UI Mode** | Choose between the legacy "Salient" templates or the React-based dashboard. | `salient` |
+| **Theme** | Select the default CSS theme used for front‑end components. | `default` |
+| **Enable Reporting** | Toggles analytics collection and dashboard widgets. Only visible to administrators. | Enabled |
+| **Admin Email** | Address used for notification emails. | WordPress admin email |
+| **Use WP Nav Menu** | If enabled, plugin pages automatically appear in the WordPress menus. | Disabled |
+
+### Import/Export
+![Import Export Tab](images/settings-import-export.png)
+
+| Setting | Description |
+|---------|-------------|
+| **Export Settings** | Download a JSON backup of all plugin options. |
+| **Import Settings** | Upload a previously exported file. Only administrators can run this action. |
+
+### Config Backup
+![Backup Tab](images/settings-backup.png)
+
+| Setting | Description |
+|---------|-------------|
+| **Create Backup** | Generate a timestamped zip archive of the current configuration. |
+| **Restore Backup** | Choose an existing backup to restore. |
+
+### Updates
+![Updates Tab](images/settings-updates.png)
+
+| Setting | Description |
+|---------|-------------|
+| **Automatic Updates** | Enable background updates when a new version is released. |
+| **Update Now** | Manually trigger the update routine. Administrators only. |
+
+### Shortcode Pages
+![Shortcodes Tab](images/settings-shortcodes.png)
+
+This tab lists every page that embeds one of the plugin shortcodes. Users with the `edit_pages` capability can jump directly to a page editor or insert new blocks using the **Add Page** shortcut.
+
+---
+Settings are visible to users with the `manage_options` capability unless otherwise noted. Most fields default to the values shown above and take effect immediately after clicking **Save Settings**.
