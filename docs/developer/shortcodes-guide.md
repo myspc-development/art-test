@@ -65,6 +65,9 @@ Outputs a curated collection by post ID.
 **Options**
 - `id` – collection post ID (required)
 
+## Creating Custom Shortcodes
+If your plugin needs bespoke dashboard widgets or data views you can register additional shortcodes. Use `add_shortcode` in a setup function and sanitize attributes with `shortcode_atts`. Output should be returned rather than echoed so you can combine shortcodes inside templates. Remember to enqueue any scripts or styles conditionally to avoid loading assets sitewide. Complex shortcodes may delegate rendering to a PHP template or React component.
+
 ## Troubleshooting
 - Ensure scripts and styles are enqueued by viewing the page source for expected assets.
 - Shortcodes that rely on REST endpoints require permalinks to be enabled.

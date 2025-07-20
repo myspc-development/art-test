@@ -45,3 +45,7 @@ If an update introduces issues you can revert to the previous release:
 4. Restore your database backup if necessary.
 
 The **Updates** tab under **ArtPulse → Settings** shows the currently installed version and provides a manual **Check for Updates** button.
+
+## Automated Updates
+
+Enabling automatic updates ensures administrators always receive the latest bug fixes and security patches without manual intervention. In the WordPress Plugins list, click **Enable Auto-updates** next to **ArtPulse Management**. Alternatively, network admins can define `auto_update_plugins` in `wp-config.php` to keep all active plugins current. The plugin exposes a version check endpoint that returns the latest tagged release. Sites with the GitHub Updater plugin installed can poll this endpoint and install new versions as soon as they are published. After enabling automatic updates monitor the changelog for breaking changes and confirm that scheduled tasks continue to run correctly.
