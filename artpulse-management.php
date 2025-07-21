@@ -351,78 +351,6 @@ function ap_install_tables() {
 register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ap_install_tables');
 
 
-// Register Dashboard Preview admin page
-add_action('admin_menu', function () {
-    add_menu_page(
-        'Dashboard Preview',
-        'Dashboard Preview',
-        'manage_options',
-        'dashboard-preview',
-        'ap_render_dashboard_preview_page',
-        'dashicons-visibility',
-        80
-    );
-
-});
-
-add_action('admin_init', 'ap_maybe_redirect_diagnostics_slug');
-
-function ap_maybe_redirect_diagnostics_slug(): void
-{
-    $uri  = $_SERVER['REQUEST_URI'] ?? '';
-    $path = parse_url($uri, PHP_URL_PATH);
-    if ($path === '/wp-admin/ap-diagnostics') {
-        wp_safe_redirect(admin_url('admin.php?page=ap-diagnostics'));
-        exit;
-    }
-}
-
-function ap_render_dashboard_preview_page() {
-    ?>
-    <div class="wrap">
-        <h1>Dashboard Preview</h1>
-        <form method="get">
-            <?php wp_nonce_field('artpulse_admin_action', 'artpulse_nonce'); ?>
-            <input type="hidden" name="page" value="dashboard-preview" />
-            <select name="role">
-                <option value="">Select Role</option>
-                <?php foreach (array_keys(get_editable_roles()) as $r): ?>
-                    <option value="<?= esc_attr($r) ?>" <?= selected($_GET['role'] ?? '', $r) ?>><?= esc_html(ucfirst($r)) ?></option>
-                <?php endforeach; ?>
-            </select>
-            <button class="button button-primary">Preview</button>
-        </form>
-        <hr>
-    <?php
-    if (isset($_GET['role'])) {
-        if (
-            !isset($_GET['artpulse_nonce']) ||
-            !check_admin_referer('artpulse_admin_action', 'artpulse_nonce')
-        ) {
-            wp_die('Security check failed. Please try again.');
-        }
-    }
-
-    $role = sanitize_text_field($_GET['role'] ?? '');
-    $editable = array_keys(get_editable_roles());
-
-    if ($role && !in_array($role, $editable, true)) {
-        wp_die('Invalid role');
-    }
-
-    if ($role && !ap_user_can_edit_layout($role)) {
-        wp_die('You are not allowed to view this dashboard.');
-    }
-
-    if ($role) {
-        echo '<h2 class="ap-card__title">Previewing: ' . ucfirst($role) . ' Dashboard</h2>';
-        echo '<div id="ap-user-dashboard" class="ap-dashboard-columns">';
-        \ArtPulse\Admin\DashboardWidgetTools::render_role_dashboard_preview($role);
-        echo '</div>';
-    }
-
-    echo '</div>';
-}
 
 
 
@@ -749,16 +677,6 @@ add_action('admin_enqueue_scripts', function ($hook) {
     }
 });
 
-add_action('admin_enqueue_scripts', function ($hook) {
-    if ($hook === 'toplevel_page_dashboard-preview') {
-        wp_enqueue_script('sortablejs', plugin_dir_url(__FILE__) . 'assets/libs/sortablejs/Sortable.min.js', [], null, true);
-        wp_enqueue_script('role-dashboard', plugin_dir_url(__FILE__) . 'assets/js/role-dashboard.js', ['jquery', 'sortablejs'], '1.0.0', true);
-        wp_localize_script('role-dashboard', 'ArtPulseDashboard', [
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('ap_dashboard_nonce')
-        ]);
-    }
-});
 
 add_action('admin_enqueue_scripts', function ($hook) {
     if ($hook === 'toplevel_page_artpulse_roles') {
