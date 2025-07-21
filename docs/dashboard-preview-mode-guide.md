@@ -14,7 +14,7 @@ Dashboard Preview mode lets administrators design layouts for each role while vi
 
 A style panel next to the preview controls background color, border style, title font size and padding presets (S, M, L). Settings are stored under the `style` key in `ap_dashboard_widget_config`.
 
-1. Open **ArtPulse → Dashboard Preview**.
+1. Open **ArtPulse → Dashboard**.
 2. Choose a role from the dropdown.
 3. Adjust layout or styling.
 4. Click **Save** to store the configuration.

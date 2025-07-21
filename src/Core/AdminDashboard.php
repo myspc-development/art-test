@@ -80,12 +80,32 @@ class AdminDashboard
                 ]
             );
         }
+
+        // Enable drag & drop and widget toggles within the dashboard preview
+        wp_enqueue_script(
+            'sortablejs',
+            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/libs/sortablejs/Sortable.min.js',
+            [],
+            '1.15.0',
+            true
+        );
+
+        wp_enqueue_script(
+            'role-dashboard',
+            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/role-dashboard.js',
+            ['jquery', 'sortablejs'],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('role-dashboard', 'ArtPulseDashboard', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('ap_dashboard_nonce'),
+        ]);
     }
 
     public static function renderDashboard()
     {
-        echo '<div class="wrap"><h1>' . esc_html__('ArtPulse Dashboard','artpulse') . '</h1>';
-        echo '<div id="ap-dashboard-root"></div></div>';
-        wp_enqueue_script('ap-dashboard-js');
+        \ArtPulse\Admin\DashboardWidgetTools::render();
     }
 }
