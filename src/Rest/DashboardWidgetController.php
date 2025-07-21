@@ -9,7 +9,7 @@ use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
 /**
  * REST controller for the Dashboard Builder.
  */
-class DashboardWidgetsController {
+class DashboardWidgetController {
     public static function register(): void {
         add_action('rest_api_init', [self::class, 'register_routes']);
     }
@@ -38,6 +38,10 @@ class DashboardWidgetsController {
     public static function get_widgets(WP_REST_Request $request): WP_REST_Response {
         $role = sanitize_key($request->get_param('role'));
         $available = array_values(DashboardWidgetRegistry::get_for_role($role));
+        foreach ($available as &$widget) {
+            $widget['preview'] = DashboardWidgetRegistry::render($widget['id']);
+        }
+        unset($widget);
         $active = get_option("artpulse_dashboard_widgets_{$role}", [
             'role' => $role,
             'enabledWidgets' => [],
@@ -65,3 +69,4 @@ class DashboardWidgetsController {
         return rest_ensure_response(['saved' => true]);
     }
 }
+

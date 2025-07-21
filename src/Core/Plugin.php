@@ -235,7 +235,7 @@ class Plugin
         \ArtPulse\Rest\WidgetEditorController::register();
         \ArtPulse\Admin\DashboardLayoutEndpoint::register();
         \ArtPulse\DashboardBuilder\DashboardManager::register();
-        \ArtPulse\Rest\DashboardWidgetsController::register();
+        \ArtPulse\Rest\DashboardWidgetController::register();
         \ArtPulse\Core\ProfileMetrics::register();
         \ArtPulse\Core\RoleAuditLogger::register();
         OrgContext::register();

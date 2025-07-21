@@ -6,6 +6,7 @@
     const [available, setAvailable] = useState([]);
     const [order, setOrder] = useState([]);
     const [enabled, setEnabled] = useState({});
+    const [preview, setPreview] = useState({});
 
     useEffect(() => {
       if(!role){ return; }
@@ -15,6 +16,9 @@
         .then(r => r.json())
         .then(data => {
           setAvailable(data.available || []);
+          const prev = {};
+          (data.available || []).forEach(w => { prev[w.id] = w.preview || ''; });
+          setPreview(prev);
           const active = data.active || {};
           const map = {};
           (active.enabledWidgets || []).forEach(id => { map[id] = true; });
@@ -67,8 +71,16 @@
           );
         })
       ),
-      h('button', { onClick: save }, 'Save Layout')
-    );
+      h('button', { onClick: save }, 'Save Layout'),
+      h('h3', {}, 'Preview'),
+      h('div', { className: 'ap-preview' },
+        order.map(id => {
+          if(!enabled[id]) return null;
+          const html = preview[id] || '';
+          return h('div', { key:id, className:'ap-widget-preview', dangerouslySetInnerHTML:{__html: html} });
+        })
+      )
+      );
   }
 
   document.addEventListener('DOMContentLoaded', function(){
