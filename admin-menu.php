@@ -14,6 +14,16 @@ add_action('admin_menu', function () {
     );
 });
 
+// Redirect direct slug path to the admin.php endpoint
+add_action('admin_init', function () {
+    $uri  = $_SERVER['REQUEST_URI'] ?? '';
+    $path = parse_url($uri, PHP_URL_PATH);
+    if ($path === '/wp-admin/artpulse-widget-matrix') {
+        wp_safe_redirect(admin_url('admin.php?page=artpulse-widget-matrix'));
+        exit;
+    }
+});
+
 add_action('admin_enqueue_scripts', function ($hook) {
     if ($hook !== 'artpulse-settings_page_artpulse-widget-matrix') {
         return;
