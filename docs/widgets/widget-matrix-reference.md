@@ -8,6 +8,10 @@ status: complete
 
 # Widget Matrix Reference
 
+**Deprecated:** The old Widget Matrix page has been replaced by the new
+**Dashboard Builder** admin screen. Use the builder to configure role based
+widgets and layouts.
+
 Combined instructions, specification and verification for the admin Widget Role
 Matrix.
 

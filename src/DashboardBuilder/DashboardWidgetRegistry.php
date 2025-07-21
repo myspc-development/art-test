@@ -1,0 +1,74 @@
+<?php
+namespace ArtPulse\DashboardBuilder;
+
+/**
+ * Simple widget registry for the Dashboard Builder.
+ */
+class DashboardWidgetRegistry {
+    /** @var array<string,array> */
+    private static array $widgets = [];
+
+    /**
+     * Register a widget definition.
+     *
+     * Example:
+     * DashboardWidgetRegistry::register('event_summary', [
+     *     'title' => 'Upcoming Events',
+     *     'render_callback' => 'render_event_summary',
+     *     'roles' => ['artist', 'org_manager'],
+     * ]);
+     */
+    public static function register(string $id, array $args): void {
+        $id = sanitize_key($id);
+        if (!$id) {
+            return;
+        }
+        $defaults = [
+            'title' => '',
+            'render_callback' => null,
+            'roles' => [],
+        ];
+        $args = array_merge($defaults, $args);
+        if (!is_callable($args['render_callback'])) {
+            return;
+        }
+        self::$widgets[$id] = [
+            'id' => $id,
+            'title' => (string) $args['title'],
+            'render_callback' => $args['render_callback'],
+            'roles' => array_map('sanitize_key', (array) $args['roles']),
+        ];
+    }
+
+    /**
+     * Get all registered widgets.
+     */
+    public static function get_all(): array {
+        return self::$widgets;
+    }
+
+    /**
+     * Get widgets available for a specific role.
+     */
+    public static function get_for_role(string $role): array {
+        $role = sanitize_key($role);
+        return array_filter(
+            self::$widgets,
+            static function($w) use ($role) {
+                return empty($w['roles']) || in_array($role, (array) $w['roles'], true);
+            }
+        );
+    }
+
+    /**
+     * Render a widget by ID and return the output.
+     */
+    public static function render(string $id): string {
+        if (!isset(self::$widgets[$id])) {
+            return '';
+        }
+        ob_start();
+        call_user_func(self::$widgets[$id]['render_callback']);
+        return ob_get_clean();
+    }
+}
