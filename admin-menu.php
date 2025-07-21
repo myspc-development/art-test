@@ -3,16 +3,19 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-add_action('admin_menu', function () {
+add_action('admin_menu', 'ap_widget_matrix_register_page');
+
+function ap_widget_matrix_register_page(): void
+{
     add_submenu_page(
         'artpulse-settings',
-        'Dashboard Widget Matrix',
-        'Dashboard Widget Matrix',
+        __('Dashboard Widget Matrix', 'artpulse'),
+        __('Dashboard Widget Matrix', 'artpulse'),
         'manage_options',
         'artpulse-widget-matrix',
-        'render_widget_matrix_page'
+        'ap_render_widget_matrix_page'
     );
-});
+}
 
 // Redirect direct slug path to the admin.php endpoint
 add_action('admin_init', function () {
@@ -24,26 +27,30 @@ add_action('admin_init', function () {
     }
 });
 
-add_action('admin_enqueue_scripts', function ($hook) {
-    if ($hook !== 'artpulse-settings_page_artpulse-widget-matrix') {
+add_action('admin_enqueue_scripts', 'ap_widget_matrix_enqueue');
+
+function ap_widget_matrix_enqueue(string $hook): void
+{
+    if (strpos($hook, 'artpulse-widget-matrix') === false) {
         return;
     }
     wp_enqueue_script(
         'ap-widget-matrix',
-        plugins_url('dist/widget-matrix.js', ARTPULSE_PLUGIN_FILE),
-        ['react', 'react-dom'],
+        plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'dist/widget-matrix.js',
+        ['react', 'react-dom', 'wp-element'],
         '1.0.0',
         true
     );
-});
-
-function render_widget_matrix_page() {
-    echo '<div id="ap-widget-matrix-root"></div>';
-    wp_enqueue_script('ap-widget-matrix');
     wp_localize_script('ap-widget-matrix', 'APWidgetMatrix', [
         'root'  => esc_url_raw(rest_url()),
         'nonce' => wp_create_nonce('wp_rest'),
     ]);
+}
+
+function ap_render_widget_matrix_page(): void
+{
+    echo '<div id="ap-widget-matrix-root"></div>';
+    wp_enqueue_script('ap-widget-matrix');
 }
 
 
