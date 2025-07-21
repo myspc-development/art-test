@@ -10,7 +10,7 @@ status: complete
 
 This guide details how administrators configure dashboard layouts for each user role. It builds on the [Admin Widget Editor Guide](./admin-widget-editor-guide.md) and covers saving behavior, widget management and REST updates.
 
-🔗 View available widgets and role visibility in the [Widget Matrix](../widgets/widget-matrix-reference.md).
+🔗 Available widgets and role visibility can now be managed in the [Dashboard Builder](../widgets/widget-matrix-reference.md).
 
 ## Role Based Configuration
 
@@ -63,7 +63,7 @@ Use the **Preview as…** dropdown to impersonate a role. Changes to layout or s
 
 - [Admin Settings UI](./admin-settings-ui.md)
 - [Dashboard Editor Developer Guide](../dashboard-editor-developer-guide.md)
-- [Widget Matrix Reference](../widgets/widget-matrix-reference.md)
+- [Dashboard Builder Reference](../widgets/widget-matrix-reference.md)
 - [Sprint Plan – Dashboard Integration](../internal/planning/Sprint_Plan.md)
 - [Admin Feature Documentation Review](./admin-feature-review.md)
 
