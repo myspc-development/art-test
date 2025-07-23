@@ -4,6 +4,8 @@ namespace ArtPulse\DashboardBuilder;
 /**
  * Registers the Dashboard Builder admin page and enqueues the React app.
  */
+use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
+
 class DashboardManager {
     public static function register(): void {
         add_action('admin_menu', [self::class, 'add_menu']);
@@ -30,6 +32,7 @@ class DashboardManager {
             <ul id="ap-db-layout"></ul>
             <div id="ap-db-available"></div>
             <p><button id="ap-db-save" class="button button-primary">' . esc_html__('Save Changes', 'artpulse') . '</button></p>
+            <p id="ap-db-warning" style="display:none" class="notice notice-warning"></p>
         </div>';
     }
 
@@ -50,10 +53,21 @@ class DashboardManager {
             [],
             ARTPULSE_VERSION
         );
+        $widget_roles = [];
+        foreach (DashboardWidgetRegistry::get_all() as $def) {
+            foreach ((array)($def['roles'] ?? []) as $r) {
+                $widget_roles[$r] = true;
+            }
+        }
+        $roles = array_keys($widget_roles);
+        sort($roles);
+        if (!$roles) {
+            $roles = array_values(array_keys(get_editable_roles()));
+        }
         wp_localize_script('ap-dashboard-builder', 'APDashboardBuilder', [
             'rest_root' => esc_url_raw(rest_url()),
             'nonce'     => wp_create_nonce('wp_rest'),
-            'roles'     => array_values(array_keys(get_editable_roles())),
+            'roles'     => $roles,
         ]);
     }
 }
