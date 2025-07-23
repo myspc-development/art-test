@@ -122,7 +122,6 @@ status: complete
 * [curator-feedback.md](../curator-feedback.md)
 * [curator-tools.md](../curator-tools.md)
 * [dashboard-editor-developer-guide.md](../dashboard-editor-developer-guide.md)
-* [dashboard-menu-codex.md](../dashboard-menu-codex.md)
 * [dashboard-widget-design-codex.md](../dashboard-widget-design-codex.md)
 * [default-design-system-codex.md](../default-design-system-codex.md)
 * [developer.md](../developer.md)

@@ -52,8 +52,7 @@ automatically.
 Administrators manage role defaults via the **Widget Editor**. Users can drag and drop their
 personal widgets on the dashboard screen. WordPress stores each arrangement in the
 `metaboxorder_dashboard` meta key. Existing widgets like **Site Overview**, **Upcoming Events**
-and **Trending Tags** show how to structure menu nodes and widget blocks defined in
-[Dashboard Menu Codex](../dashboard-menu-codex.md).
+and **Trending Tags** show how to structure menu nodes and widget blocks.
 
 Use the reset controls to restore defaults or export/import JSON layouts when migrating
 settings.

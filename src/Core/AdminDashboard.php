@@ -56,30 +56,7 @@ class AdminDashboard
             return;
         }
 
-        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-dashboard.js';
-        $url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-dashboard.js';
-
-        if (file_exists($path)) {
-            wp_enqueue_script(
-                'ap-dashboard-js',
-                $url,
-                ['wp-element', 'wp-api-fetch'],
-                filemtime($path),
-                [
-                    'strategy'  => 'defer',
-                    'in_footer' => true,
-                ]
-            );
-
-            wp_localize_script(
-                'ap-dashboard-js',
-                'APDashboard',
-                [
-                    'nonce'    => wp_create_nonce('wp_rest'),
-                    'rest_url' => rest_url('artpulse/v1/'),
-                ]
-            );
-        }
+        // Legacy dashboard script removed.
 
         // Enable drag & drop and widget toggles within the dashboard preview
         wp_enqueue_script(

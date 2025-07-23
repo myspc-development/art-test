@@ -19,12 +19,6 @@ class OrgDashboardAdmin {
         add_action('admin_init', [self::class, 'handleExports']);
     }
 
-    // Hide the default Organizations CPT menu for non-admins
-    public static function hide_org_menu() {
-        if (!current_user_can('manage_options')) {
-            remove_menu_page('edit.php?post_type=artpulse_org');
-        }
-    }
 
     /**
      * Handle CSV or PDF billing exports before page output.
