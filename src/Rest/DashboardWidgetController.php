@@ -35,25 +35,37 @@ class DashboardWidgetController {
         return current_user_can('manage_options') && wp_verify_nonce($nonce, 'wp_rest');
     }
 
-    public static function get_widgets(WP_REST_Request $request): WP_REST_Response {
+    public static function get_widgets(WP_REST_Request $request): WP_REST_Response|WP_Error {
         $role = sanitize_key($request->get_param('role'));
+        if (!$role) {
+            return new WP_Error('invalid_role', __('Role parameter missing', 'artpulse'), ['status' => 400]);
+        }
+
         $available = array_values(DashboardWidgetRegistry::get_for_role($role));
+        if (empty($available) && !get_role($role)) {
+            error_log('Dashboard widgets request for unsupported role: ' . $role);
+            return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
+        }
         foreach ($available as &$widget) {
             $widget['preview'] = DashboardWidgetRegistry::render($widget['id']);
         }
         unset($widget);
 
         $active = get_option("artpulse_dashboard_widgets_{$role}");
-        if (!is_array($active) || empty($active['layout']) && empty($active['layoutOrder'])) {
+        if (!is_array($active) || (empty($active['layout']) && empty($active['layoutOrder']))) {
             $preset_file = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . "data/preset-{$role}.json";
             if (file_exists($preset_file)) {
-                $preset_json = file_get_contents($preset_file);
-                $preset_layout = json_decode($preset_json, true);
-                if (is_array($preset_layout)) {
-                    $active = [
-                        'role'   => $role,
-                        'layout' => $preset_layout,
-                    ];
+                $preset_json = @file_get_contents($preset_file);
+                if ($preset_json === false) {
+                    error_log('Failed reading preset file: ' . $preset_file);
+                } else {
+                    $preset_layout = json_decode($preset_json, true);
+                    if (json_last_error() === JSON_ERROR_NONE && is_array($preset_layout)) {
+                        $active = [
+                            'role'   => $role,
+                            'layout' => $preset_layout,
+                        ];
+                    }
                 }
             }
         }
@@ -75,6 +87,10 @@ class DashboardWidgetController {
         $role = sanitize_key($data['role'] ?? '');
         if (!$role) {
             return new WP_Error('invalid_role', __('Invalid role', 'artpulse'), ['status' => 400]);
+        }
+        if (empty(DashboardWidgetRegistry::get_for_role($role)) && !get_role($role)) {
+            error_log('Attempt to save dashboard layout for unsupported role: ' . $role);
+            return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
         }
         $enabled = array_map('sanitize_key', (array) ($data['enabledWidgets'] ?? []));
         $order   = array_map('sanitize_key', (array) ($data['layoutOrder'] ?? []));
