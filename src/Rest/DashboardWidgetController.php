@@ -4,7 +4,9 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
-use ArtPulse\Core\DashboardWidgetRegistry;
+// Use the dashboard builder registry rather than the core registry
+// so we can query widgets and render previews for the builder UI.
+use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
 
 /**
  * REST controller for the Dashboard Builder.
