@@ -49,7 +49,14 @@ See the full roadmap in the main document (canvas), including:
 6. **Phase 6 – QA, Testing, and Docs:** Ongoing enhancements
 
 ## 🎨 Artist Dashboard (Creator)
-(Current status unchanged.)
+
+### Current Features
+- Artist Inbox Preview – [`assets/js/widgets/ArtistInboxPreviewWidget.jsx`](../assets/js/widgets/ArtistInboxPreviewWidget.jsx)
+- Artist Revenue Summary – [`assets/js/widgets/ArtistRevenueSummaryWidget.jsx`](../assets/js/widgets/ArtistRevenueSummaryWidget.jsx)
+- Artist Spotlight – [`assets/js/widgets/ArtistSpotlightWidget.jsx`](../assets/js/widgets/ArtistSpotlightWidget.jsx)
+
+### Partially Implemented / Documented but Missing
+*(none)*
 
 ## 🏢 Organization Dashboard
 The following widgets are now implemented:
