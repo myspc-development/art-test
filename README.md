@@ -5,6 +5,7 @@ Site administrators should consult the [Admin Guide](docs/guides/admin/admin-gui
 
 ## Documentation
 - [Architecture Docs](docs/architecture/)
+  - [Role-Based Dashboard Builder](docs/architecture/Role_Based_Dashboard_Builder.md)
 - [Guides](docs/guides/)
 - [Internal Docs](docs/internal/)
 
