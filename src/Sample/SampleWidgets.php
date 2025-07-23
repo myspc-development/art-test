@@ -1,4 +1,13 @@
 <?php
+/**
+ * Example dashboard widgets used for developer demos.
+ *
+ * These widgets show how to register simple widgets via
+ * DashboardWidgetRegistry. They are loaded on the `init`
+ * hook from `artpulse-management.php` and can be safely
+ * removed in production installs. See
+ * `docs/developer/sample-widgets.md` for details.
+ */
 namespace ArtPulse\Sample;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
