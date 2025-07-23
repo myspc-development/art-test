@@ -26,7 +26,7 @@ The overview summarizes the main Dashboard Modules available to administrators.
 - Export CSV reports from the **Snapshots** submenu.
 
 ## Settings Tabs
-All options live under **ArtPulse → Settings**. Tabs such as **General**, **Location APIs**, **Import/Export**, **Config Backup**, **Updates** and **Shortcode Pages** divide the settings. Each tab is a Menu Node referenced in the [Dashboard Menu Codex](../dashboard-menu-codex.md).
+All options live under **ArtPulse → Settings**. Tabs such as **General**, **Location APIs**, **Import/Export**, **Config Backup**, **Updates** and **Shortcode Pages** divide the settings.
 
 ## Additional Notes
 - The tools are responsive and keyboard accessible.

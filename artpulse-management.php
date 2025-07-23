@@ -695,17 +695,6 @@ add_action('admin_enqueue_scripts', function ($hook) {
     }
 });
 
-add_action('admin_enqueue_scripts', function () {
-    if (isset($_GET['page']) && in_array($_GET['page'], ['ap-dashboard', 'artpulse-dashboard'], true)) {
-        wp_enqueue_script(
-            'ap-dashboard',
-            plugin_dir_url(__FILE__) . 'assets/js/ap-dashboard.js',
-            ['wp-element', 'wp-api-fetch'],
-            filemtime(plugin_dir_path(__FILE__) . 'assets/js/ap-dashboard.js'),
-            true
-        );
-    }
-});
 
 
 // Enqueue the full SortableJS library on dashboard pages.

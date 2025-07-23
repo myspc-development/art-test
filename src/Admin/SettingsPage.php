@@ -151,11 +151,6 @@ class SettingsPage
                 'desc'  => __('Do not load ArtPulse CSS on the frontend.', 'artpulse'),
                 'type'  => 'checkbox',
             ],
-            'use_wp_nav_menu' => [
-                'label' => __('Use WordPress Navigation Menu', 'artpulse'),
-                'desc'  => __('Disable the React sidebar menu and rely on your theme navigation.', 'artpulse'),
-                'type'  => 'checkbox',
-            ],
             'default_rsvp_limit' => [
                 'label' => __('Default RSVP Limit', 'artpulse'),
                 'desc'  => __('Pre-filled limit for new events.', 'artpulse'),
@@ -778,7 +773,6 @@ class SettingsPage
                 'auto_expire_events',
                 'enable_artworks_for_sale',
                 'disable_styles',
-                'use_wp_nav_menu',
                 'waitlists_enabled',
                 'keep_data_on_uninstall',
                 'oauth_google_enabled',

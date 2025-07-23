@@ -151,22 +151,7 @@ class EnqueueAssets {
         $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
         $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
 
-        // Dashboard logic for plugin admin pages
-        $dashboard_path = $plugin_dir . 'assets/js/ap-dashboard.js';
-        if (file_exists($dashboard_path)) {
-            wp_enqueue_script(
-                'ap-dashboard',
-                $plugin_url . 'assets/js/ap-dashboard.js',
-                ['wp-element', 'wp-api-fetch'],
-                filemtime($dashboard_path),
-                true
-            );
-
-            wp_localize_script('ap-dashboard', 'APDashboard', [
-                'nonce'    => wp_create_nonce('wp_rest'),
-                'rest_url' => esc_url_raw(rest_url('artpulse/v1/')),
-            ]);
-        }
+        // React dashboard script removed; rely on WordPress admin menus instead.
 
         if ($screen->base === 'artpulse-settings_page_artpulse-engagement') {
             $custom_js_path = $plugin_dir . '/assets/js/ap-engagement-dashboard.js';
@@ -720,19 +705,7 @@ class EnqueueAssets {
             ]);
         }
 
-        if ( is_page('dashboard') || is_page('artist-dashboard') || is_page('organization-dashboard') ) {
-            $script_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-dashboard.js';
-            $script_url  = plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-dashboard.js';
-            if ( file_exists( $script_path ) ) {
-                wp_enqueue_script('ap-dashboard', $script_url, ['wp-element', 'wp-api-fetch'], filemtime($script_path), true);
-                wp_localize_script('ap-dashboard', 'APDashboard', [
-                    'ajax_url' => admin_url('admin-ajax.php'),
-                    'nonce'    => wp_create_nonce('ap_dashboard_nonce'),
-                ]);
-            } else {
-                error_log('[ArtPulse] Missing ap-dashboard.js at expected path: ' . $script_path);
-            }
-        }
+        // Front-end dashboard script removed.
 
 
         $opts = get_option('artpulse_settings', []);

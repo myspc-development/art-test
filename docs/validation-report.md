@@ -85,7 +85,6 @@ status: complete
 | curator-feedback.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | curator-tools.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | dashboard-editor-developer-guide.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| dashboard-menu-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | dashboard-widget-design-codex.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | default-design-system-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | developer.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |

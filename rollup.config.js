@@ -31,13 +31,6 @@ function createConfig(input, file, name, globals = {}, external = Object.keys(gl
 
 const configs = [
   createConfig('assets/js/OrganizationSubmissionForm.jsx', 'assets/js/ap-org-submission.js', 'APOrgSubmission', { react: 'React' }),
-  createConfig('assets/js/SidebarMenu.jsx', 'assets/js/sidebar-menu.js', 'APSidebarMenu', { react: 'React' }),
-  createConfig('assets/js/dashboard.jsx', 'assets/js/ap-dashboard.js', 'APDashboard', {
-    react: 'React',
-    'react-dom': 'ReactDOM',
-    'assets/js/SidebarMenu.jsx': 'APSidebarMenu',
-    'assets/js/rolesMenus.js': 'rolesMenus'
-  }),
   createConfig('assets/js/admin-dashboard-widgets-editor.jsx', 'assets/js/admin-dashboard-widgets-editor.js', 'APDashboardWidgetsEditor', {
     react: 'React',
     'react-dom/client': 'ReactDOM'

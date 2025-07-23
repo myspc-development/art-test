@@ -66,17 +66,8 @@ add_action( 'admin_menu', 'hide_artpulse_plugin_menu', 99 );
 
 ## Switch to WordPress Menus
 
-The plugin normally loads a React sidebar menu. To disable it and rely solely on
-your WordPress navigation menu you can enable **Use WordPress Navigation Menu**
-under **ArtPulse → Settings → General**. The same effect can be achieved with
-this filter in a small plugin or `functions.php`:
-
-```php
-add_filter( 'ap_use_wp_nav_menu', '__return_true' );
-```
-
-When the filter returns `true`, `SidebarMenu.jsx` is not enqueued and the React
-dashboard receives `useWpNavMenu` set to `true`.
+The plugin now relies entirely on your WordPress navigation menus. The previous
+React sidebar and its related settings have been removed.
 
 ## Result
 

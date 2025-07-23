@@ -368,7 +368,6 @@ class Plugin
         \ArtPulse\Admin\EventNotesTasks::register();
         \ArtPulse\Admin\ProfileLinkRequestAdmin::register();
         add_action('admin_menu', [\ArtPulse\Admin\OrgDashboardAdmin::class, 'register']);
-        add_action('admin_menu', [\ArtPulse\Admin\OrgDashboardAdmin::class, 'hide_org_menu'], 999);
         add_action('save_post', [\ArtPulse\Admin\OrgDashboardAdmin::class, 'clear_cache'], 10, 3);
         \ArtPulse\Blocks\AdvancedTaxonomyFilterBlock::register();
         \ArtPulse\Blocks\AjaxFilterBlock::register();
@@ -757,41 +756,9 @@ class Plugin
             'dashboardUrl'    => self::get_user_dashboard_url(),
         ]);
 
-        $opts        = get_option('artpulse_settings', []);
-        $use_wp_menu = !empty($opts['use_wp_nav_menu']);
-        $use_wp_menu = apply_filters('ap_use_wp_nav_menu', $use_wp_menu);
+        // The custom React sidebar has been removed. WordPress menus are used instead.
 
-        if (!$use_wp_menu) {
-            $sidebar_path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/js/sidebar-menu.js';
-            if (file_exists($sidebar_path)) {
-                wp_enqueue_script(
-                    'ap-sidebar-menu',
-                    plugins_url('assets/js/sidebar-menu.js', ARTPULSE_PLUGIN_FILE),
-                    ['wp-element'],
-                    filemtime($sidebar_path),
-                    true
-                );
-            }
-        }
-
-        wp_enqueue_script(
-            'ap-dashboard',
-            plugins_url('assets/js/ap-dashboard.js', ARTPULSE_PLUGIN_FILE),
-            ['wp-element', 'wp-api-fetch'],
-            '1.0.0',
-            [
-                'strategy'  => 'defer',
-                'type'      => 'module',
-                'in_footer' => true,
-            ]
-        );
-
-        $user = wp_get_current_user();
-        $role = $user->roles[0] ?? '';
-        wp_localize_script('ap-dashboard', 'APDashboard', [
-            'role'         => $role,
-            'useWpNavMenu' => $use_wp_menu,
-        ]);
+        // The standalone dashboard script has been removed.
 
         if (function_exists('ap_enqueue_global_styles')) {
             ap_enqueue_global_styles();
