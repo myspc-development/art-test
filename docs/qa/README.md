@@ -14,6 +14,7 @@ Testing resources and checklists.
 - `widget-qa-checklist.md`
 - `testing-strategy.md`
 - `End_to_End_Testing_Guide.md`
+- `dashboard-builder-uat-checklist.md`
 Refer to the [Widgets Documentation](../widgets/README.md) for implementation details used during testing.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
