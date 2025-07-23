@@ -366,6 +366,36 @@ function ap_widget_spotlight_features(array $vars = []): string
     return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
 }
 
+function ap_widget_upcoming_events_location(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/upcoming-events-location.php', $vars);
+}
+
+function ap_widget_followed_artists_activity(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/followed-artists-activity.php', $vars);
+}
+
+function ap_widget_artist_inbox_preview(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/artist-inbox-preview.php', $vars);
+}
+
+function ap_widget_my_rsvps(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/my-rsvps.php', $vars);
+}
+
+function ap_widget_my_shared_events_activity(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/my-shared-events-activity.php', $vars);
+}
+
+function ap_widget_recommended_for_you_member(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/recommended-for-you.php', $vars);
+}
+
 /**
  * Register core dashboard widgets.
  */
@@ -661,6 +691,78 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_followed_artists',
         [
             'roles' => ['member', 'artist'],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'upcoming_events_by_location',
+        __('Upcoming Events Near You', 'artpulse'),
+        'location',
+        __('Lists events based on your location or saved city.', 'artpulse'),
+        'ap_widget_upcoming_events_location',
+        [
+            'roles'    => ['member'],
+            'category' => 'events',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'followed_artists_activity',
+        __('Followed Artists Activity', 'artpulse'),
+        'activity',
+        __('Recent uploads or events from artists you follow.', 'artpulse'),
+        'ap_widget_followed_artists_activity',
+        [
+            'roles'    => ['member'],
+            'category' => 'engagement',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'artist_inbox_preview',
+        __('Artist Inbox Preview', 'artpulse'),
+        'inbox',
+        __('Recent unread messages from artists.', 'artpulse'),
+        'ap_widget_artist_inbox_preview',
+        [
+            'roles'    => ['member'],
+            'category' => 'engagement',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'my_rsvps',
+        __('My RSVPs', 'artpulse'),
+        'calendar',
+        __('Events you have RSVP\'d to.', 'artpulse'),
+        'ap_widget_my_rsvps',
+        [
+            'roles'    => ['member'],
+            'category' => 'events',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'my_shared_events_activity',
+        __('My Shared Events', 'artpulse'),
+        'share',
+        __('Events you\'ve shared and engagement.', 'artpulse'),
+        'ap_widget_my_shared_events_activity',
+        [
+            'roles'    => ['member'],
+            'category' => 'engagement',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'recommended_for_you',
+        __('Recommended For You', 'artpulse'),
+        'thumbs-up',
+        __('Suggestions based on your interests.', 'artpulse'),
+        'ap_widget_recommended_for_you_member',
+        [
+            'roles'    => ['member'],
+            'category' => 'recommended',
         ]
     );
 

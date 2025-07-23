@@ -24,5 +24,11 @@ Below is a summary of built in dashboard widgets. Custom plugins can register ad
 | notifications | Notifications | engagement | Recent notifications |
 | widget_nearby_events_map | Nearby Events | events | Events around your location. |
 | widget_my_favorites | My Favorite Events | events | Your saved events. |
+| upcoming_events_by_location | Upcoming Events Near You | events | Lists local events based on user location |
+| followed_artists_activity | Followed Artists Activity | engagement | Recent posts from followed artists |
+| artist_inbox_preview | Artist Inbox Preview | engagement | Unread messages from artists |
+| my_rsvps | My RSVPs | events | Events the user has RSVP'd to |
+| my_shared_events_activity | My Shared Events | engagement | Events the user shared |
+| recommended_for_you | Recommended For You | recommended | Suggested events or artists |
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*
