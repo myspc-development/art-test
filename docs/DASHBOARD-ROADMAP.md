@@ -52,6 +52,12 @@ See the full roadmap in the main document (canvas), including:
 (Current status unchanged.)
 
 ## 🏢 Organization Dashboard
-(Current status unchanged.)
+The following widgets are now implemented:
+
+- Donor Activity Widget
+- Audience CRM Widget
+- Sponsored Content Management tools
+- Embed Tool and sharing panel
+- Branding Settings panel
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

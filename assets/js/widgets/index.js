@@ -6,6 +6,10 @@ import { ShareThisEventWidget } from './ShareThisEventWidget.jsx';
 import { ArtistInboxPreviewWidget } from './ArtistInboxPreviewWidget.jsx';
 import { ArtistRevenueSummaryWidget } from './ArtistRevenueSummaryWidget.jsx';
 import { ArtistSpotlightWidget } from './ArtistSpotlightWidget.jsx';
+import { AudienceCRMWidget } from './AudienceCRMWidget.jsx';
+import { SponsoredEventConfigWidget } from './SponsoredEventConfigWidget.jsx';
+import { EmbedToolWidget } from './EmbedToolWidget.jsx';
+import { OrgBrandingSettingsPanel } from './OrgBrandingSettingsPanel.jsx';
 
 export default [
   {
@@ -55,5 +59,29 @@ export default [
     title: 'Artist Spotlight',
     component: ArtistSpotlightWidget,
     roles: ['artist']
+  },
+  {
+    id: 'audience_crm',
+    title: 'Audience CRM',
+    component: AudienceCRMWidget,
+    roles: ['organization']
+  },
+  {
+    id: 'sponsored_event_config',
+    title: 'Sponsored Event Config',
+    component: SponsoredEventConfigWidget,
+    roles: ['organization']
+  },
+  {
+    id: 'embed_tool',
+    title: 'Embed Tool',
+    component: EmbedToolWidget,
+    roles: ['organization']
+  },
+  {
+    id: 'branding_settings_panel',
+    title: 'Branding Settings',
+    component: OrgBrandingSettingsPanel,
+    roles: ['organization']
   }
 ];

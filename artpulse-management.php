@@ -235,6 +235,15 @@ add_action('init', function () {
     if (class_exists('\\ArtPulse\\Sample\\RoleBasedWidgets')) {
         \ArtPulse\Sample\RoleBasedWidgets::register();
     }
+    if (file_exists(__DIR__ . '/widgets/DonorActivityWidget.php')) {
+        require_once __DIR__ . '/widgets/DonorActivityWidget.php';
+    }
+    if (file_exists(__DIR__ . '/widgets/SponsorDisplayWidget.php')) {
+        require_once __DIR__ . '/widgets/SponsorDisplayWidget.php';
+    }
+    if (file_exists(__DIR__ . '/widgets/OrgWidgetSharingPanel.php')) {
+        require_once __DIR__ . '/widgets/OrgWidgetSharingPanel.php';
+    }
 });
 
 add_action('init', function () {
