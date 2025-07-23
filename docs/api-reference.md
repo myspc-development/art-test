@@ -358,6 +358,7 @@ Example response:
 ```json
 { "summary": "Award-winning painter based in NYC." }
 ```
+See [Bio Summary Endpoint](api/bio-summary.md) for details.
 
 ### `GET /artpulse/v1/promoted`
 
