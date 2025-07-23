@@ -58,7 +58,7 @@ from any directory, calendar popover or dashboard list.
 - Open your **My Events** dashboard from the main menu.
 - The list shows every event you have RSVPd to or favorited.
 - Your next upcoming RSVP is highlighted at the top.
-- Use the **Toggle Dark Mode** button or drag widgets by their handle to customize the layout.
+- Use the **Toggle Dark Mode** button or drag widgets by their handle to customize the layout. Click **Reset Layout** to restore the default arrangement for your role. Use **Export** and **Import** to share dashboard templates.
 
 All dashboards for members, artists and organizations are rendered with the `[ap_user_dashboard]` shortcode. Default layouts for each role come from the `ap_dashboard_widget_config` option.
 

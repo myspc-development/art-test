@@ -26,6 +26,8 @@ The editor exposes hooks so plugins can add controls or modify behavior. Use the
 
 Each widget opens a configuration modal where admins can adjust width, height and custom settings such as refresh intervals. These values are stored with the layout JSON described in [Dashboard Layout Config](dashboard-layout-config.md).
 
+The editor toolbar now includes **Reset Layout**, **Export** and **Import** buttons. Reset clears the current user's layout so the role default loads on next page view. Export downloads the layout JSON while Import lets admins paste or upload a template. A **Preview Mode** toggle renders the dashboard exactly as a selected role would see it.
+
 ## Debugging Tips
 Enable `SCRIPT_DEBUG` in `wp-config.php` to load unminified JavaScript. The editor logs layout actions to the browser console when the `AP_DEBUG` constant is true. If widgets fail to render, check the network tab for REST errors and confirm that permalinks are enabled.
 
