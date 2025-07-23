@@ -5,13 +5,14 @@
   const nonce = APDashboardBuilder.nonce;
 
   function fetchWidgets(role){
-    console.log('Selected role', role);
+    console.log('selectedRole', role);
     $.ajax({
       url: restRoot + 'artpulse/v1/dashboard-widgets?role=' + encodeURIComponent(role),
       method: 'GET',
       beforeSend: xhr => xhr.setRequestHeader('X-WP-Nonce', nonce),
       success: res => {
         widgets = res.available || [];
+        console.log('widgets', widgets);
         if(res.active && Array.isArray(res.active.layout)){
           layout = res.active.layout;
         } else if(res.active && Array.isArray(res.active.layoutOrder)){
@@ -19,8 +20,10 @@
         } else {
           layout = widgets.map(w => ({id:w.id, visible:true}));
         }
-        console.log('Available widgets', widgets);
-        console.log('Layout config', layout);
+        const map = {};
+        widgets.forEach(w => { map[w.id] = true; });
+        console.log('widgetComponentMap', map);
+        console.log('layoutConfig', layout);
         render();
       }
     });

@@ -4,7 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
  * REST controller for the Dashboard Builder.
@@ -42,11 +42,28 @@ class DashboardWidgetController {
             $widget['preview'] = DashboardWidgetRegistry::render($widget['id']);
         }
         unset($widget);
-        $active = get_option("artpulse_dashboard_widgets_{$role}", [
-            'role' => $role,
-            'enabledWidgets' => [],
-            'layoutOrder' => [],
-        ]);
+
+        $active = get_option("artpulse_dashboard_widgets_{$role}");
+        if (!is_array($active) || empty($active['layout']) && empty($active['layoutOrder'])) {
+            $preset_file = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . "data/preset-{$role}.json";
+            if (file_exists($preset_file)) {
+                $preset_json = file_get_contents($preset_file);
+                $preset_layout = json_decode($preset_json, true);
+                if (is_array($preset_layout)) {
+                    $active = [
+                        'role'   => $role,
+                        'layout' => $preset_layout,
+                    ];
+                }
+            }
+        }
+        if (!is_array($active)) {
+            $active = [
+                'role' => $role,
+                'enabledWidgets' => array_column($available, 'id'),
+                'layoutOrder' => array_column($available, 'id'),
+            ];
+        }
         return rest_ensure_response([
             'available' => $available,
             'active'    => $active,
