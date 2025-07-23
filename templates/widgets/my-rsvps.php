@@ -1,0 +1,7 @@
+<?php
+extract(ap_template_context($args ?? [], ['visible' => true]));
+?>
+<div id="my-rsvps-widget" class="ap-card" role="region" aria-labelledby="my-rsvps-title" data-widget="my-rsvps" <?php echo $visible ? '' : 'hidden'; ?>>
+    <h2 id="my-rsvps-title" class="ap-card__title"><?php esc_html_e('My RSVPs','artpulse'); ?></h2>
+    <div id="ap-my-rsvps"></div>
+</div>

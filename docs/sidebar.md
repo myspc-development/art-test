@@ -25,6 +25,12 @@ status: complete
   * [chat-widget.md](codex-chapters/chat-widget.md)
   * [qa-widget.md](codex-chapters/qa-widget.md)
   * [ticketing-widget.md](codex-chapters/ticketing-widget.md)
+  * [upcoming-events-by-location-widget.md](codex-chapters/upcoming-events-by-location-widget.md)
+  * [followed-artists-activity-widget.md](codex-chapters/followed-artists-activity-widget.md)
+  * [artist-inbox-preview-widget.md](codex-chapters/artist-inbox-preview-widget.md)
+  * [my-rsvps-widget.md](codex-chapters/my-rsvps-widget.md)
+  * [my-shared-events-activity-widget.md](codex-chapters/my-shared-events-activity-widget.md)
+  * [recommended-for-you-widget.md](codex-chapters/recommended-for-you-widget.md)
 * **Developer**
   * [Overview](developer/README.md)
   * [react-forms-codex.md](developer/react-forms-codex.md)
