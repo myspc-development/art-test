@@ -49,6 +49,18 @@ Users can toggle the digest, pick topics, choose weekly or monthly cadence and p
 ### E. Admin Metrics
 Track open and click rates, reach per org or tag and unsubscribe counts.
 
+### F. Weekly Recommendations Job
+`WeeklyRecommendations::register()` boots the recommendation engine. It hooks
+into `init` to schedule a weekly cron task:
+```php
+ArtPulse\Personalization\WeeklyRecommendations::register();
+wp_schedule_event( time(), 'weekly', 'ap_generate_recommendations' );
+```
+When the `ap_generate_recommendations` action runs, `generate()` loops through
+all users, fetches IDs from `RecommendationEngine::get_recommendations()` and
+saves them to the `ap_weekly_recommendations` user meta. The digest and
+`[ap_recommendations]` shortcode read from this cache.
+
 ## Sprint L3 – Syndication Feeds (iCal, JSON, RSS)
 ### A. Feed Types
 | Type | Route |
