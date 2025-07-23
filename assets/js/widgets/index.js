@@ -3,6 +3,9 @@ import { MyFavoritesWidget } from './MyFavoritesWidget.jsx';
 import { RSVPButton } from './RSVPButton.jsx';
 import { EventChatWidget } from './EventChatWidget.jsx';
 import { ShareThisEventWidget } from './ShareThisEventWidget.jsx';
+import { ArtistInboxPreviewWidget } from './ArtistInboxPreviewWidget.jsx';
+import { ArtistRevenueSummaryWidget } from './ArtistRevenueSummaryWidget.jsx';
+import { ArtistSpotlightWidget } from './ArtistSpotlightWidget.jsx';
 
 export default [
   {
@@ -34,5 +37,23 @@ export default [
     title: 'Share This Event',
     component: ShareThisEventWidget,
     roles: ['member', 'artist']
+  },
+  {
+    id: 'artist_inbox_preview_widget',
+    title: 'Artist Inbox Preview',
+    component: ArtistInboxPreviewWidget,
+    roles: ['artist']
+  },
+  {
+    id: 'artist_revenue_summary',
+    title: 'Revenue Summary',
+    component: ArtistRevenueSummaryWidget,
+    roles: ['artist']
+  },
+  {
+    id: 'artist_spotlight',
+    title: 'Artist Spotlight',
+    component: ArtistSpotlightWidget,
+    roles: ['artist']
   }
 ];

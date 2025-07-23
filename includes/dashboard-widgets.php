@@ -381,6 +381,16 @@ function ap_widget_artist_inbox_preview(array $vars = []): string
     return ap_load_dashboard_template('widgets/artist-inbox-preview.php', $vars);
 }
 
+function ap_widget_artist_revenue_summary(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/artist-revenue-summary.php', $vars);
+}
+
+function ap_widget_artist_spotlight(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/artist-spotlight-widget.php', $vars);
+}
+
 function ap_widget_my_rsvps(array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/my-rsvps.php', $vars);
@@ -842,6 +852,30 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_spotlight_features',
         [
             'roles' => ['member', 'artist', 'organization'],
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'artist_revenue_summary',
+        __('Artist Revenue Summary', 'artpulse'),
+        'dollar-sign',
+        __('Revenue totals from tickets and donations.', 'artpulse'),
+        'ap_widget_artist_revenue_summary',
+        [
+            'roles' => ['artist'],
+            'category' => 'commerce',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'artist_spotlight',
+        __('Artist Spotlight', 'artpulse'),
+        'star',
+        __('Recent mentions and highlights.', 'artpulse'),
+        'ap_widget_artist_spotlight',
+        [
+            'roles' => ['artist'],
+            'category' => 'community',
         ]
     );
 
