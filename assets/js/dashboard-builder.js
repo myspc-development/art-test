@@ -5,6 +5,7 @@
   const nonce = APDashboardBuilder.nonce;
 
   function fetchWidgets(role){
+    console.log('Selected role', role);
     $.ajax({
       url: restRoot + 'artpulse/v1/dashboard-widgets?role=' + encodeURIComponent(role),
       method: 'GET',
@@ -18,6 +19,8 @@
         } else {
           layout = widgets.map(w => ({id:w.id, visible:true}));
         }
+        console.log('Available widgets', widgets);
+        console.log('Layout config', layout);
         render();
       }
     });
@@ -43,6 +46,12 @@
         );
       }
     });
+
+    if(!widgets.length){
+      $('#ap-db-warning').text('No layout or widgets available for selected role.').show();
+    } else {
+      $('#ap-db-warning').hide();
+    }
   }
 
   function updateLayout(){
