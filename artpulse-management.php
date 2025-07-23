@@ -226,7 +226,8 @@ add_action('admin_init', function () {
     }
 });
 
-// Load sample widgets for testing
+// Load developer sample widgets for demonstration purposes.
+// See docs/developer/sample-widgets.md for details on these examples.
 add_action('init', function () {
     if (class_exists('\\ArtPulse\\Sample\\SampleWidgets')) {
         \ArtPulse\Sample\SampleWidgets::register();
