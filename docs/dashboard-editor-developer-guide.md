@@ -11,7 +11,7 @@ status: complete
 This document provides implementation details for the drag-and-drop dashboard editor. It builds on the Widget Manager reference and explains how the editor assembles layouts, persists changes and enforces role permissions.
 
 ## Architecture Overview
-The editor is a React application bundled via Webpack. Widget blocks are registered in PHP and exposed through a REST endpoint. When the editor loads it fetches the registry along with the user's existing layout. Each widget has a unique identifier and configuration data stored in the `wp_usermeta` table.
+The editor is a React application bundled via Webpack. Widget blocks are registered in PHP and exposed through a REST endpoint. When the editor loads it fetches the registry along with the user's existing layout. Each widget has a unique identifier and configuration data stored in the `wp_usermeta` table. Preview mode lets administrators switch roles on the fly so they can test layouts for **Member**, **Artist** and **Organization** dashboards.
 
 The layout state is managed by Redux. Drag handles update widget order while resize actions adjust column spans. Changes are debounced and automatically saved through a REST `PUT` request. If the network request fails, the editor surfaces an inline error and reverts the layout.
 
@@ -23,6 +23,8 @@ Only users with the `manage_dashboard` capability can modify layouts. The capabi
 
 ## Extending the Editor
 The editor exposes hooks so plugins can add controls or modify behavior. Use the `ap_dashboard_editor_init` action to enqueue extra scripts. Filters allow you to alter the list of available widgets or restrict categories. For significant UI changes consider forking the React app and submitting a pull request so the team can review design impacts.
+
+Each widget opens a configuration modal where admins can adjust width, height and custom settings such as refresh intervals. These values are stored with the layout JSON described in [Dashboard Layout Config](dashboard-layout-config.md).
 
 ## Debugging Tips
 Enable `SCRIPT_DEBUG` in `wp-config.php` to load unminified JavaScript. The editor logs layout actions to the browser console when the `AP_DEBUG` constant is true. If widgets fail to render, check the network tab for REST errors and confirm that permalinks are enabled.
