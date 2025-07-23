@@ -438,6 +438,8 @@ class Plugin
         \ArtPulse\Reporting\SnapshotExportController::register();
         GrantAssistant::register();
         \ArtPulse\Rest\GrantReportController::register();
+        \ArtPulse\Rest\OrgCrmController::register();
+        \ArtPulse\Rest\OrgMetaController::register();
         add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
         \ArtPulse\Rest\EventManagementController::register();
     }

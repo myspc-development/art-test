@@ -35,4 +35,26 @@ class DonationModel
             'total' => floatval($row->total),
         ];
     }
+
+    /**
+     * Query donations with optional date range filters.
+     *
+     * @param int    $org_id Organization ID.
+     * @param string $from   Optional start date (Y-m-d).
+     * @param string $to     Optional end date (Y-m-d).
+     * @return array<int, array<string, mixed>>
+     */
+    public static function query(int $org_id, string $from = '', string $to = ''): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_donations';
+        $where = $wpdb->prepare('org_id = %d', $org_id);
+        if ($from !== '') {
+            $where .= $wpdb->prepare(' AND donated_at >= %s', $from . ' 00:00:00');
+        }
+        if ($to !== '') {
+            $where .= $wpdb->prepare(' AND donated_at <= %s', $to . ' 23:59:59');
+        }
+        return $wpdb->get_results("SELECT * FROM $table WHERE $where ORDER BY donated_at DESC", ARRAY_A);
+    }
 }
