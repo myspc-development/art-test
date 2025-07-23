@@ -9,9 +9,12 @@ class DashboardController {
      * @var array<string,string[]>
      */
     private static array $role_widgets = [
-        'artist'       => ['membership', 'rsvps', 'sales_summary'],
-        'organization' => ['widget_members', 'widget_finance', 'widget_rsvp'],
-        'member'       => ['widget_news', 'widget_events', 'widget_favorites', 'instagram_widget'],
+        // Default widgets for newly created members
+        'member'       => ['widget_news', 'my_rsvps', 'recommended_for_you'],
+        // Artist dashboard starter widgets
+        'artist'       => ['my-events', 'sales_summary', 'artist_inbox_preview'],
+        // Organization admin widgets
+        'organization' => ['site_stats', 'webhooks', 'rsvp_stats'],
     ];
 
     /**
@@ -37,6 +40,22 @@ class DashboardController {
                 'layout' => [
                     ['id' => 'widget_spotlights'],
                 ],
+            ],
+            // New sample layouts that can be applied from the dashboard UI
+            'new_member_intro' => [
+                'title'  => 'New Member Intro',
+                'role'   => 'member',
+                'layout' => self::load_preset_layout('member', 'discovery'),
+            ],
+            'artist_tools' => [
+                'title'  => 'Artist Tools',
+                'role'   => 'artist',
+                'layout' => self::load_preset_layout('artist', 'tools'),
+            ],
+            'org_admin_start' => [
+                'title'  => 'Organization Admin Start',
+                'role'   => 'organization',
+                'layout' => self::load_preset_layout('organization', 'admin'),
             ],
         ];
     }
