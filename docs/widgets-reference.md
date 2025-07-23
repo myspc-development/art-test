@@ -30,5 +30,7 @@ Below is a summary of built in dashboard widgets. Custom plugins can register ad
 | my_rsvps | My RSVPs | events | Events the user has RSVP'd to |
 | my_shared_events_activity | My Shared Events | engagement | Events the user shared |
 | recommended_for_you | Recommended For You | recommended | Suggested events or artists |
+| artist_revenue_summary | Artist Revenue Summary | commerce | Revenue totals and payouts |
+| artist_spotlight | Artist Spotlight | community | Mentions and spotlight features |
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*
