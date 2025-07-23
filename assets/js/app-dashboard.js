@@ -1,6 +1,8 @@
 var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
   'use strict';
 
+  GridLayout = GridLayout.WidthProvider(GridLayout.Responsive);
+
   function _arrayLikeToArray(r, a) {
     (null == a || a > r.length) && (a = r.length);
     for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
@@ -350,11 +352,17 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
       return [w.id, w.component];
     }));
     return /*#__PURE__*/React$1.createElement(GridLayout, {
-      layout: layout,
-      cols: 12,
+      className: "layout",
+      layouts: {
+        lg: layout
+      },
+      cols: {
+        lg: 12
+      },
       rowHeight: 30,
-      width: 800,
-      onLayoutChange: handleLayoutChange
+      onLayoutChange: function onLayoutChange(l, all) {
+        return handleLayoutChange(all.lg);
+      }
     }, layout.map(function (item) {
       var Comp = widgetMap[item.i];
       return /*#__PURE__*/React$1.createElement("div", {

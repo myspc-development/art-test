@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import GridLayout from 'react-grid-layout';
+import { WidthProvider, Responsive } from 'react-grid-layout';
+const GridLayout = WidthProvider(Responsive);
 import registry from './widgets/index.js';
 
 export default function DashboardContainer({ role = 'member' }) {
@@ -33,11 +34,11 @@ export default function DashboardContainer({ role = 'member' }) {
 
   return (
     <GridLayout
-      layout={layout}
-      cols={12}
+      className="layout"
+      layouts={{ lg: layout }}
+      cols={{ lg: 12 }}
       rowHeight={30}
-      width={800}
-      onLayoutChange={handleLayoutChange}
+      onLayoutChange={(l, allLayouts) => handleLayoutChange(allLayouts.lg)}
     >
       {layout.map(item => {
         const Comp = widgetMap[item.i];

@@ -1,10 +1,12 @@
 import React from 'react';
-import GridLayout from 'react-grid-layout';
+import GridLayout, { WidthProvider } from 'react-grid-layout';
+
+const ResponsiveGridLayout = WidthProvider(GridLayout);
 
 export default function DashboardCanvas({ layout = [], onLayoutChange, children }) {
   return (
     <div className="ap-dashboard-canvas">
-      <GridLayout
+      <ResponsiveGridLayout
         className="layout"
         layout={layout}
         cols={12}
@@ -13,7 +15,7 @@ export default function DashboardCanvas({ layout = [], onLayoutChange, children 
         onLayoutChange={onLayoutChange}
       >
         {children}
-      </GridLayout>
+      </ResponsiveGridLayout>
     </div>
   );
 }
