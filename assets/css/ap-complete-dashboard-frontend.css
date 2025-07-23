@@ -5,6 +5,8 @@
    Compatible: Salient Theme, WPBakery, Vanilla CSS
    ========================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
 /* === Base Reset & Variables === */
 :root {
   --ap-primary: #0c75af;
