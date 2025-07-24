@@ -71,6 +71,8 @@ class FollowRestController
 
     public static function add_follow(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        // Ensure database table exists in case installation routines missed it
+        FollowManager::maybe_install_table();
         $user_id   = get_current_user_id();
         $post_id   = absint($request['post_id']);
         $post_type = sanitize_key($request['post_type']);
@@ -98,6 +100,8 @@ class FollowRestController
 
     public static function remove_follow(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        // Ensure database table exists
+        FollowManager::maybe_install_table();
         $user_id   = get_current_user_id();
         $post_id   = absint($request['post_id']);
         $post_type = sanitize_key($request['post_type']);
@@ -125,6 +129,8 @@ class FollowRestController
 
     public static function list_follows(WP_REST_Request $request): WP_REST_Response
     {
+        // Ensure database table exists before querying
+        FollowManager::maybe_install_table();
         $user_id   = get_current_user_id();
         $type      = $request['post_type'] ? sanitize_key($request['post_type']) : null;
 
@@ -134,6 +140,8 @@ class FollowRestController
 
     public static function get_followers(WP_REST_Request $request): WP_REST_Response
     {
+        // Ensure follows table exists
+        FollowManager::maybe_install_table();
         $user_id = absint($request['user_id']);
         $followers = FollowManager::get_followers($user_id);
         return rest_ensure_response(['user_id' => $user_id, 'followers' => $followers]);
