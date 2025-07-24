@@ -66,8 +66,8 @@ class DashboardWidgetTools
         add_action('admin_menu', function () {
             add_submenu_page(
                 'index.php',
-                'Dashboard Layout Help',
-                'Layout Help',
+                __('Dashboard Layout Help', 'artpulse'),
+                __('Layout Help', 'artpulse'),
                 'manage_options',
                 'dashboard-layout-help',
                 [self::class, 'render_help_page']
