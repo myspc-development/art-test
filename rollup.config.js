@@ -3,6 +3,7 @@ const nodeResolve = require('@rollup/plugin-node-resolve').nodeResolve;
 const commonjs = require('@rollup/plugin-commonjs');
 const typescript = require('@rollup/plugin-typescript');
 const postcss = require('rollup-plugin-postcss');
+const replace = require('@rollup/plugin-replace');
 
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
@@ -25,6 +26,10 @@ function createConfig(input, file, name, globals = {}, external = Object.keys(gl
       babel({ babelHelpers: 'bundled', extensions }),
       useTS && typescript({ tsconfig: './tsconfig.json' }),
       commonjs(),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+        preventAssignment: true,
+      }),
     ].filter(Boolean),
   };
 }
