@@ -9,7 +9,7 @@ use WP_Error;
 
 class EventChatController extends WP_REST_Controller
 {
-    protected string $namespace = 'artpulse/v1';
+    protected $namespace = 'artpulse/v1';
 
     public static function register(): void
     {
