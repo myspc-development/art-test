@@ -458,7 +458,7 @@
       onClick: function onClick() {
         return setShowPicker(!showPicker);
       }
-    }, "\uD83D\uDE0A"), showPicker && /*#__PURE__*/React.createElement(EmojiPicker, {
+      }, "\uD83D\uDE0A"), showPicker && typeof EmojiPicker !== 'undefined' && /*#__PURE__*/React.createElement(EmojiPicker, {
       onEmojiClick: function onEmojiClick(e) {
         return setText(function (t) {
           return t + e.emoji;
@@ -891,4 +891,4 @@
     });
   });
 
-})(React, ReactDOM, EmojiPicker);
+})(React, ReactDOM, window.EmojiPicker);
