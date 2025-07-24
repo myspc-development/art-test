@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     ArtPulse Management
  * Description:     Management plugin for ArtPulse.
- * Version:         1.3.15
+ * Version:         1.0.0
  * Author:          craig
  * Text Domain:     artpulse
  * License:         GPL2
@@ -232,47 +232,6 @@ add_action('admin_init', function () {
 
 // Load developer sample widgets for demonstration purposes.
 // See docs/developer/sample-widgets.md for details on these examples.
-add_action('init', function () {
-    if (class_exists('\\ArtPulse\\Sample\\SampleWidgets')) {
-        \ArtPulse\Sample\SampleWidgets::register();
-    }
-    if (class_exists('\\ArtPulse\\Sample\\RoleBasedWidgets')) {
-        \ArtPulse\Sample\RoleBasedWidgets::register();
-    }
-    if (file_exists(__DIR__ . '/widgets/DonorActivityWidget.php')) {
-        require_once __DIR__ . '/widgets/DonorActivityWidget.php';
-    }
-    if (file_exists(__DIR__ . '/widgets/SponsorDisplayWidget.php')) {
-        require_once __DIR__ . '/widgets/SponsorDisplayWidget.php';
-    }
-    if (file_exists(__DIR__ . '/widgets/OrgWidgetSharingPanel.php')) {
-        require_once __DIR__ . '/widgets/OrgWidgetSharingPanel.php';
-    }
-});
-
-add_action('init', function () {
-    // DashboardWidgetTools::register() already runs via SettingsPage::register()
-    // so avoid calling it twice here to prevent duplicate menu entries.
-    \ArtPulse\Core\DashboardWidgetRegistry::register(
-        'hello-world',
-        __('Hello World', 'artpulse'),
-        'smiley',
-        __('Example hello world widget.', 'artpulse'),
-        static function () {
-            return '<p>Hello World!</p>';
-        }
-    );
-
-    \ArtPulse\Core\DashboardWidgetRegistry::register(
-        'php-version',
-        __('PHP Version', 'artpulse'),
-        'admin-site-alt3',
-        __('Displays current PHP version.', 'artpulse'),
-        static function () {
-            return '<p>PHP ' . phpversion() . '</p>';
-        }
-    );
-});
 
 /**
  * Copy bundled Salient templates to the active child theme.

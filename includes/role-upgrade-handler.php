@@ -4,6 +4,7 @@ if (!defined('ABSPATH')) {
 }
 
 use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\Admin\LayoutSnapshotManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
@@ -32,6 +33,9 @@ function ap_merge_dashboard_on_role_upgrade( int $user_id, string $new_role, arr
     if ( ! is_array( $current ) || empty( $current ) ) {
         $current = UserLayoutManager::get_role_layout( $roles[0] );
     }
+
+    $prior = $old_roles[0] ?? $roles[0] ?? '';
+    LayoutSnapshotManager::snapshot( $user_id, $prior );
 
     $merged      = [];
     $seen_ids    = [];
