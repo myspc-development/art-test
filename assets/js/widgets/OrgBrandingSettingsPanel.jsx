@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+const { __ } = wp.i18n;
 
 export function OrgBrandingSettingsPanel({ apiRoot, nonce, orgId }) {
   const [settings, setSettings] = useState({ logo: '', color: '#000000', footer: '' });
@@ -27,21 +28,21 @@ export function OrgBrandingSettingsPanel({ apiRoot, nonce, orgId }) {
   return (
     <div className="ap-org-branding-settings">
       <p>
-        <label>Logo URL
+        <label>{__('Logo URL', 'artpulse')}
           <input type="text" value={settings.logo} onChange={e => setSettings({ ...settings, logo: e.target.value })} />
         </label>
       </p>
       <p>
-        <label>Brand Color
+        <label>{__('Brand Color', 'artpulse')}
           <input type="color" value={settings.color} onChange={e => setSettings({ ...settings, color: e.target.value })} />
         </label>
       </p>
       <p>
-        <label>Footer Text
+        <label>{__('Footer Text', 'artpulse')}
           <input type="text" value={settings.footer} onChange={e => setSettings({ ...settings, footer: e.target.value })} />
         </label>
       </p>
-      <button type="button" onClick={save}>Save Branding</button>
+      <button type="button" onClick={save}>{__('Save Branding', 'artpulse')}</button>
     </div>
   );
 }

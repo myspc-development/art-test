@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+const { __ } = wp.i18n;
 
 export default function TicketWidget({ eventId }) {
   const [tiers, setTiers] = useState([]);
@@ -18,10 +19,10 @@ export default function TicketWidget({ eventId }) {
         'X-WP-Nonce': APTickets.nonce
       },
       body: JSON.stringify({ ticket_id: tier.id })
-    }).then(() => alert('Purchased!'));
+    }).then(() => alert(__('Purchased!', 'artpulse')));
   };
 
-  if (loading) return <p>Loading tickets...</p>;
+  if (loading) return <p>{__('Loading tickets...', 'artpulse')}</p>;
 
   return (
     <div className="ap-tickets" data-event-id={eventId}>
@@ -29,7 +30,12 @@ export default function TicketWidget({ eventId }) {
         {tiers.map(tier => (
           <li key={tier.id} className="ap-ticket-tier">
             <span>{tier.name} - {tier.price}</span>
-            <button onClick={() => buy(tier)} aria-label={`Buy ${tier.name}`}>Buy</button>
+            <button
+              onClick={() => buy(tier)}
+              aria-label={`${__('Buy', 'artpulse')} ${tier.name}`}
+            >
+              {__('Buy', 'artpulse')}
+            </button>
           </li>
         ))}
       </ul>

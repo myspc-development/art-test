@@ -14,6 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     })
     .catch(() => {
-      container.innerHTML = '<p>Failed to load directory.</p>';
+      container.innerHTML = `<p>${wp.i18n.__('Failed to load directory.', 'artpulse')}</p>`;
     });
 });

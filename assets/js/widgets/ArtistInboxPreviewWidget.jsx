@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+const { __ } = wp.i18n;
 
 export function ArtistInboxPreviewWidget({ apiRoot, nonce }) {
   const [threads, setThreads] = useState(null);
@@ -28,11 +29,11 @@ export function ArtistInboxPreviewWidget({ apiRoot, nonce }) {
   }, []);
 
   if (threads === null) {
-    return <p>Loading...</p>;
+    return <p>{__('Loading...', 'artpulse')}</p>;
   }
 
   if (!threads.length) {
-    return <p>No new messages.</p>;
+    return <p>{__('No new messages.', 'artpulse')}</p>;
   }
 
   return (

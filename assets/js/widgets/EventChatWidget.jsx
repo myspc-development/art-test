@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+const { __ } = wp.i18n;
 
 /**
  * Simple event chat widget.
@@ -48,9 +49,9 @@ export function EventChatWidget({ eventId, apiRoot, nonce }) {
         <input
           value={text}
           onChange={e => setText(e.target.value)}
-          placeholder="Write a message..."
+          placeholder={__('Write a message...', 'artpulse')}
         />
-        <button onClick={send}>Send</button>
+        <button onClick={send}>{__('Send', 'artpulse')}</button>
       </div>
     </div>
   );
