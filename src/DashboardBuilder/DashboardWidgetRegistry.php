@@ -67,8 +67,18 @@ class DashboardWidgetRegistry {
         if (!isset(self::$widgets[$id])) {
             return '';
         }
+
+        static $stack = [];
+        if (isset($stack[$id])) {
+            return '';
+        }
+
+        $stack[$id] = true;
         ob_start();
         call_user_func(self::$widgets[$id]['render_callback']);
-        return ob_get_clean();
+        $html = ob_get_clean();
+        unset($stack[$id]);
+
+        return $html;
     }
 }

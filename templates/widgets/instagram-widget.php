@@ -7,23 +7,25 @@ $count = isset($args['count']) ? (int) $args['count'] : 3;
 $urls  = [];
 $posts = [];
 
-if ($token) {
-    $cache_key = 'ap_instagram_posts_' . md5($token . '|' . $count);
-    $posts     = get_transient($cache_key);
-    if (false === $posts) {
-        $resp = wp_remote_get("https://graph.instagram.com/me/media?fields=permalink,media_url,caption&access_token={$token}&limit={$count}");
-        if (!is_wp_error($resp)) {
-            $data  = json_decode(wp_remote_retrieve_body($resp), true);
-            $posts = $data['data'] ?? [];
-            set_transient($cache_key, $posts, HOUR_IN_SECONDS);
-        } else {
-            $posts = [];
+if (!defined('IS_DASHBOARD_BUILDER_PREVIEW') || !IS_DASHBOARD_BUILDER_PREVIEW) {
+    if ($token) {
+        $cache_key = 'ap_instagram_posts_' . md5($token . '|' . $count);
+        $posts     = get_transient($cache_key);
+        if (false === $posts) {
+            $resp = wp_remote_get("https://graph.instagram.com/me/media?fields=permalink,media_url,caption&access_token={$token}&limit={$count}");
+            if (!is_wp_error($resp)) {
+                $data  = json_decode(wp_remote_retrieve_body($resp), true);
+                $posts = $data['data'] ?? [];
+                set_transient($cache_key, $posts, HOUR_IN_SECONDS);
+            } else {
+                $posts = [];
+            }
         }
-    }
-} elseif (!empty($args['urls'])) {
-    $urls = array_slice((array) $args['urls'], 0, $count);
-    foreach ($urls as $u) {
-        $posts[] = ['permalink' => $u];
+    } elseif (!empty($args['urls'])) {
+        $urls = array_slice((array) $args['urls'], 0, $count);
+        foreach ($urls as $u) {
+            $posts[] = ['permalink' => $u];
+        }
     }
 }
 ?>

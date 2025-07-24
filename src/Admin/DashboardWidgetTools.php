@@ -424,9 +424,18 @@ class DashboardWidgetTools
             $cb = [DashboardWidgetRegistry::class, 'render_widget_fallback'];
         }
 
+        static $rendering = false;
+        if ($rendering) {
+            return '';
+        }
+
+        $rendering = true;
         ob_start();
         call_user_func($cb);
-        return ob_get_clean();
+        $html = ob_get_clean();
+        $rendering = false;
+
+        return $html;
     }
 
     /**
@@ -597,6 +606,10 @@ class DashboardWidgetTools
      */
     public static function render_role_dashboard_preview(string $role): void
     {
+        if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+            define('IS_DASHBOARD_BUILDER_PREVIEW', true);
+        }
+
         $style = UserLayoutManager::get_role_style($role);
         if ($style) {
             echo '<style id="ap-preview-style">';
