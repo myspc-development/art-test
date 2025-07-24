@@ -7,6 +7,7 @@ use ArtPulse\Core\UserEngagementLogger;
 use Stripe\StripeClient;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
+use ArtPulse\Admin\LayoutSnapshotManager;
 
 class UserDashboardManager
 {
@@ -277,6 +278,14 @@ class UserDashboardManager
         register_rest_route('artpulse/v1', '/ap/layout/reset', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'resetDashboardLayout' ],
+            'permission_callback' => function() {
+                return current_user_can('read');
+            },
+        ]);
+
+        register_rest_route('artpulse/v1', '/ap/layout/revert', [
+            'methods'             => 'POST',
+            'callback'            => [ self::class, 'revertDashboardLayout' ],
             'permission_callback' => function() {
                 return current_user_can('read');
             },
@@ -770,6 +779,13 @@ class UserDashboardManager
         $uid = get_current_user_id();
         \ArtPulse\Core\DashboardWidgetManager::resetUserLayout($uid);
         return rest_ensure_response(['reset' => true]);
+    }
+
+    public static function revertDashboardLayout(): \WP_REST_Response
+    {
+        $uid = get_current_user_id();
+        $ok = \ArtPulse\Admin\LayoutSnapshotManager::restore_last($uid);
+        return rest_ensure_response(['reverted' => $ok]);
     }
 
     public static function getAvailableWidgets(WP_REST_Request $request): \WP_REST_Response
