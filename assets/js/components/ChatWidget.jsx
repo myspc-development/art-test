@@ -58,11 +58,11 @@ export default function ChatWidget({ eventId, canPost }) {
         <form className="ap-chat-form" onSubmit={send}>
           <input
             type="text"
-            aria-label="Chat message"
+            aria-label={__('Chat message', 'artpulse')}
             value={text}
             onChange={e => setText(e.target.value)}
           />
-          <button type="submit" aria-label="Send chat message">{__('Send', 'artpulse')}</button>
+          <button type="submit" aria-label={__('Send chat message', 'artpulse')}>{__('Send', 'artpulse')}</button>
         </form>
       ) : (
         <p>{APChat.loggedIn ? __('Only attendees can post messages', 'artpulse') : __('Please log in to chat.', 'artpulse')}</p>

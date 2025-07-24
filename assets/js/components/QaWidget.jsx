@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+const { __ } = wp.i18n;
 
 export default function QaWidget({ eventId, canPost }) {
   const [comments, setComments] = useState([]);
@@ -42,11 +43,11 @@ export default function QaWidget({ eventId, canPost }) {
         <form className="ap-qa-form" onSubmit={send}>
           <textarea
             required
-            aria-label="Your question"
+            aria-label={__('Your question', 'artpulse')}
             value={text}
             onChange={e => setText(e.target.value)}
           />
-          <button type="submit" aria-label="Post question">Post</button>
+          <button type="submit" aria-label={__('Post question', 'artpulse')}>{__('Post', 'artpulse')}</button>
         </form>
       )}
     </div>

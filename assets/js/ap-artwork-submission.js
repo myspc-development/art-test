@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const { __ } = wp.i18n;
   const form = document.querySelector('.ap-artwork-upload-form');
   const messageBox = document.querySelector('.ap-form-messages');
   if (!form) return;
@@ -86,17 +87,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
 
       if (res.ok) {
-        if (messageBox) messageBox.textContent = 'Submission successful!';
+        if (messageBox) messageBox.textContent = __('Submission successful!', 'artpulse');
         form.reset();
         previews.forEach(p => { p.src = ''; p.style.display = 'none'; });
         imageInputs.forEach(i => { i.value = ''; });
         setTimeout(() => { window.location.reload(); }, 2000);
       } else if (messageBox) {
-        messageBox.textContent = data.message || 'Submission failed.';
+        messageBox.textContent = data.message || __('Submission failed.', 'artpulse');
       }
     } catch (err) {
       console.error(err);
-      if (messageBox) messageBox.textContent = 'Error: ' + err.message;
+      if (messageBox) messageBox.textContent = __('Error: ', 'artpulse') + err.message;
     }
   });
 
@@ -112,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const result = await response.json();
     if (!response.ok) {
-      throw new Error(result.message || 'Image upload failed');
+      throw new Error(result.message || __('Image upload failed', 'artpulse'));
     }
     return result.id;
   }

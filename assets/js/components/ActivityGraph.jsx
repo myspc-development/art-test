@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
+const { __ } = wp.i18n;
 
 export default function ActivityGraph({ data = [] }) {
   const canvasRef = useRef(null);
@@ -11,7 +12,7 @@ export default function ActivityGraph({ data = [] }) {
       data: {
         labels: data.map(d => d.day),
         datasets: [{
-          label: 'Count',
+          label: __('Count', 'artpulse'),
           data: data.map(d => d.c),
           borderColor: '#2563eb',
           backgroundColor: 'rgba(37,99,235,0.2)',

@@ -1,4 +1,5 @@
 import React from 'react';
+const { __ } = wp.i18n;
 
 export default function ForumBoard({ threads = [], categories = [], canCreate = false }) {
   return (
@@ -14,7 +15,7 @@ export default function ForumBoard({ threads = [], categories = [], canCreate = 
         ))}
         {canCreate && (
           <button className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Start New Thread
+            {__('Start New Thread', 'artpulse')}
           </button>
         )}
       </div>
@@ -27,11 +28,11 @@ export default function ForumBoard({ threads = [], categories = [], canCreate = 
           >
             <h4 className="font-semibold">{t.title}</h4>
             <div className="text-sm text-gray-500 flex justify-between mt-1">
-              <span>by {t.author}</span>
-              <span>{t.replies} replies</span>
+              <span>{__('by', 'artpulse')} {t.author}</span>
+              <span>{t.replies} {__('replies', 'artpulse')}</span>
             </div>
-            <span className="text-xs text-gray-400">
-              Last activity {t.lastActivity}
+              <span className="text-xs text-gray-400">
+              {__('Last activity', 'artpulse')} {t.lastActivity}
             </span>
           </a>
         ))}

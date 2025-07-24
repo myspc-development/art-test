@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+const { __ } = wp.i18n;
 import CommentForm from './CommentForm';
 import ReportDialog from './ReportDialog';
 
@@ -19,10 +20,10 @@ function Comment({ comment, onReply }) {
               className="text-blue-600"
               onClick={() => setShowReply(!showReply)}
             >
-              Reply
+              {__('Reply', 'artpulse')}
             </button>
-            <button aria-label="Report" onClick={() => onReply('report', comment)}>
-              <span className="sr-only">Report</span>🚩
+            <button aria-label={__('Report', 'artpulse')} onClick={() => onReply('report', comment)}>
+              <span className="sr-only">{__('Report', 'artpulse')}</span>🚩
             </button>
           </div>
           {showReply && (
@@ -62,7 +63,7 @@ export default function CommentThread({ comments = [], onReport }) {
 
   return (
     <div className="ap-comment-thread">
-      <h3 className="text-xl font-semibold mb-4">Comments ({comments.length})</h3>
+      <h3 className="text-xl font-semibold mb-4">{__('Comments', 'artpulse')} ({comments.length})</h3>
       <ul className="space-y-4">
         {comments.map(c => (
           <Comment key={c.id} comment={c} onReply={handleAction} />

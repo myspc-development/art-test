@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+const { __ } = wp.i18n;
 import CommentForm from './CommentForm';
 import ReportDialog from './ReportDialog';
 
@@ -16,10 +17,10 @@ function Post({ post, onReply }) {
           <div className="mt-1 whitespace-pre-wrap">{post.content}</div>
           <div className="flex gap-4 mt-2 text-sm">
             <button className="text-blue-600" onClick={() => setShowReply(!showReply)}>
-              Reply
+              {__('Reply', 'artpulse')}
             </button>
-            <button aria-label="Report" onClick={() => onReply('report', post)}>
-              <span className="sr-only">Report</span>🚩
+            <button aria-label={__('Report', 'artpulse')} onClick={() => onReply('report', post)}>
+              <span className="sr-only">{__('Report', 'artpulse')}</span>🚩
             </button>
           </div>
           {showReply && (
