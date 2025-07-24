@@ -1,6 +1,7 @@
 <?php
 add_action('admin_init', function () {
     register_setting('ap_settings_group', 'ap_ui_mode');
+    register_setting('ap_settings_group', 'ap_portfolio_display');
 });
 
 // === Rejection Reason Meta Box ===
@@ -50,6 +51,15 @@ add_action('admin_menu', function () {
                             <select name="ap_ui_mode">
                                 <option value="salient" <?php selected(get_option('ap_ui_mode'), 'salient'); ?>>Salient / WordPress Bakery</option>
                                 <option value="react" <?php selected(get_option('ap_ui_mode'), 'react'); ?>>React</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">Portfolio Display</th>
+                        <td>
+                            <select name="ap_portfolio_display">
+                                <option value="plugin" <?php selected(get_option('ap_portfolio_display', 'plugin'), 'plugin'); ?>>Plugin Templates</option>
+                                <option value="salient" <?php selected(get_option('ap_portfolio_display', 'plugin'), 'salient'); ?>>Salient Templates</option>
                             </select>
                         </td>
                     </tr>

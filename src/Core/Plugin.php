@@ -267,6 +267,7 @@ class Plugin
         \ArtPulse\Frontend\PortfolioBuilder::register();
         PortfolioManager::register();
         \ArtPulse\Integration\PortfolioSync::register();
+        \ArtPulse\Integration\PortfolioMigration::register();
         \ArtPulse\Integration\OAuthManager::register();
         \ArtPulse\Integration\CalendarExport::register();
         \ArtPulse\Integration\SocialAutoPoster::register();

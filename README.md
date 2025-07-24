@@ -415,6 +415,10 @@ Portfolio posts mirror this functionality. When a portfolio item contains multip
 
 Artist, artwork, event **and organization** posts automatically create or update a corresponding portfolio entry when saved. These portfolio items are used by the directory shortcodes. Deleting the source post removes the portfolio entry as well.
 
+Portfolio entries also copy project categories and tags to the Salient taxonomies and store the post content in `_nectar_portfolio_extra_content`. When a portfolio item is edited in the admin area the changes are pushed back to the original post.
+
+Use `wp ap migrate-portfolio` to migrate legacy `artpulse_portfolio` posts to the Salient `portfolio` type.
+
 ## Plugin Updates
 
 Upload new versions over the existing `artpulse-management` folder or use the **Updates** tab inside Settings. Since uninstall hooks only run when deleting the plugin, all options and data remain intact during a standard upgrade. The **Keep Data on Uninstall** setting protects content if you ever remove the plugin entirely. Export a configuration backup from the **Config Backup** tab before updating so you can easily restore the options if needed.
