@@ -64,6 +64,7 @@ class DirectoryManager {
                 'region'     => [ 'type' => 'string' ],
                 'for_sale'   => [ 'type' => 'boolean' ],
                 'keyword'    => [ 'type' => 'string' ],
+                'first_letter' => [ 'type' => 'string' ],
             ]
         ]);
     }
@@ -80,6 +81,7 @@ class DirectoryManager {
         $region     = sanitize_text_field( $request->get_param('region') );
         $for_sale   = $request->has_param('for_sale') ? rest_sanitize_boolean( $request->get_param('for_sale') ) : null;
         $keyword    = sanitize_text_field( $request->get_param('keyword') );
+        $first_letter = sanitize_text_field( $request->get_param('first_letter') );
 
         $allowed = ['event', 'artist', 'artwork', 'org'];
         if (!in_array($type, $allowed, true)) {
@@ -106,6 +108,7 @@ class DirectoryManager {
             'region'     => $region,
             'for_sale'   => $for_sale,
             'keyword'    => $keyword,
+            'first_letter' => $first_letter,
         ];
 
         $cache_key = self::get_cache_key( array_merge( [ 'type' => $type ], $search_args ) );
@@ -120,6 +123,7 @@ class DirectoryManager {
             ] );
         } elseif ( ExternalSearch::is_enabled() ) {
             $posts = ExternalSearch::search( $type, $search_args );
+            $posts = self::filter_by_first_letter( $posts, $first_letter );
             set_transient( $cache_key, wp_list_pluck( $posts, 'ID' ), 5 * MINUTE_IN_SECONDS );
         } else {
             if ( $type === 'event' ) {
@@ -192,6 +196,7 @@ class DirectoryManager {
             }
 
             $posts = get_posts( $args );
+            $posts = self::filter_by_first_letter( $posts, $first_letter );
             set_transient( $cache_key, wp_list_pluck( $posts, 'ID' ), 5 * MINUTE_IN_SECONDS );
         }
 
@@ -288,6 +293,12 @@ class DirectoryManager {
                 <input id="ap-filter-limit" type="number" class="ap-filter-limit" value="<?php echo esc_attr($atts['limit']); ?>" />
                 <button class="ap-filter-apply"><?php _e('Apply','artpulse'); ?></button>
             </form>
+            <nav class="ap-alpha-bar" aria-label="<?php esc_attr_e('Alphabet Filter','artpulse'); ?>">
+                <?php foreach (range('A','Z') as $ch): ?>
+                    <button type="button" data-letter="<?php echo $ch; ?>"><?php echo $ch; ?></button>
+                <?php endforeach; ?>
+                <button type="button" data-letter="#">#</button>
+            </nav>
             <div id="ap-directory-results" class="ap-directory-results" role="status" aria-live="polite"></div>
         </div>
         <?php
@@ -312,6 +323,29 @@ class DirectoryManager {
     public static function renderOrgDirectory($atts) {
         $atts['type'] = 'org';
         return self::renderDirectory($atts);
+    }
+
+    /**
+     * Filter a list of posts by first letter of the title.
+     *
+     * @param array  $posts        List of WP_Post objects.
+     * @param string $first_letter Desired starting character.
+     * @return array
+     */
+    private static function filter_by_first_letter(array $posts, string $first_letter): array
+    {
+        $first_letter = trim($first_letter);
+        if ($first_letter === '') {
+            return $posts;
+        }
+
+        return array_values(array_filter($posts, function($p) use ($first_letter) {
+            $letter = mb_substr($p->post_title, 0, 1, 'UTF-8');
+            if ($first_letter === '#') {
+                return !preg_match('/[A-Za-z]/u', $letter);
+            }
+            return mb_strtoupper($letter, 'UTF-8') === mb_strtoupper($first_letter, 'UTF-8');
+        }));
     }
 
     /**
