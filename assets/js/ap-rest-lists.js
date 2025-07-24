@@ -26,6 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const added = res.status === 'added';
             btn.classList.toggle('ap-favorited', added);
             btn.textContent = added ? '★' : '☆';
+            const countEl = btn.closest('.ap-event-actions')?.querySelector('.ap-fav-count');
+            if (countEl && typeof res.favorite_count !== 'undefined') {
+              countEl.textContent = res.favorite_count;
+            }
           }
         });
       });
@@ -44,6 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!res.code) {
             btn.classList.toggle('ap-rsvped', joining);
             btn.textContent = joining ? 'Cancel RSVP' : 'RSVP';
+            const countEl = btn.closest('.ap-event-actions')?.querySelector('.ap-rsvp-count');
+            if (countEl && typeof res.rsvp_count !== 'undefined') {
+              countEl.textContent = res.rsvp_count;
+            }
           }
         });
       });

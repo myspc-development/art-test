@@ -86,8 +86,20 @@ if ( $start && strtotime( $start ) > $now ) {
         <?php if ( $org_name || $org_email ) : ?>
             <span class="screen-reader-text"><?php esc_html_e( 'Organizer:', 'artpulse' ); ?> <?php echo esc_html( $org_name ); ?><?php if ( $org_email ) : ?> (<?php echo esc_html( antispambot( $org_email ) ); ?>)<?php endif; ?></span>
         <?php endif; ?>
+        <?php
+            $rsvps      = get_post_meta( $event_id, 'event_rsvp_list', true );
+            $rsvp_count = is_array( $rsvps ) ? count( $rsvps ) : 0;
+            $fav_count  = intval( get_post_meta( $event_id, 'ap_favorite_count', true ) );
+        ?>
         <div class="ap-event-actions">
+            <?php echo \ArtPulse\Frontend\ap_render_favorite_button( $event_id, 'artpulse_event' ); ?>
+            <span class="ap-fav-count" aria-label="<?php esc_attr_e( 'Interested count', 'artpulse' ); ?>">
+                <?php echo esc_html( $fav_count ); ?>
+            </span>
             <?php echo \ArtPulse\Frontend\ap_render_rsvp_button( $event_id ); ?>
+            <span class="ap-rsvp-count" aria-label="<?php esc_attr_e( 'RSVP count', 'artpulse' ); ?>">
+                <?php echo esc_html( $rsvp_count ); ?>
+            </span>
             <a href="<?php echo esc_url( $permalink ); ?>" class="ap-btn ap-event-details"><?php esc_html_e( 'Details', 'artpulse' ); ?></a>
         </div>
     </div>

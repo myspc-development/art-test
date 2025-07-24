@@ -98,9 +98,12 @@ class FavoriteRestController
             return new WP_Error('invalid_action', 'Invalid action.', ['status' => 400]);
         }
 
+        $fav_count = intval(get_post_meta($object_id, 'ap_favorite_count', true));
+
         return rest_ensure_response([
             'success' => true,
             'status'  => $status,
+            'favorite_count' => $fav_count,
         ]);
     }
 }
