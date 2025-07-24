@@ -38,7 +38,8 @@ class DashboardWidgetController {
     }
 
     public static function get_widgets(WP_REST_Request $request): WP_REST_Response|WP_Error {
-        $role = sanitize_key($request->get_param('role'));
+        $role        = sanitize_key($request->get_param('role'));
+        $include_all = filter_var($request->get_param('include_all'), FILTER_VALIDATE_BOOLEAN);
         if (!$role) {
             return new WP_Error('invalid_role', __('Role parameter missing', 'artpulse'), ['status' => 400]);
         }
@@ -78,10 +79,16 @@ class DashboardWidgetController {
                 'layoutOrder' => array_column($available, 'id'),
             ];
         }
-        return rest_ensure_response([
+        $response = [
             'available' => $available,
             'active'    => $active,
-        ]);
+        ];
+
+        if ($include_all) {
+            $response['all'] = array_values(DashboardWidgetRegistry::get_all());
+        }
+
+        return rest_ensure_response($response);
     }
 
     public static function save_widgets(WP_REST_Request $request): WP_REST_Response|WP_Error {
