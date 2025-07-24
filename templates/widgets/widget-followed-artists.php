@@ -2,10 +2,13 @@
 /**
  * Widget: Followed Artists
  */
-$user_id = get_current_user_id();
-$ids = get_user_meta($user_id, 'followed_artists', true);
-$ids = array_filter(array_map('intval', (array)$ids));
-$artists = $ids ? get_users(['include' => $ids]) : [];
+$artists = [];
+if (!defined('IS_DASHBOARD_BUILDER_PREVIEW') || !IS_DASHBOARD_BUILDER_PREVIEW) {
+    $user_id = get_current_user_id();
+    $ids = get_user_meta($user_id, 'followed_artists', true);
+    $ids = array_filter(array_map('intval', (array)$ids));
+    $artists = $ids ? get_users(['include' => $ids]) : [];
+}
 ?>
 <div id="ap-widget-followed-artists" class="ap-card" role="region" aria-labelledby="ap-widget-followed-artists-title">
   <h2 id="ap-widget-followed-artists-title" class="ap-card__title">🎨 <?php _e('Followed Artists','artpulse'); ?></h2>

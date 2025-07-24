@@ -1,7 +1,10 @@
 <?php
-$user_id = get_current_user_id();
-$shared = get_user_meta($user_id, 'shared_events', true);
-$shared = array_filter((array)$shared);
+$shared = [];
+if (!defined('IS_DASHBOARD_BUILDER_PREVIEW') || !IS_DASHBOARD_BUILDER_PREVIEW) {
+    $user_id = get_current_user_id();
+    $shared = get_user_meta($user_id, 'shared_events', true);
+    $shared = array_filter((array)$shared);
+}
 ?>
 <div id="my-shared-events-activity" class="ap-card" role="region" aria-labelledby="my-shared-events-activity-title" data-widget="my-shared-events-activity">
   <h2 id="my-shared-events-activity-title" class="ap-card__title"><?php esc_html_e('My Shared Events','artpulse'); ?></h2>
