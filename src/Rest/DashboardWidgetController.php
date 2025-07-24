@@ -70,6 +70,11 @@ class DashboardWidgetController {
                         ];
                     }
                 }
+            } elseif (defined('AP_DB_DEFAULT_LAYOUTS') && isset(AP_DB_DEFAULT_LAYOUTS[$role])) {
+                $active = [
+                    'role'   => $role,
+                    'layout' => AP_DB_DEFAULT_LAYOUTS[$role],
+                ];
             }
         }
         if (!is_array($active)) {

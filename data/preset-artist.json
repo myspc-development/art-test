@@ -1,5 +1,11 @@
 [
-  {"id":"content","visible":true},
-  {"id":"my-events","visible":true},
-  {"id":"favorites","visible":true}
+  {"id":"artist_event_editor","visible":true},
+  {"id":"inbox_preview","visible":true},
+  {"id":"revenue_summary","visible":true},
+  {"id":"community_mentions","visible":true},
+  {"id":"fan_poll","visible":true},
+  {"id":"drag_drop_gallery","visible":true},
+  {"id":"content_scheduler","visible":true},
+  {"id":"event_performance","visible":true},
+  {"id":"feedback_form","visible":true}
 ]
