@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
+const { __ } = wp.i18n;
 
 function WidgetConfig({ widgets, config, roles, nonce, adminNonce, ajaxUrl }) {
   const roleKeys = Object.keys(roles);
@@ -16,7 +17,7 @@ function WidgetConfig({ widgets, config, roles, nonce, adminNonce, ajaxUrl }) {
     layout.forEach(id => form.append(`config[${activeRole}][]`, id));
     fetch(ajaxUrl, { method: 'POST', body: form })
       .then(r => r.json())
-      .then(() => alert('Saved'));
+      .then(() => alert(__('Saved', 'artpulse')));
   }
 
   function toggle(id) {
@@ -40,7 +41,7 @@ function WidgetConfig({ widgets, config, roles, nonce, adminNonce, ajaxUrl }) {
           </li>
         ))}
       </ul>
-      <button onClick={handleSave}>Save</button>
+      <button onClick={handleSave}>{__('Save', 'artpulse')}</button>
     </div>
   );
 }

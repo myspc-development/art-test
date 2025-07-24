@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+const { __ } = wp.i18n;
 import AnalyticsCard from './AnalyticsCard';
 import TopUsersTable from './TopUsersTable';
 import ActivityGraph from './ActivityGraph';
@@ -23,14 +24,14 @@ export default function CommunityAnalyticsPanel() {
             onClick={() => setTab(t)}
             className={tab === t ? 'font-semibold' : ''}
           >
-            {t.charAt(0).toUpperCase() + t.slice(1)}
+            {__('' + t.charAt(0).toUpperCase() + t.slice(1), 'artpulse')}
           </button>
         ))}
       </div>
       <div className="grid gap-4 md:grid-cols-2 mb-4">
-        <AnalyticsCard label="Total" value={data.total} />
+        <AnalyticsCard label={__('Total', 'artpulse')} value={data.total} />
         {data.flagged_count !== undefined && (
-          <AnalyticsCard label="Flagged" value={data.flagged_count} />
+          <AnalyticsCard label={__('Flagged', 'artpulse')} value={data.flagged_count} />
         )}
       </div>
       {data.per_day && <ActivityGraph data={data.per_day} />}

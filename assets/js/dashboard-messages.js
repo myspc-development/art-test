@@ -7,7 +7,7 @@ fetch('/wp-json/artpulse/v1/dashboard/messages', {
     if (res.status === 401 || res.status === 403) {
       const container = document.getElementById('ap-messages-dashboard-widget');
       if (container) {
-        container.textContent = 'Please log in to view messages.';
+        container.textContent = wp.i18n.__('Please log in to view messages.', 'artpulse');
       }
       throw new Error('unauthorized');
     }

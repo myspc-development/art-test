@@ -17,12 +17,12 @@ registerBlockType('artpulse/spotlights', {
             wp.element.Fragment,
             null,
             wp.element.createElement(TextControl, {
-                label: 'Spotlight Title',
+                label: __('Spotlight Title', 'artpulse'),
                 value: attributes.title,
                 onChange: (value) => setAttributes({ title: value })
             }),
             wp.element.createElement(CheckboxControl, {
-                label: 'Show to Members',
+                label: __('Show to Members', 'artpulse'),
                 checked: (attributes.visibleTo || []).includes('member'),
                 onChange: (checked) => {
                     const roles = new Set(attributes.visibleTo || []);

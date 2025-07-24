@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+const { __ } = wp.i18n;
 
 export default function ChatWidget({ eventId, canPost }) {
   const [messages, setMessages] = useState([]);
@@ -61,10 +62,10 @@ export default function ChatWidget({ eventId, canPost }) {
             value={text}
             onChange={e => setText(e.target.value)}
           />
-          <button type="submit" aria-label="Send chat message">Send</button>
+          <button type="submit" aria-label="Send chat message">{__('Send', 'artpulse')}</button>
         </form>
       ) : (
-        <p>{APChat.loggedIn ? 'Only attendees can post messages' : 'Please log in to chat.'}</p>
+        <p>{APChat.loggedIn ? __('Only attendees can post messages', 'artpulse') : __('Please log in to chat.', 'artpulse')}</p>
       )}
     </div>
   );

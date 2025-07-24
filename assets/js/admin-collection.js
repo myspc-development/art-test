@@ -41,7 +41,7 @@ jQuery(function($){
         },
         cache:true
       },
-      placeholder: apAdminRelationship.placeholder_text || 'Search',
+      placeholder: apAdminRelationship.placeholder_text || wp.i18n.__('Search', 'artpulse'),
       minimumInputLength:1,
       allowClear:true,
       width:'resolve'

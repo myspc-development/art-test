@@ -1,12 +1,13 @@
 import React from 'react';
+const { __ } = wp.i18n;
 
 export default function TopUsersTable({ users = [] }) {
   return (
     <table className="min-w-full text-sm">
       <thead>
         <tr>
-          <th className="text-left">User</th>
-          <th className="text-right">Count</th>
+          <th className="text-left">{__('User', 'artpulse')}</th>
+          <th className="text-right">{__('Count', 'artpulse')}</th>
         </tr>
       </thead>
       <tbody>
