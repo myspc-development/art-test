@@ -23,7 +23,11 @@
     "yoast/phpunit-polyfills": "^4.0"
   },
   "scripts": {
-    "test": "vendor/bin/phpunit",
+    "install-wp-tests": "bash ./setup-tests.sh",
+    "test": [
+      "@install-wp-tests",
+      "vendor/bin/phpunit"
+    ],
     "sniff": "vendor/bin/phpcs --standard=PHPCompatibilityWP --runtime-set testVersion 8.3 .",
     "zip": [
       "@composer install --no-dev --optimize-autoloader",
