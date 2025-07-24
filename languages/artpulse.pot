@@ -4138,3 +4138,10 @@ msgstr ""
 #: templates/widgets/favorites.php:21
 msgid "Artworks"
 msgstr ""
+#: src/Admin/DashboardWidgetTools.php:69
+msgid "Dashboard Layout Help"
+msgstr ""
+
+#: src/Admin/DashboardWidgetTools.php:70
+msgid "Layout Help"
+msgstr ""
