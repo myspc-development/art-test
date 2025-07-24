@@ -42,10 +42,7 @@ class OrgRolesPage
 
     private static function get_current_org_id(): int
     {
-        if (current_user_can('administrator') && isset($_GET['org_id'])) {
-            return absint($_GET['org_id']);
-        }
-        return OrgContext::get_active_org();
+        return OrgContext::get_current_org_id();
     }
 
     public static function render(): void

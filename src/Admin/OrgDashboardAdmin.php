@@ -37,20 +37,9 @@ class OrgDashboardAdmin {
     }
 
     // --- Helper: Get the current org id for this admin ---
-    private static function get_current_org_id() {
-        // Super admins can choose any org via dropdown (?org_id=)
-        if (current_user_can('administrator')) {
-            if (isset($_GET['org_id'])) {
-                return intval($_GET['org_id']);
-            }
-            $orgs = get_posts([
-                'post_type' => 'artpulse_org',
-                'numberposts' => 1,
-                'post_status' => 'publish',
-            ]);
-            return $orgs ? $orgs[0]->ID : 0;
-        }
-        return OrgContext::get_active_org();
+    private static function get_current_org_id(): int
+    {
+        return OrgContext::get_current_org_id();
     }
 
     /**

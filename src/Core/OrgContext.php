@@ -54,4 +54,16 @@ class OrgContext
         }
         return absint(get_user_meta($user_id, 'ap_organization_id', true));
     }
+
+    /**
+     * Get the current organization taking admin override into account.
+     */
+    public static function get_current_org_id(): int
+    {
+        if (current_user_can('administrator') && isset($_GET['org_id'])) {
+            return absint($_GET['org_id']);
+        }
+
+        return self::get_active_org();
+    }
 }
