@@ -90,6 +90,8 @@
     }
   }
 
+  var __ = wp.i18n.__;
+
   // REST responses use `widget_roles` for the matrix object
 
   function AdminWidgetMatrix() {
@@ -145,7 +147,7 @@
       }).then(function () {
         var _window$wp, _window$wp$data;
         if ((_window$wp = window.wp) !== null && _window$wp !== void 0 && (_window$wp$data = _window$wp.data) !== null && _window$wp$data !== void 0 && _window$wp$data.dispatch) {
-          wp.data.dispatch('core/notices').createNotice('success', 'Saved', {
+          wp.data.dispatch('core/notices').createNotice('success', __('Saved', 'artpulse'), {
             isDismissible: true
           });
         }
@@ -153,7 +155,7 @@
     };
     return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("table", {
       className: "widefat striped"
-    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Widget"), roles.map(function (r) {
+    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, __('Widget', 'artpulse')), roles.map(function (r) {
       return /*#__PURE__*/React.createElement("th", {
         key: r
       }, r);
@@ -178,7 +180,7 @@
       type: "button",
       className: "button button-primary",
       onClick: save
-    }, "Save")));
+    }, __('Save', 'artpulse'))));
   }
 
   document.addEventListener('DOMContentLoaded', function () {
