@@ -2,6 +2,7 @@
 $user_role = 'artist';
 
 ap_safe_include('templates/partials/dashboard-nav.php', plugin_dir_path(__FILE__) . 'partials/dashboard-nav.php');
+ap_safe_include('templates/partials/dashboard-role-tabs.php', plugin_dir_path(__FILE__) . 'partials/dashboard-role-tabs.php');
 
 add_action('wp_enqueue_scripts', function () use ($user_role) {
     if (ap_user_can_edit_layout($user_role)) {
@@ -15,7 +16,7 @@ add_action('wp_enqueue_scripts', function () use ($user_role) {
     }
 });
 ?>
-<div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard">
+<div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard ap-role-layout" data-role="artist">
   <h2 class="ap-card__title"><?= ucfirst($user_role) ?> Dashboard</h2>
   <?php
   ap_safe_include('templates/partials/dashboard-generic.php', plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php');

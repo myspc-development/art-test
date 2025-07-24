@@ -5,7 +5,12 @@ interface WidgetDef {
   roles?: string[];
 }
 
-export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: {role: string}) {
+interface CurrentUser {
+  role?: string;
+  roles?: string[];
+}
+
+export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: CurrentUser) {
   const [widgetRoles, setWidgetRoles] = useState<Record<string, string[]>>({});
   const restRoot = window.wpApiSettings?.root || '/wp-json/';
   const nonce = window.wpApiSettings?.nonce || '';
@@ -17,9 +22,12 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: {r
       .catch(() => {});
   }, []);
 
+  const roles = currentUser.roles || (currentUser.role ? [currentUser.role] : []);
+
   return widgets.filter(widget => {
     const allowed = widgetRoles[widget.id] || widget.roles || [];
-    return allowed.includes(currentUser.role);
+    if (!roles.length) return true;
+    return roles.some(r => allowed.includes(r));
   });
 }
 
