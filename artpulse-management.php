@@ -675,7 +675,9 @@ add_action('admin_enqueue_scripts', 'ap_enqueue_admin_styles');
 
 // Enqueue SortableJS and layout script on dashboard pages
 add_action('admin_enqueue_scripts', function ($hook) {
-    if ($hook === 'index.php' || strpos($hook, 'dashboard') !== false) {
+    // Only load on the main WordPress dashboard. The custom dashboard
+    // page handles its own assets to avoid duplicate rendering.
+    if ($hook === 'index.php') {
         wp_enqueue_script(
             'sortablejs',
             plugin_dir_url(__FILE__) . 'assets/libs/sortablejs/Sortable.min.js',
