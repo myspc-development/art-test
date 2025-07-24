@@ -16,7 +16,8 @@ class DashboardWidgetRegistry {
      *     callback:callable,
      *     category?:string,
      *     roles?:array,
-     *     settings?:array
+     *     settings?:array,
+     *     tags?:array
      * }>
      */
     private static array $widgets = [];
@@ -33,7 +34,7 @@ class DashboardWidgetRegistry {
         string $icon,
         string $description,
         callable $callback,
-        array $options = [] // supports 'category', 'roles' and optional 'settings'
+        array $options = [] // supports 'category', 'roles', optional 'settings' and 'tags'
     ): void {
         // Prevent duplicate IDs or labels.
         if ( self::is_widget_id_registered( $id ) ) {
@@ -60,11 +61,13 @@ class DashboardWidgetRegistry {
             'category'    => $options['category'] ?? '',
             'roles'       => $options['roles'] ?? [],
             'settings'    => $options['settings'] ?? [],
+            'tags'        => $options['tags'] ?? [],
         ];
     }
 
     /**
      * Simplified widget registration used by generic dashboards.
+     * Supports all options from register(), including optional 'tags'.
      */
     public static function register_widget( string $id, array $args ): void {
         $id = sanitize_key( $id );
@@ -237,6 +240,9 @@ class DashboardWidgetRegistry {
             }
             if ( isset( $config['roles'] ) ) {
                 $def['roles'] = $config['roles'];
+            }
+            if ( isset( $config['tags'] ) ) {
+                $def['tags'] = $config['tags'];
             }
             if ( $include_schema ) {
                 $def['settings'] = $config['settings'] ?? [];
