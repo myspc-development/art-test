@@ -16,3 +16,11 @@ add_filter('simple_local_avatar_url', function($url) {
     }
     return $url;
 });
+
+// Force HTTPS for attachment URLs as well
+add_filter('wp_get_attachment_url', function($url) {
+    if ($url) {
+        $url = set_url_scheme($url, 'https');
+    }
+    return $url;
+});
