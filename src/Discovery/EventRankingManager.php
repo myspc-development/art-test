@@ -99,7 +99,7 @@ class EventRankingManager
         if (is_singular('artpulse_event') && isset($_GET['show_score']) && $_GET['show_score'] == '1') {
             global $post;
             $score = self::get_score($post->ID);
-            return '<p>Score: ' . esc_html($score) . '</p>' . $content;
+            return '<p>' . sprintf(esc_html__('Score: %s', 'artpulse'), esc_html($score)) . '</p>' . $content;
         }
         return $content;
     }

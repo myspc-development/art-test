@@ -160,7 +160,10 @@ class DashboardWidgetTools
         if (isset($_POST['import_role_layout']) && current_user_can('manage_options')) {
             $import_result = DashboardWidgetManager::importRoleLayout($selected, stripslashes($_POST['import_json'] ?? ''));
             echo '<div class="notice ' . ($import_result ? 'notice-success' : 'notice-error') . '"><p>'
-                . ($import_result ? 'Layout imported successfully.' : 'Invalid layout JSON.') . '</p></div>';
+                . ($import_result
+                    ? esc_html__('Layout imported successfully.', 'artpulse')
+                    : esc_html__('Invalid layout JSON.', 'artpulse'))
+                . '</p></div>';
         }
 
         $current  = DashboardWidgetManager::getRoleLayout($selected);
@@ -174,7 +177,7 @@ class DashboardWidgetTools
         $unused   = array_diff($all_ids, $current_ids);
 
         echo '<div class="wrap">';
-        echo '<p><a href="' . admin_url('index.php?page=dashboard-layout-help') . '" class="button">📘 View Help Guide</a></p>';
+        echo '<p><a href="' . admin_url('index.php?page=dashboard-layout-help') . '" class="button">' . esc_html__('📘 View Help Guide', 'artpulse') . '</a></p>';
         echo '<h3>' . esc_html__('Dashboard Widget Manager', 'artpulse') . '</h3>';
         echo '<form method="post" id="widget-layout-form">';
         wp_nonce_field('ap_save_role_layout');
@@ -185,17 +188,17 @@ class DashboardWidgetTools
             echo "<option value='" . esc_attr($key) . "' $sel>" . esc_html($label) . "</option>";
         }
         echo '</select> ';
-        echo '<span class="description">Drag to reorder. Toggle visibility. Click save to store layout.</span>';
+        echo '<span class="description">' . esc_html__('Drag to reorder. Toggle visibility. Click save to store layout.', 'artpulse') . '</span>';
         echo '<button type="submit" name="reset_layout" class="button">' . esc_html__('Reset Layout', 'artpulse') . '</button> ';
         echo '<button type="button" id="export-layout" class="button">' . esc_html__('Export', 'artpulse') . '</button> ';
         echo '<label for="import-layout" class="button">' . esc_html__('Import', 'artpulse') . '</label>';
         echo '<input type="file" id="import-layout" />';
         echo '<input type="hidden" id="layout_input" name="layout">';
-        echo '<p><button type="submit" id="save-layout-btn" class="button button-primary">💾 Save Layout</button></p>';
+        echo '<p><button type="submit" id="save-layout-btn" class="button button-primary">' . esc_html__('💾 Save Layout', 'artpulse') . '</button></p>';
         if (current_user_can('manage_options')) {
-            echo '<br><textarea name="import_json" rows="6" cols="60" placeholder="Paste layout JSON..."></textarea><br>';
-            echo '<button name="import_role_layout" type="submit" class="button">Import Layout</button> ';
-            echo '<button type="button" class="button" onclick="copyExportedLayout()">Copy Export</button>';
+            echo '<br><textarea name="import_json" rows="6" cols="60" placeholder="' . esc_attr__('Paste layout JSON...', 'artpulse') . '"></textarea><br>';
+            echo '<button name="import_role_layout" type="submit" class="button">' . esc_html__('Import Layout', 'artpulse') . '</button> ';
+            echo '<button type="button" class="button" onclick="copyExportedLayout()">' . esc_html__('Copy Export', 'artpulse') . '</button>';
             echo '<textarea id="export_json" rows="6" cols="60" readonly>' . esc_textarea(DashboardWidgetManager::exportRoleLayout($selected)) . '</textarea>';
         }
         echo '</form>';
@@ -210,12 +213,15 @@ class DashboardWidgetTools
                 $title = esc_html($defs_by_id[$id]['name'] ?? $id);
                 echo '<div class="ap-widget-card' . ($visible ? '' : ' is-hidden') . '" role="group" aria-label="Widget: ' . $title . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
                 echo '<div class="ap-widget-header">';
-                echo '<span class="drag-handle" title="Drag to reorder" role="button" tabindex="0" aria-label="Drag to reorder">&#9776;</span>';
+                $drag = esc_attr__('Drag to reorder', 'artpulse');
+                echo '<span class="drag-handle" title="' . $drag . '" role="button" tabindex="0" aria-label="' . $drag . '">&#9776;</span>';
                 echo '<span class="ap-widget-icon">' . artpulse_dashicon($icon) . '</span>';
                 echo '<span class="ap-widget-title">' . $title . '</span>';
                 echo '<div class="ap-widget-controls">';
-                echo '<label class="toggle-switch" title="Toggle Widget"><input type="checkbox" class="widget-toggle" aria-label="Toggle Widget"' . checked($visible, true, false) . ' /><span class="slider"></span></label>';
-                echo '<button type="button" class="widget-remove" title="Remove Widget" aria-label="Remove Widget">&#x2716;</button>';
+                $toggle = esc_attr__('Toggle Widget', 'artpulse');
+                $remove = esc_attr__('Remove Widget', 'artpulse');
+                echo '<label class="toggle-switch" title="' . $toggle . '"><input type="checkbox" class="widget-toggle" aria-label="' . $toggle . '"' . checked($visible, true, false) . ' /><span class="slider"></span></label>';
+                echo '<button type="button" class="widget-remove" title="' . $remove . '" aria-label="' . $remove . '">&#x2716;</button>';
                 echo '</div></div>';
                 if ($visible) {
                     echo '<div class="ap-widget-content">';
@@ -229,7 +235,7 @@ class DashboardWidgetTools
 
         echo '<div class="ap-add-widget">';
         echo '<h3>' . esc_html__('Add Widget', 'artpulse') . '</h3>';
-        echo '<input type="text" id="ap-widget-search" placeholder="Search widgets..." oninput="apSearchWidgets(this.value)" class="regular-text">';
+        echo '<input type="text" id="ap-widget-search" placeholder="' . esc_attr__('Search widgets...', 'artpulse') . '" oninput="apSearchWidgets(this.value)" class="regular-text">';
         $categories = array_unique(array_filter(array_column($defs, 'category')));
         if ($categories) {
             echo '<select id="ap-widget-category-filter" onchange="apFilterWidgetsByCategory(this.value)">';
@@ -276,8 +282,8 @@ class DashboardWidgetTools
         echo '</div>';
         echo '</div>';
 
-        echo '<button type="button" id="toggle-preview" class="button">Toggle Preview</button>';
-        echo '<h3>Preview Dashboard for ' . esc_html(ucfirst($selected)) . '</h3>';
+        echo '<button type="button" id="toggle-preview" class="button">' . esc_html__('Toggle Preview', 'artpulse') . '</button>';
+        echo '<h3>' . sprintf(esc_html__('Preview Dashboard for %s', 'artpulse'), esc_html(ucfirst($selected))) . '</h3>';
         echo '<div id="ap-widget-preview-area" class="ap-widget-preview-wrap">';
         self::render_preview_dashboard($selected);
         echo '</div>';
@@ -396,7 +402,7 @@ class DashboardWidgetTools
     public static function render_add_widget_modal(array $available_widgets): void
     {
         foreach ($available_widgets as $id => $def) {
-            $label       = isset($def['label']) ? $def['label'] : 'Untitled';
+            $label       = isset($def['label']) ? $def['label'] : __('Untitled', 'artpulse');
             $description = $def['description'] ?? '';
             $icon        = $def['icon'] ?? '';
             $category    = $def['category'] ?? '';
@@ -552,7 +558,7 @@ class DashboardWidgetTools
                 if (isset($def['callback']) && is_callable($def['callback'])) {
                     call_user_func($def['callback']);
                 } else {
-                    echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
+                    echo '<div class="notice notice-error"><p>' . esc_html__('Invalid or missing callback for dashboard widget.', 'artpulse') . '</p></div>';
                 }
                 echo '</div>';
             }
@@ -587,17 +593,18 @@ class DashboardWidgetTools
         self::render_layout_widgets(
             $layout,
             function (array $def, string $id, bool $visible): void {
-                $label = isset($def['label']) ? $def['label'] : 'Untitled';
+                $label = isset($def['label']) ? $def['label'] : __('Untitled', 'artpulse');
                 echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($label) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
                 $icon = $def['icon'] ?? '';
-                echo '<div class="ap-widget-header drag-handle" role="button" tabindex="0" aria-label="Drag to reorder">';
+                $drag = esc_attr__('Drag to reorder', 'artpulse');
+                echo '<div class="ap-widget-header drag-handle" role="button" tabindex="0" aria-label="' . $drag . '">';
                 echo '<span class="widget-title">' . artpulse_dashicon($icon, ['style' => 'margin-right:6px;']) . esc_html($label) . '</span>';
                 echo '</div>';
                 echo '<div class="inside">';
                 if (isset($def['callback']) && is_callable($def['callback'])) {
                     call_user_func($def['callback']);
                 } else {
-                    echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
+                    echo '<div class="notice notice-error"><p>' . esc_html__('Invalid or missing callback for dashboard widget.', 'artpulse') . '</p></div>';
                 }
                 echo '</div></div>';
             }
@@ -653,18 +660,19 @@ class DashboardWidgetTools
             }
 
             $w     = $registry[$id];
-            $label = isset($w['label']) ? $w['label'] : 'Untitled';
+            $label = isset($w['label']) ? $w['label'] : __('Untitled', 'artpulse');
 
             echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($label) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
             $icon = $w['icon'] ?? '';
-            echo '<div class="ap-widget-header drag-handle" role="button" tabindex="0" aria-label="Drag to reorder">';
+            $drag = esc_attr__('Drag to reorder', 'artpulse');
+            echo '<div class="ap-widget-header drag-handle" role="button" tabindex="0" aria-label="' . $drag . '">';
             echo '<span class="widget-title">' . artpulse_dashicon($icon, ['style' => 'margin-right:6px;']) . esc_html($label) . '</span>';
             echo '</div>';
             echo '<div class="inside">';
             if (isset($w['callback']) && is_callable($w['callback'])) {
                 call_user_func($w['callback']);
             } else {
-                echo '<div class="notice notice-error"><p>Invalid or missing callback for dashboard widget.</p></div>';
+                echo '<div class="notice notice-error"><p>' . esc_html__('Invalid or missing callback for dashboard widget.', 'artpulse') . '</p></div>';
             }
             echo '</div></div>';
         }

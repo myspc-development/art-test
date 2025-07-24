@@ -19,7 +19,7 @@ register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ArtPulse\\DB\\create_monetizatio
 add_action('plugins_loaded', function () {
     if (current_user_can('administrator') && isset($_GET['repair_artpulse_db'])) {
         ArtPulse\DB\create_monetization_tables();
-        echo '✅ ArtPulse DB tables created.';
+        esc_html_e('✅ ArtPulse DB tables created.', 'artpulse');
     }
 });
 
@@ -63,7 +63,9 @@ function ap_diagnostics_page_loader() {
     if (file_exists($path)) {
         include $path;
     } else {
-        echo '<div class="notice notice-error"><p>Diagnostics file not found.</p></div>';
+        echo '<div class="notice notice-error"><p>' .
+            esc_html__('Diagnostics file not found.', 'artpulse') .
+            '</p></div>';
     }
 }
 
@@ -72,6 +74,6 @@ add_action('wp_ajax_ap_ajax_test', function () {
     check_ajax_referer('ap_diagnostics_test', 'nonce');
 
     wp_send_json_success([
-        'message' => 'AJAX is working, nonce is valid, and you are authenticated.'
+        'message' => __('AJAX is working, nonce is valid, and you are authenticated.', 'artpulse')
     ]);
 });

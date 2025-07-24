@@ -32,7 +32,7 @@ class TaxonomyFilterBlock {
 
     public static function render_callback($attributes) {
         if (empty($attributes['postType']) || empty($attributes['taxonomy'])) {
-            return '<p>Please select post type and taxonomy.</p>';
+            return '<p>' . esc_html__('Please select post type and taxonomy.', 'artpulse') . '</p>';
         }
 
         $post_type = sanitize_text_field($attributes['postType']);
