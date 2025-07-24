@@ -1,0 +1,47 @@
+- ✅ ArtPulse DB tables created.
+- Diagnostics file not found.
+- AJAX is working, nonce is valid, and you are authenticated.
+- Please log in to view your notifications.
+- Your Notifications
+- 🔄 Refresh
+- No notifications.
+- Mark as read
+- Submit
+- Please log in to comment.
+- Layout imported successfully.
+- Invalid layout JSON.
+- 📘 View Help Guide
+- Drag to reorder. Toggle visibility. Click save to store layout.
+- Export
+- Import
+- 💾 Save Layout
+- Paste layout JSON...
+- Import Layout
+- Copy Export
+- Search widgets...
+- Toggle Preview
+- Preview Dashboard for %s
+- Drag to reorder
+- Toggle Widget
+- Remove Widget
+- Invalid or missing callback for dashboard widget.
+- Untitled
+- ArtPulse Events
+- You must be logged in to submit an event.
+- Security check failed.
+- Please enter an event title.
+- Please enter an event description.
+- Please enter an event date.
+- Please enter a valid date in YYYY-MM-DD format.
+- Start date cannot be later than end date.
+- Please select an organization.
+- Invalid organization selected.
+- Please provide a publish date.
+- Error submitting event. Please try again later.
+- Error uploading banner. Please try again.
+- Error uploading additional image. Please try again.
+- Event submitted successfully! It is awaiting review.
+- Please select post type and taxonomy.
+- Score: %s
+- Hi %s,
+- Thanks,<br/>ArtPulse Team

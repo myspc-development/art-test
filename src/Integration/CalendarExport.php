@@ -161,7 +161,7 @@ class CalendarExport
         ob_start();
         echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         echo "<rss version=\"2.0\"><channel>";
-        echo '<title>ArtPulse Events</title>';
+        echo '<title>' . esc_html__('ArtPulse Events', 'artpulse') . '</title>';
         echo '<link>' . esc_url(home_url()) . '</link>';
         foreach ($events as $event) {
             echo '<item>';

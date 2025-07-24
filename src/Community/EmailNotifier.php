@@ -192,7 +192,7 @@ class EmailNotifier {
      */
     private static function generate_body($user, $content) {
         return sprintf(
-            '<p>Hi %s,</p><p>%s</p><p>Thanks,<br/>ArtPulse Team</p>',
+            __('Hi %s,', 'artpulse') . '<p>%s</p>' . __('Thanks,<br/>ArtPulse Team', 'artpulse'),
             esc_html($user->display_name),
             nl2br(esc_html($content))
         );

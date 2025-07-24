@@ -34,10 +34,10 @@ class ArtworkCommentsShortcode
             <?php if (is_user_logged_in()): ?>
                 <form class="ap-comment-form">
                     <textarea name="content" required></textarea>
-                    <button type="submit">Submit</button>
+                    <button type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
                 </form>
             <?php else: ?>
-                <p>Please log in to comment.</p>
+                <p><?php esc_html_e('Please log in to comment.', 'artpulse'); ?></p>
             <?php endif; ?>
         </div>
         <?php

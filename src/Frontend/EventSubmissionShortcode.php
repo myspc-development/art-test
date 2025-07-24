@@ -71,7 +71,7 @@ class EventSubmissionShortcode {
 
     public static function render() {
         if (!is_user_logged_in()) {
-            return '<p>You must be logged in to submit an event.</p>';
+            return '<p>' . esc_html__('You must be logged in to submit an event.', 'artpulse') . '</p>';
         }
 
         $user_id = get_current_user_id();
@@ -272,7 +272,7 @@ class EventSubmissionShortcode {
 
         // Verify nonce
         if (!isset($_POST['ap_event_nonce']) || !wp_verify_nonce($_POST['ap_event_nonce'], 'ap_submit_event')) {
-            self::add_notice('Security check failed.', 'error');
+            self::add_notice(__('Security check failed.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
         }
@@ -308,39 +308,39 @@ class EventSubmissionShortcode {
         $featured = isset($_POST['event_featured']) ? '1' : '0';
 
         if (empty($event_title)) {
-            self::add_notice('Please enter an event title.', 'error');
+            self::add_notice(__('Please enter an event title.', 'artpulse'), 'error');
             self::maybe_redirect();
             return; // Stop processing
         }
 
         if (empty($event_description)) {
-            self::add_notice('Please enter an event description.', 'error');
+            self::add_notice(__('Please enter an event description.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
         }
 
         if (empty($event_date)) {
-            self::add_notice('Please enter an event date.', 'error');
+            self::add_notice(__('Please enter an event date.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
         }
 
         // Validate the date format
         if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $event_date)) {
-            self::add_notice('Please enter a valid date in YYYY-MM-DD format.', 'error');
+            self::add_notice(__('Please enter a valid date in YYYY-MM-DD format.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
         }
 
         // Validate that start date is not later than end date when both provided
         if ($start_date && $end_date && strtotime($start_date) > strtotime($end_date)) {
-            self::add_notice('Start date cannot be later than end date.', 'error');
+            self::add_notice(__('Start date cannot be later than end date.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
         }
 
         if ($event_org <= 0) {
-            self::add_notice('Please select an organization.', 'error');
+            self::add_notice(__('Please select an organization.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
         }
@@ -358,7 +358,7 @@ class EventSubmissionShortcode {
         }
 
         if (!in_array($event_org, $authorized, true)) {
-            self::add_notice('Invalid organization selected.', 'error');
+            self::add_notice(__('Invalid organization selected.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
         }
@@ -375,7 +375,7 @@ class EventSubmissionShortcode {
             if ($publish_date) {
                 $post_date = $publish_date;
             } else {
-                self::add_notice('Please provide a publish date.', 'error');
+                self::add_notice(__('Please provide a publish date.', 'artpulse'), 'error');
                 self::maybe_redirect();
                 return;
             }
@@ -397,7 +397,7 @@ class EventSubmissionShortcode {
 
         if (is_wp_error($post_id)) {
             error_log('Error creating event post: ' . $post_id->get_error_message());
-            self::add_notice('Error submitting event. Please try again later.', 'error');
+            self::add_notice(__('Error submitting event. Please try again later.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
         }
@@ -458,7 +458,7 @@ class EventSubmissionShortcode {
                 update_post_meta($post_id, 'event_banner_id', $attachment_id); // Store banner ID separately
             } else {
                 error_log('Error uploading banner: ' . $attachment_id->get_error_message());
-                self::add_notice('Error uploading banner. Please try again.', 'error');
+                self::add_notice(__('Error uploading banner. Please try again.', 'artpulse'), 'error');
                 self::maybe_redirect();
                 return;
             }
@@ -498,7 +498,7 @@ class EventSubmissionShortcode {
                 $image_ids[] = $attachment_id;
             } else {
                 error_log('Error uploading additional image: ' . $attachment_id->get_error_message());
-                self::add_notice('Error uploading additional image. Please try again.', 'error');
+                self::add_notice(__('Error uploading additional image. Please try again.', 'artpulse'), 'error');
                 self::maybe_redirect();
                 return;
             }
@@ -539,7 +539,7 @@ class EventSubmissionShortcode {
 
 
         // Success message and redirect
-        self::add_notice('Event submitted successfully! It is awaiting review.', 'success');
+        self::add_notice(__('Event submitted successfully! It is awaiting review.', 'artpulse'), 'success');
         self::maybe_redirect();
     }
 }
