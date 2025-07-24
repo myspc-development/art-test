@@ -286,8 +286,8 @@ class EnqueueAssets {
                 true
             );
          }
-        if (!wp_script_is('ap-my-follows', 'enqueued')) {
-             wp_enqueue_script(
+        if (!wp_script_is('ap-my-follows-js', 'enqueued')) {
+            wp_enqueue_script(
                 'ap-my-follows-js',
                 $plugin_url . '/assets/js/ap-my-follows.js',
                 [],
@@ -604,14 +604,14 @@ class EnqueueAssets {
         ]);
 
         wp_enqueue_script(
-            'ap-my-follows',
+            'ap-my-follows-js',
             $plugin_url . '/assets/js/ap-my-follows.js',
             ['jquery'],
             '1.0.0',
             true
         );
         wp_localize_script(
-            'ap-my-follows',
+            'ap-my-follows-js',
             'ArtPulseFollowsApi',
             [
                 'root'     => esc_url_raw(rest_url()),
