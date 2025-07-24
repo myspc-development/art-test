@@ -25,4 +25,15 @@ class DashboardWidgetRegistryRoleFilterTest extends TestCase
         $this->assertArrayNotHasKey('beta', $member);
         $this->assertArrayHasKey('beta', $admin);
     }
+
+    public function test_get_widgets_combines_roles(): void
+    {
+        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', '__return_null', ['roles' => ['member']]);
+        DashboardWidgetRegistry::register('beta', 'Beta', '', '', '__return_null', ['roles' => ['artist']]);
+
+        $combined = DashboardWidgetRegistry::get_widgets(['member', 'artist']);
+
+        $this->assertArrayHasKey('alpha', $combined);
+        $this->assertArrayHasKey('beta', $combined);
+    }
 }

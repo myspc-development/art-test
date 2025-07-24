@@ -205,10 +205,17 @@ class DashboardWidgetRegistry {
     /**
      * Get widget callbacks allowed for a user role.
      */
-    public static function get_widgets( string $user_role ): array {
+    /**
+     * Get widget callbacks allowed for one or more user roles.
+     *
+     * @param string|array $user_role Single role or list of roles.
+     */
+    public static function get_widgets( $user_role ): array {
+        $roles   = array_map( 'sanitize_key', (array) $user_role );
         $allowed = [];
         foreach ( self::$widgets as $id => $config ) {
-            if ( ! empty( $config['roles'] ) && ! in_array( $user_role, (array) $config['roles'], true ) ) {
+            $widget_roles = isset( $config['roles'] ) ? (array) $config['roles'] : [];
+            if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
                 continue;
             }
             $allowed[ $id ] = $config['callback'];
