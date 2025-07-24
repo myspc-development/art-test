@@ -160,6 +160,7 @@ Post lists display extra columns like dates and membership level. Columns can be
 - **My event isn’t showing up on the calendar/map?** Double-check the event location and date in your dashboard.
 - **System Status** lists recent webhook deliveries and server requirements.
 - Import errors skip failed rows—verify column mappings if data is missing.
+- **Portfolio Sync Tools** under Settings lets admins run a full sync or migrate legacy posts. Use this if portfolio items seem out of date.
 - For additional help see the Developer Guide or visit <https://docs.artpulse.io>.
 
 ## Organization Dashboard Caching
