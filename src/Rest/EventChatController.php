@@ -43,25 +43,24 @@ class EventChatController extends WP_REST_Controller
             return new WP_Error('invalid_event', 'Invalid event.', ['status' => 404]);
         }
 
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_event_chat';
-        $rows = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT user_id, content, created_at FROM $table WHERE event_id = %d ORDER BY created_at ASC LIMIT 50",
-                $event_id
-            ),
-            ARRAY_A
-        );
+        \ArtPulse\DB\Chat\maybe_install_tables();
+        $rows = \ArtPulse\DB\Chat\get_messages($event_id);
 
         $messages = array_map(static function ($row) {
             $user   = get_userdata((int) $row['user_id']);
             $avatar = get_avatar_url((int) $row['user_id'], ['size' => 48]);
+            if ($avatar) {
+                $avatar = set_url_scheme($avatar, 'https');
+            }
             return [
+                'id'         => (int) $row['id'],
                 'user_id'    => (int) $row['user_id'],
                 'author'     => $user ? $user->display_name : '',
-                'avatar'     => $avatar ? set_url_scheme($avatar, 'https') : '',
+                'avatar'     => $avatar ?: '',
                 'content'    => $row['content'],
                 'created_at' => $row['created_at'],
+                'flagged'    => (int) $row['flagged'],
+                'reactions'  => $row['reactions'],
             ];
         }, $rows);
 

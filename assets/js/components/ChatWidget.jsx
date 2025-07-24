@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import EmojiPicker from 'emoji-picker-react';
 const { __ } = wp.i18n;
 
 export default function ChatWidget({ eventId, canPost }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
+  const [showPicker, setShowPicker] = useState(false);
   const [error, setError] = useState(null);
+  const fetching = useRef(false);
 
   const load = async () => {
+    if (fetching.current) return;
+    fetching.current = true;
     try {
       const resp = await fetch(`${APChat.apiRoot}artpulse/v1/event/${eventId}/chat`, {
         headers: { 'X-WP-Nonce': APChat.nonce },
@@ -20,6 +25,8 @@ export default function ChatWidget({ eventId, canPost }) {
       }
     } catch (err) {
       setError(err);
+    } finally {
+      fetching.current = false;
     }
   };
 
@@ -27,7 +34,7 @@ export default function ChatWidget({ eventId, canPost }) {
     load();
     let id = null;
     if (!window.IS_DASHBOARD_BUILDER_PREVIEW) {
-      id = setInterval(load, 10000);
+      id = setInterval(load, 5000);
     }
     return () => { if (id) clearInterval(id); };
   }, [eventId]);
@@ -52,6 +59,21 @@ export default function ChatWidget({ eventId, canPost }) {
         body: JSON.stringify({ content: msg })
       });
       setText('');
+      setShowPicker(false);
+      load();
+    } catch (err) {
+      setError(err);
+    }
+  };
+
+  const react = async (id, emoji) => {
+    try {
+      await fetch(`${APChat.apiRoot}artpulse/v1/chat/${id}/reaction`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': APChat.nonce },
+        credentials: 'same-origin',
+        body: JSON.stringify({ emoji })
+      });
       load();
     } catch (err) {
       setError(err);
@@ -68,6 +90,13 @@ export default function ChatWidget({ eventId, canPost }) {
               <span className="ap-chat-author">{m.author}</span>
               <span className="ap-chat-time">{new Intl.DateTimeFormat('en', { timeStyle: 'short' }).format(new Date(m.created_at))}</span>
               <p className="ap-chat-content">{m.content}</p>
+              <div className="ap-chat-reactions">
+                {m.reactions && Object.entries(m.reactions).map(([emo,c]) => (
+                  <button key={emo} type="button" onClick={() => react(m.id, emo)}>{emo} {c}</button>
+                ))}
+                <button type="button" onClick={() => react(m.id, '❤️')}>❤️</button>
+                <button type="button" onClick={() => react(m.id, '👍')}>👍</button>
+              </div>
             </li>
           ))
         ) : (
@@ -85,6 +114,10 @@ export default function ChatWidget({ eventId, canPost }) {
             value={text}
             onChange={e => setText(e.target.value)}
           />
+          <button type="button" onClick={() => setShowPicker(!showPicker)}>😊</button>
+          {showPicker && (
+            <EmojiPicker onEmojiClick={e => setText(t => t + e.emoji)} />
+          )}
           <button type="submit" aria-label={__('Send chat message', 'artpulse')}>{__('Send', 'artpulse')}</button>
         </form>
       ) : (

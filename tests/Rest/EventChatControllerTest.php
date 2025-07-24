@@ -2,7 +2,9 @@
 namespace ArtPulse\Rest\Tests;
 
 use WP_REST_Request;
-use ArtPulse\Community\EventChatController;
+use ArtPulse\DB\Chat;
+use ArtPulse\Rest\EventChatPostController;
+use ArtPulse\Rest\EventChatController;
 
 /**
  * @group restapi
@@ -15,8 +17,9 @@ class EventChatControllerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
-        EventChatController::install_table();
+        Chat\install_tables();
         EventChatController::register();
+        EventChatPostController::register();
         do_action('rest_api_init');
 
         $this->event = self::factory()->post->create([
@@ -34,6 +37,7 @@ class EventChatControllerTest extends \WP_UnitTestCase
         $post->set_body_params(['content' => 'Hello']);
         $res = rest_get_server()->dispatch($post);
         $this->assertSame(200, $res->get_status());
+        $msg = $res->get_data();
 
         $get = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event . '/chat');
         $res = rest_get_server()->dispatch($get);
@@ -41,5 +45,14 @@ class EventChatControllerTest extends \WP_UnitTestCase
         $data = $res->get_data();
         $this->assertCount(1, $data);
         $this->assertSame('Hello', $data[0]['content']);
+
+        $react = new WP_REST_Request('POST', '/artpulse/v1/chat/' . $msg['id'] . '/reaction');
+        $react->set_body_params(['emoji' => '❤️']);
+        $res = rest_get_server()->dispatch($react);
+        $this->assertSame(200, $res->get_status());
+
+        $res = rest_get_server()->dispatch($get);
+        $data = $res->get_data();
+        $this->assertSame(1, $data[0]['reactions']['❤️']);
     }
 }
