@@ -178,6 +178,12 @@ class UserDashboardManager
             '1.0.0',
             true
         );
+        $user  = wp_get_current_user();
+        wp_localize_script('ap-dashboard-nav', 'APDashboardMenu', [
+            'roles' => $user->roles,
+            'menu'  => ap_merge_dashboard_menus($user->roles, true),
+            'debug' => defined('WP_DEBUG') && WP_DEBUG,
+        ]);
     }
 
     public static function registerRestRoutes()

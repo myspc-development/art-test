@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
+  if (window.APDashboardMenu) {
+    console.log('AP roles:', APDashboardMenu.roles);
+    console.log('Merged menu:', APDashboardMenu.menu);
+    if (APDashboardMenu.debug) {
+      const dbg = document.createElement('div');
+      dbg.className = 'ap-menu-debug';
+      dbg.textContent = `Roles: ${APDashboardMenu.roles.join(', ')} | Items: ${APDashboardMenu.menu.length}`;
+      document.querySelector('.dashboard-nav')?.appendChild(dbg);
+    }
+  }
   const sections = document.querySelectorAll('.ap-dashboard-section');
   const links = document.querySelectorAll('.dashboard-link');
 
