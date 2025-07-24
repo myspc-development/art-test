@@ -27,6 +27,12 @@ class EventListController
                 'before'     => [ 'type' => 'string' ],
                 'category'   => [ 'type' => 'string' ],
                 'event_type' => [ 'type' => 'string' ],
+                'organizer'  => [ 'type' => 'string' ],
+                'price_type' => [ 'type' => 'string' ],
+                'lat'        => [ 'type' => 'number' ],
+                'lng'        => [ 'type' => 'number' ],
+                'radius'     => [ 'type' => 'number', 'default' => 50 ],
+                'alpha'      => [ 'type' => 'string' ],
                 'sort'       => [ 'type' => 'string', 'default' => 'soonest' ],
                 'per_page'   => [ 'type' => 'integer', 'default' => 12 ],
             ],
@@ -39,6 +45,12 @@ class EventListController
         $venue      = $request->get_param('venue');
         $after      = $request->get_param('after');
         $before     = $request->get_param('before');
+        $organizer  = $request->get_param('organizer');
+        $price_type = $request->get_param('price_type');
+        $lat        = $request->get_param('lat');
+        $lng        = $request->get_param('lng');
+        $radius     = $request->get_param('radius');
+        $alpha      = $request->get_param('alpha');
         if ($venue !== null && $venue !== '') {
             $meta_query[] = [
                 'key'     => 'venue_name',
@@ -60,6 +72,36 @@ class EventListController
                 'value'   => sanitize_text_field($before),
                 'compare' => '<=',
                 'type'    => 'DATE',
+            ];
+        }
+        if ($organizer) {
+            $meta_query[] = [
+                'key'     => 'event_organizer_name',
+                'value'   => sanitize_text_field($organizer),
+                'compare' => 'LIKE',
+            ];
+        }
+        if ($price_type) {
+            $meta_query[] = [
+                'key'   => 'price_type',
+                'value' => sanitize_text_field($price_type),
+            ];
+        }
+        if (is_numeric($lat) && is_numeric($lng) && is_numeric($radius)) {
+            $lat = floatval($lat);
+            $lng = floatval($lng);
+            $r   = floatval($radius) / 111.0;
+            $meta_query[] = [
+                'key'     => 'event_lat',
+                'value'   => [ $lat - $r, $lat + $r ],
+                'compare' => 'BETWEEN',
+                'type'    => 'numeric',
+            ];
+            $meta_query[] = [
+                'key'     => 'event_lng',
+                'value'   => [ $lng - $r, $lng + $r ],
+                'compare' => 'BETWEEN',
+                'type'    => 'numeric',
             ];
         }
 
@@ -115,6 +157,16 @@ class EventListController
         $html  = '';
         if ($query->have_posts()) {
             foreach ($query->posts as $p) {
+                $title_first = strtoupper(mb_substr($p->post_title, 0, 1));
+                if ($alpha) {
+                    if ($alpha === '#') {
+                        if (ctype_alpha($title_first)) {
+                            continue;
+                        }
+                    } elseif ($title_first !== strtoupper($alpha)) {
+                        continue;
+                    }
+                }
                 $html .= ap_get_event_card($p->ID);
             }
         }
