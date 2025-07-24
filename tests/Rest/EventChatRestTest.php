@@ -16,7 +16,7 @@ class EventChatRestTest extends \WP_UnitTestCase
     {
         parent::set_up();
         EventChatController::install_table();
-        require_once dirname(__DIR__, 2) . '/src/Rest/EventChat.php';
+        require_once dirname(__DIR__, 2) . '/src/Rest/EventChatController.php';
         do_action('rest_api_init');
 
         $this->event = self::factory()->post->create([
