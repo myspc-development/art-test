@@ -14,37 +14,47 @@ use ArtPulse\Core\DashboardWidgetRegistry;
  * @param array  $old_roles  Roles prior to the change.
  */
 function ap_merge_dashboard_on_role_upgrade( int $user_id, string $new_role, array $old_roles ) : void {
-    if ( ! in_array( $new_role, [ 'artist', 'organization' ], true ) ) {
+    $supported_roles = [ 'member', 'artist', 'organization' ];
+    if ( ! in_array( $new_role, $supported_roles, true ) ) {
+        return; // Ignore unrelated roles.
+    }
+
+    $user  = get_userdata( $user_id );
+    if ( ! $user ) {
         return;
     }
-    if ( ! in_array( 'member', $old_roles, true ) ) {
-        return; // Only merge when upgrading from member.
+    $roles = array_values( array_intersect( $supported_roles, (array) $user->roles ) );
+    if ( count( $roles ) <= 1 ) {
+        return; // Nothing to merge if user has a single role.
     }
 
     $current = get_user_meta( $user_id, 'ap_dashboard_layout', true );
     if ( ! is_array( $current ) || empty( $current ) ) {
-        $current = UserLayoutManager::get_role_layout( 'member' );
+        $current = UserLayoutManager::get_role_layout( $roles[0] );
     }
-    $additional = UserLayoutManager::get_role_layout( $new_role );
 
-    $merged        = [];
-    $seen_ids      = [];
-    $all_widgets   = DashboardWidgetRegistry::get_definitions();
-    $valid_ids     = array_column( $all_widgets, 'id' );
-    foreach ( array_merge( $current, $additional ) as $item ) {
-        $id  = '';
-        $vis = true;
-        if ( is_array( $item ) && isset( $item['id'] ) ) {
-            $id  = sanitize_key( $item['id'] );
-            $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
-        } elseif ( is_string( $item ) ) {
-            $id = sanitize_key( $item );
+    $merged      = [];
+    $seen_ids    = [];
+    $all_widgets = DashboardWidgetRegistry::get_definitions();
+    $valid_ids   = array_column( $all_widgets, 'id' );
+
+    foreach ( $roles as $role ) {
+        $layout = $role === $roles[0] ? $current : UserLayoutManager::get_role_layout( $role );
+        foreach ( $layout as $item ) {
+            $id  = '';
+            $vis = true;
+            if ( is_array( $item ) && isset( $item['id'] ) ) {
+                $id  = sanitize_key( $item['id'] );
+                $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
+            } elseif ( is_string( $item ) ) {
+                $id = sanitize_key( $item );
+            }
+            if ( ! $id || isset( $seen_ids[ $id ] ) || ! in_array( $id, $valid_ids, true ) ) {
+                continue;
+            }
+            $seen_ids[ $id ] = true;
+            $merged[]        = [ 'id' => $id, 'visible' => $vis ];
         }
-        if ( ! $id || in_array( $id, $seen_ids, true ) || ! in_array( $id, $valid_ids, true ) ) {
-            continue;
-        }
-        $seen_ids[] = $id;
-        $merged[]   = [ 'id' => $id, 'visible' => $vis ];
     }
 
     update_user_meta( $user_id, 'ap_dashboard_layout', $merged );
