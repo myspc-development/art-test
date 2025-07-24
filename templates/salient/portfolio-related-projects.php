@@ -3,10 +3,17 @@
  * Related Projects section for Salient portfolio Event posts.
  *
  * Outputs linked artist and organization portfolio posts if stored in
- * `_ap_related_artists` and `_ap_related_org` meta.
+ * `_ap_related_artist_ids` and `_ap_related_org_ids` meta. Falls back to the
+ * legacy `_ap_related_artists` and `_ap_related_org` keys for compatibility.
  * Developers can filter the heading text and whether artists or organizations
  * display via `ap_related_projects_heading`, `ap_show_related_artists` and
  * `ap_show_related_orgs` filters.
+ *
+ * Include from `single-portfolio.php` after the main content:
+ *
+ * ```php
+ * locate_template( 'templates/salient/portfolio-related-projects.php', true, true );
+ * ```
  *
  * Copy this file to your theme to override the layout.
  *
@@ -17,14 +24,22 @@ $heading       = $heading ?? apply_filters( 'ap_related_projects_heading', __( '
 $show_artists  = $show_artists ?? apply_filters( 'ap_show_related_artists', true );
 $show_orgs     = $show_orgs ?? apply_filters( 'ap_show_related_orgs', true );
 
-$artist_ids = $show_artists ? (array) get_post_meta( get_the_ID(), '_ap_related_artists', true ) : [];
-$artist_ids = array_filter( array_map( 'intval', $artist_ids ) );
-$org_id     = $show_orgs ? (int) get_post_meta( get_the_ID(), '_ap_related_org', true ) : 0;
-$ids        = $artist_ids;
-if ( $org_id ) {
-    $ids[] = $org_id;
+$artist_ids = $show_artists ? (array) get_post_meta( get_the_ID(), '_ap_related_artist_ids', true ) : [];
+if ( empty( $artist_ids ) ) {
+    $artist_ids = $show_artists ? (array) get_post_meta( get_the_ID(), '_ap_related_artists', true ) : [];
 }
-$ids = array_unique( $ids );
+$artist_ids = array_filter( array_map( 'intval', $artist_ids ) );
+
+$org_ids = $show_orgs ? (array) get_post_meta( get_the_ID(), '_ap_related_org_ids', true ) : [];
+if ( empty( $org_ids ) ) {
+    $legacy_org = $show_orgs ? (int) get_post_meta( get_the_ID(), '_ap_related_org', true ) : 0;
+    if ( $legacy_org ) {
+        $org_ids[] = $legacy_org;
+    }
+}
+$org_ids = array_filter( array_map( 'intval', $org_ids ) );
+
+$ids = array_unique( array_merge( $artist_ids, $org_ids ) );
 if ( empty( $ids ) ) {
     return;
 }
