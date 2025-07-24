@@ -58,3 +58,22 @@
   border-radius: 999px;
   cursor: pointer;
 }
+
+.ap-alpha-bar {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.ap-alpha-btn {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.ap-alpha-btn.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}

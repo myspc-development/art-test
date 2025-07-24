@@ -64,6 +64,7 @@ class EventListingShortcode
         ob_start();
         ?>
         <div class="ap-event-listing-wrapper" data-per-page="<?php echo intval($atts['posts_per_page']); ?>">
+            <nav class="ap-alpha-bar" aria-label="<?php esc_attr_e('Filter by alphabet', 'artpulse'); ?>"></nav>
             <form id="ap-event-listing-form" class="ap-event-filter-form" autocomplete="off">
                 <input type="text" name="venue" placeholder="<?php esc_attr_e('Venue', 'artpulse'); ?>">
                 <input type="date" name="after">
@@ -85,6 +86,15 @@ class EventListingShortcode
                     <option value="az"><?php esc_html_e('A–Z', 'artpulse'); ?></option>
                     <option value="newest"><?php esc_html_e('Newest', 'artpulse'); ?></option>
                 </select>
+                <input type="hidden" name="alpha" value="">
+                <input type="hidden" name="lat" value="">
+                <input type="hidden" name="lng" value="">
+                <select name="radius">
+                    <option value="10">10 km</option>
+                    <option value="25">25 km</option>
+                    <option value="50" selected>50 km</option>
+                </select>
+                <button type="button" id="ap-nearby-btn" class="ap-form-button"><?php esc_html_e('Events Near Me', 'artpulse'); ?></button>
                 <button type="submit" class="ap-form-button"><?php esc_html_e('Apply', 'artpulse'); ?></button>
             </form>
             <div class="ap-filter-chips" aria-label="<?php esc_attr_e('Active filters', 'artpulse'); ?>"></div>
