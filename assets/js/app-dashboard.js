@@ -1,5 +1,6 @@
 var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
   'use strict';
+  var __ = wp.i18n.__;
 
   GridLayout = GridLayout.WidthProvider(GridLayout.Responsive);
 
@@ -83,7 +84,7 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
         if (res.status === 401 || res.status === 403) {
           setMessages([{
             id: 0,
-            content: 'Please log in to view messages.'
+            content: __('Please log in to view messages.', 'artpulse')
           }]);
           return Promise.reject('unauthorized');
         }

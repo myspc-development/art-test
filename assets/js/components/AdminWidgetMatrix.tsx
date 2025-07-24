@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+const { __ } = wp.i18n;
 
 interface Widget { id: string; name: string; roles?: string[]; }
 // REST responses use `widget_roles` for the matrix object
@@ -43,7 +44,7 @@ export default function AdminWidgetMatrix() {
       body: JSON.stringify({ widget_roles: matrix })
     }).then(() => {
       if (window.wp?.data?.dispatch) {
-        wp.data.dispatch('core/notices').createNotice('success', 'Saved', { isDismissible: true });
+        wp.data.dispatch('core/notices').createNotice('success', __('Saved', 'artpulse'), { isDismissible: true });
       }
     });
   };
@@ -53,7 +54,7 @@ export default function AdminWidgetMatrix() {
       <table className="widefat striped">
         <thead>
           <tr>
-            <th>Widget</th>
+            <th>{__('Widget', 'artpulse')}</th>
             {roles.map(r => (
               <th key={r}>{r}</th>
             ))}
@@ -78,7 +79,7 @@ export default function AdminWidgetMatrix() {
       </table>
       <p>
         <button type="button" className="button button-primary" onClick={save}>
-          Save
+          {__('Save', 'artpulse')}
         </button>
       </p>
     </div>

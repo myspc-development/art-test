@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+const { __ } = wp.i18n;
 
 export default function MessagesPanel() {
   const [messages, setMessages] = useState([]);
@@ -7,7 +8,7 @@ export default function MessagesPanel() {
     fetch('/wp-json/artpulse/v1/dashboard/messages')
       .then(res => {
         if (res.status === 401 || res.status === 403) {
-          setMessages([{ id: 0, content: 'Please log in to view messages.' }]);
+          setMessages([{ id: 0, content: __('Please log in to view messages.', 'artpulse') }]);
           return Promise.reject('unauthorized');
         }
         return res.json();

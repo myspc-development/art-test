@@ -1,4 +1,5 @@
 (function($){
+  const { __ } = wp.i18n;
   var pollInterval = null;
   var retryCount = 0;
   var maxRetries = 3;
@@ -21,7 +22,7 @@
         if(!$list.length) return;
         $list.empty();
         if(!data || !data.length){
-          $list.append('<li>No conversations.</li>');
+          $list.append('<li>' + __('No conversations.', 'artpulse') + '</li>');
           return;
         }
         data.forEach(function(item){
@@ -43,10 +44,10 @@
       },
       error: function(jqXHR){
         if(jqXHR.status === 401 || jqXHR.status === 403){
-          showError("You must be logged in to use messaging.");
+          showError(__('You must be logged in to use messaging.', 'artpulse'));
           var $list = $('#ap-conversation-list');
           if($list.length){
-            $list.empty().append('<li>Please log in to view messages.</li>');
+            $list.empty().append('<li>' + __('Please log in to view messages.', 'artpulse') + '</li>');
           }
           if(pollInterval){
             clearInterval(pollInterval);
@@ -72,10 +73,10 @@
       },
       error: function(jqXHR){
         if(jqXHR.status === 401 || jqXHR.status === 403){
-          showError("You must be logged in to use messaging.");
+          showError(__('You must be logged in to use messaging.', 'artpulse'));
           var $box = $('#ap-message-list');
           if($box.length){
-            $box.empty().append('<li>Please log in to view messages.</li>');
+            $box.empty().append('<li>' + __('Please log in to view messages.', 'artpulse') + '</li>');
           }
           if(pollInterval){
             clearInterval(pollInterval);
@@ -144,7 +145,7 @@
 
   $(document).ready(function(){
     if(!APMessages.loggedIn){
-      showError('Please log in to view messages.');
+      showError(__('Please log in to view messages.', 'artpulse'));
       return;
     }
     listConversations();
