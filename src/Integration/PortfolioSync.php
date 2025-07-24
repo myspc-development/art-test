@@ -6,6 +6,8 @@ namespace ArtPulse\Integration;
  */
 class PortfolioSync
 {
+    /** @var bool */
+    private static $syncing = false;
     /**
      * Register hooks for syncing portfolio posts.
      */
@@ -16,6 +18,7 @@ class PortfolioSync
             add_action("save_post_{$type}", [self::class, 'sync_portfolio'], 10, 2);
         }
         add_action('before_delete_post', [self::class, 'delete_portfolio']);
+        add_action('save_post_portfolio', [self::class, 'sync_source'], 10, 2);
     }
 
     /**
@@ -26,12 +29,14 @@ class PortfolioSync
      */
     public static function sync_portfolio($post_id, $post)
     {
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        if (self::$syncing || (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)) {
             return;
         }
         if (wp_is_post_revision($post_id)) {
             return;
         }
+
+        self::$syncing = true;
 
         $ids = [];
         if (in_array($post->post_type, ['artpulse_artwork', 'artpulse_event', 'artpulse_org'], true)) {
@@ -50,15 +55,16 @@ class PortfolioSync
             'fields'      => 'ids',
         ]);
 
-        if ($existing) {
-            $portfolio_id = $existing[0];
-            wp_update_post([
-                'ID'           => $portfolio_id,
-                'post_title'   => $post->post_title,
-                'post_content' => $post->post_content,
-                'post_status'  => $post->post_status,
-            ]);
-        } else {
+       if ($existing) {
+           $portfolio_id = $existing[0];
+           wp_update_post([
+               'ID'           => $portfolio_id,
+               'post_title'   => $post->post_title,
+               'post_content' => $post->post_content,
+               'post_status'  => $post->post_status,
+           ]);
+            update_post_meta($post_id, '_ap_portfolio_id', $portfolio_id);
+       } else {
             $portfolio_id = wp_insert_post([
                 'post_type'   => 'portfolio',
                 'post_title'  => $post->post_title,
@@ -68,11 +74,27 @@ class PortfolioSync
             ]);
             if (!is_wp_error($portfolio_id) && $portfolio_id) {
                 update_post_meta($portfolio_id, '_ap_source_post', $post_id);
+                update_post_meta($post_id, '_ap_portfolio_id', $portfolio_id);
             }
         }
 
         if (!empty($portfolio_id) && !is_wp_error($portfolio_id)) {
             update_post_meta($portfolio_id, '_ap_submission_images', $ids);
+
+            // Map plugin content to Salient extra content meta
+            if ($post->post_content !== '') {
+                update_post_meta($portfolio_id, '_nectar_portfolio_extra_content', $post->post_content);
+            }
+
+            // Copy portfolio categories/tags when present
+            $cats = wp_get_object_terms($post_id, 'portfolio_category', ['fields' => 'ids']);
+            if (!empty($cats) && !is_wp_error($cats)) {
+                wp_set_object_terms($portfolio_id, $cats, 'project-category', false);
+            }
+            $tags = wp_get_object_terms($post_id, 'portfolio_tag', ['fields' => 'ids']);
+            if (!empty($tags) && !is_wp_error($tags)) {
+                wp_set_object_terms($portfolio_id, $tags, 'project-tag', false);
+            }
 
             if ($ids) {
                 set_post_thumbnail($portfolio_id, $ids[0]);
@@ -119,6 +141,7 @@ class PortfolioSync
                     }
                 }
             }
+            self::$syncing = false;
         }
     }
 
@@ -145,5 +168,37 @@ class PortfolioSync
         if ($portfolio) {
             wp_delete_post($portfolio[0], true);
         }
+    }
+
+    /**
+     * Sync Salient portfolio edits back to the source post.
+     */
+    public static function sync_source($post_id, $post)
+    {
+        if (self::$syncing || wp_is_post_revision($post_id)) {
+            return;
+        }
+
+        $source = (int) get_post_meta($post_id, '_ap_source_post', true);
+        if (!$source) {
+            return;
+        }
+
+        self::$syncing = true;
+
+        wp_update_post([
+            'ID'           => $source,
+            'post_title'   => $post->post_title,
+            'post_content' => $post->post_content,
+        ]);
+
+        update_post_meta($source, '_ap_portfolio_id', $post_id);
+
+        $ids = get_post_meta($post_id, '_ap_submission_images', true);
+        if (is_array($ids)) {
+            update_post_meta($source, '_ap_submission_images', $ids);
+        }
+
+        self::$syncing = false;
     }
 }

@@ -8,6 +8,10 @@ function ap_get_ui_mode(): string {
     return get_option('ap_ui_mode', 'salient');
 }
 
+function ap_get_portfolio_display_mode(): string {
+    return get_option('ap_portfolio_display', 'plugin');
+}
+
 /**
  * Simple object cache wrapper for expensive queries.
  */

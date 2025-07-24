@@ -1125,6 +1125,23 @@ add_filter('template_include', function ($template) {
     return $template;
 }, 998);
 
+// Toggle Salient templates for portfolio posts
+add_filter('template_include', function ($template) {
+    if (is_singular('portfolio') && ap_get_portfolio_display_mode() === 'salient') {
+        $custom = plugin_dir_path(__FILE__) . 'templates/salient/content-portfolio.php';
+        if (file_exists($custom)) {
+            return $custom;
+        }
+    }
+    if (is_post_type_archive('portfolio') && ap_get_portfolio_display_mode() === 'salient') {
+        $archive = plugin_dir_path(__FILE__) . 'templates/salient/content-portfolio-archive.php';
+        if (file_exists($archive)) {
+            return $archive;
+        }
+    }
+    return $template;
+}, 997);
+
 // === React Form Demo ===
 function artpulse_enqueue_react_form() {
     if (!ap_page_has_shortcode('react_form')) {
