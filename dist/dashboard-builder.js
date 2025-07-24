@@ -3,6 +3,7 @@
 
   function App(props){
     const [role, setRole] = useState(props.roles[0] || '');
+    const [lastRole, setLastRole] = useState(null);
     const [available, setAvailable] = useState([]);
     const [order, setOrder] = useState([]);
     const [enabled, setEnabled] = useState({});
@@ -10,11 +11,18 @@
 
     useEffect(() => {
       if(!role){ return; }
+      if(lastRole === role && available.length){
+        console.log('[DashboardBuilder] Skip fetch, role unchanged:', role);
+        return;
+      }
+      setLastRole(role);
+      console.log('[DashboardBuilder] fetch widgets', role);
       fetch(`${props.rest_root}artpulse/v1/dashboard-widgets?role=${role}`, {
         headers: { 'X-WP-Nonce': props.nonce }
       })
         .then(r => r.json())
         .then(data => {
+          console.log('[DashboardBuilder] response', data);
           setAvailable(data.available || []);
           const prev = {};
           (data.available || []).forEach(w => { prev[w.id] = w.preview || ''; });
@@ -86,6 +94,7 @@
   document.addEventListener('DOMContentLoaded', function(){
     const root = document.getElementById('dashboard-builder-root');
     if(root){
+      console.log('[DashboardBuilder] initial role', (window.APDashboardBuilder||{}).roles?.[0]);
       render(h(App, window.APDashboardBuilder || {}), root);
     }
   });

@@ -2,6 +2,7 @@
   let layout = [];
   let widgets = [];
   let allowedMap = {};
+  let lastRole = null;
   const restRoot = APDashboardBuilder.rest_root;
   const nonce = APDashboardBuilder.nonce;
 
@@ -10,13 +11,19 @@
   }
 
   function fetchWidgets(role){
+    if (role === lastRole && widgets.length) {
+      console.log('[DashboardBuilder] Skip fetch, role unchanged:', role);
+      return;
+    }
+    lastRole = role;
     const includeAll = getIncludeAll();
-    console.log('selectedRole', role, 'includeAll', includeAll);
+    console.log('[DashboardBuilder] fetch widgets', role, 'includeAll', includeAll);
     $.ajax({
       url: restRoot + 'artpulse/v1/dashboard-widgets?role=' + encodeURIComponent(role) + (includeAll ? '&include_all=true' : ''),
       method: 'GET',
       beforeSend: xhr => xhr.setRequestHeader('X-WP-Nonce', nonce),
       success: res => {
+        console.log('[DashboardBuilder] response', res);
         const allowed = res.available || [];
         widgets = allowed.slice();
         allowedMap = {};
@@ -134,6 +141,7 @@
         render();
       }
     });
+    console.log('[DashboardBuilder] initial role', roleSel.val());
     fetchWidgets(roleSel.val());
   });
 })(jQuery);
