@@ -55,20 +55,18 @@ function ap_register_dashboard_builder_widget_map(): void {
         'organization' => $organization,
     ];
 
-    $all = [
-        'member' => $member,
-        'artist' => $artist,
-        'organization' => $organization,
-    ];
+    $all = array_merge_recursive($ap_widget_source_map);
 
     $registered_files = [];
-    $missing_files    = [];
+    $missing_files = [];
     $unregistered_files = [];
-    foreach ($all as $role => $widgets) {
+
+    foreach ($ap_widget_source_map as $role => $widgets) {
         foreach ($widgets as $id => $file) {
             $callback = static function () use ($id) {
                 echo '<div class="ap-widget-placeholder">' . esc_html($id) . '</div>';
             };
+
             DashboardWidgetRegistry::register($id, [
                 'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
                 'render_callback' => $callback,
@@ -78,6 +76,7 @@ function ap_register_dashboard_builder_widget_map(): void {
             $path_php = $plugin_dir . '/widgets/' . $file;
             $path_js  = $plugin_dir . '/assets/js/widgets/' . $file;
             $registered_files[$file] = true;
+
             if (!file_exists($path_php) && !file_exists($path_js)) {
                 $missing_files[] = $file;
                 error_log('Dashboard widget file missing: ' . $file);
@@ -92,14 +91,7 @@ function ap_register_dashboard_builder_widget_map(): void {
 
     $scanned = array_filter($scanned, static function ($path) {
         $base = basename($path);
-        if ($base === 'index.js') {
-            return false;
-        }
-        if (preg_match('/\.(test|spec)\./i', $base)) {
-            return false;
-        }
-
-        return true;
+        return !in_array($base, ['index.js']) && !preg_match('/\.(test|spec)\./i', $base);
     });
 
     foreach ($scanned as $path) {
@@ -125,7 +117,8 @@ function ap_register_dashboard_builder_widget_map(): void {
             $scanned_basenames = array_map('basename', $scanned);
             $missing = array_diff($registered, $scanned_basenames);
             $extra   = array_diff($scanned_basenames, $registered);
-            echo '<div class="notice notice-info"><p>Dashboard Builder Debug:<br>';
+
+            echo '<div class="notice notice-info"><p><strong>Dashboard Builder Debug:</strong><br>';
             if ($missing) {
                 echo 'Missing files: ' . esc_html(implode(', ', $missing)) . '<br>';
             }
