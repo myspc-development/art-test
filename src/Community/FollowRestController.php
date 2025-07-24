@@ -73,6 +73,13 @@ class FollowRestController
     {
         // Ensure database table exists in case installation routines missed it
         FollowManager::maybe_install_table();
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_follows';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            error_log('[FollowRestController] Missing table ' . $table);
+            return new WP_Error('missing_table', 'Follows table not found.', ['status' => 500]);
+        }
         $user_id   = get_current_user_id();
         $post_id   = absint($request['post_id']);
         $post_type = sanitize_key($request['post_type']);
@@ -94,6 +101,10 @@ class FollowRestController
         }
 
         FollowManager::add_follow($user_id, $post_id, $post_type);
+        if ($wpdb->last_error) {
+            error_log('[FollowRestController] DB error: ' . $wpdb->last_error);
+            return new WP_Error('db_error', 'Error adding follow.', ['status' => 500]);
+        }
 
         return rest_ensure_response(['status' => 'following', 'follows' => $follows]);
     }
@@ -102,6 +113,13 @@ class FollowRestController
     {
         // Ensure database table exists
         FollowManager::maybe_install_table();
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_follows';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            error_log('[FollowRestController] Missing table ' . $table);
+            return new WP_Error('missing_table', 'Follows table not found.', ['status' => 500]);
+        }
         $user_id   = get_current_user_id();
         $post_id   = absint($request['post_id']);
         $post_type = sanitize_key($request['post_type']);
@@ -123,27 +141,54 @@ class FollowRestController
         }
 
         FollowManager::remove_follow($user_id, $post_id, $post_type);
+        if ($wpdb->last_error) {
+            error_log('[FollowRestController] DB error: ' . $wpdb->last_error);
+            return new WP_Error('db_error', 'Error removing follow.', ['status' => 500]);
+        }
 
         return rest_ensure_response(['status' => 'unfollowed', 'follows' => $follows]);
     }
 
-    public static function list_follows(WP_REST_Request $request): WP_REST_Response
+    public static function list_follows(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         // Ensure database table exists before querying
         FollowManager::maybe_install_table();
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_follows';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            error_log('[FollowRestController] Missing table ' . $table);
+            return new WP_Error('missing_table', 'Follows table not found.', ['status' => 500]);
+        }
+
         $user_id   = get_current_user_id();
         $type      = $request['post_type'] ? sanitize_key($request['post_type']) : null;
 
         $rows = FollowManager::get_user_follows($user_id, $type);
+        if ($wpdb->last_error) {
+            error_log('[FollowRestController] DB error: ' . $wpdb->last_error);
+            return new WP_Error('db_error', 'Error retrieving follows.', ['status' => 500]);
+        }
         return rest_ensure_response($rows);
     }
 
-    public static function get_followers(WP_REST_Request $request): WP_REST_Response
+    public static function get_followers(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         // Ensure follows table exists
         FollowManager::maybe_install_table();
-        $user_id = absint($request['user_id']);
+        global $wpdb;
+        $table  = $wpdb->prefix . 'ap_follows';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            error_log('[FollowRestController] Missing table ' . $table);
+            return new WP_Error('missing_table', 'Follows table not found.', ['status' => 500]);
+        }
+        $user_id   = absint($request['user_id']);
         $followers = FollowManager::get_followers($user_id);
+        if ($wpdb->last_error) {
+            error_log('[FollowRestController] DB error: ' . $wpdb->last_error);
+            return new WP_Error('db_error', 'Error retrieving followers.', ['status' => 500]);
+        }
         return rest_ensure_response(['user_id' => $user_id, 'followers' => $followers]);
     }
 }

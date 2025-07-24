@@ -160,4 +160,18 @@ class FollowRestControllerTest extends \WP_UnitTestCase
         $res = rest_get_server()->dispatch($invalid);
         $this->assertSame(404, $res->get_status());
     }
+
+    public function test_missing_table_returns_error(): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_follows';
+        $wpdb->query("DROP TABLE IF EXISTS $table");
+
+        $req = new WP_REST_Request('GET', '/artpulse/v1/follows');
+        $res = rest_get_server()->dispatch($req);
+
+        $this->assertSame(500, $res->get_status());
+        $this->assertInstanceOf(\WP_Error::class, $res->as_error());
+        $this->assertSame('missing_table', $res->as_error()->get_error_code());
+    }
 }
