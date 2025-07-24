@@ -18,6 +18,7 @@ class ArtPulseNewsFeedWidget {
     }
 
     public static function render() {
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         $user_id = get_current_user_id();
         if (!$user_id) {
             esc_html_e('Please log in to view your feed.', 'artpulse');

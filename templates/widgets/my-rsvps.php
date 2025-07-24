@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 extract(ap_template_context($args ?? [], ['visible' => true]));
 ?>
 <div id="my-rsvps-widget" class="ap-card" role="region" aria-labelledby="my-rsvps-title" data-widget="my-rsvps" <?php echo $visible ? '' : 'hidden'; ?>>

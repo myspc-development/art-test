@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 use ArtPulse\Services\RecommendationService;
 $user_id = get_current_user_id();
 $items   = RecommendationService::get_for_user($user_id);

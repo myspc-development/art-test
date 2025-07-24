@@ -14,6 +14,7 @@ class WidgetStatusPanelWidget {
     }
 
     public static function render(): void {
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         global $ap_widget_status;
         if (!$ap_widget_status) {
             echo esc_html__('No widget data available.', 'artpulse');

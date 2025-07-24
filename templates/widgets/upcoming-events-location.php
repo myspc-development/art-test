@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 extract(ap_template_context($args ?? [], ['visible' => true]));
 ?>
 <div id="upcoming-events-location" class="ap-card" role="region" aria-labelledby="upcoming-events-location-title" data-widget="upcoming-events-by-location" <?php echo $visible ? '' : 'hidden'; ?>>

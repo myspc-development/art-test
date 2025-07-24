@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 use ArtPulse\Admin\SpotlightManager;
 use ArtPulse\Core\DashboardController;
 
