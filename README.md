@@ -414,6 +414,7 @@ Portfolio posts mirror this functionality. When a portfolio item contains multip
 ## Portfolio synchronization
 
 Artist, artwork, event **and organization** posts automatically create or update a corresponding portfolio entry when saved. These portfolio items are used by the directory shortcodes. Deleting the source post removes the portfolio entry as well.
+Each portfolio stores the source post type in `_ap_source_type` and receives a label in the `project-category` taxonomy ("Event", "Artist" or "Organization" by default).
 
 Portfolio entries also copy project categories and tags to the Salient taxonomies and store the post content in `_nectar_portfolio_extra_content`. When a portfolio item is edited in the admin area the changes are pushed back to the original post.
 
