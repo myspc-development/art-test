@@ -232,11 +232,9 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
   }
 
   var m = require$$0;
-  if (process.env.NODE_ENV === 'production') {
+  {
     m.createRoot;
     m.hydrateRoot;
-  } else {
-    m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
   }
 
   function NearbyEventsMapWidget(_ref) {
