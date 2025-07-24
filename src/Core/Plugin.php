@@ -43,7 +43,7 @@ use ArtPulse\Rest\NearbyEventsController;
 
 class Plugin
 {
-    private const VERSION = '1.3.15';
+    private const VERSION = '1.0.0-rc';
 
     public static function register(): void
     {
@@ -395,6 +395,9 @@ class Plugin
         \ArtPulse\Engagement\DigestMailer::register();
         \ArtPulse\Core\FeedbackManager::register();
        \ArtPulse\Frontend\FeedbackWidget::register();
+        \ArtPulse\Core\DashboardFeedbackManager::register();
+        \ArtPulse\Core\DashboardAnalyticsLogger::maybe_install_table();
+        \ArtPulse\Rest\DashboardAnalyticsController::register();
        \ArtPulse\Frontend\NewsletterOptinEndpoint::register();
         \ArtPulse\Community\QaThreadPostType::register();
         \ArtPulse\Community\QaThreadRestController::register();
@@ -781,6 +784,33 @@ class Plugin
                 'enabled' => true,
             ]);
         }
+
+        wp_enqueue_script(
+            'ap-dashboard-feedback',
+            plugins_url('assets/js/dashboard-feedback-widget.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-dashboard-feedback', 'APDashFeedback', [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('ap_dashboard_feedback'),
+            'thanks'  => __('Thanks for your feedback!', 'artpulse'),
+        ]);
+
+        wp_enqueue_script(
+            'ap-dashboard-analytics',
+            plugins_url('assets/js/dashboard-analytics.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            '1.0.0',
+            true
+        );
+
+        wp_localize_script('ap-dashboard-analytics', 'APDashAnalytics', [
+            'root'  => esc_url_raw(rest_url()),
+            'nonce' => wp_create_nonce('wp_rest'),
+        ]);
     }
 
     private function get_org_submission_url(): string

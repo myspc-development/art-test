@@ -7,6 +7,11 @@ status: complete
 ---
 # Changelog
 
+## 1.0.0-rc
+- Dashboard Feedback widget added for UAT.
+- Security review of REST endpoints and role gating.
+- Initial release candidate packaging scripts.
+
 ## 1.3.15
 - Added admin pages for managing ticket tiers and membership levels.
 - Introduced REST endpoints for ticket tier CRUD and membership level settings.

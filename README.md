@@ -18,6 +18,8 @@ For admin and organization reporting plus per-user metrics see the
 [Analytics & Reporting Codex](docs/guides/developer/analytics-reporting-codex.md).
 For UI customization, white‑labeling and onboarding guidelines see the
 [UI/UX Polish Codex](docs/guides/developer/ui-ux-polish-codex.md).
+
+See the [Changelog](docs/CHANGELOG.md) for release notes.
 [Widget Chapters](docs/codex-chapters/README.md) organize the chat, ticketing and Q&A widgets.
 [Event Comments Codex](docs/event-comments-codex.md) describes the REST routes used for event discussions.
 [Event Chat Codex](docs/event-chat-codex.md) explains the real-time chat module.
