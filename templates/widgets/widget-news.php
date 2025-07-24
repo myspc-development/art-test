@@ -1,3 +1,6 @@
+<?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+?>
 <div id="ap-widget-news" class="ap-card" role="region" aria-labelledby="ap-widget-news-title">
   <h2 id="ap-widget-news-title" class="ap-card__title">📰 <?php esc_html_e( 'Latest News', 'artpulse' ); ?></h2>
   <div>
