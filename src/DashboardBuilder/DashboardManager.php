@@ -31,7 +31,7 @@ class DashboardManager {
             <select id="ap-db-role"></select>
             <label style="margin-left:10px"><input type="checkbox" id="ap-db-show-all"> ' . esc_html__('Show All Widgets', 'artpulse') . '</label>
             <ul id="ap-db-layout"></ul>
-            <div id="ap-db-available"></div>
+            <ul id="ap-db-available" class="ap-available"></ul>
             <p><button id="ap-db-save" class="button button-primary">' . esc_html__('Save Changes', 'artpulse') . '</button></p>
             <p id="ap-db-warning" style="display:none" class="notice notice-warning"></p>
         </div>';

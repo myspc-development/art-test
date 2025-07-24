@@ -54,15 +54,24 @@
       li.append(' ').append(chk).append(' Show');
       list.append(li);
     });
-    list.sortable({update:updateLayout});
+    list.sortable('destroy').sortable({
+      connectWith:'#ap-db-available',
+      update:updateLayout,
+      receive:updateLayout
+    });
 
     const add = $('#ap-db-available').empty();
     widgets.forEach(w => {
       if(!layout.find(l => l.id === w.id)){
-        const btn = $('<button type="button" class="ap-add"/>').text('Add '+(w.title||w.name||w.id)).data('id', w.id);
-        if(w.notAllowed){ btn.addClass('ap-not-allowed').prop('disabled', true); }
-        add.append(btn);
+        const li = $('<li class="ap-widget"/>').attr('data-id', w.id).text(w.title || w.name || w.id);
+        if(w.notAllowed){ li.addClass('ap-not-allowed'); }
+        add.append(li);
       }
+    });
+    add.sortable('destroy').sortable({
+      connectWith:'#ap-db-layout',
+      receive:updateLayout,
+      update:updateLayout
     });
 
     if(!widgets.length){
@@ -73,6 +82,13 @@
   }
 
   function updateLayout(){
+    $('#ap-db-layout li').each(function(){
+      if($(this).find('.ap-visible').length === 0){
+        $(this).append(' ').append(
+          $('<input type="checkbox" class="ap-visible">').prop('checked', true)
+        ).append(' Show');
+      }
+    });
     layout = $('#ap-db-layout li').map(function(){
       return { id: $(this).data('id'), visible: $(this).find('.ap-visible').prop('checked') };
     }).get();
@@ -83,10 +99,6 @@
     APDashboardBuilder.roles.forEach(r => roleSel.append($('<option/>').val(r).text(r)));
     roleSel.on('change', function(){ fetchWidgets(this.value); });
     $('#ap-db-show-all').on('change', function(){ fetchWidgets(roleSel.val()); });
-    $(document).on('click','.ap-add',function(){
-      layout.push({id: $(this).data('id'), visible:true});
-      render();
-    });
     $(document).on('change','.ap-visible',updateLayout);
     $('#ap-db-save').on('click', function(){
       updateLayout();
