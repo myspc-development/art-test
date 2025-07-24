@@ -47,9 +47,9 @@ add_action('plugins_loaded', function () {
 
 // Register Diagnostics admin page
 add_action('admin_menu', function () {
-    add_menu_page(
-        'ArtPulse Diagnostics',
-        'AP Diagnostics',
+add_menu_page(
+        __('ArtPulse Diagnostics', 'artpulse'),
+        __('AP Diagnostics', 'artpulse'),
         'manage_options',
         'ap-diagnostics',
         'ap_diagnostics_page_loader',
