@@ -28,6 +28,9 @@ The overview summarizes the main Dashboard Modules available to administrators.
 ## Settings Tabs
 All options live under **ArtPulse → Settings**. Tabs such as **General**, **Location APIs**, **Import/Export**, **Config Backup**, **Updates** and **Shortcode Pages** divide the settings.
 
+## Partner API Keys
+Verified institutions can manage API credentials from the **API Keys** submenu. The page slug is `ap-api-keys`, accessible directly at `/wp-admin/admin.php?page=ap-api-keys`.
+
 ## Additional Notes
 - The tools are responsive and keyboard accessible.
 - After plugin updates visit **Settings → Permalinks** to flush rewrite rules if needed.
