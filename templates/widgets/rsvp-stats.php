@@ -5,7 +5,7 @@ $rsvp_data = [];
 if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
     $rsvp_data = EventRsvpHandler::get_rsvp_summary_for_user(get_current_user_id());
 } else {
-    echo '<p class="notice">Preview mode — dynamic content hidden</p>';
+    echo '<p class="notice">' . esc_html__( 'Preview mode — dynamic content hidden', 'artpulse' ) . '</p>';
     return;
 }
 ?>

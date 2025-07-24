@@ -6,7 +6,7 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
  */
 use ArtPulse\Community\FavoritesManager;
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
-    echo '<p class="notice">Preview mode — dynamic content hidden</p>';
+    echo '<p class="notice">' . esc_html__( 'Preview mode — dynamic content hidden', 'artpulse' ) . '</p>';
     return;
 }
 ?>
