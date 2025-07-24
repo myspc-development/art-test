@@ -59,7 +59,10 @@
       li.append(' ').append(chk).append(' Show');
       list.append(li);
     });
-    list.sortable('destroy').sortable({
+    if(list.hasClass('ui-sortable')){
+      list.sortable('destroy');
+    }
+    list.sortable({
       connectWith:'#ap-db-available',
       update:updateLayout,
       receive:updateLayout
@@ -73,7 +76,10 @@
         add.append(li);
       }
     });
-    add.sortable('destroy').sortable({
+    if(add.hasClass('ui-sortable')){
+      add.sortable('destroy');
+    }
+    add.sortable({
       connectWith:'#ap-db-layout',
       receive:updateLayout,
       update:updateLayout
