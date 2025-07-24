@@ -10,7 +10,10 @@
     function loadFollows() {
       results.innerHTML = '<div class="ap-loading">Loading…</div>';
       const params = new URLSearchParams();
-      if (filterType && filterType.value) params.append('object_type', filterType.value);
+      // Use the REST parameter name expected by the API
+      if (filterType && filterType.value) {
+        params.append('post_type', filterType.value);
+      }
 
       wp.apiFetch({
         path: '/artpulse/v1/follows?' + params.toString(),
