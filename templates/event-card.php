@@ -15,7 +15,7 @@ if ( ! $event || 'artpulse_event' !== $event->post_type ) {
 
 $title     = get_the_title( $event );
 $permalink = get_permalink( $event );
-$image     = get_the_post_thumbnail( $event_id, 'medium', [ 'alt' => $title ] );
+$image     = get_the_post_thumbnail( $event_id, 'medium', [ 'alt' => $title, 'loading' => 'lazy' ] );
 $venue     = get_post_meta( $event_id, 'venue_name', true );
 $start     = get_post_meta( $event_id, 'event_start_date', true );
 $end       = get_post_meta( $event_id, 'event_end_date', true );

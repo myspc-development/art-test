@@ -4,10 +4,12 @@
   function initDirectory(container){
     const type         = container.dataset.type;
     const results      = container.querySelector('.ap-directory-results');
+    const loadMoreBtn  = container.querySelector('.ap-load-more');
     const limitInput   = container.querySelector('.ap-filter-limit');
     const applyBtn     = container.querySelector('.ap-filter-apply');
     const alphaBar     = container.querySelector('.ap-alpha-bar');
     let activeLetter   = '';
+    let currentPage    = 1;
     const selectEl     = container.querySelector('.ap-filter-event-type');
     const cityInput    = container.querySelector('.ap-filter-city');
     const regionInput  = container.querySelector('.ap-filter-region');
@@ -100,11 +102,13 @@
     }
 
     // Core data-loading function
-    function loadData() {
+    function loadData(reset = true) {
+      if (reset) currentPage = 1; else currentPage++;
       showLoading();
       const params = new URLSearchParams({
         type,
-        limit: limitInput.value
+        limit: limitInput.value,
+        page: currentPage
       });
       if (activeLetter) {
         params.append('first_letter', activeLetter);
@@ -141,11 +145,13 @@
         path: '/artpulse/v1/filter?' + params.toString(),
         headers: { 'X-WP-Nonce': ArtPulseApi.nonce }
       })
-        .then(posts => {
-          results.innerHTML = '';
+        .then(resp => {
+          const posts = resp.posts || [];
+          if (reset) results.innerHTML = '';
           if (!posts.length) {
             results.innerHTML = '<div class="ap-empty">No results found.</div>';
             results.removeAttribute('aria-busy');
+            if (loadMoreBtn) loadMoreBtn.style.display = 'none';
             return;
           }
 
@@ -176,7 +182,7 @@
 
             let html = `
               <a href="${post.link}">
-                <img src="${post.featured_media_url || ''}" alt="${post.title}" onerror="this.onerror=null;this.src='/wp-content/uploads/fallback.jpg';"/>
+                <img src="${post.featured_media_url || ''}" loading="lazy" alt="${post.title}" onerror="this.onerror=null;this.src='/wp-content/uploads/fallback.jpg';"/>
                 <h3>${post.title}</h3>
             `;
             const start = post.event_start_date || post.start_date;
@@ -249,7 +255,9 @@
             div.appendChild(followBtn);
             results.appendChild(div);
           });
-
+          if (loadMoreBtn) {
+            loadMoreBtn.style.display = resp.has_more ? 'block' : 'none';
+          }
           // Dispatch custom events
           container.dispatchEvent(new CustomEvent('ap:loaded', {
             detail: { type, limit: limitInput.value }
@@ -321,6 +329,10 @@ function createFollowButton(post, objectType) {
         });
         loadData();
       });
+    }
+
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => loadData(false));
     }
 
     // Initial load

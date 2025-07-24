@@ -55,3 +55,27 @@ function ap_safe_include(string $relative_template, string $fallback_path): void
         error_log("ArtPulse: Missing template → $relative_template or fallback.");
     }
 }
+
+/**
+ * Locate a template allowing theme overrides similar to WooCommerce.
+ *
+ * @param string $relative_template Relative path within the theme.
+ * @param string $plugin_path       Default path in the plugin.
+ * @return string Absolute file path to load.
+ */
+function ap_locate_template(string $relative_template, string $plugin_path): string {
+    $template = locate_template($relative_template);
+    if (!$template) {
+        $template = trailingslashit(get_stylesheet_directory()) . $relative_template;
+        if (!file_exists($template)) {
+            $template = $plugin_path;
+        }
+    }
+    /**
+     * Filter located template path.
+     *
+     * @param string $template Located template file path.
+     * @param string $relative_template Requested relative template.
+     */
+    return apply_filters('ap_locate_template', $template, $relative_template);
+}

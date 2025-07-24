@@ -38,6 +38,38 @@ class JsonLdGenerator
     }
 
     /**
+     * Get schema data for an event post.
+     */
+    public static function event_data(WP_Post $post): array
+    {
+        return self::event_schema($post);
+    }
+
+    /**
+     * Build ItemList schema for a list of event posts.
+     *
+     * @param int[] $ids Event post IDs.
+     */
+    public static function directory_schema(array $ids): array
+    {
+        $items = [];
+        $pos   = 1;
+        foreach ($ids as $id) {
+            $items[] = [
+                '@type'    => 'ListItem',
+                'position' => $pos++,
+                'url'      => get_permalink($id),
+            ];
+        }
+
+        return [
+            '@context'        => 'https://schema.org',
+            '@type'           => 'ItemList',
+            'itemListElement' => $items,
+        ];
+    }
+
+    /**
      * Build Event schema data.
      */
     private static function event_schema(WP_Post $post): array
@@ -77,6 +109,18 @@ class JsonLdGenerator
             $data['organizer'] = [
                 '@type' => 'Person',
                 'name'  => $org,
+            ];
+        }
+
+        $price = get_post_meta($post->ID, 'price', true);
+        if ($price !== '') {
+            $currency = get_option('artpulse_settings')['currency'] ?? 'USD';
+            $data['offers'] = [
+                '@type'         => 'Offer',
+                'price'         => $price,
+                'priceCurrency' => $currency,
+                'availability'  => 'https://schema.org/InStock',
+                'url'           => get_permalink($post),
             ];
         }
 
