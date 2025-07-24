@@ -1,0 +1,9 @@
+{
+  "apiVersion": 2,
+  "name": "artpulse/related-projects",
+  "title": "Related Projects",
+  "category": "widgets",
+  "icon": "portfolio",
+  "supports": { "html": false },
+  "render": "ArtPulse\\Blocks\\RelatedProjectsBlock::render_callback"
+}
