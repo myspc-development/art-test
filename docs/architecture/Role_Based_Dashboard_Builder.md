@@ -14,6 +14,7 @@ The builder is a React application. `react-grid-layout` provides the drag‑and�
 - Add widgets from the **Add Widget** panel
 - Toggle each widget's visibility
 - Resize widgets within the 12‑column grid
+- Enable **Show All Widgets** to preview items restricted to other roles
 
 Source code lives under `src/admin/WidgetEditorApp.jsx` and related components.
 

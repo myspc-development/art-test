@@ -2,3 +2,8 @@
 #ap-db-layout li { padding:6px; border:1px solid #ccc; margin-bottom:4px; background:#fff; cursor:move; }
 #ap-db-available button { margin-right:4px; margin-bottom:4px; }
 #ap-db-warning { margin-top:10px; }
+
+.ap-not-allowed {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

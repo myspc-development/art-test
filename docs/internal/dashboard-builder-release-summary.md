@@ -6,6 +6,7 @@ The drag-and-drop Dashboard Builder is available for **Members**, **Artists** an
 - Open any dashboard and click **Edit Layout**.
 - Drag cards to reorder or toggle visibility.
 - Use **Reset Layout**, **Export** or **Import** from the toolbar for template management.
+- Enable **Show All Widgets** to preview items not allowed for the selected role.
 
 ## Roles supported
 - Member
