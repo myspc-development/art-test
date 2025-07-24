@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+const { __ } = wp.i18n;
 
 export function ArtistSpotlightWidget({ apiRoot, nonce }) {
   const [items, setItems] = useState(null);
@@ -15,11 +16,11 @@ export function ArtistSpotlightWidget({ apiRoot, nonce }) {
   }, []);
 
   if (items === null) {
-    return <p>Loading...</p>;
+    return <p>{__('Loading...', 'artpulse')}</p>;
   }
 
   if (!items.length) {
-    return <p>No mentions yet.</p>;
+    return <p>{__('No mentions yet.', 'artpulse')}</p>;
   }
 
   return (

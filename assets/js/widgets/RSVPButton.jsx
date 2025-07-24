@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+const { __ } = wp.i18n;
 
 /**
  * Button widget for RSVP actions.
@@ -31,7 +32,7 @@ export function RSVPButton({ eventId, apiRoot, nonce }) {
 
   return (
     <button className={`ap-rsvp-btn${rsvped ? ' is-rsvped' : ''}`} onClick={toggle}>
-      {rsvped ? 'Cancel RSVP' : 'RSVP'}
+      {rsvped ? __('Cancel RSVP', 'artpulse') : __('RSVP', 'artpulse')}
     </button>
   );
 }

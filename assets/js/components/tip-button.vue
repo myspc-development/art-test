@@ -1,6 +1,6 @@
 <template>
   <button @click="sendTip" :disabled="loading">
-    <slot>Tip</slot>
+    <slot>{{ wp.i18n.__('Tip', 'artpulse') }}</slot>
   </button>
 </template>
 

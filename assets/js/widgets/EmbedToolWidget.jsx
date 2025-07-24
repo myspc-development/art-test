@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+const { __ } = wp.i18n;
 
 export function EmbedToolWidget({ widgetId, siteUrl }) {
   const [theme, setTheme] = useState('light');
@@ -7,10 +8,10 @@ export function EmbedToolWidget({ widgetId, siteUrl }) {
   return (
     <div className="ap-embed-tool-widget">
       <p>
-        <label>Theme 
+        <label>{__('Theme', 'artpulse')}
           <select value={theme} onChange={e => setTheme(e.target.value)}>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
+            <option value="light">{__('Light', 'artpulse')}</option>
+            <option value="dark">{__('Dark', 'artpulse')}</option>
           </select>
         </label>
       </p>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+const { __ } = wp.i18n;
 
 /**
  * Social share widget for events.
@@ -18,16 +19,16 @@ export function ShareThisEventWidget({ eventUrl }) {
 
   const copy = () => {
     navigator.clipboard.writeText(eventUrl).then(() => {
-      alert('Link copied');
+      alert(__('Link copied', 'artpulse'));
     });
   };
 
   return (
     <div className="ap-share-event-widget">
       <button onClick={() => share('https://twitter.com/share?url=')}>X</button>
-      <button onClick={() => share('https://www.facebook.com/sharer/sharer.php?u=')}>Facebook</button>
-      <button onClick={() => share('https://www.linkedin.com/sharing/share-offsite/?url=')}>LinkedIn</button>
-      <button onClick={copy}>Copy Link</button>
+      <button onClick={() => share('https://www.facebook.com/sharer/sharer.php?u=')}>{__('Facebook', 'artpulse')}</button>
+      <button onClick={() => share('https://www.linkedin.com/sharing/share-offsite/?url=')}>{__('LinkedIn', 'artpulse')}</button>
+      <button onClick={copy}>{__('Copy Link', 'artpulse')}</button>
     </div>
   );
 }
