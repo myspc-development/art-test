@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+const { __ } = wp.i18n;
 
-const reasons = ['Spam', 'Abuse', 'Off-topic', 'Other'];
+const reasons = [__('Spam', 'artpulse'), __('Abuse', 'artpulse'), __('Off-topic', 'artpulse'), __('Other', 'artpulse')];
 
 export default function ReportDialog({ onClose, onSubmit }) {
   const [reason, setReason] = useState(reasons[0]);
@@ -49,7 +50,7 @@ export default function ReportDialog({ onClose, onSubmit }) {
         ref={dialogRef}
         className="bg-white p-4 rounded w-80" role="dialog" aria-modal="true"
       >
-        <h3 className="text-lg font-semibold mb-2">Report</h3>
+        <h3 className="text-lg font-semibold mb-2">{__('Report', 'artpulse')}</h3>
         <form onSubmit={handleSubmit} className="space-y-3">
           <select
             className="w-full border p-2 rounded"
@@ -62,14 +63,14 @@ export default function ReportDialog({ onClose, onSubmit }) {
           </select>
           <textarea
             className="w-full border rounded p-2"
-            placeholder="Details (optional)"
+            placeholder={__('Details (optional)', 'artpulse')}
             value={details}
             onChange={e => setDetails(e.target.value)}
             rows={3}
           />
           <div className="flex justify-end gap-2">
-            <button type="button" className="px-3 py-1" onClick={onClose}>Cancel</button>
-            <button type="submit" className="bg-red-600 text-white px-3 py-1 rounded">Submit</button>
+            <button type="button" className="px-3 py-1" onClick={onClose}>{__('Cancel', 'artpulse')}</button>
+            <button type="submit" className="bg-red-600 text-white px-3 py-1 rounded">{__('Submit', 'artpulse')}</button>
           </div>
         </form>
       </div>

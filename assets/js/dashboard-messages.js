@@ -1,3 +1,4 @@
+const { __ } = wp.i18n;
 fetch('/wp-json/artpulse/v1/dashboard/messages', {
   headers: {
     'X-WP-Nonce': ArtPulseData.nonce
@@ -15,7 +16,7 @@ fetch('/wp-json/artpulse/v1/dashboard/messages', {
   })
   .then(data => {
     if (!Array.isArray(data)) {
-      throw new Error('Invalid response format');
+      throw new Error(__('Invalid response format', 'artpulse'));
     }
 
     const container = document.getElementById('ap-messages-dashboard-widget');
@@ -32,8 +33,8 @@ fetch('/wp-json/artpulse/v1/dashboard/messages', {
           </div>
           <div>${msg.content}</div>
           <div>
-            <span class="badge ${isUnread ? 'badge-unread' : 'badge-read'}">${isUnread ? 'Unread' : 'Read'}</span>
-            <button class="reply-button" data-msg-id="${msg.id}">Reply</button>
+            <span class="badge ${isUnread ? 'badge-unread' : 'badge-read'}">${isUnread ? __('Unread', 'artpulse') : __('Read', 'artpulse')}</span>
+            <button class="reply-button" data-msg-id="${msg.id}">${__('Reply', 'artpulse')}</button>
           </div>
         </div>
       `;
@@ -59,7 +60,7 @@ fetch('/wp-json/artpulse/v1/dashboard/messages', {
       })
         .then(res => res.json())
         .then(() => {
-          alert('Reply sent!');
+          alert(__('Reply sent!', 'artpulse'));
           document.getElementById('ap-message-modal').style.display = 'none';
         });
     };

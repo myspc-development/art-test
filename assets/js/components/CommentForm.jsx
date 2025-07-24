@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+const { __ } = wp.i18n;
 
 export default function CommentForm({ onSubmit, autoFocus = false }) {
   const [content, setContent] = useState('');
@@ -19,11 +20,11 @@ export default function CommentForm({ onSubmit, autoFocus = false }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2" aria-label="Comment form">
+    <form onSubmit={handleSubmit} className="space-y-2" aria-label={__('Comment form', 'artpulse')}>
       <textarea
         ref={textareaRef}
         className="w-full p-2 border rounded resize-none overflow-hidden focus:ring focus:border-blue-500"
-        placeholder="Write a comment..."
+        placeholder={__('Write a comment...', 'artpulse')}
         value={content}
         autoFocus={autoFocus}
         onChange={e => setContent(e.target.value)}
@@ -34,7 +35,7 @@ export default function CommentForm({ onSubmit, autoFocus = false }) {
         disabled={!content.trim()}
         className="bg-blue-600 text-white px-3 py-1 rounded disabled:opacity-50"
       >
-        Submit
+        {__('Submit', 'artpulse')}
       </button>
     </form>
   );

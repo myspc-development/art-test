@@ -2,6 +2,7 @@ let myEvents = [];
 let nextEvent = null;
 let engagementPage = 1;
 const applyTheme = t => { document.body.dataset.theme = t; };
+const { __ } = wp.i18n;
 
 function fetchEventCard(id) {
   return fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${id}`, {
@@ -146,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (statsBox) {
       const rsvps = data.rsvp_count || 0;
       const favs = data.favorite_count || 0;
-      statsBox.textContent = `RSVPs: ${rsvps} \u00b7 Favorites: ${favs}`;
+      statsBox.textContent = `${__('RSVPs', 'artpulse')}: ${rsvps} \u00b7 ${__('Favorites', 'artpulse')}: ${favs}`;
     }
     const supportHistory = data.support_history || [];
 // Membership
@@ -262,7 +263,7 @@ if (content) {
       const items = data[key] || [];
       container.innerHTML = '';
       if (!items.length) {
-        container.textContent = 'No favorites.';
+        container.textContent = __('No favorites.', 'artpulse');
         return;
       }
       const ul = document.createElement('ul');
@@ -452,7 +453,7 @@ function renderEventsFeed(events) {
   if (!feed) return;
   feed.innerHTML = '';
   if (!events || !events.length) {
-    feed.textContent = 'No upcoming events.';
+    feed.textContent = __('No upcoming events.', 'artpulse');
     return;
   }
   events.forEach(ev => {
@@ -471,7 +472,7 @@ function renderRsvpEvents(list) {
   if (!container) return;
   container.innerHTML = '';
   if (!list || !list.length) {
-    container.textContent = 'No RSVPs.';
+    container.textContent = __('No RSVPs.', 'artpulse');
     return;
   }
   list.forEach(ev => {
@@ -490,7 +491,7 @@ function renderSupportHistory(list) {
   if (!container) return;
   container.innerHTML = '';
   if (!list || !list.length) {
-    container.textContent = 'No support requests.';
+    container.textContent = __('No support requests.', 'artpulse');
     return;
   }
   const ul = document.createElement('ul');
@@ -516,11 +517,11 @@ function fetchNotifications() {
     .then(data => {
       const list = data.notifications || data;
       if (!list || !list.length) {
-        container.textContent = 'No notifications.';
+        container.textContent = __('No notifications.', 'artpulse');
         return;
       }
       const markAll = document.createElement('button');
-      markAll.textContent = 'Mark All Read';
+      markAll.textContent = __('Mark All Read', 'artpulse');
       markAll.className = 'ap-form-button mark-all-read';
       markAll.onclick = markAllNotificationsRead;
       container.appendChild(markAll);
@@ -531,7 +532,7 @@ function fetchNotifications() {
         li.textContent = n.content || n.type;
         if (n.status !== 'read') {
           const btn = document.createElement('button');
-          btn.textContent = 'Mark read';
+          btn.textContent = __('Mark read', 'artpulse');
           btn.onclick = () => markNotificationRead(n.id, li);
           li.append(' ', btn);
         }
@@ -540,7 +541,7 @@ function fetchNotifications() {
       container.appendChild(ul);
     })
     .catch(() => {
-      container.textContent = 'Failed to load notifications.';
+      container.textContent = __('Failed to load notifications.', 'artpulse');
     });
 }
 
@@ -555,7 +556,7 @@ function markNotificationRead(id, el) {
     })
     .catch(() => {
       // ignore errors but show simple message
-      alert('Failed to mark as read');
+      alert(__('Failed to mark as read', 'artpulse'));
     });
 }
 
@@ -569,7 +570,7 @@ function markAllNotificationsRead() {
       fetchNotifications();
     })
     .catch(() => {
-    alert('Failed to mark all as read');
+    alert(__('Failed to mark all as read', 'artpulse'));
   });
 }
 
@@ -584,7 +585,7 @@ function fetchEngagementFeed(page = 1) {
     .then(res => res.json())
     .then(items => {
       if (page === 1 && (!items || !items.length)) {
-        container.textContent = 'No activity.';
+        container.textContent = __('No activity.', 'artpulse');
         if (moreBtn) moreBtn.style.display = 'none';
         return;
       }
@@ -626,7 +627,7 @@ function refreshDashboardEvents() {
       if (statsBox) {
         const rsvps = data.rsvp_count || 0;
         const favs = data.favorite_count || 0;
-        statsBox.textContent = `RSVPs: ${rsvps} \u00b7 Favorites: ${favs}`;
+        statsBox.textContent = `${__('RSVPs', 'artpulse')}: ${rsvps} \u00b7 ${__('Favorites', 'artpulse')}: ${favs}`;
       }
       renderRsvpEvents(data.rsvp_events || []);
       document.getElementById('ap-my-events').innerHTML = '';
@@ -687,12 +688,12 @@ function toggleMembership(action, btn) {
       if (res.success) {
         window.location.reload();
       } else {
-        alert(res.message || 'Request failed');
+        alert(res.message || __('Request failed', 'artpulse'));
         btn.disabled = false;
       }
     })
     .catch(() => {
-      alert('Request failed');
+      alert(__('Request failed', 'artpulse'));
       btn.disabled = false;
     });
 }
@@ -764,7 +765,7 @@ function deleteUserData() {
       if (res.success) {
         window.location.reload();
       } else {
-        alert(res.message || 'Deletion failed');
+        alert(res.message || __('Deletion failed', 'artpulse'));
         if (btn) {
           btn.disabled = false;
           const spinner = btn.querySelector('.ap-spinner');
@@ -796,12 +797,12 @@ function renderTrendsChart() {
       labels: APUserTrends.months,
       datasets: [
         {
-          label: 'RSVPs',
+          label: __('RSVPs', 'artpulse'),
           data: APUserTrends.rsvpCounts,
           backgroundColor: rsvpColor
         },
         {
-          label: 'Favorites',
+          label: __('Favorites', 'artpulse'),
           data: APUserTrends.favoriteCounts,
           backgroundColor: favColor
         }
@@ -828,13 +829,13 @@ function renderEngagementChart() {
       labels: APUserStats.days,
       datasets: [
         {
-          label: 'RSVPs',
+          label: __('RSVPs', 'artpulse'),
           data: APUserStats.rsvp_daily,
           borderColor: rsvpColor,
           fill: false
         },
         {
-          label: 'Favorites',
+          label: __('Favorites', 'artpulse'),
           data: APUserStats.favorite_daily,
           borderColor: favColor,
           fill: false

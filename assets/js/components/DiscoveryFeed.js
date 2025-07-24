@@ -1,5 +1,6 @@
 (function (React, ReactDOM) {
   const { createElement, useEffect, useState } = React;
+  const { __ } = wp.i18n;
 
   function DiscoveryFeed() {
     const [items, setItems] = useState([]);
@@ -26,7 +27,7 @@
           createElement(
             'span',
             { className: 'text-sm text-gray-500' },
-            'Score: ',
+            __('Score:', 'artpulse') + ' ',
             item.score
           )
         )
