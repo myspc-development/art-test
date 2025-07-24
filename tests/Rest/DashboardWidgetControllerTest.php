@@ -73,4 +73,29 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase
         sort($all_ids);
         $this->assertSame(['bar', 'baz', 'foo'], $all_ids);
     }
+
+    public function test_save_layout_with_extra_widgets(): void
+    {
+        $req = new WP_REST_Request('POST', '/artpulse/v1/dashboard-widgets/save');
+        $req->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));
+        $req->set_body_params([
+            'role' => 'administrator',
+            'layout' => [
+                ['id' => 'foo', 'visible' => true],
+                ['id' => 'bar', 'visible' => false],
+            ],
+        ]);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+
+        $saved = get_option('artpulse_dashboard_widgets_administrator');
+        $this->assertIsArray($saved);
+        $this->assertEquals([
+            'role' => 'administrator',
+            'layout' => [
+                ['id' => 'foo', 'visible' => true],
+                ['id' => 'bar', 'visible' => false],
+            ],
+        ], $saved);
+    }
 }

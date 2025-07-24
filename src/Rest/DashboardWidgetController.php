@@ -101,13 +101,26 @@ class DashboardWidgetController {
             error_log('Attempt to save dashboard layout for unsupported role: ' . $role);
             return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
         }
-        $enabled = array_map('sanitize_key', (array) ($data['enabledWidgets'] ?? []));
-        $order   = array_map('sanitize_key', (array) ($data['layoutOrder'] ?? []));
-        update_option("artpulse_dashboard_widgets_{$role}", [
-            'role' => $role,
-            'enabledWidgets' => $enabled,
-            'layoutOrder' => $order,
-        ]);
+        if (isset($data['layout']) && is_array($data['layout'])) {
+            $layout = array_map(static function ($item) {
+                return [
+                    'id'      => sanitize_key($item['id'] ?? ''),
+                    'visible' => empty($item['visible']) ? false : true,
+                ];
+            }, $data['layout']);
+            update_option("artpulse_dashboard_widgets_{$role}", [
+                'role'  => $role,
+                'layout' => $layout,
+            ]);
+        } else {
+            $enabled = array_map('sanitize_key', (array) ($data['enabledWidgets'] ?? []));
+            $order   = array_map('sanitize_key', (array) ($data['layoutOrder'] ?? []));
+            update_option("artpulse_dashboard_widgets_{$role}", [
+                'role' => $role,
+                'enabledWidgets' => $enabled,
+                'layoutOrder' => $order,
+            ]);
+        }
         return rest_ensure_response(['saved' => true]);
     }
 }
