@@ -18,6 +18,7 @@ class OrgWidgetSharingPanel
 
     public static function render(): void
     {
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         $id = get_the_ID();
         $code = '<script src="' . esc_url(rest_url('widgets/embed.js')) . '?id=' . $id . '"></script>';
         echo '<p>' . esc_html__('Copy this code to embed on another site:', 'artpulse') . '</p>';

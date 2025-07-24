@@ -13,6 +13,7 @@ class SponsorDisplayWidget
 
     public static function append_disclosure(string $content): string
     {
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         if (!is_singular()) {
             return $content;
         }

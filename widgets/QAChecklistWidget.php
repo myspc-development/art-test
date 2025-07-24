@@ -14,6 +14,7 @@ class QAChecklistWidget {
     }
 
     public static function render(): void {
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         echo '<ol class="ap-qa-checklist">';
         echo '<li>' . esc_html__('Switch roles in builder', 'artpulse') . '</li>';
         echo '<li>' . esc_html__('Drag and drop widgets', 'artpulse') . '</li>';

@@ -14,6 +14,7 @@ class WidgetManifestPanelWidget {
     }
 
     public static function render(): void {
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         $path = dirname(__DIR__) . '/widget-manifest.json';
         if (!file_exists($path)) {
             echo esc_html__('Manifest not found.', 'artpulse');

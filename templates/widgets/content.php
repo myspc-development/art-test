@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 extract(ap_template_context($args ?? [], ['visible' => true]));
 /**
  * Dashboard widget: Content list.

@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 extract(ap_template_context($args ?? [], ['visible' => true]));
 $api_root = esc_url_raw(rest_url());
 $nonce    = wp_create_nonce('wp_rest');

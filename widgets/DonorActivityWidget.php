@@ -17,6 +17,7 @@ class DonorActivityWidget
 
     public static function render(): void
     {
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         $org_id = get_user_meta(get_current_user_id(), 'ap_organization_id', true);
         if (!$org_id) {
             esc_html_e('No organization assigned.', 'artpulse');
