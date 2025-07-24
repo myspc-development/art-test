@@ -216,7 +216,6 @@ class Plugin
         \ArtPulse\Core\AnalyticsManager::register();
         \ArtPulse\Core\AnalyticsDashboard::register();
         \ArtPulse\Admin\PaymentAnalyticsDashboard::register();
-        \ArtPulse\Admin\EngagementAnalyticsDashboard::register();
         \ArtPulse\Admin\PaymentReportsPage::register();
         \ArtPulse\Admin\TicketTiersPage::register();
         \ArtPulse\Admin\MembershipLevelsPage::register();

@@ -138,7 +138,6 @@ class ComposerStaticInita473d3f3862fb4a1e679260c12c04875
         'ArtPulse\\Admin\\DashboardLayoutEndpoint' => __DIR__ . '/../..' . '/src/Admin/DashboardLayoutEndpoint.php',
         'ArtPulse\\Admin\\DashboardPageCheck' => __DIR__ . '/../..' . '/src/Admin/DashboardPageCheck.php',
         'ArtPulse\\Admin\\DashboardWidgetTools' => __DIR__ . '/../..' . '/src/Admin/DashboardWidgetTools.php',
-        'ArtPulse\\Admin\\EngagementAnalyticsDashboard' => __DIR__ . '/../..' . '/src/Admin/EngagementAnalyticsDashboard.php',
         'ArtPulse\\Admin\\EngagementDashboard' => __DIR__ . '/../..' . '/src/Admin/EngagementDashboard.php',
         'ArtPulse\\Admin\\EnqueueAssets' => __DIR__ . '/../..' . '/src/Admin/EnqueueAssets.php',
         'ArtPulse\\Admin\\EventNotesTasks' => __DIR__ . '/../..' . '/src/Admin/EventNotesTasks.php',
