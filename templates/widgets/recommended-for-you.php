@@ -2,6 +2,10 @@
 use ArtPulse\Services\RecommendationService;
 $user_id = get_current_user_id();
 $items   = RecommendationService::get_for_user($user_id);
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+    echo '<p class="notice">Preview mode — dynamic content hidden</p>';
+    return;
+}
 ?>
 <div id="recommended-for-you-widget" class="ap-card" role="region" aria-labelledby="recommended-for-you-title" data-widget="recommended-for-you">
   <h2 id="recommended-for-you-title" class="ap-card__title"><?php esc_html_e('Recommended For You','artpulse'); ?></h2>

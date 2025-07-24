@@ -424,6 +424,10 @@ class DashboardWidgetTools
             $cb = [DashboardWidgetRegistry::class, 'render_widget_fallback'];
         }
 
+        if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+            define('IS_DASHBOARD_BUILDER_PREVIEW', true);
+        }
+
         static $rendering = false;
         if ($rendering) {
             return '';
