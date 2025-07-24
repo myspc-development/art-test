@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
 use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
 
 function ap_register_dashboard_builder_widget_map(): void {
+    $plugin_dir = dirname(__DIR__);
+
     $member = [
         'news_feed' => 'ArtPulseNewsFeedWidget.php',
         'rsvp_button' => 'RSVPButtonWidget.jsx',
@@ -51,6 +53,7 @@ function ap_register_dashboard_builder_widget_map(): void {
         'organization' => $organization,
     ];
 
+    $registered_files = [];
     foreach ($all as $role => $widgets) {
         foreach ($widgets as $id => $file) {
             $callback = static function () use ($id) {
@@ -62,30 +65,63 @@ function ap_register_dashboard_builder_widget_map(): void {
                 'roles' => [$role],
             ]);
 
-            $path_php = dirname(__DIR__) . '/widgets/' . $file;
-            $path_js  = dirname(__DIR__) . '/assets/js/widgets/' . $file;
+            $path_php = $plugin_dir . '/widgets/' . $file;
+            $path_js  = $plugin_dir . '/assets/js/widgets/' . $file;
+            $registered_files[$file] = true;
             if (!file_exists($path_php) && !file_exists($path_js)) {
-                trigger_error('Dashboard widget file missing: ' . $file, E_USER_WARNING);
+                error_log('Dashboard widget file missing: ' . $file);
             }
         }
     }
 
-    $all_files = array_merge(
-        glob(dirname(__DIR__) . '/widgets/*.php') ?: [],
-        glob(dirname(__DIR__) . '/assets/js/widgets/*.{js,jsx}', GLOB_BRACE) ?: []
+    $scanned = array_merge(
+        glob($plugin_dir . '/widgets/*.php') ?: [],
+        glob($plugin_dir . '/assets/js/widgets/*.jsx') ?: []
     );
-    foreach ($all_files as $file_path) {
-        $basename = basename($file_path);
-        $found = false;
-        foreach ($all as $widgets) {
-            if (in_array($basename, $widgets, true)) {
-                $found = true;
-                break;
+
+    $scanned = array_filter($scanned, static function ($path) {
+        $base = basename($path);
+        if ($base === 'index.js') {
+            return false;
+        }
+        if (preg_match('/\.(test|spec)\./i', $base)) {
+            return false;
+        }
+
+        return true;
+    });
+
+    foreach ($scanned as $path) {
+        $basename = basename($path);
+        if (!isset($registered_files[$basename])) {
+            $id = pathinfo($basename, PATHINFO_FILENAME);
+            $callback = static function () use ($id) {
+                echo '<div class="ap-widget-placeholder">' . esc_html($id) . '</div>';
+            };
+            DashboardWidgetRegistry::register($id, [
+                'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
+                'render_callback' => $callback,
+                'roles' => [],
+            ]);
+            error_log('Dashboard widget file not registered: ' . $basename);
+        }
+    }
+
+    if (defined('WIDGET_DEBUG_MODE') && WIDGET_DEBUG_MODE) {
+        add_action('admin_notices', static function () use ($registered_files, $scanned) {
+            $registered = array_keys($registered_files);
+            $scanned_basenames = array_map('basename', $scanned);
+            $missing = array_diff($registered, $scanned_basenames);
+            $extra   = array_diff($scanned_basenames, $registered);
+            echo '<div class="notice notice-info"><p>Dashboard Builder Debug:<br>';
+            if ($missing) {
+                echo 'Missing files: ' . esc_html(implode(', ', $missing)) . '<br>';
             }
-        }
-        if (!$found) {
-            trigger_error('Dashboard widget file present but not registered: ' . $basename, E_USER_WARNING);
-        }
+            if ($extra) {
+                echo 'Unregistered files: ' . esc_html(implode(', ', $extra)) . '<br>';
+            }
+            echo '</p></div>';
+        });
     }
 
     if (!defined('AP_DB_DEFAULT_LAYOUTS')) {
