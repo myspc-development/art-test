@@ -21,6 +21,7 @@ use ArtPulse\Engagement\DigestMailer;
 use ArtPulse\Frontend\WidgetEmbedShortcode;
 use ArtPulse\Blocks\WidgetEmbedBlock;
 use ArtPulse\Blocks\DashboardNewsBlock;
+use ArtPulse\Blocks\RelatedProjectsBlock;
 use ArtPulse\Core\DashboardBlockPatternManager;
 use ArtPulse\Frontend\ReactDashboardShortcode;
 use ArtPulse\Marketplace\MarketplaceManager;
@@ -385,6 +386,7 @@ class Plugin
         \ArtPulse\Blocks\TaxonomyFilterBlock::register();
         \ArtPulse\Blocks\PortfolioPreviewBlock::register();
         \ArtPulse\Blocks\DashboardNewsBlock::register();
+        RelatedProjectsBlock::register();
         WidgetEmbedShortcode::register();
         WidgetEmbedBlock::register();
         \ArtPulse\Blocks\FavoritesWidgetBlock::register();

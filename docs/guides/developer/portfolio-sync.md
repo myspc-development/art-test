@@ -15,3 +15,22 @@ Use **Portfolio Sync → Migrate Legacy Portfolios** or run `wp ap migrate-portf
 
 ## Settings
 Administrators can select which CPTs sync and customize the category labels under **Portfolio Sync → Sync Settings**.
+
+## Related Projects Template
+
+Single portfolio pages can display related artist and organization profiles. The template
+`templates/salient/portfolio-related-projects.php` outputs this section using Salient's
+portfolio markup. Copy the file to your theme to override the layout.
+
+Include it from `single-portfolio.php` after the main content for Event posts only:
+
+```php
+if ( 'artpulse_event' === get_post_meta( get_the_ID(), '_ap_source_type', true ) ) {
+    locate_template( 'templates/salient/portfolio-related-projects.php', true, true );
+}
+```
+
+The heading and which project types display can be filtered via the `ap_related_projects_heading`,
+`ap_show_related_artists` and `ap_show_related_orgs` hooks. The optional
+`artpulse/related-projects` block renders the same output in Gutenberg when
+`\ArtPulse\Blocks\RelatedProjectsBlock::register()` runs.
