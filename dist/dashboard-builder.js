@@ -1,5 +1,20 @@
 (function(wp){
-  const { createElement: h, render, useState, useEffect } = wp.element;
+  const { createElement: h, render, useState, useEffect, Component } = wp.element;
+
+  class ErrorBoundary extends Component {
+    constructor(props){
+      super(props);
+      this.state = { hasError:false };
+    }
+    static getDerivedStateFromError(){ return { hasError:true }; }
+    componentDidCatch(err){ console.warn('Widget error', err); }
+    render(){
+      if(this.state.hasError){
+        return h('div', { className: 'ap-widget-error' }, 'Failed to load widget');
+      }
+      return this.props.children;
+    }
+  }
 
   function App(props){
     const [role, setRole] = useState(props.roles[0] || '');
@@ -8,14 +23,19 @@
     const [order, setOrder] = useState([]);
     const [enabled, setEnabled] = useState({});
     const [preview, setPreview] = useState({});
+    const [layoutReady, setLayoutReady] = useState(false);
+    const [fetching, setFetching] = useState(false);
 
     useEffect(() => {
       if(!role){ return; }
-      if(lastRole === role && available.length){
+      if(fetching){ return; }
+      if(lastRole === role && layoutReady){
         console.log('[DashboardBuilder] Skip fetch, role unchanged:', role);
         return;
       }
       setLastRole(role);
+      setLayoutReady(false);
+      setFetching(true);
       console.log('[DashboardBuilder] fetch widgets', role);
       fetch(`${props.rest_root}artpulse/v1/dashboard-widgets?role=${role}`, {
         headers: { 'X-WP-Nonce': props.nonce }
@@ -35,6 +55,12 @@
             ? active.layoutOrder
             : (data.available || []).map(w => w.id);
           setOrder(ord);
+          setLayoutReady(true);
+          setFetching(false);
+        })
+        .catch(err => {
+          console.warn('[DashboardBuilder] fetch failed', err);
+          setFetching(false);
         });
     }, [role]);
 
@@ -85,7 +111,9 @@
         order.map(id => {
           if(!enabled[id]) return null;
           const html = preview[id] || '';
-          return h('div', { key:id, className:'ap-widget-preview', dangerouslySetInnerHTML:{__html: html} });
+          return h(ErrorBoundary, { key:id },
+            h('div', { className:'ap-widget-preview', dangerouslySetInnerHTML:{__html: html} })
+          );
         })
       )
       );
@@ -94,6 +122,7 @@
   document.addEventListener('DOMContentLoaded', function(){
     const root = document.getElementById('dashboard-builder-root');
     if(root){
+      window.IS_DASHBOARD_BUILDER_PREVIEW = true;
       console.log('[DashboardBuilder] initial role', (window.APDashboardBuilder||{}).roles?.[0]);
       render(h(App, window.APDashboardBuilder || {}), root);
     }
