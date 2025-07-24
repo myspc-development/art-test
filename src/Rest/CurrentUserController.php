@@ -20,7 +20,8 @@ class CurrentUserController {
         $user = wp_get_current_user();
         return [
             'id' => $user->ID,
-            'role' => $user->roles[0] ?? 'member',
+            'role'  => $user->roles[0] ?? 'member',
+            'roles' => $user->roles,
         ];
     }
 }

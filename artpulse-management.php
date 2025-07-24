@@ -114,6 +114,7 @@ require_once __DIR__ . '/includes/widgets/class-favorite-portfolio-widget.php';
 require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/dashboard-builder-widgets.php';
+require_once __DIR__ . '/includes/dashboard-menu.php';
 require_once __DIR__ . '/includes/Core/LayoutUtils.php';
 require_once __DIR__ . '/includes/role-upgrade-handler.php';
 require_once __DIR__ . '/includes/guide-dashboard-widgets.php';
