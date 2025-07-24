@@ -419,6 +419,14 @@ Portfolio entries also copy project categories and tags to the Salient taxonomie
 
 Use `wp ap migrate-portfolio` to migrate legacy `artpulse_portfolio` posts to the Salient `portfolio` type.
 
+### Sync & Migration Tools
+
+Administrators can run a full synchronization or migrate legacy items from **Settings → Portfolio Sync**. After running either action the page shows a notice summarizing how many items were processed. Logs of the last 50 operations are available from the same menu.
+
+CLI equivalents are `wp ap sync-portfolio` and `wp ap migrate-portfolio`. Both commands require a user with the `manage_options` capability (use `--user=1`).
+
+If you encounter errors check the sync logs for messages like duplicate entries or missing images. Clearing the object cache with the built‑in button ensures the front‑end reflects new portfolio data.
+
 ## Plugin Updates
 
 Upload new versions over the existing `artpulse-management` folder or use the **Updates** tab inside Settings. Since uninstall hooks only run when deleting the plugin, all options and data remain intact during a standard upgrade. The **Keep Data on Uninstall** setting protects content if you ever remove the plugin entirely. Export a configuration backup from the **Config Backup** tab before updating so you can easily restore the options if needed.

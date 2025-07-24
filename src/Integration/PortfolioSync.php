@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Integration;
 
+use ArtPulse\Core\PortfolioSyncLogger;
+
 /**
  * Sync artist, artwork and event posts to portfolio entries.
  */
@@ -19,6 +21,10 @@ class PortfolioSync
         }
         add_action('before_delete_post', [self::class, 'delete_portfolio']);
         add_action('save_post_portfolio', [self::class, 'sync_source'], 10, 2);
+
+        if (defined('WP_CLI') && WP_CLI) {
+            \WP_CLI::add_command('ap sync-portfolio', [self::class, 'cli_sync']);
+        }
     }
 
     /**
@@ -54,16 +60,22 @@ class PortfolioSync
             'numberposts' => 1,
             'fields'      => 'ids',
         ]);
+        if (count($existing) > 1) {
+            PortfolioSyncLogger::log('sync', 'Duplicate portfolio records', ['post' => $post_id, 'ids' => $existing], get_current_user_id());
+        }
 
        if ($existing) {
            $portfolio_id = $existing[0];
-           wp_update_post([
+           $result = wp_update_post([
                'ID'           => $portfolio_id,
                'post_title'   => $post->post_title,
                'post_content' => $post->post_content,
                'post_status'  => $post->post_status,
-           ]);
-            update_post_meta($post_id, '_ap_portfolio_id', $portfolio_id);
+           ], true);
+           if (is_wp_error($result)) {
+               PortfolioSyncLogger::log('sync', 'Update failed', ['post' => $post_id, 'error' => $result->get_error_message()], get_current_user_id());
+           }
+           update_post_meta($post_id, '_ap_portfolio_id', $portfolio_id);
        } else {
             $portfolio_id = wp_insert_post([
                 'post_type'   => 'portfolio',
@@ -71,12 +83,15 @@ class PortfolioSync
                 'post_content'=> $post->post_content,
                 'post_status' => $post->post_status,
                 'post_author' => $post->post_author,
-            ]);
+            ], true);
             if (!is_wp_error($portfolio_id) && $portfolio_id) {
                 update_post_meta($portfolio_id, '_ap_source_post', $post_id);
                 update_post_meta($post_id, '_ap_portfolio_id', $portfolio_id);
+                PortfolioSyncLogger::log('sync', 'Created portfolio', ['post' => $post_id, 'portfolio' => $portfolio_id], get_current_user_id());
+            } else {
+                PortfolioSyncLogger::log('sync', 'Insert failed', ['post' => $post_id, 'error' => is_wp_error($portfolio_id) ? $portfolio_id->get_error_message() : 'unknown'], get_current_user_id());
             }
-        }
+       }
 
         if (!empty($portfolio_id) && !is_wp_error($portfolio_id)) {
             update_post_meta($portfolio_id, '_ap_submission_images', $ids);
@@ -104,6 +119,7 @@ class PortfolioSync
                     set_post_thumbnail($portfolio_id, $thumb);
                 } else {
                     delete_post_thumbnail($portfolio_id);
+                    PortfolioSyncLogger::log('sync', 'Missing images', ['post' => $post_id], get_current_user_id());
                 }
             }
 
@@ -141,6 +157,7 @@ class PortfolioSync
                     }
                 }
             }
+            PortfolioSyncLogger::log('sync', 'Synced portfolio', ['post' => $post_id, 'portfolio' => $portfolio_id], get_current_user_id());
             self::$syncing = false;
         }
     }
@@ -186,11 +203,14 @@ class PortfolioSync
 
         self::$syncing = true;
 
-        wp_update_post([
+        $result = wp_update_post([
             'ID'           => $source,
             'post_title'   => $post->post_title,
             'post_content' => $post->post_content,
-        ]);
+        ], true);
+        if (is_wp_error($result)) {
+            PortfolioSyncLogger::log('sync', 'Source update failed', ['portfolio' => $post_id, 'error' => $result->get_error_message()], get_current_user_id());
+        }
 
         update_post_meta($source, '_ap_portfolio_id', $post_id);
 
@@ -199,6 +219,46 @@ class PortfolioSync
             update_post_meta($source, '_ap_submission_images', $ids);
         }
 
+        PortfolioSyncLogger::log('sync', 'Synced source', ['portfolio' => $post_id, 'source' => $source], get_current_user_id());
         self::$syncing = false;
+    }
+
+    /**
+     * Run a full synchronization of all source posts.
+     */
+    public static function sync_all(): int
+    {
+        $types = ['artpulse_artist', 'artpulse_artwork', 'artpulse_event', 'artpulse_org'];
+        $count = 0;
+        foreach ($types as $type) {
+            $posts = get_posts([
+                'post_type'      => $type,
+                'posts_per_page' => -1,
+                'post_status'    => 'any',
+                'fields'         => 'ids',
+            ]);
+            foreach ($posts as $id) {
+                $post = get_post($id);
+                if ($post) {
+                    self::sync_portfolio($id, $post);
+                    $count++;
+                }
+            }
+        }
+        PortfolioSyncLogger::log('sync', 'Bulk sync complete', ['count' => $count], get_current_user_id());
+        return $count;
+    }
+
+    public static function cli_sync()
+    {
+        if (!function_exists('WP_CLI')) {
+            return;
+        }
+        if (!\wp_get_current_user()->has_cap('manage_options')) {
+            \WP_CLI::error('Insufficient permissions.');
+        }
+        $count = self::sync_all();
+        ap_clear_portfolio_cache();
+        \WP_CLI::success("Synced {$count} items.");
     }
 }

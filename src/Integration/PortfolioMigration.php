@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Integration;
 
+use ArtPulse\Core\PortfolioSyncLogger;
+
 use WP_CLI;
 
 /**
@@ -21,13 +23,15 @@ class PortfolioMigration
      *
      * @wp-cli-command migrate-portfolio
      */
-    public static function migrate()
+    public static function migrate($interactive = false)
     {
         $posts = get_posts([
             'post_type'      => 'artpulse_portfolio',
             'posts_per_page' => -1,
             'post_status'    => 'any',
         ]);
+
+        $count = 0;
 
         foreach ($posts as $post) {
             $exists = get_posts([
@@ -49,17 +53,25 @@ class PortfolioMigration
                 'post_content'=> $post->post_content,
                 'post_status' => $post->post_status,
                 'post_author' => $post->post_author,
-            ]);
+            ], true);
             if (is_wp_error($portfolio_id)) {
-                WP_CLI::warning("Failed to insert portfolio for {$post->ID}");
+                PortfolioSyncLogger::log('migration', 'Insert failed', ['post' => $post->ID, 'error' => $portfolio_id->get_error_message()]);
+                if ($interactive && class_exists('WP_CLI')) {
+                    \WP_CLI::warning("Failed to insert portfolio for {$post->ID}");
+                }
                 continue;
             }
 
             update_post_meta($portfolio_id, '_ap_source_post', $post->ID);
             update_post_meta($post->ID, '_ap_portfolio_id', $portfolio_id);
+            $count++;
+            PortfolioSyncLogger::log('migration', 'Migrated post', ['post' => $post->ID, 'portfolio' => $portfolio_id]);
         }
-
-        WP_CLI::success('Portfolio migration complete.');
+        PortfolioSyncLogger::log('migration', 'Migration complete', ['count' => $count]);
+        if ($interactive && class_exists('WP_CLI')) {
+            \WP_CLI::success("Portfolio migration complete ({$count})");
+        }
+        return $count;
     }
 }
 

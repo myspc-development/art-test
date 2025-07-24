@@ -83,3 +83,7 @@ function ap_locate_template(string $relative_template, string $plugin_path): str
      */
     return apply_filters('ap_locate_template', $template, $relative_template);
 }
+
+function ap_clear_portfolio_cache(): void {
+    wp_cache_flush();
+}

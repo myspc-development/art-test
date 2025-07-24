@@ -394,6 +394,36 @@ function ap_export_diagnostic_report() {
 }
 add_action('admin_post_ap_export_diagnostic_report', 'ap_export_diagnostic_report');
 
+use ArtPulse\Integration\PortfolioMigration;
+use ArtPulse\Integration\PortfolioSync;
+use ArtPulse\Core\PortfolioSyncLogger;
+
+function ap_sync_all_portfolios() {
+    if (!current_user_can('manage_options')) {
+        wp_die(__('Unauthorized', 'artpulse'));
+    }
+    check_admin_referer('ap_sync_all_portfolios');
+    $count = PortfolioSync::sync_all();
+    PortfolioSyncLogger::log('sync', 'Admin bulk sync', ['count' => $count], get_current_user_id());
+    ap_clear_portfolio_cache();
+    wp_safe_redirect(add_query_arg('synced', $count, admin_url('admin.php?page=ap-portfolio-sync')));
+    exit;
+}
+add_action('admin_post_ap_sync_all_portfolios', 'ap_sync_all_portfolios');
+
+function ap_migrate_portfolio_admin() {
+    if (!current_user_can('manage_options')) {
+        wp_die(__('Unauthorized', 'artpulse'));
+    }
+    check_admin_referer('ap_migrate_portfolio');
+    $count = PortfolioMigration::migrate(false);
+    PortfolioSyncLogger::log('migration', 'Admin migration', ['count' => $count], get_current_user_id());
+    ap_clear_portfolio_cache();
+    wp_safe_redirect(add_query_arg('migrated', $count, admin_url('admin.php?page=ap-portfolio-sync')));
+    exit;
+}
+add_action('admin_post_ap_migrate_portfolio', 'ap_migrate_portfolio_admin');
+
 // Handle template copy action
 add_action('admin_init', function () {
     if (!isset($_POST['ap_copy_templates'])) {
