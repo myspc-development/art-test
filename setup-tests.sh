@@ -3,20 +3,21 @@
 
 set -e
 
-# Ensure required environment variables are set.
-REQUIRED_VARS=(DB_NAME DB_USER DB_PASSWORD DB_HOST)
-for var in "${REQUIRED_VARS[@]}"; do
-    if [ -z "${!var}" ]; then
-        echo "Error: $var environment variable is not set." >&2
-        exit 1
-    fi
-done
+# Provide defaults for DB connection if not already set
+DB_NAME=${DB_NAME:-wordpress_test}
+DB_USER=${DB_USER:-root}
+DB_PASSWORD=${DB_PASSWORD:-root}
+DB_HOST=${DB_HOST:-localhost}
 
-echo "=== Downloading WordPress core into ./wordpress ==="
-mkdir -p wordpress
-curl -O https://wordpress.org/latest.tar.gz
-tar -xzf latest.tar.gz -C wordpress --strip-components=1
-rm latest.tar.gz
+if [ ! -f wordpress/wp-load.php ]; then
+    echo "=== Downloading WordPress core into ./wordpress ==="
+    mkdir -p wordpress
+    curl -L https://wordpress.org/latest.tar.gz -o wordpress/latest.tar.gz
+    tar -xzf wordpress/latest.tar.gz -C wordpress --strip-components=1
+    rm wordpress/latest.tar.gz
+else
+    echo "WordPress already installed in ./wordpress"
+fi
 
 echo "=== Creating wp-tests-config.php with correct paths and DB settings ==="
 cat > wp-tests-config.php << 'EOF'
