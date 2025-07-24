@@ -21,7 +21,16 @@ if ( have_posts() ) :
 
     // Event title
     echo '<h1 class="entry-title event-title">' . get_the_title() . '</h1>';
+    $rsvps      = get_post_meta(get_the_ID(), 'event_rsvp_list', true);
+    $rsvp_count = is_array($rsvps) ? count($rsvps) : 0;
+    $fav_count  = intval(get_post_meta(get_the_ID(), 'ap_favorite_count', true));
+    echo '<div class="ap-event-actions">';
+    echo \ArtPulse\Frontend\ap_render_favorite_button(get_the_ID(), 'artpulse_event');
+    echo '<span class="ap-fav-count" aria-label="' . esc_attr__('Interested count','artpulse') . '">' . esc_html($fav_count) . '</span>';
+    echo \ArtPulse\Frontend\ap_render_rsvp_button(get_the_ID());
+    echo '<span class="ap-rsvp-count" aria-label="' . esc_attr__('RSVP count','artpulse') . '">' . esc_html($rsvp_count) . '</span>';
     echo '<button class="ap-event-vote" data-event-id="' . get_the_ID() . '">⭐ ' . esc_html__('Mark as Memorable','artpulse') . '</button> <span class="ap-event-vote-count"></span>';
+    echo '</div>';
 
     // Event meta
     $date     = get_post_meta(get_the_ID(), '_ap_event_date', true);
@@ -93,6 +102,7 @@ if ( have_posts() ) :
       <button type="submit"><?php esc_html_e('Subscribe','artpulse'); ?></button>
       <span class="ap-optin-message"></span>
     </form>
+    <?php comments_template('/partials/event-comments.php'); ?>
     <?php
 
     echo '</div>'; // close .container
