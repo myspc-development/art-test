@@ -24,7 +24,6 @@ return array(
     'ArtPulse\\Admin\\DashboardLayoutEndpoint' => $baseDir . '/src/Admin/DashboardLayoutEndpoint.php',
     'ArtPulse\\Admin\\DashboardPageCheck' => $baseDir . '/src/Admin/DashboardPageCheck.php',
     'ArtPulse\\Admin\\DashboardWidgetTools' => $baseDir . '/src/Admin/DashboardWidgetTools.php',
-    'ArtPulse\\Admin\\EngagementAnalyticsDashboard' => $baseDir . '/src/Admin/EngagementAnalyticsDashboard.php',
     'ArtPulse\\Admin\\EngagementDashboard' => $baseDir . '/src/Admin/EngagementDashboard.php',
     'ArtPulse\\Admin\\EnqueueAssets' => $baseDir . '/src/Admin/EnqueueAssets.php',
     'ArtPulse\\Admin\\EventNotesTasks' => $baseDir . '/src/Admin/EventNotesTasks.php',
