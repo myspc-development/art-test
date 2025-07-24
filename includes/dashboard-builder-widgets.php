@@ -8,6 +8,8 @@ use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
 function ap_register_dashboard_builder_widget_map(): void {
     $plugin_dir = dirname(__DIR__);
 
+    global $ap_widget_source_map, $ap_widget_status;
+
     $member = [
         'news_feed' => 'ArtPulseNewsFeedWidget.php',
         'rsvp_button' => 'RSVPButtonWidget.jsx',
@@ -47,18 +49,24 @@ function ap_register_dashboard_builder_widget_map(): void {
         'pinned_announcements' => 'PinnedAnnouncementsWidget',
     ];
 
-    $all = [
+    $ap_widget_source_map = [
         'member' => $member,
         'artist' => $artist,
         'organization' => $organization,
     ];
 
+    $all = array_merge_recursive($ap_widget_source_map);
+
     $registered_files = [];
-    foreach ($all as $role => $widgets) {
+    $missing_files = [];
+    $unregistered_files = [];
+
+    foreach ($ap_widget_source_map as $role => $widgets) {
         foreach ($widgets as $id => $file) {
             $callback = static function () use ($id) {
                 echo '<div class="ap-widget-placeholder">' . esc_html($id) . '</div>';
             };
+
             DashboardWidgetRegistry::register($id, [
                 'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
                 'render_callback' => $callback,
@@ -68,7 +76,9 @@ function ap_register_dashboard_builder_widget_map(): void {
             $path_php = $plugin_dir . '/widgets/' . $file;
             $path_js  = $plugin_dir . '/assets/js/widgets/' . $file;
             $registered_files[$file] = true;
+
             if (!file_exists($path_php) && !file_exists($path_js)) {
+                $missing_files[] = $file;
                 error_log('Dashboard widget file missing: ' . $file);
             }
         }
@@ -81,14 +91,7 @@ function ap_register_dashboard_builder_widget_map(): void {
 
     $scanned = array_filter($scanned, static function ($path) {
         $base = basename($path);
-        if ($base === 'index.js') {
-            return false;
-        }
-        if (preg_match('/\.(test|spec)\./i', $base)) {
-            return false;
-        }
-
-        return true;
+        return !in_array($base, ['index.js']) && !preg_match('/\.(test|spec)\./i', $base);
     });
 
     foreach ($scanned as $path) {
@@ -103,17 +106,19 @@ function ap_register_dashboard_builder_widget_map(): void {
                 'render_callback' => $callback,
                 'roles' => [],
             ]);
+            $unregistered_files[] = $basename;
             error_log('Dashboard widget file not registered: ' . $basename);
         }
     }
 
     if (defined('WIDGET_DEBUG_MODE') && WIDGET_DEBUG_MODE) {
-        add_action('admin_notices', static function () use ($registered_files, $scanned) {
+        add_action('admin_notices', static function () use ($registered_files, $scanned, $missing_files, $unregistered_files) {
             $registered = array_keys($registered_files);
             $scanned_basenames = array_map('basename', $scanned);
             $missing = array_diff($registered, $scanned_basenames);
             $extra   = array_diff($scanned_basenames, $registered);
-            echo '<div class="notice notice-info"><p>Dashboard Builder Debug:<br>';
+
+            echo '<div class="notice notice-info"><p><strong>Dashboard Builder Debug:</strong><br>';
             if ($missing) {
                 echo 'Missing files: ' . esc_html(implode(', ', $missing)) . '<br>';
             }
@@ -124,6 +129,12 @@ function ap_register_dashboard_builder_widget_map(): void {
         });
     }
 
+    $ap_widget_status = [
+        'registered'   => array_keys($registered_files),
+        'missing'      => $missing_files,
+        'unregistered' => $unregistered_files,
+    ];
+
     if (!defined('AP_DB_DEFAULT_LAYOUTS')) {
         define('AP_DB_DEFAULT_LAYOUTS', [
             'member' => array_map(fn($id) => ['id' => $id, 'visible' => true], array_keys($member)),
@@ -133,3 +144,7 @@ function ap_register_dashboard_builder_widget_map(): void {
     }
 }
 add_action('init', 'ap_register_dashboard_builder_widget_map', 20);
+
+if (defined('WIDGET_DEBUG_MODE') && WIDGET_DEBUG_MODE) {
+    require_once dirname(__DIR__) . '/widgets/WidgetStatusPanelWidget.php';
+}

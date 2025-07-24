@@ -1,0 +1,280 @@
+{
+    "news_feed": {
+        "file": "widgets/ArtPulseNewsFeedWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered"
+    },
+    "rsvp_button": {
+        "file": "",
+        "roles": [
+            "member"
+        ],
+        "status": "missing"
+    },
+    "nearby_events_map": {
+        "file": "assets/js/widgets/NearbyEventsMapWidget.jsx",
+        "roles": [
+            "member"
+        ],
+        "status": "registered"
+    },
+    "my_favorites": {
+        "file": "assets/js/widgets/MyFavoritesWidget.jsx",
+        "roles": [
+            "member"
+        ],
+        "status": "registered"
+    },
+    "event_chat": {
+        "file": "assets/js/widgets/EventChatWidget.jsx",
+        "roles": [
+            "member"
+        ],
+        "status": "registered"
+    },
+    "share_this_event": {
+        "file": "assets/js/widgets/ShareThisEventWidget.jsx",
+        "roles": [
+            "member"
+        ],
+        "status": "registered"
+    },
+    "upcoming_events_by_location": {
+        "file": "",
+        "roles": [
+            "member"
+        ],
+        "status": "missing"
+    },
+    "followed_artists_activity": {
+        "file": "",
+        "roles": [
+            "member"
+        ],
+        "status": "missing"
+    },
+    "artist_inbox_preview": {
+        "file": "",
+        "roles": [
+            "member"
+        ],
+        "status": "missing"
+    },
+    "my_rsvps": {
+        "file": "",
+        "roles": [
+            "member"
+        ],
+        "status": "missing"
+    },
+    "my_shared_events_activity": {
+        "file": "",
+        "roles": [
+            "member"
+        ],
+        "status": "missing"
+    },
+    "recommended_for_you": {
+        "file": "",
+        "roles": [
+            "member"
+        ],
+        "status": "missing"
+    },
+    "feedback_form": {
+        "file": "",
+        "roles": [
+            "member",
+            "artist"
+        ],
+        "status": "missing"
+    },
+    "help_center": {
+        "file": "",
+        "roles": [
+            "member"
+        ],
+        "status": "missing"
+    },
+    "qa_checklist": {
+        "file": "widgets/QAChecklistWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered"
+    },
+    "artist_event_editor": {
+        "file": "",
+        "roles": [
+            "artist"
+        ],
+        "status": "missing"
+    },
+    "inbox_preview": {
+        "file": "",
+        "roles": [
+            "artist"
+        ],
+        "status": "missing"
+    },
+    "revenue_summary": {
+        "file": "",
+        "roles": [
+            "artist"
+        ],
+        "status": "missing"
+    },
+    "community_mentions": {
+        "file": "",
+        "roles": [
+            "artist"
+        ],
+        "status": "missing"
+    },
+    "fan_poll": {
+        "file": "",
+        "roles": [
+            "artist"
+        ],
+        "status": "missing"
+    },
+    "drag_drop_gallery": {
+        "file": "",
+        "roles": [
+            "artist"
+        ],
+        "status": "missing"
+    },
+    "content_scheduler": {
+        "file": "",
+        "roles": [
+            "artist"
+        ],
+        "status": "missing"
+    },
+    "event_performance": {
+        "file": "",
+        "roles": [
+            "artist"
+        ],
+        "status": "missing"
+    },
+    "crm_overview": {
+        "file": "",
+        "roles": [
+            "organization"
+        ],
+        "status": "missing"
+    },
+    "sponsor_content_manager": {
+        "file": "",
+        "roles": [
+            "organization"
+        ],
+        "status": "missing"
+    },
+    "embed_tools": {
+        "file": "",
+        "roles": [
+            "organization"
+        ],
+        "status": "missing"
+    },
+    "org_brand_customizer": {
+        "file": "",
+        "roles": [
+            "organization"
+        ],
+        "status": "missing"
+    },
+    "submission_pipeline": {
+        "file": "",
+        "roles": [
+            "organization"
+        ],
+        "status": "missing"
+    },
+    "multi_org_activity_feed": {
+        "file": "",
+        "roles": [
+            "organization"
+        ],
+        "status": "missing"
+    },
+    "team_member_roles": {
+        "file": "",
+        "roles": [
+            "organization"
+        ],
+        "status": "missing"
+    },
+    "pinned_announcements": {
+        "file": "",
+        "roles": [
+            "organization"
+        ],
+        "status": "missing"
+    },
+    "DonorActivityWidget": {
+        "file": "widgets/DonorActivityWidget.php",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "OrgWidgetSharingPanel": {
+        "file": "widgets/OrgWidgetSharingPanel.php",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "SponsorDisplayWidget": {
+        "file": "widgets/SponsorDisplayWidget.php",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "WidgetStatusPanelWidget": {
+        "file": "widgets/WidgetStatusPanelWidget.php",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "ArtistInboxPreviewWidget": {
+        "file": "assets/js/widgets/ArtistInboxPreviewWidget.jsx",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "ArtistRevenueSummaryWidget": {
+        "file": "assets/js/widgets/ArtistRevenueSummaryWidget.jsx",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "ArtistSpotlightWidget": {
+        "file": "assets/js/widgets/ArtistSpotlightWidget.jsx",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "AudienceCRMWidget": {
+        "file": "assets/js/widgets/AudienceCRMWidget.jsx",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "EmbedToolWidget": {
+        "file": "assets/js/widgets/EmbedToolWidget.jsx",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "OrgBrandingSettingsPanel": {
+        "file": "assets/js/widgets/OrgBrandingSettingsPanel.jsx",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "RSVPButton": {
+        "file": "assets/js/widgets/RSVPButton.jsx",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "SponsoredEventConfigWidget": {
+        "file": "assets/js/widgets/SponsoredEventConfigWidget.jsx",
+        "roles": [],
+        "status": "unregistered"
+    }
+}
