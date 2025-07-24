@@ -54,5 +54,14 @@ function ap_output_seo_meta(): void
     }
 
     JsonLdGenerator::output();
+
+    if (function_exists('ap_page_has_shortcode') && ap_page_has_shortcode('ap_event_directory')) {
+        global $wp_query;
+        $ids = wp_list_pluck($wp_query->posts, 'ID');
+        if ($ids) {
+            $schema = JsonLdGenerator::directory_schema($ids);
+            echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+        }
+    }
 }
 add_action('wp_head', 'ap_output_seo_meta');

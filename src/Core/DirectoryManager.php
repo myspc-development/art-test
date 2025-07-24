@@ -65,6 +65,7 @@ class DirectoryManager {
                 'for_sale'   => [ 'type' => 'boolean' ],
                 'keyword'    => [ 'type' => 'string' ],
                 'first_letter' => [ 'type' => 'string' ],
+                'page'        => [ 'type' => 'integer', 'default' => 1 ],
             ]
         ]);
     }
@@ -72,6 +73,7 @@ class DirectoryManager {
     public static function handleFilter(WP_REST_Request $request) {
         $type       = sanitize_text_field( $request->get_param('type') );
         $limit      = intval( $request->get_param('limit') ?? 10 );
+        $page       = max( 1, intval( $request->get_param('page') ?? 1 ) );
         $event_type = absint( $request->get_param('event_type') );
         $medium     = absint( $request->get_param('medium') );
         $style      = absint( $request->get_param('style') );
@@ -91,6 +93,7 @@ class DirectoryManager {
         $args       = [
             'post_type'      => 'artpulse_' . $type,
             'posts_per_page' => $limit,
+            'paged'          => $page,
             'orderby'        => 'title',
             'order'          => 'ASC',
         ];
@@ -109,6 +112,7 @@ class DirectoryManager {
             'for_sale'   => $for_sale,
             'keyword'    => $keyword,
             'first_letter' => $first_letter,
+            'page'       => $page,
         ];
 
         $cache_key = self::get_cache_key( array_merge( [ 'type' => $type ], $search_args ) );
@@ -249,7 +253,11 @@ class DirectoryManager {
             return $item;
         }, $posts);
 
-        return rest_ensure_response($data);
+        $has_more = ($query->max_num_pages > $page);
+        return rest_ensure_response([
+            'posts'    => $data,
+            'has_more' => $has_more,
+        ]);
     }
 
     public static function renderDirectory($atts) {
@@ -258,20 +266,21 @@ class DirectoryManager {
             'limit' => 10,
         ], $atts, 'ap_directory');
 
+        $server_results = self::server_results($atts);
         ob_start(); ?>
         <div class="ap-directory" data-type="<?php echo esc_attr($atts['type']); ?>" data-limit="<?php echo esc_attr($atts['limit']); ?>">
-            <form class="ap-directory-filters" aria-controls="ap-directory-results">
+            <form class="ap-directory-filters" method="get" aria-controls="ap-directory-results">
                 <?php if ($atts['type'] === 'event'): ?>
                     <label for="ap-filter-event-type"><?php _e('Filter by Event Type','artpulse'); ?>:</label>
-                    <select id="ap-filter-event-type" class="ap-filter-event-type"></select>
+                    <select id="ap-filter-event-type" name="event_type" class="ap-filter-event-type"></select>
                     <label for="ap-filter-city" class="screen-reader-text"><?php esc_html_e('City','artpulse'); ?></label>
-                    <input id="ap-filter-city" type="text" class="ap-filter-city" placeholder="<?php esc_attr_e('City','artpulse'); ?>" />
+                    <input id="ap-filter-city" name="city" type="text" class="ap-filter-city" placeholder="<?php esc_attr_e('City','artpulse'); ?>" />
                     <label for="ap-filter-region" class="screen-reader-text"><?php esc_html_e('Region','artpulse'); ?></label>
-                    <input id="ap-filter-region" type="text" class="ap-filter-region" placeholder="<?php esc_attr_e('Region','artpulse'); ?>" />
+                    <input id="ap-filter-region" name="region" type="text" class="ap-filter-region" placeholder="<?php esc_attr_e('Region','artpulse'); ?>" />
                 <?php endif; ?>
                 <?php if ($atts['type'] === 'org'): ?>
                     <label for="ap-filter-org-type"><?php _e('Organization Type','artpulse'); ?>:</label>
-                    <select id="ap-filter-org-type" class="ap-filter-org-type">
+                    <select id="ap-filter-org-type" name="org_type" class="ap-filter-org-type">
                         <option value=""><?php esc_html_e('All','artpulse'); ?></option>
                         <?php
                         foreach (['gallery','museum','art-fair','studio','collective','non-profit','commercial-gallery','public-art-space','educational-institution','other'] as $t) {
@@ -281,16 +290,16 @@ class DirectoryManager {
                     </select>
                 <?php else: ?>
                     <label for="ap-filter-medium"><?php _e('Medium','artpulse'); ?>:</label>
-                    <select id="ap-filter-medium" class="ap-filter-medium"></select>
+                    <select id="ap-filter-medium" name="medium" class="ap-filter-medium"></select>
                     <label for="ap-filter-style"><?php _e('Style','artpulse'); ?>:</label>
-                    <select id="ap-filter-style" class="ap-filter-style"></select>
+                    <select id="ap-filter-style" name="style" class="ap-filter-style"></select>
                 <?php endif; ?>
                 <label for="ap-filter-location" class="screen-reader-text"><?php esc_html_e('Location','artpulse'); ?></label>
-                <input id="ap-filter-location" type="text" class="ap-filter-location" placeholder="<?php esc_attr_e('Location','artpulse'); ?>" />
+                <input id="ap-filter-location" name="location" type="text" class="ap-filter-location" placeholder="<?php esc_attr_e('Location','artpulse'); ?>" />
                 <label for="ap-filter-keyword" class="screen-reader-text"><?php esc_html_e('Keyword','artpulse'); ?></label>
-                <input id="ap-filter-keyword" type="text" class="ap-filter-keyword" placeholder="<?php esc_attr_e('Keyword','artpulse'); ?>" />
+                <input id="ap-filter-keyword" name="keyword" type="text" class="ap-filter-keyword" placeholder="<?php esc_attr_e('Keyword','artpulse'); ?>" />
                 <label for="ap-filter-limit"><?php _e('Limit','artpulse'); ?>:</label>
-                <input id="ap-filter-limit" type="number" class="ap-filter-limit" value="<?php echo esc_attr($atts['limit']); ?>" />
+                <input id="ap-filter-limit" name="limit" type="number" class="ap-filter-limit" value="<?php echo esc_attr($atts['limit']); ?>" />
                 <button class="ap-filter-apply"><?php _e('Apply','artpulse'); ?></button>
             </form>
             <nav class="ap-alpha-bar" aria-label="<?php esc_attr_e('Alphabet Filter','artpulse'); ?>">
@@ -299,7 +308,10 @@ class DirectoryManager {
                 <?php endforeach; ?>
                 <button type="button" data-letter="#">#</button>
             </nav>
-            <div id="ap-directory-results" class="ap-directory-results" role="status" aria-live="polite"></div>
+            <div id="ap-directory-results" class="ap-directory-results" role="status" aria-live="polite">
+                <?php echo $server_results; ?>
+            </div>
+            <button class="ap-load-more" style="display:none;" type="button"><?php esc_html_e('Load More','artpulse'); ?></button>
         </div>
         <?php
         return ob_get_clean();
@@ -323,6 +335,76 @@ class DirectoryManager {
     public static function renderOrgDirectory($atts) {
         $atts['type'] = 'org';
         return self::renderDirectory($atts);
+    }
+
+    /**
+     * Generate HTML results for the first directory page.
+     *
+     * Hooks:
+     * - `ap_directory_query_args` filters the WP_Query arguments.
+     * - `ap_directory_card_html` filters each rendered card HTML.
+     */
+    private static function server_results(array $atts): string {
+        $type  = sanitize_key($atts['type']);
+        $limit = intval($atts['limit']);
+        $paged = max(1, intval($_GET['ap_page'] ?? 1));
+
+        $args = [
+            'post_type'           => 'artpulse_' . $type,
+            'posts_per_page'      => $limit,
+            'paged'               => $paged,
+            'orderby'             => 'title',
+            'order'               => 'ASC',
+            'fields'              => 'ids',
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+        ];
+
+        if ($type === 'event') {
+            if (!empty($_GET['event_type'])) {
+                $args['tax_query'][] = [
+                    'taxonomy' => 'event_type',
+                    'field'    => 'term_id',
+                    'terms'    => absint($_GET['event_type']),
+                ];
+            }
+            if (!empty($_GET['city'])) {
+                $args['meta_query'][] = [ 'key' => 'event_city', 'value' => sanitize_text_field($_GET['city']) ];
+            }
+            if (!empty($_GET['region'])) {
+                $args['meta_query'][] = [ 'key' => 'event_state', 'value' => sanitize_text_field($_GET['region']) ];
+            }
+        }
+
+        $args = apply_filters('ap_directory_query_args', $args, $atts);
+
+        $query = new \WP_Query($args);
+
+        ob_start();
+        $ids = [];
+        if ($query->have_posts()) {
+            foreach ($query->posts as $id) {
+                $html = ap_get_event_card($id);
+                echo apply_filters('ap_directory_card_html', $html, $id, $type);
+                $ids[] = $id;
+            }
+
+            echo paginate_links([
+                'total'   => $query->max_num_pages,
+                'current' => $paged,
+                'add_args'=> false,
+                'format'  => '?ap_page=%#%',
+                'type'    => 'list',
+            ]);
+        } else {
+            echo '<p>' . esc_html__('No results found.', 'artpulse') . '</p>';
+        }
+        if ($ids) {
+            $schema = \ArtPulse\SEO\JsonLdGenerator::directory_schema($ids);
+            echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>';
+        }
+        wp_reset_postdata();
+        return ob_get_clean();
     }
 
     /**

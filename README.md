@@ -246,9 +246,13 @@ Use the new directory shortcodes to display listings without specifying a type a
 
 The older `[ap_directory]` shortcode is still supported for backward compatibility.
 
+Event and artist directories now render an initial page server-side for improved SEO. Filters submit via GET so results work without JavaScript. Theme developers can override `templates/event-card.php` and `templates/page-event-directory.php` by copying them into their theme.
+
 ## Artwork Directory Shortcode
 
 The `[ap_artwork_directory]` shortcode displays artwork posts in a filterable grid. Each listing now outputs the work's medium and style beneath the title when those values are available.
+
+Event directory pages output [schema.org](https://schema.org/) JSON‑LD using the `Event` and `ItemList` types so listings qualify for Google Rich Results. Event images use `loading="lazy"` and AJAX “Load More” pagination keeps long lists performant.
 
 ## Event Enhancements
 

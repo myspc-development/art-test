@@ -51,6 +51,7 @@ class Activator
 
         // Create indexes to speed up membership lookups
         self::maybe_add_meta_indexes();
+        self::maybe_add_event_indexes();
     }
 
     /**
@@ -72,6 +73,21 @@ class Activator
             if (!$exists) {
                 $wpdb->query("CREATE INDEX {$index_name} ON {$table} (meta_key(191), meta_value(191))");
             }
+        }
+    }
+
+    /**
+     * Index event start dates for faster range queries.
+     */
+    private static function maybe_add_event_indexes(): void
+    {
+        global $wpdb;
+        $index = 'ap_event_start';
+        $exists = $wpdb->get_var(
+            $wpdb->prepare("SHOW INDEX FROM {$wpdb->postmeta} WHERE Key_name = %s", $index)
+        );
+        if (!$exists) {
+            $wpdb->query("CREATE INDEX {$index} ON {$wpdb->postmeta} (meta_key(50), meta_value(10))");
         }
     }
 }
