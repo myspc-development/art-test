@@ -9,8 +9,8 @@ use ArtPulse\Core\OrgContext;
 class OrgDashboardAdmin {
     public static function register() {
         add_menu_page(
-            'Organization Dashboard',
-            'Org Dashboard',
+            __('Organization Dashboard', 'artpulse'),
+            __('Org Dashboard', 'artpulse'),
             'view_artpulse_dashboard',
             'ap-org-dashboard',
             [self::class, 'render'],
