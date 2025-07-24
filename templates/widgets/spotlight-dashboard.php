@@ -7,7 +7,7 @@ $spotlights = [];
 if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
     $spotlights = SpotlightManager::get_dashboard_spotlights($args['role'] ?? 'member', $category);
 } else {
-    echo '<p class="notice">Preview mode — dynamic content hidden</p>';
+    echo '<p class="notice">' . esc_html__( 'Preview mode — dynamic content hidden', 'artpulse' ) . '</p>';
     return;
 }
 

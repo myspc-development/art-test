@@ -9,7 +9,7 @@ if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
     $lat = get_user_meta(get_current_user_id(), 'ap_lat', true);
     $lng = get_user_meta(get_current_user_id(), 'ap_lng', true);
 } else {
-    echo '<p class="notice">Preview mode — dynamic content hidden</p>';
+    echo '<p class="notice">' . esc_html__( 'Preview mode — dynamic content hidden', 'artpulse' ) . '</p>';
     return;
 }
 ?>

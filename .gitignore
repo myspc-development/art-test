@@ -58,3 +58,7 @@ release/
 # 🧹 WORDPRESS ROOT (optional, if excluded)
 # ===============================
 wordpress/
+
+# Translation files
+languages/*.po
+languages/*.mo

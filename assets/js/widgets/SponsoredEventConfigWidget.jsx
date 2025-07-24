@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+const { __ } = wp.i18n;
 
 export function SponsoredEventConfigWidget({ postId, apiRoot, nonce }) {
   const [data, setData] = useState({ sponsor_name: '', sponsor_link: '', sponsor_logo: '' });
@@ -32,21 +33,21 @@ export function SponsoredEventConfigWidget({ postId, apiRoot, nonce }) {
   return (
     <div className="ap-sponsored-config">
       <p>
-        <label>Sponsored By
+        <label>{__('Sponsored By', 'artpulse')}
           <input type="text" value={data.sponsor_name} onChange={e => setData({ ...data, sponsor_name: e.target.value })} />
         </label>
       </p>
       <p>
-        <label>Sponsor Link
+        <label>{__('Sponsor Link', 'artpulse')}
           <input type="url" value={data.sponsor_link} onChange={e => setData({ ...data, sponsor_link: e.target.value })} />
         </label>
       </p>
       <p>
-        <label>Logo URL
+        <label>{__('Logo URL', 'artpulse')}
           <input type="text" value={data.sponsor_logo} onChange={e => setData({ ...data, sponsor_logo: e.target.value })} />
         </label>
       </p>
-      <button type="button" onClick={save}>Save Sponsor</button>
+      <button type="button" onClick={save}>{__('Save Sponsor', 'artpulse')}</button>
     </div>
   );
 }

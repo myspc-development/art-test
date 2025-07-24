@@ -10,77 +10,78 @@ import { AudienceCRMWidget } from './AudienceCRMWidget.jsx';
 import { SponsoredEventConfigWidget } from './SponsoredEventConfigWidget.jsx';
 import { EmbedToolWidget } from './EmbedToolWidget.jsx';
 import { OrgBrandingSettingsPanel } from './OrgBrandingSettingsPanel.jsx';
+const { __ } = wp.i18n;
 
 export default [
   {
     id: 'nearby_events_map',
-    title: 'Nearby Events Map',
+    title: __('Nearby Events Map', 'artpulse'),
     component: NearbyEventsMapWidget,
     roles: ['member', 'artist']
   },
   {
     id: 'my_favorites',
-    title: 'My Favorites',
+    title: __('My Favorites', 'artpulse'),
     component: MyFavoritesWidget,
     roles: ['member', 'artist']
   },
   {
     id: 'rsvp_button',
-    title: 'RSVP Button',
+    title: __('RSVP Button', 'artpulse'),
     component: RSVPButton,
     roles: ['member', 'artist']
   },
   {
     id: 'event_chat',
-    title: 'Event Chat',
+    title: __('Event Chat', 'artpulse'),
     component: EventChatWidget,
     roles: ['member', 'artist']
   },
   {
     id: 'share_this_event',
-    title: 'Share This Event',
+    title: __('Share This Event', 'artpulse'),
     component: ShareThisEventWidget,
     roles: ['member', 'artist']
   },
   {
     id: 'artist_inbox_preview_widget',
-    title: 'Artist Inbox Preview',
+    title: __('Artist Inbox Preview', 'artpulse'),
     component: ArtistInboxPreviewWidget,
     roles: ['artist']
   },
   {
     id: 'artist_revenue_summary',
-    title: 'Revenue Summary',
+    title: __('Revenue Summary', 'artpulse'),
     component: ArtistRevenueSummaryWidget,
     roles: ['artist']
   },
   {
     id: 'artist_spotlight',
-    title: 'Artist Spotlight',
+    title: __('Artist Spotlight', 'artpulse'),
     component: ArtistSpotlightWidget,
     roles: ['artist']
   },
   {
     id: 'audience_crm',
-    title: 'Audience CRM',
+    title: __('Audience CRM', 'artpulse'),
     component: AudienceCRMWidget,
     roles: ['organization']
   },
   {
     id: 'sponsored_event_config',
-    title: 'Sponsored Event Config',
+    title: __('Sponsored Event Config', 'artpulse'),
     component: SponsoredEventConfigWidget,
     roles: ['organization']
   },
   {
     id: 'embed_tool',
-    title: 'Embed Tool',
+    title: __('Embed Tool', 'artpulse'),
     component: EmbedToolWidget,
     roles: ['organization']
   },
   {
     id: 'branding_settings_panel',
-    title: 'Branding Settings',
+    title: __('Branding Settings', 'artpulse'),
     component: OrgBrandingSettingsPanel,
     roles: ['organization']
   }

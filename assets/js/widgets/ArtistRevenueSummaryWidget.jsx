@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+const { __ } = wp.i18n;
 
 export function ArtistRevenueSummaryWidget({ apiRoot, nonce }) {
   const [data, setData] = useState(null);
@@ -19,13 +20,13 @@ export function ArtistRevenueSummaryWidget({ apiRoot, nonce }) {
   }, []);
 
   if (!data) {
-    return <p>Loading...</p>;
+    return <p>{__('Loading...', 'artpulse')}</p>;
   }
 
   return (
     <div className="ap-revenue-summary">
-      <p><strong>{data.total_revenue}</strong> total revenue this month</p>
-      <p>{data.tickets_sold} tickets sold</p>
+      <p><strong>{data.total_revenue}</strong> {__('total revenue this month', 'artpulse')}</p>
+      <p>{data.tickets_sold} {__('tickets sold', 'artpulse')}</p>
     </div>
   );
 }

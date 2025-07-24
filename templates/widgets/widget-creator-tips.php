@@ -10,7 +10,7 @@ if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
     $donation = get_user_meta($user_id, 'ap_donation_link', true);
     $badges   = \ArtPulse\Core\UserDashboardManager::getBadges($user_id);
 } else {
-    echo '<p class="notice">Preview mode — dynamic content hidden</p>';
+    echo '<p class="notice">' . esc_html__( 'Preview mode — dynamic content hidden', 'artpulse' ) . '</p>';
     return;
 }
 
