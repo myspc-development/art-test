@@ -1,5 +1,10 @@
 [
-  {"id":"webhooks","visible":true},
-  {"id":"events","visible":true},
-  {"id":"rsvps","visible":true}
+  {"id":"crm_overview","visible":true},
+  {"id":"sponsor_content_manager","visible":true},
+  {"id":"embed_tools","visible":true},
+  {"id":"org_brand_customizer","visible":true},
+  {"id":"submission_pipeline","visible":true},
+  {"id":"multi_org_activity_feed","visible":true},
+  {"id":"team_member_roles","visible":true},
+  {"id":"pinned_announcements","visible":true}
 ]

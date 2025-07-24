@@ -36,6 +36,11 @@
         } else {
           layout = widgets.map(w => ({id:w.id, visible:true}));
         }
+        widgets.forEach(w => {
+          if(!layout.find(l => l.id === w.id)){
+            layout.push({id:w.id, visible:true});
+          }
+        });
         console.log('widgetAllowedMap', allowedMap);
         console.log('layoutConfig', layout);
         render();
@@ -110,6 +115,18 @@
         data: JSON.stringify({ role: roleSel.val(), layout: layout }),
         success: () => alert('Saved')
       });
+    });
+    $('#ap-db-layout').on('dblclick','li',function(){
+      const id = $(this).data('id');
+      layout = layout.filter(l => l.id !== id);
+      render();
+    });
+    $('#ap-db-available').on('dblclick','li',function(){
+      const id = $(this).data('id');
+      if(!layout.find(l => l.id === id)){
+        layout.push({id:id, visible:true});
+        render();
+      }
     });
     fetchWidgets(roleSel.val());
   });
