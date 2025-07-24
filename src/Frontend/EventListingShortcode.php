@@ -20,101 +20,30 @@ class EventListingShortcode
             [],
             '1.0.0'
         );
+        wp_enqueue_style(
+            'ap-event-listing',
+            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/css/event-listing.css',
+            [],
+            '1.0.0'
+        );
+        wp_enqueue_script(
+            'ap-event-listing',
+            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/event-listing.js',
+            [ 'wp-api-fetch' ],
+            '1.0.0',
+            true
+        );
+        wp_localize_script('ap-event-listing', 'APEventListing', [
+            'root'  => esc_url_raw(rest_url()),
+            'nonce' => wp_create_nonce('wp_rest'),
+        ]);
     }
 
     public static function render($atts): string
     {
         $atts = shortcode_atts([
             'posts_per_page' => 12,
-            'status'         => 'publish',
-            'venue'          => '',
-            'after'          => '',
-            'before'         => '',
-            'category'       => '',
-            'event_type'     => '',
-            'orderby'        => 'date',
-            'order'          => 'DESC'
         ], $atts, 'ap_event_listing');
-
-        foreach (['venue', 'after', 'before', 'category', 'event_type', 'orderby'] as $field) {
-            if (isset($_GET[$field])) {
-                $atts[$field] = sanitize_text_field(wp_unslash($_GET[$field]));
-            }
-        }
-
-        $meta_query = [];
-        if (!empty($atts['venue'])) {
-            $meta_query[] = [
-                'key'     => 'venue_name',
-                'value'   => $atts['venue'],
-                'compare' => 'LIKE',
-            ];
-        }
-        if (!empty($atts['after'])) {
-            $meta_query[] = [
-                'key'     => 'event_start_date',
-                'value'   => $atts['after'],
-                'type'    => 'DATE',
-                'compare' => '>=',
-            ];
-        }
-        if (!empty($atts['before'])) {
-            $meta_query[] = [
-                'key'     => 'event_end_date',
-                'value'   => $atts['before'],
-                'type'    => 'DATE',
-                'compare' => '<=',
-            ];
-        }
-
-        $tax_query = [];
-        if (!empty($atts['category'])) {
-            $tax_query[] = [
-                'taxonomy' => 'category',
-                'field'    => 'slug',
-                'terms'    => array_map('trim', explode(',', $atts['category'])),
-            ];
-        }
-        if (!empty($atts['event_type'])) {
-            $tax_query[] = [
-                'taxonomy' => 'event_type',
-                'field'    => 'slug',
-                'terms'    => array_map('trim', explode(',', $atts['event_type'])),
-            ];
-        }
-
-        $q_args = [
-            'post_type'      => 'artpulse_event',
-            'post_status'    => $atts['status'],
-            'posts_per_page' => intval($atts['posts_per_page']),
-            'orderby'        => $atts['orderby'],
-            'order'          => $atts['order'],
-        ];
-
-        if (!empty($meta_query)) {
-            $q_args['meta_query'] = $meta_query;
-        }
-        if (!empty($tax_query)) {
-            $q_args['tax_query'] = $tax_query;
-        }
-
-        if ($atts['orderby'] === 'favorite_count') {
-            $q_args['orderby']  = 'meta_value_num';
-            $q_args['meta_key'] = 'ap_favorite_count';
-        }
-
-        $query = new \WP_Query($q_args);
-
-        if ($atts['orderby'] === 'rsvp_count') {
-            usort($query->posts, function($a, $b) use ($atts) {
-                $a_count = count((array) get_post_meta($a->ID, 'event_rsvp_list', true));
-                $b_count = count((array) get_post_meta($b->ID, 'event_rsvp_list', true));
-                if ($a_count === $b_count) {
-                    return 0;
-                }
-                return $atts['order'] === 'ASC' ? $a_count <=> $b_count : $b_count <=> $a_count;
-            });
-        }
 
         $event_types = get_terms([
             'taxonomy'   => 'event_type',
@@ -134,36 +63,32 @@ class EventListingShortcode
 
         ob_start();
         ?>
-        <form class="ap-event-filter-form" method="get">
-            <input type="text" name="venue" placeholder="Venue" value="<?php echo esc_attr($atts['venue']); ?>">
-            <input type="date" name="after" value="<?php echo esc_attr($atts['after']); ?>">
-            <input type="date" name="before" value="<?php echo esc_attr($atts['before']); ?>">
-            <select name="category">
-                <option value=""><?php esc_html_e('All Categories', 'artpulse'); ?></option>
-                <?php foreach ($categories as $cat) : ?>
-                    <option value="<?php echo esc_attr($cat->slug); ?>" <?php selected($atts['category'], $cat->slug); ?>><?php echo esc_html($cat->name); ?></option>
-                <?php endforeach; ?>
-            </select>
-            <select name="event_type">
-                <option value=""><?php esc_html_e('All Types', 'artpulse'); ?></option>
-                <?php foreach ($event_types as $type) : ?>
-                    <option value="<?php echo esc_attr($type->slug); ?>" <?php selected($atts['event_type'], $type->slug); ?>><?php echo esc_html($type->name); ?></option>
-                <?php endforeach; ?>
-            </select>
-            <button type="submit"><?php esc_html_e('Filter', 'artpulse'); ?></button>
-        </form>
-        <div class="ap-event-listing">
-        <?php
-        if ($query->have_posts()) {
-            while ($query->have_posts()) {
-                $query->the_post();
-                echo ap_get_event_card(get_the_ID());
-            }
-            wp_reset_postdata();
-        } else {
-            echo '<p>' . esc_html__('No events found.', 'artpulse') . '</p>';
-        }
-        ?>
+        <div class="ap-event-listing-wrapper" data-per-page="<?php echo intval($atts['posts_per_page']); ?>">
+            <form id="ap-event-listing-form" class="ap-event-filter-form" autocomplete="off">
+                <input type="text" name="venue" placeholder="<?php esc_attr_e('Venue', 'artpulse'); ?>">
+                <input type="date" name="after">
+                <input type="date" name="before">
+                <select name="category">
+                    <option value=""><?php esc_html_e('All Categories', 'artpulse'); ?></option>
+                    <?php foreach ($categories as $cat) : ?>
+                        <option value="<?php echo esc_attr($cat->slug); ?>"><?php echo esc_html($cat->name); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select name="event_type">
+                    <option value=""><?php esc_html_e('All Types', 'artpulse'); ?></option>
+                    <?php foreach ($event_types as $type) : ?>
+                        <option value="<?php echo esc_attr($type->slug); ?>"><?php echo esc_html($type->name); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select name="sort">
+                    <option value="soonest"><?php esc_html_e('Soonest', 'artpulse'); ?></option>
+                    <option value="az"><?php esc_html_e('A–Z', 'artpulse'); ?></option>
+                    <option value="newest"><?php esc_html_e('Newest', 'artpulse'); ?></option>
+                </select>
+                <button type="submit" class="ap-form-button"><?php esc_html_e('Apply', 'artpulse'); ?></button>
+            </form>
+            <div class="ap-filter-chips" aria-label="<?php esc_attr_e('Active filters', 'artpulse'); ?>"></div>
+            <div class="ap-event-listing-results" aria-live="polite"></div>
         </div>
         <?php
         return ob_get_clean();

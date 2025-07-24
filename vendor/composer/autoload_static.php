@@ -388,6 +388,7 @@ class ComposerStaticInita473d3f3862fb4a1e679260c12c04875
         'ArtPulse\\Rest\\DashboardWidgetController' => __DIR__ . '/../..' . '/src/Rest/DashboardWidgetController.php',
         'ArtPulse\\Rest\\DirectoryController' => __DIR__ . '/../..' . '/src/Rest/DirectoryController.php',
         'ArtPulse\\Rest\\EventCardController' => __DIR__ . '/../..' . '/src/Rest/EventCardController.php',
+        'ArtPulse\\Rest\\EventListController' => __DIR__ . '/../..' . '/src/Rest/EventListController.php',
         'ArtPulse\\Rest\\EventManagementController' => __DIR__ . '/../..' . '/src/Rest/EventManagementController.php',
         'ArtPulse\\Rest\\FavoriteRestController' => __DIR__ . '/../..' . '/src/Rest/FavoriteRestController.php',
         'ArtPulse\\Rest\\FeedbackRestController' => __DIR__ . '/../..' . '/src/Rest/FeedbackRestController.php',

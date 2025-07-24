@@ -1,0 +1,123 @@
+<?php
+namespace ArtPulse\Rest;
+
+use WP_REST_Request;
+use WP_Error;
+
+class EventListController
+{
+    public static function register(): void
+    {
+        if (did_action('rest_api_init')) {
+            self::register_routes();
+        } else {
+            add_action('rest_api_init', [self::class, 'register_routes']);
+        }
+    }
+
+    public static function register_routes(): void
+    {
+        register_rest_route('artpulse/v1', '/event-list', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'get_list'],
+            'permission_callback' => '__return_true',
+            'args'                => [
+                'venue'      => [ 'type' => 'string' ],
+                'after'      => [ 'type' => 'string' ],
+                'before'     => [ 'type' => 'string' ],
+                'category'   => [ 'type' => 'string' ],
+                'event_type' => [ 'type' => 'string' ],
+                'sort'       => [ 'type' => 'string', 'default' => 'soonest' ],
+                'per_page'   => [ 'type' => 'integer', 'default' => 12 ],
+            ],
+        ]);
+    }
+
+    public static function get_list(WP_REST_Request $request)
+    {
+        $meta_query = [];
+        $venue      = $request->get_param('venue');
+        $after      = $request->get_param('after');
+        $before     = $request->get_param('before');
+        if ($venue !== null && $venue !== '') {
+            $meta_query[] = [
+                'key'     => 'venue_name',
+                'value'   => sanitize_text_field($venue),
+                'compare' => 'LIKE',
+            ];
+        }
+        if ($after) {
+            $meta_query[] = [
+                'key'     => 'event_start_date',
+                'value'   => sanitize_text_field($after),
+                'compare' => '>=',
+                'type'    => 'DATE',
+            ];
+        }
+        if ($before) {
+            $meta_query[] = [
+                'key'     => 'event_end_date',
+                'value'   => sanitize_text_field($before),
+                'compare' => '<=',
+                'type'    => 'DATE',
+            ];
+        }
+
+        $tax_query = [];
+        $category   = $request->get_param('category');
+        $event_type = $request->get_param('event_type');
+        if ($category) {
+            $tax_query[] = [
+                'taxonomy' => 'category',
+                'field'    => 'slug',
+                'terms'    => array_map('trim', explode(',', sanitize_text_field($category))),
+            ];
+        }
+        if ($event_type) {
+            $tax_query[] = [
+                'taxonomy' => 'event_type',
+                'field'    => 'slug',
+                'terms'    => array_map('trim', explode(',', sanitize_text_field($event_type))),
+            ];
+        }
+
+        $sort    = $request->get_param('sort');
+        $orderby = 'meta_value';
+        $order   = 'ASC';
+        $meta_key = 'event_start_date';
+        if ($sort === 'az') {
+            $orderby = 'title';
+            $meta_key = '';
+        } elseif ($sort === 'newest') {
+            $orderby = 'date';
+            $order   = 'DESC';
+            $meta_key = '';
+        }
+
+        $args = [
+            'post_type'      => 'artpulse_event',
+            'post_status'    => 'publish',
+            'posts_per_page' => intval($request->get_param('per_page')),
+            'orderby'        => $orderby,
+            'order'          => $order,
+        ];
+        if ($meta_key) {
+            $args['meta_key'] = $meta_key;
+        }
+        if ($meta_query) {
+            $args['meta_query'] = $meta_query;
+        }
+        if ($tax_query) {
+            $args['tax_query'] = $tax_query;
+        }
+
+        $query = new \WP_Query($args);
+        $html  = '';
+        if ($query->have_posts()) {
+            foreach ($query->posts as $p) {
+                $html .= ap_get_event_card($p->ID);
+            }
+        }
+        return rest_ensure_response(['html' => $html]);
+    }
+}

@@ -274,6 +274,7 @@ return array(
     'ArtPulse\\Rest\\DashboardWidgetController' => $baseDir . '/src/Rest/DashboardWidgetController.php',
     'ArtPulse\\Rest\\DirectoryController' => $baseDir . '/src/Rest/DirectoryController.php',
     'ArtPulse\\Rest\\EventCardController' => $baseDir . '/src/Rest/EventCardController.php',
+    'ArtPulse\\Rest\\EventListController' => $baseDir . '/src/Rest/EventListController.php',
     'ArtPulse\\Rest\\EventManagementController' => $baseDir . '/src/Rest/EventManagementController.php',
     'ArtPulse\\Rest\\FavoriteRestController' => $baseDir . '/src/Rest/FavoriteRestController.php',
     'ArtPulse\\Rest\\FeedbackRestController' => $baseDir . '/src/Rest/FeedbackRestController.php',
