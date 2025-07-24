@@ -2,6 +2,7 @@
 namespace ArtPulse\Integration;
 
 use ArtPulse\Core\PortfolioSyncLogger;
+use ArtPulse\Integration\PortfolioSync;
 
 use WP_CLI;
 
@@ -67,6 +68,28 @@ class PortfolioMigration
             $count++;
             PortfolioSyncLogger::log('migration', 'Migrated post', ['post' => $post->ID, 'portfolio' => $portfolio_id]);
         }
+        $types = get_option('ap_portfolio_sync_types', [
+            'artpulse_event',
+            'artpulse_artist',
+            'artpulse_org',
+        ]);
+        $types = is_array($types) ? $types : [];
+        foreach ($types as $type) {
+            $posts = get_posts([
+                'post_type'      => $type,
+                'posts_per_page' => -1,
+                'post_status'    => 'any',
+                'fields'         => 'ids',
+            ]);
+            foreach ($posts as $pid) {
+                $post = get_post($pid);
+                if ($post) {
+                    PortfolioSync::sync_portfolio($pid, $post);
+                    $count++;
+                }
+            }
+        }
+
         PortfolioSyncLogger::log('migration', 'Migration complete', ['count' => $count]);
         if ($interactive && class_exists('WP_CLI')) {
             \WP_CLI::success("Portfolio migration complete ({$count})");

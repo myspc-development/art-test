@@ -42,6 +42,9 @@ class PortfolioSyncTest extends \WP_UnitTestCase
             $event_id,
             (int) get_post_meta($portfolio_id, '_ap_source_post', true)
         );
+        $this->assertSame('artpulse_event', get_post_meta($portfolio_id, '_ap_source_type', true));
+        $terms = wp_get_object_terms($portfolio_id, 'project-category', ['fields' => 'names']);
+        $this->assertContains('Event', $terms);
     }
 
     public function test_event_meta_copied_to_portfolio(): void

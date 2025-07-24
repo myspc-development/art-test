@@ -13,5 +13,6 @@ status: complete
 - [Analytics & Insights Codex](./analytics-insights-codex.md)
 - [Analytics & Reporting Codex](./analytics-reporting-codex.md)
 - [UI/UX Polish Codex](./ui-ux-polish-codex.md)
+- [Portfolio Sync](./portfolio-sync.md)
 
 > 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

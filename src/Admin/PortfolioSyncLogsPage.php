@@ -32,6 +32,7 @@ class PortfolioSyncLogsPage
         echo '<th>' . esc_html__('Time', 'artpulse') . '</th>';
         echo '<th>' . esc_html__('Action', 'artpulse') . '</th>';
         echo '<th>' . esc_html__('Message', 'artpulse') . '</th>';
+        echo '<th>' . esc_html__('Data', 'artpulse') . '</th>';
         echo '</tr></thead><tbody>';
         if ($rows) {
             foreach ($rows as $row) {
@@ -39,10 +40,12 @@ class PortfolioSyncLogsPage
                 echo '<td>' . esc_html(date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($row->logged_at))) . '</td>';
                 echo '<td>' . esc_html($row->action) . '</td>';
                 echo '<td>' . esc_html($row->message) . '</td>';
+                $meta = $row->metadata ? json_encode(json_decode($row->metadata, true), JSON_UNESCAPED_SLASHES) : '';
+                echo '<td><code>' . esc_html($meta) . '</code></td>';
                 echo '</tr>';
             }
         } else {
-            echo '<tr><td colspan="3">' . esc_html__('No logs found.', 'artpulse') . '</td></tr>';
+            echo '<tr><td colspan="4">' . esc_html__('No logs found.', 'artpulse') . '</td></tr>';
         }
         echo '</tbody></table>';
         echo '</div>';

@@ -424,6 +424,20 @@ function ap_migrate_portfolio_admin() {
 }
 add_action('admin_post_ap_migrate_portfolio', 'ap_migrate_portfolio_admin');
 
+function ap_save_portfolio_sync_settings() {
+    if (!current_user_can('manage_options')) {
+        wp_die(__('Unauthorized', 'artpulse'));
+    }
+    check_admin_referer('ap_save_portfolio_sync_settings');
+    $types = isset($_POST['sync_types']) ? array_map('sanitize_text_field', (array) $_POST['sync_types']) : [];
+    update_option('ap_portfolio_sync_types', $types);
+    $map = isset($_POST['cat_map']) ? array_map('sanitize_text_field', (array) $_POST['cat_map']) : [];
+    update_option('ap_portfolio_category_map', $map);
+    wp_safe_redirect(admin_url('admin.php?page=ap-portfolio-sync'));
+    exit;
+}
+add_action('admin_post_ap_save_portfolio_sync_settings', 'ap_save_portfolio_sync_settings');
+
 // Handle template copy action
 add_action('admin_init', function () {
     if (!isset($_POST['ap_copy_templates'])) {
