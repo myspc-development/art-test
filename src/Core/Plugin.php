@@ -40,6 +40,7 @@ use ArtPulse\Rest\OrgUserRolesController;
 use ArtPulse\Core\FeedAccessLogger;
 use ArtPulse\Core\OrgRoleMetaMigration;
 use ArtPulse\Rest\NearbyEventsController;
+use ArtPulse\Rest\EventListController;
 
 class Plugin
 {
@@ -317,6 +318,7 @@ class Plugin
         \ArtPulse\Rest\UserAccountRestController::register();
         \ArtPulse\Rest\CollectionRestController::register();
         \ArtPulse\Rest\ArtworkAuctionController::register();
+        \ArtPulse\Rest\EventListController::register();
         \ArtPulse\Rest\NearbyEventsController::register();
         \ArtPulse\Rest\SpotlightRestController::register();
         \ArtPulse\Rest\SpotlightAnalyticsController::register();
