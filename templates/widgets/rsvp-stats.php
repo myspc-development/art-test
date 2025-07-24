@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 use ArtPulse\Frontend\EventRsvpHandler;
 $rsvp_data = [];
 if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {

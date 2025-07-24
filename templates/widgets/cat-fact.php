@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 // Fetch a random cat fact from the catfact.ninja API with caching.
 $cache_key = 'ap_cat_fact';
 $fact      = get_transient($cache_key);

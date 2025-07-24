@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 $user_id = get_current_user_id();
 $rsvp_count = 0;
 $donation = '';
