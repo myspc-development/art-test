@@ -21,6 +21,7 @@ function ap_register_dashboard_builder_widget_map(): void {
         'recommended_for_you' => 'RecommendedForYouWidget.php',
         'feedback_form' => 'FeedbackFormWidget',
         'help_center' => 'HelpCenterWidget',
+        'qa_checklist' => 'QAChecklistWidget.php',
     ];
     $artist = [
         'artist_event_editor' => 'ArtistEventEditor',
