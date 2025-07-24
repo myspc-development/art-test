@@ -123,6 +123,7 @@ require_once __DIR__ . '/includes/dashboard-messages-widget.php';
 require_once __DIR__ . '/includes/user-actions.php';
 // Force HTTPS for avatar URLs to avoid mixed content issues
 require_once __DIR__ . '/includes/avatar-https-fix.php';
+require_once __DIR__ . '/includes/chat-db.php';
 require_once __DIR__ . '/includes/settings-register.php';
 require_once __DIR__ . '/includes/help-doc-renderer.php';
 require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';

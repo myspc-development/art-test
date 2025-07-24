@@ -90,6 +90,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\EventCommentsController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\ArtworkCommentsController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\EventChatController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Rest\EventChatPostController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\EventVoteRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\ForumRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\CommentReportRestController::class, 'register']);
@@ -413,6 +414,7 @@ class Plugin
         \ArtPulse\Community\QaThreadRestController::register();
         \ArtPulse\Frontend\QaThreadShortcode::register();
         \ArtPulse\Admin\FeedbackPage::register();
+        \ArtPulse\Admin\ChatModerationPage::register();
         \ArtPulse\Admin\ReportingManager::register();
         \ArtPulse\Admin\CustomFieldsManager::register();
         \ArtPulse\Admin\SurveyManager::register();

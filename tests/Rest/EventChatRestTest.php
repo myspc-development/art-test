@@ -2,7 +2,8 @@
 namespace ArtPulse\Rest\Tests;
 
 use WP_REST_Request;
-use ArtPulse\Community\EventChatController;
+use ArtPulse\DB\Chat;
+use ArtPulse\Rest\EventChatController;
 
 /**
  * @group restapi
@@ -15,8 +16,8 @@ class EventChatRestTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
-        EventChatController::install_table();
-        require_once dirname(__DIR__, 2) . '/src/Rest/EventChatController.php';
+        Chat\install_tables();
+        EventChatController::register();
         do_action('rest_api_init');
 
         $this->event = self::factory()->post->create([
@@ -25,14 +26,7 @@ class EventChatRestTest extends \WP_UnitTestCase
         ]);
         $this->user = self::factory()->user->create(['display_name' => 'Tester']);
 
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_event_chat';
-        $wpdb->insert($table, [
-            'event_id'   => $this->event,
-            'user_id'    => $this->user,
-            'content'    => 'Hi there',
-            'created_at' => current_time('mysql'),
-        ]);
+        Chat\insert_message($this->event, $this->user, 'Hi there');
 
         wp_set_current_user($this->user);
     }
