@@ -36,4 +36,11 @@ class DashboardWidgetRegistryRoleFilterTest extends TestCase
         $this->assertArrayHasKey('alpha', $combined);
         $this->assertArrayHasKey('beta', $combined);
     }
+
+    public function test_get_widgets_no_duplicate_when_roles_overlap(): void
+    {
+        DashboardWidgetRegistry::register('shared', 'Shared', '', '', '__return_null', ['roles' => ['member', 'artist']]);
+        $widgets = DashboardWidgetRegistry::get_widgets(['member', 'artist']);
+        $this->assertCount(1, array_filter(array_keys($widgets), fn($id) => $id === 'shared'));
+    }
 }
