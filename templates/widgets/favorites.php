@@ -4,6 +4,10 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
  * Dashboard widget: Favorites.
  */
 use ArtPulse\Community\FavoritesManager;
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+    echo '<p class="notice">Preview mode — dynamic content hidden</p>';
+    return;
+}
 ?>
 <div id="favorites" class="ap-card" role="region" aria-labelledby="favorites-title" data-widget="favorites" <?php echo $visible ? '' : 'hidden'; ?>>
     <h2 id="favorites-title" class="ap-card__title"><?php esc_html_e('My Favorites','artpulse'); ?></h2>

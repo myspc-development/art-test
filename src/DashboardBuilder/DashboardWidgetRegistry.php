@@ -27,6 +27,7 @@ class DashboardWidgetRegistry {
             'title' => '',
             'render_callback' => null,
             'roles' => [],
+            'file' => '',
         ];
         $args = array_merge($defaults, $args);
         if (!is_callable($args['render_callback'])) {
@@ -37,6 +38,7 @@ class DashboardWidgetRegistry {
             'title' => (string) $args['title'],
             'render_callback' => $args['render_callback'],
             'roles' => array_map('sanitize_key', (array) $args['roles']),
+            'file' => (string) $args['file'],
         ];
     }
 
@@ -75,7 +77,12 @@ class DashboardWidgetRegistry {
 
         $stack[$id] = true;
         ob_start();
-        call_user_func(self::$widgets[$id]['render_callback']);
+        try {
+            call_user_func(self::$widgets[$id]['render_callback']);
+        } catch (\Throwable $e) {
+            $file = self::$widgets[$id]['file'] ?? 'unknown';
+            error_log('[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage());
+        }
         $html = ob_get_clean();
         unset($stack[$id]);
 

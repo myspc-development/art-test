@@ -11,42 +11,30 @@ function ap_register_dashboard_builder_widget_map(): void {
     global $ap_widget_source_map, $ap_widget_status;
 
     $member = [
-        'news_feed' => 'ArtPulseNewsFeedWidget.php',
-        'rsvp_button' => 'RSVPButtonWidget.jsx',
+        'news_feed'        => 'ArtPulseNewsFeedWidget.php',
+        'rsvp_button'      => 'RSVPButton.jsx',
         'nearby_events_map' => 'NearbyEventsMapWidget.jsx',
-        'my_favorites' => 'MyFavoritesWidget.jsx',
-        'event_chat' => 'EventChatWidget.jsx',
+        'my_favorites'     => 'MyFavoritesWidget.jsx',
+        'event_chat'       => 'EventChatWidget.jsx',
         'share_this_event' => 'ShareThisEventWidget.jsx',
-        'upcoming_events_by_location' => 'UpcomingEventsByLocationWidget.php',
-        'followed_artists_activity' => 'FollowedArtistsActivityWidget.php',
-        'artist_inbox_preview' => 'ArtistInboxPreviewWidget.php',
-        'my_rsvps' => 'MyRSVPsWidget.php',
-        'my_shared_events_activity' => 'MySharedEventsActivityWidget.php',
-        'recommended_for_you' => 'RecommendedForYouWidget.php',
-        'feedback_form' => 'FeedbackFormWidget',
-        'help_center' => 'HelpCenterWidget',
-        'qa_checklist' => 'QAChecklistWidget.php',
+        'artist_inbox_preview' => 'ArtistInboxPreviewWidget.jsx',
+        'qa_checklist'     => 'QAChecklistWidget.php',
     ];
+
     $artist = [
-        'artist_event_editor' => 'ArtistEventEditor',
-        'inbox_preview' => 'InboxPreviewWidget',
-        'revenue_summary' => 'RevenueSummaryWidget',
-        'community_mentions' => 'CommunityMentionsWidget',
-        'fan_poll' => 'FanPollWidget',
-        'drag_drop_gallery' => 'DragDropGalleryWidget',
-        'content_scheduler' => 'ContentSchedulerWidget',
-        'event_performance' => 'EventPerformanceWidget',
-        'feedback_form' => 'FeedbackFormWidget',
+        'inbox_preview'      => 'ArtistInboxPreviewWidget.jsx',
+        'revenue_summary'    => 'ArtistRevenueSummaryWidget.jsx',
+        'artist_spotlight'   => 'ArtistSpotlightWidget.jsx',
     ];
+
     $organization = [
-        'crm_overview' => 'CRMOverviewWidget',
-        'sponsor_content_manager' => 'SponsorContentManagerWidget',
-        'embed_tools' => 'EmbedToolsWidget',
-        'org_brand_customizer' => 'OrgBrandCustomizerWidget',
-        'submission_pipeline' => 'SubmissionPipelineWidget',
-        'multi_org_activity_feed' => 'MultiOrgActivityFeedWidget',
-        'team_member_roles' => 'TeamMemberRolesWidget',
-        'pinned_announcements' => 'PinnedAnnouncementsWidget',
+        'audience_crm'           => 'AudienceCRMWidget.jsx',
+        'sponsored_event_config' => 'SponsoredEventConfigWidget.jsx',
+        'embed_tool'             => 'EmbedToolWidget.jsx',
+        'branding_settings_panel' => 'OrgBrandingSettingsPanel.jsx',
+        'donor_activity'         => 'DonorActivityWidget.php',
+        'org_widget_sharing'     => 'OrgWidgetSharingPanel.php',
+        'sponsor_display'        => 'SponsorDisplayWidget.php',
     ];
 
     $ap_widget_source_map = [
@@ -76,6 +64,7 @@ function ap_register_dashboard_builder_widget_map(): void {
                 'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
                 'render_callback' => $callback,
                 'roles' => [$role],
+                'file'  => $file,
             ]);
 
             $path_php = $plugin_dir . '/widgets/' . $file;
@@ -111,6 +100,7 @@ function ap_register_dashboard_builder_widget_map(): void {
                 'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
                 'render_callback' => $callback,
                 'roles' => [],
+                'file'  => $basename,
             ]);
             $unregistered_files[] = $basename;
             error_log('Dashboard widget file not registered: ' . $basename);

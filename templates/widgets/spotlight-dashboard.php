@@ -2,7 +2,13 @@
 use ArtPulse\Admin\SpotlightManager;
 
 $category   = $args['category'] ?? null;
-$spotlights = SpotlightManager::get_dashboard_spotlights($args['role'] ?? 'member', $category);
+$spotlights = [];
+if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+    $spotlights = SpotlightManager::get_dashboard_spotlights($args['role'] ?? 'member', $category);
+} else {
+    echo '<p class="notice">Preview mode — dynamic content hidden</p>';
+    return;
+}
 
 if (empty($spotlights)) {
     echo '<p class="ap-empty-state">' . esc_html__('No featured content available right now.', 'artpulse') . '</p>';

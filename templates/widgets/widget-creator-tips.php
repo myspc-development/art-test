@@ -1,9 +1,17 @@
 <?php
 $user_id = get_current_user_id();
-$rsvps   = get_user_meta($user_id, 'ap_rsvp_events', true);
-$rsvp_count = is_array($rsvps) ? count($rsvps) : 0;
-$donation = get_user_meta($user_id, 'ap_donation_link', true);
-$badges   = \ArtPulse\Core\UserDashboardManager::getBadges($user_id);
+$rsvp_count = 0;
+$donation = '';
+$badges   = [];
+if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+    $rsvps   = get_user_meta($user_id, 'ap_rsvp_events', true);
+    $rsvp_count = is_array($rsvps) ? count($rsvps) : 0;
+    $donation = get_user_meta($user_id, 'ap_donation_link', true);
+    $badges   = \ArtPulse\Core\UserDashboardManager::getBadges($user_id);
+} else {
+    echo '<p class="notice">Preview mode — dynamic content hidden</p>';
+    return;
+}
 
 $tips = [];
 if ($rsvp_count < 10) {
