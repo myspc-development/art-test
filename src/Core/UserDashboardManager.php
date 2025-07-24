@@ -730,22 +730,25 @@ class UserDashboardManager
         }
 
         if (empty($layout)) {
-            $roles = wp_get_current_user()->roles;
+            $roles  = wp_get_current_user()->roles;
             $config = get_option('ap_dashboard_widget_config', []);
             foreach ($roles as $r) {
-                if (!empty($config[$r]) && is_array($config[$r])) {
-                    foreach ($config[$r] as $item) {
-                        if (is_array($item)) {
-                            $id = sanitize_key($item['id'] ?? '');
-                            $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
-                        } else {
-                            $id = sanitize_key($item);
-                            $vis = true;
-                        }
-                        $layout[] = $id;
-                        $visibility[$id] = $vis;
+                if (empty($config[$r]) || ! is_array($config[$r])) {
+                    continue;
+                }
+                foreach ($config[$r] as $item) {
+                    if (is_array($item)) {
+                        $id  = sanitize_key($item['id'] ?? '');
+                        $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+                    } else {
+                        $id  = sanitize_key($item);
+                        $vis = true;
                     }
-                    break;
+                    if (in_array($id, $layout, true)) {
+                        continue;
+                    }
+                    $layout[]      = $id;
+                    $visibility[$id] = $vis;
                 }
             }
         }
@@ -900,7 +903,8 @@ class UserDashboardManager
         $show_support_history = is_array($support_history) && !empty($support_history);
         $badges = self::getBadges(get_current_user_id());
 
-        $widgets = DashboardWidgetRegistry::get_widgets($roles[0] ?? 'subscriber');
+        $roles_list = $roles ?: ['subscriber'];
+        $widgets = DashboardWidgetRegistry::get_widgets($roles_list);
         $layout_resp  = self::getDashboardLayout();
         $layout_data  = method_exists($layout_resp, 'get_data') ? $layout_resp->get_data() : (array) $layout_resp;
         $layout       = $layout_data['layout'] ?? [];

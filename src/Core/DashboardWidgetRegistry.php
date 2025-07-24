@@ -275,12 +275,16 @@ class DashboardWidgetRegistry {
     }
 
     /**
-     * Get widgets definitions filtered by role.
+     * Get widgets definitions filtered by one or more roles.
+     *
+     * @param string|array $role Single role or array of roles.
      */
-    public static function get_widgets_by_role( string $role ): array {
-        $defs = [];
+    public static function get_widgets_by_role( $role ): array {
+        $roles = array_map( 'sanitize_key', (array) $role );
+        $defs  = [];
         foreach ( self::$widgets as $id => $cfg ) {
-            if ( ! empty( $cfg['roles'] ) && ! in_array( $role, (array) $cfg['roles'], true ) ) {
+            $widget_roles = isset( $cfg['roles'] ) ? (array) $cfg['roles'] : [];
+            if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
                 continue;
             }
             $defs[ $id ] = $cfg;
