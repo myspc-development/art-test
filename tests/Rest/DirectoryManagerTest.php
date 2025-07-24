@@ -131,6 +131,41 @@ class DirectoryManagerTest extends \WP_UnitTestCase
         $this->assertSame('Impressionism', $data[0]['style']);
     }
 
+    public function test_filter_by_first_letter(): void
+    {
+        $a = wp_insert_post([
+            'post_title'  => 'Alice',
+            'post_type'   => 'artpulse_artist',
+            'post_status' => 'publish',
+        ]);
+        $b = wp_insert_post([
+            'post_title'  => 'Bob',
+            'post_type'   => 'artpulse_artist',
+            'post_status' => 'publish',
+        ]);
+        $num = wp_insert_post([
+            'post_title'  => '3D Modeler',
+            'post_type'   => 'artpulse_artist',
+            'post_status' => 'publish',
+        ]);
+
+        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req->set_param('type', 'artist');
+        $req->set_param('first_letter', 'A');
+        $res = rest_get_server()->dispatch($req);
+
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertCount(1, $data);
+        $this->assertSame($a, $data[0]['id']);
+
+        $req->set_param('first_letter', '#');
+        $res = rest_get_server()->dispatch($req);
+        $data = $res->get_data();
+        $this->assertCount(1, $data);
+        $this->assertSame($num, $data[0]['id']);
+    }
+
     public function test_filter_results_are_cached(): void
     {
         $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
@@ -149,6 +184,7 @@ class DirectoryManagerTest extends \WP_UnitTestCase
             'region'     => '',
             'for_sale'   => null,
             'keyword'    => '',
+            'first_letter' => '',
         ]);
 
         $this->assertIsArray(get_transient($key));
@@ -168,6 +204,7 @@ class DirectoryManagerTest extends \WP_UnitTestCase
             'region'     => '',
             'for_sale'   => null,
             'keyword'    => '',
+            'first_letter' => '',
         ]);
 
         set_transient($key, [$this->org_id], MINUTE_IN_SECONDS * 5);

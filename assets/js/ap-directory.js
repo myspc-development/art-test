@@ -6,6 +6,8 @@
     const results      = container.querySelector('.ap-directory-results');
     const limitInput   = container.querySelector('.ap-filter-limit');
     const applyBtn     = container.querySelector('.ap-filter-apply');
+    const alphaBar     = container.querySelector('.ap-alpha-bar');
+    let activeLetter   = '';
     const selectEl     = container.querySelector('.ap-filter-event-type');
     const cityInput    = container.querySelector('.ap-filter-city');
     const regionInput  = container.querySelector('.ap-filter-region');
@@ -104,6 +106,9 @@
         type,
         limit: limitInput.value
       });
+      if (activeLetter) {
+        params.append('first_letter', activeLetter);
+      }
       if ( selectEl && selectEl.value ) {
         params.append('event_type', selectEl.value);
       }
@@ -299,11 +304,24 @@ function createFollowButton(post, objectType) {
           style: styleEl?.value || '',
           org_type: orgTypeEl?.value || '',
           location: locationEl?.value || '',
-          keyword: keywordInput?.value || '',
-          for_sale: saleFilter || ''
+        keyword: keywordInput?.value || '',
+          for_sale: saleFilter || '',
+          first_letter: activeLetter || ''
         }
       }));
     });
+
+    if (alphaBar) {
+      alphaBar.addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        activeLetter = btn.dataset.letter || '';
+        alphaBar.querySelectorAll('button').forEach(b => {
+          b.classList.toggle('is-active', b === btn);
+        });
+        loadData();
+      });
+    }
 
     // Initial load
     loadData();
