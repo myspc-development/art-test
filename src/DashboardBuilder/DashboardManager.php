@@ -29,6 +29,7 @@ class DashboardManager {
             <h1>' . esc_html__('Dashboard Builder', 'artpulse') . '</h1>
             <label for="ap-db-role" class="screen-reader-text">' . esc_html__('Select Role', 'artpulse') . '</label>
             <select id="ap-db-role"></select>
+            <label style="margin-left:10px"><input type="checkbox" id="ap-db-show-all"> ' . esc_html__('Show All Widgets', 'artpulse') . '</label>
             <ul id="ap-db-layout"></ul>
             <div id="ap-db-available"></div>
             <p><button id="ap-db-save" class="button button-primary">' . esc_html__('Save Changes', 'artpulse') . '</button></p>
