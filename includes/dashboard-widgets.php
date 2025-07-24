@@ -406,6 +406,11 @@ function ap_widget_recommended_for_you_member(array $vars = []): string
     return ap_load_dashboard_template('widgets/recommended-for-you.php', $vars);
 }
 
+function ap_widget_dashboard_feedback(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/dashboard-feedback.php', $vars);
+}
+
 /**
  * Register core dashboard widgets.
  */
@@ -785,6 +790,18 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_cat_fact',
         [
             'category' => 'fun',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'dashboard_feedback',
+        __('Dashboard Feedback', 'artpulse'),
+        'message-circle',
+        __('Send feedback about your dashboard.', 'artpulse'),
+        'ap_widget_dashboard_feedback',
+        [
+            'roles'    => ['member', 'artist', 'organization'],
+            'category' => 'engagement',
         ]
     );
 
