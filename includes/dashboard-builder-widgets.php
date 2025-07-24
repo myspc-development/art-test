@@ -148,4 +148,5 @@ add_action('init', 'ap_register_dashboard_builder_widget_map', 20);
 
 if (defined('WIDGET_DEBUG_MODE') && WIDGET_DEBUG_MODE) {
     require_once dirname(__DIR__) . '/widgets/WidgetStatusPanelWidget.php';
+    require_once dirname(__DIR__) . '/widgets/WidgetManifestPanelWidget.php';
 }
