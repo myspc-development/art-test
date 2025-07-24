@@ -1,16 +1,30 @@
 [
-  {"id":"news_feed","visible":true},
-  {"id":"rsvp_button","visible":true},
-  {"id":"nearby_events_map","visible":true},
-  {"id":"my_favorites","visible":true},
-  {"id":"event_chat","visible":true},
-  {"id":"share_this_event","visible":true},
-  {"id":"upcoming_events_by_location","visible":true},
-  {"id":"followed_artists_activity","visible":true},
-  {"id":"artist_inbox_preview","visible":true},
-  {"id":"my_rsvps","visible":true},
-  {"id":"my_shared_events_activity","visible":true},
-  {"id":"recommended_for_you","visible":true},
-  {"id":"feedback_form","visible":true},
-  {"id":"help_center","visible":true}
+  {
+    "id": "news_feed",
+    "visible": true
+  },
+  {
+    "id": "rsvp_button",
+    "visible": true
+  },
+  {
+    "id": "nearby_events_map",
+    "visible": true
+  },
+  {
+    "id": "my_favorites",
+    "visible": true
+  },
+  {
+    "id": "event_chat",
+    "visible": true
+  },
+  {
+    "id": "share_this_event",
+    "visible": true
+  },
+  {
+    "id": "artist_inbox_preview",
+    "visible": true
+  }
 ]

@@ -1,10 +1,30 @@
 [
-  {"id":"crm_overview","visible":true},
-  {"id":"sponsor_content_manager","visible":true},
-  {"id":"embed_tools","visible":true},
-  {"id":"org_brand_customizer","visible":true},
-  {"id":"submission_pipeline","visible":true},
-  {"id":"multi_org_activity_feed","visible":true},
-  {"id":"team_member_roles","visible":true},
-  {"id":"pinned_announcements","visible":true}
+  {
+    "id": "audience_crm",
+    "visible": true
+  },
+  {
+    "id": "sponsored_event_config",
+    "visible": true
+  },
+  {
+    "id": "embed_tool",
+    "visible": true
+  },
+  {
+    "id": "branding_settings_panel",
+    "visible": true
+  },
+  {
+    "id": "donor_activity",
+    "visible": true
+  },
+  {
+    "id": "org_widget_sharing",
+    "visible": true
+  },
+  {
+    "id": "sponsor_display",
+    "visible": true
+  }
 ]
