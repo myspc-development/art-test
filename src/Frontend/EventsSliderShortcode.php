@@ -41,10 +41,15 @@ class EventsSliderShortcode
             '1.0.0',
             true
         );
-        wp_localize_script('ap-events-slider', 'APEventsSlider', [
-            'nonce'    => wp_create_nonce('wp_rest'),
-            'endpoint' => rest_url('artpulse/v1/events'),
-        ]);
+        wp_localize_script(
+            'ap-events-slider',
+            'APEventsSlider',
+            [
+                'nonce'    => wp_create_nonce('wp_rest'),
+                'endpoint' => rest_url('artpulse/v1/events'),
+                'root'     => esc_url_raw(rest_url()),
+            ]
+        );
     }
 
     public static function render(): string

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sliders.forEach(container => {
     const wrapper = container.querySelector('.swiper-wrapper');
     wp.apiFetch({
-      path: APEventsSlider.endpoint.replace(location.origin, ''),
+      path: APEventsSlider.endpoint.replace(APEventsSlider.root, ''),
       headers: { 'X-WP-Nonce': APEventsSlider.nonce }
     })
       .then(events => {
