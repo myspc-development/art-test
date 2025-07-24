@@ -409,6 +409,13 @@ class EnqueueAssets {
                 null,
                 true
             );
+            wp_enqueue_script(
+                'ap-related-carousel',
+                plugins_url('assets/js/ap-related-carousel.js', ARTPULSE_PLUGIN_FILE),
+                ['swiper-js'],
+                null,
+                true
+            );
         }
 
 
