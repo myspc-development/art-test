@@ -12,8 +12,11 @@ export default function ChatWidget({ eventId, canPost }) {
 
   useEffect(() => {
     load();
-    const id = setInterval(load, 10000);
-    return () => clearInterval(id);
+    let id = null;
+    if (!window.IS_DASHBOARD_BUILDER_PREVIEW) {
+      id = setInterval(load, 10000);
+    }
+    return () => { if (id) clearInterval(id); };
   }, [eventId]);
 
   useEffect(() => {

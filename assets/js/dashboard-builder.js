@@ -3,6 +3,8 @@
   let widgets = [];
   let allowedMap = {};
   let lastRole = null;
+  let layoutReady = false;
+  let fetching = false;
   const restRoot = APDashboardBuilder.rest_root;
   const nonce = APDashboardBuilder.nonce;
 
@@ -11,11 +13,17 @@
   }
 
   function fetchWidgets(role){
-    if (role === lastRole && widgets.length) {
+    if (fetching) {
+      console.log('[DashboardBuilder] fetch already in progress');
+      return;
+    }
+    if (role === lastRole && layoutReady) {
       console.log('[DashboardBuilder] Skip fetch, role unchanged:', role);
       return;
     }
     lastRole = role;
+    layoutReady = false;
+    fetching = true;
     const includeAll = getIncludeAll();
     console.log('[DashboardBuilder] fetch widgets', role, 'includeAll', includeAll);
     $.ajax({
@@ -51,6 +59,12 @@
         console.log('widgetAllowedMap', allowedMap);
         console.log('layoutConfig', layout);
         render();
+        layoutReady = true;
+        fetching = false;
+      },
+      error: err => {
+        console.warn('[DashboardBuilder] fetch failed', err);
+        fetching = false;
       }
     });
   }
@@ -113,6 +127,7 @@
   }
 
   $(function(){
+    window.IS_DASHBOARD_BUILDER_PREVIEW = true;
     const roleSel = $('#ap-db-role');
     APDashboardBuilder.roles.forEach(r => roleSel.append($('<option/>').val(r).text(r)));
     roleSel.on('change', function(){ fetchWidgets(this.value); });
