@@ -20,6 +20,7 @@ $active_plugins = array_map(function ($p) {
 }, (array) get_option('active_plugins', []));
 
 $user_caps = array_keys((array) wp_get_current_user()->allcaps);
+$repaired = isset($_GET['repaired']);
 ?>
 <div class="wrap">
     <h1><?php esc_html_e('ArtPulse Diagnostics', 'artpulse'); ?></h1>
@@ -54,6 +55,16 @@ $user_caps = array_keys((array) wp_get_current_user()->allcaps);
             <li><?php echo esc_html($plugin); ?></li>
         <?php endforeach; ?>
     </ul>
+
+    <h2 class="ap-card__title"><?php esc_html_e('Maintenance', 'artpulse'); ?></h2>
+    <?php if ($repaired): ?>
+        <div class="notice notice-success is-dismissible"><p><?php esc_html_e('Database tables repaired.', 'artpulse'); ?></p></div>
+    <?php endif; ?>
+    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+        <?php wp_nonce_field('ap_repair_tables'); ?>
+        <input type="hidden" name="action" value="ap_repair_tables">
+        <?php submit_button(__('Repair Tables', 'artpulse')); ?>
+    </form>
 </div>
 <script type="text/javascript">
 (function($){
