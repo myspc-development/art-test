@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import EmojiPicker from 'emoji-picker-react';
+let EmojiPicker = null;
+if (typeof window !== 'undefined' && window.EmojiPicker) {
+  EmojiPicker = window.EmojiPicker;
+}
 const { __ } = wp.i18n;
 
 export default function ChatWidget({ eventId, canPost }) {
@@ -115,7 +118,7 @@ export default function ChatWidget({ eventId, canPost }) {
             onChange={e => setText(e.target.value)}
           />
           <button type="button" onClick={() => setShowPicker(!showPicker)}>😊</button>
-          {showPicker && (
+          {showPicker && EmojiPicker && (
             <EmojiPicker onEmojiClick={e => setText(t => t + e.emoji)} />
           )}
           <button type="submit" aria-label={__('Send chat message', 'artpulse')}>{__('Send', 'artpulse')}</button>

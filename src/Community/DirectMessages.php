@@ -99,6 +99,16 @@ class DirectMessages
         ]);
     }
 
+    private static function ensure_messages_table(): ?WP_Error
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_messages';
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table)) !== $table) {
+            return new WP_Error('missing_table', 'Messages table missing.', ['status' => 500]);
+        }
+        return null;
+    }
+
     public static function register_routes(): void
     {
         register_rest_route('artpulse/v1', '/messages/send', [
@@ -234,6 +244,9 @@ class DirectMessages
 
     public static function send(WP_REST_Request $req): WP_REST_Response|WP_Error
     {
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
         $nonce = $req->get_param('nonce');
         if (!$nonce || !wp_verify_nonce($nonce, 'wp_rest')) {
             return new WP_Error('rest_forbidden', 'Unauthorized.', ['status' => 403]);
@@ -260,13 +273,21 @@ class DirectMessages
             }
         }
 
-        self::add_message($sender_id, $recipient_id, $content, $context_type, $context_id);
-
-        return rest_ensure_response(['status' => 'sent']);
+        try {
+            self::add_message($sender_id, $recipient_id, $content, $context_type, $context_id);
+            return rest_ensure_response(['status' => 'sent']);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages send error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 
     public static function send_v2(WP_REST_Request $req): WP_REST_Response|WP_Error
     {
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
+        try {
         $sender_id    = get_current_user_id();
         $recipient_id = absint($req['recipient_id']);
         $content      = wp_kses_post($req['content']);
@@ -301,20 +322,36 @@ class DirectMessages
         $row = self::get_message($id);
 
         return rest_ensure_response($row);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages send_v2 error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 
     public static function fetch(WP_REST_Request $req): WP_REST_Response
     {
-        $user_id  = get_current_user_id();
-        $other_id = absint($req['with']);
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
+        try {
+            $user_id  = get_current_user_id();
+            $other_id = absint($req['with']);
 
-        $messages = self::get_conversation($user_id, $other_id);
+            $messages = self::get_conversation($user_id, $other_id);
 
-        return rest_ensure_response($messages);
+            return rest_ensure_response($messages);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages fetch error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 
     public static function updates(WP_REST_Request $req): WP_REST_Response
     {
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
+        try {
         $user_id = get_current_user_id();
         $since   = $req->get_param('since');
         $context_id = $req->get_param('context_id') ? absint($req['context_id']) : null;
@@ -345,6 +382,10 @@ class DirectMessages
         }, $rows);
 
         return rest_ensure_response($messages);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages updates error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 
     public static function add_message(
@@ -478,9 +519,17 @@ class DirectMessages
 
     public static function rest_list_conversations(WP_REST_Request $req): WP_REST_Response
     {
-        $user_id = get_current_user_id();
-        $list = self::list_conversations($user_id);
-        return rest_ensure_response($list);
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
+        try {
+            $user_id = get_current_user_id();
+            $list = self::list_conversations($user_id);
+            return rest_ensure_response($list);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages conversations error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 
     public static function permission_view(WP_REST_Request $req): bool
@@ -495,31 +544,47 @@ class DirectMessages
 
     public static function mark_read(WP_REST_Request $req): WP_REST_Response|WP_Error
     {
-        $ids = $req->get_param('ids');
-        if (!is_array($ids)) {
-            $id  = $req->get_param('id');
-            $ids = $id ? [$id] : [];
+        if ($error = self::ensure_messages_table()) {
+            return $error;
         }
-        $ids = array_map('intval', $ids);
-        if (!$ids) {
-            return new WP_Error('invalid_params', 'No message IDs', ['status' => 400]);
+        try {
+            $ids = $req->get_param('ids');
+            if (!is_array($ids)) {
+                $id  = $req->get_param('id');
+                $ids = $id ? [$id] : [];
+            }
+            $ids = array_map('intval', $ids);
+            if (!$ids) {
+                return new WP_Error('invalid_params', 'No message IDs', ['status' => 400]);
+            }
+
+            self::mark_read_ids($ids, get_current_user_id());
+
+            return rest_ensure_response(['updated' => count($ids)]);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages mark_read error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
-
-        self::mark_read_ids($ids, get_current_user_id());
-
-        return rest_ensure_response(['updated' => count($ids)]);
     }
 
     public static function seen(WP_REST_Request $req): WP_REST_Response|WP_Error
     {
-        $ids = $req->get_param('message_ids');
-        if (!is_array($ids)) {
-            return new WP_Error('invalid_params', 'message_ids must be array', ['status' => 400]);
+        if ($error = self::ensure_messages_table()) {
+            return $error;
         }
-        $ids = array_map('intval', $ids);
-        self::mark_read_ids($ids, get_current_user_id());
+        try {
+            $ids = $req->get_param('message_ids');
+            if (!is_array($ids)) {
+                return new WP_Error('invalid_params', 'message_ids must be array', ['status' => 400]);
+            }
+            $ids = array_map('intval', $ids);
+            self::mark_read_ids($ids, get_current_user_id());
 
-        return rest_ensure_response(['updated' => count($ids)]);
+            return rest_ensure_response(['updated' => count($ids)]);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages seen error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 
     public static function mark_read_ids(array $ids, int $user_id): void
@@ -572,15 +637,26 @@ class DirectMessages
 
     public static function fetch_context(WP_REST_Request $req): WP_REST_Response
     {
-        $user_id = get_current_user_id();
-        $type    = sanitize_key($req['type']);
-        $id      = absint($req['id']);
-        $messages = self::get_context_conversation($user_id, $type, $id);
-        return rest_ensure_response($messages);
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
+        try {
+            $user_id = get_current_user_id();
+            $type    = sanitize_key($req['type']);
+            $id      = absint($req['id']);
+            $messages = self::get_context_conversation($user_id, $type, $id);
+            return rest_ensure_response($messages);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages fetch_context error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 
     public static function block_user(WP_REST_Request $req): WP_REST_Response|WP_Error
     {
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
         $user_id  = get_current_user_id();
         $block_id = absint($req['user_id']);
         if (!$block_id || !get_user_by('id', $block_id)) {
@@ -595,6 +671,10 @@ class DirectMessages
 
     public static function label(WP_REST_Request $req): WP_REST_Response|WP_Error
     {
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
+        try {
         $id     = absint($req['id']);
         $tag    = sanitize_key($req['tag']);
         $action = $req->get_param('action') ? sanitize_key($req['action']) : 'add';
@@ -614,10 +694,18 @@ class DirectMessages
         $wpdb->update($table, ['tags' => implode(',', $tags)], ['id' => $id]);
 
         return rest_ensure_response(['tags' => $tags]);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages label error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 
     public static function thread(WP_REST_Request $req): WP_REST_Response|WP_Error
     {
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
+        try {
         $id = absint($req['id']);
         $msg = self::get_message($id);
         if (!$msg) {
@@ -629,10 +717,18 @@ class DirectMessages
         $rows = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE id = %d OR parent_id = %d ORDER BY created_at ASC", $thread_id, $thread_id), ARRAY_A);
         $messages = array_map([self::class, 'get_message'], wp_list_pluck($rows, 'id'));
         return rest_ensure_response($messages);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages thread error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 
     public static function bulk_action(WP_REST_Request $req): WP_REST_Response|WP_Error
     {
+        if ($error = self::ensure_messages_table()) {
+            return $error;
+        }
+        try {
         $ids    = $req->get_param('ids');
         $action = sanitize_key($req['action']);
         $tag    = $req->get_param('tag');
@@ -663,5 +759,9 @@ class DirectMessages
         }
 
         return rest_ensure_response(['updated' => count($ids)]);
+        } catch (\Throwable $e) {
+            error_log('DirectMessages bulk_action error: ' . $e->getMessage());
+            return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
+        }
     }
 }
