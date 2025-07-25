@@ -326,6 +326,19 @@ function ap_install_tables() {
 }
 register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ap_install_tables');
 
+/**
+ * Verify core messaging tables exist on each request.
+ */
+function ap_verify_core_tables() {
+    \ArtPulse\Community\DirectMessages::maybe_install_table();
+    \ArtPulse\Community\NotificationManager::maybe_install_table();
+    \ArtPulse\Monetization\PayoutManager::maybe_install_table();
+    if (class_exists('\\ArtPulse\\Admin\\OrgCommunicationsCenter')) {
+        \ArtPulse\Admin\OrgCommunicationsCenter::maybe_install_table();
+    }
+}
+add_action('init', 'ap_verify_core_tables');
+
 
 
 
@@ -344,6 +357,17 @@ function ap_flush_github_cache() {
     exit;
 }
 add_action('admin_post_ap_flush_github_cache', 'ap_flush_github_cache');
+
+function ap_repair_tables_action() {
+    if (!current_user_can('manage_options')) {
+        wp_die(__('Unauthorized', 'artpulse'));
+    }
+    check_admin_referer('ap_repair_tables');
+    ap_verify_core_tables();
+    wp_safe_redirect(add_query_arg('repaired', '1', admin_url('admin.php?page=ap-diagnostics')));
+    exit;
+}
+add_action('admin_post_ap_repair_tables', 'ap_repair_tables_action');
 
 function ap_ping_apis() {
     if (!current_user_can('manage_options')) {
