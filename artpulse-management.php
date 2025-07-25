@@ -218,7 +218,12 @@ add_action('admin_init', function () {
     }
 
     $screen = function_exists('get_current_screen') ? get_current_screen() : null;
-    if ($screen && $screen->id === 'dashboard') {
+    if (
+        $screen &&
+        $screen->id === 'dashboard' &&
+        !ap_wp_admin_access_enabled() &&
+        !current_user_can('view_wp_admin')
+    ) {
         $user = wp_get_current_user();
         if (user_can($user, 'artist')) {
             wp_redirect(site_url('/dashboard-artist'));
@@ -600,6 +605,14 @@ function ap_adjust_color_brightness($hex, $percent) {
 function ap_styles_disabled() {
     $settings = get_option('artpulse_settings', []);
     return !empty($settings['disable_styles']);
+}
+
+/**
+ * Check if non-admin users can access wp-admin.
+ */
+function ap_wp_admin_access_enabled() {
+    $settings = get_option('artpulse_settings', []);
+    return !empty($settings['enable_wp_admin_access']);
 }
 
 /**

@@ -20,10 +20,15 @@ class AdminAccessManager
      */
     public static function maybe_hide_admin_bar(bool $show): bool
     {
-        if (!current_user_can('manage_options')) {
-            return false;
+        if (
+            current_user_can('manage_options') ||
+            current_user_can('view_wp_admin') ||
+            ap_wp_admin_access_enabled()
+        ) {
+            return $show;
         }
-        return $show;
+
+        return false;
     }
 
     /**
@@ -31,7 +36,13 @@ class AdminAccessManager
      */
     public static function maybe_redirect_admin(): void
     {
-        if (wp_doing_ajax() || !is_user_logged_in() || current_user_can('manage_options')) {
+        if (
+            wp_doing_ajax() ||
+            !is_user_logged_in() ||
+            current_user_can('manage_options') ||
+            current_user_can('view_wp_admin') ||
+            ap_wp_admin_access_enabled()
+        ) {
             return;
         }
 

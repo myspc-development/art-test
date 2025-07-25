@@ -14,6 +14,10 @@ class LoginRedirectManager
             return $redirect_to;
         }
 
+        if (current_user_can('view_wp_admin') || ap_wp_admin_access_enabled()) {
+            return $redirect_to;
+        }
+
         if (user_can($user, 'organization')) {
             return Plugin::get_org_dashboard_url();
         }

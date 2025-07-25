@@ -22,6 +22,7 @@ class CapabilitiesManager
             'edit_artpulse_content',
             'moderate_link_requests',
             'view_artpulse_dashboard',
+            'view_wp_admin',
         ];
 
         foreach ($roles as $role_key) {
@@ -42,6 +43,7 @@ class CapabilitiesManager
             'edit_artpulse_content',
             'moderate_link_requests',
             'view_artpulse_dashboard',
+            'view_wp_admin',
         ];
 
         foreach ($roles as $role_key) {
