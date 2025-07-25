@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) { exit; }
  */
 // Core management bootstrap is loaded by artpulse-management.php
 require_once __DIR__ . '/includes/db-schema.php';
+require_once __DIR__ . '/includes/avatar-https-fix.php';
 
 register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
     $settings = get_option('artpulse_settings', []);
