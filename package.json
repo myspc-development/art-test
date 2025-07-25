@@ -11,6 +11,7 @@
     "build:css": "postcss assets/css/*.css -d assets/css/min/",
     "start": "wp-scripts start",
     "release": "standard-version",
+    "test": "npm run test:js",
     "test:js": "jest",
     "test:e2e": "node tests/e2e/monetization-workflow.js",
     "cypress:run": "cypress run",
