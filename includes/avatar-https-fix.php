@@ -9,6 +9,14 @@ add_filter('get_avatar_url', function($url) {
     }
     return $url;
 });
+
+// Final fallback in case other filters didn't convert to HTTPS
+add_filter('get_avatar_url', function($url) {
+    if ($url) {
+        $url = preg_replace('/^http:\/\//i', 'https://', $url);
+    }
+    return $url;
+}, 20);
 // Support Simple Local Avatars plugin if active
 add_filter('simple_local_avatar_url', function($url) {
     if ($url) {
