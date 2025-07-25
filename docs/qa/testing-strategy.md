@@ -25,6 +25,10 @@ downloaded for Puppeteer based tests, set `PUPPETEER_SKIP_DOWNLOAD=1` before run
   ```bash
   composer test
   ```
+- The `composer test` script attempts to run `setup-tests.sh` before
+  executing PHPUnit. If the setup script fails (for example, when
+  WordPress can't be downloaded), a warning is printed and PHPUnit is
+  skipped so the command exits successfully.
 - Coding standards are checked with PHP_CodeSniffer:
   ```bash
   composer sniff
