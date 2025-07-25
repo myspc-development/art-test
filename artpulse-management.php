@@ -49,7 +49,7 @@ if (!file_exists($autoload_path)) {
     if (is_admin()) {
         add_action('admin_notices', static function () {
             echo '<div class="notice notice-error"><p>' .
-                esc_html__('ArtPulse Management plugin is missing the Composer autoloader. Run `composer install` in the plugin directory and activate the plugin again.', 'artpulse') .
+                esc_html__('ArtPulse Management plugin is missing the Composer autoloader. Please run `composer install --no-dev --optimize-autoloader` in the plugin directory and activate the plugin again.', 'artpulse') .
                 '</p></div>';
         });
     }
