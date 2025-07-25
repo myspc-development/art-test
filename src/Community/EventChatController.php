@@ -98,6 +98,9 @@ class EventChatController
             if (!$avatar) {
                 $avatar = plugins_url('assets/images/default-avatar.png', ARTPULSE_PLUGIN_FILE);
             }
+            if ($avatar) {
+                $avatar = set_url_scheme($avatar, 'https');
+            }
             return [
                 'user_id'    => (int) $row['user_id'],
                 'author'     => $user ? $user->display_name : '',
