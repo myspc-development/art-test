@@ -14,7 +14,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
  * @param string $new_role   The role being assigned.
  * @param array  $old_roles  Roles prior to the change.
  */
-function ap_merge_dashboard_on_role_upgrade( int $user_id, string $new_role, array $old_roles ) : void {
+function ap_merge_dashboard_on_role_upgrade( int $user_id, string $new_role, array $old_roles = [] ) : void {
     $supported_roles = [ 'member', 'artist', 'organization' ];
     if ( ! in_array( $new_role, $supported_roles, true ) ) {
         return; // Ignore unrelated roles.
@@ -65,7 +65,7 @@ function ap_merge_dashboard_on_role_upgrade( int $user_id, string $new_role, arr
     update_user_meta( $user_id, 'ap_role_upgrade_notice', 1 );
 }
 add_action( 'set_user_role', 'ap_merge_dashboard_on_role_upgrade', 10, 3 );
-add_action( 'add_user_role', 'ap_merge_dashboard_on_role_upgrade', 10, 3 );
+add_action( 'add_user_role', 'ap_merge_dashboard_on_role_upgrade', 10, 2 );
 
 add_action( 'admin_notices', function () {
     if ( ! is_user_logged_in() ) {
