@@ -64,7 +64,8 @@ class EventChatPostController extends WP_REST_Controller
         return current_user_can('moderate_comments');
     }
 
-    public function create_item(WP_REST_Request $request): WP_REST_Response|WP_Error
+    /** @param WP_REST_Request $request */
+    public function create_item($request)
     {
         $event_id = absint($request['id']);
         if (!$event_id || get_post_type($event_id) !== 'artpulse_event') {
@@ -91,7 +92,8 @@ class EventChatPostController extends WP_REST_Controller
         return rest_ensure_response(['status' => 'ok']);
     }
 
-    public function delete_item(WP_REST_Request $request): WP_REST_Response
+    /** @param WP_REST_Request $request */
+    public function delete_item($request)
     {
         $id = absint($request['id']);
         \ArtPulse\DB\Chat\delete_message($id);
