@@ -35,6 +35,7 @@ class Activator
                 'email_from_name'     => '',
                 'email_from_address'  => '',
                 'keep_data_on_uninstall' => 1,
+                'enable_wp_admin_access' => 0,
             ]);
         }
 

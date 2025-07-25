@@ -19,6 +19,10 @@ This document explains how site administrators manage role‑based dashboard lay
 - Use **Reset Layout** in the manager to restore defaults for the selected role.
 - Individual users can reset their personal layout from their dashboard using the "♻ Reset My Dashboard" button.
 
+## wp-admin Access
+
+Use the **Allow wp-admin Access** option under **ArtPulse → Settings → General** to control whether members, artists, and organizations are redirected to the custom dashboards or allowed into the WordPress admin area. Grant the `view_wp_admin` capability to specific roles or users if only a subset should bypass the redirect.
+
 ## Import / Export
 - Administrators can export the current layout JSON using the **Export** button.
 - Paste JSON into the import field and click **Import Layout** to restore a configuration.

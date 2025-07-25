@@ -177,6 +177,11 @@ class SettingsPage
                 'desc'  => __('Preserve settings and custom tables when removing the plugin.', 'artpulse'),
                 'type'  => 'checkbox',
             ],
+            'enable_wp_admin_access' => [
+                'label' => __('Allow wp-admin Access', 'artpulse'),
+                'desc'  => __('Permit non-admin roles to access the default WordPress dashboard.', 'artpulse'),
+                'type'  => 'checkbox',
+            ],
         ];
 
         foreach ($general_fields as $key => $cfg) {
@@ -771,6 +776,7 @@ class SettingsPage
                 'disable_styles',
                 'waitlists_enabled',
                 'keep_data_on_uninstall',
+                'enable_wp_admin_access',
                 'oauth_google_enabled',
                 'oauth_facebook_enabled',
                 'oauth_apple_enabled',
