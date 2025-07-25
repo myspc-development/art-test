@@ -2,6 +2,7 @@
   "name": "myspc-development/artpulse-management-plugin",
   "description": "ArtPulse management plugin for WP 6.8/PHP 8.3",
   "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
   "require": {
     "php": "^8.2",
     "dompdf/dompdf": "^2.0",
