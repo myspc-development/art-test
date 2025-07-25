@@ -26,10 +26,10 @@ class QuickStartGuide
 
     public static function render()
     {
-        $admin_doc  = plugins_url('assets/docs/Admin_Help.md', ARTPULSE_PLUGIN_FILE);
-        $member_doc = plugins_url('assets/docs/Member_Help.md', ARTPULSE_PLUGIN_FILE);
+        $admin_doc  = set_url_scheme(plugins_url('assets/docs/Admin_Help.md', ARTPULSE_PLUGIN_FILE), 'https');
+        $member_doc = set_url_scheme(plugins_url('assets/docs/Member_Help.md', ARTPULSE_PLUGIN_FILE), 'https');
         // base URL for local placeholder images bundled with the plugin
-        $img_base   = plugins_url('assets/images/quickstart/', ARTPULSE_PLUGIN_FILE);
+        $img_base   = set_url_scheme(plugins_url('assets/images/quickstart/', ARTPULSE_PLUGIN_FILE), 'https');
 
         echo '<div class="wrap ap-dashboard">';
         echo '<h1>' . esc_html__('ArtPulse Quick Start', 'artpulse') . '</h1>';

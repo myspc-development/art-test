@@ -92,15 +92,27 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
       setMessages = _useState2[1];
     React$1.useEffect(function () {
       fetch('/wp-json/artpulse/v1/dashboard/messages').then(function (res) {
-        if (res.status === 401 || res.status === 403) {
-          setMessages([{
-            id: 0,
-            content: __('Please log in to view messages.', 'artpulse')
-          }]);
-          return Promise.reject('unauthorized');
+        return res.text().then(function (text) {
+          if (res.status === 401 || res.status === 403) {
+            setMessages([{ id: 0, content: __('Please log in to view messages.', 'artpulse') }]);
+            throw new Error('unauthorized');
+          }
+          if (!res.ok) {
+            console.error(text);
+            throw new Error(res.statusText);
+          }
+          try {
+            return JSON.parse(text);
+          } catch (err) {
+            console.error(text);
+            throw err;
+          }
+        });
+      }).then(setMessages)["catch"](function (err) {
+        if (err && err.message !== 'unauthorized') {
+          console.error(err);
         }
-        return res.json();
-      }).then(setMessages)["catch"](function () {});
+      });
     }, []);
     return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widget bg-white p-4 rounded shadow mb-4"
@@ -208,8 +220,19 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
       setData = _useState4[1];
     React$1.useEffect(function () {
       fetch("/wp-json/artpulse/v1/analytics/community/".concat(tab)).then(function (res) {
-        return res.ok ? res.json() : {};
-      }).then(setData);
+        return res.text().then(function (text) {
+          if (!res.ok) {
+            console.error(text);
+            throw new Error(res.statusText);
+          }
+          try {
+            return JSON.parse(text);
+          } catch (err) {
+            console.error(text);
+            throw err;
+          }
+        });
+      }).then(setData)["catch"](function (err) { console.error(err); });
     }, [tab]);
     return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widget bg-white p-4 rounded shadow mb-4"
@@ -258,9 +281,20 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
       events = _useState2[0],
       setEvents = _useState2[1];
     React$1.useEffect(function () {
-      fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng)).then(function (r) {
-        return r.json();
-      }).then(setEvents);
+      fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng)).then(function (res) {
+        return res.text().then(function (text) {
+          if (!res.ok) {
+            console.error(text);
+            throw new Error(res.statusText);
+          }
+          try {
+            return JSON.parse(text);
+          } catch (err) {
+            console.error(text);
+            throw err;
+          }
+        });
+      }).then(setEvents)["catch"](function (err) { console.error(err); });
     }, [lat, lng]);
     return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-nearby-events-widget"
@@ -286,9 +320,20 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
           'X-WP-Nonce': nonce
         },
         credentials: 'same-origin'
-      }).then(function (r) {
-        return r.json();
-      }).then(setItems);
+      }).then(function (res) {
+        return res.text().then(function (text) {
+          if (!res.ok) {
+            console.error(text);
+            throw new Error(res.statusText);
+          }
+          try {
+            return JSON.parse(text);
+          } catch (err) {
+            console.error(text);
+            throw err;
+          }
+        });
+      }).then(setItems)["catch"](function (err) { console.error(err); });
     }, []);
     return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-favorites-widget"
@@ -326,22 +371,33 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
     var widgets = registry.filter(function (w) {
       return !w.roles || w.roles.includes(role);
     });
-    React$1.useEffect(function () {
-      fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout")).then(function (r) {
-        return r.json();
-      }).then(function (data) {
-        var ids = Array.isArray(data.layout) ? data.layout : [];
-        setLayout(ids.map(function (id, i) {
-          return {
-            i: id,
-            x: 0,
+      React$1.useEffect(function () {
+        fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout")).then(function (res) {
+          return res.text().then(function (text) {
+            if (!res.ok) {
+              console.error(text);
+              throw new Error(res.statusText);
+            }
+            try {
+              return JSON.parse(text);
+            } catch (err) {
+              console.error(text);
+              throw err;
+            }
+          });
+        }).then(function (data) {
+          var ids = Array.isArray(data.layout) ? data.layout : [];
+          setLayout(ids.map(function (id, i) {
+            return {
+              i: id,
+              x: 0,
             y: i,
             w: 4,
             h: 2
           };
         }));
-      });
-    }, [role]);
+        }).catch(function (err) { console.error(err); });
+      }, [role]);
     var handleLayoutChange = function handleLayoutChange(l) {
       setLayout(l);
       var ids = l.map(function (it) {
@@ -356,7 +412,14 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
         body: JSON.stringify({
           layout: ids
         })
-      });
+      }).then(function (res) {
+        return res.text().then(function (text) {
+          if (!res.ok) {
+            console.error(text);
+            throw new Error(res.statusText);
+          }
+        });
+      })["catch"](function (err) { console.error(err); });
     };
     var widgetMap = Object.fromEntries(widgets.map(function (w) {
       return [w.id, w.component];
@@ -387,13 +450,24 @@ var APDashboardApp = (function (React$1, require$$0, Chart, GridLayout) {
       _useState2 = _slicedToArray(_useState, 2),
       role = _useState2[0],
       setRole = _useState2[1];
-    React$1.useEffect(function () {
-      fetch('/wp-json/artpulse/v1/me').then(function (res) {
-        return res.json();
-      }).then(function (data) {
-        return setRole(data.role);
-      });
-    }, []);
+      React$1.useEffect(function () {
+        fetch('/wp-json/artpulse/v1/me').then(function (res) {
+          return res.text().then(function (text) {
+            if (!res.ok) {
+              console.error(text);
+              throw new Error(res.statusText);
+            }
+            try {
+              return JSON.parse(text);
+            } catch (err) {
+              console.error(text);
+              throw err;
+            }
+          });
+        }).then(function (data) {
+          return setRole(data.role);
+        })["catch"](function (err) { console.error(err); });
+      }, []);
     var logout = function logout() {
       return window.location.href = '/wp-login.php?action=logout';
     };
