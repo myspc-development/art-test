@@ -34,7 +34,6 @@ status: complete
 - [x] `codex_webhooks.md`
 - [x] `codex_grants_ai.md`
 - [x] `codex-sprint-i1-pricing-engine.md`
-- [x] `codex-sprint-i3-crm-donor-tools.md`
 - [x] `codex_curation_badges.md`
 - [x] `codex_reporting_exports.md`
 

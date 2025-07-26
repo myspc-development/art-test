@@ -90,7 +90,6 @@ status: complete
 | `codex_webhooks.md` | J1 | 🟢 Ready | Dev |
 | `codex_grants_ai.md` | J3 | 🟢 Ready | Dev, PM |
 | [`codex-sprint-i1-pricing-engine.md`](./codex-sprint-i1-pricing-engine.md) | I1–I4 | 🟢 Ready | Admin, Dev |
-| [`codex-sprint-i3-crm-donor-tools.md`](./codex-sprint-i3-crm-donor-tools.md) | I3 | 🟢 Ready | Dev, Org Admin |
 | [`webhook-automation-codex.md`](./webhook-automation-codex.md) | J1 | 🟢 Ready | Dev |
 | [`plugin-install-upgrade-codex.md`](admin/plugin-installation-updates.md) | J2 | 🟢 | Dev |
 | [`updates-codex.md`](./updates-codex.md) | J2 | 🟢 | Dev |
@@ -126,7 +125,6 @@ status: complete
   codex_webhooks.md
   codex_grants_ai.md
   codex-sprint-i1-pricing-engine.md
-  codex-sprint-i3-crm-donor-tools.md
   webhook-automation-codex.md
   plugin-install-upgrade-codex.md
   updates-codex.md

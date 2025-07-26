@@ -65,7 +65,6 @@ status: complete
 | codex-sprint-h2-multi-org-roles-permissions.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | codex-sprint-i1-pricing-engine.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | codex-sprint-i2-sponsored-event-boosting.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
-| codex-sprint-i3-crm-donor-tools.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | codex-sprint-i4-subscription-reports.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | codex-sprint-j1-webhook-sync-framework.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | codex-sprint-j3-ai-grant-assistant.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
@@ -145,7 +144,6 @@ status: complete
 | messaging-communication-codex.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | mobile-artwalk.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | moderation-flagging-codex.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
-| multi-org-roles-permissions.md | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ |
 | org-roles-matrix.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | partner-pdf/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | partnership-deployment.md | ❌ | ❌ | ✅ | ❌ | ✅ | ❌ |

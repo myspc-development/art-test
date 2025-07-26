@@ -38,7 +38,6 @@ See the [Changelog](docs/CHANGELOG.md) for release notes.
 [Widget Settings Codex](docs/widget-settings-codex.md) describes widget schemas and per-user storage.
 [Widget Editor Codex Instructions](docs/Widget_Editor_Codex_Instructions.md) details how to document new widgets and update layout examples.
 [User Dashboard Customization](docs/guides/user/dashboard-customization.md) explains per-user layout storage and REST endpoints.
-[Multi-org Roles & Permissions](docs/multi-org-roles-permissions.md) covers assigning members to multiple organizations.
 [Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.
 [Member Registration Codex](docs/member-registration-codex.md) explains native registration hooks.
 [Artist & Gallery Tools Codex](docs/artist-gallery-tools-codex.md) details self-serve portals, AI tagging, CRM features and grant-ready reports.
@@ -184,9 +183,6 @@ return HTTP 500 errors because the required classes cannot be loaded.
 
 ### Class Visit Check-Ins
 Institutions can scan a QR code or submit a form to log visits. Each check-in records the institution name and group size for the event organizer. Visit logs can be exported as CSV from the dashboard for grant reports.
-
-### CRM & Donor Tools
-Contacts are automatically logged when members interact with your organization. RSVPs add the `rsvp` tag, follows add the `follower` tag and donations add the `donor` tag. View and export these contacts from the CRM tab in the dashboard.
 
 ### Event Calendar
 - The calendar view shows all upcoming events by day.
@@ -368,7 +364,6 @@ A new **Login Heatmap** submenu under **ArtPulse → Settings** displays hourly 
 
 ## Admin Pages
 
-- **Roles & Permissions** – Manage organization roles and capabilities from **Org Dashboard → Roles & Permissions** (`wp-admin/admin.php?page=ap-org-roles`). The old `ap-org-roles-matrix` slug now redirects here.
 - **Diagnostics** – View plugin status and run maintenance tasks. Visit `wp-admin/admin.php?page=ap-diagnostics` or use `/wp-admin/ap-diagnostics` which redirects automatically.
 
 ## User Dashboard Features
