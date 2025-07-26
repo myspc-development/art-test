@@ -68,7 +68,7 @@ add_action('admin_notices', function () {
  * sub-roles in the future.
  */
 function ap_get_dashboard_widget_visibility_rules(): array {
-    return [
+    $rules = [
         'artpulse_analytics_widget' => [
             'capability'    => 'view_analytics',
             'exclude_roles' => [
@@ -80,13 +80,23 @@ function ap_get_dashboard_widget_visibility_rules(): array {
             ],
         ],
     ];
+
+    /**
+     * Allow plugins to register additional visibility rules.
+     *
+     * @param array $rules Default visibility configuration.
+     */
+    return apply_filters('ap_dashboard_widget_visibility_rules', $rules);
 }
 
 function ap_dashboard_widget_visibility_filter(): void {
     $current_user = wp_get_current_user();
     $roles        = (array) $current_user->roles;
 
-    $rules = apply_filters('ap_dashboard_widget_visibility_rules', ap_get_dashboard_widget_visibility_rules());
+    global $ap_hidden_widgets;
+    $ap_hidden_widgets = [];
+
+    $rules = ap_get_dashboard_widget_visibility_rules();
 
     foreach ($rules as $widget => $config) {
         $cap          = $config['capability']    ?? null;
@@ -104,7 +114,13 @@ function ap_dashboard_widget_visibility_filter(): void {
                 $msg  = $notice_roles[$role]['notice'] ?? '';
                 $type = $notice_roles[$role]['type'] ?? 'info';
                 if ($msg) {
-                    ap_add_admin_notice($msg, $type);
+                    if ($role === 'org_editor') {
+                        if (!get_user_meta($current_user->ID, 'ap_dismiss_org_editor_notice', true)) {
+                            update_user_meta($current_user->ID, 'ap_org_editor_notice_pending', $msg);
+                        }
+                    } else {
+                        ap_add_admin_notice($msg, $type);
+                    }
                 }
             } elseif (in_array($role, (array) $exclude, true)) {
                 $hide = true;
@@ -113,7 +129,65 @@ function ap_dashboard_widget_visibility_filter(): void {
 
         if ($hide) {
             remove_meta_box($widget, 'dashboard', 'normal');
+            $ap_hidden_widgets[$widget] = true;
         }
     }
 }
 add_action('wp_dashboard_setup', 'ap_dashboard_widget_visibility_filter', 99);
+
+function ap_handle_org_editor_notice_dismiss(): void {
+    if (isset($_GET['ap_dismiss_editor_notice'])) {
+        update_user_meta(get_current_user_id(), 'ap_dismiss_org_editor_notice', 1);
+        delete_user_meta(get_current_user_id(), 'ap_org_editor_notice_pending');
+        wp_safe_redirect(remove_query_arg('ap_dismiss_editor_notice'));
+        exit;
+    }
+}
+add_action('admin_init', 'ap_handle_org_editor_notice_dismiss');
+
+function ap_render_org_editor_notice(): void {
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->id !== 'dashboard') {
+        return;
+    }
+
+    $user_id = get_current_user_id();
+    $msg     = get_user_meta($user_id, 'ap_org_editor_notice_pending', true);
+    if (!$msg || get_user_meta($user_id, 'ap_dismiss_org_editor_notice', true)) {
+        return;
+    }
+
+    $dismiss = add_query_arg('ap_dismiss_editor_notice', '1');
+    echo '<div class="notice notice-info is-dismissible"><p>' . esc_html($msg) .
+        ' <a href="' . esc_url($dismiss) . '">' . esc_html__('Dismiss', 'artpulse') . '</a></p></div>';
+    delete_user_meta($user_id, 'ap_org_editor_notice_pending');
+}
+add_action('admin_notices', 'ap_render_org_editor_notice');
+
+function ap_dashboard_empty_state_notice(): void {
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->id !== 'dashboard') {
+        return;
+    }
+
+    global $wp_meta_boxes;
+    $count = 0;
+    if (isset($wp_meta_boxes['dashboard'])) {
+        foreach ($wp_meta_boxes['dashboard'] as $ctx) {
+            foreach ($ctx as $priority) {
+                $count += is_array($priority) ? count($priority) : 0;
+            }
+        }
+    }
+
+    if ($count === 0) {
+        $url = apply_filters('ap_dashboard_empty_help_url', '');
+        echo '<div class="notice notice-info"><p>' .
+            esc_html__('No dashboard content available.', 'artpulse');
+        if ($url) {
+            echo ' <a href="' . esc_url($url) . '" target="_blank">' . esc_html__('Learn more', 'artpulse') . '</a>';
+        }
+        echo '</p></div>';
+    }
+}
+add_action('admin_notices', 'ap_dashboard_empty_state_notice', 100);
