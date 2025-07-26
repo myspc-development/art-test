@@ -35,6 +35,7 @@ function ap_register_dashboard_builder_widget_map(): void {
         'ap_donor_activity'       => 'DonorActivityWidget.php',
         'artpulse_analytics_widget' => 'OrgAnalyticsWidget.php',
         'org_widget_sharing'     => 'OrgWidgetSharingPanel.php',
+        'webhooks'               => 'WebhooksWidget.php',
         'sponsor_display'        => 'SponsorDisplayWidget.php',
     ];
 

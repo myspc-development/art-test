@@ -1,8 +1,10 @@
 {
-    "WebhooksWidget": {
+    "webhooks": {
         "file": "widgets/WebhooksWidget.php",
-        "roles": [],
-        "status": "unregistered",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
         "previewGuarded": true
     },
     "WidgetManifestPanelWidget": {
