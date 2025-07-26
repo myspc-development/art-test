@@ -44,9 +44,9 @@ Below is a summary of built in dashboard widgets. Custom plugins can register ad
 | widget_followed_artists | Followed Artists | general | member, artist | Artists the user follows. |
 | widget_for_you_all | For You (All) | recommended | member, artist, organization | Personalized recommendations. |
 | widget_for_you_member | For You (Member) | general | member, artist | Recommended content. |
-| widget_my_favorites | My Favorite Events | general | member, artist | Your saved events. |
-| widget_nearby_events_map | Nearby Events | general | member, artist | Events around your location. |
-| widget_news | News | general | member, artist | Latest updates from ArtPulse. |
+| my_favorites | My Favorite Events | general | member, artist | Your saved events. |
+| nearby_events_map | Nearby Events | general | member, artist | Events around your location. |
+| news_feed | News | general | member, artist | Latest updates from ArtPulse. |
 | widget_spotlight_calls | Call Spotlights | general | member, artist, organization | Calls to artists or members. |
 | widget_spotlight_events | Event Spotlights | general | member, organization | Event related highlights. |
 | widget_spotlight_features | Featured Spotlights | general | member, artist, organization | General featured items. |
