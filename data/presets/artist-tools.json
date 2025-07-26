@@ -1,5 +1,6 @@
 [
-  {
-    "id": "artist_inbox_preview"
-  }
+  {"id": "artist_inbox_preview"},
+  {"id": "artist_revenue_summary"},
+  {"id": "account-tools"},
+  {"id": "my-events"}
 ]

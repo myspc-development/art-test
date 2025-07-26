@@ -1,1 +1,6 @@
-[]
+[
+  {"id": "artist_spotlight"},
+  {"id": "my-events"},
+  {"id": "artist_inbox_preview"},
+  {"id": "artist_revenue_summary"}
+]

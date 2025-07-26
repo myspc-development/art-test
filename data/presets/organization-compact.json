@@ -1,1 +1,4 @@
-[]
+[
+  {"id": "site_stats"},
+  {"id": "rsvp_stats"}
+]
