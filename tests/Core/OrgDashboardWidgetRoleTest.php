@@ -46,11 +46,14 @@ class OrgDashboardWidgetRoleTest extends TestCase {
     }
 
     public function test_org_roles_inherit_widgets(): void {
-        $org = DashboardController::get_widgets_for_role('organization');
+        $org   = DashboardController::get_widgets_for_role('organization');
         $editor = DashboardController::get_widgets_for_role('org_editor');
         $viewer = DashboardController::get_widgets_for_role('org_viewer');
+        $admin  = DashboardController::get_widgets_for_role('administrator');
+
         $this->assertSame($org, $editor);
         $this->assertSame($org, $viewer);
+        $this->assertSame([], $admin);
     }
 
     public function test_analytics_widget_removed_for_editor(): void {
@@ -65,6 +68,7 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         $this->assertFalse(\current_user_can('view_analytics'));
         \ap_dashboard_widget_visibility_filter();
         $this->assertSame('artpulse_analytics_widget', self::$removed[0][0]);
+        $this->assertEmpty(self::$notice);
     }
 }
 }

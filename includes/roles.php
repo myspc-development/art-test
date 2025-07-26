@@ -60,21 +60,60 @@ add_action('admin_notices', function () {
  * Viewers lack the capability entirely. This helper centralizes the logic
  * so tests can verify widget visibility per role.
  */
+/**
+ * Determine widget visibility for the current user and display any notices.
+ *
+ * This helper checks capability requirements and per-role exclusions. It can be
+ * extended via the `ap_dashboard_widget_visibility_rules` filter to support new
+ * sub-roles in the future.
+ */
+function ap_get_dashboard_widget_visibility_rules(): array {
+    return [
+        'artpulse_analytics_widget' => [
+            'capability'    => 'view_analytics',
+            'exclude_roles' => [
+                'org_editor' => [
+                    'notice' => __('Analytics are available to organization managers only.', 'artpulse'),
+                    'type'   => 'info',
+                ],
+                'org_viewer',
+            ],
+        ],
+    ];
+}
+
 function ap_dashboard_widget_visibility_filter(): void {
     $current_user = wp_get_current_user();
     $roles        = (array) $current_user->roles;
 
-    if (in_array('org_editor', $roles, true)) {
-        remove_meta_box('artpulse_analytics_widget', 'dashboard', 'normal');
-        ap_add_admin_notice(
-            __('Analytics are available to organization managers only.', 'artpulse'),
-            'info'
-        );
-        return;
-    }
+    $rules = apply_filters('ap_dashboard_widget_visibility_rules', ap_get_dashboard_widget_visibility_rules());
 
-    if (!current_user_can('view_analytics')) {
-        remove_meta_box('artpulse_analytics_widget', 'dashboard', 'normal');
+    foreach ($rules as $widget => $config) {
+        $cap          = $config['capability']    ?? null;
+        $exclude      = $config['exclude_roles'] ?? [];
+        $notice_roles = is_array($exclude) ? $exclude : [];
+
+        $hide = false;
+        if ($cap && !current_user_can($cap)) {
+            $hide = true;
+        }
+
+        foreach ($roles as $role) {
+            if (isset($notice_roles[$role])) {
+                $hide = true;
+                $msg  = $notice_roles[$role]['notice'] ?? '';
+                $type = $notice_roles[$role]['type'] ?? 'info';
+                if ($msg) {
+                    ap_add_admin_notice($msg, $type);
+                }
+            } elseif (in_array($role, (array) $exclude, true)) {
+                $hide = true;
+            }
+        }
+
+        if ($hide) {
+            remove_meta_box($widget, 'dashboard', 'normal');
+        }
     }
 }
 add_action('wp_dashboard_setup', 'ap_dashboard_widget_visibility_filter', 99);
