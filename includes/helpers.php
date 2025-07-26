@@ -48,12 +48,15 @@ function ap_template_context(array $args = [], array $defaults = []): array {
     return wp_parse_args($args, $defaults);
 }
 
-function ap_safe_include(string $relative_template, string $fallback_path): void {
+function ap_safe_include(string $relative_template, string $fallback_path, array $context = []): void {
     $template = locate_template($relative_template);
     if (!$template) {
         $template = $fallback_path;
     }
     if ($template && file_exists($template)) {
+        if (!empty($context)) {
+            extract($context, EXTR_SKIP);
+        }
         include $template;
     } else {
         error_log("ArtPulse: Missing template → $relative_template or fallback.");
