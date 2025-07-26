@@ -88,8 +88,38 @@ function artpulse_widget_events_render() {
 }
 
 function artpulse_widget_tags_render() {
-    echo '<p>' . esc_html__( 'Trending tags will appear here.', 'artpulse' ) . '</p>';
-    echo '<ul><li>#art</li><li>#gallery</li><li>#events</li></ul>';
+    global $wpdb;
+
+    $cutoff = gmdate('Y-m-d H:i:s', strtotime('-30 days', current_time('timestamp')));
+    $sql    = $wpdb->prepare(
+        "SELECT t.term_id, t.name, COUNT(tr.object_id) as cnt
+         FROM {$wpdb->terms} t
+         JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id
+         JOIN {$wpdb->term_relationships} tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
+         JOIN {$wpdb->posts} p ON tr.object_id = p.ID
+         WHERE tt.taxonomy = %s
+           AND p.post_status = 'publish'
+           AND p.post_date >= %s
+         GROUP BY t.term_id
+         ORDER BY cnt DESC
+         LIMIT 5",
+        'post_tag',
+        $cutoff
+    );
+
+    $rows = $wpdb->get_results($sql);
+
+    if (!$rows) {
+        echo '<p>' . esc_html__( 'No trending tags found.', 'artpulse' ) . '</p>';
+        return;
+    }
+
+    echo '<ul>';
+    foreach ($rows as $tag) {
+        $link = get_tag_link($tag->term_id);
+        echo '<li><a href="' . esc_url($link) . '">#' . esc_html($tag->name) . '</a></li>';
+    }
+    echo '</ul>';
 }
 
 /**
