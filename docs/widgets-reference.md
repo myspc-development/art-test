@@ -12,9 +12,11 @@ Below is a summary of built in dashboard widgets. Custom plugins can register ad
 | ID | Label | Category | Roles | Description |
 |---|---|---|---|---|
 | account-tools | Account Tools | account | all | Export and deletion options. |
+| ap_donor_activity | Donor Activity | commerce | organization | Recent donation history for the organization. |
 | artist_inbox_preview | Artist Inbox Preview | engagement | member | Recent unread messages from artists. |
 | artist_revenue_summary | Artist Revenue Summary | commerce | artist | Revenue totals from tickets and donations. |
 | artist_spotlight | Artist Spotlight | community | artist | Recent mentions and highlights. |
+| artpulse_analytics_widget | Organization Analytics | analytics | organization | Basic traffic and engagement metrics. |
 | cat_fact | Cat Fact | fun | all | Random cat facts from catfact.ninja. |
 | creator-tips | Creator Tips | engagement | all | Contextual suggestions for creators. |
 | dashboard_feedback | Dashboard Feedback | engagement | member, artist, organization | Send feedback about your dashboard. |

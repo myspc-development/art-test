@@ -605,8 +605,8 @@
         "unused": false,
         "previewGuarded": true
     },
-    "donor_activity": {
-        "id": "donor_activity",
+    "ap_donor_activity": {
+        "id": "ap_donor_activity",
         "file": "widgets/DonorActivityWidget.php",
         "roles": [
             "organization"
@@ -617,8 +617,8 @@
         "unused": false,
         "previewGuarded": true
     },
-    "org_analytics": {
-        "id": "org_analytics",
+    "artpulse_analytics_widget": {
+        "id": "artpulse_analytics_widget",
         "file": "widgets/OrgAnalyticsWidget.php",
         "roles": [
             "organization"

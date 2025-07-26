@@ -31,8 +31,8 @@ class DashboardController {
             'site_stats',
             'webhooks',
             'rsvp_stats',
-            'org_analytics',
-            'donor_activity',
+            'artpulse_analytics_widget',
+            'ap_donor_activity',
             'notifications',
         ],
     ];
