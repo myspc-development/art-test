@@ -10,7 +10,7 @@ status: complete
 This document explains how site administrators manage role‑based dashboard layouts.
 
 ## Editing Layouts
-1. In the WordPress dashboard open **ArtPulse → Settings → Widget Editor**.
+1. In the WordPress dashboard open **ArtPulse → Dashboard Builder**.
 2. Choose a role from the dropdown.
 3. Drag widgets to reorder or use the eye icon to toggle visibility.
 4. Click **Save Layout** to store the configuration.

@@ -13,7 +13,7 @@ The table below summarizes documentation coverage for key admin-facing features.
 | Feature Area | Exists? | Coverage Quality | Suggestions |
 |--------------|---------|------------------|-------------|
 | SettingsPage | ✅ | Moderate | Document advanced options and link to REST endpoints |
-| Widget Editor UI | ✅ | Strong | Cross-reference Redux state diagrams and API guide |
+| Widget Editor UI (deprecated) | ❌ | N/A | Replaced by the Dashboard Builder |
 | Roles UI | ✅ | Strong | See [Admin Dashboard UI](./admin-dashboard-ui.md) for per‑role layouts and fallback logic. Related code lives in [`DashboardConfigController.php`](../../src/Rest/DashboardConfigController.php) and [`page-dashboard-config.php`](../../admin/page-dashboard-config.php) |
 
 Use this checklist when updating docs to ensure all admin workflows are fully explained.

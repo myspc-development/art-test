@@ -8,7 +8,7 @@ status: complete
 
 # Admin Dashboard UI
 
-This guide details how administrators configure dashboard layouts for each user role. It builds on the [Admin Widget Editor Guide](./admin-widget-editor-guide.md) and covers saving behavior, widget management and REST updates.
+This guide details how administrators configure dashboard layouts for each user role. It builds on the Dashboard Builder and covers saving behavior, widget management and REST updates.
 
 🔗 Available widgets and role visibility can now be managed in the [Dashboard Builder](../widgets/widget-matrix-reference.md).
 

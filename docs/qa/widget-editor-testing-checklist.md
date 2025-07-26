@@ -8,6 +8,10 @@ status: complete
 
 # Widget Editor Testing Checklist
 
+> **Deprecated:** The Widget Editor has been removed. Refer to the
+> [Dashboard Builder UAT Checklist](dashboard-builder-uat-checklist.md)
+> for current testing steps.
+
 Merged from the Widget Manager testing checklist and verification notes.
 
 ## Permissions

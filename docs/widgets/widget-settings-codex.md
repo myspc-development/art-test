@@ -89,12 +89,11 @@ object alongside the layout list:
 
 ## 4. Widget Layout Editor
 
-Visit **ArtPulse → Settings → Dashboard Widgets** to open the layout editor. The
-page loads `assets/js/admin-dashboard-widgets-editor.js` which renders a React
-interface powered by SortableJS for drag‑and‑drop ordering. Two columns labeled
-**Available** and **Active** let you move widgets between them. Choose a role
-from the drop‑down, arrange the widgets, then click **Save** to store the layout
-in the `ap_dashboard_widget_config` option.
+Visit **ArtPulse → Dashboard Builder** to open the layout editor. The interface
+uses SortableJS for drag‑and‑drop ordering. Two columns labeled **Available** and
+**Active** let you move widgets between them. Choose a role from the drop‑down,
+arrange the widgets, then click **Save** to store the layout in the
+`ap_dashboard_widget_config` option.
 
 Use the **Reset to Default** button in this editor to restore the saved order for
 the current role. Individual users may also click **Reset Layout** on their

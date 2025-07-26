@@ -354,7 +354,7 @@ class DashboardWidgetTools
         if (!isset($_FILES['ap_widget_file']) || empty($_FILES['ap_widget_file']['tmp_name'])) {
             error_log('[DashboardWidgetTools] Import failed: missing file');
             \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('No file was uploaded.', 'artpulse'), 'error');
-            wp_safe_redirect(add_query_arg('dw_import_error', 'no_file', wp_get_referer() ?: admin_url('admin.php?page=artpulse-widget-editor')));
+            wp_safe_redirect(add_query_arg('dw_import_error', 'no_file', wp_get_referer() ?: admin_url('admin.php?page=dashboard-builder')));
             exit;
         }
 
@@ -365,14 +365,14 @@ class DashboardWidgetTools
         if ($file_size > $max_size) {
             error_log('[DashboardWidgetTools] Import failed: file too large');
             \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('Uploaded file exceeds the maximum size of 1 MB.', 'artpulse'), 'error');
-            wp_safe_redirect(add_query_arg('dw_import_error', 'file_size', wp_get_referer() ?: admin_url('admin.php?page=artpulse-widget-editor')));
+            wp_safe_redirect(add_query_arg('dw_import_error', 'file_size', wp_get_referer() ?: admin_url('admin.php?page=dashboard-builder')));
             exit;
         }
 
         if (!in_array($file_mime, ['application/json', 'text/plain'], true)) {
             error_log('[DashboardWidgetTools] Import failed: invalid mime ' . $file_mime);
             \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('Invalid file type. Please upload a JSON file.', 'artpulse'), 'error');
-            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_mime', wp_get_referer() ?: admin_url('admin.php?page=artpulse-widget-editor')));
+            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_mime', wp_get_referer() ?: admin_url('admin.php?page=dashboard-builder')));
             exit;
         }
 
@@ -382,7 +382,7 @@ class DashboardWidgetTools
         if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
             error_log('[DashboardWidgetTools] Invalid JSON import: ' . json_last_error_msg());
             \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('Uploaded file contains invalid JSON.', 'artpulse'), 'error');
-            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_json', wp_get_referer() ?: admin_url('admin.php?page=artpulse-widget-editor')));
+            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_json', wp_get_referer() ?: admin_url('admin.php?page=dashboard-builder')));
             exit;
         }
 
@@ -402,7 +402,7 @@ class DashboardWidgetTools
 
         update_option('ap_dashboard_widget_config', $sanitized);
 
-        wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=artpulse-widget-editor')));
+        wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=dashboard-builder')));
         exit;
     }
 

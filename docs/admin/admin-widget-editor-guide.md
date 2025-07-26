@@ -8,11 +8,15 @@ status: complete
 
 # Admin Widget Editor Guide
 
+> **Note:** The legacy Widget Editor was removed in version 2.0. Use the
+> [Dashboard Builder](../widgets/widget-matrix-reference.md) to configure
+> role-based dashboards.
+
 This document combines the original Admin Dashboard Widgets Editor guide with
 usage instructions. It describes how administrators can customize dashboard
 layouts for different user roles.
 
-- Launch the editor under **ArtPulse → Settings → Widget Editor**
+- Launch the builder under **ArtPulse → Dashboard Builder**
 - Drag and drop widgets to build role-specific dashboards
 - Save or reset layouts for each role
 - Filter the **Add Widget** panel by category or role

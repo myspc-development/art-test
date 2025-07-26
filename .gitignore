@@ -27,13 +27,11 @@ release/
 
 # Allow specific built assets
 !assets/dist/
-!assets/dist/admin-dashboard-widgets-editor.js
 !build/index.js
 !build/index.asset.php
 !build/css/widgets.css
 !build/css/dashboard.css
 !build/js/dashboard.js
-!assets/js/admin-dashboard-widgets-editor.js
 
 # ===============================
 # 🧠 IDE + OS FILES
