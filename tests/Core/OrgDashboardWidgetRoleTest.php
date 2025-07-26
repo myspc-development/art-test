@@ -14,8 +14,7 @@ namespace {
     }
     function user_can($user, $cap) {
         if ($cap === 'view_analytics') {
-            return in_array('org_editor', \ArtPulse\Core\Tests\OrgDashboardWidgetRoleTest::$current_roles, true)
-                || in_array('org_manager', \ArtPulse\Core\Tests\OrgDashboardWidgetRoleTest::$current_roles, true);
+            return in_array('organization', \ArtPulse\Core\Tests\OrgDashboardWidgetRoleTest::$current_roles, true);
         }
         return true;
     }
@@ -60,25 +59,21 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         self::$screen = 'dashboard';
     }
 
-    public function test_org_roles_inherit_widgets(): void {
-        DashboardController::get_widgets_for_role('organization');
-        $editor = DashboardController::get_widgets_for_role('org_editor');
-        $viewer = DashboardController::get_widgets_for_role('org_viewer');
-        $admin  = DashboardController::get_widgets_for_role('administrator');
-
-        $this->assertSame([], $editor);
-        $this->assertSame([], $viewer);
+    public function test_org_role_widgets(): void {
+        $widgets = DashboardController::get_widgets_for_role('organization');
+        $this->assertNotEmpty($widgets);
+        $admin = DashboardController::get_widgets_for_role('administrator');
         $this->assertSame([], $admin);
     }
 
-    public function test_analytics_widget_visible_for_editor(): void {
-        self::$current_roles = ['org_editor'];
+    public function test_analytics_widget_visible_for_org_user(): void {
+        self::$current_roles = ['organization'];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $this->assertEmpty(self::$removed);
     }
 
-    public function test_org_viewer_has_no_analytics_capability(): void {
-        self::$current_roles = ['org_viewer'];
+    public function test_member_has_no_analytics_capability(): void {
+        self::$current_roles = ['member'];
         $this->assertFalse(\current_user_can('view_analytics'));
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $this->assertSame('artpulse_analytics_widget', self::$removed[0][0]);
@@ -87,7 +82,7 @@ class OrgDashboardWidgetRoleTest extends TestCase {
 
     public function test_no_widgets_outputs_fallback_message(): void {
         global $wp_meta_boxes;
-        self::$current_roles = ['org_viewer'];
+        self::$current_roles = ['member'];
         $wp_meta_boxes = ['dashboard' => []];
         ob_start();
         \ArtPulse\Dashboard\WidgetVisibilityManager::render_empty_state_notice();
@@ -98,18 +93,18 @@ class OrgDashboardWidgetRoleTest extends TestCase {
     public function test_filter_allows_custom_visibility_rule(): void {
         tests_add_filter('ap_dashboard_widget_visibility_rules', function ($rules) {
             $rules['custom_widget'] = [
-                'exclude_roles' => ['org_viewer'],
+                'exclude_roles' => ['member'],
             ];
             return $rules;
         });
-        self::$current_roles = ['org_viewer'];
+        self::$current_roles = ['member'];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $ids = array_column(self::$removed, 0);
         $this->assertContains('custom_widget', $ids);
     }
 
     public function test_multiple_roles_evaluated(): void {
-        self::$current_roles = ['org_editor', 'custom'];
+        self::$current_roles = ['organization', 'custom'];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $ids = array_column(self::$removed, 0);
         $this->assertNotContains('artpulse_analytics_widget', $ids);
@@ -132,26 +127,22 @@ class OrgDashboardWidgetRoleTest extends TestCase {
     }
 
     public function test_filter_visible_widgets_accepts_user_param(): void {
-        $user = (object) ['ID' => 5, 'roles' => ['org_editor']];
+        $user = (object) ['ID' => 5, 'roles' => ['organization']];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets($user);
         $this->assertEmpty(self::$removed);
     }
 
     public function test_filter_visible_widgets_handles_invalid_user(): void {
-        self::$current_roles = ['org_editor'];
+        self::$current_roles = ['organization'];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets('bad');
         $this->assertEmpty(self::$removed);
     }
 
 
-    public function test_donor_widget_visible_for_all_org_roles(): void {
-        $roles = ['organization', 'org_manager', 'org_editor', 'org_viewer'];
-        foreach ($roles as $role) {
-            self::$current_roles = [$role];
-            self::$removed = [];
-            \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
-            $this->assertNotContains('ap_donor_activity', array_column(self::$removed, 0), $role);
-        }
+    public function test_donor_widget_visible_for_org_role(): void {
+        self::$current_roles = ['organization'];
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
+        $this->assertNotContains('ap_donor_activity', array_column(self::$removed, 0));
     }
 }
 }

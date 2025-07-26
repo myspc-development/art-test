@@ -68,9 +68,6 @@ class DashboardControllerTest extends TestCase
         ];
 
         $this->assertSame($expected, DashboardController::get_widgets_for_role('organization'));
-        foreach (['org_manager', 'org_editor', 'org_viewer'] as $role) {
-            $this->assertSame([], DashboardController::get_widgets_for_role($role));
-        }
     }
 
     public function test_get_widgets_for_unknown_role_returns_empty(): void

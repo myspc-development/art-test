@@ -15,7 +15,7 @@ class DashboardWidgetRegistry {
      * DashboardWidgetRegistry::register('event_summary', [
      *     'title' => 'Upcoming Events',
      *     'render_callback' => 'render_event_summary',
-     *     'roles' => ['artist', 'org_manager'],
+     *     'roles' => ['artist', 'organization'],
      * ]);
      */
     public static function register(string $id, array $args): void {

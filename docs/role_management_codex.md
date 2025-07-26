@@ -2,7 +2,7 @@
 title: Role Management Codex
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-02
 status: complete
 ---
 
@@ -15,9 +15,9 @@ This plugin registers custom roles during activation and assigns capabilities us
 - `member`
 - `artist`
 - `organization`
-- `org_manager`
-- `org_editor`
-- `org_viewer`
+
+The legacy sub‑roles `org_manager`, `org_editor` and `org_viewer` were removed.
+All organization accounts now share the single `organization` role.
 
 ## Capabilities
 
