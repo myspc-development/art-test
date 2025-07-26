@@ -12,7 +12,7 @@ This plugin adds simple widgets to the native WordPress dashboard. Widgets are r
 ## Widgets
 - **Site Overview** – quick summary of recent activity. Title uses `dashicons-admin-home`.
 - **Upcoming Events** – shows upcoming events (currently static text) with `dashicons-calendar-alt`.
-- **Trending Tags** – placeholder area for trending tags with a `dashicons-tag` icon.
+- **Trending Tags** – lists tags trending over the past month with a `dashicons-tag` icon.
 
 The **Trending Tags** widget is placed in the sidebar column by default, while the other two appear in the main column. You can drag the widgets between columns or reorder them. WordPress persists the layout per user without any additional code.
 
@@ -20,6 +20,6 @@ The **Trending Tags** widget is placed in the sidebar column by default, while t
 The stylesheet `assets/css/wp-dashboard-layout.css` provides a flexible two‑column layout. Columns collapse to full width on smaller screens. The CSS is enqueued only on the dashboard screen.
 
 ## Extending
-Developers can replace the placeholder callbacks in `includes/wp-dashboard-manager.php` or add new widgets using the same `wp_add_dashboard_widget()` function. For a richer experience you could create a React interface using a grid library and save the layout via `update_user_meta()`.
+Developers can add new widgets using the same `wp_add_dashboard_widget()` function. For a richer experience you could create a React interface using a grid library and save the layout via `update_user_meta()`.
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*
