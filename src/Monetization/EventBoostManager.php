@@ -2,6 +2,7 @@
 namespace ArtPulse\Monetization;
 
 use WP_REST_Request;
+use Stripe\StripeClient;
 
 class EventBoostManager
 {
@@ -60,8 +61,40 @@ class EventBoostManager
         if (!$event) {
             return new \WP_Error('invalid_event', 'Invalid event', ['status' => 400]);
         }
-        // Placeholder: integration with Stripe would go here.
-        return rest_ensure_response(['checkout_url' => '#']);
+        $settings = get_option('artpulse_settings', []);
+        $secret   = $settings['stripe_secret_key'] ?? ($settings['stripe_secret'] ?? '');
+
+        if (!$secret || !class_exists(\Stripe\StripeClient::class)) {
+            return new \WP_Error('stripe_unavailable', 'Stripe not configured', ['status' => 500]);
+        }
+
+        $amount   = floatval($settings['boost_price'] ?? 10);
+        $currency = $settings['currency'] ?? 'usd';
+
+        $stripe = new \Stripe\StripeClient($secret);
+
+        try {
+            $session = $stripe->checkout->sessions->create([
+                'payment_method_types' => ['card'],
+                'mode'                 => 'payment',
+                'client_reference_id'  => get_current_user_id(),
+                'line_items'           => [[
+                    'price_data' => [
+                        'currency'     => $currency,
+                        'unit_amount'  => intval($amount * 100),
+                        'product_data' => ['name' => 'Event Boost'],
+                    ],
+                    'quantity' => 1,
+                ]],
+                'metadata'    => ['event_id' => $event],
+                'success_url' => home_url('/?ap_payment=success'),
+                'cancel_url'  => home_url('/?ap_payment=cancel'),
+            ]);
+        } catch (\Exception $e) {
+            return new \WP_Error('stripe_error', $e->getMessage(), ['status' => 500]);
+        }
+
+        return rest_ensure_response(['checkout_url' => $session->url]);
     }
 
     public static function handle_webhook(WP_REST_Request $req)
