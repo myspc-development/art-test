@@ -133,7 +133,6 @@ require_once __DIR__ . '/admin/page-community-roles.php';
 require_once __DIR__ . '/admin/page-org-roles.php';
 require_once __DIR__ . '/admin/page-roles-editor.php';
 require_once __DIR__ . '/admin/page-org-crm.php';
-require_once __DIR__ . '/admin/page-api-keys.php';
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
 require_once __DIR__ . '/auto-tagger.php';

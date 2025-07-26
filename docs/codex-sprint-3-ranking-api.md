@@ -1,18 +1,17 @@
 ---
-title: Codex: Sprint 3 – Event Ranking & API
+title: Codex: Sprint 3 – Event Ranking
 category: developer
 role: developer
 last_updated: 2025-07-20
 status: complete
 ---
-# Codex: Sprint 3 – Event Ranking & API
+# Codex: Sprint 3 – Event Ranking
 
 ## Overview
-Introduces event ranking algorithm and partner-facing API with bearer auth.
+Introduces the event ranking algorithm used to surface quality content.
 
 ## Goals
 - Rank events based on engagement signals.
-- Allow partners to query events via a secure API.
 
 ## REST Routes
 - `GET /api/v1/events?orderby=rank` – Ranked event list.
@@ -20,14 +19,8 @@ Introduces event ranking algorithm and partner-facing API with bearer auth.
 
 ## Database Changes
 - `ap_event_rankings` table for scores.
-- `ap_api_keys` table storing hashed API keys.
-
-## Frontend Components
-- Admin screen for API key management.
 
 ## QA Checklist
 - Ranking table populated and used by `/events?orderby=rank`.
-- API requests with a valid key succeed.
-- Requests without a key return 401 errors.
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

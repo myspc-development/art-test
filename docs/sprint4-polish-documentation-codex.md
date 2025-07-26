@@ -58,7 +58,7 @@ Package internal implementation and integration documentation for dev onboarding
 | API Docs | REST endpoints with example payloads |
 | Data Models | `ap_event`, `ap_flags`, `ap_event_rankings`, etc. |
 | Testing & QA | Manual test scripts + automated coverage |
-| Deployment | Build steps, cron jobs, API key mgmt |
+| Deployment | Build steps, cron jobs |
 
 ### Packaging Instructions
 - Generate `.md` versions from Codex for GitHub `/docs/`.
@@ -66,7 +66,6 @@ Package internal implementation and integration documentation for dev onboarding
 - Include architecture diagrams:
   - REST structure
   - Table relationships
-  - Auth flow (e.g., partner API bearer token handshake)
 
 ### Export Targets
 | Format | Tool |
