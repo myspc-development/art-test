@@ -11,12 +11,15 @@ function ap_register_roles() {
     add_role('org_editor', 'Organization Editor', [
         'read' => true,
         'edit_dashboard_widgets' => false,
+        // Editors can technically view analytics but we hide the widget by
+        // default so managers remain responsible for performance insights.
         'view_analytics' => true,
     ]);
 
     add_role('org_viewer', 'Organization Viewer', [
         'read' => true,
         'edit_dashboard_widgets' => false,
+        // Viewers never see analytics so the widget is never registered.
         'view_analytics' => false,
     ]);
 }
@@ -52,7 +55,9 @@ add_action('admin_notices', function () {
 add_action('wp_dashboard_setup', function () {
     $current_user = wp_get_current_user();
     if (in_array('org_editor', (array) $current_user->roles, true)) {
-        // Editors see a simplified dashboard. Hide analytics reserved for managers.
+        // Org editors have the capability to view analytics, but the full
+        // metrics widget clutters their workflow. We remove it so only
+        // managers handle performance reviews.
         remove_meta_box('artpulse_analytics_widget', 'dashboard', 'normal');
         ap_add_admin_notice(
             __('Analytics are available to organization managers only.', 'artpulse'),
