@@ -153,5 +153,15 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $this->assertArrayNotHasKey('ap_org_editor_notice_pending', self::$meta);
     }
+
+    public function test_donor_widget_visible_for_all_org_roles(): void {
+        $roles = ['organization', 'org_manager', 'org_editor', 'org_viewer'];
+        foreach ($roles as $role) {
+            self::$current_roles = [$role];
+            self::$removed = [];
+            \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
+            $this->assertNotContains('ap_donor_activity', array_column(self::$removed, 0), $role);
+        }
+    }
 }
 }
