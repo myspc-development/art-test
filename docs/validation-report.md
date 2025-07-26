@@ -31,7 +31,7 @@ status: complete
 | admin/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | admin/admin-overview.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | admin/admin-settings-ui.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| admin/admin-widget-editor-guide.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| admin/admin-widget-editor-guide.md | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | admin/admin-dashboard-ui.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | admin/role-preview-guide.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | admin/plugin-installation-updates.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -91,7 +91,7 @@ status: complete
 | developer/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | developer/react-forms-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | developer/shortcodes-guide.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| developer/widget-editor-developer-guide.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| developer/widget-editor-developer-guide.md | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | development-setup.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | enhanced-notifications-codex.md | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
 | event-chat-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -153,7 +153,7 @@ status: complete
 | qa/End_to_End_Testing_Guide.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
 | qa/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | qa/testing-strategy.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| qa/widget-editor-testing-checklist.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| qa/widget-editor-testing-checklist.md | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | qa/widget-qa-checklist.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | qr-checkins.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | reporting-exports.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |

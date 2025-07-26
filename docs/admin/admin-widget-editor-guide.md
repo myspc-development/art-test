@@ -10,7 +10,7 @@ status: complete
 
 > **Note:** The legacy Widget Editor was removed in version 2.0. Use the
 > [Dashboard Builder](../widgets/widget-matrix-reference.md) to configure
-> role-based dashboards.
+> role-based dashboards. This page remains for historical reference only.
 
 This document combines the original Admin Dashboard Widgets Editor guide with
 usage instructions. It describes how administrators can customize dashboard

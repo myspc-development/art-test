@@ -10,7 +10,7 @@ status: complete
 
 Testing resources and checklists.
 
-- `widget-editor-testing-checklist.md`
+- `widget-editor-testing-checklist.md` (archived; refer to Dashboard Builder checklist)
 - `widget-qa-checklist.md`
 - `testing-strategy.md`
 - `End_to_End_Testing_Guide.md`
