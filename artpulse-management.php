@@ -165,6 +165,31 @@ require_once __DIR__ . '/includes/registration-hooks.php';
 require_once __DIR__ . '/includes/roles.php';
 require_once __DIR__ . '/includes/profile-roles.php';
 
+add_action('artpulse_upgrade', 'ap_migrate_org_sub_roles', 10, 2);
+
+/**
+ * Migrate deprecated organization sub-roles to the main role.
+ *
+ * @param string $old Previously installed version.
+ * @param string $new Upgraded version.
+ */
+function ap_migrate_org_sub_roles(string $old = '', string $new = ''): void {
+    $legacy_roles = ['org_manager', 'org_editor', 'org_viewer'];
+    foreach ($legacy_roles as $role) {
+        $users = get_users([
+            'role'   => $role,
+            'fields' => 'ID',
+        ]);
+        foreach ($users as $user_id) {
+            $user = new WP_User($user_id);
+            $user->remove_role($role);
+            if (!in_array('organization', (array) $user->roles, true)) {
+                $user->add_role('organization');
+            }
+        }
+    }
+}
+
 add_action('rest_api_init', function () {
     $controller = new \ArtPulse\Rest\OrgRolesController();
     $controller->register_routes();
