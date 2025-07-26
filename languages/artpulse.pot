@@ -2666,23 +2666,11 @@ msgstr ""
 msgid "Requested Org/Artist"
 msgstr ""
 
-#: src/Admin/OrgRolesPage.php:25 src/Admin/OrgRolesPage.php:26
-#: src/Admin/OrgRolesPage.php:56 admin/page-org-roles.php:11
-msgid "Roles & Permissions"
-msgstr ""
-
-#: src/Admin/OrgRolesPage.php:60 src/Admin/OrgUserManager.php:91
+#: src/Admin/OrgUserManager.php:91
 #: admin/page-community-roles.php:30
 msgid "Role"
 msgstr ""
 
-#: src/Admin/OrgRolesPage.php:60
-msgid "Permissions"
-msgstr ""
-
-#: src/Admin/OrgRolesPage.php:71
-msgid "Save Roles"
-msgstr ""
 
 #: src/Admin/TicketTiersPage.php:15 src/Admin/TicketTiersPage.php:16
 #: src/Admin/TicketTiersPage.php:51

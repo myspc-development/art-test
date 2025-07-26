@@ -17,6 +17,6 @@ Organizations may operate multiple groups or partner collectives under a single 
 - Only administrators and users with `manage_options` can assign cross-org roles.
 - Capabilities map to WordPress permissions so third‑party extensions can check them with `current_user_can()`.
 
-Use the admin page at `wp-admin/admin.php?page=ap-org-roles` to review roles and assign members. The table lists each role, a description and the number of users with that role in the selected org.
+Roles can be managed via the REST API. The former `ap-org-roles` admin page was removed in 2025.
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*
