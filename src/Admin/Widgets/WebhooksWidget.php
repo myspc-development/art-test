@@ -27,6 +27,10 @@ class WebhooksWidget
 
     public static function render(): void
     {
-        echo '<p>' . esc_html__('Webhook management coming soon.', 'artpulse') . '</p>';
+        if (function_exists('ap_widget_webhooks')) {
+            echo ap_widget_webhooks();
+        } else {
+            echo '<p>' . esc_html__('Webhook management unavailable.', 'artpulse') . '</p>';
+        }
     }
 }
