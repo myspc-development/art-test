@@ -165,7 +165,7 @@ class DashboardWidgetRegistry {
     }
 
     public static function render_widget_favorites(): void {
-        self::include_template( 'widgets/favorites.php' );
+        self::include_template( 'widgets/my-favorites.php' );
     }
 
     public static function render_widget_for_you(): void {

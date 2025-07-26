@@ -255,7 +255,7 @@ function ap_widget_local_events(array $vars = []): string
 
 function ap_widget_favorites(array $vars = []): string
 {
-    return ap_load_dashboard_template('widgets/favorites.php', $vars);
+    return ap_load_dashboard_template('widgets/my-favorites.php', $vars);
 }
 
 function ap_widget_my_follows(array $vars = []): string
