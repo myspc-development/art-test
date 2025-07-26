@@ -22,11 +22,11 @@ class RoleMatrixBatchTest extends \WP_UnitTestCase {
     public function test_batch_endpoint_updates_roles(): void {
         $req = new WP_REST_Request('POST', '/artpulse/v1/roles/batch');
         $req->set_body_params([
-            $this->user => [ 'org_manager' => true ]
+            $this->user => [ 'organization' => true ]
         ]);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $u = get_userdata($this->user);
-        $this->assertContains('org_manager', $u->roles);
+        $this->assertContains('organization', $u->roles);
     }
 }

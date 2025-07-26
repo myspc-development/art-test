@@ -2,22 +2,19 @@
 title: Organization Dashboard Widgets
 category: developer
 role: developer
-last_updated: 2025-07-27
+last_updated: 2025-08-02
 status: complete
 ---
 # Organization Dashboard Widgets
 
-The dashboard displays a common set of widgets for all organization sub‑roles. `DashboardController::get_widgets_for_role()` returns the same widget list for `org_manager`, `org_editor` and `org_viewer`.
+The dashboard displays a common set of widgets for the `organization` role. Legacy sub‑roles were removed so all organization accounts share the same widget list.
 
 | Role | Default Widgets |
 |------|-----------------|
-| organization | site_stats, webhooks, rsvp_stats, artpulse_analytics_widget, ap_donor_activity, notifications |
-| org_manager | site_stats, webhooks, rsvp_stats, artpulse_analytics_widget, ap_donor_activity, notifications |
-| org_editor  | site_stats, webhooks, rsvp_stats, artpulse_analytics_widget*, ap_donor_activity, notifications |
-| org_viewer  | site_stats, webhooks, rsvp_stats, ap_donor_activity, notifications |
+| organization | site_stats, webhooks, rsvp_stats, artpulse_analytics_widget*, ap_donor_activity, notifications |
 | administrator | *(no default widgets)* |
 
-`*` The `org_editor` role inherits the analytics capability but the widget is removed during `wp_dashboard_setup` by `WidgetVisibilityManager::filter_visible_widgets()`. Viewers lack the capability entirely so the widget never registers.
+`*` Organization users with the `view_analytics` capability see the analytics widget. If the capability is missing the widget is removed during `wp_dashboard_setup` by `WidgetVisibilityManager::filter_visible_widgets()`.
 
 Plugins can hook into `ap_dashboard_widget_visibility_rules` to modify widget visibility or register new widgets. Each rule key is the widget id and supports `capability` and `exclude_roles` options.
 
@@ -25,7 +22,7 @@ Plugins can hook into `ap_dashboard_widget_visibility_rules` to modify widget vi
 add_filter('ap_dashboard_widget_visibility_rules', function (array $rules) {
     $rules['myplugin_stats_widget'] = [
         'capability'    => 'view_my_stats',
-        'exclude_roles' => ['org_viewer'],
+        'exclude_roles' => ['member'],
     ];
     return $rules;
 });
