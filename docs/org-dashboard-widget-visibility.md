@@ -31,7 +31,7 @@ add_filter('ap_dashboard_widget_visibility_rules', function (array $rules) {
 });
 ```
 
-Ensure every role still receives at least one widget or the dashboard will display a "no dashboard content available" message. Provide help via the `ap_dashboard_empty_help_url` filter when needed.
+Ensure every role still receives at least one widget or the dashboard will display a "no dashboard content available" message. The fallback notice is triggered by `WidgetVisibilityManager::render_empty_state_notice()` and can link to documentation using the `ap_dashboard_empty_help_url` filter.
 
 Widget visibility is managed by `ArtPulse\Dashboard\WidgetVisibilityManager`. Developers may subclass this manager or replace it entirely to customize behavior. Overriding `get_visibility_rules()` allows complete control over which widgets appear for each role.
 
