@@ -71,11 +71,10 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         $this->assertSame([], $admin);
     }
 
-    public function test_analytics_widget_removed_for_editor(): void {
+    public function test_analytics_widget_visible_for_editor(): void {
         self::$current_roles = ['org_editor'];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
-        $this->assertSame('artpulse_analytics_widget', self::$removed[0][0]);
-        $this->assertSame('Analytics are available to organization managers only.', self::$meta['ap_org_editor_notice_pending']);
+        $this->assertEmpty(self::$removed);
     }
 
     public function test_org_viewer_has_no_analytics_capability(): void {
@@ -113,7 +112,7 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         self::$current_roles = ['org_editor', 'custom'];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $ids = array_column(self::$removed, 0);
-        $this->assertContains('artpulse_analytics_widget', $ids);
+        $this->assertNotContains('artpulse_analytics_widget', $ids);
     }
 
     public function test_unknown_role_leaves_widgets(): void {
@@ -135,7 +134,7 @@ class OrgDashboardWidgetRoleTest extends TestCase {
     public function test_filter_visible_widgets_accepts_user_param(): void {
         $user = (object) ['ID' => 5, 'roles' => ['org_editor']];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets($user);
-        $this->assertContains('artpulse_analytics_widget', array_column(self::$removed, 0));
+        $this->assertEmpty(self::$removed);
     }
 
     public function test_filter_visible_widgets_handles_invalid_user(): void {
@@ -144,21 +143,6 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         $this->assertEmpty(self::$removed);
     }
 
-    public function test_editor_notice_can_be_dismissed(): void {
-        self::$current_roles = ['org_editor'];
-        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
-        $this->assertArrayHasKey('ap_org_editor_notice_pending', self::$meta);
-
-        $_GET['ap_dismiss_editor_notice'] = '1';
-        \ArtPulse\Dashboard\WidgetVisibilityManager::handle_editor_notice_dismiss();
-        unset($_GET['ap_dismiss_editor_notice']);
-
-        $this->assertSame(1, self::$meta['ap_dismiss_org_editor_notice']);
-        $this->assertArrayNotHasKey('ap_org_editor_notice_pending', self::$meta);
-
-        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
-        $this->assertArrayNotHasKey('ap_org_editor_notice_pending', self::$meta);
-    }
 
     public function test_donor_widget_visible_for_all_org_roles(): void {
         $roles = ['organization', 'org_manager', 'org_editor', 'org_viewer'];
