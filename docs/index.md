@@ -21,6 +21,7 @@ Welcome to the documentation portal. Select a section based on your role.
 - [Widgets Documentation](widgets/README.md)
 - [Dashboard Layout Config](dashboard-layout-config.md)
 - [Architecture Guide](architecture/dev-structure.md)
+- [Upgrade Notes](upgrade-notes.md)
 
 ## QA Guides
 - [QA Documentation](qa/README.md)
