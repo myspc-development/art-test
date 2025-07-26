@@ -52,6 +52,32 @@ Invite internal or community testers and provide them with login details. Ask te
 5. Check that hiding a widget removes it from the registry and REST calls.
 6. Note any PHP or JavaScript errors displayed while `WP_DEBUG` is active.
 
+## Widget Role Rendering Verification
+
+Optionally enable a debug block on the dashboard to verify widget visibility for
+each role. Add the following snippet inside `dashboard-generic.php` or a similar
+template. It prints the current role, the active layout and all registered
+widgets when viewing the page as an administrator:
+
+```php
+<?php if (current_user_can('manage_options')): ?>
+  <div class="notice notice-info">
+    <p><strong>🧩 DEBUG: Rendering Widget Diagnostic</strong></p>
+    <p><strong>Current User Role:</strong> <?= esc_html(DashboardController::get_role(get_current_user_id())) ?></p>
+
+    <p><strong>Active Layout:</strong></p>
+    <pre><?php print_r(DashboardController::get_user_dashboard_layout(get_current_user_id())); ?></pre>
+
+    <p><strong>Registered Widgets:</strong></p>
+    <pre><?php print_r(ArtPulse\Core\DashboardWidgetRegistry::get_all()); ?></pre>
+  </div>
+<?php endif; ?>
+```
+
+Compare the layout array with the widgets shown on screen after saving changes
+in the Dashboard Builder. This helps confirm all widgets registered to a role
+are rendered correctly.
+
 ## 4. Reporting
 
 Collect feedback via your preferred tracking tool. Include screenshots and steps to reproduce any issues. When all checks pass, update this document’s status to **complete** and proceed with the release checklist.
