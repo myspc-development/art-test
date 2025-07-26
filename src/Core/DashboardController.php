@@ -10,11 +10,31 @@ class DashboardController {
      */
     private static array $role_widgets = [
         // Default widgets for newly created members
-        'member'       => ['widget_news', 'my_rsvps', 'recommended_for_you'],
+        'member'       => [
+            'widget_news',
+            'widget_favorites',
+            'widget_events',
+            'notifications',
+            'my_rsvps',
+            'recommended_for_you',
+        ],
         // Artist dashboard starter widgets
-        'artist'       => ['my-events', 'sales_summary', 'artist_inbox_preview'],
+        'artist'       => [
+            'widget_spotlights',
+            'artist_inbox_preview',
+            'artist_revenue_summary',
+            'widget_followed_artists',
+            'notifications',
+        ],
         // Organization admin widgets
-        'organization' => ['site_stats', 'webhooks', 'rsvp_stats'],
+        'organization' => [
+            'site_stats',
+            'webhooks',
+            'rsvp_stats',
+            'org_analytics',
+            'donor_activity',
+            'notifications',
+        ],
     ];
 
     /**
