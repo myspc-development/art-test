@@ -1280,11 +1280,36 @@ add_shortcode('react_form', 'artpulse_render_react_form');
 
 function artpulse_handle_react_form() {
     check_ajax_referer('ap_react_form');
+
     $name  = sanitize_text_field($_POST['name'] ?? '');
     $email = sanitize_email($_POST['email'] ?? '');
 
-    // Placeholder logic for submission handling
-    wp_send_json_success(['message' => 'Form submitted successfully!']);
+    if ($name === '' || !is_email($email)) {
+        wp_send_json_error([
+            'message' => __('Please provide a name and valid email.', 'artpulse'),
+        ]);
+    }
+
+    global $wpdb;
+    $table = $wpdb->prefix . 'ap_feedback';
+    $wpdb->insert($table, [
+        'user_id'     => get_current_user_id() ?: null,
+        'type'        => 'react_form',
+        'description' => sprintf('Name: %s', $name),
+        'email'       => $email,
+        'tags'        => '',
+        'context'     => '',
+        'created_at'  => current_time('mysql'),
+    ]);
+
+    $admin_email = get_option('admin_email');
+    $subject     = sprintf(__('React form submission from %s', 'artpulse'), $name);
+    $message     = sprintf("Name: %s\nEmail: %s", $name, $email);
+    \ArtPulse\Core\EmailService::send($admin_email, $subject, $message);
+
+    wp_send_json_success([
+        'message' => __('Form submitted successfully!', 'artpulse'),
+    ]);
 }
 add_action('wp_ajax_submit_react_form', 'artpulse_handle_react_form');
 add_action('wp_ajax_nopriv_submit_react_form', 'artpulse_handle_react_form');
