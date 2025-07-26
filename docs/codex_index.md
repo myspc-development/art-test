@@ -53,7 +53,7 @@ status: complete
 | [`dashboard-editor-developer-guide.md`](./dashboard-editor-developer-guide.md) | Admin drag-and-drop editor | Dev |
 | [`widget-registry-reference.md`](widgets/widget-registry-reference.md) | Widget registration metadata | Dev |
 | [`widget-layout-import-export-guide.md`](widgets/widget-layout-import-export-guide.md) | Import/export JSON | Dev |
-| [Widget Editor Codex Instructions](archive/Widget_Editor_Codex_Instructions.md) | How to document new widgets | Dev |
+| [Dashboard Builder UAT Checklist](qa/dashboard-builder-uat-checklist.md) | Testing guidance for the builder | QA |
 | [`widget-settings-codex.md`](widgets/widget-settings-codex.md) | Per-user widget settings | Dev |
 
 ---

@@ -49,7 +49,7 @@ automatically.
 
 ## Admin and User Customization
 
-Administrators manage role defaults via the **Widget Editor**. Users can drag and drop their
+Administrators manage role defaults via the **Dashboard Builder**. Users can drag and drop their
 personal widgets on the dashboard screen. WordPress stores each arrangement in the
 `metaboxorder_dashboard` meta key. Existing widgets like **Site Overview**, **Upcoming Events**
 and **Trending Tags** show how to structure menu nodes and widget blocks.

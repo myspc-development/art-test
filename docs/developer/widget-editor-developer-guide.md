@@ -8,6 +8,9 @@ status: complete
 
 # Widget Editor Developer Guide
 
+> **Deprecated:** The Widget Editor has been removed in favor of the
+> Dashboard Builder. This document remains for historical reference only.
+
 Combines implementation notes from the Dashboard Editor guide and Codex
 instructions. Covers adding new widgets, REST endpoints and verification
 checklists.

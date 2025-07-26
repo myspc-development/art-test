@@ -13,7 +13,7 @@ Welcome to the documentation portal. Select a section based on your role.
 ## Admin Guides
 - [Admin Documentation](admin/README.md)
 - [Admin Settings UI](admin/admin-settings-ui.md)
-- [Dashboard Widget Editor](admin/admin-widget-editor-guide.md)
+- [Dashboard Builder Guide](widgets/widget-matrix-reference.md)
 
 ## Developer Guides
 - [Developer Guides](developer/README.md)

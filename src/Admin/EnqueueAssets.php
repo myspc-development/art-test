@@ -184,43 +184,6 @@ class EnqueueAssets {
             }
         }
 
-        if ($screen->base === 'artpulse-settings_page_artpulse-widget-editor') {
-            $script_path = $plugin_dir . '/build/widget-editor.js';
-            $script_url  = $plugin_url . '/build/widget-editor.js';
-            if (file_exists($script_path)) {
-                wp_enqueue_script(
-                    'ap-widget-editor-js',
-                    $script_url,
-                    ['wp-element'],
-                    filemtime($script_path),
-                    true
-                );
-            }
-            $react_path = $plugin_dir . '/build/widget-editor-ui.js';
-            $react_url  = $plugin_url . '/build/widget-editor-ui.js';
-            if (file_exists($react_path)) {
-                wp_enqueue_script(
-                    'ap-widget-editor-ui',
-                    $react_url,
-                    ['react', 'react-dom/client', 'react-grid-layout'],
-                    filemtime($react_path),
-                    true
-                );
-                wp_localize_script('ap-widget-editor-ui', 'APWidgetEditor', [
-                    'root'  => esc_url_raw(rest_url()),
-                    'nonce' => wp_create_nonce('wp_rest'),
-                ]);
-            }
-            $style_path = $plugin_dir . '/src/admin/styles/editor.css';
-            if (file_exists($style_path)) {
-                wp_enqueue_style(
-                    'ap-widget-editor-style',
-                    plugins_url('src/admin/styles/editor.css', ARTPULSE_PLUGIN_FILE),
-                    [],
-                    filemtime($style_path)
-                );
-            }
-        }
 
         if (
             ($screen->base === 'toplevel_page_artpulse-settings' && ($_GET['tab'] ?? '') === 'import_export') ||

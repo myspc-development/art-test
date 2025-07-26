@@ -93,8 +93,8 @@ status: complete
 - [x] Add PHPUnit tests for new endpoints (RSVP, follow)
 - [x] Write Jest/Cypress tests for React widgets
 
-### 📘 Documentation
-- [x] Update Widget Editor Guide to include new widgets
+-### 📘 Documentation
+- [x] Update Dashboard Builder Guide to include new widgets
 - [x] Add user help tooltips to each widget (optional)
 
 ---
@@ -114,14 +114,14 @@ status: complete
   route class.
 - **Widget integration:** Build the React widgets under `assets/js/widgets/` and
   register them with `DashboardWidgetRegistry::register()`. They will then be
-  available in the admin Widget Editor.
+  available in the Dashboard Builder.
 - **Dashboard layout:** The file `assets/js/user-dashboard-layout.js` already
   initializes SortableJS. Layout changes are saved via the
   `/wp-json/artpulse/v1/ap_dashboard_layout` endpoint as described in
   `docs/user-dashboard-customization.md`.
 - **Testing:** Extend PHPUnit tests under `tests/` for new endpoints and add
   Jest/Cypress tests for the widgets.
-- **Documentation:** Update the Admin Widget Editor Guide and User Guide whenever
+- **Documentation:** Update the Dashboard Builder guide and User Guide whenever
   new widgets or endpoints are added.
 
 ## Completion Plan

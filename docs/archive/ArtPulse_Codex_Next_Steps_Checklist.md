@@ -49,7 +49,7 @@ npm install leaflet react-leaflet @testing-library/react
 
 ## 🎯 3. Widget Registration in WordPress
 - [x] Register new widgets with WP dashboard
-- [x] Expose widget configuration in Admin Widget Editor
+- [x] Expose widget configuration in the Dashboard Builder
 - [x] Add visibility toggles and role targeting
 
 ---
@@ -80,7 +80,7 @@ npm install leaflet react-leaflet @testing-library/react
 ## 📘 7. Developer Docs
 - [x] Document each widget component (`.md` or JSDoc)
 - [x] Include usage examples, props, data format, REST endpoints
-- [x] Update `README.md` and `Widget Editor Guide` with new capabilities
+- [x] Update `README.md` and Dashboard Builder docs with new capabilities
 For more information on widgets see [Widget Registry Reference](widgets/widget-registry-reference.md) and [Widget Specification](widgets/widget-specification.md). Analytics guidelines live in the [Admin & Analytics Codex](guides/developer/admin-analytics-codex.md).
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
