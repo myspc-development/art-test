@@ -25,6 +25,7 @@ use ArtPulse\Core\ArtworkWooSync;
 use ArtPulse\Core\Activator;
 use ArtPulse\Admin\EnqueueAssets;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Dashboard\WidgetVisibilityManager;
 
 // Suppress deprecated notices if WP_DEBUG enabled
 if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -66,6 +67,7 @@ require_once plugin_dir_path(__FILE__) . 'vendor/yahnis-elsts/plugin-update-chec
 require_once __DIR__ . '/includes/update-checker.php';
 
 Plugin::register();
+WidgetVisibilityManager::register();
 
 /**
  * Ensure core database tables exist on activation.

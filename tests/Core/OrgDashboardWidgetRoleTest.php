@@ -40,7 +40,7 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
 
 require_once __DIR__ . '/../../src/Core/DashboardController.php';
-require_once __DIR__ . '/../../includes/roles.php';
+require_once __DIR__ . '/../../src/Dashboard/WidgetVisibilityManager.php';
 
 class OrgDashboardWidgetRoleTest extends TestCase {
     public static array $current_roles = [];
@@ -70,7 +70,7 @@ class OrgDashboardWidgetRoleTest extends TestCase {
 
     public function test_analytics_widget_removed_for_editor(): void {
         self::$current_roles = ['org_editor'];
-        \ap_dashboard_widget_visibility_filter();
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $this->assertSame('artpulse_analytics_widget', self::$removed[0][0]);
         $this->assertSame('Analytics are available to organization managers only.', self::$meta['ap_org_editor_notice_pending']);
     }
@@ -78,7 +78,7 @@ class OrgDashboardWidgetRoleTest extends TestCase {
     public function test_org_viewer_has_no_analytics_capability(): void {
         self::$current_roles = ['org_viewer'];
         $this->assertFalse(\current_user_can('view_analytics'));
-        \ap_dashboard_widget_visibility_filter();
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $this->assertSame('artpulse_analytics_widget', self::$removed[0][0]);
         $this->assertEmpty(self::$notice);
     }
@@ -88,7 +88,7 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         self::$current_roles = ['org_viewer'];
         $wp_meta_boxes = ['dashboard' => []];
         ob_start();
-        \ap_dashboard_empty_state_notice();
+        \ArtPulse\Dashboard\WidgetVisibilityManager::render_empty_state_notice();
         $html = ob_get_clean();
         $this->assertStringContainsString('No dashboard content available', $html);
     }
@@ -101,9 +101,25 @@ class OrgDashboardWidgetRoleTest extends TestCase {
             return $rules;
         });
         self::$current_roles = ['org_viewer'];
-        \ap_dashboard_widget_visibility_filter();
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $ids = array_column(self::$removed, 0);
         $this->assertContains('custom_widget', $ids);
+    }
+
+    public function test_editor_notice_can_be_dismissed(): void {
+        self::$current_roles = ['org_editor'];
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
+        $this->assertArrayHasKey('ap_org_editor_notice_pending', self::$meta);
+
+        $_GET['ap_dismiss_editor_notice'] = '1';
+        \ArtPulse\Dashboard\WidgetVisibilityManager::handle_editor_notice_dismiss();
+        unset($_GET['ap_dismiss_editor_notice']);
+
+        $this->assertSame(1, self::$meta['ap_dismiss_org_editor_notice']);
+        $this->assertArrayNotHasKey('ap_org_editor_notice_pending', self::$meta);
+
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
+        $this->assertArrayNotHasKey('ap_org_editor_notice_pending', self::$meta);
     }
 }
 }

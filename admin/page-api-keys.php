@@ -37,7 +37,7 @@ function ap_render_api_keys_page()
             'created_at' => current_time('mysql'),
         ]);
         $msg = sprintf(__('New API key generated: %s', 'artpulse'), esc_html($key));
-        ap_add_admin_notice($msg);
+        \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice($msg);
     }
 
     // Delete key
@@ -47,7 +47,7 @@ function ap_render_api_keys_page()
         check_admin_referer('ap_delete_api_key_' . $_POST['id'])
     ) {
         $wpdb->delete($table, ['id' => absint($_POST['id'])]);
-        ap_add_admin_notice(__('API key deleted.', 'artpulse'));
+        \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('API key deleted.', 'artpulse'));
     }
 
     // View scopes
@@ -58,7 +58,7 @@ function ap_render_api_keys_page()
         $sql  = $wpdb->prepare("SELECT scopes FROM $table WHERE key_hash = %s", $hash);
         $view_scopes = $wpdb->get_var($sql);
         if ($view_scopes === null) {
-            ap_add_admin_notice(__('Key not found.', 'artpulse'), 'error');
+            \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('Key not found.', 'artpulse'), 'error');
             $view_scopes = '';
         }
     }
