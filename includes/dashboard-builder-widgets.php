@@ -104,7 +104,9 @@ function ap_register_dashboard_builder_widget_map(): void {
                 'file'  => $basename,
             ]);
             $unregistered_files[] = $basename;
-            error_log('Dashboard widget file not registered: ' . $basename);
+            if (defined('WIDGET_DEBUG_MODE') && WIDGET_DEBUG_MODE) {
+                error_log('Dashboard widget file not registered: ' . $basename);
+            }
         }
     }
 

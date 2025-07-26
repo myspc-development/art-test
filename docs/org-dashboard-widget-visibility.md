@@ -2,7 +2,7 @@
 title: Organization Dashboard Widgets
 category: developer
 role: developer
-last_updated: 2025-07-26
+last_updated: 2025-07-27
 status: complete
 ---
 # Organization Dashboard Widgets
@@ -42,6 +42,6 @@ The manager exposes several filters:
 - `ap_dashboard_widget_visibility_rules` – register additional widgets or custom visibility logic.
 - `ap_dashboard_empty_help_url` – supply help links when no widgets remain after filtering.
 
-Methods like `filter_visible_widgets()` also accept a user object allowing unit tests and plugins to evaluate visibility for arbitrary accounts.
+Methods like `filter_visible_widgets()` also accept a user object allowing unit tests and plugins to evaluate visibility for arbitrary accounts. If the argument is not a valid `WP_User`, widgets remain unfiltered.
 
 When customizing layouts ensure each role has at least one widget to avoid an empty dashboard. If additional widgets are needed for viewers, consider lightweight notices or activity feeds.

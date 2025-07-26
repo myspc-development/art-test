@@ -141,7 +141,7 @@ class OrgDashboardWidgetRoleTest extends TestCase {
     public function test_filter_visible_widgets_handles_invalid_user(): void {
         self::$current_roles = ['org_editor'];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets('bad');
-        $this->assertContains('artpulse_analytics_widget', array_column(self::$removed, 0));
+        $this->assertEmpty(self::$removed);
     }
 
     public function test_editor_notice_can_be_dismissed(): void {

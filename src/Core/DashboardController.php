@@ -8,6 +8,8 @@ class DashboardController {
     /**
      * Default widgets available to each role.
      *
+     * Widget IDs must match those registered via {@see DashboardWidgetRegistry}.
+     *
      * @var array<string,string[]>
      */
     private static array $role_widgets = [
