@@ -39,6 +39,20 @@ if (current_user_can('manage_options')): ?>
   </div>
 <?php endif; ?>
 
+<?php if (current_user_can('manage_options')): ?>
+  <div class="notice notice-info">
+    <p><strong>🧩 DEBUG: Rendering Widget Diagnostic</strong></p>
+
+    <p><strong>Current User Role:</strong><br>
+    <?= esc_html(\ArtPulse\Core\DashboardController::get_role(get_current_user_id())) ?></p>
+
+    <p><strong>📋 Active Layout:</strong></p>
+    <pre><?php print_r(\ArtPulse\Core\DashboardController::get_user_dashboard_layout(get_current_user_id())); ?></pre>
+
+    <p><strong>🗂️ Registered Widgets:</strong></p>
+    <pre><?php print_r(\ArtPulse\Core\DashboardWidgetRegistry::get_all()); ?></pre>
+  </div>
+<?php endif; ?>
 <?php
 $user_id = get_current_user_id();
 if (current_user_can('manage_options') && isset($_GET['ap_preview_user'])) {
