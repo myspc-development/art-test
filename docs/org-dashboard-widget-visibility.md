@@ -11,10 +11,10 @@ The dashboard displays a common set of widgets for all organization sub‑roles.
 
 | Role | Default Widgets |
 |------|-----------------|
-| organization | site_stats, webhooks, rsvp_stats, org_analytics, donor_activity, notifications |
-| org_manager | site_stats, webhooks, rsvp_stats, org_analytics, donor_activity, notifications |
-| org_editor  | site_stats, webhooks, rsvp_stats, org_analytics*, donor_activity, notifications |
-| org_viewer  | site_stats, webhooks, rsvp_stats, donor_activity, notifications |
+| organization | site_stats, webhooks, rsvp_stats, artpulse_analytics_widget, ap_donor_activity, notifications |
+| org_manager | site_stats, webhooks, rsvp_stats, artpulse_analytics_widget, ap_donor_activity, notifications |
+| org_editor  | site_stats, webhooks, rsvp_stats, artpulse_analytics_widget*, ap_donor_activity, notifications |
+| org_viewer  | site_stats, webhooks, rsvp_stats, ap_donor_activity, notifications |
 | administrator | *(no default widgets)* |
 
 `*` The `org_editor` role inherits the analytics capability but the widget is removed during `wp_dashboard_setup` by `WidgetVisibilityManager::filter_visible_widgets()`. Viewers lack the capability entirely so the widget never registers.

@@ -118,7 +118,7 @@
         "status": "registered",
         "unguarded": true
     },
-    "donor_activity": {
+    "ap_donor_activity": {
         "file": "widgets/DonorActivityWidget.php",
         "roles": [
             "organization"
@@ -126,7 +126,7 @@
         "status": "registered",
         "unguarded": true
     },
-    "org_analytics": {
+    "artpulse_analytics_widget": {
         "file": "widgets/OrgAnalyticsWidget.php",
         "roles": [
             "organization"
