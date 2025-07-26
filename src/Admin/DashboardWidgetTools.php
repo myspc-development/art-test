@@ -10,6 +10,26 @@ class DashboardWidgetTools
 {
     public static function get_role_widgets(): array
     {
+        $member_defs = DashboardWidgetRegistry::get_widgets_by_role('member');
+        $member = [];
+        foreach ($member_defs as $id => $def) {
+            $item = ['id' => $id];
+            if (!empty($def['callback'])) {
+                $item['callback'] = $def['callback'];
+            }
+            $member[] = $item;
+        }
+
+        $org_defs = DashboardWidgetRegistry::get_widgets_by_role('organization');
+        $organization = [];
+        foreach ($org_defs as $id => $def) {
+            $item = ['id' => $id];
+            if (!empty($def['callback'])) {
+                $item['callback'] = $def['callback'];
+            }
+            $organization[] = $item;
+        }
+
         return [
             'artist' => [
                 [
@@ -21,8 +41,8 @@ class DashboardWidgetTools
                     'rest' => 'artpulse/v1/dashboard/messages',
                 ],
             ],
-            'organization' => [],
-            'member' => [],
+            'organization' => $organization,
+            'member' => $member,
         ];
     }
 
