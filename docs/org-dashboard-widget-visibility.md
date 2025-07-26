@@ -2,7 +2,7 @@
 title: Organization Dashboard Widgets
 category: developer
 role: developer
-last_updated: 2025-07-26
+last_updated: 2025-09-02
 status: complete
 ---
 # Organization Dashboard Widgets
@@ -19,6 +19,18 @@ The dashboard displays a common set of widgets for all organization sub‑roles.
 
 `*` The `org_editor` role inherits the analytics capability but the widget is removed during `wp_dashboard_setup` by `ap_dashboard_widget_visibility_filter()`. Viewers lack the capability entirely so the widget never registers.
 
-Future sub‑roles can hook into `ap_dashboard_widget_visibility_rules` to modify widget visibility. Ensure each role still receives at least one widget to avoid an empty dashboard.
+Plugins can hook into `ap_dashboard_widget_visibility_rules` to modify widget visibility or register new widgets. Each rule key is the widget id and supports `capability` and `exclude_roles` options.
+
+```php
+add_filter('ap_dashboard_widget_visibility_rules', function (array $rules) {
+    $rules['myplugin_stats_widget'] = [
+        'capability'    => 'view_my_stats',
+        'exclude_roles' => ['org_viewer'],
+    ];
+    return $rules;
+});
+```
+
+Ensure every role still receives at least one widget or the dashboard will display a "no dashboard content available" message. Provide help via the `ap_dashboard_empty_help_url` filter when needed.
 
 When customizing layouts ensure each role has at least one widget to avoid an empty dashboard. If additional widgets are needed for viewers, consider lightweight notices or activity feeds.
