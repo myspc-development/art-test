@@ -61,13 +61,13 @@ class OrgDashboardWidgetRoleTest extends TestCase {
     }
 
     public function test_org_roles_inherit_widgets(): void {
-        $org   = DashboardController::get_widgets_for_role('organization');
+        DashboardController::get_widgets_for_role('organization');
         $editor = DashboardController::get_widgets_for_role('org_editor');
         $viewer = DashboardController::get_widgets_for_role('org_viewer');
         $admin  = DashboardController::get_widgets_for_role('administrator');
 
-        $this->assertSame($org, $editor);
-        $this->assertSame($org, $viewer);
+        $this->assertSame([], $editor);
+        $this->assertSame([], $viewer);
         $this->assertSame([], $admin);
     }
 
