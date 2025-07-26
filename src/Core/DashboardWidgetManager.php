@@ -12,7 +12,107 @@ class DashboardWidgetManager
 {
     public static function register(): void
     {
-        // Placeholder for future hooks.
+        // Initialize the registry on `init` so widgets can hook in early.
+        add_action('init', [self::class, 'bootstrap']);
+
+        // Allow external code to include widget files before registration.
+        add_action('artpulse_register_dashboard_widget', [self::class, 'load_widget_files'], 0);
+
+        // AJAX handlers for saving layouts.
+        add_action('wp_ajax_ap_save_user_layout', [self::class, 'ajax_save_user_layout']);
+        add_action('wp_ajax_ap_save_role_layout', [self::class, 'ajax_save_role_layout']);
+
+        // Filters to retrieve layouts.
+        add_filter('artpulse_dashboard_user_layout', [self::class, 'getUserLayout'], 10, 2);
+        add_filter('artpulse_dashboard_role_layout', [self::class, 'getRoleLayout'], 10, 1);
+    }
+
+    /**
+     * Bootstraps the widget registry and fires the registration hook.
+     */
+    public static function bootstrap(): void
+    {
+        DashboardWidgetRegistry::init();
+    }
+
+    /**
+     * Include widget files from the manifest.
+     */
+    public static function load_widget_files(): void
+    {
+        $manifest = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'widget-manifest.json';
+        if (!file_exists($manifest)) {
+            return;
+        }
+
+        $widgets = json_decode(file_get_contents($manifest), true);
+        if (!is_array($widgets)) {
+            return;
+        }
+
+        foreach ($widgets as $info) {
+            if (($info['status'] ?? '') !== 'registered' || empty($info['file'])) {
+                continue;
+            }
+
+            $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . $info['file'];
+            if (file_exists($path)) {
+                include_once $path;
+            }
+        }
+    }
+
+    /**
+     * Handle the user layout save AJAX request.
+     */
+    public static function ajax_save_user_layout(): void
+    {
+        check_ajax_referer('ap_save_user_layout', 'nonce');
+
+        $layout = null;
+        if (isset($_POST['layout'])) {
+            $raw = is_string($_POST['layout']) ? stripslashes($_POST['layout']) : $_POST['layout'];
+            $layout = is_string($raw) ? json_decode($raw, true) : $raw;
+        } else {
+            $body = json_decode(file_get_contents('php://input'), true);
+            if (is_array($body)) {
+                $layout = $body['layout'] ?? null;
+            }
+        }
+
+        if (!is_array($layout)) {
+            wp_send_json_error(['message' => 'Invalid data']);
+        }
+
+        $uid = get_current_user_id();
+        if ($uid) {
+            self::saveUserLayout($uid, $layout);
+            wp_send_json_success(['message' => 'Layout saved']);
+        }
+
+        wp_send_json_error(['message' => 'Invalid user']);
+    }
+
+    /**
+     * Handle the role layout save AJAX request.
+     */
+    public static function ajax_save_role_layout(): void
+    {
+        check_ajax_referer('ap_save_role_layout', 'nonce');
+
+        $role = sanitize_key($_POST['role'] ?? '');
+        if (!$role) {
+            wp_send_json_error(['message' => 'Invalid role']);
+        }
+
+        $layout = $_POST['layout'] ?? [];
+        if (is_string($layout)) {
+            $layout = json_decode($layout, true);
+        }
+        $layout = is_array($layout) ? $layout : [];
+
+        self::saveRoleLayout($role, $layout);
+        wp_send_json_success(['saved' => true]);
     }
 
     public static function registerWidget(
