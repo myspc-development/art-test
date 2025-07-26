@@ -25,8 +25,6 @@ class WidgetVisibilityManager
     {
         add_action('wp_dashboard_setup', [self::class, 'filter_visible_widgets'], 99);
         add_action('admin_notices', [self::class, 'render_admin_notices']);
-        add_action('admin_init', [self::class, 'handle_editor_notice_dismiss']);
-        add_action('admin_notices', [self::class, 'render_org_editor_notice']);
         add_action('admin_notices', [self::class, 'render_empty_state_notice'], 100);
     }
 
@@ -83,14 +81,7 @@ class WidgetVisibilityManager
     {
         $rules = [
             'artpulse_analytics_widget' => [
-                'capability'    => 'view_analytics',
-                'exclude_roles' => [
-                    'org_editor' => [
-                        'notice' => __('Analytics are available to organization managers only.', 'artpulse'),
-                        'type'   => 'info',
-                    ],
-                    'org_viewer',
-                ],
+                'capability' => 'view_analytics',
             ],
         ];
 
@@ -147,13 +138,7 @@ class WidgetVisibilityManager
                     $msg  = $notice_roles[$role]['notice'] ?? '';
                     $type = $notice_roles[$role]['type'] ?? 'info';
                     if ($msg) {
-                        if ($role === 'org_editor') {
-                            if (!get_user_meta($current_user->ID, 'ap_dismiss_org_editor_notice', true)) {
-                                update_user_meta($current_user->ID, 'ap_org_editor_notice_pending', $msg);
-                            }
-                        } else {
-                            self::add_admin_notice($msg, $type);
-                        }
+                        self::add_admin_notice($msg, $type);
                     }
                 } elseif (in_array($role, (array) $exclude, true)) {
                     $hide = true;
@@ -167,46 +152,6 @@ class WidgetVisibilityManager
         }
     }
 
-    /**
-     * Process dismissal of the org editor notice.
-     *
-     * @return void
-     */
-    public static function handle_editor_notice_dismiss(): void
-    {
-        if (isset($_GET['ap_dismiss_editor_notice'])) {
-            update_user_meta(get_current_user_id(), 'ap_dismiss_org_editor_notice', 1);
-            delete_user_meta(get_current_user_id(), 'ap_org_editor_notice_pending');
-            wp_safe_redirect(remove_query_arg('ap_dismiss_editor_notice'));
-            exit;
-        }
-    }
-
-    /**
-     * Render the temporary notice for org editors.
-     *
-     * @param object|null $screen Optional screen context.
-     * @param int|null    $user_id Optional user ID.
-     * @return void
-     */
-    public static function render_org_editor_notice($screen = null, ?int $user_id = null): void
-    {
-        $screen = $screen ?: (function_exists('get_current_screen') ? get_current_screen() : null);
-        if (!$screen || $screen->id !== 'dashboard') {
-            return;
-        }
-
-        $user_id = $user_id ?? get_current_user_id();
-        $msg     = get_user_meta($user_id, 'ap_org_editor_notice_pending', true);
-        if (!$msg || get_user_meta($user_id, 'ap_dismiss_org_editor_notice', true)) {
-            return;
-        }
-
-        $dismiss = add_query_arg('ap_dismiss_editor_notice', '1');
-        echo '<div class="notice notice-info is-dismissible"><p>' . esc_html($msg) .
-            ' <a href="' . esc_url($dismiss) . '">' . esc_html__('Dismiss', 'artpulse') . '</a></p></div>';
-        delete_user_meta($user_id, 'ap_org_editor_notice_pending');
-    }
 
     /**
      * Display a message if no widgets remain after filtering.
