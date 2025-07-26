@@ -193,7 +193,7 @@ class EnqueueAssets {
                 'papaparse',
                 plugins_url('assets/libs/papaparse/papaparse.min.js', ARTPULSE_PLUGIN_FILE),
                 [],
-                null,
+                '5.5.3',
                 true
             );
             $import_path = $plugin_dir . '/assets/js/ap-csv-import.js';
