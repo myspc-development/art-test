@@ -2,7 +2,7 @@
 title: Organization Dashboard Widgets
 category: developer
 role: developer
-last_updated: 2025-09-02
+last_updated: 2025-07-26
 status: complete
 ---
 # Organization Dashboard Widgets
@@ -34,5 +34,14 @@ add_filter('ap_dashboard_widget_visibility_rules', function (array $rules) {
 Ensure every role still receives at least one widget or the dashboard will display a "no dashboard content available" message. Provide help via the `ap_dashboard_empty_help_url` filter when needed.
 
 Widget visibility is managed by `ArtPulse\Dashboard\WidgetVisibilityManager`. Developers may subclass this manager or replace it entirely to customize behavior. Overriding `get_visibility_rules()` allows complete control over which widgets appear for each role.
+
+## Extensibility
+
+The manager exposes several filters:
+
+- `ap_dashboard_widget_visibility_rules` – register additional widgets or custom visibility logic.
+- `ap_dashboard_empty_help_url` – supply help links when no widgets remain after filtering.
+
+Methods like `filter_visible_widgets()` also accept a user object allowing unit tests and plugins to evaluate visibility for arbitrary accounts.
 
 When customizing layouts ensure each role has at least one widget to avoid an empty dashboard. If additional widgets are needed for viewers, consider lightweight notices or activity feeds.
