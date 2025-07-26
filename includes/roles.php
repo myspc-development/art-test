@@ -52,16 +52,29 @@ add_action('admin_notices', function () {
     delete_transient('ap_admin_notices');
 });
 
-add_action('wp_dashboard_setup', function () {
+/**
+ * Filter dashboard widgets based on role capabilities.
+ *
+ * Org editors technically have the `view_analytics` capability but the
+ * analytics widget is removed so managers remain responsible for metrics.
+ * Viewers lack the capability entirely. This helper centralizes the logic
+ * so tests can verify widget visibility per role.
+ */
+function ap_dashboard_widget_visibility_filter(): void {
     $current_user = wp_get_current_user();
-    if (in_array('org_editor', (array) $current_user->roles, true)) {
-        // Org editors have the capability to view analytics, but the full
-        // metrics widget clutters their workflow. We remove it so only
-        // managers handle performance reviews.
+    $roles        = (array) $current_user->roles;
+
+    if (in_array('org_editor', $roles, true)) {
         remove_meta_box('artpulse_analytics_widget', 'dashboard', 'normal');
         ap_add_admin_notice(
             __('Analytics are available to organization managers only.', 'artpulse'),
             'info'
         );
+        return;
     }
-}, 99);
+
+    if (!current_user_can('view_analytics')) {
+        remove_meta_box('artpulse_analytics_widget', 'dashboard', 'normal');
+    }
+}
+add_action('wp_dashboard_setup', 'ap_dashboard_widget_visibility_filter', 99);
