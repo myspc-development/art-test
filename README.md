@@ -35,7 +35,7 @@ See the [Changelog](docs/CHANGELOG.md) for release notes.
 [Webhook Automations Codex](docs/webhook-automation-codex.md) describes webhook management and payload delivery.
 [Dashboard Menu Codex](docs/dashboard-menu-codex.md) explains how the sidebar menu is generated.
 [Widget Settings Codex](docs/widget-settings-codex.md) describes widget schemas and per-user storage.
-[Widget Editor Codex Instructions](docs/Widget_Editor_Codex_Instructions.md) details how to document new widgets and update layout examples.
+[Dashboard Builder Guide](docs/widgets/widget-matrix-reference.md) explains how to configure role-based dashboards. The old Widget Editor documentation has been removed.
 [User Dashboard Customization](docs/guides/user/dashboard-customization.md) explains per-user layout storage and REST endpoints.
 [Multi-org Roles & Permissions](docs/multi-org-roles-permissions.md) covers assigning members to multiple organizations.
 [Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.

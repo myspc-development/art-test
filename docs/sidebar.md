@@ -11,7 +11,7 @@ status: complete
   * [Overview](admin/README.md)
   * [admin-overview.md](admin/admin-overview.md)
   * [admin-settings-ui.md](admin/admin-settings-ui.md)
-  * [admin-widget-editor-guide.md](admin/admin-widget-editor-guide.md) *(deprecated)*
+  * *(Widget Editor guide removed; see Dashboard Builder docs)*
   * [plugin-installation-updates.md](admin/plugin-installation-updates.md)
 * **Api**
   * [Overview](api/README.md)
@@ -35,7 +35,7 @@ status: complete
   * [Overview](developer/README.md)
   * [react-forms-codex.md](developer/react-forms-codex.md)
   * [shortcodes-guide.md](developer/shortcodes-guide.md)
-  * [widget-editor-developer-guide.md](developer/widget-editor-developer-guide.md) *(deprecated)*
+  * *(Widget Editor developer guide archived)*
 * **Guides**
   * [Overview](guides/README.md)
 * **Internal**
@@ -59,7 +59,7 @@ status: complete
   * [Overview](qa/README.md)
   * [End_to_End_Testing_Guide.md](qa/End_to_End_Testing_Guide.md)
   * [testing-strategy.md](qa/testing-strategy.md)
-  * [widget-editor-testing-checklist.md](qa/widget-editor-testing-checklist.md) *(deprecated)*
+  * *(Widget Editor testing checklist archived)*
   * [widget-qa-checklist.md](qa/widget-qa-checklist.md)
 * **Specs**
   * [Overview](specs/README.md)

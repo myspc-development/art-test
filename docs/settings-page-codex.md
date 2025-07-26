@@ -17,7 +17,7 @@ Managers call `SettingsRegistry::register_tab()` early in the plugin bootstrappi
 ```php
 use ArtPulse\Admin\SettingsRegistry;
 
-SettingsRegistry::register_tab( 'widgets', __( 'Widget Editor', 'artpulse' ) );
+SettingsRegistry::register_tab( 'widgets', __( 'Dashboard Builder', 'artpulse' ) );
 ```
 
 ## Registering Fields
@@ -25,8 +25,8 @@ SettingsRegistry::register_tab( 'widgets', __( 'Widget Editor', 'artpulse' ) );
 Individual options are added under a tab with `SettingsRegistry::register_field()`. The field configuration includes the label, description and input type.
 
 ```php
-SettingsRegistry::register_field( 'widgets', 'enable_editor', [
-    'label' => __( 'Enable Widget Editor', 'artpulse' ),
+SettingsRegistry::register_field( 'widgets', 'enable_builder', [
+    'label' => __( 'Enable Dashboard Builder', 'artpulse' ),
     'type'  => 'checkbox',
 ] );
 ```
