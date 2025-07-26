@@ -31,6 +31,12 @@ DashboardWidgetRegistry::register(
 ## Export and Import
 Call `UserLayoutManager::export_layout( $role )` to get JSON. Use `UserLayoutManager::import_layout( $role, $json )` to load it.
 
+## Rendering Dashboards
+Use `DashboardWidgetTools::render_dashboard_widgets()` to output the dashboard
+in a PHP template. The optional `$role` argument loads that role's layout
+instead of the current user's saved order. Widget previews within the editor can
+be generated with `DashboardWidgetTools::render_widget_preview( $widget_id )`.
+
 ## Messaging
 
 Direct messages are managed via REST endpoints registered by `DirectMessages`.

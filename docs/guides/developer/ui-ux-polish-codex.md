@@ -67,6 +67,16 @@ dashboard:
 - Widget cards display a hamburger-style drag handle icon to signal that they
   can be reordered via drag and drop.
 
+### Rendering Functions
+
+Dashboard output can be generated programmatically. Call
+`DashboardWidgetTools::render_dashboard_widgets( $role )` within a template or
+shortcode to display the widgets for the current user. Passing a role slug will
+render that role's layout instead of the current user's saved order. Individual
+widget previews in the editor are produced by
+`DashboardWidgetTools::render_widget_preview( $id )` which returns the widget
+HTML for use in modals or list views.
+
 ## 2. White‑Labeling
 
 Organizations can brand the dashboard and emails. A **Branding** tab under **ArtPulse → Settings** allows admins to upload a logo, choose primary and secondary colors and set email footer details. These settings are stored in site options and injected as CSS variables when the dashboard loads. Email templates swap in the logo and colors so that outbound notifications match the chosen branding. Filters like `artpulse_branding_logo_url` let developers override values.
