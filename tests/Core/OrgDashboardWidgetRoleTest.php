@@ -10,6 +10,9 @@ namespace {
         return (object)['roles' => \ArtPulse\Core\Tests\OrgDashboardWidgetRoleTest::$current_roles];
     }
     function current_user_can($cap) {
+        return user_can(wp_get_current_user(), $cap);
+    }
+    function user_can($user, $cap) {
         if ($cap === 'view_analytics') {
             return in_array('org_editor', \ArtPulse\Core\Tests\OrgDashboardWidgetRoleTest::$current_roles, true)
                 || in_array('org_manager', \ArtPulse\Core\Tests\OrgDashboardWidgetRoleTest::$current_roles, true);
@@ -104,6 +107,35 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $ids = array_column(self::$removed, 0);
         $this->assertContains('custom_widget', $ids);
+    }
+
+    public function test_multiple_roles_evaluated(): void {
+        self::$current_roles = ['org_editor', 'custom'];
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
+        $ids = array_column(self::$removed, 0);
+        $this->assertContains('artpulse_analytics_widget', $ids);
+    }
+
+    public function test_unknown_role_leaves_widgets(): void {
+        self::$current_roles = ['stranger'];
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
+        $this->assertEmpty(self::$removed);
+    }
+
+    public function test_empty_help_url_filter_outputs_link(): void {
+        tests_add_filter('ap_dashboard_empty_help_url', fn() => 'https://example.com/help');
+        global $wp_meta_boxes;
+        $wp_meta_boxes = ['dashboard' => []];
+        ob_start();
+        \ArtPulse\Dashboard\WidgetVisibilityManager::render_empty_state_notice();
+        $html = ob_get_clean();
+        $this->assertStringContainsString('https://example.com/help', $html);
+    }
+
+    public function test_filter_visible_widgets_accepts_user_param(): void {
+        $user = (object) ['ID' => 5, 'roles' => ['org_editor']];
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets($user);
+        $this->assertContains('artpulse_analytics_widget', array_column(self::$removed, 0));
     }
 
     public function test_editor_notice_can_be_dismissed(): void {

@@ -8,10 +8,18 @@ if (!defined('ABSPATH')) {
 /**
  * Handles dashboard widget visibility and related notices.
  */
+/**
+ * Dashboard widget visibility manager.
+ *
+ * Public methods are designed for unit testing. Passing the current user or
+ * screen context allows pure execution in isolation.
+ */
 class WidgetVisibilityManager
 {
     /**
      * Register WordPress hooks for widget visibility and admin notices.
+     *
+     * @return void
      */
     public static function register(): void
     {
@@ -24,6 +32,10 @@ class WidgetVisibilityManager
 
     /**
      * Queue a transient admin notice.
+     *
+     * @param string $message Notice content.
+     * @param string $type    Notice type (success, error, info).
+     * @return void
      */
     public static function add_admin_notice(string $message, string $type = 'success'): void
     {
@@ -37,6 +49,8 @@ class WidgetVisibilityManager
 
     /**
      * Output any queued admin notices.
+     *
+     * @return void
      */
     public static function render_admin_notices(): void
     {
@@ -56,6 +70,14 @@ class WidgetVisibilityManager
 
     /**
      * Retrieve visibility rules for dashboard widgets.
+     *
+     * Each array key is a widget id. The value may include:
+     * - capability: required capability to view the widget.
+     * - exclude_roles: list or map of roles that should not see the widget. When
+     *   using an associative array the value may include `notice` and `type` for
+     *   per-role admin messages.
+     *
+     * @return array Filtered visibility configuration.
      */
     public static function get_visibility_rules(): array
     {
@@ -76,16 +98,24 @@ class WidgetVisibilityManager
          * Allow plugins to register additional visibility rules.
          *
          * @param array $rules Default visibility configuration.
+         * @return array Filtered rules.
          */
         return apply_filters('ap_dashboard_widget_visibility_rules', $rules);
     }
 
     /**
      * Remove widgets hidden for the current user and track state.
+     *
+     * Passing a \WP_User instance allows unit testing without relying on the
+     * global user state.
+     *
+     * @param \WP_User|null $user Optional user to evaluate. Defaults to the
+     * current user.
+     * @return void
      */
-    public static function filter_visible_widgets(): void
+    public static function filter_visible_widgets(?\WP_User $user = null): void
     {
-        $current_user = wp_get_current_user();
+        $current_user = $user ?: wp_get_current_user();
         $roles        = (array) $current_user->roles;
 
         global $ap_hidden_widgets;
@@ -99,7 +129,7 @@ class WidgetVisibilityManager
             $notice_roles = is_array($exclude) ? $exclude : [];
 
             $hide = false;
-            if ($cap && !current_user_can($cap)) {
+            if ($cap && !user_can($current_user, $cap)) {
                 $hide = true;
             }
 
@@ -131,6 +161,8 @@ class WidgetVisibilityManager
 
     /**
      * Process dismissal of the org editor notice.
+     *
+     * @return void
      */
     public static function handle_editor_notice_dismiss(): void
     {
@@ -144,15 +176,19 @@ class WidgetVisibilityManager
 
     /**
      * Render the temporary notice for org editors.
+     *
+     * @param object|null $screen Optional screen context.
+     * @param int|null    $user_id Optional user ID.
+     * @return void
      */
-    public static function render_org_editor_notice(): void
+    public static function render_org_editor_notice($screen = null, ?int $user_id = null): void
     {
-        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        $screen = $screen ?: (function_exists('get_current_screen') ? get_current_screen() : null);
         if (!$screen || $screen->id !== 'dashboard') {
             return;
         }
 
-        $user_id = get_current_user_id();
+        $user_id = $user_id ?? get_current_user_id();
         $msg     = get_user_meta($user_id, 'ap_org_editor_notice_pending', true);
         if (!$msg || get_user_meta($user_id, 'ap_dismiss_org_editor_notice', true)) {
             return;
@@ -166,10 +202,13 @@ class WidgetVisibilityManager
 
     /**
      * Display a message if no widgets remain after filtering.
+     *
+     * @param object|null $screen Optional screen context.
+     * @return void
      */
-    public static function render_empty_state_notice(): void
+    public static function render_empty_state_notice($screen = null): void
     {
-        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        $screen = $screen ?: (function_exists('get_current_screen') ? get_current_screen() : null);
         if (!$screen || $screen->id !== 'dashboard') {
             return;
         }
@@ -185,6 +224,11 @@ class WidgetVisibilityManager
         }
 
         if ($count === 0) {
+            /**
+             * Provide a help URL when the dashboard is empty.
+             *
+             * @param string $url Default empty string.
+             */
             $url = apply_filters('ap_dashboard_empty_help_url', '');
             echo '<div class="notice notice-info"><p>' .
                 esc_html__('No dashboard content available.', 'artpulse');
