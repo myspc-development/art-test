@@ -45,6 +45,9 @@ use ArtPulse\Core\PortfolioSyncLogger;
 use ArtPulse\Core\OrgRoleMetaMigration;
 use ArtPulse\Rest\NearbyEventsController;
 use ArtPulse\Rest\EventListController;
+use ArtPulse\Admin\Widgets\WebhooksWidget;
+use ArtPulse\Admin\Widgets\WidgetManifestPanelWidget;
+use ArtPulse\Admin\Widgets\WidgetStatusPanelWidget;
 
 class Plugin
 {
@@ -212,6 +215,9 @@ class Plugin
         \ArtPulse\Core\CapabilitiesManager::register();
         \ArtPulse\Curator\CuratorManager::register();
         DashboardWidgetRegistry::init();
+        WebhooksWidget::register();
+        WidgetManifestPanelWidget::register();
+        WidgetStatusPanelWidget::register();
         DashboardWidgetManager::register();
         \ArtPulse\Core\AdminAccessManager::register();
         \ArtPulse\Core\LoginRedirectManager::register();

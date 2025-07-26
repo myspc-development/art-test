@@ -50,6 +50,7 @@ class DashboardWidgetRegistry {
 
         // Callback must be valid to render the widget.
         if ( ! is_callable( $callback ) ) {
+            error_log( 'Invalid dashboard widget callback for ID ' . $id );
             $callback = [ self::class, 'render_widget_fallback' ];
         }
 
