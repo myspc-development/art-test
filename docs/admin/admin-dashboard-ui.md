@@ -14,7 +14,7 @@ This guide details how administrators configure dashboard layouts for each user 
 
 ## Role Based Configuration
 
-Dashboard layouts are stored per role in the `ap_dashboard_widget_config` option. When the editor loads, it fetches the configuration for the selected role via `GET /wp-json/artpulse/v1/layout/{role}`. If none is found, it falls back to the default layout defined in the plugin.
+Dashboard layouts are stored per role in the `artpulse_dashboard_layouts` option (formerly `ap_dashboard_widget_config`). When the editor loads, it fetches the configuration for the selected role via `GET /wp-json/artpulse/v1/layout/{role}`. If none is found, it falls back to the default layout defined in the plugin.
 
 Admins choose a role from the **Role** dropdown before arranging widgets. Switching roles reloads the layout and available widgets for that role.
 
@@ -55,7 +55,7 @@ await fetch('/wp-json/artpulse/v1/layout/member', {
 
 ## Preview Mode & Styling
 
-Dashboard Preview now loads the `[ap_user_dashboard]` shortcode in an iframe so administrators can switch roles and see the actual layout. Access the preview from **ArtPulse → Dashboard**. A style panel lets you configure background color, border and padding presets. Saved values are stored under the `style` key in `ap_dashboard_widget_config`.
+Dashboard Preview now loads the `[ap_user_dashboard]` shortcode in an iframe so administrators can switch roles and see the actual layout. Access the preview from **ArtPulse → Dashboard**. A style panel lets you configure background color, border and padding presets. Saved values are stored under the `style` key in `artpulse_dashboard_layouts`.
 
 Use the **Preview as…** dropdown to impersonate a role. Changes to layout or style can be saved directly from the preview window.
 
