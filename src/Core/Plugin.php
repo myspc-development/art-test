@@ -446,7 +446,6 @@ class Plugin
         TrendingManager::register();
         \ArtPulse\Discovery\EventRankingManager::register();
         TrendingRestController::register();
-        \ArtPulse\Rest\PartnerApiController::register();
         \ArtPulse\Personalization\RecommendationRestController::register();
         \ArtPulse\Rest\FollowVenueCuratorController::register();
         \ArtPulse\Personalization\WeeklyRecommendations::register();

@@ -415,7 +415,6 @@ class ComposerStaticInita473d3f3862fb4a1e679260c12c04875
         'ArtPulse\\Rest\\OrgMetaController' => __DIR__ . '/../..' . '/src/Rest/OrgMetaController.php',
         'ArtPulse\\Rest\\OrgRolesController' => __DIR__ . '/../..' . '/src/Rest/OrgRolesController.php',
         'ArtPulse\\Rest\\OrgUserRolesController' => __DIR__ . '/../..' . '/src/Rest/OrgUserRolesController.php',
-        'ArtPulse\\Rest\\PartnerApiController' => __DIR__ . '/../..' . '/src/Rest/PartnerApiController.php',
         'ArtPulse\\Rest\\PaymentReportsController' => __DIR__ . '/../..' . '/src/Rest/PaymentReportsController.php',
         'ArtPulse\\Rest\\PortfolioRestController' => __DIR__ . '/../..' . '/src/Rest/PortfolioRestController.php',
         'ArtPulse\\Rest\\ProfileMetricsController' => __DIR__ . '/../..' . '/src/Rest/ProfileMetricsController.php',

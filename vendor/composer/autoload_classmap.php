@@ -301,7 +301,6 @@ return array(
     'ArtPulse\\Rest\\OrgMetaController' => $baseDir . '/src/Rest/OrgMetaController.php',
     'ArtPulse\\Rest\\OrgRolesController' => $baseDir . '/src/Rest/OrgRolesController.php',
     'ArtPulse\\Rest\\OrgUserRolesController' => $baseDir . '/src/Rest/OrgUserRolesController.php',
-    'ArtPulse\\Rest\\PartnerApiController' => $baseDir . '/src/Rest/PartnerApiController.php',
     'ArtPulse\\Rest\\PaymentReportsController' => $baseDir . '/src/Rest/PaymentReportsController.php',
     'ArtPulse\\Rest\\PortfolioRestController' => $baseDir . '/src/Rest/PortfolioRestController.php',
     'ArtPulse\\Rest\\ProfileMetricsController' => $baseDir . '/src/Rest/ProfileMetricsController.php',

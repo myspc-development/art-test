@@ -141,7 +141,6 @@ msgstr ""
 msgid "Manifest empty."
 msgstr ""
 
-#: widgets/WidgetManifestPanelWidget.php:29 admin/page-api-keys.php:85
 msgid "ID"
 msgstr ""
 
@@ -1236,7 +1235,6 @@ msgstr ""
 #: src/Frontend/MyEventsShortcode.php:70
 #: src/Admin/PendingSubmissionsPage.php:34
 #: src/Admin/MembershipLevelsPage.php:50 src/Admin/SettingsPage.php:556
-#: src/Admin/TicketTiersPage.php:64 admin/page-api-keys.php:89
 msgid "Actions"
 msgstr ""
 
@@ -1255,7 +1253,6 @@ msgstr ""
 #: src/Admin/DashboardWidgetTools.php:326 src/Admin/SpotlightManager.php:26
 #: src/Admin/ShortcodePages.php:145 src/Integration/SocialAutoPoster.php:66
 #: admin/page-org-roles.php:8 admin/page-community-roles.php:18
-#: admin/page-roles-editor.php:16 admin/page-api-keys.php:23
 #: admin/page-dashboard-config.php:6 admin/page-report-templates.php:9
 msgid "Insufficient permissions"
 msgstr ""
@@ -1268,7 +1265,6 @@ msgstr ""
 msgid "Format"
 msgstr ""
 
-#: src/Admin/SnapshotPage.php:80 admin/page-api-keys.php:78
 msgid "Generate"
 msgstr ""
 
@@ -4947,60 +4943,10 @@ msgstr ""
 msgid "Roles Editor"
 msgstr ""
 
-#: admin/page-api-keys.php:12 admin/page-api-keys.php:69
-msgid "Partner API Keys"
-msgstr ""
 
-#: admin/page-api-keys.php:13
-msgid "API Keys"
-msgstr ""
-
-#: admin/page-api-keys.php:39
-#, php-format
-msgid "New API key generated: %s"
-msgstr ""
-
-#: admin/page-api-keys.php:50
-msgid "API key deleted."
-msgstr ""
-
-#: admin/page-api-keys.php:61
-msgid "Key not found."
-msgstr ""
-
-#: admin/page-api-keys.php:71
-msgid "Generate Key"
-msgstr ""
-
-#: admin/page-api-keys.php:75
-msgid "Scopes (comma separated)"
-msgstr ""
-
-#: admin/page-api-keys.php:81
-msgid "Existing Keys"
-msgstr ""
-
-#: admin/page-api-keys.php:86
-msgid "Key"
-msgstr ""
-
-#: admin/page-api-keys.php:87
-msgid "Scopes"
-msgstr ""
-
-#: admin/page-api-keys.php:88
-msgid "Created"
-msgstr ""
-
-#: admin/page-api-keys.php:112
-msgid "Check Scopes"
-msgstr ""
-
-#: admin/page-api-keys.php:117
 msgid "View Scopes"
 msgstr ""
 
-#: admin/page-api-keys.php:119
 msgid "Scopes:"
 msgstr ""
 
