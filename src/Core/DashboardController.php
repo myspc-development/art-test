@@ -120,6 +120,11 @@ class DashboardController {
             return $custom;
         }
 
+        $layouts = get_option('artpulse_dashboard_layouts', []);
+        if (!empty($layouts[$role]) && is_array($layouts[$role])) {
+            return $layouts[$role];
+        }
+
         return array_map(
             fn($id) => ['id' => $id],
             self::get_widgets_for_role($role)
