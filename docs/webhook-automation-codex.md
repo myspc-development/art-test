@@ -11,7 +11,7 @@ This guide describes the optional webhook system for integrating ArtPulse events
 
 ## Webhook Management
 
-Webhooks are managed under the **Webhooks** tab on an organization dashboard. Admins may add an endpoint URL, choose the events to trigger the webhook and enable or disable delivery. Each webhook also has a unique secret used for payload signatures.
+Webhooks are managed under the **Webhooks** tab on an organization dashboard. The tab loads the **Webhooks** widget which lists existing subscriptions and provides controls for editing or removing them. Select **Add Webhook** to open a form where you can enter an endpoint URL, choose the events that should trigger the webhook, and toggle whether the hook is active. Each webhook also has a unique secret used for payload signatures.
 
 ## Events
 
