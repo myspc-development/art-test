@@ -16,8 +16,11 @@ This guide describes the donor and audience tracking widgets for organization ad
 
 ## Audience CRM Widget
 
-`assets/js/widgets/AudienceCRMWidget.jsx` provides a React component that fetches contacts from the REST endpoint `/artpulse/v1/org/<id>/audience`. It lists names or emails of contacts tagged by the CRM system. Add the widget through the dashboard editor for organization roles.
+`assets/js/widgets/AudienceCRMWidget.jsx` previously fetched contacts from the
+REST endpoint `/artpulse/v1/org/<id>/audience`. These routes were removed along
+with the `OrgCrmController`.
 
-## REST API Endpoints
+## REST API Endpoints (Removed)
 
-`src/Rest/OrgCrmController.php` exposes `GET /org/<id>/donors` and `GET /org/<id>/audience` routes for use in custom tooling or exports.
+The controller `src/Rest/OrgCrmController.php` and its donor and audience
+routes were removed in the 2025 cleanup.

@@ -97,7 +97,6 @@ msgstr ""
 #: src/Frontend/EventListingShortcode.php:153 src/Frontend/EventFilter.php:73
 #: src/Admin/SettingsPage.php:543 src/Admin/PaymentAnalyticsDashboard.php:66
 #: templates/page-artist-directory.php:43 templates/page-event-directory.php:51
-#: admin/page-org-crm.php:47
 msgid "Filter"
 msgstr ""
 
@@ -1368,7 +1367,6 @@ msgstr ""
 #: src/Admin/AdminColumnsOrganisation.php:20 src/Admin/SettingsPage.php:549
 #: src/Admin/EngagementDashboard.php:177 src/Admin/AdminColumnsArtist.php:20
 #: src/Admin/TicketTiersPage.php:64 src/Admin/TicketTiersPage.php:77
-#: admin/page-org-crm.php:55
 msgid "Name"
 msgstr ""
 
@@ -2080,12 +2078,11 @@ msgstr ""
 
 #: src/Admin/SettingsPage.php:544 src/Admin/OrgDashboardAdmin.php:362
 #: src/Core/UserDashboardManager.php:94 templates/widgets/account-tools.php:12
-#: admin/page-org-crm.php:48
 msgid "Export CSV"
 msgstr ""
 
 #: src/Admin/SettingsPage.php:550 src/Admin/MetaBoxesArtist.php:132
-#: src/Admin/OrgUserManager.php:91 admin/page-org-crm.php:56
+#: src/Admin/OrgUserManager.php:91
 msgid "Email"
 msgstr ""
 
@@ -5054,32 +5051,6 @@ msgstr ""
 #: admin/page-org-reports.php:62
 msgid "Download"
 msgstr ""
-
-#: admin/page-org-crm.php:13 admin/page-org-crm.php:42
-msgid "Organization CRM"
-msgstr ""
-
-#: admin/page-org-crm.php:14
-msgid "CRM"
-msgstr ""
-
-#: admin/page-org-crm.php:50
-msgid "Donor Summary"
-msgstr ""
-
-#: admin/page-org-crm.php:51
-#, php-format
-msgid "Total donated: $%s from %d donors"
-msgstr ""
-
-#: admin/page-org-crm.php:57
-msgid "Tags"
-msgstr ""
-
-#: admin/page-org-crm.php:58
-msgid "Last Active"
-msgstr ""
-
 #: admin/page-embed-stats.php:8
 msgid "Embed Stats"
 msgstr ""

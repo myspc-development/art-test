@@ -61,12 +61,9 @@ Developers may also call the helper directly:
 ap_crm_add_tag($org_id, $email, 'follower');
 ```
 
-## 2. CRM Dashboard UI
-Admin page `/wp-admin?page=ap-org-crm&org_id=XX` provides:
-- Search and filter by tag
-- Sort by last active
-- “View profile” link when user exists
-- Manual tools to edit tags, bulk export or delete contacts
+## 2. CRM Dashboard UI (Removed)
+The legacy admin page `/wp-admin?page=ap-org-crm&org_id=XX` has been removed.
+Contact data can still be exported using custom queries or other tooling.
 
 ## 3. CSV Export Tool
 Button **Export Contacts (CSV)** outputs:
