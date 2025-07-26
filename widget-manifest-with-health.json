@@ -617,6 +617,18 @@
         "unused": false,
         "previewGuarded": true
     },
+    "org_analytics": {
+        "id": "org_analytics",
+        "file": "widgets/OrgAnalyticsWidget.php",
+        "roles": [
+            "organization"
+        ],
+        "missingRoles": false,
+        "unguarded": true,
+        "debugOnly": false,
+        "unused": false,
+        "previewGuarded": true
+    },
     "embed_tool": {
         "id": "embed_tool",
         "file": "assets/js/widgets/EmbedToolWidget.jsx",

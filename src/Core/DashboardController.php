@@ -65,7 +65,14 @@ class DashboardController {
      */
     public static function get_widgets_for_role(string $role): array
     {
-        return self::$role_widgets[$role] ?? [];
+        if (isset(self::$role_widgets[$role])) {
+            return self::$role_widgets[$role];
+        }
+        // Sub-roles of organizations share the organization widget set.
+        if (in_array($role, ['org_manager', 'org_editor', 'org_viewer'], true)) {
+            return self::$role_widgets['organization'] ?? [];
+        }
+        return [];
     }
 
     /**

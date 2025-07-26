@@ -52,6 +52,11 @@ add_action('admin_notices', function () {
 add_action('wp_dashboard_setup', function () {
     $current_user = wp_get_current_user();
     if (in_array('org_editor', (array) $current_user->roles, true)) {
+        // Editors see a simplified dashboard. Hide analytics reserved for managers.
         remove_meta_box('artpulse_analytics_widget', 'dashboard', 'normal');
+        ap_add_admin_notice(
+            __('Analytics are available to organization managers only.', 'artpulse'),
+            'info'
+        );
     }
-});
+}, 99);

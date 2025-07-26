@@ -33,6 +33,7 @@ function ap_register_dashboard_builder_widget_map(): void {
         'embed_tool'             => 'EmbedToolWidget.jsx',
         'branding_settings_panel' => 'OrgBrandingSettingsPanel.jsx',
         'donor_activity'         => 'DonorActivityWidget.php',
+        'org_analytics'         => 'OrgAnalyticsWidget.php',
         'org_widget_sharing'     => 'OrgWidgetSharingPanel.php',
         'sponsor_display'        => 'SponsorDisplayWidget.php',
     ];
