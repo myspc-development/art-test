@@ -28,5 +28,54 @@ class DashboardControllerTest extends TestCase
         $this->assertArrayHasKey('org_admin_start', $presets);
         $this->assertSame('organization', $presets['org_admin_start']['role']);
     }
+
+    public function test_get_widgets_for_member_role(): void
+    {
+        $expected = [
+            'widget_news',
+            'widget_favorites',
+            'widget_events',
+            'notifications',
+            'my_rsvps',
+            'recommended_for_you',
+        ];
+
+        $this->assertSame($expected, DashboardController::get_widgets_for_role('member'));
+    }
+
+    public function test_get_widgets_for_artist_role(): void
+    {
+        $expected = [
+            'widget_spotlights',
+            'artist_inbox_preview',
+            'artist_revenue_summary',
+            'widget_followed_artists',
+            'notifications',
+        ];
+
+        $this->assertSame($expected, DashboardController::get_widgets_for_role('artist'));
+    }
+
+    public function test_get_widgets_for_organization_roles(): void
+    {
+        $expected = [
+            'site_stats',
+            'webhooks',
+            'rsvp_stats',
+            'artpulse_analytics_widget',
+            'ap_donor_activity',
+            'notifications',
+        ];
+
+        foreach (['organization', 'org_manager', 'org_editor', 'org_viewer'] as $role) {
+            $this->assertSame($expected, DashboardController::get_widgets_for_role($role));
+        }
+    }
+
+    public function test_get_widgets_for_unknown_role_returns_empty(): void
+    {
+        $this->assertSame([], DashboardController::get_widgets_for_role('administrator'));
+        $this->assertSame([], DashboardController::get_widgets_for_role('unknown'));
+    }
 }
 }
