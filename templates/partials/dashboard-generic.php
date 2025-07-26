@@ -109,19 +109,27 @@ if (empty($layout)) {
         $id      = $widget['id'];
         $visible = $widget['visible'] ?? true;
         $config  = DashboardWidgetRegistry::get_widget($id);
-        if (!$config || empty($config['template'])) continue;
+        if (!$config) {
+            continue;
+        }
 
         echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
         echo '<span class="drag-handle" role="button" tabindex="0" aria-label="Move widget"></span>';
-        $template = locate_template('templates/' . $config['template']);
-        if (!$template) {
-            $template = plugin_dir_path(__FILE__) . '../' . $config['template'];
-        }
-        if ($template && file_exists($template)) {
-            include $template;
+
+        if (isset($config['callback']) && empty($config['template'])) {
+            call_user_func($config['callback']);
         } else {
-            error_log('ArtPulse: Missing widget template → ' . $config['template']);
+            $template = locate_template('templates/' . $config['template']);
+            if (!$template) {
+                $template = plugin_dir_path(__FILE__) . '../' . $config['template'];
+            }
+            if ($template && file_exists($template)) {
+                include $template;
+            } else {
+                error_log('ArtPulse: Missing widget template → ' . $config['template']);
+            }
         }
+
         echo '</div>';
     }
     echo '</div>';
