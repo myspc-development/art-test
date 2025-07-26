@@ -22,6 +22,7 @@
         "ap_donor_activity": "DonorActivityWidget.php",
         "artpulse_analytics_widget": "OrgAnalyticsWidget.php",
         "org_widget_sharing": "OrgWidgetSharingPanel.php",
+        "webhooks": "WebhooksWidget.php",
         "sponsor_display": "SponsorDisplayWidget.php"
     }
 }
