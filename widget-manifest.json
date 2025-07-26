@@ -126,6 +126,14 @@
         "status": "registered",
         "unguarded": true
     },
+    "org_analytics": {
+        "file": "widgets/OrgAnalyticsWidget.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "unguarded": true
+    },
     "org_widget_sharing": {
         "file": "widgets/OrgWidgetSharingPanel.php",
         "roles": [
