@@ -113,9 +113,9 @@ class WidgetVisibilityManager
      * current user.
      * @return void
      */
-    public static function filter_visible_widgets(?\WP_User $user = null): void
+    public static function filter_visible_widgets($user = null): void
     {
-        $current_user = $user ?: wp_get_current_user();
+        $current_user = $user instanceof \WP_User ? $user : wp_get_current_user();
         $roles        = (array) $current_user->roles;
 
         global $ap_hidden_widgets;

@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Core;
 
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 class DashboardController {
 
     /**
@@ -86,13 +88,23 @@ class DashboardController {
     public static function get_widgets_for_role(string $role): array
     {
         if (isset(self::$role_widgets[$role])) {
-            return self::$role_widgets[$role];
+            $widgets = self::$role_widgets[$role];
+        } elseif (in_array($role, ['org_manager', 'org_editor', 'org_viewer'], true)) {
+            $widgets = self::$role_widgets['organization'] ?? [];
+        } else {
+            $widgets = [];
         }
-        // Sub-roles of organizations share the organization widget set.
-        if (in_array($role, ['org_manager', 'org_editor', 'org_viewer'], true)) {
-            return self::$role_widgets['organization'] ?? [];
+
+        $valid = [];
+        foreach ($widgets as $id) {
+            if (DashboardWidgetRegistry::get_widget($id)) {
+                $valid[] = $id;
+            } else {
+                trigger_error('Dashboard widget not registered: ' . $id, E_USER_WARNING);
+            }
         }
-        return [];
+
+        return $valid;
     }
 
     /**
