@@ -19,7 +19,14 @@ add_action('wp_enqueue_scripts', function () use ($user_role) {
 <div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard ap-role-layout" data-role="artist">
   <h2 class="ap-card__title"><?= ucfirst($user_role) ?> Dashboard</h2>
   <?php
-  ap_safe_include('templates/partials/dashboard-generic.php', plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php');
+  $user_id = get_current_user_id();
+  $layout = \ArtPulse\Core\DashboardController::get_user_dashboard_layout($user_id);
+
+  ap_safe_include(
+      'templates/partials/dashboard-generic.php',
+      plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php',
+      ['layout' => $layout]
+  );
   ?>
   <div class="ap-quickstart-wrapper">
     <?php

@@ -100,7 +100,7 @@ if (current_user_can('manage_options') && isset($_GET['ap_preview_user'])) {
   </label>
 
 <?php
-$layout = DashboardController::get_user_dashboard_layout($user_id);
+$layout = $layout ?? DashboardController::get_user_dashboard_layout($user_id);
 if (empty($layout)) {
     echo '<div class="ap-empty-state">No widgets available. Load a preset or reset layout.</div>';
 } else {
