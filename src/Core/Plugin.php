@@ -316,7 +316,6 @@ class Plugin
         \ArtPulse\Admin\CustomDashboardWidgetPostType::register();
         \ArtPulse\Admin\LoginEventsPage::register();
         \ArtPulse\Admin\OrgUserManager::register();
-        \ArtPulse\Admin\OrgRolesPage::register();
         \ArtPulse\Admin\OrgCommunicationsCenter::register();
         \ArtPulse\Admin\ScheduledMessageManager::register();
         \ArtPulse\Admin\PostStatusRejected::register();

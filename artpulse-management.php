@@ -130,7 +130,6 @@ require_once __DIR__ . '/includes/settings-register.php';
 require_once __DIR__ . '/includes/help-doc-renderer.php';
 require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';
 require_once __DIR__ . '/admin/page-community-roles.php';
-require_once __DIR__ . '/admin/page-org-roles.php';
 require_once __DIR__ . '/admin/page-roles-editor.php';
 require_once __DIR__ . '/admin/page-org-crm.php';
 require_once __DIR__ . '/admin/page-api-keys.php';
@@ -141,8 +140,6 @@ require_once __DIR__ . '/pwa-manifest.php';
 require_once __DIR__ . '/includes/i18n.php';
 
 include_once __DIR__ . '/shortcodes/artist-comments.php';
-require_once __DIR__ . '/includes/rest/org-roles.php';
-require_once __DIR__ . '/includes/rest/OrgRolesController.php';
 require_once __DIR__ . '/includes/rest/artist.php';
 require_once __DIR__ . '/includes/rest/status.php';
 require_once __DIR__ . '/includes/rest-messages.php';
@@ -190,10 +187,6 @@ function ap_migrate_org_sub_roles(string $old = '', string $new = ''): void {
     }
 }
 
-add_action('rest_api_init', function () {
-    $controller = new \ArtPulse\Rest\OrgRolesController();
-    $controller->register_routes();
-});
 
 // Ensure custom roles exist on every load
 add_action('init', function () {

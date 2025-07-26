@@ -92,15 +92,15 @@
       "tasks": [
         {
           "title": "Add /wp-admin/ap-org-roles page with add_menu_page()",
-          "status": "done"
+          "status": "removed"
         },
         {
           "title": "Mount React app in ap-org-roles.js",
-          "status": "done"
+          "status": "removed"
         },
         {
           "title": "Ensure REST route connects to UI",
-          "status": "complete"
+          "status": "removed"
         }
       ]
     },
