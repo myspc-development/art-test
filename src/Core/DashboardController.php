@@ -91,8 +91,6 @@ class DashboardController {
     {
         if (isset(self::$role_widgets[$role])) {
             $widgets = self::$role_widgets[$role];
-        } elseif (in_array($role, ['org_manager', 'org_editor', 'org_viewer'], true)) {
-            $widgets = self::$role_widgets['organization'] ?? [];
         } else {
             $widgets = [];
         }

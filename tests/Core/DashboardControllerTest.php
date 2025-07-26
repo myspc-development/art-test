@@ -67,8 +67,9 @@ class DashboardControllerTest extends TestCase
             'notifications',
         ];
 
-        foreach (['organization', 'org_manager', 'org_editor', 'org_viewer'] as $role) {
-            $this->assertSame($expected, DashboardController::get_widgets_for_role($role));
+        $this->assertSame($expected, DashboardController::get_widgets_for_role('organization'));
+        foreach (['org_manager', 'org_editor', 'org_viewer'] as $role) {
+            $this->assertSame([], DashboardController::get_widgets_for_role($role));
         }
     }
 
