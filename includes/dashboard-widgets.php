@@ -740,7 +740,9 @@ function ap_register_core_dashboard_widgets(): void
         __('Recent unread messages from artists.', 'artpulse'),
         'ap_widget_artist_inbox_preview',
         [
-            'roles'    => ['member'],
+            // Available to both members and artists so creators can monitor
+            // follower messages while regular users preview artist inboxes.
+            'roles'    => ['member', 'artist'],
             'category' => 'engagement',
         ]
     );
