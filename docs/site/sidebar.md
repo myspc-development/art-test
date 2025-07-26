@@ -130,7 +130,6 @@ status: complete
 * [event-chat-codex.md](../event-chat-codex.md)
 * [event-comments-codex.md](../event-comments-codex.md)
 * [event-management-upgrades-codex.md](../event-management-upgrades-codex.md)
-* [event-ranking-partner-api-codex.md](../event-ranking-partner-api-codex.md)
 * [event-template-duplication-codex.md](../event-template-duplication-codex.md)
 * [feedback-monitoring-layer-codex.md](../feedback-monitoring-layer-codex.md)
 * [feedback.md](../feedback.md)
