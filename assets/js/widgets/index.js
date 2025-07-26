@@ -44,7 +44,7 @@ export default [
     roles: ['member', 'artist']
   },
   {
-    id: 'artist_inbox_preview_widget',
+    id: 'artist_inbox_preview',
     title: __('Artist Inbox Preview', 'artpulse'),
     component: ArtistInboxPreviewWidget,
     roles: ['artist']

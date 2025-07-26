@@ -1,680 +1,165 @@
 {
+    "WebhooksWidget": {
+        "file": "widgets/WebhooksWidget.php",
+        "roles": [],
+        "status": "unregistered",
+        "previewGuarded": true
+    },
     "WidgetManifestPanelWidget": {
-        "id": "WidgetManifestPanelWidget",
         "file": "widgets/WidgetManifestPanelWidget.php",
         "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": true,
-        "unused": true,
+        "status": "unregistered",
         "previewGuarded": true
     },
     "WidgetStatusPanelWidget": {
-        "id": "WidgetStatusPanelWidget",
         "file": "widgets/WidgetStatusPanelWidget.php",
         "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": true,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "account-tools": {
-        "id": "account-tools",
-        "file": "templates/widgets/account-tools.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "artist_inbox_preview_legacy": {
-        "id": "artist_inbox_preview_legacy",
-        "file": "templates/widgets/artist-inbox-preview.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "artist_revenue_summary": {
-        "id": "artist_revenue_summary",
-        "file": "templates/widgets/artist-revenue-summary.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "artist_spotlight_widget": {
-        "id": "artist_spotlight_widget",
-        "file": "templates/widgets/artist-spotlight-widget.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "cat_fact": {
-        "id": "cat_fact",
-        "file": "templates/widgets/cat-fact.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "content": {
-        "id": "content",
-        "file": "templates/widgets/content.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "creator-tips": {
-        "id": "creator-tips",
-        "file": "templates/widgets/widget-creator-tips.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "dashboard_feedback": {
-        "id": "dashboard_feedback",
-        "file": "templates/widgets/dashboard-feedback.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "events": {
-        "id": "events",
-        "file": "templates/widgets/events.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "favorites": {
-        "id": "favorites",
-        "file": "templates/widgets/favorites.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "followed_artists_activity": {
-        "id": "followed_artists_activity",
-        "file": "templates/widgets/followed-artists-activity.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "guide": {
-        "id": "guide",
-        "file": "templates/widgets/guide.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "instagram_widget": {
-        "id": "instagram_widget",
-        "file": "templates/widgets/instagram-widget.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "lead_capture": {
-        "id": "lead_capture",
-        "file": "templates/widgets/lead-capture.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "local-events": {
-        "id": "local-events",
-        "file": "templates/widgets/local-events.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "membership": {
-        "id": "membership",
-        "file": "templates/widgets/membership.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "messages": {
-        "id": "messages",
-        "file": "templates/widgets/messages.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "my-events": {
-        "id": "my-events",
-        "file": "templates/widgets/my-events.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "my-follows": {
-        "id": "my-follows",
-        "file": "templates/widgets/my-follows.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "my_favorites_template": {
-        "id": "my_favorites_template",
-        "file": "templates/widgets/my-favorites.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "my_rsvps": {
-        "id": "my_rsvps",
-        "file": "templates/widgets/my-rsvps.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "my_shared_events_activity": {
-        "id": "my_shared_events_activity",
-        "file": "templates/widgets/my-shared-events-activity.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "nearby_events_map_template": {
-        "id": "nearby_events_map_template",
-        "file": "templates/widgets/nearby-events-map.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "next_payment": {
-        "id": "next_payment",
-        "file": "templates/widgets/next-payment.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "notifications": {
-        "id": "notifications",
-        "file": "templates/widgets/notifications.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "recommended_for_you": {
-        "id": "recommended_for_you",
-        "file": "templates/widgets/recommended-for-you.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "role-spotlight": {
-        "id": "role-spotlight",
-        "file": "templates/widgets/spotlight-dashboard.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "rsvp_stats": {
-        "id": "rsvp_stats",
-        "file": "templates/widgets/rsvp-stats.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "rsvps": {
-        "id": "rsvps",
-        "file": "templates/widgets/rsvps.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "sales_summary": {
-        "id": "sales_summary",
-        "file": "templates/widgets/sales-summary.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "site_stats": {
-        "id": "site_stats",
-        "file": "templates/widgets/site-stats.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "support-history": {
-        "id": "support-history",
-        "file": "templates/widgets/support-history.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "transactions": {
-        "id": "transactions",
-        "file": "templates/widgets/transactions.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "upcoming_events_by_location": {
-        "id": "upcoming_events_by_location",
-        "file": "templates/widgets/upcoming-events-location.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "upgrade": {
-        "id": "upgrade",
-        "file": "templates/widgets/upgrade.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "webhooks": {
-        "id": "webhooks",
-        "file": "templates/widgets/webhooks.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "widget_followed_artists": {
-        "id": "widget_followed_artists",
-        "file": "templates/widgets/widget-followed-artists.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "widget_for_you_all": {
-        "id": "widget_for_you_all",
-        "file": "templates/widgets/widget-for-you.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "widget_news": {
-        "id": "widget_news",
-        "file": "templates/widgets/widget-news.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": true,
-        "previewGuarded": true
-    },
-    "widget_spotlight_calls": {
-        "id": "widget_spotlight_calls",
-        "file": "templates/widgets/spotlight-dashboard.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "widget_spotlight_events": {
-        "id": "widget_spotlight_events",
-        "file": "templates/widgets/spotlight-dashboard.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "widget_spotlight_features": {
-        "id": "widget_spotlight_features",
-        "file": "templates/widgets/spotlight-dashboard.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "widget_spotlights": {
-        "id": "widget_spotlights",
-        "file": "templates/widgets/widget-spotlights.php",
-        "roles": [],
-        "missingRoles": true,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "unregistered",
         "previewGuarded": true
     },
     "artist_spotlight": {
-        "id": "artist_spotlight",
         "file": "assets/js/widgets/ArtistSpotlightWidget.jsx",
         "roles": [
             "artist"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "inbox_preview": {
-        "id": "inbox_preview",
-        "file": "assets/js/widgets/ArtistInboxPreviewWidget.jsx",
-        "roles": [
-            "artist"
-        ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "revenue_summary": {
-        "id": "revenue_summary",
         "file": "assets/js/widgets/ArtistRevenueSummaryWidget.jsx",
         "roles": [
             "artist"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "artist_inbox_preview": {
-        "id": "artist_inbox_preview",
         "file": "assets/js/widgets/ArtistInboxPreviewWidget.jsx",
         "roles": [
-            "member"
+            "member",
+            "artist"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "event_chat": {
-        "id": "event_chat",
         "file": "assets/js/widgets/EventChatWidget.jsx",
         "roles": [
             "member"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "my_favorites": {
-        "id": "my_favorites",
         "file": "assets/js/widgets/MyFavoritesWidget.jsx",
         "roles": [
             "member"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "nearby_events_map": {
-        "id": "nearby_events_map",
         "file": "assets/js/widgets/NearbyEventsMapWidget.jsx",
         "roles": [
             "member"
         ],
-        "missingRoles": false,
-        "unguarded": false,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "news_feed": {
-        "id": "news_feed",
         "file": "widgets/ArtPulseNewsFeedWidget.php",
         "roles": [
             "member"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "qa_checklist": {
-        "id": "qa_checklist",
         "file": "widgets/QAChecklistWidget.php",
         "roles": [
             "member"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "rsvp_button": {
-        "id": "rsvp_button",
         "file": "assets/js/widgets/RSVPButton.jsx",
         "roles": [
             "member"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "share_this_event": {
-        "id": "share_this_event",
         "file": "assets/js/widgets/ShareThisEventWidget.jsx",
         "roles": [
             "member"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "audience_crm": {
-        "id": "audience_crm",
-        "file": "assets/js/widgets/AudienceCRMWidget.jsx",
-        "roles": [
-            "organization"
-        ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
-        "previewGuarded": true
-    },
-    "branding_settings_panel": {
-        "id": "branding_settings_panel",
-        "file": "assets/js/widgets/OrgBrandingSettingsPanel.jsx",
-        "roles": [
-            "organization"
-        ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "ap_donor_activity": {
-        "id": "ap_donor_activity",
         "file": "widgets/DonorActivityWidget.php",
         "roles": [
             "organization"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "artpulse_analytics_widget": {
-        "id": "artpulse_analytics_widget",
         "file": "widgets/OrgAnalyticsWidget.php",
         "roles": [
             "organization"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "audience_crm": {
+        "file": "assets/js/widgets/AudienceCRMWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "branding_settings_panel": {
+        "file": "assets/js/widgets/OrgBrandingSettingsPanel.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
         "previewGuarded": true
     },
     "embed_tool": {
-        "id": "embed_tool",
         "file": "assets/js/widgets/EmbedToolWidget.jsx",
         "roles": [
             "organization"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "org_widget_sharing": {
-        "id": "org_widget_sharing",
         "file": "widgets/OrgWidgetSharingPanel.php",
         "roles": [
             "organization"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "sponsor_display": {
-        "id": "sponsor_display",
         "file": "widgets/SponsorDisplayWidget.php",
         "roles": [
             "organization"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     },
     "sponsored_event_config": {
-        "id": "sponsored_event_config",
         "file": "assets/js/widgets/SponsoredEventConfigWidget.jsx",
         "roles": [
             "organization"
         ],
-        "missingRoles": false,
-        "unguarded": true,
-        "debugOnly": false,
-        "unused": false,
+        "status": "registered",
         "previewGuarded": true
     }
 }

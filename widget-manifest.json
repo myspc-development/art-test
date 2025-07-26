@@ -4,16 +4,14 @@
         "roles": [
             "member"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "rsvp_button": {
         "file": "assets/js/widgets/RSVPButton.jsx",
         "roles": [
             "member"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "nearby_events_map": {
         "file": "assets/js/widgets/NearbyEventsMapWidget.jsx",
@@ -27,136 +25,120 @@
         "roles": [
             "member"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "event_chat": {
         "file": "assets/js/widgets/EventChatWidget.jsx",
         "roles": [
             "member"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "share_this_event": {
         "file": "assets/js/widgets/ShareThisEventWidget.jsx",
         "roles": [
             "member"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "artist_inbox_preview": {
         "file": "assets/js/widgets/ArtistInboxPreviewWidget.jsx",
         "roles": [
-            "member"
+            "member",
+            "artist"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "qa_checklist": {
         "file": "widgets/QAChecklistWidget.php",
         "roles": [
             "member"
         ],
-        "status": "registered",
-        "unguarded": true
-    },
-    "inbox_preview": {
-        "file": "assets/js/widgets/ArtistInboxPreviewWidget.jsx",
-        "roles": [
-            "artist"
-        ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "revenue_summary": {
         "file": "assets/js/widgets/ArtistRevenueSummaryWidget.jsx",
         "roles": [
             "artist"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "artist_spotlight": {
         "file": "assets/js/widgets/ArtistSpotlightWidget.jsx",
         "roles": [
             "artist"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "audience_crm": {
         "file": "assets/js/widgets/AudienceCRMWidget.jsx",
         "roles": [
             "organization"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "sponsored_event_config": {
         "file": "assets/js/widgets/SponsoredEventConfigWidget.jsx",
         "roles": [
             "organization"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "embed_tool": {
         "file": "assets/js/widgets/EmbedToolWidget.jsx",
         "roles": [
             "organization"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "branding_settings_panel": {
         "file": "assets/js/widgets/OrgBrandingSettingsPanel.jsx",
         "roles": [
             "organization"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "ap_donor_activity": {
         "file": "widgets/DonorActivityWidget.php",
         "roles": [
             "organization"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "artpulse_analytics_widget": {
         "file": "widgets/OrgAnalyticsWidget.php",
         "roles": [
             "organization"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "org_widget_sharing": {
         "file": "widgets/OrgWidgetSharingPanel.php",
         "roles": [
             "organization"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
     },
     "sponsor_display": {
         "file": "widgets/SponsorDisplayWidget.php",
         "roles": [
             "organization"
         ],
-        "status": "registered",
-        "unguarded": true
+        "status": "registered"
+    },
+    "WebhooksWidget": {
+        "file": "widgets/WebhooksWidget.php",
+        "roles": [],
+        "status": "unregistered"
+    },
+    "WidgetManifestPanelWidget": {
+        "file": "widgets/WidgetManifestPanelWidget.php",
+        "roles": [],
+        "status": "unregistered"
     },
     "WidgetStatusPanelWidget": {
         "file": "widgets/WidgetStatusPanelWidget.php",
         "roles": [],
-        "status": "unregistered",
-        "unused": true,
-        "missingRoles": true,
-        "debugOnly": true,
-        "unguarded": true
+        "status": "unregistered"
     }
 }

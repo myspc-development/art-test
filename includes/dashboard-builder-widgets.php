@@ -22,7 +22,7 @@ function ap_register_dashboard_builder_widget_map(): void {
     ];
 
     $artist = [
-        'inbox_preview'      => 'ArtistInboxPreviewWidget.jsx',
+        'artist_inbox_preview' => 'ArtistInboxPreviewWidget.jsx',
         'revenue_summary'    => 'ArtistRevenueSummaryWidget.jsx',
         'artist_spotlight'   => 'ArtistSpotlightWidget.jsx',
     ];

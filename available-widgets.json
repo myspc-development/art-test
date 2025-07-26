@@ -10,7 +10,7 @@
         "qa_checklist": "QAChecklistWidget.php"
     },
     "artist": {
-        "inbox_preview": "ArtistInboxPreviewWidget.jsx",
+        "artist_inbox_preview": "ArtistInboxPreviewWidget.jsx",
         "revenue_summary": "ArtistRevenueSummaryWidget.jsx",
         "artist_spotlight": "ArtistSpotlightWidget.jsx"
     },

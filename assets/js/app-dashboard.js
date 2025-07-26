@@ -265,19 +265,17 @@ var APDashboardApp = (function (React$4, require$$0$1, Chart) {
       i = 0;
     }
     _regeneratorDefine = function (e, r, n, t) {
-      if (r) i ? i(e, r, {
+      function o(r, n) {
+        _regeneratorDefine(e, r, function (e) {
+          return this._invoke(r, n, e);
+        });
+      }
+      r ? i ? i(e, r, {
         value: n,
         enumerable: !t,
         configurable: !t,
         writable: !t
-      }) : e[r] = n;else {
-        function o(r, n) {
-          _regeneratorDefine(e, r, function (e) {
-            return this._invoke(r, n, e);
-          });
-        }
-        o("next", 0), o("throw", 1), o("return", 2);
-      }
+      }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
     }, _regeneratorDefine(e, r, n, t);
   }
   function _setPrototypeOf(t, e) {
@@ -3485,7 +3483,7 @@ var APDashboardApp = (function (React$4, require$$0$1, Chart) {
     component: ShareThisEventWidget,
     roles: ['member', 'artist']
   }, {
-    id: 'artist_inbox_preview_widget',
+    id: 'artist_inbox_preview',
     title: __('Artist Inbox Preview', 'artpulse'),
     component: ArtistInboxPreviewWidget,
     roles: ['artist']
