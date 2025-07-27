@@ -28,20 +28,28 @@ class DashboardController {
         ],
         // Artist dashboard starter widgets
         'artist'       => [
-            'widget_spotlights',
-            'artist_inbox_preview',
+            'artist_feed_publisher',
+            'artist_audience_insights',
+            'artist_spotlight',
             'artist_revenue_summary',
-            'widget_followed_artists',
+            'my_events',
+            'messages',
             'notifications',
+            'dashboard_feedback',
+            'cat_fact',
         ],
         // Organization admin widgets
         'organization' => [
-            'site_stats',
-            'webhooks',
+            'organization_dashboard',
+            'organization_analytics',
+            'my_events',
             'rsvp_stats',
-            'artpulse_analytics_widget',
-            'ap_donor_activity',
+            'org_messages',
+            'support_history',
+            'lead_capture',
+            'site_stats',
             'notifications',
+            'dashboard_feedback',
         ],
     ];
 
@@ -153,20 +161,22 @@ class DashboardController {
     }
 
     /**
-     * Reset a member's dashboard layout if corrupted or invalid.
+     * Reset a user's dashboard layout if corrupted or contains widgets not allowed
+     * for their role.
      *
      * @return bool True when the layout was reset.
      */
     public static function reset_user_dashboard_layout(int $user_id): bool
     {
         $role = self::get_role($user_id);
-        if ($role !== 'member') {
+        $default_ids = self::get_widgets_for_role($role);
+
+        if (empty($default_ids)) {
             delete_user_meta($user_id, 'ap_dashboard_layout');
             return false;
         }
 
         $current = get_user_meta($user_id, 'ap_dashboard_layout', true);
-        $default_ids = self::get_widgets_for_role('member');
         $needs_reset = false;
 
         if (!is_array($current) || empty($current)) {
