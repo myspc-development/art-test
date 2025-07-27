@@ -14,5 +14,6 @@ status: complete
 - [Analytics & Reporting Codex](./analytics-reporting-codex.md)
 - [UI/UX Polish Codex](./ui-ux-polish-codex.md)
 - [Portfolio Sync](./portfolio-sync.md)
+- [Community Spaces & Event Threads Codex](./community-spaces-event-threads-codex.md)
 
 > 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*
