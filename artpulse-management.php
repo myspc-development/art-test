@@ -330,7 +330,7 @@ register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
 
 function ap_install_tables() {
     $installed = get_option('ap_db_version', '0.0.0');
-    if (version_compare($installed, '1.4.0', '<')) {
+    if (version_compare($installed, '1.5.0', '<')) {
         require_once __DIR__ . '/includes/db-schema.php';
         \ArtPulse\DB\create_monetization_tables();
         \ArtPulse\Core\MultiOrgRoles::maybe_install_table();
@@ -352,7 +352,7 @@ function ap_install_tables() {
             });
         }
 
-        update_option('ap_db_version', '1.4.0');
+        update_option('ap_db_version', '1.5.0');
     }
 }
 register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ap_install_tables');

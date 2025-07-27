@@ -24,7 +24,7 @@ function ap_maybe_create_table(string $table_name, string $schema): void {
 
 function create_monetization_tables() {
     $installed = get_option('ap_db_version', '0.0.0');
-    if (version_compare($installed, '1.4.0', '>=')) {
+    if (version_compare($installed, '1.5.0', '>=')) {
         return;
     }
 
@@ -131,6 +131,7 @@ function create_monetization_tables() {
         name VARCHAR(100) NOT NULL,
         price DECIMAL(10,2) NOT NULL DEFAULT 0,
         inventory INT NOT NULL DEFAULT 0,
+        max_per_user INT NOT NULL DEFAULT 0,
         sold INT NOT NULL DEFAULT 0,
         start_date DATETIME NULL,
         end_date DATETIME NULL,
@@ -294,8 +295,8 @@ function create_monetization_tables() {
 
     update_option('artpulse_installed', true);
     update_option('artpulse_version', defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : null);
-    update_option('artpulse_db_version', '1.4.0');
-    update_option('ap_db_version', '1.4.0');
+    update_option('artpulse_db_version', '1.5.0');
+    update_option('ap_db_version', '1.5.0');
     if (!get_option('artpulse_install_time')) {
         update_option('artpulse_install_time', current_time('mysql'));
     }

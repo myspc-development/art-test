@@ -17,7 +17,8 @@ features.
 `TicketManager` exposes REST endpoints for listing ticket tiers and
 initiating a purchase. An event may define multiple ticket levels such as
 General, VIP or Early Bird. Integrations with WooCommerce or Stripe can be
-added via hooks.
+added via hooks. Each tier can specify a `max_per_user` value to limit how
+many tickets a single account may purchase.
 
 Example endpoints:
 
