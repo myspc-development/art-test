@@ -14,7 +14,7 @@ This guide details how administrators configure dashboard layouts for each user 
 
 ## Role Based Configuration
 
-Dashboard layouts are stored per role in the `ap_dashboard_widget_config` option. Earlier development builds used an `artpulse_dashboard_layouts` key, but the plugin now relies on `ap_dashboard_widget_config`. When the editor loads, it fetches the configuration for the selected role via `GET /wp-json/artpulse/v1/layout/{role}`. If none is found, it falls back to the default layout defined in the plugin.
+Dashboard layouts are stored per role in the `artpulse_dashboard_layouts` option. Each entry is an array of widget IDs in display order—not block markup. The builder fetches the configuration for the selected role via `GET /wp-json/artpulse/v1/layout/{role}`. If no layout exists the default preset is used.
 
 Admins choose a role from the **Role** dropdown before arranging widgets. Switching roles reloads the layout and available widgets for that role.
 

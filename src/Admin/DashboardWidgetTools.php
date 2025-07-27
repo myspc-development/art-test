@@ -80,7 +80,8 @@ class DashboardWidgetTools
                 __('ArtPulse Dashboard', 'artpulse'),
                 'layout',
                 __('Manage dashboard layouts.', 'artpulse'),
-                [self::class, 'render']
+                [self::class, 'render'],
+                [ 'roles' => ['administrator'] ]
             );
         });
         add_action('admin_menu', function () {

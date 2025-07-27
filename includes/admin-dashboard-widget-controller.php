@@ -39,7 +39,8 @@ function artpulse_register_dashboard_widgets() {
                 $widget['title'],
                 '',
                 '',
-                $widget['callback']
+                $widget['callback'],
+                [ 'roles' => ['administrator'] ]
             );
         }
     }
