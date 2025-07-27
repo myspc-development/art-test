@@ -41,6 +41,7 @@ require_once __DIR__ . '/../includes/dashboard-widgets.php';
 ap_register_business_dashboard_widgets();
 ap_register_guide_widgets();
 ap_register_core_dashboard_widgets();
+ap_register_builder_core_placeholders();
 // messages widget registers via closure in the include above
 
 $map = \ArtPulse\Core\DashboardWidgetRegistry::get_id_map();
