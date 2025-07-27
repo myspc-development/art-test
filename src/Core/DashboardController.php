@@ -115,20 +115,37 @@ class DashboardController {
     {
         $role = self::get_role($user_id);
 
+        // Load the raw layout from user meta, options, or defaults
         $custom = get_user_meta($user_id, 'ap_dashboard_layout', true);
+        $layout = [];
+
         if (!empty($custom) && is_array($custom)) {
-            return $custom;
+            $layout = $custom;
+        } else {
+            $layouts = get_option('artpulse_dashboard_layouts', []);
+            if (!empty($layouts[$role]) && is_array($layouts[$role])) {
+                $layout = $layouts[$role];
+            } else {
+                $layout = array_map(
+                    fn($id) => ['id' => $id],
+                    self::get_widgets_for_role($role)
+                );
+            }
         }
 
-        $layouts = get_option('artpulse_dashboard_layouts', []);
-        if (!empty($layouts[$role]) && is_array($layouts[$role])) {
-            return $layouts[$role];
-        }
-
-        return array_map(
-            fn($id) => ['id' => $id],
-            self::get_widgets_for_role($role)
-        );
+        // Filter out any widgets not registered for this role
+        $all = DashboardWidgetRegistry::get_all();
+        return array_values(array_filter(
+            $layout,
+            static function ($w) use ($role, $all) {
+                $id = $w['id'] ?? null;
+                if (!$id || !isset($all[$id])) {
+                    return false;
+                }
+                $roles = isset($all[$id]['roles']) ? (array) $all[$id]['roles'] : [];
+                return in_array($role, $roles, true);
+            }
+        ));
     }
 
     /**
