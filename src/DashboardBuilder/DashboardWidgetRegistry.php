@@ -56,8 +56,9 @@ class DashboardWidgetRegistry {
         $role = sanitize_key($role);
         return array_filter(
             self::$widgets,
-            static function($w) use ($role) {
-                return empty($w['roles']) || in_array($role, (array) $w['roles'], true);
+            static function ($w) use ($role) {
+                $roles = isset($w['roles']) ? (array) $w['roles'] : [];
+                return in_array($role, $roles, true);
             }
         );
     }
