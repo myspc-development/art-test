@@ -23,6 +23,7 @@ Welcome to the documentation portal. Select a section based on your role.
 - [Architecture Guide](architecture/dev-structure.md)
 - [Upgrade Notes](upgrade-notes.md)
 - [Creator Monetization Expansion](guides/developer/creator-monetization-expansion.md)
+- [Community Moderation Codex](guides/developer/community-moderation-codex.md)
 
 ## QA Guides
 - [QA Documentation](qa/README.md)
