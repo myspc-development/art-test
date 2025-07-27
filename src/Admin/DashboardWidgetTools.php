@@ -569,7 +569,7 @@ class DashboardWidgetTools
             function (array $def, string $id, bool $visible): void {
                 echo '<div class="dashboard-widget">';
                 if (isset($def['callback']) && is_callable($def['callback'])) {
-                    call_user_func($def['callback']);
+                    ap_render_widget($id);
                 } else {
                     echo '<div class="notice notice-error"><p>' . esc_html__('Invalid or missing callback for dashboard widget.', 'artpulse') . '</p></div>';
                 }
@@ -605,7 +605,7 @@ class DashboardWidgetTools
 
         self::render_layout_widgets(
             $layout,
-            function (array $def, string $id, bool $visible): void {
+            function (array $def, string $id, bool $visible) use ($user_id): void {
                 $label = isset($def['label']) ? $def['label'] : __('Untitled', 'artpulse');
                 echo '<div class="ap-widget-card" role="group" aria-label="Widget: ' . esc_attr($label) . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
                 $icon = $def['icon'] ?? '';
@@ -615,7 +615,7 @@ class DashboardWidgetTools
                 echo '</div>';
                 echo '<div class="inside">';
                 if (isset($def['callback']) && is_callable($def['callback'])) {
-                    call_user_func($def['callback']);
+                    ap_render_widget($id, $user_id);
                 } else {
                     echo '<div class="notice notice-error"><p>' . esc_html__('Invalid or missing callback for dashboard widget.', 'artpulse') . '</p></div>';
                 }
