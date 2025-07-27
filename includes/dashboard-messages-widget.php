@@ -13,7 +13,8 @@ add_action('artpulse_register_dashboard_widget', function () {
         '',
         function () {
             echo '<div id="ap-messages-dashboard-widget">Loading messages...</div>';
-        }
+        },
+        [ 'roles' => ['administrator'] ]
     );
 });
 

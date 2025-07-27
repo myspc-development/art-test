@@ -21,12 +21,12 @@ The block uses a render callback that outputs the same template used by the lega
 
 ## Layout Storage
 
-Default layouts are saved in the `ap_dashboard_widget_config` option as arrays of widget IDs keyed by role. During `init` these arrays are loaded so the editor can present the default order for each role.
+Default layouts are saved in the `artpulse_dashboard_layouts` option as arrays of widget IDs keyed by role. During `init` these arrays are loaded so the editor can present the default order for each role.
 
 Per‑user layouts use the same array format stored in user meta.
 
 ## Editing
 
-Administrators can compose dashboards using the block editor and save the resulting widget list to `ap_dashboard_widget_config`. Users receive the list for their role unless they have customized their own layout.
+Administrators can compose dashboards using the block editor and save the resulting widget list to `artpulse_dashboard_layouts`. Users receive the list for their role unless they have customized their own layout.
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

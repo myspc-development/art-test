@@ -28,7 +28,7 @@ add_action('artpulse_register_dashboard_widget', function () {
 the widget, and an optional capability required to view it. Any callable may be
 used for the callback—functions, object methods or an anonymous closure.
 
-Default layouts can be configured in the admin. Visit **ArtPulse → Settings → Dashboard Widgets** to arrange widgets for each role. Definitions are pulled from `ap_get_all_widget_definitions()` and the selections are stored in the `ap_dashboard_widget_config` option. Roles include `member`, `artist`, `organization` and any custom roles you register.
+Default layouts can be configured in the admin. Visit **ArtPulse → Settings → Dashboard Widgets** to arrange widgets for each role. Definitions are pulled from `ap_get_all_widget_definitions()` and the selections are stored in the `artpulse_dashboard_layouts` option. Roles include `member`, `artist`, `organization` and any custom roles you register.
 
 Any role added via WordPress' `add_role()` function will automatically appear in the editor because the settings page reads `wp_roles()->roles`. When using the plugin's role hierarchy you may register roles on activation:
 
@@ -52,7 +52,7 @@ Sortable.create(availRef.current, { group: 'widgets', animation: 150 });
 ```
 
 Widgets can be moved between columns and reordered. Clicking **Save** persists
-the layout to `ap_dashboard_widget_config` via AJAX.
+the layout to `artpulse_dashboard_layouts` via AJAX.
 
 ### Rendering Functions
 

@@ -28,7 +28,7 @@ Widgets may expose a settings schema. Clicking a configurable widget opens the m
 
 ## 5. Capability Checks
 
-Only users with the `edit_dashboard_layout` capability can rearrange widgets. Administrators may define default layouts per role which are stored in the `ap_dashboard_widget_config` option.
+Only users with the `edit_dashboard_layout` capability can rearrange widgets. Administrators may define default layouts per role which are stored in the `artpulse_dashboard_layouts` option as arrays of widget IDs.
 
 ## 6. Preview Mode
 

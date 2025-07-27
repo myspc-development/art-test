@@ -49,7 +49,7 @@ add_action('artpulse_register_dashboard_widget', function () {
 
 ## 3. Default Layout Configuration
 
-Admins arrange default widget layouts under **ArtPulse → Settings → Dashboard Widgets**. The selected order for each role is stored in the `ap_dashboard_widget_config` option. Changes are saved via AJAX:
+Admins arrange default widget layouts under **ArtPulse → Settings → Dashboard Widgets**. The selected order for each role is stored in the `artpulse_dashboard_layouts` option. Changes are saved via AJAX:
 
 ```php
 add_action('wp_ajax_ap_save_dashboard_widget_config', 'ap_save_dashboard_widget_config');
@@ -69,7 +69,7 @@ function ap_save_dashboard_widget_config(): void {
         }
         $sanitized[$role_key] = $ordered;
     }
-    update_option('ap_dashboard_widget_config', $sanitized);
+    update_option('artpulse_dashboard_layouts', $sanitized);
     wp_send_json_success(['saved' => true]);
 }
 ```
@@ -93,7 +93,7 @@ Visit **ArtPulse → Dashboard Builder** to open the layout editor. The interfac
 uses SortableJS for drag‑and‑drop ordering. Two columns labeled **Available** and
 **Active** let you move widgets between them. Choose a role from the drop‑down,
 arrange the widgets, then click **Save** to store the layout in the
-`ap_dashboard_widget_config` option.
+`artpulse_dashboard_layouts` option.
 
 Use the **Reset to Default** button in this editor to restore the saved order for
 the current role. Individual users may also click **Reset Layout** on their
@@ -101,7 +101,7 @@ dashboard to revert to the default configuration described below.
 
 ## 5. Per‑User Preferences
 
-The REST endpoint `/artpulse/v1/ap_dashboard_layout` loads and saves each user's preferences. When no user meta exists, the defaults from `ap_dashboard_widget_config` are used:
+The REST endpoint `/artpulse/v1/ap_dashboard_layout` loads and saves each user's preferences. When no user meta exists, the defaults from `artpulse_dashboard_layouts` are used:
 
 ```php
 register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
@@ -125,7 +125,7 @@ public static function getDashboardLayout() {
     $layout = get_user_meta($uid, 'ap_dashboard_layout', true);
     if (!is_array($layout) || empty($layout)) {
         $roles  = wp_get_current_user()->roles;
-        $config = get_option('ap_dashboard_widget_config', []);
+        $config = get_option('artpulse_dashboard_layouts', []);
         foreach ($roles as $r) {
             if (!empty($config[$r]) && is_array($config[$r])) {
                 $layout = array_map('sanitize_key', $config[$r]);
