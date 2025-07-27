@@ -141,6 +141,41 @@
         ],
         "status": "registered"
     },
+    "org_event_overview": {
+        "file": "assets/js/widgets/OrgEventOverviewWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered"
+    },
+    "org_team_roster": {
+        "file": "assets/js/widgets/OrgTeamRosterWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered"
+    },
+    "org_approval_center": {
+        "file": "assets/js/widgets/OrgApprovalCenterWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered"
+    },
+    "org_ticket_insights": {
+        "file": "assets/js/widgets/OrgTicketInsightsWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered"
+    },
+    "org_broadcast_box": {
+        "file": "assets/js/widgets/OrgBroadcastBoxWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered"
+    },
     "webhooks": {
         "file": "widgets/WebhooksWidget.php",
         "roles": [

@@ -41,6 +41,11 @@ function ap_register_dashboard_builder_widget_map(): void {
         'org_widget_sharing'     => 'OrgWidgetSharingPanel.php',
         'webhooks'               => 'WebhooksWidget.php',
         'sponsor_display'        => 'SponsorDisplayWidget.php',
+        'org_event_overview'     => 'OrgEventOverviewWidget.jsx',
+        'org_team_roster'        => 'OrgTeamRosterWidget.jsx',
+        'org_approval_center'    => 'OrgApprovalCenterWidget.jsx',
+        'org_ticket_insights'    => 'OrgTicketInsightsWidget.jsx',
+        'org_broadcast_box'      => 'OrgBroadcastBoxWidget.jsx',
     ];
 
     $ap_widget_source_map = [

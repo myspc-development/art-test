@@ -66,6 +66,26 @@ function render_widget_embed_tool(): void {
     ap_render_js_widget('embed_tool');
 }
 
+function render_widget_org_event_overview(): void {
+    ap_render_js_widget('org_event_overview');
+}
+
+function render_widget_org_team_roster(): void {
+    ap_render_js_widget('org_team_roster');
+}
+
+function render_widget_org_approval_center(): void {
+    ap_render_js_widget('org_approval_center');
+}
+
+function render_widget_org_ticket_insights(): void {
+    ap_render_js_widget('org_ticket_insights');
+}
+
+function render_widget_org_broadcast_box(): void {
+    ap_render_js_widget('org_broadcast_box');
+}
+
 function render_widget_event_chat(): void {
     ap_render_js_widget('event_chat', ['event-id' => 0]);
 }
@@ -215,4 +235,24 @@ function render_widget_widget_share_this_event(): void {
 
 function render_widget_widget_webhooks(): void {
     render_widget_webhooks();
+}
+
+function render_widget_widget_org_event_overview(): void {
+    render_widget_org_event_overview();
+}
+
+function render_widget_widget_org_team_roster(): void {
+    render_widget_org_team_roster();
+}
+
+function render_widget_widget_org_approval_center(): void {
+    render_widget_org_approval_center();
+}
+
+function render_widget_widget_org_ticket_insights(): void {
+    render_widget_org_ticket_insights();
+}
+
+function render_widget_widget_org_broadcast_box(): void {
+    render_widget_org_broadcast_box();
 }

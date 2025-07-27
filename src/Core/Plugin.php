@@ -324,6 +324,7 @@ class Plugin
         VisitRestController::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
+        \ArtPulse\Rest\OrgDashboardController::register();
         \ArtPulse\Rest\ProfileMetricsController::register();
         \ArtPulse\Rest\AnalyticsRestController::register();
         \ArtPulse\Rest\AnalyticsPilotController::register();
