@@ -10,6 +10,10 @@ class WidgetManifestPanelWidget
 {
     public static function register(): void
     {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
         add_action('artpulse_register_dashboard_widget', [self::class, 'register_widget']);
     }
 
