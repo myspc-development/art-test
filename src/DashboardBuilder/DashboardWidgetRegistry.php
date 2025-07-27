@@ -16,6 +16,7 @@ class DashboardWidgetRegistry {
      *     'title' => 'Upcoming Events',
      *     'render_callback' => 'render_event_summary',
      *     'roles' => ['artist', 'organization'],
+     *     'visibility' => 'public'
      * ]);
      */
     public static function register(string $id, array $args): void {
@@ -28,25 +29,48 @@ class DashboardWidgetRegistry {
             'render_callback' => null,
             'roles' => [],
             'file' => '',
+            'visibility' => 'public',
         ];
         $args = array_merge($defaults, $args);
         if (!is_callable($args['render_callback'])) {
             $args['render_callback'] = static function () {};
         }
+        $visibility = in_array($args['visibility'], ['public', 'internal', 'deprecated'], true)
+            ? $args['visibility']
+            : 'public';
         self::$widgets[$id] = [
             'id' => $id,
             'title' => (string) $args['title'],
             'render_callback' => $args['render_callback'],
             'roles' => array_map('sanitize_key', (array) $args['roles']),
             'file' => (string) $args['file'],
+            'visibility' => $visibility,
         ];
     }
 
     /**
      * Get all registered widgets.
+     *
+     * @param string|null $visibility Optional visibility filter.
      */
-    public static function get_all(): array {
+    public static function get_all(?string $visibility = null): array {
+        if ($visibility !== null) {
+            return array_filter(
+                self::$widgets,
+                static fn($w) => ($w['visibility'] ?? 'public') === $visibility
+            );
+        }
+
         return self::$widgets;
+    }
+
+    /**
+     * Backwards compatibility alias for legacy code.
+     *
+     * @deprecated Use get_all() instead.
+     */
+    public static function get_all_widgets(?string $visibility = null): array {
+        return self::get_all($visibility);
     }
 
     /**
