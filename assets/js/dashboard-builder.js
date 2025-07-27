@@ -7,6 +7,7 @@
   let fetching = false;
   const restRoot = APDashboardBuilder.rest_root;
   const nonce = APDashboardBuilder.nonce;
+  const visibilityFilters = { public:true, internal:false, deprecated:false };
 
   function getIncludeAll(){
     return $('#ap-db-show-all').prop('checked');
@@ -73,11 +74,14 @@
     const list = $('#ap-db-layout').empty();
     layout.forEach(item => {
       const def = widgets.find(w => w.id === item.id) || {};
+      const vis = def.visibility || 'public';
+      if(!visibilityFilters[vis]) return;
       const li = $('<li class="ap-widget"/>').attr('data-id', item.id);
       if(!allowedMap[item.id]){ li.addClass('ap-not-allowed'); }
       const chk = $('<input type="checkbox" class="ap-visible">').prop('checked', item.visible !== false);
       li.append($('<span class="ap-widget-title"/>').text(def.title || def.name || item.id));
       li.append(' ').append(chk).append(' Show');
+      li.append(' ').append($('<span class="ap-visibility-badge ap-visibility-' + vis + '"/>').text(vis.charAt(0).toUpperCase() + vis.slice(1)));
       list.append(li);
     });
     if(list.hasClass('ui-sortable')){
@@ -91,9 +95,12 @@
 
     const add = $('#ap-db-available').empty();
     widgets.forEach(w => {
+      const vis = w.visibility || 'public';
+      if(!visibilityFilters[vis]) return;
       if(!layout.find(l => l.id === w.id)){
         const li = $('<li class="ap-widget"/>').attr('data-id', w.id).text(w.title || w.name || w.id);
         if(w.notAllowed){ li.addClass('ap-not-allowed'); }
+        li.append(' ').append($('<span class="ap-visibility-badge ap-visibility-' + vis + '"/>').text(vis.charAt(0).toUpperCase() + vis.slice(1)));
         add.append(li);
       }
     });
@@ -126,6 +133,13 @@
     }).get();
   }
 
+  function updateFilters(){
+    visibilityFilters.public = $('#ap-db-filter-public').prop('checked');
+    visibilityFilters.internal = $('#ap-db-filter-internal').prop('checked');
+    visibilityFilters.deprecated = $('#ap-db-filter-deprecated').prop('checked');
+    render();
+  }
+
   $(function(){
     window.IS_DASHBOARD_BUILDER_PREVIEW = true;
     const roleSel = $('#ap-db-role');
@@ -133,6 +147,7 @@
     roleSel.on('change', function(){ fetchWidgets(this.value); });
     $('#ap-db-show-all').on('change', function(){ fetchWidgets(roleSel.val()); });
     $(document).on('change','.ap-visible',updateLayout);
+    $('.ap-db-filter').on('change', updateFilters);
     $('#ap-db-save').on('click', function(){
       updateLayout();
       $.ajax({
@@ -157,6 +172,7 @@
       }
     });
     console.log('[DashboardBuilder] initial role', roleSel.val());
+    updateFilters();
     fetchWidgets(roleSel.val());
   });
 })(jQuery);

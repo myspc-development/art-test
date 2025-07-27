@@ -30,6 +30,11 @@ class DashboardManager {
             <label for="ap-db-role" class="screen-reader-text">' . esc_html__('Select Role', 'artpulse') . '</label>
             <select id="ap-db-role"></select>
             <label style="margin-left:10px"><input type="checkbox" id="ap-db-show-all"> ' . esc_html__('Show All Widgets', 'artpulse') . '</label>
+            <div id="ap-db-filters" style="margin-top:10px">
+                <label><input type="checkbox" id="ap-db-filter-public" class="ap-db-filter" value="public" checked> ' . esc_html__('Public', 'artpulse') . '</label>
+                <label style="margin-left:10px"><input type="checkbox" id="ap-db-filter-internal" class="ap-db-filter" value="internal"> ' . esc_html__('Internal', 'artpulse') . '</label>
+                <label style="margin-left:10px"><input type="checkbox" id="ap-db-filter-deprecated" class="ap-db-filter" value="deprecated"> ' . esc_html__('Deprecated', 'artpulse') . '</label>
+            </div>
             <ul id="ap-db-layout"></ul>
             <ul id="ap-db-available" class="ap-available"></ul>
             <p><button id="ap-db-save" class="button button-primary">' . esc_html__('Save Changes', 'artpulse') . '</button></p>
