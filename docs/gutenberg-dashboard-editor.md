@@ -2,7 +2,7 @@
 title: Gutenberg Dashboard Editor
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-07-27
 status: complete
 ---
 # Gutenberg Dashboard Editor
@@ -21,12 +21,12 @@ The block uses a render callback that outputs the same template used by the lega
 
 ## Layout Storage
 
-Default layouts are saved in the `ap_dashboard_widget_config` option as block pattern markup keyed by role. During `init` the `DashboardBlockPatternManager` registers these patterns so they appear in the block editor under the **Dashboards** category.
+Default layouts are saved in the `ap_dashboard_widget_config` option as arrays of widget IDs keyed by role. During `init` these arrays are loaded so the editor can present the default order for each role.
 
-Per‑user layouts can still be stored in user meta, but the markup is saved instead of an array of IDs.
+Per‑user layouts use the same array format stored in user meta.
 
 ## Editing
 
-Administrators can compose dashboards using the block editor and save the generated markup to `ap_dashboard_widget_config`. Users receive the pattern for their role unless they have customized their own layout.
+Administrators can compose dashboards using the block editor and save the resulting widget list to `ap_dashboard_widget_config`. Users receive the list for their role unless they have customized their own layout.
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

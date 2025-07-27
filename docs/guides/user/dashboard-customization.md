@@ -2,7 +2,7 @@
 title: User Dashboard Customization
 category: user
 role: user
-last_updated: 2025-07-20
+last_updated: 2025-07-27
 status: complete
 ---
 # User Dashboard Customization
@@ -14,7 +14,7 @@ Dashboards for members, artists and organizations are all rendered through the `
 ## Layout Storage
 
 - **Per user:** Layouts are stored in the `ap_dashboard_layout` user meta key. Visibility settings live in `ap_widget_visibility`.
-- **Per role:** Default layouts are saved in the `ap_dashboard_widget_config` option as block pattern markup keyed by role.
+- **Per role:** Default layouts are saved in the `ap_dashboard_widget_config` option as arrays of widget IDs keyed by role.
 - Legacy exports may contain arrays describing each widget. Example:
 
 ```json
