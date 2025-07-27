@@ -597,10 +597,18 @@
       events = _useState2[0],
       setEvents = _useState2[1];
     React.useEffect(function () {
-      fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng)).then(function (r) {
-        return r.json();
-      }).then(setEvents);
-    }, [lat, lng]);
+    if (!lat || !lng) {
+      setEvents([]);
+      return;
+    }
+    fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng)).then(function (r) {
+      return r.ok ? r.json() : [];
+    }).then(function (data) {
+      return Array.isArray(data) ? setEvents(data) : setEvents([]);
+    })["catch"](function () {
+      return setEvents([]);
+    });
+  }, [lat, lng]);
     return /*#__PURE__*/React.createElement("div", {
       className: "ap-nearby-events-widget"
     }, /*#__PURE__*/React.createElement("ul", null, events.map(function (ev) {
