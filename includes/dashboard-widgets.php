@@ -1034,7 +1034,7 @@ function ap_register_core_dashboard_widgets(): void
         __('Follower analytics and engagement.', 'artpulse'),
         'ap_widget_artist_audience_insights',
         [
-            'roles' => ['artist']
+            'roles' => ['artist'],
             'visibility' => 'public',
         ]
     );
@@ -1046,7 +1046,7 @@ function ap_register_core_dashboard_widgets(): void
         __('Revenue breakdown and payouts.', 'artpulse'),
         'ap_widget_artist_earnings_summary',
         [
-            'roles' => ['artist']
+            'roles' => ['artist'],
             'visibility' => 'public',
         ]
     );
@@ -1058,7 +1058,7 @@ function ap_register_core_dashboard_widgets(): void
         __('Publish updates to your feed.', 'artpulse'),
         'ap_widget_artist_feed_publisher',
         [
-            'roles' => ['artist']
+            'roles' => ['artist'],
             'visibility' => 'public',
         ]
     );
@@ -1070,7 +1070,7 @@ function ap_register_core_dashboard_widgets(): void
         __('Collaboration invites from others.', 'artpulse'),
         'ap_widget_collab_requests',
         [
-            'roles' => ['artist']
+            'roles' => ['artist'],
             'visibility' => 'public',
         ]
     );
@@ -1082,7 +1082,7 @@ function ap_register_core_dashboard_widgets(): void
         __('Steps to get started.', 'artpulse'),
         'ap_widget_onboarding_tracker',
         [
-            'roles' => ['artist']
+            'roles' => ['artist'],
             'visibility' => 'public',
         ]
     );
