@@ -10,25 +10,38 @@ class APShortcodeAdminWidgets {
     }
 
     public static function add_widgets(): void {
-        $uid = get_current_user_id();
-        $org_role = get_user_meta($uid, 'ap_org_role', true);
-        if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            return;
-        }
         wp_add_dashboard_widget('ap_event_calendar_widget', __('Event Calendar', 'artpulse'), [self::class, 'render_event_calendar']);
         wp_add_dashboard_widget('ap_notifications_widget', __('Notifications', 'artpulse'), [self::class, 'render_notifications']);
         wp_add_dashboard_widget('ap_org_dashboard_widget', __('Organization Dashboard', 'artpulse'), [self::class, 'render_org_dashboard']);
     }
 
     public static function render_event_calendar(): void {
+        $uid       = get_current_user_id();
+        $org_role  = get_user_meta($uid, 'ap_org_role', true);
+        if (!current_user_can('manage_options') && $org_role !== 'organization') {
+            echo '<p class="ap-widget-no-access">' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p>';
+            return;
+        }
         echo do_shortcode('[ap_event_calendar]');
     }
 
     public static function render_notifications(): void {
+        $uid       = get_current_user_id();
+        $org_role  = get_user_meta($uid, 'ap_org_role', true);
+        if (!current_user_can('manage_options') && $org_role !== 'organization') {
+            echo '<p class="ap-widget-no-access">' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p>';
+            return;
+        }
         echo do_shortcode('[ap_notifications]');
     }
 
     public static function render_org_dashboard(): void {
+        $uid       = get_current_user_id();
+        $org_role  = get_user_meta($uid, 'ap_org_role', true);
+        if (!current_user_can('manage_options') && $org_role !== 'organization') {
+            echo '<p class="ap-widget-no-access">' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p>';
+            return;
+        }
         echo do_shortcode('[ap_org_dashboard]');
     }
 }

@@ -17,7 +17,8 @@ class DashboardWidgetRegistry {
      *     category?:string,
      *     roles?:array,
      *     settings?:array,
-     *     tags?:array
+     *     tags?:array,
+     *     capability?:string
      * }>
      */
     private static array $widgets = [];
@@ -63,6 +64,7 @@ class DashboardWidgetRegistry {
             'roles'       => $options['roles'] ?? [],
             'settings'    => $options['settings'] ?? [],
             'tags'        => $options['tags'] ?? [],
+            'capability'  => $options['capability'] ?? '',
         ];
     }
 
@@ -184,7 +186,8 @@ class DashboardWidgetRegistry {
      * Retrieve a widget configuration by ID.
      */
     public static function get_widget( string $id ): ?array {
-        return self::$widgets[ $id ] ?? null;
+        $widgets = self::get_all();
+        return $widgets[ $id ] ?? null;
     }
 
     /**
@@ -224,14 +227,28 @@ class DashboardWidgetRegistry {
      * @return array<string,array>
      */
     public static function get_all(): array {
-        return self::$widgets;
+        $widgets  = self::$widgets;
+        $settings = get_option('ap_widget_visibility_settings', []);
+        foreach ($settings as $id => $cfg) {
+            if (!isset($widgets[$id])) {
+                continue;
+            }
+            if (isset($cfg['roles'])) {
+                $widgets[$id]['roles'] = array_map('sanitize_key', (array) $cfg['roles']);
+            }
+            if (isset($cfg['capability'])) {
+                $widgets[$id]['capability'] = sanitize_key($cfg['capability']);
+            }
+        }
+        return $widgets;
     }
 
     /**
      * Get a single widget configuration by ID.
      */
     public static function get( string $id ): ?array {
-        return self::$widgets[ $id ] ?? null;
+        $widgets = self::get_all();
+        return $widgets[ $id ] ?? null;
     }
 
     /**
@@ -245,7 +262,7 @@ class DashboardWidgetRegistry {
     public static function get_widgets( $user_role ): array {
         $roles   = array_map( 'sanitize_key', (array) $user_role );
         $allowed = [];
-        foreach ( self::$widgets as $id => $config ) {
+        foreach ( self::get_all() as $id => $config ) {
             $widget_roles = isset( $config['roles'] ) ? (array) $config['roles'] : [];
             if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
                 continue;
@@ -263,7 +280,7 @@ class DashboardWidgetRegistry {
      */
     public static function get_definitions( bool $include_schema = false ): array {
         $defs = [];
-        foreach ( self::$widgets as $id => $config ) {
+        foreach ( self::get_all() as $id => $config ) {
             // Sanitize widget configuration to avoid undefined index warnings.
             $label       = isset( $config['label'] ) ? $config['label'] : 'Unnamed Widget';
             $icon        = isset( $config['icon'] ) ? $config['icon'] : 'dashicons-admin-generic';
@@ -279,6 +296,9 @@ class DashboardWidgetRegistry {
             }
             if ( isset( $config['roles'] ) ) {
                 $def['roles'] = $config['roles'];
+            }
+            if ( isset( $config['capability'] ) ) {
+                $def['capability'] = $config['capability'];
             }
             if ( isset( $config['tags'] ) ) {
                 $def['tags'] = $config['tags'];
@@ -296,14 +316,16 @@ class DashboardWidgetRegistry {
      * Get a single widget callback by ID.
      */
     public static function get_widget_callback( string $id ): ?callable {
-        return self::$widgets[ $id ]['callback'] ?? null;
+        $widgets = self::get_all();
+        return $widgets[ $id ]['callback'] ?? null;
     }
 
     /**
      * Get the settings schema for a widget.
      */
     public static function get_widget_schema( string $id ): array {
-        return self::$widgets[ $id ]['settings'] ?? [];
+        $widgets = self::get_all();
+        return $widgets[ $id ]['settings'] ?? [];
     }
 
     /**
@@ -314,7 +336,7 @@ class DashboardWidgetRegistry {
     public static function get_widgets_by_role( $role ): array {
         $roles = array_map( 'sanitize_key', (array) $role );
         $defs  = [];
-        foreach ( self::$widgets as $id => $cfg ) {
+        foreach ( self::get_all() as $id => $cfg ) {
             $widget_roles = isset( $cfg['roles'] ) ? (array) $cfg['roles'] : [];
             if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
                 continue;
@@ -345,7 +367,7 @@ class DashboardWidgetRegistry {
      */
     public static function get_by_category( string $category ): array {
         return array_filter(
-            self::$widgets,
+            self::get_all(),
             static fn( $cfg ) => isset( $cfg['category'] ) && $cfg['category'] === $category
         );
     }

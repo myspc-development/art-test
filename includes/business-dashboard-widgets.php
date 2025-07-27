@@ -33,8 +33,9 @@ function ap_register_business_dashboard_widgets(): void
         __('Overall site traffic and engagement metrics.', 'artpulse'),
         'ap_widget_site_stats',
         [
-            'category' => 'analytics',
-            'roles'    => ['administrator'],
+            'category'   => 'analytics',
+            'roles'      => ['administrator'],
+            'capability' => 'manage_options',
         ]
     );
 
@@ -45,8 +46,9 @@ function ap_register_business_dashboard_widgets(): void
         __('Recent leads collected from forms.', 'artpulse'),
         'ap_widget_lead_capture',
         [
-            'category' => 'marketing',
-            'roles'    => ['administrator'],
+            'category'   => 'marketing',
+            'roles'      => ['administrator'],
+            'capability' => 'manage_options',
         ]
     );
 
@@ -57,8 +59,9 @@ function ap_register_business_dashboard_widgets(): void
         __('Sales totals for the selected period.', 'artpulse'),
         'ap_widget_sales_summary',
         [
-            'category' => 'commerce',
-            'roles'    => ['administrator'],
+            'category'   => 'commerce',
+            'roles'      => ['administrator'],
+            'capability' => 'manage_options',
         ]
     );
 }
