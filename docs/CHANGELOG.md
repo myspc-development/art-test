@@ -2,7 +2,7 @@
 title: Changelog
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-07-27
 status: complete
 ---
 # Changelog
@@ -17,6 +17,9 @@ status: complete
 - Introduced REST endpoints for ticket tier CRUD and membership level settings.
 - WooCommerce hooks now register automatically when enabled.
 
+## 1.3.16
+- Completed role-based dashboard builder audit and enforced widget visibility.
+- Updated default layouts for all roles and docs to match.
 ## 1.3.14
 - Documentation updates and task status refinements.
 
