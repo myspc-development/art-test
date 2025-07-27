@@ -24,6 +24,13 @@ class DashboardWidgetRegistry {
     private static array $widgets = [];
 
     /**
+     * Cached mapping of builder IDs to core IDs.
+     *
+     * @var array<string,string>|null
+     */
+    private static ?array $id_map = null;
+
+    /**
      * Register a widget and its settings.
      *
      * @param callable $callback Callback used to render the widget. Must be
@@ -194,31 +201,86 @@ class DashboardWidgetRegistry {
      * Map a builder widget ID to the core widget ID.
      */
     public static function map_to_core_id( string $id ): string {
-        static $map = [
-            'news_feed'            => 'widget_news',
-            'nearby_events_map'    => 'widget_nearby_events_map',
-            'my_favorites'         => 'widget_my_favorites',
-            'revenue_summary'      => 'artist_revenue_summary',
-            'audience_crm'         => 'audience_crm',
-            'branding_settings_panel' => 'branding_settings_panel',
-            'sponsored_event_config'  => 'sponsored_event_config',
-            'embed_tool'              => 'embed_tool',
-            'ap_donor_activity'       => 'ap_donor_activity',
-            'artpulse_analytics_widget' => 'artpulse_analytics_widget',
-            'org_widget_sharing'     => 'ap_widget_sharing',
-            'webhooks'               => 'webhooks',
-            'sponsor_display'        => 'sponsor_display',
-            'rsvp_button'            => 'rsvp_button',
-            'event_chat'            => 'event_chat',
-            'share_this_event'      => 'share_this_event',
-            'artist_inbox_preview'  => 'artist_inbox_preview',
-            'artist_spotlight'      => 'artist_spotlight',
-            'qa_checklist'          => 'ap_qa_checklist',
-            'widget_events'         => 'widget_events',
-            'widget_favorites'      => 'widget_favorites',
-        ];
-
+        $map = self::get_id_map();
         return $map[ $id ] ?? $id;
+    }
+
+    /**
+     * Map a core widget ID back to the builder ID.
+     */
+    public static function map_to_builder_id( string $id ): string {
+        static $flip = null;
+        if ( $flip === null ) {
+            $flip = array_flip( self::get_id_map() );
+        }
+
+        return $flip[ $id ] ?? $id;
+    }
+
+    /**
+     * Return the current builder to core ID map.
+     * Generated on demand from registered widget definitions.
+     */
+    public static function get_id_map(): array {
+        if ( self::$id_map !== null ) {
+            return self::$id_map;
+        }
+
+        self::$id_map = self::generate_id_map();
+
+        return self::$id_map;
+    }
+
+    /**
+     * Build the mapping between builder IDs and core registry IDs.
+     *
+     * @return array<string,string>
+     */
+    private static function generate_id_map(): array {
+        $builder = \ArtPulse\DashboardBuilder\DashboardWidgetRegistry::get_all();
+        $core    = self::get_definitions();
+
+        $map = [];
+
+        foreach ( $builder as $bid => $bdef ) {
+            $label = isset( $bdef['title'] ) ? $bdef['title'] : '';
+
+            if ( isset( $core[ $bid ] ) ) {
+                $map[ $bid ] = $bid;
+                continue;
+            }
+
+            $prefixed = 'widget_' . $bid;
+            if ( isset( $core[ $prefixed ] ) ) {
+                $map[ $bid ] = $prefixed;
+                continue;
+            }
+
+            $label_key = sanitize_key( $label );
+            $best      = null;
+            $best_pct  = 0.0;
+            foreach ( $core as $cid => $cdef ) {
+                $core_key = sanitize_key( $cdef['name'] ?? $cid );
+                if ( $core_key === $label_key ) {
+                    $best = $cid;
+                    $best_pct = 100.0;
+                    break;
+                }
+                similar_text( $label_key, $core_key, $pct );
+                if ( $pct > $best_pct ) {
+                    $best_pct = $pct;
+                    $best     = $cid;
+                }
+            }
+
+            if ( $best && $best_pct >= 70.0 ) {
+                $map[ $bid ] = $best;
+            }
+        }
+
+        ksort( $map );
+
+        return $map;
     }
 
     /**
