@@ -132,5 +132,34 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         $expected = ['a-', 'bc', 'invalidslug'];
         $this->assertSame($expected, $res->get_data()['layout']);
     }
-}
+    public function test_get_alias_route_returns_data(): void
+    {
+        update_user_meta($this->user_id, 'ap_dashboard_layout', [
+            ['id' => 'one', 'visible' => true],
+            ['id' => 'two', 'visible' => false],
+        ]);
+        $req = new WP_REST_Request('GET', '/artpulse/v1/dashboard/layout');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertSame(['one', 'two'], $data['layout']);
+    }
 
+    public function test_post_alias_route_saves_layout(): void
+    {
+        $req = new WP_REST_Request('POST', '/artpulse/v1/dashboard/layout');
+        $req->set_body_params([
+            'layout' => [
+                ['id' => 'a', 'visible' => false],
+                ['id' => 'b', 'visible' => true],
+            ]
+        ]);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $expected = [
+            ['id' => 'a', 'visible' => false],
+            ['id' => 'b', 'visible' => true],
+        ];
+        $this->assertSame($expected, get_user_meta($this->user_id, 'ap_dashboard_layout', true));
+    }
+}

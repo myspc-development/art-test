@@ -11,6 +11,18 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetManager;
 
+function register_ap_widget(string $id, array $args): void
+{
+    if (isset($args["component"]) && !isset($args["callback"])) {
+        $args["callback"] = $args["component"];
+    }
+    if (isset($args["title"]) && !isset($args["label"])) {
+        $args["label"] = $args["title"];
+    }
+    \ArtPulse\Core\DashboardWidgetRegistry::register_widget($id, $args);
+}
+
+
 function ap_get_all_widget_definitions(bool $include_schema = false): array
 {
     return DashboardWidgetManager::getWidgetDefinitions($include_schema);

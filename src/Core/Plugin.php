@@ -241,6 +241,7 @@ class Plugin
         \ArtPulse\Community\UserPreferencesRestController::register();
         \ArtPulse\Rest\WidgetSettingsRestController::register();
         \ArtPulse\Rest\DashboardConfigController::register();
+        \ArtPulse\Rest\DashboardLayoutRestController::register();
         \ArtPulse\Rest\LayoutSaveEndpoint::register();
         \ArtPulse\Rest\WidgetEditorController::register();
         \ArtPulse\Admin\DashboardLayoutEndpoint::register();
