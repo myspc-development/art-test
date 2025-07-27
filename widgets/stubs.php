@@ -8,12 +8,9 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
  * Rendering callbacks for widgets used by the dashboard builder.
  * These wrappers call existing widget implementations when available
- * or output simple containers for JavaScript powered widgets.
+ * or output simple containers for JavaScript-powered widgets.
  */
 
-/**
- * Output a minimal container for a JS widget.
- */
 function ap_render_js_widget(string $id, array $data = []): void {
     $defaults = [
         'api-root' => esc_url_raw(rest_url()),
@@ -28,23 +25,33 @@ function ap_render_js_widget(string $id, array $data = []): void {
 }
 
 function render_widget_ap_donor_activity(): void {
-    DonorActivityWidget::render();
+    if (class_exists('DonorActivityWidget')) {
+        DonorActivityWidget::render();
+    }
 }
 
 function render_widget_artist_inbox_preview(): void {
-    echo ap_widget_artist_inbox_preview([]);
+    if (function_exists('ap_widget_artist_inbox_preview')) {
+        echo ap_widget_artist_inbox_preview([]);
+    }
 }
 
 function render_widget_artist_revenue_summary(): void {
-    echo ap_widget_artist_revenue_summary([]);
+    if (function_exists('ap_widget_artist_revenue_summary')) {
+        echo ap_widget_artist_revenue_summary([]);
+    }
 }
 
 function render_widget_artist_spotlight(): void {
-    echo ap_widget_artist_spotlight([]);
+    if (function_exists('ap_widget_artist_spotlight')) {
+        echo ap_widget_artist_spotlight([]);
+    }
 }
 
 function render_widget_artpulse_analytics_widget(): void {
-    OrgAnalyticsWidget::render();
+    if (class_exists('OrgAnalyticsWidget')) {
+        OrgAnalyticsWidget::render();
+    }
 }
 
 function render_widget_audience_crm(): void {
@@ -64,11 +71,15 @@ function render_widget_event_chat(): void {
 }
 
 function render_widget_my_favorites(): void {
-    echo ap_widget_my_favorites([]);
+    if (function_exists('ap_widget_my_favorites')) {
+        echo ap_widget_my_favorites([]);
+    }
 }
 
 function render_widget_my_shared_events_activity(): void {
-    echo ap_widget_my_shared_events_activity([]);
+    if (function_exists('ap_widget_my_shared_events_activity')) {
+        echo ap_widget_my_shared_events_activity([]);
+    }
 }
 
 function render_widget_nearby_events_map(): void {
@@ -76,19 +87,27 @@ function render_widget_nearby_events_map(): void {
 }
 
 function render_widget_news_feed(): void {
-    ArtPulseNewsFeedWidget::render();
+    if (class_exists('ArtPulseNewsFeedWidget')) {
+        ArtPulseNewsFeedWidget::render();
+    }
 }
 
 function render_widget_org_widget_sharing(): void {
-    OrgWidgetSharingPanel::render();
+    if (class_exists('OrgWidgetSharingPanel')) {
+        OrgWidgetSharingPanel::render();
+    }
 }
 
 function render_widget_qa_checklist(): void {
-    QAChecklistWidget::render();
+    if (class_exists('QAChecklistWidget')) {
+        QAChecklistWidget::render();
+    }
 }
 
 function render_widget_revenue_summary(): void {
-    echo ap_widget_artist_revenue_summary([]);
+    if (function_exists('ap_widget_artist_revenue_summary')) {
+        echo ap_widget_artist_revenue_summary([]);
+    }
 }
 
 function render_widget_rsvp_button(): void {
@@ -108,9 +127,12 @@ function render_widget_sponsored_event_config(): void {
 }
 
 function render_widget_webhooks(): void {
-    echo ap_widget_webhooks([]);
+    if (function_exists('ap_widget_webhooks')) {
+        echo ap_widget_webhooks([]);
+    }
 }
 
+// Optional: Aliases to satisfy older builder configs or registry mappings
 function render_widget_widget_ap_donor_activity(): void {
     render_widget_ap_donor_activity();
 }
@@ -174,4 +196,3 @@ function render_widget_widget_sponsor_display(): void {
 function render_widget_widget_sponsored_event_config(): void {
     render_widget_sponsored_event_config();
 }
-
