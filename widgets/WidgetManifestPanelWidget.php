@@ -7,6 +7,9 @@ if (!defined('ABSPATH')) { exit; }
  */
 class WidgetManifestPanelWidget {
     public static function register(): void {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
         add_action('wp_dashboard_setup', [self::class, 'add_widget']);
     }
 
