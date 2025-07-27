@@ -445,7 +445,8 @@ class DashboardWidgetRegistry {
             'icon'        => 'dashicons-megaphone',
             'description' => __( 'Latest updates from ArtPulse.', 'artpulse' ),
             'callback'    => [ self::class, 'render_widget_news' ],
-            'roles'       => [ 'member', 'artist' ],
+            'roles'       => [ 'member' ],
+            'visibility'  => 'public',
         ] );
         $register( 'widget_events', [
             'id'          => 'widget_events',

@@ -508,9 +508,10 @@ function ap_register_core_dashboard_widgets(): void
         __('Shows events near the user.', 'artpulse'),
         'ap_widget_local_events',
         [
-            'category' => 'community',
-            'roles'    => ['member', 'artist', 'organization'],
-            'settings' => [
+            'category'   => 'community',
+            'roles'      => ['member'],
+            'visibility' => 'public',
+            'settings'   => [
                 [
                     'key'     => 'limit',
                     'label'   => __('Number of Events', 'artpulse'),
@@ -529,9 +530,10 @@ function ap_register_core_dashboard_widgets(): void
         __('Favorited content lists.', 'artpulse'),
         'ap_widget_favorites',
         [
-            'category' => 'engagement',
-            'roles'    => ['member', 'artist', 'organization'],
-            'settings' => [
+            'category'   => 'engagement',
+            'roles'      => ['member'],
+            'visibility' => 'public',
+            'settings'   => [
                 [
                     'key'     => 'limit',
                     'label'   => __('Items to Show', 'artpulse'),
@@ -550,8 +552,9 @@ function ap_register_core_dashboard_widgets(): void
         __('Artists and events you follow.', 'artpulse'),
         'ap_widget_my_follows',
         [
-            'category' => 'engagement',
-            'roles'    => ['member', 'artist', 'organization'],
+            'category'   => 'engagement',
+            'roles'      => ['member'],
+            'visibility' => 'public',
         ]
     );
 
@@ -651,9 +654,10 @@ function ap_register_core_dashboard_widgets(): void
         __('Private messages inbox.', 'artpulse'),
         'ap_widget_messages',
         [
-            'category' => 'engagement',
-            'roles'    => ['member', 'artist', 'organization'],
-            'settings' => [
+            'category'   => 'engagement',
+            'roles'      => ['member'],
+            'visibility' => 'public',
+            'settings'   => [
                 [
                     'key'     => 'limit',
                     'label'   => __('Items to Show', 'artpulse'),
@@ -714,9 +718,10 @@ function ap_register_core_dashboard_widgets(): void
         __('Recent notifications.', 'artpulse'),
         'ap_widget_notifications',
         [
-            'category' => 'engagement',
-            'roles'    => ['member', 'artist', 'organization'],
-            'settings' => [
+            'category'   => 'engagement',
+            'roles'      => ['member'],
+            'visibility' => 'public',
+            'settings'   => [
                 [
                     'key'     => 'limit',
                     'label'   => __('Items to Show', 'artpulse'),
@@ -809,8 +814,9 @@ function ap_register_core_dashboard_widgets(): void
         __('Events you have RSVP\'d to.', 'artpulse'),
         'ap_widget_my_rsvps',
         [
-            'roles'    => ['member'],
-            'category' => 'events',
+            'roles'      => ['member'],
+            'category'   => 'events',
+            'visibility' => 'public',
         ]
     );
 
@@ -833,8 +839,9 @@ function ap_register_core_dashboard_widgets(): void
         __('Suggestions based on your interests.', 'artpulse'),
         'ap_widget_recommended_for_you_member',
         [
-            'roles'    => ['member'],
-            'category' => 'recommended',
+            'roles'      => ['member'],
+            'category'   => 'recommended',
+            'visibility' => 'public',
         ]
     );
 
@@ -846,8 +853,9 @@ function ap_register_core_dashboard_widgets(): void
         __('Random cat facts from catfact.ninja.', 'artpulse'),
         'ap_widget_cat_fact',
         [
-            'category' => 'fun',
-            'roles'    => ['member', 'artist', 'organization'],
+            'category'   => 'fun',
+            'roles'      => ['member'],
+            'visibility' => 'public',
         ]
     );
 
@@ -858,8 +866,9 @@ function ap_register_core_dashboard_widgets(): void
         __('Send feedback about your dashboard.', 'artpulse'),
         'ap_widget_dashboard_feedback',
         [
-            'roles'    => ['member', 'artist', 'organization'],
-            'category' => 'engagement',
+            'roles'      => ['member'],
+            'category'   => 'engagement',
+            'visibility' => 'public',
         ]
     );
 
