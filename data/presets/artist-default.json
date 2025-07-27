@@ -2,5 +2,11 @@
   {"id": "artist_spotlight"},
   {"id": "my-events"},
   {"id": "artist_inbox_preview"},
-  {"id": "artist_revenue_summary"}
+  {"id": "artist_revenue_summary"},
+  {"id": "artist_artwork_manager"},
+  {"id": "artist_audience_insights"},
+  {"id": "artist_earnings_summary"},
+  {"id": "artist_feed_publisher"},
+  {"id": "collab_requests"},
+  {"id": "onboarding_tracker"}
 ]

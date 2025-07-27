@@ -2,5 +2,8 @@
   {"id": "artist_inbox_preview"},
   {"id": "artist_revenue_summary"},
   {"id": "account-tools"},
-  {"id": "my-events"}
+  {"id": "my-events"},
+  {"id": "artist_artwork_manager"},
+  {"id": "artist_audience_insights"},
+  {"id": "artist_feed_publisher"}
 ]

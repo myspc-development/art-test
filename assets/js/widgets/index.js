@@ -6,6 +6,12 @@ import { ShareThisEventWidget } from './ShareThisEventWidget.jsx';
 import { ArtistInboxPreviewWidget } from './ArtistInboxPreviewWidget.jsx';
 import { ArtistRevenueSummaryWidget } from './ArtistRevenueSummaryWidget.jsx';
 import { ArtistSpotlightWidget } from './ArtistSpotlightWidget.jsx';
+import { ArtistArtworkManagerWidget } from './ArtistArtworkManagerWidget.jsx';
+import { ArtistAudienceInsightsWidget } from './ArtistAudienceInsightsWidget.jsx';
+import { ArtistEarningsWidget } from './ArtistEarningsWidget.jsx';
+import { ArtistFeedPublisherWidget } from './ArtistFeedPublisherWidget.jsx';
+import { ArtistCollaborationWidget } from './ArtistCollaborationWidget.jsx';
+import { OnboardingTrackerWidget } from './OnboardingTrackerWidget.jsx';
 import { AudienceCRMWidget } from './AudienceCRMWidget.jsx';
 import { SponsoredEventConfigWidget } from './SponsoredEventConfigWidget.jsx';
 import { EmbedToolWidget } from './EmbedToolWidget.jsx';
@@ -64,6 +70,43 @@ export default [
     id: 'artist_spotlight',
     title: __('Artist Spotlight', 'artpulse'),
     component: ArtistSpotlightWidget,
+    roles: ['artist']
+  },
+  {
+    id: 'artist_artwork_manager',
+    title: __('Artwork Manager', 'artpulse'),
+    component: ArtistArtworkManagerWidget,
+    roles: ['artist'],
+    default: true
+  },
+  {
+    id: 'artist_audience_insights',
+    title: __('Audience Insights', 'artpulse'),
+    component: ArtistAudienceInsightsWidget,
+    roles: ['artist']
+  },
+  {
+    id: 'artist_earnings_summary',
+    title: __('Earnings Summary', 'artpulse'),
+    component: ArtistEarningsWidget,
+    roles: ['artist']
+  },
+  {
+    id: 'artist_feed_publisher',
+    title: __('Post & Engage', 'artpulse'),
+    component: ArtistFeedPublisherWidget,
+    roles: ['artist']
+  },
+  {
+    id: 'collab_requests',
+    title: __('Collab Requests', 'artpulse'),
+    component: ArtistCollaborationWidget,
+    roles: ['artist']
+  },
+  {
+    id: 'onboarding_tracker',
+    title: __('Onboarding Checklist', 'artpulse'),
+    component: OnboardingTrackerWidget,
     roles: ['artist']
   },
   {
