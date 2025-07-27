@@ -40,6 +40,6 @@ the file to your site root so install prompts work correctly.
 ## Additional Notes
 - The tools are responsive and keyboard accessible.
 - After plugin updates visit **Settings → Permalinks** to flush rewrite rules if needed.
-- After activation resave your permalinks to ensure the `/dashboard-role.php` preview page works.
+- After activation resave your permalinks to ensure the `/dashboard-role` preview page works.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
