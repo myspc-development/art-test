@@ -17,9 +17,9 @@ if (empty($spotlights)) {
 }
 ?>
 
-<div class="ap-widget">
-  <div class="ap-widget-header">🌟 <?= __('Featured for You', 'artpulse') ?></div>
-  <div class="ap-widget-body">
+<div id="ap-spotlight-dashboard" class="ap-card" role="region" aria-labelledby="ap-spotlight-dashboard-title">
+  <h2 id="ap-spotlight-dashboard-title" class="ap-card__title">🌟 <?= __('Featured for You', 'artpulse') ?></h2>
+  <div>
     <?php foreach ($spotlights as $post): ?>
       <div class="ap-spotlight-card">
         <?php

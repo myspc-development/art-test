@@ -11,9 +11,9 @@ if (empty($spotlights)) {
     return;
 }
 ?>
-<div class="ap-widget">
-  <div class="ap-widget-header">🌟 <?php esc_html_e('Spotlights', 'artpulse'); ?></div>
-  <div class="ap-widget-body">
+<div id="ap-spotlights" class="ap-card" role="region" aria-labelledby="ap-spotlights-title">
+  <h2 id="ap-spotlights-title" class="ap-card__title">🌟 <?php esc_html_e('Spotlights', 'artpulse'); ?></h2>
+  <div>
     <?php foreach ($spotlights as $post): ?>
       <div class="ap-spotlight-card">
         <?php

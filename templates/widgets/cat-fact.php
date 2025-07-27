@@ -15,9 +15,9 @@ if ($fact === false && (!defined('IS_DASHBOARD_BUILDER_PREVIEW') || !IS_DASHBOAR
     }
 }
 ?>
-<div class="ap-widget notice notice-info p-4 rounded">
-  <div class="ap-widget-header">😺 <?php esc_html_e('Cat Fact', 'artpulse'); ?></div>
-  <div class="ap-widget-body">
+<div id="ap-cat-fact" class="ap-card" role="region" aria-labelledby="ap-cat-fact-title">
+  <h2 id="ap-cat-fact-title" class="ap-card__title">😺 <?php esc_html_e('Cat Fact', 'artpulse'); ?></h2>
+  <div>
     <?php if ($fact): ?>
       <p><?php echo esc_html($fact); ?></p>
     <?php else: ?>
