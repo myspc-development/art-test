@@ -117,7 +117,7 @@ if (empty($layout)) {
         echo '<span class="drag-handle" role="button" tabindex="0" aria-label="Move widget"></span>';
 
         if (isset($config['callback']) && empty($config['template'])) {
-            call_user_func($config['callback']);
+            ap_render_widget($id, $user_id);
         } else {
             $template = locate_template('templates/' . $config['template']);
             if (!$template) {
