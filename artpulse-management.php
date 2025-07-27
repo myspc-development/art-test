@@ -26,6 +26,7 @@ use ArtPulse\Core\Activator;
 use ArtPulse\Admin\EnqueueAssets;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Dashboard\WidgetVisibilityManager;
+use ArtPulse\Core\WidgetRoleSync;
 
 // Suppress deprecated notices if WP_DEBUG enabled
 if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -68,6 +69,7 @@ require_once __DIR__ . '/includes/update-checker.php';
 
 Plugin::register();
 WidgetVisibilityManager::register();
+WidgetRoleSync::register();
 
 /**
  * Ensure core database tables exist on activation.
