@@ -182,6 +182,7 @@ class Plugin
         \ArtPulse\Core\PostTypeRegistrar::register();
         \ArtPulse\Integration\CalendarExport::add_rewrite_rules();
         \ArtPulse\Frontend\EmbedRewrite::add_rules();
+        \ArtPulse\Frontend\DashboardRoleRewrite::add_rules();
         flush_rewrite_rules();
 
         // ✅ Fix: ensure roles/caps are installed
@@ -403,6 +404,7 @@ class Plugin
         \ArtPulse\Blocks\FavoritesWidgetBlock::register();
         \ArtPulse\Frontend\WidgetsController::register();
         DashboardBlockPatternManager::register();
+        \ArtPulse\Frontend\DashboardRoleRewrite::register();
         \ArtPulse\Frontend\EmbedRewrite::register();
         \ArtPulse\Analytics\EmbedAnalytics::register();
         \ArtPulse\Community\FollowRestController::register();
