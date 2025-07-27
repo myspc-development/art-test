@@ -1,25 +1,34 @@
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.APDashboardMenu) {
-    if (APDashboardMenu.debug) {
-      console.log('AP roles:', APDashboardMenu.roles);
-      console.log('Merged menu:', APDashboardMenu.menu);
-      const dbg = document.createElement('div');
-      dbg.className = 'ap-menu-debug';
-      dbg.textContent = `Roles: ${APDashboardMenu.roles.join(', ')} | Items: ${APDashboardMenu.menu.length}`;
-      document.querySelector('.dashboard-nav')?.appendChild(dbg);
-    }
+  if (window.APDashboardMenu?.debug) {
+    console.log('AP roles:', APDashboardMenu.roles);
+    console.log('Merged menu:', APDashboardMenu.menu);
+    const dbg = document.createElement('div');
+    dbg.className = 'ap-menu-debug';
+    dbg.textContent = `Roles: ${APDashboardMenu.roles.join(', ')} | Items: ${APDashboardMenu.menu.length}`;
+    document.querySelector('.dashboard-nav')?.appendChild(dbg);
   }
+
   const sections = document.querySelectorAll('.ap-dashboard-section');
-  const links = document.querySelectorAll('.dashboard-link');
+  const links = Array.from(document.querySelectorAll('.dashboard-link'));
+  let activeId = null;
+  let rafId = null;
+
+  const scheduleUpdate = () => {
+    if (rafId) return;
+    rafId = requestAnimationFrame(() => {
+      links.forEach(link => {
+        link.classList.toggle('active', link.dataset.section === activeId);
+      });
+      rafId = null;
+    });
+  };
 
   const observer = new IntersectionObserver(
     entries => {
       entries.forEach(entry => {
-        const id = entry.target.id;
         if (entry.isIntersecting) {
-          links.forEach(link => {
-            link.classList.toggle('active', link.dataset.section === id);
-          });
+          activeId = entry.target.id;
+          scheduleUpdate();
         }
       });
     },
