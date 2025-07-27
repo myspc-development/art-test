@@ -15,6 +15,7 @@ use ArtPulse\Rest\RestRelationships;
 use ArtPulse\Rest\TaxonomyRestFilters;
 use ArtPulse\Discovery\TrendingManager;
 use ArtPulse\Rest\TrendingRestController;
+use ArtPulse\Personalization\RecommendationPreferenceManager;
 use ArtPulse\Admin\EngagementDashboard;
 use ArtPulse\Core\ArtworkEventLinkManager;
 use ArtPulse\Engagement\DigestMailer;
@@ -122,6 +123,7 @@ class Plugin
         add_action('init', [\ArtPulse\Core\EventMetrics::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ArtworkEventLinkManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Personalization\RecommendationEngine::class, 'maybe_install_table']);
+        add_action('init', [\ArtPulse\Personalization\RecommendationPreferenceManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\ActivityLogger::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Core\DelegatedAccessManager::class, 'maybe_install_table']);
         add_action('init', [\ArtPulse\Community\EventChatController::class, 'maybe_install_table']);
@@ -163,6 +165,7 @@ class Plugin
             \ArtPulse\Core\EventMetrics::install_table();
             \ArtPulse\Core\ArtworkEventLinkManager::install_table();
             \ArtPulse\Personalization\RecommendationEngine::install_table();
+            RecommendationPreferenceManager::install_table();
             \ArtPulse\Core\ActivityLogger::install_table();
             \ArtPulse\Community\CommentReports::install_table();
             \ArtPulse\Community\EventVoteManager::install_table();

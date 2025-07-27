@@ -2,6 +2,7 @@
 namespace ArtPulse\Personalization;
 
 use ArtPulse\Community\FavoritesManager;
+use ArtPulse\Personalization\RecommendationPreferenceManager;
 
 class RecommendationEngine
 {
@@ -73,6 +74,11 @@ class RecommendationEngine
             return $cached;
         }
 
+        $prefs = RecommendationPreferenceManager::get($user_id);
+        $preferred_tags = array_map('strtolower', (array) $prefs['preferred_tags']);
+        $ignored_tags   = array_map('strtolower', (array) $prefs['ignored_tags']);
+        $blacklist_ids  = array_map('intval', (array) $prefs['blacklist_ids']);
+
         $recs = [];
         if ($type === 'event') {
             $fav = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
@@ -103,10 +109,22 @@ class RecommendationEngine
                     'no_found_rows'  => true,
                 ]);
                 foreach ($query->posts as $post) {
+                    if (in_array($post->ID, $blacklist_ids, true)) {
+                        continue;
+                    }
+                    $post_tags = wp_get_object_terms($post->ID, ['artpulse_category','post_tag'], ['fields'=>'slugs']);
+                    $lower_tags = array_map('strtolower', $post_tags);
+                    if ($ignored_tags && array_intersect($ignored_tags, $lower_tags)) {
+                        continue;
+                    }
+                    $score = 1;
+                    if ($preferred_tags && array_intersect($preferred_tags, $lower_tags)) {
+                        $score *= 1.5;
+                    }
                     $recs[] = [
                         'id'     => $post->ID,
                         'title'  => $post->post_title,
-                        'score'  => 1,
+                        'score'  => $score,
                         'reason' => __('Based on your favorites', 'artpulse'),
                     ];
                 }
@@ -137,10 +155,22 @@ class RecommendationEngine
                 });
                 $events = array_slice($events, 0, $limit);
                 foreach ($events as $post) {
+                    if (in_array($post->ID, $blacklist_ids, true)) {
+                        continue;
+                    }
+                    $post_tags = wp_get_object_terms($post->ID, ['artpulse_category','post_tag'], ['fields'=>'slugs']);
+                    $lower_tags = array_map('strtolower', $post_tags);
+                    if ($ignored_tags && array_intersect($ignored_tags, $lower_tags)) {
+                        continue;
+                    }
+                    $score = 0.5;
+                    if ($preferred_tags && array_intersect($preferred_tags, $lower_tags)) {
+                        $score *= 1.5;
+                    }
                     $recs[] = [
                         'id'     => $post->ID,
                         'title'  => $post->post_title,
-                        'score'  => 0.5,
+                        'score'  => $score,
                         'reason' => __('Trending', 'artpulse'),
                     ];
                 }
@@ -158,6 +188,8 @@ class RecommendationEngine
                     $rec['score']    = $rec['score'] / (1 + $dist);
                 }
             }
+            usort($recs, fn($a, $b) => ($b['score'] <=> $a['score']));
+        } else {
             usort($recs, fn($a, $b) => ($b['score'] <=> $a['score']));
         }
 
