@@ -19,6 +19,7 @@ This directory groups all documentation by audience and feature area. Start with
 ### Developer Guides
 - [Developer Guides](developer/README.md) – shortcodes, forms and coding standards.
 - [Widgets Documentation](widgets/README.md) – widget registry and layout guides.
+- [Dashboard Menu Codex](dashboard-menu-codex.md) – menu configuration overview.
 
 ### QA Guides
 - [QA Documentation](qa/README.md) – checklists and automated testing notes.
