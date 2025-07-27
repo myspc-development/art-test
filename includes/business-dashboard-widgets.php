@@ -35,6 +35,7 @@ function ap_register_business_dashboard_widgets(): void
         [
             'category'   => 'analytics',
             'roles'      => ['administrator'],
+            'visibility' => 'public',
             'capability' => 'manage_options',
         ]
     );
@@ -47,6 +48,7 @@ function ap_register_business_dashboard_widgets(): void
         'ap_widget_lead_capture',
         [
             'category'   => 'marketing',
+            'visibility' => 'public',
             'roles'      => ['administrator'],
             'capability' => 'manage_options',
         ]
@@ -59,6 +61,7 @@ function ap_register_business_dashboard_widgets(): void
         __('Sales totals for the selected period.', 'artpulse'),
         'ap_widget_sales_summary',
         [
+            'visibility' => 'public',
             'category'   => 'commerce',
             'roles'      => ['administrator'],
             'capability' => 'manage_options',

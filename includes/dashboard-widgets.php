@@ -497,6 +497,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'engagement',
             'roles'    => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
             'settings' => [
                 [
                     'key'     => 'show_badges',
@@ -518,6 +519,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'account',
             'roles'    => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
             'settings' => [
                 [
                     'key'     => 'show_forms',
@@ -596,6 +598,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'engagement',
             'roles'    => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
         ]
     );
 
@@ -609,6 +612,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'events',
             'roles'    => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -630,6 +634,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'events',
             'roles'    => ['organization', 'member'],
+            'visibility' => 'public',
         ]
     );
 
@@ -643,6 +648,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'events',
             'roles'    => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -664,6 +670,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'events',
             'roles'    => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -707,6 +714,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'account',
             'roles'    => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
             'settings' => [
                 [
                     'key'     => 'show_export',
@@ -728,6 +736,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'support',
             'roles'    => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -770,6 +779,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_role_spotlight',
         [
             'roles' => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
         ]
     );
 
@@ -782,6 +792,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_for_you',
         [
             'roles'    => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
             'category' => 'recommended',
         ]
     );
@@ -795,6 +806,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_followed_artists',
         [
             'roles' => ['member', 'artist'],
+            'visibility' => 'public',
         ]
     );
 
@@ -806,6 +818,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_upcoming_events_location',
         [
             'roles'    => ['member'],
+            'visibility' => 'public',
             'category' => 'events',
         ]
     );
@@ -818,6 +831,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_followed_artists_activity',
         [
             'roles'    => ['member'],
+            'visibility' => 'public',
             'category' => 'engagement',
         ]
     );
@@ -832,6 +846,7 @@ function ap_register_core_dashboard_widgets(): void
             // Available to both members and artists so creators can monitor
             // follower messages while regular users preview artist inboxes.
             'roles'    => ['member', 'artist'],
+            'visibility' => 'public',
             'category' => 'engagement',
         ]
     );
@@ -857,6 +872,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_my_shared_events_activity',
         [
             'roles'    => ['member'],
+            'visibility' => 'public',
             'category' => 'engagement',
         ]
     );
@@ -911,6 +927,7 @@ function ap_register_core_dashboard_widgets(): void
         [
             'category' => 'social',
             'roles'    => ['member', 'artist'],
+            'visibility' => 'public',
             'settings' => [
                 [
                     'key'   => 'access_token',
@@ -941,6 +958,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_spotlight_events',
         [
             'roles' => ['member', 'organization'],
+            'visibility' => 'public',
         ]
     );
 
@@ -953,6 +971,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_spotlight_calls',
         [
             'roles' => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
         ]
     );
 
@@ -965,6 +984,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_spotlight_features',
         [
             'roles' => ['member', 'artist', 'organization'],
+            'visibility' => 'public',
         ]
     );
 
@@ -976,6 +996,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_artist_revenue_summary',
         [
             'roles' => ['artist'],
+            'visibility' => 'public',
             'category' => 'commerce',
         ]
     );
@@ -988,6 +1009,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_artist_spotlight',
         [
             'roles' => ['artist'],
+            'visibility' => 'public',
             'category' => 'community',
         ]
     );
@@ -1000,6 +1022,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_artist_artwork_manager',
         [
             'roles' => ['artist'],
+            'visibility' => 'public',
             'default' => true
         ]
     );
@@ -1012,6 +1035,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_artist_audience_insights',
         [
             'roles' => ['artist']
+            'visibility' => 'public',
         ]
     );
 
@@ -1023,6 +1047,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_artist_earnings_summary',
         [
             'roles' => ['artist']
+            'visibility' => 'public',
         ]
     );
 
@@ -1034,6 +1059,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_artist_feed_publisher',
         [
             'roles' => ['artist']
+            'visibility' => 'public',
         ]
     );
 
@@ -1045,6 +1071,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_collab_requests',
         [
             'roles' => ['artist']
+            'visibility' => 'public',
         ]
     );
 
@@ -1056,6 +1083,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_onboarding_tracker',
         [
             'roles' => ['artist']
+            'visibility' => 'public',
         ]
     );
 
@@ -1067,6 +1095,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_spotlights',
         [
             'roles' => ['artist'],
+            'visibility' => 'public',
         ]
     );
 }
