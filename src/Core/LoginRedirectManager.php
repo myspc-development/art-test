@@ -18,14 +18,7 @@ class LoginRedirectManager
             return $redirect_to;
         }
 
-        if (user_can($user, 'organization')) {
-            return Plugin::get_org_dashboard_url();
-        }
-
-        if (user_can($user, 'artist')) {
-            return Plugin::get_artist_dashboard_url();
-        }
-
-        return Plugin::get_user_dashboard_url();
+        $dashboard_url = home_url('/dashboard-role.php');
+        return $dashboard_url;
     }
 }

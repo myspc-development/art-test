@@ -858,18 +858,7 @@ class Plugin
 
     public static function get_user_dashboard_url(): string
     {
-        $pages = get_posts([
-            'post_type'   => 'page',
-            'post_status' => 'publish',
-            's'           => '[ap_user_dashboard]',
-            'numberposts' => 1,
-        ]);
-
-        if (!empty($pages)) {
-            return get_permalink($pages[0]->ID);
-        }
-
-        return home_url('/');
+        return home_url('/dashboard-role.php');
     }
 
     /**
@@ -877,18 +866,7 @@ class Plugin
      */
     public static function get_org_dashboard_url(): string
     {
-        $pages = get_posts([
-            'post_type'   => 'page',
-            'post_status' => 'publish',
-            's'           => '[ap_org_dashboard]',
-            'numberposts' => 1,
-        ]);
-
-        if (!empty($pages)) {
-            return get_permalink($pages[0]->ID);
-        }
-
-        return home_url('/');
+        return home_url('/dashboard-role.php');
     }
 
     /**
@@ -896,18 +874,7 @@ class Plugin
      */
     public static function get_artist_dashboard_url(): string
     {
-        $pages = get_posts([
-            'post_type'   => 'page',
-            'post_status' => 'publish',
-            's'           => '[ap_artist_dashboard]',
-            'numberposts' => 1,
-        ]);
-
-        if (!empty($pages)) {
-            return get_permalink($pages[0]->ID);
-        }
-
-        return home_url('/');
+        return home_url('/dashboard-role.php');
     }
 
     /**
