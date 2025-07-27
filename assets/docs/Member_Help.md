@@ -50,33 +50,33 @@ graph TD
 - Edit your profile and see recent notifications.
 - Earn badges for engagement. Any badges granted by admins appear below your membership details.
 - Drag widgets by their headers to rearrange them. Use the visibility menu to show or hide sections.
-- See the [User Guide](../../docs/user-guide.md) for dashboard features.
+- See the [User Guide](../../docs/guides/user/user-guide.md) for dashboard features.
 
 ## Event Calendar
-The **My Calendar** view in your dashboard displays upcoming events you have registered for. Use the monthly navigation to see what's coming. See the [User Guide](../../docs/user-guide.md) for full calendar instructions.
+ The **My Calendar** view in your dashboard displays upcoming events you have registered for. Use the monthly navigation to see what's coming. See the [User Guide](../../docs/guides/user/user-guide.md) for full calendar instructions.
 
 ### Exploring Events Near You
 - Allow browser location or set your home area to see events highlighted by proximity.
 - Use the color legend to spot the closest events.
 - Click an event to see full details, including distance from you and directions.
-- Additional calendar options are covered in the [User Guide](../../docs/user-guide.md).
+- Additional calendar options are covered in the [User Guide](../../docs/guides/user/user-guide.md).
 
 ## Artwork Registration
-After creating your profile, register each piece through the **Add Artwork** form. Include high quality images and a detailed description. The [User Guide](../../docs/user-guide.md) covers this form in detail.
+ After creating your profile, register each piece through the **Add Artwork** form. Include high quality images and a detailed description. The [User Guide](../../docs/guides/user/user-guide.md) covers this form in detail.
 
 ### Selling Artworks
 - If enabled by the site admin, you’ll see a “For Sale?” option when adding/editing artworks.
 - Enter a price and optional buy/contact link.
 - Buyers can contact you or purchase directly from your artwork’s page.
 - If this option isn’t visible, selling is currently disabled by the site admin.
-- See the [User Guide](../../docs/user-guide.md) for selling artworks.
+- See the [User Guide](../../docs/guides/user/user-guide.md) for selling artworks.
 
 ### Artwork Price History
 - When viewing your artwork, you’ll see a list or chart of previous sale prices if you’ve changed the price over time.
-- Details on price history appear in the [User Guide](../../docs/user-guide.md).
+- Details on price history appear in the [User Guide](../../docs/guides/user/user-guide.md).
 
 ## Event Registration
-When ready to promote an event, open **Submit Event** from your dashboard. Provide dates, times and location information. Refer to the [User Guide](../../docs/user-guide.md) for event submission steps.
+When ready to promote an event, open **Submit Event** from your dashboard. Provide dates, times and location information. Refer to the [User Guide](../../docs/guides/user/user-guide.md) for event submission steps.
 
 ### Event Images
 Each event can include a banner plus up to five additional images. The submission and edit forms provide an **Images** field for this purpose. The first image is used as the banner while the rest display as a gallery below the event description on the site.
