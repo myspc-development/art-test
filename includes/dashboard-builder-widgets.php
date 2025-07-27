@@ -70,9 +70,10 @@ function ap_register_dashboard_builder_widget_map(): void {
 
     // Register widgets with the union of roles once per widget ID.
     foreach ($combined as $id => $info) {
+        $cb = function_exists('render_widget_' . $id) ? 'render_widget_' . $id : '__return_empty_string';
         DashboardWidgetRegistry::register($id, [
             'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
-            'render_callback' => 'render_widget_' . $id,
+            'render_callback' => $cb,
             'roles' => array_unique($info['roles']),
             'file'  => $info['file'],
         ]);
@@ -100,9 +101,10 @@ function ap_register_dashboard_builder_widget_map(): void {
         $basename = basename($path);
         if (!isset($registered_files[$basename])) {
             $id = pathinfo($basename, PATHINFO_FILENAME);
+            $cb = function_exists('render_widget_' . $id) ? 'render_widget_' . $id : '__return_empty_string';
             DashboardWidgetRegistry::register($id, [
                 'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
-                'render_callback' => 'render_widget_' . $id,
+                'render_callback' => $cb,
                 'roles' => [],
                 'file'  => $basename,
             ]);

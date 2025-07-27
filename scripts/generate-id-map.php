@@ -7,6 +7,9 @@ if (!function_exists('sanitize_key')) {
 if (!function_exists('__')) {
     function __($s) { return $s; }
 }
+if (!function_exists('__return_empty_string')) {
+    function __return_empty_string() { return ''; }
+}
 if (!function_exists('add_action')) {
     function add_action($hook, $callback, $priority = 10, $args = 1) {}
 }
