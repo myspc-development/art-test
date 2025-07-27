@@ -70,13 +70,9 @@ function ap_register_dashboard_builder_widget_map(): void {
 
     // Register widgets with the union of roles once per widget ID.
     foreach ($combined as $id => $info) {
-        $callback = static function () use ($id) {
-            echo '<div class="ap-widget-placeholder">' . esc_html($id) . '</div>';
-        };
-
         DashboardWidgetRegistry::register($id, [
             'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
-            'render_callback' => $callback,
+            'render_callback' => 'render_widget_' . $id,
             'roles' => array_unique($info['roles']),
             'file'  => $info['file'],
         ]);
@@ -104,12 +100,9 @@ function ap_register_dashboard_builder_widget_map(): void {
         $basename = basename($path);
         if (!isset($registered_files[$basename])) {
             $id = pathinfo($basename, PATHINFO_FILENAME);
-            $callback = static function () use ($id) {
-                echo '<div class="ap-widget-placeholder">' . esc_html($id) . '</div>';
-            };
             DashboardWidgetRegistry::register($id, [
                 'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
-                'render_callback' => $callback,
+                'render_callback' => 'render_widget_' . $id,
                 'roles' => [],
                 'file'  => $basename,
             ]);
@@ -175,13 +168,9 @@ function ap_register_builder_core_placeholders(): void {
             continue;
         }
 
-        $callback = static function () use ($info) {
-            echo '<div class="ap-widget-placeholder">' . esc_html($info['label']) . ' widget (placeholder)</div>';
-        };
-
         CoreDashboardWidgetRegistry::register_widget($core_id, [
             'label'    => $info['label'],
-            'callback' => $callback,
+            'callback' => 'render_widget_' . $core_id,
             'roles'    => array_unique($info['roles']),
         ]);
     }

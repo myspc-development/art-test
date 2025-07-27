@@ -83,9 +83,7 @@ class WidgetRoleSync {
                 if (!isset($builder_defs[$id])) {
                     BuilderRegistry::register($id, [
                         'title' => $widgets[$id]['label'] ?? ucwords(str_replace('_', ' ', $id)),
-                        'render_callback' => static function () use ($id) {
-                            echo '<div class="ap-widget-placeholder">' . esc_html($id) . '</div>';
-                        },
+                        'render_callback' => 'render_widget_' . $id,
                         'roles' => $roles,
                         'file'  => $widgets[$id]['file'] ?? '',
                     ]);
