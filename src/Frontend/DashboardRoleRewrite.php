@@ -14,7 +14,7 @@ class DashboardRoleRewrite
     {
         add_rewrite_rule(
             '^dashboard-role(?:\\.php)?/?$',
-            'index.php?ap_dashboard_role=1',
+            'index.php?ap_dashboard_role=1&ap_dashboard=1',
             'top'
         );
     }
@@ -22,12 +22,13 @@ class DashboardRoleRewrite
     public static function register_vars(array $vars): array
     {
         $vars[] = 'ap_dashboard_role';
+        $vars[] = 'ap_dashboard';
         return $vars;
     }
 
     public static function maybe_render(): void
     {
-        if (get_query_var('ap_dashboard_role')) {
+        if (get_query_var('ap_dashboard_role') || get_query_var('ap_dashboard')) {
             include plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/dashboard-role.php';
             exit;
         }
