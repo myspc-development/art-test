@@ -10,9 +10,9 @@ if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
 }
 ?>
 
-<div class="ap-widget notice notice-info p-4 rounded">
-  <div class="ap-widget-header">📅 <?= __('RSVP Stats', 'artpulse') ?></div>
-  <div class="ap-widget-body">
+<div id="ap-rsvp-stats" class="ap-card" role="region" aria-labelledby="ap-rsvp-stats-title">
+  <h2 id="ap-rsvp-stats-title" class="ap-card__title">📅 <?= __('RSVP Stats', 'artpulse') ?></h2>
+  <div>
     <p><strong><?= $rsvp_data['going'] ?></strong> <?= esc_html__( 'Going', 'artpulse' ); ?></p>
     <p><strong><?= $rsvp_data['interested'] ?></strong> <?= esc_html__( 'Interested', 'artpulse' ); ?></p>
 

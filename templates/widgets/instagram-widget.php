@@ -30,9 +30,9 @@ if (!defined('IS_DASHBOARD_BUILDER_PREVIEW') || !IS_DASHBOARD_BUILDER_PREVIEW) {
     }
 }
 ?>
-<div class="ap-widget">
-  <div class="ap-widget-header">📷 <?php _e('Instagram', 'artpulse'); ?></div>
-  <div class="ap-widget-body">
+<div id="ap-instagram" class="ap-card" role="region" aria-labelledby="ap-instagram-title">
+  <h2 id="ap-instagram-title" class="ap-card__title">📷 <?php _e('Instagram', 'artpulse'); ?></h2>
+  <div>
     <?php foreach ($posts as $post) : ?>
       <div class="ap-instagram-post">
         <?php
