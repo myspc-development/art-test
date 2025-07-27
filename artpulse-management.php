@@ -134,6 +134,7 @@ require_once __DIR__ . '/includes/admin-dashboard-widget-controller.php';
 require_once __DIR__ . '/admin/page-community-roles.php';
 require_once __DIR__ . '/admin/page-roles-editor.php';
 require_once __DIR__ . '/admin/page-widget-visibility.php';
+require_once __DIR__ . '/admin/page-widget-audit.php';
 
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
