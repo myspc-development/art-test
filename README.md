@@ -1,7 +1,8 @@
 # ArtPulse Management Plugin
 
-For end‑user instructions see the [User Guide](docs/guides/user/user-guide.md).
-Site administrators should consult the [Admin Guide](docs/guides/admin/admin-guide.md).
+For end‑user instructions see the [User Guide](docs/guides/user/README.md).
+Site administrators should consult the [Admin Guide](docs/guides/admin/README.md).
+> 🛠️ NOTE: Guides are now nested under /docs/guides/
 
 ## Documentation
 - [Architecture Docs](docs/architecture/)
@@ -357,7 +358,7 @@ Recent updates introduce new fields for location lookups and performance tweaks:
 
 Check **Enable Service Worker** under *ArtPulse → Settings → General* to register the plugin’s worker. The loader script `assets/js/sw-loader.js` registers `assets/js/service-worker.js` after the page loads. The worker caches the homepage for offline access and handles basic push notifications. Modify `assets/js/service-worker.js` to cache more URLs or adjust the notification logic, then refresh or unregister the old worker in your browser to apply the changes.
 
-For full usage details refer to the [Admin Guide](docs/guides/admin/admin-guide.md) and [User Guide](docs/guides/user/user-guide.md).
+
 
 ## Member Badges and Login Heatmap
 

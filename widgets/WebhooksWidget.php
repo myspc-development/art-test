@@ -21,7 +21,7 @@ class WebhooksWidget {
             'admin-links',
             __('Manage outbound webhooks for automation.', 'artpulse'),
             'ap_widget_webhooks',
-            [ 'roles' => ['organization'] ]
+            [ 'roles' => ['organization'], 'visibility' => 'public' ]
         );
     }
 }
