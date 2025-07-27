@@ -25,6 +25,26 @@ class WidgetRoleSync {
     public static function sync(): array {
         $definitions = DashboardWidgetRegistry::get_all();
 
+        $registry    = new \ReflectionClass(DashboardWidgetRegistry::class);
+        $widgetsProp = $registry->getProperty('widgets');
+        $widgetsProp->setAccessible(true);
+        $widgets = $widgetsProp->getValue();
+
+        $updated = [];
+
+        // Infer roles for widgets missing them.
+        foreach ($definitions as $id => $cfg) {
+            $roles = array_map('sanitize_key', (array) ($cfg['roles'] ?? []));
+            if (empty($roles)) {
+                $roles = self::infer_roles_from_id($id);
+                $definitions[$id]['roles'] = $roles;
+                if (isset($widgets[$id])) {
+                    $widgets[$id]['roles'] = $roles;
+                }
+                $updated[$id] = $roles;
+            }
+        }
+
         $ref  = new \ReflectionClass(DashboardController::class);
         $prop = $ref->getProperty('role_widgets');
         $prop->setAccessible(true);
@@ -47,11 +67,6 @@ class WidgetRoleSync {
         }
 
         // Update widget definitions with missing role assignments.
-        $registry = new \ReflectionClass(DashboardWidgetRegistry::class);
-        $widgetsProp = $registry->getProperty('widgets');
-        $widgetsProp->setAccessible(true);
-        $widgets = $widgetsProp->getValue();
-
         foreach ($role_widgets as $role => $ids) {
             foreach ($ids as $id) {
                 if (!isset($widgets[$id])) {
@@ -82,6 +97,10 @@ class WidgetRoleSync {
         $prop->setValue($role_widgets);
         $widgetsProp->setValue($widgets);
 
+        if ($updated && defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('[WidgetRoleSync] Added roles to widgets: ' . wp_json_encode($updated));
+        }
+
         return $added;
     }
 
@@ -98,5 +117,27 @@ class WidgetRoleSync {
             }
             \WP_CLI::success('Widget roles synchronized');
         }
+    }
+
+    /**
+     * Infer widget roles from its ID when not explicitly provided.
+     */
+    private static function infer_roles_from_id(string $id): array
+    {
+        $id = strtolower($id);
+
+        if (str_contains($id, 'org') || str_contains($id, 'organization')) {
+            return ['organization'];
+        }
+
+        if (str_contains($id, 'artist') || str_contains($id, 'portfolio')) {
+            return ['artist'];
+        }
+
+        if (str_contains($id, 'favorite') || str_contains($id, 'events') || str_contains($id, 'news')) {
+            return ['member'];
+        }
+
+        return ['member', 'artist', 'organization'];
     }
 }
