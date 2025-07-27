@@ -12,34 +12,6 @@ use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
  * REST controller for the Dashboard Builder.
  */
 class DashboardWidgetController {
-    /**
-     * Map builder widget IDs to core registry IDs.
-     *
-     * @var array<string,string>
-     */
-    private const ID_MAP = [
-        'news_feed'            => 'widget_news',
-        'nearby_events_map'    => 'widget_nearby_events_map',
-        'my_favorites'         => 'widget_my_favorites',
-        'revenue_summary'      => 'artist_revenue_summary',
-        'audience_crm'         => 'audience_crm',
-        'branding_settings_panel' => 'branding_settings_panel',
-        'sponsored_event_config'  => 'sponsored_event_config',
-        'embed_tool'              => 'embed_tool',
-        'ap_donor_activity'       => 'ap_donor_activity',
-        'artpulse_analytics_widget' => 'artpulse_analytics_widget',
-        'org_widget_sharing'     => 'ap_widget_sharing',
-        'webhooks'               => 'webhooks',
-        'sponsor_display'        => 'sponsor_display',
-        'rsvp_button'            => 'rsvp_button',
-        'event_chat'            => 'event_chat',
-        'share_this_event'      => 'share_this_event',
-        'artist_inbox_preview'  => 'artist_inbox_preview',
-        'artist_spotlight'      => 'artist_spotlight',
-        'qa_checklist'          => 'ap_qa_checklist',
-        'widget_events'         => 'widget_events',
-        'widget_favorites'      => 'widget_favorites',
-    ];
 
     /**
      * Convert an array of builder layout items to core widget IDs.
@@ -110,11 +82,7 @@ class DashboardWidgetController {
      * Convert a core widget ID to the builder ID.
      */
     private static function to_builder_id(string $id): string {
-        static $flip = null;
-        if ($flip === null) {
-            $flip = array_flip(self::ID_MAP);
-        }
-        return $flip[$id] ?? $id;
+        return \ArtPulse\Core\DashboardWidgetRegistry::map_to_builder_id($id);
     }
     public static function register(): void {
         add_action('rest_api_init', [self::class, 'register_routes']);
