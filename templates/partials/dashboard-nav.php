@@ -7,10 +7,14 @@
 
 $current_user = wp_get_current_user();
 $roles        = $current_user->roles;
-error_log('AP Dashboard Roles: ' . wp_json_encode($roles));
+if ( defined('WP_DEBUG') && WP_DEBUG ) {
+    error_log('AP Dashboard Roles: ' . wp_json_encode($roles));
+}
 
 $menu_items = ap_merge_dashboard_menus($roles, !empty($show_notifications));
-error_log('AP Dashboard Menu: ' . wp_json_encode($menu_items));
+if ( defined('WP_DEBUG') && WP_DEBUG ) {
+    error_log('AP Dashboard Menu: ' . wp_json_encode($menu_items));
+}
 
 ?>
 <nav class="dashboard-nav" role="navigation" aria-label="Dashboard Navigation">
