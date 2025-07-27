@@ -41,7 +41,7 @@ class TicketManagerTest extends \WP_UnitTestCase
         return true;
     }
 
-    private function create_ticket_tier(int $inventory, int $sold = 0): int
+    private function create_ticket_tier(int $inventory, int $sold = 0, int $max = 0): int
     {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_event_tickets';
@@ -49,8 +49,9 @@ class TicketManagerTest extends \WP_UnitTestCase
             'event_id' => $this->event_id,
             'name'     => 'General',
             'price'    => 0,
-            'inventory'=> $inventory,
-            'sold'     => $sold,
+            'inventory'    => $inventory,
+            'sold'         => $sold,
+            'max_per_user' => $max,
         ]);
         return $wpdb->insert_id;
     }
@@ -101,6 +102,22 @@ class TicketManagerTest extends \WP_UnitTestCase
         rest_get_server()->dispatch($req);
         $this->assertCount(1, $this->emails);
         $this->assertSame('buyer@test.com', $this->emails[0][0]);
+    }
+
+    public function test_per_user_limit_blocks_extra_purchase(): void
+    {
+        $ticket_id = $this->create_ticket_tier(5, 0, 1);
+        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
+        $req->set_param('ticket_id', $ticket_id);
+        $req->set_param('quantity', 1);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+
+        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
+        $req->set_param('ticket_id', $ticket_id);
+        $req->set_param('quantity', 1);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(409, $res->get_status());
     }
 
     public function test_private_link_email_triggered_on_order_hook(): void

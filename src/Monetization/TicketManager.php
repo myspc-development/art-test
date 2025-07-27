@@ -101,6 +101,7 @@ class TicketManager
             name VARCHAR(100) NOT NULL,
             price DECIMAL(10,2) NOT NULL DEFAULT 0,
             inventory INT NOT NULL DEFAULT 0,
+            max_per_user INT NOT NULL DEFAULT 0,
             sold INT NOT NULL DEFAULT 0,
             start_date DATETIME NULL,
             end_date DATETIME NULL,
@@ -198,6 +199,20 @@ class TicketManager
             return new \WP_Error('sold_out', 'Not enough inventory.', ['status' => 409]);
         }
 
+        $ticket_table = $wpdb->prefix . 'ap_tickets';
+        if (intval($ticket['max_per_user']) > 0) {
+            $count = (int) $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT COUNT(*) FROM $ticket_table WHERE user_id = %d AND ticket_tier_id = %d",
+                    $user_id,
+                    $ticket_id
+                )
+            );
+            if (($count + $qty) > intval($ticket['max_per_user'])) {
+                return new \WP_Error('limit_reached', 'Ticket limit reached.', ['status' => 409]);
+            }
+        }
+
         $wpdb->query('START TRANSACTION');
         $updated = $wpdb->query(
             $wpdb->prepare(
@@ -213,7 +228,6 @@ class TicketManager
             return new \WP_Error('sold_out', 'Unable to reserve tickets.', ['status' => 409]);
         }
 
-        $ticket_table = $wpdb->prefix . 'ap_tickets';
         $code         = wp_generate_password(12, false, false);
         $wpdb->insert(
             $ticket_table,
@@ -328,6 +342,7 @@ class TicketManager
         $name     = sanitize_text_field($req->get_param('name'));
         $price    = floatval($req->get_param('price'));
         $inv      = intval($req->get_param('inventory'));
+        $limit    = intval($req->get_param('max_per_user'));
 
         if (!$event_id || !$name) {
             return new \WP_Error('invalid_params', 'Invalid parameters', ['status' => 400]);
@@ -335,10 +350,11 @@ class TicketManager
         global $wpdb;
         $table = $wpdb->prefix . 'ap_event_tickets';
         $wpdb->insert($table, [
-            'event_id' => $event_id,
-            'name'     => $name,
-            'price'    => $price,
-            'inventory'=> $inv,
+            'event_id'     => $event_id,
+            'name'         => $name,
+            'price'        => $price,
+            'inventory'    => $inv,
+            'max_per_user' => $limit,
         ]);
         return rest_ensure_response(['id' => $wpdb->insert_id]);
     }
@@ -355,6 +371,9 @@ class TicketManager
         }
         if ($req->get_param('inventory') !== null) {
             $data['inventory'] = intval($req->get_param('inventory'));
+        }
+        if ($req->get_param('max_per_user') !== null) {
+            $data['max_per_user'] = intval($req->get_param('max_per_user'));
         }
         if (empty($data)) {
             return new \WP_Error('no_data', 'No data provided', ['status' => 400]);
