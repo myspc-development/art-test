@@ -76,6 +76,23 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "widget_events": {
+        "file": "widgets/WidgetEventsWidget.php",
+        "roles": [
+            "member",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_favorites": {
+        "file": "widgets/FavoritesOverviewWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
     "qa_checklist": {
         "file": "widgets/QAChecklistWidget.php",
         "roles": [
