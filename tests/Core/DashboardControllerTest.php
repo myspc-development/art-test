@@ -33,11 +33,15 @@ class DashboardControllerTest extends TestCase
     {
         $expected = [
             'widget_news',
-            'widget_favorites',
-            'widget_events',
-            'notifications',
-            'my_rsvps',
             'recommended_for_you',
+            'my_rsvps',
+            'favorites',
+            'local-events',
+            'my-follows',
+            'notifications',
+            'messages',
+            'dashboard_feedback',
+            'cat_fact',
         ];
 
         $this->assertSame($expected, DashboardController::get_widgets_for_role('member'));

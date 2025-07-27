@@ -16,11 +16,15 @@ class DashboardController {
         // Default widgets for newly created members
         'member'       => [
             'widget_news',
-            'widget_favorites',
-            'widget_events',
-            'notifications',
-            'my_rsvps',
             'recommended_for_you',
+            'my_rsvps',
+            'favorites',
+            'local-events',
+            'my-follows',
+            'notifications',
+            'messages',
+            'dashboard_feedback',
+            'cat_fact',
         ],
         // Artist dashboard starter widgets
         'artist'       => [
@@ -149,11 +153,48 @@ class DashboardController {
     }
 
     /**
-     * Remove a user's saved dashboard layout.
+     * Reset a member's dashboard layout if corrupted or invalid.
+     *
+     * @return bool True when the layout was reset.
      */
-    public static function reset_user_dashboard_layout(int $user_id): void
+    public static function reset_user_dashboard_layout(int $user_id): bool
     {
-        delete_user_meta($user_id, 'ap_dashboard_layout');
+        $role = self::get_role($user_id);
+        if ($role !== 'member') {
+            delete_user_meta($user_id, 'ap_dashboard_layout');
+            return false;
+        }
+
+        $current = get_user_meta($user_id, 'ap_dashboard_layout', true);
+        $default_ids = self::get_widgets_for_role('member');
+        $needs_reset = false;
+
+        if (!is_array($current) || empty($current)) {
+            $needs_reset = true;
+        } else {
+            $ids = [];
+            foreach ($current as $item) {
+                if (is_array($item) && isset($item['id'])) {
+                    $ids[] = sanitize_key($item['id']);
+                } elseif (is_string($item)) {
+                    $ids[] = sanitize_key($item);
+                }
+            }
+            $allowed = array_keys(DashboardWidgetRegistry::get_widgets($role));
+            $missing = array_diff($default_ids, $ids);
+            $unauth = array_diff($ids, $allowed);
+            if (count($missing) >= floor(count($default_ids) / 2) || !empty($unauth)) {
+                $needs_reset = true;
+            }
+        }
+
+        if ($needs_reset) {
+            $layout = array_map(fn($id) => ['id' => $id], $default_ids);
+            update_user_meta($user_id, 'ap_dashboard_layout', $layout);
+            return true;
+        }
+
+        return false;
     }
 
     /**
