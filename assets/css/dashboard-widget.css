@@ -38,6 +38,13 @@
   cursor: pointer;
 }
 
+.ap-dashboard-title h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
 @media (max-width: 480px) {
   .ap-dashboard-wrap {
     padding: 12px;

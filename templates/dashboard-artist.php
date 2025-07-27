@@ -17,7 +17,18 @@ add_action('wp_enqueue_scripts', function () use ($user_role) {
 });
 ?>
 <div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard ap-role-layout" data-role="artist">
-  <h2 class="ap-card__title"><?= ucfirst($user_role) ?> Dashboard</h2>
+<?php
+$role  = \ArtPulse\Core\DashboardController::get_role(get_current_user_id());
+$title = match ($role) {
+    'member'       => '🎨 Welcome to Your ArtPulse Dashboard',
+    'artist'       => '🎭 Artist Studio Dashboard',
+    'organization' => '🏛️ Organization Control Panel',
+    default        => '📊 Dashboard',
+};
+?>
+  <div class="ap-dashboard-title">
+    <h1><?= esc_html($title); ?></h1>
+  </div>
   <?php
   $user_id = get_current_user_id();
   $layout = \ArtPulse\Core\DashboardController::get_user_dashboard_layout($user_id);
