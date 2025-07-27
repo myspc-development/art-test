@@ -1,8 +1,10 @@
-const CACHE_NAME = 'artpulse-cache-v1';
+const CACHE_NAME = 'artpulse-cache-v2';
+const API_CACHE = 'artpulse-api-v1';
 const OFFLINE_URLS = [
   '/',
+  '/dashboard',
+  '/events',
   '/offline.html',
-  // Icons are embedded in the manifest
 ];
 
 self.addEventListener('install', event => {
@@ -15,7 +17,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => Promise.all(
-      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      keys.filter(key => key !== CACHE_NAME && key !== API_CACHE).map(key => caches.delete(key))
     ))
   );
   self.clients.claim();
@@ -23,6 +25,21 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+
+  if (url.pathname.startsWith('/wp-json/artpulse/v1/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          const clone = response.clone();
+          caches.open(API_CACHE).then(cache => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then(response => {
       return (

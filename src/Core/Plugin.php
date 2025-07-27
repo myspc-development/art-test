@@ -802,6 +802,14 @@ class Plugin
                 'url'     => plugins_url('assets/js/service-worker.js', ARTPULSE_PLUGIN_FILE),
                 'enabled' => true,
             ]);
+
+            wp_enqueue_script(
+                'ap-a2hs',
+                plugins_url('assets/js/a2hs.js', ARTPULSE_PLUGIN_FILE),
+                [],
+                '1.0.0',
+                true
+            );
         }
 
         wp_enqueue_script(
