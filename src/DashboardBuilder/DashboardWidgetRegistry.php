@@ -31,7 +31,7 @@ class DashboardWidgetRegistry {
         ];
         $args = array_merge($defaults, $args);
         if (!is_callable($args['render_callback'])) {
-            return;
+            $args['render_callback'] = static function () {};
         }
         self::$widgets[$id] = [
             'id' => $id,
