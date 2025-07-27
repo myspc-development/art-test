@@ -50,11 +50,6 @@ function ap_register_dashboard_builder_widget_map(): void {
     $registered_files = [];
     $missing_files = [];
     $unregistered_files = [];
-    $valid_ids = [
-        'member' => [],
-        'artist' => [],
-        'organization' => [],
-    ];
 
     foreach ($ap_widget_source_map as $role => $widgets) {
         foreach ($widgets as $id => $file) {
@@ -75,8 +70,6 @@ function ap_register_dashboard_builder_widget_map(): void {
             if (!file_exists($path_php) && !file_exists($path_js)) {
                 $missing_files[] = $file;
                 error_log('Dashboard widget file missing: ' . $file);
-            } else {
-                $valid_ids[$role][] = $id;
             }
         }
     }
@@ -137,16 +130,6 @@ function ap_register_dashboard_builder_widget_map(): void {
         'unregistered' => $unregistered_files,
     ];
 
-    if (!defined('AP_DB_DEFAULT_LAYOUTS')) {
-        $layouts = [];
-        foreach ($valid_ids as $role_key => $ids) {
-            $layouts[$role_key] = array_map(
-                fn($id) => ['id' => $id, 'visible' => true],
-                $ids
-            );
-        }
-        define('AP_DB_DEFAULT_LAYOUTS', $layouts);
-    }
 }
 add_action('init', 'ap_register_dashboard_builder_widget_map', 20);
 
