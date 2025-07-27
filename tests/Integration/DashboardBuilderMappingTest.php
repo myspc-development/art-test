@@ -88,4 +88,19 @@ class DashboardBuilderMappingTest extends \WP_UnitTestCase {
             'widget_my_favorites' => false,
         ], $data['visibility']);
     }
+
+    public function test_map_to_core_id_helper(): void {
+        $expected = [
+            'revenue_summary'      => 'artist_revenue_summary',
+            'audience_crm'         => 'audience_crm',
+            'branding_settings_panel' => 'branding_settings_panel',
+        ];
+
+        foreach ($expected as $builder => $core) {
+            $this->assertSame(
+                $core,
+                DashboardWidgetRegistry::map_to_core_id($builder)
+            );
+        }
+    }
 }

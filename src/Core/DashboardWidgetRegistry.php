@@ -188,6 +188,35 @@ class DashboardWidgetRegistry {
     }
 
     /**
+     * Map a builder widget ID to the core widget ID.
+     */
+    public static function map_to_core_id( string $id ): string {
+        static $map = [
+            'news_feed'            => 'widget_news',
+            'nearby_events_map'    => 'widget_nearby_events_map',
+            'my_favorites'         => 'widget_my_favorites',
+            'revenue_summary'      => 'artist_revenue_summary',
+            'audience_crm'         => 'audience_crm',
+            'branding_settings_panel' => 'branding_settings_panel',
+            'sponsored_event_config'  => 'sponsored_event_config',
+            'embed_tool'              => 'embed_tool',
+            'ap_donor_activity'       => 'ap_donor_activity',
+            'artpulse_analytics_widget' => 'artpulse_analytics_widget',
+            'org_widget_sharing'     => 'ap_widget_sharing',
+            'webhooks'               => 'webhooks',
+            'sponsor_display'        => 'sponsor_display',
+            'rsvp_button'            => 'rsvp_button',
+            'event_chat'            => 'event_chat',
+            'share_this_event'      => 'share_this_event',
+            'artist_inbox_preview'  => 'artist_inbox_preview',
+            'artist_spotlight'      => 'artist_spotlight',
+            'qa_checklist'          => 'ap_qa_checklist',
+        ];
+
+        return $map[ $id ] ?? $id;
+    }
+
+    /**
      * Return all registered widgets.
      *
      * @return array<string,array>
