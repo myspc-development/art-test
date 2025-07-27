@@ -425,6 +425,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_membership',
         [
             'category' => 'engagement',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'show_badges',
@@ -445,6 +446,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_upgrade',
         [
             'category' => 'account',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'show_forms',
@@ -465,6 +467,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_local_events',
         [
             'category' => 'community',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -485,6 +488,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_favorites',
         [
             'category' => 'engagement',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -505,6 +509,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_my_follows',
         [
             'category' => 'engagement',
+            'roles'    => ['member', 'artist', 'organization'],
         ]
     );
 
@@ -516,6 +521,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_creator_tips',
         [
             'category' => 'engagement',
+            'roles'    => ['member', 'artist', 'organization'],
         ]
     );
 
@@ -528,6 +534,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_rsvps',
         [
             'category' => 'events',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -561,6 +568,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_my_events',
         [
             'category' => 'events',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -581,6 +589,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_events',
         [
             'category' => 'events',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -601,6 +610,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_messages',
         [
             'category' => 'engagement',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -621,6 +631,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_account_tools',
         [
             'category' => 'account',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'show_export',
@@ -641,6 +652,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_support_history',
         [
             'category' => 'support',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -661,6 +673,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_notifications',
         [
             'category' => 'engagement',
+            'roles'    => ['member', 'artist', 'organization'],
             'settings' => [
                 [
                     'key'     => 'limit',
@@ -792,6 +805,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_cat_fact',
         [
             'category' => 'fun',
+            'roles'    => ['member', 'artist', 'organization'],
         ]
     );
 

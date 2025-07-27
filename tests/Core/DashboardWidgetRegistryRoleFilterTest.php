@@ -43,4 +43,37 @@ class DashboardWidgetRegistryRoleFilterTest extends TestCase
         $widgets = DashboardWidgetRegistry::get_widgets(['member', 'artist']);
         $this->assertCount(1, array_filter(array_keys($widgets), fn($id) => $id === 'shared'));
     }
+
+    public function test_get_widgets_by_role_filters(): void
+    {
+        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', '__return_null', ['roles' => ['member']]);
+        DashboardWidgetRegistry::register('beta', 'Beta', '', '', '__return_null', ['roles' => ['artist']]);
+
+        $member = DashboardWidgetRegistry::get_widgets_by_role('member');
+        $artist = DashboardWidgetRegistry::get_widgets_by_role('artist');
+
+        $this->assertArrayHasKey('alpha', $member);
+        $this->assertArrayNotHasKey('beta', $member);
+        $this->assertArrayHasKey('beta', $artist);
+    }
+
+    public function test_get_widgets_by_role_full_visibility(): void
+    {
+        DashboardWidgetRegistry::register(
+            'gamma',
+            'Gamma',
+            '',
+            '',
+            '__return_null',
+            ['roles' => ['member', 'artist', 'organization']]
+        );
+
+        $member = DashboardWidgetRegistry::get_widgets_by_role('member');
+        $artist = DashboardWidgetRegistry::get_widgets_by_role('artist');
+        $org    = DashboardWidgetRegistry::get_widgets_by_role('organization');
+
+        $this->assertArrayHasKey('gamma', $member);
+        $this->assertArrayHasKey('gamma', $artist);
+        $this->assertArrayHasKey('gamma', $org);
+    }
 }
