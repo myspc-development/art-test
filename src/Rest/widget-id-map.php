@@ -21,4 +21,9 @@ return array (
   'webhooks' => 'widget_webhooks',
   'widget_events' => 'widget_events',
   'widget_favorites' => 'widget_favorites',
+  'org_event_overview' => 'widget_org_event_overview',
+  'org_team_roster' => 'widget_org_team_roster',
+  'org_approval_center' => 'widget_org_approval_center',
+  'org_ticket_insights' => 'widget_org_ticket_insights',
+  'org_broadcast_box' => 'widget_org_broadcast_box',
 );

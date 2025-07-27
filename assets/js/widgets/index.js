@@ -10,6 +10,11 @@ import { AudienceCRMWidget } from './AudienceCRMWidget.jsx';
 import { SponsoredEventConfigWidget } from './SponsoredEventConfigWidget.jsx';
 import { EmbedToolWidget } from './EmbedToolWidget.jsx';
 import { OrgBrandingSettingsPanel } from './OrgBrandingSettingsPanel.jsx';
+import { OrgEventOverviewWidget } from './OrgEventOverviewWidget.jsx';
+import { OrgTeamRosterWidget } from './OrgTeamRosterWidget.jsx';
+import { OrgApprovalCenterWidget } from './OrgApprovalCenterWidget.jsx';
+import { OrgTicketInsightsWidget } from './OrgTicketInsightsWidget.jsx';
+import { OrgBroadcastBoxWidget } from './OrgBroadcastBoxWidget.jsx';
 const { __ } = wp.i18n;
 
 export default [
@@ -83,6 +88,36 @@ export default [
     id: 'branding_settings_panel',
     title: __('Branding Settings', 'artpulse'),
     component: OrgBrandingSettingsPanel,
+    roles: ['organization']
+  },
+  {
+    id: 'org_event_overview',
+    title: __('Event Overview', 'artpulse'),
+    component: OrgEventOverviewWidget,
+    roles: ['organization']
+  },
+  {
+    id: 'org_team_roster',
+    title: __('Team Management', 'artpulse'),
+    component: OrgTeamRosterWidget,
+    roles: ['organization']
+  },
+  {
+    id: 'org_approval_center',
+    title: __('Approval Center', 'artpulse'),
+    component: OrgApprovalCenterWidget,
+    roles: ['organization']
+  },
+  {
+    id: 'org_ticket_insights',
+    title: __('Ticket Analytics', 'artpulse'),
+    component: OrgTicketInsightsWidget,
+    roles: ['organization']
+  },
+  {
+    id: 'org_broadcast_box',
+    title: __('Announcement Tool', 'artpulse'),
+    component: OrgBroadcastBoxWidget,
     roles: ['organization']
   }
 ];
