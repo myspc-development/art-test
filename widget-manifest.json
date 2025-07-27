@@ -85,6 +85,48 @@
         ],
         "status": "registered"
     },
+    "artist_artwork_manager": {
+        "file": "assets/js/widgets/ArtistArtworkManagerWidget.jsx",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered"
+    },
+    "artist_audience_insights": {
+        "file": "assets/js/widgets/ArtistAudienceInsightsWidget.jsx",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered"
+    },
+    "artist_earnings_summary": {
+        "file": "assets/js/widgets/ArtistEarningsWidget.jsx",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered"
+    },
+    "artist_feed_publisher": {
+        "file": "assets/js/widgets/ArtistFeedPublisherWidget.jsx",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered"
+    },
+    "collab_requests": {
+        "file": "assets/js/widgets/ArtistCollaborationWidget.jsx",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered"
+    },
+    "onboarding_tracker": {
+        "file": "assets/js/widgets/OnboardingTrackerWidget.jsx",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered"
+    },
     "audience_crm": {
         "file": "assets/js/widgets/AudienceCRMWidget.jsx",
         "roles": [

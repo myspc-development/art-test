@@ -6,5 +6,11 @@
   {
     "id": "revenue_summary",
     "visible": true
-  }
+  },
+  { "id": "artist_artwork_manager", "visible": true },
+  { "id": "artist_audience_insights", "visible": true },
+  { "id": "artist_earnings_summary", "visible": true },
+  { "id": "artist_feed_publisher", "visible": true },
+  { "id": "collab_requests", "visible": true },
+  { "id": "onboarding_tracker", "visible": true }
 ]

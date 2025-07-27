@@ -35,6 +35,42 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "artist_artwork_manager": {
+        "file": "assets/js/widgets/ArtistArtworkManagerWidget.jsx",
+        "roles": ["artist"],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_audience_insights": {
+        "file": "assets/js/widgets/ArtistAudienceInsightsWidget.jsx",
+        "roles": ["artist"],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_earnings_summary": {
+        "file": "assets/js/widgets/ArtistEarningsWidget.jsx",
+        "roles": ["artist"],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_feed_publisher": {
+        "file": "assets/js/widgets/ArtistFeedPublisherWidget.jsx",
+        "roles": ["artist"],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "collab_requests": {
+        "file": "assets/js/widgets/ArtistCollaborationWidget.jsx",
+        "roles": ["artist"],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "onboarding_tracker": {
+        "file": "assets/js/widgets/OnboardingTrackerWidget.jsx",
+        "roles": ["artist"],
+        "status": "registered",
+        "previewGuarded": true
+    },
     "artist_inbox_preview": {
         "file": "assets/js/widgets/ArtistInboxPreviewWidget.jsx",
         "roles": [

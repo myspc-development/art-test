@@ -403,6 +403,36 @@ function ap_widget_artist_spotlight(array $vars = []): string
     return ap_load_dashboard_template('widgets/artist-spotlight-widget.php', $vars);
 }
 
+function ap_widget_artist_artwork_manager(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/artist-artwork-manager.php', $vars);
+}
+
+function ap_widget_artist_audience_insights(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/artist-audience-insights.php', $vars);
+}
+
+function ap_widget_artist_earnings_summary(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/artist-earnings.php', $vars);
+}
+
+function ap_widget_artist_feed_publisher(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/artist-feed-publisher.php', $vars);
+}
+
+function ap_widget_collab_requests(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/collab-requests.php', $vars);
+}
+
+function ap_widget_onboarding_tracker(array $vars = []): string
+{
+    return ap_load_dashboard_template('widgets/onboarding-tracker.php', $vars);
+}
+
 function ap_widget_my_rsvps(array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/my-rsvps.php', $vars);
@@ -921,6 +951,73 @@ function ap_register_core_dashboard_widgets(): void
         [
             'roles' => ['artist'],
             'category' => 'community',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'artist_artwork_manager',
+        __('Artwork Manager', 'artpulse'),
+        'image',
+        __('Upload and manage artworks.', 'artpulse'),
+        'ap_widget_artist_artwork_manager',
+        [
+            'roles' => ['artist'],
+            'default' => true
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'artist_audience_insights',
+        __('Audience Insights', 'artpulse'),
+        'users',
+        __('Follower analytics and engagement.', 'artpulse'),
+        'ap_widget_artist_audience_insights',
+        [
+            'roles' => ['artist']
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'artist_earnings_summary',
+        __('Earnings Summary', 'artpulse'),
+        'dollar-sign',
+        __('Revenue breakdown and payouts.', 'artpulse'),
+        'ap_widget_artist_earnings_summary',
+        [
+            'roles' => ['artist']
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'artist_feed_publisher',
+        __('Post & Engage', 'artpulse'),
+        'edit',
+        __('Publish updates to your feed.', 'artpulse'),
+        'ap_widget_artist_feed_publisher',
+        [
+            'roles' => ['artist']
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'collab_requests',
+        __('Collab Requests', 'artpulse'),
+        'handshake',
+        __('Collaboration invites from others.', 'artpulse'),
+        'ap_widget_collab_requests',
+        [
+            'roles' => ['artist']
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'onboarding_tracker',
+        __('Onboarding Checklist', 'artpulse'),
+        'check',
+        __('Steps to get started.', 'artpulse'),
+        'ap_widget_onboarding_tracker',
+        [
+            'roles' => ['artist']
         ]
     );
 

@@ -12,7 +12,13 @@
     "artist": {
         "artist_inbox_preview": "ArtistInboxPreviewWidget.jsx",
         "revenue_summary": "ArtistRevenueSummaryWidget.jsx",
-        "artist_spotlight": "ArtistSpotlightWidget.jsx"
+        "artist_spotlight": "ArtistSpotlightWidget.jsx",
+        "artist_artwork_manager": "ArtistArtworkManagerWidget.jsx",
+        "artist_audience_insights": "ArtistAudienceInsightsWidget.jsx",
+        "artist_earnings_summary": "ArtistEarningsWidget.jsx",
+        "artist_feed_publisher": "ArtistFeedPublisherWidget.jsx",
+        "collab_requests": "ArtistCollaborationWidget.jsx",
+        "onboarding_tracker": "OnboardingTrackerWidget.jsx"
     },
     "organization": {
         "audience_crm": "AudienceCRMWidget.jsx",
