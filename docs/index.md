@@ -19,6 +19,7 @@ Welcome to the documentation portal. Select a section based on your role.
 - [Developer Guides](developer/README.md)
 - [API Overview](api/README.md)
 - [Widgets Documentation](widgets/README.md)
+- [Dashboard Menu Codex](dashboard-menu-codex.md)
 - [Dashboard Layout Config](dashboard-layout-config.md)
 - [Architecture Guide](architecture/dev-structure.md)
 - [Upgrade Notes](upgrade-notes.md)
