@@ -3,6 +3,7 @@ namespace ArtPulse\Personalization\Tests;
 
 use WP_UnitTestCase;
 use ArtPulse\Personalization\RecommendationEngine;
+use ArtPulse\Personalization\RecommendationPreferenceManager;
 
 class RecommendationEngineTest extends WP_UnitTestCase
 {
@@ -13,6 +14,7 @@ class RecommendationEngineTest extends WP_UnitTestCase
     {
         parent::set_up();
         RecommendationEngine::install_table();
+        RecommendationPreferenceManager::install_table();
         $this->user_id  = self::factory()->user->create();
         $this->event_id = wp_insert_post([
             'post_title'  => 'Event',
@@ -94,5 +96,19 @@ class RecommendationEngineTest extends WP_UnitTestCase
 
         $this->assertCount(2, $recs);
         $this->assertSame($la, $recs[0]['id']);
+    }
+
+    public function test_preferences_filter_and_boost(): void
+    {
+        $term = wp_insert_term('Electronic', 'artpulse_category');
+        $tid = is_wp_error($term) ? 0 : (int) $term['term_id'];
+        wp_set_post_terms($this->event_id, [$tid], 'artpulse_category');
+        RecommendationPreferenceManager::update($this->user_id, [
+            'preferred_tags' => ['electronic'],
+        ]);
+        delete_transient('ap_rec_event_' . $this->user_id);
+        $recs = RecommendationEngine::get_recommendations($this->user_id, 'event', 1);
+        $this->assertNotEmpty($recs);
+        $this->assertSame($this->event_id, $recs[0]['id']);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Community;
 
+use ArtPulse\Personalization\RecommendationPreferenceManager;
+
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -79,6 +81,9 @@ class UserPreferencesRestController
                 'notification_prefs'=> [ 'type' => 'object', 'required' => false ],
                 'digest_frequency'  => [ 'type' => 'string', 'required' => false ],
                 'digest_topics'     => [ 'type' => 'string', 'required' => false ],
+                'preferred_tags'   => [ 'type' => 'array',  'required' => false ],
+                'ignored_tags'     => [ 'type' => 'array',  'required' => false ],
+                'blacklist_ids'    => [ 'type' => 'array',  'required' => false ],
             ],
         ]);
     }
@@ -114,6 +119,20 @@ class UserPreferencesRestController
 
         if ($request->has_param('digest_topics')) {
             update_user_meta($user_id, 'ap_digest_topics', sanitize_text_field($request['digest_topics']));
+        }
+
+        $pref_update = [];
+        if ($request->has_param('preferred_tags')) {
+            $pref_update['preferred_tags'] = array_map('sanitize_text_field', (array) $request['preferred_tags']);
+        }
+        if ($request->has_param('ignored_tags')) {
+            $pref_update['ignored_tags'] = array_map('sanitize_text_field', (array) $request['ignored_tags']);
+        }
+        if ($request->has_param('blacklist_ids')) {
+            $pref_update['blacklist_ids'] = array_map('intval', (array) $request['blacklist_ids']);
+        }
+        if ($pref_update) {
+            RecommendationPreferenceManager::update($user_id, $pref_update);
         }
 
         return rest_ensure_response(['status' => 'saved']);

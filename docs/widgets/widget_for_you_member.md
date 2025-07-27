@@ -13,4 +13,4 @@ status: draft
 **Roles:** member, artist
 
 ## Description
-Recommended content.
+Personalized events and posts. Preferences can be adjusted via the profile settings panel.
