@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const canvas = document.getElementById('ap-event-analytics-chart');
   if (!canvas) return;
 
+  if (!APEventAnalytics.eventId) {
+    console.warn('APEventAnalytics.eventId is not set; skipping analytics fetch');
+    return;
+  }
+
   const headers = { 'X-WP-Nonce': APEventAnalytics.nonce };
   const res = await fetch(`${APEventAnalytics.endpoint}/trends?event_id=${APEventAnalytics.eventId}`, { headers });
   const data = await res.json();
