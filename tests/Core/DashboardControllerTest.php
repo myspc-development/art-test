@@ -50,11 +50,15 @@ class DashboardControllerTest extends TestCase
     public function test_get_widgets_for_artist_role(): void
     {
         $expected = [
-            'widget_spotlights',
-            'artist_inbox_preview',
+            'artist_feed_publisher',
+            'artist_audience_insights',
+            'artist_spotlight',
             'artist_revenue_summary',
-            'widget_followed_artists',
+            'my_events',
+            'messages',
             'notifications',
+            'dashboard_feedback',
+            'cat_fact',
         ];
 
         $this->assertSame($expected, DashboardController::get_widgets_for_role('artist'));
@@ -63,12 +67,16 @@ class DashboardControllerTest extends TestCase
     public function test_get_widgets_for_organization_roles(): void
     {
         $expected = [
-            'site_stats',
-            'webhooks',
+            'organization_dashboard',
+            'organization_analytics',
+            'my_events',
             'rsvp_stats',
-            'artpulse_analytics_widget',
-            'ap_donor_activity',
+            'org_messages',
+            'support_history',
+            'lead_capture',
+            'site_stats',
             'notifications',
+            'dashboard_feedback',
         ];
 
         $this->assertSame($expected, DashboardController::get_widgets_for_role('organization'));
