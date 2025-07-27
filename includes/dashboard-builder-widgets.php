@@ -47,32 +47,44 @@ function ap_register_dashboard_builder_widget_map(): void {
         'organization' => $organization,
     ];
 
-    $all = array_merge_recursive($ap_widget_source_map);
-
     $registered_files = [];
     $missing_files = [];
     $unregistered_files = [];
 
+    // Build a combined mapping of widget IDs to their files and roles.
+    $combined = [];
     foreach ($ap_widget_source_map as $role => $widgets) {
         foreach ($widgets as $id => $file) {
-            $callback = static function () use ($id) {
-                echo '<div class="ap-widget-placeholder">' . esc_html($id) . '</div>';
-            };
-
-            DashboardWidgetRegistry::register($id, [
-                'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
-                'render_callback' => $callback,
-                'roles' => [$role],
-                'file'  => $file,
-            ]);
-
-            $path_php = $plugin_dir . '/widgets/' . $file;
-            $path_js  = $plugin_dir . '/assets/js/widgets/' . $file;
-            $registered_files[$file] = true;
-            if (!file_exists($path_php) && !file_exists($path_js)) {
-                $missing_files[] = $file;
-                error_log('Dashboard widget file missing: ' . $file);
+            if (!isset($combined[$id])) {
+                $combined[$id] = [
+                    'file'  => $file,
+                    'roles' => [$role],
+                ];
+            } else {
+                $combined[$id]['roles'][] = $role;
             }
+        }
+    }
+
+    // Register widgets with the union of roles once per widget ID.
+    foreach ($combined as $id => $info) {
+        $callback = static function () use ($id) {
+            echo '<div class="ap-widget-placeholder">' . esc_html($id) . '</div>';
+        };
+
+        DashboardWidgetRegistry::register($id, [
+            'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
+            'render_callback' => $callback,
+            'roles' => array_unique($info['roles']),
+            'file'  => $info['file'],
+        ]);
+
+        $path_php = $plugin_dir . '/widgets/' . $info['file'];
+        $path_js  = $plugin_dir . '/assets/js/widgets/' . $info['file'];
+        $registered_files[$info['file']] = true;
+        if (!file_exists($path_php) && !file_exists($path_js)) {
+            $missing_files[] = $info['file'];
+            error_log('Dashboard widget file missing: ' . $info['file']);
         }
     }
 
