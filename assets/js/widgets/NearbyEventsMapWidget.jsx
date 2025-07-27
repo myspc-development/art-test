@@ -5,10 +5,18 @@ export function NearbyEventsMapWidget({ apiRoot, nonce, lat, lng }) {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    fetch(`${apiRoot}artpulse/v1/events/nearby?lat=${lat}&lng=${lng}`)
-      .then(r => r.json())
-      .then(setEvents);
-  }, [lat, lng]);
+    if (!lat || !lng) {
+      setEvents([]);
+      return;
+    }
+    fetch(`${apiRoot}artpulse/v1/events/nearby?lat=${lat}&lng=${lng}`, {
+      headers: { 'X-WP-Nonce': nonce },
+    })
+      .then(r => (r.ok ? r.json() : Promise.resolve([])))
+      .then(data => (Array.isArray(data) ? data : []))
+      .then(setEvents)
+      .catch(() => setEvents([]));
+  }, [lat, lng, apiRoot, nonce]);
 
   return (
     <div className="ap-nearby-events-widget">
