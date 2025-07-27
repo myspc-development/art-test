@@ -17,7 +17,13 @@ $title = match ($role) {
     <h1><?= esc_html($title); ?></h1>
   </div>
   <?php
-  ap_safe_include('templates/partials/dashboard-generic.php', plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php');
+  $user_id = get_current_user_id();
+  $layout  = \ArtPulse\Core\DashboardController::get_user_dashboard_layout($user_id);
+  ap_safe_include(
+      'templates/partials/dashboard-generic.php',
+      plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php',
+      ['layout' => $layout]
+  );
   ?>
 </div>
 <?php get_footer(); ?>

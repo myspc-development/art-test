@@ -116,19 +116,7 @@ if (empty($layout)) {
         echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
         echo '<span class="drag-handle" role="button" tabindex="0" aria-label="Move widget"></span>';
 
-        if (isset($config['callback']) && empty($config['template'])) {
-            ap_render_widget($id, $user_id);
-        } else {
-            $template = locate_template('templates/' . $config['template']);
-            if (!$template) {
-                $template = plugin_dir_path(__FILE__) . '../' . $config['template'];
-            }
-            if ($template && file_exists($template)) {
-                include $template;
-            } else {
-                error_log('ArtPulse: Missing widget template → ' . $config['template']);
-            }
-        }
+        ap_render_widget($id, $user_id);
 
         echo '</div>';
     }
