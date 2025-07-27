@@ -46,16 +46,8 @@ class AdminAccessManager
             return;
         }
 
-        $user   = wp_get_current_user();
-        $target = Plugin::get_user_dashboard_url();
-
-        if (user_can($user, 'organization')) {
-            $target = Plugin::get_org_dashboard_url();
-        } elseif (user_can($user, 'artist')) {
-            $target = Plugin::get_artist_dashboard_url();
-        }
-
-        wp_safe_redirect($target);
+        $dashboard_url = home_url('/dashboard-role.php');
+        wp_safe_redirect($dashboard_url);
         exit;
     }
 }

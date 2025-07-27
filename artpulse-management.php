@@ -1349,4 +1349,21 @@ add_shortcode('ap_member_guide', function () {
     return ap_render_help_markdown('Member_Help.md');
 });
 
+add_action('admin_bar_menu', function($wp_admin_bar) {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    if (defined('AP_DEBUG') && !AP_DEBUG) {
+        return;
+    }
+    $roles = ['member', 'artist', 'organization'];
+    foreach ($roles as $role) {
+        $wp_admin_bar->add_node([
+            'id'    => 'ap-switch-' . $role,
+            'title' => 'View as: ' . $role,
+            'href'  => add_query_arg('ap_preview_role', $role, home_url('/dashboard-role.php')),
+        ]);
+    }
+}, 100);
+
 
