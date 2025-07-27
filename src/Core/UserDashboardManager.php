@@ -998,14 +998,15 @@ class UserDashboardManager
             }
         }
 
+        $user_role = 'member';
         if (user_can($user, 'organization') || user_can($user, 'administrator')) {
-            return $onboarding_html . self::load_template('dashboard-organization.php', $vars);
+            $user_role = 'organization';
+        } elseif (user_can($user, 'artist')) {
+            $user_role = 'artist';
         }
 
-        if (user_can($user, 'artist')) {
-            return $onboarding_html . self::load_template('dashboard-artist.php', $vars);
-        }
+        $vars['user_role'] = $user_role;
 
-        return $onboarding_html . self::load_template('dashboard-member.php', $vars);
+        return $onboarding_html . self::load_template('dashboard-role.php', $vars);
     }
 }

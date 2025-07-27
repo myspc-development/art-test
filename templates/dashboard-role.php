@@ -1,5 +1,7 @@
 <?php
-$user_role = 'artist';
+if (!isset($user_role)) {
+    $user_role = 'member';
+}
 
 ap_safe_include('templates/partials/dashboard-nav.php', plugin_dir_path(__FILE__) . 'partials/dashboard-nav.php');
 ap_safe_include('templates/partials/dashboard-role-tabs.php', plugin_dir_path(__FILE__) . 'partials/dashboard-role-tabs.php');
@@ -16,7 +18,7 @@ add_action('wp_enqueue_scripts', function () use ($user_role) {
     }
 });
 ?>
-<div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard ap-role-layout" data-role="artist">
+<div class="ap-dashboard-wrap <?= esc_attr($user_role) ?>-dashboard ap-role-layout" data-role="<?= esc_attr($user_role) ?>">
 <?php
 $role  = \ArtPulse\Core\DashboardController::get_role(get_current_user_id());
 $title = match ($role) {
@@ -29,19 +31,24 @@ $title = match ($role) {
   <div class="ap-dashboard-title">
     <h1><?= esc_html($title); ?></h1>
   </div>
-  <?php
-  $user_id = get_current_user_id();
-  $layout = \ArtPulse\Core\DashboardController::get_user_dashboard_layout($user_id);
+<?php
+$user_id = get_current_user_id();
+$layout  = \ArtPulse\Core\DashboardController::get_user_dashboard_layout($user_id);
 
-  ap_safe_include(
-      'templates/partials/dashboard-generic.php',
-      plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php',
-      ['layout' => $layout]
-  );
-  ?>
+ap_safe_include(
+    'templates/partials/dashboard-generic.php',
+    plugin_dir_path(__FILE__) . 'partials/dashboard-generic.php',
+    ['layout' => $layout, 'user_role' => $user_role]
+);
+?>
   <div class="ap-quickstart-wrapper">
     <?php
-    ap_safe_include('templates/partials/quickstart-artist-guide.php', plugin_dir_path(__FILE__) . 'partials/quickstart-artist-guide.php');
+    $quickstart = match ($user_role) {
+        'artist'       => 'quickstart-artist-guide.php',
+        'organization' => 'quickstart-admin-guide.php',
+        default        => 'quickstart-member-guide.php',
+    };
+    ap_safe_include('templates/partials/' . $quickstart, plugin_dir_path(__FILE__) . 'partials/' . $quickstart);
     ?>
   </div>
 </div>
