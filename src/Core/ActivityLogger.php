@@ -60,4 +60,35 @@ class ActivityLogger
             'logged_at'   => current_time('mysql'),
         ]);
     }
+
+    /**
+     * Fetch recent activity log entries.
+     */
+    public static function get_logs(?int $org_id, ?int $user_id, int $limit = 25): array
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_activity_logs';
+
+        $where = [];
+        $args  = [];
+
+        if ($org_id !== null) {
+            $where[] = 'org_id = %d';
+            $args[]  = $org_id;
+        }
+
+        if ($user_id !== null) {
+            $where[] = 'user_id = %d';
+            $args[]  = $user_id;
+        }
+
+        if (!$where) {
+            return [];
+        }
+
+        $args[] = $limit;
+        $sql    = 'SELECT * FROM ' . $table . ' WHERE ' . implode(' OR ', $where) . ' ORDER BY logged_at DESC LIMIT %d';
+
+        return $wpdb->get_results($wpdb->prepare($sql, ...$args));
+    }
 }

@@ -12,6 +12,7 @@ function ap_register_dashboard_builder_widget_map(): void {
     global $ap_widget_source_map, $ap_widget_status;
 
     $member = [
+        'activity_feed'   => 'ActivityFeedWidget.php',
         'news_feed'        => 'ArtPulseNewsFeedWidget.php',
         'widget_events'    => 'WidgetEventsWidget.php',
         'widget_favorites' => 'FavoritesOverviewWidget.php',
@@ -25,12 +26,14 @@ function ap_register_dashboard_builder_widget_map(): void {
     ];
 
     $artist = [
+        'activity_feed'      => 'ActivityFeedWidget.php',
         'artist_inbox_preview' => 'ArtistInboxPreviewWidget.jsx',
         'revenue_summary'    => 'ArtistRevenueSummaryWidget.jsx',
         'artist_spotlight'   => 'ArtistSpotlightWidget.jsx',
     ];
 
     $organization = [
+        'activity_feed'         => 'ActivityFeedWidget.php',
         'audience_crm'           => 'AudienceCRMWidget.jsx',
         'sponsored_event_config' => 'SponsoredEventConfigWidget.jsx',
         'embed_tool'             => 'EmbedToolWidget.jsx',

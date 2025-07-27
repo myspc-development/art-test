@@ -1,5 +1,6 @@
 {
     "member": {
+        "activity_feed": "ActivityFeedWidget.php",
         "news_feed": "ArtPulseNewsFeedWidget.php",
         "rsvp_button": "RSVPButton.jsx",
         "nearby_events_map": "NearbyEventsMapWidget.jsx",
@@ -10,6 +11,7 @@
         "qa_checklist": "QAChecklistWidget.php"
     },
     "artist": {
+        "activity_feed": "ActivityFeedWidget.php",
         "artist_inbox_preview": "ArtistInboxPreviewWidget.jsx",
         "revenue_summary": "ArtistRevenueSummaryWidget.jsx",
         "artist_spotlight": "ArtistSpotlightWidget.jsx",
@@ -21,6 +23,7 @@
         "onboarding_tracker": "OnboardingTrackerWidget.jsx"
     },
     "organization": {
+        "activity_feed": "ActivityFeedWidget.php",
         "audience_crm": "AudienceCRMWidget.jsx",
         "sponsored_event_config": "SponsoredEventConfigWidget.jsx",
         "embed_tool": "EmbedToolWidget.jsx",

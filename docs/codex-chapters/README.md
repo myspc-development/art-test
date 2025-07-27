@@ -17,6 +17,7 @@ These chapters break down the core widgets used by ArtPulse. Each section includ
 - [Artist Inbox Preview Widget](./artist-inbox-preview-widget.md)
 - [My RSVPs Widget](./my-rsvps-widget.md)
 - [My Shared Events Activity Widget](./my-shared-events-activity-widget.md)
+- [Activity Feed Widget](./activity-feed-widget.md)
 - [Recommended For You Widget](./recommended-for-you-widget.md)
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
