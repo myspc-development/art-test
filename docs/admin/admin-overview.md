@@ -28,6 +28,14 @@ The overview summarizes the main Dashboard Modules available to administrators.
 ## Settings Tabs
 All options live under **ArtPulse → Settings**. Tabs such as **General**, **Location APIs**, **Import/Export**, **Config Backup**, **Updates** and **Shortcode Pages** divide the settings.
 
+## PWA Manifest File
+The plugin includes a `manifest.json` file in its root directory. The helper
+script `pwa-manifest.php` injects a `<link rel="manifest" href="/manifest.json">`
+tag into the page head so browsers can locate it. If your WordPress install
+uses custom routing or lives in a subdirectory, ensure the `/manifest.json`
+request maps to the plugin's copy. You may need to add a rewrite rule or copy
+the file to your site root so install prompts work correctly.
+
 
 ## Additional Notes
 - The tools are responsive and keyboard accessible.
