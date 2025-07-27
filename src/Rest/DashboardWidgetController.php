@@ -12,6 +12,34 @@ use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
  * REST controller for the Dashboard Builder.
  */
 class DashboardWidgetController {
+    /**
+     * Map builder widget IDs to core registry IDs.
+     *
+     * @var array<string,string>
+     */
+    private const ID_MAP = [
+        'news_feed'        => 'widget_news',
+        'nearby_events_map' => 'widget_nearby_events_map',
+        'my_favorites'     => 'widget_my_favorites',
+    ];
+
+    /**
+     * Convert a builder widget ID to the core ID.
+     */
+    private static function to_core_id(string $id): string {
+        return self::ID_MAP[$id] ?? $id;
+    }
+
+    /**
+     * Convert a core widget ID to the builder ID.
+     */
+    private static function to_builder_id(string $id): string {
+        static $flip = null;
+        if ($flip === null) {
+            $flip = array_flip(self::ID_MAP);
+        }
+        return $flip[$id] ?? $id;
+    }
     public static function register(): void {
         add_action('rest_api_init', [self::class, 'register_routes']);
     }
@@ -54,39 +82,23 @@ class DashboardWidgetController {
         }
         unset($widget);
 
-        $active = get_option("artpulse_dashboard_widgets_{$role}");
-        if (!is_array($active) || (empty($active['layout']) && empty($active['layoutOrder']))) {
-            $preset_file = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . "data/preset-{$role}.json";
-            if (file_exists($preset_file)) {
-                $preset_json = @file_get_contents($preset_file);
-                if ($preset_json === false) {
-                    error_log('Failed reading preset file: ' . $preset_file);
-                } else {
-                    $preset_layout = json_decode($preset_json, true);
-                    if (json_last_error() === JSON_ERROR_NONE && is_array($preset_layout)) {
-                        $active = [
-                            'role'   => $role,
-                            'layout' => $preset_layout,
-                        ];
-                    }
-                }
-            } elseif (defined('AP_DB_DEFAULT_LAYOUTS') && isset(AP_DB_DEFAULT_LAYOUTS[$role])) {
-                $active = [
-                    'role'   => $role,
-                    'layout' => AP_DB_DEFAULT_LAYOUTS[$role],
-                ];
-            }
-        }
-        if (!is_array($active)) {
-            $active = [
-                'role' => $role,
-                'enabledWidgets' => array_column($available, 'id'),
-                'layoutOrder' => array_column($available, 'id'),
+        $core_layout = \ArtPulse\Admin\UserLayoutManager::get_role_layout($role);
+        $active_layout = [];
+        foreach ($core_layout as $item) {
+            $id  = is_array($item) ? ($item['id'] ?? '') : $item;
+            $vis = is_array($item) ? ($item['visible'] ?? true) : true;
+            $active_layout[] = [
+                'id'      => self::to_builder_id($id),
+                'visible' => $vis,
             ];
         }
+
         $response = [
             'available' => $available,
-            'active'    => $active,
+            'active'    => [
+                'role'   => $role,
+                'layout' => $active_layout,
+            ],
         ];
 
         if ($include_all) {
@@ -107,24 +119,21 @@ class DashboardWidgetController {
             return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
         }
         if (isset($data['layout']) && is_array($data['layout'])) {
-            $layout = array_map(static function ($item) {
-                return [
-                    'id'      => sanitize_key($item['id'] ?? ''),
-                    'visible' => empty($item['visible']) ? false : true,
+            $layout = [];
+            foreach ($data['layout'] as $item) {
+                $id  = sanitize_key($item['id'] ?? '');
+                $vis = empty($item['visible']) ? false : true;
+                $layout[] = [
+                    'id'      => self::to_core_id($id),
+                    'visible' => $vis,
                 ];
-            }, $data['layout']);
-            update_option("artpulse_dashboard_widgets_{$role}", [
-                'role'  => $role,
-                'layout' => $layout,
-            ]);
+            }
+            \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $layout);
         } else {
             $enabled = array_map('sanitize_key', (array) ($data['enabledWidgets'] ?? []));
             $order   = array_map('sanitize_key', (array) ($data['layoutOrder'] ?? []));
-            update_option("artpulse_dashboard_widgets_{$role}", [
-                'role' => $role,
-                'enabledWidgets' => $enabled,
-                'layoutOrder' => $order,
-            ]);
+            $layout  = array_map(function ($id) { return ['id' => self::to_core_id($id), 'visible' => true]; }, $order);
+            \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $layout);
         }
         return rest_ensure_response(['saved' => true]);
     }
