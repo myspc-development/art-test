@@ -37,6 +37,8 @@ class DashboardWidgetController {
         'artist_inbox_preview'  => 'artist_inbox_preview',
         'artist_spotlight'      => 'artist_spotlight',
         'qa_checklist'          => 'ap_qa_checklist',
+        'widget_events'         => 'widget_events',
+        'widget_favorites'      => 'widget_favorites',
     ];
 
     /**
