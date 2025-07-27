@@ -1,7 +1,7 @@
 ---
 title: Dashboard Widgets by Role QA Checklist
 category: qa
-last_updated: 2025-07-27
+last_updated: 2025-07-28
 status: draft
 ---
 
