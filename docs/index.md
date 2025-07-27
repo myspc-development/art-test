@@ -22,6 +22,7 @@ Welcome to the documentation portal. Select a section based on your role.
 - [Dashboard Layout Config](dashboard-layout-config.md)
 - [Architecture Guide](architecture/dev-structure.md)
 - [Upgrade Notes](upgrade-notes.md)
+- [Creator Monetization Expansion](guides/developer/creator-monetization-expansion.md)
 
 ## QA Guides
 - [QA Documentation](qa/README.md)
