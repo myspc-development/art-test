@@ -3,230 +3,175 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 /**
- * Stub rendering callbacks for placeholder widgets.
- * Replace these stubs with real widget implementations as needed.
+ * Rendering callbacks for widgets used by the dashboard builder.
+ * These wrappers call existing widget implementations when available
+ * or output simple containers for JavaScript powered widgets.
  */
 
-function render_widget_ap_donor_activity() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Ap Donor Activity widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+/**
+ * Output a minimal container for a JS widget.
+ */
+function ap_render_js_widget(string $id, array $data = []): void {
+    $defaults = [
+        'api-root' => esc_url_raw(rest_url()),
+        'nonce'    => wp_create_nonce('wp_rest'),
+    ];
+    $data = array_merge($defaults, $data);
+    $attrs = '';
+    foreach ($data as $k => $v) {
+        $attrs .= ' data-' . $k . '="' . esc_attr($v) . '"';
+    }
+    echo '<div id="' . esc_attr($id) . '" class="ap-react-widget"' . $attrs . '></div>';
 }
 
-function render_widget_artist_inbox_preview() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Artist Inbox Preview widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_ap_donor_activity(): void {
+    DonorActivityWidget::render();
 }
 
-function render_widget_artist_revenue_summary() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Artist Revenue Summary widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_artist_inbox_preview(): void {
+    echo ap_widget_artist_inbox_preview([]);
 }
 
-function render_widget_artist_spotlight() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Artist Spotlight widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_artist_revenue_summary(): void {
+    echo ap_widget_artist_revenue_summary([]);
 }
 
-function render_widget_artpulse_analytics_widget() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Artpulse Analytics Widget widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_artist_spotlight(): void {
+    echo ap_widget_artist_spotlight([]);
 }
 
-function render_widget_audience_crm() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Audience Crm widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_artpulse_analytics_widget(): void {
+    OrgAnalyticsWidget::render();
 }
 
-function render_widget_branding_settings_panel() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Branding Settings Panel widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_audience_crm(): void {
+    ap_render_js_widget('audience_crm');
 }
 
-function render_widget_embed_tool() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Embed Tool widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_branding_settings_panel(): void {
+    ap_render_js_widget('branding_settings_panel');
 }
 
-function render_widget_event_chat() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Event Chat widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_embed_tool(): void {
+    ap_render_js_widget('embed_tool');
 }
 
-function render_widget_my_favorites() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('My Favorites widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_event_chat(): void {
+    ap_render_js_widget('event_chat', ['event-id' => 0]);
 }
 
-function render_widget_my_shared_events_activity() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('My Shared Events Activity widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_my_favorites(): void {
+    echo ap_widget_my_favorites([]);
 }
 
-function render_widget_nearby_events_map() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Nearby Events Map widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_my_shared_events_activity(): void {
+    echo ap_widget_my_shared_events_activity([]);
 }
 
-function render_widget_news_feed() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('News Feed widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_nearby_events_map(): void {
+    DashboardWidgetRegistry::render_widget_nearby_events_map();
 }
 
-function render_widget_org_widget_sharing() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Org Widget Sharing widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_news_feed(): void {
+    ArtPulseNewsFeedWidget::render();
 }
 
-function render_widget_qa_checklist() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Qa Checklist widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_org_widget_sharing(): void {
+    OrgWidgetSharingPanel::render();
 }
 
-function render_widget_revenue_summary() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Revenue Summary widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_qa_checklist(): void {
+    QAChecklistWidget::render();
 }
 
-function render_widget_rsvp_button() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Rsvp Button widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_revenue_summary(): void {
+    echo ap_widget_artist_revenue_summary([]);
 }
 
-function render_widget_share_this_event() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Share This Event widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_rsvp_button(): void {
+    ap_render_js_widget('rsvp_button', ['event-id' => 0]);
 }
 
-function render_widget_sponsor_display() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Sponsor Display widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_share_this_event(): void {
+    ap_render_js_widget('share_this_event');
 }
 
-function render_widget_sponsored_event_config() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Sponsored Event Config widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_sponsor_display(): void {
+    ap_render_js_widget('sponsor_display');
 }
 
-function render_widget_webhooks() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Webhooks widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_sponsored_event_config(): void {
+    ap_render_js_widget('sponsored_event_config');
 }
 
-function render_widget_widget_ap_donor_activity() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Ap Donor Activity widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_webhooks(): void {
+    echo ap_widget_webhooks([]);
 }
 
-function render_widget_widget_artpulse_analytics_widget() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Artpulse Analytics Widget widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_ap_donor_activity(): void {
+    render_widget_ap_donor_activity();
 }
 
-function render_widget_widget_audience_crm() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Audience Crm widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_artpulse_analytics_widget(): void {
+    render_widget_artpulse_analytics_widget();
 }
 
-function render_widget_widget_branding_settings_panel() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Branding Settings Panel widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_audience_crm(): void {
+    render_widget_audience_crm();
 }
 
-function render_widget_widget_embed_tool() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Embed Tool widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_branding_settings_panel(): void {
+    render_widget_branding_settings_panel();
 }
 
-function render_widget_widget_event_chat() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Event Chat widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_embed_tool(): void {
+    render_widget_embed_tool();
 }
 
-function render_widget_widget_events() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Events widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_event_chat(): void {
+    render_widget_event_chat();
 }
 
-function render_widget_widget_favorites() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Favorites widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_events(): void {
+    DashboardWidgetRegistry::render_widget_events();
 }
 
-function render_widget_widget_my_favorites() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget My Favorites widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_favorites(): void {
+    DashboardWidgetRegistry::render_widget_favorites();
 }
 
-function render_widget_widget_nearby_events_map() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Nearby Events Map widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_my_favorites(): void {
+    DashboardWidgetRegistry::render_widget_my_favorites();
 }
 
-function render_widget_widget_news_feed() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget News Feed widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_nearby_events_map(): void {
+    DashboardWidgetRegistry::render_widget_nearby_events_map();
 }
 
-function render_widget_widget_org_widget_sharing() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Org Widget Sharing widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_news_feed(): void {
+    render_widget_news_feed();
 }
 
-function render_widget_widget_qa_checklist() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Qa Checklist widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_org_widget_sharing(): void {
+    render_widget_org_widget_sharing();
 }
 
-function render_widget_widget_rsvp_button() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Rsvp Button widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_qa_checklist(): void {
+    render_widget_qa_checklist();
 }
 
-function render_widget_widget_sponsor_display() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Sponsor Display widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_rsvp_button(): void {
+    render_widget_rsvp_button();
 }
 
-function render_widget_widget_sponsored_event_config() {
-    echo '<div class="ap-widget-stub">';
-    esc_html_e('Widget Sponsored Event Config widget stub — replace with real content.', 'artpulse');
-    echo '</div>';
+function render_widget_widget_sponsor_display(): void {
+    render_widget_sponsor_display();
+}
+
+function render_widget_widget_sponsored_event_config(): void {
+    render_widget_sponsored_event_config();
 }
 
