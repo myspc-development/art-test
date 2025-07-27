@@ -33,6 +33,7 @@ function ap_register_dashboard_builder_widget_map(): void {
         'audience_crm'           => 'AudienceCRMWidget.jsx',
         'sponsored_event_config' => 'SponsoredEventConfigWidget.jsx',
         'embed_tool'             => 'EmbedToolWidget.jsx',
+        'widget_events'         => 'WidgetEventsWidget.php',
         'branding_settings_panel' => 'OrgBrandingSettingsPanel.jsx',
         'ap_donor_activity'       => 'DonorActivityWidget.php',
         'artpulse_analytics_widget' => 'OrgAnalyticsWidget.php',
