@@ -6,6 +6,21 @@
         ],
         "status": "registered"
     },
+    "widget_events": {
+        "file": "widgets/WidgetEventsWidget.php",
+        "roles": [
+            "member",
+            "organization"
+        ],
+        "status": "registered"
+    },
+    "widget_favorites": {
+        "file": "widgets/FavoritesOverviewWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered"
+    },
     "rsvp_button": {
         "file": "assets/js/widgets/RSVPButton.jsx",
         "roles": [

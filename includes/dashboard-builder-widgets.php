@@ -12,6 +12,8 @@ function ap_register_dashboard_builder_widget_map(): void {
 
     $member = [
         'news_feed'        => 'ArtPulseNewsFeedWidget.php',
+        'widget_events'    => 'WidgetEventsWidget.php',
+        'widget_favorites' => 'FavoritesOverviewWidget.php',
         'rsvp_button'      => 'RSVPButton.jsx',
         'nearby_events_map' => 'NearbyEventsMapWidget.jsx',
         'my_favorites'     => 'MyFavoritesWidget.jsx',
