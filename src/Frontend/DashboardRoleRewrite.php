@@ -12,7 +12,11 @@ class DashboardRoleRewrite
 
     public static function add_rules(): void
     {
-        add_rewrite_rule('^dashboard-role/?$', 'index.php?ap_dashboard_role=1', 'top');
+        add_rewrite_rule(
+            '^dashboard-role(?:\\.php)?/?$',
+            'index.php?ap_dashboard_role=1',
+            'top'
+        );
     }
 
     public static function register_vars(array $vars): array

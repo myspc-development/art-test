@@ -32,5 +32,6 @@ All options live under **ArtPulse → Settings**. Tabs such as **General**, **Lo
 ## Additional Notes
 - The tools are responsive and keyboard accessible.
 - After plugin updates visit **Settings → Permalinks** to flush rewrite rules if needed.
+- After activation resave your permalinks to ensure the `/dashboard-role.php` preview page works.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
