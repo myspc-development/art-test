@@ -196,3 +196,23 @@ function render_widget_widget_sponsor_display(): void {
 function render_widget_widget_sponsored_event_config(): void {
     render_widget_sponsored_event_config();
 }
+
+function render_widget_widget_artist_inbox_preview(): void {
+    render_widget_artist_inbox_preview();
+}
+
+function render_widget_widget_artist_spotlight(): void {
+    render_widget_artist_spotlight();
+}
+
+function render_widget_widget_revenue_summary(): void {
+    render_widget_revenue_summary();
+}
+
+function render_widget_widget_share_this_event(): void {
+    render_widget_share_this_event();
+}
+
+function render_widget_widget_webhooks(): void {
+    render_widget_webhooks();
+}
