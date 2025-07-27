@@ -55,4 +55,8 @@ Settings are stored in user meta such as `ap_notification_prefs`.
 
 After registration, users see a brief tour highlighting key dashboard areas. Step completion is tracked in `ap_onboarding_steps` and the flag `ap_onboarding_completed`. Developers can modify the steps via the `artpulse_onboarding_steps` filter or provide custom templates in `templates/onboarding-*`.
 
+## 4. Activity Feed Endpoint
+
+`GET /wp-json/artpulse/v1/activity` returns recent audit log entries for the logged-in user. Optional parameter `limit` controls the number of items returned.
+
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

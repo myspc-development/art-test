@@ -98,6 +98,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\CommentReportRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\LeaderboardRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\UnifiedInboxController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Rest\ActivityRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Rest\CompetitionRestController::class, 'register']);
         add_action('rest_api_init', [VisitRestController::class, 'register']);

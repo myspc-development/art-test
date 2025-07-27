@@ -1,4 +1,13 @@
 {
+    "activity_feed": {
+        "file": "widgets/ActivityFeedWidget.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered"
+    },
     "news_feed": {
         "file": "widgets/ArtPulseNewsFeedWidget.php",
         "roles": [
