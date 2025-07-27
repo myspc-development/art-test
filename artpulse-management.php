@@ -70,6 +70,9 @@ require_once __DIR__ . '/includes/update-checker.php';
 Plugin::register();
 WidgetVisibilityManager::register();
 WidgetRoleSync::register();
+// Allow access to the default WordPress dashboard by removing the
+// AdminAccessManager redirect.
+remove_action('admin_init', [\ArtPulse\Core\AdminAccessManager::class, 'maybe_redirect_admin']);
 
 /**
  * Ensure core database tables exist on activation.
@@ -239,32 +242,6 @@ add_action('init', function () {
     }
 });
 
-// Redirect users to role-specific dashboards when accessing wp-admin dashboard
-add_action('admin_init', function () {
-    if (!is_admin()) {
-        return;
-    }
-
-    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
-    if (
-        $screen &&
-        $screen->id === 'dashboard' &&
-        !ap_wp_admin_access_enabled() &&
-        !current_user_can('view_wp_admin')
-    ) {
-        $user = wp_get_current_user();
-        if (user_can($user, 'artist')) {
-            wp_redirect(site_url('/dashboard-artist'));
-            exit;
-        } elseif (user_can($user, 'member')) {
-            wp_redirect(site_url('/dashboard-member'));
-            exit;
-        } elseif (user_can($user, 'organization')) {
-            wp_redirect(site_url('/dashboard-organization'));
-            exit;
-        }
-    }
-});
 
 // Load developer sample widgets for demonstration purposes.
 // See docs/developer/sample-widgets.md for details on these examples.
