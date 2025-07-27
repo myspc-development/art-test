@@ -4,6 +4,7 @@ if (!defined('ABSPATH')) {
 }
 
 use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry as CoreDashboardWidgetRegistry;
 
 function ap_register_dashboard_builder_widget_map(): void {
     $plugin_dir = dirname(__DIR__);
@@ -147,6 +148,45 @@ function ap_register_dashboard_builder_widget_map(): void {
 
 }
 add_action('init', 'ap_register_dashboard_builder_widget_map', 20);
+
+function ap_register_builder_core_placeholders(): void {
+    global $ap_widget_source_map;
+
+    if (!is_array($ap_widget_source_map)) {
+        return;
+    }
+
+    $defs = [];
+    foreach ($ap_widget_source_map as $role => $widgets) {
+        foreach ($widgets as $id => $file) {
+            if (!isset($defs[$id])) {
+                $defs[$id] = [
+                    'roles' => [],
+                    'label' => ucwords(str_replace(['_', '-'], ' ', $id)),
+                ];
+            }
+            $defs[$id]['roles'][] = $role;
+        }
+    }
+
+    foreach ($defs as $id => $info) {
+        $core_id = 'widget_' . $id;
+        if (CoreDashboardWidgetRegistry::get_widget($core_id) || CoreDashboardWidgetRegistry::get_widget($id)) {
+            continue;
+        }
+
+        $callback = static function () use ($info) {
+            echo '<div class="ap-widget-placeholder">' . esc_html($info['label']) . ' widget (placeholder)</div>';
+        };
+
+        CoreDashboardWidgetRegistry::register_widget($core_id, [
+            'label'    => $info['label'],
+            'callback' => $callback,
+            'roles'    => array_unique($info['roles']),
+        ]);
+    }
+}
+add_action('init', 'ap_register_builder_core_placeholders', 25);
 
 if (defined('WIDGET_DEBUG_MODE') && WIDGET_DEBUG_MODE) {
     require_once dirname(__DIR__) . '/widgets/WidgetStatusPanelWidget.php';
