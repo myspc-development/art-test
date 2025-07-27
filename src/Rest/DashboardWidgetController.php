@@ -42,6 +42,64 @@ class DashboardWidgetController {
     ];
 
     /**
+     * Convert an array of builder layout items to core widget IDs.
+     * Logs a warning if a widget ID cannot be mapped.
+     *
+     * @param array<int,array|string> $layout
+     * @return array<int,array>
+     */
+    private static function convert_to_core_ids(array $layout): array {
+        $converted = [];
+        foreach ($layout as $item) {
+            if (is_array($item)) {
+                $id  = sanitize_key($item['id'] ?? '');
+                $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+            } else {
+                $id  = sanitize_key((string) $item);
+                $vis = true;
+            }
+
+            $core = self::to_core_id($id);
+            if ($id && $core === $id && !\ArtPulse\Core\DashboardWidgetRegistry::get_widget($id)) {
+                error_log('[DashboardBuilder] Unmapped widget ID: ' . $id);
+            }
+
+            $converted[] = [
+                'id'      => $core,
+                'visible' => $vis,
+            ];
+        }
+
+        return $converted;
+    }
+
+    /**
+     * Convert an array of core layout items to builder widget IDs.
+     *
+     * @param array<int,array|string> $layout
+     * @return array<int,array>
+     */
+    private static function convert_to_builder_ids(array $layout): array {
+        $converted = [];
+        foreach ($layout as $item) {
+            if (is_array($item)) {
+                $id  = sanitize_key($item['id'] ?? '');
+                $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+            } else {
+                $id  = sanitize_key((string) $item);
+                $vis = true;
+            }
+
+            $converted[] = [
+                'id'      => self::to_builder_id($id),
+                'visible' => $vis,
+            ];
+        }
+
+        return $converted;
+    }
+
+    /**
      * Convert a builder widget ID to the core ID.
      */
     private static function to_core_id(string $id): string {
@@ -100,16 +158,8 @@ class DashboardWidgetController {
         }
         unset($widget);
 
-        $core_layout = \ArtPulse\Admin\UserLayoutManager::get_role_layout($role);
-        $active_layout = [];
-        foreach ($core_layout as $item) {
-            $id  = is_array($item) ? ($item['id'] ?? '') : $item;
-            $vis = is_array($item) ? ($item['visible'] ?? true) : true;
-            $active_layout[] = [
-                'id'      => self::to_builder_id($id),
-                'visible' => $vis,
-            ];
-        }
+        $core_layout   = \ArtPulse\Admin\UserLayoutManager::get_role_layout($role);
+        $active_layout = self::convert_to_builder_ids($core_layout);
 
         $response = [
             'available' => $available,
@@ -137,20 +187,12 @@ class DashboardWidgetController {
             return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
         }
         if (isset($data['layout']) && is_array($data['layout'])) {
-            $layout = [];
-            foreach ($data['layout'] as $item) {
-                $id  = sanitize_key($item['id'] ?? '');
-                $vis = empty($item['visible']) ? false : true;
-                $layout[] = [
-                    'id'      => self::to_core_id($id),
-                    'visible' => $vis,
-                ];
-            }
+            $layout = self::convert_to_core_ids($data['layout']);
             \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $layout);
         } else {
             $enabled = array_map('sanitize_key', (array) ($data['enabledWidgets'] ?? []));
             $order   = array_map('sanitize_key', (array) ($data['layoutOrder'] ?? []));
-            $layout  = array_map(function ($id) { return ['id' => self::to_core_id($id), 'visible' => true]; }, $order);
+            $layout  = self::convert_to_core_ids(array_map(fn($id) => ['id' => $id, 'visible' => true], $order));
             \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $layout);
         }
         return rest_ensure_response(['saved' => true]);
