@@ -14,10 +14,7 @@ add_action('wp_ajax_ap_follow_toggle', 'ap_follow_toggle');
 add_action('wp_ajax_nopriv_ap_follow_toggle', 'ap_follow_toggle');
 
 function ap_follow_post(): void {
-    check_admin_referer('ap_follow_post');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
+    check_ajax_referer('wp_rest');
     if (!is_user_logged_in()) {
         wp_send_json_error(['message' => __('Login required', 'artpulse')], 403);
     }
@@ -31,10 +28,7 @@ function ap_follow_post(): void {
 }
 
 function ap_unfollow_post(): void {
-    check_admin_referer('ap_unfollow_post');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
+    check_ajax_referer('wp_rest');
     if (!is_user_logged_in()) {
         wp_send_json_error(['message' => __('Login required', 'artpulse')], 403);
     }
@@ -51,11 +45,7 @@ function ap_unfollow_post(): void {
  * Toggle follow for artists or events via AJAX.
  */
 function ap_follow_toggle(): void {
-    check_admin_referer('ap_follow_toggle');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
-    check_ajax_referer('ap_dashboard_nonce');
+    check_ajax_referer('wp_rest');
 
     if (!is_user_logged_in()) {
         wp_send_json_error(['message' => __('Login required', 'artpulse')], 403);
