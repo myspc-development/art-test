@@ -36,10 +36,6 @@ function createConfig(input, file, name, globals = {}, external = Object.keys(gl
 
 const configs = [
   createConfig('assets/js/OrganizationSubmissionForm.jsx', 'assets/js/ap-org-submission.js', 'APOrgSubmission', { react: 'React' }),
-  createConfig('assets/js/admin-dashboard-widgets-editor.jsx', 'assets/js/admin-dashboard-widgets-editor.js', 'APDashboardWidgetsEditor', {
-    react: 'React',
-    'react-dom/client': 'ReactDOM'
-  }),
   createConfig('src/index.js', 'dist/react-form.js', 'APReactForm', {
     react: 'React',
     'react-dom/client': 'ReactDOM'
