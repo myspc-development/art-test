@@ -19,7 +19,7 @@ checklists.
 
 The editor supports unique layouts for every role. For artists you might register widgets like `artwork_manager` and `payout_summary` so creators can monetize their work. Organizations often include `ticketing_overview` and `analytics_report` widgets for event tracking.
 
-Preview mode loads the full dashboard in an iframe. Admins can toggle roles and adjust base widget styles. POST requests to `/layout/{role}` now accept a `style` object along with the layout array. React sources live in `assets/js/widget-editor/WidgetEditorApp.jsx` and are bundled to `build/widget-editor-ui.js`.
+Preview mode loads the full dashboard in an iframe. Admins can toggle roles and adjust base widget styles. POST requests to `/layout/{role}` now accept a `style` object along with the layout array. React sources previously lived in `assets/js/widget-editor/WidgetEditorApp.jsx` and were bundled to `build/widget-editor-ui.js` before the editor was removed.
 
 🔗 View available widgets and role visibility in the [Widget Matrix](../widgets/widget-matrix-reference.md).
 
