@@ -18,6 +18,7 @@ This directory groups all documentation by audience and feature area. Start with
 
 ### Developer Guides
 - [Developer Guides](developer/README.md) – shortcodes, forms and coding standards.
+- [ArtPulse Plugin Documentation](ArtPulse_Plugin_Documentation.md) – features, installation and API reference.
 - [Widgets Documentation](widgets/README.md) – widget registry and layout guides.
 - [Dashboard Menu Codex](dashboard-menu-codex.md) – menu configuration overview.
 
