@@ -3,9 +3,6 @@ use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 $user_role = DashboardController::get_role( get_current_user_id() );
-if ( $user_role !== 'member' ) {
-    wp_die( __( 'Access denied', 'artpulse' ) );
-}
 
 ?>
 <div class="ap-dashboard ap-dashboard--role-<?php echo esc_attr( $user_role ); ?>">
