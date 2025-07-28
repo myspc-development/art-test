@@ -256,6 +256,15 @@ class DashboardController {
         return self::render_for_user(get_current_user_id());
     }
 
+    /**
+     * Helper alias for get_role().
+     */
+    public static function get_user_role($user_id = null): string
+    {
+        $user_id = $user_id ?: get_current_user_id();
+        return self::get_role($user_id);
+    }
+
     public static function get_role($user_id): string {
         // Allow preview via ?ap_preview_role=artist for admin users
         if (current_user_can('manage_options') && isset($_GET['ap_preview_role'])) {
