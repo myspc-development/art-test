@@ -66,17 +66,6 @@ const configs = [
     '@wordpress/api-fetch': 'wp.apiFetch'
   }),
   createConfig(
-    'src/admin/WidgetEditorApp.jsx',
-    'build/widget-editor-ui.js',
-    'APWidgetEditorUI',
-    {
-      react: 'React',
-      'react-dom': 'ReactDOM',
-      'react-grid-layout': 'ReactGridLayout'
-    },
-    ['react', 'react-dom', 'react-grid-layout']
-  ),
-  createConfig(
     'assets/js/DashboardContainer.jsx',
     'assets/js/dashboard-container.js',
     'APDashboardContainer',
