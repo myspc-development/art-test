@@ -13,18 +13,19 @@ class EventsWidget {
             [self::class, 'render'],
             [
                 'roles'   => ['member','artist','organization'],
-                'section' => 'insights',
+                'section' => self::get_section(),
             ]
         );
     }
 
     public static function get_id(): string { return 'sample_events'; }
     public static function get_title(): string { return __('Events Widget','artpulse'); }
+    public static function get_section(): string { return 'insights'; }
     public static function metadata(): array { return ['sample' => true]; }
-    public static function can_view(): bool { return is_user_logged_in(); }
+    public static function can_view(int $user_id): bool { return $user_id > 0; }
 
-    public static function render(): void {
-        if (!self::can_view()) {
+    public static function render(int $user_id): void {
+        if (!self::can_view($user_id)) {
             echo '<p class="ap-widget-no-access">' . esc_html__('Please log in.', 'artpulse') . '</p>';
             return;
         }

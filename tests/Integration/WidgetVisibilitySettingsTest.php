@@ -45,7 +45,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         wp_set_current_user($uid);
 
         ob_start();
-        OrgAnalyticsWidget::render();
+        OrgAnalyticsWidget::render($uid);
         $html = ob_get_clean();
         $this->assertStringContainsString('ap-widget-no-access', $html);
     }
@@ -55,7 +55,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         wp_set_current_user($uid);
 
         ob_start();
-        OrgAnalyticsWidget::render();
+        OrgAnalyticsWidget::render($uid);
         $html = ob_get_clean();
         $this->assertStringNotContainsString('ap-widget-no-access', $html);
         $this->assertStringContainsString('Basic traffic', $html);
@@ -70,7 +70,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         wp_set_current_user($uid);
 
         ob_start();
-        OrgAnalyticsWidget::render();
+        OrgAnalyticsWidget::render($uid);
         $html = ob_get_clean();
         $this->assertSame('', $html);
     }
@@ -105,6 +105,17 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $html = ob_get_clean();
         $this->assertStringContainsString('Events content.', $html);
         $this->assertStringNotContainsString('Example donations', $html);
+        $this->assertStringContainsString('<h2>Insights</h2>', $html);
+        $this->assertStringNotContainsString('<h2>Actions</h2>', $html);
+
+        $sub = self::factory()->user->create(['role' => 'subscriber']);
+        wp_set_current_user($sub);
+        ob_start();
+        DashboardWidgetRegistry::render_for_role($sub);
+        $html = ob_get_clean();
+        $this->assertStringNotContainsString('Events content.', $html);
+        $this->assertStringNotContainsString('Example donations', $html);
+        $this->assertStringNotContainsString('Basic traffic', $html);
 
         $org_role = get_role('organization');
         if ($org_role) {
@@ -117,6 +128,8 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $html = ob_get_clean();
         $this->assertStringContainsString('Example donations', $html);
         $this->assertStringContainsString('Basic traffic', $html);
+        $this->assertStringContainsString('<h2>Insights</h2>', $html);
+        $this->assertStringContainsString('<h2>Actions</h2>', $html);
     }
 
     public function test_donations_template_override_loaded(): void {
@@ -130,13 +143,24 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         wp_set_current_user($uid);
 
         ob_start();
-        DonationsWidget::render();
+        DonationsWidget::render($uid);
         $html = ob_get_clean();
 
         remove_filter('stylesheet_directory', $filter);
         self::recursiveRemoveDir($dir);
 
         $this->assertStringContainsString('override', $html);
+    }
+
+    public function test_donations_template_falls_back_when_missing(): void {
+        $uid = self::factory()->user->create(['role' => 'organization']);
+        wp_set_current_user($uid);
+
+        ob_start();
+        DonationsWidget::render($uid);
+        $html = ob_get_clean();
+
+        $this->assertStringContainsString('Example donations', $html);
     }
 
     private static function recursiveRemoveDir(string $dir): void {

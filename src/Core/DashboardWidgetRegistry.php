@@ -538,39 +538,35 @@ class DashboardWidgetRegistry {
             $class = $cfg['class'] ?? '';
             if ( $class && method_exists( $class, 'can_view' ) ) {
                 try {
-                    if ( ! call_user_func( [ $class, 'can_view' ] ) ) {
+                    if ( ! call_user_func( [ $class, 'can_view' ], $user_id ) ) {
                         continue;
                     }
                 } catch ( \Throwable $e ) {
                     continue;
                 }
             }
-
-            $section = sanitize_key($cfg['section'] ?? '');
-            $group   = sanitize_key($cfg['group'] ?? '');
-            $sections[$section][$group][] = $cfg + ['id' => $id];
-        }
-        foreach ($sections as $sec => $groups) {
-            echo '<section class="ap-dashboard-section ap-section-' . esc_attr($sec ?: 'default') . '">';
-            if ($sec) {
-                echo '<h2 class="ap-section-title">' . esc_html(ucfirst($sec)) . '</h2>';
+            $section = $cfg['section'] ?? '';
+            if ( $class && method_exists( $class, 'get_section' ) ) {
+                try {
+                    $section = call_user_func( [ $class, 'get_section' ] );
+                } catch ( \Throwable $e ) {
+                    $section = '';
+                }
             }
-            foreach ($groups as $group => $widgets) {
-                echo '<div class="ap-widget-group ap-group-' . esc_attr($group ?: 'default') . '">';
-                if ($group) {
-                    echo '<h3 class="ap-group-title">' . esc_html(ucfirst($group)) . '</h3>';
+            $section = sanitize_key( $section );
+            $sections[ $section ][] = $cfg + [ 'id' => $id ];
+        }
+        foreach ( $sections as $sec => $widgets ) {
+            echo '<section class="ap-widget-section">';
+            if ( $sec ) {
+                echo '<h2>' . esc_html( ucfirst( $sec ) ) . '</h2>';
+            }
+            foreach ( $widgets as $cfg ) {
+                try {
+                    call_user_func( $cfg['callback'], $user_id );
+                } catch ( \Throwable $e ) {
+                    error_log( 'Widget ' . $cfg['id'] . ' failed: ' . $e->getMessage() );
                 }
-                echo '<div class="ap-widget-grid">';
-                foreach ($widgets as $cfg) {
-                    echo '<div class="ap-widget-card">';
-                    try {
-                        call_user_func( $cfg['callback'] );
-                    } catch ( \Throwable $e ) {
-                        error_log( 'Widget ' . $cfg['id'] . ' failed: ' . $e->getMessage() );
-                    }
-                    echo '</div>';
-                }
-                echo '</div></div>';
             }
             echo '</section>';
         }
