@@ -5,13 +5,18 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Dashboard panel listing widget manifest status.
  */
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 class WidgetManifestPanelWidget {
     public static function register(): void {
-        add_action('wp_dashboard_setup', [self::class, 'add_widget']);
-    }
-
-    public static function add_widget(): void {
-        wp_add_dashboard_widget('ap_widget_manifest_panel', __('Widget Manifest', 'artpulse'), [self::class, 'render']);
+        DashboardWidgetRegistry::register(
+            'widget_manifest_panel',
+            __('Widget Manifest', 'artpulse'),
+            'list-view',
+            __('Status of registered widgets.', 'artpulse'),
+            [self::class, 'render'],
+            [ 'roles' => ['administrator'] ]
+        );
     }
 
     public static function render(): void {

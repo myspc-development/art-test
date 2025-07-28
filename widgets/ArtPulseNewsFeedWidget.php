@@ -5,16 +5,17 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Dashboard widget showing recent posts from followed artists or organizations.
  */
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 class ArtPulseNewsFeedWidget {
     public static function register() {
-        add_action('wp_dashboard_setup', [self::class, 'add_widget']);
-    }
-
-    public static function add_widget() {
-        wp_add_dashboard_widget(
-            'ap_news_feed_widget',
+        DashboardWidgetRegistry::register(
+            'news_feed',
             __('ArtPulse News Feed', 'artpulse'),
-            [self::class, 'render']
+            'rss',
+            __('Latest posts from followed artists.', 'artpulse'),
+            [self::class, 'render'],
+            [ 'roles' => ['member'] ]
         );
     }
 

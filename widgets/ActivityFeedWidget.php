@@ -3,16 +3,19 @@ if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
 
 use ArtPulse\Core\ActivityLogger;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 class ActivityFeedWidget {
     public static function register(): void
     {
-        add_action('wp_dashboard_setup', [self::class, 'add_widget']);
-    }
-
-    public static function add_widget(): void
-    {
-        wp_add_dashboard_widget('activity_feed', __('Activity Feed', 'artpulse'), [self::class, 'render']);
+        DashboardWidgetRegistry::register(
+            'activity_feed',
+            __('Activity Feed', 'artpulse'),
+            'list-view',
+            __('Recent user activity.', 'artpulse'),
+            [self::class, 'render'],
+            [ 'roles' => ['member', 'artist', 'organization'] ]
+        );
     }
 
     public static function render(): void

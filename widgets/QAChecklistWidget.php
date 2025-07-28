@@ -5,13 +5,18 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Dashboard widget for QA testers to verify basic builder functionality.
  */
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 class QAChecklistWidget {
     public static function register(): void {
-        add_action('wp_dashboard_setup', [self::class, 'add_widget']);
-    }
-
-    public static function add_widget(): void {
-        wp_add_dashboard_widget('ap_qa_checklist', __('QA Checklist', 'artpulse'), [self::class, 'render']);
+        DashboardWidgetRegistry::register(
+            'qa_checklist',
+            __('QA Checklist', 'artpulse'),
+            'yes',
+            __('Steps to verify basic dashboard features.', 'artpulse'),
+            [self::class, 'render'],
+            [ 'roles' => ['member'] ]
+        );
     }
 
     public static function render(): void {

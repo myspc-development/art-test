@@ -79,12 +79,14 @@ function ap_register_dashboard_builder_widget_map(): void {
     // Register widgets with the union of roles once per widget ID.
     foreach ($combined as $id => $info) {
         $cb = function_exists('render_widget_' . $id) ? 'render_widget_' . $id : '__return_empty_string';
-        DashboardWidgetRegistry::register($id, [
-            'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
-            'render_callback' => $cb,
-            'roles' => array_unique($info['roles']),
-            'file'  => $info['file'],
-        ]);
+        if (!DashboardWidgetRegistry::get_widget($id)) {
+            DashboardWidgetRegistry::register($id, [
+                'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
+                'render_callback' => $cb,
+                'roles' => array_unique($info['roles']),
+                'file'  => $info['file'],
+            ]);
+        }
 
         $path_php = $plugin_dir . '/widgets/' . $info['file'];
         $path_js  = $plugin_dir . '/assets/js/widgets/' . $info['file'];
@@ -110,12 +112,14 @@ function ap_register_dashboard_builder_widget_map(): void {
         if (!isset($registered_files[$basename])) {
             $id = pathinfo($basename, PATHINFO_FILENAME);
             $cb = function_exists('render_widget_' . $id) ? 'render_widget_' . $id : '__return_empty_string';
-            DashboardWidgetRegistry::register($id, [
-                'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
-                'render_callback' => $cb,
-                'roles' => [],
-                'file'  => $basename,
-            ]);
+            if (!DashboardWidgetRegistry::get_widget($id)) {
+                DashboardWidgetRegistry::register($id, [
+                    'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
+                    'render_callback' => $cb,
+                    'roles' => [],
+                    'file'  => $basename,
+                ]);
+            }
             $unregistered_files[] = $basename;
             if (defined('WIDGET_DEBUG_MODE') && WIDGET_DEBUG_MODE) {
                 error_log('Dashboard widget file not registered: ' . $basename);

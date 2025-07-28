@@ -4,15 +4,34 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Dashboard widgets rendering ArtPulse shortcodes.
  */
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 class APShortcodeAdminWidgets {
     public static function register(): void {
-        add_action('wp_dashboard_setup', [self::class, 'add_widgets']);
-    }
-
-    public static function add_widgets(): void {
-        wp_add_dashboard_widget('ap_event_calendar_widget', __('Event Calendar', 'artpulse'), [self::class, 'render_event_calendar']);
-        wp_add_dashboard_widget('ap_notifications_widget', __('Notifications', 'artpulse'), [self::class, 'render_notifications']);
-        wp_add_dashboard_widget('ap_org_dashboard_widget', __('Organization Dashboard', 'artpulse'), [self::class, 'render_org_dashboard']);
+        DashboardWidgetRegistry::register(
+            'ap_event_calendar_widget',
+            __('Event Calendar', 'artpulse'),
+            'calendar-alt',
+            '',
+            [self::class, 'render_event_calendar'],
+            [ 'roles' => ['organization'], 'capability' => 'manage_options' ]
+        );
+        DashboardWidgetRegistry::register(
+            'ap_notifications_widget',
+            __('Notifications', 'artpulse'),
+            'bell',
+            '',
+            [self::class, 'render_notifications'],
+            [ 'roles' => ['organization'], 'capability' => 'manage_options' ]
+        );
+        DashboardWidgetRegistry::register(
+            'ap_org_dashboard_widget',
+            __('Organization Dashboard', 'artpulse'),
+            'building',
+            '',
+            [self::class, 'render_org_dashboard'],
+            [ 'roles' => ['organization'], 'capability' => 'manage_options' ]
+        );
     }
 
     public static function render_event_calendar(): void {

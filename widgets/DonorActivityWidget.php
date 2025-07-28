@@ -3,17 +3,20 @@ if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
 
 use ArtPulse\Crm\DonationModel;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DonorActivityWidget
 {
     public static function register(): void
     {
-        add_action('wp_dashboard_setup', [self::class, 'add_widget']);
-    }
-
-    public static function add_widget(): void
-    {
-        wp_add_dashboard_widget('ap_donor_activity', __('Donor Activity', 'artpulse'), [self::class, 'render']);
+        DashboardWidgetRegistry::register(
+            'ap_donor_activity',
+            __('Donor Activity', 'artpulse'),
+            'chart-line',
+            __('Recent donations for your organization.', 'artpulse'),
+            [self::class, 'render'],
+            [ 'roles' => ['organization'] ]
+        );
     }
 
     public static function render(): void
