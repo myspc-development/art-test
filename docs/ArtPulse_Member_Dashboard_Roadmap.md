@@ -47,7 +47,7 @@ status: complete
 ## PHASE 3: Messaging & Interaction
 
 ### 💬 Messaging
-- [~] `EventChatWidget.jsx`
+- [x] `EventChatWidget.jsx`
   - Pulls and posts messages related to events
   - Threads via `event_id`
 
@@ -55,7 +55,7 @@ status: complete
   - Previews recent messages to/from artists or orgs
 
 ### 📩 RSVP System
-- [~] `RSVPButton.jsx`
+- [x] `RSVPButton.jsx`
   - Toggle RSVP state with `/event/{id}/rsvp`
   - Show capacity and current attendance
 
@@ -67,7 +67,7 @@ status: complete
 ## PHASE 4: Sharing & Social Engagement
 
 ### 📢 Community Sharing
-- [~] `ShareThisEventWidget.jsx`
+- [x] `ShareThisEventWidget.jsx`
   - Social share buttons (Twitter/X, Facebook, LinkedIn)
   - Copy-to-clipboard event URL
 
@@ -79,7 +79,7 @@ status: complete
 ## PHASE 5: Feed & Content
 
 ### 📰 Feed Integration
-- [~] `ArtPulseNewsFeedWidget.php`
+- [x] `ArtPulseNewsFeedWidget.php`
   - Shows news and posts from followed artists/orgs
 
 - [x] `RecommendedForYouWidget.php`
