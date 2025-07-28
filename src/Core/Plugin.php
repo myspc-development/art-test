@@ -51,7 +51,7 @@ use ArtPulse\Admin\Widgets\WidgetStatusPanelWidget;
 
 class Plugin
 {
-    private const VERSION = '1.0.0-rc';
+    private const VERSION = '1.3.16';
 
     public static function register(): void
     {
