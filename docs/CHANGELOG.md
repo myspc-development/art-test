@@ -23,6 +23,9 @@ status: complete
 ## 1.3.17
 - Removed outdated `ap-org-roles.js` bundle from `rollup.config.js`.
 - Eliminates missing file errors when running `npm run bundle:react`.
+## 1.3.18
+- Added **Full Dashboard Compliance Check** QA guide.
+- Logged dashboard discrepancies in `issue-011-dashboard-compliance-gaps.md`.
 ## 1.3.14
 - Documentation updates and task status refinements.
 
