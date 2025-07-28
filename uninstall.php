@@ -1,67 +1,59 @@
 <?php
-if (!defined('WP_UNINSTALL_PLUGIN')) {
+// Exit if accessed directly or if uninstall not requested by WordPress
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
+}
+
+// Optional constant to prevent accidental data loss
+if ( ! defined( 'ARTPULSE_DELETE_DATA' ) || ! ARTPULSE_DELETE_DATA ) {
+    return;
 }
 
 global $wpdb;
 
-$remove_data = true;
-if (defined('ARTPULSE_REMOVE_DATA_ON_UNINSTALL')) {
-    $remove_data = (bool) ARTPULSE_REMOVE_DATA_ON_UNINSTALL;
-} else {
-    $settings = get_option('artpulse_settings', []);
-    $remove_data = empty($settings['keep_data_on_uninstall']);
-}
+try {
+    // Remove plugin options
+    delete_option( 'artpulse_settings' );
+    delete_option( 'openai_api_key' );
+    delete_option( 'ap_db_version' );
 
-if (!$remove_data) {
-    return;
-}
+    // Remove transients beginning with artpulse_
+    $transients = $wpdb->get_col(
+        $wpdb->prepare(
+            "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
+            $wpdb->esc_like( '_transient_artpulse_' ) . '%'
+        )
+    );
 
-$tables = [
-    'ap_roles',
-    'ap_feedback',
-    'ap_feedback_comments',
-    'ap_org_messages',
-    'ap_scheduled_messages',
-    'ap_payouts',
-    'ap_donations',
-    'ap_tickets',
-    'ap_event_tickets',
-    'ap_auctions',
-    'ap_bids',
-    'ap_promotions',
-    'ap_messages',
-    'ap_org_user_roles',
-];
-
-foreach ($tables as $t) {
-    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}{$t}");
-}
-
-delete_option('artpulse_settings');
-delete_option('artpulse_version');
-delete_option('ap_db_version');
-delete_option('ap_latest_release_info');
-delete_option('ap_update_available');
-delete_option('artpulse_default_layouts');
-delete_option('artpulse_widget_roles');
-delete_option('artpulse_locked_widgets');
-
-$page_ids = array_map('intval', (array) get_option('ap_shortcode_page_ids', []));
-foreach ($page_ids as $page_id) {
-    if ($page_id > 0) {
-        wp_delete_post($page_id, true);
+    foreach ( $transients as $transient ) {
+        $name = str_replace( '_transient_', '', $transient );
+        delete_transient( $name );
     }
-}
-delete_option('ap_shortcode_page_ids');
 
-$dash_roles = ['artist', 'member', 'organization'];
-$users = get_users(['role__in' => $dash_roles]);
-foreach ($users as $user) {
-    delete_user_meta($user->ID, 'ap_dashboard_layout');
-    $user->set_role('subscriber');
-}
-foreach ($dash_roles as $r) {
-    remove_role($r);
+    // Remove user meta keys beginning with artpulse_
+    $meta_keys = $wpdb->get_col(
+        $wpdb->prepare(
+            "SELECT meta_key FROM {$wpdb->usermeta} WHERE meta_key LIKE %s GROUP BY meta_key",
+            $wpdb->esc_like( 'artpulse_' ) . '%'
+        )
+    );
+
+    foreach ( $meta_keys as $meta_key ) {
+        delete_metadata( 'user', 0, $meta_key, '', true );
+    }
+
+    // Drop custom plugin tables prefixed with ap_
+    $tables = $wpdb->get_col(
+        $wpdb->prepare(
+            'SHOW TABLES LIKE %s',
+            $wpdb->esc_like( $wpdb->prefix . 'ap_' ) . '%'
+        )
+    );
+
+    foreach ( $tables as $table ) {
+        $wpdb->query( $wpdb->prepare( "DROP TABLE IF EXISTS `$table`" ) );
+    }
+} catch ( Exception $e ) {
+    // Errors are suppressed during uninstall to avoid blocking deletion
 }
 
