@@ -88,6 +88,14 @@ class DashboardWidgetRegistry {
     }
 
     /**
+     * Retrieve a widget configuration by ID.
+     */
+    public static function get_widget(string $id): ?array {
+        $widgets = self::get_all();
+        return $widgets[$id] ?? null;
+    }
+
+    /**
      * Render a widget by ID and return the output.
      */
     public static function render(string $id): string {
