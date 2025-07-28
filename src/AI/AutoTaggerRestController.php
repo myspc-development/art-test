@@ -4,9 +4,10 @@ namespace ArtPulse\AI;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\AI\OpenAIClient;
 
 /**
- * REST controller for generating tags from text via mocked AI.
+ * REST controller for generating tags from text via the OpenAI API.
  */
 class AutoTaggerRestController
 {
@@ -38,7 +39,7 @@ class AutoTaggerRestController
     }
 
     /**
-     * Generate tags for provided text (mocked implementation).
+     * Generate tags for provided text using OpenAI.
      */
     public static function generate_tags(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
@@ -47,9 +48,11 @@ class AutoTaggerRestController
             return new WP_Error('invalid_text', __('Invalid text.', 'artpulse'), ['status' => 400]);
         }
 
-        // Mocked AI response.
-        $tags = ['abstract', 'modern'];
+        $result = OpenAIClient::generateTags($text);
+        if (is_wp_error($result)) {
+            return $result;
+        }
 
-        return rest_ensure_response($tags);
+        return rest_ensure_response(['tags' => $result]);
     }
 }
