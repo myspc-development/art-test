@@ -2,7 +2,7 @@
 title: Changelog
 category: developer
 role: developer
-last_updated: 2025-07-27
+last_updated: 2025-07-28
 status: complete
 ---
 # Changelog
@@ -20,6 +20,9 @@ status: complete
 ## 1.3.16
 - Completed role-based dashboard builder audit and enforced widget visibility.
 - Updated default layouts for all roles and docs to match.
+## 1.3.17
+- Removed outdated `ap-org-roles.js` bundle from `rollup.config.js`.
+- Eliminates missing file errors when running `npm run bundle:react`.
 ## 1.3.14
 - Documentation updates and task status refinements.
 

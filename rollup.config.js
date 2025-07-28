@@ -57,10 +57,6 @@ const configs = [
     react: 'React',
     'react-dom/client': 'ReactDOM'
   }),
-  createConfig('assets/js/ap-org-roles.js', 'assets/js/ap-org-roles.bundle.js', 'APOrgRoles', {
-    '@wordpress/element': 'wp.element',
-    '@wordpress/api-fetch': 'wp.apiFetch'
-  }),
   createConfig(
     'src/admin/WidgetEditorApp.jsx',
     'build/widget-editor-ui.js',
