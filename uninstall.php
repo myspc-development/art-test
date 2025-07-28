@@ -5,8 +5,15 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 
 global $wpdb;
 
-$settings = get_option('artpulse_settings', []);
-if (!empty($settings['keep_data_on_uninstall'])) {
+$remove_data = true;
+if (defined('ARTPULSE_REMOVE_DATA_ON_UNINSTALL')) {
+    $remove_data = (bool) ARTPULSE_REMOVE_DATA_ON_UNINSTALL;
+} else {
+    $settings = get_option('artpulse_settings', []);
+    $remove_data = empty($settings['keep_data_on_uninstall']);
+}
+
+if (!$remove_data) {
     return;
 }
 
