@@ -1010,6 +1010,11 @@ class UserDashboardManager
 
         $vars['user_role'] = $user_role;
 
-        return $onboarding_html . self::load_template('dashboard-role.php', $vars);
+        $template = "dashboard-{$user_role}.php";
+        if (!file_exists(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/' . $template)) {
+            $template = 'dashboard-role.php';
+        }
+
+        return $onboarding_html . self::load_template($template, $vars);
     }
 }

@@ -1123,14 +1123,15 @@ add_action('wp_enqueue_scripts', function () {
 
 add_shortcode('ap_render_ui', function () {
     ob_start();
-    $user_id = get_current_user_id();
-    if ($user_id && \ArtPulse\Core\DashboardController::get_role($user_id) === 'member') {
-        echo do_shortcode('[ap_user_dashboard]');
+
+    if (is_user_logged_in()) {
+        echo \ArtPulse\Core\DashboardController::render();
     } else {
-        $ui_mode = ap_get_ui_mode();
+        $ui_mode  = ap_get_ui_mode();
         $template = $ui_mode === 'react' ? 'form-react.php' : 'form-tailwind.php';
         include plugin_dir_path(__FILE__) . "templates/{$template}";
     }
+
     return ob_get_clean();
 });
 
