@@ -8,5 +8,9 @@ if (!defined('ABSPATH')) {
 }
 
 AutoTagger::register();
-BioSummaryRestController::register();
-AutoTaggerRestController::register();
+
+// Register custom REST API controllers when the REST API is initialized.
+add_action('rest_api_init', static function () {
+    BioSummaryRestController::register_routes();
+    AutoTaggerRestController::register_routes();
+});
