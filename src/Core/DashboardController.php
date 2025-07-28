@@ -227,17 +227,7 @@ class DashboardController {
         return [];
     }
     public static function render_for_user($user_id) {
-        $role = self::get_role($user_id);
-
-        switch ($role) {
-            case 'artist':
-                return \ArtPulse\Frontend\ArtistDashboardShortcode::render();
-            case 'organization':
-                return \ArtPulse\Frontend\OrganizationDashboardShortcode::render([]);
-            case 'member':
-            default:
-                return UserDashboardManager::renderDashboard([]);
-        }
+        return UserDashboardManager::renderDashboard([]);
     }
 
     /**
