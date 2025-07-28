@@ -74,6 +74,7 @@ class DashboardWidgetRegistry {
             'callback'    => $callback,
             'class'       => $class,
             'category'    => $options['category'] ?? '',
+            'group'       => $options['group'] ?? '',
             'roles'       => $options['roles'] ?? [],
             'settings'    => $options['settings'] ?? [],
             'tags'        => $options['tags'] ?? [],
@@ -105,6 +106,7 @@ class DashboardWidgetRegistry {
         }
 
         $args['label'] = $label;
+        $args['group'] = $args['group'] ?? '';
 
         if ( empty( $args['callback'] ) && isset( $args['template'] ) ) {
             $template         = $args['template'];
@@ -312,6 +314,13 @@ class DashboardWidgetRegistry {
             }
             if (isset($cfg['capability'])) {
                 $widgets[$id]['capability'] = sanitize_key($cfg['capability']);
+            }
+        }
+        $group_vis = get_option('ap_widget_group_visibility', []);
+        foreach ($widgets as $id => $cfg) {
+            $grp = $cfg['group'] ?? '';
+            if ($grp && isset($group_vis[$grp]) && !$group_vis[$grp]) {
+                unset($widgets[$id]);
             }
         }
         return $widgets;

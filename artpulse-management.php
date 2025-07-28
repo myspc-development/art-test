@@ -656,12 +656,21 @@ function ap_enqueue_dashboard_styles() {
         [],
         filemtime(plugin_dir_path(__FILE__) . 'assets/css/ap-complete-dashboard-frontend.css')
     );
+    $dash_css = plugin_dir_path(__FILE__) . 'assets/css/dashboard.css';
+    if (file_exists($dash_css)) {
+        wp_enqueue_style(
+            'ap-dashboard',
+            plugin_dir_url(__FILE__) . 'assets/css/dashboard.css',
+            ['ap-complete-dashboard-style'],
+            filemtime($dash_css)
+        );
+    }
     $user_css = plugin_dir_path(__FILE__) . 'assets/css/ap-user-dashboard.css';
     if (file_exists($user_css)) {
         wp_enqueue_style(
             'ap-user-dashboard-style',
             plugin_dir_url(__FILE__) . 'assets/css/ap-user-dashboard.css',
-            ['ap-complete-dashboard-style'],
+            ['ap-complete-dashboard-style', 'ap-dashboard'],
             filemtime($user_css)
         );
     }
