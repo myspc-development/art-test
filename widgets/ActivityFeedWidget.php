@@ -6,6 +6,11 @@ use ArtPulse\Core\ActivityLogger;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 class ActivityFeedWidget {
+    public static function can_view(): bool {
+        $role = \ArtPulse\Core\DashboardController::get_role( get_current_user_id() );
+        return in_array( $role, [ 'member', 'artist', 'organization' ], true );
+    }
+
     public static function register(): void
     {
         DashboardWidgetRegistry::register(
@@ -21,6 +26,12 @@ class ActivityFeedWidget {
     public static function render(): void
     {
         if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+
+        if ( ! self::can_view() ) {
+            echo '<p class="ap-widget-no-access">' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p>';
+            return;
+        }
+
         $user_id = get_current_user_id();
         if (!$user_id) {
             esc_html_e('Please log in to view your activity.', 'artpulse');

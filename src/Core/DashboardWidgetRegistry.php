@@ -490,4 +490,35 @@ class DashboardWidgetRegistry {
         ] );
         do_action( 'artpulse_register_dashboard_widget' );
     }
+
+    /**
+     * Render all widgets visible to the specified user in a basic grid layout.
+     */
+    public static function render_for_role( int $user_id ): void {
+        $role = DashboardController::get_role( $user_id );
+
+        echo '<div class="ap-widget-grid">';
+
+        foreach ( self::get_all() as $id => $cfg ) {
+            $roles = isset( $cfg['roles'] ) ? (array) $cfg['roles'] : [];
+            if ( $roles && ! in_array( $role, $roles, true ) ) {
+                continue;
+            }
+
+            $cap = $cfg['capability'] ?? '';
+            if ( $cap && ! user_can( $user_id, $cap ) ) {
+                continue;
+            }
+
+            echo '<div class="ap-widget-card">';
+            try {
+                call_user_func( $cfg['callback'] );
+            } catch ( \Throwable $e ) {
+                error_log( 'Widget ' . $id . ' failed: ' . $e->getMessage() );
+            }
+            echo '</div>';
+        }
+
+        echo '</div>';
+    }
 }

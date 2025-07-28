@@ -1122,16 +1122,12 @@ add_action('wp_enqueue_scripts', function () {
 });
 
 add_shortcode('ap_render_ui', function () {
-    ob_start();
-
-    if (is_user_logged_in()) {
-        echo \ArtPulse\Core\DashboardController::render();
-    } else {
-        $ui_mode  = ap_get_ui_mode();
-        $template = $ui_mode === 'react' ? 'form-react.php' : 'form-tailwind.php';
-        include plugin_dir_path(__FILE__) . "templates/{$template}";
+    if ( ! is_user_logged_in() ) {
+        return '<p>Please <a href="' . esc_url( wp_login_url() ) . '">log in</a> to access your dashboard.</p>';
     }
 
+    ob_start();
+    echo \ArtPulse\Core\DashboardController::render();
     return ob_get_clean();
 });
 

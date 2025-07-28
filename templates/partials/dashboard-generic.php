@@ -120,6 +120,9 @@ if (empty($layout)) {
 
         echo '</div>';
     }
+
+    \ArtPulse\Core\DashboardWidgetRegistry::render_for_role($user_id);
+
     echo '</div>';
 }
 ?>
