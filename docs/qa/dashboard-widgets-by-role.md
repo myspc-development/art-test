@@ -2,7 +2,7 @@
 title: Dashboard Widgets by Role QA Checklist
 category: qa
 last_updated: 2025-07-28
-status: draft
+status: complete
 ---
 
 This checklist verifies that each user role sees the correct widgets in both the live dashboard (`[ap_user_dashboard]` shortcode) and the Dashboard Builder.
@@ -68,3 +68,6 @@ The plugin loads a baseline set of widgets for each new account. Administrators 
    - Check `DashboardWidgetRegistry::get_definitions(true)` output.
    - Review the **Widget Visibility** admin page for role/capability overrides.
    - Ensure the widget file exists and is included in `available-widgets.json`.
+7. Repeat the process after clearing user meta with the **Reset Layout** button to ensure role defaults load correctly.
+
+Successful completion of these checks confirms widgets match capabilities for every role across both the builder and front‑end view.
