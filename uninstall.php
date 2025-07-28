@@ -40,6 +40,14 @@ delete_option('artpulse_default_layouts');
 delete_option('artpulse_widget_roles');
 delete_option('artpulse_locked_widgets');
 
+$page_ids = array_map('intval', (array) get_option('ap_shortcode_page_ids', []));
+foreach ($page_ids as $page_id) {
+    if ($page_id > 0) {
+        wp_delete_post($page_id, true);
+    }
+}
+delete_option('ap_shortcode_page_ids');
+
 $dash_roles = ['artist', 'member', 'organization'];
 $users = get_users(['role__in' => $dash_roles]);
 foreach ($users as $user) {
