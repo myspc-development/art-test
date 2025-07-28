@@ -7,6 +7,12 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DonorActivityWidget
 {
+    public static function can_view(): bool
+    {
+        $role = \ArtPulse\Core\DashboardController::get_role( get_current_user_id() );
+        return $role === 'organization';
+    }
+
     public static function register(): void
     {
         DashboardWidgetRegistry::register(
@@ -22,6 +28,12 @@ class DonorActivityWidget
     public static function render(): void
     {
         if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
+
+        if ( ! self::can_view() ) {
+            echo '<p class="ap-widget-no-access">' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p>';
+            return;
+        }
+
         $org_id = get_user_meta(get_current_user_id(), 'ap_organization_id', true);
         if (!$org_id) {
             esc_html_e('No organization assigned.', 'artpulse');
