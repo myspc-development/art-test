@@ -2,6 +2,8 @@
 namespace ArtPulse\Core;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Frontend\ArtistDashboardShortcode;
+use ArtPulse\Frontend\OrganizationDashboardShortcode;
 
 class DashboardController {
 
@@ -229,13 +231,29 @@ class DashboardController {
 
         switch ($role) {
             case 'artist':
-                return ArtistDashboardHome::render($user_id);
+                return \ArtPulse\Frontend\ArtistDashboardShortcode::render();
             case 'organization':
-                return OrgDashboardManager::render($user_id);
+                return \ArtPulse\Frontend\OrganizationDashboardShortcode::render([]);
             case 'member':
             default:
-                return UserDashboardManager::render($user_id);
+                return UserDashboardManager::renderDashboard([]);
         }
+    }
+
+    /**
+     * Render the current user's dashboard.
+     *
+     * This helper loads the correct dashboard for the logged-in user and
+     * returns the generated HTML. When no user is logged in a small
+     * login prompt is returned instead of triggering errors.
+     */
+    public static function render(): string
+    {
+        if (!is_user_logged_in()) {
+            return '<p>' . esc_html__('Please log in to view your dashboard.', 'artpulse') . '</p>';
+        }
+
+        return self::render_for_user(get_current_user_id());
     }
 
     public static function get_role($user_id): string {
