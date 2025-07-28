@@ -62,11 +62,17 @@ class DashboardWidgetRegistry {
             $callback = [ self::class, 'render_widget_fallback' ];
         }
 
+        $class = '';
+        if ( is_array( $callback ) && isset( $callback[0] ) && is_string( $callback[0] ) ) {
+            $class = $callback[0];
+        }
+
         self::$widgets[ $id ] = [
             'label'       => $label,
             'icon'        => $icon,
             'description' => $description,
             'callback'    => $callback,
+            'class'       => $class,
             'category'    => $options['category'] ?? '',
             'roles'       => $options['roles'] ?? [],
             'settings'    => $options['settings'] ?? [],
@@ -117,7 +123,13 @@ class DashboardWidgetRegistry {
             $args['callback'] = [ self::class, 'render_widget_fallback' ];
         }
 
-        $args['id'] = $id;
+        $class = '';
+        if ( is_array( $args['callback'] ) && isset( $args['callback'][0] ) && is_string( $args['callback'][0] ) ) {
+            $class = $args['callback'][0];
+        }
+
+        $args['id']    = $id;
+        $args['class'] = $class;
         self::$widgets[ $id ] = $args;
     }
 
@@ -508,6 +520,17 @@ class DashboardWidgetRegistry {
             $cap = $cfg['capability'] ?? '';
             if ( $cap && ! user_can( $user_id, $cap ) ) {
                 continue;
+            }
+
+            $class = $cfg['class'] ?? '';
+            if ( $class && method_exists( $class, 'can_view' ) ) {
+                try {
+                    if ( ! call_user_func( [ $class, 'can_view' ] ) ) {
+                        continue;
+                    }
+                } catch ( \Throwable $e ) {
+                    continue;
+                }
             }
 
             echo '<div class="ap-widget-card">';

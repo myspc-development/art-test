@@ -1121,15 +1121,7 @@ add_action('wp_enqueue_scripts', function () {
     }
 });
 
-add_shortcode('ap_render_ui', function () {
-    if ( ! is_user_logged_in() ) {
-        return '<p>Please <a href="' . esc_url( wp_login_url() ) . '">log in</a> to access your dashboard.</p>';
-    }
-
-    ob_start();
-    echo \ArtPulse\Core\DashboardController::render();
-    return ob_get_clean();
-});
+add_shortcode('ap_render_ui', [\ArtPulse\Core\DashboardController::class, 'render']);
 
 add_action('rest_api_init', function() {
     register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/attendees', [
