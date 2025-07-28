@@ -39,6 +39,26 @@ body {
   gap: var(--ap-gap);
   margin-bottom: var(--ap-gap);
 }
+.dashboard-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--ap-bg);
+  padding: 1rem 1.5rem;
+  border-radius: var(--ap-radius);
+  box-shadow: var(--ap-shadow);
+  margin-bottom: var(--ap-gap);
+}
+.dashboard-topbar .welcome {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.dashboard-topbar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
 .dashboard-sidebar {
   flex: 1 1 250px;
   background: var(--ap-bg);

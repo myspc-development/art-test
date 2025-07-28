@@ -15,19 +15,18 @@ class DashboardController {
     private static array $role_widgets = [
         // Default widgets for newly created members
         'member'       => [
-            'widget_news',
             'membership',
             'upgrade',
+            'nearby_events_map',
+            'widget_favorites',
+            'widget_events',
+            'activity_feed',
             'account-tools',
-            'recommended_for_you',
-            'my_rsvps',
-            'favorites',
-            'local-events',
-            'my-follows',
             'notifications',
-            'messages',
-            'dashboard_feedback',
-            'cat_fact',
+            'rsvp_button',
+            'event_chat',
+            'share_this_event',
+            'qa_checklist',
         ],
         // Artist dashboard starter widgets
         'artist'       => [

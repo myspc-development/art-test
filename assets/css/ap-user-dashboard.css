@@ -9,6 +9,26 @@
   background-color: var(--ap-alt-bg-color);
   color: var(--ap-text-color);
 }
+.dashboard-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--ap-bg-color);
+  padding: 1rem 1.5rem;
+  border-radius: var(--ap-border-radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin-bottom: var(--ap-space-medium);
+}
+.dashboard-topbar .welcome {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.dashboard-topbar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
 
 .dashboard-widget {
   width: 100%;

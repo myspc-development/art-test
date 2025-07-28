@@ -13,6 +13,22 @@
     <button class="button"><?php esc_html_e('♻ Reset My Dashboard', 'artpulse'); ?></button>
   </form>
 
+  <?php $user = wp_get_current_user(); ?>
+  <header class="dashboard-topbar">
+    <div class="welcome">
+      <img src="<?php echo esc_url(get_avatar_url($user->ID, ['size' => 60])); ?>" alt="" />
+      <div>
+        <h2 class="ap-card__title"><?php printf(__('Welcome back, %s', 'artpulse'), esc_html($user->display_name)); ?></h2>
+        <span class="membership-status">
+          <?php
+          $level = \ArtPulse\ap_user_membership_level($user->ID);
+          echo esc_html(sprintf(__('Membership: %s', 'artpulse'), ucfirst($level)));
+          ?>
+        </span>
+      </div>
+    </div>
+  </header>
+
   <div class="ap-dashboard-layout">
     <aside class="ap-dashboard-sidebar">
       <?php
@@ -22,7 +38,6 @@
     </aside>
     <main class="ap-dashboard-main">
       <?php
-      $user    = wp_get_current_user();
       $followed = \ArtPulse\Community\FollowManager::get_user_follows($user->ID, 'artist');
       $follows  = is_array($followed) ? count($followed) : 0;
       $orgs     = \ArtPulse\Community\FollowManager::get_user_follows($user->ID, 'artpulse_org');
@@ -30,8 +45,7 @@
       $summary = \ArtPulse\Frontend\EventRsvpHandler::get_rsvp_summary_for_user($user->ID);
       $events  = $summary['going'] ?? 0;
       ?>
-      <h2 class="ap-card__title">Welcome back, <?= esc_html($user->display_name) ?> 👋</h2>
-      <p>You're following <?= $follows ?> artists and <?= $org_count ?> organizations. You’ve RSVP’d to <?= $events ?> events.</p>
+      <p><?php printf(__('You\'re following %d artists and %d organizations. You’ve RSVP’d to %d events.', 'artpulse'), $follows, $org_count, $events); ?></p>
       <?php if ($org_count === 0): ?>
         <p><?php esc_html_e('Follow organizations to see more events in your digest.', 'artpulse'); ?></p>
       <?php endif; ?>
