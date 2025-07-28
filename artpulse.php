@@ -7,6 +7,14 @@ if (!defined('ABSPATH')) { exit; }
 require_once __DIR__ . '/includes/db-schema.php';
 require_once __DIR__ . '/includes/avatar-https-fix.php';
 
+// Development helpers
+if (defined('WP_DEBUG') && WP_DEBUG) {
+    $dev_file = __DIR__ . '/includes/dev/debug-rest.php';
+    if (file_exists($dev_file)) {
+        require_once $dev_file;
+    }
+}
+
 register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
     $settings = get_option('artpulse_settings', []);
     $settings = array_merge(artpulse_get_default_settings(), $settings);
