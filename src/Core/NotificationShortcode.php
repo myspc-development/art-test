@@ -1,41 +1,26 @@
 <?php
 namespace ArtPulse\Core;
 
-use ArtPulse\Community\NotificationManager;
-
 class NotificationShortcode {
     public static function register() {
-        add_shortcode('ap_notifications', [self::class, 'render']);
+        if (!shortcode_exists('ap_notifications')) {
+            add_shortcode('ap_notifications', [__CLASS__, 'render']);
+        }
     }
 
-    public static function render() {
-        if (!is_user_logged_in()) {
-            return '<p>Please log in to view your notifications.</p>';
-        }
-
+    public static function render($atts = []) {
         $user_id = get_current_user_id();
-        $notifications = NotificationManager::get($user_id, 50);
+        if (!$user_id) return '<p>Please log in to see notifications.</p>';
+
+        $notifications = get_user_meta($user_id, 'ap_notifications', true);
+        if (!is_array($notifications)) return '<p>No notifications.</p>';
 
         ob_start();
-        ?>
-        <div class="ap-notifications">
-            <ul id="ap-notification-list">
-                <?php if (empty($notifications)): ?>
-                    <li>No notifications.</li>
-                <?php else: ?>
-                    <?php foreach ($notifications as $notif): ?>
-                        <li data-id="<?= esc_attr($notif->id) ?>">
-                            <span><?= esc_html($notif->content ?: $notif->type) ?></span>
-                            <?php if ($notif->status !== 'read'): ?>
-                                <button class="mark-read">Mark as read</button>
-                            <?php endif; ?>
-                        </li>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </ul>
-            <button id="ap-refresh-notifications">Refresh</button>
-        </div>
-        <?php
+        echo '<ul class="ap-notifications">';
+        foreach ($notifications as $n) {
+            echo '<li>' . esc_html($n) . '</li>';
+        }
+        echo '</ul>';
         return ob_get_clean();
     }
 }
