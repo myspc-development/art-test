@@ -248,7 +248,15 @@ class DashboardController {
             return 'member';
         }
 
-        return $user->roles[0];
+        $roles = array_map('sanitize_key', $user->roles);
+        $priority = ['member', 'artist', 'organization'];
+        foreach ($priority as $r) {
+            if (in_array($r, $roles, true)) {
+                return $r;
+            }
+        }
+
+        return $roles[0];
     }
 
     /**

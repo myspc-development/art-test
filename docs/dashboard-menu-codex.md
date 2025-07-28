@@ -27,7 +27,7 @@ $menu = [
 ];
 ```
 
-The `ap_merge_dashboard_menus()` helper combines menus when a user has multiple roles. Items are deduplicated by `id`, and the optional `$show_notifications` parameter controls whether the notifications link is included.
+The `ap_merge_dashboard_menus()` helper combines menus when a user has multiple roles. Items are deduplicated by `id`, and the optional `$show_notifications` parameter controls whether the notifications link is included. When merging menus the plugin now prioritizes roles using the same order as `DashboardController::get_role()`—`member` first, then `artist` and finally `organization`.
 
 ## Role Examples
 
