@@ -4,7 +4,7 @@ namespace ArtPulse\Frontend;
 
 class OrganizationDashboardShortcode {
     public static function register() {
-        add_shortcode('ap_org_dashboard', [self::class, 'render']);
+        // Dashboard shortcode removed
         // Legacy AJAX endpoints remain for backwards compatibility
         add_action('wp_ajax_ap_add_org_event', [self::class, 'handle_ajax_add_event']);
         add_action('wp_ajax_ap_get_org_event', [self::class, 'handle_ajax_get_event']);
