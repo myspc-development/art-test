@@ -7,6 +7,14 @@ status: draft
 
 This checklist verifies that each user role sees the correct widgets in both the live dashboard (`[ap_user_dashboard]` shortcode) and the Dashboard Builder.
 
+
+## Default Widgets by Role
+The plugin loads a baseline set of widgets for each new account. Administrators can change this list from the Dashboard Builder.
+
+- **Member:** `widget_news`, `membership`, `upgrade`, `account-tools`, `recommended_for_you`, `my_rsvps`, `favorites`, `local-events`, `my-follows`, `notifications`, `messages`, `dashboard_feedback`, `cat_fact`
+- **Artist:** `artist_feed_publisher`, `artist_audience_insights`, `artist_spotlight`, `artist_revenue_summary`, `my_events`, `messages`, `notifications`, `dashboard_feedback`, `cat_fact`
+
+- **Organization:** `organization_dashboard`, `organization_analytics`, `my_events`, `rsvp_stats`, `org_messages`, `support_history`, `lead_capture`, `site_stats`, `notifications`, `dashboard_feedback`
 | Widget ID | Required Capability | Member | Artist | Organization |
 |-----------|--------------------|:------:|:------:|:------------:|
 | membership | read | ✅ | ✅ | ✅ |
@@ -40,6 +48,14 @@ This checklist verifies that each user role sees the correct widgets in both the
 | widget_spotlight_features | read | ✅ | ✅ | ✅ |
 | artist_revenue_summary | read | ❌ | ✅ | ❌ |
 | artist_spotlight | read | ❌ | ✅ | ❌ |
+| widget_news | read | ✅ | ❌ | ❌ |
+| artist_feed_publisher | read | ❌ | ✅ | ❌ |
+| artist_audience_insights | read | ❌ | ✅ | ❌ |
+| organization_dashboard | read | ❌ | ❌ | ✅ |
+| organization_analytics | read | ❌ | ❌ | ✅ |
+| org_messages | read | ❌ | ❌ | ✅ |
+| lead_capture | read | ❌ | ❌ | ✅ |
+| site_stats | read | ❌ | ❌ | ✅ |
 | widget_spotlights | read | ❌ | ✅ | ❌ |
 
 ### Verification Steps
