@@ -20,5 +20,6 @@ Tracking documents for major issues and feature requests.
 - [Internationalization](issue-008-internationalization.md)
 - [Automated Testing](issue-009-automated-testing.md)
 - [CI/CD Workflow](issue-010-ci-cd-workflow.md)
+- [Dashboard Compliance Gaps](issue-011-dashboard-compliance-gaps.md)
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
