@@ -26,6 +26,10 @@ status: complete
 ## 1.3.18
 - Added **Full Dashboard Compliance Check** QA guide.
 - Logged dashboard discrepancies in `issue-011-dashboard-compliance-gaps.md`.
+## 1.3.19
+- Implemented dashboard config validation and fallback presets.
+- REST `/widgets` now filters by user role.
+- Added member and organization dashboard overview docs.
 ## 1.3.14
 - Documentation updates and task status refinements.
 

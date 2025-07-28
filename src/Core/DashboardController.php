@@ -299,4 +299,18 @@ class DashboardController {
 
         return get_posts($args);
     }
+
+    /**
+     * Return the default layout preset for a role if available.
+     */
+    public static function get_default_layout_for_role(string $role): array
+    {
+        foreach (self::get_default_presets() as $preset) {
+            if ($preset['role'] === $role) {
+                return $preset['layout'];
+            }
+        }
+
+        return [];
+    }
 }

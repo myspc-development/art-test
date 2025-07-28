@@ -11,13 +11,37 @@ function ap_render_dashboard_config_page() {
     $locked = get_option('artpulse_locked_widgets', []);
 
     if (isset($_POST['save_dashboard_config']) && check_admin_referer('ap_save_dashboard_config')) {
-        $roles  = json_decode(stripslashes($_POST['roles_json'] ?? ''), true) ?: [];
-        $layout = json_decode(stripslashes($_POST['layout_json'] ?? ''), true) ?: [];
-        $locked = json_decode(stripslashes($_POST['locked_json'] ?? ''), true) ?: [];
-        update_option('artpulse_widget_roles', $roles);
-        update_option('artpulse_default_layouts', $layout);
-        update_option('artpulse_locked_widgets', $locked);
-        echo '<div class="notice notice-success"><p>' . esc_html__('Configuration saved.', 'artpulse') . '</p></div>';
+        $roles_raw  = stripslashes($_POST['roles_json'] ?? '');
+        $layout_raw = stripslashes($_POST['layout_json'] ?? '');
+        $locked_raw = stripslashes($_POST['locked_json'] ?? '');
+
+        $roles  = json_decode($roles_raw, true);
+        $layout = json_decode($layout_raw, true);
+        $locked = json_decode($locked_raw, true);
+
+        $valid = true;
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($roles)) {
+            echo '<div class="notice notice-error"><p>' . esc_html__('Invalid roles JSON', 'artpulse') . '</p></div>';
+            $roles  = [];
+            $valid = false;
+        }
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($layout)) {
+            echo '<div class="notice notice-error"><p>' . esc_html__('Invalid layout JSON', 'artpulse') . '</p></div>';
+            $layout = [];
+            $valid  = false;
+        }
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($locked)) {
+            echo '<div class="notice notice-error"><p>' . esc_html__('Invalid locked JSON', 'artpulse') . '</p></div>';
+            $locked = [];
+            $valid  = false;
+        }
+
+        if ($valid) {
+            update_option('artpulse_widget_roles', $roles);
+            update_option('artpulse_default_layouts', $layout);
+            update_option('artpulse_locked_widgets', $locked);
+            echo '<div class="notice notice-success"><p>' . esc_html__('Configuration saved.', 'artpulse') . '</p></div>';
+        }
     }
     ?>
     <div class="wrap">

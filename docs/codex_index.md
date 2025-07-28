@@ -57,6 +57,8 @@ status: complete
 | [Role-Based Dashboard Verification](qa/role-based-dashboard-verification.md) | QA prompt for verifying role dashboards | QA |
 | [Full Dashboard Compliance Check](qa/full-dashboard-compliance-check.md) | Final QA for all dashboards | QA |
 | [`widget-settings-codex.md`](widgets/widget-settings-codex.md) | Per-user widget settings | Dev |
+| [`member-dashboard-overview.md`](guides/user/member-dashboard-overview.md) | Member dashboard basics | User |
+| [`organization-dashboard-overview.md`](guides/user/organization-dashboard-overview.md) | Organization dashboard basics | User |
 
 ---
 

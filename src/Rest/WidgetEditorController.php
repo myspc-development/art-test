@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Core\DashboardWidgetManager;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
  * Simple endpoints used by the React widget editor.
@@ -42,7 +43,9 @@ class WidgetEditorController
 
     public static function get_widgets(): WP_REST_Response
     {
-        $defs = DashboardWidgetManager::getWidgetDefinitions(true);
+        $user  = wp_get_current_user();
+        $roles = $user ? (array) $user->roles : [];
+        $defs  = DashboardWidgetRegistry::get_widgets_by_role($roles);
         return rest_ensure_response(array_values($defs));
     }
 

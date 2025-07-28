@@ -7,6 +7,7 @@ use ArtPulse\Core\UserEngagementLogger;
 use Stripe\StripeClient;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
+use ArtPulse\Core\DashboardController;
 use ArtPulse\Admin\LayoutSnapshotManager;
 
 class UserDashboardManager
@@ -727,7 +728,11 @@ class UserDashboardManager
     public static function getDashboardLayout(): \WP_REST_Response
     {
         $uid   = get_current_user_id();
+        $role  = DashboardController::get_role($uid);
         $layout_meta = get_user_meta($uid, 'ap_dashboard_layout', true);
+        if (empty($layout_meta)) {
+            $layout_meta = DashboardController::get_default_layout_for_role($role);
+        }
         $layout = [];
         $visibility = [];
         if (is_array($layout_meta)) {
