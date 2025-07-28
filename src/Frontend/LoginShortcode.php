@@ -1,9 +1,15 @@
 <?php
 namespace ArtPulse\Frontend;
 
+/**
+ * Shortcode that outputs login and registration forms.
+ */
 class LoginShortcode
 {
     private const NOTICE_KEY = 'ap_register_notices';
+    /**
+     * Registers hooks and the `ap_login` shortcode.
+     */
     public static function register(): void
     {
         add_shortcode('ap_login', [self::class, 'render']);
