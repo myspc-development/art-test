@@ -11,9 +11,9 @@ status: complete
 This document provides implementation details for the drag-and-drop dashboard editor. It builds on the Widget Manager reference and explains how the editor assembles layouts, persists changes and enforces role permissions.
 
 ## Architecture Overview
-The editor is a React application bundled via Webpack. Widget blocks are registered in PHP and exposed through a REST endpoint. When the editor loads it fetches the registry along with the user's existing layout. Each widget has a unique identifier and configuration data stored in the `wp_usermeta` table. Preview mode lets administrators switch roles on the fly so they can test layouts for **Member**, **Artist** and **Organization** dashboards.
+The editor is a React application built with Vite, which uses Rollup under the hood to bundle the assets. Widget blocks are registered in PHP and exposed through a REST endpoint. When the editor loads it fetches the registry along with the user's existing layout. Each widget has a unique identifier and configuration data stored in the `wp_usermeta` table. Preview mode lets administrators switch roles on the fly so they can test layouts for **Member**, **Artist** and **Organization** dashboards.
 
-The layout state is managed by Redux. Drag handles update widget order while resize actions adjust column spans. Changes are debounced and automatically saved through a REST `PUT` request. If the network request fails, the editor surfaces an inline error and reverts the layout.
+Layout state is handled internally through React hooks—no Redux layer is required. Drag handles update widget order while resize actions adjust column spans. Changes are debounced and automatically saved through a REST `PUT` request. If the network request fails, the editor surfaces an inline error and reverts the layout.
 
 ## Adding New Widgets
 To make a widget available in the editor, register it in `widgets/widget-registry.php` with metadata such as title, icon and default width. Provide a React edit component that receives props for settings and dataset results. The registry reference explains available fields. Once registered, the widget automatically appears in the editor's sidebar under the appropriate category.
