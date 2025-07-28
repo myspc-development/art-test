@@ -16,6 +16,9 @@ class DashboardController {
         // Default widgets for newly created members
         'member'       => [
             'widget_news',
+            'membership',
+            'upgrade',
+            'account-tools',
             'recommended_for_you',
             'my_rsvps',
             'favorites',
