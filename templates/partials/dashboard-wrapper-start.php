@@ -25,6 +25,13 @@
           echo esc_html(sprintf(__('Membership: %s', 'artpulse'), ucfirst($level)));
           ?>
         </span>
+        <?php if (\ArtPulse\Core\DashboardController::get_role($user->ID) === 'artist'): ?>
+        <?php $public = (bool) get_user_meta($user->ID, 'ap_profile_public', true); ?>
+        <label class="ap-profile-toggle">
+          <input type="checkbox" id="ap-profile-public" <?php checked($public, true); ?> />
+          <?php esc_html_e('Public Profile', 'artpulse'); ?>
+        </label>
+        <?php endif; ?>
       </div>
     </div>
   </header>
