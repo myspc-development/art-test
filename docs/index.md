@@ -17,6 +17,7 @@ Welcome to the documentation portal. Select a section based on your role.
 
 ## Developer Guides
 - [Developer Guides](developer/README.md)
+- [ArtPulse Plugin Documentation](ArtPulse_Plugin_Documentation.md)
 - [API Overview](api/README.md)
 - [Widgets Documentation](widgets/README.md)
 - [Dashboard Menu Codex](dashboard-menu-codex.md)
