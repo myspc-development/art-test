@@ -67,6 +67,29 @@ class DashboardControllerTest extends TestCase
         $this->assertSame($expected, DashboardController::get_widgets_for_role('artist'));
     }
 
+    public function test_artist_widgets_match_manifest(): void
+    {
+        $manifest_file = __DIR__ . '/../../widget-manifest.json';
+        $json = file_get_contents($manifest_file);
+        $manifest = json_decode($json, true);
+
+        $manifest_ids = [];
+        foreach ($manifest as $id => $data) {
+            $roles = $data['roles'] ?? [];
+            if (in_array('artist', $roles, true)) {
+                $manifest_ids[] = $id;
+            }
+        }
+
+        $widgets = DashboardController::get_widgets_for_role('artist');
+
+        $missing = array_diff($manifest_ids, $widgets);
+        $extra   = array_diff($widgets, $manifest_ids);
+
+        $this->assertSame([], $missing, 'Missing widget(s): ' . implode(', ', $missing));
+        $this->assertSame([], $extra,   'Unexpected widget(s): ' . implode(', ', $extra));
+    }
+
     public function test_get_widgets_for_organization_roles(): void
     {
         $expected = [
