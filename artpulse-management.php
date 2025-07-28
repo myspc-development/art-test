@@ -1136,25 +1136,6 @@ add_action('wp_enqueue_scripts', function () {
 
 add_shortcode('ap_render_ui', [\ArtPulse\Core\DashboardController::class, 'render']);
 
-add_action('rest_api_init', function() {
-    register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/attendees', [
-        'methods'  => 'GET',
-        'callback' => function($request) {
-            $event_id = $request['id'];
-            // Replace this with your actual attendee query logic:
-            if (!get_post($event_id)) {
-                return new WP_Error('event_not_found', 'Event not found', array('status' => 404));
-            }
-            // Example: get attendees from meta, or whatever storage
-            $attendees = get_post_meta($event_id, '_attendees', true);
-            $attendees = is_array($attendees) ? $attendees : [];
-            return rest_ensure_response($attendees);
-        },
-        'permission_callback' => function() {
-            return current_user_can('edit_posts');
-        }
-    ]);
-});
 
 
 add_action('wp_footer', function () {
@@ -1166,34 +1147,6 @@ add_action('wp_footer', function () {
         <a href="?ui_mode=react">React</a></div>';
 });
 
-// Expose event comments via REST
-add_action('rest_api_init', function () {
-    register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
-        'methods'  => 'GET',
-        'callback' => function ($request) {
-            $event_id = $request['id'];
-            $args     = [
-                'post_id' => $event_id,
-                'status'  => 'approve',
-            ];
-            $comments = get_comments($args);
-
-            $data = array_map(function ($c) {
-                return [
-                    'id'      => $c->comment_ID,
-                    'author'  => $c->comment_author,
-                    'content' => $c->comment_content,
-                    'date'    => $c->comment_date,
-                ];
-            }, $comments);
-
-            return rest_ensure_response($data);
-        },
-        'permission_callback' => function () {
-            return current_user_can('read');
-        },
-    ]);
-});
 
 // Force plugin template for single artpulse_event posts
 add_filter('template_include', function ($template) {
