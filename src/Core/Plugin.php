@@ -49,7 +49,7 @@ use ArtPulse\Admin\Widgets\WidgetStatusPanelWidget;
 
 class Plugin
 {
-    private const VERSION = '1.3.16';
+    private const VERSION = '1.3.18';
 
     public static function register(): void
     {
