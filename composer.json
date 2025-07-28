@@ -13,5 +13,10 @@
     "require": {
         "yahnis-elsts/plugin-update-checker": "^5.6",
         "erusev/parsedown": "^1.7"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "sniff": "phpcs --standard=phpcs.xml",
+        "zip": "bash scripts/release.sh"
     }
 }
