@@ -54,6 +54,7 @@ status: complete
 | [`widget-registry-reference.md`](widgets/widget-registry-reference.md) | Widget registration metadata | Dev |
 | [`widget-layout-import-export-guide.md`](widgets/widget-layout-import-export-guide.md) | Import/export JSON | Dev |
 | [Dashboard Builder UAT Checklist](qa/dashboard-builder-uat-checklist.md) | Testing guidance for the builder | QA |
+| [Role-Based Dashboard Verification](qa/role-based-dashboard-verification.md) | QA prompt for verifying role dashboards | QA |
 | [`widget-settings-codex.md`](widgets/widget-settings-codex.md) | Per-user widget settings | Dev |
 
 ---
