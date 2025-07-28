@@ -3,6 +3,8 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Widgets\OrgAnalyticsWidget;
+use ArtPulse\Widgets\EventsWidget;
+use ArtPulse\Widgets\DonationsWidget;
 
 class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
     public function set_up(): void {
@@ -13,6 +15,10 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $prop->setAccessible(true);
         $prop->setValue([]);
         delete_option('ap_widget_visibility_settings');
+
+        EventsWidget::register();
+        DonationsWidget::register();
+        OrgAnalyticsWidget::register();
     }
 
     public function test_settings_override_roles_and_capability(): void {
@@ -89,5 +95,59 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
 
         $this->assertStringContainsString('value="member" checked', $html);
         $this->assertStringContainsString('value="edit_posts"', $html);
+    }
+
+    public function test_widget_visibility_per_role(): void {
+        $member = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($member);
+        ob_start();
+        DashboardWidgetRegistry::render_for_role($member);
+        $html = ob_get_clean();
+        $this->assertStringContainsString('Events content.', $html);
+        $this->assertStringNotContainsString('Example donations', $html);
+
+        $org_role = get_role('organization');
+        if ($org_role) {
+            $org_role->add_cap('view_analytics');
+        }
+        $org = self::factory()->user->create(['role' => 'organization']);
+        wp_set_current_user($org);
+        ob_start();
+        DashboardWidgetRegistry::render_for_role($org);
+        $html = ob_get_clean();
+        $this->assertStringContainsString('Example donations', $html);
+        $this->assertStringContainsString('Basic traffic', $html);
+    }
+
+    public function test_donations_template_override_loaded(): void {
+        $dir = sys_get_temp_dir() . '/ap-theme-' . wp_generate_password(8, false, false);
+        mkdir($dir . '/templates/widgets', 0777, true);
+        file_put_contents($dir . '/templates/widgets/donations.php', '<p>override</p>');
+        $filter = static function() use ($dir) { return $dir; };
+        add_filter('stylesheet_directory', $filter);
+
+        $uid = self::factory()->user->create(['role' => 'organization']);
+        wp_set_current_user($uid);
+
+        ob_start();
+        DonationsWidget::render();
+        $html = ob_get_clean();
+
+        remove_filter('stylesheet_directory', $filter);
+        self::recursiveRemoveDir($dir);
+
+        $this->assertStringContainsString('override', $html);
+    }
+
+    private static function recursiveRemoveDir(string $dir): void {
+        if (!is_dir($dir)) return;
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($files as $file) {
+            $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
+        }
+        rmdir($dir);
     }
 }

@@ -479,6 +479,27 @@ details on the required credentials and optional interactive mode.
 
 See [docs/development-setup.md](docs/development-setup.md) for the required environment variables and instructions on using a local WordPress archive when working offline.
 
+## Widget Development
+
+Widget PHP files register themselves on the `artpulse_register_dashboard_widget` hook. Copy any file from `templates/widgets/` into your theme to override the markup. For example:
+
+```bash
+mkdir -p $(wp eval 'echo get_stylesheet_directory();')/templates/widgets
+cp templates/widgets/donations.php $(wp eval 'echo get_stylesheet_directory();')/templates/widgets/
+```
+
+Developers may modify the registry via the `ap_dashboard_widgets` filter. Each widget entry supports a `section` key for grouping under headings such as **insights** or **actions**.
+
+### Seeding Demo Content
+
+Run the helper script to create demo users, events and donations:
+
+```bash
+wp eval-file tools/seed-dashboard-users.php
+```
+
+This populates a sample organization with members, events and donation records for local testing.
+
 ## Sprint History
 
 All Codex modules and tasks have been completed and verified. The project board reflects a final status of **Done** across reporting, curator tools, analytics, and testing. Documentation was updated each sprint and the changelog records feature milestones through version 1.3.16.

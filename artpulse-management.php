@@ -160,6 +160,9 @@ require_once __DIR__ . '/includes/rest-update-diagnostics.php';
 // Legacy dashboard implementation removed in favor of DashboardWidgetRegistry
 // based widgets loaded via the manifest.
 require_once __DIR__ . '/widgets/stubs.php';
+require_once __DIR__ . '/widgets/EventsWidget.php';
+require_once __DIR__ . '/widgets/DonationsWidget.php';
+require_once __DIR__ . '/widgets/OrgAnalyticsWidget.php';
 require_once plugin_dir_path(__FILE__) . 'src/Rest/EventChatController.php';
 require_once __DIR__ . '/enqueue-react-widgets.php';
 require_once __DIR__ . '/includes/hooks.php';

@@ -24,7 +24,11 @@ class OrgAnalyticsWidget {
             'chart-bar',
             __('Basic traffic and engagement metrics.', 'artpulse'),
             [self::class, 'render'],
-            [ 'roles' => ['organization'], 'capability' => 'view_analytics' ]
+            [
+                'roles'      => ['organization'],
+                'capability' => 'view_analytics',
+                'section'    => 'insights',
+            ]
         );
     }
 

@@ -11,7 +11,10 @@ class EventsWidget {
             'calendar',
             __('Sample upcoming events list.', 'artpulse'),
             [self::class, 'render'],
-            ['roles' => ['member','artist','organization'], 'group' => 'insights']
+            [
+                'roles'   => ['member','artist','organization'],
+                'section' => 'insights',
+            ]
         );
     }
 
