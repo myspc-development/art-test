@@ -33,7 +33,7 @@ Response:
 
 ```json
 {
-  "plugin_version": "1.3.15",
+  "plugin_version": "1.3.16",
   "db_version": "1.4.0",
   "cache": "Enabled",
   "debug": false

@@ -481,7 +481,7 @@ See [docs/development-setup.md](docs/development-setup.md) for the required envi
 
 ## Sprint History
 
-All Codex modules and tasks have been completed and verified. The project board reflects a final status of **Done** across reporting, curator tools, analytics, and testing. Documentation was updated each sprint and the changelog records feature milestones through version 1.3.15.
+All Codex modules and tasks have been completed and verified. The project board reflects a final status of **Done** across reporting, curator tools, analytics, and testing. Documentation was updated each sprint and the changelog records feature milestones through version 1.3.16.
 
 ## Status
 
