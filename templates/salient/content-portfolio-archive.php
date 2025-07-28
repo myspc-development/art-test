@@ -60,12 +60,8 @@
                 case 'artpulse_event':
                     $date     = get_post_meta( get_the_ID(), '_ap_event_date', true );
                     $location = get_post_meta( get_the_ID(), '_ap_event_location', true );
-                    if ( $date ) {
-                        echo '<li><strong>' . esc_html__( 'Date:', 'artpulse' ) . '</strong> ' . esc_html( $date ) . '</li>';
-                    }
-                    if ( $location ) {
-                        echo '<li><strong>' . esc_html__( 'Location:', 'artpulse' ) . '</strong> ' . esc_html( $location ) . '</li>';
-                    }
+                    echo '<li><strong>' . esc_html__( 'Date:', 'artpulse' ) . '</strong> ' . esc_html( $date ?: __( 'Not specified', 'artpulse' ) ) . '</li>';
+                    echo '<li><strong>' . esc_html__( 'Location:', 'artpulse' ) . '</strong> ' . esc_html( $location ?: __( 'Not specified', 'artpulse' ) ) . '</li>';
                     break;
             }
             echo '</ul>'; ?>

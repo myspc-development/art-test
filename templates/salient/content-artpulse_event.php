@@ -30,32 +30,22 @@
           $rsvp    = get_post_meta(get_the_ID(), '_ap_event_rsvp', true);
         ?>
 
-        <?php if ($date || $venue || $address || $start || $end || $contact || $rsvp) : ?>
-          <ul class="event-meta styled-box">
-            <?php if ($date): ?>
-              <li><strong>Date:</strong> <?php echo esc_html($date); ?></li>
-            <?php endif; ?>
-            <?php if ($venue): ?>
-              <li><strong>Venue:</strong> <?php echo esc_html($venue); ?></li>
-            <?php endif; ?>
-            <?php if ($address): ?>
-              <li><strong>Address:</strong> <?php echo esc_html($address); ?></li>
-            <?php endif; ?>
-            <?php if ($start || $end): ?>
-              <li><strong>Time:</strong>
-                <?php echo esc_html($start); ?>
-                <?php echo ($start && $end) ? ' – ' : ''; ?>
-                <?php echo esc_html($end); ?>
-              </li>
-            <?php endif; ?>
-            <?php if ($contact): ?>
-              <li><strong>Contact:</strong> <?php echo esc_html($contact); ?></li>
-            <?php endif; ?>
-            <?php if ($rsvp): ?>
-              <li><strong>RSVP:</strong> <a href="<?php echo esc_url($rsvp); ?>" target="_blank">Reserve Now</a></li>
+          <ul class="event-meta styled-box" itemscope itemtype="https://schema.org/Event">
+            <meta itemprop="name" content="<?php the_title(); ?>">
+            <meta itemprop="startDate" content="<?php echo esc_attr($date); ?>">
+            <meta itemprop="location" content="<?php echo esc_attr($venue); ?>">
+            <li><strong>Date:</strong> <?php echo esc_html($date ?: __('Not specified', 'artpulse')); ?></li>
+            <?php $time_display = ($start || $end) ? esc_html($start) . ($start && $end ? ' – ' : '') . esc_html($end) : __('Not specified', 'artpulse'); ?>
+            <li><strong>Time:</strong> <?php echo $time_display; ?></li>
+            <li><strong>Venue:</strong> <?php echo esc_html($venue ?: __('Not specified', 'artpulse')); ?></li>
+            <li><strong>Address:</strong> <?php echo esc_html($address ?: __('Not specified', 'artpulse')); ?></li>
+            <li><strong>Contact:</strong> <?php echo esc_html($contact ?: __('Not specified', 'artpulse')); ?></li>
+            <?php if (!empty($rsvp) && filter_var($rsvp, FILTER_VALIDATE_URL)) : ?>
+              <li><strong>RSVP:</strong> <a href="<?php echo esc_url($rsvp); ?>" class="event-rsvp-link" target="_blank">RSVP Now</a></li>
+            <?php else : ?>
+              <li><strong>RSVP:</strong> <?php esc_html_e('Not specified', 'artpulse'); ?></li>
             <?php endif; ?>
           </ul>
-        <?php endif; ?>
 
         <div class="event-description">
           <?php the_content(); ?>
