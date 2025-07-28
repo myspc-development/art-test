@@ -1,0 +1,61 @@
+<?php
+namespace ArtPulse\AI\Tests;
+
+use WP_REST_Request;
+use ArtPulse\AI\BioSummaryRestController;
+
+/**
+ * @group restapi
+ */
+class BioSummaryRestControllerTest extends \WP_UnitTestCase
+{
+    private int $admin;
+    private int $subscriber;
+
+    public function set_up(): void
+    {
+        parent::set_up();
+        $this->admin = self::factory()->user->create(['role' => 'administrator']);
+        $this->subscriber = self::factory()->user->create(['role' => 'subscriber']);
+
+        BioSummaryRestController::register();
+        do_action('rest_api_init');
+    }
+
+    /**
+     * Ensure the /bio-summary endpoint returns a summary string.
+     */
+    public function test_endpoint_returns_summary(): void
+    {
+        wp_set_current_user($this->admin);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/bio-summary');
+        $req->set_param('bio', 'Artist biography');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $this->assertSame(['summary' => 'A visionary artist blending tradition and technology.'], $res->get_data());
+    }
+
+    /**
+     * Invalid bio after sanitization should return an error.
+     */
+    public function test_invalid_bio_returns_error(): void
+    {
+        wp_set_current_user($this->admin);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/bio-summary');
+        $req->set_param('bio', '   ');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(400, $res->get_status());
+    }
+
+    /**
+     * Only users with edit_posts capability can access the endpoint.
+     */
+    public function test_requires_edit_posts_capability(): void
+    {
+        wp_set_current_user($this->subscriber);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/bio-summary');
+        $req->set_param('bio', 'Artist bio');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(403, $res->get_status());
+    }
+}
