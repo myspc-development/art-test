@@ -31,6 +31,21 @@ for ($i=1; $i<=3; $i++) {
         'role'       => 'member',
     ]);
     add_user_meta($uid, 'favorite_color', 'blue');
+
+    // demo events per member
+    for ($e=1; $e<=2; $e++) {
+        wp_insert_post([
+            'post_type'   => 'artpulse_event',
+            'post_title'  => "Member {$i} Event {$e}",
+            'post_status' => 'publish',
+            'post_author' => $uid,
+        ]);
+    }
+
+    // demo donations to the org
+    if (class_exists('ArtPulse\\Crm\\DonationModel')) {
+        ArtPulse\Crm\DonationModel::add($org_id, $uid, 5.0 * $i, 'seed');
+    }
 }
 
 for ($i=1; $i<=2; $i++) {

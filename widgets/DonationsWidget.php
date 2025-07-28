@@ -11,7 +11,10 @@ class DonationsWidget {
             'money-alt',
             __('Recent donations list.', 'artpulse'),
             [self::class, 'render'],
-            ['roles' => ['organization'], 'group' => 'actions']
+            [
+                'roles'   => ['organization'],
+                'section' => 'actions',
+            ]
         );
     }
 
@@ -25,8 +28,12 @@ class DonationsWidget {
             echo '<p class="ap-widget-no-access">' . esc_html__('You do not have access.', 'artpulse') . '</p>';
             return;
         }
-        if (function_exists('ap_load_dashboard_template')) {
-            echo ap_load_dashboard_template('widgets/donations.php');
+        $template = locate_template('templates/widgets/donations.php');
+        if (!$template) {
+            $template = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/widgets/donations.php';
+        }
+        if ($template && file_exists($template)) {
+            include $template;
         } else {
             echo '<p>' . esc_html__('Example donations data.', 'artpulse') . '</p>';
         }
