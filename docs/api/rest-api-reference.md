@@ -20,6 +20,11 @@ Returns:
 ### POST /wp-json/artpulse/v1/dashboard-config
 Update the allowed widgets and locked state.
 
+> **Note**: The legacy `dashboard-config.php` route and the earlier
+> definitions inside `artpulse-management.php` have been removed. All
+> logic for this endpoint now lives in
+> `src/Rest/DashboardConfigController.php`.
+
 ## Widget Manager Endpoints
 
 ### GET /ap/widgets/available?role=member

@@ -76,3 +76,10 @@ If your plugin needs bespoke dashboard widgets or data views you can register ad
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
 
 For a full list of available shortcodes, see the files under [docs/shortcodes](../shortcodes/).
+
+### Deprecated registrations
+Earlier releases registered several shortcodes in multiple bootstrap files.
+These duplicates have been consolidated. The authoritative logic now lives in
+`src/Core/ShortcodeManager.php` and `src/Frontend/WidgetEmbedShortcode.php`.
+Legacy helpers such as `widget-embed.php` and `CommunityShortcodeManager.php`
+are retained only for reference.
