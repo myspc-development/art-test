@@ -3,7 +3,7 @@ namespace ArtPulse\Frontend;
 
 class ArtistDashboardShortcode {
     public static function register(): void {
-        add_shortcode('ap_artist_dashboard', [self::class, 'render']);
+        // Dashboard shortcode removed
         add_action('wp_ajax_ap_delete_artwork', [self::class, 'handle_ajax_delete_artwork']);
         add_action('wp_ajax_save_artwork_order', [self::class, 'handle_save_artwork_order']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);

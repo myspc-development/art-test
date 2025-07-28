@@ -84,9 +84,6 @@ For each role:
 
 | Doc | Exists | Up-to-date | Missing Sections |
 |-----|--------|-------------|------------------|
-| `artist-dashboard-overview.md` | ✅ | ✅/❌ | — |
-| `member-dashboard-overview.md` | ❌ | — | layout, widgets, shortcode |
-| `organization-dashboard-overview.md` | ❌ | — | role presets, widgets |
 | `dashboard-widget-index.md` | ✅ | ✅/❌ | role filtering |
 
 - [ ] Create missing role guides based on actual dashboard behavior
