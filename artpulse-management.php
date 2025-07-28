@@ -702,11 +702,12 @@ add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('dashicons'));
  */
 function ap_enqueue_admin_styles($hook) {
     if (strpos($hook, 'artpulse') !== false) {
+        $css_file = plugin_dir_path(__FILE__) . 'assets/css/ap-style.css';
         wp_enqueue_style(
             'ap-admin-ui',
             plugin_dir_url(__FILE__) . 'assets/css/ap-style.css',
             [],
-            '1.0'
+            file_exists($css_file) ? filemtime($css_file) : null
         );
     }
 }
