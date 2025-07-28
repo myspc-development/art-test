@@ -1,15 +1,19 @@
 <?php
+namespace ArtPulse\Widgets;
+
+use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardController;
+
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
 
 /**
  * Simple dashboard widget showing basic organization analytics.
  */
-use ArtPulse\Core\DashboardWidgetRegistry;
 
 class OrgAnalyticsWidget {
     public static function can_view(): bool {
-        $role = \ArtPulse\Core\DashboardController::get_role( get_current_user_id() );
+        $role = DashboardController::get_role( get_current_user_id() );
         return $role === 'organization' && current_user_can( 'view_analytics' );
     }
 

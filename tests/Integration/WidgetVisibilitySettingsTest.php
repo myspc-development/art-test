@@ -2,7 +2,7 @@
 namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
-use OrgAnalyticsWidget;
+use ArtPulse\Widgets\OrgAnalyticsWidget;
 
 class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
     public function set_up(): void {

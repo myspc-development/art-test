@@ -518,8 +518,9 @@ class DashboardWidgetRegistry {
     public static function render_for_role( int $user_id ): void {
         $role = DashboardController::get_role( $user_id );
 
-        echo '<div class="ap-widget-grid">';
+        do_action('ap_before_widgets', $role);
 
+        $sections = [];
         foreach ( self::get_all() as $id => $cfg ) {
             $roles = isset( $cfg['roles'] ) ? (array) $cfg['roles'] : [];
             if ( $roles && ! in_array( $role, $roles, true ) ) {
@@ -542,15 +543,27 @@ class DashboardWidgetRegistry {
                 }
             }
 
-            echo '<div class="ap-widget-card">';
-            try {
-                call_user_func( $cfg['callback'] );
-            } catch ( \Throwable $e ) {
-                error_log( 'Widget ' . $id . ' failed: ' . $e->getMessage() );
+            $group = sanitize_key($cfg['group'] ?? '');
+            $sections[$group][] = $cfg + ['id' => $id];
+        }
+        foreach ($sections as $group => $widgets) {
+            echo '<div class="ap-dashboard-section ap-section-' . esc_attr($group ?: 'default') . '">';
+            if ($group) {
+                echo '<h2 class="ap-section-title">' . esc_html(ucfirst($group)) . '</h2>';
             }
-            echo '</div>';
+            echo '<div class="ap-widget-grid">';
+            foreach ($widgets as $cfg) {
+                echo '<div class="ap-widget-card">';
+                try {
+                    call_user_func( $cfg['callback'] );
+                } catch ( \Throwable $e ) {
+                    error_log( 'Widget ' . $cfg['id'] . ' failed: ' . $e->getMessage() );
+                }
+                echo '</div>';
+            }
+            echo '</div></div>';
         }
 
-        echo '</div>';
+        do_action('ap_after_widgets', $role);
     }
 }
