@@ -25,7 +25,9 @@ status: complete
 - [Codex Sprint Readiness](./codex_sprint_readiness.md)
 - [Partner PDFs](./partner-pdf/)
 - [API Reference Chapters](./api-chapters)
-
+- [Shortcodes Reference](./shortcodes/)
+- [All REST API Endpoints](api/all-endpoints.md)
+- [Hook Reference](./dev/hooks.md)
 
 ## ⚙️ Core Infrastructure & Foundation (Phase A)
 
@@ -58,6 +60,7 @@ status: complete
 | [Full Dashboard Compliance Check](qa/full-dashboard-compliance-check.md) | Final QA for all dashboards | QA |
 | [`widget-settings-codex.md`](widgets/widget-settings-codex.md) | Per-user widget settings | Dev |
 
+- [Widget and Template Reference](widgets/template-reference.md)
 ---
 
 ## 🎨 Creator & Curator Tools (Phase M)

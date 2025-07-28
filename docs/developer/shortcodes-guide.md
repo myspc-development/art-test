@@ -74,3 +74,5 @@ If your plugin needs bespoke dashboard widgets or data views you can register ad
 - If output is blank, check user capabilities and that the `id` attribute references existing content.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
+
+For a full list of available shortcodes, see the files under [docs/shortcodes](../shortcodes/).
