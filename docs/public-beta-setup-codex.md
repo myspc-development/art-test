@@ -2,12 +2,15 @@
 title: ArtPulse Codex: Public Beta Setup
 category: developer
 role: developer
-last_updated: 2025-07-20
-status: complete
+last_updated: 2025-07-28
+status: draft
 ---
 # ArtPulse Codex: Public Beta Setup
 
 This codex describes how to enable a limited public beta program with invite-only access, onboarding guidance and feature flags.
+
+> **Note**
+> The `ap_beta_invites` table and related REST endpoint are not yet implemented. This document outlines proposed future functionality and may change when development begins.
 
 ## 1. Beta Access & Invite System
 

@@ -154,7 +154,7 @@ status: complete
 * [multi-org-roles-permissions.md](multi-org-roles-permissions.md)
 * [org-roles-matrix.md](org-roles-matrix.md)
 * [partnership-deployment.md](partnership-deployment.md)
-* [public-beta-setup-codex.md](public-beta-setup-codex.md)
+* [public-beta-setup-codex.md](public-beta-setup-codex.md) _(draft)_
 * [qr-checkins.md](qr-checkins.md)
 * [reporting-exports.md](reporting-exports.md)
 * [search-services.md](search-services.md)
