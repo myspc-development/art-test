@@ -13,7 +13,11 @@ function ap_widget_admin_guide(array $vars = []): string
 {
     $doc = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/docs/Admin_Help.md';
     $parsedown = new Parsedown();
-    $parsedown->setSafeMode(true);
+    if (method_exists($parsedown, 'setSafeMode')) {
+        $parsedown->setSafeMode(true);
+    } elseif (method_exists($parsedown, 'setMarkupEscaped')) {
+        $parsedown->setMarkupEscaped(true);
+    }
     $content = file_exists($doc) ? $parsedown->text(file_get_contents($doc)) : '<p>' . esc_html__('Guide not found.', 'artpulse') . '</p>';
     $vars['id'] = 'admin-guide';
     $vars['title'] = __('Admin Guide', 'artpulse');
@@ -25,7 +29,11 @@ function ap_widget_member_guide(array $vars = []): string
 {
     $doc = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/docs/Member_Help.md';
     $parsedown = new Parsedown();
-    $parsedown->setSafeMode(true);
+    if (method_exists($parsedown, 'setSafeMode')) {
+        $parsedown->setSafeMode(true);
+    } elseif (method_exists($parsedown, 'setMarkupEscaped')) {
+        $parsedown->setMarkupEscaped(true);
+    }
     $content = file_exists($doc) ? $parsedown->text(file_get_contents($doc)) : '<p>' . esc_html__('Guide not found.', 'artpulse') . '</p>';
     $vars['id'] = 'member-guide';
     $vars['title'] = __('Member Guide', 'artpulse');

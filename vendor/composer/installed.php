@@ -1,21 +1,30 @@
 <?php return array(
     'root' => array(
-        'name' => '__root__',
+        'name' => 'artpulse/art-test',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e66cd188385153888dd55f373e5de98634d72e4d',
+        'reference' => '8f2600bc971b75c7c90d1033fa8dd98360d839b4',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        '__root__' => array(
+        'artpulse/art-test' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e66cd188385153888dd55f373e5de98634d72e4d',
+            'reference' => '8f2600bc971b75c7c90d1033fa8dd98360d839b4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'erusev/parsedown' => array(
+            'pretty_version' => '1.7.4',
+            'version' => '1.7.4.0',
+            'reference' => 'cb17b6477dfff935958ba01325f2e8a2bfa6dab3',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../erusev/parsedown',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
