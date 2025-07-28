@@ -142,6 +142,7 @@ require_once __DIR__ . '/admin/page-widget-audit.php';
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
 require_once __DIR__ . '/auto-tagger.php';
+require_once __DIR__ . '/admin/page-artpulse-ai.php';
 require_once __DIR__ . '/pwa-manifest.php';
 require_once __DIR__ . '/includes/i18n.php';
 
