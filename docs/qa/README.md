@@ -17,6 +17,7 @@ Testing resources and checklists.
 - `dashboard-builder-uat-checklist.md`
 - `role-based-widget-visibility-checklist.md`
 - `role-based-dashboard-verification.md`
+- `dashboard-rendering-audit-standardization.md`
 Refer to the [Widgets Documentation](../widgets/README.md) for implementation details used during testing.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

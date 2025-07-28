@@ -3,7 +3,7 @@ title: Codex QA Prompt – Role-Based Dashboard Verification
 category: qa
 role: qa
 last_updated: 2025-07-28
-status: active
+status: complete
 ---
 
 # ✅ Codex QA Prompt – Role-Based Dashboard Verification
@@ -104,3 +104,5 @@ For each role:
 - [`admin-dashboard-ui.md`](../admin/admin-dashboard-ui.md)
 - [`dashboard-builder-release-summary.md`](../internal/dashboard-builder-release-summary.md)
 - [`dashboard-widget-index.md`](../dashboard_widget_index.md)
+
+> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
