@@ -1,260 +1,597 @@
 {
-  "webhooks": {
-    "file": "widgets/WebhooksWidget.php",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "artist_spotlight": {
-    "file": "assets/js/widgets/ArtistSpotlightWidget.jsx",
-    "roles": [
-      "artist"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "revenue_summary": {
-    "file": "assets/js/widgets/ArtistRevenueSummaryWidget.jsx",
-    "roles": [
-      "artist"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "artist_artwork_manager": {
-    "file": "assets/js/widgets/ArtistArtworkManagerWidget.jsx",
-    "roles": [
-      "artist"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "artist_audience_insights": {
-    "file": "assets/js/widgets/ArtistAudienceInsightsWidget.jsx",
-    "roles": [
-      "artist"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "artist_earnings_summary": {
-    "file": "assets/js/widgets/ArtistEarningsWidget.jsx",
-    "roles": [
-      "artist"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "artist_feed_publisher": {
-    "file": "assets/js/widgets/ArtistFeedPublisherWidget.jsx",
-    "roles": [
-      "artist"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "collab_requests": {
-    "file": "assets/js/widgets/ArtistCollaborationWidget.jsx",
-    "roles": [
-      "artist"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "onboarding_tracker": {
-    "file": "assets/js/widgets/OnboardingTrackerWidget.jsx",
-    "roles": [
-      "artist"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "artist_inbox_preview": {
-    "file": "assets/js/widgets/ArtistInboxPreviewWidget.jsx",
-    "roles": [
-      "member",
-      "artist"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "event_chat": {
-    "file": "assets/js/widgets/EventChatWidget.jsx",
-    "roles": [
-      "member"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "my_favorites": {
-    "file": "assets/js/widgets/MyFavoritesWidget.jsx",
-    "roles": [
-      "member"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "nearby_events_map": {
-    "file": "assets/js/widgets/NearbyEventsMapWidget.jsx",
-    "roles": [
-      "member"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "news_feed": {
-    "file": "widgets/ArtPulseNewsFeedWidget.php",
-    "roles": [
-      "member"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "widget_events": {
-    "file": "widgets/WidgetEventsWidget.php",
-    "roles": [
-      "member",
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "widget_favorites": {
-    "file": "widgets/FavoritesOverviewWidget.php",
-    "roles": [
-      "member"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "qa_checklist": {
-    "file": "widgets/QAChecklistWidget.php",
-    "roles": [
-      "member"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "rsvp_button": {
-    "file": "assets/js/widgets/RSVPButton.jsx",
-    "roles": [
-      "member"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "share_this_event": {
-    "file": "assets/js/widgets/ShareThisEventWidget.jsx",
-    "roles": [
-      "member"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "ap_donor_activity": {
-    "file": "widgets/DonorActivityWidget.php",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "artpulse_analytics_widget": {
-    "file": "widgets/OrgAnalyticsWidget.php",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "audience_crm": {
-    "file": "assets/js/widgets/AudienceCRMWidget.jsx",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "branding_settings_panel": {
-    "file": "assets/js/widgets/OrgBrandingSettingsPanel.jsx",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "embed_tool": {
-    "file": "assets/js/widgets/EmbedToolWidget.jsx",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "org_widget_sharing": {
-    "file": "widgets/OrgWidgetSharingPanel.php",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "sponsor_display": {
-    "file": "widgets/SponsorDisplayWidget.php",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "org_event_overview": {
-    "file": "assets/js/widgets/OrgEventOverviewWidget.jsx",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "org_team_roster": {
-    "file": "assets/js/widgets/OrgTeamRosterWidget.jsx",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "org_approval_center": {
-    "file": "assets/js/widgets/OrgApprovalCenterWidget.jsx",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "org_ticket_insights": {
-    "file": "assets/js/widgets/OrgTicketInsightsWidget.jsx",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "org_broadcast_box": {
-    "file": "assets/js/widgets/OrgBroadcastBoxWidget.jsx",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  },
-  "sponsored_event_config": {
-    "file": "assets/js/widgets/SponsoredEventConfigWidget.jsx",
-    "roles": [
-      "organization"
-    ],
-    "status": "registered",
-    "previewGuarded": true
-  }
+    "admin_guide": {
+        "file": "templates/widgets/guide.php",
+        "roles": [
+            "administrator",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "lead_capture": {
+        "file": "templates/widgets/lead-capture.php",
+        "roles": [
+            "administrator"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "sales_summary": {
+        "file": "templates/widgets/sales-summary.php",
+        "roles": [
+            "administrator"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "site_stats": {
+        "file": "templates/widgets/site-stats.php",
+        "roles": [
+            "administrator"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_artwork_manager": {
+        "file": "templates/widgets/artist-artwork-manager.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_audience_insights": {
+        "file": "templates/widgets/artist-audience-insights.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_earnings_summary": {
+        "file": "templates/widgets/artist-earnings.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_feed_publisher": {
+        "file": "templates/widgets/artist-feed-publisher.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_revenue_summary": {
+        "file": "templates/widgets/artist-revenue-summary.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_spotlight": {
+        "file": "templates/widgets/artist-spotlight-widget.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "collab_requests": {
+        "file": "templates/widgets/collab-requests.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "messages": {
+        "file": "templates/widgets/messages.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "onboarding_tracker": {
+        "file": "templates/widgets/onboarding-tracker.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "revenue_summary": {
+        "file": "assets/js/widgets/ArtistRevenueSummaryWidget.jsx",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_spotlights": {
+        "file": "templates/widgets/widget-spotlights.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "account-tools": {
+        "file": "templates/widgets/account-tools.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_inbox_preview": {
+        "file": "templates/widgets/artist-inbox-preview.php",
+        "roles": [
+            "member",
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "cat_fact": {
+        "file": "templates/widgets/cat-fact.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "creator-tips": {
+        "file": "templates/widgets/widget-creator-tips.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "dashboard_feedback": {
+        "file": "templates/widgets/dashboard-feedback.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "event_chat": {
+        "file": "assets/js/widgets/EventChatWidget.jsx",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "events": {
+        "file": "templates/widgets/events.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "favorites": {
+        "file": "templates/widgets/my-favorites.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "followed_artists_activity": {
+        "file": "templates/widgets/followed-artists-activity.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "instagram_widget": {
+        "file": "templates/widgets/instagram-widget.php",
+        "roles": [
+            "member",
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "local-events": {
+        "file": "templates/widgets/local-events.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "member_guide": {
+        "file": "templates/widgets/guide.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "membership": {
+        "file": "templates/widgets/membership.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "my-events": {
+        "file": "templates/widgets/my-events.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "my-follows": {
+        "file": "templates/widgets/my-follows.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "my_favorites": {
+        "file": "assets/js/widgets/MyFavoritesWidget.jsx",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "my_rsvps": {
+        "file": "templates/widgets/my-rsvps.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "my_shared_events_activity": {
+        "file": "templates/widgets/my-shared-events-activity.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "nearby_events_map": {
+        "file": "assets/js/widgets/NearbyEventsMapWidget.jsx",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "news_feed": {
+        "file": "widgets/ArtPulseNewsFeedWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "notifications": {
+        "file": "templates/widgets/notifications.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "qa_checklist": {
+        "file": "widgets/QAChecklistWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "recommended_for_you": {
+        "file": "templates/widgets/recommended-for-you.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "role-spotlight": {
+        "file": "templates/widgets/spotlight-dashboard.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "rsvp_button": {
+        "file": "assets/js/widgets/RSVPButton.jsx",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "rsvps": {
+        "file": "templates/widgets/rsvps.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "share_this_event": {
+        "file": "assets/js/widgets/ShareThisEventWidget.jsx",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "support-history": {
+        "file": "templates/widgets/support-history.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "upcoming_events_by_location": {
+        "file": "templates/widgets/upcoming-events-location.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "upgrade": {
+        "file": "templates/widgets/upgrade.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_events": {
+        "file": "widgets/WidgetEventsWidget.php",
+        "roles": [
+            "member",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_favorites": {
+        "file": "widgets/FavoritesOverviewWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_followed_artists": {
+        "file": "templates/widgets/widget-followed-artists.php",
+        "roles": [
+            "member",
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_for_you_all": {
+        "file": "templates/widgets/widget-for-you.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_my_favorites": {
+        "file": "templates/widgets/my-favorites.php",
+        "roles": [
+            "member",
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_nearby_events_map": {
+        "file": "templates/widgets/nearby-events-map.php",
+        "roles": [
+            "member",
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_news": {
+        "file": "templates/widgets/widget-news.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_spotlight_calls": {
+        "file": "templates/widgets/spotlight-dashboard.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_spotlight_events": {
+        "file": "templates/widgets/spotlight-dashboard.php",
+        "roles": [
+            "member",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_spotlight_features": {
+        "file": "templates/widgets/spotlight-dashboard.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "ap_donor_activity": {
+        "file": "widgets/DonorActivityWidget.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artpulse_analytics_widget": {
+        "file": "widgets/OrgAnalyticsWidget.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "audience_crm": {
+        "file": "assets/js/widgets/AudienceCRMWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "branding_settings_panel": {
+        "file": "assets/js/widgets/OrgBrandingSettingsPanel.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "embed_tool": {
+        "file": "assets/js/widgets/EmbedToolWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "org_approval_center": {
+        "file": "assets/js/widgets/OrgApprovalCenterWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "org_broadcast_box": {
+        "file": "assets/js/widgets/OrgBroadcastBoxWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "org_event_overview": {
+        "file": "assets/js/widgets/OrgEventOverviewWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "org_team_roster": {
+        "file": "assets/js/widgets/OrgTeamRosterWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "org_ticket_insights": {
+        "file": "assets/js/widgets/OrgTicketInsightsWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "org_widget_sharing": {
+        "file": "widgets/OrgWidgetSharingPanel.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "rsvp_stats": {
+        "file": "templates/widgets/rsvp-stats.php",
+        "roles": [
+            "organization",
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "sponsor_display": {
+        "file": "widgets/SponsorDisplayWidget.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "sponsored_event_config": {
+        "file": "assets/js/widgets/SponsoredEventConfigWidget.jsx",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "webhooks": {
+        "file": "templates/widgets/webhooks.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    }
 }
