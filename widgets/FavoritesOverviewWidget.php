@@ -5,13 +5,18 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Wrapper widget for Favorites Overview.
  */
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 class FavoritesOverviewWidget {
     public static function register(): void {
-        add_action('wp_dashboard_setup', [self::class, 'add_widget']);
-    }
-
-    public static function add_widget(): void {
-        wp_add_dashboard_widget('widget_favorites', __('Favorites Overview', 'artpulse'), [self::class, 'render']);
+        DashboardWidgetRegistry::register(
+            'widget_favorites',
+            __('Favorites Overview', 'artpulse'),
+            'heart',
+            __('Your favorite artists and works.', 'artpulse'),
+            [self::class, 'render'],
+            [ 'roles' => ['member'] ]
+        );
     }
 
     public static function render(): void {

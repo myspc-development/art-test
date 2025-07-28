@@ -5,16 +5,17 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Simple dashboard widget showing basic organization analytics.
  */
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 class OrgAnalyticsWidget {
     public static function register(): void {
-        add_action('wp_dashboard_setup', [self::class, 'add_widget']);
-    }
-
-    public static function add_widget(): void {
-        wp_add_dashboard_widget(
+        DashboardWidgetRegistry::register(
             'artpulse_analytics_widget',
             __('Organization Analytics', 'artpulse'),
-            [self::class, 'render']
+            'chart-bar',
+            __('Basic traffic and engagement metrics.', 'artpulse'),
+            [self::class, 'render'],
+            [ 'roles' => ['organization'], 'capability' => 'view_analytics' ]
         );
     }
 

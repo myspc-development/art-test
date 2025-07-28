@@ -5,13 +5,18 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Wrapper widget for Upcoming Events.
  */
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 class WidgetEventsWidget {
     public static function register(): void {
-        add_action('wp_dashboard_setup', [self::class, 'add_widget']);
-    }
-
-    public static function add_widget(): void {
-        wp_add_dashboard_widget('widget_events', __('Upcoming Events', 'artpulse'), [self::class, 'render']);
+        DashboardWidgetRegistry::register(
+            'widget_events',
+            __('Upcoming Events', 'artpulse'),
+            'calendar',
+            __('Upcoming events for your organization.', 'artpulse'),
+            [self::class, 'render'],
+            [ 'roles' => ['member', 'organization'] ]
+        );
     }
 
     public static function render(): void {
