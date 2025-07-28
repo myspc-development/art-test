@@ -21,6 +21,10 @@ class ComposerStaticInita473d3f3862fb4a1e679260c12c04875
         array (
             'DeepCopy\\' => 9,
         ),
+        'A' => 
+        array (
+            'ArtPulse\\' => 9,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -31,6 +35,10 @@ class ComposerStaticInita473d3f3862fb4a1e679260c12c04875
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
+        ),
+        'ArtPulse\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 
