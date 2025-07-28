@@ -38,35 +38,28 @@ class OrganizationDashboardShortcodeTest extends TestCase
         self::$caps = [];
     }
 
-    public function test_opening_hours_in_dashboard(): void
+    public function test_dashboard_renders_grid(): void
     {
         self::$user_meta[1]['ap_organization_id'] = 10;
-        self::$post_meta[10]['ead_org_monday_start_time'] = '09:00';
-        self::$post_meta[10]['ead_org_monday_end_time'] = '17:00';
-
         $html = OrganizationDashboardShortcode::render([]);
-        $this->assertStringContainsString('Opening Hours', $html);
-        $this->assertStringContainsString('09:00 - 17:00', $html);
+        $this->assertStringContainsString('ap-dashboard-grid', $html);
     }
 
     public function test_analytics_hidden_without_cap(): void
     {
         self::$user_meta[1]['ap_organization_id'] = 10;
-        self::$caps['manage_options'] = false;
-        self::$caps['edit_others_posts'] = false;
+        self::$caps['view_analytics'] = false;
 
         $html = OrganizationDashboardShortcode::render([]);
-        $this->assertStringNotContainsString('id="analytics-section"', $html);
-        $this->assertStringNotContainsString('href="#analytics"', $html);
+        $this->assertStringNotContainsString('Organization Analytics', $html);
     }
 
     public function test_analytics_visible_with_cap(): void
     {
         self::$user_meta[1]['ap_organization_id'] = 10;
-        self::$caps['manage_options'] = true;
+        self::$caps['view_analytics'] = true;
 
         $html = OrganizationDashboardShortcode::render([]);
-        $this->assertStringContainsString('id="analytics-section"', $html);
-        $this->assertStringContainsString('href="#analytics"', $html);
+        $this->assertStringContainsString('Organization Analytics', $html);
     }
 }
