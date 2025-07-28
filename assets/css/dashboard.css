@@ -45,3 +45,11 @@
 .ap-card__button:hover {
   background-color: #0064a6;
 }
+
+.ap-widget-section {
+  margin-bottom: 2rem;
+}
+.ap-widget-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}

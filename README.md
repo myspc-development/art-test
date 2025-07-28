@@ -500,6 +500,25 @@ wp eval-file tools/seed-dashboard-users.php
 
 This populates a sample organization with members, events and donation records for local testing.
 
+### Creating Widgets
+
+1. Copy `widgets/SampleHelloWidget.php` and update the class name.
+2. Implement `get_id()`, `get_title()`, `get_section()`, `can_view( $user_id )` and `render( $user_id )`.
+3. Call `DashboardWidgetRegistry::register()` in the `register()` method with a `roles` array.
+
+### Template Overrides
+
+Place a file under `your-theme/widgets/` with the same name as the plugin template (e.g. `donations.php`) to override it. If no override exists the template bundled with the plugin is loaded.
+
+### Running PHPUnit
+
+The suite depends on the WP test library. Run the setup script once and then execute PHPUnit:
+
+```bash
+bash scripts/setup-env.sh
+composer test
+```
+
 ## Sprint History
 
 All Codex modules and tasks have been completed and verified. The project board reflects a final status of **Done** across reporting, curator tools, analytics, and testing. Documentation was updated each sprint and the changelog records feature milestones through version 1.3.16.
