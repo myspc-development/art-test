@@ -11,6 +11,7 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
 {
     private int $admin;
     private int $subscriber;
+    private string $mock_body = '';
 
     public function set_up(): void
     {
@@ -20,6 +21,27 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
 
         BioSummaryRestController::register();
         do_action('rest_api_init');
+
+        update_option('openai_api_key', 'test');
+        add_filter('pre_http_request', [$this, 'mock_request'], 10, 3);
+    }
+
+    public function tear_down(): void
+    {
+        remove_filter('pre_http_request', [$this, 'mock_request'], 10);
+        parent::tear_down();
+    }
+
+    public function mock_request($pre, $args, $url)
+    {
+        if (str_contains($url, 'api.openai.com')) {
+            return [
+                'headers'  => [],
+                'response' => ['code' => 200],
+                'body'     => $this->mock_body,
+            ];
+        }
+        return false;
     }
 
     /**
@@ -28,6 +50,7 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
     public function test_endpoint_returns_summary(): void
     {
         wp_set_current_user($this->admin);
+        $this->mock_body = json_encode(['choices' => [ ['message' => ['content' => 'A visionary artist blending tradition and technology.']] ]]);
         $req = new WP_REST_Request('POST', '/artpulse/v1/bio-summary');
         $req->set_param('bio', 'Artist biography');
         $res = rest_get_server()->dispatch($req);

@@ -4,9 +4,10 @@ namespace ArtPulse\AI;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\AI\OpenAIClient;
 
 /**
- * REST controller for generating artist bio summaries using mocked AI.
+ * REST controller for generating artist bio summaries using OpenAI.
  */
 class BioSummaryRestController
 {
@@ -38,7 +39,7 @@ class BioSummaryRestController
     }
 
     /**
-     * Generate a summary from the provided bio (mocked implementation).
+     * Generate a summary from the provided bio using OpenAI.
      */
     public static function generate_summary(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
@@ -47,8 +48,10 @@ class BioSummaryRestController
             return new WP_Error('invalid_bio', __('Invalid bio.', 'artpulse'), ['status' => 400]);
         }
 
-        // Mocked AI summary.
-        $summary = 'A visionary artist blending tradition and technology.';
+        $summary = OpenAIClient::generateSummary($bio);
+        if (is_wp_error($summary)) {
+            return $summary;
+        }
 
         return rest_ensure_response(['summary' => $summary]);
     }
