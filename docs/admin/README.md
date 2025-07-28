@@ -11,7 +11,7 @@ status: complete
 Guides for site administrators configuring the ArtPulse plugin.
 
 - `admin-settings-ui.md` – settings tabs and configuration UI
-- `admin-widget-editor-guide.md` – removed; see Dashboard Builder docs
+- [admin-widget-editor-guide.md](../archive/admin-widget-editor-guide.md) – archived; see Dashboard Builder docs
 - `plugin-installation-updates.md` – installation and update procedures
 - `admin-overview.md` – summary of admin features
 For implementation details see the [Developer Guides](../developer/README.md).

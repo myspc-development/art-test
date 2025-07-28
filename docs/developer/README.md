@@ -10,7 +10,7 @@ status: complete
 
 Technical references and implementation docs.
 
-- `widget-editor-developer-guide.md` (archived; replaced by Dashboard Builder docs)
+- [widget-editor-developer-guide.md](../archive/widget-editor-developer-guide.md) (archived; replaced by Dashboard Builder docs)
 - `shortcodes-guide.md`
 - `react-forms-codex.md`
 - `sample-widgets.md`

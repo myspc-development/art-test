@@ -31,7 +31,7 @@ status: complete
 | admin/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | admin/admin-overview.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | admin/admin-settings-ui.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| admin/admin-widget-editor-guide.md | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| archive/admin-widget-editor-guide.md | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | admin/admin-dashboard-ui.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | admin/role-preview-guide.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | admin/plugin-installation-updates.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -91,7 +91,7 @@ status: complete
 | developer/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | developer/react-forms-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | developer/shortcodes-guide.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| developer/widget-editor-developer-guide.md | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| archive/widget-editor-developer-guide.md | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | development-setup.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | enhanced-notifications-codex.md | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
 | event-chat-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
