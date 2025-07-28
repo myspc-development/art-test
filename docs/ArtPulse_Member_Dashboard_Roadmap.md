@@ -19,9 +19,9 @@ status: complete
 
 ### ✅ 2. Create/Update REST API Endpoints
 - [x] `GET /events/nearby`: Return events with geo + radius filter
-- [~] `POST /event/{id}/rsvp`: RSVP logic with user_id, status
-- [~] `POST /user/{id}/follow`: Follow/unfollow artist/org
-- [~] `POST /event/{id}/message`: Create message thread/comment
+- [x] `POST /event/{id}/rsvp`: RSVP logic with user_id, status
+- [x] `POST /user/{id}/follow`: Follow/unfollow artist/org
+- [x] `POST /event/{id}/message`: Create message thread/comment
 
 ---
 
@@ -93,7 +93,7 @@ status: complete
 - [x] Add PHPUnit tests for new endpoints (RSVP, follow)
 - [x] Write Jest/Cypress tests for React widgets
 
--### 📘 Documentation
+- ### 📘 Documentation
 - [x] Update Dashboard Builder Guide to include new widgets
 - [x] Add user help tooltips to each widget (optional)
 

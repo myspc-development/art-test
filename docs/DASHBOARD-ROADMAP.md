@@ -29,9 +29,6 @@ See the full roadmap in the main document (canvas), including:
 - Recommended For You
 - Followed Artists Activity
 
-### Partially Implemented / Documented but Missing
-- ArtPulse News Feed Widget
-
 ### Verified via Codex Chapters
 - [My RSVPs Widget](codex-chapters/my-rsvps-widget.md)
 - [Artist Inbox Preview Widget](codex-chapters/artist-inbox-preview-widget.md)
@@ -54,9 +51,6 @@ See the full roadmap in the main document (canvas), including:
 - Artist Inbox Preview – [`assets/js/widgets/ArtistInboxPreviewWidget.jsx`](../assets/js/widgets/ArtistInboxPreviewWidget.jsx)
 - Artist Revenue Summary – [`assets/js/widgets/ArtistRevenueSummaryWidget.jsx`](../assets/js/widgets/ArtistRevenueSummaryWidget.jsx)
 - Artist Spotlight – [`assets/js/widgets/ArtistSpotlightWidget.jsx`](../assets/js/widgets/ArtistSpotlightWidget.jsx)
-
-### Partially Implemented / Documented but Missing
-*(none)*
 
 ## 🏢 Organization Dashboard
 The following widgets are now implemented:
