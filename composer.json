@@ -1,45 +1,8 @@
 {
-  "name": "myspc-development/artpulse-management-plugin",
-  "description": "ArtPulse management plugin for WP 6.8/PHP 8.3",
-  "type": "wordpress-plugin",
-  "license": "GPL-2.0-or-later",
-  "require": {
-    "php": "^8.2",
-    "dompdf/dompdf": "^2.0",
-    "erusev/parsedown": "^1.7",
-    "stripe/stripe-php": "^17.3",
-    "yahnis-elsts/plugin-update-checker": "^5"
-  },
-  "autoload": {
-    "psr-4": {
-      "ArtPulse\\": "src/"
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "require": {
+        "yahnis-elsts/plugin-update-checker": "^5.6"
     }
-  },
-  "require-dev": {
-    "brain/monkey": "^2.6",
-    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-    "phpcompatibility/phpcompatibility-wp": "*",
-    "phpunit/phpunit": "^9",
-    "wp-phpunit/wp-phpunit": "^6",
-    "yoast/phpunit-polyfills": "^4.0"
-  },
-  "scripts": {
-    "install-wp-tests": "bash ./setup-tests.sh",
-    "test": "bash -c 'bash ./setup-tests.sh || { echo \"Warning: setup-tests.sh failed; skipping PHPUnit\" >&2; exit 0; }; vendor/bin/phpunit'",
-    "sniff": "vendor/bin/phpcs --standard=PHPCompatibilityWP --runtime-set testVersion 8.3 .",
-    "zip": [
-      "@composer install --no-dev --optimize-autoloader",
-      "mkdir -p release",
-      "zip -r release/artpulse-management-plugin.zip . -x '*.git*' '*.log' '*.zip' 'tests/*' 'node_modules/*' 'release/*' 'vendor/bin/*' '.github/*' '.gitignore' '.env' '*.xml' '*.md' 'phpunit.xml'"
-    ]
-  },
-  "config": {
-    "optimize-autoloader": true,
-    "sort-packages": true,
-    "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
-    }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
 }
