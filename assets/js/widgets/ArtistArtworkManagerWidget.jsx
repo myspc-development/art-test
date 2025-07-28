@@ -1,16 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 const { __ } = wp.i18n;
 
-export function ArtistArtworkManagerWidget() {
+export function ArtistArtworkManagerWidget({ apiRoot, nonce }) {
+  const [items, setItems] = useState(null);
+
+  useEffect(() => {
+    fetch(`${apiRoot}wp/v2/artpulse_artwork?per_page=5&_embed`, {
+      headers: { 'X-WP-Nonce': nonce },
+      credentials: 'same-origin'
+    })
+      .then(r => r.json())
+      .then(data => setItems(Array.isArray(data) ? data : []))
+      .catch(() => setItems([]));
+  }, []);
+
+  if (items === null) {
+    return <p>{__('Loading...', 'artpulse')}</p>;
+  }
+
+  if (!items.length) {
+    return <p>{__('No artworks found.', 'artpulse')}</p>;
+  }
+
   return (
-    <div className="ap-artwork-manager-placeholder">
-      {__('Artwork manager coming soon.', 'artpulse')}
-    </div>
+    <ul className="ap-artwork-manager">
+      {items.map(a => (
+        <li key={a.id}>
+          <a href={a.link}>{a.title?.rendered || a.slug}</a>
+        </li>
+      ))}
+    </ul>
   );
 }
 
 export default function initArtistArtworkManagerWidget(el) {
   const root = createRoot(el);
-  root.render(<ArtistArtworkManagerWidget />);
+  const { apiRoot = wpApiSettings?.root || '/wp-json/', nonce = wpApiSettings?.nonce || '' } = el.dataset;
+  root.render(<ArtistArtworkManagerWidget apiRoot={apiRoot} nonce={nonce} />);
 }
