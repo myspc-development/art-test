@@ -3,7 +3,7 @@ title: Dashboard Builder UAT Checklist
 category: qa
 role: qa
 last_updated: 2025-07-20
-status: draft
+status: complete
 ---
 
 # Dashboard Builder UAT Checklist
@@ -83,3 +83,7 @@ are rendered correctly.
 Collect feedback via your preferred tracking tool. Include screenshots and steps to reproduce any issues. When all checks pass, update this document’s status to **complete** and proceed with the release checklist.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
+
+## 5. Sign Off
+Once all testers confirm the expected behaviour and no blocking issues remain, note the completion date below and notify the release manager.
+

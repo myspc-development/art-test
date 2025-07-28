@@ -3,7 +3,7 @@ title: Dashboard Layout Config
 category: developer
 role: developer
 last_updated: 2025-07-23
-status: draft
+status: complete
 ---
 # Dashboard Layout Config
 
@@ -23,3 +23,16 @@ If no user-specific layout exists, the builder falls back to the role defaults d
 The builder fetches layouts via `GET /wp-json/artpulse/v1/dashboard-widgets?role={role}` and saves changes with `POST /dashboard-widgets/save`.
 
 A **Reset Layout** action deletes the user meta so role defaults apply on next login.
+Additional fields such as `minW` and `minH` can be supplied by widgets that require a fixed size. The builder honors these constraints when positioning tiles.
+
+To retrieve the stored layout for the current user in PHP use:
+
+```php
+$layout = DashboardWidgetManager::getUserLayout( get_current_user_id() );
+```
+
+Administrators editing defaults should call `DashboardWidgetManager::saveRoleLayout( $role, $layout );` after validating the layout structure. See the **Widget Manager Data Layer Guide** for persistence details.
+
+### Exporting and Importing Layouts
+Use the **Import/Export** panel in the Dashboard Builder to transfer layouts between sites. The exported JSON matches the structure above and can be restored by uploading the file.
+

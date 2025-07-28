@@ -3,7 +3,7 @@ title: For You (Member)
 category: widgets
 role: developer
 last_updated: 2025-07-24
-status: draft
+status: complete
 ---
 
 # For You (Member)
@@ -14,3 +14,10 @@ status: draft
 
 ## Description
 Personalized events and posts. Preferences can be adjusted via the profile settings panel.
+
+Content is calculated server side using the current user profile and follow list. Results come from `GET /wp-json/artpulse/v1/recommendations`.
+
+### Customization
+- The member can refine recommendations through the **For You Settings** modal in their profile.
+- Admins may override the API endpoint using the `ap_for_you_endpoint` filter to test alternative services.
+
