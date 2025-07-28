@@ -30,15 +30,12 @@ class DashboardController {
         ],
         // Artist dashboard starter widgets
         'artist'       => [
-            'artist_feed_publisher',
-            'artist_audience_insights',
-            'artist_spotlight',
+            'activity_feed',
+            'artist_inbox_preview',
             'artist_revenue_summary',
-            'my_events',
-            'messages',
-            'notifications',
-            'dashboard_feedback',
-            'cat_fact',
+            'artist_spotlight',
+            'widget_favorites',
+            'qa_checklist',
         ],
         // Organization admin widgets
         'organization' => [
@@ -76,7 +73,12 @@ class DashboardController {
                 'title'  => 'Artist Default',
                 'role'   => 'artist',
                 'layout' => [
-                    ['id' => 'widget_spotlights'],
+                    ['id' => 'activity_feed'],
+                    ['id' => 'artist_inbox_preview'],
+                    ['id' => 'artist_revenue_summary'],
+                    ['id' => 'artist_spotlight'],
+                    ['id' => 'widget_favorites'],
+                    ['id' => 'qa_checklist'],
                 ],
             ],
             // New sample layouts that can be applied from the dashboard UI

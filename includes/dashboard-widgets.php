@@ -691,8 +691,9 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_messages',
         [
             'category'   => 'engagement',
-            'roles'      => ['member'],
+            'roles'      => ['artist'],
             'visibility' => 'public',
+            'capability' => 'can_receive_messages',
             'settings'   => [
                 [
                     'key'     => 'limit',
@@ -843,11 +844,10 @@ function ap_register_core_dashboard_widgets(): void
         __('Recent unread messages from artists.', 'artpulse'),
         'ap_widget_artist_inbox_preview',
         [
-            // Available to both members and artists so creators can monitor
-            // follower messages while regular users preview artist inboxes.
-            'roles'    => ['member', 'artist'],
+            'roles'      => ['artist'],
             'visibility' => 'public',
-            'category' => 'engagement',
+            'capability' => 'can_receive_messages',
+            'category'   => 'engagement',
         ]
     );
 
@@ -995,9 +995,10 @@ function ap_register_core_dashboard_widgets(): void
         __('Revenue totals from tickets and donations.', 'artpulse'),
         'ap_widget_artist_revenue_summary',
         [
-            'roles' => ['artist'],
+            'roles'      => ['artist'],
             'visibility' => 'public',
-            'category' => 'commerce',
+            'capability' => 'view_own_sales_data',
+            'category'   => 'commerce',
         ]
     );
 

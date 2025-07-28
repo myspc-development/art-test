@@ -575,6 +575,9 @@ class UserDashboardManager
         if ( isset($params['ap_city']) ) {
             update_user_meta($user_id, 'ap_city', sanitize_text_field($params['ap_city']));
         }
+        if ( isset($params['ap_profile_public']) ) {
+            update_user_meta($user_id, 'ap_profile_public', $params['ap_profile_public'] ? 1 : 0);
+        }
         return rest_ensure_response([ 'success' => true ]);
     }
 
