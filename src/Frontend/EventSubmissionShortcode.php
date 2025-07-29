@@ -396,7 +396,9 @@ class EventSubmissionShortcode {
         $post_id = wp_insert_post($post_args);
 
         if (is_wp_error($post_id)) {
-            error_log('Error creating event post: ' . $post_id->get_error_message());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('Error creating event post: ' . $post_id->get_error_message());
+            }
             self::add_notice(__('Error submitting event. Please try again later.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
@@ -457,7 +459,9 @@ class EventSubmissionShortcode {
                 set_post_thumbnail($post_id, $attachment_id);
                 update_post_meta($post_id, 'event_banner_id', $attachment_id); // Store banner ID separately
             } else {
-                error_log('Error uploading banner: ' . $attachment_id->get_error_message());
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log('Error uploading banner: ' . $attachment_id->get_error_message());
+                }
                 self::add_notice(__('Error uploading banner. Please try again.', 'artpulse'), 'error');
                 self::maybe_redirect();
                 return;
@@ -497,7 +501,9 @@ class EventSubmissionShortcode {
             if (!is_wp_error($attachment_id)) {
                 $image_ids[] = $attachment_id;
             } else {
-                error_log('Error uploading additional image: ' . $attachment_id->get_error_message());
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log('Error uploading additional image: ' . $attachment_id->get_error_message());
+                }
                 self::add_notice(__('Error uploading additional image. Please try again.', 'artpulse'), 'error');
                 self::maybe_redirect();
                 return;
