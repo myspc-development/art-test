@@ -14,7 +14,7 @@ class OpenAIClient
      * @param string $text
      * @return array<string>|WP_Error
      */
-    public static function generateTags(string $text)
+    public static function generateTags(string $text): array|string|WP_Error
     {
         $prompt = 'Generate relevant tags for this art description. Return tags as a comma-separated list.';
         $response = self::request([
@@ -36,7 +36,7 @@ class OpenAIClient
      * @param string $bio
      * @return string|WP_Error
      */
-    public static function generateSummary(string $bio)
+    public static function generateSummary(string $bio): string|WP_Error
     {
         $prompt = 'Summarize this artist bio.';
         return self::request([
