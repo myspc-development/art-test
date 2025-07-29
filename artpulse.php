@@ -25,18 +25,13 @@ register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
 register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ArtPulse\\DB\\create_monetization_tables');
 
 // Optional manual repair: create tables via ?repair_artpulse_db
-add_action('plugins_loaded', function () {
+add_action('init', function () {
     if (current_user_can('administrator') && isset($_GET['repair_artpulse_db'])) {
         ArtPulse\DB\create_monetization_tables();
         esc_html_e('✅ ArtPulse DB tables created.', 'artpulse');
     }
 });
 
-// Load translations at the proper time
-function ap_load_textdomain() {
-    load_plugin_textdomain('artpulse', false, basename(dirname(__FILE__)) . '/languages');
-}
-add_action('plugins_loaded', 'ap_load_textdomain');
 
 // Ensure tables stay up to date when plugin updates
 add_action('plugins_loaded', function () {
