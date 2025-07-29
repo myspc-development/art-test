@@ -588,6 +588,14 @@ class Plugin
         );
 
         wp_enqueue_script(
+            'ap-rsvp-js',
+            plugins_url('assets/js/rsvp.js', ARTPULSE_PLUGIN_FILE),
+            ['wp-api-fetch'],
+            '1.0.0',
+            true
+        );
+
+        wp_enqueue_script(
             'ap-qa-thread',
             plugins_url('assets/js/ap-qa-thread.js', ARTPULSE_PLUGIN_FILE),
             ['wp-api-fetch'],
@@ -680,6 +688,16 @@ class Plugin
         wp_localize_script('ap-event-vote-js', 'APEventVote', [
             'apiRoot' => esc_url_raw(rest_url()),
             'nonce'   => wp_create_nonce('wp_rest'),
+        ]);
+
+        wp_localize_script('ap-rsvp-js', 'APRsvp', [
+            'root'        => esc_url_raw(rest_url()),
+            'nonce'       => wp_create_nonce('wp_rest'),
+            'rsvpText'    => __('RSVP', 'artpulse'),
+            'cancelText'  => __('Cancel RSVP', 'artpulse'),
+            'goingText'   => __("You're going", 'artpulse'),
+            'waitlistText'=> __('Added to waitlist', 'artpulse'),
+            'limitText'   => __('RSVP limit reached', 'artpulse'),
         ]);
 
         wp_localize_script('ap-qa-thread', 'APQa', [

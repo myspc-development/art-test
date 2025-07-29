@@ -7,11 +7,16 @@ namespace ArtPulse\Frontend;
 
 function ap_render_rsvp_button(int $event_id): string
 {
+    if (!is_user_logged_in()) {
+        $login = \ArtPulse\Core\Plugin::get_login_url();
+        return '<a href="' . esc_url($login) . '" class="ap-btn ap-login-rsvp">' . esc_html__('Login to RSVP', 'artpulse') . '</a>';
+    }
+
     $list       = get_post_meta($event_id, 'event_rsvp_list', true);
     $rsvp_count = is_array($list) ? count($list) : 0;
-    $user_id = get_current_user_id();
-    $rsvps = $user_id ? (array) get_user_meta($user_id, 'ap_rsvp_events', true) : [];
-    $joined = in_array($event_id, $rsvps, true);
+    $user_id    = get_current_user_id();
+    $rsvps      = $user_id ? (array) get_user_meta($user_id, 'ap_rsvp_events', true) : [];
+    $joined     = in_array($event_id, $rsvps, true);
 
     $label = $joined ? __('Cancel RSVP', 'artpulse') : __('RSVP', 'artpulse');
     ob_start();
