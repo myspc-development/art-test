@@ -30,7 +30,7 @@ ArtPulse is a WordPress plugin that empowers artists and organizations with mone
 The settings page lives under **Settings \u2192 ArtPulse AI**.
 
 1. Enter your OpenAI API key.
-2. (Optional) Customize the prompts used for tag generation and bio summaries.
+2. (Optional) Customize the prompts used for tag generation and bio summaries. Leave the fields blank to use the plugin defaults.
 3. Use the built-in tester to send sample text to the REST endpoints and preview the AI response.
 
 Example values:

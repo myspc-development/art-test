@@ -16,7 +16,10 @@ class OpenAIClient
      */
     public static function generateTags(string $text)
     {
-        $prompt = 'Generate relevant tags for this art description. Return tags as a comma-separated list.';
+        $prompt = trim((string) get_option('artpulse_tag_prompt'));
+        if ($prompt === '') {
+            $prompt = 'Generate relevant tags for this art description. Return tags as a comma-separated list.';
+        }
         $response = self::request([
             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
             ['role' => 'user', 'content' => $prompt . ' ' . $text],
@@ -38,7 +41,10 @@ class OpenAIClient
      */
     public static function generateSummary(string $bio)
     {
-        $prompt = 'Summarize this artist bio.';
+        $prompt = trim((string) get_option('artpulse_summary_prompt'));
+        if ($prompt === '') {
+            $prompt = 'Summarize this artist bio.';
+        }
         return self::request([
             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
             ['role' => 'user', 'content' => $prompt . ' ' . $bio],
