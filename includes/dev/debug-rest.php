@@ -1,3 +1,4 @@
+<?php
 add_filter('rest_endpoints', function ($endpoints) {
     $seen = [];
     foreach ($endpoints as $route => $handlers) {
