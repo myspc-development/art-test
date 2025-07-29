@@ -1,0 +1,17 @@
+{
+  "apiVersion": 2,
+  "name": "artpulse/event-list",
+  "title": "Event List",
+  "category": "widgets",
+  "icon": "list-view",
+  "attributes": {
+    "posts_per_page": { "type": "integer", "default": 6 },
+    "after": { "type": "string" },
+    "before": { "type": "string" },
+    "category": { "type": "string" },
+    "event_type": { "type": "string" },
+    "sort": { "type": "string", "default": "soonest" },
+    "layout": { "type": "string", "default": "grid" }
+  },
+  "render": "ArtPulse\\Blocks\\EventListBlock::render_callback"
+}
