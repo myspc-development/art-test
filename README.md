@@ -78,6 +78,17 @@ roadmap highlights priorities around security, NLP‑powered tagging,
 customizable dashboards and comprehensive testing to ensure reliable
 releases.
 
+## Developer Prerequisites
+
+Before running the plugin locally make sure the following tools are available:
+
+- **PHP 8.2+ with Composer** – install PHP libraries with `composer install`.
+- **Node.js and npm** – run `npm install` to fetch packages including
+  `sass` used for SCSS compilation. If the Puppeteer download fails set
+  `PUPPETEER_SKIP_DOWNLOAD=true` before installing.
+- **WordPress test library** – run `bash scripts/setup-env.sh` once to
+  download the WordPress core files required by the PHPUnit suite.
+
 ## Quick Start
 
 ```bash
