@@ -5,14 +5,33 @@ fetch('/wp-json/artpulse/v1/dashboard/messages', {
   }
 })
   .then(res => {
+    const container = document.getElementById('ap-messages-dashboard-widget');
     if (res.status === 401 || res.status === 403) {
-      const container = document.getElementById('ap-messages-dashboard-widget');
       if (container) {
         container.textContent = wp.i18n.__('Please log in to view messages.', 'artpulse');
       }
       throw new Error('unauthorized');
     }
-    return res.json();
+    if (!res.ok) {
+      if (container) {
+        container.textContent = wp.i18n.__('Error loading messages.', 'artpulse');
+      }
+      throw new Error('network-error');
+    }
+    return res.text();
+  })
+  .then(text => {
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (err) {
+      const container = document.getElementById('ap-messages-dashboard-widget');
+      if (container) {
+        container.textContent = wp.i18n.__('Received malformed data from server.', 'artpulse');
+      }
+      throw err;
+    }
+    return data;
   })
   .then(data => {
     if (!Array.isArray(data)) {
