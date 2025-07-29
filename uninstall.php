@@ -51,7 +51,7 @@ try {
     );
 
     foreach ( $tables as $table ) {
-        $wpdb->query( $wpdb->prepare( "DROP TABLE IF EXISTS `$table`" ) );
+        $wpdb->query( "DROP TABLE IF EXISTS `{$table}`" );
     }
 } catch ( Exception $e ) {
     // Errors are suppressed during uninstall to avoid blocking deletion
