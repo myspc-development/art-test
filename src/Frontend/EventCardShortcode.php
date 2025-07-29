@@ -46,6 +46,11 @@ class EventCardShortcode {
             'rsvp'       => get_post_meta($event_id, '_ap_event_rsvp', true),
         ];
 
+        $current_user = get_current_user_id();
+        $author_id    = intval($event->post_author);
+        $can_edit     = $current_user && ($current_user === $author_id || current_user_can('edit_post', $event_id));
+        $show_rsvp    = $current_user && $current_user !== $author_id;
+
         $image = get_the_post_thumbnail($event_id, 'large', [
             'loading' => 'lazy',
             'alt'     => get_the_title($event_id),
@@ -67,6 +72,15 @@ class EventCardShortcode {
                     <?php if ($meta['contact']) : ?><li><?php echo esc_html($meta['contact']); ?></li><?php endif; ?>
                     <?php if ($meta['rsvp']) : ?><li><a href="<?php echo esc_url($meta['rsvp']); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('RSVP', 'artpulse'); ?></a></li><?php endif; ?>
                 </ul>
+                <?php if ($can_edit || $show_rsvp) : ?>
+                    <div class="ap-event-actions">
+                        <?php if ($can_edit) : ?>
+                            <a href="<?php echo esc_url(get_edit_post_link($event_id)); ?>" class="ap-form-button ap-btn-edit"><?php esc_html_e('Edit Event', 'artpulse'); ?></a>
+                        <?php elseif ($show_rsvp) : ?>
+                            <?php echo ap_render_rsvp_button($event_id); ?>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         <?php
