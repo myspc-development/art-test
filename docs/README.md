@@ -2,7 +2,7 @@
 title: Documentation Overview
 category: docs
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-30
 status: complete
 ---
 
@@ -28,6 +28,7 @@ This directory groups all documentation by audience and feature area. Start with
 ### User Guides
 - [User Guides](user/README.md) – customizing dashboards and general usage tips.
 
-Additional planning docs live under [internal/](internal/) and more detailed specifications are in [specs/](specs/). Navigate through each folder README to explore related articles in a logical order.
+## Additional Resources
+Additional planning docs live under [internal README](internal/README.md) and more detailed specifications are in [specs README](specs/README.md). Navigate through each folder README to explore related articles in a logical order.
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

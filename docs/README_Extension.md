@@ -2,7 +2,7 @@
 title: Plugin Extension Guide
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-30
 status: complete
 ---
 
@@ -11,7 +11,7 @@ status: complete
 This document outlines newly suggested features and implementation strategy for extending the ArtPulse Plugin.
 
 ## Auto-Tagger Enhancements
-The initial [auto-tagger.php](../auto-tagger.php) provides basic metadata detection. We plan to integrate a lightweight ML model to classify images and event descriptions. The AI module triggers on `save_post_artpulse_event` and updates taxonomy terms automatically:
+The initial `auto-tagger.php` script provides basic metadata detection. We plan to integrate a lightweight ML model to classify images and event descriptions. The AI module triggers on `save_post_artpulse_event` and updates taxonomy terms automatically:
 
 ```php
 add_action('save_post_artpulse_event', 'ap_ai_describe_event');
