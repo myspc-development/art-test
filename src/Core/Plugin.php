@@ -288,6 +288,7 @@ class Plugin
         \ArtPulse\Frontend\LogoutShortcode::register();
         \ArtPulse\Frontend\EventsSliderShortcode::register();
         \ArtPulse\Frontend\EventListingShortcode::register();
+        \ArtPulse\Frontend\EventCardShortcode::register();
         \ArtPulse\Frontend\EventCalendarShortcode::register();
         \ArtPulse\Rest\CalendarFeedController::register();
         \ArtPulse\Frontend\EventMapShortcode::register();
@@ -388,6 +389,7 @@ class Plugin
         \ArtPulse\Blocks\FavoritePortfolioBlock::register();
         \ArtPulse\Blocks\TaxonomyFilterBlock::register();
         \ArtPulse\Blocks\PortfolioPreviewBlock::register();
+        \ArtPulse\Blocks\EventCardBlock::register();
         \ArtPulse\Blocks\DashboardNewsBlock::register();
         RelatedProjectsBlock::register();
         WidgetEmbedShortcode::register();
