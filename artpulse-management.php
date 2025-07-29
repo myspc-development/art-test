@@ -252,12 +252,35 @@ add_action('init', function () {
  * Copy bundled Salient templates to the active child theme.
  */
 function ap_copy_templates_to_child_theme() {
+    global $wp_filesystem;
+
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    WP_Filesystem();
+
     $source_dir  = plugin_dir_path(__FILE__) . 'templates/salient/';
     $target_root = get_stylesheet_directory();
     $target_dir  = trailingslashit($target_root) . 'templates/salient/';
 
-    if (!file_exists($target_dir)) {
-        wp_mkdir_p($target_dir);
+    if ( ! $wp_filesystem->is_writable( $target_root ) ) {
+        error_log( 'ArtPulse: child theme directory is not writable.' );
+        add_action( 'admin_notices', static function () {
+            echo '<div class="notice notice-error"><p>' .
+                esc_html__( 'ArtPulse templates could not be copied. Child theme directory is not writable.', 'artpulse' ) .
+                '</p></div>';
+        } );
+        return;
+    }
+
+    if ( ! $wp_filesystem->is_dir( $target_dir ) ) {
+        if ( ! $wp_filesystem->mkdir( $target_dir, FS_CHMOD_DIR ) ) {
+            error_log( 'ArtPulse: failed to create templates directory.' );
+            add_action( 'admin_notices', static function () {
+                echo '<div class="notice notice-error"><p>' .
+                    esc_html__( 'ArtPulse templates directory could not be created.', 'artpulse' ) .
+                    '</p></div>';
+            } );
+            return;
+        }
     }
 
     $files = [
@@ -267,16 +290,21 @@ function ap_copy_templates_to_child_theme() {
         'single-artpulse_artist.php',
     ];
 
-    foreach ($files as $file) {
+    foreach ( $files as $file ) {
         $source = $source_dir . $file;
-        if (!file_exists($source)) {
+        if ( ! $wp_filesystem->exists( $source ) ) {
             continue;
         }
-        $destination = ($file === 'single-artpulse_event.php')
-            ? trailingslashit($target_root) . $file
+        $destination = ( $file === 'single-artpulse_event.php' )
+            ? trailingslashit( $target_root ) . $file
             : $target_dir . $file;
 
-        copy($source, $destination);
+        if ( ! $wp_filesystem->copy( $source, $destination, true, FS_CHMOD_FILE ) ) {
+            error_log( "ArtPulse: failed to copy template $file" );
+            add_action( 'admin_notices', static function () use ( $file ) {
+                printf( '<div class="notice notice-error"><p>%s</p></div>', esc_html( sprintf( __( 'ArtPulse template %s could not be copied.', 'artpulse' ), $file ) ) );
+            } );
+        }
     }
 }
 
