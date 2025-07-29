@@ -943,7 +943,7 @@ function ap_favorites_analytics_widget($atts = []) {
         }
     }
 
-    wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], null);
+    wp_enqueue_script('chart-js', plugins_url('assets/libs/chart.js/4.4.1/chart.min.js', ARTPULSE_PLUGIN_FILE), [], null);
 
     $limit = $atts['type'] === 'detailed' ? 20 : 5;
 
@@ -1009,8 +1009,17 @@ add_shortcode('ap_favorites_analytics', 'ap_favorites_analytics_widget');
 
 function ap_enqueue_event_calendar_assets() {
     if (is_page('events') || is_singular('artpulse_event')) {
-        wp_enqueue_style('fullcalendar-css', 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css');
-        wp_enqueue_script('fullcalendar-js', 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.js', [], null, true);
+        wp_enqueue_style(
+            'fullcalendar-css',
+            plugins_url('assets/libs/fullcalendar/6.1.11/main.min.css', __FILE__)
+        );
+        wp_enqueue_script(
+            'fullcalendar-js',
+            plugins_url('assets/libs/fullcalendar/6.1.11/main.min.js', __FILE__),
+            [],
+            null,
+            true
+        );
         wp_enqueue_script('ap-event-calendar', plugin_dir_url(__FILE__) . 'assets/js/ap-event-calendar.js', ['fullcalendar-js', 'jquery'], '1.0', true);
         wp_localize_script('ap-event-calendar', 'APCalendar', [
             'events' => ap_get_events_for_calendar(),

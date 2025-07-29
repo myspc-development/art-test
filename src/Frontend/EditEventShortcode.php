@@ -69,7 +69,7 @@ class EditEventShortcode {
 
         wp_enqueue_script(
             'chart-js',
-            plugins_url('assets/libs/chart.js/chart.min.js', ARTPULSE_PLUGIN_FILE),
+            plugins_url('assets/libs/chart.js/4.4.1/chart.min.js', ARTPULSE_PLUGIN_FILE),
             [],
             null,
             true
@@ -281,7 +281,7 @@ class EditEventShortcode {
             'nonce'    => wp_create_nonce('ap_edit_event_nonce')
         ]);
 
-        wp_register_script('chart-js', plugins_url('assets/libs/chart.js/chart.min.js', ARTPULSE_PLUGIN_FILE), [], null, true);
+        wp_register_script('chart-js', plugins_url('assets/libs/chart.js/4.4.1/chart.min.js', ARTPULSE_PLUGIN_FILE), [], null, true);
         wp_register_script('ap-rsvp-analytics', plugins_url('assets/js/ap-rsvp-analytics.js', ARTPULSE_PLUGIN_FILE), ['chart-js'], '1.0', true);
     }
 

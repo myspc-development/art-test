@@ -400,7 +400,7 @@ class EnqueueAssets {
 
         wp_enqueue_script(
             'chart-js',
-            plugins_url('assets/libs/chart.js/chart.min.js', ARTPULSE_PLUGIN_FILE),
+            plugins_url('assets/libs/chart.js/4.4.1/chart.min.js', ARTPULSE_PLUGIN_FILE),
             [],
             null,
             true

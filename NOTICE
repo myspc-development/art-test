@@ -1,0 +1,9 @@
+Third-Party Libraries
+---------------------
+
+This plugin bundles the following libraries:
+
+- Chart.js v4.4.1 (MIT License) - https://www.chartjs.org
+- FullCalendar v6.1.11 (MIT License) - https://fullcalendar.io
+
+These assets are located under assets/libs and are provided for offline use.

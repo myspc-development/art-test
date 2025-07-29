@@ -37,8 +37,17 @@ class MyEventsShortcode {
             return '<p>You haven’t submitted any events yet.</p>';
         }
 
-        wp_enqueue_style('fullcalendar-css', 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css');
-        wp_enqueue_script('fullcalendar-js', 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.js', [], null, true);
+        wp_enqueue_style(
+            'fullcalendar-css',
+            plugins_url('assets/libs/fullcalendar/6.1.11/main.min.css', ARTPULSE_PLUGIN_FILE)
+        );
+        wp_enqueue_script(
+            'fullcalendar-js',
+            plugins_url('assets/libs/fullcalendar/6.1.11/main.min.js', ARTPULSE_PLUGIN_FILE),
+            [],
+            null,
+            true
+        );
         wp_enqueue_script('ap-dashboard-calendar', plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-dashboard-calendar.js', ['fullcalendar-js'], '1.0', true);
         wp_localize_script('ap-dashboard-calendar', 'APArtistCalendar', [
             'rest_root' => esc_url_raw(rest_url()),
