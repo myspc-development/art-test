@@ -3,4 +3,5 @@
 .ap-event-card-content{padding:1rem;}
 .ap-event-meta{list-style:none;padding:0;margin:0;}
 .ap-event-meta li{margin-bottom:0.25rem;}
+.ap-event-actions{margin-top:.5rem;display:flex;gap:.5rem}
 @media(max-width:600px){.ap-event-card{grid-template-columns:1fr;}}
