@@ -14,7 +14,7 @@ class OpenAIClient
      * @param string $text
      * @return array<string>|WP_Error
      */
-    public static function generateTags(string $text)
+    public static function generateTags(string $text): array|string|WP_Error
     {
         $prompt = trim((string) get_option('artpulse_tag_prompt'));
         if ($prompt === '') {
@@ -39,7 +39,7 @@ class OpenAIClient
      * @param string $bio
      * @return string|WP_Error
      */
-    public static function generateSummary(string $bio)
+    public static function generateSummary(string $bio): string|WP_Error
     {
         $prompt = trim((string) get_option('artpulse_summary_prompt'));
         if ($prompt === '') {
