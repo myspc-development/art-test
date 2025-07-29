@@ -2,7 +2,7 @@
 title: Admin Settings UI
 category: admin
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-30
 status: complete
 ---
 
@@ -67,7 +67,7 @@ Settings are saved using the WordPress options API. Most forms submit with `wp_a
 Below is a summary of the default configuration tabs and the fields found within each. Screenshots use placeholders so you can replace them with real images when documenting your own setup.
 
 ### General
-![General Tab](images/settings-general.png)
+*General tab screenshot*
 
 | Setting | Description | Default |
 |---------|-------------|---------|
@@ -78,7 +78,7 @@ Below is a summary of the default configuration tabs and the fields found within
 | **Use WP Nav Menu** | If enabled, plugin pages automatically appear in the WordPress menus. | Disabled |
 
 ### Import/Export
-![Import Export Tab](images/settings-import-export.png)
+*Import/Export tab screenshot*
 
 | Setting | Description |
 |---------|-------------|
@@ -86,7 +86,7 @@ Below is a summary of the default configuration tabs and the fields found within
 | **Import Settings** | Upload a previously exported file. Only administrators can run this action. |
 
 ### Config Backup
-![Backup Tab](images/settings-backup.png)
+*Backup tab screenshot*
 
 | Setting | Description |
 |---------|-------------|
@@ -94,7 +94,7 @@ Below is a summary of the default configuration tabs and the fields found within
 | **Restore Backup** | Choose an existing backup to restore. |
 
 ### Updates
-![Updates Tab](images/settings-updates.png)
+*Updates tab screenshot*
 
 | Setting | Description |
 |---------|-------------|
@@ -102,7 +102,7 @@ Below is a summary of the default configuration tabs and the fields found within
 | **Update Now** | Manually trigger the update routine. Administrators only. |
 
 ### Shortcode Pages
-![Shortcodes Tab](images/settings-shortcodes.png)
+*Shortcodes tab screenshot*
 
 This tab lists every page that embeds one of the plugin shortcodes. Users with the `edit_pages` capability can jump directly to a page editor or insert new blocks using the **Add Page** shortcut.
 

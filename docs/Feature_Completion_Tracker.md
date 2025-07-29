@@ -2,12 +2,16 @@
 title: Feature Completion Tracker
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-30
 status: complete
 ---
 # Feature Completion Tracker
 
+## Overview
+
 Use this table to record progress across major features. Update the `Status` column as code is committed and QA is verified.
+
+## Feature Status
 
 | Feature | Sprint | Status |
 | --- | --- | --- |

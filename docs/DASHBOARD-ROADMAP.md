@@ -2,10 +2,12 @@
 title: Dashboard Roadmap
 category: widgets
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-30
 status: complete
 ---
 # Dashboard Roadmap
+
+## Overview
 
 See the full roadmap in the main document (canvas), including:
 - Feature goals
@@ -48,9 +50,9 @@ See the full roadmap in the main document (canvas), including:
 ## 🎨 Artist Dashboard (Creator)
 
 ### Current Features
-- Artist Inbox Preview – [`assets/js/widgets/ArtistInboxPreviewWidget.jsx`](../assets/js/widgets/ArtistInboxPreviewWidget.jsx)
-- Artist Revenue Summary – [`assets/js/widgets/ArtistRevenueSummaryWidget.jsx`](../assets/js/widgets/ArtistRevenueSummaryWidget.jsx)
-- Artist Spotlight – [`assets/js/widgets/ArtistSpotlightWidget.jsx`](../assets/js/widgets/ArtistSpotlightWidget.jsx)
+- Artist Inbox Preview – `assets/js/widgets/ArtistInboxPreviewWidget.jsx`
+- Artist Revenue Summary – `assets/js/widgets/ArtistRevenueSummaryWidget.jsx`
+- Artist Spotlight – `assets/js/widgets/ArtistSpotlightWidget.jsx`
 
 ## 🏢 Organization Dashboard
 The following widgets are now implemented:

@@ -2,11 +2,13 @@
 title: Admin Documentation
 category: admin
 role: admin
-last_updated: 2025-07-20
+last_updated: 2025-08-30
 status: complete
 ---
 
 # Admin Documentation
+
+## Overview
 
 Guides for site administrators configuring the ArtPulse plugin.
 
@@ -14,6 +16,8 @@ Guides for site administrators configuring the ArtPulse plugin.
 - [admin-widget-editor-guide.md](../archive/admin-widget-editor-guide.md) – archived; see Dashboard Builder docs
 - `plugin-installation-updates.md` – installation and update procedures
 - `admin-overview.md` – summary of admin features
+
+## Additional References
 For implementation details see the [Developer Guides](../developer/README.md).
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

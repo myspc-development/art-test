@@ -2,7 +2,7 @@
 title: Codex Instructions
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-30
 status: complete
 ---
 
@@ -35,7 +35,7 @@ status: complete
 - Use `H2` and `H3` headings to structure sections logically.
 - Include bullet points, tables and code blocks where helpful.
 - Refer to other docs using relative links. Example: `[Example Guide](./README.md)`.
-- When screenshots are needed, insert placeholders like `![placeholder](images/example.png)`.
+- When screenshots are needed, insert placeholder images and replace them later with real screenshots.
 
 ## Review Checklist
 1. Confirm REST endpoints, hooks and UI components are documented.
@@ -49,6 +49,6 @@ Following these conventions keeps the Codex consistent and easier to maintain.
 Where possible cross-reference sections to avoid duplication. For example the [Widget Registry Reference](widgets/widget-registry-reference.md) explains the registration API, so other guides can simply link to that file. When referencing external resources include a short summary to keep the doc self-contained.
 
 ## Keeping Docs Current
-After each sprint check the [Verification Checklist](VERIFICATION-CHECKLIST.md) and update the `last_updated` frontmatter date. Remove obsolete TODOs and confirm all relative links resolve. Docs that fall below the 300-word threshold should be expanded with examples or screenshots so they remain comprehensive.
+After each sprint check the [Verification Checklist](VERIFICATION-CHECKLIST.md) and update the `last_updated` frontmatter date. Remove obsolete notes and confirm all relative links resolve. Docs that fall below the 300-word threshold should be expanded with examples or screenshots so they remain comprehensive.
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

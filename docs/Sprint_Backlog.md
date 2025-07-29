@@ -2,12 +2,18 @@
 title: Sprint Backlog
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-30
 status: complete
 ---
 # Sprint Backlog
 
-The following items are considered high priority for the upcoming sprint. Progress should be tracked daily and synced with the Feature Completion Tracker.
+## Overview
+
+This page lists the highest priority items for the upcoming sprint.
+
+## Sprint Tasks
+
+The following items are considered high priority. Progress should be tracked daily and synced with the Feature Completion Tracker.
 
 | Category | Task | Status |
 | --- | --- | --- |
