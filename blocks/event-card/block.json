@@ -1,0 +1,11 @@
+{
+  "apiVersion": 2,
+  "name": "artpulse/event-card",
+  "title": "Event Card",
+  "category": "widgets",
+  "icon": "calendar",
+  "attributes": {
+    "id": { "type": "integer" }
+  },
+  "render": "ArtPulse\\Blocks\\EventCardBlock::render_callback"
+}
