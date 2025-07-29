@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) { exit; }
 // Core management bootstrap is loaded by artpulse-management.php
 require_once __DIR__ . '/includes/db-schema.php';
 require_once __DIR__ . '/includes/avatar-https-fix.php';
+require_once __DIR__ . '/includes/rest-dedupe.php';
 
 // Development helpers
 if (defined('WP_DEBUG') && WP_DEBUG) {
