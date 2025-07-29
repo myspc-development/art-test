@@ -12,6 +12,7 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
     private int $admin;
     private int $subscriber;
     private string $mock_body = '';
+    private array $request_args = [];
 
     public function set_up(): void
     {
@@ -35,6 +36,7 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
     public function mock_request($pre, $args, $url)
     {
         if (str_contains($url, 'api.openai.com')) {
+            $this->request_args = $args;
             return [
                 'headers'  => [],
                 'response' => ['code' => 200],
@@ -80,5 +82,20 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
         $req->set_param('bio', 'Artist bio');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
+    }
+
+    /**
+     * Custom summary prompt should appear in the request body.
+     */
+    public function test_custom_prompt_applied(): void
+    {
+        wp_set_current_user($this->admin);
+        update_option('artpulse_summary_prompt', 'Please summarize:');
+        $this->mock_body = json_encode(['choices' => [ ['message' => ['content' => 'summary']] ]]);
+        $req = new WP_REST_Request('POST', '/artpulse/v1/bio-summary');
+        $req->set_param('bio', 'My life');
+        rest_get_server()->dispatch($req);
+        $body = json_decode($this->request_args['body'], true);
+        $this->assertStringStartsWith('Please summarize:', $body['messages'][1]['content']);
     }
 }
