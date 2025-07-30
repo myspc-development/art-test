@@ -82,3 +82,12 @@ add_action('wp_ajax_ap_ajax_test', function () {
         'message' => __('AJAX is working, nonce is valid, and you are authenticated.', 'artpulse')
     ]);
 });
+
+// Bootstrap placeholder guard after widgets register
+add_action('init', function () {
+    $enabled = defined('AP_ENABLE_WIDGET_PLACEHOLDERS') ? AP_ENABLE_WIDGET_PLACEHOLDERS : (bool) get_option('ap_enable_widget_placeholders', '1');
+    $enabled = apply_filters('ap_widget_placeholder_enabled', $enabled);
+    if ($enabled) {
+        \ArtPulse\Dashboard\WidgetGuard::init();
+    }
+}, 20);
