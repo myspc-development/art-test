@@ -471,10 +471,11 @@ Developer environment steps, WebSocket configuration and CI instructions are doc
 
 ## Running Tests
 
-PHPUnit requires the WordPress test library and core files. Run the environment setup script before executing the suite:
+PHPUnit relies on the official WordPress test library. Run the installer to download WordPress and set up the tests, then execute PHPUnit:
 
 ```bash
-bash scripts/setup-env.sh
+bin/install-wp-tests.sh wordpress_test root '' localhost latest
+composer install
 composer test
 ```
 
