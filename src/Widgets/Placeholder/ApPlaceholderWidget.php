@@ -27,8 +27,8 @@ class ApPlaceholderWidget
         $markup .= '<p>' . esc_html__('This widget is not available yet.', 'artpulse') . '</p>';
         if (defined('WP_DEBUG') && WP_DEBUG) {
             $debug = $args['debug'] ?? '';
-            if ($debug) {
-                $markup .= '<small class="ap-widget__debug">' . esc_html($debug) . '</small>';
+            if (!empty($debug)) {
+                $markup .= '<small class="ap-widget__debug">' . wp_json_encode($debug) . '</small>';
             }
         }
         $markup .= '</div></div>';
