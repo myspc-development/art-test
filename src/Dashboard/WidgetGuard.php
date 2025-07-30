@@ -31,13 +31,17 @@ class WidgetGuard
     /**
      * Validate registered widgets and patch any missing callbacks.
      */
-    public static function validate_and_patch(): void
+    public static function validate_and_patch(?string $role = null): void
     {
         if (!apply_filters('ap_widget_placeholder_enabled', true)) {
             return;
         }
 
-        $widgets = DashboardWidgetRegistry::get_all();
+        if ($role !== null && method_exists(DashboardWidgetRegistry::class, 'get_role_widgets')) {
+            $widgets = DashboardWidgetRegistry::get_role_widgets($role);
+        } else {
+            $widgets = DashboardWidgetRegistry::get_all();
+        }
         $map     = apply_filters('ap_widget_placeholder_map', self::known_widget_map());
 
         foreach ($widgets as $id => $cfg) {
