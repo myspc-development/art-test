@@ -138,6 +138,21 @@ class DashboardWidgetRegistry {
     }
 
     /**
+     * Update an existing widget definition.
+     *
+     * Replaces the configuration for the given widget ID.
+     */
+    public static function update_widget( string $id, array $definition ): void {
+        $id = sanitize_key( $id );
+        if ( ! $id || ! isset( self::$widgets[ $id ] ) ) {
+            return;
+        }
+
+        self::$widgets[ $id ] = $definition;
+        self::$id_map         = null;
+    }
+
+    /**
      * Checks if a widget ID is already registered.
      *
      * @param string $id The widget ID to check.
