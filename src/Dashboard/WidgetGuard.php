@@ -86,16 +86,7 @@ class WidgetGuard
         $def['class']       = ApPlaceholderWidget::class;
         $def['section']     = $meta['section'] ?? ($cfg['section'] ?? 'insights');
 
-        $ref  = new \ReflectionClass(DashboardWidgetRegistry::class);
-        $prop = $ref->getProperty('widgets');
-        $prop->setAccessible(true);
-        $widgets = $prop->getValue();
-        $widgets[$id] = $def;
-        $prop->setValue($widgets);
-
-        $prop = $ref->getProperty('id_map');
-        $prop->setAccessible(true);
-        $prop->setValue(null);
+        DashboardWidgetRegistry::update_widget($id, $def);
     }
 
     /**
