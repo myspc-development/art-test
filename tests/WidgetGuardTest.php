@@ -1,9 +1,14 @@
 <?php
+namespace ArtPulse\Dashboard {
+    function error_log($msg) { \WidgetGuardTest::$logs[] = $msg; }
+}
+
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Dashboard\WidgetGuard;
 
 class WidgetGuardTest extends WP_UnitTestCase
 {
+    public static array $logs = [];
     private function reset_registry(): void
     {
         $ref  = new ReflectionClass(DashboardWidgetRegistry::class);
@@ -19,6 +24,7 @@ class WidgetGuardTest extends WP_UnitTestCase
     {
         parent::set_up();
         $this->reset_registry();
+        self::$logs = [];
     }
 
     public function test_invalid_callback_gets_placeholder(): void
@@ -56,5 +62,31 @@ class WidgetGuardTest extends WP_UnitTestCase
         $html = ob_get_clean();
         $this->assertStringContainsString('Widget callback is missing', $html);
         remove_all_filters('ap_widget_placeholder_enabled');
+    }
+
+    public function test_debug_summary_logged_when_patched(): void
+    {
+        DashboardWidgetRegistry::register('one', 'One', 'info', 'desc', 'missing_cb');
+        DashboardWidgetRegistry::register('two', 'Two', 'info', 'desc', 'missing_cb');
+        WidgetGuard::validate_and_patch();
+        $this->assertNotEmpty(self::$logs);
+        $summary = end(self::$logs);
+        $this->assertStringContainsString('Patched widgets: one, two', $summary);
+    }
+
+    public function test_debug_filter_modifies_payload(): void
+    {
+        add_filter('ap_widget_placeholder_debug_payload', function ($args, $id) {
+            $args['debug'] = $id;
+            return $args;
+        }, 10, 2);
+        DashboardWidgetRegistry::register('foo', 'Foo', 'info', 'desc', 'missing_cb');
+        WidgetGuard::validate_and_patch();
+        $cb = DashboardWidgetRegistry::get_widget_callback('foo');
+        ob_start();
+        call_user_func($cb);
+        $html = ob_get_clean();
+        $this->assertStringContainsString('foo', $html);
+        remove_all_filters('ap_widget_placeholder_debug_payload');
     }
 }

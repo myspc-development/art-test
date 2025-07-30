@@ -59,6 +59,10 @@ class WidgetGuard
             self::register_placeholder($id, $meta, $cfg);
             self::$patched[] = $id;
         }
+
+        if (defined('WP_DEBUG') && WP_DEBUG && self::$patched) {
+            error_log('[AP Widget Placeholder] Patched widgets: ' . implode(', ', self::$patched));
+        }
     }
 
     /**
@@ -78,6 +82,7 @@ class WidgetGuard
     private static function register_placeholder(string $id, array $meta, array $cfg): void
     {
         $args = [ 'debug' => 'Missing callback' ];
+        $args = apply_filters('ap_widget_placeholder_debug_payload', $args, $id, $meta, $cfg);
         $callback = static function ($unused = null) use ($args) {
             ApPlaceholderWidget::render($args);
         };
