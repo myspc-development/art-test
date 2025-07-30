@@ -15,6 +15,10 @@ if (!defined('ABSPATH')) { exit; }
 if (!defined('ARTPULSE_PLUGIN_FILE')) {
     define('ARTPULSE_PLUGIN_FILE', __FILE__);
 }
+// Enable automatic widget placeholders by default
+if (!defined('AP_ENABLE_WIDGET_PLACEHOLDERS')) {
+    define('AP_ENABLE_WIDGET_PLACEHOLDERS', true);
+}
 
 // Load main plugin logic
 require_once plugin_dir_path(__FILE__) . 'artpulse.php';

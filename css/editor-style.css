@@ -12,3 +12,7 @@
     border-left:4px solid #2271b1;
 }
 .hidden{display:none;}
+
+.ap-widget--placeholder { background:#fff; border:1px dashed #cbd5e1; padding:16px; border-radius:12px; }
+.ap-widget--placeholder .ap-widget__title { margin:0 0 8px; font-size:1.1rem; }
+
