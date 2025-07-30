@@ -24,7 +24,7 @@ class WidgetGuardTest extends WP_UnitTestCase
     public function test_invalid_callback_gets_placeholder(): void
     {
         DashboardWidgetRegistry::register('bad', 'Bad', 'alert', 'desc', 'missing_cb');
-        WidgetGuard::validate_and_patch();
+        WidgetGuard::validate_and_patch('member');
         $cb = DashboardWidgetRegistry::get_widget_callback('bad');
         ob_start();
         call_user_func($cb, 1);
@@ -37,7 +37,7 @@ class WidgetGuardTest extends WP_UnitTestCase
         DashboardWidgetRegistry::register('good', 'Good', 'info', 'desc', static function () {
             echo 'OK';
         });
-        WidgetGuard::validate_and_patch();
+        WidgetGuard::validate_and_patch('member');
         $cb = DashboardWidgetRegistry::get_widget_callback('good');
         ob_start();
         call_user_func($cb, 1);
@@ -49,7 +49,7 @@ class WidgetGuardTest extends WP_UnitTestCase
     {
         add_filter('ap_widget_placeholder_enabled', '__return_false');
         DashboardWidgetRegistry::register('bad2', 'Bad2', 'info', 'desc', 'missing_cb');
-        WidgetGuard::validate_and_patch();
+        WidgetGuard::validate_and_patch('member');
         $cb = DashboardWidgetRegistry::get_widget_callback('bad2');
         ob_start();
         call_user_func($cb);
