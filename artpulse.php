@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) { exit; }
 require_once __DIR__ . '/includes/db-schema.php';
 require_once __DIR__ . '/includes/avatar-https-fix.php';
 require_once __DIR__ . '/includes/rest-dedupe.php';
+require_once __DIR__ . '/includes/install.php';
 require_once __DIR__ . '/ap-placeholder-bootstrap.php';
 
 // Development helpers
@@ -22,6 +23,9 @@ register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
     $settings = array_merge(artpulse_get_default_settings(), $settings);
     update_option('artpulse_settings', $settings);
 });
+
+// Create webhook log table on activation
+register_activation_hook(ARTPULSE_PLUGIN_FILE, 'artpulse_create_webhook_logs_table');
 
 // Setup monetization tables on activation
 register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ArtPulse\\DB\\create_monetization_tables');
