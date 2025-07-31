@@ -2,7 +2,7 @@
 title: 🧭 Organizer Dashboard Roadmap
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-31
 status: complete
 ---
 # 🧭 Organizer Dashboard Roadmap
@@ -22,14 +22,14 @@ status: complete
 ---
 
 ## PHASE 2: CRM & Contacts
- - [x] `CrmContactsWidget.php` lists member interactions
+ - ~~`CrmContactsWidget.php`~~ *(deprecated – not implemented)*
  - [x] `/crm/contacts` REST route with filtering
  - [x] Tagging interface for notes and follow ups
 
 ---
 
 ## PHASE 3: Donor & Payment Tools
- - [x] `DonationsSummaryWidget.php` displays recent gifts
+ - ~~`DonationsSummaryWidget.php`~~ *(deprecated – not implemented)*
  - [x] `/donations/overview` REST route
  - [x] Export to CSV for grants reporting
 
