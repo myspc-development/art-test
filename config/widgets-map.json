@@ -1,0 +1,44 @@
+{
+  "upcoming-events-location": {
+    "label": "Upcoming Events by Location",
+    "template": "templates/widgets/upcoming-events-location.php",
+    "roles": ["member", "artist"],
+    "status": "stable"
+  },
+  "followed-artists-activity": {
+    "label": "Followed Artists Activity",
+    "template": "templates/widgets/followed-artists-activity.php",
+    "roles": ["member"],
+    "status": "stable"
+  },
+  "my-rsvps": {
+    "label": "My RSVPs",
+    "template": "templates/widgets/my-rsvps.php",
+    "roles": ["member"],
+    "status": "stable"
+  },
+  "my-shared-events-activity": {
+    "label": "My Shared Events Activity",
+    "template": "templates/widgets/my-shared-events-activity.php",
+    "roles": ["member"],
+    "status": "stable"
+  },
+  "recommended-for-you": {
+    "label": "Recommended For You",
+    "template": "templates/widgets/recommended-for-you.php",
+    "roles": ["member", "artist"],
+    "status": "beta"
+  },
+  "crm-contacts": {
+    "label": "CRM Contacts",
+    "template": null,
+    "status": "deprecated",
+    "notes": "Not implemented; removed during refactor"
+  },
+  "donations-summary": {
+    "label": "Donations Summary",
+    "template": null,
+    "status": "deprecated",
+    "notes": "Not implemented; removed during refactor"
+  }
+}

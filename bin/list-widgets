@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+$mapFile = __DIR__ . '/../config/widgets-map.json';
+$map = json_decode(file_get_contents($mapFile), true);
+$exit = 0;
+foreach ($map as $slug => $meta) {
+$template = $meta['template'] ?? '';
+$status   = $meta['status'] ?? '';
+if (!$template && $status === 'deprecated') {
+    echo sprintf("[--] %-28s  template: (deprecated)\n", $slug);
+    continue;
+}
+$path = __DIR__ . '/../' . $template;
+$ok = $template && file_exists($path);
+echo sprintf("[%s] %-28s  template: %s  %s\n",
+    $ok ? 'OK' : '!!',
+    $slug,
+    $template ?: '(none)',
+    $ok ? '' : 'MISSING'
+);
+if (!$ok) { $exit = 1; }
+}
+exit($exit);

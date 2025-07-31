@@ -2,13 +2,18 @@
 title: 🧭 ArtPulse Member Dashboard – Implementation Roadmap
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-31
 status: complete
 ---
 
 # 🧭 ArtPulse Member Dashboard – Implementation Roadmap
 
 ---
+
+> **Migration Note:** As of v1.5 dashboard widgets transitioned from class‑based
+> PHP components to template files in `templates/widgets/`. Former class names
+> such as `UpcomingEventsByLocationWidget.php` are now represented by their
+> template paths (e.g. `upcoming-events-location.php`).
 
 ## PHASE 1: Core Setup & Structure
 
@@ -32,11 +37,11 @@ status: complete
   - Uses Leaflet or Google Maps API
   - Pulls via `/events/nearby` with location + date filter
 
-- [x] `UpcomingEventsByLocationWidget.php`
+- [x] `templates/widgets/upcoming-events-location.php`
   - Lists events filtered by city, category, or tags
 
 ### ❤️ Following & Favoriting
-- [x] `FollowedArtistsActivityWidget.php`
+- [x] `templates/widgets/followed-artists-activity.php`
   - Shows posts/artworks by followed artists/orgs
 
 - [x] `MyFavoritesWidget.jsx`
@@ -59,7 +64,7 @@ status: complete
   - Toggle RSVP state with `/event/{id}/rsvp`
   - Show capacity and current attendance
 
-- [x] `MyRSVPsWidget.php`
+- [x] `templates/widgets/my-rsvps.php`
   - Lists upcoming events user has RSVP’d to
 
 ---
@@ -71,7 +76,7 @@ status: complete
   - Social share buttons (Twitter/X, Facebook, LinkedIn)
   - Copy-to-clipboard event URL
 
-- [x] `MySharedEventsActivityWidget.php`
+- [x] `templates/widgets/my-shared-events-activity.php`
   - Tracks internal shares to ArtPulse community
 
 ---
@@ -82,7 +87,7 @@ status: complete
 - [x] `ArtPulseNewsFeedWidget.php`
   - Shows news and posts from followed artists/orgs
 
-- [x] `RecommendedForYouWidget.php`
+- [x] `templates/widgets/recommended-for-you.php`
   - Uses follow data, tags, or interaction history
 
 ---

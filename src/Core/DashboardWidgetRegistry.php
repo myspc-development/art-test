@@ -111,15 +111,17 @@ class DashboardWidgetRegistry {
         $args['section'] = $args['section'] ?? '';
 
         if ( empty( $args['callback'] ) && isset( $args['template'] ) ) {
-            $template         = $args['template'];
-            $args['callback'] = static function () use ( $template ) {
-                $path = locate_template( $template );
-                if ( ! $path ) {
-                    $path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $template;
-                }
-                if ( file_exists( $path ) ) {
-                    include $path;
-                }
+            $template = $args['template'];
+            $path     = locate_template( $template );
+            if ( ! $path ) {
+                $path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $template;
+            }
+            if ( ! file_exists( $path ) ) {
+                do_action( 'ap_widget_missing_template', $id, $template );
+                return;
+            }
+            $args['callback'] = static function () use ( $path ) {
+                include $path;
             };
         }
 

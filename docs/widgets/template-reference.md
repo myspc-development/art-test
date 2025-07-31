@@ -2,13 +2,25 @@
 title: Widget and Template Reference
 category: widgets
 role: developer
-last_updated: 2025-07-28
+last_updated: 2025-08-31
 status: draft
 ---
 
 # Widget and Template Reference
 
-The plugin includes numerous widget templates under `templates/widgets/`. This file lists each template with a short description placeholder.
+As of **v1.5** widgets moved from PHP classes to simple template files located under `templates/widgets/`. The table below lists documentation names and their corresponding templates.
+
+| Documentation Name | Template Path | Status | Notes |
+|--------------------|--------------|--------|-------|
+| UpcomingEventsByLocation | templates/widgets/upcoming-events-location.php | ✅ Implemented | Template-based |
+| FollowedArtistsActivity | templates/widgets/followed-artists-activity.php | ✅ Implemented | Template-based |
+| MyRSVPs | templates/widgets/my-rsvps.php | ✅ Implemented | Template-based |
+| MySharedEventsActivity | templates/widgets/my-shared-events-activity.php | ✅ Implemented | Template-based |
+| RecommendedForYou | templates/widgets/recommended-for-you.php | ✅ Implemented | Template-based |
+| CrmContacts | — | ❌ Not implemented | Deprecated reference |
+| DonationsSummary | — | ❌ Not implemented | Deprecated reference |
+
+The plugin includes numerous additional widget templates under `templates/widgets/`. The following list provides brief placeholders for each template file:
 
 - `account-tools.php` - description pending
 - `artist-artwork-manager.php` - description pending
