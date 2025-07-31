@@ -32,6 +32,16 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "activity_feed": {
+        "file": "widgets/ActivityFeedWidget.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
     "artist_artwork_manager": {
         "file": "templates/widgets/artist-artwork-manager.php",
         "roles": [
