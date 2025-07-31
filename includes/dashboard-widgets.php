@@ -482,6 +482,27 @@ function ap_widget_dashboard_feedback(array $vars = []): string
     return ap_load_dashboard_template('widgets/dashboard-feedback.php', $vars);
 }
 
+function ap_widget_rsvp_button(array $vars = []): string
+{
+    ob_start();
+    ap_render_js_widget('rsvp_button', ['event-id' => $vars['event_id'] ?? 0]);
+    return ob_get_clean();
+}
+
+function ap_widget_event_chat(array $vars = []): string
+{
+    ob_start();
+    ap_render_js_widget('event_chat', ['event-id' => $vars['event_id'] ?? 0]);
+    return ob_get_clean();
+}
+
+function ap_widget_share_this_event(array $vars = []): string
+{
+    ob_start();
+    ap_render_js_widget('share_this_event');
+    return ob_get_clean();
+}
+
 /**
  * Register core dashboard widgets.
  */
@@ -838,13 +859,52 @@ function ap_register_core_dashboard_widgets(): void
     );
 
     DashboardWidgetRegistry::register(
+        'rsvp_button',
+        __('RSVP Button', 'artpulse'),
+        'calendar-check',
+        __('Toggle RSVP status for an event.', 'artpulse'),
+        'ap_widget_rsvp_button',
+        [
+            'roles'      => ['member'],
+            'visibility' => 'public',
+            'category'   => 'events',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'event_chat',
+        __('Event Chat', 'artpulse'),
+        'comments',
+        __('Chat with other attendees.', 'artpulse'),
+        'ap_widget_event_chat',
+        [
+            'roles'      => ['member'],
+            'visibility' => 'public',
+            'category'   => 'events',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'share_this_event',
+        __('Share This Event', 'artpulse'),
+        'share',
+        __('Share this event with friends.', 'artpulse'),
+        'ap_widget_share_this_event',
+        [
+            'roles'      => ['member'],
+            'visibility' => 'public',
+            'category'   => 'events',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
         'artist_inbox_preview',
         __('Artist Inbox Preview', 'artpulse'),
         'inbox',
         __('Recent unread messages from artists.', 'artpulse'),
         'ap_widget_artist_inbox_preview',
         [
-            'roles'      => ['artist'],
+            'roles'      => ['artist', 'member'],
             'visibility' => 'public',
             'capability' => 'can_receive_messages',
             'category'   => 'engagement',

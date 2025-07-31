@@ -33,7 +33,10 @@ Fill out one row per widget while testing. Mark ❌ if a widget fails to appear,
 | Role | Widget ID | In Builder? | Live Dashboard? | Shows Placeholder? | Notes |
 |------|-----------|-------------|-----------------|--------------------|-------|
 | Member | membership | ✅ | ✅ | ❌ | Fully implemented |
-| Member | news_feed | ✅ | ✅ | ✅ | Placeholder only |
+| Member | news_feed | ✅ | ✅ | ❌ | Fully implemented |
+| Member | rsvp_button | ✅ | ✅ | ❌ | Implemented via JS widget |
+| Member | event_chat | ✅ | ✅ | ❌ | Implemented via JS widget |
+| Member | share_this_event | ✅ | ✅ | ❌ | Implemented via JS widget |
 | Artist | artist_spotlight | ✅ | ✅ | ✅ | Implementation pending |
 | Organization | audience_crm | ✅ | ✅ | ✅ | Placeholder shown |
 

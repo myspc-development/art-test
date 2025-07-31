@@ -48,6 +48,9 @@ Below is a summary of built in dashboard widgets. Custom plugins can register ad
 | nearby_events_map | Nearby Events | general | member, artist | Events around your location. |
 | activity_feed | Activity Feed | general | member, artist, organization | Recent activity log entries. |
 | news_feed | News | general | member, artist | Latest updates from ArtPulse. |
+| rsvp_button | RSVP Button | events | member | Toggle RSVP status for an event. |
+| event_chat | Event Chat | events | member | Chat interface for attendees. |
+| share_this_event | Share This Event | events | member | Quick share buttons for the event. |
 | widget_spotlight_calls | Call Spotlights | general | member, artist, organization | Calls to artists or members. |
 | widget_spotlight_events | Event Spotlights | general | member, organization | Event related highlights. |
 | widget_spotlight_features | Featured Spotlights | general | member, artist, organization | General featured items. |
