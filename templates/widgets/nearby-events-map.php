@@ -13,7 +13,7 @@ if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
     return;
 }
 ?>
-<div id="nearby-events-map" class="ap-card" role="region" aria-labelledby="nearby-events-title" data-widget="nearby_events_map" <?php echo $visible ? '' : 'hidden'; ?>>
+<section id="nearby-events-map" class="ap-card" role="region" aria-labelledby="nearby-events-title" data-widget="nearby_events_map" <?php echo $visible ? '' : 'hidden'; ?>>
     <h2 id="nearby-events-title" class="ap-card__title"><?php esc_html_e('Nearby Events','artpulse'); ?></h2>
     <div class="ap-nearby-events-widget" data-api-root="<?php echo esc_attr($api_root); ?>" data-nonce="<?php echo esc_attr($nonce); ?>" data-lat="<?php echo esc_attr($lat); ?>" data-lng="<?php echo esc_attr($lng); ?>"></div>
-</div>
+</section>

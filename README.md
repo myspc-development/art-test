@@ -479,12 +479,21 @@ composer install
 composer test
 ```
 
+Frontend code is checked with ESLint and Jest:
+
+```bash
+npm run lint
+npm run test:js
+```
+
 End-to-end browser tests can be run with Cypress once the environment variables
 are set. Use the provided npm script:
 
 ```bash
 npm run test:ui
 ```
+
+UI tests automatically skip when Cypress is not installed (e.g. offline CI).
 
 Refer to [docs/End_to_End_Testing_Guide.md](docs/End_to_End_Testing_Guide.md) for
 details on the required credentials and optional interactive mode.

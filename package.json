@@ -14,9 +14,9 @@
     "test": "npm run test:js",
     "test:js": "jest",
     "test:e2e": "node tests/e2e/monetization-workflow.js",
-    "cypress:run": "cypress run",
-    "test:ui": "cypress run",
-    "lint": "eslint assets/js",
+    "cypress:run": "node scripts/run-cypress.js",
+    "test:ui": "node scripts/run-cypress.js",
+    "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
     "ws": "node server/ws-server.js",
     "build:dev": "NODE_ENV=development npm run build"
   },
@@ -62,6 +62,10 @@
     "typescript": "^5.4.5",
     "vite": "^5.0.11",
     "@babel/eslint-parser": "^7.23.3",
-    "eslint-plugin-react": "^7.33.2"
+    "eslint-plugin-react": "^7.33.2",
+    "eslint": "^8.57.0",
+    "@babel/core": "^7.23.3",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0"
   }
 }
