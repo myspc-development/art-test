@@ -1,5 +1,7 @@
 # Artist Dashboard Widgets – Status Check
 
+> **Architecture note:** The Artist dashboard uses a **hybrid** approach. Some widgets are lightweight PHP templates under `templates/widgets/`, while others are React components in `assets/js/widgets/` backed by plugin REST endpoints (e.g., `src/Rest/*`) and related service classes. This mix optimizes fast‑rendering informational blocks and richer interactive tools where needed.
+
 The following widgets were reviewed on 2025-07-23. They comprise all widgets registered for the `artist` role in `DashboardController` and `widget-manifest.json`. No organization widgets appear in the artist dashboard layout.
 
 | Widget | Implemented | Key Files |

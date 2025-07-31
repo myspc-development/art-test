@@ -2,7 +2,7 @@
 title: Widget and Template Reference
 category: widgets
 role: developer
-last_updated: 2025-08-31
+last_updated: 2025-07-31
 status: draft
 ---
 
@@ -10,15 +10,15 @@ status: draft
 
 As of **v1.5** widgets moved from PHP classes to simple template files located under `templates/widgets/`. The table below lists documentation names and their corresponding templates.
 
-| Documentation Name | Template Path | Status | Notes |
-|--------------------|--------------|--------|-------|
-| UpcomingEventsByLocation | templates/widgets/upcoming-events-location.php | ✅ Implemented | Template-based |
-| FollowedArtistsActivity | templates/widgets/followed-artists-activity.php | ✅ Implemented | Template-based |
-| MyRSVPs | templates/widgets/my-rsvps.php | ✅ Implemented | Template-based |
-| MySharedEventsActivity | templates/widgets/my-shared-events-activity.php | ✅ Implemented | Template-based |
-| RecommendedForYou | templates/widgets/recommended-for-you.php | ✅ Implemented | Template-based |
-| CrmContacts | — | ❌ Not implemented | Deprecated reference |
-| DonationsSummary | — | ❌ Not implemented | Deprecated reference |
+| Documentation Name | Template Path | Status | Roles | Notes |
+|--------------------|--------------|--------|-------|-------|
+| UpcomingEventsByLocation | templates/widgets/upcoming-events-location.php | ✅ Implemented | member, artist | Template-based |
+| FollowedArtistsActivity | templates/widgets/followed-artists-activity.php | ✅ Implemented | member | Template-based |
+| MyRSVPs | templates/widgets/my-rsvps.php | ✅ Implemented | member | Template-based |
+| MySharedEventsActivity | templates/widgets/my-shared-events-activity.php | ✅ Implemented | member | Template-based |
+| RecommendedForYou | templates/widgets/recommended-for-you.php | 🚧 Beta | member, artist | Template-based |
+| CrmContacts | — | Deprecated |  | Not implemented; removed during refactor |
+| DonationsSummary | — | Deprecated |  | Not implemented; removed during refactor |
 
 The plugin includes numerous additional widget templates under `templates/widgets/`. The following list provides brief placeholders for each template file:
 
