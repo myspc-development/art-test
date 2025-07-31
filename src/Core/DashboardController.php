@@ -220,9 +220,31 @@ class DashboardController {
     {
         $file = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . "data/presets/{$role}-{$preset}.json";
         if (file_exists($file)) {
-            $json = file_get_contents($file);
+            $json   = file_get_contents($file);
             $layout = json_decode($json, true);
-            return is_array($layout) ? $layout : [];
+
+            if (!is_array($layout)) {
+                return [];
+            }
+
+            $clean = [];
+            foreach ($layout as $entry) {
+                if (!is_array($entry) || !isset($entry['id'])) {
+                    continue;
+                }
+
+                $id = DashboardWidgetRegistry::map_to_core_id(sanitize_key($entry['id']));
+
+                if (!DashboardWidgetRegistry::get_widget($id)) {
+                    error_log("[Dashboard Preset] Widget {$id} not registered");
+                    continue;
+                }
+
+                $entry['id'] = $id;
+                $clean[]     = $entry;
+            }
+
+            return $clean;
         }
         return [];
     }
