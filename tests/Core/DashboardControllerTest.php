@@ -93,16 +93,17 @@ class DashboardControllerTest extends TestCase
     public function test_get_widgets_for_organization_roles(): void
     {
         $expected = [
-            'organization_dashboard',
-            'organization_analytics',
-            'my_events',
+            'org_event_overview',
+            'artpulse_analytics_widget',
             'rsvp_stats',
-            'org_messages',
-            'support_history',
-            'lead_capture',
-            'site_stats',
-            'notifications',
-            'dashboard_feedback',
+            'my-events',
+            'org_ticket_insights',
+            'org_team_roster',
+            'audience_crm',
+            'org_broadcast_box',
+            'org_approval_center',
+            'webhooks',
+            'support-history',
         ];
 
         $this->assertSame($expected, DashboardController::get_widgets_for_role('organization'));

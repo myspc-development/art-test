@@ -40,19 +40,24 @@ class DashboardController {
             'qa_checklist',
         ],
         // Organization admin widgets
+        // Synced with widget manifest. Guard below will warn on drift.
         'organization' => [
-            'organization_dashboard',
-            'organization_analytics',
-            'my_events',
+            'org_event_overview',
+            'artpulse_analytics_widget',
             'rsvp_stats',
-            'org_messages',
-            'support_history',
-            'lead_capture',
-            'site_stats',
-            'notifications',
-            'dashboard_feedback',
+            'my-events',
+            'org_ticket_insights',
+            'org_team_roster',
+            'audience_crm',
+            'org_broadcast_box',
+            'org_approval_center',
+            'webhooks',
+            'support-history',
         ],
     ];
+
+    /** @var bool */
+    private static bool $defaults_checked = false;
 
     /**
      * Default layout presets keyed by unique identifier.
@@ -103,10 +108,40 @@ class DashboardController {
     }
 
     /**
+     * Verify that default widget IDs are registered and log a warning once.
+     */
+    private static function verify_default_widgets(): void
+    {
+        if (self::$defaults_checked) {
+            return;
+        }
+
+        self::$defaults_checked = true;
+
+        $missing = [];
+        foreach (self::$role_widgets as $ids) {
+            foreach ($ids as $id) {
+                if (!DashboardWidgetRegistry::get_widget($id)) {
+                    $missing[] = $id;
+                }
+            }
+        }
+
+        if ($missing) {
+            trigger_error(
+                'Unregistered dashboard widget defaults: ' . implode(', ', array_unique($missing)),
+                E_USER_WARNING
+            );
+        }
+    }
+
+    /**
      * Get the widgets assigned to a role.
      */
     public static function get_widgets_for_role(string $role): array
     {
+        self::verify_default_widgets();
+
         if (isset(self::$role_widgets[$role])) {
             $widgets = self::$role_widgets[$role];
         } else {
