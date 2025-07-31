@@ -71,6 +71,25 @@ if (!function_exists('ap_merge_dashboard_menus')) {
         if (!$show_notifications) {
             $menu = array_values(array_filter($menu, fn($i) => $i['id'] !== 'notifications'));
         }
+        $user = is_user_logged_in() ? wp_get_current_user() : new \WP_User(0);
+        /**
+         * Filter dashboard sidebar links before output.
+         *
+         * @param array    $menu Menu items.
+         * @param \WP_User $user Current user.
+         */
+        $menu = apply_filters('ap_dashboard_sidebar_links', $menu, $user);
         return $menu;
     }
 }
+
+// Front-end sidebar guard to hide org admin pages for members.
+add_filter('ap_dashboard_sidebar_links', function (array $links, \WP_User $user): array {
+    if (!user_can($user, 'view_artpulse_dashboard')) {
+        $links = array_values(array_filter(
+            $links,
+            fn($l) => !isset($l['slug']) || !in_array($l['slug'], ['ap-org-dashboard', 'ap-org-user-manager'], true)
+        ));
+    }
+    return $links;
+}, 10, 2);
