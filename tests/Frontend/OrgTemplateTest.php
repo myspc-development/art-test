@@ -9,7 +9,6 @@ namespace {
     function the_content(){ echo 'Org Content'; }
     function get_the_ID(){ return 1; }
     function get_post_meta($id,$key,$single=false){ return \ArtPulse\Frontend\Tests\OrgTemplateTest::$meta[$key] ?? ''; }
-    function esc_html_e($text,$domain=null){ echo $text; }
     function esc_html($text){ return $text; }
     function esc_url($url){ return $url; }
 }

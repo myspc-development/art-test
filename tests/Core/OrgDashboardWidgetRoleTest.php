@@ -26,7 +26,6 @@ namespace {
     function get_transient($k) { return null; }
     function delete_transient($k) {}
     function esc_attr($t) { return $t; }
-    function __($t, $d=null) { return $t; }
     function get_current_screen() { return (object)['id' => \ArtPulse\Core\Tests\OrgDashboardWidgetRoleTest::$screen]; }
     function get_current_user_id() { return 1; }
     function get_user_meta($uid, $key, $single = false) { return \ArtPulse\Core\Tests\OrgDashboardWidgetRoleTest::$meta[$key] ?? ''; }

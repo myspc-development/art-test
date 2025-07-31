@@ -6,7 +6,6 @@ function get_page_by_path($path,$output,$type){return OrgPublicProfileShortcodeT
 function get_post($id){return (object)['ID'=>$id,'post_title'=>'My Org'];}
 function wp_get_attachment_url($id){return 'img'.$id.'.jpg';}
 function esc_html($t){return $t;}
-function esc_html_e($t,$d=null){}
 function esc_url($u){return $u;}
 function get_permalink($id){return '/event/'.$id;}
 function get_the_title($id){return 'Event '.$id;}

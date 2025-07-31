@@ -139,3 +139,54 @@ function wp_generate_password(int $length = 12, bool $special_chars = false): st
     return Stub::$password;
 }
 
+
+namespace ArtPulse\Admin;
+if (!function_exists('ArtPulse\\Admin\\__')) {
+    function __($text, $domain = null) { return $text; }
+}
+if (!function_exists('ArtPulse\\Admin\\_e')) {
+    function _e($text, $domain = null) { echo $text; }
+}
+if (!function_exists('ArtPulse\\Admin\\esc_html__')) {
+    function esc_html__($text, $domain = null) { return $text; }
+}
+if (!function_exists('ArtPulse\\Admin\\esc_html_e')) {
+    function esc_html_e($text, $domain = null) { echo $text; }
+}
+
+namespace ArtPulse\Frontend;
+if (!function_exists('ArtPulse\\Frontend\\__')) {
+    function __($text, $domain = null) { return $text; }
+}
+if (!function_exists('ArtPulse\\Frontend\\_e')) {
+    function _e($text, $domain = null) { echo $text; }
+}
+if (!function_exists('ArtPulse\\Frontend\\esc_html__')) {
+    function esc_html__($text, $domain = null) { return $text; }
+}
+if (!function_exists('ArtPulse\\Frontend\\esc_html_e')) {
+    function esc_html_e($text, $domain = null) { echo $text; }
+}
+
+namespace ArtPulse\Core;
+if (!function_exists('ArtPulse\\Core\\__')) {
+    function __($text, $domain = null) { return $text; }
+}
+if (!function_exists('ArtPulse\\Core\\_e')) {
+    function _e($text, $domain = null) { echo $text; }
+}
+if (!function_exists('ArtPulse\\Core\\esc_html__')) {
+    function esc_html__($text, $domain = null) { return $text; }
+}
+if (!function_exists('ArtPulse\\Core\\esc_html_e')) {
+    function esc_html_e($text, $domain = null) { echo $text; }
+}
+
+namespace ArtPulse\Widgets\Placeholder;
+if (!function_exists('ArtPulse\\Widgets\\Placeholder\\esc_html__')) {
+    function esc_html__($text, $domain = null) { return $text; }
+}
+if (!function_exists('ArtPulse\\Widgets\\Placeholder\\esc_html_e')) {
+    function esc_html_e($text, $domain = null) { echo $text; }
+}
+

@@ -10,7 +10,6 @@ use ArtPulse\Core\DashboardWidgetManager;
 // Stub functions
 function artpulse_dashicon($icon, $args = []) { return '<span></span>'; }
 function esc_attr($str) { return $str; }
-function __($str, $domain = null) { return $str; }
 function update_option($k, $v) { PreviewStyleTest::$options[$k] = $v; }
 function get_option($k, $d = []) { return PreviewStyleTest::$options[$k] ?? $d; }
 function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
