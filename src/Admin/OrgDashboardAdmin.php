@@ -17,6 +17,15 @@ class OrgDashboardAdmin {
             'dashicons-building'
         );
         add_action('admin_init', [self::class, 'handleExports']);
+        add_action('admin_menu', [self::class, 'hideFromMembers'], 999);
+    }
+
+    public static function hideFromMembers(): void
+    {
+        if (!current_user_can('view_artpulse_dashboard')) {
+            remove_menu_page('ap-org-dashboard');
+            remove_submenu_page('ap-org-dashboard', 'ap-org-user-manager');
+        }
     }
 
 

@@ -55,6 +55,28 @@ add_action('plugins_loaded', function () {
     }
 });
 
+// One-time capability upgrader
+add_action('plugins_loaded', function () {
+    if (!get_option('ap_caps_v2_applied')) {
+        require_once ARTPULSE_PLUGIN_DIR . 'src/Core/RoleSetup.php';
+        ArtPulse\Core\RoleSetup::assign_capabilities();
+
+        if ($role = get_role('member')) {
+            $role->remove_cap('view_artpulse_dashboard');
+        }
+
+        $members = get_users(['role' => 'member', 'fields' => ['ID']]);
+        foreach ($members as $u) {
+            $user = new WP_User($u->ID);
+            if ($user->has_cap('view_artpulse_dashboard')) {
+                $user->remove_cap('view_artpulse_dashboard');
+            }
+        }
+
+        update_option('ap_caps_v2_applied', 1);
+    }
+}, 20);
+
 // Register Diagnostics admin page
 add_action('admin_menu', function () {
 add_menu_page(
