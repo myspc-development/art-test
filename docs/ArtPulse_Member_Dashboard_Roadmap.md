@@ -2,7 +2,7 @@
 title: 🧭 ArtPulse Member Dashboard – Implementation Roadmap
 category: developer
 role: developer
-last_updated: 2025-08-31
+last_updated: 2025-07-31
 status: complete
 ---
 
@@ -14,6 +14,8 @@ status: complete
 > PHP components to template files in `templates/widgets/`. Former class names
 > such as `UpcomingEventsByLocationWidget.php` are now represented by their
 > template paths (e.g. `upcoming-events-location.php`).
+
+> **Deprecated widgets:** *CRM Contacts* and *Donations Summary* were never implemented during the refactor and are retained as **deprecated** entries for traceability. See **docs/widgets/template-reference.md** and `config/widgets-map.json` for authoritative status.
 
 ## PHASE 1: Core Setup & Structure
 
