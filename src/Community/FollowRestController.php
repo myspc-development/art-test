@@ -6,12 +6,15 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
+use ArtPulse\Traits\Registerable;
+
 class FollowRestController
 {
-    public static function register(): void
-    {
-        add_action('rest_api_init', [self::class, 'register_routes']);
-    }
+    use Registerable;
+
+    private const HOOKS = [
+        'rest_api_init' => 'register_routes',
+    ];
 
     public static function register_routes(): void
     {

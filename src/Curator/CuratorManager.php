@@ -1,12 +1,15 @@
 <?php
 namespace ArtPulse\Curator;
 
+use ArtPulse\Traits\Registerable;
+
 class CuratorManager
 {
-    public static function register(): void
-    {
-        add_action('init', [self::class, 'maybe_install_table']);
-    }
+    use Registerable;
+
+    private const HOOKS = [
+        'init' => 'maybe_install_table',
+    ];
 
     public static function install_table(): void
     {

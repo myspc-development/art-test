@@ -4,12 +4,16 @@ namespace ArtPulse\Search;
 use WP_Post;
 use WP_Query;
 
+use ArtPulse\Traits\Registerable;
+
 class ExternalSearch {
-    public static function register(): void {
-        add_action('save_post_artpulse_artist', [self::class, 'sync_post']);
-        add_action('save_post_artpulse_org', [self::class, 'sync_post']);
-        add_action('delete_post', [self::class, 'delete_post']);
-    }
+    use Registerable;
+
+    private const HOOKS = [
+        ['save_post_artpulse_artist', 'sync_post', 10, 1],
+        ['save_post_artpulse_org', 'sync_post', 10, 1],
+        ['delete_post', 'delete_post', 10, 1],
+    ];
 
     public static function is_enabled(): bool {
         $service = self::get_service();

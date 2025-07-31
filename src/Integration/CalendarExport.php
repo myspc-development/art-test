@@ -3,14 +3,17 @@ namespace ArtPulse\Integration;
 
 use ArtPulse\Core\FeedAccessLogger;
 
+use ArtPulse\Traits\Registerable;
+
 class CalendarExport
 {
-    public static function register(): void
-    {
-        add_action('init', [self::class, 'add_rewrite_rules']);
-        add_filter('query_vars', [self::class, 'register_query_vars']);
-        add_action('template_redirect', [self::class, 'maybe_output']);
-    }
+    use Registerable;
+
+    private const HOOKS = [
+        ['init', 'add_rewrite_rules'],
+        [ 'query_vars', 'register_query_vars', 10, 1, 'filter' ],
+        ['template_redirect', 'maybe_output'],
+    ];
 
     public static function add_rewrite_rules(): void
     {
