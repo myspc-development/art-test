@@ -299,6 +299,15 @@ function ap_widget_favorites(array $vars = []): string
     return ap_load_dashboard_template('widgets/my-favorites.php', $vars);
 }
 
+function ap_widget_my_favorites(array $vars = []): string
+{
+    if (function_exists('ap_widget_favorites')) {
+        return ap_widget_favorites($vars);
+    }
+    trigger_error( 'ap_widget_favorites not found, falling back placeholder', E_USER_NOTICE );
+    return '<div class="ap-widget-placeholder">Favorites widget is under construction.</div>';
+}
+
 function ap_widget_my_follows(array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/my-follows.php', $vars);
