@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-
-if (!function_exists('__')) {
-    function __($s) { return $s; }
-}
+require_once __DIR__ . '/translation-helper.php';
 if (!defined('ARTPULSE_PLUGIN_FILE')) {
     define('ARTPULSE_PLUGIN_FILE', __DIR__ . '/../artpulse-management.php');
 }

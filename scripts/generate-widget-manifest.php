@@ -4,9 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 if (!function_exists('sanitize_key')) {
     function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
 }
-if (!function_exists('__')) {
-    function __($s) { return $s; }
-}
+require_once __DIR__ . '/translation-helper.php';
 
 if (!function_exists('add_action')) {
     function add_action($hook, $callback, $priority = 10, $args = 1) {}

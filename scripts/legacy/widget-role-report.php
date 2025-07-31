@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 if (!function_exists('sanitize_key')) {
     function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
 }
-if (!function_exists('__')) { function __($s){ return $s; } }
+require_once __DIR__ . '/../translation-helper.php';
 if (!function_exists('esc_attr')) { function esc_attr($v){ return $v; } }
 if (!function_exists('esc_url_raw')) { function esc_url_raw($v){ return $v; } }
 if (!function_exists('wp_create_nonce')) { function wp_create_nonce($v=''){ return 'nonce'; } }
