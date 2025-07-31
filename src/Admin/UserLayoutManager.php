@@ -9,7 +9,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 class UserLayoutManager
 {
     public const META_KEY = 'ap_dashboard_layout';
-    public const ROLE_KEY_PREFIX = 'ap_dashboard_layout_role_';
     public const VIS_META_KEY = 'ap_widget_visibility';
     /**
      * Get a user's widget layout with fallbacks.
