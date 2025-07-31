@@ -15,6 +15,7 @@
     "test:js": "jest",
     "test:e2e": "node tests/e2e/monetization-workflow.js",
     "cypress:run": "cypress run",
+    "test:ui": "cypress run",
     "lint": "eslint assets/js",
     "ws": "node server/ws-server.js",
     "build:dev": "NODE_ENV=development npm run build"

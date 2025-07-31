@@ -483,7 +483,7 @@ End-to-end browser tests can be run with Cypress once the environment variables
 are set. Use the provided npm script:
 
 ```bash
-npm run cypress:run
+npm run test:ui
 ```
 
 Refer to [docs/End_to_End_Testing_Guide.md](docs/End_to_End_Testing_Guide.md) for

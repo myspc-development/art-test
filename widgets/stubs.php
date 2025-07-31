@@ -22,7 +22,9 @@ function ap_render_js_widget(string $id, array $data = []): void {
     foreach ($data as $k => $v) {
         $attrs .= ' data-' . $k . '="' . esc_attr($v) . '"';
     }
+    echo '<section data-widget="' . esc_attr($id) . '" class="ap-widget ap-' . esc_attr($id) . '">';
     echo '<div id="' . esc_attr($id) . '" class="ap-react-widget"' . $attrs . '></div>';
+    echo '</section>';
 }
 
 function render_widget_ap_donor_activity(): void {

@@ -43,6 +43,7 @@ class ActivityFeedWidget {
             esc_html_e('No recent activity.', 'artpulse');
             return;
         }
+        echo '<section data-widget="activity_feed" class="ap-widget ap-activity_feed">';
         echo '<ul class="ap-activity-feed">';
         foreach ($logs as $row) {
             echo '<li>' . esc_html($row->description) . ' <em>' .
@@ -50,6 +51,7 @@ class ActivityFeedWidget {
                 '</em></li>';
         }
         echo '</ul>';
+        echo '</section>';
     }
 }
 
