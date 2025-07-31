@@ -20,7 +20,7 @@ class DashboardLayoutEndpoint
     public static function handle(\WP_REST_Request $request)
     {
         $ctx = sanitize_key($request['context']);
-        $option = get_option('artpulse_dashboard_layouts', []);
+        $option = get_option('ap_dashboard_widget_config', []);
 
         if ($request->get_method() === 'GET') {
             $layout = $option[$ctx] ?? [];
@@ -32,7 +32,7 @@ class DashboardLayoutEndpoint
             return new \WP_Error('invalid', 'Invalid layout', ['status' => 400]);
         }
         $option[$ctx] = $layout;
-        update_option('artpulse_dashboard_layouts', $option);
+        update_option('ap_dashboard_widget_config', $option);
         return rest_ensure_response(['saved' => true]);
     }
 }

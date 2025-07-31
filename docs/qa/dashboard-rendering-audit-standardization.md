@@ -39,7 +39,7 @@ Example expected files:
 - [ ] Ensure fallback message or empty state exists if no widgets
 - [ ] Each widget’s callback or component renders inside proper container (e.g. `.ap-card`)
 - [ ] Role-specific layouts stored in:
-  - [ ] `artpulse_dashboard_layouts` (global)
+  - [ ] `ap_dashboard_widget_config` (global)
   - [ ] `ap_dashboard_layout` (per user)
 
 ## 🔁 3. Standardize to WordPress Dashboard Conventions

@@ -11,7 +11,7 @@ status: complete
 This document summarizes how dashboard layouts and visibility settings are stored and retrieved.
 
 ## Default Layouts
-- Stored in the **`artpulse_dashboard_layouts`** option.
+- Stored in the **`ap_dashboard_widget_config`** option.
 - Each entry contains an array of widget IDs keyed by role: `member`, `artist`, `organization`.
 - Updated via the block editor when an administrator saves layouts. The editor serializes the widget order to JSON.
 
@@ -29,7 +29,7 @@ This document summarizes how dashboard layouts and visibility settings are store
 
 ## Retrieval Flow
 1. Load user meta for layout and visibility.
-2. If empty, load role layout from `artpulse_dashboard_layouts`.
+2. If empty, load role layout from `ap_dashboard_widget_config`.
 3. Merge the stored widget IDs with registered widgets so missing widgets are appended if needed.
 
 See [User Dashboard Customization](../user/README.md) for additional context.

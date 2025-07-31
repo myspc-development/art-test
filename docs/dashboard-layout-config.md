@@ -16,7 +16,7 @@ The Dashboard Builder stores layouts as JSON arrays. Each entry contains the wid
 ]
 ```
 
-Layouts are saved per user in `ap_dashboard_layout` and per role in the `artpulse_dashboard_layouts` option. Use `DashboardWidgetManager::saveUserLayout()` and `saveRoleLayout()` to persist updates.
+Layouts are saved per user in `ap_dashboard_layout` and per role in the `ap_dashboard_widget_config` option. Use `DashboardWidgetManager::saveUserLayout()` and `saveRoleLayout()` to persist updates.
 
 If no user-specific layout exists, the builder falls back to the role defaults defined in `DashboardController::$role_widgets`. Preset templates registered via `DashboardController::get_default_presets()` can be loaded on demand through the dashboard UI.
 
