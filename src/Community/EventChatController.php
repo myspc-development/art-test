@@ -5,13 +5,16 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
+use ArtPulse\Traits\Registerable;
+
 class EventChatController
 {
-    public static function register(): void
-    {
-        add_action('init', [self::class, 'maybe_install_table']);
-        add_action('rest_api_init', [self::class, 'register_routes']);
-    }
+    use Registerable;
+
+    private const HOOKS = [
+        'init'         => 'maybe_install_table',
+        'rest_api_init' => 'register_routes',
+    ];
 
     public static function maybe_install_table(): void
     {

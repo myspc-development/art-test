@@ -1,12 +1,20 @@
 <?php
 namespace ArtPulse\Monetization;
 
+use ArtPulse\Traits\Registerable;
+
 class DonationLink
 {
-    public static function register(): void
-    {
-        add_filter('rest_prepare_user', [self::class, 'add_meta'], 10, 2);
-    }
+    use Registerable;
+
+    private const HOOKS = [
+        'rest_prepare_user' => [
+            'method'   => 'add_meta',
+            'type'     => 'filter',
+            'priority' => 10,
+            'args'     => 2,
+        ],
+    ];
 
     public static function add_meta($response, $user)
     {

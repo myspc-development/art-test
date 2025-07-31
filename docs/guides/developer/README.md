@@ -17,5 +17,6 @@ status: complete
 - [Portfolio Sync](./portfolio-sync.md)
 - [Community Spaces & Event Threads Codex](./community-spaces-event-threads-codex.md)
 - [Community Moderation Codex](./community-moderation-codex.md)
+- [Registerable Trait Usage](./hook-registration.md)
 
 > 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*

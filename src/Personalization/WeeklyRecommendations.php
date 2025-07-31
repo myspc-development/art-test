@@ -1,13 +1,16 @@
 <?php
 namespace ArtPulse\Personalization;
 
+use ArtPulse\Traits\Registerable;
+
 class WeeklyRecommendations
 {
-    public static function register(): void
-    {
-        add_action('init', [self::class, 'schedule_cron']);
-        add_action('ap_generate_recommendations', [self::class, 'generate']);
-    }
+    use Registerable;
+
+    private const HOOKS = [
+        'init' => 'schedule_cron',
+        'ap_generate_recommendations' => 'generate',
+    ];
 
     public static function schedule_cron(): void
     {
