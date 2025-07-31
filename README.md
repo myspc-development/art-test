@@ -522,6 +522,13 @@ This populates a sample organization with members, events and donation records f
 
 Place a file under `your-theme/widgets/` with the same name as the plugin template (e.g. `donations.php`) to override it. If no override exists the template bundled with the plugin is loaded.
 
+### Widget Fallbacks
+
+Wrapper functions inside `widgets/stubs.php` call implementation functions like
+`ap_widget_example()`. If those inner functions are missing, stubs are
+auto-generated from `widgets/fallback-stubs.php`. When `WP_DEBUG` is on, using a
+stub logs a warning so developers know to supply the real widget code.
+
 ### Running PHPUnit
 
 The suite depends on the WP test library. Run the setup script once and then execute PHPUnit:
