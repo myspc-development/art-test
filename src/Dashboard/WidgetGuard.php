@@ -50,7 +50,7 @@ class WidgetGuard
             if ($valid) {
                 continue;
             }
-            error_log('[AP Widget Placeholder] Missing or invalid callback: ' . $id);
+            error_log("[Member Dashboard] Widget {$id} callback missing");
             $meta = $map[$id] ?? [
                 'title'   => ucwords(str_replace('_', ' ', $id)),
                 'icon'    => 'info',
