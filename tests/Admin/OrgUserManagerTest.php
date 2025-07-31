@@ -17,7 +17,6 @@ function wp_die($message = '') { OrgUserManagerTest::$died = true; }
 function get_current_user_id() { return 1; }
 function get_user_meta($uid, $key, $single = false) { return 5; }
 function get_users($args = []) { return []; }
-function esc_html__($text, $domain = '') { return $text; }
 function esc_html($text) { return $text; }
 function esc_attr($text) { return $text; }
 

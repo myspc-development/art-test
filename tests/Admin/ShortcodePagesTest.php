@@ -6,7 +6,6 @@ function wp_insert_post($arr) { \ArtPulse\Admin\Tests\ShortcodePagesTest::$inser
 function update_option($key, $value) { \ArtPulse\Admin\Tests\ShortcodePagesTest::$updated[$key] = $value; }
 function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\ShortcodePagesTest::$options[$key] ?? $default; }
 function is_wp_error($obj) { return false; }
-function __( $text, $domain = null ) { return $text; }
 
 namespace ArtPulse\Admin\Tests;
 

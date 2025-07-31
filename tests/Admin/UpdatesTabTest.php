@@ -45,7 +45,6 @@ namespace ArtPulse\Admin {
     function current_time($type = 'mysql') { return 'now'; }
     function delete_option($key) { unset(\ArtPulse\Admin\Tests\UpdatesTabTest::$options[$key]); }
     function esc_html($text) { return $text; }
-    function esc_html_e($text, $domain = '') { echo $text; }
     function wp_nonce_field($action) {}
     function esc_url($url) { return $url; }
     function wp_die($msg = '') { \ArtPulse\Admin\Tests\UpdatesTabTest::$died = $msg ?: true; }

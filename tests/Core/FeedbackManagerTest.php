@@ -10,7 +10,6 @@ function get_current_user_id() { return \ArtPulse\Core\Tests\FeedbackManagerTest
 function current_time($type = 'mysql') { return \ArtPulse\Core\Tests\FeedbackManagerTest::$current_time; }
 function wp_send_json_success($data = null) { \ArtPulse\Core\Tests\FeedbackManagerTest::$json_success = $data ?? true; }
 function wp_send_json_error($data) { \ArtPulse\Core\Tests\FeedbackManagerTest::$json_error = $data; }
-function __($text, $domain = null) { return $text; }
 function add_action($hook, $callback, $priority = 10, $args = 1) { \ArtPulse\Core\Tests\FeedbackManagerTest::$hooks[$hook][] = $callback; }
 function do_action($hook) { foreach (\ArtPulse\Core\Tests\FeedbackManagerTest::$hooks[$hook] ?? [] as $cb) { call_user_func($cb); } }
 

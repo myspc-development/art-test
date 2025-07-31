@@ -15,9 +15,6 @@ function get_user_meta($uid, $key, $single = false) {
 function get_post($id) {
     return (object)['ID' => $id, 'post_title' => 'Post ' . $id];
 }
-function esc_html_e($text, $domain = null) { }
-function __($text, $domain = null) { return $text; }
-function _e($text, $domain = null) { }
 function esc_url($url) { return $url; }
 function do_shortcode($code) {
     if ($code === '[ap_submit_artist]') {

@@ -12,8 +12,6 @@ function sanitize_key($key){ return $key; }
 function selected($val,$cmp,$echo=true){ return $val==$cmp ? 'selected' : ''; }
 function get_terms($tax,$args){ return []; }
 function wp_create_nonce($action){ return 'nonce'; }
-function esc_html_e($t,$d=null){}
-function _e($t,$d=null){}
 function esc_html($t){ return $t; }
 function esc_attr($t){ return $t; }
 function esc_url($t){ return $t; }
