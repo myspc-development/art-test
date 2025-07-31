@@ -305,6 +305,9 @@ function ap_widget_my_favorites(array $vars = []): string
         return ap_widget_favorites($vars);
     }
     trigger_error( 'ap_widget_favorites not found, falling back placeholder', E_USER_NOTICE );
+    if (class_exists('FavoritesOverviewWidget')) {
+        return FavoritesOverviewWidget::render_placeholder();
+    }
     return '<div class="ap-widget-placeholder">Favorites widget is under construction.</div>';
 }
 
