@@ -12,7 +12,6 @@ function add_query_arg($key, $value, $base) { return $base . (str_contains($base
 function update_option($key, $value) { \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$options[$key] = $value; }
 function file_get_contents($path) { return \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$file_contents; }
 function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
-function __($text, $domain = null) { return $text; }
 
 namespace ArtPulse\Admin\Tests;
 

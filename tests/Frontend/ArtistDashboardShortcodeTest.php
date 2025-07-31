@@ -16,11 +16,9 @@ function get_post($id) { return (object)['ID'=>$id,'post_type'=>'artpulse_artwor
 function wp_delete_post($id, $force = false) { \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$deleted = $id; }
 function wp_send_json_success($data) { \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$json = $data; }
 function wp_send_json_error($data) { \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$json_error = $data; }
-function esc_html_e($t,$d=null){}
 function esc_html($t) { return $t; }
 function esc_url($t) { return $t; }
 function wp_enqueue_script($h){}
-function __( $t, $d=null ) { return $t; }
 function do_shortcode($code) {
     if ($code === '[ap_user_profile]') {
         return '<div class="ap-user-profile"></div>';

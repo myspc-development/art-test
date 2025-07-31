@@ -2,7 +2,6 @@
 namespace ArtPulse\Core;
 
 function esc_html($text) { return $text; }
-function esc_html__($text, $domain = null) { return $text; }
 function trailingslashit($path) { return rtrim($path, '/').'/'; }
 
 namespace ArtPulse\Core\Tests;

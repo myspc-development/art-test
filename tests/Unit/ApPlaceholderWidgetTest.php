@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Widgets\Placeholder;
 
-function esc_html__( $text, $domain ) { return $text; }
 function esc_html( $text ) { return $text; }
 function apply_filters( $tag, $value, $args = null ) { return $value; }
 function wp_json_encode( $data, $options = 0, $depth = 512 ) { return json_encode( $data, $options, $depth ); }

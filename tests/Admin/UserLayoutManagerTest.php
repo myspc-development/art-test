@@ -18,7 +18,6 @@ function get_userdata($uid) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest
 function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
 function wp_json_encode($data, $flags = 0) { return json_encode($data, $flags); }
 function header($string, $replace = true, $code = 0) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$headers[] = $string; }
-function __($text, $domain = null) { return $text; }
 
 namespace ArtPulse\Admin\Tests;
 

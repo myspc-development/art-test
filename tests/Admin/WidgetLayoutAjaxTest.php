@@ -12,7 +12,6 @@ namespace ArtPulse\Admin {
     function wp_send_json_error($data) { \ArtPulse\Admin\Tests\WidgetLayoutAjaxTest::$json_error = $data; }
     function add_action($hook, $callback, $priority = 10, $args = 1) { \ArtPulse\Admin\Tests\WidgetLayoutAjaxTest::$hooks[$hook][] = $callback; }
     function do_action($hook) { foreach (\ArtPulse\Admin\Tests\WidgetLayoutAjaxTest::$hooks[$hook] ?? [] as $cb) { call_user_func($cb); } }
-    function __($text, $domain = null) { return $text; }
     function apply_filters($hook, $value) { return $value; }
 }
 
