@@ -208,6 +208,9 @@ DashboardWidgetRegistry::register(
     ]
 );
 ```
+`ap_widget_favorites` is provided by `includes/dashboard-widgets.php`, which loads when
+`artpulse-management.php` runs. Ensure that file is included or implement your
+own callback; otherwise the widget will display the class fallback placeholder.
 
 Settings are stored in `ap_widget_settings_{id}` user meta or options when the
 `global` flag is provided. The REST endpoint `/artpulse/v1/widget-settings/{id}`

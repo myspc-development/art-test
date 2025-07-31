@@ -20,8 +20,21 @@ class FavoritesOverviewWidget {
     }
 
     public static function render(): void {
-        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
-        echo ap_widget_favorites([]);
+        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+            return;
+        }
+        if (function_exists('ap_widget_favorites')) {
+            echo ap_widget_favorites([]);
+        } else {
+            echo self::render_placeholder();
+        }
+    }
+
+    public static function render_placeholder(): string
+    {
+        return '<div class="ap-widget-placeholder">' .
+            esc_html__('Favorites widget is under construction.', 'artpulse') .
+            '</div>';
     }
 }
 
