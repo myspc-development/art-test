@@ -9,6 +9,11 @@ add_action('user_register', function ($user_id) {
     if (in_array('subscriber', (array) $user->roles, true)) {
         $user->set_role('member');
     }
+
+    $token = $_POST['ap_org_invite_token'] ?? $_GET['ap_org_invite_token'] ?? '';
+    if ($token) {
+        \ArtPulse\Core\OrgInviteManager::accept_invite(sanitize_text_field($token), $user_id);
+    }
 });
 
 // Redirect new registrants to the member dashboard
