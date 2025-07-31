@@ -83,12 +83,35 @@ class Subscriptions {
     }
 }
 
+class Sessions {
+    public function create(array $params = []) {
+        return (object)['id' => 'sess_123', 'url' => 'https://example.com/session'];
+    }
+}
+
+class Checkout {
+    public Sessions $sessions;
+    public function __construct() {
+        $this->sessions = new Sessions();
+    }
+}
+
+class PaymentIntents {
+    public function create(array $params = []) {
+        return (object)['client_secret' => 'pi_secret'];
+    }
+}
+
 class StripeClient {
     public Charges $charges;
     public Subscriptions $subscriptions;
+    public PaymentIntents $paymentIntents;
+    public Checkout $checkout;
     public function __construct(string $secret) {
         $this->charges = new Charges();
         $this->subscriptions = new Subscriptions();
+        $this->paymentIntents = new PaymentIntents();
+        $this->checkout = new Checkout();
     }
 }
 
