@@ -40,7 +40,7 @@ For each role:
 
 ## 🧰 2. LAYOUT STORAGE & PRESET BEHAVIOR
 
-- [ ] Layouts saved in `artpulse_dashboard_layouts` for each role
+- [ ] Layouts saved in `ap_dashboard_widget_config` for each role
 - [ ] Individual user layout overrides saved in `ap_dashboard_layout` user meta
 - [ ] Reset layout button restores default preset
 - [ ] `GET /wp-json/artpulse/v1/layout/{role}` returns ordered widget IDs

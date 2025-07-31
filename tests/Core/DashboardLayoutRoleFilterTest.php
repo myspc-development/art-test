@@ -68,7 +68,7 @@ class DashboardLayoutRoleFilterTest extends TestCase
         DashboardWidgetRegistry::register('beta', 'Beta', '', '', '__return_null', ['roles' => ['artist']]);
 
         self::$users[2] = (object)['roles' => ['member']];
-        self::$options['artpulse_dashboard_layouts'] = [
+        self::$options['ap_dashboard_widget_config'] = [
             'member' => [
                 ['id' => 'alpha'],
                 ['id' => 'beta'],

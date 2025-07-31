@@ -140,7 +140,7 @@ class DashboardController {
         if (!empty($custom) && is_array($custom)) {
             $layout = $custom;
         } else {
-            $layouts = get_option('artpulse_dashboard_layouts', []);
+            $layouts = get_option('ap_dashboard_widget_config', []);
             if (!empty($layouts[$role]) && is_array($layouts[$role])) {
                 $layout = $layouts[$role];
             } else {

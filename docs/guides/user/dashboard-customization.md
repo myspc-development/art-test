@@ -15,7 +15,7 @@ Users can enable additional widgets by clicking **Add Widget** and selecting fro
 ## Layout Storage
 
 - **Per user:** Layouts are stored in the `ap_dashboard_layout` user meta key. Visibility settings live in `ap_widget_visibility`.
- - **Per role:** Default layouts are saved in the `artpulse_dashboard_layouts` option as arrays of widget IDs keyed by role.
+ - **Per role:** Default layouts are saved in the `ap_dashboard_widget_config` option as arrays of widget IDs keyed by role.
 - Legacy exports may contain arrays describing each widget. Example:
 
 ```json
