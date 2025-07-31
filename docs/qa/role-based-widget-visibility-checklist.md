@@ -40,7 +40,7 @@ Fill out one row per widget while testing. Mark ❌ if a widget fails to appear,
 | Artist | artist_spotlight | ✅ | ✅ | ✅ | Implementation pending |
 | Organization | audience_crm | ✅ | ✅ | ✅ | Placeholder shown |
 
-Once all widgets for a role are verified, note any discrepancies in your issue tracker. If a widget is missing entirely, inspect `available-widgets.json` and confirm the ID is present. The registry should match the layout stored in `ap_dashboard_layout_<role>` user meta. Save failures may indicate nonce or capability problems that must be addressed before release.
+Once all widgets for a role are verified, note any discrepancies in your issue tracker. If a widget is missing entirely, inspect `available-widgets.json` and confirm the ID is present. The registry should match the layout stored in `ap_dashboard_layout` user meta. Save failures may indicate nonce or capability problems that must be addressed before release.
 
 This checklist ensures dashboard functionality remains consistent as new widgets are added. Update the table whenever additional widgets are registered or role definitions change.
 
