@@ -15,6 +15,7 @@ class TipManagerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\Monetization\TipManager::maybe_install_table();
         do_action('init');
         $this->artist_id = self::factory()->user->create();
         $this->fan_id    = self::factory()->user->create();

@@ -16,6 +16,7 @@ class AuctionManagerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\DB\create_monetization_tables();
         $this->artist_id = self::factory()->user->create();
         $this->bidder_id = self::factory()->user->create();
         $this->artwork_id = wp_insert_post([

@@ -12,6 +12,7 @@ class WebhookManagerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\Integration\WebhookManager::maybe_install_tables();
         do_action('init');
         WebhookManager::register();
         do_action('rest_api_init');

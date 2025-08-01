@@ -16,6 +16,7 @@ class TicketManagerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\DB\create_monetization_tables();
         add_filter('pre_wp_mail', [$this, 'capture_mail'], 10, 6);
         do_action('init');
         $this->user_id = self::factory()->user->create(['user_email' => 'buyer@test.com']);

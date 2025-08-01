@@ -14,6 +14,7 @@ class WebhookWorkflowTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\Integration\WebhookManager::maybe_install_tables();
         $this->response = ['headers' => [], 'body' => '', 'response' => ['code' => 200]];
         do_action('init');
         WebhookManager::register();

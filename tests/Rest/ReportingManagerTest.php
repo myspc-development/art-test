@@ -17,6 +17,7 @@ class ReportingManagerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\DB\create_monetization_tables();
         do_action('init');
         $this->event_id = wp_insert_post([
             'post_title' => 'Event',
