@@ -1,6 +1,10 @@
 <?php
 namespace ArtPulse\Frontend;
 
+use ArtPulse\Tests\Stubs\WP_Query;
+
+class_alias(WP_Query::class, '\\WP_Query');
+
 function is_user_logged_in(){ return true; }
 function get_current_user_id(){ return 1; }
 function get_user_meta($uid,$key,$single=false){ return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$user_meta[$uid][$key] ?? ''; }
@@ -16,7 +20,6 @@ function esc_html($t){ return $t; }
 function esc_attr($t){ return $t; }
 function esc_url($t){ return $t; }
 function current_user_can($cap){ return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$caps[$cap] ?? false; }
-class WP_Query{ public array $posts=[]; public $max_num_pages=1; public function __construct($a){} }
 
 namespace ArtPulse\Frontend\Tests;
 

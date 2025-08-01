@@ -1,16 +1,12 @@
 <?php
 namespace ArtPulse\Ajax;
 
+use ArtPulse\Tests\Stubs\WP_Query;
+
+class_alias(WP_Query::class, '\\WP_Query');
+
 function check_ajax_referer($action, $name) {}
 function sanitize_text_field($value) { return $value; }
-class WP_Query {
-    public array $posts = [];
-    public int $max_num_pages = 3;
-    public function __construct($args) {
-        \ArtPulse\Ajax\Tests\FrontendFilterHandlerTest::$query_args = $args;
-        $this->posts = \ArtPulse\Ajax\Tests\FrontendFilterHandlerTest::$posts;
-    }
-}
 function get_the_title($id) { return 'Post ' . $id; }
 function get_permalink($id) { return '/post/' . $id; }
 function wp_send_json($data) { \ArtPulse\Ajax\Tests\FrontendFilterHandlerTest::$json = $data; }
@@ -31,6 +27,9 @@ class FrontendFilterHandlerTest extends TestCase
         self::$posts = [];
         self::$json = [];
         self::$query_args = [];
+        WP_Query::$default_posts = [];
+        WP_Query::$default_max_pages = 3;
+        WP_Query::$last_args = [];
         $_GET = [];
     }
 
@@ -43,7 +42,9 @@ class FrontendFilterHandlerTest extends TestCase
             'terms' => 'a,b',
             'nonce' => 'n',
         ];
+        WP_Query::$default_posts = self::$posts;
         FrontendFilterHandler::handle_filter_posts();
+        self::$query_args = WP_Query::$last_args;
         $this->assertSame(2, self::$query_args['paged']);
         $this->assertSame(5, self::$query_args['posts_per_page']);
         $this->assertCount(2, self::$json['posts']);
