@@ -50,6 +50,7 @@ class DashboardWidgetRegistry {
 
             return;
         }
+        $label = trim( $label );
         if ( self::is_widget_label_registered( $label ) ) {
             trigger_error( 'Dashboard widget label already registered: ' . $label, E_USER_WARNING );
 
@@ -99,7 +100,7 @@ class DashboardWidgetRegistry {
             return;
         }
 
-        $label = $args['label'] ?? 'Untitled';
+        $label = trim( $args['label'] ?? 'Untitled' );
         if ( self::is_widget_label_registered( $label ) ) {
             trigger_error( 'Dashboard widget label already registered: ' . $label, E_USER_WARNING );
 
@@ -173,8 +174,9 @@ class DashboardWidgetRegistry {
      * @return bool True if the label is registered, false otherwise.
      */
     private static function is_widget_label_registered( string $label ): bool {
+        $label = strtolower( trim( $label ) );
         foreach ( self::$widgets as $w ) {
-            if ( ( $w['label'] ?? '' ) === $label ) {
+            if ( strtolower( trim( $w['label'] ?? '' ) ) === $label ) {
                 return true;
             }
         }
@@ -208,6 +210,15 @@ class DashboardWidgetRegistry {
 
     public static function render_widget_favorites(): void {
         self::include_template( 'widgets/my-favorites.php' );
+    }
+
+    // Legacy aliases used in some configurations.
+    public static function render_widget_widget_events(): void {
+        self::render_widget_events();
+    }
+
+    public static function render_widget_widget_favorites(): void {
+        self::render_widget_favorites();
     }
 
     public static function render_widget_for_you(): void {

@@ -38,12 +38,14 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\FeedbackManager;
 
+if (!class_exists(__NAMESPACE__ . '\\WPDBStub')) {
 class WPDBStub {
     public string $prefix = 'wp_';
     public array $insert_args = [];
     public function insert($table, $data) {
         $this->insert_args[] = ['table' => $table, 'data' => $data];
     }
+}
 }
 
 class FeedbackManagerTest extends TestCase

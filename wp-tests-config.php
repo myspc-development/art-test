@@ -41,6 +41,10 @@ if ( ! defined( 'ABSPATH' ) ) {
     define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
 }
 
+if ( ! defined( 'WP_TESTS_DIR' ) ) {
+    define( 'WP_TESTS_DIR', dirname( __FILE__ ) . '/wordpress-tests-lib' );
+}
+
 // Prefix for tables created during tests.
 if ( ! isset( $table_prefix ) ) {
     $table_prefix = 'wptests_';
