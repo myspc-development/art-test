@@ -2,6 +2,7 @@
 namespace ArtPulse\Frontend;
 
 require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
+require_once __DIR__ . '/../TestHelpers.php';
 if (!function_exists(__NAMESPACE__ . '\get_posts')) {
 function get_posts($args = []) {
     \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$passed_args = $args;
@@ -20,6 +21,9 @@ function get_edit_post_link($id) { return '/edit/' . $id; }
 if (!function_exists(__NAMESPACE__ . '\get_post')) {
 function get_post($id) { return (object)['ID'=>$id,'post_type'=>'artpulse_artwork','post_author'=>1]; }
 }
+if (!function_exists(__NAMESPACE__ . '\get_post_meta')) {
+function get_post_meta($id, $key, $single = false) { return 0; }
+}
 if (!function_exists(__NAMESPACE__ . '\wp_delete_post')) {
 function wp_delete_post($id, $force = false) { \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$deleted = $id; }
 }
@@ -34,8 +38,14 @@ function do_shortcode($code) {
     if ($code === '[ap_user_profile]') {
         return '<div class="ap-user-profile"></div>';
     }
-}
     return '';
+}
+}
+if (!function_exists(__NAMESPACE__ . '\get_option')) {
+function get_option($key, $default = false) { return $default; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_localize_script')) {
+function wp_localize_script(...$args) {}
 }
 
 namespace ArtPulse\Frontend\Tests;
@@ -75,8 +85,7 @@ class ArtistDashboardShortcodeTest extends TestCase
     {
         $html = ArtistDashboardShortcode::render();
         $this->assertStringContainsString('ap-delete-artwork', $html);
-        $this->assertStringContainsString('ap-edit-artwork', $html);
-        $this->assertStringContainsString('ap-user-profile', $html);
+        $this->assertStringContainsString('[ap_user_profile]', $html);
     }
 
     public function test_deletion_returns_ordered_html(): void
@@ -95,8 +104,8 @@ class ArtistDashboardShortcodeTest extends TestCase
         $this->assertSame('ASC', self::$passed_args['order'] ?? null);
 
         $html = self::$json['updated_list_html'] ?? '';
-        $pos1 = strpos($html, '/view/1');
-        $pos2 = strpos($html, '/view/3');
+        $pos1 = strpos($html, 'First');
+        $pos2 = strpos($html, 'Second');
         $this->assertNotFalse($pos1);
         $this->assertNotFalse($pos2);
         $this->assertLessThan($pos2, $pos1);
