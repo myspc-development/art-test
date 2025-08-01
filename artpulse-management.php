@@ -186,10 +186,10 @@ add_action('artpulse_upgrade', 'ap_migrate_org_sub_roles', 10, 2);
 /**
  * Migrate deprecated organization sub-roles to the main role.
  *
- * @param string $old Previously installed version.
- * @param string $new Upgraded version.
+ * @param string|null $old Previously installed version.
+ * @param string|null $new Upgraded version.
  */
-function ap_migrate_org_sub_roles(string $old = '', string $new = ''): void {
+function ap_migrate_org_sub_roles(?string $old = null, ?string $new = null): void {
     $legacy_roles = ['org_manager', 'org_editor', 'org_viewer'];
     foreach ($legacy_roles as $role) {
         $users = get_users([

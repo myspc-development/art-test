@@ -39,7 +39,16 @@ if (!file_exists(WP_TESTS_DIR . '/includes/bootstrap.php')) {
 require_once WP_TESTS_DIR . '/includes/functions.php';
 
 tests_add_filter('muplugins_loaded', static function () {
-    require dirname(__DIR__) . '/artpulse-management.php'; // or your main plugin file
+    require dirname(__DIR__) . '/artpulse-management.php';
+
+    // Ensure core tables exist when running under PHPUnit since activation
+    // hooks do not fire in this context.
+    if (function_exists('ap_create_all_tables')) {
+        ap_create_all_tables();
+    }
+    if (function_exists('ArtPulse\\DB\\create_monetization_tables')) {
+        ArtPulse\DB\create_monetization_tables();
+    }
 });
 
 require_once WP_TESTS_DIR . '/includes/bootstrap.php';
