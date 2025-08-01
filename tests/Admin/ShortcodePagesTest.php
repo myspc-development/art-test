@@ -1,11 +1,21 @@
 <?php
 namespace ArtPulse\Admin;
 
-function get_posts($args) { return \ArtPulse\Admin\Tests\ShortcodePagesTest::$posts_return; }
-function wp_insert_post($arr) { \ArtPulse\Admin\Tests\ShortcodePagesTest::$inserted[] = $arr; return \ArtPulse\Admin\Tests\ShortcodePagesTest::$next_id++; }
-function update_option($key, $value) { \ArtPulse\Admin\Tests\ShortcodePagesTest::$updated[$key] = $value; }
-function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\ShortcodePagesTest::$options[$key] ?? $default; }
-function is_wp_error($obj) { return false; }
+if (!function_exists(__NAMESPACE__ . '\\get_posts')) {
+    function get_posts($args) { return \ArtPulse\Admin\Tests\ShortcodePagesTest::$posts_return; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_insert_post')) {
+    function wp_insert_post($arr) { \ArtPulse\Admin\Tests\ShortcodePagesTest::$inserted[] = $arr; return \ArtPulse\Admin\Tests\ShortcodePagesTest::$next_id++; }
+}
+if (!function_exists(__NAMESPACE__ . '\\update_option')) {
+    function update_option($key, $value) { \ArtPulse\Admin\Tests\ShortcodePagesTest::$updated[$key] = $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_option')) {
+    function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\ShortcodePagesTest::$options[$key] ?? $default; }
+}
+if (!function_exists(__NAMESPACE__ . '\\is_wp_error')) {
+    function is_wp_error($obj) { return false; }
+}
 
 namespace ArtPulse\Admin\Tests;
 

@@ -2,28 +2,66 @@
 namespace ArtPulse\Admin;
 
 // Stub WordPress and plugin functions
-function wp_enqueue_script(...$args) { \ArtPulse\Admin\Tests\EnqueueAssetsTest::$scripts[] = $args; }
-function wp_enqueue_style(...$args) {}
-function get_current_screen() { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$current_screen; }
-function plugin_dir_path($file) { return '/'; }
-function plugin_dir_url($file) { return '/'; }
-function file_exists($path) { return true; }
-function admin_url($path = '') { return $path; }
-function rest_url($path = '') { return $path; }
-function wp_create_nonce($action = '') { return 'nonce'; }
-function is_user_logged_in() { return true; }
-function get_current_user_id() { return 1; }
-function get_user_meta($uid, $key, $single = false) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$user_meta[$uid][$key] ?? ''; }
-function get_posts($args = []) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$posts; }
-function get_the_terms($post_id, $tax) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$terms[$post_id] ?? false; }
-function wp_localize_script($handle, $name, $data) {
-    \ArtPulse\Admin\Tests\EnqueueAssetsTest::$localized = $data;
-    \ArtPulse\Admin\Tests\EnqueueAssetsTest::$localize_calls[] = [$handle, $name, $data];
+if (!function_exists(__NAMESPACE__ . '\\wp_enqueue_script')) {
+    function wp_enqueue_script(...$args) { \ArtPulse\Admin\Tests\EnqueueAssetsTest::$scripts[] = $args; }
 }
-function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$options[$key] ?? $default; }
-function update_option($key, $value) { \ArtPulse\Admin\Tests\EnqueueAssetsTest::$options[$key] = $value; }
-function wp_roles() { return (object)['roles' => ['administrator' => [], 'subscriber' => []]]; }
-function wp_script_is($h, $list) { return false; }
+if (!function_exists(__NAMESPACE__ . '\\wp_enqueue_style')) {
+    function wp_enqueue_style(...$args) {}
+}
+if (!function_exists(__NAMESPACE__ . '\\get_current_screen')) {
+    function get_current_screen() { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$current_screen; }
+}
+if (!function_exists(__NAMESPACE__ . '\\plugin_dir_path')) {
+    function plugin_dir_path($file) { return '/'; }
+}
+if (!function_exists(__NAMESPACE__ . '\\plugin_dir_url')) {
+    function plugin_dir_url($file) { return '/'; }
+}
+if (!function_exists(__NAMESPACE__ . '\\file_exists')) {
+    function file_exists($path) { return true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
+    function admin_url($path = '') { return $path; }
+}
+if (!function_exists(__NAMESPACE__ . '\\rest_url')) {
+    function rest_url($path = '') { return $path; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_create_nonce')) {
+    function wp_create_nonce($action = '') { return 'nonce'; }
+}
+if (!function_exists(__NAMESPACE__ . '\\is_user_logged_in')) {
+    function is_user_logged_in() { return true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_current_user_id')) {
+    function get_current_user_id() { return 1; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_user_meta')) {
+    function get_user_meta($uid, $key, $single = false) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$user_meta[$uid][$key] ?? ''; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_posts')) {
+    function get_posts($args = []) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$posts; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_the_terms')) {
+    function get_the_terms($post_id, $tax) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$terms[$post_id] ?? false; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_localize_script')) {
+    function wp_localize_script($handle, $name, $data) {
+        \ArtPulse\Admin\Tests\EnqueueAssetsTest::$localized = $data;
+        \ArtPulse\Admin\Tests\EnqueueAssetsTest::$localize_calls[] = [$handle, $name, $data];
+    }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_option')) {
+    function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\EnqueueAssetsTest::$options[$key] ?? $default; }
+}
+if (!function_exists(__NAMESPACE__ . '\\update_option')) {
+    function update_option($key, $value) { \ArtPulse\Admin\Tests\EnqueueAssetsTest::$options[$key] = $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_roles')) {
+    function wp_roles() { return (object)['roles' => ['administrator' => [], 'subscriber' => []]]; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_script_is')) {
+    function wp_script_is($h, $list) { return false; }
+}
 
 namespace ArtPulse\Core;
 class Plugin { public static function get_event_submission_url(): string { return '/submit'; } }

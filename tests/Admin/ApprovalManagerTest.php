@@ -5,14 +5,30 @@ namespace ArtPulse\Admin;
 if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
     function current_user_can($cap) { return \ArtPulse\Admin\Tests\ApprovalManagerTest::$can; }
 }
-function wp_die($msg = '') { \ArtPulse\Admin\Tests\ApprovalManagerTest::$died = $msg ?: true; }
-function wp_verify_nonce($nonce, $action) { return true; }
-function get_post($post_id) { return \ArtPulse\Admin\Tests\ApprovalManagerTest::$post; }
-function wp_update_post($arr) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$updated = $arr; }
-function admin_url($path = '') { return $path; }
-function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$redirect = $url; throw new \Exception('redirect'); }
-function update_user_meta($user_id, $key, $value) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$meta[$user_id][$key] = $value; }
-function delete_user_meta($user_id, $key) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$deleted[$user_id][] = $key; }
+if (!function_exists(__NAMESPACE__ . '\\wp_die')) {
+    function wp_die($msg = '') { \ArtPulse\Admin\Tests\ApprovalManagerTest::$died = $msg ?: true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_verify_nonce')) {
+    function wp_verify_nonce($nonce, $action) { return true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_post')) {
+    function get_post($post_id) { return \ArtPulse\Admin\Tests\ApprovalManagerTest::$post; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_update_post')) {
+    function wp_update_post($arr) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$updated = $arr; }
+}
+if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
+    function admin_url($path = '') { return $path; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_safe_redirect')) {
+    function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$redirect = $url; throw new \Exception('redirect'); }
+}
+if (!function_exists(__NAMESPACE__ . '\\update_user_meta')) {
+    function update_user_meta($user_id, $key, $value) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$meta[$user_id][$key] = $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\delete_user_meta')) {
+    function delete_user_meta($user_id, $key) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$deleted[$user_id][] = $key; }
+}
 
 namespace ArtPulse\Admin\Tests;
 
