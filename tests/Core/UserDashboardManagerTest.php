@@ -128,4 +128,14 @@ class UserDashboardManagerTest extends TestCase
         $html = UserDashboardManager::renderDashboard([]);
         $this->assertStringNotContainsString('ap-onboarding-banner', $html);
     }
+
+    protected function tearDown(): void {
+        $_GET = [];
+        Stub::$logged_in = true;
+        Stub::$can_view = true;
+        Stub::$roles = [];
+        Stub::$user_id = 1;
+        Stub::$meta = [];
+        parent::tearDown();
+    }
 }

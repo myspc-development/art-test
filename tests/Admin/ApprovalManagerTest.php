@@ -62,6 +62,17 @@ class ApprovalManagerTest extends TestCase
         $_POST['nonce']   = 'nonce';
     }
 
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        self::$updated = [];
+        self::$redirect = '';
+        self::$meta = [];
+        self::$deleted = [];
+        self::$died = null;
+        parent::tearDown();
+    }
+
     public function test_handle_approval_sets_user_meta_for_org(): void
     {
         try {

@@ -42,6 +42,14 @@ class MetaBoxesArtworkTest extends TestCase
         $_POST = [];
     }
 
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        self::$meta = [];
+        self::$updated = [];
+        parent::tearDown();
+    }
+
     public function test_price_history_recorded_when_price_changes(): void
     {
         $_POST['ead_artwork_meta_nonce_field'] = 'nonce';

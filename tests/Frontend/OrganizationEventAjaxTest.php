@@ -44,6 +44,20 @@ class OrganizationEventAjaxTest extends TestCase
         $_POST = [];
     }
 
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        self::$post_meta = [];
+        self::$posts = [];
+        self::$passed_args = [];
+        self::$meta_updates = [];
+        self::$updated = [];
+        self::$json = [];
+        self::$json_error = null;
+        self::$terms = [];
+        parent::tearDown();
+    }
+
     public function test_update_event_returns_html(): void
     {
         self::$post_meta[7]['_ap_event_organization'] = 5;

@@ -59,6 +59,20 @@ class DashboardWidgetToolsImportTest extends TestCase
         $_FILES = [];
     }
 
+    protected function tearDown(): void
+    {
+        $_FILES = [];
+        self::$options = [];
+        self::$died = null;
+        self::$redirect = '';
+        self::$file_contents = '';
+        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
+        $prop = $ref->getProperty('widgets');
+        $prop->setAccessible(true);
+        $prop->setValue([]);
+        parent::tearDown();
+    }
+
     public function test_unknown_ids_are_ignored_on_import(): void
     {
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');

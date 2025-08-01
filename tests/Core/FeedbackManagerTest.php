@@ -33,6 +33,7 @@ class FeedbackManagerTest extends TestCase
     public static $json_error = null;
     public static int $current_user_id = 1;
     public static string $current_time = '2024-01-01 00:00:00';
+    private $old_wpdb;
 
     protected function setUp(): void
     {
@@ -40,9 +41,18 @@ class FeedbackManagerTest extends TestCase
         self::$json_success = null;
         self::$json_error = null;
         global $wpdb;
+        $this->old_wpdb = $wpdb ?? null;
         $wpdb = new WPDBStub();
         FeedbackManager::register();
         $_POST = [];
+    }
+
+    protected function tearDown(): void
+    {
+        global $wpdb;
+        $wpdb = $this->old_wpdb;
+        $_POST = [];
+        parent::tearDown();
     }
 
     public function test_handle_submission_inserts_row_and_returns_success(): void
