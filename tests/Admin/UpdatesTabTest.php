@@ -1,11 +1,6 @@
 <?php
 namespace ArtPulse\Admin {
-    if (!defined('ABSPATH')) {
-        define('ABSPATH', sys_get_temp_dir() . '/aptests/');
-    }
-    if (!defined('ARTPULSE_PLUGIN_FILE')) {
-        define('ARTPULSE_PLUGIN_FILE', __FILE__);
-    }
+    
     class WP_Error {
         public string $code;
         public string $message;

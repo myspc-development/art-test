@@ -1,11 +1,5 @@
 <?php
 namespace {
-    if (!defined('ARTPULSE_PLUGIN_FILE')) {
-        define('ARTPULSE_PLUGIN_FILE', __DIR__ . '/../../artpulse.php');
-    }
-    if (!defined('MINUTE_IN_SECONDS')) {
-        define('MINUTE_IN_SECONDS', 60);
-    }
     function wp_get_current_user() {
         return (object)['roles' => \ArtPulse\Core\Tests\OrgDashboardWidgetRoleTest::$current_roles];
     }

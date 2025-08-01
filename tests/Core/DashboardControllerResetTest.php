@@ -1,8 +1,5 @@
 <?php
 namespace {
-    if (!defined('ARTPULSE_PLUGIN_FILE')) {
-        define('ARTPULSE_PLUGIN_FILE', __DIR__ . '/../../artpulse.php');
-    }
     function get_user_meta($uid, $key, $single = false) {
         return \ArtPulse\Core\Tests\DashboardControllerResetTest::$meta[$uid][$key] ?? '';
     }

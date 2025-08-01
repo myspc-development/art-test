@@ -1,8 +1,5 @@
 <?php
 namespace ArtPulse\Core {
-    if (!defined('ARTPULSE_PLUGIN_FILE')) {
-        define('ARTPULSE_PLUGIN_FILE', __DIR__ . '/../../artpulse.php');
-    }
 
     if (!function_exists(__NAMESPACE__ . '\\get_user_meta')) {
         function get_user_meta($uid, $key, $single = false) { return ''; }

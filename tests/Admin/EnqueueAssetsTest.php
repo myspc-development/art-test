@@ -112,9 +112,6 @@ class EnqueueAssetsTest extends TestCase
 
     public function test_localizes_stage_groups(): void
     {
-        if (!defined('ARTPULSE_PLUGIN_FILE')) {
-            define('ARTPULSE_PLUGIN_FILE', __FILE__);
-        }
         self::$user_meta[1]['ap_organization_id'] = 5;
         self::add_post(1, 'Art One', 'stage-1', 'Stage 1');
         EnqueueAssets::enqueue_frontend();
@@ -124,9 +121,6 @@ class EnqueueAssetsTest extends TestCase
 
     public function test_block_editor_scripts_enqueue_when_screen_available(): void
     {
-        if (!defined('ARTPULSE_PLUGIN_FILE')) {
-            define('ARTPULSE_PLUGIN_FILE', __FILE__);
-        }
         self::$current_screen = (object)[
             'id' => 'edit-artpulse_event',
             'is_block_editor' => true,
@@ -138,9 +132,6 @@ class EnqueueAssetsTest extends TestCase
 
     public function test_exits_gracefully_without_screen(): void
     {
-        if (!defined('ARTPULSE_PLUGIN_FILE')) {
-            define('ARTPULSE_PLUGIN_FILE', __FILE__);
-        }
         self::$current_screen = null;
         EnqueueAssets::enqueue_block_editor_assets();
         $this->assertSame([], self::$scripts);

@@ -1,8 +1,5 @@
 <?php
 namespace ArtPulse\Admin {
-    if (!defined('ABSPATH')) {
-        define('ABSPATH', __DIR__);
-    }
     if (!function_exists(__NAMESPACE__ . '\\check_ajax_referer')) {
         function check_ajax_referer($action, $name) {}
     }

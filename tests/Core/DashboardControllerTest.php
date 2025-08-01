@@ -1,8 +1,5 @@
 <?php
 namespace {
-    if (!defined('ARTPULSE_PLUGIN_FILE')) {
-        define('ARTPULSE_PLUGIN_FILE', __DIR__ . '/../../artpulse.php');
-    }
     if (!function_exists('plugin_dir_path')) {
         function plugin_dir_path($file) { return dirname($file) . '/'; }
     }
