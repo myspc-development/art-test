@@ -4,7 +4,7 @@ use ArtPulse\Widgets\EventsWidget;
 use ArtPulse\Widgets\DonationsWidget;
 
 class DashboardRenderingTest extends WP_UnitTestCase {
-    protected function set_up(): void {
+    public function set_up(): void {
         parent::set_up();
         $ref = new ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');

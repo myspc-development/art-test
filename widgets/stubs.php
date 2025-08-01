@@ -188,6 +188,14 @@ function render_widget_widget_favorites(): void {
     DashboardWidgetRegistry::render_widget_favorites();
 }
 
+function widget_widget_events(): void {
+    DashboardWidgetRegistry::render_widget_events();
+}
+
+function widget_widget_favorites(): void {
+    DashboardWidgetRegistry::render_widget_favorites();
+}
+
 function render_widget_widget_my_favorites(): void {
     DashboardWidgetRegistry::render_widget_my_favorites();
 }

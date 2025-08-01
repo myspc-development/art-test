@@ -7,7 +7,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DashboardRoleTemplateTest extends WP_UnitTestCase
 {
-    protected function set_up(): void
+    public function set_up(): void
     {
         parent::set_up();
         // Clear widget registry to keep output predictable

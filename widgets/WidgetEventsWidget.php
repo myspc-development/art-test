@@ -22,7 +22,7 @@ class WidgetEventsWidget {
         if (!DashboardWidgetRegistry::get_widget('widget_widget_events')) {
             DashboardWidgetRegistry::register(
                 'widget_widget_events',
-                __('Upcoming Events', 'artpulse'),
+                __('Upcoming Events (Legacy)', 'artpulse'),
                 'calendar',
                 __('Upcoming events for your organization.', 'artpulse'),
                 [self::class, 'render'],
