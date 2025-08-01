@@ -1,17 +1,29 @@
 <?php
 namespace ArtPulse\Admin;
 
-function wp_verify_nonce($nonce, $action){ return true; }
+if (!function_exists(__NAMESPACE__ . '\\wp_verify_nonce')) {
+    function wp_verify_nonce($nonce, $action) { return true; }
+}
 if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
     function current_user_can($cap) {
         return true;
     }
 }
-function get_post_meta($post_id, $key, $single = false){ return \ArtPulse\Admin\Tests\MetaBoxesArtworkTest::$meta[$post_id][$key] ?? ''; }
-function update_post_meta($post_id, $key, $value){ \ArtPulse\Admin\Tests\MetaBoxesArtworkTest::$updated[$post_id][$key] = $value; }
-function sanitize_text_field($v){ return $v; }
-function sanitize_textarea_field($v){ return $v; }
-function current_time($type){ return 'now'; }
+if (!function_exists(__NAMESPACE__ . '\\get_post_meta')) {
+    function get_post_meta($post_id, $key, $single = false) { return \ArtPulse\Admin\Tests\MetaBoxesArtworkTest::$meta[$post_id][$key] ?? ''; }
+}
+if (!function_exists(__NAMESPACE__ . '\\update_post_meta')) {
+    function update_post_meta($post_id, $key, $value) { \ArtPulse\Admin\Tests\MetaBoxesArtworkTest::$updated[$post_id][$key] = $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\sanitize_text_field')) {
+    function sanitize_text_field($v) { return $v; }
+}
+if (!function_exists(__NAMESPACE__ . '\\sanitize_textarea_field')) {
+    function sanitize_textarea_field($v) { return $v; }
+}
+if (!function_exists(__NAMESPACE__ . '\\current_time')) {
+    function current_time($type) { return 'now'; }
+}
 
 namespace ArtPulse\Admin\Tests;
 

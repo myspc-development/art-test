@@ -7,15 +7,33 @@ if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
         return \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$can;
     }
 }
-function wp_die($msg = '') { \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$died = $msg ?: true; }
-function check_admin_referer($action) {}
-function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$redirect = $url; throw new \Exception('redirect'); }
-function wp_get_referer() { return '/ref'; }
-function admin_url($path = '') { return $path; }
-function add_query_arg($key, $value, $base) { return $base . (str_contains($base, '?') ? '&' : '?') . $key . '=' . $value; }
-function update_option($key, $value) { \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$options[$key] = $value; }
-function file_get_contents($path) { return \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$file_contents; }
-function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
+if (!function_exists(__NAMESPACE__ . '\\wp_die')) {
+    function wp_die($msg = '') { \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$died = $msg ?: true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\check_admin_referer')) {
+    function check_admin_referer($action) {}
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_safe_redirect')) {
+    function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$redirect = $url; throw new \Exception('redirect'); }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_get_referer')) {
+    function wp_get_referer() { return '/ref'; }
+}
+if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
+    function admin_url($path = '') { return $path; }
+}
+if (!function_exists(__NAMESPACE__ . '\\add_query_arg')) {
+    function add_query_arg($key, $value, $base) { return $base . (str_contains($base, '?') ? '&' : '?') . $key . '=' . $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\update_option')) {
+    function update_option($key, $value) { \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$options[$key] = $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\file_get_contents')) {
+    function file_get_contents($path) { return \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$file_contents; }
+}
+if (!function_exists(__NAMESPACE__ . '\\sanitize_key')) {
+    function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
+}
 
 namespace ArtPulse\Admin\Tests;
 

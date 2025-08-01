@@ -29,44 +29,88 @@ namespace ArtPulse\Admin {
             return \ArtPulse\Admin\Tests\UpdatesTabTest::$can;
         }
     }
-    function admin_url($path = '') { return $path; }
-    function add_query_arg($params, $url) { return $url . (str_contains($url, '?') ? '&' : '?') . http_build_query($params); }
-    function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\UpdatesTabTest::$redirect = $url; throw new \Exception('redirect'); }
-    function download_url($url, $timeout = 300, $filename = '', $args = []) {
-        if (\ArtPulse\Admin\Tests\UpdatesTabTest::$download_error) {
-            return \ArtPulse\Admin\Tests\UpdatesTabTest::$download_error;
-        }
-        return \ArtPulse\Admin\Tests\UpdatesTabTest::create_zip();
+    if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
+        function admin_url($path = '') { return $path; }
     }
-    function unzip_file($file, $dest) { \ArtPulse\Admin\Tests\UpdatesTabTest::$unzipped = [$file, $dest]; return true; }
-    function is_wp_error($thing) { return $thing instanceof WP_Error; }
-    function plugin_dir_path($file) { return '/dest'; }
-    function get_temp_dir() { return sys_get_temp_dir(); }
-    function wp_generate_password($length = 12, $special_chars = false) { return 'pass'; }
-    function wp_mkdir_p($dir) { mkdir($dir, 0777, true); }
-    function update_option($key, $value) { \ArtPulse\Admin\Tests\UpdatesTabTest::$options[$key] = $value; }
-    function get_option($key, $default = '') { return \ArtPulse\Admin\Tests\UpdatesTabTest::$options[$key] ?? $default; }
-    function current_time($type = 'mysql') { return 'now'; }
-    function delete_option($key) { unset(\ArtPulse\Admin\Tests\UpdatesTabTest::$options[$key]); }
-    function esc_html($text) { return $text; }
-    function wp_nonce_field($action) {}
-    function esc_url($url) { return $url; }
-    function wp_die($msg = '') { \ArtPulse\Admin\Tests\UpdatesTabTest::$died = $msg ?: true; }
-    function check_admin_referer($action) {
-        \ArtPulse\Admin\Tests\UpdatesTabTest::$checked_action = $action;
-        if (($_REQUEST['_wpnonce'] ?? '') !== 'valid') {
-            wp_die('invalid');
-            throw new \Exception('die');
+    if (!function_exists(__NAMESPACE__ . '\\add_query_arg')) {
+        function add_query_arg($params, $url) { return $url . (str_contains($url, '?') ? '&' : '?') . http_build_query($params); }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\wp_safe_redirect')) {
+        function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\UpdatesTabTest::$redirect = $url; throw new \Exception('redirect'); }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\download_url')) {
+        function download_url($url, $timeout = 300, $filename = '', $args = []) {
+            if (\ArtPulse\Admin\Tests\UpdatesTabTest::$download_error) {
+                return \ArtPulse\Admin\Tests\UpdatesTabTest::$download_error;
+            }
+            return \ArtPulse\Admin\Tests\UpdatesTabTest::create_zip();
         }
     }
-    function wp_remote_get($url, $args = []) {
-        if (\ArtPulse\Admin\Tests\UpdatesTabTest::$remote_error) {
-            return \ArtPulse\Admin\Tests\UpdatesTabTest::$remote_error;
-        }
-        return ['body' => json_encode(['sha' => 'def'])];
+    if (!function_exists(__NAMESPACE__ . '\\unzip_file')) {
+        function unzip_file($file, $dest) { \ArtPulse\Admin\Tests\UpdatesTabTest::$unzipped = [$file, $dest]; return true; }
     }
-    function wp_remote_retrieve_body($res) { return $res['body']; }
-    function error_log($msg) { \ArtPulse\Admin\Tests\UpdatesTabTest::$logs[] = $msg; }
+    if (!function_exists(__NAMESPACE__ . '\\is_wp_error')) {
+        function is_wp_error($thing) { return $thing instanceof WP_Error; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\plugin_dir_path')) {
+        function plugin_dir_path($file) { return '/dest'; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\get_temp_dir')) {
+        function get_temp_dir() { return sys_get_temp_dir(); }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\wp_generate_password')) {
+        function wp_generate_password($length = 12, $special_chars = false) { return 'pass'; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\wp_mkdir_p')) {
+        function wp_mkdir_p($dir) { mkdir($dir, 0777, true); }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\update_option')) {
+        function update_option($key, $value) { \ArtPulse\Admin\Tests\UpdatesTabTest::$options[$key] = $value; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\get_option')) {
+        function get_option($key, $default = '') { return \ArtPulse\Admin\Tests\UpdatesTabTest::$options[$key] ?? $default; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\current_time')) {
+        function current_time($type = 'mysql') { return 'now'; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\delete_option')) {
+        function delete_option($key) { unset(\ArtPulse\Admin\Tests\UpdatesTabTest::$options[$key]); }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\esc_html')) {
+        function esc_html($text) { return $text; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\wp_nonce_field')) {
+        function wp_nonce_field($action) {}
+    }
+    if (!function_exists(__NAMESPACE__ . '\\esc_url')) {
+        function esc_url($url) { return $url; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\wp_die')) {
+        function wp_die($msg = '') { \ArtPulse\Admin\Tests\UpdatesTabTest::$died = $msg ?: true; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\check_admin_referer')) {
+        function check_admin_referer($action) {
+            \ArtPulse\Admin\Tests\UpdatesTabTest::$checked_action = $action;
+            if (($_REQUEST['_wpnonce'] ?? '') !== 'valid') {
+                wp_die('invalid');
+                throw new \Exception('die');
+            }
+        }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\wp_remote_get')) {
+        function wp_remote_get($url, $args = []) {
+            if (\ArtPulse\Admin\Tests\UpdatesTabTest::$remote_error) {
+                return \ArtPulse\Admin\Tests\UpdatesTabTest::$remote_error;
+            }
+            return ['body' => json_encode(['sha' => 'def'])];
+        }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\wp_remote_retrieve_body')) {
+        function wp_remote_retrieve_body($res) { return $res['body']; }
+    }
+    if (!function_exists(__NAMESPACE__ . '\\error_log')) {
+        function error_log($msg) { \ArtPulse\Admin\Tests\UpdatesTabTest::$logs[] = $msg; }
+    }
 }
 
 namespace ArtPulse\Admin\Tests {

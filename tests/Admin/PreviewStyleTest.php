@@ -8,11 +8,21 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
 
 // Stub functions
-function artpulse_dashicon($icon, $args = []) { return '<span></span>'; }
-function esc_attr($str) { return $str; }
-function update_option($k, $v) { PreviewStyleTest::$options[$k] = $v; }
-function get_option($k, $d = []) { return PreviewStyleTest::$options[$k] ?? $d; }
-function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
+if (!function_exists(__NAMESPACE__ . '\\artpulse_dashicon')) {
+    function artpulse_dashicon($icon, $args = []) { return '<span></span>'; }
+}
+if (!function_exists(__NAMESPACE__ . '\\esc_attr')) {
+    function esc_attr($str) { return $str; }
+}
+if (!function_exists(__NAMESPACE__ . '\\update_option')) {
+    function update_option($k, $v) { PreviewStyleTest::$options[$k] = $v; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_option')) {
+    function get_option($k, $d = []) { return PreviewStyleTest::$options[$k] ?? $d; }
+}
+if (!function_exists(__NAMESPACE__ . '\\sanitize_key')) {
+    function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
+}
 
 class PreviewStyleTest extends TestCase
 {

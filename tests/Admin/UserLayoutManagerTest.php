@@ -7,21 +7,51 @@ if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
         return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$can;
     }
 }
-function wp_die($msg = '') { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$died = $msg ?: true; }
-function check_admin_referer($action) {}
-function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$redirect = $url; throw new \Exception('redirect'); }
-function wp_get_referer() { return '/ref'; }
-function admin_url($path = '') { return $path; }
-function add_query_arg($key, $value, $base) { return $base . (str_contains($base, '?') ? '&' : '?') . $key . '=' . $value; }
-function update_option($key, $value) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$options[$key] = $value; }
-function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$options[$key] ?? $default; }
-function file_get_contents($path) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$file_contents; }
-function get_user_meta($uid, $key, $single = false) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$meta[$uid][$key] ?? ''; }
-function update_user_meta($uid, $key, $value) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$meta[$uid][$key] = $value; }
-function get_userdata($uid) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$users[$uid] ?? null; }
-function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
-function wp_json_encode($data, $flags = 0) { return json_encode($data, $flags); }
-function header($string, $replace = true, $code = 0) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$headers[] = $string; }
+if (!function_exists(__NAMESPACE__ . '\\wp_die')) {
+    function wp_die($msg = '') { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$died = $msg ?: true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\check_admin_referer')) {
+    function check_admin_referer($action) {}
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_safe_redirect')) {
+    function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$redirect = $url; throw new \Exception('redirect'); }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_get_referer')) {
+    function wp_get_referer() { return '/ref'; }
+}
+if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
+    function admin_url($path = '') { return $path; }
+}
+if (!function_exists(__NAMESPACE__ . '\\add_query_arg')) {
+    function add_query_arg($key, $value, $base) { return $base . (str_contains($base, '?') ? '&' : '?') . $key . '=' . $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\update_option')) {
+    function update_option($key, $value) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$options[$key] = $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_option')) {
+    function get_option($key, $default = []) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$options[$key] ?? $default; }
+}
+if (!function_exists(__NAMESPACE__ . '\\file_get_contents')) {
+    function file_get_contents($path) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$file_contents; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_user_meta')) {
+    function get_user_meta($uid, $key, $single = false) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$meta[$uid][$key] ?? ''; }
+}
+if (!function_exists(__NAMESPACE__ . '\\update_user_meta')) {
+    function update_user_meta($uid, $key, $value) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$meta[$uid][$key] = $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_userdata')) {
+    function get_userdata($uid) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$users[$uid] ?? null; }
+}
+if (!function_exists(__NAMESPACE__ . '\\sanitize_key')) {
+    function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_json_encode')) {
+    function wp_json_encode($data, $flags = 0) { return json_encode($data, $flags); }
+}
+if (!function_exists(__NAMESPACE__ . '\\header')) {
+    function header($string, $replace = true, $code = 0) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$headers[] = $string; }
+}
 
 namespace ArtPulse\Admin\Tests;
 
