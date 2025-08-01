@@ -1,12 +1,24 @@
 <?php
-namespace {
+namespace ArtPulse\Core {
     if (!defined('ARTPULSE_PLUGIN_FILE')) {
         define('ARTPULSE_PLUGIN_FILE', __DIR__ . '/../../artpulse.php');
     }
-    function get_user_meta($uid, $key, $single = false) { return ''; }
-    function get_option($key, $default = []) { return $default; }
-    function get_userdata($uid) { return \ArtPulse\Core\Tests\DashboardControllerMultiRoleTest::$users[$uid] ?? null; }
-    function current_user_can($cap) { return true; }
+
+    if (!function_exists(__NAMESPACE__ . '\\get_user_meta')) {
+        function get_user_meta($uid, $key, $single = false) { return ''; }
+    }
+
+    if (!function_exists(__NAMESPACE__ . '\\get_option')) {
+        function get_option($key, $default = []) { return $default; }
+    }
+
+    if (!function_exists(__NAMESPACE__ . '\\get_userdata')) {
+        function get_userdata($uid) { return \ArtPulse\Core\Tests\DashboardControllerMultiRoleTest::$users[$uid] ?? null; }
+    }
+
+    if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+        function current_user_can($cap) { return true; }
+    }
 }
 
 namespace ArtPulse\Core\Tests {
