@@ -23,6 +23,8 @@ class ComposerStaticInita473d3f3862fb4a1e679260c12c04875
         ),
         'A' => 
         array (
+            'ArtPulse\\Widgets\\' => 17,
+            'ArtPulse\\Tests\\Stubs\\' => 21,
             'ArtPulse\\' => 9,
         ),
     );
@@ -35,6 +37,14 @@ class ComposerStaticInita473d3f3862fb4a1e679260c12c04875
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
+        ),
+        'ArtPulse\\Widgets\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/widgets',
+        ),
+        'ArtPulse\\Tests\\Stubs\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests/Stubs',
         ),
         'ArtPulse\\' => 
         array (
