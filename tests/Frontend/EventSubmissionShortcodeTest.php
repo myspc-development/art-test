@@ -1,9 +1,7 @@
 <?php
 namespace ArtPulse\Frontend;
 
-if (!defined('ABSPATH')) {
-    define('ABSPATH', __DIR__ . '/');
-}
+
 
 // WordPress function stubs
 function is_user_logged_in() { return true; }

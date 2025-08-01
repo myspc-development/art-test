@@ -31,9 +31,6 @@ namespace ArtPulse\Admin {
     if (!function_exists(__NAMESPACE__ . '\\get_post_meta')) {
         function get_post_meta($post_id, $key, $single = false) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::get_post_meta($post_id, $key); }
     }
-    if (!defined('MINUTE_IN_SECONDS')) {
-        define('MINUTE_IN_SECONDS', 60);
-    }
 
     class WP_Post {
         public $post_type;
