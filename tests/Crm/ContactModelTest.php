@@ -34,7 +34,7 @@ class ContactModelTest extends TestCase
                 return $sql;
             }
             public function get_row($sql) {
-                if (preg_match('/org_id = (\d+) AND email = \\'([^\']+)\'/',$sql,$m)) {
+                if (preg_match("/org_id = (\\d+) AND email = '([^']+)'/", $sql, $m)) {
                     foreach ($this->rows as $row) {
                         if ($row['org_id']==(int)$m[1] && $row['email']===$m[2]) {
                             return (object)$row;

@@ -11,8 +11,17 @@
         <env name="WP_RUN_CORE_TESTS" value="0"/>
     </php>
     <testsuites>
-        <testsuite name="Plugin">
-            <directory>tests</directory>
+        <testsuite name="ajax">
+            <directory>tests/Ajax</directory>
+        </testsuite>
+        <testsuite name="crm">
+            <directory>tests/Crm</directory>
+        </testsuite>
+        <testsuite name="core">
+            <directory>tests/Core</directory>
+        </testsuite>
+        <testsuite name="dashboard">
+            <file>tests/test-dashboard.php</file>
         </testsuite>
     </testsuites>
     <coverage>

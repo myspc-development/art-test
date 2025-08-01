@@ -4,8 +4,17 @@
          verbose="true"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Plugin Test Suite">
-            <directory>./tests</directory>
+        <testsuite name="ajax">
+            <directory>tests/Ajax</directory>
+        </testsuite>
+        <testsuite name="crm">
+            <directory>tests/Crm</directory>
+        </testsuite>
+        <testsuite name="core">
+            <directory>tests/Core</directory>
+        </testsuite>
+        <testsuite name="dashboard">
+            <file>tests/test-dashboard.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
