@@ -4,6 +4,7 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\RoleSetup;
 
+if (!class_exists(__NAMESPACE__ . '\\WPDBStub')) {
 class WPDBStub {
     public $prefix = 'wp_';
     public array $data = [];
@@ -25,6 +26,7 @@ class WPDBStub {
         $table = $m[1];
         return array_values($this->data[$table] ?? []);
     }
+}
 }
 
 class RoleHierarchyTest extends TestCase
