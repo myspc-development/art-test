@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php"
          colors="true"
-         failOnWarning="true"
-         failOnRisky="true"
-         executionOrder="depends,defects">
+         verbose="true"
+         backupGlobals="false">
     <php>
         <env name="WP_TESTS_DIR" value="/tmp/wordpress-tests-lib"/>
         <env name="WP_CORE_DIR" value="/tmp/wordpress"/>
@@ -11,23 +10,8 @@
         <env name="WP_RUN_CORE_TESTS" value="0"/>
     </php>
     <testsuites>
-        <testsuite name="ajax">
-            <directory>tests/Ajax</directory>
-        </testsuite>
-        <testsuite name="crm">
-            <directory>tests/Crm</directory>
-        </testsuite>
-        <testsuite name="core">
-            <directory>tests/Core</directory>
-        </testsuite>
-        <testsuite name="dashboard">
-            <file>tests/test-dashboard.php</file>
+        <testsuite name="Plugin">
+            <directory suffix=".php">tests/</directory>
         </testsuite>
     </testsuites>
-    <coverage>
-        <include>
-            <directory suffix=".php">src</directory>
-            <directory suffix=".php">includes</directory>
-        </include>
-    </coverage>
 </phpunit>
