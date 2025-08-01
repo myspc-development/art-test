@@ -118,9 +118,6 @@ class StripeClient {
 namespace ArtPulse\Admin;
 use ArtPulse\Admin\Tests\Stub;
 
-if (!defined('MINUTE_IN_SECONDS')) {
-    define('MINUTE_IN_SECONDS', 60);
-}
 
 if (!function_exists(__NAMESPACE__ . '\get_transient')) {
 function get_transient(string $key) {

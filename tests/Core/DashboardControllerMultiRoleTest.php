@@ -1,8 +1,5 @@
 <?php
 namespace ArtPulse\Core {
-    if (!defined('ARTPULSE_PLUGIN_FILE')) {
-        define('ARTPULSE_PLUGIN_FILE', __DIR__ . '/../../artpulse.php');
-    }
 
     if (!function_exists(__NAMESPACE__ . '\\get_user_meta')) {
         function get_user_meta($uid, $key, $single = false) { return ''; }
@@ -63,6 +60,16 @@ class DashboardControllerMultiRoleTest extends TestCase {
             'roles'    => ['organization'],
         ]);
         $_GET = [];
+    }
+
+    protected function tearDown(): void {
+        $_GET = [];
+        self::$users = [];
+        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
+        $prop = $ref->getProperty('widgets');
+        $prop->setAccessible(true);
+        $prop->setValue([]);
+        parent::tearDown();
     }
 
     public function test_member_priority_over_artist(): void {

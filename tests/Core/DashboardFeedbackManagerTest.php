@@ -39,11 +39,22 @@ class DashboardFeedbackManagerTest extends TestCase
     public static $success=null;
     public static $error=null;
     public static $mail=null;
+    private $old_wpdb;
 
     protected function setUp(): void
     {
-        global $wpdb; $wpdb=new DBStub();
+        global $wpdb; 
+        $this->old_wpdb = $wpdb ?? null;
+        $wpdb=new DBStub();
         self::$success=self::$error=self::$mail=null;
+    }
+
+    protected function tearDown(): void
+    {
+        global $wpdb;
+        $wpdb = $this->old_wpdb;
+        $_POST = [];
+        parent::tearDown();
     }
 
     public function test_handle_inserts_feedback_and_emails_admin(): void

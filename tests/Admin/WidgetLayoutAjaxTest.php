@@ -1,8 +1,5 @@
 <?php
 namespace ArtPulse\Admin {
-    if (!defined('ABSPATH')) {
-        define('ABSPATH', __DIR__);
-    }
     if (!function_exists(__NAMESPACE__ . '\\check_ajax_referer')) {
         function check_ajax_referer($action, $name) {}
     }
@@ -64,6 +61,20 @@ class WidgetLayoutAjaxTest extends TestCase
         DashboardWidgetRegistry::register('a', 'a', '', '', 'strtolower');
         DashboardWidgetRegistry::register('b', 'b', '', '', 'strtolower');
         DashboardWidgetRegistry::register('c', 'c', '', '', 'strtolower');
+    }
+
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        self::$meta = [];
+        self::$hooks = [];
+        self::$json_success = null;
+        self::$json_error = null;
+        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
+        $prop = $ref->getProperty('widgets');
+        $prop->setAccessible(true);
+        $prop->setValue([]);
+        parent::tearDown();
     }
 
     public function test_save_widget_layout_sanitizes_and_saves(): void

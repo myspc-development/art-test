@@ -1,8 +1,5 @@
 <?php
 namespace {
-    if (!defined('ARTPULSE_PLUGIN_FILE')) {
-        define('ARTPULSE_PLUGIN_FILE', __DIR__ . '/../../artpulse.php');
-    }
     function get_user_meta($uid, $key, $single = false) { return ''; }
     function get_option($key, $default = []) { return $default; }
     function get_userdata($uid) { return \ArtPulse\Core\Tests\GetUserDashboardLayoutTest::$users[$uid] ?? null; }
@@ -53,32 +50,22 @@ class GetUserDashboardLayoutTest extends TestCase
         ]);
     }
 
-    public function test_member_receives_member_widgets(): void
+    public static function layoutProvider(): iterable
     {
-        self::$users[1] = (object)['roles' => ['member']];
+        yield 'member' => ['member', [['id' => 'alpha']]];
+        yield 'artist' => ['artist', [['id' => 'beta']]];
+        yield 'organization' => ['organization', [['id' => 'gamma']]];
+        yield 'invalid role' => ['invalid', []];
+    }
+
+    /**
+     * @dataProvider layoutProvider
+     */
+    public function test_get_user_dashboard_layout(string $role, array $expected): void
+    {
+        self::$users[1] = (object)['roles' => [$role]];
         $layout = DashboardController::get_user_dashboard_layout(1);
-        $this->assertSame([['id' => 'alpha']], $layout);
-    }
-
-    public function test_artist_receives_artist_widgets(): void
-    {
-        self::$users[2] = (object)['roles' => ['artist']];
-        $layout = DashboardController::get_user_dashboard_layout(2);
-        $this->assertSame([['id' => 'beta']], $layout);
-    }
-
-    public function test_org_receives_org_widgets(): void
-    {
-        self::$users[3] = (object)['roles' => ['organization']];
-        $layout = DashboardController::get_user_dashboard_layout(3);
-        $this->assertSame([['id' => 'gamma']], $layout);
-    }
-
-    public function test_invalid_role_returns_empty_layout(): void
-    {
-        self::$users[4] = (object)['roles' => ['invalid']];
-        $layout = DashboardController::get_user_dashboard_layout(4);
-        $this->assertSame([], $layout);
+        $this->assertSame($expected, $layout);
     }
 }
 }

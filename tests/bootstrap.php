@@ -19,6 +19,13 @@ if ( ! defined( 'WP_TESTS_DIR' ) ) {
 if ( ! defined( 'WP_CORE_DIR' ) ) {
     define( 'WP_CORE_DIR', getenv( 'WP_CORE_DIR' ) ?: '/tmp/wordpress' );
 }
+// Common constants for tests
+if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
+    define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__ ) . '/artpulse.php' );
+}
+if ( ! defined( 'MINUTE_IN_SECONDS' ) ) {
+    define( 'MINUTE_IN_SECONDS', 60 );
+}
 // Ensure the core bootstrap can locate the configuration file.
 if ( ! defined( 'WP_TESTS_CONFIG_FILE_PATH' ) ) {
     define( 'WP_TESTS_CONFIG_FILE_PATH', WP_TESTS_DIR . '/wp-tests-config.php' );

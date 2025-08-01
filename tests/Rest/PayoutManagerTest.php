@@ -14,6 +14,7 @@ class PayoutManagerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\Monetization\PayoutManager::maybe_install_table();
         do_action('init');
         $this->artist_id = self::factory()->user->create();
         global $wpdb;

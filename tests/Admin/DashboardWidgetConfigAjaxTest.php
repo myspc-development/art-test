@@ -1,8 +1,5 @@
 <?php
 namespace ArtPulse\Admin {
-    if (!defined('ABSPATH')) {
-        define('ABSPATH', __DIR__);
-    }
     if (!function_exists(__NAMESPACE__ . '\\check_ajax_referer')) {
         function check_ajax_referer($action, $name) {}
     }
@@ -53,6 +50,16 @@ class DashboardWidgetConfigAjaxTest extends TestCase
         self::$json_success = null;
         self::$json_error = null;
         $_POST = [];
+    }
+
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        self::$options = [];
+        self::$hooks = [];
+        self::$json_success = null;
+        self::$json_error = null;
+        parent::tearDown();
     }
 
     public function test_save_dashboard_widget_config_saves_arrays_per_role(): void

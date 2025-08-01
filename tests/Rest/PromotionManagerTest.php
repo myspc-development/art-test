@@ -14,6 +14,7 @@ class PromotionManagerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\DB\create_monetization_tables();
         wp_set_current_user(self::factory()->user->create());
         do_action('init');
         $this->artwork_id = self::factory()->post->create([

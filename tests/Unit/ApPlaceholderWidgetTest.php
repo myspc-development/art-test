@@ -20,9 +20,6 @@ class ApPlaceholderWidgetTest extends TestCase
 {
     protected function setUp(): void
     {
-        if (!defined('ABSPATH')) {
-            define('ABSPATH', __DIR__);
-        }
         if (!defined('WP_DEBUG')) {
             define('WP_DEBUG', true);
         }

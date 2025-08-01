@@ -41,6 +41,15 @@ class ExternalSearchTest extends TestCase
         self::$ep_args = [];
     }
 
+    protected function tearDown(): void
+    {
+        self::$options = [];
+        self::$algolia_results = [];
+        self::$ep_posts = [];
+        self::$ep_args = [];
+        parent::tearDown();
+    }
+
     public function test_search_returns_algolia_results_when_enabled(): void
     {
         self::$options['artpulse_settings'] = ['search_service' => 'algolia'];

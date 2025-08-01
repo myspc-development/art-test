@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Frontend;
 
-if (!function_exists(__NAMESPACE__ . '\is_user_logged_in')) {
+
 function is_user_logged_in(){ return true; }
 }
 if (!function_exists(__NAMESPACE__ . '\get_current_user_id')) {
@@ -45,8 +45,7 @@ function esc_url($t){ return $t; }
 }
 if (!function_exists(__NAMESPACE__ . '\current_user_can')) {
 function current_user_can($cap){ return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$caps[$cap] ?? false; }
-}
-class WP_Query{ public array $posts=[]; public $max_num_pages=1; public function __construct($a){} }
+
 
 namespace ArtPulse\Frontend\Tests;
 

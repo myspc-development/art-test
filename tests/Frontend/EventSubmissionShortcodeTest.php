@@ -1,9 +1,7 @@
 <?php
 namespace ArtPulse\Frontend;
 
-if (!defined('ABSPATH')) {
-    define('ABSPATH', __DIR__ . '/');
-}
+
 
 // WordPress function stubs
 if (!function_exists(__NAMESPACE__ . '\is_user_logged_in')) {
@@ -112,6 +110,20 @@ class EventSubmissionShortcodeTest extends TestCase
             'event_location'  => '',
             'event_org'       => 99,
         ];
+    }
+
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        $_FILES = [];
+        self::$posts_return = [];
+        self::$user_meta = [];
+        self::$notice = '';
+        self::$inserted = [];
+        self::$meta_updates = [];
+        self::$media_ids = [];
+        self::$thumbnail = 0;
+        parent::tearDown();
     }
 
     public function test_invalid_org_rejected(): void

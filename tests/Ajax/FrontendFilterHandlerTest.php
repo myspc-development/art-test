@@ -1,21 +1,12 @@
 <?php
 namespace ArtPulse\Ajax;
 
-if (!function_exists(__NAMESPACE__ . '\check_ajax_referer')) {
+n
 function check_ajax_referer($action, $name) {}
 }
 if (!function_exists(__NAMESPACE__ . '\sanitize_text_field')) {
 function sanitize_text_field($value) { return $value; }
-}
-class WP_Query {
-    public array $posts = [];
-    public int $max_num_pages = 3;
-    public function __construct($args) {
-        \ArtPulse\Ajax\Tests\FrontendFilterHandlerTest::$query_args = $args;
-        $this->posts = \ArtPulse\Ajax\Tests\FrontendFilterHandlerTest::$posts;
-    }
-}
-if (!function_exists(__NAMESPACE__ . '\get_the_title')) {
+
 function get_the_title($id) { return 'Post ' . $id; }
 }
 if (!function_exists(__NAMESPACE__ . '\get_permalink')) {
@@ -41,7 +32,19 @@ class FrontendFilterHandlerTest extends TestCase
         self::$posts = [];
         self::$json = [];
         self::$query_args = [];
+        WP_Query::$default_posts = [];
+        WP_Query::$default_max_pages = 3;
+        WP_Query::$last_args = [];
         $_GET = [];
+    }
+
+    protected function tearDown(): void
+    {
+        $_GET = [];
+        self::$posts = [];
+        self::$json = [];
+        self::$query_args = [];
+        parent::tearDown();
     }
 
     public function test_handle_filter_posts_outputs_json(): void
@@ -53,7 +56,9 @@ class FrontendFilterHandlerTest extends TestCase
             'terms' => 'a,b',
             'nonce' => 'n',
         ];
+        WP_Query::$default_posts = self::$posts;
         FrontendFilterHandler::handle_filter_posts();
+        self::$query_args = WP_Query::$last_args;
         $this->assertSame(2, self::$query_args['paged']);
         $this->assertSame(5, self::$query_args['posts_per_page']);
         $this->assertCount(2, self::$json['posts']);

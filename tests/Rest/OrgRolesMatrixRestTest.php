@@ -28,6 +28,12 @@ class OrgRolesMatrixRestTest extends \WP_UnitTestCase
         wp_set_current_user($this->admin);
     }
 
+    public function tear_down(): void
+    {
+        $_GET = [];
+        parent::tear_down();
+    }
+
     public function test_get_roles_for_org_returns_data(): void
     {
         $req = new WP_REST_Request('GET', '/artpulse/v1/org-roles');
