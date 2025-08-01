@@ -1,9 +1,11 @@
 <?php
 namespace ArtPulse\Blocks;
 
+if (!function_exists(__NAMESPACE__ . '\do_shortcode')) {
 function do_shortcode($code)
 {
     return 'SC:' . $code;
+}
 }
 
 namespace ArtPulse\Blocks\Tests;

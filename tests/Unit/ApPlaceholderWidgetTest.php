@@ -1,9 +1,15 @@
 <?php
 namespace ArtPulse\Widgets\Placeholder;
 
+if (!function_exists(__NAMESPACE__ . '\esc_html')) {
 function esc_html( $text ) { return $text; }
+}
+if (!function_exists(__NAMESPACE__ . '\apply_filters')) {
 function apply_filters( $tag, $value, $args = null ) { return $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_json_encode')) {
 function wp_json_encode( $data, $options = 0, $depth = 512 ) { return json_encode( $data, $options, $depth ); }
+}
 
 namespace ArtPulse\Widgets\Placeholder\Tests;
 

@@ -2,12 +2,16 @@
 namespace ArtPulse\Rest;
 
 // --- Stubs for WordPress functions used in the controller ---
+if (!function_exists(__NAMESPACE__ . '\current_user_can')) {
 function current_user_can(string $cap) {
     return \ArtPulse\Rest\Tests\SubmissionStub::$can;
 }
+}
 
+if (!function_exists(__NAMESPACE__ . '\wp_verify_nonce')) {
 function wp_verify_nonce($nonce, $action) {
     return \ArtPulse\Rest\Tests\SubmissionStub::$nonce_valid && $nonce === 'good' && $action === 'wp_rest';
+}
 }
 
 class WP_REST_Request {

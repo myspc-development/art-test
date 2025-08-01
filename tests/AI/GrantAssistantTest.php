@@ -1,13 +1,27 @@
 <?php
 namespace ArtPulse\AI;
 
+if (!function_exists(__NAMESPACE__ . '\sanitize_key')) {
 function sanitize_key($key) { return $key; }
+}
+if (!function_exists(__NAMESPACE__ . '\sanitize_textarea_field')) {
 function sanitize_textarea_field($text) { return $text; }
+}
+if (!function_exists(__NAMESPACE__ . '\esc_html')) {
 function esc_html($text) { return $text; }
+}
+if (!function_exists(__NAMESPACE__ . '\wpautop')) {
 function wpautop($text) { return '<p>'.$text.'</p>'; }
+}
+if (!function_exists(__NAMESPACE__ . '\rest_ensure_response')) {
 function rest_ensure_response($data) { return $data; }
+}
+if (!function_exists(__NAMESPACE__ . '\is_user_logged_in')) {
 function is_user_logged_in() { return true; }
+}
+if (!function_exists(__NAMESPACE__ . '\add_action')) {
 function add_action($h, $cb) {}
+}
 
 use PHPUnit\Framework\TestCase;
 

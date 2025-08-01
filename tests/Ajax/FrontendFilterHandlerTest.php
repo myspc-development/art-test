@@ -1,8 +1,12 @@
 <?php
 namespace ArtPulse\Ajax;
 
+if (!function_exists(__NAMESPACE__ . '\check_ajax_referer')) {
 function check_ajax_referer($action, $name) {}
+}
+if (!function_exists(__NAMESPACE__ . '\sanitize_text_field')) {
 function sanitize_text_field($value) { return $value; }
+}
 class WP_Query {
     public array $posts = [];
     public int $max_num_pages = 3;
@@ -11,9 +15,15 @@ class WP_Query {
         $this->posts = \ArtPulse\Ajax\Tests\FrontendFilterHandlerTest::$posts;
     }
 }
+if (!function_exists(__NAMESPACE__ . '\get_the_title')) {
 function get_the_title($id) { return 'Post ' . $id; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_permalink')) {
 function get_permalink($id) { return '/post/' . $id; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_send_json')) {
 function wp_send_json($data) { \ArtPulse\Ajax\Tests\FrontendFilterHandlerTest::$json = $data; }
+}
 
 namespace ArtPulse\Ajax\Tests;
 

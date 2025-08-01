@@ -1,19 +1,45 @@
 <?php
 namespace ArtPulse\Frontend;
 
+if (!function_exists(__NAMESPACE__ . '\check_ajax_referer')) {
 function check_ajax_referer($action,$name) {}
+}
+if (!function_exists(__NAMESPACE__ . '\current_user_can')) {
 function current_user_can($cap,$id=0){ return true; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_post_type')) {
 function get_post_type($id){ return 'artpulse_event'; }
+}
+if (!function_exists(__NAMESPACE__ . '\sanitize_text_field')) {
 function sanitize_text_field($v){ return is_string($v) ? $v : ''; }
+}
+if (!function_exists(__NAMESPACE__ . '\sanitize_email')) {
 function sanitize_email($v){ return $v; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_update_post')) {
 function wp_update_post($arr){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$updated = $arr; }
+}
+if (!function_exists(__NAMESPACE__ . '\update_post_meta')) {
 function update_post_meta(...$args){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$meta_updates[] = $args; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_post_meta')) {
 function get_post_meta($id,$key,$single=false){ return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$post_meta[$id][$key] ?? ''; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_posts')) {
 function get_posts($args=[]){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$passed_args = $args; return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$posts; }
+}
+if (!function_exists(__NAMESPACE__ . '\esc_html')) {
 function esc_html($t){ return $t; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_set_post_terms')) {
 function wp_set_post_terms($id,$terms,$tax){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$terms = [$id,$terms,$tax]; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_send_json_success')) {
 function wp_send_json_success($data){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$json = $data; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_send_json_error')) {
 function wp_send_json_error($data){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$json_error = $data; }
+}
 
 namespace ArtPulse\Frontend\Tests;
 

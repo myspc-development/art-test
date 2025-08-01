@@ -1,8 +1,12 @@
 <?php
 namespace ArtPulse\Core;
 
+if (!function_exists(__NAMESPACE__ . '\esc_html')) {
 function esc_html($text) { return $text; }
+}
+if (!function_exists(__NAMESPACE__ . '\trailingslashit')) {
 function trailingslashit($path) { return rtrim($path, '/').'/'; }
+}
 
 namespace ArtPulse\Core\Tests;
 

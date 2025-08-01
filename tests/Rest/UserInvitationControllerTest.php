@@ -2,47 +2,73 @@
 namespace ArtPulse\Rest;
 
 // --- Stubs for WordPress functions used in the controller ---
+if (!function_exists(__NAMESPACE__ . '\current_user_can')) {
 function current_user_can(string $cap) {
     return \ArtPulse\Rest\Tests\Stub::$can;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\get_current_user_id')) {
 function get_current_user_id() {
     return \ArtPulse\Rest\Tests\Stub::$current_user_id;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\get_user_meta')) {
 function get_user_meta(int $user_id, string $key, bool $single = false) {
     return \ArtPulse\Rest\Tests\Stub::$user_meta[$user_id][$key] ?? '';
 }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_mail')) {
 function wp_mail(string $to, string $subject, string $message) {
     \ArtPulse\Rest\Tests\Stub::$sent_emails[] = [$to, $subject, $message];
     return true;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\update_user_meta')) {
 function update_user_meta(int $user_id, string $key, $value) {
     \ArtPulse\Rest\Tests\Stub::$user_meta[$user_id][$key] = $value;
     return true;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\get_user_by')) {
 function get_user_by(string $field, string $value) {
     return \ArtPulse\Rest\Tests\Stub::get_user_by($field, $value);
 }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_delete_user')) {
 function wp_delete_user(int $user_id) {
     \ArtPulse\Rest\Tests\Stub::$deleted_users[] = $user_id;
     return true;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\rest_ensure_response')) {
 function rest_ensure_response($data) {
     return $data;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\sanitize_email')) {
 function sanitize_email($email) {
     return filter_var($email, FILTER_SANITIZE_EMAIL);
 }
+}
+if (!function_exists(__NAMESPACE__ . '\is_email')) {
 function is_email($email) {
     return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
 }
+}
+if (!function_exists(__NAMESPACE__ . '\sanitize_text_field')) {
 function sanitize_text_field($value) {
     return is_string($value) ? trim($value) : $value;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\sanitize_key')) {
 function sanitize_key($key) {
     return preg_replace('/[^a-z0-9_]/i', '', $key);
 }
+}
+if (!function_exists(__NAMESPACE__ . '\absint')) {
 function absint($num) {
     return abs(intval($num));
+}
 }
 
 // Minimal WP_Error stub

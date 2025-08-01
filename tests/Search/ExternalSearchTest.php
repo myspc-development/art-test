@@ -1,18 +1,24 @@
 <?php
 namespace ArtPulse\Search;
 
+if (!function_exists(__NAMESPACE__ . '\get_option')) {
 function get_option($key, $default = false) {
     return \ArtPulse\Search\Tests\ExternalSearchTest::$options[$key] ?? $default;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\apply_filters')) {
 function apply_filters($hook, $value, ...$args) {
     if ($hook === 'algolia_search_records') {
         return \ArtPulse\Search\Tests\ExternalSearchTest::$algolia_results;
     }
+}
     return $value;
 }
+if (!function_exists(__NAMESPACE__ . '\ep_search')) {
 function ep_search($args) {
     \ArtPulse\Search\Tests\ExternalSearchTest::$ep_args = $args;
     return (object)['posts' => \ArtPulse\Search\Tests\ExternalSearchTest::$ep_posts];
+}
 }
 
 namespace ArtPulse\Search\Tests;

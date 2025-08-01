@@ -4,15 +4,33 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardFeedbackManager;
 
+if (!function_exists(__NAMESPACE__ . '\check_ajax_referer')) {
 function check_ajax_referer($action, $name) {}
+}
+if (!function_exists(__NAMESPACE__ . '\sanitize_textarea_field')) {
 function sanitize_textarea_field($v){ return is_string($v) ? trim($v) : $v; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_current_user_id')) {
 function get_current_user_id(){ return 5; }
+}
+if (!function_exists(__NAMESPACE__ . '\DashboardController_get_role')) {
 function DashboardController_get_role($uid){ return 'member'; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_send_json_success')) {
 function wp_send_json_success($d=null){ DashboardFeedbackManagerTest::$success=$d; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_send_json_error')) {
 function wp_send_json_error($d){ DashboardFeedbackManagerTest::$error=$d; }
+}
+if (!function_exists(__NAMESPACE__ . '\is_email')) {
 function is_email($e){ return true; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_option')) {
 function get_option($k){ return 'admin@example.com'; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_mail')) {
 function wp_mail($to,$sub,$body){ DashboardFeedbackManagerTest::$mail=[$to,$sub,$body]; }
+}
 
 class DBStub{ public $prefix='wp_'; public $insert_args=[]; public function insert($t,$d){ $this->insert_args[]=['table'=>$t,'data'=>$d]; } public function get_charset_collate(){ return ''; } public function get_var($q){ return 'wp_dashboard_feedback'; } }
 

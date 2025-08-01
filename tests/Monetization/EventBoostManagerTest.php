@@ -1,8 +1,10 @@
 <?php
 namespace ArtPulse\Monetization;
 
+if (!function_exists(__NAMESPACE__ . '\current_time')) {
 function current_time(string $type = 'mysql') {
     return EventBoostManagerTest::$nowFormatted;
+}
 }
 
 use PHPUnit\Framework\TestCase;
