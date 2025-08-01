@@ -2,7 +2,11 @@
 namespace ArtPulse\Admin;
 
 function wp_verify_nonce($nonce, $action){ return true; }
-function current_user_can($cap){ return true; }
+if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+    function current_user_can($cap) {
+        return true;
+    }
+}
 function get_post_meta($post_id, $key, $single = false){ return \ArtPulse\Admin\Tests\MetaBoxesArtworkTest::$meta[$post_id][$key] ?? ''; }
 function update_post_meta($post_id, $key, $value){ \ArtPulse\Admin\Tests\MetaBoxesArtworkTest::$updated[$post_id][$key] = $value; }
 function sanitize_text_field($v){ return $v; }

@@ -17,6 +17,18 @@ class FavoritesOverviewWidget {
             [self::class, 'render'],
             [ 'roles' => ['member'] ]
         );
+
+        // Legacy alias used in older configs.
+        if (!DashboardWidgetRegistry::get_widget('widget_widget_favorites')) {
+            DashboardWidgetRegistry::register(
+                'widget_widget_favorites',
+                __('Favorites Overview', 'artpulse'),
+                'heart',
+                __('Your favorite artists and works.', 'artpulse'),
+                [self::class, 'render'],
+                [ 'roles' => ['member'] ]
+            );
+        }
     }
 
     public static function render(): void {

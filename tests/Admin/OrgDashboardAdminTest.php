@@ -4,7 +4,9 @@ namespace ArtPulse\Admin {
     function add_action($hook, $callback, $priority = 10, $args = 1) {}
     function remove_menu_page($slug) {}
     function add_menu_page(...$args) {}
-    function current_user_can($cap) { return true; }
+    if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+        function current_user_can($cap) { return true; }
+    }
     function get_transient($key) { return \ArtPulse\Admin\Tests\Stub::$transients[$key] ?? false; }
     function set_transient($key, $value, $expire = 0) { \ArtPulse\Admin\Tests\Stub::$transients[$key] = $value; return true; }
     function delete_transient($key) { unset(\ArtPulse\Admin\Tests\Stub::$transients[$key]); return true; }

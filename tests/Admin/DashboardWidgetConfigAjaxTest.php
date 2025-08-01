@@ -4,7 +4,11 @@ namespace ArtPulse\Admin {
         define('ABSPATH', __DIR__);
     }
     function check_ajax_referer($action, $name) {}
-    function current_user_can($cap) { return \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$can; }
+    if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+        function current_user_can($cap) {
+            return \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$can;
+        }
+    }
     function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
     function update_option($key, $value) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$options[$key] = $value; }
     function wp_send_json_success($data = null) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$json_success = $data ?? true; }
