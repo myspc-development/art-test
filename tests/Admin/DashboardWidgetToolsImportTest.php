@@ -2,7 +2,11 @@
 namespace ArtPulse\Admin;
 
 // Stub WordPress functions
-function current_user_can($cap) { return \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$can; }
+if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+    function current_user_can($cap) {
+        return \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$can;
+    }
+}
 function wp_die($msg = '') { \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$died = $msg ?: true; }
 function check_admin_referer($action) {}
 function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\DashboardWidgetToolsImportTest::$redirect = $url; throw new \Exception('redirect'); }

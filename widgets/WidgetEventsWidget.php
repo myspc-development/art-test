@@ -17,6 +17,18 @@ class WidgetEventsWidget {
             [self::class, 'render'],
             [ 'roles' => ['member', 'organization'] ]
         );
+
+        // Legacy alias used in older configs.
+        if (!DashboardWidgetRegistry::get_widget('widget_widget_events')) {
+            DashboardWidgetRegistry::register(
+                'widget_widget_events',
+                __('Upcoming Events', 'artpulse'),
+                'calendar',
+                __('Upcoming events for your organization.', 'artpulse'),
+                [self::class, 'render'],
+                [ 'roles' => ['member', 'organization'] ]
+            );
+        }
     }
 
     public static function render(): void {

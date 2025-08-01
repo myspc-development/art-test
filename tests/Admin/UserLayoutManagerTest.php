@@ -2,7 +2,11 @@
 namespace ArtPulse\Admin;
 
 // WordPress function stubs
-function current_user_can($cap) { return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$can; }
+if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+    function current_user_can($cap) {
+        return \ArtPulse\Admin\Tests\UserLayoutManagerTest::$can;
+    }
+}
 function wp_die($msg = '') { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$died = $msg ?: true; }
 function check_admin_referer($action) {}
 function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$redirect = $url; throw new \Exception('redirect'); }

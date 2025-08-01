@@ -24,7 +24,11 @@ namespace ArtPulse\Admin {
         }
     }
 
-    function current_user_can($cap) { return \ArtPulse\Admin\Tests\UpdatesTabTest::$can; }
+    if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+        function current_user_can($cap) {
+            return \ArtPulse\Admin\Tests\UpdatesTabTest::$can;
+        }
+    }
     function admin_url($path = '') { return $path; }
     function add_query_arg($params, $url) { return $url . (str_contains($url, '?') ? '&' : '?') . http_build_query($params); }
     function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\UpdatesTabTest::$redirect = $url; throw new \Exception('redirect'); }

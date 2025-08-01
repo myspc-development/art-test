@@ -4,7 +4,11 @@ namespace ArtPulse\Admin {
         define('ABSPATH', __DIR__);
     }
     function check_ajax_referer($action, $name) {}
-    function current_user_can($cap) { return \ArtPulse\Admin\Tests\WidgetLayoutAjaxTest::$can; }
+    if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+        function current_user_can($cap) {
+            return \ArtPulse\Admin\Tests\WidgetLayoutAjaxTest::$can;
+        }
+    }
     function get_current_user_id() { return \ArtPulse\Admin\Tests\WidgetLayoutAjaxTest::$uid; }
     function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
     function update_user_meta($uid, $key, $value) { \ArtPulse\Admin\Tests\WidgetLayoutAjaxTest::$meta[$uid][$key] = $value; }
