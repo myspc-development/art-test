@@ -1,24 +1,16 @@
 <?php
-namespace {
-    function get_user_meta($uid, $key, $single = false) { return ''; }
-    function get_option($key, $default = []) { return $default; }
-    function get_userdata($uid) { return \ArtPulse\Core\Tests\GetUserDashboardLayoutTest::$users[$uid] ?? null; }
-    function current_user_can($cap) { return false; }
-}
-
 namespace ArtPulse\Core\Tests {
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Tests\Stubs\MockStorage;
 
 class GetUserDashboardLayoutTest extends TestCase
 {
-    public static array $users = [];
-
     protected function setUp(): void
     {
-        self::$users = [];
+        MockStorage::$users = [];
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
@@ -63,7 +55,7 @@ class GetUserDashboardLayoutTest extends TestCase
      */
     public function test_get_user_dashboard_layout(string $role, array $expected): void
     {
-        self::$users[1] = (object)['roles' => [$role]];
+        MockStorage::$users[1] = (object)['roles' => [$role]];
         $layout = DashboardController::get_user_dashboard_layout(1);
         $this->assertSame($expected, $layout);
     }
