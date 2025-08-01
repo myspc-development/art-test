@@ -178,15 +178,13 @@ function ap_register_builder_core_placeholders(): void {
 
     foreach ($defs as $id => $info) {
         $core_id = 'widget_' . $id;
-        if (CoreDashboardWidgetRegistry::get_widget($core_id) || CoreDashboardWidgetRegistry::get_widget($id)) {
-            continue;
+        if (!CoreDashboardWidgetRegistry::get_widget($core_id)) {
+            CoreDashboardWidgetRegistry::register_widget($core_id, [
+                'label'    => $info['label'],
+                'callback' => 'render_widget_' . $core_id,
+                'roles'    => array_unique($info['roles']),
+            ]);
         }
-
-        CoreDashboardWidgetRegistry::register_widget($core_id, [
-            'label'    => $info['label'],
-            'callback' => 'render_widget_' . $core_id,
-            'roles'    => array_unique($info['roles']),
-        ]);
     }
 }
 add_action('init', 'ap_register_builder_core_placeholders', 25);

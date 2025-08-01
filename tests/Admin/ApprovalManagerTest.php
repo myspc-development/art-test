@@ -2,7 +2,9 @@
 namespace ArtPulse\Admin;
 
 // --- WordPress function stubs ---
-function current_user_can($cap) { return \ArtPulse\Admin\Tests\ApprovalManagerTest::$can; }
+if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+    function current_user_can($cap) { return \ArtPulse\Admin\Tests\ApprovalManagerTest::$can; }
+}
 function wp_die($msg = '') { \ArtPulse\Admin\Tests\ApprovalManagerTest::$died = $msg ?: true; }
 function wp_verify_nonce($nonce, $action) { return true; }
 function get_post($post_id) { return \ArtPulse\Admin\Tests\ApprovalManagerTest::$post; }
