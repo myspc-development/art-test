@@ -17,6 +17,7 @@ class SnapshotExportControllerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\DB\create_monetization_tables();
         do_action('init');
         $this->org_id = self::factory()->post->create([
             'post_type'   => 'artpulse_org',

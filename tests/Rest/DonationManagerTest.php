@@ -15,6 +15,7 @@ class DonationManagerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\Monetization\DonationManager::maybe_install_table();
         do_action('init');
         $this->artist_id = self::factory()->user->create();
         $this->user_id   = self::factory()->user->create();

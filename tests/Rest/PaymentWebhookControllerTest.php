@@ -15,6 +15,7 @@ class PaymentWebhookControllerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        \ArtPulse\DB\create_monetization_tables();
         // ensure db tables
         do_action('init');
         $this->user_id = self::factory()->user->create();
