@@ -18,6 +18,12 @@ class MockStorage {
 namespace {
     use ArtPulse\Tests\Stubs\MockStorage;
 
+    // If the WordPress test suite is available, let core functions be loaded
+    // normally to avoid "cannot redeclare" errors when they are included later.
+    if (defined('WP_TESTS_DIR') && file_exists(WP_TESTS_DIR . '/includes/bootstrap.php')) {
+        return;
+    }
+
     if (!function_exists('nsl_init')) {
         function nsl_init() {}
     }
