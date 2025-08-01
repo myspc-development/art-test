@@ -37,43 +37,25 @@ class DashboardControllerResetTest extends TestCase {
         $prop2->setValue([]);
     }
 
-    public function test_reset_invalid_member_layout(): void {
-        foreach (DashboardController::get_widgets_for_role('member') as $id) {
+    public static function resetProvider(): iterable {
+        yield 'member' => ['member', []];
+        yield 'artist' => ['artist', []];
+        yield 'organization' => ['organization', []];
+    }
+
+    /**
+     * @dataProvider resetProvider
+     */
+    public function test_reset_invalid_layout(string $role, array $expected): void {
+        foreach (DashboardController::get_widgets_for_role($role) as $id) {
             DashboardWidgetRegistry::register_widget($id, ['callback' => '__return_null']);
         }
-        self::$users[1] = (object)['roles' => ['member']];
+        self::$users[1] = (object)['roles' => [$role]];
         self::$meta[1]['ap_dashboard_layout'] = [['id' => 'bad_widget']];
 
         DashboardController::reset_user_dashboard_layout(1);
 
-        $expected = array_map(fn($id) => ['id' => $id], DashboardController::get_widgets_for_role('member'));
         $this->assertSame($expected, self::$meta[1]['ap_dashboard_layout']);
-    }
-
-    public function test_reset_invalid_artist_layout(): void {
-        foreach (DashboardController::get_widgets_for_role('artist') as $id) {
-            DashboardWidgetRegistry::register_widget($id, ['callback' => '__return_null']);
-        }
-        self::$users[2] = (object)['roles' => ['artist']];
-        self::$meta[2]['ap_dashboard_layout'] = [['id' => 'other_widget']];
-
-        DashboardController::reset_user_dashboard_layout(2);
-
-        $expected = array_map(fn($id) => ['id' => $id], DashboardController::get_widgets_for_role('artist'));
-        $this->assertSame($expected, self::$meta[2]['ap_dashboard_layout']);
-    }
-
-    public function test_reset_invalid_organization_layout(): void {
-        foreach (DashboardController::get_widgets_for_role('organization') as $id) {
-            DashboardWidgetRegistry::register_widget($id, ['callback' => '__return_null']);
-        }
-        self::$users[3] = (object)['roles' => ['organization']];
-        self::$meta[3]['ap_dashboard_layout'] = [['id' => 'bad']];
-
-        DashboardController::reset_user_dashboard_layout(3);
-
-        $expected = array_map(fn($id) => ['id' => $id], DashboardController::get_widgets_for_role('organization'));
-        $this->assertSame($expected, self::$meta[3]['ap_dashboard_layout']);
     }
 }
 }
