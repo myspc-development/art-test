@@ -64,7 +64,17 @@ if (!function_exists(__NAMESPACE__ . '\\wp_script_is')) {
 }
 
 namespace ArtPulse\Core;
-class Plugin { public static function get_event_submission_url(): string { return '/submit'; } }
+
+// Stub WordPress functions used by Plugin::get_event_submission_url
+if (!function_exists(__NAMESPACE__ . '\\get_posts')) {
+    function get_posts($args = []) { return [(object)['ID' => 1]]; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_permalink')) {
+    function get_permalink($id) { return '/submit'; }
+}
+if (!function_exists(__NAMESPACE__ . '\\home_url')) {
+    function home_url($path = '/') { return '/'; }
+}
 
 namespace ArtPulse\Admin\Tests;
 
