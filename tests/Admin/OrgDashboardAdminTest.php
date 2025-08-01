@@ -14,22 +14,22 @@ namespace ArtPulse\Admin {
         function current_user_can($cap) { return true; }
     }
     if (!function_exists(__NAMESPACE__ . '\\get_transient')) {
-        function get_transient($key) { return \ArtPulse\Admin\Tests\Stub::$transients[$key] ?? false; }
+        function get_transient($key) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::$transients[$key] ?? false; }
     }
     if (!function_exists(__NAMESPACE__ . '\\set_transient')) {
-        function set_transient($key, $value, $expire = 0) { \ArtPulse\Admin\Tests\Stub::$transients[$key] = $value; return true; }
+        function set_transient($key, $value, $expire = 0) { \ArtPulse\Admin\Tests\OrgDashboardAdminStub::$transients[$key] = $value; return true; }
     }
     if (!function_exists(__NAMESPACE__ . '\\delete_transient')) {
-        function delete_transient($key) { unset(\ArtPulse\Admin\Tests\Stub::$transients[$key]); return true; }
+        function delete_transient($key) { unset(\ArtPulse\Admin\Tests\OrgDashboardAdminStub::$transients[$key]); return true; }
     }
     if (!function_exists(__NAMESPACE__ . '\\get_posts')) {
-        function get_posts($args) { return \ArtPulse\Admin\Tests\Stub::get_posts($args); }
+        function get_posts($args) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::get_posts($args); }
     }
     if (!function_exists(__NAMESPACE__ . '\\wp_is_post_revision')) {
         function wp_is_post_revision($id) { return false; }
     }
     if (!function_exists(__NAMESPACE__ . '\\get_post_meta')) {
-        function get_post_meta($post_id, $key, $single = false) { return \ArtPulse\Admin\Tests\Stub::get_post_meta($post_id, $key); }
+        function get_post_meta($post_id, $key, $single = false) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::get_post_meta($post_id, $key); }
     }
     if (!defined('MINUTE_IN_SECONDS')) {
         define('MINUTE_IN_SECONDS', 60);
@@ -50,7 +50,7 @@ namespace ArtPulse\Admin\Tests {
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\OrgDashboardAdmin;
 
-class Stub {
+class OrgDashboardAdminStub {
     public static array $transients = [];
     public static array $posts_return = [];
     public static int $get_posts_calls = 0;
@@ -81,12 +81,12 @@ class OrgDashboardAdminTest extends TestCase
 {
     protected function setUp(): void
     {
-        Stub::reset();
+        OrgDashboardAdminStub::reset();
     }
 
     public function test_get_all_orgs_caches_results(): void
     {
-        Stub::$posts_return['artpulse_org'] = [(object)['ID' => 1]];
+        OrgDashboardAdminStub::$posts_return['artpulse_org'] = [(object)['ID' => 1]];
         $ref = new \ReflectionClass(OrgDashboardAdmin::class);
         $m = $ref->getMethod('get_all_orgs');
         $m->setAccessible(true);
@@ -95,12 +95,12 @@ class OrgDashboardAdminTest extends TestCase
         $second = $m->invoke(null);
 
         $this->assertSame($first, $second);
-        $this->assertSame(1, Stub::$get_posts_calls);
+        $this->assertSame(1, OrgDashboardAdminStub::$get_posts_calls);
     }
 
     public function test_get_org_posts_caches_results(): void
     {
-        Stub::$posts_return['ap_profile_link'] = [(object)['ID' => 2]];
+        OrgDashboardAdminStub::$posts_return['ap_profile_link'] = [(object)['ID' => 2]];
         $ref = new \ReflectionClass(OrgDashboardAdmin::class);
         $m = $ref->getMethod('get_org_posts');
         $m->setAccessible(true);
@@ -110,17 +110,17 @@ class OrgDashboardAdminTest extends TestCase
         $second = $m->invoke(null, 5, 'profile_links', $args);
 
         $this->assertSame($first, $second);
-        $this->assertSame(1, Stub::$get_posts_calls);
+        $this->assertSame(1, OrgDashboardAdminStub::$get_posts_calls);
     }
 
     public function test_clear_cache_deletes_transient_on_event_save(): void
     {
-        Stub::$transients['ap_dash_profile_links_10'] = ['a'];
-        Stub::$transients['ap_dash_artworks_10'] = ['b'];
-        Stub::$transients['ap_dash_events_10'] = ['c'];
-        Stub::$transients['ap_dash_stats_artworks_10'] = ['d'];
-        Stub::$transients['ap_org_metrics_10'] = ['e'];
-        Stub::$post_meta[5]['org_id'] = 10;
+        OrgDashboardAdminStub::$transients['ap_dash_profile_links_10'] = ['a'];
+        OrgDashboardAdminStub::$transients['ap_dash_artworks_10'] = ['b'];
+        OrgDashboardAdminStub::$transients['ap_dash_events_10'] = ['c'];
+        OrgDashboardAdminStub::$transients['ap_dash_stats_artworks_10'] = ['d'];
+        OrgDashboardAdminStub::$transients['ap_org_metrics_10'] = ['e'];
+        OrgDashboardAdminStub::$post_meta[5]['org_id'] = 10;
 
         $post = new \WP_Post('artpulse_event', 5);
         $ref = new \ReflectionClass(OrgDashboardAdmin::class);
@@ -129,11 +129,11 @@ class OrgDashboardAdminTest extends TestCase
 
         $m->invoke(null, 5, $post, true);
 
-        $this->assertArrayNotHasKey('ap_dash_profile_links_10', Stub::$transients);
-        $this->assertArrayNotHasKey('ap_dash_artworks_10', Stub::$transients);
-        $this->assertArrayNotHasKey('ap_dash_events_10', Stub::$transients);
-        $this->assertArrayNotHasKey('ap_dash_stats_artworks_10', Stub::$transients);
-        $this->assertArrayNotHasKey('ap_org_metrics_10', Stub::$transients);
+        $this->assertArrayNotHasKey('ap_dash_profile_links_10', OrgDashboardAdminStub::$transients);
+        $this->assertArrayNotHasKey('ap_dash_artworks_10', OrgDashboardAdminStub::$transients);
+        $this->assertArrayNotHasKey('ap_dash_events_10', OrgDashboardAdminStub::$transients);
+        $this->assertArrayNotHasKey('ap_dash_stats_artworks_10', OrgDashboardAdminStub::$transients);
+        $this->assertArrayNotHasKey('ap_org_metrics_10', OrgDashboardAdminStub::$transients);
     }
 }
 }
