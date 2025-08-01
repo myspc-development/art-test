@@ -1,8 +1,4 @@
 <?php
-namespace {
-    function nsl_init() {}
-}
-
 namespace ArtPulse\Integration\Tests {
 
 use ArtPulse\Integration\OAuthManager;

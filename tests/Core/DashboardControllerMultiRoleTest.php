@@ -1,34 +1,14 @@
 <?php
-namespace ArtPulse\Core {
-
-    if (!function_exists(__NAMESPACE__ . '\\get_user_meta')) {
-        function get_user_meta($uid, $key, $single = false) { return ''; }
-    }
-
-    if (!function_exists(__NAMESPACE__ . '\\get_option')) {
-        function get_option($key, $default = []) { return $default; }
-    }
-
-    if (!function_exists(__NAMESPACE__ . '\\get_userdata')) {
-        function get_userdata($uid) { return \ArtPulse\Core\Tests\DashboardControllerMultiRoleTest::$users[$uid] ?? null; }
-    }
-
-    if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
-        function current_user_can($cap) { return true; }
-    }
-}
-
 namespace ArtPulse\Core\Tests {
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Tests\Stubs\MockStorage;
 
 class DashboardControllerMultiRoleTest extends TestCase {
-    public static array $users = [];
-
     protected function setUp(): void {
-        self::$users = [];
+        MockStorage::$users = [];
 
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
@@ -64,7 +44,7 @@ class DashboardControllerMultiRoleTest extends TestCase {
 
     protected function tearDown(): void {
         $_GET = [];
-        self::$users = [];
+        MockStorage::$users = [];
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
@@ -73,20 +53,20 @@ class DashboardControllerMultiRoleTest extends TestCase {
     }
 
     public function test_member_priority_over_artist(): void {
-        self::$users[1] = (object)['roles' => ['artist', 'member']];
+        MockStorage::$users[1] = (object)['roles' => ['artist', 'member']];
         $layout = DashboardController::get_user_dashboard_layout(1);
         $this->assertSame([['id' => 'alpha']], $layout);
     }
 
     public function test_artist_priority_over_organization(): void {
-        self::$users[2] = (object)['roles' => ['organization', 'artist']];
+        MockStorage::$users[2] = (object)['roles' => ['organization', 'artist']];
         $layout = DashboardController::get_user_dashboard_layout(2);
         $this->assertSame([['id' => 'beta']], $layout);
     }
 
     public function test_preview_role_override(): void {
         $_GET['ap_preview_role'] = 'organization';
-        self::$users[3] = (object)['roles' => ['member', 'artist']];
+        MockStorage::$users[3] = (object)['roles' => ['member', 'artist']];
         $layout = DashboardController::get_user_dashboard_layout(3);
         $this->assertSame([['id' => 'gamma']], $layout);
     }

@@ -1,34 +1,18 @@
 <?php
-namespace {
-    function get_user_meta($uid, $key, $single = false) {
-        return \ArtPulse\Core\Tests\DashboardLayoutRoleFilterTest::\$meta[$uid][$key] ?? '';
-    }
-    function get_option($key, $default = []) {
-        return \ArtPulse\Core\Tests\DashboardLayoutRoleFilterTest::\$options[$key] ?? $default;
-    }
-    function get_userdata($uid) {
-        return \ArtPulse\Core\Tests\DashboardLayoutRoleFilterTest::\$users[$uid] ?? null;
-    }
-    function current_user_can($cap) { return false; }
-}
-
 namespace ArtPulse\Core\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Tests\Stubs\MockStorage;
 
 class DashboardLayoutRoleFilterTest extends TestCase
 {
-    public static array $meta = [];
-    public static array $options = [];
-    public static array $users = [];
-
     protected function setUp(): void
     {
-        self::$meta = [];
-        self::$options = [];
-        self::$users = [];
+        MockStorage::$user_meta = [];
+        MockStorage::$options = [];
+        MockStorage::$users = [];
 
         // Reset registry widgets
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
@@ -48,8 +32,8 @@ class DashboardLayoutRoleFilterTest extends TestCase
         DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', '__return_null', ['roles' => ['member']]);
         DashboardWidgetRegistry::register('beta', 'Beta', '', '', '__return_null', ['roles' => ['artist']]);
 
-        self::$users[1] = (object)['roles' => ['member']];
-        self::$meta[1]['ap_dashboard_layout'] = [
+        MockStorage::$users[1] = (object)['roles' => ['member']];
+        MockStorage::$user_meta[1]['ap_dashboard_layout'] = [
             ['id' => 'alpha'],
             ['id' => 'beta'],
             ['id' => 'unknown'],
@@ -64,8 +48,8 @@ class DashboardLayoutRoleFilterTest extends TestCase
         DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', '__return_null', ['roles' => ['member']]);
         DashboardWidgetRegistry::register('beta', 'Beta', '', '', '__return_null', ['roles' => ['artist']]);
 
-        self::$users[2] = (object)['roles' => ['member']];
-        self::$options['ap_dashboard_widget_config'] = [
+        MockStorage::$users[2] = (object)['roles' => ['member']];
+        MockStorage::$options['ap_dashboard_widget_config'] = [
             'member' => [
                 ['id' => 'alpha'],
                 ['id' => 'beta'],
@@ -88,7 +72,7 @@ class DashboardLayoutRoleFilterTest extends TestCase
             'member' => ['alpha', 'beta'],
         ]);
 
-        self::$users[3] = (object)['roles' => ['member']];
+        MockStorage::$users[3] = (object)['roles' => ['member']];
 
         $layout = DashboardController::get_user_dashboard_layout(3);
         $this->assertSame([['id' => 'alpha']], $layout);

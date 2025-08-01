@@ -37,6 +37,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 if (file_exists(__DIR__ . '/TestHelpers.php')) {
     require_once __DIR__ . '/TestHelpers.php';
 }
+require_once __DIR__ . '/TestStubs.php';
 
 if (!file_exists(WP_TESTS_DIR . '/includes/bootstrap.php')) {
     echo "Missing WordPress test library in: " . WP_TESTS_DIR . "\n";

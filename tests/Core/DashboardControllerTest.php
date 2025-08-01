@@ -1,10 +1,4 @@
 <?php
-namespace {
-    if (!function_exists('plugin_dir_path')) {
-        function plugin_dir_path($file) { return dirname($file) . '/'; }
-    }
-}
-
 namespace ArtPulse\Core\Tests {
 
 use PHPUnit\Framework\TestCase;
