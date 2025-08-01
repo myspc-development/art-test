@@ -216,6 +216,8 @@ class Plugin
         \ArtPulse\Admin\ShortcodePages::register();
         \ArtPulse\Core\MembershipManager::register();
         \ArtPulse\Core\AccessControlManager::register();
+        \ArtPulse\Core\DashboardWidgetManager::register();
+        \ArtPulse\Core\UserDashboardManager::register();
         \ArtPulse\Core\CapabilitiesManager::register();
         \ArtPulse\Curator\CuratorManager::register();
         WebhooksWidget::register();
