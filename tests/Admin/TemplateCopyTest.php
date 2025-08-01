@@ -21,6 +21,7 @@ class TemplateCopyTest extends WP_UnitTestCase
     {
         remove_filter('stylesheet_directory', [$this, 'filterStylesheet'], 10);
         $this->removeDir($this->childDir);
+        $_POST = [];
         parent::tear_down();
     }
 

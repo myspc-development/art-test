@@ -84,6 +84,21 @@ class UserLayoutManagerTest extends TestCase
         $_FILES = [];
     }
 
+    protected function tearDown(): void
+    {
+        $_FILES = [];
+        self::$meta = [];
+        self::$users = [];
+        self::$options = [];
+        self::$file_contents = '';
+        self::$headers = [];
+        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
+        $prop = $ref->getProperty('widgets');
+        $prop->setAccessible(true);
+        $prop->setValue(null, []);
+        parent::tearDown();
+    }
+
     public function test_user_layout_is_stored_and_retrieved(): void
     {
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');

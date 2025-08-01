@@ -74,6 +74,20 @@ class EventSubmissionShortcodeTest extends TestCase
         ];
     }
 
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        $_FILES = [];
+        self::$posts_return = [];
+        self::$user_meta = [];
+        self::$notice = '';
+        self::$inserted = [];
+        self::$meta_updates = [];
+        self::$media_ids = [];
+        self::$thumbnail = 0;
+        parent::tearDown();
+    }
+
     public function test_invalid_org_rejected(): void
     {
         // Authorized org id is 5, selected org 99 should fail

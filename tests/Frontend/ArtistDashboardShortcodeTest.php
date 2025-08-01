@@ -48,6 +48,17 @@ class ArtistDashboardShortcodeTest extends TestCase
         self::$deleted = null;
     }
 
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        self::$posts = [];
+        self::$passed_args = [];
+        self::$json = [];
+        self::$json_error = null;
+        self::$deleted = null;
+        parent::tearDown();
+    }
+
     public function test_delete_button_rendered(): void
     {
         $html = ArtistDashboardShortcode::render();

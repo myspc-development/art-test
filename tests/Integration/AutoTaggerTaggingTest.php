@@ -11,6 +11,12 @@ class AutoTaggerTaggingTest extends \WP_UnitTestCase
         AutoTagger::register();
     }
 
+    public function tear_down(): void
+    {
+        $_POST = [];
+        parent::tear_down();
+    }
+
     public function test_autotagger_handles_empty_post(): void
     {
         $post_id = self::factory()->post->create(['post_content' => '']);

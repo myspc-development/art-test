@@ -65,6 +65,16 @@ class DashboardControllerMultiRoleTest extends TestCase {
         $_GET = [];
     }
 
+    protected function tearDown(): void {
+        $_GET = [];
+        self::$users = [];
+        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
+        $prop = $ref->getProperty('widgets');
+        $prop->setAccessible(true);
+        $prop->setValue([]);
+        parent::tearDown();
+    }
+
     public function test_member_priority_over_artist(): void {
         self::$users[1] = (object)['roles' => ['artist', 'member']];
         $layout = DashboardController::get_user_dashboard_layout(1);

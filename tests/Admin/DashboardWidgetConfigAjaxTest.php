@@ -55,6 +55,16 @@ class DashboardWidgetConfigAjaxTest extends TestCase
         $_POST = [];
     }
 
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        self::$options = [];
+        self::$hooks = [];
+        self::$json_success = null;
+        self::$json_error = null;
+        parent::tearDown();
+    }
+
     public function test_save_dashboard_widget_config_saves_arrays_per_role(): void
     {
         $_POST['nonce'] = 'n';

@@ -39,6 +39,7 @@ class RsvpIntegrationTest extends \WP_UnitTestCase
     public function tear_down(): void
     {
         remove_filter('pre_wp_mail', [$this, 'capture_mail'], 10);
+        $_POST = [];
         parent::tear_down();
     }
 

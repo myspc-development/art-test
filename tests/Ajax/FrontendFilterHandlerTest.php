@@ -34,6 +34,15 @@ class FrontendFilterHandlerTest extends TestCase
         $_GET = [];
     }
 
+    protected function tearDown(): void
+    {
+        $_GET = [];
+        self::$posts = [];
+        self::$json = [];
+        self::$query_args = [];
+        parent::tearDown();
+    }
+
     public function test_handle_filter_posts_outputs_json(): void
     {
         self::$posts = [7, 8];

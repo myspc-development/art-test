@@ -66,6 +66,20 @@ class WidgetLayoutAjaxTest extends TestCase
         DashboardWidgetRegistry::register('c', 'c', '', '', 'strtolower');
     }
 
+    protected function tearDown(): void
+    {
+        $_POST = [];
+        self::$meta = [];
+        self::$hooks = [];
+        self::$json_success = null;
+        self::$json_error = null;
+        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
+        $prop = $ref->getProperty('widgets');
+        $prop->setAccessible(true);
+        $prop->setValue([]);
+        parent::tearDown();
+    }
+
     public function test_save_widget_layout_sanitizes_and_saves(): void
     {
         $_POST['nonce'] = 'n';
