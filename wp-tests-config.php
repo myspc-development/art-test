@@ -37,9 +37,13 @@ if ( ! defined( 'WP_PHP_BINARY' ) ) {
     define( 'WP_PHP_BINARY', 'php' );
 }
 
-define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
+}
 
 // Prefix for tables created during tests.
-$table_prefix = 'wptests_';
+if ( ! isset( $table_prefix ) ) {
+    $table_prefix = 'wptests_';
+}
 
 require_once ABSPATH . '/wp-settings.php';
