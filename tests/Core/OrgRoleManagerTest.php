@@ -4,14 +4,20 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\OrgRoleManager;
 
+if (!function_exists(__NAMESPACE__ . '\get_user_meta')) {
 function get_user_meta($uid, $key, $single = false) {
     return OrgRoleManagerTest::$meta[$uid][$key] ?? '';
 }
+}
+if (!function_exists(__NAMESPACE__ . '\get_post_meta')) {
 function get_post_meta($pid, $key, $single = false) {
     return OrgRoleManagerTest::$post_meta[$pid][$key] ?? '';
 }
+}
+if (!function_exists(__NAMESPACE__ . '\get_current_user_id')) {
 function get_current_user_id() {
     return OrgRoleManagerTest::$current_id;
+}
 }
 
 class OrgRoleManagerTest extends TestCase

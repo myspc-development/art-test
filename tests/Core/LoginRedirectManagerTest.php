@@ -8,14 +8,22 @@ if (!class_exists('WP_Error')) {
     }
 }
 
+if (!function_exists(__NAMESPACE__ . '\current_user_can')) {
 function current_user_can($cap) {
     return \ArtPulse\Core\Tests\LoginRedirectManagerTest::$caps[$cap] ?? false;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\ap_wp_admin_access_enabled')) {
 function ap_wp_admin_access_enabled() {
     return \ArtPulse\Core\Tests\LoginRedirectManagerTest::$admin_enabled;
 }
+}
+if (!function_exists(__NAMESPACE__ . '\home_url')) {
 function home_url($path = '') { return 'https://site.test' . $path; }
+}
+if (!function_exists(__NAMESPACE__ . '\is_wp_error')) {
 function is_wp_error($thing) { return $thing instanceof WP_Error; }
+}
 
 namespace ArtPulse\Core\Tests;
 

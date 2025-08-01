@@ -1,10 +1,18 @@
 <?php
 namespace ArtPulse\Crm;
 
+if (!function_exists(__NAMESPACE__ . '\sanitize_email')) {
 function sanitize_email($email) { return $email; }
+}
+if (!function_exists(__NAMESPACE__ . '\sanitize_text_field')) {
 function sanitize_text_field($text) { return $text; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_json_encode')) {
 function wp_json_encode($data) { return json_encode($data); }
+}
+if (!function_exists(__NAMESPACE__ . '\current_time')) {
 function current_time($type = 'mysql') { return ContactModelTest::$now; }
+}
 
 use PHPUnit\Framework\TestCase;
 

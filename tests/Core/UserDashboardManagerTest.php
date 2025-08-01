@@ -2,30 +2,54 @@
 namespace ArtPulse\Core;
 
 // Stub WordPress functions
+if (!function_exists(__NAMESPACE__ . '\is_user_logged_in')) {
 function is_user_logged_in() { return \ArtPulse\Core\Tests\Stub::$logged_in; }
+}
+if (!function_exists(__NAMESPACE__ . '\current_user_can')) {
 function current_user_can($cap) { return \ArtPulse\Core\Tests\Stub::$can_view; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_get_current_user')) {
 function wp_get_current_user() { return (object)['roles' => \ArtPulse\Core\Tests\Stub::$roles]; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_posts')) {
 function get_posts($args) { return []; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_permalink')) {
 function get_permalink($id) { return '/profile'; }
+}
+if (!function_exists(__NAMESPACE__ . '\home_url')) {
 function home_url($path = '/') { return '/'; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_current_user_id')) {
 function get_current_user_id() { return \ArtPulse\Core\Tests\Stub::$user_id; }
+}
+if (!function_exists(__NAMESPACE__ . '\get_user_meta')) {
 function get_user_meta($uid, $key, $single = false) {
     return \ArtPulse\Core\Tests\Stub::$meta[$key] ?? [];
 }
+}
+if (!function_exists(__NAMESPACE__ . '\get_post')) {
 function get_post($id) {
     return (object)['ID' => $id, 'post_title' => 'Post ' . $id];
 }
+}
+if (!function_exists(__NAMESPACE__ . '\esc_url')) {
 function esc_url($url) { return $url; }
+}
+if (!function_exists(__NAMESPACE__ . '\do_shortcode')) {
 function do_shortcode($code) {
     if ($code === '[ap_submit_artist]') {
         return '<form class="ap-artist-submission-form"></form>';
     }
+}
     if ($code === '[ap_submit_organization]') {
         return '<form class="ap-org-submission-form"></form>';
     }
     return '';
 }
+if (!function_exists(__NAMESPACE__ . '\locate_template')) {
 function locate_template($template) { return ''; }
+}
 
 namespace ArtPulse\Core\Tests;
 

@@ -119,44 +119,62 @@ namespace ArtPulse\Admin;
 use ArtPulse\Admin\Tests\Stub;
 
 
+if (!function_exists(__NAMESPACE__ . '\get_transient')) {
 function get_transient(string $key) {
     return Stub::$transients[$key] ?? false;
 }
+}
 
+if (!function_exists(__NAMESPACE__ . '\set_transient')) {
 function set_transient(string $key, $value, int $expire = 0) {
     Stub::$transients[$key] = $value;
     return true;
 }
+}
 
+if (!function_exists(__NAMESPACE__ . '\apply_filters')) {
 function apply_filters(string $tag, $value) {
     return $value;
 }
+}
 
+if (!function_exists(__NAMESPACE__ . '\get_option')) {
 function get_option(string $key, $default = false) {
     return Stub::get_option($key);
 }
+}
 
+if (!function_exists(__NAMESPACE__ . '\wc_get_orders')) {
 function wc_get_orders(array $args = []) {
     return Stub::get_orders($args);
 }
+}
 
+if (!function_exists(__NAMESPACE__ . '\current_time')) {
 function current_time(string $type = 'timestamp') {
     return Stub::$current_time;
 }
+}
 
+if (!function_exists(__NAMESPACE__ . '\date_i18n')) {
 function date_i18n(string $format, int $timestamp) {
     return date($format, $timestamp);
+}
 }
 
 namespace ArtPulse\Core;
 use ArtPulse\Admin\Tests\Stub;
 
+if (!function_exists(__NAMESPACE__ . '\wp_upload_dir')) {
 function wp_upload_dir(): array {
     return ['path' => Stub::$upload_path, 'basedir' => Stub::$upload_path];
 }
+}
 
+if (!function_exists(__NAMESPACE__ . '\wp_generate_password')) {
 function wp_generate_password(int $length = 12, bool $special_chars = false): string {
     return Stub::$password;
+}
 }
 
 
@@ -209,4 +227,3 @@ if (!function_exists('ArtPulse\\Widgets\\Placeholder\\esc_html__')) {
 if (!function_exists('ArtPulse\\Widgets\\Placeholder\\esc_html_e')) {
     function esc_html_e($text, $domain = null) { echo $text; }
 }
-
