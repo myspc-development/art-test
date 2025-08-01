@@ -1,27 +1,9 @@
 <?php
 namespace ArtPulse\Frontend;
 
-
+require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
 
 // WordPress function stubs
-if (!function_exists(__NAMESPACE__ . '\is_user_logged_in')) {
-function is_user_logged_in() { return true; }
-}
-if (!function_exists(__NAMESPACE__ . '\wp_verify_nonce')) {
-function wp_verify_nonce($nonce, $action) { return true; }
-}
-if (!function_exists(__NAMESPACE__ . '\get_current_user_id')) {
-function get_current_user_id() { return 1; }
-}
-if (!function_exists(__NAMESPACE__ . '\sanitize_text_field')) {
-function sanitize_text_field($value) { return is_string($value) ? trim($value) : $value; }
-}
-if (!function_exists(__NAMESPACE__ . '\wp_kses_post')) {
-function wp_kses_post($value) { return $value; }
-}
-if (!function_exists(__NAMESPACE__ . '\sanitize_email')) {
-function sanitize_email($value) { return $value; }
-}
 if (!function_exists(__NAMESPACE__ . '\get_posts')) {
 function get_posts($args) { return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$posts_return; }
 }
@@ -53,15 +35,6 @@ function set_post_thumbnail($post_id, $thumb_id) { \ArtPulse\Frontend\Tests\Even
 }
 if (!function_exists(__NAMESPACE__ . '\get_post_thumbnail_id')) {
 function get_post_thumbnail_id($post_id) { return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$thumbnail; }
-}
-if (!function_exists(__NAMESPACE__ . '\is_wp_error')) {
-function is_wp_error($obj) { return false; }
-}
-if (!function_exists(__NAMESPACE__ . '\wp_unslash')) {
-function wp_unslash($value) { return $value; }
-}
-if (!function_exists(__NAMESPACE__ . '\wp_set_post_terms')) {
-function wp_set_post_terms(...$args) {}
 }
 if (!function_exists(__NAMESPACE__ . '\function_exists')) {
 function function_exists($name) { return $name === 'wc_add_notice'; }

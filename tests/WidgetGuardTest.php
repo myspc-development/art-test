@@ -1,7 +1,6 @@
 <?php
-namespace ArtPulse\Dashboard {
-    function error_log($msg) { \WidgetGuardTest::$logs[] = $msg; }
-}
+namespace ArtPulse\Dashboard;
+function error_log($msg) { \WidgetGuardTest::$logs[] = $msg; }
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Dashboard\WidgetGuard;
@@ -20,7 +19,7 @@ class WidgetGuardTest extends WP_UnitTestCase
         $prop->setValue(null);
     }
 
-    protected function set_up(): void
+    public function set_up(): void
     {
         parent::set_up();
         $this->reset_registry();

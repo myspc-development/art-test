@@ -22,7 +22,7 @@ class FavoritesOverviewWidget {
         if (!DashboardWidgetRegistry::get_widget('widget_widget_favorites')) {
             DashboardWidgetRegistry::register(
                 'widget_widget_favorites',
-                __('Favorites Overview', 'artpulse'),
+                __('Favorites Overview (Legacy)', 'artpulse'),
                 'heart',
                 __('Your favorite artists and works.', 'artpulse'),
                 [self::class, 'render'],
