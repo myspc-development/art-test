@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php"
-         colors="true"
-         verbose="true"
-         stopOnFailure="false">
+<phpunit
+    bootstrap="tests/bootstrap.php"
+    colors="true"
+    stopOnFailure="false"
+    verbose="true"
+>
     <testsuites>
-        <testsuite name="ajax">
-            <directory>tests/Ajax</directory>
-        </testsuite>
-        <testsuite name="crm">
-            <directory>tests/Crm</directory>
-        </testsuite>
-        <testsuite name="core">
-            <directory>tests/Core</directory>
-        </testsuite>
-        <testsuite name="dashboard">
-            <file>tests/test-dashboard.php</file>
+        <testsuite name="plugin">
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
+
+    <php>
+        <env name="WP_TESTS_DIR" value="vendor/wp-phpunit/wp-phpunit/" />
+        <env name="WP_PHP_BINARY" value="php" />
+        <env name="WP_DEBUG" value="true" />
+    </php>
 </phpunit>
