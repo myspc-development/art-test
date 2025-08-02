@@ -15,10 +15,26 @@
     ],
     "status": "registered"
   },
+  "org_insights": {
+    "file": "src/Widgets.php",
+    "roles": [
+      "organization"
+    ],
+    "status": "registered"
+  },
   "widget_events": {
     "file": "widgets/WidgetEventsWidget.php",
     "roles": [
       "member",
+      "organization"
+    ],
+    "status": "registered"
+  },
+  "sample_events": {
+    "file": "widgets/EventsWidget.php",
+    "roles": [
+      "member",
+      "artist",
       "organization"
     ],
     "status": "registered"
