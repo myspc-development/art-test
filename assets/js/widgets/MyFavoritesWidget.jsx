@@ -14,7 +14,7 @@ export function MyFavoritesWidget({ apiRoot, nonce }) {
   }, []);
 
   return (
-    <div className="ap-favorites-widget">
+    <div className="ap-favorites-widget" data-widget-id="my_favorites">
       <ul>
         {items.map(i => (
           <li key={i.post_id}><a href={i.link}>{i.title}</a></li>

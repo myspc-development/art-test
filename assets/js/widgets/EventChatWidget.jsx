@@ -39,7 +39,7 @@ export function EventChatWidget({ eventId, apiRoot, nonce }) {
   };
 
   return (
-    <div className="ap-event-chat-widget">
+    <div className="ap-event-chat-widget" data-widget-id="event_chat">
       <ul className="chat-thread">
         {messages.map((m, i) => (
           <li key={i}><strong>{m.author}:</strong> {m.content}</li>

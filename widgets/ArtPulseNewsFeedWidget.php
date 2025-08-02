@@ -23,9 +23,11 @@ class ArtPulseNewsFeedWidget {
 
     public static function render() {
         if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
+        echo '<div class="ap-news-feed-widget" data-widget-id="news_feed">';
         $user_id = get_current_user_id();
         if (!$user_id) {
             esc_html_e('Please log in to view your feed.', 'artpulse');
+            echo '</div>';
             return;
         }
 
@@ -33,6 +35,7 @@ class ArtPulseNewsFeedWidget {
         $authors = is_array($authors) ? array_map('intval', $authors) : [];
         if (empty($authors)) {
             esc_html_e('Follow artists or organizations to see their latest posts.', 'artpulse');
+            echo '</div>';
             return;
         }
 
@@ -45,6 +48,7 @@ class ArtPulseNewsFeedWidget {
 
         if (!$query->have_posts()) {
             esc_html_e('No recent posts from followed artists.', 'artpulse');
+            echo '</div>';
             return;
         }
 
@@ -54,6 +58,7 @@ class ArtPulseNewsFeedWidget {
             echo '<li><a href="' . esc_url(get_permalink()) . '">' . esc_html(get_the_title()) . '</a></li>';
         }
         echo '</ul>';
+        echo '</div>';
         wp_reset_postdata();
     }
 }

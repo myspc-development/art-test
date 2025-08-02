@@ -15,17 +15,20 @@ export function ArtistAudienceInsightsWidget({ apiRoot, nonce }) {
       .catch(() => setStats({ followers: 0, sales: 0, artworks: 0 }));
   }, []);
 
+  let content;
   if (!stats) {
-    return <p>{__('Loading...', 'artpulse')}</p>;
+    content = <p>{__('Loading...', 'artpulse')}</p>;
+  } else {
+    content = (
+      <ul className="ap-audience-insights">
+        <li><strong>{stats.followers}</strong> {__('followers', 'artpulse')}</li>
+        <li><strong>{stats.sales}</strong> {__('total sales', 'artpulse')}</li>
+        <li><strong>{stats.artworks}</strong> {__('artworks uploaded', 'artpulse')}</li>
+      </ul>
+    );
   }
 
-  return (
-    <ul className="ap-audience-insights">
-      <li><strong>{stats.followers}</strong> {__('followers', 'artpulse')}</li>
-      <li><strong>{stats.sales}</strong> {__('total sales', 'artpulse')}</li>
-      <li><strong>{stats.artworks}</strong> {__('artworks uploaded', 'artpulse')}</li>
-    </ul>
-  );
+  return <div data-widget-id="artist_audience_insights">{content}</div>;
 }
 
 export default function initArtistAudienceInsightsWidget(el) {

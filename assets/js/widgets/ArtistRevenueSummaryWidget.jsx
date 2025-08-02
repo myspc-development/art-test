@@ -20,11 +20,15 @@ export function ArtistRevenueSummaryWidget({ apiRoot, nonce }) {
   }, []);
 
   if (!data) {
-    return <p>{__('Loading...', 'artpulse')}</p>;
+    return (
+      <div data-widget-id="revenue_summary">
+        <p>{__('Loading...', 'artpulse')}</p>
+      </div>
+    );
   }
 
   return (
-    <div className="ap-revenue-summary">
+    <div className="ap-revenue-summary" data-widget-id="revenue_summary">
       <p><strong>{data.total_revenue}</strong> {__('total revenue this month', 'artpulse')}</p>
       <p>{data.tickets_sold} {__('tickets sold', 'artpulse')}</p>
     </div>

@@ -24,8 +24,10 @@ class OrgWidgetSharingPanel
         if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         $id = get_the_ID();
         $code = '<script src="' . esc_url(rest_url('widgets/embed.js')) . '?id=' . $id . '"></script>';
+        echo '<div class="ap-widget-sharing" data-widget-id="org_widget_sharing">';
         echo '<p>' . esc_html__('Copy this code to embed on another site:', 'artpulse') . '</p>';
         echo '<textarea readonly style="width:100%" rows="3">' . esc_textarea($code) . '</textarea>';
+        echo '</div>';
     }
 }
 

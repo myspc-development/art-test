@@ -19,7 +19,7 @@ export function NearbyEventsMapWidget({ apiRoot, nonce, lat, lng }) {
   }, [lat, lng, apiRoot, nonce]);
 
   return (
-    <div className="ap-nearby-events-widget">
+    <div className="ap-nearby-events-widget" data-widget-id="nearby_events_map">
       <ul>
         {events.map(ev => (
           <li key={ev.id}>

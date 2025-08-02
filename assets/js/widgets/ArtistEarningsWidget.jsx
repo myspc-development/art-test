@@ -16,11 +16,15 @@ export function ArtistEarningsWidget({ apiRoot, nonce }) {
   }, []);
 
   if (!data) {
-    return <p>{__('Loading...', 'artpulse')}</p>;
+    return (
+      <div data-widget-id="artist_earnings_summary">
+        <p>{__('Loading...', 'artpulse')}</p>
+      </div>
+    );
   }
 
   return (
-    <div className="ap-earnings-summary">
+    <div className="ap-earnings-summary" data-widget-id="artist_earnings_summary">
       <p><strong>{data.balance}</strong> {__('current balance', 'artpulse')}</p>
       {data.payouts.length ? (
         <ul>

@@ -28,25 +28,26 @@ export function ArtistInboxPreviewWidget({ apiRoot, nonce }) {
       .catch(() => setThreads([]));
   }, []);
 
+  let content;
   if (threads === null) {
-    return <p>{__('Loading...', 'artpulse')}</p>;
+    content = <p>{__('Loading...', 'artpulse')}</p>;
+  } else if (!threads.length) {
+    content = <p>{__('No new messages.', 'artpulse')}</p>;
+  } else {
+    content = (
+      <ul className="ap-inbox-preview-list">
+        {threads.slice(0, 3).map(t => (
+          <li key={t.user_id}>
+            <strong>{t.display_name}</strong>
+            {t.preview && <span>: {t.preview}</span>}
+            {t.date && <em> {new Date(t.date).toLocaleDateString()}</em>}
+          </li>
+        ))}
+      </ul>
+    );
   }
 
-  if (!threads.length) {
-    return <p>{__('No new messages.', 'artpulse')}</p>;
-  }
-
-  return (
-    <ul className="ap-inbox-preview-list">
-      {threads.slice(0, 3).map(t => (
-        <li key={t.user_id}>
-          <strong>{t.display_name}</strong>
-          {t.preview && <span>: {t.preview}</span>}
-          {t.date && <em> {new Date(t.date).toLocaleDateString()}</em>}
-        </li>
-      ))}
-    </ul>
-  );
+  return <div data-widget-id="artist_inbox_preview">{content}</div>;
 }
 
 export default function initArtistInboxPreviewWidget(el) {

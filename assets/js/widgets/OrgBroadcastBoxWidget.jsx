@@ -15,7 +15,7 @@ export function OrgBroadcastBoxWidget({ apiRoot, nonce, orgId }) {
   };
 
   return (
-    <div className="ap-org-broadcast-box-widget">
+    <div className="ap-org-broadcast-box-widget" data-widget-id="org_broadcast_box">
       <textarea value={text} onChange={e => setText(e.target.value)} />
       <button onClick={send}>{__('Send Broadcast', 'artpulse')}</button>
     </div>

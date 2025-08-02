@@ -27,14 +27,13 @@ class EventsWidget {
     public static function render(): string {
         $user_id = get_current_user_id();
         if (!self::can_view($user_id)) {
-            return '<p class="ap-widget-no-access">' . esc_html__('Please log in.', 'artpulse') . '</p>';
+            $content = '<p class="ap-widget-no-access">' . esc_html__('Please log in.', 'artpulse') . '</p>';
+        } elseif (function_exists('ap_widget_events')) {
+            $content = wp_kses_post(ap_widget_events([]));
+        } else {
+            $content = '<p>' . esc_html__('Events content.', 'artpulse') . '</p>';
         }
-
-        if (function_exists('ap_widget_events')) {
-            return wp_kses_post(ap_widget_events([]));
-        }
-
-        return '<p>' . esc_html__('Events content.', 'artpulse') . '</p>';
+        return '<div data-widget-id="' . esc_attr(self::get_id()) . '">' . $content . '</div>';
     }
 }
 

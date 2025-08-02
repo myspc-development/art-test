@@ -27,15 +27,17 @@ export function ArtistFeedPublisherWidget({ apiRoot, nonce }) {
   };
 
   return (
-    <form className="ap-feed-publisher" onSubmit={submit}>
-      <textarea
-        value={text}
-        onChange={e => setText(e.target.value)}
-        placeholder={__('Share an update...', 'artpulse')}
-      />
-      <button type="submit">{__('Publish', 'artpulse')}</button>
-      {msg && <p className="ap-post-status">{msg}</p>}
-    </form>
+    <div data-widget-id="artist_feed_publisher">
+      <form className="ap-feed-publisher" onSubmit={submit}>
+        <textarea
+          value={text}
+          onChange={e => setText(e.target.value)}
+          placeholder={__('Share an update...', 'artpulse')}
+        />
+        <button type="submit">{__('Publish', 'artpulse')}</button>
+        {msg && <p className="ap-post-status">{msg}</p>}
+      </form>
+    </div>
   );
 }
 
