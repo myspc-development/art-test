@@ -1,6 +1,6 @@
-const http = require('http');
-const socketio = require('socket.io');
-const jwt = require('jsonwebtoken');
+import http from 'http';
+import { Server } from 'socket.io';
+import jwt from 'jsonwebtoken';
 
 // JWTs must include an expiration (`exp`) claim which will be validated on
 // each connection.
@@ -14,7 +14,7 @@ if (SECRET.length < 10) {
   process.exit(1);
 }
 const server = http.createServer();
-const io = socketio(server, { cors: { origin: '*' } });
+const io = new Server(server, { cors: { origin: '*' } });
 
 const connections = new Map();
 
