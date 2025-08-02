@@ -249,5 +249,27 @@
       "organization"
     ],
     "status": "registered"
+  },
+  "portfolio_preview": {
+    "id": "portfolio_preview",
+    "file": "src/Widgets.php",
+    "roles": [
+      "artist"
+    ],
+    "status": "registered",
+    "label": "Portfolio Overview",
+    "description": "Summary of your published artworks.",
+    "icon": "portfolio"
+  },
+  "welcome_box": {
+    "id": "welcome_box",
+    "file": "src/Widgets.php",
+    "roles": [
+      "member"
+    ],
+    "status": "registered",
+    "label": "Welcome",
+    "description": "Personal greeting for the signed-in user.",
+    "icon": "smiley"
   }
 }
