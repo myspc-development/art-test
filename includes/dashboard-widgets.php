@@ -10,37 +10,11 @@ if (!defined('ABSPATH')) {
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetManager;
+use ArtPulse\Core\DashboardRenderer;
 
-function ap_render_widget(string $widget_id, int $user_id = null): void
+function ap_render_widget(string $widget_id, ?int $user_id = null): void
 {
-    $user_id = $user_id ?: get_current_user_id();
-    $role    = DashboardController::get_role($user_id);
-    $widgets = DashboardWidgetRegistry::get_all();
-
-    if (!isset($widgets[$widget_id])) {
-        error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not found in registry.");
-        return;
-    }
-
-    if (!in_array($role, $widgets[$widget_id]['roles'] ?? [], true)) {
-        error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not allowed for role '{$role}'.");
-        return;
-    }
-
-    if (has_action("ap_render_dashboard_widget_{$widget_id}")) {
-        do_action("ap_render_dashboard_widget_{$widget_id}", $user_id);
-        return;
-    }
-
-    $cb = $widgets[$widget_id]['callback'] ?? null;
-    if (is_callable($cb)) {
-        $output = call_user_func($cb);
-        if (is_string($output)) {
-            echo $output;
-        }
-    } else {
-        error_log("\xF0\x9F\x9A\xAB Invalid callback for widget '{$widget_id}'.");
-    }
+    echo DashboardRenderer::render($widget_id, $user_id);
 }
 
 function register_ap_widget(string $id, array $args): void
