@@ -1,52 +1,235 @@
-{
-    "member": {
-        "activity_feed": "ActivityFeedWidget.php",
-        "news_feed": "ArtPulseNewsFeedWidget.php",
-        "rsvp_button": "RSVPButton.jsx",
-        "nearby_events_map": "NearbyEventsMapWidget.jsx",
-        "my_favorites": "MyFavoritesWidget.jsx",
-        "widget_favorites": "FavoritesOverviewWidget.php",
-        "event_chat": "EventChatWidget.jsx",
-        "share_this_event": "ShareThisEventWidget.jsx",
-        "artist_inbox_preview": "ArtistInboxPreviewWidget.jsx",
-        "qa_checklist": "QAChecklistWidget.php",
-        "welcome_box": "ArtPulse\\Widgets::render_welcome_box",
-        "sample_events": "EventsWidget.php",
-        "widget_events": "WidgetEventsWidget.php"
+[
+    {
+        "id": "activity_feed",
+        "callback": "ActivityFeedWidget.php",
+        "allowed_roles": [
+            "member"
+        ]
     },
-    "artist": {
-        "activity_feed": "ActivityFeedWidget.php",
-        "portfolio_preview": "Widgets.php",
-        "artist_inbox_preview": "ArtistInboxPreviewWidget.jsx",
-        "sample_events": "EventsWidget.php",
-        "revenue_summary": "ArtistRevenueSummaryWidget.jsx",
-        "artist_spotlight": "ArtistSpotlightWidget.jsx",
-        "artist_artwork_manager": "ArtistArtworkManagerWidget.jsx",
-        "artist_audience_insights": "ArtistAudienceInsightsWidget.jsx",
-        "artist_earnings_summary": "ArtistEarningsWidget.jsx",
-        "artist_feed_publisher": "ArtistFeedPublisherWidget.jsx",
-        "collab_requests": "ArtistCollaborationWidget.jsx",
-        "my_favorites": "MyFavoritesWidget.jsx",
-        "nearby_events_map": "NearbyEventsMapWidget.jsx",
-        "onboarding_tracker": "OnboardingTrackerWidget.jsx"
+    {
+        "id": "artist_artwork_manager",
+        "callback": "ArtistArtworkManagerWidget.jsx",
+        "allowed_roles": [
+            "artist"
+        ]
     },
-    "organization": {
-        "org_insights": "OrgInsightsWidget.php",
-        "activity_feed": "ActivityFeedWidget.php",
-        "sample_events": "EventsWidget.php",
-        "audience_crm": "AudienceCRMWidget.jsx",
-        "sponsored_event_config": "SponsoredEventConfigWidget.jsx",
-        "embed_tool": "EmbedToolWidget.jsx",
-        "branding_settings_panel": "OrgBrandingSettingsPanel.jsx",
-        "ap_donor_activity": "DonorActivityWidget.php",
-        "artpulse_analytics_widget": "OrgAnalyticsWidget.php",
-        "org_widget_sharing": "OrgWidgetSharingPanel.php",
-        "webhooks": "WebhooksWidget.php",
-        "sponsor_display": "SponsorDisplayWidget.php",
-        "org_event_overview": "OrgEventOverviewWidget.jsx",
-        "org_team_roster": "OrgTeamRosterWidget.jsx",
-        "org_approval_center": "OrgApprovalCenterWidget.jsx",
-        "org_ticket_insights": "OrgTicketInsightsWidget.jsx",
-        "org_broadcast_box": "OrgBroadcastBoxWidget.jsx"
+    {
+        "id": "artist_audience_insights",
+        "callback": "ArtistAudienceInsightsWidget.jsx",
+        "allowed_roles": [
+            "artist"
+        ]
+    },
+    {
+        "id": "artist_earnings_summary",
+        "callback": "ArtistEarningsWidget.jsx",
+        "allowed_roles": [
+            "artist"
+        ]
+    },
+    {
+        "id": "artist_feed_publisher",
+        "callback": "ArtistFeedPublisherWidget.jsx",
+        "allowed_roles": [
+            "artist"
+        ]
+    },
+    {
+        "id": "artist_inbox_preview",
+        "callback": "ArtistInboxPreviewWidget.jsx",
+        "allowed_roles": [
+            "artist"
+        ]
+    },
+    {
+        "id": "artpulse_analytics_widget",
+        "callback": "OrgAnalyticsWidget.php",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "branding_settings_panel",
+        "callback": "OrgBrandingSettingsPanel.jsx",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "collab_requests",
+        "callback": "ArtistCollaborationWidget.jsx",
+        "allowed_roles": [
+            "artist"
+        ]
+    },
+    {
+        "id": "embed_tool",
+        "callback": "EmbedToolWidget.jsx",
+        "allowed_roles": [
+            "artist"
+        ]
+    },
+    {
+        "id": "event_chat",
+        "callback": "EventChatWidget.jsx",
+        "allowed_roles": [
+            "member"
+        ]
+    },
+    {
+        "id": "my_favorites",
+        "callback": "MyFavoritesWidget.jsx",
+        "allowed_roles": [
+            "member"
+        ]
+    },
+    {
+        "id": "nearby_events_map",
+        "callback": "NearbyEventsMapWidget.jsx",
+        "allowed_roles": [
+            "member"
+        ]
+    },
+    {
+        "id": "news_feed",
+        "callback": "ArtPulseNewsFeedWidget.php",
+        "allowed_roles": [
+            "member"
+        ]
+    },
+    {
+        "id": "org_approval_center",
+        "callback": "OrgApprovalCenterWidget.jsx",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "org_broadcast_box",
+        "callback": "OrgBroadcastBoxWidget.jsx",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "org_event_overview",
+        "callback": "OrgEventOverviewWidget.jsx",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "org_insights",
+        "callback": "OrgInsightsWidget.php",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "org_team_roster",
+        "callback": "OrgTeamRosterWidget.jsx",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "org_ticket_insights",
+        "callback": "OrgTicketInsightsWidget.jsx",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "org_widget_sharing",
+        "callback": "OrgWidgetSharingPanel.php",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "portfolio_preview",
+        "callback": "Widgets.php",
+        "allowed_roles": [
+            "artist"
+        ]
+    },
+    {
+        "id": "qa_checklist",
+        "callback": "QAChecklistWidget.php",
+        "allowed_roles": [
+            "artist",
+            "member"
+        ]
+    },
+    {
+        "id": "revenue_summary",
+        "callback": "ArtistRevenueSummaryWidget.jsx",
+        "allowed_roles": [
+            "artist"
+        ]
+    },
+    {
+        "id": "rsvp_button",
+        "callback": "RSVPButton.jsx",
+        "allowed_roles": [
+            "member"
+        ]
+    },
+    {
+        "id": "sample_events",
+        "callback": "EventsWidget.php",
+        "allowed_roles": [
+            "member"
+        ]
+    },
+    {
+        "id": "share_this_event",
+        "callback": "ShareThisEventWidget.jsx",
+        "allowed_roles": [
+            "member"
+        ]
+    },
+    {
+        "id": "sponsor_display",
+        "callback": "SponsorDisplayWidget.php",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "sponsored_event_config",
+        "callback": "SponsoredEventConfigWidget.jsx",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "webhooks",
+        "callback": "WebhooksWidget.php",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "welcome_box",
+        "callback": "ArtPulse\\Widgets::render_welcome_box",
+        "allowed_roles": [
+            "member"
+        ]
+    },
+    {
+        "id": "widget_events",
+        "callback": "WidgetEventsWidget.php",
+        "allowed_roles": [
+            "member",
+            "organization"
+        ]
+    },
+    {
+        "id": "widget_favorites",
+        "callback": "FavoritesOverviewWidget.php",
+        "allowed_roles": [
+            "member"
+        ]
     }
-}
+]
