@@ -3,7 +3,16 @@
         "id": "activity_feed",
         "callback": "ActivityFeedWidget.php",
         "allowed_roles": [
-            "member"
+            "artist",
+            "member",
+            "organization"
+        ]
+    },
+    {
+        "id": "ap_donor_activity",
+        "callback": "DonorActivityWidget.php",
+        "allowed_roles": [
+            "organization"
         ]
     },
     {
@@ -38,12 +47,27 @@
         "id": "artist_inbox_preview",
         "callback": "ArtistInboxPreviewWidget.jsx",
         "allowed_roles": [
+            "artist",
+            "member"
+        ]
+    },
+    {
+        "id": "artist_spotlight",
+        "callback": "ArtistSpotlightWidget.jsx",
+        "allowed_roles": [
             "artist"
         ]
     },
     {
         "id": "artpulse_analytics_widget",
         "callback": "OrgAnalyticsWidget.php",
+        "allowed_roles": [
+            "organization"
+        ]
+    },
+    {
+        "id": "audience_crm",
+        "callback": "AudienceCRMWidget.jsx",
         "allowed_roles": [
             "organization"
         ]
@@ -66,7 +90,8 @@
         "id": "embed_tool",
         "callback": "EmbedToolWidget.jsx",
         "allowed_roles": [
-            "artist"
+            "artist",
+            "organization"
         ]
     },
     {
@@ -95,6 +120,13 @@
         "callback": "ArtPulseNewsFeedWidget.php",
         "allowed_roles": [
             "member"
+        ]
+    },
+    {
+        "id": "onboarding_tracker",
+        "callback": "OnboardingTrackerWidget.jsx",
+        "allowed_roles": [
+            "artist"
         ]
     },
     {
@@ -179,7 +211,9 @@
         "id": "sample_events",
         "callback": "EventsWidget.php",
         "allowed_roles": [
-            "member"
+            "artist",
+            "member",
+            "organization"
         ]
     },
     {
