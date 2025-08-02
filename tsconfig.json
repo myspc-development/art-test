@@ -4,7 +4,15 @@
     "module": "esnext",
     "jsx": "react",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+
+    // ✅ Required for tsconfig-paths to work
+    "baseUrl": ".",
+
+    // ✅ Optional: helpful if you use @/... in imports
+    "paths": {
+      "@/*": ["assets/js/*"]
+    }
   },
   "include": ["assets/js/**/*"]
 }
