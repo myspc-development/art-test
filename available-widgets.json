@@ -5,6 +5,7 @@
         "rsvp_button": "RSVPButton.jsx",
         "nearby_events_map": "NearbyEventsMapWidget.jsx",
         "my_favorites": "MyFavoritesWidget.jsx",
+        "widget_favorites": "FavoritesOverviewWidget.php",
         "event_chat": "EventChatWidget.jsx",
         "share_this_event": "ShareThisEventWidget.jsx",
         "artist_inbox_preview": "ArtistInboxPreviewWidget.jsx",
