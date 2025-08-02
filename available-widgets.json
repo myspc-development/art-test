@@ -14,7 +14,9 @@
     },
     "artist": {
         "activity_feed": "ActivityFeedWidget.php",
+        "portfolio_preview": "Widgets.php",
         "artist_inbox_preview": "ArtistInboxPreviewWidget.jsx",
+        "sample_events": "EventsWidget.php",
         "revenue_summary": "ArtistRevenueSummaryWidget.jsx",
         "artist_spotlight": "ArtistSpotlightWidget.jsx",
         "artist_artwork_manager": "ArtistArtworkManagerWidget.jsx",
