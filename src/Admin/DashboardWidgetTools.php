@@ -17,6 +17,9 @@ class DashboardWidgetTools
             if (!empty($def['callback'])) {
                 $item['callback'] = $def['callback'];
             }
+            if (!empty($def['rest'])) {
+                $item['rest'] = $def['rest'];
+            }
             $member[] = $item;
         }
 
@@ -27,20 +30,27 @@ class DashboardWidgetTools
             if (!empty($def['callback'])) {
                 $item['callback'] = $def['callback'];
             }
+            if (!empty($def['rest'])) {
+                $item['rest'] = $def['rest'];
+            }
             $organization[] = $item;
         }
 
+        $artist_defs = DashboardWidgetRegistry::get_widgets_by_role('artist');
+        $artist = [];
+        foreach ($artist_defs as $id => $def) {
+            $item = ['id' => $id];
+            if (!empty($def['callback'])) {
+                $item['callback'] = $def['callback'];
+            }
+            if (!empty($def['rest'])) {
+                $item['rest'] = $def['rest'];
+            }
+            $artist[] = $item;
+        }
+
         return [
-            'artist' => [
-                [
-                    'id'       => 'favorites',
-                    'callback' => [\ArtPulse\Core\DashboardWidgetRegistry::class, 'render_widget_favorites'],
-                ],
-                [
-                    'id'   => 'messages',
-                    'rest' => 'artpulse/v1/dashboard/messages',
-                ],
-            ],
+            'artist' => $artist,
             'organization' => $organization,
             'member' => $member,
         ];
