@@ -51,6 +51,42 @@ function render_widget_artist_spotlight(): void {
     }
 }
 
+function render_widget_artist_artwork_manager(): void {
+    if (function_exists('ap_widget_artist_artwork_manager')) {
+        echo ap_widget_artist_artwork_manager([]);
+    }
+}
+
+function render_widget_artist_audience_insights(): void {
+    if (function_exists('ap_widget_artist_audience_insights')) {
+        echo ap_widget_artist_audience_insights([]);
+    }
+}
+
+function render_widget_artist_earnings_summary(): void {
+    if (function_exists('ap_widget_artist_earnings_summary')) {
+        echo ap_widget_artist_earnings_summary([]);
+    }
+}
+
+function render_widget_artist_feed_publisher(): void {
+    if (function_exists('ap_widget_artist_feed_publisher')) {
+        echo ap_widget_artist_feed_publisher([]);
+    }
+}
+
+function render_widget_collab_requests(): void {
+    if (function_exists('ap_widget_collab_requests')) {
+        echo ap_widget_collab_requests([]);
+    }
+}
+
+function render_widget_onboarding_tracker(): void {
+    if (function_exists('ap_widget_onboarding_tracker')) {
+        echo ap_widget_onboarding_tracker([]);
+    }
+}
+
 function render_widget_artpulse_analytics_widget(): void {
     if (class_exists('OrgAnalyticsWidget')) {
         OrgAnalyticsWidget::render();
@@ -266,4 +302,28 @@ function render_widget_widget_org_ticket_insights(): void {
 
 function render_widget_widget_org_broadcast_box(): void {
     render_widget_org_broadcast_box();
+}
+
+function render_widget_widget_artist_artwork_manager(): void {
+    render_widget_artist_artwork_manager();
+}
+
+function render_widget_widget_artist_audience_insights(): void {
+    render_widget_artist_audience_insights();
+}
+
+function render_widget_widget_artist_earnings_summary(): void {
+    render_widget_artist_earnings_summary();
+}
+
+function render_widget_widget_artist_feed_publisher(): void {
+    render_widget_artist_feed_publisher();
+}
+
+function render_widget_widget_collab_requests(): void {
+    render_widget_collab_requests();
+}
+
+function render_widget_widget_onboarding_tracker(): void {
+    render_widget_onboarding_tracker();
 }
