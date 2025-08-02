@@ -42,6 +42,14 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "org_insights": {
+        "file": "src/Widgets.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
     "artist_artwork_manager": {
         "file": "templates/widgets/artist-artwork-manager.php",
         "roles": [
@@ -396,6 +404,16 @@
         "file": "widgets/WidgetEventsWidget.php",
         "roles": [
             "member",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "sample_events": {
+        "file": "widgets/EventsWidget.php",
+        "roles": [
+            "member",
+            "artist",
             "organization"
         ],
         "status": "registered",

@@ -29,7 +29,9 @@
         "onboarding_tracker": "OnboardingTrackerWidget.jsx"
     },
     "organization": {
+        "org_insights": "OrgInsightsWidget.php",
         "activity_feed": "ActivityFeedWidget.php",
+        "sample_events": "EventsWidget.php",
         "audience_crm": "AudienceCRMWidget.jsx",
         "sponsored_event_config": "SponsoredEventConfigWidget.jsx",
         "embed_tool": "EmbedToolWidget.jsx",
