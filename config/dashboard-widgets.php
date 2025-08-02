@@ -1,6 +1,7 @@
 <?php
 
 use ArtPulse\Widgets\EventsWidget;
+use ArtPulse\Widgets\OrgAnalyticsWidget;
 
 return [
     'welcome_box' => [
@@ -220,6 +221,75 @@ return [
         'description' => 'List and manage team members.',
         'roles' => ['organization'],
         'icon' => 'admin-users',
+        'lazy' => true,
+    ],
+    'branding_settings_panel' => [
+        'callback' => 'render_widget_branding_settings_panel',
+        'label' => 'Branding Settings',
+        'description' => 'Customize organization branding.',
+        'roles' => ['organization'],
+        'icon' => 'admin-customizer',
+        'lazy' => true,
+    ],
+    'ap_donor_activity' => [
+        'class' => \DonorActivityWidget::class,
+        'label' => 'Donor Activity',
+        'description' => 'Recent donations for your organization.',
+        'roles' => ['organization'],
+        'icon' => 'chart-line',
+    ],
+    'artpulse_analytics_widget' => [
+        'class' => OrgAnalyticsWidget::class,
+        'label' => 'Organization Analytics',
+        'description' => 'Basic traffic and engagement metrics.',
+        'roles' => ['organization'],
+        'icon' => 'chart-bar',
+    ],
+    'org_widget_sharing' => [
+        'callback' => 'render_widget_org_widget_sharing',
+        'label' => 'Widget Sharing',
+        'description' => 'Share widgets with partners.',
+        'roles' => ['organization'],
+        'icon' => 'share',
+        'lazy' => true,
+    ],
+    'webhooks' => [
+        'callback' => 'render_widget_webhooks',
+        'label' => 'Webhooks',
+        'description' => 'Manage outbound webhooks for automation.',
+        'roles' => ['organization'],
+        'icon' => 'admin-links',
+    ],
+    'sponsor_display' => [
+        'callback' => 'render_widget_sponsor_display',
+        'label' => 'Sponsor Display',
+        'description' => 'Showcase sponsors on events.',
+        'roles' => ['organization'],
+        'icon' => 'star-filled',
+        'lazy' => true,
+    ],
+    'org_approval_center' => [
+        'callback' => 'render_widget_org_approval_center',
+        'label' => 'Approval Center',
+        'description' => 'Review pending items awaiting approval.',
+        'roles' => ['organization'],
+        'icon' => 'yes',
+        'lazy' => true,
+    ],
+    'org_ticket_insights' => [
+        'callback' => 'render_widget_org_ticket_insights',
+        'label' => 'Ticket Insights',
+        'description' => 'Analyze ticket sales and attendance.',
+        'roles' => ['organization'],
+        'icon' => 'chart-line',
+        'lazy' => true,
+    ],
+    'org_broadcast_box' => [
+        'callback' => 'render_widget_org_broadcast_box',
+        'label' => 'Broadcast Box',
+        'description' => 'Send messages to followers.',
+        'roles' => ['organization'],
+        'icon' => 'megaphone',
         'lazy' => true,
     ],
 ];
