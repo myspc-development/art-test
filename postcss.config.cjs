@@ -1,10 +1,11 @@
-import postcssImport from 'postcss-import';
-import postcssNested from 'postcss-nested';
-import autoprefixer from 'autoprefixer';
-import cssnano from 'cssnano';
-import purgecss from '@fullhuman/postcss-purgecss';
+// postcss.config.cjs
+const postcssImport = require('postcss-import');
+const postcssNested = require('postcss-nested');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+const purgecss = require('@fullhuman/postcss-purgecss');
 
-export default {
+module.exports = {
   plugins: [
     postcssImport,
     postcssNested,
