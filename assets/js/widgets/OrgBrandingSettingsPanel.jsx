@@ -26,7 +26,7 @@ export function OrgBrandingSettingsPanel({ apiRoot, nonce, orgId }) {
   };
 
   return (
-    <div className="ap-org-branding-settings">
+    <div className="ap-org-branding-settings" data-widget-id="branding_settings_panel">
       <p>
         <label>{__('Logo URL', 'artpulse')}
           <input type="text" value={settings.logo} onChange={e => setSettings({ ...settings, logo: e.target.value })} />

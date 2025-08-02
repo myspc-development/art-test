@@ -29,23 +29,24 @@ export function ArtistCollaborationWidget({ apiRoot, nonce }) {
       .catch(() => setInvites([]));
   }, []);
 
+  let content;
   if (invites === null) {
-    return <p>{__('Loading...', 'artpulse')}</p>;
+    content = <p>{__('Loading...', 'artpulse')}</p>;
+  } else if (!invites.length) {
+    content = <p>{__('No pending invites.', 'artpulse')}</p>;
+  } else {
+    content = (
+      <ul className="ap-collab-requests">
+        {invites.map(inv => (
+          <li key={inv.org_id}>
+            {inv.name} – {inv.role} ({inv.status})
+          </li>
+        ))}
+      </ul>
+    );
   }
 
-  if (!invites.length) {
-    return <p>{__('No pending invites.', 'artpulse')}</p>;
-  }
-
-  return (
-    <ul className="ap-collab-requests">
-      {invites.map(inv => (
-        <li key={inv.org_id}>
-          {inv.name} – {inv.role} ({inv.status})
-        </li>
-      ))}
-    </ul>
-  );
+  return <div data-widget-id="collab_requests">{content}</div>;
 }
 
 export default function initArtistCollaborationWidget(el) {

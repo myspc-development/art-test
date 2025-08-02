@@ -38,11 +38,13 @@ class OrgAnalyticsWidget {
 
     public static function render( int $user_id ): void {
         if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+        echo '<div class="ap-org-analytics-widget" data-widget-id="' . esc_attr(self::get_id()) . '">';
         if ( ! self::can_view( $user_id ) ) {
-            echo '<p class="ap-widget-no-access">' . esc_html__("You do not have access to view this widget.", 'artpulse') . '</p>';
+            echo '<p class="ap-widget-no-access">' . esc_html__("You do not have access to view this widget.", 'artpulse') . '</p></div>';
             return;
         }
         echo '<p>' . esc_html__('Basic traffic and engagement metrics will appear here.', 'artpulse') . '</p>';
+        echo '</div>';
     }
 }
 

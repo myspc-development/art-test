@@ -31,9 +31,11 @@ export function RSVPButton({ eventId, apiRoot, nonce }) {
   };
 
   return (
-    <button className={`ap-rsvp-btn${rsvped ? ' is-rsvped' : ''}`} onClick={toggle}>
-      {rsvped ? __('Cancel RSVP', 'artpulse') : __('RSVP', 'artpulse')}
-    </button>
+    <div data-widget-id="rsvp_button">
+      <button className={`ap-rsvp-btn${rsvped ? ' is-rsvped' : ''}`} onClick={toggle}>
+        {rsvped ? __('Cancel RSVP', 'artpulse') : __('RSVP', 'artpulse')}
+      </button>
+    </div>
   );
 }
 

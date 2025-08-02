@@ -15,7 +15,7 @@ export function OrgApprovalCenterWidget({ apiRoot, nonce, orgId }) {
   }, [orgId]);
 
   return (
-    <div className="ap-org-approval-center-widget">
+    <div className="ap-org-approval-center-widget" data-widget-id="org_approval_center">
       <ul>
         {items.map(item => (
           <li key={item.id}>{item.title} - {item.status}</li>

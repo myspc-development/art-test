@@ -15,23 +15,24 @@ export function ArtistArtworkManagerWidget({ apiRoot, nonce }) {
       .catch(() => setItems([]));
   }, []);
 
+  let content;
   if (items === null) {
-    return <p>{__('Loading...', 'artpulse')}</p>;
+    content = <p>{__('Loading...', 'artpulse')}</p>;
+  } else if (!items.length) {
+    content = <p>{__('No artworks found.', 'artpulse')}</p>;
+  } else {
+    content = (
+      <ul className="ap-artwork-manager">
+        {items.map(a => (
+          <li key={a.id}>
+            <a href={a.link}>{a.title?.rendered || a.slug}</a>
+          </li>
+        ))}
+      </ul>
+    );
   }
 
-  if (!items.length) {
-    return <p>{__('No artworks found.', 'artpulse')}</p>;
-  }
-
-  return (
-    <ul className="ap-artwork-manager">
-      {items.map(a => (
-        <li key={a.id}>
-          <a href={a.link}>{a.title?.rendered || a.slug}</a>
-        </li>
-      ))}
-    </ul>
-  );
+  return <div data-widget-id="artist_artwork_manager">{content}</div>;
 }
 
 export default function initArtistArtworkManagerWidget(el) {

@@ -15,7 +15,7 @@ export function OrgTeamRosterWidget({ apiRoot, nonce, orgId }) {
   }, [orgId]);
 
   return (
-    <div className="ap-org-team-roster-widget">
+    <div className="ap-org-team-roster-widget" data-widget-id="org_team_roster">
       <ul>
         {team.map(user => (
           <li key={user.user_id}>{user.user_id} - {user.role}</li>

@@ -27,7 +27,7 @@ class SponsorDisplayWidget
         if (!$name && !$logo) {
             return $content;
         }
-        $out = '<div class="ap-sponsor-disclosure">';
+        $out = '<div class="ap-sponsor-disclosure" data-widget-id="sponsor_display">';
         if ($logo) {
             $out .= '<img src="' . esc_url($logo) . '" alt="' . esc_attr($name) . '" />';
         }

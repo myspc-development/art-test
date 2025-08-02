@@ -67,9 +67,11 @@ class FavoritesOverviewWidget implements DashboardWidgetInterface {
         if (function_exists('ap_widget_favorites')) {
             ob_start();
             ap_widget_favorites([]);
-            return ob_get_clean();
+            $content = ob_get_clean();
+        } else {
+            $content = self::render_placeholder();
         }
-        return self::render_placeholder();
+        return '<div data-widget-id="' . esc_attr(self::id()) . '">' . $content . '</div>';
     }
 
     public static function render_placeholder(): string

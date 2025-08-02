@@ -15,7 +15,7 @@ export function OrgTicketInsightsWidget({ apiRoot, nonce, orgId }) {
   }, [orgId]);
 
   return (
-    <div className="ap-org-ticket-insights-widget">
+    <div className="ap-org-ticket-insights-widget" data-widget-id="org_ticket_insights">
       <p>{__('Tickets Sold', 'artpulse')}: {metrics.sales}</p>
       <p>{__('Revenue', 'artpulse')}: {metrics.revenue}</p>
     </div>

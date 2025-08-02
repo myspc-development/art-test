@@ -15,7 +15,7 @@ export function OrgEventOverviewWidget({ apiRoot, nonce, orgId }) {
   }, [orgId]);
 
   return (
-    <div className="ap-org-event-overview-widget">
+    <div className="ap-org-event-overview-widget" data-widget-id="org_event_overview">
       <ul>
         {events.map(ev => (
           <li key={ev.id}>{ev.title} ({ev.status})</li>

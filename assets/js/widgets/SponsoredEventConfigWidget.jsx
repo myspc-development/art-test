@@ -31,7 +31,7 @@ export function SponsoredEventConfigWidget({ postId, apiRoot, nonce }) {
   };
 
   return (
-    <div className="ap-sponsored-config">
+    <div className="ap-sponsored-config" data-widget-id="sponsored_event_config">
       <p>
         <label>{__('Sponsored By', 'artpulse')}
           <input type="text" value={data.sponsor_name} onChange={e => setData({ ...data, sponsor_name: e.target.value })} />

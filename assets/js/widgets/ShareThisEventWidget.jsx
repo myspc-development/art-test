@@ -24,7 +24,7 @@ export function ShareThisEventWidget({ eventUrl }) {
   };
 
   return (
-    <div className="ap-share-event-widget">
+    <div className="ap-share-event-widget" data-widget-id="share_this_event">
       <button onClick={() => share('https://twitter.com/share?url=')}>X</button>
       <button onClick={() => share('https://www.facebook.com/sharer/sharer.php?u=')}>{__('Facebook', 'artpulse')}</button>
       <button onClick={() => share('https://www.linkedin.com/sharing/share-offsite/?url=')}>{__('LinkedIn', 'artpulse')}</button>

@@ -35,7 +35,9 @@ class WidgetEventsWidget {
 
     public static function render(): void {
         if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+        echo '<div data-widget-id="widget_events">';
         echo ap_widget_events([]);
+        echo '</div>';
     }
 }
 
