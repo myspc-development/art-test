@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
-    bootstrap="tests/widgets/bootstrap.php"
-    colors="true"
-    stopOnFailure="false"
->
-    <testsuites>
-        <testsuite name="plugin">
-            <directory>./tests/widgets</directory>
-        </testsuite>
-    </testsuites>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         executionOrder="random"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd">
 
-    <coverage includeUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">./widgets</directory>
-        </include>
-    </coverage>
+  <testsuites>
+    <testsuite name="ArtPulse Plugin Test Suite">
+      <directory>./tests</directory>
+    </testsuite>
+  </testsuites>
 
-    <logging>
-        <log type="coverage-html" target="coverage/widgets" />
-    </logging>
+  <coverage>
+    <include>
+      <directory suffix=".php">widgets</directory>
+      <directory suffix=".php">src</directory>
+    </include>
+    <report>
+      <html outputDirectory="coverage" />
+    </report>
+  </coverage>
 
-    <php>
-        <env name="WP_TESTS_DIR" value="vendor/wp-phpunit/wp-phpunit/" />
-        <env name="WP_PHP_BINARY" value="php" />
-        <env name="WP_DEBUG" value="true" />
-    </php>
 </phpunit>
