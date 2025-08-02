@@ -8,7 +8,9 @@
         "event_chat": "EventChatWidget.jsx",
         "share_this_event": "ShareThisEventWidget.jsx",
         "artist_inbox_preview": "ArtistInboxPreviewWidget.jsx",
-        "qa_checklist": "QAChecklistWidget.php"
+        "qa_checklist": "QAChecklistWidget.php",
+        "welcome_box": "ArtPulse\\Widgets::render_welcome_box",
+        "sample_events": "EventsWidget.php"
     },
     "artist": {
         "activity_feed": "ActivityFeedWidget.php",
