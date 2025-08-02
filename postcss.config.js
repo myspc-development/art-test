@@ -1,11 +1,15 @@
-const purgecss = require('@fullhuman/postcss-purgecss');
+import postcssImport from 'postcss-import';
+import postcssNested from 'postcss-nested';
+import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
+import purgecss from '@fullhuman/postcss-purgecss';
 
-module.exports = {
+export default {
   plugins: [
-    require('postcss-import'),
-    require('postcss-nested'),
-    require('autoprefixer'),
-    require('cssnano')(), // Minify CSS
+    postcssImport,
+    postcssNested,
+    autoprefixer,
+    cssnano(), // Minify CSS
     purgecss({
       content: [
         './templates/**/*.php',
