@@ -3,6 +3,30 @@
 use ArtPulse\Widgets\EventsWidget;
 
 return [
+    'welcome_box' => [
+        'callback' => [\ArtPulse\Widgets::class, 'render_welcome_box'],
+        'label' => 'Welcome',
+        'description' => 'Personal greeting for the signed-in user.',
+        'roles' => ['member'],
+        'category' => 'general',
+        'icon' => 'smiley',
+    ],
+    'portfolio_preview' => [
+        'callback' => [\ArtPulse\Widgets::class, 'render_portfolio_box'],
+        'label' => 'Portfolio Overview',
+        'description' => 'Summary of your published artworks.',
+        'roles' => ['artist'],
+        'category' => 'general',
+        'icon' => 'portfolio',
+    ],
+    'org_insights' => [
+        'callback' => [\ArtPulse\Widgets::class, 'render_org_insights_box'],
+        'label' => 'Organization Insights',
+        'description' => 'Key metrics for organization accounts.',
+        'roles' => ['organization'],
+        'category' => 'general',
+        'icon' => 'chart-area',
+    ],
     'activity_feed' => [
         'class' => \ActivityFeedWidget::class,
         'label' => 'Activity Feed',
