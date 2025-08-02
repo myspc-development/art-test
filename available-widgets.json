@@ -20,6 +20,8 @@
         "artist_earnings_summary": "ArtistEarningsWidget.jsx",
         "artist_feed_publisher": "ArtistFeedPublisherWidget.jsx",
         "collab_requests": "ArtistCollaborationWidget.jsx",
+        "my_favorites": "MyFavoritesWidget.jsx",
+        "nearby_events_map": "NearbyEventsMapWidget.jsx",
         "onboarding_tracker": "OnboardingTrackerWidget.jsx"
     },
     "organization": {
