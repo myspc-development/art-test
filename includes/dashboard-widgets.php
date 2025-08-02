@@ -93,12 +93,12 @@ function ap_ajax_render_widget(): void
     $widget_id = sanitize_key($_POST['widget_id'] ?? '');
     check_ajax_referer('ap_render_widget', 'nonce');
 
-    if (!$widget_id || !is_user_logged_in()) {
-        wp_die('Invalid widget', 400);
+    if (!$widget_id || !is_user_logged_in() || !current_user_can('read')) {
+        wp_send_json_error(['message' => 'Invalid widget'], 403);
     }
 
-    echo DashboardRenderer::render($widget_id, get_current_user_id());
-    wp_die();
+    $html = DashboardRenderer::render($widget_id, get_current_user_id());
+    wp_send_json_success(['html' => $html]);
 }
 
 function ap_save_dashboard_widget_config(): void
@@ -203,6 +203,10 @@ function ap_save_user_layout(): void
 {
     // Verify request nonce
     check_ajax_referer('ap_save_user_layout', 'nonce');
+
+    if (!is_user_logged_in() || !current_user_can('read')) {
+        wp_send_json_error(['message' => __('Permission denied', 'artpulse')], 403);
+    }
 
     $layout = [];
 

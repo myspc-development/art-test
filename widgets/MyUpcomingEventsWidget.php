@@ -26,12 +26,13 @@ class MyUpcomingEventsWidget {
         return $user_id > 0;
     }
 
-    public static function render(int $user_id): void {
+    public static function render(): string {
+        $user_id = get_current_user_id();
         if (!self::can_view($user_id)) {
-            echo '<p class="ap-widget-no-access">' . esc_html__('Please log in.', 'artpulse') . '</p>';
-            return;
+            return '<p class="ap-widget-no-access">' . esc_html__('Please log in.', 'artpulse') . '</p>';
         }
-        echo '<p>' . esc_html__('Upcoming events will appear here.', 'artpulse') . '</p>';
+
+        return '<p>' . esc_html__('Upcoming events will appear here.', 'artpulse') . '</p>';
     }
 }
 
