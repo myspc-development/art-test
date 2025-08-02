@@ -24,16 +24,17 @@ class EventsWidget {
     public static function metadata(): array { return ['sample' => true]; }
     public static function can_view(int $user_id): bool { return $user_id > 0; }
 
-    public static function render(int $user_id): void {
+    public static function render(): string {
+        $user_id = get_current_user_id();
         if (!self::can_view($user_id)) {
-            echo '<p class="ap-widget-no-access">' . esc_html__('Please log in.', 'artpulse') . '</p>';
-            return;
+            return '<p class="ap-widget-no-access">' . esc_html__('Please log in.', 'artpulse') . '</p>';
         }
+
         if (function_exists('ap_widget_events')) {
-            echo ap_widget_events([]);
-        } else {
-            echo '<p>' . esc_html__('Events content.', 'artpulse') . '</p>';
+            return wp_kses_post(ap_widget_events([]));
         }
+
+        return '<p>' . esc_html__('Events content.', 'artpulse') . '</p>';
     }
 }
 
