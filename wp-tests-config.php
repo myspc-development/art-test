@@ -5,22 +5,22 @@
 
 // Allow environment variables or an existing test suite to set these constants.
 if ( ! defined( 'DB_NAME' ) ) {
-    define( 'DB_NAME', getenv( 'DB_NAME' ) );
+    define( 'DB_NAME', getenv( 'DB_NAME' ) ?: 'wordpress_test' );
 }
 if ( ! defined( 'DB_USER' ) ) {
-    define( 'DB_USER', getenv( 'DB_USER' ) );
+    define( 'DB_USER', getenv( 'DB_USER' ) ?: 'wp' );
 }
 if ( ! defined( 'DB_PASSWORD' ) ) {
-    define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) );
+    define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) ?: 'password' );
 }
 if ( ! defined( 'DB_HOST' ) ) {
-    define( 'DB_HOST', getenv( 'DB_HOST' ) );
+    define( 'DB_HOST', getenv( 'DB_HOST' ) ?: '127.0.0.1' );
 }
 if ( ! defined( 'DB_CHARSET' ) ) {
-    define( 'DB_CHARSET', getenv( 'DB_CHARSET' ) );
+    define( 'DB_CHARSET', getenv( 'DB_CHARSET' ) ?: 'utf8' );
 }
 if ( ! defined( 'DB_COLLATE' ) ) {
-    define( 'DB_COLLATE', getenv( 'DB_COLLATE' ) );
+    define( 'DB_COLLATE', getenv( 'DB_COLLATE' ) ?: '' );
 }
 
 if ( ! defined( 'WP_TESTS_DOMAIN' ) ) {
@@ -41,13 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
 }
 
-if ( ! defined( 'WP_TESTS_DIR' ) ) {
-    define( 'WP_TESTS_DIR', dirname( __FILE__ ) . '/wordpress-tests-lib' );
-}
-
 // Prefix for tables created during tests.
 if ( ! isset( $table_prefix ) ) {
     $table_prefix = 'wptests_';
 }
-
-require_once ABSPATH . '/wp-settings.php';
