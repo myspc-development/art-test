@@ -10,6 +10,7 @@ return [
         'roles' => ['member', 'artist', 'organization'],
         'category' => 'user',
         'icon' => 'activity',
+        'cache' => true,
     ],
     'qa_checklist' => [
         'class' => \QAChecklistWidget::class,
@@ -25,5 +26,7 @@ return [
         'roles' => ['member', 'artist', 'organization'],
         'icon' => 'calendar',
         'category' => 'community',
+        'cache' => true,
+        'lazy' => true,
     ],
 ];

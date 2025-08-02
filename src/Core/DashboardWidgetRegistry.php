@@ -18,7 +18,9 @@ class DashboardWidgetRegistry {
      *     roles?:array,
      *     settings?:array,
      *     tags?:array,
-     *     capability?:string
+     *     capability?:string,
+     *     cache?:bool,
+     *     lazy?:bool
      * }>
      */
     private static array $widgets = [];
@@ -81,6 +83,8 @@ class DashboardWidgetRegistry {
             'settings'    => $options['settings'] ?? [],
             'tags'        => $options['tags'] ?? [],
             'capability'  => $options['capability'] ?? '',
+            'cache'       => $options['cache'] ?? false,
+            'lazy'        => $options['lazy'] ?? false,
         ];
     }
 

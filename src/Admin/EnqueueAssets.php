@@ -238,6 +238,7 @@ class EnqueueAssets {
                 'artistEndpoint'   => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
                 'exportEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/export')),
                 'deleteEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/delete')),
+                'ajaxUrl'          => admin_url('admin-ajax.php'),
             ]);
         }
          if (!wp_script_is('ap-analytics', 'enqueued')) {

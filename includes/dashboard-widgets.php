@@ -14,6 +14,18 @@ use ArtPulse\Core\DashboardRenderer;
 
 function ap_render_widget(string $widget_id, ?int $user_id = null): void
 {
+    $config = DashboardWidgetRegistry::get_widget($widget_id);
+    if (!$config) {
+        return;
+    }
+
+    $lazy = apply_filters('ap_dashboard_widget_lazy', $config['lazy'] ?? false, $widget_id, $user_id, $config);
+    if ($lazy) {
+        $nonce = wp_create_nonce('ap_render_widget');
+        echo '<div class="ap-widget-placeholder" data-widget-id="' . esc_attr($widget_id) . '" data-nonce="' . esc_attr($nonce) . '"><span class="spinner"></span></div>';
+        return;
+    }
+
     echo DashboardRenderer::render($widget_id, $user_id);
 }
 
@@ -27,6 +39,16 @@ function register_ap_widget(string $id, array $args): void
     }
     \ArtPulse\Core\DashboardWidgetRegistry::register_widget($id, $args);
 }
+
+add_shortcode('ap_widget', function ($atts) {
+    $id = sanitize_key($atts['id'] ?? '');
+    if (!$id) {
+        return '';
+    }
+    ob_start();
+    ap_render_widget($id);
+    return ob_get_clean();
+});
 
 
 function ap_get_all_widget_definitions(bool $include_schema = false): array
@@ -50,6 +72,7 @@ add_action('wp_ajax_ap_save_role_layout', 'ap_save_role_layout');
 add_action('wp_ajax_ap_save_user_layout', 'ap_save_user_layout');
 add_action('wp_ajax_save_widget_order', 'ap_save_widget_order');
 add_action('wp_ajax_ap_save_dashboard_order', 'ap_save_dashboard_order_callback');
+add_action('wp_ajax_ap_render_widget', 'ap_ajax_render_widget');
 add_action('wp_ajax_save_dashboard_layout', function () {
     check_admin_referer('save_dashboard_layout');
     if ( ! current_user_can( 'manage_options' ) ) {
@@ -64,6 +87,19 @@ add_action('wp_ajax_save_dashboard_layout', function () {
     update_user_meta(get_current_user_id(), 'ap_dashboard_layout', $layout);
     wp_send_json_success();
 });
+
+function ap_ajax_render_widget(): void
+{
+    $widget_id = sanitize_key($_POST['widget_id'] ?? '');
+    check_ajax_referer('ap_render_widget', 'nonce');
+
+    if (!$widget_id || !is_user_logged_in()) {
+        wp_die('Invalid widget', 400);
+    }
+
+    echo DashboardRenderer::render($widget_id, get_current_user_id());
+    wp_die();
+}
 
 function ap_save_dashboard_widget_config(): void
 {

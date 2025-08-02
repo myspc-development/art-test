@@ -356,6 +356,33 @@ if (content) {
       });
     }
   });
+
+  const loadWidget = el => {
+    const id = el.dataset.widgetId;
+    const nonce = el.dataset.nonce;
+    fetch(ArtPulseDashboardApi.ajaxUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+      body: new URLSearchParams({ action: 'ap_render_widget', widget_id: id, nonce })
+    })
+      .then(res => res.text())
+      .then(html => { el.outerHTML = html; })
+      .catch(() => { el.outerHTML = '<div class="ap-widget-error">Failed to load widget</div>'; });
+  };
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          observer.unobserve(entry.target);
+          loadWidget(entry.target);
+        }
+      });
+    });
+    document.querySelectorAll('.ap-widget-placeholder').forEach(el => observer.observe(el));
+  } else {
+    document.querySelectorAll('.ap-widget-placeholder').forEach(loadWidget);
+  }
 });
 
 function renderCalendar(events, containerId = 'ap-my-events') {
