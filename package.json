@@ -2,6 +2,7 @@
   "name": "artpulse-management-plugin",
   "version": "0.1.3",
   "private": true,
+    "type": "module",
   "scripts": {
     "build": "npm run build:sass && npm run build:css && wp-scripts build && npm run bundle:react && npm run build:babel",
     "build:dev": "NODE_ENV=development npm run build",
@@ -13,7 +14,7 @@
     "babel:taxonomy": "npx babel assets/js/advanced-taxonomy-filter-block.jsx -o assets/js/advanced-taxonomy-filter-block.js",
     "babel:filtered-list": "npx babel assets/js/filtered-list-shortcode-block.jsx -o assets/js/filtered-list-shortcode-block.js",
     "babel:ajax-filter": "npx babel assets/js/ajax-filter-block.jsx -o assets/js/ajax-filter-block.js",
-"type": "module"
+
 
     "bundle:react": "rollup -c",
     "dev": "vite",
