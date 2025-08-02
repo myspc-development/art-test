@@ -12,10 +12,10 @@ function ap_register_dashboard_builder_widget_map(): void {
     global $ap_widget_source_map, $ap_widget_status;
 
     $member = [
-        'activity_feed'   => 'ActivityFeedWidget.php',
+        'activity_feed'   => ActivityFeedWidget::class,
         'news_feed'        => 'ArtPulseNewsFeedWidget.php',
         'widget_events'    => 'WidgetEventsWidget.php',
-        'widget_favorites' => 'FavoritesOverviewWidget.php',
+        'widget_favorites' => FavoritesOverviewWidget::class,
         'rsvp_button'      => 'RSVPButton.jsx',
         'nearby_events_map' => 'NearbyEventsMapWidget.jsx',
         'my_favorites'     => 'MyFavoritesWidget.jsx',
@@ -26,14 +26,14 @@ function ap_register_dashboard_builder_widget_map(): void {
     ];
 
     $artist = [
-        'activity_feed'      => 'ActivityFeedWidget.php',
+        'activity_feed'      => ActivityFeedWidget::class,
         'artist_inbox_preview' => 'ArtistInboxPreviewWidget.jsx',
         'revenue_summary'    => 'ArtistRevenueSummaryWidget.jsx',
         'artist_spotlight'   => 'ArtistSpotlightWidget.jsx',
     ];
 
     $organization = [
-        'activity_feed'         => 'ActivityFeedWidget.php',
+        'activity_feed'         => ActivityFeedWidget::class,
         'audience_crm'           => 'AudienceCRMWidget.jsx',
         'sponsored_event_config' => 'SponsoredEventConfigWidget.jsx',
         'embed_tool'             => 'EmbedToolWidget.jsx',
@@ -64,36 +64,51 @@ function ap_register_dashboard_builder_widget_map(): void {
     // Build a combined mapping of widget IDs to their files and roles.
     $combined = [];
     foreach ($ap_widget_source_map as $role => $widgets) {
-        foreach ($widgets as $id => $file) {
+        foreach ($widgets as $id => $handler) {
             if (!isset($combined[$id])) {
                 $combined[$id] = [
-                    'file'  => $file,
                     'roles' => [$role],
                 ];
             } else {
                 $combined[$id]['roles'][] = $role;
+            }
+
+            if (str_ends_with($handler, '.php') || str_ends_with($handler, '.jsx')) {
+                $combined[$id]['file'] = $handler;
+            } else {
+                $combined[$id]['class'] = $handler;
+                $combined[$id]['file']  = $handler . '.php';
             }
         }
     }
 
     // Register widgets with the union of roles once per widget ID.
     foreach ($combined as $id => $info) {
-        $cb = function_exists('render_widget_' . $id) ? 'render_widget_' . $id : '__return_empty_string';
-        if (!DashboardWidgetRegistry::get_widget($id)) {
-            DashboardWidgetRegistry::register($id, [
-                'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
-                'render_callback' => $cb,
-                'roles' => array_unique($info['roles']),
-                'file'  => $info['file'],
-            ]);
+        $args = [
+            'title' => ucwords(str_replace(['_', '-'], ' ', $id)),
+            'roles' => array_unique($info['roles']),
+            'file'  => $info['file'] ?? '',
+        ];
+
+        if (!empty($info['class'])) {
+            $args['render_callback'] = [$info['class'], 'render'];
+        } else {
+            $cb = function_exists('render_widget_' . $id) ? 'render_widget_' . $id : '__return_empty_string';
+            $args['render_callback'] = $cb;
         }
 
-        $path_php = $plugin_dir . '/widgets/' . $info['file'];
-        $path_js  = $plugin_dir . '/assets/js/widgets/' . $info['file'];
-        $registered_files[$info['file']] = true;
-        if (!file_exists($path_php) && !file_exists($path_js)) {
-            $missing_files[] = $info['file'];
-            error_log('Dashboard widget file missing: ' . $info['file']);
+        if (!DashboardWidgetRegistry::get_widget($id)) {
+            DashboardWidgetRegistry::register($id, $args);
+        }
+
+        if (!empty($info['file'])) {
+            $path_php = $plugin_dir . '/widgets/' . $info['file'];
+            $path_js  = $plugin_dir . '/assets/js/widgets/' . $info['file'];
+            $registered_files[$info['file']] = true;
+            if (!file_exists($path_php) && !file_exists($path_js)) {
+                $missing_files[] = $info['file'];
+                error_log('Dashboard widget file missing: ' . $info['file']);
+            }
         }
     }
 

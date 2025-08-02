@@ -11,6 +11,12 @@ interface DashboardWidgetInterface
      * @return array
      */
     public static function roles(): array;
+
+    /**
+     * Short description shown in dashboards or admin screens.
+     */
+    public static function description(): string;
+
     /**
      * Render the widget output.
      *

@@ -14,8 +14,8 @@ class SampleHelloWidget implements DashboardWidgetInterface {
         DashboardWidgetRegistry::register(
             self::id(),
             self::label(),
-            'admin-users',
-            __('Greets the current user.', 'artpulse'),
+            self::icon(),
+            self::description(),
             [self::class, 'render'],
             [ 'roles' => self::roles() ]
         );
@@ -36,6 +36,14 @@ class SampleHelloWidget implements DashboardWidgetInterface {
         return ['member', 'artist', 'organization'];
     }
 
+    public static function description(): string {
+        return __('Greets the current user.', 'artpulse');
+    }
+
+    public static function icon(): string {
+        return 'admin-users';
+    }
+
     /** Determine if the widget can be viewed. */
     public static function can_view(): bool {
         return is_user_logged_in();
@@ -43,19 +51,17 @@ class SampleHelloWidget implements DashboardWidgetInterface {
 
     /** Render the widget output. */
     public static function render(): string {
-        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return '';
+        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+            return '';
+        }
 
         if (!self::can_view()) {
-            $msg = '<p class="ap-widget-no-access">' . esc_html__('You do not have access.', 'artpulse') . '</p>';
-            echo $msg;
-            return $msg;
+            return '<p class="ap-widget-no-access">' . esc_html__('You do not have access.', 'artpulse') . '</p>';
         }
 
         $user = wp_get_current_user();
         $name = $user->display_name ?: $user->user_login;
-        $output = '<div>Hello, ' . esc_html($name) . '!</div>';
-        echo $output;
-        return $output;
+        return '<div>Hello, ' . esc_html($name) . '!</div>';
     }
 }
 
