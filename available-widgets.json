@@ -10,7 +10,8 @@
         "artist_inbox_preview": "ArtistInboxPreviewWidget.jsx",
         "qa_checklist": "QAChecklistWidget.php",
         "welcome_box": "ArtPulse\\Widgets::render_welcome_box",
-        "sample_events": "EventsWidget.php"
+        "sample_events": "EventsWidget.php",
+        "widget_events": "WidgetEventsWidget.php"
     },
     "artist": {
         "activity_feed": "ActivityFeedWidget.php",
