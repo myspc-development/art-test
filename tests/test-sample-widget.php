@@ -1,7 +1,7 @@
 <?php
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-class SampleHelloWidgetTest extends WP_UnitTestCase {
+class SampleHelloWidgetExistingTest extends WP_UnitTestCase {
     private function reset_registry(): void {
         $ref  = new ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
