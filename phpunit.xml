@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-    bootstrap="tests/bootstrap.php"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+    bootstrap="tests/widgets/bootstrap.php"
     colors="true"
     stopOnFailure="false"
-    verbose="true"
 >
     <testsuites>
         <testsuite name="plugin">
-            <directory>./tests</directory>
+            <directory>./tests/widgets</directory>
         </testsuite>
     </testsuites>
+
+    <coverage includeUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./widgets</directory>
+        </include>
+    </coverage>
+
+    <logging>
+        <log type="coverage-html" target="coverage/widgets" />
+    </logging>
 
     <php>
         <env name="WP_TESTS_DIR" value="vendor/wp-phpunit/wp-phpunit/" />
