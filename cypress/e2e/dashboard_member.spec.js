@@ -1,11 +1,19 @@
 describe('Member Dashboard', () => {
-  const widgets = ['activity_feed', 'news_feed', 'my_favorites'];
+  const widgets = [
+    'activity_feed',
+    'news_feed',
+    'my_favorites',
+    'qa_checklist',
+    'widget_events',
+    'rsvp_button',
+  ];
 
   it('renders all member widgets', () => {
-    cy.login('member', 'password');
+    cy.login('member');
     cy.visit('/dashboard');
     widgets.forEach((id) => {
-      cy.get(`[data-widget-id="${id}"]`, { timeout: 15000 }).should('exist');
+      cy.get(`[data-widget-id="${id}"]`).should('exist');
     });
   });
 });
+

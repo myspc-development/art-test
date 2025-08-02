@@ -1,11 +1,19 @@
 describe('Organization Dashboard', () => {
-  const widgets = ['org_event_overview', 'org_insights', 'webhooks'];
+  const widgets = [
+    'org_event_overview',
+    'org_insights',
+    'org_widget_sharing',
+    'webhooks',
+    'artpulse_analytics_widget',
+    'sponsor_display',
+  ];
 
   it('renders all organization widgets', () => {
-    cy.login('organization', 'password');
+    cy.login('organization');
     cy.visit('/dashboard');
     widgets.forEach((id) => {
-      cy.get(`[data-widget-id="${id}"]`, { timeout: 15000 }).should('exist');
+      cy.get(`[data-widget-id="${id}"]`).should('exist');
     });
   });
 });
+
