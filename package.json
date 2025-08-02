@@ -13,6 +13,7 @@
     "babel:taxonomy": "npx babel assets/js/advanced-taxonomy-filter-block.jsx -o assets/js/advanced-taxonomy-filter-block.js",
     "babel:filtered-list": "npx babel assets/js/filtered-list-shortcode-block.jsx -o assets/js/filtered-list-shortcode-block.js",
     "babel:ajax-filter": "npx babel assets/js/ajax-filter-block.jsx -o assets/js/ajax-filter-block.js",
+"type": "module"
 
     "bundle:react": "rollup -c",
     "dev": "vite",
