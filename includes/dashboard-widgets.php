@@ -34,7 +34,10 @@ function ap_render_widget(string $widget_id, int $user_id = null): void
 
     $cb = $widgets[$widget_id]['callback'] ?? null;
     if (is_callable($cb)) {
-        call_user_func($cb);
+        $output = call_user_func($cb);
+        if (is_string($output)) {
+            echo $output;
+        }
     } else {
         error_log("\xF0\x9F\x9A\xAB Invalid callback for widget '{$widget_id}'.");
     }
