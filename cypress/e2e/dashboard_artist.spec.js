@@ -1,11 +1,19 @@
 describe('Artist Dashboard', () => {
-  const widgets = ['artist_feed_publisher', 'artist_artwork_manager'];
+  const widgets = [
+    'artist_artwork_manager',
+    'artist_feed_publisher',
+    'artist_inbox_preview',
+    'revenue_summary',
+    'embed_tool',
+    'collab_requests',
+  ];
 
   it('renders all artist widgets', () => {
-    cy.login('artist', 'password');
+    cy.login('artist');
     cy.visit('/dashboard');
     widgets.forEach((id) => {
-      cy.get(`[data-widget-id="${id}"]`, { timeout: 15000 }).should('exist');
+      cy.get(`[data-widget-id="${id}"]`).should('exist');
     });
   });
 });
+
