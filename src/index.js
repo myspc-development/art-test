@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import ReactForm from './components/ReactForm';
+import ReactForm from './components/ReactForm.js';
 
 const container = document.getElementById('react-form-root');
 if (container) {
