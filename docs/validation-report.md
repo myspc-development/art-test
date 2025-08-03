@@ -103,7 +103,7 @@
 | dashboard_widget_index.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | default-design-system-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | dev/hooks.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
-| developer.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| developer/dashboard-widget-system.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | developer/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | developer/analyzer-tool-guide.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | developer/detect-duplicate-rest-route-registrations.md | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |

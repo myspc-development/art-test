@@ -15,6 +15,7 @@ Technical references and implementation docs.
 - `react-forms-codex.md`
 - `sample-widgets.md`
 - `analyzer-tool-guide.md`
+- `dashboard-widget-system.md`
 Additional references: [API Overview](../api/README.md) and [Architecture Guide](../architecture/dev-structure.md).
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
