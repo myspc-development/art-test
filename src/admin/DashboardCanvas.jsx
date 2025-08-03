@@ -11,7 +11,6 @@ export default function DashboardCanvas({ layout = [], onLayoutChange, children 
         layout={layout}
         cols={12}
         rowHeight={30}
-        width={800}
         onLayoutChange={onLayoutChange}
       >
         {children}
