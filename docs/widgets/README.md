@@ -2,7 +2,7 @@
 title: Widgets Overview
 category: widgets
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-07-31
 status: complete
 ---
 
@@ -18,6 +18,6 @@ This folder collects every guide related to dashboard widgets. New developers sh
 6. **[Widget Layout Import Export Guide](./widget-layout-import-export-guide.md)** – shows how to migrate layouts between installations.
 
 Use these guides alongside the [Widget Manager Data Layer Guide](./widget-manager-data-layer-guide.md) when customizing layouts. The recommended read order ensures you first grasp the core spec before exploring advanced usage and deployment scenarios.
-See the [REST API reference](../api/rest-api-reference.md) for endpoints used by widgets. QA should consult the [Dashboard Builder UAT Checklist](../qa/dashboard-builder-uat-checklist.md).
+See the [REST API reference](../api/rest-api-reference.md) for endpoints used by widgets. QA should consult the [Dashboard QA Checklist](../qa/dashboard-qa-checklist.md).
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*

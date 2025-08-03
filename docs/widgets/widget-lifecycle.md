@@ -2,7 +2,7 @@
 title: Widget Lifecycle
 category: widgets
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-07-31
 status: complete
 ---
 
@@ -23,6 +23,6 @@ Widgets can expose options on the **Settings** page. See [Settings Page Codex](.
 Widgets appear in exported layout JSON and are restored via the import tool in the editor.
 
 ## Test & Verify
-Follow the [Widget QA Checklist](../qa/widget-qa-checklist.md) to validate rendering and role visibility.
+Follow the [Dashboard QA Checklist](../qa/dashboard-qa-checklist.md) to validate rendering and role visibility.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
