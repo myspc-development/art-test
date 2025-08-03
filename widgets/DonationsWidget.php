@@ -26,20 +26,21 @@ class DonationsWidget {
         return user_can($user_id, 'manage_options') || user_can($user_id, 'organization');
     }
 
-    public static function render(int $user_id): void {
+    public static function render(int $user_id): string {
         if (!self::can_view($user_id)) {
-            echo '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
-            return;
+            return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
         }
         $template = locate_template('widgets/donations.php');
         if (!$template) {
             $template = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/widgets/donations.php';
         }
+        ob_start();
         if ($template && file_exists($template)) {
             load_template($template, false);
         } else {
             echo '<p>' . esc_html__('Example donations data.', 'artpulse') . '</p>';
         }
+        return ob_get_clean();
     }
 }
 

@@ -56,9 +56,9 @@ class DashboardWidgetVisibilityTest extends \WP_UnitTestCase {
 
 class TestWidgetYes {
     public static function can_view() { return true; }
-    public static function render() { echo 'YES'; }
+    public static function render() { return 'YES'; }
 }
 class TestWidgetNo {
     public static function can_view() { return false; }
-    public static function render() { echo 'NO'; }
+    public static function render() { return 'NO'; }
 }

@@ -19,10 +19,8 @@ class DashboardRenderingTest extends WP_UnitTestCase {
 
     public function test_fallback_callback_used(): void {
         DashboardWidgetRegistry::register('bad', 'Bad', 'alert', 'bad', 'not_callable');
-        $cb = DashboardWidgetRegistry::get_widget_callback('bad');
-        ob_start();
-        call_user_func($cb);
-        $html = ob_get_clean();
+        $cb   = DashboardWidgetRegistry::get_widget_callback('bad');
+        $html = call_user_func($cb);
         $this->assertStringContainsString('Widget callback is missing', $html);
     }
 

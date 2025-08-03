@@ -36,16 +36,12 @@ class OrgAnalyticsWidget {
     public static function get_title(): string { return __('Organization Analytics', 'artpulse'); }
     public static function get_section(): string { return 'insights'; }
 
-    public static function render( int $user_id ): void {
-        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
-        echo '<div class="ap-org-analytics-widget" data-widget-id="' . esc_attr(self::get_id()) . '">';
+    public static function render( int $user_id ): string {
+        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return '';
         if ( ! self::can_view( $user_id ) ) {
-            echo '<div class="notice notice-error"><p>' . esc_html__("You do not have access to view this widget.", 'artpulse') . '</p></div>';
-            echo '</div>';
-            return;
+            return '<div class="ap-org-analytics-widget" data-widget-id="' . esc_attr(self::get_id()) . '"><div class="notice notice-error"><p>' . esc_html__("You do not have access to view this widget.", 'artpulse') . '</p></div></div>';
         }
-        echo '<p>' . esc_html__('Basic traffic and engagement metrics will appear here.', 'artpulse') . '</p>';
-        echo '</div>';
+        return '<div class="ap-org-analytics-widget" data-widget-id="' . esc_attr(self::get_id()) . '"><p>' . esc_html__('Basic traffic and engagement metrics will appear here.', 'artpulse') . '</p></div>';
     }
 }
 

@@ -26,12 +26,11 @@ class ProfileOverviewWidget {
         return user_can($user_id, 'artist');
     }
 
-    public static function render(int $user_id): void {
+    public static function render(int $user_id): string {
         if (!self::can_view($user_id)) {
-            echo '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
-            return;
+            return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
         }
-        echo '<p>' . esc_html__('Profile statistics coming soon.', 'artpulse') . '</p>';
+        return '<p>' . esc_html__('Profile statistics coming soon.', 'artpulse') . '</p>';
     }
 }
 

@@ -36,34 +36,31 @@ class APShortcodeAdminWidgets {
         );
     }
 
-    public static function render_event_calendar(): void {
+    public static function render_event_calendar(): string {
         $uid       = get_current_user_id();
         $org_role  = get_user_meta($uid, 'ap_org_role', true);
         if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            echo '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
-            return;
+            return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
         }
-        echo do_shortcode('[ap_event_calendar]');
+        return do_shortcode('[ap_event_calendar]');
     }
 
-    public static function render_notifications(): void {
+    public static function render_notifications(): string {
         $uid       = get_current_user_id();
         $org_role  = get_user_meta($uid, 'ap_org_role', true);
         if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            echo '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
-            return;
+            return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
         }
-        echo do_shortcode('[ap_notifications]');
+        return do_shortcode('[ap_notifications]');
     }
 
-    public static function render_org_dashboard(): void {
+    public static function render_org_dashboard(): string {
         $uid       = get_current_user_id();
         $org_role  = get_user_meta($uid, 'ap_org_role', true);
         if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            echo '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
-            return;
+            return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
         }
-        echo do_shortcode('[ap_org_dashboard]');
+        return do_shortcode('[ap_org_dashboard]');
     }
 }
 APShortcodeAdminWidgets::register();

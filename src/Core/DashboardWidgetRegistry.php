@@ -126,7 +126,9 @@ class DashboardWidgetRegistry {
                 return;
             }
             $args['callback'] = static function () use ( $path ) {
+                ob_start();
                 include $path;
+                return ob_get_clean();
             };
         }
 
@@ -188,53 +190,55 @@ class DashboardWidgetRegistry {
         return false;
     }
 
-    public static function render_widget_fallback(): void {
-        echo '<p><strong>Widget callback is missing or invalid.</strong></p>';
+    public static function render_widget_fallback(): string {
+        return '<p><strong>Widget callback is missing or invalid.</strong></p>';
     }
 
-    private static function include_template( string $template ): void {
+    private static function include_template( string $template ): string {
         $path = locate_template( $template );
         if ( ! $path ) {
             $path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'templates/' . $template;
         }
         if ( file_exists( $path ) ) {
+            ob_start();
             include $path;
-        } else {
-            echo '<p>' . esc_html__( 'No content available.', 'artpulse' ) . '</p>';
+            return ob_get_clean();
         }
+
+        return '<p>' . esc_html__( 'No content available.', 'artpulse' ) . '</p>';
     }
 
-    public static function render_widget_news(): void {
-        self::include_template( 'widgets/widget-news.php' );
+    public static function render_widget_news(): string {
+        return self::include_template( 'widgets/widget-news.php' );
     }
 
-    public static function render_widget_events(): void {
-        self::include_template( 'widgets/events.php' );
+    public static function render_widget_events(): string {
+        return self::include_template( 'widgets/events.php' );
     }
 
-    public static function render_widget_favorites(): void {
-        self::include_template( 'widgets/my-favorites.php' );
+    public static function render_widget_favorites(): string {
+        return self::include_template( 'widgets/my-favorites.php' );
     }
 
     // Legacy aliases used in some configurations.
-    public static function render_widget_widget_events(): void {
-        self::render_widget_events();
+    public static function render_widget_widget_events(): string {
+        return self::render_widget_events();
     }
 
-    public static function render_widget_widget_favorites(): void {
-        self::render_widget_favorites();
+    public static function render_widget_widget_favorites(): string {
+        return self::render_widget_favorites();
     }
 
-    public static function render_widget_for_you(): void {
-        self::include_template( 'widgets/widget-for-you.php' );
+    public static function render_widget_for_you(): string {
+        return self::include_template( 'widgets/widget-for-you.php' );
     }
 
-    public static function render_widget_nearby_events_map(): void {
-        self::include_template( 'widgets/nearby-events-map.php' );
+    public static function render_widget_nearby_events_map(): string {
+        return self::include_template( 'widgets/nearby-events-map.php' );
     }
 
-    public static function render_widget_my_favorites(): void {
-        self::include_template( 'widgets/my-favorites.php' );
+    public static function render_widget_my_favorites(): string {
+        return self::include_template( 'widgets/my-favorites.php' );
     }
 
     /**
@@ -595,8 +599,16 @@ class DashboardWidgetRegistry {
             }
             foreach ( $widgets as $cfg ) {
                 try {
-                    call_user_func( $cfg['callback'], $user_id );
+                    ob_start();
+                    $result = call_user_func( $cfg['callback'], $user_id );
+                    $echoed = ob_get_clean();
+                    if ( is_string( $result ) && $result !== '' ) {
+                        echo $result;
+                    } else {
+                        echo $echoed;
+                    }
                 } catch ( \Throwable $e ) {
+                    ob_end_clean();
                     error_log( 'Widget ' . $cfg['id'] . ' failed: ' . $e->getMessage() );
                 }
             }
