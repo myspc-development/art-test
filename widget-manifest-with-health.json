@@ -33,7 +33,7 @@
         "previewGuarded": true
     },
     "activity_feed": {
-        "file": "widgets/ActivityFeedWidget.php",
+        "file": "widgets/member/ActivityFeedWidget.php",
         "roles": [
             "member",
             "artist",

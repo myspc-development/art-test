@@ -21,6 +21,7 @@ namespace ArtPulse\Core {
 
 namespace {
     require_once __DIR__ . '/../TestStubs.php';
+    require_once __DIR__ . '/../../widgets/member/ActivityFeedWidget.php';
 
     if (!defined('ABSPATH')) {
         define('ABSPATH', __DIR__ . '/');
@@ -72,8 +73,8 @@ namespace {
         function wp_kses_post($content) { return $content; }
     }
 
-    if (class_exists('ArtPulse\\Widgets\\ActivityFeedWidget') && !class_exists('ActivityFeedWidget')) {
-        class_alias('ArtPulse\\Widgets\\ActivityFeedWidget', 'ActivityFeedWidget');
+    if (class_exists('ArtPulse\\Widgets\\Member\\ActivityFeedWidget') && !class_exists('ActivityFeedWidget')) {
+        class_alias('ArtPulse\\Widgets\\Member\\ActivityFeedWidget', 'ActivityFeedWidget');
     }
 }
 

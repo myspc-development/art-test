@@ -7,10 +7,13 @@ use ArtPulse\Widgets\FavoritesOverviewWidget;
 use ArtPulse\Widgets\MyUpcomingEventsWidget;
 use ArtPulse\Widgets\ProfileOverviewWidget;
 use ArtPulse\Widgets\WidgetEventsWidget;
+use ArtPulse\Widgets\Member\ActivityFeedWidget;
+use ArtPulse\Widgets\Member\WelcomeBoxWidget;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 return [
     'welcome_box' => [
-        'callback' => [\ArtPulse\Widgets::class, 'render_welcome_box'],
+        'class' => WelcomeBoxWidget::class,
         'label' => 'Welcome',
         'description' => 'Personal greeting for the signed-in user.',
         'roles' => ['member'],
@@ -34,7 +37,7 @@ return [
         'icon' => 'chart-area',
     ],
     'activity_feed' => [
-        'class' => \ActivityFeedWidget::class,
+        'class' => ActivityFeedWidget::class,
         'label' => 'Activity Feed',
         'description' => 'Shows recent user and org activity',
         'roles' => ['member', 'artist', 'organization'],
@@ -43,7 +46,7 @@ return [
         'cache' => true,
     ],
     'artist_inbox_preview' => [
-        'callback' => 'render_widget_artist_inbox_preview',
+        'callback' => 'ap_widget_artist_inbox_preview',
         'label' => 'Artist Inbox Preview',
         'description' => 'Recent unread messages from artists.',
         'roles' => ['member', 'artist'],
@@ -52,7 +55,7 @@ return [
         'capability' => 'can_receive_messages',
     ],
     'event_chat' => [
-        'callback' => 'render_widget_event_chat',
+        'callback' => 'ap_widget_event_chat',
         'label' => 'Event Chat',
         'description' => 'Chat with other attendees.',
         'roles' => ['member'],
@@ -60,7 +63,7 @@ return [
         'icon' => 'comments',
     ],
     'my_favorites' => [
-        'callback' => 'render_widget_my_favorites',
+        'callback' => [DashboardWidgetRegistry::class, 'render_widget_my_favorites'],
         'label' => 'My Favorite Events',
         'description' => 'Your saved events.',
         'roles' => ['member', 'artist'],
@@ -68,7 +71,7 @@ return [
         'icon' => 'star',
     ],
     'nearby_events_map' => [
-        'callback' => 'render_widget_nearby_events_map',
+        'callback' => [DashboardWidgetRegistry::class, 'render_widget_nearby_events_map'],
         'label' => 'Nearby Events',
         'description' => 'Events around your location.',
         'roles' => ['member', 'artist'],
@@ -91,7 +94,7 @@ return [
         'icon' => 'yes',
     ],
     'rsvp_button' => [
-        'callback' => 'render_widget_rsvp_button',
+        'callback' => 'ap_widget_rsvp_button',
         'label' => 'RSVP Button',
         'description' => 'Toggle RSVP status for an event.',
         'roles' => ['member'],
@@ -99,7 +102,7 @@ return [
         'icon' => 'calendar-check',
     ],
     'share_this_event' => [
-        'callback' => 'render_widget_share_this_event',
+        'callback' => 'ap_widget_share_this_event',
         'label' => 'Share This Event',
         'description' => 'Share this event with friends.',
         'roles' => ['member'],
@@ -117,7 +120,7 @@ return [
         'lazy' => true,
     ],
     'revenue_summary' => [
-        'callback' => 'render_widget_revenue_summary',
+        'callback' => 'ap_widget_artist_revenue_summary',
         'label' => 'Revenue Summary',
         'description' => 'Revenue totals from tickets and donations.',
         'roles' => ['artist'],
@@ -126,7 +129,7 @@ return [
         'lazy' => true,
     ],
     'artist_spotlight' => [
-        'callback' => 'render_widget_artist_spotlight',
+        'callback' => 'ap_widget_artist_spotlight',
         'label' => 'Artist Spotlight',
         'description' => 'Recent mentions and highlights.',
         'roles' => ['artist'],
@@ -135,7 +138,7 @@ return [
         'lazy' => true,
     ],
     'artist_artwork_manager' => [
-        'callback' => 'render_widget_artist_artwork_manager',
+        'callback' => 'ap_widget_artist_artwork_manager',
         'label' => 'Artwork Manager',
         'description' => 'Manage your artworks.',
         'roles' => ['artist'],
@@ -144,7 +147,7 @@ return [
         'lazy' => true,
     ],
     'artist_audience_insights' => [
-        'callback' => 'render_widget_artist_audience_insights',
+        'callback' => 'ap_widget_artist_audience_insights',
         'label' => 'Audience Insights',
         'description' => 'View audience insights.',
         'roles' => ['artist'],
@@ -153,7 +156,7 @@ return [
         'lazy' => true,
     ],
     'artist_earnings_summary' => [
-        'callback' => 'render_widget_artist_earnings_summary',
+        'callback' => 'ap_widget_artist_earnings_summary',
         'label' => 'Earnings Summary',
         'description' => 'Overview of earnings from sales and tips.',
         'roles' => ['artist'],
@@ -162,7 +165,7 @@ return [
         'lazy' => true,
     ],
     'artist_feed_publisher' => [
-        'callback' => 'render_widget_artist_feed_publisher',
+        'callback' => 'ap_widget_artist_feed_publisher',
         'label' => 'Post & Engage',
         'description' => 'Publish updates to your feed.',
         'roles' => ['artist'],
@@ -171,7 +174,7 @@ return [
         'lazy' => true,
     ],
     'collab_requests' => [
-        'callback' => 'render_widget_collab_requests',
+        'callback' => 'ap_widget_collab_requests',
         'label' => 'Collab Requests',
         'description' => 'Manage collaboration requests.',
         'roles' => ['artist'],
@@ -180,7 +183,7 @@ return [
         'lazy' => true,
     ],
     'onboarding_tracker' => [
-        'callback' => 'render_widget_onboarding_tracker',
+        'callback' => 'ap_widget_onboarding_tracker',
         'label' => 'Onboarding Checklist',
         'description' => 'Track setup tasks.',
         'roles' => ['artist'],
@@ -189,7 +192,7 @@ return [
         'lazy' => true,
     ],
     'audience_crm' => [
-        'callback' => 'render_widget_audience_crm',
+        'callback' => 'ap_widget_audience_crm',
         'label' => 'Audience CRM',
         'description' => 'Manage organization contacts.',
         'roles' => ['organization'],
@@ -197,7 +200,7 @@ return [
         'lazy' => true,
     ],
     'sponsored_event_config' => [
-        'callback' => 'render_widget_sponsored_event_config',
+        'callback' => 'ap_widget_sponsored_event_config',
         'label' => 'Sponsored Event Config',
         'description' => 'Configure sponsored event settings.',
         'roles' => ['organization'],
@@ -205,7 +208,7 @@ return [
         'lazy' => true,
     ],
     'embed_tool' => [
-        'callback' => 'render_widget_embed_tool',
+        'callback' => 'ap_widget_embed_tool',
         'label' => 'Embed Tool',
         'description' => 'Generate embeddable event widgets.',
         'roles' => ['organization'],
@@ -213,7 +216,7 @@ return [
         'lazy' => true,
     ],
     'org_event_overview' => [
-        'callback' => 'render_widget_org_event_overview',
+        'callback' => 'ap_widget_org_event_overview',
         'label' => 'Event Overview',
         'description' => 'Overview of upcoming organization events.',
         'roles' => ['organization'],
@@ -221,7 +224,7 @@ return [
         'lazy' => true,
     ],
     'org_team_roster' => [
-        'callback' => 'render_widget_org_team_roster',
+        'callback' => 'ap_widget_org_team_roster',
         'label' => 'Team Roster',
         'description' => 'List and manage team members.',
         'roles' => ['organization'],
@@ -229,7 +232,7 @@ return [
         'lazy' => true,
     ],
     'branding_settings_panel' => [
-        'callback' => 'render_widget_branding_settings_panel',
+        'callback' => 'ap_widget_branding_settings_panel',
         'label' => 'Branding Settings',
         'description' => 'Customize organization branding.',
         'roles' => ['organization'],
@@ -251,7 +254,7 @@ return [
         'icon' => 'chart-bar',
     ],
     'org_widget_sharing' => [
-        'callback' => 'render_widget_org_widget_sharing',
+        'callback' => 'ap_widget_org_widget_sharing',
         'label' => 'Widget Sharing',
         'description' => 'Share widgets with partners.',
         'roles' => ['organization'],
@@ -259,14 +262,14 @@ return [
         'lazy' => true,
     ],
     'webhooks' => [
-        'callback' => 'render_widget_webhooks',
+        'callback' => 'ap_widget_webhooks',
         'label' => 'Webhooks',
         'description' => 'Manage outbound webhooks for automation.',
         'roles' => ['organization'],
         'icon' => 'admin-links',
     ],
     'sponsor_display' => [
-        'callback' => 'render_widget_sponsor_display',
+        'callback' => 'ap_widget_sponsor_display',
         'label' => 'Sponsor Display',
         'description' => 'Showcase sponsors on events.',
         'roles' => ['organization'],
@@ -274,7 +277,7 @@ return [
         'lazy' => true,
     ],
     'org_approval_center' => [
-        'callback' => 'render_widget_org_approval_center',
+        'callback' => 'ap_widget_org_approval_center',
         'label' => 'Approval Center',
         'description' => 'Review pending items awaiting approval.',
         'roles' => ['organization'],
@@ -282,7 +285,7 @@ return [
         'lazy' => true,
     ],
     'org_ticket_insights' => [
-        'callback' => 'render_widget_org_ticket_insights',
+        'callback' => 'ap_widget_org_ticket_insights',
         'label' => 'Ticket Insights',
         'description' => 'Analyze ticket sales and attendance.',
         'roles' => ['organization'],
@@ -290,7 +293,7 @@ return [
         'lazy' => true,
     ],
     'org_broadcast_box' => [
-        'callback' => 'render_widget_org_broadcast_box',
+        'callback' => 'ap_widget_org_broadcast_box',
         'label' => 'Broadcast Box',
         'description' => 'Send messages to followers.',
         'roles' => ['organization'],

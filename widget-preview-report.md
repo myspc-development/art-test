@@ -10,5 +10,5 @@ Widgets unguarded: 0
 - templates/widgets/guide.php: admin_guide, member_guide
 
 ## Unmapped Files
-- widgets/ActivityFeedWidget.php
+- widgets/member/ActivityFeedWidget.php
 - widgets/WebhooksWidget.php

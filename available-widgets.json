@@ -1,7 +1,7 @@
 [
     {
         "id": "activity_feed",
-        "callback": "ActivityFeedWidget.php",
+        "callback": "member/ActivityFeedWidget.php",
         "allowed_roles": [
             "artist",
             "member",
@@ -268,7 +268,7 @@
     },
     {
         "id": "welcome_box",
-        "callback": "ArtPulse\\Widgets::render_welcome_box",
+        "callback": "member/WelcomeBoxWidget.php",
         "allowed_roles": [
             "member"
         ]

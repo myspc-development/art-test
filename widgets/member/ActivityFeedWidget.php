@@ -1,5 +1,5 @@
 <?php
-namespace ArtPulse\Widgets;
+namespace ArtPulse\Widgets\Member;
 
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
@@ -70,7 +70,7 @@ class ActivityFeedWidget implements DashboardWidgetInterface {
         }
 
         ob_start();
-        include __DIR__ . '/../templates/widgets/activity_feed.php';
+        include __DIR__ . '/../../templates/widgets/activity_feed.php';
         return ob_get_clean();
     }
 }
