@@ -188,7 +188,7 @@
     },
     {
         "id": "portfolio_preview",
-        "callback": "Widgets.php",
+        "callback": "ArtPulse\\Widgets::render_portfolio_box",
         "allowed_roles": [
             "artist"
         ]
