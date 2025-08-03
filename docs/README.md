@@ -26,7 +26,7 @@ This directory groups all documentation by audience and feature area. Start with
 - [QA Documentation](qa/README.md) – checklists and automated testing notes.
 
 ### User Guides
-- [User Guides](user/README.md) – customizing dashboards and general usage tips.
+- [User Guides](guides/user/README.md) – customizing dashboards and general usage tips.
 
 ## Additional Resources
 Additional planning docs live under [internal README](internal/README.md) and more detailed specifications are in [specs README](specs/README.md). Navigate through each folder README to explore related articles in a logical order.

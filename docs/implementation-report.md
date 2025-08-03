@@ -16,7 +16,7 @@ This report tracks key documentation components and their completion status.
 | `admin/README.md` | ✅ | Summarizes admin docs |
 | `developer/README.md` | ✅ | Provides developer guide links |
 | `qa/README.md` | ✅ | Lists QA resources |
-| `user/README.md` | ✅ | Contains user overview |
+| `guides/user/README.md` | ✅ | Contains user overview |
 | `widgets/README.md` | ✅ | Orders widget guides |
 | `architecture/README.md` | ✅ | Added overview README |
 | `issues/README.md` | ✅ | New issues index |

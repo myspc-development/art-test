@@ -67,8 +67,8 @@ status: complete
   * [Overview](ui/README.md)
   * [widget-ui-design-guide.md](ui/widget-ui-design-guide.md)
 * **User**
-  * [Overview](user/README.md)
-  * [user-guide.md](user/user-guide.md)
+  * [Overview](guides/user/README.md)
+  * [user-guide.md](guides/user/user-guide.md)
 * **Widgets**
   * [Overview](widgets/README.md)
   * [widget-layout-import-export-guide.md](widgets/widget-layout-import-export-guide.md)

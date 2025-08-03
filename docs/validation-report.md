@@ -270,8 +270,6 @@
 | ui/widget-ui-design-guide.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | updates-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | upgrade-notes.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| user/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
-| user/user-guide.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | validation-report.md | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ |
 | webhook-automation-codex.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | widgets-reference.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
