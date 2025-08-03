@@ -20,9 +20,6 @@ composer-setup.php
 # ===============================
 build/
 dist/
-!dist/
-dist/app-dashboard.js
-!dist/bundle.css
 release/
 *.zip
 
