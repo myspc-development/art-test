@@ -326,19 +326,12 @@ function ap_widget_local_events(int $user_id = 0, array $vars = []): string
 
 function ap_widget_favorites(int $user_id = 0, array $vars = []): string
 {
-    return ap_load_dashboard_template('widgets/my-favorites.php', $vars);
+    return ap_load_dashboard_template('widgets/favorites.php', $vars);
 }
 
 function ap_widget_my_favorites(int $user_id = 0, array $vars = []): string
 {
-    if (function_exists('ap_widget_favorites')) {
-        return ap_widget_favorites($vars);
-    }
-    trigger_error( 'ap_widget_favorites not found, falling back placeholder', E_USER_NOTICE );
-    if (class_exists('FavoritesOverviewWidget')) {
-        return FavoritesOverviewWidget::render_placeholder();
-    }
-    return '<div class="ap-widget-placeholder">Favorites widget is under construction.</div>';
+    return ap_load_dashboard_template('widgets/my-favorites.php', $vars);
 }
 
 function ap_widget_my_follows(int $user_id = 0, array $vars = []): string
@@ -424,29 +417,27 @@ function ap_widget_spotlights(int $user_id = 0, array $vars = []): string
 
 function ap_widget_role_spotlight(int $user_id = 0, array $vars = []): string
 {
-    $vars['role'] = DashboardController::get_role(get_current_user_id());
+    $vars['role']      = DashboardController::get_role(get_current_user_id());
+    $vars['widget_id'] = 'role-spotlight';
     return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
 }
 
 function ap_widget_spotlight_calls(int $user_id = 0, array $vars = []): string
 {
-    $vars['role']     = DashboardController::get_role(get_current_user_id());
-    $vars['category'] = 'calls';
-    return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
+    $vars['role'] = DashboardController::get_role(get_current_user_id());
+    return ap_load_dashboard_template('widgets/spotlight-dashboard-calls.php', $vars);
 }
 
 function ap_widget_spotlight_events(int $user_id = 0, array $vars = []): string
 {
-    $vars['role']     = DashboardController::get_role(get_current_user_id());
-    $vars['category'] = 'events';
-    return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
+    $vars['role'] = DashboardController::get_role(get_current_user_id());
+    return ap_load_dashboard_template('widgets/spotlight-dashboard-events.php', $vars);
 }
 
 function ap_widget_spotlight_features(int $user_id = 0, array $vars = []): string
 {
-    $vars['role']     = DashboardController::get_role(get_current_user_id());
-    $vars['category'] = 'featured';
-    return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
+    $vars['role'] = DashboardController::get_role(get_current_user_id());
+    return ap_load_dashboard_template('widgets/spotlight-dashboard-features.php', $vars);
 }
 
 function ap_widget_upcoming_events_location(int $user_id = 0, array $vars = []): string
