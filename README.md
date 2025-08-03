@@ -60,14 +60,7 @@ Additional resources:
 - [Sprint Workflow Codex](docs/sprint-workflow-codex.md)
 - [Sprint 4 Polish & Documentation Codex](docs/sprint4-polish-documentation-codex.md)
 
-Styling now relies on the Salient theme and WPBakery builder. See the
-[Dashboard Style Guide](docs/dashboard-style-guide.md) for
-recommended class names when extending layouts. Widgets should also
-follow the more detailed
-[Default Design System Codex](docs/default-design-system-codex.md).
-When customizing SCSS or JavaScript be sure to run `npm run build` and
-commit the updated `build/` output so the admin screens load the latest
-compiled assets.
+
 
 ## Project Vision & Goals
 
@@ -94,6 +87,17 @@ composer install
 npm install
 npm run dev
 ```
+
+### Building for deployment
+
+Generate production bundles before packaging the plugin:
+
+```bash
+npm run build
+```
+
+The compiled assets in `dist/` are not committed. CI workflows run this build
+step during deployment so the directory is recreated automatically.
 
 ## Directory Structure
 

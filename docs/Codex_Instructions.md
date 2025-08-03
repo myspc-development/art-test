@@ -12,7 +12,7 @@ This document defines the conventions used when writing or updating documentatio
 
 ## File Organization
 - Place documents under the relevant audience folder: `admin/`, `developer/`, `qa/`, `user/`, `widgets/` and so on.
-- Use lowercase kebab-case for filenames, e.g. `widget-qa-checklist.md`.
+- Use lowercase kebab-case for filenames, e.g. `dashboard-qa-checklist.md`.
 - Keep screenshots in an adjacent `images/` directory when available.
 
 ## Frontmatter Format

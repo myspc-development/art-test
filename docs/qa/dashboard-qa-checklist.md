@@ -1,14 +1,14 @@
 ---
-title: Dashboard Builder UAT Checklist
+title: Dashboard QA Checklist
 category: qa
 role: qa
-last_updated: 2025-07-20
+last_updated: 2025-07-31
 status: complete
 ---
 
-# Dashboard Builder UAT Checklist
+# Dashboard QA Checklist
 
-This document outlines the final user acceptance testing (UAT) steps for the Dashboard Builder. Run these checks in a staging or preview environment before any public release.
+This document combines the former **Dashboard Builder UAT** and **Widget QA** checklists. Use it to verify both the builder interface and the live dashboard widgets before release.
 
 ## 1. Deploy to Staging
 
@@ -41,7 +41,7 @@ wp user create org3 org3@example.com --role=organization_admin --user_pass=pass
 wp db import data/event-seed.sql
 ```
 
-## 3. Tester Workflow
+## 3. Builder Workflow
 
 Invite internal or community testers and provide them with login details. Ask testers to:
 
@@ -52,7 +52,48 @@ Invite internal or community testers and provide them with login details. Ask te
 5. Check that hiding a widget removes it from the registry and REST calls.
 6. Note any PHP or JavaScript errors displayed while `WP_DEBUG` is active.
 
-## Widget Role Rendering Verification
+## 4. Widget Verification
+
+### Render
+- [ ] Widget title displays correctly
+- [ ] Placeholder content replaced with real data
+
+### Data Save
+- [ ] Widget options save via AJAX
+- [ ] REST API returns updated values
+- [ ] Invalid data shows an inline error
+
+### Responsive Layout
+- [ ] Widgets stack properly on mobile
+- [ ] Grid adjusts on tablet and desktop
+- [ ] Collapse/expand controls work at all sizes
+
+### Permissions
+- [ ] Only authorized roles can view the widget
+- [ ] Editing restricted to users with `manage_options`
+- [ ] Hidden widgets remain inaccessible via direct REST calls
+
+### Browser Compatibility
+- [ ] Render tested in latest Chrome, Firefox and Safari
+- [ ] Mobile Safari and Chrome show no layout shifts
+- [ ] Keyboard navigation works consistently across browsers
+
+### Accessibility
+- [ ] ARIA labels present for interactive controls
+- [ ] Sufficient color contrast for text and icons
+- [ ] Widget is usable without a mouse
+
+### Performance
+- [ ] Widget loads within two seconds on a fresh page view
+- [ ] No excessive network requests
+- [ ] Memory usage stays under 50 MB after multiple edits
+
+Status:
+
+- [ ] Verified
+- [ ] Needs Testing
+
+## 5. Widget Role Rendering Verification
 
 Optionally enable a debug block on the dashboard to verify widget visibility for
 each role. Add the following snippet inside `dashboard-generic.php` or a similar
@@ -74,16 +115,14 @@ widgets when viewing the page as an administrator:
 <?php endif; ?>
 ```
 
-Compare the layout array with the widgets shown on screen after saving changes
-in the Dashboard Builder. This helps confirm all widgets registered to a role
-are rendered correctly.
+Compare the layout array with the widgets shown on screen after saving changes in the Dashboard Builder. This helps confirm all widgets registered to a role are rendered correctly.
 
-## 4. Reporting
+## 6. Reporting
 
 Collect feedback via your preferred tracking tool. Include screenshots and steps to reproduce any issues. When all checks pass, update this document’s status to **complete** and proceed with the release checklist.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
 
-## 5. Sign Off
+## 7. Sign Off
 Once all testers confirm the expected behaviour and no blocking issues remain, note the completion date below and notify the release manager.
 

@@ -181,14 +181,13 @@
 | public-beta-setup-codex.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | qa/End_to_End_Testing_Guide.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
 | qa/README.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
-| qa/dashboard-builder-uat-checklist.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| qa/dashboard-qa-checklist.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | qa/dashboard-rendering-audit-standardization.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | qa/dashboard-widgets-by-role.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | qa/full-dashboard-compliance-check.md | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | qa/role-based-widget-visibility-checklist.md | ✅ | ✅ | ❌ | ✅ | ✅ | ❌ |
 | qa/testing-strategy.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | qa/widget-editor-testing-checklist.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| qa/widget-qa-checklist.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | qr-checkins.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | reporting-exports.md | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | role_management_codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
