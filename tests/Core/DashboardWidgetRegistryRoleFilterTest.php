@@ -1,24 +1,36 @@
 <?php
 namespace ArtPulse\Core\Tests;
 
-use PHPUnit\Framework\TestCase;
+use WP_UnitTestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-class DashboardWidgetRegistryRoleFilterTest extends TestCase
+class DashboardWidgetRegistryRoleFilterTest extends WP_UnitTestCase
 {
-    protected function setUp(): void
+    protected function set_up(): void
     {
+        parent::set_up();
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
         $prop->setValue([]);
+        foreach (['member', 'artist', 'administrator', 'organization'] as $role) {
+            if (!get_role($role)) {
+                add_role($role, ucfirst($role));
+            }
+        }
     }
 
     public function test_get_widgets_filters_by_role(): void
     {
         DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', '__return_null', ['roles' => ['member']]);
         DashboardWidgetRegistry::register('beta', 'Beta', '', '', '__return_null', ['roles' => ['administrator']]);
+
+        $member_id = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($member_id);
         $member = DashboardWidgetRegistry::get_widgets('member');
+
+        $admin_id = self::factory()->user->create(['role' => 'administrator']);
+        wp_set_current_user($admin_id);
         $admin = DashboardWidgetRegistry::get_widgets('administrator');
 
         $this->assertArrayHasKey('alpha', $member);
@@ -26,20 +38,25 @@ class DashboardWidgetRegistryRoleFilterTest extends TestCase
         $this->assertArrayHasKey('beta', $admin);
     }
 
-    public function test_get_widgets_combines_roles(): void
+    public function test_get_widgets_respects_current_user_role_when_multiple_requested(): void
     {
         DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', '__return_null', ['roles' => ['member']]);
         DashboardWidgetRegistry::register('beta', 'Beta', '', '', '__return_null', ['roles' => ['artist']]);
 
+        $member_id = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($member_id);
         $combined = DashboardWidgetRegistry::get_widgets(['member', 'artist']);
 
         $this->assertArrayHasKey('alpha', $combined);
-        $this->assertArrayHasKey('beta', $combined);
+        $this->assertArrayNotHasKey('beta', $combined);
     }
 
     public function test_get_widgets_no_duplicate_when_roles_overlap(): void
     {
         DashboardWidgetRegistry::register('shared', 'Shared', '', '', '__return_null', ['roles' => ['member', 'artist']]);
+
+        $member_id = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($member_id);
         $widgets = DashboardWidgetRegistry::get_widgets(['member', 'artist']);
         $this->assertCount(1, array_filter(array_keys($widgets), fn($id) => $id === 'shared'));
     }
@@ -49,7 +66,12 @@ class DashboardWidgetRegistryRoleFilterTest extends TestCase
         DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', '__return_null', ['roles' => ['member']]);
         DashboardWidgetRegistry::register('beta', 'Beta', '', '', '__return_null', ['roles' => ['artist']]);
 
+        $member_id = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($member_id);
         $member = DashboardWidgetRegistry::get_widgets_by_role('member');
+
+        $artist_id = self::factory()->user->create(['role' => 'artist']);
+        wp_set_current_user($artist_id);
         $artist = DashboardWidgetRegistry::get_widgets_by_role('artist');
 
         $this->assertArrayHasKey('alpha', $member);
@@ -68,9 +90,17 @@ class DashboardWidgetRegistryRoleFilterTest extends TestCase
             ['roles' => ['member', 'artist', 'organization']]
         );
 
+        $member_id = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($member_id);
         $member = DashboardWidgetRegistry::get_widgets_by_role('member');
+
+        $artist_id = self::factory()->user->create(['role' => 'artist']);
+        wp_set_current_user($artist_id);
         $artist = DashboardWidgetRegistry::get_widgets_by_role('artist');
-        $org    = DashboardWidgetRegistry::get_widgets_by_role('organization');
+
+        $org_id = self::factory()->user->create(['role' => 'organization']);
+        wp_set_current_user($org_id);
+        $org = DashboardWidgetRegistry::get_widgets_by_role('organization');
 
         $this->assertArrayHasKey('gamma', $member);
         $this->assertArrayHasKey('gamma', $artist);

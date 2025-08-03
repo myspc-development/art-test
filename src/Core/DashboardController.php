@@ -121,7 +121,7 @@ class DashboardController {
         $missing = [];
         foreach (self::$role_widgets as $ids) {
             foreach ($ids as $id) {
-                if (!DashboardWidgetRegistry::get_widget($id)) {
+                if (!DashboardWidgetRegistry::get($id)) {
                     $missing[] = $id;
                 }
             }
@@ -150,7 +150,7 @@ class DashboardController {
 
         $valid = [];
         foreach ($widgets as $id) {
-            if (DashboardWidgetRegistry::get_widget($id)) {
+            if (DashboardWidgetRegistry::get($id)) {
                 $valid[] = $id;
             } else {
                 trigger_error('Dashboard widget not registered: ' . $id, E_USER_WARNING);
@@ -231,7 +231,7 @@ class DashboardController {
                     $ids[] = sanitize_key($item);
                 }
             }
-            $allowed = array_keys(DashboardWidgetRegistry::get_widgets($role));
+            $allowed = array_keys(DashboardWidgetRegistry::get_widgets($role, $user_id));
             $missing = array_diff($default_ids, $ids);
             $unauth = array_diff($ids, $allowed);
             if (count($missing) >= floor(count($default_ids) / 2) || !empty($unauth)) {
@@ -270,7 +270,7 @@ class DashboardController {
 
                 $id = DashboardWidgetRegistry::map_to_core_id(sanitize_key($entry['id']));
 
-                if (!DashboardWidgetRegistry::get_widget($id)) {
+                if (!DashboardWidgetRegistry::get($id)) {
                     error_log("[Dashboard Preset] Widget {$id} not registered");
                     continue;
                 }

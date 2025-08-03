@@ -159,7 +159,7 @@ if (empty($layout)) {
     foreach ($layout as $widget) {
         $id      = $widget['id'];
         $visible = $widget['visible'] ?? true;
-        $config  = DashboardWidgetRegistry::get_widget($id);
+        $config  = DashboardWidgetRegistry::get_widget($id, $user_id);
         if (!$config) {
             continue;
         }

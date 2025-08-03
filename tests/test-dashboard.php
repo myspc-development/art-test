@@ -13,14 +13,21 @@ class DashboardRenderingTest extends WP_UnitTestCase {
         $prop = $ref->getProperty('id_map');
         $prop->setAccessible(true);
         $prop->setValue(null);
+        foreach (['member', 'artist', 'organization'] as $role) {
+            if (!get_role($role)) {
+                add_role($role, ucfirst($role));
+            }
+        }
         EventsWidget::register();
         DonationsWidget::register();
     }
 
     public function test_fallback_callback_used(): void {
+        $uid = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($uid);
         DashboardWidgetRegistry::register('bad', 'Bad', 'alert', 'bad', 'not_callable');
         $cb   = DashboardWidgetRegistry::get_widget_callback('bad');
-        $html = call_user_func($cb);
+        $html = $cb ? call_user_func($cb) : '';
         $this->assertStringContainsString('Widget callback is missing', $html);
     }
 

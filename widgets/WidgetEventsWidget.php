@@ -21,7 +21,7 @@ class WidgetEventsWidget {
         );
 
         // Legacy alias used in older configs.
-        if (!DashboardWidgetRegistry::get_widget('widget_widget_events')) {
+        if (!DashboardWidgetRegistry::get('widget_widget_events')) {
             DashboardWidgetRegistry::register(
                 'widget_widget_events',
                 __('Upcoming Events (Legacy)', 'artpulse'),

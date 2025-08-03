@@ -24,6 +24,11 @@ class WidgetGuardTest extends WP_UnitTestCase
         parent::set_up();
         $this->reset_registry();
         self::$logs = [];
+        if (!get_role('member')) {
+            add_role('member', 'Member');
+        }
+        $uid = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($uid);
     }
 
     public function test_invalid_callback_gets_placeholder(): void

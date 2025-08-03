@@ -24,7 +24,7 @@ class DashboardRenderer
     {
         $user_id = $user_id ?? get_current_user_id();
         $role    = DashboardController::get_role($user_id);
-        $widget  = DashboardWidgetRegistry::get_widget($widget_id);
+        $widget  = DashboardWidgetRegistry::get_widget($widget_id, $user_id);
 
         if (!$widget) {
             error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not found in registry.");

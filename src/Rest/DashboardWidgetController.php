@@ -32,7 +32,7 @@ class DashboardWidgetController {
             }
 
             $core = self::to_core_id($id);
-            if ($id && $core === $id && !\ArtPulse\Core\DashboardWidgetRegistry::get_widget($id)) {
+            if ($id && $core === $id && !\ArtPulse\Core\DashboardWidgetRegistry::get($id)) {
                 error_log('[DashboardBuilder] Unmapped widget ID: ' . $id);
             }
 

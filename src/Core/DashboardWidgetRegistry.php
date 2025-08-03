@@ -287,7 +287,10 @@ class DashboardWidgetRegistry {
     /**
      * Retrieve a widget configuration by ID.
      */
-    public static function get_widget( string $id ): ?array {
+    public static function get_widget( string $id, int $user_id = 0 ): ?array {
+        if ( ! self::user_can_see( $id, $user_id ) ) {
+            return null;
+        }
         $widgets = self::get_all();
         return $widgets[ $id ] ?? null;
     }
@@ -408,6 +411,33 @@ class DashboardWidgetRegistry {
     }
 
     /**
+     * Determine if a user can see a widget.
+     */
+    public static function user_can_see( string $id, int $user_id = 0 ): bool {
+        if ( ! $user_id ) {
+            $user_id = get_current_user_id();
+        }
+
+        $widget = self::get( $id );
+        if ( ! $widget ) {
+            return false;
+        }
+
+        $role         = DashboardController::get_role( $user_id );
+        $widget_roles  = isset( $widget['roles'] ) ? (array) $widget['roles'] : [];
+        if ( $widget_roles && ! in_array( $role, $widget_roles, true ) ) {
+            return false;
+        }
+
+        $cap = $widget['capability'] ?? '';
+        if ( $cap && ! user_can( $user_id, $cap ) ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Get a single widget configuration by ID.
      */
     public static function get( string $id ): ?array {
@@ -423,12 +453,15 @@ class DashboardWidgetRegistry {
      *
      * @param string|array $user_role Single role or list of roles.
      */
-    public static function get_widgets( $user_role ): array {
+    public static function get_widgets( $user_role, int $user_id = 0 ): array {
         $roles   = array_map( 'sanitize_key', (array) $user_role );
         $allowed = [];
         foreach ( self::get_all() as $id => $config ) {
             $widget_roles = isset( $config['roles'] ) ? (array) $config['roles'] : [];
             if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
+                continue;
+            }
+            if ( ! self::user_can_see( $id, $user_id ) ) {
                 continue;
             }
             $allowed[ $id ] = $config['callback'];
@@ -442,9 +475,12 @@ class DashboardWidgetRegistry {
      *
      * @param bool $include_schema Include the settings schema for each widget.
      */
-    public static function get_definitions( bool $include_schema = false ): array {
+    public static function get_definitions( bool $include_schema = false, int $user_id = 0 ): array {
         $defs = [];
         foreach ( self::get_all() as $id => $config ) {
+            if ( ! self::user_can_see( $id, $user_id ) ) {
+                continue;
+            }
             // Sanitize widget configuration to avoid undefined index warnings.
             $label       = isset( $config['label'] ) ? $config['label'] : 'Unnamed Widget';
             $icon        = isset( $config['icon'] ) ? $config['icon'] : 'dashicons-admin-generic';
@@ -479,7 +515,10 @@ class DashboardWidgetRegistry {
     /**
      * Get a single widget callback by ID.
      */
-    public static function get_widget_callback( string $id ): ?callable {
+    public static function get_widget_callback( string $id, int $user_id = 0 ): ?callable {
+        if ( ! self::user_can_see( $id, $user_id ) ) {
+            return null;
+        }
         $widgets = self::get_all();
         return $widgets[ $id ]['callback'] ?? null;
     }
@@ -487,7 +526,10 @@ class DashboardWidgetRegistry {
     /**
      * Get the settings schema for a widget.
      */
-    public static function get_widget_schema( string $id ): array {
+    public static function get_widget_schema( string $id, int $user_id = 0 ): array {
+        if ( ! self::user_can_see( $id, $user_id ) ) {
+            return [];
+        }
         $widgets = self::get_all();
         return $widgets[ $id ]['settings'] ?? [];
     }
@@ -497,12 +539,15 @@ class DashboardWidgetRegistry {
      *
      * @param string|array $role Single role or array of roles.
      */
-    public static function get_widgets_by_role( $role ): array {
+    public static function get_widgets_by_role( $role, int $user_id = 0 ): array {
         $roles = array_map( 'sanitize_key', (array) $role );
         $defs  = [];
         foreach ( self::get_all() as $id => $cfg ) {
             $widget_roles = isset( $cfg['roles'] ) ? (array) $cfg['roles'] : [];
             if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
+                continue;
+            }
+            if ( ! self::user_can_see( $id, $user_id ) ) {
                 continue;
             }
             $defs[ $id ] = $cfg;
@@ -514,8 +559,8 @@ class DashboardWidgetRegistry {
     /**
      * Get a random subset of widgets for a role.
      */
-    public static function get_random( string $role, int $limit = 1 ): array {
-        $widgets = self::get_widgets_by_role( $role );
+    public static function get_random( string $role, int $limit = 1, int $user_id = 0 ): array {
+        $widgets = self::get_widgets_by_role( $role, $user_id );
         if ( ! $widgets ) {
             return [];
         }
@@ -529,10 +574,16 @@ class DashboardWidgetRegistry {
     /**
      * Get widgets that belong to a specific category.
      */
-    public static function get_by_category( string $category ): array {
+    public static function get_by_category( string $category, int $user_id = 0 ): array {
         return array_filter(
             self::get_all(),
-            static fn( $cfg ) => isset( $cfg['category'] ) && $cfg['category'] === $category
+            static function ( $cfg, $id ) use ( $category, $user_id ) {
+                if ( isset( $cfg['category'] ) && $cfg['category'] === $category ) {
+                    return DashboardWidgetRegistry::user_can_see( $id, $user_id );
+                }
+                return false;
+            },
+            ARRAY_FILTER_USE_BOTH
         );
     }
 

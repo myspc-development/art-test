@@ -77,7 +77,7 @@ class WidgetRegistryLoader
                 continue;
             }
 
-            if (DashboardWidgetRegistry::get_widget($id)) {
+            if (DashboardWidgetRegistry::get($id)) {
                 // Skip if already registered elsewhere.
                 continue;
             }
