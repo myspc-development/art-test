@@ -2,6 +2,11 @@
 
 use ArtPulse\Widgets\EventsWidget;
 use ArtPulse\Widgets\OrgAnalyticsWidget;
+use ArtPulse\Widgets\DonationsWidget;
+use ArtPulse\Widgets\FavoritesOverviewWidget;
+use ArtPulse\Widgets\MyUpcomingEventsWidget;
+use ArtPulse\Widgets\ProfileOverviewWidget;
+use ArtPulse\Widgets\WidgetEventsWidget;
 
 return [
     'welcome_box' => [
@@ -291,5 +296,45 @@ return [
         'roles' => ['organization'],
         'icon' => 'megaphone',
         'lazy' => true,
+    ],
+    'my_upcoming_events' => [
+        'class' => MyUpcomingEventsWidget::class,
+        'label' => 'My Upcoming Events',
+        'description' => 'List of your upcoming events.',
+        'roles' => ['member', 'artist'],
+        'category' => 'events',
+        'icon' => 'calendar',
+    ],
+    'profile_overview' => [
+        'class' => ProfileOverviewWidget::class,
+        'label' => 'Profile Overview',
+        'description' => 'Quick stats about your profile.',
+        'roles' => ['artist'],
+        'category' => 'general',
+        'icon' => 'user',
+    ],
+    'sample_donations' => [
+        'class' => DonationsWidget::class,
+        'label' => 'Donations Widget',
+        'description' => 'Recent donations list.',
+        'roles' => ['organization'],
+        'category' => 'commerce',
+        'icon' => 'money-alt',
+    ],
+    'widget_events' => [
+        'class' => WidgetEventsWidget::class,
+        'label' => 'Upcoming Events (Member)',
+        'description' => 'Events happening soon.',
+        'roles' => ['member', 'organization'],
+        'category' => 'general',
+        'icon' => 'calendar',
+    ],
+    'widget_favorites' => [
+        'class' => FavoritesOverviewWidget::class,
+        'label' => 'Favorites Overview',
+        'description' => 'Your favorite artists and works.',
+        'roles' => ['member'],
+        'category' => 'general',
+        'icon' => 'heart',
     ],
 ];
