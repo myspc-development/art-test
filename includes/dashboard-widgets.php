@@ -547,57 +547,79 @@ function ap_widget_share_this_event(int $user_id = 0, array $vars = []): string
 
 function ap_widget_audience_crm(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will show audience CRM.</div>';
+    ob_start();
+    ap_render_js_widget('audience_crm');
+    return ob_get_clean();
 }
 
 function ap_widget_sponsored_event_config(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will configure sponsored events.</div>';
+    ob_start();
+    ap_render_js_widget('sponsored_event_config');
+    return ob_get_clean();
 }
 
 function ap_widget_embed_tool(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will provide an embed tool.</div>';
+    ob_start();
+    ap_render_js_widget('embed_tool');
+    return ob_get_clean();
 }
 
 function ap_widget_org_event_overview(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will show organization events.</div>';
+    ob_start();
+    ap_render_js_widget('org_event_overview');
+    return ob_get_clean();
 }
 
 function ap_widget_org_team_roster(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will list team members.</div>';
+    ob_start();
+    ap_render_js_widget('org_team_roster');
+    return ob_get_clean();
 }
 
 function ap_widget_branding_settings_panel(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will manage branding settings.</div>';
+    ob_start();
+    ap_render_js_widget('branding_settings_panel');
+    return ob_get_clean();
 }
 
 function ap_widget_org_widget_sharing(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will handle widget sharing.</div>';
+    ob_start();
+    ap_render_js_widget('org_widget_sharing');
+    return ob_get_clean();
 }
 
 function ap_widget_sponsor_display(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will showcase sponsors.</div>';
+    ob_start();
+    ap_render_js_widget('sponsor_display');
+    return ob_get_clean();
 }
 
 function ap_widget_org_approval_center(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will manage approvals.</div>';
+    ob_start();
+    ap_render_js_widget('org_approval_center');
+    return ob_get_clean();
 }
 
 function ap_widget_org_ticket_insights(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will display ticket insights.</div>';
+    ob_start();
+    ap_render_js_widget('org_ticket_insights');
+    return ob_get_clean();
 }
 
 function ap_widget_org_broadcast_box(int $user_id = 0, array $vars = []): string
 {
-    return '<div class="ap-widget-placeholder">This widget will broadcast messages.</div>';
+    ob_start();
+    ap_render_js_widget('org_broadcast_box');
+    return ob_get_clean();
 }
 
 /**
@@ -1254,6 +1276,149 @@ function ap_register_core_dashboard_widgets(): void
         [
             'roles' => ['artist'],
             'visibility' => 'public',
+        ]
+    );
+
+    // Organization widgets
+    DashboardWidgetRegistry::register(
+        'audience_crm',
+        __('Audience CRM', 'artpulse'),
+        'groups',
+        __('Manage organization contacts.', 'artpulse'),
+        'ap_widget_audience_crm',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'sponsored_event_config',
+        __('Sponsored Event Config', 'artpulse'),
+        'star',
+        __('Configure sponsored event settings.', 'artpulse'),
+        'ap_widget_sponsored_event_config',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'embed_tool',
+        __('Embed Tool', 'artpulse'),
+        'share',
+        __('Generate embeddable event widgets.', 'artpulse'),
+        'ap_widget_embed_tool',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'org_event_overview',
+        __('Event Overview', 'artpulse'),
+        'calendar',
+        __('Overview of upcoming organization events.', 'artpulse'),
+        'ap_widget_org_event_overview',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'branding_settings_panel',
+        __('Branding Settings', 'artpulse'),
+        'admin-customizer',
+        __('Customize organization branding.', 'artpulse'),
+        'ap_widget_branding_settings_panel',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'org_widget_sharing',
+        __('Widget Sharing', 'artpulse'),
+        'share',
+        __('Share widgets with partners.', 'artpulse'),
+        'ap_widget_org_widget_sharing',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'webhooks',
+        __('Webhooks', 'artpulse'),
+        'admin-links',
+        __('Manage outbound webhooks for automation.', 'artpulse'),
+        'ap_widget_webhooks',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'sponsor_display',
+        __('Sponsor Display', 'artpulse'),
+        'star-filled',
+        __('Showcase sponsors on events.', 'artpulse'),
+        'ap_widget_sponsor_display',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'org_approval_center',
+        __('Approval Center', 'artpulse'),
+        'yes',
+        __('Review pending items awaiting approval.', 'artpulse'),
+        'ap_widget_org_approval_center',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'org_ticket_insights',
+        __('Ticket Insights', 'artpulse'),
+        'chart-line',
+        __('Analyze ticket sales and attendance.', 'artpulse'),
+        'ap_widget_org_ticket_insights',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
+        ]
+    );
+
+    DashboardWidgetRegistry::register(
+        'org_broadcast_box',
+        __('Broadcast Box', 'artpulse'),
+        'megaphone',
+        __('Send messages to followers.', 'artpulse'),
+        'ap_widget_org_broadcast_box',
+        [
+            'roles'      => ['organization'],
+            'visibility' => 'public',
+            'lazy'       => true,
         ]
     );
 }
