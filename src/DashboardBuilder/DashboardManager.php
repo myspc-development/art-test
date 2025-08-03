@@ -74,6 +74,7 @@ class DashboardManager {
             'rest_root' => esc_url_raw(rest_url()),
             'nonce'     => wp_create_nonce('wp_rest'),
             'roles'     => $roles,
+            'debug'     => defined('WP_DEBUG') && WP_DEBUG,
         ]);
     }
 }
