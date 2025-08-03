@@ -44,7 +44,13 @@ export default function DashboardContainer({ role = 'member' }) {
         const Comp = widgetMap[item.i];
         return (
           <div key={item.i} data-grid={item}>
-            {Comp ? <Comp /> : item.i}
+            {Comp ? (
+              <Comp />
+            ) : (
+              <div role="region" aria-label="Unavailable Widget">
+                <p>ⓘ This widget is available via API only and will be activated soon.</p>
+              </div>
+            )}
           </div>
         );
       })}

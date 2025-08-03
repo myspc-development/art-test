@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 interface WidgetDef {
   id: string;
   roles?: string[];
+  restOnly?: boolean;
 }
 
 interface CurrentUser {
@@ -24,10 +25,20 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
 
   const roles = currentUser.roles || (currentUser.role ? [currentUser.role] : []);
 
-  return widgets.filter(widget => {
+  const filtered = widgets.filter(widget => {
     const allowed = widgetRoles[widget.id] || widget.roles || [];
     if (!roles.length) return true;
     return roles.some(r => allowed.includes(r));
   });
+
+  const restOnly = Object.entries(widgetRoles)
+    .filter(([id]) => !widgets.some(w => w.id === id))
+    .filter(([, allowed]) => {
+      if (!roles.length) return true;
+      return roles.some(r => allowed.includes(r));
+    })
+    .map(([id]) => ({ id, restOnly: true }));
+
+  return [...filtered, ...restOnly];
 }
 

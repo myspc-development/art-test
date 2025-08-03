@@ -39,6 +39,8 @@ class ShortcodePages
             '[ap_register]'              => __('Register', 'artpulse'),
             '[ap_logout]'                => __('Logout', 'artpulse'),
             '[ap_user_dashboard]'        => __('Member Dashboard', 'artpulse'),
+            '[ap_react_dashboard]'      => __('React Dashboard', 'artpulse'),
+            '[ap_widget]'               => __('Dashboard Widget', 'artpulse'),
             '[ap_profile_edit]'          => __('Edit Profile', 'artpulse'),
             '[ap_submit_organization]'   => __('Submit Organization', 'artpulse'),
             '[ap_submit_artist]'        => __('Submit Artist', 'artpulse'),

@@ -78,10 +78,12 @@ class ShortcodePagesTest extends TestCase
             '[ap_favorites_analytics]',
             '[ap_messages]',
             '[ap_org_rsvp_dashboard]',
+            '[ap_react_dashboard]',
             '[ap_payouts]',
             '[ap_recommendations]',
             '[ap_render_ui]',
             '[ap_spotlights]',
+            '[ap_widget]',
         ];
         foreach ($expected as $code) {
             $this->assertArrayHasKey($code, $map);
