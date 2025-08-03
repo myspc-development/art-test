@@ -24,11 +24,11 @@ class ReactDashboardShortcode {
             wp_add_inline_script('react-grid-layout', 'window.GridLayout = window.ReactGridLayout;', 'after');
         }
 
-        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'js/app-dashboard.js';
+        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'dist/app-dashboard.js';
         if (file_exists($path)) {
             wp_enqueue_script(
                 'ap-react-dashboard',
-                plugins_url('js/app-dashboard.js', ARTPULSE_PLUGIN_FILE),
+                plugins_url('dist/app-dashboard.js', ARTPULSE_PLUGIN_FILE),
                 ['wp-element', 'react-grid-layout'],
                 filemtime($path),
                 true

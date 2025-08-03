@@ -40,7 +40,7 @@ const configs = [
     react: 'React',
     'react-dom/client': 'ReactDOM'
   }),
-  createConfig('assets/js/AppDashboard.js', 'assets/js/app-dashboard.js', 'APDashboardApp', {
+  createConfig('assets/js/AppDashboard.js', 'dist/app-dashboard.js', 'APDashboardApp', {
     react: 'React',
     'react-dom': 'ReactDOM',
     'chart.js/auto': 'Chart'
