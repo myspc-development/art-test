@@ -192,138 +192,51 @@ function render_widget_webhooks(): void {
 }
 
 // Optional: Aliases to satisfy older builder configs or registry mappings
-function render_widget_widget_ap_donor_activity(): void {
-    render_widget_ap_donor_activity();
-}
+$widget_alias_map = [
+    'render_widget_widget_ap_donor_activity'        => 'render_widget_ap_donor_activity',
+    'render_widget_widget_artpulse_analytics_widget'=> 'render_widget_artpulse_analytics_widget',
+    'render_widget_widget_audience_crm'             => 'render_widget_audience_crm',
+    'render_widget_widget_branding_settings_panel'  => 'render_widget_branding_settings_panel',
+    'render_widget_widget_embed_tool'               => 'render_widget_embed_tool',
+    'render_widget_widget_event_chat'               => 'render_widget_event_chat',
+    'render_widget_widget_events'                   => 'ArtPulse\\Core\\DashboardWidgetRegistry::render_widget_events',
+    'render_widget_widget_favorites'                => 'ArtPulse\\Core\\DashboardWidgetRegistry::render_widget_favorites',
+    'widget_widget_events'                          => 'ArtPulse\\Core\\DashboardWidgetRegistry::render_widget_events',
+    'widget_widget_favorites'                       => 'ArtPulse\\Core\\DashboardWidgetRegistry::render_widget_favorites',
+    'render_widget_widget_my_favorites'             => 'ArtPulse\\Core\\DashboardWidgetRegistry::render_widget_my_favorites',
+    'render_widget_widget_nearby_events_map'        => 'ArtPulse\\Core\\DashboardWidgetRegistry::render_widget_nearby_events_map',
+    'render_widget_widget_news_feed'                => 'render_widget_news_feed',
+    'render_widget_widget_org_widget_sharing'       => 'render_widget_org_widget_sharing',
+    'render_widget_widget_qa_checklist'             => 'render_widget_qa_checklist',
+    'render_widget_widget_rsvp_button'              => 'render_widget_rsvp_button',
+    'render_widget_widget_sponsor_display'          => 'render_widget_sponsor_display',
+    'render_widget_widget_sponsored_event_config'   => 'render_widget_sponsored_event_config',
+    'render_widget_widget_artist_inbox_preview'     => 'render_widget_artist_inbox_preview',
+    'render_widget_widget_artist_spotlight'         => 'render_widget_artist_spotlight',
+    'render_widget_widget_revenue_summary'          => 'render_widget_revenue_summary',
+    'render_widget_widget_share_this_event'         => 'render_widget_share_this_event',
+    'render_widget_widget_webhooks'                 => 'render_widget_webhooks',
+    'render_widget_widget_org_event_overview'       => 'render_widget_org_event_overview',
+    'render_widget_widget_org_team_roster'          => 'render_widget_org_team_roster',
+    'render_widget_widget_org_approval_center'      => 'render_widget_org_approval_center',
+    'render_widget_widget_org_ticket_insights'      => 'render_widget_org_ticket_insights',
+    'render_widget_widget_org_broadcast_box'        => 'render_widget_org_broadcast_box',
+    'render_widget_widget_artist_artwork_manager'   => 'render_widget_artist_artwork_manager',
+    'render_widget_widget_artist_audience_insights' => 'render_widget_artist_audience_insights',
+    'render_widget_widget_artist_earnings_summary'  => 'render_widget_artist_earnings_summary',
+    'render_widget_widget_artist_feed_publisher'    => 'render_widget_artist_feed_publisher',
+    'render_widget_widget_collab_requests'          => 'render_widget_collab_requests',
+    'render_widget_widget_onboarding_tracker'       => 'render_widget_onboarding_tracker',
+];
 
-function render_widget_widget_artpulse_analytics_widget(): void {
-    render_widget_artpulse_analytics_widget();
-}
-
-function render_widget_widget_audience_crm(): void {
-    render_widget_audience_crm();
-}
-
-function render_widget_widget_branding_settings_panel(): void {
-    render_widget_branding_settings_panel();
-}
-
-function render_widget_widget_embed_tool(): void {
-    render_widget_embed_tool();
-}
-
-function render_widget_widget_event_chat(): void {
-    render_widget_event_chat();
-}
-
-function render_widget_widget_events(): void {
-    DashboardWidgetRegistry::render_widget_events();
-}
-
-function render_widget_widget_favorites(): void {
-    DashboardWidgetRegistry::render_widget_favorites();
-}
-
-function widget_widget_events(): void {
-    DashboardWidgetRegistry::render_widget_events();
-}
-
-function widget_widget_favorites(): void {
-    DashboardWidgetRegistry::render_widget_favorites();
-}
-
-function render_widget_widget_my_favorites(): void {
-    DashboardWidgetRegistry::render_widget_my_favorites();
-}
-
-function render_widget_widget_nearby_events_map(): void {
-    DashboardWidgetRegistry::render_widget_nearby_events_map();
-}
-
-function render_widget_widget_news_feed(): void {
-    render_widget_news_feed();
-}
-
-function render_widget_widget_org_widget_sharing(): void {
-    render_widget_org_widget_sharing();
-}
-
-function render_widget_widget_qa_checklist(): void {
-    render_widget_qa_checklist();
-}
-
-function render_widget_widget_rsvp_button(): void {
-    render_widget_rsvp_button();
-}
-
-function render_widget_widget_sponsor_display(): void {
-    render_widget_sponsor_display();
-}
-
-function render_widget_widget_sponsored_event_config(): void {
-    render_widget_sponsored_event_config();
-}
-
-function render_widget_widget_artist_inbox_preview(): void {
-    render_widget_artist_inbox_preview();
-}
-
-function render_widget_widget_artist_spotlight(): void {
-    render_widget_artist_spotlight();
-}
-
-function render_widget_widget_revenue_summary(): void {
-    render_widget_revenue_summary();
-}
-
-function render_widget_widget_share_this_event(): void {
-    render_widget_share_this_event();
-}
-
-function render_widget_widget_webhooks(): void {
-    render_widget_webhooks();
-}
-
-function render_widget_widget_org_event_overview(): void {
-    render_widget_org_event_overview();
-}
-
-function render_widget_widget_org_team_roster(): void {
-    render_widget_org_team_roster();
-}
-
-function render_widget_widget_org_approval_center(): void {
-    render_widget_org_approval_center();
-}
-
-function render_widget_widget_org_ticket_insights(): void {
-    render_widget_org_ticket_insights();
-}
-
-function render_widget_widget_org_broadcast_box(): void {
-    render_widget_org_broadcast_box();
-}
-
-function render_widget_widget_artist_artwork_manager(): void {
-    render_widget_artist_artwork_manager();
-}
-
-function render_widget_widget_artist_audience_insights(): void {
-    render_widget_artist_audience_insights();
-}
-
-function render_widget_widget_artist_earnings_summary(): void {
-    render_widget_artist_earnings_summary();
-}
-
-function render_widget_widget_artist_feed_publisher(): void {
-    render_widget_artist_feed_publisher();
-}
-
-function render_widget_widget_collab_requests(): void {
-    render_widget_collab_requests();
-}
-
-function render_widget_widget_onboarding_tracker(): void {
-    render_widget_onboarding_tracker();
+foreach ($widget_alias_map as $alias => $target) {
+    if (is_callable($target)) {
+        eval(sprintf(
+            'function %s() { return call_user_func_array(%s, func_get_args()); }',
+            $alias,
+            var_export($target, true)
+        ));
+    } else {
+        error_log(sprintf('Unresolved widget alias: %s -> %s', $alias, $target));
+    }
 }
