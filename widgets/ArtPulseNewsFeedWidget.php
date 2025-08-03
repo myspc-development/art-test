@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) { exit; }
  * Dashboard widget showing recent posts from followed artists or organizations.
  */
 use ArtPulse\Core\DashboardWidgetRegistry;
+use WP_Query;
 
 class ArtPulseNewsFeedWidget {
     public static function register() {
