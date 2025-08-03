@@ -59,16 +59,16 @@ Create short-lived feature branches from `main` using the pattern `feature/<desc
 
 The project follows the [WordPress PHP Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/) and ESLint recommended rules. Run `composer sniff` to check PHP files and `npm run lint` to verify JavaScript code.
 
-## Documentation Guidelines
+## Documentation
 
-Documentation lives in the `docs/` directory and is organized by audience folders (admin, developer, qa, user). Each folder has a `README.md` that lists key articles in order.
+Documentation lives in the `docs/` directory. Follow the
+[documentation contribution guide](docs/CONTRIBUTING.md) for full naming,
+frontmatter, and style rules. In short:
 
-When adding a new document:
-1. Include frontmatter with `title`, `category`, `role`, `last_updated`, and `status`.
-2. Use relative links to other docs.
-3. Update `docs/index.md` so readers can discover the new guide.
-4. Keep filenames lowercase with hyphens.
+- Use lowercase hyphenated filenames organized under audience folders.
+- Begin each file with `title`, `category`, `role`, `last_updated`, and `status` frontmatter.
+- Reference other docs with relative links and add new guides to `docs/index.md`.
 
-Questions or suggestions can be filed via the link in [docs/feedback.md](docs/feedback.md).
+Questions or suggestions can be filed via [docs/feedback.md](docs/feedback.md).
 
 
