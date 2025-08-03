@@ -60,7 +60,7 @@ status: complete
   * [End_to_End_Testing_Guide.md](qa/End_to_End_Testing_Guide.md)
   * [testing-strategy.md](qa/testing-strategy.md)
   * *(Widget Editor testing checklist archived)*
-  * [widget-qa-checklist.md](qa/widget-qa-checklist.md)
+  * [dashboard-qa-checklist.md](qa/dashboard-qa-checklist.md)
   * [full-dashboard-compliance-check.md](qa/full-dashboard-compliance-check.md)
 * **Specs**
   * [Overview](specs/README.md)

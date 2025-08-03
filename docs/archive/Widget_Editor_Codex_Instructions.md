@@ -2,7 +2,7 @@
 title: Widget Editor Codex Instructions
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-07-31
 status: complete
 ---
 
@@ -20,7 +20,7 @@ Every widget guide includes the following sections:
 2. **Props & Settings** – Table listing available attributes, default values and data types. Include code examples for enabling optional features.
 3. **Data Flow** – Outline REST endpoints or AJAX actions used to fetch and save data.
 4. **Permissions** – Explain which user roles can view or configure the widget and what capabilities are checked.
-5. **Testing Steps** – Link to the [Widget QA Checklist](./qa/widget-qa-checklist.md) and describe any widget‑specific scenarios.
+5. **Testing Steps** – Link to the [Dashboard QA Checklist](../qa/dashboard-qa-checklist.md) and describe any widget‑specific scenarios.
 
 ## Screenshots
 Screenshots help designers understand alignment and color usage. Capture the widget at common breakpoints: 360px (mobile), 768px (tablet) and 1440px (desktop). Place images in a subfolder named after the widget. Reference them with relative paths and short alt text.

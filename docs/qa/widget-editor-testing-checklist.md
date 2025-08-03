@@ -9,7 +9,7 @@ status: complete
 # Widget Editor Testing Checklist
 
 > **Deprecated:** The Widget Editor has been removed. Refer to the
-> [Dashboard Builder UAT Checklist](dashboard-builder-uat-checklist.md)
+> [Dashboard QA Checklist](dashboard-qa-checklist.md)
 > for current testing steps.
 
 Merged from the Widget Manager testing checklist and verification notes.
