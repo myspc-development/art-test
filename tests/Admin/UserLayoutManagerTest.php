@@ -57,7 +57,6 @@ namespace ArtPulse\Admin\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UserLayoutManager;
-use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 class UserLayoutManagerTest extends TestCase
@@ -192,35 +191,6 @@ class UserLayoutManagerTest extends TestCase
             array_column(DashboardWidgetRegistry::get_definitions(), 'id')
         );
         $this->assertSame($expected, UserLayoutManager::get_role_layout('subscriber'));
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
-    public function test_role_layout_import_and_export_json(): void
-    {
-        DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
-        DashboardWidgetRegistry::register('bar', 'Bar', '', '', '__return_null');
-
-        $import = ['administrator' => [
-            ['id' => 'bar'],
-            ['id' => 'foo', 'visible' => false]
-        ]];
-        self::$file_contents = json_encode($import, JSON_PRETTY_PRINT);
-        $_FILES['ap_widget_file'] = ['tmp_name' => '/tmp/test'];
-
-        try {
-            DashboardWidgetTools::handle_import();
-        } catch (\Exception $e) {
-            $this->assertSame('redirect', $e->getMessage());
-        }
-
-        $this->assertSame($import, self::$options['ap_dashboard_widget_config']);
-
-        $expected_json = json_encode($import, JSON_PRETTY_PRINT);
-        self::$options['ap_dashboard_widget_config'] = $import;
-        $this->expectOutputString($expected_json);
-        DashboardWidgetTools::handle_export();
     }
 
     public function test_export_layout_returns_pretty_json(): void

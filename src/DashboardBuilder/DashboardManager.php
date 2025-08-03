@@ -26,8 +26,19 @@ class DashboardManager {
     }
 
     public static function render_page(): void {
-        echo '<div class="wrap" id="ap-dashboard-builder">';
-        echo '<h1>' . esc_html__('Dashboard Builder', 'artpulse') . '</h1>';
+        self::render_builder();
+    }
+
+    /**
+     * Output the Dashboard Builder interface markup.
+     *
+     * @param bool $include_heading Whether to include the page heading.
+     */
+    public static function render_builder(bool $include_heading = true): void {
+        echo '<div id="ap-dashboard-builder"' . ($include_heading ? ' class="wrap"' : '') . '>';
+        if ($include_heading) {
+            echo '<h1>' . esc_html__('Dashboard Builder', 'artpulse') . '</h1>';
+        }
         echo '<label for="ap-db-role" class="screen-reader-text">' . esc_html__('Select Role', 'artpulse') . '</label>';
         echo '<select id="ap-db-role"></select>';
         echo '<label style="margin-left:10px"><input type="checkbox" id="ap-db-show-all"> ' . esc_html__('Show All Widgets', 'artpulse') . '</label>';
@@ -44,9 +55,20 @@ class DashboardManager {
     }
 
     public static function enqueue(string $hook): void {
-        if ($hook !== 'toplevel_page_dashboard-builder') {
+        if ($hook === 'toplevel_page_dashboard-builder') {
+            self::enqueue_assets();
+        }
+    }
+
+    /**
+     * Enqueue scripts and styles for the builder.
+     */
+    public static function enqueue_assets(): void {
+        static $done = false;
+        if ($done) {
             return;
         }
+        $done = true;
         wp_enqueue_script(
             'ap-dashboard-builder',
             plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/dashboard-builder.js',
