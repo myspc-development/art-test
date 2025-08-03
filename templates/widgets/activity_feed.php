@@ -1,7 +1,7 @@
 <?php
 use ArtPulse\Widgets\Member\ActivityFeedWidget;
 
-$heading_id = ActivityFeedWidget::id() . '-heading';
+$heading_id = sanitize_title( ActivityFeedWidget::id() ) . '-heading-' . uniqid();
 ?>
 <section role="region" aria-labelledby="<?php echo esc_attr( $heading_id ); ?>"
     data-widget="<?= esc_attr( ActivityFeedWidget::id() ); ?>"

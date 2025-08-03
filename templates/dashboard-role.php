@@ -11,7 +11,7 @@ if ( $allowed_roles && ! in_array( $user_role, $allowed_roles, true ) ) {
 
 get_header();
 ?>
-<main id="dashboard-main" class="wrap" role="main" tabindex="-1">
+<main id="dashboard-main" role="main" tabindex="-1">
   <div class="dashboard-widgets-wrap">
     <div class="ap-dashboard ap-dashboard--role-<?php echo esc_attr( $user_role ); ?>">
       <?php
