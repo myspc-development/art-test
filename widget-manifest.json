@@ -271,5 +271,27 @@
     "label": "Welcome",
     "description": "Personal greeting for the signed-in user.",
     "icon": "smiley"
+  },
+  "my_upcoming_events": {
+    "file": "widgets/MyUpcomingEventsWidget.php",
+    "roles": [
+      "member",
+      "artist"
+    ],
+    "status": "registered"
+  },
+  "sample_donations": {
+    "file": "widgets/DonationsWidget.php",
+    "roles": [
+      "organization"
+    ],
+    "status": "registered"
+  },
+  "profile_overview": {
+    "file": "widgets/ProfileOverviewWidget.php",
+    "roles": [
+      "artist"
+    ],
+    "status": "registered"
   }
 }

@@ -109,6 +109,14 @@
         ]
     },
     {
+        "id": "my_upcoming_events",
+        "callback": "MyUpcomingEventsWidget.php",
+        "allowed_roles": [
+            "artist",
+            "member"
+        ]
+    },
+    {
         "id": "nearby_events_map",
         "callback": "NearbyEventsMapWidget.jsx",
         "allowed_roles": [
@@ -186,6 +194,13 @@
         ]
     },
     {
+        "id": "profile_overview",
+        "callback": "ProfileOverviewWidget.php",
+        "allowed_roles": [
+            "artist"
+        ]
+    },
+    {
         "id": "qa_checklist",
         "callback": "QAChecklistWidget.php",
         "allowed_roles": [
@@ -205,6 +220,13 @@
         "callback": "RSVPButton.jsx",
         "allowed_roles": [
             "member"
+        ]
+    },
+    {
+        "id": "sample_donations",
+        "callback": "DonationsWidget.php",
+        "allowed_roles": [
+            "organization"
         ]
     },
     {
