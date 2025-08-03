@@ -3,6 +3,7 @@
 namespace ArtPulse\Core;
 
 use ArtPulse\DashboardWidgetRegistryLoader;
+use ArtPulse\Dashboard\WidgetVisibility;
 use WP_Roles;
 
 /**
@@ -103,7 +104,7 @@ class DashboardWidgetRegistry {
                     'render_callback' => null,
                     'roles'           => [],
                     'file'            => '',
-                    'visibility'      => 'public',
+                    'visibility'      => WidgetVisibility::PUBLIC,
                 ],
                 $label
             );
@@ -111,9 +112,9 @@ class DashboardWidgetRegistry {
             if ( ! is_callable( $args['render_callback'] ) ) {
                 $args['render_callback'] = static function () {};
             }
-            $visibility = in_array( $args['visibility'], [ 'public', 'internal', 'deprecated' ], true )
+            $visibility = in_array( $args['visibility'], WidgetVisibility::values(), true )
                 ? $args['visibility']
-                : 'public';
+                : WidgetVisibility::PUBLIC;
 
             self::$builder_widgets[ $id ] = [
                 'id'             => $id,
@@ -167,7 +168,7 @@ class DashboardWidgetRegistry {
             'capability'  => $options['capability'] ?? '',
             'cache'       => $options['cache'] ?? false,
             'lazy'        => $options['lazy'] ?? false,
-            'visibility'  => $options['visibility'] ?? 'public',
+            'visibility'  => $options['visibility'] ?? WidgetVisibility::PUBLIC,
             'builder_only'=> $options['builder_only'] ?? false,
         ];
     }
@@ -439,7 +440,7 @@ class DashboardWidgetRegistry {
             if ( $visibility !== null ) {
                 $widgets = array_filter(
                     $widgets,
-                    static fn( $w ) => ( $w['visibility'] ?? 'public' ) === $visibility
+                    static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
                 );
             }
 
@@ -477,7 +478,7 @@ class DashboardWidgetRegistry {
         if ( $visibility !== null ) {
             $widgets = array_filter(
                 $widgets,
-                static fn( $w ) => ( $w['visibility'] ?? 'public' ) === $visibility
+                static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
             );
         }
 
@@ -741,7 +742,7 @@ class DashboardWidgetRegistry {
             'description' => __( 'Latest updates from ArtPulse.', 'artpulse' ),
             'callback'    => [ self::class, 'render_widget_news' ],
             'roles'       => [ 'member' ],
-            'visibility'  => 'public',
+            'visibility'  => WidgetVisibility::PUBLIC,
         ] );
         $register( 'widget_events', [
             'id'          => 'widget_events',

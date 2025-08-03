@@ -3,6 +3,7 @@ namespace ArtPulse\DashboardBuilder\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Dashboard\WidgetVisibility;
 
 class DashboardBuilderRegistryVisibilityTest extends TestCase
 {
@@ -27,7 +28,7 @@ class DashboardBuilderRegistryVisibilityTest extends TestCase
         ]);
 
         $all = DashboardWidgetRegistry::get_all(null, true);
-        $this->assertSame('public', $all['alpha']['visibility']);
+        $this->assertSame(WidgetVisibility::PUBLIC, $all['alpha']['visibility']);
     }
 
     public function test_filter_by_visibility(): void
@@ -35,21 +36,21 @@ class DashboardBuilderRegistryVisibilityTest extends TestCase
         DashboardWidgetRegistry::register('a', [
             'title' => 'A',
             'render_callback' => '__return_null',
-            'visibility' => 'public',
+            'visibility' => WidgetVisibility::PUBLIC,
         ]);
         DashboardWidgetRegistry::register('b', [
             'title' => 'B',
             'render_callback' => '__return_null',
-            'visibility' => 'internal',
+            'visibility' => WidgetVisibility::INTERNAL,
         ]);
         DashboardWidgetRegistry::register('c', [
             'title' => 'C',
             'render_callback' => '__return_null',
-            'visibility' => 'deprecated',
+            'visibility' => WidgetVisibility::DEPRECATED,
         ]);
 
-        $public = DashboardWidgetRegistry::get_all('public', true);
-        $internal = DashboardWidgetRegistry::get_all('internal', true);
+        $public = DashboardWidgetRegistry::get_all(WidgetVisibility::PUBLIC, true);
+        $internal = DashboardWidgetRegistry::get_all(WidgetVisibility::INTERNAL, true);
 
         $this->assertArrayHasKey('a', $public);
         $this->assertArrayNotHasKey('b', $public);
