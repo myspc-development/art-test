@@ -142,7 +142,7 @@ If non-compliance is found:
 ---
 
 ## 🧾 REFERENCES
-- [`dashboard-widget-design-codex.md`](../dashboard-widget-design-codex.md)
+- [`dashboard-style-guide.md`](../dashboard-style-guide.md)
 - [`guides/developer/ui-ux-polish-codex.md`](../guides/developer/ui-ux-polish-codex.md)
 - [`admin/admin-dashboard-ui.md`](../admin/admin-dashboard-ui.md)
 - [`internal/dashboard-builder-release-summary.md`](../internal/dashboard-builder-release-summary.md)

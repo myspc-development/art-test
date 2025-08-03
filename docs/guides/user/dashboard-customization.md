@@ -94,7 +94,7 @@ The flow above shows how a dashboard is rendered and personalized. Users drag wi
 
 ---
 
-For additional design guidelines and example code, see the [Widget Settings Codex](../../widgets/widget-settings-codex.md) and the [Dashboard Widget Design Codex](../../dashboard-widget-design-codex.md).
+For additional design guidelines and example code, see the [Widget Settings Codex](../../widgets/widget-settings-codex.md) and the [Dashboard Style Guide](../../dashboard-style-guide.md).
 
 ## User Dashboard Customization Codex
 

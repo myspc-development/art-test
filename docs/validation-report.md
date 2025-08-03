@@ -98,7 +98,7 @@
 | dashboard-layout-config.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | dashboard-menu-codex.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
 | dashboard-preview-mode-guide.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
-| dashboard-widget-design-codex.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| dashboard-style-guide.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | dashboard_refactor_review.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | dashboard_widget_index.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | default-design-system-codex.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |

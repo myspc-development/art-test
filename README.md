@@ -60,13 +60,11 @@ Additional resources:
 - [Sprint Workflow Codex](docs/sprint-workflow-codex.md)
 - [Sprint 4 Polish & Documentation Codex](docs/sprint4-polish-documentation-codex.md)
 
-Styling now relies on the Salient theme and WPBakery builder. See
-[`assets/docs/Style_Guide.md`](assets/docs/Style_Guide.md) for
-recommended class names when extending layouts.
-Dashboard widgets follow the unified styles described in the
-[`Dashboard Widget Design Codex`](docs/dashboard-widget-design-codex.md)
-and the more detailed
-[`Default Design System Codex`](docs/default-design-system-codex.md).
+Styling now relies on the Salient theme and WPBakery builder. See the
+[Dashboard Style Guide](docs/dashboard-style-guide.md) for
+recommended class names when extending layouts. Widgets should also
+follow the more detailed
+[Default Design System Codex](docs/default-design-system-codex.md).
 When customizing SCSS or JavaScript be sure to run `npm run build` and
 commit the updated `build/` output so the admin screens load the latest
 compiled assets.

@@ -44,7 +44,7 @@ export default [
 - Tags provide additional keywords for search or grouping.
 - Register widgets on the `artpulse_register_dashboard_widget` action so they are available before layouts load. Core widgets reside in `src/Sample/RoleBasedWidgets.php`.
 
-See the [Dashboard Widget Design Codex](../dashboard-widget-design-codex.md) for styling guidelines.
+See the [Dashboard Style Guide](../dashboard-style-guide.md) for styling guidelines.
 
 To add or remove a widget from the React dashboard, edit `assets/js/widgets/index.js`
 and update the exported array. Roles may be adjusted by modifying the `roles`
