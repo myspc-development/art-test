@@ -24,6 +24,12 @@ composer install --no-dev --optimize-autoloader
 # 3. Build assets
 npm run build
 
+# Ensure CSS bundle exists for deployment
+if [ ! -f dist/bundle.css ]; then
+  echo "❌ dist/bundle.css is missing. Run 'npm run build' to generate it." >&2
+  exit 1
+fi
+
 # 4. Ensure optimized autoloader for packaging
 composer install --no-dev --optimize-autoloader
 
