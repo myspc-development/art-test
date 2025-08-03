@@ -17,6 +17,23 @@ if (!defined('ABSPATH')) {
 class WidgetVisibilityManager
 {
     /**
+     * Hidden widget identifiers keyed by id.
+     *
+     * @var array<string, bool>
+     */
+    private static array $hidden_widgets = [];
+
+    /**
+     * Retrieve IDs for widgets hidden during filtering.
+     *
+     * @return array<string, bool> Map of widget ids to hidden state.
+     */
+    public static function get_hidden_widgets(): array
+    {
+        return self::$hidden_widgets;
+    }
+
+    /**
      * Register WordPress hooks for widget visibility and admin notices.
      *
      * @return void
@@ -115,10 +132,9 @@ class WidgetVisibilityManager
             return;
         }
 
-        $roles        = (array) $current_user->roles;
+        $roles = (array) $current_user->roles;
 
-        global $ap_hidden_widgets;
-        $ap_hidden_widgets = [];
+        self::$hidden_widgets = [];
 
         $rules = self::get_visibility_rules();
 
@@ -147,7 +163,7 @@ class WidgetVisibilityManager
 
             if ($hide) {
                 remove_meta_box($widget, 'dashboard', 'normal');
-                $ap_hidden_widgets[$widget] = true;
+                self::$hidden_widgets[$widget] = true;
             }
         }
     }
