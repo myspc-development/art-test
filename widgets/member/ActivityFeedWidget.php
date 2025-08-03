@@ -60,10 +60,6 @@ class ActivityFeedWidget implements DashboardWidgetInterface {
 
           $org_id = intval(get_user_meta($user_id, 'ap_organization_id', true));
           $logs   = ActivityLogger::get_logs($org_id ?: null, $user_id, 10);
-        if (empty($logs)) {
-            return esc_html__('No recent activity.', 'artpulse');
-        }
-
         ob_start();
         include __DIR__ . '/../../templates/widgets/activity_feed.php';
         return ob_get_clean();
