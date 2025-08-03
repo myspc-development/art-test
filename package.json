@@ -32,6 +32,8 @@
 
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
 
+    "widget:audit": "node scripts/widget-audit.js",
+
     "ws": "node server/ws-server.js"
   },
   "dependencies": {
