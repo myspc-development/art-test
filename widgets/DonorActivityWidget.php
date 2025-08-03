@@ -32,7 +32,7 @@ class DonorActivityWidget
         if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
 
         if ( ! self::can_view() ) {
-            echo '<p class="ap-widget-no-access">' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p>';
+            echo '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
             return;
         }
 

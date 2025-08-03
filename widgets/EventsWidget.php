@@ -27,7 +27,7 @@ class EventsWidget {
     public static function render(): string {
         $user_id = get_current_user_id();
         if (!self::can_view($user_id)) {
-            $content = '<p class="ap-widget-no-access">' . esc_html__('Please log in.', 'artpulse') . '</p>';
+            $content = '<div class="notice notice-error"><p>' . esc_html__('Please log in.', 'artpulse') . '</p></div>';
         } elseif (function_exists('ap_widget_events')) {
             $content = wp_kses_post(ap_widget_events([]));
         } else {

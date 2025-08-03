@@ -22,8 +22,10 @@ function ap_render_js_widget(string $id, array $data = []): void {
     foreach ($data as $k => $v) {
         $attrs .= ' data-' . $k . '="' . esc_attr($v) . '"';
     }
-    echo '<section data-widget="' . esc_attr($id) . '" class="ap-widget ap-' . esc_attr($id) . '">';
+    echo '<section data-widget="' . esc_attr($id) . '" data-widget-id="' . esc_attr($id) . '" class="dashboard-widget">';
+    echo '<div class="inside">';
     echo '<div id="' . esc_attr($id) . '" class="ap-react-widget"' . $attrs . '></div>';
+    echo '</div>';
     echo '</section>';
 }
 

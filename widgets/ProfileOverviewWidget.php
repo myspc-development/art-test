@@ -28,7 +28,7 @@ class ProfileOverviewWidget {
 
     public static function render(int $user_id): void {
         if (!self::can_view($user_id)) {
-            echo '<p class="ap-widget-no-access">' . esc_html__('You do not have access.', 'artpulse') . '</p>';
+            echo '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
             return;
         }
         echo '<p>' . esc_html__('Profile statistics coming soon.', 'artpulse') . '</p>';

@@ -22,7 +22,7 @@ class ExampleWidget implements DashboardWidgetInterface {
 
     public static function render(): string {
         if ( ! is_user_logged_in() ) {
-            return '<p class="ap-widget-no-access">' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p>';
+            return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
         }
 
         ob_start();

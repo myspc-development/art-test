@@ -58,7 +58,7 @@ class SampleHelloWidget implements DashboardWidgetInterface {
         }
 
         if (!self::can_view()) {
-            return '<p class="ap-widget-no-access">' . esc_html__('You do not have access.', 'artpulse') . '</p>';
+            return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
         }
 
         $user = wp_get_current_user();

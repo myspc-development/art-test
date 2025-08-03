@@ -47,7 +47,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         ob_start();
         OrgAnalyticsWidget::render($uid);
         $html = ob_get_clean();
-        $this->assertStringContainsString('ap-widget-no-access', $html);
+        $this->assertStringContainsString('notice-error', $html);
     }
 
     public function test_org_analytics_widget_renders_for_capable_user(): void {
@@ -57,7 +57,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         ob_start();
         OrgAnalyticsWidget::render($uid);
         $html = ob_get_clean();
-        $this->assertStringNotContainsString('ap-widget-no-access', $html);
+        $this->assertStringNotContainsString('notice-error', $html);
         $this->assertStringContainsString('Basic traffic', $html);
     }
 

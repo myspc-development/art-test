@@ -40,7 +40,7 @@ class APShortcodeAdminWidgets {
         $uid       = get_current_user_id();
         $org_role  = get_user_meta($uid, 'ap_org_role', true);
         if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            echo '<p class="ap-widget-no-access">' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p>';
+            echo '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
             return;
         }
         echo do_shortcode('[ap_event_calendar]');
@@ -50,7 +50,7 @@ class APShortcodeAdminWidgets {
         $uid       = get_current_user_id();
         $org_role  = get_user_meta($uid, 'ap_org_role', true);
         if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            echo '<p class="ap-widget-no-access">' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p>';
+            echo '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
             return;
         }
         echo do_shortcode('[ap_notifications]');
@@ -60,7 +60,7 @@ class APShortcodeAdminWidgets {
         $uid       = get_current_user_id();
         $org_role  = get_user_meta($uid, 'ap_org_role', true);
         if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            echo '<p class="ap-widget-no-access">' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p>';
+            echo '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
             return;
         }
         echo do_shortcode('[ap_org_dashboard]');

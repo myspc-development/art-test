@@ -35,14 +35,6 @@
   margin-top: var(--ap-space);
 }
 
-.ap-widget-no-access {
-  background: #f8d7da;
-  border: 1px solid #f5c2c7;
-  padding: var(--ap-space, 1rem);
-  border-radius: var(--ap-radius, 0.75rem);
-  color: #842029;
-}
-
 .ap-form-group {
   display: block;
   margin-bottom: var(--ap-space);
