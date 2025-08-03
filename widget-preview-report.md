@@ -1,14 +1,19 @@
 # Widget Preview Guard Report
 
-Total widgets scanned: 57
-Widgets guarded: 70
-Widgets unguarded: 0
+Total widgets scanned: 63
+Widgets guarded: 76
+Widgets unguarded: 4
 
-## Duplicate IDs
-- templates/widgets/my-favorites.php: favorites, widget_my_favorites
-- templates/widgets/spotlight-dashboard.php: role-spotlight, widget_spotlight_events, widget_spotlight_calls, widget_spotlight_features
-- templates/widgets/guide.php: admin_guide, member_guide
-
-## Unmapped Files
-- widgets/member/ActivityFeedWidget.php
-- widgets/WebhooksWidget.php
+## Files Updated
+- widgets/ArtPulseNewsFeedWidget.php
+- widgets/DonationsWidget.php
+- widgets/DonorActivityWidget.php
+- widgets/EventsWidget.php
+- widgets/FavoritesOverviewWidget.php
+- widgets/MyUpcomingEventsWidget.php
+- widgets/OrgAnalyticsWidget.php
+- widgets/OrgWidgetSharingPanel.php
+- widgets/ProfileOverviewWidget.php
+- widgets/QAChecklistWidget.php
+- widgets/SponsorDisplayWidget.php
+- widgets/WidgetEventsWidget.php

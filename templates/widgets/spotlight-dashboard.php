@@ -3,6 +3,7 @@ if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 use ArtPulse\Admin\SpotlightManager;
 
 $category   = $args['category'] ?? null;
+$widget_id  = $args['widget_id'] ?? 'role-spotlight';
 $spotlights = [];
 if (!defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
     $spotlights = SpotlightManager::get_dashboard_spotlights($args['role'] ?? 'member', $category);
@@ -17,8 +18,8 @@ if (empty($spotlights)) {
 }
 ?>
 
-<div id="ap-spotlight-dashboard" class="ap-card" role="region" aria-labelledby="ap-spotlight-dashboard-title">
-  <h2 id="ap-spotlight-dashboard-title" class="ap-card__title">🌟 <?= __('Featured for You', 'artpulse') ?></h2>
+<div id="<?php echo esc_attr($widget_id); ?>" class="ap-card" role="region" aria-labelledby="<?php echo esc_attr($widget_id); ?>-title" data-widget="<?php echo esc_attr($widget_id); ?>" data-widget-id="<?php echo esc_attr($widget_id); ?>">
+  <h2 id="<?php echo esc_attr($widget_id); ?>-title" class="ap-card__title">🌟 <?= __('Featured for You', 'artpulse') ?></h2>
   <div>
     <?php foreach ($spotlights as $post): ?>
       <div class="ap-spotlight-card">

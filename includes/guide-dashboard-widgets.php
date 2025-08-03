@@ -22,7 +22,7 @@ function ap_widget_admin_guide(int $user_id = 0, array $vars = []): string
     $vars['id'] = 'admin-guide';
     $vars['title'] = __('Admin Guide', 'artpulse');
     $vars['content'] = $content;
-    return ap_load_dashboard_template('widgets/guide.php', $vars);
+    return ap_load_dashboard_template('widgets/admin-guide.php', $vars);
 }
 
 function ap_widget_member_guide(int $user_id = 0, array $vars = []): string
@@ -38,7 +38,7 @@ function ap_widget_member_guide(int $user_id = 0, array $vars = []): string
     $vars['id'] = 'member-guide';
     $vars['title'] = __('Member Guide', 'artpulse');
     $vars['content'] = $content;
-    return ap_load_dashboard_template('widgets/guide.php', $vars);
+    return ap_load_dashboard_template('widgets/member-guide.php', $vars);
 }
 
 function ap_register_guide_widgets(): void

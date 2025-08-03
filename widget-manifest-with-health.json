@@ -1,6 +1,12 @@
 {
-    "admin_guide": {
+    "guide_base": {
         "file": "templates/widgets/guide.php",
+        "roles": [],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "admin_guide": {
+        "file": "templates/widgets/admin-guide.php",
         "roles": [
             "administrator",
             "organization"
@@ -28,24 +34,6 @@
         "file": "templates/widgets/site-stats.php",
         "roles": [
             "administrator"
-        ],
-        "status": "registered",
-        "previewGuarded": true
-    },
-    "activity_feed": {
-        "file": "widgets/member/ActivityFeedWidget.php",
-        "roles": [
-            "member",
-            "artist",
-            "organization"
-        ],
-        "status": "registered",
-        "previewGuarded": true
-    },
-    "org_insights": {
-        "file": "src/Widgets.php",
-        "roles": [
-            "organization"
         ],
         "status": "registered",
         "previewGuarded": true
@@ -122,6 +110,14 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "profile_overview": {
+        "file": "widgets/ProfileOverviewWidget.php",
+        "roles": [
+            "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
     "revenue_summary": {
         "file": "assets/js/widgets/ArtistRevenueSummaryWidget.jsx",
         "roles": [
@@ -147,6 +143,26 @@
         ],
         "status": "registered",
         "previewGuarded": true
+    },
+    "activity_feed": {
+        "file": "widgets/member/ActivityFeedWidget.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": false
+    },
+    "activity_feed_template": {
+        "file": "templates/widgets/activity_feed.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": false
     },
     "artist_inbox_preview": {
         "file": "templates/widgets/artist-inbox-preview.php",
@@ -202,7 +218,7 @@
         "previewGuarded": true
     },
     "favorites": {
-        "file": "templates/widgets/my-favorites.php",
+        "file": "templates/widgets/favorites.php",
         "roles": [
             "member"
         ],
@@ -235,7 +251,7 @@
         "previewGuarded": true
     },
     "member_guide": {
-        "file": "templates/widgets/guide.php",
+        "file": "templates/widgets/member-guide.php",
         "roles": [
             "member",
             "artist",
@@ -292,6 +308,15 @@
         "file": "templates/widgets/my-shared-events-activity.php",
         "roles": [
             "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "my_upcoming_events": {
+        "file": "widgets/MyUpcomingEventsWidget.php",
+        "roles": [
+            "member",
+            "artist"
         ],
         "status": "registered",
         "previewGuarded": true
@@ -364,6 +389,16 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "sample_events": {
+        "file": "widgets/EventsWidget.php",
+        "roles": [
+            "member",
+            "artist",
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
     "share_this_event": {
         "file": "assets/js/widgets/ShareThisEventWidget.jsx",
         "roles": [
@@ -404,16 +439,6 @@
         "file": "widgets/WidgetEventsWidget.php",
         "roles": [
             "member",
-            "organization"
-        ],
-        "status": "registered",
-        "previewGuarded": true
-    },
-    "sample_events": {
-        "file": "widgets/EventsWidget.php",
-        "roles": [
-            "member",
-            "artist",
             "organization"
         ],
         "status": "registered",
@@ -473,7 +498,7 @@
         "previewGuarded": true
     },
     "widget_spotlight_calls": {
-        "file": "templates/widgets/spotlight-dashboard.php",
+        "file": "templates/widgets/spotlight-dashboard-calls.php",
         "roles": [
             "member",
             "artist",
@@ -483,7 +508,7 @@
         "previewGuarded": true
     },
     "widget_spotlight_events": {
-        "file": "templates/widgets/spotlight-dashboard.php",
+        "file": "templates/widgets/spotlight-dashboard-events.php",
         "roles": [
             "member",
             "organization"
@@ -492,7 +517,7 @@
         "previewGuarded": true
     },
     "widget_spotlight_features": {
-        "file": "templates/widgets/spotlight-dashboard.php",
+        "file": "templates/widgets/spotlight-dashboard-features.php",
         "roles": [
             "member",
             "artist",
@@ -533,6 +558,14 @@
         "status": "ok",
         "previewGuarded": true
     },
+    "donations_template": {
+        "file": "templates/widgets/donations.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": false
+    },
     "embed_tool": {
         "file": "assets/js/widgets/EmbedToolWidget.jsx",
         "roles": [
@@ -564,6 +597,14 @@
         ],
         "status": "ok",
         "previewGuarded": true
+    },
+    "org_insights": {
+        "file": "src/Widgets.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": false
     },
     "org_team_roster": {
         "file": "assets/js/widgets/OrgTeamRosterWidget.jsx",
@@ -598,6 +639,14 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "sample_donations": {
+        "file": "widgets/DonationsWidget.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
     "sponsor_display": {
         "file": "widgets/SponsorDisplayWidget.php",
         "roles": [
@@ -620,6 +669,14 @@
             "organization"
         ],
         "status": "ok",
+        "previewGuarded": true
+    },
+    "webhooks_widget": {
+        "file": "widgets/WebhooksWidget.php",
+        "roles": [
+            "organization"
+        ],
+        "status": "registered",
         "previewGuarded": true
     }
 }
