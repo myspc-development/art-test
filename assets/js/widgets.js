@@ -1,29 +1,28 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import RsvpButton from './widgets/RsvpButtonWidget.jsx';
+import EventChat from './widgets/EventChatWidget.jsx';
 
-function toComponentName(id) {
-  return id
-    .split('_')
-    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-    .join('') + 'Widget';
-}
+const mountPoints = document.querySelectorAll('[data-widget]');
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-widget]').forEach(async (el) => {
-    const id = el.getAttribute('data-widget');
-    const props = JSON.parse(el.getAttribute('data-props') || '{}');
-    const componentName = toComponentName(id);
-    try {
-      const module = await import(`./widgets/${componentName}.jsx`);
-      const Component = module.default || module[componentName];
-      if (!Component) {
-        console.warn(`Component ${componentName} missing for widget ${id}`);
-        return;
-      }
-      const root = createRoot(el);
-      root.render(<Component {...props} />);
-    } catch (e) {
-      console.warn(`No component found for widget "${id}"`);
-    }
-  });
+mountPoints.forEach(node => {
+  const widget = node.dataset.widget;
+  const props = JSON.parse(node.dataset.props || '{}');
+  let Component = null;
+
+  switch (widget) {
+    case 'rsvp_button':
+      Component = RsvpButton;
+      break;
+    case 'event_chat':
+      Component = EventChat;
+      break;
+    default:
+      console.warn(`Unknown widget: ${widget}`);
+      return;
+  }
+
+  const root = createRoot(node);
+  root.render(<Component {...props} />);
 });
+
