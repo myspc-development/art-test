@@ -3,7 +3,7 @@ namespace ArtPulse\Rest\Tests;
 
 use WP_REST_Request;
 use ArtPulse\Rest\DashboardWidgetController;
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
  * @group restapi
@@ -20,6 +20,11 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
         $prop->setValue([]);
+        if ($ref->hasProperty('builder_widgets')) {
+            $b = $ref->getProperty('builder_widgets');
+            $b->setAccessible(true);
+            $b->setValue([]);
+        }
 
         $this->uid = self::factory()->user->create(['role' => 'administrator']);
         wp_set_current_user($this->uid);

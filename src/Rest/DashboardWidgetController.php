@@ -6,7 +6,7 @@ use WP_REST_Response;
 use WP_Error;
 // Use the dashboard builder registry rather than the core registry
 // so we can query widgets and render previews for the builder UI.
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
  * REST controller for the Dashboard Builder.
@@ -138,7 +138,7 @@ class DashboardWidgetController {
         ];
 
         if ($include_all) {
-            $response['all'] = array_values(DashboardWidgetRegistry::get_all());
+            $response['all'] = array_values(DashboardWidgetRegistry::get_all(null, true));
         }
 
         return rest_ensure_response($response);

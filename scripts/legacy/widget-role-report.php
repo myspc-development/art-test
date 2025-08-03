@@ -30,11 +30,10 @@ require_once __DIR__ . '/../includes/dashboard-builder-widgets.php';
 ap_register_dashboard_builder_widget_map();
 ap_register_builder_core_placeholders();
 
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry as BuilderRegistry;
-use ArtPulse\Core\DashboardWidgetRegistry as CoreRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
-$builder_defs = BuilderRegistry::get_all();
-$core_defs = CoreRegistry::get_all();
+$builder_defs = DashboardWidgetRegistry::get_all(null, true);
+$core_defs = DashboardWidgetRegistry::get_all();
 $map = include __DIR__ . '/../src/Rest/widget-id-map.php';
 $flip_map = array_flip($map);
 
@@ -42,9 +41,9 @@ $roles = ['member','artist','organization'];
 
 $rows = [];
 foreach ($roles as $role) {
-    $builder_role = BuilderRegistry::get_for_role($role);
+    $builder_role = DashboardWidgetRegistry::get_for_role($role);
     $builder_ids = array_keys($builder_role);
-    $core_role = CoreRegistry::get_widgets_by_role($role);
+    $core_role = DashboardWidgetRegistry::get_widgets_by_role($role);
     $core_ids = array_keys($core_role);
 
     $checked = [];

@@ -21,10 +21,19 @@ class DashboardWidgetRegistry {
      *     tags?:array,
      *     capability?:string,
      *     cache?:bool,
-     *     lazy?:bool
+     *     lazy?:bool,
+     *     visibility?:string,
+     *     builder_only?:bool
      * }>
      */
     private static array $widgets = [];
+
+    /**
+     * Builder widget definitions used by the dashboard builder UI.
+     *
+     * @var array<string,array>
+     */
+    private static array $builder_widgets = [];
 
     /**
      * Cached mapping of builder IDs to core IDs.
@@ -76,13 +85,49 @@ class DashboardWidgetRegistry {
      */
     public static function register(
         string $id,
-        string $label,
-        string $icon,
-        string $description,
-        callable $callback,
+        string|array $label,
+        string $icon = '',
+        string $description = '',
+        callable $callback = null,
         array $options = [] // supports 'category', 'roles', optional 'settings' and 'tags'
     ): void {
-        // Prevent duplicate IDs or labels.
+        // Builder-style registration when the second argument is an array.
+        if ( is_array( $label ) ) {
+            $id = sanitize_key( $id );
+            if ( ! $id ) {
+                return;
+            }
+            $args = array_merge(
+                [
+                    'title'           => '',
+                    'render_callback' => null,
+                    'roles'           => [],
+                    'file'            => '',
+                    'visibility'      => 'public',
+                ],
+                $label
+            );
+
+            if ( ! is_callable( $args['render_callback'] ) ) {
+                $args['render_callback'] = static function () {};
+            }
+            $visibility = in_array( $args['visibility'], [ 'public', 'internal', 'deprecated' ], true )
+                ? $args['visibility']
+                : 'public';
+
+            self::$builder_widgets[ $id ] = [
+                'id'             => $id,
+                'title'          => (string) $args['title'],
+                'render_callback'=> $args['render_callback'],
+                'roles'          => array_map( 'sanitize_key', (array) $args['roles'] ),
+                'file'           => (string) $args['file'],
+                'visibility'     => $visibility,
+            ];
+
+            return;
+        }
+
+        // Core-style registration.
         if ( self::is_widget_id_registered( $id ) ) {
             trigger_error( 'Dashboard widget ID already registered: ' . $id, E_USER_WARNING );
 
@@ -95,7 +140,6 @@ class DashboardWidgetRegistry {
             return;
         }
 
-        // Callback must be valid to render the widget.
         if ( ! is_callable( $callback ) ) {
             error_log( 'Invalid dashboard widget callback for ID ' . $id );
             $callback = [ self::class, 'render_widget_fallback' ];
@@ -123,6 +167,8 @@ class DashboardWidgetRegistry {
             'capability'  => $options['capability'] ?? '',
             'cache'       => $options['cache'] ?? false,
             'lazy'        => $options['lazy'] ?? false,
+            'visibility'  => $options['visibility'] ?? 'public',
+            'builder_only'=> $options['builder_only'] ?? false,
         ];
     }
 
@@ -336,7 +382,7 @@ class DashboardWidgetRegistry {
      * @return array<string,string>
      */
     private static function generate_id_map(): array {
-        $builder = \ArtPulse\DashboardBuilder\DashboardWidgetRegistry::get_all();
+        $builder = self::get_all( null, true );
         $core    = self::get_definitions();
 
         $map = [];
@@ -387,7 +433,19 @@ class DashboardWidgetRegistry {
      *
      * @return array<string,array>
      */
-    public static function get_all(): array {
+    public static function get_all(?string $visibility = null, bool $builder = false): array {
+        if ( $builder ) {
+            $widgets = self::$builder_widgets;
+            if ( $visibility !== null ) {
+                $widgets = array_filter(
+                    $widgets,
+                    static fn( $w ) => ( $w['visibility'] ?? 'public' ) === $visibility
+                );
+            }
+
+            return $widgets;
+        }
+
         $widgets  = self::$widgets;
         $settings = get_option('artpulse_widget_roles', []);
         foreach ($settings as $id => $cfg) {
@@ -415,7 +473,65 @@ class DashboardWidgetRegistry {
                 unset($widgets[$id]);
             }
         }
+
+        if ( $visibility !== null ) {
+            $widgets = array_filter(
+                $widgets,
+                static fn( $w ) => ( $w['visibility'] ?? 'public' ) === $visibility
+            );
+        }
+
         return $widgets;
+    }
+
+    /**
+     * Backwards compatibility alias for legacy code.
+     *
+     * @deprecated Use get_all() instead.
+     */
+    public static function get_all_widgets(?string $visibility = null, bool $builder = false): array {
+        return self::get_all( $visibility, $builder );
+    }
+
+    /**
+     * Get widgets available for a specific role from the builder registry.
+     */
+    public static function get_for_role( string $role ): array {
+        $role = sanitize_key( $role );
+        return array_filter(
+            self::get_all( null, true ),
+            static function ( $w ) use ( $role ) {
+                $roles = isset( $w['roles'] ) ? (array) $w['roles'] : [];
+                return in_array( $role, $roles, true );
+            }
+        );
+    }
+
+    /**
+     * Render a builder widget by ID and return the output.
+     */
+    public static function render( string $id ): string {
+        if ( ! isset( self::$builder_widgets[ $id ] ) ) {
+            return '';
+        }
+
+        static $stack = [];
+        if ( isset( $stack[ $id ] ) ) {
+            return '';
+        }
+        $stack[ $id ] = true;
+
+        ob_start();
+        try {
+            call_user_func( self::$builder_widgets[ $id ]['render_callback'] );
+        } catch ( \Throwable $e ) {
+            $file = self::$builder_widgets[ $id ]['file'] ?? 'unknown';
+            error_log( '[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage() );
+        }
+        $html = ob_get_clean();
+        unset( $stack[ $id ] );
+
+        return $html;
     }
 
     /**
@@ -461,7 +577,12 @@ class DashboardWidgetRegistry {
      */
     public static function get( string $id ): ?array {
         $widgets = self::get_all();
-        return $widgets[ $id ] ?? null;
+        if ( isset( $widgets[ $id ] ) ) {
+            return $widgets[ $id ];
+        }
+
+        $builder = self::get_all( null, true );
+        return $builder[ $id ] ?? null;
     }
 
     /**

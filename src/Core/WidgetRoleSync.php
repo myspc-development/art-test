@@ -1,8 +1,6 @@
 <?php
 namespace ArtPulse\Core;
 
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry as BuilderRegistry;
-
 /**
  * Synchronize dashboard widget role assignments and builder registration.
  */
@@ -79,9 +77,9 @@ class WidgetRoleSync {
                 }
 
                 // Register with the Dashboard Builder if missing.
-                $builder_defs = BuilderRegistry::get_all();
+                $builder_defs = DashboardWidgetRegistry::get_all(null, true);
                 if (!isset($builder_defs[$id])) {
-                    BuilderRegistry::register($id, [
+                    DashboardWidgetRegistry::register($id, [
                         'title' => $widgets[$id]['label'] ?? ucwords(str_replace('_', ' ', $id)),
                         'render_callback' => 'render_widget_' . $id,
                         'roles' => $roles,

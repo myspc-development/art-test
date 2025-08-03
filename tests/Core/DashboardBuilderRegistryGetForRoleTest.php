@@ -2,7 +2,7 @@
 namespace ArtPulse\DashboardBuilder\Tests;
 
 use PHPUnit\Framework\TestCase;
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DashboardBuilderRegistryGetForRoleTest extends TestCase
 {
@@ -12,6 +12,11 @@ class DashboardBuilderRegistryGetForRoleTest extends TestCase
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
         $prop->setValue([]);
+        if ($ref->hasProperty('builder_widgets')) {
+            $bw = $ref->getProperty('builder_widgets');
+            $bw->setAccessible(true);
+            $bw->setValue([]);
+        }
     }
 
     public function test_get_for_role_requires_explicit_match(): void

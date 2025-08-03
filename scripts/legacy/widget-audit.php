@@ -30,7 +30,7 @@ ap_register_guide_widgets();
 ap_register_core_dashboard_widgets();
 ap_register_builder_core_placeholders();
 
-$builder_defs = \ArtPulse\DashboardBuilder\DashboardWidgetRegistry::get_all();
+$builder_defs = \ArtPulse\Core\DashboardWidgetRegistry::get_all(null, true);
 $core_defs = \ArtPulse\Core\DashboardWidgetRegistry::get_all();
 $map = \ArtPulse\Core\DashboardWidgetRegistry::get_id_map();
 

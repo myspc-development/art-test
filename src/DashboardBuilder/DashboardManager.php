@@ -4,7 +4,7 @@ namespace ArtPulse\DashboardBuilder;
 /**
  * Registers the Dashboard Builder admin page and enqueues the React app.
  */
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DashboardManager {
     public static function register(): void {
@@ -60,7 +60,7 @@ class DashboardManager {
             ARTPULSE_VERSION
         );
         $widget_roles = [];
-        foreach (DashboardWidgetRegistry::get_all() as $def) {
+        foreach (DashboardWidgetRegistry::get_all(null, true) as $def) {
             foreach ((array)($def['roles'] ?? []) as $r) {
                 $widget_roles[$r] = true;
             }

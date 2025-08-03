@@ -3,8 +3,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
-use ArtPulse\Core\DashboardWidgetRegistry as CoreDashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\WidgetRegistryLoader;
 use ArtPulse\Admin\Widgets\WidgetStatusPanelWidget;
 use ArtPulse\Admin\Widgets\WidgetManifestPanelWidget;
@@ -43,7 +42,7 @@ function ap_register_dashboard_builder_widget_map(): void {
             $args['render_callback'] = $cb;
         }
 
-        if (!DashboardWidgetRegistry::get_widget($id)) {
+        if (!DashboardWidgetRegistry::get($id)) {
             DashboardWidgetRegistry::register($id, $args);
         }
     }
@@ -54,8 +53,8 @@ function ap_register_builder_core_placeholders(): void {
     $config = WidgetRegistryLoader::get_config();
     foreach ($config as $id => $data) {
         $core_id = 'widget_' . $id;
-        if (!CoreDashboardWidgetRegistry::get($core_id)) {
-            CoreDashboardWidgetRegistry::register_widget($core_id, [
+        if (!DashboardWidgetRegistry::get($core_id)) {
+            DashboardWidgetRegistry::register_widget($core_id, [
                 'label'    => $data['label'] ?? ucwords(str_replace(['_', '-'], ' ', $id)),
                 'callback' => 'render_widget_' . $core_id,
                 'roles'    => $data['roles'] ?? [],
