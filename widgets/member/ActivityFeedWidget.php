@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Widgets\Member;
 
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
 
 use ArtPulse\Core\ActivityLogger;
@@ -53,10 +52,6 @@ class ActivityFeedWidget implements DashboardWidgetInterface {
 
       public static function render(int $user_id = 0): string
       {
-          if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
-              return '';
-          }
-
           $user_id = $user_id ?: get_current_user_id();
 
           if (!$user_id || !self::can_view()) {

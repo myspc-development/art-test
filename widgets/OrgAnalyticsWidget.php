@@ -4,7 +4,6 @@ namespace ArtPulse\Widgets;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
 
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
 
 /**
@@ -38,7 +37,6 @@ class OrgAnalyticsWidget {
 
       public static function render( int $user_id = 0 ): string {
           $user_id = $user_id ?: get_current_user_id();
-          if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return '';
           if ( ! self::can_view( $user_id ) ) {
               return '<div class="ap-org-analytics-widget" data-widget-id="' . esc_attr(self::get_id()) . '"><div class="notice notice-error"><p>' . esc_html__("You do not have access to view this widget.", 'artpulse') . '</p></div></div>';
           }

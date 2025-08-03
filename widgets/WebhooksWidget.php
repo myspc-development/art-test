@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Widgets;
 
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
 
 use ArtPulse\Core\DashboardWidgetRegistry;

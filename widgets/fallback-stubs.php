@@ -1,5 +1,4 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) {
     exit;
 }

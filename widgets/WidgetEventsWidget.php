@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Widgets;
 
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
 
 /**
@@ -34,7 +33,6 @@ class WidgetEventsWidget {
     }
 
       public static function render(): string {
-          if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return '';
           ob_start();
           echo '<div data-widget-id="widget_events">';
           echo ap_widget_events([]);
