@@ -21,9 +21,14 @@ class WidgetEmbedShortcode {
 
         // Load widget config
         $registry = get_option('artpulse_widget_roles', []);
-        $allowed_roles = $registry[$widget_id] ?? [];
+        $conf = $registry[$widget_id] ?? [];
+        if (is_array($conf) && array_keys($conf) !== range(0, count($conf) - 1)) {
+            $allowed_roles = (array) ($conf['roles'] ?? []);
+        } else {
+            $allowed_roles = (array) $conf;
+        }
 
-        if (!in_array($role, $allowed_roles)) return '';
+        if (!in_array($role, $allowed_roles, true)) return '';
 
         $template_path = plugin_dir_path(__FILE__) . "../../templates/widgets/{$widget_id}.php";
         if (!file_exists($template_path)) return '';

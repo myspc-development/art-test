@@ -18,6 +18,15 @@ if (defined('WP_DEBUG') && WP_DEBUG) {
     }
 }
 
+// Migrate legacy widget visibility option to unified artpulse_widget_roles.
+add_action('plugins_loaded', function () {
+    $legacy = get_option('ap_widget_visibility_settings', false);
+    if ($legacy !== false && get_option('artpulse_widget_roles', false) === false) {
+        update_option('artpulse_widget_roles', $legacy);
+        delete_option('ap_widget_visibility_settings');
+    }
+});
+
 register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
     $settings = get_option('artpulse_settings', []);
     $settings = array_merge(artpulse_get_default_settings(), $settings);

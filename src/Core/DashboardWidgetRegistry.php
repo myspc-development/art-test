@@ -385,11 +385,18 @@ class DashboardWidgetRegistry {
      */
     public static function get_all(): array {
         $widgets  = self::$widgets;
-        $settings = get_option('ap_widget_visibility_settings', []);
+        $settings = get_option('artpulse_widget_roles', []);
         foreach ($settings as $id => $cfg) {
             if (!isset($widgets[$id])) {
                 continue;
             }
+
+            // Backward compatibility: allow storing roles as a simple array.
+            if (is_array($cfg) && array_keys($cfg) === range(0, count($cfg) - 1)) {
+                $widgets[$id]['roles'] = array_map('sanitize_key', $cfg);
+                continue;
+            }
+
             if (isset($cfg['roles'])) {
                 $widgets[$id]['roles'] = array_map('sanitize_key', (array) $cfg['roles']);
             }

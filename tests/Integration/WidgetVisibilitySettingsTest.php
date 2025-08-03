@@ -14,7 +14,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
         $prop->setValue([]);
-        delete_option('ap_widget_visibility_settings');
+        delete_option('artpulse_widget_roles');
 
         EventsWidget::register();
         DonationsWidget::register();
@@ -28,7 +28,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
             'roles' => ['member'],
         ]);
 
-        update_option('ap_widget_visibility_settings', [
+        update_option('artpulse_widget_roles', [
             'test_widget' => [
                 'roles' => ['organization'],
                 'capability' => 'edit_posts',
@@ -76,7 +76,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
             'roles' => ['member'],
         ]);
 
-        update_option('ap_widget_visibility_settings', [
+        update_option('artpulse_widget_roles', [
             'test_widget' => [
                 'roles' => ['member'],
                 'capability' => 'edit_posts',
