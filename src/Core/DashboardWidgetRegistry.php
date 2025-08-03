@@ -432,7 +432,7 @@ class DashboardWidgetRegistry {
         }
 
         $role         = DashboardController::get_role( $user_id );
-        $widget_roles  = isset( $widget['roles'] ) ? (array) $widget['roles'] : [];
+        $widget_roles = isset( $widget['roles'] ) ? (array) $widget['roles'] : [];
         if ( $widget_roles && ! in_array( $role, $widget_roles, true ) ) {
             return false;
         }
@@ -440,6 +440,17 @@ class DashboardWidgetRegistry {
         $cap = $widget['capability'] ?? '';
         if ( $cap && ! user_can( $user_id, $cap ) ) {
             return false;
+        }
+
+        $class = $widget['class'] ?? '';
+        if ( $class && method_exists( $class, 'can_view' ) ) {
+            try {
+                if ( ! call_user_func( [ $class, 'can_view' ], $user_id ) ) {
+                    return false;
+                }
+            } catch ( \Throwable $e ) {
+                return false;
+            }
         }
 
         return true;
@@ -665,26 +676,11 @@ class DashboardWidgetRegistry {
         $sections = [];
         $widgets = apply_filters('ap_dashboard_widgets', self::get_all(), $role);
         foreach ( $widgets as $id => $cfg ) {
-            $roles = isset( $cfg['roles'] ) ? (array) $cfg['roles'] : [];
-            if ( $roles && ! in_array( $role, $roles, true ) ) {
+            if ( ! self::user_can_see( $id, $user_id ) ) {
                 continue;
             }
 
-            $cap = $cfg['capability'] ?? '';
-            if ( $cap && ! user_can( $user_id, $cap ) ) {
-                continue;
-            }
-
-            $class = $cfg['class'] ?? '';
-            if ( $class && method_exists( $class, 'can_view' ) ) {
-                try {
-                    if ( ! call_user_func( [ $class, 'can_view' ], $user_id ) ) {
-                        continue;
-                    }
-                } catch ( \Throwable $e ) {
-                    continue;
-                }
-            }
+            $class   = $cfg['class'] ?? '';
             $section = $cfg['section'] ?? '';
             if ( $class && method_exists( $class, 'get_section' ) ) {
                 try {
