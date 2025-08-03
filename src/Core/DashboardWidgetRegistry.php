@@ -33,6 +33,41 @@ class DashboardWidgetRegistry {
     private static ?array $id_map = null;
 
     /**
+     * Ensure callbacks consistently accept a user ID parameter.
+     *
+     * If the provided callback does not require a parameter or its first
+     * parameter is not an integer, wrap it in a closure that ignores the user
+     * ID. This allows legacy callbacks to remain compatible while the
+     * registry always invokes callbacks with the user ID argument.
+     */
+    private static function normalize_callback( callable $callback ): callable {
+        try {
+            $ref = is_array( $callback )
+                ? new \ReflectionMethod( $callback[0], $callback[1] )
+                : new \ReflectionFunction( $callback );
+
+            $params = $ref->getParameters();
+            if ( ! $params ) {
+                return static function ( int $user_id = 0 ) use ( $callback ) {
+                    return call_user_func( $callback );
+                };
+            }
+
+            $first = $params[0];
+            $type  = $first->getType();
+            if ( $type instanceof \ReflectionNamedType && $type->getName() !== 'int' ) {
+                return static function ( int $user_id = 0 ) use ( $callback ) {
+                    return call_user_func( $callback );
+                };
+            }
+        } catch ( \ReflectionException $e ) {
+            // Ignore reflection errors and fall back to original callback.
+        }
+
+        return $callback;
+    }
+
+    /**
      * Register a widget and its settings.
      *
      * @param callable $callback Callback used to render the widget. Must be
@@ -64,6 +99,8 @@ class DashboardWidgetRegistry {
             error_log( 'Invalid dashboard widget callback for ID ' . $id );
             $callback = [ self::class, 'render_widget_fallback' ];
         }
+
+        $callback = self::normalize_callback( $callback );
 
         $class = '';
         if ( is_array( $callback ) && isset( $callback[0] ) && is_string( $callback[0] ) ) {
@@ -134,6 +171,8 @@ class DashboardWidgetRegistry {
 
         if ( empty( $args['callback'] ) || ! is_callable( $args['callback'] ) ) {
             $args['callback'] = [ self::class, 'render_widget_fallback' ];
+        } else {
+            $args['callback'] = self::normalize_callback( $args['callback'] );
         }
 
         $class = '';
@@ -155,6 +194,10 @@ class DashboardWidgetRegistry {
         $id = sanitize_key( $id );
         if ( ! $id || ! isset( self::$widgets[ $id ] ) ) {
             return;
+        }
+
+        if ( isset( $definition['callback'] ) && is_callable( $definition['callback'] ) ) {
+            $definition['callback'] = self::normalize_callback( $definition['callback'] );
         }
 
         self::$widgets[ $id ] = $definition;
@@ -190,7 +233,7 @@ class DashboardWidgetRegistry {
         return false;
     }
 
-    public static function render_widget_fallback(): string {
+    public static function render_widget_fallback( int $user_id = 0 ): string {
         return '<p><strong>Widget callback is missing or invalid.</strong></p>';
     }
 
@@ -208,36 +251,36 @@ class DashboardWidgetRegistry {
         return '<p>' . esc_html__( 'No content available.', 'artpulse' ) . '</p>';
     }
 
-    public static function render_widget_news(): string {
+    public static function render_widget_news( int $user_id = 0 ): string {
         return self::include_template( 'widgets/widget-news.php' );
     }
 
-    public static function render_widget_events(): string {
+    public static function render_widget_events( int $user_id = 0 ): string {
         return self::include_template( 'widgets/events.php' );
     }
 
-    public static function render_widget_favorites(): string {
+    public static function render_widget_favorites( int $user_id = 0 ): string {
         return self::include_template( 'widgets/my-favorites.php' );
     }
 
     // Legacy aliases used in some configurations.
-    public static function render_widget_widget_events(): string {
+    public static function render_widget_widget_events( int $user_id = 0 ): string {
         return self::render_widget_events();
     }
 
-    public static function render_widget_widget_favorites(): string {
+    public static function render_widget_widget_favorites( int $user_id = 0 ): string {
         return self::render_widget_favorites();
     }
 
-    public static function render_widget_for_you(): string {
+    public static function render_widget_for_you( int $user_id = 0 ): string {
         return self::include_template( 'widgets/widget-for-you.php' );
     }
 
-    public static function render_widget_nearby_events_map(): string {
+    public static function render_widget_nearby_events_map( int $user_id = 0 ): string {
         return self::include_template( 'widgets/nearby-events-map.php' );
     }
 
-    public static function render_widget_my_favorites(): string {
+    public static function render_widget_my_favorites( int $user_id = 0 ): string {
         return self::include_template( 'widgets/my-favorites.php' );
     }
 

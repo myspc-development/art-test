@@ -26,14 +26,14 @@ class SubmissionChecklistWidget {
         return user_can($user_id, 'artist') || user_can($user_id, 'organization');
     }
 
-    public static function render(): string {
-        $user_id = get_current_user_id();
-        if (!self::can_view($user_id)) {
-            return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
-        }
+      public static function render(int $user_id = 0): string {
+          $user_id = $user_id ?: get_current_user_id();
+          if (!self::can_view($user_id)) {
+              return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
+          }
 
-        return '<p>' . esc_html__('Checklist content coming soon.', 'artpulse') . '</p>';
-    }
+          return '<p>' . esc_html__('Checklist content coming soon.', 'artpulse') . '</p>';
+      }
 }
 
 SubmissionChecklistWidget::register();

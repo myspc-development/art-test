@@ -21,11 +21,12 @@ class WidgetManifestPanelWidget {
         );
     }
 
-    public static function render(): string {
-        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return '';
-        if (!current_user_can('manage_options')) {
-            return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
-        }
+      public static function render(int $user_id = 0): string {
+          if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return '';
+          $user_id = $user_id ?: get_current_user_id();
+          if (!current_user_can('manage_options')) {
+              return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
+          }
         $path = dirname(__DIR__) . '/widget-manifest.json';
         if (!file_exists($path)) {
             return esc_html__('Manifest not found.', 'artpulse');

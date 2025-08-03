@@ -51,23 +51,20 @@ class ActivityFeedWidget implements DashboardWidgetInterface {
         );
     }
 
-    public static function render(): string
-    {
-        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
-            return '';
-        }
+      public static function render(int $user_id = 0): string
+      {
+          if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+              return '';
+          }
 
-        if (!self::can_view()) {
-            return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
-        }
+          $user_id = $user_id ?: get_current_user_id();
 
-        $user_id = get_current_user_id();
-        if (!$user_id) {
-            return esc_html__('Please log in to view your activity.', 'artpulse');
-        }
+          if (!$user_id || !self::can_view()) {
+              return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
+          }
 
-        $org_id = intval(get_user_meta($user_id, 'ap_organization_id', true));
-        $logs   = ActivityLogger::get_logs($org_id ?: null, $user_id, 10);
+          $org_id = intval(get_user_meta($user_id, 'ap_organization_id', true));
+          $logs   = ActivityLogger::get_logs($org_id ?: null, $user_id, 10);
         if (empty($logs)) {
             return esc_html__('No recent activity.', 'artpulse');
         }

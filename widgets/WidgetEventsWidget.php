@@ -33,14 +33,14 @@ class WidgetEventsWidget {
         }
     }
 
-    public static function render(): string {
-        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return '';
-        ob_start();
-        echo '<div data-widget-id="widget_events">';
-        echo ap_widget_events([]);
-        echo '</div>';
-        return ob_get_clean();
-    }
+      public static function render(int $user_id = 0): string {
+          if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return '';
+          ob_start();
+          echo '<div data-widget-id="widget_events">';
+          echo ap_widget_events([]);
+          echo '</div>';
+          return ob_get_clean();
+      }
 }
 
 WidgetEventsWidget::register();

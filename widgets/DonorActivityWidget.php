@@ -9,9 +9,9 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DonorActivityWidget
 {
-    public static function can_view(): bool
+    public static function can_view(int $user_id): bool
     {
-        $role = \ArtPulse\Core\DashboardController::get_role( get_current_user_id() );
+        $role = \ArtPulse\Core\DashboardController::get_role( $user_id );
         return $role === 'organization';
     }
 
@@ -27,15 +27,17 @@ class DonorActivityWidget
         );
     }
 
-    public static function render(): string
+    public static function render(int $user_id = 0): string
     {
         if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return '';
 
-        if ( ! self::can_view() ) {
+        $user_id = $user_id ?: get_current_user_id();
+
+        if ( ! self::can_view( $user_id ) ) {
             return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
         }
 
-        $org_id = get_user_meta(get_current_user_id(), 'ap_organization_id', true);
+        $org_id = get_user_meta($user_id, 'ap_organization_id', true);
         if (!$org_id) {
             return esc_html__('No organization assigned.', 'artpulse');
         }

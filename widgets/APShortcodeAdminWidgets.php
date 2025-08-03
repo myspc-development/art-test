@@ -36,31 +36,31 @@ class APShortcodeAdminWidgets {
         );
     }
 
-    public static function render_event_calendar(): string {
-        $uid       = get_current_user_id();
-        $org_role  = get_user_meta($uid, 'ap_org_role', true);
-        if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
-        }
-        return do_shortcode('[ap_event_calendar]');
-    }
+      public static function render_event_calendar(int $user_id = 0): string {
+          $uid       = $user_id ?: get_current_user_id();
+          $org_role  = get_user_meta($uid, 'ap_org_role', true);
+          if (!current_user_can('manage_options') && $org_role !== 'organization') {
+              return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
+          }
+          return do_shortcode('[ap_event_calendar]');
+      }
 
-    public static function render_notifications(): string {
-        $uid       = get_current_user_id();
-        $org_role  = get_user_meta($uid, 'ap_org_role', true);
-        if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
-        }
-        return do_shortcode('[ap_notifications]');
-    }
+      public static function render_notifications(int $user_id = 0): string {
+          $uid       = $user_id ?: get_current_user_id();
+          $org_role  = get_user_meta($uid, 'ap_org_role', true);
+          if (!current_user_can('manage_options') && $org_role !== 'organization') {
+              return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
+          }
+          return do_shortcode('[ap_notifications]');
+      }
 
-    public static function render_org_dashboard(): string {
-        $uid       = get_current_user_id();
-        $org_role  = get_user_meta($uid, 'ap_org_role', true);
-        if (!current_user_can('manage_options') && $org_role !== 'organization') {
-            return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
-        }
-        return do_shortcode('[ap_org_dashboard]');
-    }
+      public static function render_org_dashboard(int $user_id = 0): string {
+          $uid       = $user_id ?: get_current_user_id();
+          $org_role  = get_user_meta($uid, 'ap_org_role', true);
+          if (!current_user_can('manage_options') && $org_role !== 'organization') {
+              return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
+          }
+          return do_shortcode('[ap_org_dashboard]');
+      }
 }
 APShortcodeAdminWidgets::register();

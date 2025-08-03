@@ -281,42 +281,42 @@ function ap_load_dashboard_template(string $template, array $vars = []): string
     return ob_get_clean();
 }
 
-function ap_widget_membership(array $vars = []): string
+function ap_widget_membership(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/membership.php', $vars);
 }
 
-function ap_widget_next_payment(array $vars = []): string
+function ap_widget_next_payment(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/next-payment.php', $vars);
 }
 
-function ap_widget_transactions(array $vars = []): string
+function ap_widget_transactions(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/transactions.php', $vars);
 }
 
-function ap_widget_upgrade(array $vars = []): string
+function ap_widget_upgrade(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/upgrade.php', $vars);
 }
 
-function ap_widget_content(array $vars = []): string
+function ap_widget_content(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/content.php', $vars);
 }
 
-function ap_widget_local_events(array $vars = []): string
+function ap_widget_local_events(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/local-events.php', $vars);
 }
 
-function ap_widget_favorites(array $vars = []): string
+function ap_widget_favorites(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/my-favorites.php', $vars);
 }
 
-function ap_widget_my_favorites(array $vars = []): string
+function ap_widget_my_favorites(int $user_id = 0, array $vars = []): string
 {
     if (function_exists('ap_widget_favorites')) {
         return ap_widget_favorites($vars);
@@ -328,204 +328,204 @@ function ap_widget_my_favorites(array $vars = []): string
     return '<div class="ap-widget-placeholder">Favorites widget is under construction.</div>';
 }
 
-function ap_widget_my_follows(array $vars = []): string
+function ap_widget_my_follows(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/my-follows.php', $vars);
 }
 
-function ap_widget_creator_tips(array $vars = []): string
+function ap_widget_creator_tips(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/widget-creator-tips.php', $vars);
 }
 
-function ap_widget_rsvps(array $vars = []): string
+function ap_widget_rsvps(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/rsvps.php', $vars);
 }
 
-function ap_widget_rsvp_stats(array $vars = []): string
+function ap_widget_rsvp_stats(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/rsvp-stats.php', $vars);
 }
 
-function ap_widget_my_events(array $vars = []): string
+function ap_widget_my_events(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/my-events.php', $vars);
 }
 
-function ap_widget_events(array $vars = []): string
+function ap_widget_events(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/events.php', $vars);
 }
 
-function ap_widget_support_history(array $vars = []): string
+function ap_widget_support_history(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/support-history.php', $vars);
 }
 
-function ap_widget_notifications(array $vars = []): string
+function ap_widget_notifications(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/notifications.php', $vars);
 }
 
-function ap_widget_messages(array $vars = []): string
+function ap_widget_messages(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/messages.php', $vars);
 }
 
-function ap_widget_for_you(array $vars = []): string
+function ap_widget_for_you(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/widget-for-you.php', $vars);
 }
 
-function ap_widget_followed_artists(array $vars = []): string
+function ap_widget_followed_artists(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/widget-followed-artists.php', $vars);
 }
 
-function ap_widget_account_tools(array $vars = []): string
+function ap_widget_account_tools(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/account-tools.php', $vars);
 }
 
-function ap_widget_webhooks(array $vars = []): string
+function ap_widget_webhooks(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/webhooks.php', $vars);
 }
 
-function ap_widget_instagram(array $vars = []): string
+function ap_widget_instagram(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/instagram-widget.php', $vars);
 }
 
-function ap_widget_cat_fact(array $vars = []): string
+function ap_widget_cat_fact(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/cat-fact.php', $vars);
 }
 
-function ap_widget_spotlights(array $vars = []): string
+function ap_widget_spotlights(int $user_id = 0, array $vars = []): string
 {
     $vars['role'] = DashboardController::get_role(get_current_user_id());
     return ap_load_dashboard_template('widgets/widget-spotlights.php', $vars);
 }
 
-function ap_widget_role_spotlight(array $vars = []): string
+function ap_widget_role_spotlight(int $user_id = 0, array $vars = []): string
 {
     $vars['role'] = DashboardController::get_role(get_current_user_id());
     return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
 }
 
-function ap_widget_spotlight_calls(array $vars = []): string
+function ap_widget_spotlight_calls(int $user_id = 0, array $vars = []): string
 {
     $vars['role']     = DashboardController::get_role(get_current_user_id());
     $vars['category'] = 'calls';
     return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
 }
 
-function ap_widget_spotlight_events(array $vars = []): string
+function ap_widget_spotlight_events(int $user_id = 0, array $vars = []): string
 {
     $vars['role']     = DashboardController::get_role(get_current_user_id());
     $vars['category'] = 'events';
     return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
 }
 
-function ap_widget_spotlight_features(array $vars = []): string
+function ap_widget_spotlight_features(int $user_id = 0, array $vars = []): string
 {
     $vars['role']     = DashboardController::get_role(get_current_user_id());
     $vars['category'] = 'featured';
     return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
 }
 
-function ap_widget_upcoming_events_location(array $vars = []): string
+function ap_widget_upcoming_events_location(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/upcoming-events-location.php', $vars);
 }
 
-function ap_widget_followed_artists_activity(array $vars = []): string
+function ap_widget_followed_artists_activity(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/followed-artists-activity.php', $vars);
 }
 
-function ap_widget_artist_inbox_preview(array $vars = []): string
+function ap_widget_artist_inbox_preview(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/artist-inbox-preview.php', $vars);
 }
 
-function ap_widget_artist_revenue_summary(array $vars = []): string
+function ap_widget_artist_revenue_summary(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/artist-revenue-summary.php', $vars);
 }
 
-function ap_widget_artist_spotlight(array $vars = []): string
+function ap_widget_artist_spotlight(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/artist-spotlight-widget.php', $vars);
 }
 
-function ap_widget_artist_artwork_manager(array $vars = []): string
+function ap_widget_artist_artwork_manager(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/artist-artwork-manager.php', $vars);
 }
 
-function ap_widget_artist_audience_insights(array $vars = []): string
+function ap_widget_artist_audience_insights(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/artist-audience-insights.php', $vars);
 }
 
-function ap_widget_artist_earnings_summary(array $vars = []): string
+function ap_widget_artist_earnings_summary(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/artist-earnings.php', $vars);
 }
 
-function ap_widget_artist_feed_publisher(array $vars = []): string
+function ap_widget_artist_feed_publisher(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/artist-feed-publisher.php', $vars);
 }
 
-function ap_widget_collab_requests(array $vars = []): string
+function ap_widget_collab_requests(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/collab-requests.php', $vars);
 }
 
-function ap_widget_onboarding_tracker(array $vars = []): string
+function ap_widget_onboarding_tracker(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/onboarding-tracker.php', $vars);
 }
 
-function ap_widget_my_rsvps(array $vars = []): string
+function ap_widget_my_rsvps(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/my-rsvps.php', $vars);
 }
 
-function ap_widget_my_shared_events_activity(array $vars = []): string
+function ap_widget_my_shared_events_activity(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/my-shared-events-activity.php', $vars);
 }
 
-function ap_widget_recommended_for_you_member(array $vars = []): string
+function ap_widget_recommended_for_you_member(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/recommended-for-you.php', $vars);
 }
 
-function ap_widget_dashboard_feedback(array $vars = []): string
+function ap_widget_dashboard_feedback(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/dashboard-feedback.php', $vars);
 }
 
-function ap_widget_rsvp_button(array $vars = []): string
+function ap_widget_rsvp_button(int $user_id = 0, array $vars = []): string
 {
     ob_start();
     ap_render_js_widget('rsvp_button', ['event-id' => $vars['event_id'] ?? 0]);
     return ob_get_clean();
 }
 
-function ap_widget_event_chat(array $vars = []): string
+function ap_widget_event_chat(int $user_id = 0, array $vars = []): string
 {
     ob_start();
     ap_render_js_widget('event_chat', ['event-id' => $vars['event_id'] ?? 0]);
     return ob_get_clean();
 }
 
-function ap_widget_share_this_event(array $vars = []): string
+function ap_widget_share_this_event(int $user_id = 0, array $vars = []): string
 {
     ob_start();
     ap_render_js_widget('share_this_event');

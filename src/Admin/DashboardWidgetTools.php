@@ -256,7 +256,7 @@ class DashboardWidgetTools
                 echo '</div></div>';
                 if ($visible) {
                     echo '<div class="ap-widget-content">';
-                    echo call_user_func($cb);
+                    echo call_user_func($cb, get_current_user_id());
                     echo '</div>';
                 }
                 echo '</div>';
@@ -464,7 +464,7 @@ class DashboardWidgetTools
 
         $rendering = true;
         ob_start();
-        call_user_func($cb);
+        call_user_func($cb, 0);
         $html = ob_get_clean();
         $rendering = false;
 
@@ -504,7 +504,7 @@ class DashboardWidgetTools
             echo '<h4>' . esc_html($defs[$id]['name']) . '</h4>';
             echo '<div class="ap-preview-content">';
             try {
-                call_user_func($cb);
+                call_user_func($cb, 0);
             } catch (\Throwable $e) {
                 echo '<div class="notice notice-error"><p>Error rendering widget: ' . esc_html($e->getMessage()) . '</p></div>';
             }
@@ -693,7 +693,7 @@ class DashboardWidgetTools
             echo '</div>';
             echo '<div class="inside">';
             if (isset($w['callback']) && is_callable($w['callback'])) {
-                call_user_func($w['callback']);
+                call_user_func($w['callback'], 0);
             } else {
                 echo '<div class="notice notice-error"><p>' . esc_html__('Invalid or missing callback for dashboard widget.', 'artpulse') . '</p></div>';
             }

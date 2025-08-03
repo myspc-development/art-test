@@ -26,14 +26,14 @@ class MyUpcomingEventsWidget {
         return $user_id > 0;
     }
 
-    public static function render(): string {
-        $user_id = get_current_user_id();
-        if (!self::can_view($user_id)) {
-            return '<div class="notice notice-error"><p>' . esc_html__('Please log in.', 'artpulse') . '</p></div>';
-        }
+      public static function render(int $user_id = 0): string {
+          $user_id = $user_id ?: get_current_user_id();
+          if (!self::can_view($user_id)) {
+              return '<div class="notice notice-error"><p>' . esc_html__('Please log in.', 'artpulse') . '</p></div>';
+          }
 
-        return '<p>' . esc_html__('Upcoming events will appear here.', 'artpulse') . '</p>';
-    }
+          return '<p>' . esc_html__('Upcoming events will appear here.', 'artpulse') . '</p>';
+      }
 }
 
 MyUpcomingEventsWidget::register();

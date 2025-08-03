@@ -18,9 +18,12 @@ interface DashboardWidgetInterface
     public static function description(): string;
 
     /**
-     * Render the widget output.
+     * Render the widget output for a user.
      *
-     * Should return the rendered HTML as a string.
+     * @param int $user_id Optional user ID when rendering in a specific
+     *                     context. Defaults to the current user.
+     *
+     * @return string Rendered HTML output.
      */
-    public static function render(): string;
+    public static function render(int $user_id = 0): string;
 }

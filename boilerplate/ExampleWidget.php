@@ -63,15 +63,16 @@ class ExampleWidget implements DashboardWidgetInterface {
     /**
      * Render the widget output.
      */
-    public static function render(): string {
-        if (!self::can_view()) {
-            return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
-        }
+      public static function render(int $user_id = 0): string {
+          $user_id = $user_id ?: get_current_user_id();
+          if (!$user_id || !self::can_view()) {
+              return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
+          }
 
-        ob_start();
-        include __DIR__ . '/example-widget-template.php';
-        return ob_get_clean();
-    }
+          ob_start();
+          include __DIR__ . '/example-widget-template.php';
+          return ob_get_clean();
+      }
 }
 
 ExampleWidget::register();

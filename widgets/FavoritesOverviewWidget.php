@@ -59,16 +59,16 @@ class FavoritesOverviewWidget implements DashboardWidgetInterface {
         return 'heart';
     }
 
-    public static function render(): string
-    {
-        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
-            return '';
-        }
-        if (function_exists('ap_widget_favorites')) {
-            return ap_widget_favorites([]);
-        }
-        return self::render_placeholder();
-    }
+      public static function render(int $user_id = 0): string
+      {
+          if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+              return '';
+          }
+          if (function_exists('ap_widget_favorites')) {
+              return ap_widget_favorites([]);
+          }
+          return self::render_placeholder();
+      }
 
     public static function render_placeholder(): string
     {
