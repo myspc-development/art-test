@@ -733,13 +733,17 @@ add_action('wp_enqueue_scripts', function () {
  * Enqueue the base plugin stylesheet.
  */
 function ap_enqueue_main_style() {
-    $css_path = plugin_dir_path(__FILE__) . 'dist/bundle.css';
-    wp_enqueue_style(
-        'artpulse-bundle',
-        plugin_dir_url(__FILE__) . 'dist/bundle.css',
-        [],
-        file_exists($css_path) ? filemtime($css_path) : '1.0.0'
-    );
+    $relative = 'dist/bundle.css';
+    $css_path = plugin_dir_path(__FILE__) . $relative;
+
+    if (file_exists($css_path)) {
+        wp_enqueue_style(
+            'artpulse-bundle',
+            plugin_dir_url(__FILE__) . $relative,
+            [],
+            filemtime($css_path)
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'ap_enqueue_main_style');
 add_action('admin_enqueue_scripts', 'ap_enqueue_main_style');
