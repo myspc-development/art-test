@@ -1,8 +1,8 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 namespace ArtPulse\Widgets;
 
 if (!defined('ABSPATH')) { exit; }
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 
 /**
  * Display sponsor information on event or post pages.

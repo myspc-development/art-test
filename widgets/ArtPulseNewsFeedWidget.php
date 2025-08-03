@@ -1,14 +1,15 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 namespace ArtPulse\Widgets;
 
+use ArtPulse\Core\DashboardWidgetRegistry;
+use WP_Query;
+
 if (!defined('ABSPATH')) { exit; }
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 
 /**
  * Dashboard widget showing recent posts from followed artists or organizations.
  */
-use ArtPulse\Core\DashboardWidgetRegistry;
-use WP_Query;
 
 class ArtPulseNewsFeedWidget {
     public static function register() {

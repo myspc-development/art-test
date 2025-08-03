@@ -1,13 +1,14 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 namespace ArtPulse\Widgets;
 
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 if (!defined('ABSPATH')) { exit; }
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 
 /**
  * Dashboard widget for QA testers to verify basic builder functionality.
  */
-use ArtPulse\Core\DashboardWidgetRegistry;
 
 class QAChecklistWidget {
     public static function register(): void {
