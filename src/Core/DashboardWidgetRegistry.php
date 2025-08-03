@@ -698,6 +698,57 @@ class DashboardWidgetRegistry {
     }
 
     /**
+     * Build a map of widgets grouped by role.
+     *
+     * Each entry contains the widget ID along with optional callback and REST
+     * configuration, matching the structure expected by
+     * {@see \ArtPulse\Admin\DashboardWidgetTools::get_role_widgets()}.
+     *
+     * @param array $roles Optional list of roles to include. Defaults to all roles.
+     * @return array<string,array<int,array<string,mixed>>>
+     */
+    public static function get_role_widget_map( array $roles = [] ): array {
+        if ( ! $roles ) {
+            if ( function_exists( 'wp_roles' ) ) {
+                $roles = array_keys( wp_roles()->roles );
+            } else {
+                $roles = [ 'member', 'artist', 'organization' ];
+            }
+        } else {
+            $roles = array_map( 'sanitize_key', $roles );
+        }
+
+        $map = array_fill_keys( $roles, [] );
+
+        foreach ( self::get_all() as $id => $def ) {
+            $item = [ 'id' => $id ];
+            if ( ! empty( $def['callback'] ) ) {
+                $item['callback'] = $def['callback'];
+            }
+            if ( ! empty( $def['rest'] ) ) {
+                $item['rest'] = $def['rest'];
+            }
+
+            $widget_roles = isset( $def['roles'] ) ? (array) $def['roles'] : [];
+            if ( $widget_roles ) {
+                foreach ( $widget_roles as $role ) {
+                    $role = sanitize_key( $role );
+                    if ( ! isset( $map[ $role ] ) ) {
+                        $map[ $role ] = [];
+                    }
+                    $map[ $role ][] = $item;
+                }
+            } else {
+                foreach ( $roles as $role ) {
+                    $map[ $role ][] = $item;
+                }
+            }
+        }
+
+        return $map;
+    }
+
+    /**
      * Get a random subset of widgets for a role.
      */
     public static function get_random( string $role, int $limit = 1, int $user_id = 0 ): array {
