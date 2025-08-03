@@ -185,19 +185,17 @@
       i = 0;
     }
     _regeneratorDefine = function (e, r, n, t) {
-      if (r) i ? i(e, r, {
+      function o(r, n) {
+        _regeneratorDefine(e, r, function (e) {
+          return this._invoke(r, n, e);
+        });
+      }
+      r ? i ? i(e, r, {
         value: n,
         enumerable: !t,
         configurable: !t,
         writable: !t
-      }) : e[r] = n;else {
-        function o(r, n) {
-          _regeneratorDefine(e, r, function (e) {
-            return this._invoke(r, n, e);
-          });
-        }
-        o("next", 0), o("throw", 1), o("return", 2);
-      }
+      }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
     }, _regeneratorDefine(e, r, n, t);
   }
   function _slicedToArray(r, e) {
@@ -225,6 +223,10 @@
     }
   }
 
+  var EmojiPicker = null;
+  if (typeof window !== 'undefined' && window.EmojiPicker) {
+    EmojiPicker = window.EmojiPicker;
+  }
   var __$5 = wp.i18n.__;
   function ChatWidget(_ref) {
     var eventId = _ref.eventId,
@@ -250,7 +252,7 @@
       var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
         var resp, data, _t;
         return _regenerator().w(function (_context) {
-          while (1) switch (_context.n) {
+          while (1) switch (_context.p = _context.n) {
             case 0:
               if (!fetching.current) {
                 _context.n = 1;
@@ -315,7 +317,7 @@
       var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(e) {
         var msg, _t2;
         return _regenerator().w(function (_context2) {
-          while (1) switch (_context2.n) {
+          while (1) switch (_context2.p = _context2.n) {
             case 0:
               e.preventDefault();
               msg = text.trim();
@@ -361,7 +363,7 @@
       var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(id, emoji) {
         var _t3;
         return _regenerator().w(function (_context3) {
-          while (1) switch (_context3.n) {
+          while (1) switch (_context3.p = _context3.n) {
             case 0:
               _context3.p = 0;
               _context3.n = 1;
@@ -458,7 +460,7 @@
       onClick: function onClick() {
         return setShowPicker(!showPicker);
       }
-      }, "\uD83D\uDE0A"), showPicker && typeof window.EmojiPicker !== 'undefined' && /*#__PURE__*/React.createElement(window.EmojiPicker, {
+    }, "\uD83D\uDE0A"), showPicker && EmojiPicker && /*#__PURE__*/React.createElement(EmojiPicker, {
       onEmojiClick: function onEmojiClick(e) {
         return setText(function (t) {
           return t + e.emoji;
@@ -588,29 +590,34 @@
   }
 
   function NearbyEventsMapWidget(_ref) {
-    var apiRoot = _ref.apiRoot;
-      _ref.nonce;
-      var lat = _ref.lat,
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce,
+      lat = _ref.lat,
       lng = _ref.lng;
     var _useState = React.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       events = _useState2[0],
       setEvents = _useState2[1];
     React.useEffect(function () {
-    if (!lat || !lng) {
-      setEvents([]);
-      return;
-    }
-    fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng)).then(function (r) {
-      return r.ok ? r.json() : [];
-    }).then(function (data) {
-      return Array.isArray(data) ? setEvents(data) : setEvents([]);
-    })["catch"](function () {
-      return setEvents([]);
-    });
-  }, [lat, lng]);
+      if (!lat || !lng) {
+        setEvents([]);
+        return;
+      }
+      fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng), {
+        headers: {
+          'X-WP-Nonce': nonce
+        }
+      }).then(function (r) {
+        return r.ok ? r.json() : Promise.resolve([]);
+      }).then(function (data) {
+        return Array.isArray(data) ? data : [];
+      }).then(setEvents)["catch"](function () {
+        return setEvents([]);
+      });
+    }, [lat, lng, apiRoot, nonce]);
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-nearby-events-widget"
+      className: "ap-nearby-events-widget",
+      "data-widget-id": "nearby_events_map"
     }, /*#__PURE__*/React.createElement("ul", null, events.map(function (ev) {
       return /*#__PURE__*/React.createElement("li", {
         key: ev.id
@@ -652,7 +659,8 @@
       }).then(setItems);
     }, []);
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-favorites-widget"
+      className: "ap-favorites-widget",
+      "data-widget-id": "my_favorites"
     }, /*#__PURE__*/React.createElement("ul", null, items.map(function (i) {
       return /*#__PURE__*/React.createElement("li", {
         key: i.post_id
@@ -741,19 +749,23 @@
         return setThreads([]);
       });
     }, []);
+    var content;
     if (threads === null) {
-      return /*#__PURE__*/React.createElement("p", null, __$2('Loading...', 'artpulse'));
+      content = /*#__PURE__*/React.createElement("p", null, __$2('Loading...', 'artpulse'));
+    } else if (!threads.length) {
+      content = /*#__PURE__*/React.createElement("p", null, __$2('No new messages.', 'artpulse'));
+    } else {
+      content = /*#__PURE__*/React.createElement("ul", {
+        className: "ap-inbox-preview-list"
+      }, threads.slice(0, 3).map(function (t) {
+        return /*#__PURE__*/React.createElement("li", {
+          key: t.user_id
+        }, /*#__PURE__*/React.createElement("strong", null, t.display_name), t.preview && /*#__PURE__*/React.createElement("span", null, ": ", t.preview), t.date && /*#__PURE__*/React.createElement("em", null, " ", new Date(t.date).toLocaleDateString()));
+      }));
     }
-    if (!threads.length) {
-      return /*#__PURE__*/React.createElement("p", null, __$2('No new messages.', 'artpulse'));
-    }
-    return /*#__PURE__*/React.createElement("ul", {
-      className: "ap-inbox-preview-list"
-    }, threads.slice(0, 3).map(function (t) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: t.user_id
-      }, /*#__PURE__*/React.createElement("strong", null, t.display_name), t.preview && /*#__PURE__*/React.createElement("span", null, ": ", t.preview), t.date && /*#__PURE__*/React.createElement("em", null, " ", new Date(t.date).toLocaleDateString()));
-    }));
+    return /*#__PURE__*/React.createElement("div", {
+      "data-widget-id": "artist_inbox_preview"
+    }, content);
   }
   function initArtistInboxPreviewWidget(el) {
     var root = client.createRoot(el);
@@ -795,10 +807,13 @@
       });
     }, []);
     if (!data) {
-      return /*#__PURE__*/React.createElement("p", null, __$1('Loading...', 'artpulse'));
+      return /*#__PURE__*/React.createElement("div", {
+        "data-widget-id": "revenue_summary"
+      }, /*#__PURE__*/React.createElement("p", null, __$1('Loading...', 'artpulse')));
     }
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-revenue-summary"
+      className: "ap-revenue-summary",
+      "data-widget-id": "revenue_summary"
     }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, data.total_revenue), " ", __$1('total revenue this month', 'artpulse')), /*#__PURE__*/React.createElement("p", null, data.tickets_sold, " ", __$1('tickets sold', 'artpulse')));
   }
   function initArtistRevenueSummaryWidget(el) {

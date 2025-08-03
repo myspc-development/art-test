@@ -28,37 +28,37 @@ export default [
     id: 'nearby_events_map',
     title: __('Nearby Events Map', 'artpulse'),
     component: NearbyEventsMapWidget,
-    roles: ['member', 'artist']
+    roles: ['member']
   },
   {
     id: 'my_favorites',
     title: __('My Favorites', 'artpulse'),
     component: MyFavoritesWidget,
-    roles: ['member', 'artist']
+    roles: ['member']
   },
   {
     id: 'rsvp_button',
     title: __('RSVP Button', 'artpulse'),
     component: RSVPButton,
-    roles: ['member', 'artist']
+    roles: ['member']
   },
   {
     id: 'event_chat',
     title: __('Event Chat', 'artpulse'),
     component: EventChatWidget,
-    roles: ['member', 'artist']
+    roles: ['member']
   },
   {
     id: 'share_this_event',
     title: __('Share This Event', 'artpulse'),
     component: ShareThisEventWidget,
-    roles: ['member', 'artist']
+    roles: ['member']
   },
   {
     id: 'artist_inbox_preview',
     title: __('Artist Inbox Preview', 'artpulse'),
     component: ArtistInboxPreviewWidget,
-    roles: ['artist']
+    roles: ['member', 'artist']
   },
   {
     id: 'artist_revenue_summary',
