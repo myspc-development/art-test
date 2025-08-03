@@ -40,6 +40,24 @@ function register_ap_widget(string $id, array $args): void
     \ArtPulse\Core\DashboardWidgetRegistry::register_widget($id, $args);
 }
 
+function ap_render_js_widget(string $id, array $data = []): void
+{
+    $defaults = [
+        'api-root' => esc_url_raw(rest_url()),
+        'nonce'    => wp_create_nonce('wp_rest'),
+    ];
+    $data  = array_merge($defaults, $data);
+    $attrs = '';
+    foreach ($data as $k => $v) {
+        $attrs .= ' data-' . $k . '="' . esc_attr($v) . '"';
+    }
+    echo '<section data-widget="' . esc_attr($id) . '" data-widget-id="' . esc_attr($id) . '" class="dashboard-widget">';
+    echo '<div class="inside">';
+    echo '<div id="' . esc_attr($id) . '" class="ap-react-widget"' . $attrs . '></div>';
+    echo '</div>';
+    echo '</section>';
+}
+
 add_shortcode('ap_widget', function ($atts) {
     $id = sanitize_key($atts['id'] ?? '');
     if (!$id) {

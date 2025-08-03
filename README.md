@@ -525,20 +525,13 @@ This populates a sample organization with members, events and donation records f
 
 ### Creating Widgets
 
-1. Copy `widgets/SampleHelloWidget.php` and update the class name.
+1. Copy an existing widget from the `widgets/` directory and update the class name.
 2. Implement `get_id()`, `get_title()`, `get_section()`, `can_view( $user_id )` and `render( $user_id )`.
 3. Call `DashboardWidgetRegistry::register()` in the `register()` method with a `roles` array.
 
 ### Template Overrides
 
 Place a file under `your-theme/widgets/` with the same name as the plugin template (e.g. `donations.php`) to override it. If no override exists the template bundled with the plugin is loaded.
-
-### Widget Fallbacks
-
-Wrapper functions inside `widgets/stubs.php` call implementation functions like
-`ap_widget_example()`. If those inner functions are missing, stubs are
-auto-generated from `widgets/fallback-stubs.php`. When `WP_DEBUG` is on, using a
-stub logs a warning so developers know to supply the real widget code.
 
 ### Running PHPUnit
 

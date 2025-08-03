@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
 use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetRegistry as CoreDashboardWidgetRegistry;
 use ArtPulse\Core\WidgetRegistryLoader;
+use ArtPulse\Admin\Widgets\WidgetStatusPanelWidget;
+use ArtPulse\Admin\Widgets\WidgetManifestPanelWidget;
 
 // Load and register widgets defined in the configuration file.
 add_action('artpulse_register_dashboard_widget', [WidgetRegistryLoader::class, 'register_widgets']);
@@ -64,6 +66,6 @@ function ap_register_builder_core_placeholders(): void {
 add_action('init', 'ap_register_builder_core_placeholders', 25);
 
 if (defined('WIDGET_DEBUG_MODE') && WIDGET_DEBUG_MODE) {
-    require_once dirname(__DIR__) . '/widgets/WidgetStatusPanelWidget.php';
-    require_once dirname(__DIR__) . '/widgets/WidgetManifestPanelWidget.php';
+    WidgetStatusPanelWidget::register();
+    WidgetManifestPanelWidget::register();
 }

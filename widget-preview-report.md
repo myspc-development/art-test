@@ -10,10 +10,5 @@ Widgets unguarded: 0
 - templates/widgets/guide.php: admin_guide, member_guide
 
 ## Unmapped Files
-- widgets/APShortcodeAdminWidgets.php
 - widgets/ActivityFeedWidget.php
-- widgets/SampleHelloWidget.php
 - widgets/WebhooksWidget.php
-- widgets/WidgetManifestPanelWidget.php
-- widgets/WidgetStatusPanelWidget.php
-- widgets/stubs.php
