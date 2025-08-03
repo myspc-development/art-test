@@ -1,10 +1,10 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 namespace ArtPulse\Widgets;
 
-if (!defined('ABSPATH')) { exit; }
-
 use ArtPulse\Core\DashboardWidgetRegistry;
+
+if (!defined('ABSPATH')) { exit; }
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 
 /**
  * Dashboard widget allowing organizations to manage outbound webhooks.

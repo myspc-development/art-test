@@ -1,13 +1,14 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 namespace ArtPulse\Widgets;
 
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 if (!defined('ABSPATH')) { exit; }
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 
 /**
  * Wrapper widget for Favorites Overview.
  */
-use ArtPulse\Core\DashboardWidgetRegistry;
 
 class FavoritesOverviewWidget {
     public static function register(): void {

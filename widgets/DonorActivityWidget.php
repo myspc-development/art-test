@@ -1,11 +1,11 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 namespace ArtPulse\Widgets;
-
-if (!defined('ABSPATH')) { exit; }
 
 use ArtPulse\Crm\DonationModel;
 use ArtPulse\Core\DashboardWidgetRegistry;
+
+if (!defined('ABSPATH')) { exit; }
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 
 class DonorActivityWidget
 {

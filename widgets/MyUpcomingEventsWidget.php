@@ -1,8 +1,9 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 namespace ArtPulse\Widgets;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 
 class MyUpcomingEventsWidget {
     public static function register(): void {

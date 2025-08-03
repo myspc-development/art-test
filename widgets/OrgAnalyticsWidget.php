@@ -1,11 +1,11 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 namespace ArtPulse\Widgets;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
 
 if (!defined('ABSPATH')) { exit; }
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 
 /**
  * Simple dashboard widget showing basic organization analytics.
