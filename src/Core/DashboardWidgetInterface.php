@@ -18,6 +18,11 @@ interface DashboardWidgetInterface
     public static function description(): string;
 
     /**
+     * Register the widget with the registry.
+     */
+    public static function register(): void;
+
+    /**
      * Render the widget output for a user.
      *
      * @param int $user_id Optional user ID when rendering in a specific

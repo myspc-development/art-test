@@ -1,5 +1,5 @@
 <?php
-use ArtPulse\Widgets\ActivityFeedWidget;
+use ArtPulse\Widgets\Member\ActivityFeedWidget;
 
 class ActivityFeedWidgetTest extends \WP_UnitTestCase {
     public function test_render_output() {

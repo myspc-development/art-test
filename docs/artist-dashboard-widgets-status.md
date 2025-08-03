@@ -6,7 +6,7 @@ The following widgets were reviewed on 2025-07-23. They comprise all widgets reg
 
 | Widget | Implemented | Key Files |
 |--------|-------------|----------|
-| Activity Feed | ✅ | `widgets/ActivityFeedWidget.php` |
+| Activity Feed | ✅ | `widgets/member/ActivityFeedWidget.php` |
 | Artwork Manager | ✅ | `assets/js/widgets/ArtistArtworkManagerWidget.jsx` |
 | Audience Insights | ✅ | `assets/js/widgets/ArtistAudienceInsightsWidget.jsx` |
 | Earnings Summary | ✅ | `assets/js/widgets/ArtistEarningsWidget.jsx` |

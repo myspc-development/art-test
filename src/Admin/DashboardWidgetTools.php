@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Widgets\Member\WelcomeBoxWidget;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Admin\UserLayoutManager;
@@ -68,7 +69,7 @@ class DashboardWidgetTools
     {
         $defaults = [
             'member' => [
-                ['id' => 'welcome_box', 'label' => 'Welcome', 'callback' => [\ArtPulse\Widgets::class, 'render_welcome_box']],
+                ['id' => 'welcome_box', 'label' => 'Welcome', 'callback' => [WelcomeBoxWidget::class, 'render']],
             ],
             'artist' => [
                 ['id' => 'portfolio_preview', 'label' => 'Portfolio', 'callback' => [\ArtPulse\Widgets::class, 'render_portfolio_box']],

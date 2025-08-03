@@ -67,6 +67,9 @@ if (!file_exists($autoload_path)) {
 }
 require_once $autoload_path;
 
+require_once __DIR__ . '/includes/widget-loader.php';
+add_action('plugins_loaded', [\ArtPulse\DashboardWidgetRegistryLoader::class, 'load_all']);
+
 // Setup automatic plugin updates from GitHub
 require_once plugin_dir_path(__FILE__) . 'vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php';
 require_once __DIR__ . '/includes/update-checker.php';
@@ -166,7 +169,6 @@ require_once __DIR__ . '/includes/http-hooks.php';
 require_once __DIR__ . '/includes/rest-update-diagnostics.php';
 // Legacy dashboard implementation removed in favor of DashboardWidgetRegistry
 // based widgets loaded via the manifest.
-require_once __DIR__ . '/widgets/ActivityFeedWidget.php';
 require_once __DIR__ . '/widgets/QAChecklistWidget.php';
 require_once __DIR__ . '/widgets/EventsWidget.php';
 require_once __DIR__ . '/widgets/DonationsWidget.php';

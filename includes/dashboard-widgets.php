@@ -550,6 +550,61 @@ function ap_widget_share_this_event(int $user_id = 0, array $vars = []): string
     return ob_get_clean();
 }
 
+function ap_widget_audience_crm(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will show audience CRM.</div>';
+}
+
+function ap_widget_sponsored_event_config(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will configure sponsored events.</div>';
+}
+
+function ap_widget_embed_tool(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will provide an embed tool.</div>';
+}
+
+function ap_widget_org_event_overview(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will show organization events.</div>';
+}
+
+function ap_widget_org_team_roster(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will list team members.</div>';
+}
+
+function ap_widget_branding_settings_panel(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will manage branding settings.</div>';
+}
+
+function ap_widget_org_widget_sharing(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will handle widget sharing.</div>';
+}
+
+function ap_widget_sponsor_display(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will showcase sponsors.</div>';
+}
+
+function ap_widget_org_approval_center(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will manage approvals.</div>';
+}
+
+function ap_widget_org_ticket_insights(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will display ticket insights.</div>';
+}
+
+function ap_widget_org_broadcast_box(int $user_id = 0, array $vars = []): string
+{
+    return '<div class="ap-widget-placeholder">This widget will broadcast messages.</div>';
+}
+
 /**
  * Register core dashboard widgets.
  */

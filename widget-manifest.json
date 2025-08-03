@@ -1,6 +1,6 @@
 {
   "activity_feed": {
-    "file": "widgets/ActivityFeedWidget.php",
+    "file": "widgets/member/ActivityFeedWidget.php",
     "roles": [
       "member",
       "artist",
@@ -266,7 +266,7 @@
   },
   "welcome_box": {
     "id": "welcome_box",
-    "file": "src/Widgets.php",
+    "file": "widgets/member/WelcomeBoxWidget.php",
     "roles": [
       "member"
     ],
