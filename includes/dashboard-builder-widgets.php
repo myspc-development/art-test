@@ -43,7 +43,7 @@ function ap_register_dashboard_builder_widget_map(): void {
             $args['render_callback'] = $cb;
         }
 
-        if (!DashboardWidgetRegistry::get($id)) {
+        if (!DashboardWidgetRegistry::get_widget($id)) {
             DashboardWidgetRegistry::register($id, $args);
         }
     }
