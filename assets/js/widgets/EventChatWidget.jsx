@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
 const { __ } = wp.i18n;
 
 /**
@@ -10,7 +9,7 @@ const { __ } = wp.i18n;
  * - apiRoot: REST API base.
  * - nonce: WP nonce.
  */
-export function EventChatWidget({ eventId, apiRoot, nonce }) {
+export default function EventChatWidget({ eventId, apiRoot, nonce }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
 
@@ -39,7 +38,7 @@ export function EventChatWidget({ eventId, apiRoot, nonce }) {
   };
 
   return (
-    <div className="ap-event-chat-widget" data-widget-id="event_chat">
+    <div className="ap-event-chat-widget">
       <ul className="chat-thread">
         {messages.map((m, i) => (
           <li key={i}><strong>{m.author}:</strong> {m.content}</li>
@@ -54,13 +53,5 @@ export function EventChatWidget({ eventId, apiRoot, nonce }) {
         <button onClick={send}>{__('Send', 'artpulse')}</button>
       </div>
     </div>
-  );
-}
-
-export default function initEventChatWidget(el) {
-  const root = createRoot(el);
-  const { eventId, apiRoot, nonce } = el.dataset;
-  root.render(
-    <EventChatWidget eventId={Number(eventId)} apiRoot={apiRoot} nonce={nonce} />
   );
 }

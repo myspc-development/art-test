@@ -57,6 +57,10 @@ const configs = [
     react: 'React',
     'react-dom/client': 'ReactDOM'
   }),
+  createConfig('assets/js/widgets.js', 'assets/js/widgets.bundle.js', 'APWidgets', {
+    react: 'React',
+    'react-dom/client': 'ReactDOM'
+  }),
   createConfig(
     'assets/js/DashboardContainer.jsx',
     'assets/js/dashboard-container.js',

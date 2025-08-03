@@ -347,7 +347,7 @@
         "previewGuarded": true
     },
     "rsvp_button": {
-        "file": "assets/js/widgets/RSVPButton.jsx",
+        "file": "assets/js/widgets/RsvpButtonWidget.jsx",
         "roles": [
             "member"
         ],
