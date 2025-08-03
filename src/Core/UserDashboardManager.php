@@ -1008,13 +1008,10 @@ class UserDashboardManager
             $user_role = 'artist';
         }
 
-        $vars['user_role'] = $user_role;
+        ob_start();
+        \ap_render_dashboard([$user_role]);
+        $dashboard_html = ob_get_clean();
 
-        $template = "dashboard-{$user_role}.php";
-        if (!file_exists(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/' . $template)) {
-            $template = 'dashboard-role.php';
-        }
-
-        return $onboarding_html . self::load_template($template, $vars);
+        return $onboarding_html . $dashboard_html;
     }
 }
