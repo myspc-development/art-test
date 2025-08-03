@@ -8,6 +8,7 @@
   const restRoot = APDashboardBuilder.rest_root;
   const nonce = APDashboardBuilder.nonce;
   const visibilityFilters = { public:true, internal:false, deprecated:false };
+  const debug = !!APDashboardBuilder.debug;
 
   function getIncludeAll(){
     return $('#ap-db-show-all').prop('checked');
@@ -15,24 +16,24 @@
 
   function fetchWidgets(role){
     if (fetching) {
-      console.log('[DashboardBuilder] fetch already in progress');
+      if (debug) console.log('[DashboardBuilder] fetch already in progress');
       return;
     }
     if (role === lastRole && layoutReady) {
-      console.log('[DashboardBuilder] Skip fetch, role unchanged:', role);
+      if (debug) console.log('[DashboardBuilder] Skip fetch, role unchanged:', role);
       return;
     }
     lastRole = role;
     layoutReady = false;
     fetching = true;
     const includeAll = getIncludeAll();
-    console.log('[DashboardBuilder] fetch widgets', role, 'includeAll', includeAll);
+    if (debug) console.log('[DashboardBuilder] fetch widgets', role, 'includeAll', includeAll);
     $.ajax({
       url: restRoot + 'artpulse/v1/dashboard-widgets?role=' + encodeURIComponent(role) + (includeAll ? '&include_all=true' : ''),
       method: 'GET',
       beforeSend: xhr => xhr.setRequestHeader('X-WP-Nonce', nonce),
       success: res => {
-        console.log('[DashboardBuilder] response', res);
+        if (debug) console.log('[DashboardBuilder] response', res);
         const allowed = res.available || [];
         widgets = allowed.slice();
         allowedMap = {};
@@ -44,7 +45,7 @@
             }
           });
         }
-        console.log('widgets', widgets);
+        if (debug) console.log('widgets', widgets);
         if(res.active && Array.isArray(res.active.layout)){
           layout = res.active.layout;
         } else if(res.active && Array.isArray(res.active.layoutOrder)){
@@ -57,14 +58,14 @@
             layout.push({id:w.id, visible:true});
           }
         });
-        console.log('widgetAllowedMap', allowedMap);
-        console.log('layoutConfig', layout);
+        if (debug) console.log('widgetAllowedMap', allowedMap);
+        if (debug) console.log('layoutConfig', layout);
         render();
         layoutReady = true;
         fetching = false;
       },
       error: err => {
-        console.warn('[DashboardBuilder] fetch failed', err);
+        if (debug) console.warn('[DashboardBuilder] fetch failed', err);
         fetching = false;
       }
     });
@@ -171,7 +172,7 @@
         render();
       }
     });
-    console.log('[DashboardBuilder] initial role', roleSel.val());
+    if (debug) console.log('[DashboardBuilder] initial role', roleSel.val());
     updateFilters();
     fetchWidgets(roleSel.val());
   });
