@@ -34,14 +34,14 @@ Embeds a single dashboard widget anywhere on the site.
 ```
 Outputs only the `stats` widget if the current user has permission to view it.
 
-## `[ap_org_dashboard]`
-Displays the organization management dashboard with event and artwork lists.
+## `[ap_react_dashboard]`
+Embeds the React-powered dashboard interface for logged-in users.
 
 **Example**
 ```html
-[ap_org_dashboard]
+[ap_react_dashboard]
 ```
-Only users assigned to an organization will see data.
+Outputs the dynamic dashboard UI rendered via React.
 
 ## `[ap_event_comments]`
 Shows the comment list and form for an event post.

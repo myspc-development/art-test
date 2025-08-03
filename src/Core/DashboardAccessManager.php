@@ -21,9 +21,8 @@ class DashboardAccessManager
 
         $content = $post->post_content ?? '';
         if (
-            strpos($content, '[ap_org_dashboard]') !== false ||
-            strpos($content, '[ap_artist_dashboard]') !== false ||
-            strpos($content, '[ap_user_dashboard]') !== false
+            strpos($content, '[ap_user_dashboard]') !== false ||
+            strpos($content, '[ap_react_dashboard]') !== false
         ) {
             $login_url = Plugin::get_login_url();
             wp_safe_redirect(add_query_arg('redirect_to', rawurlencode(get_permalink($post)), $login_url));

@@ -29,9 +29,9 @@ For each role:
 
 | Role         | Shortcode Used          | Template Exists | Route Loads | Dashboard Visible |
 |--------------|-------------------------|-----------------|-------------|-------------------|
-| `member`     | `[ap_member_dashboard]` | ✅/❌            | `/member-dashboard` | ✅/❌ |
-| `artist`     | `[ap_artist_dashboard]` | ✅/❌            | `/artist-dashboard` | ✅/❌ |
-| `organization`| `[ap_org_dashboard]`   | ✅/❌            | `/organization-dashboard` | ✅/❌ |
+| `member`     | `[ap_user_dashboard]` | ✅/❌            | `/member-dashboard` | ✅/❌ |
+| `artist`     | `[ap_user_dashboard]` | ✅/❌            | `/artist-dashboard` | ✅/❌ |
+| `organization`| `[ap_user_dashboard]` | ✅/❌            | `/organization-dashboard` | ✅/❌ |
 | `admin`      | admin tools, builder    | ✅               | `/wp-admin/...` | ✅ |
 
 ---
