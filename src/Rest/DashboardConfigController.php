@@ -24,11 +24,11 @@ class DashboardConfigController {
     }
 
     public static function get_config(WP_REST_Request $request): WP_REST_Response {
-        $roles  = get_option('artpulse_widget_roles', []);
-        $locked = get_option('artpulse_locked_widgets', []);
+        $visibility = get_option('artpulse_widget_roles', []);
+        $locked     = get_option('artpulse_locked_widgets', []);
 
         return rest_ensure_response([
-            'widget_roles' => $roles,
+            'widget_roles' => $visibility,
             'locked'       => array_values($locked),
         ]);
     }
@@ -39,11 +39,11 @@ class DashboardConfigController {
             return new WP_Error('rest_forbidden', __('Invalid nonce', 'artpulse'), ['status' => 403]);
         }
 
-        $data   = $request->get_json_params();
-        $roles  = isset($data['widget_roles']) && is_array($data['widget_roles']) ? $data['widget_roles'] : [];
-        $locked = isset($data['locked']) && is_array($data['locked']) ? $data['locked'] : [];
+        $data       = $request->get_json_params();
+        $visibility = isset($data['widget_roles']) && is_array($data['widget_roles']) ? $data['widget_roles'] : [];
+        $locked     = isset($data['locked']) && is_array($data['locked']) ? $data['locked'] : [];
 
-        update_option('artpulse_widget_roles', $roles);
+        update_option('artpulse_widget_roles', $visibility);
         update_option('artpulse_locked_widgets', $locked);
 
         return rest_ensure_response(['saved' => true]);

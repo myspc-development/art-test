@@ -14,7 +14,7 @@ add_action('admin_menu', function(){
 });
 
 add_action('admin_init', function(){
-    register_setting('ap_widget_visibility_settings', 'ap_widget_visibility_settings');
+    register_setting('artpulse_widget_roles', 'artpulse_widget_roles');
 });
 
 function ap_render_widget_visibility_page() {
@@ -22,11 +22,11 @@ function ap_render_widget_visibility_page() {
         wp_die(__('Insufficient permissions', 'artpulse'));
     }
     $widgets  = DashboardWidgetRegistry::get_all();
-    $settings = get_option('ap_widget_visibility_settings', []);
+    $settings = get_option('artpulse_widget_roles', []);
     $roles    = ['member', 'artist', 'organization'];
     echo '<div class="wrap"><h1>' . esc_html__('Widget Visibility', 'artpulse') . '</h1>';
     echo '<form method="post" action="options.php">';
-    settings_fields('ap_widget_visibility_settings');
+    settings_fields('artpulse_widget_roles');
     echo '<table class="widefat"><thead><tr><th>' . esc_html__('Widget', 'artpulse') . '</th>';
     echo '<th>' . esc_html__('Roles', 'artpulse') . '</th>';
     echo '<th>' . esc_html__('Capability', 'artpulse') . '</th></tr></thead><tbody>';
@@ -36,9 +36,9 @@ function ap_render_widget_visibility_page() {
         echo '<tr><td>' . esc_html($def['label']) . '</td><td>';
         foreach ($roles as $r) {
             $checked = in_array($r, (array)$conf_roles, true) ? 'checked' : '';
-            echo '<label style="margin-right:8px"><input type="checkbox" name="ap_widget_visibility_settings[' . esc_attr($id) . '][roles][]" value="' . esc_attr($r) . '" ' . $checked . ' /> ' . esc_html(ucfirst($r)) . '</label>';
+            echo '<label style="margin-right:8px"><input type="checkbox" name="artpulse_widget_roles[' . esc_attr($id) . '][roles][]" value="' . esc_attr($r) . '" ' . $checked . ' /> ' . esc_html(ucfirst($r)) . '</label>';
         }
-        echo '</td><td><input type="text" name="ap_widget_visibility_settings[' . esc_attr($id) . '][capability]" value="' . esc_attr($cap) . '" /></td></tr>';
+        echo '</td><td><input type="text" name="artpulse_widget_roles[' . esc_attr($id) . '][capability]" value="' . esc_attr($cap) . '" /></td></tr>';
     }
     echo '</tbody></table>';
     submit_button();
