@@ -65,20 +65,16 @@ class FavoritesOverviewWidget implements DashboardWidgetInterface {
             return '';
         }
         if (function_exists('ap_widget_favorites')) {
-            ob_start();
-            ap_widget_favorites([]);
-            $content = ob_get_clean();
-        } else {
-            $content = self::render_placeholder();
+            return ap_widget_favorites([]);
         }
-        return '<div data-widget-id="' . esc_attr(self::id()) . '">' . $content . '</div>';
+        return self::render_placeholder();
     }
 
     public static function render_placeholder(): string
     {
-        return '<div class="ap-widget-placeholder">' .
+        return '<div data-widget="' . esc_attr(self::id()) . '" data-widget-id="' . esc_attr(self::id()) . '" class="dashboard-widget"><div class="inside"><div class="ap-widget-placeholder">' .
             esc_html__('Favorites widget is under construction.', 'artpulse') .
-            '</div>';
+            '</div></div></div>';
     }
 }
 
