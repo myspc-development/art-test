@@ -2,7 +2,7 @@
 title: 📚 Codex Index
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-07-29
 status: complete
 ---
 # 📚 Codex Index
@@ -56,8 +56,7 @@ status: complete
 | [`widget-registry-reference.md`](widgets/widget-registry-reference.md) | Widget registration metadata | Dev |
 | [`widget-layout-import-export-guide.md`](widgets/widget-layout-import-export-guide.md) | Import/export JSON | Dev |
 | [Dashboard Builder UAT Checklist](qa/dashboard-builder-uat-checklist.md) | Testing guidance for the builder | QA |
-| [Role-Based Dashboard Verification](qa/role-based-dashboard-verification.md) | QA prompt for verifying role dashboards | QA |
-| [Full Dashboard Compliance Check](qa/full-dashboard-compliance-check.md) | Final QA for all dashboards | QA |
+| [Dashboard Compliance & Role Verification](qa/full-dashboard-compliance-check.md) | Final QA for all dashboards and roles | QA |
 | [`widget-settings-codex.md`](widgets/widget-settings-codex.md) | Per-user widget settings | Dev |
 
 - [Widget and Template Reference](widgets/template-reference.md)

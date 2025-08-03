@@ -2,7 +2,7 @@
 title: QA Documentation
 category: qa
 role: qa
-last_updated: 2025-07-20
+last_updated: 2025-07-29
 status: complete
 ---
 
@@ -16,7 +16,7 @@ Testing resources and checklists.
 - `End_to_End_Testing_Guide.md`
 - `dashboard-builder-uat-checklist.md`
 - `role-based-widget-visibility-checklist.md`
-- `role-based-dashboard-verification.md`
+- `full-dashboard-compliance-check.md`
 - `dashboard-rendering-audit-standardization.md`
 Refer to the [Widgets Documentation](../widgets/README.md) for implementation details used during testing.
 

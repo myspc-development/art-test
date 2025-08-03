@@ -2,7 +2,7 @@
 title: Docs Sidebar
 category: docs
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-07-29
 status: complete
 ---
 
@@ -61,6 +61,7 @@ status: complete
   * [testing-strategy.md](qa/testing-strategy.md)
   * *(Widget Editor testing checklist archived)*
   * [widget-qa-checklist.md](qa/widget-qa-checklist.md)
+  * [full-dashboard-compliance-check.md](qa/full-dashboard-compliance-check.md)
 * **Specs**
   * [Overview](specs/README.md)
 * **Ui**
