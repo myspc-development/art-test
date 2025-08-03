@@ -90,3 +90,47 @@ function ap_locate_template(string $relative_template, string $plugin_path): str
 function ap_clear_portfolio_cache(): void {
     wp_cache_flush();
 }
+
+/**
+ * Render the unified dashboard template for the current user.
+ *
+ * @param string[] $allowed_roles Roles permitted to view the dashboard.
+ */
+function ap_render_dashboard(array $allowed_roles = []): void {
+    $allowed_roles = array_map('sanitize_key', $allowed_roles);
+    $user_role     = \ArtPulse\Core\DashboardController::get_role(get_current_user_id());
+
+    if ($allowed_roles && !in_array($user_role, $allowed_roles, true)) {
+        wp_die(__('Access denied', 'artpulse'));
+    }
+
+    ap_safe_include(
+        'dashboard-role.php',
+        plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/dashboard-role.php',
+        [
+            'allowed_roles' => $allowed_roles,
+            'user_role'     => $user_role,
+        ]
+    );
+}
+
+/**
+ * Convenience wrapper to render the member dashboard.
+ */
+function ap_render_member_dashboard(): void {
+    ap_render_dashboard(['member']);
+}
+
+/**
+ * Convenience wrapper to render the artist dashboard.
+ */
+function ap_render_artist_dashboard(): void {
+    ap_render_dashboard(['artist']);
+}
+
+/**
+ * Convenience wrapper to render the organization dashboard.
+ */
+function ap_render_organization_dashboard(): void {
+    ap_render_dashboard(['organization']);
+}

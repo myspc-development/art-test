@@ -29,7 +29,7 @@ class DashboardRoleRewrite
     public static function maybe_render(): void
     {
         if (get_query_var('ap_dashboard_role') || get_query_var('ap_dashboard')) {
-            include plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/dashboard-role.php';
+            \ap_render_dashboard();
             exit;
         }
     }
