@@ -26,12 +26,11 @@ class InboxWidget {
         return $user_id > 0;
     }
 
-    public static function render(int $user_id): void {
+    public static function render(int $user_id): string {
         if (!self::can_view($user_id)) {
-            echo '<div class="notice notice-error"><p>' . esc_html__('Please log in.', 'artpulse') . '</p></div>';
-            return;
+            return '<div class="notice notice-error"><p>' . esc_html__('Please log in.', 'artpulse') . '</p></div>';
         }
-        echo '<p>' . esc_html__('Message inbox coming soon.', 'artpulse') . '</p>';
+        return '<p>' . esc_html__('Message inbox coming soon.', 'artpulse') . '</p>';
     }
 }
 

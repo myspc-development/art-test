@@ -44,9 +44,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $uid = self::factory()->user->create(['role' => 'subscriber']);
         wp_set_current_user($uid);
 
-        ob_start();
-        OrgAnalyticsWidget::render($uid);
-        $html = ob_get_clean();
+        $html = OrgAnalyticsWidget::render($uid);
         $this->assertStringContainsString('notice-error', $html);
     }
 
@@ -54,9 +52,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $uid = self::factory()->user->create(['role' => 'organization']);
         wp_set_current_user($uid);
 
-        ob_start();
-        OrgAnalyticsWidget::render($uid);
-        $html = ob_get_clean();
+        $html = OrgAnalyticsWidget::render($uid);
         $this->assertStringNotContainsString('notice-error', $html);
         $this->assertStringContainsString('Basic traffic', $html);
     }
@@ -69,9 +65,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $uid = self::factory()->user->create(['role' => 'subscriber']);
         wp_set_current_user($uid);
 
-        ob_start();
-        OrgAnalyticsWidget::render($uid);
-        $html = ob_get_clean();
+        $html = OrgAnalyticsWidget::render($uid);
         $this->assertSame('', $html);
     }
 
@@ -142,9 +136,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $uid = self::factory()->user->create(['role' => 'organization']);
         wp_set_current_user($uid);
 
-        ob_start();
-        DonationsWidget::render($uid);
-        $html = ob_get_clean();
+        $html = DonationsWidget::render($uid);
 
         remove_filter('stylesheet_directory', $filter);
         self::recursiveRemoveDir($dir);
@@ -156,9 +148,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $uid = self::factory()->user->create(['role' => 'organization']);
         wp_set_current_user($uid);
 
-        ob_start();
-        DonationsWidget::render($uid);
-        $html = ob_get_clean();
+        $html = DonationsWidget::render($uid);
 
         $this->assertStringContainsString('Example donations', $html);
     }

@@ -11,9 +11,9 @@ class DashboardWidgetRenderTest extends \WP_UnitTestCase {
         $prop->setAccessible(true);
         $prop->setValue([]);
 
-        DashboardWidgetRegistry::register('alpha','Alpha','', '', function(){ echo 'alpha'; }, ['roles'=>['member']]);
-        DashboardWidgetRegistry::register('beta','Beta','', '', function(){ echo 'beta'; }, ['roles'=>['artist']]);
-        DashboardWidgetRegistry::register('gamma','Gamma','', '', function(){ echo 'gamma'; }, ['roles'=>['organization']]);
+        DashboardWidgetRegistry::register('alpha','Alpha','', '', function(){ return 'alpha'; }, ['roles'=>['member']]);
+        DashboardWidgetRegistry::register('beta','Beta','', '', function(){ return 'beta'; }, ['roles'=>['artist']]);
+        DashboardWidgetRegistry::register('gamma','Gamma','', '', function(){ return 'gamma'; }, ['roles'=>['organization']]);
     }
 
     public static function roleProvider(): iterable {

@@ -21,19 +21,18 @@ class WidgetStatusPanelWidget {
         );
     }
 
-    public static function render(): void {
-        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
+    public static function render(): string {
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return '';
         if (!current_user_can('manage_options')) {
-            echo '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
-            return;
+            return '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
         }
         global $ap_widget_status;
         if (!$ap_widget_status) {
-            echo esc_html__('No widget data available.', 'artpulse');
-            return;
+            return esc_html__('No widget data available.', 'artpulse');
         }
+        ob_start();
         echo '<h4>' . esc_html__('Registered Widgets', 'artpulse') . '</h4>';
-        echo '<ul>'; 
+        echo '<ul>';
         foreach ($ap_widget_status['registered'] as $file) {
             echo '<li>' . esc_html($file) . '</li>';
         }
@@ -52,6 +51,7 @@ class WidgetStatusPanelWidget {
             }
             echo '</ul>';
         }
+        return ob_get_clean();
     }
 }
 

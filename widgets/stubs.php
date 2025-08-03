@@ -91,7 +91,7 @@ function render_widget_onboarding_tracker(): void {
 
 function render_widget_artpulse_analytics_widget(): void {
     if (class_exists('OrgAnalyticsWidget')) {
-        OrgAnalyticsWidget::render();
+        echo OrgAnalyticsWidget::render(get_current_user_id());
     }
 }
 

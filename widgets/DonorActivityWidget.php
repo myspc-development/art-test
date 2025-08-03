@@ -27,23 +27,22 @@ class DonorActivityWidget
         );
     }
 
-    public static function render(): void
+    public static function render(): string
     {
-        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return '';
 
         if ( ! self::can_view() ) {
-            echo '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
-            return;
+            return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
         }
 
         $org_id = get_user_meta(get_current_user_id(), 'ap_organization_id', true);
         if (!$org_id) {
-            esc_html_e('No organization assigned.', 'artpulse');
-            return;
+            return esc_html__('No organization assigned.', 'artpulse');
         }
 
         $from = sanitize_text_field($_GET['donor_from'] ?? '');
         $to   = sanitize_text_field($_GET['donor_to'] ?? '');
+        ob_start();
         echo '<form method="get" style="margin-bottom:10px">';
         echo '<input type="hidden" name="page" value="dashboard" />';
         echo '<label>' . esc_html__('From', 'artpulse') . ' <input type="date" name="donor_from" value="' . esc_attr($from) . '" /></label> ';
@@ -54,7 +53,7 @@ class DonorActivityWidget
         $rows = DonationModel::query((int) $org_id, $from, $to);
         if (!$rows) {
             esc_html_e('No donations found.', 'artpulse');
-            return;
+            return ob_get_clean();
         }
         echo '<table class="widefat striped"><thead><tr><th>' . esc_html__('Donor','artpulse') . '</th><th>' . esc_html__('Amount','artpulse') . '</th><th>' . esc_html__('Date','artpulse') . '</th></tr></thead><tbody>';
         foreach ($rows as $row) {
@@ -63,6 +62,7 @@ class DonorActivityWidget
             echo '<tr><td>' . esc_html($name) . '</td><td>$' . number_format_i18n($row['amount'], 2) . '</td><td>' . esc_html(date_i18n(get_option('date_format'), strtotime($row['donated_at']))) . '</td></tr>';
         }
         echo '</tbody></table>';
+        return ob_get_clean();
     }
 }
 

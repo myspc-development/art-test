@@ -33,11 +33,13 @@ class WidgetEventsWidget {
         }
     }
 
-    public static function render(): void {
-        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+    public static function render(): string {
+        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return '';
+        ob_start();
         echo '<div data-widget-id="widget_events">';
         echo ap_widget_events([]);
         echo '</div>';
+        return ob_get_clean();
     }
 }
 

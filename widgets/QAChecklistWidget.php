@@ -21,8 +21,9 @@ class QAChecklistWidget {
         );
     }
 
-    public static function render(): void {
-        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
+    public static function render(): string {
+        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return '';
+        ob_start();
         echo '<section data-widget="qa_checklist" data-widget-id="qa_checklist" class="dashboard-widget">';
         echo '<div class="inside">';
         echo '<ol>';
@@ -34,6 +35,7 @@ class QAChecklistWidget {
         echo '<p><input type="text" placeholder="' . esc_attr__('Your notes...', 'artpulse') . '" style="width:100%" /></p>';
         echo '</div>';
         echo '</section>';
+        return ob_get_clean();
     }
 }
 
