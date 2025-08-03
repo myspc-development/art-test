@@ -19,11 +19,7 @@ can verify that the plugin works correctly across updates.
 - The ArtPulse plugin activated on that site
 - Test credentials for an account able to log in
 
-Install Node dependencies in the plugin directory:
-
-```bash
-npm install
-```
+Ensure Node dependencies are installed (`npm install`). See [../development-setup.md](../development-setup.md) for full environment instructions.
 
 ## Running the Tests
 

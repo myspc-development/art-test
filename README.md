@@ -69,35 +69,9 @@ roadmap highlights priorities around security, NLP‑powered tagging,
 customizable dashboards and comprehensive testing to ensure reliable
 releases.
 
-## Developer Prerequisites
+## Development Setup
 
-Before running the plugin locally make sure the following tools are available:
-
-- **PHP 8.2+ with Composer** – install PHP libraries with `composer install`.
-- **Node.js and npm** – run `npm install` to fetch packages including
-  `sass` used for SCSS compilation. If the Puppeteer download fails set
-  `PUPPETEER_SKIP_DOWNLOAD=true` before installing.
-- **WordPress test library** – run `bash scripts/setup-env.sh` once to
-  download the WordPress core files required by the PHPUnit suite.
-
-## Quick Start
-
-```bash
-composer install
-npm install
-npm run dev
-```
-
-### Building for deployment
-
-Generate production bundles before packaging the plugin:
-
-```bash
-npm run build
-```
-
-The compiled assets in `dist/` are not committed. CI workflows run this build
-step during deployment so the directory is recreated automatically.
+Set up the project following the [development guide](docs/development-setup.md), which covers installing Composer and Node dependencies, building assets, preparing WordPress for tests, and running commands like `composer install`, `npm install`, `npm run build`, and `bash scripts/setup-env.sh`.
 
 ## Directory Structure
 
@@ -108,31 +82,6 @@ step during deployment so the directory is recreated automatically.
 - `docs/` – project documentation
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines.
-
-## Installation
-
-This plugin uses [Composer](https://getcomposer.org/) for its PHP libraries.
-Run the following command in the plugin directory **before** activating it so
-`vendor/autoload.php` is generated:
-
-```bash
-composer install --no-dev --optimize-autoloader
-```
-
-Install the Node dependencies if you need to compile JavaScript or run the test
-suite. If Chrome cannot be downloaded for Puppeteer-based tests, set
-`PUPPETEER_SKIP_DOWNLOAD=1` before running `npm install`:
-
-```bash
-PUPPETEER_SKIP_DOWNLOAD=1 npm install
-```
-
-ArtPulse requires **PHP 8.2 or higher**. Ensure your server meets this
-requirement before activating the plugin.
-
-WordPress will display an “unexpected output” warning if this file is missing.
-If you skip `composer install` before activating the plugin, admin pages may
-return HTTP 500 errors because the required classes cannot be loaded.
 
 ## Overview & Quick Reference
 
@@ -467,41 +416,6 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 - Buttons and forms support keyboard navigation and screen readers.
 - Event cards and dashboards are designed for responsive display.
 
-## Development Setup
-
-Developer environment steps, WebSocket configuration and CI instructions are documented in [docs/development-setup.md](docs/development-setup.md). To quickly spin up a local site with Docker follow [docs/Plugin_Activation_Guide.md](docs/Plugin_Activation_Guide.md).
-
-## Running Tests
-
-PHPUnit relies on the official WordPress test library. Run the installer to download WordPress and set up the tests, then execute PHPUnit:
-
-```bash
-bin/install-wp-tests.sh wordpress_test root '' localhost latest
-composer install
-composer test
-```
-
-Frontend code is checked with ESLint and Jest:
-
-```bash
-npm run lint
-npm run test:js
-```
-
-End-to-end browser tests can be run with Cypress once the environment variables
-are set. Use the provided npm script:
-
-```bash
-npm run test:ui
-```
-
-UI tests automatically skip when Cypress is not installed (e.g. offline CI).
-
-Refer to [docs/End_to_End_Testing_Guide.md](docs/End_to_End_Testing_Guide.md) for
-details on the required credentials and optional interactive mode.
-
-See [docs/development-setup.md](docs/development-setup.md) for the required environment variables and instructions on using a local WordPress archive when working offline.
-
 ## Widget Development
 
 Widget PHP files register themselves on the `artpulse_register_dashboard_widget` hook. Copy any file from `templates/widgets/` into your theme to override the markup. For example:
@@ -535,10 +449,9 @@ Place a file under `your-theme/widgets/` with the same name as the plugin templa
 
 ### Running PHPUnit
 
-The suite depends on the WP test library. Run the setup script once and then execute PHPUnit:
+See the [Development Setup](docs/development-setup.md) guide for preparing the WordPress test library. Once configured, run:
 
 ```bash
-bash scripts/setup-env.sh
 composer test
 ```
 

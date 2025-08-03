@@ -1,29 +1,6 @@
 # Contributing
 
-Thank you for your interest in contributing to ArtPulse. Development requires **PHP 8.2 or higher** and WordPress 6.8. To get started clone the repository and install the PHP and Node dependencies:
-
-```bash
-composer install       # install PHP libraries
-npm install            # install Node packages
-npx husky install      # activate Git hooks
-npm run build          # compile JavaScript assets
-bash scripts/setup-env.sh
-```
-The script uses `svn` to download WordPress. Install Subversion if the command is missing.
-The `setup-env.sh` script will also install Composer dependencies when the
-`CI` environment variable is present, allowing automated test pipelines to run
-without a separate install step.
-
-`setup-tests.sh` relies on database credentials supplied via environment
-variables. Export these variables or create a `.env` file before running the
-script:
-
-```bash
-DB_NAME=your_test_db
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_HOST=localhost
-```
+Thank you for your interest in contributing to ArtPulse. Development requires **PHP 8.2 or higher** and WordPress 6.8. Follow the [Development Setup guide](docs/development-setup.md) to install dependencies, build assets, and prepare the test environment.
 
 Run the automated test suite and coding standards checks with:
 
@@ -40,7 +17,7 @@ existing file:
 bash tests/check-widget-manifests.sh
 ```
 
-These tools are described in the [Development Setup](README.md#development-setup) section of the README. For more details on the testing workflow see [docs/testing-strategy.md](docs/testing-strategy.md).
+These tools are documented in [docs/development-setup.md](docs/development-setup.md). For more details on the testing workflow see [docs/testing-strategy.md](docs/testing-strategy.md).
 
 When working on JavaScript sources or block files make sure to rebuild the
 compiled assets so `wp_enqueue_script()` loads valid code. React components are
