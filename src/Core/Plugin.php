@@ -254,6 +254,7 @@ class Plugin
         OrgContext::register();
         MultiOrgRoles::register();
         OrgInviteManager::register();
+        \ArtPulse\Core\OrgDashboardManager::register();
         \ArtPulse\Core\ActivityLogger::register();
         FeedAccessLogger::register();
         \ArtPulse\Community\CommunityRoles::register();
