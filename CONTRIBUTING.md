@@ -32,6 +32,14 @@ vendor/bin/phpunit
 composer sniff
 ```
 
+Run the widget manifest consistency check to ensure every widget file is
+listed in both manifest files and that each manifest entry references an
+existing file:
+
+```bash
+bash tests/check-widget-manifests.sh
+```
+
 These tools are described in the [Development Setup](README.md#development-setup) section of the README. For more details on the testing workflow see [docs/testing-strategy.md](docs/testing-strategy.md).
 
 When working on JavaScript sources or block files make sure to rebuild the
