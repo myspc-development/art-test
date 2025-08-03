@@ -29,7 +29,7 @@ class SubmissionChecklistWidget {
     public static function render(): string {
         $user_id = get_current_user_id();
         if (!self::can_view($user_id)) {
-            return '<p class="ap-widget-no-access">' . esc_html__('You do not have access.', 'artpulse') . '</p>';
+            return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
         }
 
         return '<p>' . esc_html__('Checklist content coming soon.', 'artpulse') . '</p>';

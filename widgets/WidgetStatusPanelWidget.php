@@ -24,7 +24,7 @@ class WidgetStatusPanelWidget {
     public static function render(): void {
         if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         if (!current_user_can('manage_options')) {
-            echo '<p class="ap-widget-no-access">' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p>';
+            echo '<div class="notice notice-error"><p>' . esc_html__("You don’t have access to view this widget.", 'artpulse') . '</p></div>';
             return;
         }
         global $ap_widget_status;

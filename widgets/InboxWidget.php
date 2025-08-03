@@ -28,7 +28,7 @@ class InboxWidget {
 
     public static function render(int $user_id): void {
         if (!self::can_view($user_id)) {
-            echo '<p class="ap-widget-no-access">' . esc_html__('Please log in.', 'artpulse') . '</p>';
+            echo '<div class="notice notice-error"><p>' . esc_html__('Please log in.', 'artpulse') . '</p></div>';
             return;
         }
         echo '<p>' . esc_html__('Message inbox coming soon.', 'artpulse') . '</p>';
