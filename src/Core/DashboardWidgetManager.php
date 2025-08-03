@@ -56,9 +56,11 @@ class DashboardWidgetManager
             }
 
             $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . $info['file'];
-            if (file_exists($path)) {
-                include_once $path;
+            if (pathinfo($path, PATHINFO_EXTENSION) !== 'php' || !file_exists($path)) {
+                continue;
             }
+
+            include_once $path;
         }
     }
 

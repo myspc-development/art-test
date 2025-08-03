@@ -50,42 +50,42 @@
     "status": "registered"
   },
   "rsvp_button": {
-    "file": "assets/js/widgets/RsvpButtonWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "member"
     ],
     "status": "registered"
   },
   "nearby_events_map": {
-    "file": "assets/js/widgets/NearbyEventsMapWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "member"
     ],
     "status": "registered"
   },
   "my_favorites": {
-    "file": "assets/js/widgets/MyFavoritesWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "member"
     ],
     "status": "registered"
   },
   "event_chat": {
-    "file": "assets/js/widgets/EventChatWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "member"
     ],
     "status": "registered"
   },
   "share_this_event": {
-    "file": "assets/js/widgets/ShareThisEventWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "member"
     ],
     "status": "registered"
   },
   "artist_inbox_preview": {
-    "file": "assets/js/widgets/ArtistInboxPreviewWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "member",
       "artist"
@@ -100,84 +100,84 @@
     "status": "registered"
   },
   "revenue_summary": {
-    "file": "assets/js/widgets/ArtistRevenueSummaryWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "artist"
     ],
     "status": "registered"
   },
   "artist_spotlight": {
-    "file": "assets/js/widgets/ArtistSpotlightWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "artist"
     ],
     "status": "registered"
   },
   "artist_artwork_manager": {
-    "file": "assets/js/widgets/ArtistArtworkManagerWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "artist"
     ],
     "status": "registered"
   },
   "artist_audience_insights": {
-    "file": "assets/js/widgets/ArtistAudienceInsightsWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "artist"
     ],
     "status": "registered"
   },
   "artist_earnings_summary": {
-    "file": "assets/js/widgets/ArtistEarningsWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "artist"
     ],
     "status": "registered"
   },
   "artist_feed_publisher": {
-    "file": "assets/js/widgets/ArtistFeedPublisherWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "artist"
     ],
     "status": "registered"
   },
   "collab_requests": {
-    "file": "assets/js/widgets/ArtistCollaborationWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "artist"
     ],
     "status": "registered"
   },
   "onboarding_tracker": {
-    "file": "assets/js/widgets/OnboardingTrackerWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "artist"
     ],
     "status": "registered"
   },
   "audience_crm": {
-    "file": "assets/js/widgets/AudienceCRMWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "organization"
     ],
     "status": "registered"
   },
   "sponsored_event_config": {
-    "file": "assets/js/widgets/SponsoredEventConfigWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "organization"
     ],
     "status": "registered"
   },
   "embed_tool": {
-    "file": "assets/js/widgets/EmbedToolWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "organization"
     ],
     "status": "registered"
   },
   "branding_settings_panel": {
-    "file": "assets/js/widgets/OrgBrandingSettingsPanel.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "organization"
     ],
@@ -212,35 +212,35 @@
     "status": "registered"
   },
   "org_event_overview": {
-    "file": "assets/js/widgets/OrgEventOverviewWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "organization"
     ],
     "status": "registered"
   },
   "org_team_roster": {
-    "file": "assets/js/widgets/OrgTeamRosterWidget.jsx",
+    "file": "widgets/member/OrgTeamRosterWidget.php",
     "roles": [
       "organization"
     ],
     "status": "registered"
   },
   "org_approval_center": {
-    "file": "assets/js/widgets/OrgApprovalCenterWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "organization"
     ],
     "status": "registered"
   },
   "org_ticket_insights": {
-    "file": "assets/js/widgets/OrgTicketInsightsWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "organization"
     ],
     "status": "registered"
   },
   "org_broadcast_box": {
-    "file": "assets/js/widgets/OrgBroadcastBoxWidget.jsx",
+    "file": "includes/dashboard-widgets.php",
     "roles": [
       "organization"
     ],
