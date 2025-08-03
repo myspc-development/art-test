@@ -7,10 +7,9 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Wrapper widget for Favorites Overview.
  */
-use ArtPulse\Core\DashboardWidgetInterface;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-class FavoritesOverviewWidget implements DashboardWidgetInterface {
+class FavoritesOverviewWidget {
     public static function register(): void {
         DashboardWidgetRegistry::register(
             self::id(),
@@ -59,7 +58,7 @@ class FavoritesOverviewWidget implements DashboardWidgetInterface {
         return 'heart';
     }
 
-      public static function render(int $user_id = 0): string
+      public static function render(): string
       {
           if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
               return '';
