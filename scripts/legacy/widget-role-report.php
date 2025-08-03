@@ -25,7 +25,6 @@ if (!function_exists('wp_nonce_field')) { function wp_nonce_field(){ } }
 if (!defined('ABSPATH')) { define('ABSPATH', __DIR__.'/../'); }
 if (!defined('ARTPULSE_PLUGIN_FILE')) { define('ARTPULSE_PLUGIN_FILE', __DIR__.'/../artpulse-management.php'); }
 
-require_once __DIR__ . '/../widgets/stubs.php';
 require_once __DIR__ . '/../includes/dashboard-builder-widgets.php';
 \ArtPulse\Core\DashboardWidgetRegistry::init();
 ap_register_dashboard_builder_widget_map();
