@@ -14,7 +14,7 @@ use ArtPulse\Core\DashboardRenderer;
 
 function ap_render_widget(string $widget_id, ?int $user_id = null): void
 {
-    $config = DashboardWidgetRegistry::get_widget($widget_id);
+    $config = DashboardWidgetRegistry::get_widget($widget_id, $user_id ?? 0);
     if (!$config) {
         return;
     }

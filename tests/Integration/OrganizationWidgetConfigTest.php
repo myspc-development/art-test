@@ -24,6 +24,11 @@ class OrganizationWidgetConfigTest extends WP_UnitTestCase {
         $regProp->setValue(false);
 
         WidgetRegistryLoader::register_widgets();
+        if (!get_role('organization')) {
+            add_role('organization', 'Organization');
+        }
+        $uid = self::factory()->user->create(['role' => 'organization']);
+        wp_set_current_user($uid);
     }
 
     public function test_org_widgets_registered_and_renderable(): void {

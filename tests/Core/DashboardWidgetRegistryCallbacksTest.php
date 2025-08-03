@@ -1,17 +1,23 @@
 <?php
 namespace ArtPulse\Core\Tests;
 
-use PHPUnit\Framework\TestCase;
+use WP_UnitTestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-class DashboardWidgetRegistryCallbacksTest extends TestCase
+class DashboardWidgetRegistryCallbacksTest extends WP_UnitTestCase
 {
-    protected function setUp(): void
+    protected function set_up(): void
     {
+        parent::set_up();
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
         $prop->setValue([]);
+        if (!get_role('member')) {
+            add_role('member', 'Member');
+        }
+        $uid = self::factory()->user->create(['role' => 'member']);
+        wp_set_current_user($uid);
     }
 
     public function test_member_widgets_return_callable_callbacks(): void
