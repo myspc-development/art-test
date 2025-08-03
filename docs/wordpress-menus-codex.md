@@ -22,8 +22,7 @@ Create a WordPress page for each ArtPulse shortcode and paste the shortcode into
 | Page Title | Shortcode |
 |------------|-----------|
 | Member Dashboard | `[ap_user_dashboard]` |
-| Artist Dashboard | `[ap_artist_dashboard]` |
-| Organization Dashboard | `[ap_org_dashboard]` |
+| React Dashboard | `[ap_react_dashboard]` |
 | Submit Event | `[ap_submit_event]` |
 | Edit Profile | `[ap_profile_edit]` |
 | Notifications | `[ap_notifications]` |

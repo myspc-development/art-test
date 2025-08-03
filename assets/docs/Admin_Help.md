@@ -115,8 +115,6 @@ Attributes shown in the examples below are optional parameters and may be omitte
 | `[ap_my_events]` | List events submitted by the current user. |
 | `[ap_my_follows]` | Display items the user follows. |
 | `[ap_notifications]` | Show user notifications. |
-| `[ap_artist_dashboard]` | Dashboard where artists can manage their artworks. |
-| `[ap_org_dashboard]` | Dashboard for an organization with event management. |
 | `[ap_org_profile_edit]` | Form to edit an organization profile. |
 | `[ap_organizations]` | List organizations. |
 | `[ap_portfolio_builder]` | Manage a member portfolio. Included within the organization dashboard for easy editing. |
@@ -126,6 +124,7 @@ Attributes shown in the examples below are optional parameters and may be omitte
 | `[ap_submit_organization]` | Form to submit a new organization. |
 | `[ap_submit_artist]` | Form to submit a new artist profile. |
 | `[ap_user_dashboard]` | Member dashboard with calendar and favorites. Accepts `show_forms` to embed submission forms. |
+| `[ap_react_dashboard]` | React-based dashboard interface for advanced UI. |
 | `[ap_user_profile id="1" show_social="true" show_membership="true" show_completeness="true"]` | Display a user profile with optional sections. |
 | `[ap_event_calendar]` | Event calendar view. |
 | `[ap_event_map]` | Map of events. |
