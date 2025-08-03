@@ -10,12 +10,60 @@ if (!isset($user_role) || !ap_user_can_edit_layout($user_role)) {
 get_header();
 ?>
 <div class="wrap">
-  <div class="dashboard-widgets-wrap">
-<?php
-$dashboard_class = $user_role . '-dashboard';
-$dashboard_title = ucfirst($user_role) . ' Dashboard';
-ap_safe_include('partials/dashboard-wrapper-start.php', plugin_dir_path(__FILE__) . 'dashboard-wrapper-start.php');
+  <div class="dashboard-widgets-wrap <?php echo esc_attr( $user_role . '-dashboard' ); ?>">
+    <?php $dashboard_title = ucfirst($user_role) . ' Dashboard'; ?>
+    <h2 class="ap-card__title"><?php echo esc_html( $dashboard_title ); ?></h2>
+    <form method="post" class="ap-dashboard-reset ap-inline-form">
+      <?php wp_nonce_field('ap_reset_user_layout'); ?>
+      <input type="hidden" name="reset_user_layout" value="1" />
+      <button class="button"><?php esc_html_e('♻ Reset My Dashboard', 'artpulse'); ?></button>
+    </form>
 
+    <?php $user = wp_get_current_user(); ?>
+    <header class="dashboard-topbar">
+      <div class="welcome">
+        <img src="<?php echo esc_url(get_avatar_url($user->ID, ['size' => 60])); ?>" alt="" />
+        <div>
+          <h2 class="ap-card__title"><?php printf(__('Welcome back, %s', 'artpulse'), esc_html($user->display_name)); ?></h2>
+          <span class="membership-status">
+            <?php
+            $level = \ArtPulse\ap_user_membership_level($user->ID);
+            echo esc_html(sprintf(__('Membership: %s', 'artpulse'), ucfirst($level)));
+            ?>
+          </span>
+          <?php if (\ArtPulse\Core\DashboardController::get_role($user->ID) === 'artist'): ?>
+          <?php $public = (bool) get_user_meta($user->ID, 'ap_profile_public', true); ?>
+          <label class="ap-profile-toggle">
+            <input type="checkbox" id="ap-profile-public" <?php checked($public, true); ?> />
+            <?php esc_html_e('Public Profile', 'artpulse'); ?>
+          </label>
+          <?php endif; ?>
+        </div>
+      </div>
+    </header>
+
+    <div class="ap-dashboard-layout">
+      <aside class="ap-dashboard-sidebar">
+        <?php
+        $show_notifications = true; // Optional logic to toggle certain links
+        ap_safe_include('partials/dashboard-nav.php', plugin_dir_path(__FILE__) . 'dashboard-nav.php');
+        ?>
+      </aside>
+      <main class="ap-dashboard-main">
+        <?php
+        $followed = \ArtPulse\Community\FollowManager::get_user_follows($user->ID, 'artist');
+        $follows  = is_array($followed) ? count($followed) : 0;
+        $orgs     = \ArtPulse\Community\FollowManager::get_user_follows($user->ID, 'artpulse_org');
+        $org_count = is_array($orgs) ? count($orgs) : 0;
+        $summary = \ArtPulse\Frontend\EventRsvpHandler::get_rsvp_summary_for_user($user->ID);
+        $events  = $summary['going'] ?? 0;
+        ?>
+        <p><?php printf(__('You\'re following %d artists and %d organizations. You’ve RSVP’d to %d events.', 'artpulse'), $follows, $org_count, $events); ?></p>
+        <?php if ($org_count === 0): ?>
+          <p><?php esc_html_e('Follow organizations to see more events in your digest.', 'artpulse'); ?></p>
+        <?php endif; ?>
+
+<?php
 // Admin preview selector
 if (current_user_can('manage_options')): ?>
   <form method="get" id="ap-preview-switcher" class="ap-inline-form">
@@ -129,10 +177,26 @@ if (empty($layout)) {
     echo '</div>';
 }
 ?>
-
-<?php
-ap_safe_include('partials/dashboard-wrapper-end.php', plugin_dir_path(__FILE__) . 'dashboard-wrapper-end.php');
-?>
+      </main>
+    </div>
+    <?php if (is_user_logged_in() && \ArtPulse\Core\DashboardController::get_role(get_current_user_id()) === 'artist'): ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      const cb = document.getElementById('ap-profile-public');
+      if(!cb) return;
+      cb.addEventListener('change', function(){
+        fetch('<?php echo esc_url_raw(rest_url('artpulse/v1/user/profile')); ?>', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': '<?php echo wp_create_nonce('wp_rest'); ?>'
+          },
+          body: JSON.stringify({ ap_profile_public: cb.checked ? 1 : 0 })
+        });
+      });
+    });
+    </script>
+    <?php endif; ?>
   </div>
 </div>
 <?php
