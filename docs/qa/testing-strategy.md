@@ -12,11 +12,7 @@ This document outlines automated and manual testing practices used to ensure plu
 
 ## Prerequisites
 
-Run `composer install` and `npm install` once your environment has network access so that PHP and Node
-dependencies are available. The `scripts/setup-env.sh` helper downloads WordPress into the `wordpress/`
-directory and installs the `wp-phpunit` library under `vendor/wp-phpunit/wp-phpunit`. PHPUnit will look for
-WordPress using the `WP_CORE_DIR` environment variable which defaults to `./wordpress`. If Chrome cannot be
-downloaded for Puppeteer based tests, set `PUPPETEER_SKIP_DOWNLOAD=1` before running `npm install`.
+Ensure the project is configured as described in [../development-setup.md](../development-setup.md) so PHP and Node dependencies are installed and the WordPress test library is available. If Chrome cannot be downloaded for Puppeteer-based tests, set `PUPPETEER_SKIP_DOWNLOAD=1` before running `npm install`.
 
 ## Automated Tests
 

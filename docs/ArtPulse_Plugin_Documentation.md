@@ -64,7 +64,7 @@ Use hooks to modify AI behavior or add custom logic:
 
 ## \ud83d\udc4d Contributing
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines. Development follows PSR-12 and WordPress coding standards. Run `npm install` and `composer install` to set up a local environment. Pull requests are welcome on the `main` branch.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines. Follow the [Development Setup guide](development-setup.md) to configure a local environment. Pull requests are welcome on the `main` branch.
 
 ## \ud83d\udcdc Changelog
 
