@@ -67,9 +67,9 @@ Dashboard widgets follow the unified styles described in the
 [`Dashboard Widget Design Codex`](docs/dashboard-widget-design-codex.md)
 and the more detailed
 [`Default Design System Codex`](docs/default-design-system-codex.md).
-When customizing SCSS or JavaScript be sure to run `npm run build` and
-commit the updated `build/` output so the admin screens load the latest
-compiled assets.
+When customizing SCSS or JavaScript run `npm run build` to regenerate the
+bundles. The `dist/` directory is excluded from version control; CI/CD runs
+the build step during deployment so compiled assets are created on the fly.
 
 ## Project Vision & Goals
 
@@ -96,6 +96,17 @@ composer install
 npm install
 npm run dev
 ```
+
+### Building for deployment
+
+Generate production bundles before packaging the plugin:
+
+```bash
+npm run build
+```
+
+The compiled assets in `dist/` are not committed. CI workflows run this build
+step during deployment so the directory is recreated automatically.
 
 ## Directory Structure
 
