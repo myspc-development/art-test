@@ -9,6 +9,9 @@ use ArtPulse\Widgets\ProfileOverviewWidget;
 use ArtPulse\Widgets\WidgetEventsWidget;
 use ArtPulse\Widgets\Member\ActivityFeedWidget;
 use ArtPulse\Widgets\Member\WelcomeBoxWidget;
+use ArtPulse\Widgets\Member\EventChatWidget;
+use ArtPulse\Widgets\Member\ArtistInboxPreviewWidget;
+use ArtPulse\Widgets\Member\OrgTeamRosterWidget;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 return [
@@ -46,7 +49,7 @@ return [
         'cache' => true,
     ],
     'artist_inbox_preview' => [
-        'callback' => 'ap_widget_artist_inbox_preview',
+        'class' => ArtistInboxPreviewWidget::class,
         'label' => 'Artist Inbox Preview',
         'description' => 'Recent unread messages from artists.',
         'roles' => ['member', 'artist'],
@@ -55,7 +58,7 @@ return [
         'capability' => 'can_receive_messages',
     ],
     'event_chat' => [
-        'callback' => 'ap_widget_event_chat',
+        'class' => EventChatWidget::class,
         'label' => 'Event Chat',
         'description' => 'Chat with other attendees.',
         'roles' => ['member'],
@@ -224,7 +227,7 @@ return [
         'lazy' => true,
     ],
     'org_team_roster' => [
-        'callback' => 'ap_widget_org_team_roster',
+        'class' => OrgTeamRosterWidget::class,
         'label' => 'Team Roster',
         'description' => 'List and manage team members.',
         'roles' => ['organization'],
