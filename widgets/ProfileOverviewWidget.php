@@ -26,12 +26,13 @@ class ProfileOverviewWidget {
         return user_can($user_id, 'artist');
     }
 
-    public static function render(int $user_id): string {
-        if (!self::can_view($user_id)) {
-            return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
-        }
-        return '<p>' . esc_html__('Profile statistics coming soon.', 'artpulse') . '</p>';
-    }
+      public static function render(int $user_id = 0): string {
+          $user_id = $user_id ?: get_current_user_id();
+          if (!self::can_view($user_id)) {
+              return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
+          }
+          return '<p>' . esc_html__('Profile statistics coming soon.', 'artpulse') . '</p>';
+      }
 }
 
 ProfileOverviewWidget::register();

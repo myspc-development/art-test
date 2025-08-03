@@ -58,7 +58,7 @@ class DashboardRenderer
 
         if ($class && class_exists($class) && is_callable([$class, 'render'])) {
             ob_start();
-            $result = $class::render();
+            $result = $class::render($user_id);
             $buffer = ob_get_clean();
             $output = $buffer . (is_string($result) ? $result : '');
         } elseif (has_action("ap_render_dashboard_widget_{$widget_id}")) {
@@ -67,7 +67,7 @@ class DashboardRenderer
             $output = ob_get_clean();
         } elseif (isset($widget['callback']) && is_callable($widget['callback'])) {
             ob_start();
-            $result = call_user_func($widget['callback']);
+            $result = call_user_func($widget['callback'], $user_id);
             $buffer = ob_get_clean();
             $output = $buffer . (is_string($result) ? $result : '');
         } else {

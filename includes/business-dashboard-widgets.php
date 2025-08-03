@@ -9,17 +9,17 @@ if (!defined('ABSPATH')) {
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-function ap_widget_site_stats(array $vars = []): string
+function ap_widget_site_stats(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/site-stats.php', $vars);
 }
 
-function ap_widget_lead_capture(array $vars = []): string
+function ap_widget_lead_capture(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/lead-capture.php', $vars);
 }
 
-function ap_widget_sales_summary(array $vars = []): string
+function ap_widget_sales_summary(int $user_id = 0, array $vars = []): string
 {
     return ap_load_dashboard_template('widgets/sales-summary.php', $vars);
 }

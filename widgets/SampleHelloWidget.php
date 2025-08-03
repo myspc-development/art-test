@@ -52,19 +52,24 @@ class SampleHelloWidget implements DashboardWidgetInterface {
     }
 
     /** Render the widget output. */
-    public static function render(): string {
-        if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
-            return '';
-        }
+      public static function render(int $user_id = 0): string {
+          if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
+              return '';
+          }
 
-        if (!self::can_view()) {
-            return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
-        }
+          $user_id = $user_id ?: get_current_user_id();
 
-        $user = wp_get_current_user();
-        $name = $user->display_name ?: $user->user_login;
-        return '<div>Hello, ' . esc_html($name) . '!</div>';
-    }
+          if (!$user_id || !self::can_view()) {
+              return '<div class="notice notice-error"><p>' . esc_html__('You do not have access.', 'artpulse') . '</p></div>';
+          }
+
+          $user = get_user_by('id', $user_id);
+          if (!$user) {
+              return '';
+          }
+          $name = $user->display_name ?: $user->user_login;
+          return '<div>Hello, ' . esc_html($name) . '!</div>';
+      }
 }
 
 SampleHelloWidget::register();

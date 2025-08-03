@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-function ap_widget_admin_guide(array $vars = []): string
+function ap_widget_admin_guide(int $user_id = 0, array $vars = []): string
 {
     $doc = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/docs/Admin_Help.md';
     $parsedown = new Parsedown();
@@ -25,7 +25,7 @@ function ap_widget_admin_guide(array $vars = []): string
     return ap_load_dashboard_template('widgets/guide.php', $vars);
 }
 
-function ap_widget_member_guide(array $vars = []): string
+function ap_widget_member_guide(int $user_id = 0, array $vars = []): string
 {
     $doc = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/docs/Member_Help.md';
     $parsedown = new Parsedown();
