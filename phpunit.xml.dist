@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php"
+<phpunit bootstrap="tests/php/bootstrap.php"
          colors="true"
          verbose="true"
          backupGlobals="false">
     <php>
-        <env name="WP_TESTS_DIR" value="/tmp/wordpress-tests-lib"/>
-        <env name="WP_CORE_DIR" value="/tmp/wordpress"/>
-        <env name="WP_PHPUNIT__DIR" value="${WP_TESTS_DIR}"/>
-        <env name="WP_RUN_CORE_TESTS" value="0"/>
+        <env name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
     </php>
     <testsuites>
         <testsuite name="Plugin">
-            <directory suffix=".php">tests/</directory>
+            <directory path="tests/php" suffix="-test.php"/>
         </testsuite>
     </testsuites>
 </phpunit>
