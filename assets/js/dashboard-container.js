@@ -230,21 +230,34 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
   }
 
   function NearbyEventsMapWidget(_ref) {
-    var apiRoot = _ref.apiRoot;
-      _ref.nonce;
-      var lat = _ref.lat,
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce,
+      lat = _ref.lat,
       lng = _ref.lng;
     var _useState = React.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       events = _useState2[0],
       setEvents = _useState2[1];
     React.useEffect(function () {
-      fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng)).then(function (r) {
-        return r.json();
-      }).then(setEvents);
-    }, [lat, lng]);
+      if (!lat || !lng) {
+        setEvents([]);
+        return;
+      }
+      fetch("".concat(apiRoot, "artpulse/v1/events/nearby?lat=").concat(lat, "&lng=").concat(lng), {
+        headers: {
+          'X-WP-Nonce': nonce
+        }
+      }).then(function (r) {
+        return r.ok ? r.json() : Promise.resolve([]);
+      }).then(function (data) {
+        return Array.isArray(data) ? data : [];
+      }).then(setEvents)["catch"](function () {
+        return setEvents([]);
+      });
+    }, [lat, lng, apiRoot, nonce]);
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-nearby-events-widget"
+      className: "ap-nearby-events-widget",
+      "data-widget-id": "nearby_events_map"
     }, /*#__PURE__*/React.createElement("ul", null, events.map(function (ev) {
       return /*#__PURE__*/React.createElement("li", {
         key: ev.id
@@ -272,7 +285,8 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       }).then(setItems);
     }, []);
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-favorites-widget"
+      className: "ap-favorites-widget",
+      "data-widget-id": "my_favorites"
     }, /*#__PURE__*/React.createElement("ul", null, items.map(function (i) {
       return /*#__PURE__*/React.createElement("li", {
         key: i.post_id
@@ -282,7 +296,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     })));
   }
 
-  var __$9 = wp.i18n.__;
+  var __$h = wp.i18n.__;
 
   /**
    * Button widget for RSVP actions.
@@ -334,13 +348,15 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return _ref2.apply(this, arguments);
       };
     }();
-    return /*#__PURE__*/React.createElement("button", {
+    return /*#__PURE__*/React.createElement("div", {
+      "data-widget-id": "rsvp_button"
+    }, /*#__PURE__*/React.createElement("button", {
       className: "ap-rsvp-btn".concat(rsvped ? ' is-rsvped' : ''),
       onClick: toggle
-    }, rsvped ? __$9('Cancel RSVP', 'artpulse') : __$9('RSVP', 'artpulse'));
+    }, rsvped ? __$h('Cancel RSVP', 'artpulse') : __$h('RSVP', 'artpulse')));
   }
 
-  var __$8 = wp.i18n.__;
+  var __$g = wp.i18n.__;
 
   /**
    * Simple event chat widget.
@@ -403,7 +419,8 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       };
     }();
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-event-chat-widget"
+      className: "ap-event-chat-widget",
+      "data-widget-id": "event_chat"
     }, /*#__PURE__*/React.createElement("ul", {
       className: "chat-thread"
     }, messages.map(function (m, i) {
@@ -417,13 +434,13 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       onChange: function onChange(e) {
         return setText(e.target.value);
       },
-      placeholder: __$8('Write a message...', 'artpulse')
+      placeholder: __$g('Write a message...', 'artpulse')
     }), /*#__PURE__*/React.createElement("button", {
       onClick: send
-    }, __$8('Send', 'artpulse'))));
+    }, __$g('Send', 'artpulse'))));
   }
 
-  var __$7 = wp.i18n.__;
+  var __$f = wp.i18n.__;
 
   /**
    * Social share widget for events.
@@ -444,11 +461,12 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     };
     var copy = function copy() {
       navigator.clipboard.writeText(eventUrl).then(function () {
-        alert(__$7('Link copied', 'artpulse'));
+        alert(__$f('Link copied', 'artpulse'));
       });
     };
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-share-event-widget"
+      className: "ap-share-event-widget",
+      "data-widget-id": "share_this_event"
     }, /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
         return share('https://twitter.com/share?url=');
@@ -457,16 +475,16 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       onClick: function onClick() {
         return share('https://www.facebook.com/sharer/sharer.php?u=');
       }
-    }, __$7('Facebook', 'artpulse')), /*#__PURE__*/React.createElement("button", {
+    }, __$f('Facebook', 'artpulse')), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
         return share('https://www.linkedin.com/sharing/share-offsite/?url=');
       }
-    }, __$7('LinkedIn', 'artpulse')), /*#__PURE__*/React.createElement("button", {
+    }, __$f('LinkedIn', 'artpulse')), /*#__PURE__*/React.createElement("button", {
       onClick: copy
-    }, __$7('Copy Link', 'artpulse')));
+    }, __$f('Copy Link', 'artpulse')));
   }
 
-  var __$6 = wp.i18n.__;
+  var __$e = wp.i18n.__;
   function ArtistInboxPreviewWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
@@ -535,22 +553,26 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return setThreads([]);
       });
     }, []);
+    var content;
     if (threads === null) {
-      return /*#__PURE__*/React.createElement("p", null, __$6('Loading...', 'artpulse'));
+      content = /*#__PURE__*/React.createElement("p", null, __$e('Loading...', 'artpulse'));
+    } else if (!threads.length) {
+      content = /*#__PURE__*/React.createElement("p", null, __$e('No new messages.', 'artpulse'));
+    } else {
+      content = /*#__PURE__*/React.createElement("ul", {
+        className: "ap-inbox-preview-list"
+      }, threads.slice(0, 3).map(function (t) {
+        return /*#__PURE__*/React.createElement("li", {
+          key: t.user_id
+        }, /*#__PURE__*/React.createElement("strong", null, t.display_name), t.preview && /*#__PURE__*/React.createElement("span", null, ": ", t.preview), t.date && /*#__PURE__*/React.createElement("em", null, " ", new Date(t.date).toLocaleDateString()));
+      }));
     }
-    if (!threads.length) {
-      return /*#__PURE__*/React.createElement("p", null, __$6('No new messages.', 'artpulse'));
-    }
-    return /*#__PURE__*/React.createElement("ul", {
-      className: "ap-inbox-preview-list"
-    }, threads.slice(0, 3).map(function (t) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: t.user_id
-      }, /*#__PURE__*/React.createElement("strong", null, t.display_name), t.preview && /*#__PURE__*/React.createElement("span", null, ": ", t.preview), t.date && /*#__PURE__*/React.createElement("em", null, " ", new Date(t.date).toLocaleDateString()));
-    }));
+    return /*#__PURE__*/React.createElement("div", {
+      "data-widget-id": "artist_inbox_preview"
+    }, content);
   }
 
-  var __$5 = wp.i18n.__;
+  var __$d = wp.i18n.__;
   function ArtistRevenueSummaryWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
@@ -579,14 +601,17 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       });
     }, []);
     if (!data) {
-      return /*#__PURE__*/React.createElement("p", null, __$5('Loading...', 'artpulse'));
+      return /*#__PURE__*/React.createElement("div", {
+        "data-widget-id": "revenue_summary"
+      }, /*#__PURE__*/React.createElement("p", null, __$d('Loading...', 'artpulse')));
     }
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-revenue-summary"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, data.total_revenue), " ", __$5('total revenue this month', 'artpulse')), /*#__PURE__*/React.createElement("p", null, data.tickets_sold, " ", __$5('tickets sold', 'artpulse')));
+      className: "ap-revenue-summary",
+      "data-widget-id": "revenue_summary"
+    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, data.total_revenue), " ", __$d('total revenue this month', 'artpulse')), /*#__PURE__*/React.createElement("p", null, data.tickets_sold, " ", __$d('tickets sold', 'artpulse')));
   }
 
-  var __$4 = wp.i18n.__;
+  var __$c = wp.i18n.__;
   function ArtistSpotlightWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
@@ -607,10 +632,10 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       });
     }, []);
     if (items === null) {
-      return /*#__PURE__*/React.createElement("p", null, __$4('Loading...', 'artpulse'));
+      return /*#__PURE__*/React.createElement("p", null, __$c('Loading...', 'artpulse'));
     }
     if (!items.length) {
-      return /*#__PURE__*/React.createElement("p", null, __$4('No mentions yet.', 'artpulse'));
+      return /*#__PURE__*/React.createElement("p", null, __$c('No mentions yet.', 'artpulse'));
     }
     return /*#__PURE__*/React.createElement("ul", {
       className: "ap-spotlight-list"
@@ -620,6 +645,296 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       }, /*#__PURE__*/React.createElement("a", {
         href: it.link
       }, it.title));
+    }));
+  }
+
+  var __$b = wp.i18n.__;
+  function ArtistArtworkManagerWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce;
+    var _useState = React.useState(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      items = _useState2[0],
+      setItems = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "wp/v2/artpulse_artwork?per_page=5&_embed"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(function (data) {
+        return setItems(Array.isArray(data) ? data : []);
+      })["catch"](function () {
+        return setItems([]);
+      });
+    }, []);
+    var content;
+    if (items === null) {
+      content = /*#__PURE__*/React.createElement("p", null, __$b('Loading...', 'artpulse'));
+    } else if (!items.length) {
+      content = /*#__PURE__*/React.createElement("p", null, __$b('No artworks found.', 'artpulse'));
+    } else {
+      content = /*#__PURE__*/React.createElement("ul", {
+        className: "ap-artwork-manager"
+      }, items.map(function (a) {
+        var _a$title;
+        return /*#__PURE__*/React.createElement("li", {
+          key: a.id
+        }, /*#__PURE__*/React.createElement("a", {
+          href: a.link
+        }, ((_a$title = a.title) === null || _a$title === void 0 ? void 0 : _a$title.rendered) || a.slug));
+      }));
+    }
+    return /*#__PURE__*/React.createElement("div", {
+      "data-widget-id": "artist_artwork_manager"
+    }, content);
+  }
+
+  var __$a = wp.i18n.__;
+  function ArtistAudienceInsightsWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce;
+    var _useState = React.useState(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      stats = _useState2[0],
+      setStats = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/artist"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(setStats)["catch"](function () {
+        return setStats({
+          followers: 0,
+          sales: 0,
+          artworks: 0
+        });
+      });
+    }, []);
+    var content;
+    if (!stats) {
+      content = /*#__PURE__*/React.createElement("p", null, __$a('Loading...', 'artpulse'));
+    } else {
+      content = /*#__PURE__*/React.createElement("ul", {
+        className: "ap-audience-insights"
+      }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, stats.followers), " ", __$a('followers', 'artpulse')), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, stats.sales), " ", __$a('total sales', 'artpulse')), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, stats.artworks), " ", __$a('artworks uploaded', 'artpulse')));
+    }
+    return /*#__PURE__*/React.createElement("div", {
+      "data-widget-id": "artist_audience_insights"
+    }, content);
+  }
+
+  var __$9 = wp.i18n.__;
+  function ArtistEarningsWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce;
+    var _useState = React.useState(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      data = _useState2[0],
+      setData = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/user/payouts"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(setData)["catch"](function () {
+        return setData({
+          payouts: [],
+          balance: 0
+        });
+      });
+    }, []);
+    if (!data) {
+      return /*#__PURE__*/React.createElement("div", {
+        "data-widget-id": "artist_earnings_summary"
+      }, /*#__PURE__*/React.createElement("p", null, __$9('Loading...', 'artpulse')));
+    }
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ap-earnings-summary",
+      "data-widget-id": "artist_earnings_summary"
+    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, data.balance), " ", __$9('current balance', 'artpulse')), data.payouts.length ? /*#__PURE__*/React.createElement("ul", null, data.payouts.slice(0, 5).map(function (p) {
+      return /*#__PURE__*/React.createElement("li", {
+        key: p.id
+      }, new Date(p.payout_date).toLocaleDateString(), " \u2013 ", p.amount, " (", p.status, ")");
+    })) : /*#__PURE__*/React.createElement("p", null, __$9('No payouts yet.', 'artpulse')));
+  }
+
+  var __$8 = wp.i18n.__;
+  function ArtistFeedPublisherWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce;
+    var _useState = React.useState(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      text = _useState2[0],
+      setText = _useState2[1];
+    var _useState3 = React.useState(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      msg = _useState4[0],
+      setMsg = _useState4[1];
+    var submit = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(e) {
+        var resp;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.n) {
+            case 0:
+              e.preventDefault();
+              setMsg('');
+              _context.n = 1;
+              return fetch("".concat(apiRoot, "wp/v2/posts"), {
+                method: 'POST',
+                headers: {
+                  'X-WP-Nonce': nonce,
+                  'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                  title: text,
+                  status: 'publish'
+                })
+              });
+            case 1:
+              resp = _context.v;
+              if (resp.ok) {
+                setText('');
+                setMsg(__$8('Posted!', 'artpulse'));
+              } else {
+                setMsg(__$8('Error posting.', 'artpulse'));
+              }
+            case 2:
+              return _context.a(2);
+          }
+        }, _callee);
+      }));
+      return function submit(_x) {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+    return /*#__PURE__*/React.createElement("div", {
+      "data-widget-id": "artist_feed_publisher"
+    }, /*#__PURE__*/React.createElement("form", {
+      className: "ap-feed-publisher",
+      onSubmit: submit
+    }, /*#__PURE__*/React.createElement("textarea", {
+      value: text,
+      onChange: function onChange(e) {
+        return setText(e.target.value);
+      },
+      placeholder: __$8('Share an update...', 'artpulse')
+    }), /*#__PURE__*/React.createElement("button", {
+      type: "submit"
+    }, __$8('Publish', 'artpulse')), msg && /*#__PURE__*/React.createElement("p", {
+      className: "ap-post-status"
+    }, msg)));
+  }
+
+  var __$7 = wp.i18n.__;
+  function ArtistCollaborationWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce;
+    var _useState = React.useState(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      invites = _useState2[0],
+      setInvites = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/users/me/orgs"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(/*#__PURE__*/function () {
+        var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(list) {
+          var pending, detailed;
+          return _regenerator().w(function (_context2) {
+            while (1) switch (_context2.n) {
+              case 0:
+                pending = list.filter(function (i) {
+                  return i.status && i.status !== 'active';
+                });
+                _context2.n = 1;
+                return Promise.all(pending.map(/*#__PURE__*/function () {
+                  var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(inv) {
+                    var _org$title, res, org;
+                    return _regenerator().w(function (_context) {
+                      while (1) switch (_context.p = _context.n) {
+                        case 0:
+                          _context.p = 0;
+                          _context.n = 1;
+                          return fetch("".concat(apiRoot, "wp/v2/artpulse_org/").concat(inv.org_id));
+                        case 1:
+                          res = _context.v;
+                          _context.n = 2;
+                          return res.json();
+                        case 2:
+                          org = _context.v;
+                          return _context.a(2, _objectSpread2(_objectSpread2({}, inv), {}, {
+                            name: ((_org$title = org.title) === null || _org$title === void 0 ? void 0 : _org$title.rendered) || inv.org_id
+                          }));
+                        case 3:
+                          _context.p = 3;
+                          _context.v;
+                          return _context.a(2, _objectSpread2(_objectSpread2({}, inv), {}, {
+                            name: inv.org_id
+                          }));
+                      }
+                    }, _callee, null, [[0, 3]]);
+                  }));
+                  return function (_x2) {
+                    return _ref3.apply(this, arguments);
+                  };
+                }()));
+              case 1:
+                detailed = _context2.v;
+                setInvites(detailed);
+              case 2:
+                return _context2.a(2);
+            }
+          }, _callee2);
+        }));
+        return function (_x) {
+          return _ref2.apply(this, arguments);
+        };
+      }())["catch"](function () {
+        return setInvites([]);
+      });
+    }, []);
+    var content;
+    if (invites === null) {
+      content = /*#__PURE__*/React.createElement("p", null, __$7('Loading...', 'artpulse'));
+    } else if (!invites.length) {
+      content = /*#__PURE__*/React.createElement("p", null, __$7('No pending invites.', 'artpulse'));
+    } else {
+      content = /*#__PURE__*/React.createElement("ul", {
+        className: "ap-collab-requests"
+      }, invites.map(function (inv) {
+        return /*#__PURE__*/React.createElement("li", {
+          key: inv.org_id
+        }, inv.name, " \u2013 ", inv.role, " (", inv.status, ")");
+      }));
+    }
+    return /*#__PURE__*/React.createElement("div", {
+      "data-widget-id": "collab_requests"
+    }, content);
+  }
+
+  var __$6 = wp.i18n.__;
+  function OnboardingTrackerWidget() {
+    var items = [__$6('Complete Profile', 'artpulse'), __$6('Upload First Artwork', 'artpulse'), __$6('Host an Event', 'artpulse'), __$6('Get 10 Followers', 'artpulse')];
+    return /*#__PURE__*/React.createElement("ul", {
+      className: "ap-onboarding-tracker"
+    }, items.map(function (i, idx) {
+      return /*#__PURE__*/React.createElement("li", {
+        key: idx
+      }, i);
     }));
   }
 
@@ -650,7 +965,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     })));
   }
 
-  var __$3 = wp.i18n.__;
+  var __$5 = wp.i18n.__;
   function SponsoredEventConfigWidget(_ref) {
     var postId = _ref.postId,
       apiRoot = _ref.apiRoot,
@@ -691,8 +1006,9 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       });
     };
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-sponsored-config"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$3('Sponsored By', 'artpulse'), /*#__PURE__*/React.createElement("input", {
+      className: "ap-sponsored-config",
+      "data-widget-id": "sponsored_event_config"
+    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$5('Sponsored By', 'artpulse'), /*#__PURE__*/React.createElement("input", {
       type: "text",
       value: data.sponsor_name,
       onChange: function onChange(e) {
@@ -700,7 +1016,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
           sponsor_name: e.target.value
         }));
       }
-    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$3('Sponsor Link', 'artpulse'), /*#__PURE__*/React.createElement("input", {
+    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$5('Sponsor Link', 'artpulse'), /*#__PURE__*/React.createElement("input", {
       type: "url",
       value: data.sponsor_link,
       onChange: function onChange(e) {
@@ -708,7 +1024,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
           sponsor_link: e.target.value
         }));
       }
-    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$3('Logo URL', 'artpulse'), /*#__PURE__*/React.createElement("input", {
+    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$5('Logo URL', 'artpulse'), /*#__PURE__*/React.createElement("input", {
       type: "text",
       value: data.sponsor_logo,
       onChange: function onChange(e) {
@@ -719,10 +1035,10 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     }))), /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: save
-    }, __$3('Save Sponsor', 'artpulse')));
+    }, __$5('Save Sponsor', 'artpulse')));
   }
 
-  var __$2 = wp.i18n.__;
+  var __$4 = wp.i18n.__;
   function EmbedToolWidget(_ref) {
     var widgetId = _ref.widgetId,
       siteUrl = _ref.siteUrl;
@@ -732,17 +1048,18 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       setTheme = _useState2[1];
     var code = "<script src=\"".concat(siteUrl, "/wp-json/widgets/embed.js?id=").concat(widgetId, "&theme=").concat(theme, "\"></script>");
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-embed-tool-widget"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$2('Theme', 'artpulse'), /*#__PURE__*/React.createElement("select", {
+      className: "ap-embed-tool-widget",
+      "data-widget-id": "embed_tool"
+    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$4('Theme', 'artpulse'), /*#__PURE__*/React.createElement("select", {
       value: theme,
       onChange: function onChange(e) {
         return setTheme(e.target.value);
       }
     }, /*#__PURE__*/React.createElement("option", {
       value: "light"
-    }, __$2('Light', 'artpulse')), /*#__PURE__*/React.createElement("option", {
+    }, __$4('Light', 'artpulse')), /*#__PURE__*/React.createElement("option", {
       value: "dark"
-    }, __$2('Dark', 'artpulse'))))), /*#__PURE__*/React.createElement("textarea", {
+    }, __$4('Dark', 'artpulse'))))), /*#__PURE__*/React.createElement("textarea", {
       readOnly: true,
       rows: "3",
       style: {
@@ -752,7 +1069,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     }));
   }
 
-  var __$1 = wp.i18n.__;
+  var __$3 = wp.i18n.__;
   function OrgBrandingSettingsPanel(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce,
@@ -791,8 +1108,9 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       });
     };
     return /*#__PURE__*/React.createElement("div", {
-      className: "ap-org-branding-settings"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$1('Logo URL', 'artpulse'), /*#__PURE__*/React.createElement("input", {
+      className: "ap-org-branding-settings",
+      "data-widget-id": "branding_settings_panel"
+    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$3('Logo URL', 'artpulse'), /*#__PURE__*/React.createElement("input", {
       type: "text",
       value: settings.logo,
       onChange: function onChange(e) {
@@ -800,7 +1118,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
           logo: e.target.value
         }));
       }
-    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$1('Brand Color', 'artpulse'), /*#__PURE__*/React.createElement("input", {
+    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$3('Brand Color', 'artpulse'), /*#__PURE__*/React.createElement("input", {
       type: "color",
       value: settings.color,
       onChange: function onChange(e) {
@@ -808,7 +1126,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
           color: e.target.value
         }));
       }
-    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$1('Footer Text', 'artpulse'), /*#__PURE__*/React.createElement("input", {
+    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$3('Footer Text', 'artpulse'), /*#__PURE__*/React.createElement("input", {
       type: "text",
       value: settings.footer,
       onChange: function onChange(e) {
@@ -819,7 +1137,180 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     }))), /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: save
-    }, __$1('Save Branding', 'artpulse')));
+    }, __$3('Save Branding', 'artpulse')));
+  }
+
+  wp.i18n.__;
+  function OrgEventOverviewWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce,
+      orgId = _ref.orgId;
+    var _useState = React.useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      events = _useState2[0],
+      setEvents = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/org/").concat(orgId, "/events/summary"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(function (data) {
+        return setEvents(data.events || []);
+      });
+    }, [orgId]);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ap-org-event-overview-widget",
+      "data-widget-id": "org_event_overview"
+    }, /*#__PURE__*/React.createElement("ul", null, events.map(function (ev) {
+      return /*#__PURE__*/React.createElement("li", {
+        key: ev.id
+      }, ev.title, " (", ev.status, ")");
+    })));
+  }
+
+  wp.i18n.__;
+  function OrgTeamRosterWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce,
+      orgId = _ref.orgId;
+    var _useState = React.useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      team = _useState2[0],
+      setTeam = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/orgs/").concat(orgId, "/roles"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(function (data) {
+        return setTeam(Array.isArray(data) ? data : []);
+      });
+    }, [orgId]);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ap-org-team-roster-widget",
+      "data-widget-id": "org_team_roster"
+    }, /*#__PURE__*/React.createElement("ul", null, team.map(function (user) {
+      return /*#__PURE__*/React.createElement("li", {
+        key: user.user_id
+      }, user.user_id, " - ", user.role);
+    })));
+  }
+
+  wp.i18n.__;
+  function OrgApprovalCenterWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce,
+      orgId = _ref.orgId;
+    var _useState = React.useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      items = _useState2[0],
+      setItems = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/org/").concat(orgId, "/submissions"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(function (data) {
+        return setItems(Array.isArray(data) ? data : []);
+      });
+    }, [orgId]);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ap-org-approval-center-widget",
+      "data-widget-id": "org_approval_center"
+    }, /*#__PURE__*/React.createElement("ul", null, items.map(function (item) {
+      return /*#__PURE__*/React.createElement("li", {
+        key: item.id
+      }, item.title, " - ", item.status);
+    })));
+  }
+
+  var __$2 = wp.i18n.__;
+  function OrgTicketInsightsWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce,
+      orgId = _ref.orgId;
+    var _useState = React.useState({
+        sales: 0,
+        revenue: 0
+      }),
+      _useState2 = _slicedToArray(_useState, 2),
+      metrics = _useState2[0],
+      setMetrics = _useState2[1];
+    React.useEffect(function () {
+      fetch("".concat(apiRoot, "artpulse/v1/org/").concat(orgId, "/tickets/metrics"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
+        return r.json();
+      }).then(function (data) {
+        return setMetrics(data);
+      });
+    }, [orgId]);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ap-org-ticket-insights-widget",
+      "data-widget-id": "org_ticket_insights"
+    }, /*#__PURE__*/React.createElement("p", null, __$2('Tickets Sold', 'artpulse'), ": ", metrics.sales), /*#__PURE__*/React.createElement("p", null, __$2('Revenue', 'artpulse'), ": ", metrics.revenue));
+  }
+
+  var __$1 = wp.i18n.__;
+  function OrgBroadcastBoxWidget(_ref) {
+    var apiRoot = _ref.apiRoot,
+      nonce = _ref.nonce,
+      orgId = _ref.orgId;
+    var _useState = React.useState(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      text = _useState2[0],
+      setText = _useState2[1];
+    var send = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.n) {
+            case 0:
+              _context.n = 1;
+              return fetch("".concat(apiRoot, "artpulse/v1/org/").concat(orgId, "/message/broadcast"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-WP-Nonce': nonce
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                  message: text
+                })
+              });
+            case 1:
+              setText('');
+            case 2:
+              return _context.a(2);
+          }
+        }, _callee);
+      }));
+      return function send() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ap-org-broadcast-box-widget",
+      "data-widget-id": "org_broadcast_box"
+    }, /*#__PURE__*/React.createElement("textarea", {
+      value: text,
+      onChange: function onChange(e) {
+        return setText(e.target.value);
+      }
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: send
+    }, __$1('Send Broadcast', 'artpulse')));
   }
 
   var __ = wp.i18n.__;
@@ -827,32 +1318,32 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     id: 'nearby_events_map',
     title: __('Nearby Events Map', 'artpulse'),
     component: NearbyEventsMapWidget,
-    roles: ['member', 'artist']
+    roles: ['member']
   }, {
     id: 'my_favorites',
     title: __('My Favorites', 'artpulse'),
     component: MyFavoritesWidget,
-    roles: ['member', 'artist']
+    roles: ['member']
   }, {
     id: 'rsvp_button',
     title: __('RSVP Button', 'artpulse'),
     component: RSVPButton,
-    roles: ['member', 'artist']
+    roles: ['member']
   }, {
     id: 'event_chat',
     title: __('Event Chat', 'artpulse'),
     component: EventChatWidget,
-    roles: ['member', 'artist']
+    roles: ['member']
   }, {
     id: 'share_this_event',
     title: __('Share This Event', 'artpulse'),
     component: ShareThisEventWidget,
-    roles: ['member', 'artist']
+    roles: ['member']
   }, {
     id: 'artist_inbox_preview',
     title: __('Artist Inbox Preview', 'artpulse'),
     component: ArtistInboxPreviewWidget,
-    roles: ['artist']
+    roles: ['member', 'artist']
   }, {
     id: 'artist_revenue_summary',
     title: __('Revenue Summary', 'artpulse'),
@@ -862,6 +1353,37 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     id: 'artist_spotlight',
     title: __('Artist Spotlight', 'artpulse'),
     component: ArtistSpotlightWidget,
+    roles: ['artist']
+  }, {
+    id: 'artist_artwork_manager',
+    title: __('Artwork Manager', 'artpulse'),
+    component: ArtistArtworkManagerWidget,
+    roles: ['artist'],
+    "default": true
+  }, {
+    id: 'artist_audience_insights',
+    title: __('Audience Insights', 'artpulse'),
+    component: ArtistAudienceInsightsWidget,
+    roles: ['artist']
+  }, {
+    id: 'artist_earnings_summary',
+    title: __('Earnings Summary', 'artpulse'),
+    component: ArtistEarningsWidget,
+    roles: ['artist']
+  }, {
+    id: 'artist_feed_publisher',
+    title: __('Post & Engage', 'artpulse'),
+    component: ArtistFeedPublisherWidget,
+    roles: ['artist']
+  }, {
+    id: 'collab_requests',
+    title: __('Collab Requests', 'artpulse'),
+    component: ArtistCollaborationWidget,
+    roles: ['artist']
+  }, {
+    id: 'onboarding_tracker',
+    title: __('Onboarding Checklist', 'artpulse'),
+    component: OnboardingTrackerWidget,
     roles: ['artist']
   }, {
     id: 'audience_crm',
@@ -882,6 +1404,31 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     id: 'branding_settings_panel',
     title: __('Branding Settings', 'artpulse'),
     component: OrgBrandingSettingsPanel,
+    roles: ['organization']
+  }, {
+    id: 'org_event_overview',
+    title: __('Event Overview', 'artpulse'),
+    component: OrgEventOverviewWidget,
+    roles: ['organization']
+  }, {
+    id: 'org_team_roster',
+    title: __('Team Management', 'artpulse'),
+    component: OrgTeamRosterWidget,
+    roles: ['organization']
+  }, {
+    id: 'org_approval_center',
+    title: __('Approval Center', 'artpulse'),
+    component: OrgApprovalCenterWidget,
+    roles: ['organization']
+  }, {
+    id: 'org_ticket_insights',
+    title: __('Ticket Analytics', 'artpulse'),
+    component: OrgTicketInsightsWidget,
+    roles: ['organization']
+  }, {
+    id: 'org_broadcast_box',
+    title: __('Announcement Tool', 'artpulse'),
+    component: OrgBroadcastBoxWidget,
     roles: ['organization']
   }];
 
