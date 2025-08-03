@@ -20,7 +20,10 @@
     "roles": [
       "organization"
     ],
-    "status": "registered"
+    "status": "registered",
+    "label": "Organization Insights",
+    "description": "Key metrics for organization accounts.",
+    "icon": "chart-area"
   },
   "widget_events": {
     "file": "widgets/WidgetEventsWidget.php",

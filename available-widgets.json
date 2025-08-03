@@ -160,7 +160,7 @@
     },
     {
         "id": "org_insights",
-        "callback": "OrgInsightsWidget.php",
+        "callback": "ArtPulse\\Widgets::render_org_insights_box",
         "allowed_roles": [
             "organization"
         ]
