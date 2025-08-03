@@ -5,7 +5,7 @@
             "administrator",
             "organization"
         ],
-        "status": "stub",
+        "status": "ok",
         "previewGuarded": true
     },
     "lead_capture": {
@@ -13,7 +13,7 @@
         "roles": [
             "administrator"
         ],
-        "status": "stub",
+        "status": "ok",
         "previewGuarded": true
     },
     "sales_summary": {
@@ -21,7 +21,7 @@
         "roles": [
             "administrator"
         ],
-        "status": "stub",
+        "status": "ok",
         "previewGuarded": true
     },
     "site_stats": {
@@ -154,7 +154,7 @@
             "member",
             "artist"
         ],
-        "status": "stub",
+        "status": "ok",
         "previewGuarded": true
     },
     "cat_fact": {
@@ -188,7 +188,7 @@
         "roles": [
             "member"
         ],
-        "status": "stub",
+        "status": "ok",
         "previewGuarded": true
     },
     "events": {
@@ -522,7 +522,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "branding_settings_panel": {
@@ -530,7 +530,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "embed_tool": {
@@ -538,7 +538,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "org_approval_center": {
@@ -546,7 +546,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "org_broadcast_box": {
@@ -554,7 +554,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "org_event_overview": {
@@ -562,7 +562,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "org_team_roster": {
@@ -570,7 +570,7 @@
         "roles": [
             "organization"
         ],
-        "status": "stub",
+        "status": "ok",
         "previewGuarded": true
     },
     "org_ticket_insights": {
@@ -578,7 +578,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "org_widget_sharing": {
@@ -586,7 +586,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "rsvp_stats": {
@@ -603,7 +603,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "sponsored_event_config": {
@@ -611,7 +611,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     },
     "webhooks": {
@@ -619,7 +619,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "ok",
         "previewGuarded": true
     }
 }

@@ -24,7 +24,9 @@ class EventChatWidget implements DashboardWidgetInterface {
     }
 
     public static function render(int $user_id = 0): string {
-        return '<div data-widget-id="' . esc_attr(self::id()) . '">This will show event chat.</div>';
+        ob_start();
+        \ap_render_js_widget(self::id());
+        return ob_get_clean();
     }
 }
 
