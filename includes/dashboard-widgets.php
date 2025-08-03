@@ -40,22 +40,17 @@ function register_ap_widget(string $id, array $args): void
     \ArtPulse\Core\DashboardWidgetRegistry::register_widget($id, $args);
 }
 
-function ap_render_js_widget(string $id, array $data = []): void
+function ap_render_js_widget(string $id, array $props = []): void
 {
     $defaults = [
-        'api-root' => esc_url_raw(rest_url()),
-        'nonce'    => wp_create_nonce('wp_rest'),
+        'apiRoot' => esc_url_raw(rest_url()),
+        'nonce'   => wp_create_nonce('wp_rest'),
     ];
-    $data  = array_merge($defaults, $data);
-    $attrs = '';
-    foreach ($data as $k => $v) {
-        $attrs .= ' data-' . $k . '="' . esc_attr($v) . '"';
-    }
-    echo '<section data-widget="' . esc_attr($id) . '" data-widget-id="' . esc_attr($id) . '" class="dashboard-widget">';
-    echo '<div class="inside">';
-    echo '<div id="' . esc_attr($id) . '" class="ap-react-widget"' . $attrs . '></div>';
-    echo '</div>';
-    echo '</section>';
+
+    $props      = array_merge($defaults, $props);
+    $json_props = esc_attr(wp_json_encode($props));
+
+    echo '<div id="ap-widget-' . esc_attr($id) . '" data-widget="' . esc_attr($id) . '" data-props=\'' . $json_props . '\'></div>';
 }
 
 add_shortcode('ap_widget', function ($atts) {
@@ -532,21 +527,21 @@ function ap_widget_dashboard_feedback(int $user_id = 0, array $vars = []): strin
 function ap_widget_rsvp_button(int $user_id = 0, array $vars = []): string
 {
     ob_start();
-    ap_render_js_widget('rsvp_button', ['event-id' => $vars['event_id'] ?? 0]);
+    ap_render_js_widget('rsvp_button', ['eventId' => $vars['event_id'] ?? 0]);
     return ob_get_clean();
 }
 
 function ap_widget_event_chat(int $user_id = 0, array $vars = []): string
 {
     ob_start();
-    ap_render_js_widget('event_chat', ['event-id' => $vars['event_id'] ?? 0]);
+    ap_render_js_widget('event_chat', ['eventId' => $vars['event_id'] ?? 0]);
     return ob_get_clean();
 }
 
 function ap_widget_share_this_event(int $user_id = 0, array $vars = []): string
 {
     ob_start();
-    ap_render_js_widget('share_this_event');
+    ap_render_js_widget('share_this_event', ['eventUrl' => $vars['event_url'] ?? '']);
     return ob_get_clean();
 }
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { createRoot } from 'react-dom/client';
 const { __ } = wp.i18n;
 
 /**
@@ -10,7 +9,7 @@ const { __ } = wp.i18n;
  * - apiRoot: REST API root URL.
  * - nonce: WP nonce for authentication.
  */
-export function RSVPButton({ eventId, apiRoot, nonce }) {
+export default function RsvpButtonWidget({ eventId, apiRoot, nonce }) {
   const [rsvped, setRsvped] = useState(false);
 
   const toggle = async () => {
@@ -31,18 +30,8 @@ export function RSVPButton({ eventId, apiRoot, nonce }) {
   };
 
   return (
-    <div data-widget-id="rsvp_button">
-      <button className={`ap-rsvp-btn${rsvped ? ' is-rsvped' : ''}`} onClick={toggle}>
-        {rsvped ? __('Cancel RSVP', 'artpulse') : __('RSVP', 'artpulse')}
-      </button>
-    </div>
-  );
-}
-
-export default function initRSVPButton(el) {
-  const root = createRoot(el);
-  const { eventId, apiRoot, nonce } = el.dataset;
-  root.render(
-    <RSVPButton eventId={Number(eventId)} apiRoot={apiRoot} nonce={nonce} />
+    <button className={`ap-rsvp-btn${rsvped ? ' is-rsvped' : ''}`} onClick={toggle}>
+      {rsvped ? __('Cancel RSVP', 'artpulse') : __('RSVP', 'artpulse')}
+    </button>
   );
 }

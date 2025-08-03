@@ -1,8 +1,8 @@
 import { NearbyEventsMapWidget } from './NearbyEventsMapWidget.jsx';
 import { MyFavoritesWidget } from './MyFavoritesWidget.jsx';
-import { RSVPButton } from './RSVPButton.jsx';
-import { EventChatWidget } from './EventChatWidget.jsx';
-import { ShareThisEventWidget } from './ShareThisEventWidget.jsx';
+import RsvpButtonWidget from './RsvpButtonWidget.jsx';
+import EventChatWidget from './EventChatWidget.jsx';
+import ShareThisEventWidget from './ShareThisEventWidget.jsx';
 import { ArtistInboxPreviewWidget } from './ArtistInboxPreviewWidget.jsx';
 import { ArtistRevenueSummaryWidget } from './ArtistRevenueSummaryWidget.jsx';
 import { ArtistSpotlightWidget } from './ArtistSpotlightWidget.jsx';
@@ -39,7 +39,7 @@ export default [
   {
     id: 'rsvp_button',
     title: __('RSVP Button', 'artpulse'),
-    component: RSVPButton,
+    component: RsvpButtonWidget,
     roles: ['member']
   },
   {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 const { __ } = wp.i18n;
 
 /**
@@ -8,7 +7,7 @@ const { __ } = wp.i18n;
  * Props:
  * - eventUrl: URL of the event page.
  */
-export function ShareThisEventWidget({ eventUrl }) {
+export default function ShareThisEventWidget({ eventUrl }) {
   const share = (prefix) => {
     if (navigator.share) {
       navigator.share({ url: eventUrl }).catch(() => {});
@@ -24,17 +23,11 @@ export function ShareThisEventWidget({ eventUrl }) {
   };
 
   return (
-    <div className="ap-share-event-widget" data-widget-id="share_this_event">
+    <div className="ap-share-event-widget">
       <button onClick={() => share('https://twitter.com/share?url=')}>X</button>
       <button onClick={() => share('https://www.facebook.com/sharer/sharer.php?u=')}>{__('Facebook', 'artpulse')}</button>
       <button onClick={() => share('https://www.linkedin.com/sharing/share-offsite/?url=')}>{__('LinkedIn', 'artpulse')}</button>
       <button onClick={copy}>{__('Copy Link', 'artpulse')}</button>
     </div>
   );
-}
-
-export default function initShareThisEventWidget(el) {
-  const root = createRoot(el);
-  const { eventUrl } = el.dataset;
-  root.render(<ShareThisEventWidget eventUrl={eventUrl} />);
 }
