@@ -2,7 +2,7 @@
 namespace ArtPulse\DashboardBuilder\Tests;
 
 use PHPUnit\Framework\TestCase;
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DashboardBuilderRegistryVisibilityTest extends TestCase
 {
@@ -12,6 +12,11 @@ class DashboardBuilderRegistryVisibilityTest extends TestCase
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
         $prop->setValue([]);
+        if ($ref->hasProperty('builder_widgets')) {
+            $bw = $ref->getProperty('builder_widgets');
+            $bw->setAccessible(true);
+            $bw->setValue([]);
+        }
     }
 
     public function test_default_visibility_is_public(): void
@@ -21,7 +26,7 @@ class DashboardBuilderRegistryVisibilityTest extends TestCase
             'render_callback' => '__return_null',
         ]);
 
-        $all = DashboardWidgetRegistry::get_all();
+        $all = DashboardWidgetRegistry::get_all(null, true);
         $this->assertSame('public', $all['alpha']['visibility']);
     }
 
@@ -43,8 +48,8 @@ class DashboardBuilderRegistryVisibilityTest extends TestCase
             'visibility' => 'deprecated',
         ]);
 
-        $public = DashboardWidgetRegistry::get_all('public');
-        $internal = DashboardWidgetRegistry::get_all('internal');
+        $public = DashboardWidgetRegistry::get_all('public', true);
+        $internal = DashboardWidgetRegistry::get_all('internal', true);
 
         $this->assertArrayHasKey('a', $public);
         $this->assertArrayNotHasKey('b', $public);

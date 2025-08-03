@@ -3,7 +3,6 @@ namespace ArtPulse\Integration\Tests;
 
 use WP_REST_Request;
 use ArtPulse\Rest\DashboardWidgetController;
-use ArtPulse\DashboardBuilder\DashboardWidgetRegistry as BuilderRegistry;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\UserDashboardManager;
@@ -13,27 +12,27 @@ class DashboardBuilderMappingTest extends \WP_UnitTestCase {
 
     public function set_up(): void {
         parent::set_up();
-        // reset registries
-        $ref = new \ReflectionClass(BuilderRegistry::class);
-        $prop = $ref->getProperty('widgets');
-        $prop->setAccessible(true);
-        $prop->setValue([]);
-
+        // reset registry
         $ref2 = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop2 = $ref2->getProperty('widgets');
         $prop2->setAccessible(true);
         $prop2->setValue([]);
+        if ($ref2->hasProperty('builder_widgets')) {
+            $bw = $ref2->getProperty('builder_widgets');
+            $bw->setAccessible(true);
+            $bw->setValue([]);
+        }
 
         $this->admin = self::factory()->user->create(['role' => 'administrator']);
         wp_set_current_user($this->admin);
 
         // register builder widgets
-        BuilderRegistry::register('news_feed', [
+        DashboardWidgetRegistry::register('news_feed', [
             'title' => 'News Feed',
             'render_callback' => '__return_null',
             'roles' => ['member']
         ]);
-        BuilderRegistry::register('my_favorites', [
+        DashboardWidgetRegistry::register('my_favorites', [
             'title' => 'Favorites',
             'render_callback' => '__return_null',
             'roles' => ['member']
