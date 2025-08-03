@@ -79,6 +79,9 @@ namespace {
     if (!function_exists('sanitize_text_field')) {
         function sanitize_text_field($value) { return $value; }
     }
+    if (!function_exists('sanitize_key')) {
+        function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
+    }
     if (!function_exists('get_the_title')) {
         function get_the_title($id) { return 'Post ' . $id; }
     }

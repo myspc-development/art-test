@@ -16,6 +16,7 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         MockStorage::$notice = [];
         MockStorage::$user_meta = [];
         MockStorage::$screen = 'dashboard';
+        MockStorage::$options = [];
     }
 
     public function test_org_role_widgets(): void {
@@ -102,6 +103,30 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         MockStorage::$current_roles = ['organization'];
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $this->assertNotContains('ap_donor_activity', array_column(MockStorage::$removed, 0));
+    }
+
+    public function test_saved_rules_exclude_roles(): void {
+        MockStorage::$options['artpulse_widget_roles'] = [
+            'ap_donor_activity' => [
+                'exclude_roles' => ['member'],
+            ],
+        ];
+        MockStorage::$current_roles = ['member'];
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
+        $ids = array_column(MockStorage::$removed, 0);
+        $this->assertContains('ap_donor_activity', $ids);
+    }
+
+    public function test_saved_rules_capability(): void {
+        MockStorage::$options['artpulse_widget_roles'] = [
+            'ap_donor_activity' => [
+                'capability' => 'special_view',
+            ],
+        ];
+        MockStorage::$current_roles = ['member'];
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
+        $ids = array_column(MockStorage::$removed, 0);
+        $this->assertContains('ap_donor_activity', $ids);
     }
 }
 }

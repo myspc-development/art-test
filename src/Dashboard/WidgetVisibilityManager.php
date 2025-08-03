@@ -102,6 +102,32 @@ class WidgetVisibilityManager
             ],
         ];
 
+        $saved = get_option('artpulse_widget_roles', []);
+        if (is_array($saved)) {
+            foreach ($saved as $widget => $config) {
+                $widget  = sanitize_key($widget);
+                $config  = is_array($config) ? $config : [];
+
+                $merged = [];
+
+                if (!empty($config['capability'])) {
+                    $merged['capability'] = sanitize_text_field($config['capability']);
+                }
+
+                if (!empty($config['exclude_roles'])) {
+                    $roles = array_map('sanitize_key', (array) $config['exclude_roles']);
+                    $roles = array_values(array_filter($roles));
+                    if ($roles) {
+                        $merged['exclude_roles'] = $roles;
+                    }
+                }
+
+                if ($merged) {
+                    $rules[$widget] = array_merge($rules[$widget] ?? [], $merged);
+                }
+            }
+        }
+
         /**
          * Allow plugins to register additional visibility rules.
          *
