@@ -17,6 +17,7 @@ This guide explains how to propose new documentation or update existing guides i
 ## Folder and Naming Conventions
 - Organize docs under audience folders like `admin/`, `developer/`, `qa/`, `user/` and `widgets/`.
 - Use lowercase kebab-case for filenames such as `widget-editor-guide.md`.
+- Add the new guide to `docs/index.md` so readers can discover it.
 
 ## YAML Frontmatter Format
 Every Markdown file begins with frontmatter:
