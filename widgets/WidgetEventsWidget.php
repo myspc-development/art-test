@@ -33,7 +33,7 @@ class WidgetEventsWidget {
         }
     }
 
-      public static function render(int $user_id = 0): string {
+      public static function render(): string {
           if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return '';
           ob_start();
           echo '<div data-widget-id="widget_events">';

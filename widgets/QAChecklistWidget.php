@@ -21,7 +21,7 @@ class QAChecklistWidget {
         );
     }
 
-    public static function render(int $user_id = 0): string {
+    public static function render(): string {
         if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return '';
         ob_start();
         echo '<section data-widget="qa_checklist" data-widget-id="qa_checklist" class="dashboard-widget">';
