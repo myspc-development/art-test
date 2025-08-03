@@ -2,6 +2,7 @@
 
 namespace ArtPulse\Core;
 
+use ArtPulse\DashboardWidgetRegistryLoader;
 use WP_Roles;
 
 /**
@@ -547,6 +548,8 @@ class DashboardWidgetRegistry {
      * Register default widgets and fire registration hook.
      */
     public static function init(): void {
+        DashboardWidgetRegistryLoader::load_all();
+
         $register = [ self::class, 'register_widget' ];
         $register( 'widget_news', [
             'id'          => 'widget_news',
