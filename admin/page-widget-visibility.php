@@ -14,8 +14,31 @@ add_action('admin_menu', function(){
 });
 
 add_action('admin_init', function(){
-    register_setting('artpulse_widget_roles', 'artpulse_widget_roles');
+    register_setting('artpulse_widget_roles', 'artpulse_widget_roles', [
+        'sanitize_callback' => 'ap_sanitize_widget_visibility_settings',
+    ]);
 });
+
+function ap_sanitize_widget_visibility_settings($input) {
+    $roles = ['member', 'artist', 'organization'];
+    $output = [];
+    foreach ((array) $input as $id => $config) {
+        $id    = sanitize_key($id);
+        $conf  = [];
+        $allowed = array_map('sanitize_key', $config['roles'] ?? []);
+        $exclude = array_values(array_diff($roles, $allowed));
+        if ($exclude) {
+            $conf['exclude_roles'] = $exclude;
+        }
+        if (!empty($config['capability'])) {
+            $conf['capability'] = sanitize_text_field($config['capability']);
+        }
+        if ($conf) {
+            $output[$id] = $conf;
+        }
+    }
+    return $output;
+}
 
 function ap_render_widget_visibility_page() {
     if (!current_user_can('manage_options')) {
@@ -31,7 +54,8 @@ function ap_render_widget_visibility_page() {
     echo '<th>' . esc_html__('Roles', 'artpulse') . '</th>';
     echo '<th>' . esc_html__('Capability', 'artpulse') . '</th></tr></thead><tbody>';
     foreach ($widgets as $id => $def) {
-        $conf_roles = $settings[$id]['roles'] ?? ($def['roles'] ?? []);
+        $excluded   = $settings[$id]['exclude_roles'] ?? ($def['exclude_roles'] ?? []);
+        $conf_roles = array_diff($roles, (array) $excluded);
         $cap        = $settings[$id]['capability'] ?? ($def['capability'] ?? '');
         echo '<tr><td>' . esc_html($def['label']) . '</td><td>';
         foreach ($roles as $r) {
