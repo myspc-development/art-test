@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Widgets;
 
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
 
 /**
@@ -60,9 +59,6 @@ class FavoritesOverviewWidget {
 
       public static function render(): string
       {
-          if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
-              return '';
-          }
           if (function_exists('ap_widget_favorites')) {
               return ap_widget_favorites([]);
           }

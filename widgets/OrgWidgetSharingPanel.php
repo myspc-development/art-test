@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Widgets;
 
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!defined('ABSPATH')) { exit; }
 
 /**
@@ -21,7 +20,6 @@ class OrgWidgetSharingPanel
 
     public static function render(): void
     {
-        if (defined("IS_DASHBOARD_BUILDER_PREVIEW")) return;
         $id = get_the_ID();
         $code = '<script src="' . esc_url(rest_url('widgets/embed.js')) . '?id=' . $id . '"></script>';
         echo '<div class="dashboard-widget" data-widget-id="org_widget_sharing"><div class="inside">';
