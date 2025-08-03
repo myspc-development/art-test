@@ -7,7 +7,7 @@ class DashboardWidgetRegistryLoader {
         if (!is_dir($dir)) {
             return;
         }
-        foreach (glob($dir . '*.php') as $file) {
+        foreach (glob($dir . '*Widget.php') as $file) {
             include_once $file;
         }
     }

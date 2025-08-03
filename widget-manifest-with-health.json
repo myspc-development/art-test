@@ -5,7 +5,7 @@
             "administrator",
             "organization"
         ],
-        "status": "registered",
+        "status": "stub",
         "previewGuarded": true
     },
     "lead_capture": {
@@ -13,7 +13,7 @@
         "roles": [
             "administrator"
         ],
-        "status": "registered",
+        "status": "stub",
         "previewGuarded": true
     },
     "sales_summary": {
@@ -21,7 +21,7 @@
         "roles": [
             "administrator"
         ],
-        "status": "registered",
+        "status": "stub",
         "previewGuarded": true
     },
     "site_stats": {
@@ -154,7 +154,7 @@
             "member",
             "artist"
         ],
-        "status": "registered",
+        "status": "stub",
         "previewGuarded": true
     },
     "cat_fact": {
@@ -188,7 +188,7 @@
         "roles": [
             "member"
         ],
-        "status": "registered",
+        "status": "stub",
         "previewGuarded": true
     },
     "events": {
@@ -570,7 +570,7 @@
         "roles": [
             "organization"
         ],
-        "status": "registered",
+        "status": "stub",
         "previewGuarded": true
     },
     "org_ticket_insights": {
