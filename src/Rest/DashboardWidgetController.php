@@ -99,6 +99,16 @@ class DashboardWidgetController {
             'callback' => [self::class, 'save_widgets'],
             'permission_callback' => [self::class, 'check_permissions'],
         ]);
+        register_rest_route('artpulse/v1', '/dashboard-widgets/export', [
+            'methods'  => 'GET',
+            'callback' => [self::class, 'export_layout'],
+            'permission_callback' => [self::class, 'check_permissions'],
+        ]);
+        register_rest_route('artpulse/v1', '/dashboard-widgets/import', [
+            'methods'  => 'POST',
+            'callback' => [self::class, 'import_layout'],
+            'permission_callback' => [self::class, 'check_permissions'],
+        ]);
     }
 
     public static function check_permissions(WP_REST_Request $request): bool {
@@ -164,6 +174,37 @@ class DashboardWidgetController {
             \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $layout);
         }
         return rest_ensure_response(['saved' => true]);
+    }
+
+    public static function export_layout(WP_REST_Request $request): WP_REST_Response|WP_Error {
+        $role = sanitize_key($request->get_param('role'));
+        if (!$role) {
+            return new WP_Error('invalid_role', __('Role parameter missing', 'artpulse'), ['status' => 400]);
+        }
+
+        $layout = \ArtPulse\Admin\UserLayoutManager::get_role_layout($role);
+        $builder = self::convert_to_builder_ids($layout);
+        return rest_ensure_response(['role' => $role, 'layout' => $builder]);
+    }
+
+    public static function import_layout(WP_REST_Request $request): WP_REST_Response|WP_Error {
+        $data = $request->get_json_params();
+        $role = sanitize_key($data['role'] ?? '');
+        if (!$role) {
+            return new WP_Error('invalid_role', __('Invalid role', 'artpulse'), ['status' => 400]);
+        }
+        if (empty(DashboardWidgetRegistry::get_for_role($role)) && !get_role($role)) {
+            error_log('Attempt to import dashboard layout for unsupported role: ' . $role);
+            return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
+        }
+        $layout = $data['layout'] ?? null;
+        if (!is_array($layout)) {
+            return new WP_Error('invalid_layout', __('Invalid layout', 'artpulse'), ['status' => 400]);
+        }
+
+        $core_layout = self::convert_to_core_ids($layout);
+        \ArtPulse\Admin\UserLayoutManager::save_role_layout($role, $core_layout);
+        return rest_ensure_response(['imported' => true]);
     }
 }
 

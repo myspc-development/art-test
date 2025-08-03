@@ -4,8 +4,8 @@ namespace ArtPulse\Admin;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Widgets\Member\WelcomeBoxWidget;
 use ArtPulse\Core\DashboardController;
-use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\DashboardBuilder\DashboardManager as BuilderDashboardManager;
 
 class DashboardWidgetTools
 {
@@ -105,8 +105,6 @@ class DashboardWidgetTools
                 [self::class, 'render_help_page']
             );
         });
-        add_action('admin_post_ap_export_widget_config', [self::class, 'handle_export']);
-        add_action('admin_post_ap_import_widget_config', [self::class, 'handle_import']);
         add_action('artpulse_render_settings_tab_widgets', function () {
             include ARTPULSE_PLUGIN_DIR . 'templates/admin/settings-tab-widgets.php';
         });
@@ -121,308 +119,14 @@ class DashboardWidgetTools
 
     public static function render(): void
     {
-        $roles       = get_editable_roles();
-        $selected    = sanitize_text_field($_GET['ap_dashboard_role'] ?? '');
-
-        if (isset($_POST['ap_dashboard_role'])) {
-            $selected = sanitize_text_field($_POST['ap_dashboard_role']);
-        }
-
-        $editable = array_keys($roles);
-        if (!in_array($selected, $editable, true) && !current_user_can('manage_options')) {
-            wp_die(
-                __('Invalid role.', 'artpulse'),
-                '',
-                ['response' => 403]
-            );
-        }
-
-        if (!ap_user_can_edit_layout($selected)) {
-            wp_die(
-                __('Access denied.', 'artpulse'),
-                '',
-                ['response' => 403]
-            );
-        }
-
-        if (isset($_GET['dw_import_success'])) {
-            echo '<div class="notice notice-success"><p>' . esc_html__('Widget configuration imported.', 'artpulse') . '</p></div>';
-        } elseif (isset($_GET['dw_import_error'])) {
-            $err  = sanitize_text_field($_GET['dw_import_error']);
-            switch ($err) {
-                case 'no_file':
-                    $msg = __('No file was uploaded.', 'artpulse');
-                    break;
-                case 'file_size':
-                    $msg = __('Uploaded file exceeds the maximum size of 1 MB.', 'artpulse');
-                    break;
-                case 'invalid_mime':
-                    $msg = __('Invalid file type. Please upload a JSON file.', 'artpulse');
-                    break;
-                case 'invalid_json':
-                default:
-                    $msg = __('Uploaded file contains invalid JSON.', 'artpulse');
-                    break;
-            }
-            echo '<div class="notice notice-error"><p>' . esc_html($msg) . '</p></div>';
-        }
-
-        if (defined('ARTPULSE_DEBUG') && ARTPULSE_DEBUG) {
-            error_log('Widget Manager accessed by user: ' . get_current_user_id());
-            error_log('User roles: ' . wp_json_encode(wp_get_current_user()->roles));
-        }
-
-        if (isset($_POST['layout'])) {
-            check_admin_referer('ap_save_role_layout');
-            $selected = sanitize_key($_POST['ap_dashboard_role'] ?? $selected);
-            $layout   = json_decode(wp_unslash($_POST['layout']), true) ?: [];
-            if (is_array($layout)) {
-                DashboardWidgetManager::saveRoleLayout($selected, $layout);
-                echo '<div class="notice notice-success"><p>' . esc_html__('Layout saved for role.', 'artpulse') . '</p></div>';
-            }
-        }
-
-        if (isset($_POST['reset_layout'])) {
-            check_admin_referer('ap_save_role_layout');
-            $selected = sanitize_key($_POST['ap_dashboard_role'] ?? $selected);
-            DashboardWidgetManager::saveRoleLayout($selected, []);
-            echo '<div class="notice notice-success"><p>' . esc_html__('Layout reset for role.', 'artpulse') . '</p></div>';
-        }
-
-        if (isset($_POST['import_role_layout']) && current_user_can('manage_options')) {
-            $import_result = DashboardWidgetManager::importRoleLayout($selected, stripslashes($_POST['import_json'] ?? ''));
-            echo '<div class="notice ' . ($import_result ? 'notice-success' : 'notice-error') . '"><p>'
-                . ($import_result
-                    ? esc_html__('Layout imported successfully.', 'artpulse')
-                    : esc_html__('Invalid layout JSON.', 'artpulse'))
-                . '</p></div>';
-        }
-
-        $current  = DashboardWidgetManager::getRoleLayout($selected);
-        $defs     = DashboardWidgetRegistry::get_definitions();
-        $defs_by_id = [];
-        foreach ($defs as $def) {
-            $defs_by_id[$def['id']] = $def;
-        }
-        $all_ids  = array_column($defs, 'id');
-        $current_ids = array_column($current, 'id');
-        $unused   = array_diff($all_ids, $current_ids);
-
-        echo '<div class="wrap">';
-        echo '<p><a href="' . admin_url('index.php?page=dashboard-layout-help') . '" class="button">' . esc_html__('📘 View Help Guide', 'artpulse') . '</a></p>';
-        echo '<h3>' . esc_html__('Dashboard Widget Manager', 'artpulse') . '</h3>';
-        echo '<form method="post" id="widget-layout-form">';
-        wp_nonce_field('ap_save_role_layout');
-        echo '<select id="ap-role-selector" name="ap_dashboard_role">';
-        foreach ($roles as $key => $role) {
-            $sel   = selected($selected, $key, false);
-            $label = $role['name'] ?? $key;
-            echo "<option value='" . esc_attr($key) . "' $sel>" . esc_html($label) . "</option>";
-        }
-        echo '</select> ';
-        echo '<span class="description">' . esc_html__('Drag to reorder. Toggle visibility. Click save to store layout.', 'artpulse') . '</span>';
-        echo '<button type="submit" name="reset_layout" class="button">' . esc_html__('Reset Layout', 'artpulse') . '</button> ';
-        echo '<button type="button" id="export-layout" class="button">' . esc_html__('Export', 'artpulse') . '</button> ';
-        echo '<label for="import-layout" class="button">' . esc_html__('Import', 'artpulse') . '</label>';
-        echo '<input type="file" id="import-layout" />';
-        echo '<input type="hidden" id="layout_input" name="layout">';
-        echo '<p><button type="submit" id="save-layout-btn" class="button button-primary">' . esc_html__('💾 Save Layout', 'artpulse') . '</button></p>';
-        if (current_user_can('manage_options')) {
-            echo '<br><textarea name="import_json" rows="6" cols="60" placeholder="' . esc_attr__('Paste layout JSON...', 'artpulse') . '"></textarea><br>';
-            echo '<button name="import_role_layout" type="submit" class="button">' . esc_html__('Import Layout', 'artpulse') . '</button> ';
-            echo '<button type="button" class="button" onclick="copyExportedLayout()">' . esc_html__('Copy Export', 'artpulse') . '</button>';
-            echo '<textarea id="export_json" rows="6" cols="60" readonly>' . esc_textarea(DashboardWidgetManager::exportRoleLayout($selected)) . '</textarea>';
-        }
-        echo '</form>';
-
-        echo '<div id="ap-widget-list">';
-        foreach ($current as $item) {
-            $id = $item['id'];
-            $visible = $item['visible'] ?? true;
-            $cb = DashboardWidgetRegistry::get_widget_callback($id);
-            if (is_callable($cb)) {
-                $icon  = $defs_by_id[$id]['icon'] ?? '';
-                $title = esc_html($defs_by_id[$id]['name'] ?? $id);
-                echo '<div class="ap-widget-card' . ($visible ? '' : ' is-hidden') . '" role="group" aria-label="Widget: ' . $title . '" data-widget-id="' . esc_attr($id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
-                echo '<div class="ap-widget-header">';
-                $drag = esc_attr__('Drag to reorder', 'artpulse');
-                echo '<span class="drag-handle" title="' . $drag . '" role="button" tabindex="0" aria-label="' . $drag . '">&#9776;</span>';
-                echo '<span class="ap-widget-icon">' . artpulse_dashicon($icon) . '</span>';
-                echo '<span class="ap-widget-title">' . $title . '</span>';
-                echo '<div class="ap-widget-controls">';
-                $toggle = esc_attr__('Toggle Widget', 'artpulse');
-                $remove = esc_attr__('Remove Widget', 'artpulse');
-                echo '<label class="toggle-switch" title="' . $toggle . '"><input type="checkbox" class="widget-toggle" aria-label="' . $toggle . '"' . checked($visible, true, false) . ' /><span class="slider"></span></label>';
-                echo '<button type="button" class="widget-remove" title="' . $remove . '" aria-label="' . $remove . '">&#x2716;</button>';
-                echo '</div></div>';
-                if ($visible) {
-                    echo '<div class="ap-widget-content">';
-                    echo call_user_func($cb, get_current_user_id());
-                    echo '</div>';
-                }
-                echo '</div>';
-            }
-        }
-        echo '</div>';
-
-        echo '<div class="ap-add-widget">';
-        echo '<h3>' . esc_html__('Add Widget', 'artpulse') . '</h3>';
-        echo '<input type="text" id="ap-widget-search" placeholder="' . esc_attr__('Search widgets...', 'artpulse') . '" oninput="apSearchWidgets(this.value)" class="regular-text">';
-        $categories = array_unique(array_filter(array_column($defs, 'category')));
-        if ($categories) {
-            echo '<select id="ap-widget-category-filter" onchange="apFilterWidgetsByCategory(this.value)">';
-            echo '<option value="">' . esc_html__('All Categories', 'artpulse') . '</option>';
-            foreach ($categories as $cat) {
-                echo '<option value="' . esc_attr($cat) . '">' . esc_html(ucfirst($cat)) . '</option>';
-            }
-            echo '</select>';
-        }
-        $role_keys = array_keys($roles);
-        echo '<select id="ap-widget-role-filter"><option value="">' . esc_html__('All Roles', 'artpulse') . '</option>';
-        foreach ($role_keys as $role_key) {
-            echo '<option value="' . esc_attr($role_key) . '">' . esc_html(ucfirst($role_key)) . '</option>';
-        }
-        echo '</select>';
-        echo '<ul id="add-widget-panel">';
-        foreach ($defs as $def) {
-            if (in_array($def['id'], $unused, true)) {
-                if (!empty($def['roles']) && !in_array($selected, (array) $def['roles'], true)) {
-                    continue;
-                }
-                $id        = esc_attr($def['id']);
-                $preview   = self::render_widget_preview($def['id']);
-                $icon      = esc_html($def['icon'] ?? '');
-                $category  = esc_attr($def['category'] ?? '');
-                $name_attr = esc_attr($def['name'] ?? $def['id']);
-                $desc_attr = esc_attr($def['description'] ?? '');
-                $roles_attr = esc_attr(implode(',', $def['roles'] ?? []));
-                $roles_text = '';
-                if (!empty($def['roles'])) {
-                    $roles_text = sprintf(__('Only visible to: %s', 'artpulse'), implode(', ', array_map('ucfirst', (array) $def['roles'])));
-                }
-                echo '<li class="widget-card" data-category="' . $category . '" data-name="' . $name_attr . '" data-desc="' . $desc_attr . '" data-roles="' . $roles_attr . '"><label><input type="checkbox" class="add-widget-check" value="' . $id . '"> ';
-                echo '<span class="widget-icon">' . $icon . '</span> <strong>' . esc_html($def['name']) . '</strong>';
-                echo '<div class="widget-preview-box">' . $preview . '</div>';
-                echo '<small>' . esc_html($def['description']) . '</small>';
-                if ($roles_text) {
-                    echo '<br><small class="widget-roles">' . esc_html($roles_text) . '</small>';
-                }
-                echo '</label></li>';
-            }
-        }
-        echo '</ul>';
-        echo '</div>';
-        echo '</div>';
-
-        echo '<button type="button" id="toggle-preview" class="button">' . esc_html__('Toggle Preview', 'artpulse') . '</button>';
-        echo '<h3>' . sprintf(esc_html__('Preview Dashboard for %s', 'artpulse'), esc_html(ucfirst($selected))) . '</h3>';
-        echo '<div id="ap-widget-preview-area" class="ap-widget-preview-wrap">';
-        self::render_preview_dashboard($selected);
-        echo '</div>';
-
-        echo '</div>';
-    }
-
-    /**
-     * Export the saved dashboard widget layout as JSON.
-     */
-    public static function handle_export(): void
-    {
         if (!current_user_can('manage_options')) {
-            wp_die(
-                __('Insufficient permissions', 'artpulse'),
-                '',
-                ['response' => 403]
-            );
+            wp_die(__('Access denied.', 'artpulse'), '', ['response' => 403]);
         }
 
-        check_admin_referer('ap_export_widget_config');
-
-        $config = get_option('ap_dashboard_widget_config', []);
-        $json   = wp_json_encode($config, JSON_PRETTY_PRINT);
-
-        header('Content-Type: application/json');
-        header('Content-Disposition: attachment; filename="ap-dashboard-widgets.json"');
-        echo $json;
-        exit;
+        BuilderDashboardManager::enqueue_assets();
+        BuilderDashboardManager::render_builder(false);
     }
 
-    /**
-     * Parse an uploaded JSON file and update the widget layout option.
-     * Validates file size and MIME type before processing.
-     */
-    public static function handle_import(): void
-    {
-        if (!current_user_can('manage_options')) {
-            wp_die(
-                __('Insufficient permissions', 'artpulse'),
-                '',
-                ['response' => 403]
-            );
-        }
-
-        check_admin_referer('ap_import_widget_config');
-
-        if (!isset($_FILES['ap_widget_file']) || empty($_FILES['ap_widget_file']['tmp_name'])) {
-            error_log('[DashboardWidgetTools] Import failed: missing file');
-            \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('No file was uploaded.', 'artpulse'), 'error');
-            wp_safe_redirect(add_query_arg('dw_import_error', 'no_file', wp_get_referer() ?: admin_url('admin.php?page=dashboard-builder')));
-            exit;
-        }
-
-        $file       = $_FILES['ap_widget_file'];
-        $max_size   = 1024 * 1024; // 1 MB
-        $file_size  = $file['size'] ?? 0;
-        $file_mime  = mime_content_type($file['tmp_name']);
-        if ($file_size > $max_size) {
-            error_log('[DashboardWidgetTools] Import failed: file too large');
-            \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('Uploaded file exceeds the maximum size of 1 MB.', 'artpulse'), 'error');
-            wp_safe_redirect(add_query_arg('dw_import_error', 'file_size', wp_get_referer() ?: admin_url('admin.php?page=dashboard-builder')));
-            exit;
-        }
-
-        if (!in_array($file_mime, ['application/json', 'text/plain'], true)) {
-            error_log('[DashboardWidgetTools] Import failed: invalid mime ' . $file_mime);
-            \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('Invalid file type. Please upload a JSON file.', 'artpulse'), 'error');
-            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_mime', wp_get_referer() ?: admin_url('admin.php?page=dashboard-builder')));
-            exit;
-        }
-
-        $json = file_get_contents($_FILES['ap_widget_file']['tmp_name']);
-        $data = json_decode($json, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
-            error_log('[DashboardWidgetTools] Invalid JSON import: ' . json_last_error_msg());
-            \ArtPulse\Dashboard\WidgetVisibilityManager::add_admin_notice(__('Uploaded file contains invalid JSON.', 'artpulse'), 'error');
-            wp_safe_redirect(add_query_arg('dw_import_error', 'invalid_json', wp_get_referer() ?: admin_url('admin.php?page=dashboard-builder')));
-            exit;
-        }
-
-        $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-        $sanitized = [];
-
-        foreach ($data as $role => $widgets) {
-            if (!is_array($widgets)) {
-                continue;
-            }
-
-            $role_key = sanitize_key($role);
-            $ordered  = \ArtPulse\Core\LayoutUtils::normalize_layout($widgets, $valid_ids);
-
-            $sanitized[$role_key] = $ordered;
-        }
-
-        update_option('ap_dashboard_widget_config', $sanitized);
-
-        wp_safe_redirect(add_query_arg('dw_import_success', '1', admin_url('admin.php?page=dashboard-builder')));
-        exit;
-    }
-
-    /**
-     * Render widget selection cards for the Add Widget modal.
-     *
-     * @param array $available_widgets
-     */
     public static function render_add_widget_modal(array $available_widgets): void
     {
         foreach ($available_widgets as $id => $def) {
@@ -481,7 +185,7 @@ class DashboardWidgetTools
             return;
         }
 
-        $layout  = DashboardWidgetManager::getRoleLayout($role);
+        $layout  = UserLayoutManager::get_role_layout($role);
 
         echo '<div class="ap-preview-dashboard">';
         $defs = DashboardWidgetRegistry::get_definitions();
@@ -570,10 +274,10 @@ class DashboardWidgetTools
     public static function render_dashboard_widgets(string $role = ''): void
     {
         if ($role !== '') {
-            $layout = DashboardWidgetManager::getRoleLayout($role);
+            $layout = UserLayoutManager::get_role_layout($role);
         } else {
             $user_id = get_current_user_id();
-            $layout  = DashboardWidgetManager::getUserLayout($user_id);
+            $layout  = UserLayoutManager::get_layout_for_user($user_id);
         }
         self::render_layout_widgets(
             $layout,
@@ -669,7 +373,7 @@ class DashboardWidgetTools
             echo '</style>';
         }
         $registry = \ArtPulse\Core\DashboardWidgetRegistry::get_all();
-        $layout   = DashboardWidgetManager::getRoleLayout($role);
+        $layout   = UserLayoutManager::get_role_layout($role);
 
         foreach ($layout as $widget) {
             $id      = is_array($widget) ? $widget['id'] : $widget;
