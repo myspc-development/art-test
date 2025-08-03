@@ -5,6 +5,7 @@ namespace ArtPulse\DashboardBuilder;
  * Registers the Dashboard Builder admin page and enqueues the React app.
  */
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Dashboard\WidgetVisibility;
 
 class DashboardManager {
     public static function register(): void {
@@ -25,21 +26,21 @@ class DashboardManager {
     }
 
     public static function render_page(): void {
-        echo '<div class="wrap" id="ap-dashboard-builder">
-            <h1>' . esc_html__('Dashboard Builder', 'artpulse') . '</h1>
-            <label for="ap-db-role" class="screen-reader-text">' . esc_html__('Select Role', 'artpulse') . '</label>
-            <select id="ap-db-role"></select>
-            <label style="margin-left:10px"><input type="checkbox" id="ap-db-show-all"> ' . esc_html__('Show All Widgets', 'artpulse') . '</label>
-            <div id="ap-db-filters" style="margin-top:10px">
-                <label><input type="checkbox" id="ap-db-filter-public" class="ap-db-filter" value="public" checked> ' . esc_html__('Public', 'artpulse') . '</label>
-                <label style="margin-left:10px"><input type="checkbox" id="ap-db-filter-internal" class="ap-db-filter" value="internal"> ' . esc_html__('Internal', 'artpulse') . '</label>
-                <label style="margin-left:10px"><input type="checkbox" id="ap-db-filter-deprecated" class="ap-db-filter" value="deprecated"> ' . esc_html__('Deprecated', 'artpulse') . '</label>
-            </div>
-            <ul id="ap-db-layout"></ul>
-            <ul id="ap-db-available" class="ap-available"></ul>
-            <p><button id="ap-db-save" class="button button-primary">' . esc_html__('Save Changes', 'artpulse') . '</button></p>
-            <p id="ap-db-warning" style="display:none" class="notice notice-warning"></p>
-        </div>';
+        echo '<div class="wrap" id="ap-dashboard-builder">';
+        echo '<h1>' . esc_html__('Dashboard Builder', 'artpulse') . '</h1>';
+        echo '<label for="ap-db-role" class="screen-reader-text">' . esc_html__('Select Role', 'artpulse') . '</label>';
+        echo '<select id="ap-db-role"></select>';
+        echo '<label style="margin-left:10px"><input type="checkbox" id="ap-db-show-all"> ' . esc_html__('Show All Widgets', 'artpulse') . '</label>';
+        echo '<div id="ap-db-filters" style="margin-top:10px">';
+        echo '<label><input type="checkbox" id="ap-db-filter-public" class="ap-db-filter" value="'. WidgetVisibility::PUBLIC.'" checked> ' . esc_html__('Public', 'artpulse') . '</label>';
+        echo '<label style="margin-left:10px"><input type="checkbox" id="ap-db-filter-internal" class="ap-db-filter" value="'. WidgetVisibility::INTERNAL.'"> ' . esc_html__('Internal', 'artpulse') . '</label>';
+        echo '<label style="margin-left:10px"><input type="checkbox" id="ap-db-filter-deprecated" class="ap-db-filter" value="'. WidgetVisibility::DEPRECATED.'"> ' . esc_html__('Deprecated', 'artpulse') . '</label>';
+        echo '</div>';
+        echo '<ul id="ap-db-layout"></ul>';
+        echo '<ul id="ap-db-available" class="ap-available"></ul>';
+        echo '<p><button id="ap-db-save" class="button button-primary">' . esc_html__('Save Changes', 'artpulse') . '</button></p>';
+        echo '<p id="ap-db-warning" style="display:none" class="notice notice-warning"></p>';
+        echo '</div>';
     }
 
     public static function enqueue(string $hook): void {
@@ -71,10 +72,11 @@ class DashboardManager {
             $roles = array_values(array_keys(get_editable_roles()));
         }
         wp_localize_script('ap-dashboard-builder', 'APDashboardBuilder', [
-            'rest_root' => esc_url_raw(rest_url()),
-            'nonce'     => wp_create_nonce('wp_rest'),
-            'roles'     => $roles,
-            'debug'     => defined('WP_DEBUG') && WP_DEBUG,
+            'rest_root'  => esc_url_raw(rest_url()),
+            'nonce'      => wp_create_nonce('wp_rest'),
+            'roles'      => $roles,
+            'debug'      => defined('WP_DEBUG') && WP_DEBUG,
+            'visibility' => WidgetVisibility::all(),
         ]);
     }
 }

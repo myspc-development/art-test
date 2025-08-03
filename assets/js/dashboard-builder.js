@@ -7,7 +7,12 @@
   let fetching = false;
   const restRoot = APDashboardBuilder.rest_root;
   const nonce = APDashboardBuilder.nonce;
-  const visibilityFilters = { public:true, internal:false, deprecated:false };
+  const VISIBILITY = APDashboardBuilder.visibility;
+  const visibilityFilters = {
+    [VISIBILITY.PUBLIC]: true,
+    [VISIBILITY.INTERNAL]: false,
+    [VISIBILITY.DEPRECATED]: false
+  };
   const debug = !!APDashboardBuilder.debug;
 
   function getIncludeAll(){
@@ -75,7 +80,7 @@
     const list = $('#ap-db-layout').empty();
     layout.forEach(item => {
       const def = widgets.find(w => w.id === item.id) || {};
-      const vis = def.visibility || 'public';
+      const vis = def.visibility || VISIBILITY.PUBLIC;
       if(!visibilityFilters[vis]) return;
       const li = $('<li class="ap-widget"/>').attr('data-id', item.id);
       if(!allowedMap[item.id]){ li.addClass('ap-not-allowed'); }
@@ -96,7 +101,7 @@
 
     const add = $('#ap-db-available').empty();
     widgets.forEach(w => {
-      const vis = w.visibility || 'public';
+      const vis = w.visibility || VISIBILITY.PUBLIC;
       if(!visibilityFilters[vis]) return;
       if(!layout.find(l => l.id === w.id)){
         const li = $('<li class="ap-widget"/>').attr('data-id', w.id).text(w.title || w.name || w.id);
@@ -135,9 +140,9 @@
   }
 
   function updateFilters(){
-    visibilityFilters.public = $('#ap-db-filter-public').prop('checked');
-    visibilityFilters.internal = $('#ap-db-filter-internal').prop('checked');
-    visibilityFilters.deprecated = $('#ap-db-filter-deprecated').prop('checked');
+    visibilityFilters[VISIBILITY.PUBLIC] = $('#ap-db-filter-public').prop('checked');
+    visibilityFilters[VISIBILITY.INTERNAL] = $('#ap-db-filter-internal').prop('checked');
+    visibilityFilters[VISIBILITY.DEPRECATED] = $('#ap-db-filter-deprecated').prop('checked');
     render();
   }
 
