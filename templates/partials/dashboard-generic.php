@@ -8,7 +8,10 @@ if (!isset($user_role) || !ap_user_can_edit_layout($user_role)) {
 }
 
 get_header();
-
+?>
+<div class="wrap">
+  <div class="dashboard-widgets-wrap">
+<?php
 $dashboard_class = $user_role . '-dashboard';
 $dashboard_title = ucfirst($user_role) . ' Dashboard';
 ap_safe_include('partials/dashboard-wrapper-start.php', plugin_dir_path(__FILE__) . 'dashboard-wrapper-start.php');
@@ -129,5 +132,9 @@ if (empty($layout)) {
 
 <?php
 ap_safe_include('partials/dashboard-wrapper-end.php', plugin_dir_path(__FILE__) . 'dashboard-wrapper-end.php');
+?>
+  </div>
+</div>
+<?php
 get_footer();
 ?>

@@ -9,19 +9,27 @@ if ( $allowed_roles && ! in_array( $user_role, $allowed_roles, true ) ) {
     wp_die( __( 'Access denied', 'artpulse' ) );
 }
 
+get_header();
 ?>
-<div class="ap-dashboard ap-dashboard--role-<?php echo esc_attr( $user_role ); ?>">
-  <?php
-  if ( class_exists( '\\ArtPulse\\Core\\DashboardWidgetRegistry' ) ) {
-      $widgets = DashboardWidgetRegistry::get_widgets( $user_role );
-      if ( empty( $widgets ) ) {
-          echo '<p>' . esc_html__( 'No widgets available for your role.', 'artpulse' ) . '</p>';
+<div class="wrap">
+  <div class="dashboard-widgets-wrap">
+    <div class="ap-dashboard ap-dashboard--role-<?php echo esc_attr( $user_role ); ?>">
+      <?php
+      if ( class_exists( '\\ArtPulse\\Core\\DashboardWidgetRegistry' ) ) {
+          $widgets = DashboardWidgetRegistry::get_widgets( $user_role );
+          if ( empty( $widgets ) ) {
+              echo '<p>' . esc_html__( 'No widgets available for your role.', 'artpulse' ) . '</p>';
+          } else {
+              DashboardWidgetRegistry::render_for_role( get_current_user_id() );
+          }
       } else {
-          DashboardWidgetRegistry::render_for_role( get_current_user_id() );
+          echo '<p>' . esc_html__( 'Unable to load dashboard widgets. Please contact support.', 'artpulse' ) . '</p>';
       }
-  } else {
-      echo '<p>' . esc_html__( 'Unable to load dashboard widgets. Please contact support.', 'artpulse' ) . '</p>';
-  }
-  ?>
+      ?>
+    </div>
+  </div>
 </div>
+<?php
+get_footer();
+?>
 
