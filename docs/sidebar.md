@@ -131,7 +131,7 @@ status: complete
 * [dashboard-editor-developer-guide.md](dashboard-editor-developer-guide.md)
 * [dashboard-style-guide.md](dashboard-style-guide.md)
 * [default-design-system-codex.md](default-design-system-codex.md)
-* [developer.md](developer.md)
+* [dashboard-widget-system.md](developer/dashboard-widget-system.md)
 * [development-setup.md](development-setup.md)
 * [enhanced-notifications-codex.md](enhanced-notifications-codex.md)
 * [event-chat-codex.md](event-chat-codex.md)
