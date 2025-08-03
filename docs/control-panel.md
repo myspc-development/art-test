@@ -14,7 +14,7 @@ Quick links for maintaining the ArtPulse documentation.
 - [Admin Guides](admin/README.md)
 - [Developer Guides](developer/README.md)
 - [QA Guides](qa/README.md)
-- [User Guides](user/README.md)
+- [User Guides](guides/user/README.md)
 - [Widget Guides](widgets/README.md)
 
 ## Resources
