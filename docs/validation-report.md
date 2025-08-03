@@ -185,7 +185,6 @@
 | qa/dashboard-rendering-audit-standardization.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | qa/dashboard-widgets-by-role.md | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
 | qa/full-dashboard-compliance-check.md | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |
-| qa/role-based-dashboard-verification.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | qa/role-based-widget-visibility-checklist.md | ✅ | ✅ | ❌ | ✅ | ✅ | ❌ |
 | qa/testing-strategy.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | qa/widget-editor-testing-checklist.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
