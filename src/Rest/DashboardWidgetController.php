@@ -136,7 +136,8 @@ class DashboardWidgetController {
         }
         unset($widget);
 
-        $core_layout   = \ArtPulse\Admin\UserLayoutManager::get_role_layout($role);
+        $core_result   = \ArtPulse\Admin\UserLayoutManager::get_role_layout($role);
+        $core_layout   = $core_result['layout'];
         $active_layout = self::convert_to_builder_ids($core_layout);
 
         $response = [
@@ -182,8 +183,8 @@ class DashboardWidgetController {
             return new WP_Error('invalid_role', __('Role parameter missing', 'artpulse'), ['status' => 400]);
         }
 
-        $layout = \ArtPulse\Admin\UserLayoutManager::get_role_layout($role);
-        $builder = self::convert_to_builder_ids($layout);
+        $result  = \ArtPulse\Admin\UserLayoutManager::get_role_layout($role);
+        $builder = self::convert_to_builder_ids($result['layout']);
         return rest_ensure_response(['role' => $role, 'layout' => $builder]);
     }
 

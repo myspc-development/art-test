@@ -56,7 +56,8 @@ class WidgetEditorController
     public static function get_layout(WP_REST_Request $req): WP_REST_Response
     {
         $role = sanitize_key($req['role']);
-        $layout = DashboardWidgetManager::getRoleLayout($role);
+        $result = DashboardWidgetManager::getRoleLayout($role);
+        $layout = $result['layout'];
         $style  = \ArtPulse\Admin\UserLayoutManager::get_role_style($role);
         return rest_ensure_response([
             'layout' => $layout,

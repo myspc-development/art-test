@@ -847,7 +847,8 @@ class DashboardWidgetRegistry {
 
         do_action( 'ap_before_widgets', $role );
 
-        $layout  = UserLayoutManager::get_role_layout( $role );
+        $result  = UserLayoutManager::get_role_layout( $role );
+        $layout  = $result['layout'];
         $widgets = apply_filters( 'ap_dashboard_widgets', self::get_widgets_by_role( $role, $user_id ), $role );
 
         $layout_ids = array_map(

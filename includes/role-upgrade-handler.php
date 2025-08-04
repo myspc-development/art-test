@@ -31,7 +31,7 @@ function ap_merge_dashboard_on_role_upgrade( int $user_id, string $new_role, arr
 
     $current = get_user_meta( $user_id, 'ap_dashboard_layout', true );
     if ( ! is_array( $current ) || empty( $current ) ) {
-        $current = UserLayoutManager::get_role_layout( $roles[0] );
+        $current = UserLayoutManager::get_role_layout( $roles[0] )['layout'];
     }
 
     $prior = $old_roles[0] ?? $roles[0] ?? '';
@@ -43,7 +43,7 @@ function ap_merge_dashboard_on_role_upgrade( int $user_id, string $new_role, arr
     $valid_ids   = array_column( $all_widgets, 'id' );
 
     foreach ( $roles as $role ) {
-        $layout = $role === $roles[0] ? $current : UserLayoutManager::get_role_layout( $role );
+        $layout = $role === $roles[0] ? $current : UserLayoutManager::get_role_layout( $role )['layout'];
         foreach ( $layout as $item ) {
             $id  = '';
             $vis = true;
