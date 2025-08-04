@@ -1,6 +1,11 @@
 <?php
-namespace ArtPulse\Admin;
+namespace {
+    if (!function_exists('__return_null')) {
+        function __return_null() { return null; }
+    }
+}
 
+namespace ArtPulse\Admin {
 // WordPress function stubs
 if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
     function current_user_can($cap) {
@@ -49,11 +54,15 @@ if (!function_exists(__NAMESPACE__ . '\\sanitize_key')) {
 if (!function_exists(__NAMESPACE__ . '\\wp_json_encode')) {
     function wp_json_encode($data, $flags = 0) { return json_encode($data, $flags); }
 }
+if (!function_exists(__NAMESPACE__ . '\\error_log')) {
+    function error_log($msg) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$logs[] = $msg; }
+}
 if (!function_exists(__NAMESPACE__ . '\\header')) {
     function header($string, $replace = true, $code = 0) { \ArtPulse\Admin\Tests\UserLayoutManagerTest::$headers[] = $string; }
 }
+}
 
-namespace ArtPulse\Admin\Tests;
+namespace ArtPulse\Admin\Tests {
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UserLayoutManager;
@@ -69,6 +78,7 @@ class UserLayoutManagerTest extends TestCase
     public static array $options = [];
     public static string $file_contents = '';
     public static array $headers = [];
+    public static array $logs = [];
 
     protected function setUp(): void
     {
@@ -80,6 +90,7 @@ class UserLayoutManagerTest extends TestCase
         self::$options = [];
         self::$file_contents = '';
         self::$headers = [];
+        self::$logs = [];
         $_FILES = [];
     }
 
@@ -91,6 +102,7 @@ class UserLayoutManagerTest extends TestCase
         self::$options = [];
         self::$file_contents = '';
         self::$headers = [];
+        self::$logs = [];
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
@@ -193,6 +205,37 @@ class UserLayoutManagerTest extends TestCase
         $this->assertSame($expected, UserLayoutManager::get_role_layout('subscriber'));
     }
 
+    public function test_get_role_layout_logs_invalid_widgets(): void
+    {
+        DashboardWidgetRegistry::register('good', 'Good', '', '', '__return_null');
+        DashboardWidgetRegistry::register('broken', 'Broken', '', '', '__return_null');
+
+        // Make the "broken" widget callback uncallable.
+        $ref  = new \ReflectionClass(DashboardWidgetRegistry::class);
+        $prop = $ref->getProperty('widgets');
+        $prop->setAccessible(true);
+        $widgets = $prop->getValue();
+        $widgets['broken']['callback'] = 'not_callable';
+        $prop->setValue(null, $widgets);
+
+        self::$options['ap_dashboard_widget_config'] = [
+            'subscriber' => [
+                ['id' => 'good'],
+                ['id' => 'missing'],
+                ['id' => 'broken'],
+            ],
+        ];
+
+        $layout = UserLayoutManager::get_role_layout('subscriber');
+        $this->assertSame([['id' => 'good', 'visible' => true]], $layout);
+
+        $this->assertNotEmpty(self::$logs);
+        $log = self::$logs[0];
+        $this->assertStringContainsString('subscriber', $log);
+        $this->assertStringContainsString('missing', $log);
+        $this->assertStringContainsString('broken', $log);
+    }
+
     public function test_export_layout_returns_pretty_json(): void
     {
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
@@ -248,5 +291,6 @@ class UserLayoutManagerTest extends TestCase
         $this->assertContains('foo', $ids);
         $this->assertNotContains('artpulse_dashboard_widget', $ids);
     }
+}
 }
 

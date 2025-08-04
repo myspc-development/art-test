@@ -55,8 +55,42 @@ class UserLayoutManager
         }
 
         if (is_array($layout) && !empty($layout)) {
-            $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-            $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid);
+            $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+            $issues    = [ 'unregistered' => [], 'uncallable' => [] ];
+            $ordered   = [];
+
+            foreach ($layout as $item) {
+                if (is_array($item) && isset($item['id'])) {
+                    $id  = sanitize_key($item['id']);
+                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+                } else {
+                    $id  = sanitize_key((string) $item);
+                    $vis = true;
+                }
+
+                if (!in_array($id, $valid_ids, true)) {
+                    $issues['unregistered'][] = $id;
+                    continue;
+                }
+
+                $widget   = DashboardWidgetRegistry::get($id);
+                $callback = $widget['callback'] ?? null;
+                if (!is_callable($callback)) {
+                    $issues['uncallable'][] = $id;
+                    continue;
+                }
+
+                $ordered[] = [ 'id' => $id, 'visible' => $vis ];
+            }
+
+            if (!empty($issues['unregistered']) || !empty($issues['uncallable'])) {
+                error_log('[UserLayoutManager] ' . wp_json_encode([
+                    'role'        => $role,
+                    'unregistered'=> $issues['unregistered'],
+                    'uncallable'  => $issues['uncallable'],
+                ]));
+            }
+
             if ($ordered) {
                 return $ordered;
             }
