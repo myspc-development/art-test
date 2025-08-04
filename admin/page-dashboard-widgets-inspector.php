@@ -78,7 +78,7 @@ function ap_render_dashboard_widgets_inspector(): void {
         $start    = microtime(true);
         $preview  = DashboardRenderer::render($id, get_current_user_id());
         $time_ms  = round((microtime(true) - $start) * 1000, 2);
-        if ($time_ms > 500) {
+        if ($time_ms > 500 && defined('WP_DEBUG') && WP_DEBUG) {
             error_log('🐌 Slow dashboard widget ' . $id . ' took ' . $time_ms . 'ms');
         }
 
