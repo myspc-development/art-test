@@ -8,7 +8,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
  * Output debugging information for administrators when viewing wp-admin dashboard.
  */
 add_action('load-index.php', function () {
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('manage_options') || !defined('WP_DEBUG') || !WP_DEBUG) {
         return;
     }
     $user_id = get_current_user_id();

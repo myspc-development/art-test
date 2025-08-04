@@ -50,7 +50,9 @@ class WidgetGuard
             if ($valid) {
                 continue;
             }
-            error_log("[Member Dashboard] Widget {$id} callback missing");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[Member Dashboard] Widget {$id} callback missing");
+            }
             $meta = $map[$id] ?? [
                 'title'   => ucwords(str_replace('_', ' ', $id)),
                 'icon'    => 'info',

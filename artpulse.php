@@ -148,7 +148,7 @@ add_action('init', function () {
 // Detect and log capability filters that may interfere with admin rights.
 add_action('init', function () {
     foreach (['user_has_cap', 'map_meta_cap'] as $hook) {
-        if (has_filter($hook)) {
+        if (has_filter($hook) && defined('WP_DEBUG') && WP_DEBUG) {
             error_log(sprintf('ArtPulse: filter detected on %s', $hook));
         }
     }
