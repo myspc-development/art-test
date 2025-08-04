@@ -25,7 +25,7 @@ function ap_member_dashboard_bootstrap(): void {
                 continue;
             }
         }
-        WidgetGuard::register_stub_widget($id);
+
         $widgets = DashboardWidgetRegistry::get_widgets('member');
     }
 

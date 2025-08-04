@@ -93,4 +93,14 @@ class WidgetGuardTest extends WP_UnitTestCase
         $this->assertStringContainsString('foo', $html);
         remove_all_filters('ap_widget_placeholder_debug_payload');
     }
+
+    public function test_register_stub_widget_registers_placeholder(): void
+    {
+        WidgetGuard::register_stub_widget('stub_widget', ['title' => 'Stub Widget']);
+        $cb = DashboardWidgetRegistry::get_widget_callback('stub_widget');
+        ob_start();
+        call_user_func($cb, 1);
+        $html = ob_get_clean();
+        $this->assertStringContainsString('Widget Unavailable', $html);
+    }
 }
