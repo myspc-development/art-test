@@ -66,6 +66,11 @@ class CapabilitiesManager
      */
     public static function map_meta_cap(array $caps, string $cap, int $user_id, array $args): array
     {
+        $user = get_userdata($user_id);
+        if ($user && in_array('administrator', (array) $user->roles, true)) {
+            // Never deny capabilities to administrators via this mapper.
+            return $caps;
+        }
         if ($cap === 'ap_premium_member') {
             $level = get_user_meta($user_id, 'ap_membership_level', true);
             if ($level && $level !== 'Free') {

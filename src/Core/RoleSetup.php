@@ -142,8 +142,13 @@ class RoleSetup
         // Apply capabilities to each role
         foreach ($roles_caps as $role_key => $capabilities) {
             $role = get_role($role_key);
-            if ($role) {
-                foreach (array_unique($capabilities) as $cap) {
+            if (!$role) {
+                continue;
+            }
+            foreach (array_unique($capabilities) as $cap) {
+                // Only add capabilities that do not already exist to avoid
+                // resetting or wiping out existing caps on core roles.
+                if (!$role->has_cap($cap)) {
                     $role->add_cap($cap);
                 }
             }

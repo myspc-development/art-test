@@ -119,3 +119,45 @@ add_action('wp_ajax_ap_ajax_test', function () {
     ]);
 });
 
+// Ensure administrator retains core page and post capabilities.
+add_action('init', function () {
+    $admin = get_role('administrator');
+    if (!$admin) {
+        return;
+    }
+    $required = [
+        'edit_pages', 'publish_pages', 'edit_others_pages',
+        'edit_published_pages', 'delete_pages', 'delete_others_pages',
+        'edit_posts', 'publish_posts', 'edit_others_posts', 'delete_posts',
+    ];
+    foreach ($required as $cap) {
+        if (!$admin->has_cap($cap)) {
+            $admin->add_cap($cap);
+        }
+    }
+}, 1);
+
+// Detect and log capability filters that may interfere with admin rights.
+add_action('init', function () {
+    foreach (['user_has_cap', 'map_meta_cap'] as $hook) {
+        if (has_filter($hook)) {
+            error_log(sprintf('ArtPulse: filter detected on %s', $hook));
+        }
+    }
+}, 100);
+
+// Final safeguard: never allow other filters to strip core caps from administrators.
+add_filter('user_has_cap', function (array $allcaps, array $caps, array $args, \WP_User $user): array {
+    if (in_array('administrator', (array) $user->roles, true)) {
+        $required = [
+            'edit_pages', 'publish_pages', 'edit_others_pages',
+            'edit_published_pages', 'delete_pages', 'delete_others_pages',
+            'edit_posts', 'publish_posts', 'edit_others_posts', 'delete_posts',
+        ];
+        foreach ($required as $cap) {
+            $allcaps[$cap] = true;
+        }
+    }
+    return $allcaps;
+}, PHP_INT_MAX, 4);
+
