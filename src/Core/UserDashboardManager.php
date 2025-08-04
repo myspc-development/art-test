@@ -913,7 +913,17 @@ class UserDashboardManager
         $can_view = current_user_can('view_artpulse_dashboard');
 
         if (defined('WP_DEBUG') && WP_DEBUG) {
-            error_log(sprintf('ap_user_dashboard request uid=%d role=%s can_view=%s', $uid, $role, $can_view ? 'yes' : 'no'));
+            $u     = wp_get_current_user();
+            $roles = $u ? implode(',', (array) $u->roles) : 'guest';
+            error_log(
+                sprintf(
+                    'ap_user_dashboard uid=%d roles=%s can_view=%s resolved_role=%s',
+                    $uid,
+                    $roles,
+                    $can_view ? 'yes' : 'no',
+                    $role
+                )
+            );
         }
 
         if (!is_user_logged_in() || !$can_view) {
