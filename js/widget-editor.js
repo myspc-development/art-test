@@ -7,10 +7,25 @@
         setTimeout(function(){ n.classList.add('hidden'); }, 3000);
     }
 
+    // TODO: migrate to a React component for consistency with other UIs.
     function renderWidget(data){
         var el = document.createElement('div');
         el.className = 'ap-widget-item';
-        el.textContent = 'Widget ' + data.id;
+        el.setAttribute('data-id', data.id);
+
+        var title = document.createElement('span');
+        title.className = 'title';
+        title.textContent = 'Widget ' + data.id;
+        el.appendChild(title);
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'toggle';
+        if (typeof APWidgetEditor !== 'undefined') {
+            btn.textContent = APWidgetEditor.hide;
+        }
+        el.appendChild(btn);
+
         return el;
     }
 
@@ -20,10 +35,7 @@
 
         var items = [{id:1, visible:true},{id:2, visible:true}];
         items.forEach(function(w){
-            var li = $('<div class="ap-widget-item" data-id="'+w.id+'"></div>')
-                .append('<span class="title">Widget '+w.id+'</span> ')
-                .append('<button type="button" class="toggle">'+APWidgetEditor.hide+'</button>');
-            root.append(li);
+            root.append(renderWidget(w));
         });
 
         root.sortable({ stop: save });
@@ -39,7 +51,8 @@
                     role: APWidgetEditor.role,
                     layout: JSON.stringify(items)
                 },
-                success:function(){ showNotice('Saved'); }
+                success:function(){ showNotice('Saved'); },
+                error:function(){ showNotice('Failed to save'); }
             });
         }
     });
