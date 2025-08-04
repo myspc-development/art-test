@@ -174,17 +174,4 @@ add_filter('user_has_cap', function (array $allcaps, array $caps, array $args, \
     return $allcaps;
 }, PHP_INT_MAX, 4);
 
-// Optional admin dashboard integration: expose the custom dashboard in wp-admin.
-add_action('wp_dashboard_setup', function () {
-    if (!current_user_can('view_artpulse_dashboard')) {
-        return;
-    }
-    wp_add_dashboard_widget(
-        'ap_member_dashboard',
-        __('My ArtPulse Dashboard', 'artpulse'),
-        function () {
-            echo do_shortcode('[ap_user_dashboard]');
-        }
-    );
-});
 
