@@ -16,6 +16,23 @@ if (!function_exists(__NAMESPACE__ . '\\get_option')) {
 if (!function_exists(__NAMESPACE__ . '\\is_wp_error')) {
     function is_wp_error($obj) { return false; }
 }
+if (!function_exists(__NAMESPACE__ . '\\__')) {
+    function __($text, $domain = null) { return $text; }
+}
+
+if (!class_exists(__NAMESPACE__ . '\\wpdb')) {
+    class wpdb {
+        public static array $col_results = [];
+        public $posts = 'wp_posts';
+        public function esc_like($text) { return $text; }
+        public function prepare($query, $like) { return $query; }
+        public function get_col($query) {
+            return array_shift(self::$col_results) ?? [];
+        }
+    }
+}
+
+$GLOBALS['wpdb'] = new wpdb();
 
 namespace ArtPulse\Admin\Tests;
 
@@ -37,6 +54,7 @@ class ShortcodePagesTest extends TestCase
         self::$updated = [];
         self::$options = [];
         self::$next_id = 1;
+        \ArtPulse\Admin\wpdb::$col_results = [];
     }
 
     public function test_creates_selected_pages_and_updates_option(): void
@@ -63,6 +81,16 @@ class ShortcodePagesTest extends TestCase
 
         $this->assertCount(count($map), self::$inserted);
         $this->assertSame(range(1, count($map)), self::$updated['ap_shortcode_page_ids']);
+    }
+
+    public function test_collects_existing_shortcode_pages(): void
+    {
+        \ArtPulse\Admin\wpdb::$col_results = [[10, 11]];
+
+        ShortcodePages::create_pages(['[ap_login]']);
+
+        $this->assertCount(0, self::$inserted);
+        $this->assertSame([10, 11], self::$updated['ap_shortcode_page_ids']);
     }
 
     public function test_shortcode_map_includes_new_shortcodes(): void

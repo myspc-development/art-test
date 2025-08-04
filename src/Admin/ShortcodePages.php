@@ -97,16 +97,18 @@ class ShortcodePages
         }
 
         $created = self::get_page_ids();
+        global $wpdb;
         foreach ($map as $shortcode => $title) {
-            $existing = get_posts([
-                'post_type'   => 'page',
-                'post_status' => 'any',
-                's'           => $shortcode,
-                'numberposts' => 1,
-                'fields'      => 'ids',
-            ]);
+            $tag      = trim($shortcode, '[]');
+            $like     = '%' . $wpdb->esc_like('[' . $tag) . '%';
+            $existing = $wpdb->get_col(
+                $wpdb->prepare(
+                    "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status != 'trash' AND post_content LIKE %s",
+                    $like
+                )
+            );
             if (!empty($existing)) {
-                $created[] = $existing[0];
+                $created = array_merge($created, array_map('intval', $existing));
                 continue;
             }
             $page_id = wp_insert_post([
