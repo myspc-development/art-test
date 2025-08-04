@@ -54,13 +54,42 @@ function ap_render_js_widget(string $id, array $props = []): void
 }
 
 \ArtPulse\Core\ShortcodeRegistry::register('ap_widget', 'Dashboard Widget', function ($atts) {
-    $id = sanitize_key($atts['id'] ?? '');
+    $atts = shortcode_atts([
+        'id'   => '',
+        'role' => '',
+    ], $atts, 'ap_widget');
+
+    $id = sanitize_key($atts['id']);
     if (!$id) {
         return '';
     }
+
+    $current_role = DashboardController::get_role(get_current_user_id());
+
+    $config = DashboardWidgetRegistry::get($id);
+    if (!$config) {
+        return '';
+    }
+
+    $widget_roles = isset($config['roles']) ? (array) $config['roles'] : [];
+    if ($widget_roles && !in_array($current_role, $widget_roles, true)) {
+        return '';
+    }
+
+    $attr_roles = array_filter(array_map('sanitize_key', explode(',', (string) $atts['role'])));
+    if ($attr_roles && !in_array($current_role, $attr_roles, true)) {
+        return '';
+    }
+
     ob_start();
     ap_render_widget($id);
-    return ob_get_clean();
+    $html = ob_get_clean();
+
+    if ($html === '') {
+        return '';
+    }
+
+    return '<div class="DashboardCard">' . $html . '</div>';
 });
 
 
