@@ -69,22 +69,24 @@ class FavoritesOverviewWidget {
             return self::render_placeholder();
         }
 
-        $favorites = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
-        if (!$favorites) {
-            return '<p>' . esc_html__('You have no favorite events yet.', 'artpulse') . '</p>';
+        $favorites    = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
+        $no_favorites = '<p>' . esc_html__('You have no favorite events yet.', 'artpulse') . '</p>';
+        if (empty($favorites)) {
+            return $no_favorites;
         }
 
         $items = [];
         foreach ($favorites as $fav) {
-            $link  = get_permalink((int) $fav->object_id);
-            $title = get_the_title((int) $fav->object_id);
+            $post_id = (int) $fav->object_id;
+            $link    = get_permalink($post_id);
+            $title   = get_the_title($post_id);
             if ($link && $title) {
-                $items[] = '<li><a href="' . esc_url($link) . '">' . esc_html($title) . '</a></li>';
+                $items[] = sprintf('<li><a href="%s">%s</a></li>', esc_url($link), esc_html($title));
             }
         }
 
         if (!$items) {
-            return '<p>' . esc_html__('You have no favorite events yet.', 'artpulse') . '</p>';
+            return $no_favorites;
         }
 
         return '<ul class="ap-favorites-overview">' . implode('', $items) . '</ul>';

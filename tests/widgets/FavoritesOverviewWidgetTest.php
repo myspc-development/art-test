@@ -17,4 +17,17 @@ class FavoritesOverviewWidgetTest extends \WP_UnitTestCase {
             'Widget should list favorited events with links.'
         );
     }
+
+    public function test_render_shows_message_when_no_favorites() {
+        FavoritesManager::install_favorites_table();
+        $user_id = self::factory()->user->create();
+
+        $output = FavoritesOverviewWidget::render($user_id);
+
+        $this->assertStringContainsString(
+            'You have no favorite events yet.',
+            $output,
+            'Widget should show a helpful message when no favorites exist.'
+        );
+    }
 }
