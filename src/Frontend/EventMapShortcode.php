@@ -5,7 +5,7 @@ class EventMapShortcode
 {
     public static function register(): void
     {
-        add_shortcode('ap_event_map', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_event_map', 'Event Map', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 

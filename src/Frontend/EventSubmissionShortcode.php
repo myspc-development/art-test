@@ -55,7 +55,7 @@ class EventSubmissionShortcode {
     }
 
     public static function register() {
-        add_shortcode('ap_submit_event', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_submit_event', 'Submit Event', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_scripts']); // Enqueue scripts and styles
         // Use a later priority so the handler runs during the same request
         // even though this callback is added while the `init` action is firing.

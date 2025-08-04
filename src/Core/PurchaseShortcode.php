@@ -3,7 +3,7 @@ namespace ArtPulse\Core;
 
 class PurchaseShortcode {
     public static function register() {
-        add_shortcode('ap_membership_purchase', [self::class, 'render']);
+        ShortcodeRegistry::register('ap_membership_purchase', 'Membership Purchase', [self::class, 'render']);
     }
 
     public static function render($atts = []) {

@@ -6,11 +6,11 @@ use ArtPulse\Search\ExternalSearch;
 
 class DirectoryManager {
     public static function register() {
-        add_shortcode('ap_directory',   [ self::class, 'renderDirectory' ]);
-        add_shortcode('ap_event_directory',  [ self::class, 'renderEventDirectory' ]);
-        add_shortcode('ap_artist_directory', [ self::class, 'renderArtistDirectory' ]);
-        add_shortcode('ap_artwork_directory',[ self::class, 'renderArtworkDirectory' ]);
-        add_shortcode('ap_org_directory',    [ self::class, 'renderOrgDirectory' ]);
+        ShortcodeRegistry::register('ap_directory', 'Legacy Directory', [ self::class, 'renderDirectory' ]);
+        ShortcodeRegistry::register('ap_event_directory', 'Event Directory', [ self::class, 'renderEventDirectory' ]);
+        ShortcodeRegistry::register('ap_artist_directory', 'Artist Directory', [ self::class, 'renderArtistDirectory' ]);
+        ShortcodeRegistry::register('ap_artwork_directory', 'Artwork Directory', [ self::class, 'renderArtworkDirectory' ]);
+        ShortcodeRegistry::register('ap_org_directory', 'Organization Directory', [ self::class, 'renderOrgDirectory' ]);
         add_action('wp_enqueue_scripts',[ self::class, 'enqueueAssets'  ]);
         add_action('rest_api_init',     [ self::class, 'register_routes' ]);
         add_action('save_post',         [ self::class, 'clear_cache' ], 10, 3);

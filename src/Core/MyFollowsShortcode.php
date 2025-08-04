@@ -3,7 +3,7 @@ namespace ArtPulse\Core;
 
 class MyFollowsShortcode {
     public static function register() {
-        add_shortcode('ap_my_follows', [self::class, 'render']);
+        ShortcodeRegistry::register('ap_my_follows', 'My Follows', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 

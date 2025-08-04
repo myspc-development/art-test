@@ -5,11 +5,11 @@ class ShortcodeManager
 {
     public static function register()
     {
-        add_shortcode('ap_events',       [ self::class, 'renderEvents' ]);
-        add_shortcode('ap_artists',      [ self::class, 'renderArtists' ]);
-        add_shortcode('ap_artworks',     [ self::class, 'renderArtworks' ]);
-        add_shortcode('ap_organizations',[ self::class, 'renderOrganizations' ]);
-        add_shortcode('ap_spotlights',   [ self::class, 'renderSpotlights' ]);
+        ShortcodeRegistry::register('ap_events', 'Events List', [ self::class, 'renderEvents' ]);
+        ShortcodeRegistry::register('ap_artists', 'Artists List', [ self::class, 'renderArtists' ]);
+        ShortcodeRegistry::register('ap_artworks', 'Artworks List', [ self::class, 'renderArtworks' ]);
+        ShortcodeRegistry::register('ap_organizations', 'Organizations List', [ self::class, 'renderOrganizations' ]);
+        ShortcodeRegistry::register('ap_spotlights', 'Spotlights', [ self::class, 'renderSpotlights' ]);
     }
 
     public static function renderEvents($atts)

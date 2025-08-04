@@ -3,7 +3,7 @@ namespace ArtPulse\Frontend;
 
 class QaThreadShortcode {
     public static function register(): void {
-        add_shortcode('ap_event_qa', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_event_qa', 'Event QA', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 

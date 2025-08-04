@@ -125,7 +125,7 @@ add_action('wp_enqueue_scripts', 'artpulse_enqueue_react_form');
 function artpulse_render_react_form() {
     return '<div id="react-form-root"></div>';
 }
-add_shortcode('react_form', 'artpulse_render_react_form');
+\ArtPulse\Core\ShortcodeRegistry::register('react_form', 'React Form', 'artpulse_render_react_form');
 ```
 
 The localized `apReactForm` object exposes `ajaxurl` and a security

@@ -5,7 +5,7 @@ class EventListingShortcode
 {
     public static function register(): void
     {
-        add_shortcode('ap_event_listing', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_event_listing', 'Event Listing', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 

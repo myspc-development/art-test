@@ -19,7 +19,7 @@ namespace ArtPulse\Core;
 
 class DirectoryManager {
     public static function register() {
-        add_shortcode('ap_directory', [self::class, 'renderDirectory']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_directory', 'Legacy Directory', [self::class, 'renderDirectory']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueueAssets']);
         add_action('rest_api_init', [self::class, 'registerRestRoutes']);
     }

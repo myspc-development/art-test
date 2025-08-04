@@ -13,7 +13,7 @@ class UserDashboardManager
 {
     public static function register()
     {
-        add_shortcode('ap_user_dashboard', [ self::class, 'renderDashboard' ]);
+        ShortcodeRegistry::register('ap_user_dashboard', 'Member Dashboard', [ self::class, 'renderDashboard' ]);
         add_action('wp_enqueue_scripts',   [ self::class, 'enqueueAssets' ]);
         add_action('rest_api_init',        [ self::class, 'register_routes' ]);
         // Dashboard widgets are registered via the `artpulse_register_dashboard_widget` hook.

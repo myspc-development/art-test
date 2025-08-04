@@ -8,7 +8,7 @@ class EventFilter
 {
     public static function register(): void
     {
-        add_shortcode('ap_event_filter', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_event_filter', 'Event Filter', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
         add_action('wp_ajax_ap_filter_events', __NAMESPACE__ . '\\ap_filter_events_callback');
         add_action('wp_ajax_nopriv_ap_filter_events', __NAMESPACE__ . '\\ap_filter_events_callback');

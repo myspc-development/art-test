@@ -4,7 +4,7 @@ namespace ArtPulse\Core;
 class NotificationShortcode {
     public static function register() {
         if (!shortcode_exists('ap_notifications')) {
-            add_shortcode('ap_notifications', [__CLASS__, 'render']);
+            ShortcodeRegistry::register('ap_notifications', 'Notifications', [__CLASS__, 'render']);
         }
     }
 

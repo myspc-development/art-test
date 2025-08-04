@@ -5,7 +5,7 @@ namespace ArtPulse\Frontend;
 class EditEventShortcode {
 
     public static function register() {
-        add_shortcode('ap_edit_event', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_edit_event', 'Edit Event', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_scripts']);
         add_action('wp_ajax_ap_save_event', [self::class, 'handle_ajax']);
         add_action('wp_ajax_ap_delete_event', [self::class, 'handle_ajax_delete']);

@@ -5,7 +5,7 @@ class OrgRsvpDashboard
 {
     public static function register(): void
     {
-        add_shortcode('ap_org_rsvp_dashboard', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_org_rsvp_dashboard', 'RSVP Dashboard', [self::class, 'render']);
     }
 
     public static function render(): string

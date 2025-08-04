@@ -5,7 +5,7 @@ namespace ArtPulse\Frontend;
 class MyEventsShortcode {
 
     public static function register() {
-        add_shortcode('ap_my_events', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_my_events', 'My Events', [self::class, 'render']);
         add_action('init', [self::class, 'handle_deletion']);
         add_action('init', [self::class, 'handle_bulk_actions']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);

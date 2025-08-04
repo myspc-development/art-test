@@ -7,7 +7,7 @@ class CompetitionDashboardShortcode
 {
     public static function register(): void
     {
-        add_shortcode('ap_competition_dashboard', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_competition_dashboard', 'Competition Dashboard', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
     }
 
