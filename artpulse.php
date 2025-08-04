@@ -9,6 +9,8 @@ require_once __DIR__ . '/includes/avatar-https-fix.php';
 require_once __DIR__ . '/includes/rest-dedupe.php';
 require_once __DIR__ . '/includes/install.php';
 require_once __DIR__ . '/ap-placeholder-bootstrap.php';
+require_once __DIR__ . '/includes/reset-user-dashboard-meta.php';
+require_once __DIR__ . '/includes/dashboard-debug-inspector.php';
 
 // Development helpers
 if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -158,9 +160,28 @@ add_filter('user_has_cap', function (array $allcaps, array $caps, array $args, \
             'edit_posts', 'publish_posts', 'edit_others_posts', 'delete_posts',
         ];
         foreach ($required as $cap) {
-            $allcaps[$cap] = true;
+            if (empty($allcaps[$cap])) {
+                $allcaps[$cap] = true;
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log(sprintf('ap user_has_cap restored %s for admin %d', $cap, $user->ID));
+                }
+            }
         }
     }
     return $allcaps;
 }, PHP_INT_MAX, 4);
+
+// Optional admin dashboard integration: expose the custom dashboard in wp-admin.
+add_action('wp_dashboard_setup', function () {
+    if (!current_user_can('view_artpulse_dashboard')) {
+        return;
+    }
+    wp_add_dashboard_widget(
+        'ap_member_dashboard',
+        __('My ArtPulse Dashboard', 'artpulse'),
+        function () {
+            echo do_shortcode('[ap_user_dashboard]');
+        }
+    );
+});
 

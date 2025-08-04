@@ -8,6 +8,7 @@ use Stripe\StripeClient;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Admin\LayoutSnapshotManager;
+use ArtPulse\Core\DashboardController;
 
 class UserDashboardManager
 {
@@ -907,12 +908,19 @@ class UserDashboardManager
 
     public static function renderDashboard($atts)
     {
+        $uid      = get_current_user_id();
+        $role     = DashboardController::get_role($uid);
         $can_view = current_user_can('view_artpulse_dashboard');
-        if ( ! is_user_logged_in() || ! $can_view ) {
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log(sprintf('ap_user_dashboard request uid=%d role=%s can_view=%s', $uid, $role, $can_view ? 'yes' : 'no'));
+        }
+
+        if (!is_user_logged_in() || !$can_view) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 $u = wp_get_current_user();
                 $roles = $u ? implode(',', (array) $u->roles) : 'guest';
-                error_log(sprintf('ap_user_dashboard denied: roles=%s can_view=%s', $roles, $can_view ? 'yes' : 'no'));
+                error_log(sprintf('ap_user_dashboard denied uid=%d role=%s roles=%s', $uid, $role, $roles));
             }
             return '<p>' . __('Please log in to view your dashboard.', 'artpulse') . '</p>';
         }

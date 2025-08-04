@@ -67,6 +67,13 @@ class CapabilitiesManager
     public static function map_meta_cap(array $caps, string $cap, int $user_id, array $args): array
     {
         $user = get_userdata($user_id);
+
+        // Log the capability mapping for debugging in development environments.
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            $roles = $user ? implode(',', (array) $user->roles) : 'none';
+            error_log(sprintf('ap map_meta_cap user=%d cap=%s roles=%s', $user_id, $cap, $roles));
+        }
+
         if ($user && in_array('administrator', (array) $user->roles, true)) {
             // Never deny capabilities to administrators via this mapper.
             return $caps;
