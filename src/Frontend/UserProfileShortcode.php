@@ -4,7 +4,7 @@ namespace ArtPulse\Frontend;
 class UserProfileShortcode {
 
     public static function register() {
-        add_shortcode('ap_user_profile', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_user_profile', 'User Profile', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
     }
 

@@ -12,7 +12,7 @@ class LoginShortcode
      */
     public static function register(): void
     {
-        add_shortcode('ap_login', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_login', 'Login', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_scripts']);
         add_action('wp_ajax_ap_do_login', [self::class, 'ajax_login']);
         add_action('wp_ajax_nopriv_ap_do_login', [self::class, 'ajax_login']);

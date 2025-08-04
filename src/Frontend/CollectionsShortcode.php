@@ -5,7 +5,7 @@ class CollectionsShortcode
 {
     public static function register(): void
     {
-        add_shortcode('ap_collections', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_collections', 'Collections Grid', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 

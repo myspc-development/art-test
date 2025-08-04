@@ -6,7 +6,7 @@ use ArtPulse\Helpers\WidgetHelpers;
 
 class ReactDashboardShortcode {
     public static function register(): void {
-        add_shortcode('ap_react_dashboard', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_react_dashboard', 'React Dashboard', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_scripts']);
     }
 

@@ -84,10 +84,10 @@ class ShortcodeManager
 {
     public static function register()
     {
-        add_shortcode('ap_events',       [ self::class, 'renderEvents' ]);
-        add_shortcode('ap_artists',      [ self::class, 'renderArtists' ]);
-        add_shortcode('ap_artworks',     [ self::class, 'renderArtworks' ]);
-        add_shortcode('ap_organizations',[ self::class, 'renderOrganizations' ]);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_events', 'Events List', [ self::class, 'renderEvents' ]);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_artists', 'Artists List', [ self::class, 'renderArtists' ]);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_artworks', 'Artworks List', [ self::class, 'renderArtworks' ]);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_organizations', 'Organizations List', [ self::class, 'renderOrganizations' ]);
     }
 
     public static function renderEvents($atts)

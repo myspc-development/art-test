@@ -5,9 +5,9 @@ class MessagesShortcode
 {
     public static function register(): void
     {
-        add_shortcode('ap_messages', [self::class, 'render']);
-        add_shortcode('ap_inbox', [self::class, 'render']);
-        add_shortcode('ap_message_form', [self::class, 'render_form']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_messages', 'Messages Inbox', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_inbox', 'Messages Inbox', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_message_form', 'Message Form', [self::class, 'render_form']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 

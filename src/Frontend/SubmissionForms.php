@@ -12,7 +12,7 @@ class SubmissionForms
      */
     public static function register(): void
     {
-        add_shortcode('ap_submission_form', [__CLASS__, 'render_form']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_submission_form', 'Submission Form', [__CLASS__, 'render_form']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
     }
 

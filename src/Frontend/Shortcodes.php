@@ -4,7 +4,7 @@ namespace ArtPulse\Frontend;
 class Shortcodes {
 
     public static function register() {
-        add_shortcode('ap_filtered_list', [self::class, 'render_filtered_list']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_filtered_list', 'Filtered List', [self::class, 'render_filtered_list']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
     }
 

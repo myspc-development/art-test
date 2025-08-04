@@ -3,7 +3,7 @@ namespace ArtPulse\Frontend;
 
 class SubmitArtistForm {
     public static function register(): void {
-        add_shortcode('ap_submit_artist', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_submit_artist', 'Submit Artist', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
     }
 

@@ -5,7 +5,7 @@ class RegistrationShortcode
 {
     public static function register(): void
     {
-        add_shortcode('ap_register', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_register', 'Register', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_scripts']);
     }
 

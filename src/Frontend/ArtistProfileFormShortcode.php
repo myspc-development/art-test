@@ -3,7 +3,7 @@ namespace ArtPulse\Frontend;
 
 class ArtistProfileFormShortcode {
     public static function register(): void {
-        add_shortcode('ap_artist_profile_form', [self::class, 'render_form']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_artist_profile_form', 'Artist Profile Form', [self::class, 'render_form']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
         add_action('init', [self::class, 'maybe_handle_form']);
     }

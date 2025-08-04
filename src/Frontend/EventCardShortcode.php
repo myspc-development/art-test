@@ -3,7 +3,7 @@ namespace ArtPulse\Frontend;
 
 class EventCardShortcode {
     public static function register(): void {
-        add_shortcode('ap_event_card', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_event_card', 'Event Card', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
     }
 

@@ -20,4 +20,4 @@ function ap_artist_comments_shortcode(): string {
     <?php
     return ob_get_clean();
 }
-add_shortcode('ap_artist_comments', 'ap_artist_comments_shortcode');
+\ArtPulse\Core\ShortcodeRegistry::register('ap_artist_comments', 'Artist Comments', 'ap_artist_comments_shortcode');

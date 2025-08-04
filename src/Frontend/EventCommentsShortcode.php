@@ -5,7 +5,7 @@ class EventCommentsShortcode
 {
     public static function register(): void
     {
-        add_shortcode('ap_event_comments', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_event_comments', 'Event Comments', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
     }
 

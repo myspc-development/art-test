@@ -38,6 +38,7 @@ namespace ArtPulse\Admin\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\ShortcodePages;
+use ArtPulse\Core\ShortcodeRegistry;
 
 class ShortcodePagesTest extends TestCase
 {
@@ -54,11 +55,14 @@ class ShortcodePagesTest extends TestCase
         self::$updated = [];
         self::$options = [];
         self::$next_id = 1;
-        \ArtPulse\Admin\wpdb::$col_results = [];
+
     }
 
     public function test_creates_selected_pages_and_updates_option(): void
     {
+        ShortcodeRegistry::register('ap_login', 'Login', function () {});
+        ShortcodeRegistry::register('ap_register', 'Register', function () {});
+
         ShortcodePages::create_pages(['[ap_login]', '[ap_register]']);
 
         $this->assertCount(2, self::$inserted);
@@ -67,6 +71,8 @@ class ShortcodePagesTest extends TestCase
 
     public function test_supports_logout_shortcode(): void
     {
+        ShortcodeRegistry::register('ap_logout', 'Logout', function () {});
+
         ShortcodePages::create_pages(['[ap_logout]']);
 
         $this->assertCount(1, self::$inserted);
@@ -75,8 +81,11 @@ class ShortcodePagesTest extends TestCase
 
     public function test_creates_pages_for_all_shortcodes(): void
     {
-        $map = ShortcodePages::get_shortcode_map();
+        ShortcodeRegistry::register('ap_login', 'Login', function () {});
+        ShortcodeRegistry::register('ap_register', 'Register', function () {});
+        ShortcodeRegistry::register('ap_logout', 'Logout', function () {});
 
+        $map = ShortcodePages::get_shortcode_map();
         ShortcodePages::create_pages();
 
         $this->assertCount(count($map), self::$inserted);
@@ -95,26 +104,12 @@ class ShortcodePagesTest extends TestCase
 
     public function test_shortcode_map_includes_new_shortcodes(): void
     {
+        ShortcodeRegistry::register('ap_artist_profile_form', 'Artist Profile Form', function () {});
+        ShortcodeRegistry::register('ap_collection', 'Collection Detail', function () {});
+
         $map = ShortcodePages::get_shortcode_map();
-        $expected = [
-            '[ap_artist_profile_form]',
-            '[ap_collection]',
-            '[ap_collections]',
-            '[ap_competition_dashboard]',
-            '[ap_event_chat]',
-            '[ap_favorite_portfolio]',
-            '[ap_favorites_analytics]',
-            '[ap_messages]',
-            '[ap_org_rsvp_dashboard]',
-            '[ap_react_dashboard]',
-            '[ap_payouts]',
-            '[ap_recommendations]',
-            '[ap_render_ui]',
-            '[ap_spotlights]',
-            '[ap_widget]',
-        ];
-        foreach ($expected as $code) {
-            $this->assertArrayHasKey($code, $map);
-        }
+
+        $this->assertArrayHasKey('[ap_artist_profile_form]', $map);
+        $this->assertArrayHasKey('[ap_collection]', $map);
     }
 }

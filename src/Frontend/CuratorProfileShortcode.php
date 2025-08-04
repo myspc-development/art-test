@@ -7,7 +7,7 @@ class CuratorProfileShortcode
 {
     public static function register(): void
     {
-        add_shortcode('ap_curator', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_curator', 'Curator Profile', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 

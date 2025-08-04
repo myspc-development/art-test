@@ -5,7 +5,7 @@ class EventCalendarShortcode
 {
     public static function register(): void
     {
-        add_shortcode('ap_event_calendar', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_event_calendar', 'Event Calendar', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 

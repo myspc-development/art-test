@@ -33,60 +33,9 @@ class ShortcodePages
      */
     public static function get_shortcode_map(): array
     {
-        // Keep this list in sync with any new shortcodes that are introduced.
-        return [
-            '[ap_login]'                 => __('Login', 'artpulse'),
-            '[ap_register]'              => __('Register', 'artpulse'),
-            '[ap_logout]'                => __('Logout', 'artpulse'),
-            '[ap_user_dashboard]'        => __('Member Dashboard', 'artpulse'),
-            '[ap_react_dashboard]'      => __('React Dashboard', 'artpulse'),
-            '[ap_widget]'               => __('Dashboard Widget', 'artpulse'),
-            '[ap_profile_edit]'          => __('Edit Profile', 'artpulse'),
-            '[ap_submit_organization]'   => __('Submit Organization', 'artpulse'),
-            '[ap_submit_artist]'        => __('Submit Artist', 'artpulse'),
-            '[ap_submit_event]'          => __('Submit Event', 'artpulse'),
-            '[ap_portfolio_builder]'     => __('Portfolio Builder', 'artpulse'),
-            '[ap_my_events]'             => __('My Events', 'artpulse'),
-            '[ap_my_follows]'            => __('My Follows', 'artpulse'),
-            '[ap_notifications]'         => __('Notifications', 'artpulse'),
-            '[ap_membership_account]'    => __('Membership Account', 'artpulse'),
-            '[ap_membership_purchase]'   => __('Membership Purchase', 'artpulse'),
-            '[ap_user_profile]'          => __('User Profile', 'artpulse'),
-            '[ap_events]'                => __('Events List', 'artpulse'),
-            '[ap_event_calendar]'        => __('Event Calendar', 'artpulse'),
-            '[ap_events_slider]'         => __('Events Slider', 'artpulse'),
-            '[ap_event_comments]'        => __('Event Comments', 'artpulse'),
-            '[ap_event_filter]'          => __('Event Filter', 'artpulse'),
-            '[ap_event_listing]'         => __('Event Listing', 'artpulse'),
-            '[ap_event_map]'             => __('Event Map', 'artpulse'),
-            '[ap_artists]'               => __('Artists List', 'artpulse'),
-            '[ap_artworks]'              => __('Artworks List', 'artpulse'),
-            '[ap_event_directory]'       => __('Event Directory', 'artpulse'),
-            '[ap_artist_directory]'      => __('Artist Directory', 'artpulse'),
-            '[ap_artwork_directory]'     => __('Artwork Directory', 'artpulse'),
-            '[ap_org_directory]'         => __('Organization Directory', 'artpulse'),
-            '[ap_org_event_form]'        => __('Organization Event Form', 'artpulse'),
-            '[ap_directory]'             => __('Legacy Directory', 'artpulse'),
-            '[ap_organizations]'         => __('Organizations List', 'artpulse'),
-            '[ap_submission_form]'       => __('Submission Form', 'artpulse'),
-            '[ap_edit_event]'            => __('Edit Event', 'artpulse'),
-            '[ap_filtered_list]'         => __('Filtered List', 'artpulse'),
-            '[ap_org_profile_edit]'      => __('Edit Organization Profile', 'artpulse'),
-            '[ap_org_profile]'           => __('Organization Profile', 'artpulse'),
-            '[ap_artist_profile_form]'   => __('Artist Profile Form', 'artpulse'),
-            '[ap_collection]'            => __('Collection Detail', 'artpulse'),
-            '[ap_collections]'           => __('Collections Grid', 'artpulse'),
-            '[ap_competition_dashboard]' => __('Competition Dashboard', 'artpulse'),
-            '[ap_event_chat]'            => __('Event Chat', 'artpulse'),
-            '[ap_favorite_portfolio]'    => __('Favorite Portfolio', 'artpulse'),
-            '[ap_favorites_analytics]'   => __('Favorites Analytics', 'artpulse'),
-            '[ap_messages]'              => __('Messages Inbox', 'artpulse'),
-            '[ap_org_rsvp_dashboard]'    => __('RSVP Dashboard', 'artpulse'),
-            '[ap_payouts]'               => __('Payouts', 'artpulse'),
-            '[ap_recommendations]'       => __('Recommendations', 'artpulse'),
-            '[ap_render_ui]'             => __('Render UI', 'artpulse'),
-            '[ap_spotlights]'            => __('Spotlights', 'artpulse'),
-        ];
+        // The list of shortcodes now derives from the central registry so new
+        // shortcodes automatically appear in generated docs and tests.
+        return \ArtPulse\Core\ShortcodeRegistry::all();
     }
 
     public static function create_pages(array $selected = []): void
@@ -162,16 +111,45 @@ class ShortcodePages
             self::toggle_pages(true);
             echo '<div class="notice notice-success"><p>' . esc_html__('Pages disabled.', 'artpulse') . '</p></div>';
         }
+        $page_map = [];
+        foreach (self::get_page_ids() as $id) {
+            $content = trim((string) get_post_field('post_content', $id));
+            if ($content !== '') {
+                $page_map[$content] = [
+                    'id'   => $id,
+                    'link' => get_permalink($id),
+                ];
+            }
+        }
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Shortcode Pages', 'artpulse'); ?></h1>
             <form method="post">
                 <?php wp_nonce_field('ap_create_shortcode_pages'); ?>
-                <fieldset>
+                <p>
+                    <label for="ap-shortcode-search" class="screen-reader-text"><?php esc_html_e('Search Shortcodes', 'artpulse'); ?></label>
+                    <input type="search" id="ap-shortcode-search" placeholder="<?php esc_attr_e('Search shortcodes', 'artpulse'); ?>" style="max-width:300px;">
+                </p>
+                <fieldset id="ap-shortcode-list">
                     <legend class="screen-reader-text"><?php esc_html_e('Select Shortcodes', 'artpulse'); ?></legend>
-                    <?php foreach (self::get_shortcode_map() as $code => $label) : ?>
-                        <label>
-                            <input type="checkbox" name="ap_shortcodes[]" value="<?php echo esc_attr($code); ?>" checked> <?php echo esc_html($label . ' ' . $code); ?>
+                    <?php foreach (self::get_shortcode_map() as $code => $label) :
+                        $exists = isset($page_map[$code]);
+                        $search = strtolower($label . ' ' . $code);
+                        ?>
+                        <label class="ap-shortcode-option" data-search="<?php echo esc_attr($search); ?>">
+                            <input type="checkbox" name="ap_shortcodes[]" value="<?php echo esc_attr($code); ?>" <?php checked(!$exists); ?> <?php disabled($exists); ?>>
+                            <?php echo esc_html($label . ' ' . $code); ?>
+                            <?php if ($exists) : ?>
+                                <span class="ap-shortcode-created">
+                                    <?php
+                                    printf(
+                                        '<a href="%s" target="_blank">%s</a>',
+                                        esc_url($page_map[$code]['link']),
+                                        esc_html__('View', 'artpulse')
+                                    );
+                                    ?>
+                                </span>
+                            <?php endif; ?>
                         </label>
                     <?php endforeach; ?>
                 </fieldset>
@@ -183,6 +161,14 @@ class ShortcodePages
                 <input type="submit" name="ap_disable_shortcode_pages" class="button button-secondary" value="<?php esc_attr_e('Disable Pages', 'artpulse'); ?>">
             </form>
         </div>
+        <script>
+            document.getElementById('ap-shortcode-search').addEventListener('input', function () {
+                var term = this.value.toLowerCase();
+                document.querySelectorAll('#ap-shortcode-list .ap-shortcode-option').forEach(function (el) {
+                    el.style.display = el.dataset.search.indexOf(term) === -1 ? 'none' : '';
+                });
+            });
+        </script>
         <?php
     }
 }

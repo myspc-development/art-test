@@ -5,7 +5,7 @@ use ArtPulse\Admin\MetaBoxesOrganisation;
 
 class OrgProfileEditShortcode {
     public static function register() {
-        add_shortcode('ap_org_profile_edit', [self::class, 'render_form']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_org_profile_edit', 'Edit Organization Profile', [self::class, 'render_form']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
         self::handle_form_submission();
     }
