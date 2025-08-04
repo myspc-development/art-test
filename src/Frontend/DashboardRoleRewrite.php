@@ -29,7 +29,12 @@ class DashboardRoleRewrite
     public static function maybe_render(): void
     {
         if (get_query_var('ap_dashboard_role') || get_query_var('ap_dashboard')) {
-            \ap_render_dashboard();
+            $role = isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
+            if ($role) {
+                \ap_render_dashboard([$role]);
+            } else {
+                \ap_render_dashboard();
+            }
             exit;
         }
     }

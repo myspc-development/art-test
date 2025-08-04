@@ -97,6 +97,10 @@ function ap_clear_portfolio_cache(): void {
  * @param string[] $allowed_roles Roles permitted to view the dashboard.
  */
 function ap_render_dashboard(array $allowed_roles = []): void {
+    if (!defined('AP_DASHBOARD_RENDERING')) {
+        define('AP_DASHBOARD_RENDERING', true);
+    }
+
     $allowed_roles = array_map('sanitize_key', $allowed_roles);
     $user_role     = \ArtPulse\Core\DashboardController::get_role(get_current_user_id());
 
