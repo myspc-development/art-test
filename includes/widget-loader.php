@@ -3,12 +3,19 @@ namespace ArtPulse;
 
 class DashboardWidgetRegistryLoader {
     public static function load_all(): void {
-        $dir = __DIR__ . '/../widgets/member/';
-        if (!is_dir($dir)) {
+        $base = __DIR__ . '/../widgets/';
+        if (!is_dir($base)) {
             return;
         }
-        foreach (glob($dir . '*Widget.php') as $file) {
-            include_once $file;
+
+        $iter = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($base, \FilesystemIterator::SKIP_DOTS)
+        );
+
+        foreach ($iter as $file) {
+            if ($file->isFile() && str_ends_with($file->getFilename(), 'Widget.php')) {
+                include_once $file->getPathname();
+            }
         }
     }
 }

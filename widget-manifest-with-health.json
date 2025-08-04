@@ -678,5 +678,13 @@
         ],
         "status": "registered",
         "previewGuarded": true
+    },
+    "welcome_box": {
+        "file": "widgets/member/WelcomeBoxWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "ok",
+        "previewGuarded": true
     }
 }
