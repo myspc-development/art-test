@@ -15,6 +15,7 @@ add_action('load-index.php', function () {
     $role    = DashboardController::get_role($user_id);
     $can     = current_user_can('view_artpulse_dashboard');
     $widgets = array_keys(DashboardWidgetRegistry::get_widgets($role, $user_id));
+    $list    = implode(', ', $widgets);
 
     // Log to debug.log for troubleshooting.
     error_log(sprintf(
@@ -22,16 +23,16 @@ add_action('load-index.php', function () {
         $user_id,
         $role,
         $can ? 'yes' : 'no',
-        implode(',', $widgets)
+        $list
     ));
 
     // Display an admin notice with the same information.
-    add_action('admin_notices', function () use ($role, $can, $widgets) {
+    add_action('admin_notices', function () use ($role, $can, $list) {
         echo '<div class="notice notice-info"><p>' . sprintf(
-            esc_html__('Dashboard inspector – role: %1$s, can_view: %2$s, widgets: %3$s', 'artpulse'),
+            esc_html__('Dashboard inspector – role: %1$s, view_cap: %2$s, widgets: %3$s', 'artpulse'),
             esc_html($role),
             esc_html($can ? 'yes' : 'no'),
-            esc_html(implode(',', $widgets))
+            esc_html($list)
         ) . '</p></div>';
     });
 });
