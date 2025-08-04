@@ -4,6 +4,8 @@ export default function RoleMatrix({ selectedOrg = 0 }) {
   const [roles, setRoles] = useState([]);
   const [users, setUsers] = useState([]);
   const [changes, setChanges] = useState({});
+  const [status, setStatus] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     fetch(`/wp-json/artpulse/v1/org-roles?org_id=${selectedOrg}`, {
@@ -34,15 +36,28 @@ export default function RoleMatrix({ selectedOrg = 0 }) {
     setUsers(prev => prev.map(u => (u.id === userId ? { ...u, role: roleSlug } : u)));
   }
 
-  const saveChanges = () => {
-    fetch('/wp-json/artpulse/v1/org-roles/update', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': ArtPulseData.rest_nonce,
-      },
-      body: JSON.stringify({ org_id: selectedOrg, roles: changes }),
-    });
+  const saveChanges = async () => {
+    setIsSaving(true);
+    setStatus(null);
+    try {
+      const res = await fetch('/wp-json/artpulse/v1/org-roles/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': ArtPulseData.rest_nonce,
+        },
+        body: JSON.stringify({ org_id: selectedOrg, roles: changes }),
+      });
+
+      if (!res.ok) throw new Error(`API Error: ${res.status}`);
+
+      setStatus('Changes saved successfully.');
+    } catch (err) {
+      console.error('Failed to save org roles:', err);
+      setStatus('Failed to save changes.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (!roles || !Array.isArray(roles) || roles.length === 0) {
@@ -77,7 +92,10 @@ export default function RoleMatrix({ selectedOrg = 0 }) {
           ))}
         </tbody>
       </table>
-      <button onClick={saveChanges}>Save</button>
+      <button onClick={saveChanges} disabled={isSaving}>
+        {isSaving ? 'Saving...' : 'Save'}
+      </button>
+      {status && <p>{status}</p>}
     </div>
   );
 }
