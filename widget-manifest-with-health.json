@@ -452,6 +452,14 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "widget_near_me_events": {
+        "file": "widgets/NearMeEventsWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
     "widget_followed_artists": {
         "file": "templates/widgets/widget-followed-artists.php",
         "roles": [

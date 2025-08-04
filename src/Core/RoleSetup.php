@@ -69,6 +69,11 @@ class RoleSetup
                 'read',
                 'create_artpulse_events',
                 'upload_files',
+                // Members need access to the custom dashboard. In previous
+                // versions this capability was missing, preventing the widget
+                // system from rendering. Adding it here restores the intended
+                // behavior without overwriting other caps.
+                'view_artpulse_dashboard',
             ],
             'artist' => [
                 'read',

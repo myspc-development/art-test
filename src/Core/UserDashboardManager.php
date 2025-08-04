@@ -907,7 +907,13 @@ class UserDashboardManager
 
     public static function renderDashboard($atts)
     {
-        if ( ! is_user_logged_in() || ! current_user_can('view_artpulse_dashboard') ) {
+        $can_view = current_user_can('view_artpulse_dashboard');
+        if ( ! is_user_logged_in() || ! $can_view ) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                $u = wp_get_current_user();
+                $roles = $u ? implode(',', (array) $u->roles) : 'guest';
+                error_log(sprintf('ap_user_dashboard denied: roles=%s can_view=%s', $roles, $can_view ? 'yes' : 'no'));
+            }
             return '<p>' . __('Please log in to view your dashboard.', 'artpulse') . '</p>';
         }
 
@@ -930,6 +936,10 @@ class UserDashboardManager
 
         $roles_list = $roles ?: ['subscriber'];
         $widgets = DashboardWidgetRegistry::get_widgets($roles_list);
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('ap_user_dashboard roles: ' . implode(',', $roles_list));
+            error_log('ap_user_dashboard widgets: ' . implode(',', array_keys($widgets)));
+        }
         $layout_resp  = self::getDashboardLayout();
         $layout_data  = method_exists($layout_resp, 'get_data') ? $layout_resp->get_data() : (array) $layout_resp;
         $layout       = $layout_data['layout'] ?? [];

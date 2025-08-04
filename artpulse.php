@@ -70,15 +70,18 @@ add_action('plugins_loaded', function () {
         require_once ARTPULSE_PLUGIN_DIR . 'src/Core/RoleSetup.php';
         ArtPulse\Core\RoleSetup::assign_capabilities();
 
+        // Earlier migrations removed the dashboard capability from members,
+        // which prevented the custom dashboard from loading. Restore it for
+        // the role and any existing users to ensure dashboard access.
         if ($role = get_role('member')) {
-            $role->remove_cap('view_artpulse_dashboard');
+            $role->add_cap('view_artpulse_dashboard');
         }
 
         $members = get_users(['role' => 'member', 'fields' => ['ID']]);
         foreach ($members as $u) {
             $user = new WP_User($u->ID);
-            if ($user->has_cap('view_artpulse_dashboard')) {
-                $user->remove_cap('view_artpulse_dashboard');
+            if (!$user->has_cap('view_artpulse_dashboard')) {
+                $user->add_cap('view_artpulse_dashboard');
             }
         }
 

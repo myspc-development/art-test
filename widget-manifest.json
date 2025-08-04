@@ -49,6 +49,13 @@
     ],
     "status": "registered"
   },
+  "widget_near_me_events": {
+    "file": "widgets/NearMeEventsWidget.php",
+    "roles": [
+      "member"
+    ],
+    "status": "registered"
+  },
   "rsvp_button": {
     "file": "includes/dashboard-widgets.php",
     "roles": [

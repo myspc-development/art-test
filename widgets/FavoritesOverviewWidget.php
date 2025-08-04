@@ -2,6 +2,7 @@
 namespace ArtPulse\Widgets;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Community\FavoritesManager;
 
 if (!defined('ABSPATH')) { exit; }
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
@@ -59,13 +60,35 @@ class FavoritesOverviewWidget {
         return 'heart';
     }
 
-      public static function render(): string
-      {
-          if (function_exists('ap_widget_favorites')) {
-              return ap_widget_favorites([]);
-          }
-          return self::render_placeholder();
-      }
+    public static function render(int $user_id = 0): string
+    {
+        $user_id = $user_id ?: get_current_user_id();
+        if (!$user_id) {
+            // Should not happen on the dashboard but keeps the widget safe for
+            // unauthenticated contexts.
+            return self::render_placeholder();
+        }
+
+        $favorites = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
+        if (!$favorites) {
+            return '<p>' . esc_html__('You have no favorite events yet.', 'artpulse') . '</p>';
+        }
+
+        $items = [];
+        foreach ($favorites as $fav) {
+            $link  = get_permalink((int) $fav->object_id);
+            $title = get_the_title((int) $fav->object_id);
+            if ($link && $title) {
+                $items[] = '<li><a href="' . esc_url($link) . '">' . esc_html($title) . '</a></li>';
+            }
+        }
+
+        if (!$items) {
+            return '<p>' . esc_html__('You have no favorite events yet.', 'artpulse') . '</p>';
+        }
+
+        return '<ul class="ap-favorites-overview">' . implode('', $items) . '</ul>';
+    }
 
     public static function render_placeholder(): string
     {

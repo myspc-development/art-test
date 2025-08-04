@@ -287,5 +287,12 @@
         "allowed_roles": [
             "member"
         ]
+    },
+    {
+        "id": "widget_near_me_events",
+        "callback": "widgets/NearMeEventsWidget.php",
+        "allowed_roles": [
+            "member"
+        ]
     }
 ]
