@@ -7,21 +7,33 @@ const ReactForm = ({ type = 'default' }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('Submitting...');
+    try {
+      const { ajaxurl, nonce } = window.apReactForm || {};
 
-    const { ajaxurl, nonce } = window.apReactForm || {};
+      const response = await fetch(ajaxurl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          action: 'submit_react_form',
+          _ajax_nonce: nonce,
+          ...formData,
+        }),
+      });
 
-    const response = await fetch(ajaxurl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        action: 'submit_react_form',
-        _ajax_nonce: nonce,
-        ...formData,
-      }),
-    });
+      if (!response.ok) {
+        throw new Error('Request failed');
+      }
 
-    const result = await response.json();
-    setStatus(result.message || 'Done!');
+      const result = await response.json();
+
+      if (!result || typeof result.message !== 'string') {
+        throw new Error('Unexpected response');
+      }
+
+      setStatus(result.message);
+    } catch (error) {
+      setStatus('There was an error submitting the form.');
+    }
   };
 
   return (
