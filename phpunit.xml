@@ -7,13 +7,14 @@
          failOnWarning="true"
          executionOrder="random"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd">
-
+  <php>
+    <env name="WP_PHPUNIT__TESTS_CONFIG" value="wp-tests-config.php"/>
+  </php>
   <testsuites>
-    <testsuite name="ArtPulse Plugin Test Suite">
-      <directory>./tests</directory>
+    <testsuite name="ArtPulse Widget Test Suite">
+      <directory>./tests/phpunit</directory>
     </testsuite>
   </testsuites>
-
   <coverage>
     <include>
       <directory suffix=".php">widgets</directory>
@@ -23,5 +24,4 @@
       <html outputDirectory="coverage" />
     </report>
   </coverage>
-
 </phpunit>

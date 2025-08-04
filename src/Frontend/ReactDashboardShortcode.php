@@ -45,11 +45,23 @@ class ReactDashboardShortcode {
         ob_start();
         echo '<div id="ap-dashboard-root">';
         foreach ($widgets as $widget) {
-            if (!empty($widget['callback'])) {
-                echo '<div class="ap-widget bg-white p-4 rounded shadow mb-4">';
-                echo WidgetHelpers::render_callback_output($widget['callback']);
-                echo '</div>';
+            $id    = isset($widget['id']) ? esc_attr($widget['id']) : '';
+            $attrs = [
+                'class'         => 'ap-widget bg-white p-4 rounded shadow mb-4',
+                'data-widget-id'=> $id,
+            ];
+            if (!empty($widget['rest'])) {
+                $attrs['data-rest'] = esc_attr($widget['rest']);
             }
+            echo '<div';
+            foreach ($attrs as $key => $val) {
+                echo ' ' . $key . '="' . $val . '"';
+            }
+            echo '>';
+            if (!empty($widget['callback']) && is_callable($widget['callback'])) {
+                echo WidgetHelpers::render_callback_output($widget['callback']);
+            }
+            echo '</div>';
         }
         echo '</div>';
         return ob_get_clean();
