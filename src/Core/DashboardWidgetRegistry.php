@@ -172,6 +172,11 @@ class DashboardWidgetRegistry {
             'visibility'  => $options['visibility'] ?? WidgetVisibility::PUBLIC,
             'builder_only'=> $options['builder_only'] ?? false,
         ];
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            $roles = isset(self::$widgets[$id]['roles']) ? implode(',', (array) self::$widgets[$id]['roles']) : 'all';
+            error_log(sprintf('ap widget register %s roles=%s', $id, $roles));
+        }
     }
 
     /**
@@ -232,6 +237,11 @@ class DashboardWidgetRegistry {
         $args['id']    = $id;
         $args['class'] = $class;
         self::$widgets[ $id ] = $args;
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            $roles = isset($args['roles']) ? implode(',', (array) $args['roles']) : 'all';
+            error_log(sprintf('ap widget register %s roles=%s', $id, $roles));
+        }
     }
 
     /**
@@ -598,15 +608,29 @@ class DashboardWidgetRegistry {
     public static function get_widgets( $user_role, int $user_id = 0 ): array {
         $roles   = array_map( 'sanitize_key', (array) $user_role );
         $allowed = [];
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log(sprintf('ap widget get_widgets roles=%s user=%d', implode(',', $roles), $user_id));
+        }
+
         foreach ( self::get_all() as $id => $config ) {
             $widget_roles = isset( $config['roles'] ) ? (array) $config['roles'] : [];
             if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log(sprintf('ap widget %s excluded: role mismatch', $id));
+                }
                 continue;
             }
             if ( ! self::user_can_see( $id, $user_id ) ) {
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log(sprintf('ap widget %s excluded: capability', $id));
+                }
                 continue;
             }
             $allowed[ $id ] = $config['callback'];
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log(sprintf('ap widget %s included', $id));
+            }
         }
 
         return $allowed;
