@@ -58,21 +58,7 @@ class UserLayoutManager
         }
 
         if (is_array($layout) && !empty($layout)) {
-            $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-            $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid);
-            $logs    = [];
-            foreach ($ordered as $row) {
-                $id  = $row['id'] ?? null;
-                if (!$id) {
-                    continue;
-                }
-                $cfg = DashboardWidgetRegistry::get($id);
-                if ($cfg === null || !is_callable($cfg['callback'] ?? null)) {
-                    $logs[] = $id;
-                    error_log("[AP UserLayout] Missing widget or callback: {$id}");
-                    WidgetGuard::register_stub_widget($id, [], $cfg ?? []);
-                }
-            }
+
             if ($ordered) {
                 return [
                     'layout' => $ordered,
