@@ -142,7 +142,7 @@ class DashboardWidgetTools
             return;
         }
 
-        $layout  = UserLayoutManager::get_role_layout($role);
+        $layout  = UserLayoutManager::get_role_layout($role)['layout'];
 
         echo '<div class="ap-preview-dashboard">';
         $defs = DashboardWidgetRegistry::get_definitions();
@@ -231,7 +231,7 @@ class DashboardWidgetTools
     public static function render_dashboard_widgets(string $role = ''): void
     {
         if ($role !== '') {
-            $layout = UserLayoutManager::get_role_layout($role);
+            $layout = UserLayoutManager::get_role_layout($role)['layout'];
         } else {
             $user_id = get_current_user_id();
             $layout  = UserLayoutManager::get_layout_for_user($user_id);
@@ -330,7 +330,7 @@ class DashboardWidgetTools
             echo '</style>';
         }
         $registry = \ArtPulse\Core\DashboardWidgetRegistry::get_all();
-        $layout   = UserLayoutManager::get_role_layout($role);
+        $layout   = UserLayoutManager::get_role_layout($role)['layout'];
 
         foreach ($layout as $widget) {
             $id      = is_array($widget) ? $widget['id'] : $widget;

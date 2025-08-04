@@ -12,7 +12,7 @@ class RoleLayoutManager
      */
     public static function get_layout_for_role(string $role): array
     {
-        return UserLayoutManager::get_role_layout($role);
+        return UserLayoutManager::get_role_layout($role)['layout'];
     }
 }
 

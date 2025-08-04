@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Dashboard\WidgetGuard;
 
 /**
  * Manage dashboard widget layouts for users and roles.
@@ -41,6 +42,8 @@ class UserLayoutManager
 
     /**
      * Get the default layout for a role.
+     *
+     * @return array{layout:array<array<string,mixed>>,logs:array<int,string>}
      */
     public static function get_role_layout(string $role): array
     {
@@ -57,8 +60,24 @@ class UserLayoutManager
         if (is_array($layout) && !empty($layout)) {
             $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
             $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid);
+            $logs    = [];
+            foreach ($ordered as $row) {
+                $id  = $row['id'] ?? null;
+                if (!$id) {
+                    continue;
+                }
+                $cfg = DashboardWidgetRegistry::get($id);
+                if ($cfg === null || !is_callable($cfg['callback'] ?? null)) {
+                    $logs[] = $id;
+                    error_log("[AP UserLayout] Missing widget or callback: {$id}");
+                    WidgetGuard::register_stub_widget($id, [], $cfg ?? []);
+                }
+            }
             if ($ordered) {
-                return $ordered;
+                return [
+                    'layout' => $ordered,
+                    'logs'   => $logs,
+                ];
             }
         }
 
@@ -68,10 +87,13 @@ class UserLayoutManager
             fn($def) => $def['id'] !== 'artpulse_dashboard_widget'
         );
 
-        return array_map(
-            fn($def) => ['id' => $def['id'], 'visible' => true],
-            $defs
-        );
+        return [
+            'layout' => array_map(
+                fn($def) => ['id' => $def['id'], 'visible' => true],
+                $defs
+            ),
+            'logs'   => [],
+        ];
     }
 
     /**
@@ -100,7 +122,7 @@ class UserLayoutManager
 
     public static function export_layout(string $role): string
     {
-        return json_encode(self::get_role_layout($role), JSON_PRETTY_PRINT);
+        return json_encode(self::get_role_layout($role)['layout'], JSON_PRETTY_PRINT);
     }
 
     public static function import_layout(string $role, string $json): bool
@@ -190,8 +212,9 @@ class UserLayoutManager
             return $layout;
         }
 
-        $role = self::get_primary_role($user_id);
-        $layout = self::get_role_layout($role);
+        $role   = self::get_primary_role($user_id);
+        $result = self::get_role_layout($role);
+        $layout = $result['layout'];
         if (!empty($layout)) {
             return $layout;
         }
