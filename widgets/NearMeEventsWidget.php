@@ -20,9 +20,6 @@ class NearMeEventsWidget {
             [self::class, 'render'],
             [ 'roles' => self::roles() ]
         );
-        // Load geolocation scripts/styles used by the event listing shortcode
-        // so the "Events Near Me" button works in the dashboard context.
-        add_action('admin_enqueue_scripts', [EventListingShortcode::class, 'enqueue']);
     }
 
     public static function id(): string { return 'widget_near_me_events'; }
@@ -30,6 +27,10 @@ class NearMeEventsWidget {
     public static function roles(): array { return ['member']; }
 
     public static function render(int $user_id = 0): string {
+        // Ensure the geolocation scripts/styles from the event listing shortcode
+        // are available when the widget is displayed.
+        EventListingShortcode::enqueue();
+
         // Render the existing event listing shortcode with a small page size.
         return do_shortcode('[ap_event_listing posts_per_page="5"]');
     }
