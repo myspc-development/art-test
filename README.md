@@ -437,6 +437,16 @@ wp eval-file tools/seed-dashboard-users.php
 
 This populates a sample organization with members, events and donation records for local testing.
 
+### Resetting Dashboard Layouts
+
+Clear a user's saved dashboard layout and widget visibility via WP-CLI:
+
+```bash
+wp ap reset-layout <USER_ID>
+```
+
+This removes the `ap_dashboard_layout` and `ap_widget_visibility` meta so the default widgets load again.
+
 ### Creating Widgets
 
 1. Copy an existing widget from the `widgets/` directory and update the class name.
