@@ -22,5 +22,6 @@
 To ensure required capabilities exist on older installs run:
 ```bash
 wp cap add member view_artpulse_dashboard
+wp user list --role=member --field=ID | xargs -I % wp user add-cap % view_artpulse_dashboard
 wp cap add administrator publish_pages
 ```

@@ -72,7 +72,9 @@ class RoleSetup
                 // Members need access to the custom dashboard. In previous
                 // versions this capability was missing, preventing the widget
                 // system from rendering. Adding it here restores the intended
-                // behavior without overwriting other caps.
+                // behavior without overwriting other caps. For existing sites
+                // run `wp cap add member view_artpulse_dashboard` to patch
+                // the role if needed.
                 'view_artpulse_dashboard',
             ],
             'artist' => [
