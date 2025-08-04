@@ -147,6 +147,7 @@ require_once __DIR__ . '/admin/page-roles-editor.php';
 require_once __DIR__ . '/admin/page-widget-visibility.php';
 require_once __DIR__ . '/admin/page-widget-audit.php';
 require_once __DIR__ . '/admin/page-dashboard-widgets-inspector.php';
+require_once __DIR__ . '/admin/page-widget-health.php';
 
 require_once __DIR__ . '/follow-api.php';
 require_once __DIR__ . '/seo-meta.php';
