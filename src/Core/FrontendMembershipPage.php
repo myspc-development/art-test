@@ -9,7 +9,7 @@ class FrontendMembershipPage
     public static function register()
     {
         // Shortcode to render the account page
-        add_shortcode('ap_membership_account', [ self::class, 'renderAccount' ]);
+        ShortcodeRegistry::register('ap_membership_account', 'Membership Account', [ self::class, 'renderAccount' ]);
 
         // Expose a REST endpoint for the account data
         add_action('rest_api_init', function() {

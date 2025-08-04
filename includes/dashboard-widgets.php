@@ -53,7 +53,7 @@ function ap_render_js_widget(string $id, array $props = []): void
     echo '<div id="ap-widget-' . esc_attr($id) . '" data-widget="' . esc_attr($id) . '" data-props=\'' . $json_props . '\'></div>';
 }
 
-add_shortcode('ap_widget', function ($atts) {
+\ArtPulse\Core\ShortcodeRegistry::register('ap_widget', 'Dashboard Widget', function ($atts) {
     $id = sanitize_key($atts['id'] ?? '');
     if (!$id) {
         return '';

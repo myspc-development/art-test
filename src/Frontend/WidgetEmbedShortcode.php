@@ -4,7 +4,7 @@ namespace ArtPulse\Frontend;
 class WidgetEmbedShortcode {
     public static function register() {
         if (!shortcode_exists('ap_widget')) {
-            add_shortcode('ap_widget', [__CLASS__, 'render']);
+            \ArtPulse\Core\ShortcodeRegistry::register('ap_widget', 'Dashboard Widget', [__CLASS__, 'render']);
         }
     }
 

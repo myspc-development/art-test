@@ -5,7 +5,7 @@ use ArtPulse\Community\DirectMessages;
 
 class InboxReact {
     public static function register(): void {
-        add_shortcode('ap_inbox_app', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_inbox_app', 'Inbox App', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
     }
 

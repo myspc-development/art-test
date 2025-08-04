@@ -5,8 +5,8 @@ class RestListShortcodes
 {
     public static function register(): void
     {
-        add_shortcode('ap_recommendations', [self::class, 'render_recommendations']);
-        add_shortcode('ap_collection', [self::class, 'render_collection']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_recommendations', 'Recommendations', [self::class, 'render_recommendations']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_collection', 'Collection Detail', [self::class, 'render_collection']);
     }
 
     public static function render_recommendations($atts): string

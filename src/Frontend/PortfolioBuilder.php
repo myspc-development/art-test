@@ -6,7 +6,7 @@ class PortfolioBuilder
 {
     public static function register()
     {
-        add_shortcode('ap_portfolio_builder', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_portfolio_builder', 'Portfolio Builder', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_scripts']);
         add_action('wp_ajax_ap_save_portfolio', [self::class, 'handle_form']);
         add_action('wp_ajax_ap_get_portfolio_item', [self::class, 'get_item']);

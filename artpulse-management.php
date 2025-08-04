@@ -934,7 +934,7 @@ function ap_render_favorite_portfolio($atts = []) {
     }
     return ob_get_clean();
 }
-add_shortcode('ap_favorite_portfolio', 'ap_render_favorite_portfolio');
+\ArtPulse\Core\ShortcodeRegistry::register('ap_favorite_portfolio', 'Favorite Portfolio', 'ap_render_favorite_portfolio');
 
 function ap_favorites_analytics_widget($atts = []) {
     $atts = shortcode_atts([
@@ -1020,7 +1020,7 @@ function ap_favorites_analytics_widget($atts = []) {
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('ap_favorites_analytics', 'ap_favorites_analytics_widget');
+\ArtPulse\Core\ShortcodeRegistry::register('ap_favorites_analytics', 'Favorites Analytics', 'ap_favorites_analytics_widget');
 
 function ap_enqueue_event_calendar_assets() {
     if (is_page('events') || is_singular('artpulse_event')) {
@@ -1122,7 +1122,7 @@ add_action('wp_enqueue_scripts', function () {
     }
 });
 
-add_shortcode('ap_render_ui', [\ArtPulse\Core\DashboardController::class, 'render']);
+\ArtPulse\Core\ShortcodeRegistry::register('ap_render_ui', 'Render UI', [\ArtPulse\Core\DashboardController::class, 'render']);
 
 
 
@@ -1206,7 +1206,7 @@ function artpulse_render_react_form($atts = []) {
     $type = sanitize_key($atts['type']);
     return '<div id="react-form-root" data-type="' . esc_attr($type) . '"></div>';
 }
-add_shortcode('react_form', 'artpulse_render_react_form');
+\ArtPulse\Core\ShortcodeRegistry::register('react_form', 'React Form', 'artpulse_render_react_form');
 
 function artpulse_handle_react_form() {
     check_ajax_referer('ap_react_form');
@@ -1287,11 +1287,11 @@ add_action('admin_enqueue_scripts', function ($hook) {
     );
 });
 
-add_shortcode('ap_admin_guide', function () {
+\ArtPulse\Core\ShortcodeRegistry::register('ap_admin_guide', 'Admin Guide', function () {
     return ap_render_help_markdown('Admin_Help.md');
 });
 
-add_shortcode('ap_member_guide', function () {
+\ArtPulse\Core\ShortcodeRegistry::register('ap_member_guide', 'Member Guide', function () {
     return ap_render_help_markdown('Member_Help.md');
 });
 

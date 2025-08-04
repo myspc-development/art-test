@@ -3,7 +3,7 @@ namespace ArtPulse\Frontend;
 
 class OrgPublicProfileShortcode {
     public static function register() {
-        add_shortcode('ap_org_profile', [self::class, 'render']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_org_profile', 'Organization Profile', [self::class, 'render']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
     }
 

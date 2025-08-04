@@ -5,7 +5,7 @@ namespace ArtPulse\Frontend;
 class ProfileEditShortcode {
 
     public static function register() {
-        add_shortcode('ap_profile_edit', [self::class, 'render_form']);
+        \ArtPulse\Core\ShortcodeRegistry::register('ap_profile_edit', 'Edit Profile', [self::class, 'render_form']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
         self::handle_form_submission();
         add_action('wp_ajax_update_profile_field', [self::class, 'ajax_update_profile']);
