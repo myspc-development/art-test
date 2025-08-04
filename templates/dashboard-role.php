@@ -7,6 +7,8 @@ if (!defined('AP_DASHBOARD_RENDERING')) {
 
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Frontend\DashboardCard;
+use ArtPulse\Admin\UserLayoutManager;
 
 $allowed_roles = $allowed_roles ?? [];
 $user_role     = $user_role ?? DashboardController::get_role(get_current_user_id());
@@ -22,11 +24,37 @@ get_header();
     <div class="ap-dashboard ap-dashboard--role-<?php echo esc_attr( $user_role ); ?>">
       <?php
       if ( class_exists( '\\ArtPulse\\Core\\DashboardWidgetRegistry' ) ) {
-          $widgets = DashboardWidgetRegistry::get_widgets( $user_role );
-          if ( empty( $widgets ) ) {
+          $user_id = get_current_user_id();
+          $defs    = DashboardWidgetRegistry::get_widgets_by_role( $user_role, $user_id );
+          if ( empty( $defs ) ) {
               echo '<p>' . esc_html__( 'No widgets available for your role.', 'artpulse' ) . '</p>';
           } else {
-              DashboardWidgetRegistry::render_for_role( get_current_user_id() );
+              $layout   = UserLayoutManager::get_role_layout( $user_role );
+              $sections = [];
+              $order    = [];
+              foreach ( $layout['layout'] as $row ) {
+                  $id      = sanitize_key( $row['id'] ?? '' );
+                  $visible = isset( $row['visible'] ) ? (bool) $row['visible'] : true;
+                  if ( ! $visible || ! isset( $defs[ $id ] ) ) {
+                      continue;
+                  }
+                  $section = sanitize_key( $defs[ $id ]['section'] ?? '' );
+                  if ( ! isset( $sections[ $section ] ) ) {
+                      $sections[ $section ] = [];
+                      $order[]              = $section;
+                  }
+                  $sections[ $section ][] = $id;
+              }
+              foreach ( $order as $sec ) {
+                  echo '<section class="ap-widget-section">';
+                  if ( $sec ) {
+                      echo '<h2>' . esc_html( ucfirst( $sec ) ) . '</h2>';
+                  }
+                  foreach ( $sections[ $sec ] as $id ) {
+                      echo DashboardCard::render( $id, $user_id );
+                  }
+                  echo '</section>';
+              }
           }
       } else {
           echo '<p>' . esc_html__( 'Unable to load dashboard widgets. Please contact support.', 'artpulse' ) . '</p>';

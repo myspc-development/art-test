@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetManager;
-use ArtPulse\Core\DashboardRenderer;
+use ArtPulse\Frontend\DashboardCard;
 
 function ap_render_widget(string $widget_id, ?int $user_id = null): void
 {
@@ -26,7 +26,7 @@ function ap_render_widget(string $widget_id, ?int $user_id = null): void
         return;
     }
 
-    echo DashboardRenderer::render($widget_id, $user_id);
+    echo DashboardCard::render($widget_id, $user_id);
 }
 
 function register_ap_widget(string $id, array $args): void
@@ -110,7 +110,7 @@ function ap_ajax_render_widget(): void
         wp_send_json_error(['message' => 'Invalid widget'], 403);
     }
 
-    $html = DashboardRenderer::render($widget_id, get_current_user_id());
+    $html = DashboardCard::render($widget_id, get_current_user_id());
     wp_send_json_success(['html' => $html]);
 }
 
