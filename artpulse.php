@@ -138,6 +138,9 @@ add_action('init', function () {
     foreach ($required as $cap) {
         if (!$admin->has_cap($cap)) {
             $admin->add_cap($cap);
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log(sprintf('ap init restored %s capability for administrators', $cap));
+            }
         }
     }
 }, 1);
