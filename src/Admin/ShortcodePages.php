@@ -160,16 +160,45 @@ class ShortcodePages
             self::toggle_pages(true);
             echo '<div class="notice notice-success"><p>' . esc_html__('Pages disabled.', 'artpulse') . '</p></div>';
         }
+        $page_map = [];
+        foreach (self::get_page_ids() as $id) {
+            $content = trim((string) get_post_field('post_content', $id));
+            if ($content !== '') {
+                $page_map[$content] = [
+                    'id'   => $id,
+                    'link' => get_permalink($id),
+                ];
+            }
+        }
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Shortcode Pages', 'artpulse'); ?></h1>
             <form method="post">
                 <?php wp_nonce_field('ap_create_shortcode_pages'); ?>
-                <fieldset>
+                <p>
+                    <label for="ap-shortcode-search" class="screen-reader-text"><?php esc_html_e('Search Shortcodes', 'artpulse'); ?></label>
+                    <input type="search" id="ap-shortcode-search" placeholder="<?php esc_attr_e('Search shortcodes', 'artpulse'); ?>" style="max-width:300px;">
+                </p>
+                <fieldset id="ap-shortcode-list">
                     <legend class="screen-reader-text"><?php esc_html_e('Select Shortcodes', 'artpulse'); ?></legend>
-                    <?php foreach (self::get_shortcode_map() as $code => $label) : ?>
-                        <label>
-                            <input type="checkbox" name="ap_shortcodes[]" value="<?php echo esc_attr($code); ?>" checked> <?php echo esc_html($label . ' ' . $code); ?>
+                    <?php foreach (self::get_shortcode_map() as $code => $label) :
+                        $exists = isset($page_map[$code]);
+                        $search = strtolower($label . ' ' . $code);
+                        ?>
+                        <label class="ap-shortcode-option" data-search="<?php echo esc_attr($search); ?>">
+                            <input type="checkbox" name="ap_shortcodes[]" value="<?php echo esc_attr($code); ?>" <?php checked(!$exists); ?> <?php disabled($exists); ?>>
+                            <?php echo esc_html($label . ' ' . $code); ?>
+                            <?php if ($exists) : ?>
+                                <span class="ap-shortcode-created">
+                                    <?php
+                                    printf(
+                                        '<a href="%s" target="_blank">%s</a>',
+                                        esc_url($page_map[$code]['link']),
+                                        esc_html__('View', 'artpulse')
+                                    );
+                                    ?>
+                                </span>
+                            <?php endif; ?>
                         </label>
                     <?php endforeach; ?>
                 </fieldset>
@@ -181,6 +210,14 @@ class ShortcodePages
                 <input type="submit" name="ap_disable_shortcode_pages" class="button button-secondary" value="<?php esc_attr_e('Disable Pages', 'artpulse'); ?>">
             </form>
         </div>
+        <script>
+            document.getElementById('ap-shortcode-search').addEventListener('input', function () {
+                var term = this.value.toLowerCase();
+                document.querySelectorAll('#ap-shortcode-list .ap-shortcode-option').forEach(function (el) {
+                    el.style.display = el.dataset.search.indexOf(term) === -1 ? 'none' : '';
+                });
+            });
+        </script>
         <?php
     }
 }
