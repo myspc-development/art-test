@@ -33,6 +33,7 @@
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
 
     "widget:audit": "node scripts/widget-audit.js",
+    "widget:fix": "node scripts/fix-widget-callbacks.js",
 
     "ws": "node server/ws-server.js"
   },

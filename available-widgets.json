@@ -1,7 +1,7 @@
 [
     {
         "id": "activity_feed",
-        "callback": "member/ActivityFeedWidget.php",
+        "callback": "widgets/member/ActivityFeedWidget.php",
         "allowed_roles": [
             "artist",
             "member",
@@ -45,7 +45,7 @@
     },
     {
         "id": "artist_inbox_preview",
-        "callback": "ArtistInboxPreviewWidget.jsx",
+        "callback": "assets/js/widgets/ArtistInboxPreviewWidget.jsx",
         "allowed_roles": [
             "artist",
             "member"
@@ -96,21 +96,21 @@
     },
     {
         "id": "event_chat",
-        "callback": "EventChatWidget.jsx",
+        "callback": "assets/js/widgets/EventChatWidget.jsx",
         "allowed_roles": [
             "member"
         ]
     },
     {
         "id": "my_favorites",
-        "callback": "MyFavoritesWidget.jsx",
+        "callback": "assets/js/widgets/MyFavoritesWidget.jsx",
         "allowed_roles": [
             "member"
         ]
     },
     {
         "id": "my_upcoming_events",
-        "callback": "MyUpcomingEventsWidget.php",
+        "callback": "widgets/MyUpcomingEventsWidget.php",
         "allowed_roles": [
             "artist",
             "member"
@@ -118,14 +118,14 @@
     },
     {
         "id": "nearby_events_map",
-        "callback": "NearbyEventsMapWidget.jsx",
+        "callback": "assets/js/widgets/NearbyEventsMapWidget.jsx",
         "allowed_roles": [
             "member"
         ]
     },
     {
         "id": "news_feed",
-        "callback": "ArtPulseNewsFeedWidget.php",
+        "callback": "widgets/ArtPulseNewsFeedWidget.php",
         "allowed_roles": [
             "member"
         ]
@@ -202,7 +202,7 @@
     },
     {
         "id": "qa_checklist",
-        "callback": "QAChecklistWidget.php",
+        "callback": "widgets/QAChecklistWidget.php",
         "allowed_roles": [
             "artist",
             "member"
@@ -217,7 +217,7 @@
     },
     {
         "id": "rsvp_button",
-        "callback": "RsvpButtonWidget.jsx",
+        "callback": "assets/js/widgets/RsvpButtonWidget.jsx",
         "allowed_roles": [
             "member"
         ]
@@ -231,7 +231,7 @@
     },
     {
         "id": "sample_events",
-        "callback": "EventsWidget.php",
+        "callback": "widgets/EventsWidget.php",
         "allowed_roles": [
             "artist",
             "member",
@@ -240,7 +240,7 @@
     },
     {
         "id": "share_this_event",
-        "callback": "ShareThisEventWidget.jsx",
+        "callback": "assets/js/widgets/ShareThisEventWidget.jsx",
         "allowed_roles": [
             "member"
         ]
@@ -268,14 +268,14 @@
     },
     {
         "id": "welcome_box",
-        "callback": "member/WelcomeBoxWidget.php",
+        "callback": "widgets/member/WelcomeBoxWidget.php",
         "allowed_roles": [
             "member"
         ]
     },
     {
         "id": "widget_events",
-        "callback": "WidgetEventsWidget.php",
+        "callback": "widgets/WidgetEventsWidget.php",
         "allowed_roles": [
             "member",
             "organization"
@@ -283,7 +283,7 @@
     },
     {
         "id": "widget_favorites",
-        "callback": "FavoritesOverviewWidget.php",
+        "callback": "widgets/FavoritesOverviewWidget.php",
         "allowed_roles": [
             "member"
         ]
