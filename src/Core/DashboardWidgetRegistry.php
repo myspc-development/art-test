@@ -5,6 +5,7 @@ namespace ArtPulse\Core;
 use ArtPulse\DashboardWidgetRegistryLoader;
 use ArtPulse\Dashboard\WidgetVisibility;
 use WP_Roles;
+use ArtPulse\Admin\UserLayoutManager;
 
 /**
  * Simple registry for dashboard widgets.
@@ -842,17 +843,35 @@ class DashboardWidgetRegistry {
      * Render all widgets visible to the specified user in a basic grid layout.
      */
     public static function render_for_role( int $user_id ): void {
-        $role = DashboardController::get_role( $user_id );
+        $role    = DashboardController::get_role( $user_id );
 
-        do_action('ap_before_widgets', $role);
+        do_action( 'ap_before_widgets', $role );
+
+        $layout  = UserLayoutManager::get_role_layout( $role );
+        $widgets = apply_filters( 'ap_dashboard_widgets', self::get_widgets_by_role( $role, $user_id ), $role );
+
+        $layout_ids = array_map(
+            static fn( $row ) => sanitize_key( $row['id'] ?? '' ),
+            $layout
+        );
+        $widget_ids = array_keys( $widgets );
+
+        $missing = array_diff( $layout_ids, $widget_ids );
+        foreach ( $missing as $id ) {
+            error_log( "[AP Dashboard] Widget {$id} missing for role {$role}" );
+        }
+        $extra = array_diff( $widget_ids, $layout_ids );
+        foreach ( $extra as $id ) {
+            error_log( "[AP Dashboard] Widget {$id} not in layout for role {$role}" );
+        }
 
         $sections = [];
-        $widgets = apply_filters('ap_dashboard_widgets', self::get_all(), $role);
-        foreach ( $widgets as $id => $cfg ) {
-            if ( ! self::user_can_see( $id, $user_id ) ) {
+        $order    = [];
+        foreach ( $layout_ids as $id ) {
+            if ( ! isset( $widgets[ $id ] ) || ! self::user_can_see( $id, $user_id ) ) {
                 continue;
             }
-
+            $cfg     = $widgets[ $id ];
             $class   = $cfg['class'] ?? '';
             $section = $cfg['section'] ?? '';
             if ( $class && method_exists( $class, 'get_section' ) ) {
@@ -863,19 +882,24 @@ class DashboardWidgetRegistry {
                 }
             }
             $section = sanitize_key( $section );
+            if ( ! isset( $sections[ $section ] ) ) {
+                $sections[ $section ] = [];
+                $order[]              = $section;
+            }
             $sections[ $section ][] = $cfg + [ 'id' => $id ];
         }
-        foreach ( $sections as $sec => $widgets ) {
+
+        foreach ( $order as $sec ) {
             echo '<section class="ap-widget-section">';
             if ( $sec ) {
                 echo '<h2>' . esc_html( ucfirst( $sec ) ) . '</h2>';
             }
-            foreach ( $widgets as $cfg ) {
+            foreach ( $sections[ $sec ] as $cfg ) {
                 try {
                     ob_start();
                     $result = call_user_func( $cfg['callback'], $user_id );
                     $echoed = ob_get_clean();
-                    if ( is_string( $result ) && $result !== '' ) {
+                    if ( is_string( $result ) && '' !== $result ) {
                         echo $result;
                     } else {
                         echo $echoed;
@@ -888,6 +912,6 @@ class DashboardWidgetRegistry {
             echo '</section>';
         }
 
-        do_action('ap_after_widgets', $role);
+        do_action( 'ap_after_widgets', $role );
     }
 }
