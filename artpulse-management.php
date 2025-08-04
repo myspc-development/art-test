@@ -31,6 +31,7 @@ use ArtPulse\Admin\EnqueueAssets;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Dashboard\WidgetVisibilityManager;
 use ArtPulse\Core\WidgetRoleSync;
+use ArtPulse\Admin\FrontendDashboardWidget;
 
 // Suppress deprecated notices if WP_DEBUG enabled
 if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -77,6 +78,7 @@ require_once __DIR__ . '/includes/update-checker.php';
 Plugin::register();
 WidgetVisibilityManager::register();
 WidgetRoleSync::register();
+FrontendDashboardWidget::register();
 // Allow access to the default WordPress dashboard by removing the
 // AdminAccessManager redirect.
 remove_action('admin_init', [\ArtPulse\Core\AdminAccessManager::class, 'maybe_redirect_admin']);
