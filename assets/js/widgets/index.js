@@ -4,6 +4,14 @@ import RsvpButtonWidget from './RsvpButtonWidget.jsx';
 import EventChatWidget from './EventChatWidget.jsx';
 import ShareThisEventWidget from './ShareThisEventWidget.jsx';
 import { ArtistInboxPreviewWidget } from './ArtistInboxPreviewWidget.jsx';
+import { ActivityFeedWidget } from './ActivityFeedWidget.jsx';
+import { MyUpcomingEventsWidget } from './MyUpcomingEventsWidget.jsx';
+import { ArtPulseNewsFeedWidget } from './ArtPulseNewsFeedWidget.jsx';
+import { QAChecklistWidget } from './QAChecklistWidget.jsx';
+import { EventsWidget } from './EventsWidget.jsx';
+import { WelcomeBoxWidget } from './WelcomeBoxWidget.jsx';
+import { WidgetEventsWidget } from './WidgetEventsWidget.jsx';
+import { FavoritesOverviewWidget } from './FavoritesOverviewWidget.jsx';
 import { ArtistRevenueSummaryWidget } from './ArtistRevenueSummaryWidget.jsx';
 import { ArtistSpotlightWidget } from './ArtistSpotlightWidget.jsx';
 import { ArtistArtworkManagerWidget } from './ArtistArtworkManagerWidget.jsx';
@@ -37,6 +45,24 @@ export default [
     roles: ['member']
   },
   {
+    id: 'activity_feed',
+    title: __('Activity Feed', 'artpulse'),
+    component: ActivityFeedWidget,
+    roles: ['member']
+  },
+  {
+    id: 'my_upcoming_events',
+    title: __('My Upcoming Events', 'artpulse'),
+    component: MyUpcomingEventsWidget,
+    roles: ['member']
+  },
+  {
+    id: 'news_feed',
+    title: __('News Feed', 'artpulse'),
+    component: ArtPulseNewsFeedWidget,
+    roles: ['member']
+  },
+  {
     id: 'rsvp_button',
     title: __('RSVP Button', 'artpulse'),
     component: RsvpButtonWidget,
@@ -52,6 +78,36 @@ export default [
     id: 'share_this_event',
     title: __('Share This Event', 'artpulse'),
     component: ShareThisEventWidget,
+    roles: ['member']
+  },
+  {
+    id: 'qa_checklist',
+    title: __('QA Checklist', 'artpulse'),
+    component: QAChecklistWidget,
+    roles: ['member']
+  },
+  {
+    id: 'sample_events',
+    title: __('Sample Events', 'artpulse'),
+    component: EventsWidget,
+    roles: ['member']
+  },
+  {
+    id: 'welcome_box',
+    title: __('Welcome Box', 'artpulse'),
+    component: WelcomeBoxWidget,
+    roles: ['member']
+  },
+  {
+    id: 'widget_events',
+    title: __('Upcoming Events', 'artpulse'),
+    component: WidgetEventsWidget,
+    roles: ['member']
+  },
+  {
+    id: 'widget_favorites',
+    title: __('Favorites Overview', 'artpulse'),
+    component: FavoritesOverviewWidget,
     roles: ['member']
   },
   {
