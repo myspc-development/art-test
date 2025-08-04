@@ -857,6 +857,8 @@ class DashboardWidgetRegistry {
         );
         $widget_ids = array_keys( $widgets );
 
+        error_log( "[AP Dashboard] Rendering {$role} → layout: " . implode( ',', $layout_ids ) . ' widgets: ' . implode( ',', $widget_ids ) );
+
         $missing = array_diff( $layout_ids, $widget_ids );
         foreach ( $missing as $id ) {
             error_log( "[AP Dashboard] Widget {$id} missing for role {$role}" );
@@ -866,13 +868,21 @@ class DashboardWidgetRegistry {
             error_log( "[AP Dashboard] Widget {$id} not in layout for role {$role}" );
         }
 
-        $sections = [];
-        $order    = [];
+        $sections  = [];
+        $order     = [];
         foreach ( $layout_ids as $id ) {
-            if ( ! isset( $widgets[ $id ] ) || ! self::user_can_see( $id, $user_id ) ) {
+            if ( ! isset( $widgets[ $id ] ) ) {
                 continue;
             }
-            $cfg     = $widgets[ $id ];
+            if ( ! self::user_can_see( $id, $user_id ) ) {
+                error_log( "[AP Dashboard] Visibility rejected for {$id} and role {$role}" );
+                continue;
+            }
+            $cfg = $widgets[ $id ];
+            if ( ! is_callable( $cfg['callback'] ?? null ) ) {
+                error_log( "[AP Dashboard] Widget {$id} callback not callable" );
+                continue;
+            }
             $class   = $cfg['class'] ?? '';
             $section = $cfg['section'] ?? '';
             if ( $class && method_exists( $class, 'get_section' ) ) {
@@ -890,6 +900,7 @@ class DashboardWidgetRegistry {
             $sections[ $section ][] = $cfg + [ 'id' => $id ];
         }
 
+        $rendered = 0;
         foreach ( $order as $sec ) {
             echo '<section class="ap-widget-section">';
             if ( $sec ) {
@@ -905,12 +916,20 @@ class DashboardWidgetRegistry {
                     } else {
                         echo $echoed;
                     }
+                    $rendered++;
                 } catch ( \Throwable $e ) {
                     ob_end_clean();
                     error_log( 'Widget ' . $cfg['id'] . ' failed: ' . $e->getMessage() );
                 }
             }
             echo '</section>';
+        }
+
+        if ( 0 === $rendered ) {
+            echo '<div class="ap-dashboard-error">' . esc_html__( 'No dashboard widgets could be rendered.', 'artpulse' ) . '</div>';
+            error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
+        } else {
+            error_log( "[AP Dashboard] Rendered {$rendered} widgets for role {$role}" );
         }
 
         do_action( 'ap_after_widgets', $role );
