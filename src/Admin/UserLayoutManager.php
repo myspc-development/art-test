@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Dashboard\WidgetGuard;
 
 /**
  * Manage dashboard widget layouts for users and roles.
@@ -41,6 +42,8 @@ class UserLayoutManager
 
     /**
      * Get the default layout for a role.
+     *
+     * @return array{layout:array<array<string,mixed>>,logs:array<int,string>}
      */
     public static function get_role_layout(string $role): array
     {
@@ -55,44 +58,12 @@ class UserLayoutManager
         }
 
         if (is_array($layout) && !empty($layout)) {
-            $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-            $issues    = [ 'unregistered' => [], 'uncallable' => [] ];
-            $ordered   = [];
-
-            foreach ($layout as $item) {
-                if (is_array($item) && isset($item['id'])) {
-                    $id  = sanitize_key($item['id']);
-                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
-                } else {
-                    $id  = sanitize_key((string) $item);
-                    $vis = true;
-                }
-
-                if (!in_array($id, $valid_ids, true)) {
-                    $issues['unregistered'][] = $id;
-                    continue;
-                }
-
-                $widget   = DashboardWidgetRegistry::get($id);
-                $callback = $widget['callback'] ?? null;
-                if (!is_callable($callback)) {
-                    $issues['uncallable'][] = $id;
-                    continue;
-                }
-
-                $ordered[] = [ 'id' => $id, 'visible' => $vis ];
-            }
-
-            if (!empty($issues['unregistered']) || !empty($issues['uncallable'])) {
-                error_log('[UserLayoutManager] ' . wp_json_encode([
-                    'role'        => $role,
-                    'unregistered'=> $issues['unregistered'],
-                    'uncallable'  => $issues['uncallable'],
-                ]));
-            }
 
             if ($ordered) {
-                return $ordered;
+                return [
+                    'layout' => $ordered,
+                    'logs'   => $logs,
+                ];
             }
         }
 
@@ -102,10 +73,13 @@ class UserLayoutManager
             fn($def) => $def['id'] !== 'artpulse_dashboard_widget'
         );
 
-        return array_map(
-            fn($def) => ['id' => $def['id'], 'visible' => true],
-            $defs
-        );
+        return [
+            'layout' => array_map(
+                fn($def) => ['id' => $def['id'], 'visible' => true],
+                $defs
+            ),
+            'logs'   => [],
+        ];
     }
 
     /**
@@ -134,7 +108,7 @@ class UserLayoutManager
 
     public static function export_layout(string $role): string
     {
-        return json_encode(self::get_role_layout($role), JSON_PRETTY_PRINT);
+        return json_encode(self::get_role_layout($role)['layout'], JSON_PRETTY_PRINT);
     }
 
     public static function import_layout(string $role, string $json): bool
@@ -224,8 +198,9 @@ class UserLayoutManager
             return $layout;
         }
 
-        $role = self::get_primary_role($user_id);
-        $layout = self::get_role_layout($role);
+        $role   = self::get_primary_role($user_id);
+        $result = self::get_role_layout($role);
+        $layout = $result['layout'];
         if (!empty($layout)) {
             return $layout;
         }

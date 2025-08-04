@@ -98,7 +98,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase
         $this->assertEquals([
             ['id' => 'foo', 'visible' => true],
             ['id' => 'bar', 'visible' => false],
-        ], $saved);
+        ], $saved['layout']);
+        $this->assertSame([], $saved['logs']);
     }
 
     public function test_export_layout_endpoint(): void
@@ -124,6 +125,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $saved = UserLayoutManager::get_role_layout('administrator');
-        $this->assertSame([['id' => 'baz', 'visible' => true]], $saved);
+        $this->assertSame([['id' => 'baz', 'visible' => true]], $saved['layout']);
+        $this->assertSame([], $saved['logs']);
     }
 }

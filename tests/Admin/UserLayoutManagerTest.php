@@ -191,18 +191,39 @@ class UserLayoutManagerTest extends TestCase
             ],
         ];
 
-        $layout = UserLayoutManager::get_role_layout('subscriber');
+        $result = UserLayoutManager::get_role_layout('subscriber');
+        $layout = $result['layout'];
         $this->assertSame([
             ['id' => 'gr_two', 'visible' => true],
             ['id' => 'gr_one', 'visible' => true],
         ], $layout);
+        $this->assertSame([], $result['logs']);
 
         self::$options['ap_dashboard_widget_config'] = [];
         $expected = array_map(
             fn($id) => ['id' => $id, 'visible' => true],
             array_column(DashboardWidgetRegistry::get_definitions(), 'id')
         );
-        $this->assertSame($expected, UserLayoutManager::get_role_layout('subscriber'));
+        $this->assertSame($expected, UserLayoutManager::get_role_layout('subscriber')['layout']);
+    }
+
+    public function test_get_role_layout_logs_and_stubs_invalid_widget(): void
+    {
+        DashboardWidgetRegistry::register('good', 'Good', '', '', '__return_null');
+
+        self::$options['ap_dashboard_widget_config'] = [
+            'subscriber' => [
+                ['id' => 'good'],
+                ['id' => 'missing'],
+            ],
+        ];
+
+        $result = UserLayoutManager::get_role_layout('subscriber');
+        $this->assertSame(['missing'], $result['logs']);
+        $this->assertSame('missing', $result['layout'][1]['id']);
+        $stub = DashboardWidgetRegistry::get('missing');
+        $this->assertNotNull($stub);
+        $this->assertIsCallable($stub['callback']);
     }
 
     public function test_get_role_layout_logs_invalid_widgets(): void
@@ -285,7 +306,7 @@ class UserLayoutManagerTest extends TestCase
         DashboardWidgetRegistry::register('artpulse_dashboard_widget', 'Manager', '', '', '__return_null');
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
 
-        $layout = UserLayoutManager::get_role_layout('subscriber');
+        $layout = UserLayoutManager::get_role_layout('subscriber')['layout'];
         $ids = array_column($layout, 'id');
 
         $this->assertContains('foo', $ids);
