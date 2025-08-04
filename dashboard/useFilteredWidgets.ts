@@ -17,10 +17,22 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
   const nonce = window.wpApiSettings?.nonce || '';
 
   useEffect(() => {
-    fetch(restRoot + 'artpulse/v1/dashboard-config', { headers: { 'X-WP-Nonce': nonce } })
-      .then(r => r.json())
-      .then(data => setWidgetRoles(data.widget_roles || {}))
-      .catch(() => {});
+    const fetchConfig = () => {
+      fetch(restRoot + 'artpulse/v1/dashboard-config', { headers: { 'X-WP-Nonce': nonce } })
+        .then(r => r.json())
+        .then(data => setWidgetRoles(data.widget_roles || {}))
+        .catch(err => {
+          // Log the error for debugging purposes
+          console.error('Failed to load dashboard configuration', err);
+          // Offer a retry option and show a fallback message
+          if (window.confirm('Failed to load dashboard configuration. Retry?')) {
+            fetchConfig();
+          } else {
+            alert('Using default dashboard configuration.');
+          }
+        });
+    };
+    fetchConfig();
   }, []);
 
   const roles = currentUser.roles || (currentUser.role ? [currentUser.role] : []);
