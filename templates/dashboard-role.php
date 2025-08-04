@@ -4,5 +4,6 @@ if (!defined('AP_DASHBOARD_RENDERING')) {
     ap_render_dashboard($role ? [$role] : []);
     return;
 }
+
 ?>
 <div id="ap-user-dashboard" class="ap-dashboard-grid" data-role="<?php echo esc_attr($user_role ?? ''); ?>"></div>
