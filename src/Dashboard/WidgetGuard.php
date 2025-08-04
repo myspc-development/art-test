@@ -100,8 +100,13 @@ class WidgetGuard
 
     /**
      * Register a stub widget when no implementation exists.
+     *
+     * This provides a stable public API for registering placeholder
+     * widgets that do not yet have an implementation. It leverages the
+     * existing {@see register_placeholder()} logic so that the
+     * placeholder behaviour stays consistent.
      */
-    public static function register_stub_widget(string $id, array $meta = []): void
+    public static function register_stub_widget(string $id, array $meta, array $cfg = []): void
     {
         $meta = array_merge([
             'title'   => ucwords(str_replace('_', ' ', $id)),
@@ -109,18 +114,20 @@ class WidgetGuard
             'section' => 'insights',
         ], $meta);
 
-        $callback = static function ($unused = null) {
-            ApPlaceholderWidget::render(['debug' => 'Stub widget']);
-        };
+        // Ensure the widget exists in the registry before attempting to
+        // update it with placeholder information.
+        if (DashboardWidgetRegistry::get($id) === null) {
+            $def = $cfg;
+            $def['label']       = $meta['title'];
+            $def['icon']        = $meta['icon'];
+            $def['description'] = $def['description'] ?? __('Placeholder widget', 'artpulse');
+            $def['callback']    = static function () {};
+            $def['section']     = $meta['section'];
 
-        DashboardWidgetRegistry::register_widget($id, [
-            'label'       => $meta['title'],
-            'icon'        => $meta['icon'],
-            'description' => __('Placeholder widget', 'artpulse'),
-            'callback'    => $callback,
-            'class'       => ApPlaceholderWidget::class,
-            'section'     => $meta['section'],
-        ]);
+            DashboardWidgetRegistry::register_widget($id, $def);
+        }
+
+        self::register_placeholder($id, $meta, $cfg);
     }
 
     /**
