@@ -99,6 +99,31 @@ class WidgetGuard
     }
 
     /**
+     * Register a stub widget when no implementation exists.
+     */
+    public static function register_stub_widget(string $id, array $meta = []): void
+    {
+        $meta = array_merge([
+            'title'   => ucwords(str_replace('_', ' ', $id)),
+            'icon'    => 'info',
+            'section' => 'insights',
+        ], $meta);
+
+        $callback = static function ($unused = null) {
+            ApPlaceholderWidget::render(['debug' => 'Stub widget']);
+        };
+
+        DashboardWidgetRegistry::register_widget($id, [
+            'label'       => $meta['title'],
+            'icon'        => $meta['icon'],
+            'description' => __('Placeholder widget', 'artpulse'),
+            'callback'    => $callback,
+            'class'       => ApPlaceholderWidget::class,
+            'section'     => $meta['section'],
+        ]);
+    }
+
+    /**
      * Default map of known widgets.
      *
      * @return array<string,array<string,string>>
