@@ -319,7 +319,7 @@ class UserDashboardManager
         }
 
         // Temporary aliases for backward compatibility
-        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout', 'GET')) {
             register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
             'methods'  => 'GET',
             'callback' => [ self::class, 'getDashboardLayout' ],
@@ -327,7 +327,7 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout', 'POST')) {
             register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
             'methods'  => 'POST',
             'callback' => [ self::class, 'saveDashboardLayout' ],

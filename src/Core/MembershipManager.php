@@ -172,13 +172,11 @@ class MembershipManager
             },
         ]);
 
-        register_rest_route('artpulse/v1', '/membership-levels', [
-            'methods'             => ['GET', 'POST'],
-            'callback'            => [ self::class, 'handleMembershipLevels' ],
+
             'permission_callback' => [ self::class, 'checkManageMemberships' ],
         ]);
 
-        register_rest_route('artpulse/v1', '/membership-levels/(?P<level>[^/]+)', [
+
             'methods'             => 'DELETE',
             'callback'            => [ self::class, 'deleteLevel' ],
             'permission_callback' => [ self::class, 'checkManageMemberships' ],

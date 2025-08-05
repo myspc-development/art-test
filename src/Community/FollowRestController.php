@@ -18,9 +18,7 @@ class FollowRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/follows', [
-            'methods'             => ['GET', 'POST', 'DELETE'],
-            'callback'            => [self::class, 'handle_follows'],
+
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [
                 'post_id' => [

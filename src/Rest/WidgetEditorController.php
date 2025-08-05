@@ -30,9 +30,6 @@ class WidgetEditorController
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
 
-        register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
-            'methods'  => ['GET', 'POST'],
-            'callback' => [self::class, 'handle_layout'],
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
     }
