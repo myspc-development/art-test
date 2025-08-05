@@ -41,7 +41,7 @@ class AP_CLI_Dashboard_Diagnose {
             }
         }
 
-        $available_widgets = ap_get_available_widgets();
+        $available_widgets = ap_get_all_widget_definitions();
         $registered = [];
         foreach ($available_widgets as $id => $def) {
             $widget_roles = isset($def['roles']) ? (array)$def['roles'] : [];
