@@ -18,8 +18,8 @@
     "dev": "vite",
     "start": "wp-scripts start",
     "release": "standard-version",
-    "test": "jest",
-    "test:js": "jest",
+    "test": "jest --config=jest.config.cjs",
+    "test:js": "jest --config=jest.config.cjs",
     "test:e2e": "node tests/e2e/monetization-workflow.js",
     "test:php": "WP_PHPUNIT__TESTS_CONFIG=wp-tests-config.php ./vendor/bin/phpunit",
     "test:ui": "npm run cypress:run",
@@ -79,13 +79,5 @@
     "standard-version": "^9.5.0",
     "typescript": "^5.4.5",
     "vite": "^5.0.11"
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "moduleFileExtensions": ["js", "jsx"],
-    "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"]
   }
 }
