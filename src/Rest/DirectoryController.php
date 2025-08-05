@@ -10,7 +10,7 @@ class DirectoryController
 {
     public static function register_routes(): void
     {
-        register_rest_route('art/v1', '/artists', [
+        register_rest_route('artpulse/v1', '/artists', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_artists'],
             'permission_callback' => function() {
@@ -21,7 +21,7 @@ class DirectoryController
             },
         ]);
 
-        register_rest_route('art/v1', '/events', [
+        register_rest_route('artpulse/v1', '/events', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_events'],
             'permission_callback' => function() {
