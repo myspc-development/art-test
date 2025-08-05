@@ -9,7 +9,11 @@ function ap_render_rsvp_button(int $event_id): string
 {
     if (!is_user_logged_in()) {
         $login = \ArtPulse\Core\Plugin::get_login_url();
-        return '<a href="' . esc_url($login) . '" class="ap-btn ap-login-rsvp">' . esc_html__('Login to RSVP', 'artpulse') . '</a>';
+        if ($login) {
+            return '<a href="' . esc_url($login) . '" class="ap-btn ap-login-rsvp">' . esc_html__('Login to RSVP', 'artpulse') . '</a>';
+        }
+
+        return esc_html__('Login to RSVP', 'artpulse');
     }
 
     $list       = get_post_meta($event_id, 'event_rsvp_list', true);
