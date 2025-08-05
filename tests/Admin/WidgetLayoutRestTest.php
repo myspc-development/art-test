@@ -3,6 +3,7 @@ namespace ArtPulse\Admin\Tests;
 
 use WP_REST_Request;
 use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\Rest\WidgetLayoutController;
 
 /**
  * @group admin
@@ -17,7 +18,7 @@ class WidgetLayoutRestTest extends \WP_UnitTestCase
         $this->uid = self::factory()->user->create(['role' => 'administrator']);
         wp_set_current_user($this->uid);
 
-        require_once __DIR__ . '/../../includes/rest/widget-layout.php';
+        WidgetLayoutController::register();
         do_action('rest_api_init');
     }
 

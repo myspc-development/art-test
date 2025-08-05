@@ -5,6 +5,7 @@ namespace ArtPulse\Rest;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_REST_Server;
 use ArtPulse\Integration\PortfolioSync;
 
 class SubmissionRestController
@@ -40,26 +41,22 @@ class SubmissionRestController
             'artpulse/v1',
             '/submissions',
             [
-                'methods'             => 'POST',
-                'callback'            => [ self::class, 'handle_submission' ],
-                'permission_callback' => [ self::class, 'check_permissions' ],
-                'args'                => self::get_endpoint_args(),
-            ]
-        );
-
-        // Optional: GET handler to avoid 404 if frontend pings it
-        register_rest_route(
-            'artpulse/v1',
-            '/submissions',
-            [
-                'methods'             => 'GET',
-                'callback'            => fn() => rest_ensure_response(['message' => 'Use POST to submit a form.']),
-                'permission_callback' => function() {
-                    if (!current_user_can('read')) {
-                        return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                    }
-                    return true;
-                },
+                [
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => [ self::class, 'handle_submission' ],
+                    'permission_callback' => [ self::class, 'check_permissions' ],
+                    'args'                => self::get_endpoint_args(),
+                ],
+                [
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => fn() => rest_ensure_response(['message' => 'Use POST to submit a form.']),
+                    'permission_callback' => function() {
+                        if (!current_user_can('read')) {
+                            return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
+                        }
+                        return true;
+                    },
+                ],
             ]
         );
     }

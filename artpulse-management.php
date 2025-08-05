@@ -161,16 +161,11 @@ require_once __DIR__ . '/auto-tagger.php';
 require_once __DIR__ . '/admin/page-artpulse-ai.php';
 require_once __DIR__ . '/pwa-manifest.php';
 include_once __DIR__ . '/shortcodes/artist-comments.php';
-require_once __DIR__ . '/includes/rest/artist.php';
-require_once __DIR__ . '/includes/rest/status.php';
-require_once __DIR__ . '/includes/rest-role-matrix.php';
-require_once __DIR__ . '/includes/rest/widget-layout.php';
 require_once __DIR__ . '/includes/class-artpulse-rest-controller.php';
 // The DashboardConfigController class provides this route.
 // require_once __DIR__ . '/api/dashboard-config.php';
 require_once __DIR__ . '/admin-menu.php';
 require_once __DIR__ . '/includes/http-hooks.php';
-require_once __DIR__ . '/includes/rest-update-diagnostics.php';
 // Legacy dashboard implementation removed in favor of DashboardWidgetRegistry
 // based widgets loaded via the manifest.
 require_once __DIR__ . '/widgets/QAChecklistWidget.php';
