@@ -131,9 +131,13 @@ add_action('init', function () {
         return;
     }
     $required = [
-        'edit_pages', 'publish_pages', 'edit_others_pages',
-        'edit_published_pages', 'delete_pages', 'delete_others_pages',
-        'edit_posts', 'publish_posts', 'edit_others_posts', 'delete_posts',
+        'edit_pages',
+        'publish_pages',
+        'edit_posts',
+        'edit_others_pages',
+        'edit_published_pages',
+        'delete_pages',
+        'delete_others_pages',
     ];
     foreach ($required as $cap) {
         if (!$admin->has_cap($cap)) {
@@ -158,9 +162,13 @@ add_action('init', function () {
 add_filter('user_has_cap', function (array $allcaps, array $caps, array $args, \WP_User $user): array {
     if (in_array('administrator', (array) $user->roles, true)) {
         $required = [
-            'edit_pages', 'publish_pages', 'edit_others_pages',
-            'edit_published_pages', 'delete_pages', 'delete_others_pages',
-            'edit_posts', 'publish_posts', 'edit_others_posts', 'delete_posts',
+            'edit_pages',
+            'publish_pages',
+            'edit_posts',
+            'edit_others_pages',
+            'edit_published_pages',
+            'delete_pages',
+            'delete_others_pages',
         ];
         foreach ($required as $cap) {
             if (empty($allcaps[$cap])) {
