@@ -53,5 +53,6 @@ php tools/rest-route-conflicts.php
 
 - Use `--json` for machine-readable output.
 - Pass `--suggest-fix` to print code snippets that guard new registrations with an existing route check.
+- Provide `--output=tools/rest-route-conflicts.json` (or another path) to save results to a file.
 
 The script exits with a non-zero status when conflicts are detected. It is invoked automatically from the project's pre-commit hook so new duplicates are caught before code is committed.
