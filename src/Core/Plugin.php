@@ -912,7 +912,10 @@ class Plugin
         ]);
 
         if (!empty($pages)) {
-            return get_permalink($pages[0]->ID);
+            $permalink = get_permalink($pages[0]->ID);
+            if ($permalink) {
+                return $permalink;
+            }
         }
 
         return wp_login_url();
