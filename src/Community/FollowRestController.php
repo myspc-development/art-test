@@ -18,21 +18,11 @@ class FollowRestController
 
     public static function register_routes(): void
     {
-
+        register_rest_route('artpulse/v1', '/follows', [
+            'methods'             => ['POST', 'DELETE', 'GET'],
+            'callback'            => [self::class, 'handle_follows'],
             'permission_callback' => fn() => is_user_logged_in(),
-            'args'                => [
-                'post_id' => [
-                    'type'        => 'integer',
-                    'required'    => false,
-                    'description' => 'ID of the post to follow or unfollow.',
-                ],
-                'post_type' => [
-                    'type'        => 'string',
-                    'required'    => false,
-                    'enum'        => ['artpulse_artist', 'artpulse_event', 'artpulse_org', 'user'],
-                    'description' => 'The post type being followed.',
-                ],
-            ],
+            'args'                => self::get_schema(),
         ]);
 
         register_rest_route('artpulse/v1', '/followers/(?P<user_id>\\d+)', [
