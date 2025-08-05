@@ -7,12 +7,12 @@ if (!defined('ABSPATH')) { exit; }
 require_once __DIR__ . '/includes/db-schema.php';
 require_once __DIR__ . '/includes/avatar-https-fix.php';
 require_once __DIR__ . '/includes/rest-dedupe.php';
-require_once __DIR__ . '/includes/rest-route-audit.php';
 require_once __DIR__ . '/includes/install.php';
 require_once __DIR__ . '/ap-placeholder-bootstrap.php';
 require_once __DIR__ . '/includes/reset-user-dashboard-meta.php';
 require_once __DIR__ . '/includes/dashboard-debug-inspector.php';
 require_once __DIR__ . '/includes/class-cli-dashboard-diagnose.php';
+require_once __DIR__ . '/includes/class-cli-rest-route-audit.php';
 
 // Development helpers
 if (defined('WP_DEBUG') && WP_DEBUG) {
