@@ -4,22 +4,11 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use WP_User_Query;
 
 class DirectoryController
 {
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/artists', [
-            'methods'             => WP_REST_Server::READABLE,
-            'callback'            => [self::class, 'get_artists'],
-            'permission_callback' => function() {
-                if (!current_user_can('read')) {
-                    return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                }
-                return true;
-            },
-        ]);
 
         register_rest_route('artpulse/v1', '/events', [
             'methods'             => WP_REST_Server::READABLE,
@@ -33,23 +22,6 @@ class DirectoryController
         ]);
     }
 
-    public static function get_artists(WP_REST_Request $request): WP_REST_Response
-    {
-        $query  = new WP_User_Query([
-            'role'   => 'artist',
-            'fields' => ['ID', 'display_name'],
-            'number' => -1,
-        ]);
-        $data = [];
-        foreach ($query->get_results() as $u) {
-            $data[] = [
-                'id'   => $u->ID,
-                'name' => $u->display_name,
-                'link' => get_author_posts_url($u->ID),
-            ];
-        }
-        return rest_ensure_response($data);
-    }
 
     public static function get_events(WP_REST_Request $request): WP_REST_Response
     {
