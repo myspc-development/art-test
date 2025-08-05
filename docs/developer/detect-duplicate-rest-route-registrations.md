@@ -42,3 +42,16 @@ add_filter('rest_endpoints', function ($endpoints) {
     return $endpoints;
 });
 ```
+
+### Option 2: CLI Inspection Script (Recommended)
+
+Run the bundled checker to scan all registered routes after WordPress boots:
+
+```bash
+php tools/rest-route-conflicts.php
+```
+
+- Use `--json` for machine-readable output.
+- Pass `--suggest-fix` to print code snippets that guard new registrations with an existing route check.
+
+The script exits with a non-zero status when conflicts are detected. It is invoked automatically from the project's pre-commit hook so new duplicates are caught before code is committed.
