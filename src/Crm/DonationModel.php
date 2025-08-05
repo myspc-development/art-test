@@ -3,8 +3,24 @@ namespace ArtPulse\Crm;
 
 class DonationModel
 {
-    public static function add(int $org_id, int $user_id, float $amount, string $method): void
+    public static function add(int $org_id, int $user_id, float $amount, string $method = ''): void
     {
+        if ($org_id <= 0) {
+            throw new \InvalidArgumentException('Organization ID must be a positive integer.');
+        }
+
+        if ($user_id <= 0) {
+            throw new \InvalidArgumentException('User ID must be a positive integer.');
+        }
+
+        if ($amount <= 0) {
+            throw new \InvalidArgumentException('Amount must be greater than zero.');
+        }
+
+        if ($method === '') {
+            throw new \InvalidArgumentException('Method cannot be empty.');
+        }
+
         global $wpdb;
         $table = $wpdb->prefix . 'ap_donations';
         $wpdb->insert($table, [
