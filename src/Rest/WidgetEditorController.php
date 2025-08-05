@@ -29,6 +29,12 @@ class WidgetEditorController
             'callback' => [self::class, 'get_roles'],
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
+
+        register_rest_route('artpulse/v1', '/layout', [
+            'methods'  => ['GET', 'POST'],
+            'callback' => [self::class, 'handle_layout'],
+            'permission_callback' => fn () => current_user_can('manage_options'),
+        ]);
     }
 
     public static function get_widgets(): WP_REST_Response
