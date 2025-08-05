@@ -17,26 +17,27 @@ class CollectionRestController
     public static function register_routes(): void
     {
         register_rest_route(self::NAMESPACE, '/collections', [
-            'methods'             => WP_REST_Server::READABLE,
-            'callback'            => [self::class, 'get_collections'],
-            'permission_callback' => function () {
-                return current_user_can('read');
-            },
-        ]);
-
-        register_rest_route(self::NAMESPACE, '/collections', [
-            'methods'             => WP_REST_Server::CREATABLE,
-            'callback'            => [self::class, 'create_or_update'],
-            'permission_callback' => function () {
-                return current_user_can('edit_ap_collections');
-            },
-            'args'                => [
-                'id' => [ 'type' => 'integer', 'required' => false ],
-                'title' => [ 'type' => 'string', 'required' => true ],
-                'items' => [
-                    'type'  => 'array',
-                    'items' => [ 'type' => 'integer' ],
-                    'required' => false,
+            [
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => [self::class, 'get_collections'],
+                'permission_callback' => function () {
+                    return current_user_can('read');
+                },
+            ],
+            [
+                'methods'             => WP_REST_Server::CREATABLE,
+                'callback'            => [self::class, 'create_or_update'],
+                'permission_callback' => function () {
+                    return current_user_can('edit_ap_collections');
+                },
+                'args'                => [
+                    'id'    => [ 'type' => 'integer', 'required' => false ],
+                    'title' => [ 'type' => 'string',  'required' => true ],
+                    'items' => [
+                        'type'  => 'array',
+                        'items' => [ 'type' => 'integer' ],
+                        'required' => false,
+                    ],
                 ],
             ],
         ]);

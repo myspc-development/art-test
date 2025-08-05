@@ -2,6 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use WP_REST_Request;
+use ArtPulse\Rest\RoleMatrixController;
 
 /**
  * @group restapi
@@ -12,7 +13,7 @@ class RoleMatrixBatchTest extends \WP_UnitTestCase {
 
     public function set_up(): void {
         parent::set_up();
-        require_once __DIR__ . '/../../includes/rest-role-matrix.php';
+        RoleMatrixController::register();
         do_action('rest_api_init');
         $this->admin = self::factory()->user->create(['role' => 'administrator']);
         $this->user  = self::factory()->user->create(['role' => 'subscriber']);
