@@ -10,17 +10,19 @@ class ArtPulse_REST_Controller {
     }
 
     public static function register_routes() {
-        register_rest_route('artpulse/v1', '/events/nearby', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'get_nearby_events'],
-            'permission_callback' => '__return_true',
-            'args'                => [
-                'lat'    => [ 'type' => 'number', 'required' => true ],
-                'lng'    => [ 'type' => 'number', 'required' => true ],
-                'radius' => [ 'type' => 'number', 'required' => false, 'default' => 50 ],
-                'limit'  => [ 'type' => 'integer', 'required' => false, 'default' => 20 ],
-            ],
-        ]);
+        if (!ap_rest_route_registered('artpulse/v1', '/events/nearby')) {
+            register_rest_route('artpulse/v1', '/events/nearby', [
+                'methods'             => 'GET',
+                'callback'            => [self::class, 'get_nearby_events'],
+                'permission_callback' => '__return_true',
+                'args'                => [
+                    'lat'    => [ 'type' => 'number', 'required' => true ],
+                    'lng'    => [ 'type' => 'number', 'required' => true ],
+                    'radius' => [ 'type' => 'number', 'required' => false, 'default' => 50 ],
+                    'limit'  => [ 'type' => 'integer', 'required' => false, 'default' => 20 ],
+                ],
+            ]);
+        }
 
         register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/rsvp', [
             'methods'             => 'POST',
