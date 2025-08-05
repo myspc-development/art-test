@@ -13,11 +13,13 @@ class SegmentationManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/admin/users', [
+        if (!ap_rest_route_registered('artpulse/v1', '/admin/users')) {
+            register_rest_route('artpulse/v1', '/admin/users', [
             'methods'  => 'GET',
             'callback' => [self::class, 'handle'],
             'permission_callback' => [self::class, 'check_permission'],
         ]);
+        }
     }
 
     public static function check_permission(): bool

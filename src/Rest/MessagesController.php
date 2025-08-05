@@ -12,11 +12,13 @@ class MessagesController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/messages/(?P<id>\d+)/reply', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/(?P<id>\d+)/reply')) {
+            register_rest_route('artpulse/v1', '/messages/(?P<id>\d+)/reply', [
             'methods'             => 'POST',
             'permission_callback' => fn () => current_user_can('read'),
             'callback'            => [self::class, 'reply'],
         ]);
+        }
     }
 
     public static function reply(WP_REST_Request $request)

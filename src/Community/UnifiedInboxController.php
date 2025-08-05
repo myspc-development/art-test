@@ -18,7 +18,8 @@ class UnifiedInboxController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/inbox', [
+        if (!ap_rest_route_registered('artpulse/v1', '/inbox')) {
+            register_rest_route('artpulse/v1', '/inbox', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -26,8 +27,10 @@ class UnifiedInboxController
                 'limit' => [ 'type' => 'integer', 'default' => 20 ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/inbox/read', [
+        if (!ap_rest_route_registered('artpulse/v1', '/inbox/read')) {
+            register_rest_route('artpulse/v1', '/inbox/read', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'mark_read'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -37,8 +40,10 @@ class UnifiedInboxController
                 'ids'  => [ 'type' => 'array', 'required' => false ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/inbox/unread', [
+        if (!ap_rest_route_registered('artpulse/v1', '/inbox/unread')) {
+            register_rest_route('artpulse/v1', '/inbox/unread', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'mark_unread'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -48,6 +53,7 @@ class UnifiedInboxController
                 'ids'  => [ 'type' => 'array', 'required' => false ],
             ],
         ]);
+        }
     }
 
     public static function list(WP_REST_Request $request): WP_REST_Response

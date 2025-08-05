@@ -43,16 +43,20 @@ class EventBoostManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/boost/create-checkout', [
+        if (!ap_rest_route_registered('artpulse/v1', '/boost/create-checkout')) {
+            register_rest_route('artpulse/v1', '/boost/create-checkout', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_checkout'],
             'permission_callback' => function () { return is_user_logged_in(); },
         ]);
-        register_rest_route('artpulse/v1', '/boost/webhook', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/boost/webhook')) {
+            register_rest_route('artpulse/v1', '/boost/webhook', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle_webhook'],
             'permission_callback' => '__return_true',
         ]);
+        }
     }
 
     public static function create_checkout(WP_REST_Request $req)

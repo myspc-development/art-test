@@ -14,7 +14,8 @@ class RecommendationRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/recommendations', [
+        if (!ap_rest_route_registered('artpulse/v1', '/recommendations')) {
+            register_rest_route('artpulse/v1', '/recommendations', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_recommendations'],
             'permission_callback' => function () {
@@ -44,6 +45,7 @@ class RecommendationRestController
                 ],
             ],
         ]);
+        }
     }
 
     public static function get_recommendations(WP_REST_Request $request): WP_REST_Response|WP_Error

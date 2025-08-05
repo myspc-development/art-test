@@ -15,7 +15,8 @@ class GrantReportController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/orgs/(?P<id>\\d+)/grant-report', [
+        if (!ap_rest_route_registered('artpulse/v1', '/orgs/(?P<id>\\d+)/grant-report')) {
+            register_rest_route('artpulse/v1', '/orgs/(?P<id>\\d+)/grant-report', [
             'methods'  => 'GET',
             'callback' => [self::class, 'export'],
             'permission_callback' => function () { return current_user_can('read'); },
@@ -24,6 +25,7 @@ class GrantReportController
                 'format' => ['default' => 'csv'],
             ],
         ]);
+        }
     }
 
     public static function export(WP_REST_Request $req)

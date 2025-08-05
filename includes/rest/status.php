@@ -2,7 +2,8 @@
 if (!defined('ABSPATH')) { exit; }
 
 add_action('rest_api_init', function () {
-    register_rest_route('artpulse/v1', '/status', [
+    if (!ap_rest_route_registered('artpulse/v1', '/status')) {
+        register_rest_route('artpulse/v1', '/status', [
         'methods'             => 'GET',
         'callback'            => 'ap_get_system_status',
         'permission_callback' => function () {
@@ -12,6 +13,7 @@ add_action('rest_api_init', function () {
             return true;
         },
     ]);
+    }
 });
 
 function ap_get_system_status() {

@@ -24,7 +24,8 @@ class AutoTaggerRestController
      */
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/tag', [
+        if (!ap_rest_route_registered('artpulse/v1', '/tag')) {
+            register_rest_route('artpulse/v1', '/tag', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'generate_tags'],
             'permission_callback' => static fn() => current_user_can('edit_posts'),
@@ -36,6 +37,7 @@ class AutoTaggerRestController
                 ],
             ],
         ]);
+        }
     }
 
     /**

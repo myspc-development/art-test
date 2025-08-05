@@ -111,7 +111,8 @@ class DirectMessages
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/messages/send', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/send')) {
+            register_rest_route('artpulse/v1', '/messages/send', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'send_v2'],
             'permission_callback' => [self::class, 'permission_send'],
@@ -125,8 +126,10 @@ class DirectMessages
                 'tags'         => [ 'type' => 'array',   'required' => false ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages')) {
+            register_rest_route('artpulse/v1', '/messages', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'send'],
             'permission_callback' => [self::class, 'permission_send'],
@@ -138,8 +141,10 @@ class DirectMessages
                 'context_id'   => [ 'type' => 'integer', 'required' => false ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages')) {
+            register_rest_route('artpulse/v1', '/messages', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'fetch'],
             'permission_callback' => static function () {
@@ -149,8 +154,10 @@ class DirectMessages
                 'with' => [ 'type' => 'integer', 'required' => true ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages/updates', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/updates')) {
+            register_rest_route('artpulse/v1', '/messages/updates', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'updates'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -159,8 +166,10 @@ class DirectMessages
                 'context_id'  => [ 'type' => 'integer', 'required' => false ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages/seen', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/seen')) {
+            register_rest_route('artpulse/v1', '/messages/seen', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'seen'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -168,8 +177,10 @@ class DirectMessages
                 'message_ids' => [ 'type' => 'array', 'required' => true ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages/search', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/search')) {
+            register_rest_route('artpulse/v1', '/messages/search', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'search'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -177,14 +188,18 @@ class DirectMessages
                 'q' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\d+)', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\d+)')) {
+            register_rest_route('artpulse/v1', '/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\d+)', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'fetch_context'],
             'permission_callback' => [self::class, 'permission_view'],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages/block', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/block')) {
+            register_rest_route('artpulse/v1', '/messages/block', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'block_user'],
             'permission_callback' => fn() => CommunityRoles::can_block(get_current_user_id()),
@@ -192,8 +207,10 @@ class DirectMessages
                 'user_id' => [ 'type' => 'integer', 'required' => true ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages/label', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/label')) {
+            register_rest_route('artpulse/v1', '/messages/label', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'label'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -203,8 +220,10 @@ class DirectMessages
                 'action' => [ 'type' => 'string',  'required' => false ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages/thread', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/thread')) {
+            register_rest_route('artpulse/v1', '/messages/thread', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'thread'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -212,8 +231,10 @@ class DirectMessages
                 'id' => [ 'type' => 'integer', 'required' => true ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/messages/bulk', [
+        if (!ap_rest_route_registered('artpulse/v1', '/messages/bulk')) {
+            register_rest_route('artpulse/v1', '/messages/bulk', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'bulk_action'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -223,16 +244,20 @@ class DirectMessages
                 'tag'    => [ 'type' => 'string', 'required' => false ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/conversations', [
+        if (!ap_rest_route_registered('artpulse/v1', '/conversations')) {
+            register_rest_route('artpulse/v1', '/conversations', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'rest_list_conversations'],
             'permission_callback' => static function () {
                 return is_user_logged_in();
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/message/read', [
+        if (!ap_rest_route_registered('artpulse/v1', '/message/read')) {
+            register_rest_route('artpulse/v1', '/message/read', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'mark_read'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -240,6 +265,7 @@ class DirectMessages
                 'nonce' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
+        }
     }
 
     public static function send(WP_REST_Request $req): WP_REST_Response|WP_Error

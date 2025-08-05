@@ -13,17 +13,21 @@ class GrantAssistant
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/ai/generate-grant-copy', [
+        if (!ap_rest_route_registered('artpulse/v1', '/ai/generate-grant-copy')) {
+            register_rest_route('artpulse/v1', '/ai/generate-grant-copy', [
             'methods'  => 'POST',
             'callback' => [self::class, 'generate'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/ai/rewrite', [
+        if (!ap_rest_route_registered('artpulse/v1', '/ai/rewrite')) {
+            register_rest_route('artpulse/v1', '/ai/rewrite', [
             'methods'  => 'POST',
             'callback' => [self::class, 'rewrite'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
+        }
     }
 
     public static function maybe_install_table(): void

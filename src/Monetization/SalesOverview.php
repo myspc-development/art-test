@@ -16,11 +16,13 @@ class SalesOverview
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/user/sales', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user/sales')) {
+            register_rest_route('artpulse/v1', '/user/sales', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_sales'],
             'permission_callback' => [self::class, 'check_logged_in'],
         ]);
+        }
     }
 
     public static function check_logged_in()

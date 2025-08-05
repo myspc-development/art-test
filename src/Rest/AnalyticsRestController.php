@@ -15,7 +15,8 @@ class AnalyticsRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/analytics/trends', [
+        if (!ap_rest_route_registered('artpulse/v1', '/analytics/trends')) {
+            register_rest_route('artpulse/v1', '/analytics/trends', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_trends'],
             'permission_callback' => function () {
@@ -26,8 +27,10 @@ class AnalyticsRestController
                 'days'     => [ 'type' => 'integer', 'default' => 30 ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/analytics/export', [
+        if (!ap_rest_route_registered('artpulse/v1', '/analytics/export')) {
+            register_rest_route('artpulse/v1', '/analytics/export', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'export_csv'],
             'permission_callback' => function () {
@@ -38,6 +41,7 @@ class AnalyticsRestController
                 'days'     => [ 'type' => 'integer', 'default' => 30 ],
             ],
         ]);
+        }
     }
 
     public static function get_trends(WP_REST_Request $request): WP_REST_Response|WP_Error

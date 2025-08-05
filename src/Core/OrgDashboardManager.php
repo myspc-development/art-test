@@ -14,7 +14,8 @@ class OrgDashboardManager
 
     public static function register_routes()
     {
-        register_rest_route('artpulse/v1', '/org/dashboard', [
+        if (!ap_rest_route_registered('artpulse/v1', '/org/dashboard')) {
+            register_rest_route('artpulse/v1', '/org/dashboard', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_dashboard_data'],
             'permission_callback' => function() {
@@ -24,6 +25,7 @@ class OrgDashboardManager
                 return true;
             },
         ]);
+        }
     }
 
     public static function get_dashboard_data(WP_REST_Request $request): WP_REST_Response

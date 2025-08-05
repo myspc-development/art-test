@@ -14,7 +14,8 @@ class CommentReportRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/comment/(?P<id>\\d+)/report', [
+        if (!ap_rest_route_registered('artpulse/v1', '/comment/(?P<id>\\d+)/report')) {
+            register_rest_route('artpulse/v1', '/comment/(?P<id>\\d+)/report', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'report'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -23,6 +24,7 @@ class CommentReportRestController
                 'reason' => [ 'type' => 'string', 'required' => false ],
             ],
         ]);
+        }
     }
 
     public static function report(WP_REST_Request $request): WP_REST_Response|WP_Error

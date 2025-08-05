@@ -30,15 +30,18 @@ class PromotionManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/promoted', [
+        if (!ap_rest_route_registered('artpulse/v1', '/promoted')) {
+            register_rest_route('artpulse/v1', '/promoted', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_promoted'],
             'permission_callback' => function () {
                 return current_user_can('read');
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/promote', [
+        if (!ap_rest_route_registered('artpulse/v1', '/promote')) {
+            register_rest_route('artpulse/v1', '/promote', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_promotion'],
             'permission_callback' => fn() => current_user_can('edit_posts'),
@@ -50,6 +53,7 @@ class PromotionManager
                 'priority_level'=> ['type' => 'integer', 'default' => 0],
             ],
         ]);
+        }
     }
 
     public static function list_promoted(): WP_REST_Response

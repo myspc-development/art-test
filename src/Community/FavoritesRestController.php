@@ -16,7 +16,8 @@ class FavoritesRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/favorites', [
+        if (!ap_rest_route_registered('artpulse/v1', '/favorites')) {
+            register_rest_route('artpulse/v1', '/favorites', [
             'methods'  => 'DELETE',
             'callback' => [self::class, 'remove_favorite'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -25,6 +26,7 @@ class FavoritesRestController
                 'object_type' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
+        }
     }
 
     public static function remove_favorite(WP_REST_Request $request): WP_REST_Response|WP_Error

@@ -17,13 +17,15 @@ class ArtistUpgradeRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/artist-upgrade', [
+        if (!ap_rest_route_registered('artpulse/v1', '/artist-upgrade')) {
+            register_rest_route('artpulse/v1', '/artist-upgrade', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle_request'],
             'permission_callback' => function () {
                 return is_user_logged_in();
             },
         ]);
+        }
     }
 
     public static function handle_request(WP_REST_Request $request): WP_REST_Response|WP_Error

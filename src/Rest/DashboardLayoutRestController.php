@@ -21,12 +21,15 @@ class DashboardLayoutRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/dashboard/layout', [
+        if (!ap_rest_route_registered('artpulse/v1', '/dashboard/layout')) {
+            register_rest_route('artpulse/v1', '/dashboard/layout', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_layout'],
             'permission_callback' => fn() => current_user_can('read'),
         ]);
-        register_rest_route('artpulse/v1', '/dashboard/layout', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/dashboard/layout')) {
+            register_rest_route('artpulse/v1', '/dashboard/layout', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'save_layout'],
             'permission_callback' => fn() => current_user_can('read'),
@@ -35,6 +38,7 @@ class DashboardLayoutRestController
                 'visibility' => ['type' => 'object', 'required' => false],
             ],
         ]);
+        }
     }
 
     public static function get_layout(WP_REST_Request $request): WP_REST_Response

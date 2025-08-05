@@ -4,7 +4,8 @@ if (!defined('ABSPATH')) { exit; }
 use ArtPulse\Admin\UserLayoutManager;
 
 add_action('rest_api_init', function () {
-    register_rest_route('artpulse/v1', '/widget-layout', [
+    if (!ap_rest_route_registered('artpulse/v1', '/widget-layout')) {
+        register_rest_route('artpulse/v1', '/widget-layout', [
         'methods'  => 'POST',
         'callback' => function ($request) {
             $layout = $request->get_json_params();
@@ -18,4 +19,5 @@ add_action('rest_api_init', function () {
             return current_user_can('manage_options');
         }
     ]);
+    }
 });

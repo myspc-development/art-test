@@ -15,12 +15,14 @@ class EventPromotionManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/feature', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/feature')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/feature', [
             'methods'  => 'POST',
             'callback' => [self::class, 'feature_event'],
             'permission_callback' => [self::class, 'can_edit'],
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
+        }
     }
 
     public static function can_edit(WP_REST_Request $req)

@@ -15,15 +15,18 @@ class CuratorRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/curators', [
+        if (!ap_rest_route_registered('artpulse/v1', '/curators')) {
+            register_rest_route('artpulse/v1', '/curators', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_curators'],
             'permission_callback' => function () {
                 return current_user_can('read');
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/curator/(?P<slug>[a-z0-9-]+)', [
+        if (!ap_rest_route_registered('artpulse/v1', '/curator/(?P<slug>[a-z0-9-]+)')) {
+            register_rest_route('artpulse/v1', '/curator/(?P<slug>[a-z0-9-]+)', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_curator'],
             'permission_callback' => function () {
@@ -33,6 +36,7 @@ class CuratorRestController
                 'slug' => ['sanitize_callback' => 'sanitize_title'],
             ],
         ]);
+        }
     }
 
     public static function get_curators(WP_REST_Request $req): WP_REST_Response

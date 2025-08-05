@@ -15,7 +15,8 @@ class ProfileVerificationController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/profile/(?P<id>\d+)/verify', [
+        if (!ap_rest_route_registered('artpulse/v1', '/profile/(?P<id>\d+)/verify')) {
+            register_rest_route('artpulse/v1', '/profile/(?P<id>\d+)/verify', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [self::class, 'verify_profile'],
             'permission_callback' => fn() => current_user_can('manage_options'),
@@ -25,6 +26,7 @@ class ProfileVerificationController
                 ],
             ],
         ]);
+        }
     }
 
     public static function verify_profile(WP_REST_Request $req): WP_REST_Response

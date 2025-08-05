@@ -43,7 +43,8 @@ class DirectoryManager {
     }
 
     public static function register_routes() {
-        register_rest_route('artpulse/v1', '/filter', [
+        if (!ap_rest_route_registered('artpulse/v1', '/filter')) {
+            register_rest_route('artpulse/v1', '/filter', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'handleFilter' ],
             'permission_callback' => function() {
@@ -68,6 +69,7 @@ class DirectoryManager {
                 'page'        => [ 'type' => 'integer', 'default' => 1 ],
             ]
         ]);
+        }
     }
 
     public static function handleFilter(WP_REST_Request $request) {

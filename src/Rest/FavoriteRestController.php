@@ -19,7 +19,8 @@ class FavoriteRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/favorite', [
+        if (!ap_rest_route_registered('artpulse/v1', '/favorite')) {
+            register_rest_route('artpulse/v1', '/favorite', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'handle_request'],
             'permission_callback' => function () {
@@ -27,6 +28,7 @@ class FavoriteRestController
             },
             'args'                => self::get_schema(),
         ]);
+        }
     }
 
     public static function get_schema(): array

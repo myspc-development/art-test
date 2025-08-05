@@ -18,26 +18,34 @@ class WidgetEditorController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/widgets', [
+        if (!ap_rest_route_registered('artpulse/v1', '/widgets')) {
+            register_rest_route('artpulse/v1', '/widgets', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_widgets'],
             'permission_callback' => fn () => current_user_can('read'),
         ]);
-        register_rest_route('artpulse/v1', '/roles', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/roles')) {
+            register_rest_route('artpulse/v1', '/roles', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_roles'],
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
-        register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)')) {
+            register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_layout'],
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
-        register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)')) {
+            register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
             'methods'  => 'POST',
             'callback' => [self::class, 'save_layout'],
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
+        }
     }
 
     public static function get_widgets(): WP_REST_Response

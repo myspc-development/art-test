@@ -24,19 +24,23 @@ class ArtPulse_REST_Controller {
             ]);
         }
 
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/rsvp', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/rsvp')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/rsvp', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'rsvp_event'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [ 'id' => [ 'type' => 'integer', 'required' => true ] ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/user/(?P<id>\\d+)/follow', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user/(?P<id>\\d+)/follow')) {
+            register_rest_route('artpulse/v1', '/user/(?P<id>\\d+)/follow', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'follow_user'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [ 'id' => [ 'type' => 'integer', 'required' => true ] ],
         ]);
+        }
     }
 
     public static function get_nearby_events(WP_REST_Request $request) {

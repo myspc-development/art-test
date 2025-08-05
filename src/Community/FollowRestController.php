@@ -18,21 +18,26 @@ class FollowRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/follows', [
+        if (!ap_rest_route_registered('artpulse/v1', '/follows')) {
+            register_rest_route('artpulse/v1', '/follows', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'add_follow'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => self::get_schema(),
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/follows', [
+        if (!ap_rest_route_registered('artpulse/v1', '/follows')) {
+            register_rest_route('artpulse/v1', '/follows', [
             'methods'             => 'DELETE',
             'callback'            => [self::class, 'remove_follow'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => self::get_schema(),
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/follows', [
+        if (!ap_rest_route_registered('artpulse/v1', '/follows')) {
+            register_rest_route('artpulse/v1', '/follows', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list_follows'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -44,8 +49,10 @@ class FollowRestController
                 ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/followers/(?P<user_id>\\d+)', [
+        if (!ap_rest_route_registered('artpulse/v1', '/followers/(?P<user_id>\\d+)')) {
+            register_rest_route('artpulse/v1', '/followers/(?P<user_id>\\d+)', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_followers'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -53,6 +60,7 @@ class FollowRestController
                 'user_id' => [ 'type' => 'integer', 'required' => true ],
             ],
         ]);
+        }
     }
 
     public static function get_schema(): array

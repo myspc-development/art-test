@@ -14,7 +14,8 @@ class ArtworkAuctionController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/artwork/(?P<id>\d+)/auction', [
+        if (!ap_rest_route_registered('artpulse/v1', '/artwork/(?P<id>\d+)/auction')) {
+            register_rest_route('artpulse/v1', '/artwork/(?P<id>\d+)/auction', [
             'methods'  => 'GET',
             'callback' => [self::class, 'status'],
             'permission_callback' => function () {
@@ -25,7 +26,9 @@ class ArtworkAuctionController
             },
             'args' => ['id' => ['validate_callback' => 'is_numeric']],
         ]);
-        register_rest_route('artpulse/v1', '/artwork/(?P<id>\d+)/bid', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/artwork/(?P<id>\d+)/bid')) {
+            register_rest_route('artpulse/v1', '/artwork/(?P<id>\d+)/bid', [
             'methods'  => 'POST',
             'callback' => [self::class, 'bid'],
             'permission_callback' => function () {
@@ -39,6 +42,7 @@ class ArtworkAuctionController
                 'amount' => ['validate_callback' => 'is_numeric'],
             ],
         ]);
+        }
     }
 
     private static function validate(int $id): bool

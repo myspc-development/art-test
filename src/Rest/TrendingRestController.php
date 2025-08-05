@@ -10,7 +10,8 @@ class TrendingRestController {
     }
 
     public static function register_routes(): void {
-        register_rest_route('artpulse/v1', '/trending', [
+        if (!ap_rest_route_registered('artpulse/v1', '/trending')) {
+            register_rest_route('artpulse/v1', '/trending', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_trending'],
             'permission_callback' => function () {
@@ -21,6 +22,7 @@ class TrendingRestController {
                 'limit' => [ 'type' => 'integer', 'default' => 20 ],
             ],
         ]);
+        }
     }
 
     public static function get_trending(WP_REST_Request $request) {

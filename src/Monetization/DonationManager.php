@@ -14,7 +14,8 @@ class DonationManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/donations', [
+        if (!ap_rest_route_registered('artpulse/v1', '/donations')) {
+            register_rest_route('artpulse/v1', '/donations', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_donation'],
             'permission_callback' => [self::class, 'check_logged_in'],
@@ -23,6 +24,7 @@ class DonationManager
                 'amount'    => ['validate_callback' => 'is_numeric', 'required' => true],
             ],
         ]);
+        }
     }
 
     public static function check_logged_in()

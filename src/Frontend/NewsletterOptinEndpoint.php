@@ -14,7 +14,8 @@ class NewsletterOptinEndpoint
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/newsletter-optin', [
+        if (!ap_rest_route_registered('artpulse/v1', '/newsletter-optin')) {
+            register_rest_route('artpulse/v1', '/newsletter-optin', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle'],
             'permission_callback' => function() {
@@ -27,6 +28,7 @@ class NewsletterOptinEndpoint
                 'email' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
+        }
     }
 
     public static function handle(WP_REST_Request $req): WP_REST_Response|WP_Error

@@ -36,13 +36,16 @@ class AuctionManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/bids', [
+        if (!ap_rest_route_registered('artpulse/v1', '/bids')) {
+            register_rest_route('artpulse/v1', '/bids', [
             'methods'  => 'POST',
             'callback' => [self::class, 'place_bid'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/bids/(?P<artwork_id>\\d+)', [
+        if (!ap_rest_route_registered('artpulse/v1', '/bids/(?P<artwork_id>\\d+)')) {
+            register_rest_route('artpulse/v1', '/bids/(?P<artwork_id>\\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_bids'],
             'permission_callback' => function () {
@@ -52,14 +55,17 @@ class AuctionManager
                 'artwork_id' => ['validate_callback' => 'absint'],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/auctions/live', [
+        if (!ap_rest_route_registered('artpulse/v1', '/auctions/live')) {
+            register_rest_route('artpulse/v1', '/auctions/live', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_live'],
             'permission_callback' => function () {
                 return current_user_can('read');
             },
         ]);
+        }
     }
 
     private static function get_tables(): array

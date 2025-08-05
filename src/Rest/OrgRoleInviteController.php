@@ -17,17 +17,21 @@ class OrgRoleInviteController
 
     public static function routes(): void
     {
-        register_rest_route('artpulse/v1', '/org-roles/invite', [
+        if (!ap_rest_route_registered('artpulse/v1', '/org-roles/invite')) {
+            register_rest_route('artpulse/v1', '/org-roles/invite', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'invite'],
             'permission_callback' => [self::class, 'can_invite'],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/org-roles/accept', [
+        if (!ap_rest_route_registered('artpulse/v1', '/org-roles/accept')) {
+            register_rest_route('artpulse/v1', '/org-roles/accept', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'accept'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
+        }
     }
 
     public static function can_invite(WP_REST_Request $req): bool

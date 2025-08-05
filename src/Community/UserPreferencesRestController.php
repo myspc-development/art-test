@@ -69,7 +69,8 @@ class UserPreferencesRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/user-preferences', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user-preferences')) {
+            register_rest_route('artpulse/v1', '/user-preferences', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'save_preferences'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -86,6 +87,7 @@ class UserPreferencesRestController
                 'blacklist_ids'    => [ 'type' => 'array',  'required' => false ],
             ],
         ]);
+        }
     }
 
     public static function save_preferences(WP_REST_Request $request): WP_REST_Response|WP_Error

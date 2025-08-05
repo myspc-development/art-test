@@ -2,7 +2,8 @@
 if (!defined('ABSPATH')) { exit; }
 
 add_action('rest_api_init', function () {
-    register_rest_route('artpulse/v1', '/roles/toggle', [
+    if (!ap_rest_route_registered('artpulse/v1', '/roles/toggle')) {
+        register_rest_route('artpulse/v1', '/roles/toggle', [
         'methods'  => 'POST',
         'callback' => function ($req) {
             if (!current_user_can('edit_users')) {
@@ -33,8 +34,10 @@ add_action('rest_api_init', function () {
             return new WP_Error('rest_forbidden', 'Forbidden', ['status' => 403]);
         },
     ]);
+    }
 
-    register_rest_route('artpulse/v1', '/roles/batch', [
+    if (!ap_rest_route_registered('artpulse/v1', '/roles/batch')) {
+        register_rest_route('artpulse/v1', '/roles/batch', [
         'methods'  => 'POST',
         'callback' => function (WP_REST_Request $req) {
             if (!current_user_can('edit_users')) {
@@ -66,8 +69,10 @@ add_action('rest_api_init', function () {
             return new WP_Error('rest_forbidden', 'Forbidden', ['status' => 403]);
         },
     ]);
+    }
 
-    register_rest_route('artpulse/v1', '/roles/seed', [
+    if (!ap_rest_route_registered('artpulse/v1', '/roles/seed')) {
+        register_rest_route('artpulse/v1', '/roles/seed', [
         'methods'  => 'GET',
         'callback' => function () {
             if (!current_user_can('edit_users')) {
@@ -109,4 +114,5 @@ add_action('rest_api_init', function () {
             return new WP_Error('rest_forbidden', 'Forbidden', ['status' => 403]);
         },
     ]);
+    }
 });

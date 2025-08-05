@@ -139,7 +139,8 @@ class MembershipManager
      */
     public static function registerRestRoutes()
     {
-        register_rest_route('artpulse/v1', '/stripe-webhook', [
+        if (!ap_rest_route_registered('artpulse/v1', '/stripe-webhook')) {
+            register_rest_route('artpulse/v1', '/stripe-webhook', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'handleStripeWebhook' ],
             'permission_callback' => function () {
@@ -149,8 +150,10 @@ class MembershipManager
                 return true;
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/membership/pause', [
+        if (!ap_rest_route_registered('artpulse/v1', '/membership/pause')) {
+            register_rest_route('artpulse/v1', '/membership/pause', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'pauseMembership' ],
             'permission_callback' => function () {
@@ -160,8 +163,10 @@ class MembershipManager
                 return true;
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/membership/resume', [
+        if (!ap_rest_route_registered('artpulse/v1', '/membership/resume')) {
+            register_rest_route('artpulse/v1', '/membership/resume', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'resumeMembership' ],
             'permission_callback' => function () {
@@ -171,24 +176,31 @@ class MembershipManager
                 return true;
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/membership-levels', [
+        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels')) {
+            register_rest_route('artpulse/v1', '/membership-levels', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getLevelsEndpoint' ],
             'permission_callback' => [ self::class, 'checkManageMemberships' ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/membership-levels', [
+        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels')) {
+            register_rest_route('artpulse/v1', '/membership-levels', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'addLevel' ],
             'permission_callback' => [ self::class, 'checkManageMemberships' ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/membership-levels/(?P<level>[^/]+)', [
+        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels/(?P<level>[^/]+)')) {
+            register_rest_route('artpulse/v1', '/membership-levels/(?P<level>[^/]+)', [
             'methods'             => 'DELETE',
             'callback'            => [ self::class, 'deleteLevel' ],
             'permission_callback' => [ self::class, 'checkManageMemberships' ],
         ]);
+        }
     }
 
     /**

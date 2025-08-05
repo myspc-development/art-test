@@ -14,7 +14,8 @@ class ShareController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/share', [
+        if (!ap_rest_route_registered('artpulse/v1', '/share')) {
+            register_rest_route('artpulse/v1', '/share', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'log_share'],
             'permission_callback' => function () {
@@ -26,6 +27,7 @@ class ShareController
                 'network'    => [ 'type' => 'string', 'required' => false ],
             ],
         ]);
+        }
     }
 
     public static function log_share(WP_REST_Request $request): WP_REST_Response|WP_Error
