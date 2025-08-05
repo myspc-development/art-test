@@ -812,6 +812,12 @@ class DashboardWidgetRegistry {
      * Register default widgets and fire registration hook.
      */
     public static function init(): void {
+        static $initialized = false;
+        if ($initialized) {
+            return;
+        }
+        $initialized = true;
+
         DashboardWidgetRegistryLoader::load_all();
 
         $register = [ self::class, 'register_widget' ];
@@ -864,7 +870,10 @@ class DashboardWidgetRegistry {
             'callback'    => [ self::class, 'render_widget_my_favorites' ],
             'roles'       => [ 'member', 'artist' ],
         ] );
-        do_action( 'artpulse_register_dashboard_widget' );
+
+        if (!did_action('artpulse_register_dashboard_widget')) {
+            do_action('artpulse_register_dashboard_widget');
+        }
     }
 
     /**

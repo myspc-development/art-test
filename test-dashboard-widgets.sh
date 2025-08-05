@@ -11,6 +11,15 @@ REST_URL="http://localhost/wp-json/artpulse/v1"
 TEST_USER_ID=1
 TEST_ROLE="subscriber"
 
+# 0. VERIFY PHP MODULES
+echo "✅ Checking PHP modules..."
+MODULE_OUTPUT=$(php -m 2>&1)
+echo "$MODULE_OUTPUT" | grep -E "Zend OPcache|zip" || true
+if echo "$MODULE_OUTPUT" | grep -qi 'already loaded'; then
+    echo "⚠️ PHP configuration appears to load some modules multiple times:"
+    echo "$MODULE_OUTPUT" | grep -i 'already loaded'
+fi
+
 # 1. LINT PHP FILES
 echo "✅ Checking PHP syntax..."
 find . -name "*.php" ! -path "./vendor/*" -exec php -l {} \;
