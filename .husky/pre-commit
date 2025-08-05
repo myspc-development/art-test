@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run lint && vendor/bin/phpstan analyse
+npm run lint && vendor/bin/phpstan analyse && php tools/rest-route-conflicts.php
