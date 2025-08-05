@@ -1,6 +1,11 @@
 module.exports = {
-  // Use a browser-like environment so DOM APIs exist
+  // Use a browser-like environment so DOM APIs (like localStorage) exist
   testEnvironment: 'jsdom',
+
+  // Give jsdom a non-opaque origin so localStorage is available
+  testEnvironmentOptions: {
+    url: 'http://localhost/'
+  },
 
   // Transform .js/.jsx/.ts/.tsx files with Babel
   transform: {
