@@ -33,25 +33,6 @@ class RestRoutes
             ]);
             }
 
-            if (!ap_rest_route_registered('artpulse/v1', '/artists')) {
-                register_rest_route('artpulse/v1', '/artists', [
-                'methods'             => 'GET',
-                'callback'            => [self::class, 'get_artists'],
-                'permission_callback' => function () {
-                    return current_user_can('read');
-                },
-            ]);
-            }
-
-            if (!ap_rest_route_registered('artpulse/v1', '/artworks')) {
-                register_rest_route('artpulse/v1', '/artworks', [
-                'methods'             => 'GET',
-                'callback'            => [self::class, 'get_artworks'],
-                'permission_callback' => function () {
-                    return current_user_can('read');
-                },
-            ]);
-            }
 
             if (!ap_rest_route_registered('artpulse/v1', '/orgs')) {
                 register_rest_route('artpulse/v1', '/orgs', [
@@ -263,23 +244,6 @@ class RestRoutes
         }
 
         return $events;
-    }
-
-    public static function get_artists()
-    {
-        return self::get_posts_with_meta('artpulse_artist', [
-            'artist_bio' => '_ap_artist_bio',
-            'artist_org' => '_ap_artist_org',
-        ]);
-    }
-
-    public static function get_artworks()
-    {
-        return self::get_posts_with_meta('artpulse_artwork', [
-            'medium'     => '_ap_artwork_medium',
-            'dimensions' => '_ap_artwork_dimensions',
-            'materials'  => '_ap_artwork_materials',
-        ]);
     }
 
     public static function get_orgs()
