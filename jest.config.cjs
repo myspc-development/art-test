@@ -1,23 +1,14 @@
 // jest.config.cjs
 module.exports = {
-  // Use jsdom so DOM APIs exist
-  testEnvironment: 'jsdom',
+  // Use the jsdom environment that brings in localStorage, sessionStorage, etc.
+  testEnvironment: 'jest-environment-jsdom-global',
 
-  // Legacy option for older Jest versions
-  testURL: 'http://localhost/',
-
-  // Modern option for jsdom URL
+  // Give jsdom a non-opaque origin so URL APIs work
   testEnvironmentOptions: {
     url: 'http://localhost/'
   },
 
-  // Before each test file, run this to patch/mimic localStorage if needed
-  setupFiles: ['<rootDir>/jest.setup.js'],
-
-  // After env is ready, load jest-dom matchers
-  setupFilesAfterEnv: ['@testing-library/jest-dom'],
-
-  // Transform files via babel-jest
+  // Transform JS/TS and JSX/TSX through Babel
   transform: {
     '^.+\\.[jt]sx?$': 'babel-jest'
   },
@@ -25,6 +16,9 @@ module.exports = {
   // Only run your widget tests
   testMatch: ['**/__tests__/widgets/**/*.test.[jt]s?(x)'],
 
-  // Recognized extensions
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx']
+  // Recognize these extensions
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
+
+  // Add jest-dom matchers (optional, if you still need them)
+  setupFilesAfterEnv: ['@testing-library/jest-dom']
 };
