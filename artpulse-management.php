@@ -20,6 +20,9 @@ if (!defined('AP_ENABLE_WIDGET_PLACEHOLDERS')) {
     define('AP_ENABLE_WIDGET_PLACEHOLDERS', true);
 }
 
+// Load translations before other files hook into init
+require_once __DIR__ . '/includes/i18n.php';
+
 // Load main plugin logic
 require_once plugin_dir_path(__FILE__) . 'artpulse.php';
 
@@ -157,8 +160,6 @@ require_once __DIR__ . '/seo-meta.php';
 require_once __DIR__ . '/auto-tagger.php';
 require_once __DIR__ . '/admin/page-artpulse-ai.php';
 require_once __DIR__ . '/pwa-manifest.php';
-require_once __DIR__ . '/includes/i18n.php';
-
 include_once __DIR__ . '/shortcodes/artist-comments.php';
 require_once __DIR__ . '/includes/rest/artist.php';
 require_once __DIR__ . '/includes/rest/status.php';
