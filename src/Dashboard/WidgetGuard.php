@@ -120,7 +120,7 @@ class WidgetGuard
         // update it with placeholder information.
         if (DashboardWidgetRegistry::get($id) === null) {
             $def = $cfg;
-            $def['label']       = $meta['title'];
+            $def['label']       = $meta['title'] . ' (Stub)';
             $def['icon']        = $meta['icon'];
             $def['description'] = $def['description'] ?? __('Placeholder widget', 'artpulse');
             $def['callback']    = static function () {};

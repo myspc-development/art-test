@@ -54,8 +54,9 @@ function ap_register_builder_core_placeholders(): void {
     foreach ($config as $id => $data) {
         $core_id = 'widget_' . $id;
         if (!DashboardWidgetRegistry::get($core_id)) {
+            $label = $data['label'] ?? ucwords(str_replace(['_', '-'], ' ', $id));
             DashboardWidgetRegistry::register_widget($core_id, [
-                'label'    => $data['label'] ?? ucwords(str_replace(['_', '-'], ' ', $id)),
+                'label'    => $label . ' (Core)',
                 'callback' => 'render_widget_' . $core_id,
                 'roles'    => $data['roles'] ?? [],
             ]);
