@@ -18,41 +18,24 @@ class FollowRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/follows', 'POST')) {
-            register_rest_route('artpulse/v1', '/follows', [
-            'methods'             => 'POST',
-            'callback'            => [self::class, 'add_follow'],
-            'permission_callback' => fn() => is_user_logged_in(),
-            'args'                => self::get_schema(),
-        ]);
-        }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/follows', 'DELETE')) {
-            register_rest_route('artpulse/v1', '/follows', [
-            'methods'             => 'DELETE',
-            'callback'            => [self::class, 'remove_follow'],
-            'permission_callback' => fn() => is_user_logged_in(),
-            'args'                => self::get_schema(),
-        ]);
-        }
-
-        if (!ap_rest_route_registered('artpulse/v1', '/follows', 'GET')) {
-            register_rest_route('artpulse/v1', '/follows', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'list_follows'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [
+                'post_id' => [
+                    'type'        => 'integer',
+                    'required'    => false,
+                    'description' => 'ID of the post to follow or unfollow.',
+                ],
                 'post_type' => [
-                    'type'     => 'string',
-                    'required' => false,
-                    'enum'     => ['artpulse_artist', 'artpulse_event', 'artpulse_org', 'user'],
+                    'type'        => 'string',
+                    'required'    => false,
+                    'enum'        => ['artpulse_artist', 'artpulse_event', 'artpulse_org', 'user'],
+                    'description' => 'The post type being followed.',
                 ],
             ],
         ]);
-        }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/followers/(?P<user_id>\\d+)')) {
-            register_rest_route('artpulse/v1', '/followers/(?P<user_id>\\d+)', [
+        register_rest_route('artpulse/v1', '/followers/(?P<user_id>\\d+)', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_followers'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -60,7 +43,6 @@ class FollowRestController
                 'user_id' => [ 'type' => 'integer', 'required' => true ],
             ],
         ]);
-        }
     }
 
     public static function get_schema(): array
@@ -68,16 +50,26 @@ class FollowRestController
         return [
             'post_id' => [
                 'type'        => 'integer',
-                'required'    => true,
+                'required'    => false,
                 'description' => 'ID of the post to follow or unfollow.',
             ],
             'post_type' => [
                 'type'        => 'string',
-                'required'    => true,
+                'required'    => false,
                 'enum'        => ['artpulse_artist', 'artpulse_event', 'artpulse_org', 'user'],
                 'description' => 'The post type being followed.',
             ],
         ];
+    }
+
+    public static function handle_follows(WP_REST_Request $request): WP_REST_Response|WP_Error
+    {
+        return match ($request->get_method()) {
+            'POST'   => self::add_follow($request),
+            'DELETE' => self::remove_follow($request),
+            'GET'    => self::list_follows($request),
+            default  => new WP_Error('invalid_method', 'Method not allowed', ['status' => 405]),
+        };
     }
 
     public static function add_follow(WP_REST_Request $request): WP_REST_Response|WP_Error

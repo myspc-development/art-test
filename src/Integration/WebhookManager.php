@@ -19,44 +19,13 @@ class WebhookManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', 'GET')) {
-            register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', [
-            'methods'  => 'GET',
-            'callback' => [self::class, 'list_webhooks'],
-            'permission_callback' => [self::class, 'check_manage_org'],
-            'args' => ['id' => ['validate_callback' => 'absint']],
-        ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', 'POST')) {
-            register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', [
-            'methods'  => 'POST',
-            'callback' => [self::class, 'create_webhook'],
-            'permission_callback' => [self::class, 'check_manage_org'],
-            'args' => ['id' => ['validate_callback' => 'absint']],
-        ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', 'PUT')) {
-            register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', [
-            'methods'  => 'PUT',
-            'callback' => [self::class, 'update_webhook'],
+
             'permission_callback' => [self::class, 'check_manage_org'],
             'args' => [
                 'id'  => ['validate_callback' => 'absint'],
                 'hid' => ['validate_callback' => 'absint'],
             ],
         ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', 'DELETE')) {
-            register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', [
-            'methods'  => 'DELETE',
-            'callback' => [self::class, 'delete_webhook'],
-            'permission_callback' => [self::class, 'check_manage_org'],
-            'args' => [
-                'id'  => ['validate_callback' => 'absint'],
-                'hid' => ['validate_callback' => 'absint'],
-            ],
-        ]);
-        }
     }
 
     public static function check_manage_org(): bool
@@ -114,6 +83,15 @@ class WebhookManager
         return rest_ensure_response($rows);
     }
 
+    public static function handle_webhooks(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        return match ($req->get_method()) {
+            'POST' => self::create_webhook($req),
+            'GET'  => self::list_webhooks($req),
+            default => new WP_Error('invalid_method', 'Method not allowed', ['status' => 405]),
+        };
+    }
+
     public static function create_webhook(WP_REST_Request $req)
     {
         $org_id = absint($req['id']);
@@ -167,6 +145,15 @@ class WebhookManager
         $table = $wpdb->prefix . 'ap_webhooks';
         $wpdb->delete($table, ['id' => $id, 'org_id' => $org_id]);
         return rest_ensure_response(['deleted' => true]);
+    }
+
+    public static function handle_webhook_item(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        return match ($req->get_method()) {
+            'PUT'    => self::update_webhook($req),
+            'DELETE' => self::delete_webhook($req),
+            default  => new WP_Error('invalid_method', 'Method not allowed', ['status' => 405]),
+        };
     }
 
     public static function handle_ticket_purchased(int $user_id, int $event_id, int $ticket_id, int $qty): void
