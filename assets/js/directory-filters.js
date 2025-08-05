@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('ap-artist-directory');
   if (!container) return;
 
-  fetch('/wp-json/art/v1/artists')
+  fetch('/wp-json/artpulse/v1/artists')
     .then(r => r.json())
     .then(list => {
       container.innerHTML = '';
