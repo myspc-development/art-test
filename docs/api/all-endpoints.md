@@ -239,6 +239,6 @@ The following table lists every REST route registered by the plugin. Method dete
 | artpulse/v1 | /widget-settings/(?P<id>[a-z0-9_-]+) | POST |
 | artpulse/v1 | /widgets | GET |
 | widgets | /embed.js | GET |
-| widgets | /log | POST |
+| artpulse/v1 | /widgets/log | POST |
 | widgets | /render | GET |
 \n> 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
