@@ -321,9 +321,13 @@ function validate_monetization_tables(): void {
 
     foreach ($required_tables as $tbl) {
         if ($wpdb->get_var("SHOW TABLES LIKE '{$tbl}'") !== $tbl) {
-            error_log("❌ Missing: {$tbl}");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("❌ Missing: {$tbl}");
+            }
         } else {
-            error_log("✅ Present: {$tbl}");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("✅ Present: {$tbl}");
+            }
         }
     }
 }

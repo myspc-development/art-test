@@ -277,7 +277,9 @@ class DirectMessages
             self::add_message($sender_id, $recipient_id, $content, $context_type, $context_id);
             return rest_ensure_response(['status' => 'sent']);
         } catch (\Throwable $e) {
-            error_log('DirectMessages send error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages send error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -323,7 +325,9 @@ class DirectMessages
 
         return rest_ensure_response($row);
         } catch (\Throwable $e) {
-            error_log('DirectMessages send_v2 error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages send_v2 error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -341,7 +345,9 @@ class DirectMessages
 
             return rest_ensure_response($messages);
         } catch (\Throwable $e) {
-            error_log('DirectMessages fetch error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages fetch error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -383,7 +389,9 @@ class DirectMessages
 
         return rest_ensure_response($messages);
         } catch (\Throwable $e) {
-            error_log('DirectMessages updates error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages updates error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -527,7 +535,9 @@ class DirectMessages
             $list = self::list_conversations($user_id);
             return rest_ensure_response($list);
         } catch (\Throwable $e) {
-            error_log('DirectMessages conversations error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages conversations error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -562,7 +572,9 @@ class DirectMessages
 
             return rest_ensure_response(['updated' => count($ids)]);
         } catch (\Throwable $e) {
-            error_log('DirectMessages mark_read error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages mark_read error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -582,7 +594,9 @@ class DirectMessages
 
             return rest_ensure_response(['updated' => count($ids)]);
         } catch (\Throwable $e) {
-            error_log('DirectMessages seen error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages seen error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -647,7 +661,9 @@ class DirectMessages
             $messages = self::get_context_conversation($user_id, $type, $id);
             return rest_ensure_response($messages);
         } catch (\Throwable $e) {
-            error_log('DirectMessages fetch_context error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages fetch_context error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -695,7 +711,9 @@ class DirectMessages
 
         return rest_ensure_response(['tags' => $tags]);
         } catch (\Throwable $e) {
-            error_log('DirectMessages label error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages label error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -718,7 +736,9 @@ class DirectMessages
         $messages = array_map([self::class, 'get_message'], wp_list_pluck($rows, 'id'));
         return rest_ensure_response($messages);
         } catch (\Throwable $e) {
-            error_log('DirectMessages thread error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages thread error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
@@ -760,7 +780,9 @@ class DirectMessages
 
         return rest_ensure_response(['updated' => count($ids)]);
         } catch (\Throwable $e) {
-            error_log('DirectMessages bulk_action error: ' . $e->getMessage());
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('DirectMessages bulk_action error: ' . $e->getMessage());
+            }
             return new WP_Error('server_error', 'Unexpected error.', ['status' => 500]);
         }
     }
