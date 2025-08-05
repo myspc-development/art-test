@@ -24,10 +24,12 @@ class RestRouteAuditCommandTest extends \WP_UnitTestCase
         \register_rest_route('ap/v1', '/conflict', [
             'methods' => 'GET',
             'callback' => '__return_true',
+            'permission_callback' => '__return_true',
         ]);
         \register_rest_route('ap/v1', '/conflict', [
             'methods' => 'GET',
             'callback' => '__return_false',
+            'permission_callback' => '__return_true',
         ]);
     }
 
