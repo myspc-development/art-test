@@ -19,7 +19,7 @@ class WebhookManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', 'GET')) {
             register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_webhooks'],
@@ -27,7 +27,7 @@ class WebhookManager
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', 'POST')) {
             register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_webhook'],
@@ -35,7 +35,7 @@ class WebhookManager
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', 'PUT')) {
             register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', [
             'methods'  => 'PUT',
             'callback' => [self::class, 'update_webhook'],
@@ -46,7 +46,7 @@ class WebhookManager
             ],
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', 'DELETE')) {
             register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/webhooks/(?P<hid>\\d+)', [
             'methods'  => 'DELETE',
             'callback' => [self::class, 'delete_webhook'],
