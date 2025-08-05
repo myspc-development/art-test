@@ -13,12 +13,12 @@ class WidgetsController
 
     public static function register_routes(): void
     {
-        register_rest_route('widgets', '/embed.js', [
+        register_rest_route('artpulse/v1', '/widgets/embed.js', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'embed'],
             'permission_callback' => '__return_true',
         ]);
-        register_rest_route('widgets', '/render', [
+        register_rest_route('artpulse/v1', '/widgets/render', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'render'],
             'permission_callback' => '__return_true',
@@ -27,7 +27,7 @@ class WidgetsController
 
     public static function embed(WP_REST_Request $request): WP_REST_Response
     {
-        $src = add_query_arg($request->get_params(), rest_url('widgets/render'));
+        $src = add_query_arg($request->get_params(), rest_url('artpulse/v1/widgets/render'));
         $js  = 'var f=document.createElement("iframe");f.src="' . esc_url_raw($src) . '";' .
             'f.style.width="100%";f.style.border="none";f.height="500";' .
             'document.currentScript.parentNode.insertBefore(f, document.currentScript);';
