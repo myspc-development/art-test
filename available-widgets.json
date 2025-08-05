@@ -290,7 +290,7 @@
     },
     {
         "id": "widget_near_me_events",
-        "callback": "widgets/NearMeEventsWidget.php",
+        "callback": "widgets/NearbyEventsWidget.php",
         "allowed_roles": [
             "member"
         ]
