@@ -64,6 +64,11 @@ class RestRoutes
             \ArtPulse\Rest\EventCardController::register();
             // Artist-specific events for dashboards
             \ArtPulse\Rest\ArtistEventsController::register();
+            \ArtPulse\Rest\ArtistOverviewController::register();
+            \ArtPulse\Rest\StatusController::register();
+            \ArtPulse\Rest\WidgetLayoutController::register();
+            \ArtPulse\Rest\RoleMatrixController::register();
+            \ArtPulse\Rest\UpdateDiagnosticsController::register();
         });
 
         $post_types = ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org'];
