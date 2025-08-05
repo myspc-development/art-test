@@ -54,9 +54,24 @@ function ap_register_builder_core_placeholders(): void {
     foreach ($config as $id => $data) {
         $core_id = 'widget_' . $id;
         if (!DashboardWidgetRegistry::get($core_id)) {
-            $label = $data['label'] ?? ucwords(str_replace(['_', '-'], ' ', $id));
+            $label           = $data['label'] ?? ucwords(str_replace(['_', '-'], ' ', $id));
+            $placeholderLabel = $label . ' (Core)';
+
+            $is_registered = false;
+            foreach (DashboardWidgetRegistry::get_all() as $widget) {
+                $existing = trim($widget['label'] ?? '');
+                if (strtolower($existing) === strtolower($placeholderLabel)) {
+                    $is_registered = true;
+                    break;
+                }
+            }
+
+            if ($is_registered) {
+                continue;
+            }
+
             DashboardWidgetRegistry::register_widget($core_id, [
-                'label'    => $label . ' (Core)',
+                'label'    => $placeholderLabel,
                 'callback' => 'render_widget_' . $core_id,
                 'roles'    => $data['roles'] ?? [],
             ]);

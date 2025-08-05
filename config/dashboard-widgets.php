@@ -76,7 +76,7 @@ return [
     ],
     'nearby_events_map' => [
         'callback' => [DashboardWidgetRegistry::class, 'render_widget_nearby_events_map'],
-        'label' => 'Nearby Events',
+        'label' => 'Nearby Events Map',
         'description' => 'Events around your location.',
         'roles' => ['member', 'artist'],
         'category' => 'general',
@@ -338,7 +338,7 @@ return [
     ],
     'widget_near_me_events' => [
         'class' => NearbyEventsWidget::class,
-        'label' => 'Nearby Events',
+        'label' => 'Nearby Events (Legacy)',
         'description' => 'Events near your location.',
         'roles' => ['member'],
         'category' => 'general',
