@@ -1,3 +1,9 @@
+if (typeof global.TextEncoder === "undefined") {
+  const util = require("util");
+  global.TextEncoder = util.TextEncoder;
+  global.TextDecoder = util.TextDecoder;
+}
+
 // Polyfill localStorage in Jest tests when missing
 if (typeof global.localStorage === 'undefined') {
   let store = {};
