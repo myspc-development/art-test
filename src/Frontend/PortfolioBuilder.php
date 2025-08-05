@@ -13,24 +13,6 @@ class PortfolioBuilder
         add_action('wp_ajax_ap_toggle_visibility', [self::class, 'toggle_visibility']);
         add_action('wp_ajax_ap_delete_portfolio_item', [self::class, 'delete_item']);
         add_action('wp_ajax_ap_save_portfolio_order', [self::class, 'save_order']);
-        add_action('rest_api_init', function () { // Add this block
-            register_rest_route('artpulse/v1', '/portfolio/(?P<user_id>\d+)', [
-                'methods'             => 'GET',
-                'callback'            => [self::class, 'rest_get_portfolio'],
-                'permission_callback' => function() {
-                    if (!current_user_can('read')) {
-                        return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                    }
-                    return true;
-                },
-                'args' => [
-                    'user_id' => [
-                        'validate_callback' => 'is_numeric',
-                        'sanitize_callback' => 'absint',
-                    ],
-                ],
-            ]);
-        });
     }
 
     public static function enqueue_scripts()
@@ -250,29 +232,4 @@ class PortfolioBuilder
         wp_send_json_success(['message' => 'Order updated.']);
     }
 
-    public static function rest_get_portfolio($request)
-    {
-        $user_id = absint($request['user_id']);
-
-        $items = get_posts([
-            'post_type'   => 'portfolio',
-            'author'      => $user_id,
-            'meta_key'    => 'portfolio_visibility',
-            'meta_value'  => 'public',
-            'numberposts' => -1,
-        ]);
-
-        $data = array_map(function ($post) {
-            return [
-                'id'          => $post->ID,
-                'title'       => $post->post_title,
-                'description' => get_post_meta($post->ID, 'portfolio_description', true),
-                'link'        => get_post_meta($post->ID, 'portfolio_link', true),
-                'image'       => get_post_meta($post->ID, 'portfolio_image', true),
-                'category'    => wp_get_post_terms($post->ID, 'portfolio_category', ['fields' => 'names'])[0] ?? '',
-            ];
-        }, $items);
-
-        return rest_ensure_response($data);
-    }
 }
