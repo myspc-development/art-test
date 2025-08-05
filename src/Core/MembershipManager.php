@@ -178,7 +178,7 @@ class MembershipManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels', 'GET')) {
             register_rest_route('artpulse/v1', '/membership-levels', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getLevelsEndpoint' ],
@@ -186,7 +186,7 @@ class MembershipManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels', 'POST')) {
             register_rest_route('artpulse/v1', '/membership-levels', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'addLevel' ],

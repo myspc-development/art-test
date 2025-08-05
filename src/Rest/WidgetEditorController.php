@@ -32,14 +32,14 @@ class WidgetEditorController
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', 'GET')) {
             register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_layout'],
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', 'POST')) {
             register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
             'methods'  => 'POST',
             'callback' => [self::class, 'save_layout'],

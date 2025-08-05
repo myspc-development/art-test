@@ -18,7 +18,7 @@ class FollowRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/follows')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/follows', 'POST')) {
             register_rest_route('artpulse/v1', '/follows', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'add_follow'],
@@ -27,7 +27,7 @@ class FollowRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/follows')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/follows', 'DELETE')) {
             register_rest_route('artpulse/v1', '/follows', [
             'methods'             => 'DELETE',
             'callback'            => [self::class, 'remove_follow'],
@@ -36,7 +36,7 @@ class FollowRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/follows')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/follows', 'GET')) {
             register_rest_route('artpulse/v1', '/follows', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list_follows'],
