@@ -1,5 +1,5 @@
 module.exports = {
-  // Use a browser-like environment so DOM APIs (like document.createElement) exist
+  // Use a browser-like environment so DOM APIs exist
   testEnvironment: 'jsdom',
 
   // Transform .js/.jsx/.ts/.tsx files with Babel
@@ -7,12 +7,12 @@ module.exports = {
     '^.+\\.[jt]sx?$': 'babel-jest'
   },
 
-  // Only run tests in your widgets folder (adjust the pattern as needed)
+  // Only run tests in your widgets folder (adjust pattern as needed)
   testMatch: ['**/__tests__/widgets/**/*.test.[jt]s?(x)'],
 
-  // Recognize these file extensions for modules
+  // Recognize these extensions
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
 
-  // After setting up the environment, load these matchers
-  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect']
+  // Load this module to add jest-dom matchers
+  setupFilesAfterEnv: ['@testing-library/jest-dom']
 };
