@@ -139,8 +139,7 @@ class MembershipManager
      */
     public static function registerRestRoutes()
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/stripe-webhook')) {
-            register_rest_route('artpulse/v1', '/stripe-webhook', [
+        register_rest_route('artpulse/v1', '/stripe-webhook', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'handleStripeWebhook' ],
             'permission_callback' => function () {
@@ -150,10 +149,8 @@ class MembershipManager
                 return true;
             },
         ]);
-        }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/membership/pause')) {
-            register_rest_route('artpulse/v1', '/membership/pause', [
+        register_rest_route('artpulse/v1', '/membership/pause', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'pauseMembership' ],
             'permission_callback' => function () {
@@ -163,10 +160,8 @@ class MembershipManager
                 return true;
             },
         ]);
-        }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/membership/resume')) {
-            register_rest_route('artpulse/v1', '/membership/resume', [
+        register_rest_route('artpulse/v1', '/membership/resume', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'resumeMembership' ],
             'permission_callback' => function () {
@@ -176,31 +171,18 @@ class MembershipManager
                 return true;
             },
         ]);
-        }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels')) {
-            register_rest_route('artpulse/v1', '/membership-levels', [
-            'methods'             => 'GET',
-            'callback'            => [ self::class, 'getLevelsEndpoint' ],
+        register_rest_route('artpulse/v1', '/membership-levels', [
+            'methods'             => ['GET', 'POST'],
+            'callback'            => [ self::class, 'handleMembershipLevels' ],
             'permission_callback' => [ self::class, 'checkManageMemberships' ],
         ]);
-        }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels')) {
-            register_rest_route('artpulse/v1', '/membership-levels', [
-            'methods'             => 'POST',
-            'callback'            => [ self::class, 'addLevel' ],
-            'permission_callback' => [ self::class, 'checkManageMemberships' ],
-        ]);
-        }
-
-        if (!ap_rest_route_registered('artpulse/v1', '/membership-levels/(?P<level>[^/]+)')) {
-            register_rest_route('artpulse/v1', '/membership-levels/(?P<level>[^/]+)', [
+        register_rest_route('artpulse/v1', '/membership-levels/(?P<level>[^/]+)', [
             'methods'             => 'DELETE',
             'callback'            => [ self::class, 'deleteLevel' ],
             'permission_callback' => [ self::class, 'checkManageMemberships' ],
         ]);
-        }
     }
 
     /**
@@ -500,6 +482,15 @@ class MembershipManager
         $levels[] = $level;
         update_option('ap_membership_levels', array_values(array_unique($levels)));
         return rest_ensure_response(['levels' => $levels]);
+    }
+
+    public static function handleMembershipLevels(WP_REST_Request $req)
+    {
+        return match ($req->get_method()) {
+            'POST' => self::addLevel($req),
+            'GET'  => self::getLevelsEndpoint(),
+            default => new WP_Error('invalid_method', 'Method not allowed', ['status' => 405]),
+        };
     }
 
     public static function deleteLevel(WP_REST_Request $req)

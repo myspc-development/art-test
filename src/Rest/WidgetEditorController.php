@@ -18,34 +18,23 @@ class WidgetEditorController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/widgets')) {
-            register_rest_route('artpulse/v1', '/widgets', [
+        register_rest_route('artpulse/v1', '/widgets', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_widgets'],
             'permission_callback' => fn () => current_user_can('read'),
         ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/roles')) {
-            register_rest_route('artpulse/v1', '/roles', [
+
+        register_rest_route('artpulse/v1', '/roles', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_roles'],
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)')) {
-            register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
-            'methods'  => 'GET',
-            'callback' => [self::class, 'get_layout'],
+
+        register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
+            'methods'  => ['GET', 'POST'],
+            'callback' => [self::class, 'handle_layout'],
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)')) {
-            register_rest_route('artpulse/v1', '/layout/(?P<role>[a-z0-9_-]+)', [
-            'methods'  => 'POST',
-            'callback' => [self::class, 'save_layout'],
-            'permission_callback' => fn () => current_user_can('manage_options'),
-        ]);
-        }
     }
 
     public static function get_widgets(): WP_REST_Response
@@ -87,5 +76,14 @@ class WidgetEditorController
             \ArtPulse\Admin\UserLayoutManager::save_role_style($role, $style);
         }
         return rest_ensure_response(['saved' => true]);
+    }
+
+    public static function handle_layout(WP_REST_Request $req): WP_REST_Response|WP_Error
+    {
+        return match ($req->get_method()) {
+            'POST' => self::save_layout($req),
+            'GET'  => self::get_layout($req),
+            default => new WP_Error('invalid_method', 'Method not allowed', ['status' => 405]),
+        };
     }
 }
