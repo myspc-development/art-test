@@ -130,30 +130,29 @@ class DirectMessages
 
         if (!ap_rest_route_registered('artpulse/v1', '/messages')) {
             register_rest_route('artpulse/v1', '/messages', [
-            'methods'             => 'POST',
-            'callback'            => [self::class, 'send'],
-            'permission_callback' => [self::class, 'permission_send'],
-            'args'                => [
-                'recipient_id' => [ 'type' => 'integer', 'required' => true ],
-                'content'      => [ 'type' => 'string',  'required' => true ],
-                'nonce'        => [ 'type' => 'string',  'required' => true ],
-                'context_type' => [ 'type' => 'string',  'required' => false ],
-                'context_id'   => [ 'type' => 'integer', 'required' => false ],
-            ],
-        ]);
-        }
-
-        if (!ap_rest_route_registered('artpulse/v1', '/messages')) {
-            register_rest_route('artpulse/v1', '/messages', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'fetch'],
-            'permission_callback' => static function () {
-                return current_user_can('read');
-            },
-            'args'                => [
-                'with' => [ 'type' => 'integer', 'required' => true ],
-            ],
-        ]);
+                [
+                    'methods'             => 'POST',
+                    'callback'            => [self::class, 'send'],
+                    'permission_callback' => [self::class, 'permission_send'],
+                    'args'                => [
+                        'recipient_id' => [ 'type' => 'integer', 'required' => true ],
+                        'content'      => [ 'type' => 'string',  'required' => true ],
+                        'nonce'        => [ 'type' => 'string',  'required' => true ],
+                        'context_type' => [ 'type' => 'string',  'required' => false ],
+                        'context_id'   => [ 'type' => 'integer', 'required' => false ],
+                    ],
+                ],
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [self::class, 'fetch'],
+                    'permission_callback' => static function () {
+                        return current_user_can('read');
+                    },
+                    'args'                => [
+                        'with' => [ 'type' => 'integer', 'required' => true ],
+                    ],
+                ],
+            ]);
         }
 
         if (!ap_rest_route_registered('artpulse/v1', '/messages/updates')) {

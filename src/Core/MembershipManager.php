@@ -173,15 +173,16 @@ class MembershipManager
         ]);
 
         register_rest_route('artpulse/v1', '/membership/levels', [
-            'methods'             => 'GET',
-            'callback'            => [ self::class, 'getLevelsEndpoint' ],
-            'permission_callback' => [ self::class, 'checkManageMemberships' ],
-        ]);
-
-        register_rest_route('artpulse/v1', '/membership/levels', [
-            'methods'             => 'POST',
-            'callback'            => [ self::class, 'addLevel' ],
-            'permission_callback' => [ self::class, 'checkManageMemberships' ],
+            [
+                'methods'             => 'GET',
+                'callback'            => [ self::class, 'getLevelsEndpoint' ],
+                'permission_callback' => [ self::class, 'checkManageMemberships' ],
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => [ self::class, 'addLevel' ],
+                'permission_callback' => [ self::class, 'checkManageMemberships' ],
+            ],
         ]);
 
         register_rest_route('artpulse/v1', '/membership/levels/(?P<level>[\\w-]+)', [

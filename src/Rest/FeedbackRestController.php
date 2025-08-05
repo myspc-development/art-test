@@ -21,17 +21,17 @@ class FeedbackRestController
     {
         if (!ap_rest_route_registered('artpulse/v1', '/feedback')) {
             register_rest_route('artpulse/v1', '/feedback', [
-            'methods'             => 'POST',
-            'callback'            => [self::class, 'submit'],
-            'permission_callback' => fn () => is_user_logged_in(),
-        ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/feedback')) {
-            register_rest_route('artpulse/v1', '/feedback', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'list'],
-            'permission_callback' => fn () => is_user_logged_in(),
-        ]);
+                [
+                    'methods'             => 'POST',
+                    'callback'            => [self::class, 'submit'],
+                    'permission_callback' => fn () => is_user_logged_in(),
+                ],
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [self::class, 'list'],
+                    'permission_callback' => fn () => is_user_logged_in(),
+                ],
+            ]);
         }
         if (!ap_rest_route_registered('artpulse/v1', '/feedback/(?P<id>\\d+)/vote')) {
             register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/vote', [
@@ -43,22 +43,22 @@ class FeedbackRestController
         }
         if (!ap_rest_route_registered('artpulse/v1', '/feedback/(?P<id>\\d+)/comments')) {
             register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/comments', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'comments'],
-            'permission_callback' => fn () => is_user_logged_in(),
-            'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
-        ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/feedback/(?P<id>\\d+)/comments')) {
-            register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/comments', [
-            'methods'             => 'POST',
-            'callback'            => [self::class, 'add_comment'],
-            'permission_callback' => fn () => is_user_logged_in(),
-            'args'                => [
-                'id'      => [ 'validate_callback' => 'is_numeric' ],
-                'comment' => [ 'type' => 'string', 'required' => true ],
-            ],
-        ]);
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [self::class, 'comments'],
+                    'permission_callback' => fn () => is_user_logged_in(),
+                    'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
+                ],
+                [
+                    'methods'             => 'POST',
+                    'callback'            => [self::class, 'add_comment'],
+                    'permission_callback' => fn () => is_user_logged_in(),
+                    'args'                => [
+                        'id'      => [ 'validate_callback' => 'is_numeric' ],
+                        'comment' => [ 'type' => 'string', 'required' => true ],
+                    ],
+                ],
+            ]);
         }
     }
 

@@ -17,18 +17,17 @@ class OrgUserRolesController
     {
         if (!ap_rest_route_registered('artpulse/v1', '/orgs/(?P<id>\d+)/roles')) {
             register_rest_route('artpulse/v1', '/orgs/(?P<id>\d+)/roles', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'list_roles'],
-            'permission_callback' => [self::class, 'can_view'],
-        ]);
-        }
-
-        if (!ap_rest_route_registered('artpulse/v1', '/orgs/(?P<id>\d+)/roles')) {
-            register_rest_route('artpulse/v1', '/orgs/(?P<id>\d+)/roles', [
-            'methods'             => 'POST',
-            'callback'            => [self::class, 'add_role'],
-            'permission_callback' => [self::class, 'can_manage'],
-        ]);
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [self::class, 'list_roles'],
+                    'permission_callback' => [self::class, 'can_view'],
+                ],
+                [
+                    'methods'             => 'POST',
+                    'callback'            => [self::class, 'add_role'],
+                    'permission_callback' => [self::class, 'can_manage'],
+                ],
+            ]);
         }
 
         if (!ap_rest_route_registered('artpulse/v1', '/orgs/(?P<id>\d+)/roles/(?P<user_id>\d+)')) {

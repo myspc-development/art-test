@@ -16,23 +16,22 @@ class ArtworkCommentsController
     {
         if (!ap_rest_route_registered('artpulse/v1', '/artwork/(?P<id>\\d+)/comments')) {
             register_rest_route('artpulse/v1', '/artwork/(?P<id>\\d+)/comments', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'list'],
-            'permission_callback' => fn() => is_user_logged_in(),
-            'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
-        ]);
-        }
-
-        if (!ap_rest_route_registered('artpulse/v1', '/artwork/(?P<id>\\d+)/comments')) {
-            register_rest_route('artpulse/v1', '/artwork/(?P<id>\\d+)/comments', [
-            'methods'             => 'POST',
-            'callback'            => [self::class, 'add'],
-            'permission_callback' => fn() => is_user_logged_in(),
-            'args'                => [
-                'id'      => [ 'validate_callback' => 'is_numeric' ],
-                'content' => [ 'type' => 'string', 'required' => true ],
-            ],
-        ]);
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [self::class, 'list'],
+                    'permission_callback' => fn() => is_user_logged_in(),
+                    'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
+                ],
+                [
+                    'methods'             => 'POST',
+                    'callback'            => [self::class, 'add'],
+                    'permission_callback' => fn() => is_user_logged_in(),
+                    'args'                => [
+                        'id'      => [ 'validate_callback' => 'is_numeric' ],
+                        'content' => [ 'type' => 'string', 'required' => true ],
+                    ],
+                ],
+            ]);
         }
     }
 
