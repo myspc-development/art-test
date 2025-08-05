@@ -1,7 +1,7 @@
 // jest.config.cjs
 module.exports = {
-  // Use the jsdom environment that brings in localStorage, sessionStorage, etc.
-  testEnvironment: 'jest-environment-jsdom-global',
+  // Use the standard jsdom environment
+  testEnvironment: 'jsdom',
 
   // Give jsdom a non-opaque origin so URL APIs work
   testEnvironmentOptions: {
@@ -19,6 +19,9 @@ module.exports = {
   // Recognize these extensions
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
 
-  // Add jest-dom matchers (optional, if you still need them)
-  setupFilesAfterEnv: ['@testing-library/jest-dom']
+  // Polyfill globals before tests run
+  setupFiles: ['<rootDir>/jest.setup.js'],
+
+  // Run additional setup after the environment is ready
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js', '@testing-library/jest-dom']
 };
