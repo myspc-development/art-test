@@ -11,7 +11,7 @@ This document provides an overview of the plugin code layout and how to extend i
 
 ## Folder Layout
 
-- `src/` – PHP classes organized by namespace (e.g. `ArtPulse\Blocks`, `ArtPulse\Rest`).
+- `src/` – PHP classes organized by namespace (e.g. `ArtPulse\Blocks`, `ArtPulse\Core`). Legacy REST controllers remain under `src/Rest`.
 - `includes/` – Helper functions and legacy procedural code.
 - `templates/` – PHP templates for widgets and front‑end views.
 - `assets/` – JavaScript and CSS assets compiled for production.
@@ -35,6 +35,6 @@ Use `wp_enqueue_script` and `wp_enqueue_style` with a version based on `filemtim
 
 ## Registering REST Endpoints
 
-Create a controller class under `src/Rest/` with a `register()` method hooking into `rest_api_init`. Use `register_rest_route()` to define endpoints and return data via `rest_ensure_response()`.
+Create a controller class under `src/Core/` with a `register()` method hooking into `rest_api_init`. Use `register_rest_route()` to define endpoints and return data via `rest_ensure_response()`. Legacy endpoints in `src/Rest` are being phased out.
 
 > 💬 *Found something outdated? [Submit Feedback](../feedback.md)*
