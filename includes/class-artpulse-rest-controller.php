@@ -1,8 +1,6 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 
-use WP_REST_Request;
-
 /**
  * Registers REST API routes used by dashboard widgets.
  */
