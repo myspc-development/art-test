@@ -14,7 +14,7 @@ The following table lists every REST route registered by the plugin. Method dete
 |-----------|-------|---------|
 | artpulse/v1 | /artists | ANY |
 | artpulse/v1 | /events | ANY |
-| art/v1 | /spotlight/view | POST |
+| artpulse/v1 | /spotlight/view | POST |
 | artpulse/v1 | /activity | GET |
 | artpulse/v1 | /admin/export | GET |
 | artpulse/v1 | /admin/reminders | ANY |
