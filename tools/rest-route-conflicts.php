@@ -94,9 +94,12 @@ add_action('rest_api_init', function () {
             return;
         }
     }
-    register_rest_route('namespace', $path, [
+    register_rest_route('artpulse/v1', $path, [
         'methods' => '%s',
         'callback' => '%s',
+        'permission_callback' => function () {
+            return current_user_can('manage_options');
+        },
     ]);
 });
 SNIPPET;
