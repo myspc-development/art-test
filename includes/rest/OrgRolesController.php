@@ -5,10 +5,19 @@ namespace ArtPulse\Rest;
 use WP_REST_Controller;
 
 class OrgRolesController extends WP_REST_Controller {
-    public function __construct() {
-        $this->namespace = 'artpulse/v1';
-        $this->rest_base = 'roles';
-    }
+    /**
+     * Namespace for these routes.
+     *
+     * @var string
+     */
+    protected $namespace = 'artpulse/v1';
+
+    /**
+     * Route base.
+     *
+     * @var string
+     */
+    protected $rest_base = 'roles';
 
     public function register_routes() {
         register_rest_route($this->namespace, '/' . $this->rest_base, [
