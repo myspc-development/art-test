@@ -9,9 +9,10 @@ if (PHP_SAPI !== 'cli') {
     exit(1);
 }
 
-$opts    = getopt('', ['json', 'suggest-fix']);
-$json    = array_key_exists('json', $opts);
-$suggest = array_key_exists('suggest-fix', $opts);
+$opts        = getopt('', ['json', 'suggest-fix', 'output:']);
+$output_file = $opts['output'] ?? null;
+$json        = array_key_exists('json', $opts) || $output_file !== null;
+$suggest     = array_key_exists('suggest-fix', $opts);
 
 $wp_load = __DIR__ . '/../wordpress/wp-load.php';
 if (! file_exists($wp_load)) {
@@ -48,16 +49,21 @@ foreach ($routes as $route => $handlers) {
 }
 
 if ($json) {
-    $output = [];
+    $data = [];
     foreach ($conflicts as $key => $callbacks) {
         [$route, $method] = explode('|', $key);
-        $output[] = [
+        $data[] = [
             'route'     => $route,
             'method'    => $method,
             'callbacks' => $callbacks,
         ];
     }
-    echo json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
+    $json_data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    if ($output_file) {
+        file_put_contents($output_file, $json_data . PHP_EOL);
+    } else {
+        echo $json_data . PHP_EOL;
+    }
 } else {
     if (empty($conflicts)) {
         echo 'No duplicate REST routes found.' . PHP_EOL;
