@@ -64,30 +64,34 @@ class FavoritesOverviewWidget {
     {
         $user_id = $user_id ?: get_current_user_id();
         if (!$user_id) {
-            // Should not happen on the dashboard but keeps the widget safe for
-            // unauthenticated contexts.
             return self::render_placeholder();
         }
 
-        $favorites = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
-        if (!$favorites) {
-            return '<p>' . esc_html__('You have no favorite events yet.', 'artpulse') . '</p>';
+        $favorites = FavoritesManager::get_user_favorites($user_id, 'event');
+
+        if (empty($favorites)) {
+            $content = '<p>' . esc_html__('No favorites yet', 'artpulse') . '</p>';
+            return '<div class="inside">' . $content . '</div>';
         }
 
         $items = [];
         foreach ($favorites as $fav) {
-            $link  = get_permalink((int) $fav->object_id);
-            $title = get_the_title((int) $fav->object_id);
-            if ($link && $title) {
-                $items[] = '<li><a href="' . esc_url($link) . '">' . esc_html($title) . '</a></li>';
+            $post_id = (int) $fav->object_id;
+            $url     = get_permalink($post_id);
+            $title   = get_the_title($post_id);
+
+            if ($url && $title) {
+                $items[] = sprintf('<li><a href="%s">%s</a></li>', esc_url($url), esc_html($title));
             }
         }
 
         if (!$items) {
-            return '<p>' . esc_html__('You have no favorite events yet.', 'artpulse') . '</p>';
+            $content = '<p>' . esc_html__('No favorites yet', 'artpulse') . '</p>';
+        } else {
+            $content = '<ul class="ap-favorites-overview">' . implode('', $items) . '</ul>';
         }
 
-        return '<ul class="ap-favorites-overview">' . implode('', $items) . '</ul>';
+        return '<div class="inside">' . $content . '</div>';
     }
 
     public static function render_placeholder(): string

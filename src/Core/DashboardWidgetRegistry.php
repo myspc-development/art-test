@@ -143,7 +143,9 @@ class DashboardWidgetRegistry {
         }
 
         if ( ! is_callable( $callback ) ) {
-            error_log( 'Invalid dashboard widget callback for ID ' . $id );
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log( 'Invalid dashboard widget callback for ID ' . $id );
+            }
             $callback = [ self::class, 'render_widget_fallback' ];
         }
 
@@ -538,7 +540,9 @@ class DashboardWidgetRegistry {
             call_user_func( self::$builder_widgets[ $id ]['render_callback'] );
         } catch ( \Throwable $e ) {
             $file = self::$builder_widgets[ $id ]['file'] ?? 'unknown';
-            error_log( '[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage() );
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log( '[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage() );
+            }
         }
         $html = ob_get_clean();
         unset( $stack[ $id ] );
@@ -881,15 +885,22 @@ class DashboardWidgetRegistry {
         );
         $widget_ids = array_keys( $widgets );
 
-        error_log( "[AP Dashboard] Rendering {$role} → layout: " . implode( ',', $layout_ids ) . ' widgets: ' . implode( ',', $widget_ids ) );
+        $debug = defined('WP_DEBUG') && WP_DEBUG;
+        if ( $debug ) {
+            error_log( "[AP Dashboard] Rendering {$role} → layout: " . implode( ',', $layout_ids ) . ' widgets: ' . implode( ',', $widget_ids ) );
+        }
 
         $missing = array_diff( $layout_ids, $widget_ids );
         foreach ( $missing as $id ) {
-            error_log( "[AP Dashboard] Widget {$id} missing for role {$role}" );
+            if ( $debug ) {
+                error_log( "[AP Dashboard] Widget {$id} missing for role {$role}" );
+            }
         }
         $extra = array_diff( $widget_ids, $layout_ids );
         foreach ( $extra as $id ) {
-            error_log( "[AP Dashboard] Widget {$id} not in layout for role {$role}" );
+            if ( $debug ) {
+                error_log( "[AP Dashboard] Widget {$id} not in layout for role {$role}" );
+            }
         }
 
         $sections  = [];
@@ -899,12 +910,16 @@ class DashboardWidgetRegistry {
                 continue;
             }
             if ( ! self::user_can_see( $id, $user_id ) ) {
-                error_log( "[AP Dashboard] Visibility rejected for {$id} and role {$role}" );
+                if ( $debug ) {
+                    error_log( "[AP Dashboard] Visibility rejected for {$id} and role {$role}" );
+                }
                 continue;
             }
             $cfg = $widgets[ $id ];
             if ( ! is_callable( $cfg['callback'] ?? null ) ) {
-                error_log( "[AP Dashboard] Widget {$id} callback not callable" );
+                if ( $debug ) {
+                    error_log( "[AP Dashboard] Widget {$id} callback not callable" );
+                }
                 continue;
             }
             $class   = $cfg['class'] ?? '';
@@ -943,7 +958,9 @@ class DashboardWidgetRegistry {
                     $rendered++;
                 } catch ( \Throwable $e ) {
                     ob_end_clean();
-                    error_log( 'Widget ' . $cfg['id'] . ' failed: ' . $e->getMessage() );
+                    if ( $debug ) {
+                        error_log( 'Widget ' . $cfg['id'] . ' failed: ' . $e->getMessage() );
+                    }
                 }
             }
             echo '</section>';
@@ -951,9 +968,13 @@ class DashboardWidgetRegistry {
 
         if ( 0 === $rendered ) {
             echo '<div class="ap-dashboard-error">' . esc_html__( 'No dashboard widgets could be rendered.', 'artpulse' ) . '</div>';
-            error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
+            if ( $debug ) {
+                error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
+            }
         } else {
-            error_log( "[AP Dashboard] Rendered {$rendered} widgets for role {$role}" );
+            if ( $debug ) {
+                error_log( "[AP Dashboard] Rendered {$rendered} widgets for role {$role}" );
+            }
         }
 
         do_action( 'ap_after_widgets', $role );

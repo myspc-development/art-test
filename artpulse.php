@@ -131,13 +131,20 @@ add_action('init', function () {
         return;
     }
     $required = [
-        'edit_pages', 'publish_pages', 'edit_others_pages',
-        'edit_published_pages', 'delete_pages', 'delete_others_pages',
-        'edit_posts', 'publish_posts', 'edit_others_posts', 'delete_posts',
+        'edit_pages',
+        'publish_pages',
+        'edit_posts',
+        'edit_others_pages',
+        'edit_published_pages',
+        'delete_pages',
+        'delete_others_pages',
     ];
     foreach ($required as $cap) {
         if (!$admin->has_cap($cap)) {
             $admin->add_cap($cap);
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log(sprintf('ap init restored %s capability for administrators', $cap));
+            }
         }
     }
 }, 1);
@@ -145,7 +152,7 @@ add_action('init', function () {
 // Detect and log capability filters that may interfere with admin rights.
 add_action('init', function () {
     foreach (['user_has_cap', 'map_meta_cap'] as $hook) {
-        if (has_filter($hook)) {
+        if (has_filter($hook) && defined('WP_DEBUG') && WP_DEBUG) {
             error_log(sprintf('ArtPulse: filter detected on %s', $hook));
         }
     }
@@ -155,9 +162,13 @@ add_action('init', function () {
 add_filter('user_has_cap', function (array $allcaps, array $caps, array $args, \WP_User $user): array {
     if (in_array('administrator', (array) $user->roles, true)) {
         $required = [
-            'edit_pages', 'publish_pages', 'edit_others_pages',
-            'edit_published_pages', 'delete_pages', 'delete_others_pages',
-            'edit_posts', 'publish_posts', 'edit_others_posts', 'delete_posts',
+            'edit_pages',
+            'publish_pages',
+            'edit_posts',
+            'edit_others_pages',
+            'edit_published_pages',
+            'delete_pages',
+            'delete_others_pages',
         ];
         foreach ($required as $cap) {
             if (empty($allcaps[$cap])) {
@@ -171,17 +182,4 @@ add_filter('user_has_cap', function (array $allcaps, array $caps, array $args, \
     return $allcaps;
 }, PHP_INT_MAX, 4);
 
-// Optional admin dashboard integration: expose the custom dashboard in wp-admin.
-add_action('wp_dashboard_setup', function () {
-    if (!current_user_can('view_artpulse_dashboard')) {
-        return;
-    }
-    wp_add_dashboard_widget(
-        'ap_member_dashboard',
-        __('My ArtPulse Dashboard', 'artpulse'),
-        function () {
-            echo do_shortcode('[ap_user_dashboard]');
-        }
-    );
-});
 

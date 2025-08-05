@@ -33,7 +33,9 @@ class DashboardWidgetController {
 
             $core = self::to_core_id($id);
             if ($id && $core === $id && !\ArtPulse\Core\DashboardWidgetRegistry::get($id)) {
-                error_log('[DashboardBuilder] Unmapped widget ID: ' . $id);
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log('[DashboardBuilder] Unmapped widget ID: ' . $id);
+                }
             }
 
             $converted[] = [
@@ -128,7 +130,9 @@ class DashboardWidgetController {
 
         $available = array_values(DashboardWidgetRegistry::get_for_role($role));
         if (empty($available) && !get_role($role)) {
-            error_log('Dashboard widgets request for unsupported role: ' . $role);
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('Dashboard widgets request for unsupported role: ' . $role);
+            }
             return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
         }
         foreach ($available as &$widget) {
@@ -162,7 +166,9 @@ class DashboardWidgetController {
             return new WP_Error('invalid_role', __('Invalid role', 'artpulse'), ['status' => 400]);
         }
         if (empty(DashboardWidgetRegistry::get_for_role($role)) && !get_role($role)) {
-            error_log('Attempt to save dashboard layout for unsupported role: ' . $role);
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('Attempt to save dashboard layout for unsupported role: ' . $role);
+            }
             return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
         }
         if (isset($data['layout']) && is_array($data['layout'])) {
@@ -195,7 +201,9 @@ class DashboardWidgetController {
             return new WP_Error('invalid_role', __('Invalid role', 'artpulse'), ['status' => 400]);
         }
         if (empty(DashboardWidgetRegistry::get_for_role($role)) && !get_role($role)) {
-            error_log('Attempt to import dashboard layout for unsupported role: ' . $role);
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('Attempt to import dashboard layout for unsupported role: ' . $role);
+            }
             return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
         }
         $layout = $data['layout'] ?? null;

@@ -15,12 +15,17 @@ function ap_reset_user_dashboard_meta(int $user_id): bool {
 }
 
 if (defined('WP_CLI') && WP_CLI) {
-    \WP_CLI::add_command('ap reset-user-dashboard', function($args) {
+    $handler = function ($args): void {
         $uid = (int)($args[0] ?? 0);
         if (!$uid) {
             \WP_CLI::error('User ID required.');
         }
         ap_reset_user_dashboard_meta($uid);
         \WP_CLI::success("Reset dashboard layout for user {$uid}.");
-    });
+    };
+
+    // Original command name.
+    \WP_CLI::add_command('ap reset-user-dashboard', $handler);
+    // Short alias for convenience.
+    \WP_CLI::add_command('ap reset-layout', $handler);
 }

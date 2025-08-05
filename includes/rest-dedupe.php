@@ -25,7 +25,9 @@ function ap_deduplicate_rest_routes(array $endpoints): array {
                     unset($endpoints[$route][$key]);
                 } else {
                     // Different handler registered for same route/method.
-                    error_log("[REST CONFLICT] Duplicate route $route ($method) with different callbacks.");
+                    if (defined('WP_DEBUG') && WP_DEBUG) {
+                        error_log("[REST CONFLICT] Duplicate route $route ($method) with different callbacks.");
+                    }
                 }
             } else {
                 $seen[$hash] = $handler;
