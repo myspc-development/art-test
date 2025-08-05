@@ -21,9 +21,7 @@ Returns:
 Update the allowed widgets and locked state.
 
 > **Note**: The legacy `dashboard-config.php` route and the earlier
-> definitions inside `artpulse-management.php` have been removed. All
-> logic for this endpoint now lives in
-> `src/Rest/DashboardConfigController.php`.
+> definitions inside `artpulse-management.php` have been removed. Routing now uses `src/Rest/DashboardConfigController.php` with core logic in `src/Core/DashboardController.php`.
 
 ## Widget Manager Endpoints
 
