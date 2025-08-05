@@ -15,7 +15,8 @@ class CompetitionRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/competitions/(?P<id>\d+)/entries', [
+        if (!ap_rest_route_registered('artpulse/v1', '/competitions/(?P<id>\d+)/entries')) {
+            register_rest_route('artpulse/v1', '/competitions/(?P<id>\d+)/entries', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'submit_entry'],
             'permission_callback' => [self::class, 'can_submit'],
@@ -24,8 +25,10 @@ class CompetitionRestController
                 'artwork_id' => [ 'validate_callback' => 'is_numeric', 'required' => true ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/competitions/(?P<id>\d+)/entries/(?P<entry_id>\d+)/vote', [
+        if (!ap_rest_route_registered('artpulse/v1', '/competitions/(?P<id>\d+)/entries/(?P<entry_id>\d+)/vote')) {
+            register_rest_route('artpulse/v1', '/competitions/(?P<id>\d+)/entries/(?P<entry_id>\d+)/vote', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'vote_entry'],
             'permission_callback' => [self::class, 'can_vote'],
@@ -34,6 +37,7 @@ class CompetitionRestController
                 'entry_id' => [ 'validate_callback' => 'is_numeric' ],
             ],
         ]);
+        }
     }
 
     public static function can_submit(WP_REST_Request $req): bool

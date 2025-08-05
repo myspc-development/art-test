@@ -10,20 +10,24 @@ class OrgAnalyticsController {
     }
 
     public static function register_routes(): void {
-        register_rest_route('artpulse/v1', '/org-metrics', [
+        if (!ap_rest_route_registered('artpulse/v1', '/org-metrics')) {
+            register_rest_route('artpulse/v1', '/org-metrics', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_metrics'],
             'permission_callback' => function () {
                 return is_user_logged_in();
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/rsvp-stats', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/rsvp-stats')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/rsvp-stats', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_event_rsvp_stats'],
             'permission_callback' => [\ArtPulse\Rest\RsvpRestController::class, 'check_permissions'],
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
+        }
     }
 
     public static function get_metrics(WP_REST_Request $request): WP_REST_Response {

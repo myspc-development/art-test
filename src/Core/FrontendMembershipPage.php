@@ -13,7 +13,8 @@ class FrontendMembershipPage
 
         // Expose a REST endpoint for the account data
         add_action('rest_api_init', function() {
-            register_rest_route('artpulse/v1', '/member/account', [
+            if (!ap_rest_route_registered('artpulse/v1', '/member/account')) {
+                register_rest_route('artpulse/v1', '/member/account', [
                 'methods'  => 'GET',
                 'callback' => [ self::class, 'getAccountData' ],
                 'permission_callback' => function() {
@@ -23,6 +24,7 @@ class FrontendMembershipPage
                     return true;
                 },
             ]);
+            }
         });
     }
 

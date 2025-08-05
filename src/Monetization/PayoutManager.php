@@ -17,16 +17,20 @@ class PayoutManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/user/payouts', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user/payouts')) {
+            register_rest_route('artpulse/v1', '/user/payouts', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_payouts'],
             'permission_callback' => [self::class, 'check_logged_in'],
         ]);
-        register_rest_route('artpulse/v1', '/user/payouts/settings', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/user/payouts/settings')) {
+            register_rest_route('artpulse/v1', '/user/payouts/settings', [
             'methods'  => 'POST',
             'callback' => [self::class, 'update_settings'],
             'permission_callback' => [self::class, 'check_logged_in'],
         ]);
+        }
     }
 
     public static function check_logged_in()

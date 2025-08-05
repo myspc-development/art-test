@@ -14,11 +14,13 @@ class ReminderManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/admin/reminders', [
+        if (!ap_rest_route_registered('artpulse/v1', '/admin/reminders')) {
+            register_rest_route('artpulse/v1', '/admin/reminders', [
             'methods'  => ['GET', 'POST'],
             'callback' => [self::class, 'handle'],
             'permission_callback' => [self::class, 'check_permission'],
         ]);
+        }
     }
 
     public static function check_permission()

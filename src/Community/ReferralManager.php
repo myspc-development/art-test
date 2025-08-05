@@ -40,7 +40,8 @@ class ReferralManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/referral/redeem', [
+        if (!ap_rest_route_registered('artpulse/v1', '/referral/redeem')) {
+            register_rest_route('artpulse/v1', '/referral/redeem', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'redeem'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -48,6 +49,7 @@ class ReferralManager
                 'code' => ['type' => 'string', 'required' => true],
             ],
         ]);
+        }
     }
 
     public static function create_code(int $user_id): string

@@ -17,7 +17,8 @@ class EventListController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/event-list', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event-list')) {
+            register_rest_route('artpulse/v1', '/event-list', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_list'],
             'permission_callback' => '__return_true',
@@ -37,6 +38,7 @@ class EventListController
                 'per_page'   => [ 'type' => 'integer', 'default' => 12 ],
             ],
         ]);
+        }
     }
 
     public static function get_list(WP_REST_Request $request)

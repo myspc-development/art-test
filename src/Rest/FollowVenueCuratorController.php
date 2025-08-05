@@ -13,7 +13,8 @@ class FollowVenueCuratorController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/follow/venue', [
+        if (!ap_rest_route_registered('artpulse/v1', '/follow/venue')) {
+            register_rest_route('artpulse/v1', '/follow/venue', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'follow_venue'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -21,14 +22,18 @@ class FollowVenueCuratorController
                 'venue_id' => ['type' => 'integer', 'required' => true],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/followed/venues', [
+        if (!ap_rest_route_registered('artpulse/v1', '/followed/venues')) {
+            register_rest_route('artpulse/v1', '/followed/venues', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_followed_venues'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/follow/curator', [
+        if (!ap_rest_route_registered('artpulse/v1', '/follow/curator')) {
+            register_rest_route('artpulse/v1', '/follow/curator', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'follow_curator'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -36,12 +41,15 @@ class FollowVenueCuratorController
                 'curator_id' => ['type' => 'integer', 'required' => true],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/followed/curators', [
+        if (!ap_rest_route_registered('artpulse/v1', '/followed/curators')) {
+            register_rest_route('artpulse/v1', '/followed/curators', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_followed_curators'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
+        }
     }
 
     public static function follow_venue(WP_REST_Request $req): WP_REST_Response

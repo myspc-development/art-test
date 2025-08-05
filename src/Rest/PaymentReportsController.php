@@ -14,7 +14,8 @@ class PaymentReportsController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/payment-reports', [
+        if (!ap_rest_route_registered('artpulse/v1', '/payment-reports')) {
+            register_rest_route('artpulse/v1', '/payment-reports', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_reports'],
             'permission_callback' => function () {
@@ -24,6 +25,7 @@ class PaymentReportsController
                 return true;
             },
         ]);
+        }
     }
 
     public static function get_reports(WP_REST_Request $request): WP_REST_Response

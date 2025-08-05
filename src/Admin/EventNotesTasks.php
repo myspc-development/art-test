@@ -204,7 +204,8 @@ class EventNotesTasks
 
     public static function register_rest(): void
     {
-        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/notes', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/notes')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/notes', [
             'methods' => 'GET',
             'callback' => function (WP_REST_Request $req) {
                 $id = intval($req['id']);
@@ -221,7 +222,9 @@ class EventNotesTasks
                 return true;
             }
         ]);
-        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/tasks', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/tasks')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/tasks', [
             'methods' => 'GET',
             'callback' => function (WP_REST_Request $req) {
                 $id = intval($req['id']);
@@ -238,5 +241,6 @@ class EventNotesTasks
                 return true;
             }
         ]);
+        }
     }
 }

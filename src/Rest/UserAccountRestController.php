@@ -20,7 +20,8 @@ class UserAccountRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/user/export', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user/export')) {
+            register_rest_route('artpulse/v1', '/user/export', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'export_user_data'],
             'permission_callback' => function() {
@@ -37,8 +38,10 @@ class UserAccountRestController
                 ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/user/delete', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user/delete')) {
+            register_rest_route('artpulse/v1', '/user/delete', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'delete_user_data'],
             'permission_callback' => function() {
@@ -48,6 +51,7 @@ class UserAccountRestController
                 return true;
             },
         ]);
+        }
     }
 
     public static function export_user_data(WP_REST_Request $request): WP_REST_Response|WP_Error

@@ -12,13 +12,15 @@ class CalendarFeedController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/calendar', [
+        if (!ap_rest_route_registered('artpulse/v1', '/calendar')) {
+            register_rest_route('artpulse/v1', '/calendar', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_feed'],
             'permission_callback' => function () {
                 return current_user_can('read');
             },
         ]);
+        }
     }
 
     public static function get_feed(WP_REST_Request $req)

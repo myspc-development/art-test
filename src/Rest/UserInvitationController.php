@@ -18,7 +18,8 @@ class UserInvitationController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/invite', [
+        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/invite')) {
+            register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/invite', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'invite'],
             'permission_callback' => [self::class, 'check_permissions'],
@@ -28,8 +29,10 @@ class UserInvitationController
                 ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/users/batch', [
+        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\\d+)/users/batch')) {
+            register_rest_route('artpulse/v1', '/org/(?P<id>\\d+)/users/batch', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'batch_users'],
             'permission_callback' => [self::class, 'check_permissions'],
@@ -39,6 +42,7 @@ class UserInvitationController
                 ],
             ],
         ]);
+        }
     }
 
     public static function check_permissions(WP_REST_Request $request): bool

@@ -14,7 +14,8 @@ class ActivityRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/activity', [
+        if (!ap_rest_route_registered('artpulse/v1', '/activity')) {
+            register_rest_route('artpulse/v1', '/activity', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -22,6 +23,7 @@ class ActivityRestController
                 'limit' => [ 'type' => 'integer', 'default' => 20 ],
             ],
         ]);
+        }
     }
 
     public static function list(WP_REST_Request $request): WP_REST_Response

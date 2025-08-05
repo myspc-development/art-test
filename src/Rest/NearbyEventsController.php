@@ -21,7 +21,8 @@ class NearbyEventsController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/events/nearby', [
+        if (!ap_rest_route_registered('artpulse/v1', '/events/nearby')) {
+            register_rest_route('artpulse/v1', '/events/nearby', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_nearby'],
             'permission_callback' => '__return_true',
@@ -32,6 +33,7 @@ class NearbyEventsController
                 'limit'  => ['type' => 'integer', 'required' => false, 'default' => 20],
             ],
         ]);
+        }
     }
 
     public static function get_nearby(WP_REST_Request $request): WP_REST_Response|WP_Error

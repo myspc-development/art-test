@@ -2,7 +2,8 @@
 if (!defined('ABSPATH')) { exit; }
 
 add_action('rest_api_init', function () {
-    register_rest_route('artpulse/v1', '/update/diagnostics', [
+    if (!ap_rest_route_registered('artpulse/v1', '/update/diagnostics')) {
+        register_rest_route('artpulse/v1', '/update/diagnostics', [
         'methods'  => 'GET',
         'callback' => function () {
             $repo = get_option('ap_github_repo_url');
@@ -28,4 +29,5 @@ add_action('rest_api_init', function () {
             return true;
         }
     ]);
+    }
 });

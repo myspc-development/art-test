@@ -19,11 +19,13 @@ class ReportingManager
      */
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/admin/export', [
+        if (!ap_rest_route_registered('artpulse/v1', '/admin/export')) {
+            register_rest_route('artpulse/v1', '/admin/export', [
             'methods'  => 'GET',
             'callback' => [self::class, 'handle_export'],
             'permission_callback' => [self::class, 'can_export'],
         ]);
+        }
     }
 
     /**

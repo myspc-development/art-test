@@ -14,7 +14,8 @@ class ProfileMetricsController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/profile-metrics/(?P<id>\d+)', [
+        if (!ap_rest_route_registered('artpulse/v1', '/profile-metrics/(?P<id>\d+)')) {
+            register_rest_route('artpulse/v1', '/profile-metrics/(?P<id>\d+)', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_metrics'],
             'permission_callback' => function () {
@@ -34,6 +35,7 @@ class ProfileMetricsController
                 ],
             ],
         ]);
+        }
     }
 
     public static function get_metrics(WP_REST_Request $request): WP_REST_Response

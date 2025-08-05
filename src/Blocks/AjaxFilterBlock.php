@@ -31,7 +31,8 @@ class AjaxFilterBlock {
     }
 
     public static function register_rest_routes() {
-        register_rest_route('artpulse/v1', '/filtered-posts', [
+        if (!ap_rest_route_registered('artpulse/v1', '/filtered-posts')) {
+            register_rest_route('artpulse/v1', '/filtered-posts', [
             'methods'  => 'GET',
             'callback' => [self::class, 'rest_filtered_posts'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -43,6 +44,7 @@ class AjaxFilterBlock {
                 'page'      => ['required' => false, 'default' => 1],
             ],
         ]);
+        }
     }
 
     public static function rest_filtered_posts(\WP_REST_Request $request) {

@@ -19,12 +19,14 @@ class CustomFieldsManager
      */
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/rsvp/custom-fields', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/rsvp/custom-fields')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/rsvp/custom-fields', [
             'methods'  => ['GET', 'POST'],
             'callback' => [self::class, 'route_handler'],
             'permission_callback' => [self::class, 'check_permission'],
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
+        }
     }
 
     public static function check_permission()

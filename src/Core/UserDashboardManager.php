@@ -189,7 +189,8 @@ class UserDashboardManager
 
     public static function registerRestRoutes()
     {
-        register_rest_route('artpulse/v1', '/user/dashboard', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user/dashboard')) {
+            register_rest_route('artpulse/v1', '/user/dashboard', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getDashboardData' ],
             'permission_callback' => function() {
@@ -199,8 +200,10 @@ class UserDashboardManager
                 return true;
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/user/profile', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user/profile')) {
+            register_rest_route('artpulse/v1', '/user/profile', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'updateProfile' ],
             'permission_callback' => function() {
@@ -210,8 +213,10 @@ class UserDashboardManager
                 return true;
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/user/engagement', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user/engagement')) {
+            register_rest_route('artpulse/v1', '/user/engagement', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getEngagementFeed' ],
             'permission_callback' => function() {
@@ -225,8 +230,10 @@ class UserDashboardManager
                 'per_page' => [ 'type' => 'integer', 'default' => 10 ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/user/onboarding', [
+        if (!ap_rest_route_registered('artpulse/v1', '/user/onboarding')) {
+            register_rest_route('artpulse/v1', '/user/onboarding', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'saveOnboardingProgress' ],
             'permission_callback' => function() {
@@ -239,8 +246,10 @@ class UserDashboardManager
                 'step' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/dashboard-tour', [
+        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-tour')) {
+            register_rest_route('artpulse/v1', '/dashboard-tour', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'completeDashboardTour' ],
             'permission_callback' => function() {
@@ -250,8 +259,10 @@ class UserDashboardManager
                 return true;
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/ap/widgets/available', [
+        if (!ap_rest_route_registered('artpulse/v1', '/ap/widgets/available')) {
+            register_rest_route('artpulse/v1', '/ap/widgets/available', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getAvailableWidgets' ],
             'permission_callback' => function() {
@@ -261,16 +272,20 @@ class UserDashboardManager
                 'role' => [ 'type' => 'string', 'required' => false ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/ap/layout', [
+        if (!ap_rest_route_registered('artpulse/v1', '/ap/layout')) {
+            register_rest_route('artpulse/v1', '/ap/layout', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getDashboardLayout' ],
             'permission_callback' => function() {
                 return current_user_can('read');
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/ap/layout/save', [
+        if (!ap_rest_route_registered('artpulse/v1', '/ap/layout/save')) {
+            register_rest_route('artpulse/v1', '/ap/layout/save', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'saveDashboardLayout' ],
             'permission_callback' => function() {
@@ -281,31 +296,39 @@ class UserDashboardManager
                 'visibility' => [ 'type' => 'object', 'required' => false ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/ap/layout/reset', [
+        if (!ap_rest_route_registered('artpulse/v1', '/ap/layout/reset')) {
+            register_rest_route('artpulse/v1', '/ap/layout/reset', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'resetDashboardLayout' ],
             'permission_callback' => function() {
                 return current_user_can('read');
             },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/ap/layout/revert', [
+        if (!ap_rest_route_registered('artpulse/v1', '/ap/layout/revert')) {
+            register_rest_route('artpulse/v1', '/ap/layout/revert', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'revertDashboardLayout' ],
             'permission_callback' => function() {
                 return current_user_can('read');
             },
         ]);
+        }
 
         // Temporary aliases for backward compatibility
-        register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
+        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout')) {
+            register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
             'methods'  => 'GET',
             'callback' => [ self::class, 'getDashboardLayout' ],
             'permission_callback' => function() { return current_user_can('read'); },
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
+        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout')) {
+            register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
             'methods'  => 'POST',
             'callback' => [ self::class, 'saveDashboardLayout' ],
             'permission_callback' => function() { return current_user_can('read'); },
@@ -314,6 +337,7 @@ class UserDashboardManager
                 'visibility' => [ 'type' => 'object', 'required' => false ],
             ],
         ]);
+        }
     }
 
     public static function getDashboardData(WP_REST_Request $request)

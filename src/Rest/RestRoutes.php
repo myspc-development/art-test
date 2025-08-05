@@ -10,7 +10,8 @@ class RestRoutes
     {
         add_action('rest_api_init', function () {
             // Register listing endpoints
-            register_rest_route('artpulse/v1', '/events', [
+            if (!ap_rest_route_registered('artpulse/v1', '/events')) {
+                register_rest_route('artpulse/v1', '/events', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_events'],
                 'permission_callback' => function () {
@@ -30,30 +31,37 @@ class RestRoutes
                     'age_range'     => [ 'type' => 'string',  'required' => false ],
                 ],
             ]);
+            }
 
-            register_rest_route('artpulse/v1', '/artists', [
+            if (!ap_rest_route_registered('artpulse/v1', '/artists')) {
+                register_rest_route('artpulse/v1', '/artists', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_artists'],
                 'permission_callback' => function () {
                     return current_user_can('read');
                 },
             ]);
+            }
 
-            register_rest_route('artpulse/v1', '/artworks', [
+            if (!ap_rest_route_registered('artpulse/v1', '/artworks')) {
+                register_rest_route('artpulse/v1', '/artworks', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_artworks'],
                 'permission_callback' => function () {
                     return current_user_can('read');
                 },
             ]);
+            }
 
-            register_rest_route('artpulse/v1', '/orgs', [
+            if (!ap_rest_route_registered('artpulse/v1', '/orgs')) {
+                register_rest_route('artpulse/v1', '/orgs', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_orgs'],
                 'permission_callback' => function () {
                     return current_user_can('read');
                 },
             ]);
+            }
 
             // ✅ Register the new SubmissionRestController endpoint
             \ArtPulse\Rest\SubmissionRestController::register();

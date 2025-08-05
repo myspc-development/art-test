@@ -15,7 +15,8 @@ class ProfileLinkRequestManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/link-requests', [
+        if (!ap_rest_route_registered('artpulse/v1', '/link-requests')) {
+            register_rest_route('artpulse/v1', '/link-requests', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'handle_create_request'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -27,6 +28,7 @@ class ProfileLinkRequestManager
                 ]
             ]
         ]);
+        }
     }
 
     public static function handle_create_request(WP_REST_Request $request): WP_REST_Response|WP_Error

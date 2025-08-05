@@ -6,7 +6,8 @@ if (!defined('ABSPATH')) {
 }
 
 add_action('rest_api_init', function () {
-    register_rest_route('artpulse/v1', '/payment/intent', [
+    if (!ap_rest_route_registered('artpulse/v1', '/payment/intent')) {
+        register_rest_route('artpulse/v1', '/payment/intent', [
         'methods'  => 'POST',
         'callback' => 'ap_create_payment_intent',
         'permission_callback' => function () {
@@ -16,8 +17,10 @@ add_action('rest_api_init', function () {
             return true;
         },
     ]);
+    }
 
-    register_rest_route('artpulse/v1', '/payment/checkout', [
+    if (!ap_rest_route_registered('artpulse/v1', '/payment/checkout')) {
+        register_rest_route('artpulse/v1', '/payment/checkout', [
         'methods'  => 'POST',
         'callback' => 'ap_create_checkout_session',
         'permission_callback' => function () {
@@ -27,6 +30,7 @@ add_action('rest_api_init', function () {
             return true;
         },
     ]);
+    }
 });
 
 function ap_create_payment_intent(WP_REST_Request $req) {

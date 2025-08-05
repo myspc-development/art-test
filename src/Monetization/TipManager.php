@@ -17,7 +17,8 @@ class TipManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/artist/(?P<id>\\d+)/tip', [
+        if (!ap_rest_route_registered('artpulse/v1', '/artist/(?P<id>\\d+)/tip')) {
+            register_rest_route('artpulse/v1', '/artist/(?P<id>\\d+)/tip', [
             'methods'  => 'POST',
             'callback' => [self::class, 'record_tip'],
             'permission_callback' => [self::class, 'check_logged_in'],
@@ -26,6 +27,7 @@ class TipManager
                 'amount' => ['validate_callback' => 'is_numeric'],
             ],
         ]);
+        }
     }
 
     public static function check_logged_in()

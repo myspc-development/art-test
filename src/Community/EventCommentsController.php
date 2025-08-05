@@ -17,14 +17,17 @@ class EventCommentsController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/comments')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/comments')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'add'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -33,8 +36,10 @@ class EventCommentsController
                 'content' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/event/comment/(?P<comment_id>\\d+)/moderate', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event/comment/(?P<comment_id>\\d+)/moderate')) {
+            register_rest_route('artpulse/v1', '/event/comment/(?P<comment_id>\\d+)/moderate', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'moderate'],
             'permission_callback' => fn() => CommunityRoles::can_moderate(get_current_user_id()),
@@ -43,6 +48,7 @@ class EventCommentsController
                 'status'     => [ 'type' => 'string', 'enum' => ['approve','spam','trash'], 'required' => true ],
             ],
         ]);
+        }
     }
 
     public static function list(WP_REST_Request $request): WP_REST_Response|WP_Error

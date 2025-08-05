@@ -13,12 +13,14 @@ class OrgMetaController
 
     public static function routes(): void
     {
-        register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/meta', [
+        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\d+)/meta')) {
+            register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/meta', [
             'methods'             => ['GET', 'POST'],
             'callback'            => [self::class, 'handle'],
             'permission_callback' => function () { return current_user_can('read'); },
             'args'                => [ 'id' => ['validate_callback' => 'is_numeric'] ],
         ]);
+        }
     }
 
     public static function handle(WP_REST_Request $req): WP_REST_Response

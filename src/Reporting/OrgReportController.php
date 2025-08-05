@@ -18,7 +18,8 @@ class OrgReportController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/orgs/(?P<id>\d+)/report', [
+        if (!ap_rest_route_registered('artpulse/v1', '/orgs/(?P<id>\d+)/report')) {
+            register_rest_route('artpulse/v1', '/orgs/(?P<id>\d+)/report', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'download'],
             'permission_callback' => [self::class, 'can_download'],
@@ -34,6 +35,7 @@ class OrgReportController
                 ],
             ],
         ]);
+        }
     }
 
     public static function can_download()

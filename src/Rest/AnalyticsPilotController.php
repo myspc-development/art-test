@@ -15,7 +15,8 @@ class AnalyticsPilotController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/analytics/pilot/invite', [
+        if (!ap_rest_route_registered('artpulse/v1', '/analytics/pilot/invite')) {
+            register_rest_route('artpulse/v1', '/analytics/pilot/invite', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'invite'],
             'permission_callback' => fn() => current_user_can('manage_options'),
@@ -23,6 +24,7 @@ class AnalyticsPilotController
                 'email' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
+        }
     }
 
     public static function invite(WP_REST_Request $request): WP_REST_Response|WP_Error

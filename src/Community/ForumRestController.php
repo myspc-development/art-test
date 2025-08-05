@@ -16,13 +16,16 @@ class ForumRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/forum/threads', [
+        if (!ap_rest_route_registered('artpulse/v1', '/forum/threads')) {
+            register_rest_route('artpulse/v1', '/forum/threads', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'list_threads'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/forum/threads', [
+        if (!ap_rest_route_registered('artpulse/v1', '/forum/threads')) {
+            register_rest_route('artpulse/v1', '/forum/threads', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [self::class, 'create_thread'],
             'permission_callback' => fn() => CommunityRoles::can_post_thread(get_current_user_id()),
@@ -31,15 +34,19 @@ class ForumRestController
                 'content' => [ 'type' => 'string', 'required' => false ],
             ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments', [
+        if (!ap_rest_route_registered('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments')) {
+            register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_comments'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
+        }
 
-        register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments', [
+        if (!ap_rest_route_registered('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments')) {
+            register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [self::class, 'add_comment'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -48,6 +55,7 @@ class ForumRestController
                 'content' => [ 'type' => 'string', 'required' => true ],
             ],
         ]);
+        }
     }
 
     public static function list_threads(WP_REST_Request $request): WP_REST_Response

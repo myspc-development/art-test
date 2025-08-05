@@ -11,13 +11,16 @@ class EventVoteRestController {
     }
 
     public static function register_routes(): void {
-        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/vote', [
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/vote')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/vote', [
             'methods'  => 'POST',
             'callback' => [self::class, 'vote'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'     => ['id' => ['validate_callback' => 'is_numeric']],
         ]);
-        register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/votes', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/votes')) {
+            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/votes', [
             'methods'  => 'GET',
             'callback' => [self::class, 'count'],
             'permission_callback' => function () {
@@ -25,13 +28,16 @@ class EventVoteRestController {
             },
             'args'     => ['id' => ['validate_callback' => 'is_numeric']],
         ]);
-        register_rest_route('artpulse/v1', '/leaderboards/top-events', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/leaderboards/top-events')) {
+            register_rest_route('artpulse/v1', '/leaderboards/top-events', [
             'methods' => 'GET',
             'callback' => [self::class, 'top_events'],
             'permission_callback' => function () {
                 return current_user_can('read');
             },
         ]);
+        }
     }
 
     public static function vote(WP_REST_Request $req): WP_REST_Response|WP_Error {

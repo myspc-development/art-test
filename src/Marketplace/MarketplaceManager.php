@@ -81,11 +81,13 @@ class MarketplaceManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/artworks', [
+        if (!ap_rest_route_registered('artpulse/v1', '/artworks')) {
+            register_rest_route('artpulse/v1', '/artworks', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_artwork'],
             'permission_callback' => [self::class, 'check_artist'],
         ]);
+        }
         if (!ap_rest_route_registered('artpulse/v1', '/artworks')) {
             register_rest_route('artpulse/v1', '/artworks', [
                 'methods'  => 'GET',
@@ -95,7 +97,8 @@ class MarketplaceManager
                 },
             ]);
         }
-        register_rest_route('artpulse/v1', '/artworks/(?P<id>\\d+)', [
+        if (!ap_rest_route_registered('artpulse/v1', '/artworks/(?P<id>\\d+)')) {
+            register_rest_route('artpulse/v1', '/artworks/(?P<id>\\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_artwork'],
             'permission_callback' => function () {
@@ -103,16 +106,21 @@ class MarketplaceManager
             },
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
-        register_rest_route('artpulse/v1', '/orders', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/orders')) {
+            register_rest_route('artpulse/v1', '/orders', [
             'methods'  => 'POST',
             'callback' => [self::class, 'submit_order'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
-        register_rest_route('artpulse/v1', '/orders/mine', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/orders/mine')) {
+            register_rest_route('artpulse/v1', '/orders/mine', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_orders'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
+        }
     }
 
     public static function check_artist(): bool

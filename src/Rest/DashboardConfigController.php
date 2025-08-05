@@ -11,16 +11,20 @@ class DashboardConfigController {
     }
 
     public static function register_routes(): void {
-        register_rest_route('artpulse/v1', '/dashboard-config', [
+        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-config')) {
+            register_rest_route('artpulse/v1', '/dashboard-config', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_config'],
             'permission_callback' => fn() => current_user_can('read'),
         ]);
-        register_rest_route('artpulse/v1', '/dashboard-config', [
+        }
+        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-config')) {
+            register_rest_route('artpulse/v1', '/dashboard-config', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'save_config'],
             'permission_callback' => fn() => current_user_can('manage_options'),
         ]);
+        }
     }
 
     public static function get_config(WP_REST_Request $request): WP_REST_Response {
