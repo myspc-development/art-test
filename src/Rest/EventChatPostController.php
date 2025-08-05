@@ -9,6 +9,11 @@ use WP_Error;
 
 class EventChatPostController extends WP_REST_Controller
 {
+    /**
+     * REST API namespace for these routes.
+     *
+     * @var string
+     */
     protected $namespace = 'artpulse/v1';
 
     public static function register(): void

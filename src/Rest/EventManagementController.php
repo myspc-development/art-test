@@ -8,6 +8,11 @@ use WP_REST_Response;
 
 class EventManagementController extends WP_REST_Controller
 {
+    /**
+     * REST API namespace used by this controller.
+     *
+     * @var string
+     */
     protected $namespace = 'artpulse/v1';
 
     public static function register(): void
