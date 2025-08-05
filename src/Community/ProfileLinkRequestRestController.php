@@ -39,14 +39,24 @@ class ProfileLinkRequestRestController {
 
         if (!ap_rest_route_registered('artpulse/v1', '/link-requests')) {
             register_rest_route('artpulse/v1', '/link-requests', [
-            'methods'  => 'GET',
-            'callback' => [self::class, 'list_requests'],
-            'permission_callback' => function() { return current_user_can('edit_others_posts'); },
-            'args' => [
-                'org_id' => ['type' => 'integer', 'required' => true],
-                'status' => ['type' => 'string', 'required' => false, 'enum' => ['pending', 'approved', 'denied', 'all']],
-            ],
-        ]);
+                [
+                    'methods'  => 'GET',
+                    'callback' => [self::class, 'list_requests'],
+                    'permission_callback' => function() { return current_user_can('edit_others_posts'); },
+                    'args' => [
+                        'org_id' => ['type' => 'integer', 'required' => true],
+                        'status' => ['type' => 'string', 'required' => false, 'enum' => ['pending', 'approved', 'denied', 'all']],
+                    ],
+                ],
+                [
+                    'methods'  => 'POST',
+                    'callback' => [ProfileLinkRequestManager::class, 'handle_create_request'],
+                    'permission_callback' => fn() => is_user_logged_in(),
+                    'args' => [
+                        'target_id' => ['type' => 'integer', 'required' => true],
+                    ],
+                ],
+            ]);
         }
 
         if (!ap_rest_route_registered('artpulse/v1', '/link-requests/bulk')) {

@@ -319,24 +319,23 @@ class UserDashboardManager
         }
 
         // Temporary aliases for backward compatibility
-        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout', 'GET')) {
+        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout')) {
             register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
-            'methods'  => 'GET',
-            'callback' => [ self::class, 'getDashboardLayout' ],
-            'permission_callback' => function() { return current_user_can('read'); },
-        ]);
-        }
-
-        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout', 'POST')) {
-            register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
-            'methods'  => 'POST',
-            'callback' => [ self::class, 'saveDashboardLayout' ],
-            'permission_callback' => function() { return current_user_can('read'); },
-            'args'     => [
-                'layout'     => [ 'type' => 'array', 'required' => false ],
-                'visibility' => [ 'type' => 'object', 'required' => false ],
-            ],
-        ]);
+                [
+                    'methods'  => 'GET',
+                    'callback' => [ self::class, 'getDashboardLayout' ],
+                    'permission_callback' => function() { return current_user_can('read'); },
+                ],
+                [
+                    'methods'  => 'POST',
+                    'callback' => [ self::class, 'saveDashboardLayout' ],
+                    'permission_callback' => function() { return current_user_can('read'); },
+                    'args'     => [
+                        'layout'     => [ 'type' => 'array', 'required' => false ],
+                        'visibility' => [ 'type' => 'object', 'required' => false ],
+                    ],
+                ],
+            ]);
         }
     }
 

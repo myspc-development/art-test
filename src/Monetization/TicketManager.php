@@ -49,18 +49,17 @@ class TicketManager
 
         if (!ap_rest_route_registered('artpulse/v1', '/ticket-tier/(?P<tier_id>\\d+)')) {
             register_rest_route('artpulse/v1', '/ticket-tier/(?P<tier_id>\\d+)', [
-            'methods'             => 'PUT',
-            'callback'            => [self::class, 'update_ticket_tier'],
-            'permission_callback' => [self::class, 'check_manage'],
-        ]);
-        }
-
-        if (!ap_rest_route_registered('artpulse/v1', '/ticket-tier/(?P<tier_id>\\d+)')) {
-            register_rest_route('artpulse/v1', '/ticket-tier/(?P<tier_id>\\d+)', [
-            'methods'             => 'DELETE',
-            'callback'            => [self::class, 'delete_ticket_tier'],
-            'permission_callback' => [self::class, 'check_manage'],
-        ]);
+                [
+                    'methods'             => 'PUT',
+                    'callback'            => [self::class, 'update_ticket_tier'],
+                    'permission_callback' => [self::class, 'check_manage'],
+                ],
+                [
+                    'methods'             => 'DELETE',
+                    'callback'            => [self::class, 'delete_ticket_tier'],
+                    'permission_callback' => [self::class, 'check_manage'],
+                ],
+            ]);
         }
     }
 

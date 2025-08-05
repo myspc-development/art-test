@@ -23,21 +23,21 @@ class DashboardLayoutRestController
     {
         if (!ap_rest_route_registered('artpulse/v1', '/dashboard/layout')) {
             register_rest_route('artpulse/v1', '/dashboard/layout', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'get_layout'],
-            'permission_callback' => fn() => current_user_can('read'),
-        ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard/layout')) {
-            register_rest_route('artpulse/v1', '/dashboard/layout', [
-            'methods'             => 'POST',
-            'callback'            => [self::class, 'save_layout'],
-            'permission_callback' => fn() => current_user_can('read'),
-            'args'                => [
-                'layout'     => ['type' => 'array', 'required' => false],
-                'visibility' => ['type' => 'object', 'required' => false],
-            ],
-        ]);
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [self::class, 'get_layout'],
+                    'permission_callback' => fn() => current_user_can('read'),
+                ],
+                [
+                    'methods'             => 'POST',
+                    'callback'            => [self::class, 'save_layout'],
+                    'permission_callback' => fn() => current_user_can('read'),
+                    'args'                => [
+                        'layout'     => ['type' => 'array', 'required' => false],
+                        'visibility' => ['type' => 'object', 'required' => false],
+                    ],
+                ],
+            ]);
         }
     }
 

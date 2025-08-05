@@ -83,18 +83,18 @@ class MarketplaceManager
     {
         if (!ap_rest_route_registered('artpulse/v1', '/artworks')) {
             register_rest_route('artpulse/v1', '/artworks', [
-            'methods'  => 'POST',
-            'callback' => [self::class, 'create_artwork'],
-            'permission_callback' => [self::class, 'check_artist'],
-        ]);
-        }
-        if (!ap_rest_route_registered('artpulse/v1', '/artworks')) {
-            register_rest_route('artpulse/v1', '/artworks', [
-                'methods'  => 'GET',
-                'callback' => [self::class, 'list_artworks'],
-                'permission_callback' => function () {
-                    return current_user_can('read');
-                },
+                [
+                    'methods'  => 'POST',
+                    'callback' => [self::class, 'create_artwork'],
+                    'permission_callback' => [self::class, 'check_artist'],
+                ],
+                [
+                    'methods'  => 'GET',
+                    'callback' => [self::class, 'list_artworks'],
+                    'permission_callback' => function () {
+                        return current_user_can('read');
+                    },
+                ],
             ]);
         }
         if (!ap_rest_route_registered('artpulse/v1', '/artworks/(?P<id>\\d+)')) {

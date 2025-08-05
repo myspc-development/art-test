@@ -10,25 +10,7 @@ class ProfileLinkRequestManager
 {
     public static function register(): void
     {
-        add_action('rest_api_init', [self::class, 'register_routes']);
-    }
-
-    public static function register_routes(): void
-    {
-        if (!ap_rest_route_registered('artpulse/v1', '/link-requests')) {
-            register_rest_route('artpulse/v1', '/link-requests', [
-            'methods'             => 'POST',
-            'callback'            => [self::class, 'handle_create_request'],
-            'permission_callback' => fn() => is_user_logged_in(),
-            'args'                => [
-                'target_id' => [
-                    'type'        => 'integer',
-                    'required'    => true,
-                    'description' => 'Target organization or artist post ID.',
-                ]
-            ]
-        ]);
-        }
+        self::maybe_install_table();
     }
 
     public static function handle_create_request(WP_REST_Request $request): WP_REST_Response|WP_Error

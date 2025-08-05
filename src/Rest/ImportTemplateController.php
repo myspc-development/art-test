@@ -21,23 +21,22 @@ class ImportTemplateController
     {
         if (!ap_rest_route_registered('artpulse/v1', '/import-template/(?P<post_type>[^/]+)')) {
             register_rest_route('artpulse/v1', '/import-template/(?P<post_type>[^/]+)', [
-            'methods'             => 'GET',
-            'callback'            => [self::class, 'get_template'],
-            'permission_callback' => [ImportRestController::class, 'check_permissions'],
-            'args'                => [
-                'post_type' => [
-                    'validate_callback' => 'sanitize_key',
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [self::class, 'get_template'],
+                    'permission_callback' => [ImportRestController::class, 'check_permissions'],
+                    'args'                => [
+                        'post_type' => [
+                            'validate_callback' => 'sanitize_key',
+                        ],
+                    ],
                 ],
-            ],
-        ]);
-        }
-
-        if (!ap_rest_route_registered('artpulse/v1', '/import-template/(?P<post_type>[^/]+)')) {
-            register_rest_route('artpulse/v1', '/import-template/(?P<post_type>[^/]+)', [
-            'methods'             => 'POST',
-            'callback'            => [self::class, 'save_template'],
-            'permission_callback' => [ImportRestController::class, 'check_permissions'],
-        ]);
+                [
+                    'methods'             => 'POST',
+                    'callback'            => [self::class, 'save_template'],
+                    'permission_callback' => [ImportRestController::class, 'check_permissions'],
+                ],
+            ]);
         }
     }
 
