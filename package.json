@@ -19,10 +19,13 @@
     "start": "wp-scripts start",
     "release": "standard-version",
 
+    "test": "jest --config=jest.config.cjs",
+    "test:js": "jest --config=jest.config.cjs",
     "test:e2e": "node tests/e2e/monetization-workflow.js",
     "test:php": "WP_PHPUNIT__TESTS_CONFIG=wp-tests-config.php ./vendor/bin/phpunit",
     "test:ui": "npm run cypress:run",
     "test:all": "npm run test:php && npm run test:ui",
+
     "cypress:run": "node scripts/run-cypress.js",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
     "widget:audit": "node scripts/widget-audit.js",
@@ -77,9 +80,6 @@
     "sass": "^1.69.5",
     "standard-version": "^9.5.0",
     "typescript": "^5.4.5",
-    "vite": "^5.0.11",
-    "@testing-library/jest-dom": "^6.4.1",
-    "jsdom": "^24.0.0",
-    "vitest": "^1.6.0"
+    "vite": "^5.0.11"
   }
 }
