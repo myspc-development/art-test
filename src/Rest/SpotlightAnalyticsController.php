@@ -17,7 +17,7 @@ class SpotlightAnalyticsController
 
     public static function register_routes(): void
     {
-        register_rest_route('art/v1', '/spotlight/view', [
+        register_rest_route('artpulse/v1', '/spotlight/view', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'log_view'],
             'permission_callback' => fn() => is_user_logged_in(),
