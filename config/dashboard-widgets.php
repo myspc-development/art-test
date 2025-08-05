@@ -4,6 +4,7 @@ use ArtPulse\Widgets\EventsWidget;
 use ArtPulse\Widgets\OrgAnalyticsWidget;
 use ArtPulse\Widgets\DonationsWidget;
 use ArtPulse\Widgets\FavoritesOverviewWidget;
+use ArtPulse\Widgets\NearbyEventsWidget;
 use ArtPulse\Widgets\MyUpcomingEventsWidget;
 use ArtPulse\Widgets\ProfileOverviewWidget;
 use ArtPulse\Widgets\WidgetEventsWidget;
@@ -334,6 +335,14 @@ return [
         'roles' => ['member', 'organization'],
         'category' => 'general',
         'icon' => 'calendar',
+    ],
+    'widget_near_me_events' => [
+        'class' => NearbyEventsWidget::class,
+        'label' => 'Nearby Events',
+        'description' => 'Events near your location.',
+        'roles' => ['member'],
+        'category' => 'general',
+        'icon' => 'location',
     ],
     'widget_favorites' => [
         'class' => FavoritesOverviewWidget::class,

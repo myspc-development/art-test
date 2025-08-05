@@ -50,7 +50,7 @@
     "status": "registered"
   },
   "widget_near_me_events": {
-    "file": "widgets/NearMeEventsWidget.php",
+    "file": "widgets/NearbyEventsWidget.php",
     "roles": [
       "member"
     ],
