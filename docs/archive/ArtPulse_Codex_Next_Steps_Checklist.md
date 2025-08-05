@@ -27,7 +27,7 @@ register_post_type('event', [ /* args with 'supports' => [title, editor, custom-
 - [x] `/events/nearby` (GET) → with geolocation filtering
 - [x] `/event/{id}/rsvp` (POST) → store RSVP status for user
 - [x] `/user/{id}/follow` (POST) → manage following/favorites
-- [x] `/event/{id}/message` (POST/GET) → post/view comments or questions
+- [x] `/event/{id}/chat` (POST/GET) → post/view comments or questions
 
 ---
 

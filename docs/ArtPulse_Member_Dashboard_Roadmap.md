@@ -28,7 +28,7 @@ status: complete
 - [x] `GET /events/nearby`: Return events with geo + radius filter
 - [x] `POST /event/{id}/rsvp`: RSVP logic with user_id, status
 - [x] `POST /user/{id}/follow`: Follow/unfollow artist/org
-- [x] `POST /event/{id}/message`: Create message thread/comment
+- [x] `POST /event/{id}/chat`: Create message thread/comment
 
 ---
 
