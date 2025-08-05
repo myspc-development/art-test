@@ -44,10 +44,11 @@ if (version_compare(PHP_VERSION, '8.2', '<')) {
     if (function_exists('deactivate_plugins')) {
         deactivate_plugins(plugin_basename(__FILE__));
     }
-    wp_die(sprintf(
-        esc_html__('ArtPulse requires PHP 8.2 or higher. You are running %s.', 'artpulse'),
-        PHP_VERSION
-    ));
+    wp_die(
+        esc_html(
+            sprintf('ArtPulse requires PHP 8.2 or higher. You are running %s.', PHP_VERSION)
+        )
+    );
 }
 
 // Load Composer autoloader
@@ -56,7 +57,7 @@ if (!file_exists($autoload_path)) {
     if (is_admin()) {
         add_action('admin_notices', static function () {
             echo '<div class="notice notice-error"><p>' .
-                esc_html__('ArtPulse Management plugin is missing the Composer autoloader. Please run `composer install --no-dev --optimize-autoloader` in the plugin directory and activate the plugin again.', 'artpulse') .
+                esc_html('ArtPulse Management plugin is missing the Composer autoloader. Please run `composer install --no-dev --optimize-autoloader` in the plugin directory and activate the plugin again.') .
                 '</p></div>';
         });
     }
