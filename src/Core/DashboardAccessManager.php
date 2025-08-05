@@ -25,8 +25,13 @@ class DashboardAccessManager
             strpos($content, '[ap_react_dashboard]') !== false
         ) {
             $login_url = Plugin::get_login_url();
-            wp_safe_redirect(add_query_arg('redirect_to', rawurlencode(get_permalink($post)), $login_url));
-            exit;
+            if (!$login_url) {
+                $login_url = wp_login_url();
+            }
+            if (is_string($login_url) && $login_url !== '') {
+                wp_safe_redirect(add_query_arg('redirect_to', rawurlencode(get_permalink($post)), $login_url));
+                exit;
+            }
         }
     }
 }
