@@ -6,7 +6,11 @@ class PortfolioRestController
 {
     public static function register()
     {
-        add_action('rest_api_init', [self::class, 'register_routes']);
+        if (did_action('rest_api_init')) {
+            self::register_routes();
+        } else {
+            add_action('rest_api_init', [self::class, 'register_routes']);
+        }
     }
 
     public static function register_routes(): void
@@ -53,7 +57,7 @@ class PortfolioRestController
                 'description' => get_post_meta($post_id, 'portfolio_description', true),
                 'link'        => get_post_meta($post_id, 'portfolio_link', true),
                 'image'       => get_post_meta($post_id, 'portfolio_image', true),
-                'category'    => wp_get_post_terms($post_id, 'portfolio_category', ['fields' => 'slugs'])[0] ?? '',
+                'category'    => wp_get_post_terms($post_id, 'portfolio_category', ['fields' => 'names'])[0] ?? '',
             ];
         }
 
