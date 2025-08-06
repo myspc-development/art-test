@@ -17,6 +17,7 @@ require_once __DIR__ . '/includes/dashboard-debug-inspector.php';
 require_once __DIR__ . '/includes/class-cli-dashboard-diagnose.php';
 require_once __DIR__ . '/includes/class-cli-rest-route-audit.php';
 require_once __DIR__ . '/includes/class-cli-widget-roles.php';
+require_once __DIR__ . '/includes/class-cli-check-widget-presets.php';
 require_once __DIR__ . '/includes/widget-logging.php';
 
 // Development helpers

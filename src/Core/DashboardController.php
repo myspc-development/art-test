@@ -67,10 +67,14 @@ class DashboardController {
     /**
      * Default layout presets keyed by unique identifier.
      *
+     * Preset layouts are filtered so only widgets the specified role can access
+     * are returned. Unregistered widgets, widgets limited to other roles and
+     * widgets requiring capabilities the role lacks are automatically removed.
+     *
      * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
      */
     public static function get_default_presets(): array {
-        return [
+        $presets = [
             'member_default' => [
                 'title'  => 'Member Default',
                 'role'   => 'member',
@@ -110,6 +114,53 @@ class DashboardController {
                 'layout' => self::load_preset_layout('organization', 'admin'),
             ],
         ];
+
+        // Remove widgets the role cannot access.
+        foreach ($presets as $key => $preset) {
+            $presets[$key]['layout'] = self::filter_accessible_layout(
+                $preset['layout'],
+                $preset['role']
+            );
+        }
+
+        return $presets;
+    }
+
+    /**
+     * Filter a preset layout so it only contains widgets the role can access.
+     */
+    private static function filter_accessible_layout(array $layout, string $role): array
+    {
+        $filtered = [];
+        $role_obj = function_exists('get_role') ? get_role($role) : null;
+
+        foreach ($layout as $entry) {
+            $id = $entry['id'] ?? '';
+            if (!$id) {
+                continue;
+            }
+
+            $config = DashboardWidgetRegistry::get($id);
+            if (!$config) {
+                continue; // unregistered widget
+            }
+
+            $widget_roles = isset($config['roles']) ? (array) $config['roles'] : [];
+            if ($widget_roles && !in_array($role, $widget_roles, true)) {
+                continue; // role mismatch
+            }
+
+            $cap = $config['capability'] ?? '';
+            if ($cap && $role !== 'administrator') {
+                if (!$role_obj || !$role_obj->has_cap($cap)) {
+                    continue; // capability not allowed for role
+                }
+            }
+
+            $filtered[] = ['id' => $id];
+        }
+
+        return $filtered;
     }
 
     /**
@@ -193,7 +244,7 @@ class DashboardController {
 
         // Filter out any widgets not registered for this role
         $all = DashboardWidgetRegistry::get_all();
-        return array_values(array_filter(
+        $filtered = array_values(array_filter(
             $layout,
             static function ($w) use ($role, $all) {
                 $id = $w['id'] ?? null;
@@ -204,6 +255,18 @@ class DashboardController {
                 return in_array($role, $roles, true);
             }
         ));
+
+        if (empty($filtered)) {
+            /**
+             * Fires when a user's dashboard layout resolves to an empty set.
+             *
+             * Plugins may use this to display a notice or offer to load a preset
+             * layout for the current role.
+             */
+            do_action('ap_dashboard_empty_layout', $user_id, $role);
+        }
+
+        return $filtered;
     }
 
     /**
