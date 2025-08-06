@@ -230,6 +230,7 @@ class WidgetVisibilityManager
             if ($hide) {
                 remove_meta_box($widget, 'dashboard', 'normal');
                 self::$hidden_widgets[$widget] = true;
+                do_action('ap_widget_hidden', $widget, $current_user->ID);
             }
         }
     }

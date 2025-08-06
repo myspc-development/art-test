@@ -9,6 +9,8 @@ export default function AdminWidgetMatrix() {
   const [widgets, setWidgets] = useState<Widget[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
   const [matrix, setMatrix] = useState<Matrix>({});
+  const [filterRole, setFilterRole] = useState('all');
+  const [search, setSearch] = useState('');
   const [error, setError] = useState('');
   const restRoot =
     window.APWidgetMatrix?.root || window.wpApiSettings?.root || '/wp-json/';
@@ -78,8 +80,31 @@ export default function AdminWidgetMatrix() {
     );
   }
 
+  const filtered = widgets.filter(w => {
+    const q = search.toLowerCase();
+    const matchesSearch = !q || (w.name || '').toLowerCase().includes(q) || w.id.includes(q);
+    const matchesRole = filterRole === 'all' || (matrix[w.id] || w.roles || []).includes(filterRole);
+    return matchesSearch && matchesRole;
+  });
+
   return (
     <div>
+      <div style={{ marginBottom: '1em', display: 'flex', gap: '1em' }}>
+        <select value={filterRole} onChange={e => setFilterRole(e.target.value)}>
+          <option value="all">{__('All Roles', 'artpulse')}</option>
+          {roles.map(r => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
+        </select>
+        <input
+          type="search"
+          placeholder={__('Search widgets…', 'artpulse')}
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+      </div>
       <table className="widefat striped">
         <thead>
           <tr>
@@ -90,7 +115,7 @@ export default function AdminWidgetMatrix() {
           </tr>
         </thead>
         <tbody>
-          {widgets.map(w => (
+          {filtered.map(w => (
             <tr key={w.id}>
               <td>{w.name || w.id}</td>
               {roles.map(role => (

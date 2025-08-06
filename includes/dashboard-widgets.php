@@ -14,19 +14,21 @@ use ArtPulse\Frontend\DashboardCard;
 
 function ap_render_widget(string $widget_id, ?int $user_id = null): void
 {
-    $config = DashboardWidgetRegistry::get_widget($widget_id, $user_id ?? 0);
+    $uid    = $user_id ?? get_current_user_id();
+    $config = DashboardWidgetRegistry::get_widget($widget_id, $uid);
     if (!$config) {
         return;
     }
 
-    $lazy = apply_filters('ap_dashboard_widget_lazy', $config['lazy'] ?? false, $widget_id, $user_id, $config);
+    $lazy = apply_filters('ap_dashboard_widget_lazy', $config['lazy'] ?? false, $widget_id, $uid, $config);
     if ($lazy) {
         $nonce = wp_create_nonce('ap_render_widget');
         echo '<div class="ap-widget-placeholder" data-widget-id="' . esc_attr($widget_id) . '" data-nonce="' . esc_attr($nonce) . '"><span class="spinner"></span></div>';
         return;
     }
 
-    echo DashboardCard::render($widget_id, $user_id);
+    echo DashboardCard::render($widget_id, $uid);
+    do_action('ap_widget_rendered', $widget_id, $uid);
 }
 
 function register_ap_widget(string $id, array $args): void
