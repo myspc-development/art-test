@@ -10,8 +10,8 @@ class OrgAnalyticsController {
     }
 
     public static function register_routes(): void {
-        if (!ap_rest_route_registered('artpulse/v1', '/org-metrics')) {
-            register_rest_route('artpulse/v1', '/org-metrics', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/org-metrics')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/org-metrics', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_metrics'],
             'permission_callback' => function () {
@@ -20,8 +20,8 @@ class OrgAnalyticsController {
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/rsvp-stats')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/rsvp-stats', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/rsvp-stats')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/rsvp-stats', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_event_rsvp_stats'],
             'permission_callback' => [\ArtPulse\Rest\RsvpRestController::class, 'check_permissions'],

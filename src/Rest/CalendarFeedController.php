@@ -12,8 +12,8 @@ class CalendarFeedController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/calendar')) {
-            register_rest_route('artpulse/v1', '/calendar', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/calendar')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/calendar', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_feed'],
             'permission_callback' => function () {

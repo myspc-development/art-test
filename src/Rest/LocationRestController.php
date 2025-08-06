@@ -8,15 +8,15 @@ use WP_REST_Response;
 class LocationRestController {
     public static function register(): void {
         add_action('rest_api_init', function () {
-            if (!ap_rest_route_registered('artpulse/v1', '/location/geonames')) {
-                register_rest_route('artpulse/v1', '/location/geonames', [
+            if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/location/geonames')) {
+                register_rest_route(ARTPULSE_API_NAMESPACE, '/location/geonames', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'geonames'],
                 'permission_callback' => fn() => is_user_logged_in(),
             ]);
             }
-            if (!ap_rest_route_registered('artpulse/v1', '/location/google')) {
-                register_rest_route('artpulse/v1', '/location/google', [
+            if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/location/google')) {
+                register_rest_route(ARTPULSE_API_NAMESPACE, '/location/google', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'google'],
                 'permission_callback' => fn() => is_user_logged_in(),

@@ -14,8 +14,8 @@ class NewsletterOptinEndpoint
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/newsletter-optin')) {
-            register_rest_route('artpulse/v1', '/newsletter-optin', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/newsletter-optin')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/newsletter-optin', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle'],
             'permission_callback' => function() {

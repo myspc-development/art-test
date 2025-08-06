@@ -14,8 +14,8 @@ class ShareController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/share')) {
-            register_rest_route('artpulse/v1', '/share', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/share')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/share', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'log_share'],
             'permission_callback' => function () {

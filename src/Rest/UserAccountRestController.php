@@ -20,8 +20,8 @@ class UserAccountRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/user/export')) {
-            register_rest_route('artpulse/v1', '/user/export', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/user/export')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/user/export', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'export_user_data'],
             'permission_callback' => function() {
@@ -40,8 +40,8 @@ class UserAccountRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/user/delete')) {
-            register_rest_route('artpulse/v1', '/user/delete', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/user/delete')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/user/delete', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'delete_user_data'],
             'permission_callback' => function() {

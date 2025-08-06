@@ -17,8 +17,8 @@ class EventListController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/event-list')) {
-            register_rest_route('artpulse/v1', '/event-list', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event-list')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event-list', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_list'],
             'permission_callback' => '__return_true',

@@ -111,8 +111,8 @@ class DirectMessages
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/messages/send')) {
-            register_rest_route('artpulse/v1', '/messages/send', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages/send')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages/send', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'send_v2'],
             'permission_callback' => [self::class, 'permission_send'],
@@ -128,8 +128,8 @@ class DirectMessages
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/messages')) {
-            register_rest_route('artpulse/v1', '/messages', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages', [
                 [
                     'methods'             => 'POST',
                     'callback'            => [self::class, 'send'],
@@ -155,8 +155,8 @@ class DirectMessages
             ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/messages/updates')) {
-            register_rest_route('artpulse/v1', '/messages/updates', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages/updates')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages/updates', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'updates'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -167,8 +167,8 @@ class DirectMessages
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/messages/seen')) {
-            register_rest_route('artpulse/v1', '/messages/seen', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages/seen')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages/seen', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'seen'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -178,8 +178,8 @@ class DirectMessages
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/messages/search')) {
-            register_rest_route('artpulse/v1', '/messages/search', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages/search')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages/search', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'search'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -189,16 +189,16 @@ class DirectMessages
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\d+)')) {
-            register_rest_route('artpulse/v1', '/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\d+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\d+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\d+)', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'fetch_context'],
             'permission_callback' => [self::class, 'permission_view'],
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/messages/block')) {
-            register_rest_route('artpulse/v1', '/messages/block', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages/block')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages/block', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'block_user'],
             'permission_callback' => fn() => CommunityRoles::can_block(get_current_user_id()),
@@ -208,8 +208,8 @@ class DirectMessages
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/messages/label')) {
-            register_rest_route('artpulse/v1', '/messages/label', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages/label')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages/label', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'label'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -221,8 +221,8 @@ class DirectMessages
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/messages/thread')) {
-            register_rest_route('artpulse/v1', '/messages/thread', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages/thread')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages/thread', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'thread'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -232,8 +232,8 @@ class DirectMessages
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/messages/bulk')) {
-            register_rest_route('artpulse/v1', '/messages/bulk', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/messages/bulk')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/messages/bulk', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'bulk_action'],
             'permission_callback' => [self::class, 'permission_view'],
@@ -245,8 +245,8 @@ class DirectMessages
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/conversations')) {
-            register_rest_route('artpulse/v1', '/conversations', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/conversations')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/conversations', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'rest_list_conversations'],
             'permission_callback' => static function () {
@@ -255,8 +255,8 @@ class DirectMessages
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/message/read')) {
-            register_rest_route('artpulse/v1', '/message/read', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/message/read')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/message/read', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'mark_read'],
             'permission_callback' => [self::class, 'permission_view'],

@@ -189,8 +189,8 @@ class UserDashboardManager
 
     public static function registerRestRoutes()
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/user/dashboard')) {
-            register_rest_route('artpulse/v1', '/user/dashboard', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/user/dashboard')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/user/dashboard', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getDashboardData' ],
             'permission_callback' => function() {
@@ -202,8 +202,8 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/user/profile')) {
-            register_rest_route('artpulse/v1', '/user/profile', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/user/profile')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/user/profile', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'updateProfile' ],
             'permission_callback' => function() {
@@ -215,8 +215,8 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/user/engagement')) {
-            register_rest_route('artpulse/v1', '/user/engagement', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/user/engagement')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/user/engagement', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getEngagementFeed' ],
             'permission_callback' => function() {
@@ -232,8 +232,8 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/user/onboarding')) {
-            register_rest_route('artpulse/v1', '/user/onboarding', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/user/onboarding')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/user/onboarding', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'saveOnboardingProgress' ],
             'permission_callback' => function() {
@@ -248,8 +248,8 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-tour')) {
-            register_rest_route('artpulse/v1', '/dashboard-tour', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/dashboard-tour')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/dashboard-tour', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'completeDashboardTour' ],
             'permission_callback' => function() {
@@ -261,8 +261,8 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/ap/widgets/available')) {
-            register_rest_route('artpulse/v1', '/ap/widgets/available', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/ap/widgets/available')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/ap/widgets/available', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getAvailableWidgets' ],
             'permission_callback' => function() {
@@ -274,8 +274,8 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/ap/layout')) {
-            register_rest_route('artpulse/v1', '/ap/layout', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/ap/layout')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/ap/layout', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'getDashboardLayout' ],
             'permission_callback' => function() {
@@ -284,8 +284,8 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/ap/layout/save')) {
-            register_rest_route('artpulse/v1', '/ap/layout/save', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/ap/layout/save')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/ap/layout/save', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'saveDashboardLayout' ],
             'permission_callback' => function() {
@@ -298,8 +298,8 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/ap/layout/reset')) {
-            register_rest_route('artpulse/v1', '/ap/layout/reset', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/ap/layout/reset')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/ap/layout/reset', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'resetDashboardLayout' ],
             'permission_callback' => function() {
@@ -308,8 +308,8 @@ class UserDashboardManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/ap/layout/revert')) {
-            register_rest_route('artpulse/v1', '/ap/layout/revert', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/ap/layout/revert')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/ap/layout/revert', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'revertDashboardLayout' ],
             'permission_callback' => function() {
@@ -319,8 +319,8 @@ class UserDashboardManager
         }
 
         // Temporary aliases for backward compatibility
-        if (!ap_rest_route_registered('artpulse/v1', '/ap_dashboard_layout')) {
-            register_rest_route('artpulse/v1', '/ap_dashboard_layout', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/ap_dashboard_layout')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/ap_dashboard_layout', [
                 [
                     'methods'  => 'GET',
                     'callback' => [ self::class, 'getDashboardLayout' ],

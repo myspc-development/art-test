@@ -14,8 +14,8 @@ class ActivityRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/activity')) {
-            register_rest_route('artpulse/v1', '/activity', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/activity')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/activity', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
             'permission_callback' => fn() => is_user_logged_in(),

@@ -14,8 +14,8 @@ class CommentReportRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/comment/(?P<id>\\d+)/report')) {
-            register_rest_route('artpulse/v1', '/comment/(?P<id>\\d+)/report', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/comment/(?P<id>\\d+)/report')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/comment/(?P<id>\\d+)/report', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'report'],
             'permission_callback' => fn() => is_user_logged_in(),

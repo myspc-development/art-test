@@ -15,8 +15,8 @@ class CommunityAnalyticsController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/analytics/community/messaging')) {
-            register_rest_route('artpulse/v1', '/analytics/community/messaging', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/analytics/community/messaging')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/analytics/community/messaging', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_messaging'],
             'permission_callback' => [self::class, 'check_permission'],
@@ -27,8 +27,8 @@ class CommunityAnalyticsController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/analytics/community/comments')) {
-            register_rest_route('artpulse/v1', '/analytics/community/comments', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/analytics/community/comments')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/analytics/community/comments', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_comments'],
             'permission_callback' => [self::class, 'check_permission'],
@@ -36,8 +36,8 @@ class CommunityAnalyticsController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/analytics/community/forums')) {
-            register_rest_route('artpulse/v1', '/analytics/community/forums', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/analytics/community/forums')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/analytics/community/forums', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_forums'],
             'permission_callback' => [self::class, 'check_permission'],

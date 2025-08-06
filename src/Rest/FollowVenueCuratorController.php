@@ -13,8 +13,8 @@ class FollowVenueCuratorController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/follow/venue')) {
-            register_rest_route('artpulse/v1', '/follow/venue', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/follow/venue')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/follow/venue', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'follow_venue'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -24,16 +24,16 @@ class FollowVenueCuratorController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/followed/venues')) {
-            register_rest_route('artpulse/v1', '/followed/venues', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/followed/venues')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/followed/venues', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_followed_venues'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/follow/curator')) {
-            register_rest_route('artpulse/v1', '/follow/curator', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/follow/curator')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/follow/curator', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'follow_curator'],
             'permission_callback' => fn() => is_user_logged_in(),
@@ -43,8 +43,8 @@ class FollowVenueCuratorController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/followed/curators')) {
-            register_rest_route('artpulse/v1', '/followed/curators', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/followed/curators')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/followed/curators', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_followed_curators'],
             'permission_callback' => fn() => is_user_logged_in(),

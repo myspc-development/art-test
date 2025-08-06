@@ -24,8 +24,8 @@ class AutoTaggerRestController
      */
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/tag')) {
-            register_rest_route('artpulse/v1', '/tag', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/tag')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/tag', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'generate_tags'],
             'permission_callback' => static fn() => current_user_can('edit_posts'),

@@ -18,19 +18,19 @@ class WidgetEditorController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/widgets', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/widgets', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_widgets'],
             'permission_callback' => fn () => current_user_can('read'),
         ]);
 
-        register_rest_route('artpulse/v1', '/roles', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/roles', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_roles'],
             'permission_callback' => fn () => current_user_can('manage_options'),
         ]);
 
-        register_rest_route('artpulse/v1', '/layout', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/layout', [
             'methods'  => ['GET', 'POST'],
             'callback' => [self::class, 'handle_layout'],
             'permission_callback' => fn () => current_user_can('manage_options'),

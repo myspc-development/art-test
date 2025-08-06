@@ -10,8 +10,8 @@ class DashboardLayoutEndpoint
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-layout/(?P<context>\\w+)')) {
-            register_rest_route('artpulse/v1', '/dashboard-layout/(?P<context>\\w+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/dashboard-layout/(?P<context>\\w+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/dashboard-layout/(?P<context>\\w+)', [
             'methods'  => ['GET', 'POST'],
             'callback' => [self::class, 'handle'],
             'permission_callback' => fn () => current_user_can('manage_options'),

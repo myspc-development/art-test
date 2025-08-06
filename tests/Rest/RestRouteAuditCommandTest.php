@@ -21,6 +21,7 @@ class RestRouteAuditCommandTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        // Test-only duplicate routes used to verify conflict detection.
         \register_rest_route('ap/v1', '/conflict', [
             'methods' => 'GET',
             'callback' => '__return_true',

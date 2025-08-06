@@ -21,8 +21,8 @@ class BudgetExportController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/budget/export')) {
-            register_rest_route('artpulse/v1', '/budget/export', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/budget/export')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/budget/export', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'export'],
             'permission_callback' => [self::class, 'can_export'],

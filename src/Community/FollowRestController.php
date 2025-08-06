@@ -18,14 +18,14 @@ class FollowRestController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/follows', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/follows', [
             'methods'             => ['POST', 'DELETE', 'GET'],
             'callback'            => [self::class, 'handle_follows'],
             'permission_callback' => fn() => is_user_logged_in(),
             'args'                => self::get_schema(),
         ]);
 
-        register_rest_route('artpulse/v1', '/followers/(?P<user_id>\\d+)', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/followers/(?P<user_id>\\d+)', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_followers'],
             'permission_callback' => fn() => is_user_logged_in(),

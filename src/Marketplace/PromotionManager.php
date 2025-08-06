@@ -30,8 +30,8 @@ class PromotionManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/promoted')) {
-            register_rest_route('artpulse/v1', '/promoted', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/promoted')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/promoted', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_promoted'],
             'permission_callback' => function () {
@@ -40,8 +40,8 @@ class PromotionManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/promote')) {
-            register_rest_route('artpulse/v1', '/promote', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/promote')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/promote', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_promotion'],
             'permission_callback' => fn() => current_user_can('edit_posts'),

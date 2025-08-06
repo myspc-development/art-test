@@ -8,8 +8,8 @@ class RestRoutes
     public static function register()
     {
         add_action('rest_api_init', function () {
-            if (!ap_rest_route_registered('artpulse/v1', '/orgs')) {
-                register_rest_route('artpulse/v1', '/orgs', [
+            if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/orgs')) {
+                register_rest_route(ARTPULSE_API_NAMESPACE, '/orgs', [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_orgs'],
                 'permission_callback' => function () {

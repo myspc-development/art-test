@@ -16,24 +16,24 @@ class NotificationRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/notifications')) {
-            register_rest_route('artpulse/v1', '/notifications', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/notifications')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/notifications', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/notifications/(?P<id>\\d+)/read')) {
-            register_rest_route('artpulse/v1', '/notifications/(?P<id>\\d+)/read', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/notifications/(?P<id>\\d+)/read')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/notifications/(?P<id>\\d+)/read', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'mark_read'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/notifications/mark-all-read')) {
-            register_rest_route('artpulse/v1', '/notifications/mark-all-read', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/notifications/mark-all-read')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/notifications/mark-all-read', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'mark_all_read'],
             'permission_callback' => fn() => is_user_logged_in(),

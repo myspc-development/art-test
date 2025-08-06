@@ -14,8 +14,8 @@ class RecommendationRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/recommendations')) {
-            register_rest_route('artpulse/v1', '/recommendations', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/recommendations')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/recommendations', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_recommendations'],
             'permission_callback' => function () {

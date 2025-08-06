@@ -31,8 +31,8 @@ class AjaxFilterBlock {
     }
 
     public static function register_rest_routes() {
-        if (!ap_rest_route_registered('artpulse/v1', '/filtered-posts')) {
-            register_rest_route('artpulse/v1', '/filtered-posts', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/filtered-posts')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/filtered-posts', [
             'methods'  => 'GET',
             'callback' => [self::class, 'rest_filtered_posts'],
             'permission_callback' => fn() => is_user_logged_in(),

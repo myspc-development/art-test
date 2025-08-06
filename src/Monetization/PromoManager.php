@@ -13,8 +13,8 @@ class PromoManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/promo-code/apply')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/promo-code/apply', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/promo-code/apply')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/promo-code/apply', [
             'methods'  => 'POST',
             'callback' => [self::class, 'apply_code'],
             'permission_callback' => function() {

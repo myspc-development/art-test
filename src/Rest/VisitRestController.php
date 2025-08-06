@@ -19,8 +19,8 @@ class VisitRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/checkin')) {
-            register_rest_route('artpulse/v1', '/checkin', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/checkin')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/checkin', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'checkin'],
             'permission_callback' => function () {
@@ -34,8 +34,8 @@ class VisitRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/visits')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/visits', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/visits')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/visits', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'list'],
             'permission_callback' => [\ArtPulse\Rest\RsvpRestController::class, 'check_permissions'],
@@ -43,8 +43,8 @@ class VisitRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/visits/export')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/visits/export', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/visits/export')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/visits/export', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'export'],
             'permission_callback' => [\ArtPulse\Rest\RsvpRestController::class, 'check_permissions'],

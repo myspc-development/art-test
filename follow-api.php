@@ -6,8 +6,8 @@ if (!defined('ABSPATH')) {
 }
 
 add_action('rest_api_init', function () {
-    if (!ap_rest_route_registered('artpulse/v1', '/follow/feed')) {
-        register_rest_route('artpulse/v1', '/follow/feed', [
+    if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/follow/feed')) {
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/follow/feed', [
         'methods'             => 'GET',
         'callback'            => function (WP_REST_Request $request) {
             $limit = max(1, intval($request->get_param('limit') ?: 20));

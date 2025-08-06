@@ -19,8 +19,8 @@ class ReportTemplateController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/report-template/(?P<type>[^/]+)')) {
-            register_rest_route('artpulse/v1', '/report-template/(?P<type>[^/]+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/report-template/(?P<type>[^/]+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/report-template/(?P<type>[^/]+)', [
                 [
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'get_template'],

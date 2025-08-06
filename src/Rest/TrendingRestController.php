@@ -10,8 +10,8 @@ class TrendingRestController {
     }
 
     public static function register_routes(): void {
-        if (!ap_rest_route_registered('artpulse/v1', '/trending')) {
-            register_rest_route('artpulse/v1', '/trending', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/trending')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/trending', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_trending'],
             'permission_callback' => function () {

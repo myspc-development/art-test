@@ -11,8 +11,8 @@ class DashboardConfigController {
     }
 
     public static function register_routes(): void {
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-config')) {
-            register_rest_route('artpulse/v1', '/dashboard-config', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/dashboard-config')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/dashboard-config', [
                 [
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'get_config'],

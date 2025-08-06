@@ -19,8 +19,8 @@ class FeedbackRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/feedback')) {
-            register_rest_route('artpulse/v1', '/feedback', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/feedback')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/feedback', [
                 [
                     'methods'             => 'POST',
                     'callback'            => [self::class, 'submit'],
@@ -33,16 +33,16 @@ class FeedbackRestController
                 ],
             ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/feedback/(?P<id>\\d+)/vote')) {
-            register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/vote', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/feedback/(?P<id>\\d+)/vote')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/feedback/(?P<id>\\d+)/vote', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'vote'],
             'permission_callback' => fn () => is_user_logged_in(),
             'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/feedback/(?P<id>\\d+)/comments')) {
-            register_rest_route('artpulse/v1', '/feedback/(?P<id>\\d+)/comments', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/feedback/(?P<id>\\d+)/comments')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/feedback/(?P<id>\\d+)/comments', [
                 [
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'comments'],

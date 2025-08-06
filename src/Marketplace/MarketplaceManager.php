@@ -81,8 +81,8 @@ class MarketplaceManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/artworks')) {
-            register_rest_route('artpulse/v1', '/artworks', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/artworks')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/artworks', [
                 [
                     'methods'  => 'POST',
                     'callback' => [self::class, 'create_artwork'],
@@ -97,8 +97,8 @@ class MarketplaceManager
                 ],
             ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/artworks/(?P<id>\\d+)')) {
-            register_rest_route('artpulse/v1', '/artworks/(?P<id>\\d+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/artworks/(?P<id>\\d+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/artworks/(?P<id>\\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_artwork'],
             'permission_callback' => function () {
@@ -107,15 +107,15 @@ class MarketplaceManager
             'args' => ['id' => ['validate_callback' => 'absint']],
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/orders')) {
-            register_rest_route('artpulse/v1', '/orders', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/orders')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/orders', [
             'methods'  => 'POST',
             'callback' => [self::class, 'submit_order'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/orders/mine')) {
-            register_rest_route('artpulse/v1', '/orders/mine', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/orders/mine')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/orders/mine', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_orders'],
             'permission_callback' => fn() => is_user_logged_in(),

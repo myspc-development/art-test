@@ -16,8 +16,8 @@ class FavoritesRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/favorites')) {
-            register_rest_route('artpulse/v1', '/favorites', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/favorites')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/favorites', [
             'methods'  => 'DELETE',
             'callback' => [self::class, 'remove_favorite'],
             'permission_callback' => fn() => is_user_logged_in(),

@@ -40,8 +40,8 @@ class ReferralManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/referral/redeem')) {
-            register_rest_route('artpulse/v1', '/referral/redeem', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/referral/redeem')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/referral/redeem', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'redeem'],
             'permission_callback' => fn() => is_user_logged_in(),

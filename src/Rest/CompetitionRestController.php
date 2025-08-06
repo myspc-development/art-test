@@ -15,8 +15,8 @@ class CompetitionRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/competitions/(?P<id>\d+)/entries')) {
-            register_rest_route('artpulse/v1', '/competitions/(?P<id>\d+)/entries', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/competitions/(?P<id>\d+)/entries')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/competitions/(?P<id>\d+)/entries', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'submit_entry'],
             'permission_callback' => [self::class, 'can_submit'],
@@ -27,8 +27,8 @@ class CompetitionRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/competitions/(?P<id>\d+)/entries/(?P<entry_id>\d+)/vote')) {
-            register_rest_route('artpulse/v1', '/competitions/(?P<id>\d+)/entries/(?P<entry_id>\d+)/vote', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/competitions/(?P<id>\d+)/entries/(?P<entry_id>\d+)/vote')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/competitions/(?P<id>\d+)/entries/(?P<entry_id>\d+)/vote', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'vote_entry'],
             'permission_callback' => [self::class, 'can_vote'],

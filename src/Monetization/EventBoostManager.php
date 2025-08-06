@@ -43,15 +43,15 @@ class EventBoostManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/boost/create-checkout')) {
-            register_rest_route('artpulse/v1', '/boost/create-checkout', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/boost/create-checkout')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/boost/create-checkout', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_checkout'],
             'permission_callback' => function () { return is_user_logged_in(); },
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/boost/webhook')) {
-            register_rest_route('artpulse/v1', '/boost/webhook', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/boost/webhook')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/boost/webhook', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle_webhook'],
             'permission_callback' => '__return_true',

@@ -94,7 +94,7 @@ add_action('rest_api_init', function () {
             return;
         }
     }
-    register_rest_route('artpulse/v1', $path, [
+    register_rest_route(ARTPULSE_API_NAMESPACE, $path, [
         'methods' => '%s',
         'callback' => '%s',
         'permission_callback' => function () {

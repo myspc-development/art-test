@@ -15,8 +15,8 @@ class AnalyticsPilotController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/analytics/pilot/invite')) {
-            register_rest_route('artpulse/v1', '/analytics/pilot/invite', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/analytics/pilot/invite')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/analytics/pilot/invite', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'invite'],
             'permission_callback' => fn() => current_user_can('manage_options'),

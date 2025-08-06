@@ -12,8 +12,8 @@ class OrgDashboardController {
     }
 
     public static function routes(): void {
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\d+)/events/summary')) {
-            register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/events/summary', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/events/summary')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/events/summary', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'event_summary'],
             'permission_callback' => [self::class, 'can_view'],
@@ -21,8 +21,8 @@ class OrgDashboardController {
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\d+)/team/invite')) {
-            register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/team/invite', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/team/invite')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/team/invite', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'team_invite'],
             'permission_callback' => [self::class, 'can_manage'],
@@ -30,8 +30,8 @@ class OrgDashboardController {
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\d+)/tickets/metrics')) {
-            register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/tickets/metrics', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/tickets/metrics')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/tickets/metrics', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'ticket_metrics'],
             'permission_callback' => [self::class, 'can_view'],
@@ -39,8 +39,8 @@ class OrgDashboardController {
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\d+)/message/broadcast')) {
-            register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/message/broadcast', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/message/broadcast')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/message/broadcast', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'broadcast'],
             'permission_callback' => [self::class, 'can_manage'],

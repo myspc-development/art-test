@@ -13,8 +13,8 @@ class OrgMetaController
 
     public static function routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/org/(?P<id>\d+)/meta')) {
-            register_rest_route('artpulse/v1', '/org/(?P<id>\d+)/meta', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/meta')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/org/(?P<id>\d+)/meta', [
             'methods'             => ['GET', 'POST'],
             'callback'            => [self::class, 'handle'],
             'permission_callback' => function () { return current_user_can('read'); },

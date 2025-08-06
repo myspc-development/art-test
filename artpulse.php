@@ -1,5 +1,8 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
+if (!defined('ARTPULSE_API_NAMESPACE')) {
+    define('ARTPULSE_API_NAMESPACE', 'artpulse/v1');
+}
 /**
  * Plugin loader with version migration.
  */

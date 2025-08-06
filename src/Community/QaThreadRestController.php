@@ -11,8 +11,8 @@ class QaThreadRestController {
     }
 
     public static function routes(): void {
-        if (!ap_rest_route_registered('artpulse/v1', '/qa-thread/(?P<event_id>\d+)')) {
-            register_rest_route('artpulse/v1', '/qa-thread/(?P<event_id>\d+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/qa-thread/(?P<event_id>\d+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/qa-thread/(?P<event_id>\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_thread'],
             'permission_callback' => function () {
@@ -20,8 +20,8 @@ class QaThreadRestController {
             },
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/qa-thread/(?P<event_id>\d+)/post')) {
-            register_rest_route('artpulse/v1', '/qa-thread/(?P<event_id>\d+)/post', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/qa-thread/(?P<event_id>\d+)/post')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/qa-thread/(?P<event_id>\d+)/post', [
             'methods'  => 'POST',
             'callback' => [self::class, 'post_comment'],
             'permission_callback' => fn() => is_user_logged_in(),

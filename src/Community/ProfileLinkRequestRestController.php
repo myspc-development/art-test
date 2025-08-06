@@ -9,8 +9,8 @@ class ProfileLinkRequestRestController {
     }
 
     public static function register_routes() {
-        if (!ap_rest_route_registered('artpulse/v1', '/link-request')) {
-            register_rest_route('artpulse/v1', '/link-request', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/link-request')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/link-request', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_request'],
             'permission_callback' => function() { return is_user_logged_in(); },
@@ -21,24 +21,24 @@ class ProfileLinkRequestRestController {
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/link-request/(?P<id>\d+)/approve')) {
-            register_rest_route('artpulse/v1', '/link-request/(?P<id>\d+)/approve', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/link-request/(?P<id>\d+)/approve')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/link-request/(?P<id>\d+)/approve', [
             'methods'  => 'POST',
             'callback' => [self::class, 'approve_request'],
             'permission_callback' => function() { return current_user_can('edit_others_posts'); },
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/link-request/(?P<id>\d+)/deny')) {
-            register_rest_route('artpulse/v1', '/link-request/(?P<id>\d+)/deny', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/link-request/(?P<id>\d+)/deny')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/link-request/(?P<id>\d+)/deny', [
             'methods'  => 'POST',
             'callback' => [self::class, 'deny_request'],
             'permission_callback' => function() { return current_user_can('edit_others_posts'); },
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/link-requests')) {
-            register_rest_route('artpulse/v1', '/link-requests', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/link-requests')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/link-requests', [
                 [
                     'methods'  => 'GET',
                     'callback' => [self::class, 'list_requests'],
@@ -59,8 +59,8 @@ class ProfileLinkRequestRestController {
             ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/link-requests/bulk')) {
-            register_rest_route('artpulse/v1', '/link-requests/bulk', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/link-requests/bulk')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/link-requests/bulk', [
             'methods'  => 'POST',
             'callback' => [self::class, 'bulk_update'],
             'permission_callback' => function () { return current_user_can('edit_others_posts'); },

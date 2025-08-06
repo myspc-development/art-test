@@ -17,8 +17,8 @@ class EventCommentsController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/comments')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/comments', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/comments')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/comments', [
                 [
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'list'],
@@ -37,8 +37,8 @@ class EventCommentsController
             ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/comment/(?P<comment_id>\\d+)/moderate')) {
-            register_rest_route('artpulse/v1', '/event/comment/(?P<comment_id>\\d+)/moderate', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/comment/(?P<comment_id>\\d+)/moderate')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/comment/(?P<comment_id>\\d+)/moderate', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'moderate'],
             'permission_callback' => fn() => CommunityRoles::can_moderate(get_current_user_id()),

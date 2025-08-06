@@ -13,12 +13,12 @@ class WidgetsController
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/widgets/embed.js', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/widgets/embed.js', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'embed'],
             'permission_callback' => '__return_true',
         ]);
-        register_rest_route('artpulse/v1', '/widgets/render', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/widgets/render', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'render'],
             'permission_callback' => '__return_true',

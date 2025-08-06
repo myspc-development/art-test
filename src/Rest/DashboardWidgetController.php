@@ -91,29 +91,29 @@ class DashboardWidgetController {
     }
 
     public static function register_routes(): void {
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-widgets')) {
-            register_rest_route('artpulse/v1', '/dashboard-widgets', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/dashboard-widgets')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/dashboard-widgets', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_widgets'],
             'permission_callback' => [self::class, 'check_permissions'],
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-widgets/save')) {
-            register_rest_route('artpulse/v1', '/dashboard-widgets/save', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/dashboard-widgets/save')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/dashboard-widgets/save', [
             'methods'  => 'POST',
             'callback' => [self::class, 'save_widgets'],
             'permission_callback' => [self::class, 'check_permissions'],
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-widgets/export')) {
-            register_rest_route('artpulse/v1', '/dashboard-widgets/export', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/dashboard-widgets/export')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/dashboard-widgets/export', [
             'methods'  => 'GET',
             'callback' => [self::class, 'export_layout'],
             'permission_callback' => [self::class, 'check_permissions'],
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-widgets/import')) {
-            register_rest_route('artpulse/v1', '/dashboard-widgets/import', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/dashboard-widgets/import')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/dashboard-widgets/import', [
             'methods'  => 'POST',
             'callback' => [self::class, 'import_layout'],
             'permission_callback' => [self::class, 'check_permissions'],
