@@ -20,6 +20,10 @@ Layouts are saved per user in `ap_dashboard_layout` and per role in the `ap_dash
 
 If no user-specific layout exists, the builder falls back to the role defaults defined in `DashboardController::$role_widgets`. Preset templates registered via `DashboardController::get_default_presets()` can be loaded on demand through the dashboard UI.
 
+Default presets are now filtered against the current role before rendering. Widgets that are unregistered, restricted to other roles or require capabilities the role lacks are automatically removed. When every widget is filtered out an empty-state message is shown with a prompt to load a preset.
+
+Preview parameters (`?ap_preview_role` and `?ap_preview_user`) continue to influence which role and layout are loaded, allowing administrators to verify the experience for different accounts.
+
 The builder fetches layouts via `GET /wp-json/artpulse/v1/dashboard-widgets?role={role}` and saves changes with `POST /dashboard-widgets/save`.
 
 A **Reset Layout** action deletes the user meta so role defaults apply on next login.
