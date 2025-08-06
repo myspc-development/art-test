@@ -25,7 +25,10 @@ export default function AdminWidgetMatrix() {
       headers: { 'X-WP-Nonce': nonce }
     })
       .then(r => r.json())
-      .then(data => setMatrix(data.widget_roles || {}));
+      .then(data => {
+        setMatrix(data.widget_roles || {});
+        if (data.role_widgets) setRoles(Object.keys(data.role_widgets));
+      });
   }, []);
 
   const toggle = (wid: string, role: string) => {
