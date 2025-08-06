@@ -119,6 +119,18 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         $this->assertSame(['membership' => true, 'upgrade' => true], $data['visibility']);
     }
 
+    public function test_get_returns_layout_for_specified_role(): void
+    {
+        update_option('ap_dashboard_widget_config', ['member' => ['membership']]);
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
+        $req->set_param('role', 'member');
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+        $data = $res->get_data();
+        $this->assertSame(['membership'], $data['layout']);
+        $this->assertSame(['membership' => true], $data['visibility']);
+    }
+
     public function test_get_sanitizes_layout_values(): void
     {
         update_user_meta($this->user_id, 'ap_dashboard_layout', [

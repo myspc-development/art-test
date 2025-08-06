@@ -1010,7 +1010,10 @@ function applySavedVisibility(vis) {
 
 async function loadDashboardLayout() {
   try {
-    const res = await fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap/layout`, {
+    const roleQuery = typeof previewRole !== 'undefined' && previewRole
+      ? `?role=${previewRole}`
+      : '';
+    const res = await fetch(`${ArtPulseDashboardApi.root}artpulse/v1/ap/layout${roleQuery}`, {
       headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
     });
     if (!res.ok) throw new Error('fail');
