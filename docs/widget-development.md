@@ -52,6 +52,27 @@ const root = createRoot( document.getElementById( 'my-react-widget' ) );
 root.render( <MyWidget /> );
 ```
 
+## Layout and markup
+
+WordPress dashboard widgets should follow the core structure so they inherit
+default styling:
+
+```html
+<div class="postbox">
+  <h2 class="hndle"><span>Widget Title</span></h2>
+  <div class="inside">
+    <!-- content -->
+  </div>
+</div>
+```
+
+Use the `.inside` container for padding and align form elements with the
+standard `.regular-text` and `.button` classes. Avoid custom margins so widgets
+remain visually consistent.
+
+When including icons prefer Dashicons and mark them with `aria-hidden="true"`
+or provide screen reader text to maintain accessibility.
+
 ## Assigning widgets to roles
 
 Register widgets for specific roles by providing a `roles` array or using the helper `register_widget_for_roles`:

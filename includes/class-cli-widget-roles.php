@@ -12,8 +12,8 @@ class AP_CLI_Widget_Roles {
      *
      * ## OPTIONS
      *
-     * [--export=<file>]
-     * : Export mapping to JSON file.
+     * [--export]
+     * : Output mapping as JSON to STDOUT. Redirect to save.
      *
      * [--import=<file>]
      * : Import mapping from JSON file and save to options.
@@ -25,13 +25,21 @@ class AP_CLI_Widget_Roles {
      */
     public function __invoke( array $args, array $assoc_args ): void {
         $map = DashboardWidgetRegistry::get_role_widget_map();
-        if ( isset( $assoc_args['export'] ) ) {
-            file_put_contents( $assoc_args['export'], wp_json_encode( $map, JSON_PRETTY_PRINT ) );
-            \WP_CLI::success( 'Exported widget-role map.' );
+
+        $sub = $args[0] ?? '';
+
+        // Support `wp widget-roles export` or `--export`.
+        if ( $sub === 'export' || isset( $assoc_args['export'] ) ) {
+            \WP_CLI::print_value( $map, [ 'json' => true ] );
             return;
         }
-        if ( isset( $assoc_args['import'] ) ) {
-            $file = $assoc_args['import'];
+
+        // Support `wp widget-roles import file.json` or `--import=file.json`.
+        if ( $sub === 'import' || isset( $assoc_args['import'] ) ) {
+            $file = $assoc_args['import'] ?? ( $args[1] ?? '' );
+            if ( ! $file ) {
+                \WP_CLI::error( 'Missing file.' );
+            }
             if ( ! file_exists( $file ) ) {
                 \WP_CLI::error( 'File not found.' );
             }
@@ -43,6 +51,7 @@ class AP_CLI_Widget_Roles {
             \WP_CLI::success( 'Imported widget-role map.' );
             return;
         }
+
         \WP_CLI::print_value( $map, [ 'json' => true ] );
     }
 }
