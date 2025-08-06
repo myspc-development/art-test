@@ -491,6 +491,9 @@ class DashboardWidgetRegistry {
             if (isset($cfg['capability'])) {
                 $widgets[$id]['capability'] = sanitize_key($cfg['capability']);
             }
+            if (isset($cfg['exclude_roles'])) {
+                $widgets[$id]['exclude_roles'] = array_map('sanitize_key', (array) $cfg['exclude_roles']);
+            }
         }
         $group_vis = get_option('ap_widget_group_visibility', []);
         foreach ($widgets as $id => $cfg) {

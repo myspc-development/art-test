@@ -40,10 +40,24 @@ class DashboardConfigController {
             ));
         }
 
+        $defs        = DashboardWidgetRegistry::get_all();
+        $capabilities = [];
+        $excluded     = [];
+        foreach ($defs as $id => $def) {
+            if (!empty($def['capability'])) {
+                $capabilities[$id] = sanitize_key($def['capability']);
+            }
+            if (!empty($def['exclude_roles'])) {
+                $excluded[$id] = array_map('sanitize_key', (array) $def['exclude_roles']);
+            }
+        }
+
         return rest_ensure_response([
             'widget_roles' => $visibility,
             'role_widgets' => $role_widgets,
             'locked'       => array_values($locked),
+            'capabilities' => $capabilities,
+            'excluded_roles' => $excluded,
         ]);
     }
 
