@@ -20,6 +20,11 @@ require_once __DIR__ . '/includes/class-cli-widget-roles.php';
 require_once __DIR__ . '/includes/class-cli-check-widget-presets.php';
 require_once __DIR__ . '/includes/widget-logging.php';
 
+if (defined('WP_CLI') && WP_CLI) {
+    require_once __DIR__ . '/includes/class-cli-debug-dashboard.php';
+    \WP_CLI::add_command('artpulse debug-dashboard', \ArtPulse\CLI\DebugDashboardCommand::class);
+}
+
 // Development helpers
 if (defined('WP_DEBUG') && WP_DEBUG) {
     $dev_file = __DIR__ . '/includes/dev/debug-rest.php';
