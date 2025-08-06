@@ -83,6 +83,14 @@ const RoleDashboard: React.FC = () => {
     RoleDashboardData.widgets,
     { roles: previewRole ? [previewRole] : RoleDashboardData.currentUser.roles }
   );
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.group('[RoleDashboard]');
+      console.log('User role:', previewRole || RoleDashboardData.currentUser.role);
+      console.log('Widgets rendered:', allowed.map(w => w.id));
+      console.groupEnd();
+    }
+  }, [allowed, previewRole]);
   const [htmlMap, setHtmlMap] = useState<Record<string, string>>({});
   const [errorMap, setErrorMap] = useState<Record<string, boolean>>({});
 
