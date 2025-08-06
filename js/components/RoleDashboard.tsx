@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import useFilteredWidgets from '../../dashboard/useFilteredWidgets';
 
 interface WidgetDef {
@@ -57,6 +57,9 @@ const RoleDashboard: React.FC = () => {
   const restRoot = (window as WindowWithDashboard).wpApiSettings?.root || '/wp-json/';
   const nonce = (window as WindowWithDashboard).wpApiSettings?.nonce || '';
 
+  const [layout, setLayout] = useState<string[]>([]);
+  const [visibility, setVisibility] = useState<Record<string, boolean>>({});
+
   useEffect(() => {
     fetch(restRoot + 'artpulse/v1/dashboard-config', {
       headers: { 'X-WP-Nonce': nonce },
@@ -84,13 +87,50 @@ const RoleDashboard: React.FC = () => {
     { roles: previewRole ? [previewRole] : RoleDashboardData.currentUser.roles }
   );
   useEffect(() => {
+    const role = previewRole || RoleDashboardData.currentUser.role;
+    const url = `${restRoot}artpulse/v1/ap/layout${role ? `?role=${role}` : ''}`;
+    fetch(url, {
+      headers: { 'X-WP-Nonce': nonce },
+    })
+      .then(r => r.json())
+      .then(data => {
+        setLayout(Array.isArray(data.layout) ? data.layout : []);
+        setVisibility(data.visibility || {});
+      })
+      .catch(err => {
+        console.error('Failed to load layout', err);
+        setLayout([]);
+        setVisibility({});
+      });
+  }, [previewRole, restRoot, nonce, RoleDashboardData.currentUser.role]);
+
+  const ordered = useMemo(() => {
+    if (layout.length === 0) return allowed;
+    const map = new Map(allowed.map(w => [w.id, w]));
+    const sorted: WidgetDef[] = [];
+    layout.forEach(id => {
+      const w = map.get(id);
+      if (w) sorted.push(w);
+    });
+    allowed.forEach(w => {
+      if (!layout.includes(w.id)) sorted.push(w);
+    });
+    return sorted;
+  }, [allowed, layout]);
+
+  const visibleWidgets = useMemo(
+    () => ordered.filter(w => visibility[w.id] !== false),
+    [ordered, visibility]
+  );
+
+  useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       console.group('[RoleDashboard]');
       console.log('User role:', previewRole || RoleDashboardData.currentUser.role);
-      console.log('Widgets rendered:', allowed.map(w => w.id));
+      console.log('Widgets rendered:', visibleWidgets.map(w => w.id));
       console.groupEnd();
     }
-  }, [allowed, previewRole]);
+  }, [visibleWidgets, previewRole]);
   const [htmlMap, setHtmlMap] = useState<Record<string, string>>({});
   const [errorMap, setErrorMap] = useState<Record<string, boolean>>({});
 
@@ -110,14 +150,14 @@ const RoleDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    allowed.forEach(widget => {
+    visibleWidgets.forEach(widget => {
       if (widget.restOnly && !htmlMap[widget.id] && !errorMap[widget.id]) {
         fetchWidgetHtml(widget.id);
       } else if (!widget.restOnly && widget.html && !htmlMap[widget.id]) {
         setHtmlMap(prev => ({ ...prev, [widget.id]: addHeadingId(widget.id, widget.html as string) }));
       }
     });
-  }, [allowed, restRoot, nonce, htmlMap, errorMap]);
+  }, [visibleWidgets, restRoot, nonce, htmlMap, errorMap]);
 
   return (
     <>
@@ -143,9 +183,13 @@ const RoleDashboard: React.FC = () => {
           <button onClick={retryConfig}>Retry</button>
         </div>
       )}
-      {allowed.length === 0 && <p>No widgets available for your role.</p>}
-      {allowed.map(widget => (
-        <DashboardCard key={widget.id} id={widget.id}>
+      {visibleWidgets.length === 0 && <p>No widgets available for your role.</p>}
+      {visibleWidgets.map(widget => (
+        <DashboardCard
+          key={widget.id}
+          id={widget.id}
+          visible={visibility[widget.id] !== false}
+        >
           {errorMap[widget.id] ? (
             <div>
               <p>Failed to load widget.</p>
