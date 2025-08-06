@@ -21,6 +21,8 @@ interface WindowWithDashboard extends Window {
   wpApiSettings?: { root: string; nonce: string };
 }
 
+const LOCAL_STORAGE_KEY = 'ap_preview_role';
+
 const addHeadingId = (id: string, html: string) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
@@ -46,15 +48,43 @@ const DashboardCard: React.FC<{ id: string; visible?: boolean; children?: React.
 
 const RoleDashboard: React.FC = () => {
   const { RoleDashboardData = { widgets: [], currentUser: {} } } = window as WindowWithDashboard;
-  const { widgets: allowed, error: configError, retry: retryConfig } = useFilteredWidgets(
-    RoleDashboardData.widgets,
-    RoleDashboardData.currentUser
+
+  const [previewRole, setPreviewRole] = useState<string | null>(
+    () => window.localStorage.getItem(LOCAL_STORAGE_KEY)
   );
-  const [htmlMap, setHtmlMap] = useState<Record<string, string>>({});
-  const [errorMap, setErrorMap] = useState<Record<string, boolean>>({});
+  const [availableRoles, setAvailableRoles] = useState<string[]>([]);
 
   const restRoot = (window as WindowWithDashboard).wpApiSettings?.root || '/wp-json/';
   const nonce = (window as WindowWithDashboard).wpApiSettings?.nonce || '';
+
+  useEffect(() => {
+    fetch(restRoot + 'artpulse/v1/dashboard-config', {
+      headers: { 'X-WP-Nonce': nonce },
+    })
+      .then(r => r.json())
+      .then(data => {
+        const roles = Object.keys(data.role_widgets || {});
+        setAvailableRoles(roles);
+      })
+      .catch(err => {
+        console.error('Failed to load roles', err);
+      });
+  }, [restRoot, nonce]);
+
+  useEffect(() => {
+    if (previewRole) {
+      window.localStorage.setItem(LOCAL_STORAGE_KEY, previewRole);
+    } else {
+      window.localStorage.removeItem(LOCAL_STORAGE_KEY);
+    }
+  }, [previewRole]);
+
+  const { widgets: allowed, error: configError, retry: retryConfig } = useFilteredWidgets(
+    RoleDashboardData.widgets,
+    { roles: previewRole ? [previewRole] : RoleDashboardData.currentUser.roles }
+  );
+  const [htmlMap, setHtmlMap] = useState<Record<string, string>>({});
+  const [errorMap, setErrorMap] = useState<Record<string, boolean>>({});
 
   const fetchWidgetHtml = (id: string) => {
     fetch(`${restRoot}artpulse/v1/dashboard-widget/${id}`, {
@@ -83,6 +113,22 @@ const RoleDashboard: React.FC = () => {
 
   return (
     <>
+      <div className="ap-role-select">
+        <label>
+          Preview role:{' '}
+          <select
+            value={previewRole || ''}
+            onChange={e => setPreviewRole(e.target.value || null)}
+          >
+            <option value="">(Your current role)</option>
+            {availableRoles.map(role => (
+              <option key={role} value={role}>
+                {role}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
       {configError && (
         <div className="ap-error" role="alert">
           <p>{configError}</p>
