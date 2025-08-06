@@ -5,7 +5,12 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Dashboard\WidgetVisibilityManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+if (!defined('ABSPATH')) {
+    define('ABSPATH', __DIR__ . '/');
+}
+
 require_once __DIR__ . '/../TestStubs.php';
+require_once __DIR__ . '/../../includes/widget-loader.php';
 require_once __DIR__ . '/../../src/Dashboard/WidgetVisibilityManager.php';
 require_once __DIR__ . '/../../src/Core/DashboardWidgetRegistry.php';
 
@@ -19,5 +24,22 @@ class WidgetVisibilityRulesTest extends TestCase {
         $rules = WidgetVisibilityManager::get_visibility_rules();
         $this->assertArrayHasKey('widget_news', $rules);
         $this->assertContains('organization', $rules['widget_news']['exclude_roles']);
+    }
+
+    public function test_rules_include_allowed_roles_from_registry(): void {
+        DashboardWidgetRegistry::init();
+        $rules = WidgetVisibilityManager::get_visibility_rules();
+        $this->assertArrayHasKey('widget_news', $rules);
+        $this->assertSame(['member'], $rules['widget_news']['allowed_roles']);
+    }
+
+    public function test_rules_include_allowed_roles_from_options(): void {
+        \ArtPulse\Tests\Stubs\MockStorage::$options['artpulse_widget_roles'] = [
+            'custom_widget' => [
+                'allowed_roles' => ['member'],
+            ],
+        ];
+        $rules = WidgetVisibilityManager::get_visibility_rules();
+        $this->assertSame(['member'], $rules['custom_widget']['allowed_roles']);
     }
 }
