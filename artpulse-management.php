@@ -336,12 +336,14 @@ register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
 
     // Initialize default dashboard widget layout if missing
     if (false === get_option('ap_dashboard_widget_config', false)) {
-        $roles       = array_keys(wp_roles()->roles);
-        $definitions = \ArtPulse\Core\DashboardWidgetRegistry::get_definitions();
-        $all_ids     = array_column($definitions, 'id');
-        $default     = [];
+        $roles   = array_keys(wp_roles()->roles);
+        $default = [];
         foreach ($roles as $role) {
-            $default[$role] = $all_ids;
+            $ids = \ArtPulse\Core\DashboardController::get_widgets_for_role($role);
+            $default[$role] = array_map(
+                fn($id) => ['id' => $id, 'visible' => true],
+                $ids
+            );
         }
         add_option('ap_dashboard_widget_config', $default);
     }

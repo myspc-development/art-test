@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardController;
 use ArtPulse\Dashboard\WidgetGuard;
 
 /**
@@ -58,25 +59,42 @@ class UserLayoutManager
         }
 
         if (is_array($layout) && !empty($layout)) {
+            $valid  = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+            $logs   = [];
+            $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid, $logs);
 
-            if ($ordered) {
-                return [
-                    'layout' => $ordered,
-                    'logs'   => $logs,
-                ];
+            $defs  = DashboardWidgetRegistry::get_definitions();
+            $final = [];
+            foreach ($ordered as $item) {
+                $id   = $item['id'];
+                $def  = $defs[$id] ?? null;
+                $vis  = $item['visible'] ?? true;
+
+                if (!$def || !is_callable($def['callback'] ?? null)) {
+                    if (!in_array($id, $logs, true)) {
+                        $logs[] = $id;
+                    }
+                    WidgetGuard::register_stub_widget($id, [], $def ?? []);
+                }
+
+                $final[] = ['id' => $id, 'visible' => $vis];
             }
+
+            if ($logs) {
+                error_log('Invalid dashboard widgets for role ' . $role . ': ' . implode(', ', $logs));
+            }
+
+            return [
+                'layout' => $final,
+                'logs'   => $logs,
+            ];
         }
 
-        $defs = DashboardWidgetRegistry::get_definitions();
-        $defs = array_filter(
-            $defs,
-            fn($def) => $def['id'] !== 'artpulse_dashboard_widget'
-        );
-
+        $default_ids = \ArtPulse\Core\DashboardController::get_widgets_for_role($role);
         return [
             'layout' => array_map(
-                fn($def) => ['id' => $def['id'], 'visible' => true],
-                $defs
+                fn($id) => ['id' => $id, 'visible' => true],
+                $default_ids
             ),
             'logs'   => [],
         ];

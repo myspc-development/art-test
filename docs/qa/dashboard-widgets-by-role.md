@@ -14,7 +14,7 @@ The plugin loads a baseline set of widgets for each new account. Administrators 
 - **Member:** `widget_news`, `membership`, `upgrade`, `account-tools`, `recommended_for_you`, `my_rsvps`, `favorites`, `local-events`, `my-follows`, `notifications`, `messages`, `dashboard_feedback`, `cat_fact`
 - **Artist:** `artist_feed_publisher`, `artist_audience_insights`, `artist_spotlight`, `artist_revenue_summary`, `my_events`, `messages`, `notifications`, `dashboard_feedback`, `cat_fact`
 
-- **Organization:** `organization_dashboard`, `organization_analytics`, `my_events`, `rsvp_stats`, `org_messages`, `support_history`, `lead_capture`, `site_stats`, `notifications`, `dashboard_feedback`
+- **Organization:** `org_event_overview`, `artpulse_analytics_widget`, `rsvp_stats`, `my-events`, `org_ticket_insights`, `org_team_roster`, `audience_crm`, `org_broadcast_box`, `org_approval_center`, `webhooks`, `support-history`
 | Widget ID | Required Capability | Member | Artist | Organization |
 |-----------|--------------------|:------:|:------:|:------------:|
 | membership | read | ✅ | ✅ | ✅ |

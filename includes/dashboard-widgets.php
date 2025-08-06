@@ -1100,7 +1100,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_cat_fact',
         [
             'category'   => 'fun',
-            'roles'      => ['member'],
+            'roles'      => ['member', 'artist', 'organization'],
             'visibility' => 'public',
         ]
     );
@@ -1112,7 +1112,7 @@ function ap_register_core_dashboard_widgets(): void
         __('Send feedback about your dashboard.', 'artpulse'),
         'ap_widget_dashboard_feedback',
         [
-            'roles'      => ['member'],
+            'roles'      => ['member', 'artist', 'organization'],
             'category'   => 'engagement',
             'visibility' => 'public',
         ]

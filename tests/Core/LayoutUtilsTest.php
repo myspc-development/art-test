@@ -21,7 +21,9 @@ class LayoutUtilsTest extends TestCase
             ['id' => 'alpha', 'visible' => true],
             ['id' => 'beta', 'visible' => false],
         ];
-        $this->assertSame($expected, LayoutUtils::normalize_layout($layout, $valid));
+        $logs = [];
+        $this->assertSame($expected, LayoutUtils::normalize_layout($layout, $valid, $logs));
+        $this->assertSame(['gamma'], $logs);
     }
 
     public function test_merge_styles_sanitizes_keys_and_values(): void
