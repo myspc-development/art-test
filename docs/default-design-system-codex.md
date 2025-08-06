@@ -16,7 +16,6 @@ plugin-root/
 ├─ src/
 │  ├─ css/
 │  │  ├─ tokens.css
-│  │  ├─ dashboard.css      # ✅ Unified Dashboard Styling (NEW)
 │  │  └─ widgets.scss
 │  └─ js/
 │     └─ dashboard.js
@@ -64,76 +63,13 @@ Import this file at the top of all SCSS modules:
 @use "../css/tokens.css";
 ```
 
-### 2.1 Unified Dashboard Styling (`src/css/dashboard.css`)
-
-```css
-@import "./tokens.css";
-
-.ap-dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--ap-space);
-  align-items: start;
-}
-
-.ap-card {
-  background-color: var(--ap-surface);
-  border: 1px solid var(--ap-border-color);
-  border-radius: var(--ap-radius);
-  padding: var(--ap-space);
-  box-shadow: var(--ap-shadow);
-  transition: box-shadow 0.2s ease-in-out;
-}
-
-.ap-card:where(:hover, :focus-within) {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
-}
-
-.ap-card__title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-}
-
-.ap-muted {
-  color: var(--ap-muted);
-  font-size: 0.875rem;
-}
-
-.ap-card__button {
-  background-color: var(--ap-accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--ap-radius);
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.ap-card__button:hover {
-  background-color: #0064a6;
-}
-```
-
-Compile the styles with `npm run build` which outputs `build/css/dashboard.css`.
-
-Enqueue globally:
-
-```php
-wp_enqueue_style( 'ap-dashboard', plugins_url( '../build/css/dashboard.css', __FILE__ ), [], '1.0' );
-```
-
-This ensures all dashboards use the same grid layout and card styling system.
-
 ## 3. Global Layout & Card Styles (`src/css/widgets.scss`)
 
 ```scss
 @import "./tokens.css";
-@import "./dashboard.css";
 ```
 
-Only widget-specific overrides or utility classes should go here. All shared layout components now come from `dashboard.css`.
+Only widget-specific overrides or utility classes should go here.
 
 ## 4. Build Setup (`package.json`)
 
@@ -182,7 +118,7 @@ Follow these actions to implement the system:
 
    - Use `.ap-dashboard-grid`
    - Contain only `.ap-card` widgets
-   - Include `widgets.css` or `dashboard.css`
+   - Include `widgets.css`
 
 4. **Recompile styles**
 
@@ -190,6 +126,6 @@ Follow these actions to implement the system:
    npm run build
    ```
 
-   Make sure the output CSS reflects `dashboard.css` changes.
+   Make sure the output CSS reflects style changes.
 
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

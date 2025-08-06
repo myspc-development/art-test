@@ -9,27 +9,32 @@ export default function AdminWidgetMatrix() {
   const [widgets, setWidgets] = useState<Widget[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
   const [matrix, setMatrix] = useState<Matrix>({});
+  const [error, setError] = useState('');
   const restRoot =
     window.APWidgetMatrix?.root || window.wpApiSettings?.root || '/wp-json/';
   const nonce =
     window.APWidgetMatrix?.nonce || window.wpApiSettings?.nonce || '';
 
-  useEffect(() => {
-    fetch(restRoot + 'artpulse/v1/widgets')
-      .then(r => r.json())
-      .then(setWidgets);
-    fetch(restRoot + 'artpulse/v1/roles')
-      .then(r => r.json())
-      .then(setRoles);
-    fetch(restRoot + 'artpulse/v1/dashboard-config', {
-      headers: { 'X-WP-Nonce': nonce }
-    })
-      .then(r => r.json())
-      .then(data => {
-        setMatrix(data.widget_roles || {});
-        if (data.role_widgets) setRoles(Object.keys(data.role_widgets));
+  const load = () => {
+    setError('');
+    Promise.all([
+      fetch(restRoot + 'artpulse/v1/widgets').then(r => r.json()),
+      fetch(restRoot + 'artpulse/v1/roles').then(r => r.json()),
+      fetch(restRoot + 'artpulse/v1/dashboard-config', {
+        headers: { 'X-WP-Nonce': nonce }
+      }).then(r => r.json())
+    ])
+      .then(([widgetsData, rolesData, config]) => {
+        setWidgets(widgetsData);
+        setRoles(config.role_widgets ? Object.keys(config.role_widgets) : rolesData);
+        setMatrix(config.widget_roles || {});
+      })
+      .catch(() => {
+        setError(__('Unable to load data. Please try again.', 'artpulse'));
       });
-  }, []);
+  };
+
+  useEffect(load, []);
 
   const toggle = (wid: string, role: string) => {
     setMatrix(m => {
@@ -51,6 +56,27 @@ export default function AdminWidgetMatrix() {
       }
     });
   };
+
+  if (error) {
+    return (
+      <div className="notice notice-error inline">
+        <p>{error}</p>
+        <p>
+          <button type="button" className="button" onClick={load}>
+            {__('Retry', 'artpulse')}
+          </button>
+        </p>
+      </div>
+    );
+  }
+
+  if (widgets.length === 0) {
+    return (
+      <div className="notice notice-info inline">
+        <p>{__('No widgets available.', 'artpulse')}</p>
+      </div>
+    );
+  }
 
   return (
     <div>

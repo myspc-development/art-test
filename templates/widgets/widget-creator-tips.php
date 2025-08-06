@@ -25,15 +25,17 @@ if (empty($badges)) {
     $tips[] = __('Engage with the community to earn badges.', 'artpulse');
 }
 ?>
-<div id="ap-widget-creator-tips" class="ap-card" role="region" aria-labelledby="ap-widget-creator-tips-title">
-  <h2 id="ap-widget-creator-tips-title" class="ap-card__title">💡 <?php esc_html_e('Creator Tips', 'artpulse'); ?></h2>
-  <?php if ($tips): ?>
-    <ul class="list-disc ml-4">
-      <?php foreach ($tips as $tip): ?>
-        <li><?php echo esc_html($tip); ?></li>
-      <?php endforeach; ?>
-    </ul>
-  <?php else: ?>
-    <p><?php esc_html_e('Keep up the great work!', 'artpulse'); ?></p>
-  <?php endif; ?>
+<div id="ap-widget-creator-tips" class="postbox" role="region" aria-labelledby="ap-widget-creator-tips-title">
+  <h2 id="ap-widget-creator-tips-title" class="hndle"><span>💡 <?php esc_html_e('Creator Tips', 'artpulse'); ?></span></h2>
+  <div class="inside">
+    <?php if ($tips): ?>
+      <ul class="list-disc ml-4">
+        <?php foreach ($tips as $tip): ?>
+          <li><?php echo esc_html($tip); ?></li>
+        <?php endforeach; ?>
+      </ul>
+    <?php else: ?>
+      <p><?php esc_html_e('Keep up the great work!', 'artpulse'); ?></p>
+    <?php endif; ?>
+  </div>
 </div>

@@ -11,9 +11,9 @@ if (!defined('IS_DASHBOARD_BUILDER_PREVIEW') || !IS_DASHBOARD_BUILDER_PREVIEW) {
     $artists = $ids ? get_users(['include' => $ids]) : [];
 }
 ?>
-<div id="ap-widget-followed-artists" class="ap-card" role="region" aria-labelledby="ap-widget-followed-artists-title">
-  <h2 id="ap-widget-followed-artists-title" class="ap-card__title">🎨 <?php _e('Followed Artists','artpulse'); ?></h2>
-  <div>
+<div id="ap-widget-followed-artists" class="postbox" role="region" aria-labelledby="ap-widget-followed-artists-title">
+  <h2 id="ap-widget-followed-artists-title" class="hndle"><span>🎨 <?php _e('Followed Artists','artpulse'); ?></span></h2>
+  <div class="inside">
     <?php if ($artists): ?>
       <div class="ap-grid">
         <?php foreach ($artists as $artist): ?>
