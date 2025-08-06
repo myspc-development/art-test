@@ -52,6 +52,33 @@ const root = createRoot( document.getElementById( 'my-react-widget' ) );
 root.render( <MyWidget /> );
 ```
 
+## Assigning widgets to roles
+
+Register widgets for specific roles by providing a `roles` array or using the helper `register_widget_for_roles`:
+
+```php
+use ArtPulse\Core\DashboardWidgetRegistry;
+
+DashboardWidgetRegistry::register_widget_for_roles(
+    'example_widget',
+    [
+        'label'    => 'Example',
+        'callback' => [ ExampleWidget::class, 'render' ],
+    ],
+    [ 'member', 'artist' ]
+);
+```
+
+For JSON configuration files, include the same `roles` key:
+
+```json
+{
+  "id": "example_widget",
+  "roles": ["member"],
+  "file": "widgets/example-widget.php"
+}
+```
+
 ## Best practices
 
 * **Escaping:** Always escape output using `esc_html`, `esc_attr` or `wp_kses_post`.

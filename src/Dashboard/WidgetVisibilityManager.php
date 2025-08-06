@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Dashboard;
 
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -96,12 +98,48 @@ class WidgetVisibilityManager
      */
     public static function get_visibility_rules(): array
     {
-        $rules = [
-            'artpulse_analytics_widget' => [
-                'capability' => 'view_analytics',
-            ],
+        $rules = [];
+
+        // Include default WordPress dashboard widgets and their capabilities.
+        $rules += [
+            'dashboard_activity'    => ['capability' => 'edit_posts'],
+            'dashboard_quick_press' => ['capability' => 'edit_posts'],
+            'dashboard_site_health' => ['capability' => 'view_site_health_checks'],
+            'artpulse_analytics_widget' => ['capability' => 'view_analytics'],
         ];
 
+        // Build exclude lists from the registered widget → role map.
+        if (class_exists(\ArtPulse\Core\DashboardWidgetRegistry::class)) {
+            \ArtPulse\Core\DashboardWidgetRegistry::init();
+            $map   = \ArtPulse\Core\DashboardWidgetRegistry::get_role_widget_map();
+            $roles = array_keys($map);
+            $defs  = \ArtPulse\Core\DashboardWidgetRegistry::get_all();
+
+            $allowed = [];
+            foreach ($map as $role => $widgets) {
+                foreach ($widgets as $item) {
+                    $id = sanitize_key($item['id'] ?? '');
+                    if (!$id) {
+                        continue;
+                    }
+                    $allowed[$id][$role] = true;
+                }
+            }
+
+            foreach ($allowed as $id => $allow_roles) {
+                $rule = $rules[$id] ?? [];
+                $exclude = array_values(array_diff($roles, array_keys($allow_roles)));
+                if ($exclude) {
+                    $rule['exclude_roles'] = $exclude;
+                }
+                if (!empty($defs[$id]['capability'])) {
+                    $rule['capability'] = sanitize_text_field($defs[$id]['capability']);
+                }
+                $rules[$id] = $rule;
+            }
+        }
+
+        // Merge in any saved configuration from the database.
         $saved = get_option('artpulse_widget_roles', []);
         if (is_array($saved)) {
             foreach ($saved as $widget => $config) {
@@ -130,6 +168,8 @@ class WidgetVisibilityManager
 
         /**
          * Allow plugins to register additional visibility rules.
+         * Plugins may filter 'ap_dashboard_widget_visibility_rules' to add or
+         * modify entries without touching core defaults.
          *
          * @param array $rules Default visibility configuration.
          * @return array Filtered rules.
@@ -225,8 +265,8 @@ class WidgetVisibilityManager
              * @param string $url Default empty string.
              */
             $url = apply_filters('ap_dashboard_empty_help_url', '');
-            echo '<div class="notice notice-info"><p>' .
-                esc_html__('No dashboard content available.', 'artpulse');
+            echo '<div class="notice notice-info is-dismissible"><p>' .
+                esc_html__('No widgets available for your role. Contact admin to enable access.', 'artpulse');
             if ($url) {
                 echo ' <a href="' . esc_url($url) . '" target="_blank">' . esc_html__('Learn more', 'artpulse') . '</a>';
             }

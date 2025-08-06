@@ -184,6 +184,10 @@ class DashboardWidgetRegistry {
     /**
      * Simplified widget registration used by generic dashboards.
      * Supports all options from register(), including optional 'tags'.
+     *
+     * @param string $id   Widget identifier.
+     * @param array  $args Configuration arguments. Accepts `label`, `callback`,
+     *                     and optional `roles` to limit visibility by role.
      */
     public static function register_widget( string $id, array $args ): void {
         $id = sanitize_key( $id );
@@ -244,6 +248,14 @@ class DashboardWidgetRegistry {
             $roles = isset($args['roles']) ? implode(',', (array) $args['roles']) : 'all';
             error_log(sprintf('ap widget register %s roles=%s', $id, $roles));
         }
+    }
+
+    /**
+     * Convenience wrapper for registering a widget visible only to given roles.
+     */
+    public static function register_widget_for_roles( string $id, array $args, array $roles ): void {
+        $args['roles'] = $roles;
+        self::register_widget( $id, $args );
     }
 
     /**
@@ -954,16 +966,19 @@ class DashboardWidgetRegistry {
             if ( $sec ) {
                 echo '<h2>' . esc_html( ucfirst( $sec ) ) . '</h2>';
             }
+            echo '<div class="meta-box-sortables">';
             foreach ( $sections[ $sec ] as $cfg ) {
                 try {
                     ob_start();
                     $result = call_user_func( $cfg['callback'], $user_id );
                     $echoed = ob_get_clean();
+                    echo '<div class="postbox"><div class="inside">';
                     if ( is_string( $result ) && '' !== $result ) {
                         echo $result;
                     } else {
                         echo $echoed;
                     }
+                    echo '</div></div>';
                     $rendered++;
                 } catch ( \Throwable $e ) {
                     ob_end_clean();
@@ -972,7 +987,7 @@ class DashboardWidgetRegistry {
                     }
                 }
             }
-            echo '</section>';
+            echo '</div></section>';
         }
 
         if ( 0 === $rendered ) {

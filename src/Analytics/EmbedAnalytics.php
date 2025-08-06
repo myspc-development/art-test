@@ -43,7 +43,10 @@ class EmbedAnalytics {
         register_rest_route(ARTPULSE_API_NAMESPACE, '/widgets/log', [
             'methods' => 'POST',
             'callback' => [self::class, 'log_endpoint'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function (WP_REST_Request $req): bool {
+                $nonce = $req->get_header('X-WP-Nonce');
+                return (bool) ($nonce && wp_verify_nonce($nonce, 'wp_rest') && current_user_can('read'));
+            },
         ]);
     }
 

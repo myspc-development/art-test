@@ -13,7 +13,8 @@ status: complete
 ### GET /wp-json/artpulse/v1/dashboard-config
 Returns:
 {
-  roles: { widgetId: [roles] },
+  widget_roles: { widgetId: [roles] },
+  role_widgets: { role: [widgetIds] },
   locked: [widgetIds]
 }
 

@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DashboardConfigController {
     public static function register(): void {
@@ -30,9 +31,18 @@ class DashboardConfigController {
     public static function get_config(WP_REST_Request $request): WP_REST_Response {
         $visibility = get_option('artpulse_widget_roles', []);
         $locked     = get_option('artpulse_locked_widgets', []);
+        $role_map   = DashboardWidgetRegistry::get_role_widget_map();
+        $role_widgets = [];
+        foreach ($role_map as $role => $widgets) {
+            $role_widgets[$role] = array_values(array_map(
+                static fn($w) => sanitize_key($w['id'] ?? ''),
+                $widgets
+            ));
+        }
 
         return rest_ensure_response([
             'widget_roles' => $visibility,
+            'role_widgets' => $role_widgets,
             'locked'       => array_values($locked),
         ]);
     }
