@@ -41,6 +41,7 @@ use ArtPulse\Rest\OrgRoleInviteController;
 use ArtPulse\Core\FeedAccessLogger;
 use ArtPulse\Admin\PortfolioToolsPage;
 use ArtPulse\Admin\PortfolioSyncLogsPage;
+use ArtPulse\Admin\RoleDashboardPage;
 use ArtPulse\Core\PortfolioSyncLogger;
 use ArtPulse\Core\OrgRoleMetaMigration;
 use ArtPulse\Rest\NearbyEventsController;
@@ -235,6 +236,7 @@ class Plugin
         \ArtPulse\Admin\WebhookLogsPage::register();
         EngagementDashboard::register();
         AdminDashboard::register();
+        RoleDashboardPage::register();
         \ArtPulse\Core\FrontendMembershipPage::register();
         \ArtPulse\Community\ProfileLinkRequestManager::register();
         \ArtPulse\Community\ArtistUpgradeRestController::register();

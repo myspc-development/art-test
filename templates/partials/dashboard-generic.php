@@ -3,7 +3,7 @@ use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-if (!isset($user_role) || !ap_user_can_edit_layout($user_role)) {
+if (!isset($user_role) || !current_user_can('read')) {
     wp_die(__('Access denied', 'artpulse'));
 }
 

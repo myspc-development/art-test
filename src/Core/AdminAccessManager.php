@@ -36,6 +36,9 @@ class AdminAccessManager
      */
     public static function maybe_redirect_admin(): void
     {
+        if (isset($_GET['page']) && $_GET['page'] === 'dashboard-role') {
+            return;
+        }
         if (
             wp_doing_ajax() ||
             !is_user_logged_in() ||
