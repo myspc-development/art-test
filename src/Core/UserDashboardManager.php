@@ -281,6 +281,9 @@ class UserDashboardManager
             'permission_callback' => function() {
                 return current_user_can('read');
             },
+            'args' => [
+                'role' => [ 'type' => 'string', 'required' => false ],
+            ],
         ]);
         }
 
@@ -325,6 +328,9 @@ class UserDashboardManager
                     'methods'  => 'GET',
                     'callback' => [ self::class, 'getDashboardLayout' ],
                     'permission_callback' => function() { return current_user_can('read'); },
+                    'args' => [
+                        'role' => [ 'type' => 'string', 'required' => false ],
+                    ],
                 ],
                 [
                     'methods'  => 'POST',
@@ -748,11 +754,16 @@ class UserDashboardManager
         return rest_ensure_response(['completed' => $completed]);
     }
 
-    public static function getDashboardLayout(): \WP_REST_Response
+    public static function getDashboardLayout(?\WP_REST_Request $request = null): \WP_REST_Response
     {
-        $uid   = get_current_user_id();
-        $layout_meta = get_user_meta($uid, 'ap_dashboard_layout', true);
-        $layout = [];
+        $role = '';
+        if ($request instanceof \WP_REST_Request) {
+            $role = sanitize_key((string) $request->get_param('role'));
+        }
+
+        $uid        = get_current_user_id();
+        $layout_meta = $role ? [] : get_user_meta($uid, 'ap_dashboard_layout', true);
+        $layout     = [];
         $visibility = [];
         if (is_array($layout_meta)) {
             if (isset($layout_meta[0]) && is_array($layout_meta[0])) {
@@ -762,8 +773,8 @@ class UserDashboardManager
                     if (!in_array($id, $valid, true)) {
                         continue;
                     }
-                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
-                    $layout[] = $id;
+                    $vis           = isset($item['visible']) ? (bool) $item['visible'] : true;
+                    $layout[]      = $id;
                     $visibility[$id] = $vis;
                 }
             } else {
@@ -772,10 +783,10 @@ class UserDashboardManager
         }
 
         if (empty($layout)) {
-            $roles  = wp_get_current_user()->roles;
+            $roles  = $role ? [$role] : wp_get_current_user()->roles;
             $config = get_option('ap_dashboard_widget_config', []);
             foreach ($roles as $r) {
-                if (empty($config[$r]) || ! is_array($config[$r])) {
+                if (empty($config[$r]) || !is_array($config[$r])) {
                     continue;
                 }
                 foreach ($config[$r] as $item) {
@@ -789,12 +800,12 @@ class UserDashboardManager
                     if (in_array($id, $layout, true)) {
                         continue;
                     }
-                    $layout[]      = $id;
+                    $layout[]        = $id;
                     $visibility[$id] = $vis;
                 }
             }
         }
-        if (empty($visibility)) {
+        if (empty($visibility) && !$role) {
             $vis_meta = get_user_meta($uid, 'ap_widget_visibility', true);
             if (is_array($vis_meta)) {
                 $visibility = array_map('boolval', $vis_meta);

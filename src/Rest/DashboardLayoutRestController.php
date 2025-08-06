@@ -27,6 +27,9 @@ class DashboardLayoutRestController
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'get_layout'],
                     'permission_callback' => fn() => current_user_can('read'),
+                    'args'                => [
+                        'role' => ['type' => 'string', 'required' => false],
+                    ],
                 ],
                 [
                     'methods'             => 'POST',
@@ -43,7 +46,7 @@ class DashboardLayoutRestController
 
     public static function get_layout(WP_REST_Request $request): WP_REST_Response
     {
-        return UserDashboardManager::getDashboardLayout();
+        return UserDashboardManager::getDashboardLayout($request);
     }
 
     public static function save_layout(WP_REST_Request $request): WP_REST_Response
