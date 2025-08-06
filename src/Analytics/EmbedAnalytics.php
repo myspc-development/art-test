@@ -40,7 +40,7 @@ class EmbedAnalytics {
     }
 
     public static function register_routes(): void {
-        register_rest_route('artpulse/v1', '/widgets/log', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/widgets/log', [
             'methods' => 'POST',
             'callback' => [self::class, 'log_endpoint'],
             'permission_callback' => '__return_true',

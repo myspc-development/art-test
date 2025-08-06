@@ -19,8 +19,8 @@ class ImportTemplateController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/import-template/(?P<post_type>[^/]+)')) {
-            register_rest_route('artpulse/v1', '/import-template/(?P<post_type>[^/]+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/import-template/(?P<post_type>[^/]+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/import-template/(?P<post_type>[^/]+)', [
                 [
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'get_template'],

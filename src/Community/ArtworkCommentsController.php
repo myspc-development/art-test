@@ -14,8 +14,8 @@ class ArtworkCommentsController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/artwork/(?P<id>\\d+)/comments')) {
-            register_rest_route('artpulse/v1', '/artwork/(?P<id>\\d+)/comments', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/artwork/(?P<id>\\d+)/comments')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/artwork/(?P<id>\\d+)/comments', [
                 [
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'list'],

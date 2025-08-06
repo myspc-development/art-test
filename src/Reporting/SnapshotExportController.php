@@ -22,24 +22,24 @@ class SnapshotExportController
             'org_id' => [ 'type' => 'integer', 'required' => true ],
             'period' => [ 'type' => 'string',  'required' => true ],
         ];
-        if (!ap_rest_route_registered('artpulse/v1', '/reporting/snapshot')) {
-            register_rest_route('artpulse/v1', '/reporting/snapshot', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/reporting/snapshot')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/reporting/snapshot', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'summary'],
             'permission_callback' => [self::class, 'can_export'],
             'args'                => $args,
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/reporting/snapshot.csv')) {
-            register_rest_route('artpulse/v1', '/reporting/snapshot.csv', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/reporting/snapshot.csv')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/reporting/snapshot.csv', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'csv'],
             'permission_callback' => [self::class, 'can_export'],
             'args'                => $args,
         ]);
         }
-        if (!ap_rest_route_registered('artpulse/v1', '/reporting/snapshot.pdf')) {
-            register_rest_route('artpulse/v1', '/reporting/snapshot.pdf', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/reporting/snapshot.pdf')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/reporting/snapshot.pdf', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'pdf'],
             'permission_callback' => [self::class, 'can_export'],

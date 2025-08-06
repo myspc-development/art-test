@@ -19,8 +19,8 @@ class CustomFieldsManager
      */
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/rsvp/custom-fields')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/rsvp/custom-fields', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/rsvp/custom-fields')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/rsvp/custom-fields', [
             'methods'  => ['GET', 'POST'],
             'callback' => [self::class, 'route_handler'],
             'permission_callback' => [self::class, 'check_permission'],

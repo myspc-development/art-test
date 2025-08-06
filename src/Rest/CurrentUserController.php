@@ -7,8 +7,8 @@ class CurrentUserController {
     }
 
     public static function register_routes(): void {
-        if (!ap_rest_route_registered('artpulse/v1', '/me')) {
-            register_rest_route('artpulse/v1', '/me', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/me')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/me', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_current_user'],
             'permission_callback' => function () {

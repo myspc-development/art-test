@@ -19,8 +19,8 @@ class WidgetSettingsRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/widget-settings/(?P<id>[a-z0-9_-]+)')) {
-            register_rest_route('artpulse/v1', '/widget-settings/(?P<id>[a-z0-9_-]+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/widget-settings/(?P<id>[a-z0-9_-]+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/widget-settings/(?P<id>[a-z0-9_-]+)', [
                 [
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'get_settings'],

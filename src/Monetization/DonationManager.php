@@ -14,8 +14,8 @@ class DonationManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/donations')) {
-            register_rest_route('artpulse/v1', '/donations', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/donations')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/donations', [
             'methods'  => 'POST',
             'callback' => [self::class, 'create_donation'],
             'permission_callback' => [self::class, 'check_logged_in'],

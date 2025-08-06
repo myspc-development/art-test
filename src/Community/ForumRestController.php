@@ -16,8 +16,8 @@ class ForumRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/forum/threads')) {
-            register_rest_route('artpulse/v1', '/forum/threads', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/forum/threads')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/forum/threads', [
                 [
                     'methods'             => WP_REST_Server::READABLE,
                     'callback'            => [self::class, 'list_threads'],
@@ -35,8 +35,8 @@ class ForumRestController
             ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments')) {
-            register_rest_route('artpulse/v1', '/forum/thread/(?P<id>\\d+)/comments', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/forum/thread/(?P<id>\\d+)/comments')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/forum/thread/(?P<id>\\d+)/comments', [
                 [
                     'methods'             => WP_REST_Server::READABLE,
                     'callback'            => [self::class, 'get_comments'],

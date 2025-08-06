@@ -21,8 +21,8 @@ class NearbyEventsController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/events/nearby')) {
-            register_rest_route('artpulse/v1', '/events/nearby', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/events/nearby')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/events/nearby', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_nearby'],
             'permission_callback' => '__return_true',

@@ -14,8 +14,8 @@ class OrgDashboardManager
 
     public static function register_routes()
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/org/dashboard')) {
-            register_rest_route('artpulse/v1', '/org/dashboard', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/org/dashboard')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/org/dashboard', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_dashboard_data'],
             'permission_callback' => function() {

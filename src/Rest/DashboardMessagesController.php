@@ -7,8 +7,8 @@ class DashboardMessagesController {
     }
 
     public static function register_routes(): void {
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard/messages')) {
-            register_rest_route('artpulse/v1', '/dashboard/messages', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/dashboard/messages')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/dashboard/messages', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_messages'],
             'permission_callback' => function () { return current_user_can('read'); },

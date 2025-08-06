@@ -139,7 +139,7 @@ class MembershipManager
      */
     public static function registerRestRoutes()
     {
-        register_rest_route('artpulse/v1', '/stripe-webhook', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/stripe-webhook', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'handleStripeWebhook' ],
             'permission_callback' => function () {
@@ -150,7 +150,7 @@ class MembershipManager
             },
         ]);
 
-        register_rest_route('artpulse/v1', '/membership/pause', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/membership/pause', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'pauseMembership' ],
             'permission_callback' => function () {
@@ -161,7 +161,7 @@ class MembershipManager
             },
         ]);
 
-        register_rest_route('artpulse/v1', '/membership/resume', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/membership/resume', [
             'methods'             => 'POST',
             'callback'            => [ self::class, 'resumeMembership' ],
             'permission_callback' => function () {
@@ -172,7 +172,7 @@ class MembershipManager
             },
         ]);
 
-        register_rest_route('artpulse/v1', '/membership/levels', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/membership/levels', [
             [
                 'methods'             => 'GET',
                 'callback'            => [ self::class, 'getLevelsEndpoint' ],
@@ -185,7 +185,7 @@ class MembershipManager
             ],
         ]);
 
-        register_rest_route('artpulse/v1', '/membership/levels/(?P<level>[\\w-]+)', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/membership/levels/(?P<level>[\\w-]+)', [
             'methods'             => 'DELETE',
             'callback'            => [ self::class, 'deleteLevel' ],
             'permission_callback' => [ self::class, 'checkManageMemberships' ],

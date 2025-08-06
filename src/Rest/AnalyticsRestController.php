@@ -15,8 +15,8 @@ class AnalyticsRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/analytics/trends')) {
-            register_rest_route('artpulse/v1', '/analytics/trends', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/analytics/trends')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/analytics/trends', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_trends'],
             'permission_callback' => function () {
@@ -29,8 +29,8 @@ class AnalyticsRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/analytics/export')) {
-            register_rest_route('artpulse/v1', '/analytics/export', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/analytics/export')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/analytics/export', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'export_csv'],
             'permission_callback' => function () {

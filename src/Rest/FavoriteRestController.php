@@ -19,8 +19,8 @@ class FavoriteRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/favorite')) {
-            register_rest_route('artpulse/v1', '/favorite', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/favorite')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/favorite', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'handle_request'],
             'permission_callback' => function () {

@@ -17,8 +17,8 @@ class TipManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/artist/(?P<id>\\d+)/tip')) {
-            register_rest_route('artpulse/v1', '/artist/(?P<id>\\d+)/tip', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/artist/(?P<id>\\d+)/tip')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/artist/(?P<id>\\d+)/tip', [
             'methods'  => 'POST',
             'callback' => [self::class, 'record_tip'],
             'permission_callback' => [self::class, 'check_logged_in'],

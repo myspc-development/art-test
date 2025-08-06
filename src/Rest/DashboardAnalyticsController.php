@@ -15,8 +15,8 @@ class DashboardAnalyticsController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/dashboard-analytics')) {
-            register_rest_route('artpulse/v1', '/dashboard-analytics', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/dashboard-analytics')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/dashboard-analytics', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'log_event'],
             'permission_callback' => [self::class, 'check_permissions'],

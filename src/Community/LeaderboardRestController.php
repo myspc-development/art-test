@@ -13,16 +13,16 @@ class LeaderboardRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/leaderboards/most-helpful')) {
-            register_rest_route('artpulse/v1', '/leaderboards/most-helpful', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/leaderboards/most-helpful')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/leaderboards/most-helpful', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'most_helpful'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/leaderboards/most-upvoted')) {
-            register_rest_route('artpulse/v1', '/leaderboards/most-upvoted', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/leaderboards/most-upvoted')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/leaderboards/most-upvoted', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'most_upvoted'],
             'permission_callback' => fn() => is_user_logged_in(),

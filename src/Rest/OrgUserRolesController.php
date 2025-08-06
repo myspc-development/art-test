@@ -15,8 +15,8 @@ class OrgUserRolesController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/orgs/(?P<id>\d+)/roles')) {
-            register_rest_route('artpulse/v1', '/orgs/(?P<id>\d+)/roles', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/orgs/(?P<id>\d+)/roles')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/orgs/(?P<id>\d+)/roles', [
                 [
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'list_roles'],
@@ -30,16 +30,16 @@ class OrgUserRolesController
             ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/orgs/(?P<id>\d+)/roles/(?P<user_id>\d+)')) {
-            register_rest_route('artpulse/v1', '/orgs/(?P<id>\d+)/roles/(?P<user_id>\d+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/orgs/(?P<id>\d+)/roles/(?P<user_id>\d+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/orgs/(?P<id>\d+)/roles/(?P<user_id>\d+)', [
             'methods'             => 'DELETE',
             'callback'            => [self::class, 'remove_role'],
             'permission_callback' => [self::class, 'can_manage'],
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/users/me/orgs')) {
-            register_rest_route('artpulse/v1', '/users/me/orgs', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/users/me/orgs')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/users/me/orgs', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'my_orgs'],
             'permission_callback' => function () { return is_user_logged_in(); },

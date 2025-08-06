@@ -10,7 +10,7 @@ class DirectoryController
     public static function register_routes(): void
     {
 
-        register_rest_route('artpulse/v1', '/events', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/events', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_events'],
             'permission_callback' => function() {

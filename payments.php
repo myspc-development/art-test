@@ -6,8 +6,8 @@ if (!defined('ABSPATH')) {
 }
 
 add_action('rest_api_init', function () {
-    if (!ap_rest_route_registered('artpulse/v1', '/payment/intent')) {
-        register_rest_route('artpulse/v1', '/payment/intent', [
+    if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/payment/intent')) {
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/payment/intent', [
         'methods'  => 'POST',
         'callback' => 'ap_create_payment_intent',
         'permission_callback' => function () {
@@ -19,8 +19,8 @@ add_action('rest_api_init', function () {
     ]);
     }
 
-    if (!ap_rest_route_registered('artpulse/v1', '/payment/checkout')) {
-        register_rest_route('artpulse/v1', '/payment/checkout', [
+    if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/payment/checkout')) {
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/payment/checkout', [
         'methods'  => 'POST',
         'callback' => 'ap_create_checkout_session',
         'permission_callback' => function () {

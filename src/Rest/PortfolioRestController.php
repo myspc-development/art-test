@@ -15,8 +15,8 @@ class PortfolioRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/portfolio/(?P<user_id>\d+)')) {
-            register_rest_route('artpulse/v1', '/portfolio/(?P<user_id>\d+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/portfolio/(?P<user_id>\d+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/portfolio/(?P<user_id>\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'get_portfolio'],
             'permission_callback' => function () {

@@ -43,8 +43,8 @@ class DirectoryManager {
     }
 
     public static function register_routes() {
-        if (!ap_rest_route_registered('artpulse/v1', '/filter')) {
-            register_rest_route('artpulse/v1', '/filter', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/filter')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/filter', [
             'methods'             => 'GET',
             'callback'            => [ self::class, 'handleFilter' ],
             'permission_callback' => function() {

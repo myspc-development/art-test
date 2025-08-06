@@ -17,8 +17,8 @@ class ArtistUpgradeRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/artist-upgrade')) {
-            register_rest_route('artpulse/v1', '/artist-upgrade', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/artist-upgrade')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/artist-upgrade', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle_request'],
             'permission_callback' => function () {

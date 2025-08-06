@@ -24,8 +24,8 @@ class BioSummaryRestController
      */
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/bio-summary')) {
-            register_rest_route('artpulse/v1', '/bio-summary', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/bio-summary')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/bio-summary', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'generate_summary'],
             'permission_callback' => static fn() => current_user_can('edit_posts'),

@@ -18,8 +18,8 @@ class RsvpRestController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/rsvp')) {
-            register_rest_route('artpulse/v1', '/rsvp', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/rsvp')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/rsvp', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'join'],
             'permission_callback' => function () {
@@ -34,8 +34,8 @@ class RsvpRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/rsvp/cancel')) {
-            register_rest_route('artpulse/v1', '/rsvp/cancel', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/rsvp/cancel')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/rsvp/cancel', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'cancel'],
             'permission_callback' => function () {
@@ -50,8 +50,8 @@ class RsvpRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/waitlist/remove')) {
-            register_rest_route('artpulse/v1', '/waitlist/remove', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/waitlist/remove')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/waitlist/remove', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'remove_waitlist'],
             'permission_callback' => function () {
@@ -66,8 +66,8 @@ class RsvpRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/attendees')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/attendees', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/attendees')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/attendees', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_attendees'],
             'permission_callback' => [self::class, 'check_permissions'],
@@ -75,8 +75,8 @@ class RsvpRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\d+)/attendees/export')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\d+)/attendees/export', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/attendees/export')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\d+)/attendees/export', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'export_attendees'],
             'permission_callback' => [self::class, 'check_permissions'],
@@ -84,8 +84,8 @@ class RsvpRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/attended')) {
-            register_rest_route('artpulse/v1', '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/attended', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/attended')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/attended', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'toggle_attended'],
             'permission_callback' => [self::class, 'check_permissions'],
@@ -96,8 +96,8 @@ class RsvpRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/remove')) {
-            register_rest_route('artpulse/v1', '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/remove', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/remove')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/remove', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'remove_attendee'],
             'permission_callback' => [self::class, 'check_permissions'],
@@ -108,8 +108,8 @@ class RsvpRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<event_id>\d+)/email-rsvps')) {
-            register_rest_route('artpulse/v1', '/event/(?P<event_id>\d+)/email-rsvps', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<event_id>\d+)/email-rsvps')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<event_id>\d+)/email-rsvps', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'email_rsvps'],
             'permission_callback' => [self::class, 'check_permissions'],
@@ -119,8 +119,8 @@ class RsvpRestController
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/message')) {
-            register_rest_route('artpulse/v1', '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/message', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/message')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/message', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'email_attendee'],
             'permission_callback' => [self::class, 'check_permissions'],

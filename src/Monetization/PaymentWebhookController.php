@@ -13,8 +13,8 @@ class PaymentWebhookController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/payment/webhook')) {
-            register_rest_route('artpulse/v1', '/payment/webhook', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/payment/webhook')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/payment/webhook', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle'],
             'permission_callback' => function() {

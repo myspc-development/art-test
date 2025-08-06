@@ -36,16 +36,16 @@ class AuctionManager
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/bids')) {
-            register_rest_route('artpulse/v1', '/bids', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/bids')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/bids', [
             'methods'  => 'POST',
             'callback' => [self::class, 'place_bid'],
             'permission_callback' => fn() => is_user_logged_in(),
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/bids/(?P<artwork_id>\\d+)')) {
-            register_rest_route('artpulse/v1', '/bids/(?P<artwork_id>\\d+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/bids/(?P<artwork_id>\\d+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/bids/(?P<artwork_id>\\d+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_bids'],
             'permission_callback' => function () {
@@ -57,8 +57,8 @@ class AuctionManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/auctions/live')) {
-            register_rest_route('artpulse/v1', '/auctions/live', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/auctions/live')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/auctions/live', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_live'],
             'permission_callback' => function () {

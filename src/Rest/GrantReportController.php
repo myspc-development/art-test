@@ -15,8 +15,8 @@ class GrantReportController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/orgs/(?P<id>\\d+)/grant-report')) {
-            register_rest_route('artpulse/v1', '/orgs/(?P<id>\\d+)/grant-report', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/orgs/(?P<id>\\d+)/grant-report')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/orgs/(?P<id>\\d+)/grant-report', [
             'methods'  => 'GET',
             'callback' => [self::class, 'export'],
             'permission_callback' => function () { return current_user_can('read'); },

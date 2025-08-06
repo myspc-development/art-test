@@ -21,8 +21,8 @@ class TicketManager
      */
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/tickets')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/tickets', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/tickets')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/tickets', [
             'methods'  => 'GET',
             'callback' => [self::class, 'list_tickets'],
             'permission_callback' => [self::class, 'check_logged_in'],
@@ -30,8 +30,8 @@ class TicketManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/buy-ticket')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/buy-ticket', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/buy-ticket')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/buy-ticket', [
             'methods'  => 'POST',
             'callback' => [self::class, 'buy_ticket'],
             'permission_callback' => [self::class, 'check_logged_in'],
@@ -39,16 +39,16 @@ class TicketManager
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/event/(?P<id>\\d+)/ticket-tier')) {
-            register_rest_route('artpulse/v1', '/event/(?P<id>\\d+)/ticket-tier', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/ticket-tier')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/event/(?P<id>\\d+)/ticket-tier', [
             'methods'             => 'POST',
             'callback'            => [self::class, 'create_ticket_tier'],
             'permission_callback' => [self::class, 'check_manage'],
         ]);
         }
 
-        if (!ap_rest_route_registered('artpulse/v1', '/ticket-tier/(?P<tier_id>\\d+)')) {
-            register_rest_route('artpulse/v1', '/ticket-tier/(?P<tier_id>\\d+)', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/ticket-tier/(?P<tier_id>\\d+)')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/ticket-tier/(?P<tier_id>\\d+)', [
                 [
                     'methods'             => 'PUT',
                     'callback'            => [self::class, 'update_ticket_tier'],

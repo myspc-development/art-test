@@ -7,8 +7,8 @@ class DashboardPreviewController {
     }
 
     public static function register_routes(): void {
-        if (!ap_rest_route_registered('artpulse/v1', '/preview/dashboard')) {
-            register_rest_route('artpulse/v1', '/preview/dashboard', [
+        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/preview/dashboard')) {
+            register_rest_route(ARTPULSE_API_NAMESPACE, '/preview/dashboard', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_preview'],
             'permission_callback' => function () {

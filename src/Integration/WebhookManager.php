@@ -19,7 +19,7 @@ class WebhookManager
 
     public static function register_routes(): void
     {
-        register_rest_route('artpulse/v1', '/webhooks/(?P<id>\d+)', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/webhooks/(?P<id>\d+)', [
             'methods'             => ['GET', 'POST'],
             'callback'            => [self::class, 'handle_webhooks'],
             'permission_callback' => [self::class, 'check_manage_org'],
@@ -28,7 +28,7 @@ class WebhookManager
             ],
         ]);
 
-        register_rest_route('artpulse/v1', '/webhooks/(?P<id>\d+)/(?P<hid>\d+)', [
+        register_rest_route(ARTPULSE_API_NAMESPACE, '/webhooks/(?P<id>\d+)/(?P<hid>\d+)', [
             'methods'             => ['PUT', 'DELETE'],
             'callback'            => [self::class, 'handle_webhook_item'],
             'permission_callback' => [self::class, 'check_manage_org'],
