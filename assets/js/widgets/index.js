@@ -36,25 +36,25 @@ export default [
     id: 'nearby_events_map',
     title: __('Nearby Events Map', 'artpulse'),
     component: NearbyEventsMapWidget,
-    roles: ['member']
+    roles: ['member', 'artist']
   },
   {
     id: 'my_favorites',
     title: __('My Favorites', 'artpulse'),
     component: MyFavoritesWidget,
-    roles: ['member']
+    roles: ['member', 'artist']
   },
   {
     id: 'activity_feed',
     title: __('Activity Feed', 'artpulse'),
     component: ActivityFeedWidget,
-    roles: ['member']
+    roles: ['member', 'artist', 'organization']
   },
   {
     id: 'my_upcoming_events',
     title: __('My Upcoming Events', 'artpulse'),
     component: MyUpcomingEventsWidget,
-    roles: ['member']
+    roles: ['member', 'artist']
   },
   {
     id: 'news_feed',
@@ -90,7 +90,7 @@ export default [
     id: 'sample_events',
     title: __('Sample Events', 'artpulse'),
     component: EventsWidget,
-    roles: ['member']
+    roles: ['member', 'artist', 'organization']
   },
   {
     id: 'welcome_box',
@@ -102,7 +102,7 @@ export default [
     id: 'widget_events',
     title: __('Upcoming Events', 'artpulse'),
     component: WidgetEventsWidget,
-    roles: ['member']
+    roles: ['member', 'organization']
   },
   {
     id: 'widget_favorites',
