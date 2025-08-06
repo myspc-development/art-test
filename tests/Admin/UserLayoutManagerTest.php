@@ -148,7 +148,7 @@ class UserLayoutManagerTest extends TestCase
         $layout = UserLayoutManager::get_layout(2);
         $expected = array_map(
             fn($id) => ['id' => $id, 'visible' => true],
-            array_column(DashboardWidgetRegistry::get_definitions(), 'id')
+            \ArtPulse\Core\DashboardController::get_widgets_for_role('subscriber')
         );
         $this->assertSame($expected, $layout);
 
@@ -202,7 +202,7 @@ class UserLayoutManagerTest extends TestCase
         self::$options['ap_dashboard_widget_config'] = [];
         $expected = array_map(
             fn($id) => ['id' => $id, 'visible' => true],
-            array_column(DashboardWidgetRegistry::get_definitions(), 'id')
+            \ArtPulse\Core\DashboardController::get_widgets_for_role('subscriber')
         );
         $this->assertSame($expected, UserLayoutManager::get_role_layout('subscriber')['layout']);
     }
@@ -247,8 +247,9 @@ class UserLayoutManagerTest extends TestCase
             ],
         ];
 
-        $layout = UserLayoutManager::get_role_layout('subscriber');
-        $this->assertSame([['id' => 'good', 'visible' => true]], $layout);
+        $result = UserLayoutManager::get_role_layout('subscriber');
+        $this->assertSame([['id' => 'good', 'visible' => true]], $result['layout']);
+        $this->assertSame(['missing', 'broken'], $result['logs']);
 
         $this->assertNotEmpty(self::$logs);
         $log = self::$logs[0];
@@ -296,7 +297,7 @@ class UserLayoutManagerTest extends TestCase
         $this->assertArrayNotHasKey('subscriber', self::$options['ap_dashboard_widget_config']);
     }
 
-    public function test_default_role_layout_omits_manager_widget(): void
+    public function test_default_role_layout_for_unknown_role_is_empty(): void
     {
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
@@ -307,10 +308,7 @@ class UserLayoutManagerTest extends TestCase
         DashboardWidgetRegistry::register('foo', 'Foo', '', '', '__return_null');
 
         $layout = UserLayoutManager::get_role_layout('subscriber')['layout'];
-        $ids = array_column($layout, 'id');
-
-        $this->assertContains('foo', $ids);
-        $this->assertNotContains('artpulse_dashboard_widget', $ids);
+        $this->assertSame([], $layout);
     }
 }
 }

@@ -17,6 +17,7 @@ Below is a summary of built in dashboard widgets. Custom plugins can register ad
 | artist_revenue_summary | Artist Revenue Summary | commerce | artist | Revenue totals from tickets and donations. |
 | artist_spotlight | Artist Spotlight | community | artist | Recent mentions and highlights. |
 | artpulse_analytics_widget | Organization Analytics | analytics | organization | Basic traffic and engagement metrics. |
+| audience_crm | Audience CRM | engagement | organization | Manage organization contacts. |
 | cat_fact | Cat Fact | fun | member, artist, organization | Random cat facts from catfact.ninja. |
 | creator-tips | Creator Tips | engagement | member, artist, organization | Contextual suggestions for creators. |
 | dashboard_feedback | Dashboard Feedback | engagement | member, artist, organization | Send feedback about your dashboard. |
@@ -32,6 +33,10 @@ Below is a summary of built in dashboard widgets. Custom plugins can register ad
 | my_rsvps | My RSVPs | events | member | Events you have RSVP'd to. |
 | my_shared_events_activity | My Shared Events | engagement | member | Events you've shared and engagement. |
 | notifications | Notifications | engagement | member, artist, organization | Recent notifications. |
+| org_approval_center | Approval Center | general | organization | Review pending items awaiting approval. |
+| org_broadcast_box | Broadcast Box | engagement | organization | Send messages to followers. |
+| org_event_overview | Event Overview | events | organization | Overview of upcoming organization events. |
+| org_ticket_insights | Ticket Insights | analytics | organization | Analyze ticket sales and attendance. |
 | recommended_for_you | Recommended For You | recommended | member | Suggestions based on your interests. |
 | role-spotlight | Featured Spotlight | general | member, artist, organization | Role based spotlights. |
 | rsvp_stats | RSVP Stats | events | organization, member | RSVP summary for your events. |
