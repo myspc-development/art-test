@@ -14,7 +14,7 @@ class EventChatPostController extends WP_REST_Controller
      *
      * @var string
      */
-    protected $namespace = 'artpulse/v1';
+    protected $namespace = ARTPULSE_API_NAMESPACE;
 
     public static function register(): void
     {
@@ -24,15 +24,16 @@ class EventChatPostController extends WP_REST_Controller
 
     public function register_routes(): void
     {
-        register_rest_route($this->namespace, '/event/(?P<id>\d+)/chat', [
-            'methods'             => WP_REST_Server::CREATABLE,
-            'callback'            => [$this, 'create_item'],
-            'permission_callback' => [$this, 'permissions'],
-            'args'                => [
-                'id'      => ['validate_callback' => 'is_numeric'],
-                'content' => ['type' => 'string', 'required' => true],
-            ],
-        ]);
+        // Duplicate route /event/(?P<id>\d+)/chat (POST) removed; handled in EventChatController.php
+        // register_rest_route($this->namespace, '/event/(?P<id>\d+)/chat', [
+        //     'methods'             => WP_REST_Server::CREATABLE,
+        //     'callback'            => [$this, 'create_item'],
+        //     'permission_callback' => [$this, 'permissions'],
+        //     'args'                => [
+        //         'id'      => ['validate_callback' => 'is_numeric'],
+        //         'content' => ['type' => 'string', 'required' => true],
+        //     ],
+        // ]);
 
         register_rest_route($this->namespace, '/chat/(?P<id>\d+)/reaction', [
             'methods'             => WP_REST_Server::CREATABLE,
@@ -67,23 +68,6 @@ class EventChatPostController extends WP_REST_Controller
     public function moderator_check(WP_REST_Request $request)
     {
         return current_user_can('moderate_comments');
-    }
-
-    /** @param WP_REST_Request $request */
-    public function create_item($request)
-    {
-        $event_id = absint($request['id']);
-        if (!$event_id || get_post_type($event_id) !== 'artpulse_event') {
-            return new WP_Error('invalid_event', 'Invalid event.', ['status' => 404]);
-        }
-        $content = sanitize_text_field($request['content']);
-        if ($content === '') {
-            return new WP_Error('empty_content', 'Message content required.', ['status' => 400]);
-        }
-        $user_id = get_current_user_id();
-        \ArtPulse\DB\Chat\maybe_install_tables();
-        $msg = \ArtPulse\DB\Chat\insert_message($event_id, $user_id, $content);
-        return rest_ensure_response($msg);
     }
 
     public function add_reaction(WP_REST_Request $request): WP_REST_Response|WP_Error

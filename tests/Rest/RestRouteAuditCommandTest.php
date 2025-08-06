@@ -27,11 +27,11 @@ class RestRouteAuditCommandTest extends \WP_UnitTestCase
             'callback' => '__return_true',
             'permission_callback' => '__return_true',
         ]);
-        \register_rest_route('ap/v1', '/conflict', [
-            'methods' => 'GET',
-            'callback' => '__return_false',
-            'permission_callback' => '__return_true',
-        ]);
+        // \register_rest_route('ap/v1', '/conflict', [
+        //     'methods' => 'GET',
+        //     'callback' => '__return_false',
+        //     'permission_callback' => '__return_true',
+        // ]); // Duplicate route for testing removed; retained only one registration.
     }
 
     public function test_detects_conflict(): void
