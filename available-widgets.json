@@ -90,7 +90,6 @@
         "id": "embed_tool",
         "callback": "EmbedToolWidget.jsx",
         "allowed_roles": [
-            "artist",
             "organization"
         ]
     },
@@ -105,7 +104,8 @@
         "id": "my_favorites",
         "callback": "assets/js/widgets/MyFavoritesWidget.jsx",
         "allowed_roles": [
-            "member"
+            "member",
+            "artist"
         ]
     },
     {
@@ -120,7 +120,8 @@
         "id": "nearby_events_map",
         "callback": "assets/js/widgets/NearbyEventsMapWidget.jsx",
         "allowed_roles": [
-            "member"
+            "member",
+            "artist"
         ]
     },
     {
@@ -204,7 +205,6 @@
         "id": "qa_checklist",
         "callback": "widgets/QAChecklistWidget.php",
         "allowed_roles": [
-            "artist",
             "member"
         ]
     },

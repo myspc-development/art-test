@@ -21,8 +21,24 @@ interface WindowWithDashboard extends Window {
   wpApiSettings?: { root: string; nonce: string };
 }
 
+const addHeadingId = (id: string, html: string) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const heading = doc.querySelector('h1, h2, h3, h4, h5, h6');
+  if (heading && !heading.id) {
+    heading.id = `${id}-heading`;
+  }
+  return doc.body.innerHTML;
+};
+
 const DashboardCard: React.FC<{ id: string; visible?: boolean; children?: React.ReactNode }> = ({ id, visible = true, children }) => (
-  <div className="ap-widget-card" data-id={id} data-visible={visible ? '1' : '0'}>
+  <div
+    className="ap-widget-card"
+    data-id={id}
+    data-visible={visible ? '1' : '0'}
+    role="region"
+    aria-labelledby={`${id}-heading`}
+  >
     <span className="drag-handle" role="button" tabIndex={0} aria-label="Move widget"></span>
     {children}
   </div>
@@ -30,7 +46,10 @@ const DashboardCard: React.FC<{ id: string; visible?: boolean; children?: React.
 
 const RoleDashboard: React.FC = () => {
   const { RoleDashboardData = { widgets: [], currentUser: {} } } = window as WindowWithDashboard;
-  const allowed = useFilteredWidgets(RoleDashboardData.widgets, RoleDashboardData.currentUser);
+  const { widgets: allowed, error: configError, retry: retryConfig } = useFilteredWidgets(
+    RoleDashboardData.widgets,
+    RoleDashboardData.currentUser
+  );
   const [htmlMap, setHtmlMap] = useState<Record<string, string>>({});
   const [errorMap, setErrorMap] = useState<Record<string, boolean>>({});
 
@@ -43,12 +62,11 @@ const RoleDashboard: React.FC = () => {
     })
       .then(res => res.text())
       .then(html => {
-        setHtmlMap(prev => ({ ...prev, [id]: html }));
+        setHtmlMap(prev => ({ ...prev, [id]: addHeadingId(id, html) }));
         setErrorMap(prev => ({ ...prev, [id]: false }));
       })
       .catch(err => {
         console.error('Failed to load widget', id, err);
-        alert('Failed to load widget.');
         setErrorMap(prev => ({ ...prev, [id]: true }));
       });
   };
@@ -58,13 +76,20 @@ const RoleDashboard: React.FC = () => {
       if (widget.restOnly && !htmlMap[widget.id] && !errorMap[widget.id]) {
         fetchWidgetHtml(widget.id);
       } else if (!widget.restOnly && widget.html && !htmlMap[widget.id]) {
-        setHtmlMap(prev => ({ ...prev, [widget.id]: widget.html as string }));
+        setHtmlMap(prev => ({ ...prev, [widget.id]: addHeadingId(widget.id, widget.html as string) }));
       }
     });
   }, [allowed, restRoot, nonce, htmlMap, errorMap]);
 
   return (
     <>
+      {configError && (
+        <div className="ap-error" role="alert">
+          <p>{configError}</p>
+          <button onClick={retryConfig}>Retry</button>
+        </div>
+      )}
+      {allowed.length === 0 && <p>No widgets available for your role.</p>}
       {allowed.map(widget => (
         <DashboardCard key={widget.id} id={widget.id}>
           {errorMap[widget.id] ? (

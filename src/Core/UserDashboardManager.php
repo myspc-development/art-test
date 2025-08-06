@@ -1059,6 +1059,22 @@ class UserDashboardManager
             $user_role = 'artist';
         }
 
+        $widget_defs = array_map(
+            static fn($id) => ['id' => $id, 'restOnly' => true],
+            array_keys($widgets)
+        );
+        wp_localize_script(
+            'art-widgets',
+            'RoleDashboardData',
+            [
+                'widgets' => array_values($widget_defs),
+                'currentUser' => [
+                    'role'  => $user_role,
+                    'roles' => $roles_list,
+                ],
+            ]
+        );
+
         ob_start();
         \ap_render_dashboard([$user_role]);
         $dashboard_html = ob_get_clean();
