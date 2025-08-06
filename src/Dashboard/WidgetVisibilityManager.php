@@ -93,6 +93,7 @@ class WidgetVisibilityManager
      * - exclude_roles: list or map of roles that should not see the widget. When
      *   using an associative array the value may include `notice` and `type` for
      *   per-role admin messages.
+     * - allowed_roles: explicit list of roles permitted to view the widget.
      *
      * @return array Filtered visibility configuration.
      */
@@ -108,7 +109,7 @@ class WidgetVisibilityManager
             'artpulse_analytics_widget' => ['capability' => 'view_analytics'],
         ];
 
-        // Build exclude lists from the registered widget → role map.
+        // Build role-based visibility from the registered widget → role map.
         if (class_exists(\ArtPulse\Core\DashboardWidgetRegistry::class)) {
             \ArtPulse\Core\DashboardWidgetRegistry::init();
             $map   = \ArtPulse\Core\DashboardWidgetRegistry::get_role_widget_map();
@@ -127,10 +128,14 @@ class WidgetVisibilityManager
             }
 
             foreach ($allowed as $id => $allow_roles) {
-                $rule = $rules[$id] ?? [];
-                $exclude = array_values(array_diff($roles, array_keys($allow_roles)));
+                $rule      = $rules[$id] ?? [];
+                $allow     = array_keys($allow_roles);
+                $exclude   = array_values(array_diff($roles, $allow));
                 if ($exclude) {
                     $rule['exclude_roles'] = $exclude;
+                }
+                if ($allow) {
+                    $rule['allowed_roles'] = $allow;
                 }
                 if (!empty($defs[$id]['capability'])) {
                     $rule['capability'] = sanitize_text_field($defs[$id]['capability']);
@@ -157,6 +162,14 @@ class WidgetVisibilityManager
                     $roles = array_values(array_filter($roles));
                     if ($roles) {
                         $merged['exclude_roles'] = $roles;
+                    }
+                }
+
+                if (!empty($config['allowed_roles'])) {
+                    $roles = array_map('sanitize_key', (array) $config['allowed_roles']);
+                    $roles = array_values(array_filter($roles));
+                    if ($roles) {
+                        $merged['allowed_roles'] = $roles;
                     }
                 }
 
@@ -207,10 +220,15 @@ class WidgetVisibilityManager
         foreach ($rules as $widget => $config) {
             $cap          = $config['capability']    ?? null;
             $exclude      = $config['exclude_roles'] ?? [];
+            $allowed      = $config['allowed_roles'] ?? [];
             $notice_roles = is_array($exclude) ? $exclude : [];
 
             $hide = false;
             if ($cap && !user_can($current_user, $cap)) {
+                $hide = true;
+            }
+
+            if ($allowed && empty(array_intersect($roles, (array) $allowed))) {
                 $hide = true;
             }
 

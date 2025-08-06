@@ -58,14 +58,30 @@ namespace {
             return MockStorage::$users[$uid] ?? null;
         }
     }
+    if (!class_exists('WP_User')) {
+        class WP_User {
+            public $ID;
+            public $roles;
+            public function __construct($ID = 0, $roles = []) {
+                $this->ID = $ID;
+                $this->roles = $roles;
+            }
+            public function exists() { return true; }
+        }
+    }
     if (!function_exists('current_user_can')) {
         function current_user_can($cap) {
             return in_array($cap, MockStorage::$current_roles, true);
         }
     }
+    if (!function_exists('user_can')) {
+        function user_can($user, $cap) {
+            return in_array($cap, MockStorage::$current_roles, true);
+        }
+    }
     if (!function_exists('wp_get_current_user')) {
         function wp_get_current_user() {
-            return (object)['roles' => MockStorage::$current_roles];
+            return new WP_User(1, MockStorage::$current_roles);
         }
     }
     if (!function_exists('get_current_user_id')) {
@@ -148,6 +164,24 @@ namespace {
     }
     if (!function_exists('get_current_screen')) {
         function get_current_screen() { return (object)['id' => MockStorage::$screen]; }
+    }
+    if (!function_exists('add_filter')) {
+        function add_filter($tag, $func, $priority = 10, $accepted_args = 1) {}
+    }
+    if (!function_exists('apply_filters')) {
+        function apply_filters($tag, $value, ...$args) { return $value; }
+    }
+    if (!function_exists('add_action')) {
+        function add_action($tag, $func, $priority = 10, $accepted_args = 1) {}
+    }
+    if (!function_exists('do_action')) {
+        function do_action($tag, ...$args) {}
+    }
+    if (!function_exists('__')) {
+        function __($text, $domain = null) { return $text; }
+    }
+    if (!function_exists('did_action')) {
+        function did_action($tag) { return 0; }
     }
     if (!function_exists('add_query_arg')) {
         function add_query_arg(...$args) { return '#'; }

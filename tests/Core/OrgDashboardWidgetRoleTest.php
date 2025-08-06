@@ -3,8 +3,14 @@ namespace ArtPulse\Core\Tests {
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
 
+if (!defined('ABSPATH')) {
+    define('ABSPATH', __DIR__ . '/');
+}
+
 require_once __DIR__ . '/../../src/Core/DashboardController.php';
 require_once __DIR__ . '/../../src/Dashboard/WidgetVisibilityManager.php';
+require_once __DIR__ . '/../../includes/widget-loader.php';
+require_once __DIR__ . '/../../src/Core/DashboardWidgetRegistry.php';
 
 use ArtPulse\Tests\Stubs\MockStorage;
 
@@ -127,6 +133,18 @@ class OrgDashboardWidgetRoleTest extends TestCase {
         \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
         $ids = array_column(MockStorage::$removed, 0);
         $this->assertContains('ap_donor_activity', $ids);
+    }
+
+    public function test_saved_rules_allowed_roles_only(): void {
+        MockStorage::$options['artpulse_widget_roles'] = [
+            'custom_widget' => [
+                'allowed_roles' => ['organization'],
+            ],
+        ];
+        MockStorage::$current_roles = ['member'];
+        \ArtPulse\Dashboard\WidgetVisibilityManager::filter_visible_widgets();
+        $ids = array_column(MockStorage::$removed, 0);
+        $this->assertContains('custom_widget', $ids);
     }
 }
 }
