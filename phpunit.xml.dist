@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/php/bootstrap.php"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="tests/bootstrap.php"
          colors="true"
-         verbose="true"
-         backupGlobals="false">
+         failOnRisky="true"
+         failOnWarning="true"
+         executionOrder="random"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd">
     <php>
-        <env name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
+        <env name="WP_PHPUNIT__TESTS_CONFIG" value="wp-tests-config.php"/>
     </php>
     <testsuites>
-        <testsuite name="Plugin">
-            <directory path="tests/php" suffix="-test.php"/>
+        <testsuite name="ArtPulse Widget Test Suite">
+            <directory>./tests/phpunit</directory>
         </testsuite>
     </testsuites>
+    <coverage>
+        <include>
+            <directory suffix=".php">widgets</directory>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <html outputDirectory="coverage" />
+        </report>
+    </coverage>
 </phpunit>

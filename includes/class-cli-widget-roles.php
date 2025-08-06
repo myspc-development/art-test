@@ -17,6 +17,11 @@ class AP_CLI_Widget_Roles {
      *
      * [--import=<file>]
      * : Import mapping from JSON file and save to options.
+     *
+     * ## EXAMPLES
+     *
+     *     wp widget-roles export > roles.json
+     *     wp widget-roles import roles.json
      */
     public function __invoke( array $args, array $assoc_args ): void {
         $map = DashboardWidgetRegistry::get_role_widget_map();
@@ -43,5 +48,6 @@ class AP_CLI_Widget_Roles {
 }
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
+    \WP_CLI::add_command( 'widget-roles', 'AP_CLI_Widget_Roles' );
     \WP_CLI::add_command( 'artpulse widget-roles', 'AP_CLI_Widget_Roles' );
 }
