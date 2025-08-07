@@ -1,5 +1,6 @@
 <?php
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+if (!user_can(get_current_user_id(), 'read')) return;
 extract(ap_template_context($args ?? [], ['visible' => true]));
 ?>
 <div id="onboarding-tracker" class="ap-card" role="region" aria-labelledby="onboarding-tracker-title" data-widget="onboarding-tracker" <?php echo $visible ? '' : 'hidden'; ?>>

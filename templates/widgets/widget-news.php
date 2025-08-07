@@ -1,5 +1,6 @@
 <?php
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+if (!user_can(get_current_user_id(), 'read')) return;
 ?>
 <div id="ap-widget-news" class="postbox" role="region" aria-labelledby="ap-widget-news-title">
   <h2 id="ap-widget-news-title" class="hndle"><span class="dashicons dashicons-megaphone"></span> <?php esc_html_e( 'Latest News', 'artpulse' ); ?></h2>

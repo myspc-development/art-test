@@ -1,5 +1,6 @@
 <?php
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+if (!user_can(get_current_user_id(), 'read')) return;
 extract(ap_template_context($args ?? [], ['visible' => true]));
 ?>
 <div id="artist-audience-insights" class="ap-card" role="region" aria-labelledby="artist-audience-insights-title" data-widget="artist-audience-insights" <?php echo $visible ? '' : 'hidden'; ?>>
