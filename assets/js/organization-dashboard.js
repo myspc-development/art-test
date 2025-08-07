@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('ap-user-dashboard');
+  const container = document.getElementById('ap-dashboard-root');
   if (!container) return;
 
   const savedOrder = JSON.parse(localStorage.getItem('ap-widget-order') || '[]');

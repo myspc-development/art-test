@@ -786,22 +786,33 @@ class UserDashboardManager
             $roles  = $role ? [$role] : wp_get_current_user()->roles;
             $config = get_option('ap_dashboard_widget_config', []);
             foreach ($roles as $r) {
-                if (empty($config[$r]) || !is_array($config[$r])) {
-                    continue;
-                }
-                foreach ($config[$r] as $item) {
-                    if (is_array($item)) {
-                        $id  = sanitize_key($item['id'] ?? '');
-                        $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
-                    } else {
-                        $id  = sanitize_key($item);
-                        $vis = true;
+                if (!empty($config[$r]) && is_array($config[$r])) {
+                    foreach ($config[$r] as $item) {
+                        if (is_array($item)) {
+                            $id  = sanitize_key($item['id'] ?? '');
+                            $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
+                        } else {
+                            $id  = sanitize_key($item);
+                            $vis = true;
+                        }
+                        if (in_array($id, $layout, true)) {
+                            continue;
+                        }
+                        $layout[]        = $id;
+                        $visibility[$id] = $vis;
                     }
+                }
+                // Ensure all widgets from the registry are present
+                $allowed = array_keys(DashboardWidgetRegistry::get_widgets($r, $uid));
+                foreach ($allowed as $id) {
+                    $id = sanitize_key($id);
                     if (in_array($id, $layout, true)) {
                         continue;
                     }
                     $layout[]        = $id;
-                    $visibility[$id] = $vis;
+                    if (!isset($visibility[$id])) {
+                        $visibility[$id] = true;
+                    }
                 }
             }
         }

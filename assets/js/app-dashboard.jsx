@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import DashboardNavbar from './components/DashboardNavbar';
 import MessagesPanel from './components/MessagesPanel';
 import CommunityAnalyticsPanel from './components/CommunityAnalyticsPanel';
 import DashboardContainer from './DashboardContainer.jsx';
 
-export default function AppDashboard() {
+function AppDashboard() {
   const [role, setRole] = useState(null);
 
   useEffect(() => {
@@ -30,7 +30,12 @@ export default function AppDashboard() {
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('ap-dashboard-root');
-  if (rootEl && window.ReactDOM) {
-    ReactDOM.render(<AppDashboard />, rootEl);
+  if (rootEl) {
+    const root = createRoot(rootEl);
+    root.render(<AppDashboard />);
   }
 });
+
+// Expose for debugging when loaded directly
+window.APDashboardApp = AppDashboard;
+
