@@ -43,7 +43,7 @@ function createDashboardBundle(input, output, globalName) {
 }
 
 module.exports = [
-  createDashboardBundle('assets/js/AppDashboard.js', 'dist/app-dashboard.js', 'APDashboardApp'),
+  createDashboardBundle('assets/js/app-dashboard.jsx', 'dist/app-dashboard.js', 'APDashboardApp'),
   createDashboardBundle('assets/js/react-widgets.js', 'dist/react-widgets.js', 'APReactWidgets'),
   createDashboardBundle('assets/js/DashboardContainer.jsx', 'dist/dashboard-container.js', 'APDashboardContainer')
 ];
