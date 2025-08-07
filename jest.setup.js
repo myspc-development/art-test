@@ -1,3 +1,5 @@
+require('@testing-library/jest-dom');
+
 if (typeof global.TextEncoder === "undefined") {
   const util = require("util");
   global.TextEncoder = util.TextEncoder;
