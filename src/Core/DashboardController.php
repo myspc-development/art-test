@@ -221,6 +221,13 @@ class DashboardController {
      */
     public static function get_user_dashboard_layout(int $user_id): array
     {
+        if (current_user_can('manage_options') && isset($_GET['ap_preview_user'])) {
+            $preview = (int) $_GET['ap_preview_user'];
+            if ($preview > 0) {
+                $user_id = $preview;
+            }
+        }
+
         $role = self::get_role($user_id);
 
         // Load the raw layout from user meta, options, or defaults
@@ -383,6 +390,13 @@ class DashboardController {
         // Allow preview via ?ap_preview_role=artist for admin users
         if (current_user_can('manage_options') && isset($_GET['ap_preview_role'])) {
             return sanitize_text_field($_GET['ap_preview_role']);
+        }
+
+        if (current_user_can('manage_options') && isset($_GET['ap_preview_user'])) {
+            $preview = (int) $_GET['ap_preview_user'];
+            if ($preview > 0) {
+                $user_id = $preview;
+            }
         }
 
         $user = get_userdata($user_id);
