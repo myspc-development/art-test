@@ -180,7 +180,7 @@ function ap_save_widget_layout(): void
         return;
     }
     check_ajax_referer('ap_save_widget_layout', 'nonce');
-    if (!current_user_can($role) && !current_user_can('manage_options')) {
+    if (!in_array($role, wp_get_current_user()->roles, true) && !current_user_can('manage_options')) {
         wp_send_json_error(['message' => __('Permission denied', 'artpulse')], 403);
         return;
     }
