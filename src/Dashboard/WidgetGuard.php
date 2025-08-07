@@ -37,12 +37,12 @@ class WidgetGuard
             return;
         }
 
-        if ($role !== null && method_exists(DashboardWidgetRegistry::class, 'get_role_widgets')) {
-            $widgets = DashboardWidgetRegistry::get_role_widgets($role);
+        if ($role !== null) {
+            $widgets = DashboardWidgetRegistry::get_widgets_by_role($role);
         } else {
             $widgets = DashboardWidgetRegistry::get_all();
         }
-        $map     = apply_filters('ap_widget_placeholder_map', self::known_widget_map());
+        $map = apply_filters('ap_widget_placeholder_map', self::known_widget_map());
 
         foreach ($widgets as $id => $cfg) {
             $cb = $cfg['callback'] ?? null;
