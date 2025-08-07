@@ -5,6 +5,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Frontend\ArtistDashboardShortcode;
 use ArtPulse\Frontend\OrganizationDashboardShortcode;
 use ArtPulse\Dashboard\WidgetGuard;
+use ArtPulse\Core\RoleResolver;
 
 class DashboardController {
 
@@ -275,6 +276,8 @@ class DashboardController {
         ));
 
         if (empty($filtered)) {
+            WidgetGuard::register_stub_widget('widget_placeholder', ['title' => 'Dashboard Placeholder'], ['roles' => [$role]]);
+            $filtered = [ ['id' => 'widget_placeholder'] ];
             /**
              * Fires when a user's dashboard layout resolves to an empty set.
              *
@@ -412,32 +415,7 @@ class DashboardController {
     }
 
     public static function get_role($user_id): string {
-        // Allow preview via ?ap_preview_role=artist for admin users
-        if (current_user_can('manage_options') && isset($_GET['ap_preview_role'])) {
-            return sanitize_text_field($_GET['ap_preview_role']);
-        }
-
-        if (current_user_can('manage_options') && isset($_GET['ap_preview_user'])) {
-            $preview = (int) $_GET['ap_preview_user'];
-            if ($preview > 0) {
-                $user_id = $preview;
-            }
-        }
-
-        $user = get_userdata($user_id);
-        if (!$user || empty($user->roles)) {
-            return 'member';
-        }
-
-        $roles = array_map('sanitize_key', $user->roles);
-        $priority = ['member', 'artist', 'organization'];
-        foreach ($priority as $r) {
-            if (in_array($r, $roles, true)) {
-                return $r;
-            }
-        }
-
-        return $roles[0];
+        return RoleResolver::resolve($user_id);
     }
 
     /**

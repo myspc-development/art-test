@@ -29,9 +29,11 @@ add_action('plugins_loaded', static function (): void {
         'rsvp_button',
         'share_this_event',
         'sponsored_event_config',
+        'widget_placeholder',
     ];
 
     foreach ($ids as $id) {
-        WidgetGuard::register_stub_widget($id, []);
+        $meta = $id === 'widget_placeholder' ? ['title' => 'Placeholder Widget'] : [];
+        WidgetGuard::register_stub_widget($id, $meta);
     }
 }, 15);
