@@ -18,10 +18,6 @@ module.exports = {
 
   // Recognize these extensions
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
-
-  // Polyfill globals before tests run
-  setupFiles: ['<rootDir>/jest.setup.js'],
-
   // Run additional setup after the environment is ready
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js', '@testing-library/jest-dom']
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js']
 };
