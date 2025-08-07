@@ -24,7 +24,7 @@ For each role (`member`, `artist`, `organization`):
 
 - [ ] Confirm if dashboard is rendered via:
   - [ ] Custom page template (e.g. `dashboard-member.php`)
-  - [ ] Shortcode (e.g. `[ap_member_dashboard]`)
+  - [ ] Shortcode (e.g. `[ap_user_dashboard]`)
   - [ ] REST + React front end (e.g. `ReactDashboardShortcode.php`)
 - [ ] Check if fallback is defined for missing layout or widgets
 - [ ] Ensure layout template uses `get_header()`, `get_footer()` and follows WP structure
