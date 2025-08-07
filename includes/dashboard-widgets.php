@@ -11,6 +11,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Frontend\DashboardCard;
+use ArtPulse\Dashboard\WidgetVisibilityManager;
 
 function ap_render_widget(string $widget_id, ?int $user_id = null): void
 {
@@ -81,6 +82,22 @@ function ap_render_js_widget(string $id, array $props = []): void
     $attr_roles = array_filter(array_map('sanitize_key', explode(',', (string) $atts['role'])));
     if ($attr_roles && !in_array($current_role, $attr_roles, true)) {
         return '';
+    }
+
+    $rules = WidgetVisibilityManager::get_visibility_rules();
+    if (isset($rules[$id])) {
+        $rule   = $rules[$id];
+        $user   = wp_get_current_user();
+        $roles  = (array) $user->roles;
+        if (!empty($rule['capability']) && !user_can($user, $rule['capability'])) {
+            return '';
+        }
+        if (!empty($rule['allowed_roles']) && empty(array_intersect($roles, (array) $rule['allowed_roles']))) {
+            return '';
+        }
+        if (!empty($rule['exclude_roles']) && array_intersect($roles, (array) $rule['exclude_roles'])) {
+            return '';
+        }
     }
 
     ob_start();

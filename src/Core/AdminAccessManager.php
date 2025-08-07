@@ -49,7 +49,7 @@ class AdminAccessManager
             return;
         }
 
-        $dashboard_url = home_url('/dashboard-role.php');
+        $dashboard_url = home_url('/dashboard');
         wp_safe_redirect($dashboard_url);
         exit;
     }

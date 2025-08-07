@@ -47,19 +47,19 @@ class LoginRedirectManagerTest extends TestCase {
     public function test_member_redirects_to_dashboard(): void {
         $user = (object)['roles' => ['member']];
         $redirect = $this->runRedirect($user);
-        $this->assertSame('https://site.test/dashboard-role.php', $redirect);
+        $this->assertSame('https://site.test/dashboard', $redirect);
     }
 
     public function test_artist_redirects_to_dashboard(): void {
         $user = (object)['roles' => ['artist']];
         $redirect = $this->runRedirect($user);
-        $this->assertSame('https://site.test/dashboard-role.php', $redirect);
+        $this->assertSame('https://site.test/dashboard', $redirect);
     }
 
     public function test_org_redirects_to_dashboard(): void {
         $user = (object)['roles' => ['organization']];
         $redirect = $this->runRedirect($user);
-        $this->assertSame('https://site.test/dashboard-role.php', $redirect);
+        $this->assertSame('https://site.test/dashboard', $redirect);
     }
 
     public function test_wp_admin_cap_returns_default(): void {

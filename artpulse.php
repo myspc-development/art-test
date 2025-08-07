@@ -23,6 +23,8 @@ require_once __DIR__ . '/includes/widget-logging.php';
 if (defined('WP_CLI') && WP_CLI) {
     require_once __DIR__ . '/includes/class-cli-debug-dashboard.php';
     \WP_CLI::add_command('artpulse debug-dashboard', \ArtPulse\CLI\DebugDashboardCommand::class);
+    require_once __DIR__ . '/includes/class-cli-create-dashboard-page.php';
+    \WP_CLI::add_command('artpulse create-user-dashboard-page', \ArtPulse\CLI\CreateUserDashboardPageCommand::class);
 }
 
 // Development helpers

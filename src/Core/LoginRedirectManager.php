@@ -18,7 +18,7 @@ class LoginRedirectManager
             return $redirect_to;
         }
 
-        $dashboard_url = home_url('/dashboard-role.php');
+        $dashboard_url = home_url('/dashboard');
         return $dashboard_url;
     }
 }

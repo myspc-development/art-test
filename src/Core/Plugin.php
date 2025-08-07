@@ -883,7 +883,7 @@ class Plugin
 
     public static function get_user_dashboard_url(): string
     {
-        return home_url('/dashboard-role.php');
+        return home_url('/dashboard');
     }
 
     /**
@@ -891,7 +891,7 @@ class Plugin
      */
     public static function get_org_dashboard_url(): string
     {
-        return home_url('/dashboard-role.php');
+        return home_url('/dashboard');
     }
 
     /**
@@ -899,7 +899,7 @@ class Plugin
      */
     public static function get_artist_dashboard_url(): string
     {
-        return home_url('/dashboard-role.php');
+        return home_url('/dashboard');
     }
 
     /**
