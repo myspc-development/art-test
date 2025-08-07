@@ -3,6 +3,11 @@ Cypress.Commands.add('login', (username, password = 'password') => {
     username,
     password
   }).then((resp) => {
-    window.localStorage.setItem('auth_token', resp.body.token);
+    const token = resp.body.token;
+    expect(token).to.exist;
+
+    cy.window().then((win) => {
+      win.localStorage.setItem('auth_token', token);
+    });
   });
 });
