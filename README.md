@@ -120,6 +120,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines.
 ### Dashboard & Analytics
 - Queries in the organization dashboard now use transients to cache results for 15 minutes, improving load times.
 - Place `[ap_user_dashboard]` on a page to expose the member dashboard with calendars for **My Favorites** and **My RSVPs** along with charts of engagement statistics.
+- For environments without JavaScript, `[user_dashboard]` renders a server-side fallback (see `templates/simple-dashboard.php`).
 - Analytics dashboards appear for both users and organizers.
 - Widgets show:
   - **Total RSVPs** (overall and per event)

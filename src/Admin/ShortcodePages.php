@@ -60,12 +60,16 @@ class ShortcodePages
                 $created = array_merge($created, array_map('intval', $existing));
                 continue;
             }
-            $page_id = wp_insert_post([
+            $args = [
                 'post_title'   => $title,
                 'post_content' => $shortcode,
                 'post_status'  => 'publish',
                 'post_type'    => 'page',
-            ]);
+            ];
+            if ($shortcode === '[user_dashboard]') {
+                $args['post_name'] = 'dashboard';
+            }
+            $page_id = wp_insert_post($args);
             if ($page_id && !is_wp_error($page_id)) {
                 $created[] = $page_id;
             }
