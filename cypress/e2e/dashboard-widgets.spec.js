@@ -2,7 +2,7 @@ describe('Dashboard Widgets', () => {
     it('shows dashboard container when logged in', () => {
         cy.login('artist');
         cy.visit('/dashboard');
-        cy.get('#ap-user-dashboard').should('exist');
+        cy.get('#ap-dashboard-root').should('exist');
     });
 
     it('displays artist widgets', () => {

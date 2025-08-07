@@ -18,6 +18,7 @@ function createConfig(input, file, name, globals = {}, external = Object.keys(gl
       format: 'iife',
       name,
       globals,
+      exports: 'auto',
     },
     external,
     plugins: [
@@ -40,9 +41,9 @@ const configs = [
     react: 'React',
     'react-dom/client': 'ReactDOM'
   }),
-  createConfig('assets/js/AppDashboard.js', 'dist/app-dashboard.js', 'APDashboardApp', {
+  createConfig('assets/js/app-dashboard.jsx', 'dist/app-dashboard.js', 'APDashboardApp', {
     react: 'React',
-    'react-dom': 'ReactDOM',
+    'react-dom/client': 'ReactDOM',
     'chart.js/auto': 'Chart'
   }),
   createConfig('assets/react/RoleMatrix.jsx', 'dist/role-matrix.js', 'APRoleMatrix', {

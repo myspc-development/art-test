@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.querySelector('#ap-user-dashboard');
+  const container = document.querySelector('#ap-dashboard-root');
   if (!container) return;
 
   Sortable.create(container, {

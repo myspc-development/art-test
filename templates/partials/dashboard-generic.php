@@ -155,7 +155,7 @@ $layout = $layout ?? DashboardController::get_user_dashboard_layout($user_id);
 if (empty($layout)) {
     echo '<div class="ap-empty-state">No widgets available. Load a preset or reset layout.</div>';
 } else {
-    echo '<div id="ap-user-dashboard" class="ap-dashboard-grid" data-role="' . esc_attr(DashboardController::get_role($user_id)) . '">';
+    echo '<div id="ap-dashboard-root" class="ap-dashboard-grid" data-role="' . esc_attr(DashboardController::get_role($user_id)) . '">';
     foreach ($layout as $widget) {
         $id      = $widget['id'];
         $visible = $widget['visible'] ?? true;
