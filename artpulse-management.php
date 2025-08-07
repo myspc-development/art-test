@@ -142,6 +142,7 @@ require_once __DIR__ . '/includes/guide-dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
 require_once __DIR__ . '/includes/dashboard-messages-widget.php';
 require_once __DIR__ . '/includes/user-actions.php';
+require_once __DIR__ . '/includes/user-dashboard-page.php';
 // Force HTTPS for avatar URLs to avoid mixed content issues
 require_once __DIR__ . '/includes/avatar-https-fix.php';
 require_once __DIR__ . '/includes/chat-db.php';
@@ -161,6 +162,7 @@ require_once __DIR__ . '/auto-tagger.php';
 require_once __DIR__ . '/admin/page-artpulse-ai.php';
 require_once __DIR__ . '/pwa-manifest.php';
 include_once __DIR__ . '/shortcodes/artist-comments.php';
+include_once __DIR__ . '/shortcodes/user-dashboard.php';
 require_once __DIR__ . '/includes/class-artpulse-rest-controller.php';
 // The DashboardConfigController class provides this route.
 // require_once __DIR__ . '/api/dashboard-config.php';
@@ -1299,7 +1301,7 @@ add_action('admin_bar_menu', function($wp_admin_bar) {
         $wp_admin_bar->add_node([
             'id'    => 'ap-switch-' . $role,
             'title' => 'View as: ' . $role,
-            'href'  => add_query_arg('ap_preview_role', $role, home_url('/dashboard-role.php')),
+            'href'  => add_query_arg('ap_preview_role', $role, home_url('/dashboard')),
         ]);
     }
 }, 100);
