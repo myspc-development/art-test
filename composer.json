@@ -16,7 +16,8 @@
     "yoast/phpunit-polyfills": "^2.0",
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
     "phpcompatibility/phpcompatibility-wp": "*",
-    "wp-phpunit/wp-phpunit": "^6"
+    "wp-phpunit/wp-phpunit": "^6",
+      "10up/wp_mock": "^0.4"
   },
   "require": {
     "yahnis-elsts/plugin-update-checker": "^5.6",
