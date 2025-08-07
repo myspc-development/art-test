@@ -1,5 +1,6 @@
 <?php
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+if (!user_can(get_current_user_id(), 'read')) return;
 extract(ap_template_context($args ?? [], ['visible' => true]));
 ?>
 <div id="dashboard-feedback" class="dashboard-widget" role="region" aria-labelledby="dashboard-feedback-title" data-widget="dashboard-feedback" <?php echo $visible ? '' : 'hidden'; ?>>
