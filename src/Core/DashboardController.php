@@ -357,8 +357,21 @@ class DashboardController {
         }
         return [];
     }
-    public static function render_for_user($user_id) {
-        return UserDashboardManager::renderDashboard([]);
+    /**
+     * Render the dashboard for a specific user.
+     *
+     * @param int $user_id User ID to render the dashboard for.
+     *
+     * @return string Dashboard HTML for the user.
+     */
+    public static function render_for_user( int $user_id ): string {
+        if ( ! $user_id ) {
+            return '';
+        }
+
+        ob_start();
+        DashboardWidgetRegistry::render_for_role( (int) $user_id );
+        return ob_get_clean();
     }
 
     /**
