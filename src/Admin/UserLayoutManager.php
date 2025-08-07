@@ -91,6 +91,15 @@ class UserLayoutManager
         }
 
         $default_ids = \ArtPulse\Core\DashboardController::get_widgets_for_role($role);
+        if (empty($default_ids)) {
+            $stub = 'empty_dashboard';
+            WidgetGuard::register_stub_widget($stub, [], []);
+            error_log('Empty dashboard layout resolved for role ' . $role);
+            return [
+                'layout' => [ ['id' => $stub, 'visible' => true] ],
+                'logs'   => [$stub],
+            ];
+        }
         return [
             'layout' => array_map(
                 fn($id) => ['id' => $id, 'visible' => true],

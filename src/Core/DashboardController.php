@@ -4,6 +4,7 @@ namespace ArtPulse\Core;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Frontend\ArtistDashboardShortcode;
 use ArtPulse\Frontend\OrganizationDashboardShortcode;
+use ArtPulse\Dashboard\WidgetGuard;
 
 class DashboardController {
 
@@ -116,10 +117,17 @@ class DashboardController {
 
         // Remove widgets the role cannot access.
         foreach ($presets as $key => $preset) {
-            $presets[$key]['layout'] = self::filter_accessible_layout(
+            $layout = self::filter_accessible_layout(
                 $preset['layout'],
                 $preset['role']
             );
+            if (empty($layout)) {
+                $stub = sanitize_key($key . '_placeholder');
+                WidgetGuard::register_stub_widget($stub, [], []);
+                error_log("[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}");
+                $layout = [ ['id' => $stub] ];
+            }
+            $presets[$key]['layout'] = $layout;
         }
 
         return $presets;
@@ -183,6 +191,10 @@ class DashboardController {
         }
 
         if ($missing) {
+            foreach (array_unique($missing) as $id) {
+                WidgetGuard::register_stub_widget($id, [], []);
+                error_log("[DashboardController] Registered stub widget {$id}");
+            }
             trigger_error(
                 'Unregistered dashboard widget defaults: ' . implode(', ', array_unique($missing)),
                 E_USER_WARNING

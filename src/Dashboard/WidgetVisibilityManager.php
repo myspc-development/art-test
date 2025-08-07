@@ -278,6 +278,7 @@ class WidgetVisibilityManager
         }
 
         if ($count === 0) {
+            error_log('Dashboard empty for role ' . (wp_get_current_user()->roles[0] ?? 'unknown'));
             /**
              * Provide a help URL when the dashboard is empty.
              *
