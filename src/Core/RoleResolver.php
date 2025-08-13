@@ -7,7 +7,8 @@ class RoleResolver
     {
         // Allow preview via ?ap_preview_role=artist for admin users
         if (current_user_can('manage_options') && isset($_GET['ap_preview_role'])) {
-            return sanitize_text_field($_GET['ap_preview_role']);
+            $role = sanitize_text_field($_GET['ap_preview_role']);
+            return self::map_role($role);
         }
 
         if (!$user_id) {
@@ -28,6 +29,12 @@ class RoleResolver
         }
 
         $roles    = array_map('sanitize_key', $user->roles);
+        foreach ($roles as $r) {
+            if (isset(self::ROLE_MAP[$r])) {
+                return self::ROLE_MAP[$r];
+            }
+        }
+
         $priority = ['member', 'artist', 'organization'];
         foreach ($priority as $r) {
             if (in_array($r, $roles, true)) {
@@ -36,5 +43,18 @@ class RoleResolver
         }
 
         return $roles[0];
+    }
+
+    private const ROLE_MAP = [
+        'subscriber'  => 'member',
+        'contributor' => 'member',
+        'author'      => 'member',
+        'editor'      => 'member',
+    ];
+
+    private static function map_role(string $role): string
+    {
+        $key = sanitize_key($role);
+        return self::ROLE_MAP[$key] ?? $key;
     }
 }
