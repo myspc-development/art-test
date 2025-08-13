@@ -124,7 +124,7 @@ class DashboardController {
             );
             if (empty($layout)) {
                 $stub = sanitize_key($key . '_placeholder');
-                WidgetGuard::register_stub_widget($stub, [], []);
+                WidgetGuard::register_stub_widget($stub, [], ['roles' => [$preset['role']]]);
                 error_log("[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}");
                 $layout = [ ['id' => $stub] ];
             }
