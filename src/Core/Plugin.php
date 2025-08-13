@@ -329,7 +329,6 @@ class Plugin
         \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\OrgUserRolesController::register();
         OrgRoleInviteController::register();
-        VisitRestController::register();
         \ArtPulse\Rest\LocationRestController::register();
         \ArtPulse\Rest\OrgAnalyticsController::register();
         \ArtPulse\Rest\OrgDashboardController::register();

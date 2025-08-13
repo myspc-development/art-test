@@ -16,7 +16,7 @@ class VisitRestControllerTest extends \WP_UnitTestCase
     {
         parent::set_up();
         VisitTracker::install_table();
-        VisitRestController::register();
+        add_action('rest_api_init', [VisitRestController::class, 'register']);
         do_action('rest_api_init');
 
         $this->event_id = self::factory()->post->create([
