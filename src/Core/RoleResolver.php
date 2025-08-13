@@ -3,24 +3,19 @@ namespace ArtPulse\Core;
 
 class RoleResolver
 {
+    /**
+     * Determine the effective plugin role for a user.
+     */
     public static function resolve(int $user_id = 0): string
     {
-        // Allow preview via ?ap_preview_role=artist for admin users
-        if (current_user_can('manage_options') && isset($_GET['ap_preview_role'])) {
-            $role = sanitize_text_field($_GET['ap_preview_role']);
-            return self::map_role($role);
+        $preview = isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
+        $allowed = array('member', 'artist', 'organization');
+        if ($preview && in_array($preview, $allowed, true) && current_user_can('manage_options')) {
+            return $preview;
         }
 
         if (!$user_id) {
             $user_id = get_current_user_id();
-        }
-
-        // Allow previewing another user's role via ?ap_preview_user=ID
-        if (current_user_can('manage_options') && isset($_GET['ap_preview_user'])) {
-            $preview = (int) $_GET['ap_preview_user'];
-            if ($preview > 0) {
-                $user_id = $preview;
-            }
         }
 
         $user = get_userdata($user_id);
@@ -28,33 +23,39 @@ class RoleResolver
             return 'member';
         }
 
-        $roles    = array_map('sanitize_key', $user->roles);
+        $roles = array_map('sanitize_key', (array) $user->roles);
+
+        if (in_array('administrator', $roles, true)) {
+            return 'organization';
+        }
+
         foreach ($roles as $r) {
             if (isset(self::ROLE_MAP[$r])) {
                 return self::ROLE_MAP[$r];
             }
         }
 
-        $priority = ['member', 'artist', 'organization'];
+        $priority = array('member', 'artist', 'organization');
         foreach ($priority as $r) {
             if (in_array($r, $roles, true)) {
                 return $r;
             }
         }
 
-        return $roles[0];
+        return 'member';
     }
 
-    private const ROLE_MAP = [
+    private const ROLE_MAP = array(
         'subscriber'  => 'member',
         'contributor' => 'member',
         'author'      => 'member',
         'editor'      => 'member',
-    ];
+    );
+}
 
-    private static function map_role(string $role): string
+if (!function_exists('ap_get_effective_role')) {
+    function ap_get_effective_role(): string
     {
-        $key = sanitize_key($role);
-        return self::ROLE_MAP[$key] ?? $key;
+        return RoleResolver::resolve(get_current_user_id());
     }
 }

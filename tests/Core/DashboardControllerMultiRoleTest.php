@@ -66,6 +66,7 @@ class DashboardControllerMultiRoleTest extends TestCase {
 
     public function test_preview_role_override(): void {
         $_GET['ap_preview_role'] = 'organization';
+        MockStorage::$current_roles = ['manage_options'];
         MockStorage::$users[3] = (object)['roles' => ['member', 'artist']];
         $layout = DashboardController::get_user_dashboard_layout(3);
         $this->assertSame([['id' => 'gamma']], $layout);
