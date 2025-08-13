@@ -86,6 +86,34 @@ class WidgetVisibilityManager
     }
 
     /**
+     * Normalize a role list into a de-duplicated, lower-cased array.
+     *
+     * @param mixed $roles Role list in various formats.
+     */
+    private static function normalizeRoleList($roles): array
+    {
+        if (is_string($roles)) {
+            $s = trim($roles);
+            if ($s !== '' && ($s[0] === '[' || $s[0] === '{')) {
+                $decoded = json_decode($s, true);
+                $roles   = is_array($decoded) ? $decoded : array_map('trim', explode(',', $s));
+            } else {
+                $roles = array_map('trim', explode(',', $s));
+            }
+        } elseif ($roles instanceof \Traversable) {
+            $roles = iterator_to_array($roles);
+        }
+        if (!is_array($roles)) {
+            $roles = [];
+        }
+        $roles = array_values(array_unique(array_filter(array_map(
+            static fn($r) => strtolower(trim((string) $r)),
+            $roles
+        ))));
+        return $roles;
+    }
+
+    /**
      * Retrieve visibility rules for dashboard widgets.
      *
      * Each array key is a widget id. The value may include:
@@ -146,28 +174,33 @@ class WidgetVisibilityManager
 
         // Merge in any saved configuration from the database.
         $saved = get_option('artpulse_widget_roles', []);
+        if (is_string($saved)) {
+            $decoded = json_decode($saved, true);
+            $saved   = is_array($decoded) ? $decoded : [];
+        }
         if (is_array($saved)) {
             foreach ($saved as $widget => $config) {
-                $widget  = sanitize_key($widget);
-                $config  = is_array($config) ? $config : [];
+                $widget = sanitize_key($widget);
+                $config = is_array($config) ? $config : [];
 
                 $merged = [];
 
-                if (!empty($config['capability'])) {
-                    $merged['capability'] = sanitize_text_field($config['capability']);
+                if (isset($config['capability'])) {
+                    $cap = sanitize_text_field($config['capability']);
+                    if ($cap !== '') {
+                        $merged['capability'] = $cap;
+                    }
                 }
 
-                if (!empty($config['exclude_roles'])) {
-                    $roles = array_map('sanitize_key', (array) $config['exclude_roles']);
-                    $roles = array_values(array_filter($roles));
+                if (isset($config['exclude_roles'])) {
+                    $roles = self::normalizeRoleList($config['exclude_roles']);
                     if ($roles) {
                         $merged['exclude_roles'] = $roles;
                     }
                 }
 
-                if (!empty($config['allowed_roles'])) {
-                    $roles = array_map('sanitize_key', (array) $config['allowed_roles']);
-                    $roles = array_values(array_filter($roles));
+                if (isset($config['allowed_roles'])) {
+                    $roles = self::normalizeRoleList($config['allowed_roles']);
                     if ($roles) {
                         $merged['allowed_roles'] = $roles;
                     }
@@ -218,17 +251,20 @@ class WidgetVisibilityManager
         $rules = self::get_visibility_rules();
 
         foreach ($rules as $widget => $config) {
-            $cap          = $config['capability']    ?? null;
-            $exclude      = $config['exclude_roles'] ?? [];
-            $allowed      = $config['allowed_roles'] ?? [];
-            $notice_roles = is_array($exclude) ? $exclude : [];
+            $cap         = $config['capability'] ?? null;
+            $exclude_raw = $config['exclude_roles'] ?? [];
+            $allowed     = self::normalizeRoleList($config['allowed_roles'] ?? []);
+            $notice_roles = is_array($exclude_raw) && array_keys($exclude_raw) !== range(0, count($exclude_raw) - 1)
+                ? $exclude_raw
+                : [];
+            $exclude = $notice_roles ? self::normalizeRoleList(array_keys($notice_roles)) : self::normalizeRoleList($exclude_raw);
 
             $hide = false;
             if ($cap && !user_can($current_user, $cap)) {
                 $hide = true;
             }
 
-            if ($allowed && empty(array_intersect($roles, (array) $allowed))) {
+            if ($allowed && empty(array_intersect($roles, $allowed))) {
                 $hide = true;
             }
 
@@ -240,7 +276,7 @@ class WidgetVisibilityManager
                     if ($msg) {
                         self::add_admin_notice($msg, $type);
                     }
-                } elseif (in_array($role, (array) $exclude, true)) {
+                } elseif (in_array($role, $exclude, true)) {
                     $hide = true;
                 }
             }
