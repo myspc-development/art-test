@@ -13,10 +13,11 @@ class ApPlaceholderWidget
     /**
      * Render the placeholder markup.
      *
-     * @param array $args Optional arguments including 'debug'.
+     * @param int|null $user_id Optional user ID.
+     * @param array    $args    Optional arguments including 'debug'.
      * @return void
      */
-    public static function render(array $args = []): void
+    public static function render(?int $user_id = null, array $args = []): void
     {
         $markup  = '<div class="ap-widget ap-widget--placeholder">';
         $markup .= '<div class="ap-widget__header">';
