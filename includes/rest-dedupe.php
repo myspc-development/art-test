@@ -5,8 +5,13 @@ if (!defined('ABSPATH')) { exit; }
  * Detect and merge duplicate REST route handlers during bootstrapping.
  */
 function ap_deduplicate_rest_routes(array $endpoints): array {
+    static $logged = false;
+    if ($logged) {
+        return $endpoints;
+    }
+
     $seen = [];
-    $core_prefixes = ['/wp/v2', '/wp/v2/'];
+    $core_prefixes = ['/', '/wp/v2', '/wp/v2/', '/batch/v1', '/wp-site-health/v1', '/block-editor/v1', '/oembed/1.0'];
 
     foreach ($endpoints as $route => $handlers) {
         if (!is_array($handlers)) {
@@ -15,6 +20,12 @@ function ap_deduplicate_rest_routes(array $endpoints): array {
 
         // Skip core endpoints to avoid noise from WordPress internals.
         foreach ($core_prefixes as $prefix) {
+            if ($prefix === '/') {
+                if ($route === '/') {
+                    continue 2;
+                }
+                continue;
+            }
             if (strpos($route, $prefix) === 0) {
                 continue 2;
             }
@@ -27,31 +38,38 @@ function ap_deduplicate_rest_routes(array $endpoints): array {
             }
             $methods = array_filter(array_map('strtoupper', $methods));
             sort($methods);
-            $hash    = md5(serialize([$methods, $route]));
             $method_label = implode(',', $methods) ?: 'ALL';
+            $dedupe_key   = $route . ' ' . $method_label;
 
-            if (isset($seen[$hash])) {
-                $prev = $seen[$hash];
-                $same_callback  = isset($prev['callback']) && isset($handler['callback']) && $prev['callback'] === $handler['callback'];
-                $same_permission = ($prev['permission_callback'] ?? null) === ($handler['permission_callback'] ?? null);
+            if (!isset($seen[$dedupe_key])) {
+                $seen[$dedupe_key] = [
+                    'callback'            => $handler['callback'] ?? null,
+                    'permission_callback' => $handler['permission_callback'] ?? null,
+                    'logged'              => false,
+                ];
+                continue;
+            }
 
-                if ($same_callback && $same_permission) {
-                    // Identical handler already registered - remove duplicate.
-                    unset($endpoints[$route][$key]);
-                } else {
-                    // Different handler registered for same route/method.
-                    if (defined('WP_DEBUG') && WP_DEBUG) {
-                        $prev_loc = ap_callback_location($prev['callback'] ?? null);
-                        $curr_loc = ap_callback_location($handler['callback'] ?? null);
-                        error_log("[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc.");
-                    }
-                }
-            } else {
-                $seen[$hash] = $handler;
+            $prev            = $seen[$dedupe_key];
+            $same_callback   = isset($handler['callback']) && $prev['callback'] === $handler['callback'];
+            $same_permission = $prev['permission_callback'] === ($handler['permission_callback'] ?? null);
+
+            if ($same_callback && $same_permission) {
+                // Identical handler already registered - remove duplicate.
+                unset($endpoints[$route][$key]);
+                continue;
+            }
+
+            if (defined('WP_DEBUG') && WP_DEBUG && !$prev['logged']) {
+                $prev_loc = ap_callback_location($prev['callback']);
+                $curr_loc = ap_callback_location($handler['callback'] ?? null);
+                error_log("[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc.");
+                $seen[$dedupe_key]['logged'] = true;
             }
         }
     }
 
+    $logged = true;
     return $endpoints;
 }
 
