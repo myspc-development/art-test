@@ -80,6 +80,33 @@ class DashboardWidgetRegistry {
     }
 
     /**
+     * Normalize a role list into a de-duplicated, lower-cased array.
+     *
+     * @param mixed $roles Role list in various formats.
+     */
+    private static function normalizeRoleList( $roles ): array {
+        if ( is_string( $roles ) ) {
+            $s = trim( $roles );
+            if ( $s !== '' && ( $s[0] === '[' || $s[0] === '{' ) ) {
+                $decoded = json_decode( $s, true );
+                $roles   = is_array( $decoded ) ? $decoded : array_map( 'trim', explode( ',', $s ) );
+            } else {
+                $roles = array_map( 'trim', explode( ',', $s ) );
+            }
+        } elseif ( $roles instanceof \Traversable ) {
+            $roles = iterator_to_array( $roles );
+        }
+        if ( ! is_array( $roles ) ) {
+            $roles = [];
+        }
+        $roles = array_values( array_unique( array_filter( array_map(
+            static fn( $r ) => strtolower( trim( (string) $r ) ),
+            $roles
+        ) ) ) );
+        return $roles;
+    }
+
+    /**
      * Register a widget and its settings.
      *
      * @param callable $callback Callback used to render the widget. Must be
@@ -117,11 +144,13 @@ class DashboardWidgetRegistry {
                 ? $args['visibility']
                 : WidgetVisibility::PUBLIC;
 
+            $args['roles'] = self::normalizeRoleList( $args['roles'] ?? [] );
+
             self::$builder_widgets[ $id ] = [
                 'id'             => $id,
                 'title'          => (string) $args['title'],
                 'render_callback'=> $args['render_callback'],
-                'roles'          => array_map( 'sanitize_key', (array) $args['roles'] ),
+                'roles'          => $args['roles'],
                 'file'           => (string) $args['file'],
                 'visibility'     => $visibility,
             ];
@@ -156,6 +185,8 @@ class DashboardWidgetRegistry {
             $class = $callback[0];
         }
 
+        $options['roles'] = self::normalizeRoleList( $options['roles'] ?? [] );
+
         self::$widgets[ $id ] = [
             'label'       => $label,
             'icon'        => $icon,
@@ -165,7 +196,7 @@ class DashboardWidgetRegistry {
             'category'    => $options['category'] ?? '',
             'group'       => $options['group'] ?? '',
             'section'     => $options['section'] ?? '',
-            'roles'       => $options['roles'] ?? [],
+            'roles'       => $options['roles'],
             'settings'    => $options['settings'] ?? [],
             'tags'        => $options['tags'] ?? [],
             'capability'  => $options['capability'] ?? '',
@@ -234,6 +265,8 @@ class DashboardWidgetRegistry {
         } else {
             $args['callback'] = self::normalize_callback( $args['callback'] );
         }
+
+        $args['roles'] = self::normalizeRoleList( $args['roles'] ?? [] );
 
         $class = '';
         if ( is_array( $args['callback'] ) && isset( $args['callback'][0] ) && is_string( $args['callback'][0] ) ) {
@@ -473,26 +506,24 @@ class DashboardWidgetRegistry {
         }
 
         $widgets  = self::$widgets;
-        $settings = get_option('artpulse_widget_roles', []);
-        foreach ($settings as $id => $cfg) {
-            if (!isset($widgets[$id])) {
+        $settings = get_option( 'artpulse_widget_roles', [] );
+        if ( is_string( $settings ) ) {
+            $decoded  = json_decode( $settings, true );
+            $settings = is_array( $decoded ) ? $decoded : [];
+        }
+        foreach ( $settings as $id => $cfg ) {
+            if ( ! isset( $widgets[ $id ] ) ) {
                 continue;
             }
 
-            // Backward compatibility: allow storing roles as a simple array.
-            if (is_array($cfg) && array_keys($cfg) === range(0, count($cfg) - 1)) {
-                $widgets[$id]['roles'] = array_map('sanitize_key', $cfg);
-                continue;
+            if ( isset( $cfg['roles'] ) ) {
+                $widgets[ $id ]['roles'] = self::normalizeRoleList( $cfg['roles'] );
             }
-
-            if (isset($cfg['roles'])) {
-                $widgets[$id]['roles'] = array_map('sanitize_key', (array) $cfg['roles']);
+            if ( isset( $cfg['capability'] ) ) {
+                $widgets[ $id ]['capability'] = sanitize_key( $cfg['capability'] );
             }
-            if (isset($cfg['capability'])) {
-                $widgets[$id]['capability'] = sanitize_key($cfg['capability']);
-            }
-            if (isset($cfg['exclude_roles'])) {
-                $widgets[$id]['exclude_roles'] = array_map('sanitize_key', (array) $cfg['exclude_roles']);
+            if ( isset( $cfg['exclude_roles'] ) ) {
+                $widgets[ $id ]['exclude_roles'] = self::normalizeRoleList( $cfg['exclude_roles'] );
             }
         }
         $group_vis = get_option('ap_widget_group_visibility', []);
@@ -530,7 +561,7 @@ class DashboardWidgetRegistry {
         return array_filter(
             self::get_all( null, true ),
             static function ( $w ) use ( $role ) {
-                $roles = isset( $w['roles'] ) ? (array) $w['roles'] : [];
+                $roles = self::normalizeRoleList( $w['roles'] ?? [] );
                 return in_array( $role, $roles, true );
             }
         );
@@ -579,7 +610,7 @@ class DashboardWidgetRegistry {
         }
 
         $role         = DashboardController::get_role( $user_id );
-        $widget_roles = isset( $widget['roles'] ) ? (array) $widget['roles'] : [];
+        $widget_roles = self::normalizeRoleList( $widget['roles'] ?? [] );
         if ( $widget_roles && ! in_array( $role, $widget_roles, true ) ) {
             return false;
         }
@@ -625,7 +656,7 @@ class DashboardWidgetRegistry {
      * @param string|array $user_role Single role or list of roles.
      */
     public static function get_widgets( $user_role, int $user_id = 0 ): array {
-        $roles   = array_map( 'sanitize_key', (array) $user_role );
+        $roles   = self::normalizeRoleList( $user_role );
         $allowed = [];
 
         if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -633,7 +664,7 @@ class DashboardWidgetRegistry {
         }
 
         foreach ( self::get_all() as $id => $config ) {
-            $widget_roles = isset( $config['roles'] ) ? (array) $config['roles'] : [];
+            $widget_roles = self::normalizeRoleList( $config['roles'] ?? [] );
             if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
                 if (defined('WP_DEBUG') && WP_DEBUG) {
                     error_log(sprintf('ap widget %s excluded: role mismatch', $id));
@@ -725,10 +756,10 @@ class DashboardWidgetRegistry {
      * @param string|array $role Single role or array of roles.
      */
     public static function get_widgets_by_role( $role, int $user_id = 0 ): array {
-        $roles = array_map( 'sanitize_key', (array) $role );
+        $roles = self::normalizeRoleList( $role );
         $defs  = [];
         foreach ( self::get_all() as $id => $cfg ) {
-            $widget_roles = isset( $cfg['roles'] ) ? (array) $cfg['roles'] : [];
+            $widget_roles = self::normalizeRoleList( $cfg['roles'] ?? [] );
             if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
                 continue;
             }
@@ -773,7 +804,7 @@ class DashboardWidgetRegistry {
                 $item['rest'] = $def['rest'];
             }
 
-            $widget_roles = isset( $def['roles'] ) ? (array) $def['roles'] : [];
+            $widget_roles = self::normalizeRoleList( $def['roles'] ?? [] );
             if ( $widget_roles ) {
                 foreach ( $widget_roles as $role ) {
                     $role = sanitize_key( $role );
