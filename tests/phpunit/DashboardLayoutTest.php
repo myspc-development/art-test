@@ -105,7 +105,7 @@ class DashboardLayoutTest extends TestCase {
         $prop2->setValue(['member' => ['beta']]);
         MockStorage::$users[3] = (object)['roles' => ['member']];
         $layout = DashboardController::get_user_dashboard_layout(3);
-        $this->assertSame([], $layout);
+        $this->assertSame([['id' => 'empty_dashboard']], $layout);
         $this->assertSame([['ap_dashboard_empty_layout', [3, 'member']]], self::$actions);
     }
 

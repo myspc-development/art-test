@@ -276,8 +276,8 @@ class DashboardController {
         ));
 
         if (empty($filtered)) {
-            WidgetGuard::register_stub_widget('widget_placeholder', ['title' => 'Dashboard Placeholder'], ['roles' => [$role]]);
-            $filtered = [ ['id' => 'widget_placeholder'] ];
+            WidgetGuard::register_stub_widget('empty_dashboard', ['title' => 'Dashboard Placeholder'], ['roles' => [$role]]);
+            $filtered = [ ['id' => 'empty_dashboard'] ];
             /**
              * Fires when a user's dashboard layout resolves to an empty set.
              *

@@ -143,6 +143,7 @@ require_once __DIR__ . '/includes/business-dashboard-widgets.php';
 require_once __DIR__ . '/includes/dashboard-messages-widget.php';
 require_once __DIR__ . '/includes/user-actions.php';
 require_once __DIR__ . '/includes/user-dashboard-page.php';
+register_activation_hook(__FILE__, 'ap_ensure_user_dashboard_page');
 // Force HTTPS for avatar URLs to avoid mixed content issues
 require_once __DIR__ . '/includes/avatar-https-fix.php';
 require_once __DIR__ . '/includes/chat-db.php';

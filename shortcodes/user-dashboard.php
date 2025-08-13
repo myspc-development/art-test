@@ -45,7 +45,7 @@ function user_dashboard_shortcode(): string {
     }
 
     if (empty($widgets)) {
-        $widgets = ['widget_placeholder'];
+        $widgets = ['empty_dashboard'];
     }
 
     ob_start();

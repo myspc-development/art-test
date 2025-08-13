@@ -28,11 +28,11 @@ function ap_ensure_user_dashboard_page(): int {
         'post_name'    => 'dashboard',
         'post_status'  => 'publish',
         'post_type'    => 'page',
-        'post_content' => '',
+        'post_content' => '[user_dashboard]',
         'comment_status' => 'closed',
     ]);
     if (!is_wp_error($page_id)) {
-        update_post_meta($page_id, '_wp_page_template', 'page-dashboard.php');
+        update_post_meta($page_id, '_wp_page_template', 'simple-dashboard.php');
         return (int) $page_id;
     }
     return 0;
@@ -42,7 +42,7 @@ add_action('init', 'ap_ensure_user_dashboard_page');
 
 add_filter('template_include', function ($template) {
     if (is_page('dashboard')) {
-        $custom = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/page-dashboard.php';
+        $custom = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/simple-dashboard.php';
         if (file_exists($custom)) {
             return $custom;
         }

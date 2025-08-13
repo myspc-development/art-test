@@ -29,11 +29,17 @@ add_action('plugins_loaded', static function (): void {
         'rsvp_button',
         'share_this_event',
         'sponsored_event_config',
+        'empty_dashboard',
         'widget_placeholder',
     ];
 
     foreach ($ids as $id) {
-        $meta = $id === 'widget_placeholder' ? ['title' => 'Placeholder Widget'] : [];
+        $meta = [];
+        if ($id === 'widget_placeholder') {
+            $meta = ['title' => 'Placeholder Widget'];
+        } elseif ($id === 'empty_dashboard') {
+            $meta = ['title' => 'Dashboard Placeholder'];
+        }
         WidgetGuard::register_stub_widget($id, $meta);
     }
 }, 15);
