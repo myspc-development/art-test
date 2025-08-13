@@ -85,8 +85,8 @@ class WidgetGuard
     {
         $args = [ 'debug' => 'Missing callback' ];
         $args = apply_filters('ap_widget_placeholder_debug_payload', $args, $id, $meta, $cfg);
-        $callback = static function ($unused = null) use ($args) {
-            ApPlaceholderWidget::render($args);
+        $callback = static function ($user_id = null) use ($args) {
+            ApPlaceholderWidget::render($user_id, $args);
         };
 
         $def = $cfg;
