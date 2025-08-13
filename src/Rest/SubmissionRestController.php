@@ -20,6 +20,8 @@ class SubmissionRestController
         'artpulse_org',
     ];
 
+    private static $routes_registered = false;
+
     /**
      * Register the submission endpoint.
      */
@@ -37,6 +39,11 @@ class SubmissionRestController
      */
     public static function register_routes(): void
     {
+        if ( self::$routes_registered ) {
+            return;
+        }
+        self::$routes_registered = true;
+
         register_rest_route(
             'artpulse/v1',
             '/submissions',
