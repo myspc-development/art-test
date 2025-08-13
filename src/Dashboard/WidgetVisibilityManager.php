@@ -239,6 +239,13 @@ class WidgetVisibilityManager
             return;
         }
 
+        $preview = isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
+        $preview_valid = $preview && in_array($preview, array('member', 'artist', 'organization'), true);
+        if (current_user_can('manage_options') && !$preview_valid) {
+            self::$hidden_widgets = array();
+            return;
+        }
+
         $current_user = $user instanceof \WP_User ? $user : wp_get_current_user();
         if (!($current_user instanceof \WP_User) || !$current_user->exists()) {
             return;

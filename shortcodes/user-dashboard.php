@@ -33,7 +33,7 @@ function user_dashboard_shortcode(): string {
     }
 
     $user_id = get_current_user_id();
-    $role    = RoleResolver::resolve($user_id);
+    $role    = function_exists('ap_get_effective_role') ? ap_get_effective_role() : RoleResolver::resolve($user_id);
     $layout  = DashboardController::get_user_dashboard_layout($user_id);
 
     $widgets = [];
