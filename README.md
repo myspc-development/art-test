@@ -476,6 +476,21 @@ wp artpulse widgets audit
 wp artpulse widgets fix --role=member --activate-all --unhide
 ```
 
+## Widget Audit Suite
+
+WP-CLI tools to compare widget sources and render results.
+
+```
+wp artpulse audit:widgets --format=table
+wp artpulse audit:visibility --format=json
+wp artpulse audit:builder --role=member
+wp artpulse audit:render --role=member --no-preview
+# optional fixer
+wp artpulse audit:fix --role=member --unhide --activate-all
+```
+
+Commands exit with a non-zero code when mismatches are detected, allowing CI pipelines to fail fast.
+
 ## Sprint History
 
 All Codex modules and tasks have been completed and verified. The project board reflects a final status of **Done** across reporting, curator tools, analytics, and testing. Documentation was updated each sprint and the changelog records feature milestones through version 1.3.16.
