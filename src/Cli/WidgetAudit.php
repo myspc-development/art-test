@@ -40,7 +40,7 @@ class WidgetAudit {
             ];
         }
         $format = $assoc['format'] ?? 'table';
-        \WP_CLI\Utils::format_items($format, $rows, ['id','status','has_callback','roles_from_registry','roles_from_visibility','registered_in_code_file']);
+        \WP_CLI\Utils\format_items($format, $rows, ['id','status','has_callback','roles_from_registry','roles_from_visibility','registered_in_code_file']);
     }
 
     public function visibility($args, $assoc)
@@ -58,7 +58,7 @@ class WidgetAudit {
             ];
         }
         $format = $assoc['format'] ?? 'table';
-        \WP_CLI\Utils::format_items($format, $rows, ['id','allowed_roles(option)','registry_roles(if any)','union','notes(conflicts)']);
+        \WP_CLI\Utils\format_items($format, $rows, ['id','allowed_roles(option)','registry_roles(if any)','union','notes(conflicts)']);
     }
 
     public function builder($args, $assoc)
@@ -83,7 +83,7 @@ class WidgetAudit {
             }
             WP_CLI::line('Role: ' . $r);
             $format = $assoc['format'] ?? 'table';
-            \WP_CLI\Utils::format_items($format, $rows, ['order','widget_id','in_registry','has_callback']);
+            \WP_CLI\Utils\format_items($format, $rows, ['order','widget_id','in_registry','has_callback']);
         }
     }
 
