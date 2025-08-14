@@ -26,7 +26,6 @@ foreach ( $ids as $raw ) {
         $missing[] = $raw;
         continue;
     }
-    $def = \ArtPulse\Core\DashboardWidgetRegistry::getById( $slug );
     $found[] = $slug;
     if ( ! \ArtPulse\Dashboard\WidgetVisibilityManager::isVisible( $slug, get_current_user_id() ) ) {
         $hidden[] = $slug;
