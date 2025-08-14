@@ -38,7 +38,7 @@ if (defined('WP_DEBUG') && WP_DEBUG) {
 // Migrate legacy widget visibility option to unified artpulse_widget_roles.
 add_action('plugins_loaded', function () {
     $legacy = get_option('ap_widget_visibility_settings', false);
-    if ($legacy !== false && get_option('artpulse_widget_roles', false) === false) {
+    if ($legacy !== false && \ArtPulse\Support\OptionUtils::get_array_option('artpulse_widget_roles') === []) {
         update_option('artpulse_widget_roles', $legacy);
         delete_option('ap_widget_visibility_settings');
     }
