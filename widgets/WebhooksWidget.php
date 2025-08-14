@@ -19,9 +19,9 @@ class WebhooksWidget {
     public static function register_widget(): void {
         DashboardWidgetRegistry::register(
             'webhooks',
-            __('Webhooks', 'artpulse'),
+            'Webhooks',
             'admin-links',
-            __('Manage outbound webhooks for automation.', 'artpulse'),
+            'Manage outbound webhooks for automation.',
             'ap_widget_webhooks',
             [ 'roles' => ['organization'], 'visibility' => 'public' ]
         );

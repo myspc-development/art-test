@@ -3,7 +3,6 @@ namespace ArtPulse\Widgets;
 
 use ArtPulse\Crm\DonationModel;
 use ArtPulse\Core\DashboardWidgetRegistry;
-use ArtPulse\Support\WpAdminFns;
 
 if (!defined('ABSPATH')) { exit; }
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
@@ -20,9 +19,9 @@ class DonorActivityWidget
     {
         DashboardWidgetRegistry::register(
             'ap_donor_activity',
-            __('Donor Activity', 'artpulse'),
+            'Donor Activity',
             'chart-line',
-            __('Recent donations for your organization.', 'artpulse'),
+            'Recent donations for your organization.',
             [self::class, 'render'],
             [ 'roles' => ['organization'] ]
         );
@@ -41,17 +40,8 @@ class DonorActivityWidget
             return esc_html__('No organization assigned.', 'artpulse');
         }
 
-        $from = sanitize_text_field($_GET['donor_from'] ?? '');
-        $to   = sanitize_text_field($_GET['donor_to'] ?? '');
         ob_start();
-        echo '<form method="get" style="margin-bottom:10px">';
-        echo '<input type="hidden" name="page" value="dashboard" />';
-        echo '<label>' . esc_html__('From', 'artpulse') . ' <input type="date" name="donor_from" value="' . esc_attr($from) . '" /></label> ';
-        echo '<label>' . esc_html__('To', 'artpulse') . ' <input type="date" name="donor_to" value="' . esc_attr($to) . '" /></label> ';
-        WpAdminFns::submit_button(__('Filter', 'artpulse'), 'secondary', '', false);
-        echo '</form>';
-
-        $rows = DonationModel::query((int) $org_id, $from, $to);
+        $rows = DonationModel::query((int) $org_id);
         if (!$rows) {
             esc_html_e('No donations found.', 'artpulse');
             return ob_get_clean();

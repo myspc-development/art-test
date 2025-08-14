@@ -1,9 +1,12 @@
 <?php
 namespace ArtPulse\Crm;
 
+use wpdb;
+use ArtPulse\Install\Schema;
+
 class DonationModel
 {
-    public static function add(int $org_id, int $user_id, float $amount, string $method = ''): void
+    public static function add(int $org_id, int $user_id, float $amount): void
     {
         if ($org_id <= 0) {
             throw new \InvalidArgumentException('Organization ID must be a positive integer.');
@@ -17,17 +20,12 @@ class DonationModel
             throw new \InvalidArgumentException('Amount must be greater than zero.');
         }
 
-        if ($method === '') {
-            throw new \InvalidArgumentException('Method cannot be empty.');
-        }
-
         global $wpdb;
         $table = $wpdb->prefix . 'ap_donations';
         $wpdb->insert($table, [
             'org_id'     => $org_id,
             'user_id'    => $user_id,
             'amount'     => $amount,
-            'method'     => sanitize_text_field($method),
             'donated_at' => current_time('mysql'),
         ]);
 
@@ -52,25 +50,15 @@ class DonationModel
         ];
     }
 
-    /**
-     * Query donations with optional date range filters.
-     *
-     * @param int    $org_id Organization ID.
-     * @param string $from   Optional start date (Y-m-d).
-     * @param string $to     Optional end date (Y-m-d).
-     * @return array<int, array<string, mixed>>
-     */
-    public static function query(int $org_id, string $from = '', string $to = ''): array
+    public static function query(int $org_id): array
     {
-        global $wpdb;
+        global $wpdb; /** @var wpdb $wpdb */
         $table = $wpdb->prefix . 'ap_donations';
-        $where = $wpdb->prepare('org_id = %d', $org_id);
-        if ($from !== '') {
-            $where .= $wpdb->prepare(' AND donated_at >= %s', $from . ' 00:00:00');
+        if (!Schema::column_exists($table, 'org_id')) {
+            error_log('AP: donations table missing org_id column; returning empty set');
+            return [];
         }
-        if ($to !== '') {
-            $where .= $wpdb->prepare(' AND donated_at <= %s', $to . ' 23:59:59');
-        }
-        return $wpdb->get_results("SELECT * FROM $table WHERE $where ORDER BY donated_at DESC", ARRAY_A);
+        $sql = "SELECT * FROM {$table} WHERE org_id = %d ORDER BY donated_at DESC";
+        return $wpdb->get_results($wpdb->prepare($sql, $org_id), ARRAY_A) ?: [];
     }
 }

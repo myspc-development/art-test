@@ -11,7 +11,7 @@ class DonationsWidget {
             self::get_id(),
             self::get_title(),
             'money-alt',
-            __('Recent donations list.', 'artpulse'),
+            'Recent donations list.',
             [self::class, 'render'],
             [
                 'roles'   => ['organization'],
@@ -21,7 +21,7 @@ class DonationsWidget {
     }
 
     public static function get_id(): string { return 'sample_donations'; }
-    public static function get_title(): string { return __('Donations Widget', 'artpulse'); }
+    public static function get_title(): string { return 'Donations Widget'; }
     public static function get_section(): string { return 'actions'; }
     public static function metadata(): array { return ['sample' => true]; }
     public static function can_view(int $user_id): bool {

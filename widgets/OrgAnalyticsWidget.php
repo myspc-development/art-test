@@ -22,7 +22,7 @@ class OrgAnalyticsWidget {
             self::get_id(),
             self::get_title(),
             'chart-bar',
-            __('Basic traffic and engagement metrics.', 'artpulse'),
+            'Basic traffic and engagement metrics.',
             [self::class, 'render'],
             [
                 'roles'      => ['organization'],
@@ -33,7 +33,7 @@ class OrgAnalyticsWidget {
     }
 
     public static function get_id(): string { return 'artpulse_analytics_widget'; }
-    public static function get_title(): string { return __('Organization Analytics', 'artpulse'); }
+    public static function get_title(): string { return 'Organization Analytics'; }
     public static function get_section(): string { return 'insights'; }
 
       public static function render( int $user_id = 0 ): string {

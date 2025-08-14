@@ -11,7 +11,7 @@ class EventsWidget {
             self::get_id(),
             self::get_title(),
             'calendar',
-            __('Sample upcoming events list.', 'artpulse'),
+            'Sample upcoming events list.',
             [self::class, 'render'],
             [
                 'roles'   => ['member','artist','organization'],
@@ -21,7 +21,7 @@ class EventsWidget {
     }
 
     public static function get_id(): string { return 'sample_events'; }
-    public static function get_title(): string { return __('Events Widget','artpulse'); }
+    public static function get_title(): string { return 'Events Widget'; }
     public static function get_section(): string { return 'insights'; }
     public static function metadata(): array { return ['sample' => true]; }
     public static function can_view(int $user_id): bool { return $user_id > 0; }

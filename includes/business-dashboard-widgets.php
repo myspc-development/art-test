@@ -28,9 +28,9 @@ function ap_register_business_dashboard_widgets(): void
 {
     DashboardWidgetRegistry::register(
         'site_stats',
-        __('Site Stats', 'artpulse'),
+        'Site Stats',
         'chart-bar',
-        __('Overall site traffic and engagement metrics.', 'artpulse'),
+        'Overall site traffic and engagement metrics.',
         'ap_widget_site_stats',
         [
             'category'   => 'analytics',
@@ -42,9 +42,9 @@ function ap_register_business_dashboard_widgets(): void
 
     DashboardWidgetRegistry::register(
         'lead_capture',
-        __('Lead Capture', 'artpulse'),
+        'Lead Capture',
         'megaphone',
-        __('Recent leads collected from forms.', 'artpulse'),
+        'Recent leads collected from forms.',
         'ap_widget_lead_capture',
         [
             'category'   => 'marketing',
@@ -56,9 +56,9 @@ function ap_register_business_dashboard_widgets(): void
 
     DashboardWidgetRegistry::register(
         'sales_summary',
-        __('Sales Summary (Admin)', 'artpulse'),
+        'Sales Summary (Admin)',
         'chart-pie',
-        __('Sales totals for the selected period.', 'artpulse'),
+        'Sales totals for the selected period.',
         'ap_widget_sales_summary',
         [
             'visibility' => 'public',

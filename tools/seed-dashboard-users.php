@@ -44,7 +44,7 @@ for ($i=1; $i<=3; $i++) {
 
     // demo donations to the org
     if (class_exists('ArtPulse\\Crm\\DonationModel')) {
-        ArtPulse\Crm\DonationModel::add($org_id, $uid, 5.0 * $i, 'seed');
+        ArtPulse\Crm\DonationModel::add($org_id, $uid, 5.0 * $i);
     }
 }
 
@@ -62,7 +62,7 @@ for ($i=1; $i<=2; $i++) {
 // sample donations
 if (class_exists('ArtPulse\\Crm\\DonationModel')) {
     foreach (range(1,3) as $d) {
-        ArtPulse\Crm\DonationModel::add($org_id, 1, 10.0*$d, 'seed');
+        ArtPulse\Crm\DonationModel::add($org_id, 1, 10.0*$d);
     }
 }
 
