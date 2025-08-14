@@ -2,7 +2,66 @@
 /**
  * Template Name: Simple Dashboard
  *
- * Minimal template rendering the fallback dashboard.
+ * Minimal template rendering the fallback dashboard with debug pipeline.
  */
 
-echo do_shortcode('[user_dashboard]');
+if ( ! is_user_logged_in() ) {
+    return;
+}
+
+$role    = function_exists( 'ap_get_effective_role' ) ? ap_get_effective_role() : 'member';
+$layouts = get_option( 'artpulse_default_layouts', [] );
+if ( is_string( $layouts ) ) {
+    $tmp = json_decode( $layouts, true );
+    $layouts = is_array( $tmp ) ? $tmp : [];
+}
+
+$ids = isset( $layouts[ $role ] ) && is_array( $layouts[ $role ] ) ? $layouts[ $role ] : [];
+
+$found = $missing = $hidden = $renderable = [];
+
+foreach ( $ids as $raw ) {
+    $slug = \ArtPulse\Core\DashboardWidgetRegistry::canon_slug( $raw );
+    if ( ! $slug ) {
+        $missing[] = $raw;
+        continue;
+    }
+    $def = \ArtPulse\Core\DashboardWidgetRegistry::get( $slug );
+    if ( ! $def ) {
+        $missing[] = $raw;
+        continue;
+    }
+    $found[] = $slug;
+    if ( ! \ArtPulse\Dashboard\WidgetVisibilityManager::isVisible( $slug, get_current_user_id() ) ) {
+        $hidden[] = $slug;
+        continue;
+    }
+    $renderable[] = $slug;
+}
+
+$user_id = get_current_user_id();
+
+if ( empty( $renderable ) ) {
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        $snap = \ArtPulse\Core\DashboardWidgetRegistry::debug_snapshot();
+        error_log( 'AP:DASH \xE2\x9B\x94 placeholder ' . wp_json_encode( [
+            'role'           => $role,
+            'layout_ids'     => $ids,
+            'found'          => $found,
+            'missing'        => $missing,
+            'hidden'         => $hidden,
+            'registry_count' => $snap['count'] ?? null,
+            'registered_ids' => $snap['registered_ids'] ?? [],
+            'admin'          => current_user_can( 'manage_options' ),
+            'previewing'     => isset( $_GET['ap_preview_role'] ),
+        ] ) );
+    }
+    $renderable = [ 'empty_dashboard' ];
+}
+
+echo '<div class="ap-dashboard-fallback" data-role="' . esc_attr( $role ) . '">';
+foreach ( $renderable as $id ) {
+    ap_render_widget( $id, $user_id );
+}
+echo '</div>';
+

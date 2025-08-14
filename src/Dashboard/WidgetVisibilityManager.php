@@ -225,6 +225,45 @@ class WidgetVisibilityManager
     }
 
     /**
+     * Determine if a widget should be visible to a user.
+     */
+    public static function isVisible(string $widget, ?int $user_id = null): bool
+    {
+        $preview = isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
+        $previewing = in_array($preview, ['member', 'artist', 'organization'], true);
+
+        if (current_user_can('manage_options') && !$previewing) {
+            return true;
+        }
+
+        $user = $user_id !== null ? get_userdata($user_id) : wp_get_current_user();
+        if (!($user instanceof \WP_User) || !$user->exists()) {
+            return false;
+        }
+
+        $roles = self::normalizeRoleList($user->roles ?? []);
+
+        $rules  = self::get_visibility_rules();
+        $config = $rules[$widget] ?? [];
+
+        $cap     = $config['capability'] ?? null;
+        $exclude = self::normalizeRoleList($config['exclude_roles'] ?? []);
+        $allowed = self::normalizeRoleList($config['allowed_roles'] ?? []);
+
+        if ($cap && !user_can($user, $cap)) {
+            return false;
+        }
+        if ($allowed && empty(array_intersect($roles, $allowed))) {
+            return false;
+        }
+        if ($exclude && array_intersect($roles, $exclude)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Remove widgets hidden for the current user and track state.
      *
      * Passing a \WP_User instance allows unit testing without relying on the
@@ -252,7 +291,7 @@ class WidgetVisibilityManager
             return;
         }
 
-        $roles = (array) $current_user->roles;
+        $roles = self::normalizeRoleList($current_user->roles ?? []);
 
         self::$hidden_widgets = [];
 
