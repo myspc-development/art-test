@@ -107,6 +107,33 @@ class DashboardWidgetRegistry {
     }
 
     /**
+     * Canonicalize a widget slug by lower-casing, sanitizing and ensuring the
+     * `widget_` prefix is present.
+     */
+    public static function canon_slug( string $slug ): string {
+        $s = strtolower( sanitize_key( $slug ) );
+        if ( $s === '' ) {
+            return '';
+        }
+        if ( strpos( $s, 'widget_' ) !== 0 ) {
+            $s = 'widget_' . $s;
+        }
+        return $s;
+    }
+
+    /**
+     * Snapshot of the registry for debugging.
+     *
+     * @return array{registered_ids:array<int,string>,count:int}
+     */
+    public static function debug_snapshot(): array {
+        return [
+            'registered_ids' => array_keys( self::$widgets ),
+            'count'          => count( self::$widgets ),
+        ];
+    }
+
+    /**
      * Register a widget and its settings.
      *
      * @param callable $callback Callback used to render the widget. Must be
@@ -159,6 +186,7 @@ class DashboardWidgetRegistry {
         }
 
         // Core-style registration.
+        $id = self::canon_slug( $id );
         if ( self::is_widget_id_registered( $id ) ) {
             trigger_error( 'Dashboard widget ID already registered: ' . $id, E_USER_WARNING );
 
@@ -221,7 +249,7 @@ class DashboardWidgetRegistry {
      *                     and optional `roles` to limit visibility by role.
      */
     public static function register_widget( string $id, array $args ): void {
-        $id = sanitize_key( $id );
+        $id = self::canon_slug( $id );
         if ( ! $id ) {
             return;
         }
@@ -297,7 +325,7 @@ class DashboardWidgetRegistry {
      * Replaces the configuration for the given widget ID.
      */
     public static function update_widget( string $id, array $definition ): void {
-        $id = sanitize_key( $id );
+        $id = self::canon_slug( $id );
         if ( ! $id || ! isset( self::$widgets[ $id ] ) ) {
             return;
         }
@@ -318,6 +346,7 @@ class DashboardWidgetRegistry {
      * @return bool True if the ID is registered, false otherwise.
      */
     private static function is_widget_id_registered( string $id ): bool {
+        $id = self::canon_slug( $id );
         return isset( self::$widgets[ $id ] );
     }
 
@@ -394,6 +423,7 @@ class DashboardWidgetRegistry {
      * Retrieve a widget configuration by ID.
      */
     public static function get_widget( string $id, int $user_id = 0 ): ?array {
+        $id = self::canon_slug( $id );
         if ( ! self::user_can_see( $id, $user_id ) ) {
             return null;
         }
@@ -512,6 +542,7 @@ class DashboardWidgetRegistry {
             $settings = is_array( $decoded ) ? $decoded : [];
         }
         foreach ( $settings as $id => $cfg ) {
+            $id = self::canon_slug( $id );
             if ( ! isset( $widgets[ $id ] ) ) {
                 continue;
             }
@@ -600,6 +631,7 @@ class DashboardWidgetRegistry {
      * Determine if a user can see a widget.
      */
     public static function user_can_see( string $id, int $user_id = 0 ): bool {
+        $id = self::canon_slug( $id );
         if ( ! $user_id ) {
             $user_id = get_current_user_id();
         }
@@ -644,13 +676,15 @@ class DashboardWidgetRegistry {
      * Get a single widget configuration by ID.
      */
     public static function get( string $id ): ?array {
+        $cid     = self::canon_slug( $id );
         $widgets = self::get_all();
-        if ( isset( $widgets[ $id ] ) ) {
-            return $widgets[ $id ];
+        if ( isset( $widgets[ $cid ] ) ) {
+            return $widgets[ $cid ];
         }
 
         $builder = self::get_all( null, true );
-        return $builder[ $id ] ?? null;
+        $base    = strpos( $cid, 'widget_' ) === 0 ? substr( $cid, 7 ) : $cid;
+        return $builder[ $base ] ?? null;
     }
 
     /**
@@ -738,6 +772,7 @@ class DashboardWidgetRegistry {
      * Get a single widget callback by ID.
      */
     public static function get_widget_callback( string $id, int $user_id = 0 ): ?callable {
+        $id = self::canon_slug( $id );
         if ( ! self::user_can_see( $id, $user_id ) ) {
             return null;
         }
@@ -749,6 +784,7 @@ class DashboardWidgetRegistry {
      * Get the settings schema for a widget.
      */
     public static function get_widget_schema( string $id, int $user_id = 0 ): array {
+        $id = self::canon_slug( $id );
         if ( ! self::user_can_see( $id, $user_id ) ) {
             return [];
         }
