@@ -222,10 +222,9 @@ class WidgetVisibilityManager
     /**
      * Determine if a widget should be visible to a user.
      */
-    public static function isVisible(string $widget, ?int $user_id = null): bool
+    public static function isVisible(string $widget, ?int $user_id = null, ?string $force_role = null): bool
     {
-        $preview = isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
-        $previewing = in_array($preview, ['member', 'artist', 'organization'], true);
+        $previewing = in_array($force_role, ['member', 'artist', 'organization'], true);
 
         $is_admin = $user_id !== null
             ? user_can($user_id, 'manage_options')
@@ -239,7 +238,9 @@ class WidgetVisibilityManager
             return false;
         }
 
-        $roles = self::normalizeRoleList($user->roles ?? []);
+        $roles = $previewing
+            ? [ $force_role ]
+            : self::normalizeRoleList($user->roles ?? []);
 
         $rules  = self::get_visibility_rules();
         $config = $rules[$widget] ?? [];
@@ -289,7 +290,9 @@ class WidgetVisibilityManager
             return;
         }
 
-        $roles = self::normalizeRoleList($current_user->roles ?? []);
+        $roles = $preview_valid
+            ? [ $preview ]
+            : self::normalizeRoleList($current_user->roles ?? []);
 
         self::$hidden_widgets = [];
 

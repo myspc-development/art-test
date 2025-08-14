@@ -167,12 +167,12 @@ class DashboardWidgetRegistry {
         string $description = '',
         callable $callback = null,
         array $options = [] // supports 'category', 'roles', optional 'settings' and 'tags'
-    ): void {
+    ): array {
         // Builder-style registration when the second argument is an array.
         if ( is_array( $label ) ) {
             $id = sanitize_key( $id );
             if ( ! $id ) {
-                return;
+                return [];
             }
             $args = array_merge(
                 [
@@ -203,21 +203,24 @@ class DashboardWidgetRegistry {
                 'visibility'     => $visibility,
             ];
 
-            return;
+            return self::$builder_widgets[ $id ];
         }
 
         // Core-style registration.
         $id = self::canon_slug( $id );
-        if ( self::is_widget_id_registered( $id ) ) {
-            trigger_error( 'Dashboard widget ID already registered: ' . $id, E_USER_WARNING );
+        $options['roles'] = self::normalizeRoleList( $options['roles'] ?? [] );
 
-            return;
+        if ( isset( self::$widgets[ $id ] ) ) {
+            if ( $options['roles'] ) {
+                $prior = self::$widgets[ $id ]['roles'] ?? [];
+                self::$widgets[ $id ]['roles'] = array_values( array_unique( array_merge( $prior, $options['roles'] ) ) );
+            }
+            return self::$widgets[ $id ];
         }
+
         $label = trim( $label );
         if ( self::is_widget_label_registered( $label ) ) {
-            trigger_error( 'Dashboard widget label already registered: ' . $label, E_USER_WARNING );
-
-            return;
+            return self::$widgets[ $id ] ?? [];
         }
 
         if ( ! is_callable( $callback ) ) {
@@ -233,8 +236,6 @@ class DashboardWidgetRegistry {
         if ( is_array( $callback ) && isset( $callback[0] ) && is_string( $callback[0] ) ) {
             $class = $callback[0];
         }
-
-        $options['roles'] = self::normalizeRoleList( $options['roles'] ?? [] );
 
         self::$widgets[ $id ] = [
             'label'       => $label,
@@ -259,6 +260,8 @@ class DashboardWidgetRegistry {
             $roles = isset(self::$widgets[$id]['roles']) ? implode(',', (array) self::$widgets[$id]['roles']) : 'all';
             error_log(sprintf('ap widget register %s roles=%s', $id, $roles));
         }
+
+        return self::$widgets[ $id ];
     }
 
     /**
@@ -269,23 +272,25 @@ class DashboardWidgetRegistry {
      * @param array  $args Configuration arguments. Accepts `label`, `callback`,
      *                     and optional `roles` to limit visibility by role.
      */
-    public static function register_widget( string $id, array $args ): void {
+    public static function register_widget( string $id, array $args ): array {
         $id = self::canon_slug( $id );
         if ( ! $id ) {
-            return;
+            return [];
         }
 
-        if ( self::is_widget_id_registered( $id ) ) {
-            trigger_error( 'Dashboard widget ID already registered: ' . $id, E_USER_WARNING );
+        $args['roles'] = self::normalizeRoleList( $args['roles'] ?? [] );
 
-            return;
+        if ( isset( self::$widgets[ $id ] ) ) {
+            if ( $args['roles'] ) {
+                $prior = self::$widgets[ $id ]['roles'] ?? [];
+                self::$widgets[ $id ]['roles'] = array_values( array_unique( array_merge( $prior, $args['roles'] ) ) );
+            }
+            return self::$widgets[ $id ];
         }
 
         $label = trim( $args['label'] ?? 'Untitled' );
         if ( self::is_widget_label_registered( $label ) ) {
-            trigger_error( 'Dashboard widget label already registered: ' . $label, E_USER_WARNING );
-
-            return;
+            return self::$widgets[ $id ] ?? [];
         }
 
         $args['label'] = $label;
@@ -300,7 +305,7 @@ class DashboardWidgetRegistry {
             }
             if ( ! file_exists( $path ) ) {
                 do_action( 'ap_widget_missing_template', $id, $template );
-                return;
+                return [];
             }
             $args['callback'] = static function () use ( $path ) {
                 ob_start();
@@ -315,8 +320,6 @@ class DashboardWidgetRegistry {
             $args['callback'] = self::normalize_callback( $args['callback'] );
         }
 
-        $args['roles'] = self::normalizeRoleList( $args['roles'] ?? [] );
-
         $class = '';
         if ( is_array( $args['callback'] ) && isset( $args['callback'][0] ) && is_string( $args['callback'][0] ) ) {
             $class = $args['callback'][0];
@@ -330,6 +333,8 @@ class DashboardWidgetRegistry {
             $roles = isset($args['roles']) ? implode(',', (array) $args['roles']) : 'all';
             error_log(sprintf('ap widget register %s roles=%s', $id, $roles));
         }
+
+        return self::$widgets[ $id ];
     }
 
     /**
