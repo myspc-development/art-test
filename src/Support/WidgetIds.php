@@ -29,9 +29,15 @@ final class WidgetIds {
         'widget_account_tools'         => 'widget_account_tools',
     ];
 
-    public static function canonicalize(string $id): string {
+    public static function canonicalize( $id ): string {
+        if (!is_string($id)) {
+            return '';
+        }
         $id = strtolower($id);
         $id = str_replace('-', '_', $id);
+        if ($id === '') {
+            return '';
+        }
         // Ensure "widget_" prefix for canonical space
         if (strpos($id, 'widget_') !== 0 && !isset(self::$aliases[$id])) {
             $id = 'widget_' . $id;
