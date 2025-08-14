@@ -118,7 +118,7 @@ class WidgetGuard
 
         // Ensure the widget exists in the registry before attempting to
         // update it with placeholder information.
-        if (DashboardWidgetRegistry::get($id) === null) {
+        if (!DashboardWidgetRegistry::exists($id)) {
             $def = $cfg;
             $def['label']       = $meta['title'] . ' (Stub)';
             $def['icon']        = $meta['icon'];

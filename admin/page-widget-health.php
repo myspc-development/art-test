@@ -53,7 +53,7 @@ function ap_render_widget_health_page(): void {
             $visible = false;
 
             if ($registered) {
-                $def = DashboardWidgetRegistry::get($id);
+                $def = DashboardWidgetRegistry::getById($id);
                 if ($def) {
                     $callback = $def['callback'] ?? null;
                     if (is_callable($callback)) {

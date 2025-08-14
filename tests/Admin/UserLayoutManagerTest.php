@@ -221,7 +221,7 @@ class UserLayoutManagerTest extends TestCase
         $result = UserLayoutManager::get_role_layout('subscriber');
         $this->assertSame(['missing'], $result['logs']);
         $this->assertSame('missing', $result['layout'][1]['id']);
-        $stub = DashboardWidgetRegistry::get('missing');
+        $stub = DashboardWidgetRegistry::getById('missing');
         $this->assertNotNull($stub);
         $this->assertIsCallable($stub['callback']);
     }

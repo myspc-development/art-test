@@ -69,7 +69,7 @@ function ap_render_js_widget(string $id, array $props = []): void
 
     $current_role = DashboardController::get_role(get_current_user_id());
 
-    $config = DashboardWidgetRegistry::get($id);
+    $config = DashboardWidgetRegistry::getById($id);
     if (!$config) {
         return '';
     }

@@ -23,7 +23,7 @@ class FavoritesOverviewWidget {
         );
 
         // Legacy alias used in older configs.
-        if (!DashboardWidgetRegistry::get('widget_widget_favorites')) {
+        if (!DashboardWidgetRegistry::exists('widget_widget_favorites')) {
             DashboardWidgetRegistry::register(
                 'widget_widget_favorites',
                 self::label() . ' (Legacy)',

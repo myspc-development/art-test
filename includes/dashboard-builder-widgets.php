@@ -53,7 +53,7 @@ function ap_register_builder_core_placeholders(): void {
     $config = WidgetRegistryLoader::get_config();
     foreach ($config as $id => $data) {
         $core_id = 'widget_' . $id;
-        if (!DashboardWidgetRegistry::get($core_id)) {
+        if (!DashboardWidgetRegistry::exists($core_id)) {
             $label           = $data['label'] ?? ucwords(str_replace(['_', '-'], ' ', $id));
             $placeholderLabel = $label . ' (Core)';
 

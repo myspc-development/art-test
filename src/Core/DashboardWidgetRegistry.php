@@ -122,6 +122,27 @@ class DashboardWidgetRegistry {
     }
 
     /**
+     * Retrieve a widget definition by slug.
+     */
+    public static function getById( string $slug ): ?array {
+        $id = self::canon_slug( $slug );
+        if ( $id === '' ) {
+            return null;
+        }
+
+        return self::$widgets[ $id ] ?? null;
+    }
+
+    /**
+     * Determine if a widget ID exists in the registry.
+     */
+    public static function exists( string $slug ): bool {
+        $id = self::canon_slug( $slug );
+
+        return $id !== '' && isset( self::$widgets[ $id ] );
+    }
+
+    /**
      * Snapshot of the registry for debugging.
      *
      * @return array{registered_ids:array<int,string>,count:int}
