@@ -1,13 +1,25 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 
+use ArtPulse\Support\OptionUtils;
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 function ap_render_dashboard_config_page() {
     if (!current_user_can('manage_options')) {
         wp_die(__('Insufficient permissions', 'artpulse'));
     }
 
-    $visibility = get_option('artpulse_widget_roles', []);
-    $layout     = get_option('artpulse_default_layouts', []);
+    $visibility = OptionUtils::get_array_option('artpulse_widget_roles');
+    $layout     = OptionUtils::get_array_option('artpulse_default_layouts');
+    if (!$layout) {
+        $layout = [];
+        foreach (DashboardWidgetRegistry::get_role_widget_map() as $role => $widgets) {
+            $layout[$role] = array_map(
+                static fn($w) => ['id' => sanitize_key(is_array($w) ? ($w['id'] ?? '') : $w)],
+                $widgets
+            );
+        }
+    }
     $locked     = get_option('artpulse_locked_widgets', []);
 
     if (isset($_POST['save_dashboard_config']) && check_admin_referer('ap_save_dashboard_config')) {

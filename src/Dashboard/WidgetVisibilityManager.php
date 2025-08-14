@@ -2,6 +2,7 @@
 namespace ArtPulse\Dashboard;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Support\OptionUtils;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -173,7 +174,7 @@ class WidgetVisibilityManager
         }
 
         // Merge in any saved configuration from the database.
-        $saved = get_option('artpulse_widget_roles', []);
+        $saved = OptionUtils::get_array_option('artpulse_widget_roles');
         if (is_string($saved)) {
             $decoded = json_decode($saved, true);
             $saved   = is_array($decoded) ? $decoded : [];

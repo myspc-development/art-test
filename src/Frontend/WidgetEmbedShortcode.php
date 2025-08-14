@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Frontend;
 
+use ArtPulse\Support\OptionUtils;
+
 class WidgetEmbedShortcode {
     public static function register() {
         if (!shortcode_exists('ap_widget')) {
@@ -20,7 +22,7 @@ class WidgetEmbedShortcode {
         $role = $user->roles[0] ?? 'guest';
 
         // Load widget config
-        $registry = get_option('artpulse_widget_roles', []);
+        $registry = OptionUtils::get_array_option('artpulse_widget_roles');
         $conf = $registry[$widget_id] ?? [];
         if (is_array($conf) && array_keys($conf) !== range(0, count($conf) - 1)) {
             $allowed_roles = (array) ($conf['roles'] ?? []);

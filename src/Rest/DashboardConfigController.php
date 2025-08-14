@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Support\OptionUtils;
 
 class DashboardConfigController {
     public static function register(): void {
@@ -29,7 +30,7 @@ class DashboardConfigController {
     }
 
     public static function get_config(WP_REST_Request $request): WP_REST_Response {
-        $visibility = get_option('artpulse_widget_roles', []);
+        $visibility = OptionUtils::get_array_option('artpulse_widget_roles');
         $locked     = get_option('artpulse_locked_widgets', []);
         $role_map   = DashboardWidgetRegistry::get_role_widget_map();
         $role_widgets = [];
