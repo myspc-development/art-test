@@ -175,41 +175,36 @@ class WidgetVisibilityManager
 
         // Merge in any saved configuration from the database.
         $saved = OptionUtils::get_array_option('artpulse_widget_roles');
-        if (is_string($saved)) {
-            $decoded = json_decode($saved, true);
-            $saved   = is_array($decoded) ? $decoded : [];
-        }
-        if (is_array($saved)) {
-            foreach ($saved as $widget => $config) {
-                $widget = sanitize_key($widget);
-                $config = is_array($config) ? $config : [];
+        $saved = is_array($saved) ? $saved : [];
+        foreach ($saved as $widget => $config) {
+            $widget = sanitize_key($widget);
+            $config = is_array($config) ? $config : [];
 
-                $merged = [];
+            $merged = [];
 
-                if (isset($config['capability'])) {
-                    $cap = sanitize_text_field($config['capability']);
-                    if ($cap !== '') {
-                        $merged['capability'] = $cap;
-                    }
+            if (isset($config['capability'])) {
+                $cap = sanitize_text_field($config['capability']);
+                if ($cap !== '') {
+                    $merged['capability'] = $cap;
                 }
+            }
 
-                if (isset($config['exclude_roles'])) {
-                    $roles = self::normalizeRoleList($config['exclude_roles']);
-                    if ($roles) {
-                        $merged['exclude_roles'] = $roles;
-                    }
+            if (isset($config['exclude_roles'])) {
+                $roles = self::normalizeRoleList($config['exclude_roles']);
+                if ($roles) {
+                    $merged['exclude_roles'] = $roles;
                 }
+            }
 
-                if (isset($config['allowed_roles'])) {
-                    $roles = self::normalizeRoleList($config['allowed_roles']);
-                    if ($roles) {
-                        $merged['allowed_roles'] = $roles;
-                    }
+            if (isset($config['allowed_roles'])) {
+                $roles = self::normalizeRoleList($config['allowed_roles']);
+                if ($roles) {
+                    $merged['allowed_roles'] = $roles;
                 }
+            }
 
-                if ($merged) {
-                    $rules[$widget] = array_merge($rules[$widget] ?? [], $merged);
-                }
+            if ($merged) {
+                $rules[$widget] = array_merge($rules[$widget] ?? [], $merged);
             }
         }
 
