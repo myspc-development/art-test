@@ -28,7 +28,7 @@ class WidgetSourcesVisibilityTest extends TestCase
     public function test_roles_from_visibility_option(): void
     {
         DashboardWidgetRegistry::register('widget_demo', 'Demo', '', '', static fn() => '');
-        update_option('artpulse_widget_roles', ['widget_demo' => ['member']]);
+        update_option('artpulse_widget_roles', ['member' => ['widget_demo']]);
 
         $cmd = new WidgetAudit();
         $cmd->widgets([], ['format' => 'table']);

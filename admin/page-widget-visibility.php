@@ -3,6 +3,7 @@ if (!defined('ABSPATH')) { exit; }
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Support\OptionUtils;
+use ArtPulse\Support\WidgetIds;
 
 add_action('admin_menu', function(){
     add_options_page(
@@ -24,7 +25,7 @@ function ap_sanitize_widget_visibility_settings($input) {
     $roles = ['member', 'artist', 'organization'];
     $output = [];
     foreach ((array) $input as $id => $config) {
-        $id    = sanitize_key($id);
+        $id    = WidgetIds::canonicalize($id);
         $conf  = [];
         $allowed = array_map('sanitize_key', $config['roles'] ?? []);
         $exclude = array_values(array_diff($roles, $allowed));

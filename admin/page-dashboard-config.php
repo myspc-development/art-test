@@ -3,6 +3,7 @@ if (!defined('ABSPATH')) { exit; }
 
 use ArtPulse\Support\OptionUtils;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Support\WidgetIds;
 
 function ap_render_dashboard_config_page() {
     if (!current_user_can('manage_options')) {
@@ -10,7 +11,7 @@ function ap_render_dashboard_config_page() {
     }
 
     $visibility = OptionUtils::get_array_option('artpulse_widget_roles');
-    $layout     = OptionUtils::get_array_option('artpulse_default_layouts');
+    $layout     = OptionUtils::get_array_option('artpulse_dashboard_layouts');
     if (!$layout) {
         $layout = [];
         foreach (DashboardWidgetRegistry::get_role_widget_map() as $role => $widgets) {
@@ -24,10 +25,28 @@ function ap_render_dashboard_config_page() {
 
     if (isset($_POST['save_dashboard_config']) && check_admin_referer('ap_save_dashboard_config')) {
         $visibility = json_decode(stripslashes($_POST['roles_json'] ?? ''), true) ?: [];
-        $layout     = json_decode(stripslashes($_POST['layout_json'] ?? ''), true) ?: [];
-        $locked     = json_decode(stripslashes($_POST['locked_json'] ?? ''), true) ?: [];
+        foreach ($visibility as $r => &$ids) {
+            $ids = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $ids)));
+        }
+        unset($ids);
+        $layout = json_decode(stripslashes($_POST['layout_json'] ?? ''), true) ?: [];
+        foreach ($layout as $r => &$ids) {
+            $new = [];
+            $seen = [];
+            foreach ((array)$ids as $item) {
+                $id = is_array($item) ? ($item['id'] ?? '') : $item;
+                $id = WidgetIds::canonicalize($id);
+                if (in_array($id, $seen, true)) { continue; }
+                $seen[] = $id;
+                $new[] = is_array($item) ? array_merge($item, ['id'=>$id]) : $id;
+            }
+            $ids = $new;
+        }
+        unset($ids);
+        $locked = json_decode(stripslashes($_POST['locked_json'] ?? ''), true) ?: [];
+        $locked = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $locked)));
         update_option('artpulse_widget_roles', $visibility);
-        update_option('artpulse_default_layouts', $layout);
+        update_option('artpulse_dashboard_layouts', $layout);
         update_option('artpulse_locked_widgets', $locked);
         echo '<div class="notice notice-success"><p>' . esc_html__('Configuration saved.', 'artpulse') . '</p></div>';
     }

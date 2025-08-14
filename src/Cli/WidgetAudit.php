@@ -6,6 +6,7 @@ use ArtPulse\Audit\Parity;
 use ArtPulse\Audit\AuditBus;
 use ArtPulse\Core\DashboardRenderer;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Support\WidgetIds;
 use WP_CLI; // phpcs:ignore
 
 /**
@@ -150,6 +151,57 @@ class WidgetAudit {
         $registry = WidgetSources::get_registry();
         $summary  = [];
 
+        if (isset($assoc['resolve-parity'])) {
+            $target      = $assoc['resolve-parity'];
+            $target_role = $target !== true ? sanitize_key($target) : '';
+            $keys        = ['artpulse_widget_roles', 'artpulse_hidden_widgets', 'artpulse_dashboard_layouts'];
+            $remapped    = 0;
+            $deduped     = 0;
+            foreach ($keys as $k) {
+                $opt = get_option($k, []);
+                if (!is_array($opt)) {
+                    continue;
+                }
+                foreach ($opt as $r => &$ids) {
+                    if ($target_role && $r !== $target_role) {
+                        continue;
+                    }
+                    if ($k === 'artpulse_dashboard_layouts') {
+                        $new  = [];
+                        $seen = [];
+                        foreach ((array) $ids as $item) {
+                            $id = is_array($item) ? ($item['id'] ?? '') : $item;
+                            $canon = WidgetIds::canonicalize($id);
+                            if ($canon !== $id) {
+                                $remapped++;
+                            }
+                            if (in_array($canon, $seen, true)) {
+                                $deduped++;
+                                continue;
+                            }
+                            $seen[] = $canon;
+                            $new[] = is_array($item) ? array_merge($item, ['id' => $canon]) : $canon;
+                        }
+                        $ids = $new;
+                    } else {
+                        $before = (array) $ids;
+                        $ids = array_map(function ($id) use (&$remapped) {
+                            $canon = WidgetIds::canonicalize($id);
+                            if ($canon !== $id) {
+                                $remapped++;
+                            }
+                            return $canon;
+                        }, $before);
+                        $ids = array_values(array_unique($ids));
+                        $deduped += count($before) - count($ids);
+                    }
+                }
+                unset($ids);
+                update_option($k, $opt);
+            }
+            WP_CLI::line("remapped={$remapped} deduped={$deduped}");
+        }
+
         // Unhide widgets for a role.
         if (isset($assoc['unhide'])) {
             if (!$role) {
@@ -236,7 +288,7 @@ class WidgetAudit {
                         do_action('artpulse_audit_event', 'fix', ['widget' => $id, 'action' => 'hide', 'class' => null]);
                     }
                 }
-                $hidden[$r] = $list;
+                $hidden[$r] = array_values(array_unique($list));
             }
             update_option('artpulse_hidden_widgets', $hidden);
         }

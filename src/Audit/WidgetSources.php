@@ -2,7 +2,7 @@
 namespace ArtPulse\Audit;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
-use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\Support\WidgetIds;
 
 /**
  * Helpers to read widget configuration sources.
@@ -18,6 +18,7 @@ class WidgetSources {
         $defs = DashboardWidgetRegistry::get_all();
         $out  = [];
         foreach ($defs as $id => $cfg) {
+            $id = WidgetIds::canonicalize($id);
             $cb = $cfg['callback'] ?? null;
             $class = $cfg['class'] ?? '';
             $out[$id] = [
@@ -42,7 +43,23 @@ class WidgetSources {
     public static function get_visibility_roles(): array
     {
         $opt = get_option('artpulse_widget_roles', []);
-        return is_array($opt) ? $opt : [];
+        $out = [];
+        if (is_array($opt)) {
+            foreach ($opt as $role => $ids) {
+                foreach ((array) $ids as $id) {
+                    $cid = WidgetIds::canonicalize($id);
+                    if (!$cid) {
+                        continue;
+                    }
+                    $out[$cid][] = $role;
+                }
+            }
+            foreach ($out as &$roles) {
+                $roles = array_values(array_unique($roles));
+            }
+            unset($roles);
+        }
+        return $out;
     }
 
     /**
@@ -53,7 +70,13 @@ class WidgetSources {
     public static function get_hidden_for_roles(): array
     {
         $opt = get_option('artpulse_hidden_widgets', []);
-        return is_array($opt) ? $opt : [];
+        $out = [];
+        if (is_array($opt)) {
+            foreach ($opt as $role => $ids) {
+                $out[$role] = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $ids)));
+            }
+        }
+        return $out;
     }
 
     /**
@@ -72,12 +95,16 @@ class WidgetSources {
      */
     public static function get_builder_layout(string $role): array
     {
-        $res = UserLayoutManager::get_role_layout($role);
-        $layout = $res['layout'] ?? [];
+        $layouts = get_option('artpulse_dashboard_layouts', []);
+        $layout = $layouts[$role] ?? [];
         $ids = [];
         foreach ($layout as $item) {
-            $ids[] = is_array($item) ? ($item['id'] ?? '') : $item;
+            $id = is_array($item) ? ($item['id'] ?? '') : $item;
+            $id = WidgetIds::canonicalize($id);
+            if ($id && !in_array($id, $ids, true)) {
+                $ids[] = $id;
+            }
         }
-        return array_values(array_filter($ids));
+        return $ids;
     }
 }
