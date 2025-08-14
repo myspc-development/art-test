@@ -6,6 +6,7 @@ use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Support\OptionUtils;
+use ArtPulse\Support\WidgetIds;
 
 class DashboardConfigController {
     public static function register(): void {
@@ -70,7 +71,12 @@ class DashboardConfigController {
 
         $data       = $request->get_json_params();
         $visibility = isset($data['widget_roles']) && is_array($data['widget_roles']) ? $data['widget_roles'] : [];
-        $locked     = isset($data['locked']) && is_array($data['locked']) ? $data['locked'] : [];
+        foreach ($visibility as $role => &$ids) {
+            $ids = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $ids)));
+        }
+        unset($ids);
+        $locked = isset($data['locked']) && is_array($data['locked']) ? $data['locked'] : [];
+        $locked = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $locked)));
 
         update_option('artpulse_widget_roles', $visibility);
         update_option('artpulse_locked_widgets', $locked);

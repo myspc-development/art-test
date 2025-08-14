@@ -52,6 +52,23 @@ add_action('init', function () {
 // Ensure role sync runs before audits access visibility options.
 add_action('init', [\ArtPulse\Core\WidgetRoleSync::class, 'sync'], 20);
 
+// Normalize any saved widget ids to their canonical forms.
+add_action('admin_init', function () {
+  $keys = ['artpulse_widget_roles','artpulse_hidden_widgets','artpulse_dashboard_layouts'];
+  foreach ($keys as $k) {
+    $v = get_option($k, []);
+    $changed = false;
+    array_walk_recursive($v, function (&$id) use (&$changed) {
+      $canon = \ArtPulse\Support\WidgetIds::canonicalize($id);
+      if ($canon !== $id) { $id = $canon; $changed = true; }
+    });
+    if ($changed) {
+      $v = is_array($v) ? array_map(fn($arr)=>array_values(array_unique($arr)), $v) : $v;
+      update_option($k, $v, true);
+    }
+  }
+}, 20);
+
 if (defined('WP_CLI') && WP_CLI) {
     require_once __DIR__ . '/includes/class-cli-debug-dashboard.php';
     \WP_CLI::add_command('artpulse debug-dashboard', \ArtPulse\CLI\DebugDashboardCommand::class);

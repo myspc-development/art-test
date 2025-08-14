@@ -7,6 +7,7 @@ use ArtPulse\Dashboard\WidgetVisibility;
 use WP_Roles;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\WidgetFlags;
+use ArtPulse\Support\WidgetIds;
 
 /**
  * Simple registry for dashboard widgets.
@@ -133,34 +134,17 @@ class DashboardWidgetRegistry {
      * `widget_` prefix is present.
      */
     public static function canon_slug( string $slug ): string {
-        $s = strtolower( sanitize_key( $slug ) );
-        $s = str_replace( '-', '_', $s );
-        if ( $s === '' ) {
-            return '';
-        }
-        if ( strpos( $s, 'widget_' ) !== 0 ) {
-            $s = 'widget_' . $s;
-        }
-        if ( isset( self::$aliases[ $s ] ) ) {
-            return self::$aliases[ $s ];
-        }
-        return $s;
+        $s = WidgetIds::canonicalize( $slug );
+        return self::$aliases[ $s ] ?? $s;
     }
 
     /**
      * Register an alternate widget ID that maps to a canonical ID.
      */
     public static function alias( string $alias, string $canonical ): void {
-        $a = strtolower( sanitize_key( $alias ) );
-        $a = str_replace( '-', '_', $a );
-        $c = self::canon_slug( $canonical );
-        if ( $a === '' || $c === '' ) {
-            return;
-        }
-        if ( strpos( $a, 'widget_' ) !== 0 ) {
-            $a = 'widget_' . $a;
-        }
-        if ( $a === $c ) {
+        $a = WidgetIds::canonicalize( $alias );
+        $c = WidgetIds::canonicalize( $canonical );
+        if ( $a === '' || $c === '' || $a === $c ) {
             return;
         }
         self::$aliases[ $a ] = $c;

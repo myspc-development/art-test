@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Audit;
 
+use ArtPulse\Support\WidgetIds;
+
 /**
  * Compute expected vs actual widget rendering parity.
  */
@@ -43,10 +45,11 @@ class Parity {
             if (($e['role'] ?? '') !== $role || ($e['type'] ?? '') !== 'render') {
                 continue;
             }
+            $id = WidgetIds::canonicalize($e['id']);
             if (!empty($e['ok'])) {
-                $rendered[] = $e['id'];
+                $rendered[] = $id;
             }
-            $last[$e['id']] = $e;
+            $last[$id] = $e;
         }
         $rendered = array_values(array_unique($rendered));
         $missing = [];
