@@ -7,6 +7,7 @@ use ArtPulse\Admin\ConfigBackupTab;
 use ArtPulse\Admin\UpdatesTab;
 use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Core\ActivityLogger;
+use ArtPulse\Support\WpAdminFns;
 
 class SettingsPage
 {
@@ -653,9 +654,9 @@ class SettingsPage
                         <?php ConfigBackupTab::render(); ?>
                     <?php elseif ($slug === 'updates') : ?>
                         <form method="post" action="options.php">
-                            <?php settings_fields('artpulse_settings_group'); ?>
-                            <?php do_settings_sections('artpulse-updates'); ?>
-                            <?php submit_button(); ?>
+                            <?php WpAdminFns::settings_fields('artpulse_settings_group'); ?>
+                            <?php WpAdminFns::do_settings_sections('artpulse-updates'); ?>
+                            <?php WpAdminFns::submit_button(); ?>
                         </form>
                         <?php include ARTPULSE_PLUGIN_DIR . 'templates/admin/settings-tab-updates.php'; ?>
                     <?php elseif ($slug === 'widgets') : ?>
@@ -664,9 +665,9 @@ class SettingsPage
                         <?php \ArtPulse\Integration\SocialAutoPoster::render_settings(); ?>
                     <?php else : ?>
                         <form method="post" action="options.php">
-                            <?php settings_fields('artpulse_settings_group'); ?>
-                            <?php do_settings_sections('artpulse-' . $slug); ?>
-                            <?php submit_button(); ?>
+                            <?php WpAdminFns::settings_fields('artpulse_settings_group'); ?>
+                            <?php WpAdminFns::do_settings_sections('artpulse-' . $slug); ?>
+                            <?php WpAdminFns::submit_button(); ?>
                         </form>
                         <?php if ($slug === 'general') : ?>
                             <hr>
@@ -703,11 +704,11 @@ class SettingsPage
                                 </tbody>
                             </table>
                             <form method="post">
-                                <?php wp_nonce_field('ap_test_webhook_action'); ?>
+                                <?php \wp_nonce_field('ap_test_webhook_action'); ?>
                                 <input type="submit" name="ap_test_webhook" class="button button-secondary" value="<?php esc_attr_e('Simulate Webhook Event', 'artpulse'); ?>">
                             </form>
                             <form method="post">
-                                <?php wp_nonce_field('ap_clear_webhook_log_action'); ?>
+                                <?php \wp_nonce_field('ap_clear_webhook_log_action'); ?>
                                 <input type="submit" name="ap_clear_webhook_log" class="button button-secondary" value="<?php esc_attr_e('Clear Webhook Log', 'artpulse'); ?>">
                             </form>
                         <?php endif; ?>

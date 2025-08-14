@@ -20,8 +20,14 @@ if (!defined('AP_ENABLE_WIDGET_PLACEHOLDERS')) {
     define('AP_ENABLE_WIDGET_PLACEHOLDERS', true);
 }
 
-// Load translations before other files hook into init
-require_once __DIR__ . '/includes/i18n.php';
+add_action('init', function () {
+    load_plugin_textdomain('artpulse', false, dirname(plugin_basename(__FILE__)) . '/languages');
+    if (function_exists('wp_set_script_translations')) {
+        $lang_dir = plugin_dir_path(__FILE__) . 'languages';
+        wp_set_script_translations('ap-payment-dashboard', 'artpulse', $lang_dir);
+        wp_set_script_translations('ap-engagement-dashboard', 'artpulse', $lang_dir);
+    }
+});
 
 // Load main plugin logic
 require_once plugin_dir_path(__FILE__) . 'artpulse.php';

@@ -56,22 +56,27 @@ class DashboardRenderer
 
         $start = microtime(true);
 
-        if ($class && class_exists($class) && is_callable([$class, 'render'])) {
-            ob_start();
-            $result = $class::render($user_id);
-            $buffer = ob_get_clean();
-            $output = $buffer . (is_string($result) ? $result : '');
-        } elseif (has_action("ap_render_dashboard_widget_{$widget_id}")) {
-            ob_start();
-            do_action("ap_render_dashboard_widget_{$widget_id}", $user_id);
-            $output = ob_get_clean();
-        } elseif (isset($widget['callback']) && is_callable($widget['callback'])) {
-            ob_start();
-            $result = call_user_func($widget['callback'], $user_id);
-            $buffer = ob_get_clean();
-            $output = $buffer . (is_string($result) ? $result : '');
-        } else {
-            error_log("\xF0\x9F\x9A\xAB Invalid callback for widget '{$widget_id}'.");
+        try {
+            if ($class && class_exists($class) && is_callable([$class, 'render'])) {
+                ob_start();
+                $result = $class::render($user_id);
+                $buffer = ob_get_clean();
+                $output = $buffer . (is_string($result) ? $result : '');
+            } elseif (has_action("ap_render_dashboard_widget_{$widget_id}")) {
+                ob_start();
+                do_action("ap_render_dashboard_widget_{$widget_id}", $user_id);
+                $output = ob_get_clean();
+            } elseif (isset($widget['callback']) && is_callable($widget['callback'])) {
+                ob_start();
+                $result = call_user_func($widget['callback'], $user_id);
+                $buffer = ob_get_clean();
+                $output = $buffer . (is_string($result) ? $result : '');
+            } else {
+                error_log("\xF0\x9F\x9A\xAB Invalid callback for widget '{$widget_id}'.");
+            }
+        } catch (\Throwable $e) {
+            error_log("AP: widget {$widget_id} failed: " . $e->getMessage());
+            $output = "<div class='ap-widget-error'>This widget failed to load.</div>";
         }
 
         $output = apply_filters('ap_render_dashboard_widget_output', $output, $widget_id, $user_id, $widget);

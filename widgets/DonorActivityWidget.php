@@ -3,6 +3,7 @@ namespace ArtPulse\Widgets;
 
 use ArtPulse\Crm\DonationModel;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Support\WpAdminFns;
 
 if (!defined('ABSPATH')) { exit; }
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
@@ -47,7 +48,7 @@ class DonorActivityWidget
         echo '<input type="hidden" name="page" value="dashboard" />';
         echo '<label>' . esc_html__('From', 'artpulse') . ' <input type="date" name="donor_from" value="' . esc_attr($from) . '" /></label> ';
         echo '<label>' . esc_html__('To', 'artpulse') . ' <input type="date" name="donor_to" value="' . esc_attr($to) . '" /></label> ';
-        submit_button(__('Filter','artpulse'), 'secondary', '','false');
+        WpAdminFns::submit_button(__('Filter', 'artpulse'), 'secondary', '', false);
         echo '</form>';
 
         $rows = DonationModel::query((int) $org_id, $from, $to);

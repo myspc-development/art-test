@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Admin;
 
+use ArtPulse\Support\WpAdminFns;
+
 class SpotlightManager
 {
     public static function register(): void
@@ -49,7 +51,7 @@ class SpotlightManager
 
         echo '<div class="wrap"><h1>' . esc_html__('Artist Spotlights', 'artpulse') . '</h1>';
         echo '<form method="post">';
-        wp_nonce_field('ap_spotlights_save', 'ap_spotlights_nonce');
+        \wp_nonce_field('ap_spotlights_save', 'ap_spotlights_nonce');
         echo '<table class="widefat"><thead><tr><th>' . esc_html__('Artist', 'artpulse') . '</th><th>' . esc_html__('Spotlight', 'artpulse') . '</th><th>' . esc_html__('Start', 'artpulse') . '</th><th>' . esc_html__('End', 'artpulse') . '</th></tr></thead><tbody>';
         foreach ($artists as $artist) {
             $spot  = get_post_meta($artist->ID, 'artist_spotlight', true);
@@ -63,7 +65,7 @@ class SpotlightManager
             echo '</tr>';
         }
         echo '</tbody></table>';
-        submit_button(__('Save Spotlights', 'artpulse'));
+        WpAdminFns::submit_button(__('Save Spotlights', 'artpulse'));
         echo '</form></div>';
     }
 
