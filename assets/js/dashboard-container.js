@@ -1,4 +1,4 @@
-var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
+var APDashboardContainer = (function (require$$0$1, reactGridLayout, require$$0) {
   'use strict';
 
   function _arrayLikeToArray(r, a) {
@@ -229,16 +229,78 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     m.hydrateRoot;
   }
 
+  var jsxRuntime = {exports: {}};
+
+  var reactJsxRuntime_production_min = {};
+
+  /**
+   * @license React
+   * react-jsx-runtime.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+  var hasRequiredReactJsxRuntime_production_min;
+
+  function requireReactJsxRuntime_production_min () {
+  	if (hasRequiredReactJsxRuntime_production_min) return reactJsxRuntime_production_min;
+  	hasRequiredReactJsxRuntime_production_min = 1;
+
+  	var f = require$$0$1,
+  	  k = Symbol["for"]("react.element"),
+  	  l = Symbol["for"]("react.fragment"),
+  	  m = Object.prototype.hasOwnProperty,
+  	  n = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+  	  p = {
+  	    key: true,
+  	    ref: true,
+  	    __self: true,
+  	    __source: true
+  	  };
+  	function q(c, a, g) {
+  	  var b,
+  	    d = {},
+  	    e = null,
+  	    h = null;
+  	  void 0 !== g && (e = "" + g);
+  	  void 0 !== a.key && (e = "" + a.key);
+  	  void 0 !== a.ref && (h = a.ref);
+  	  for (b in a) m.call(a, b) && !p.hasOwnProperty(b) && (d[b] = a[b]);
+  	  if (c && c.defaultProps) for (b in a = c.defaultProps, a) void 0 === d[b] && (d[b] = a[b]);
+  	  return {
+  	    $$typeof: k,
+  	    type: c,
+  	    key: e,
+  	    ref: h,
+  	    props: d,
+  	    _owner: n.current
+  	  };
+  	}
+  	reactJsxRuntime_production_min.Fragment = l;
+  	reactJsxRuntime_production_min.jsx = q;
+  	reactJsxRuntime_production_min.jsxs = q;
+  	return reactJsxRuntime_production_min;
+  }
+
+  {
+    jsxRuntime.exports = requireReactJsxRuntime_production_min();
+  }
+
+  var jsxRuntimeExports = jsxRuntime.exports;
+
   function NearbyEventsMapWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce,
       lat = _ref.lat,
       lng = _ref.lng;
-    var _useState = React.useState([]),
+    var _useState = require$$0$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       events = _useState2[0],
       setEvents = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       if (!lat || !lng) {
         setEvents([]);
         return;
@@ -255,26 +317,30 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return setEvents([]);
       });
     }, [lat, lng, apiRoot, nonce]);
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "ap-nearby-events-widget",
-      "data-widget-id": "nearby_events_map"
-    }, /*#__PURE__*/React.createElement("ul", null, events.map(function (ev) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: ev.id
-      }, /*#__PURE__*/React.createElement("a", {
-        href: ev.link
-      }, ev.title), " (", ev.distance, " km)");
-    })));
+      "data-widget-id": "nearby_events_map",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: events.map(function (ev) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [/*#__PURE__*/jsxRuntimeExports.jsx("a", {
+              href: ev.link,
+              children: ev.title
+            }), " (", ev.distance, " km)"]
+          }, ev.id);
+        })
+      })
+    });
   }
 
   function MyFavoritesWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState([]),
+    var _useState = require$$0$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       items = _useState2[0],
       setItems = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/follows?post_type=artpulse_event"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -284,16 +350,20 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return r.json();
       }).then(setItems);
     }, []);
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "ap-favorites-widget",
-      "data-widget-id": "my_favorites"
-    }, /*#__PURE__*/React.createElement("ul", null, items.map(function (i) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: i.post_id
-      }, /*#__PURE__*/React.createElement("a", {
-        href: i.link
-      }, i.title));
-    })));
+      "data-widget-id": "my_favorites",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: items.map(function (i) {
+          return /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+            children: /*#__PURE__*/jsxRuntimeExports.jsx("a", {
+              href: i.link,
+              children: i.title
+            })
+          }, i.post_id);
+        })
+      })
+    });
   }
 
   var __$h = wp.i18n.__;
@@ -306,11 +376,11 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
    * - apiRoot: REST API root URL.
    * - nonce: WP nonce for authentication.
    */
-  function RSVPButton(_ref) {
+  function RsvpButtonWidget(_ref) {
     var eventId = _ref.eventId,
       apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(false),
+    var _useState = require$$0$1.useState(false),
       _useState2 = _slicedToArray(_useState, 2),
       rsvped = _useState2[0],
       setRsvped = _useState2[1];
@@ -348,12 +418,11 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return _ref2.apply(this, arguments);
       };
     }();
-    return /*#__PURE__*/React.createElement("div", {
-      "data-widget-id": "rsvp_button"
-    }, /*#__PURE__*/React.createElement("button", {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("button", {
       className: "ap-rsvp-btn".concat(rsvped ? ' is-rsvped' : ''),
-      onClick: toggle
-    }, rsvped ? __$h('Cancel RSVP', 'artpulse') : __$h('RSVP', 'artpulse')));
+      onClick: toggle,
+      children: rsvped ? __$h('Cancel RSVP', 'artpulse') : __$h('RSVP', 'artpulse')
+    });
   }
 
   var __$g = wp.i18n.__;
@@ -370,15 +439,15 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     var eventId = _ref.eventId,
       apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState([]),
+    var _useState = require$$0$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       messages = _useState2[0],
       setMessages = _useState2[1];
-    var _useState3 = React.useState(''),
+    var _useState3 = require$$0$1.useState(''),
       _useState4 = _slicedToArray(_useState3, 2),
       text = _useState4[0],
       setText = _useState4[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/event/").concat(eventId, "/chat")).then(function (r) {
         return r.json();
       }).then(setMessages);
@@ -418,26 +487,31 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return _ref2.apply(this, arguments);
       };
     }();
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-event-chat-widget",
-      "data-widget-id": "event_chat"
-    }, /*#__PURE__*/React.createElement("ul", {
-      className: "chat-thread"
-    }, messages.map(function (m, i) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: i
-      }, /*#__PURE__*/React.createElement("strong", null, m.author, ":"), " ", m.content);
-    })), /*#__PURE__*/React.createElement("div", {
-      className: "chat-form"
-    }, /*#__PURE__*/React.createElement("input", {
-      value: text,
-      onChange: function onChange(e) {
-        return setText(e.target.value);
-      },
-      placeholder: __$g('Write a message...', 'artpulse')
-    }), /*#__PURE__*/React.createElement("button", {
-      onClick: send
-    }, __$g('Send', 'artpulse'))));
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        className: "chat-thread",
+        children: messages.map(function (m, i) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [/*#__PURE__*/jsxRuntimeExports.jsxs("strong", {
+              children: [m.author, ":"]
+            }), " ", m.content]
+          }, i);
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "chat-form",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("input", {
+          value: text,
+          onChange: function onChange(e) {
+            return setText(e.target.value);
+          },
+          placeholder: __$g('Write a message...', 'artpulse')
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+          onClick: send,
+          children: __$g('Send', 'artpulse')
+        })]
+      })]
+    });
   }
 
   var __$f = wp.i18n.__;
@@ -464,35 +538,39 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         alert(__$f('Link copied', 'artpulse'));
       });
     };
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-share-event-widget",
-      "data-widget-id": "share_this_event"
-    }, /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return share('https://twitter.com/share?url=');
-      }
-    }, "X"), /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return share('https://www.facebook.com/sharer/sharer.php?u=');
-      }
-    }, __$f('Facebook', 'artpulse')), /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return share('https://www.linkedin.com/sharing/share-offsite/?url=');
-      }
-    }, __$f('LinkedIn', 'artpulse')), /*#__PURE__*/React.createElement("button", {
-      onClick: copy
-    }, __$f('Copy Link', 'artpulse')));
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        onClick: function onClick() {
+          return share('https://twitter.com/share?url=');
+        },
+        children: "X"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        onClick: function onClick() {
+          return share('https://www.facebook.com/sharer/sharer.php?u=');
+        },
+        children: __$f('Facebook', 'artpulse')
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        onClick: function onClick() {
+          return share('https://www.linkedin.com/sharing/share-offsite/?url=');
+        },
+        children: __$f('LinkedIn', 'artpulse')
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        onClick: copy,
+        children: __$f('Copy Link', 'artpulse')
+      })]
+    });
   }
 
   var __$e = wp.i18n.__;
   function ArtistInboxPreviewWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       threads = _useState2[0],
       setThreads = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/conversations"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -555,32 +633,92 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     }, []);
     var content;
     if (threads === null) {
-      content = /*#__PURE__*/React.createElement("p", null, __$e('Loading...', 'artpulse'));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$e('Loading...', 'artpulse')
+      });
     } else if (!threads.length) {
-      content = /*#__PURE__*/React.createElement("p", null, __$e('No new messages.', 'artpulse'));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$e('No new messages.', 'artpulse')
+      });
     } else {
-      content = /*#__PURE__*/React.createElement("ul", {
-        className: "ap-inbox-preview-list"
-      }, threads.slice(0, 3).map(function (t) {
-        return /*#__PURE__*/React.createElement("li", {
-          key: t.user_id
-        }, /*#__PURE__*/React.createElement("strong", null, t.display_name), t.preview && /*#__PURE__*/React.createElement("span", null, ": ", t.preview), t.date && /*#__PURE__*/React.createElement("em", null, " ", new Date(t.date).toLocaleDateString()));
-      }));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        className: "ap-inbox-preview-list",
+        children: threads.slice(0, 3).map(function (t) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [/*#__PURE__*/jsxRuntimeExports.jsx("strong", {
+              children: t.display_name
+            }), t.preview && /*#__PURE__*/jsxRuntimeExports.jsxs("span", {
+              children: [": ", t.preview]
+            }), t.date && /*#__PURE__*/jsxRuntimeExports.jsxs("em", {
+              children: [" ", new Date(t.date).toLocaleDateString()]
+            })]
+          }, t.user_id);
+        })
+      });
     }
-    return /*#__PURE__*/React.createElement("div", {
-      "data-widget-id": "artist_inbox_preview"
-    }, content);
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      "data-widget-id": "artist_inbox_preview",
+      children: content
+    });
+  }
+
+  function ActivityFeedWidget() {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: "ActivityFeedWidget Component Placeholder"
+    });
+  }
+
+  function MyUpcomingEventsWidget() {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: "MyUpcomingEventsWidget Component Placeholder"
+    });
+  }
+
+  function ArtPulseNewsFeedWidget() {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: "ArtPulseNewsFeedWidget Component Placeholder"
+    });
+  }
+
+  function QAChecklistWidget() {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: "QAChecklistWidget Component Placeholder"
+    });
+  }
+
+  function EventsWidget() {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: "EventsWidget Component Placeholder"
+    });
+  }
+
+  function WelcomeBoxWidget() {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: "WelcomeBoxWidget Component Placeholder"
+    });
+  }
+
+  function WidgetEventsWidget() {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: "WidgetEventsWidget Component Placeholder"
+    });
+  }
+
+  function FavoritesOverviewWidget() {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: "FavoritesOverviewWidget Component Placeholder"
+    });
   }
 
   var __$d = wp.i18n.__;
   function ArtistRevenueSummaryWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       data = _useState2[0],
       setData = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       var now = new Date();
       var start = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10);
       fetch("".concat(apiRoot, "artpulse/v1/user/sales?from=").concat(start), {
@@ -601,25 +739,35 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       });
     }, []);
     if (!data) {
-      return /*#__PURE__*/React.createElement("div", {
-        "data-widget-id": "revenue_summary"
-      }, /*#__PURE__*/React.createElement("p", null, __$d('Loading...', 'artpulse')));
+      return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        "data-widget-id": "revenue_summary",
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: __$d('Loading...', 'artpulse')
+        })
+      });
     }
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-revenue-summary",
-      "data-widget-id": "revenue_summary"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, data.total_revenue), " ", __$d('total revenue this month', 'artpulse')), /*#__PURE__*/React.createElement("p", null, data.tickets_sold, " ", __$d('tickets sold', 'artpulse')));
+      "data-widget-id": "revenue_summary",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("strong", {
+          children: data.total_revenue
+        }), " ", __$d('total revenue this month', 'artpulse')]
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [data.tickets_sold, " ", __$d('tickets sold', 'artpulse')]
+      })]
+    });
   }
 
   var __$c = wp.i18n.__;
   function ArtistSpotlightWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       items = _useState2[0],
       setItems = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/spotlights"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -632,31 +780,37 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       });
     }, []);
     if (items === null) {
-      return /*#__PURE__*/React.createElement("p", null, __$c('Loading...', 'artpulse'));
+      return /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$c('Loading...', 'artpulse')
+      });
     }
     if (!items.length) {
-      return /*#__PURE__*/React.createElement("p", null, __$c('No mentions yet.', 'artpulse'));
+      return /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$c('No mentions yet.', 'artpulse')
+      });
     }
-    return /*#__PURE__*/React.createElement("ul", {
-      className: "ap-spotlight-list"
-    }, items.slice(0, 3).map(function (it) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: it.id
-      }, /*#__PURE__*/React.createElement("a", {
-        href: it.link
-      }, it.title));
-    }));
+    return /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+      className: "ap-spotlight-list",
+      children: items.slice(0, 3).map(function (it) {
+        return /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("a", {
+            href: it.link,
+            children: it.title
+          })
+        }, it.id);
+      })
+    });
   }
 
   var __$b = wp.i18n.__;
   function ArtistArtworkManagerWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       items = _useState2[0],
       setItems = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "wp/v2/artpulse_artwork?per_page=5&_embed"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -672,35 +826,42 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     }, []);
     var content;
     if (items === null) {
-      content = /*#__PURE__*/React.createElement("p", null, __$b('Loading...', 'artpulse'));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$b('Loading...', 'artpulse')
+      });
     } else if (!items.length) {
-      content = /*#__PURE__*/React.createElement("p", null, __$b('No artworks found.', 'artpulse'));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$b('No artworks found.', 'artpulse')
+      });
     } else {
-      content = /*#__PURE__*/React.createElement("ul", {
-        className: "ap-artwork-manager"
-      }, items.map(function (a) {
-        var _a$title;
-        return /*#__PURE__*/React.createElement("li", {
-          key: a.id
-        }, /*#__PURE__*/React.createElement("a", {
-          href: a.link
-        }, ((_a$title = a.title) === null || _a$title === void 0 ? void 0 : _a$title.rendered) || a.slug));
-      }));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        className: "ap-artwork-manager",
+        children: items.map(function (a) {
+          var _a$title;
+          return /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+            children: /*#__PURE__*/jsxRuntimeExports.jsx("a", {
+              href: a.link,
+              children: ((_a$title = a.title) === null || _a$title === void 0 ? void 0 : _a$title.rendered) || a.slug
+            })
+          }, a.id);
+        })
+      });
     }
-    return /*#__PURE__*/React.createElement("div", {
-      "data-widget-id": "artist_artwork_manager"
-    }, content);
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      "data-widget-id": "artist_artwork_manager",
+      children: content
+    });
   }
 
   var __$a = wp.i18n.__;
   function ArtistAudienceInsightsWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       stats = _useState2[0],
       setStats = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/artist"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -718,26 +879,42 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     }, []);
     var content;
     if (!stats) {
-      content = /*#__PURE__*/React.createElement("p", null, __$a('Loading...', 'artpulse'));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$a('Loading...', 'artpulse')
+      });
     } else {
-      content = /*#__PURE__*/React.createElement("ul", {
-        className: "ap-audience-insights"
-      }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, stats.followers), " ", __$a('followers', 'artpulse')), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, stats.sales), " ", __$a('total sales', 'artpulse')), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, stats.artworks), " ", __$a('artworks uploaded', 'artpulse')));
+      content = /*#__PURE__*/jsxRuntimeExports.jsxs("ul", {
+        className: "ap-audience-insights",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx("strong", {
+            children: stats.followers
+          }), " ", __$a('followers', 'artpulse')]
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx("strong", {
+            children: stats.sales
+          }), " ", __$a('total sales', 'artpulse')]
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx("strong", {
+            children: stats.artworks
+          }), " ", __$a('artworks uploaded', 'artpulse')]
+        })]
+      });
     }
-    return /*#__PURE__*/React.createElement("div", {
-      "data-widget-id": "artist_audience_insights"
-    }, content);
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      "data-widget-id": "artist_audience_insights",
+      children: content
+    });
   }
 
   var __$9 = wp.i18n.__;
   function ArtistEarningsWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       data = _useState2[0],
       setData = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/user/payouts"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -753,29 +930,41 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       });
     }, []);
     if (!data) {
-      return /*#__PURE__*/React.createElement("div", {
-        "data-widget-id": "artist_earnings_summary"
-      }, /*#__PURE__*/React.createElement("p", null, __$9('Loading...', 'artpulse')));
+      return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        "data-widget-id": "artist_earnings_summary",
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: __$9('Loading...', 'artpulse')
+        })
+      });
     }
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-earnings-summary",
-      "data-widget-id": "artist_earnings_summary"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, data.balance), " ", __$9('current balance', 'artpulse')), data.payouts.length ? /*#__PURE__*/React.createElement("ul", null, data.payouts.slice(0, 5).map(function (p) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: p.id
-      }, new Date(p.payout_date).toLocaleDateString(), " \u2013 ", p.amount, " (", p.status, ")");
-    })) : /*#__PURE__*/React.createElement("p", null, __$9('No payouts yet.', 'artpulse')));
+      "data-widget-id": "artist_earnings_summary",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("strong", {
+          children: data.balance
+        }), " ", __$9('current balance', 'artpulse')]
+      }), data.payouts.length ? /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: data.payouts.slice(0, 5).map(function (p) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [new Date(p.payout_date).toLocaleDateString(), " \u2013 ", p.amount, " (", p.status, ")"]
+          }, p.id);
+        })
+      }) : /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$9('No payouts yet.', 'artpulse')
+      })]
+    });
   }
 
   var __$8 = wp.i18n.__;
   function ArtistFeedPublisherWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(''),
+    var _useState = require$$0$1.useState(''),
       _useState2 = _slicedToArray(_useState, 2),
       text = _useState2[0],
       setText = _useState2[1];
-    var _useState3 = React.useState(''),
+    var _useState3 = require$$0$1.useState(''),
       _useState4 = _slicedToArray(_useState3, 2),
       msg = _useState4[0],
       setMsg = _useState4[1];
@@ -817,33 +1006,37 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return _ref2.apply(this, arguments);
       };
     }();
-    return /*#__PURE__*/React.createElement("div", {
-      "data-widget-id": "artist_feed_publisher"
-    }, /*#__PURE__*/React.createElement("form", {
-      className: "ap-feed-publisher",
-      onSubmit: submit
-    }, /*#__PURE__*/React.createElement("textarea", {
-      value: text,
-      onChange: function onChange(e) {
-        return setText(e.target.value);
-      },
-      placeholder: __$8('Share an update...', 'artpulse')
-    }), /*#__PURE__*/React.createElement("button", {
-      type: "submit"
-    }, __$8('Publish', 'artpulse')), msg && /*#__PURE__*/React.createElement("p", {
-      className: "ap-post-status"
-    }, msg)));
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      "data-widget-id": "artist_feed_publisher",
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
+        className: "ap-feed-publisher",
+        onSubmit: submit,
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("textarea", {
+          value: text,
+          onChange: function onChange(e) {
+            return setText(e.target.value);
+          },
+          placeholder: __$8('Share an update...', 'artpulse')
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+          type: "submit",
+          children: __$8('Publish', 'artpulse')
+        }), msg && /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          className: "ap-post-status",
+          children: msg
+        })]
+      })
+    });
   }
 
   var __$7 = wp.i18n.__;
   function ArtistCollaborationWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       invites = _useState2[0],
       setInvites = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/users/me/orgs"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -909,44 +1102,51 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     }, []);
     var content;
     if (invites === null) {
-      content = /*#__PURE__*/React.createElement("p", null, __$7('Loading...', 'artpulse'));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$7('Loading...', 'artpulse')
+      });
     } else if (!invites.length) {
-      content = /*#__PURE__*/React.createElement("p", null, __$7('No pending invites.', 'artpulse'));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$7('No pending invites.', 'artpulse')
+      });
     } else {
-      content = /*#__PURE__*/React.createElement("ul", {
-        className: "ap-collab-requests"
-      }, invites.map(function (inv) {
-        return /*#__PURE__*/React.createElement("li", {
-          key: inv.org_id
-        }, inv.name, " \u2013 ", inv.role, " (", inv.status, ")");
-      }));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        className: "ap-collab-requests",
+        children: invites.map(function (inv) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [inv.name, " \u2013 ", inv.role, " (", inv.status, ")"]
+          }, inv.org_id);
+        })
+      });
     }
-    return /*#__PURE__*/React.createElement("div", {
-      "data-widget-id": "collab_requests"
-    }, content);
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      "data-widget-id": "collab_requests",
+      children: content
+    });
   }
 
   var __$6 = wp.i18n.__;
   function OnboardingTrackerWidget() {
     var items = [__$6('Complete Profile', 'artpulse'), __$6('Upload First Artwork', 'artpulse'), __$6('Host an Event', 'artpulse'), __$6('Get 10 Followers', 'artpulse')];
-    return /*#__PURE__*/React.createElement("ul", {
-      className: "ap-onboarding-tracker"
-    }, items.map(function (i, idx) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: idx
-      }, i);
-    }));
+    return /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+      className: "ap-onboarding-tracker",
+      children: items.map(function (i, idx) {
+        return /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+          children: i
+        }, idx);
+      })
+    });
   }
 
   function AudienceCRMWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce,
       orgId = _ref.orgId;
-    var _useState = React.useState([]),
+    var _useState = require$$0$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       contacts = _useState2[0],
       setContacts = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/org/").concat(orgId, "/audience"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -956,13 +1156,16 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return r.json();
       }).then(setContacts);
     }, [orgId]);
-    return /*#__PURE__*/React.createElement("div", {
-      className: "ap-audience-crm-widget"
-    }, /*#__PURE__*/React.createElement("ul", null, contacts.map(function (c) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: c.email
-      }, c.name || c.email);
-    })));
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "ap-audience-crm-widget",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: contacts.map(function (c) {
+          return /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+            children: c.name || c.email
+          }, c.email);
+        })
+      })
+    });
   }
 
   var __$5 = wp.i18n.__;
@@ -970,7 +1173,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     var postId = _ref.postId,
       apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState({
+    var _useState = require$$0$1.useState({
         sponsor_name: '',
         sponsor_link: '',
         sponsor_logo: ''
@@ -978,7 +1181,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       _useState2 = _slicedToArray(_useState, 2),
       data = _useState2[0],
       setData = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "wp/v2/event/").concat(postId), {
         headers: {
           'X-WP-Nonce': nonce
@@ -1005,68 +1208,90 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         })
       });
     };
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-sponsored-config",
-      "data-widget-id": "sponsored_event_config"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$5('Sponsored By', 'artpulse'), /*#__PURE__*/React.createElement("input", {
-      type: "text",
-      value: data.sponsor_name,
-      onChange: function onChange(e) {
-        return setData(_objectSpread2(_objectSpread2({}, data), {}, {
-          sponsor_name: e.target.value
-        }));
-      }
-    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$5('Sponsor Link', 'artpulse'), /*#__PURE__*/React.createElement("input", {
-      type: "url",
-      value: data.sponsor_link,
-      onChange: function onChange(e) {
-        return setData(_objectSpread2(_objectSpread2({}, data), {}, {
-          sponsor_link: e.target.value
-        }));
-      }
-    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$5('Logo URL', 'artpulse'), /*#__PURE__*/React.createElement("input", {
-      type: "text",
-      value: data.sponsor_logo,
-      onChange: function onChange(e) {
-        return setData(_objectSpread2(_objectSpread2({}, data), {}, {
-          sponsor_logo: e.target.value
-        }));
-      }
-    }))), /*#__PURE__*/React.createElement("button", {
-      type: "button",
-      onClick: save
-    }, __$5('Save Sponsor', 'artpulse')));
+      "data-widget-id": "sponsored_event_config",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: /*#__PURE__*/jsxRuntimeExports.jsxs("label", {
+          children: [__$5('Sponsored By', 'artpulse'), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            type: "text",
+            value: data.sponsor_name,
+            onChange: function onChange(e) {
+              return setData(_objectSpread2(_objectSpread2({}, data), {}, {
+                sponsor_name: e.target.value
+              }));
+            }
+          })]
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: /*#__PURE__*/jsxRuntimeExports.jsxs("label", {
+          children: [__$5('Sponsor Link', 'artpulse'), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            type: "url",
+            value: data.sponsor_link,
+            onChange: function onChange(e) {
+              return setData(_objectSpread2(_objectSpread2({}, data), {}, {
+                sponsor_link: e.target.value
+              }));
+            }
+          })]
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: /*#__PURE__*/jsxRuntimeExports.jsxs("label", {
+          children: [__$5('Logo URL', 'artpulse'), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            type: "text",
+            value: data.sponsor_logo,
+            onChange: function onChange(e) {
+              return setData(_objectSpread2(_objectSpread2({}, data), {}, {
+                sponsor_logo: e.target.value
+              }));
+            }
+          })]
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        type: "button",
+        onClick: save,
+        children: __$5('Save Sponsor', 'artpulse')
+      })]
+    });
   }
 
   var __$4 = wp.i18n.__;
   function EmbedToolWidget(_ref) {
     var widgetId = _ref.widgetId,
       siteUrl = _ref.siteUrl;
-    var _useState = React.useState('light'),
+    var _useState = require$$0$1.useState('light'),
       _useState2 = _slicedToArray(_useState, 2),
       theme = _useState2[0],
       setTheme = _useState2[1];
     var code = "<script src=\"".concat(siteUrl, "/wp-json/widgets/embed.js?id=").concat(widgetId, "&theme=").concat(theme, "\"></script>");
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-embed-tool-widget",
-      "data-widget-id": "embed_tool"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$4('Theme', 'artpulse'), /*#__PURE__*/React.createElement("select", {
-      value: theme,
-      onChange: function onChange(e) {
-        return setTheme(e.target.value);
-      }
-    }, /*#__PURE__*/React.createElement("option", {
-      value: "light"
-    }, __$4('Light', 'artpulse')), /*#__PURE__*/React.createElement("option", {
-      value: "dark"
-    }, __$4('Dark', 'artpulse'))))), /*#__PURE__*/React.createElement("textarea", {
-      readOnly: true,
-      rows: "3",
-      style: {
-        width: '100%'
-      },
-      value: code
-    }));
+      "data-widget-id": "embed_tool",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: /*#__PURE__*/jsxRuntimeExports.jsxs("label", {
+          children: [__$4('Theme', 'artpulse'), /*#__PURE__*/jsxRuntimeExports.jsxs("select", {
+            value: theme,
+            onChange: function onChange(e) {
+              return setTheme(e.target.value);
+            },
+            children: [/*#__PURE__*/jsxRuntimeExports.jsx("option", {
+              value: "light",
+              children: __$4('Light', 'artpulse')
+            }), /*#__PURE__*/jsxRuntimeExports.jsx("option", {
+              value: "dark",
+              children: __$4('Dark', 'artpulse')
+            })]
+          })]
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("textarea", {
+        readOnly: true,
+        rows: "3",
+        style: {
+          width: '100%'
+        },
+        value: code
+      })]
+    });
   }
 
   var __$3 = wp.i18n.__;
@@ -1074,7 +1299,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce,
       orgId = _ref.orgId;
-    var _useState = React.useState({
+    var _useState = require$$0$1.useState({
         logo: '',
         color: '#000000',
         footer: ''
@@ -1082,7 +1307,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       _useState2 = _slicedToArray(_useState, 2),
       settings = _useState2[0],
       setSettings = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/org/").concat(orgId, "/meta"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -1107,37 +1332,51 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         body: JSON.stringify(settings)
       });
     };
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-org-branding-settings",
-      "data-widget-id": "branding_settings_panel"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$3('Logo URL', 'artpulse'), /*#__PURE__*/React.createElement("input", {
-      type: "text",
-      value: settings.logo,
-      onChange: function onChange(e) {
-        return setSettings(_objectSpread2(_objectSpread2({}, settings), {}, {
-          logo: e.target.value
-        }));
-      }
-    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$3('Brand Color', 'artpulse'), /*#__PURE__*/React.createElement("input", {
-      type: "color",
-      value: settings.color,
-      onChange: function onChange(e) {
-        return setSettings(_objectSpread2(_objectSpread2({}, settings), {}, {
-          color: e.target.value
-        }));
-      }
-    }))), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("label", null, __$3('Footer Text', 'artpulse'), /*#__PURE__*/React.createElement("input", {
-      type: "text",
-      value: settings.footer,
-      onChange: function onChange(e) {
-        return setSettings(_objectSpread2(_objectSpread2({}, settings), {}, {
-          footer: e.target.value
-        }));
-      }
-    }))), /*#__PURE__*/React.createElement("button", {
-      type: "button",
-      onClick: save
-    }, __$3('Save Branding', 'artpulse')));
+      "data-widget-id": "branding_settings_panel",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: /*#__PURE__*/jsxRuntimeExports.jsxs("label", {
+          children: [__$3('Logo URL', 'artpulse'), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            type: "text",
+            value: settings.logo,
+            onChange: function onChange(e) {
+              return setSettings(_objectSpread2(_objectSpread2({}, settings), {}, {
+                logo: e.target.value
+              }));
+            }
+          })]
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: /*#__PURE__*/jsxRuntimeExports.jsxs("label", {
+          children: [__$3('Brand Color', 'artpulse'), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            type: "color",
+            value: settings.color,
+            onChange: function onChange(e) {
+              return setSettings(_objectSpread2(_objectSpread2({}, settings), {}, {
+                color: e.target.value
+              }));
+            }
+          })]
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: /*#__PURE__*/jsxRuntimeExports.jsxs("label", {
+          children: [__$3('Footer Text', 'artpulse'), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            type: "text",
+            value: settings.footer,
+            onChange: function onChange(e) {
+              return setSettings(_objectSpread2(_objectSpread2({}, settings), {}, {
+                footer: e.target.value
+              }));
+            }
+          })]
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        type: "button",
+        onClick: save,
+        children: __$3('Save Branding', 'artpulse')
+      })]
+    });
   }
 
   wp.i18n.__;
@@ -1145,11 +1384,11 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce,
       orgId = _ref.orgId;
-    var _useState = React.useState([]),
+    var _useState = require$$0$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       events = _useState2[0],
       setEvents = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/org/").concat(orgId, "/events/summary"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -1161,14 +1400,17 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return setEvents(data.events || []);
       });
     }, [orgId]);
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "ap-org-event-overview-widget",
-      "data-widget-id": "org_event_overview"
-    }, /*#__PURE__*/React.createElement("ul", null, events.map(function (ev) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: ev.id
-      }, ev.title, " (", ev.status, ")");
-    })));
+      "data-widget-id": "org_event_overview",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: events.map(function (ev) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [ev.title, " (", ev.status, ")"]
+          }, ev.id);
+        })
+      })
+    });
   }
 
   wp.i18n.__;
@@ -1176,11 +1418,11 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce,
       orgId = _ref.orgId;
-    var _useState = React.useState([]),
+    var _useState = require$$0$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       team = _useState2[0],
       setTeam = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/orgs/").concat(orgId, "/roles"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -1192,14 +1434,17 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return setTeam(Array.isArray(data) ? data : []);
       });
     }, [orgId]);
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "ap-org-team-roster-widget",
-      "data-widget-id": "org_team_roster"
-    }, /*#__PURE__*/React.createElement("ul", null, team.map(function (user) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: user.user_id
-      }, user.user_id, " - ", user.role);
-    })));
+      "data-widget-id": "org_team_roster",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: team.map(function (user) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [user.user_id, " - ", user.role]
+          }, user.user_id);
+        })
+      })
+    });
   }
 
   wp.i18n.__;
@@ -1207,11 +1452,11 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce,
       orgId = _ref.orgId;
-    var _useState = React.useState([]),
+    var _useState = require$$0$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       items = _useState2[0],
       setItems = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/org/").concat(orgId, "/submissions"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -1223,14 +1468,17 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return setItems(Array.isArray(data) ? data : []);
       });
     }, [orgId]);
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "ap-org-approval-center-widget",
-      "data-widget-id": "org_approval_center"
-    }, /*#__PURE__*/React.createElement("ul", null, items.map(function (item) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: item.id
-      }, item.title, " - ", item.status);
-    })));
+      "data-widget-id": "org_approval_center",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: items.map(function (item) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [item.title, " - ", item.status]
+          }, item.id);
+        })
+      })
+    });
   }
 
   var __$2 = wp.i18n.__;
@@ -1238,14 +1486,14 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce,
       orgId = _ref.orgId;
-    var _useState = React.useState({
+    var _useState = require$$0$1.useState({
         sales: 0,
         revenue: 0
       }),
       _useState2 = _slicedToArray(_useState, 2),
       metrics = _useState2[0],
       setMetrics = _useState2[1];
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/org/").concat(orgId, "/tickets/metrics"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -1257,10 +1505,15 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return setMetrics(data);
       });
     }, [orgId]);
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-org-ticket-insights-widget",
-      "data-widget-id": "org_ticket_insights"
-    }, /*#__PURE__*/React.createElement("p", null, __$2('Tickets Sold', 'artpulse'), ": ", metrics.sales), /*#__PURE__*/React.createElement("p", null, __$2('Revenue', 'artpulse'), ": ", metrics.revenue));
+      "data-widget-id": "org_ticket_insights",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [__$2('Tickets Sold', 'artpulse'), ": ", metrics.sales]
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [__$2('Revenue', 'artpulse'), ": ", metrics.revenue]
+      })]
+    });
   }
 
   var __$1 = wp.i18n.__;
@@ -1268,7 +1521,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce,
       orgId = _ref.orgId;
-    var _useState = React.useState(''),
+    var _useState = require$$0$1.useState(''),
       _useState2 = _slicedToArray(_useState, 2),
       text = _useState2[0],
       setText = _useState2[1];
@@ -1300,17 +1553,19 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
         return _ref2.apply(this, arguments);
       };
     }();
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-org-broadcast-box-widget",
-      "data-widget-id": "org_broadcast_box"
-    }, /*#__PURE__*/React.createElement("textarea", {
-      value: text,
-      onChange: function onChange(e) {
-        return setText(e.target.value);
-      }
-    }), /*#__PURE__*/React.createElement("button", {
-      onClick: send
-    }, __$1('Send Broadcast', 'artpulse')));
+      "data-widget-id": "org_broadcast_box",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("textarea", {
+        value: text,
+        onChange: function onChange(e) {
+          return setText(e.target.value);
+        }
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        onClick: send,
+        children: __$1('Send Broadcast', 'artpulse')
+      })]
+    });
   }
 
   var __ = wp.i18n.__;
@@ -1318,16 +1573,31 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     id: 'nearby_events_map',
     title: __('Nearby Events Map', 'artpulse'),
     component: NearbyEventsMapWidget,
-    roles: ['member']
+    roles: ['member', 'artist']
   }, {
     id: 'my_favorites',
     title: __('My Favorites', 'artpulse'),
     component: MyFavoritesWidget,
+    roles: ['member', 'artist']
+  }, {
+    id: 'activity_feed',
+    title: __('Activity Feed', 'artpulse'),
+    component: ActivityFeedWidget,
+    roles: ['member', 'artist', 'organization']
+  }, {
+    id: 'my_upcoming_events',
+    title: __('My Upcoming Events', 'artpulse'),
+    component: MyUpcomingEventsWidget,
+    roles: ['member', 'artist']
+  }, {
+    id: 'news_feed',
+    title: __('News Feed', 'artpulse'),
+    component: ArtPulseNewsFeedWidget,
     roles: ['member']
   }, {
     id: 'rsvp_button',
     title: __('RSVP Button', 'artpulse'),
-    component: RSVPButton,
+    component: RsvpButtonWidget,
     roles: ['member']
   }, {
     id: 'event_chat',
@@ -1338,6 +1608,31 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     id: 'share_this_event',
     title: __('Share This Event', 'artpulse'),
     component: ShareThisEventWidget,
+    roles: ['member']
+  }, {
+    id: 'qa_checklist',
+    title: __('QA Checklist', 'artpulse'),
+    component: QAChecklistWidget,
+    roles: ['member']
+  }, {
+    id: 'sample_events',
+    title: __('Sample Events', 'artpulse'),
+    component: EventsWidget,
+    roles: ['member', 'artist', 'organization']
+  }, {
+    id: 'welcome_box',
+    title: __('Welcome Box', 'artpulse'),
+    component: WelcomeBoxWidget,
+    roles: ['member']
+  }, {
+    id: 'widget_events',
+    title: __('Upcoming Events', 'artpulse'),
+    component: WidgetEventsWidget,
+    roles: ['member', 'organization']
+  }, {
+    id: 'widget_favorites',
+    title: __('Favorites Overview', 'artpulse'),
+    component: FavoritesOverviewWidget,
     roles: ['member']
   }, {
     id: 'artist_inbox_preview',
@@ -1439,14 +1734,14 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       role = _ref$role === void 0 ? 'member' : _ref$role;
     var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
     var nonce = ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
-    var _useState = React.useState([]),
+    var _useState = require$$0$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       layout = _useState2[0],
       setLayout = _useState2[1];
     var widgets = registry.filter(function (w) {
       return !w.roles || w.roles.includes(role);
     });
-    React.useEffect(function () {
+    require$$0$1.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout")).then(function (r) {
         return r.json();
       }).then(function (data) {
@@ -1481,7 +1776,7 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
     var widgetMap = Object.fromEntries(widgets.map(function (w) {
       return [w.id, w.component];
     }));
-    return /*#__PURE__*/React.createElement(GridLayout, {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(GridLayout, {
       className: "layout",
       layouts: {
         lg: layout
@@ -1492,14 +1787,21 @@ var APDashboardContainer = (function (React, reactGridLayout, require$$0) {
       rowHeight: 30,
       onLayoutChange: function onLayoutChange(l, allLayouts) {
         return handleLayoutChange(allLayouts.lg);
-      }
-    }, layout.map(function (item) {
-      var Comp = widgetMap[item.i];
-      return /*#__PURE__*/React.createElement("div", {
-        key: item.i,
-        "data-grid": item
-      }, Comp ? /*#__PURE__*/React.createElement(Comp, null) : item.i);
-    }));
+      },
+      children: layout.map(function (item) {
+        var Comp = widgetMap[item.i];
+        return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+          "data-grid": item,
+          children: Comp ? /*#__PURE__*/jsxRuntimeExports.jsx(Comp, {}) : /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+            role: "region",
+            "aria-label": "Unavailable Widget",
+            children: /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+              children: "\u24D8 This widget is available via API only and will be activated soon."
+            })
+          })
+        }, item.i);
+      })
+    });
   }
 
   return DashboardContainer;

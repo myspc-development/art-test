@@ -1,4 +1,4 @@
-(function (React, client) {
+(function (require$$0, client) {
   'use strict';
 
   function _arrayLikeToArray(r, a) {
@@ -223,6 +223,68 @@
     }
   }
 
+  var jsxRuntime = {exports: {}};
+
+  var reactJsxRuntime_production_min = {};
+
+  /**
+   * @license React
+   * react-jsx-runtime.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+  var hasRequiredReactJsxRuntime_production_min;
+
+  function requireReactJsxRuntime_production_min () {
+  	if (hasRequiredReactJsxRuntime_production_min) return reactJsxRuntime_production_min;
+  	hasRequiredReactJsxRuntime_production_min = 1;
+
+  	var f = require$$0,
+  	  k = Symbol["for"]("react.element"),
+  	  l = Symbol["for"]("react.fragment"),
+  	  m = Object.prototype.hasOwnProperty,
+  	  n = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+  	  p = {
+  	    key: true,
+  	    ref: true,
+  	    __self: true,
+  	    __source: true
+  	  };
+  	function q(c, a, g) {
+  	  var b,
+  	    d = {},
+  	    e = null,
+  	    h = null;
+  	  void 0 !== g && (e = "" + g);
+  	  void 0 !== a.key && (e = "" + a.key);
+  	  void 0 !== a.ref && (h = a.ref);
+  	  for (b in a) m.call(a, b) && !p.hasOwnProperty(b) && (d[b] = a[b]);
+  	  if (c && c.defaultProps) for (b in a = c.defaultProps, a) void 0 === d[b] && (d[b] = a[b]);
+  	  return {
+  	    $$typeof: k,
+  	    type: c,
+  	    key: e,
+  	    ref: h,
+  	    props: d,
+  	    _owner: n.current
+  	  };
+  	}
+  	reactJsxRuntime_production_min.Fragment = l;
+  	reactJsxRuntime_production_min.jsx = q;
+  	reactJsxRuntime_production_min.jsxs = q;
+  	return reactJsxRuntime_production_min;
+  }
+
+  {
+    jsxRuntime.exports = requireReactJsxRuntime_production_min();
+  }
+
+  var jsxRuntimeExports = jsxRuntime.exports;
+
   var EmojiPicker = null;
   if (typeof window !== 'undefined' && window.EmojiPicker) {
     EmojiPicker = window.EmojiPicker;
@@ -231,23 +293,23 @@
   function ChatWidget(_ref) {
     var eventId = _ref.eventId,
       canPost = _ref.canPost;
-    var _useState = React.useState([]),
+    var _useState = require$$0.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       messages = _useState2[0],
       setMessages = _useState2[1];
-    var _useState3 = React.useState(''),
+    var _useState3 = require$$0.useState(''),
       _useState4 = _slicedToArray(_useState3, 2),
       text = _useState4[0],
       setText = _useState4[1];
-    var _useState5 = React.useState(false),
+    var _useState5 = require$$0.useState(false),
       _useState6 = _slicedToArray(_useState5, 2),
       showPicker = _useState6[0],
       setShowPicker = _useState6[1];
-    var _useState7 = React.useState(null),
+    var _useState7 = require$$0.useState(null),
       _useState8 = _slicedToArray(_useState7, 2),
       error = _useState8[0],
       setError = _useState8[1];
-    var fetching = React.useRef(false);
+    var fetching = require$$0.useRef(false);
     var load = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
         var resp, data, _t;
@@ -299,7 +361,7 @@
         return _ref2.apply(this, arguments);
       };
     }();
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       load();
       var id = null;
       if (!window.IS_DASHBOARD_BUILDER_PREVIEW) {
@@ -309,7 +371,7 @@
         if (id) clearInterval(id);
       };
     }, [eventId]);
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       var list = document.querySelector('.ap-chat-list');
       if (list) list.scrollTop = list.scrollHeight;
     }, [messages]);
@@ -395,92 +457,107 @@
         return _ref4.apply(this, arguments);
       };
     }();
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-event-chat",
-      "data-event-id": eventId
-    }, /*#__PURE__*/React.createElement("ul", {
-      className: "ap-chat-list",
-      role: "status",
-      "aria-live": "polite"
-    }, Array.isArray(messages) && messages.length > 0 ? messages.map(function (m) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: m.id
-      }, /*#__PURE__*/React.createElement("img", {
-        className: "ap-chat-avatar",
-        src: m.avatar,
-        alt: ""
-      }), /*#__PURE__*/React.createElement("span", {
-        className: "ap-chat-author"
-      }, m.author), /*#__PURE__*/React.createElement("span", {
-        className: "ap-chat-time"
-      }, new Intl.DateTimeFormat('en', {
-        timeStyle: 'short'
-      }).format(new Date(m.created_at))), /*#__PURE__*/React.createElement("p", {
-        className: "ap-chat-content"
-      }, m.content), /*#__PURE__*/React.createElement("div", {
-        className: "ap-chat-reactions"
-      }, m.reactions && Object.entries(m.reactions).map(function (_ref5) {
-        var _ref6 = _slicedToArray(_ref5, 2),
-          emo = _ref6[0],
-          c = _ref6[1];
-        return /*#__PURE__*/React.createElement("button", {
-          key: emo,
+      "data-event-id": eventId,
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        className: "ap-chat-list",
+        role: "status",
+        "aria-live": "polite",
+        children: Array.isArray(messages) && messages.length > 0 ? messages.map(function (m) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [/*#__PURE__*/jsxRuntimeExports.jsx("img", {
+              className: "ap-chat-avatar",
+              src: m.avatar,
+              alt: ""
+            }), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
+              className: "ap-chat-author",
+              children: m.author
+            }), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
+              className: "ap-chat-time",
+              children: new Intl.DateTimeFormat('en', {
+                timeStyle: 'short'
+              }).format(new Date(m.created_at))
+            }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+              className: "ap-chat-content",
+              children: m.content
+            }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+              className: "ap-chat-reactions",
+              children: [m.reactions && Object.entries(m.reactions).map(function (_ref5) {
+                var _ref6 = _slicedToArray(_ref5, 2),
+                  emo = _ref6[0],
+                  c = _ref6[1];
+                return /*#__PURE__*/jsxRuntimeExports.jsxs("button", {
+                  type: "button",
+                  onClick: function onClick() {
+                    return react(m.id, emo);
+                  },
+                  children: [emo, " ", c]
+                }, emo);
+              }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+                type: "button",
+                onClick: function onClick() {
+                  return react(m.id, '❤️');
+                },
+                children: "\u2764\uFE0F"
+              }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+                type: "button",
+                onClick: function onClick() {
+                  return react(m.id, '👍');
+                },
+                children: "\uD83D\uDC4D"
+              })]
+            })]
+          }, m.id);
+        }) : /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+          className: "ap-chat-empty",
+          children: __$5('No messages yet.', 'artpulse')
+        })
+      }), error && /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        className: "ap-chat-error",
+        children: __$5('Unable to load chat.', 'artpulse')
+      }), canPost ? /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
+        className: "ap-chat-form",
+        onSubmit: send,
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("input", {
+          type: "text",
+          "aria-label": __$5('Chat message', 'artpulse'),
+          value: text,
+          onChange: function onChange(e) {
+            return setText(e.target.value);
+          }
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
           type: "button",
           onClick: function onClick() {
-            return react(m.id, emo);
+            return setShowPicker(!showPicker);
+          },
+          children: "\uD83D\uDE0A"
+        }), showPicker && EmojiPicker && /*#__PURE__*/jsxRuntimeExports.jsx(EmojiPicker, {
+          onEmojiClick: function onEmojiClick(e) {
+            return setText(function (t) {
+              return t + e.emoji;
+            });
           }
-        }, emo, " ", c);
-      }), /*#__PURE__*/React.createElement("button", {
-        type: "button",
-        onClick: function onClick() {
-          return react(m.id, '❤️');
-        }
-      }, "\u2764\uFE0F"), /*#__PURE__*/React.createElement("button", {
-        type: "button",
-        onClick: function onClick() {
-          return react(m.id, '👍');
-        }
-      }, "\uD83D\uDC4D")));
-    }) : /*#__PURE__*/React.createElement("li", {
-      className: "ap-chat-empty"
-    }, __$5('No messages yet.', 'artpulse'))), error && /*#__PURE__*/React.createElement("p", {
-      className: "ap-chat-error"
-    }, __$5('Unable to load chat.', 'artpulse')), canPost ? /*#__PURE__*/React.createElement("form", {
-      className: "ap-chat-form",
-      onSubmit: send
-    }, /*#__PURE__*/React.createElement("input", {
-      type: "text",
-      "aria-label": __$5('Chat message', 'artpulse'),
-      value: text,
-      onChange: function onChange(e) {
-        return setText(e.target.value);
-      }
-    }), /*#__PURE__*/React.createElement("button", {
-      type: "button",
-      onClick: function onClick() {
-        return setShowPicker(!showPicker);
-      }
-    }, "\uD83D\uDE0A"), showPicker && EmojiPicker && /*#__PURE__*/React.createElement(EmojiPicker, {
-      onEmojiClick: function onEmojiClick(e) {
-        return setText(function (t) {
-          return t + e.emoji;
-        });
-      }
-    }), /*#__PURE__*/React.createElement("button", {
-      type: "submit",
-      "aria-label": __$5('Send chat message', 'artpulse')
-    }, __$5('Send', 'artpulse'))) : /*#__PURE__*/React.createElement("p", null, APChat.loggedIn ? __$5('Only attendees can post messages', 'artpulse') : __$5('Please log in to chat.', 'artpulse')));
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+          type: "submit",
+          "aria-label": __$5('Send chat message', 'artpulse'),
+          children: __$5('Send', 'artpulse')
+        })]
+      }) : /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: APChat.loggedIn ? __$5('Only attendees can post messages', 'artpulse') : __$5('Please log in to chat.', 'artpulse')
+      })]
+    });
   }
 
   var __$4 = wp.i18n.__;
   function QaWidget(_ref) {
     var eventId = _ref.eventId,
       canPost = _ref.canPost;
-    var _useState = React.useState([]),
+    var _useState = require$$0.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       comments = _useState2[0],
       setComments = _useState2[1];
-    var _useState3 = React.useState(''),
+    var _useState3 = require$$0.useState(''),
       _useState4 = _slicedToArray(_useState3, 2),
       text = _useState4[0],
       setText = _useState4[1];
@@ -491,7 +568,7 @@
         return setComments(d.comments || []);
       });
     };
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       load();
     }, [eventId]);
     var send = function send(e) {
@@ -512,43 +589,47 @@
         load();
       });
     };
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-qa-thread",
-      "data-event-id": eventId
-    }, /*#__PURE__*/React.createElement("ul", {
-      className: "ap-qa-list"
-    }, comments.map(function (c) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: c.id
-      }, c.author, ": ", c.content);
-    })), canPost && /*#__PURE__*/React.createElement("form", {
-      className: "ap-qa-form",
-      onSubmit: send
-    }, /*#__PURE__*/React.createElement("textarea", {
-      required: true,
-      "aria-label": __$4('Your question', 'artpulse'),
-      value: text,
-      onChange: function onChange(e) {
-        return setText(e.target.value);
-      }
-    }), /*#__PURE__*/React.createElement("button", {
-      type: "submit",
-      "aria-label": __$4('Post question', 'artpulse')
-    }, __$4('Post', 'artpulse'))));
+      "data-event-id": eventId,
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        className: "ap-qa-list",
+        children: comments.map(function (c) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [c.author, ": ", c.content]
+          }, c.id);
+        })
+      }), canPost && /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
+        className: "ap-qa-form",
+        onSubmit: send,
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("textarea", {
+          required: true,
+          "aria-label": __$4('Your question', 'artpulse'),
+          value: text,
+          onChange: function onChange(e) {
+            return setText(e.target.value);
+          }
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+          type: "submit",
+          "aria-label": __$4('Post question', 'artpulse'),
+          children: __$4('Post', 'artpulse')
+        })]
+      })]
+    });
   }
 
   var __$3 = wp.i18n.__;
   function TicketWidget(_ref) {
     var eventId = _ref.eventId;
-    var _useState = React.useState([]),
+    var _useState = require$$0.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       tiers = _useState2[0],
       setTiers = _useState2[1];
-    var _useState3 = React.useState(true),
+    var _useState3 = require$$0.useState(true),
       _useState4 = _slicedToArray(_useState3, 2),
       loading = _useState4[0],
       setLoading = _useState4[1];
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       fetch("".concat(APTickets.apiRoot, "artpulse/v1/event/").concat(eventId, "/tickets")).then(function (r) {
         return r.json();
       }).then(function (d) {
@@ -570,23 +651,30 @@
         return alert(__$3('Purchased!', 'artpulse'));
       });
     };
-    if (loading) return /*#__PURE__*/React.createElement("p", null, __$3('Loading tickets...', 'artpulse'));
-    return /*#__PURE__*/React.createElement("div", {
+    if (loading) return /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+      children: __$3('Loading tickets...', 'artpulse')
+    });
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "ap-tickets",
-      "data-event-id": eventId
-    }, /*#__PURE__*/React.createElement("ul", {
-      className: "ap-ticket-list"
-    }, tiers.map(function (tier) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: tier.id,
-        className: "ap-ticket-tier"
-      }, /*#__PURE__*/React.createElement("span", null, tier.name, " - ", tier.price), /*#__PURE__*/React.createElement("button", {
-        onClick: function onClick() {
-          return buy(tier);
-        },
-        "aria-label": "".concat(__$3('Buy', 'artpulse'), " ").concat(tier.name)
-      }, __$3('Buy', 'artpulse')));
-    })));
+      "data-event-id": eventId,
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        className: "ap-ticket-list",
+        children: tiers.map(function (tier) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            className: "ap-ticket-tier",
+            children: [/*#__PURE__*/jsxRuntimeExports.jsxs("span", {
+              children: [tier.name, " - ", tier.price]
+            }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+              onClick: function onClick() {
+                return buy(tier);
+              },
+              "aria-label": "".concat(__$3('Buy', 'artpulse'), " ").concat(tier.name),
+              children: __$3('Buy', 'artpulse')
+            })]
+          }, tier.id);
+        })
+      })
+    });
   }
 
   function NearbyEventsMapWidget(_ref) {
@@ -594,11 +682,11 @@
       nonce = _ref.nonce,
       lat = _ref.lat,
       lng = _ref.lng;
-    var _useState = React.useState([]),
+    var _useState = require$$0.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       events = _useState2[0],
       setEvents = _useState2[1];
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       if (!lat || !lng) {
         setEvents([]);
         return;
@@ -615,16 +703,20 @@
         return setEvents([]);
       });
     }, [lat, lng, apiRoot, nonce]);
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "ap-nearby-events-widget",
-      "data-widget-id": "nearby_events_map"
-    }, /*#__PURE__*/React.createElement("ul", null, events.map(function (ev) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: ev.id
-      }, /*#__PURE__*/React.createElement("a", {
-        href: ev.link
-      }, ev.title), " (", ev.distance, " km)");
-    })));
+      "data-widget-id": "nearby_events_map",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: events.map(function (ev) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [/*#__PURE__*/jsxRuntimeExports.jsx("a", {
+              href: ev.link,
+              children: ev.title
+            }), " (", ev.distance, " km)"]
+          }, ev.id);
+        })
+      })
+    });
   }
   function initNearbyEventsMapWidget(el) {
     var root = client.createRoot(el);
@@ -633,7 +725,7 @@
       lng = _el$dataset.lng,
       apiRoot = _el$dataset.apiRoot,
       nonce = _el$dataset.nonce;
-    root.render(/*#__PURE__*/React.createElement(NearbyEventsMapWidget, {
+    root.render(/*#__PURE__*/jsxRuntimeExports.jsx(NearbyEventsMapWidget, {
       apiRoot: apiRoot,
       nonce: nonce,
       lat: lat,
@@ -644,11 +736,11 @@
   function MyFavoritesWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState([]),
+    var _useState = require$$0.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       items = _useState2[0],
       setItems = _useState2[1];
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/follows?post_type=artpulse_event"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -658,23 +750,27 @@
         return r.json();
       }).then(setItems);
     }, []);
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "ap-favorites-widget",
-      "data-widget-id": "my_favorites"
-    }, /*#__PURE__*/React.createElement("ul", null, items.map(function (i) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: i.post_id
-      }, /*#__PURE__*/React.createElement("a", {
-        href: i.link
-      }, i.title));
-    })));
+      "data-widget-id": "my_favorites",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: items.map(function (i) {
+          return /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+            children: /*#__PURE__*/jsxRuntimeExports.jsx("a", {
+              href: i.link,
+              children: i.title
+            })
+          }, i.post_id);
+        })
+      })
+    });
   }
   function initMyFavoritesWidget(el) {
     var root = client.createRoot(el);
     var _el$dataset = el.dataset,
       apiRoot = _el$dataset.apiRoot,
       nonce = _el$dataset.nonce;
-    root.render(/*#__PURE__*/React.createElement(MyFavoritesWidget, {
+    root.render(/*#__PURE__*/jsxRuntimeExports.jsx(MyFavoritesWidget, {
       apiRoot: apiRoot,
       nonce: nonce
     }));
@@ -684,11 +780,11 @@
   function ArtistInboxPreviewWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       threads = _useState2[0],
       setThreads = _useState2[1];
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/conversations"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -751,28 +847,40 @@
     }, []);
     var content;
     if (threads === null) {
-      content = /*#__PURE__*/React.createElement("p", null, __$2('Loading...', 'artpulse'));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$2('Loading...', 'artpulse')
+      });
     } else if (!threads.length) {
-      content = /*#__PURE__*/React.createElement("p", null, __$2('No new messages.', 'artpulse'));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __$2('No new messages.', 'artpulse')
+      });
     } else {
-      content = /*#__PURE__*/React.createElement("ul", {
-        className: "ap-inbox-preview-list"
-      }, threads.slice(0, 3).map(function (t) {
-        return /*#__PURE__*/React.createElement("li", {
-          key: t.user_id
-        }, /*#__PURE__*/React.createElement("strong", null, t.display_name), t.preview && /*#__PURE__*/React.createElement("span", null, ": ", t.preview), t.date && /*#__PURE__*/React.createElement("em", null, " ", new Date(t.date).toLocaleDateString()));
-      }));
+      content = /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        className: "ap-inbox-preview-list",
+        children: threads.slice(0, 3).map(function (t) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [/*#__PURE__*/jsxRuntimeExports.jsx("strong", {
+              children: t.display_name
+            }), t.preview && /*#__PURE__*/jsxRuntimeExports.jsxs("span", {
+              children: [": ", t.preview]
+            }), t.date && /*#__PURE__*/jsxRuntimeExports.jsxs("em", {
+              children: [" ", new Date(t.date).toLocaleDateString()]
+            })]
+          }, t.user_id);
+        })
+      });
     }
-    return /*#__PURE__*/React.createElement("div", {
-      "data-widget-id": "artist_inbox_preview"
-    }, content);
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      "data-widget-id": "artist_inbox_preview",
+      children: content
+    });
   }
   function initArtistInboxPreviewWidget(el) {
     var root = client.createRoot(el);
     var _el$dataset = el.dataset,
       apiRoot = _el$dataset.apiRoot,
       nonce = _el$dataset.nonce;
-    root.render(/*#__PURE__*/React.createElement(ArtistInboxPreviewWidget, {
+    root.render(/*#__PURE__*/jsxRuntimeExports.jsx(ArtistInboxPreviewWidget, {
       apiRoot: apiRoot,
       nonce: nonce
     }));
@@ -782,11 +890,11 @@
   function ArtistRevenueSummaryWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       data = _useState2[0],
       setData = _useState2[1];
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       var now = new Date();
       var start = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10);
       fetch("".concat(apiRoot, "artpulse/v1/user/sales?from=").concat(start), {
@@ -807,21 +915,31 @@
       });
     }, []);
     if (!data) {
-      return /*#__PURE__*/React.createElement("div", {
-        "data-widget-id": "revenue_summary"
-      }, /*#__PURE__*/React.createElement("p", null, __$1('Loading...', 'artpulse')));
+      return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        "data-widget-id": "revenue_summary",
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: __$1('Loading...', 'artpulse')
+        })
+      });
     }
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "ap-revenue-summary",
-      "data-widget-id": "revenue_summary"
-    }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, data.total_revenue), " ", __$1('total revenue this month', 'artpulse')), /*#__PURE__*/React.createElement("p", null, data.tickets_sold, " ", __$1('tickets sold', 'artpulse')));
+      "data-widget-id": "revenue_summary",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("strong", {
+          children: data.total_revenue
+        }), " ", __$1('total revenue this month', 'artpulse')]
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [data.tickets_sold, " ", __$1('tickets sold', 'artpulse')]
+      })]
+    });
   }
   function initArtistRevenueSummaryWidget(el) {
     var root = client.createRoot(el);
     var _el$dataset = el.dataset,
       apiRoot = _el$dataset.apiRoot,
       nonce = _el$dataset.nonce;
-    root.render(/*#__PURE__*/React.createElement(ArtistRevenueSummaryWidget, {
+    root.render(/*#__PURE__*/jsxRuntimeExports.jsx(ArtistRevenueSummaryWidget, {
       apiRoot: apiRoot,
       nonce: nonce
     }));
@@ -831,11 +949,11 @@
   function ArtistSpotlightWidget(_ref) {
     var apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(null),
+    var _useState = require$$0.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       items = _useState2[0],
       setItems = _useState2[1];
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/spotlights"), {
         headers: {
           'X-WP-Nonce': nonce
@@ -848,27 +966,33 @@
       });
     }, []);
     if (items === null) {
-      return /*#__PURE__*/React.createElement("p", null, __('Loading...', 'artpulse'));
+      return /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __('Loading...', 'artpulse')
+      });
     }
     if (!items.length) {
-      return /*#__PURE__*/React.createElement("p", null, __('No mentions yet.', 'artpulse'));
+      return /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: __('No mentions yet.', 'artpulse')
+      });
     }
-    return /*#__PURE__*/React.createElement("ul", {
-      className: "ap-spotlight-list"
-    }, items.slice(0, 3).map(function (it) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: it.id
-      }, /*#__PURE__*/React.createElement("a", {
-        href: it.link
-      }, it.title));
-    }));
+    return /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+      className: "ap-spotlight-list",
+      children: items.slice(0, 3).map(function (it) {
+        return /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("a", {
+            href: it.link,
+            children: it.title
+          })
+        }, it.id);
+      })
+    });
   }
   function initArtistSpotlightWidget(el) {
     var root = client.createRoot(el);
     var _el$dataset = el.dataset,
       apiRoot = _el$dataset.apiRoot,
       nonce = _el$dataset.nonce;
-    root.render(/*#__PURE__*/React.createElement(ArtistSpotlightWidget, {
+    root.render(/*#__PURE__*/jsxRuntimeExports.jsx(ArtistSpotlightWidget, {
       apiRoot: apiRoot,
       nonce: nonce
     }));
@@ -878,7 +1002,7 @@
     document.querySelectorAll('.ap-event-chat[data-event-id]').forEach(function (el) {
       var root = client.createRoot(el);
       var canPost = !!el.dataset.canPost;
-      root.render(/*#__PURE__*/React.createElement(ChatWidget, {
+      root.render(/*#__PURE__*/jsxRuntimeExports.jsx(ChatWidget, {
         eventId: el.dataset.eventId,
         canPost: canPost
       }));
@@ -886,14 +1010,14 @@
     document.querySelectorAll('.ap-qa-thread[data-event-id]').forEach(function (el) {
       var root = client.createRoot(el);
       var canPost = !!el.dataset.canPost;
-      root.render(/*#__PURE__*/React.createElement(QaWidget, {
+      root.render(/*#__PURE__*/jsxRuntimeExports.jsx(QaWidget, {
         eventId: el.dataset.eventId,
         canPost: canPost
       }));
     });
     document.querySelectorAll('.ap-tickets[data-event-id]').forEach(function (el) {
       var root = client.createRoot(el);
-      root.render(/*#__PURE__*/React.createElement(TicketWidget, {
+      root.render(/*#__PURE__*/jsxRuntimeExports.jsx(TicketWidget, {
         eventId: el.dataset.eventId
       }));
     });

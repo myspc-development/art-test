@@ -1,4 +1,4 @@
-(function (React, client) {
+(function (require$$0, client) {
   'use strict';
 
   function _arrayLikeToArray(r, a) {
@@ -34,6 +34,14 @@
       });
     };
   }
+  function _defineProperty(e, r, t) {
+    return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+      value: t,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    }) : e[r] = t, e;
+  }
   function _iterableToArrayLimit(r, l) {
     var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
     if (null != t) {
@@ -60,6 +68,27 @@
   }
   function _nonIterableRest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function ownKeys(e, r) {
+    var t = Object.keys(e);
+    if (Object.getOwnPropertySymbols) {
+      var o = Object.getOwnPropertySymbols(e);
+      r && (o = o.filter(function (r) {
+        return Object.getOwnPropertyDescriptor(e, r).enumerable;
+      })), t.push.apply(t, o);
+    }
+    return t;
+  }
+  function _objectSpread2(e) {
+    for (var r = 1; r < arguments.length; r++) {
+      var t = null != arguments[r] ? arguments[r] : {};
+      r % 2 ? ownKeys(Object(t), true).forEach(function (r) {
+        _defineProperty(e, r, t[r]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
+        Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+      });
+    }
+    return e;
   }
   function _regenerator() {
     /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
@@ -172,6 +201,20 @@
   function _slicedToArray(r, e) {
     return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
   }
+  function _toPrimitive(t, r) {
+    if ("object" != typeof t || !t) return t;
+    var e = t[Symbol.toPrimitive];
+    if (void 0 !== e) {
+      var i = e.call(t, r);
+      if ("object" != typeof i) return i;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return ("string" === r ? String : Number)(t);
+  }
+  function _toPropertyKey(t) {
+    var i = _toPrimitive(t, "string");
+    return "symbol" == typeof i ? i : i + "";
+  }
   function _unsupportedIterableToArray(r, a) {
     if (r) {
       if ("string" == typeof r) return _arrayLikeToArray(r, a);
@@ -179,6 +222,68 @@
       return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
     }
   }
+
+  var jsxRuntime = {exports: {}};
+
+  var reactJsxRuntime_production_min = {};
+
+  /**
+   * @license React
+   * react-jsx-runtime.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+  var hasRequiredReactJsxRuntime_production_min;
+
+  function requireReactJsxRuntime_production_min () {
+  	if (hasRequiredReactJsxRuntime_production_min) return reactJsxRuntime_production_min;
+  	hasRequiredReactJsxRuntime_production_min = 1;
+
+  	var f = require$$0,
+  	  k = Symbol["for"]("react.element"),
+  	  l = Symbol["for"]("react.fragment"),
+  	  m = Object.prototype.hasOwnProperty,
+  	  n = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+  	  p = {
+  	    key: true,
+  	    ref: true,
+  	    __self: true,
+  	    __source: true
+  	  };
+  	function q(c, a, g) {
+  	  var b,
+  	    d = {},
+  	    e = null,
+  	    h = null;
+  	  void 0 !== g && (e = "" + g);
+  	  void 0 !== a.key && (e = "" + a.key);
+  	  void 0 !== a.ref && (h = a.ref);
+  	  for (b in a) m.call(a, b) && !p.hasOwnProperty(b) && (d[b] = a[b]);
+  	  if (c && c.defaultProps) for (b in a = c.defaultProps, a) void 0 === d[b] && (d[b] = a[b]);
+  	  return {
+  	    $$typeof: k,
+  	    type: c,
+  	    key: e,
+  	    ref: h,
+  	    props: d,
+  	    _owner: n.current
+  	  };
+  	}
+  	reactJsxRuntime_production_min.Fragment = l;
+  	reactJsxRuntime_production_min.jsx = q;
+  	reactJsxRuntime_production_min.jsxs = q;
+  	return reactJsxRuntime_production_min;
+  }
+
+  {
+    jsxRuntime.exports = requireReactJsxRuntime_production_min();
+  }
+
+  var jsxRuntimeExports = jsxRuntime.exports;
 
   var __$1 = wp.i18n.__;
 
@@ -194,7 +299,7 @@
     var eventId = _ref.eventId,
       apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState(false),
+    var _useState = require$$0.useState(false),
       _useState2 = _slicedToArray(_useState, 2),
       rsvped = _useState2[0],
       setRsvped = _useState2[1];
@@ -232,10 +337,11 @@
         return _ref2.apply(this, arguments);
       };
     }();
-    return /*#__PURE__*/React.createElement("button", {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("button", {
       className: "ap-rsvp-btn".concat(rsvped ? ' is-rsvped' : ''),
-      onClick: toggle
-    }, rsvped ? __$1('Cancel RSVP', 'artpulse') : __$1('RSVP', 'artpulse'));
+      onClick: toggle,
+      children: rsvped ? __$1('Cancel RSVP', 'artpulse') : __$1('RSVP', 'artpulse')
+    });
   }
 
   var __ = wp.i18n.__;
@@ -252,15 +358,15 @@
     var eventId = _ref.eventId,
       apiRoot = _ref.apiRoot,
       nonce = _ref.nonce;
-    var _useState = React.useState([]),
+    var _useState = require$$0.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       messages = _useState2[0],
       setMessages = _useState2[1];
-    var _useState3 = React.useState(''),
+    var _useState3 = require$$0.useState(''),
       _useState4 = _slicedToArray(_useState3, 2),
       text = _useState4[0],
       setText = _useState4[1];
-    React.useEffect(function () {
+    require$$0.useEffect(function () {
       fetch("".concat(apiRoot, "artpulse/v1/event/").concat(eventId, "/chat")).then(function (r) {
         return r.json();
       }).then(setMessages);
@@ -300,25 +406,31 @@
         return _ref2.apply(this, arguments);
       };
     }();
-    return /*#__PURE__*/React.createElement("div", {
-      className: "ap-event-chat-widget"
-    }, /*#__PURE__*/React.createElement("ul", {
-      className: "chat-thread"
-    }, messages.map(function (m, i) {
-      return /*#__PURE__*/React.createElement("li", {
-        key: i
-      }, /*#__PURE__*/React.createElement("strong", null, m.author, ":"), " ", m.content);
-    })), /*#__PURE__*/React.createElement("div", {
-      className: "chat-form"
-    }, /*#__PURE__*/React.createElement("input", {
-      value: text,
-      onChange: function onChange(e) {
-        return setText(e.target.value);
-      },
-      placeholder: __('Write a message...', 'artpulse')
-    }), /*#__PURE__*/React.createElement("button", {
-      onClick: send
-    }, __('Send', 'artpulse'))));
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "ap-event-chat-widget",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        className: "chat-thread",
+        children: messages.map(function (m, i) {
+          return /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [/*#__PURE__*/jsxRuntimeExports.jsxs("strong", {
+              children: [m.author, ":"]
+            }), " ", m.content]
+          }, i);
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "chat-form",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("input", {
+          value: text,
+          onChange: function onChange(e) {
+            return setText(e.target.value);
+          },
+          placeholder: __('Write a message...', 'artpulse')
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+          onClick: send,
+          children: __('Send', 'artpulse')
+        })]
+      })]
+    });
   }
 
   var mountPoints = document.querySelectorAll('[data-widget]');
@@ -338,7 +450,7 @@
         return;
     }
     var root = client.createRoot(node);
-    root.render(/*#__PURE__*/React.createElement(Component, props));
+    root.render(/*#__PURE__*/jsxRuntimeExports.jsx(Component, _objectSpread2({}, props)));
   });
 
 })(React, ReactDOM);
