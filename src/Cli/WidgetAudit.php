@@ -28,21 +28,29 @@ class WidgetAudit {
     {
         $registry = WidgetSources::get_registry();
         $vis      = WidgetSources::get_visibility_roles();
+        $hidden   = WidgetSources::get_hidden_for_roles();
         $problems = Parity::problems();
         $rows = [];
         foreach ($registry as $id => $info) {
+            $hidden_roles = [];
+            foreach ($hidden as $role => $ids) {
+                if (in_array($id, (array)$ids, true)) {
+                    $hidden_roles[] = $role;
+                }
+            }
             $rows[] = [
                 'id'                   => $id,
                 'status'               => $info['status'],
                 'has_callback'         => $info['callback_is_callable'] ? 'yes' : 'no',
                 'roles_from_registry'  => implode(',', $info['roles_from_registry']),
                 'roles_from_visibility'=> implode(',', $vis[$id] ?? []),
+                'hidden_for_roles'     => implode(',', $hidden_roles),
                 'registered_in_code_file' => $info['class'],
                 'problem'              => $problems[$id] ?? '',
             ];
         }
         $format = $assoc['format'] ?? 'table';
-        \WP_CLI\Utils\format_items($format, $rows, ['id','status','has_callback','roles_from_registry','roles_from_visibility','registered_in_code_file','problem']);
+        \WP_CLI\Utils\format_items($format, $rows, ['id','status','has_callback','roles_from_registry','roles_from_visibility','hidden_for_roles','registered_in_code_file','problem']);
     }
 
     public function visibility($args, $assoc)
@@ -138,58 +146,133 @@ class WidgetAudit {
 
     public function fix($args, $assoc)
     {
-        $changed = false;
+        $role = isset($assoc['role']) ? sanitize_key($assoc['role']) : '';
+        $registry = WidgetSources::get_registry();
+        $summary  = [];
 
-        if (isset($assoc['role']) && isset($assoc['unhide'])) {
-            $role = sanitize_key($assoc['role']);
+        // Unhide widgets for a role.
+        if (isset($assoc['unhide'])) {
+            if (!$role) {
+                WP_CLI::error('Missing --role for --unhide');
+            }
             $hidden = get_option('artpulse_hidden_widgets', []);
             if (!is_array($hidden)) {
                 $hidden = [];
             }
+            $to_unhide = $hidden[$role] ?? [];
+            foreach ((array)$to_unhide as $id) {
+                $summary[] = ['widget' => $id, 'action' => 'unhide', 'class' => ''];
+                do_action('artpulse_audit_event', 'fix', ['widget' => $id, 'action' => 'unhide', 'class' => null]);
+            }
             $hidden[$role] = [];
             update_option('artpulse_hidden_widgets', $hidden);
-            WP_CLI::line("Unhid widgets for role {$role}");
-            do_action('artpulse_audit_event', 'fix', ['role' => $role, 'action' => 'unhide']);
-            $changed = true;
         }
 
+        // Activate all widgets.
         if (isset($assoc['activate-all'])) {
             $flags = get_option('artpulse_widget_flags', []);
             if (!is_array($flags)) {
                 $flags = [];
             }
-            foreach ($flags as $id => &$cfg) {
-                if (is_array($cfg)) {
-                    $cfg['status'] = 'active';
-                } else {
-                    $cfg = ['status' => 'active'];
-                }
-                do_action('artpulse_audit_event', 'fix', ['widget' => $id, 'action' => 'activate']);
+            foreach ($registry as $id => $info) {
+                $flags[$id] = array_merge($flags[$id] ?? [], ['status' => 'active']);
+                $summary[] = ['widget' => $id, 'action' => 'activate', 'class' => ''];
+                do_action('artpulse_audit_event', 'fix', ['widget' => $id, 'action' => 'activate', 'class' => null]);
             }
-            unset($cfg);
             update_option('artpulse_widget_flags', $flags);
-            WP_CLI::line('Activated all widgets');
-            $changed = true;
         }
 
-        // Auto-bind placeholders to real renderers when possible.
-        $registry = WidgetSources::get_registry();
+        $known = [];
+        if (isset($assoc['bind-known'])) {
+            $known = [
+                'widget_news' => ['class' => \ArtPulse\Widgets\ArtPulseNewsFeedWidget::class, 'method' => 'render'],
+                'widget_recommended_for_you' => ['class' => \ArtPulse\Widgets\RecommendationsWidget::class, 'method' => 'render'],
+            ];
+        }
+
+        $placeholders = [];
         foreach ($registry as $id => $info) {
             if (empty($info['is_placeholder'])) {
                 continue;
             }
+            $placeholders[] = $id;
+
+            // Known bindings.
+            if (isset($known[$id])) {
+                $map = $known[$id];
+                if (class_exists($map['class']) && method_exists($map['class'], $map['method'])) {
+                    DashboardWidgetRegistry::bindRenderer($id, [$map['class'], $map['method']]);
+                    $summary[] = ['widget' => $id, 'action' => 'bind', 'class' => $map['class']];
+                    do_action('artpulse_audit_event', 'fix', ['widget' => $id, 'action' => 'bind', 'class' => $map['class']]);
+                    continue;
+                }
+            }
+
+            // Fallback auto-bind based on slug.
             $base  = strpos($id, 'widget_') === 0 ? substr($id, 7) : $id;
             $class = 'ArtPulse\\Widgets\\' . str_replace(' ', '', ucwords(str_replace('_', ' ', $base))) . 'Widget';
             if (class_exists($class) && method_exists($class, 'render')) {
                 DashboardWidgetRegistry::bindRenderer($id, [$class, 'render']);
-                WP_CLI::line("Bound {$id} to {$class}::render");
+                $summary[] = ['widget' => $id, 'action' => 'bind', 'class' => $class];
                 do_action('artpulse_audit_event', 'fix', ['widget' => $id, 'action' => 'bind', 'class' => $class]);
-                $changed = true;
             }
         }
 
-        if (!$changed) {
+        // Hide placeholder widgets for roles.
+        if (isset($assoc['hide-placeholders'])) {
+            $target = $assoc['hide-placeholders'];
+            $target_role = $target !== true ? sanitize_key($target) : ($role ?: '');
+            $hidden = get_option('artpulse_hidden_widgets', []);
+            if (!is_array($hidden)) {
+                $hidden = [];
+            }
+            $roles = $target_role ? [$target_role] : array_keys((new \WP_Roles())->roles);
+            foreach ($roles as $r) {
+                $list = $hidden[$r] ?? [];
+                foreach ($placeholders as $id) {
+                    if (!in_array($id, $list, true)) {
+                        $list[] = $id;
+                        $summary[] = ['widget' => $id, 'action' => 'hide', 'class' => ''];
+                        do_action('artpulse_audit_event', 'fix', ['widget' => $id, 'action' => 'hide', 'class' => null]);
+                    }
+                }
+                $hidden[$r] = $list;
+            }
+            update_option('artpulse_hidden_widgets', $hidden);
+        }
+
+        // Output summary.
+        if ($summary) {
+            \WP_CLI\Utils\format_items('table', $summary, ['widget', 'action', 'class']);
+        } else {
             WP_CLI::line('No changes made.');
+        }
+
+        // Determine leftover placeholders.
+        $hidden = WidgetSources::get_hidden_for_roles();
+        $leftover = [];
+        foreach ($placeholders as $id) {
+            $def   = DashboardWidgetRegistry::get($id);
+            $class = $def['class'] ?? '';
+            $is_placeholder = str_starts_with($class, 'ArtPulse\\Widgets\\Placeholder\\');
+            if (!$is_placeholder) {
+                continue;
+            }
+            $is_hidden = false;
+            foreach ($hidden as $r => $ids) {
+                if (in_array($id, (array)$ids, true)) {
+                    $is_hidden = true;
+                    break;
+                }
+            }
+            if (!$is_hidden) {
+                $leftover[] = $id;
+            }
+        }
+
+        if ($leftover) {
+            WP_CLI::warning('Unbound placeholders remain: ' . implode(', ', $leftover));
+            WP_CLI::halt(1);
         }
     }
 }

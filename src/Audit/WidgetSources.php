@@ -46,6 +46,17 @@ class WidgetSources {
     }
 
     /**
+     * Mapping of roles to hidden widget ids.
+     *
+     * @return array<string,array<int,string>> role => [widget ids]
+     */
+    public static function get_hidden_for_roles(): array
+    {
+        $opt = get_option('artpulse_hidden_widgets', []);
+        return is_array($opt) ? $opt : [];
+    }
+
+    /**
      * @deprecated Use get_visibility_roles() instead.
      */
     public static function get_visibility_matrix(): array
