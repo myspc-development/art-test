@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Core;
 
+use ArtPulse\Audit\AuditBus;
+
 class DashboardRenderer
 {
     /**
@@ -28,12 +30,28 @@ class DashboardRenderer
 
         if (!$widget) {
             error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not found or hidden.");
+            AuditBus::on_rendered($widget_id, $role, 0, false, 'missing');
             return '';
         }
 
-        $status = $widget['status'] ?? 'active';
+        $status  = $widget['status'] ?? 'active';
+        $preview = apply_filters('ap_dashboard_preview_enabled', false);
+        $hidden_list = apply_filters('ap_dashboard_hidden_widgets', [], $role);
+        $hidden = in_array($widget_id, $hidden_list, true);
+        AuditBus::on_attempt($widget_id, $role, [
+            'hidden'  => $hidden,
+            'status'  => $status,
+            'preview' => $preview,
+        ]);
+
+        if ($hidden && !current_user_can('manage_options')) {
+            AuditBus::on_rendered($widget_id, $role, 0, false, 'hidden');
+            return '';
+        }
+
         if ($status !== 'active' && !current_user_can('manage_options')) {
             error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' inactive.");
+            AuditBus::on_rendered($widget_id, $role, 0, false, 'inactive');
             return '';
         }
 
@@ -47,6 +65,7 @@ class DashboardRenderer
 
         if ($allowed_roles && !in_array($role, $allowed_roles, true)) {
             error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not allowed for role '{$role}'.");
+            AuditBus::on_rendered($widget_id, $role, 0, false, 'forbidden');
             return '';
         }
 
@@ -62,6 +81,8 @@ class DashboardRenderer
 
         $start = microtime(true);
 
+        $ok = true;
+        $reason = '';
         try {
             if ($class && class_exists($class) && is_callable([$class, 'render'])) {
                 ob_start();
@@ -78,11 +99,15 @@ class DashboardRenderer
                 $buffer = ob_get_clean();
                 $output = $buffer . (is_string($result) ? $result : '');
             } else {
+                $ok = false;
+                $reason = 'no-callback';
                 error_log("\xF0\x9F\x9A\xAB Invalid callback for widget '{$widget_id}'.");
             }
         } catch (\Throwable $e) {
+            $ok = false;
+            $reason = 'exception';
             error_log("AP: widget {$widget_id} failed: " . $e->getMessage());
-            $output = "<div class='ap-widget-error'>This widget failed to load.</div>";
+            $output = current_user_can('manage_options') ? "<div class='ap-widget-error'>This widget failed to load.</div>" : '';
         }
 
         $output = apply_filters('ap_render_dashboard_widget_output', $output, $widget_id, $user_id, $widget);
@@ -100,6 +125,7 @@ class DashboardRenderer
 
         $elapsed = microtime(true) - $start;
         error_log(sprintf('⏱️ Widget %s rendered in %.4fs', $widget_id, $elapsed));
+        AuditBus::on_rendered($widget_id, $role, (int) ($elapsed * 1000), $ok, $reason);
 
         if (self::shouldCache($widget_id, $user_id, $widget)) {
             $ttl = (int) apply_filters('ap_dashboard_widget_cache_ttl', MINUTE_IN_SECONDS * 10, $widget_id, $user_id, $widget);

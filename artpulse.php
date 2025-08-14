@@ -28,6 +28,8 @@ if (defined('WP_CLI') && WP_CLI) {
     \WP_CLI::add_command('artpulse create-user-dashboard-page', \ArtPulse\CLI\CreateUserDashboardPageCommand::class);
     require_once __DIR__ . '/src/Cli/WidgetDoctor.php';
     \WP_CLI::add_command('artpulse widgets', \ArtPulse\Cli\WidgetDoctor::class);
+    require_once __DIR__ . '/src/Cli/WidgetAudit.php';
+    (new \ArtPulse\Cli\WidgetAudit())->register();
 }
 
 // Development helpers
