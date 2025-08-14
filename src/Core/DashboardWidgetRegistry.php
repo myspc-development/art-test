@@ -134,6 +134,7 @@ class DashboardWidgetRegistry {
      */
     public static function canon_slug( string $slug ): string {
         $s = strtolower( sanitize_key( $slug ) );
+        $s = str_replace( '-', '_', $s );
         if ( $s === '' ) {
             return '';
         }
@@ -151,6 +152,7 @@ class DashboardWidgetRegistry {
      */
     public static function alias( string $alias, string $canonical ): void {
         $a = strtolower( sanitize_key( $alias ) );
+        $a = str_replace( '-', '_', $a );
         $c = self::canon_slug( $canonical );
         if ( $a === '' || $c === '' ) {
             return;
@@ -215,6 +217,15 @@ class DashboardWidgetRegistry {
         $id = self::canon_slug( $slug );
 
         return $id !== '' && isset( self::$widgets[ $id ] );
+    }
+
+    /**
+     * Backwards compatibility helper.
+     *
+     * @param string $slug Widget identifier.
+     */
+    public static function has( string $slug ): bool {
+        return self::exists( $slug );
     }
 
     /**

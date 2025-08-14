@@ -21,10 +21,17 @@ require_once __DIR__ . '/includes/class-cli-check-widget-presets.php';
 require_once __DIR__ . '/includes/widget-logging.php';
 require_once __DIR__ . '/includes/unhide-default-widgets.php';
 
+add_action('init', function () {
+    load_plugin_textdomain('artpulse', false, dirname(plugin_basename(__FILE__)).'/languages');
+}, 11);
+
 // Alias legacy widget IDs and bind real renderers after canonical registration.
 add_action('init', function () {
     \ArtPulse\Core\DashboardWidgetRegistry::alias('widget_widget_favorites', 'widget_favorites');
     \ArtPulse\Core\DashboardWidgetRegistry::alias('widget_widget_near_me_events', 'widget_near_me_events');
+    \ArtPulse\Core\DashboardWidgetRegistry::alias('widget_news', 'widget_news_feed');
+    \ArtPulse\Core\DashboardWidgetRegistry::alias('widget_local-events', 'widget_local_events');
+    \ArtPulse\Core\DashboardWidgetRegistry::alias('widget_account-tools', 'widget_account_tools');
 
     if (class_exists(\ArtPulse\Widgets\FavoritesOverviewWidget::class)) {
         \ArtPulse\Core\DashboardWidgetRegistry::bindRenderer(
