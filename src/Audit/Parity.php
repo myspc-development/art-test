@@ -13,7 +13,7 @@ class Parity {
     public static function expected_for_role(string $role): array
     {
         $builder    = WidgetSources::get_builder_layout($role);
-        $visibility = WidgetSources::get_visibility_matrix();
+        $visibility = WidgetSources::get_visibility_roles();
         $registry   = WidgetSources::get_registry();
         $expected   = [];
         foreach ($builder as $id) {
@@ -57,13 +57,7 @@ class Parity {
         }
         $extra = array_values(array_diff($rendered, $expected));
 
-        $registry = WidgetSources::get_registry();
-        $problems = [];
-        foreach ($registry as $id => $info) {
-            if (!$info['callback_is_callable'] || in_array($info['status'], ['coming_soon', 'inactive'], true)) {
-                $problems[] = $id;
-            }
-        }
+        $problems = self::problems();
         return [
             'would_render' => $expected,
             'did_render'   => $rendered,
@@ -71,5 +65,25 @@ class Parity {
             'extra'        => $extra,
             'problems'     => $problems,
         ];
+    }
+
+    /**
+     * Detect configuration problems independent of rendering parity.
+     *
+     * @return array<string,string> Map of widget id to problem reason.
+     */
+    public static function problems(): array
+    {
+        $registry = WidgetSources::get_registry();
+        $problems = [];
+        foreach ($registry as $id => $info) {
+            if (!($info['callback_is_callable'] ?? false) || in_array($info['status'] ?? '', ['coming_soon', 'inactive'], true)) {
+                $problems[$id] = 'missing_callback';
+            }
+            if (!empty($info['is_placeholder'])) {
+                $problems[$id] = 'placeholder_renderer';
+            }
+        }
+        return $problems;
     }
 }

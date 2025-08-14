@@ -60,6 +60,13 @@ class DashboardWidgetRegistry {
     private static array $logged_duplicates = [];
 
     /**
+     * Map of widget ID aliases to their canonical IDs.
+     *
+     * @var array<string,string>
+     */
+    private static array $aliases = [];
+
+    /**
      * Ensure callbacks consistently accept a user ID parameter.
      *
      * If the provided callback does not require a parameter or its first
@@ -133,7 +140,48 @@ class DashboardWidgetRegistry {
         if ( strpos( $s, 'widget_' ) !== 0 ) {
             $s = 'widget_' . $s;
         }
+        if ( isset( self::$aliases[ $s ] ) ) {
+            return self::$aliases[ $s ];
+        }
         return $s;
+    }
+
+    /**
+     * Register an alternate widget ID that maps to a canonical ID.
+     */
+    public static function alias( string $alias, string $canonical ): void {
+        $a = strtolower( sanitize_key( $alias ) );
+        $c = self::canon_slug( $canonical );
+        if ( $a === '' || $c === '' ) {
+            return;
+        }
+        if ( strpos( $a, 'widget_' ) !== 0 ) {
+            $a = 'widget_' . $a;
+        }
+        if ( $a === $c ) {
+            return;
+        }
+        self::$aliases[ $a ] = $c;
+        if ( isset( self::$widgets[ $a ] ) ) {
+            if ( ! isset( self::$widgets[ $c ] ) ) {
+                self::$widgets[ $c ] = self::$widgets[ $a ];
+            }
+            unset( self::$widgets[ $a ] );
+        }
+    }
+
+    /**
+     * Update a widget's render callback.
+     */
+    public static function bindRenderer( string $id, callable $callback ): void {
+        $cid = self::canon_slug( $id );
+        if ( ! $cid || ! isset( self::$widgets[ $cid ] ) ) {
+            return;
+        }
+        self::$widgets[ $cid ]['callback'] = self::normalize_callback( $callback );
+        if ( is_array( $callback ) && isset( $callback[0] ) && is_string( $callback[0] ) ) {
+            self::$widgets[ $cid ]['class'] = $callback[0];
+        }
     }
 
     /**
