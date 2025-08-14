@@ -227,7 +227,10 @@ class WidgetVisibilityManager
         $preview = isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
         $previewing = in_array($preview, ['member', 'artist', 'organization'], true);
 
-        if (current_user_can('manage_options') && !$previewing) {
+        $is_admin = $user_id !== null
+            ? user_can($user_id, 'manage_options')
+            : current_user_can('manage_options');
+        if ($is_admin && !$previewing) {
             return true;
         }
 
