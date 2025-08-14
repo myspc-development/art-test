@@ -9,7 +9,9 @@ if ( ! is_user_logged_in() ) {
     return;
 }
 
-$role    = function_exists( 'ap_get_effective_role' ) ? ap_get_effective_role() : 'member';
+$preview   = isset( $_GET['ap_preview_role'] ) ? sanitize_key( $_GET['ap_preview_role'] ) : null;
+$previewing = in_array( $preview, array( 'member', 'artist', 'organization' ), true );
+$role    = $previewing ? $preview : ( function_exists( 'ap_get_effective_role' ) ? ap_get_effective_role() : 'member' );
 $layouts = get_option( 'artpulse_default_layouts', [] );
 if ( is_string( $layouts ) ) {
     $tmp = json_decode( $layouts, true );
@@ -20,6 +22,8 @@ $ids = isset( $layouts[ $role ] ) && is_array( $layouts[ $role ] ) ? $layouts[ $
 
 $found = $missing = $hidden = $renderable = [];
 
+$effective_role = $previewing ? $preview : null;
+
 foreach ( $ids as $raw ) {
     $slug = \ArtPulse\Core\DashboardWidgetRegistry::canon_slug( $raw );
     if ( ! $slug || ! \ArtPulse\Core\DashboardWidgetRegistry::exists( $slug ) ) {
@@ -27,7 +31,7 @@ foreach ( $ids as $raw ) {
         continue;
     }
     $found[] = $slug;
-    if ( ! \ArtPulse\Dashboard\WidgetVisibilityManager::isVisible( $slug, get_current_user_id() ) ) {
+    if ( ! \ArtPulse\Dashboard\WidgetVisibilityManager::isVisible( $slug, get_current_user_id(), $effective_role ) ) {
         $hidden[] = $slug;
         continue;
     }
