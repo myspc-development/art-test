@@ -23,7 +23,7 @@ $found = $missing = $hidden = $renderable = [];
 foreach ( $ids as $raw ) {
     $slug = \ArtPulse\Core\DashboardWidgetRegistry::canon_slug( $raw );
     if ( ! $slug || ! \ArtPulse\Core\DashboardWidgetRegistry::exists( $slug ) ) {
-        $missing[] = $raw;
+        $missing[] = $slug ?: $raw;
         continue;
     }
     $found[] = $slug;
