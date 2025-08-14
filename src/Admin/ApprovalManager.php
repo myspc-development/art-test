@@ -2,6 +2,8 @@
 
 namespace ArtPulse\Admin;
 
+use ArtPulse\Support\WpAdminFns;
+
 /**
  * Handles admin approval workflow for pending submissions.
  */
@@ -49,16 +51,16 @@ class ApprovalManager
         $approve_url = admin_url('admin-post.php');
         ?>
         <form method="post" action="<?php echo esc_url($approve_url); ?>">
-            <?php wp_nonce_field('ap_approve_submission_' . $post->ID, 'ap_approve_nonce'); ?>
+            <?php \wp_nonce_field('ap_approve_submission_' . $post->ID, 'ap_approve_nonce'); ?>
             <input type="hidden" name="action" value="ap_approve_submission" />
             <input type="hidden" name="post_id" value="<?php echo esc_attr($post->ID); ?>" />
-            <?php submit_button(__('Approve', 'artpulse'), 'primary', 'submit', false); ?>
+            <?php WpAdminFns::submit_button(__('Approve', 'artpulse'), 'primary', 'submit', false); ?>
         </form>
         <form method="post" action="<?php echo esc_url($approve_url); ?>">
-            <?php wp_nonce_field('ap_reject_submission_' . $post->ID, 'ap_reject_nonce'); ?>
+            <?php \wp_nonce_field('ap_reject_submission_' . $post->ID, 'ap_reject_nonce'); ?>
             <input type="hidden" name="action" value="ap_reject_submission" />
             <input type="hidden" name="post_id" value="<?php echo esc_attr($post->ID); ?>" />
-            <?php submit_button(__('Reject', 'artpulse'), 'secondary', 'submit', false); ?>
+            <?php WpAdminFns::submit_button(__('Reject', 'artpulse'), 'secondary', 'submit', false); ?>
         </form>
         <?php
     }

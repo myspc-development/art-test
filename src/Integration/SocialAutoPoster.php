@@ -2,6 +2,7 @@
 namespace ArtPulse\Integration;
 
 use ArtPulse\Admin\SettingsRegistry;
+use ArtPulse\Support\WpAdminFns;
 
 class SocialAutoPoster
 {
@@ -68,7 +69,7 @@ class SocialAutoPoster
         $opts = get_option(self::OPTION_KEY, []);
         ?>
         <form method="post" action="options.php" class="ap-settings-form">
-            <?php settings_fields('ap_social_auto_post_settings_group'); ?>
+            <?php WpAdminFns::settings_fields('ap_social_auto_post_settings_group'); ?>
             <h2 class="ap-card__title"><?php esc_html_e('Social Auto-Posting', 'artpulse'); ?></h2>
             <?php foreach (self::NETWORKS as $network) : ?>
                 <fieldset class="ap-fieldset">
@@ -103,7 +104,7 @@ class SocialAutoPoster
                     <?php echo esc_html(ucfirst($key)); ?>
                 </label><br>
             <?php endforeach; ?>
-            <?php submit_button(); ?>
+            <?php WpAdminFns::submit_button(); ?>
         </form>
         <?php
     }

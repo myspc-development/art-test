@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Admin;
 
+use ArtPulse\Support\WpAdminFns;
+
 class PortfolioToolsPage
 {
     public static function register(): void
@@ -41,19 +43,19 @@ class PortfolioToolsPage
                 <div class="notice notice-success is-dismissible"><p><?php printf(esc_html__('Migrated %d legacy items.', 'artpulse'), $migrated); ?></p></div>
             <?php endif; ?>
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                <?php wp_nonce_field('ap_sync_all_portfolios'); ?>
+                <?php \wp_nonce_field('ap_sync_all_portfolios'); ?>
                 <input type="hidden" name="action" value="ap_sync_all_portfolios">
-                <?php submit_button(__('Run Full Sync', 'artpulse')); ?>
+                <?php WpAdminFns::submit_button(__('Run Full Sync', 'artpulse')); ?>
             </form>
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin-top:20px;">
-                <?php wp_nonce_field('ap_migrate_portfolio'); ?>
+                <?php \wp_nonce_field('ap_migrate_portfolio'); ?>
                 <input type="hidden" name="action" value="ap_migrate_portfolio">
-                <?php submit_button(__('Migrate Legacy Portfolios', 'artpulse')); ?>
+                <?php WpAdminFns::submit_button(__('Migrate Legacy Portfolios', 'artpulse')); ?>
             </form>
             <hr/>
             <h2><?php esc_html_e('Sync Settings', 'artpulse'); ?></h2>
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                <?php wp_nonce_field('ap_save_portfolio_sync_settings'); ?>
+                <?php \wp_nonce_field('ap_save_portfolio_sync_settings'); ?>
                 <input type="hidden" name="action" value="ap_save_portfolio_sync_settings">
                 <p><?php esc_html_e('Select post types to sync:', 'artpulse'); ?></p>
                 <label><input type="checkbox" name="sync_types[]" value="artpulse_event" <?php checked(in_array('artpulse_event',$types,true)); ?> /> <?php esc_html_e('Events','artpulse'); ?></label><br>
@@ -74,7 +76,7 @@ class PortfolioToolsPage
                         <td><input type="text" name="cat_map[artpulse_org]" value="<?php echo esc_attr($cat_map['artpulse_org'] ?? ''); ?>" /></td>
                     </tr>
                 </table>
-                <?php submit_button(__('Save Settings','artpulse')); ?>
+                <?php WpAdminFns::submit_button(__('Save Settings','artpulse')); ?>
             </form>
             <p><a href="<?php echo esc_url(admin_url('admin.php?page=ap-portfolio-logs')); ?>"><?php esc_html_e('View Sync Logs', 'artpulse'); ?></a></p>
         </div>

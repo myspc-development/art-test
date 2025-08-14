@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Admin;
 
+use ArtPulse\Support\WpAdminFns;
+
 class PendingSubmissionsPage
 {
     public static function register()
@@ -43,16 +45,16 @@ class PendingSubmissionsPage
                 echo '<td>' . esc_html($post->post_type) . '</td>';
                 echo '<td>';
                 echo '<form method="post" action="' . esc_url($action_url) . '">';
-                wp_nonce_field('ap_approve_submission_' . $post->ID, 'ap_approve_nonce');
+                \wp_nonce_field('ap_approve_submission_' . $post->ID, 'ap_approve_nonce');
                 echo '<input type="hidden" name="action" value="ap_approve_submission" />';
                 echo '<input type="hidden" name="post_id" value="' . intval($post->ID) . '" />';
-                submit_button(__('Approve', 'artpulse'), 'primary', 'submit', false);
+                WpAdminFns::submit_button(__('Approve', 'artpulse'), 'primary', 'submit', false);
                 echo '</form> ';
                 echo '<form method="post" action="' . esc_url($action_url) . '">';
-                wp_nonce_field('ap_reject_submission_' . $post->ID, 'ap_reject_nonce');
+                \wp_nonce_field('ap_reject_submission_' . $post->ID, 'ap_reject_nonce');
                 echo '<input type="hidden" name="action" value="ap_reject_submission" />';
                 echo '<input type="hidden" name="post_id" value="' . intval($post->ID) . '" />';
-                submit_button(__('Reject', 'artpulse'), 'secondary', 'submit', false, ['onclick' => 'return confirm("' . esc_js(__('Are you sure?', 'artpulse')) . '");']);
+                WpAdminFns::submit_button(__('Reject', 'artpulse'), 'secondary', 'submit', false, ['onclick' => 'return confirm("' . esc_js(__('Are you sure?', 'artpulse')) . '");']);
                 echo '</form>';
                 echo '</td>';
                 echo '</tr>';

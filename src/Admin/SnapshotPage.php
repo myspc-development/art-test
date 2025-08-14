@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin;
 
 use ArtPulse\Reporting\SnapshotBuilder;
+use ArtPulse\Support\WpAdminFns;
 
 /**
  * Admin page to generate reporting snapshots on demand.
@@ -74,10 +75,10 @@ class SnapshotPage
         echo '<div class="wrap">';
         echo '<h1>' . esc_html__('Generate Snapshot', 'artpulse') . '</h1>';
         echo '<form method="post">';
-        wp_nonce_field('ap_generate_snapshot');
+        \wp_nonce_field('ap_generate_snapshot');
         echo '<p><label>' . esc_html__('Title', 'artpulse') . ' <input type="text" name="title" required></label></p>';
         echo '<p><label>' . esc_html__('Format', 'artpulse') . ' <select name="format"><option value="csv">CSV</option><option value="pdf">PDF</option></select></label></p>';
-        submit_button(__('Generate', 'artpulse'), 'primary', 'ap_generate_snapshot');
+        WpAdminFns::submit_button(__('Generate', 'artpulse'), 'primary', 'ap_generate_snapshot');
         echo '</form>';
         echo '</div>';
     }
