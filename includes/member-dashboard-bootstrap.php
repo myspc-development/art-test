@@ -40,7 +40,7 @@ function ap_dashboard_bootstrap(): void {
     $ids = array_unique(array_filter($ids));
 
     foreach ($ids as $id) {
-        $def = DashboardWidgetRegistry::get($id);
+        $def = DashboardWidgetRegistry::getById($id);
         $callback = $def['callback'] ?? null;
         $class = $def['class'] ?? null;
         $callable = $def && (is_callable($callback) || (is_string($class) && method_exists($class, 'render')));

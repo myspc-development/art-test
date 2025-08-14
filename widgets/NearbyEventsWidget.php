@@ -21,7 +21,7 @@ class NearbyEventsWidget {
         );
 
         // Legacy alias used in older configs.
-        if (!DashboardWidgetRegistry::get('widget_widget_near_me')) {
+        if (!DashboardWidgetRegistry::exists('widget_widget_near_me')) {
             DashboardWidgetRegistry::register(
                 'widget_widget_near_me',
                 self::label() . ' (Legacy)',

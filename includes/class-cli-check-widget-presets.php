@@ -19,7 +19,7 @@ class AP_CLI_Check_Widget_Presets {
             $role = $preset['role'];
             foreach ($preset['layout'] as $item) {
                 $id = $item['id'] ?? '';
-                $config = DashboardWidgetRegistry::get($id);
+                $config = DashboardWidgetRegistry::getById($id);
                 if (!$config) {
                     \WP_CLI::warning("{$id} not registered in preset {$key}");
                     $errors = true;

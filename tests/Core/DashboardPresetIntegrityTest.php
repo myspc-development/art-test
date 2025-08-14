@@ -184,8 +184,8 @@ class DashboardPresetIntegrityTest extends TestCase {
         $presets = DashboardController::get_default_presets();
         foreach ($presets as $preset) {
             foreach ($preset['layout'] as $widget) {
-                $this->assertNotNull(
-                    DashboardWidgetRegistry::get($widget['id']),
+                $this->assertTrue(
+                    DashboardWidgetRegistry::exists($widget['id']),
                     'Widget '.$widget['id'].' not registered'
                 );
             }

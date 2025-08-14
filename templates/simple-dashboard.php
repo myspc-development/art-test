@@ -22,15 +22,11 @@ $found = $missing = $hidden = $renderable = [];
 
 foreach ( $ids as $raw ) {
     $slug = \ArtPulse\Core\DashboardWidgetRegistry::canon_slug( $raw );
-    if ( ! $slug ) {
+    if ( ! $slug || ! \ArtPulse\Core\DashboardWidgetRegistry::exists( $slug ) ) {
         $missing[] = $raw;
         continue;
     }
-    $def = \ArtPulse\Core\DashboardWidgetRegistry::get( $slug );
-    if ( ! $def ) {
-        $missing[] = $raw;
-        continue;
-    }
+    $def = \ArtPulse\Core\DashboardWidgetRegistry::getById( $slug );
     $found[] = $slug;
     if ( ! \ArtPulse\Dashboard\WidgetVisibilityManager::isVisible( $slug, get_current_user_id() ) ) {
         $hidden[] = $slug;
