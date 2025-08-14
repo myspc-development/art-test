@@ -42,7 +42,6 @@ if ( empty( $renderable ) ) {
         error_log( 'AP:DASH \xE2\x9B\x94 placeholder ' . wp_json_encode( [
             'role'           => $role,
             'layout_ids'     => $ids,
-            'found'          => $found,
             'missing'        => $missing,
             'hidden'         => $hidden,
             'registry_count' => $snap['count'] ?? null,
