@@ -11,7 +11,7 @@ class MyUpcomingEventsWidget {
             self::get_id(),
             self::get_title(),
             'calendar',
-            __('List of your upcoming events', 'artpulse'),
+            'List of your upcoming events',
             [self::class, 'render'],
             [
                 'roles' => ['member', 'artist'],
@@ -21,7 +21,7 @@ class MyUpcomingEventsWidget {
     }
 
     public static function get_id(): string { return 'my_upcoming_events'; }
-    public static function get_title(): string { return __('My Upcoming Events', 'artpulse'); }
+    public static function get_title(): string { return 'My Upcoming Events'; }
     public static function get_section(): string { return 'insights'; }
 
     public static function can_view(int $user_id): bool {

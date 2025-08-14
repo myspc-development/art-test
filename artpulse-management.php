@@ -78,6 +78,18 @@ if (!file_exists($autoload_path)) {
 }
 require_once $autoload_path;
 
+// Ensure donations schema exists
+register_activation_hook(__FILE__, function () {
+    \ArtPulse\Install\Schema::ensure();
+    update_option('artpulse_db_version', '1.0.0');
+});
+add_action('admin_init', function () {
+    if (!get_option('artpulse_db_version')) {
+        \ArtPulse\Install\Schema::ensure();
+        update_option('artpulse_db_version', '1.0.0');
+    }
+});
+
 require_once __DIR__ . '/includes/widget-loader.php';
 add_action('plugins_loaded', [\ArtPulse\DashboardWidgetRegistryLoader::class, 'load_all']);
 

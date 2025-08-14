@@ -62,7 +62,7 @@ for ($i = 1; $i <= 2; $i++) {
 }
 
 foreach (range(1, 3) as $i) {
-    ArtPulse\Crm\DonationModel::add($org, $members[0], 5.0 * $i, 'seed');
+    ArtPulse\Crm\DonationModel::add($org, $members[0], 5.0 * $i);
 }
 
 update_user_meta($org, 'ap_crm_seed_audience', [

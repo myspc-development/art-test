@@ -211,16 +211,18 @@ class DashboardWidgetRegistry {
         $options['roles'] = self::normalizeRoleList( $options['roles'] ?? [] );
 
         if ( isset( self::$widgets[ $id ] ) ) {
-            if ( $options['roles'] ) {
-                $prior = self::$widgets[ $id ]['roles'] ?? [];
-                self::$widgets[ $id ]['roles'] = array_values( array_unique( array_merge( $prior, $options['roles'] ) ) );
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log( "AP: widget id already registered: $id" );
             }
-            return self::$widgets[ $id ];
+            return false;
         }
 
         $label = trim( $label );
-        if ( self::is_widget_label_registered( $label ) ) {
-            return self::$widgets[ $id ] ?? [];
+        $description = trim( $description );
+        if ( ! did_action('init') && ( str_contains( $label, '__(' ) || str_contains( $description, '__(' ) ) ) {
+            _doing_it_wrong( __METHOD__, 'Translated strings not allowed during registration; pass plain strings.', '1.0.0' );
+            $label = preg_replace('/__\(([^)]+)\)/', '$1', $label);
+            $description = preg_replace('/__\(([^)]+)\)/', '$1', $description);
         }
 
         if ( ! is_callable( $callback ) ) {
@@ -289,9 +291,6 @@ class DashboardWidgetRegistry {
         }
 
         $label = trim( $args['label'] ?? 'Untitled' );
-        if ( self::is_widget_label_registered( $label ) ) {
-            return self::$widgets[ $id ] ?? [];
-        }
 
         $args['label'] = $label;
         $args['group'] = $args['group'] ?? '';
@@ -376,26 +375,12 @@ class DashboardWidgetRegistry {
         return isset( self::$widgets[ $id ] );
     }
 
-    /**
-     * Checks if a widget label is already registered.
-     *
-     * @param string $label The widget label to check.
-     *
-     * @return bool True if the label is registered, false otherwise.
-     */
-    private static function is_widget_label_registered( string $label ): bool {
-        $label = strtolower( trim( $label ) );
-        foreach ( self::$widgets as $w ) {
-            if ( strtolower( trim( $w['label'] ?? '' ) ) === $label ) {
-                return true;
-            }
-        }
-
-        return false;
+    public static function render_widget_fallback( int $user_id = 0 ): string {
+        return '<p><strong>' . self::late_i18n('Widget callback is missing or invalid.') . '</strong></p>';
     }
 
-    public static function render_widget_fallback( int $user_id = 0 ): string {
-        return '<p><strong>Widget callback is missing or invalid.</strong></p>';
+    private static function late_i18n( string $s ): string {
+        return did_action('init') ? esc_html__( $s, 'artpulse') : esc_html( $s );
     }
 
     private static function include_template( string $template ): string {
@@ -409,7 +394,7 @@ class DashboardWidgetRegistry {
             return ob_get_clean();
         }
 
-        return '<p>' . esc_html__( 'No content available.', 'artpulse' ) . '</p>';
+        return '<p>' . self::late_i18n('No content available.') . '</p>';
     }
 
     public static function render_widget_news( int $user_id = 0 ): string {
@@ -769,9 +754,9 @@ class DashboardWidgetRegistry {
             $description = isset( $config['description'] ) ? $config['description'] : '';
             $def         = [
                 'id'          => $id,
-                'name'        => $label,
+                'name'        => self::late_i18n( $label ),
                 'icon'        => $icon,
-                'description' => $description,
+                'description' => self::late_i18n( $description ),
             ];
             if ( isset( $config['category'] ) ) {
                 $def['category'] = $config['category'];
@@ -937,50 +922,50 @@ class DashboardWidgetRegistry {
         $register = [ self::class, 'register_widget' ];
         $register( 'widget_news', [
             'id'          => 'widget_news',
-            'label'       => __( 'News', 'artpulse' ),
+            'label'       => 'News',
             'icon'        => 'dashicons-megaphone',
-            'description' => __( 'Latest updates from ArtPulse.', 'artpulse' ),
+            'description' => 'Latest updates from ArtPulse.',
             'callback'    => [ self::class, 'render_widget_news' ],
             'roles'       => [ 'member' ],
             'visibility'  => WidgetVisibility::PUBLIC,
         ] );
         $register( 'widget_events', [
             'id'          => 'widget_events',
-            'label'       => __( 'Upcoming Events (Member)', 'artpulse' ),
+            'label'       => 'Upcoming Events (Member)',
             'icon'        => 'dashicons-calendar-alt',
-            'description' => __( 'Events happening soon.', 'artpulse' ),
+            'description' => 'Events happening soon.',
             'callback'    => [ self::class, 'render_widget_events' ],
             'roles'       => [ 'member', 'organization' ],
         ] );
         $register( 'widget_favorites', [
             'id'          => 'widget_favorites',
-            'label'       => __( 'Favorites Overview', 'artpulse' ),
+            'label'       => 'Favorites Overview',
             'icon'        => 'dashicons-star-filled',
-            'description' => __( 'Artists you have saved.', 'artpulse' ),
+            'description' => 'Artists you have saved.',
             'callback'    => [ self::class, 'render_widget_favorites' ],
             'roles'       => [ 'member' ],
         ] );
         $register( 'widget_for_you_member', [
             'id'          => 'widget_for_you_member',
-            'label'       => __( 'For You (Member)', 'artpulse' ),
+            'label'       => 'For You (Member)',
             'icon'        => 'dashicons-thumbs-up',
-            'description' => __( 'Recommended content.', 'artpulse' ),
+            'description' => 'Recommended content.',
             'callback'    => [ self::class, 'render_widget_for_you' ],
             'roles'       => [ 'member', 'artist' ],
         ] );
         $register( 'widget_nearby_events_map', [
             'id'          => 'widget_nearby_events_map',
-            'label'       => __( 'Nearby Events', 'artpulse' ),
+            'label'       => 'Nearby Events',
             'icon'        => 'dashicons-location-alt',
-            'description' => __( 'Events around your location.', 'artpulse' ),
+            'description' => 'Events around your location.',
             'callback'    => [ self::class, 'render_widget_nearby_events_map' ],
             'roles'       => [ 'member', 'artist' ],
         ] );
         $register( 'widget_my_favorites', [
             'id'          => 'widget_my_favorites',
-            'label'       => __( 'My Favorite Events', 'artpulse' ),
+            'label'       => 'My Favorite Events',
             'icon'        => 'dashicons-star-empty',
-            'description' => __( 'Your saved events.', 'artpulse' ),
+            'description' => 'Your saved events.',
             'callback'    => [ self::class, 'render_widget_my_favorites' ],
             'roles'       => [ 'member', 'artist' ],
         ] );
@@ -1066,7 +1051,7 @@ class DashboardWidgetRegistry {
         foreach ( $order as $sec ) {
             echo '<section class="ap-widget-section">';
             if ( $sec ) {
-                echo '<h2>' . esc_html( ucfirst( $sec ) ) . '</h2>';
+                echo '<h2>' . self::late_i18n( ucfirst( $sec ) ) . '</h2>';
             }
             echo '<div class="meta-box-sortables">';
             foreach ( $sections[ $sec ] as $cfg ) {
@@ -1087,13 +1072,15 @@ class DashboardWidgetRegistry {
                     if ( $debug ) {
                         error_log( 'Widget ' . $cfg['id'] . ' failed: ' . $e->getMessage() );
                     }
+                    echo '<div class="postbox ap-widget-error"><div class="inside"><p>' . self::late_i18n('Error loading widget.') . '</p></div></div>';
+                    $rendered++;
                 }
             }
             echo '</div></section>';
         }
 
         if ( 0 === $rendered ) {
-            echo '<div class="ap-dashboard-error">' . esc_html__( 'No dashboard widgets could be rendered.', 'artpulse' ) . '</div>';
+            echo '<div class="ap-dashboard-error">' . self::late_i18n('No dashboard widgets could be rendered.') . '</div>';
             if ( $debug ) {
                 error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
             }

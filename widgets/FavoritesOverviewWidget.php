@@ -42,7 +42,7 @@ class FavoritesOverviewWidget {
 
     public static function label(): string
     {
-        return __('Favorites Overview', 'artpulse');
+        return 'Favorites Overview';
     }
 
     public static function roles(): array
@@ -52,7 +52,7 @@ class FavoritesOverviewWidget {
 
     public static function description(): string
     {
-        return __('Your favorite artists and works.', 'artpulse');
+        return 'Your favorite artists and works.';
     }
 
     public static function icon(): string

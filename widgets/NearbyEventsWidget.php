@@ -35,11 +35,11 @@ class NearbyEventsWidget {
 
     public static function id(): string { return 'widget_near_me_events'; }
 
-    public static function label(): string { return __('Nearby Events', 'artpulse'); }
+    public static function label(): string { return 'Nearby Events'; }
 
     public static function roles(): array { return ['member']; }
 
-    public static function description(): string { return __('Events near your location.', 'artpulse'); }
+    public static function description(): string { return 'Events near your location.'; }
 
     public static function icon(): string { return 'location'; }
 

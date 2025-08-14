@@ -45,18 +45,18 @@ function ap_register_guide_widgets(): void
 {
     DashboardWidgetRegistry::register(
         'admin_guide',
-        __('Admin Guide', 'artpulse'),
+        'Admin Guide',
         'book-open',
-        __('Getting started instructions for administrators.', 'artpulse'),
+        'Getting started instructions for administrators.',
         'ap_widget_admin_guide',
         [ 'roles' => ['administrator', 'organization'] ]
     );
 
     DashboardWidgetRegistry::register(
         'member_guide',
-        __('Member Guide', 'artpulse'),
+        'Member Guide',
         'book',
-        __('Getting started instructions for members.', 'artpulse'),
+        'Getting started instructions for members.',
         'ap_widget_member_guide',
         [ 'roles' => ['member', 'artist', 'organization'] ]
     );
