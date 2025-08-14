@@ -157,15 +157,19 @@ class DashboardWidgetRegistry {
     /**
      * Register a widget and its settings.
      *
-     * @param callable $callback Callback used to render the widget. Must be
-     *                           callable.
+     * @param callable|null $callback Callback used to render the widget. Must be
+     *                                callable.
+     *
+     * @return array Widget definition. Returns the existing definition when a
+     *               widget with the given ID is already registered or an empty
+     *               array if registration fails.
      */
     public static function register(
         string $id,
         string|array $label,
         string $icon = '',
         string $description = '',
-        callable $callback = null,
+        ?callable $callback = null,
         array $options = [] // supports 'category', 'roles', optional 'settings' and 'tags'
     ): array {
         // Builder-style registration when the second argument is an array.
@@ -214,7 +218,8 @@ class DashboardWidgetRegistry {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log( "AP: widget id already registered: $id" );
             }
-            return false;
+
+            return self::$widgets[ $id ];
         }
 
         $label = trim( $label );
