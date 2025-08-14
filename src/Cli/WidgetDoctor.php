@@ -31,7 +31,7 @@ class WidgetDoctor {
                 'hidden_for_roles' => implode( ',', $hidden_roles ),
             ];
         }
-        \WP_CLI\Utils::format_items( 'table', $rows, [ 'id', 'status', 'roles', 'has_callback', 'hidden_for_roles' ] );
+        \WP_CLI\Utils\format_items( 'table', $rows, [ 'id', 'status', 'roles', 'has_callback', 'hidden_for_roles' ] );
     }
 
     /**
@@ -59,7 +59,7 @@ class WidgetDoctor {
             }
         }
         if ( $issues ) {
-            \WP_CLI\Utils::format_items( 'table', $issues, [ 'id', 'status', 'has_callback', 'hidden_for' ] );
+            \WP_CLI\Utils\format_items( 'table', $issues, [ 'id', 'status', 'has_callback', 'hidden_for' ] );
             WP_CLI::error( 'Widget issues found.' );
         }
         WP_CLI::success( 'All widgets active with renderers.' );
