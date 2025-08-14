@@ -604,6 +604,12 @@ class DashboardWidgetRegistry {
             $user_id = get_current_user_id();
         }
 
+        $preview      = isset( $_GET['ap_preview_role'] ) ? sanitize_key( $_GET['ap_preview_role'] ) : null;
+        $preview_valid = $preview && in_array( $preview, array( 'member', 'artist', 'organization' ), true );
+        if ( current_user_can( 'manage_options' ) && ! $preview_valid ) {
+            return true;
+        }
+
         $widget = self::get( $id );
         if ( ! $widget ) {
             return false;

@@ -45,6 +45,24 @@ function user_dashboard_shortcode(): string {
     }
 
     if (empty($widgets)) {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            $layouts = get_option('artpulse_default_layouts', array());
+            if (is_string($layouts)) {
+                $d = json_decode($layouts, true);
+                if (is_array($d)) {
+                    $layouts = $d;
+                } else {
+                    $layouts = array();
+                }
+            }
+            $layout_ids = isset($layouts[$role]) && is_array($layouts[$role]) ? $layouts[$role] : array();
+            error_log(sprintf(
+                '⛔ No visible widgets => role=%s layout_count=%d layout_ids=[%s]',
+                $role,
+                is_array($layout_ids) ? count($layout_ids) : 0,
+                is_array($layout_ids) ? implode(',', $layout_ids) : ''
+            ));
+        }
         $widgets = ['empty_dashboard'];
     }
 
