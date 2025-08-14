@@ -19,6 +19,7 @@ class WidgetSources {
         $out  = [];
         foreach ($defs as $id => $cfg) {
             $cb = $cfg['callback'] ?? null;
+            $class = $cfg['class'] ?? '';
             $out[$id] = [
                 'id'                    => $id,
                 'title'                 => $cfg['label'] ?? '',
@@ -26,7 +27,8 @@ class WidgetSources {
                 'status'                => $cfg['status'] ?? 'active',
                 'callback_is_callable'  => is_callable($cb),
                 'callback'              => $cb,
-                'class'                 => $cfg['class'] ?? '',
+                'class'                 => $class,
+                'is_placeholder'        => str_starts_with($class, 'ArtPulse\\Widgets\\Placeholder\\'),
             ];
         }
         return $out;
@@ -37,10 +39,18 @@ class WidgetSources {
      *
      * @return array<string,array<int,string>>
      */
-    public static function get_visibility_matrix(): array
+    public static function get_visibility_roles(): array
     {
         $opt = get_option('artpulse_widget_roles', []);
         return is_array($opt) ? $opt : [];
+    }
+
+    /**
+     * @deprecated Use get_visibility_roles() instead.
+     */
+    public static function get_visibility_matrix(): array
+    {
+        return self::get_visibility_roles();
     }
 
     /**

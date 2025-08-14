@@ -27,7 +27,8 @@ class WidgetAudit {
     public function widgets($args, $assoc)
     {
         $registry = WidgetSources::get_registry();
-        $vis      = WidgetSources::get_visibility_matrix();
+        $vis      = WidgetSources::get_visibility_roles();
+        $problems = Parity::problems();
         $rows = [];
         foreach ($registry as $id => $info) {
             $rows[] = [
@@ -37,15 +38,16 @@ class WidgetAudit {
                 'roles_from_registry'  => implode(',', $info['roles_from_registry']),
                 'roles_from_visibility'=> implode(',', $vis[$id] ?? []),
                 'registered_in_code_file' => $info['class'],
+                'problem'              => $problems[$id] ?? '',
             ];
         }
         $format = $assoc['format'] ?? 'table';
-        \WP_CLI\Utils\format_items($format, $rows, ['id','status','has_callback','roles_from_registry','roles_from_visibility','registered_in_code_file']);
+        \WP_CLI\Utils\format_items($format, $rows, ['id','status','has_callback','roles_from_registry','roles_from_visibility','registered_in_code_file','problem']);
     }
 
     public function visibility($args, $assoc)
     {
-        $vis = WidgetSources::get_visibility_matrix();
+        $vis = WidgetSources::get_visibility_roles();
         $reg = WidgetSources::get_registry();
         $rows = [];
         foreach ($vis as $id => $roles) {
@@ -136,6 +138,58 @@ class WidgetAudit {
 
     public function fix($args, $assoc)
     {
-        WP_CLI::warning('fix subcommand not implemented.');
+        $changed = false;
+
+        if (isset($assoc['role']) && isset($assoc['unhide'])) {
+            $role = sanitize_key($assoc['role']);
+            $hidden = get_option('artpulse_hidden_widgets', []);
+            if (!is_array($hidden)) {
+                $hidden = [];
+            }
+            $hidden[$role] = [];
+            update_option('artpulse_hidden_widgets', $hidden);
+            WP_CLI::line("Unhid widgets for role {$role}");
+            do_action('artpulse_audit_event', 'fix', ['role' => $role, 'action' => 'unhide']);
+            $changed = true;
+        }
+
+        if (isset($assoc['activate-all'])) {
+            $flags = get_option('artpulse_widget_flags', []);
+            if (!is_array($flags)) {
+                $flags = [];
+            }
+            foreach ($flags as $id => &$cfg) {
+                if (is_array($cfg)) {
+                    $cfg['status'] = 'active';
+                } else {
+                    $cfg = ['status' => 'active'];
+                }
+                do_action('artpulse_audit_event', 'fix', ['widget' => $id, 'action' => 'activate']);
+            }
+            unset($cfg);
+            update_option('artpulse_widget_flags', $flags);
+            WP_CLI::line('Activated all widgets');
+            $changed = true;
+        }
+
+        // Auto-bind placeholders to real renderers when possible.
+        $registry = WidgetSources::get_registry();
+        foreach ($registry as $id => $info) {
+            if (empty($info['is_placeholder'])) {
+                continue;
+            }
+            $base  = strpos($id, 'widget_') === 0 ? substr($id, 7) : $id;
+            $class = 'ArtPulse\\Widgets\\' . str_replace(' ', '', ucwords(str_replace('_', ' ', $base))) . 'Widget';
+            if (class_exists($class) && method_exists($class, 'render')) {
+                DashboardWidgetRegistry::bindRenderer($id, [$class, 'render']);
+                WP_CLI::line("Bound {$id} to {$class}::render");
+                do_action('artpulse_audit_event', 'fix', ['widget' => $id, 'action' => 'bind', 'class' => $class]);
+                $changed = true;
+            }
+        }
+
+        if (!$changed) {
+            WP_CLI::line('No changes made.');
+        }
     }
 }

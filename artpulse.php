@@ -21,6 +21,30 @@ require_once __DIR__ . '/includes/class-cli-check-widget-presets.php';
 require_once __DIR__ . '/includes/widget-logging.php';
 require_once __DIR__ . '/includes/unhide-default-widgets.php';
 
+// Alias legacy widget IDs and bind real renderers after canonical registration.
+add_action('init', function () {
+    \ArtPulse\Core\DashboardWidgetRegistry::alias('widget_widget_favorites', 'widget_favorites');
+    \ArtPulse\Core\DashboardWidgetRegistry::alias('widget_widget_near_me_events', 'widget_near_me_events');
+
+    if (class_exists(\ArtPulse\Widgets\FavoritesOverviewWidget::class)) {
+        \ArtPulse\Core\DashboardWidgetRegistry::bindRenderer(
+            'widget_my_favorites',
+            [\ArtPulse\Widgets\FavoritesOverviewWidget::class, 'render']
+        );
+    }
+
+    if (class_exists(\ArtPulse\Widgets\NearbyEventsWidget::class)) {
+        $method = method_exists(\ArtPulse\Widgets\NearbyEventsWidget::class, 'renderMap') ? 'renderMap' : 'render';
+        \ArtPulse\Core\DashboardWidgetRegistry::bindRenderer(
+            'widget_nearby_events_map',
+            [\ArtPulse\Widgets\NearbyEventsWidget::class, $method]
+        );
+    }
+}, 20);
+
+// Ensure role sync runs before audits access visibility options.
+add_action('init', [\ArtPulse\Core\WidgetRoleSync::class, 'sync'], 20);
+
 if (defined('WP_CLI') && WP_CLI) {
     require_once __DIR__ . '/includes/class-cli-debug-dashboard.php';
     \WP_CLI::add_command('artpulse debug-dashboard', \ArtPulse\CLI\DebugDashboardCommand::class);
