@@ -27,7 +27,13 @@ class DashboardRenderer
         $widget  = DashboardWidgetRegistry::get_widget($widget_id, $user_id);
 
         if (!$widget) {
-            error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not found in registry.");
+            error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not found or hidden.");
+            return '';
+        }
+
+        $status = $widget['status'] ?? 'active';
+        if ($status !== 'active' && !current_user_can('manage_options')) {
+            error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' inactive.");
             return '';
         }
 

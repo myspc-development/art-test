@@ -224,7 +224,8 @@ class WidgetVisibilityManager
      */
     public static function isVisible(string $widget, ?int $user_id = null, ?string $force_role = null): bool
     {
-        $previewing = in_array($force_role, ['member', 'artist', 'organization'], true);
+        $preview_enabled = apply_filters('ap_dashboard_preview_enabled', false);
+        $previewing = $preview_enabled && in_array($force_role, ['member', 'artist', 'organization'], true);
 
         $is_admin = $user_id !== null
             ? user_can($user_id, 'manage_options')
@@ -241,6 +242,18 @@ class WidgetVisibilityManager
         $roles = $previewing
             ? [ $force_role ]
             : self::normalizeRoleList($user->roles ?? []);
+
+        $role_for_hidden = $previewing ? $force_role : ( $roles[0] ?? '' );
+        $hidden = get_option( 'artpulse_dashboard_hidden_' . $role_for_hidden, [] );
+        if ( is_string( $hidden ) ) {
+            $decoded = json_decode( $hidden, true );
+            $hidden  = is_array( $decoded ) ? $decoded : [];
+        }
+        $hidden = array_values( array_map( 'sanitize_key', (array) $hidden ) );
+        $hidden = apply_filters( 'ap_dashboard_hidden_widgets', $hidden, $role_for_hidden );
+        if ( in_array( $widget, $hidden, true ) ) {
+            return false;
+        }
 
         $rules  = self::get_visibility_rules();
         $config = $rules[$widget] ?? [];
@@ -278,8 +291,9 @@ class WidgetVisibilityManager
             return;
         }
 
-        $preview = isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
-        $preview_valid = $preview && in_array($preview, array('member', 'artist', 'organization'), true);
+        $preview_enabled = apply_filters('ap_dashboard_preview_enabled', false);
+        $preview = $preview_enabled && isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
+        $preview_valid = $preview_enabled && $preview && in_array($preview, array('member', 'artist', 'organization'), true);
         if (current_user_can('manage_options') && !$preview_valid) {
             self::$hidden_widgets = array();
             return;
