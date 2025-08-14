@@ -466,6 +466,16 @@ See the [Development Setup](docs/development-setup.md) guide for preparing the W
 composer test
 ```
 
+## Widget Doctor
+
+Use WP-CLI commands to audit dashboard widgets:
+
+```
+wp artpulse widgets list
+wp artpulse widgets audit
+wp artpulse widgets fix --role=member --activate-all --unhide
+```
+
 ## Sprint History
 
 All Codex modules and tasks have been completed and verified. The project board reflects a final status of **Done** across reporting, curator tools, analytics, and testing. Documentation was updated each sprint and the changelog records feature milestones through version 1.3.16.

@@ -25,7 +25,11 @@ class ApPlaceholderWidget
         $markup .= '<h3 class="ap-widget__title">' . esc_html__('Widget Unavailable', 'artpulse') . '</h3>';
         $markup .= '</div>';
         $markup .= '<div class="ap-widget__body">';
-        $markup .= '<p>' . esc_html__('This widget is not available yet.', 'artpulse') . '</p>';
+        $show_notice = defined('AP_STRICT_FLAGS') && AP_STRICT_FLAGS && current_user_can('manage_options');
+        if ($show_notice) {
+            $msg = apply_filters('ap_widget_unavailable_message', __('This widget is not available yet.', 'artpulse'), $args);
+            $markup .= '<p>' . esc_html($msg) . '</p>';
+        }
         if (defined('WP_DEBUG') && WP_DEBUG) {
             $debug = $args['debug'] ?? '';
             if (!empty($debug)) {

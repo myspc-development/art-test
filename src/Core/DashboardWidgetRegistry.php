@@ -6,6 +6,7 @@ use ArtPulse\DashboardWidgetRegistryLoader;
 use ArtPulse\Dashboard\WidgetVisibility;
 use WP_Roles;
 use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\Core\WidgetFlags;
 
 /**
  * Simple registry for dashboard widgets.
@@ -43,6 +44,20 @@ class DashboardWidgetRegistry {
      * @var array<string,string>|null
      */
     private static ?array $id_map = null;
+
+    /**
+     * Issues collected during registration for audit purposes.
+     *
+     * @var array<string>
+     */
+    private static array $issues = [];
+
+    /**
+     * Track duplicate registration notices to avoid log spam.
+     *
+     * @var array<string,bool>
+     */
+    private static array $logged_duplicates = [];
 
     /**
      * Ensure callbacks consistently accept a user ID parameter.
@@ -122,6 +137,18 @@ class DashboardWidgetRegistry {
     }
 
     /**
+     * Attempt to derive a callback based on widget id naming conventions.
+     */
+    private static function derive_callback( string $id ): ?callable {
+        $base  = strpos( $id, 'widget_' ) === 0 ? substr( $id, 7 ) : $id;
+        $class = 'ArtPulse\\Widgets\\' . str_replace( ' ', '', ucwords( str_replace( '_', ' ', $base ) ) ) . 'Widget';
+        if ( class_exists( $class ) && method_exists( $class, 'render' ) ) {
+            return [ $class, 'render' ];
+        }
+        return null;
+    }
+
+    /**
      * Retrieve a widget definition by slug.
      */
     public static function getById( string $slug ): ?array {
@@ -152,6 +179,20 @@ class DashboardWidgetRegistry {
             'registered_ids' => array_keys( self::$widgets ),
             'count'          => count( self::$widgets ),
         ];
+    }
+
+    /**
+     * Return all registered widget definitions.
+     */
+    public static function all(): array {
+        return self::$widgets;
+    }
+
+    /**
+     * Retrieve registration issues collected during runtime.
+     */
+    public static function issues(): array {
+        return self::$issues;
     }
 
     /**
@@ -212,13 +253,16 @@ class DashboardWidgetRegistry {
 
         // Core-style registration.
         $id = self::canon_slug( $id );
+        if ( ! $id ) {
+            return [];
+        }
         $options['roles'] = self::normalizeRoleList( $options['roles'] ?? [] );
 
         if ( isset( self::$widgets[ $id ] ) ) {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
+            if ( empty( self::$logged_duplicates[ $id ] ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 error_log( "AP: widget id already registered: $id" );
+                self::$logged_duplicates[ $id ] = true;
             }
-
             return self::$widgets[ $id ];
         }
 
@@ -231,10 +275,22 @@ class DashboardWidgetRegistry {
         }
 
         if ( ! is_callable( $callback ) ) {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log( 'Invalid dashboard widget callback for ID ' . $id );
-            }
-            $callback = [ self::class, 'render_widget_fallback' ];
+            $callback = self::derive_callback( $id );
+        }
+
+        $status = $options['status'] ?? 'active';
+        if ( in_array( $status, [ 'coming_soon', 'beta' ], true ) && ( ! defined( 'AP_STRICT_FLAGS' ) || ! AP_STRICT_FLAGS ) ) {
+            $status = 'active';
+        }
+
+        if ( ! is_callable( $callback ) ) {
+            self::$issues[] = $id;
+            $callback = static function () {};
+            $status   = 'inactive';
+        }
+
+        if ( ! WidgetFlags::is_active( $id ) ) {
+            $status = 'inactive';
         }
 
         $callback = self::normalize_callback( $callback );
@@ -261,6 +317,7 @@ class DashboardWidgetRegistry {
             'lazy'        => $options['lazy'] ?? false,
             'visibility'  => $options['visibility'] ?? WidgetVisibility::PUBLIC,
             'builder_only'=> $options['builder_only'] ?? false,
+            'status'      => $status,
         ];
 
         if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -318,10 +375,25 @@ class DashboardWidgetRegistry {
             };
         }
 
+        if ( empty( $args['callback'] ) ) {
+            $args['callback'] = self::derive_callback( $id );
+        }
+
+        $status = $args['status'] ?? 'active';
+        if ( in_array( $status, [ 'coming_soon', 'beta' ], true ) && ( ! defined( 'AP_STRICT_FLAGS' ) || ! AP_STRICT_FLAGS ) ) {
+            $status = 'active';
+        }
+
         if ( empty( $args['callback'] ) || ! is_callable( $args['callback'] ) ) {
-            $args['callback'] = [ self::class, 'render_widget_fallback' ];
+            self::$issues[] = $id;
+            $args['callback'] = static function () {};
+            $status = 'inactive';
         } else {
             $args['callback'] = self::normalize_callback( $args['callback'] );
+        }
+
+        if ( ! WidgetFlags::is_active( $id ) ) {
+            $status = 'inactive';
         }
 
         $class = '';
@@ -331,6 +403,7 @@ class DashboardWidgetRegistry {
 
         $args['id']    = $id;
         $args['class'] = $class;
+        $args['status'] = $status;
         self::$widgets[ $id ] = $args;
 
         if (defined('WP_DEBUG') && WP_DEBUG) {

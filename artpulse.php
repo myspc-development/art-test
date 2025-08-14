@@ -19,12 +19,15 @@ require_once __DIR__ . '/includes/class-cli-rest-route-audit.php';
 require_once __DIR__ . '/includes/class-cli-widget-roles.php';
 require_once __DIR__ . '/includes/class-cli-check-widget-presets.php';
 require_once __DIR__ . '/includes/widget-logging.php';
+require_once __DIR__ . '/includes/unhide-default-widgets.php';
 
 if (defined('WP_CLI') && WP_CLI) {
     require_once __DIR__ . '/includes/class-cli-debug-dashboard.php';
     \WP_CLI::add_command('artpulse debug-dashboard', \ArtPulse\CLI\DebugDashboardCommand::class);
     require_once __DIR__ . '/includes/class-cli-create-dashboard-page.php';
     \WP_CLI::add_command('artpulse create-user-dashboard-page', \ArtPulse\CLI\CreateUserDashboardPageCommand::class);
+    require_once __DIR__ . '/src/Cli/WidgetDoctor.php';
+    \WP_CLI::add_command('artpulse widgets', \ArtPulse\Cli\WidgetDoctor::class);
 }
 
 // Development helpers

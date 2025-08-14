@@ -9,8 +9,9 @@ if ( ! is_user_logged_in() ) {
     return;
 }
 
-$preview   = isset( $_GET['ap_preview_role'] ) ? sanitize_key( $_GET['ap_preview_role'] ) : null;
-$previewing = in_array( $preview, array( 'member', 'artist', 'organization' ), true );
+$preview_enabled = apply_filters( 'ap_dashboard_preview_enabled', false );
+$preview   = $preview_enabled && isset( $_GET['ap_preview_role'] ) ? sanitize_key( $_GET['ap_preview_role'] ) : null;
+$previewing = $preview_enabled && in_array( $preview, array( 'member', 'artist', 'organization' ), true );
 $role    = $previewing ? $preview : ( function_exists( 'ap_get_effective_role' ) ? ap_get_effective_role() : 'member' );
 $layouts = get_option( 'artpulse_default_layouts', [] );
 if ( is_string( $layouts ) ) {
