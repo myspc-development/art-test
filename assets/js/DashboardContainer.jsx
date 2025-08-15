@@ -37,10 +37,11 @@ export default function DashboardContainer({ role = 'member' }) {
   return (
     <GridLayout
       className="layout"
-      layouts={{ lg: layout }}
-      cols={{ lg: 12 }}
+      breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+      cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+      layouts={{ lg: layout, md: layout, sm: layout, xs: layout, xxs: layout }}
       rowHeight={30}
-      onLayoutChange={(l, allLayouts) => handleLayoutChange(allLayouts.lg)}
+      onLayoutChange={l => handleLayoutChange(l)}
     >
       {layout.map(item => {
         const Comp = widgetMap[item.i];
