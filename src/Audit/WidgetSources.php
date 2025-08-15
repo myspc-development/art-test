@@ -107,4 +107,15 @@ class WidgetSources {
         }
         return $ids;
     }
+
+    /**
+     * Instance helper to mirror static builder layout lookup.
+     *
+     * @param string $role
+     * @return array<int,string>
+     */
+    public function builderForRole(string $role): array
+    {
+        return self::get_builder_layout($role);
+    }
 }

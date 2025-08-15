@@ -491,6 +491,16 @@ wp artpulse audit:fix --role=member --unhide --activate-all
 
 Commands exit with a non-zero code when mismatches are detected, allowing CI pipelines to fail fast.
 
+The Dashboard Builder preview now renders exactly the widgets configured for a role in the order they appear in the builder. Use the **Simulate user gating** checkbox (or add `?simulate_user=1` to the URL) to apply capability and feature-flag gates.
+
+Examples:
+
+```
+wp artpulse audit:builder --role=member
+wp artpulse audit:render --role=member --context=builder_preview
+wp artpulse audit:render --role=member --context=builder_preview --simulate-user
+```
+
 ## Sprint History
 
 All Codex modules and tasks have been completed and verified. The project board reflects a final status of **Done** across reporting, curator tools, analytics, and testing. Documentation was updated each sprint and the changelog records feature milestones through version 1.3.16.

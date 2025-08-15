@@ -23,12 +23,20 @@ class DashboardRenderer
         return (bool) apply_filters('ap_dashboard_widget_should_cache', $flag, $widget_id, $user_id, $widget);
     }
 
-    public static function render(string $widget_id, ?int $user_id = null): string
+    /**
+     * Render a single widget with optional gating.
+     */
+    public function renderWidget(string $widget_id, array $opts = [], ?int $user_id = null): string
     {
+        $opts = array_merge([
+            'gate_caps'  => true,
+            'gate_flags' => true,
+        ], $opts);
+
         $widget_id = WidgetIds::canonicalize($widget_id);
         $user_id   = $user_id ?? get_current_user_id();
         $role      = DashboardController::get_role($user_id);
-        $widget    = DashboardWidgetRegistry::get_widget($widget_id, $user_id);
+        $widget    = $opts['gate_caps'] ? DashboardWidgetRegistry::get_widget($widget_id, $user_id) : DashboardWidgetRegistry::get($widget_id);
 
         if (!$widget) {
             error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not found or hidden.");
@@ -37,21 +45,24 @@ class DashboardRenderer
         }
 
         $status  = $widget['status'] ?? 'active';
+        if (!$opts['gate_flags']) {
+            $status = 'active';
+        }
         $preview = apply_filters('ap_dashboard_preview_enabled', false);
-        $hidden_list = apply_filters('ap_dashboard_hidden_widgets', [], $role);
-        $hidden = in_array($widget_id, $hidden_list, true);
+        $hidden_list = $opts['gate_caps'] ? apply_filters('ap_dashboard_hidden_widgets', [], $role) : [];
+        $hidden = $opts['gate_caps'] ? in_array($widget_id, $hidden_list, true) : false;
         AuditBus::on_attempt($widget_id, $role, [
             'hidden'  => $hidden,
             'status'  => $status,
             'preview' => $preview,
         ]);
 
-        if ($hidden && !current_user_can('manage_options')) {
+        if ($hidden && $opts['gate_caps'] && !current_user_can('manage_options')) {
             AuditBus::on_rendered($widget_id, $role, 0, false, 'hidden');
             return '';
         }
 
-        if ($status !== 'active' && !current_user_can('manage_options')) {
+        if ($status !== 'active' && $opts['gate_flags'] && !current_user_can('manage_options')) {
             error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' inactive.");
             AuditBus::on_rendered($widget_id, $role, 0, false, 'inactive');
             return '';
@@ -59,16 +70,18 @@ class DashboardRenderer
 
         $allowed_roles = [];
         $class         = $widget['class'] ?? '';
-        if ($class && class_exists($class) && is_callable([$class, 'roles'])) {
-            $allowed_roles = (array) $class::roles();
-        } elseif (!empty($widget['roles'])) {
-            $allowed_roles = (array) $widget['roles'];
-        }
+        if ($opts['gate_caps']) {
+            if ($class && class_exists($class) && is_callable([$class, 'roles'])) {
+                $allowed_roles = (array) $class::roles();
+            } elseif (!empty($widget['roles'])) {
+                $allowed_roles = (array) $widget['roles'];
+            }
 
-        if ($allowed_roles && !in_array($role, $allowed_roles, true)) {
-            error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not allowed for role '{$role}'.");
-            AuditBus::on_rendered($widget_id, $role, 0, false, 'forbidden');
-            return '';
+            if ($allowed_roles && !in_array($role, $allowed_roles, true)) {
+                error_log("\xF0\x9F\x9A\xAB Widget '{$widget_id}' not allowed for role '{$role}'.");
+                AuditBus::on_rendered($widget_id, $role, 0, false, 'forbidden');
+                return '';
+            }
         }
 
         $cache_key = "ap_widget_{$widget_id}_{$user_id}";
@@ -137,5 +150,44 @@ class DashboardRenderer
         }
 
         return $output;
+    }
+
+    /**
+     * Back-compat static wrapper.
+     */
+    public static function render(string $widget_id, ?int $user_id = null): string
+    {
+        $renderer = new self();
+        return $renderer->renderWidget($widget_id, [], $user_id);
+    }
+
+    /**
+     * Render an exact list of widget IDs.
+     */
+    public function renderIds(array $ids, array $opts = []): string {
+        $opts = array_merge([
+            'context'     => 'builder_preview',
+            'gate_caps'   => false,
+            'gate_flags'  => false,
+        ], $opts);
+
+        $html = '';
+        foreach ($ids as $id) {
+            do_action('artpulse/audit/widget_attempt', ['id' => $id, 'context' => $opts['context']]);
+
+            $out = $this->renderWidget($id, [
+                'gate_caps'  => $opts['gate_caps'],
+                'gate_flags' => $opts['gate_flags'],
+            ]);
+
+            if (is_wp_error($out) || $out === null || $out === '') {
+                do_action('artpulse/audit/widget_result', ['id' => $id, 'context' => $opts['context'], 'status' => 'not_rendered']);
+                continue;
+            }
+
+            $html .= sprintf('<div data-widget-id="%s">%s</div>', esc_attr($id), $out);
+            do_action('artpulse/audit/widget_result', ['id' => $id, 'context' => $opts['context'], 'status' => 'rendered']);
+        }
+        return $html;
     }
 }
