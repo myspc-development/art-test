@@ -9,11 +9,12 @@ export default function CommunityAnalyticsPanel() {
   const [tab, setTab] = useState('messaging');
   const [data, setData] = useState({});
   const apiRoot = window.ArtPulseDashboardApi?.root || '/wp-json/';
-  const nonce = window.ArtPulseDashboardApi?.nonce || '';
+  const nonce = window.apNonce || window.ArtPulseDashboardApi?.nonce || '';
 
   useEffect(() => {
     fetch(`${apiRoot}artpulse/v1/analytics/community/${tab}`, {
-      headers: { 'X-WP-Nonce': nonce }
+      headers: { 'X-WP-Nonce': nonce },
+      credentials: 'same-origin'
     })
       .then(res => res.ok ? res.json() : {})
       .then(setData);

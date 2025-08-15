@@ -4,10 +4,15 @@ let engagementPage = 1;
 const applyTheme = t => { document.body.dataset.theme = t; };
 const { __ } = wp.i18n;
 
+const _fetch = window.fetch;
+const apNonce = window.apNonce || ArtPulseDashboardApi.nonce;
+window.fetch = (url, options = {}) => {
+  const headers = { 'X-WP-Nonce': apNonce, ...(options.headers || {}) };
+  return _fetch(url, { credentials: 'same-origin', ...options, headers });
+};
+
 function fetchEventCard(id) {
-  return fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${id}`, {
-    headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
-  }).then(r => r.text());
+  return fetch(`${ArtPulseDashboardApi.root}artpulse/v1/event-card/${id}`).then(r => r.text());
 }
 document.addEventListener('DOMContentLoaded', () => {
   const dash = document.querySelector('.ap-dashboard');
