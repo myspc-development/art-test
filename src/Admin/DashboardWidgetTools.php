@@ -6,6 +6,8 @@ use ArtPulse\Widgets\Member\WelcomeBoxWidget;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\DashboardBuilder\DashboardManager as BuilderDashboardManager;
+use ArtPulse\Audit\WidgetSources;
+use ArtPulse\Core\DashboardRenderer;
 
 class DashboardWidgetTools
 {
@@ -142,41 +144,23 @@ class DashboardWidgetTools
             return;
         }
 
-        $layout  = UserLayoutManager::get_role_layout($role)['layout'];
+        $role      = sanitize_key($_GET['role'] ?? $role);
+        $sources   = ap()->make(WidgetSources::class);
+        $renderer  = ap()->make(DashboardRenderer::class);
+        $ids       = $sources->builderForRole($role) ?: [];
+        $simulate  = !empty($_GET['simulate_user']);
 
         echo '<div class="ap-preview-dashboard">';
-        $defs = DashboardWidgetRegistry::get_definitions();
-        $has_visible = false;
-        foreach ($layout as $widget) {
-            $id = is_array($widget) ? $widget['id'] : $widget;
-            $visible = is_array($widget) ? ($widget['visible'] ?? true) : true;
-
-            if (!$visible || !isset($defs[$id])) {
-                continue;
-            }
-
-            $has_visible = true;
-
-            $cb = DashboardWidgetRegistry::get_widget_callback($id);
-            if (!is_callable($cb)) {
-                continue;
-            }
-
-            echo '<div class="ap-preview-widget">';
-            echo '<h4>' . esc_html($defs[$id]['name']) . '</h4>';
-            echo '<div class="ap-preview-content">';
-            try {
-                call_user_func($cb, 0);
-            } catch (\Throwable $e) {
-                echo '<div class="notice notice-error"><p>Error rendering widget: ' . esc_html($e->getMessage()) . '</p></div>';
-            }
-            echo '</div></div>';
-        }
-
-        if (!$has_visible) {
-            echo '<div class="ap-preview-empty notice notice-info"><p>No widgets are currently visible for this layout.</p></div>';
-        }
-
+        echo '<form method="get" style="margin-bottom:10px">';
+        echo '<input type="hidden" name="page" value="' . esc_attr($_GET['page'] ?? '') . '">';
+        echo '<input type="hidden" name="role" value="' . esc_attr($role) . '">';
+        echo '<label><input type="checkbox" name="simulate_user" value="1"' . ($simulate ? ' checked' : '') . ' onchange="this.form.submit()"> ' . esc_html__('Simulate user gating', 'artpulse') . '</label>';
+        echo '</form>';
+        echo $renderer->renderIds($ids, [
+            'context'     => $simulate ? 'builder_preview_real' : 'builder_preview',
+            'gate_caps'   => $simulate,
+            'gate_flags'  => $simulate,
+        ]);
         echo '</div>';
     }
 

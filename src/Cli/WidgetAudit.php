@@ -104,6 +104,44 @@ class WidgetAudit {
         if (!$role) {
             WP_CLI::error('Missing --role parameter');
         }
+        $context  = $assoc['context'] ?? '';
+        $simulate = isset($assoc['simulate-user']);
+
+        if ($context === 'builder_preview') {
+            AuditBus::reset();
+            $sources  = new WidgetSources();
+            $renderer = new DashboardRenderer();
+            $ids      = $sources->builderForRole($role) ?: [];
+            $renderer->renderIds($ids, [
+                'context'     => $simulate ? 'builder_preview_real' : 'builder_preview',
+                'gate_caps'   => $simulate,
+                'gate_flags'  => $simulate,
+            ]);
+            $events   = AuditBus::snapshot();
+            $rendered = [];
+            foreach ($events as $e) {
+                if (($e['type'] ?? '') === 'render' && !empty($e['ok'])) {
+                    $rendered[] = $e['id'];
+                }
+            }
+            $rendered = array_values(array_unique($rendered));
+            $missing  = array_values(array_diff($ids, $rendered));
+            $extra    = array_values(array_diff($rendered, $ids));
+            WP_CLI::line('EXPECTED: ' . implode(', ', $ids));
+            WP_CLI::line('RENDERED: ' . implode(', ', $rendered));
+            if ($missing) {
+                WP_CLI::line('MISSING: ' . implode(', ', $missing));
+            }
+            if ($extra) {
+                WP_CLI::line('EXTRA: ' . implode(', ', $extra));
+            }
+            WP_CLI::line('COUNTS expected=' . count($ids) . ' rendered=' . count($rendered) . ' missing=' . count($missing) . ' extra=' . count($extra));
+            if ($missing || $extra) {
+                WP_CLI::halt(1);
+            }
+            return;
+        }
+
         if (isset($assoc['no-preview'])) {
             add_filter('ap_dashboard_preview_enabled', '__return_false');
         }
