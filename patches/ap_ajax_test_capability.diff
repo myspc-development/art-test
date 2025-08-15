@@ -1,0 +1,14 @@
+*** Begin Patch
+*** Update File: artpulse.php
+@@
+ add_action('wp_ajax_ap_ajax_test', function () {
+     check_ajax_referer('ap_diagnostics_test', 'nonce');
++    if ( ! current_user_can('manage_options') ) {
++        wp_send_json_error(['message' => __('Insufficient permissions.', 'artpulse')], 403);
++    }
+ 
+     wp_send_json_success([
+         'message' => __('AJAX is working, nonce is valid, and you are authenticated.', 'artpulse')
+     ]);
+ });
+*** End Patch
