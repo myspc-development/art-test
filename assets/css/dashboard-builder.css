@@ -9,6 +9,21 @@
   cursor: not-allowed;
 }
 
+.ap-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ap-disabled-badge {
+  background-color: #ffc107;
+  color: #212529;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 11px;
+  margin-left: 6px;
+  cursor: help;
+}
+
 .ap-visibility-badge {
   border-radius: 3px;
   padding: 2px 4px;

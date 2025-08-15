@@ -13,6 +13,14 @@
     [VISIBILITY.INTERNAL]: false,
     [VISIBILITY.DEPRECATED]: false
   };
+  const REASON_LABELS = {
+    not_in_registry: 'Not in registry',
+    no_renderer: 'No renderer',
+    role_hidden: 'Hidden for role',
+    flag_off: 'Flag disabled',
+    simulated_user_denied: 'Simulated user denied'
+  };
+  function reasonLabel(key){ return REASON_LABELS[key] || key; }
   const debug = !!APDashboardBuilder.debug;
 
   function getIncludeAll(){
@@ -84,10 +92,14 @@
       if(!visibilityFilters[vis]) return;
       const li = $('<li class="ap-widget"/>').attr('data-id', item.id);
       if(!allowedMap[item.id]){ li.addClass('ap-not-allowed'); }
+      if(def.disabled){ li.addClass('ap-disabled'); }
       const chk = $('<input type="checkbox" class="ap-visible">').prop('checked', item.visible !== false);
       li.append($('<span class="ap-widget-title"/>').text(def.title || def.name || item.id));
       li.append(' ').append(chk).append(' Show');
       li.append(' ').append($('<span class="ap-visibility-badge ap-visibility-' + vis + '"/>').text(vis.charAt(0).toUpperCase() + vis.slice(1)));
+      if(def.disabled_reason){
+        li.append(' ').append($('<span class="ap-disabled-badge"/>').attr('title', reasonLabel(def.disabled_reason)).text('!'));
+      }
       list.append(li);
     });
     if(list.hasClass('ui-sortable')){
@@ -106,7 +118,11 @@
       if(!layout.find(l => l.id === w.id)){
         const li = $('<li class="ap-widget"/>').attr('data-id', w.id).text(w.title || w.name || w.id);
         if(w.notAllowed){ li.addClass('ap-not-allowed'); }
+        if(w.disabled){ li.addClass('ap-disabled'); }
         li.append(' ').append($('<span class="ap-visibility-badge ap-visibility-' + vis + '"/>').text(vis.charAt(0).toUpperCase() + vis.slice(1)));
+        if(w.disabled_reason){
+          li.append(' ').append($('<span class="ap-disabled-badge"/>').attr('title', reasonLabel(w.disabled_reason)).text('!'));
+        }
         add.append(li);
       }
     });

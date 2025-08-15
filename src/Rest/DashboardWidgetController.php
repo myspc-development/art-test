@@ -7,6 +7,7 @@ use WP_Error;
 // Use the dashboard builder registry rather than the core registry
 // so we can query widgets and render previews for the builder UI.
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Admin\DashboardWidgetTools;
 
 /**
  * REST controller for the Dashboard Builder.
@@ -136,17 +137,18 @@ class DashboardWidgetController {
             return new WP_Error('invalid_role', __('Role parameter missing', 'artpulse'), ['status' => 400]);
         }
 
-        $available = array_values(DashboardWidgetRegistry::get_for_role($role));
+        $simulate = filter_var($request->get_param('simulate'), FILTER_VALIDATE_BOOLEAN);
+        $widgets  = DashboardWidgetTools::listWidgetsForRole($role, $simulate);
+
+        $available = array_values(array_filter($widgets, static fn($w) => $w['is_allowed_for_role']));
+
         if (empty($available) && !get_role($role)) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log('Dashboard widgets request for unsupported role: ' . $role);
             }
             return new WP_Error('invalid_role', __('Unsupported role', 'artpulse'), ['status' => 400]);
         }
-        foreach ($available as &$widget) {
-            $widget['preview'] = DashboardWidgetRegistry::render($widget['id']);
-        }
-        unset($widget);
+        // Previews are generated in listWidgetsForRole.
 
         $core_result   = \ArtPulse\Admin\UserLayoutManager::get_role_layout($role);
         $core_layout   = $core_result['layout'];
@@ -161,7 +163,7 @@ class DashboardWidgetController {
         ];
 
         if ($include_all) {
-            $response['all'] = array_values(DashboardWidgetRegistry::get_all(null, true));
+            $response['all'] = $widgets;
         }
 
         return rest_ensure_response($response);

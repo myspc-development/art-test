@@ -8,6 +8,7 @@ use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\DashboardBuilder\DashboardManager as BuilderDashboardManager;
 use ArtPulse\Audit\WidgetSources;
 use ArtPulse\Core\DashboardRenderer;
+use ArtPulse\Support\WidgetIds;
 
 class DashboardWidgetTools
 {
@@ -162,6 +163,98 @@ class DashboardWidgetTools
             'gate_flags'  => $simulate,
         ]);
         echo '</div>';
+    }
+
+    /**
+     * List widgets for a role including disabled status and preview markup.
+     *
+     * @param string $role             Role slug.
+     * @param bool   $simulate         Whether to simulate user gating.
+     * @param bool   $allow_placeholders Allow placeholder widgets without callbacks.
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    public static function listWidgetsForRole(string $role, bool $simulate = false, bool $allow_placeholders = false): array
+    {
+        $role     = sanitize_key($role);
+        $sources  = new WidgetSources();
+        $renderer = new DashboardRenderer();
+
+        $raw_registry = DashboardWidgetRegistry::get_all(null, true);
+        $registry     = [];
+        $canon_to_out = [];
+        foreach ($raw_registry as $rid => $def) {
+            $cid               = WidgetIds::canonicalize($rid);
+            $registry[$cid]    = $def;
+            $canon_to_out[$cid] = $rid;
+        }
+
+        $builder_ids = [];
+        foreach ($sources->builderForRole($role) as $bid) {
+            $cid = WidgetIds::canonicalize($bid);
+            $builder_ids[$cid] = true;
+            if (!isset($canon_to_out[$cid])) {
+                $canon_to_out[$cid] = $bid;
+            }
+        }
+
+        $all_ids = array_values(array_unique(array_merge(array_keys($registry), array_keys($builder_ids))));
+
+        $preview_html = $renderer->renderIds($all_ids, [
+            'context'    => $simulate ? 'builder_list_simulated' : 'builder_list',
+            'gate_caps'  => $simulate,
+            'gate_flags' => $simulate,
+        ]);
+        $previews = [];
+        if ($preview_html && preg_match_all('#<div data-widget-id="([^"]+)">(.*?)</div>#s', $preview_html, $m, PREG_SET_ORDER)) {
+            foreach ($m as $match) {
+                $previews[$match[1]] = $match[2];
+            }
+        }
+
+        $role_map = WidgetSources::get_visibility_roles();
+        $snapshot = WidgetSources::get_registry();
+        $results  = [];
+        foreach ($all_ids as $cid) {
+            $def           = $registry[$cid] ?? [];
+            $snap          = $snapshot[$cid] ?? [];
+            $has_callback  = $snap['callback_is_callable'] ?? is_callable($def['render_callback'] ?? null);
+            $is_in_registry = isset($snapshot[$cid]);
+            $flag_active   = ($snap['status'] ?? 'active') === 'active';
+            $is_placeholder = (bool)($snap['is_placeholder'] ?? false);
+
+            $allowed_roles       = $role_map[$cid] ?? ($def['roles'] ?? []);
+            $is_allowed_for_role = empty($allowed_roles) || in_array($role, (array) $allowed_roles, true);
+
+            $disabled = !$is_in_registry || (!$has_callback && !$allow_placeholders) || ($simulate && !$is_allowed_for_role) || !$flag_active;
+
+            $reason = '';
+            if (!$is_in_registry) {
+                $reason = 'not_in_registry';
+            } elseif (!$has_callback && !$allow_placeholders) {
+                $reason = 'no_renderer';
+            } elseif (!$flag_active) {
+                $reason = 'flag_off';
+            } elseif (!$is_allowed_for_role) {
+                $reason = $simulate ? 'simulated_user_denied' : 'role_hidden';
+            }
+
+            $results[] = [
+                'id'                => $canon_to_out[$cid] ?? $cid,
+                'title'             => $def['title'] ?? $def['name'] ?? $def['label'] ?? ($snap['title'] ?? $cid),
+                'visibility'        => $def['visibility'] ?? 'public',
+                'preview'           => $previews[$cid] ?? '',
+                'has_callback'      => $has_callback,
+                'is_in_registry'    => $is_in_registry,
+                'is_allowed_for_role'=> $is_allowed_for_role,
+                'flag_active'       => $flag_active,
+                'is_placeholder'    => $is_placeholder,
+                'disabled'          => $disabled,
+                'disabled_reason'   => $reason,
+            ];
+        }
+
+        return $results;
     }
 
     /**
