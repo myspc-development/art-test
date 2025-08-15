@@ -8,9 +8,13 @@ import FlaggedActivityLog from './FlaggedActivityLog';
 export default function CommunityAnalyticsPanel() {
   const [tab, setTab] = useState('messaging');
   const [data, setData] = useState({});
+  const apiRoot = window.ArtPulseDashboardApi?.root || '/wp-json/';
+  const nonce = window.ArtPulseDashboardApi?.nonce || '';
 
   useEffect(() => {
-    fetch(`/wp-json/artpulse/v1/analytics/community/${tab}`)
+    fetch(`${apiRoot}artpulse/v1/analytics/community/${tab}`, {
+      headers: { 'X-WP-Nonce': nonce }
+    })
       .then(res => res.ok ? res.json() : {})
       .then(setData);
   }, [tab]);

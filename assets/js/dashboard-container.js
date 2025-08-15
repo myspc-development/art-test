@@ -1742,7 +1742,11 @@ var APDashboardContainer = (function (require$$0$1, reactGridLayout, require$$0)
       return !w.roles || w.roles.includes(role);
     });
     require$$0$1.useEffect(function () {
-      fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout")).then(function (r) {
+      fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        }
+      }).then(function (r) {
         return r.json();
       }).then(function (data) {
         var ids = Array.isArray(data.layout) ? data.layout : [];
