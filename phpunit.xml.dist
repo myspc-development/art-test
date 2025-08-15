@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php" colors="true" beStrictAboutTestsThatDoNotTestAnything="false">
+<phpunit bootstrap="tests/bootstrap.php" colors="true" beStrictAboutOutputDuringTests="true">
   <testsuites>
-    <testsuite name="ArtPulse">
-      <directory>tests/</directory>
+    <testsuite name="Plugin Test Suite">
+      <directory suffix="Test.php">tests</directory>
     </testsuite>
   </testsuites>
   <php>
-    <env name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit" />
+    <!-- Path to the wp-phpunit package -->
+    <const name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
+    <!-- ABSOLUTE path to installed WordPress core (MUST end with a slash) -->
+    <const name="WP_PHPUNIT__ABSPATH_DIR" value="/www/wwwroot/192.168.1.21/"/>
+    <!-- Optional: custom config for DB creds -->
+    <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-tests-config.php"/>
   </php>
 </phpunit>
