@@ -1,37 +1,47 @@
 <?php
-/**
- * PHPUnit bootstrap for ArtPulse.
- *
- * @package ArtPulse
- */
-
-// Load WP test suite.
-$_tests_dir = getenv( 'WP_PHPUNIT__DIR' );
-if ( ! $_tests_dir ) {
-	$_tests_dir = __DIR__ . '/../vendor/wp-phpunit/wp-phpunit';
+// Ensure Composer autoload exists
+$autoload = __DIR__ . '/../vendor/autoload.php';
+if (file_exists($autoload)) {
+    require_once $autoload;
 }
-require $_tests_dir . '/includes/functions.php';
 
-tests_add_filter(
-	'muplugins_loaded',
-	function () {
-			// Load the plugin under test.
-			require dirname( __DIR__ ) . '/artpulse.php';
-	}
-);
-
-if ( ! defined( 'WP_TESTS_CONFIG_FILE_PATH' ) ) {
-	define( 'WP_TESTS_CONFIG_FILE_PATH', dirname( __DIR__ ) . '/wp-tests-config.php' );
+// Define where the wp-phpunit test suite lives
+if (!defined('WP_PHPUNIT__DIR')) {
+    define('WP_PHPUNIT__DIR', __DIR__ . '/../vendor/wp-phpunit/wp-phpunit');
 }
-require $_tests_dir . '/includes/bootstrap.php';
 
-// Simple helpers.
-/**
- * Instantiate a class via the container if available.
- *
- * @param string $class_name Class name to instantiate.
- * @return object Instance of the class.
- */
-function ap_make( $class_name ) {
-		return \function_exists( 'ap' ) ? ap()->make( $class_name ) : new $class_name();
+// Define where WordPress core is installed (Option A: existing site)
+if (!defined('WP_PHPUNIT__ABSPATH_DIR')) {
+    define('WP_PHPUNIT__ABSPATH_DIR', '/www/wwwroot/192.168.1.21/'); // trailing slash required
 }
+if (substr(WP_PHPUNIT__ABSPATH_DIR, -1) !== '/') {
+    define('WP_PHPUNIT__ABSPATH_DIR', rtrim(WP_PHPUNIT__ABSPATH_DIR, '/') . '/');
+}
+if (!file_exists(WP_PHPUNIT__ABSPATH_DIR . 'wp-settings.php')) {
+    fwrite(STDERR, "ERROR: wp-settings.php not found at " . WP_PHPUNIT__ABSPATH_DIR . "\n");
+    exit(1);
+}
+
+// Load the wp-phpunit bootstrap
+require_once WP_PHPUNIT__DIR . '/includes/functions.php';
+
+// Load the plugin under test when WordPress boots
+tests_add_filter('muplugins_loaded', function () {
+    $root = dirname(__DIR__);
+    // Try common plugin entry files (add more if needed)
+    $candidates = [
+        $root . '/artpulse.php',
+        $root . '/artpulse-management.php',
+        $root . '/art-test-main.php',
+        $root . '/plugin.php',
+    ];
+    foreach ($candidates as $file) {
+        if (file_exists($file)) {
+            require_once $file;
+            break;
+        }
+    }
+});
+
+// Start up the WP testing environment
+require_once WP_PHPUNIT__DIR . '/includes/bootstrap.php';

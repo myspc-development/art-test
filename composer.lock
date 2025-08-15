@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f4dab67a61bc5ac24256e1b5913f062b",
+    "content-hash": "e697acf714437113305d6703bebc7115",
     "packages": [
         {
             "name": "erusev/parsedown",
@@ -2678,26 +2678,26 @@
         },
         {
             "name": "yoast/phpunit-polyfills",
-            "version": "1.1.5",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast/PHPUnit-Polyfills.git",
-                "reference": "41aaac462fbd80feb8dd129e489f4bbc53fe26b0"
+                "reference": "9cf2ccd990eadfc4a1e390592d4731e590b2c618"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast/PHPUnit-Polyfills/zipball/41aaac462fbd80feb8dd129e489f4bbc53fe26b0",
-                "reference": "41aaac462fbd80feb8dd129e489f4bbc53fe26b0",
+                "url": "https://api.github.com/repos/Yoast/PHPUnit-Polyfills/zipball/9cf2ccd990eadfc4a1e390592d4731e590b2c618",
+                "reference": "9cf2ccd990eadfc4a1e390592d4731e590b2c618",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4",
-                "phpunit/phpunit": "^4.8.36 || ^5.7.21 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
+                "php": ">=7.0",
+                "phpunit/phpunit": "^6.4.4 || ^7.0 || ^8.0 || ^9.0 || ^11.0"
             },
             "require-dev": {
                 "php-parallel-lint/php-console-highlighter": "^1.0.0",
                 "php-parallel-lint/php-parallel-lint": "^1.4.0",
-                "yoast/yoastcs": "^3.2.0"
+                "yoast/yoastcs": "^3.1.0"
             },
             "type": "library",
             "extra": {
@@ -2737,76 +2737,7 @@
                 "security": "https://github.com/Yoast/PHPUnit-Polyfills/security/policy",
                 "source": "https://github.com/Yoast/PHPUnit-Polyfills"
             },
-            "time": "2025-08-10T04:54:36+00:00"
-        },
-        {
-            "name": "yoast/wp-test-utils",
-            "version": "1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Yoast/wp-test-utils.git",
-                "reference": "2e0f62e0281e4859707c5f13b7da1422aa1c8f7b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Yoast/wp-test-utils/zipball/2e0f62e0281e4859707c5f13b7da1422aa1c8f7b",
-                "reference": "2e0f62e0281e4859707c5f13b7da1422aa1c8f7b",
-                "shasum": ""
-            },
-            "require": {
-                "brain/monkey": "^2.6.1",
-                "php": ">=5.6",
-                "yoast/phpunit-polyfills": "^1.1.0"
-            },
-            "require-dev": {
-                "yoast/yoastcs": "^2.3.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "1.x-dev",
-                    "dev-develop": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ],
-                "exclude-from-classmap": [
-                    "/src/WPIntegration/TestCase.php",
-                    "/src/WPIntegration/TestCaseNoPolyfills.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Team Yoast",
-                    "email": "support@yoast.com",
-                    "homepage": "https://yoast.com"
-                },
-                {
-                    "name": "Contributors",
-                    "homepage": "https://github.com/Yoast/wp-test-utils/graphs/contributors"
-                }
-            ],
-            "description": "PHPUnit cross-version compatibility layer for testing plugins and themes build for WordPress",
-            "homepage": "https://github.com/Yoast/wp-test-utils/",
-            "keywords": [
-                "brainmonkey",
-                "integration-testing",
-                "phpunit",
-                "testing",
-                "unit-testing",
-                "wordpress"
-            ],
-            "support": {
-                "issues": "https://github.com/Yoast/wp-test-utils/issues",
-                "source": "https://github.com/Yoast/wp-test-utils"
-            },
-            "time": "2023-09-27T10:25:08+00:00"
+            "time": "2025-02-09T18:36:24+00:00"
         }
     ],
     "aliases": [],
