@@ -10,7 +10,9 @@ export default function DashboardContainer({ role = 'member' }) {
   const widgets = registry.filter(w => !w.roles || w.roles.includes(role));
 
   useEffect(() => {
-    fetch(`${apiRoot}artpulse/v1/ap_dashboard_layout`)
+    fetch(`${apiRoot}artpulse/v1/ap_dashboard_layout`, {
+      headers: { 'X-WP-Nonce': nonce }
+    })
       .then(r => r.json())
       .then(data => {
         const ids = Array.isArray(data.layout) ? data.layout : [];

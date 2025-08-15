@@ -7,9 +7,13 @@ import DashboardContainer from './DashboardContainer.jsx';
 
 function AppDashboard() {
   const [role, setRole] = useState(null);
+  const apiRoot = window.ArtPulseDashboardApi?.root || '/wp-json/';
+  const nonce = window.ArtPulseDashboardApi?.nonce || '';
 
   useEffect(() => {
-    fetch('/wp-json/artpulse/v1/me')
+    fetch(`${apiRoot}artpulse/v1/me`, {
+      headers: { 'X-WP-Nonce': nonce }
+    })
       .then(res => res.json())
       .then(data => setRole(data.role));
   }, []);
