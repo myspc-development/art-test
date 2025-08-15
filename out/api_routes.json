@@ -1,0 +1,5890 @@
+{
+  "rest": [
+    {
+      "namespace": "artpulse/v1",
+      "route": "/follow/feed",
+      "methods": [
+        "GET"
+      ],
+      "file": "follow-api.php",
+      "line": 10,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/payment/intent",
+      "methods": [
+        "POST"
+      ],
+      "file": "payments.php",
+      "line": 10,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/payment/checkout",
+      "methods": [
+        "POST"
+      ],
+      "file": "payments.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\\\d+)/rsvp",
+      "methods": [
+        "POST"
+      ],
+      "file": "includes/class-artpulse-rest-controller.php",
+      "line": 14,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/(?P<id>\\\\d+)/follow",
+      "methods": [
+        "POST"
+      ],
+      "file": "includes/class-artpulse-rest-controller.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/widgets/log",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Analytics/EmbedAnalytics.php",
+      "line": 43,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/webhooks/(?P<id>\\d+)",
+      "methods": [
+        "['GET"
+      ],
+      "file": "src/Integration/WebhookManager.php",
+      "line": 22,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/webhooks/(?P<id>\\d+)/(?P<hid>\\d+)",
+      "methods": [
+        "['PUT"
+      ],
+      "file": "src/Integration/WebhookManager.php",
+      "line": 31,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        },
+        "hid": {
+          "validate": "absint"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/import",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/ImportRestController.php",
+      "line": 32,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/preview/dashboard",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/DashboardPreviewController.php",
+      "line": 11,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org/(?P<id>\\d+)/meta",
+      "methods": [
+        "['GET"
+      ],
+      "file": "src/Rest/OrgMetaController.php",
+      "line": 17,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/artist-events",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/ArtistEventsController.php",
+      "line": 20,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/roles/toggle",
+      "methods": [
+        "WP_REST_Server::CREATABLE"
+      ],
+      "file": "src/Rest/RoleMatrixController.php",
+      "line": 22,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_users"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "user_id": {
+          "type": "integer",
+          "required": true
+        },
+        "role": {
+          "type": "string",
+          "required": true
+        },
+        "checked": {
+          "type": "boolean",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/roles/batch",
+      "methods": [
+        "WP_REST_Server::CREATABLE"
+      ],
+      "file": "src/Rest/RoleMatrixController.php",
+      "line": 39,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_users"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/roles/seed",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/RoleMatrixController.php",
+      "line": 51,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_users"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/payment-reports",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/PaymentReportsController.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/profile/(?P<id>\\d+)/verify",
+      "methods": [
+        "WP_REST_Server::CREATABLE"
+      ],
+      "file": "src/Rest/ProfileVerificationController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/import-template/(?P<post_type>[^/]+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/ImportTemplateController.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "post_type": {
+          "validate": "sanitize_key"
+        },
+        "callback": {},
+        "permission_callback": {}
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard/messages",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/DashboardMessagesController.php",
+      "line": 11,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/favorite",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/FavoriteRestController.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/checkin",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/VisitRestController.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "event_id": {
+          "required": true,
+          "validate": "is_numeric"
+        },
+        "institution": {
+          "sanitize": "sanitize_text_field"
+        },
+        "group_size": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\d+)/visits",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/VisitRestController.php",
+      "line": 38,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\d+)/visits/export",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/VisitRestController.php",
+      "line": 47,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/update/diagnostics",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/UpdateDiagnosticsController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [
+        "update_plugins"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/follow/venue",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/FollowVenueCuratorController.php",
+      "line": 17,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "venue_id": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/followed/venues",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/FollowVenueCuratorController.php",
+      "line": 28,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/follow/curator",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/FollowVenueCuratorController.php",
+      "line": 36,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "curator_id": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/followed/curators",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/FollowVenueCuratorController.php",
+      "line": 47,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/artist",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/ArtistOverviewController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/orgs/(?P<id>\\d+)/roles",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/OrgUserRolesController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/orgs/(?P<id>\\d+)/roles/(?P<user_id>\\d+)",
+      "methods": [
+        "DELETE"
+      ],
+      "file": "src/Rest/OrgUserRolesController.php",
+      "line": 34,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/users/me/orgs",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/OrgUserRolesController.php",
+      "line": 42,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/trending",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/TrendingRestController.php",
+      "line": 14,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "type": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard-widgets",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/DashboardWidgetController.php",
+      "line": 96,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard-widgets/save",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/DashboardWidgetController.php",
+      "line": 103,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard-widgets/export",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/DashboardWidgetController.php",
+      "line": 110,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard-widgets/import",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/DashboardWidgetController.php",
+      "line": 117,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/artwork/(?P<id>\\d+)/auction",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/ArtworkAuctionController.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/artwork/(?P<id>\\d+)/bid",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/ArtworkAuctionController.php",
+      "line": 31,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/rsvp",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/RsvpRestController.php",
+      "line": 22,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/rsvp/cancel",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/RsvpRestController.php",
+      "line": 38,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/waitlist/remove",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/RsvpRestController.php",
+      "line": 54,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\d+)/attendees",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/RsvpRestController.php",
+      "line": 70,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\d+)/attendees/export",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/RsvpRestController.php",
+      "line": 79,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<event_id>\\d+)/attendees/(?P<user_id>\\d+)/attended",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/RsvpRestController.php",
+      "line": 88,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "event_id": {
+          "validate": "is_numeric"
+        },
+        "user_id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<event_id>\\d+)/attendees/(?P<user_id>\\d+)/remove",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/RsvpRestController.php",
+      "line": 100,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "event_id": {
+          "validate": "is_numeric"
+        },
+        "user_id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<event_id>\\d+)/email-rsvps",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/RsvpRestController.php",
+      "line": 112,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "event_id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<event_id>\\d+)/attendees/(?P<user_id>\\d+)/message",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/RsvpRestController.php",
+      "line": 123,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "event_id": {
+          "validate": "is_numeric"
+        },
+        "user_id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/events",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/DirectoryController.php",
+      "line": 13,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/activity",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/ActivityRestController.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "limit": {
+          "type": "integer"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/analytics/community/messaging",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/CommunityAnalyticsController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "range": {
+          "type": "string",
+          "required": false
+        },
+        "top_users": {
+          "type": "boolean",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/analytics/community/comments",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/CommunityAnalyticsController.php",
+      "line": 31,
+      "permission_callback_present": true,
+      "capabilities": [
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "range": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/analytics/community/forums",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/CommunityAnalyticsController.php",
+      "line": 40,
+      "permission_callback_present": true,
+      "capabilities": [
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "range": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/event-card/(?P<id>\\\\d+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/EventCardController.php",
+      "line": 20,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": true,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org/(?P<id>\\\\d+)/invite",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/UserInvitationController.php",
+      "line": 22,
+      "permission_callback_present": true,
+      "capabilities": [
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org/(?P<id>\\\\d+)/users/batch",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/UserInvitationController.php",
+      "line": 35,
+      "permission_callback_present": true,
+      "capabilities": [
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/curators",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/CuratorRestController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/curator/(?P<slug>[a-z0-9-]+)",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/CuratorRestController.php",
+      "line": 29,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "slug": {
+          "sanitize": "sanitize_title"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/widgets",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/WidgetEditorController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/roles",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/WidgetEditorController.php",
+      "line": 27,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/layout",
+      "methods": [
+        "['GET"
+      ],
+      "file": "src/Rest/WidgetEditorController.php",
+      "line": 33,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event-list",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/EventListController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "venue": {
+          "type": "string"
+        },
+        "after": {
+          "type": "string"
+        },
+        "before": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "organizer": {
+          "type": "string"
+        },
+        "price_type": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number"
+        },
+        "alpha": {
+          "type": "string"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "per_page": {
+          "type": "integer"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": true,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/role-widget-map",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/RoleWidgetMapController.php",
+      "line": 16,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/feedback",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/FeedbackRestController.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/feedback/(?P<id>\\\\d+)/vote",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/FeedbackRestController.php",
+      "line": 37,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/feedback/(?P<id>\\\\d+)/comments",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/FeedbackRestController.php",
+      "line": 45,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        },
+        "callback": {},
+        "args": {
+          "validate": "is_numeric"
+        },
+        "comment": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/widget-settings/(?P<id>[a-z0-9_-]+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/WidgetSettingsRestController.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org-metrics",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/OrgAnalyticsController.php",
+      "line": 14,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\d+)/rsvp-stats",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/OrgAnalyticsController.php",
+      "line": 24,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/portfolio/(?P<user_id>\\d+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/PortfolioRestController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "user_id": {
+          "sanitize": "absint",
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/report-template/(?P<type>[^/]+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/ReportTemplateController.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/spotlight/view",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/SpotlightAnalyticsController.php",
+      "line": 20,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "required": true,
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/calendar",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/CalendarFeedController.php",
+      "line": 16,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/status",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Rest/StatusController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/analytics/trends",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/AnalyticsRestController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "event_id": {
+          "type": "integer",
+          "required": true
+        },
+        "days": {
+          "type": "integer"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/analytics/export",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/AnalyticsRestController.php",
+      "line": 33,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "event_id": {
+          "type": "integer",
+          "required": true
+        },
+        "days": {
+          "type": "integer"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard/layout",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/DashboardLayoutRestController.php",
+      "line": 25,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "role": {
+          "type": "string",
+          "required": false
+        },
+        "callback": {},
+        "args": {
+          "type": "array",
+          "required": false
+        },
+        "visibility": {
+          "type": "object",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/export",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/UserAccountRestController.php",
+      "line": 24,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/delete",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/UserAccountRestController.php",
+      "line": 44,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard-config",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/DashboardConfigController.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org/(?P<id>\\d+)/events/summary",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/OrgDashboardController.php",
+      "line": 16,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org/(?P<id>\\d+)/team/invite",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/OrgDashboardController.php",
+      "line": 25,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org/(?P<id>\\d+)/tickets/metrics",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/OrgDashboardController.php",
+      "line": 34,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org/(?P<id>\\d+)/message/broadcast",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/OrgDashboardController.php",
+      "line": 43,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/orgs",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/RestRoutes.php",
+      "line": 12,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard-analytics",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/DashboardAnalyticsController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org-roles/invite",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/OrgRoleInviteController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org-roles/accept",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/OrgRoleInviteController.php",
+      "line": 29,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/share",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/ShareController.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "object_id": {
+          "type": "integer",
+          "required": true
+        },
+        "object_type": {
+          "type": "string",
+          "required": true
+        },
+        "network": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/widget-layout",
+      "methods": [
+        "WP_REST_Server::CREATABLE"
+      ],
+      "file": "src/Rest/WidgetLayoutController.php",
+      "line": 22,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "layout": {
+          "type": "array",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/profile-metrics/(?P<id>\\d+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/ProfileMetricsController.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/analytics/pilot/invite",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/AnalyticsPilotController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "email": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "'artpulse/v1'",
+      "route": "/submissions",
+      "methods": [
+        "WP_REST_Server::CREATABLE"
+      ],
+      "file": "src/Rest/SubmissionRestController.php",
+      "line": 47,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read",
+        "upload_files"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/me",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/CurrentUserController.php",
+      "line": 11,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/(?P<id>\\d+)/reply",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/MessagesController.php",
+      "line": 16,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/orgs/(?P<id>\\\\d+)/grant-report",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/GrantReportController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        },
+        "format": {}
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/competitions/(?P<id>\\d+)/entries",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/CompetitionRestController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_others_posts",
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        },
+        "artwork_id": {
+          "required": true,
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/competitions/(?P<id>\\d+)/entries/(?P<entry_id>\\d+)/vote",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Rest/CompetitionRestController.php",
+      "line": 31,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_others_posts",
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        },
+        "entry_id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/location/geonames",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/LocationRestController.php",
+      "line": 12,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/location/google",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/LocationRestController.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/events/nearby",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Rest/NearbyEventsController.php",
+      "line": 25,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "lat": {
+          "type": "number",
+          "required": true
+        },
+        "lng": {
+          "type": "number",
+          "required": true
+        },
+        "radius": {
+          "type": "number",
+          "required": false
+        },
+        "limit": {
+          "type": "integer",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/recommendations",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Personalization/RecommendationRestController.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/payment/webhook",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/PaymentWebhookController.php",
+      "line": 17,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/boost/create-checkout",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/EventBoostManager.php",
+      "line": 47,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/boost/webhook",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/EventBoostManager.php",
+      "line": 54,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\\\d+)/tickets",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Monetization/TicketManager.php",
+      "line": 25,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\\\d+)/buy-ticket",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/TicketManager.php",
+      "line": 34,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\\\d+)/ticket-tier",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/TicketManager.php",
+      "line": 43,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/ticket-tier/(?P<tier_id>\\\\d+)",
+      "methods": [
+        "PUT"
+      ],
+      "file": "src/Monetization/TicketManager.php",
+      "line": 51,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/donations",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/DonationManager.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "artist_id": {
+          "required": true,
+          "validate": "absint"
+        },
+        "amount": {
+          "required": true,
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/membership",
+      "methods": [
+        "['GET"
+      ],
+      "file": "src/Monetization/MembershipManager.php",
+      "line": 16,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/sales",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Monetization/SalesOverview.php",
+      "line": 20,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/payouts",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Monetization/PayoutManager.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/payouts/settings",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/PayoutManager.php",
+      "line": 28,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\\\d+)/promo-code/apply",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/PromoManager.php",
+      "line": 17,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\\\d+)/feature",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/EventPromotionManager.php",
+      "line": 19,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_post"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/artist/(?P<id>\\\\d+)/tip",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Monetization/TipManager.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        },
+        "amount": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/reporting/snapshot",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Reporting/SnapshotExportController.php",
+      "line": 26,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/reporting/snapshot.csv",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Reporting/SnapshotExportController.php",
+      "line": 34,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/reporting/snapshot.pdf",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Reporting/SnapshotExportController.php",
+      "line": 42,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/orgs/(?P<id>\\d+)/report",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Reporting/OrgReportController.php",
+      "line": 22,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "type": "integer"
+        },
+        "type": {
+          "required": true
+        },
+        "format": {}
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/budget/export",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Reporting/BudgetExportController.php",
+      "line": 25,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "event_id": {
+          "required": false,
+          "validate": "is_numeric"
+        },
+        "event_ids": {
+          "required": false,
+          "validate": "is_string"
+        },
+        "format": {}
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\\\d+)/comments",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/EventCommentsController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        },
+        "callback": {},
+        "args": {
+          "validate": "is_numeric"
+        },
+        "content": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/comment/(?P<comment_id>\\\\d+)/moderate",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/EventCommentsController.php",
+      "line": 41,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "comment_id": {
+          "validate": "is_numeric"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/artwork/(?P<id>\\\\d+)/comments",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/ArtworkCommentsController.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        },
+        "callback": {},
+        "args": {
+          "validate": "is_numeric"
+        },
+        "content": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/qa-thread/(?P<event_id>\\d+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/QaThreadRestController.php",
+      "line": 15,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/qa-thread/(?P<event_id>\\d+)/post",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/QaThreadRestController.php",
+      "line": 24,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/forum/threads",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Community/ForumRestController.php",
+      "line": 20,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "content": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/forum/thread/(?P<id>\\\\d+)/comments",
+      "methods": [
+        "WP_REST_Server::READABLE"
+      ],
+      "file": "src/Community/ForumRestController.php",
+      "line": 39,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        },
+        "callback": {},
+        "args": {
+          "validate": "is_numeric"
+        },
+        "content": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/follows",
+      "methods": [
+        "['POST"
+      ],
+      "file": "src/Community/FollowRestController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/followers/(?P<user_id>\\\\d+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/FollowRestController.php",
+      "line": 28,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "user_id": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/referral/redeem",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/ReferralManager.php",
+      "line": 44,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "code": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/artist-upgrade",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/ArtistUpgradeRestController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/favorites",
+      "methods": [
+        "DELETE"
+      ],
+      "file": "src/Community/FavoritesRestController.php",
+      "line": 20,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "object_id": {
+          "type": "integer",
+          "required": true
+        },
+        "object_type": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/comment/(?P<id>\\\\d+)/report",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/CommentReportRestController.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        },
+        "reason": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/leaderboards/most-helpful",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/LeaderboardRestController.php",
+      "line": 17,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/leaderboards/most-upvoted",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/LeaderboardRestController.php",
+      "line": 25,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\d+)/vote",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/EventVoteRestController.php",
+      "line": 15,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\d+)/votes",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/EventVoteRestController.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "is_numeric"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/leaderboards/top-events",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/EventVoteRestController.php",
+      "line": 33,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/inbox",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/UnifiedInboxController.php",
+      "line": 22,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "limit": {
+          "type": "integer"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/inbox/read",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/UnifiedInboxController.php",
+      "line": 33,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "type": {
+          "type": "string",
+          "required": true
+        },
+        "id": {
+          "type": "integer",
+          "required": false
+        },
+        "ids": {
+          "type": "array",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/inbox/unread",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/UnifiedInboxController.php",
+      "line": 46,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "type": {
+          "type": "string",
+          "required": true
+        },
+        "id": {
+          "type": "integer",
+          "required": false
+        },
+        "ids": {
+          "type": "array",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/send",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 115,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "recipient_id": {
+          "type": "integer",
+          "required": true
+        },
+        "content": {
+          "type": "string",
+          "required": true
+        },
+        "context_type": {
+          "type": "string",
+          "required": false
+        },
+        "context_id": {
+          "type": "integer",
+          "required": false
+        },
+        "parent_id": {
+          "type": "integer",
+          "required": false
+        },
+        "attachments": {
+          "type": "array",
+          "required": false
+        },
+        "tags": {
+          "type": "array",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 132,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "recipient_id": {
+          "type": "integer",
+          "required": true
+        },
+        "content": {
+          "type": "string",
+          "required": true
+        },
+        "nonce": {
+          "type": "string",
+          "required": true
+        },
+        "context_type": {
+          "type": "string",
+          "required": false
+        },
+        "context_id": {
+          "type": "integer",
+          "required": false
+        },
+        "callback": {},
+        "args": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/updates",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 159,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "since": {
+          "type": "string",
+          "required": true
+        },
+        "context_id": {
+          "type": "integer",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/seen",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 171,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "message_ids": {
+          "type": "array",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/search",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 182,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "q": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\\d+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 193,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/block",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 201,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "user_id": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/label",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 212,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "id": {
+          "type": "integer",
+          "required": true
+        },
+        "tag": {
+          "type": "string",
+          "required": true
+        },
+        "action": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/thread",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 225,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "id": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/messages/bulk",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 236,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "ids": {
+          "type": "array",
+          "required": true
+        },
+        "action": {
+          "type": "string",
+          "required": true
+        },
+        "tag": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/conversations",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 249,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/message/read",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/DirectMessages.php",
+      "line": 259,
+      "permission_callback_present": true,
+      "capabilities": [
+        "ap_send_messages",
+        "read"
+      ],
+      "nonce_check_present": true,
+      "args": {
+        "nonce": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/link-request",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/ProfileLinkRequestRestController.php",
+      "line": 13,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_others_posts"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "org_id": {
+          "type": "integer",
+          "required": true
+        },
+        "message": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/link-request/(?P<id>\\d+)/approve",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/ProfileLinkRequestRestController.php",
+      "line": 25,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_others_posts"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/link-request/(?P<id>\\d+)/deny",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/ProfileLinkRequestRestController.php",
+      "line": 33,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_others_posts"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/link-requests",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/ProfileLinkRequestRestController.php",
+      "line": 41,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_others_posts"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "org_id": {
+          "type": "integer",
+          "required": true
+        },
+        "status": {
+          "type": "string",
+          "required": false
+        },
+        "callback": {},
+        "args": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/link-requests/bulk",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/ProfileLinkRequestRestController.php",
+      "line": 63,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_others_posts"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "ids": {
+          "type": "array",
+          "required": true
+        },
+        "action": {
+          "type": "string"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user-preferences",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/UserPreferencesRestController.php",
+      "line": 73,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "push_token": {
+          "type": "string",
+          "required": false
+        },
+        "phone_number": {
+          "type": "string",
+          "required": false
+        },
+        "sms_opt_in": {
+          "type": "boolean",
+          "required": false
+        },
+        "dashboard_theme": {
+          "type": "string",
+          "required": false
+        },
+        "notification_prefs": {
+          "type": "object",
+          "required": false
+        },
+        "digest_frequency": {
+          "type": "string",
+          "required": false
+        },
+        "digest_topics": {
+          "type": "string",
+          "required": false
+        },
+        "preferred_tags": {
+          "type": "array",
+          "required": false
+        },
+        "ignored_tags": {
+          "type": "array",
+          "required": false
+        },
+        "blacklist_ids": {
+          "type": "array",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/notifications",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Community/NotificationRestController.php",
+      "line": 20,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/notifications/(?P<id>\\\\d+)/read",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/NotificationRestController.php",
+      "line": 28,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/notifications/mark-all-read",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Community/NotificationRestController.php",
+      "line": 36,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/filtered-posts",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Blocks/AjaxFilterBlock.php",
+      "line": 35,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {
+        "post_type": {
+          "required": true
+        },
+        "taxonomy": {
+          "required": true
+        },
+        "terms": {
+          "required": false
+        },
+        "per_page": {
+          "required": false
+        },
+        "page": {
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": true,
+        "per_page": true,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\\\d+)/survey",
+      "methods": [
+        "['GET"
+      ],
+      "file": "src/Admin/SurveyManager.php",
+      "line": 17,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard-layout/(?P<context>\\\\w+)",
+      "methods": [
+        "['GET"
+      ],
+      "file": "src/Admin/DashboardLayoutEndpoint.php",
+      "line": 14,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/admin/users",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Admin/SegmentationManager.php",
+      "line": 17,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\d+)/notes",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Admin/EventNotesTasks.php",
+      "line": 208,
+      "permission_callback_present": false,
+      "capabilities": [
+        "edit_post"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\d+)/tasks",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Admin/EventNotesTasks.php",
+      "line": 227,
+      "permission_callback_present": false,
+      "capabilities": [
+        "edit_post"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/admin/reminders",
+      "methods": [
+        "['GET"
+      ],
+      "file": "src/Admin/ReminderManager.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/event/(?P<id>\\\\d+)/rsvp/custom-fields",
+      "methods": [
+        "['GET"
+      ],
+      "file": "src/Admin/CustomFieldsManager.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/admin/export",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Admin/ReportingManager.php",
+      "line": 23,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/filter",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Core/DirectoryManager.php",
+      "line": 47,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/org/dashboard",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Core/OrgDashboardManager.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/stripe-webhook",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Core/MembershipManager.php",
+      "line": 142,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/membership/pause",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Core/MembershipManager.php",
+      "line": 153,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/membership/resume",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Core/MembershipManager.php",
+      "line": 164,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/membership/levels",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Core/MembershipManager.php",
+      "line": 175,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/membership/levels/(?P<level>[\\\\w-]+)",
+      "methods": [
+        "DELETE"
+      ],
+      "file": "src/Core/MembershipManager.php",
+      "line": 188,
+      "permission_callback_present": true,
+      "capabilities": [
+        "manage_options",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/member/account",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Core/FrontendMembershipPage.php",
+      "line": 17,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/dashboard",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 193,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/profile",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 206,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/engagement",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 219,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/user/onboarding",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 236,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/dashboard-tour",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 252,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/ap/widgets/available",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 265,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "role": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/ap/layout",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 278,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "role": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/ap/layout/save",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 291,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "layout": {
+          "type": "array",
+          "required": false
+        },
+        "visibility": {
+          "type": "object",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/ap/layout/reset",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 305,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/ap/layout/revert",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 315,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/ap_dashboard_layout",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Core/UserDashboardManager.php",
+      "line": 326,
+      "permission_callback_present": true,
+      "capabilities": [
+        "administrator",
+        "artist",
+        "member",
+        "organization",
+        "read",
+        "view_artpulse_dashboard"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "role": {
+          "type": "string",
+          "required": false
+        },
+        "callback": {},
+        "args": {
+          "type": "array",
+          "required": false
+        },
+        "visibility": {
+          "type": "object",
+          "required": false
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/newsletter-optin",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Frontend/NewsletterOptinEndpoint.php",
+      "line": 18,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/widgets/embed.js",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Frontend/WidgetsController.php",
+      "line": 16,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/widgets/render",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Frontend/WidgetsController.php",
+      "line": 21,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/bids",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Marketplace/AuctionManager.php",
+      "line": 40,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/bids/(?P<artwork_id>\\\\d+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Marketplace/AuctionManager.php",
+      "line": 48,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "artwork_id": {
+          "validate": "absint"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/auctions/live",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Marketplace/AuctionManager.php",
+      "line": 61,
+      "permission_callback_present": true,
+      "capabilities": [
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/promoted",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Marketplace/PromotionManager.php",
+      "line": 34,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_posts",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/promote",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Marketplace/PromotionManager.php",
+      "line": 44,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_posts",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "artwork_id": {
+          "type": "integer",
+          "required": true
+        },
+        "start_date": {
+          "type": "string",
+          "required": true
+        },
+        "end_date": {
+          "type": "string",
+          "required": true
+        },
+        "type": {
+          "type": "string"
+        },
+        "priority_level": {
+          "type": "integer"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/artworks",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Marketplace/MarketplaceManager.php",
+      "line": 85,
+      "permission_callback_present": true,
+      "capabilities": [
+        "artist",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/artworks/(?P<id>\\\\d+)",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Marketplace/MarketplaceManager.php",
+      "line": 101,
+      "permission_callback_present": true,
+      "capabilities": [
+        "artist",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "id": {
+          "validate": "absint"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/orders",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/Marketplace/MarketplaceManager.php",
+      "line": 111,
+      "permission_callback_present": true,
+      "capabilities": [
+        "artist",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/orders/mine",
+      "methods": [
+        "GET"
+      ],
+      "file": "src/Marketplace/MarketplaceManager.php",
+      "line": 118,
+      "permission_callback_present": true,
+      "capabilities": [
+        "artist",
+        "read"
+      ],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/ai/generate-grant-copy",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/AI/GrantAssistant.php",
+      "line": 17,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/ai/rewrite",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/AI/GrantAssistant.php",
+      "line": 25,
+      "permission_callback_present": true,
+      "capabilities": [],
+      "nonce_check_present": false,
+      "args": {},
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/bio-summary",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/AI/BioSummaryRestController.php",
+      "line": 28,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_posts"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "bio": {
+          "type": "string",
+          "required": true,
+          "sanitize": "sanitize_textarea_field"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    },
+    {
+      "namespace": "artpulse/v1",
+      "route": "/tag",
+      "methods": [
+        "POST"
+      ],
+      "file": "src/AI/AutoTaggerRestController.php",
+      "line": 28,
+      "permission_callback_present": true,
+      "capabilities": [
+        "edit_posts"
+      ],
+      "nonce_check_present": false,
+      "args": {
+        "text": {
+          "type": "string",
+          "required": true,
+          "sanitize": "sanitize_textarea_field"
+        }
+      },
+      "errors_standardized": false,
+      "pagination": {
+        "page": false,
+        "per_page": false,
+        "search": false
+      },
+      "notes": ""
+    }
+  ],
+  "ajax": [
+    {
+      "action": "ap_ajax_test",
+      "nopriv": false,
+      "file": "artpulse.php",
+      "line": 187,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "administrator"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "submit_react_form",
+      "nopriv": false,
+      "file": "artpulse-management.php",
+      "line": 1256,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "submit_react_form",
+      "nopriv": true,
+      "file": "artpulse-management.php",
+      "line": 1257,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_apply_preset",
+      "nopriv": false,
+      "file": "artpulse-management.php",
+      "line": 1260,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_reset_layout",
+      "nopriv": false,
+      "file": "artpulse-management.php",
+      "line": 1276,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_follow_post",
+      "nopriv": false,
+      "file": "includes/user-actions.php",
+      "line": 8,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_follow_post",
+      "nopriv": true,
+      "file": "includes/user-actions.php",
+      "line": 9,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_unfollow_post",
+      "nopriv": false,
+      "file": "includes/user-actions.php",
+      "line": 10,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_unfollow_post",
+      "nopriv": true,
+      "file": "includes/user-actions.php",
+      "line": 11,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_follow_toggle",
+      "nopriv": false,
+      "file": "includes/user-actions.php",
+      "line": 13,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_follow_toggle",
+      "nopriv": true,
+      "file": "includes/user-actions.php",
+      "line": 14,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_dashboard_widget_config",
+      "nopriv": false,
+      "file": "includes/dashboard-widgets.php",
+      "line": 129,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options",
+        "read"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_widget_layout",
+      "nopriv": false,
+      "file": "includes/dashboard-widgets.php",
+      "line": 131,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options",
+        "read"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_role_layout",
+      "nopriv": false,
+      "file": "includes/dashboard-widgets.php",
+      "line": 132,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options",
+        "read"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_user_layout",
+      "nopriv": false,
+      "file": "includes/dashboard-widgets.php",
+      "line": 133,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options",
+        "read"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "save_widget_order",
+      "nopriv": false,
+      "file": "includes/dashboard-widgets.php",
+      "line": 134,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options",
+        "read"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_dashboard_order",
+      "nopriv": false,
+      "file": "includes/dashboard-widgets.php",
+      "line": 135,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options",
+        "read"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_render_widget",
+      "nopriv": false,
+      "file": "includes/dashboard-widgets.php",
+      "line": 136,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options",
+        "read"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "save_dashboard_layout",
+      "nopriv": false,
+      "file": "includes/dashboard-widgets.php",
+      "line": 137,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options",
+        "read"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "save_dashboard_layout",
+      "nopriv": false,
+      "file": "src/Rest/LayoutSaveEndpoint.php",
+      "line": 8,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_filter_posts",
+      "nopriv": false,
+      "file": "src/Ajax/FrontendFilterHandler.php",
+      "line": 8,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_filter_posts",
+      "nopriv": true,
+      "file": "src/Ajax/FrontendFilterHandler.php",
+      "line": 9,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_search_posts",
+      "nopriv": false,
+      "file": "src/Admin/MetaBoxesRelationship.php",
+      "line": 68,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "edit_page",
+        "edit_post"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_search_collection_items",
+      "nopriv": false,
+      "file": "src/Admin/MetaBoxesCollection.php",
+      "line": 9,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "edit_post"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_event_gallery_order",
+      "nopriv": false,
+      "file": "src/Admin/AdminColumnsEvent.php",
+      "line": 11,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "edit_post"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_dismiss_release_notes",
+      "nopriv": false,
+      "file": "src/Admin/ReleaseNotes.php",
+      "line": 14,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "manage_options"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_dashboard_feedback",
+      "nopriv": false,
+      "file": "src/Core/DashboardFeedbackManager.php",
+      "line": 11,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_submit_feedback",
+      "nopriv": false,
+      "file": "src/Core/FeedbackManager.php",
+      "line": 9,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_submit_feedback",
+      "nopriv": true,
+      "file": "src/Core/FeedbackManager.php",
+      "line": 10,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_user_layout",
+      "nopriv": false,
+      "file": "src/Core/DashboardWidgetManager.php",
+      "line": 22,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_role_layout",
+      "nopriv": false,
+      "file": "src/Core/DashboardWidgetManager.php",
+      "line": 23,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "update_profile_field",
+      "nopriv": false,
+      "file": "src/Frontend/ProfileEditShortcode.php",
+      "line": 11,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_delete_artwork",
+      "nopriv": false,
+      "file": "src/Frontend/ArtistDashboardShortcode.php",
+      "line": 7,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "delete_post",
+        "edit_post"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "save_artwork_order",
+      "nopriv": false,
+      "file": "src/Frontend/ArtistDashboardShortcode.php",
+      "line": 8,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "delete_post",
+        "edit_post"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_do_login",
+      "nopriv": false,
+      "file": "src/Frontend/LoginShortcode.php",
+      "line": 17,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_do_login",
+      "nopriv": true,
+      "file": "src/Frontend/LoginShortcode.php",
+      "line": 18,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_do_register",
+      "nopriv": false,
+      "file": "src/Frontend/LoginShortcode.php",
+      "line": 19,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_do_register",
+      "nopriv": true,
+      "file": "src/Frontend/LoginShortcode.php",
+      "line": 20,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_portfolio",
+      "nopriv": false,
+      "file": "src/Frontend/PortfolioBuilder.php",
+      "line": 11,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_get_portfolio_item",
+      "nopriv": false,
+      "file": "src/Frontend/PortfolioBuilder.php",
+      "line": 12,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_toggle_visibility",
+      "nopriv": false,
+      "file": "src/Frontend/PortfolioBuilder.php",
+      "line": 13,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_delete_portfolio_item",
+      "nopriv": false,
+      "file": "src/Frontend/PortfolioBuilder.php",
+      "line": 14,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_portfolio_order",
+      "nopriv": false,
+      "file": "src/Frontend/PortfolioBuilder.php",
+      "line": 15,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_filter_events",
+      "nopriv": false,
+      "file": "src/Frontend/EventFilter.php",
+      "line": 13,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_filter_events",
+      "nopriv": true,
+      "file": "src/Frontend/EventFilter.php",
+      "line": 14,
+      "nonce_check_present": true,
+      "capability_checks": [],
+      "notes": ""
+    },
+    {
+      "action": "ap_save_event",
+      "nopriv": false,
+      "file": "src/Frontend/EditEventShortcode.php",
+      "line": 10,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "delete_post",
+        "edit_post",
+        "view_artpulse_dashboard"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_delete_event",
+      "nopriv": false,
+      "file": "src/Frontend/EditEventShortcode.php",
+      "line": 11,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "delete_post",
+        "edit_post",
+        "view_artpulse_dashboard"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_add_org_event",
+      "nopriv": false,
+      "file": "src/Frontend/OrganizationDashboardShortcode.php",
+      "line": 9,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "administrator",
+        "create_artpulse_events",
+        "delete_post",
+        "edit_post"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_get_org_event",
+      "nopriv": false,
+      "file": "src/Frontend/OrganizationDashboardShortcode.php",
+      "line": 10,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "administrator",
+        "create_artpulse_events",
+        "delete_post",
+        "edit_post"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_update_org_event",
+      "nopriv": false,
+      "file": "src/Frontend/OrganizationDashboardShortcode.php",
+      "line": 11,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "administrator",
+        "create_artpulse_events",
+        "delete_post",
+        "edit_post"
+      ],
+      "notes": ""
+    },
+    {
+      "action": "ap_delete_org_event",
+      "nopriv": false,
+      "file": "src/Frontend/OrganizationDashboardShortcode.php",
+      "line": 12,
+      "nonce_check_present": true,
+      "capability_checks": [
+        "administrator",
+        "create_artpulse_events",
+        "delete_post",
+        "edit_post"
+      ],
+      "notes": ""
+    }
+  ],
+  "summary": {
+    "rest_count": 208,
+    "ajax_count": 51
+  }
+}

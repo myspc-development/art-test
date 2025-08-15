@@ -1,0 +1,2216 @@
+openapi: 3.0.0
+info:
+  title: ArtPulse API (Stub)
+  version: '1.0.0'
+paths:
+  /artpulse/v1/follow/feed:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/payment/intent:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/payment/checkout:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\\d+)/rsvp:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/(?P<id>\\d+)/follow:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/widgets/log:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/webhooks/(?P<id>\d+):
+    ['get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/webhooks/(?P<id>\d+)/(?P<hid>\d+):
+    ['put:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: hid
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/import:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/preview/dashboard:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org/(?P<id>\d+)/meta:
+    ['get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/artist-events:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/roles/toggle:
+    wp_rest_server::creatable:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: role
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: checked
+          schema:
+            type: boolean
+          required: true
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/roles/batch:
+    wp_rest_server::creatable:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/roles/seed:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/payment-reports:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/profile/(?P<id>\d+)/verify:
+    wp_rest_server::creatable:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/import-template/(?P<post_type>[^/]+):
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: post_type
+          schema:
+            type: string
+        - in: query
+          name: callback
+          schema:
+            type: string
+        - in: query
+          name: permission_callback
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard/messages:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/favorite:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/checkin:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: institution
+          schema:
+            type: string
+        - in: query
+          name: group_size
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\d+)/visits:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\d+)/visits/export:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/update/diagnostics:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/follow/venue:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: venue_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/followed/venues:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/follow/curator:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: curator_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/followed/curators:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/artist:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/orgs/(?P<id>\d+)/roles:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/orgs/(?P<id>\d+)/roles/(?P<user_id>\d+):
+    delete:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/users/me/orgs:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/trending:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard-widgets:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard-widgets/save:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard-widgets/export:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard-widgets/import:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/artwork/(?P<id>\d+)/auction:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/artwork/(?P<id>\d+)/bid:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/rsvp:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/rsvp/cancel:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/waitlist/remove:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\d+)/attendees:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\d+)/attendees/export:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/attended:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: string
+        - in: query
+          name: user_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/remove:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: string
+        - in: query
+          name: user_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<event_id>\d+)/email-rsvps:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<event_id>\d+)/attendees/(?P<user_id>\d+)/message:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: string
+        - in: query
+          name: user_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/events:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/activity:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/analytics/community/messaging:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: range
+          schema:
+            type: string
+        - in: query
+          name: top_users
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/analytics/community/comments:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: range
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/analytics/community/forums:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: range
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/event-card/(?P<id>\\d+):
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org/(?P<id>\\d+)/invite:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org/(?P<id>\\d+)/users/batch:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/curators:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/curator/(?P<slug>[a-z0-9-]+):
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: slug
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/widgets:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/roles:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/layout:
+    ['get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event-list:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: venue
+          schema:
+            type: string
+        - in: query
+          name: after
+          schema:
+            type: string
+        - in: query
+          name: before
+          schema:
+            type: string
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: event_type
+          schema:
+            type: string
+        - in: query
+          name: organizer
+          schema:
+            type: string
+        - in: query
+          name: price_type
+          schema:
+            type: string
+        - in: query
+          name: lat
+          schema:
+            type: number
+        - in: query
+          name: lng
+          schema:
+            type: number
+        - in: query
+          name: radius
+          schema:
+            type: number
+        - in: query
+          name: alpha
+          schema:
+            type: string
+        - in: query
+          name: sort
+          schema:
+            type: string
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/role-widget-map:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/feedback:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/feedback/(?P<id>\\d+)/vote:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/feedback/(?P<id>\\d+)/comments:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: callback
+          schema:
+            type: string
+        - in: query
+          name: args
+          schema:
+            type: string
+        - in: query
+          name: comment
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/widget-settings/(?P<id>[a-z0-9_-]+):
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org-metrics:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\d+)/rsvp-stats:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/portfolio/(?P<user_id>\d+):
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/report-template/(?P<type>[^/]+):
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/spotlight/view:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/calendar:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/status:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/analytics/trends:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: days
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/analytics/export:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: days
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard/layout:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: role
+          schema:
+            type: string
+        - in: query
+          name: callback
+          schema:
+            type: string
+        - in: query
+          name: args
+          schema:
+            type: array
+        - in: query
+          name: visibility
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/export:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/delete:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard-config:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org/(?P<id>\d+)/events/summary:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org/(?P<id>\d+)/team/invite:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org/(?P<id>\d+)/tickets/metrics:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org/(?P<id>\d+)/message/broadcast:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/orgs:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard-analytics:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org-roles/invite:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org-roles/accept:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/share:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: object_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: object_type
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: network
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/widget-layout:
+    wp_rest_server::creatable:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: layout
+          schema:
+            type: array
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/profile-metrics/(?P<id>\d+):
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/analytics/pilot/invite:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /'artpulse/v1'/submissions:
+    wp_rest_server::creatable:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/me:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/(?P<id>\d+)/reply:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/orgs/(?P<id>\\d+)/grant-report:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: format
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/competitions/(?P<id>\d+)/entries:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: artwork_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/competitions/(?P<id>\d+)/entries/(?P<entry_id>\d+)/vote:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: entry_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/location/geonames:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/location/google:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/events/nearby:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: lat
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: lng
+          schema:
+            type: number
+          required: true
+        - in: query
+          name: radius
+          schema:
+            type: number
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/recommendations:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/payment/webhook:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/boost/create-checkout:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/boost/webhook:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\\d+)/tickets:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\\d+)/buy-ticket:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\\d+)/ticket-tier:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/ticket-tier/(?P<tier_id>\\d+):
+    put:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/donations:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: artist_id
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: amount
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/membership:
+    ['get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/sales:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/payouts:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/payouts/settings:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\\d+)/promo-code/apply:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\\d+)/feature:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/artist/(?P<id>\\d+)/tip:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: amount
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/reporting/snapshot:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/reporting/snapshot.csv:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/reporting/snapshot.pdf:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/orgs/(?P<id>\d+)/report:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+        - in: query
+          name: type
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: format
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/budget/export:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: string
+        - in: query
+          name: event_ids
+          schema:
+            type: string
+        - in: query
+          name: format
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\\d+)/comments:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: callback
+          schema:
+            type: string
+        - in: query
+          name: args
+          schema:
+            type: string
+        - in: query
+          name: content
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/comment/(?P<comment_id>\\d+)/moderate:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: comment_id
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/artwork/(?P<id>\\d+)/comments:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: callback
+          schema:
+            type: string
+        - in: query
+          name: args
+          schema:
+            type: string
+        - in: query
+          name: content
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/qa-thread/(?P<event_id>\d+):
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/qa-thread/(?P<event_id>\d+)/post:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/forum/threads:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: content
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/forum/thread/(?P<id>\\d+)/comments:
+    wp_rest_server::readable:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: callback
+          schema:
+            type: string
+        - in: query
+          name: args
+          schema:
+            type: string
+        - in: query
+          name: content
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/follows:
+    ['post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/followers/(?P<user_id>\\d+):
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/referral/redeem:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: code
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/artist-upgrade:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/favorites:
+    delete:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: object_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: object_type
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/comment/(?P<id>\\d+)/report:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: reason
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/leaderboards/most-helpful:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/leaderboards/most-upvoted:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\d+)/vote:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\d+)/votes:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/leaderboards/top-events:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/inbox:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/inbox/read:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: id
+          schema:
+            type: integer
+        - in: query
+          name: ids
+          schema:
+            type: array
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/inbox/unread:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: id
+          schema:
+            type: integer
+        - in: query
+          name: ids
+          schema:
+            type: array
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/send:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: recipient_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: content
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: context_type
+          schema:
+            type: string
+        - in: query
+          name: context_id
+          schema:
+            type: integer
+        - in: query
+          name: parent_id
+          schema:
+            type: integer
+        - in: query
+          name: attachments
+          schema:
+            type: array
+        - in: query
+          name: tags
+          schema:
+            type: array
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: recipient_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: content
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: nonce
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: context_type
+          schema:
+            type: string
+        - in: query
+          name: context_id
+          schema:
+            type: integer
+        - in: query
+          name: callback
+          schema:
+            type: string
+        - in: query
+          name: args
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/updates:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: since
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: context_id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/seen:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: message_ids
+          schema:
+            type: array
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/search:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/context/(?P<type>[a-zA-Z0-9_-]+)/(?P<id>\d+):
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/block:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/label:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: tag
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: action
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/thread:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/messages/bulk:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: ids
+          schema:
+            type: array
+          required: true
+        - in: query
+          name: action
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: tag
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/conversations:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/message/read:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: nonce
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/link-request:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: org_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: message
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/link-request/(?P<id>\d+)/approve:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/link-request/(?P<id>\d+)/deny:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/link-requests:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: org_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: callback
+          schema:
+            type: string
+        - in: query
+          name: args
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/link-requests/bulk:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: ids
+          schema:
+            type: array
+          required: true
+        - in: query
+          name: action
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user-preferences:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: push_token
+          schema:
+            type: string
+        - in: query
+          name: phone_number
+          schema:
+            type: string
+        - in: query
+          name: sms_opt_in
+          schema:
+            type: boolean
+        - in: query
+          name: dashboard_theme
+          schema:
+            type: string
+        - in: query
+          name: notification_prefs
+          schema:
+            type: object
+        - in: query
+          name: digest_frequency
+          schema:
+            type: string
+        - in: query
+          name: digest_topics
+          schema:
+            type: string
+        - in: query
+          name: preferred_tags
+          schema:
+            type: array
+        - in: query
+          name: ignored_tags
+          schema:
+            type: array
+        - in: query
+          name: blacklist_ids
+          schema:
+            type: array
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/notifications:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/notifications/(?P<id>\\d+)/read:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/notifications/mark-all-read:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/filtered-posts:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: post_type
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: taxonomy
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: terms
+          schema:
+            type: string
+        - in: query
+          name: per_page
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\\d+)/survey:
+    ['get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard-layout/(?P<context>\\w+):
+    ['get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/admin/users:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\d+)/notes:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\d+)/tasks:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/admin/reminders:
+    ['get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/event/(?P<id>\\d+)/rsvp/custom-fields:
+    ['get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/admin/export:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/filter:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/org/dashboard:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/stripe-webhook:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/membership/pause:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/membership/resume:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/membership/levels:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/membership/levels/(?P<level>[\\w-]+):
+    delete:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/member/account:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/dashboard:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/profile:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/engagement:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/user/onboarding:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/dashboard-tour:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/ap/widgets/available:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: role
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/ap/layout:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: role
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/ap/layout/save:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: layout
+          schema:
+            type: array
+        - in: query
+          name: visibility
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/ap/layout/reset:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/ap/layout/revert:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/ap_dashboard_layout:
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: role
+          schema:
+            type: string
+        - in: query
+          name: callback
+          schema:
+            type: string
+        - in: query
+          name: args
+          schema:
+            type: array
+        - in: query
+          name: visibility
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/newsletter-optin:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/widgets/embed.js:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/widgets/render:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/bids:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/bids/(?P<artwork_id>\\d+):
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: artwork_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/auctions/live:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/promoted:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/promote:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: artwork_id
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: start_date
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: end_date
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: type
+          schema:
+            type: string
+        - in: query
+          name: priority_level
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/artworks:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/artworks/(?P<id>\\d+):
+    get:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/orders:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/orders/mine:
+    get:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/ai/generate-grant-copy:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/ai/rewrite:
+    post:
+      summary: Auto-generated stub
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/bio-summary:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: bio
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+  /artpulse/v1/tag:
+    post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: text
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: wordpress_logged_in_
