@@ -34,11 +34,14 @@ export default function DashboardContainer({ role = 'member' }) {
 
   const widgetMap = Object.fromEntries(widgets.map(w => [w.id, w.component]));
 
+  const breakpoints = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 };
+  const cols = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
+
   return (
     <GridLayout
       className="layout"
-      breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-      cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+      breakpoints={breakpoints}
+      cols={cols}
       layouts={{ lg: layout, md: layout, sm: layout, xs: layout, xxs: layout }}
       rowHeight={30}
       onLayoutChange={l => handleLayoutChange(l)}
