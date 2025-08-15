@@ -33,6 +33,13 @@ class ReactDashboardShortcode {
                 filemtime($path),
                 true
             );
+
+            $nonce = wp_create_nonce('wp_rest');
+            wp_localize_script('ap-react-dashboard', 'ArtPulseDashboardApi', [
+                'root'  => esc_url_raw(rest_url()),
+                'nonce' => $nonce,
+            ]);
+            wp_add_inline_script('ap-react-dashboard', 'window.apNonce = ' . wp_json_encode($nonce) . ';', 'before');
         }
     }
 

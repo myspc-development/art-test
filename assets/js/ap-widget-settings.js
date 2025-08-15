@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function openSettings(id) {
     const res = await fetch(`${ArtPulseDashboardApi.root}artpulse/v1/widget-settings/${id}`, {
-      headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce }
+      headers: { 'X-WP-Nonce': window.apNonce || ArtPulseDashboardApi.nonce },
+      credentials: 'same-origin'
     });
     if (!res.ok) return;
     const data = await res.json();
@@ -51,7 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       await fetch(`${ArtPulseDashboardApi.root}artpulse/v1/widget-settings/${id}`, {
         method: 'POST',
-        headers: { 'X-WP-Nonce': ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
+        headers: { 'X-WP-Nonce': window.apNonce || ArtPulseDashboardApi.nonce, 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify({ settings })
       });
       modal.classList.remove('open');

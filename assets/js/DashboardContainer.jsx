@@ -5,13 +5,14 @@ import registry from './widgets/index.js';
 
 export default function DashboardContainer({ role = 'member' }) {
   const apiRoot = window.ArtPulseDashboardApi?.root || '/wp-json/';
-  const nonce = window.ArtPulseDashboardApi?.nonce || '';
+  const nonce = window.apNonce || window.ArtPulseDashboardApi?.nonce || '';
   const [layout, setLayout] = useState([]);
   const widgets = registry.filter(w => !w.roles || w.roles.includes(role));
 
   useEffect(() => {
     fetch(`${apiRoot}artpulse/v1/ap_dashboard_layout`, {
-      headers: { 'X-WP-Nonce': nonce }
+      headers: { 'X-WP-Nonce': nonce },
+      credentials: 'same-origin'
     })
       .then(r => r.json())
       .then(data => {
@@ -28,6 +29,7 @@ export default function DashboardContainer({ role = 'member' }) {
     fetch(`${apiRoot}artpulse/v1/ap_dashboard_layout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
+      credentials: 'same-origin',
       body: JSON.stringify({ layout: ids })
     });
   };
