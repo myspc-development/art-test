@@ -41,6 +41,7 @@
     "artist_artwork_manager": {
         "file": "templates/widgets/artist-artwork-manager.php",
         "roles": [
+            "member",
             "artist"
         ],
         "status": "registered",
@@ -97,6 +98,7 @@
     "messages": {
         "file": "templates/widgets/messages.php",
         "roles": [
+            "member",
             "artist"
         ],
         "status": "registered",

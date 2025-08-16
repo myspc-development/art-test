@@ -99,6 +99,14 @@
     ],
     "status": "registered"
   },
+  "messages": {
+    "file": "templates/widgets/messages.php",
+    "roles": [
+      "member",
+      "artist"
+    ],
+    "status": "registered"
+  },
   "qa_checklist": {
     "file": "widgets/QAChecklistWidget.php",
     "roles": [
