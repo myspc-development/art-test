@@ -24,10 +24,15 @@ add_filter('wp_registration_redirect', function ($redirect_to) {
     return $redirect_to;
 });
 
-// Redirect members after first login as well
+// Redirect members and artists after first login as well
 add_filter('login_redirect', function ($redirect_to, $request, $user) {
-    if ($user instanceof \WP_User && user_can($user, 'member') && !ap_wp_admin_access_enabled() && !user_can($user, 'view_wp_admin')) {
-        return home_url('/dashboard');
+    if ($user instanceof \WP_User && !ap_wp_admin_access_enabled() && !user_can($user, 'view_wp_admin')) {
+        if (user_can($user, 'member')) {
+            return home_url('/dashboard');
+        }
+        if (user_can($user, 'artist')) {
+            return home_url('/artist-dashboard');
+        }
     }
     return $redirect_to;
 }, 10, 3);
