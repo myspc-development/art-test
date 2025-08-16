@@ -80,7 +80,7 @@ class PortfolioBuilder
             <p>
                 <button class="ap-form-button nectar-button" type="button" id="ap-upload-image">Upload Image</button><br>
                 <img id="ap-preview" width="200" hidden />
-                <input type="hidden" name="image" />
+                <input type="hidden" name="image_id" />
             </p>
             <p><button class="ap-form-button nectar-button" type="submit">Save Portfolio Item</button></p>
             <p id="ap-portfolio-message" class="ap-form-messages" role="status" aria-live="polite"></p>
@@ -91,7 +91,7 @@ class PortfolioBuilder
         <div id="ap-saved-items" class="ap-widget">
             <?php
             $items = get_posts([
-                'post_type'   => 'portfolio',
+                'post_type'   => 'artpulse_portfolio',
                 'author'      => get_current_user_id(),
                 'post_status' => 'publish',
                 'numberposts' => -1,
@@ -122,23 +122,31 @@ class PortfolioBuilder
     {
         check_ajax_referer('ap_portfolio_nonce', 'nonce');
 
-        $post_id = intval($_POST['post_id'] ?? 0);
-        $user_id = get_current_user_id();
-        $title = sanitize_text_field($_POST['title']);
-        $desc = sanitize_text_field($_POST['description']);
-        $cat = sanitize_text_field($_POST['category']);
-        $link = esc_url_raw($_POST['link']);
-        $visibility = sanitize_text_field($_POST['visibility']);
-        $image = esc_url_raw($_POST['image']);
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error(['message' => 'Permission denied.']);
+        }
 
-        if ($post_id && get_post_field('post_author', $post_id) == $user_id) {
+        $post_id   = intval($_POST['post_id'] ?? 0);
+        $user_id   = get_current_user_id();
+        $title     = sanitize_text_field($_POST['title']);
+        $desc      = sanitize_text_field($_POST['description']);
+        $cat       = sanitize_text_field($_POST['category']);
+        $link      = esc_url_raw($_POST['link']);
+        $visibility = sanitize_text_field($_POST['visibility']);
+        $image_id  = intval($_POST['image_id'] ?? 0);
+
+        if ($post_id && (get_post_type($post_id) !== 'artpulse_portfolio' || get_post_field('post_author', $post_id) != $user_id)) {
+            wp_send_json_error(['message' => 'Invalid portfolio item.']);
+        }
+
+        if ($post_id) {
             wp_update_post([
                 'ID'         => $post_id,
                 'post_title' => $title,
             ]);
         } else {
             $post_id = wp_insert_post([
-                'post_type'   => 'portfolio',
+                'post_type'   => 'artpulse_portfolio',
                 'post_title'  => $title,
                 'post_status' => 'publish',
                 'post_author' => $user_id,
@@ -149,11 +157,18 @@ class PortfolioBuilder
             wp_send_json_error(['message' => 'Failed to save portfolio item.']);
         }
 
+        if ($image_id) {
+            $attachment = get_post($image_id);
+            if (!$attachment || $attachment->post_type !== 'attachment' || intval($attachment->post_author) !== $user_id) {
+                wp_send_json_error(['message' => 'Invalid image.']);
+            }
+        }
+
         wp_set_post_terms($post_id, [$cat], 'portfolio_category');
         update_post_meta($post_id, 'portfolio_description', $desc);
         update_post_meta($post_id, 'portfolio_link', $link);
         update_post_meta($post_id, 'portfolio_visibility', $visibility);
-        update_post_meta($post_id, 'portfolio_image', $image);
+        update_post_meta($post_id, 'portfolio_image', $image_id);
 
         wp_send_json_success([
             'message' => 'Saved successfully.',
@@ -169,18 +184,21 @@ class PortfolioBuilder
         $id = intval($_GET['post_id']);
         $post = get_post($id);
 
-        if (!$post || $post->post_author != get_current_user_id()) {
+        if (!$post || $post->post_author != get_current_user_id() || get_post_type($post) !== 'artpulse_portfolio') {
             wp_send_json_error('Not found or unauthorized');
         }
 
+        $image_id = (int) get_post_meta($post->ID, 'portfolio_image', true);
+
         wp_send_json_success([
-            'id' => $post->ID,
-            'title' => $post->post_title,
-            'description' => get_post_meta($post->ID, 'portfolio_description', true),
-            'link' => get_post_meta($post->ID, 'portfolio_link', true),
+            'id'         => $post->ID,
+            'title'      => $post->post_title,
+            'description'=> get_post_meta($post->ID, 'portfolio_description', true),
+            'link'       => get_post_meta($post->ID, 'portfolio_link', true),
             'visibility' => get_post_meta($post->ID, 'portfolio_visibility', true),
-            'image' => get_post_meta($post->ID, 'portfolio_image', true),
-            'category' => wp_get_post_terms($post->ID, 'portfolio_category', ['fields' => 'slugs'])[0] ?? '',
+            'image_id'   => $image_id,
+            'image_url'  => $image_id ? wp_get_attachment_url($image_id) : '',
+            'category'   => wp_get_post_terms($post->ID, 'portfolio_category', ['fields' => 'slugs'])[0] ?? '',
         ]);
     }
 
@@ -188,10 +206,14 @@ class PortfolioBuilder
     {
         check_ajax_referer('ap_portfolio_nonce', 'nonce');
 
-        $id = intval($_POST['post_id']);
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied');
+        }
+
+        $id  = intval($_POST['post_id']);
         $new = sanitize_text_field($_POST['visibility']);
 
-        if (get_post_field('post_author', $id) != get_current_user_id()) {
+        if (get_post_type($id) !== 'artpulse_portfolio' || get_post_field('post_author', $id) != get_current_user_id()) {
             wp_send_json_error('Not allowed');
         }
 
@@ -203,9 +225,13 @@ class PortfolioBuilder
     {
         check_ajax_referer('ap_portfolio_nonce', 'nonce');
 
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied');
+        }
+
         $id = intval($_POST['post_id']);
 
-        if (get_post_field('post_author', $id) != get_current_user_id()) {
+        if (get_post_type($id) !== 'artpulse_portfolio' || get_post_field('post_author', $id) != get_current_user_id()) {
             wp_send_json_error('Not allowed');
         }
 
@@ -217,10 +243,14 @@ class PortfolioBuilder
     {
         check_ajax_referer('ap_portfolio_nonce', 'nonce');
 
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied');
+        }
+
         $order = array_map('intval', $_POST['order'] ?? []);
 
         foreach ($order as $index => $post_id) {
-            if (get_post_field('post_author', $post_id) != get_current_user_id()) {
+            if (get_post_type($post_id) !== 'artpulse_portfolio' || get_post_field('post_author', $post_id) != get_current_user_id()) {
                 continue;
             }
             wp_update_post([
