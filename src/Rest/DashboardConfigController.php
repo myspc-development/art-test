@@ -31,15 +31,17 @@ class DashboardConfigController {
     }
 
     public static function get_config(WP_REST_Request $request): WP_REST_Response {
-        $visibility = OptionUtils::get_array_option('artpulse_widget_roles');
-        $locked     = get_option('artpulse_locked_widgets', []);
-        $role_map   = DashboardWidgetRegistry::get_role_widget_map();
-        $role_widgets = [];
-        foreach ($role_map as $role => $widgets) {
-            $role_widgets[$role] = array_values(array_map(
-                static fn($w) => sanitize_key($w['id'] ?? ''),
-                $widgets
-            ));
+        $visibility   = OptionUtils::get_array_option('artpulse_widget_roles');
+        $locked       = get_option('artpulse_locked_widgets', []);
+        $role_widgets = OptionUtils::get_array_option('artpulse_dashboard_layouts');
+        if (!$role_widgets) {
+            $role_widgets = [];
+            foreach (DashboardWidgetRegistry::get_role_widget_map() as $role => $widgets) {
+                $role_widgets[$role] = array_values(array_map(
+                    static fn($w) => sanitize_key($w['id'] ?? ''),
+                    $widgets
+                ));
+            }
         }
 
         $defs        = DashboardWidgetRegistry::get_all();
@@ -75,10 +77,18 @@ class DashboardConfigController {
             $ids = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $ids)));
         }
         unset($ids);
+
+        $role_widgets = isset($data['role_widgets']) && is_array($data['role_widgets']) ? $data['role_widgets'] : [];
+        foreach ($role_widgets as $role => &$ids) {
+            $ids = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $ids)));
+        }
+        unset($ids);
+
         $locked = isset($data['locked']) && is_array($data['locked']) ? $data['locked'] : [];
         $locked = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $locked)));
 
         update_option('artpulse_widget_roles', $visibility);
+        update_option('artpulse_dashboard_layouts', $role_widgets);
         update_option('artpulse_locked_widgets', $locked);
 
         return rest_ensure_response(['saved' => true]);

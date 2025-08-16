@@ -9,11 +9,16 @@ export default function AdminWidgetMatrix() {
   const [widgets, setWidgets] = useState<Widget[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
   const [matrix, setMatrix] = useState<Matrix>({});
+  const [roleWidgets, setRoleWidgets] = useState<Matrix>({});
+  const [locked, setLocked] = useState<string[]>([]);
   const [filterRole, setFilterRole] = useState('all');
   const [search, setSearch] = useState('');
   const [error, setError] = useState('');
-  const restRoot =
-    window.APWidgetMatrix?.root || window.wpApiSettings?.root || '/wp-json/';
+  const endpoint =
+    window.APWidgetMatrix?.endpoint ||
+    (window.wpApiSettings?.root || '/wp-json/') +
+      'artpulse/v1/dashboard-config';
+  const restRoot = endpoint.replace(/artpulse\/v1\/dashboard-config\/?$/, '');
   const nonce =
     window.APWidgetMatrix?.nonce || window.wpApiSettings?.nonce || '';
 
@@ -22,14 +27,18 @@ export default function AdminWidgetMatrix() {
     Promise.all([
       fetch(restRoot + 'artpulse/v1/widgets').then(r => r.json()),
       fetch(restRoot + 'artpulse/v1/roles').then(r => r.json()),
-      fetch(restRoot + 'artpulse/v1/dashboard-config', {
+      fetch(endpoint, {
         headers: { 'X-WP-Nonce': nonce }
       }).then(r => r.json())
     ])
       .then(([widgetsData, rolesData, config]) => {
         setWidgets(widgetsData);
-        setRoles(config.role_widgets ? Object.keys(config.role_widgets) : rolesData);
+        setRoles(
+          config.role_widgets ? Object.keys(config.role_widgets) : rolesData
+        );
         setMatrix(config.widget_roles || {});
+        setRoleWidgets(config.role_widgets || {});
+        setLocked(config.locked || []);
       })
       .catch(() => {
         setError(__('Unable to load data. Please try again.', 'artpulse'));
@@ -48,10 +57,14 @@ export default function AdminWidgetMatrix() {
   };
 
   const save = () => {
-    fetch(restRoot + 'artpulse/v1/dashboard-config', {
+    fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
-      body: JSON.stringify({ widget_roles: matrix })
+      body: JSON.stringify({
+        widget_roles: matrix,
+        role_widgets: roleWidgets,
+        locked
+      })
     }).then(() => {
       if (window.wp?.data?.dispatch) {
         wp.data.dispatch('core/notices').createNotice('success', __('Saved', 'artpulse'), { isDismissible: true });
