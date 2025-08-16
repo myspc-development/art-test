@@ -250,12 +250,20 @@
 
   var __$m = wp.i18n.__;
   function MessagesPanel() {
+    var _window$ArtPulseDashb, _window$ArtPulseDashb2;
     var _useState = React$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       messages = _useState2[0],
       setMessages = _useState2[1];
+    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
+    var nonce = window.apNonce || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
     React$1.useEffect(function () {
-      fetch('/wp-json/artpulse/v1/dashboard/messages').then(function (res) {
+      fetch("".concat(apiRoot, "artpulse/v1/dashboard/messages"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (res) {
         if (res.status === 401 || res.status === 403) {
           setMessages([{
             id: 0,
@@ -366,6 +374,7 @@
 
   var __$i = wp.i18n.__;
   function CommunityAnalyticsPanel() {
+    var _window$ArtPulseDashb, _window$ArtPulseDashb2;
     var _useState = React$1.useState('messaging'),
       _useState2 = _slicedToArray(_useState, 2),
       tab = _useState2[0],
@@ -374,8 +383,15 @@
       _useState4 = _slicedToArray(_useState3, 2),
       data = _useState4[0],
       setData = _useState4[1];
+    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
+    var nonce = window.apNonce || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
     React$1.useEffect(function () {
-      fetch("/wp-json/artpulse/v1/analytics/community/".concat(tab)).then(function (res) {
+      fetch("".concat(apiRoot, "artpulse/v1/analytics/community/").concat(tab), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (res) {
         return res.ok ? res.json() : {};
       }).then(setData);
     }, [tab]);
@@ -1687,7 +1703,7 @@
     var _ref$role = _ref.role,
       role = _ref$role === void 0 ? 'member' : _ref$role;
     var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
-    var nonce = ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
+    var nonce = window.apNonce || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
     var _useState = React$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       layout = _useState2[0],
@@ -1695,8 +1711,16 @@
     var widgets = registry.filter(function (w) {
       return !w.roles || w.roles.includes(role);
     });
+    var widgetTitles = Object.fromEntries(widgets.map(function (w) {
+      return [w.id, w.title];
+    }));
     React$1.useEffect(function () {
-      fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout")).then(function (r) {
+      fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (r) {
         return r.json();
       }).then(function (data) {
         var ids = Array.isArray(data.layout) ? data.layout : [];
@@ -1722,6 +1746,7 @@
           'Content-Type': 'application/json',
           'X-WP-Nonce': nonce
         },
+        credentials: 'same-origin',
         body: JSON.stringify({
           layout: ids
         })
@@ -1730,23 +1755,106 @@
     var widgetMap = Object.fromEntries(widgets.map(function (w) {
       return [w.id, w.component];
     }));
+    var handleKeyDown = function handleKeyDown(e, item) {
+      var key = e.key;
+      var changes = null;
+      if (e.shiftKey) {
+        switch (key) {
+          case 'ArrowLeft':
+            changes = {
+              w: Math.max(1, item.w - 1)
+            };
+            break;
+          case 'ArrowRight':
+            changes = {
+              w: item.w + 1
+            };
+            break;
+          case 'ArrowUp':
+            changes = {
+              h: Math.max(1, item.h - 1)
+            };
+            break;
+          case 'ArrowDown':
+            changes = {
+              h: item.h + 1
+            };
+            break;
+        }
+      } else {
+        switch (key) {
+          case 'ArrowLeft':
+            changes = {
+              x: Math.max(0, item.x - 1)
+            };
+            break;
+          case 'ArrowRight':
+            changes = {
+              x: item.x + 1
+            };
+            break;
+          case 'ArrowUp':
+            changes = {
+              y: Math.max(0, item.y - 1)
+            };
+            break;
+          case 'ArrowDown':
+            changes = {
+              y: item.y + 1
+            };
+            break;
+        }
+      }
+      if (changes) {
+        e.preventDefault();
+        var updated = layout.map(function (it) {
+          return it.i === item.i ? _objectSpread2(_objectSpread2({}, it), changes) : it;
+        });
+        handleLayoutChange(updated);
+      }
+    };
+    var breakpoints = {
+      lg: 1200,
+      md: 996,
+      sm: 768,
+      xs: 480,
+      xxs: 0
+    };
+    var cols = {
+      lg: 12,
+      md: 10,
+      sm: 6,
+      xs: 4,
+      xxs: 2
+    };
     return /*#__PURE__*/React$1.createElement(GridLayout, {
       className: "layout",
+      role: "grid",
+      "aria-label": "Dashboard widgets",
+      breakpoints: breakpoints,
+      cols: cols,
       layouts: {
-        lg: layout
-      },
-      cols: {
-        lg: 12
+        lg: layout,
+        md: layout,
+        sm: layout,
+        xs: layout,
+        xxs: layout
       },
       rowHeight: 30,
-      onLayoutChange: function onLayoutChange(l, allLayouts) {
-        return handleLayoutChange(allLayouts.lg);
+      onLayoutChange: function onLayoutChange(l) {
+        return handleLayoutChange(l);
       }
     }, layout.map(function (item) {
       var Comp = widgetMap[item.i];
       return /*#__PURE__*/React$1.createElement("div", {
         key: item.i,
-        "data-grid": item
+        "data-grid": item,
+        role: "gridcell",
+        tabIndex: 0,
+        "aria-label": widgetTitles[item.i],
+        onKeyDown: function onKeyDown(e) {
+          return handleKeyDown(e, item);
+        }
       }, Comp ? /*#__PURE__*/React$1.createElement(Comp, null) : /*#__PURE__*/React$1.createElement("div", {
         role: "region",
         "aria-label": "Unavailable Widget"
@@ -1755,12 +1863,20 @@
   }
 
   function AppDashboard() {
+    var _window$ArtPulseDashb, _window$ArtPulseDashb2;
     var _useState = React$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       role = _useState2[0],
       setRole = _useState2[1];
+    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
+    var nonce = window.apNonce || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
     React$1.useEffect(function () {
-      fetch('/wp-json/artpulse/v1/me').then(function (res) {
+      fetch("".concat(apiRoot, "artpulse/v1/me"), {
+        headers: {
+          'X-WP-Nonce': nonce
+        },
+        credentials: 'same-origin'
+      }).then(function (res) {
         return res.json();
       }).then(function (data) {
         return setRole(data.role);
