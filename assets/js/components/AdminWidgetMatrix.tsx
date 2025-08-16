@@ -33,11 +33,15 @@ export default function AdminWidgetMatrix() {
     ])
       .then(([widgetsData, rolesData, config]) => {
         setWidgets(widgetsData);
-        setRoles(
-          config.role_widgets ? Object.keys(config.role_widgets) : rolesData
-        );
+        const layoutMap = config.layout || config.role_widgets || {};
+        const roleList = config.layout
+          ? Object.keys(config.layout)
+          : config.role_widgets
+          ? Object.keys(config.role_widgets)
+          : rolesData;
+        setRoles(roleList);
         setMatrix(config.widget_roles || {});
-        setRoleWidgets(config.role_widgets || {});
+        setRoleWidgets(layoutMap);
         setLocked(config.locked || []);
       })
       .catch(() => {
@@ -62,7 +66,7 @@ export default function AdminWidgetMatrix() {
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
       body: JSON.stringify({
         widget_roles: matrix,
-        role_widgets: roleWidgets,
+        layout: roleWidgets,
         locked
       })
     }).then(() => {

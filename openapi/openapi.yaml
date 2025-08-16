@@ -808,6 +808,28 @@ paths:
       responses:
         '200':
           description: OK
+    post:
+      summary: Update dashboard widget roles and layout
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                widget_roles:
+                  type: object
+                layout:
+                  type: object
+                role_widgets:
+                  type: object
+                locked:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: OK
   /artpulse/v1/org/(?P<id>\d+)/events/summary:
     get:
       summary: Auto-generated stub
