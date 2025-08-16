@@ -26,7 +26,7 @@ class FavoritesOverviewWidget {
         if (!DashboardWidgetRegistry::exists('widget_widget_favorites')) {
             DashboardWidgetRegistry::register(
                 'widget_widget_favorites',
-                self::label() . ' (Legacy)',
+                sprintf( esc_html__( '%s (Legacy)', 'artpulse' ), self::label() ),
                 self::icon(),
                 self::description(),
                 [self::class, 'render'],
@@ -42,7 +42,7 @@ class FavoritesOverviewWidget {
 
     public static function label(): string
     {
-        return 'Favorites Overview';
+        return esc_html__( 'Favorites Overview', 'artpulse' );
     }
 
     public static function roles(): array
@@ -52,7 +52,7 @@ class FavoritesOverviewWidget {
 
     public static function description(): string
     {
-        return 'Your favorite artists and works.';
+        return esc_html__( 'Your favorite artists and works.', 'artpulse' );
     }
 
     public static function icon(): string

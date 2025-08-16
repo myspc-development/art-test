@@ -24,7 +24,7 @@ class NearbyEventsWidget {
         if (!DashboardWidgetRegistry::exists('widget_widget_near_me')) {
             DashboardWidgetRegistry::register(
                 'widget_widget_near_me',
-                self::label() . ' (Legacy)',
+                sprintf( esc_html__( '%s (Legacy)', 'artpulse' ), self::label() ),
                 self::icon(),
                 self::description(),
                 [self::class, 'render'],
@@ -35,11 +35,11 @@ class NearbyEventsWidget {
 
     public static function id(): string { return 'widget_near_me_events'; }
 
-    public static function label(): string { return 'Nearby Events'; }
+    public static function label(): string { return esc_html__( 'Nearby Events', 'artpulse' ); }
 
     public static function roles(): array { return ['member']; }
 
-    public static function description(): string { return 'Events near your location.'; }
+    public static function description(): string { return esc_html__( 'Events near your location.', 'artpulse' ); }
 
     public static function icon(): string { return 'location'; }
 

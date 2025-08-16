@@ -14,9 +14,9 @@ class QAChecklistWidget {
     public static function register(): void {
         DashboardWidgetRegistry::register(
             'qa_checklist',
-            'QA Checklist',
+            esc_html__( 'QA Checklist', 'artpulse' ),
             'yes',
-            'Steps to verify basic dashboard features.',
+            esc_html__( 'Steps to verify basic dashboard features.', 'artpulse' ),
             [self::class, 'render'],
             [ 'roles' => ['member'] ]
         );

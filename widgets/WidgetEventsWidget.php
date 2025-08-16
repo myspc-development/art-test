@@ -14,9 +14,9 @@ class WidgetEventsWidget {
     public static function register(): void {
         DashboardWidgetRegistry::register(
             'widget_events',
-            'Upcoming Events',
+            esc_html__( 'Upcoming Events', 'artpulse' ),
             'calendar',
-            'Upcoming events for your organization.',
+            esc_html__( 'Upcoming events for your organization.', 'artpulse' ),
             [self::class, 'render'],
             [ 'roles' => ['member', 'organization'] ]
         );
@@ -25,9 +25,9 @@ class WidgetEventsWidget {
         if (!DashboardWidgetRegistry::exists('widget_widget_events')) {
             DashboardWidgetRegistry::register(
                 'widget_widget_events',
-                'Upcoming Events (Legacy)',
+                esc_html__( 'Upcoming Events (Legacy)', 'artpulse' ),
                 'calendar',
-                'Upcoming events for your organization.',
+                esc_html__( 'Upcoming events for your organization.', 'artpulse' ),
                 [self::class, 'render'],
                 [ 'roles' => ['member', 'organization'] ]
             );

@@ -8,9 +8,9 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class ArtistInboxPreviewWidget implements DashboardWidgetInterface {
     public static function id(): string { return 'artist_inbox_preview'; }
-    public static function label(): string { return 'Artist Inbox Preview'; }
+    public static function label(): string { return esc_html__( 'Artist Inbox Preview', 'artpulse' ); }
     public static function roles(): array { return ['member', 'artist']; }
-    public static function description(): string { return 'Recent unread messages from artists.'; }
+    public static function description(): string { return esc_html__( 'Recent unread messages from artists.', 'artpulse' ); }
 
     public static function register(): void {
         DashboardWidgetRegistry::register(
