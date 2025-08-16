@@ -81,7 +81,8 @@ class LoginShortcode
         $user = wp_signon($creds, false);
 
         if (is_wp_error($user)) {
-            wp_send_json_error(['message' => $user->get_error_message()]);
+            error_log('Login error: ' . $user->get_error_message());
+            wp_send_json_error(['message' => __('Invalid credentials.', 'artpulse')]);
         }
 
         $opts = get_option('artpulse_settings', []);
