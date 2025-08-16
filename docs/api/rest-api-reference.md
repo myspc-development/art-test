@@ -19,7 +19,14 @@ Returns:
 }
 
 ### POST /wp-json/artpulse/v1/dashboard-config
-Update the allowed widgets and locked state.
+Update the allowed widgets, per-role layout, and locked state.
+
+Request body:
+{
+  widget_roles: { widgetId: [roles] },
+  layout: { role: [widgetIds] }, // alias: role_widgets
+  locked: [widgetIds]
+}
 
 > **Note**: The legacy `dashboard-config.php` route and the earlier
 > definitions inside `artpulse-management.php` have been removed. Routing now uses `src/Rest/DashboardConfigController.php` with core logic in `src/Core/DashboardController.php`.

@@ -25,6 +25,12 @@ class DashboardConfigController {
                     'methods'             => 'POST',
                     'callback'            => [self::class, 'save_config'],
                     'permission_callback' => fn() => current_user_can('manage_options'),
+                    'args'                => [
+                        'widget_roles' => ['type' => 'object', 'required' => false],
+                        'role_widgets' => ['type' => 'object', 'required' => false],
+                        'layout'       => ['type' => 'object', 'required' => false],
+                        'locked'       => ['type' => 'array', 'required' => false],
+                    ],
                 ],
             ]);
         }
@@ -78,9 +84,18 @@ class DashboardConfigController {
         }
         unset($ids);
 
-        $role_widgets = isset($data['role_widgets']) && is_array($data['role_widgets']) ? $data['role_widgets'] : [];
-        foreach ($role_widgets as $role => &$ids) {
-            $ids = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $ids)));
+        $layout = [];
+        if (isset($data['layout']) && is_array($data['layout'])) {
+            $layout = $data['layout'];
+        } elseif (isset($data['role_widgets']) && is_array($data['role_widgets'])) {
+            $layout = $data['role_widgets'];
+        }
+
+        foreach ($layout as $role => &$ids) {
+            $ids = array_values(array_unique(array_filter(
+                array_map([WidgetIds::class, 'canonicalize'], (array) $ids),
+                [DashboardWidgetRegistry::class, 'exists']
+            )));
         }
         unset($ids);
 
@@ -88,7 +103,7 @@ class DashboardConfigController {
         $locked = array_values(array_unique(array_map([WidgetIds::class, 'canonicalize'], (array) $locked)));
 
         update_option('artpulse_widget_roles', $visibility);
-        update_option('artpulse_dashboard_layouts', $role_widgets);
+        update_option('artpulse_dashboard_layouts', $layout);
         update_option('artpulse_locked_widgets', $locked);
 
         return rest_ensure_response(['saved' => true]);
