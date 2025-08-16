@@ -200,6 +200,8 @@ class MetaBoxesOrganisation {
             'ead_org_primary_contact_email'  => ['email',    __('Primary Contact Email', 'artpulse')],
             'ead_org_primary_contact_phone'  => ['text',     __('Primary Contact Phone', 'artpulse')],
             'ead_org_primary_contact_role'   => ['text',     __('Primary Contact Role', 'artpulse')],
+            'ap_org_country'                 => ['text',     __('Country', 'artpulse')],
+            'ap_org_city'                    => ['text',     __('City', 'artpulse')],
             'ead_org_street_address'         => ['text',     __('Street Address', 'artpulse')],
             'ead_org_postal_address'         => ['text',     __('Postal Address', 'artpulse')],
             'ead_org_venue_address'          => ['text',     __('Venue Address', 'artpulse')],
