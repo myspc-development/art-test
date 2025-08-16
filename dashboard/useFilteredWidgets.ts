@@ -19,11 +19,17 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
   const [caps, setCaps] = useState<Record<string, string>>({});
   const [excluded, setExcluded] = useState<Record<string, string[]>>({});
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const restRoot = window.wpApiSettings?.root || '/wp-json/';
   const nonce = window.wpApiSettings?.nonce || '';
 
   const fetchConfig = () => {
-    fetch(restRoot + 'artpulse/v1/dashboard-config', { headers: { 'X-WP-Nonce': nonce } })
+    const controller = new AbortController();
+    setLoading(true);
+    fetch(restRoot + 'artpulse/v1/dashboard-config', {
+      headers: { 'X-WP-Nonce': nonce },
+      signal: controller.signal,
+    })
       .then(r => r.json())
       .then(data => {
         setWidgetRoles(data.widget_roles || {});
@@ -32,14 +38,19 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
         setError(null);
       })
       .catch(err => {
-        console.error('Failed to load dashboard configuration', err);
-        setError('Failed to load dashboard configuration.');
-      });
+        if (err.name !== 'AbortError') {
+          console.error('Failed to load dashboard configuration', err);
+          setError('Failed to load dashboard configuration.');
+        }
+      })
+      .finally(() => setLoading(false));
+    return controller;
   };
 
   useEffect(() => {
-    fetchConfig();
-  }, []);
+    const controller = fetchConfig();
+    return () => controller.abort();
+  }, [restRoot, nonce]);
 
   const roles = currentUser.roles || (currentUser.role ? [currentUser.role] : []);
   const userCaps = currentUser.capabilities || [];
@@ -56,7 +67,7 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
 
   const restOnly = Object.entries(widgetRoles)
     .filter(([id]) => !widgets.some(w => w.id === id))
-    .filter(([, allowed]) => {
+    .filter(([id, allowed]) => {
       const cap = caps[id];
       const deny = excluded[id] || [];
       if (cap && !userCaps.includes(cap)) return false;
@@ -66,6 +77,6 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
     })
     .map(([id]) => ({ id, restOnly: true }));
 
-  return { widgets: [...filtered, ...restOnly], error, retry: fetchConfig };
+  return { widgets: [...filtered, ...restOnly], error, retry: fetchConfig, loading };
 }
 
