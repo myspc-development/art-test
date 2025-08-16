@@ -8,9 +8,9 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class OrgTeamRosterWidget implements DashboardWidgetInterface {
     public static function id(): string { return 'org_team_roster'; }
-    public static function label(): string { return 'Team Roster'; }
+    public static function label(): string { return esc_html__( 'Team Roster', 'artpulse' ); }
     public static function roles(): array { return ['organization']; }
-    public static function description(): string { return 'List and manage team members.'; }
+    public static function description(): string { return esc_html__( 'List and manage team members.', 'artpulse' ); }
 
     public static function register(): void {
         DashboardWidgetRegistry::register(

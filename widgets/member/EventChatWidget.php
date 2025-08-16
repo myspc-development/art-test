@@ -8,9 +8,9 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class EventChatWidget implements DashboardWidgetInterface {
     public static function id(): string { return 'event_chat'; }
-    public static function label(): string { return 'Event Chat'; }
+    public static function label(): string { return esc_html__( 'Event Chat', 'artpulse' ); }
     public static function roles(): array { return ['member']; }
-    public static function description(): string { return 'Chat with other attendees.'; }
+    public static function description(): string { return esc_html__( 'Chat with other attendees.', 'artpulse' ); }
 
     public static function register(): void {
         DashboardWidgetRegistry::register(

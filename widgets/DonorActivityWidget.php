@@ -19,9 +19,9 @@ class DonorActivityWidget
     {
         DashboardWidgetRegistry::register(
             'ap_donor_activity',
-            'Donor Activity',
+            esc_html__( 'Donor Activity', 'artpulse' ),
             'chart-line',
-            'Recent donations for your organization.',
+            esc_html__( 'Recent donations for your organization.', 'artpulse' ),
             [self::class, 'render'],
             [ 'roles' => ['organization'] ]
         );

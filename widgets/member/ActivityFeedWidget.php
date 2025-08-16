@@ -20,7 +20,7 @@ class ActivityFeedWidget implements DashboardWidgetInterface {
 
     public static function label(): string
     {
-        return 'Activity Feed';
+        return esc_html__( 'Activity Feed', 'artpulse' );
     }
 
     public static function roles(): array
@@ -30,7 +30,7 @@ class ActivityFeedWidget implements DashboardWidgetInterface {
 
     public static function description(): string
     {
-        return 'Recent user activity.';
+        return esc_html__( 'Recent user activity.', 'artpulse' );
     }
 
     public static function icon(): string

@@ -15,9 +15,9 @@ class ArtPulseNewsFeedWidget {
     public static function register() {
         DashboardWidgetRegistry::register(
             'news_feed',
-            'ArtPulse News Feed',
+            esc_html__( 'ArtPulse News Feed', 'artpulse' ),
             'rss',
-            'Latest posts from followed artists.',
+            esc_html__( 'Latest posts from followed artists.', 'artpulse' ),
             [self::class, 'render'],
             [ 'roles' => ['member'] ]
         );

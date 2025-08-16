@@ -9,11 +9,11 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 class WelcomeBoxWidget implements DashboardWidgetInterface {
     public static function id(): string { return 'welcome_box'; }
 
-    public static function label(): string { return 'Welcome'; }
+    public static function label(): string { return esc_html__( 'Welcome', 'artpulse' ); }
 
     public static function roles(): array { return ['member']; }
 
-    public static function description(): string { return 'Personal greeting for the signed-in user.'; }
+    public static function description(): string { return esc_html__( 'Personal greeting for the signed-in user.', 'artpulse' ); }
 
     public static function register(): void {
         DashboardWidgetRegistry::register(
@@ -37,7 +37,7 @@ class WelcomeBoxWidget implements DashboardWidgetInterface {
         <section role="region" aria-labelledby="<?php echo esc_attr($heading_id); ?>"
             data-widget-id="<?php echo esc_attr(self::id()); ?>"
             class="ap-widget ap-<?php echo esc_attr(self::id()); ?>">
-            <h2 id="<?php echo esc_attr($heading_id); ?>"><?php echo esc_html__( self::label(), 'artpulse' ); ?></h2>
+            <h2 id="<?php echo esc_attr($heading_id); ?>"><?php echo self::label(); ?></h2>
             <p><?php echo esc_html($text); ?></p>
         </section>
         <?php
