@@ -30,7 +30,7 @@ class OrgProfileEditShortcode {
 
         $org_post = get_post($org_id);
         $fields   = MetaBoxesOrganisation::get_registered_org_meta_fields();
-        unset($fields['ead_org_name']);
+        unset($fields['ead_org_name'], $fields['ap_org_country'], $fields['ap_org_city']);
 
         $address_json = get_post_meta($org_id, 'address_components', true);
         $components   = $address_json ? json_decode($address_json, true) : [];
@@ -138,7 +138,7 @@ class OrgProfileEditShortcode {
         update_post_meta( $org_id, 'ead_org_name', $title );
 
         $fields = MetaBoxesOrganisation::get_registered_org_meta_fields();
-        unset($fields['ead_org_name']);
+        unset($fields['ead_org_name'], $fields['ap_org_country'], $fields['ap_org_city']);
 
         if (!empty($_POST['address_components'])) {
             $decoded = json_decode(stripslashes($_POST['address_components']), true);
@@ -150,6 +150,11 @@ class OrgProfileEditShortcode {
                 ]));
             }
         }
+
+        $country = sanitize_text_field($_POST['ap_org_country'] ?? '');
+        $city    = sanitize_text_field($_POST['ap_org_city'] ?? '');
+        update_post_meta($org_id, 'ap_org_country', $country);
+        update_post_meta($org_id, 'ap_org_city', $city);
 
         if (!function_exists('media_handle_upload')) {
             require_once ABSPATH . 'wp-admin/includes/image.php';

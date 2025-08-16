@@ -505,6 +505,18 @@ class PostTypeRegistrar
             'type'         => 'string',
         ]);
 
+        register_post_meta('artpulse_org', 'ap_org_country', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        register_post_meta('artpulse_org', 'ap_org_city', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
         // Competition fields
         register_post_meta('ap_competition', 'competition_theme', [
             'show_in_rest' => true,

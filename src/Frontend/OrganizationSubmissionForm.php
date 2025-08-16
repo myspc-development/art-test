@@ -25,9 +25,9 @@ class OrganizationSubmissionForm {
         wp_enqueue_script('ap-org-submission-js');
 
         $fields = \ArtPulse\Admin\MetaBoxesOrganisation::get_registered_org_meta_fields();
-        // Avoid duplicate name input; the title field already captures the
-        // organization name.
-        unset($fields['ead_org_name']);
+        // Avoid duplicate name and location inputs; the title field already
+        // captures the organization name.
+        unset($fields['ead_org_name'], $fields['ap_org_country'], $fields['ap_org_city']);
 
         ob_start();
         ?>
@@ -39,13 +39,13 @@ class OrganizationSubmissionForm {
                 <input id="ap-org-title" type="text" name="title">
 
                 <label for="ap-org-country"><?php esc_html_e('Country', 'artpulse'); ?></label>
-                <input id="ap-org-country" type="text">
+                <input id="ap-org-country" type="text" name="ap_org_country">
             </fieldset>
 
             <fieldset class="form-section">
                 <legend>Details</legend>
                 <label for="ap-org-city"><?php esc_html_e('City', 'artpulse'); ?></label>
-                <input id="ap-org-city" type="text">
+                <input id="ap-org-city" type="text" name="ap_org_city">
 
                 <label class="ap-form-label"><?php esc_html_e('Images (max 5)', 'artpulse'); ?></label>
                 <?php for ($i = 1; $i <= 5; $i++) : ?>
@@ -75,6 +75,15 @@ class OrganizationSubmissionForm {
 
         if (is_wp_error($post_id)) {
             return;
+        }
+
+        $country = sanitize_text_field($_POST['ap_org_country'] ?? '');
+        $city    = sanitize_text_field($_POST['ap_org_city'] ?? '');
+        if ($country !== '') {
+            update_post_meta($post_id, 'ap_org_country', $country);
+        }
+        if ($city !== '') {
+            update_post_meta($post_id, 'ap_org_city', $city);
         }
 
         if (!function_exists('media_handle_upload')) {
