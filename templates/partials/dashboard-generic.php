@@ -155,7 +155,7 @@ $layout = $layout ?? DashboardController::get_user_dashboard_layout($user_id);
 if (empty($layout)) {
     echo '<div class="ap-empty-state">No widgets available. Load a preset or reset layout.</div>';
 } else {
-    echo '<div id="ap-dashboard-root" class="ap-dashboard-grid" data-role="' . esc_attr(DashboardController::get_role($user_id)) . '">';
+    echo '<div id="ap-dashboard-root" class="ap-dashboard-grid" role="grid" aria-label="Dashboard widgets" data-role="' . esc_attr(DashboardController::get_role($user_id)) . '">';
     foreach ($layout as $widget) {
         $id      = $widget['id'];
         $visible = $widget['visible'] ?? true;
@@ -164,7 +164,7 @@ if (empty($layout)) {
             continue;
         }
 
-        echo '<div class="ap-widget-card" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+        echo '<div class="ap-widget-card" role="gridcell" tabindex="0" aria-label="' . esc_attr($config['label'] ?? $id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
         echo '<span class="drag-handle" role="button" tabindex="0" aria-label="Move widget"></span>';
 
         ap_render_widget($id, $user_id);

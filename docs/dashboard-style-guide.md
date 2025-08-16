@@ -47,4 +47,10 @@ These steps ensure every widget follows the same layout, theming variables, and 
 
 Use the custom `.ap-card` styling as the authoritative pattern for all widgets. The WordPress `.dashboard-widget` class is deprecated and should not be used in new development.
 
+## Accessible Interactions
+
+- Mark the dashboard grid with `role="grid"` and provide an `aria-label` describing the collection of widgets.
+- Each widget container should use `role="gridcell"`, be focusable, and include an `aria-label` identifying the widget.
+- When a widget has focus, arrow keys move it within the grid; hold `Shift` + arrow keys to resize it.
+
 > 💬 *Found something outdated? [Submit Feedback](feedback.md)*

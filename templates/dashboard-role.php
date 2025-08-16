@@ -6,4 +6,4 @@ if (!defined('AP_DASHBOARD_RENDERING')) {
 }
 
 ?>
-<div id="ap-dashboard-root" class="ap-dashboard-grid" data-role="<?php echo esc_attr($user_role ?? ''); ?>"></div>
+<div id="ap-dashboard-root" class="ap-dashboard-grid" role="grid" aria-label="Dashboard widgets" data-role="<?php echo esc_attr($user_role ?? ''); ?>"></div>
