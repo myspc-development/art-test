@@ -26,6 +26,18 @@ function wp_send_json_success($data){ \ArtPulse\Frontend\Tests\OrganizationEvent
 if (!function_exists(__NAMESPACE__ . '\wp_send_json_error')) {
 function wp_send_json_error($data){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$json_error = $data; }
 }
+if (!function_exists(__NAMESPACE__ . '\media_handle_upload')) {
+function media_handle_upload($field, $post_id){ return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$media_result; }
+}
+if (!function_exists(__NAMESPACE__ . '\wp_insert_post')) {
+function wp_insert_post($arr){ return 99; }
+}
+if (!function_exists(__NAMESPACE__ . '\set_post_thumbnail')) {
+function set_post_thumbnail($id, $thumb){}
+}
+if (!function_exists(__NAMESPACE__ . '\get_user_meta')) {
+function get_user_meta($user_id, $key, $single=false){ return 1; }
+}
 
 namespace ArtPulse\Frontend\Tests;
 
@@ -42,6 +54,7 @@ class OrganizationEventAjaxTest extends TestCase
     public static array $json = [];
     public static $json_error = null;
     public static array $terms = [];
+    public static $media_result = 1;
 
     protected function setUp(): void
     {
@@ -53,12 +66,15 @@ class OrganizationEventAjaxTest extends TestCase
         self::$json = [];
         self::$json_error = null;
         self::$terms = [];
+        self::$media_result = 1;
         $_POST = [];
+        $_FILES = [];
     }
 
     protected function tearDown(): void
     {
         $_POST = [];
+        $_FILES = [];
         self::$post_meta = [];
         self::$posts = [];
         self::$passed_args = [];
@@ -67,6 +83,7 @@ class OrganizationEventAjaxTest extends TestCase
         self::$json = [];
         self::$json_error = null;
         self::$terms = [];
+        self::$media_result = 1;
         parent::tearDown();
     }
 
@@ -109,5 +126,23 @@ class OrganizationEventAjaxTest extends TestCase
 
         $expected_meta = [7, 'address_components', json_encode($addr)];
         $this->assertContains($expected_meta, self::$meta_updates);
+    }
+
+    public function test_add_event_returns_error_when_upload_fails(): void
+    {
+        self::$media_result = new \WP_Error('upload_error', 'Upload failed');
+        $_FILES = ['event_banner' => ['tmp_name' => 'tmp']];
+
+        $_POST = [
+            'nonce' => 'n',
+            'ap_event_title' => 'Event',
+            'ap_event_date' => '2024-01-01',
+            'ap_event_location' => '',
+            'ap_event_organization' => 1,
+        ];
+
+        OrganizationDashboardShortcode::handle_ajax_add_event();
+
+        $this->assertSame('Upload failed', self::$json_error['message'] ?? null);
     }
 }

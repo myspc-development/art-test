@@ -284,7 +284,8 @@ document.addEventListener('DOMContentLoaded', () => {
           modal.classList.remove('open');
           eventsContainer.innerHTML = data.data.updated_list_html;
         } else if (statusBox) {
-          statusBox.textContent = data.data.message || 'Error submitting.';
+          const msg = (data?.data && data.data.message) ? data.data.message : (data.message || 'Error submitting.');
+          statusBox.textContent = msg;
           statusBox.className = 'error';
         }
       })

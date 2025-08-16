@@ -210,18 +210,20 @@ class OrganizationDashboardShortcode {
 
         if (!empty($_FILES['event_banner']['tmp_name'])) {
             $attachment_id = media_handle_upload('event_banner', $event_id);
-            if (!is_wp_error($attachment_id)) {
-                $image_ids[] = $attachment_id;
+            if (is_wp_error($attachment_id)) {
+                wp_send_json_error(['message' => $attachment_id->get_error_message()]);
             }
+            $image_ids[] = $attachment_id;
         }
 
         for ($i = 1; $i <= 5; $i++) {
             $key = 'image_' . $i;
             if (!empty($_FILES[$key]['tmp_name'])) {
                 $id = media_handle_upload($key, $event_id);
-                if (!is_wp_error($id)) {
-                    $image_ids[] = $id;
+                if (is_wp_error($id)) {
+                    wp_send_json_error(['message' => $id->get_error_message()]);
                 }
+                $image_ids[] = $id;
             }
         }
 
@@ -379,20 +381,22 @@ class OrganizationDashboardShortcode {
 
         if (!empty($_FILES['event_banner']['tmp_name'])) {
             $attachment_id = media_handle_upload('event_banner', $event_id);
-            if (!is_wp_error($attachment_id)) {
-                $image_ids[] = $attachment_id;
-                update_post_meta($event_id, 'event_banner_id', $attachment_id);
-                set_post_thumbnail($event_id, $attachment_id);
+            if (is_wp_error($attachment_id)) {
+                wp_send_json_error(['message' => $attachment_id->get_error_message()]);
             }
+            $image_ids[] = $attachment_id;
+            update_post_meta($event_id, 'event_banner_id', $attachment_id);
+            set_post_thumbnail($event_id, $attachment_id);
         }
 
         for ($i = 1; $i <= 5; $i++) {
             $key = 'image_' . $i;
             if (!empty($_FILES[$key]['tmp_name'])) {
                 $id = media_handle_upload($key, $event_id);
-                if (!is_wp_error($id)) {
-                    $image_ids[] = $id;
+                if (is_wp_error($id)) {
+                    wp_send_json_error(['message' => $id->get_error_message()]);
                 }
+                $image_ids[] = $id;
             }
         }
 
