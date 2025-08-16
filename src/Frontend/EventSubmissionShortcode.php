@@ -307,58 +307,8 @@ class EventSubmissionShortcode {
         $event_type = intval($_POST['event_type'] ?? 0);
         $featured = isset($_POST['event_featured']) ? '1' : '0';
 
-        if (empty($event_title)) {
-            self::add_notice(__('Please enter an event title.', 'artpulse'), 'error');
-            self::maybe_redirect();
-            return; // Stop processing
-        }
-
         if (empty($event_description)) {
             self::add_notice(__('Please enter an event description.', 'artpulse'), 'error');
-            self::maybe_redirect();
-            return;
-        }
-
-        if (empty($event_date)) {
-            self::add_notice(__('Please enter an event date.', 'artpulse'), 'error');
-            self::maybe_redirect();
-            return;
-        }
-
-        // Validate the date format
-        if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $event_date)) {
-            self::add_notice(__('Please enter a valid date in YYYY-MM-DD format.', 'artpulse'), 'error');
-            self::maybe_redirect();
-            return;
-        }
-
-        // Validate that start date is not later than end date when both provided
-        if ($start_date && $end_date && strtotime($start_date) > strtotime($end_date)) {
-            self::add_notice(__('Start date cannot be later than end date.', 'artpulse'), 'error');
-            self::maybe_redirect();
-            return;
-        }
-
-        if ($event_org <= 0) {
-            self::add_notice(__('Please select an organization.', 'artpulse'), 'error');
-            self::maybe_redirect();
-            return;
-        }
-
-        // Verify the organization belongs to the current user
-        $user_orgs = get_posts([
-            'post_type'   => 'artpulse_org',
-            'author'      => $user_id,
-            'numberposts' => -1,
-        ]);
-        $authorized = array_map('intval', wp_list_pluck($user_orgs, 'ID'));
-        $meta_org = intval(get_user_meta($user_id, 'ap_organization_id', true));
-        if ($meta_org) {
-            $authorized[] = $meta_org;
-        }
-
-        if (!in_array($event_org, $authorized, true)) {
-            self::add_notice(__('Invalid organization selected.', 'artpulse'), 'error');
             self::maybe_redirect();
             return;
         }
@@ -381,58 +331,45 @@ class EventSubmissionShortcode {
             }
         }
 
-        $post_args = [
-            'post_type'   => 'artpulse_event',
-            'post_status' => $post_status,
-            'post_title'  => $event_title,
-            'post_content'=> $event_description,
-            'post_author' => $user_id,
+        $data = [
+            'title'            => $event_title,
+            'description'      => $event_description,
+            'date'             => $event_date,
+            'start_date'       => $start_date,
+            'end_date'         => $end_date,
+            'recurrence'       => $recurrence,
+            'location'         => $event_location,
+            'venue_name'       => $venue_name,
+            'street'           => $street,
+            'country'          => $country,
+            'state'            => $state,
+            'city'             => $city,
+            'postcode'         => $postcode,
+            'address_components' => $address_components ?: $address_json,
+            'address_full'     => $address_full,
+            'start_time'       => $start_time,
+            'end_time'         => $end_time,
+            'contact_info'     => $contact_info,
+            'rsvp_url'         => $rsvp_url,
+            'organizer_name'   => $organizer_name,
+            'organizer_email'  => $organizer_email,
+            'org_id'           => $event_org,
+            'artists'          => $event_artists,
+            'event_type'       => $event_type,
+            'featured'         => $featured,
+            'post_status'      => $post_status,
+            'post_date'        => $post_date,
         ];
 
-        if ($post_date) {
-            $post_args['post_date'] = $publish_date;
-        }
-
-        $post_id = wp_insert_post($post_args);
+        $post_id = EventService::create_event($data, $user_id);
 
         if (is_wp_error($post_id)) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log('Error creating event post: ' . $post_id->get_error_message());
             }
-            self::add_notice(__('Error submitting event. Please try again later.', 'artpulse'), 'error');
+            self::add_notice($post_id->get_error_message(), 'error');
             self::maybe_redirect();
             return;
-        }
-
-        update_post_meta($post_id, '_ap_event_date', $event_date);
-        update_post_meta($post_id, 'event_start_date', $start_date);
-        update_post_meta($post_id, 'event_end_date', $end_date);
-        update_post_meta($post_id, 'event_recurrence_rule', $recurrence);
-        update_post_meta($post_id, '_ap_event_location', $event_location);
-        update_post_meta($post_id, 'venue_name', $venue_name);
-        update_post_meta($post_id, 'event_street_address', $street);
-        update_post_meta($post_id, 'event_country', $country);
-        update_post_meta($post_id, 'event_state', $state);
-        update_post_meta($post_id, 'event_city', $city);
-        update_post_meta($post_id, 'event_postcode', $postcode);
-        if (is_array($address_components)) {
-            update_post_meta($post_id, 'address_components', wp_json_encode($address_components));
-        } else {
-            update_post_meta($post_id, 'address_components', $address_json);
-        }
-        update_post_meta($post_id, '_ap_event_address', $address_full);
-        update_post_meta($post_id, '_ap_event_start_time', $start_time);
-        update_post_meta($post_id, '_ap_event_end_time', $end_time);
-        update_post_meta($post_id, '_ap_event_contact', $contact_info);
-        update_post_meta($post_id, '_ap_event_rsvp', $rsvp_url);
-        update_post_meta($post_id, 'event_organizer_name', $organizer_name);
-        update_post_meta($post_id, 'event_organizer_email', $organizer_email);
-        update_post_meta($post_id, '_ap_event_organization', $event_org);
-        update_post_meta($post_id, '_ap_event_artists', $event_artists);
-        update_post_meta($post_id, 'event_featured', $featured);
-
-        if ($event_type) {
-            wp_set_post_terms($post_id, [$event_type], 'event_type');
         }
 
         // Handle banner and additional image uploads
