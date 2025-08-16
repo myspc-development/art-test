@@ -29,13 +29,52 @@ function ap_render_artist_badges_metabox($post) {
 }
 
 function ap_render_artist_gallery_metabox($post) {
+    wp_enqueue_media();
+
     $ids = get_post_meta($post->ID, '_ap_submission_images', true);
     if (!is_array($ids)) {
         $ids = [];
     }
     $value = implode(',', $ids);
-    echo '<p>' . esc_html__('Gallery image IDs (comma separated):', 'artpulse') . '</p>';
-    echo '<input type="text" class="widefat" name="artist_gallery_ids" value="' . esc_attr($value) . '" />';
+
+    echo '<div id="artist-gallery-container">';
+    foreach ($ids as $id) {
+        echo wp_get_attachment_image($id, 'thumbnail', false, ['style' => 'margin-right:5px;']);
+    }
+    echo '</div>';
+    echo '<input type="hidden" id="artist_gallery_ids" name="artist_gallery_ids" value="' . esc_attr($value) . '" />';
+    echo '<button type="button" class="button" id="artist_gallery_upload">' . esc_html__('Select Images', 'artpulse') . '</button>';
+    ?>
+    <script type="text/javascript">
+    jQuery(document).ready(function($){
+        var frame;
+        $('#artist_gallery_upload').on('click', function(e){
+            e.preventDefault();
+            if (frame) {
+                frame.open();
+                return;
+            }
+            frame = wp.media({
+                title: '<?php echo esc_js(__('Select Images', 'artpulse')); ?>',
+                button: { text: '<?php echo esc_js(__('Use images', 'artpulse')); ?>' },
+                multiple: true
+            });
+            frame.on('select', function(){
+                var selection = frame.state().get('selection');
+                var ids = [];
+                var container = $('#artist-gallery-container').empty();
+                selection.each(function(attachment){
+                    ids.push(attachment.id);
+                    var url = attachment.attributes.sizes && attachment.attributes.sizes.thumbnail ? attachment.attributes.sizes.thumbnail.url : attachment.attributes.url;
+                    container.append('<img src="'+url+'" style="margin-right:5px;" />');
+                });
+                $('#artist_gallery_ids').val(ids.join(','));
+            });
+            frame.open();
+        });
+    });
+    </script>
+    <?php
 }
 
 function ap_save_artist_portfolio_meta($post_id, $post) {
