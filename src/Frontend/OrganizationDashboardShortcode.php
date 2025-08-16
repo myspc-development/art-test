@@ -146,59 +146,36 @@ class OrganizationDashboardShortcode {
         $featured         = isset($_POST['ap_event_featured']) ? '1' : '0';
         $org_id           = intval($_POST['ap_event_organization']);
 
-        if (empty($title)) {
-            wp_send_json_error(['message' => 'Please enter an event title.']);
-        }
+        $data = [
+            'title'            => $title,
+            'date'             => $date,
+            'start_date'       => $start_date,
+            'end_date'         => $end_date,
+            'location'         => $location,
+            'venue_name'       => $venue_name,
+            'street'           => $street,
+            'country'          => $country,
+            'state'            => $state,
+            'city'             => $city,
+            'postcode'         => $postcode,
+            'address_components' => $address_components ?: $address_json,
+            'address_full'     => $address_full,
+            'start_time'       => $start_time,
+            'end_time'         => $end_time,
+            'contact_info'     => $contact_info,
+            'rsvp_url'         => $rsvp_url,
+            'organizer_name'   => $organizer_name,
+            'organizer_email'  => $organizer_email,
+            'event_type'       => $event_type,
+            'featured'         => $featured,
+            'org_id'           => $org_id,
+            'post_status'      => 'pending',
+        ];
 
-        if (empty($date)) {
-            wp_send_json_error(['message' => 'Please enter an event date.']);
+        $event_id = EventService::create_event($data, get_current_user_id());
+        if (is_wp_error($event_id)) {
+            wp_send_json_error(['message' => $event_id->get_error_message()]);
         }
-
-        if (!preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $date)) {
-            wp_send_json_error(['message' => 'Please enter a valid date in YYYY-MM-DD format.']);
-        }
-
-        if ($org_id <= 0) {
-            wp_send_json_error(['message' => 'Please select an organization.']);
-        }
-
-        $user_org = intval(get_user_meta(get_current_user_id(), 'ap_organization_id', true));
-        if (!$user_org || $user_org !== $org_id) {
-            wp_send_json_error('Permission denied');
-        }
-
-        $event_id = wp_insert_post([
-            'post_title' => $title,
-            'post_type' => 'artpulse_event',
-            'post_status' => 'pending'
-        ]);
-
-        if (!$event_id) {
-            wp_send_json_error(['message' => 'Failed to insert post']);
-        }
-
-        update_post_meta($event_id, '_ap_event_date', $date);
-        update_post_meta($event_id, 'event_start_date', $start_date);
-        update_post_meta($event_id, 'event_end_date', $end_date);
-        update_post_meta($event_id, '_ap_event_location', $location);
-        update_post_meta($event_id, 'venue_name', $venue_name);
-        update_post_meta($event_id, 'event_street_address', $street);
-        update_post_meta($event_id, 'event_country', $country);
-        update_post_meta($event_id, 'event_state', $state);
-        update_post_meta($event_id, 'event_city', $city);
-        update_post_meta($event_id, 'event_postcode', $postcode);
-        if (is_array($address_components)) {
-            update_post_meta($event_id, 'address_components', wp_json_encode($address_components));
-        }
-        update_post_meta($event_id, '_ap_event_address', $address_full);
-        update_post_meta($event_id, '_ap_event_start_time', $start_time);
-        update_post_meta($event_id, '_ap_event_end_time', $end_time);
-        update_post_meta($event_id, '_ap_event_contact', $contact_info);
-        update_post_meta($event_id, '_ap_event_rsvp', $rsvp_url);
-        update_post_meta($event_id, 'event_organizer_name', $organizer_name);
-        update_post_meta($event_id, 'event_organizer_email', $organizer_email);
-        update_post_meta($event_id, '_ap_event_organization', $org_id);
-        update_post_meta($event_id, 'event_featured', $featured);
 
         if (! function_exists('media_handle_upload')) {
             require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -231,10 +208,6 @@ class OrganizationDashboardShortcode {
             update_post_meta($event_id, '_ap_submission_images', $image_ids);
             update_post_meta($event_id, 'event_banner_id', $image_ids[0]);
             set_post_thumbnail($event_id, $image_ids[0]);
-        }
-
-        if ($event_type) {
-            wp_set_post_terms($event_id, [$event_type], 'event_type');
         }
 
         // Reload the event list
