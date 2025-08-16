@@ -6,6 +6,7 @@ use ArtPulse\Frontend\ArtistDashboardShortcode;
 use ArtPulse\Frontend\OrganizationDashboardShortcode;
 use ArtPulse\Dashboard\WidgetGuard;
 use ArtPulse\Core\RoleResolver;
+use ArtPulse\Core\LayoutUtils;
 
 class DashboardController {
 
@@ -261,8 +262,15 @@ class DashboardController {
             }
         }
 
+        $all        = DashboardWidgetRegistry::get_all();
+        $valid_ids  = array_keys($all);
+        $layout     = LayoutUtils::normalize_layout($layout, $valid_ids);
+        $layout     = array_values(array_filter(
+            $layout,
+            static fn($w) => in_array($w['id'], $valid_ids, true)
+        ));
+
         // Filter out any widgets not registered for this role
-        $all = DashboardWidgetRegistry::get_all();
         $filtered = array_values(array_filter(
             $layout,
             static function ($w) use ($role, $all) {
