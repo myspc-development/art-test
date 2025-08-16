@@ -31,7 +31,7 @@ import { OrgTicketInsightsWidget } from './OrgTicketInsightsWidget.jsx';
 import { OrgBroadcastBoxWidget } from './OrgBroadcastBoxWidget.jsx';
 const { __ } = wp.i18n;
 
-export default [
+const widgets = [
   {
     id: 'nearby_events_map',
     title: __('Nearby Events Map', 'artpulse'),
@@ -43,12 +43,6 @@ export default [
     title: __('My Favorites', 'artpulse'),
     component: MyFavoritesWidget,
     roles: ['member', 'artist']
-  },
-  {
-    id: 'activity_feed',
-    title: __('Activity Feed', 'artpulse'),
-    component: ActivityFeedWidget,
-    roles: ['member', 'artist', 'organization']
   },
   {
     id: 'my_upcoming_events',
@@ -78,12 +72,6 @@ export default [
     id: 'share_this_event',
     title: __('Share This Event', 'artpulse'),
     component: ShareThisEventWidget,
-    roles: ['member']
-  },
-  {
-    id: 'qa_checklist',
-    title: __('QA Checklist', 'artpulse'),
-    component: QAChecklistWidget,
     roles: ['member']
   },
   {
@@ -220,3 +208,20 @@ export default [
     roles: ['organization']
   }
 ];
+
+if ( window.AP_DEV_MODE ) {
+  widgets.push({
+    id: 'activity_feed',
+    title: __('Activity Feed', 'artpulse'),
+    component: ActivityFeedWidget,
+    roles: ['member', 'artist', 'organization']
+  });
+  widgets.push({
+    id: 'qa_checklist',
+    title: __('QA Checklist', 'artpulse'),
+    component: QAChecklistWidget,
+    roles: ['member']
+  });
+}
+
+export default widgets;

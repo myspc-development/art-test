@@ -89,14 +89,14 @@ class DashboardController {
             'artist_default' => [
                 'title'  => 'Artist Default',
                 'role'   => 'artist',
-                'layout' => [
-                    ['id' => 'activity_feed'],
+                'layout' => array_values(array_filter([
+                    defined('AP_DEV_MODE') && AP_DEV_MODE ? ['id' => 'activity_feed'] : null,
                     ['id' => 'artist_inbox_preview'],
                     ['id' => 'artist_revenue_summary'],
                     ['id' => 'artist_spotlight'],
                     ['id' => 'widget_favorites'],
-                    ['id' => 'qa_checklist'],
-                ],
+                    defined('AP_DEV_MODE') && AP_DEV_MODE ? ['id' => 'qa_checklist'] : null,
+                ])),
             ],
             // New sample layouts that can be applied from the dashboard UI
             'new_member_intro' => [

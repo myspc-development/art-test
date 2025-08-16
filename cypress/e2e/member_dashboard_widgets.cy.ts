@@ -12,13 +12,11 @@ describe('Member Dashboard Widgets', () => {
     'nearby_events_map',
     'widget_favorites',
     'widget_events',
-    'activity_feed',
     'account-tools',
     'notifications',
     'rsvp_button',
     'event_chat',
     'share_this_event',
-    'qa_checklist',
   ];
 
   it('shows default widgets for members', () => {
