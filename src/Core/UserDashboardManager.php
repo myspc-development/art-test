@@ -9,6 +9,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Admin\LayoutSnapshotManager;
 use ArtPulse\Core\DashboardController;
+use ArtPulse\Core\LayoutUtils;
 
 class UserDashboardManager
 {
@@ -761,24 +762,19 @@ class UserDashboardManager
             $role = sanitize_key((string) $request->get_param('role'));
         }
 
-        $uid        = get_current_user_id();
+        $uid         = get_current_user_id();
         $layout_meta = $role ? [] : get_user_meta($uid, 'ap_dashboard_layout', true);
-        $layout     = [];
-        $visibility = [];
+        $layout      = [];
+        $visibility  = [];
         if (is_array($layout_meta)) {
-            if (isset($layout_meta[0]) && is_array($layout_meta[0])) {
-                $valid = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-                foreach ($layout_meta as $item) {
-                    $id = sanitize_key($item['id'] ?? '');
-                    if (!in_array($id, $valid, true)) {
-                        continue;
-                    }
-                    $vis           = isset($item['visible']) ? (bool) $item['visible'] : true;
-                    $layout[]      = $id;
-                    $visibility[$id] = $vis;
+            $valid      = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+            $normalized = LayoutUtils::normalize_layout($layout_meta, $valid);
+            foreach ($normalized as $item) {
+                if (!in_array($item['id'], $valid, true)) {
+                    continue;
                 }
-            } else {
-                $layout = array_map('sanitize_key', $layout_meta);
+                $layout[]         = $item['id'];
+                $visibility[$item['id']] = $item['visible'];
             }
         }
 
@@ -816,10 +812,15 @@ class UserDashboardManager
                 }
             }
         }
-        if (empty($visibility) && !$role) {
+        if (!$role) {
             $vis_meta = get_user_meta($uid, 'ap_widget_visibility', true);
             if (is_array($vis_meta)) {
-                $visibility = array_map('boolval', $vis_meta);
+                foreach ($vis_meta as $id => $vis) {
+                    $id = sanitize_key($id);
+                    if (isset($visibility[$id])) {
+                        $visibility[$id] = (bool) $vis;
+                    }
+                }
             }
         }
 
@@ -869,19 +870,11 @@ class UserDashboardManager
                 $layout_raw = json_decode($layout_raw, true);
             }
             $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-            $ordered = [];
-            foreach ((array) $layout_raw as $item) {
-                if (is_array($item) && isset($item['id'])) {
-                    $id  = sanitize_key($item['id']);
-                    $vis = isset($item['visible']) ? (bool) $item['visible'] : true;
-                } else {
-                    $id  = sanitize_key($item);
-                    $vis = true;
-                }
-                if (in_array($id, $valid_ids, true)) {
-                    $ordered[] = ['id' => $id, 'visible' => $vis];
-                }
-            }
+            $ordered    = LayoutUtils::normalize_layout((array) $layout_raw, $valid_ids);
+            $ordered    = array_values(array_filter(
+                $ordered,
+                static fn($item) => in_array($item['id'], $valid_ids, true)
+            ));
             update_user_meta($uid, 'ap_dashboard_layout', $ordered);
         } elseif ($request->has_param('visibility')) {
             $vis_raw = (array) $request->get_param('visibility');

@@ -159,12 +159,15 @@ if (empty($layout)) {
     foreach ($layout as $widget) {
         $id      = $widget['id'];
         $visible = $widget['visible'] ?? true;
+        if (!$visible) {
+            continue;
+        }
         $config  = DashboardWidgetRegistry::get_widget($id, $user_id);
         if (!$config) {
             continue;
         }
 
-        echo '<div class="ap-widget-card" role="gridcell" tabindex="0" aria-label="' . esc_attr($config['label'] ?? $id) . '" data-id="' . esc_attr($id) . '" data-visible="' . ($visible ? '1' : '0') . '">';
+        echo '<div class="ap-widget-card" role="gridcell" tabindex="0" aria-label="' . esc_attr($config['label'] ?? $id) . '" data-id="' . esc_attr($id) . '" data-visible="1">';
         echo '<span class="drag-handle" role="button" tabindex="0" aria-label="Move widget"></span>';
 
         ap_render_widget($id, $user_id);
