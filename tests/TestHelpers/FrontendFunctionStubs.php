@@ -44,7 +44,14 @@ if (!function_exists(__NAMESPACE__ . '\\wp_set_post_terms')) {
     function wp_set_post_terms(...$args) {}
 }
 if (!function_exists(__NAMESPACE__ . '\\is_wp_error')) {
-    function is_wp_error($obj) { return false; }
+    function is_wp_error($obj) { return $obj instanceof \WP_Error; }
+}
+if (!class_exists('WP_Error')) {
+    class WP_Error {
+        protected string $message;
+        public function __construct($code = '', $message = '') { $this->message = $message; }
+        public function get_error_message() { return $this->message; }
+    }
 }
 if (!function_exists(__NAMESPACE__ . '\\wp_unslash')) {
     function wp_unslash($value) { return $value; }
