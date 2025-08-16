@@ -870,7 +870,7 @@ function ap_register_core_dashboard_widgets(): void
         'ap_widget_messages',
         [
             'category'   => 'engagement',
-            'roles'      => ['artist'],
+            'roles'      => ['member', 'artist'],
             'visibility' => 'public',
             'capability' => 'can_receive_messages',
             'settings'   => [
