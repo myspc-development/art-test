@@ -112,16 +112,24 @@ class LoginShortcode
             wp_send_json_error(['message' => __('Registration is currently disabled.', 'artpulse')]);
         }
 
-        $username      = sanitize_user($_POST['username'] ?? '');
-        $email         = sanitize_email($_POST['email'] ?? '');
-        $password      = $_POST['password'] ?? '';
-        $confirm       = $_POST['password_confirm'] ?? '';
-        $display_name  = sanitize_text_field($_POST['display_name'] ?? '');
-        $bio           = sanitize_textarea_field($_POST['description'] ?? '');
-        $role          = sanitize_key($_POST['role'] ?? 'member');
-        $allowed_roles = ['member', 'artist', 'organization'];
-        if (!in_array($role, $allowed_roles, true)) {
+        $username       = sanitize_user($_POST['username'] ?? '');
+        $email          = sanitize_email($_POST['email'] ?? '');
+        $password       = $_POST['password'] ?? '';
+        $confirm        = $_POST['password_confirm'] ?? '';
+        $display_name   = sanitize_text_field($_POST['display_name'] ?? '');
+        $bio            = sanitize_textarea_field($_POST['description'] ?? '');
+        $requested_role = sanitize_key($_POST['role'] ?? 'member');
+        $allowed_roles  = ['member'];
+        if (current_user_can('promote_users')) {
+            $allowed_roles = array_merge($allowed_roles, ['artist', 'organization']);
+        }
+        if (!in_array($requested_role, $allowed_roles, true)) {
+            if (in_array($requested_role, ['artist', 'organization'], true)) {
+                wp_send_json_error(['message' => __('Registration as artist or organization requires approval.', 'artpulse')]);
+            }
             $role = 'member';
+        } else {
+            $role = $requested_role;
         }
         $components    = [];
         if (!empty($_POST['address_components'])) {
@@ -234,16 +242,26 @@ class LoginShortcode
             return;
         }
 
-        $username      = sanitize_user($_POST['username'] ?? '');
-        $email         = sanitize_email($_POST['email'] ?? '');
-        $password      = $_POST['password'] ?? '';
-        $confirm       = $_POST['password_confirm'] ?? '';
-        $display_name  = sanitize_text_field($_POST['display_name'] ?? '');
-        $bio           = sanitize_textarea_field($_POST['description'] ?? '');
-        $role          = sanitize_key($_POST['role'] ?? 'member');
-        $allowed_roles = ['member', 'artist', 'organization'];
-        if (!in_array($role, $allowed_roles, true)) {
+        $username       = sanitize_user($_POST['username'] ?? '');
+        $email          = sanitize_email($_POST['email'] ?? '');
+        $password       = $_POST['password'] ?? '';
+        $confirm        = $_POST['password_confirm'] ?? '';
+        $display_name   = sanitize_text_field($_POST['display_name'] ?? '');
+        $bio            = sanitize_textarea_field($_POST['description'] ?? '');
+        $requested_role = sanitize_key($_POST['role'] ?? 'member');
+        $allowed_roles  = ['member'];
+        if (current_user_can('promote_users')) {
+            $allowed_roles = array_merge($allowed_roles, ['artist', 'organization']);
+        }
+        if (!in_array($requested_role, $allowed_roles, true)) {
+            if (in_array($requested_role, ['artist', 'organization'], true)) {
+                self::add_notice(__('Registration as artist or organization requires approval.', 'artpulse'));
+                self::maybe_redirect();
+                return;
+            }
             $role = 'member';
+        } else {
+            $role = $requested_role;
         }
 
         $components = [];
