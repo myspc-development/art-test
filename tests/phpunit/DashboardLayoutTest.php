@@ -56,13 +56,13 @@ class DashboardLayoutTest extends TestCase {
 
     public function test_default_presets_loaded_per_role(): void {
         DashboardWidgetRegistry::register('widget_news', 'News', '', '', static function () {}, ['roles' => ['member']]);
-        DashboardWidgetRegistry::register('activity_feed', 'Feed', '', '', static function () {}, ['roles' => ['artist']]);
+        DashboardWidgetRegistry::register('artist_inbox_preview', 'Inbox Preview', '', '', static function () {}, ['roles' => ['artist']]);
 
         $presets = DashboardController::get_default_presets();
         $this->assertSame('member', $presets['member_default']['role']);
         $this->assertSame([['id' => 'widget_news']], $presets['member_default']['layout']);
         $this->assertSame('artist', $presets['artist_default']['role']);
-        $this->assertSame([['id' => 'activity_feed']], $presets['artist_default']['layout']);
+        $this->assertSame([['id' => 'artist_inbox_preview']], $presets['artist_default']['layout']);
     }
 
     public function test_fallback_layout_and_filtering(): void {

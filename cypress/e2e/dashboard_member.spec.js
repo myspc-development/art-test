@@ -1,9 +1,7 @@
 describe('Member Dashboard', () => {
   const widgets = [
-    'activity_feed',
     'news_feed',
     'my_favorites',
-    'qa_checklist',
     'widget_events',
     'rsvp_button',
   ];

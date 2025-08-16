@@ -101,11 +101,6 @@ class DashboardPresetIntegrityTest extends TestCase {
         ]);
 
         // Register artist widgets
-        DashboardWidgetRegistry::register_widget('activity_feed', [
-            'label' => 'Activity',
-            'roles' => ['artist'],
-            'callback' => '__return_null',
-        ]);
         DashboardWidgetRegistry::register_widget('artist_inbox_preview', [
             'label' => 'Inbox Preview',
             'roles' => ['artist'],
@@ -120,11 +115,6 @@ class DashboardPresetIntegrityTest extends TestCase {
         DashboardWidgetRegistry::register_widget('artist_spotlight', [
             'label' => 'Spotlight',
             'roles' => ['artist'],
-            'callback' => '__return_null',
-        ]);
-        DashboardWidgetRegistry::register_widget('qa_checklist', [
-            'label' => 'QA Checklist',
-            'roles' => ['member'],
             'callback' => '__return_null',
         ]);
 
@@ -171,7 +161,7 @@ class DashboardPresetIntegrityTest extends TestCase {
             $member_ids
         );
         $this->assertSame(
-            ['activity_feed', 'artist_inbox_preview', 'artist_spotlight', 'widget_favorites'],
+            ['artist_inbox_preview', 'artist_spotlight', 'widget_favorites'],
             $artist_ids
         );
         $this->assertSame(

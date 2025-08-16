@@ -1,13 +1,4 @@
 {
-  "activity_feed": {
-    "file": "widgets/member/ActivityFeedWidget.php",
-    "roles": [
-      "member",
-      "artist",
-      "organization"
-    ],
-    "status": "registered"
-  },
   "news_feed": {
     "file": "widgets/ArtPulseNewsFeedWidget.php",
     "roles": [
@@ -104,13 +95,6 @@
     "roles": [
       "member",
       "artist"
-    ],
-    "status": "registered"
-  },
-  "qa_checklist": {
-    "file": "widgets/QAChecklistWidget.php",
-    "roles": [
-      "member"
     ],
     "status": "registered"
   },

@@ -146,26 +146,6 @@
         "status": "registered",
         "previewGuarded": true
     },
-    "activity_feed": {
-        "file": "widgets/member/ActivityFeedWidget.php",
-        "roles": [
-            "member",
-            "artist",
-            "organization"
-        ],
-        "status": "registered",
-        "previewGuarded": false
-    },
-    "activity_feed_template": {
-        "file": "templates/widgets/activity_feed.php",
-        "roles": [
-            "member",
-            "artist",
-            "organization"
-        ],
-        "status": "registered",
-        "previewGuarded": false
-    },
     "artist_inbox_preview": {
         "file": "templates/widgets/artist-inbox-preview.php",
         "roles": [
@@ -341,14 +321,6 @@
     },
     "notifications": {
         "file": "templates/widgets/notifications.php",
-        "roles": [
-            "member"
-        ],
-        "status": "registered",
-        "previewGuarded": true
-    },
-    "qa_checklist": {
-        "file": "widgets/QAChecklistWidget.php",
         "roles": [
             "member"
         ],

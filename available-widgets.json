@@ -1,14 +1,5 @@
 [
     {
-        "id": "activity_feed",
-        "callback": "widgets/member/ActivityFeedWidget.php",
-        "allowed_roles": [
-            "artist",
-            "member",
-            "organization"
-        ]
-    },
-    {
         "id": "ap_donor_activity",
         "callback": "DonorActivityWidget.php",
         "allowed_roles": [
@@ -199,13 +190,6 @@
         "callback": "ProfileOverviewWidget.php",
         "allowed_roles": [
             "artist"
-        ]
-    },
-    {
-        "id": "qa_checklist",
-        "callback": "widgets/QAChecklistWidget.php",
-        "allowed_roles": [
-            "member"
         ]
     },
     {

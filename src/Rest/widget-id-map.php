@@ -12,7 +12,6 @@ return array (
   'nearby_events_map' => 'widget_nearby_events_map',
   'news_feed' => 'widget_news_feed',
   'org_widget_sharing' => 'widget_org_widget_sharing',
-  'qa_checklist' => 'widget_qa_checklist',
   'revenue_summary' => 'widget_revenue_summary',
   'artist_artwork_manager' => 'widget_artist_artwork_manager',
   'artist_audience_insights' => 'widget_artist_audience_insights',

@@ -15,7 +15,7 @@ use ArtPulse\Widgets\Member\ArtistInboxPreviewWidget;
 use ArtPulse\Widgets\Member\OrgTeamRosterWidget;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-return [
+return array_filter([
     'welcome_box' => [
         'class' => WelcomeBoxWidget::class,
         'label' => 'Welcome',
@@ -40,7 +40,7 @@ return [
         'category' => 'general',
         'icon' => 'chart-area',
     ],
-    'activity_feed' => [
+    'activity_feed' => ( defined('AP_DEV_MODE') && AP_DEV_MODE ) ? [
         'class' => ActivityFeedWidget::class,
         'label' => 'Activity Feed',
         'description' => 'Shows recent user and org activity',
@@ -48,7 +48,7 @@ return [
         'category' => 'user',
         'icon' => 'activity',
         'cache' => true,
-    ],
+    ] : null,
     'artist_inbox_preview' => [
         'class' => ArtistInboxPreviewWidget::class,
         'label' => 'Artist Inbox Preview',
@@ -90,13 +90,13 @@ return [
         'category' => 'general',
         'icon' => 'rss',
     ],
-    'qa_checklist' => [
+    'qa_checklist' => ( defined('AP_DEV_MODE') && AP_DEV_MODE ) ? [
         'class' => \QAChecklistWidget::class,
         'label' => 'QA Checklist',
         'description' => 'Steps to verify basic dashboard features.',
         'roles' => ['member'],
         'icon' => 'yes',
-    ],
+    ] : null,
     'rsvp_button' => [
         'callback' => 'ap_widget_rsvp_button',
         'label' => 'RSVP Button',
@@ -352,4 +352,6 @@ return [
         'category' => 'general',
         'icon' => 'heart',
     ],
-];
+], function ($item) {
+    return ! is_null($item);
+});
