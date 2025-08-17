@@ -21,6 +21,11 @@ class DashboardLayoutEndpoint
 
     public static function handle(\WP_REST_Request $request)
     {
+        $nonce = $request->get_header('X-WP-Nonce');
+        if (!$nonce || !wp_verify_nonce($nonce, 'wp_rest')) {
+            return new \WP_Error('invalid_nonce', 'Invalid or missing nonce', ['status' => 403]);
+        }
+
         $ctx = sanitize_key($request['context']);
         $option = get_option('ap_dashboard_widget_config', []);
 
@@ -31,10 +36,11 @@ class DashboardLayoutEndpoint
 
         $layout = $request->get_json_params();
         if (!is_array($layout)) {
-            return new \WP_Error('invalid', 'Invalid layout', ['status' => 400]);
+            return new \WP_Error('invalid_layout', 'Layout must be an array', ['status' => 400]);
         }
-        $option[$ctx] = $layout;
-        update_option('ap_dashboard_widget_config', $option);
+
+        UserLayoutManager::save_role_layout($ctx, $layout);
+
         return rest_ensure_response(['saved' => true]);
     }
 }
