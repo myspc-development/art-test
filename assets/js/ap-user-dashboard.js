@@ -266,21 +266,24 @@ if (content) {
       const container = document.getElementById(id);
       if (!container) return;
       const items = data[key] || [];
-      container.innerHTML = '';
-      if (!items.length) {
-        container.textContent = __('No favorites.', 'artpulse');
-        return;
-      }
-      const ul = document.createElement('ul');
-      items.forEach(item => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = item.link;
-        a.textContent = item.title;
-        li.appendChild(a);
-        ul.appendChild(li);
+      requestAnimationFrame(() => {
+        if (!items.length) {
+          container.textContent = __('No favorites.', 'artpulse');
+          return;
+        }
+        const ul = document.createElement('ul');
+        const frag = document.createDocumentFragment();
+        items.forEach(item => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = item.link;
+          a.textContent = item.title;
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+        frag.appendChild(ul);
+        container.replaceChildren(frag);
       });
-      container.appendChild(ul);
     });
 
     renderRsvpEvents(data.rsvp_events || []);
@@ -396,7 +399,7 @@ function renderCalendar(events, containerId = 'ap-my-events') {
 
   let current = new Date();
   function draw() {
-    container.innerHTML = '';
+    const frag = document.createDocumentFragment();
     const month = current.getMonth();
     const year  = current.getFullYear();
 
@@ -411,7 +414,7 @@ function renderCalendar(events, containerId = 'ap-my-events') {
     header.appendChild(prev);
     header.appendChild(title);
     header.appendChild(next);
-    container.appendChild(header);
+    frag.appendChild(header);
 
     const table = document.createElement('table');
     table.className = 'ap-calendar';
@@ -472,10 +475,14 @@ function renderCalendar(events, containerId = 'ap-my-events') {
       if (date > daysInMonth) break;
     }
     table.appendChild(tbody);
-    container.appendChild(table);
+    frag.appendChild(table);
 
     prev.onclick = () => { current.setMonth(current.getMonth() - 1); draw(); };
     next.onclick = () => { current.setMonth(current.getMonth() + 1); draw(); };
+
+    requestAnimationFrame(() => {
+      container.replaceChildren(frag);
+    });
   }
   draw();
 }
@@ -483,38 +490,44 @@ function renderCalendar(events, containerId = 'ap-my-events') {
 function renderEventsFeed(events) {
   const feed = document.getElementById('ap-events-feed');
   if (!feed) return;
-  feed.innerHTML = '';
-  if (!events || !events.length) {
-    feed.textContent = __('No upcoming events.', 'artpulse');
-    return;
-  }
-  events.forEach(ev => {
-    const wrap = document.createElement('div');
-    fetchEventCard(ev.id)
-      .then(html => {
-        wrap.innerHTML = html;
-        initCardInteractions(wrap);
-      });
-    feed.appendChild(wrap);
+  requestAnimationFrame(() => {
+    if (!events || !events.length) {
+      feed.textContent = __('No upcoming events.', 'artpulse');
+      return;
+    }
+    const frag = document.createDocumentFragment();
+    events.forEach(ev => {
+      const wrap = document.createElement('div');
+      fetchEventCard(ev.id)
+        .then(html => {
+          wrap.innerHTML = html;
+          initCardInteractions(wrap);
+        });
+      frag.appendChild(wrap);
+    });
+    feed.replaceChildren(frag);
   });
 }
 
 function renderRsvpEvents(list) {
   const container = document.getElementById('ap-rsvp-events');
   if (!container) return;
-  container.innerHTML = '';
-  if (!list || !list.length) {
-    container.textContent = __('No RSVPs.', 'artpulse');
-    return;
-  }
-  list.forEach(ev => {
-    const wrap = document.createElement('div');
-    fetchEventCard(ev.id)
-      .then(html => {
-        wrap.innerHTML = html;
-        initCardInteractions(wrap);
-      });
-    container.appendChild(wrap);
+  requestAnimationFrame(() => {
+    if (!list || !list.length) {
+      container.textContent = __('No RSVPs.', 'artpulse');
+      return;
+    }
+    const frag = document.createDocumentFragment();
+    list.forEach(ev => {
+      const wrap = document.createElement('div');
+      fetchEventCard(ev.id)
+        .then(html => {
+          wrap.innerHTML = html;
+          initCardInteractions(wrap);
+        });
+      frag.appendChild(wrap);
+    });
+    container.replaceChildren(frag);
   });
 }
 
@@ -733,15 +746,17 @@ function toggleMembership(action, btn) {
 function highlightNextEvent(ev) {
   const container = document.getElementById('ap-next-event');
   if (!container) return;
-  container.innerHTML = '';
-  if (!ev) return;
-  const wrap = document.createElement('div');
-  fetchEventCard(ev.id)
-    .then(html => {
-      wrap.innerHTML = html;
-      initCardInteractions(wrap);
-    });
-  container.appendChild(wrap);
+  requestAnimationFrame(() => {
+    container.textContent = '';
+    if (!ev) return;
+    const wrap = document.createElement('div');
+    fetchEventCard(ev.id)
+      .then(html => {
+        wrap.innerHTML = html;
+        initCardInteractions(wrap);
+      });
+    container.appendChild(wrap);
+  });
 }
 
 

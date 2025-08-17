@@ -9,20 +9,23 @@ document.addEventListener('DOMContentLoaded', () => {
         container.addEventListener('mouseleave', () => { autoScroll = true; list.scrollTop = list.scrollHeight; });
 
         function render(msgs) {
-            list.innerHTML = '';
-            if (!Array.isArray(msgs)) {
-                const li = document.createElement('li');
-                li.textContent = 'Unable to load messages';
-                list.appendChild(li);
-                return;
-            }
-            msgs.forEach(msg => {
-                const li = document.createElement('li');
-                const time = new Intl.DateTimeFormat('en', { timeStyle: 'short' }).format(new Date(msg.created_at));
-                li.innerHTML = `<img class="ap-chat-avatar" src="${msg.avatar}" alt=""> <span class="ap-chat-author">${msg.author}</span> <span class="ap-chat-time">${time}</span> <p class="ap-chat-content">${msg.content}</p>`;
-                list.appendChild(li);
+            requestAnimationFrame(() => {
+                if (!Array.isArray(msgs)) {
+                    const li = document.createElement('li');
+                    li.textContent = 'Unable to load messages';
+                    list.replaceChildren(li);
+                    return;
+                }
+                const frag = document.createDocumentFragment();
+                msgs.forEach(msg => {
+                    const li = document.createElement('li');
+                    const time = new Intl.DateTimeFormat('en', { timeStyle: 'short' }).format(new Date(msg.created_at));
+                    li.innerHTML = `<img class="ap-chat-avatar" src="${msg.avatar}" alt=""> <span class="ap-chat-author">${msg.author}</span> <span class="ap-chat-time">${time}</span> <p class="ap-chat-content">${msg.content}</p>`;
+                    frag.appendChild(li);
+                });
+                list.replaceChildren(frag);
+                if (autoScroll) list.scrollTop = list.scrollHeight;
             });
-            if (autoScroll) list.scrollTop = list.scrollHeight;
         }
 
         let pollTimer;

@@ -31,7 +31,8 @@
     "widget:audit": "node scripts/widget-audit.js",
     "widget:fix": "node scripts/fix-widget-callbacks.js",
     "widget:diagnose": "node scripts/widget-diagnostics.js",
-    "ws": "node server/ws-server.js"
+    "ws": "node server/ws-server.js",
+    "perf": "node tools/perf-profile.js"
   },
   "dependencies": {
     "emoji-picker-react": "^4.13.2",
