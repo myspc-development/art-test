@@ -995,15 +995,14 @@ class UserDashboardManager
         $org_form    = $show_forms ? do_shortcode('[ap_submit_organization]') : '';
 
         $user             = wp_get_current_user();
-        $roles            = (array) $user->roles;
         $profile_edit_url = self::get_profile_edit_url();
         $show_notifications = current_user_can('member') || current_user_can('artist') || current_user_can('organization') || current_user_can('administrator');
         $support_history   = get_user_meta(get_current_user_id(), 'ap_support_history', true);
         $show_support_history = is_array($support_history) && !empty($support_history);
         $badges = self::getBadges(get_current_user_id());
 
-        $roles_list = $roles ?: ['subscriber'];
-        $widgets = DashboardWidgetRegistry::get_widgets($roles_list);
+        $roles_list = [$role];
+        $widgets = DashboardWidgetRegistry::get_widgets($role, $uid);
         if (defined('WP_DEBUG') && WP_DEBUG) {
             error_log('ap_user_dashboard roles: ' . implode(',', $roles_list));
             error_log('ap_user_dashboard widgets: ' . implode(',', array_keys($widgets)));
@@ -1079,12 +1078,7 @@ class UserDashboardManager
             }
         }
 
-        $user_role = 'member';
-        if (user_can($user, 'organization') || user_can($user, 'administrator')) {
-            $user_role = 'organization';
-        } elseif (user_can($user, 'artist')) {
-            $user_role = 'artist';
-        }
+        $user_role = $role;
 
         $widget_defs = array_map(
             static fn($id) => ['id' => $id, 'restOnly' => true],

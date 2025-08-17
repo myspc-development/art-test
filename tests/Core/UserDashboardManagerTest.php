@@ -33,6 +33,11 @@ function get_post($id) {
     return (object)['ID' => $id, 'post_title' => 'Post ' . $id];
 }
 }
+if (!function_exists(__NAMESPACE__ . '\get_userdata')) {
+function get_userdata($uid) {
+    return (object)['ID' => $uid, 'roles' => \ArtPulse\Core\Tests\Stub::$roles];
+}
+}
 if (!function_exists(__NAMESPACE__ . '\esc_url')) {
 function esc_url($url) { return $url; }
 }

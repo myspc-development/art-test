@@ -10,12 +10,13 @@ jest.mock('../../dashboard/useFilteredWidgets', () => ({
 
 describe('RoleDashboard preview role', () => {
   beforeEach(() => {
-    (window as any).RoleDashboardData = { widgets: [], currentUser: { roles: ['administrator'] } };
+    (window as any).RoleDashboardData = { widgets: [], currentUser: { roles: ['artist'] } };
     (window as any).wpApiSettings = { root: '/', nonce: 'nonce' };
     localStorage.clear();
-    (global as any).fetch = jest.fn(() =>
+    (globalThis as any).fetch = jest.fn(() =>
       Promise.resolve({
-        json: () => Promise.resolve({ widget_roles: {}, role_widgets: { administrator: [], member: [] } }),
+        json: () =>
+          Promise.resolve({ widget_roles: {}, role_widgets: { artist: [], member: [], organization: [] } }),
       })
     );
   });

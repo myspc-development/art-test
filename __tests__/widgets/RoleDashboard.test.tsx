@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import RoleDashboard from '../../js/components/RoleDashboard';
 import useFilteredWidgets from '../../dashboard/useFilteredWidgets';
 
@@ -27,6 +28,13 @@ describe('RoleDashboard widget filtering', () => {
           retry: jest.fn(),
         };
       }
+      if (roles.includes('organization')) {
+        return {
+          widgets: widgets.filter((w: any) => w.id === 'manage'),
+          error: null,
+          retry: jest.fn(),
+        };
+      }
       return { widgets: [], error: null, retry: jest.fn() };
     });
 
@@ -35,16 +43,17 @@ describe('RoleDashboard widget filtering', () => {
         { id: 'news', html: '<h2>news-heading</h2>' },
         { id: 'events', html: '<h2>events-heading</h2>' },
         { id: 'alerts', html: '<h2>alerts-heading</h2>' },
+        { id: 'manage', html: '<h2>manage-heading</h2>' },
       ],
       currentUser: { roles: ['artist'] },
     };
 
     (window as any).wpApiSettings = { root: '/', nonce: 'nonce' };
     localStorage.clear();
-    (global as any).fetch = jest.fn(() =>
+    (globalThis as any).fetch = jest.fn(() =>
       Promise.resolve({
         json: () =>
-          Promise.resolve({ widget_roles: {}, role_widgets: { artist: [], member: [] } }),
+          Promise.resolve({ widget_roles: {}, role_widgets: { artist: [], member: [], organization: [] } }),
       })
     );
   });
@@ -52,11 +61,13 @@ describe('RoleDashboard widget filtering', () => {
   it('shows widgets for current role and updates on preview role change', async () => {
     render(<RoleDashboard />);
 
-    await screen.findByRole('option', { name: 'member' });
+    await screen.findByRole('option', { name: 'organization' });
 
+    // initial artist role
     expect(await screen.findByRole('region', { name: /news-heading/i })).toBeInTheDocument();
     expect(await screen.findByRole('region', { name: /events-heading/i })).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: /alerts-heading/i })).toBeNull();
+    expect(screen.queryByRole('region', { name: /manage-heading/i })).toBeNull();
 
     mockUse.mockClear();
 
@@ -68,6 +79,17 @@ describe('RoleDashboard widget filtering', () => {
     expect(await screen.findByRole('region', { name: /alerts-heading/i })).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: /news-heading/i })).toBeNull();
     expect(screen.queryByRole('region', { name: /events-heading/i })).toBeNull();
+    expect(screen.queryByRole('region', { name: /manage-heading/i })).toBeNull();
+
+    mockUse.mockClear();
+    fireEvent.change(select, { target: { value: 'organization' } });
+
+    expect(mockUse.mock.calls[0][1]).toEqual({ roles: ['organization'] });
+
+    expect(await screen.findByRole('region', { name: /manage-heading/i })).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: /news-heading/i })).toBeNull();
+    expect(screen.queryByRole('region', { name: /events-heading/i })).toBeNull();
+    expect(screen.queryByRole('region', { name: /alerts-heading/i })).toBeNull();
   });
 });
 
