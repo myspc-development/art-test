@@ -4,41 +4,58 @@ import commonjs from '@rollup/plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
 import replace from '@rollup/plugin-replace';
 
-const extensions = ['.js', '.jsx'];
+const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
-export default {
-  input: 'assets/js/app-dashboard.jsx',
-  output: {
-    file: 'dist/app-dashboard.js',
-    format: 'iife',
-    name: 'APDashboardApp',
-    globals: {
-      react: 'React',
-      'react-dom/client': 'ReactDOM',
-      'react-dom': 'ReactDOM',
-      'react-grid-layout': 'ReactGridLayout',
-      'chart.js/auto': 'Chart'
+const commonPlugins = [
+  nodeResolve({ extensions }),
+  commonjs(),
+  postcss({ inject: true, minimize: true }),
+  babel({
+    babelHelpers: 'bundled',
+    extensions,
+    presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+    exclude: 'node_modules/**'
+  }),
+  replace({
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+    preventAssignment: true
+  })
+];
+
+export default [
+  {
+    input: 'assets/js/app-dashboard.jsx',
+    output: {
+      file: 'dist/app-dashboard.js',
+      format: 'iife',
+      name: 'APDashboardApp',
+      globals: {
+        react: 'React',
+        'react-dom/client': 'ReactDOM',
+        'react-dom': 'ReactDOM',
+        'react-grid-layout': 'ReactGridLayout',
+        'chart.js/auto': 'Chart'
+      },
+      exports: 'none'
     },
-    exports: 'none'
+    external: ['react', 'react-dom', 'react-dom/client', 'react-grid-layout', 'chart.js/auto'],
+    plugins: commonPlugins
   },
-  external: ['react', 'react-dom', 'react-dom/client', 'react-grid-layout', 'chart.js/auto'],
-  plugins: [
-    nodeResolve({ extensions }),
-    commonjs(),
-    postcss({
-      inject: true,
-      minimize: true
-    }),
-    babel({
-      babelHelpers: 'bundled',
-      extensions,
-      presets: ['@babel/preset-env', '@babel/preset-react'],
-      exclude: 'node_modules/**'
-    }),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
-      preventAssignment: true
-    })
-  ]
-};
+  {
+    input: 'assets/ts/dashboard/index.tsx',
+    output: {
+      file: 'dist/dashboard.js',
+      format: 'iife',
+      name: 'APRoleDashboard',
+      globals: {
+        react: 'React',
+        'react-dom/client': 'ReactDOM',
+        'react-dom': 'ReactDOM'
+      },
+      exports: 'none'
+    },
+    external: ['react', 'react-dom', 'react-dom/client'],
+    plugins: commonPlugins
+  }
+];
 

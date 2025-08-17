@@ -23,6 +23,8 @@ use ArtPulse\Blocks\DashboardNewsBlock;
 use ArtPulse\Blocks\RelatedProjectsBlock;
 use ArtPulse\Core\DashboardBlockPatternManager;
 use ArtPulse\Frontend\ReactDashboardShortcode;
+use ArtPulse\Frontend\ShortcodeRoleDashboard;
+use ArtPulse\Rest\UserLayoutController;
 use ArtPulse\Marketplace\MarketplaceManager;
 use ArtPulse\Marketplace\AuctionManager;
 use ArtPulse\Community\ReferralManager;
@@ -236,6 +238,8 @@ class Plugin
         EngagementDashboard::register();
         AdminDashboard::register();
         RoleDashboardPage::register();
+        ShortcodeRoleDashboard::register();
+        UserLayoutController::register();
         \ArtPulse\Core\FrontendMembershipPage::register();
         \ArtPulse\Community\ProfileLinkRequestManager::register();
         \ArtPulse\Community\ArtistUpgradeRestController::register();
