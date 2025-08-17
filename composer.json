@@ -1,5 +1,6 @@
 {
-  "name": "artpulse/art-test",
+  "name": "yourorg/artpulse",
+  "type": "wordpress-plugin",
   "autoload": {
     "psr-4": {
       "ArtPulse\\": "src/",
@@ -12,8 +13,8 @@
     }
   },
   "require-dev": {
-    "wp-phpunit/wp-phpunit": "^6",
-    "yoast/phpunit-polyfills": "^3.1",
+    "wp-phpunit/wp-phpunit": "^6.0",
+    "yoast/phpunit-polyfills": "^3.0",
     "brain/monkey": "^2.6",
     "phpunit/phpunit": "^9.6",
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
@@ -26,10 +27,7 @@
     "erusev/parsedown": "^1.7"
   },
   "scripts": {
-    "test": "vendor/bin/phpunit",
-    "test:debug": "XDEBUG_MODE=coverage vendor/bin/phpunit -d xdebug.mode=debug,coverage",
-    "cs": "vendor/bin/phpcs",
-    "cbf": "vendor/bin/phpcbf"
+    "test": "phpunit"
   },
   "config": {
     "allow-plugins": {
