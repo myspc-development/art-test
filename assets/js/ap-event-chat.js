@@ -48,6 +48,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(render)
                 .catch(err => {
                     console.error('Chat load error', err);
+                    if (!container.querySelector('.ap-chat-error')) {
+                        const error = document.createElement('p');
+                        error.className = 'ap-chat-error';
+                        error.textContent = 'Failed to load chat';
+                        container.appendChild(error);
+                        const retry = document.createElement('button');
+                        retry.type = 'button';
+                        retry.className = 'ap-chat-retry';
+                        retry.textContent = 'Retry';
+                        retry.addEventListener('click', () => {
+                            error.remove();
+                            retry.remove();
+                            poll();
+                        });
+                        container.appendChild(retry);
+                    }
                 });
         }
 
