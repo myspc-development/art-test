@@ -19,7 +19,7 @@ class ProfileMetricsController
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_metrics'],
             'permission_callback' => function () {
-                if (!current_user_can('read')) {
+                if (!current_user_can('manage_options')) {
                     return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
                 }
                 return true;
