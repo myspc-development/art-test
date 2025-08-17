@@ -38,9 +38,12 @@ class DashboardWidgetTools
                 ['id' => 'org_insights', 'label' => 'Insights', 'callback' => [\ArtPulse\Widgets::class, 'render_org_insights_box']],
             ],
         ];
-
-        foreach ($defaults[$role] ?? [] as $widget) {
-            update_user_meta(get_current_user_id(), "ap_widget_{$role}_{$widget['id']}", $widget);
+        $role = sanitize_key($role);
+        $uid  = get_current_user_id();
+        if ($uid > 0) {
+            foreach ($defaults[$role] ?? [] as $widget) {
+                update_user_meta($uid, "ap_widget_{$role}_{$widget['id']}", $widget);
+            }
         }
     }
     public static function register(): void
