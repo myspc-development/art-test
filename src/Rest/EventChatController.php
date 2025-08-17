@@ -86,6 +86,15 @@ class EventChatController extends WP_REST_Controller
                 'id' => ['validate_callback' => static fn($v) => is_numeric($v) && (int)$v > 0],
             ],
         ]);
+
+        // Optional slug route to avoid ID mismatches
+        register_rest_route($this->namespace, '/event/by-slug/(?P<slug>[A-Za-z0-9-_]+)/chat', [
+            [
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => [$this, 'get_messages_by_slug'],
+                'permission_callback' => [$this, 'can_read_by_slug'],
+            ],
+        ]);
     }
 
     /** Read permission for chat (logged-in + event exists) */
@@ -96,10 +105,14 @@ class EventChatController extends WP_REST_Controller
         }
         $event_id = (int) $request['id'];
         $post     = get_post($event_id);
-        if (!$post || $post->post_type !== 'artpulse_event') {
+        if (!$post) {
+            error_log("[artpulse] chat 404: event {$event_id} not found");
             return new WP_Error('ap_event_not_found', __('Event not found.', 'artpulse'), ['status' => 404]);
         }
-        // Adjust according to your policy (participants-only, etc.)
+        if ($post->post_type !== 'artpulse_event') {
+            error_log("[artpulse] chat 404: id {$event_id} is type {$post->post_type}, expected artpulse_event");
+            return new WP_Error('ap_event_not_found', __('Event not found.', 'artpulse'), ['status' => 404]);
+        }
         if (!current_user_can('read_post', $event_id) && !current_user_can('read')) {
             return new WP_Error('rest_forbidden', __('You cannot view this chat.', 'artpulse'), ['status' => 403]);
         }
@@ -276,5 +289,33 @@ class EventChatController extends WP_REST_Controller
             return new WP_Error('rest_forbidden', __('Moderator permission required.', 'artpulse'), ['status' => 403]);
         }
         return true;
+    }
+
+    // --- Slug helpers (optional) ---
+    public function can_read_by_slug(\WP_REST_Request $req)
+    {
+        if (!is_user_logged_in()) {
+            return new \WP_Error('rest_forbidden', __('Authentication required.', 'artpulse'), ['status' => 401]);
+        }
+        $slug = sanitize_title($req['slug'] ?? '');
+        $post = get_page_by_path($slug, OBJECT, 'artpulse_event');
+        if (!$post) {
+            return new \WP_Error('ap_event_not_found', __('Event not found.', 'artpulse'), ['status' => 404]);
+        }
+        if (!current_user_can('read_post', $post->ID) && !current_user_can('read')) {
+            return new \WP_Error('rest_forbidden', __('You cannot view this chat.', 'artpulse'), ['status' => 403]);
+        }
+        return true;
+    }
+
+    public function get_messages_by_slug(\WP_REST_Request $req)
+    {
+        $slug = sanitize_title($req['slug'] ?? '');
+        $post = get_page_by_path($slug, OBJECT, 'artpulse_event');
+        if (!$post) {
+            return new \WP_Error('ap_event_not_found', __('Event not found.', 'artpulse'), ['status' => 404]);
+        }
+        $req['id'] = (int) $post->ID;
+        return $this->get_messages($req);
     }
 }
