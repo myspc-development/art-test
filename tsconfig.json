@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "es6",
+    "lib": ["es2019", "dom"],
     "module": "esnext",
+    "moduleResolution": "node",
     "jsx": "react",
     "strict": true,
     "esModuleInterop": true,
@@ -12,7 +14,9 @@
     // ✅ Optional: helpful if you use @/... in imports
     "paths": {
       "@/*": ["assets/js/*"]
-    }
+    },
+
+    "types": ["jest", "@testing-library/jest-dom"]
   },
   "include": ["assets/js/**/*", "assets/ts/**/*"]
 }

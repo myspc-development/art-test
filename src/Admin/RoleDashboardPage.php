@@ -30,6 +30,13 @@ class RoleDashboardPage
     {
         $role = DashboardController::get_role(get_current_user_id());
         ShortcodeRoleDashboard::enqueue_assets($role);
+        // Enqueue dashboard assets only when viewing the role dashboard page.
+        // Localize REST data + nonce so the frontend can sync layout, e.g.:
+        // wp_localize_script('ap-dashboard-js', 'AP_DASH', [
+        //   'restBase' => esc_url_raw( rest_url( 'artpulse/v1' ) ),
+        //   'nonce'    => wp_create_nonce( 'wp_rest' ),
+        //   'role'     => $role_for_current_user,
+        // ]);
         \ap_render_dashboard();
     }
 }
