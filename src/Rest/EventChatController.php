@@ -165,7 +165,15 @@ class EventChatController extends WP_REST_Controller
         }
     }
 
-    public function create_item(WP_REST_Request $request): WP_REST_Response|WP_Error
+    /**
+     * Create a chat message.
+     *
+     * Matches the signature expected by WP_REST_Controller::create_item().
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function create_item( $request )
     {
         $event_id = (int) $request['id'];
         $content  = (string) $request['content'];
@@ -216,7 +224,15 @@ class EventChatController extends WP_REST_Controller
         }
     }
 
-    public function delete_item(WP_REST_Request $request): WP_REST_Response|WP_Error
+    /**
+     * Delete a chat message.
+     *
+     * Matches the signature expected by WP_REST_Controller::delete_item().
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function delete_item( $request )
     {
         $id = (int) $request['id'];
         if (!$id) {
