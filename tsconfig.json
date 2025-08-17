@@ -14,5 +14,5 @@
       "@/*": ["assets/js/*"]
     }
   },
-  "include": ["assets/js/**/*"]
+  "include": ["assets/js/**/*", "assets/ts/**/*"]
 }
