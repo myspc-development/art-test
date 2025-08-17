@@ -42,4 +42,21 @@ class EventChatRestTest extends \WP_UnitTestCase
         $this->assertSame('Tester', $data[0]['author']);
         $this->assertSame($this->user, $data[0]['user_id']);
     }
+
+    public function test_post_event_chat_requires_nonce(): void
+    {
+        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event . '/chat');
+        $req->set_body_params(['content' => 'Another']);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(401, $res->get_status());
+    }
+
+    public function test_post_event_chat_with_nonce_succeeds(): void
+    {
+        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event . '/chat');
+        $req->set_body_params(['content' => 'Another']);
+        $req->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(200, $res->get_status());
+    }
 }
