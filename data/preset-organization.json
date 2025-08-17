@@ -28,6 +28,7 @@
     "visible": true
   },
   { "id": "org_event_overview", "visible": true },
+  { "id": "org_event_quick_add", "visible": true },
   { "id": "org_team_roster", "visible": true },
   { "id": "org_approval_center", "visible": true },
   { "id": "org_ticket_insights", "visible": true },

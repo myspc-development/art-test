@@ -151,6 +151,15 @@
         ]
     },
     {
+        "id": "org_event_quick_add",
+        "label": "Quick Add Event",
+        "callback": "widgets/OrgQuickAddEventWidget.php",
+        "allowed_roles": [
+            "organization"
+        ],
+        "width": "1x1"
+    },
+    {
         "id": "org_insights",
         "callback": "ArtPulse\\Widgets::render_org_insights_box",
         "allowed_roles": [
