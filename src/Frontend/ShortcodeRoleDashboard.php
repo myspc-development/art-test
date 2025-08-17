@@ -47,7 +47,7 @@ class ShortcodeRoleDashboard
     public static function maybe_enqueue(): void
     {
         if (has_shortcode(get_post_field('post_content', get_the_ID() ?: 0), 'ap_role_dashboard')) {
-            $role = is_user_logged_in() ? \\ArtPulse\\Core\\DashboardController::get_role(get_current_user_id()) : 'member';
+            $role = is_user_logged_in() ? \ArtPulse\Core\DashboardController::get_role(get_current_user_id()) : 'member';
             self::enqueue_assets($role);
         }
     }
