@@ -20,9 +20,23 @@ class DashboardWidgetTools
     public static function get_role_widgets_for_current_user(): array
     {
         $user  = wp_get_current_user();
-        $role  = $user->roles[0] ?? 'member';
-        $all   = self::get_role_widgets();
-        return $all[$role] ?? [];
+        $roles = $user->roles;
+        if (!$roles) {
+            $roles = ['member'];
+        }
+
+        $all     = self::get_role_widgets();
+        $widgets = [];
+        foreach ($roles as $role) {
+            foreach ($all[$role] ?? [] as $widget) {
+                $id = $widget['id'] ?? null;
+                if ($id !== null && !isset($widgets[$id])) {
+                    $widgets[$id] = $widget;
+                }
+            }
+        }
+
+        return array_values($widgets);
     }
 
     public static function register_default_widgets_for_role(string $role): void
