@@ -16,7 +16,7 @@ class ProfileMetricsControllerTest extends \WP_UnitTestCase
     {
         parent::set_up();
         ProfileMetrics::install_table();
-        $this->user_id = self::factory()->user->create();
+        $this->user_id = self::factory()->user->create(['role' => 'administrator']);
         wp_set_current_user($this->user_id);
         ProfileMetricsController::register();
         do_action('rest_api_init');

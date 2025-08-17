@@ -891,7 +891,15 @@ async function renderProfileMetricsChart() {
 
   const headers = { 'X-WP-Nonce': APProfileMetrics.nonce };
   const viewRes = await fetch(`${APProfileMetrics.endpoint}/${APProfileMetrics.profileId}?metric=view`, { headers });
+  if (viewRes.status === 403 || !viewRes.ok) {
+    console.warn('Unauthorized to fetch profile metrics');
+    return;
+  }
   const followRes = await fetch(`${APProfileMetrics.endpoint}/${APProfileMetrics.profileId}?metric=follow`, { headers });
+  if (followRes.status === 403 || !followRes.ok) {
+    console.warn('Unauthorized to fetch profile metrics');
+    return;
+  }
   const views = await viewRes.json();
   const follows = await followRes.json();
 
