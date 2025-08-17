@@ -80,6 +80,9 @@ class Plugin
         if (!defined('ARTPULSE_PLUGIN_FILE')) {
             define('ARTPULSE_PLUGIN_FILE', ARTPULSE_PLUGIN_DIR . 'artpulse-management.php');
         }
+        if (!defined('ARTPULSE_API_NAMESPACE')) {
+            define('ARTPULSE_API_NAMESPACE', 'artpulse/v1');
+        }
     }
 
     private function register_hooks()
@@ -96,6 +99,7 @@ class Plugin
         add_action('rest_api_init', [\ArtPulse\Community\EventCommentsController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\ArtworkCommentsController::class, 'register']);
         add_action('init', [\ArtPulse\Rest\EventChatController::class, 'register']);
+        \ArtPulse\Frontend\EventChatAssets::register();
         add_action('rest_api_init', [\ArtPulse\Community\EventVoteRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\ForumRestController::class, 'register']);
         add_action('rest_api_init', [\ArtPulse\Community\CommentReportRestController::class, 'register']);
