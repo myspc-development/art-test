@@ -303,7 +303,9 @@ function ap_save_widget_order(): void
     }
     check_ajax_referer('ap_widget_order', 'nonce');
     $order = isset($_POST['order']) ? json_decode(stripslashes($_POST['order']), true) : [];
-    update_user_meta(get_current_user_id(), 'ap_widget_order', $order);
+    $identifier = isset($_POST['identifier']) ? intval($_POST['identifier']) : 0;
+    $user_id = $identifier > 0 ? $identifier : get_current_user_id();
+    update_user_meta($user_id, 'ap_widget_order', $order);
     wp_send_json_success();
 }
 

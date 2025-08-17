@@ -2,7 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('ap-dashboard-root');
   if (!container) return;
 
-  const savedOrder = JSON.parse(localStorage.getItem('ap-widget-order') || '[]');
+  const { identifier } = APWidgetOrder;
+  const storageKey = `ap-widget-order-${identifier}`;
+
+  const savedOrder = JSON.parse(localStorage.getItem(storageKey) || '[]');
   if (savedOrder.length) {
     savedOrder.forEach(id => {
       const el = container.querySelector(`[data-widget-id="${id}"]`);
@@ -15,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     handle: '.drag-handle',
     onEnd: () => {
       const order = Array.from(container.children).map(el => el.dataset.widgetId);
-      localStorage.setItem('ap-widget-order', JSON.stringify(order));
+      localStorage.setItem(storageKey, JSON.stringify(order));
 
       fetch(APWidgetOrder.ajax_url, {
         method: 'POST',
@@ -23,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: new URLSearchParams({
           action: 'save_widget_order',
           order: JSON.stringify(order),
+          identifier,
           nonce: APWidgetOrder.nonce
         })
       }).then(res => {

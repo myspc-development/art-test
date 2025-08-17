@@ -837,6 +837,20 @@ add_action('wp_enqueue_scripts', function () {
             null,
             true
         );
+
+        $script_path = plugin_dir_path(__FILE__) . 'assets/js/organization-dashboard.js';
+        wp_enqueue_script(
+            'organization-dashboard',
+            plugins_url('assets/js/organization-dashboard.js', __FILE__),
+            ['sortablejs'],
+            file_exists($script_path) ? (string) filemtime($script_path) : null,
+            true
+        );
+        wp_localize_script('organization-dashboard', 'APWidgetOrder', [
+            'ajax_url'   => admin_url('admin-ajax.php'),
+            'nonce'      => wp_create_nonce('ap_widget_order'),
+            'identifier' => get_current_user_id(),
+        ]);
     }
 });
 
