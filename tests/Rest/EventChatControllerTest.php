@@ -30,8 +30,10 @@ class EventChatControllerTest extends \WP_UnitTestCase
     public function test_post_and_get_chat(): void
     {
         Chat\install_tables();
+        $nonce = wp_create_nonce('wp_rest');
         $post = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event . '/chat');
         $post->set_body_params(['content' => 'Hello']);
+        $post->set_header('X-WP-Nonce', $nonce);
         $res = rest_get_server()->dispatch($post);
         $this->assertSame(200, $res->get_status());
         $msg = $res->get_data();
@@ -45,12 +47,32 @@ class EventChatControllerTest extends \WP_UnitTestCase
 
         $react = new WP_REST_Request('POST', '/artpulse/v1/chat/' . $msg['id'] . '/reaction');
         $react->set_body_params(['emoji' => '❤️']);
+        $react->set_header('X-WP-Nonce', $nonce);
         $res = rest_get_server()->dispatch($react);
         $this->assertSame(200, $res->get_status());
 
         $res = rest_get_server()->dispatch($get);
         $data = $res->get_data();
         $this->assertSame(1, $data[0]['reactions']['❤️']);
+    }
+
+    public function test_post_chat_without_nonce_fails(): void
+    {
+        Chat\install_tables();
+        $post = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event . '/chat');
+        $post->set_body_params(['content' => 'Hello']);
+        $res = rest_get_server()->dispatch($post);
+        $this->assertSame(401, $res->get_status());
+    }
+
+    public function test_add_reaction_without_nonce_fails(): void
+    {
+        Chat\install_tables();
+        $msg_id = Chat\insert_message($this->event, $this->user, 'Hi');
+        $react = new WP_REST_Request('POST', '/artpulse/v1/chat/' . $msg_id . '/reaction');
+        $react->set_body_params(['emoji' => '❤️']);
+        $res = rest_get_server()->dispatch($react);
+        $this->assertSame(401, $res->get_status());
     }
 
     public function test_get_chat_without_preloading_helpers(): void
