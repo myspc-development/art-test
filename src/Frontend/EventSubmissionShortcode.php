@@ -306,7 +306,7 @@ class EventSubmissionShortcode {
         $start_time = sanitize_text_field($_POST['event_start_time'] ?? '');
         $end_time = sanitize_text_field($_POST['event_end_time'] ?? '');
         $contact_info = sanitize_text_field($_POST['event_contact'] ?? '');
-        $rsvp_url = sanitize_text_field($_POST['event_rsvp_url'] ?? '');
+        $rsvp_url = esc_url_raw($_POST['event_rsvp_url'] ?? '');
         $organizer_name = sanitize_text_field($_POST['event_organizer_name'] ?? '');
         $organizer_email = sanitize_email($_POST['event_organizer_email'] ?? '');
         $event_org = intval($_POST['event_org']);
