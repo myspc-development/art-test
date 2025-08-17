@@ -24,6 +24,9 @@ class EventChatController extends WP_REST_Controller
 
     public function register_routes(): void
     {
+        if (!function_exists('ArtPulse\\DB\\Chat\\maybe_install_tables')) {
+            require_once plugin_dir_path(__DIR__) . '/includes/chat-db.php';
+        }
         register_rest_route($this->namespace, '/event/(?P<id>\\d+)/chat', [
             [
                 'methods'             => WP_REST_Server::READABLE,

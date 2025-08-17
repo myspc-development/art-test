@@ -15,7 +15,6 @@ class EventChatControllerTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
-        Chat\install_tables();
         do_action('init');
         do_action('rest_api_init');
 
@@ -30,6 +29,7 @@ class EventChatControllerTest extends \WP_UnitTestCase
 
     public function test_post_and_get_chat(): void
     {
+        Chat\install_tables();
         $post = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event . '/chat');
         $post->set_body_params(['content' => 'Hello']);
         $res = rest_get_server()->dispatch($post);
@@ -51,5 +51,13 @@ class EventChatControllerTest extends \WP_UnitTestCase
         $res = rest_get_server()->dispatch($get);
         $data = $res->get_data();
         $this->assertSame(1, $data[0]['reactions']['❤️']);
+    }
+
+    public function test_get_chat_without_preloading_helpers(): void
+    {
+        $get = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event . '/chat');
+        $res = rest_get_server()->dispatch($get);
+        $this->assertSame(200, $res->get_status());
+        $this->assertSame([], $res->get_data());
     }
 }
