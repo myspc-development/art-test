@@ -3,7 +3,6 @@ namespace ArtPulse\Rest\Tests;
 
 use WP_REST_Request;
 use ArtPulse\DB\Chat;
-use ArtPulse\Rest\EventChatController;
 
 /**
  * @group restapi
@@ -17,7 +16,7 @@ class EventChatRestTest extends \WP_UnitTestCase
     {
         parent::set_up();
         Chat\install_tables();
-        EventChatController::register();
+        do_action('init');
         do_action('rest_api_init');
 
         $this->event = self::factory()->post->create([
