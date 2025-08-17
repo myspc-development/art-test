@@ -7,6 +7,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
     "test:php": "composer test",
     "test:php:up": "docker compose -f docker-compose.tests.yml up -d",
     "test:php:down": "docker compose -f docker-compose.tests.yml down -v",
