@@ -180,10 +180,22 @@ class UserDashboardManager
             '1.0.0',
             true
         );
-        $user  = wp_get_current_user();
+        $user = wp_get_current_user();
+        $menu = ap_merge_dashboard_menus($user->roles, true);
+        if (empty($menu)) {
+            $menu = [
+                [
+                    'id' => 'placeholder',
+                    'section' => '#',
+                    'label' => __('No menu items available', 'artpulse'),
+                    'icon' => 'dashicons-info',
+                    'capability' => 'read',
+                ],
+            ];
+        }
         wp_localize_script('ap-dashboard-nav', 'APDashboardMenu', [
             'roles' => $user->roles,
-            'menu'  => ap_merge_dashboard_menus($user->roles, true),
+            'menu'  => $menu,
             'debug' => defined('WP_DEBUG') && WP_DEBUG,
         ]);
     }
