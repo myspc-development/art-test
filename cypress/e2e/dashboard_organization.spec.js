@@ -15,5 +15,11 @@ describe('Organization Dashboard', () => {
       cy.get(`[data-widget-id="${id}"]`).should('exist');
     });
   });
+
+  it('shows Quick Add Event widget', () => {
+    cy.login('organization');
+    cy.visit('/dashboard');
+    cy.get('#ap-add-event-btn').should('exist');
+  });
 });
 
