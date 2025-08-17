@@ -996,7 +996,11 @@ class UserDashboardManager
 
         $user             = wp_get_current_user();
         $profile_edit_url = self::get_profile_edit_url();
-        $show_notifications = current_user_can('member') || current_user_can('artist') || current_user_can('organization') || current_user_can('administrator');
+        $show_notifications =
+            in_array('member', $user->roles, true) ||
+            in_array('artist', $user->roles, true) ||
+            in_array('organization', $user->roles, true) ||
+            user_can($user, 'manage_options');
         $support_history   = get_user_meta(get_current_user_id(), 'ap_support_history', true);
         $show_support_history = is_array($support_history) && !empty($support_history);
         $badges = self::getBadges(get_current_user_id());
@@ -1068,7 +1072,7 @@ class UserDashboardManager
             ]);
         }
         if (!$completed && !$tour_done) {
-            if (user_can($user, 'artist') && isset($_GET['onboarding'])) {
+            if (in_array('artist', $user->roles, true) && isset($_GET['onboarding'])) {
                 $onboarding_html = self::load_template('onboarding-artist.php');
             } else {
                 $onboarding_html = '<div id="ap-onboarding-banner" class="ap-onboarding-banner">'
