@@ -1,13 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
   if (window.APDashboardMenu?.debug) {
-    if (process.env.NODE_ENV !== 'production') {
+    const env = typeof process !== 'undefined' ? process.env?.NODE_ENV : undefined;
+    if (env && env !== 'production') {
       console.log('AP roles:', APDashboardMenu.roles);
       console.log('Merged menu:', APDashboardMenu.menu);
+      const dbg = document.createElement('div');
+      dbg.className = 'ap-menu-debug';
+      dbg.textContent = `Roles: ${APDashboardMenu.roles.join(', ')} | Items: ${APDashboardMenu.menu.length}`;
+      document.querySelector('.dashboard-nav')?.appendChild(dbg);
     }
-    const dbg = document.createElement('div');
-    dbg.className = 'ap-menu-debug';
-    dbg.textContent = `Roles: ${APDashboardMenu.roles.join(', ')} | Items: ${APDashboardMenu.menu.length}`;
-    document.querySelector('.dashboard-nav')?.appendChild(dbg);
   }
 
   const sections = document.querySelectorAll('.ap-dashboard-section');
