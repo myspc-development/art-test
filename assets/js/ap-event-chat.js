@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.ap-event-chat').forEach(container => {
-        const eventId = container.dataset.eventId || (typeof ArtPulseChatVars !== 'undefined' ? ArtPulseChatVars.event_id : 0);
+        const eventId = parseInt(container.dataset.eventId || (typeof ArtPulseChatVars !== 'undefined' ? ArtPulseChatVars.event_id : 0), 10);
         const list = container.querySelector('.ap-chat-list');
         const form = container.querySelector('.ap-chat-form');
         let autoScroll = true;
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             requestAnimationFrame(() => {
                 if (!Array.isArray(msgs)) {
                     const li = document.createElement('li');
-                    li.textContent = 'Unable to load messages';
+                    li.textContent = typeof msgs === 'string' ? msgs : 'Unable to load messages';
                     list.replaceChildren(li);
                     return;
                 }
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let pollTimer;
         let stopped = false;
         function load() {
-            fetch(`/wp-json/artpulse/v1/event/${eventId}/chat`, {
+            return fetch(`/wp-json/artpulse/v1/event/${eventId}/chat`, {
                 headers: { 'X-WP-Nonce': typeof APChat !== 'undefined' ? APChat.nonce : '' }
             })
                 .then(r => {
@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (r.status === 404 || (r.status >= 400 && r.status < 500)) {
                             stopped = true;
                             if (pollTimer) clearTimeout(pollTimer);
+                            render('Chat unavailable');
                         }
                         throw new Error(`Chat load failed: ${r.status}`);
                     }
@@ -51,15 +52,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function poll() {
-            load();
-            pollTimer = setTimeout(() => {
-                if (!stopped && document.body.contains(container)) {
-                    poll();
+            if (stopped) {
+                if (pollTimer) {
+                    clearTimeout(pollTimer);
+                    pollTimer = null;
                 }
-            }, 10000);
+                return;
+            }
+            load().finally(() => {
+                if (!stopped && document.body.contains(container)) {
+                    pollTimer = setTimeout(poll, 10000);
+                }
+            });
         }
 
-        poll();
+        if (Number.isInteger(eventId) && eventId > 0) {
+            poll();
+        } else {
+            render('Chat unavailable');
+        }
 
         const cleanup = () => pollTimer && clearTimeout(pollTimer);
         window.addEventListener('beforeunload', cleanup);
