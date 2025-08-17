@@ -8,13 +8,6 @@ if (!$wp_phpunit_dir) {
     $wp_phpunit_dir = __DIR__ . '/../../vendor/wp-phpunit/wp-phpunit';
 }
 
-// If WordPress core isn't installed, skip the tests gracefully.
-$wp_core = dirname(__DIR__, 2) . '/wordpress/wp-settings.php';
-if (!file_exists($wp_core)) {
-    fwrite(STDERR, "[bootstrap] WordPress not installed; skipping tests.\n");
-    return;
-}
-
 // Load test functions so we can load the plugin.
 require_once $wp_phpunit_dir . '/includes/functions.php';
 
@@ -36,5 +29,11 @@ tests_add_filter('muplugins_loaded', function () {
     }
 });
 
-// Start up the WP testing environment.
+// Ensure tests config path is available to the wp-phpunit bootstrap.
+$tests_config = getenv('WP_PHPUNIT__TESTS_CONFIG') ?: __DIR__ . '/wp-tests-config.php';
+if (! file_exists($tests_config)) {
+    fwrite(STDERR, "\n[bootstrap] Missing tests config at {$tests_config}. Create tests/php/wp-tests-config.php or set WP_PHPUNIT__TESTS_CONFIG.\n");
+}
+
+// Start up the WP testing environment (this loads WP core from wp-phpunit package).
 require $wp_phpunit_dir . '/includes/bootstrap.php';
