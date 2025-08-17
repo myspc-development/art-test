@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/php/bootstrap.php" colors="true">
-    <testsuites>
-      <testsuite name="Plugin Test Suite">
-        <directory>tests</directory>
-      </testsuite>
-    </testsuites>
-    <php>
+  <testsuites>
+    <testsuite name="ArtPulse Plugin">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <!-- Path to wp-phpunit test library -->
     <env name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit" />
+    <!-- Point to our WP config for tests -->
     <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/php/wp-tests-config.php" />
+    <!-- Path to your plugin bootstrap file at repo root; adjust if different -->
     <env name="PLUGIN_MAIN_FILE" value="artpulse.php" />
-    <!-- Default DB creds for local runs; override via environment/CI -->
+    <!-- Defaults for local DB; override via environment or CI -->
     <env name="WP_DB_HOST" value="127.0.0.1:3306" />
     <env name="WP_DB_NAME" value="wordpress_test" />
     <env name="WP_DB_USER" value="root" />
     <env name="WP_DB_PASS" value="" />
-    </php>
-  </phpunit>
+  </php>
+</phpunit>
