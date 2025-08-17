@@ -88,6 +88,8 @@ class EventSubmissionShortcode {
             'numberposts' => -1,
         ]);
 
+        $can_publish = current_user_can('publish_events');
+
         ob_start();
         ?>
         <div class="ap-form-messages" role="status" aria-live="polite">
@@ -250,12 +252,17 @@ class EventSubmissionShortcode {
                 </label>
             </p>
 
+            <?php if ($can_publish): ?>
             <p>
                 <label><input type="radio" name="event_status" value="publish" checked> Publish Now</label>
                 <label><input type="radio" name="event_status" value="draft"> Save as Draft</label>
                 <label><input type="radio" name="event_status" value="future"> Schedule</label>
                 <input type="datetime-local" name="event_publish_date" value="">
             </p>
+            <?php else: ?>
+            <input type="hidden" name="event_status" value="pending" />
+            <p><em><?= esc_html__('Your event will be submitted for review.', 'artpulse'); ?></em></p>
+            <?php endif; ?>
 
             <p>
                 <button class="ap-form-button nectar-button" type="submit" name="ap_submit_event">Submit Event</button>
@@ -315,19 +322,22 @@ class EventSubmissionShortcode {
 
         $status_choice = sanitize_text_field($_POST['event_status'] ?? 'publish');
         $publish_date  = sanitize_text_field($_POST['event_publish_date'] ?? '');
-        $post_status   = 'publish';
+        $can_publish   = current_user_can('publish_events');
+        $post_status   = $can_publish ? 'publish' : 'pending';
         $post_date     = null;
 
-        if ($status_choice === 'draft') {
-            $post_status = 'draft';
-        } elseif ($status_choice === 'future') {
-            $post_status = 'future';
-            if ($publish_date) {
-                $post_date = $publish_date;
-            } else {
-                self::add_notice(__('Please provide a publish date.', 'artpulse'), 'error');
-                self::maybe_redirect();
-                return;
+        if ($can_publish) {
+            if ($status_choice === 'draft') {
+                $post_status = 'draft';
+            } elseif ($status_choice === 'future') {
+                $post_status = 'future';
+                if ($publish_date) {
+                    $post_date = $publish_date;
+                } else {
+                    self::add_notice(__('Please provide a publish date.', 'artpulse'), 'error');
+                    self::maybe_redirect();
+                    return;
+                }
             }
         }
 
@@ -482,7 +492,10 @@ class EventSubmissionShortcode {
 
 
         // Success message and redirect
-        self::add_notice(__('Event submitted successfully! It is awaiting review.', 'artpulse'), 'success');
+        $message = $post_status === 'pending'
+            ? __('Event submitted successfully! It is awaiting review.', 'artpulse')
+            : __('Event submitted successfully!', 'artpulse');
+        self::add_notice($message, 'success');
         self::maybe_redirect();
     }
 }
