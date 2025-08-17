@@ -1,23 +1,44 @@
 name: CI
-
 on:
   push:
-    branches: [main]
   pull_request:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=20
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-php@v3
+      - uses: actions/setup-node@v4
         with:
-          php-version: '8.3'
-      - run: composer install --prefer-dist --no-progress
-      - run: npm install
-      - run: npm run lint --if-present
-      - run: npm run test:js --if-present
-      - run: composer test || true
-      - run: composer sniff || true
-      - run: npm run build --if-present
-      - run: npm run perf --if-present
+          node-version: '20'
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: phpunit
+          coverage: none
+      - name: Install JS deps
+        run: npm ci
+      - name: Run JS tests
+        run: npm test
+      - name: Install Composer deps
+        run: composer install --prefer-dist --no-progress
+      - name: Run PHP tests
+        env:
+          WP_DB_HOST: 127.0.0.1:3306
+          WP_DB_USER: root
+          WP_DB_PASS: ""
+          WP_DB_NAME: wordpress_test
+        run: vendor/bin/phpunit
