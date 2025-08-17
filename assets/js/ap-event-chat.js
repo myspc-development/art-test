@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function render(msgs) {
             list.innerHTML = '';
+            if (!Array.isArray(msgs)) {
+                const li = document.createElement('li');
+                li.textContent = 'Unable to load messages';
+                list.appendChild(li);
+                return;
+            }
             msgs.forEach(msg => {
                 const li = document.createElement('li');
                 const time = new Intl.DateTimeFormat('en', { timeStyle: 'short' }).format(new Date(msg.created_at));
@@ -19,22 +25,32 @@ document.addEventListener('DOMContentLoaded', () => {
             if (autoScroll) list.scrollTop = list.scrollHeight;
         }
 
+        let pollTimer;
+        let stopped = false;
         function load() {
             fetch(`/wp-json/artpulse/v1/event/${eventId}/chat`, {
                 headers: { 'X-WP-Nonce': typeof APChat !== 'undefined' ? APChat.nonce : '' }
             })
-                .then(r => r.json())
+                .then(r => {
+                    if (!r.ok) {
+                        if (r.status === 404 || (r.status >= 400 && r.status < 500)) {
+                            stopped = true;
+                            if (pollTimer) clearTimeout(pollTimer);
+                        }
+                        throw new Error(`Chat load failed: ${r.status}`);
+                    }
+                    return r.json();
+                })
                 .then(render)
                 .catch(err => {
                     console.error('Chat load error', err);
                 });
         }
 
-        let pollTimer;
         function poll() {
             load();
             pollTimer = setTimeout(() => {
-                if (document.body.contains(container)) {
+                if (!stopped && document.body.contains(container)) {
                     poll();
                 }
             }, 10000);
