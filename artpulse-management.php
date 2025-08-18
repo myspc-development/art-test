@@ -200,6 +200,7 @@ require_once __DIR__ . '/includes/registration-hooks.php';
 require_once __DIR__ . '/includes/roles.php';
 require_once __DIR__ . '/includes/profile-roles.php';
 require_once __DIR__ . '/includes/cleanup-dashboard-layouts.php';
+require_once __DIR__ . '/includes/repair-dashboard-layouts.php';
 require_once __DIR__ . '/includes/delete-dashboard-layouts.php';
 require_once __DIR__ . '/includes/member-dashboard-bootstrap.php';
 

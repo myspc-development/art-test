@@ -4,6 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use WP_REST_Request;
 use ArtPulse\Core\UserDashboardManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Core\DashboardWidgetManager;
 
 /**
  * @group restapi
@@ -15,8 +16,12 @@ class DashboardLayoutTest extends \WP_UnitTestCase
     public function set_up(): void
     {
         parent::set_up();
+        DashboardWidgetManager::register();
         $this->user_id = self::factory()->user->create();
         wp_set_current_user($this->user_id);
+        // Remove the auto-assigned layout so tests can define their own.
+        delete_user_meta($this->user_id, 'ap_dashboard_layout');
+
         UserDashboardManager::register();
         DashboardWidgetRegistry::register('one', 'one', '', '', '__return_null');
         DashboardWidgetRegistry::register('two', 'two', '', '', '__return_null');
@@ -107,6 +112,8 @@ class DashboardLayoutTest extends \WP_UnitTestCase
     public function test_get_uses_role_default_when_no_user_meta(): void
     {
         $uid = self::factory()->user->create(['role' => 'member']);
+        // Remove layout assigned during registration to simulate missing meta.
+        delete_user_meta($uid, 'ap_dashboard_layout');
         wp_set_current_user($uid);
         update_option('ap_dashboard_widget_config', ['member' => ['membership', 'upgrade']]);
 
@@ -117,6 +124,15 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         $data = $res->get_data();
         $this->assertSame(['membership', 'upgrade'], $data['layout']);
         $this->assertSame(['membership' => true, 'upgrade' => true], $data['visibility']);
+    }
+
+    public function test_user_register_populates_default_layout(): void
+    {
+        DashboardWidgetRegistry::register('my-events', 'my-events', '', '', '__return_null');
+        update_option('ap_dashboard_widget_config', ['organization' => ['my-events']]);
+        $uid = self::factory()->user->create(['role' => 'organization']);
+        $expected = [ ['id' => 'my-events', 'visible' => true] ];
+        $this->assertSame($expected, get_user_meta($uid, 'ap_dashboard_layout', true));
     }
 
     public function test_get_returns_layout_for_specified_role(): void
