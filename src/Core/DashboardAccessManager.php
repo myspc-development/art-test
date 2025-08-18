@@ -20,8 +20,9 @@ class DashboardAccessManager
         }
 
         $content = $post->post_content ?? '';
+        $tag = apply_filters('ap_dashboard_shortcode_tag', 'ap_user_dashboard');
         if (
-            strpos($content, '[ap_user_dashboard]') !== false ||
+            strpos($content, '[' . $tag . ']') !== false ||
             strpos($content, '[ap_react_dashboard]') !== false
         ) {
             $login_url = Plugin::get_login_url();

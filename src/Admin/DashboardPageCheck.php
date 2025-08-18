@@ -17,7 +17,8 @@ class DashboardPageCheck
         }
 
         if (isset($_GET['ap_create_dashboard_pages']) && check_admin_referer('ap_create_dashboard_pages')) {
-            ShortcodePages::create_pages(['[ap_user_dashboard]', '[user_dashboard]']);
+            $tag = apply_filters('ap_dashboard_shortcode_tag', 'ap_user_dashboard');
+            ShortcodePages::create_pages(['[' . $tag . ']', '[user_dashboard]']);
             add_action('admin_notices', static function () {
                 echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Dashboard pages created.', 'artpulse') . '</p></div>';
             });
@@ -25,7 +26,8 @@ class DashboardPageCheck
             exit;
         }
 
-        $codes = ['[ap_user_dashboard]', '[user_dashboard]'];
+        $tag = apply_filters('ap_dashboard_shortcode_tag', 'ap_user_dashboard');
+        $codes = ['[' . $tag . ']', '[user_dashboard]'];
         foreach ($codes as $code) {
             $pages = get_posts([
                 'post_type'   => 'page',

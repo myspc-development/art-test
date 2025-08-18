@@ -111,7 +111,8 @@ class OrganizationDashboardShortcode {
         if ($mode === 'react') {
             return do_shortcode('[ap_render_ui]');
         }
-        return do_shortcode('[ap_user_dashboard]');
+        $tag = apply_filters('ap_dashboard_shortcode_tag', 'ap_user_dashboard');
+        return do_shortcode('[' . $tag . ']');
     }
 
 
