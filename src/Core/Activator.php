@@ -20,6 +20,8 @@ class Activator
                 'woocommerce_enabled'   => 0,
                 'service_worker_enabled' => 0,
                 'openai_api_key'        => '',
+                'external_api_base_url' => '',
+                'external_api_token'    => '',
                 'debug_logging'         => 0,
                 'override_artist_membership'  => 0,
                 'override_org_membership'    => 0,

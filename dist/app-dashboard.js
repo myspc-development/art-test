@@ -1858,7 +1858,7 @@
       }, Comp ? /*#__PURE__*/React$1.createElement(Comp, null) : /*#__PURE__*/React$1.createElement("div", {
         role: "region",
         "aria-label": "Unavailable Widget"
-      }, /*#__PURE__*/React$1.createElement("p", null, "\u24D8 This widget is available via API only and will be activated soon.")));
+      }, /*#__PURE__*/React$1.createElement("p", null, "")));
     }));
   }
 

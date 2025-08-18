@@ -8,17 +8,28 @@ import FlaggedActivityLog from './FlaggedActivityLog';
 export default function CommunityAnalyticsPanel() {
   const [tab, setTab] = useState('messaging');
   const [data, setData] = useState({});
-  const apiRoot = window.ArtPulseDashboardApi?.root || '/wp-json/';
+  const apiRoot = window.ArtPulseDashboardApi?.apiUrl || window.ArtPulseDashboardApi?.root || '/wp-json/';
   const nonce = window.apNonce || window.ArtPulseDashboardApi?.nonce || '';
+  const token = window.ArtPulseDashboardApi?.apiToken || '';
 
   useEffect(() => {
+    const headers = { 'X-WP-Nonce': nonce };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
     fetch(`${apiRoot}artpulse/v1/analytics/community/${tab}`, {
-      headers: { 'X-WP-Nonce': nonce },
+      headers,
       credentials: 'same-origin'
     })
-      .then(res => res.ok ? res.json() : {})
-      .then(setData);
+      .then(res => (res.status === 401 || res.status === 403 || res.status === 404 ? {} : res.json()))
+      .then(setData)
+      .catch(() => setData({}));
   }, [tab]);
+  if (Object.keys(data).length === 0) {
+    return (
+      <div className="ap-widget bg-white p-4 rounded shadow mb-4">
+        <p>{__('No analytics available.', 'artpulse')}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="ap-widget bg-white p-4 rounded shadow mb-4">

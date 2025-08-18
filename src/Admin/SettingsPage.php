@@ -98,6 +98,16 @@ class SettingsPage
                 'desc'  => __('Used for auto-tagging and summaries.', 'artpulse'),
                 'type'  => 'text',
             ],
+            'external_api_base_url' => [
+                'label' => __('External API Base URL', 'artpulse'),
+                'desc'  => __('Base URL for external dashboard APIs.', 'artpulse'),
+                'type'  => 'text',
+            ],
+            'external_api_token' => [
+                'label' => __('External API Token', 'artpulse'),
+                'desc'  => __('Bearer token used for external API requests.', 'artpulse'),
+                'type'  => 'text',
+            ],
             'oauth_google_enabled' => [
                 'label' => __('Enable Google Login', 'artpulse'),
                 'desc'  => __('Show Google button on the login form.', 'artpulse'),

@@ -72,6 +72,7 @@ class UserDashboardManager
         );
 
         // Localize dashboard REST endpoint
+        $opts = get_option('artpulse_settings', []);
         wp_localize_script('ap-user-dashboard-js', 'ArtPulseDashboardApi', [
             'root'             => esc_url_raw(rest_url()),
             'nonce'            => wp_create_nonce('wp_rest'),
@@ -80,6 +81,8 @@ class UserDashboardManager
             'artistEndpoint'   => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
             'exportEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/export')),
             'deleteEndpoint'   => esc_url_raw(rest_url('artpulse/v1/user/delete')),
+            'apiUrl'           => esc_url_raw($opts['external_api_base_url'] ?? ''),
+            'apiToken'         => $opts['external_api_token'] ?? '',
         ]);
 
         wp_localize_script('ap-user-dashboard-js', 'apL10n', [
