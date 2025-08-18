@@ -985,6 +985,10 @@ class UserDashboardManager
             return '<p>' . __('Please log in to view your dashboard.', 'artpulse') . '</p>';
         }
 
+        wp_enqueue_style('ap-react-dashboard');
+        wp_enqueue_script('ap-react-vendor');
+        wp_enqueue_script('ap-react-dashboard');
+
         $atts = shortcode_atts([
             'show_forms' => false,
         ], $atts, 'ap_user_dashboard');

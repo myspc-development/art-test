@@ -48,6 +48,10 @@ class ReactDashboardShortcode {
             return '<p>' . __('Please log in to view your dashboard.', 'artpulse') . '</p>';
         }
 
+        wp_enqueue_style('ap-react-dashboard');
+        wp_enqueue_script('ap-react-vendor');
+        wp_enqueue_script('ap-react-dashboard');
+
         $widgets = DashboardWidgetTools::get_role_widgets_for_current_user();
         ob_start();
         echo '<div id="ap-dashboard-root">';

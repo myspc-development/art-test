@@ -31,6 +31,9 @@ function user_dashboard_shortcode(): string {
     if (!is_user_logged_in()) {
         return '';
     }
+    wp_enqueue_style('ap-react-dashboard');
+    wp_enqueue_script('ap-react-vendor');
+    wp_enqueue_script('ap-react-dashboard');
 
     $user_id = get_current_user_id();
     $role    = function_exists('ap_get_effective_role') ? ap_get_effective_role() : RoleResolver::resolve($user_id);
