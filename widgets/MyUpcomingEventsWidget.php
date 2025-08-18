@@ -28,14 +28,64 @@ class MyUpcomingEventsWidget {
         return $user_id > 0;
     }
 
-      public static function render(int $user_id = 0): string {
-          $user_id = $user_id ?: get_current_user_id();
-          if (!self::can_view($user_id)) {
-              return '<div class="notice notice-error"><p>' . esc_html__('Please log in.', 'artpulse') . '</p></div>';
-          }
+    public static function render(int $user_id = 0): string {
+        $user_id = $user_id ?: get_current_user_id();
+        if (!self::can_view($user_id)) {
+            return '<div class="notice notice-error"><p>' . esc_html__('Please log in.', 'artpulse') . '</p></div>';
+        }
 
-          return '<p>' . esc_html__('Upcoming events will appear here.', 'artpulse') . '</p>';
-      }
+        $rsvp_ids = get_user_meta($user_id, 'ap_rsvp_events', true);
+        if (!is_array($rsvp_ids)) {
+            $rsvp_ids = [];
+        }
+
+        $authored_ids = get_posts([
+            'post_type'      => 'artpulse_event',
+            'post_status'    => 'publish',
+            'author'         => $user_id,
+            'fields'         => 'ids',
+            'nopaging'       => true,
+            'suppress_filters' => true,
+        ]);
+
+        $event_ids = array_unique(array_merge($rsvp_ids, $authored_ids));
+        if (empty($event_ids)) {
+            return '<div class="ap-widget-empty">' . esc_html__('No upcoming events.', 'artpulse') . '</div>';
+        }
+
+        $today = current_time('Y-m-d');
+        $q = new \WP_Query([
+            'post_type'      => 'artpulse_event',
+            'post__in'       => $event_ids,
+            'posts_per_page' => 5,
+            'orderby'        => 'meta_value',
+            'order'          => 'ASC',
+            'meta_key'       => '_ap_event_date',
+            'meta_query'     => [
+                [
+                    'key'     => '_ap_event_date',
+                    'value'   => $today,
+                    'compare' => '>=',
+                    'type'    => 'DATE',
+                ],
+            ],
+            'suppress_filters' => true,
+        ]);
+
+        if (!$q->have_posts()) {
+            return '<div class="ap-widget-empty">' . esc_html__('No upcoming events.', 'artpulse') . '</div>';
+        }
+
+        ob_start();
+        echo '<ul class="ap-event-list">';
+        while ($q->have_posts()) {
+            $q->the_post();
+            echo '<li>' . esc_html(get_the_title()) . '</li>';
+        }
+        echo '</ul>';
+        wp_reset_postdata();
+        return ob_get_clean();
+    }
 }
 
 MyUpcomingEventsWidget::register();
