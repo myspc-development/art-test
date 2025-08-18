@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import useFilteredWidgets from '../../dashboard/useFilteredWidgets';
+import DOMPurify from 'dompurify';
 
 interface WidgetDef {
   id: string;
@@ -140,7 +141,8 @@ const RoleDashboard: React.FC = () => {
     })
       .then(res => res.text())
       .then(html => {
-        setHtmlMap(prev => ({ ...prev, [id]: addHeadingId(id, html) }));
+        const clean = DOMPurify.sanitize(addHeadingId(id, html));
+        setHtmlMap(prev => ({ ...prev, [id]: clean }));
         setErrorMap(prev => ({ ...prev, [id]: false }));
       })
       .catch(err => {
@@ -154,7 +156,10 @@ const RoleDashboard: React.FC = () => {
       if (widget.restOnly && !htmlMap[widget.id] && !errorMap[widget.id]) {
         fetchWidgetHtml(widget.id);
       } else if (!widget.restOnly && widget.html && !htmlMap[widget.id]) {
-        setHtmlMap(prev => ({ ...prev, [widget.id]: addHeadingId(widget.id, widget.html as string) }));
+        const clean = DOMPurify.sanitize(
+          addHeadingId(widget.id, widget.html as string)
+        );
+        setHtmlMap(prev => ({ ...prev, [widget.id]: clean }));
       }
     });
   }, [visibleWidgets, restRoot, nonce, htmlMap, errorMap]);
@@ -196,7 +201,10 @@ const RoleDashboard: React.FC = () => {
               <button onClick={() => fetchWidgetHtml(widget.id)}>Retry</button>
             </div>
           ) : (
-            <div dangerouslySetInnerHTML={{ __html: htmlMap[widget.id] || '' }} />
+            (() => {
+              const sanitized = DOMPurify.sanitize(htmlMap[widget.id] || '');
+              return <div dangerouslySetInnerHTML={{ __html: sanitized }} />;
+            })()
           )}
         </DashboardCard>
       ))}
