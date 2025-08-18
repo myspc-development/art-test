@@ -135,9 +135,10 @@ const RoleDashboard: React.FC = () => {
   const [htmlMap, setHtmlMap] = useState<Record<string, string>>({});
   const [errorMap, setErrorMap] = useState<Record<string, boolean>>({});
 
-  const fetchWidgetHtml = (id: string) => {
+  const fetchWidgetHtml = (id: string, controller: AbortController) => {
     fetch(`${restRoot}artpulse/v1/dashboard-widget/${id}`, {
       headers: { 'X-WP-Nonce': nonce },
+      signal: controller.signal,
     })
       .then(res => res.text())
       .then(html => {
@@ -146,15 +147,19 @@ const RoleDashboard: React.FC = () => {
         setErrorMap(prev => ({ ...prev, [id]: false }));
       })
       .catch(err => {
+        if ((err as { name?: string }).name === 'AbortError') return;
         console.error('Failed to load widget', id, err);
         setErrorMap(prev => ({ ...prev, [id]: true }));
       });
   };
 
   useEffect(() => {
+    const controllers: AbortController[] = [];
     visibleWidgets.forEach(widget => {
       if (widget.restOnly && !htmlMap[widget.id] && !errorMap[widget.id]) {
-        fetchWidgetHtml(widget.id);
+        const controller = new AbortController();
+        controllers.push(controller);
+        fetchWidgetHtml(widget.id, controller);
       } else if (!widget.restOnly && widget.html && !htmlMap[widget.id]) {
         const clean = DOMPurify.sanitize(
           addHeadingId(widget.id, widget.html as string)
@@ -162,6 +167,9 @@ const RoleDashboard: React.FC = () => {
         setHtmlMap(prev => ({ ...prev, [widget.id]: clean }));
       }
     });
+    return () => {
+      controllers.forEach(c => c.abort());
+    };
   }, [visibleWidgets, restRoot, nonce, htmlMap, errorMap]);
 
   return (
@@ -198,7 +206,14 @@ const RoleDashboard: React.FC = () => {
           {errorMap[widget.id] ? (
             <div>
               <p>Failed to load widget.</p>
-              <button onClick={() => fetchWidgetHtml(widget.id)}>Retry</button>
+              <button
+                onClick={() => {
+                  const controller = new AbortController();
+                  fetchWidgetHtml(widget.id, controller);
+                }}
+              >
+                Retry
+              </button>
             </div>
           ) : (
             (() => {
