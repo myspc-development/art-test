@@ -25,6 +25,9 @@ class DashboardWidgetManager
         // Filters to retrieve layouts.
         add_filter('artpulse_dashboard_user_layout', [self::class, 'getUserLayout'], 10, 2);
         add_filter('artpulse_dashboard_role_layout', [self::class, 'getRoleLayout'], 10, 1);
+
+        // Ensure newly created users receive a default dashboard layout.
+        add_action('user_register', [self::class, 'assign_default_layout']);
     }
 
     /**
@@ -166,6 +169,30 @@ class DashboardWidgetManager
     public static function resetUserLayout(int $user_id): void
     {
         UserLayoutManager::reset_user_layout($user_id);
+    }
+
+    /**
+     * Assign a default dashboard layout to newly created users.
+     *
+     * If the user has no saved layout, populate it using the role's default
+     * configuration. Falls back to a minimal layout containing the core
+     * `my-events` widget when no role preset is available.
+     */
+    public static function assign_default_layout(int $user_id): void
+    {
+        $current = get_user_meta($user_id, UserLayoutManager::META_KEY, true);
+        if (is_array($current) && !empty($current)) {
+            return;
+        }
+
+        $role   = UserLayoutManager::get_primary_role($user_id);
+        $result = UserLayoutManager::get_role_layout($role);
+        $layout = $result['layout'] ?? [];
+        if (empty($layout)) {
+            $layout = [ ['id' => 'my-events', 'visible' => true] ];
+        }
+
+        UserLayoutManager::save_user_layout($user_id, $layout);
     }
 
     public static function renderPreview(string $role): void
