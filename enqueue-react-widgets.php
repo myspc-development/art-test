@@ -14,10 +14,18 @@ function artpulse_enqueue_widget_scripts(): void {
         return;
     }
 
-    $has_widget = has_shortcode($post->post_content, 'ap_widget')
-        || has_shortcode($post->post_content, 'ap_user_dashboard')
-        || has_shortcode($post->post_content, 'ap_react_dashboard')
-        || has_shortcode($post->post_content, 'user_dashboard');
+    $shortcodes = ['ap_widget', 'ap_user_dashboard', 'ap_react_dashboard', 'user_dashboard'];
+    $elementor_data = get_post_meta($post->ID, '_elementor_data', true);
+
+    $has_widget = false;
+    foreach ([$post->post_content, is_string($elementor_data) ? $elementor_data : ''] as $content) {
+        foreach ($shortcodes as $shortcode) {
+            if (has_shortcode($content, $shortcode) || strpos($content, '[' . $shortcode) !== false) {
+                $has_widget = true;
+                break 2;
+            }
+        }
+    }
     if (!$has_widget) {
         return;
     }
