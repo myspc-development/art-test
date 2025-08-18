@@ -13,6 +13,15 @@ use ArtPulse\Core\LayoutUtils;
 
 class UserDashboardManager
 {
+    /**
+     * Generate a cache-busting asset version based on file modification time.
+     */
+    private static function get_asset_version(string $relative_path): string
+    {
+        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . ltrim($relative_path, '/');
+        return file_exists($path) ? (string) filemtime($path) : '1.0.0';
+    }
+
     public static function register()
     {
         ShortcodeRegistry::register('ap_user_dashboard', 'Member Dashboard', [ self::class, 'renderDashboard' ]);
@@ -34,14 +43,14 @@ class UserDashboardManager
             'ap-widget-lifecycle',
             plugins_url('assets/js/widget-lifecycle.js', ARTPULSE_PLUGIN_FILE),
             [],
-            '1.0.0',
+            self::get_asset_version('assets/js/widget-lifecycle.js'),
             true
         );
         wp_enqueue_script(
             'ap-user-dashboard-js',
             plugins_url('assets/js/ap-user-dashboard.js', ARTPULSE_PLUGIN_FILE),
             ['wp-api-fetch', 'chart-js', 'ap-widget-lifecycle'],
-            '1.0.0',
+            self::get_asset_version('assets/js/ap-user-dashboard.js'),
             true
         );
 
@@ -50,7 +59,7 @@ class UserDashboardManager
             'ap-analytics-js',
             plugins_url('assets/js/ap-analytics.js', ARTPULSE_PLUGIN_FILE),
             ['ap-user-dashboard-js'],
-            '1.0.0',
+            self::get_asset_version('assets/js/ap-analytics.js'),
             true
         );
 
@@ -58,7 +67,7 @@ class UserDashboardManager
             'ap-event-analytics',
             plugins_url('assets/js/event-analytics.js', ARTPULSE_PLUGIN_FILE),
             ['ap-user-dashboard-js'],
-            '1.0.0',
+            self::get_asset_version('assets/js/event-analytics.js'),
             true
         );
 
@@ -133,7 +142,7 @@ class UserDashboardManager
             'ap-profile-modal',
             plugins_url('assets/js/ap-profile-modal.js', ARTPULSE_PLUGIN_FILE),
             [],
-            '1.0.0',
+            self::get_asset_version('assets/js/ap-profile-modal.js'),
             true
         );
         wp_localize_script('ap-profile-modal', 'APProfileModal', [
@@ -145,7 +154,7 @@ class UserDashboardManager
             'ap-widget-settings',
             plugins_url('assets/js/ap-widget-settings.js', ARTPULSE_PLUGIN_FILE),
             [],
-            '1.0.0',
+            self::get_asset_version('assets/js/ap-widget-settings.js'),
             true
         );
         wp_localize_script('ap-widget-settings', 'APWidgetSettings', [
@@ -158,14 +167,14 @@ class UserDashboardManager
             'sortablejs',
             plugins_url('assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE),
             [],
-            '1.15.0',
+            self::get_asset_version('assets/libs/sortablejs/Sortable.min.js'),
             true
         );
         wp_enqueue_script(
             'user-dashboard-layout',
             plugins_url('assets/js/user-dashboard-layout.js', ARTPULSE_PLUGIN_FILE),
             ['sortablejs'],
-            '1.0.0',
+            self::get_asset_version('assets/js/user-dashboard-layout.js'),
             true
         );
         wp_localize_script('user-dashboard-layout', 'APLayout', [
@@ -177,7 +186,7 @@ class UserDashboardManager
             'ap-dashboard-nav',
             plugins_url('assets/js/dashboard-nav.js', ARTPULSE_PLUGIN_FILE),
             [],
-            '1.0.0',
+            self::get_asset_version('assets/js/dashboard-nav.js'),
             true
         );
         $user = wp_get_current_user();
