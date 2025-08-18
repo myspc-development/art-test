@@ -130,18 +130,18 @@ class DashboardRenderer {
 			$output = current_user_can( 'manage_options' ) ? "<div class='ap-widget-error'>This widget failed to load.</div>" : '';
 		}
 
-		$output = apply_filters( 'ap_render_dashboard_widget_output', $output, $widget_id, $user_id, $widget );
+               $output = apply_filters( 'ap_render_dashboard_widget_output', $output, $widget_id, $user_id, $widget );
 
-		// Sanitize final HTML to prevent XSS.
-		$output = wp_kses_post( $output );
+               // Optionally wrap output in developer mode for easier debugging.
+               if ( defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ) {
+                       $output = sprintf( '<!-- ap-widget:%s:start -->%s<!-- ap-widget:%s:end -->', $widget_id, $output, $widget_id );
+               }
 
-		// Optionally wrap output in developer mode for easier debugging.
-		if ( defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ) {
-			$output = sprintf( '<!-- ap-widget:%s:start -->%s<!-- ap-widget:%s:end -->', $widget_id, $output, $widget_id );
-		}
+               // Allow filters on the fully rendered widget markup.
+               $output = apply_filters( 'ap_dashboard_rendered_widget', $output, $widget_id, $user_id );
 
-		// Allow filters on the fully rendered widget markup.
-		$output = apply_filters( 'ap_dashboard_rendered_widget', $output, $widget_id, $user_id );
+               // Sanitize final HTML to prevent XSS.
+               $output = wp_kses_post( $output );
 
 		$elapsed = microtime( true ) - $start;
 		error_log( sprintf( '⏱️ Widget %s rendered in %.4fs', $widget_id, $elapsed ) );
