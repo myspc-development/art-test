@@ -7,16 +7,20 @@ import DashboardContainer from './DashboardContainer.jsx';
 
 function AppDashboard() {
   const [role, setRole] = useState(null);
-  const apiRoot = window.ArtPulseDashboardApi?.root || '/wp-json/';
+  const apiRoot = window.ArtPulseDashboardApi?.apiUrl || window.ArtPulseDashboardApi?.root || '/wp-json/';
   const nonce = window.apNonce || window.ArtPulseDashboardApi?.nonce || '';
+  const token = window.ArtPulseDashboardApi?.apiToken || '';
 
   useEffect(() => {
+    const headers = { 'X-WP-Nonce': nonce };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
     fetch(`${apiRoot}artpulse/v1/me`, {
-      headers: { 'X-WP-Nonce': nonce },
+      headers,
       credentials: 'same-origin'
     })
-      .then(res => res.json())
-      .then(data => setRole(data.role));
+      .then(res => (res.status === 401 || res.status === 403 || res.status === 404 ? {} : res.json()))
+      .then(data => setRole(data.role))
+      .catch(() => setRole(null));
   }, []);
 
   const logout = () => (window.location.href = '/wp-login.php?action=logout');

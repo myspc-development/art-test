@@ -183,7 +183,7 @@ function DashboardContainer(_ref) {
           role: "region",
           "aria-label": "Unavailable Widget",
           children: /*#__PURE__*/(0, _jsxRuntime.jsx)("p", {
-            children: "\u24D8 This widget is available via API only and will be activated soon."
+            children: ""
           })
         })
       }, item.i);

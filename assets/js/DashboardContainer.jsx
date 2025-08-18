@@ -4,32 +4,38 @@ const GridLayout = WidthProvider(Responsive);
 import registry from './widgets/index.js';
 
 export default function DashboardContainer({ role = 'member' }) {
-  const apiRoot = window.ArtPulseDashboardApi?.root || '/wp-json/';
+  const apiRoot = window.ArtPulseDashboardApi?.apiUrl || window.ArtPulseDashboardApi?.root || '/wp-json/';
   const nonce = window.apNonce || window.ArtPulseDashboardApi?.nonce || '';
+  const token = window.ArtPulseDashboardApi?.apiToken || '';
   const [layout, setLayout] = useState([]);
   const widgets = registry.filter(w => !w.roles || w.roles.includes(role));
   const widgetTitles = Object.fromEntries(widgets.map(w => [w.id, w.title]));
 
   useEffect(() => {
+    const headers = { 'X-WP-Nonce': nonce };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
     fetch(`${apiRoot}artpulse/v1/ap_dashboard_layout`, {
-      headers: { 'X-WP-Nonce': nonce },
+      headers,
       credentials: 'same-origin'
     })
-      .then(r => r.json())
+      .then(r => (r.status === 401 || r.status === 403 || r.status === 404 ? Promise.reject() : r.json()))
       .then(data => {
         const ids = Array.isArray(data.layout) ? data.layout : [];
         setLayout(
           ids.map((id, i) => ({ i: id, x: 0, y: i, w: 4, h: 2 }))
         );
-      });
+      })
+      .catch(() => setLayout([]));
   }, [role]);
 
   const handleLayoutChange = l => {
     setLayout(l);
     const ids = l.map(it => it.i);
+    const headers = { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
     fetch(`${apiRoot}artpulse/v1/ap_dashboard_layout`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
+      headers,
       credentials: 'same-origin',
       body: JSON.stringify({ layout: ids })
     });
@@ -105,13 +111,7 @@ export default function DashboardContainer({ role = 'member' }) {
             aria-label={widgetTitles[item.i]}
             onKeyDown={e => handleKeyDown(e, item)}
           >
-            {Comp ? (
-              <Comp />
-            ) : (
-              <div role="region" aria-label="Unavailable Widget">
-                <p>ⓘ This widget is available via API only and will be activated soon.</p>
-              </div>
-            )}
+            {Comp ? <Comp /> : <div className="ap-widget placeholder" role="region" aria-label="Unavailable Widget" />}
           </div>
         );
       })}

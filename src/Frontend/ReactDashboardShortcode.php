@@ -35,9 +35,12 @@ class ReactDashboardShortcode {
             );
 
             $nonce = wp_create_nonce('wp_rest');
+            $opts  = get_option('artpulse_settings', []);
             wp_localize_script('ap-react-dashboard', 'ArtPulseDashboardApi', [
                 'root'  => esc_url_raw(rest_url()),
                 'nonce' => $nonce,
+                'apiUrl'   => esc_url_raw($opts['external_api_base_url'] ?? ''),
+                'apiToken' => $opts['external_api_token'] ?? '',
             ]);
             wp_add_inline_script('ap-react-dashboard', 'window.apNonce = ' . wp_json_encode($nonce) . ';', 'before');
         }
