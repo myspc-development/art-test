@@ -8,12 +8,16 @@ function artpulse_enqueue_widget_scripts(): void {
         return;
     }
 
+    global $post;
     $post = get_post();
     if (!$post) {
         return;
     }
 
-    $has_widget = has_shortcode($post->post_content, 'ap_widget') || has_shortcode($post->post_content, 'ap_user_dashboard');
+    $has_widget = has_shortcode($post->post_content, 'ap_widget')
+        || has_shortcode($post->post_content, 'ap_user_dashboard')
+        || has_shortcode($post->post_content, 'ap_react_dashboard')
+        || has_shortcode($post->post_content, 'user_dashboard');
     if (!$has_widget) {
         return;
     }
