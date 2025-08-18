@@ -28,7 +28,8 @@ class FrontendDashboardWidget
 
     public static function render_widget(): void
     {
-        echo do_shortcode('[ap_user_dashboard]');
+        $tag = apply_filters('ap_dashboard_shortcode_tag', 'ap_user_dashboard');
+        echo do_shortcode('[' . $tag . ']');
     }
 }
 
