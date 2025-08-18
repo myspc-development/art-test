@@ -2,6 +2,7 @@ describe('Member Dashboard', () => {
   const widgets = [
     'news_feed',
     'my_favorites',
+    'my_follows',
     'widget_events',
     'rsvp_button',
   ];
