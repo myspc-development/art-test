@@ -154,8 +154,8 @@ class DashboardController {
                 continue; // unregistered widget
             }
 
-            $widget_roles = isset($config['roles']) ? (array) $config['roles'] : [];
-            if ($widget_roles && !in_array($role, $widget_roles, true)) {
+            $roles = isset($config['roles']) ? (array) $config['roles'] : [];
+            if (!(empty($roles) || in_array($role, $roles, true))) {
                 continue; // role mismatch
             }
 
@@ -279,7 +279,7 @@ class DashboardController {
                     return false;
                 }
                 $roles = isset($all[$id]['roles']) ? (array) $all[$id]['roles'] : [];
-                return in_array($role, $roles, true);
+                return empty($roles) || in_array($role, $roles, true);
             }
         ));
 
