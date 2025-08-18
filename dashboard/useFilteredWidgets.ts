@@ -20,8 +20,8 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
   const [excluded, setExcluded] = useState<Record<string, string[]>>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const restRoot = window.wpApiSettings?.root || '/wp-json/';
-  const nonce = window.wpApiSettings?.nonce || '';
+  const restRoot = (window as any).wpApiSettings?.root || '/wp-json/';
+  const nonce = (window as any).wpApiSettings?.nonce || '';
 
   const fetchConfig = () => {
     const controller = new AbortController();
@@ -61,6 +61,7 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
     const deny = excluded[widget.id] || widget.excluded_roles || [];
     if (cap && !userCaps.includes(cap)) return false;
     if (roles.some(r => deny.includes(r))) return false;
+    if (allowed.length === 0) return true;
     if (!roles.length) return true;
     return roles.some(r => allowed.includes(r));
   });
@@ -72,6 +73,7 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
       const deny = excluded[id] || [];
       if (cap && !userCaps.includes(cap)) return false;
       if (roles.some(r => deny.includes(r))) return false;
+      if (allowed.length === 0) return true;
       if (!roles.length) return true;
       return roles.some(r => allowed.includes(r));
     })
