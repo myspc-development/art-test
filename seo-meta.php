@@ -37,6 +37,10 @@ function ap_output_seo_meta(): void
         echo '<meta name="robots" content="noindex" />' . "\n";
     }
 
+    if (is_page(['login', 'dashboard'])) {
+        echo '<meta name="robots" content="noindex" />' . "\n";
+    }
+
     echo '<link rel="canonical" href="' . esc_url($url) . '" />' . "\n";
 
     echo '<meta property="og:title" content="' . esc_attr($title) . '" />' . "\n";
