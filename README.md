@@ -144,7 +144,7 @@ The default panels rely on the following REST routes:
 | RSVP Admin | `GET`/`PUT` | `/ap/v1/rsvps?event_id=&status=&start=&end=` |
 | RSVP Export | `GET` | `/ap/v1/rsvps/export.csv?event_id=` |
 | Events | `GET`/`POST`/`PUT`/`DELETE` | `/wp/v2/artpulse_event` |
-| Analytics | `GET` | `/ap/v1/analytics/events/summary?range=7|30|90|YYYY-MM-DD,YYYY-MM-DD` |
+| Analytics | `GET` | `/ap/v1/analytics/events/summary?range=7|30|90|YYYY-MM-DD,YYYY-MM-DD` *(returns `timezone` field)* |
 | Artist Upgrade *(optional)* | `POST` | `/ap/v1/upgrade-to-artist` |
 
 To add a new panel, register a tab in `dashboard-nav.php` and handle the
