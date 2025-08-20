@@ -334,6 +334,7 @@ function ap_copy_templates_to_child_theme() {
         'content-artpulse_event.php',
         'archive-artpulse_event.php',
         'single-artpulse_artist.php',
+        'single-artist_profile.php',
     ];
 
     foreach ( $files as $file ) {
@@ -1202,6 +1203,17 @@ add_filter('template_include', function ($template) {
     }
     return $template;
 }, 998);
+
+// Force plugin template for single artist_profile posts
+add_filter('template_include', function ($template) {
+    if (is_singular('artist_profile')) {
+        $custom_template = plugin_dir_path(__FILE__) . 'templates/single-artist_profile.php';
+        if (file_exists($custom_template)) {
+            return $custom_template;
+        }
+    }
+    return $template;
+}, 997);
 
 // Toggle Salient templates for portfolio posts
 add_filter('template_include', function ($template) {

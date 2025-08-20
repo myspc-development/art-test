@@ -82,6 +82,8 @@ class PortfolioBuilder
                 <img id="ap-preview" width="200" hidden />
                 <input type="hidden" name="image_id" />
             </p>
+            <p><label class="ap-form-label" for="ap_image_alt">Image ALT Text</label><br><input class="ap-input" id="ap_image_alt" type="text" name="image_alt" required /></p>
+            <p><label><input type="checkbox" name="featured" value="1" /> Featured Item</label></p>
             <p><button class="ap-form-button nectar-button" type="submit">Save Portfolio Item</button></p>
             <p id="ap-portfolio-message" class="ap-form-messages" role="status" aria-live="polite"></p>
         </form>
@@ -134,6 +136,8 @@ class PortfolioBuilder
         $link      = esc_url_raw($_POST['link']);
         $visibility = sanitize_text_field($_POST['visibility']);
         $image_id  = intval($_POST['image_id'] ?? 0);
+        $alt       = sanitize_text_field($_POST['image_alt'] ?? '');
+        $featured  = !empty($_POST['featured']) ? 1 : 0;
 
         if ($post_id && (get_post_type($post_id) !== 'artpulse_portfolio' || get_post_field('post_author', $post_id) != $user_id)) {
             wp_send_json_error(['message' => 'Invalid portfolio item.']);
@@ -162,6 +166,10 @@ class PortfolioBuilder
             if (!$attachment || $attachment->post_type !== 'attachment' || intval($attachment->post_author) !== $user_id) {
                 wp_send_json_error(['message' => 'Invalid image.']);
             }
+            if ($alt === '') {
+                wp_send_json_error(['message' => 'ALT text required.']);
+            }
+            update_post_meta($image_id, '_wp_attachment_image_alt', $alt);
         }
 
         wp_set_post_terms($post_id, [$cat], 'portfolio_category');
@@ -169,6 +177,15 @@ class PortfolioBuilder
         update_post_meta($post_id, 'portfolio_link', $link);
         update_post_meta($post_id, 'portfolio_visibility', $visibility);
         update_post_meta($post_id, 'portfolio_image', $image_id);
+        update_post_meta($post_id, 'portfolio_featured', $featured);
+
+        $profile_id = (int) get_user_meta($user_id, 'ap_artist_profile_id', true);
+        if ($profile_id) {
+            update_post_meta($post_id, '_ap_artist_profile', $profile_id);
+            if ($featured) {
+                update_post_meta($profile_id, '_ap_portfolio_featured', $post_id);
+            }
+        }
 
         wp_send_json_success([
             'message' => 'Saved successfully.',
@@ -199,6 +216,8 @@ class PortfolioBuilder
             'image_id'   => $image_id,
             'image_url'  => $image_id ? wp_get_attachment_url($image_id) : '',
             'category'   => wp_get_post_terms($post->ID, 'portfolio_category', ['fields' => 'slugs'])[0] ?? '',
+            'image_alt'  => $image_id ? get_post_meta($image_id, '_wp_attachment_image_alt', true) : '',
+            'featured'   => (int) get_post_meta($post->ID, 'portfolio_featured', true),
         ]);
     }
 
