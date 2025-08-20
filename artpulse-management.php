@@ -77,6 +77,20 @@ if (!file_exists($autoload_path)) {
 }
 require_once $autoload_path;
 
+// Foundation setup classes and shortcodes
+require_once plugin_dir_path(__FILE__) . 'includes/class-activator.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-deactivator.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-roles.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-assets.php';
+require_once plugin_dir_path(__FILE__) . 'includes/helpers-page.php';
+require_once plugin_dir_path(__FILE__) . 'shortcodes/login.php';
+require_once plugin_dir_path(__FILE__) . 'shortcodes/event-calendar.php';
+
+ArtPulse_Assets::init();
+
+register_activation_hook(__FILE__, ['ArtPulse_Activator', 'activate']);
+register_deactivation_hook(__FILE__, ['ArtPulse_Deactivator', 'deactivate']);
+
 // Ensure donations schema exists
 register_activation_hook(__FILE__, function () {
     \ArtPulse\Install\Schema::ensure();
