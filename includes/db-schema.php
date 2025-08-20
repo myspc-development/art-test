@@ -22,6 +22,28 @@ function ap_maybe_create_table(string $table_name, string $schema): void {
     dbDelta("CREATE TABLE $table_name ( $schema ) $charset_collate;");
 }
 
+/**
+ * Create the RSVP tracking table used for event signups.
+ */
+function create_rsvp_table(): void {
+    global $wpdb;
+    $table  = "{$wpdb->prefix}ap_rsvps";
+    $schema = "
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        event_id BIGINT(20) NOT NULL,
+        user_id BIGINT(20) NULL,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) NOT NULL,
+        status VARCHAR(20) NOT NULL DEFAULT 'going',
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY  (id),
+        KEY event_id (event_id),
+        KEY status (status)
+    ";
+
+    ap_maybe_create_table($table, $schema);
+}
+
 function create_monetization_tables() {
     $installed = get_option('ap_db_version', '0.0.0');
     if (version_compare($installed, '1.5.0', '>=')) {
