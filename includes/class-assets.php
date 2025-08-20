@@ -64,6 +64,7 @@ class ArtPulse_Assets
                     'overview' => '#overview',
                     'calendar' => '#calendar',
                     'favorites' => '#favorites',
+                    'my-rsvps' => '#my-rsvps',
                     'rsvps' => '#rsvps',
                     'events' => '#events',
                     'analytics' => '#analytics',

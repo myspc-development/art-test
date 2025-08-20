@@ -1,109 +1,62 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const cfg = window.APRestLists || {};
-  const restRoot = cfg.root || (window.wpApiSettings && window.wpApiSettings.root) || '';
-  const nonce = cfg.nonce || '';
-  const headers = nonce ? { 'X-WP-Nonce': nonce } : {};
-  const noItemsText = cfg.noItemsText || 'No items found.';
+import { apiFetch, __ } from './ap-core.js';
+import { Toast, Confirm } from './ap-ui.js';
 
-  const fetchCard = id => {
-    return fetch(restRoot + 'artpulse/v1/event-card/' + id, { headers })
-      .then(r => r.text());
-  };
+export default async function render(container) {
+  const table = document.createElement('table');
+  table.className = 'ap-table';
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  ['Event', 'Date', 'Status', ''].forEach((h) => {
+    const th = document.createElement('th');
+    th.scope = 'col';
+    th.textContent = __(h);
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr);
+  table.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  table.appendChild(tbody);
+  container.appendChild(table);
 
-  function initInteractions(el) {
-    el.querySelectorAll('.ap-fav-btn').forEach(btn => {
-      btn.addEventListener('click', ev => {
-        ev.preventDefault();
-        const id = btn.dataset.objectId;
-        const type = btn.dataset.objectType;
-        fetch(restRoot + 'artpulse/v1/favorites', {
-          method: 'POST',
-          headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
-          body: JSON.stringify({ object_id: id, object_type: type })
-        }).then(r => r.json()).then(res => {
-          if (res.success) {
-            const added = res.status === 'added';
-            btn.classList.toggle('ap-favorited', added);
-            btn.textContent = added ? '❤' : '♡';
-            const countEl = btn.closest('.ap-event-actions')?.querySelector('.ap-fav-count');
-            if (countEl && typeof res.favorite_count !== 'undefined') {
-              countEl.textContent = res.favorite_count;
-            }
-          }
+  try {
+    const items = await apiFetch('/ap/v1/rsvps', { cacheKey: 'my-rsvps', ttlMs: 600000 });
+    if (!items || !items.length) {
+      const p = document.createElement('p');
+      p.textContent = __('No RSVPs yet');
+      container.appendChild(p);
+      return;
+    }
+    items.forEach((item) => {
+      const tr = document.createElement('tr');
+      const tdEvent = document.createElement('td');
+      tdEvent.textContent = item.event_title || '';
+      const tdDate = document.createElement('td');
+      tdDate.textContent = item.event_date || '';
+      const tdStatus = document.createElement('td');
+      tdStatus.textContent = item.status || '';
+      const tdAction = document.createElement('td');
+      if (item.can_cancel) {
+        const btn = document.createElement('button');
+        btn.textContent = __('Cancel');
+        btn.addEventListener('click', () => {
+          Confirm.show({
+            message: __('Cancel this RSVP?'),
+            onConfirm: async () => {
+              await apiFetch(`/ap/v1/rsvps/${item.id}`, { method: 'PUT', body: { status: 'cancelled' } });
+              tr.remove();
+              Toast.show({ type: 'info', message: __('RSVP cancelled') });
+            },
+          });
         });
-      });
+        tdAction.appendChild(btn);
+      }
+      tr.appendChild(tdEvent);
+      tr.appendChild(tdDate);
+      tr.appendChild(tdStatus);
+      tr.appendChild(tdAction);
+      tbody.appendChild(tr);
     });
-    el.querySelectorAll('.ap-rsvp-btn').forEach(btn => {
-      btn.addEventListener('click', ev => {
-        ev.preventDefault();
-        const id = btn.dataset.event;
-        const joining = !btn.classList.contains('ap-rsvped');
-        const endpoint = joining ? 'rsvp' : 'rsvp/cancel';
-        fetch(restRoot + 'artpulse/v1/' + endpoint, {
-          method: 'POST',
-          headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
-          body: JSON.stringify({ event_id: id })
-        }).then(r => r.json()).then(res => {
-          if (!res.code) {
-            btn.classList.toggle('ap-rsvped', joining);
-            btn.textContent = joining ? 'Cancel RSVP' : 'RSVP';
-            const countEl = btn.closest('.ap-event-actions')?.querySelector('.ap-rsvp-count');
-            if (countEl && typeof res.rsvp_count !== 'undefined') {
-              countEl.textContent = res.rsvp_count;
-            }
-          }
-        });
-      });
-    });
+  } catch (e) {
+    Toast.show({ type: 'error', message: e.message });
   }
-
-  document.querySelectorAll('.ap-recommendations').forEach(container => {
-    const type = container.dataset.type || 'event';
-    const limit = container.dataset.limit || 5;
-    fetch(restRoot + 'artpulse/v1/recommendations?type=' + encodeURIComponent(type) + '&limit=' + limit, { headers })
-      .then(r => r.json())
-      .then(list => {
-        container.innerHTML = '';
-        if (!list.length) {
-          container.innerHTML = '<p>No recommendations found.</p>';
-          return;
-        }
-        list.forEach(item => {
-          fetchCard(item.id).then(html => {
-            const tmp = document.createElement('div');
-            tmp.innerHTML = html.trim();
-            const card = tmp.firstElementChild;
-            if (card) {
-              container.appendChild(card);
-              initInteractions(card);
-            }
-          });
-        });
-      });
-  });
-
-  document.querySelectorAll('.ap-collection').forEach(container => {
-    const id = container.dataset.id;
-    if (!id) return;
-    fetch(restRoot + 'artpulse/v1/collection/' + id, { headers })
-      .then(r => r.json())
-      .then(list => {
-        container.innerHTML = '';
-        if (!list.length) {
-          container.innerHTML = '<p>' + noItemsText + '</p>';
-          return;
-        }
-        list.forEach(item => {
-          fetchCard(item.id).then(html => {
-            const tmp = document.createElement('div');
-            tmp.innerHTML = html.trim();
-            const card = tmp.firstElementChild;
-            if (card) {
-              container.appendChild(card);
-              initInteractions(card);
-            }
-          });
-        });
-      });
-  });
-});
+}

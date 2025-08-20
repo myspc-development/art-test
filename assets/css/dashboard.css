@@ -1,24 +1,57 @@
-.ap-dashboard-grid {
+/* Basic grid utilities */
+.grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
 }
-@media (min-width: 640px) {
-  .ap-dashboard-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Card and tile styles */
+.card,
+.tile {
+  background: var(--ap-bg, #fff);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+/* Table styles */
+table.ap-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table.ap-table th {
+  position: sticky;
+  top: 0;
+  background: var(--ap-bg, #fff);
+  text-align: left;
+}
+table.ap-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid #0050b3;
+  outline-offset: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ap-bg: #1e1e1e;
+    color: #eee;
+    background: #121212;
   }
-}
-@media (min-width: 1024px) {
-  .ap-dashboard-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  table.ap-table tr:nth-child(even) {
+    background: #1a1a1a;
   }
-}
-@media (min-width: 1280px) {
-  .ap-dashboard-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  .card,
+  .tile {
+    border-color: #333;
   }
-}
-.ap-dashboard-grid > div {
-  min-height: 10rem;
 }
 
