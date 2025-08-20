@@ -116,10 +116,10 @@ The dashboard uses a hash-based router. The following routes are available out o
 - `#overview` – landing tiles.
 - `#calendar` – upcoming events.
 - `#favorites` – saved items.
-- `#rsvps` – organisation RSVP panel.
-- `#events` – event editor.
-- `#analytics` – usage metrics.
-- `#portfolio` – artist portfolio manager.
+- `#rsvps` – organisation RSVP panel with status/date filters and CSV export.
+- `#events` – event editor (title, description, start/end, venue, address, lat/lng, capacity, price and cover image).
+- `#analytics` – usage metrics with 7/30/90/custom range selector.
+- `#portfolio` – artist portfolio manager with image upload and drag‑and‑drop ordering.
 - `#artworks` – media library.
 - `#settings` – account preferences.
 
@@ -138,8 +138,10 @@ The default panels rely on the following REST routes:
 | Favorites | `GET`/`POST` | `/ap/v1/favorites` |
 | Calendar | `GET` | `/ap/v1/calendar?lat=&lng=&radius_km=&start=&end=` |
 | My RSVPs | `GET`/`PUT` | `/ap/v1/rsvps` |
+| RSVP Admin | `GET`/`PUT` | `/ap/v1/rsvps?event_id=&status=&start=&end=` |
 | RSVP Export | `GET` | `/ap/v1/rsvps/export.csv?event_id=` |
-| Analytics | `GET` | `/ap/v1/analytics/events/summary?range=` |
+| Events | `GET`/`POST`/`PUT`/`DELETE` | `/wp/v2/artpulse_event` |
+| Analytics | `GET` | `/ap/v1/analytics/events/summary?range=7|30|90|YYYY-MM-DD,YYYY-MM-DD` |
 | Artist Upgrade *(optional)* | `POST` | `/ap/v1/upgrade-to-artist` |
 
 To add a new panel, register a tab in `dashboard-nav.php` and handle the

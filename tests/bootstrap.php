@@ -15,3 +15,8 @@ tests_add_filter('muplugins_loaded', '_manually_load_plugin');
 
 require $wp_tests_dir . '/includes/bootstrap.php';
 
+if ( ! file_exists( ABSPATH . 'wp-settings.php' ) ) {
+    fwrite( STDERR, "\xE2\x9D\x8C WordPress core could not be located. Did you run the install-wp-tests.sh script?\n" );
+    exit(1);
+}
+
