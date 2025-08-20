@@ -30,6 +30,7 @@ class RestRoutes
             \ArtPulse\Rest\UserInvitationController::register();
             // Register RSVP endpoints for events
             \ArtPulse\Rest\RsvpRestController::register();
+            \ArtPulse\Rest\RsvpDbController::register();
             // Feedback endpoints for suggestions and voting
             \ArtPulse\Rest\FeedbackRestController::register();
             // Provide event card markup via REST
@@ -41,6 +42,7 @@ class RestRoutes
             \ArtPulse\Rest\WidgetLayoutController::register();
             \ArtPulse\Rest\RoleMatrixController::register();
             \ArtPulse\Rest\UpdateDiagnosticsController::register();
+            \ArtPulse\Rest\EventAnalyticsController::register();
         });
 
         $post_types = ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org'];

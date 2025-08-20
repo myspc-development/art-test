@@ -49,6 +49,7 @@ class Activator
         RoleSetup::maybe_install_table();
         OrgCommunicationsCenter::install_messages_table();
         require_once ARTPULSE_PLUGIN_DIR . 'includes/db-schema.php';
+        \ArtPulse\DB\create_rsvp_table();
         \ArtPulse\DB\create_monetization_tables();
         \ArtPulse\Admin\ScheduledMessageManager::install_scheduled_table();
 
