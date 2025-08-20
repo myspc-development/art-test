@@ -78,6 +78,27 @@ Set up the project following the [development guide](docs/development-setup.md),
 - `src/` – PHP classes
 - `admin/` – admin pages and settings
 - `assets/` – JavaScript and CSS
+- `templates/` – front-end page templates
+
+## Dashboard Tabs
+
+The dashboard uses a hash-based router. The following routes are available out of the box:
+
+- `#overview` – landing tiles.
+- `#calendar` – upcoming events.
+- `#favorites` – saved items.
+- `#rsvps` – organisation RSVP panel.
+- `#events` – event editor.
+- `#analytics` – usage metrics.
+- `#portfolio` – artist portfolio manager.
+- `#artworks` – media library.
+- `#settings` – account preferences.
+
+New tabs can be added by extending `templates/partials/dashboard-nav.php`
+with a link and lazy-loading a JavaScript module in the router contained
+in `assets/js/ap-user-dashboard.js`. Boot data including the REST root,
+nonces and current user information are exposed on `window.ARTPULSE_BOOT`
+via `includes/class-assets.php`.
 - `tests/` – PHPUnit and Jest tests
 - `docs/` – project documentation
 
