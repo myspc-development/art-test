@@ -39,16 +39,19 @@ See the [Changelog](docs/CHANGELOG.md) for release notes.
 [Dashboard Builder Guide](docs/widgets/widget-matrix-reference.md) explains how to configure role-based dashboards. The old Widget Editor documentation has been removed.
 [User Dashboard Customization](docs/guides/user/dashboard-customization.md) explains per-user layout storage and REST endpoints.
 
-## Running tests
+## Testing
 
-To run the plugin's PHPUnit tests locally:
+Install dependencies and the WordPress testing library:
 
 ```
 composer install
-WP_PHPUNIT__DIR=vendor/wp-phpunit/wp-phpunit vendor/bin/phpunit -c phpunit.xml.dist
+bash vendor/wp-phpunit/wp-phpunit/bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest
+WP_PHPUNIT__DIR=vendor/wp-phpunit/wp-phpunit \
+WP_PHPUNIT__TESTS_CONFIG=tests/wp-tests-config.php \
+vendor/bin/phpunit -c phpunit.xml.dist
 ```
 
-JavaScript linting and unit tests can be executed with:
+JavaScript unit tests can be executed with:
 
 ```
 npm test

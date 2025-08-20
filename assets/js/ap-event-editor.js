@@ -1,4 +1,4 @@
-import { apiFetch, __ } from './ap-core.js';
+import { apiFetch, __, debounce } from './ap-core.js';
 import { Toast, Confirm } from './ap-ui.js';
 
 /**
@@ -9,7 +9,7 @@ export default async function render(container) {
   const search = document.createElement('input');
   search.type = 'search';
   search.placeholder = __('Search events');
-  search.addEventListener('input', () => loadEvents(search.value));
+  search.addEventListener('input', debounce(() => loadEvents(search.value), 300));
 
   const table = document.createElement('table');
   table.className = 'ap-table';
@@ -55,7 +55,10 @@ export default async function render(container) {
 
   async function loadEvents(q = '') {
     try {
-      events = await apiFetch(`/wp/v2/artpulse_event?search=${encodeURIComponent(q)}&status=any&_fields=id,title.rendered,status`);
+      events = await apiFetch(
+        `/wp/v2/artpulse_event?search=${encodeURIComponent(q)}&status=any&_fields=id,title.rendered,status`,
+        { cacheKey: `events-${q}`, ttlMs: 5000 }
+      );
     } catch (e) {
       events = [];
       Toast.show({ type: 'error', message: e.message || __('Unable to load events') });
