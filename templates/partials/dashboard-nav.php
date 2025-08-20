@@ -4,5 +4,5 @@ if (!defined('ABSPATH')) {
 }
 ?>
 <nav class="ap-dashboard-nav" data-ap-nav>
-    <ul id="ap-nav-list"></ul>
+    <ul id="ap-nav-list" role="tablist"></ul>
 </nav>

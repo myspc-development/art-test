@@ -2,7 +2,7 @@ import { apiFetch, __ } from './ap-core.js';
 import { Toast } from './ap-ui.js';
 
 const roleTabs = {
-  member: ['overview', 'calendar', 'favorites', 'my-rsvps', 'settings', 'upgrade-artist'],
+  member: ['overview', 'calendar', 'favorites', 'my-rsvps', 'settings'],
   artist: ['overview', 'portfolio', 'artworks', 'calendar', 'settings'],
   organization: ['overview', 'events', 'rsvps', 'analytics', 'settings'],
 };
@@ -23,7 +23,6 @@ const labels = {
   favorites: __('Favorites'),
   'my-rsvps': __('My RSVPs'),
   settings: __('Settings'),
-  'upgrade-artist': __('Upgrade to Artist'),
   portfolio: __('Portfolio'),
   artworks: __('Artworks'),
   events: __('Events'),
@@ -34,9 +33,12 @@ const labels = {
 const main = document.getElementById('ap-view');
 main.setAttribute('role', 'main');
 main.setAttribute('aria-live', 'polite');
+main.tabIndex = -1;
 const navList = document.getElementById('ap-nav-list');
+navList.setAttribute('role', 'tablist');
 const roles = ARTPULSE_BOOT.currentUser.roles || [];
 let currentTab = '';
+const baseTitle = document.title;
 
 function allowedTabs() {
   if (roles.includes('organization')) return roleTabs.organization;
@@ -48,10 +50,17 @@ function renderNav(tabs) {
   navList.innerHTML = '';
   tabs.forEach((t) => {
     const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = '#' + t;
-    a.textContent = labels[t] || t;
-    li.appendChild(a);
+    li.setAttribute('role', 'presentation');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.setAttribute('role', 'tab');
+    btn.dataset.tab = t;
+    btn.id = `ap-tab-${t}`;
+    btn.textContent = labels[t] || t;
+    btn.addEventListener('click', () => {
+      window.location.hash = '#' + t;
+    });
+    li.appendChild(btn);
     navList.appendChild(li);
   });
 }
@@ -77,6 +86,9 @@ async function loadTab(tab) {
     container.textContent = __('Nothing to display');
   }
   container.removeAttribute('aria-busy');
+  updateSelection();
+  document.title = `${labels[tab] || tab} – ${baseTitle}`;
+  main.focus();
 }
 
 function onHashChange() {
@@ -101,6 +113,13 @@ function prefetch(tabs) {
       });
     });
   }
+}
+
+function updateSelection() {
+  navList.querySelectorAll('[role="tab"]').forEach((btn) => {
+    btn.setAttribute('aria-selected', btn.dataset.tab === currentTab ? 'true' : 'false');
+    btn.tabIndex = btn.dataset.tab === currentTab ? '0' : '-1';
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

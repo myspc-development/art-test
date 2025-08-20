@@ -37,7 +37,11 @@ export default async function render(container) {
     }
   });
 
-  container.append(upload, list, saveBtn, profileLink, copyBtn);
+  const live = document.createElement('div');
+  live.className = 'screen-reader-text';
+  live.setAttribute('aria-live', 'polite');
+
+  container.append(upload, list, saveBtn, profileLink, copyBtn, live);
 
   let items = [];
   try {
@@ -100,6 +104,21 @@ export default async function render(container) {
       li.className = 'ap-portfolio-item';
       li.tabIndex = 0;
       li.setAttribute('aria-label', __('Portfolio item %d', index + 1));
+      li.draggable = true;
+      li.addEventListener('dragstart', (e) => e.dataTransfer.setData('text/plain', String(index)));
+      li.addEventListener('dragover', (e) => e.preventDefault());
+      li.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const from = Number(e.dataTransfer.getData('text/plain'));
+        const to = index;
+        if (!Number.isNaN(from) && from !== to) {
+          const [m] = items.splice(from, 1);
+          items.splice(to, 0, m);
+          renderList();
+          saveBtn.disabled = false;
+          live.textContent = __('Moved to position ') + (to + 1);
+        }
+      });
 
       const img = document.createElement('img');
       img.src = item.url;
@@ -184,6 +203,7 @@ export default async function render(container) {
     items[newIndex] = tmp;
     renderList();
     saveBtn.disabled = false;
+    live.textContent = __('Moved to position ') + (newIndex + 1);
   }
 }
 

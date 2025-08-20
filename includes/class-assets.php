@@ -40,7 +40,7 @@ class ArtPulse_Assets
             wp_enqueue_script(
                 'ap-user-dashboard',
                 $base . 'assets/js/ap-user-dashboard.js',
-                ['wp-i18n'],
+                [],
                 defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : false,
                 true
             );
