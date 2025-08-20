@@ -33,8 +33,8 @@ from any directory, calendar popover or dashboard list.
 
 ### How to Favorite an Event
 
-- Click the star (☆) on the event card, event page, or calendar.
-- Favorited events are shown with a filled star (★).
+- Click the heart (♡) on the event card, event page, or calendar.
+- Favorited events are shown with a filled heart (❤).
 - The favorite count updates instantly.
 - All your favorited events are visible in your dashboard under "My Events."
 - Event cards in "My Events" include badges showing whether you RSVP’d or favorited them.

@@ -162,6 +162,7 @@ require_once __DIR__ . '/src/Frontend/ShareButtons.php';
 require_once __DIR__ . '/src/Frontend/DonationHelpers.php';
 require_once __DIR__ . '/includes/widgets/class-ap-widget.php';
 require_once __DIR__ . '/includes/widgets/class-favorite-portfolio-widget.php';
+require_once __DIR__ . '/includes/class-favorites.php';
 require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/src/Util/EventFeed.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
@@ -869,7 +870,7 @@ add_action('wp_enqueue_scripts', function () {
     }
 });
 
-// Deprecated: use REST endpoint /artpulse/v1/favorite instead
+// Deprecated: use REST endpoint /artpulse/v1/favorites instead
 
 function ap_user_has_favorited($user_id, $post_id) {
     $post_type = get_post_type($post_id);

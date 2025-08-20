@@ -39,11 +39,11 @@ function ap_render_favorite_button(int $object_id, string $object_type = ''): st
     $fav_count = intval(get_post_meta($object_id, 'ap_favorite_count', true));
     $user_id = get_current_user_id();
     $favorited = $user_id && function_exists('ap_user_has_favorited') ? ap_user_has_favorited($user_id, $object_id) : false;
-    $star = $favorited ? '★' : '☆';
+    $icon  = $favorited ? '❤' : '♡';
     $label = $favorited ? __('Remove favorite', 'artpulse') : __('Add to favorites', 'artpulse');
     ob_start();
     ?>
-    <button class="ap-fav-btn<?php echo $favorited ? ' ap-favorited' : ''; ?>" data-object-id="<?php echo esc_attr($object_id); ?>" data-object-type="<?php echo esc_attr($object_type); ?>" aria-label="<?php echo esc_attr($label); ?>"><?php echo $star; ?></button>
+    <button class="ap-fav-btn<?php echo $favorited ? ' ap-favorited' : ''; ?>" data-object-id="<?php echo esc_attr($object_id); ?>" data-object-type="<?php echo esc_attr($object_type); ?>" aria-label="<?php echo esc_attr($label); ?>"><?php echo $icon; ?></button>
     <?php
     return trim(ob_get_clean());
 }

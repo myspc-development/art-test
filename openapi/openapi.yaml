@@ -182,12 +182,6 @@ paths:
       responses:
         '200':
           description: OK
-  /artpulse/v1/favorite:
-    post:
-      summary: Auto-generated stub
-      responses:
-        '200':
-          description: OK
   /artpulse/v1/checkin:
     post:
       summary: Auto-generated stub
@@ -726,6 +720,27 @@ paths:
   /artpulse/v1/calendar:
     get:
       summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: lat
+          schema:
+            type: number
+        - in: query
+          name: lng
+          schema:
+            type: number
+        - in: query
+          name: radius_km
+          schema:
+            type: number
+        - in: query
+          name: start
+          schema:
+            type: string
+        - in: query
+          name: end
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -1389,19 +1404,13 @@ paths:
         '200':
           description: OK
   /artpulse/v1/favorites:
-    delete:
+    get:
       summary: Auto-generated stub
-      parameters:
-        - in: query
-          name: object_id
-          schema:
-            type: integer
-          required: true
-        - in: query
-          name: object_type
-          schema:
-            type: string
-          required: true
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Auto-generated stub
       responses:
         '200':
           description: OK

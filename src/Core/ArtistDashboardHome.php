@@ -84,7 +84,7 @@ class ArtistDashboardHome
         $activity = [];
         foreach ($rows as $row) {
             $activity[] = [
-                'icon'    => $row->type === 'favorite' ? '★' : '📅',
+                'icon'    => $row->type === 'favorite' ? '❤' : '📅',
                 'message' => $row->type === 'favorite'
                     ? sprintf(__('New favorite on "%s"', 'artpulse'), $row->post_title)
                     : sprintf(__('New RSVP for "%s"', 'artpulse'), $row->post_title),

@@ -16,16 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
         ev.preventDefault();
         const id = btn.dataset.objectId;
         const type = btn.dataset.objectType;
-        const action = btn.classList.contains('ap-favorited') ? 'remove' : 'add';
-        fetch(restRoot + 'artpulse/v1/favorite', {
+        fetch(restRoot + 'artpulse/v1/favorites', {
           method: 'POST',
           headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
-          body: JSON.stringify({ object_id: id, object_type: type, action })
+          body: JSON.stringify({ object_id: id, object_type: type })
         }).then(r => r.json()).then(res => {
           if (res.success) {
             const added = res.status === 'added';
             btn.classList.toggle('ap-favorited', added);
-            btn.textContent = added ? '★' : '☆';
+            btn.textContent = added ? '❤' : '♡';
             const countEl = btn.closest('.ap-event-actions')?.querySelector('.ap-fav-count');
             if (countEl && typeof res.favorite_count !== 'undefined') {
               countEl.textContent = res.favorite_count;

@@ -25,9 +25,27 @@ class CalendarFeedController
 
     public static function get_feed(WP_REST_Request $req)
     {
-        $lat = $req->get_param('lat');
-        $lng = $req->get_param('lng');
+        $lat       = $req->get_param('lat');
+        $lng       = $req->get_param('lng');
+        $radius    = $req->get_param('radius_km');
+        $start     = $req->get_param('start');
+        $end       = $req->get_param('end');
 
-        return rest_ensure_response(\ArtPulse\Util\ap_fetch_calendar_events($lat, $lng));
+        $cache_key = 'ap_cal_' . md5(json_encode([
+            round((float) $lat, 2),
+            round((float) $lng, 2),
+            (float) $radius,
+            $start,
+            $end,
+        ]));
+
+        $cached = get_transient($cache_key);
+        if ($cached !== false) {
+            return rest_ensure_response($cached);
+        }
+
+        $events = \ArtPulse\Util\ap_fetch_calendar_events($lat, $lng, $radius, $start, $end);
+        set_transient($cache_key, $events, MINUTE_IN_SECONDS * 10);
+        return rest_ensure_response($events);
     }
 }

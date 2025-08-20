@@ -28,16 +28,14 @@ class EventCalendarShortcode
         wp_enqueue_script(
             'ap-event-calendar',
             plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/ap-event-calendar.js',
-            ['fullcalendar-js', 'jquery'],
+            ['fullcalendar-js'],
             '1.0',
             true
         );
 
         wp_localize_script('ap-event-calendar', 'APCalendar', [
-            'events'    => ap_get_events_for_calendar(),
-            'rest_root' => esc_url_raw(rest_url()),
-            'close_text' => __('Close', 'artpulse'),
-            'nonce'      => wp_create_nonce('wp_rest'),
+            'apiRoot'   => esc_url_raw(rest_url()),
+            'nonce'     => wp_create_nonce('wp_rest'),
         ]);
     }
 

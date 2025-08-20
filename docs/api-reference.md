@@ -130,20 +130,19 @@ curl -X POST -H 'X-WP-Nonce: <nonce>' \
 
 See [Event Comments Codex](event-comments-codex.md) for details.
 
-### `POST /artpulse/v1/favorite`
+### `POST /artpulse/v1/favorites`
 
-Add or remove a favorite.
+Toggle a favorite.
 Parameters:
 - `object_id` (int, required)
 - `object_type` (string, required)
-- `action` (`add`|`remove`, required)
 
 Example request:
 
 ```bash
 curl -X POST -H 'X-WP-Nonce: <nonce>' \
-  -d 'object_id=10&object_type=artpulse_event&action=add' \
-  '/wp-json/artpulse/v1/favorite'
+  -d 'object_id=10&object_type=artpulse_event' \
+  '/wp-json/artpulse/v1/favorites'
 ```
 
 Favorite metrics are described in the [Analytics & Insights Codex](guides/developer/analytics-insights-codex.md).
