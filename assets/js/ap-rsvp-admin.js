@@ -26,6 +26,10 @@ export default async function render(container) {
   table.className = 'ap-table';
   const tbody = document.createElement('tbody');
   table.appendChild(tbody);
+  const pager = document.createElement('div');
+  const prev = button(__('Prev'));
+  const next = button(__('Next'));
+  pager.append(prev, next);
 
   const bulkSelect = document.createElement('select');
   ['approve', 'waitlist', 'cancel'].forEach((s) => {
@@ -45,13 +49,15 @@ export default async function render(container) {
     Toast.show({ type: 'info', message: __('CSV opens in a new window. Avoid leading = or + to prevent CSV injection.') });
   });
 
-  container.append(eventSelect, statusFilter, start, end, filterBtn, table, bulkSelect, bulkBtn, exportBtn);
+  container.append(eventSelect, statusFilter, start, end, filterBtn, table, pager, bulkSelect, bulkBtn, exportBtn);
 
   let rsvps = [];
+  let page = 1;
+  let totalPages = 1;
 
   async function loadEvents() {
     try {
-      const events = await apiFetch('/wp/v2/artpulse_event?status=any&_fields=id,title.rendered&per_page=100');
+      const events = await apiFetch('/wp/v2/artpulse_event?author=me&status=any&_fields=id,title.rendered&per_page=100');
       events.forEach((e) => {
         const o = document.createElement('option');
         o.value = e.id;
@@ -70,10 +76,14 @@ export default async function render(container) {
       const query = new URLSearchParams({
         event_id: eventSelect.value,
         status: statusFilter.value,
-        start: start.value,
-        end: end.value,
+        from: start.value,
+        to: end.value,
+        page: String(page),
+        per_page: '25',
       });
-      rsvps = await apiFetch(`/ap/v1/rsvps?${query.toString()}`, { cacheKey: `rsvps-${query.toString()}`, ttlMs: 1000 });
+      const data = await apiFetch(`/ap/v1/rsvps?${query.toString()}`, { cacheKey: `rsvps-${query.toString()}`, ttlMs: 1000 });
+      rsvps = data.rows || [];
+      totalPages = Math.ceil((data.total || 0) / (data.per_page || 25)) || 1;
     } catch (e) {
       rsvps = [];
       Toast.show({ type: 'error', message: e.message || __('Unable to load RSVPs') });
@@ -122,14 +132,23 @@ export default async function render(container) {
     const ids = Array.from(tbody.querySelectorAll('input[type="checkbox"]:checked')).map((i) => i.dataset.id);
     if (!ids.length) return;
     if (!(await Confirm.show(__('Apply to selected?')))) return;
-    for (const id of ids) {
-      await updateStatus(id, bulkSelect.value);
+    try {
+      await apiFetch('/ap/v1/rsvps/bulk-update', {
+        method: 'POST',
+        body: { event_id: eventSelect.value, ids, status: bulkSelect.value },
+      });
+      Toast.show({ type: 'success', message: __('Updated') });
+      emit('rsvps:changed');
+      loadRsvps();
+    } catch (e) {
+      Toast.show({ type: 'error', message: e.message || __('Update failed') });
     }
-    loadRsvps();
   }
 
-  eventSelect.addEventListener('change', loadRsvps);
-  statusFilter.addEventListener('change', loadRsvps);
+  eventSelect.addEventListener('change', () => { page = 1; loadRsvps(); });
+  statusFilter.addEventListener('change', () => { page = 1; loadRsvps(); });
+  prev.addEventListener('click', () => { if (page > 1) { page--; loadRsvps(); } });
+  next.addEventListener('click', () => { if (page < totalPages) { page++; loadRsvps(); } });
   loadEvents();
 }
 

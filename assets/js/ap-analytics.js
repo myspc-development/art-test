@@ -40,10 +40,20 @@ export default async function render(container) {
   table.setAttribute('aria-describedby', 'ap-analytics-chart');
   canvas.id = 'ap-analytics-chart';
 
-  container.append(rangeWrap, tiles, canvas, table);
+  const barCanvas = document.createElement('canvas');
+  barCanvas.width = 400; barCanvas.height = 200;
+  barCanvas.id = 'ap-analytics-top';
+  const topTable = document.createElement('table');
+  topTable.className = 'ap-table';
+  const topBody = document.createElement('tbody');
+  topTable.appendChild(topBody);
+  topTable.setAttribute('aria-describedby', 'ap-analytics-top');
+
+  container.append(rangeWrap, tiles, canvas, table, barCanvas, topTable);
 
   on('rsvps:changed', () => {
     sessionStorage.removeItem(cacheKey(currentRange));
+    load();
   });
 
   async function load() {
@@ -51,12 +61,14 @@ export default async function render(container) {
     tbody.textContent = '';
     const data = await apiFetch(`/ap/v1/analytics/events/summary?range=${currentRange}`, {
       cacheKey: cacheKey(currentRange),
-      ttlMs: 300000,
+      ttlMs: 600000,
     });
     if (!data) return;
     renderTiles(data);
     renderChart(data.trend || []);
     renderTable(data.trend || []);
+    renderBar(data.top_events || []);
+    renderTopTable(data.top_events || []);
   }
 
   function renderTiles(data) {
@@ -99,6 +111,32 @@ export default async function render(container) {
       c.textContent = p.count;
       tr.append(d, c);
       tbody.appendChild(tr);
+    });
+  }
+
+  function renderBar(rows) {
+    const ctx = barCanvas.getContext('2d');
+    ctx.clearRect(0, 0, barCanvas.width, barCanvas.height);
+    if (!rows.length) return;
+    const max = Math.max(...rows.map((r) => r.count));
+    const barWidth = barCanvas.width / rows.length;
+    rows.forEach((r, i) => {
+      const h = (r.count / max) * barCanvas.height;
+      ctx.fillStyle = '#8899cc';
+      ctx.fillRect(i * barWidth, barCanvas.height - h, barWidth - 4, h);
+    });
+  }
+
+  function renderTopTable(rows) {
+    topBody.textContent = '';
+    rows.forEach((r) => {
+      const tr = document.createElement('tr');
+      const t = document.createElement('td');
+      t.textContent = r.title;
+      const c = document.createElement('td');
+      c.textContent = r.count;
+      tr.append(t, c);
+      topBody.appendChild(tr);
     });
   }
 

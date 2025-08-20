@@ -39,6 +39,11 @@ class RsvpDbController extends WP_REST_Controller
                 'permission_callback' => [$this, 'can_manage'],
                 'args'                => [
                     'event_id' => ['type' => 'integer', 'required' => true],
+                    'status'   => ['type' => 'string', 'required' => false],
+                    'from'     => ['type' => 'string'],
+                    'to'       => ['type' => 'string'],
+                    'page'     => ['type' => 'integer', 'default' => 1],
+                    'per_page' => ['type' => 'integer', 'default' => 25],
                 ],
             ],
         ]);
@@ -58,6 +63,17 @@ class RsvpDbController extends WP_REST_Controller
             'permission_callback' => [$this, 'can_manage'],
             'args'                => [
                 'event_id' => ['type' => 'integer', 'required' => true],
+            ],
+        ]);
+
+        register_rest_route($this->namespace, '/rsvps/bulk-update', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [$this, 'bulk_update'],
+            'permission_callback' => [$this, 'can_manage'],
+            'args'                => [
+                'event_id' => ['type' => 'integer', 'required' => true],
+                'ids'      => ['type' => 'array',   'required' => true],
+                'status'   => ['type' => 'string',  'required' => true],
             ],
         ]);
     }
@@ -97,6 +113,7 @@ class RsvpDbController extends WP_REST_Controller
         $wpdb->insert($this->table(), $data, ['%d','%d','%s','%s','%s']);
         $data['id'] = $wpdb->insert_id;
         $data['created_at'] = current_time('mysql');
+        do_action('ap_rsvp_changed', $event_id);
         return rest_ensure_response($data);
     }
 
@@ -104,14 +121,42 @@ class RsvpDbController extends WP_REST_Controller
     {
         global $wpdb;
         $event_id = intval($request['event_id']);
+        $status   = sanitize_text_field($request['status']);
+        $from     = $request['from'] ? sanitize_text_field($request['from']) : null;
+        $to       = $request['to'] ? sanitize_text_field($request['to']) : null;
+        $page     = max(1, intval($request['page']));
+        $per_page = max(1, min(100, intval($request['per_page'])));
+
+        $where  = $wpdb->prepare('event_id = %d', $event_id);
+        $args   = [];
+        if ($status) {
+            $where .= $wpdb->prepare(' AND status = %s', $status);
+        }
+        if ($from) {
+            $where .= $wpdb->prepare(' AND DATE(created_at) >= %s', $from);
+        }
+        if ($to) {
+            $where .= $wpdb->prepare(' AND DATE(created_at) <= %s', $to);
+        }
+
+        $total = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$this->table()} WHERE $where");
+        $offset = ($page - 1) * $per_page;
+
         $rows = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT id, event_id, user_id, name, email, status, created_at FROM {$this->table()} WHERE event_id = %d",
-                $event_id
+                "SELECT id, name, email, status, created_at FROM {$this->table()} WHERE $where ORDER BY created_at DESC LIMIT %d OFFSET %d",
+                $per_page,
+                $offset
             ),
             ARRAY_A
         );
-        return rest_ensure_response($rows);
+
+        return rest_ensure_response([
+            'total'    => $total,
+            'page'     => $page,
+            'per_page' => $per_page,
+            'rows'     => $rows,
+        ]);
     }
 
     public function update_rsvp(WP_REST_Request $request): WP_REST_Response|WP_Error
@@ -124,25 +169,52 @@ class RsvpDbController extends WP_REST_Controller
         }
         global $wpdb;
         $wpdb->update($this->table(), ['status' => $status], ['id' => $id], ['%s'], ['%d']);
+        $event_id = (int) $wpdb->get_var($wpdb->prepare("SELECT event_id FROM {$this->table()} WHERE id = %d", $id));
+        do_action('ap_rsvp_changed', $event_id);
         return rest_ensure_response(['id' => $id, 'status' => $status]);
     }
 
     public function export_csv(WP_REST_Request $request)
     {
-        $data = $this->list_rsvps($request)->get_data();
-        $out  = "id,event_id,user_id,name,email,status,created_at\n";
-        foreach ($data as $row) {
-            $out .= sprintf(
-                "%d,%d,%s,%s,%s,%s,%s\n",
-                $row['id'],
-                $row['event_id'],
-                $row['user_id'] ?: '',
-                $row['name'],
-                $row['email'],
-                $row['status'],
-                $row['created_at']
-            );
+        $request->set_param('page', 1);
+        $request->set_param('per_page', 10000);
+        $payload = $this->list_rsvps($request)->get_data();
+        $rows    = $payload['rows'] ?? [];
+        $out  = "id,name,email,status,created_at\n";
+        foreach ($rows as $row) {
+            $cells = [];
+            foreach (['id','name','email','status','created_at'] as $col) {
+                $val = (string) ($row[$col] ?? '');
+                if (preg_match('/^[=+\-@]/', $val)) {
+                    $val = "'" . $val;
+                }
+                $cells[] = $val;
+            }
+            $out .= implode(',', $cells) . "\n";
         }
-        return new WP_REST_Response($out, 200, ['Content-Type' => 'text/csv']);
+        $filename = 'rsvps-' . intval($request['event_id']) . '-' . date('Ymd') . '.csv';
+        return new WP_REST_Response($out, 200, [
+            'Content-Type'        => 'text/csv; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
+    }
+
+    public function bulk_update(WP_REST_Request $request): WP_REST_Response|WP_Error
+    {
+        $event_id = intval($request['event_id']);
+        $ids      = array_map('intval', (array) $request['ids']);
+        $status   = sanitize_text_field($request['status']);
+        $allowed  = ['going', 'waitlist', 'cancelled'];
+        if (!in_array($status, $allowed, true)) {
+            return new WP_Error('invalid_status', 'Invalid status.', ['status' => 400]);
+        }
+        if (!$ids) {
+            return new WP_Error('invalid_ids', 'No IDs supplied.', ['status' => 400]);
+        }
+        global $wpdb;
+        $in = implode(',', array_fill(0, count($ids), '%d'));
+        $wpdb->query($wpdb->prepare("UPDATE {$this->table()} SET status = %s WHERE event_id = %d AND id IN ($in)", array_merge([$status, $event_id], $ids)));
+        do_action('ap_rsvp_changed', $event_id);
+        return rest_ensure_response(['updated' => count($ids)]);
     }
 }

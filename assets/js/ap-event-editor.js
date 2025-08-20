@@ -15,6 +15,10 @@ export default async function render(container) {
   table.className = 'ap-table';
   const tbody = document.createElement('tbody');
   table.appendChild(tbody);
+  const pager = document.createElement('div');
+  const prev = button(__('Prev'));
+  const next = button(__('Next'));
+  pager.append(prev, next);
 
   const form = document.createElement('form');
   form.className = 'ap-event-form';
@@ -48,16 +52,17 @@ export default async function render(container) {
   actions.append(save, dup, cancel, del);
   form.appendChild(actions);
 
-  container.append(search, table, form);
+  container.append(search, table, pager, form);
 
   let events = [];
   let current = null;
+  let page = 1;
 
   async function loadEvents(q = '') {
     try {
       events = await apiFetch(
-        `/wp/v2/artpulse_event?search=${encodeURIComponent(q)}&status=any&_fields=id,title.rendered,status`,
-        { cacheKey: `events-${q}`, ttlMs: 5000 }
+        `/wp/v2/artpulse_event?author=me&status=any&search=${encodeURIComponent(q)}&per_page=10&page=${page}&_embed`,
+        { cacheKey: `events-${q}-${page}`, ttlMs: 5000 }
       );
     } catch (e) {
       events = [];
@@ -65,6 +70,17 @@ export default async function render(container) {
     }
     renderTable();
   }
+
+  prev.addEventListener('click', () => {
+    if (page > 1) {
+      page--;
+      loadEvents(search.value);
+    }
+  });
+  next.addEventListener('click', () => {
+    page++;
+    loadEvents(search.value);
+  });
 
   function renderTable() {
     tbody.textContent = '';

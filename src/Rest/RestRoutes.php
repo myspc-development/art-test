@@ -43,6 +43,7 @@ class RestRoutes
             \ArtPulse\Rest\RoleMatrixController::register();
             \ArtPulse\Rest\UpdateDiagnosticsController::register();
             \ArtPulse\Rest\EventAnalyticsController::register();
+            \ArtPulse\Rest\PortfolioRestController::register();
         });
 
         $post_types = ['artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org'];

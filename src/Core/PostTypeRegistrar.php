@@ -162,6 +162,34 @@ class PostTypeRegistrar
             ]
         );
 
+        // Core event meta exposed via REST for the dashboard editor
+        $event_meta = [
+            'ap_event_start'    => 'string',
+            'ap_event_end'      => 'string',
+            'ap_event_venue'    => 'string',
+            'ap_event_address'  => 'string',
+            'ap_event_lat'      => 'number',
+            'ap_event_lng'      => 'number',
+            'ap_event_capacity' => 'integer',
+            'ap_event_price'    => 'string',
+        ];
+
+        foreach ($event_meta as $key => $type) {
+            register_post_meta(
+                'artpulse_event',
+                $key,
+                [
+                    'type'         => $type,
+                    'single'       => true,
+                    'show_in_rest' => true,
+                    'auth_callback' => function () {
+                        $post_id = func_num_args() > 2 ? func_get_arg(2) : null;
+                        return $post_id ? current_user_can('edit_post', $post_id) : false;
+                    },
+                ]
+            );
+        }
+
         register_post_meta(
             'review',
             '_reviewed_id',
