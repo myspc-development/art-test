@@ -43,14 +43,24 @@ class EventAnalyticsController extends WP_REST_Controller
         $end     = $request->get_param('end');
         $range   = $request->get_param('range') ?: '30d';
 
+        $tz       = wp_timezone();
+        $tz_name  = wp_timezone_string() ?: 'UTC';
+        $utc_tz   = new \DateTimeZone('UTC');
+
         if ($start && $end) {
-            $after = $start;
-            $end   = $end;
+            $start_dt = new \DateTime($start, $tz);
+            $end_dt   = new \DateTime($end, $tz);
         } else {
-            $days  = intval(rtrim($range, 'd')) ?: 30;
-            $after = date('Y-m-d', strtotime('-' . $days . ' days'));
-            $end   = date('Y-m-d');
+            $days     = intval(rtrim($range, 'd')) ?: 30;
+            $end_dt   = new \DateTime('now', $tz);
+            $start_dt = (clone $end_dt)->modify('-' . $days . ' days');
         }
+
+        $after = $start_dt->format('Y-m-d');
+        $end   = $end_dt->format('Y-m-d');
+
+        $after_utc = (clone $start_dt)->setTimezone($utc_tz)->format('Y-m-d');
+        $end_utc   = (clone $end_dt)->setTimezone($utc_tz)->format('Y-m-d');
 
         $cache_key = self::cache_key($user_id, $start, $end, $range);
         $cached    = get_transient($cache_key);
@@ -103,7 +113,15 @@ class EventAnalyticsController extends WP_REST_Controller
         $top_events = [];
         $top_event = '';
         if ($ids) {
-            $rows = $wpdb->get_results($wpdb->prepare("SELECT DATE(created_at) d, COUNT(*) c FROM {$table} WHERE event_id IN ($in) AND DATE(created_at) BETWEEN %s AND %s GROUP BY d ORDER BY d", $after, $end), ARRAY_A);
+            $rows = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT DATE(CONVERT_TZ(created_at, '+00:00', %s)) d, COUNT(*) c FROM {$table} WHERE event_id IN ($in) AND created_at BETWEEN %s AND %s GROUP BY d ORDER BY d",
+                    $tz_name,
+                    $after_utc . ' 00:00:00',
+                    $end_utc . ' 23:59:59'
+                ),
+                ARRAY_A
+            );
             foreach ($rows as $row) {
                 $trend[] = ['date' => $row['d'], 'count' => (int) $row['c']];
             }
@@ -125,6 +143,7 @@ class EventAnalyticsController extends WP_REST_Controller
             'trend'             => $trend,
             'top_event'         => $top_event,
             'top_events'        => $top_events,
+            'timezone'          => $tz_name,
         ];
 
         set_transient($cache_key, $data, 10 * MINUTE_IN_SECONDS);
