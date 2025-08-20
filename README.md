@@ -99,6 +99,23 @@ with a link and lazy-loading a JavaScript module in the router contained
 in `assets/js/ap-user-dashboard.js`. Boot data including the REST root,
 nonces and current user information are exposed on `window.ARTPULSE_BOOT`
 via `includes/class-assets.php`.
+
+### REST Endpoints
+
+The default panels rely on the following REST routes:
+
+| Feature | Method | Route |
+| --- | --- | --- |
+| Favorites | `GET`/`POST` | `/ap/v1/favorites` |
+| Calendar | `GET` | `/ap/v1/calendar?lat=&lng=&radius_km=&start=&end=` |
+| My RSVPs | `GET`/`PUT` | `/ap/v1/rsvps` |
+| RSVP Export | `GET` | `/ap/v1/rsvps/export.csv?event_id=` |
+| Analytics | `GET` | `/ap/v1/analytics/events/summary?range=` |
+| Artist Upgrade *(optional)* | `POST` | `/ap/v1/upgrade-to-artist` |
+
+To add a new panel, register a tab in `dashboard-nav.php` and handle the
+hash in `ap-user-dashboard.js`, then call existing REST endpoints or
+expose new ones via PHP as needed.
 - `tests/` – PHPUnit and Jest tests
 - `docs/` – project documentation
 

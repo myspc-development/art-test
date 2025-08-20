@@ -1,47 +1,14 @@
 <?php
-// Ensure Composer autoload exists
-$autoload = __DIR__ . '/../vendor/autoload.php';
-if (file_exists($autoload)) {
-    require_once $autoload;
+require_once __DIR__ . '/../vendor/autoload.php';
+$_tests_dir = getenv('WP_PHPUNIT__DIR') ?: __DIR__ . '/../vendor/wp-phpunit/wp-phpunit';
+require_once $_tests_dir . '/includes/functions.php';
+function _manually_load_plugin() {
+    require dirname(__DIR__) . '/artpulse-management.php';
 }
-
-// Define where the wp-phpunit test suite lives
-if (!defined('WP_PHPUNIT__DIR')) {
-    define('WP_PHPUNIT__DIR', __DIR__ . '/../vendor/wp-phpunit/wp-phpunit');
+tests_add_filter('muplugins_loaded', '_manually_load_plugin');
+$_config_file = __DIR__ . '/wp-tests-config.php';
+if (file_exists($_config_file)) {
+    putenv('WP_PHPUNIT__TESTS_CONFIG=' . $_config_file);
 }
+require $_tests_dir . '/includes/bootstrap.php';
 
-// Define where WordPress core is installed (Option A: existing site)
-if (!defined('WP_PHPUNIT__ABSPATH_DIR')) {
-    define('WP_PHPUNIT__ABSPATH_DIR', '/www/wwwroot/192.168.1.21/'); // trailing slash required
-}
-if (substr(WP_PHPUNIT__ABSPATH_DIR, -1) !== '/') {
-    define('WP_PHPUNIT__ABSPATH_DIR', rtrim(WP_PHPUNIT__ABSPATH_DIR, '/') . '/');
-}
-if (!file_exists(WP_PHPUNIT__ABSPATH_DIR . 'wp-settings.php')) {
-    fwrite(STDERR, "ERROR: wp-settings.php not found at " . WP_PHPUNIT__ABSPATH_DIR . "\n");
-    exit(1);
-}
-
-// Load the wp-phpunit bootstrap
-require_once WP_PHPUNIT__DIR . '/includes/functions.php';
-
-// Load the plugin under test when WordPress boots
-tests_add_filter('muplugins_loaded', function () {
-    $root = dirname(__DIR__);
-    // Try common plugin entry files (add more if needed)
-    $candidates = [
-        $root . '/artpulse.php',
-        $root . '/artpulse-management.php',
-        $root . '/art-test-main.php',
-        $root . '/plugin.php',
-    ];
-    foreach ($candidates as $file) {
-        if (file_exists($file)) {
-            require_once $file;
-            break;
-        }
-    }
-});
-
-// Start up the WP testing environment
-require_once WP_PHPUNIT__DIR . '/includes/bootstrap.php';

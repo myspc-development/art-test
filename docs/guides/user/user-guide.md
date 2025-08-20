@@ -96,6 +96,24 @@ The calendar relies on the FullCalendar library. Scripts are loaded from the jsD
 
 **Tip:** Calendar updates instantly when new events are added or when filters are applied.
 
+## Dashboard Panels
+
+### Favorites
+The **Favorites** tab shows a paginated grid of everything you have saved.
+Click the heart to remove an item; changes are reflected immediately.
+
+### My RSVPs
+Your upcoming RSVPs appear in a simple table. Use the **Cancel** button if
+you can no longer attend.
+
+### Portfolio
+Artists can upload images, add captions and drag to reorder items in the
+**Portfolio** tab. Alt text is required for accessibility.
+
+### Events
+Organizations manage their events under the **Events** tab where new events
+can be created, duplicated or cancelled.
+
 ## Shortcode Reference
 
 - `[ap_event_directory]` — Show event directory with filters
@@ -122,3 +140,4 @@ bookmark or share a direct link to any section.
 - Event cards and dashboards are designed for responsive display.
 
 > 💬 *Found something outdated? [Submit Feedback](../../feedback.md)*
+
