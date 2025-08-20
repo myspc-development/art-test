@@ -573,6 +573,27 @@ wp artpulse audit:render --role=member --context=builder_preview
 wp artpulse audit:render --role=member --context=builder_preview --simulate-user
 ```
 
+## REST API Notes
+
+- **Portfolio**
+  - `GET /ap/v1/portfolio?user=me`
+  - `POST /ap/v1/portfolio/items` – link media attachment with metadata
+  - `PUT /ap/v1/portfolio/order` – save ordered attachment IDs
+  - `PUT /ap/v1/portfolio/featured` – set featured attachment
+
+- **Event Meta Fields** (available via `wp/v2/artpulse_event`)
+  - `ap_event_start`, `ap_event_end`
+  - `ap_event_venue`, `ap_event_address`
+  - `ap_event_lat`, `ap_event_lng`
+  - `ap_event_capacity`, `ap_event_price`
+
+- **RSVPs**
+  - `POST /ap/v1/rsvps/bulk-update` → `{ event_id, ids, status }`
+
+- **Analytics**
+  - `GET /ap/v1/analytics/events/summary?range=7d|30d|90d`
+  - Custom ranges via `start=YYYY-MM-DD&end=YYYY-MM-DD`
+
 ## Sprint History
 
 All Codex modules and tasks have been completed and verified. The project board reflects a final status of **Done** across reporting, curator tools, analytics, and testing. Documentation was updated each sprint and the changelog records feature milestones through version 1.3.16.

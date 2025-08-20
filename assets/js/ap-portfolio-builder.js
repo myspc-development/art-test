@@ -44,8 +44,12 @@ export default async function render(container) {
   container.append(upload, list, saveBtn, profileLink, copyBtn, live);
 
   let items = [];
+  let featured = 0;
   try {
-    items = await apiFetch('/ap/v1/portfolio') || [];
+    const data = await apiFetch('/ap/v1/portfolio?user=me', { cacheKey: 'portfolio', ttlMs: 30000 });
+    items = data.items || [];
+    featured = data.featured_id || 0;
+    items.forEach((i) => (i.featured = i.id === featured));
   } catch (e) {
     items = [];
   }
@@ -88,7 +92,27 @@ export default async function render(container) {
       return;
     }
     try {
-      await apiFetch('/ap/v1/portfolio', { method: 'POST', body: { items } });
+      for (const item of items) {
+        await apiFetch('/ap/v1/portfolio/items', {
+          method: 'POST',
+          body: {
+            media_id: item.id,
+            meta: {
+              title: item.title,
+              alt: item.alt,
+              caption: item.caption,
+              year: item.year,
+              medium: item.medium ? item.medium.split(',').map((s) => s.trim()).filter(Boolean) : [],
+              tags: item.tags ? item.tags.split(',').map((s) => s.trim()).filter(Boolean) : [],
+            },
+          },
+        });
+      }
+      await apiFetch('/ap/v1/portfolio/order', { method: 'PUT', body: { order: items.map((i) => i.id) } });
+      const feat = items.find((i) => i.featured);
+      if (feat) {
+        await apiFetch('/ap/v1/portfolio/featured', { method: 'PUT', body: { attachment_id: feat.id } });
+      }
       Toast.show({ type: 'success', message: __('Portfolio saved') });
       saveBtn.disabled = true;
       emit('portfolio:changed');
@@ -117,6 +141,7 @@ export default async function render(container) {
           renderList();
           saveBtn.disabled = false;
           live.textContent = __('Moved to position ') + (to + 1);
+          apiFetch('/ap/v1/portfolio/order', { method: 'PUT', body: { order: items.map((i) => i.id) } }).catch(() => {});
         }
       });
 
@@ -158,6 +183,7 @@ export default async function render(container) {
         items.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
         renderList();
         saveBtn.disabled = false;
+        apiFetch('/ap/v1/portfolio/featured', { method: 'PUT', body: { attachment_id: item.id } }).catch(() => {});
       });
       const remove = document.createElement('button');
       remove.textContent = __('Remove');
@@ -204,6 +230,7 @@ export default async function render(container) {
     renderList();
     saveBtn.disabled = false;
     live.textContent = __('Moved to position ') + (newIndex + 1);
+    apiFetch('/ap/v1/portfolio/order', { method: 'PUT', body: { order: items.map((i) => i.id) } }).catch(() => {});
   }
 }
 
