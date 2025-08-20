@@ -114,6 +114,18 @@ Artists can upload images, add captions and drag to reorder items in the
 Organizations manage their events under the **Events** tab where new events
 can be created, duplicated or cancelled.
 
+## Dashboard Navigation
+
+The dashboard uses hash-based routes so panels can be bookmarked or linked directly:
+
+- Members: `#overview`, `#calendar`, `#favorites`, `#my-rsvps`, `#settings`
+- Artists: `#overview`, `#portfolio`, `#artworks`, `#calendar`, `#settings`
+- Organizations: `#overview`, `#events`, `#rsvps`, `#analytics`, `#settings`
+
+Adding a new panel requires registering a route in `assets/js/ap-user-dashboard.js`, creating a module that renders its contents, and exposing a navigation link. Each panel should render into `<main id="ap-view">` and avoid injecting unescaped HTML.
+
+![Dashboard screenshot placeholder](../../images/dashboard-placeholder.png)
+
 ## Shortcode Reference
 
 - `[ap_event_directory]` — Show event directory with filters

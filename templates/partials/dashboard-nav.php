@@ -4,9 +4,5 @@ if (!defined('ABSPATH')) {
 }
 ?>
 <nav class="ap-dashboard-nav" data-ap-nav>
-    <ul>
-        <li><a href="#overview"><?php esc_html_e('Overview', 'artpulse'); ?></a></li>
-        <li><a href="#calendar"><?php esc_html_e('Calendar', 'artpulse'); ?></a></li>
-        <li><a href="#favorites"><?php esc_html_e('Favorites', 'artpulse'); ?></a></li>
-    </ul>
+    <ul id="ap-nav-list"></ul>
 </nav>

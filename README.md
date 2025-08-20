@@ -38,6 +38,35 @@ See the [Changelog](docs/CHANGELOG.md) for release notes.
 [Widget Settings Codex](docs/widget-settings-codex.md) describes widget schemas and per-user storage.
 [Dashboard Builder Guide](docs/widgets/widget-matrix-reference.md) explains how to configure role-based dashboards. The old Widget Editor documentation has been removed.
 [User Dashboard Customization](docs/guides/user/dashboard-customization.md) explains per-user layout storage and REST endpoints.
+
+## Running tests
+
+To run the plugin's PHPUnit tests locally:
+
+```
+composer install
+WP_PHPUNIT__DIR=vendor/wp-phpunit/wp-phpunit vendor/bin/phpunit -c phpunit.xml.dist
+```
+
+JavaScript linting and unit tests can be executed with:
+
+```
+npm test
+```
+
+## Dashboard routes
+
+The dashboard uses hash-based navigation. Available panels depend on the current user's role:
+
+| Member | Artist | Organization |
+| --- | --- | --- |
+| `#overview` | `#overview` | `#overview` |
+| `#calendar` | `#portfolio` | `#events` |
+| `#favorites` | `#artworks` | `#rsvps` |
+| `#my-rsvps` | `#calendar` | `#analytics` |
+| `#settings` | `#settings` | `#settings` |
+
+To add a new panel, register a hash route in `assets/js/ap-user-dashboard.js`, create the module file that renders the panel, and add a link in `templates/partials/dashboard-nav.php` or via JS when the router initializes.
 [Multi-org Roles & Permissions](docs/multi-org-roles-permissions.md) covers assigning members to multiple organizations.
 [Community Engagement Codex](docs/community-engagement-codex.md) summarizes forum, feedback and social modules.
 [Member Registration Codex](docs/member-registration-codex.md) explains native registration hooks.
