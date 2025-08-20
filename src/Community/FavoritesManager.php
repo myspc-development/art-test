@@ -12,7 +12,7 @@ class FavoritesManager {
             'user_id'      => $user_id,
             'object_id'    => $object_id,
             'object_type'  => $object_type,
-            'favorited_on' => current_time('mysql')
+            'created_at'   => current_time('mysql')
         ]);
         \ArtPulse\Core\UserEngagementLogger::log($user_id, 'favorite', $object_id);
         \ArtPulse\Personalization\RecommendationEngine::log($user_id, $object_type, $object_id, 'favorite');
@@ -72,13 +72,13 @@ class FavoritesManager {
     public static function get_user_favorites($user_id, $object_type = null) {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_favorites';
-        $sql = "SELECT object_id, object_type, favorited_on FROM $table WHERE user_id = %d";
+        $sql = "SELECT object_id, object_type, created_at FROM $table WHERE user_id = %d";
         $params = [ $user_id ];
         if ($object_type) {
             $sql .= " AND object_type = %s";
             $params[] = $object_type;
         }
-        $sql .= " ORDER BY favorited_on DESC";
+        $sql .= " ORDER BY created_at DESC";
         return $wpdb->get_results($wpdb->prepare($sql, ...$params));
     }
 
@@ -163,7 +163,7 @@ class FavoritesManager {
             user_id BIGINT NOT NULL,
             object_id BIGINT NOT NULL,
             object_type VARCHAR(32) NOT NULL,
-            favorited_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY user_object (user_id, object_id, object_type)
         ) $charset_collate;";
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');

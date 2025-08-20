@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function(){
       var objectType = this.dataset.objectType;
       var isActive = this.classList.contains('active');
 
-      fetch(window.ArtPulseApi.root + 'artpulse/v1/favorite', {
+      fetch(window.ArtPulseApi.root + 'artpulse/v1/favorites', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -14,14 +14,14 @@ document.addEventListener('DOMContentLoaded', function(){
         },
         body: JSON.stringify({
           object_id: objectId,
-          object_type: objectType,
-          action: isActive ? 'remove' : 'add'
+          object_type: objectType
         })
       })
       .then(r => r.json())
       .then(data => {
         if (data.success) {
           this.classList.toggle('active');
+          this.textContent = this.classList.contains('active') ? '❤' : '♡';
         } else {
           alert(data.message || 'Error updating favorite');
         }

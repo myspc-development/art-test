@@ -677,10 +677,10 @@ class UserDashboardManager
         $favorite_counts = array_fill(0, 6, 0);
         $favs = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
         foreach ($favs as $fav) {
-            if (empty($fav->favorited_on)) {
+            if (empty($fav->created_at)) {
                 continue;
             }
-            $month = substr($fav->favorited_on, 0, 7);
+            $month = substr($fav->created_at, 0, 7);
             $index = array_search($month, $months, true);
             if ($index !== false) {
                 $favorite_counts[$index]++;

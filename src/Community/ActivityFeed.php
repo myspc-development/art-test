@@ -69,7 +69,7 @@ class ActivityFeed
             }
 
             $sql = $wpdb->prepare(
-                "SELECT object_id, object_type, favorited_on FROM {$favorites_table} WHERE user_id IN ($placeholders) ORDER BY favorited_on DESC LIMIT %d",
+                "SELECT object_id, object_type, created_at FROM {$favorites_table} WHERE user_id IN ($placeholders) ORDER BY created_at DESC LIMIT %d",
                 array_merge($follow_users, [$limit])
             );
             $rows = $wpdb->get_results($sql);
@@ -85,7 +85,7 @@ class ActivityFeed
                     'type'  => 'favorite',
                     'title' => $title,
                     'link'  => $title ? get_permalink($f->object_id) : '',
-                    'date'  => $f->favorited_on,
+                    'date'  => $f->created_at,
                 ];
             }
         }

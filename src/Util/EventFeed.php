@@ -10,24 +10,44 @@ use WP_Query;
  * @param float|null $lng Longitude to filter by.
  * @return array[] List of event data.
  */
-function ap_fetch_calendar_events($lat = null, $lng = null): array
+function ap_fetch_calendar_events($lat = null, $lng = null, $radius_km = null, $start = null, $end = null): array
 {
     $meta_query = [
         ['key' => 'event_start_date', 'compare' => 'EXISTS'],
     ];
 
+    if ($start) {
+        $meta_query[] = [
+            'key'     => 'event_start_date',
+            'value'   => $start,
+            'compare' => '>=',
+            'type'    => 'DATE',
+        ];
+    }
+    if ($end) {
+        $meta_query[] = [
+            'key'     => 'event_start_date',
+            'value'   => $end,
+            'compare' => '<=',
+            'type'    => 'DATE',
+        ];
+    }
+
     if ($lat !== null && $lng !== null) {
         $lat = (float) $lat;
         $lng = (float) $lng;
+        $radius_km = $radius_km !== null ? (float) $radius_km : 50.0;
+        $lat_delta = $radius_km / 111.0;
+        $lng_delta = $radius_km / (111.0 * cos(deg2rad($lat)));
         $meta_query[] = [
             'key'     => 'event_lat',
-            'value'   => [ $lat - 0.5, $lat + 0.5 ],
+            'value'   => [ $lat - $lat_delta, $lat + $lat_delta ],
             'compare' => 'BETWEEN',
             'type'    => 'DECIMAL(10,6)',
         ];
         $meta_query[] = [
             'key'     => 'event_lng',
-            'value'   => [ $lng - 0.5, $lng + 0.5 ],
+            'value'   => [ $lng - $lng_delta, $lng + $lng_delta ],
             'compare' => 'BETWEEN',
             'type'    => 'DECIMAL(10,6)',
         ];
@@ -40,10 +60,6 @@ function ap_fetch_calendar_events($lat = null, $lng = null): array
         'meta_query'     => $meta_query,
     ]);
 
-    $user_id   = get_current_user_id();
-    $favorited = $user_id ? (array) get_user_meta($user_id, 'ap_favorite_events', true) : [];
-    $rsvpd     = $user_id ? (array) get_user_meta($user_id, 'ap_rsvp_events', true) : [];
-
     $events = [];
     while ($query->have_posts()) {
         $query->the_post();
@@ -51,18 +67,8 @@ function ap_fetch_calendar_events($lat = null, $lng = null): array
         $start    = get_post_meta($event_id, 'event_start_date', true);
         $end      = get_post_meta($event_id, 'event_end_date', true);
         $venue    = get_post_meta($event_id, 'venue_name', true);
-        $address  = get_post_meta($event_id, 'event_street_address', true);
-
-        $is_fav  = in_array($event_id, $favorited, true);
-        $is_rsvp = in_array($event_id, $rsvpd, true);
-
-        $class = [];
-        if ($is_fav) {
-            $class[] = 'event-favorited';
-        }
-        if ($is_rsvp) {
-            $class[] = 'event-rsvpd';
-        }
+        $lat_meta = get_post_meta($event_id, 'event_lat', true);
+        $lng_meta = get_post_meta($event_id, 'event_lng', true);
 
         $events[] = [
             'id'    => $event_id,
@@ -70,13 +76,9 @@ function ap_fetch_calendar_events($lat = null, $lng = null): array
             'start' => $start,
             'end'   => $end,
             'url'   => get_permalink(),
-            'classNames' => $class,
-            'extendedProps' => [
-                'venue'     => $venue,
-                'address'   => $address,
-                'favorited' => $is_fav,
-                'rsvpd'     => $is_rsvp,
-            ],
+            'venue' => $venue,
+            'lat'   => $lat_meta,
+            'lng'   => $lng_meta,
         ];
     }
     wp_reset_postdata();

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const objectType = btn.dataset.objectType;
       const isActive   = btn.classList.contains('ap-favorited');
 
-      fetch(APFavorites.apiRoot + 'artpulse/v1/favorite', {
+      fetch(APFavorites.apiRoot + 'artpulse/v1/favorites', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -14,8 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify({
           object_id: objectId,
-          object_type: objectType,
-          action: isActive ? 'remove' : 'add'
+          object_type: objectType
         })
       })
         .then(r => r.json())
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (data.success) {
             const added = data.status === 'added';
             btn.classList.toggle('ap-favorited', added);
-            btn.textContent = added ? '★' : '☆';
+            btn.textContent = added ? '❤' : '♡';
           }
         });
     });

@@ -28,15 +28,15 @@ class EventFeedTest extends \WP_UnitTestCase
         $events = ap_fetch_calendar_events();
         $this->assertCount(1, $events);
         $this->assertSame($this->event_id, $events[0]['id']);
-        $this->assertSame('Main Hall', $events[0]['extendedProps']['venue']);
+        $this->assertSame('Main Hall', $events[0]['venue']);
     }
 
     public function test_fetch_filters_by_location(): void
     {
-        $events = ap_fetch_calendar_events(10.1, 20.1);
+        $events = ap_fetch_calendar_events(10.1, 20.1, 50);
         $this->assertCount(1, $events);
 
-        $events = ap_fetch_calendar_events(50, 50);
+        $events = ap_fetch_calendar_events(50, 50, 50);
         $this->assertCount(0, $events);
     }
 }

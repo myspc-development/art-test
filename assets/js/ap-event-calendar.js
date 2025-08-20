@@ -3,93 +3,70 @@ document.addEventListener('DOMContentLoaded', function() {
   var el = document.getElementById('ap-event-calendar');
   if (!el) return;
 
-  var events = (window.APCalendar && window.APCalendar.events) ? window.APCalendar.events : [];
-  var restRoot = (window.APCalendar && window.APCalendar.rest_root) || (window.wpApiSettings && window.wpApiSettings.root) || '/wp-json/';
-  var nonce = (window.APCalendar && window.APCalendar.nonce) || '';
+  var restRoot = (window.APCalendar && window.APCalendar.apiRoot) || (window.wpApiSettings && window.wpApiSettings.root) || '/wp-json/';
+  var nonce    = (window.APCalendar && window.APCalendar.nonce) || '';
 
-  var params = new URLSearchParams(window.location.search);
-  if (!params.has('lat') && navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(pos){
-      params.set('lat', pos.coords.latitude);
-      params.set('lng', pos.coords.longitude);
-      window.location.search = params.toString();
+  function initCalendar(lat, lng) {
+    var calendar = new FullCalendar.Calendar(el, {
+      initialView: 'dayGridMonth',
+      events: function(info, success, failure) {
+        var params = new URLSearchParams({ start: info.startStr, end: info.endStr });
+        if (lat != null && lng != null) {
+          params.set('lat', lat);
+          params.set('lng', lng);
+        }
+        fetch(restRoot + 'artpulse/v1/calendar?' + params.toString(), {
+          headers: nonce ? { 'X-WP-Nonce': nonce } : {}
+        })
+          .then(r => r.json())
+          .then(data => success(data))
+          .catch(failure);
+      },
+      eventClick: function(info) {
+        window.location.href = info.event.url;
+      }
     });
+    calendar.render();
   }
 
-  var popover, popContent, closeBtn, lastFocus;
-
-  function createPopover() {
-    if (popover) return;
-    popover = document.createElement('div');
-    popover.id = 'ap-event-popover';
-    popover.className = 'ap-event-popover';
-    popover.setAttribute('role', 'dialog');
-    popover.setAttribute('aria-modal', 'true');
-    popover.tabIndex = -1;
-    closeBtn = document.createElement('button');
-    closeBtn.type = 'button';
-    closeBtn.className = 'ap-event-popover-close ap-form-button';
-    closeBtn.textContent = (window.APCalendar && window.APCalendar.close_text) || 'Close';
-    closeBtn.addEventListener('click', hidePopover);
-    popContent = document.createElement('div');
-    popover.appendChild(closeBtn);
-    popover.appendChild(popContent);
-    document.body.appendChild(popover);
-    document.addEventListener('click', function(e){ if (popover.classList.contains('open') && !popover.contains(e.target)) hidePopover(); });
-    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') hidePopover(); });
-  }
-
-  function showPopover(html, x, y, url) {
-    createPopover();
-    popContent.innerHTML = html;
-    if (window.innerWidth < 500) {
-      var link = document.createElement('p');
-      link.className = 'ap-event-view-link';
-      link.innerHTML = '<a href="' + url + '">View event</a>';
-      popContent.appendChild(link);
-    }
-    popover.style.left = x + 'px';
-    popover.style.top = y + 'px';
-    popover.classList.add('open');
-    lastFocus = document.activeElement;
-    popover.focus();
-  }
-
-  function hidePopover() {
-    if (!popover) return;
-    popover.classList.remove('open');
-    popContent.innerHTML = '';
-    if (lastFocus) lastFocus.focus();
-  }
-
-  var calendar = new FullCalendar.Calendar(el, {
-    initialView: 'dayGridMonth',
-    events: events,
-    eventClick: function(info) {
-      info.jsEvent.preventDefault();
-      fetch(restRoot + 'artpulse/v1/event-card/' + info.event.id, {
-        headers: nonce ? { 'X-WP-Nonce': nonce } : {}
-      })
-        .then(function(res){ return res.text(); })
-        .then(function(html){ showPopover(html, info.jsEvent.pageX, info.jsEvent.pageY, info.event.url); })
-        .catch(function(){ window.open(info.event.url, '_blank'); });
-    },
-    eventDidMount: function(info) {
-      if (info.event.extendedProps.favorited) {
-        info.el.classList.add('event-favorited');
+  function promptForLocation() {
+    var input = prompt('Enter your location as "lat,lng"');
+    if (input) {
+      var parts = input.split(',');
+      var lat = parseFloat(parts[0]);
+      var lng = parseFloat(parts[1]);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        localStorage.setItem('ap_last_location', JSON.stringify({lat:lat,lng:lng}));
+        initCalendar(lat, lng);
+        return;
       }
-      if (info.event.extendedProps.rsvpd) {
-        info.el.classList.add('event-rsvpd');
-      }
-      var title = info.event.title;
-      var venue = info.event.extendedProps.venue;
-      var address = info.event.extendedProps.address;
-      var tooltip = title;
-      if (venue) tooltip += '\nVenue: ' + venue;
-      if (address) tooltip += '\nAddress: ' + address;
-      info.el.title = tooltip;
     }
-  });
+    initCalendar(null, null);
+  }
 
-  calendar.render();
+  function obtainLocation() {
+    var stored = localStorage.getItem('ap_last_location');
+    if (stored) {
+      try {
+        var loc = JSON.parse(stored);
+        if (loc.lat != null && loc.lng != null) {
+          initCalendar(loc.lat, loc.lng);
+          return;
+        }
+      } catch(e){}
+    }
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(pos){
+        var loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        localStorage.setItem('ap_last_location', JSON.stringify(loc));
+        initCalendar(loc.lat, loc.lng);
+      }, function(){
+        promptForLocation();
+      });
+    } else {
+      promptForLocation();
+    }
+  }
+
+  obtainLocation();
 });
