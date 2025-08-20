@@ -32,6 +32,8 @@ const labels = {
 };
 
 const main = document.getElementById('ap-view');
+main.setAttribute('role', 'main');
+main.setAttribute('aria-live', 'polite');
 const navList = document.getElementById('ap-nav-list');
 const roles = ARTPULSE_BOOT.currentUser.roles || [];
 let currentTab = '';
@@ -59,10 +61,13 @@ async function loadTab(tab) {
   localStorage.setItem('ap-last-tab', tab);
   main.textContent = '';
   const container = document.createElement('div');
+  container.textContent = __('Loading...');
+  container.setAttribute('aria-busy', 'true');
   main.appendChild(container);
   try {
     if (tabModules[tab]) {
       const mod = await tabModules[tab]();
+      container.textContent = '';
       await mod.default(container);
     } else {
       container.textContent = labels[tab] || tab;
@@ -71,11 +76,13 @@ async function loadTab(tab) {
     Toast.show({ type: 'error', message: e.message || 'Error loading panel' });
     container.textContent = __('Nothing to display');
   }
+  container.removeAttribute('aria-busy');
 }
 
 function onHashChange() {
   const hash = window.location.hash.replace('#', '') || localStorage.getItem('ap-last-tab') || allowedTabs()[0];
   if (!allowedTabs().includes(hash)) {
+    Toast.show({ type: 'warning', message: __('Unknown panel') });
     window.location.hash = allowedTabs()[0];
     return;
   }

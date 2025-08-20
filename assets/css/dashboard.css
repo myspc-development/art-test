@@ -1,4 +1,7 @@
 /* Basic grid utilities */
+:root {
+  color-scheme: light dark;
+}
 .grid {
   display: grid;
   gap: 1rem;
@@ -32,6 +35,35 @@ table.ap-table th {
 }
 table.ap-table tr:nth-child(even) {
   background: #f9f9f9;
+}
+
+@media (max-width: 600px) {
+  table.ap-table, table.ap-table thead, table.ap-table tbody, table.ap-table th, table.ap-table td, table.ap-table tr {
+    display: block;
+  }
+  table.ap-table thead {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  table.ap-table tr {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0.5rem;
+  }
+  table.ap-table td {
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+  }
+  table.ap-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 1rem;
+    text-align: left;
+    font-weight: bold;
+  }
 }
 
 /* Focus ring */

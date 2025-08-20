@@ -3,7 +3,6 @@
 namespace Yoast\PHPUnitPolyfills\Polyfills;
 
 use PHPUnit\Framework\Assert;
-use ReflectionObject;
 
 /**
  * Polyfill the Assert::assertIsList() method.
@@ -59,32 +58,12 @@ trait AssertIsList {
 	/**
 	 * Returns the description of the failure.
 	 *
-	 * @param mixed $value The value under test.
+	 * @param mixed $other The value under test.
 	 *
 	 * @return string
 	 */
-	private static function assertIsListFailureDescription( $value ) {
-		$message = 'Failed asserting that %s is a list.';
-
-		if ( \is_object( $value ) ) {
-			// Improved error message as per upstream since PHPUnit 11.3.1.
-			$reflector   = new ReflectionObject( $value );
-			$description = 'an instance of class ' . $reflector->getName();
-
-			if ( $reflector->isAnonymous() ) {
-				$name   = \str_replace( 'class@anonymous', '', $reflector->getName() );
-				$length = \strpos( $name, '$' );
-				if ( \is_int( $length ) ) {
-					$name = \substr( $name, 0, $length );
-				}
-
-				$description = 'an instance of anonymous class created at ' . $name;
-			}
-
-			return \sprintf( $message, $description );
-		}
-
-		$type = \strtolower( \gettype( $value ) );
+	private static function assertIsListFailureDescription( $other ) {
+		$type = \strtolower( \gettype( $other ) );
 
 		switch ( $type ) {
 			case 'double':
@@ -97,6 +76,7 @@ trait AssertIsList {
 
 			case 'array':
 			case 'integer':
+			case 'object':
 				$description = 'an ' . $type;
 				break;
 
@@ -117,6 +97,6 @@ trait AssertIsList {
 				break;
 		}
 
-		return \sprintf( $message, $description );
+		return \sprintf( 'Failed asserting that %s is a list.', $description );
 	}
 }

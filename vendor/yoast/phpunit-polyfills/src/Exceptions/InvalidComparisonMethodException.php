@@ -5,10 +5,10 @@ namespace Yoast\PHPUnitPolyfills\Exceptions;
 use Exception;
 
 /**
- * Exception used for all errors throw by the polyfill for the `assertObjectEquals()` and the `assertObjectNotEquals()` assertions.
+ * Exception used for all errors throw by the polyfill for the `assertObjectEquals()` assertion.
  *
  * PHPUnit natively throws a range of different exceptions.
- * The polyfills throw just one exception type with different messages.
+ * The polyfill throws just one exception type with different messages.
  *
  * @since 1.0.0
  */

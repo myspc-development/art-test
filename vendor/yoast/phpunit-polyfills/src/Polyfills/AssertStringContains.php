@@ -10,6 +10,12 @@ namespace Yoast\PHPUnitPolyfills\Polyfills;
  * Use of Assert::assertContains() and Assert::assertNotContains() with string haystacks was
  * deprecated in PHPUnit 7.5.0 and removed in PHPUnit 9.0.0.
  *
+ * Note: this polyfill accounts for a bug in PHPUnit < 6.4.2.
+ * Prior to PHPUnit 6.4.2, when the $needle was an empty string, a PHP native
+ * "mb_strpos(): Empty delimiter" warning would be thrown, which would result
+ * in the test failing.
+ * This polyfill prevents that warning and emulates the PHPUnit >= 6.4.2 behaviour.
+ *
  * @link https://github.com/sebastianbergmann/phpunit/issues/3422
  * @link https://github.com/sebastianbergmann/phpunit/issues/2520
  * @link https://github.com/sebastianbergmann/phpunit/pull/2778
@@ -28,6 +34,11 @@ trait AssertStringContains {
 	 * @return void
 	 */
 	final public static function assertStringContainsString( $needle, $haystack, $message = '' ) {
+		if ( $needle === '' ) {
+			static::assertSame( $needle, $needle, $message );
+			return;
+		}
+
 		static::assertContains( $needle, $haystack, $message );
 	}
 
@@ -41,6 +52,11 @@ trait AssertStringContains {
 	 * @return void
 	 */
 	final public static function assertStringContainsStringIgnoringCase( $needle, $haystack, $message = '' ) {
+		if ( $needle === '' ) {
+			static::assertSame( $needle, $needle, $message );
+			return;
+		}
+
 		static::assertContains( $needle, $haystack, $message, true );
 	}
 
@@ -54,6 +70,15 @@ trait AssertStringContains {
 	 * @return void
 	 */
 	final public static function assertStringNotContainsString( $needle, $haystack, $message = '' ) {
+		if ( $needle === '' ) {
+			$msg = "Failed asserting that '{$haystack}' does not contain \"\".";
+			if ( $message !== '' ) {
+				$msg = $message . \PHP_EOL . $msg;
+			}
+
+			static::fail( $msg );
+		}
+
 		static::assertNotContains( $needle, $haystack, $message );
 	}
 
@@ -67,6 +92,15 @@ trait AssertStringContains {
 	 * @return void
 	 */
 	final public static function assertStringNotContainsStringIgnoringCase( $needle, $haystack, $message = '' ) {
+		if ( $needle === '' ) {
+			$msg = "Failed asserting that '{$haystack}' does not contain \"\".";
+			if ( $message !== '' ) {
+				$msg = $message . \PHP_EOL . $msg;
+			}
+
+			static::fail( $msg );
+		}
+
 		static::assertNotContains( $needle, $haystack, $message, true );
 	}
 }

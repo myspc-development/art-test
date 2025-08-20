@@ -107,12 +107,26 @@ Your upcoming RSVPs appear in a simple table. Use the **Cancel** button if
 you can no longer attend.
 
 ### Portfolio
-Artists can upload images, add captions and drag to reorder items in the
-**Portfolio** tab. Alt text is required for accessibility.
+Artists can upload images, edit titles and captions, and drag to reorder items
+in the **Portfolio** tab. Alt text is required before saving. Use the **Set as
+Featured** action to highlight an item and copy the **View public profile** link
+to share your page.
 
 ### Events
-Organizations manage their events under the **Events** tab where new events
-can be created, duplicated or cancelled.
+Organizations manage their events under the **Events** tab where new events can
+be created, duplicated or cancelled. Required fields include title, description,
+start/end dates, venue, address, capacity and optional price and cover image.
+
+### RSVP Admin
+The **RSVPs** tab lists attendees for the selected event. Filter by status or
+date range, update statuses inline or in bulk, and export a CSV. Avoid leading
+`=` or `+` in exported cells to guard against CSV injection.
+
+### Analytics
+The **Analytics** tab summarizes total RSVPs, unique attendees, confirmation
+rates and the top event. Choose ranges of 7, 30, 90 days or enter custom start
+and end dates. Charts provide a canvas visual with a table fallback for screen
+readers.
 
 ## Dashboard Navigation
 
