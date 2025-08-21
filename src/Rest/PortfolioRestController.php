@@ -6,7 +6,7 @@ use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use function ArtPulse\Rest\Util\require_login_and_cap;
+use ArtPulse\Rest\Util\Auth;
 
 /**
  * Artist portfolio persistence API.
@@ -26,7 +26,7 @@ class PortfolioRestController extends WP_REST_Controller
         register_rest_route($this->namespace, '/portfolio', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [$this, 'get_portfolio'],
-            'permission_callback' => require_login_and_cap(),
+              'permission_callback' => Auth::require_login_and_cap(),
             'args'                => [
                 'user' => ['type' => 'string', 'default' => 'me'],
             ],
@@ -35,7 +35,7 @@ class PortfolioRestController extends WP_REST_Controller
         register_rest_route($this->namespace, '/portfolio/items', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [$this, 'add_item'],
-            'permission_callback' => require_login_and_cap(),
+              'permission_callback' => Auth::require_login_and_cap(),
             'args'                => [
                 'media_id' => ['type' => 'integer', 'required' => true],
                 'meta'     => ['type' => 'object',  'required' => true],
@@ -45,7 +45,7 @@ class PortfolioRestController extends WP_REST_Controller
         register_rest_route($this->namespace, '/portfolio/order', [
             'methods'             => WP_REST_Server::EDITABLE,
             'callback'            => [$this, 'save_order'],
-            'permission_callback' => require_login_and_cap(),
+              'permission_callback' => Auth::require_login_and_cap(),
             'args'                => [
                 'order' => ['type' => 'array', 'required' => true],
             ],
@@ -54,7 +54,7 @@ class PortfolioRestController extends WP_REST_Controller
         register_rest_route($this->namespace, '/portfolio/featured', [
             'methods'             => WP_REST_Server::EDITABLE,
             'callback'            => [$this, 'set_featured'],
-            'permission_callback' => require_login_and_cap(),
+              'permission_callback' => Auth::require_login_and_cap(),
             'args'                => [
                 'attachment_id' => ['type' => 'integer', 'required' => true],
             ],

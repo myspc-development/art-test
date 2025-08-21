@@ -6,7 +6,7 @@ use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use function ArtPulse\Rest\Util\require_login_and_cap;
+use ArtPulse\Rest\Util\Auth;
 
 /**
  * Simple RSVP management backed by the ap_rsvps table.
@@ -37,7 +37,7 @@ class RsvpDbController extends WP_REST_Controller
             [
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => [$this, 'list_rsvps'],
-                'permission_callback' => require_login_and_cap(fn($req) => (int)$req['event_id'] && current_user_can('edit_post', (int)$req['event_id'])),
+                'permission_callback' => Auth::require_login_and_cap(fn($req) => (int)$req['event_id'] && current_user_can('edit_post', (int)$req['event_id'])),
                 'args'                => [
                     'event_id' => ['type' => 'integer', 'required' => true],
                     'status'   => ['type' => 'string', 'required' => false],
@@ -52,7 +52,7 @@ class RsvpDbController extends WP_REST_Controller
         register_rest_route($this->namespace, '/rsvps/(?P<id>\d+)', [
             'methods'             => WP_REST_Server::EDITABLE,
             'callback'            => [$this, 'update_rsvp'],
-            'permission_callback' => require_login_and_cap(fn($req) => (int)$req['id'] && current_user_can('edit_post', (int)$req['id'])),
+            'permission_callback' => Auth::require_login_and_cap(fn($req) => (int)$req['id'] && current_user_can('edit_post', (int)$req['id'])),
             'args'                => [
                 'status' => ['type' => 'string', 'required' => true],
             ],
@@ -61,7 +61,7 @@ class RsvpDbController extends WP_REST_Controller
         register_rest_route($this->namespace, '/rsvps/export.csv', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [$this, 'export_csv'],
-            'permission_callback' => require_login_and_cap(fn($req) => (int)$req['event_id'] && current_user_can('edit_post', (int)$req['event_id'])),
+            'permission_callback' => Auth::require_login_and_cap(fn($req) => (int)$req['event_id'] && current_user_can('edit_post', (int)$req['event_id'])),
             'args'                => [
                 'event_id' => ['type' => 'integer', 'required' => true],
             ],
@@ -70,7 +70,7 @@ class RsvpDbController extends WP_REST_Controller
         register_rest_route($this->namespace, '/rsvps/bulk-update', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [$this, 'bulk_update'],
-            'permission_callback' => require_login_and_cap(fn($req) => (int)$req['event_id'] && current_user_can('edit_post', (int)$req['event_id'])),
+            'permission_callback' => Auth::require_login_and_cap(fn($req) => (int)$req['event_id'] && current_user_can('edit_post', (int)$req['event_id'])),
             'args'                => [
                 'event_id' => ['type' => 'integer', 'required' => true],
                 'ids'      => ['type' => 'array',   'required' => true],

@@ -28,7 +28,7 @@ class EventAnalyticsController extends WP_REST_Controller
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [$this, 'get_summary'],
             // Unauthenticated -> 401, authenticated but unauthorized -> 403
-            'permission_callback' => Auth::require_login_and_cap(static fn() => current_user_can('read')),
+            'permission_callback' => Auth::require_login_and_cap('read'),
             'args'                => [
                 // Accept either range or explicit dates; clamp internally.
                 'range' => ['type' => 'string', 'default' => '30d'],

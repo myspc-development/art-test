@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Request;
-use function ArtPulse\Rest\Util\require_login_and_cap;
+use ArtPulse\Rest\Util\Auth;
 
 class ArtistEventsController
 {
@@ -23,9 +23,7 @@ class ArtistEventsController
             [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_events'],
-                'permission_callback' => require_login_and_cap(static function () {
-                    return current_user_can('read');
-                }),
+                  'permission_callback' => Auth::require_login_and_cap('read'),
             ]
         );
     }

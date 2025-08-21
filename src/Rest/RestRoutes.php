@@ -2,7 +2,10 @@
 namespace ArtPulse\Rest;
 
 final class RestRoutes {
-    public static function register_routes(): void {
+    /**
+     * Register all REST controllers with the rest_api_init hook.
+     */
+    public static function register_all(): void {
         // Register controllers that expose routes
         // (each controller internally calls register_rest_route)
         AnalyticsPilotController::register();
@@ -13,9 +16,7 @@ final class RestRoutes {
         RsvpDbController::register();
         CalendarFeedController::register();
         ProfileMetricsController::register();
-        SystemStatusController::register(); // new
+        SystemStatusController::register();
     }
 }
 
-// Ensure registration happens in tests and runtime
-add_action('rest_api_init', [RestRoutes::class, 'register_routes']);

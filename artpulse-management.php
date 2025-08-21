@@ -200,7 +200,7 @@ require_once __DIR__ . '/includes/class-artpulse-rest-controller.php';
 // The DashboardConfigController class provides this route.
 // require_once __DIR__ . '/api/dashboard-config.php';
 
-\ArtPulse\Rest\RestRoutes::boot();
+add_action('rest_api_init', [\ArtPulse\Rest\RestRoutes::class, 'register_all']);
 require_once __DIR__ . '/admin-menu.php';
 require_once __DIR__ . '/includes/http-hooks.php';
 // Legacy dashboard implementation removed in favor of DashboardWidgetRegistry
