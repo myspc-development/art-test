@@ -2036,32 +2036,6 @@ paths:
       responses:
         '200':
           description: OK
-  /artpulse/v1/ap/layout:
-    get:
-      summary: Auto-generated stub
-      parameters:
-        - in: query
-          name: role
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-  /artpulse/v1/ap/layout/save:
-    post:
-      summary: Auto-generated stub
-      parameters:
-        - in: query
-          name: layout
-          schema:
-            type: array
-        - in: query
-          name: visibility
-          schema:
-            type: object
-      responses:
-        '200':
-          description: OK
   /artpulse/v1/ap/layout/reset:
     post:
       summary: Auto-generated stub

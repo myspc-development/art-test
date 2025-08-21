@@ -194,11 +194,10 @@ Total AJAX actions: 51
 | artpulse/v1 | POST | /user/onboarding | src/Core/UserDashboardManager.php:236 | yes | no |
 | artpulse/v1 | POST | /dashboard-tour | src/Core/UserDashboardManager.php:252 | yes | no |
 | artpulse/v1 | GET | /ap/widgets/available | src/Core/UserDashboardManager.php:265 | yes | no |
-| artpulse/v1 | GET | /ap/layout | src/Core/UserDashboardManager.php:278 | yes | no |
-| artpulse/v1 | POST | /ap/layout/save | src/Core/UserDashboardManager.php:291 | yes | no |
 | artpulse/v1 | POST | /ap/layout/reset | src/Core/UserDashboardManager.php:305 | yes | no |
 | artpulse/v1 | POST | /ap/layout/revert | src/Core/UserDashboardManager.php:315 | yes | no |
-| artpulse/v1 | GET | /ap_dashboard_layout | src/Core/UserDashboardManager.php:326 | yes | no |
+| artpulse/v1 | GET | /ap_dashboard_layout | src/Core/UserDashboardManager.php:325 | yes | no |
+| artpulse/v1 | POST | /ap_dashboard_layout | src/Core/UserDashboardManager.php:326 | yes | no |
 | artpulse/v1 | POST | /newsletter-optin | src/Frontend/NewsletterOptinEndpoint.php:18 | yes | no |
 | artpulse/v1 | GET | /widgets/embed.js | src/Frontend/WidgetsController.php:16 | yes | no |
 | artpulse/v1 | GET | /widgets/render | src/Frontend/WidgetsController.php:21 | yes | no |

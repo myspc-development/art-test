@@ -40,18 +40,21 @@ class DashboardLayoutTest extends \WP_UnitTestCase
             ['id' => 'one', 'visible' => true],
             ['id' => 'two', 'visible' => true],
         ]);
-        update_user_meta($this->user_id, 'ap_widget_visibility', ['one' => true]);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
         $this->assertSame(['one', 'two'], $data['layout']);
-        $this->assertSame(['one' => true, 'two' => true], $data['visibility']);
+        $expected = [
+            ['id' => 'one', 'visible' => true],
+            ['id' => 'two', 'visible' => true],
+        ];
+        $this->assertSame($expected, $data['visibility']);
     }
 
     public function test_post_saves_layout_and_visibility(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/ap/layout/save');
+        $req = new WP_REST_Request('POST', '/artpulse/v1/ap_dashboard_layout');
         $req->set_body_params([
             'layout' => [
                 ['id' => 'a', 'visible' => false],
@@ -71,7 +74,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
 
     public function test_post_sanitizes_layout_values(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/ap/layout/save');
+        $req = new WP_REST_Request('POST', '/artpulse/v1/ap_dashboard_layout');
         $req->set_body_params([
             'layout' => [
                 ['id' => 'A-'],
@@ -91,7 +94,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
 
     public function test_post_ignores_duplicates_and_invalid_ids(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/ap/layout/save');
+        $req = new WP_REST_Request('POST', '/artpulse/v1/ap_dashboard_layout');
         $req->set_body_params([
             'layout' => [
                 ['id' => 'a'],
@@ -115,15 +118,22 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         // Remove layout assigned during registration to simulate missing meta.
         delete_user_meta($uid, 'ap_dashboard_layout');
         wp_set_current_user($uid);
-        update_option('ap_dashboard_widget_config', ['member' => ['membership', 'upgrade']]);
+        tests_add_filter('ap_dashboard_default_widgets_for_role', function ($defaults, $role) {
+            return 'member' === $role ? ['membership', 'upgrade'] : $defaults;
+        });
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
         $res = rest_get_server()->dispatch($req);
 
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
         $this->assertSame(['membership', 'upgrade'], $data['layout']);
-        $this->assertSame(['membership' => true, 'upgrade' => true], $data['visibility']);
+        $expected = [
+            ['id' => 'membership', 'visible' => true],
+            ['id' => 'upgrade', 'visible' => true],
+        ];
+        $this->assertSame($expected, $data['visibility']);
+        remove_all_filters('ap_dashboard_default_widgets_for_role');
     }
 
     public function test_user_register_populates_default_layout(): void
@@ -137,14 +147,19 @@ class DashboardLayoutTest extends \WP_UnitTestCase
 
     public function test_get_returns_layout_for_specified_role(): void
     {
-        update_option('ap_dashboard_widget_config', ['member' => ['membership']]);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
+        tests_add_filter('ap_dashboard_default_widgets_for_role', function ($defaults, $role) {
+            return 'member' === $role ? ['membership'] : $defaults;
+        });
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
         $req->set_param('role', 'member');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
         $this->assertSame(['membership'], $data['layout']);
-        $this->assertSame(['membership' => true], $data['visibility']);
+        $this->assertSame([
+            ['id' => 'membership', 'visible' => true],
+        ], $data['visibility']);
+        remove_all_filters('ap_dashboard_default_widgets_for_role');
     }
 
     public function test_get_sanitizes_layout_values(): void
@@ -154,7 +169,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
             ['id' => 'B C'],
             ['id' => 'in valid/slug']
         ]);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $expected = ['a-', 'bc', 'invalidslug'];

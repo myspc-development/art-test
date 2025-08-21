@@ -134,9 +134,9 @@ class DebugDashboardCommand {
         $res1 = rest_do_request($req1);
         WP_CLI::log('REST /role-widget-map: ' . wp_json_encode($res1->get_data()));
 
-        $req2 = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
+        $req2 = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
         $req2->set_param('user_id', $user_id);
         $res2 = rest_do_request($req2);
-        WP_CLI::log('REST /ap/layout: ' . wp_json_encode($res2->get_data()));
+        WP_CLI::log('REST /ap_dashboard_layout: ' . wp_json_encode($res2->get_data()));
     }
 }

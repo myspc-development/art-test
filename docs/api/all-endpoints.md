@@ -27,10 +27,8 @@ The following table lists every REST route registered by the plugin. Method dete
 | artpulse/v1 | /analytics/export | GET |
 | artpulse/v1 | /analytics/pilot/invite | POST |
 | artpulse/v1 | /analytics/trends | GET |
-| artpulse/v1 | /ap/layout | GET |
 | artpulse/v1 | /ap/layout/reset | POST |
 | artpulse/v1 | /ap/layout/revert | POST |
-| artpulse/v1 | /ap/layout/save | POST |
 | artpulse/v1 | /ap/widgets/available | GET |
 | artpulse/v1 | /ap_dashboard_layout | GET |
 | artpulse/v1 | /ap_dashboard_layout | POST |

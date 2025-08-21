@@ -27,14 +27,14 @@ class DashboardWidgetSaveTest extends \WP_UnitTestCase
     {
         UserLayoutManager::save_role_layout('subscriber', [ ['id' => 'alpha'], ['id' => 'beta'] ]);
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
+        $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertSame(['alpha', 'beta'], $res->get_data()['layout']);
 
         UserLayoutManager::save_role_layout('subscriber', [ ['id' => 'beta'], ['id' => 'alpha'] ]);
 
-        $req2 = new WP_REST_Request('GET', '/artpulse/v1/ap/layout');
+        $req2 = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
         $res2 = rest_get_server()->dispatch($req2);
         $this->assertSame(['beta', 'alpha'], $res2->get_data()['layout']);
     }
