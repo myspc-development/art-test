@@ -1,63 +1,45 @@
 <?php
 namespace ArtPulse\Rest;
 
+use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
-use WP_REST_Server;
-use function ArtPulse\Rest\Util\require_login_and_cap;
+use ArtPulse\Rest\Util\Auth;
 
-/**
- * Provides basic profile metrics for dashboards.
- */
-class ProfileMetricsController {
+final class ProfileMetricsController {
     public static function register(): void {
-        $c = new self();
-        add_action('rest_api_init', [$c, 'register_routes']);
+        add_action('rest_api_init', [self::class, 'routes']);
     }
-
-    public function register_routes(): void {
-        register_rest_route(ARTPULSE_API_NAMESPACE, '/profile/metrics', [
-            'methods'             => WP_REST_Server::READABLE,
-            'callback'            => [$this, 'get_metrics'],
-            'permission_callback' => require_login_and_cap(),
+    public static function routes(): void {
+        register_rest_route('ap/v1', '/profile/metrics', [
+            'methods'  => WP_REST_Server::READABLE,
+            'callback' => [self::class, 'get_metrics'],
+            'permission_callback' => Auth::require_login_and_cap(static fn() => current_user_can('read')),
         ]);
     }
-
-    public function get_metrics(WP_REST_Request $request): WP_REST_Response {
+    public static function get_metrics(WP_REST_Request $req): WP_REST_Response {
         $uid = get_current_user_id();
-        $now = current_time('mysql');
-        $week_ago = gmdate('Y-m-d H:i:s', strtotime('-7 days', strtotime($now)));
-
-        $events = get_posts([
-            'post_type'      => 'artpulse_event',
-            'post_status'    => ['publish', 'draft', 'pending', 'future'],
-            'author'         => $uid,
-            'date_query'     => [ ['after' => $week_ago] ],
-            'fields'         => 'ids',
-            'nopaging'       => true,
-            'no_found_rows'  => true,
+        // Count authored events last 30 days
+        $q = new \WP_Query([
+            'post_type'   => 'artpulse_event',
+            'author'      => $uid,
+            'date_query'  => [[ 'after' => date('Y-m-d', strtotime('-30 days')), 'inclusive' => true ]],
+            'post_status' => ['publish','draft','pending','future'],
+            'fields'      => 'ids',
+            'no_found_rows' => true,
         ]);
-        $event_ids = $events ? array_map('intval', $events) : [];
+        $events = is_array($q->posts) ? count($q->posts) : 0;
 
-        $rsvp_count = 0;
-        if ($event_ids) {
-            global $wpdb;
+        global $wpdb;
+        $rsvps = 0;
+        try {
             $table = $wpdb->prefix . 'ap_rsvps';
-            $in    = implode(',', $event_ids);
-            $statuses = "'going','confirmed','attending','waitlist'";
-            $rsvp_count = (int) $wpdb->get_var(
-                $wpdb->prepare(
-                    "SELECT COUNT(*) FROM {$table} WHERE event_id IN ($in) AND status IN ($statuses) AND created_at >= %s",
-                    $week_ago
-                )
+            $rsvps = (int) $wpdb->get_var(
+                $wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE user_id = %d AND created_at >= %s",
+                    $uid, date('Y-m-d', strtotime('-30 days')) . ' 00:00:00')
             );
-        }
+        } catch (\Throwable $e) {}
 
-        $data = [
-            'events_created_last_7d' => count($event_ids),
-            'rsvps_received_last_7d' => $rsvp_count,
-        ];
-
-        return rest_ensure_response($data);
+        return new WP_REST_Response(['recent_events' => $events, 'recent_rsvps' => $rsvps], 200);
     }
 }
