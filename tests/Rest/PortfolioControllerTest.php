@@ -56,5 +56,21 @@ class PortfolioControllerTest extends \WP_UnitTestCase {
         $req->set_param('meta', ['alt' => 'x']);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
+
+        // Owner cannot include other user's attachment in order or featured
+        wp_set_current_user($this->u1);
+        $file = DIR_TESTDATA . '/images/canola.jpg';
+        $other = self::factory()->attachment->create_upload_object($file);
+        wp_update_post(['ID' => $other, 'post_author' => $this->u2]);
+
+        $req = new WP_REST_Request('POST', '/ap/v1/portfolio/order');
+        $req->set_param('order', [$this->attachment, $other]);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(403, $res->get_status());
+
+        $req = new WP_REST_Request('POST', '/ap/v1/portfolio/featured');
+        $req->set_param('attachment_id', $other);
+        $res = rest_get_server()->dispatch($req);
+        $this->assertSame(403, $res->get_status());
     }
 }

@@ -13,7 +13,7 @@ use ArtPulse\Rest\Util\Auth;
  */
 class PortfolioRestController extends WP_REST_Controller
 {
-    protected $namespace = ARTPULSE_API_NAMESPACE;
+    protected $namespace = 'ap/v1';
 
     public static function register(): void
     {
@@ -26,7 +26,7 @@ class PortfolioRestController extends WP_REST_Controller
         register_rest_route($this->namespace, '/portfolio', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [$this, 'get_portfolio'],
-              'permission_callback' => Auth::require_login_and_cap(),
+            'permission_callback' => Auth::require_login_and_cap('read'),
             'args'                => [
                 'user' => ['type' => 'string', 'default' => 'me'],
             ],
@@ -35,7 +35,7 @@ class PortfolioRestController extends WP_REST_Controller
         register_rest_route($this->namespace, '/portfolio/items', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [$this, 'add_item'],
-              'permission_callback' => Auth::require_login_and_cap(),
+            'permission_callback' => Auth::require_login_and_cap('read'),
             'args'                => [
                 'media_id' => ['type' => 'integer', 'required' => true],
                 'meta'     => ['type' => 'object',  'required' => true],
@@ -45,7 +45,7 @@ class PortfolioRestController extends WP_REST_Controller
         register_rest_route($this->namespace, '/portfolio/order', [
             'methods'             => WP_REST_Server::EDITABLE,
             'callback'            => [$this, 'save_order'],
-              'permission_callback' => Auth::require_login_and_cap(),
+            'permission_callback' => Auth::require_login_and_cap('read'),
             'args'                => [
                 'order' => ['type' => 'array', 'required' => true],
             ],
@@ -54,7 +54,7 @@ class PortfolioRestController extends WP_REST_Controller
         register_rest_route($this->namespace, '/portfolio/featured', [
             'methods'             => WP_REST_Server::EDITABLE,
             'callback'            => [$this, 'set_featured'],
-              'permission_callback' => Auth::require_login_and_cap(),
+            'permission_callback' => Auth::require_login_and_cap('read'),
             'args'                => [
                 'attachment_id' => ['type' => 'integer', 'required' => true],
             ],
@@ -93,12 +93,16 @@ class PortfolioRestController extends WP_REST_Controller
     public function add_item(WP_REST_Request $request)
     {
         $user_id    = get_current_user_id();
-        $profile_id = $this->get_profile_id( $user_id );
-        $media_id   = absint( $request['media_id'] );
-        $meta       = (array) $request->get_param( 'meta' );
+        $profile_id = $this->get_profile_id($user_id);
+        $media_id   = absint($request['media_id']);
+        $meta       = (array) $request->get_param('meta');
 
-        if ( $media_id < 1 || ( get_post_field( 'post_author', $media_id ) != $user_id && ! current_user_can( 'edit_post', $media_id ) ) ) {
-            return new WP_Error( 'rest_forbidden', __( "You don't have permission to modify this resource.", 'artpulse' ), [ 'status' => 403 ] );
+        if ((int) get_post_field('post_author', $profile_id) !== $user_id) {
+            return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
+        }
+
+        if ($media_id < 1 || (int) get_post_field('post_author', $media_id) !== $user_id) {
+            return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
         }
 
         $alt = sanitize_text_field( $meta['alt'] ?? '' );
@@ -130,7 +134,15 @@ class PortfolioRestController extends WP_REST_Controller
     {
         $user_id    = get_current_user_id();
         $profile_id = $this->get_profile_id($user_id);
-        $order      = array_map('intval', (array) $request['order']);
+        if ((int) get_post_field('post_author', $profile_id) !== $user_id) {
+            return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
+        }
+        $order = array_map('intval', (array) $request['order']);
+        foreach ($order as $att_id) {
+            if ((int) get_post_field('post_author', $att_id) !== $user_id) {
+                return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
+            }
+        }
         update_post_meta($profile_id, 'ap_portfolio_order', $order);
         return rest_ensure_response($this->build_response($profile_id));
     }
@@ -140,6 +152,9 @@ class PortfolioRestController extends WP_REST_Controller
         $user_id    = get_current_user_id();
         $profile_id = $this->get_profile_id($user_id);
         $att_id     = absint($request['attachment_id']);
+        if ((int) get_post_field('post_author', $profile_id) !== $user_id || (int) get_post_field('post_author', $att_id) !== $user_id) {
+            return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
+        }
         update_post_meta($profile_id, 'ap_portfolio_featured_id', $att_id);
         return rest_ensure_response($this->build_response($profile_id));
     }
