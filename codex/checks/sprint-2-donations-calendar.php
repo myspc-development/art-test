@@ -29,7 +29,7 @@ if ( is_wp_error( $resp ) ) {
 }
 
 // Sprint 2: calendar feed
-$cal = wp_remote_get( rest_url('artpulse/v1/calendar') );
+$cal = wp_remote_get( rest_url('ap/v1/calendar') );
 if ( is_wp_error( $cal ) ) {
     $errors[] = 'Calendar endpoint missing';
 } else {

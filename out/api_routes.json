@@ -1793,7 +1793,7 @@
       "notes": ""
     },
     {
-      "namespace": "artpulse/v1",
+      "namespace": "ap/v1",
       "route": "/calendar",
       "methods": [
         "GET"

@@ -717,7 +717,7 @@ paths:
       responses:
         '200':
           description: OK
-  /artpulse/v1/calendar:
+  /ap/v1/calendar:
     get:
       summary: Auto-generated stub
       parameters:
