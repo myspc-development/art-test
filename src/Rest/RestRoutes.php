@@ -15,6 +15,7 @@ final class RestRoutes {
             RsvpDbController::class,
             CalendarFeedController::class,
             ProfileMetricsController::class,
+            RouteAudit::class,
             SystemStatusController::class,
             UserAccountRestController::class,
             DashboardPreviewController::class,
