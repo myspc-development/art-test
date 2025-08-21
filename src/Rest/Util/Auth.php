@@ -1,24 +1,47 @@
 <?php
 namespace ArtPulse\Rest\Util;
 
-use WP_Error;
-
+/**
+ * Helper for REST API permission callbacks.
+ */
 final class Auth {
     /**
-     * Returns a permission_callback suitable for register_rest_route().
-     * - 401 when unauthenticated
-     * - 403 when authenticated but lacks capability
+     * Generate a permission callback suitable for register_rest_route().
+     *
+     * Behaviour:
+     *  - If the user is not logged in, return 401.
+     *  - If $capability is null, return true for authenticated users.
+     *  - If $capability is a callable, invoke it and cast to bool.
+     *  - If $capability is an array, require all caps in the array.
+     *  - Otherwise treat $capability as a capability string.
+     *  - On failure return 403.
      */
-    public static function require_login_and_cap(callable $capCheck): callable {
-        return static function () use ($capCheck) {
-            if ( ! is_user_logged_in() ) {
-                return new WP_Error('rest_auth_required', __('Authentication required.', 'artpulse'), ['status' => 401]);
+    public static function require_login_and_cap($capability = null): callable {
+        return static function () use ($capability) {
+            if (!is_user_logged_in()) {
+                return new \WP_Error('rest_forbidden', 'Authentication required.', ['status' => 401]);
             }
-            $ok = (bool) call_user_func($capCheck);
-            if ( ! $ok ) {
-                return new WP_Error('rest_forbidden', __('You do not have permission.', 'artpulse'), ['status' => 403]);
+            if ($capability === null) {
+                return true;
             }
-            return true;
+
+            $ok = false;
+            if (is_callable($capability)) {
+                $ok = (bool) call_user_func($capability);
+            } elseif (is_array($capability)) {
+                $ok = true;
+                foreach ($capability as $cap) {
+                    if (!current_user_can($cap)) {
+                        $ok = false;
+                        break;
+                    }
+                }
+            } else {
+                $ok = current_user_can((string) $capability);
+            }
+
+            return $ok ? true : new \WP_Error('rest_forbidden', 'Insufficient permissions.', ['status' => 403]);
         };
     }
 }
+

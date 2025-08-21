@@ -4,7 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
-use function ArtPulse\Rest\Util\require_login_and_cap;
+use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Support\OptionUtils;
 use ArtPulse\Support\WidgetIds;
@@ -20,12 +20,12 @@ class DashboardConfigController {
                 [
                     'methods'             => 'GET',
                     'callback'            => [self::class, 'get_config'],
-                    'permission_callback' => require_login_and_cap(static fn() => current_user_can('read')),
+                      'permission_callback' => Auth::require_login_and_cap('read'),
                 ],
                 [
                     'methods'             => 'POST',
                     'callback'            => [self::class, 'save_config'],
-                    'permission_callback' => require_login_and_cap(static fn() => current_user_can('manage_options')),
+                      'permission_callback' => Auth::require_login_and_cap('manage_options'),
                     'args'                => [
                         'widget_roles' => ['type' => 'object', 'required' => false],
                         'role_widgets' => ['type' => 'object', 'required' => false],

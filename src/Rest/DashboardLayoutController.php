@@ -21,7 +21,7 @@ final class DashboardLayoutController {
         register_rest_route(self::NS, '/dashboard/layout', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_layout'],
-            'permission_callback' => Auth::require_login_and_cap(static fn() => current_user_can('read')),
+            'permission_callback' => Auth::require_login_and_cap('read'),
             'args'                => [
                 'role' => ['type' => 'string'],
             ],
@@ -29,19 +29,19 @@ final class DashboardLayoutController {
         register_rest_route(self::NS, '/dashboard/layout', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [self::class, 'save_layout'],
-            'permission_callback' => Auth::require_login_and_cap(static fn() => current_user_can('read')),
+            'permission_callback' => Auth::require_login_and_cap('read'),
         ]);
 
         // Alias routes used by tests
         register_rest_route(self::NS, '/dashboard/layout/alias', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [self::class, 'get_layout'],
-            'permission_callback' => Auth::require_login_and_cap(static fn() => current_user_can('read')),
+            'permission_callback' => Auth::require_login_and_cap('read'),
         ]);
         register_rest_route(self::NS, '/dashboard/layout/alias', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [self::class, 'save_layout'],
-            'permission_callback' => Auth::require_login_and_cap(static fn() => current_user_can('read')),
+            'permission_callback' => Auth::require_login_and_cap('read'),
         ]);
     }
 

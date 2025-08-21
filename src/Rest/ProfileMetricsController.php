@@ -14,7 +14,7 @@ final class ProfileMetricsController {
         register_rest_route('ap/v1', '/profile/metrics', [
             'methods'  => WP_REST_Server::READABLE,
             'callback' => [self::class, 'get_metrics'],
-            'permission_callback' => Auth::require_login_and_cap(static fn() => current_user_can('read')),
+              'permission_callback' => Auth::require_login_and_cap('read'),
         ]);
     }
     public static function get_metrics(WP_REST_Request $req): WP_REST_Response {

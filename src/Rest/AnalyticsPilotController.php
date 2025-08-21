@@ -14,7 +14,7 @@ final class AnalyticsPilotController {
         register_rest_route('ap/v1', '/analytics/pilot/invite', [
             'methods'  => 'POST',
             'callback' => [self::class, 'invite'],
-            'permission_callback' => Auth::require_login_and_cap(static fn() => current_user_can('manage_options')),
+            'permission_callback' => Auth::require_login_and_cap('manage_options'),
             'args' => [
                 'user_id' => ['type' => 'integer'],
                 'id'      => ['type' => 'integer'],
@@ -32,6 +32,6 @@ final class AnalyticsPilotController {
             return new WP_REST_Response(['ok' => false, 'reason' => 'user_not_found'], 200);
         }
         $user->add_cap('ap_analytics_pilot');
-        return new WP_REST_Response(['ok' => true, 'user_id' => $user_id], 200);
+        return new WP_REST_Response(['success' => true], 200);
     }
 }
