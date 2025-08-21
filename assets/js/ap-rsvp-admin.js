@@ -33,6 +33,7 @@ export default async function render(container) {
   const thSel = document.createElement('th');
   thSel.scope = 'col';
   thSel.innerHTML = `<span class="screen-reader-text">${__('Select')}</span>`;
+  thSel.setAttribute('aria-sort', 'none');
   const thName = document.createElement('th');
   thName.scope = 'col';
   thName.textContent = __('Name');
@@ -49,9 +50,11 @@ export default async function render(container) {
   const thStatus = document.createElement('th');
   thStatus.scope = 'col';
   thStatus.textContent = __('Status');
+  thStatus.setAttribute('aria-sort', 'none');
   hrow.append(thSel, thName, thStatus);
   thead.appendChild(hrow);
   const tbody = document.createElement('tbody');
+  tbody.setAttribute('aria-live', 'polite');
   table.append(thead, tbody);
   const pager = document.createElement('div');
   const prev = button(__('Prev'));

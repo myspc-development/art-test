@@ -39,24 +39,26 @@ class EventAnalyticsController extends WP_REST_Controller
     public function get_summary(WP_REST_Request $request): WP_REST_Response
     {
         $user_id = get_current_user_id();
-        $start   = $request->get_param('start');
-        $end     = $request->get_param('end');
-        $range   = $request->get_param('range') ?: '30d';
+        $start   = $request->get_param( 'start' );
+        $end     = $request->get_param( 'end' );
+        $range   = $request->get_param( 'range' ) ?: '30d';
 
-        $tz       = wp_timezone();
-        $tz_name  = wp_timezone_string() ?: 'UTC';
-        $utc_tz   = new \DateTimeZone('UTC');
+        $tz      = wp_timezone();
+        $tz_name = wp_timezone_string() ?: 'UTC';
+        $utc_tz  = new \DateTimeZone( 'UTC' );
 
-        if ($start && $end) {
-            $start_dt = new \DateTime($start, $tz);
-            $end_dt   = new \DateTime($end, $tz);
-            if ($start_dt > $end_dt) {
-                return new \WP_Error('invalid_range', __('Invalid range', 'artpulse'), ['status' => 400]);
+        if ( $start && $end ) {
+            $start_dt = new \DateTime( $start, $tz );
+            $end_dt   = new \DateTime( $end, $tz );
+            $diff_days = $start_dt->diff( $end_dt )->days;
+            if ( $start_dt > $end_dt || $diff_days > 365 ) {
+                return new \WP_Error( 'invalid_range', __( 'Invalid range', 'artpulse' ), [ 'status' => 400 ] );
             }
         } else {
-            $days     = intval(rtrim($range, 'd')) ?: 30;
-            $end_dt   = new \DateTime('now', $tz);
-            $start_dt = (clone $end_dt)->modify('-' . $days . ' days');
+            $days     = intval( rtrim( $range, 'd' ) ) ?: 30;
+            $days     = max( 1, min( 365, $days ) );
+            $end_dt   = new \DateTime( 'now', $tz );
+            $start_dt = ( clone $end_dt )->modify( '-' . $days . ' days' );
         }
 
         $after = $start_dt->format('Y-m-d');

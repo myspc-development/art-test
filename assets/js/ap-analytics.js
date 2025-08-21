@@ -43,10 +43,12 @@ export default async function render(container) {
     const th = document.createElement('th');
     th.scope = 'col';
     th.textContent = __(label);
+    th.setAttribute('aria-sort', 'none');
     hrow.appendChild(th);
   });
   thead.appendChild(hrow);
   const tbody = document.createElement('tbody');
+  tbody.setAttribute('aria-live', 'polite');
   table.append(thead, tbody);
   table.setAttribute('aria-describedby', 'ap-analytics-chart');
   canvas.id = 'ap-analytics-chart';
@@ -62,10 +64,12 @@ export default async function render(container) {
     const th = document.createElement('th');
     th.scope = 'col';
     th.textContent = __(label);
+    th.setAttribute('aria-sort', 'none');
     topRow.appendChild(th);
   });
   topHead.appendChild(topRow);
   const topBody = document.createElement('tbody');
+  topBody.setAttribute('aria-live', 'polite');
   topTable.append(topHead, topBody);
   topTable.setAttribute('aria-describedby', 'ap-analytics-top');
 
