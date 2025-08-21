@@ -17,21 +17,30 @@ final class AnalyticsPilotController {
             'permission_callback' => Auth::require_login_and_cap('manage_options'),
             'args' => [
                 'user_id' => ['type' => 'integer'],
-                'id'      => ['type' => 'integer'],
-                'user'    => ['type' => 'integer'],
+                'email'   => ['type' => 'string'],
             ],
         ]);
     }
     public static function invite(WP_REST_Request $req) {
-        $user_id = (int) ($req->get_param('user_id') ?? $req->get_param('id') ?? $req->get_param('user') ?? 0);
-        if ($user_id <= 0) {
-            return new WP_REST_Response(['ok' => false, 'reason' => 'missing_user_id'], 200);
+        if (!wp_verify_nonce($req->get_header('X-WP-Nonce'), 'wp_rest')) {
+            return new WP_Error('invalid_nonce', 'Invalid nonce', ['status' => 401]);
         }
-        $user = get_user_by('id', $user_id);
+
+        $user = null;
+        $user_id = absint($req->get_param('user_id'));
+        if ($user_id) {
+            $user = get_user_by('id', $user_id);
+        }
         if (!$user) {
-            return new WP_REST_Response(['ok' => false, 'reason' => 'user_not_found'], 200);
+            $email = sanitize_email($req->get_param('email'));
+            if ($email) {
+                $user = get_user_by('email', $email);
+            }
+        }
+        if (!$user) {
+            return new WP_Error('user_not_found', 'User not found', ['status' => 404]);
         }
         $user->add_cap('ap_analytics_pilot');
-        return new WP_REST_Response(['success' => true], 200);
+        return new WP_REST_Response(['granted' => true], 200);
     }
 }
