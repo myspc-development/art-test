@@ -2,7 +2,6 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Server;
-use WP_REST_Response;
 use ArtPulse\Rest\Util\Auth;
 
 final class SystemStatusController {
@@ -15,13 +14,11 @@ final class SystemStatusController {
             'permission_callback' => Auth::allow_public(),
             'callback' => function () {
                 global $wp_version;
-                $plugin_v = defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : 'dev';
-                return new WP_REST_Response([
-                    'ok'     => true,
-                    'php'    => PHP_VERSION,
-                    'wp'     => $wp_version ?? 'unknown',
-                    'plugin' => $plugin_v,
-                ], 200);
+                return rest_ensure_response([
+                    'wordpress' => $wp_version,
+                    'php'       => PHP_VERSION,
+                    'plugin'    => ARTPULSE_VERSION,
+                ]);
             }
         ]);
     }
