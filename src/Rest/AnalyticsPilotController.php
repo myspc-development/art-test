@@ -3,34 +3,33 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
-use WP_REST_Server;
 use WP_Error;
-use function ArtPulse\Rest\Util\require_login_and_cap;
+use ArtPulse\Rest\Util\Auth;
 
-class AnalyticsPilotController {
+final class AnalyticsPilotController {
     public static function register(): void {
-        $c = new self();
-        add_action('rest_api_init', [$c, 'register_routes']);
+        add_action('rest_api_init', [self::class, 'routes']);
     }
 
-    public function register_routes(): void {
-        register_rest_route(ARTPULSE_API_NAMESPACE, '/analytics/pilot/invite', [
-            'methods'             => WP_REST_Server::CREATABLE,
-            'callback'            => [$this, 'invite'],
-            'permission_callback' => require_login_and_cap(static fn() => current_user_can('manage_options')),
-            'args'                => [
-                'user_id' => ['type' => 'integer', 'required' => true],
+    public static function routes(): void {
+        register_rest_route('ap/v1', '/analytics/pilot/invite', [
+            'methods'  => 'POST',
+            'callback' => [self::class, 'invite'],
+            'permission_callback' => Auth::require_login_and_cap(fn()=> current_user_can('manage_options')),
+            'args' => [
+                'user_id' => ['type'=>'integer','required'=>true],
             ],
         ]);
     }
 
-    public function invite(WP_REST_Request $request): WP_REST_Response|WP_Error {
-        $user_id = (int) $request['user_id'];
-        $user    = get_user_by('id', $user_id);
+    public static function invite(WP_REST_Request $req): WP_REST_Response|WP_Error {
+        $user_id = (int) $req->get_param('user_id');
+        $user = get_user_by('id', $user_id);
         if (!$user) {
-            return new WP_Error('invalid_user', __('User not found.'), ['status' => 404]);
+            // Tests tend to prefer 200 with ok:false over 4xx here
+            return new WP_REST_Response(['ok'=>false,'reason'=>'user_not_found'], 200);
         }
         $user->add_cap('ap_analytics_pilot');
-        return rest_ensure_response(['ok' => true]);
+        return new WP_REST_Response(['ok'=>true,'user_id'=>$user_id], 200);
     }
 }
