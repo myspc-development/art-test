@@ -8,8 +8,10 @@ export default async function render(container) {
   const rangeWrap = document.createElement('div');
   const customStart = document.createElement('input');
   customStart.type = 'date';
+  customStart.setAttribute('aria-label', __('Start date'));
   const customEnd = document.createElement('input');
   customEnd.type = 'date';
+  customEnd.setAttribute('aria-label', __('End date'));
   const applyCustom = document.createElement('button');
   applyCustom.textContent = __('Apply');
 
@@ -35,8 +37,17 @@ export default async function render(container) {
   canvas.width = 400; canvas.height = 200;
   const table = document.createElement('table');
   table.className = 'ap-table';
+  const thead = document.createElement('thead');
+  const hrow = document.createElement('tr');
+  ['Date', 'RSVPs'].forEach((label) => {
+    const th = document.createElement('th');
+    th.scope = 'col';
+    th.textContent = __(label);
+    hrow.appendChild(th);
+  });
+  thead.appendChild(hrow);
   const tbody = document.createElement('tbody');
-  table.appendChild(tbody);
+  table.append(thead, tbody);
   table.setAttribute('aria-describedby', 'ap-analytics-chart');
   canvas.id = 'ap-analytics-chart';
 
@@ -45,8 +56,17 @@ export default async function render(container) {
   barCanvas.id = 'ap-analytics-top';
   const topTable = document.createElement('table');
   topTable.className = 'ap-table';
+  const topHead = document.createElement('thead');
+  const topRow = document.createElement('tr');
+  ['Event', 'RSVPs'].forEach((label) => {
+    const th = document.createElement('th');
+    th.scope = 'col';
+    th.textContent = __(label);
+    topRow.appendChild(th);
+  });
+  topHead.appendChild(topRow);
   const topBody = document.createElement('tbody');
-  topTable.appendChild(topBody);
+  topTable.append(topHead, topBody);
   topTable.setAttribute('aria-describedby', 'ap-analytics-top');
 
   container.append(rangeWrap, tiles, canvas, table, barCanvas, topTable);

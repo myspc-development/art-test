@@ -9,12 +9,39 @@ export default async function render(container) {
   const search = document.createElement('input');
   search.type = 'search';
   search.placeholder = __('Search events');
+  search.setAttribute('aria-label', __('Search events'));
   search.addEventListener('input', debounce(() => loadEvents(search.value), 300));
 
   const table = document.createElement('table');
   table.className = 'ap-table';
+  const thead = document.createElement('thead');
+  const headRow = document.createElement('tr');
+  const headers = [
+    { key: 'title', label: __('Title'), sortable: true },
+    { key: 'status', label: __('Status'), sortable: true },
+    { key: 'actions', label: __('Actions'), sortable: false },
+  ];
+  headers.forEach((h) => {
+    const th = document.createElement('th');
+    th.textContent = h.label;
+    th.scope = 'col';
+    th.dataset.key = h.key;
+    if (h.sortable) {
+      th.tabIndex = 0;
+      th.setAttribute('aria-sort', 'none');
+      th.addEventListener('click', () => setSort(h.key));
+      th.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          th.click();
+        }
+      });
+    }
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
   const tbody = document.createElement('tbody');
-  table.appendChild(tbody);
+  table.append(thead, tbody);
   const pager = document.createElement('div');
   const prev = button(__('Prev'));
   const next = button(__('Next'));
@@ -82,9 +109,39 @@ export default async function render(container) {
     loadEvents(search.value);
   });
 
+  let sortKey = 'title';
+  let sortDir = 'asc';
+
+  function setSort(key) {
+    if (sortKey === key) {
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortKey = key;
+      sortDir = 'asc';
+    }
+    renderTable();
+  }
+
   function renderTable() {
     tbody.textContent = '';
-    events.forEach((ev) => {
+    const rows = [...events];
+    if (sortKey === 'title') {
+      rows.sort((a, b) => (a.title?.rendered || '').localeCompare(b.title?.rendered || ''));
+    } else if (sortKey === 'status') {
+      rows.sort((a, b) => (a.status || '').localeCompare(b.status || ''));
+    }
+    if (sortDir === 'desc') {
+      rows.reverse();
+    }
+
+    headers.forEach((h) => {
+      if (h.sortable) {
+        const th = headRow.querySelector(`th[data-key="${h.key}"]`);
+        th.setAttribute('aria-sort', sortKey === h.key ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none');
+      }
+    });
+
+    rows.forEach((ev) => {
       const tr = document.createElement('tr');
       const tdTitle = document.createElement('td');
       tdTitle.textContent = ev.title?.rendered || __('(no title)');
@@ -97,11 +154,17 @@ export default async function render(container) {
       tr.append(tdTitle, tdStatus, tdAction);
       tbody.appendChild(tr);
     });
+    focusFirstRow();
+  }
+
+  function focusFirstRow() {
+    const first = tbody.querySelector('button');
+    if (first) first.focus();
   }
 
   async function edit(id) {
     try {
-      current = await apiFetch(`/wp/v2/artpulse_event/${id}`);
+      current = await apiFetch(`/wp/v2/artpulse_event/${id}?context=edit`);
       setForm(current);
     } catch (e) {
       Toast.show({ type: 'error', message: __('Unable to load event') });
@@ -109,9 +172,16 @@ export default async function render(container) {
   }
 
   function setForm(ev) {
-    Object.entries(fields).forEach(([k, { input }]) => {
-      input.value = ev[k] || '';
-    });
+    fields.title.input.value = ev.title?.raw || ev.title?.rendered || '';
+    fields.description.input.value = ev.content?.raw || ev.content?.rendered || '';
+    fields.start.input.value = ev.meta?.ap_event_start || '';
+    fields.end.input.value = ev.meta?.ap_event_end || '';
+    fields.venue.input.value = ev.meta?.ap_event_venue || '';
+    fields.address.input.value = ev.meta?.ap_event_address || '';
+    fields.lat.input.value = ev.meta?.ap_event_lat || '';
+    fields.lng.input.value = ev.meta?.ap_event_lng || '';
+    fields.capacity.input.value = ev.meta?.ap_event_capacity || '';
+    fields.price.input.value = ev.meta?.ap_event_price || '';
   }
 
   function getForm() {
@@ -120,6 +190,29 @@ export default async function render(container) {
       data[k] = input.value;
     });
     return data;
+  }
+
+  function buildPayload(data) {
+    const meta = {
+      ap_event_start: data.start || null,
+      ap_event_end: data.end || null,
+      ap_event_venue: data.venue || '',
+      ap_event_address: data.address || '',
+      ap_event_lat: data.lat ? Number(data.lat) : null,
+      ap_event_lng: data.lng ? Number(data.lng) : null,
+      ap_event_capacity: data.capacity ? parseInt(data.capacity, 10) : null,
+      ap_event_price: data.price || '',
+    };
+    const payload = {
+      title: data.title || '',
+      content: data.description || '',
+      status: current?.status || 'draft',
+      meta,
+    };
+    if (data.featured_media) {
+      payload.featured_media = data.featured_media;
+    }
+    return payload;
   }
 
   save.addEventListener('click', async (e) => {
@@ -138,14 +231,20 @@ export default async function render(container) {
         const media = await uploadFile(cover.files[0]);
         data.featured_media = media.id;
       }
-      const method = current?.id ? 'PUT' : 'POST';
+      const payload = buildPayload(data);
       const path = current?.id ? `/wp/v2/artpulse_event/${current.id}` : '/wp/v2/artpulse_event';
-      current = await apiFetch(path, { method, body: data });
+      const res = await apiFetch(path, { method: current?.id ? 'PUT' : 'POST', body: payload });
+      if (res?.code) {
+        throw { status: res.data?.status, message: res.message };
+      }
+      current = res;
       Toast.show({ type: 'success', message: __('Saved') });
       cover.value = '';
-      loadEvents();
+      await loadEvents(search.value);
     } catch (err) {
-      if (err.message === 'forbidden') {
+      if (err.status === 400) {
+        Toast.show({ type: 'error', message: __('Invalid data') });
+      } else if (err.status === 403 || err.message === 'forbidden') {
         Toast.show({ type: 'error', message: __('You don\'t have permission') });
       } else {
         Toast.show({ type: 'error', message: err.message || __('Error saving') });
@@ -153,14 +252,38 @@ export default async function render(container) {
     }
   });
 
-  dup.addEventListener('click', (e) => {
+  dup.addEventListener('click', async (e) => {
     e.preventDefault();
+    if (!current) return;
     const data = getForm();
-    delete data.id;
-    current = null;
-    Object.entries(fields).forEach(([k, { input }]) => {
-      input.value = data[k] || '';
-    });
+    if (data.start && data.end && new Date(data.start) > new Date(data.end)) {
+      Toast.show({ type: 'error', message: __('Start must be before end') });
+      return;
+    }
+    if (data.capacity && Number(data.capacity) < 0) {
+      Toast.show({ type: 'error', message: __('Capacity must be positive') });
+      return;
+    }
+    try {
+      const payload = buildPayload(data);
+      payload.status = 'draft';
+      const res = await apiFetch('/wp/v2/artpulse_event', { method: 'POST', body: payload });
+      if (res?.code) {
+        throw { status: res.data?.status, message: res.message };
+      }
+      current = res;
+      setForm(res);
+      Toast.show({ type: 'success', message: __('Duplicated') });
+      await loadEvents(search.value);
+    } catch (err) {
+      if (err.status === 403 || err.message === 'forbidden') {
+        Toast.show({ type: 'error', message: __('You don\'t have permission') });
+      } else if (err.status === 400) {
+        Toast.show({ type: 'error', message: __('Invalid data') });
+      } else {
+        Toast.show({ type: 'error', message: err.message || __('Error duplicating') });
+      }
+    }
   });
 
   cancel.addEventListener('click', (e) => {
@@ -178,7 +301,7 @@ export default async function render(container) {
       await apiFetch(`/wp/v2/artpulse_event/${current.id}?force=true`, { method: 'DELETE' });
       Toast.show({ type: 'success', message: __('Deleted') });
       cancel.click();
-      loadEvents();
+      await loadEvents(search.value);
     } catch (err) {
       Toast.show({ type: 'error', message: err.message || __('Error deleting') });
     }
