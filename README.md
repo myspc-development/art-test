@@ -45,9 +45,7 @@ Install dependencies and the WordPress testing library:
 
 ```
 composer install
-bash vendor/wp-phpunit/wp-phpunit/bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest
-WP_PHPUNIT__DIR=vendor/wp-phpunit/wp-phpunit \
-WP_PHPUNIT__TESTS_CONFIG=tests/wp-tests-config.php \
+bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
 vendor/bin/phpunit -c phpunit.xml.dist
 ```
 

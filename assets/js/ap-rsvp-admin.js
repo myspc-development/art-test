@@ -6,7 +6,9 @@ import { Toast, Confirm } from './ap-ui.js';
  */
 export default async function render(container) {
   const eventSelect = document.createElement('select');
+  eventSelect.setAttribute('aria-label', __('Event'));
   const statusFilter = document.createElement('select');
+  statusFilter.setAttribute('aria-label', __('Status'));
   ['all', 'going', 'waitlist', 'cancelled'].forEach((s) => {
     const o = document.createElement('option');
     o.value = s === 'all' ? '' : s;
@@ -16,22 +18,48 @@ export default async function render(container) {
 
   const start = document.createElement('input');
   start.type = 'date';
+  start.setAttribute('aria-label', __('Start date'));
   const end = document.createElement('input');
   end.type = 'date';
+  end.setAttribute('aria-label', __('End date'));
 
   const filterBtn = button(__('Filter'));
   filterBtn.addEventListener('click', () => loadRsvps());
 
   const table = document.createElement('table');
   table.className = 'ap-table';
+  const thead = document.createElement('thead');
+  const hrow = document.createElement('tr');
+  const thSel = document.createElement('th');
+  thSel.scope = 'col';
+  thSel.innerHTML = `<span class="screen-reader-text">${__('Select')}</span>`;
+  const thName = document.createElement('th');
+  thName.scope = 'col';
+  thName.textContent = __('Name');
+  thName.dataset.key = 'name';
+  thName.tabIndex = 0;
+  thName.setAttribute('aria-sort', 'none');
+  thName.addEventListener('click', () => setSort('name'));
+  thName.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      thName.click();
+    }
+  });
+  const thStatus = document.createElement('th');
+  thStatus.scope = 'col';
+  thStatus.textContent = __('Status');
+  hrow.append(thSel, thName, thStatus);
+  thead.appendChild(hrow);
   const tbody = document.createElement('tbody');
-  table.appendChild(tbody);
+  table.append(thead, tbody);
   const pager = document.createElement('div');
   const prev = button(__('Prev'));
   const next = button(__('Next'));
   pager.append(prev, next);
 
   const bulkSelect = document.createElement('select');
+  bulkSelect.setAttribute('aria-label', __('Bulk action'));
   ['approve', 'waitlist', 'cancel'].forEach((s) => {
     const o = document.createElement('option');
     o.value = s;
@@ -42,11 +70,11 @@ export default async function render(container) {
   bulkBtn.addEventListener('click', () => bulkUpdate());
 
   const exportBtn = button(__('Export CSV'));
+  exportBtn.title = __('CSV is sanitized for spreadsheet safety.');
   exportBtn.addEventListener('click', () => {
     if (!eventSelect.value) return;
     const url = `${window.ARTPULSE_BOOT.restRoot}/ap/v1/rsvps/export.csv?event_id=${eventSelect.value}`;
     window.open(url, '_blank');
-    Toast.show({ type: 'info', message: __('CSV opens in a new window. Avoid leading = or + to prevent CSV injection.') });
   });
 
   container.append(eventSelect, statusFilter, start, end, filterBtn, table, pager, bulkSelect, bulkBtn, exportBtn);
@@ -54,6 +82,12 @@ export default async function render(container) {
   let rsvps = [];
   let page = 1;
   let totalPages = 1;
+  let sortDir = 'asc';
+
+  function setSort(key) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    renderTable();
+  }
 
   async function loadEvents() {
     try {
@@ -93,7 +127,11 @@ export default async function render(container) {
 
   function renderTable() {
     tbody.textContent = '';
-    rsvps.forEach((r) => {
+    const rows = [...rsvps];
+    rows.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    if (sortDir === 'desc') rows.reverse();
+    thName.setAttribute('aria-sort', sortDir === 'asc' ? 'ascending' : 'descending');
+    rows.forEach((r) => {
       const tr = document.createElement('tr');
       const cbTd = document.createElement('td');
       const cb = document.createElement('input');

@@ -50,6 +50,9 @@ class EventAnalyticsController extends WP_REST_Controller
         if ($start && $end) {
             $start_dt = new \DateTime($start, $tz);
             $end_dt   = new \DateTime($end, $tz);
+            if ($start_dt > $end_dt) {
+                return new \WP_Error('invalid_range', __('Invalid range', 'artpulse'), ['status' => 400]);
+            }
         } else {
             $days     = intval(rtrim($range, 'd')) ?: 30;
             $end_dt   = new \DateTime('now', $tz);
