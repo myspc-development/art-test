@@ -89,14 +89,20 @@ const RoleDashboard: React.FC = () => {
   );
   useEffect(() => {
     const role = previewRole || RoleDashboardData.currentUser.role;
-    const url = `${restRoot}artpulse/v1/ap/layout${role ? `?role=${role}` : ''}`;
+    const url = `${restRoot}artpulse/v1/ap_dashboard_layout${role ? `?role=${role}` : ''}`;
     fetch(url, {
       headers: { 'X-WP-Nonce': nonce },
     })
       .then(r => r.json())
       .then(data => {
         setLayout(Array.isArray(data.layout) ? data.layout : []);
-        setVisibility(data.visibility || {});
+        const vis: Record<string, boolean> = {};
+        (Array.isArray(data.visibility) ? data.visibility : []).forEach(v => {
+          if (v && typeof v.id === 'string') {
+            vis[v.id] = !!v.visible;
+          }
+        });
+        setVisibility(vis);
       })
       .catch(err => {
         console.error('Failed to load layout', err);

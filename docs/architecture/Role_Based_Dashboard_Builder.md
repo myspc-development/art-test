@@ -20,7 +20,7 @@ Earlier versions stored a React-based editor in `src/admin/WidgetEditorApp.jsx`,
 
 ## 3. Save and Load Layout
 
-Layout state is persisted via REST calls to `/artpulse/v1/ap/layout` and `/artpulse/v1/ap/layout/save`. Per user layouts are stored in the `ap_dashboard_layout` user meta key. A **Reset to Default** action posts to `/ap/layout/reset` which removes the user meta so role defaults apply.
+Layout state is persisted via REST calls to `/artpulse/v1/ap_dashboard_layout`. Per user layouts are stored in the `ap_dashboard_layout` user meta key. A **Reset to Default** action posts to `/ap/layout/reset` which removes the user meta so role defaults apply.
 
 ## 4. Widget Configuration Modal
 

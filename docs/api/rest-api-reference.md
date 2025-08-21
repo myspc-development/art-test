@@ -36,10 +36,10 @@ Request body:
 ### GET /ap/widgets/available?role=member
 Return widget metadata for a role.
 
-### GET /ap/layout?user_id=123
+### GET /ap_dashboard_layout?user_id=123
 Fetch a specific user's layout and visibility.
 
-### POST /ap/layout/save
+### POST /ap_dashboard_layout
 Persist widget order and visibility.
 
 ### POST /ap/layout/reset
