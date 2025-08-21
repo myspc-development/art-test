@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Request;
-use WP_Error;
+use function ArtPulse\Rest\Util\require_login_and_cap;
 
 class ArtistEventsController
 {
@@ -23,12 +23,9 @@ class ArtistEventsController
             [
                 'methods'             => 'GET',
                 'callback'            => [self::class, 'get_events'],
-                'permission_callback' => function() {
-                    if (!current_user_can('read')) {
-                        return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                    }
-                    return true;
-                },
+                'permission_callback' => require_login_and_cap(static function () {
+                    return current_user_can('read');
+                }),
             ]
         );
     }
@@ -36,9 +33,6 @@ class ArtistEventsController
     public static function get_events(WP_REST_Request $request)
     {
         $uid = get_current_user_id();
-        if (!$uid) {
-            return new WP_Error('rest_forbidden', 'Authentication required', ['status' => 401]);
-        }
 
         $posts = get_posts([
             'post_type'   => 'artpulse_event',

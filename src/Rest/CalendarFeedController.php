@@ -14,12 +14,10 @@ class CalendarFeedController
     {
         if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/calendar')) {
             register_rest_route(ARTPULSE_API_NAMESPACE, '/calendar', [
-            'methods'  => 'GET',
-            'callback' => [self::class, 'get_feed'],
-            'permission_callback' => function () {
-                return current_user_can('read');
-            },
-        ]);
+                'methods'  => 'GET',
+                'callback' => [self::class, 'get_feed'],
+                'permission_callback' => '__return_true',
+            ]);
         }
     }
 

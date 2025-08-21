@@ -5,6 +5,7 @@ use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use function ArtPulse\Rest\Util\require_login_and_cap;
 
 /**
  * Provides simple event metrics for organization dashboards.
@@ -25,9 +26,7 @@ class EventAnalyticsController extends WP_REST_Controller
         register_rest_route($this->namespace, '/analytics/events/summary', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [$this, 'get_summary'],
-            'permission_callback' => function () {
-                return current_user_can('read');
-            },
+            'permission_callback' => require_login_and_cap(static fn() => current_user_can('read')),
             'args'                => [
                 'range' => ['type' => 'string', 'default' => '30d'],
                 'start' => ['type' => 'string'],
