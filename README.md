@@ -590,7 +590,7 @@ wp artpulse audit:render --role=member --context=builder_preview --simulate-user
   - `ap_event_capacity`, `ap_event_price`
 
 - **RSVPs**
-  - `POST /ap/v1/rsvps/bulk-update` → `{ event_id, ids, status }`
+  - `POST /ap/v1/rsvps/bulk` → `{ event_id, ids, status }`
 
 - **Analytics**
   - `GET /ap/v1/analytics/events/summary?range=7d|30d|90d`
