@@ -7,6 +7,15 @@ use WP_REST_Server;
 
 class DirectoryController
 {
+    public static function register(): void
+    {
+        if (did_action('rest_api_init')) {
+            self::register_routes();
+        } else {
+            add_action('rest_api_init', [self::class, 'register_routes']);
+        }
+    }
+
     public static function register_routes(): void
     {
 

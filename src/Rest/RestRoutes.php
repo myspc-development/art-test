@@ -3,20 +3,38 @@ namespace ArtPulse\Rest;
 
 final class RestRoutes {
     /**
-     * Register all REST controllers with the rest_api_init hook.
+     * Register all REST controllers.
      */
     public static function register_all(): void {
-        // Register controllers that expose routes
-        // (each controller internally calls register_rest_route)
-        AnalyticsPilotController::register();
-        DashboardLayoutController::register();
-        DashboardConfigController::register();
-        EventAnalyticsController::register();
-        PortfolioRestController::register();
-        RsvpDbController::register();
-        CalendarFeedController::register();
-        ProfileMetricsController::register();
-        SystemStatusController::register();
+        foreach ([
+            AnalyticsPilotController::class,
+            DashboardLayoutController::class,
+            DashboardConfigController::class,
+            EventAnalyticsController::class,
+            PortfolioRestController::class,
+            RsvpDbController::class,
+            CalendarFeedController::class,
+            ProfileMetricsController::class,
+            SystemStatusController::class,
+            UserAccountRestController::class,
+            DashboardPreviewController::class,
+            DirectoryController::class,
+            \ArtPulse\Reporting\BudgetExportController::class,
+        ] as $ctrl) {
+            try {
+                $ctrl::register();
+            } catch (\Throwable $e) {
+                error_log($e->getMessage());
+                throw $e;
+            }
+        }
+    }
+
+    /**
+     * Backward-compatibility wrapper.
+     */
+    public static function register(): void {
+        add_action('rest_api_init', [self::class, 'register_all']);
     }
 }
 
