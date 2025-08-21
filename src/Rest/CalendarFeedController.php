@@ -6,6 +6,9 @@ use ArtPulse\Rest\Util\Auth;
 
 class CalendarFeedController
 {
+    /** @var string REST namespace */
+    private const NAMESPACE = 'ap/v1';
+
     public static function register(): void
     {
         add_action('rest_api_init', [self::class, 'register_routes']);
@@ -13,10 +16,10 @@ class CalendarFeedController
 
     public static function register_routes(): void
     {
-        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/calendar')) {
-            register_rest_route(ARTPULSE_API_NAMESPACE, '/calendar', [
-                'methods'  => 'GET',
-                'callback' => [self::class, 'get_feed'],
+        if (!ap_rest_route_registered(self::NAMESPACE, '/calendar')) {
+            register_rest_route(self::NAMESPACE, '/calendar', [
+                'methods'             => 'GET',
+                'callback'            => [self::class, 'get_feed'],
                 'permission_callback' => Auth::allow_public(),
             ]);
         }
@@ -24,11 +27,11 @@ class CalendarFeedController
 
     public static function get_feed(WP_REST_Request $req)
     {
-        $lat       = $req->get_param('lat');
-        $lng       = $req->get_param('lng');
-        $radius    = $req->get_param('radius_km');
-        $start     = $req->get_param('start');
-        $end       = $req->get_param('end');
+        $lat    = $req->get_param('lat');
+        $lng    = $req->get_param('lng');
+        $radius = $req->get_param('radius_km');
+        $start  = $req->get_param('start');
+        $end    = $req->get_param('end');
 
         $cache_key = 'ap_cal_' . md5(json_encode([
             round((float) $lat, 2),

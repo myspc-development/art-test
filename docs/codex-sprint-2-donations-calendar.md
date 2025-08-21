@@ -16,7 +16,7 @@ Adds donation processing endpoints and a simple calendar feed.
 
 ## REST Routes
 - `POST /artpulse/v1/donations` – Process donations.
-- `GET /artpulse/v1/calendar` – Calendar feed of upcoming events.
+- `GET /ap/v1/calendar` – Calendar feed of upcoming events.
 
 ## Database Changes
 - `ap_donations` table storing payment references.
