@@ -6,6 +6,13 @@ namespace ArtPulse\Rest\Util;
  */
 final class Auth {
     /**
+     * Permission callback for public endpoints.
+     */
+    public static function allow_public(): callable {
+        return '__return_true';
+    }
+
+    /**
      * Generate a permission callback suitable for register_rest_route().
      *
      * Behaviour:
@@ -16,8 +23,8 @@ final class Auth {
      *  - Otherwise treat $capability as a capability string.
      *  - On failure return 403.
      */
-    public static function require_login_and_cap($capability = null): callable {
-        return static function () use ($capability) {
+    public static function require_login_and_cap(string|array|callable|null $capability = null): callable {
+        return static function ($request = null) use ($capability) {
             if (!is_user_logged_in()) {
                 return new \WP_Error('rest_forbidden', 'Authentication required.', ['status' => 401]);
             }
@@ -27,7 +34,7 @@ final class Auth {
 
             $ok = false;
             if (is_callable($capability)) {
-                $ok = (bool) call_user_func($capability);
+                $ok = (bool) call_user_func($capability, $request);
             } elseif (is_array($capability)) {
                 $ok = true;
                 foreach ($capability as $cap) {

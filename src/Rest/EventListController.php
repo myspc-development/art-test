@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class EventListController
 {
@@ -21,7 +22,7 @@ class EventListController
             register_rest_route(ARTPULSE_API_NAMESPACE, '/event-list', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_list'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => Auth::allow_public(),
             'args'                => [
                 'venue'      => [ 'type' => 'string' ],
                 'after'      => [ 'type' => 'string' ],

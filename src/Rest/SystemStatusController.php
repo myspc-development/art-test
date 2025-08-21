@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Server;
 use WP_REST_Response;
+use ArtPulse\Rest\Util\Auth;
 
 final class SystemStatusController {
     public static function register(): void {
@@ -11,7 +12,7 @@ final class SystemStatusController {
     public static function routes(): void {
         register_rest_route('ap/v1', '/system/status', [
             'methods'  => WP_REST_Server::READABLE,
-            'permission_callback' => '__return_true', // public
+            'permission_callback' => Auth::allow_public(),
             'callback' => function () {
                 global $wp_version;
                 $plugin_v = defined('ARTPULSE_VERSION') ? ARTPULSE_VERSION : 'dev';

@@ -3,6 +3,7 @@ namespace ArtPulse\Monetization;
 
 use WP_REST_Request;
 use ArtPulse\Payment\StripeHelper;
+use ArtPulse\Rest\Util\Auth;
 
 class EventBoostManager
 {
@@ -54,7 +55,7 @@ class EventBoostManager
             register_rest_route(ARTPULSE_API_NAMESPACE, '/boost/webhook', [
             'methods'  => 'POST',
             'callback' => [self::class, 'handle_webhook'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => Auth::allow_public(),
         ]);
         }
     }
