@@ -94,21 +94,9 @@ class Plugin
         add_action('init', [\ArtPulse\Frontend\SubmissionForms::class, 'register']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_scripts']);
 
-        add_action('rest_api_init', [\ArtPulse\Community\NotificationRestController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Community\FavoritesRestController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Community\EventCommentsController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Community\ArtworkCommentsController::class, 'register']);
         add_action('init', [\ArtPulse\Rest\EventChatController::class, 'register']);
         \ArtPulse\Frontend\EventChatAssets::register();
-        add_action('rest_api_init', [\ArtPulse\Community\EventVoteRestController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Community\ForumRestController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Community\CommentReportRestController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Community\LeaderboardRestController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Community\UnifiedInboxController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Rest\ActivityRestController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Rest\SubmissionRestController::class, 'register']);
-        add_action('rest_api_init', [\ArtPulse\Rest\CompetitionRestController::class, 'register']);
-        add_action('rest_api_init', [VisitRestController::class, 'register']);
+        add_action('rest_api_init', [\ArtPulse\Rest\RestRoutes::class, 'register_all']);
         add_action('init', [\ArtPulse\Core\EventRsvpMetaMigration::class, 'maybe_migrate']);
         add_action('init', [OrgRoleMetaMigration::class, 'maybe_migrate']);
         add_action('init', [$this, 'maybe_migrate_org_meta']);
@@ -473,7 +461,6 @@ class Plugin
         GrantAssistant::register();
         \ArtPulse\Rest\GrantReportController::register();
         \ArtPulse\Rest\OrgMetaController::register();
-        add_action('rest_api_init', [\ArtPulse\Rest\DirectoryController::class, 'register_routes']);
         \ArtPulse\Rest\EventManagementController::register();
     }
 

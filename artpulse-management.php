@@ -579,15 +579,6 @@ add_action('admin_init', function () {
 // ✅ Hook for deactivation
 //register_deactivation_hook(__FILE__, [$plugin, 'deactivate']);
 
-// Register REST API routes
-add_action('rest_api_init', function () {
-    \ArtPulse\Rest\PortfolioRestController::register();
-    \ArtPulse\Rest\UserAccountRestController::register();
-    \ArtPulse\Rest\DashboardPreviewController::register();
-    \ArtPulse\Reporting\BudgetExportController::register();
-});
-
-
 function artpulse_create_custom_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'artpulse_data';
