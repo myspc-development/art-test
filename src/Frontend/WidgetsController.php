@@ -3,6 +3,7 @@ namespace ArtPulse\Frontend;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use ArtPulse\Rest\Util\Auth;
 
 class WidgetsController
 {
@@ -16,12 +17,12 @@ class WidgetsController
         register_rest_route(ARTPULSE_API_NAMESPACE, '/widgets/embed.js', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'embed'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => Auth::allow_public(),
         ]);
         register_rest_route(ARTPULSE_API_NAMESPACE, '/widgets/render', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'render'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => Auth::allow_public(),
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 /**
  * REST controller providing a simple nearby events query.
@@ -25,7 +26,7 @@ class NearbyEventsController
             register_rest_route(ARTPULSE_API_NAMESPACE, '/events/nearby', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'get_nearby'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => Auth::allow_public(),
             'args'                => [
                 'lat'    => ['type' => 'number', 'required' => true],
                 'lng'    => ['type' => 'number', 'required' => true],
