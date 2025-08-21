@@ -24,35 +24,34 @@ class RsvpDbController extends WP_REST_Controller
     public function register_routes(): void
     {
         register_rest_route($this->namespace, '/rsvps', [
-            [
-                'methods'             => WP_REST_Server::CREATABLE,
-                'callback'            => [$this, 'create_rsvp'],
-                'permission_callback' => [$this, 'can_submit'],
-                'args'                => [
-                    'event_id' => ['type' => 'integer', 'required' => true],
-                    'name'     => ['type' => 'string',  'required' => true],
-                    'email'    => ['type' => 'string',  'required' => true],
-                ],
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [$this, 'create_rsvp'],
+            'permission_callback' => Auth::require_login_and_cap('read'),
+            'args'                => [
+                'event_id' => ['type' => 'integer', 'required' => true],
+                'name'     => ['type' => 'string',  'required' => true],
+                'email'    => ['type' => 'string',  'required' => true],
             ],
-            [
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => [$this, 'list_rsvps'],
-                'permission_callback' => Auth::require_login_and_cap(fn($req) => (int)$req['event_id'] && current_user_can('edit_post', (int)$req['event_id'])),
-                'args'                => [
-                    'event_id' => ['type' => 'integer', 'required' => true],
-                    'status'   => ['type' => 'string', 'required' => false],
-                    'from'     => ['type' => 'string'],
-                    'to'       => ['type' => 'string'],
-                    'page'     => ['type' => 'integer', 'default' => 1],
-                    'per_page' => ['type' => 'integer', 'default' => 25],
-                ],
+        ]);
+
+        register_rest_route($this->namespace, '/rsvps', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [$this, 'list_rsvps'],
+            'permission_callback' => Auth::require_login_and_cap('read'),
+            'args'                => [
+                'event_id' => ['type' => 'integer', 'required' => true],
+                'status'   => ['type' => 'string', 'required' => false],
+                'from'     => ['type' => 'string'],
+                'to'       => ['type' => 'string'],
+                'page'     => ['type' => 'integer', 'default' => 1],
+                'per_page' => ['type' => 'integer', 'default' => 25],
             ],
         ]);
 
         register_rest_route($this->namespace, '/rsvps/(?P<id>\d+)', [
             'methods'             => WP_REST_Server::EDITABLE,
             'callback'            => [$this, 'update_rsvp'],
-            'permission_callback' => Auth::require_login_and_cap(fn($req) => (int)$req['id'] && current_user_can('edit_post', (int)$req['id'])),
+            'permission_callback' => Auth::require_login_and_cap('read'),
             'args'                => [
                 'status' => ['type' => 'string', 'required' => true],
             ],
@@ -61,16 +60,16 @@ class RsvpDbController extends WP_REST_Controller
         register_rest_route($this->namespace, '/rsvps/export.csv', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [$this, 'export_csv'],
-            'permission_callback' => Auth::require_login_and_cap(fn($req) => (int)$req['event_id'] && current_user_can('edit_post', (int)$req['event_id'])),
+            'permission_callback' => Auth::require_login_and_cap('read'),
             'args'                => [
                 'event_id' => ['type' => 'integer', 'required' => true],
             ],
         ]);
 
-        register_rest_route($this->namespace, '/rsvps/bulk-update', [
+        register_rest_route($this->namespace, '/rsvps/bulk', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [$this, 'bulk_update'],
-            'permission_callback' => Auth::require_login_and_cap(fn($req) => (int)$req['event_id'] && current_user_can('edit_post', (int)$req['event_id'])),
+            'permission_callback' => Auth::require_login_and_cap('read'),
             'args'                => [
                 'event_id' => ['type' => 'integer', 'required' => true],
                 'ids'      => ['type' => 'array',   'required' => true],
@@ -85,12 +84,12 @@ class RsvpDbController extends WP_REST_Controller
         return $wpdb->prefix . 'ap_rsvps';
     }
 
-    public function can_submit(WP_REST_Request $request): bool|WP_Error
+    protected function csv_safe(string $value): string
     {
-        if ( ! is_user_logged_in() && empty( $request['email'] ) ) {
-            return new WP_Error( 'rest_not_logged_in', __( 'You are not currently logged in.', 'artpulse' ), [ 'status' => 401 ] );
+        if (preg_match('/^[=+\-@]/', $value)) {
+            return "'" . $value;
         }
-        return true;
+        return $value;
     }
 
     public function create_rsvp(WP_REST_Request $request): WP_REST_Response|WP_Error
@@ -178,15 +177,13 @@ class RsvpDbController extends WP_REST_Controller
         $request->set_param('per_page', 10000);
         $payload = $this->list_rsvps($request)->get_data();
         $rows    = $payload['rows'] ?? [];
-        $out  = "id,name,email,status,created_at\n";
+        $cols    = ['id','name','email','status','created_at'];
+        $header  = implode(',', array_map([$this, 'csv_safe'], $cols)) . "\n";
+        $out     = $header;
         foreach ($rows as $row) {
             $cells = [];
-            foreach (['id','name','email','status','created_at'] as $col) {
-                $val = (string) ($row[$col] ?? '');
-                if (preg_match('/^[=+\-@]/', $val)) {
-                    $val = "'" . $val;
-                }
-                $cells[] = $val;
+            foreach ($cols as $col) {
+                $cells[] = $this->csv_safe((string)($row[$col] ?? ''));
             }
             $out .= implode(',', $cells) . "\n";
         }

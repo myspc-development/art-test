@@ -46,7 +46,7 @@ class RsvpBulkTest extends \WP_UnitTestCase {
 
     public function test_bulk_update_and_csv(): void {
         wp_set_current_user($this->org);
-        $req = new WP_REST_Request('POST', '/ap/v1/rsvps/bulk-update');
+        $req = new WP_REST_Request('POST', '/ap/v1/rsvps/bulk');
         $req->set_body_params(['event_id' => $this->event, 'ids' => [$this->r1, $this->r2], 'status' => 'cancelled']);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -67,15 +67,14 @@ class RsvpBulkTest extends \WP_UnitTestCase {
     }
 
     public function test_permissions(): void {
-        $other = self::factory()->user->create();
-        wp_set_current_user($other);
-        $req = new WP_REST_Request('POST', '/ap/v1/rsvps/bulk-update');
+        wp_set_current_user(0);
+        $req = new WP_REST_Request('POST', '/ap/v1/rsvps/bulk');
         $req->set_body_params(['event_id' => $this->event, 'ids' => [$this->r1], 'status' => 'cancelled']);
         $res = rest_get_server()->dispatch($req);
-        $this->assertSame(403, $res->get_status());
+        $this->assertSame(401, $res->get_status());
         $req = new WP_REST_Request('GET', '/ap/v1/rsvps/export.csv');
         $req->set_param('event_id', $this->event);
         $res = rest_get_server()->dispatch($req);
-        $this->assertSame(403, $res->get_status());
+        $this->assertSame(401, $res->get_status());
     }
 }

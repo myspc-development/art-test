@@ -174,7 +174,7 @@ export default async function render(container) {
     if (!ids.length) return;
     if (!(await Confirm.show(__('Apply to selected?')))) return;
     try {
-      await apiFetch('/ap/v1/rsvps/bulk-update', {
+     await apiFetch('/ap/v1/rsvps/bulk', {
         method: 'POST',
         body: { event_id: eventSelect.value, ids, status: bulkSelect.value },
       });
