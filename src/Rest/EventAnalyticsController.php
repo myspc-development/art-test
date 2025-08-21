@@ -58,9 +58,9 @@ class EventAnalyticsController extends WP_REST_Controller
                 return new \WP_Error('invalid_range', __('Invalid range', 'artpulse'), ['status' => 400]);
             }
         } else {
-            $days   = intval(rtrim($range, 'd')) ?: 30;
-            $days   = max(1, min(365, $days));
-            $end_dt = new \DateTime('now', $tz);
+            $days     = intval(rtrim($range, 'd')) ?: 30;
+            $days     = max(1, min(365, $days));
+            $end_dt   = new \DateTime('now', $tz);
             $start_dt = (clone $end_dt)->modify('-' . $days . ' days');
         }
 
@@ -106,21 +106,21 @@ class EventAnalyticsController extends WP_REST_Controller
         }
 
         global $wpdb;
-        $rsvps = ['going' => 0, 'waitlist' => 0, 'cancelled' => 0];
-        $unique = 0;
-        $total_rsvps = 0;
-        $top_events = [];
-        $top_event  = '';
+        $rsvps        = ['going' => 0, 'waitlist' => 0, 'cancelled' => 0];
+        $unique       = 0;
+        $total_rsvps  = 0;
+        $top_events   = [];
+        $top_event    = '';
 
         if ($ids) {
             $table = $wpdb->prefix . 'ap_rsvps';
             $in    = implode(',', array_map('intval', $ids));
 
             // Totals by status (robust to unknown statuses).
-            $rows = $wpdb->get_results("SELECT status, COUNT(*) c FROM {$table} WHERE event_id IN ($in) GROUP BY status", ARRAY_A);
+            $rows = $wpdb->get_results("SELECT status, COUNT(*) c FROM {$table} WHERE event_id IN ($in) GROUP BY status", ARRAY_A) ?: [];
             foreach ($rows as $row) {
-                $st = (string) $row['status'];
-                $c  = (int) $row['c'];
+                $st = (string) ($row['status'] ?? '');
+                $c  = (int) ($row['c'] ?? 0);
                 if (isset($rsvps[$st])) {
                     $rsvps[$st] = $c;
                 }
@@ -128,7 +128,7 @@ class EventAnalyticsController extends WP_REST_Controller
             }
 
             // Unique attendees (by email).
-            $unique = (int) $wpdb->get_var("SELECT COUNT(DISTINCT email) FROM {$table} WHERE event_id IN ($in)");
+            $unique = (int) $wpdb->get_var("SELECT COUNT(DISTINCT email) FROM {$table} WHERE event_id IN ($in)") ?: 0;
 
             // Trend: group by UTC date in SQL, then map buckets into local TZ in PHP (portable; no CONVERT_TZ).
             try {
@@ -144,11 +144,12 @@ class EventAnalyticsController extends WP_REST_Controller
                         $until_utc . ' 23:59:59'
                     ),
                     ARRAY_A
-                );
+                ) ?: [];
 
                 foreach ($rows as $r) {
-                    $utcDay = (string) $r['d'];
-                    $cnt    = (int) $r['c'];
+                    $utcDay = (string) ($r['d'] ?? '');
+                    $cnt    = (int) ($r['c'] ?? 0);
+                    if (!$utcDay) { continue; }
                     // Convert this UTC bucket to local "day" bucket edge.
                     $dt = new \DateTime($utcDay . ' 00:00:00', $utc_tz);
                     $dt->setTimezone($tz);
@@ -167,10 +168,10 @@ class EventAnalyticsController extends WP_REST_Controller
                      ORDER BY c DESC
                      LIMIT 5",
                     ARRAY_A
-                );
+                ) ?: [];
                 $top_events = array_map(
-                    fn($r) => ['title' => get_the_title((int) $r['event_id']), 'count' => (int) $r['c']],
-                    $tops ?: []
+                    fn($r) => ['title' => get_the_title((int) ($r['event_id'] ?? 0)), 'count' => (int) ($r['c'] ?? 0)],
+                    $tops
                 );
                 $top_event = $top_events[0]['title'] ?? '';
             } catch (\Throwable $e) {
