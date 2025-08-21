@@ -60,9 +60,12 @@ class PortfolioRestController extends WP_REST_Controller
         ]);
     }
 
-    public function can_edit(): bool
+    public function can_edit(): bool|WP_Error
     {
-        return is_user_logged_in();
+        if ( ! is_user_logged_in() ) {
+            return new WP_Error( 'rest_not_logged_in', __( 'You are not currently logged in.', 'artpulse' ), [ 'status' => 401 ] );
+        }
+        return true;
     }
 
     protected function get_profile_id(int $user_id): int
@@ -97,17 +100,17 @@ class PortfolioRestController extends WP_REST_Controller
     public function add_item(WP_REST_Request $request)
     {
         $user_id    = get_current_user_id();
-        $profile_id = $this->get_profile_id($user_id);
-        $media_id   = absint($request['media_id']);
-        $meta       = (array) $request->get_param('meta');
+        $profile_id = $this->get_profile_id( $user_id );
+        $media_id   = absint( $request['media_id'] );
+        $meta       = (array) $request->get_param( 'meta' );
 
-        if ($media_id < 1 || get_post_field('post_author', $media_id) != $user_id) {
-            return new WP_Error('forbidden', __('Invalid media ID', 'artpulse'), ['status' => 403]);
+        if ( $media_id < 1 || ( get_post_field( 'post_author', $media_id ) != $user_id && ! current_user_can( 'edit_post', $media_id ) ) ) {
+            return new WP_Error( 'rest_forbidden', __( "You don't have permission to modify this resource.", 'artpulse' ), [ 'status' => 403 ] );
         }
 
-        $alt = sanitize_text_field($meta['alt'] ?? '');
-        if ($alt === '') {
-            return new WP_Error('invalid_alt', __('Alt text required.', 'artpulse'), ['status' => 400]);
+        $alt = sanitize_text_field( $meta['alt'] ?? '' );
+        if ( $alt === '' ) {
+            return new WP_Error( 'invalid_alt', __( 'ALT text is required for accessibility.', 'artpulse' ), [ 'status' => 400 ] );
         }
 
         wp_update_post([

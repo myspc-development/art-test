@@ -41,13 +41,17 @@ See the [Changelog](docs/CHANGELOG.md) for release notes.
 
 ## Testing
 
-Install dependencies and the WordPress testing library:
+Install dependencies and run tests completely offline:
 
 ```
-composer install
-bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
+# one-time: create test DB (no network)
+composer run test:db
+
+# run tests using local WordPress core (no download needed)
 vendor/bin/phpunit -c phpunit.xml.dist
 ```
+
+This uses your existing WordPress core at /www/wwwroot/192.168.1.21/ for ABSPATH + a separate DB (wordpress_test), so it’s isolated and network-free.
 
 JavaScript unit tests can be executed with:
 
