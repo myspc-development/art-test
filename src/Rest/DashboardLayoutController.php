@@ -1,104 +1,155 @@
 <?php
 namespace ArtPulse\Rest;
 
+use WP_Error;
+use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 
 /**
- * Layout persistence + defaults with filter hooks used in tests.
+ * REST controller for managing dashboard layouts.
  */
-final class DashboardLayoutController {
-    protected const NS = 'ap/v1';
+final class DashboardLayoutController extends WP_REST_Controller {
+    /** @var string */
+    protected $namespace = 'ap/v1';
 
+    /**
+     * Register the controller.
+     */
     public static function register(): void {
-        add_action('rest_api_init', [self::class, 'routes']);
+        $controller = new self();
+        add_action('rest_api_init', [ $controller, 'register_routes' ]);
     }
 
-    public static function routes(): void {
-        // Primary
-        register_rest_route(self::NS, '/dashboard/layout', [
-            'methods'             => WP_REST_Server::READABLE,
-            'callback'            => [self::class, 'get_layout'],
-            'permission_callback' => Auth::require_login_and_cap('read'),
-            'args'                => [
-                'role' => ['type' => 'string'],
+    /**
+     * Register REST API routes.
+     */
+    public function register_routes(): void {
+        register_rest_route($this->namespace, '/dashboard/layout', [
+            [
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => [ $this, 'get_layout' ],
+                'permission_callback' => Auth::require_login_and_cap('read'),
+                'args'                => [
+                    'role' => [ 'type' => 'string', 'required' => false ],
+                ],
+            ],
+            [
+                'methods'             => WP_REST_Server::CREATABLE,
+                'callback'            => [ $this, 'save_layout' ],
+                'permission_callback' => Auth::require_login_and_cap('read'),
             ],
         ]);
-        register_rest_route(self::NS, '/dashboard/layout', [
-            'methods'             => WP_REST_Server::CREATABLE,
-            'callback'            => [self::class, 'save_layout'],
-            'permission_callback' => Auth::require_login_and_cap('read'),
-        ]);
 
-        // Alias routes used by tests
-        register_rest_route(self::NS, '/dashboard/layout/alias', [
+        register_rest_route($this->namespace, '/dashboard/layout/alias/(?P<alias>[a-z0-9_-]+)', [
             'methods'             => WP_REST_Server::READABLE,
-            'callback'            => [self::class, 'get_layout'],
-            'permission_callback' => Auth::require_login_and_cap('read'),
-        ]);
-        register_rest_route(self::NS, '/dashboard/layout/alias', [
-            'methods'             => WP_REST_Server::CREATABLE,
-            'callback'            => [self::class, 'save_layout'],
+            'callback'            => [ $this, 'get_alias' ],
             'permission_callback' => Auth::require_login_and_cap('read'),
         ]);
     }
 
-    public static function get_layout(WP_REST_Request $req): WP_REST_Response {
-        $role       = (string) ($req->get_param('role') ?? '');
-        $user_id    = get_current_user_id();
-        $meta_key   = 'ap_dashboard_layout';
+    /**
+     * Sanitize a widget ID.
+     */
+    private static function sanitize_id(string $id): string {
+        $id = strtolower($id);
+        return preg_replace('/[^a-z0-9_\-]/', '', $id);
+    }
 
-        // User layout first
-        $saved = get_user_meta($user_id, $meta_key, true);
-        if (is_array($saved) && $saved) {
-            $ids = array_values(array_unique(array_map([self::class,'slug'], array_column($saved, 'id'))));
-            return new WP_REST_Response($ids, 200);
+    /**
+     * Get the current dashboard layout.
+     */
+    public function get_layout(WP_REST_Request $request): WP_REST_Response {
+        $user_id = get_current_user_id();
+        $role    = sanitize_key($request->get_param('role') ?? '');
+        if (!$role) {
+            $user = wp_get_current_user();
+            $role = $user->roles[0] ?? '';
         }
 
-        // Role default via filter used by tests
-        $default = apply_filters('ap_dashboard_default_layout', [], $role);
-        $ids     = array_values(array_unique(array_map([self::class,'slug'], (array) $default)));
+        $saved = get_user_meta($user_id, 'ap_dashboard_layout', true);
+        $items = is_array($saved) ? $saved : [];
 
-        return new WP_REST_Response($ids, 200);
-    }
+        if (empty($items)) {
+            $defaults = (array) apply_filters('ap_dashboard_default_widgets', []);
+            if ($role) {
+                $defaults = (array) apply_filters('ap_dashboard_default_widgets_for_role', $defaults, $role);
+            }
+            $items = array_map(fn($id) => [ 'id' => $id, 'visible' => true ], $defaults);
+        }
 
-    public static function save_layout(WP_REST_Request $req): WP_REST_Response {
-        $user_id  = get_current_user_id();
-        $meta_key = 'ap_dashboard_layout';
-
-        $body = $req->get_json_params();
-        $items = is_array($body) ? $body : ($body['layout'] ?? []);
-        if (!is_array($items)) $items = [];
-
-        // Allowed widget whitelist via filter (tests supply very small sets)
-        $allowed = apply_filters('ap_dashboard_widget_whitelist', []);
-        $allowed = array_map([self::class,'slug'], (array) $allowed);
-        $allowed_set = array_flip($allowed);
-
-        $seen = [];
-        $clean = [];
+        $layout_ids = [];
+        $visibility = [];
+        $seen       = [];
         foreach ($items as $row) {
-            $id = self::slug($row['id'] ?? '');
-            if (!$id) continue;
-            // Drop unknown widgets silently (tests expect ignore, not 400)
-            if ($allowed && !isset($allowed_set[$id])) continue;
-            if (isset($seen[$id])) continue;
-            $seen[$id] = true;
-            $clean[] = [
-                'id' => $id,
-                'visible' => (bool) ($row['visible'] ?? true),
-            ];
+            $id = self::sanitize_id($row['id'] ?? '');
+            if (!$id || isset($seen[$id])) {
+                continue;
+            }
+            $seen[$id]   = true;
+            $visible     = isset($row['visible']) ? (bool) $row['visible'] : true;
+            $layout_ids[] = $id;
+            $visibility[] = [ 'id' => $id, 'visible' => $visible ];
         }
 
-        update_user_meta($user_id, $meta_key, $clean);
-        return new WP_REST_Response($clean, 200);
+        return rest_ensure_response([
+            'layout'     => $layout_ids,
+            'visibility' => $visibility,
+        ]);
     }
 
-    private static function slug(string $s): string {
-        $s = strtolower($s);
-        // keep tests happy: allow bare ids like 'a', 'one', etc.
-        return preg_replace('/[^a-z0-9_\-]/', '', $s);
+    /**
+     * Save the dashboard layout.
+     */
+    public function save_layout(WP_REST_Request $request): WP_REST_Response|WP_Error {
+        $nonce = $request->get_header('X-WP-Nonce');
+        if (!$nonce || !wp_verify_nonce($nonce, 'wp_rest')) {
+            return new WP_Error('rest_forbidden', 'Invalid nonce.', [ 'status' => 401 ]);
+        }
+
+        $items = $request->get_param('layout');
+        if (!is_array($items)) {
+            $items = [];
+        }
+
+        $clean      = [];
+        $layout_ids = [];
+        $seen       = [];
+        foreach ($items as $row) {
+            $id = self::sanitize_id($row['id'] ?? '');
+            if (!$id || isset($seen[$id])) {
+                continue;
+            }
+            $seen[$id]   = true;
+            $visible      = isset($row['visible']) ? (bool) $row['visible'] : true;
+            $layout_ids[] = $id;
+            $clean[]      = [ 'id' => $id, 'visible' => $visible ];
+        }
+
+        update_user_meta(get_current_user_id(), 'ap_dashboard_layout', $clean);
+
+        return rest_ensure_response([
+            'layout'     => $layout_ids,
+            'visibility' => $clean,
+        ]);
+    }
+
+    /**
+     * Return layout for a predefined alias.
+     */
+    public function get_alias(WP_REST_Request $request): WP_REST_Response {
+        $alias = self::sanitize_id($request['alias'] ?? '');
+        $map   = (array) apply_filters('ap_dashboard_alias_map', []);
+        $layout = isset($map[$alias]) ? (array) $map[$alias] : [];
+
+        $layout = array_values(array_map([self::class, 'sanitize_id'], $layout));
+        $visibility = array_map(fn($id) => [ 'id' => $id, 'visible' => true ], $layout);
+
+        return rest_ensure_response([
+            'layout'     => $layout,
+            'visibility' => $visibility,
+        ]);
     }
 }
