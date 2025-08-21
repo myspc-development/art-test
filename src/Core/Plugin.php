@@ -253,7 +253,6 @@ class Plugin
         \ArtPulse\Rest\WidgetSettingsRestController::register();
         \ArtPulse\Rest\DashboardConfigController::register();
         \ArtPulse\Rest\RoleWidgetMapController::register();
-        \ArtPulse\Rest\DashboardLayoutRestController::register();
         \ArtPulse\Rest\LayoutSaveEndpoint::register();
         \ArtPulse\Rest\WidgetEditorController::register();
         \ArtPulse\Admin\DashboardLayoutEndpoint::register();
@@ -333,7 +332,6 @@ class Plugin
         \ArtPulse\Admin\OrgCommunicationsCenter::register();
         \ArtPulse\Admin\ScheduledMessageManager::register();
         \ArtPulse\Admin\PostStatusRejected::register();
-        \ArtPulse\Rest\RestRoutes::register();
         \ArtPulse\Rest\OrgUserRolesController::register();
         OrgRoleInviteController::register();
         \ArtPulse\Rest\LocationRestController::register();

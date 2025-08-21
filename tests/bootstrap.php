@@ -31,3 +31,7 @@ if ( ! file_exists( ABSPATH . 'wp-settings.php' ) ) {
     exit(1);
 }
 
+// Ensure all REST routes are registered for tests.
+rest_get_server();
+do_action('rest_api_init');
+
