@@ -84,15 +84,24 @@ class RsvpDbController extends WP_REST_Controller
         return $wpdb->prefix . 'ap_rsvps';
     }
 
-    public function can_submit(WP_REST_Request $request): bool
+    public function can_submit(WP_REST_Request $request): bool|WP_Error
     {
-        return is_user_logged_in() || !empty($request['email']);
+        if ( ! is_user_logged_in() && empty( $request['email'] ) ) {
+            return new WP_Error( 'rest_not_logged_in', __( 'You are not currently logged in.', 'artpulse' ), [ 'status' => 401 ] );
+        }
+        return true;
     }
 
-    public function can_manage(WP_REST_Request $request): bool
+    public function can_manage(WP_REST_Request $request): bool|WP_Error
     {
-        $event_id = intval($request['event_id'] ?? $request['id']);
-        return $event_id && current_user_can('edit_post', $event_id);
+        $event_id = intval( $request['event_id'] ?? $request['id'] );
+        if ( ! is_user_logged_in() ) {
+            return new WP_Error( 'rest_not_logged_in', __( 'You are not currently logged in.', 'artpulse' ), [ 'status' => 401 ] );
+        }
+        if ( ! $event_id || ! current_user_can( 'edit_post', $event_id ) ) {
+            return new WP_Error( 'rest_forbidden', __( "You don't have permission to modify this resource.", 'artpulse' ), [ 'status' => 403 ] );
+        }
+        return true;
     }
 
     public function create_rsvp(WP_REST_Request $request): WP_REST_Response|WP_Error

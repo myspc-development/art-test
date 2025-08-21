@@ -41,6 +41,7 @@ export default async function render(container) {
   });
   thead.appendChild(headRow);
   const tbody = document.createElement('tbody');
+  tbody.setAttribute('aria-live', 'polite');
   table.append(thead, tbody);
   const pager = document.createElement('div');
   const prev = button(__('Prev'));
