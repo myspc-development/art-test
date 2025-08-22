@@ -2,11 +2,6 @@
 namespace ArtPulse\Core;
 
 // Simple stubs for WordPress functions used by LoginRedirectManager
-if (!class_exists('WP_Error')) {
-    class WP_Error {
-        public function __construct($code = '', $message = '') {}
-    }
-}
 
 if (!function_exists(__NAMESPACE__ . '\current_user_can')) {
 function current_user_can($cap) {
@@ -29,7 +24,7 @@ namespace ArtPulse\Core\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\LoginRedirectManager;
-use ArtPulse\Core\WP_Error;
+use WP_Error;
 
 class LoginRedirectManagerTest extends TestCase {
     public static array $caps = [];

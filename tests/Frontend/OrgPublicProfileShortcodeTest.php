@@ -2,10 +2,6 @@
 namespace ArtPulse\Frontend;
 
 require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
-
-if (!function_exists(__NAMESPACE__ . '\get_post_meta')) {
-function get_post_meta($id,$key,$single=false){return \ArtPulse\Frontend\Tests\OrgPublicProfileShortcodeTest::$meta[$key] ?? '';}
-}
 if (!function_exists(__NAMESPACE__ . '\get_page_by_path')) {
 function get_page_by_path($path,$output=null,$type=null){return \ArtPulse\Frontend\Tests\OrgPublicProfileShortcodeTest::$page;}
 }
@@ -20,20 +16,18 @@ use ArtPulse\Frontend\OrgPublicProfileShortcode;
 
 class OrgPublicProfileShortcodeTest extends TestCase
 {
-    public static array $meta = [];
     public static $page = null;
 
     protected function setUp(): void
     {
-        self::$meta = [
-            'ap_org_profile_published' => '1',
-            'ap_org_tagline' => 'Best Org',
-            'ap_org_theme_color' => '#abc',
-            'ead_org_logo_id' => 4,
-            'ead_org_banner_id' => 5,
-            'ead_org_description' => 'About us',
-            'ap_org_featured_events' => '2,3',
-        ];
+        \ArtPulse\Frontend\StubState::reset();
+        \ArtPulse\Frontend\update_post_meta(1, 'ap_org_profile_published', '1');
+        \ArtPulse\Frontend\update_post_meta(1, 'ap_org_tagline', 'Best Org');
+        \ArtPulse\Frontend\update_post_meta(1, 'ap_org_theme_color', '#abc');
+        \ArtPulse\Frontend\update_post_meta(1, 'ead_org_logo_id', 4);
+        \ArtPulse\Frontend\update_post_meta(1, 'ead_org_banner_id', 5);
+        \ArtPulse\Frontend\update_post_meta(1, 'ead_org_description', 'About us');
+        \ArtPulse\Frontend\update_post_meta(1, 'ap_org_featured_events', '2,3');
         self::$page = null;
     }
 

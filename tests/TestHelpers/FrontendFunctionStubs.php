@@ -1,16 +1,18 @@
 <?php
 
-namespace {
-    if (!class_exists('WP_Error')) {
-        class WP_Error {
-            protected string $message;
-            public function __construct($code = '', $message = '') { $this->message = $message; }
-            public function get_error_message() { return $this->message; }
-        }
+namespace ArtPulse\Frontend {
+
+class StubState
+{
+    public static array $post_meta = [];
+    public static array $meta_log = [];
+
+    public static function reset(): void
+    {
+        self::$post_meta = [];
+        self::$meta_log = [];
     }
 }
-
-namespace ArtPulse\Frontend {
 
 if (!function_exists(__NAMESPACE__ . '\\get_post')) {
     function get_post($id) {
@@ -33,6 +35,28 @@ if (!function_exists(__NAMESPACE__ . '\\get_the_title')) {
             return $postOrId->post_title ?? ('Event ' . ($postOrId->ID ?? ''));
         }
         return 'Event ' . $postOrId;
+    }
+}
+
+if (!function_exists(__NAMESPACE__ . '\\get_post_meta')) {
+    function get_post_meta($post_id, $key, $single = false) {
+        return StubState::$post_meta[$post_id][$key] ?? '';
+    }
+}
+
+if (!function_exists(__NAMESPACE__ . '\\update_post_meta')) {
+    function update_post_meta($post_id, $key, $value) {
+        StubState::$post_meta[$post_id][$key] = $value;
+        StubState::$meta_log[] = [$post_id, $key, $value];
+        return true;
+    }
+}
+
+if (!function_exists(__NAMESPACE__ . '\\delete_post_meta')) {
+    function delete_post_meta($post_id, $key) {
+        unset(StubState::$post_meta[$post_id][$key]);
+        StubState::$meta_log[] = [$post_id, $key, null];
+        return true;
     }
 }
 

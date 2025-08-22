@@ -6,9 +6,6 @@ require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
 if (!function_exists(__NAMESPACE__ . '\\wp_insert_post')) {
     function wp_insert_post($arr) { return 123; }
 }
-if (!function_exists(__NAMESPACE__ . '\\update_post_meta')) {
-    function update_post_meta(...$args) { \ArtPulse\Frontend\Tests\EventServiceTest::$meta_updates[] = $args; }
-}
 if (!function_exists(__NAMESPACE__ . '\\wp_set_post_terms')) {
     function wp_set_post_terms($id, $terms, $tax) { \ArtPulse\Frontend\Tests\EventServiceTest::$terms = [$id, $terms, $tax]; }
 }
@@ -25,13 +22,12 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Frontend\EventService;
 
 class EventServiceTest extends TestCase {
-    public static array $meta_updates = [];
     public static array $terms = [];
     public static array $user_org_posts = [];
     public static int $user_meta = 0;
 
     protected function setUp(): void {
-        self::$meta_updates = [];
+        \ArtPulse\Frontend\StubState::reset();
         self::$terms = [];
         self::$user_org_posts = [(object)['ID' => 5]];
         self::$user_meta = 5;
@@ -55,7 +51,7 @@ class EventServiceTest extends TestCase {
         $result = EventService::create_event($data, 1);
         $this->assertSame(123, $result);
         $found = false;
-        foreach (self::$meta_updates as $args) {
+        foreach (\ArtPulse\Frontend\StubState::$meta_log as $args) {
             if ($args[1] === '_ap_event_date' && $args[2] === '2024-01-01') {
                 $found = true;
             }

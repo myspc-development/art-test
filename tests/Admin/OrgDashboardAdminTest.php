@@ -1,48 +1,48 @@
 <?php
-namespace ArtPulse\Admin {
-    // Stub WordPress functions and constants
-    if (!function_exists(__NAMESPACE__ . '\\add_action')) {
-        function add_action($hook, $callback, $priority = 10, $args = 1) {}
-    }
-    if (!function_exists(__NAMESPACE__ . '\\remove_menu_page')) {
-        function remove_menu_page($slug) {}
-    }
-    if (!function_exists(__NAMESPACE__ . '\\add_menu_page')) {
-        function add_menu_page(...$args) {}
-    }
-    if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
-        function current_user_can($cap) { return true; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\get_transient')) {
-        function get_transient($key) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::$transients[$key] ?? false; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\set_transient')) {
-        function set_transient($key, $value, $expire = 0) { \ArtPulse\Admin\Tests\OrgDashboardAdminStub::$transients[$key] = $value; return true; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\delete_transient')) {
-        function delete_transient($key) { unset(\ArtPulse\Admin\Tests\OrgDashboardAdminStub::$transients[$key]); return true; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\get_posts')) {
-        function get_posts($args) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::get_posts($args); }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\wp_is_post_revision')) {
-        function wp_is_post_revision($id) { return false; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\get_post_meta')) {
-        function get_post_meta($post_id, $key, $single = false) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::get_post_meta($post_id, $key); }
-    }
+namespace ArtPulse\Admin;
 
-    class WP_Post {
-        public $post_type;
-        public $ID;
-        public function __construct(string $post_type = 'post', int $ID = 0) {
-            $this->post_type = $post_type;
-            $this->ID = $ID;
-        }
+// Stub WordPress functions and constants
+if (!function_exists(__NAMESPACE__ . '\\add_action')) {
+    function add_action($hook, $callback, $priority = 10, $args = 1) {}
+}
+if (!function_exists(__NAMESPACE__ . '\\remove_menu_page')) {
+    function remove_menu_page($slug) {}
+}
+if (!function_exists(__NAMESPACE__ . '\\add_menu_page')) {
+    function add_menu_page(...$args) {}
+}
+if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+    function current_user_can($cap) { return true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_transient')) {
+    function get_transient($key) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::$transients[$key] ?? false; }
+}
+if (!function_exists(__NAMESPACE__ . '\\set_transient')) {
+    function set_transient($key, $value, $expire = 0) { \ArtPulse\Admin\Tests\OrgDashboardAdminStub::$transients[$key] = $value; return true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\delete_transient')) {
+    function delete_transient($key) { unset(\ArtPulse\Admin\Tests\OrgDashboardAdminStub::$transients[$key]); return true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_posts')) {
+    function get_posts($args) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::get_posts($args); }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_is_post_revision')) {
+    function wp_is_post_revision($id) { return false; }
+}
+if (!function_exists(__NAMESPACE__ . '\\get_post_meta')) {
+    function get_post_meta($post_id, $key, $single = false) { return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::get_post_meta($post_id, $key); }
+}
+
+class WP_Post {
+    public $post_type;
+    public $ID;
+    public function __construct(string $post_type = 'post', int $ID = 0) {
+        $this->post_type = $post_type;
+        $this->ID = $ID;
     }
 }
 
-namespace ArtPulse\Admin\Tests {
+namespace ArtPulse\Admin\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\OrgDashboardAdmin;
@@ -132,5 +132,4 @@ class OrgDashboardAdminTest extends TestCase
         $this->assertArrayNotHasKey('ap_dash_stats_artworks_10', OrgDashboardAdminStub::$transients);
         $this->assertArrayNotHasKey('ap_org_metrics_10', OrgDashboardAdminStub::$transients);
     }
-}
 }

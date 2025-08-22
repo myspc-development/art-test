@@ -8,9 +8,6 @@ function get_post_type($id){ return 'artpulse_event'; }
 if (!function_exists(__NAMESPACE__ . '\wp_update_post')) {
 function wp_update_post($arr){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$updated = $arr; }
 }
-if (!function_exists(__NAMESPACE__ . '\update_post_meta')) {
-function update_post_meta(...$args){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$meta_updates[] = $args; }
-}
 if (!function_exists(__NAMESPACE__ . '\get_posts')) {
 function get_posts($args=[]){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$passed_args = $args; return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$posts; }
 }
@@ -45,7 +42,6 @@ class OrganizationEventAjaxTest extends TestCase
 {
     public static array $posts = [];
     public static array $passed_args = [];
-    public static array $meta_updates = [];
     public static array $updated = [];
     public static array $json = [];
     public static $json_error = null;
@@ -54,9 +50,9 @@ class OrganizationEventAjaxTest extends TestCase
 
     protected function setUp(): void
     {
+        \ArtPulse\Frontend\StubState::reset();
         self::$posts = [];
         self::$passed_args = [];
-        self::$meta_updates = [];
         self::$updated = [];
         self::$json = [];
         self::$json_error = null;
@@ -72,7 +68,6 @@ class OrganizationEventAjaxTest extends TestCase
         $_FILES = [];
         self::$posts = [];
         self::$passed_args = [];
-        self::$meta_updates = [];
         self::$updated = [];
         self::$json = [];
         self::$json_error = null;
@@ -118,7 +113,7 @@ class OrganizationEventAjaxTest extends TestCase
         $this->assertStringContainsString('Second', $html);
 
         $expected_meta = [7, 'address_components', json_encode($addr)];
-        $this->assertContains($expected_meta, self::$meta_updates);
+        $this->assertContains($expected_meta, \ArtPulse\Frontend\StubState::$meta_log);
     }
 
     public function test_add_event_returns_error_when_upload_fails(): void
