@@ -2,34 +2,34 @@
 namespace ArtPulse\Frontend;
 
 require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
-if (!function_exists(__NAMESPACE__ . '\get_post_type')) {
+if (!function_exists('ArtPulse\\Frontend\\get_post_type')) {
 function get_post_type($id){ return 'artpulse_event'; }
 }
-if (!function_exists(__NAMESPACE__ . '\wp_update_post')) {
+if (!function_exists('ArtPulse\\Frontend\\wp_update_post')) {
 function wp_update_post($arr){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$updated = $arr; }
 }
-if (!function_exists(__NAMESPACE__ . '\get_posts')) {
+if (!function_exists('ArtPulse\\Frontend\\get_posts')) {
 function get_posts($args=[]){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$passed_args = $args; return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$posts; }
 }
-if (!function_exists(__NAMESPACE__ . '\wp_set_post_terms')) {
+if (!function_exists('ArtPulse\\Frontend\\wp_set_post_terms')) {
 function wp_set_post_terms($id,$terms,$tax){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$terms = [$id,$terms,$tax]; }
 }
-if (!function_exists(__NAMESPACE__ . '\wp_send_json_success')) {
+if (!function_exists('ArtPulse\\Frontend\\wp_send_json_success')) {
 function wp_send_json_success($data){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$json = $data; }
 }
-if (!function_exists(__NAMESPACE__ . '\wp_send_json_error')) {
+if (!function_exists('ArtPulse\\Frontend\\wp_send_json_error')) {
 function wp_send_json_error($data){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$json_error = $data; }
 }
-if (!function_exists(__NAMESPACE__ . '\media_handle_upload')) {
+if (!function_exists('ArtPulse\\Frontend\\media_handle_upload')) {
 function media_handle_upload($field, $post_id){ return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$media_result; }
 }
-if (!function_exists(__NAMESPACE__ . '\wp_insert_post')) {
+if (!function_exists('ArtPulse\\Frontend\\wp_insert_post')) {
 function wp_insert_post($arr){ return 99; }
 }
-if (!function_exists(__NAMESPACE__ . '\set_post_thumbnail')) {
+if (!function_exists('ArtPulse\\Frontend\\set_post_thumbnail')) {
 function set_post_thumbnail($id, $thumb){}
 }
-if (!function_exists(__NAMESPACE__ . '\get_user_meta')) {
+if (!function_exists('ArtPulse\\Frontend\\get_user_meta')) {
 function get_user_meta($user_id, $key, $single=false){ return 1; }
 }
 

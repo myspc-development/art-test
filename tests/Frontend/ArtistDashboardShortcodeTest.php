@@ -3,22 +3,22 @@ namespace ArtPulse\Frontend;
 
 require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
 require_once __DIR__ . '/../TestHelpers.php';
-if (!function_exists(__NAMESPACE__ . '\get_posts')) {
+if (!function_exists('ArtPulse\\Frontend\\get_posts')) {
 function get_posts($args = []) {
     \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$passed_args = $args;
     return \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$posts;
 }
 }
-if (!function_exists(__NAMESPACE__ . '\wp_delete_post')) {
+if (!function_exists('ArtPulse\\Frontend\\wp_delete_post')) {
 function wp_delete_post($id, $force = false) { \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$deleted = $id; }
 }
-if (!function_exists(__NAMESPACE__ . '\wp_send_json_success')) {
+if (!function_exists('ArtPulse\\Frontend\\wp_send_json_success')) {
 function wp_send_json_success($data) { \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$json = $data; }
 }
-if (!function_exists(__NAMESPACE__ . '\wp_send_json_error')) {
+if (!function_exists('ArtPulse\\Frontend\\wp_send_json_error')) {
 function wp_send_json_error($data) { \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$json_error = $data; }
 }
-if (!function_exists(__NAMESPACE__ . '\do_shortcode')) {
+if (!function_exists('ArtPulse\\Frontend\\do_shortcode')) {
 function do_shortcode($code) {
     if ($code === '[ap_user_profile]') {
         return '<div class="ap-user-profile"></div>';
