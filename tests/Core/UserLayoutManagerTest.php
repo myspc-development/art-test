@@ -3,9 +3,16 @@
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
-use WP_Mock\Tools\TestCase;
 
-class UserLayoutManagerTest extends TestCase {
+if (!function_exists('get_userdata')) {
+    function get_userdata($user_id) { return (object) ['ID' => $user_id]; }
+}
+if (!function_exists('get_user_meta')) {
+    function get_user_meta($user_id, $key = '', $single = false) { return \UserLayoutManagerTest::$user_meta; }
+}
+
+class UserLayoutManagerTest extends \WP_UnitTestCase {
+    public static array $user_meta = [];
 
     public function setUp(): void {
         parent::setUp();
@@ -29,15 +36,7 @@ class UserLayoutManagerTest extends TestCase {
 
     public function test_fallback_layout_for_member_role() {
         $user_id = 101;
-        WP_Mock::userFunction('get_userdata', [
-            'args' => [$user_id],
-            'return' => (object) ['ID' => $user_id],
-        ]);
-
-        WP_Mock::userFunction('get_user_meta', [
-            'times' => 1,
-            'return' => ['member'],
-        ]);
+        self::$user_meta = ['member'];
 
         $layout = UserLayoutManager::get_role_layout($user_id);
 
@@ -50,10 +49,7 @@ class UserLayoutManagerTest extends TestCase {
 
     public function test_fallback_layout_for_artist_role() {
         $user_id = 102;
-        WP_Mock::userFunction('get_user_meta', [
-            'times' => 1,
-            'return' => ['artist'],
-        ]);
+        self::$user_meta = ['artist'];
 
         $layout = UserLayoutManager::get_role_layout($user_id);
         $this->assertNotEmpty($layout, 'Fallback layout for artist should not be empty.');
@@ -65,10 +61,7 @@ class UserLayoutManagerTest extends TestCase {
 
     public function test_layout_filters_out_unregistered_widgets() {
         $user_id = 103;
-        WP_Mock::userFunction('get_user_meta', [
-            'times' => 1,
-            'return' => ['organization'],
-        ]);
+        self::$user_meta = ['organization'];
 
         // Simulate a layout with an unregistered widget
         $default = [

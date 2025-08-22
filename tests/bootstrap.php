@@ -1,37 +1,13 @@
 <?php
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$config = getenv('WP_PHPUNIT__TESTS_CONFIG');
-if ( $config && file_exists( $config ) ) {
-    // Use provided config as-is.
-} elseif ( file_exists( '/tmp/wordpress-tests-lib/wp-tests-config.php' ) ) {
-    $config = '/tmp/wordpress-tests-lib/wp-tests-config.php';
-    putenv( 'WP_PHPUNIT__TESTS_CONFIG=' . $config );
-} else {
-    fwrite( STDERR, "WP test config not found. Use offline mode (tests/wp-tests-config.local.php) or install the test suite.\n" );
-    exit(1);
+if (!getenv('WP_PHPUNIT__TESTS_CONFIG')) {
+    putenv('WP_PHPUNIT__TESTS_CONFIG=' . __DIR__ . '/wp-tests-config.local.php');
 }
 
-$wp_tests_dir = getenv( 'WP_PHPUNIT__DIR' ) ?: __DIR__ . '/../vendor/wp-phpunit/wp-phpunit';
-if ( ! file_exists( $wp_tests_dir . '/includes/functions.php' ) ) {
-    fwrite( STDERR, "\xE2\x9D\x8C WP_PHPUNIT__DIR not found at $wp_tests_dir. Did you run composer install and bin/install-wp-tests.sh?\n" );
-    exit(1);
-}
-require $wp_tests_dir . '/includes/functions.php';
+require_once __DIR__ . '/TestHelpers/FrontendFunctionStubs.php';
+require_once __DIR__ . '/TestHelpers.php';
 
-function _manually_load_plugin() {
-    require dirname( __DIR__ ) . '/artpulse-management.php';
-}
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
-
-require $wp_tests_dir . '/includes/bootstrap.php';
-
-if ( ! file_exists( ABSPATH . 'wp-settings.php' ) ) {
-    fwrite( STDERR, "\xE2\x9D\x8C WordPress core could not be located. Did you run bin/install-wp-tests.sh?\n" );
-    exit(1);
-}
-
-// Ensure all REST routes are registered for tests.
-rest_get_server();
-do_action('rest_api_init');
+require_once __DIR__ . '/../vendor/wp-phpunit/wp-phpunit/includes/bootstrap.php';
 

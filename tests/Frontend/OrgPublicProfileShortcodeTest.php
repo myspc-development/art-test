@@ -4,31 +4,13 @@ namespace ArtPulse\Frontend;
 require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
 
 if (!function_exists(__NAMESPACE__ . '\get_post_meta')) {
-function get_post_meta($id,$key,$single=false){return OrgPublicProfileShortcodeTest::$meta[$key] ?? '';}
+function get_post_meta($id,$key,$single=false){return \ArtPulse\Frontend\Tests\OrgPublicProfileShortcodeTest::$meta[$key] ?? '';}
 }
 if (!function_exists(__NAMESPACE__ . '\get_page_by_path')) {
-function get_page_by_path($path,$output,$type){return OrgPublicProfileShortcodeTest::$page;}
-}
-if (!function_exists(__NAMESPACE__ . '\get_post')) {
-function get_post($id){return (object)['ID'=>$id,'post_title'=>'My Org'];}
+function get_page_by_path($path,$output=null,$type=null){return \ArtPulse\Frontend\Tests\OrgPublicProfileShortcodeTest::$page;}
 }
 if (!function_exists(__NAMESPACE__ . '\wp_get_attachment_url')) {
 function wp_get_attachment_url($id){return 'img'.$id.'.jpg';}
-}
-if (!function_exists(__NAMESPACE__ . '\get_permalink')) {
-function get_permalink($id){return '/event/'.$id;}
-}
-if (!function_exists(__NAMESPACE__ . '\get_the_title')) {
-function get_the_title($id){return 'Event '.$id;}
-}
-if (!function_exists(__NAMESPACE__ . '\wpautop')) {
-function wpautop($t){return $t;}
-}
-if (!function_exists(__NAMESPACE__ . '\sanitize_title')) {
-function sanitize_title($s){return $s;}
-}
-if (!function_exists(__NAMESPACE__ . '\shortcode_atts')) {
-function shortcode_atts($pairs,$atts,$tag){return array_merge($pairs,$atts);} 
 }
 
 namespace ArtPulse\Frontend\Tests;
