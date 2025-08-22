@@ -24,9 +24,6 @@ function wp_die($msg) { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$
 if (!function_exists(__NAMESPACE__ . '\wp_insert_post')) {
 function wp_insert_post($arr) { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$inserted = $arr; return 1; }
 }
-if (!function_exists(__NAMESPACE__ . '\update_post_meta')) {
-function update_post_meta(...$args) { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$meta_updates[] = $args; }
-}
 if (!function_exists(__NAMESPACE__ . '\media_handle_upload')) {
 function media_handle_upload($file, $post_id) { return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$media_ids[$file] ?? 0; }
 }
@@ -51,7 +48,6 @@ class EventSubmissionShortcodeTest extends TestCase
     public static array $user_meta = [];
     public static string $notice = '';
     public static array $inserted = [];
-    public static array $meta_updates = [];
     public static array $media_ids = [];
     public static int $thumbnail = 0;
 
@@ -60,8 +56,8 @@ class EventSubmissionShortcodeTest extends TestCase
         self::$posts_return = [];
         self::$user_meta = [];
         self::$notice = '';
+        \ArtPulse\Frontend\StubState::reset();
         self::$inserted = [];
-        self::$meta_updates = [];
         self::$media_ids = [];
         self::$thumbnail = 0;
         $_FILES = [];
@@ -93,7 +89,6 @@ class EventSubmissionShortcodeTest extends TestCase
         self::$user_meta = [];
         self::$notice = '';
         self::$inserted = [];
-        self::$meta_updates = [];
         self::$media_ids = [];
         self::$thumbnail = 0;
         parent::tearDown();
@@ -137,7 +132,7 @@ class EventSubmissionShortcodeTest extends TestCase
         EventSubmissionShortcode::maybe_handle_form();
 
         $gallery = null;
-        foreach (self::$meta_updates as $args) {
+        foreach (\ArtPulse\Frontend\StubState::$meta_log as $args) {
             if ($args[1] === '_ap_submission_images') {
                 $gallery = $args[2];
             }
@@ -159,7 +154,7 @@ class EventSubmissionShortcodeTest extends TestCase
 
         $gallery = null;
         $banner_meta_found = false;
-        foreach (self::$meta_updates as $args) {
+        foreach (\ArtPulse\Frontend\StubState::$meta_log as $args) {
             if ($args[1] === '_ap_submission_images') {
                 $gallery = $args[2];
             }

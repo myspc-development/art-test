@@ -1,46 +1,28 @@
 <?php
-namespace ArtPulse\Admin {
-    
-    class WP_Error {
-        public string $code;
-        public string $message;
-        public array $data;
+namespace ArtPulse\Admin;
 
-        public function __construct(string $code = '', string $message = '', array $data = [])
-        {
-            $this->code    = $code;
-            $this->message = $message;
-            $this->data    = $data;
+if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+    function current_user_can($cap) {
+        return \ArtPulse\Admin\Tests\UpdatesTabTest::$can;
+    }
+}
+if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
+    function admin_url($path = '') { return $path; }
+}
+if (!function_exists(__NAMESPACE__ . '\\add_query_arg')) {
+    function add_query_arg($params, $url) { return $url . (str_contains($url, '?') ? '&' : '?') . http_build_query($params); }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_safe_redirect')) {
+    function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\UpdatesTabTest::$redirect = $url; throw new \Exception('redirect'); }
+}
+if (!function_exists(__NAMESPACE__ . '\\download_url')) {
+    function download_url($url, $timeout = 300, $filename = '', $args = []) {
+        if (\ArtPulse\Admin\Tests\UpdatesTabTest::$download_error) {
+            return \ArtPulse\Admin\Tests\UpdatesTabTest::$download_error;
         }
-
-        public function get_error_message(): string
-        {
-            return $this->message;
-        }
+        return \ArtPulse\Admin\Tests\UpdatesTabTest::create_zip();
     }
-
-    if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
-        function current_user_can($cap) {
-            return \ArtPulse\Admin\Tests\UpdatesTabTest::$can;
-        }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
-        function admin_url($path = '') { return $path; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\add_query_arg')) {
-        function add_query_arg($params, $url) { return $url . (str_contains($url, '?') ? '&' : '?') . http_build_query($params); }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\wp_safe_redirect')) {
-        function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\UpdatesTabTest::$redirect = $url; throw new \Exception('redirect'); }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\download_url')) {
-        function download_url($url, $timeout = 300, $filename = '', $args = []) {
-            if (\ArtPulse\Admin\Tests\UpdatesTabTest::$download_error) {
-                return \ArtPulse\Admin\Tests\UpdatesTabTest::$download_error;
-            }
-            return \ArtPulse\Admin\Tests\UpdatesTabTest::create_zip();
-        }
-    }
+}
     if (!function_exists(__NAMESPACE__ . '\\unzip_file')) {
         function unzip_file($file, $dest) { \ArtPulse\Admin\Tests\UpdatesTabTest::$unzipped = [$file, $dest]; return true; }
     }
@@ -106,9 +88,8 @@ namespace ArtPulse\Admin {
     if (!function_exists(__NAMESPACE__ . '\\error_log')) {
         function error_log($msg) { \ArtPulse\Admin\Tests\UpdatesTabTest::$logs[] = $msg; }
     }
-}
 
-namespace ArtPulse\Admin\Tests {
+namespace ArtPulse\Admin\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UpdatesTab;
@@ -263,5 +244,4 @@ class UpdatesTabTest extends TestCase
         }
         $this->assertStringContainsString('ap_update_error=' . urlencode('remote failed'), self::$redirect);
     }
-}
 }

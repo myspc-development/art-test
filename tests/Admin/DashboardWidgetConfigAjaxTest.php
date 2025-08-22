@@ -1,34 +1,34 @@
 <?php
-namespace ArtPulse\Admin {
-    if (!function_exists(__NAMESPACE__ . '\\check_ajax_referer')) {
-        function check_ajax_referer($action, $name) {}
-    }
-    if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
-        function current_user_can($cap) {
-            return \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$can;
-        }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\sanitize_key')) {
-        function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\update_option')) {
-        function update_option($key, $value) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$options[$key] = $value; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\wp_send_json_success')) {
-        function wp_send_json_success($data = null) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$json_success = $data ?? true; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\wp_send_json_error')) {
-        function wp_send_json_error($data) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$json_error = $data; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\add_action')) {
-        function add_action($hook, $callback, $priority = 10, $args = 1) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$hooks[$hook][] = $callback; }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\do_action')) {
-        function do_action($hook) { foreach (\ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$hooks[$hook] ?? [] as $cb) { call_user_func($cb); } }
+namespace ArtPulse\Admin;
+
+if (!function_exists(__NAMESPACE__ . '\\check_ajax_referer')) {
+    function check_ajax_referer($action, $name) {}
+}
+if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
+    function current_user_can($cap) {
+        return \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$can;
     }
 }
+if (!function_exists(__NAMESPACE__ . '\\sanitize_key')) {
+    function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
+}
+if (!function_exists(__NAMESPACE__ . '\\update_option')) {
+    function update_option($key, $value) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$options[$key] = $value; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_send_json_success')) {
+    function wp_send_json_success($data = null) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$json_success = $data ?? true; }
+}
+if (!function_exists(__NAMESPACE__ . '\\wp_send_json_error')) {
+    function wp_send_json_error($data) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$json_error = $data; }
+}
+if (!function_exists(__NAMESPACE__ . '\\add_action')) {
+    function add_action($hook, $callback, $priority = 10, $args = 1) { \ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$hooks[$hook][] = $callback; }
+}
+if (!function_exists(__NAMESPACE__ . '\\do_action')) {
+    function do_action($hook) { foreach (\ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$hooks[$hook] ?? [] as $cb) { call_user_func($cb); } }
+}
 
-namespace ArtPulse\Admin\Tests {
+namespace ArtPulse\Admin\Tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -93,5 +93,4 @@ class DashboardWidgetConfigAjaxTest extends TestCase
         $this->assertNull(self::$json_success);
         $this->assertSame(['message' => 'Permission denied'], self::$json_error);
     }
-}
 }
