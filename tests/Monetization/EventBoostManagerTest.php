@@ -30,7 +30,7 @@ class EventBoostManagerTest extends TestCase
                 return $sql;
             }
             public function get_var($query) {
-                if (preg_match('/FROM (\w+) WHERE post_id = (\d+) AND expires_at > \\'([^\']+)\'/', $query, $m)) {
+                if (preg_match("/FROM (\\w+) WHERE post_id = (\\d+) AND expires_at > '([^']+)'/", $query, $m)) {
                     [$all, $table, $event, $ts] = $m;
                     $count = 0;
                     foreach ($this->data[$table] ?? [] as $row) {

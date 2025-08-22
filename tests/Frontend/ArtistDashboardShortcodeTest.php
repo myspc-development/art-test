@@ -9,21 +9,6 @@ function get_posts($args = []) {
     return \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$posts;
 }
 }
-if (!function_exists(__NAMESPACE__ . '\get_permalink')) {
-function get_permalink($id) { return '/view/' . $id; }
-}
-if (!function_exists(__NAMESPACE__ . '\get_the_title')) {
-function get_the_title($post) { return $post->post_title; }
-}
-if (!function_exists(__NAMESPACE__ . '\get_edit_post_link')) {
-function get_edit_post_link($id) { return '/edit/' . $id; }
-}
-if (!function_exists(__NAMESPACE__ . '\get_post')) {
-function get_post($id) { return (object)['ID'=>$id,'post_type'=>'artpulse_artwork','post_author'=>1]; }
-}
-if (!function_exists(__NAMESPACE__ . '\get_post_meta')) {
-function get_post_meta($id, $key, $single = false) { return 0; }
-}
 if (!function_exists(__NAMESPACE__ . '\wp_delete_post')) {
 function wp_delete_post($id, $force = false) { \ArtPulse\Frontend\Tests\ArtistDashboardShortcodeTest::$deleted = $id; }
 }
@@ -40,12 +25,6 @@ function do_shortcode($code) {
     }
     return '';
 }
-}
-if (!function_exists(__NAMESPACE__ . '\get_option')) {
-function get_option($key, $default = false) { return $default; }
-}
-if (!function_exists(__NAMESPACE__ . '\wp_localize_script')) {
-function wp_localize_script(...$args) {}
 }
 
 namespace ArtPulse\Frontend\Tests;

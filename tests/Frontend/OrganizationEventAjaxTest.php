@@ -11,9 +11,6 @@ function wp_update_post($arr){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTes
 if (!function_exists(__NAMESPACE__ . '\update_post_meta')) {
 function update_post_meta(...$args){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$meta_updates[] = $args; }
 }
-if (!function_exists(__NAMESPACE__ . '\get_post_meta')) {
-function get_post_meta($id,$key,$single=false){ return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$post_meta[$id][$key] ?? ''; }
-}
 if (!function_exists(__NAMESPACE__ . '\get_posts')) {
 function get_posts($args=[]){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$passed_args = $args; return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$posts; }
 }
@@ -46,7 +43,6 @@ use ArtPulse\Frontend\OrganizationDashboardShortcode;
 
 class OrganizationEventAjaxTest extends TestCase
 {
-    public static array $post_meta = [];
     public static array $posts = [];
     public static array $passed_args = [];
     public static array $meta_updates = [];
@@ -58,7 +54,6 @@ class OrganizationEventAjaxTest extends TestCase
 
     protected function setUp(): void
     {
-        self::$post_meta = [];
         self::$posts = [];
         self::$passed_args = [];
         self::$meta_updates = [];
@@ -75,7 +70,6 @@ class OrganizationEventAjaxTest extends TestCase
     {
         $_POST = [];
         $_FILES = [];
-        self::$post_meta = [];
         self::$posts = [];
         self::$passed_args = [];
         self::$meta_updates = [];
@@ -89,7 +83,6 @@ class OrganizationEventAjaxTest extends TestCase
 
     public function test_update_event_returns_html(): void
     {
-        self::$post_meta[7]['_ap_event_organization'] = 5;
         self::$posts = [
             (object)['ID' => 7, 'post_title' => 'First'],
             (object)['ID' => 8, 'post_title' => 'Second'],

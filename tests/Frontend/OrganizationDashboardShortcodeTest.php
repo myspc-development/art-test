@@ -6,9 +6,6 @@ require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
 if (!function_exists(__NAMESPACE__ . '\get_user_meta')) {
 function get_user_meta($uid,$key,$single=false){ return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$user_meta[$uid][$key] ?? ''; }
 }
-if (!function_exists(__NAMESPACE__ . '\get_post_meta')) {
-function get_post_meta($id,$key,$single=false){ return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$post_meta[$id][$key] ?? ''; }
-}
 if (!function_exists(__NAMESPACE__ . '\get_terms')) {
 function get_terms($tax,$args){ return []; }
 }
