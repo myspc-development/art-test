@@ -6,7 +6,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DashboardWidgetRegistryMapTest extends WP_UnitTestCase
 {
-    protected function set_up(): void
+public function set_up(): void
     {
         parent::set_up();
         $ref  = new \ReflectionClass(DashboardWidgetRegistry::class);

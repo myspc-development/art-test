@@ -1,5 +1,5 @@
 <?php
-namespace ArtPulse\Admin {
+namespace ArtPulse\Admin ;
     if (!function_exists(__NAMESPACE__ . '\\check_ajax_referer')) {
         function check_ajax_referer($action, $name) {}
     }
@@ -26,9 +26,9 @@ namespace ArtPulse\Admin {
     if (!function_exists(__NAMESPACE__ . '\\do_action')) {
         function do_action($hook) { foreach (\ArtPulse\Admin\Tests\DashboardWidgetConfigAjaxTest::$hooks[$hook] ?? [] as $cb) { call_user_func($cb); } }
     }
-}
 
-namespace ArtPulse\Admin\Tests {
+
+namespace ArtPulse\Admin\Tests ;
 
 use PHPUnit\Framework\TestCase;
 
@@ -94,4 +94,4 @@ class DashboardWidgetConfigAjaxTest extends TestCase
         $this->assertSame(['message' => 'Permission denied'], self::$json_error);
     }
 }
-}
+

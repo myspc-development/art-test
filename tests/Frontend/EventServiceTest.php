@@ -7,7 +7,6 @@ if (!function_exists(__NAMESPACE__ . '\\wp_insert_post')) {
     function wp_insert_post($arr) { return 123; }
 }
 if (!function_exists(__NAMESPACE__ . '\\update_post_meta')) {
-    function update_post_meta(...$args) { \ArtPulse\Frontend\Tests\EventServiceTest::$meta_updates[] = $args; }
 }
 if (!function_exists(__NAMESPACE__ . '\\wp_set_post_terms')) {
     function wp_set_post_terms($id, $terms, $tax) { \ArtPulse\Frontend\Tests\EventServiceTest::$terms = [$id, $terms, $tax]; }

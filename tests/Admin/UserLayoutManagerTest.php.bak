@@ -1,5 +1,6 @@
 <?php
 namespace ArtPulse\Admin\Tests;
+namespace ;
     if (!function_exists('__return_null')) {
         function __return_null() { return null; }
     }

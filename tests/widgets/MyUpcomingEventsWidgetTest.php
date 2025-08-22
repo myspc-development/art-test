@@ -5,7 +5,7 @@ class MyUpcomingEventsWidgetTest extends \WP_UnitTestCase {
     private int $user_id;
 
     protected function setUp(): void {
-        parent::setUp();
+        parent::set_up();
         $this->user_id = self::factory()->user->create();
         wp_set_current_user($this->user_id);
     }

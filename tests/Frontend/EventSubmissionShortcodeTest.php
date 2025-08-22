@@ -25,7 +25,6 @@ if (!function_exists(__NAMESPACE__ . '\wp_insert_post')) {
 function wp_insert_post($arr) { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$inserted = $arr; return 1; }
 }
 if (!function_exists(__NAMESPACE__ . '\update_post_meta')) {
-function update_post_meta(...$args) { \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$meta_updates[] = $args; }
 }
 if (!function_exists(__NAMESPACE__ . '\media_handle_upload')) {
 function media_handle_upload($file, $post_id) { return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$media_ids[$file] ?? 0; }

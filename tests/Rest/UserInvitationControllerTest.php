@@ -72,16 +72,6 @@ function absint($num) {
 }
 
 // Minimal WP_Error stub
-class WP_Error {
-    public string $code;
-    public string $message;
-    public array $data;
-    public function __construct(string $code = '', string $message = '', array $data = []) {
-        $this->code = $code;
-        $this->message = $message;
-        $this->data = $data;
-    }
-}
 
 // Minimal WP_REST_Request stub
 class WP_REST_Request {

@@ -12,7 +12,7 @@ class ParityCanonicalizationTest extends \WP_UnitTestCase
 {
     protected function setUp(): void
     {
-        parent::setUp();
+        parent::set_up();
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         foreach (['widgets','builder_widgets','id_map','issues','logged_duplicates','aliases'] as $prop) {
             if ($ref->hasProperty($prop)) {

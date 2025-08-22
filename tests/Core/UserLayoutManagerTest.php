@@ -15,7 +15,7 @@ class UserLayoutManagerTest extends \WP_UnitTestCase {
     public static array $user_meta = [];
 
     public function setUp(): void {
-        parent::setUp();
+        parent::set_up();
 
         // Register some fake widgets for testing
         DashboardWidgetRegistry::register_widget([

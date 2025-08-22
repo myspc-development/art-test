@@ -1,5 +1,5 @@
 <?php
-namespace ArtPulse\Admin {
+namespace ArtPulse\Admin ;
     // Stub WordPress functions and constants
     if (!function_exists(__NAMESPACE__ . '\\add_action')) {
         function add_action($hook, $callback, $priority = 10, $args = 1) {}
@@ -40,9 +40,9 @@ namespace ArtPulse\Admin {
             $this->ID = $ID;
         }
     }
-}
 
-namespace ArtPulse\Admin\Tests {
+
+namespace ArtPulse\Admin\Tests ;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\OrgDashboardAdmin;
@@ -133,4 +133,4 @@ class OrgDashboardAdminTest extends TestCase
         $this->assertArrayNotHasKey('ap_org_metrics_10', OrgDashboardAdminStub::$transients);
     }
 }
-}
+

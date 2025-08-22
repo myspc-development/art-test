@@ -1,6 +1,6 @@
 <?php
 namespace ArtPulse\Admin;
-namespace ArtPulse\Admin\Tests ;
+namespace ArtPulse\Admin\Tests {
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UpdatesTab;
@@ -158,4 +158,4 @@ class UpdatesTabTest extends TestCase
 
 }
 
-
+}

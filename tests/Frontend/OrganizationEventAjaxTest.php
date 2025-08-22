@@ -9,7 +9,6 @@ if (!function_exists(__NAMESPACE__ . '\wp_update_post')) {
 function wp_update_post($arr){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$updated = $arr; }
 }
 if (!function_exists(__NAMESPACE__ . '\update_post_meta')) {
-function update_post_meta(...$args){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$meta_updates[] = $args; }
 }
 if (!function_exists(__NAMESPACE__ . '\get_posts')) {
 function get_posts($args=[]){ \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$passed_args = $args; return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$posts; }
