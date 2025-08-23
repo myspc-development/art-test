@@ -3,9 +3,31 @@ namespace ArtPulse\Core {
     interface DashboardWidgetInterface {}
 
     class DashboardWidgetRegistry {
-        public static function register(...$args): void {}
-        public static function get_widget($id) { return null; }
-        public static function get_widget_callback($id) { return null; }
+        private static array $widgets = [];
+
+        public static function register($id, $label = '', $icon = '', $description = '', $callback = null, $args = []): void {
+            self::$widgets[$id] = [
+                'id'       => $id,
+                'callback' => $callback,
+                'args'     => $args,
+            ];
+        }
+
+        public static function get_widget($id) {
+            return self::$widgets[$id] ?? null;
+        }
+
+        public static function get_widget_callback($id) {
+            return self::$widgets[$id]['callback'] ?? null;
+        }
+
+        public static function exists($id): bool {
+            return isset(self::$widgets[$id]);
+        }
+
+        public static function reset(): void {
+            self::$widgets = [];
+        }
     }
 
     class DashboardController {
