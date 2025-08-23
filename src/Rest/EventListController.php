@@ -44,6 +44,11 @@ class EventListController
 
     public static function get_list(WP_REST_Request $request)
     {
+        $cache_key = 'ap_event_list_' . get_current_user_id() . '_' . md5(serialize($request->get_params()));
+        if (false !== ($cached = get_transient($cache_key))) {
+            return rest_ensure_response($cached);
+        }
+
         $meta_query = [];
         $venue      = $request->get_param('venue');
         $after      = $request->get_param('after');
@@ -173,6 +178,8 @@ class EventListController
                 $html .= ap_get_event_card($p->ID);
             }
         }
-        return rest_ensure_response(['html' => $html]);
+        $data = ['html' => $html];
+        set_transient($cache_key, $data, 30);
+        return rest_ensure_response($data);
     }
 }

@@ -205,7 +205,7 @@ class EventAnalyticsController extends WP_REST_Controller
             'top_events'        => $top_events,
         ];
 
-        set_transient($cache_key, $data, 10 * MINUTE_IN_SECONDS);
+        set_transient($cache_key, $data, MINUTE_IN_SECONDS);
         return rest_ensure_response($data);
     }
 
