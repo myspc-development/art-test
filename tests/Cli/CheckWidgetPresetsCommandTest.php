@@ -1,0 +1,89 @@
+<?php
+
+namespace {
+    require_once __DIR__ . '/WP_CLI_Stub.php';
+    if (!defined('ABSPATH')) { define('ABSPATH', __DIR__); }
+    
+    // Provide minimal role handling for capability checks.
+    if (!function_exists('add_role')) {
+        function add_role($role, $display_name = '', $caps = []) { $GLOBALS['test_roles'][$role] = $caps; }
+    }
+    if (!function_exists('remove_role')) {
+        function remove_role($role) { unset($GLOBALS['test_roles'][$role]); }
+    }
+    if (!function_exists('get_role')) {
+        function get_role($role) {
+            $caps = $GLOBALS['test_roles'][$role] ?? [];
+            return new class($caps) {
+                private array $caps;
+                public function __construct(array $caps) { $this->caps = $caps; }
+                public function has_cap($cap) { return !empty($this->caps[$cap]); }
+            };
+        }
+    }
+}
+
+namespace ArtPulse\Core {
+    class DashboardController {
+        private static array $presets = [];
+        public static function set_presets(array $presets): void { self::$presets = $presets; }
+        public static function get_default_presets(): array { return self::$presets; }
+    }
+    class DashboardWidgetRegistry {
+        private static array $widgets = [];
+        public static function set_widgets(array $widgets): void { self::$widgets = $widgets; }
+        public static function getById(string $id) { return self::$widgets[$id] ?? null; }
+    }
+}
+
+namespace ArtPulse\Cli\Tests {
+    use PHPUnit\Framework\TestCase;
+    use WP_CLI;
+    use ArtPulse\Core\DashboardController;
+    use ArtPulse\Core\DashboardWidgetRegistry;
+    
+    require_once __DIR__ . '/../../includes/class-cli-check-widget-presets.php';
+    
+    class CheckWidgetPresetsCommandTest extends TestCase {
+        protected function setUp(): void {
+            WP_CLI::$commands = [];
+            WP_CLI::$last_output = '';
+            $GLOBALS['test_roles'] = [];
+        }
+        
+        public function test_reports_warnings_and_errors(): void {
+            // Setup roles
+            add_role('member', 'Member', ['read' => true]);
+            
+            // Setup widgets
+            DashboardWidgetRegistry::set_widgets([
+                'valid_widget' => ['roles' => ['member']],
+                'cap_widget'   => ['roles' => ['member'], 'capability' => 'manage_options'],
+            ]);
+            
+            // Setup presets with valid, missing, and capability restricted widgets
+            DashboardController::set_presets([
+                'member_preset' => [
+                    'role' => 'member',
+                    'layout' => [
+                        ['id' => 'valid_widget'],
+                        ['id' => 'missing_widget'],
+                        ['id' => 'cap_widget'],
+                    ],
+                ],
+            ]);
+            
+            WP_CLI::add_command('artpulse check-widget-presets', \AP_CLI_Check_Widget_Presets::class);
+            
+            try {
+                WP_CLI::runcommand('artpulse check-widget-presets');
+                $this->fail('Expected error not thrown');
+            } catch (\RuntimeException $e) {
+                $this->assertSame('Preset check found issues.', $e->getMessage());
+                $out = WP_CLI::$last_output;
+                $this->assertStringContainsString('missing_widget not registered in preset member_preset', $out);
+                $this->assertStringContainsString('cap_widget requires capability manage_options not available to member in preset member_preset', $out);
+            }
+        }
+    }
+}
