@@ -40,6 +40,14 @@ jobs:
         run: npm test
       - name: Install Composer deps
         run: composer install --prefer-dist --no-progress
+      - name: Install WP test suite
+        env:
+          WP_DB_HOST: 127.0.0.1:3306
+          WP_DB_USER: root
+          WP_DB_PASS: ""
+          WP_DB_NAME: wordpress_test
+          WP_VERSION: ${{ matrix.wp }}
+        run: bash bin/install-wp-tests.sh "$WP_DB_NAME" "$WP_DB_USER" "$WP_DB_PASS" "$WP_DB_HOST" "$WP_VERSION"
       - name: PHP CodeSniffer
         run: vendor/bin/phpcs --standard=phpcs.xml
       - name: PHPStan
@@ -51,4 +59,4 @@ jobs:
           WP_DB_PASS: ""
           WP_DB_NAME: wordpress_test
           WP_VERSION: ${{ matrix.wp }}
-        run: vendor/bin/phpunit --coverage-text
+        run: vendor/bin/phpunit --coverage-clover build/coverage.xml
