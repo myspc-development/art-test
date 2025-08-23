@@ -131,7 +131,8 @@ function ap_create_all_tables() {
         user_id BIGINT NOT NULL,
         role VARCHAR(100) NOT NULL,
         status VARCHAR(50) DEFAULT 'active',
-        PRIMARY KEY (org_id, user_id)
+        PRIMARY KEY (org_id, user_id),
+        KEY user_id (user_id)
     ) $charset_collate;";
 
     $tables[] = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}ap_roles (

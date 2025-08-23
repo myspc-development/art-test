@@ -286,7 +286,8 @@ function create_monetization_tables() {
         status ENUM('active','pending','invited') DEFAULT 'active',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        KEY org_user (org_id, user_id)
+        KEY org_user (org_id, user_id),
+        KEY user_id (user_id)
         ) $charset_collate;");
         file_put_contents(
             $log_file,

@@ -17,6 +17,7 @@ function artpulse_create_webhook_logs_table(): void {
         response_body TEXT NULL,
         timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
+        KEY ts (timestamp),
         KEY sub_id (subscription_id)
     ) $charset_collate;";
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
