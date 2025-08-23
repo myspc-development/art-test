@@ -218,13 +218,28 @@ class WebhookManager
             'timeout' => 5,
         ]);
 
-        $status = is_wp_error($res) ? 'error' : (string) wp_remote_retrieve_response_code($res);
+        $status = is_wp_error($res) ? 0 : (int) wp_remote_retrieve_response_code($res);
+        $body   = is_wp_error($res) ? $res->get_error_message() : wp_remote_retrieve_body($res);
+
+        self::insert_log((int) $webhook->id, $status ? (string) $status : null, $body);
 
         global $wpdb;
         $table = $wpdb->prefix . 'ap_webhooks';
         $wpdb->update($table, [
-            'last_status' => $status,
+            'last_status' => $status ? (string) $status : 'error',
             'last_sent'   => current_time('mysql'),
         ], ['id' => $webhook->id]);
+    }
+
+    private static function insert_log(int $subscription_id, ?string $status_code, ?string $response_body): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_webhook_logs';
+        $wpdb->insert($table, [
+            'subscription_id' => $subscription_id,
+            'status_code'     => $status_code,
+            'response_body'   => $response_body,
+            'timestamp'       => current_time('mysql'),
+        ]);
     }
 }
