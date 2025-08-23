@@ -11,6 +11,7 @@ require_once __DIR__ . '/includes/db-schema.php';
 require_once __DIR__ . '/includes/avatar-https-fix.php';
 require_once __DIR__ . '/includes/rest-dedupe.php';
 require_once __DIR__ . '/includes/install.php';
+require_once __DIR__ . '/includes/migrations/2025_08_23_unify_webhook_logs.php';
 require_once __DIR__ . '/ap-placeholder-bootstrap.php';
 require_once __DIR__ . '/includes/reset-user-dashboard-meta.php';
 require_once __DIR__ . '/includes/dashboard-debug-inspector.php';
@@ -105,6 +106,7 @@ register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
 
 // Create webhook log table on activation
 register_activation_hook(ARTPULSE_PLUGIN_FILE, 'artpulse_create_webhook_logs_table');
+add_action('artpulse_upgrade', 'ap_unify_webhook_logs_migration', 10, 2);
 
 // Setup monetization tables on activation
 register_activation_hook(ARTPULSE_PLUGIN_FILE, 'ArtPulse\\DB\\create_monetization_tables');
