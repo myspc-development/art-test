@@ -2,8 +2,29 @@
 <phpunit colors="true" bootstrap="tests/bootstrap.php">
   <testsuites>
     <testsuite name="Plugin">
+      <directory>tests/AI</directory>
+      <directory>tests/Admin</directory>
+      <directory>tests/Ajax</directory>
+      <directory>tests/Blocks</directory>
+      <directory>tests/Cli</directory>
+      <directory>tests/Community</directory>
+      <directory>tests/Core</directory>
+      <directory>tests/Crm</directory>
+      <directory>tests/Engagement</directory>
+      <directory>tests/Frontend</directory>
+      <directory>tests/Integration</directory>
+      <directory>tests/Monetization</directory>
+      <directory>tests/Payment</directory>
+      <directory>tests/Personalization</directory>
+      <directory>tests/Reporting</directory>
       <directory>tests/Rest</directory>
+      <directory>tests/Search</directory>
+      <directory>tests/Smoke</directory>
+      <directory>tests/Support</directory>
+      <directory>tests/Unit</directory>
+      <directory>tests/phpunit</directory>
       <directory>tests/smoke</directory>
+      <directory>tests/widgets</directory>
     </testsuite>
   </testsuites>
   <php>
