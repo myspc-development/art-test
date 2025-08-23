@@ -71,18 +71,7 @@ class WebhookManager
         $log_table = $wpdb->prefix . 'ap_webhook_logs';
         $exists_log = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $log_table));
         if ($exists_log !== $log_table) {
-            $charset = $wpdb->get_charset_collate();
-            $sql2 = "CREATE TABLE $log_table (
-                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-                subscription_id BIGINT NOT NULL,
-                status_code VARCHAR(20) DEFAULT NULL,
-                response_body TEXT NULL,
-                timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (id),
-                KEY sub_id (subscription_id)
-            ) $charset;";
-            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-            dbDelta($sql2);
+            artpulse_create_webhook_logs_table();
         }
     }
 

@@ -21,18 +21,24 @@ function ap_unify_webhook_logs_migration(?string $old_version = null, ?string $n
     $names = wp_list_pluck($columns, 'Field');
 
     if (in_array('status', $names, true) && !in_array('status_code', $names, true)) {
-        $wpdb->query("ALTER TABLE $table CHANGE status status_code VARCHAR(20) NULL");
+        $wpdb->query("ALTER TABLE $table ADD status_code VARCHAR(20) NULL");
+        $wpdb->query("UPDATE $table SET status_code = status");
+        $wpdb->query("ALTER TABLE $table DROP COLUMN status");
     }
     if (in_array('response', $names, true) && !in_array('response_body', $names, true)) {
-        $wpdb->query("ALTER TABLE $table CHANGE response response_body TEXT NULL");
+        $wpdb->query("ALTER TABLE $table ADD response_body TEXT NULL");
+        $wpdb->query("UPDATE $table SET response_body = response");
+        $wpdb->query("ALTER TABLE $table DROP COLUMN response");
     }
     if (in_array('created_at', $names, true) && !in_array('timestamp', $names, true)) {
-        $wpdb->query("ALTER TABLE $table CHANGE created_at timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP");
+        $wpdb->query("ALTER TABLE $table ADD timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP");
+        $wpdb->query("UPDATE $table SET timestamp = created_at");
+        $wpdb->query("ALTER TABLE $table DROP COLUMN created_at");
     }
     if (!in_array('subscription_id', $names, true)) {
         $wpdb->query("ALTER TABLE $table ADD subscription_id BIGINT NOT NULL DEFAULT 0");
-        $wpdb->query("ALTER TABLE $table MODIFY subscription_id BIGINT NOT NULL");
     }
+    $wpdb->query("ALTER TABLE $table MODIFY subscription_id BIGINT NOT NULL");
     if (in_array('event', $names, true)) {
         $wpdb->query("ALTER TABLE $table DROP COLUMN event");
     }
