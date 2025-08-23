@@ -83,4 +83,104 @@ class ActivatorDeactivatorTest extends TestCase
         ArtPulse_Deactivator::deactivate();
         $this->addToAssertionCount(1);
     }
+
+    public function test_activation_callbacks_initialize_options_tables_and_capabilities(): void
+    {
+        // Capture activation and plugins_loaded callbacks.
+        $activationCallbacks = [];
+        Functions\when('register_activation_hook')->alias(
+            function ($file, $callback) use (&$activationCallbacks) {
+                $activationCallbacks[] = $callback;
+            }
+        );
+
+        $pluginLoadedCallbacks = [];
+        Functions\when('add_action')->alias(
+            function ($hook, $callback, $priority = null) use (&$pluginLoadedCallbacks) {
+                if ($hook === 'plugins_loaded') {
+                    $pluginLoadedCallbacks[] = $callback;
+                }
+                return true;
+            }
+        );
+
+        // Simulate WordPress option storage.
+        $options = [];
+        Functions\when('get_option')->alias(
+            function ($name, $default = false) use (&$options) {
+                return $options[$name] ?? $default;
+            }
+        );
+        Functions\when('update_option')->alias(
+            function ($name, $value) use (&$options) {
+                $options[$name] = $value;
+                return true;
+            }
+        );
+        Functions\when('delete_option')->alias(
+            function ($name) use (&$options) {
+                unset($options[$name]);
+                return true;
+            }
+        );
+
+        // Default settings used during activation.
+        $defaults = ['theme' => 'default'];
+        Functions\when('artpulse_get_default_settings')->justReturn($defaults);
+
+        // Minimal stubs for plugin helpers.
+        Functions\when('plugin_dir_path')->alias(fn($file) => dirname($file) . '/');
+        Functions\when('plugin_basename')->alias(fn($file) => basename($file));
+        Functions\when('plugins_url')->justReturn('');
+        Functions\when('current_time')->justReturn('now');
+
+        // Prepare role object and related stubs.
+        $role = new class {
+            public array $caps = [];
+            public function add_cap($cap) { $this->caps[$cap] = true; }
+            public function has_cap($cap) { return !empty($this->caps[$cap]); }
+        };
+        Functions\when('get_role')->alias(fn($name) => $name === 'member' ? $role : null);
+        Functions\when('get_users')->justReturn([]);
+
+        if (!defined('ARTPULSE_PLUGIN_FILE')) {
+            define('ARTPULSE_PLUGIN_FILE', dirname(__DIR__) . '/artpulse.php');
+        }
+        if (!defined('ARTPULSE_PLUGIN_DIR')) {
+            define('ARTPULSE_PLUGIN_DIR', dirname(__DIR__) . '/');
+        }
+
+        require dirname(__DIR__) . '/artpulse.php';
+
+        // Stub monetization table creation after definitions loaded.
+        $tablesCreated = false;
+        Functions\when('ArtPulse\\DB\\create_monetization_tables')->alias(
+            function () use (&$tablesCreated) {
+                $tablesCreated = true;
+            }
+        );
+        Functions\when('artpulse_create_webhook_logs_table')->alias(fn() => null);
+
+        // Execute activation callbacks.
+        foreach ($activationCallbacks as $cb) {
+            if (is_callable($cb)) {
+                $cb();
+            } elseif (is_string($cb) && function_exists($cb)) {
+                $cb();
+            }
+        }
+
+        // Execute the plugins_loaded callback to assign capabilities.
+        foreach ($pluginLoadedCallbacks as $cb) {
+            $cb();
+        }
+
+        $this->assertSame($defaults, $options['artpulse_settings'] ?? null);
+        $this->assertTrue($tablesCreated, 'Monetization tables should be created.');
+        $this->assertTrue($role->has_cap('view_artpulse_dashboard'));
+
+        // Cleanup
+        delete_option('artpulse_settings');
+        delete_option('ap_caps_v2_applied');
+    }
 }
