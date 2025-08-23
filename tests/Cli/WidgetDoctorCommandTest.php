@@ -1,75 +1,7 @@
 <?php
-namespace {
-    class WP_CLI {
-        public static array $commands = [];
-        public static string $last_output = '';
-
-        public static function add_command( string $name, $callable ): void {
-            self::$commands[ $name ] = $callable;
-        }
-
-        public static function runcommand( string $command ): string {
-            $parts       = preg_split( '/\s+/', trim( $command ) );
-            $cmd_tokens  = [];
-            $assoc       = [];
-            foreach ( $parts as $p ) {
-                if ( str_starts_with( $p, '--' ) ) {
-                    $p = substr( $p, 2 );
-                    $kv = explode( '=', $p, 2 );
-                    $assoc[ $kv[0] ] = $kv[1] ?? true;
-                } else {
-                    $cmd_tokens[] = $p;
-                }
-            }
-            $root = $cmd_tokens[0] . ' ' . ($cmd_tokens[1] ?? '');
-            $sub  = $cmd_tokens[2] ?? '';
-            $handler = self::$commands[ $root ] ?? null;
-            if ( is_string( $handler ) ) {
-                $obj = new $handler();
-            } elseif ( is_object( $handler ) ) {
-                $obj = $handler;
-            } else {
-                throw new \RuntimeException( 'Command not registered.' );
-            }
-            $method = $sub;
-            if ( ! method_exists( $obj, $method ) && method_exists( $obj, $sub . '_' ) ) {
-                $method = $sub . '_';
-            }
-            ob_start();
-            try {
-                $obj->$method( [], $assoc );
-            } catch ( \RuntimeException $e ) {
-                self::$last_output = ob_get_clean();
-                throw $e;
-            }
-            self::$last_output = ob_get_clean();
-            return self::$last_output;
-        }
-
-        public static function success( string $msg ): void {
-            echo $msg . "\n";
-        }
-
-        public static function error( string $msg ): void {
-            throw new \RuntimeException( $msg );
-        }
-    }
-}
-
-namespace WP_CLI\Utils {
-    function format_items( $type, $items, $fields ): void {
-        echo implode( "\t", $fields ) . "\n";
-        foreach ( $items as $row ) {
-            $out = [];
-            foreach ( $fields as $f ) {
-                $out[] = $row[ $f ] ?? '';
-            }
-            echo implode( "\t", $out ) . "\n";
-        }
-    }
-}
 
 namespace {
+    require_once __DIR__ . '/WP_CLI_Stub.php';
     $GLOBALS['hidden_widgets'] = [];
     $GLOBALS['options']        = [];
 
