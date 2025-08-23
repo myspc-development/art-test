@@ -9,7 +9,17 @@ final class Auth {
      * Permission callback for public endpoints.
      */
     public static function allow_public(): callable {
-        return '__return_true';
+        return static function ($request = null) {
+            $ip    = $_SERVER['REMOTE_ADDR'] ?? '';
+            $route = $request instanceof \WP_REST_Request ? $request->get_route() : '';
+            $key   = 'ap_rl_' . md5($ip . '|' . $route);
+            $count = (int) get_transient($key);
+            if ($count >= 30) {
+                return new \WP_Error('rest_rate_limited', 'Too many requests', ['status' => 429]);
+            }
+            set_transient($key, $count + 1, MINUTE_IN_SECONDS);
+            return true;
+        };
     }
 
     /**
