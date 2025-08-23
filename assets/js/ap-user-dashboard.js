@@ -17,6 +17,10 @@ const tabModules = {
   analytics: () => import('./ap-analytics.js'),
 };
 
+export function getRoutes() {
+  return tabModules;
+}
+
 const labels = {
   overview: __('Overview'),
   calendar: __('Calendar'),
@@ -92,26 +96,17 @@ async function loadTab(tab) {
 }
 
 function onHashChange() {
-  const hash = window.location.hash.replace('#', '') || localStorage.getItem('ap-last-tab') || allowedTabs()[0];
+  const hash =
+    window.location.hash.replace('#', '') ||
+    localStorage.getItem('ap-last-tab') ||
+    allowedTabs()[0];
   if (!allowedTabs().includes(hash)) {
     Toast.show({ type: 'warning', message: __('Unknown panel') });
-    window.location.hash = allowedTabs()[0];
+    window.location.hash = '#overview';
     return;
   }
   if (hash !== currentTab) {
     loadTab(hash);
-  }
-}
-
-function prefetch(tabs) {
-  if (window.requestIdleCallback) {
-    requestIdleCallback(() => {
-      tabs.forEach((t) => {
-        if (tabModules[t]) {
-          tabModules[t]().catch(() => {});
-        }
-      });
-    });
   }
 }
 
@@ -125,7 +120,6 @@ function updateSelection() {
 document.addEventListener('DOMContentLoaded', () => {
   const tabs = allowedTabs();
   renderNav(tabs);
-  prefetch(tabs.slice(1));
   window.addEventListener('hashchange', onHashChange);
   onHashChange();
 });
