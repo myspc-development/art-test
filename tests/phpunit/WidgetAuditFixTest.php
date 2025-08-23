@@ -28,6 +28,9 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Cli\WidgetAudit;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
+use ArtPulse\Widgets\TestWidget;
+
+require_once __DIR__ . '/fixtures/TestWidget.php';
 
 class WidgetAuditFixTest extends TestCase
 {
@@ -50,7 +53,6 @@ class WidgetAuditFixTest extends TestCase
         update_option('artpulse_widget_flags', ['widget_test' => ['status' => 'inactive']]);
 
         DashboardWidgetRegistry::register('widget_test', 'Test', '', '', [ApPlaceholderWidget::class, 'render']);
-        eval('namespace ArtPulse\\Widgets; class TestWidget { public static function render(int $user_id = 0): string { return "x"; } }');
 
         $cmd = new WidgetAudit();
         $cmd->fix([], ['role' => 'member', 'unhide' => true, 'activate-all' => true]);
@@ -60,7 +62,7 @@ class WidgetAuditFixTest extends TestCase
         $flags = get_option('artpulse_widget_flags');
         $this->assertSame('active', $flags['widget_test']['status']);
         $def = DashboardWidgetRegistry::get('widget_test');
-        $this->assertSame('ArtPulse\\Widgets\\TestWidget', $def['class']);
+        $this->assertSame(TestWidget::class, $def['class']);
     }
 }
 
