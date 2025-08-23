@@ -36,7 +36,7 @@ class MetaFullTextSearch {
             return $search;
         }
 
-        $like = '%' . $wpdb->esc_like($search_term) . '%';
+        $like = ap_db_like($search_term);
 
         $meta_search_sql = [];
         foreach ($meta_keys as $key) {

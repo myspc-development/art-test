@@ -1,6 +1,14 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Escape a term for use within a SQL LIKE clause.
+ */
+function ap_db_like(string $term): string {
+    global $wpdb;
+    return '%' . $wpdb->esc_like($term) . '%';
+}
+
 function ap_get_ui_mode(): string {
     if (isset($_GET['ui_mode'])) {
         return sanitize_text_field($_GET['ui_mode']);

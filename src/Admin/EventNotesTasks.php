@@ -123,7 +123,8 @@ class EventNotesTasks
     private static function get_notes(int $event_id): array
     {
         global $wpdb;
-        $table = $wpdb->prefix.'ap_event_notes';
+        $event_id = absint($event_id);
+        $table    = $wpdb->prefix.'ap_event_notes';
         // Ensure the notes table exists to avoid errors on new installs.
         if (!self::table_exists($table)) {
             self::maybe_install_tables();
@@ -131,13 +132,17 @@ class EventNotesTasks
                 return [];
             }
         }
-        return $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE event_id=%d ORDER BY created_at DESC", $event_id), ARRAY_A) ?: [];
+        return $wpdb->get_results(
+            $wpdb->prepare('SELECT id, event_id, user_id, note, created_at, updated_at FROM %i WHERE event_id=%d ORDER BY created_at DESC', $table, $event_id),
+            ARRAY_A
+        ) ?: [];
     }
 
     private static function get_tasks(int $event_id): array
     {
         global $wpdb;
-        $table = $wpdb->prefix.'ap_event_tasks';
+        $event_id = absint($event_id);
+        $table    = $wpdb->prefix.'ap_event_tasks';
         // Ensure the tasks table exists to avoid errors on new installs.
         if (!self::table_exists($table)) {
             self::maybe_install_tables();
@@ -145,13 +150,18 @@ class EventNotesTasks
                 return [];
             }
         }
-        return $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE event_id=%d ORDER BY created_at DESC", $event_id), ARRAY_A) ?: [];
+        return $wpdb->get_results(
+            $wpdb->prepare('SELECT id, event_id, title, description, assignee, due_date, status, created_at, updated_at FROM %i WHERE event_id=%d ORDER BY created_at DESC', $table, $event_id),
+            ARRAY_A
+        ) ?: [];
     }
 
     private static function add_note(int $event_id, int $user_id, string $note): void
     {
         global $wpdb;
-        $table = $wpdb->prefix.'ap_event_notes';
+        $event_id = absint($event_id);
+        $user_id  = absint($user_id);
+        $table    = $wpdb->prefix.'ap_event_notes';
         // Skip if the table is missing to prevent insert errors on fresh installs.
         if (!self::table_exists($table)) {
             self::maybe_install_tables();
@@ -161,7 +171,7 @@ class EventNotesTasks
         }
         $wpdb->insert($table, [
             'event_id' => $event_id,
-            'user_id' => $user_id,
+            'user_id'  => $user_id,
             'note' => $note,
             'created_at' => current_time('mysql')
         ]);
@@ -170,7 +180,9 @@ class EventNotesTasks
     private static function add_task(int $event_id, string $title, int $assignee, string $due): void
     {
         global $wpdb;
-        $table = $wpdb->prefix.'ap_event_tasks';
+        $event_id = absint($event_id);
+        $assignee = absint($assignee);
+        $table    = $wpdb->prefix.'ap_event_tasks';
         // Skip if the table is missing to prevent insert errors on fresh installs.
         if (!self::table_exists($table)) {
             self::maybe_install_tables();
@@ -180,7 +192,7 @@ class EventNotesTasks
         }
         $wpdb->insert($table, [
             'event_id' => $event_id,
-            'title' => $title,
+            'title'    => $title,
             'assignee' => $assignee ?: null,
             'due_date' => $due ?: null,
             'status' => 'open',
@@ -191,7 +203,8 @@ class EventNotesTasks
     public static function get_open_count(int $event_id): int
     {
         global $wpdb;
-        $table = $wpdb->prefix.'ap_event_tasks';
+        $event_id = absint($event_id);
+        $table    = $wpdb->prefix.'ap_event_tasks';
         // Avoid SELECT errors if tables have not been created yet.
         if (!self::table_exists($table)) {
             self::maybe_install_tables();
@@ -199,7 +212,9 @@ class EventNotesTasks
                 return 0;
             }
         }
-        return (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE event_id=%d AND status='open'", $event_id));
+        return (int) $wpdb->get_var(
+            $wpdb->prepare('SELECT COUNT(*) FROM %i WHERE event_id=%d AND status=%s', $table, $event_id, 'open')
+        );
     }
 
     public static function register_rest(): void

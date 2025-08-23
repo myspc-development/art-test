@@ -6,21 +6,36 @@ class ContactModel
     public static function get_all(int $org_id, string $tag = ''): array
     {
         global $wpdb;
+        $org_id = absint($org_id);
         $table = $wpdb->prefix . 'ap_crm_contacts';
-        $where = $wpdb->prepare('org_id = %d', $org_id);
         if ($tag !== '') {
-            $like = '%' . $wpdb->esc_like($tag) . '%';
-            $where .= $wpdb->prepare(' AND tags LIKE %s', $like);
+            return $wpdb->get_results(
+                $wpdb->prepare(
+                    'SELECT id, org_id, user_id, email, name, tags, first_seen, last_active FROM %i WHERE org_id = %d AND tags LIKE %s ORDER BY last_active DESC',
+                    $table,
+                    $org_id,
+                    ap_db_like($tag)
+                ),
+                ARRAY_A
+            );
         }
-        return $wpdb->get_results("SELECT * FROM $table WHERE $where ORDER BY last_active DESC", ARRAY_A);
+        return $wpdb->get_results(
+            $wpdb->prepare(
+                'SELECT id, org_id, user_id, email, name, tags, first_seen, last_active FROM %i WHERE org_id = %d ORDER BY last_active DESC',
+                $table,
+                $org_id
+            ),
+            ARRAY_A
+        );
     }
 
     public static function add_or_update(int $org_id, string $email, string $name = '', array $tags = []): void
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'ap_crm_contacts';
-        $row = $wpdb->get_row(
-            $wpdb->prepare("SELECT id, name, tags FROM $table WHERE org_id = %d AND email = %s", $org_id, $email)
+        $org_id = absint($org_id);
+        $table  = $wpdb->prefix . 'ap_crm_contacts';
+        $row    = $wpdb->get_row(
+            $wpdb->prepare('SELECT id, name, tags FROM %i WHERE org_id = %d AND email = %s', $table, $org_id, $email)
         );
         $now = current_time('mysql');
         if ($row) {

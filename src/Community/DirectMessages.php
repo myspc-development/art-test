@@ -395,14 +395,16 @@ class DirectMessages
 
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
-        $sql = "SELECT * FROM $table WHERE created_at > %s AND (sender_id = %d OR recipient_id = %d)";
-        $args = [$since, $user_id, $user_id];
+        $columns = 'id, sender_id, recipient_id, content, context_type, context_id, parent_id, attachments, tags, created_at, is_read, is_delivered';
+        $sql = "SELECT $columns FROM %i WHERE created_at > %s AND (sender_id = %d OR recipient_id = %d)";
+        $args = [$table, $since, $user_id, $user_id];
         if ($context_id) {
-            $sql .= " AND context_id = %d";
+            $sql .= ' AND context_id = %d';
             $args[] = $context_id;
         }
-        $sql .= " ORDER BY created_at ASC";
-        $rows = $wpdb->get_results($wpdb->prepare($sql, ...$args), ARRAY_A);
+        $sql  .= ' ORDER BY created_at ASC';
+        $sql   = $wpdb->prepare($sql, ...$args);
+        $rows  = $wpdb->get_results($sql, ARRAY_A);
         $messages = array_map(static function($row){
             $row['id'] = (int) $row['id'];
             $row['sender_id'] = (int) $row['sender_id'];
@@ -463,7 +465,8 @@ class DirectMessages
     {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
-        $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE id = %d", $id), ARRAY_A);
+        $sql   = $wpdb->prepare('SELECT id, sender_id, recipient_id, content, context_type, context_id, parent_id, attachments, tags, created_at, is_read, is_delivered FROM %i WHERE id = %d', $table, $id);
+        $row   = $wpdb->get_row($sql, ARRAY_A);
         if (!$row) {
             return [];
         }
@@ -486,8 +489,16 @@ class DirectMessages
     {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
-        $sql = "SELECT * FROM $table WHERE (sender_id = %d AND recipient_id = %d) OR (sender_id = %d AND recipient_id = %d) ORDER BY created_at ASC";
-        $rows = $wpdb->get_results($wpdb->prepare($sql, $user_id, $other_user, $other_user, $user_id), ARRAY_A);
+        $columns = 'id, sender_id, recipient_id, content, context_type, context_id, parent_id, attachments, tags, created_at, is_read, is_delivered';
+        $sql  = $wpdb->prepare(
+            "SELECT $columns FROM %i WHERE (sender_id = %d AND recipient_id = %d) OR (sender_id = %d AND recipient_id = %d) ORDER BY created_at ASC",
+            $table,
+            $user_id,
+            $other_user,
+            $other_user,
+            $user_id
+        );
+        $rows = $wpdb->get_results($sql, ARRAY_A);
         return array_map(static function($row){
             $row['id'] = (int) $row['id'];
             $row['sender_id'] = (int) $row['sender_id'];
@@ -509,8 +520,16 @@ class DirectMessages
     {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
-        $sql = "SELECT * FROM $table WHERE context_type = %s AND context_id = %d AND (sender_id = %d OR recipient_id = %d) ORDER BY created_at ASC";
-        $rows = $wpdb->get_results($wpdb->prepare($sql, $context_type, $context_id, $user_id, $user_id), ARRAY_A);
+        $columns = 'id, sender_id, recipient_id, content, context_type, context_id, parent_id, attachments, tags, created_at, is_read, is_delivered';
+        $sql  = $wpdb->prepare(
+            "SELECT $columns FROM %i WHERE context_type = %s AND context_id = %d AND (sender_id = %d OR recipient_id = %d) ORDER BY created_at ASC",
+            $table,
+            $context_type,
+            $context_id,
+            $user_id,
+            $user_id
+        );
+        $rows = $wpdb->get_results($sql, ARRAY_A);
         return array_map(static function($row){
             $row['id'] = (int) $row['id'];
             $row['sender_id'] = (int) $row['sender_id'];
@@ -532,12 +551,19 @@ class DirectMessages
     {
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
-        $sql = "SELECT CASE WHEN sender_id = %d THEN recipient_id ELSE sender_id END AS other_id,
+        $sql  = $wpdb->prepare(
+            "SELECT CASE WHEN sender_id = %d THEN recipient_id ELSE sender_id END AS other_id,
                        SUM(CASE WHEN recipient_id = %d AND is_read = 0 THEN 1 ELSE 0 END) AS unread
-                FROM $table
+                FROM %i
                 WHERE sender_id = %d OR recipient_id = %d
-                GROUP BY other_id";
-        $rows = $wpdb->get_results($wpdb->prepare($sql, $user_id, $user_id, $user_id, $user_id), ARRAY_A);
+                GROUP BY other_id",
+            $user_id,
+            $user_id,
+            $table,
+            $user_id,
+            $user_id
+        );
+        $rows = $wpdb->get_results($sql, ARRAY_A);
         return array_map(static function($row) {
             $other_id = (int) $row['other_id'];
             $user     = get_user_by('id', $other_id);
@@ -632,11 +658,13 @@ class DirectMessages
             return;
         }
         global $wpdb;
-        $table = $wpdb->prefix . 'ap_messages';
-        $place = implode(',', array_fill(0, count($ids), '%d'));
-        $args  = array_merge($ids, [$user_id]);
-        $sql   = "UPDATE $table SET is_read = 1 WHERE id IN ($place) AND recipient_id = %d";
-        $wpdb->query($wpdb->prepare($sql, ...$args));
+        $ids     = array_map('absint', $ids);
+        $user_id = absint($user_id);
+        $table   = $wpdb->prefix . 'ap_messages';
+        $place   = implode(',', array_fill(0, count($ids), '%d'));
+        $args    = array_merge([$table], $ids, [$user_id]);
+        $sql     = $wpdb->prepare("UPDATE %i SET is_read = 1 WHERE id IN ($place) AND recipient_id = %d", ...$args);
+        $wpdb->query($sql);
     }
 
     public static function mark_unread_ids(array $ids, int $user_id): void
@@ -645,23 +673,33 @@ class DirectMessages
             return;
         }
         global $wpdb;
-        $table = $wpdb->prefix . 'ap_messages';
-        $place = implode(',', array_fill(0, count($ids), '%d'));
-        $args  = array_merge($ids, [$user_id]);
-        $sql   = "UPDATE $table SET is_read = 0 WHERE id IN ($place) AND recipient_id = %d";
-        $wpdb->query($wpdb->prepare($sql, ...$args));
+        $ids     = array_map('absint', $ids);
+        $user_id = absint($user_id);
+        $table   = $wpdb->prefix . 'ap_messages';
+        $place   = implode(',', array_fill(0, count($ids), '%d'));
+        $args    = array_merge([$table], $ids, [$user_id]);
+        $sql     = $wpdb->prepare("UPDATE %i SET is_read = 0 WHERE id IN ($place) AND recipient_id = %d", ...$args);
+        $wpdb->query($sql);
     }
 
     public static function search(WP_REST_Request $req): WP_REST_Response
     {
-        $user_id = get_current_user_id();
+        $user_id = absint(get_current_user_id());
         $term    = sanitize_text_field($req->get_param('q'));
 
         global $wpdb;
-        $table = $wpdb->prefix . 'ap_messages';
-        $like  = '%' . $wpdb->esc_like($term) . '%';
-        $sql = "SELECT * FROM (SELECT *, CASE WHEN sender_id = %d THEN recipient_id ELSE sender_id END AS other_id FROM $table WHERE (sender_id = %d OR recipient_id = %d) AND content LIKE %s ORDER BY created_at DESC) t GROUP BY other_id";
-        $rows = $wpdb->get_results($wpdb->prepare($sql, $user_id, $user_id, $user_id, $like), ARRAY_A);
+        $table   = $wpdb->prefix . 'ap_messages';
+        $like    = ap_db_like($term);
+        $columns = 'id, sender_id, recipient_id, content, context_type, context_id, parent_id, attachments, tags, created_at, is_read, is_delivered';
+        $sql     = $wpdb->prepare(
+            "SELECT $columns, other_id FROM (SELECT $columns, CASE WHEN sender_id = %d THEN recipient_id ELSE sender_id END AS other_id FROM %i WHERE (sender_id = %d OR recipient_id = %d) AND content LIKE %s ORDER BY created_at DESC) t GROUP BY other_id",
+            $user_id,
+            $table,
+            $user_id,
+            $user_id,
+            $like
+        );
+        $rows    = $wpdb->get_results($sql, ARRAY_A);
         $messages = array_map(static function($row){
             $row['id'] = (int) $row['id'];
             $row['sender_id'] = (int) $row['sender_id'];
@@ -722,7 +760,8 @@ class DirectMessages
 
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
-        $row   = $wpdb->get_row($wpdb->prepare("SELECT tags FROM $table WHERE id = %d AND (sender_id = %d OR recipient_id = %d)", $id, get_current_user_id(), get_current_user_id()), ARRAY_A);
+        $sql   = $wpdb->prepare('SELECT tags FROM %i WHERE id = %d AND (sender_id = %d OR recipient_id = %d)', $table, $id, get_current_user_id(), get_current_user_id());
+        $row   = $wpdb->get_row($sql, ARRAY_A);
         if (!$row) {
             return new WP_Error('not_found', 'Message not found', ['status' => 404]);
         }
@@ -757,7 +796,8 @@ class DirectMessages
         $thread_id = $msg['parent_id'] ? $msg['parent_id'] : $msg['id'];
         global $wpdb;
         $table = $wpdb->prefix . 'ap_messages';
-        $rows = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE id = %d OR parent_id = %d ORDER BY created_at ASC", $thread_id, $thread_id), ARRAY_A);
+        $sql  = $wpdb->prepare('SELECT id, sender_id, recipient_id, content, context_type, context_id, parent_id, attachments, tags, created_at, is_read, is_delivered FROM %i WHERE id = %d OR parent_id = %d ORDER BY created_at ASC', $table, $thread_id, $thread_id);
+        $rows = $wpdb->get_results($sql, ARRAY_A);
         $messages = array_map([self::class, 'get_message'], wp_list_pluck($rows, 'id'));
         return rest_ensure_response($messages);
         } catch (\Throwable $e) {
