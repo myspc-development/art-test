@@ -37,7 +37,6 @@ function setupDom() {
   (global as any).localStorage = dom.window.localStorage as any;
   (global as any).navigator = dom.window.navigator as any;
   (global as any).Event = dom.window.Event as any;
-  (global as any).requestIdleCallback = (cb: any) => cb();
 }
 
 function flush() {
@@ -66,18 +65,42 @@ describe('dashboard router', () => {
 
   it.each(routes)('loads route #%s', async ({ route, roles }) => {
     (global as any).ARTPULSE_BOOT = { currentUser: { roles } };
-    window.location.hash = '#' + route;
+    window.location.hash = '#overview';
     await jest.isolateModulesAsync(async () => {
       await import('../assets/js/ap-user-dashboard.js');
       document.dispatchEvent(new Event('DOMContentLoaded'));
     });
     await flush();
+    // Ensure no modules loaded on initial render
+    Object.values(moduleMap).forEach(m => expect(m).not.toHaveBeenCalled());
+
+    window.location.hash = '#' + route;
+    window.dispatchEvent(new Event('hashchange'));
+    await flush();
 
     if (moduleMap[route]) {
-      expect(moduleMap[route]).toHaveBeenCalled();
+      expect(moduleMap[route]).toHaveBeenCalledTimes(1);
     } else {
       Object.values(moduleMap).forEach(m => expect(m).not.toHaveBeenCalled());
     }
+
+    // calling the same hash again shouldn't reload
+    window.dispatchEvent(new Event('hashchange'));
+    await flush();
+    if (moduleMap[route]) {
+      expect(moduleMap[route]).toHaveBeenCalledTimes(1);
+    }
+  });
+
+  test('exposes route map via getRoutes', async () => {
+    (global as any).ARTPULSE_BOOT = { currentUser: { roles: [] as string[] } };
+    const mod = await jest.isolateModulesAsync(async () => {
+      return import('../assets/js/ap-user-dashboard.js');
+    });
+    const routesMap = mod.getRoutes();
+    expect(Object.keys(routesMap)).toEqual(
+      expect.arrayContaining(Object.keys(moduleMap))
+    );
   });
 
   test('falls back to overview on unknown hash', async () => {
