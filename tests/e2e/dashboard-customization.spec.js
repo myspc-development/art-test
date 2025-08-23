@@ -1,7 +1,17 @@
 const { test, expect } = require('@playwright/test');
+const { execSync } = require('child_process');
 
 const baseUrl = process.env.BASE_URL || 'http://localhost:8000';
 const username = process.env.WP_USER || 'admin';
+test.beforeEach(() => {
+    execSync('docker compose -f docker-compose.yml.example down -v', { stdio: 'inherit' });
+    execSync('docker compose -f docker-compose.yml.example up -d --wait', { stdio: 'inherit' });
+});
+
+test.afterAll(() => {
+    execSync('docker compose -f docker-compose.yml.example down -v', { stdio: 'inherit' });
+});
+
 const password = process.env.WP_PASS || 'password';
 
 test('user can customize dashboard layout and widgets', async ({ page }) => {
