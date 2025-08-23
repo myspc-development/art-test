@@ -10,4 +10,5 @@ require_once __DIR__ . '/TestHelpers/FrontendFunctionStubs.php';
 require_once __DIR__ . '/TestHelpers.php';
 
 require_once __DIR__ . '/../vendor/wp-phpunit/wp-phpunit/includes/bootstrap.php';
+require_once __DIR__ . '/../includes/helpers.php';
 

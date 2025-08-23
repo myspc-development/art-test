@@ -72,10 +72,16 @@ class Activator
 
         foreach ($tables as $table => $index_name) {
             $exists = $wpdb->get_var(
-                $wpdb->prepare("SHOW INDEX FROM {$table} WHERE Key_name = %s", $index_name)
+                $wpdb->prepare('SHOW INDEX FROM %i WHERE Key_name = %s', $table, $index_name)
             );
             if (!$exists) {
-                $wpdb->query("CREATE INDEX {$index_name} ON {$table} (meta_key(191), meta_value(191))");
+                $wpdb->query(
+                    $wpdb->prepare(
+                        'CREATE INDEX %i ON %i (meta_key(191), meta_value(191))',
+                        $index_name,
+                        $table
+                    )
+                );
             }
         }
     }
@@ -91,7 +97,13 @@ class Activator
             $wpdb->prepare("SHOW INDEX FROM {$wpdb->postmeta} WHERE Key_name = %s", $index)
         );
         if (!$exists) {
-            $wpdb->query("CREATE INDEX {$index} ON {$wpdb->postmeta} (meta_key(50), meta_value(10))");
+            $wpdb->query(
+                $wpdb->prepare(
+                    'CREATE INDEX %i ON %i (meta_key(50), meta_value(10))',
+                    $index,
+                    $wpdb->postmeta
+                )
+            );
         }
     }
 }

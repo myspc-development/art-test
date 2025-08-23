@@ -27,7 +27,11 @@ class ContactModelTest extends TestCase
         $this->wpdb = new class {
             public string $prefix = 'wp_';
             public array $rows = [];
+            public array $prepared = [];
+            public string $last_query = '';
+            public function esc_like($text) { return $text; }
             public function prepare($sql, ...$args) {
+                $this->prepared[] = $sql;
                 foreach ($args as $arg) {
                     $sql = preg_replace('/%[ds]/', is_numeric($arg)?$arg:"'$arg'", $sql, 1);
                 }
@@ -45,6 +49,7 @@ class ContactModelTest extends TestCase
             }
             public function insert($table,$data){ $data['id']=count($this->rows)+1; $this->rows[]=$data; }
             public function update($table,$data,$where){ foreach($this->rows as &$row){ if($row['id']==$where['id']){ $row=array_merge($row,$data); } } }
+            public function get_results($sql,$format=ARRAY_A){ $this->last_query=$sql; return []; }
         };
         global $wpdb;
         $wpdb = $this->wpdb;
@@ -74,5 +79,18 @@ class ContactModelTest extends TestCase
         $tags = json_decode($row['tags'], true);
         sort($tags);
         $this->assertSame(['rsvp','supporter'],$tags);
+    }
+
+    public function test_get_all_uses_like_placeholder(): void
+    {
+        ContactModel::get_all(1, 'friend');
+        $found = false;
+        foreach ($this->wpdb->prepared as $q) {
+            if (strpos($q, 'LIKE %s') !== false) {
+                $found = true;
+                break;
+            }
+        }
+        $this->assertTrue($found);
     }
 }

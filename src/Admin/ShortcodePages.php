@@ -49,7 +49,7 @@ class ShortcodePages
         global $wpdb;
         foreach ($map as $shortcode => $title) {
             $tag      = trim($shortcode, '[]');
-            $like     = '%' . $wpdb->esc_like('[' . $tag) . '%';
+            $like     = ap_db_like('[' . $tag);
             $existing = $wpdb->get_col(
                 $wpdb->prepare(
                     "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status != 'trash' AND post_content LIKE %s",
