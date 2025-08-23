@@ -1,0 +1,12 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 7
+    paths:
+        - src
+        - includes
+        - widgets
+    tmpDir: build/phpstan
+    scanFiles:
+        - %currentWorkingDirectory%/stubs/wp-rest-controller.php
