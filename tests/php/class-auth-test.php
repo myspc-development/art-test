@@ -1,15 +1,34 @@
 <?php
 class Auth_Test extends WP_UnitTestCase {
+    protected $login_redirect_cb;
+
+    public function tearDown(): void {
+        if ( $this->login_redirect_cb ) {
+            remove_filter( 'login_redirect', $this->login_redirect_cb, 10 );
+            $this->login_redirect_cb = null;
+        }
+        parent::tearDown();
+    }
+
     public function test_login_redirect_filter() {
-        add_filter( 'login_redirect', function( $redirect_to ) {
+        $this->login_redirect_cb = function( $redirect_to ) {
             return '/dashboard';
-        }, 10 );
+        };
+        add_filter( 'login_redirect', $this->login_redirect_cb, 10 );
 
         $user_id = self::factory()->user->create();
         $user = get_user_by( 'ID', $user_id );
 
         $result = apply_filters( 'login_redirect', '/wp-admin', '', $user );
         $this->assertSame( '/dashboard', $result );
+    }
+
+    public function test_login_redirect_filter_removed() {
+        $user_id = self::factory()->user->create();
+        $user = get_user_by( 'ID', $user_id );
+
+        $result = apply_filters( 'login_redirect', '/wp-admin', '', $user );
+        $this->assertSame( '/wp-admin', $result );
     }
 
     public function test_require_login_and_cap_unauthenticated_returns_401() {
