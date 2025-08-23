@@ -3,6 +3,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/**
+ * Create or upgrade the webhook logs table to the unified schema.
+ */
 function artpulse_create_webhook_logs_table(): void {
     global $wpdb;
     $table = $wpdb->prefix . 'ap_webhook_logs';
