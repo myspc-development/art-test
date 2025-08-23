@@ -7,6 +7,7 @@
     "jsx": "react",
     "strict": true,
     "esModuleInterop": true,
+    "allowJs": true,
 
     // ✅ Required for tsconfig-paths to work
     "baseUrl": ".",
@@ -18,5 +19,10 @@
 
     "types": ["jest", "@testing-library/jest-dom"]
   },
-  "include": ["assets/js/**/*", "assets/ts/**/*"]
+  "include": [
+    "assets/js/**/*",
+    "assets/ts/**/*",
+    "src/js/**/*",
+    "src/components/**/*"
+  ]
 }

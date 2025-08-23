@@ -15,34 +15,35 @@
     "test:php:local": "npm run test:php:up && composer test:php:local; npm run test:php:down"
   },
   "dependencies": {
-    "emoji-picker-react": "^4.13.2",
-    "jsonwebtoken": "^9.0.2",
-    "lucide-react": "^0.346.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-grid-layout": "^1.3.4",
-    "socket.io": "^4.7.2",
-    "mysql2": "^3.6.5",
-    "php-serialize": "^1.2.2",
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.0",
+    "dompurify": "^3.2.6",
+    "emoji-picker-react": "^4.13.2",
     "framer-motion": "^11.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.346.0",
+    "mysql2": "^3.6.5",
+    "php-serialize": "^1.2.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-grid-layout": "^1.3.4",
     "recharts": "^2.7.2",
-    "dompurify": "^3.2.6"
+    "socket.io": "^4.7.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
     "@types/jest": "^29.5.14",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/testing-library__jest-dom": "^6.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@types/testing-library__jest-dom": "^6.0.0"
+    "vitest": "^3.2.4"
   }
 }
