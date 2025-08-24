@@ -48,6 +48,13 @@ jobs:
         run: npm test
       - name: Install Composer deps
         run: composer install --prefer-dist --no-progress
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h"$WP_DB_HOST" --silent; then echo "MySQL up"; exit 0; fi
+            echo "waiting for MySQL..."; sleep 2
+          done
+          echo "MySQL never became ready"; exit 1
       - name: Install WP test suite
         env:
           WP_DB_HOST: 127.0.0.1:3306
