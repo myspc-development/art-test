@@ -96,6 +96,34 @@ class MigrationWebhookLogsTest extends WP_UnitTestCase
         $this->assertStringContainsString('42', $html);
     }
 
+    public function test_migration_handles_large_response_body(): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_webhook_logs';
+        $wpdb->query("DROP TABLE IF EXISTS {$table}");
+        $wpdb->query("CREATE TABLE {$table} (
+            id bigint unsigned auto_increment primary key,
+            event varchar(191), payload longtext, status varchar(20),
+            response longtext, created_at datetime
+        )");
+        $huge = str_repeat('X', 80 * 1024); // 80KB
+        $wpdb->insert($table, [
+            'event' => 'ping',
+            'payload' => '{}',
+            'status' => '200',
+            'response' => $huge,
+            'created_at' => current_time('mysql'),
+        ]);
+        do_action('artpulse_upgrade');
+        $row = $wpdb->get_row("SELECT response_body FROM {$table} ORDER BY id DESC LIMIT 1");
+        $this->assertNotEmpty($row->response_body);
+        $this->assertTrue(strlen($row->response_body) >= 65535 || strlen($row->response_body) === strlen($huge));
+        ob_start();
+        WebhookLogsPage::render();
+        $html = ob_get_clean();
+        $this->assertMatchesRegularExpression('/(&hellip;|\\.\\.\\.|…)/', $html);
+    }
+
     public static function schemaShapes(): array
     {
         return [
