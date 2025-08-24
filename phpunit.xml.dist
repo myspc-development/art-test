@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true" bootstrap="tests/bootstrap.php">
+<phpunit colors="true" bootstrap="tests/bootstrap.php" failOnRisky="true" failOnWarning="true" beStrictAboutOutputDuringTests="true">
   <testsuites>
     <testsuite name="Plugin">
       <directory>tests/AI</directory>
@@ -42,6 +42,7 @@
     <log type="coverage-clover" target="build/coverage.xml"/>
   </logging>
   <php>
+    <ini name="zend.assertions" value="-1"/>
     <env name="WP_PHPUNIT__DIR" value="/tmp/wordpress-tests-lib"/>
     <!-- Prefer our local config (no network). -->
     <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-tests-config.local.php"/>
