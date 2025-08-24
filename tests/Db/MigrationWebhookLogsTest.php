@@ -67,4 +67,54 @@ class MigrationWebhookLogsTest extends WP_UnitTestCase
         ob_end_clean();
         $this->assertEmpty($wpdb->last_error, $wpdb->last_error);
     }
+
+    /**
+     * @dataProvider schemaShapes
+     */
+    public function test_migration_is_idempotent_and_handles_shapes(callable $createShape): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_webhook_logs';
+        $wpdb->query("DROP TABLE IF EXISTS {$table}");
+        $createShape($wpdb, $table);
+
+        do_action('artpulse_upgrade');
+        do_action('artpulse_upgrade'); // run again (idempotent)
+
+        $cols = $wpdb->get_col("SHOW COLUMNS FROM {$table}", 0);
+        $this->assertEqualsCanonicalizing(
+            ['id', 'subscription_id', 'status_code', 'response_body', 'timestamp'],
+            array_values(array_intersect($cols, ['id', 'subscription_id', 'status_code', 'response_body', 'timestamp']))
+        );
+
+        $idx = $wpdb->get_results("SHOW INDEX FROM {$table}");
+        $this->assertSame(1, count(array_filter($idx, fn($i) => $i->Key_name === 'sub_id')));
+
+        $ref = new ReflectionClass(WebhookManager::class);
+        $method = $ref->getMethod('insert_log');
+        $method->setAccessible(true);
+        $method->invoke(null, 42, '201', 'Created');
+        $this->assertEmpty($wpdb->last_error, $wpdb->last_error);
+
+        ob_start();
+        WebhookLogsPage::render();
+        $html = ob_get_clean();
+        $this->assertStringContainsString('201', $html);
+        $this->assertStringContainsString('42', $html);
+    }
+
+    public static function schemaShapes(): array
+    {
+        return [
+            'legacy'  => [function ($wpdb, $t) {
+                $wpdb->query("CREATE TABLE $t (id bigint unsigned auto_increment primary key, event varchar(191), payload longtext, status varchar(20), response longtext, created_at datetime)");
+            }],
+            'partial' => [function ($wpdb, $t) {
+                $wpdb->query("CREATE TABLE $t (id bigint unsigned auto_increment primary key, subscription_id bigint, response_body text, created_at datetime)");
+            }],
+            'missing' => [function ($wpdb, $t) {
+                // do nothing; migration should create table
+            }],
+        ];
+    }
 }
