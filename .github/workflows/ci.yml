@@ -71,3 +71,16 @@ jobs:
             echo "Coverage: ".round($pct*100,2)."%\n";
             exit($pct>=0.70?0:1);
           '
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phpunit-${{ matrix.php }}-${{ matrix.wp }}
+          path: build/
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-${{ matrix.php }}-${{ matrix.wp }}
+          path: |
+            playwright-report/
+            test-results/
