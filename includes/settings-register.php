@@ -3,7 +3,14 @@
  * Register global plugin settings.
  */
 function artpulse_register_settings() {
-    register_setting('artpulse_settings_group', 'artpulse_settings');
+    if (!did_action('artpulse_register_settings_done')) {
+        register_setting(
+            'artpulse_settings_group',
+            'artpulse_settings',
+            ['sanitize_callback' => ['\\ArtPulse\\Admin\\SettingsPage', 'sanitizeSettings']]
+        );
+        do_action('artpulse_register_settings_done');
+    }
 }
 add_action('admin_init', 'artpulse_register_settings');
 

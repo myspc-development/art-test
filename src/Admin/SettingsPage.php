@@ -730,11 +730,17 @@ class SettingsPage
     }
     public static function registerSettings()
     {
+        if (did_action('artpulse_register_settings_done')) {
+            return;
+        }
+
         register_setting(
             'artpulse_settings_group',
             'artpulse_settings',
             ['sanitize_callback' => [self::class, 'sanitizeSettings']]
         );
+
+        do_action('artpulse_register_settings_done');
 
         $tabs = apply_filters('artpulse_settings_tabs', SettingsRegistry::get_tabs());
         foreach ($tabs as $slug => $label) {
