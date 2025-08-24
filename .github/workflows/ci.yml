@@ -120,3 +120,8 @@ jobs:
           path: |
             playwright-report/
             test-results/
+      - name: Add Playwright link to summary
+        if: always()
+        run: |
+          echo "### Playwright report" >> $GITHUB_STEP_SUMMARY
+          echo "Download the **playwright** artifact from the run’s Artifacts section." >> $GITHUB_STEP_SUMMARY
