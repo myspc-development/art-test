@@ -68,6 +68,24 @@ jobs:
           WP_DB_NAME: wordpress_test
           WP_VERSION: ${{ matrix.wp }}
         run: vendor/bin/phpunit --log-junit build/junit.xml --coverage-clover build/coverage.xml
+      - name: Coverage summary (bottom 15 files)
+        if: always()
+        run: |
+          php -r '
+            $x=simplexml_load_file("build/coverage.xml");
+            $rows=[];
+            foreach($x->project->file as $f){
+              $name=(string)$f["name"]; $m=$f->metrics;
+              $cov=(float)$m["lines-covered"]; $tot=(float)$m["lines-valid"];
+              if($tot==0) continue; $pct=$cov/$tot;
+              $rows[]=["name"=>$name,"pct"=>$pct,"cov"=>$cov,"tot"=>$tot];
+            }
+            usort($rows, fn($a,$b)=>$a["pct"]<=>$b["pct"]);
+            $rows=array_slice($rows,0,15);
+            $o="# Lowest coverage files\n\n| File | Lines | Covered | % |\n|---|---:|---:|---:|\n";
+            foreach($rows as $r){ $o.=sprintf("| %s | %d | %d | %.2f%% |\n",$r["name"],$r["tot"],$r["cov"],$r["pct"]*100); }
+            file_put_contents(getenv("GITHUB_STEP_SUMMARY") ?: "summary.md", $o, FILE_APPEND);
+          '
       - name: Enforce 70% coverage
         run: |
           php -r '
