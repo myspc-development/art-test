@@ -4,7 +4,6 @@ namespace ArtPulse\Db\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Admin\WebhookLogsPage;
 use ArtPulse\Integration\WebhookManager;
-use ReflectionClass;
 
 class MigrationWebhookLogsTest extends WP_UnitTestCase
 {
@@ -56,10 +55,7 @@ class MigrationWebhookLogsTest extends WP_UnitTestCase
         $this->assertSame('OK', $row['response_body']);
         $this->assertSame('2024-01-01 00:00:00', $row['timestamp']);
 
-        $ref = new ReflectionClass(WebhookManager::class);
-        $method = $ref->getMethod('insert_log');
-        $method->setAccessible(true);
-        $method->invoke(null, 123, '201', 'Created');
+        WebhookManager::insert_log_for_tests(123, '201', 'Created');
         $this->assertEmpty($wpdb->last_error, $wpdb->last_error);
 
         ob_start();
@@ -90,10 +86,7 @@ class MigrationWebhookLogsTest extends WP_UnitTestCase
         $idx = $wpdb->get_results("SHOW INDEX FROM {$table}");
         $this->assertSame(1, count(array_filter($idx, fn($i) => $i->Key_name === 'sub_id')));
 
-        $ref = new ReflectionClass(WebhookManager::class);
-        $method = $ref->getMethod('insert_log');
-        $method->setAccessible(true);
-        $method->invoke(null, 42, '201', 'Created');
+        WebhookManager::insert_log_for_tests(42, '201', 'Created');
         $this->assertEmpty($wpdb->last_error, $wpdb->last_error);
 
         ob_start();

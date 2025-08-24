@@ -220,6 +220,12 @@ class WebhookManager
         ], ['id' => $webhook->id]);
     }
 
+    /** @internal For tests */
+    public static function insert_log_for_tests(int $subscription_id, ?string $status_code, ?string $response_body): void
+    {
+        self::insert_log($subscription_id, $status_code, $response_body);
+    }
+
     private static function insert_log(int $subscription_id, ?string $status_code, ?string $response_body): void
     {
         global $wpdb;
