@@ -32,8 +32,8 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: phpunit
-          coverage: none
+          coverage: pcov
+          tools: composer
       - name: Install JS deps
         run: npm ci
       - name: Run JS tests
@@ -52,11 +52,22 @@ jobs:
         run: vendor/bin/phpcs --standard=phpcs.xml
       - name: PHPStan
         run: vendor/bin/phpstan analyse src includes widgets --memory-limit=512M
-      - name: Run PHP tests
+      - name: Run PHPUnit (with coverage)
         env:
           WP_DB_HOST: 127.0.0.1:3306
           WP_DB_USER: root
           WP_DB_PASS: ""
           WP_DB_NAME: wordpress_test
           WP_VERSION: ${{ matrix.wp }}
-        run: vendor/bin/phpunit --coverage-clover build/coverage.xml
+        run: vendor/bin/phpunit --log-junit build/junit.xml --coverage-clover build/coverage.xml
+      - name: Enforce 70% coverage
+        run: |
+          php -r '
+            $x=simplexml_load_file("build/coverage.xml");
+            if(!$x){fwrite(STDERR,"No coverage.xml\n"); exit(1);}
+            $m=(float)$x->project->metrics["lines-covered"];
+            $n=(float)$x->project->metrics["lines-valid"];
+            $pct=$n?($m/$n):0;
+            echo "Coverage: ".round($pct*100,2)."%\n";
+            exit($pct>=0.70?0:1);
+          '
