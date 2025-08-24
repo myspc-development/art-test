@@ -38,33 +38,16 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
 
     public function routesProvider(): array {
         $out = [];
-        $ns = '/ap/v1';
-        $server = rest_get_server();
-        foreach ($server->get_routes() as $route => $handlers) {
-            if (strpos($route, $ns) !== 0) {
+        $namespaces = ['/ap/v1', '/artpulse/v1']; // TODO: Deprecate one namespace later.
+        $routes = rest_get_server()->get_routes();
+        foreach ($routes as $r => $handlers) {
+            if (!array_filter($namespaces, fn($ns) => strpos($r, $ns) === 0)) {
                 continue;
             }
-            foreach ($handlers as $handler) {
-                $args = [];
-                foreach ($handler['args'] ?? [] as $k => $arg) {
-                    if (!empty($arg['required']) && !array_key_exists('default', $arg)) {
-                        continue 2; // skip handler with required arg without default
-                    }
-                    $args[$k] = $arg['default'] ?? null;
-                }
-                $methods = $handler['methods'] ?? 'GET';
-                if (is_array($methods)) {
-                    $method = is_string(key($methods)) ? key($methods) : reset($methods);
-                } else {
-                    $method = $methods;
-                }
-                if (is_string($method) && strpos($method, ',') !== false) {
-                    $method = explode(',', $method)[0];
-                }
-                if (is_string($method) && strpos($method, '|') !== false) {
-                    $method = explode('|', $method)[0];
-                }
-                $out[] = [$route, $method, $args, $handler['schema'] ?? null];
+            foreach ($handlers as $h) {
+                $method = is_array($h['methods'] ?? null) ? reset($h['methods']) : ($h['methods'] ?? 'GET');
+                $args = array_map(fn($a) => $a['default'] ?? null, $h['args'] ?? []);
+                $out[] = [$r, $method, $args, $h['schema'] ?? null];
             }
         }
         return $out;
