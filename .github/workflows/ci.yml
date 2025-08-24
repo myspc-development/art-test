@@ -29,11 +29,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: pcov
           tools: composer
+      - uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       - name: Install JS deps
         run: npm ci
       - name: Run JS tests
@@ -71,6 +79,9 @@ jobs:
             echo "Coverage: ".round($pct*100,2)."%\n";
             exit($pct>=0.70?0:1);
           '
+      - name: Run Playwright
+        if: matrix.php == '8.2' && matrix.wp == 'latest'
+        run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: always()
         with:
