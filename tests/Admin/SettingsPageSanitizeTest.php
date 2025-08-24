@@ -21,4 +21,25 @@ class SettingsPageSanitizeTest extends WP_UnitTestCase
         $result = SettingsPage::sanitizeSettings($input);
         $this->assertSame(1, $result['debug_logging']);
     }
+
+    public function test_only_one_sanitizer_runs(): void
+    {
+        require_once __DIR__ . '/../../includes/settings-register.php';
+
+        remove_all_filters('pre_update_option_artpulse_settings');
+        remove_all_filters('sanitize_option_artpulse_settings');
+
+        artpulse_register_settings();
+        SettingsPage::registerSettings();
+
+        $calls = 0;
+        add_filter('pre_update_option_artpulse_settings', function ($value) use (&$calls) {
+            $calls++;
+            return $value;
+        });
+
+        update_option('artpulse_settings', ['debug_logging' => '1']);
+
+        $this->assertSame(1, $calls);
+    }
 }
