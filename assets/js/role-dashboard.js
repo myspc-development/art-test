@@ -2,6 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('#ap-dashboard-root');
   const isV2 = container?.dataset.apV2 === '1';
   if (!isV2) return;
+
+  // Preserve query parameters (specifically role) when updating hashes
+  const buildUrl = hash => {
+    const url = new URL(window.location.origin + window.location.pathname);
+    const role = new URLSearchParams(window.location.search).get('role');
+    if (role) url.searchParams.set('role', role);
+    url.hash = hash;
+    return url;
+  };
+
   if (container && window.ArtPulseDashboard && container.querySelector('.ap-drag-handle')) {
     Sortable.create(container, {
       animation: 150,
@@ -44,6 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = links.map(link => document.querySelector(link.getAttribute('href')));
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const setActiveLink = activeLink => {
+      links.forEach(l => {
+        const isActive = l === activeLink;
+        l.classList.toggle('is-active', isActive);
+        if (isActive) {
+          l.setAttribute('aria-current', 'true');
+        } else {
+          l.removeAttribute('aria-current');
+        }
+      });
+    };
+
     links.forEach(link => {
       link.addEventListener('click', e => {
         const target = document.querySelector(link.getAttribute('href'));
@@ -51,9 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const top = target.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({ top, behavior: prefersReduced ? 'auto' : 'smooth' });
-        const url = new URL(window.location.href);
-        url.hash = target.id;
-        history.replaceState(null, '', url);
+        history.replaceState(null, '', buildUrl(target.id));
       });
     });
 
@@ -61,19 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
       entries.forEach(entry => {
         const link = nav.querySelector(`a[href="#${entry.target.id}"]`);
         if (!link) return;
-        const active = entry.intersectionRatio >= 0.6;
-        link.classList.toggle('is-active', active);
-        if (active) {
-          links.forEach(l => {
-            if (l !== link) {
-              l.classList.remove('is-active');
-              l.removeAttribute('aria-current');
-            }
-          });
-          link.setAttribute('aria-current', 'true');
-          const url = new URL(window.location.href);
-          url.hash = entry.target.id;
-          history.replaceState(null, '', url);
+        if (entry.intersectionRatio >= 0.6) {
+          setActiveLink(link);
+          history.replaceState(null, '', buildUrl(entry.target.id));
+        } else if (link.classList.contains('is-active')) {
+          link.classList.remove('is-active');
+          link.removeAttribute('aria-current');
         } else {
           link.removeAttribute('aria-current');
         }
@@ -96,19 +109,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = card.querySelector('[data-card-body]') || card;
     card.classList.add('is-loading');
     body.innerHTML = createSkeleton();
+
+    const showEmpty = () => {
+      body.innerHTML = emptyState(card.dataset.emptyTitle, card.dataset.emptyMessage);
+    };
+
     fetch(endpoint, { credentials: 'same-origin' })
-      .then(r => r.text())
+      .then(r => {
+        if (!r.ok) throw new Error('Network response was not ok');
+        return r.text();
+      })
       .then(html => {
         card.classList.remove('is-loading');
         if (html.trim()) {
           body.innerHTML = html;
         } else {
-          body.innerHTML = emptyState(card.dataset.emptyTitle, card.dataset.emptyMessage);
+          showEmpty();
         }
       })
       .catch(() => {
         card.classList.remove('is-loading');
-        body.innerHTML = emptyState(card.dataset.emptyTitle, card.dataset.emptyMessage);
+        showEmpty();
       });
   });
 });
