@@ -11,8 +11,10 @@ get_header();
 ?>
 <div class="wrap">
   <div class="dashboard-widgets-wrap <?php echo esc_attr( $user_role . '-dashboard' ); ?>">
-    <?php $dashboard_title = ucfirst($user_role) . ' Dashboard'; ?>
-    <h2 class="ap-card__title"><?php echo esc_html( $dashboard_title ); ?></h2>
+    <?php $current_role = $user_role; ?>
+    <h2 class="ap-card__title">
+      <?php echo esc_html( ucfirst($current_role) . ' ' . __('Dashboard', 'artpulse') ); ?>
+    </h2>
     <form method="post" class="ap-dashboard-reset ap-inline-form">
       <?php wp_nonce_field('ap_reset_user_layout'); ?>
       <input type="hidden" name="reset_user_layout" value="1" />
@@ -167,8 +169,8 @@ if (empty($layout)) {
             continue;
         }
 
-        echo '<div class="ap-widget-card" role="gridcell" tabindex="0" aria-label="' . esc_attr($config['label'] ?? $id) . '" data-id="' . esc_attr($id) . '" data-visible="1">';
-        echo '<span class="drag-handle" role="button" tabindex="0" aria-label="Move widget"></span>';
+        echo '<div class="ap-widget-card ap-card" role="gridcell" tabindex="0" aria-label="' . esc_attr($config['label'] ?? $id) . '" data-id="' . esc_attr($id) . '" data-visible="1">';
+        echo '<button class="ap-drag-handle" aria-label="' . esc_attr__('Reorder widget', 'artpulse') . '" type="button">⋮⋮</button>';
 
         ap_render_widget($id, $user_id);
 

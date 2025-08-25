@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('#ap-dashboard-root');
-  if (!container || !window.ArtPulseDashboard) return;
+  if (!container || !window.ArtPulseDashboard || !container.querySelector('.ap-drag-handle')) return;
 
   Sortable.create(container, {
     animation: 150,
-    handle: '.drag-handle',
+    handle: '.ap-drag-handle',
+    filter: 'a, button, input, textarea, select',
+    preventOnFilter: false,
     onEnd: () => {
       const newOrder = Array.from(container.children).map(card => ({
         id: card.dataset.id,
