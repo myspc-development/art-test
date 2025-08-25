@@ -27,7 +27,7 @@ $first_panel = false;
   <?php echo $is_active ? '' : 'hidden'; ?>>
 
   <?php
-  // Build sections (override or extend as needed)
+  // Define sections (override/extend if needed)
   $sections = [
     'overview' => [
       'label'   => __('Overview', 'artpulse'),
