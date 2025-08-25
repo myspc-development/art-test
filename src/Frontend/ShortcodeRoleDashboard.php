@@ -57,6 +57,7 @@ class ShortcodeRoleDashboard
             'role'      => $role,
             'restBase'  => esc_url_raw(rest_url(\defined('ARTPULSE_API_NAMESPACE') ? \ARTPULSE_API_NAMESPACE : 'artpulse/v1')),
             'nonce'     => wp_create_nonce('wp_rest'),
+            'seenDashboardV2' => (bool) get_user_meta($u->ID, 'ap_seen_dashboard_v2', true),
         ];
     }
 
