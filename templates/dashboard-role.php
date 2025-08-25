@@ -5,59 +5,73 @@ if (!defined('AP_DASHBOARD_RENDERING')) {
     return;
 }
 
-?>
-<?php
 static $first_panel = true;
-$is_first = $first_panel;
 $dashboard_v2 = function_exists('ap_dashboard_v2_enabled') ? ap_dashboard_v2_enabled() : true;
-if ($is_first && $dashboard_v2) {
+
+if ($first_panel && $dashboard_v2) {
     ap_safe_include('partials/dashboard-role-tabs.php', plugin_dir_path(__FILE__) . 'partials/dashboard-role-tabs.php');
 }
+
 $is_active = $first_panel;
 $first_panel = false;
+
+// $user_role is provided by the caller (renderer) for each panel
 ?>
-<section class="ap-role-layout" role="tabpanel" id="ap-panel-<?php echo esc_attr($user_role ?? ''); ?>" aria-labelledby="ap-tab-<?php echo esc_attr($user_role ?? ''); ?>" data-role="<?php echo esc_attr($user_role ?? ''); ?>"<?php echo $is_active ? '' : ' hidden'; ?>>
+<section
+  class="ap-role-layout"
+  role="tabpanel"
+  id="ap-panel-<?php echo esc_attr($user_role ?? ''); ?>"
+  aria-labelledby="ap-tab-<?php echo esc_attr($user_role ?? ''); ?>"
+  data-role="<?php echo esc_attr($user_role ?? ''); ?>"
+  <?php echo $is_active ? '' : 'hidden'; ?>>
+
   <?php
+  // Build sections (override or extend as needed)
   $sections = [
-      'overview' => [
-          'label'   => __('Overview', 'artpulse'),
-          'content' => function () use ($user_role, $dashboard_v2) {
-              echo '<div id="ap-dashboard-root" class="ap-dashboard-grid" role="grid" aria-label="' . esc_attr__('Dashboard widgets', 'artpulse') . '" data-role="' . esc_attr($user_role ?? '') . '" data-ap-v2="' . ($dashboard_v2 ? '1' : '0') . '"></div>';
-          },
-      ],
+    'overview' => [
+      'label'   => __('Overview', 'artpulse'),
+      'content' => function () use ($dashboard_v2) {
+        echo '<div id="ap-dashboard-root" class="ap-dashboard-grid" data-ap-v2="' . ($dashboard_v2 ? '1' : '0') . '"></div>';
+      },
+    ],
+    'activity' => [
+      'label'   => __('Activity', 'artpulse'),
+      'content' => function () {
+        echo '<div class="ap-dashboard-section-inner">' . esc_html__('Recent activity will appear here.', 'artpulse') . '</div>';
+      },
+    ],
+    'payments' => [
+      'label'   => __('Payments', 'artpulse'),
+      'content' => function () {
+        echo '<div class="ap-dashboard-section-inner">' . esc_html__('Payment summaries will appear here.', 'artpulse') . '</div>';
+      },
+    ],
   ];
 
-  $events_tpl   = plugin_dir_path(__FILE__) . 'partials/dashboard-events.php';
-  $payments_tpl = plugin_dir_path(__FILE__) . 'partials/dashboard-payments.php';
-  if (file_exists($events_tpl)) {
-      $sections['activity'] = [
-          'label'    => __('Activity', 'artpulse'),
-          'template' => $events_tpl,
-      ];
-  }
-  if (file_exists($payments_tpl)) {
-      $sections['payments'] = [
-          'label'    => __('Payments', 'artpulse'),
-          'template' => $payments_tpl,
-      ];
-  }
+  // Sticky local nav (server-rendered for no-JS fallback)
+  if ($dashboard_v2 && $sections) :
+    $qs_role = isset($_GET['role']) ? sanitize_key($_GET['role']) : ($user_role ?? '');
+  ?>
+    <nav class="ap-local-nav" aria-label="<?php echo esc_attr__('Dashboard sections', 'artpulse'); ?>">
+      <ul>
+        <?php foreach ($sections as $id => $info) :
+          $href = ($qs_role ? '?role=' . urlencode($qs_role) : '') . '#' . $id; ?>
+          <li><a href="<?php echo esc_url($href); ?>"><?php echo esc_html($info['label']); ?></a></li>
+        <?php endforeach; ?>
+      </ul>
+    </nav>
+  <?php endif; ?>
 
-  if ($sections) {
-      echo '<nav class="ap-local-nav" aria-label="' . esc_attr__('Dashboard sections', 'artpulse') . '">';
-      foreach ($sections as $id => $info) {
-          echo '<a href="#' . esc_attr($id) . '">' . esc_html($info['label']) . '</a>';
-      }
-      echo '</nav>';
-
-      foreach ($sections as $id => $info) {
-          echo '<section id="' . esc_attr($id) . '" class="ap-dashboard-section">';
-          if (isset($info['template'])) {
-              ap_safe_include('partials/' . basename($info['template']), $info['template']);
-          } else {
-              $info['content']();
-          }
-          echo '</section>';
-      }
+  <?php
+  // Render sections
+  foreach ($sections as $id => $info) {
+    echo '<section id="' . esc_attr($id) . '" class="ap-dashboard-section" tabindex="-1">';
+    if (isset($info['template'])) {
+      ap_safe_include('partials/' . basename($info['template']), $info['template']);
+    } else {
+      $info['content']();
+    }
+    echo '</section>';
   }
   ?>
 </section>
