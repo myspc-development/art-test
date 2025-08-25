@@ -105,7 +105,7 @@ jobs:
             exit($pct>=0.70?0:1);
           '
       - name: Run Playwright
-        if: matrix.php == '8.2' && matrix.wp == 'latest'
+        if: github.event_name == 'pull_request' && matrix.php == '8.2' && matrix.wp == 'latest'
         run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: always()
