@@ -8,7 +8,6 @@
   --ap-bg: #ffffff;
   --ap-text: #111827;
 }
-
 [data-role-theme="member"] { --ap-accent: var(--ap-role-member); }
 [data-role-theme="artist"] { --ap-accent: var(--ap-role-artist); }
 [data-role-theme="organization"] { --ap-accent: var(--ap-role-org); }
