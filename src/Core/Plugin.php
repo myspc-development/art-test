@@ -232,6 +232,7 @@ class Plugin
         RoleDashboardPage::register();
         ShortcodeRoleDashboard::register();
         UserLayoutController::register();
+        \ArtPulse\Rest\DashboardSeenController::register();
         \ArtPulse\Core\FrontendMembershipPage::register();
         \ArtPulse\Community\ProfileLinkRequestManager::register();
         \ArtPulse\Community\ArtistUpgradeRestController::register();
