@@ -1,8 +1,4 @@
-diff --git a/templates/partials/dashboard-role-tabs.php b/templates/partials/dashboard-role-tabs.php
-index 1111111..2222222 100644
---- a/templates/partials/dashboard-role-tabs.php
-+++ b/templates/partials/dashboard-role-tabs.php
-@@
+
  <?php
  if (function_exists('ap_dashboard_v2_enabled') && !ap_dashboard_v2_enabled()) {
      return;
