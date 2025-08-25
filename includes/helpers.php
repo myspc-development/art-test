@@ -100,6 +100,33 @@ function ap_clear_portfolio_cache(): void {
 }
 
 /**
+ * Determine if the roles dashboard v2 is enabled.
+ *
+ * Supports URL override (?ap_v2=0|1) stored in session.
+ */
+function ap_dashboard_v2_enabled(): bool {
+    if (PHP_SAPI !== 'cli' && !headers_sent() && !session_id()) {
+        session_start();
+    }
+
+    if (isset($_GET['ap_v2'])) {
+        $_SESSION['ap_v2'] = $_GET['ap_v2'] === '1' ? 1 : 0;
+        return $_SESSION['ap_v2'] === 1;
+    }
+
+    if (isset($_SESSION['ap_v2'])) {
+        return $_SESSION['ap_v2'] === 1;
+    }
+
+    $opts = get_option('artpulse_settings', []);
+    if (!array_key_exists('dashboard_v2', $opts)) {
+        return true;
+    }
+
+    return (bool) $opts['dashboard_v2'];
+}
+
+/**
  * Render the unified dashboard template for the current user.
  *
  * @param string[] $allowed_roles Roles permitted to view the dashboard.

@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('#ap-dashboard-root');
+  const isV2 = container?.dataset.apV2 === '1';
+  if (!isV2) return;
   if (container && window.ArtPulseDashboard && container.querySelector('.ap-drag-handle')) {
     Sortable.create(container, {
       animation: 150,

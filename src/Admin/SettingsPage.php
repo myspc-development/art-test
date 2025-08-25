@@ -193,6 +193,12 @@ class SettingsPage
                 'desc'  => __('Permit non-admin roles to access the default WordPress dashboard.', 'artpulse'),
                 'type'  => 'checkbox',
             ],
+            'dashboard_v2' => [
+                'label'   => __('Roles Dashboard v2', 'artpulse'),
+                'desc'    => __('Enable the updated roles dashboard layout.', 'artpulse'),
+                'type'    => 'checkbox',
+                'default' => 1,
+            ],
         ];
 
         foreach ($general_fields as $key => $cfg) {

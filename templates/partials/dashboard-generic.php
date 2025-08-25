@@ -10,7 +10,8 @@ if (!isset($user_role) || !current_user_can('read')) {
 get_header();
 ?>
 <div class="wrap">
-  <div class="dashboard-widgets-wrap <?php echo esc_attr( $user_role . '-dashboard' ); ?>" data-role-theme="<?php echo esc_attr( $user_role ); ?>">
+  <?php $dashboard_v2 = function_exists('ap_dashboard_v2_enabled') ? ap_dashboard_v2_enabled() : true; ?>
+  <div class="dashboard-widgets-wrap <?php echo esc_attr( $user_role . '-dashboard' ); ?>" data-role-theme="<?php echo esc_attr( $user_role ); ?>" data-ap-v2="<?php echo $dashboard_v2 ? '1' : '0'; ?>">
     <?php $current_role = $user_role; ?>
     <h2 class="ap-card__title ap-role-header">
       <?php echo esc_html( ucfirst($current_role) . ' ' . __('Dashboard', 'artpulse') ); ?>
@@ -184,7 +185,7 @@ $layout = $layout ?? DashboardController::get_user_dashboard_layout($user_id);
 if (empty($layout)) {
     echo '<div class="ap-empty-state">No widgets available. Load a preset or reset layout.</div>';
 } else {
-    echo '<div id="ap-dashboard-root" class="ap-dashboard-grid" role="grid" aria-label="Dashboard widgets" data-role="' . esc_attr(DashboardController::get_role($user_id)) . '">';
+    echo '<div id="ap-dashboard-root" class="ap-dashboard-grid" role="grid" aria-label="Dashboard widgets" data-role="' . esc_attr(DashboardController::get_role($user_id)) . '" data-ap-v2="' . ($dashboard_v2 ? '1' : '0') . '">';
     foreach ($layout as $widget) {
         $id      = $widget['id'];
         $visible = $widget['visible'] ?? true;

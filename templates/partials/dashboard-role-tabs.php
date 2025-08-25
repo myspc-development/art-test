@@ -1,4 +1,7 @@
 <?php
+if (function_exists('ap_dashboard_v2_enabled') && !ap_dashboard_v2_enabled()) {
+    return;
+}
 $roles = array_intersect(['member','artist','organization'], wp_get_current_user()->roles);
 if (count($roles) <= 1) {
     return; // no tabs needed
