@@ -1,4 +1,5 @@
 <?php
+// Accessible role switching tabs
 if (function_exists('ap_dashboard_v2_enabled') && !ap_dashboard_v2_enabled()) {
     return;
 }

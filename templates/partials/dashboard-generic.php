@@ -1,4 +1,5 @@
 <?php
+// Generic dashboard wrapper template
 use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;

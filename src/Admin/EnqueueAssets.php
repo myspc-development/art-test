@@ -1,6 +1,7 @@
 <?php
 namespace ArtPulse\Admin;
 
+// Handles asset loading across admin, editor, and frontend
 class EnqueueAssets {
 
     /**
