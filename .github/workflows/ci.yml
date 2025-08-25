@@ -128,3 +128,19 @@ jobs:
         run: |
           echo "### Playwright report" >> $GITHUB_STEP_SUMMARY
           echo "Download the **playwright** artifact from the run’s Artifacts section." >> $GITHUB_STEP_SUMMARY
+
+  playwright-visual:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npm run test:e2e

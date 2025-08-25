@@ -12,7 +12,8 @@
     "test:php": "composer test",
     "test:php:up": "docker compose -f docker-compose.tests.yml up -d",
     "test:php:down": "docker compose -f docker-compose.tests.yml down -v",
-    "test:php:local": "npm run test:php:up && composer test:php:local; npm run test:php:down"
+    "test:php:local": "npm run test:php:up && composer test:php:local; npm run test:php:down",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
@@ -32,6 +33,7 @@
     "socket.io": "^4.7.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
     "@types/jest": "^29.5.14",
