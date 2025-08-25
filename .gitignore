@@ -44,6 +44,9 @@ release/
 *.log
 .cache/
 .phpunit.result.cache
+playwright-report/
+test-results/
+tests/playwright/__screenshots__/
 
 # ===============================
 # 🔐 ENVIRONMENT
