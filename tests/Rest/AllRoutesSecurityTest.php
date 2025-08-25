@@ -2,6 +2,10 @@
 namespace ArtPulse\Rest\Tests;
 
 class AllRoutesSecurityTest extends \WP_UnitTestCase {
+    private static array $mustValidate = [
+        '/ap/v1/roles',
+        '/artpulse/v1/webhooks',
+    ];
     /**
      * @dataProvider routesProvider
      * @group restapi
@@ -29,6 +33,15 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
         $res = $server->dispatch($req);
         $status = $res->get_status();
         $this->assertTrue($status >= 200 && $status < 300, "Admin access to $method $route should be 2xx, got $status");
+
+        if (in_array($route, self::$mustValidate, true)) {
+            $data = $res->get_data();
+            $this->assertIsArray($data);
+            $this->assertNotEmpty($data);
+            $first = is_array($data) ? reset($data) : $data;
+            $this->assertIsArray($first);
+            $this->assertArrayHasKey('id', $first);
+        }
     }
 
     private static function normalize_methods($m): array {
