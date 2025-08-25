@@ -3,15 +3,17 @@ use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-if (!isset($user_role) || !current_user_can('read')) {
+if (!current_user_can('read')) {
     wp_die(__('Access denied', 'artpulse'));
 }
+
+$user_role = isset($user_role) && $user_role ? $user_role : 'member';
 
 get_header();
 ?>
 <div class="wrap">
   <?php $dashboard_v2 = function_exists('ap_dashboard_v2_enabled') ? ap_dashboard_v2_enabled() : true; ?>
-  <div class="dashboard-widgets-wrap <?php echo esc_attr( $user_role . '-dashboard' ); ?>" data-role-theme="<?php echo esc_attr( $user_role ); ?>" data-ap-v2="<?php echo $dashboard_v2 ? '1' : '0'; ?>">
+  <div class="<?php echo esc_attr( $user_role ); ?>" data-role-theme="<?php echo esc_attr( $user_role ); ?>" data-ap-v2="<?php echo $dashboard_v2 ? '1' : '0'; ?>">
     <?php $current_role = $user_role; ?>
     <h2 class="ap-card__title ap-role-header">
       <?php echo esc_html( ucfirst($current_role) . ' ' . __('Dashboard', 'artpulse') ); ?>
