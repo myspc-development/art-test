@@ -12,13 +12,63 @@ class EnqueueAssets {
         add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_frontend']);
         add_action('admin_enqueue_scripts', function ($hook) {
-            if (in_array($hook, ['toplevel_page_ap-dashboard', 'toplevel_page_ap-org-dashboard'], true)) {
-                wp_enqueue_style(
-                    'ap-quickstart-guides',
-                    plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/css/ap-quickstart-guides.css',
-                    [],
-                    filemtime(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/css/ap-quickstart-guides.css')
-                );
+            $dashboard_pages = ['toplevel_page_ap-dashboard', 'toplevel_page_ap-org-dashboard'];
+            if (in_array($hook, $dashboard_pages, true)) {
+                $plugin_dir = plugin_dir_path(ARTPULSE_PLUGIN_FILE);
+                $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
+
+                $qs_path = $plugin_dir . 'assets/css/ap-quickstart-guides.css';
+                if (file_exists($qs_path)) {
+                    wp_enqueue_style(
+                        'ap-quickstart-guides',
+                        $plugin_url . 'assets/css/ap-quickstart-guides.css',
+                        [],
+                        filemtime($qs_path)
+                    );
+                }
+
+                $dashboard_css = $plugin_dir . 'assets/css/dashboard.css';
+                if (file_exists($dashboard_css)) {
+                    wp_enqueue_style(
+                        'ap-dashboard',
+                        $plugin_url . 'assets/css/dashboard.css',
+                        [],
+                        filemtime($dashboard_css)
+                    );
+                }
+
+                $tabs_js = $plugin_dir . 'assets/js/dashboard-role-tabs.js';
+                if (file_exists($tabs_js)) {
+                    wp_enqueue_script(
+                        'ap-role-tabs',
+                        $plugin_url . 'assets/js/dashboard-role-tabs.js',
+                        [],
+                        filemtime($tabs_js),
+                        true
+                    );
+                }
+
+                $sortable_js = $plugin_dir . 'assets/libs/sortablejs/Sortable.min.js';
+                if (file_exists($sortable_js)) {
+                    wp_enqueue_script(
+                        'sortablejs',
+                        $plugin_url . 'assets/libs/sortablejs/Sortable.min.js',
+                        [],
+                        '1.15.0',
+                        true
+                    );
+                }
+
+                $role_dashboard_js = $plugin_dir . 'assets/js/role-dashboard.js';
+                if (file_exists($role_dashboard_js)) {
+                    wp_enqueue_script(
+                        'role-dashboard',
+                        $plugin_url . 'assets/js/role-dashboard.js',
+                        ['sortablejs'],
+                        filemtime($role_dashboard_js),
+                        true
+                    );
+                }
             }
         });
     }
