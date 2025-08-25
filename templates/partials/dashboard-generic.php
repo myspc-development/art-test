@@ -10,9 +10,9 @@ if (!isset($user_role) || !current_user_can('read')) {
 get_header();
 ?>
 <div class="wrap">
-  <div class="dashboard-widgets-wrap <?php echo esc_attr( $user_role . '-dashboard' ); ?>">
+  <div class="dashboard-widgets-wrap <?php echo esc_attr( $user_role . '-dashboard' ); ?>" data-role-theme="<?php echo esc_attr( $user_role ); ?>">
     <?php $current_role = $user_role; ?>
-    <h2 class="ap-card__title">
+    <h2 class="ap-card__title ap-role-header">
       <?php echo esc_html( ucfirst($current_role) . ' ' . __('Dashboard', 'artpulse') ); ?>
     </h2>
     <form method="post" class="ap-dashboard-reset ap-inline-form">
