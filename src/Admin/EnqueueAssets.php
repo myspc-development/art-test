@@ -56,18 +56,24 @@ class EnqueueAssets {
             self::enqueue_style_if_exists('ap-quickstart-guides', 'assets/css/ap-quickstart-guides.css');
             self::enqueue_style_if_exists('ap-dashboard',          'assets/css/dashboard.css');
 
-            self::enqueue_script_if_exists('ap-role-tabs',         'assets/js/dashboard-role-tabs.js');
+            self::enqueue_script_if_exists('ap-role-tabs', 'assets/js/dashboard-role-tabs.js');
+
             // Sortable (if shipped)
-            if (file_exists(self::asset_path('assets/libs/sortablejs/Sortable.min.js'))) {
+            $sortable_rel  = 'assets/libs/sortablejs/Sortable.min.js';
+            $sortable_path = self::asset_path($sortable_rel);
+            $deps          = ['ap-role-tabs'];
+            if (file_exists($sortable_path)) {
                 wp_enqueue_script(
                     'sortablejs',
-                    self::asset_url('assets/libs/sortablejs/Sortable.min.js'),
+                    self::asset_url($sortable_rel),
                     [],
-                    '1.15.0',
+                    filemtime($sortable_path),
                     true
                 );
+                $deps[] = 'sortablejs';
             }
-            self::enqueue_script_if_exists('role-dashboard',       'assets/js/role-dashboard.js', ['sortablejs']);
+
+            self::enqueue_script_if_exists('role-dashboard', 'assets/js/role-dashboard.js', $deps);
         });
     }
 
@@ -148,7 +154,7 @@ class EnqueueAssets {
             self::enqueue_script_if_exists('ap-quickstart', 'assets/js/ap-quickstart.js');
             if (wp_script_is('ap-quickstart', 'enqueued')) {
                 wp_localize_script('ap-quickstart', 'apQuickstart', [
-                    'mermaidUrl' => plugins_url('assets/libs/mermaid/mermaid.min.js', ARTPULSE_PLUGIN_FILE),
+                    'mermaidUrl' => self::asset_url('assets/libs/mermaid/mermaid.min.js'),
                 ]);
             }
         }
@@ -158,13 +164,7 @@ class EnqueueAssets {
         if (($screen->base === 'toplevel_page_artpulse-settings' && $tab === 'import_export') ||
             $screen->base === 'artpulse-settings_page_artpulse-import-export'
         ) {
-            wp_enqueue_script(
-                'papaparse',
-                plugins_url('assets/libs/papaparse/papaparse.min.js', ARTPULSE_PLUGIN_FILE),
-                [],
-                '5.5.3',
-                true
-            );
+            self::enqueue_script_if_exists('papaparse', 'assets/libs/papaparse/papaparse.min.js');
             self::enqueue_script_if_exists('ap-csv-import', 'assets/js/ap-csv-import.js', ['papaparse', 'wp-api-fetch']);
             if (wp_script_is('ap-csv-import', 'enqueued')) {
                 wp_localize_script('ap-csv-import', 'APCSVImport', [
@@ -178,30 +178,25 @@ class EnqueueAssets {
         // Core admin styles + dashboard script (non-React)
         if (!wp_script_is('ap-user-dashboard-js', 'enqueued')) {
             self::enqueue_style_if_exists('ap-style', 'assets/css/ap-style.css');
-            // Ensure Chart.js is registered as dependency
-            wp_enqueue_script(
-                'ap-user-dashboard-js',
-                self::asset_url('assets/js/ap-user-dashboard.js'),
-                ['wp-api-fetch', 'chart-js'],
-                file_exists(self::asset_path('assets/js/ap-user-dashboard.js')) ? filemtime(self::asset_path('assets/js/ap-user-dashboard.js')) : '1.0.0',
-                true
-            );
+            self::enqueue_script_if_exists('ap-user-dashboard-js', 'assets/js/ap-user-dashboard.js', ['wp-api-fetch', 'chart-js']);
 
-            $opts = get_option('artpulse_settings', []);
-            // Avoid exposing secrets unless absolutely necessary.
-            $apiToken = ''; // ($opts['external_api_token'] ?? ''); // <- intentionally blanked
-            wp_localize_script('ap-user-dashboard-js', 'ArtPulseDashboardApi', [
-                'root'               => esc_url_raw(rest_url()),
-                'nonce'              => wp_create_nonce('wp_rest'),
-                'orgSubmissionUrl'   => self::get_org_submission_url(),
-                'artistSubmissionUrl'=> self::get_artist_submission_url(),
-                'artistEndpoint'     => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
-                'exportEndpoint'     => esc_url_raw(rest_url('artpulse/v1/user/export')),
-                'deleteEndpoint'     => esc_url_raw(rest_url('artpulse/v1/user/delete')),
-                'ajaxUrl'            => admin_url('admin-ajax.php'),
-                'apiUrl'             => esc_url_raw($opts['external_api_base_url'] ?? ''),
-                'apiToken'           => $apiToken,
-            ]);
+            if (wp_script_is('ap-user-dashboard-js', 'enqueued')) {
+                $opts = get_option('artpulse_settings', []);
+                // Avoid exposing secrets unless absolutely necessary.
+                $apiToken = ''; // ($opts['external_api_token'] ?? '');
+                wp_localize_script('ap-user-dashboard-js', 'ArtPulseDashboardApi', [
+                    'root'               => esc_url_raw(rest_url()),
+                    'nonce'              => wp_create_nonce('wp_rest'),
+                    'orgSubmissionUrl'   => self::get_org_submission_url(),
+                    'artistSubmissionUrl'=> self::get_artist_submission_url(),
+                    'artistEndpoint'     => esc_url_raw(rest_url('artpulse/v1/artist-upgrade')),
+                    'exportEndpoint'     => esc_url_raw(rest_url('artpulse/v1/user/export')),
+                    'deleteEndpoint'     => esc_url_raw(rest_url('artpulse/v1/user/delete')),
+                    'ajaxUrl'            => admin_url('admin-ajax.php'),
+                    'apiUrl'             => esc_url_raw($opts['external_api_base_url'] ?? ''),
+                    'apiToken'           => $apiToken,
+                ]);
+            }
         }
 
         // FIX: handle mismatch — standardize to 'ap-analytics' everywhere
@@ -251,7 +246,15 @@ class EnqueueAssets {
             self::enqueue_style_if_exists('ap-swiper', 'assets/css/swiper.css', ['swiper-css']);
 
             // Swiper JS
-            wp_enqueue_script('swiper-js', self::asset_url('assets/libs/swiper/swiper-bundle.min.js'), [], null, true);
+            $swiper_js_rel  = 'assets/libs/swiper/swiper-bundle.min.js';
+            $swiper_js_path = self::asset_path($swiper_js_rel);
+            wp_enqueue_script(
+                'swiper-js',
+                self::asset_url($swiper_js_rel),
+                [],
+                file_exists($swiper_js_path) ? filemtime($swiper_js_path) : null,
+                true
+            );
 
             // Page-specific scripts
             if (is_singular('artpulse_event') || is_singular('artpulse_org')) {
@@ -266,11 +269,6 @@ class EnqueueAssets {
         // Membership/account & favorites/share
         wp_enqueue_script('ap-membership-account-js', self::asset_url('assets/js/ap-membership-account.js'), ['wp-api-fetch'], '1.0.0', true);
         wp_enqueue_script('ap-favorites-js',          self::asset_url('assets/js/ap-favorites.js'),          [],                '1.0.0', true);
-
-        // Chart.js available on frontend (registered above)
-        if (!wp_script_is('chart-js', 'enqueued') && wp_script_is('chart-js', 'registered')) {
-            wp_enqueue_script('chart-js');
-        }
 
         wp_enqueue_script('ap-favorite-toggle', self::asset_url('assets/js/ap-favorite-toggle.js'), [], '1.0.0', true);
         wp_localize_script('ap-favorite-toggle', 'APFavorites', [
@@ -344,8 +342,8 @@ class EnqueueAssets {
         }
 
         // Front-end extras
-        wp_enqueue_script('ap-analytics', self::asset_url('assets/js/ap-analytics.js'), ['jquery'], '1.0.0', true);
-        wp_enqueue_script('ap-directory', self::asset_url('assets/js/ap-directory.js'), ['jquery'], '1.0.0', true);
+        self::enqueue_script_if_exists('ap-analytics', 'assets/js/ap-analytics.js', ['jquery']);
+        self::enqueue_script_if_exists('ap-directory', 'assets/js/ap-directory.js', ['jquery']);
 
         self::enqueue_style_if_exists('ap-event-filter-form', 'assets/css/ap-event-filter-form.css');
         wp_enqueue_script('ap-event-filter', self::asset_url('assets/js/ap-event-filter.js'), ['jquery'], '1.0.0', true);
@@ -433,6 +431,10 @@ class EnqueueAssets {
                 'successText' => __('Subscribed!', 'artpulse'),
                 'errorText'   => __('Subscription failed.', 'artpulse'),
             ]);
+        }
+
+        if (wp_script_is('chart-js', 'registered') && !wp_script_is('chart-js', 'enqueued') && wp_script_is('ap-user-dashboard-js', 'enqueued')) {
+            wp_enqueue_script('chart-js');
         }
 
         if (is_singular('artpulse_artist')) {
