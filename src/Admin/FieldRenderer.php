@@ -13,7 +13,7 @@ class FieldRenderer
     {
         $options = get_option('artpulse_settings');
         $key     = $field['key'];
-        $value   = $options[$key] ?? '';
+        $value   = $options[$key] ?? ($field['default'] ?? '');
         $desc    = $field['desc'] ?? '';
         $type    = $field['type'] ?? 'text';
 

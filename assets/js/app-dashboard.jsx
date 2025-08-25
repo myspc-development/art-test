@@ -39,7 +39,8 @@ function AppDashboard() {
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootEl = document.getElementById('ap-dashboard-root');
-  if (rootEl) {
+  const isV2 = rootEl?.dataset.apV2 === '1';
+  if (rootEl && isV2) {
     const root = createRoot(rootEl);
     root.render(<AppDashboard />);
   }

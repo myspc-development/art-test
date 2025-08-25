@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('ap-dashboard-root');
-  if (!container) return;
+  const isV2 = container?.dataset.apV2 === '1';
+  if (!container || !isV2) return;
 
   const { identifier } = APWidgetOrder;
   const storageKey = `ap-widget-order-${identifier}`;

@@ -8,6 +8,12 @@ if (!defined('AP_DASHBOARD_RENDERING')) {
 ?>
 <?php
 static $first_panel = true;
+$is_first = $first_panel;
+$dashboard_v2 = function_exists('ap_dashboard_v2_enabled') ? ap_dashboard_v2_enabled() : true;
+if ($is_first && $dashboard_v2) {
+    ap_safe_include('partials/dashboard-role-tabs.php', plugin_dir_path(__FILE__) . 'partials/dashboard-role-tabs.php');
+    ap_safe_include('partials/dashboard-nav.php', plugin_dir_path(__FILE__) . 'partials/dashboard-nav.php');
+}
 $is_active = $first_panel;
 $first_panel = false;
 ?>
@@ -16,8 +22,8 @@ $first_panel = false;
   $sections = [
       'overview' => [
           'label'   => __('Overview', 'artpulse'),
-          'content' => function () use ($user_role) {
-              echo '<div id="ap-dashboard-root" class="ap-dashboard-grid" role="grid" aria-label="' . esc_attr__('Dashboard widgets', 'artpulse') . '" data-role="' . esc_attr($user_role ?? '') . '"></div>';
+          'content' => function () use ($user_role, $dashboard_v2) {
+              echo '<div id="ap-dashboard-root" class="ap-dashboard-grid" role="grid" aria-label="' . esc_attr__('Dashboard widgets', 'artpulse') . '" data-role="' . esc_attr($user_role ?? '') . '" data-ap-v2="' . ($dashboard_v2 ? '1' : '0') . '"></div>';
           },
       ],
   ];

@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
+  const root = document.getElementById('ap-dashboard-root');
+  if (root && root.dataset.apV2 !== '1') {
+    return;
+  }
   if (window.APDashboardMenu?.debug) {
     const env = typeof process !== 'undefined' ? process.env?.NODE_ENV : undefined;
     if (env && env !== 'production') {
