@@ -12,14 +12,14 @@ $labels = [
     'organization' => __('Org Tools', 'artpulse'),
 ];
 $icons = [
-    'member' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a10 10 0 0 1 13 0"/></svg>',
-    'artist' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><circle cx="10" cy="10" r="1"/><circle cx="14" cy="10" r="1"/><path d="M8 16c1.333-1.333 4.667-1.333 6 0"/></svg>',
-    'organization' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M6 21V9h12v12"/><path d="M9 21V12h6v9"/></svg>',
+    'member' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a10 10 0 0 1 13 0"/></svg>',
+    'artist' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="10" cy="10" r="1"/><circle cx="14" cy="10" r="1"/><path d="M8 16c1.333-1.333 4.667-1.333 6 0"/></svg>',
+    'organization' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M6 21V9h12v12"/><path d="M9 21V12h6v9"/></svg>',
 ];
 wp_enqueue_script('ap-role-tabs', plugin_dir_url(__FILE__) . '../../assets/js/dashboard-role-tabs.js', [], null, true);
 $active_role = reset($roles);
 ?>
-<div class="ap-role-tabs" role="tablist">
+<div class="ap-role-tabs" role="tablist" aria-label="<?php esc_attr_e('Dashboard role tabs', 'artpulse'); ?>">
   <?php foreach ($roles as $role): ?>
     <?php $is_active = ($role === $active_role); ?>
     <button type="button"
