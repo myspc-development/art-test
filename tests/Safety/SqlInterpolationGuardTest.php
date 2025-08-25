@@ -12,7 +12,10 @@ final class SqlInterpolationGuardTest extends \PHPUnit\Framework\TestCase {
                     continue;
                 }
                 $code = file_get_contents($f->getPathname());
-                if (preg_match('/\$wpdb->get_(?:var|row|col|results)\s*\(\s*"SELECT[^"]*\$_(GET|POST|REQUEST|COOKIE|SERVER)/i', $code)) {
+                if (preg_match(
+                    '/\$wpdb->(?:get_(?:var|row|col|results)|query)\s*\(\s*[\'"]\s*SELECT[\s\S]+?\$(?:GLOBALS|_[A-Z]+)/i',
+                    $code
+                )) {
                     $bad[] = $f->getPathname();
                 }
             }
