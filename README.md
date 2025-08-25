@@ -9,6 +9,8 @@ Site administrators should consult the [Admin Guide](docs/guides/admin/README.md
   - [Role-Based Dashboard Builder](docs/architecture/Role_Based_Dashboard_Builder.md)
 - [Guides](docs/guides/)
 - [Internal Docs](docs/internal/)
+- [Roles Dashboard v2 Release Notes](docs/release-notes/2025-roles-dashboard-v2.md)
+- [Roles Dashboard Manual QA](docs/manual-qa/roles-dashboard.md)
 
 [Monetization & Ticketing Codex](docs/guides/developer/monetization-ticketing-codex.md).
 For artist monetization options see the
