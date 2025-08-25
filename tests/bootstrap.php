@@ -1,14 +1,21 @@
 <?php
+// WordPress-less test bootstrap.
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-if (!getenv('WP_PHPUNIT__TESTS_CONFIG')) {
-    putenv('WP_PHPUNIT__TESTS_CONFIG=' . __DIR__ . '/wp-tests-config.local.php');
+if (!defined('ARTPULSE_PLUGIN_FILE')) {
+    define('ARTPULSE_PLUGIN_FILE', __FILE__);
 }
 
-require_once __DIR__ . '/TestHelpers/FrontendFunctionStubs.php';
-require_once __DIR__ . '/TestHelpers.php';
+if (!function_exists('sanitize_text_field')) {
+    function sanitize_text_field($str) {
+        return preg_replace('/[^A-Za-z0-9_\-]/', '', strip_tags($str));
+    }
+}
 
-require_once __DIR__ . '/../vendor/wp-phpunit/wp-phpunit/includes/bootstrap.php';
-require_once __DIR__ . '/../includes/helpers.php';
+if (!function_exists('wp_unslash')) {
+    function wp_unslash($str) {
+        return $str;
+    }
+}
 

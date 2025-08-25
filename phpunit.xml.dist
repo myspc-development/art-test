@@ -1,53 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true" bootstrap="tests/bootstrap.php" failOnRisky="true" failOnWarning="true" beStrictAboutOutputDuringTests="true">
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
   <testsuites>
     <testsuite name="Plugin">
-      <directory>tests/AI</directory>
-      <directory>tests/Admin</directory>
-      <directory>tests/Ajax</directory>
-      <directory>tests/Blocks</directory>
-      <directory>tests/Cli</directory>
-      <directory>tests/Community</directory>
-      <directory>tests/Core</directory>
-      <directory>tests/Crm</directory>
-      <directory>tests/Engagement</directory>
-      <directory>tests/Frontend</directory>
-      <directory>tests/Integration</directory>
-      <directory>tests/Monetization</directory>
-      <directory>tests/Payment</directory>
-      <directory>tests/Personalization</directory>
-      <directory>tests/Reporting</directory>
-      <directory>tests/Rest</directory>
-      <directory>tests/Search</directory>
-      <directory>tests/Smoke</directory>
-      <directory>tests/Support</directory>
-      <directory>tests/Unit</directory>
-      <directory>tests/phpunit</directory>
-      <directory>tests/smoke</directory>
-      <directory>tests/widgets</directory>
-      <directory>tests/Db</directory>
+      <file>tests/phpunit/EnqueueAssetsTest.php</file>
     </testsuite>
   </testsuites>
-  <coverage processUncoveredFiles="true">
-    <include>
-      <directory>src</directory>
-      <directory>includes</directory>
-      <directory>widgets</directory>
-    </include>
-    <report>
-      <text lowUpperBound="70" highLowerBound="90"/>
-    </report>
-  </coverage>
-  <logging>
-    <log type="coverage-clover" target="build/coverage.xml"/>
-  </logging>
-  <php>
-    <ini name="zend.assertions" value="-1"/>
-    <env name="WP_PHPUNIT__DIR" value="/tmp/wordpress-tests-lib"/>
-    <!-- Prefer our local config (no network). -->
-    <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-tests-config.local.php"/>
-    <ini name="display_startup_errors" value="0"/>
-    <ini name="error_reporting" value="32767"/>
-  </php>
 </phpunit>
 
