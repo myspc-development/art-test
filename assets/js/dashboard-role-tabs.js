@@ -23,22 +23,18 @@
       });
       panels.forEach(function (panel) {
         var show = panel.dataset.role === role;
-        if (show) panel.removeAttribute('hidden');
-        else panel.setAttribute('hidden', '');
+        if (show) panel.removeAttribute('hidden'); else panel.setAttribute('hidden','');
       });
       localStorage.setItem('ap:lastRole', role);
       var url = new URL(window.location.href);
       url.searchParams.set('role', role);
       window.history.replaceState(null, '', url.toString());
-      // keep the role theme up to date (for per-role accents)
       var wrap = document.querySelector('.dashboard-widgets-wrap');
       if (wrap) wrap.setAttribute('data-role-theme', role);
     }
 
     tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        setActive(tab.dataset.role, false);
-      });
+      tab.addEventListener('click', function () { setActive(tab.dataset.role, false); });
     });
 
     tablist.addEventListener('keydown', function (e) {
@@ -46,14 +42,10 @@
       if (i === -1) i = 0;
       var next = i;
       switch (e.key) {
-        case 'ArrowRight': case 'ArrowDown':
-          e.preventDefault(); next = (i + 1) % tabs.length; break;
-        case 'ArrowLeft': case 'ArrowUp':
-          e.preventDefault(); next = (i - 1 + tabs.length) % tabs.length; break;
-        case 'Home':
-          e.preventDefault(); next = 0; break;
-        case 'End':
-          e.preventDefault(); next = tabs.length - 1; break;
+        case 'ArrowRight': case 'ArrowDown': e.preventDefault(); next = (i + 1) % tabs.length; break;
+        case 'ArrowLeft':  case 'ArrowUp':   e.preventDefault(); next = (i - 1 + tabs.length) % tabs.length; break;
+        case 'Home': e.preventDefault(); next = 0; break;
+        case 'End':  e.preventDefault(); next = tabs.length - 1; break;
         default: return;
       }
       setActive(tabs[next].dataset.role, true);
