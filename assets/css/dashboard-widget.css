@@ -53,3 +53,42 @@
     gap: calc(var(--ap-space, 1rem) / 2);
   }
 }
+
+/* Skeleton loading */
+.ap-card.is-loading > *:not(.ap-skeleton) {
+  display: none;
+}
+.ap-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ap-skel-line {
+  background: #e1e1e1;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.ap-skel-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+  animation: ap-skeleton-shimmer 1.5s infinite;
+}
+.ap-skel-line.w-25 { width: 25%; }
+.ap-skel-line.w-50 { width: 50%; }
+.ap-skel-line.w-75 { width: 75%; }
+.ap-skel-line.w-100 { width: 100%; }
+.ap-skel-line.h-4 { height: 1rem; }
+.ap-skel-line.h-6 { height: 1.5rem; }
+.ap-skel-line.h-8 { height: 2rem; }
+@keyframes ap-skeleton-shimmer {
+  100% { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ap-skel-line::after {
+    animation: none;
+  }
+}

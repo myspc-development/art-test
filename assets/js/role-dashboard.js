@@ -80,5 +80,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sections.forEach(sec => { if (sec) observer.observe(sec); });
   }
+
+  const cards = document.querySelectorAll('.ap-card[data-endpoint]');
+  const createSkeleton = () => {
+    return `\n      <div class="ap-skeleton">\n        <div class="ap-skel-line w-100 h-6"></div>\n        <div class="ap-skel-line w-75 h-6"></div>\n        <div class="ap-skel-line w-50 h-6"></div>\n      </div>`;
+  };
+  const emptyState = (title = '', msg = 'Nothing to display.') => {
+    return `<div class="ap-empty-state" role="status" aria-live="polite">${title ? `<h3 class="ap-empty-state__title">${title}</h3>` : ''}<p class="ap-empty-state__body">${msg}</p></div>`;
+  };
+  cards.forEach(card => {
+    const endpoint = card.dataset.endpoint;
+    if (!endpoint) return;
+    const body = card.querySelector('[data-card-body]') || card;
+    card.classList.add('is-loading');
+    body.innerHTML = createSkeleton();
+    fetch(endpoint, { credentials: 'same-origin' })
+      .then(r => r.text())
+      .then(html => {
+        card.classList.remove('is-loading');
+        if (html.trim()) {
+          body.innerHTML = html;
+        } else {
+          body.innerHTML = emptyState(card.dataset.emptyTitle, card.dataset.emptyMessage);
+        }
+      })
+      .catch(() => {
+        card.classList.remove('is-loading');
+        body.innerHTML = emptyState(card.dataset.emptyTitle, card.dataset.emptyMessage);
+      });
+  });
 });
 
