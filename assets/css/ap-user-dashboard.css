@@ -330,3 +330,13 @@
   border-radius: 3px;
   z-index: 1000;
 }
+
+.ap-seg { display:flex; gap:.25rem; padding:.25rem; border:1px solid var(--ap-border-color); border-radius:999px; margin:0 0 1rem; }
+.ap-seg button { background:var(--ap-light-bg-color); border:0; padding:.5rem .75rem; border-radius:999px; }
+.ap-seg button.active { background:var(--ap-primary-color); color:#fff; }
+.ap-seg button:focus-visible { outline:2px solid var(--ap-primary-color); outline-offset:2px; }
+
+.ap-local-nav { position:sticky; top:var(--ap-sticky-top, .5rem); z-index:10; display:flex; gap:.5rem; background:var(--ap-bg-color); padding:.25rem 0; margin-bottom:1rem; }
+.ap-local-nav a { text-decoration:none; color:inherit; padding:.25rem .5rem; border-radius:4px; }
+.ap-local-nav a.is-active { color:var(--ap-primary-color); font-weight:600; }
+.ap-dashboard-section { scroll-margin-top:calc(var(--ap-sticky-top, .5rem) + 1rem); }

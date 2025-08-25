@@ -22,6 +22,33 @@ get_header();
     </form>
 
     <?php $user = wp_get_current_user(); ?>
+    <?php
+    $roles = array_intersect(['member', 'artist', 'organization'], $user->roles);
+    if (count($roles) > 1) {
+        $labels = [
+            'member'       => __('Member Tools', 'artpulse'),
+            'artist'       => __('Artist Tools', 'artpulse'),
+            'organization' => __('Org Tools', 'artpulse'),
+        ];
+        wp_enqueue_script('ap-role-tabs', plugin_dir_url(__FILE__) . '../../assets/js/dashboard-role-tabs.js', [], null, true);
+        $active_role = $user_role;
+        echo '<div class="ap-seg ap-role-tabs" role="tablist" aria-label="' . esc_attr__('Switch role view', 'artpulse') . '">';
+        foreach ($roles as $role) {
+            $is_active = ($role === $active_role);
+            echo '<button type="button"'
+               . ' class="ap-role-tab' . ($is_active ? ' active' : '') . '"'
+               . ' role="tab"'
+               . ' id="ap-tab-' . esc_attr($role) . '"'
+               . ' aria-controls="ap-panel-' . esc_attr($role) . '"'
+               . ' aria-selected="' . ($is_active ? 'true' : 'false') . '"'
+               . ' tabindex="' . ($is_active ? '0' : '-1') . '"'
+               . ' data-role="' . esc_attr($role) . '">'
+               . esc_html($labels[$role] ?? ucfirst($role))
+               . '</button>';
+        }
+        echo '</div>';
+    }
+    ?>
     <header class="dashboard-topbar">
       <div class="welcome">
         <img src="<?php echo esc_url(get_avatar_url($user->ID, ['size' => 60])); ?>" alt="" />
