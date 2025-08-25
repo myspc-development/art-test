@@ -54,6 +54,20 @@ class MigrationWebhookLogsTest extends WP_UnitTestCase
         $this->assertSame('200', $row['status_code']);
         $this->assertSame('OK', $row['response_body']);
         $this->assertSame('2024-01-01 00:00:00', $row['timestamp']);
+        
+        global $wpdb; $db = $wpdb->dbname; $table = $wpdb->prefix.'ap_webhook_logs';
+        $cols = $wpdb->get_results( $wpdb->prepare(
+          "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE, IS_NULLABLE
+           FROM INFORMATION_SCHEMA.COLUMNS
+           WHERE TABLE_SCHEMA=%s AND TABLE_NAME=%s",
+          $db, $table
+        ), OBJECT_K);
+        $this->assertSame('bigint', $cols['subscription_id']->DATA_TYPE);
+        $this->assertStringContainsString('unsigned', strtolower($cols['subscription_id']->COLUMN_TYPE));
+        $this->assertSame('varchar', $cols['status_code']->DATA_TYPE);
+        $this->assertMatchesRegularExpression('/^varchar\\(\\d+\\)$/', $cols['status_code']->COLUMN_TYPE);
+        $this->assertContains($cols['response_body']->DATA_TYPE, ['text','longtext']);
+        $this->assertSame('datetime', $cols['timestamp']->DATA_TYPE);
 
         WebhookManager::insert_log_for_tests(123, '201', 'Created');
         $this->assertEmpty($wpdb->last_error, $wpdb->last_error);
