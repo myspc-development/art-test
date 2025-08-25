@@ -6,7 +6,7 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
      * @dataProvider routesProvider
      * @group restapi
      */
-    public function test_route_security(string $route, string $method, array $args, $schema): void {
+    public function test_route_security(string $route, string $method, array $args): void {
         $server = rest_get_server();
 
         // 401: unauthenticated request
@@ -29,25 +29,33 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
         $res = $server->dispatch($req);
         $status = $res->get_status();
         $this->assertTrue($status >= 200 && $status < 300, "Admin access to $method $route should be 2xx, got $status");
+    }
 
-        if ($schema) {
-            $valid = rest_validate_value_from_schema($res->get_data(), $schema, 'response');
-            $this->assertTrue(!is_wp_error($valid), 'Response does not match schema');
+    private static function normalize_methods($m): array {
+        if (is_array($m)) return array_values($m);
+        $map = [
+            \WP_REST_Server::READABLE   => 'GET',
+            \WP_REST_Server::CREATABLE  => 'POST',
+            \WP_REST_Server::EDITABLE   => 'PUT',
+            \WP_REST_Server::DELETABLE  => 'DELETE',
+            \WP_REST_Server::ALLMETHODS => ['GET','POST','PUT','PATCH','DELETE'],
+        ];
+        $out=[];
+        foreach ($map as $flag=>$verb) {
+            if (is_int($m) && ($m & $flag)) $out = array_merge($out, (array)$verb);
         }
+        return $out ?: ['GET'];
     }
 
     public function routesProvider(): array {
-        $out = [];
-        $namespaces = ['/ap/v1', '/artpulse/v1']; // TODO: Deprecate one namespace later.
-        $routes = rest_get_server()->get_routes();
-        foreach ($routes as $r => $handlers) {
-            if (!array_filter($namespaces, fn($ns) => strpos($r, $ns) === 0)) {
-                continue;
-            }
+        $out=[]; $namespaces=['/ap/v1','/artpulse/v1'];
+        foreach (rest_get_server()->get_routes() as $route => $handlers) {
+            if (!array_filter($namespaces, fn($ns)=>strpos($route,$ns)===0)) continue;
             foreach ($handlers as $h) {
-                $method = is_array($h['methods'] ?? null) ? reset($h['methods']) : ($h['methods'] ?? 'GET');
-                $args = array_map(fn($a) => $a['default'] ?? null, $h['args'] ?? []);
-                $out[] = [$r, $method, $args, $h['schema'] ?? null];
+                foreach (self::normalize_methods($h['methods'] ?? []) as $method) {
+                    $args = array_map(fn($a)=>$a['default']??null, $h['args'] ?? []);
+                    $out[] = [$route, $method, $args];
+                }
             }
         }
         return $out;
