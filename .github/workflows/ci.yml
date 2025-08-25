@@ -97,13 +97,16 @@ jobs:
         run: |
           php -r '
             $x=simplexml_load_file("build/coverage.xml");
-            if(!$x){fwrite(STDERR,"No coverage.xml\n"); exit(1);}
+            if(!$x){fwrite(STDERR,"No coverage.xml\n"); exit(1);} 
             $m=(float)$x->project->metrics["lines-covered"];
             $n=(float)$x->project->metrics["lines-valid"];
             $pct=$n?($m/$n):0;
             echo "Coverage: ".round($pct*100,2)."%\n";
             exit($pct>=0.70?0:1);
           '
+      - name: Run Cypress
+        if: github.event_name == 'pull_request' && matrix.php == '8.2' && matrix.wp == 'latest'
+        run: npm run cypress:run
       - name: Run Playwright
         if: github.event_name == 'pull_request' && matrix.php == '8.2' && matrix.wp == 'latest'
         run: npm run test:e2e
