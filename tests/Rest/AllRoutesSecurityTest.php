@@ -33,8 +33,12 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
         $res = $server->dispatch($req);
         $status = $res->get_status();
         $this->assertTrue($status >= 200 && $status < 300, "Admin access to $method $route should be 2xx, got $status");
+        $schema = self::get_response_schema($route, $method);
 
-        if (in_array($route, self::$mustValidate, true)) {
+        if ($schema) {
+            $validation = rest_validate_value_from_schema($res->get_data(), $schema, 'response');
+            $this->assertNotWPError($validation);
+        } elseif (in_array($route, self::$mustValidate, true)) {
             $data = $res->get_data();
             $this->assertIsArray($data);
             $this->assertNotEmpty($data);
@@ -49,7 +53,7 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
         $map = [
             \WP_REST_Server::READABLE   => 'GET',
             \WP_REST_Server::CREATABLE  => 'POST',
-            \WP_REST_Server::EDITABLE   => 'PUT',
+            \WP_REST_Server::EDITABLE   => ['PUT','PATCH'],
             \WP_REST_Server::DELETABLE  => 'DELETE',
             \WP_REST_Server::ALLMETHODS => ['GET','POST','PUT','PATCH','DELETE'],
         ];
@@ -58,6 +62,24 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
             if (is_int($m) && ($m & $flag)) $out = array_merge($out, (array)$verb);
         }
         return $out ?: ['GET'];
+    }
+
+    private static function get_response_schema(string $route, string $method): ?array {
+        foreach (rest_get_server()->get_routes()[$route] ?? [] as $handler) {
+            $methods = self::normalize_methods($handler['methods'] ?? []);
+            if (!in_array($method, $methods, true)) {
+                continue;
+            }
+            if (!isset($handler['schema'])) {
+                break;
+            }
+            $schema = $handler['schema'];
+            if (is_callable($schema)) {
+                $schema = call_user_func($schema);
+            }
+            return is_array($schema) ? $schema : null;
+        }
+        return null;
     }
 
     public function routesProvider(): array {
