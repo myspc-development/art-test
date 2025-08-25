@@ -1,13 +1,14 @@
 (function(){
   document.addEventListener('DOMContentLoaded', function(){
-    var tabs = Array.prototype.slice.call(document.querySelectorAll('.ap-role-tab[role="tab"]'));
-    if (!tabs.length) return;
-    var panels = Array.prototype.slice.call(document.querySelectorAll('.ap-role-layout[role="tabpanel"]'));
     var tablist = document.querySelector('.ap-role-tabs[role="tablist"]');
+    var panels = Array.prototype.slice.call(document.querySelectorAll('.ap-role-layout[role="tabpanel"]'));
+    if (!tablist || !panels.length) return;
+    var tabs = Array.prototype.slice.call(tablist.querySelectorAll('.ap-role-tab[role="tab"]'));
+    if (!tabs.length) return;
     var root = document.querySelector('.dashboard-widgets-wrap') || document.getElementById('ap-dashboard-root');
     if (root && root.dataset.apV2 !== '1') return;
-    var params = new URLSearchParams(window.location.search);
-    var initial = params.get('role') || localStorage.getItem('ap:lastRole') || tabs[0].dataset.role;
+    var url = new URL(window.location.href);
+    var initial = url.searchParams.get('role') || localStorage.getItem('ap:lastRole') || tabs[0].dataset.role;
 
     function setActive(role, focusTab){
       tabs.forEach(function(tab){
@@ -24,9 +25,8 @@
       });
       if (root) { root.setAttribute('data-role-theme', role); }
       localStorage.setItem('ap:lastRole', role);
-      params.set('role', role);
-      var newUrl = window.location.pathname + '?' + params.toString();
-      history.replaceState(null, '', newUrl);
+      url.searchParams.set('role', role);
+      history.replaceState(null, '', url.toString());
     }
 
     tabs.forEach(function(tab){
@@ -35,8 +35,7 @@
       });
     });
 
-    if (tablist) {
-      tablist.addEventListener('keydown', function(e){
+    tablist.addEventListener('keydown', function(e){
         var index = tabs.findIndex(function(t){ return t.getAttribute('aria-selected') === 'true'; });
         if (index === -1) index = 0;
         var next;
@@ -63,7 +62,6 @@
             break;
         }
       });
-    }
 
     setActive(initial, false);
   });
