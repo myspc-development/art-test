@@ -37,6 +37,53 @@ table.ap-table tr:nth-child(even) {
   background: #f9f9f9;
 }
 
+/* Role matrix layout */
+.ap-role-table-wrap {
+  overflow-x: auto;
+}
+.ap-role-matrix table {
+  min-width: 40rem;
+}
+.ap-role-matrix thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.ap-role-matrix tbody th[scope="row"] {
+  position: sticky;
+  left: 0;
+  background: var(--ap-bg, #fff);
+  z-index: 1;
+}
+.ap-role-toolbar {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+.ap-col-toggle,
+.ap-row-toggle {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0 .25rem;
+}
+.ap-unsaved-chip {
+  background: #f0ad4e;
+  padding: 0 .5rem;
+  border-radius: 12px;
+  font-size: .75rem;
+}
+.ap-toast {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: #333;
+  color: #fff;
+  padding: .5rem 1rem;
+  border-radius: 4px;
+}
+
 @media (max-width: 600px) {
   table.ap-table, table.ap-table thead, table.ap-table tbody, table.ap-table th, table.ap-table td, table.ap-table tr {
     display: block;
