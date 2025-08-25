@@ -1,3 +1,4 @@
+/* Role dashboard interactions */
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('#ap-dashboard-root');
   const isV2 = container?.dataset.apV2 === '1';

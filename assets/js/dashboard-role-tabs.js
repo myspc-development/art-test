@@ -1,3 +1,4 @@
+/* Handles role tab interactions */
 (function () {
   document.addEventListener('DOMContentLoaded', function () {
     var tablist = document.querySelector('.ap-role-tabs[role="tablist"]');
