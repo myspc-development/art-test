@@ -4,6 +4,7 @@
     if (!tabs.length) return;
     var panels = Array.prototype.slice.call(document.querySelectorAll('.ap-role-layout[role="tabpanel"]'));
     var tablist = document.querySelector('.ap-role-tabs[role="tablist"]');
+    var root = document.querySelector('.dashboard-widgets-wrap');
     var params = new URLSearchParams(window.location.search);
     var initial = params.get('role') || localStorage.getItem('ap:lastRole') || tabs[0].dataset.role;
 
@@ -20,6 +21,7 @@
         if (active) { panel.removeAttribute('hidden'); }
         else { panel.setAttribute('hidden', ''); }
       });
+      if (root) { root.setAttribute('data-role-theme', role); }
       localStorage.setItem('ap:lastRole', role);
       params.set('role', role);
       var newUrl = window.location.pathname + '?' + params.toString();
