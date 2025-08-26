@@ -177,5 +177,21 @@ class DashboardLayoutTest extends TestCase {
             ['id' => 'widget_alpha', 'visible' => false],
         ], $filtered);
     }
+
+    public function test_register_widgets_invoked_and_layout_not_empty(): void {
+        DashboardWidgetRegistry::register('widget_alpha', 'Alpha', '', '', static function () {}, ['roles' => ['member']]);
+
+        $refCtrl = new \ReflectionClass(DashboardController::class);
+        $propWidgets = $refCtrl->getProperty('role_widgets');
+        $propWidgets->setAccessible(true);
+        $propWidgets->setValue(null, ['member' => ['widget_alpha']]);
+
+        MockStorage::$users[5] = (object)['roles' => ['member']];
+        $layout = DashboardController::get_user_dashboard_layout(5);
+
+        $this->assertSame([
+            ['id' => 'widget_alpha', 'visible' => true],
+        ], $layout);
+    }
 }
 }
