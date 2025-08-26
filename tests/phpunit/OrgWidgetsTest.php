@@ -16,7 +16,7 @@ namespace ArtPulse\Tests {
     use ArtPulse\Widgets\Organization\RsvpStatsWidget;
     use ArtPulse\Widgets\Organization\WebhooksWidget;
     use ArtPulse\Widgets\Organization\MyEventsWidget;
-    use ArtPulse\Widgets\Organization\SiteStatsWidget;
+    use ArtPulse\Widgets\Common\SiteStatsWidget;
 
     class OrgWidgetsTest extends TestCase {
         protected function setUp(): void {

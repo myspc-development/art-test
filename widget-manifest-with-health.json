@@ -33,6 +33,9 @@
     "site_stats": {
         "file": "templates/widgets/site-stats.php",
         "roles": [
+            "artist",
+            "member",
+            "organization",
             "administrator"
         ],
         "status": "registered",
