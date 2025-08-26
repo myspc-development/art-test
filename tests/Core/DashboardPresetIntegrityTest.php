@@ -19,7 +19,7 @@ class DashboardPresetIntegrityTest extends TestCase
             define('WP_DEBUG', true);
         }
         $slugs = [
-            'membership',
+            'widget_membership',
             'widget_followed_artists',
             'upcoming_events_by_location',
             'recommended_for_you',

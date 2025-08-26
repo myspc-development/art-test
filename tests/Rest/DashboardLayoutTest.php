@@ -119,7 +119,7 @@ class DashboardLayoutTest extends \WP_UnitTestCase
         delete_user_meta($uid, 'ap_dashboard_layout');
         wp_set_current_user($uid);
         tests_add_filter('ap_dashboard_default_widgets_for_role', function ($defaults, $role) {
-            return 'member' === $role ? ['membership', 'upgrade'] : $defaults;
+            return 'member' === $role ? ['widget_membership', 'upgrade'] : $defaults;
         });
 
         $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
@@ -127,9 +127,9 @@ class DashboardLayoutTest extends \WP_UnitTestCase
 
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
-        $this->assertSame(['membership', 'upgrade'], $data['layout']);
+        $this->assertSame(['widget_membership', 'upgrade'], $data['layout']);
         $expected = [
-            ['id' => 'membership', 'visible' => true],
+            ['id' => 'widget_membership', 'visible' => true],
             ['id' => 'upgrade', 'visible' => true],
         ];
         $this->assertSame($expected, $data['visibility']);
@@ -148,16 +148,16 @@ class DashboardLayoutTest extends \WP_UnitTestCase
     public function test_get_returns_layout_for_specified_role(): void
     {
         tests_add_filter('ap_dashboard_default_widgets_for_role', function ($defaults, $role) {
-            return 'member' === $role ? ['membership'] : $defaults;
+            return 'member' === $role ? ['widget_membership'] : $defaults;
         });
         $req = new WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
         $req->set_param('role', 'member');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
-        $this->assertSame(['membership'], $data['layout']);
+        $this->assertSame(['widget_membership'], $data['layout']);
         $this->assertSame([
-            ['id' => 'membership', 'visible' => true],
+            ['id' => 'widget_membership', 'visible' => true],
         ], $data['visibility']);
         remove_all_filters('ap_dashboard_default_widgets_for_role');
     }

@@ -69,7 +69,7 @@ class CapabilitiesManager
         $user = get_userdata($user_id);
 
         // Log the capability mapping for debugging in development environments.
-        if (defined('WP_DEBUG') && WP_DEBUG) {
+        if (defined('WP_DEBUG') && WP_DEBUG && get_current_user_id()) {
             $roles = $user ? implode(',', (array) $user->roles) : 'none';
             error_log(sprintf('ap map_meta_cap user=%d cap=%s roles=%s', $user_id, $cap, $roles));
         }

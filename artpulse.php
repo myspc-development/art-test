@@ -23,8 +23,8 @@ require_once __DIR__ . '/includes/widget-logging.php';
 require_once __DIR__ . '/includes/unhide-default-widgets.php';
 
 add_action('init', function () {
-    load_plugin_textdomain('artpulse', false, dirname(plugin_basename(__FILE__)).'/languages');
-}, 11);
+    load_plugin_textdomain('artpulse', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}, 0);
 
 // Alias legacy widget IDs and bind real renderers after canonical registration.
 add_action('init', function () {
@@ -221,9 +221,11 @@ add_action('init', function () {
 
 // Detect and log capability filters that may interfere with admin rights.
 add_action('init', function () {
-    foreach (['user_has_cap', 'map_meta_cap'] as $hook) {
-        if (has_filter($hook) && defined('WP_DEBUG') && WP_DEBUG) {
-            error_log(sprintf('ArtPulse: filter detected on %s', $hook));
+    if (defined('WP_DEBUG') && WP_DEBUG && get_current_user_id()) {
+        foreach (['user_has_cap', 'map_meta_cap'] as $hook) {
+            if (has_filter($hook)) {
+                error_log(sprintf('ArtPulse: filter detected on %s', $hook));
+            }
         }
     }
 }, 100);
@@ -243,7 +245,7 @@ add_filter('user_has_cap', function (array $allcaps, array $caps, array $args, \
         foreach ($required as $cap) {
             if (empty($allcaps[$cap])) {
                 $allcaps[$cap] = true;
-                if (defined('WP_DEBUG') && WP_DEBUG) {
+                if (defined('WP_DEBUG') && WP_DEBUG && get_current_user_id()) {
                     error_log(sprintf('ap user_has_cap restored %s for admin %d', $cap, $user->ID));
                 }
             }

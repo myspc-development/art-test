@@ -66,14 +66,14 @@ class DashboardWidgetConfigAjaxTest extends TestCase
     {
         $_POST['nonce'] = 'n';
         $_POST['config'] = [
-            'administrator' => ['membership', 'upgrade'],
+            'administrator' => ['widget_membership', 'upgrade'],
             'editor<script>' => ['content', 'favorites', 'bad<>'],
         ];
 
         do_action('wp_ajax_ap_save_dashboard_widget_config');
 
         $expected = [
-            'administrator' => ['membership', 'upgrade'],
+            'administrator' => ['widget_membership', 'upgrade'],
             'editorscript' => ['content', 'favorites', 'bad'],
         ];
         $this->assertSame($expected, self::$options['ap_dashboard_widget_config'] ?? null);

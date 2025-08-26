@@ -13,7 +13,7 @@ class DashboardPresets
      */
     private static array $presets = [
         'member' => [
-            'membership',
+            'widget_membership',
             'widget_followed_artists',
             'upcoming_events_by_location',
             'recommended_for_you',
@@ -37,7 +37,7 @@ class DashboardPresets
             'site_stats',
         ],
         'new_member_intro' => [
-            'membership',
+            'widget_membership',
         ],
         'org_admin_start' => [
             'lead_capture',
@@ -52,22 +52,22 @@ class DashboardPresets
      */
     public static function get_preset_for_role(string $role): array
     {
-        $key   = strtolower(trim($role));
-        $slugs = self::$presets[$key] ?? [];
+        $key    = strtolower(trim($role));
+        $preset = self::$presets[$key] ?? [];
         if (function_exists('apply_filters')) {
-            $slugs = (array) apply_filters('artpulse/dashboard/preset', $slugs, $key);
+            $preset = (array) apply_filters('artpulse/dashboard/preset', $preset, $key);
         }
 
-        $result = [];
-        foreach ($slugs as $slug) {
-            if (WidgetRegistry::exists($slug)) {
-                $result[] = $slug;
-                continue;
-            }
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                throw new \InvalidArgumentException('Unknown widget slug: ' . $slug);
+        $validSlugs = WidgetRegistry::list();
+        $invalid    = array_diff($preset, $validSlugs);
+        $preset     = array_values(array_intersect($preset, $validSlugs));
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            foreach ($invalid as $slug) {
+                error_log('ArtPulse: Unknown widget slug: ' . $slug);
             }
         }
-        return $result;
+
+        return $preset;
     }
 }
