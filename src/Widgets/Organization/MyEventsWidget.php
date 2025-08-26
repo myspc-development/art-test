@@ -54,7 +54,18 @@ class MyEventsWidget implements DashboardWidgetInterface
     public static function render(int $user_id = 0): string
     {
         if (!current_user_can('ap_manage_org') && !current_user_can('manage_options')) {
-            return '';
+            $heading_id = self::id() . '-heading';
+            ob_start();
+            ?>
+            <section role="region" aria-labelledby="<?php echo esc_attr($heading_id); ?>"
+                data-widget="<?php echo esc_attr(self::id()); ?>"
+                data-widget-id="<?php echo esc_attr(self::id()); ?>"
+                class="ap-widget ap-<?php echo esc_attr(self::id()); ?>">
+                <h2 id="<?php echo esc_attr($heading_id); ?>"><?php echo esc_html(self::label()); ?></h2>
+                <p><?php echo esc_html__('Permission denied', 'artpulse'); ?></p>
+            </section>
+            <?php
+            return ob_get_clean();
         }
         $heading_id = self::id() . '-heading';
         $add_url    = function_exists('admin_url') ? admin_url('post-new.php?post_type=artpulse_event') : '#';
