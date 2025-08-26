@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
   <testsuites>
-    <testsuite name="Plugin">
+    <testsuite name="Unit">
+      <file>tests/phpunit/ActivityFeedWidgetTest.php</file>
+      <file>tests/phpunit/DashboardLayoutTest.php</file>
+      <file>tests/phpunit/DashboardPreviewUserTest.php</file>
+      <file>tests/phpunit/DashboardWidgetRegistryAliasTest.php</file>
+      <file>tests/phpunit/DashboardWidgetRegistryHelpersTest.php</file>
       <file>tests/phpunit/EnqueueAssetsTest.php</file>
+      <file>tests/phpunit/NearbyEventsWidgetTest.php</file>
+      <file>tests/phpunit/ParityPlaceholderTest.php</file>
+      <file>tests/phpunit/RestRouteConflictsTest.php</file>
+      <file>tests/phpunit/UserLayoutManagerRoleLayoutTest.php</file>
+      <file>tests/phpunit/WelcomeBoxWidgetTest.php</file>
+      <file>tests/phpunit/WidgetAuditFixTest.php</file>
+      <file>tests/phpunit/WidgetIdsCanonicalizationTest.php</file>
+      <file>tests/phpunit/WidgetSourcesVisibilityTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>
-
