@@ -14,7 +14,7 @@ class DashboardPresets
     private static array $presets = [
         'member' => [
             'widget_membership',
-            'widget_followed_artists',
+            'widget_my_follows',
             'upcoming_events_by_location',
             'recommended_for_you',
             'my-events',
