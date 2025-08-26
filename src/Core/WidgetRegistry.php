@@ -21,6 +21,11 @@ class WidgetRegistry
     private static array $logged_missing = [];
 
     /**
+     * Override debug mode for missing widget rendering.
+     */
+    private static ?bool $debugOverride = null;
+
+    /**
      * Fire registration hook on init so other modules can register widgets.
      */
     public static function init(): void
@@ -59,7 +64,7 @@ class WidgetRegistry
     {
         $key = strtolower(trim($slug));
         if (!isset(self::$widgets[$key])) {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
+            if (self::$debugOverride ?? (defined('WP_DEBUG') && WP_DEBUG)) {
                 if (!isset(self::$logged_missing[$key])) {
                     error_log('Unknown widget slug: ' . $key);
                     self::$logged_missing[$key] = true;
@@ -82,6 +87,22 @@ class WidgetRegistry
     public static function list(): array
     {
         return array_keys(self::$widgets);
+    }
+
+    /**
+     * Override debug mode for missing widget placeholder rendering.
+     */
+    public static function setDebug(?bool $debug): void
+    {
+        self::$debugOverride = $debug;
+    }
+
+    /**
+     * Clear debug override so WP_DEBUG is used instead.
+     */
+    public static function resetDebug(): void
+    {
+        self::$debugOverride = null;
     }
 }
 
