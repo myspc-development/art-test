@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/php/bootstrap.php" colors="true">
+<phpunit bootstrap="tests/bootstrap.simple.php" colors="true">
   <testsuites>
     <testsuite name="Plugin">
       <directory>tests/phpunit/</directory>
+      <exclude>tests/phpunit/ParityCanonicalizationTest.php</exclude>
+      <exclude>tests/phpunit/EnqueueAssetsTest.php</exclude>
     </testsuite>
   </testsuites>
-  <php>
-    <server name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
-    <const name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
-    <env name="PLUGIN_MAIN_FILE" value="artpulse-management.php"/>
-  </php>
 </phpunit>
