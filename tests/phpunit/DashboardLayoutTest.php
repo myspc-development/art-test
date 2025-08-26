@@ -4,11 +4,6 @@ namespace {
     if (!defined('ARTPULSE_PLUGIN_FILE')) {
         define('ARTPULSE_PLUGIN_FILE', dirname(__DIR__, 2) . '/artpulse.php');
     }
-    if (!function_exists('plugin_dir_path')) {
-        function plugin_dir_path($file) {
-            return dirname($file) . '/';
-        }
-    }
 }
 
 namespace ArtPulse\Core {
@@ -28,6 +23,8 @@ namespace ArtPulse\Core {
 
 namespace ArtPulse\Core\Tests {
 use PHPUnit\Framework\TestCase;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
@@ -37,6 +34,8 @@ class DashboardLayoutTest extends TestCase {
 
     protected function setUp(): void {
         parent::setUp();
+        Monkey\setUp();
+        Functions\when('plugin_dir_path')->alias(fn($file) => dirname($file) . '/');
         MockStorage::$user_meta = [];
         MockStorage::$options = [];
         MockStorage::$users = [];
@@ -52,6 +51,11 @@ class DashboardLayoutTest extends TestCase {
         $prop2 = $ref2->getProperty('role_widgets');
         $prop2->setAccessible(true);
         $prop2->setValue([]);
+    }
+
+    protected function tearDown(): void {
+        Monkey\tearDown();
+        parent::tearDown();
     }
 
     public function test_default_presets_loaded_per_role(): void {
