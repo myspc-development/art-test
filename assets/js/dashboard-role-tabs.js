@@ -12,7 +12,26 @@
     if (root && root.dataset.apV2 !== '1') return;
 
     var params = new URLSearchParams(window.location.search);
-    var initial = params.get('role') || localStorage.getItem('ap:lastRole') || tabs[0].dataset.role;
+    var initial = params.get('role');
+    if (!tabs.some(function (t) { return t.dataset.role === initial; })) {
+      initial = localStorage.getItem('ap:lastRole');
+    }
+    if (!tabs.some(function (t) { return t.dataset.role === initial; })) {
+      initial = tabs[0].dataset.role;
+    }
+
+    function updateNavLinks(role) {
+      var navLinks = document.querySelectorAll('.ap-local-nav a[href]');
+      navLinks.forEach(function (a) {
+        var href = a.getAttribute('href') || '';
+        try {
+          var url = new URL(href, window.location.href);
+          if (url.origin !== window.location.origin) return;
+          url.searchParams.set('role', role);
+          a.setAttribute('href', url.pathname + url.search + url.hash);
+        } catch (err) { /* ignore malformed hrefs */ }
+      });
+    }
 
     function setActive(role, focusTab) {
       tabs.forEach(function (tab) {
@@ -30,6 +49,7 @@
       var url = new URL(window.location.href);
       url.searchParams.set('role', role);
       window.history.replaceState(null, '', url.toString());
+      updateNavLinks(role);
       var wrap = document.querySelector('.dashboard-widgets-wrap');
       if (wrap) wrap.setAttribute('data-role-theme', role);
     }
