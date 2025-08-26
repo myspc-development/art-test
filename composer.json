@@ -29,11 +29,10 @@
     "erusev/parsedown": "^1.7"
   },
   "scripts": {
-      "test:unit": "vendor/bin/phpunit -c phpunit.unit.xml.dist",
-    "test:wp":   "vendor/bin/phpunit -c phpunit.wp.xml.dist",
-    "test":      "composer run test:unit && composer run test:wp"
-    "test:db": "mysql -u ${WP_TESTS_DB_USER:-root} -p\"${WP_TESTS_DB_PASS}\" -h ${WP_TESTS_DB_HOST:-127.0.0.1} -e \"CREATE DATABASE IF NOT EXISTS ${WP_TESTS_DB_NAME:-wordpress_test} DEFAULT CHARACTER SET utf8mb4;\"",
-    "test": "vendor/bin/phpunit -c phpunit.xml.dist"
+    "test:unit": "vendor/bin/phpunit -c phpunit.unit.xml.dist",
+    "test:wp": "vendor/bin/phpunit -c phpunit.wp.xml.dist",
+    "test": "composer run test:unit && composer run test:wp",
+    "test:db": "mysql -u ${WP_TESTS_DB_USER:-root} -p\"${WP_TESTS_DB_PASS}\" -h ${WP_TESTS_DB_HOST:-127.0.0.1} -e \"CREATE DATABASE IF NOT EXISTS ${WP_TESTS_DB_NAME:-wordpress_test} DEFAULT CHARACTER SET utf8mb4;\""
   },
   "config": {
     "allow-plugins": {

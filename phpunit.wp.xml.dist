@@ -9,6 +9,7 @@
   <!-- Optional, if you want to override defaults -->
   <php>
     <server name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
+    <const name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
     <const name="WP_TESTS_DOMAIN" value="example.org"/>
     <const name="WP_TESTS_EMAIL" value="admin@example.org"/>
   </php>
