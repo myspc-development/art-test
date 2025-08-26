@@ -30,6 +30,11 @@ class SiteStatsWidget implements DashboardWidgetInterface
         return esc_html__('Overall site traffic and engagement metrics.', 'artpulse');
     }
 
+    public static function boot(): void
+    {
+        add_action('artpulse/widgets/register', [self::class, 'register'], 10, 1);
+    }
+
     public static function register(): void
     {
         DashboardWidgetRegistry::register(
@@ -61,6 +66,4 @@ class SiteStatsWidget implements DashboardWidgetInterface
         return ob_get_clean();
     }
 }
-
-SiteStatsWidget::register();
 
