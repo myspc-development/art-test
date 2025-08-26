@@ -232,11 +232,31 @@ class DashboardController {
 
         $valid = [];
         foreach ($widgets as $id) {
-            if (DashboardWidgetRegistry::exists($id)) {
-                $valid[] = $id;
-            } else {
+            $config = DashboardWidgetRegistry::get($id);
+            if (!$config) {
                 trigger_error('Dashboard widget not registered: ' . $id, E_USER_WARNING);
+                continue;
             }
+
+            $roles = isset($config['roles']) ? (array) $config['roles'] : [];
+            if ($roles && !in_array($role, $roles, true)) {
+                continue;
+            }
+
+            $cap = $config['capability'] ?? '';
+            if ($cap && function_exists('user_can')) {
+                if (class_exists('WP_User')) {
+                    $u = new \WP_User(0);
+                    $u->add_role($role);
+                    if (!user_can($u, $cap)) {
+                        continue;
+                    }
+                } elseif (!user_can(0, $cap)) {
+                    continue;
+                }
+            }
+
+            $valid[] = $id;
         }
 
         return $valid;
@@ -305,17 +325,8 @@ class DashboardController {
                 }
 
                 $cap = $config['capability'] ?? '';
-                if ($cap) {
-                    if (function_exists('get_role') && $role !== 'administrator') {
-                        $role_obj = get_role($role);
-                        if (!$role_obj || !$role_obj->has_cap($cap)) {
-                            return false;
-                        }
-                    }
-
-                    if (function_exists('user_can') && !user_can($user_id, $cap)) {
-                        return false;
-                    }
+                if ($cap && function_exists('user_can') && !user_can($user_id, $cap)) {
+                    return false;
                 }
 
                 return true;

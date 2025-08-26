@@ -59,7 +59,7 @@ class DashboardPreviewUserTest extends TestCase {
 
         $layoutDefault = DashboardController::get_user_dashboard_layout(1);
         $this->assertSame([
-            ['id' => 'widget_alpha', 'visible' => true],
+            ['id' => 'empty_dashboard', 'visible' => true],
         ], $layoutDefault);
 
         $_GET['ap_preview_user'] = '2';
