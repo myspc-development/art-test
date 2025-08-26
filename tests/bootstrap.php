@@ -53,5 +53,5 @@ if (!function_exists('admin_url'))           { function admin_url($p=''){ return
 if (!function_exists('rest_url'))            { function rest_url($p=''){ return 'https://example.test/wp-json/'.ltrim((string)$p,'/'); } }
 if (!function_exists('__'))                  { function __($t,$d=null){ return (string)$t; } }
 if (!function_exists('esc_html__'))          { function esc_html__($t,$d=null){ return (string)$t; } }
-if (!function_exists('plugin_dir_path'))     { function plugin_dir_path($f){ return rtrim(dirname((string)$f),'/\\').'/'; } }
-if (!function_exists('plugin_dir_url'))      { function plugin_dir_url($f){ return 'https://example.test/plugin/'; } }
+// Plugin path helpers are stubbed per-test when needed to avoid conflicts
+// with Brain Monkey's function patching.
