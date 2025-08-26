@@ -52,9 +52,13 @@ class EnqueueAssets {
      * Register Chart.js so it can be used as a dependency.
      */
     private static function register_chart_js(): void {
+        if (wp_script_is('chart-js', 'registered')) {
+            return;
+        }
+
         $rel  = 'assets/libs/chart.js/4.4.1/chart.min.js';
         $path = self::asset_path($rel);
-        if (!wp_script_is('chart-js', 'registered') && file_exists($path)) {
+        if (file_exists($path)) {
             wp_register_script('chart-js', self::asset_url($rel), [], filemtime($path), true);
         }
     }
@@ -126,7 +130,7 @@ class EnqueueAssets {
             return;
         }
 
-        $tab = sanitize_text_field(wp_unslash($_GET['tab'] ?? ''));
+        $tab = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : '';
 
         if ($tab === 'import_export') {
             self::enqueue_script_if_exists('papaparse', 'assets/libs/papaparse/papaparse.min.js');
