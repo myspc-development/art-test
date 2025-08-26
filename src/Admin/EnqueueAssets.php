@@ -58,9 +58,9 @@ class EnqueueAssets {
 
         $rel  = 'assets/libs/chart.js/4.4.1/chart.min.js';
         $path = self::asset_path($rel);
-        if (file_exists($path)) {
-            wp_register_script('chart-js', self::asset_url($rel), [], filemtime($path), true);
-        }
+        $ver  = file_exists($path) ? filemtime($path) : '4.4.1';
+
+        wp_register_script('chart-js', self::asset_url($rel), [], $ver, true);
     }
 
     /**

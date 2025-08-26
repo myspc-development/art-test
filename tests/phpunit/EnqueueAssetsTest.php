@@ -148,9 +148,11 @@ final class EnqueueAssetsTest extends TestCase
         EnqueueAssets::enqueue_admin('toplevel_page_artpulse-settings');
 
         $this->assertArrayHasKey('chart-js', $this->registeredScripts);
+        $this->assertSame(1234567890, $this->registeredScripts['chart-js']['ver']);
         $dash = $this->script('ap-user-dashboard-js');
         $this->assertNotNull($dash);
         $this->assertContains('chart-js', $dash['deps']);
+        $this->assertArrayNotHasKey('chart-js', $this->enqueuedScripts);
     }
 
     public function test_block_editor_styles_enqueue(): void
@@ -214,6 +216,33 @@ final class EnqueueAssetsTest extends TestCase
         unset($_GET['tab']);
     }
 
+    public function test_dashboard_not_enqueued_on_unrelated_admin_page(): void
+    {
+        // Provide assets that would normally load on the dashboard
+        $this->touch('assets/css/dashboard.css');
+        $this->touch('assets/js/dashboard-role-tabs.js');
+        $this->touch('assets/js/role-dashboard.js');
+        $this->touch('assets/libs/chart.js/4.4.1/chart.min.js');
+
+        Functions\when('do_action')->alias(function ($hook, ...$args) {
+            if ($hook === 'admin_enqueue_scripts') {
+                EnqueueAssets::enqueue_admin(...$args);
+            }
+        });
+
+        // Simulate an admin page that is NOT a dashboard page
+        do_action('admin_enqueue_scripts', 'plugins.php');
+
+        // Chart.js should be registered but not enqueued
+        $this->assertArrayHasKey('chart-js', $this->registeredScripts);
+        $this->assertArrayNotHasKey('chart-js', $this->enqueuedScripts);
+
+        // Dashboard assets should not load
+        $this->assertNull($this->style('ap-dashboard'));
+        $this->assertNull($this->script('ap-role-tabs'));
+        $this->assertNull($this->script('role-dashboard'));
+    }
+
     public function test_org_dashboard_admin_enqueues_with_sortable(): void
     {
         // Provide dashboard assets
@@ -245,6 +274,16 @@ final class EnqueueAssetsTest extends TestCase
 
         $this->assertArrayHasKey('chart-js', $this->registeredScripts);
         $this->assertArrayNotHasKey('chart-js', $this->enqueuedScripts);
+        $this->assertSame(1234567890, $this->registeredScripts['chart-js']['ver']);
+    }
+
+    public function test_chart_js_semver_fallback_when_file_missing(): void
+    {
+        EnqueueAssets::enqueue_frontend();
+
+        $this->assertArrayHasKey('chart-js', $this->registeredScripts);
+        $this->assertArrayNotHasKey('chart-js', $this->enqueuedScripts);
+        $this->assertSame('4.4.1', $this->registeredScripts['chart-js']['ver']);
     }
 }
 
