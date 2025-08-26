@@ -59,7 +59,7 @@ class UserLayoutManager
         }
 
         if (is_array($layout) && !empty($layout)) {
-            $valid  = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+            $valid  = array_keys(DashboardWidgetRegistry::get_all());
             $logs   = [];
             $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid, $logs);
 
