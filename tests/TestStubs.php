@@ -165,18 +165,9 @@ namespace {
     if (!function_exists('get_current_screen')) {
         function get_current_screen() { return (object)['id' => MockStorage::$screen]; }
     }
-    if (!function_exists('add_filter')) {
-        function add_filter($tag, $func, $priority = 10, $accepted_args = 1) {}
-    }
-    if (!function_exists('apply_filters')) {
-        function apply_filters($tag, $value, ...$args) { return $value; }
-    }
-    if (!function_exists('add_action')) {
-        function add_action($tag, $func, $priority = 10, $accepted_args = 1) {}
-    }
-    if (!function_exists('do_action')) {
-        function do_action($tag, ...$args) {}
-    }
+    // Core hook functions (add_filter/add_action/etc.) are intentionally
+    // omitted here so that Brain Monkey can intercept them during tests.
+    // Defining them would bypass the monkey patching and break expectations.
     if (!function_exists('__')) {
         function __($text, $domain = null) { return $text; }
     }
