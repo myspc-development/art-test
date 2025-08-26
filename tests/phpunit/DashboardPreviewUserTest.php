@@ -24,16 +24,16 @@ class DashboardPreviewUserTest extends TestCase {
         $prop2 = $ref2->getProperty('role_widgets');
         $prop2->setAccessible(true);
         $prop2->setValue(null, [
-            'member' => ['alpha'],
-            'artist' => ['beta'],
+            'member' => ['widget_alpha'],
+            'artist' => ['widget_beta'],
         ]);
 
-        DashboardWidgetRegistry::register_widget('alpha', [
+        DashboardWidgetRegistry::register_widget('widget_alpha', [
             'label'    => 'Alpha',
             'callback' => '__return_null',
             'roles'    => ['member'],
         ]);
-        DashboardWidgetRegistry::register_widget('beta', [
+        DashboardWidgetRegistry::register_widget('widget_beta', [
             'label'    => 'Beta',
             'callback' => '__return_null',
             'roles'    => ['artist'],
@@ -58,11 +58,15 @@ class DashboardPreviewUserTest extends TestCase {
         MockStorage::$users[2] = (object)['roles' => ['artist']];
 
         $layoutDefault = DashboardController::get_user_dashboard_layout(1);
-        $this->assertSame([['id' => 'alpha']], $layoutDefault);
+        $this->assertSame([
+            ['id' => 'widget_alpha', 'visible' => true],
+        ], $layoutDefault);
 
         $_GET['ap_preview_user'] = '2';
         $layoutPreview = DashboardController::get_user_dashboard_layout(1);
-        $this->assertSame([['id' => 'beta']], $layoutPreview);
+        $this->assertSame([
+            ['id' => 'widget_beta', 'visible' => true],
+        ], $layoutPreview);
     }
 }
 }

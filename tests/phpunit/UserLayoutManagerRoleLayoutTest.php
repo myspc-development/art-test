@@ -16,6 +16,7 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
         parent::setUp();
         MockStorage::$options = [];
         MockStorage::$users = [];
+        MockStorage::$current_roles = ['manage_options'];
 
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
@@ -26,25 +27,25 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
         $prop2 = $ref2->getProperty('role_widgets');
         $prop2->setAccessible(true);
         $prop2->setValue(null, [
-            'member' => ['alpha'],
-            'artist' => ['beta'],
+            'member' => ['widget_alpha'],
+            'artist' => ['widget_beta'],
         ]);
 
-        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', static function () {}, ['roles' => ['member']]);
-        DashboardWidgetRegistry::register('beta', 'Beta', '', '', static function () {}, ['roles' => ['artist']]);
+        DashboardWidgetRegistry::register('widget_alpha', 'Alpha', '', '', static function () {}, ['roles' => ['member']]);
+        DashboardWidgetRegistry::register('widget_beta', 'Beta', '', '', static function () {}, ['roles' => ['artist']]);
     }
 
     public function test_role_layout_registers_placeholders_for_missing_widgets(): void {
         MockStorage::$options['ap_dashboard_widget_config'] = [
             'member' => [
-                ['id' => 'alpha'],
-                ['id' => 'ghost'],
+                ['id' => 'widget_alpha', 'visible' => true],
+                ['id' => 'ghost', 'visible' => true],
             ],
         ];
 
         $result = UserLayoutManager::get_role_layout('member');
         $this->assertSame([
-            ['id' => 'alpha', 'visible' => true],
+            ['id' => 'widget_alpha', 'visible' => true],
             ['id' => 'ghost', 'visible' => true],
         ], $result['layout']);
         $this->assertSame(['ghost'], $result['logs']);
@@ -55,7 +56,7 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
     public function test_role_layout_falls_back_to_default_widgets(): void {
         $result = UserLayoutManager::get_role_layout('artist');
         $this->assertSame([
-            ['id' => 'beta', 'visible' => true],
+            ['id' => 'widget_beta', 'visible' => true],
         ], $result['layout']);
     }
 }
