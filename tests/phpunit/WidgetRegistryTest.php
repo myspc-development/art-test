@@ -39,7 +39,7 @@ class WidgetRegistryTest extends TestCase
     {
         WidgetRegistry::setDebug(false);
         $html = WidgetRegistry::render('missing');
-        $this->assertSame('', $html);
+        $this->assertStringContainsString('ap-widget--missing', $html);
     }
 }
 

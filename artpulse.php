@@ -22,7 +22,8 @@ require_once __DIR__ . '/includes/class-cli-check-widget-presets.php';
 require_once __DIR__ . '/includes/widget-logging.php';
 require_once __DIR__ . '/includes/unhide-default-widgets.php';
 
-add_action('init', function () {
+// Load i18n early but not before init (WP 6.7+ requirement).
+add_action('init', static function () {
     load_plugin_textdomain('artpulse', false, dirname(plugin_basename(__FILE__)) . '/languages');
 }, 0);
 

@@ -53,6 +53,9 @@ tests/playwright/__screenshots__/
 # ===============================
 .env
 
+# Ignore bundled wp-config.php
+wp-config.php
+
 # ===============================
 # 🧹 WORDPRESS ROOT (optional, if excluded)
 # ===============================
