@@ -16,6 +16,7 @@
       <file>tests/phpunit/WidgetAuditFixTest.php</file>
       <file>tests/phpunit/WidgetIdsCanonicalizationTest.php</file>
       <file>tests/phpunit/WidgetSourcesVisibilityTest.php</file>
+      <file>tests/phpunit/ArtistWidgetsTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>
