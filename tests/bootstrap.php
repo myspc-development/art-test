@@ -53,3 +53,18 @@ if (!function_exists('__'))                  { function __($t,$d=null){ return (
 if (!function_exists('esc_html__'))          { function esc_html__($t,$d=null){ return (string)$t; } }
 if (!function_exists('plugin_dir_path'))     { function plugin_dir_path($f){ return rtrim(dirname((string)$f),'/\\').'/'; } }
 if (!function_exists('plugin_dir_url'))      { function plugin_dir_url($f){ return 'https://example.test/plugin/'; } }
+
+// Fallback: if dev autoload missed Brain Monkey, load its source directly.
+if (!function_exists('Brain\\Monkey\\Functions\\when')) {
+    $bm = __DIR__ . '/../vendor/brain/monkey/src';
+    if (is_dir($bm)) {
+        foreach (['Functions','Actions','Filters','Expectations','Patchers','Monkey'] as $f) {
+            $p = $bm . '/' . $f . '.php';
+            if (is_file($p)) { require_once $p; }
+        }
+    }
+}
+if (!function_exists('Brain\\Monkey\\Functions\\when')) {
+    fwrite(STDERR, "[bootstrap] Brain\\Monkey not found. Re-run: COMPOSER_NO_DEV=0 composer install\n");
+    exit(1);
+}
