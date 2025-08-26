@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/wp-bootstrap.php" colors="true">
+<phpunit bootstrap="tests/php/bootstrap.php" colors="true">
   <testsuites>
     <testsuite name="WordPress">
       <file>tests/phpunit/ParityCanonicalizationTest.php</file>
+      <file>tests/Rest/UserLayoutControllerTest.php</file>
     </testsuite>
   </testsuites>
 
@@ -12,5 +13,6 @@
     <const name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
     <const name="WP_TESTS_DOMAIN" value="example.org"/>
     <const name="WP_TESTS_EMAIL" value="admin@example.org"/>
+    <env name="PLUGIN_MAIN_FILE" value="artpulse-management.php"/>
   </php>
 </phpunit>

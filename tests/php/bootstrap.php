@@ -24,6 +24,12 @@ tests_add_filter('muplugins_loaded', function () {
     $candidate   = $root . '/' . ltrim($plugin_main, '/');
 
     if ( file_exists( $candidate ) ) {
+        if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
+            define( 'ARTPULSE_PLUGIN_FILE', $candidate );
+        }
+        if ( ! defined( 'ARTPULSE_PLUGIN_DIR' ) ) {
+            define( 'ARTPULSE_PLUGIN_DIR', dirname( ARTPULSE_PLUGIN_FILE ) . '/' );
+        }
         require_once $candidate;
     } else {
         // Fallback if plugin bootstrap is namespaced in src/Core/Plugin.php
