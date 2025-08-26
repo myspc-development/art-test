@@ -150,10 +150,11 @@
     "status": "registered"
   },
   "site_stats": {
-    "file": "src/Widgets/Artist/SiteStatsWidget.php",
+    "file": "src/Widgets/Common/SiteStatsWidget.php",
     "roles": [
       "artist",
       "member",
+      "organization",
       "administrator"
     ],
     "status": "registered"

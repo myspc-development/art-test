@@ -17,7 +17,7 @@ namespace ArtPulse\Tests {
     use ArtPulse\Widgets\Artist\ArtistAudienceInsightsWidget;
     use ArtPulse\Widgets\Artist\ArtistFeedPublisherWidget;
     use ArtPulse\Widgets\Artist\MyEventsWidget;
-    use ArtPulse\Widgets\Artist\SiteStatsWidget;
+    use ArtPulse\Widgets\Common\SiteStatsWidget;
 
     class ArtistWidgetsTest extends TestCase {
         protected function setUp(): void {

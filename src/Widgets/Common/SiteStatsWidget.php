@@ -1,5 +1,5 @@
 <?php
-namespace ArtPulse\Widgets\Artist;
+namespace ArtPulse\Widgets\Common;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -22,7 +22,7 @@ class SiteStatsWidget implements DashboardWidgetInterface
 
     public static function roles(): array
     {
-        return ['artist', 'member', 'administrator'];
+        return ['artist', 'member', 'organization', 'administrator'];
     }
 
     public static function description(): string
@@ -63,3 +63,4 @@ class SiteStatsWidget implements DashboardWidgetInterface
 }
 
 SiteStatsWidget::register();
+
