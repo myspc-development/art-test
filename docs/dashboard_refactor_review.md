@@ -10,7 +10,7 @@ status: complete
 
 This checklist summarizes the code and documentation alignment work.
 
-- Created `LayoutUtils` under `includes/Core` for layout normalization and style merging.
+- Created `LayoutUtils` under `src/Core` for layout normalization and style merging.
 - Updated `UserLayoutManager` and `DashboardWidgetTools` to use the new helper.
 - REST docs now reference `POST` requests for `/layout/{role}`.
 - React-based widget editor sources (now removed) were previously located at `assets/js/widget-editor/WidgetEditorApp.jsx`.

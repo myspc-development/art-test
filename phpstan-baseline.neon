@@ -3,42 +3,42 @@ parameters:
 		-
 			message: "#^Function sanitize_key not found\\.$#"
 			count: 3
-			path: includes/Core/LayoutUtils.php
+			path: src/Core/LayoutUtils.php
 
 		-
 			message: "#^Function sanitize_text_field not found\\.$#"
 			count: 1
-			path: includes/Core/LayoutUtils.php
+			path: src/Core/LayoutUtils.php
 
 		-
 			message: "#^Method ArtPulse\\\\Core\\\\LayoutUtils\\:\\:merge_styles\\(\\) has parameter \\$base with no value type specified in iterable type array\\.$#"
 			count: 1
-			path: includes/Core/LayoutUtils.php
+			path: src/Core/LayoutUtils.php
 
 		-
 			message: "#^Method ArtPulse\\\\Core\\\\LayoutUtils\\:\\:merge_styles\\(\\) has parameter \\$updates with no value type specified in iterable type array\\.$#"
 			count: 1
-			path: includes/Core/LayoutUtils.php
+			path: src/Core/LayoutUtils.php
 
 		-
 			message: "#^Method ArtPulse\\\\Core\\\\LayoutUtils\\:\\:merge_styles\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: includes/Core/LayoutUtils.php
+			path: src/Core/LayoutUtils.php
 
 		-
 			message: "#^Method ArtPulse\\\\Core\\\\LayoutUtils\\:\\:normalize_layout\\(\\) has parameter \\$layout with no value type specified in iterable type array\\.$#"
 			count: 1
-			path: includes/Core/LayoutUtils.php
+			path: src/Core/LayoutUtils.php
 
 		-
 			message: "#^Method ArtPulse\\\\Core\\\\LayoutUtils\\:\\:normalize_layout\\(\\) has parameter \\$logs with no value type specified in iterable type array\\.$#"
 			count: 1
-			path: includes/Core/LayoutUtils.php
+			path: src/Core/LayoutUtils.php
 
 		-
 			message: "#^Method ArtPulse\\\\Core\\\\LayoutUtils\\:\\:normalize_layout\\(\\) has parameter \\$valid_ids with no value type specified in iterable type array\\.$#"
 			count: 1
-			path: includes/Core/LayoutUtils.php
+			path: src/Core/LayoutUtils.php
 
 		-
 			message: "#^Function add_action not found\\.$#"

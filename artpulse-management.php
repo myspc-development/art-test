@@ -169,7 +169,6 @@ require_once __DIR__ . '/src/Util/EventFeed.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/dashboard-builder-widgets.php';
 require_once __DIR__ . '/includes/dashboard-menu.php';
-require_once __DIR__ . '/includes/Core/LayoutUtils.php';
 require_once __DIR__ . '/includes/role-upgrade-handler.php';
 require_once __DIR__ . '/includes/guide-dashboard-widgets.php';
 require_once __DIR__ . '/includes/business-dashboard-widgets.php';
