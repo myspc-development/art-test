@@ -1,9 +1,9 @@
 <?php
-use ArtPulse\Widgets\SubmissionChecklistWidget;
+use ArtPulse\Widgets\QAChecklistWidget;
 
-class SubmissionChecklistWidgetTest extends \WP_UnitTestCase {
+class QAChecklistWidgetTest extends \WP_UnitTestCase {
     public function test_render_output() {
-        $widget = new SubmissionChecklistWidget();
+        $widget = new QAChecklistWidget();
         $output = $widget->render();
         $this->assertNotEmpty($output, 'Render output should not be empty.');
     }
