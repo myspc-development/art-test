@@ -285,7 +285,7 @@ class DashboardController {
         // Filter out any widgets not registered for this role
         $filtered = array_values(array_filter(
             $layout,
-            static function ($w) use ($role, $all) {
+            static function ($w) use ($role, $all, $user_id) {
                 $id = $w['id'] ?? null;
                 if (!$id || !isset($all[$id])) {
                     return false;
@@ -298,9 +298,15 @@ class DashboardController {
                 }
 
                 $cap = $config['capability'] ?? '';
-                if ($cap && function_exists('get_role') && $role !== 'administrator') {
-                    $role_obj = get_role($role);
-                    if (!$role_obj || !$role_obj->has_cap($cap)) {
+                if ($cap) {
+                    if (function_exists('get_role') && $role !== 'administrator') {
+                        $role_obj = get_role($role);
+                        if (!$role_obj || !$role_obj->has_cap($cap)) {
+                            return false;
+                        }
+                    }
+
+                    if (function_exists('user_can') && !user_can($user_id, $cap)) {
                         return false;
                     }
                 }
