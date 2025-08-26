@@ -43,14 +43,20 @@ See the [Changelog](docs/CHANGELOG.md) for release notes.
 
 ## Testing
 
-To install dependencies and run the test suite locally:
+Install dependencies and run the PHP test suite locally:
 
 ```
-COMPOSER_NO_DEV=0 composer install --no-interaction --no-progress
+composer install
 vendor/bin/phpunit -c phpunit.xml.dist
 ```
 
-Install dependencies and run tests completely offline:
+Generate coverage (optional):
+
+```
+XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.xml.dist --coverage-html coverage
+```
+
+Run tests completely offline:
 
 ```
 # one-time: create test DB (no network)
@@ -59,8 +65,6 @@ composer run test:db
 # run tests using local WordPress core (no download needed)
 vendor/bin/phpunit -c phpunit.xml.dist
 ```
-
-This uses your existing WordPress core at /www/wwwroot/192.168.1.21/ for ABSPATH + a separate DB (wordpress_test), so it’s isolated and network-free.
 
 JavaScript unit tests can be executed with:
 
@@ -502,14 +506,44 @@ When the plugin is uninstalled through the WordPress admin, all tables created b
 
 ## Widget Development
 
-Widget PHP files register themselves on the `artpulse_register_dashboard_widget` hook. Copy any file from `templates/widgets/` into your theme to override the markup. For example:
+### Widget Registry API
 
-```bash
-mkdir -p $(wp eval 'echo get_stylesheet_directory();')/templates/widgets
-cp templates/widgets/donations.php $(wp eval 'echo get_stylesheet_directory();')/templates/widgets/
+Hook into `artpulse/widgets/register` to add widgets to the registry:
+
+```php
+use ArtPulse\Core\WidgetRegistry;
+
+add_action( 'artpulse/widgets/register', function () {
+    WidgetRegistry::register(
+        'example',
+        [ Example_Widget::class, 'render' ],
+        [ 'label' => 'Example Widget' ]
+    );
+} );
 ```
 
-Developers may modify the registry via the `ap_dashboard_widgets` filter. Each widget entry supports a `section` key for grouping under headings such as **insights** or **actions**.
+Themes or sites can adjust default presets for roles with the `artpulse/dashboard/preset` filter:
+
+```php
+add_filter( 'artpulse/dashboard/preset', function ( array $slugs, string $role ) {
+    if ( $role === 'member' ) {
+        $slugs[] = 'example';
+    }
+    return $slugs;
+}, 10, 2 );
+```
+
+### Quick Custom Widget
+
+```php
+class Example_Widget {
+    public static function render( array $args ): string {
+        return '<p>Hello World</p>';
+    }
+}
+```
+
+Copy any file from `templates/widgets/` into your theme to override its markup.
 
 ### Seeding Demo Content
 
@@ -534,8 +568,8 @@ This removes the `ap_dashboard_layout` and `ap_widget_visibility` meta so the de
 ### Creating Widgets
 
 1. Copy an existing widget from the `widgets/` directory and update the class name.
-2. Implement `get_id()`, `get_title()`, `get_section()`, `can_view( $user_id )` and `render( $user_id )`.
-3. Call `DashboardWidgetRegistry::register()` in the `register()` method with a `roles` array.
+2. Register it on the `artpulse/widgets/register` action via `WidgetRegistry::register()`.
+3. Optionally use `artpulse/dashboard/preset` to include it in a default layout.
 
 ### Template Overrides
 
