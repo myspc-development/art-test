@@ -89,7 +89,7 @@ class EnqueueAssets {
         if (!$screen || (method_exists($screen, 'is_block_editor') && !$screen->is_block_editor())) {
             return;
         }
-        self::enqueue_style_if_exists('artpulse-editor-styles', 'assets/css/editor.css');
+        self::enqueue_style_if_exists('artpulse-editor-styles', 'assets/css/editor-styles.css');
     }
 
     /**
@@ -113,6 +113,16 @@ class EnqueueAssets {
             }
 
             self::enqueue_script_if_exists('role-dashboard', 'assets/js/role-dashboard.js', $deps);
+            return;
+        }
+
+        $settings_pages = [
+            'toplevel_page_artpulse-settings',
+            'artpulse-settings_page_artpulse-import-export',
+            'artpulse-settings_page_artpulse-quickstart',
+            'artpulse-settings_page_artpulse-engagement',
+        ];
+        if (!in_array($hook, $settings_pages, true)) {
             return;
         }
 

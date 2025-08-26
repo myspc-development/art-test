@@ -110,21 +110,12 @@ final class EnqueueAssetsTest extends TestCase
 
     public function test_dashboard_admin_enqueues_with_sortable(): void
     {
-        $cb = null;
-        Actions\expectAdded('admin_enqueue_scripts')->once()->whenHappen(function ($callback) use (&$cb) {
-            $cb = $callback;
-        });
-        EnqueueAssets::register();
-        Actions\expectDone('admin_enqueue_scripts')->once()->whenHappen(function ($hook) use (&$cb) {
-            call_user_func($cb, $hook);
-        });
-
         $this->touch('assets/css/dashboard.css');
         $this->touch('assets/js/dashboard-role-tabs.js');
         $this->touch('assets/js/role-dashboard.js');
         $this->touch('assets/libs/sortablejs/Sortable.min.js');
 
-        do_action('admin_enqueue_scripts', 'toplevel_page_ap-dashboard');
+        EnqueueAssets::enqueue_admin('toplevel_page_ap-dashboard');
 
         $this->assertNotNull($this->style('ap-dashboard'));
         $this->assertNotNull($this->script('ap-role-tabs'));
@@ -137,20 +128,11 @@ final class EnqueueAssetsTest extends TestCase
 
     public function test_dashboard_admin_enqueues_without_sortable(): void
     {
-        $cb = null;
-        Actions\expectAdded('admin_enqueue_scripts')->once()->whenHappen(function ($callback) use (&$cb) {
-            $cb = $callback;
-        });
-        EnqueueAssets::register();
-        Actions\expectDone('admin_enqueue_scripts')->once()->whenHappen(function ($hook) use (&$cb) {
-            call_user_func($cb, $hook);
-        });
-
         $this->touch('assets/css/dashboard.css');
         $this->touch('assets/js/dashboard-role-tabs.js');
         $this->touch('assets/js/role-dashboard.js');
 
-        do_action('admin_enqueue_scripts', 'toplevel_page_ap-dashboard');
+        EnqueueAssets::enqueue_admin('toplevel_page_ap-dashboard');
 
         $role = $this->script('role-dashboard');
         $this->assertNotNull($role);
@@ -163,7 +145,7 @@ final class EnqueueAssetsTest extends TestCase
         $this->touch('assets/libs/chart.js/4.4.1/chart.min.js');
         $this->touch('assets/js/ap-user-dashboard.js');
 
-        EnqueueAssets::enqueue_admin('artpulse-settings');
+        EnqueueAssets::enqueue_admin('toplevel_page_artpulse-settings');
 
         $this->assertArrayHasKey('chart-js', $this->registeredScripts);
         $dash = $this->script('ap-user-dashboard-js');
@@ -177,7 +159,7 @@ final class EnqueueAssetsTest extends TestCase
             public function is_block_editor(): bool { return true; }
         };
         Functions\when('get_current_screen')->justReturn($screen);
-        $this->touch('assets/css/editor.css');
+        $this->touch('assets/css/editor-styles.css');
 
         EnqueueAssets::enqueue_block_editor_styles();
 
@@ -189,12 +171,9 @@ final class EnqueueAssetsTest extends TestCase
         $this->touch('assets/libs/papaparse/papaparse.min.js');
         $this->touch('assets/js/ap-csv-import.js');
 
-        Functions\when('get_current_screen')->justReturn(new class {
-            public string $id = 'artpulse-settings';
-        });
         $_GET['tab'] = 'import_export';
 
-        EnqueueAssets::enqueue_admin('artpulse-settings');
+        EnqueueAssets::enqueue_admin('toplevel_page_artpulse-settings');
 
         $this->assertNotNull($this->script('papaparse'));
         $csv = $this->script('ap-csv-import');
@@ -203,6 +182,40 @@ final class EnqueueAssetsTest extends TestCase
         $this->assertContains('wp-api-fetch', $csv['deps']);
 
         unset($_GET['tab']);
+    }
+
+    public function test_block_editor_styles_not_enqueued_when_file_missing(): void
+    {
+        $screen = new class {
+            public function is_block_editor(): bool { return true; }
+        };
+        Functions\when('get_current_screen')->justReturn($screen);
+
+        EnqueueAssets::enqueue_block_editor_styles();
+
+        $this->assertNull($this->style('artpulse-editor-styles'));
+    }
+
+    public function test_import_export_not_enqueued_on_unrelated_admin_page(): void
+    {
+        $_GET['tab'] = 'import_export';
+
+        EnqueueAssets::enqueue_admin('plugins.php');
+
+        $this->assertNull($this->script('papaparse'));
+        $this->assertNull($this->script('ap-csv-import'));
+
+        unset($_GET['tab']);
+    }
+
+    public function test_frontend_registers_chart_only(): void
+    {
+        $this->touch('assets/libs/chart.js/4.4.1/chart.min.js');
+
+        EnqueueAssets::enqueue_frontend();
+
+        $this->assertArrayHasKey('chart-js', $this->registeredScripts);
+        $this->assertArrayNotHasKey('chart-js', $this->enqueuedScripts);
     }
 }
 

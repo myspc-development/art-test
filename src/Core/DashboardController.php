@@ -127,7 +127,9 @@ class DashboardController {
             if (empty($layout)) {
                 $stub = sanitize_key($key . '_placeholder');
                 WidgetGuard::register_stub_widget($stub, [], ['roles' => [$preset['role']]]);
-                error_log("[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}");
+                if (defined('ARTPULSE_TEST_VERBOSE') && ARTPULSE_TEST_VERBOSE) {
+                    error_log("[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}");
+                }
                 $layout = [ ['id' => $stub] ];
             }
             $presets[$key]['layout'] = $layout;
@@ -418,7 +420,9 @@ class DashboardController {
                 $id = DashboardWidgetRegistry::map_to_core_id(sanitize_key($entry['id']));
 
                 if (!DashboardWidgetRegistry::exists($id)) {
-                    error_log("[Dashboard Preset] Widget {$id} not registered");
+                    if (defined('ARTPULSE_TEST_VERBOSE') && ARTPULSE_TEST_VERBOSE) {
+                        error_log("[Dashboard Preset] Widget {$id} not registered");
+                    }
                     continue;
                 }
 
