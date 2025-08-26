@@ -98,8 +98,8 @@
     ],
     "status": "registered"
   },
-  "revenue_summary": {
-    "file": "includes/dashboard-widgets.php",
+  "artist_revenue_summary": {
+    "file": "src/Widgets/Artist/ArtistRevenueSummaryWidget.php",
     "roles": [
       "artist"
     ],
@@ -113,14 +113,14 @@
     "status": "registered"
   },
   "artist_artwork_manager": {
-    "file": "includes/dashboard-widgets.php",
+    "file": "src/Widgets/Artist/ArtistArtworkManagerWidget.php",
     "roles": [
       "artist"
     ],
     "status": "registered"
   },
   "artist_audience_insights": {
-    "file": "includes/dashboard-widgets.php",
+    "file": "src/Widgets/Artist/ArtistAudienceInsightsWidget.php",
     "roles": [
       "artist"
     ],
@@ -134,9 +134,27 @@
     "status": "registered"
   },
   "artist_feed_publisher": {
-    "file": "includes/dashboard-widgets.php",
+    "file": "src/Widgets/Artist/ArtistFeedPublisherWidget.php",
     "roles": [
       "artist"
+    ],
+    "status": "registered"
+  },
+  "my_events": {
+    "file": "src/Widgets/Artist/MyEventsWidget.php",
+    "roles": [
+      "artist",
+      "member",
+      "organization"
+    ],
+    "status": "registered"
+  },
+  "site_stats": {
+    "file": "src/Widgets/Artist/SiteStatsWidget.php",
+    "roles": [
+      "artist",
+      "member",
+      "administrator"
     ],
     "status": "registered"
   },
