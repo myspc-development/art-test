@@ -64,5 +64,14 @@ namespace ArtPulse\Tests {
             $this->assertIsString($html);
             $this->assertStringContainsString('<section', $html);
         }
+
+        public function test_my_events_alias_resolves(): void {
+            $this->assertTrue(DashboardWidgetRegistry::exists('my-events'));
+            $this->assertTrue(DashboardWidgetRegistry::exists('myevents'));
+            $this->assertSame(
+                DashboardWidgetRegistry::get('my-events'),
+                DashboardWidgetRegistry::get('myevents')
+            );
+        }
     }
 }
