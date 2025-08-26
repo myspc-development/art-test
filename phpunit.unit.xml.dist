@@ -7,6 +7,7 @@
       <file>tests/phpunit/DashboardPreviewUserTest.php</file>
       <file>tests/phpunit/DashboardWidgetRegistryAliasTest.php</file>
       <file>tests/phpunit/DashboardWidgetRegistryHelpersTest.php</file>
+      <file>tests/phpunit/DashboardPresetIntegrityTest.php</file>
       <file>tests/phpunit/EnqueueAssetsTest.php</file>
       <file>tests/phpunit/DashboardRoleTabsTest.php</file>
       <file>tests/phpunit/NearbyEventsWidgetTest.php</file>

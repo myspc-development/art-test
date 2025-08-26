@@ -18,7 +18,7 @@ class DashboardPresets
             'upcoming_events_by_location',
             'recommended_for_you',
             'my-events',
-            'accounttools',
+            'account-tools',
             'site_stats',
         ],
         'artist' => [
