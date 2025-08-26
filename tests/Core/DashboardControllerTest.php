@@ -24,7 +24,7 @@ class DashboardControllerTest extends TestCase
     {
         $expected = [
             'widget_news',
-            'membership',
+            'widget_membership',
             'upgrade',
             'account-tools',
             'recommended_for_you',

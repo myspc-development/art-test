@@ -670,7 +670,7 @@ function ap_register_core_dashboard_widgets(): void
 {
     // visible to all dashboards
     DashboardWidgetRegistry::register(
-        'membership',
+        'widget_membership',
         __('Membership', 'artpulse'),
         'users',
         __('Subscription status and badges.', 'artpulse'),

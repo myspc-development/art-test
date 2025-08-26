@@ -1,5 +1,5 @@
 [
-  {"id": "membership"},
+  {"id": "widget_membership"},
   {"id": "widget_followed_artists"},
   {"id": "upcoming_events_by_location"},
   {"id": "recommended_for_you"}
