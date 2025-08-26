@@ -198,14 +198,43 @@ final class EnqueueAssetsTest extends TestCase
 
     public function test_import_export_not_enqueued_on_unrelated_admin_page(): void
     {
+        Functions\when('do_action')->alias(function ($hook, ...$args) {
+            if ($hook === 'admin_enqueue_scripts') {
+                EnqueueAssets::enqueue_admin(...$args);
+            }
+        });
         $_GET['tab'] = 'import_export';
 
-        EnqueueAssets::enqueue_admin('plugins.php');
+        // Simulate an admin page that is NOT an ArtPulse settings page:
+        do_action('admin_enqueue_scripts', 'plugins.php');
 
         $this->assertNull($this->script('papaparse'));
         $this->assertNull($this->script('ap-csv-import'));
 
         unset($_GET['tab']);
+    }
+
+    public function test_org_dashboard_admin_enqueues_with_sortable(): void
+    {
+        // Provide dashboard assets
+        $this->touch('assets/css/dashboard.css');
+        $this->touch('assets/js/dashboard-role-tabs.js');
+        $this->touch('assets/js/role-dashboard.js');
+        $this->touch('assets/libs/sortablejs/Sortable.min.js');
+
+        Functions\when('do_action')->alias(function ($hook, ...$args) {
+            if ($hook === 'admin_enqueue_scripts') {
+                EnqueueAssets::enqueue_admin(...$args);
+            }
+        });
+
+        // Fire the org dashboard hook
+        do_action('admin_enqueue_scripts', 'toplevel_page_ap-org-dashboard');
+
+        $role = $this->script('role-dashboard');
+        $this->assertNotNull($role);
+        $this->assertContains('ap-role-tabs', $role['deps']);
+        $this->assertContains('sortablejs',   $role['deps']);
     }
 
     public function test_frontend_registers_chart_only(): void

@@ -48,6 +48,8 @@ if (is_file(__DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php')) {
     require_once __DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php';
 }
 
+require_once __DIR__ . '/polyfills.php'; // load WP polyfills before any plugin file uses them
+
 // 3) Minimal constants/polyfills used by code under test
 if (!defined('ARTPULSE_PLUGIN_FILE')) define('ARTPULSE_PLUGIN_FILE', __FILE__);
 if (!function_exists('sanitize_text_field')) { function sanitize_text_field($s){ return preg_replace('/[^A-Za-z0-9_\-]/','',strip_tags((string)$s)); } }
@@ -57,5 +59,4 @@ if (!function_exists('admin_url'))           { function admin_url($p = ''){ retu
 if (!function_exists('rest_url'))            { function rest_url($p = ''){ return 'http://example.com/wp-json/' . ltrim($p,'/'); } }
 if (!function_exists('__'))                  { function __($t){ return $t; } }
 if (!function_exists('esc_html__'))          { function esc_html__($t){ return $t; } }
-require_once __DIR__ . '/polyfills.php';
 
