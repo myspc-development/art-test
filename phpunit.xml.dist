@@ -2,7 +2,7 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true" cacheResult="false">
   <testsuites>
     <testsuite name="Plugin">
-      <file>tests/phpunit/EnqueueAssetsTest.php</file>
+      <directory>tests/phpunit/</directory>
     </testsuite>
   </testsuites>
 </phpunit>
