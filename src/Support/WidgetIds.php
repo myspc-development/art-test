@@ -27,6 +27,8 @@ final class WidgetIds {
         'widget_widget_near_me'        => 'widget_near_me_events',
         'widget_local_events'          => 'widget_local_events',
         'widget_account_tools'         => 'widget_account_tools',
+        'widget_followed_artists'      => 'widget_my_follows',
+        'followed_artists'             => 'widget_my_follows',
     ];
 
     public static function canonicalize( $id ): string {
