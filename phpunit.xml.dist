@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true" cacheResult="false">
+  <testsuites>
+    <testsuite name="Plugin">
+      <file>tests/phpunit/EnqueueAssetsTest.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>
+
