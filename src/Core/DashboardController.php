@@ -159,14 +159,26 @@ class DashboardController {
                 continue; // role mismatch
             }
 
-            $cap = $config['capability'] ?? '';
-            if ($cap && $role !== 'administrator') {
-                if (!$role_obj || !$role_obj->has_cap($cap)) {
-                    continue; // capability not allowed for role
+            $caps = [];
+            if (!empty($config['capability'])) {
+                $caps[] = $config['capability'];
+            }
+            if (!empty($entry['capability'])) {
+                $caps[] = $entry['capability'];
+            }
+
+            foreach ($caps as $cap) {
+                if ($cap && $role !== 'administrator') {
+                    if (!$role_obj || !$role_obj->has_cap($cap)) {
+                        continue 2; // capability not allowed for role
+                    }
                 }
             }
 
-            $filtered[] = ['id' => $id];
+            $filtered[] = [
+                'id'       => $id,
+                'visible'  => $entry['visible'] ?? true,
+            ];
         }
 
         return $filtered;
@@ -278,14 +290,28 @@ class DashboardController {
                 if (!$id || !isset($all[$id])) {
                     return false;
                 }
-                $roles = isset($all[$id]['roles']) ? (array) $all[$id]['roles'] : [];
-                return empty($roles) || in_array($role, $roles, true);
+
+                $config = $all[$id];
+                $roles = isset($config['roles']) ? (array) $config['roles'] : [];
+                if (!(empty($roles) || in_array($role, $roles, true))) {
+                    return false;
+                }
+
+                $cap = $config['capability'] ?? '';
+                if ($cap && function_exists('get_role') && $role !== 'administrator') {
+                    $role_obj = get_role($role);
+                    if (!$role_obj || !$role_obj->has_cap($cap)) {
+                        return false;
+                    }
+                }
+
+                return true;
             }
         ));
 
         if (empty($filtered)) {
             WidgetGuard::register_stub_widget('empty_dashboard', ['title' => 'Dashboard Placeholder'], ['roles' => [$role]]);
-            $filtered = [ ['id' => 'empty_dashboard'] ];
+            $filtered = [ ['id' => 'empty_dashboard', 'visible' => true] ];
             /**
              * Fires when a user's dashboard layout resolves to an empty set.
              *
