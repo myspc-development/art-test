@@ -10,7 +10,6 @@ if (!defined('ARTPULSE_PLUGIN_FILE')) {
 }
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../includes/Core/LayoutUtils.php';
 require_once __DIR__ . '/../includes/widget-loader.php';
 require_once __DIR__ . '/translation-helper.php';
 
