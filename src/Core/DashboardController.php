@@ -68,6 +68,23 @@ class DashboardController {
     private static bool $defaults_checked = false;
 
     /**
+     * Normalize legacy widget slugs to their canonical forms.
+     */
+    private static function normalize_widget_slug(string $id): string {
+        static $map = [
+            'membership'                   => 'widget_membership',
+            'widget_followed_artists'      => 'widget_my_follows',
+            'followed_artists'             => 'widget_my_follows',
+            'upcoming_events_by_location'  => 'widget_local_events',
+            'recommended_for_you'          => 'widget_recommended_for_you',
+            'my-events'                    => 'widget_my_events',
+            'account-tools'                => 'widget_account_tools',
+            'site_stats'                   => 'widget_site_stats',
+        ];
+        return $map[$id] ?? $id;
+    }
+
+    /**
      * Default layout presets keyed by unique identifier.
      *
      * Preset layouts are filtered so only widgets the specified role can access
@@ -201,6 +218,7 @@ class DashboardController {
         $missing = [];
         foreach (self::$role_widgets as $ids) {
             foreach ($ids as $id) {
+                $id = self::normalize_widget_slug($id);
                 if (!DashboardWidgetRegistry::exists($id)) {
                     $missing[] = $id;
                 }
@@ -230,6 +248,12 @@ class DashboardController {
             $widgets = self::$role_widgets[$role];
         } else {
             $widgets = [];
+        }
+
+        $widgets = array_map([self::class, 'normalize_widget_slug'], $widgets);
+        $known   = WidgetRegistry::ids();
+        if (!empty($known)) {
+            $widgets = array_values(array_unique(array_intersect($widgets, $known)));
         }
 
         $valid = [];
@@ -301,6 +325,16 @@ class DashboardController {
                 );
             }
         }
+
+        $layout = array_map(
+            static function ($entry) {
+                if (is_array($entry) && isset($entry['id'])) {
+                    $entry['id'] = self::normalize_widget_slug(sanitize_key($entry['id']));
+                }
+                return $entry;
+            },
+            $layout
+        );
 
         $all       = DashboardWidgetRegistry::get_all();
         $valid_ids = array_keys($all);
@@ -375,9 +409,9 @@ class DashboardController {
             $ids = [];
             foreach ($current as $item) {
                 if (is_array($item) && isset($item['id'])) {
-                    $ids[] = sanitize_key($item['id']);
+                    $ids[] = self::normalize_widget_slug(sanitize_key($item['id']));
                 } elseif (is_string($item)) {
-                    $ids[] = sanitize_key($item);
+                    $ids[] = self::normalize_widget_slug(sanitize_key($item));
                 }
             }
             $allowed = array_keys(DashboardWidgetRegistry::get_widgets($role, $user_id));
@@ -417,9 +451,9 @@ class DashboardController {
                     continue;
                 }
 
-                $id = DashboardWidgetRegistry::map_to_core_id(sanitize_key($entry['id']));
+                $id = self::normalize_widget_slug(sanitize_key($entry['id']));
 
-                if (!DashboardWidgetRegistry::exists($id)) {
+                if (!WidgetRegistry::exists($id) && !DashboardWidgetRegistry::exists($id)) {
                     if (defined('ARTPULSE_TEST_VERBOSE') && ARTPULSE_TEST_VERBOSE) {
                         error_log("[Dashboard Preset] Widget {$id} not registered");
                     }
@@ -505,4 +539,29 @@ class DashboardController {
 
         return get_posts($args);
     }
+}
+
+if (function_exists('add_action')) {
+    \add_action('init', static function () {
+    $aliases = [
+        'membership'                  => 'widget_membership',
+        'widget_followed_artists'     => 'widget_my_follows',
+        'followed_artists'            => 'widget_my_follows',
+        'upcoming_events_by_location' => 'widget_local_events',
+        'recommended_for_you'         => 'widget_recommended_for_you',
+        'my-events'                   => 'widget_my_events',
+        'account-tools'               => 'widget_account_tools',
+        'site_stats'                  => 'widget_site_stats',
+    ];
+
+    foreach ($aliases as $legacy => $canon) {
+        if ($legacy === $canon) { continue; }
+        if (\ArtPulse\Core\WidgetRegistry::exists($legacy)) { continue; }
+        if (!\ArtPulse\Core\WidgetRegistry::exists($canon)) { continue; }
+
+        \ArtPulse\Core\WidgetRegistry::register($legacy, function(array $ctx = []) use ($canon) {
+            return \ArtPulse\Core\WidgetRegistry::render($canon, $ctx);
+        });
+    }
+    }, 20);
 }

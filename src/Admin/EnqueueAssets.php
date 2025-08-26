@@ -146,6 +146,18 @@ class EnqueueAssets {
      */
     public static function enqueue_frontend(): void {
         self::register_chart_js();
+
+        $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
+        // Guard helper existence
+        if (!function_exists('ap_styles_disabled') || !ap_styles_disabled()) {
+            wp_enqueue_style(
+                'ap-style',
+                $plugin_url . '/assets/css/ap-style.css',
+                [],
+                '1.0.0'
+            );
+        }
+
         // Frontend scripts would be enqueued here when needed.
     }
 }

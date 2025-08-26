@@ -64,15 +64,18 @@ class WidgetRegistry
     {
         $key = strtolower(trim($slug));
         if (!isset(self::$widgets[$key])) {
-            if (self::$debugOverride ?? (defined('WP_DEBUG') && WP_DEBUG)) {
-                if (!isset(self::$logged_missing[$key])) {
-                    error_log('Unknown widget slug: ' . $key);
-                    self::$logged_missing[$key] = true;
+            if (!isset(self::$logged_missing[$key])) {
+                self::$logged_missing[$key] = true;
+                if (
+                    defined('WP_DEBUG') && WP_DEBUG &&
+                    defined('ARTPULSE_TEST_VERBOSE') && ARTPULSE_TEST_VERBOSE &&
+                    function_exists('is_user_logged_in') && is_user_logged_in()
+                ) {
+                    error_log('ArtPulse: Unknown widget slug: ' . $slug);
                 }
-                $escaped = function_exists('esc_attr') ? esc_attr($key) : htmlspecialchars($key, ENT_QUOTES);
-                return '<section class="ap-widget--missing" data-slug="' . $escaped . '"></section>';
             }
-            return '';
+            $escaped = function_exists('esc_attr') ? esc_attr($slug) : htmlspecialchars($slug, ENT_QUOTES);
+            return '<section class="ap-widget--missing" data-slug="' . $escaped . '"></section>';
         }
         $def  = self::$widgets[$key];
         $args = array_merge($def['args'], $context);
@@ -87,6 +90,16 @@ class WidgetRegistry
     public static function list(): array
     {
         return array_keys(self::$widgets);
+    }
+
+    /**
+     * Retrieve all registered widget IDs.
+     *
+     * @return array<string>
+     */
+    public static function ids(): array
+    {
+        return array_keys(self::$widgets ?? []);
     }
 
     /**
