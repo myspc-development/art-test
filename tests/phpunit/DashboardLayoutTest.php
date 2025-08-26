@@ -161,5 +161,21 @@ class DashboardLayoutTest extends TestCase {
             ['id' => 'widget_alpha', 'visible' => true],
         ], $filtered);
     }
+
+    public function test_filter_accessible_layout_respects_entry_capability(): void {
+        DashboardWidgetRegistry::register('widget_alpha', 'Alpha', '', '', static function () {}, ['roles' => ['member']]);
+        DashboardWidgetRegistry::register('widget_beta', 'Beta', '', '', static function () {}, ['roles' => ['member']]);
+        $layout = [
+            ['id' => 'widget_alpha', 'visible' => false],
+            ['id' => 'widget_beta', 'visible' => true, 'capability' => 'edit_posts'],
+        ];
+        $ref = new \ReflectionClass(DashboardController::class);
+        $m = $ref->getMethod('filter_accessible_layout');
+        $m->setAccessible(true);
+        $filtered = $m->invoke(null, $layout, 'member');
+        $this->assertSame([
+            ['id' => 'widget_alpha', 'visible' => false],
+        ], $filtered);
+    }
 }
 }
