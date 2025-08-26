@@ -1,6 +1,6 @@
 <?php
 namespace ArtPulse\Core {
-    if (!class_exists('ArtPulse\\Core\\DashboardWidgetRegistry', false)) {
+    if (!class_exists(\ArtPulse\Core\DashboardWidgetRegistry::class)) {
         class DashboardWidgetRegistry { public static function register(...$args): void {} }
     }
 }
