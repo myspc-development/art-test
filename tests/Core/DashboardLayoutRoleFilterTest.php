@@ -68,7 +68,7 @@ class DashboardLayoutRoleFilterTest extends TestCase
         $ref = new \ReflectionClass(DashboardController::class);
         $prop = $ref->getProperty('role_widgets');
         $prop->setAccessible(true);
-        $prop->setValue([
+        $prop->setValue(null, [
             'member' => ['alpha', 'beta'],
         ]);
 
@@ -118,7 +118,7 @@ class DashboardLayoutRoleFilterTest extends TestCase
         $ref = new \ReflectionClass(DashboardController::class);
         $prop = $ref->getProperty('role_widgets');
         $prop->setAccessible(true);
-        $prop->setValue([
+        $prop->setValue(null, [
             'member' => ['alpha', 'beta'],
         ]);
 

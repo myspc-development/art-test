@@ -13,12 +13,12 @@ class WidgetRoleSyncTest extends TestCase
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
 
         $ref2 = new \ReflectionClass(DashboardController::class);
         $prop2 = $ref2->getProperty('role_widgets');
         $prop2->setAccessible(true);
-        $prop2->setValue([]);
+        $prop2->setValue(null, []);
     }
 
     public function test_roles_inferred_for_missing_widget(): void

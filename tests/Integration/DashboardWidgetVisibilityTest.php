@@ -9,7 +9,7 @@ class DashboardWidgetVisibilityTest extends \WP_UnitTestCase {
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
         delete_option('ap_widget_group_visibility');
     }
 

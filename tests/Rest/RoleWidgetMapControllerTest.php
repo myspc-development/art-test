@@ -18,7 +18,7 @@ class RoleWidgetMapControllerTest extends \WP_UnitTestCase
         $ref  = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
 
         // Ensure roles exist
         foreach ([ 'member', 'artist', 'organization' ] as $role) {

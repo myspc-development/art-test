@@ -11,11 +11,11 @@ class DashboardBuilderRegistryGetForRoleTest extends TestCase
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
         if ($ref->hasProperty('builder_widgets')) {
             $bw = $ref->getProperty('builder_widgets');
             $bw->setAccessible(true);
-            $bw->setValue([]);
+            $bw->setValue(null, []);
         }
     }
 

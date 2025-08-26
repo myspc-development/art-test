@@ -13,10 +13,10 @@ class WidgetGuardTest extends WP_UnitTestCase
         $ref  = new ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
         $prop = $ref->getProperty('id_map');
         $prop->setAccessible(true);
-        $prop->setValue(null);
+        $prop->setValue(null, null);
     }
 
     public function set_up(): void

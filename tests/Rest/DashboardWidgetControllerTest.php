@@ -20,11 +20,11 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
         if ($ref->hasProperty('builder_widgets')) {
             $b = $ref->getProperty('builder_widgets');
             $b->setAccessible(true);
-            $b->setValue([]);
+            $b->setValue(null, []);
         }
 
         $this->uid = self::factory()->user->create(['role' => 'administrator']);

@@ -13,15 +13,15 @@ class OrganizationWidgetConfigTest extends WP_UnitTestCase {
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
 
         $loaderRef = new \ReflectionClass(WidgetRegistryLoader::class);
         $configProp = $loaderRef->getProperty('config');
         $configProp->setAccessible(true);
-        $configProp->setValue([]);
+        $configProp->setValue(null, []);
         $regProp = $loaderRef->getProperty('registered');
         $regProp->setAccessible(true);
-        $regProp->setValue(false);
+        $regProp->setValue(null, false);
 
         WidgetRegistryLoader::register_widgets();
         if (!get_role('organization')) {

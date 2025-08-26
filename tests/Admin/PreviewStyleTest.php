@@ -32,7 +32,7 @@ class PreviewStyleTest extends TestCase
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
     }
 
     public function test_preview_injects_style_tag(): void
