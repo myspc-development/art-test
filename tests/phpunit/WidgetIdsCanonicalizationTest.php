@@ -19,6 +19,8 @@ class WidgetIdsCanonicalizationTest extends TestCase
             'favorites'                => 'widget_favorites',
             'local-events'             => 'widget_local_events',
             'my-follows'               => 'widget_my_follows',
+            'widget_followed_artists'  => 'widget_my_follows',
+            'followed_artists'         => 'widget_my_follows',
             'notifications'            => 'widget_notifications',
             'messages'                 => 'widget_messages',
             'dashboard_feedback'       => 'widget_dashboard_feedback',
