@@ -8,6 +8,7 @@
       <file>tests/phpunit/DashboardWidgetRegistryAliasTest.php</file>
       <file>tests/phpunit/DashboardWidgetRegistryHelpersTest.php</file>
       <file>tests/phpunit/EnqueueAssetsTest.php</file>
+      <file>tests/phpunit/DashboardRoleTabsTest.php</file>
       <file>tests/phpunit/NearbyEventsWidgetTest.php</file>
       <file>tests/phpunit/ParityPlaceholderTest.php</file>
       <file>tests/phpunit/RestRouteConflictsTest.php</file>

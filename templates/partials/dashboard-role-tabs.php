@@ -22,8 +22,11 @@ $icons = [
     'organization' => '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M3 21V9l9-6 9 6v12H3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 21v-6h6v6" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
 ];
 
-$requested = isset($_GET['role']) ? sanitize_key($_GET['role']) : null;
-$active    = ($requested && in_array($requested, $roles, true)) ? $requested : $roles[0];
+$requested = '';
+if (isset($_GET['role'])) {
+    $requested = sanitize_key(wp_unslash($_GET['role']));
+}
+$active = ($requested && in_array($requested, $roles, true)) ? $requested : $roles[0];
 ?>
 <div class="ap-role-tabs" role="tablist" aria-label="<?php echo esc_attr__('Switch role view', 'artpulse'); ?>">
   <?php foreach ($roles as $role): ?>
