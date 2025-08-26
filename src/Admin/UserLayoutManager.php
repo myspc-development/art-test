@@ -27,7 +27,7 @@ class UserLayoutManager
      */
     public static function save_layout(int $user_id, array $layout): void
     {
-        $valid   = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
+        $valid   = array_keys(DashboardWidgetRegistry::get_all());
         $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid);
 
         update_user_meta($user_id, self::META_KEY, $ordered);
