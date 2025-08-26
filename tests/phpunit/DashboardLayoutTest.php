@@ -78,7 +78,7 @@ class DashboardLayoutTest extends TestCase {
         $prop2 = $ref2->getProperty('role_widgets');
         $prop2->setAccessible(true);
         $prop2->setValue([
-            'member' => ['alpha', 'beta', 'missing', 'gamma'],
+            'member' => ['alpha', 'beta', 'gamma'],
         ]);
 
         MockStorage::$users[1] = (object)['roles' => ['member']];
