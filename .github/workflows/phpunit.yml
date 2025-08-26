@@ -26,3 +26,12 @@ jobs:
       - run: composer install --prefer-dist --no-progress
       - run: bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest
       - run: vendor/bin/phpunit
+      - name: Run WordPress tests
+        run: vendor/bin/phpunit -c phpunit.wp.xml.dist
+        env:
+          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
+          DB_NAME: wordpress_test
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
