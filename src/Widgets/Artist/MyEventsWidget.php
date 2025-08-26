@@ -32,6 +32,7 @@ class MyEventsWidget implements DashboardWidgetInterface
 
     public static function register(): void
     {
+        DashboardWidgetRegistry::alias('myevents', self::id());
         DashboardWidgetRegistry::register(
             self::id(),
             self::label(),
