@@ -2,178 +2,207 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-
-use Brain\Monkey;
+use Brain\Monkey as Monkey;
 use Brain\Monkey\Functions;
 use Brain\Monkey\Actions;
-
 use ArtPulse\Admin\EnqueueAssets;
 
 final class EnqueueAssetsTest extends TestCase
 {
-    private array $enqueuedScripts;
-    private array $enqueuedStyles;
-    private array $registeredScripts;
-    private array $fs;
+    private array $enqueuedScripts = [];
+    private array $enqueuedStyles  = [];
+    private array $registeredScripts = [];
+    private array $fs = [];
 
     protected function setUp(): void
     {
-        Monkey\setUp(); // Brain Monkey on
-
-        $this->enqueuedScripts   = [];
-        $this->enqueuedStyles    = [];
-        $this->registeredScripts = [];
-        $this->fs                = [];
+        parent::setUp();
+        Monkey\setUp();
 
         if (!defined('ARTPULSE_PLUGIN_FILE')) {
             define('ARTPULSE_PLUGIN_FILE', __FILE__);
         }
 
-        // ---- Paths/URLs ----
-        Functions\when('plugin_dir_path')->alias(fn($file) => '/p/');
-        Functions\when('plugin_dir_url')->alias(fn($file) => 'https://example.test/p/');
+        // Paths
+        Functions\when('plugin_dir_path')->alias(fn($f) => '/p/');
+        Functions\when('plugin_dir_url')->alias(fn($f) => 'https://example.test/p/');
 
-        // ---- FS shims ----
-        Functions\when('file_exists')->alias(fn(string $path) => $this->fs[$path] ?? false);
-        Functions\when('filemtime')->alias(fn(string $path) => 1234567890);
+        // File system
+        Functions\when('file_exists')->alias(fn(string $p) => $this->fs[$p] ?? false);
+        Functions\when('filemtime')->alias(fn(string $p) => 1234567890);
 
-        // ---- Enqueue/register shims ----
-        Functions\when('wp_enqueue_style')->alias(function ($handle, $src = '', $deps = [], $ver = false, $media = 'all') {
-            $this->enqueuedStyles[$handle] = compact('handle','src','deps','ver','media');
-        });
-        Functions\when('wp_style_is')->alias(fn($handle, $list = 'enqueued') =>
-            $list === 'enqueued' ? isset($this->enqueuedStyles[$handle]) : false
-        );
-
+        // Script/style helpers
         Functions\when('wp_register_script')->alias(function ($handle, $src = '', $deps = [], $ver = false, $in_footer = false) {
-            $this->registeredScripts[$handle] = compact('handle','src','deps','ver','in_footer');
+            $this->registeredScripts[$handle] = [
+                'handle' => $handle,
+                'src' => $src,
+                'deps' => $deps,
+                'ver' => $ver,
+                'in_footer' => $in_footer,
+            ];
         });
         Functions\when('wp_enqueue_script')->alias(function ($handle, $src = '', $deps = [], $ver = false, $in_footer = false) {
             if ($src === '' && isset($this->registeredScripts[$handle])) {
-                $reg = $this->registeredScripts[$handle];
-                $src = $reg['src']; $deps = $reg['deps']; $ver = $reg['ver']; $in_footer = $reg['in_footer'];
+                $r = $this->registeredScripts[$handle];
+                $src = $r['src']; $deps = $r['deps']; $ver = $r['ver']; $in_footer = $r['in_footer'];
             }
-            $this->enqueuedScripts[$handle] = compact('handle','src','deps','ver','in_footer');
+            $this->enqueuedScripts[$handle] = [
+                'handle' => $handle,
+                'src' => $src,
+                'deps' => $deps,
+                'ver' => $ver,
+                'in_footer' => $in_footer,
+            ];
         });
         Functions\when('wp_script_is')->alias(function ($handle, $list = 'enqueued') {
-            if ($list === 'registered') return isset($this->registeredScripts[$handle]);
-            if ($list === 'enqueued')  return isset($this->enqueuedScripts[$handle]);
+            if ($list === 'registered') {
+                return isset($this->registeredScripts[$handle]);
+            }
+            if ($list === 'enqueued') {
+                return isset($this->enqueuedScripts[$handle]);
+            }
             return false;
         });
+        Functions\when('wp_enqueue_style')->alias(function ($handle, $src = '', $deps = [], $ver = false, $media = 'all') {
+            $this->enqueuedStyles[$handle] = [
+                'handle' => $handle,
+                'src' => $src,
+                'deps' => $deps,
+                'ver' => $ver,
+                'media' => $media,
+            ];
+        });
+        Functions\when('wp_style_is')->alias(function ($handle, $list = 'enqueued') {
+            return $list === 'enqueued' ? isset($this->enqueuedStyles[$handle]) : false;
+        });
 
-        // ---- Misc helpers touched in code ----
-        Functions\when('admin_url')->justReturn('https://example.test/wp-admin/admin-ajax.php');
-        Functions\when('rest_url')->justReturn('https://example.test/wp-json/');
-        Functions\when('wp_create_nonce')->justReturn('nonce');
-        Functions\when('esc_url_raw')->alias(fn($u) => $u);
-        Functions\when('__')->alias(fn($t, $d=null) => $t);
-        Functions\when('esc_html__')->alias(fn($t, $d=null) => $t);
-
-        // get_current_screen is stubbed per-test where needed.
     }
 
     protected function tearDown(): void
     {
-        Monkey\tearDown(); // Brain Monkey off
+        Monkey\tearDown();
+        parent::tearDown();
     }
 
-    /** Utility: mark a file as present in fake FS */
-    private function fsTouch(string $rel): string
+    private function touch(string $rel): void
     {
-        $path = rtrim('/p/', '/') . '/' . ltrim($rel, '/');
-        $this->fs[$path] = true;
-        return $path;
+        $this->fs['/p/' . ltrim($rel, '/')] = true;
     }
 
-    private function script(string $handle): ?array { return $this->enqueuedScripts[$handle] ?? null; }
-    private function style(string $handle): ?array  { return $this->enqueuedStyles[$handle] ?? null; }
+    private function script(string $handle): ?array
+    {
+        return $this->enqueuedScripts[$handle] ?? null;
+    }
 
-    public function test_register_adds_core_hooks(): void
+    private function style(string $handle): ?array
+    {
+        return $this->enqueuedStyles[$handle] ?? null;
+    }
+
+    public function test_register_wires_hooks(): void
     {
         Actions\expectAdded('enqueue_block_editor_assets')->twice();
         Actions\expectAdded('admin_enqueue_scripts')->once();
         Actions\expectAdded('wp_enqueue_scripts')->once();
-
         EnqueueAssets::register();
-        $this->assertTrue(true); // no exception means hooks added as expected
+        $this->assertTrue(true);
     }
 
     public function test_dashboard_admin_enqueues_with_sortable(): void
     {
+        $cb = null;
+        Actions\expectAdded('admin_enqueue_scripts')->once()->whenHappen(function ($callback) use (&$cb) {
+            $cb = $callback;
+        });
         EnqueueAssets::register();
+        Actions\expectDone('admin_enqueue_scripts')->once()->whenHappen(function ($hook) use (&$cb) {
+            call_user_func($cb, $hook);
+        });
 
-        $this->fsTouch('assets/css/dashboard.css');
-        $this->fsTouch('assets/js/dashboard-role-tabs.js');
-        $this->fsTouch('assets/js/role-dashboard.js');
-        $this->fsTouch('assets/libs/sortablejs/Sortable.min.js');
+        $this->touch('assets/css/dashboard.css');
+        $this->touch('assets/js/dashboard-role-tabs.js');
+        $this->touch('assets/js/role-dashboard.js');
+        $this->touch('assets/libs/sortablejs/Sortable.min.js');
 
         do_action('admin_enqueue_scripts', 'toplevel_page_ap-dashboard');
 
         $this->assertNotNull($this->style('ap-dashboard'));
         $this->assertNotNull($this->script('ap-role-tabs'));
         $this->assertNotNull($this->script('sortablejs'));
-
-        $roleDash = $this->script('role-dashboard');
-        $this->assertNotNull($roleDash);
-        $this->assertContains('ap-role-tabs', $roleDash['deps']);
-        $this->assertContains('sortablejs',   $roleDash['deps']);
+        $role = $this->script('role-dashboard');
+        $this->assertNotNull($role);
+        $this->assertContains('ap-role-tabs', $role['deps']);
+        $this->assertContains('sortablejs', $role['deps']);
     }
 
     public function test_dashboard_admin_enqueues_without_sortable(): void
     {
+        $cb = null;
+        Actions\expectAdded('admin_enqueue_scripts')->once()->whenHappen(function ($callback) use (&$cb) {
+            $cb = $callback;
+        });
         EnqueueAssets::register();
+        Actions\expectDone('admin_enqueue_scripts')->once()->whenHappen(function ($hook) use (&$cb) {
+            call_user_func($cb, $hook);
+        });
 
-        $this->fsTouch('assets/css/dashboard.css');
-        $this->fsTouch('assets/js/dashboard-role-tabs.js');
-        $this->fsTouch('assets/js/role-dashboard.js');
+        $this->touch('assets/css/dashboard.css');
+        $this->touch('assets/js/dashboard-role-tabs.js');
+        $this->touch('assets/js/role-dashboard.js');
 
         do_action('admin_enqueue_scripts', 'toplevel_page_ap-dashboard');
 
-        $roleDash = $this->script('role-dashboard');
-        $this->assertNotNull($roleDash);
-        $this->assertContains('ap-role-tabs', $roleDash['deps']);
-        $this->assertNotContains('sortablejs', $roleDash['deps']);
+        $role = $this->script('role-dashboard');
+        $this->assertNotNull($role);
+        $this->assertContains('ap-role-tabs', $role['deps']);
+        $this->assertNotContains('sortablejs', $role['deps']);
     }
 
-    public function test_chart_js_is_registered_in_admin(): void
+    public function test_chart_js_registered_in_admin(): void
     {
-        $screen = new class { public string $id = 'artpulse-settings'; };
-        Functions\when('get_current_screen')->justReturn($screen);
+        $this->touch('assets/libs/chart.js/4.4.1/chart.min.js');
+        $this->touch('assets/js/ap-user-dashboard.js');
 
-        $this->fsTouch('assets/libs/chart.js/4.4.1/chart.min.js');
-        $this->fsTouch('assets/js/ap-user-dashboard.js');
-        $this->fsTouch('assets/css/ap-style.css');
-
-        EnqueueAssets::enqueue_admin();
+        EnqueueAssets::enqueue_admin('artpulse-settings');
 
         $this->assertArrayHasKey('chart-js', $this->registeredScripts);
-        $userDash = $this->script('ap-user-dashboard-js');
-        $this->assertNotNull($userDash);
-        $this->assertContains('chart-js', $userDash['deps']);
+        $dash = $this->script('ap-user-dashboard-js');
+        $this->assertNotNull($dash);
+        $this->assertContains('chart-js', $dash['deps']);
     }
 
     public function test_block_editor_styles_enqueue(): void
     {
-        $screen = new class { public function is_block_editor() { return true; } };
+        $screen = new class {
+            public function is_block_editor(): bool { return true; }
+        };
         Functions\when('get_current_screen')->justReturn($screen);
-
-        $this->fsTouch('assets/css/editor-styles.css');
+        $this->touch('assets/css/editor.css');
 
         EnqueueAssets::enqueue_block_editor_styles();
 
         $this->assertNotNull($this->style('artpulse-editor-styles'));
     }
 
-    public function test_analytics_handle_is_consistent(): void
+    public function test_import_export_tab_enqueues(): void
     {
-        $screen = new class { public string $id = 'artpulse-overview'; };
-        Functions\when('get_current_screen')->justReturn($screen);
+        $this->touch('assets/libs/papaparse/papaparse.min.js');
+        $this->touch('assets/js/ap-csv-import.js');
 
-        $this->fsTouch('assets/js/ap-analytics.js');
+        Functions\when('get_current_screen')->justReturn(new class {
+            public string $id = 'artpulse-settings';
+        });
+        $_GET['tab'] = 'import_export';
 
-        EnqueueAssets::enqueue_admin();
+        EnqueueAssets::enqueue_admin('artpulse-settings');
 
-        $this->assertNotNull($this->script('ap-analytics'));
-        $this->assertNull($this->script('ap-analytics-js'));
+        $this->assertNotNull($this->script('papaparse'));
+        $csv = $this->script('ap-csv-import');
+        $this->assertNotNull($csv);
+        $this->assertContains('papaparse', $csv['deps']);
+        $this->assertContains('wp-api-fetch', $csv['deps']);
+
+        unset($_GET['tab']);
     }
 }
+
