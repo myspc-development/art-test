@@ -16,11 +16,11 @@ class DashboardBuilderMappingTest extends \WP_UnitTestCase {
         $ref2 = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop2 = $ref2->getProperty('widgets');
         $prop2->setAccessible(true);
-        $prop2->setValue([]);
+        $prop2->setValue(null, []);
         if ($ref2->hasProperty('builder_widgets')) {
             $bw = $ref2->getProperty('builder_widgets');
             $bw->setAccessible(true);
-            $bw->setValue([]);
+            $bw->setValue(null, []);
         }
 
         $this->admin = self::factory()->user->create(['role' => 'administrator']);

@@ -9,7 +9,7 @@ class DashboardWidgetRenderTest extends \WP_UnitTestCase {
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
 
         DashboardWidgetRegistry::register('alpha','Alpha','', '', function(){ return 'alpha'; }, ['roles'=>['member']]);
         DashboardWidgetRegistry::register('beta','Beta','', '', function(){ return 'beta'; }, ['roles'=>['artist']]);

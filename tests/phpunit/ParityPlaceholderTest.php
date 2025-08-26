@@ -18,7 +18,7 @@ class ParityPlaceholderTest extends TestCase
             if ($ref->hasProperty($prop)) {
                 $p = $ref->getProperty($prop);
                 $p->setAccessible(true);
-                $p->setValue([]);
+                $p->setValue(null, []);
             }
         }
     }

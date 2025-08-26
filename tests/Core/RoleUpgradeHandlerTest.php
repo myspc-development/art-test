@@ -18,7 +18,7 @@ class RoleUpgradeHandlerTest extends TestCase
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
     }
 
     public function test_widgets_merge_and_layout_is_snapshotted(): void

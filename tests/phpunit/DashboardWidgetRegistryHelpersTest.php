@@ -14,7 +14,7 @@ class DashboardWidgetRegistryHelpersTest extends TestCase {
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
     }
 
     public function test_getById_canonicalizes_slug(): void {

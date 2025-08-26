@@ -13,7 +13,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
         delete_option('artpulse_widget_roles');
 
         EventsWidget::register();

@@ -90,8 +90,8 @@ class WidgetRoleSync {
         }
 
         // Save changes back to the registries.
-        $prop->setValue($role_widgets);
-        $widgetsProp->setValue($widgets);
+        $prop->setValue(null, $role_widgets);
+        $widgetsProp->setValue(null, $widgets);
 
         if ($updated && defined('WP_DEBUG') && WP_DEBUG) {
             error_log('[WidgetRoleSync] Added roles to widgets: ' . wp_json_encode($updated));

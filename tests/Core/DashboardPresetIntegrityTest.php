@@ -143,7 +143,7 @@ class DashboardPresetIntegrityTest extends TestCase {
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
 
         remove_role('member');
         remove_role('artist');

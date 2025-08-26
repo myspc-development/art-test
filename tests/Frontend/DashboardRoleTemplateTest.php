@@ -14,7 +14,7 @@ class DashboardRoleTemplateTest extends WP_UnitTestCase
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
-        $prop->setValue([]);
+        $prop->setValue(null, []);
 
         set_query_var('ap_dashboard_role', null);
         set_query_var('ap_dashboard', null);

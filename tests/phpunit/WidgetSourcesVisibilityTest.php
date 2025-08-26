@@ -18,7 +18,7 @@ class WidgetSourcesVisibilityTest extends TestCase
             if ($ref->hasProperty($prop)) {
                 $p = $ref->getProperty($prop);
                 $p->setAccessible(true);
-                $p->setValue([]);
+                $p->setValue(null, []);
             }
         }
         update_option('artpulse_widget_roles', []);

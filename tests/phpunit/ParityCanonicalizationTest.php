@@ -18,7 +18,7 @@ class ParityCanonicalizationTest extends \WP_UnitTestCase
             if ($ref->hasProperty($prop)) {
                 $p = $ref->getProperty($prop);
                 $p->setAccessible(true);
-                $p->setValue([]);
+                $p->setValue(null, []);
             }
         }
         AuditBus::reset();
