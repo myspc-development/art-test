@@ -1,16 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/wp-bootstrap.php" colors="true">
-  <testsuites>
-    <testsuite name="WordPress">
-      <file>tests/phpunit/ParityCanonicalizationTest.php</file>
-    </testsuite>
-  </testsuites>
-
-  <!-- Optional, if you want to override defaults -->
-  <php>
-    <server name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
-    <const name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
-    <const name="WP_TESTS_DOMAIN" value="example.org"/>
-    <const name="WP_TESTS_EMAIL" value="admin@example.org"/>
-  </php>
-</phpunit>
+diff --git a/phpunit.wp.xml.dist b/phpunit.wp.xml.dist
+index d552e3f1cb6cb90553faed21e2ddcdc144e29abf..01824d394e38947031e00651dba85f040552f81f 100644
+--- a/phpunit.wp.xml.dist
++++ b/phpunit.wp.xml.dist
+@@ -1,15 +1,16 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <phpunit bootstrap="tests/wp-bootstrap.php" colors="true">
+   <testsuites>
+     <testsuite name="WordPress">
+       <file>tests/phpunit/ParityCanonicalizationTest.php</file>
+     </testsuite>
+   </testsuites>
+ 
+   <!-- Optional, if you want to override defaults -->
+   <php>
+     <server name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
++    <const name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
+     <const name="WP_TESTS_DOMAIN" value="example.org"/>
+     <const name="WP_TESTS_EMAIL" value="admin@example.org"/>
+   </php>
+ </phpunit>
