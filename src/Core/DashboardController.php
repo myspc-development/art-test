@@ -7,6 +7,7 @@ use ArtPulse\Frontend\OrganizationDashboardShortcode;
 use ArtPulse\Dashboard\WidgetGuard;
 use ArtPulse\Core\RoleResolver;
 use ArtPulse\Core\LayoutUtils;
+use ArtPulse\Core\WidgetRegistryLoader;
 
 class DashboardController {
 
@@ -256,6 +257,11 @@ class DashboardController {
 
         $role = self::get_role($user_id);
 
+        // Ensure all widgets are registered before deriving the layout.
+        if (empty(DashboardWidgetRegistry::get_all()) && function_exists('plugin_dir_path')) {
+            WidgetRegistryLoader::register_widgets();
+        }
+
         // Load the raw layout from user meta, options, or defaults
         $custom = get_user_meta($user_id, 'ap_dashboard_layout', true);
         $layout = [];
@@ -274,10 +280,11 @@ class DashboardController {
             }
         }
 
-        $all        = DashboardWidgetRegistry::get_all();
-        $valid_ids  = array_keys($all);
-        $layout     = LayoutUtils::normalize_layout($layout, $valid_ids);
-        $layout     = array_values(array_filter(
+        $all       = DashboardWidgetRegistry::get_all();
+        $valid_ids = array_keys($all);
+        // Normalize the layout before filtering by role or capabilities.
+        $layout    = LayoutUtils::normalize_layout($layout, $valid_ids);
+        $layout    = array_values(array_filter(
             $layout,
             static fn($w) => in_array($w['id'], $valid_ids, true)
         ));
