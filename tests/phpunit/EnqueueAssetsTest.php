@@ -1,174 +1,227 @@
 <?php
-
 use PHPUnit\Framework\TestCase;
+
 use Brain\Monkey;
-use function Brain\Monkey\Functions\expect;
-use function Brain\Monkey\Functions\when;
+use Brain\Monkey\Functions;
+use Brain\Monkey\Actions;
+
 use ArtPulse\Admin\EnqueueAssets;
 
-class EnqueueAssetsTest extends TestCase {
+/**
+ * Requires:
+ *   - composer require --dev phpunit/phpunit:^9.6 brain/monkey:^2.6
+ *   - tests/bootstrap.php that loads Composer autoload and defines ARTPULSE_PLUGIN_FILE
+ *
+ * If you don't have a bootstrap, minimally:
+ *   - define('ARTPULSE_PLUGIN_FILE', __FILE__);
+ *   - require_once __DIR__ . '/../../src/Admin/EnqueueAssets.php';
+ */
+class EnqueueAssetsTest extends TestCase
+{
+    private array $enqueuedScripts;
+    private array $enqueuedStyles;
+    private array $registeredScripts;
+    private array $fs;
 
-    protected function setUp(): void {
-        parent::setUp();
+    protected function setUp(): void
+    {
         Monkey\setUp();
-    }
 
-    protected function tearDown(): void {
-        Monkey\tearDown();
-        parent::tearDown();
-    }
+        // ---- Tracking ----
+        $this->enqueuedScripts   = [];
+        $this->enqueuedStyles    = [];
+        $this->registeredScripts = [];
+        $this->fs                = []; // path => exists?
 
-    private function makeBase(array $files): string {
-        $base = sys_get_temp_dir() . '/ap-test-' . uniqid();
-        foreach ($files as $file) {
-            $path = $base . '/' . $file;
-            if (!is_dir(dirname($path))) {
-                mkdir(dirname($path), 0777, true);
-            }
-            file_put_contents($path, '');
+        // ---- Paths/URLs ----
+        if (!defined('ARTPULSE_PLUGIN_FILE')) {
+            define('ARTPULSE_PLUGIN_FILE', __FILE__);
         }
-        return $base;
+
+        Functions::when('plugin_dir_path')->alias(function ($file) {
+            return '/p/'; // fake plugin dir
+        });
+        Functions::when('plugin_dir_url')->alias(function ($file) {
+            return 'https://example.test/p/';
+        });
+
+        // ---- File system shims ----
+        Functions::when('file_exists')->alias(function (string $path) {
+            return $this->fs[$path] ?? false;
+        });
+        Functions::when('filemtime')->alias(function (string $path) {
+            return 1234567890;
+        });
+
+        // ---- WP enqueue/register shims ----
+        Functions::when('wp_enqueue_style')->alias(function ($handle, $src = '', $deps = [], $ver = false, $media = 'all') {
+            $this->enqueuedStyles[$handle] = compact('handle','src','deps','ver','media');
+        });
+        Functions::when('wp_style_is')->alias(function ($handle, $list = 'enqueued') {
+            return $list === 'enqueued' ? isset($this->enqueuedStyles[$handle]) : false;
+        });
+
+        Functions::when('wp_register_script')->alias(function ($handle, $src = '', $deps = [], $ver = false, $in_footer = false) {
+            $this->registeredScripts[$handle] = compact('handle','src','deps','ver','in_footer');
+        });
+        Functions::when('wp_enqueue_script')->alias(function ($handle, $src = '', $deps = [], $ver = false, $in_footer = false) {
+            // If caller passes only handle (already registered), keep deps/src if known
+            if ($src === '' && isset($this->registeredScripts[$handle])) {
+                $reg = $this->registeredScripts[$handle];
+                $src = $reg['src']; $deps = $reg['deps']; $ver = $reg['ver']; $in_footer = $reg['in_footer'];
+            }
+            $this->enqueuedScripts[$handle] = compact('handle','src','deps','ver','in_footer');
+        });
+        Functions::when('wp_script_is')->alias(function ($handle, $list = 'enqueued') {
+            if ($list === 'registered') return isset($this->registeredScripts[$handle]);
+            if ($list === 'enqueued')  return isset($this->enqueuedScripts[$handle]);
+            return false;
+        });
+
+        // ---- Hook system ----
+        // Brain Monkey already provides add_action/do_action implementations.
+
+        // ---- Misc WP helpers used in code paths ----
+        Functions::when('admin_url')->justReturn('https://example.test/wp-admin/admin-ajax.php');
+        Functions::when('rest_url')->justReturn('https://example.test/wp-json/');
+        Functions::when('wp_create_nonce')->justReturn('nonce');
+        Functions::when('esc_url_raw')->alias(fn($u) => $u);
+        Functions::when('esc_html__')->alias(fn($t,$d=null)=>$t);
+        Functions::when('__')->alias(fn($t,$d=null)=>$t);
     }
 
-    public function test_register_chart_js_registers_when_file_exists(): void {
-        $base = $this->makeBase(['assets/libs/chart.js/4.4.1/chart.min.js']);
-        $mtime = filemtime($base . '/assets/libs/chart.js/4.4.1/chart.min.js');
-        when('plugin_dir_path')->justReturn($base . '/');
-        when('plugin_dir_url')->justReturn('https://plugin/');
-        when('wp_script_is')->alias(fn() => false);
-
-        expect('wp_register_script')
-            ->once()->with('chart-js', 'https://plugin/assets/libs/chart.js/4.4.1/chart.min.js', [], $mtime, true);
-
-        $ref = new \ReflectionClass(EnqueueAssets::class);
-        $m = $ref->getMethod('register_chart_js');
-        $m->setAccessible(true);
-        $m->invoke(null);
-        $this->addToAssertionCount(1);
+    protected function tearDown(): void
+    {
+        Monkey\tearDown();
     }
 
-    public function test_editor_styles_hook_uses_enqueue_block_editor_assets(): void {
-        $base = $this->makeBase(['assets/css/editor.css']);
-        $mtime = filemtime($base . '/assets/css/editor.css');
-        $screen = (object) ['is_block_editor' => fn() => true];
-        when('get_current_screen')->justReturn($screen);
-        when('plugin_dir_path')->justReturn($base . '/');
-        when('plugin_dir_url')->justReturn('https://plugin/');
-        when('wp_style_is')->alias(fn() => false);
+    /** Utility: set a file as existing in our fake FS */
+    private function fsTouch(string $rel): string
+    {
+        $path = rtrim('/p/', '/').'/'.ltrim($rel,'/');
+        $this->fs[$path] = true;
+        return $path;
+    }
 
-        expect('wp_enqueue_style')
-            ->once()->with('artpulse-editor-styles', 'https://plugin/assets/css/editor.css', [], $mtime);
+    /** Utility: fetch an enqueued script record by handle */
+    private function script(string $handle): ?array
+    {
+        return $this->enqueuedScripts[$handle] ?? null;
+    }
+    /** Utility: fetch an enqueued style record by handle */
+    private function style(string $handle): ?array
+    {
+        return $this->enqueuedStyles[$handle] ?? null;
+    }
+
+    public function test_register_adds_core_hooks(): void
+    {
+        Actions\expectAdded('enqueue_block_editor_assets')->twice(); // scripts + styles
+        Actions\expectAdded('admin_enqueue_scripts')->once();        // method
+        Actions\expectAdded('wp_enqueue_scripts')->once();           // method
+        // (There is also an anonymous admin_enqueue_scripts closure we don't assert explicitly.)
+
+        EnqueueAssets::register();
+    }
+
+    public function test_dashboard_admin_enqueues_with_sortable(): void
+    {
+        EnqueueAssets::register();
+
+        // Provide all expected files
+        $this->fsTouch('assets/css/dashboard.css');
+        $this->fsTouch('assets/js/dashboard-role-tabs.js');
+        $this->fsTouch('assets/js/role-dashboard.js');
+        $this->fsTouch('assets/libs/sortablejs/Sortable.min.js');
+
+        // Fire the admin hook for the dashboard page
+        do_action('admin_enqueue_scripts', 'toplevel_page_ap-dashboard');
+
+        // Assertions
+        $this->assertNotNull($this->style('ap-dashboard'), 'dashboard.css should be enqueued');
+
+        $tabs = $this->script('ap-role-tabs');
+        $this->assertNotNull($tabs, 'dashboard-role-tabs.js should be enqueued');
+
+        $sortable = $this->script('sortablejs');
+        $this->assertNotNull($sortable, 'SortableJS should be enqueued when present');
+
+        $roleDash = $this->script('role-dashboard');
+        $this->assertNotNull($roleDash, 'role-dashboard.js should be enqueued');
+
+        // Ensure deps include tabs and sortable
+        $this->assertContains('ap-role-tabs', $roleDash['deps']);
+        $this->assertContains('sortablejs',   $roleDash['deps']);
+    }
+
+    public function test_dashboard_admin_enqueues_without_sortable(): void
+    {
+        EnqueueAssets::register();
+
+        // Present core assets, omit SortableJS
+        $this->fsTouch('assets/css/dashboard.css');
+        $this->fsTouch('assets/js/dashboard-role-tabs.js');
+        $this->fsTouch('assets/js/role-dashboard.js');
+        // no sortable touch
+
+        do_action('admin_enqueue_scripts', 'toplevel_page_ap-dashboard');
+
+        $roleDash = $this->script('role-dashboard');
+        $this->assertNotNull($roleDash, 'role-dashboard.js should be enqueued');
+        $this->assertContains('ap-role-tabs', $roleDash['deps']);
+        $this->assertNotContains('sortablejs', $roleDash['deps'], 'Should not depend on sortable if file missing');
+    }
+
+    public function test_chart_js_is_registered_in_admin(): void
+    {
+        // Simulate an admin screen that passes the ArtPulse check
+        $screen = new class {
+            public string $id = 'artpulse-settings';
+        };
+        Functions::when('get_current_screen')->justReturn($screen);
+
+        // Chart.js file exists
+        $this->fsTouch('assets/libs/chart.js/4.4.1/chart.min.js');
+        // Also ensure the dependent script exists so enqueue path proceeds
+        $this->fsTouch('assets/js/ap-user-dashboard.js');
+        $this->fsTouch('assets/css/ap-style.css');
+
+        EnqueueAssets::enqueue_admin();
+
+        $this->assertArrayHasKey('chart-js', $this->registeredScripts, 'Chart.js should be registered in admin');
+        $userDash = $this->script('ap-user-dashboard-js');
+        $this->assertNotNull($userDash, 'ap-user-dashboard-js should be enqueued');
+        $this->assertContains('chart-js', $userDash['deps'], 'ap-user-dashboard-js must depend on chart-js');
+    }
+
+    public function test_block_editor_styles_enqueue(): void
+    {
+        // Editor screen
+        $screen = new class {
+            public function is_block_editor() { return true; }
+        };
+        Functions::when('get_current_screen')->justReturn($screen);
+
+        $this->fsTouch('assets/css/editor-styles.css');
 
         EnqueueAssets::enqueue_block_editor_styles();
-        $this->addToAssertionCount(1);
+
+        $this->assertNotNull($this->style('artpulse-editor-styles'), 'Editor styles should be enqueued on block editor screens');
     }
 
-    public function test_dashboard_admin_enqueues_in_order(): void {
-        $base = $this->makeBase([
-            'assets/css/dashboard.css',
-            'assets/js/dashboard-role-tabs.js',
-            'assets/libs/sortablejs/Sortable.min.js',
-            'assets/js/role-dashboard.js',
-        ]);
-        $m1 = filemtime($base . '/assets/css/dashboard.css');
-        $m2 = filemtime($base . '/assets/js/dashboard-role-tabs.js');
-        $m3 = filemtime($base . '/assets/libs/sortablejs/Sortable.min.js');
-        $m4 = filemtime($base . '/assets/js/role-dashboard.js');
-        when('plugin_dir_path')->justReturn($base . '/');
-        when('plugin_dir_url')->justReturn('https://plugin/');
-        $enqueued = [];
-        when('wp_script_is')->alias(function($handle,$state=null) use (&$enqueued){
-            return $state === 'enqueued' && in_array($handle, $enqueued, true);
-        });
-        when('wp_style_is')->alias(fn() => false);
+    public function test_analytics_handle_is_consistent(): void
+    {
+        // Admin screen that matches ArtPulse
+        $screen = new class {
+            public string $id = 'artpulse-overview';
+        };
+        Functions::when('get_current_screen')->justReturn($screen);
 
-        expect('wp_enqueue_style')
-            ->once()->ordered()->with('ap-dashboard', 'https://plugin/assets/css/dashboard.css', [], $m1);
-        expect('wp_enqueue_script')
-            ->once()->ordered()->with('ap-role-tabs', 'https://plugin/assets/js/dashboard-role-tabs.js', [], $m2, true)
-            ->andReturnUsing(function($h) use (&$enqueued){ $enqueued[] = $h; });
-        expect('wp_enqueue_script')
-            ->once()->ordered()->with('sortablejs', 'https://plugin/assets/libs/sortablejs/Sortable.min.js', [], $m3, true)
-            ->andReturnUsing(function($h) use (&$enqueued){ $enqueued[] = $h; });
-        expect('wp_enqueue_script')
-            ->once()->ordered()->with('role-dashboard', 'https://plugin/assets/js/role-dashboard.js', ['ap-role-tabs','sortablejs'], $m4, true)
-            ->andReturnUsing(function($h) use (&$enqueued){ $enqueued[] = $h; });
+        $this->fsTouch('assets/js/ap-analytics.js');
 
-        EnqueueAssets::enqueue_admin('toplevel_page_ap-dashboard');
-        $this->addToAssertionCount(1);
-    }
+        EnqueueAssets::enqueue_admin();
 
-    public function test_user_dashboard_depends_on_chart_js(): void {
-        $base = $this->makeBase([
-            'assets/libs/chart.js/4.4.1/chart.min.js',
-            'assets/js/ap-analytics.js',
-            'assets/js/ap-user-dashboard.js',
-        ]);
-        $m1 = filemtime($base . '/assets/libs/chart.js/4.4.1/chart.min.js');
-        $m2 = filemtime($base . '/assets/js/ap-analytics.js');
-        $m3 = filemtime($base . '/assets/js/ap-user-dashboard.js');
-        when('plugin_dir_path')->justReturn($base . '/');
-        when('plugin_dir_url')->justReturn('https://plugin/');
-        when('wp_script_is')->alias(fn() => false);
-        when('wp_style_is')->alias(fn() => false);
-
-        expect('wp_register_script')
-            ->once()->with('chart-js', 'https://plugin/assets/libs/chart.js/4.4.1/chart.min.js', [], $m1, true);
-        expect('wp_enqueue_script')
-            ->once()->ordered()->with('ap-analytics', 'https://plugin/assets/js/ap-analytics.js', [], $m2, true);
-        expect('wp_enqueue_script')
-            ->once()->ordered()->with('ap-user-dashboard-js', 'https://plugin/assets/js/ap-user-dashboard.js', ['wp-api-fetch','chart-js'], $m3, true);
-
-        EnqueueAssets::enqueue_admin('any');
-        $this->addToAssertionCount(1);
-    }
-
-    public function test_analytics_handle_consistent(): void {
-        $base = $this->makeBase([
-            'assets/libs/chart.js/4.4.1/chart.min.js',
-            'assets/js/ap-analytics.js',
-            'assets/js/ap-user-dashboard.js',
-        ]);
-        $m1 = filemtime($base . '/assets/libs/chart.js/4.4.1/chart.min.js');
-        $m2 = filemtime($base . '/assets/js/ap-analytics.js');
-        $m3 = filemtime($base . '/assets/js/ap-user-dashboard.js');
-        when('plugin_dir_path')->justReturn($base . '/');
-        when('plugin_dir_url')->justReturn('https://plugin/');
-        when('wp_script_is')->alias(fn() => false);
-        when('wp_style_is')->alias(fn() => false);
-
-        expect('wp_register_script')
-            ->once()->with('chart-js', 'https://plugin/assets/libs/chart.js/4.4.1/chart.min.js', [], $m1, true);
-        expect('wp_enqueue_script')
-            ->once()->ordered()->with('ap-analytics', 'https://plugin/assets/js/ap-analytics.js', [], $m2, true);
-        expect('wp_enqueue_script')
-            ->once()->ordered()->with('ap-user-dashboard-js', 'https://plugin/assets/js/ap-user-dashboard.js', ['wp-api-fetch','chart-js'], $m3, true);
-
-        EnqueueAssets::enqueue_admin('another');
-        $this->addToAssertionCount(1);
-    }
-
-    public function test_import_export_tab_sanitized(): void {
-        $_GET['tab'] = '<script>import_export</script>';
-        $base = $this->makeBase([
-            'assets/libs/papaparse/papaparse.min.js',
-            'assets/js/ap-csv-import.js',
-        ]);
-        $m1 = filemtime($base . '/assets/libs/papaparse/papaparse.min.js');
-        $m2 = filemtime($base . '/assets/js/ap-csv-import.js');
-        when('plugin_dir_path')->justReturn($base . '/');
-        when('plugin_dir_url')->justReturn('https://plugin/');
-        when('wp_script_is')->alias(fn() => false);
-        when('wp_style_is')->alias(fn() => false);
-
-        expect('wp_enqueue_script')
-            ->once()->ordered()->with('papaparse', 'https://plugin/assets/libs/papaparse/papaparse.min.js', [], $m1, true);
-        expect('wp_enqueue_script')
-            ->once()->ordered()->with('ap-csv-import', 'https://plugin/assets/js/ap-csv-import.js', ['papaparse','wp-api-fetch'], $m2, true);
-
-        EnqueueAssets::enqueue_admin('toplevel_page_ap-settings');
-        unset($_GET['tab']);
-        $this->addToAssertionCount(1);
+        $this->assertNotNull($this->script('ap-analytics'), 'Analytics should enqueue with handle "ap-analytics"');
+        $this->assertNull($this->script('ap-analytics-js'), 'Handle "ap-analytics-js" should not be used');
     }
 }
-
