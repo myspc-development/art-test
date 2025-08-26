@@ -65,7 +65,7 @@ class WidgetRegistry
                     self::$logged_missing[$key] = true;
                 }
                 $escaped = function_exists('esc_attr') ? esc_attr($key) : htmlspecialchars($key, ENT_QUOTES);
-                return '<div class="ap-widget ap-widget--missing" data-slug="' . $escaped . '"></div>';
+                return '<section class="ap-widget--missing" data-slug="' . $escaped . '"></section>';
             }
             return '';
         }
