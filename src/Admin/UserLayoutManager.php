@@ -80,7 +80,7 @@ class UserLayoutManager
                 $final[] = ['id' => $id, 'visible' => $vis];
             }
 
-            if ($logs) {
+            if ($logs && defined('ARTPULSE_TEST_VERBOSE') && ARTPULSE_TEST_VERBOSE) {
                 error_log('Invalid dashboard widgets for role ' . $role . ': ' . implode(', ', $logs));
             }
 

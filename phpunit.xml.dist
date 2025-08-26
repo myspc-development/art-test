@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.simple.php" colors="true">
+<phpunit bootstrap="tests/bootstrap.php" colors="true" cacheResult="false">
   <testsuites>
     <testsuite name="Plugin">
       <directory>tests/phpunit/</directory>
       <exclude>tests/phpunit/ParityCanonicalizationTest.php</exclude>
-      <exclude>tests/phpunit/EnqueueAssetsTest.php</exclude>
     </testsuite>
   </testsuites>
 </phpunit>

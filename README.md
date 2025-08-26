@@ -43,6 +43,13 @@ See the [Changelog](docs/CHANGELOG.md) for release notes.
 
 ## Testing
 
+To install dependencies and run the test suite locally:
+
+```
+COMPOSER_NO_DEV=0 composer install --no-interaction --no-progress
+vendor/bin/phpunit -c phpunit.xml.dist
+```
+
 Install dependencies and run tests completely offline:
 
 ```
