@@ -49,7 +49,6 @@ if (!defined('ARTPULSE_PLUGIN_FILE')) define('ARTPULSE_PLUGIN_FILE', __FILE__);
 if (!function_exists('sanitize_text_field')) { function sanitize_text_field($s){ return preg_replace('/[^A-Za-z0-9_\-]/','',strip_tags((string)$s)); } }
 if (!function_exists('wp_unslash'))          { function wp_unslash($v){ return $v; } }
 if (!function_exists('esc_url_raw'))         { function esc_url_raw($u){ return (string)$u; } }
-if (!function_exists('admin_url'))           { function admin_url($p=''){ return 'https://example.test/wp-admin/'.ltrim((string)$p,'/'); } }
 if (!function_exists('rest_url'))            { function rest_url($p=''){ return 'https://example.test/wp-json/'.ltrim((string)$p,'/'); } }
 if (!function_exists('__'))                  { function __($t,$d=null){ return (string)$t; } }
 if (!function_exists('esc_html__'))          { function esc_html__($t,$d=null){ return (string)$t; } }

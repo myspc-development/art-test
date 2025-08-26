@@ -20,9 +20,6 @@ if (!function_exists(__NAMESPACE__ . '\\plugin_dir_url')) {
 if (!function_exists(__NAMESPACE__ . '\\file_exists')) {
     function file_exists($path) { return true; }
 }
-if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
-    function admin_url($path = '') { return $path; }
-}
 if (!function_exists(__NAMESPACE__ . '\\rest_url')) {
     function rest_url($path = '') { return $path; }
 }
@@ -80,6 +77,8 @@ namespace ArtPulse\Admin\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\EnqueueAssets;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 class EnqueueAssetsTest extends TestCase
 {
@@ -94,6 +93,10 @@ class EnqueueAssetsTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+        Monkey\setUp();
+        Functions\when('admin_url')->alias(fn($path = '') => $path);
+
         self::$localized = [];
         self::$user_meta = [];
         self::$posts = [];
@@ -102,6 +105,12 @@ class EnqueueAssetsTest extends TestCase
         self::$localize_calls = [];
         self::$options = ['artpulse_settings' => ['disable_styles' => true]];
         self::$current_screen = null;
+    }
+
+    protected function tearDown(): void
+    {
+        Monkey\tearDown();
+        parent::tearDown();
     }
 
     public static function add_post(int $id, string $title, string $stage_slug, string $stage_name): void

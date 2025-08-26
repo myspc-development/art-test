@@ -17,9 +17,6 @@ if (!function_exists(__NAMESPACE__ . '\\get_post')) {
 if (!function_exists(__NAMESPACE__ . '\\wp_update_post')) {
     function wp_update_post($arr) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$updated = $arr; }
 }
-if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
-    function admin_url($path = '') { return $path; }
-}
 if (!function_exists(__NAMESPACE__ . '\\wp_safe_redirect')) {
     function wp_safe_redirect($url) { \ArtPulse\Admin\Tests\ApprovalManagerTest::$redirect = $url; throw new \Exception('redirect'); }
 }
@@ -34,6 +31,8 @@ namespace ArtPulse\Admin\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\ApprovalManager;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 class ApprovalManagerTest extends TestCase
 {
@@ -47,6 +46,10 @@ class ApprovalManagerTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+        Monkey\setUp();
+        Functions\when('admin_url')->alias(fn($path = '') => $path);
+
         self::$can = true;
         self::$post = (object)[
             'ID'          => 7,
@@ -70,6 +73,7 @@ class ApprovalManagerTest extends TestCase
         self::$meta = [];
         self::$deleted = [];
         self::$died = null;
+        Monkey\tearDown();
         parent::tearDown();
     }
 

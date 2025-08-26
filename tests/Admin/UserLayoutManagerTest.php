@@ -24,9 +24,6 @@ if (!function_exists(__NAMESPACE__ . '\\wp_safe_redirect')) {
 if (!function_exists(__NAMESPACE__ . '\\wp_get_referer')) {
     function wp_get_referer() { return '/ref'; }
 }
-if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
-    function admin_url($path = '') { return $path; }
-}
 if (!function_exists(__NAMESPACE__ . '\\add_query_arg')) {
     function add_query_arg($key, $value, $base) { return $base . (str_contains($base, '?') ? '&' : '?') . $key . '=' . $value; }
 }
@@ -67,6 +64,8 @@ namespace ArtPulse\Admin\Tests {
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 class UserLayoutManagerTest extends TestCase
 {
@@ -82,6 +81,10 @@ class UserLayoutManagerTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+        Monkey\setUp();
+        Functions\when('admin_url')->alias(fn($path = '') => $path);
+
         self::$can = true;
         self::$died = null;
         self::$redirect = '';
@@ -107,6 +110,7 @@ class UserLayoutManagerTest extends TestCase
         $prop = $ref->getProperty('widgets');
         $prop->setAccessible(true);
         $prop->setValue(null, []);
+        Monkey\tearDown();
         parent::tearDown();
     }
 
