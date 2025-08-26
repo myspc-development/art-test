@@ -5,7 +5,7 @@ declare(strict_types=1);
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-/** 1) Find Composer autoload */
+/** 1) Composer autoload (search common locations) */
 $candidates = [
     __DIR__ . '/../vendor/autoload.php',          // plugin/vendor (expected)
     __DIR__ . '/../../vendor/autoload.php',       // wp-content/plugins
@@ -17,27 +17,29 @@ foreach ($candidates as $try) {
     if (is_file($try)) { $autoload = $try; break; }
 }
 if (!$autoload) {
-    fwrite(STDERR, "[bootstrap] No composer autoload found. Run composer install in plugin root.\n");
+    fwrite(STDERR, "[bootstrap] Composer autoload not found. Run `composer install` in the plugin root.\n");
     exit(1);
 }
 require_once $autoload;
-fwrite(STDERR, "[bootstrap] autoload: {$autoload}\n");
 
-/** 2) Safety net: if dev autoload missed Brain Monkey, require its sources directly */
-if (!class_exists(\Brain\Monkey\Functions::class)) {
-    $bm = realpath(__DIR__ . '/../vendor/brain/monkey/src');
-    fwrite(STDERR, "[bootstrap] Brain\\Monkey autoloaded? NO. Fallback src=" . ($bm ?: 'N/A') . "\n");
-    if ($bm && is_dir($bm)) {
-        $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($bm));
-        foreach ($it as $file) {
-            if ($file->isFile() && substr($file->getFilename(), -4) === '.php') {
-                require_once $file->getPathname();
-            }
-        }
+/** 2) Force-load Brain Monkey sources if dev autoload didn’t include them */
+if (!function_exists('Brain\\Monkey\\Functions\\when')) {
+    $bm = __DIR__ . '/../vendor/brain/monkey/src';
+    // Explicit file list for BM 2.x
+    $files = [
+        $bm . '/Functions.php',
+        $bm . '/Actions.php',
+        $bm . '/Filters.php',
+        $bm . '/Expectations.php',
+        $bm . '/Patchers.php',
+        $bm . '/Monkey.php', // defines Brain\Monkey\setUp/tearDown
+    ];
+    foreach ($files as $f) {
+        if (is_file($f)) { require_once $f; }
     }
 }
-if (!class_exists(\Brain\Monkey\Functions::class)) {
-    fwrite(STDERR, "[bootstrap] Brain\\Monkey still missing. Re-run: COMPOSER_NO_DEV=0 composer install\n");
+if (!function_exists('Brain\\Monkey\\Functions\\when')) {
+    fwrite(STDERR, "[bootstrap] Brain\\Monkey not found (namespace functions missing). Re-run: COMPOSER_NO_DEV=0 composer install\n");
     exit(1);
 }
 
@@ -53,18 +55,3 @@ if (!function_exists('__'))                  { function __($t,$d=null){ return (
 if (!function_exists('esc_html__'))          { function esc_html__($t,$d=null){ return (string)$t; } }
 if (!function_exists('plugin_dir_path'))     { function plugin_dir_path($f){ return rtrim(dirname((string)$f),'/\\').'/'; } }
 if (!function_exists('plugin_dir_url'))      { function plugin_dir_url($f){ return 'https://example.test/plugin/'; } }
-
-// Fallback: if dev autoload missed Brain Monkey, load its source directly.
-if (!function_exists('Brain\\Monkey\\Functions\\when')) {
-    $bm = __DIR__ . '/../vendor/brain/monkey/src';
-    if (is_dir($bm)) {
-        foreach (['Functions','Actions','Filters','Expectations','Patchers','Monkey'] as $f) {
-            $p = $bm . '/' . $f . '.php';
-            if (is_file($p)) { require_once $p; }
-        }
-    }
-}
-if (!function_exists('Brain\\Monkey\\Functions\\when')) {
-    fwrite(STDERR, "[bootstrap] Brain\\Monkey not found. Re-run: COMPOSER_NO_DEV=0 composer install\n");
-    exit(1);
-}
