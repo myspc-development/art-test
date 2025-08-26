@@ -1,0 +1,50 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    strategy:
+      matrix:
+        php: [8.1, 8.2, 8.3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer
+      - uses: ramsey/composer-install@v2
+      - name: Create database
+        run: composer run test:db
+        env:
+          WP_TESTS_DB_USER: root
+          WP_TESTS_DB_PASS: root
+          WP_TESTS_DB_HOST: 127.0.0.1
+          WP_TESTS_DB_NAME: wordpress_test
+      - name: Run unit tests
+        run: composer run test:unit
+      - name: Run WordPress tests
+        run: composer run test:wp
+        env:
+          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
+          DB_NAME: wordpress_test
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
