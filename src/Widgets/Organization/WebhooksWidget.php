@@ -30,7 +30,12 @@ class WebhooksWidget implements DashboardWidgetInterface
         return esc_html__('Configured webhooks for this organization.', 'artpulse');
     }
 
-    public static function register(): void
+    public static function boot(): void
+    {
+        add_action('artpulse/widgets/register', [self::class, 'register'], 10, 1);
+    }
+
+    public static function register($registry = null): void
     {
         DashboardWidgetRegistry::register(
             self::id(),
@@ -91,4 +96,3 @@ class WebhooksWidget implements DashboardWidgetInterface
     }
 }
 
-WebhooksWidget::register();
