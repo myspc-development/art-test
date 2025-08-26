@@ -6,9 +6,6 @@ if (!function_exists(__NAMESPACE__ . '\\current_user_can')) {
         return \ArtPulse\Admin\Tests\UpdatesTabTest::$can;
     }
 }
-if (!function_exists(__NAMESPACE__ . '\\admin_url')) {
-    function admin_url($path = '') { return $path; }
-}
 if (!function_exists(__NAMESPACE__ . '\\add_query_arg')) {
     function add_query_arg($params, $url) { return $url . (str_contains($url, '?') ? '&' : '?') . http_build_query($params); }
 }
@@ -93,6 +90,8 @@ namespace ArtPulse\Admin\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UpdatesTab;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 class UpdatesTabTest extends TestCase
 {
@@ -120,6 +119,10 @@ class UpdatesTabTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+        Monkey\setUp();
+        Functions\when('admin_url')->alias(fn($path = '') => $path);
+
         self::$can = true;
         self::$redirect = '';
         self::$options = ['ap_update_remote_sha' => 'abc'];
@@ -139,9 +142,11 @@ class UpdatesTabTest extends TestCase
 
     protected function tearDown(): void
     {
+        Monkey\tearDown();
         if (self::$zip && file_exists(self::$zip)) {
             unlink(self::$zip);
         }
+        parent::tearDown();
     }
 
     public function test_run_update_stores_file_list_and_redirects(): void
