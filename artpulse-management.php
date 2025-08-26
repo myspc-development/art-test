@@ -76,6 +76,7 @@ if (!file_exists($autoload_path)) {
     return;
 }
 require_once $autoload_path;
+require_once __DIR__ . '/src/Widgets/bootstrap.php';
 
 // Foundation setup classes and shortcodes
 require_once plugin_dir_path(__FILE__) . 'includes/class-activator.php';
