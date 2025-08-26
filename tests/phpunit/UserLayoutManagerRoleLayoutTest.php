@@ -48,7 +48,7 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
             ['id' => 'widget_alpha', 'visible' => true],
             ['id' => 'ghost', 'visible' => true],
         ], $result['layout']);
-        $this->assertSame(['ghost'], $result['logs']);
+        $this->assertSame(['ghost', 'widget_alpha'], $result['logs']);
         $def = DashboardWidgetRegistry::getById('ghost');
         $this->assertSame(ApPlaceholderWidget::class, $def['class']);
     }

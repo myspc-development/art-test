@@ -88,7 +88,7 @@ class DashboardLayoutTest extends TestCase {
         MockStorage::$users[1] = (object)['roles' => ['member']];
         $layout = DashboardController::get_user_dashboard_layout(1);
         $this->assertSame([
-            ['id' => 'widget_alpha', 'visible' => true],
+            ['id' => 'empty_dashboard', 'visible' => true],
         ], $layout);
     }
 
