@@ -68,8 +68,11 @@ class CapabilitiesManager
     {
         $user = get_userdata($user_id);
 
-        // Log the capability mapping for debugging in development environments.
-        if (defined('WP_DEBUG') && WP_DEBUG && get_current_user_id()) {
+        // Log the capability mapping for debugging when verbose mode is enabled.
+        if (
+            defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE &&
+            function_exists('is_user_logged_in') && is_user_logged_in()
+        ) {
             $roles = $user ? implode(',', (array) $user->roles) : 'none';
             error_log(sprintf('ap map_meta_cap user=%d cap=%s roles=%s', $user_id, $cap, $roles));
         }

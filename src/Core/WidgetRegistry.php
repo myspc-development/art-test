@@ -14,6 +14,22 @@ class WidgetRegistry
     private static array $widgets = [];
 
     /**
+     * Legacy slugs mapped to their canonical widget IDs.
+     *
+     * @var array<string,string>
+     */
+    private static array $aliases = [
+        'membership'                   => 'widget_membership',
+        'my-events'                    => 'widget_my_events',
+        'account-tools'                => 'widget_account_tools',
+        'widget_followed_artists'      => 'widget_my_follows',
+        'followed_artists'             => 'widget_my_follows',
+        'upcoming_events_by_location'  => 'widget_local_events',
+        'recommended_for_you'          => 'widget_recommended_for_you',
+        'site_stats'                   => 'widget_site_stats',
+    ];
+
+    /**
      * Track missing slugs already logged.
      *
      * @var array<string, bool>
@@ -38,7 +54,7 @@ class WidgetRegistry
      */
     public static function register(string $slug, callable $render, array $args = []): void
     {
-        $key = strtolower(trim($slug));
+        $key = self::normalize_slug($slug);
         if ($key === '') {
             return;
         }
@@ -53,7 +69,7 @@ class WidgetRegistry
      */
     public static function exists(string $slug): bool
     {
-        $key = strtolower(trim($slug));
+        $key = self::normalize_slug($slug);
         return isset(self::$widgets[$key]);
     }
 
@@ -62,19 +78,15 @@ class WidgetRegistry
      */
     public static function render(string $slug, array $context = []): string
     {
-        $key = strtolower(trim($slug));
+        $key = self::normalize_slug($slug);
         if (!isset(self::$widgets[$key])) {
             if (!isset(self::$logged_missing[$key])) {
                 self::$logged_missing[$key] = true;
-                if (
-                    defined('WP_DEBUG') && WP_DEBUG &&
-                    defined('ARTPULSE_TEST_VERBOSE') && ARTPULSE_TEST_VERBOSE &&
-                    function_exists('is_user_logged_in') && is_user_logged_in()
-                ) {
-                    error_log('ArtPulse: Unknown widget slug: ' . $slug);
+                if (self::should_debug()) {
+                    error_log('ArtPulse: Unknown widget slug: ' . $key);
                 }
             }
-            $escaped = function_exists('esc_attr') ? esc_attr($slug) : htmlspecialchars($slug, ENT_QUOTES);
+            $escaped = function_exists('esc_attr') ? esc_attr($key) : htmlspecialchars($key, ENT_QUOTES);
             return '<section class="ap-widget--missing" data-slug="' . $escaped . '"></section>';
         }
         $def  = self::$widgets[$key];
@@ -102,6 +114,12 @@ class WidgetRegistry
         return array_keys(self::$widgets ?? []);
     }
 
+    /** Return all canonical widget IDs */
+    public static function get_canonical_ids(): array
+    {
+        return array_keys(self::$widgets);
+    }
+
     /**
      * Override debug mode for missing widget placeholder rendering.
      */
@@ -116,6 +134,28 @@ class WidgetRegistry
     public static function resetDebug(): void
     {
         self::$debugOverride = null;
+    }
+
+    /** Normalize a slug to its canonical form */
+    public static function normalize_slug(string $slug): string
+    {
+        $s = trim(strtolower($slug));
+        if (isset(self::$aliases[$s])) {
+            return self::$aliases[$s];
+        }
+        if (strpos($s, 'widget_') !== 0) {
+            $pref = 'widget_' . $s;
+            if (isset(self::$widgets[$pref])) {
+                return $pref;
+            }
+        }
+        return $s;
+    }
+
+    private static function should_debug(): bool
+    {
+        return defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE
+            && function_exists('is_user_logged_in') && is_user_logged_in();
     }
 }
 

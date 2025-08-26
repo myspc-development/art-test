@@ -9,10 +9,11 @@ class RecommendationPreferenceManager
         $table = $wpdb->prefix . 'ap_user_preferences';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table (
-            user_id BIGINT NOT NULL PRIMARY KEY,
-            preferred_tags TEXT NULL,
-            ignored_tags TEXT NULL,
-            blacklist_ids TEXT NULL
+            user_id BIGINT(20) NOT NULL,
+            preferred_tags LONGTEXT NULL,
+            ignored_tags LONGTEXT NULL,
+            blacklist_ids LONGTEXT NULL,
+            PRIMARY KEY  (user_id)
         ) $charset;";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }

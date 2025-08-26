@@ -8,6 +8,11 @@ use ArtPulse\Dashboard\WidgetGuard;
 use ArtPulse\Core\RoleResolver;
 use ArtPulse\Core\LayoutUtils;
 use ArtPulse\Core\WidgetRegistryLoader;
+use ArtPulse\Core\WidgetRegistry;
+
+if (!defined('ARTPULSE_SKIP_TEMPLATE_COPY')) {
+    define('ARTPULSE_SKIP_TEMPLATE_COPY', true);
+}
 
 class DashboardController {
 
@@ -67,22 +72,6 @@ class DashboardController {
     /** @var bool */
     private static bool $defaults_checked = false;
 
-    /**
-     * Normalize legacy widget slugs to their canonical forms.
-     */
-    private static function normalize_widget_slug(string $id): string {
-        static $map = [
-            'membership'                   => 'widget_membership',
-            'widget_followed_artists'      => 'widget_my_follows',
-            'followed_artists'             => 'widget_my_follows',
-            'upcoming_events_by_location'  => 'widget_local_events',
-            'recommended_for_you'          => 'widget_recommended_for_you',
-            'my-events'                    => 'widget_my_events',
-            'account-tools'                => 'widget_account_tools',
-            'site_stats'                   => 'widget_site_stats',
-        ];
-        return $map[$id] ?? $id;
-    }
 
     /**
      * Default layout presets keyed by unique identifier.
@@ -144,7 +133,10 @@ class DashboardController {
             if (empty($layout)) {
                 $stub = sanitize_key($key . '_placeholder');
                 WidgetGuard::register_stub_widget($stub, [], ['roles' => [$preset['role']]]);
-                if (defined('ARTPULSE_TEST_VERBOSE') && ARTPULSE_TEST_VERBOSE) {
+                if (
+                    defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE &&
+                    function_exists('is_user_logged_in') && is_user_logged_in()
+                ) {
                     error_log("[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}");
                 }
                 $layout = [ ['id' => $stub] ];
@@ -218,7 +210,7 @@ class DashboardController {
         $missing = [];
         foreach (self::$role_widgets as $ids) {
             foreach ($ids as $id) {
-                $id = self::normalize_widget_slug($id);
+                $id = WidgetRegistry::normalize_slug($id);
                 if (!DashboardWidgetRegistry::exists($id)) {
                     $missing[] = $id;
                 }
@@ -228,7 +220,12 @@ class DashboardController {
         if ($missing) {
             foreach (array_unique($missing) as $id) {
                 WidgetGuard::register_stub_widget($id, [], []);
-                error_log("[DashboardController] Registered stub widget {$id}");
+                if (
+                    defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE &&
+                    function_exists('is_user_logged_in') && is_user_logged_in()
+                ) {
+                    error_log("[DashboardController] Registered stub widget {$id}");
+                }
             }
             trigger_error(
                 'Unregistered dashboard widget defaults: ' . implode(', ', array_unique($missing)),
@@ -250,8 +247,8 @@ class DashboardController {
             $widgets = [];
         }
 
-        $widgets = array_map([self::class, 'normalize_widget_slug'], $widgets);
-        $known   = WidgetRegistry::ids();
+        $widgets = array_map([WidgetRegistry::class, 'normalize_slug'], $widgets);
+        $known   = WidgetRegistry::get_canonical_ids();
         if (!empty($known)) {
             $widgets = array_values(array_unique(array_intersect($widgets, $known)));
         }
@@ -329,7 +326,7 @@ class DashboardController {
         $layout = array_map(
             static function ($entry) {
                 if (is_array($entry) && isset($entry['id'])) {
-                    $entry['id'] = self::normalize_widget_slug(sanitize_key($entry['id']));
+                    $entry['id'] = WidgetRegistry::normalize_slug(sanitize_key($entry['id']));
                 }
                 return $entry;
             },
@@ -409,9 +406,9 @@ class DashboardController {
             $ids = [];
             foreach ($current as $item) {
                 if (is_array($item) && isset($item['id'])) {
-                    $ids[] = self::normalize_widget_slug(sanitize_key($item['id']));
+                    $ids[] = WidgetRegistry::normalize_slug(sanitize_key($item['id']));
                 } elseif (is_string($item)) {
-                    $ids[] = self::normalize_widget_slug(sanitize_key($item));
+                    $ids[] = WidgetRegistry::normalize_slug(sanitize_key($item));
                 }
             }
             $allowed = array_keys(DashboardWidgetRegistry::get_widgets($role, $user_id));
@@ -451,10 +448,13 @@ class DashboardController {
                     continue;
                 }
 
-                $id = self::normalize_widget_slug(sanitize_key($entry['id']));
+                $id = WidgetRegistry::normalize_slug(sanitize_key($entry['id']));
 
                 if (!WidgetRegistry::exists($id) && !DashboardWidgetRegistry::exists($id)) {
-                    if (defined('ARTPULSE_TEST_VERBOSE') && ARTPULSE_TEST_VERBOSE) {
+                    if (
+                        defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE &&
+                        function_exists('is_user_logged_in') && is_user_logged_in()
+                    ) {
                         error_log("[Dashboard Preset] Widget {$id} not registered");
                     }
                     continue;
@@ -539,29 +539,83 @@ class DashboardController {
 
         return get_posts($args);
     }
+
+    public static function on_activate(): void
+    {
+        if (function_exists('flush_rewrite_rules')) {
+            flush_rewrite_rules();
+        }
+        self::maybe_copy_template();
+    }
+
+    public static function maybe_copy_template(): void
+    {
+        if (ARTPULSE_SKIP_TEMPLATE_COPY) {
+            return;
+        }
+        $dest_dir = get_stylesheet_directory();
+        $src  = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/single-artpulse_event.php';
+        $dest = trailingslashit($dest_dir) . 'single-artpulse_event.php';
+        if (!is_readable($src) || !is_writable($dest_dir)) {
+            return;
+        }
+        if (!file_exists($dest)) {
+            if (!@copy($src, $dest)) {
+                if (defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE && function_exists('is_user_logged_in') && is_user_logged_in()) {
+                    error_log('ArtPulse: failed to copy template single-artpulse_event.php');
+                }
+            }
+        }
+    }
 }
 
 if (function_exists('add_action')) {
     \add_action('init', static function () {
-    $aliases = [
-        'membership'                  => 'widget_membership',
-        'widget_followed_artists'     => 'widget_my_follows',
-        'followed_artists'            => 'widget_my_follows',
-        'upcoming_events_by_location' => 'widget_local_events',
-        'recommended_for_you'         => 'widget_recommended_for_you',
-        'my-events'                   => 'widget_my_events',
-        'account-tools'               => 'widget_account_tools',
-        'site_stats'                  => 'widget_site_stats',
-    ];
+        $aliases = [
+            'membership'                  => 'widget_membership',
+            'widget_followed_artists'     => 'widget_my_follows',
+            'followed_artists'            => 'widget_my_follows',
+            'upcoming_events_by_location' => 'widget_local_events',
+            'recommended_for_you'         => 'widget_recommended_for_you',
+            'my-events'                   => 'widget_my_events',
+            'account-tools'               => 'widget_account_tools',
+            'site_stats'                  => 'widget_site_stats',
+        ];
 
-    foreach ($aliases as $legacy => $canon) {
-        if ($legacy === $canon) { continue; }
-        if (\ArtPulse\Core\WidgetRegistry::exists($legacy)) { continue; }
-        if (!\ArtPulse\Core\WidgetRegistry::exists($canon)) { continue; }
+        foreach ($aliases as $legacy => $canon) {
+            if ($legacy === $canon) { continue; }
+            if (\ArtPulse\Core\WidgetRegistry::exists($legacy)) { continue; }
+            if (!\ArtPulse\Core\WidgetRegistry::exists($canon)) { continue; }
 
-        \ArtPulse\Core\WidgetRegistry::register($legacy, function(array $ctx = []) use ($canon) {
-            return \ArtPulse\Core\WidgetRegistry::render($canon, $ctx);
-        });
-    }
+            \ArtPulse\Core\WidgetRegistry::register($legacy, function(array $ctx = []) use ($canon) {
+                return \ArtPulse\Core\WidgetRegistry::render($canon, $ctx);
+            });
+        }
     }, 20);
+
+    add_filter('query_vars', static function ($vars) {
+        $vars[] = 'ap_dashboard';
+        return $vars;
+    });
+
+    add_action('init', static function () {
+        add_rewrite_rule('^dashboard/?$', 'index.php?ap_dashboard=1', 'top');
+    }, 5);
+
+    add_filter('template_include', static function ($template) {
+        $is_query = get_query_var('ap_dashboard') === '1';
+        $is_page  = function_exists('is_page') && is_page('dashboard');
+        if (($is_query || $is_page) && is_user_logged_in() && current_user_can('view_artpulse_dashboard')) {
+            $tpl = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/simple-dashboard.php';
+            if (file_exists($tpl)) {
+                if (defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE) {
+                    error_log('🔥 template_include resolved: ' . $tpl);
+                }
+                return $tpl;
+            }
+        }
+        return $template;
+    }, 99);
+
+    register_activation_hook(ARTPULSE_PLUGIN_FILE, [DashboardController::class, 'on_activate']);
 }

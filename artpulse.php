@@ -22,10 +22,12 @@ require_once __DIR__ . '/includes/class-cli-check-widget-presets.php';
 require_once __DIR__ . '/includes/widget-logging.php';
 require_once __DIR__ . '/includes/unhide-default-widgets.php';
 
-// Load i18n early but not before init (WP 6.7+ requirement).
+// Load the textdomain after WordPress bootstrap but before most init callbacks.
 add_action('init', static function () {
     load_plugin_textdomain('artpulse', false, dirname(plugin_basename(__FILE__)) . '/languages');
-}, 0);
+}, 1);
+
+// NOTE: Avoid calling translation functions at file scope; translate within callbacks.
 
 // Alias legacy widget IDs and bind real renderers after canonical registration.
 add_action('init', function () {

@@ -372,7 +372,9 @@ register_activation_hook(ARTPULSE_PLUGIN_FILE, function () {
     artpulse_create_custom_table();
     \ArtPulse\Core\FeedbackManager::install_table();
     artpulse_activate(); // WooCommerceIntegration has no activate() method
-    ap_copy_templates_to_child_theme();
+    if (defined('ARTPULSE_SKIP_TEMPLATE_COPY') ? !ARTPULSE_SKIP_TEMPLATE_COPY : false) {
+        ap_copy_templates_to_child_theme();
+    }
 
     // Initialize default dashboard widget layout if missing
     if (false === get_option('ap_dashboard_widget_config', false)) {

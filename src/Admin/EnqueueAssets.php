@@ -157,6 +157,9 @@ class EnqueueAssets {
                 '1.0.0'
             );
         }
+        if (function_exists('ap_enqueue_frontend_styles')) {
+            ap_enqueue_frontend_styles();
+        }
 
         // Frontend scripts would be enqueued here when needed.
     }
