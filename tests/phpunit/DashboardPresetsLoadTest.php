@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/../TestStubs.php';
+
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardPresets;
 
@@ -8,10 +10,14 @@ final class DashboardPresetsLoadTest extends TestCase {
     private string $dataDir;
 
     protected function setUp(): void {
+        DashboardPresets::resetCache();
         $this->dataDir = dirname(__DIR__, 2) . '/data';
     }
 
-    /** @runInSeparateProcess */
+    protected function tearDown(): void {
+        DashboardPresets::resetCache();
+    }
+
     public function test_fallback_when_json_missing(): void {
         $roles = ['member','artist','organization'];
         $backups = [];
@@ -35,7 +41,6 @@ final class DashboardPresetsLoadTest extends TestCase {
         }
     }
 
-    /** @runInSeparateProcess */
     public function test_json_canonicalization(): void {
         $path = "$this->dataDir/preset-member.json";
         $orig = is_readable($path) ? file_get_contents($path) : null;

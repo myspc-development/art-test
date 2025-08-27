@@ -9,6 +9,19 @@ class DashboardPresets
     private const ROLES = ['member','artist','organization'];
 
     /**
+     * Cache of role → widget slugs.
+     *
+     * @var array<string, array<int, string>>
+     */
+    private static array $cache = [];
+
+    /** Clear the cached presets. */
+    public static function resetCache(): void
+    {
+        self::$cache = [];
+    }
+
+    /**
      * Return the canonical list of widget slugs for a role.
      * Looks for JSON under current and legacy paths; falls back to hard-coded defaults.
      *
@@ -22,9 +35,8 @@ class DashboardPresets
             $role = 'member';
         }
 
-        static $cache = [];
-        if (isset($cache[$role])) {
-            return $cache[$role];
+        if (isset(self::$cache[$role])) {
+            return self::$cache[$role];
         }
 
         // plugin root from src/Core → ../../
@@ -89,6 +101,6 @@ class DashboardPresets
 
         // De-dupe preserving order
         $slugs = array_values(array_unique($slugs));
-        return $cache[$role] = $slugs;
+        return self::$cache[$role] = $slugs;
     }
 }
