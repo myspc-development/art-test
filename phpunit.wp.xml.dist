@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/wp-bootstrap.php" colors="true">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+    <exclude>
+      <directory>tests/views</directory>
+    </exclude>
+    <report>
+      <text outputFile="php://stdout"/>
+    </report>
+  </coverage>
   <testsuites>
     <testsuite name="WordPress">
       <directory>tests/</directory>
