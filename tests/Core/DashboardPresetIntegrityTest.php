@@ -53,7 +53,7 @@ class DashboardPresetIntegrityTest extends TestCase
     public function test_presets_reference_registered_widgets(): void
     {
         foreach (['member', 'artist', 'organization'] as $role) {
-            $slugs = DashboardPresets::get_preset_for_role($role);
+            $slugs = DashboardPresets::forRole($role);
             foreach ($slugs as $slug) {
                 $this->assertTrue(
                     WidgetRegistry::exists($slug),

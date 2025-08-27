@@ -1,105 +1,94 @@
 <?php
 namespace ArtPulse\Core;
 
-/**
- * Role-based dashboard widget presets.
- */
+use ArtPulse\Support\WidgetIds;
+
 class DashboardPresets
 {
-    /**
-     * Mapping of role or preset keys to widget slugs.
-     *
-     * @var array<string, array<int, string>>
-     */
-    private static array $presets = [
-        'member' => [
-            'widget_membership',
-            'widget_my_follows',
-            'widget_local_events',
-            'widget_recommended_for_you',
-            'widget_my_events',
-            'widget_account_tools',
-            'widget_site_stats',
-        ],
-        'artist' => [
-            'widget_artist_revenue_summary',
-            'widget_artist_artwork_manager',
-            'widget_artist_audience_insights',
-            'widget_artist_feed_publisher',
-            'widget_my_events',
-            'widget_site_stats',
-        ],
-        'organization' => [
-            'widget_audience_crm',
-            'widget_org_ticket_insights',
-            'widget_webhooks',
-            'widget_my_events',
-            'widget_site_stats',
-        ],
-        'new_member_intro' => [
-            'widget_membership',
-        ],
-        'org_admin_start' => [
-            'widget_audience_crm',
-        ],
-    ];
-
     /** @var string[] */
-    private const ALLOWED_ROLES = ['member', 'artist', 'organization'];
-
-    /** @var bool */
-    private static bool $bootstrapped = false;
-
-    /** Normalize preset slugs to canonical IDs */
-    public static function bootstrap(): void
-    {
-        if (self::$bootstrapped) {
-            return;
-        }
-        self::$bootstrapped = true;
-        foreach (self::$presets as $key => $slugs) {
-            self::$presets[$key] = array_map([WidgetRegistry::class, 'normalize_slug'], $slugs);
-        }
-    }
+    private const ROLES = ['member','artist','organization'];
 
     /**
-     * Retrieve preset widget slugs for a role or preset key.
+     * Return the canonical list of widget slugs for a role.
+     * Looks for JSON under current and legacy paths; falls back to hard-coded defaults.
      *
-     * @param string $role Role or preset key.
-     * @return array<int, string>
+     * @param string $role
+     * @return array<int,string>
      */
-    public static function get_preset_for_role(string $role): array
-    {
-        self::bootstrap();
-        $key    = strtolower(trim($role));
-        $preset = self::$presets[$key] ?? [];
-        if (function_exists('apply_filters')) {
-            $preset = (array) apply_filters('artpulse/dashboard/preset', $preset, $key);
-        }
-
-        $preset = array_map([WidgetRegistry::class, 'normalize_slug'], $preset);
-        $validSlugs = WidgetRegistry::get_canonical_ids();
-        $invalid    = array_diff($preset, $validSlugs);
-        $preset     = array_values(array_intersect($preset, $validSlugs));
-
-        if (defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG && function_exists('is_user_logged_in') && is_user_logged_in()) {
-            foreach ($invalid as $slug) {
-                error_log('ArtPulse: Unknown widget slug: ' . $slug);
-            }
-        }
-
-        return $preset;
-    }
-
-    /** @return array<int,string> */
     public static function forRole(string $role): array
     {
         $role = sanitize_key($role);
-        if (!in_array($role, self::ALLOWED_ROLES, true)) {
+        if (!in_array($role, self::ROLES, true)) {
             $role = 'member';
         }
-        return self::get_preset_for_role($role);
+
+        static $cache = [];
+        if (isset($cache[$role])) {
+            return $cache[$role];
+        }
+
+        // plugin root from src/Core → ../../
+        $root = dirname(__DIR__, 2);
+
+        // Try current filename first, then legacy candidates
+        $candidates = [
+            "$root/data/preset-$role.json",
+            "$root/data/presets/{$role}-default.json",
+            "$root/data/presets/$role.json",
+            // organization sometimes used compact/admin variants historically
+            $role === 'organization' ? "$root/data/presets/organization-compact.json" : null,
+            $role === 'organization' ? "$root/data/presets/organization-admin.json" : null,
+            // earlier member/artist variants
+            $role === 'member' ? "$root/data/presets/member-discovery.json" : null,
+            $role === 'artist' ? "$root/data/presets/artist-default.json" : null,
+            $role === 'artist' ? "$root/data/presets/artist-tools.json" : null,
+        ];
+        $candidates = array_values(array_filter($candidates, 'is_string'));
+
+        $slugs = [];
+        foreach ($candidates as $file) {
+            if (@is_readable($file)) {
+                $raw = @file_get_contents($file);
+                if (is_string($raw) && $raw !== '') {
+                    $json = json_decode($raw, true);
+                    if (is_array($json)) {
+                        $list = isset($json['widgets']) && is_array($json['widgets'])
+                            ? $json['widgets']
+                            : (array_keys($json) === range(0, count($json) - 1) ? $json : []);
+                        foreach ($list as $slug) {
+                            if (is_string($slug) && $slug !== '') {
+                                $slugs[] = WidgetIds::canonicalize($slug);
+                            }
+                        }
+                        if ($slugs) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Fallback to the hard-coded canonical layout (docs/dashboard-mockup.tsx)
+        if (!$slugs) {
+            $fallback = [
+                'member' => [
+                    'widget_membership','widget_account_tools','widget_my_follows',
+                    'widget_recommended_for_you','widget_local_events','widget_my_events','widget_site_stats'
+                ],
+                'artist' => [
+                    'widget_artist_revenue_summary','widget_artist_artwork_manager','widget_artist_audience_insights',
+                    'widget_artist_feed_publisher','widget_my_events','widget_site_stats'
+                ],
+                'organization' => [
+                    'widget_audience_crm','widget_org_ticket_insights','widget_webhooks',
+                    'widget_my_events','widget_site_stats'
+                ],
+            ];
+            $slugs = $fallback[$role];
+        }
+
+        // De-dupe preserving order
+        $slugs = array_values(array_unique($slugs));
+        return $cache[$role] = $slugs;
     }
 }
-
-DashboardPresets::bootstrap();
