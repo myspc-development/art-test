@@ -22,6 +22,12 @@ if (!$autoload) {
 }
 require_once $autoload;
 
+// Load Yoast PHPUnit Polyfills if available
+$polyfill = __DIR__ . '/../vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
+if (file_exists($polyfill)) {
+    require_once $polyfill;
+}
+
 // 2) If dev autoload omitted Brain Monkey, require its sources explicitly
 $bmSrc = null;
 if (class_exists(\Composer\InstalledVersions::class) && \Composer\InstalledVersions::isInstalled('brain/monkey')) {
