@@ -30,7 +30,8 @@
     "yahnis-elsts/plugin-update-checker": "^5.6",
     "erusev/parsedown": "^1.7"
   },
-  "scripts": {
+    "scripts": {
+    "pretest": "php tools/preflight.php",
     "test": [
       "@test:unit",
       "@test:db",
@@ -38,7 +39,7 @@
     ],
     "test:unit": "php -d opcache.enable_cli=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
     "test:db": "php bin/create-test-db.php",
-    "test:wp": "php vendor/bin/phpunit -c phpunit.wp.xml.dist",
+    "test:wp": "php -d opcache.enable_cli=0 -d display_errors=0 vendor/bin/phpunit -c phpunit.wp.xml.dist",
     "test:coverage": "tools/run-coverage.sh",
     "cs": "vendor/bin/phpcs",
     "cs:fix": "vendor/bin/phpcbf",
