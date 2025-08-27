@@ -66,6 +66,10 @@ class DashboardRoleTemplateAttributesTest extends \WP_UnitTestCase {
         $this->assertStringContainsString( 'data-role="' . $role . '"', $html );
         $this->assertStringContainsString( 'id="ap-panel-' . $role . '"', $html );
         $this->assertStringContainsString( 'aria-labelledby="ap-tab-' . $role . '"', $html );
+
+        foreach ( DashboardPresets::forRole( $role ) as $slug ) {
+            $this->assertStringContainsString( 'data-slug="' . $slug . '"', $html );
+        }
     }
 }
 

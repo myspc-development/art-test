@@ -10,7 +10,7 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
  * Dashboard widget: My Events.
  */
 ?>
-<div id="my-events" class="ap-card" role="region" aria-labelledby="my-events-title" data-widget="my-events" <?php echo $visible ? '' : 'hidden'; ?>>
+<div id="my-events" class="ap-card" role="region" aria-labelledby="my-events-title" data-slug="widget_my_events" data-widget="my-events" <?php echo $visible ? '' : 'hidden'; ?>>
     <h2 id="my-events-title" class="ap-card__title"><?php esc_html_e('My Events','artpulse'); ?></h2>
     <?php if (current_user_can('publish_ap_events')) : ?>
         <button id="ap-add-event-btn" class="ap-form-button nectar-button"><?php esc_html_e('Add New Event', 'artpulse'); ?></button>

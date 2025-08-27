@@ -9,7 +9,7 @@ if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) {
     return;
 }
 ?>
-<div id="recommended-for-you-widget" class="ap-card" role="region" aria-labelledby="recommended-for-you-title" data-widget="recommended-for-you">
+<div id="recommended-for-you-widget" class="ap-card" role="region" aria-labelledby="recommended-for-you-title" data-slug="widget_recommended_for_you" data-widget="recommended-for-you">
   <h2 id="recommended-for-you-title" class="ap-card__title"><?php esc_html_e('Recommended For You','artpulse'); ?></h2>
   <?php if ($items): ?>
   <ul>
