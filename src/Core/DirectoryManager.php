@@ -32,6 +32,9 @@ class DirectoryManager {
             '1.0.0',
             true
         );
+        if (function_exists('wp_script_add_data')) {
+            wp_script_add_data('ap-analytics-js', 'type', 'module');
+        }
         wp_localize_script('ap-directory-js', 'ArtPulseApi', [
             'root'  => esc_url_raw(rest_url()),
             'nonce' => wp_create_nonce('wp_rest'),

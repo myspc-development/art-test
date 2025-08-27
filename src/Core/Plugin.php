@@ -514,6 +514,9 @@ class Plugin
             '1.0.0',
             true
         );
+        if (function_exists('wp_script_add_data')) {
+            wp_script_add_data('ap-favorites-js', 'type', 'module');
+        }
 
         wp_enqueue_script(
             'ap-follow-feed-js',

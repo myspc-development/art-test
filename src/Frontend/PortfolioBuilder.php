@@ -42,6 +42,9 @@ class PortfolioBuilder
             '1.0',
             true
         );
+        if (function_exists('wp_script_add_data')) {
+            wp_script_add_data('ap-portfolio-builder', 'type', 'module');
+        }
 
         wp_localize_script('ap-portfolio-builder', 'APPortfolio', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
