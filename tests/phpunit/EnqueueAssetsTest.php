@@ -198,6 +198,21 @@ final class EnqueueAssetsTest extends TestCase
         $this->assertNull($this->style('artpulse-editor-styles'));
     }
 
+    public function test_settings_page_enqueues_scripts(): void
+    {
+        $this->touch('assets/js/ap-analytics.js');
+        $this->touch('assets/js/ap-user-dashboard.js');
+        $this->touch('assets/libs/chart.js/4.4.1/chart.min.js');
+
+        EnqueueAssets::enqueue_admin('toplevel_page_artpulse-settings');
+
+        $this->assertNotNull($this->script('ap-analytics'));
+        $dash = $this->script('ap-user-dashboard-js');
+        $this->assertNotNull($dash);
+        $this->assertContains('chart-js', $dash['deps']);
+        $this->assertArrayNotHasKey('chart-js', $this->enqueuedScripts);
+    }
+
     public function test_import_export_not_enqueued_on_unrelated_admin_page(): void
     {
         Functions\when('do_action')->alias(function ($hook, ...$args) {
@@ -243,6 +258,26 @@ final class EnqueueAssetsTest extends TestCase
         $this->assertNull($this->script('role-dashboard'));
     }
 
+    public function test_settings_scripts_not_enqueued_on_unrelated_admin_page(): void
+    {
+        $this->touch('assets/js/ap-analytics.js');
+        $this->touch('assets/js/ap-user-dashboard.js');
+        $this->touch('assets/libs/chart.js/4.4.1/chart.min.js');
+
+        Functions\when('do_action')->alias(function ($hook, ...$args) {
+            if ($hook === 'admin_enqueue_scripts') {
+                EnqueueAssets::enqueue_admin(...$args);
+            }
+        });
+
+        do_action('admin_enqueue_scripts', 'plugins.php');
+
+        $this->assertNull($this->script('ap-analytics'));
+        $this->assertNull($this->script('ap-user-dashboard-js'));
+        $this->assertArrayHasKey('chart-js', $this->registeredScripts);
+        $this->assertArrayNotHasKey('chart-js', $this->enqueuedScripts);
+    }
+
     public function test_org_dashboard_admin_enqueues_with_sortable(): void
     {
         // Provide dashboard assets
@@ -264,6 +299,47 @@ final class EnqueueAssetsTest extends TestCase
         $this->assertNotNull($role);
         $this->assertContains('ap-role-tabs', $role['deps']);
         $this->assertContains('sortablejs',   $role['deps']);
+    }
+
+    public function test_dashboard_assets_not_double_enqueued(): void
+    {
+        $this->touch('assets/css/dashboard.css');
+        $this->touch('assets/js/dashboard-role-tabs.js');
+        $this->touch('assets/js/role-dashboard.js');
+
+        $scriptCalls = [];
+        $styleCalls  = [];
+        Functions\when('wp_enqueue_script')->alias(function ($handle, $src = '', $deps = [], $ver = false, $in_footer = false) use (&$scriptCalls) {
+            $scriptCalls[$handle] = ($scriptCalls[$handle] ?? 0) + 1;
+            if ($src === '' && isset($this->registeredScripts[$handle])) {
+                $r = $this->registeredScripts[$handle];
+                $src = $r['src']; $deps = $r['deps']; $ver = $r['ver']; $in_footer = $r['in_footer'];
+            }
+            $this->enqueuedScripts[$handle] = [
+                'handle' => $handle,
+                'src' => $src,
+                'deps' => $deps,
+                'ver' => $ver,
+                'in_footer' => $in_footer,
+            ];
+        });
+        Functions\when('wp_enqueue_style')->alias(function ($handle, $src = '', $deps = [], $ver = false, $media = 'all') use (&$styleCalls) {
+            $styleCalls[$handle] = ($styleCalls[$handle] ?? 0) + 1;
+            $this->enqueuedStyles[$handle] = [
+                'handle' => $handle,
+                'src' => $src,
+                'deps' => $deps,
+                'ver' => $ver,
+                'media' => $media,
+            ];
+        });
+
+        EnqueueAssets::enqueue_admin('toplevel_page_ap-dashboard');
+        EnqueueAssets::enqueue_admin('toplevel_page_ap-dashboard');
+
+        $this->assertSame(1, $styleCalls['ap-dashboard'] ?? 0);
+        $this->assertSame(1, $scriptCalls['ap-role-tabs'] ?? 0);
+        $this->assertSame(1, $scriptCalls['role-dashboard'] ?? 0);
     }
 
     public function test_frontend_registers_chart_only(): void
