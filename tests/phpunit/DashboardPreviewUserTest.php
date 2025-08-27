@@ -62,11 +62,54 @@ class DashboardPreviewUserTest extends TestCase {
             ['id' => 'empty_dashboard', 'visible' => true],
         ], $layoutDefault);
 
-        $_GET['ap_preview_user'] = '2';
+        $_GET['ap_preview_user']  = '2';
+        $_GET['ap_preview_nonce'] = wp_create_nonce('ap_preview');
         $layoutPreview = DashboardController::get_user_dashboard_layout(1);
         $this->assertSame([
             ['id' => 'widget_beta', 'visible' => true],
         ], $layoutPreview);
+        unset($_GET['ap_preview_user'], $_GET['ap_preview_nonce']);
+    }
+
+    public function test_preview_user_requires_nonce(): void {
+        MockStorage::$users[1] = (object)['roles' => ['member']];
+        MockStorage::$users[2] = (object)['roles' => ['artist']];
+
+        $_GET['ap_preview_user'] = '2';
+        $layout = DashboardController::get_user_dashboard_layout(1);
+        $this->assertSame([
+            ['id' => 'empty_dashboard', 'visible' => true],
+        ], $layout);
+        unset($_GET['ap_preview_user']);
+    }
+
+    public function test_non_admin_cannot_preview_user(): void {
+        MockStorage::$users[1] = (object)['roles' => ['member']];
+        MockStorage::$users[2] = (object)['roles' => ['artist']];
+        MockStorage::$current_roles = [];
+
+        $_GET['ap_preview_user']  = '2';
+        $_GET['ap_preview_nonce'] = wp_create_nonce('ap_preview');
+        $layout = DashboardController::get_user_dashboard_layout(1);
+        $this->assertSame([
+            ['id' => 'empty_dashboard', 'visible' => true],
+        ], $layout);
+        unset($_GET['ap_preview_user'], $_GET['ap_preview_nonce']);
+    }
+
+    public function test_preview_user_does_not_persist_layout(): void {
+        MockStorage::$users[1] = (object)['roles' => ['administrator']];
+        MockStorage::$users[2] = (object)['roles' => ['artist']];
+        MockStorage::$user_meta[1]['ap_dashboard_layout'] = [ ['id' => 'widget_alpha', 'visible' => true] ];
+
+        $_GET['ap_preview_user']  = '2';
+        $_GET['ap_preview_nonce'] = wp_create_nonce('ap_preview');
+        DashboardController::get_user_dashboard_layout(1);
+        unset($_GET['ap_preview_user'], $_GET['ap_preview_nonce']);
+
+        $this->assertSame([
+            ['id' => 'widget_alpha', 'visible' => true],
+        ], MockStorage::$user_meta[1]['ap_dashboard_layout']);
     }
 }
 }

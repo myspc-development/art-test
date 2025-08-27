@@ -292,8 +292,9 @@ class WidgetVisibilityManager
         }
 
         $preview_enabled = apply_filters('ap_dashboard_preview_enabled', false);
-        $preview = $preview_enabled && isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
-        $preview_valid = $preview_enabled && $preview && in_array($preview, array('member', 'artist', 'organization'), true);
+        $nonce = isset($_GET['ap_preview_nonce']) ? sanitize_key($_GET['ap_preview_nonce']) : '';
+        $preview = $preview_enabled && isset($_GET['ap_preview_role']) && current_user_can('manage_options') && wp_verify_nonce($nonce, 'ap_preview') ? sanitize_key($_GET['ap_preview_role']) : null;
+        $preview_valid = $preview && in_array($preview, array('member', 'artist', 'organization'), true);
         if (current_user_can('manage_options') && !$preview_valid) {
             self::$hidden_widgets = array();
             return;

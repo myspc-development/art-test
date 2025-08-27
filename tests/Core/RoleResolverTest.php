@@ -38,17 +38,35 @@ class RoleResolverTest extends TestCase {
     public function test_admin_preview_overrides_role(): void {
         MockStorage::$users[5] = (object)['roles' => ['administrator']];
         MockStorage::$current_roles = ['manage_options'];
-        $_GET['ap_preview_role'] = 'artist';
+        $_GET['ap_preview_role']  = 'artist';
+        $_GET['ap_preview_nonce'] = wp_create_nonce('ap_preview');
         $this->assertSame('artist', RoleResolver::resolve(5));
+        unset($_GET['ap_preview_role'], $_GET['ap_preview_nonce']);
+    }
+
+    public function test_admin_preview_requires_nonce(): void {
+        MockStorage::$users[6] = (object)['roles' => ['administrator']];
+        MockStorage::$current_roles = ['manage_options'];
+        $_GET['ap_preview_role'] = 'artist';
+        $this->assertSame('organization', RoleResolver::resolve(6));
         unset($_GET['ap_preview_role']);
     }
 
+    public function test_non_admin_cannot_preview_role(): void {
+        MockStorage::$users[7] = (object)['roles' => ['member']];
+        $_GET['ap_preview_role']  = 'artist';
+        $_GET['ap_preview_nonce'] = wp_create_nonce('ap_preview');
+        $this->assertSame('member', RoleResolver::resolve(7));
+        unset($_GET['ap_preview_role'], $_GET['ap_preview_nonce']);
+    }
+
     public function test_invalid_preview_is_ignored(): void {
-        MockStorage::$users[6] = (object)['roles' => ['administrator']];
+        MockStorage::$users[8] = (object)['roles' => ['administrator']];
         MockStorage::$current_roles = ['manage_options'];
-        $_GET['ap_preview_role'] = 'invalid';
-        $this->assertSame('organization', RoleResolver::resolve(6));
-        unset($_GET['ap_preview_role']);
+        $_GET['ap_preview_role']  = 'invalid';
+        $_GET['ap_preview_nonce'] = wp_create_nonce('ap_preview');
+        $this->assertSame('organization', RoleResolver::resolve(8));
+        unset($_GET['ap_preview_role'], $_GET['ap_preview_nonce']);
     }
 }
 }
