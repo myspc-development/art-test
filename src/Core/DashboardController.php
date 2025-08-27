@@ -584,6 +584,17 @@ class DashboardController {
     }
 
     /**
+     * Back-compat shim that proxies to {@see interceptTemplate()}.
+     *
+     * @param string $template
+     * @return string
+     */
+    public static function template_include(string $template): string
+    {
+        return self::interceptTemplate($template);
+    }
+
+    /**
      * Filter template_include to force our dashboard template when requested.
      */
     public static function interceptTemplate(string $template): string
