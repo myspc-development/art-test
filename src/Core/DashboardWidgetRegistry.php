@@ -762,13 +762,16 @@ class DashboardWidgetRegistry {
 
     /**
      * Render a builder widget by ID and return the output.
+     *
+     * @param array{preview_role?:string} $context
      */
-    public static function render( string $id, ?string $role = null ): string {
+    public static function render( string $id, array $context = [] ): string {
         $id = self::canon_slug( $id );
         if ( ! isset( self::$builder_widgets[ $id ] ) ) {
             return '';
         }
-        if ( ! self::user_can_see( $id, 0, $role ) ) {
+        $preview_role = isset( $context['preview_role'] ) ? (string) $context['preview_role'] : null;
+        if ( ! self::user_can_see( $id, 0, $preview_role ) ) {
             return '';
         }
 

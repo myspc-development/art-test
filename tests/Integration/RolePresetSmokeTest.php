@@ -61,7 +61,7 @@ class RolePresetSmokeTest extends \WP_UnitTestCase {
         $slugs = DashboardPresets::forRole( $role );
         $this->assertNotEmpty( $slugs );
         set_query_var( 'ap_role', $role );
-        $html = DashboardWidgetRegistry::render( $slugs[0], $role );
+        $html = DashboardWidgetRegistry::render( $slugs[0], ['preview_role' => $role] );
         $this->assertStringContainsString( '<section', $html );
     }
 }

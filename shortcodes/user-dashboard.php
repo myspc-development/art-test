@@ -8,9 +8,8 @@ if (!defined('ABSPATH')) {
 }
 
 use ArtPulse\Core\ShortcodeRegistry;
-use ArtPulse\Core\RoleResolver;
 use ArtPulse\Core\DashboardPresets;
-use ArtPulse\Core\WidgetRegistry;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 function ap_user_events_shortcode(): string {
     return do_shortcode('[ap_widget id="my-events"]');
@@ -31,23 +30,24 @@ function user_dashboard_shortcode(): string {
     if (!is_user_logged_in()) {
         return '';
     }
-    wp_enqueue_style('ap-react-dashboard');
-    wp_enqueue_script('ap-react-vendor');
-    wp_enqueue_script('ap-react-dashboard');
-
-    $user_id = get_current_user_id();
-    $role    = function_exists('ap_get_effective_role') ? ap_get_effective_role() : RoleResolver::resolve($user_id);
-    $widgets = DashboardPresets::forRole($role);
-    if (empty($widgets)) {
-        $widgets = ['empty_dashboard'];
+    $role = function_exists('get_query_var') ? sanitize_key(get_query_var('ap_role')) : 'member';
+    if (!in_array($role, ['member','artist','organization'], true)) {
+        $role = 'member';
     }
+
+    $slugs = DashboardPresets::forRole($role);
 
     ob_start();
-    echo '<div class="ap-dashboard-fallback" data-role="' . esc_attr($role) . '">';
-    foreach ($widgets as $slug) {
-        echo WidgetRegistry::render($slug, ['user_id' => $user_id]);
+    echo '<section class="ap-role-layout" role="tabpanel"'
+       . ' data-role="' . esc_attr($role) . '"'
+       . ' id="ap-panel-' . esc_attr($role) . '"'
+       . ' aria-labelledby="ap-tab-' . esc_attr($role) . '">';
+
+    foreach ($slugs as $slug) {
+        echo DashboardWidgetRegistry::render($slug, ['preview_role' => $role]);
     }
-    echo '</div>';
+
+    echo '</section>';
     return ob_get_clean();
 }
 ShortcodeRegistry::register('user_dashboard', 'User Dashboard', 'user_dashboard_shortcode');

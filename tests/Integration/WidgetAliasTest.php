@@ -32,9 +32,9 @@ class WidgetAliasTest extends \WP_UnitTestCase {
     }
 
     public function test_aliases_render_canonical_widget(): void {
-        $html1 = DashboardWidgetRegistry::render( 'widget_followed_artists', 'member' );
+        $html1 = DashboardWidgetRegistry::render( 'widget_followed_artists', ['preview_role' => 'member'] );
         $this->assertStringContainsString( 'widget_my_follows', $html1 );
-        $html2 = DashboardWidgetRegistry::render( 'followed_artists', 'member' );
+        $html2 = DashboardWidgetRegistry::render( 'followed_artists', ['preview_role' => 'member'] );
         $this->assertStringContainsString( 'widget_my_follows', $html2 );
     }
 }
