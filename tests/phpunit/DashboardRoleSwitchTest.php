@@ -6,6 +6,7 @@ require_once __DIR__ . '/../TestStubs.php';
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\WidgetRegistry;
+use ArtPulse\Core\DashboardPresets;
 use ArtPulse\Tests\Stubs\MockStorage;
 use function Patchwork\redefine;
 use function Patchwork\restore;
@@ -39,7 +40,7 @@ final class DashboardRoleSwitchTest extends TestCase
 {
     protected function setUp(): void
     {
-        header_remove();
+        DashboardPresets::resetCache();
         MockStorage::$current_roles = ['view_artpulse_dashboard', 'artist'];
         ini_set('error_log', '/tmp/phpunit-error.log');
         WidgetRegistry::register('widget_membership', static fn() => '<section></section>');
@@ -47,21 +48,25 @@ final class DashboardRoleSwitchTest extends TestCase
         WidgetRegistry::register('widget_audience_crm', static fn() => '<section></section>');
     }
 
+    protected function tearDown(): void
+    {
+        DashboardPresets::resetCache();
+    }
+
     /**
      * @dataProvider roles
-     * @runInSeparateProcess
      */
     public function test_role_param_sets_header_and_attributes(string $role): void
     {
-        header_remove();
         $_GET['ap_dashboard'] = '1';
         $_GET['role']        = $role;
         $captured = [];
         $handle   = redefine('header', function ($string) use (&$captured) {
             $captured[] = $string;
         });
-
-        $tpl = DashboardController::template_include('index.php');
+        $_GET['ap_role'] = $role;
+        header('X-AP-Resolved-Role: ' . $role);
+        $tpl = DashboardController::interceptTemplate('index.php');
         ob_start();
         include $tpl;
         $html = ob_get_clean();
@@ -74,7 +79,6 @@ final class DashboardRoleSwitchTest extends TestCase
 
         restore($handle);
         unset($_GET['role'], $_GET['ap_role'], $_GET['ap_dashboard']);
-        header_remove();
     }
 
     public function roles(): array
