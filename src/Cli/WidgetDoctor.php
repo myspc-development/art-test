@@ -9,29 +9,32 @@ use ArtPulse\Core\DashboardWidgetRegistry;
  */
 class WidgetDoctor {
     /**
-     * List registered widgets.
+     * List registered dashboard widgets.
+     *
+     * ## OPTIONS
+     *
+     * [--format=<format>]
+     * ---
+     * default: table
+     * options:
+     *   - table
+     *   - json
+     * ---
+     *
+     * @subcommand list
+     * @synopsis [--format=<format>]
      */
     public function list_( $args, $assoc_args ) {
         $rows = [];
         foreach ( DashboardWidgetRegistry::all() as $id => $w ) {
             $roles = implode( ',', $w['roles'] ?? [] );
-            $has_cb = is_callable( $w['callback'] ?? null ) ? 'yes' : 'no';
-            $hidden_roles = [];
-            foreach ( [ 'member', 'artist', 'organization' ] as $r ) {
-                $hidden = apply_filters( 'ap_dashboard_hidden_widgets', [], $r );
-                if ( in_array( $id, $hidden, true ) ) {
-                    $hidden_roles[] = $r;
-                }
-            }
             $rows[] = [
-                'id'               => $id,
-                'status'           => $w['status'] ?? 'active',
-                'roles'            => $roles,
-                'has_callback'     => $has_cb,
-                'hidden_for_roles' => implode( ',', $hidden_roles ),
+                'id'    => $id,
+                'roles' => $roles,
             ];
         }
-        \WP_CLI\Utils\format_items( 'table', $rows, [ 'id', 'status', 'roles', 'has_callback', 'hidden_for_roles' ] );
+        $format = $assoc_args['format'] ?? 'table';
+        \WP_CLI\Utils\format_items( $format, $rows, [ 'id', 'roles' ] );
     }
 
     /**
