@@ -28,7 +28,7 @@ class RestRouteConflictsTest extends TestCase
 
     public function testDetectsDuplicateRoutesWithDifferentCallbacks(): void
     {
-        $cmd = PHP_BINARY . ' ' . escapeshellarg($this->script);
+        $cmd = 'PATCHWORK_DISABLE=1 ' . PHP_BINARY . ' ' . escapeshellarg($this->script);
         exec($cmd, $output, $status);
         $result = implode("\n", $output);
 
@@ -40,7 +40,7 @@ class RestRouteConflictsTest extends TestCase
 
     public function testJsonOutputStructure(): void
     {
-        $cmd = PHP_BINARY . ' ' . escapeshellarg($this->script) . ' --json';
+        $cmd = 'PATCHWORK_DISABLE=1 ' . PHP_BINARY . ' ' . escapeshellarg($this->script) . ' --json';
         exec($cmd, $output, $status);
         $json = implode("\n", $output);
         $data = json_decode($json, true);
@@ -59,7 +59,7 @@ class RestRouteConflictsTest extends TestCase
 
     public function testSuggestFixOptionEmitsSuggestions(): void
     {
-        $cmd = PHP_BINARY . ' ' . escapeshellarg($this->script) . ' --suggest-fix';
+        $cmd = 'PATCHWORK_DISABLE=1 ' . PHP_BINARY . ' ' . escapeshellarg($this->script) . ' --suggest-fix';
         exec($cmd, $output, $status);
         $result = implode("\n", $output);
 
