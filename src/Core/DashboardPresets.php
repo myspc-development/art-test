@@ -91,7 +91,11 @@ class DashboardPresets
     /** @return array<int,string> */
     public static function forRole(string $role): array
     {
-        $role = sanitize_key($role);
+        $allowed = ['member', 'artist', 'organization'];
+        $role    = sanitize_key($role);
+        if (!in_array($role, $allowed, true)) {
+            $role = 'member';
+        }
         return self::get_preset_for_role($role);
     }
 }
