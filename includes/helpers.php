@@ -2,6 +2,27 @@
 declare(strict_types=1);
 
 /**
+ * Write a message to the PHP error log when debugging is enabled.
+ *
+ * Ensures the message is sanitized and avoids leaking sensitive data in
+ * production environments where WP_DEBUG is disabled.
+ */
+function ap_log($message): void {
+    $debug = defined('WP_DEBUG') && WP_DEBUG;
+    if (isset($GLOBALS['ap_debug_override'])) {
+        $debug = (bool) $GLOBALS['ap_debug_override'];
+    }
+    if (!$debug) {
+        return;
+    }
+    if (is_array($message) || is_object($message)) {
+        $message = wp_json_encode($message);
+    }
+    $message = sanitize_text_field((string) $message);
+    error_log($message);
+}
+
+/**
  * Escape a term for use within a SQL LIKE clause.
  */
 function ap_db_like(string $term): string {
@@ -67,7 +88,7 @@ function ap_safe_include(string $relative_template, string $fallback_path, array
         }
         include $template;
     } else {
-        error_log("ArtPulse: Missing template → $relative_template or fallback.");
+        ap_log("ArtPulse: Missing template → $relative_template or fallback.");
     }
 }
 

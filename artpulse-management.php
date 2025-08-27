@@ -311,7 +311,7 @@ function ap_copy_templates_to_child_theme() {
     $target_dir  = trailingslashit($target_root) . 'templates/salient/';
 
     if ( ! $wp_filesystem->is_writable( $target_root ) ) {
-        error_log( 'ArtPulse: child theme directory is not writable.' );
+        ap_log( 'ArtPulse: child theme directory is not writable.' );
         add_action( 'admin_notices', static function () {
             echo '<div class="notice notice-error"><p>' .
                 esc_html__( 'ArtPulse templates could not be copied. Child theme directory is not writable.', 'artpulse' ) .
@@ -322,7 +322,7 @@ function ap_copy_templates_to_child_theme() {
 
     if ( ! $wp_filesystem->is_dir( $target_dir ) ) {
         if ( ! $wp_filesystem->mkdir( $target_dir, FS_CHMOD_DIR ) ) {
-            error_log( 'ArtPulse: failed to create templates directory.' );
+            ap_log( 'ArtPulse: failed to create templates directory.' );
             add_action( 'admin_notices', static function () {
                 echo '<div class="notice notice-error"><p>' .
                     esc_html__( 'ArtPulse templates directory could not be created.', 'artpulse' ) .
@@ -350,7 +350,7 @@ function ap_copy_templates_to_child_theme() {
             : $target_dir . $file;
 
         if ( ! $wp_filesystem->copy( $source, $destination, true, FS_CHMOD_FILE ) ) {
-            error_log( "ArtPulse: failed to copy template $file" );
+            ap_log( "ArtPulse: failed to copy template $file" );
             add_action( 'admin_notices', static function () use ( $file ) {
                 printf( '<div class="notice notice-error"><p>%s</p></div>', esc_html( sprintf( __( 'ArtPulse template %s could not be copied.', 'artpulse' ), $file ) ) );
             } );
@@ -402,7 +402,7 @@ function ap_install_tables() {
         $table  = $wpdb->prefix . 'ap_org_user_roles';
         $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
         if ($exists !== $table) {
-            error_log("❌ Failed to create table $table");
+            ap_log("❌ Failed to create table $table");
             add_action('admin_notices', static function () use ($table) {
                 printf(
                     '<div class="notice notice-error"><p>%s</p></div>',
@@ -1184,7 +1184,7 @@ add_filter('template_include', function ($template) {
         $custom_template = plugin_dir_path(__FILE__) . 'templates/salient/single-artpulse_event.php';
         if (file_exists($custom_template)) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log('✅ Plugin forcing use of single-artpulse_event.php');
+                ap_log('✅ Plugin forcing use of single-artpulse_event.php');
             }
             return $custom_template;
         }
