@@ -23,6 +23,7 @@
   <testsuites>
     <testsuite name="Unit">
       <file>tests/phpunit/ActivityFeedWidgetTest.php</file>
+      <file>tests/phpunit/FileSystemTest.php</file>
       <file>tests/phpunit/DashboardLayoutTest.php</file>
       <file>tests/phpunit/DashboardPreviewUserTest.php</file>
       <file>tests/phpunit/DashboardWidgetRegistryAliasTest.php</file>
