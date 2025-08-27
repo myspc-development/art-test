@@ -2,7 +2,11 @@
 // WordPress integration bootstrap.
 declare(strict_types=1);
 
-$_tests_dir = getenv('WP_PHPUNIT__DIR') ?: __DIR__ . '/../vendor/wp-phpunit/wp-phpunit';
+$_tests_dir = getenv('WP_PHPUNIT__DIR');
+if (!$_tests_dir) {
+    fwrite(STDERR, "WP_PHPUNIT__DIR is not set. Run tools/provision-wp-core.sh first.\n");
+    exit(1);
+}
 
 require $_tests_dir . '/includes/functions.php';
 
