@@ -12,7 +12,7 @@ class FileSystem
         if (self::is_dangerous($path) || is_link($path) || !is_file($path)) {
             return false;
         }
-        return @unlink($path);
+        return unlink($path);
     }
 
     /**
@@ -37,17 +37,16 @@ class FileSystem
             \RecursiveIteratorIterator::CHILD_FIRST
         );
         foreach ($items as $item) {
+            $itemPath = $item->getPathname();
             if ($item->isLink()) {
-                $success = false;
-                continue;
-            }
-            if ($item->isDir()) {
-                $success = @rmdir($item->getPathname()) && $success;
+                $success = unlink($itemPath) && $success;
+            } elseif ($item->isDir()) {
+                $success = rmdir($itemPath) && $success;
             } else {
-                $success = @unlink($item->getPathname()) && $success;
+                $success = unlink($itemPath) && $success;
             }
         }
-        return @rmdir($path) && $success;
+        return rmdir($path) && $success;
     }
 
     private static function normalize(string $path): string
@@ -68,6 +67,12 @@ class FileSystem
         }
         if ($p === '/' || preg_match('#^[A-Za-z]:$#', $p)) {
             return true;
+        }
+        if (defined('ABSPATH')) {
+            $abspath = rtrim(self::normalize(ABSPATH), '/\\');
+            if ($p === $abspath) {
+                return true;
+            }
         }
         return false;
     }
