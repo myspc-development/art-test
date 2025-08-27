@@ -32,7 +32,7 @@
     "test:unit": "php -d opcache.enable_cli=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
     "test:wp": "php -d opcache.enable_cli=0 vendor/bin/phpunit -c phpunit.wp.xml.dist",
     "test": "composer run test:unit && composer run test:wp",
-    "test:db": "mysql -u ${WP_TESTS_DB_USER:-root} -p\"${WP_TESTS_DB_PASS}\" -h ${WP_TESTS_DB_HOST:-127.0.0.1} -e \"CREATE DATABASE IF NOT EXISTS ${WP_TESTS_DB_NAME:-wordpress_test} DEFAULT CHARACTER SET utf8mb4;\"",
+    "test:db": "mysql -u ${WP_TESTS_DB_USER:-${DB_USER:-root}} -p\"${WP_TESTS_DB_PASSWORD:-${DB_PASSWORD:-}}\" -h ${WP_TESTS_DB_HOST:-${DB_HOST:-localhost}} -e \"CREATE DATABASE IF NOT EXISTS ${WP_TESTS_DB_NAME:-${DB_NAME:-wordpress_test}} DEFAULT CHARACTER SET utf8mb4;\"",
     "lint:phpcs": "vendor/bin/phpcs",
     "lint:phpstan": "vendor/bin/phpstan analyse",
     "lint": ["@lint:phpcs", "@lint:phpstan"]
