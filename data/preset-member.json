@@ -1,30 +1,30 @@
 [
   {
-    "id": "news_feed",
+    "id": "widget_news_feed",
     "visible": true
   },
   {
-    "id": "rsvp_button",
+    "id": "widget_rsvp_button",
     "visible": true
   },
   {
-    "id": "nearby_events_map",
+    "id": "widget_nearby_events_map",
     "visible": true
   },
   {
-    "id": "my_favorites",
+    "id": "widget_my_favorites",
     "visible": true
   },
   {
-    "id": "event_chat",
+    "id": "widget_event_chat",
     "visible": true
   },
   {
-    "id": "share_this_event",
+    "id": "widget_share_this_event",
     "visible": true
   },
   {
-    "id": "artist_inbox_preview",
+    "id": "widget_artist_inbox_preview",
     "visible": true
   }
 ]

@@ -9,7 +9,7 @@ if (!is_user_logged_in()) {
     return;
 }
 
-$role = get_query_var('ap_role');
+$role = get_query_var('ap_role') ?: 'member';
 if (!in_array($role, ['member','artist','organization'], true)) {
     $role = 'member';
 }
@@ -22,7 +22,7 @@ if (!in_array($role, ['member','artist','organization'], true)) {
   data-role="<?php echo esc_attr($role); ?>"
 >
   <?php foreach (\ArtPulse\Core\DashboardPresets::forRole($role) as $slug): ?>
-      <?php echo \ArtPulse\Core\WidgetRegistry::render($slug); ?>
+      <?php echo \ArtPulse\Core\DashboardWidgetRegistry::render($slug); ?>
   <?php endforeach; ?>
 </section>
 
