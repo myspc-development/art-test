@@ -13,7 +13,7 @@ if (!is_user_logged_in()) {
 }
 
 $role = get_query_var('ap_role');
-if (!$role) {
+if (empty($role)) {
     $role = get_query_var('role');
 }
 $role = sanitize_key($role ?: 'member');
