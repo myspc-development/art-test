@@ -15,12 +15,9 @@
   <coverage processUncoveredFiles="true">
     <include>
       <directory suffix=".php">src</directory>
-      <directory suffix=".php">includes</directory>
-      <directory suffix=".php">widgets</directory>
     </include>
     <exclude>
-      <directory>tests</directory>
-      <directory>vendor</directory>
+      <directory>tests/views</directory>
     </exclude>
     <report>
       <text outputFile="php://stdout"/>

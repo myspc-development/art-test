@@ -39,6 +39,7 @@
     "test:unit": "php -d opcache.enable_cli=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
     "test:db": "php bin/create-test-db.php",
     "test:wp": "php vendor/bin/phpunit -c phpunit.wp.xml.dist",
+    "test:coverage": "tools/run-coverage.sh",
     "cs": "vendor/bin/phpcs",
     "cs:fix": "vendor/bin/phpcbf",
     "stan": "vendor/bin/phpstan analyse",
