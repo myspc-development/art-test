@@ -32,9 +32,9 @@
   },
   "scripts": {
     "test:unit": "php -d opcache.enable_cli=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
-    "test:wp": "php -d opcache.enable_cli=0 vendor/bin/phpunit -c phpunit.wp.xml.dist",
-    "test": "composer run test:unit && composer run test:wp",
-    "test:db": "php -d opcache.enable_cli=0 bin/create-test-db.php",
+    "test:wp": "php vendor/bin/phpunit -c phpunit.wp.xml.dist",
+    "test": "composer run test:unit && composer run test:db && composer run test:wp",
+    "test:db": "php bin/create-test-db.php",
     "lint:phpcs": "vendor/bin/phpcs",
     "lint:phpstan": "vendor/bin/phpstan analyse",
     "lint": [
