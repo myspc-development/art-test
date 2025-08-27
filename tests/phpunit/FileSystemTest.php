@@ -27,13 +27,16 @@ class FileSystemTest extends TestCase
             \RecursiveIteratorIterator::CHILD_FIRST
         );
         foreach ($items as $item) {
-            if ($item->isDir()) {
-                @rmdir($item->getPathname());
+            $itemPath = $item->getPathname();
+            if ($item->isLink()) {
+                unlink($itemPath);
+            } elseif ($item->isDir()) {
+                rmdir($itemPath);
             } else {
-                @unlink($item->getPathname());
+                unlink($itemPath);
             }
         }
-        @rmdir($path);
+        rmdir($path);
     }
 
     public function test_safe_unlink_removes_file(): void
@@ -85,5 +88,22 @@ class FileSystemTest extends TestCase
     {
         $this->assertFalse(FileSystem::safe_unlink('/'));
         $this->assertFalse(FileSystem::rm_rf('/'));
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_root_guard_refuses_abspath(): void
+    {
+        $root = defined('ABSPATH') ? ABSPATH : sys_get_temp_dir() . '/wp-test-root';
+        if (!defined('ABSPATH')) {
+            define('ABSPATH', $root);
+        }
+        if (!file_exists($root)) {
+            mkdir($root, 0777, true);
+        }
+        $this->assertFalse(FileSystem::safe_unlink(ABSPATH));
+        $this->assertFalse(FileSystem::rm_rf(ABSPATH));
+        $this->assertTrue(file_exists(ABSPATH));
     }
 }
