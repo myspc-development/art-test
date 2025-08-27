@@ -13,10 +13,9 @@ if (!is_user_logged_in()) {
 }
 
 $role = get_query_var('ap_role');
-if (empty($role)) {
-    $role = get_query_var('role');
+if (!in_array($role, ['member', 'artist', 'organization'], true)) {
+    $role = 'member';
 }
-$role = sanitize_key($role ?: 'member');
 
 $user_id    = get_current_user_id();
 $slugs      = DashboardPresets::forRole($role);

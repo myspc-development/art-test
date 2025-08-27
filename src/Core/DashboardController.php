@@ -587,9 +587,6 @@ class DashboardController {
         if (($is_query || $is_page) && function_exists('\is_user_logged_in') && \is_user_logged_in() &&
             function_exists('\current_user_can') && \current_user_can('view_artpulse_dashboard')) {
             $role = self::resolveRole();
-            if (function_exists('set_query_var')) {
-                set_query_var('ap_role', $role);
-            }
 
             $base = defined('ARTPULSE_PLUGIN_DIR') ? ARTPULSE_PLUGIN_DIR : \plugin_dir_path(ARTPULSE_PLUGIN_FILE);
             $tpl  = rtrim($base, '/\\') . '/templates/simple-dashboard.php';
@@ -603,14 +600,20 @@ class DashboardController {
         return $template;
     }
 
+    /**
+     * Sanitize a role string to one of the accepted values.
+     */
+    private static function sanitizeRole($role): ?string
+    {
+        $role = is_string($role) ? sanitize_key($role) : '';
+        return in_array($role, self::ALLOWED_ROLES, true) ? $role : null;
+    }
+
     private static function resolveRole(): string
     {
-        $allowed = ['member', 'artist', 'organization'];
-        $qv      = function_exists('get_query_var') ? get_query_var('role') : '';
-        $qv      = is_string($qv) ? sanitize_key($qv) : '';
-        if ($qv && in_array($qv, $allowed, true)) {
-            $resolved = $qv;
-        } else {
+        $raw      = function_exists('get_query_var') ? get_query_var('role') : '';
+        $resolved = self::sanitizeRole($raw);
+        if ($resolved === null) {
             $resolved = 'member';
             if (function_exists('is_user_logged_in') && is_user_logged_in()) {
                 $u     = wp_get_current_user();
@@ -622,9 +625,16 @@ class DashboardController {
                 }
             }
         }
-        if (defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG && function_exists('is_user_logged_in') && is_user_logged_in()) {
-            error_log(sprintf('[AP role] qv_role=%s resolved=%s', $qv ?: '(none)', $resolved));
+
+        if (function_exists('set_query_var')) {
+            set_query_var('ap_role', $resolved);
         }
+
+        if (defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG && function_exists('is_user_logged_in') && is_user_logged_in()) {
+            error_log(sprintf('[AP role] qv_role=%s resolved=%s', $raw ?: '(none)', $resolved));
+            header('X-AP-Resolved-Role: ' . $resolved);
+        }
+
         return $resolved;
     }
 

@@ -44,6 +44,9 @@ class DashboardPresets
         ],
     ];
 
+    /** @var string[] */
+    private const ALLOWED_ROLES = ['member', 'artist', 'organization'];
+
     /** @var bool */
     private static bool $bootstrapped = false;
 
@@ -91,9 +94,8 @@ class DashboardPresets
     /** @return array<int,string> */
     public static function forRole(string $role): array
     {
-        $allowed = ['member', 'artist', 'organization'];
-        $role    = sanitize_key($role);
-        if (!in_array($role, $allowed, true)) {
+        $role = sanitize_key($role);
+        if (!in_array($role, self::ALLOWED_ROLES, true)) {
             $role = 'member';
         }
         return self::get_preset_for_role($role);
