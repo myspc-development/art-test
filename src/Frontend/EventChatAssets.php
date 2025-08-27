@@ -12,7 +12,7 @@ class EventChatAssets
 
     public static function maybe_localize(): void
     {
-        $handle = 'ap-event-chat';
+        $handle = 'ap-event-chat-js';
         if (!wp_script_is($handle, 'enqueued') && !wp_script_is($handle, 'registered')) {
             return;
         }
@@ -23,6 +23,9 @@ class EventChatAssets
         }
         if (!$event_id && is_singular('artpulse_event')) {
             $event_id = (int) get_queried_object_id();
+        }
+        if (!$event_id) {
+            return;
         }
 
         wp_localize_script(

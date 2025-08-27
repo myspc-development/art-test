@@ -573,13 +573,22 @@ class Plugin
             true
         );
 
-        wp_enqueue_script(
-            'ap-event-chat-js',
-            plugins_url('assets/js/ap-event-chat.js', ARTPULSE_PLUGIN_FILE),
-            ['wp-api-fetch'],
-            '1.0.0',
-            true
-        );
+        $event_id = 0;
+        if (isset($_GET['event_id'])) {
+            $event_id = (int) $_GET['event_id'];
+        }
+        if (!$event_id && is_singular('artpulse_event')) {
+            $event_id = (int) get_queried_object_id();
+        }
+        if ($event_id) {
+            wp_enqueue_script(
+                'ap-event-chat-js',
+                plugins_url('assets/js/ap-event-chat.js', ARTPULSE_PLUGIN_FILE),
+                ['wp-api-fetch'],
+                '1.0.0',
+                true
+            );
+        }
 
         wp_enqueue_script(
             'ap-event-vote-js',
@@ -677,15 +686,7 @@ class Plugin
             'nonce'   => wp_create_nonce('wp_rest'),
         ]);
 
-        wp_localize_script('ap-event-chat-js', 'APChat', [
-            'apiRoot' => esc_url_raw(rest_url()),
-            'nonce'   => wp_create_nonce('wp_rest'),
-            'poll'    => true,
-        ]);
 
-        wp_localize_script('ap-event-chat-js', 'ArtPulseChatVars', [
-            'event_id' => get_the_ID(),
-        ]);
 
         wp_localize_script('ap-event-vote-js', 'APEventVote', [
             'apiRoot' => esc_url_raw(rest_url()),
