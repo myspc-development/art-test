@@ -25,6 +25,10 @@
           }
           $list.append(li);
         });
+      },
+      error: function() {
+        var $list = $('#ap-notification-list');
+        $list.empty().append('<li>Failed to load notifications.</li>');
       }
     });
   }
@@ -38,6 +42,9 @@
       },
       success: function() {
         li.fadeOut(300, function(){ $(this).remove(); });
+      },
+      error: function() {
+        li.append(' <span class="ap-error">Failed to update.</span>');
       }
     });
   }
