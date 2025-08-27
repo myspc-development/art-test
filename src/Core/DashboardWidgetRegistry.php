@@ -551,6 +551,36 @@ class DashboardWidgetRegistry {
         return self::include_template( 'widgets/my-favorites.php' );
     }
 
+    public static function render_widget_membership( int $user_id = 0 ): string {
+        $billing = function_exists( 'home_url' ) ? home_url( '/account/billing' ) : '';
+        if ( ! $billing && function_exists( 'admin_url' ) ) {
+            $billing = admin_url( 'profile.php' );
+        }
+        $upgrade = function_exists( 'home_url' ) ? home_url( '/membership/upgrade' ) : '';
+        if ( ! $upgrade && function_exists( 'admin_url' ) ) {
+            $upgrade = admin_url( 'admin.php?page=artpulse-membership' );
+        }
+        $links  = '<a href="' . esc_url( $billing ) . '">Manage Billing</a>';
+        $links .= ' <a href="' . esc_url( $upgrade ) . '">Upgrade</a>';
+        return '<section data-slug="widget_membership">' . $links . '</section>';
+    }
+
+    public static function render_widget_artist_artwork_manager( int $user_id = 0 ): string {
+        $url = function_exists( 'admin_url' ) ? admin_url( 'post-new.php?post_type=artpulse_artwork' ) : '#';
+        $url = function_exists( 'wp_nonce_url' ) ? wp_nonce_url( $url, 'add_artpulse_artwork' ) : $url;
+        return '<section data-slug="widget_artist_artwork_manager"><a href="' . esc_url( $url ) . '">Add New Artwork</a></section>';
+    }
+
+    public static function render_widget_artist_feed_publisher( int $user_id = 0 ): string {
+        $url = function_exists( 'admin_url' ) ? admin_url( 'post-new.php' ) : '#';
+        return '<section data-slug="widget_artist_feed_publisher"><a href="' . esc_url( $url ) . '">Publish</a></section>';
+    }
+
+    public static function render_widget_webhooks( int $user_id = 0 ): string {
+        $url = function_exists( 'admin_url' ) ? admin_url( 'admin.php?page=artpulse-webhooks' ) : '#';
+        return '<section data-slug="widget_webhooks"><a href="' . esc_url( $url ) . '">Manage Webhooks</a></section>';
+    }
+
     /**
      * Retrieve a widget configuration by ID.
      */
@@ -733,8 +763,12 @@ class DashboardWidgetRegistry {
     /**
      * Render a builder widget by ID and return the output.
      */
-    public static function render( string $id ): string {
+    public static function render( string $id, ?string $role = null ): string {
+        $id = self::canon_slug( $id );
         if ( ! isset( self::$builder_widgets[ $id ] ) ) {
+            return '';
+        }
+        if ( ! self::user_can_see( $id, 0, $role ) ) {
             return '';
         }
 
@@ -762,7 +796,7 @@ class DashboardWidgetRegistry {
     /**
      * Determine if a user can see a widget.
      */
-    public static function user_can_see( string $id, int $user_id = 0 ): bool {
+    public static function user_can_see( string $id, int $user_id = 0, ?string $preview_role = null ): bool {
         $id = self::canon_slug( $id );
         if ( ! $user_id ) {
             $user_id = get_current_user_id();
@@ -773,7 +807,7 @@ class DashboardWidgetRegistry {
             return false;
         }
 
-        $preview = function_exists( 'get_query_var' ) ? get_query_var( 'ap_role' ) : null;
+        $preview = $preview_role ? sanitize_key( $preview_role ) : ( function_exists( 'get_query_var' ) ? get_query_var( 'ap_role' ) : null );
         if ( function_exists( 'current_user_can' ) && current_user_can( 'manage_options' ) ) {
             if ( ! is_string( $preview ) || $preview === '' ) {
                 return true;

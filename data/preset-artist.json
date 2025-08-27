@@ -1,16 +1,8 @@
 [
-  {
-    "id": "widget_artist_inbox_preview",
-    "visible": true
-  },
-  {
-    "id": "widget_artist_revenue_summary",
-    "visible": true
-  },
+  { "id": "widget_artist_revenue_summary", "visible": true },
   { "id": "widget_artist_artwork_manager", "visible": true },
   { "id": "widget_artist_audience_insights", "visible": true },
-  { "id": "widget_artist_earnings_summary", "visible": true },
   { "id": "widget_artist_feed_publisher", "visible": true },
-  { "id": "widget_collab_requests", "visible": true },
-  { "id": "widget_onboarding_tracker", "visible": true }
+  { "id": "widget_my_events", "visible": true },
+  { "id": "widget_site_stats", "visible": true }
 ]

@@ -1,36 +1,7 @@
 [
-  {
-    "id": "widget_audience_crm",
-    "visible": true
-  },
-  {
-    "id": "widget_sponsored_event_config",
-    "visible": true
-  },
-  {
-    "id": "widget_embed_tool",
-    "visible": true
-  },
-  {
-    "id": "widget_branding_settings_panel",
-    "visible": true
-  },
-  {
-    "id": "widget_ap_donor_activity",
-    "visible": true
-  },
-  {
-    "id": "widget_org_widget_sharing",
-    "visible": true
-  },
-  {
-    "id": "widget_sponsor_display",
-    "visible": true
-  },
-  { "id": "widget_org_event_overview", "visible": true },
-  { "id": "widget_org_event_quick_add", "visible": true },
-  { "id": "widget_org_team_roster", "visible": true },
-  { "id": "widget_org_approval_center", "visible": true },
+  { "id": "widget_audience_crm", "visible": true },
   { "id": "widget_org_ticket_insights", "visible": true },
-  { "id": "widget_org_broadcast_box", "visible": true }
+  { "id": "widget_webhooks", "visible": true },
+  { "id": "widget_my_events", "visible": true },
+  { "id": "widget_site_stats", "visible": true }
 ]
