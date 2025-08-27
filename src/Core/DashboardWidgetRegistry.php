@@ -363,9 +363,9 @@ class DashboardWidgetRegistry {
             'status'      => $status,
         ];
 
-        if (defined('WP_DEBUG') && WP_DEBUG) {
+        if ( defined('WP_CLI') && WP_CLI ) {
             $roles = isset(self::$widgets[$id]['roles']) ? implode(',', (array) self::$widgets[$id]['roles']) : 'all';
-            error_log(sprintf('ap widget register %s roles=%s', $id, $roles));
+            \WP_CLI::debug( "widget register {$id} roles={$roles}", 'artpulse' );
         }
 
         return self::$widgets[ $id ];
@@ -449,9 +449,9 @@ class DashboardWidgetRegistry {
         $args['status'] = $status;
         self::$widgets[ $id ] = $args;
 
-        if (defined('WP_DEBUG') && WP_DEBUG) {
+        if ( defined('WP_CLI') && WP_CLI ) {
             $roles = isset($args['roles']) ? implode(',', (array) $args['roles']) : 'all';
-            error_log(sprintf('ap widget register %s roles=%s', $id, $roles));
+            \WP_CLI::debug( "widget register {$id} roles={$roles}", 'artpulse' );
         }
 
         return self::$widgets[ $id ];

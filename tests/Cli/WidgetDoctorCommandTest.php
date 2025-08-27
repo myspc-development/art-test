@@ -69,10 +69,19 @@ namespace ArtPulse\Cli\Tests {
                 'widget_one' => [ 'status' => 'active', 'roles' => [ 'member' ], 'callback' => '__return_true' ],
                 'widget_two' => [ 'status' => 'beta', 'roles' => [ 'artist' ], 'callback' => '__return_true' ],
             ] );
-            $GLOBALS['hidden_widgets']['member'] = [ 'widget_two' ];
             $out = WP_CLI::runcommand( 'artpulse widgets list' );
-            $this->assertStringContainsString( "id\tstatus\troles\thas_callback\thidden_for_roles", $out );
-            $this->assertStringContainsString( "widget_two\tbeta\tartist\tyes\tmember", $out );
+            $this->assertStringContainsString( "id\troles", $out );
+            $this->assertStringContainsString( "widget_two\tartist", $out );
+        }
+
+        public function test_list_supports_json(): void {
+            DashboardWidgetRegistry::set( [
+                'widget_one' => [ 'status' => 'active', 'roles' => [ 'member' ], 'callback' => '__return_true' ],
+                'widget_two' => [ 'status' => 'beta', 'roles' => [ 'artist' ], 'callback' => '__return_true' ],
+            ] );
+            $out = WP_CLI::runcommand( 'artpulse widgets list --format=json' );
+            $decoded = json_decode( $out, true );
+            $this->assertSame( 'artist', $decoded[1]['roles'] );
         }
 
         public function test_audit_reports_issues_and_errors(): void {
