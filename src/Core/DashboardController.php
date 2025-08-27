@@ -149,7 +149,7 @@ class DashboardController {
                 $stub = sanitize_key($key . '_placeholder');
                 WidgetGuard::register_stub_widget($stub, [], ['roles' => [$preset['role']]]);
                 if (
-                    defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE &&
+                    defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG &&
                     function_exists('is_user_logged_in') && is_user_logged_in()
                 ) {
                     error_log("[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}");
@@ -236,7 +236,7 @@ class DashboardController {
             foreach (array_unique($missing) as $id) {
                 WidgetGuard::register_stub_widget($id, [], []);
                 if (
-                    defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE &&
+                    defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG &&
                     function_exists('is_user_logged_in') && is_user_logged_in()
                 ) {
                     error_log("[DashboardController] Registered stub widget {$id}");
@@ -467,7 +467,7 @@ class DashboardController {
 
                 if (!WidgetRegistry::exists($id) && !DashboardWidgetRegistry::exists($id)) {
                     if (
-                        defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE &&
+                        defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG &&
                         function_exists('is_user_logged_in') && is_user_logged_in()
                     ) {
                         error_log("[Dashboard Preset] Widget {$id} not registered");
@@ -576,7 +576,7 @@ class DashboardController {
         }
         if (!file_exists($dest)) {
             if (!@copy($src, $dest)) {
-                if (defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE && function_exists('is_user_logged_in') && is_user_logged_in()) {
+                if (defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG && function_exists('is_user_logged_in') && is_user_logged_in()) {
                     error_log('ArtPulse: failed to copy template single-artpulse_event.php');
                 }
             }
@@ -597,7 +597,7 @@ class DashboardController {
             $base = defined('ARTPULSE_PLUGIN_DIR') ? ARTPULSE_PLUGIN_DIR : \plugin_dir_path(ARTPULSE_PLUGIN_FILE);
             $tpl  = rtrim($base, '/\\') . '/templates/simple-dashboard.php';
             if (file_exists($tpl)) {
-                if (defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE) {
+                if (defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG) {
                     error_log('🔥 template_include resolved: ' . $tpl);
                 }
                 return $tpl;

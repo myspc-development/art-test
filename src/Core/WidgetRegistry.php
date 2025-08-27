@@ -134,7 +134,7 @@ class WidgetRegistry
         if (self::$debugOverride !== null) {
             return self::$debugOverride;
         }
-        return defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE
+        return defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG
             && function_exists('is_user_logged_in') && is_user_logged_in();
     }
 }

@@ -70,7 +70,7 @@ class CapabilitiesManager
 
         // Log the capability mapping for debugging when verbose mode is enabled.
         if (
-            defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE &&
+            defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG &&
             function_exists('is_user_logged_in') && is_user_logged_in()
         ) {
             $roles = $user ? implode(',', (array) $user->roles) : 'none';

@@ -82,7 +82,7 @@ class DashboardPresets
         $invalid    = array_diff($preset, $validSlugs);
         $preset     = array_values(array_intersect($preset, $validSlugs));
 
-        if (defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE && function_exists('is_user_logged_in') && is_user_logged_in()) {
+        if (defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG && function_exists('is_user_logged_in') && is_user_logged_in()) {
             foreach ($invalid as $slug) {
                 error_log('ArtPulse: Unknown widget slug: ' . $slug);
             }
