@@ -135,12 +135,35 @@ class DashboardLayoutTest extends TestCase {
         ]);
         MockStorage::$users[4] = (object)['roles' => ['administrator']];
         MockStorage::$current_roles = ['manage_options'];
-        $_GET['ap_preview_role'] = 'artist';
+        $_GET['ap_preview_role']  = 'artist';
+        $_GET['ap_preview_nonce'] = wp_create_nonce('ap_preview');
         $layout = DashboardController::get_user_dashboard_layout(4);
-        unset($_GET['ap_preview_role']);
+        unset($_GET['ap_preview_role'], $_GET['ap_preview_nonce']);
         $this->assertSame([
             ['id' => 'widget_beta', 'visible' => true],
         ], $layout);
+    }
+
+    public function test_preview_role_does_not_persist_layout(): void {
+        DashboardWidgetRegistry::register('widget_alpha', 'Alpha', '', '', static function () {}, ['roles' => ['member']]);
+        DashboardWidgetRegistry::register('widget_beta', 'Beta', '', '', static function () {}, ['roles' => ['artist']]);
+        $ref2 = new \ReflectionClass(DashboardController::class);
+        $prop2 = $ref2->getProperty('role_widgets');
+        $prop2->setAccessible(true);
+        $prop2->setValue(null, [
+            'member' => ['widget_alpha'],
+            'artist' => ['widget_beta'],
+        ]);
+        MockStorage::$users[6] = (object)['roles' => ['administrator']];
+        MockStorage::$current_roles = ['manage_options'];
+        MockStorage::$user_meta[6]['ap_dashboard_layout'] = [ ['id' => 'widget_alpha', 'visible' => true] ];
+        $_GET['ap_preview_role']  = 'artist';
+        $_GET['ap_preview_nonce'] = wp_create_nonce('ap_preview');
+        DashboardController::get_user_dashboard_layout(6);
+        unset($_GET['ap_preview_role'], $_GET['ap_preview_nonce']);
+        $this->assertSame([
+            ['id' => 'widget_alpha', 'visible' => true],
+        ], MockStorage::$user_meta[6]['ap_dashboard_layout']);
     }
 
     public function test_filter_accessible_layout_excludes_by_capability_and_role(): void {

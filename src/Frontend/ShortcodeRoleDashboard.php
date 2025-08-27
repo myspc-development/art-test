@@ -18,11 +18,19 @@ class ShortcodeRoleDashboard
         add_filter('the_content', [self::class, 'inject_container_if_preview'], 9);
     }
 
+    /** ensure preview requests come from admins with a valid nonce */
+    private static function can_preview(): bool
+    {
+        if (!is_user_logged_in() || !current_user_can('manage_options')) return false;
+        $nonce = isset($_GET['ap_preview_nonce']) ? sanitize_key((string) $_GET['ap_preview_nonce']) : '';
+        return isset($_GET['ap_preview_role']) && wp_verify_nonce($nonce, 'ap_preview');
+    }
+
     /** derive role from shortcode/user and allow ?ap_preview_role override for logged-in users */
     private static function role_from_request(?string $fallback): string
     {
         $role = $fallback && in_array($fallback, self::ALLOWED_ROLES, true) ? $fallback : 'member';
-        if (is_user_logged_in() && isset($_GET['ap_preview_role'])) {
+        if (self::can_preview()) {
             $preview = sanitize_key((string) $_GET['ap_preview_role']);
             if (in_array($preview, self::ALLOWED_ROLES, true)) {
                 $role = $preview;
@@ -112,7 +120,7 @@ class ShortcodeRoleDashboard
         $post_id = get_queried_object_id();
         $content = (string) get_post_field('post_content', $post_id);
         $has_sc  = has_shortcode($content, 'ap_role_dashboard');
-        $is_preview = isset($_GET['ap_preview_role']);
+        $is_preview = self::can_preview();
         if (! $has_sc && ! $is_preview) return;
 
         $role = self::role_from_request(
@@ -125,7 +133,7 @@ class ShortcodeRoleDashboard
     public static function inject_container_if_preview(string $content): string
     {
         if (!is_user_logged_in() || !is_singular()) return $content;
-        if (!isset($_GET['ap_preview_role'])) return $content;
+        if (!self::can_preview()) return $content;
         if (has_shortcode($content, 'ap_role_dashboard') || strpos($content, 'id="ap-dashboard-root"') !== false) {
             return $content;
         }

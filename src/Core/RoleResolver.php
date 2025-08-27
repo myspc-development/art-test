@@ -10,7 +10,13 @@ class RoleResolver
     {
         $preview = isset($_GET['ap_preview_role']) ? sanitize_key($_GET['ap_preview_role']) : null;
         $allowed = array('member', 'artist', 'organization');
-        if ($preview && in_array($preview, $allowed, true) && current_user_can('manage_options')) {
+        $nonce   = isset($_GET['ap_preview_nonce']) ? sanitize_key($_GET['ap_preview_nonce']) : '';
+        if (
+            $preview &&
+            in_array($preview, $allowed, true) &&
+            current_user_can('manage_options') &&
+            wp_verify_nonce($nonce, 'ap_preview')
+        ) {
             return $preview;
         }
 
