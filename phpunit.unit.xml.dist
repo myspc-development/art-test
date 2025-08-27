@@ -31,6 +31,7 @@
       <file>tests/phpunit/ActivityFeedWidgetTest.php</file>
       <file>tests/phpunit/FileSystemTest.php</file>
       <file>tests/phpunit/DashboardLayoutTest.php</file>
+      <file>tests/phpunit/DashboardPreviewRoleHeaderTest.php</file>
       <file>tests/phpunit/DashboardPreviewUserTest.php</file>
       <file>tests/phpunit/DashboardWidgetRegistryAliasTest.php</file>
       <file>tests/phpunit/DashboardWidgetRegistryHelpersTest.php</file>
