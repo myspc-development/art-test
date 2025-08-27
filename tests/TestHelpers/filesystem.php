@@ -14,9 +14,9 @@ namespace ArtPulse\Tests;
  * @return void
  */
 function safe_unlink( string $path ): void {
-	if ( is_file( $path ) ) {
-		@unlink( $path );
-	}
+        if ( is_file( $path ) ) {
+                unlink( $path );
+        }
 }
 
 /**
@@ -26,21 +26,26 @@ function safe_unlink( string $path ): void {
  * @return void
  */
 function remove_dir( string $path ): void {
-	if ( ! is_dir( $path ) ) {
-		return;
-	}
-	$items = new \RecursiveIteratorIterator(
-		new \RecursiveDirectoryIterator( $path, \FilesystemIterator::SKIP_DOTS ),
-		\RecursiveIteratorIterator::CHILD_FIRST
-	);
-	foreach ( $items as $item ) {
-		if ( $item->isDir() ) {
-			@rmdir( $item->getPathname() );
-		} else {
-			@unlink( $item->getPathname() );
-		}
-	}
-	@rmdir( $path );
+        if ( ! is_dir( $path ) ) {
+                return;
+        }
+        $items = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator( $path, \FilesystemIterator::SKIP_DOTS ),
+                \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ( $items as $item ) {
+                $item_path = $item->getPathname();
+                if ( $item->isDir() ) {
+                        if ( is_dir( $item_path ) ) {
+                                rmdir( $item_path );
+                        }
+                } elseif ( is_file( $item_path ) ) {
+                        unlink( $item_path );
+                }
+        }
+        if ( is_dir( $path ) ) {
+                rmdir( $path );
+        }
 }
 
 // Backwards compatible alias

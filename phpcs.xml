@@ -10,6 +10,7 @@
   <rule ref="WordPress-Extra"/>
   <rule ref="PHPCompatibility"/>
   <exclude-pattern>vendor/*</exclude-pattern>
+  <exclude-pattern>tests/TestHelpers/*</exclude-pattern>
 
   <severity>5</severity>
   <arg value="sp"/>
