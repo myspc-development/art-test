@@ -768,18 +768,20 @@ class DashboardWidgetRegistry {
             $user_id = get_current_user_id();
         }
 
-        $preview      = isset( $_GET['ap_preview_role'] ) ? sanitize_key( $_GET['ap_preview_role'] ) : null;
-        $preview_valid = $preview && in_array( $preview, array( 'member', 'artist', 'organization' ), true );
-        if ( current_user_can( 'manage_options' ) && ! $preview_valid ) {
-            return true;
-        }
-
         $widget = self::get( $id );
         if ( ! $widget ) {
             return false;
         }
 
-        $role         = DashboardController::get_role( $user_id );
+        $preview = get_query_var( 'ap_role' );
+        if ( current_user_can( 'manage_options' ) ) {
+            if ( ! is_string( $preview ) || $preview === '' ) {
+                return true;
+            }
+            $role = $preview;
+        } else {
+            $role = DashboardController::get_role( $user_id );
+        }
         $widget_roles = self::normalizeRoleList( $widget['roles'] ?? [] );
         if ( $widget_roles && ! in_array( $role, $widget_roles, true ) ) {
             return false;
