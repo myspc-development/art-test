@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php" colors="true" beStrictAboutOutputDuringTests="true" failOnWarning="true" failOnRisky="true">
+<phpunit
+  bootstrap="tests/bootstrap.php"
+  colors="true"
+  beStrictAboutOutputDuringTests="true"
+  failOnWarning="true"
+  failOnRisky="true"
+>
   <php>
     <ini name="display_errors" value="0"/>
     <ini name="error_reporting" value="-1"/>
