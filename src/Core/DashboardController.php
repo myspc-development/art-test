@@ -80,6 +80,13 @@ class DashboardController {
     /** @var bool */
     private static bool $defaults_checked = false;
 
+    public static function init(): void
+    {
+        add_filter('query_vars', [__CLASS__, 'registerQueryVars']);
+        add_action('parse_query', [__CLASS__, 'resolveRoleIntoQuery']);
+        add_filter('template_include', [__CLASS__, 'interceptTemplate'], 9);
+    }
+
 
     /**
      * Default layout presets keyed by unique identifier.
@@ -579,14 +586,13 @@ class DashboardController {
     /**
      * Filter template_include to force our dashboard template when requested.
      */
-    public static function template_include(string $template): string
+    public static function interceptTemplate(string $template): string
     {
         $is_query = (function_exists('\get_query_var') && \get_query_var('ap_dashboard') === '1')
             || (isset($_GET['ap_dashboard']) && $_GET['ap_dashboard'] === '1');
         $is_page  = function_exists('\is_page') && \is_page('dashboard');
         if (($is_query || $is_page) && function_exists('\is_user_logged_in') && \is_user_logged_in() &&
             function_exists('\current_user_can') && \current_user_can('view_artpulse_dashboard')) {
-            $role = self::resolveRole();
 
             $base = defined('ARTPULSE_PLUGIN_DIR') ? ARTPULSE_PLUGIN_DIR : \plugin_dir_path(ARTPULSE_PLUGIN_FILE);
             $tpl  = rtrim($base, '/\\') . '/templates/simple-dashboard.php';
@@ -600,60 +606,34 @@ class DashboardController {
         return $template;
     }
 
-    /**
-     * Sanitize a role string to one of the accepted values.
-     */
-    private static function sanitizeRole($role): ?string
-    {
-        $role = is_string($role) ? sanitize_key($role) : '';
-        return in_array($role, self::ALLOWED_ROLES, true) ? $role : null;
-    }
-
-    private static function resolveRole(): string
-    {
-        $raw      = function_exists('get_query_var') ? get_query_var('role') : '';
-        $resolved = self::sanitizeRole($raw);
-        if ($resolved === null) {
-            $resolved = 'member';
-            if (function_exists('is_user_logged_in') && is_user_logged_in()) {
-                $u     = wp_get_current_user();
-                $roles = array_map('sanitize_key', (array) $u->roles);
-                if (array_intersect($roles, ['organization'])) {
-                    $resolved = 'organization';
-                } elseif (array_intersect($roles, ['artist'])) {
-                    $resolved = 'artist';
-                }
-            }
-        }
-
-        if (function_exists('set_query_var')) {
-            set_query_var('ap_role', $resolved);
-        }
-
-        if (defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG && function_exists('is_user_logged_in') && is_user_logged_in()) {
-            error_log(sprintf('[AP role] qv_role=%s resolved=%s', $raw ?: '(none)', $resolved));
-            header('X-AP-Resolved-Role: ' . $resolved);
-        }
-
-        return $resolved;
-    }
-
-    public static function register_query_vars(array $vars): array
+    public static function registerQueryVars(array $vars): array
     {
         $vars[] = 'ap_dashboard';
         $vars[] = 'role';
+        $vars[] = 'ap_role';
         return $vars;
+    }
+
+    public static function resolveRoleIntoQuery(\WP_Query $q): void
+    {
+        $req  = isset($_GET['role']) ? sanitize_key((string) $_GET['role']) : (string) $q->get('role');
+        $role = in_array($req, self::ALLOWED_ROLES, true) ? $req : 'member';
+        set_query_var('ap_role', $role);
+
+        if (defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG && function_exists('is_user_logged_in') && is_user_logged_in()) {
+            add_action('send_headers', static function () use ($role) {
+                header('X-AP-Resolved-Role: ' . $role);
+            });
+        }
     }
 }
 
 if (function_exists('add_action')) {
-    add_filter('query_vars', [DashboardController::class, 'register_query_vars']);
+    add_action('init', [DashboardController::class, 'init']);
 
     add_action('init', static function () {
         add_rewrite_rule('^dashboard/?$', 'index.php?ap_dashboard=1', 'top');
     }, 5);
-
-    add_filter('template_include', [DashboardController::class, 'template_include'], 99);
 
     register_activation_hook(ARTPULSE_PLUGIN_FILE, [DashboardController::class, 'on_activate']);
 }
