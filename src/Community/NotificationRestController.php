@@ -11,7 +11,7 @@ class NotificationRestController
 {
     public static function register(): void
     {
-        self::register_routes();
+        add_action('rest_api_init', [self::class, 'register_routes']);
     }
 
     public static function register_routes(): void

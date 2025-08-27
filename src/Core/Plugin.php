@@ -407,6 +407,7 @@ class Plugin
         \ArtPulse\Analytics\EmbedAnalytics::register();
         \ArtPulse\Community\FollowRestController::register();
         \ArtPulse\Community\ProfileLinkRequestRestController::register();
+        \ArtPulse\Community\NotificationRestController::register();
         \ArtPulse\Community\NotificationHooks::register();
         \ArtPulse\Community\DirectMessages::register();
         \ArtPulse\Community\EventVoteManager::register();
