@@ -48,14 +48,14 @@ class DashboardPresetIntegrityTest extends TestCase
 
     public function test_presets_reference_registered_slugs(): void
     {
-        $ref = new \ReflectionClass(DashboardPresets::class);
-        $prop = $ref->getProperty('presets');
-        $prop->setAccessible(true);
-        $presets = $prop->getValue();
         $registered = WidgetRegistry::list();
-        foreach ($presets as $role => $preset) {
+        foreach (['member', 'artist', 'organization'] as $role) {
+            $preset = DashboardPresets::forRole($role);
             $unknown = array_diff($preset, $registered);
-            $this->assertEmpty($unknown, "Preset {$role} references unregistered widgets: " . implode(', ', $unknown));
+            $this->assertEmpty(
+                $unknown,
+                "Preset {$role} references unregistered widgets: " . implode(', ', $unknown)
+            );
         }
     }
 }

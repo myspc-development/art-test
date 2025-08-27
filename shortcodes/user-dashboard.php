@@ -37,7 +37,7 @@ function user_dashboard_shortcode(): string {
 
     $user_id = get_current_user_id();
     $role    = function_exists('ap_get_effective_role') ? ap_get_effective_role() : RoleResolver::resolve($user_id);
-    $widgets = DashboardPresets::get_preset_for_role($role);
+    $widgets = DashboardPresets::forRole($role);
     if (empty($widgets)) {
         $widgets = ['empty_dashboard'];
     }
