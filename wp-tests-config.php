@@ -31,7 +31,7 @@ if ( ! defined( 'DB_HOST' ) ) {
 if ( ! defined( 'DB_CHARSET' ) ) {
     define(
         'DB_CHARSET',
-        getenv( 'WP_TESTS_DB_CHARSET' ) ?: getenv( 'DB_CHARSET' ) ?: 'utf8'
+        getenv( 'WP_TESTS_DB_CHARSET' ) ?: getenv( 'DB_CHARSET' ) ?: 'utf8mb4'
     );
 }
 if ( ! defined( 'DB_COLLATE' ) ) {
