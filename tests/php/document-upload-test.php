@@ -1,4 +1,6 @@
 <?php
+use function ArtPulse\Tests\safe_unlink;
+
 class Document_Upload_Test extends WP_UnitTestCase {
     protected $attachment_id;
     protected $filename;
@@ -8,8 +10,8 @@ class Document_Upload_Test extends WP_UnitTestCase {
             wp_delete_attachment( $this->attachment_id, true );
         }
 
-        if ( $this->filename && file_exists( $this->filename ) ) {
-            unlink( $this->filename );
+        if ( $this->filename ) {
+            safe_unlink( $this->filename );
         }
 
         parent::tearDown();

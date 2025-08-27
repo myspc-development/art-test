@@ -44,3 +44,4 @@ tests_add_filter('muplugins_loaded', function () {
 
 // Now start WordPress (defines ABSPATH) and runs the test environment.
 require $wp_phpunit_dir . '/includes/bootstrap.php';
+require_once __DIR__ . '/../TestHelpers/filesystem.php';

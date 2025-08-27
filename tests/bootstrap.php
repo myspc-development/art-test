@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 error_reporting(E_ALL);
-ini_set('display_errors', '1');
+ini_set('display_errors', '0');
 
 // 1) Load Composer autoload from common locations
 $candidates = [
@@ -49,6 +49,7 @@ if (is_file(__DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php')) {
 }
 
 require_once __DIR__ . '/polyfills.php'; // load WP polyfills before any plugin file uses them
+require_once __DIR__ . '/TestHelpers/filesystem.php';
 
 // 3) Minimal constants/polyfills used by code under test
 if (!defined('ARTPULSE_PLUGIN_FILE')) define('ARTPULSE_PLUGIN_FILE', __FILE__);
