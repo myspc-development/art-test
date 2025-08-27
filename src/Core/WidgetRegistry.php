@@ -14,22 +14,6 @@ class WidgetRegistry
     private static array $widgets = [];
 
     /**
-     * Legacy slugs mapped to their canonical widget IDs.
-     *
-     * @var array<string,string>
-     */
-    private static array $aliases = [
-        'membership'                   => 'widget_membership',
-        'my-events'                    => 'widget_my_events',
-        'account-tools'                => 'widget_account_tools',
-        'widget_followed_artists'      => 'widget_my_follows',
-        'followed_artists'             => 'widget_my_follows',
-        'upcoming_events_by_location'  => 'widget_local_events',
-        'recommended_for_you'          => 'widget_recommended_for_you',
-        'site_stats'                   => 'widget_site_stats',
-    ];
-
-    /**
      * Track missing slugs already logged.
      *
      * @var array<string, bool>
@@ -86,8 +70,11 @@ class WidgetRegistry
                     error_log('ArtPulse: Unknown widget slug: ' . $key);
                 }
             }
-            $escaped = function_exists('esc_attr') ? esc_attr($key) : htmlspecialchars($key, ENT_QUOTES);
-            return '<section class="ap-widget--missing" data-slug="' . $escaped . '"></section>';
+            if (self::should_debug()) {
+                $escaped = function_exists('esc_attr') ? esc_attr($key) : htmlspecialchars($key, ENT_QUOTES);
+                return '<section class="ap-widget--missing" data-slug="' . $escaped . '"></section>';
+            }
+            return '';
         }
         $def  = self::$widgets[$key];
         $args = array_merge($def['args'], $context);
@@ -139,21 +126,14 @@ class WidgetRegistry
     /** Normalize a slug to its canonical form */
     public static function normalize_slug(string $slug): string
     {
-        $s = trim(strtolower($slug));
-        if (isset(self::$aliases[$s])) {
-            return self::$aliases[$s];
-        }
-        if (strpos($s, 'widget_') !== 0) {
-            $pref = 'widget_' . $s;
-            if (isset(self::$widgets[$pref])) {
-                return $pref;
-            }
-        }
-        return $s;
+        return \ArtPulse\Support\WidgetIds::canonicalize($slug);
     }
 
     private static function should_debug(): bool
     {
+        if (self::$debugOverride !== null) {
+            return self::$debugOverride;
+        }
         return defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE
             && function_exists('is_user_logged_in') && is_user_logged_in();
     }

@@ -12,12 +12,22 @@ final class WidgetIds {
         'my_rsvps'                 => 'widget_my_rsvps',
         'favorites'                => 'widget_favorites',
         'local_events'             => 'widget_local_events',
+        'upcoming_events_by_location' => 'widget_local_events',
+        'my_events'                => 'widget_my_events',
+        'site_stats'               => 'widget_site_stats',
         'my_follows'               => 'widget_my_follows',
         'notifications'            => 'widget_notifications',
         'messages'                 => 'widget_messages',
         'dashboard_feedback'       => 'widget_dashboard_feedback',
         'cat_fact'                 => 'widget_cat_fact',
         'news'                     => 'widget_news_feed',
+
+        // Organization widgets
+        'lead_capture'             => 'widget_audience_crm',
+        'audience_crm'             => 'widget_audience_crm',
+        'rsvp_stats'               => 'widget_org_ticket_insights',
+        'org_ticket_insights'      => 'widget_org_ticket_insights',
+        'webhooks'                 => 'widget_webhooks',
 
         // Duplicates / legacy slugs → canonical
         'widget_news'                  => 'widget_news_feed',

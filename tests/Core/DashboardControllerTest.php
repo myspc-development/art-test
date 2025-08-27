@@ -86,14 +86,13 @@ class DashboardControllerTest extends TestCase
         $expected = [
             'org_event_overview',
             'artpulse_analytics_widget',
-            'rsvp_stats',
-            'my-events',
-            'org_ticket_insights',
+            'widget_org_ticket_insights',
+            'widget_my_events',
             'org_team_roster',
-            'audience_crm',
+            'widget_audience_crm',
             'org_broadcast_box',
             'org_approval_center',
-            'webhooks',
+            'widget_webhooks',
             'support-history',
         ];
 

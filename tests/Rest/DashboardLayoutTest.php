@@ -138,10 +138,10 @@ class DashboardLayoutTest extends \WP_UnitTestCase
 
     public function test_user_register_populates_default_layout(): void
     {
-        DashboardWidgetRegistry::register('my-events', 'my-events', '', '', '__return_null');
-        update_option('ap_dashboard_widget_config', ['organization' => ['my-events']]);
+        DashboardWidgetRegistry::register('widget_my_events', 'my-events', '', '', '__return_null');
+        update_option('ap_dashboard_widget_config', ['organization' => ['widget_my_events']]);
         $uid = self::factory()->user->create(['role' => 'organization']);
-        $expected = [ ['id' => 'my-events', 'visible' => true] ];
+        $expected = [ ['id' => 'widget_my_events', 'visible' => true] ];
         $this->assertSame($expected, get_user_meta($uid, 'ap_dashboard_layout', true));
     }
 

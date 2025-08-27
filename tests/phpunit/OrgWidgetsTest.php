@@ -35,11 +35,11 @@ namespace ArtPulse\Tests {
 
         public function widgetIds(): array {
             return [
-                ['lead_capture'],
-                ['rsvp_stats'],
-                ['webhooks'],
-                ['my-events'],
-                ['site_stats'],
+                ['widget_audience_crm'],
+                ['widget_org_ticket_insights'],
+                ['widget_webhooks'],
+                ['widget_my_events'],
+                ['widget_site_stats'],
             ];
         }
 

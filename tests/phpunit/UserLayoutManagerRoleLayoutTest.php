@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Core\WidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
 use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 
@@ -33,6 +34,8 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
 
         DashboardWidgetRegistry::register('widget_alpha', 'Alpha', '', '', static function () {}, ['roles' => ['member']]);
         DashboardWidgetRegistry::register('widget_beta', 'Beta', '', '', static function () {}, ['roles' => ['artist']]);
+        WidgetRegistry::register('widget_alpha', static fn(): string => '<section></section>');
+        WidgetRegistry::register('widget_beta', static fn(): string => '<section></section>');
     }
 
     public function test_role_layout_registers_placeholders_for_missing_widgets(): void {

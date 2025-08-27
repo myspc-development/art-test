@@ -567,32 +567,31 @@ class DashboardController {
             }
         }
     }
+
+    /**
+     * Filter template_include to force our dashboard template when requested.
+     */
+    public static function template_include(string $template): string
+    {
+        $is_query = (function_exists('\get_query_var') && \get_query_var('ap_dashboard') === '1')
+            || (isset($_GET['ap_dashboard']) && $_GET['ap_dashboard'] === '1');
+        $is_page  = function_exists('\is_page') && \is_page('dashboard');
+        if (($is_query || $is_page) && function_exists('\is_user_logged_in') && \is_user_logged_in() &&
+            function_exists('\current_user_can') && \current_user_can('view_artpulse_dashboard')) {
+            $base = defined('ARTPULSE_PLUGIN_DIR') ? ARTPULSE_PLUGIN_DIR : \plugin_dir_path(ARTPULSE_PLUGIN_FILE);
+            $tpl  = rtrim($base, '/\\') . '/templates/simple-dashboard.php';
+            if (file_exists($tpl)) {
+                if (defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE) {
+                    error_log('🔥 template_include resolved: ' . $tpl);
+                }
+                return $tpl;
+            }
+        }
+        return $template;
+    }
 }
 
 if (function_exists('add_action')) {
-    \add_action('init', static function () {
-        $aliases = [
-            'membership'                  => 'widget_membership',
-            'widget_followed_artists'     => 'widget_my_follows',
-            'followed_artists'            => 'widget_my_follows',
-            'upcoming_events_by_location' => 'widget_local_events',
-            'recommended_for_you'         => 'widget_recommended_for_you',
-            'my-events'                   => 'widget_my_events',
-            'account-tools'               => 'widget_account_tools',
-            'site_stats'                  => 'widget_site_stats',
-        ];
-
-        foreach ($aliases as $legacy => $canon) {
-            if ($legacy === $canon) { continue; }
-            if (\ArtPulse\Core\WidgetRegistry::exists($legacy)) { continue; }
-            if (!\ArtPulse\Core\WidgetRegistry::exists($canon)) { continue; }
-
-            \ArtPulse\Core\WidgetRegistry::register($legacy, function(array $ctx = []) use ($canon) {
-                return \ArtPulse\Core\WidgetRegistry::render($canon, $ctx);
-            });
-        }
-    }, 20);
-
     add_filter('query_vars', static function ($vars) {
         $vars[] = 'ap_dashboard';
         return $vars;
@@ -602,20 +601,7 @@ if (function_exists('add_action')) {
         add_rewrite_rule('^dashboard/?$', 'index.php?ap_dashboard=1', 'top');
     }, 5);
 
-    add_filter('template_include', static function ($template) {
-        $is_query = get_query_var('ap_dashboard') === '1';
-        $is_page  = function_exists('is_page') && is_page('dashboard');
-        if (($is_query || $is_page) && is_user_logged_in() && current_user_can('view_artpulse_dashboard')) {
-            $tpl = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/simple-dashboard.php';
-            if (file_exists($tpl)) {
-                if (defined('ARTPULSE_DEBUG_VERBOSE') && ARTPULSE_DEBUG_VERBOSE) {
-                    error_log('🔥 template_include resolved: ' . $tpl);
-                }
-                return $tpl;
-            }
-        }
-        return $template;
-    }, 99);
+    add_filter('template_include', [DashboardController::class, 'template_include'], 99);
 
     register_activation_hook(ARTPULSE_PLUGIN_FILE, [DashboardController::class, 'on_activate']);
 }

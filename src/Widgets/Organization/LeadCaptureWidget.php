@@ -12,7 +12,7 @@ class LeadCaptureWidget implements DashboardWidgetInterface
 {
     public static function id(): string
     {
-        return 'lead_capture';
+        return 'widget_audience_crm';
     }
 
     public static function label(): string

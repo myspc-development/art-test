@@ -12,7 +12,7 @@ class RsvpStatsWidget implements DashboardWidgetInterface
 {
     public static function id(): string
     {
-        return 'rsvp_stats';
+        return 'widget_org_ticket_insights';
     }
 
     public static function label(): string

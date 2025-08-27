@@ -1,4 +1,4 @@
 [
-  {"id": "site_stats"},
-  {"id": "rsvp_stats"}
+  {"id": "widget_site_stats"},
+  {"id": "widget_org_ticket_insights"}
 ]

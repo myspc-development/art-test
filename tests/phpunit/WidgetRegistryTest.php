@@ -24,7 +24,7 @@ class WidgetRegistryTest extends TestCase
         WidgetRegistry::register('foo', static fn(array $ctx = []): string => 'hello ' . ($ctx['name'] ?? 'world'));
         $this->assertTrue(WidgetRegistry::exists('foo'));
         $this->assertSame('hello bob', WidgetRegistry::render('foo', ['name' => 'bob']));
-        $this->assertContains('foo', WidgetRegistry::list());
+        $this->assertContains('widget_foo', WidgetRegistry::list());
     }
 
     public function test_missing_slug_returns_placeholder_with_data_slug(): void
@@ -32,14 +32,14 @@ class WidgetRegistryTest extends TestCase
         WidgetRegistry::setDebug(true);
         $html = WidgetRegistry::render('missing');
         $this->assertStringContainsString('ap-widget--missing', $html);
-       $this->assertStringContainsString('data-slug="missing"', $html);
+        $this->assertStringContainsString('data-slug="widget_missing"', $html);
     }
 
     public function test_missing_slug_returns_empty_string_when_debug_disabled(): void
     {
         WidgetRegistry::setDebug(false);
         $html = WidgetRegistry::render('missing');
-        $this->assertStringContainsString('ap-widget--missing', $html);
+        $this->assertSame('', $html);
     }
 }
 
