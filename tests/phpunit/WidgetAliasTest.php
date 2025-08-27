@@ -16,7 +16,15 @@ final class WidgetAliasTest extends TestCase {
         // ensure widgets+aliases registered for the test
         do_action('init');
         MockStorage::$current_roles = ['read'];
-        WidgetRegistry::register('widget_membership', static fn(array $ctx = []): string => '<div>membership</div>');
+        $register = static function (string $slug): void {
+            WidgetRegistry::register($slug, static fn(array $ctx = []): string => '<section data-slug="' . $slug . '">ok</section>');
+        };
+        $register('widget_membership');
+        $register('widget_my_events');
+        $register('widget_account_tools');
+        $register('widget_site_stats');
+        $register('widget_recommended_for_you');
+        $register('widget_local_events');
         WidgetRegistry::register('widget_my_follows', static function(array $ctx = []): string {
             ob_start();
             require __DIR__ . '/../../templates/widgets/widget-my-follows.php';
@@ -38,8 +46,13 @@ final class WidgetAliasTest extends TestCase {
     public function aliasProvider(): array {
         return [
             ['membership',              'widget_membership'],
+            ['my-events',               'widget_my_events'],
+            ['account-tools',           'widget_account_tools'],
+            ['site_stats',              'widget_site_stats'],
             ['followed_artists',        'widget_my_follows'],
             ['widget_followed_artists', 'widget_my_follows'],
+            ['recommended_for_you',     'widget_recommended_for_you'],
+            ['local_events',            'widget_local_events'],
         ];
     }
 

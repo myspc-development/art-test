@@ -1,6 +1,6 @@
 [
-  {"id": "site_stats"},
-  {"id": "webhooks"},
-  {"id": "rsvp_stats"},
-  {"id": "lead_capture"}
+  {"id": "widget_site_stats"},
+  {"id": "widget_webhooks"},
+  {"id": "widget_org_ticket_insights"},
+  {"id": "widget_audience_crm"}
 ]

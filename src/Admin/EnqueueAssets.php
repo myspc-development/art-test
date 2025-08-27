@@ -26,11 +26,11 @@ class EnqueueAssets {
      * Enqueue a style only if the file exists and has not been enqueued.
      */
     private static function enqueue_style_if_exists(string $handle, string $rel, array $deps = []): void {
-        if (wp_style_is($handle, 'enqueued')) {
+        if (function_exists('wp_style_is') && wp_style_is($handle, 'enqueued')) {
             return;
         }
         $path = self::asset_path($rel);
-        if (file_exists($path)) {
+        if (file_exists($path) && function_exists('wp_enqueue_style')) {
             wp_enqueue_style($handle, self::asset_url($rel), $deps, filemtime($path));
         }
     }
@@ -39,11 +39,11 @@ class EnqueueAssets {
      * Enqueue a script only if the file exists and has not been enqueued.
      */
     private static function enqueue_script_if_exists(string $handle, string $rel, array $deps = [], bool $in_footer = true): void {
-        if (wp_script_is($handle, 'enqueued')) {
+        if (function_exists('wp_script_is') && wp_script_is($handle, 'enqueued')) {
             return;
         }
         $path = self::asset_path($rel);
-        if (file_exists($path)) {
+        if (file_exists($path) && function_exists('wp_enqueue_script')) {
             wp_enqueue_script($handle, self::asset_url($rel), $deps, filemtime($path), $in_footer);
         }
     }
@@ -52,7 +52,7 @@ class EnqueueAssets {
      * Register Chart.js so it can be used as a dependency.
      */
     private static function register_chart_js(): void {
-        if (wp_script_is('chart-js', 'registered')) {
+        if (function_exists('wp_script_is') && wp_script_is('chart-js', 'registered')) {
             return;
         }
 
@@ -60,7 +60,9 @@ class EnqueueAssets {
         $path = self::asset_path($rel);
         $ver  = file_exists($path) ? filemtime($path) : '4.4.1';
 
-        wp_register_script('chart-js', self::asset_url($rel), [], $ver, true);
+        if (function_exists('wp_register_script')) {
+            wp_register_script('chart-js', self::asset_url($rel), [], $ver, true);
+        }
     }
 
     /**

@@ -12,7 +12,7 @@ class MyEventsWidget implements DashboardWidgetInterface
 {
     public static function id(): string
     {
-        return 'my-events';
+        return 'widget_my_events';
     }
 
     public static function label(): string
@@ -33,6 +33,7 @@ class MyEventsWidget implements DashboardWidgetInterface
     public static function register(): void
     {
         DashboardWidgetRegistry::alias('myevents', self::id());
+        DashboardWidgetRegistry::alias('my-events', self::id());
         DashboardWidgetRegistry::register(
             self::id(),
             self::label(),

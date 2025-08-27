@@ -12,7 +12,7 @@ class WebhooksWidget implements DashboardWidgetInterface
 {
     public static function id(): string
     {
-        return 'webhooks';
+        return 'widget_webhooks';
     }
 
     public static function label(): string

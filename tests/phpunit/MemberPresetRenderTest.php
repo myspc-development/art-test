@@ -7,6 +7,10 @@ use ArtPulse\Core\DashboardPresets;
 
 final class MemberPresetRenderTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        WidgetRegistry::register('widget_my_follows', static fn(): string => '<section></section>');
+    }
     public function test_member_preset_contains_my_follows_section(): void
     {
         $ids = $this->memberPresetIds();

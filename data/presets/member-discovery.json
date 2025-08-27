@@ -1,6 +1,6 @@
 [
   {"id": "widget_membership"},
   {"id": "widget_my_follows"},
-  {"id": "upcoming_events_by_location"},
-  {"id": "recommended_for_you"}
+  {"id": "widget_local_events"},
+  {"id": "widget_recommended_for_you"}
 ]

@@ -37,12 +37,12 @@ namespace ArtPulse\Tests {
 
         public function widgetIds(): array {
             return [
-                ['artist_revenue_summary'],
-                ['artist_artwork_manager'],
-                ['artist_audience_insights'],
-                ['artist_feed_publisher'],
-                ['my-events'],
-                ['site_stats'],
+                ['widget_artist_revenue_summary'],
+                ['widget_artist_artwork_manager'],
+                ['widget_artist_audience_insights'],
+                ['widget_artist_feed_publisher'],
+                ['widget_my_events'],
+                ['widget_site_stats'],
             ];
         }
 
@@ -69,8 +69,8 @@ namespace ArtPulse\Tests {
             $this->assertTrue(DashboardWidgetRegistry::exists('my-events'));
             $this->assertTrue(DashboardWidgetRegistry::exists('myevents'));
             $this->assertSame(
-                DashboardWidgetRegistry::get('my-events'),
-                DashboardWidgetRegistry::get('myevents')
+                DashboardWidgetRegistry::get('widget_my_events'),
+                DashboardWidgetRegistry::get('my-events')
             );
         }
     }
