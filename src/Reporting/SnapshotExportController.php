@@ -4,6 +4,7 @@ namespace ArtPulse\Reporting;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Support\FileSystem;
 
 class SnapshotExportController
 {
@@ -81,7 +82,7 @@ class SnapshotExportController
             'data'  => $data,
         ]);
         $csv = file_get_contents($path);
-        unlink($path);
+        FileSystem::safe_unlink($path);
         return new WP_REST_Response($csv, 200, [
             'Content-Type'        => 'text/csv',
             'Content-Disposition' => 'attachment; filename="snapshot.csv"',
@@ -100,7 +101,7 @@ class SnapshotExportController
             'data'  => $data,
         ]);
         $pdf = file_get_contents($path);
-        unlink($path);
+        FileSystem::safe_unlink($path);
         return new WP_REST_Response($pdf, 200, [
             'Content-Type'        => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="snapshot.pdf"',

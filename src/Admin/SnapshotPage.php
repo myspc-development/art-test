@@ -3,6 +3,7 @@ namespace ArtPulse\Admin;
 
 use ArtPulse\Reporting\SnapshotBuilder;
 use ArtPulse\Support\WpAdminFns;
+use ArtPulse\Support\FileSystem;
 
 /**
  * Admin page to generate reporting snapshots on demand.
@@ -67,7 +68,7 @@ class SnapshotPage
                 header('Content-Type: ' . $type);
                 header('Content-Disposition: attachment; filename="' . basename($path) . '"');
                 readfile($path);
-                unlink($path);
+                FileSystem::safe_unlink($path);
                 exit;
             }
         }

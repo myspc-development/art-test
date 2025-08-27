@@ -43,6 +43,8 @@ namespace {
 namespace ArtPulse\Core\Tests {
 
 use PHPUnit\Framework\TestCase;
+use function ArtPulse\Tests\safe_unlink;
+use function ArtPulse\Tests\rm_rf;
 
 class WidgetLoggingTest extends TestCase
 {
@@ -68,8 +70,8 @@ class WidgetLoggingTest extends TestCase
 
     protected function tearDown(): void
     {
-        @unlink($this->logFile);
-        @rmdir($this->uploadsDir);
+        safe_unlink($this->logFile);
+        rm_rf($this->uploadsDir);
         parent::tearDown();
     }
 

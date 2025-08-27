@@ -5,6 +5,7 @@ require_once __DIR__ . '/../TestStubs.php';
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardPresets;
+use function ArtPulse\Tests\safe_unlink;
 
 final class DashboardPresetsLoadTest extends TestCase {
     private string $dataDir;
@@ -25,7 +26,7 @@ final class DashboardPresetsLoadTest extends TestCase {
             $path = "$this->dataDir/preset-$r.json";
             if (is_readable($path)) {
                 $backups[$r] = file_get_contents($path);
-                unlink($path);
+                safe_unlink($path);
             }
         }
         $expected = [
@@ -52,7 +53,7 @@ final class DashboardPresetsLoadTest extends TestCase {
         if ($orig !== null) {
             file_put_contents($path, $orig);
         } else {
-            unlink($path);
+            safe_unlink($path);
         }
     }
 

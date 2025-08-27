@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Admin;
 
+use ArtPulse\Support\FileSystem;
+
 class UpdatesTab
 {
     public static function register(): void
@@ -274,7 +276,7 @@ class UpdatesTab
             self::copy_recursive($src, $plugin_dir);
         }
         self::delete_recursive($temp_dir);
-        unlink($tmp);
+        FileSystem::safe_unlink($tmp);
 
         if (is_wp_error($result)) {
             return $result;

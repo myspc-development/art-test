@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Core;
 
+use ArtPulse\Support\FileSystem;
+
 class ReportSubscriptionManager
 {
     public static function register(): void
@@ -110,7 +112,7 @@ class ReportSubscriptionManager
                     [],
                     [$path]
                 );
-                unlink($path);
+                FileSystem::safe_unlink($path);
                 $wpdb->update($table, ['last_sent' => current_time('mysql')], ['id' => $sub->id]);
             }
         }

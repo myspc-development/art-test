@@ -92,6 +92,7 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UpdatesTab;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
+use function ArtPulse\Tests\safe_unlink;
 
 class UpdatesTabTest extends TestCase
 {
@@ -144,7 +145,7 @@ class UpdatesTabTest extends TestCase
     {
         Monkey\tearDown();
         if (self::$zip && file_exists(self::$zip)) {
-            unlink(self::$zip);
+            safe_unlink(self::$zip);
         }
         parent::tearDown();
     }

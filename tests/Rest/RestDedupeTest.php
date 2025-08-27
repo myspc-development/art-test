@@ -2,6 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use WP_REST_Server;
+use function ArtPulse\Tests\safe_unlink;
 
 /**
  * @group restapi
@@ -50,7 +51,7 @@ class RestDedupeTest extends \WP_UnitTestCase
         $this->assertStringContainsString('[REST CONFLICT] Duplicate route /ap/v1/bar (POST)', $contents);
 
         ini_set('error_log', $prev);
-        unlink($log);
+        safe_unlink($log);
     }
 
     public function test_ap_rest_route_registered_detects_methods_and_missing_routes(): void

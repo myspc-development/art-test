@@ -4,6 +4,7 @@ namespace ArtPulse\Reporting;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Support\FileSystem;
 
 /**
  * Exports budget line items for an event as CSV or PDF.
@@ -90,7 +91,7 @@ class BudgetExportController
                 'data'  => $totals,
             ]);
             $data = file_get_contents($path);
-            unlink($path);
+            FileSystem::safe_unlink($path);
             return new WP_REST_Response($data, 200, [
                 'Content-Type'        => 'text/csv',
                 'Content-Disposition' => 'attachment; filename="budget-' . $title_id . '.csv"',
@@ -102,7 +103,7 @@ class BudgetExportController
             'data'  => $totals,
         ]);
         $data = file_get_contents($path);
-        unlink($path);
+        FileSystem::safe_unlink($path);
         return new WP_REST_Response($data, 200, [
             'Content-Type'        => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="budget-' . $title_id . '.pdf"',

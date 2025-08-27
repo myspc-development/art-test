@@ -19,6 +19,7 @@ namespace ArtPulse\Reporting\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Reporting\SnapshotBuilder;
 use ArtPulse\Admin\Tests\Stub;
+use function ArtPulse\Tests\safe_unlink;
 
 class SnapshotBuilderTest extends TestCase
 {
@@ -43,7 +44,7 @@ class SnapshotBuilderTest extends TestCase
 
         $this->assertNotEmpty($path);
         $this->assertFileExists($path);
-        unlink($path);
+        safe_unlink($path);
     }
 
     public function test_generate_csv_returns_file_path(): void
@@ -58,6 +59,6 @@ class SnapshotBuilderTest extends TestCase
 
         $this->assertNotEmpty($path);
         $this->assertFileExists($path);
-        unlink($path);
+        safe_unlink($path);
     }
 }
