@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Monetization;
 
+use ArtPulse\Support\FileSystem;
+
 /**
  * Manages paid tickets and tiers.
  */
@@ -278,7 +280,7 @@ class TicketManager
                 $pdf ? [$pdf] : []
             );
             if ($pdf) {
-                unlink($pdf);
+                FileSystem::safe_unlink($pdf);
             }
         }
 

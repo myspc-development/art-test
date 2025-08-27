@@ -16,6 +16,7 @@ namespace ArtPulse\Reporting\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Reporting\GrantReportBuilder;
 use ArtPulse\Admin\Tests\Stub;
+use function ArtPulse\Tests\safe_unlink;
 
 class GrantReportBuilderTest extends TestCase
 {
@@ -41,6 +42,6 @@ class GrantReportBuilderTest extends TestCase
 
         $this->assertNotEmpty($path);
         $this->assertFileExists($path);
-        unlink($path);
+        safe_unlink($path);
     }
 }

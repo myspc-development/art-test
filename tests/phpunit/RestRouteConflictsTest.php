@@ -1,6 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use function ArtPulse\Tests\remove_dir;
+use function ArtPulse\Tests\rm_rf;
 
 class RestRouteConflictsTest extends TestCase
 {
@@ -21,7 +21,7 @@ class RestRouteConflictsTest extends TestCase
 
     protected function tearDown(): void
     {
-        remove_dir($this->wpDir);
+        rm_rf($this->wpDir);
     }
 
     public function testDetectsDuplicateRoutesWithDifferentCallbacks(): void

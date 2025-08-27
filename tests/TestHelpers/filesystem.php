@@ -42,3 +42,8 @@ function remove_dir( string $path ): void {
 	}
 	@rmdir( $path );
 }
+
+// Backwards compatible alias
+function rm_rf( string $path ): void {
+        remove_dir( $path );
+}

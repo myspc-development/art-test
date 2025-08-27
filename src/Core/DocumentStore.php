@@ -2,6 +2,7 @@
 namespace ArtPulse\Core;
 
 use RuntimeException;
+use ArtPulse\Support\FileSystem;
 
 /**
  * Simple file-based document handler.
@@ -74,7 +75,7 @@ class DocumentStore
         if (!file_exists($path)) {
             throw new RuntimeException('Document not found');
         }
-        unlink($path);
+        FileSystem::safe_unlink($path);
     }
 
     /**
@@ -82,16 +83,7 @@ class DocumentStore
      */
     public function cleanup(): void
     {
-        if (!is_dir($this->dir)) {
-            return;
-        }
-        $files = glob($this->dir . '/*') ?: [];
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
-        }
-        rmdir($this->dir);
+        FileSystem::rm_rf($this->dir);
     }
 
     private function path(string $name): string

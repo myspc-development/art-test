@@ -22,6 +22,7 @@ namespace ArtPulse\Core {
 namespace ArtPulse\Cli\Tests {
     use PHPUnit\Framework\TestCase;
     use WP_CLI;
+    use function ArtPulse\Tests\safe_unlink;
 
     require_once __DIR__ . '/../../includes/class-cli-widget-roles.php';
 
@@ -63,7 +64,7 @@ namespace ArtPulse\Cli\Tests {
                 $this->expectExceptionMessage('Invalid JSON.');
                 WP_CLI::runcommand('widget-roles import ' . $tmp);
             } finally {
-                @unlink($tmp);
+                safe_unlink($tmp);
             }
         }
 
@@ -75,7 +76,7 @@ namespace ArtPulse\Cli\Tests {
             $out = WP_CLI::runcommand('widget-roles --import=' . $tmp);
             $this->assertStringContainsString('Imported widget-role map.', $out);
             $this->assertSame($data, $GLOBALS['options']['artpulse_widget_roles']);
-            @unlink($tmp);
+            safe_unlink($tmp);
         }
     }
 }

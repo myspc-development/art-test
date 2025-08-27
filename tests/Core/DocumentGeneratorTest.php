@@ -13,6 +13,7 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DocumentGenerator;
 use ArtPulse\Admin\Tests\Stub;
+use function ArtPulse\Tests\safe_unlink;
 
 class DocumentGeneratorTest extends TestCase
 {
@@ -55,6 +56,6 @@ class DocumentGeneratorTest extends TestCase
         $this->assertNotEmpty($path);
         $this->assertStringContainsString('ticket-ABC123.pdf', $path);
         $this->assertFileExists($path);
-        unlink($path);
+        safe_unlink($path);
     }
 }

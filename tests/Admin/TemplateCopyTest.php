@@ -2,6 +2,7 @@
 namespace ArtPulse\Admin\Tests;
 
 use WP_UnitTestCase;
+use function ArtPulse\Tests\rm_rf;
 
 /**
  * @group admin
@@ -20,7 +21,7 @@ class TemplateCopyTest extends WP_UnitTestCase
     public function tear_down(): void
     {
         remove_filter('stylesheet_directory', [$this, 'filterStylesheet'], 10);
-        $this->removeDir($this->childDir);
+        rm_rf($this->childDir);
         $_POST = [];
         parent::tear_down();
     }
@@ -28,21 +29,6 @@ class TemplateCopyTest extends WP_UnitTestCase
     public function filterStylesheet($dir)
     {
         return $this->childDir;
-    }
-
-    private function removeDir(string $dir): void
-    {
-        if (!is_dir($dir)) {
-            return;
-        }
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-        foreach ($files as $file) {
-            $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
-        }
-        rmdir($dir);
     }
 
     public function test_templates_copied_to_child_theme(): void

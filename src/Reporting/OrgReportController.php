@@ -4,6 +4,7 @@ namespace ArtPulse\Reporting;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Support\FileSystem;
 
 class OrgReportController
 {
@@ -65,7 +66,7 @@ class OrgReportController
                 'data'  => $data,
             ]);
             $content = file_get_contents($path);
-            unlink($path);
+            FileSystem::safe_unlink($path);
             return new WP_REST_Response($content, 200, [
                 'Content-Type'        => 'text/csv',
                 'Content-Disposition' => 'attachment; filename="org-report.csv"',
@@ -77,7 +78,7 @@ class OrgReportController
             'data'  => $data,
         ]);
         $content = file_get_contents($path);
-        unlink($path);
+        FileSystem::safe_unlink($path);
         return new WP_REST_Response($content, 200, [
             'Content-Type'        => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="org-report.pdf"',

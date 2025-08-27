@@ -5,6 +5,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Widgets\OrgAnalyticsWidget;
 use ArtPulse\Widgets\EventsWidget;
 use ArtPulse\Widgets\DonationsWidget;
+use function ArtPulse\Tests\rm_rf;
 
 class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
     public function set_up(): void {
@@ -154,14 +155,6 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
     }
 
     private static function recursiveRemoveDir(string $dir): void {
-        if (!is_dir($dir)) return;
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-        foreach ($files as $file) {
-            $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
-        }
-        rmdir($dir);
+        \ArtPulse\Tests\rm_rf($dir);
     }
 }
