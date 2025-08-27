@@ -6,7 +6,7 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
  * Dashboard widget: Webhooks.
  */
 ?>
-<div id="webhooks" class="ap-card" role="region" aria-labelledby="webhooks-title" data-widget="webhooks" data-widget-id="webhooks" <?php echo $visible ? '' : 'hidden'; ?>>
+<div id="webhooks" class="ap-card" role="region" aria-labelledby="webhooks-title" data-slug="widget_webhooks" data-widget="webhooks" data-widget-id="webhooks" <?php echo $visible ? '' : 'hidden'; ?>>
     <h2 id="webhooks-title" class="ap-card__title"><?php esc_html_e('Webhooks','artpulse'); ?></h2>
     <div id="ap-webhook-controls">
         <button id="ap-add-webhook" class="ap-form-button nectar-button"><?php esc_html_e('Add Webhook','artpulse'); ?></button>

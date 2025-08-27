@@ -18,6 +18,7 @@ if (!$org_id) {
 $heading_id = sanitize_title($id) . '-heading-' . uniqid();
 ?>
 <section role="region" aria-labelledby="<?php echo esc_attr($heading_id); ?>"
+  data-slug="widget_org_ticket_insights"
   data-widget="<?php echo esc_attr($id); ?>"
   data-widget-id="<?php echo esc_attr($id); ?>"
   data-api-root="<?php echo esc_attr($api_root); ?>"

@@ -6,7 +6,7 @@ extract(ap_template_context($args ?? [], ['visible' => true]));
  * Dashboard widget: Membership.
  */
 ?>
-<section id="membership" class="ap-card" role="region" aria-labelledby="membership-title" data-widget="widget_membership" <?php echo $visible ? '' : 'hidden'; ?>>
+<section id="membership" class="ap-card" role="region" aria-labelledby="membership-title" data-slug="widget_membership" data-widget="widget_membership" <?php echo $visible ? '' : 'hidden'; ?>>
     <h2 id="membership-title" class="ap-card__title"><?php esc_html_e('Subscription Status','artpulse'); ?></h2>
     <div id="ap-membership-info"></div>
     <?php if (!empty($badges)) : ?>
