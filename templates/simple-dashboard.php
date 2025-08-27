@@ -12,21 +12,33 @@ if (!is_user_logged_in()) {
     return;
 }
 
-$roleParam   = isset($_GET['role']) ? sanitize_key($_GET['role']) : '';
-$role        = $roleParam ?: (function_exists('ap_get_effective_role') ? ap_get_effective_role() : 'member');
-$role        = in_array($role, ['member', 'artist', 'organization'], true) ? $role : 'member';
-$user_id     = get_current_user_id();
-$slugs       = DashboardPresets::get_preset_for_role($role);
-$validSlugs  = WidgetRegistry::ids();
-$slugs       = array_values(array_intersect($slugs, $validSlugs));
-$context     = ['user_id' => $user_id];
+$role = get_query_var('ap_role');
+if (!$role) {
+    $role = get_query_var('role');
+}
+$role = sanitize_key($role ?: 'member');
 
-echo '<div class="ap-dashboard-fallback" data-role="' . esc_attr($role) . '">';
+$user_id    = get_current_user_id();
+$slugs      = DashboardPresets::forRole($role);
+$validSlugs = WidgetRegistry::ids();
+$slugs      = array_values(array_intersect($slugs, $validSlugs));
+$context    = ['user_id' => $user_id];
+
+?>
+<section
+  class="ap-role-layout"
+  role="tabpanel"
+  id="ap-panel-<?php echo esc_attr($role); ?>"
+  aria-labelledby="ap-tab-<?php echo esc_attr($role); ?>"
+  data-role="<?php echo esc_attr($role); ?>"
+>
+<?php
 foreach ($slugs as $slug) {
     $html = WidgetRegistry::render($slug, $context);
     if ($html !== '') {
         echo $html;
     }
 }
-echo '</div>';
+?>
+</section>
 

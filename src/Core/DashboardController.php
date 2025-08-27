@@ -9,12 +9,20 @@ use ArtPulse\Core\RoleResolver;
 use ArtPulse\Core\LayoutUtils;
 use ArtPulse\Core\WidgetRegistryLoader;
 use ArtPulse\Core\WidgetRegistry;
+use WP;
+use WP_Query;
 
 if (!defined('ARTPULSE_SKIP_TEMPLATE_COPY')) {
     define('ARTPULSE_SKIP_TEMPLATE_COPY', true);
 }
 
 class DashboardController {
+
+    /** @var string[] */
+    private const ALLOWED_ROLES = ['member', 'artist', 'organization'];
+
+    /** Expose current role for template if you prefer property over query var */
+    private ?string $current_role = null;
 
     /**
      * Default widgets available to each role.
@@ -578,6 +586,15 @@ class DashboardController {
         $is_page  = function_exists('\is_page') && \is_page('dashboard');
         if (($is_query || $is_page) && function_exists('\is_user_logged_in') && \is_user_logged_in() &&
             function_exists('\current_user_can') && \current_user_can('view_artpulse_dashboard')) {
+            $role = self::resolveRole();
+            if (function_exists('set_query_var')) {
+                set_query_var('ap_role', $role);
+            }
+
+            if (defined('AP_VERBOSE_DEBUG') && AP_VERBOSE_DEBUG && function_exists('is_user_logged_in') && is_user_logged_in()) {
+                error_log(sprintf('AP dash: qv(role)=%s resolved=%s', get_query_var('role'), $role));
+            }
+
             $base = defined('ARTPULSE_PLUGIN_DIR') ? ARTPULSE_PLUGIN_DIR : \plugin_dir_path(ARTPULSE_PLUGIN_FILE);
             $tpl  = rtrim($base, '/\\') . '/templates/simple-dashboard.php';
             if (file_exists($tpl)) {
@@ -589,11 +606,37 @@ class DashboardController {
         }
         return $template;
     }
+
+    private static function resolveRole(): string
+    {
+        $requested = function_exists('get_query_var') ? get_query_var('role') : '';
+        if ($requested === '' && isset($_GET['role'])) {
+            $requested = $_GET['role'];
+        }
+        $requested = sanitize_key((string) $requested);
+        if (in_array($requested, self::ALLOWED_ROLES, true)) {
+            return $requested;
+        }
+
+        if (function_exists('is_user_logged_in') && is_user_logged_in()) {
+            $u = wp_get_current_user();
+            $roles = array_map('sanitize_key', (array) $u->roles);
+            if (array_intersect($roles, ['organization'])) {
+                return 'organization';
+            }
+            if (array_intersect($roles, ['artist'])) {
+                return 'artist';
+            }
+        }
+
+        return 'member';
+    }
 }
 
 if (function_exists('add_action')) {
     add_filter('query_vars', static function ($vars) {
         $vars[] = 'ap_dashboard';
+        $vars[] = 'role';
         return $vars;
     });
 
