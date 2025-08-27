@@ -53,6 +53,9 @@ class UserDashboardManager
             self::get_asset_version('assets/js/ap-user-dashboard.js'),
             true
         );
+        if (function_exists('wp_script_add_data')) {
+            wp_script_add_data('ap-user-dashboard-js', 'type', 'module');
+        }
 
         // Analytics events
         wp_enqueue_script(
@@ -62,6 +65,9 @@ class UserDashboardManager
             self::get_asset_version('assets/js/ap-analytics.js'),
             true
         );
+        if (function_exists('wp_script_add_data')) {
+            wp_script_add_data('ap-analytics-js', 'type', 'module');
+        }
 
         wp_enqueue_script(
             'ap-event-analytics',

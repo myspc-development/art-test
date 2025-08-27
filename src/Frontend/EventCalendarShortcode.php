@@ -32,6 +32,9 @@ class EventCalendarShortcode
             '1.0',
             true
         );
+        if (function_exists('wp_script_add_data')) {
+            wp_script_add_data('ap-event-calendar', 'type', 'module');
+        }
 
         wp_localize_script('ap-event-calendar', 'APCalendar', [
             'apiRoot'   => esc_url_raw(rest_url()),

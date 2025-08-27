@@ -38,13 +38,18 @@ class EnqueueAssets {
     /**
      * Enqueue a script only if the file exists and has not been enqueued.
      */
-    private static function enqueue_script_if_exists(string $handle, string $rel, array $deps = [], bool $in_footer = true): void {
+    private static function enqueue_script_if_exists(string $handle, string $rel, array $deps = [], bool $in_footer = true, array $attributes = []): void {
         if (function_exists('wp_script_is') && wp_script_is($handle, 'enqueued')) {
             return;
         }
         $path = self::asset_path($rel);
         if (file_exists($path) && function_exists('wp_enqueue_script')) {
             wp_enqueue_script($handle, self::asset_url($rel), $deps, filemtime($path), $in_footer);
+            if ($attributes && function_exists('wp_script_add_data')) {
+                foreach ($attributes as $key => $value) {
+                    wp_script_add_data($handle, $key, $value);
+                }
+            }
         }
     }
 
@@ -139,8 +144,8 @@ class EnqueueAssets {
             self::enqueue_script_if_exists('ap-csv-import', 'assets/js/ap-csv-import.js', ['papaparse', 'wp-api-fetch']);
         }
 
-        self::enqueue_script_if_exists('ap-analytics', 'assets/js/ap-analytics.js');
-        self::enqueue_script_if_exists('ap-user-dashboard-js', 'assets/js/ap-user-dashboard.js', ['wp-api-fetch', 'chart-js']);
+        self::enqueue_script_if_exists('ap-analytics', 'assets/js/ap-analytics.js', [], true, ['type' => 'module']);
+        self::enqueue_script_if_exists('ap-user-dashboard-js', 'assets/js/ap-user-dashboard.js', ['wp-api-fetch', 'chart-js'], true, ['type' => 'module']);
     }
 
     /**

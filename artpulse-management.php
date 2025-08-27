@@ -1075,6 +1075,9 @@ function ap_enqueue_event_calendar_assets() {
             true
         );
         wp_enqueue_script('ap-event-calendar', plugin_dir_url(__FILE__) . 'assets/js/ap-event-calendar.js', ['fullcalendar-js', 'jquery'], '1.0', true);
+        if (function_exists('wp_script_add_data')) {
+            wp_script_add_data('ap-event-calendar', 'type', 'module');
+        }
         wp_localize_script('ap-event-calendar', 'APCalendar', [
             'events' => ap_get_events_for_calendar(),
         ]);
