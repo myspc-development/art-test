@@ -808,11 +808,13 @@ class DashboardWidgetRegistry {
         }
 
         $preview = $preview_role ? sanitize_key( $preview_role ) : ( function_exists( 'get_query_var' ) ? get_query_var( 'ap_role' ) : null );
+        $admin_preview = false;
         if ( function_exists( 'current_user_can' ) && current_user_can( 'manage_options' ) ) {
             if ( ! is_string( $preview ) || $preview === '' ) {
                 return true;
             }
-            $role = $preview;
+            $role          = $preview;
+            $admin_preview = true;
         } else {
             $role = DashboardController::get_role( $user_id );
         }
@@ -822,12 +824,12 @@ class DashboardWidgetRegistry {
         }
 
         $cap = $widget['capability'] ?? '';
-        if ( $cap && ! user_can( $user_id, $cap ) ) {
+        if ( ! $admin_preview && $cap && ! user_can( $user_id, $cap ) ) {
             return false;
         }
 
         $class = $widget['class'] ?? '';
-        if ( $class && method_exists( $class, 'can_view' ) ) {
+        if ( ! $admin_preview && $class && method_exists( $class, 'can_view' ) ) {
             try {
                 if ( ! call_user_func( [ $class, 'can_view' ], $user_id ) ) {
                     return false;
