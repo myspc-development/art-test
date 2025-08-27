@@ -7,43 +7,29 @@
 
 namespace ArtPulse\Tests;
 
+use ArtPulse\Support\FileSystem;
+
 /**
  * Delete a file if it exists.
  *
  * @param string $path Path to file.
- * @return void
+ * @return bool Whether the file was deleted.
  */
-function safe_unlink( string $path ): void {
-	if ( is_file( $path ) ) {
-		@unlink( $path );
-	}
+function safe_unlink( string $path ): bool {
+    return FileSystem::safe_unlink( $path );
 }
 
 /**
  * Recursively remove a directory if it exists.
  *
  * @param string $path Path to directory.
- * @return void
+ * @return bool Whether the directory was removed.
  */
-function remove_dir( string $path ): void {
-	if ( ! is_dir( $path ) ) {
-		return;
-	}
-	$items = new \RecursiveIteratorIterator(
-		new \RecursiveDirectoryIterator( $path, \FilesystemIterator::SKIP_DOTS ),
-		\RecursiveIteratorIterator::CHILD_FIRST
-	);
-	foreach ( $items as $item ) {
-		if ( $item->isDir() ) {
-			@rmdir( $item->getPathname() );
-		} else {
-			@unlink( $item->getPathname() );
-		}
-	}
-	@rmdir( $path );
+function remove_dir( string $path ): bool {
+    return FileSystem::rm_rf( $path );
 }
 
 // Backwards compatible alias
-function rm_rf( string $path ): void {
-        remove_dir( $path );
+function rm_rf( string $path ): bool {
+    return remove_dir( $path );
 }
