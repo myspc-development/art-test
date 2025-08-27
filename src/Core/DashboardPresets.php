@@ -87,6 +87,13 @@ class DashboardPresets
 
         return $preset;
     }
+
+    /** @return array<int,string> */
+    public static function forRole(string $role): array
+    {
+        $role = sanitize_key($role);
+        return self::get_preset_for_role($role);
+    }
 }
 
 DashboardPresets::bootstrap();
