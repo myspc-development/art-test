@@ -773,8 +773,8 @@ class DashboardWidgetRegistry {
             return false;
         }
 
-        $preview = get_query_var( 'ap_role' );
-        if ( current_user_can( 'manage_options' ) ) {
+        $preview = function_exists( 'get_query_var' ) ? get_query_var( 'ap_role' ) : null;
+        if ( function_exists( 'current_user_can' ) && current_user_can( 'manage_options' ) ) {
             if ( ! is_string( $preview ) || $preview === '' ) {
                 return true;
             }
@@ -804,6 +804,16 @@ class DashboardWidgetRegistry {
         }
 
         return true;
+    }
+
+    /**
+     * Backwards compatibility alias for user_can_see().
+     *
+     * Uses the preview role from the "ap_role" query var when the current
+     * user can manage options so dashboard previews are gated correctly.
+     */
+    public static function isAllowedForCurrentUser( string $id, int $user_id = 0 ): bool {
+        return self::user_can_see( $id, $user_id );
     }
 
     /**

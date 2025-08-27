@@ -37,10 +37,10 @@ export function verify() {
   const presetPath = path.join(base, 'data', 'preset-organization.json');
   try {
     const preset = JSON.parse(fs.readFileSync(presetPath, 'utf8'));
-    if (preset.some(w => w.id === 'org_event_quick_add')) {
+    if (preset.some(w => w.id === 'widget_org_event_quick_add')) {
       results.visible = true;
     } else {
-      results.messages.push('org_event_quick_add missing from data/preset-organization.json');
+      results.messages.push('widget_org_event_quick_add missing from data/preset-organization.json');
     }
   } catch (e) {
     results.messages.push('Error reading preset-organization.json: ' + e.message);

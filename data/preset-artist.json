@@ -1,16 +1,16 @@
 [
   {
-    "id": "artist_inbox_preview",
+    "id": "widget_artist_inbox_preview",
     "visible": true
   },
   {
-    "id": "revenue_summary",
+    "id": "widget_artist_revenue_summary",
     "visible": true
   },
-  { "id": "artist_artwork_manager", "visible": true },
-  { "id": "artist_audience_insights", "visible": true },
-  { "id": "artist_earnings_summary", "visible": true },
-  { "id": "artist_feed_publisher", "visible": true },
-  { "id": "collab_requests", "visible": true },
-  { "id": "onboarding_tracker", "visible": true }
+  { "id": "widget_artist_artwork_manager", "visible": true },
+  { "id": "widget_artist_audience_insights", "visible": true },
+  { "id": "widget_artist_earnings_summary", "visible": true },
+  { "id": "widget_artist_feed_publisher", "visible": true },
+  { "id": "widget_collab_requests", "visible": true },
+  { "id": "widget_onboarding_tracker", "visible": true }
 ]

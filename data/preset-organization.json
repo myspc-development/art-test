@@ -1,36 +1,36 @@
 [
   {
-    "id": "audience_crm",
+    "id": "widget_audience_crm",
     "visible": true
   },
   {
-    "id": "sponsored_event_config",
+    "id": "widget_sponsored_event_config",
     "visible": true
   },
   {
-    "id": "embed_tool",
+    "id": "widget_embed_tool",
     "visible": true
   },
   {
-    "id": "branding_settings_panel",
+    "id": "widget_branding_settings_panel",
     "visible": true
   },
   {
-    "id": "ap_donor_activity",
+    "id": "widget_ap_donor_activity",
     "visible": true
   },
   {
-    "id": "org_widget_sharing",
+    "id": "widget_org_widget_sharing",
     "visible": true
   },
   {
-    "id": "sponsor_display",
+    "id": "widget_sponsor_display",
     "visible": true
   },
-  { "id": "org_event_overview", "visible": true },
-  { "id": "org_event_quick_add", "visible": true },
-  { "id": "org_team_roster", "visible": true },
-  { "id": "org_approval_center", "visible": true },
-  { "id": "org_ticket_insights", "visible": true },
-  { "id": "org_broadcast_box", "visible": true }
+  { "id": "widget_org_event_overview", "visible": true },
+  { "id": "widget_org_event_quick_add", "visible": true },
+  { "id": "widget_org_team_roster", "visible": true },
+  { "id": "widget_org_approval_center", "visible": true },
+  { "id": "widget_org_ticket_insights", "visible": true },
+  { "id": "widget_org_broadcast_box", "visible": true }
 ]
