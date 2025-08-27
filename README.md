@@ -4,6 +4,42 @@ For end‑user instructions see the [User Guide](docs/guides/user/README.md).
 Site administrators should consult the [Admin Guide](docs/guides/admin/README.md).
 > 🛠️ NOTE: Guides are now nested under /docs/guides/
 
+## Quickstart
+
+### Prerequisites
+
+- PHP with the `mysqli` extension enabled
+- Composer
+- Node.js and npm
+
+### Setup
+
+```bash
+composer install
+npm ci
+
+# run test suite
+composer test
+
+# coding standards
+composer cs
+
+# static analysis
+composer stan
+```
+
+To automatically fix coding standards:
+
+```bash
+composer cs:fix
+```
+
+Generate or update the PHPStan baseline with:
+
+```bash
+composer stan:baseline
+```
+
 ## Documentation
 - [Architecture Docs](docs/architecture/)
   - [Role-Based Dashboard Builder](docs/architecture/Role_Based_Dashboard_Builder.md)
