@@ -52,7 +52,7 @@ function allowedTabs() {
 
 function renderNav(tabs) {
   navList.innerHTML = '';
-  tabs.forEach((t) => {
+  tabs.forEach((t, i) => {
     const li = document.createElement('li');
     li.setAttribute('role', 'presentation');
     const btn = document.createElement('button');
@@ -61,8 +61,21 @@ function renderNav(tabs) {
     btn.dataset.tab = t;
     btn.id = `ap-tab-${t}`;
     btn.textContent = labels[t] || t;
+    btn.setAttribute('aria-selected', 'false');
+    btn.tabIndex = -1;
     btn.addEventListener('click', () => {
       window.location.hash = '#' + t;
+    });
+    btn.addEventListener('keydown', (e) => {
+      let target;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        target = navList.querySelector(`[data-tab="${tabs[(i + 1) % tabs.length]}"]`);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        target = navList.querySelector(`[data-tab="${tabs[(i - 1 + tabs.length) % tabs.length]}"]`);
+      }
+      target?.focus();
     });
     li.appendChild(btn);
     navList.appendChild(li);

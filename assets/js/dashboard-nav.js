@@ -24,7 +24,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (rafId) return;
     rafId = requestAnimationFrame(() => {
       links.forEach(link => {
-        link.classList.toggle('active', link.dataset.section === activeId);
+        const isActive = link.dataset.section === activeId;
+        link.classList.toggle('active', isActive);
+        link.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        link.tabIndex = isActive ? 0 : -1;
       });
       rafId = null;
     });
