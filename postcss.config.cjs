@@ -3,7 +3,7 @@ const postcssImport = require('postcss-import');
 const postcssNested = require('postcss-nested');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
-const purgecss = require('@fullhuman/postcss-purgecss');
+const purgecss = require('@fullhuman/postcss-purgecss').default;
 
 module.exports = {
   plugins: [
