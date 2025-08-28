@@ -1329,12 +1329,22 @@ add_action('wp_ajax_ap_reset_layout', function () {
     wp_send_json_success(['message' => 'Layout reset.']);
 });
 
-add_action('widgets_init', function () {
-    register_widget('AP_Widget');
-    if (class_exists('AP_Favorite_Portfolio_Widget')) {
-        register_widget('AP_Favorite_Portfolio_Widget');
+if ( ! function_exists( 'ap_register_widget_once' ) ) {
+    function ap_register_widget_once( $class, $id_base = null ) {
+        global $wp_widget_factory;
+        $id_base = $id_base ?: ( is_string( $class ) ? $class : null );
+        if ( $id_base && empty( $wp_widget_factory->widgets[ $id_base ] ) ) {
+            register_widget( $class );
+        }
     }
-});
+}
+
+add_action( 'widgets_init', function () {
+    ap_register_widget_once( 'AP_Widget', 'ap_shortcode_widget' );
+    if ( class_exists( 'AP_Favorite_Portfolio_Widget' ) ) {
+        ap_register_widget_once( 'AP_Favorite_Portfolio_Widget', 'ap_favorite_portfolio_widget' );
+    }
+}, 1 );
 
 // --- Help Guide Shortcodes & Styles ---
 add_action('admin_enqueue_scripts', function ($hook) {
