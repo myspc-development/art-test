@@ -2,8 +2,7 @@
 declare(strict_types=1);
 
 namespace {
-    // Minimal WP-CLI stub + ABSPATH for unit context
-    require_once __DIR__ . '/WP_CLI_Stub.php';
+    // ABSPATH for unit context; WP-CLI stub loaded via bootstrap
     if (!defined('ABSPATH')) { define('ABSPATH', __DIR__); }
 
     // Minimal role handling for capability checks.

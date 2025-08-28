@@ -2,7 +2,7 @@
 namespace ArtPulse\Cli\Tests;
 
 require_once __DIR__ . '/../Stubs/wp_rest.php';
-require_once __DIR__ . '/WP_CLI_Stub.php';
+// WP-CLI stub loaded via bootstrap
 require_once __DIR__ . '/../../includes/class-cli-rest-route-audit.php';
 
 use PHPUnit\Framework\TestCase;
