@@ -804,29 +804,6 @@ paths:
       responses:
         '200':
           description: OK
-  /artpulse/v1/dashboard/layout:
-    get:
-      summary: Auto-generated stub
-      parameters:
-        - in: query
-          name: role
-          schema:
-            type: string
-        - in: query
-          name: callback
-          schema:
-            type: string
-        - in: query
-          name: args
-          schema:
-            type: array
-        - in: query
-          name: visibility
-          schema:
-            type: object
-      responses:
-        '200':
-          description: OK
   /artpulse/v1/user/export:
     get:
       summary: Auto-generated stub

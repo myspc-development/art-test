@@ -83,7 +83,6 @@ Total AJAX actions: 51
 | 'artpulse/v1' | WP_REST_Server::READABLE | /status | src/Rest/StatusController.php:21 | yes | no |
 | artpulse/v1 | GET | /analytics/trends | src/Rest/AnalyticsRestController.php:19 | yes | no |
 | artpulse/v1 | GET | /analytics/export | src/Rest/AnalyticsRestController.php:33 | yes | no |
-| artpulse/v1 | GET | /dashboard/layout | src/Rest/DashboardLayoutRestController.php:25 | yes | no |
 | artpulse/v1 | GET | /user/export | src/Rest/UserAccountRestController.php:24 | yes | no |
 | artpulse/v1 | POST | /user/delete | src/Rest/UserAccountRestController.php:44 | yes | no |
 | artpulse/v1 | GET | /dashboard-config | src/Rest/DashboardConfigController.php:18 | yes | yes |

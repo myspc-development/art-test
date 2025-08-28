@@ -248,58 +248,6 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
 		$expected = array( 'a-', 'bc', 'invalidslug' );
 		$this->assertSame( $expected, $res->get_data()['layout'] );
 	}
-	public function test_get_alias_route_returns_data(): void {
-		update_user_meta(
-			$this->user_id,
-			'ap_dashboard_layout',
-			array(
-				array(
-					'id'      => 'one',
-					'visible' => true,
-				),
-				array(
-					'id'      => 'two',
-					'visible' => false,
-				),
-			)
-		);
-		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard/layout' );
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 200, $res->get_status() );
-		$data = $res->get_data();
-		$this->assertSame( array( 'one', 'two' ), $data['layout'] );
-	}
-
-	public function test_post_alias_route_saves_layout(): void {
-		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard/layout' );
-		$req->set_body_params(
-			array(
-				'layout' => array(
-					array(
-						'id'      => 'a',
-						'visible' => false,
-					),
-					array(
-						'id'      => 'b',
-						'visible' => true,
-					),
-				),
-			)
-		);
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 200, $res->get_status() );
-		$expected = array(
-			array(
-				'id'      => 'a',
-				'visible' => false,
-			),
-			array(
-				'id'      => 'b',
-				'visible' => true,
-			),
-		);
-		$this->assertSame( $expected, get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
-	}
     public function test_reset_route_clears_layout_and_visibility(): void {
         update_user_meta(
             $this->user_id,

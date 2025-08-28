@@ -66,8 +66,6 @@ The following table lists every REST route registered by the plugin. Method dete
 | artpulse/v1 | /dashboard-tour | POST |
 | artpulse/v1 | /dashboard-widgets | GET |
 | artpulse/v1 | /dashboard-widgets/save | POST |
-| artpulse/v1 | /dashboard/layout | GET |
-| artpulse/v1 | /dashboard/layout | POST |
 | artpulse/v1 | /dashboard/messages | GET |
 | artpulse/v1 | /donations | POST |
 | artpulse/v1 | /event-list | GET |
