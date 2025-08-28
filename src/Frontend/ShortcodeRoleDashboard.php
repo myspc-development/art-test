@@ -156,7 +156,7 @@ class ShortcodeRoleDashboard {
 		return $content . "\n\n" . $container;
 	}
 
-	public static function render( $atts = array() ): string {
+	public static function render( array $atts = array() ): string {
 		if ( ! is_user_logged_in() ) {
 			return '';
 		}
