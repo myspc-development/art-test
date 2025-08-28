@@ -3,7 +3,10 @@
 get_header();
 ?>
 <div class="ap-login-page">
-    <?php echo do_shortcode('[ap_login]'); ?>
+    <?php
+    $output = do_shortcode( '[ap_login]' );
+    echo wp_kses_post( $output );
+    ?>
 </div>
 <?php
 get_footer();
