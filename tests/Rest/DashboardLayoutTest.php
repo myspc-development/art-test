@@ -4,6 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Core\UserDashboardManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
+use ArtPulse\Admin\LayoutSnapshotManager;
 
 /**
  * @group restapi
@@ -299,4 +300,108 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
 		);
 		$this->assertSame( $expected, get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
 	}
+    public function test_reset_route_clears_layout_and_visibility(): void {
+        update_user_meta(
+            $this->user_id,
+            'ap_dashboard_layout',
+            array(
+                array(
+                    'id'      => 'a',
+                    'visible' => false,
+                ),
+                array(
+                    'id'      => 'b',
+                    'visible' => true,
+                ),
+            )
+        );
+        update_user_meta(
+            $this->user_id,
+            'ap_widget_visibility',
+            array(
+                'a' => false,
+                'b' => true,
+            )
+        );
+
+        $req = new \WP_REST_Request( 'POST', '/artpulse/v1/ap/layout/reset' );
+        $res = rest_get_server()->dispatch( $req );
+        $this->assertSame( 200, $res->get_status() );
+        $data = $res->get_data();
+        $this->assertTrue( $data['reset'] );
+        $this->assertEmpty( get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
+        $this->assertEmpty( get_user_meta( $this->user_id, 'ap_widget_visibility', true ) );
+
+        tests_add_filter(
+            'ap_dashboard_default_widgets_for_role',
+            function ( $defaults, $role ) {
+                return 'subscriber' === $role ? array( 'one', 'two' ) : $defaults;
+            }
+        );
+        $get = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
+        $res = rest_get_server()->dispatch( $get );
+        $this->assertSame( 200, $res->get_status() );
+        $data = $res->get_data();
+        $this->assertSame( array( 'one', 'two' ), $data['layout'] );
+        $this->assertSame(
+            array(
+                array(
+                    'id'      => 'one',
+                    'visible' => true,
+                ),
+                array(
+                    'id'      => 'two',
+                    'visible' => true,
+                ),
+            ),
+            $data['visibility']
+        );
+        remove_all_filters( 'ap_dashboard_default_widgets_for_role' );
+    }
+
+    public function test_revert_route_restores_last_snapshot(): void {
+        update_user_meta(
+            $this->user_id,
+            'ap_dashboard_layout',
+            array(
+                array(
+                    'id'      => 'a',
+                    'visible' => true,
+                ),
+                array(
+                    'id'      => 'b',
+                    'visible' => true,
+                ),
+            )
+        );
+        LayoutSnapshotManager::snapshot( $this->user_id, 'subscriber' );
+        update_user_meta(
+            $this->user_id,
+            'ap_dashboard_layout',
+            array(
+                array(
+                    'id'      => 'c',
+                    'visible' => true,
+                ),
+            )
+        );
+        $req = new \WP_REST_Request( 'POST', '/artpulse/v1/ap/layout/revert' );
+        $res = rest_get_server()->dispatch( $req );
+        $this->assertSame( 200, $res->get_status() );
+        $data = $res->get_data();
+        $this->assertTrue( $data['reverted'] );
+        $this->assertSame(
+            array(
+                array(
+                    'id'      => 'a',
+                    'visible' => true,
+                ),
+                array(
+                    'id'      => 'b',
+                    'visible' => true,
+                ),
+            ),
+            get_user_meta( $this->user_id, 'ap_dashboard_layout', true )
+        );
+    }
 }
