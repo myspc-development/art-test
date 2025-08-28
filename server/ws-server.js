@@ -1,6 +1,7 @@
 const http = require('http');
 const socketio = require('socket.io');
 const jwt = require('jsonwebtoken');
+const APDebug = require('../js/APDebug');
 
 // JWTs must include an expiration (`exp`) claim which will be validated on
 // each connection.
@@ -38,9 +39,7 @@ io.use((socket, next) => {
 
 io.on('connection', socket => {
   connections.set(socket.userId, socket);
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('connection', socket.userId);
-  }
+  APDebug.log('connection', socket.userId);
 
   socket.on('message:send', data => {
     const recipient = connections.get(data.recipient_id);
@@ -59,15 +58,11 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     connections.delete(socket.userId);
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('disconnect', socket.userId);
-    }
+    APDebug.log('disconnect', socket.userId);
   });
 });
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('ws server running on', PORT);
-  }
+  APDebug.log('ws server running on', PORT);
 });
