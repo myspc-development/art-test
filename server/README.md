@@ -7,7 +7,7 @@ HTTP is not recommended.
 
 ## Configuration
 
-Create a `.env` file in the project root and define at least:
+Copy `.env.example` to `.env` in the project root and define at least:
 
 ```bash
 JWT_SECRET=change_me_to_a_long_random_string

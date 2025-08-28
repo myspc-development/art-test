@@ -33,8 +33,30 @@ paths:
       responses:
         '200':
           description: OK
+    delete:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
   /artpulse/v1/user/(?P<id>\\d+)/follow:
     post:
+      summary: Auto-generated stub
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+    delete:
       summary: Auto-generated stub
       parameters:
         - in: query

@@ -53,6 +53,27 @@ composer zip
 
 The zip file is placed in the `release/` directory.
 
+## Docker-Based Local Environment
+
+Use Docker to spin up WordPress and a MySQL database for local testing:
+
+```bash
+cp docker-compose.yml.example docker-compose.yml
+docker-compose up -d
+```
+
+After the containers start, visit `http://localhost:8000` and activate the
+plugin from the WordPress admin.
+
+## Manual Local Install
+
+To test the plugin against a manually installed WordPress site:
+
+1. Download and install WordPress in a local directory.
+2. Copy or symlink this plugin into `wp-content/plugins/artpulse`.
+3. Run `npm run build` to compile assets.
+4. Activate the plugin from the WordPress dashboard.
+
 ## WebSocket Server
 
 The real-time message server uses a JWT for authentication. Set the `JWT_SECRET` environment variable to a long random string before running the server. You can start it with `node server/ws-server.js` or via the npm script `npm run ws`.
