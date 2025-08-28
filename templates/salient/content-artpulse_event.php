@@ -34,16 +34,16 @@
             <meta itemprop="name" content="<?php the_title(); ?>">
             <meta itemprop="startDate" content="<?php echo esc_attr($date); ?>">
             <meta itemprop="location" content="<?php echo esc_attr($venue); ?>">
-            <li><strong>Date:</strong> <?php echo esc_html($date ?: __('Not specified', 'artpulse')); ?></li>
-            <?php $time_display = ($start || $end) ? esc_html($start) . ($start && $end ? ' – ' : '') . esc_html($end) : __('Not specified', 'artpulse'); ?>
-            <li><strong>Time:</strong> <?php echo $time_display; ?></li>
-            <li><strong>Venue:</strong> <?php echo esc_html($venue ?: __('Not specified', 'artpulse')); ?></li>
-            <li><strong>Address:</strong> <?php echo esc_html($address ?: __('Not specified', 'artpulse')); ?></li>
-            <li><strong>Contact:</strong> <?php echo esc_html($contact ?: __('Not specified', 'artpulse')); ?></li>
+            <li><strong><?php esc_html_e('Date:', 'artpulse'); ?></strong> <?php echo esc_html( $date ?: __( 'Not specified', 'artpulse' ) ); ?></li>
+            <?php $time_display = ($start || $end) ? esc_html($start) . ($start && $end ? ' – ' : '') . esc_html($end) : esc_html__( 'Not specified', 'artpulse' ); ?>
+            <li><strong><?php esc_html_e('Time:', 'artpulse'); ?></strong> <?php echo $time_display; ?></li>
+            <li><strong><?php esc_html_e('Venue:', 'artpulse'); ?></strong> <?php echo esc_html( $venue ?: __( 'Not specified', 'artpulse' ) ); ?></li>
+            <li><strong><?php esc_html_e('Address:', 'artpulse'); ?></strong> <?php echo esc_html( $address ?: __( 'Not specified', 'artpulse' ) ); ?></li>
+            <li><strong><?php esc_html_e('Contact:', 'artpulse'); ?></strong> <?php echo esc_html( $contact ?: __( 'Not specified', 'artpulse' ) ); ?></li>
             <?php if (!empty($rsvp) && filter_var($rsvp, FILTER_VALIDATE_URL)) : ?>
-              <li><strong>RSVP:</strong> <a href="<?php echo esc_url($rsvp); ?>" class="event-rsvp-link" target="_blank">RSVP Now</a></li>
+              <li><strong><?php esc_html_e('RSVP:', 'artpulse'); ?></strong> <a href="<?php echo esc_url($rsvp); ?>" class="event-rsvp-link" target="_blank"><?php esc_html_e('RSVP Now', 'artpulse'); ?></a></li>
             <?php else : ?>
-              <li><strong>RSVP:</strong> <?php esc_html_e('Not specified', 'artpulse'); ?></li>
+              <li><strong><?php esc_html_e('RSVP:', 'artpulse'); ?></strong> <?php esc_html_e('Not specified', 'artpulse'); ?></li>
             <?php endif; ?>
           </ul>
 

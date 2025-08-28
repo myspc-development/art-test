@@ -43,18 +43,28 @@ if ( have_posts() ) :
 
     echo '<div class="event-meta styled-box"><ul class="event-meta-list">';
 
-    if ($date)     echo '<li><strong>Date:</strong> ' . esc_html($date) . '</li>';
+    if ($date) {
+      echo '<li><strong>' . esc_html__( 'Date:', 'artpulse' ) . '</strong> ' . esc_html( $date ) . '</li>';
+    }
     if ($start || $end) {
-      echo '<li><strong>Time:</strong> ';
-      echo esc_html($start);
-      echo ($start && $end) ? ' – ' : '';
-      echo esc_html($end);
+      echo '<li><strong>' . esc_html__( 'Time:', 'artpulse' ) . '</strong> ';
+      echo esc_html( $start );
+      echo ( $start && $end ) ? ' – ' : '';
+      echo esc_html( $end );
       echo '</li>';
     }
-    if ($location) echo '<li><strong>Venue:</strong> ' . esc_html($location) . '</li>';
-    if ($address)  echo '<li><strong>Address:</strong> ' . esc_html($address) . '</li>';
-    if ($contact)  echo '<li><strong>Contact:</strong> ' . esc_html($contact) . '</li>';
-    if ($rsvp)     echo '<li><strong>RSVP:</strong> <a href="' . esc_url($rsvp) . '" target="_blank">Reserve Now</a></li>';
+    if ($location) {
+      echo '<li><strong>' . esc_html__( 'Venue:', 'artpulse' ) . '</strong> ' . esc_html( $location ) . '</li>';
+    }
+    if ($address) {
+      echo '<li><strong>' . esc_html__( 'Address:', 'artpulse' ) . '</strong> ' . esc_html( $address ) . '</li>';
+    }
+    if ($contact) {
+      echo '<li><strong>' . esc_html__( 'Contact:', 'artpulse' ) . '</strong> ' . esc_html( $contact ) . '</li>';
+    }
+    if ($rsvp) {
+      echo '<li><strong>' . esc_html__( 'RSVP:', 'artpulse' ) . '</strong> <a href="' . esc_url( $rsvp ) . '" target="_blank">' . esc_html__( 'Reserve Now', 'artpulse' ) . '</a></li>';
+    }
 
     echo '</ul></div>'; // close .event-meta
 
@@ -108,7 +118,7 @@ if ( have_posts() ) :
     echo '</div>'; // close .container
   endwhile;
 else :
-  echo '<p>No event found.</p>';
+  echo '<p>' . esc_html__( 'No event found.', 'artpulse' ) . '</p>';
 endif;
 
 get_footer();
