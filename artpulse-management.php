@@ -84,7 +84,6 @@ require_once plugin_dir_path(__FILE__) . 'includes/class-deactivator.php';
 require_once plugin_dir_path(__FILE__) . 'includes/class-roles.php';
 require_once plugin_dir_path(__FILE__) . 'includes/class-assets.php';
 require_once plugin_dir_path(__FILE__) . 'includes/helpers-page.php';
-require_once plugin_dir_path(__FILE__) . 'shortcodes/login.php';
 
 ArtPulse_Assets::init();
 
