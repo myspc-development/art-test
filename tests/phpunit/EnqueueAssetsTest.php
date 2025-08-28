@@ -24,11 +24,14 @@ final class EnqueueAssetsTest extends TestCase {
 
 		// Paths
 		Functions\when( 'plugin_dir_path' )->alias( fn( $f ) => '/p/' );
-		Functions\when( 'plugin_dir_url' )->alias( fn( $f ) => 'https://example.test/p/' );
+                Functions\when( 'plugin_dir_url' )->alias( fn( $f ) => 'https://example.test/p/' );
 
-		// File system
-		Functions\when( 'file_exists' )->alias( fn( string $p ) => $this->fs[ $p ] ?? false );
-		Functions\when( 'filemtime' )->alias( fn( string $p ) => 1234567890 );
+                // File system
+                Functions\when( 'file_exists' )->alias( fn( string $p ) => $this->fs[ $p ] ?? false );
+                Functions\when( 'filemtime' )->alias( fn( string $p ) => 1234567890 );
+
+                Functions\when( 'sanitize_key' )->alias( fn( $k ) => strtolower( preg_replace( '/[^a-z0-9_]/', '', $k ) ) );
+                Functions\when( 'wp_unslash' )->alias( fn( $v ) => $v );
 
 		// Script/style helpers
 		Functions\when( 'wp_register_script' )->alias(
@@ -282,12 +285,12 @@ final class EnqueueAssetsTest extends TestCase {
 		$this->assertArrayNotHasKey( 'chart-js', $this->enqueuedScripts );
 	}
 
-	public function test_org_dashboard_admin_enqueues_with_sortable(): void {
-		// Provide dashboard assets
-		$this->touch( 'assets/css/dashboard.css' );
-		$this->touch( 'assets/js/dashboard-role-tabs.js' );
-		$this->touch( 'assets/js/role-dashboard.js' );
-		$this->touch( 'assets/libs/sortablejs/Sortable.min.js' );
+        public function test_org_dashboard_admin_enqueues_with_sortable(): void {
+                // Provide dashboard assets
+                $this->touch( 'assets/css/dashboard.css' );
+                $this->touch( 'assets/js/dashboard-role-tabs.js' );
+                $this->touch( 'assets/js/role-dashboard.js' );
+                $this->touch( 'assets/libs/sortablejs/Sortable.min.js' );
 
 		Functions\when( 'do_action' )->alias(
 			function ( $hook, ...$args ) {
@@ -297,16 +300,42 @@ final class EnqueueAssetsTest extends TestCase {
 			}
 		);
 
-		// Fire the org dashboard hook
-		do_action( 'admin_enqueue_scripts', 'toplevel_page_ap-org-dashboard' );
+                // Fire the org dashboard hook
+                do_action( 'admin_enqueue_scripts', 'toplevel_page_ap-org-dashboard' );
 
-		$role = $this->script( 'role-dashboard' );
-		$this->assertNotNull( $role );
-		$this->assertContains( 'ap-role-tabs', $role['deps'] );
-		$this->assertContains( 'sortablejs', $role['deps'] );
-	}
+                $this->assertNotNull( $this->script( 'ap-role-tabs' ) );
+                $role = $this->script( 'role-dashboard' );
+                $this->assertNotNull( $role );
+                $this->assertContains( 'ap-role-tabs', $role['deps'] );
+                $this->assertContains( 'sortablejs', $role['deps'] );
+        }
 
-	public function test_dashboard_assets_not_double_enqueued(): void {
+        /**
+         * @return array<string, array{0: string}>
+         */
+        public static function settings_pages_provider(): array {
+                return array(
+                        'settings root' => array( 'toplevel_page_artpulse-settings' ),
+                        'import-export' => array( 'artpulse-settings_page_artpulse-import-export' ),
+                        'quickstart'    => array( 'artpulse-settings_page_artpulse-quickstart' ),
+                        'engagement'    => array( 'artpulse-settings_page_artpulse-engagement' ),
+                );
+        }
+
+        /**
+         * @dataProvider settings_pages_provider
+         */
+        public function test_role_dashboard_scripts_not_enqueued_on_settings_pages( string $hook ): void {
+                $this->touch( 'assets/js/dashboard-role-tabs.js' );
+                $this->touch( 'assets/js/role-dashboard.js' );
+
+                EnqueueAssets::enqueue_admin( $hook );
+
+                $this->assertNull( $this->script( 'ap-role-tabs' ) );
+                $this->assertNull( $this->script( 'role-dashboard' ) );
+        }
+
+        public function test_dashboard_assets_not_double_enqueued(): void {
 		$this->touch( 'assets/css/dashboard.css' );
 		$this->touch( 'assets/js/dashboard-role-tabs.js' );
 		$this->touch( 'assets/js/role-dashboard.js' );
