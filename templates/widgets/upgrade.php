@@ -1,7 +1,16 @@
 <?php
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!user_can(get_current_user_id(), 'read')) return;
-extract(ap_template_context($args ?? [], ['visible' => true]));
+$args        = ap_template_context($args ?? [], [
+    'visible'     => true,
+    'show_forms'  => false,
+    'artist_form' => '',
+    'org_form'    => '',
+]);
+$visible     = $args['visible'] ?? true;
+$show_forms  = $args['show_forms'] ?? false;
+$artist_form = $args['artist_form'] ?? '';
+$org_form    = $args['org_form'] ?? '';
 /**
  * Dashboard widget: Upgrade account.
  */
