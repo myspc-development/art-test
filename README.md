@@ -18,6 +18,24 @@ composer run lint:phpcs
 composer run lint:phpstan
 ```
 
+## WebSocket Server
+
+Some features rely on a real-time WebSocket backend. Copy the example environment file and configure a secret:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` to set a strong `JWT_SECRET` and optionally a custom `PORT`. Start the server with:
+
+```bash
+node server/ws-server.js
+# or
+npm run ws
+```
+
+Run this server whenever real-time capabilities are needed.
+
 ## Debug Logging
 
 Verbose debug output is disabled by default. Use the `APDebug` utility instead of `console.log` and enable it in development with
