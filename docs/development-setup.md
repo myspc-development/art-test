@@ -2,7 +2,7 @@
 title: Development Setup
 category: developer
 role: developer
-last_updated: 2025-07-20
+last_updated: 2025-08-28
 status: complete
 ---
 # Development Setup
@@ -78,9 +78,15 @@ To test the plugin against a manually installed WordPress site:
 
 ## WebSocket Server
 
-The real-time message server uses a JWT for authentication. Set the `JWT_SECRET` environment variable to a long random string before running the server. You can start it with `node server/ws-server.js` or via the npm script `npm run ws`.
+The real-time message server uses a JWT for authentication. Copy the example environment file and define a strong secret before running the server:
 
-To configure the server create a `.env` file in the project root. Define the secret and optionally the port:
+```bash
+cp .env.example .env
+```
+
+Edit `.env` to set `JWT_SECRET` to a long random string and optionally define `PORT` if the default `3001` should be changed. Start the server with `node server/ws-server.js` or via the npm script `npm run ws` whenever real-time features are needed.
+
+The relevant variables look like this:
 
 ```bash
 JWT_SECRET=change_me_to_a_long_random_string
