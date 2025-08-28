@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Personalization\Tests;
 
-use WP_REST_Request;
 use ArtPulse\Personalization\RecommendationEngine;
 use ArtPulse\Community\FavoritesManager;
 use ArtPulse\Community\FollowManager;
@@ -59,7 +58,7 @@ class ActivityLoggingTest extends \WP_UnitTestCase
     public function test_rsvp_logs_activity(): void
     {
         wp_set_current_user($this->user_id);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         rest_get_server()->dispatch($req);
 

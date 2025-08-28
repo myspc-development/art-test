@@ -3,7 +3,6 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Rest\SubmissionRestController;
 use ArtPulse\Frontend\EventFilter;
-use WP_REST_Request;
 
 class EventCreationFilteringTest extends \WP_UnitTestCase
 {
@@ -24,7 +23,7 @@ class EventCreationFilteringTest extends \WP_UnitTestCase
     public function test_event_creation_and_filtering(): void
     {
         $nonce = wp_create_nonce('wp_rest');
-        $req = new WP_REST_Request('POST', '/artpulse/v1/submissions');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/submissions');
         $req->add_header('X-WP-Nonce', $nonce);
         $req->set_body_params([
             'post_type'       => 'artpulse_event',

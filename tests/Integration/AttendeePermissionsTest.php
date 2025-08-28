@@ -2,7 +2,6 @@
 namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Rest\RsvpRestController;
-use WP_REST_Request;
 
 class AttendeePermissionsTest extends \WP_UnitTestCase
 {
@@ -33,7 +32,7 @@ class AttendeePermissionsTest extends \WP_UnitTestCase
     public function test_unauthorized_user_cannot_view_attendees(): void
     {
         wp_set_current_user($this->other);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
     }

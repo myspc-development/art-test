@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Admin\Tests;
 
-use WP_REST_Request;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Rest\WidgetLayoutController;
 
@@ -25,7 +24,7 @@ class WidgetLayoutRestTest extends \WP_UnitTestCase
     public function test_post_saves_layout_with_meta_key(): void
     {
         $layout = [ ['id' => 'foo'], ['id' => 'bar', 'visible' => false] ];
-        $req = new WP_REST_Request('POST', '/artpulse/v1/widget-layout');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/widget-layout');
         $req->set_body_params($layout);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

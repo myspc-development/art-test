@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Community\Tests;
 
-use WP_REST_Request;
 use ArtPulse\Community\ReferralManager;
 use ArtPulse\Core\BadgeRules;
 use ArtPulse\Core\UserDashboardManager;
@@ -29,7 +28,7 @@ class ReferralManagerTest extends \WP_UnitTestCase
             $uid = self::factory()->user->create();
             $this->new_users[] = $uid;
             wp_set_current_user($uid);
-            $req = new WP_REST_Request('POST', '/artpulse/v1/referral/redeem');
+            $req = new \WP_REST_Request('POST', '/artpulse/v1/referral/redeem');
             $req->set_param('code', $code);
             rest_get_server()->dispatch($req);
             // generate new code for next user except last

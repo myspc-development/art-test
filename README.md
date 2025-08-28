@@ -96,27 +96,22 @@ See the [Changelog](docs/CHANGELOG.md) for release notes.
 
 ## Testing
 
-Install dependencies and run the PHP test suite locally:
+Install dependencies and run the PHP test suites locally:
 
 ```
 composer install
-vendor/bin/phpunit -c phpunit.xml.dist
+
+# Pure unit tests (no WordPress)
+composer run test:unit
+
+# WordPress integration tests
+composer run test:wp
 ```
 
 Generate coverage (optional):
 
 ```
-XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.xml.dist --coverage-html coverage
-```
-
-Run tests completely offline:
-
-```
-# one-time: create test DB (no network)
-composer run test:db
-
-# run tests using local WordPress core (no download needed)
-vendor/bin/phpunit -c phpunit.xml.dist
+XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-html coverage
 ```
 
 JavaScript unit tests can be executed with:

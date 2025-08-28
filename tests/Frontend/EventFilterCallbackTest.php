@@ -2,7 +2,6 @@
 namespace ArtPulse\Frontend\Tests;
 
 use WP_UnitTestCase;
-use WP_REST_Request;
 use function ArtPulse\Frontend\ap_filter_events_callback;
 
 class EventFilterCallbackTest extends WP_UnitTestCase

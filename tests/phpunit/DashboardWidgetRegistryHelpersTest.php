@@ -1,9 +1,7 @@
 <?php
-namespace {
-    require_once __DIR__ . '/../TestStubs.php';
-}
+namespace ArtPulse\Core\Tests;
 
-namespace ArtPulse\Core\Tests {
+require_once __DIR__ . '/../TestStubs.php';
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
@@ -32,4 +30,3 @@ class DashboardWidgetRegistryHelpersTest extends TestCase {
     }
 }
 
-}

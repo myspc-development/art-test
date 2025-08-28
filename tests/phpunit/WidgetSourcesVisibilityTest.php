@@ -1,5 +1,5 @@
 <?php
-namespace ArtPulse\Audit\Tests {
+namespace ArtPulse\Audit\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Cli\WidgetAudit;
@@ -35,14 +35,5 @@ class WidgetSourcesVisibilityTest extends TestCase
 
         $this->assertNotEmpty(self::$rows);
         $this->assertSame('member', self::$rows[0]['roles_from_visibility']);
-    }
-}
-}
-namespace {
-    if (!class_exists('WP_CLI')) {
-        class WP_CLI {
-            public static function line($msg): void {}
-            public static function error($msg): void { throw new \Exception($msg); }
-        }
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace {
+if (!class_exists('WP_CLI')) {
     class WP_CLI {
         public static array $commands = [];
         public static string $last_output = '';
@@ -77,14 +77,16 @@ namespace {
 }
 
 namespace WP_CLI\Utils {
-    function format_items($type, $items, $fields): void {
-        echo implode("\t", $fields) . "\n";
-        foreach ($items as $row) {
-            $out = [];
-            foreach ($fields as $f) {
-                $out[] = $row[$f] ?? '';
+    if (!function_exists(__NAMESPACE__ . '\\format_items')) {
+        function format_items($type, $items, $fields): void {
+            echo implode("\t", $fields) . "\n";
+            foreach ($items as $row) {
+                $out = [];
+                foreach ($fields as $f) {
+                    $out[] = $row[$f] ?? '';
+                }
+                echo implode("\t", $out) . "\n";
             }
-            echo implode("\t", $out) . "\n";
         }
     }
 }

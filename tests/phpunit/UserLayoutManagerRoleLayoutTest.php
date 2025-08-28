@@ -1,9 +1,7 @@
 <?php
-namespace {
-    require_once __DIR__ . '/../TestStubs.php';
-}
+namespace ArtPulse\Admin\Tests;
 
-namespace ArtPulse\Admin\Tests {
+require_once __DIR__ . '/../TestStubs.php';
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardController;
@@ -62,5 +60,4 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
             ['id' => 'widget_beta', 'visible' => true],
         ], $result['layout']);
     }
-}
 }

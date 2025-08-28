@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Reporting\Tests;
 
-use WP_REST_Request;
 use ArtPulse\Reporting\SnapshotExportController;
 use ArtPulse\Core\VisitTracker;
 
@@ -70,7 +69,7 @@ class SnapshotExportControllerTest extends \WP_UnitTestCase
 
     public function test_summary_endpoint_returns_metrics(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/reporting/snapshot');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/reporting/snapshot');
         $req->set_param('org_id', $this->org_id);
         $req->set_param('period', date('Y-m'));
         $res = rest_get_server()->dispatch($req);
@@ -84,7 +83,7 @@ class SnapshotExportControllerTest extends \WP_UnitTestCase
 
     public function test_csv_endpoint_returns_csv(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/reporting/snapshot.csv');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/reporting/snapshot.csv');
         $req->set_param('org_id', $this->org_id);
         $req->set_param('period', date('Y-m'));
         $res = rest_get_server()->dispatch($req);
@@ -94,7 +93,7 @@ class SnapshotExportControllerTest extends \WP_UnitTestCase
 
     public function test_pdf_endpoint_returns_pdf(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/reporting/snapshot.pdf');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/reporting/snapshot.pdf');
         $req->set_param('org_id', $this->org_id);
         $req->set_param('period', date('Y-m'));
         $res = rest_get_server()->dispatch($req);

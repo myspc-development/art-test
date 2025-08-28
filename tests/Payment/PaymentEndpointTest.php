@@ -3,7 +3,6 @@ namespace ArtPulse\Payment\Tests;
 
 use Brain\Monkey;
 use function Brain\Monkey\Functions\when;
-use WP_REST_Request;
 
 class PaymentEndpointTest extends \WP_UnitTestCase
 {
@@ -29,7 +28,7 @@ class PaymentEndpointTest extends \WP_UnitTestCase
     public function test_create_payment_intent_requires_read_capability(): void
     {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/payment/intent');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/payment/intent');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
     }
@@ -41,7 +40,7 @@ class PaymentEndpointTest extends \WP_UnitTestCase
         $user_id = self::factory()->user->create(['role' => 'subscriber']);
         wp_set_current_user($user_id);
 
-        $req = new WP_REST_Request('POST', '/artpulse/v1/payment/intent');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/payment/intent');
         $req->set_body_params(['amount' => 500, 'currency' => 'usd']);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -52,7 +51,7 @@ class PaymentEndpointTest extends \WP_UnitTestCase
     public function test_create_checkout_session_requires_read_capability(): void
     {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/payment/checkout');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/payment/checkout');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
     }
@@ -64,7 +63,7 @@ class PaymentEndpointTest extends \WP_UnitTestCase
         $user_id = self::factory()->user->create(['role' => 'subscriber']);
         wp_set_current_user($user_id);
 
-        $req = new WP_REST_Request('POST', '/artpulse/v1/payment/checkout');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/payment/checkout');
         $req->set_body_params(['price_id' => 'price_123']);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

@@ -1,9 +1,7 @@
 <?php
-namespace {
-    require_once __DIR__ . '/../TestStubs.php';
-}
+namespace ArtPulse\Core\Tests;
 
-namespace ArtPulse\Core\Tests {
+require_once __DIR__ . '/../TestStubs.php';
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
@@ -111,5 +109,4 @@ class DashboardPreviewUserTest extends TestCase {
             ['id' => 'widget_alpha', 'visible' => true],
         ], MockStorage::$user_meta[1]['ap_dashboard_layout']);
     }
-}
 }

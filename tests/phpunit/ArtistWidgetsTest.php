@@ -1,15 +1,7 @@
 <?php
-namespace {
-    require_once __DIR__ . '/../TestStubs.php';
-    if (!function_exists('sanitize_title')) {
-        function sanitize_title($title) { return preg_replace('/[^a-z0-9_\-]+/i', '-', strtolower($title)); }
-    }
-    if (!function_exists('wp_script_is')) {
-        function wp_script_is($handle, $list = 'enqueued') { return false; }
-    }
-}
+namespace ArtPulse\Tests;
 
-namespace ArtPulse\Tests {
+require_once __DIR__ . '/../TestStubs.php';
     use PHPUnit\Framework\TestCase;
     use ArtPulse\Core\DashboardWidgetRegistry;
     use ArtPulse\Widgets\Artist\ArtistRevenueSummaryWidget;
@@ -74,4 +66,3 @@ namespace ArtPulse\Tests {
             );
         }
     }
-}

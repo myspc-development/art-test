@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Reporting\Tests;
 
-use WP_REST_Request;
 use ArtPulse\Reporting\BudgetExportController;
 use ArtPulse\Admin\Tests\Stub;
 
@@ -37,7 +36,7 @@ class BudgetExportControllerTest extends \WP_UnitTestCase
 
     public function test_export_pdf_returns_pdf_response(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/budget/export');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/budget/export');
         $req->set_param('event_id', $this->event_id);
         $req->set_param('format', 'pdf');
         $res = rest_get_server()->dispatch($req);
@@ -47,7 +46,7 @@ class BudgetExportControllerTest extends \WP_UnitTestCase
 
     public function test_export_csv_returns_csv_response(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/budget/export');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/budget/export');
         $req->set_param('event_id', $this->event_id);
         $req->set_param('format', 'csv');
         $res = rest_get_server()->dispatch($req);
@@ -65,7 +64,7 @@ class BudgetExportControllerTest extends \WP_UnitTestCase
             ['estimated' => 200, 'actual' => 200],
         ]);
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/budget/export');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/budget/export');
         $req->set_param('event_ids', $this->event_id . ',' . $id2);
         $req->set_param('format', 'csv');
         $res = rest_get_server()->dispatch($req);

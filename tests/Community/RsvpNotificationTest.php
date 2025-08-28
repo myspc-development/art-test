@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Community\Tests;
 
-use WP_REST_Request;
 use ArtPulse\Rest\RsvpRestController;
 use ArtPulse\Community\NotificationManager;
 use ArtPulse\Community\NotificationHooks;
@@ -39,7 +38,7 @@ class RsvpNotificationTest extends \WP_UnitTestCase
     public function test_rsvp_creates_notification_for_organizer(): void
     {
         wp_set_current_user($this->user_id);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
