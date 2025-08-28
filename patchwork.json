@@ -1,1 +1,8 @@
-{ "redefinable-internals": ["file_exists", "filemtime", "header"] }
+{
+  "redefinable-internals": [
+    "file_exists",
+    "filemtime",
+    "header",
+    "exit"
+  ]
+}
