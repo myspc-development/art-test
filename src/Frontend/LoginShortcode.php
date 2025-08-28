@@ -91,11 +91,13 @@ class LoginShortcode
             wp_send_json_error(['message' => __('Two-factor authentication is required.', 'artpulse')]);
         }
 
-        $target = \ArtPulse\Core\Plugin::get_user_dashboard_url();
-        if (user_can($user, 'organization')) {
+        $roles = (array) $user->roles;
+        if (in_array('organization', $roles, true)) {
             $target = \ArtPulse\Core\Plugin::get_org_dashboard_url();
-        } elseif (user_can($user, 'artist')) {
+        } elseif (in_array('artist', $roles, true)) {
             $target = \ArtPulse\Core\Plugin::get_artist_dashboard_url();
+        } else {
+            $target = \ArtPulse\Core\Plugin::get_user_dashboard_url();
         }
 
         wp_send_json_success([
