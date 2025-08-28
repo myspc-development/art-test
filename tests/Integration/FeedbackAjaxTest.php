@@ -2,9 +2,17 @@
 namespace ArtPulse\Integration\Tests;
 
 use WP_Ajax_UnitTestCase;
+use AjaxTestHelper;
 
 class FeedbackAjaxTest extends WP_Ajax_UnitTestCase
 {
+    use AjaxTestHelper;
+
+    protected function tear_down(): void
+    {
+        $this->reset_superglobals();
+        parent::tear_down();
+    }
     public function test_submission_fails_without_nonce(): void
     {
         $user_id = self::factory()->user->create(['role' => 'subscriber']);
@@ -25,7 +33,7 @@ class FeedbackAjaxTest extends WP_Ajax_UnitTestCase
         $user = get_user_by('ID', $user_id);
         $user->remove_cap('read');
         wp_set_current_user($user_id);
-        $_POST['nonce'] = wp_create_nonce('ap_feedback_nonce');
+        $this->set_nonce('ap_feedback_nonce', 'nonce');
         $_POST['description'] = 'Test';
 
         try {
@@ -41,7 +49,7 @@ class FeedbackAjaxTest extends WP_Ajax_UnitTestCase
     {
         $user_id = self::factory()->user->create(['role' => 'subscriber']);
         wp_set_current_user($user_id);
-        $_POST['nonce'] = wp_create_nonce('ap_feedback_nonce');
+        $this->set_nonce('ap_feedback_nonce', 'nonce');
         $_POST['description'] = 'Great plugin';
 
         $this->_handleAjax('ap_submit_feedback');
