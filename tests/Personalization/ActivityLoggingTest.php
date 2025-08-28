@@ -14,7 +14,7 @@ class ActivityLoggingTest extends \WP_UnitTestCase
     private int $followee_id;
     private int $event_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         RecommendationEngine::install_table();

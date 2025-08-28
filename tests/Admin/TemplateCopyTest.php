@@ -11,14 +11,14 @@ class TemplateCopyTest extends WP_UnitTestCase
 {
     private string $childDir;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->childDir = sys_get_temp_dir() . '/ap-child-' . wp_generate_password(8, false, false);
         add_filter('stylesheet_directory', [$this, 'filterStylesheet'], 10, 3);
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_filter('stylesheet_directory', [$this, 'filterStylesheet'], 10);
         rm_rf($this->childDir);

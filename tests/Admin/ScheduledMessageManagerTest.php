@@ -10,7 +10,7 @@ use ArtPulse\Admin\OrgCommunicationsCenter;
  */
 class ScheduledMessageManagerTest extends WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         ScheduledMessageManager::install_scheduled_table();

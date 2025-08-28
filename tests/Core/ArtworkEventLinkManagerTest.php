@@ -9,7 +9,7 @@ class ArtworkEventLinkManagerTest extends WP_UnitTestCase
     private int $artwork_id;
     private int $event_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         ArtworkEventLinkManager::install_table();

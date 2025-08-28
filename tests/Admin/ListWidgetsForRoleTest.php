@@ -6,7 +6,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class ListWidgetsForRoleTest extends \WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $ref  = new \ReflectionClass(DashboardWidgetRegistry::class);

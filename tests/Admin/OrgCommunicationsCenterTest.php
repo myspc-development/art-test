@@ -9,7 +9,7 @@ use WP_UnitTestCase;
  */
 class OrgCommunicationsCenterTest extends WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         OrgCommunicationsCenter::install_messages_table();

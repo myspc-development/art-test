@@ -11,7 +11,7 @@ class MentionNotificationTest extends WP_UnitTestCase
     private int $author_id;
     private int $mention_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         NotificationManager::install_notifications_table();

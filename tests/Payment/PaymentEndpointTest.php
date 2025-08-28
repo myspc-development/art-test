@@ -7,7 +7,7 @@ use WP_REST_Request;
 
 class PaymentEndpointTest extends \WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         Monkey\setUp();
@@ -20,7 +20,7 @@ class PaymentEndpointTest extends \WP_UnitTestCase
         do_action('rest_api_init');
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         Monkey\tearDown();
         parent::tear_down();

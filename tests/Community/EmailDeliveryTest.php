@@ -12,7 +12,7 @@ class EmailDeliveryTest extends WP_UnitTestCase
     private array $from = [];
     private array $names = [];
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         NotificationManager::install_notifications_table();
@@ -26,7 +26,7 @@ class EmailDeliveryTest extends WP_UnitTestCase
         add_filter('wp_mail_from_name', [$this, 'capture_name'], 20);
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_filter('pre_wp_mail', [$this, 'capture_mail'], 10);
         remove_filter('pre_http_request', [$this, 'capture_request'], 10);

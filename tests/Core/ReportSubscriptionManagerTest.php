@@ -8,7 +8,7 @@ use ArtPulse\Core\ReportSubscriptionManager;
  */
 class ReportSubscriptionManagerTest extends \WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         ReportSubscriptionManager::register();

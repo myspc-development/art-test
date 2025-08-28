@@ -14,7 +14,7 @@ class SnapshotExportControllerTest extends \WP_UnitTestCase
     private int $event_id;
     private int $tier_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\DB\create_monetization_tables();

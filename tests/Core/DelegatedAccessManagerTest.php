@@ -6,7 +6,7 @@ use ArtPulse\Core\DelegatedAccessManager;
 
 class DelegatedAccessManagerTest extends WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         DelegatedAccessManager::install_table();

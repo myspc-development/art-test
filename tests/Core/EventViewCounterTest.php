@@ -10,7 +10,7 @@ class EventViewCounterTest extends WP_UnitTestCase
     private int $event_id;
     private array $logged = [];
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         EventMetrics::install_table();
@@ -23,7 +23,7 @@ class EventViewCounterTest extends WP_UnitTestCase
         }, 10, 3);
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_all_actions('ap_event_metric_logged');
         parent::tear_down();

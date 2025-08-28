@@ -12,7 +12,7 @@ class EngagementDashboardTest extends WP_UnitTestCase
     private int $admin_id;
     private int $subscriber_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->admin_id = self::factory()->user->create(['role' => 'administrator']);

@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../includes/install.php';
 
 class WebhookLogsUiTest extends WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         global $wpdb;

@@ -8,7 +8,7 @@ use WP_UnitTestCase;
 
 class PaymentHandlerTest extends WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         Monkey\setUp();
@@ -16,7 +16,7 @@ class PaymentHandlerTest extends WP_UnitTestCase
         require_once dirname(__DIR__, 2) . '/includes/payment-handler.php';
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         Monkey\tearDown();
         parent::tear_down();
