@@ -69,6 +69,9 @@ class FeedbackManager
 
     public static function handle_submission(): void
     {
+        if (!is_user_logged_in() || ! current_user_can('read')) {
+            wp_send_json_error(['message' => 'Authentication required'], 401);
+        }
         check_ajax_referer('ap_feedback_nonce', 'nonce');
 
         $type = sanitize_text_field($_POST['type'] ?? 'general');

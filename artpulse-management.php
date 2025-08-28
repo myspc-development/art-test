@@ -1299,6 +1299,9 @@ add_action('wp_ajax_nopriv_submit_react_form', 'artpulse_handle_react_form');
 
 // Dashboard preset loader via AJAX
 add_action('wp_ajax_ap_apply_preset', function () {
+    if ( ! current_user_can('read') ) {
+        wp_send_json_error(['message' => 'Forbidden'], 403);
+    }
     check_ajax_referer('ap_dashboard_nonce');
 
     $user_id = get_current_user_id();
@@ -1315,6 +1318,9 @@ add_action('wp_ajax_ap_apply_preset', function () {
 
 // Dashboard layout reset via AJAX
 add_action('wp_ajax_ap_reset_layout', function () {
+    if ( ! current_user_can('read') ) {
+        wp_send_json_error(['message' => 'Forbidden'], 403);
+    }
     check_ajax_referer('ap_dashboard_nonce');
 
     $user_id = get_current_user_id();

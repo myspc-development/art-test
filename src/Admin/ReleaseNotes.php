@@ -64,6 +64,9 @@ class ReleaseNotes
 
     public static function dismiss()
     {
+        if (! current_user_can('manage_options')) {
+            wp_send_json_error(['message' => 'Forbidden'], 403);
+        }
         check_ajax_referer('ap_release_notes', 'nonce');
         update_user_meta(get_current_user_id(), self::DISMISS_META, ARTPULSE_VERSION);
         wp_send_json_success();

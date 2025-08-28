@@ -286,12 +286,11 @@ class EditEventShortcode {
     }
 
     public static function handle_ajax() {
-        check_ajax_referer('ap_edit_event_nonce', 'nonce');
-
         $post_id = intval($_POST['post_id']);
         if (!current_user_can('edit_post', $post_id)) {
-            wp_send_json_error(['message' => 'Permission denied.']);
+            wp_send_json_error(['message' => 'Permission denied.'], 403);
         }
+        check_ajax_referer('ap_edit_event_nonce', 'nonce');
 
         $title          = sanitize_text_field($_POST['title']);
         $content        = sanitize_textarea_field($_POST['content']);
@@ -394,13 +393,13 @@ class EditEventShortcode {
     }
     
     public static function handle_ajax_delete() {
-        if (!current_user_can('delete_post', $_POST['post_id'])) {
-            wp_send_json_error(['message' => 'Permission denied.']);
+        $post_id = intval($_POST['post_id']);
+        if (!current_user_can('delete_post', $post_id)) {
+            wp_send_json_error(['message' => 'Permission denied.'], 403);
         }
 
         check_ajax_referer('ap_edit_event_nonce', 'nonce');
 
-        $post_id = intval($_POST['post_id']);
         if (get_post_type($post_id) !== 'artpulse_event') {
             wp_send_json_error(['message' => 'Invalid event.']);
         }

@@ -42,6 +42,9 @@ class DashboardFeedbackManager
 
     public static function handle(): void
     {
+        if (! current_user_can('read')) {
+            wp_send_json_error(['message' => 'Forbidden'], 403);
+        }
         check_ajax_referer('ap_dashboard_feedback', 'nonce');
         $message = sanitize_textarea_field($_POST['message'] ?? '');
         if ($message === '') {

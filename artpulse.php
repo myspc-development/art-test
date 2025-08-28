@@ -190,6 +190,9 @@ function ap_diagnostics_page_loader() {
 
 // AJAX handler for diagnostics test
 add_action('wp_ajax_ap_ajax_test', function () {
+    if ( ! current_user_can('manage_options') ) {
+        wp_send_json_error(['message' => 'Forbidden'], 403);
+    }
     check_ajax_referer('ap_diagnostics_test', 'nonce');
 
     wp_send_json_success([

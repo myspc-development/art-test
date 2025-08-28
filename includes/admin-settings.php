@@ -1,7 +1,13 @@
 <?php
 add_action('admin_init', function () {
-    register_setting('ap_settings_group', 'ap_ui_mode');
-    register_setting('ap_settings_group', 'ap_portfolio_display');
+    register_setting('ap_settings_group', 'ap_ui_mode', [
+        'type'              => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    register_setting('ap_settings_group', 'ap_portfolio_display', [
+        'type'              => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
 });
 
 // === Rejection Reason Meta Box ===

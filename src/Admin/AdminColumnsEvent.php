@@ -119,14 +119,13 @@ class AdminColumnsEvent
 
     public static function ajax_save_gallery_order(): void
     {
+        $post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            wp_send_json_error( [ 'message' => 'Permission denied.' ], 403 );
+        }
         check_ajax_referer( 'ap_event_gallery_nonce', 'nonce' );
 
-        $post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
         $order   = isset( $_POST['order'] ) ? array_map( 'intval', (array) $_POST['order'] ) : [];
-
-        if ( ! current_user_can( 'edit_post', $post_id ) ) {
-            wp_send_json_error( [ 'message' => 'Permission denied.' ] );
-        }
 
         $existing = get_post_meta( $post_id, '_ap_submission_images', true );
         if ( ! is_array( $existing ) ) {
