@@ -6,125 +6,124 @@ use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
 
-class DashboardLayoutRoleFilterTest extends TestCase
-{
-    protected function setUp(): void
-    {
-        MockStorage::$user_meta = [];
-        MockStorage::$options = [];
-        MockStorage::$users = [];
+class DashboardLayoutRoleFilterTest extends TestCase {
 
-        // Reset registry widgets
-        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
-        $prop = $ref->getProperty('widgets');
-        $prop->setAccessible(true);
-        $prop->setValue(null, []);
+	protected function setUp(): void {
+		MockStorage::$user_meta = array();
+		MockStorage::$options   = array();
+		MockStorage::$users     = array();
 
-        // Reset role widgets map
-        $ref2 = new \ReflectionClass(DashboardController::class);
-        $prop2 = $ref2->getProperty('role_widgets');
-        $prop2->setAccessible(true);
-        $prop2->setValue(null, []);
-    }
+		// Reset registry widgets
+		$ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
+		$prop = $ref->getProperty( 'widgets' );
+		$prop->setAccessible( true );
+		$prop->setValue( null, array() );
 
-    public function test_user_meta_layout_is_filtered_by_role(): void
-    {
-        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', null, ['roles' => ['member']]);
-        DashboardWidgetRegistry::register('beta', 'Beta', '', '', null, ['roles' => ['artist']]);
+		// Reset role widgets map
+		$ref2  = new \ReflectionClass( DashboardController::class );
+		$prop2 = $ref2->getProperty( 'role_widgets' );
+		$prop2->setAccessible( true );
+		$prop2->setValue( null, array() );
+	}
 
-        MockStorage::$users[1] = (object)['roles' => ['member']];
-        MockStorage::$user_meta[1]['ap_dashboard_layout'] = [
-            ['id' => 'alpha'],
-            ['id' => 'beta'],
-            ['id' => 'unknown'],
-        ];
+	public function test_user_meta_layout_is_filtered_by_role(): void {
+		DashboardWidgetRegistry::register( 'alpha', 'Alpha', '', '', null, array( 'roles' => array( 'member' ) ) );
+		DashboardWidgetRegistry::register( 'beta', 'Beta', '', '', null, array( 'roles' => array( 'artist' ) ) );
 
-        $layout = DashboardController::get_user_dashboard_layout(1);
-        $this->assertSame([['id' => 'alpha']], $layout);
-    }
+		MockStorage::$users[1]                            = (object) array( 'roles' => array( 'member' ) );
+		MockStorage::$user_meta[1]['ap_dashboard_layout'] = array(
+			array( 'id' => 'alpha' ),
+			array( 'id' => 'beta' ),
+			array( 'id' => 'unknown' ),
+		);
 
-    public function test_option_layout_is_filtered_by_role(): void
-    {
-        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', null, ['roles' => ['member']]);
-        DashboardWidgetRegistry::register('beta', 'Beta', '', '', null, ['roles' => ['artist']]);
+		$layout = DashboardController::get_user_dashboard_layout( 1 );
+		$this->assertSame( array( array( 'id' => 'alpha' ) ), $layout );
+	}
 
-        MockStorage::$users[2] = (object)['roles' => ['member']];
-        MockStorage::$options['ap_dashboard_widget_config'] = [
-            'member' => [
-                ['id' => 'alpha'],
-                ['id' => 'beta'],
-            ],
-        ];
+	public function test_option_layout_is_filtered_by_role(): void {
+		DashboardWidgetRegistry::register( 'alpha', 'Alpha', '', '', null, array( 'roles' => array( 'member' ) ) );
+		DashboardWidgetRegistry::register( 'beta', 'Beta', '', '', null, array( 'roles' => array( 'artist' ) ) );
 
-        $layout = DashboardController::get_user_dashboard_layout(2);
-        $this->assertSame([['id' => 'alpha']], $layout);
-    }
+		MockStorage::$users[2]                              = (object) array( 'roles' => array( 'member' ) );
+		MockStorage::$options['ap_dashboard_widget_config'] = array(
+			'member' => array(
+				array( 'id' => 'alpha' ),
+				array( 'id' => 'beta' ),
+			),
+		);
 
-    public function test_default_layout_is_filtered_by_role_widgets(): void
-    {
-        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', null, ['roles' => ['member']]);
-        DashboardWidgetRegistry::register('beta', 'Beta', '', '', null, ['roles' => ['artist']]);
+		$layout = DashboardController::get_user_dashboard_layout( 2 );
+		$this->assertSame( array( array( 'id' => 'alpha' ) ), $layout );
+	}
 
-        $ref = new \ReflectionClass(DashboardController::class);
-        $prop = $ref->getProperty('role_widgets');
-        $prop->setAccessible(true);
-        $prop->setValue(null, [
-            'member' => ['alpha', 'beta'],
-        ]);
+	public function test_default_layout_is_filtered_by_role_widgets(): void {
+		DashboardWidgetRegistry::register( 'alpha', 'Alpha', '', '', null, array( 'roles' => array( 'member' ) ) );
+		DashboardWidgetRegistry::register( 'beta', 'Beta', '', '', null, array( 'roles' => array( 'artist' ) ) );
 
-        MockStorage::$users[3] = (object)['roles' => ['member']];
+		$ref  = new \ReflectionClass( DashboardController::class );
+		$prop = $ref->getProperty( 'role_widgets' );
+		$prop->setAccessible( true );
+		$prop->setValue(
+			null,
+			array(
+				'member' => array( 'alpha', 'beta' ),
+			)
+		);
 
-        $layout = DashboardController::get_user_dashboard_layout(3);
-        $this->assertSame([['id' => 'alpha']], $layout);
-    }
+		MockStorage::$users[3] = (object) array( 'roles' => array( 'member' ) );
 
-    public function test_user_meta_layout_includes_widgets_without_roles(): void
-    {
-        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', null, ['roles' => ['artist']]);
-        DashboardWidgetRegistry::register('beta', 'Beta', '', '', null);
+		$layout = DashboardController::get_user_dashboard_layout( 3 );
+		$this->assertSame( array( array( 'id' => 'alpha' ) ), $layout );
+	}
 
-        MockStorage::$users[4] = (object)['roles' => ['member']];
-        MockStorage::$user_meta[4]['ap_dashboard_layout'] = [
-            ['id' => 'alpha'],
-            ['id' => 'beta'],
-        ];
+	public function test_user_meta_layout_includes_widgets_without_roles(): void {
+		DashboardWidgetRegistry::register( 'alpha', 'Alpha', '', '', null, array( 'roles' => array( 'artist' ) ) );
+		DashboardWidgetRegistry::register( 'beta', 'Beta', '', '', null );
 
-        $layout = DashboardController::get_user_dashboard_layout(4);
-        $this->assertSame([['id' => 'beta']], $layout);
-    }
+		MockStorage::$users[4]                            = (object) array( 'roles' => array( 'member' ) );
+		MockStorage::$user_meta[4]['ap_dashboard_layout'] = array(
+			array( 'id' => 'alpha' ),
+			array( 'id' => 'beta' ),
+		);
 
-    public function test_option_layout_includes_widgets_without_roles(): void
-    {
-        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', null, ['roles' => ['artist']]);
-        DashboardWidgetRegistry::register('beta', 'Beta', '', '', null);
+		$layout = DashboardController::get_user_dashboard_layout( 4 );
+		$this->assertSame( array( array( 'id' => 'beta' ) ), $layout );
+	}
 
-        MockStorage::$users[5] = (object)['roles' => ['member']];
-        MockStorage::$options['ap_dashboard_widget_config'] = [
-            'member' => [
-                ['id' => 'alpha'],
-                ['id' => 'beta'],
-            ],
-        ];
+	public function test_option_layout_includes_widgets_without_roles(): void {
+		DashboardWidgetRegistry::register( 'alpha', 'Alpha', '', '', null, array( 'roles' => array( 'artist' ) ) );
+		DashboardWidgetRegistry::register( 'beta', 'Beta', '', '', null );
 
-        $layout = DashboardController::get_user_dashboard_layout(5);
-        $this->assertSame([['id' => 'beta']], $layout);
-    }
+		MockStorage::$users[5]                              = (object) array( 'roles' => array( 'member' ) );
+		MockStorage::$options['ap_dashboard_widget_config'] = array(
+			'member' => array(
+				array( 'id' => 'alpha' ),
+				array( 'id' => 'beta' ),
+			),
+		);
 
-    public function test_default_layout_includes_widgets_without_roles(): void
-    {
-        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', null, ['roles' => ['artist']]);
-        DashboardWidgetRegistry::register('beta', 'Beta', '', '', null);
+		$layout = DashboardController::get_user_dashboard_layout( 5 );
+		$this->assertSame( array( array( 'id' => 'beta' ) ), $layout );
+	}
 
-        $ref = new \ReflectionClass(DashboardController::class);
-        $prop = $ref->getProperty('role_widgets');
-        $prop->setAccessible(true);
-        $prop->setValue(null, [
-            'member' => ['alpha', 'beta'],
-        ]);
+	public function test_default_layout_includes_widgets_without_roles(): void {
+		DashboardWidgetRegistry::register( 'alpha', 'Alpha', '', '', null, array( 'roles' => array( 'artist' ) ) );
+		DashboardWidgetRegistry::register( 'beta', 'Beta', '', '', null );
 
-        MockStorage::$users[6] = (object)['roles' => ['member']];
+		$ref  = new \ReflectionClass( DashboardController::class );
+		$prop = $ref->getProperty( 'role_widgets' );
+		$prop->setAccessible( true );
+		$prop->setValue(
+			null,
+			array(
+				'member' => array( 'alpha', 'beta' ),
+			)
+		);
 
-        $layout = DashboardController::get_user_dashboard_layout(6);
-        $this->assertSame([['id' => 'beta']], $layout);
-    }
+		MockStorage::$users[6] = (object) array( 'roles' => array( 'member' ) );
+
+		$layout = DashboardController::get_user_dashboard_layout( 6 );
+		$this->assertSame( array( array( 'id' => 'beta' ) ), $layout );
+	}
 }

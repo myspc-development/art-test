@@ -5,92 +5,90 @@ namespace ArtPulse\Core;
  * Loads widget definitions from a config file and registers them with the
  * DashboardWidgetRegistry.
  */
-class WidgetRegistryLoader
-{
-    /**
-     * Cached configuration array.
-     *
-     * @var array<string, array>
-     */
-    private static array $config = [];
+class WidgetRegistryLoader {
 
-    /**
-     * Flag to ensure widgets are only registered once.
-     */
-    private static bool $registered = false;
+	/**
+	 * Cached configuration array.
+	 *
+	 * @var array<string, array>
+	 */
+	private static array $config = array();
 
-    /**
-     * Retrieve the widget configuration.
-     *
-     * @return array<string, array>
-     */
-    public static function get_config(): array
-    {
-        if (self::$config) {
-            return self::$config;
-        }
+	/**
+	 * Flag to ensure widgets are only registered once.
+	 */
+	private static bool $registered = false;
 
-        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'config/dashboard-widgets.php';
-        $config = file_exists($path) ? include $path : [];
-        if (!is_array($config)) {
-            $config = [];
-        }
+	/**
+	 * Retrieve the widget configuration.
+	 *
+	 * @return array<string, array>
+	 */
+	public static function get_config(): array {
+		if ( self::$config ) {
+			return self::$config;
+		}
 
-        /**
-         * Allow third-parties to modify widget metadata before registration.
-         */
-        $config = apply_filters('ap_dashboard_widgets_metadata', $config);
+		$path   = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'config/dashboard-widgets.php';
+		$config = file_exists( $path ) ? include $path : array();
+		if ( ! is_array( $config ) ) {
+			$config = array();
+		}
 
-        self::$config = $config;
-        return self::$config;
-    }
+		/**
+		 * Allow third-parties to modify widget metadata before registration.
+		 */
+		$config = apply_filters( 'ap_dashboard_widgets_metadata', $config );
 
-    /**
-     * Register widgets defined in the configuration file.
-     */
-    public static function register_widgets(): void
-    {
-        if (self::$registered) {
-            return;
-        }
-        self::$registered = true;
+		self::$config = $config;
+		return self::$config;
+	}
 
-        foreach (self::get_config() as $id => $def) {
-            $id = sanitize_key($id);
-            if (!$id) {
-                continue;
-            }
+	/**
+	 * Register widgets defined in the configuration file.
+	 */
+	public static function register_widgets(): void {
+		if ( self::$registered ) {
+			return;
+		}
+		self::$registered = true;
 
-            $label = $def['label'] ?? '';
-            $roles = $def['roles'] ?? [];
+		foreach ( self::get_config() as $id => $def ) {
+			$id = sanitize_key( $id );
+			if ( ! $id ) {
+				continue;
+			}
 
-            // Determine the render callback.
-            $callback = null;
-            if (isset($def['class']) && is_string($def['class']) && method_exists($def['class'], 'render')) {
-                $callback = [$def['class'], 'render'];
-            } elseif (isset($def['callback'])) {
-                $callback = $def['callback'];
-            }
+			$label = $def['label'] ?? '';
+			$roles = $def['roles'] ?? array();
 
-            if (!$label || !is_array($roles) || !$callback) {
-                // Skip invalid widget definitions.
-                continue;
-            }
+			// Determine the render callback.
+			$callback = null;
+			if ( isset( $def['class'] ) && is_string( $def['class'] ) && method_exists( $def['class'], 'render' ) ) {
+				$callback = array( $def['class'], 'render' );
+			} elseif ( isset( $def['callback'] ) ) {
+				$callback = $def['callback'];
+			}
 
-            if (DashboardWidgetRegistry::exists($id)) {
-                // Skip if already registered elsewhere.
-                continue;
-            }
+			if ( ! $label || ! is_array( $roles ) || ! $callback ) {
+				// Skip invalid widget definitions.
+				continue;
+			}
 
-            $icon        = $def['icon'] ?? '';
-            $description = $def['description'] ?? '';
+			if ( DashboardWidgetRegistry::exists( $id ) ) {
+				// Skip if already registered elsewhere.
+				continue;
+			}
 
-            // Pass through additional optional configuration fields.
-            $options = $def;
-            unset($options['class'], $options['label'], $options['description'], $options['icon'], $options['callback']);
-            $options['roles'] = $roles;
+			$icon        = $def['icon'] ?? '';
+			$description = $def['description'] ?? '';
 
-            DashboardWidgetRegistry::register($id, $label, $icon, $description, $callback, $options);
-        }
-    }
+			// Pass through additional optional configuration fields.
+			$options = $def;
+			unset( $options['class'], $options['label'], $options['description'], $options['icon'], $options['callback'] );
+			$options['roles'] = $roles;
+
+			DashboardWidgetRegistry::register( $id, $label, $icon, $description, $callback, $options );
+		}
+	}
 }

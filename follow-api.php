@@ -1,26 +1,38 @@
 <?php
 use ArtPulse\Community\ActivityFeed;
 
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-add_action('rest_api_init', function () {
-    if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/follow/feed')) {
-        register_rest_route(ARTPULSE_API_NAMESPACE, '/follow/feed', [
-        'methods'             => 'GET',
-        'callback'            => function (WP_REST_Request $request) {
-            $limit = max(1, intval($request->get_param('limit') ?: 20));
-            $items = ActivityFeed::get_feed(get_current_user_id(), $limit);
-            return rest_ensure_response($items);
-        },
-        'permission_callback' => function () {
-            if (!current_user_can('read')) {
-                return new WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-            }
-            return true;
-        },
-        'args'                => [ 'limit' => [ 'type' => 'integer', 'default' => 20 ] ],
-    ]);
-    }
-});
+add_action(
+	'rest_api_init',
+	function () {
+		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/follow/feed' ) ) {
+			register_rest_route(
+				ARTPULSE_API_NAMESPACE,
+				'/follow/feed',
+				array(
+					'methods'             => 'GET',
+					'callback'            => function ( WP_REST_Request $request ) {
+						$limit = max( 1, intval( $request->get_param( 'limit' ) ?: 20 ) );
+						$items = ActivityFeed::get_feed( get_current_user_id(), $limit );
+						return rest_ensure_response( $items );
+					},
+					'permission_callback' => function () {
+						if ( ! current_user_can( 'read' ) ) {
+							return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
+						}
+						return true;
+					},
+					'args'                => array(
+						'limit' => array(
+							'type'    => 'integer',
+							'default' => 20,
+						),
+					),
+				)
+			);
+		}
+	}
+);

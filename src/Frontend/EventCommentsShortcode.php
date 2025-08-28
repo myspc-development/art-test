@@ -1,46 +1,47 @@
 <?php
 namespace ArtPulse\Frontend;
 
-class EventCommentsShortcode
-{
-    public static function register(): void
-    {
-        \ArtPulse\Core\ShortcodeRegistry::register('ap_event_comments', 'Event Comments', [self::class, 'render']);
-        add_action('wp_enqueue_scripts', [self::class, 'enqueue_styles']);
-    }
+class EventCommentsShortcode {
 
-    public static function enqueue_styles(): void
-    {
-        if (function_exists('ap_enqueue_global_styles')) {
-            ap_enqueue_global_styles();
-        }
-    }
+	public static function register(): void {
+		\ArtPulse\Core\ShortcodeRegistry::register( 'ap_event_comments', 'Event Comments', array( self::class, 'render' ) );
+		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_styles' ) );
+	}
 
-    public static function render($atts = []): string
-    {
-        $atts = shortcode_atts([
-            'id' => get_the_ID(),
-        ], $atts, 'ap_event_comments');
+	public static function enqueue_styles(): void {
+		if ( function_exists( 'ap_enqueue_global_styles' ) ) {
+			ap_enqueue_global_styles();
+		}
+	}
 
-        $event_id = intval($atts['id']);
-        if (!$event_id) {
-            return '';
-        }
+	public static function render( $atts = array() ): string {
+		$atts = shortcode_atts(
+			array(
+				'id' => get_the_ID(),
+			),
+			$atts,
+			'ap_event_comments'
+		);
 
-        ob_start();
-        ?>
-        <div class="ap-event-comments" data-event-id="<?= esc_attr($event_id); ?>">
-            <ul class="ap-comment-list" role="status" aria-live="polite"></ul>
-            <?php if (is_user_logged_in()): ?>
-                <form class="ap-comment-form">
-                    <textarea name="content" required></textarea>
-                    <button type="submit"><?php esc_html_e('Submit', 'artpulse'); ?></button>
-                </form>
-            <?php else: ?>
-                <p><?php esc_html_e('Please log in to comment.', 'artpulse'); ?></p>
-            <?php endif; ?>
-        </div>
-        <?php
-        return ob_get_clean();
-    }
+		$event_id = intval( $atts['id'] );
+		if ( ! $event_id ) {
+			return '';
+		}
+
+		ob_start();
+		?>
+		<div class="ap-event-comments" data-event-id="<?php echo esc_attr( $event_id ); ?>">
+			<ul class="ap-comment-list" role="status" aria-live="polite"></ul>
+			<?php if ( is_user_logged_in() ) : ?>
+				<form class="ap-comment-form">
+					<textarea name="content" required></textarea>
+					<button type="submit"><?php esc_html_e( 'Submit', 'artpulse' ); ?></button>
+				</form>
+			<?php else : ?>
+				<p><?php esc_html_e( 'Please log in to comment.', 'artpulse' ); ?></p>
+			<?php endif; ?>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
 }

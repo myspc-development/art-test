@@ -1,94 +1,94 @@
 <?php
 namespace ArtPulse\Frontend;
 
-class EventRsvpHandler
-{
-    public static function register(): void
-    {
-        add_action('admin_post_ap_rsvp_event', [self::class, 'handle']);
-        add_action('admin_post_nopriv_ap_rsvp_event', [self::class, 'handle']);
-    }
+class EventRsvpHandler {
 
-    public static function handle(): void
-    {
-        if (!is_user_logged_in()) {
-            return;
-        }
+	public static function register(): void {
+		add_action( 'admin_post_ap_rsvp_event', array( self::class, 'handle' ) );
+		add_action( 'admin_post_nopriv_ap_rsvp_event', array( self::class, 'handle' ) );
+	}
 
-        if (!check_admin_referer('ap_rsvp_event')) {
-            wp_die(__('Invalid nonce', 'artpulse'));
-        }
+	public static function handle(): void {
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
 
-        $event_id = isset($_POST['event_id']) ? intval($_POST['event_id']) : 0;
-        if (!$event_id) {
-            return;
-        }
+		if ( ! check_admin_referer( 'ap_rsvp_event' ) ) {
+			wp_die( __( 'Invalid nonce', 'artpulse' ) );
+		}
 
-        $enabled = get_post_meta($event_id, 'event_rsvp_enabled', true);
-        if (!$enabled) {
-            wp_safe_redirect(get_permalink($event_id));
-            exit;
-        }
+		$event_id = isset( $_POST['event_id'] ) ? intval( $_POST['event_id'] ) : 0;
+		if ( ! $event_id ) {
+			return;
+		}
 
-        $user_id = get_current_user_id();
-        $existing = get_post_meta($event_id, 'event_rsvp_list', true);
-        if (!is_array($existing)) {
-            $existing = [];
-        }
+		$enabled = get_post_meta( $event_id, 'event_rsvp_enabled', true );
+		if ( ! $enabled ) {
+			wp_safe_redirect( get_permalink( $event_id ) );
+			exit;
+		}
 
-        if (!in_array($user_id, $existing, true)) {
-            $existing[] = $user_id;
-            update_post_meta($event_id, 'event_rsvp_list', $existing);
-            do_action('ap_event_rsvp_added', $event_id, get_current_user_id());
-        }
+		$user_id  = get_current_user_id();
+		$existing = get_post_meta( $event_id, 'event_rsvp_list', true );
+		if ( ! is_array( $existing ) ) {
+			$existing = array();
+		}
 
-        wp_safe_redirect(get_permalink($event_id));
-        exit;
-    }
+		if ( ! in_array( $user_id, $existing, true ) ) {
+			$existing[] = $user_id;
+			update_post_meta( $event_id, 'event_rsvp_list', $existing );
+			do_action( 'ap_event_rsvp_added', $event_id, get_current_user_id() );
+		}
 
-    public static function get_rsvp_summary_for_user($user_id): array
-    {
-        $event_ids = get_user_meta($user_id, 'ap_rsvp_events', true);
-        if (!is_array($event_ids)) {
-            $event_ids = [];
-        }
+		wp_safe_redirect( get_permalink( $event_id ) );
+		exit;
+	}
 
-        $going      = 0;
-        $interested = 0;
-        $trend_map  = [];
+	public static function get_rsvp_summary_for_user( $user_id ): array {
+		$event_ids = get_user_meta( $user_id, 'ap_rsvp_events', true );
+		if ( ! is_array( $event_ids ) ) {
+			$event_ids = array();
+		}
 
-        $today = strtotime('today');
+		$going      = 0;
+		$interested = 0;
+		$trend_map  = array();
 
-        foreach ($event_ids as $eid) {
-            $date = get_post_meta($eid, '_ap_event_date', true);
-            $ts   = $date ? strtotime($date) : false;
-            if ($ts !== false && $ts >= $today) {
-                $going++;
-            } else {
-                $interested++;
-            }
+		$today = strtotime( 'today' );
 
-            $history = get_post_meta($eid, 'event_rsvp_history', true);
-            if (is_array($history)) {
-                foreach ($history as $day => $count) {
-                    if (!isset($trend_map[$day])) {
-                        $trend_map[$day] = 0;
-                    }
-                    $trend_map[$day] += (int) $count;
-                }
-            }
-        }
+		foreach ( $event_ids as $eid ) {
+			$date = get_post_meta( $eid, '_ap_event_date', true );
+			$ts   = $date ? strtotime( $date ) : false;
+			if ( $ts !== false && $ts >= $today ) {
+				++$going;
+			} else {
+				++$interested;
+			}
 
-        ksort($trend_map);
-        $trend = [];
-        foreach ($trend_map as $day => $count) {
-            $trend[] = ['date' => $day, 'count' => $count];
-        }
+			$history = get_post_meta( $eid, 'event_rsvp_history', true );
+			if ( is_array( $history ) ) {
+				foreach ( $history as $day => $count ) {
+					if ( ! isset( $trend_map[ $day ] ) ) {
+						$trend_map[ $day ] = 0;
+					}
+					$trend_map[ $day ] += (int) $count;
+				}
+			}
+		}
 
-        return [
-            'going'      => $going,
-            'interested' => $interested,
-            'trend'      => $trend,
-        ];
-    }
+		ksort( $trend_map );
+		$trend = array();
+		foreach ( $trend_map as $day => $count ) {
+			$trend[] = array(
+				'date'  => $day,
+				'count' => $count,
+			);
+		}
+
+		return array(
+			'going'      => $going,
+			'interested' => $interested,
+			'trend'      => $trend,
+		);
+	}
 }

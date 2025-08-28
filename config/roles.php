@@ -1,15 +1,15 @@
 <?php
-return [
-    'admin' => [
-        'name' => 'Org Admin',
-        'description' => 'Full access'
-    ],
-    'curator' => [
-        'name' => 'Curator',
-        'description' => 'Manages exhibitions'
-    ],
-    'editor' => [
-        'name' => 'Content Editor',
-        'description' => 'Edits org posts'
-    ],
-];
+return array(
+	'admin'   => array(
+		'name'        => 'Org Admin',
+		'description' => 'Full access',
+	),
+	'curator' => array(
+		'name'        => 'Curator',
+		'description' => 'Manages exhibitions',
+	),
+	'editor'  => array(
+		'name'        => 'Content Editor',
+		'description' => 'Edits org posts',
+	),
+);

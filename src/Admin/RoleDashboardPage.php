@@ -7,36 +7,33 @@ use ArtPulse\Core\DashboardController;
 /**
  * Registers a hidden wp-admin page for the role-based dashboard.
  */
-class RoleDashboardPage
-{
-    public static function register(): void
-    {
-        add_action('admin_menu', [self::class, 'add_page']);
-    }
+class RoleDashboardPage {
 
-    public static function add_page(): void
-    {
-        add_submenu_page(
-            null,
-            __('Role Dashboard', 'artpulse'),
-            __('Role Dashboard', 'artpulse'),
-            'read',
-            'dashboard-role',
-            [self::class, 'render']
-        );
-    }
+	public static function register(): void {
+		add_action( 'admin_menu', array( self::class, 'add_page' ) );
+	}
 
-    public static function render(): void
-    {
-        $role = DashboardController::get_role(get_current_user_id());
-        ShortcodeRoleDashboard::enqueue_assets($role);
-        // Enqueue dashboard assets only when viewing the role dashboard page.
-        // Localize REST data + nonce so the frontend can sync layout, e.g.:
-        // wp_localize_script('ap-dashboard-js', 'AP_DASH', [
-        //   'restBase' => esc_url_raw( rest_url( 'artpulse/v1' ) ),
-        //   'nonce'    => wp_create_nonce( 'wp_rest' ),
-        //   'role'     => $role_for_current_user,
-        // ]);
-        \ap_render_dashboard();
-    }
+	public static function add_page(): void {
+		add_submenu_page(
+			null,
+			__( 'Role Dashboard', 'artpulse' ),
+			__( 'Role Dashboard', 'artpulse' ),
+			'read',
+			'dashboard-role',
+			array( self::class, 'render' )
+		);
+	}
+
+	public static function render(): void {
+		$role = DashboardController::get_role( get_current_user_id() );
+		ShortcodeRoleDashboard::enqueue_assets( $role );
+		// Enqueue dashboard assets only when viewing the role dashboard page.
+		// Localize REST data + nonce so the frontend can sync layout, e.g.:
+		// wp_localize_script('ap-dashboard-js', 'AP_DASH', [
+		// 'restBase' => esc_url_raw( rest_url( 'artpulse/v1' ) ),
+		// 'nonce'    => wp_create_nonce( 'wp_rest' ),
+		// 'role'     => $role_for_current_user,
+		// ]);
+		\ap_render_dashboard();
+	}
 }

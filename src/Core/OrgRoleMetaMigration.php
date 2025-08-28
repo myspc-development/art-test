@@ -1,46 +1,53 @@
 <?php
 namespace ArtPulse\Core;
 
-class OrgRoleMetaMigration
-{
-    public static function maybe_migrate(): void
-    {
-        if (get_option('ap_org_roles_table_migrated')) {
-            return;
-        }
+class OrgRoleMetaMigration {
 
-        $users = get_users([
-            'fields'     => 'ids',
-            'meta_query' => [
-                'relation' => 'OR',
-                ['key' => 'ap_org_role', 'compare' => 'EXISTS'],
-                ['key' => 'ap_org_roles', 'compare' => 'EXISTS'],
-            ],
-        ]);
+	public static function maybe_migrate(): void {
+		if ( get_option( 'ap_org_roles_table_migrated' ) ) {
+			return;
+		}
 
-        foreach ($users as $uid) {
-            $org_id = absint(get_user_meta($uid, 'ap_organization_id', true));
-            if (!$org_id) {
-                continue;
-            }
+		$users = get_users(
+			array(
+				'fields'     => 'ids',
+				'meta_query' => array(
+					'relation' => 'OR',
+					array(
+						'key'     => 'ap_org_role',
+						'compare' => 'EXISTS',
+					),
+					array(
+						'key'     => 'ap_org_roles',
+						'compare' => 'EXISTS',
+					),
+				),
+			)
+		);
 
-            $roles = get_user_meta($uid, 'ap_org_roles', true);
-            if (is_string($roles)) {
-                $roles = [$roles];
-            }
-            if (!is_array($roles) || empty($roles)) {
-                $role = get_user_meta($uid, 'ap_org_role', true);
-                $roles = $role ? [$role] : [];
-            }
+		foreach ( $users as $uid ) {
+			$org_id = absint( get_user_meta( $uid, 'ap_organization_id', true ) );
+			if ( ! $org_id ) {
+				continue;
+			}
 
-            if (!empty($roles)) {
-                MultiOrgRoles::assign_roles($uid, $org_id, $roles);
-            }
+			$roles = get_user_meta( $uid, 'ap_org_roles', true );
+			if ( is_string( $roles ) ) {
+				$roles = array( $roles );
+			}
+			if ( ! is_array( $roles ) || empty( $roles ) ) {
+				$role  = get_user_meta( $uid, 'ap_org_role', true );
+				$roles = $role ? array( $role ) : array();
+			}
 
-            delete_user_meta($uid, 'ap_org_role');
-            delete_user_meta($uid, 'ap_org_roles');
-        }
+			if ( ! empty( $roles ) ) {
+				MultiOrgRoles::assign_roles( $uid, $org_id, $roles );
+			}
 
-        update_option('ap_org_roles_table_migrated', 1);
-    }
+			delete_user_meta( $uid, 'ap_org_role' );
+			delete_user_meta( $uid, 'ap_org_roles' );
+		}
+
+		update_option( 'ap_org_roles_table_migrated', 1 );
+	}
 }

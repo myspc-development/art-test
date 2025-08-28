@@ -3,14 +3,17 @@ namespace ArtPulse\Frontend;
 
 require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
 
-if (!function_exists(__NAMESPACE__ . '\get_user_meta')) {
-function get_user_meta($uid,$key,$single=false){ return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$user_meta[$uid][$key] ?? ''; }
+if ( ! function_exists( __NAMESPACE__ . '\get_user_meta' ) ) {
+	function get_user_meta( $uid, $key, $single = false ) {
+		return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$user_meta[ $uid ][ $key ] ?? ''; }
 }
-if (!function_exists(__NAMESPACE__ . '\get_terms')) {
-function get_terms($tax,$args){ return []; }
+if ( ! function_exists( __NAMESPACE__ . '\get_terms' ) ) {
+	function get_terms( $tax, $args ) {
+		return array(); }
 }
-if (!function_exists(__NAMESPACE__ . '\current_user_can')) {
-function current_user_can($cap){ return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$caps[$cap] ?? false; }
+if ( ! function_exists( __NAMESPACE__ . '\current_user_can' ) ) {
+	function current_user_can( $cap ) {
+		return \ArtPulse\Frontend\Tests\OrganizationDashboardShortcodeTest::$caps[ $cap ] ?? false; }
 }
 
 namespace ArtPulse\Frontend\Tests;
@@ -18,41 +21,37 @@ namespace ArtPulse\Frontend\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Frontend\OrganizationDashboardShortcode;
 
-class OrganizationDashboardShortcodeTest extends TestCase
-{
-    public static array $user_meta = [];
-    public static array $post_meta = [];
-    public static array $caps = [];
+class OrganizationDashboardShortcodeTest extends TestCase {
 
-    protected function setUp(): void
-    {
-        self::$user_meta = [];
-        self::$post_meta = [];
-        self::$caps = [];
-    }
+	public static array $user_meta = array();
+	public static array $post_meta = array();
+	public static array $caps      = array();
 
-    public function test_dashboard_renders_grid(): void
-    {
-        self::$user_meta[1]['ap_organization_id'] = 10;
-        $html = OrganizationDashboardShortcode::render([]);
-        $this->assertStringContainsString('ap-dashboard-grid', $html);
-    }
+	protected function setUp(): void {
+		self::$user_meta = array();
+		self::$post_meta = array();
+		self::$caps      = array();
+	}
 
-    public function test_analytics_hidden_without_cap(): void
-    {
-        self::$user_meta[1]['ap_organization_id'] = 10;
-        self::$caps['view_analytics'] = false;
+	public function test_dashboard_renders_grid(): void {
+		self::$user_meta[1]['ap_organization_id'] = 10;
+		$html                                     = OrganizationDashboardShortcode::render( array() );
+		$this->assertStringContainsString( 'ap-dashboard-grid', $html );
+	}
 
-        $html = OrganizationDashboardShortcode::render([]);
-        $this->assertStringNotContainsString('Organization Analytics', $html);
-    }
+	public function test_analytics_hidden_without_cap(): void {
+		self::$user_meta[1]['ap_organization_id'] = 10;
+		self::$caps['view_analytics']             = false;
 
-    public function test_analytics_visible_with_cap(): void
-    {
-        self::$user_meta[1]['ap_organization_id'] = 10;
-        self::$caps['view_analytics'] = true;
+		$html = OrganizationDashboardShortcode::render( array() );
+		$this->assertStringNotContainsString( 'Organization Analytics', $html );
+	}
 
-        $html = OrganizationDashboardShortcode::render([]);
-        $this->assertStringContainsString('Organization Analytics', $html);
-    }
+	public function test_analytics_visible_with_cap(): void {
+		self::$user_meta[1]['ap_organization_id'] = 10;
+		self::$caps['view_analytics']             = true;
+
+		$html = OrganizationDashboardShortcode::render( array() );
+		$this->assertStringContainsString( 'Organization Analytics', $html );
+	}
 }

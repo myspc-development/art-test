@@ -6,31 +6,28 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
  * Debug widget displaying widget status information.
  */
-class WidgetStatusPanelWidget
-{
-    public static function register(): void
-    {
-        if (!current_user_can('manage_options')) {
-            return;
-        }
+class WidgetStatusPanelWidget {
 
-        add_action('artpulse_register_dashboard_widget', [self::class, 'register_widget']);
-    }
+	public static function register(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 
-    public static function register_widget(): void
-    {
-        DashboardWidgetRegistry::register(
-            'ap_widget_status_panel',
-            __('Widget Status Panel', 'artpulse'),
-            'info',
-            __('Registered and missing widgets.', 'artpulse'),
-            [self::class, 'render'],
-            ['roles' => ['administrator']]
-        );
-    }
+		add_action( 'artpulse_register_dashboard_widget', array( self::class, 'register_widget' ) );
+	}
 
-    public static function render(): void
-    {
-        echo '<p>' . esc_html__('Widget status placeholder.', 'artpulse') . '</p>';
-    }
+	public static function register_widget(): void {
+		DashboardWidgetRegistry::register(
+			'ap_widget_status_panel',
+			__( 'Widget Status Panel', 'artpulse' ),
+			'info',
+			__( 'Registered and missing widgets.', 'artpulse' ),
+			array( self::class, 'render' ),
+			array( 'roles' => array( 'administrator' ) )
+		);
+	}
+
+	public static function render(): void {
+		echo '<p>' . esc_html__( 'Widget status placeholder.', 'artpulse' ) . '</p>';
+	}
 }

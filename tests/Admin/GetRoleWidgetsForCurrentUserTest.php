@@ -8,45 +8,63 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
 use PHPUnit\Framework\TestCase;
 
-class GetRoleWidgetsForCurrentUserTest extends TestCase
-{
-    protected function setUp(): void
-    {
-        parent::setUp();
+class GetRoleWidgetsForCurrentUserTest extends TestCase {
 
-        $ref  = new \ReflectionClass(DashboardWidgetRegistry::class);
-        $prop = $ref->getProperty('widgets');
-        $prop->setAccessible(true);
-        $prop->setValue(null, []);
-        if ($ref->hasProperty('builder_widgets')) {
-            $b = $ref->getProperty('builder_widgets');
-            $b->setAccessible(true);
-            $b->setValue(null, []);
-        }
+	protected function setUp(): void {
+		parent::setUp();
 
-        MockStorage::$current_roles = [];
-    }
+		$ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
+		$prop = $ref->getProperty( 'widgets' );
+		$prop->setAccessible( true );
+		$prop->setValue( null, array() );
+		if ( $ref->hasProperty( 'builder_widgets' ) ) {
+			$b = $ref->getProperty( 'builder_widgets' );
+			$b->setAccessible( true );
+			$b->setValue( null, array() );
+		}
 
-    public function test_union_of_widgets_for_all_roles(): void
-    {
-        DashboardWidgetRegistry::register('widget_a', 'Widget A', '', '', static function () {}, [
-            'roles' => ['subscriber'],
-        ]);
-        DashboardWidgetRegistry::register('widget_b', 'Widget B', '', '', static function () {}, [
-            'roles' => ['editor'],
-        ]);
-        DashboardWidgetRegistry::register('widget_common', 'Widget Common', '', '', static function () {}, [
-            'roles' => ['subscriber', 'editor'],
-        ]);
+		MockStorage::$current_roles = array();
+	}
 
-        MockStorage::$current_roles = ['subscriber', 'editor'];
+	public function test_union_of_widgets_for_all_roles(): void {
+		DashboardWidgetRegistry::register(
+			'widget_a',
+			'Widget A',
+			'',
+			'',
+			static function () {},
+			array(
+				'roles' => array( 'subscriber' ),
+			)
+		);
+		DashboardWidgetRegistry::register(
+			'widget_b',
+			'Widget B',
+			'',
+			'',
+			static function () {},
+			array(
+				'roles' => array( 'editor' ),
+			)
+		);
+		DashboardWidgetRegistry::register(
+			'widget_common',
+			'Widget Common',
+			'',
+			'',
+			static function () {},
+			array(
+				'roles' => array( 'subscriber', 'editor' ),
+			)
+		);
 
-        $widgets = DashboardWidgetTools::get_role_widgets_for_current_user();
-        $ids     = array_map(fn($w) => $w['id'], $widgets);
-        sort($ids);
+		MockStorage::$current_roles = array( 'subscriber', 'editor' );
 
-        $this->assertSame(['widget_a', 'widget_b', 'widget_common'], $ids);
-        $this->assertCount(3, $widgets);
-    }
+		$widgets = DashboardWidgetTools::get_role_widgets_for_current_user();
+		$ids     = array_map( fn( $w ) => $w['id'], $widgets );
+		sort( $ids );
+
+		$this->assertSame( array( 'widget_a', 'widget_b', 'widget_common' ), $ids );
+		$this->assertCount( 3, $widgets );
+	}
 }
-

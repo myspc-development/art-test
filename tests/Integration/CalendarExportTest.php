@@ -3,140 +3,161 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Integration\CalendarExport;
 
-class CalendarExportTest extends \WP_UnitTestCase
-{
-    public function set_up()
-    {
-        parent::set_up();
-        CalendarExport::register();
-        do_action('init');
-    }
+class CalendarExportTest extends \WP_UnitTestCase {
 
-    public function test_event_calendar_export_builds_ics(): void
-    {
-        $id = wp_insert_post([
-            'post_title'  => 'Export Event',
-            'post_type'   => 'artpulse_event',
-            'post_status' => 'publish',
-            'post_content'=> 'An event description.',
-        ]);
-        update_post_meta($id, 'event_start_date', '2030-01-01');
-        update_post_meta($id, 'event_end_date', '2030-01-02');
-        update_post_meta($id, 'venue_name', 'Main Hall');
+	public function set_up() {
+		parent::set_up();
+		CalendarExport::register();
+		do_action( 'init' );
+	}
 
-        $ref    = new \ReflectionMethod(CalendarExport::class, 'build_event_ics');
-        $ref->setAccessible(true);
-        $ics    = $ref->invoke(null, get_post($id));
+	public function test_event_calendar_export_builds_ics(): void {
+		$id = wp_insert_post(
+			array(
+				'post_title'   => 'Export Event',
+				'post_type'    => 'artpulse_event',
+				'post_status'  => 'publish',
+				'post_content' => 'An event description.',
+			)
+		);
+		update_post_meta( $id, 'event_start_date', '2030-01-01' );
+		update_post_meta( $id, 'event_end_date', '2030-01-02' );
+		update_post_meta( $id, 'venue_name', 'Main Hall' );
 
-        $this->assertStringContainsString('BEGIN:VCALENDAR', $ics);
-        $this->assertStringContainsString('SUMMARY:Export Event', $ics);
-        $this->assertStringContainsString('VTIMEZONE', $ics);
-        $this->assertStringContainsString('DTSTART;TZID=', $ics);
-        $this->assertStringContainsString('DESCRIPTION:An event description.', $ics);
-        $this->assertStringContainsString('LOCATION:Main Hall', $ics);
-        $this->assertStringContainsString('URL:' . get_permalink($id), $ics);
+		$ref = new \ReflectionMethod( CalendarExport::class, 'build_event_ics' );
+		$ref->setAccessible( true );
+		$ics = $ref->invoke( null, get_post( $id ) );
 
-        $filename = sanitize_title('Export Event') . '.ics';
-        $this->assertSame('export-event.ics', $filename);
-    }
+		$this->assertStringContainsString( 'BEGIN:VCALENDAR', $ics );
+		$this->assertStringContainsString( 'SUMMARY:Export Event', $ics );
+		$this->assertStringContainsString( 'VTIMEZONE', $ics );
+		$this->assertStringContainsString( 'DTSTART;TZID=', $ics );
+		$this->assertStringContainsString( 'DESCRIPTION:An event description.', $ics );
+		$this->assertStringContainsString( 'LOCATION:Main Hall', $ics );
+		$this->assertStringContainsString( 'URL:' . get_permalink( $id ), $ics );
 
-    public function test_org_calendar_export_builds_ics_for_events(): void
-    {
-        $org = wp_insert_post([
-            'post_title'  => 'My Org',
-            'post_type'   => 'artpulse_org',
-            'post_status' => 'publish',
-        ]);
-        $id1 = wp_insert_post([
-            'post_title'  => 'First Event',
-            'post_type'   => 'artpulse_event',
-            'post_status' => 'publish',
-            'post_content'=> 'First description',
-            'meta_input'  => ['_ap_event_organization' => $org, 'event_start_date' => '2031-01-01'],
-        ]);
-        $id2 = wp_insert_post([
-            'post_title'  => 'Second Event',
-            'post_type'   => 'artpulse_event',
-            'post_status' => 'publish',
-            'post_content'=> 'Second description',
-            'meta_input'  => ['_ap_event_organization' => $org, 'event_start_date' => '2031-02-01'],
-        ]);
+		$filename = sanitize_title( 'Export Event' ) . '.ics';
+		$this->assertSame( 'export-event.ics', $filename );
+	}
 
-        $events = get_posts([
-            'post_type'      => 'artpulse_event',
-            'post_status'    => 'publish',
-            'posts_per_page' => -1,
-            'meta_key'       => '_ap_event_organization',
-            'meta_value'     => $org,
-        ]);
+	public function test_org_calendar_export_builds_ics_for_events(): void {
+		$org = wp_insert_post(
+			array(
+				'post_title'  => 'My Org',
+				'post_type'   => 'artpulse_org',
+				'post_status' => 'publish',
+			)
+		);
+		$id1 = wp_insert_post(
+			array(
+				'post_title'   => 'First Event',
+				'post_type'    => 'artpulse_event',
+				'post_status'  => 'publish',
+				'post_content' => 'First description',
+				'meta_input'   => array(
+					'_ap_event_organization' => $org,
+					'event_start_date'       => '2031-01-01',
+				),
+			)
+		);
+		$id2 = wp_insert_post(
+			array(
+				'post_title'   => 'Second Event',
+				'post_type'    => 'artpulse_event',
+				'post_status'  => 'publish',
+				'post_content' => 'Second description',
+				'meta_input'   => array(
+					'_ap_event_organization' => $org,
+					'event_start_date'       => '2031-02-01',
+				),
+			)
+		);
 
-        $ref = new \ReflectionMethod(CalendarExport::class, 'build_org_ics');
-        $ref->setAccessible(true);
-        $ics = $ref->invoke(null, $events);
+		$events = get_posts(
+			array(
+				'post_type'      => 'artpulse_event',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'meta_key'       => '_ap_event_organization',
+				'meta_value'     => $org,
+			)
+		);
 
-        $this->assertStringContainsString('BEGIN:VCALENDAR', $ics);
-        $this->assertStringContainsString('SUMMARY:First Event', $ics);
-        $this->assertStringContainsString('SUMMARY:Second Event', $ics);
-        $this->assertStringContainsString('END:VCALENDAR', $ics);
+		$ref = new \ReflectionMethod( CalendarExport::class, 'build_org_ics' );
+		$ref->setAccessible( true );
+		$ics = $ref->invoke( null, $events );
 
-        $filename = 'organization-' . $org . '.ics';
-        $this->assertSame('organization-' . $org . '.ics', $filename);
-    }
+		$this->assertStringContainsString( 'BEGIN:VCALENDAR', $ics );
+		$this->assertStringContainsString( 'SUMMARY:First Event', $ics );
+		$this->assertStringContainsString( 'SUMMARY:Second Event', $ics );
+		$this->assertStringContainsString( 'END:VCALENDAR', $ics );
 
-    public function test_artist_calendar_export_builds_ics_for_events(): void
-    {
-        $artist = self::factory()->user->create(['role' => 'author']);
-        $id = wp_insert_post([
-            'post_title'  => 'Artist Event',
-            'post_type'   => 'artpulse_event',
-            'post_status' => 'publish',
-            'post_author' => $artist,
-            'meta_input'  => ['event_start_date' => '2032-03-01'],
-        ]);
+		$filename = 'organization-' . $org . '.ics';
+		$this->assertSame( 'organization-' . $org . '.ics', $filename );
+	}
 
-        $events = get_posts([
-            'post_type'      => 'artpulse_event',
-            'post_status'    => 'publish',
-            'posts_per_page' => -1,
-            'author'         => $artist,
-        ]);
+	public function test_artist_calendar_export_builds_ics_for_events(): void {
+		$artist = self::factory()->user->create( array( 'role' => 'author' ) );
+		$id     = wp_insert_post(
+			array(
+				'post_title'  => 'Artist Event',
+				'post_type'   => 'artpulse_event',
+				'post_status' => 'publish',
+				'post_author' => $artist,
+				'meta_input'  => array( 'event_start_date' => '2032-03-01' ),
+			)
+		);
 
-        $ref = new \ReflectionMethod(CalendarExport::class, 'build_artist_ics');
-        $ref->setAccessible(true);
-        $ics = $ref->invoke(null, $events);
+		$events = get_posts(
+			array(
+				'post_type'      => 'artpulse_event',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'author'         => $artist,
+			)
+		);
 
-        $this->assertStringContainsString('BEGIN:VCALENDAR', $ics);
-        $this->assertStringContainsString('SUMMARY:Artist Event', $ics);
-        $this->assertStringContainsString('END:VCALENDAR', $ics);
-    }
+		$ref = new \ReflectionMethod( CalendarExport::class, 'build_artist_ics' );
+		$ref->setAccessible( true );
+		$ics = $ref->invoke( null, $events );
 
-    public function test_all_calendar_export_builds_ics_for_all_events(): void
-    {
-        $id1 = wp_insert_post([
-            'post_title'  => 'First Global',
-            'post_type'   => 'artpulse_event',
-            'post_status' => 'publish',
-            'meta_input'  => ['event_start_date' => '2033-01-01'],
-        ]);
-        $id2 = wp_insert_post([
-            'post_title'  => 'Second Global',
-            'post_type'   => 'artpulse_event',
-            'post_status' => 'publish',
-            'meta_input'  => ['event_start_date' => '2033-02-01'],
-        ]);
+		$this->assertStringContainsString( 'BEGIN:VCALENDAR', $ics );
+		$this->assertStringContainsString( 'SUMMARY:Artist Event', $ics );
+		$this->assertStringContainsString( 'END:VCALENDAR', $ics );
+	}
 
-        $events = get_posts([
-            'post_type'      => 'artpulse_event',
-            'post_status'    => 'publish',
-            'posts_per_page' => -1,
-        ]);
+	public function test_all_calendar_export_builds_ics_for_all_events(): void {
+		$id1 = wp_insert_post(
+			array(
+				'post_title'  => 'First Global',
+				'post_type'   => 'artpulse_event',
+				'post_status' => 'publish',
+				'meta_input'  => array( 'event_start_date' => '2033-01-01' ),
+			)
+		);
+		$id2 = wp_insert_post(
+			array(
+				'post_title'  => 'Second Global',
+				'post_type'   => 'artpulse_event',
+				'post_status' => 'publish',
+				'meta_input'  => array( 'event_start_date' => '2033-02-01' ),
+			)
+		);
 
-        $ref = new \ReflectionMethod(CalendarExport::class, 'build_all_ics');
-        $ref->setAccessible(true);
-        $ics = $ref->invoke(null, $events);
+		$events = get_posts(
+			array(
+				'post_type'      => 'artpulse_event',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+			)
+		);
 
-        $this->assertStringContainsString('SUMMARY:First Global', $ics);
-        $this->assertStringContainsString('SUMMARY:Second Global', $ics);
-        $this->assertStringContainsString('PRODID:-//ArtPulse//AllEvents//EN', $ics);
-    }
+		$ref = new \ReflectionMethod( CalendarExport::class, 'build_all_ics' );
+		$ref->setAccessible( true );
+		$ics = $ref->invoke( null, $events );
+
+		$this->assertStringContainsString( 'SUMMARY:First Global', $ics );
+		$this->assertStringContainsString( 'SUMMARY:Second Global', $ics );
+		$this->assertStringContainsString( 'PRODID:-//ArtPulse//AllEvents//EN', $ics );
+	}
 }

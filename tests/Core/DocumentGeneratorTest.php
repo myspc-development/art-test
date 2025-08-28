@@ -1,11 +1,13 @@
 <?php
 namespace ArtPulse\Core;
 
-if (!function_exists(__NAMESPACE__ . '\esc_html')) {
-function esc_html($text) { return $text; }
+if ( ! function_exists( __NAMESPACE__ . '\esc_html' ) ) {
+	function esc_html( $text ) {
+		return $text; }
 }
-if (!function_exists(__NAMESPACE__ . '\trailingslashit')) {
-function trailingslashit($path) { return rtrim($path, '/').'/'; }
+if ( ! function_exists( __NAMESPACE__ . '\trailingslashit' ) ) {
+	function trailingslashit( $path ) {
+		return rtrim( $path, '/' ) . '/'; }
 }
 
 namespace ArtPulse\Core\Tests;
@@ -15,47 +17,46 @@ use ArtPulse\Core\DocumentGenerator;
 use ArtPulse\Admin\Tests\Stub;
 use function ArtPulse\Tests\safe_unlink;
 
-class DocumentGeneratorTest extends TestCase
-{
-    protected function setUp(): void
-    {
-        Stub::reset();
-    }
+class DocumentGeneratorTest extends TestCase {
 
-    public function test_generate_ticket_pdf_returns_empty_when_dompdf_missing(): void
-    {
-        class_exists(DocumentGenerator::class);
-        $loaders = spl_autoload_functions() ?: [];
-        foreach ($loaders as $loader) {
-            spl_autoload_unregister($loader);
-        }
+	protected function setUp(): void {
+		Stub::reset();
+	}
 
-        $path = DocumentGenerator::generate_ticket_pdf(['event_title' => 'Test']);
+	public function test_generate_ticket_pdf_returns_empty_when_dompdf_missing(): void {
+		class_exists( DocumentGenerator::class );
+		$loaders = spl_autoload_functions() ?: array();
+		foreach ( $loaders as $loader ) {
+			spl_autoload_unregister( $loader );
+		}
 
-        foreach ($loaders as $loader) {
-            spl_autoload_register($loader);
-        }
+		$path = DocumentGenerator::generate_ticket_pdf( array( 'event_title' => 'Test' ) );
 
-        $this->assertSame('', $path);
-    }
+		foreach ( $loaders as $loader ) {
+			spl_autoload_register( $loader );
+		}
 
-    public function test_generate_ticket_pdf_returns_file_path(): void
-    {
-        Stub::$upload_path = sys_get_temp_dir();
-        Stub::$password    = 'code';
+		$this->assertSame( '', $path );
+	}
 
-        if (!class_exists('Dompdf\\Dompdf')) {
-            eval('namespace Dompdf; class Dompdf { public function loadHtml($h){} public function setPaper($p){} public function render(){} public function output(){ return "PDF"; } }');
-        }
+	public function test_generate_ticket_pdf_returns_file_path(): void {
+		Stub::$upload_path = sys_get_temp_dir();
+		Stub::$password    = 'code';
 
-        $path = DocumentGenerator::generate_ticket_pdf([
-            'event_title' => 'Event',
-            'ticket_code' => 'ABC123',
-        ]);
+		if ( ! class_exists( 'Dompdf\\Dompdf' ) ) {
+			eval( 'namespace Dompdf; class Dompdf { public function loadHtml($h){} public function setPaper($p){} public function render(){} public function output(){ return "PDF"; } }' );
+		}
 
-        $this->assertNotEmpty($path);
-        $this->assertStringContainsString('ticket-ABC123.pdf', $path);
-        $this->assertFileExists($path);
-        safe_unlink($path);
-    }
+		$path = DocumentGenerator::generate_ticket_pdf(
+			array(
+				'event_title' => 'Event',
+				'ticket_code' => 'ABC123',
+			)
+		);
+
+		$this->assertNotEmpty( $path );
+		$this->assertStringContainsString( 'ticket-ABC123.pdf', $path );
+		$this->assertFileExists( $path );
+		safe_unlink( $path );
+	}
 }

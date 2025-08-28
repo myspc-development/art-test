@@ -1,68 +1,74 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-
 use ArtPulse\Rest\RoleWidgetMapController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
  * @group restapi
  */
-class RoleWidgetMapControllerTest extends \WP_UnitTestCase
-{
-    public function set_up()
-    {
-        parent::set_up();
+class RoleWidgetMapControllerTest extends \WP_UnitTestCase {
 
-        // Reset registry
-        $ref  = new \ReflectionClass(DashboardWidgetRegistry::class);
-        $prop = $ref->getProperty('widgets');
-        $prop->setAccessible(true);
-        $prop->setValue(null, []);
+	public function set_up() {
+		parent::set_up();
 
-        // Ensure roles exist
-        foreach ([ 'member', 'artist', 'organization' ] as $role) {
-            if (!get_role($role)) {
-                add_role($role, ucfirst($role));
-            }
-        }
+		// Reset registry
+		$ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
+		$prop = $ref->getProperty( 'widgets' );
+		$prop->setAccessible( true );
+		$prop->setValue( null, array() );
 
-        DashboardWidgetRegistry::register('alpha', [
-            'title'           => 'Alpha',
-            'render_callback' => '__return_null',
-            'roles'           => ['member'],
-        ]);
-        DashboardWidgetRegistry::register('beta', [
-            'title'           => 'Beta',
-            'render_callback' => '__return_null',
-            'roles'           => ['artist'],
-        ]);
-        DashboardWidgetRegistry::register('gamma', [
-            'title'           => 'Gamma',
-            'render_callback' => '__return_null',
-        ]);
+		// Ensure roles exist
+		foreach ( array( 'member', 'artist', 'organization' ) as $role ) {
+			if ( ! get_role( $role ) ) {
+				add_role( $role, ucfirst( $role ) );
+			}
+		}
 
-        RoleWidgetMapController::register();
-        do_action('rest_api_init');
+		DashboardWidgetRegistry::register(
+			'alpha',
+			array(
+				'title'           => 'Alpha',
+				'render_callback' => '__return_null',
+				'roles'           => array( 'member' ),
+			)
+		);
+		DashboardWidgetRegistry::register(
+			'beta',
+			array(
+				'title'           => 'Beta',
+				'render_callback' => '__return_null',
+				'roles'           => array( 'artist' ),
+			)
+		);
+		DashboardWidgetRegistry::register(
+			'gamma',
+			array(
+				'title'           => 'Gamma',
+				'render_callback' => '__return_null',
+			)
+		);
 
-        wp_set_current_user(self::factory()->user->create(['role' => 'administrator']));
-    }
+		RoleWidgetMapController::register();
+		do_action( 'rest_api_init' );
 
-    public function test_get_role_widget_map(): void
-    {
-        $req = new \WP_REST_Request('GET', '/artpulse/v1/role-widget-map');
-        $req->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));
-        $res = rest_get_server()->dispatch($req);
-        $this->assertSame(200, $res->get_status());
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+	}
 
-        $data  = $res->get_data();
-        $roles = ['member', 'artist', 'organization'];
-        foreach ($roles as $role) {
-            $this->assertArrayHasKey($role, $data, 'Missing role ' . $role);
-            foreach ($data[$role] as $id) {
-                $this->assertIsString($id);
-                $this->assertNotSame('', $id);
-            }
-        }
-    }
+	public function test_get_role_widget_map(): void {
+		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/role-widget-map' );
+		$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+		$res = rest_get_server()->dispatch( $req );
+		$this->assertSame( 200, $res->get_status() );
+
+		$data  = $res->get_data();
+		$roles = array( 'member', 'artist', 'organization' );
+		foreach ( $roles as $role ) {
+			$this->assertArrayHasKey( $role, $data, 'Missing role ' . $role );
+			foreach ( $data[ $role ] as $id ) {
+				$this->assertIsString( $id );
+				$this->assertNotSame( '', $id );
+			}
+		}
+	}
 }

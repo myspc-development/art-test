@@ -1,19 +1,17 @@
 <?php
 namespace ArtPulse\Core;
 
-class ActivityLogger
-{
-    public static function register(): void
-    {
-        add_action('admin_init', [self::class, 'maybe_install_table']);
-    }
+class ActivityLogger {
 
-    public static function install_table(): void
-    {
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_activity_logs';
-        $charset = $wpdb->get_charset_collate();
-        $sql = "CREATE TABLE $table (
+	public static function register(): void {
+		add_action( 'admin_init', array( self::class, 'maybe_install_table' ) );
+	}
+
+	public static function install_table(): void {
+		global $wpdb;
+		$table   = $wpdb->prefix . 'ap_activity_logs';
+		$charset = $wpdb->get_charset_collate();
+		$sql     = "CREATE TABLE $table (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             org_id BIGINT NULL,
@@ -28,67 +26,68 @@ class ActivityLogger
             KEY action_type (action_type),
             KEY logged_at (logged_at)
         ) $charset;";
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
-        dbDelta($sql);
-    }
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( $sql ); }
+		dbDelta( $sql );
+	}
 
-    public static function maybe_install_table(): void
-    {
-        global $wpdb;
-        $table  = $wpdb->prefix . 'ap_activity_logs';
-        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
-        if ($exists !== $table) {
-            self::install_table();
-        }
-    }
+	public static function maybe_install_table(): void {
+		global $wpdb;
+		$table  = $wpdb->prefix . 'ap_activity_logs';
+		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+		if ( $exists !== $table ) {
+			self::install_table();
+		}
+	}
 
-    public static function log(?int $org_id, ?int $user_id, string $action_type, string $description, array $metadata = []): void
-    {
-        global $wpdb;
-        if (!isset($wpdb)) {
-            return;
-        }
-        $table = $wpdb->prefix . 'ap_activity_logs';
-        $wpdb->insert($table, [
-            'org_id'      => $org_id,
-            'user_id'     => $user_id,
-            'action_type' => $action_type,
-            'description' => $description,
-            'ip_address'  => $_SERVER['REMOTE_ADDR'] ?? '',
-            'metadata'    => wp_json_encode($metadata),
-            'logged_at'   => current_time('mysql'),
-        ]);
-    }
+	public static function log( ?int $org_id, ?int $user_id, string $action_type, string $description, array $metadata = array() ): void {
+		global $wpdb;
+		if ( ! isset( $wpdb ) ) {
+			return;
+		}
+		$table = $wpdb->prefix . 'ap_activity_logs';
+		$wpdb->insert(
+			$table,
+			array(
+				'org_id'      => $org_id,
+				'user_id'     => $user_id,
+				'action_type' => $action_type,
+				'description' => $description,
+				'ip_address'  => $_SERVER['REMOTE_ADDR'] ?? '',
+				'metadata'    => wp_json_encode( $metadata ),
+				'logged_at'   => current_time( 'mysql' ),
+			)
+		);
+	}
 
-    /**
-     * Fetch recent activity log entries.
-     */
-    public static function get_logs(?int $org_id, ?int $user_id, int $limit = 25): array
-    {
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_activity_logs';
+	/**
+	 * Fetch recent activity log entries.
+	 */
+	public static function get_logs( ?int $org_id, ?int $user_id, int $limit = 25 ): array {
+		global $wpdb;
+		$table = $wpdb->prefix . 'ap_activity_logs';
 
-        $where = [];
-        $args  = [];
+		$where = array();
+		$args  = array();
 
-        if ($org_id !== null) {
-            $where[] = 'org_id = %d';
-            $args[]  = $org_id;
-        }
+		if ( $org_id !== null ) {
+			$where[] = 'org_id = %d';
+			$args[]  = $org_id;
+		}
 
-        if ($user_id !== null) {
-            $where[] = 'user_id = %d';
-            $args[]  = $user_id;
-        }
+		if ( $user_id !== null ) {
+			$where[] = 'user_id = %d';
+			$args[]  = $user_id;
+		}
 
-        if (!$where) {
-            return [];
-        }
+		if ( ! $where ) {
+			return array();
+		}
 
-        $args[] = $limit;
-        $sql    = 'SELECT * FROM ' . $table . ' WHERE ' . implode(' OR ', $where) . ' ORDER BY logged_at DESC LIMIT %d';
+		$args[] = $limit;
+		$sql    = 'SELECT * FROM ' . $table . ' WHERE ' . implode( ' OR ', $where ) . ' ORDER BY logged_at DESC LIMIT %d';
 
-        return $wpdb->get_results($wpdb->prepare($sql, ...$args));
-    }
+		return $wpdb->get_results( $wpdb->prepare( $sql, ...$args ) );
+	}
 }

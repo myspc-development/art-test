@@ -8,245 +8,244 @@ use ArtPulse\Dashboard\WidgetGuard;
 /**
  * Manage dashboard widget layouts for users and roles.
  */
-class UserLayoutManager
-{
-    public const META_KEY = 'ap_dashboard_layout';
-    public const VIS_META_KEY = 'ap_widget_visibility';
-    /**
-     * Get a user's widget layout with fallbacks.
-     *
-     * @deprecated Use get_layout_for_user() instead.
-     */
-    public static function get_layout(int $user_id): array
-    {
-        return self::get_layout_for_user($user_id);
-    }
+class UserLayoutManager {
 
-    /**
-     * Save a user's widget layout.
-     */
-    public static function save_layout(int $user_id, array $layout): void
-    {
-        $valid   = array_keys(DashboardWidgetRegistry::get_all());
-        $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid);
+	public const META_KEY     = 'ap_dashboard_layout';
+	public const VIS_META_KEY = 'ap_widget_visibility';
+	/**
+	 * Get a user's widget layout with fallbacks.
+	 *
+	 * @deprecated Use get_layout_for_user() instead.
+	 */
+	public static function get_layout( int $user_id ): array {
+		return self::get_layout_for_user( $user_id );
+	}
 
-        update_user_meta($user_id, self::META_KEY, $ordered);
-    }
+	/**
+	 * Save a user's widget layout.
+	 */
+	public static function save_layout( int $user_id, array $layout ): void {
+		$valid   = array_keys( DashboardWidgetRegistry::get_all() );
+		$ordered = \ArtPulse\Core\LayoutUtils::normalize_layout( $layout, $valid );
 
-    /**
-     * Alias for save_layout for backward compatibility.
-     */
-    public static function save_user_layout(int $user_id, array $layout): void
-    {
-        self::save_layout($user_id, $layout);
-    }
+		update_user_meta( $user_id, self::META_KEY, $ordered );
+	}
 
-    /**
-     * Get the default layout for a role.
-     *
-     * @return array{layout:array<array<string,mixed>>,logs:array<int,string>}
-     */
-    public static function get_role_layout(string $role): array
-    {
-        $config = get_option('ap_dashboard_widget_config', []);
-        $entry  = $config[$role] ?? [];
-        $layout = [];
+	/**
+	 * Alias for save_layout for backward compatibility.
+	 */
+	public static function save_user_layout( int $user_id, array $layout ): void {
+		self::save_layout( $user_id, $layout );
+	}
 
-        if (is_array($entry) && isset($entry['layout'])) {
-            $layout = $entry['layout'];
-        } elseif (is_array($entry)) {
-            $layout = $entry;
-        }
+	/**
+	 * Get the default layout for a role.
+	 *
+	 * @return array{layout:array<array<string,mixed>>,logs:array<int,string>}
+	 */
+	public static function get_role_layout( string $role ): array {
+		$config = get_option( 'ap_dashboard_widget_config', array() );
+		$entry  = $config[ $role ] ?? array();
+		$layout = array();
 
-        if (is_array($layout) && !empty($layout)) {
-            $valid  = array_keys(DashboardWidgetRegistry::get_all());
-            $logs   = [];
-            $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid, $logs);
+		if ( is_array( $entry ) && isset( $entry['layout'] ) ) {
+			$layout = $entry['layout'];
+		} elseif ( is_array( $entry ) ) {
+			$layout = $entry;
+		}
 
-            $defs  = DashboardWidgetRegistry::get_definitions();
-            $final = [];
-            foreach ($ordered as $item) {
-                $id   = $item['id'];
-                $def  = $defs[$id] ?? null;
-                $vis  = $item['visible'] ?? true;
+		if ( is_array( $layout ) && ! empty( $layout ) ) {
+			$valid   = array_keys( DashboardWidgetRegistry::get_all() );
+			$logs    = array();
+			$ordered = \ArtPulse\Core\LayoutUtils::normalize_layout( $layout, $valid, $logs );
 
-                if (!$def || !is_callable($def['callback'] ?? null)) {
-                    if (!in_array($id, $logs, true)) {
-                        $logs[] = $id;
-                    }
-                    WidgetGuard::register_stub_widget($id, [], $def ?? []);
-                }
+			$defs  = DashboardWidgetRegistry::get_definitions();
+			$final = array();
+			foreach ( $ordered as $item ) {
+				$id  = $item['id'];
+				$def = $defs[ $id ] ?? null;
+				$vis = $item['visible'] ?? true;
 
-                $final[] = ['id' => $id, 'visible' => $vis];
-            }
+				if ( ! $def || ! is_callable( $def['callback'] ?? null ) ) {
+					if ( ! in_array( $id, $logs, true ) ) {
+						$logs[] = $id;
+					}
+					WidgetGuard::register_stub_widget( $id, array(), $def ?? array() );
+				}
 
-            if ($logs && defined('ARTPULSE_TEST_VERBOSE') && ARTPULSE_TEST_VERBOSE) {
-                error_log('Invalid dashboard widgets for role ' . $role . ': ' . implode(', ', $logs));
-            }
+				$final[] = array(
+					'id'      => $id,
+					'visible' => $vis,
+				);
+			}
 
-            return [
-                'layout' => $final,
-                'logs'   => $logs,
-            ];
-        }
+			if ( $logs && defined( 'ARTPULSE_TEST_VERBOSE' ) && ARTPULSE_TEST_VERBOSE ) {
+				error_log( 'Invalid dashboard widgets for role ' . $role . ': ' . implode( ', ', $logs ) );
+			}
 
-        $default_ids = \ArtPulse\Core\DashboardController::get_widgets_for_role($role);
-        $layout = array_map(
-            fn($id) => ['id' => $id, 'visible' => true],
-            $default_ids
-        );
-        if (empty($layout)) {
-            $stub = 'empty_dashboard';
-            WidgetGuard::register_stub_widget($stub, [], []);
-            error_log('Empty dashboard layout resolved for role ' . $role);
-            return [
-                'layout' => [ ['id' => $stub, 'visible' => true] ],
-                'logs'   => [$stub],
-            ];
-        }
-        return [
-            'layout' => $layout,
-            'logs'   => [],
-        ];
-    }
+			return array(
+				'layout' => $final,
+				'logs'   => $logs,
+			);
+		}
 
-    /**
-     * Save the default layout for a role.
-     */
-    public static function save_role_layout(string $role, array $layout): void
-    {
-        $valid  = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-        $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout($layout, $valid);
+		$default_ids = \ArtPulse\Core\DashboardController::get_widgets_for_role( $role );
+		$layout      = array_map(
+			fn( $id ) => array(
+				'id'      => $id,
+				'visible' => true,
+			),
+			$default_ids
+		);
+		if ( empty( $layout ) ) {
+			$stub = 'empty_dashboard';
+			WidgetGuard::register_stub_widget( $stub, array(), array() );
+			error_log( 'Empty dashboard layout resolved for role ' . $role );
+			return array(
+				'layout' => array(
+					array(
+						'id'      => $stub,
+						'visible' => true,
+					),
+				),
+				'logs'   => array( $stub ),
+			);
+		}
+		return array(
+			'layout' => $layout,
+			'logs'   => array(),
+		);
+	}
 
-        $config = get_option('ap_dashboard_widget_config', []);
-        $role_key = sanitize_key($role);
-        $entry = $config[$role_key] ?? [];
-        $style = [];
-        if (is_array($entry) && isset($entry['style'])) {
-            $style = $entry['style'];
-        }
+	/**
+	 * Save the default layout for a role.
+	 */
+	public static function save_role_layout( string $role, array $layout ): void {
+		$valid   = array_column( DashboardWidgetRegistry::get_definitions(), 'id' );
+		$ordered = \ArtPulse\Core\LayoutUtils::normalize_layout( $layout, $valid );
 
-        $config[$role_key] = [ 'layout' => $ordered ];
-        if ($style) {
-            $config[$role_key]['style'] = $style;
-        }
+		$config   = get_option( 'ap_dashboard_widget_config', array() );
+		$role_key = sanitize_key( $role );
+		$entry    = $config[ $role_key ] ?? array();
+		$style    = array();
+		if ( is_array( $entry ) && isset( $entry['style'] ) ) {
+			$style = $entry['style'];
+		}
 
-        update_option('ap_dashboard_widget_config', $config);
-    }
+		$config[ $role_key ] = array( 'layout' => $ordered );
+		if ( $style ) {
+			$config[ $role_key ]['style'] = $style;
+		}
 
-    public static function export_layout(string $role): string
-    {
-        return json_encode(self::get_role_layout($role)['layout'], JSON_PRETTY_PRINT);
-    }
+		update_option( 'ap_dashboard_widget_config', $config );
+	}
 
-    public static function import_layout(string $role, string $json): bool
-    {
-        $decoded = json_decode($json, true);
-        if (is_array($decoded)) {
-            self::save_role_layout($role, $decoded);
-            return true;
-        }
-        return false;
-    }
+	public static function export_layout( string $role ): string {
+		return json_encode( self::get_role_layout( $role )['layout'], JSON_PRETTY_PRINT );
+	}
 
-    /**
-     * Get style configuration for a role.
-     */
-    public static function get_role_style(string $role): array
-    {
-        $config = get_option('ap_dashboard_widget_config', []);
-        $entry = $config[$role] ?? [];
-        if (is_array($entry) && isset($entry['style']) && is_array($entry['style'])) {
-            return $entry['style'];
-        }
-        return [];
-    }
+	public static function import_layout( string $role, string $json ): bool {
+		$decoded = json_decode( $json, true );
+		if ( is_array( $decoded ) ) {
+			self::save_role_layout( $role, $decoded );
+			return true;
+		}
+		return false;
+	}
 
-    /**
-     * Save style configuration for a role.
-     */
-    public static function save_role_style(string $role, array $style): void
-    {
-        $sanitized = [];
-        foreach ($style as $k => $v) {
-            $key = sanitize_key($k);
-            $val = is_string($v) ? sanitize_text_field($v) : $v;
-            $sanitized[$key] = $val;
-        }
+	/**
+	 * Get style configuration for a role.
+	 */
+	public static function get_role_style( string $role ): array {
+		$config = get_option( 'ap_dashboard_widget_config', array() );
+		$entry  = $config[ $role ] ?? array();
+		if ( is_array( $entry ) && isset( $entry['style'] ) && is_array( $entry['style'] ) ) {
+			return $entry['style'];
+		}
+		return array();
+	}
 
-        $config = get_option('ap_dashboard_widget_config', []);
-        $role_key = sanitize_key($role);
-        $entry = $config[$role_key] ?? [];
+	/**
+	 * Save style configuration for a role.
+	 */
+	public static function save_role_style( string $role, array $style ): void {
+		$sanitized = array();
+		foreach ( $style as $k => $v ) {
+			$key               = sanitize_key( $k );
+			$val               = is_string( $v ) ? sanitize_text_field( $v ) : $v;
+			$sanitized[ $key ] = $val;
+		}
 
-        if (!is_array($entry)) {
-            $entry = [ 'layout' => is_array($entry) ? $entry : [] ];
-        }
+		$config   = get_option( 'ap_dashboard_widget_config', array() );
+		$role_key = sanitize_key( $role );
+		$entry    = $config[ $role_key ] ?? array();
 
-        $entry['style'] = $sanitized;
-        $config[$role_key] = $entry;
+		if ( ! is_array( $entry ) ) {
+			$entry = array( 'layout' => is_array( $entry ) ? $entry : array() );
+		}
 
-        update_option('ap_dashboard_widget_config', $config);
-    }
+		$entry['style']      = $sanitized;
+		$config[ $role_key ] = $entry;
 
-    public static function reset_layout_for_role(string $role): void
-    {
-        $config = get_option('ap_dashboard_widget_config', []);
-        $role_key = sanitize_key($role);
-        if (isset($config[$role_key])) {
-            unset($config[$role_key]);
-            update_option('ap_dashboard_widget_config', $config);
-        }
-    }
+		update_option( 'ap_dashboard_widget_config', $config );
+	}
 
-    /**
-     * Remove a user's saved dashboard layout and visibility.
-     */
-    public static function reset_user_layout(int $user_id): void
-    {
-        delete_user_meta($user_id, self::META_KEY);
-        delete_user_meta($user_id, self::VIS_META_KEY);
-    }
+	public static function reset_layout_for_role( string $role ): void {
+		$config   = get_option( 'ap_dashboard_widget_config', array() );
+		$role_key = sanitize_key( $role );
+		if ( isset( $config[ $role_key ] ) ) {
+			unset( $config[ $role_key ] );
+			update_option( 'ap_dashboard_widget_config', $config );
+		}
+	}
 
-    /**
-     * Retrieve the raw dashboard layout for a user.
-     */
-    public static function get_user_layout(int $user_id): array
-    {
-        $layout = get_user_meta($user_id, self::META_KEY, true);
-        return is_array($layout) ? $layout : [];
-    }
+	/**
+	 * Remove a user's saved dashboard layout and visibility.
+	 */
+	public static function reset_user_layout( int $user_id ): void {
+		delete_user_meta( $user_id, self::META_KEY );
+		delete_user_meta( $user_id, self::VIS_META_KEY );
+	}
 
-    /**
-     * Determine a user's dashboard layout with fallbacks.
-     */
-    public static function get_layout_for_user(int $user_id): array
-    {
-        $layout = self::get_user_layout($user_id);
-        if (!empty($layout)) {
-            return $layout;
-        }
+	/**
+	 * Retrieve the raw dashboard layout for a user.
+	 */
+	public static function get_user_layout( int $user_id ): array {
+		$layout = get_user_meta( $user_id, self::META_KEY, true );
+		return is_array( $layout ) ? $layout : array();
+	}
 
-        $role   = self::get_primary_role($user_id);
-        $result = self::get_role_layout($role);
-        $layout = $result['layout'];
-        if (!empty($layout)) {
-            return $layout;
-        }
+	/**
+	 * Determine a user's dashboard layout with fallbacks.
+	 */
+	public static function get_layout_for_user( int $user_id ): array {
+		$layout = self::get_user_layout( $user_id );
+		if ( ! empty( $layout ) ) {
+			return $layout;
+		}
 
-        $all = DashboardWidgetRegistry::get_all();
-        return array_map(
-            fn($id) => ['id' => $id, 'visible' => true],
-            array_keys($all)
-        );
-    }
+		$role   = self::get_primary_role( $user_id );
+		$result = self::get_role_layout( $role );
+		$layout = $result['layout'];
+		if ( ! empty( $layout ) ) {
+			return $layout;
+		}
 
-    /**
-     * Get a user's primary role.
-     */
-    public static function get_primary_role(int $user_id): string
-    {
-        $user = get_userdata($user_id);
-        return $user && !empty($user->roles) ? $user->roles[0] : 'subscriber';
-    }
+		$all = DashboardWidgetRegistry::get_all();
+		return array_map(
+			fn( $id ) => array(
+				'id'      => $id,
+				'visible' => true,
+			),
+			array_keys( $all )
+		);
+	}
 
+	/**
+	 * Get a user's primary role.
+	 */
+	public static function get_primary_role( int $user_id ): string {
+		$user = get_userdata( $user_id );
+		return $user && ! empty( $user->roles ) ? $user->roles[0] : 'subscriber';
+	}
 }

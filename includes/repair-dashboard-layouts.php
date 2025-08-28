@@ -1,6 +1,6 @@
 <?php
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 use ArtPulse\Admin\UserLayoutManager;
@@ -14,34 +14,39 @@ use ArtPulse\Admin\UserLayoutManager;
  * available.
  */
 function ap_repair_dashboard_layouts(): void {
-    $users    = get_users(['fields' => ['ID']]);
-    $repaired = 0;
+	$users    = get_users( array( 'fields' => array( 'ID' ) ) );
+	$repaired = 0;
 
-    foreach ($users as $user) {
-        $uid    = (int) $user->ID;
-        $layout = get_user_meta($uid, UserLayoutManager::META_KEY, true);
-        if (is_array($layout) && !empty($layout)) {
-            continue;
-        }
+	foreach ( $users as $user ) {
+		$uid    = (int) $user->ID;
+		$layout = get_user_meta( $uid, UserLayoutManager::META_KEY, true );
+		if ( is_array( $layout ) && ! empty( $layout ) ) {
+			continue;
+		}
 
-        $role   = UserLayoutManager::get_primary_role($uid);
-        $result = UserLayoutManager::get_role_layout($role);
-        $layout = $result['layout'] ?? [];
-        if (empty($layout)) {
-            $layout = [ ['id' => 'my-events', 'visible' => true] ];
-        }
+		$role   = UserLayoutManager::get_primary_role( $uid );
+		$result = UserLayoutManager::get_role_layout( $role );
+		$layout = $result['layout'] ?? array();
+		if ( empty( $layout ) ) {
+			$layout = array(
+				array(
+					'id'      => 'my-events',
+					'visible' => true,
+				),
+			);
+		}
 
-        UserLayoutManager::save_user_layout($uid, $layout);
-        $repaired++;
-    }
+		UserLayoutManager::save_user_layout( $uid, $layout );
+		++$repaired;
+	}
 
-    if (defined('WP_CLI') && WP_CLI) {
-        \WP_CLI::success("Repaired dashboard layouts for {$repaired} users.");
-    } else {
-        echo "✅ Repaired dashboard layouts for {$repaired} users.\n";
-    }
+	if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		\WP_CLI::success( "Repaired dashboard layouts for {$repaired} users." );
+	} else {
+		echo "✅ Repaired dashboard layouts for {$repaired} users.\n";
+	}
 }
 
-if (defined('WP_CLI') && WP_CLI) {
-    \WP_CLI::add_command('ap repair-dashboard-layouts', 'ap_repair_dashboard_layouts');
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	\WP_CLI::add_command( 'ap repair-dashboard-layouts', 'ap_repair_dashboard_layouts' );
 }

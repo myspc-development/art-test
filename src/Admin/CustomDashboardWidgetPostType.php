@@ -3,106 +3,104 @@ namespace ArtPulse\Admin;
 
 use ArtPulse\Admin\ShortcodePages;
 
-class CustomDashboardWidgetPostType
-{
-    public static function register(): void
-    {
-        add_action('init', [self::class, 'register_cpt']);
-        add_action('add_meta_boxes', [self::class, 'add_meta_boxes']);
-        add_action('save_post_dashboard_widget', [self::class, 'save_meta']);
-        add_action('restrict_manage_posts', [self::class, 'add_admin_filters']);
-        add_filter('pre_get_posts', [self::class, 'filter_admin_query']);
-    }
+class CustomDashboardWidgetPostType {
 
-    public static function register_cpt(): void
-    {
-        register_post_type('dashboard_widget', [
-            'label'        => __('Dashboard Widgets', 'artpulse'),
-            'public'       => false,
-            'show_ui'      => true,
-            'menu_icon'    => 'dashicons-screenoptions',
-            'supports'     => ['title', 'editor'],
-            'show_in_rest' => true,
-            'taxonomies'   => ['category', 'post_tag'],
-            'menu_position'=> 25,
-        ]);
+	public static function register(): void {
+		add_action( 'init', array( self::class, 'register_cpt' ) );
+		add_action( 'add_meta_boxes', array( self::class, 'add_meta_boxes' ) );
+		add_action( 'save_post_dashboard_widget', array( self::class, 'save_meta' ) );
+		add_action( 'restrict_manage_posts', array( self::class, 'add_admin_filters' ) );
+		add_filter( 'pre_get_posts', array( self::class, 'filter_admin_query' ) );
+	}
 
-        register_taxonomy_for_object_type('category', 'dashboard_widget');
-        register_taxonomy_for_object_type('post_tag', 'dashboard_widget');
-    }
+	public static function register_cpt(): void {
+		register_post_type(
+			'dashboard_widget',
+			array(
+				'label'         => __( 'Dashboard Widgets', 'artpulse' ),
+				'public'        => false,
+				'show_ui'       => true,
+				'menu_icon'     => 'dashicons-screenoptions',
+				'supports'      => array( 'title', 'editor' ),
+				'show_in_rest'  => true,
+				'taxonomies'    => array( 'category', 'post_tag' ),
+				'menu_position' => 25,
+			)
+		);
 
-    public static function add_meta_boxes(): void
-    {
-        add_meta_box('widget_options', __('Widget Options', 'artpulse'), [self::class, 'render_meta_box'], 'dashboard_widget', 'normal');
-    }
+		register_taxonomy_for_object_type( 'category', 'dashboard_widget' );
+		register_taxonomy_for_object_type( 'post_tag', 'dashboard_widget' );
+	}
 
-    public static function render_meta_box($post): void
-    {
-        $roles     = ['artist', 'organization', 'member'];
-        $current   = get_post_meta($post->ID, 'visible_to_roles', true) ?: [];
-        $icon       = get_post_meta($post->ID, 'widget_icon', true);
-        $order      = get_post_meta($post->ID, 'widget_order', true);
-        $css_class  = get_post_meta($post->ID, 'widget_class', true);
-        $shortcode  = get_post_meta($post->ID, 'widget_shortcode', true);
-        $short_atts = get_post_meta($post->ID, 'widget_shortcode_atts', true);
-        $codes      = array_keys(ShortcodePages::get_shortcode_map());
-        ?>
-        <p><label><?php _e('Roles', 'artpulse'); ?></label><br>
-        <?php foreach ($roles as $role): ?>
-            <label><input type="checkbox" name="visible_to_roles[]" value="<?= esc_attr($role) ?>" <?= in_array($role, (array) $current, true) ? 'checked' : '' ?>> <?= esc_html(ucfirst($role)) ?></label><br>
-        <?php endforeach; ?>
-        </p>
-        <p><label><?php _e('Icon', 'artpulse'); ?> <input type="text" name="widget_icon" value="<?= esc_attr($icon) ?>" class="regular-text"></label></p>
-        <p><label><?php _e('Order', 'artpulse'); ?> <input type="number" name="widget_order" value="<?= esc_attr($order ?: 1) ?>" class="small-text"></label></p>
-        <p><label><?php _e('CSS Class', 'artpulse'); ?> <input type="text" name="widget_class" value="<?= esc_attr($css_class) ?>" class="regular-text"></label></p>
-        <p><label><?php _e('Shortcode', 'artpulse'); ?>
-            <select name="widget_shortcode">
-                <option value="">—</option>
-                <?php foreach ($codes as $code) : ?>
-                    <option value="<?= esc_attr($code) ?>" <?= selected($shortcode, $code, false) ?>><?= esc_html($code) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label></p>
-        <p><label><?php _e('Shortcode Attributes', 'artpulse'); ?> <input type="text" name="widget_shortcode_atts" value="<?= esc_attr($short_atts) ?>" class="regular-text"></label></p>
-        <?php
-    }
+	public static function add_meta_boxes(): void {
+		add_meta_box( 'widget_options', __( 'Widget Options', 'artpulse' ), array( self::class, 'render_meta_box' ), 'dashboard_widget', 'normal' );
+	}
 
-    public static function save_meta(int $post_id): void
-    {
-        $roles = array_map('sanitize_key', (array) ($_POST['visible_to_roles'] ?? []));
-        update_post_meta($post_id, 'visible_to_roles', $roles);
-        update_post_meta($post_id, 'widget_icon', sanitize_text_field($_POST['widget_icon'] ?? ''));
-        update_post_meta($post_id, 'widget_order', intval($_POST['widget_order'] ?? 1));
-        update_post_meta($post_id, 'widget_class', sanitize_text_field($_POST['widget_class'] ?? ''));
-        update_post_meta($post_id, 'widget_shortcode', sanitize_text_field($_POST['widget_shortcode'] ?? ''));
-        update_post_meta($post_id, 'widget_shortcode_atts', sanitize_text_field($_POST['widget_shortcode_atts'] ?? ''));
-    }
+	public static function render_meta_box( $post ): void {
+		$roles      = array( 'artist', 'organization', 'member' );
+		$current    = get_post_meta( $post->ID, 'visible_to_roles', true ) ?: array();
+		$icon       = get_post_meta( $post->ID, 'widget_icon', true );
+		$order      = get_post_meta( $post->ID, 'widget_order', true );
+		$css_class  = get_post_meta( $post->ID, 'widget_class', true );
+		$shortcode  = get_post_meta( $post->ID, 'widget_shortcode', true );
+		$short_atts = get_post_meta( $post->ID, 'widget_shortcode_atts', true );
+		$codes      = array_keys( ShortcodePages::get_shortcode_map() );
+		?>
+		<p><label><?php _e( 'Roles', 'artpulse' ); ?></label><br>
+		<?php foreach ( $roles as $role ) : ?>
+			<label><input type="checkbox" name="visible_to_roles[]" value="<?php echo esc_attr( $role ); ?>" <?php echo in_array( $role, (array) $current, true ) ? 'checked' : ''; ?>> <?php echo esc_html( ucfirst( $role ) ); ?></label><br>
+		<?php endforeach; ?>
+		</p>
+		<p><label><?php _e( 'Icon', 'artpulse' ); ?> <input type="text" name="widget_icon" value="<?php echo esc_attr( $icon ); ?>" class="regular-text"></label></p>
+		<p><label><?php _e( 'Order', 'artpulse' ); ?> <input type="number" name="widget_order" value="<?php echo esc_attr( $order ?: 1 ); ?>" class="small-text"></label></p>
+		<p><label><?php _e( 'CSS Class', 'artpulse' ); ?> <input type="text" name="widget_class" value="<?php echo esc_attr( $css_class ); ?>" class="regular-text"></label></p>
+		<p><label><?php _e( 'Shortcode', 'artpulse' ); ?>
+			<select name="widget_shortcode">
+				<option value="">—</option>
+				<?php foreach ( $codes as $code ) : ?>
+					<option value="<?php echo esc_attr( $code ); ?>" <?php echo selected( $shortcode, $code, false ); ?>><?php echo esc_html( $code ); ?></option>
+				<?php endforeach; ?>
+			</select>
+		</label></p>
+		<p><label><?php _e( 'Shortcode Attributes', 'artpulse' ); ?> <input type="text" name="widget_shortcode_atts" value="<?php echo esc_attr( $short_atts ); ?>" class="regular-text"></label></p>
+		<?php
+	}
 
-    public static function add_admin_filters(): void
-    {
-        $screen = get_current_screen();
-        if (!$screen || $screen->post_type !== 'dashboard_widget') {
-            return;
-        }
-        $selected_cat = $_GET['cat'] ?? '';
-        wp_dropdown_categories([
-            'show_option_all' => __('All Categories', 'artpulse'),
-            'taxonomy'        => 'category',
-            'name'            => 'cat',
-            'selected'        => $selected_cat,
-            'hide_empty'      => false,
-        ]);
-        $selected_tag = $_GET['tag'] ?? '';
-        echo '<input type="text" name="tag" value="' . esc_attr($selected_tag) . '" placeholder="' . esc_attr__('Tag','artpulse') . '" />';
-    }
+	public static function save_meta( int $post_id ): void {
+		$roles = array_map( 'sanitize_key', (array) ( $_POST['visible_to_roles'] ?? array() ) );
+		update_post_meta( $post_id, 'visible_to_roles', $roles );
+		update_post_meta( $post_id, 'widget_icon', sanitize_text_field( $_POST['widget_icon'] ?? '' ) );
+		update_post_meta( $post_id, 'widget_order', intval( $_POST['widget_order'] ?? 1 ) );
+		update_post_meta( $post_id, 'widget_class', sanitize_text_field( $_POST['widget_class'] ?? '' ) );
+		update_post_meta( $post_id, 'widget_shortcode', sanitize_text_field( $_POST['widget_shortcode'] ?? '' ) );
+		update_post_meta( $post_id, 'widget_shortcode_atts', sanitize_text_field( $_POST['widget_shortcode_atts'] ?? '' ) );
+	}
 
-    public static function filter_admin_query($query): void
-    {
-        if (!is_admin() || !$query->is_main_query() || $query->get('post_type') !== 'dashboard_widget') {
-            return;
-        }
-        if (!empty($_GET['tag'])) {
-            $query->set('tag', sanitize_text_field($_GET['tag']));
-        }
-    }
+	public static function add_admin_filters(): void {
+		$screen = get_current_screen();
+		if ( ! $screen || $screen->post_type !== 'dashboard_widget' ) {
+			return;
+		}
+		$selected_cat = $_GET['cat'] ?? '';
+		wp_dropdown_categories(
+			array(
+				'show_option_all' => __( 'All Categories', 'artpulse' ),
+				'taxonomy'        => 'category',
+				'name'            => 'cat',
+				'selected'        => $selected_cat,
+				'hide_empty'      => false,
+			)
+		);
+		$selected_tag = $_GET['tag'] ?? '';
+		echo '<input type="text" name="tag" value="' . esc_attr( $selected_tag ) . '" placeholder="' . esc_attr__( 'Tag', 'artpulse' ) . '" />';
+	}
+
+	public static function filter_admin_query( $query ): void {
+		if ( ! is_admin() || ! $query->is_main_query() || $query->get( 'post_type' ) !== 'dashboard_widget' ) {
+			return;
+		}
+		if ( ! empty( $_GET['tag'] ) ) {
+			$query->set( 'tag', sanitize_text_field( $_GET['tag'] ) );
+		}
+	}
 }

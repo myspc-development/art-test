@@ -4,47 +4,54 @@ namespace ArtPulse\DashboardBuilder\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-class DashboardBuilderRegistryGetForRoleTest extends TestCase
-{
-    protected function setUp(): void
-    {
-        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
-        $prop = $ref->getProperty('widgets');
-        $prop->setAccessible(true);
-        $prop->setValue(null, []);
-        if ($ref->hasProperty('builder_widgets')) {
-            $bw = $ref->getProperty('builder_widgets');
-            $bw->setAccessible(true);
-            $bw->setValue(null, []);
-        }
-    }
+class DashboardBuilderRegistryGetForRoleTest extends TestCase {
 
-    public function test_get_for_role_requires_explicit_match(): void
-    {
-        DashboardWidgetRegistry::register('alpha', [
-            'title' => 'Alpha',
-            'render_callback' => '__return_null',
-            'roles' => ['member']
-        ]);
-        DashboardWidgetRegistry::register('beta', [
-            'title' => 'Beta',
-            'render_callback' => '__return_null',
-            'roles' => ['artist']
-        ]);
-        DashboardWidgetRegistry::register('unassigned', [
-            'title' => 'Unassigned',
-            'render_callback' => '__return_null'
-        ]);
+	protected function setUp(): void {
+		$ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
+		$prop = $ref->getProperty( 'widgets' );
+		$prop->setAccessible( true );
+		$prop->setValue( null, array() );
+		if ( $ref->hasProperty( 'builder_widgets' ) ) {
+			$bw = $ref->getProperty( 'builder_widgets' );
+			$bw->setAccessible( true );
+			$bw->setValue( null, array() );
+		}
+	}
 
-        $member = DashboardWidgetRegistry::get_for_role('member');
-        $artist = DashboardWidgetRegistry::get_for_role('artist');
+	public function test_get_for_role_requires_explicit_match(): void {
+		DashboardWidgetRegistry::register(
+			'alpha',
+			array(
+				'title'           => 'Alpha',
+				'render_callback' => '__return_null',
+				'roles'           => array( 'member' ),
+			)
+		);
+		DashboardWidgetRegistry::register(
+			'beta',
+			array(
+				'title'           => 'Beta',
+				'render_callback' => '__return_null',
+				'roles'           => array( 'artist' ),
+			)
+		);
+		DashboardWidgetRegistry::register(
+			'unassigned',
+			array(
+				'title'           => 'Unassigned',
+				'render_callback' => '__return_null',
+			)
+		);
 
-        $this->assertArrayHasKey('alpha', $member);
-        $this->assertArrayNotHasKey('beta', $member);
-        $this->assertArrayNotHasKey('unassigned', $member);
+		$member = DashboardWidgetRegistry::get_for_role( 'member' );
+		$artist = DashboardWidgetRegistry::get_for_role( 'artist' );
 
-        $this->assertArrayHasKey('beta', $artist);
-        $this->assertArrayNotHasKey('alpha', $artist);
-        $this->assertArrayNotHasKey('unassigned', $artist);
-    }
+		$this->assertArrayHasKey( 'alpha', $member );
+		$this->assertArrayNotHasKey( 'beta', $member );
+		$this->assertArrayNotHasKey( 'unassigned', $member );
+
+		$this->assertArrayHasKey( 'beta', $artist );
+		$this->assertArrayNotHasKey( 'alpha', $artist );
+		$this->assertArrayNotHasKey( 'unassigned', $artist );
+	}
 }

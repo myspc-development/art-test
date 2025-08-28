@@ -7,27 +7,31 @@ use ArtPulse\Rest\WidgetLayoutController;
 /**
  * @group admin
  */
-class WidgetLayoutRestTest extends \WP_UnitTestCase
-{
-    private int $uid;
+class WidgetLayoutRestTest extends \WP_UnitTestCase {
 
-    public function set_up()
-    {
-        parent::set_up();
-        $this->uid = self::factory()->user->create(['role' => 'administrator']);
-        wp_set_current_user($this->uid);
+	private int $uid;
 
-        WidgetLayoutController::register();
-        do_action('rest_api_init');
-    }
+	public function set_up() {
+		parent::set_up();
+		$this->uid = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $this->uid );
 
-    public function test_post_saves_layout_with_meta_key(): void
-    {
-        $layout = [ ['id' => 'foo'], ['id' => 'bar', 'visible' => false] ];
-        $req = new \WP_REST_Request('POST', '/artpulse/v1/widget-layout');
-        $req->set_body_params($layout);
-        $res = rest_get_server()->dispatch($req);
-        $this->assertSame(200, $res->get_status());
-        $this->assertSame($layout, get_user_meta($this->uid, UserLayoutManager::META_KEY, true));
-    }
+		WidgetLayoutController::register();
+		do_action( 'rest_api_init' );
+	}
+
+	public function test_post_saves_layout_with_meta_key(): void {
+		$layout = array(
+			array( 'id' => 'foo' ),
+			array(
+				'id'      => 'bar',
+				'visible' => false,
+			),
+		);
+		$req    = new \WP_REST_Request( 'POST', '/artpulse/v1/widget-layout' );
+		$req->set_body_params( $layout );
+		$res = rest_get_server()->dispatch( $req );
+		$this->assertSame( 200, $res->get_status() );
+		$this->assertSame( $layout, get_user_meta( $this->uid, UserLayoutManager::META_KEY, true ) );
+	}
 }

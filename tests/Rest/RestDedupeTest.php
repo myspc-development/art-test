@@ -7,80 +7,77 @@ use function ArtPulse\Tests\safe_unlink;
 /**
  * @group restapi
  */
-class RestDedupeTest extends \WP_UnitTestCase
-{
-    public function test_deduplicate_routes_and_log_conflicts(): void
-    {
-        $log = tempnam(sys_get_temp_dir(), 'aplog');
-        $prev = ini_set('error_log', $log);
-        ini_set('log_errors', '1');
+class RestDedupeTest extends \WP_UnitTestCase {
 
-        $endpoints = [
-            '/ap/v1/foo' => [
-                [
-                    'methods' => 'GET',
-                    'callback' => '__return_true',
-                    'permission_callback' => '__return_true',
-                ],
-                [
-                    'methods' => 'GET',
-                    'callback' => '__return_true',
-                    'permission_callback' => '__return_true',
-                ],
-            ],
-            '/ap/v1/bar' => [
-                [
-                    'methods' => 'POST',
-                    'callback' => '__return_true',
-                    'permission_callback' => '__return_true',
-                ],
-                [
-                    'methods' => 'POST',
-                    'callback' => '__return_false',
-                    'permission_callback' => '__return_true',
-                ],
-            ],
-        ];
+	public function test_deduplicate_routes_and_log_conflicts(): void {
+		$log  = tempnam( sys_get_temp_dir(), 'aplog' );
+		$prev = ini_set( 'error_log', $log );
+		ini_set( 'log_errors', '1' );
 
-        $result = \ap_deduplicate_rest_routes($endpoints);
+		$endpoints = array(
+			'/ap/v1/foo' => array(
+				array(
+					'methods'             => 'GET',
+					'callback'            => '__return_true',
+					'permission_callback' => '__return_true',
+				),
+				array(
+					'methods'             => 'GET',
+					'callback'            => '__return_true',
+					'permission_callback' => '__return_true',
+				),
+			),
+			'/ap/v1/bar' => array(
+				array(
+					'methods'             => 'POST',
+					'callback'            => '__return_true',
+					'permission_callback' => '__return_true',
+				),
+				array(
+					'methods'             => 'POST',
+					'callback'            => '__return_false',
+					'permission_callback' => '__return_true',
+				),
+			),
+		);
 
-        $this->assertCount(1, $result['/ap/v1/foo']);
-        $this->assertCount(2, $result['/ap/v1/bar']);
+		$result = \ap_deduplicate_rest_routes( $endpoints );
 
-        $contents = file_get_contents($log);
-        $this->assertStringContainsString('[REST CONFLICT] Duplicate route /ap/v1/bar (POST)', $contents);
+		$this->assertCount( 1, $result['/ap/v1/foo'] );
+		$this->assertCount( 2, $result['/ap/v1/bar'] );
 
-        ini_set('error_log', $prev);
-        safe_unlink($log);
-    }
+		$contents = file_get_contents( $log );
+		$this->assertStringContainsString( '[REST CONFLICT] Duplicate route /ap/v1/bar (POST)', $contents );
 
-    public function test_ap_rest_route_registered_detects_methods_and_missing_routes(): void
-    {
-        global $wp_rest_server;
-        $prev_server = $wp_rest_server;
+		ini_set( 'error_log', $prev );
+		safe_unlink( $log );
+	}
 
-        $wp_rest_server = new class {
-            public function get_routes(): array
-            {
-                return [
-                    '/ap/v1/sample' => [
-                        ['methods' => 'GET|POST'],
-                        ['methods' => ['DELETE']],
-                        ['methods' => WP_REST_Server::EDITABLE],
-                    ],
-                ];
-            }
-        };
+	public function test_ap_rest_route_registered_detects_methods_and_missing_routes(): void {
+		global $wp_rest_server;
+		$prev_server = $wp_rest_server;
 
-        $this->assertTrue(\ap_rest_route_registered('ap/v1', '/sample'));
-        $this->assertTrue(\ap_rest_route_registered('ap/v1', '/sample', 'GET'));
-        $this->assertTrue(\ap_rest_route_registered('ap/v1', '/sample', 'POST'));
-        $this->assertTrue(\ap_rest_route_registered('ap/v1', '/sample', 'DELETE'));
-        $this->assertTrue(\ap_rest_route_registered('ap/v1', '/sample', 'PUT'));
-        $this->assertTrue(\ap_rest_route_registered('ap/v1', '/sample', 'PATCH'));
-        $this->assertFalse(\ap_rest_route_registered('ap/v1', '/sample', 'OPTIONS'));
-        $this->assertFalse(\ap_rest_route_registered('ap/v1', '/missing'));
+		$wp_rest_server = new class() {
+			public function get_routes(): array {
+				return array(
+					'/ap/v1/sample' => array(
+						array( 'methods' => 'GET|POST' ),
+						array( 'methods' => array( 'DELETE' ) ),
+						array( 'methods' => WP_REST_Server::EDITABLE ),
+					),
+				);
+			}
+		};
 
-        $wp_rest_server = $prev_server;
-    }
+		$this->assertTrue( \ap_rest_route_registered( 'ap/v1', '/sample' ) );
+		$this->assertTrue( \ap_rest_route_registered( 'ap/v1', '/sample', 'GET' ) );
+		$this->assertTrue( \ap_rest_route_registered( 'ap/v1', '/sample', 'POST' ) );
+		$this->assertTrue( \ap_rest_route_registered( 'ap/v1', '/sample', 'DELETE' ) );
+		$this->assertTrue( \ap_rest_route_registered( 'ap/v1', '/sample', 'PUT' ) );
+		$this->assertTrue( \ap_rest_route_registered( 'ap/v1', '/sample', 'PATCH' ) );
+		$this->assertFalse( \ap_rest_route_registered( 'ap/v1', '/sample', 'OPTIONS' ) );
+		$this->assertFalse( \ap_rest_route_registered( 'ap/v1', '/missing' ) );
+
+		$wp_rest_server = $prev_server;
+	}
 }

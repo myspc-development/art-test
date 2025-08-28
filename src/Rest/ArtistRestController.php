@@ -7,125 +7,123 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 
-class ArtistRestController extends WP_REST_Controller
-{
-    /**
-     * Namespace for the REST API
-     * @var string
-     */
-    protected $namespace = 'artpulse/v1';
+class ArtistRestController extends WP_REST_Controller {
 
-    /**
-     * Constructor: register routes
-     */
-    public function __construct()
-    {
-        add_action('rest_api_init', [ $this, 'register_routes' ]);
-    }
+	/**
+	 * Namespace for the REST API
+	 *
+	 * @var string
+	 */
+	protected $namespace = 'artpulse/v1';
 
-    /**
-     * Optional static initializer for consistency with other controllers
-     */
-    public static function register(): void
-    {
-        new self();
-    }
+	/**
+	 * Constructor: register routes
+	 */
+	public function __construct() {
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+	}
 
-    /**
-     * Register REST API routes for artists
-     */
-    public function register_routes(): void
-    {
-        register_rest_route(
-            $this->namespace,
-            '/artists',
-            [
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => [ $this, 'get_artists' ],
-                'permission_callback' => function() {
-                    if (!current_user_can('read')) {
-                        return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                    }
-                    return true;
-                },
-            ]
-        );
+	/**
+	 * Optional static initializer for consistency with other controllers
+	 */
+	public static function register(): void {
+		new self();
+	}
 
-        register_rest_route(
-            $this->namespace,
-            '/artists/(?P<id>\d+)',
-            [
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => [ $this, 'get_artist' ],
-                'permission_callback' => function() {
-                    if (!current_user_can('read')) {
-                        return new \WP_Error('rest_forbidden', __('Unauthorized.', 'artpulse'), ['status' => 403]);
-                    }
-                    return true;
-                },
-                'args'                => [
-                    'id' => [
-                        'validate_callback' => 'is_numeric',
-                    ],
-                ],
-            ]
-        );
-    }
+	/**
+	 * Register REST API routes for artists
+	 */
+	public function register_routes(): void {
+		register_rest_route(
+			$this->namespace,
+			'/artists',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_artists' ),
+				'permission_callback' => function () {
+					if ( ! current_user_can( 'read' ) ) {
+						return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
+					}
+					return true;
+				},
+			)
+		);
 
-    /**
-     * GET /artists
-     * Return list of artists
-     */
-    public function get_artists(WP_REST_Request $request): WP_REST_Response
-    {
-        $query = new \WP_Query([
-            'post_type'      => 'artpulse_artist',
-            'posts_per_page' => -1,
-            // Only fetch IDs for a lighter query and skip found rows since
-            // pagination isn't used here.
-            'fields'         => 'ids',
-            'no_found_rows'  => true,
-        ]);
+		register_rest_route(
+			$this->namespace,
+			'/artists/(?P<id>\d+)',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_artist' ),
+				'permission_callback' => function () {
+					if ( ! current_user_can( 'read' ) ) {
+						return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
+					}
+					return true;
+				},
+				'args'                => array(
+					'id' => array(
+						'validate_callback' => 'is_numeric',
+					),
+				),
+			)
+		);
+	}
 
-        $data = [];
-        foreach ($query->posts as $post_id) {
-            $item = [
-                'id'    => $post_id,
-                'title' => get_the_title($post_id),
-                'link'  => get_permalink($post_id),
-                'is_verified' => (bool) get_post_meta($post_id, '_ap_is_verified', true),
-            ];
-            $data[] = $this->prepare_item_for_response($item, get_post($post_id));
-        }
+	/**
+	 * GET /artists
+	 * Return list of artists
+	 */
+	public function get_artists( WP_REST_Request $request ): WP_REST_Response {
+		$query = new \WP_Query(
+			array(
+				'post_type'      => 'artpulse_artist',
+				'posts_per_page' => -1,
+				// Only fetch IDs for a lighter query and skip found rows since
+				// pagination isn't used here.
+				'fields'         => 'ids',
+				'no_found_rows'  => true,
+			)
+		);
 
-        return rest_ensure_response($data);
-    }
+		$data = array();
+		foreach ( $query->posts as $post_id ) {
+			$item   = array(
+				'id'          => $post_id,
+				'title'       => get_the_title( $post_id ),
+				'link'        => get_permalink( $post_id ),
+				'is_verified' => (bool) get_post_meta( $post_id, '_ap_is_verified', true ),
+			);
+			$data[] = $this->prepare_item_for_response( $item, get_post( $post_id ) );
+		}
 
-    /**
-     * GET /artists/{id}
-     * Return single artist
-     */
-    public function get_artist(WP_REST_Request $request): WP_REST_Response
-    {
-        $id   = (int) $request['id'];
-        $post = get_post($id);
+		return rest_ensure_response( $data );
+	}
 
-        if (empty($post) || 'artpulse_artist' !== $post->post_type) {
-            return new WP_REST_Response(['message' => 'Artist not found'], 404);
-        }
+	/**
+	 * GET /artists/{id}
+	 * Return single artist
+	 */
+	public function get_artist( WP_REST_Request $request ): WP_REST_Response {
+		$id   = (int) $request['id'];
+		$post = get_post( $id );
 
-        $item = [
-            'id'      => $post->ID,
-            'title'   => get_the_title($post),
-            'content' => apply_filters('the_content', $post->post_content),
-            'meta'    => [
-                'bio' => get_post_meta($post->ID, '_ap_artist_bio', true),
-                'org' => get_post_meta($post->ID, '_ap_artist_org', true),
-            ],
-            'link'    => get_permalink($post),
-            'is_verified' => (bool) get_post_meta($post->ID, '_ap_is_verified', true),
-        ];
+		if ( empty( $post ) || 'artpulse_artist' !== $post->post_type ) {
+			return new WP_REST_Response( array( 'message' => 'Artist not found' ), 404 );
+		}
 
-        return rest_ensure_response($item);
-    }
+		$item = array(
+			'id'          => $post->ID,
+			'title'       => get_the_title( $post ),
+			'content'     => apply_filters( 'the_content', $post->post_content ),
+			'meta'        => array(
+				'bio' => get_post_meta( $post->ID, '_ap_artist_bio', true ),
+				'org' => get_post_meta( $post->ID, '_ap_artist_org', true ),
+			),
+			'link'        => get_permalink( $post ),
+			'is_verified' => (bool) get_post_meta( $post->ID, '_ap_is_verified', true ),
+		);
+
+		return rest_ensure_response( $item );
+	}
 }

@@ -8,44 +8,47 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
 
 // Stub functions
-if (!function_exists(__NAMESPACE__ . '\\artpulse_dashicon')) {
-    function artpulse_dashicon($icon, $args = []) { return '<span></span>'; }
+if ( ! function_exists( __NAMESPACE__ . '\\artpulse_dashicon' ) ) {
+	function artpulse_dashicon( $icon, $args = array() ) {
+		return '<span></span>'; }
 }
-if (!function_exists(__NAMESPACE__ . '\\esc_attr')) {
-    function esc_attr($str) { return $str; }
+if ( ! function_exists( __NAMESPACE__ . '\\esc_attr' ) ) {
+	function esc_attr( $str ) {
+		return $str; }
 }
-if (!function_exists(__NAMESPACE__ . '\\update_option')) {
-    function update_option($k, $v) { PreviewStyleTest::$options[$k] = $v; }
+if ( ! function_exists( __NAMESPACE__ . '\\update_option' ) ) {
+	function update_option( $k, $v ) {
+		PreviewStyleTest::$options[ $k ] = $v; }
 }
-if (!function_exists(__NAMESPACE__ . '\\get_option')) {
-    function get_option($k, $d = []) { return PreviewStyleTest::$options[$k] ?? $d; }
+if ( ! function_exists( __NAMESPACE__ . '\\get_option' ) ) {
+	function get_option( $k, $d = array() ) {
+		return PreviewStyleTest::$options[ $k ] ?? $d; }
 }
-if (!function_exists(__NAMESPACE__ . '\\sanitize_key')) {
-    function sanitize_key($key) { return preg_replace('/[^a-z0-9_]/i', '', strtolower($key)); }
+if ( ! function_exists( __NAMESPACE__ . '\\sanitize_key' ) ) {
+	function sanitize_key( $key ) {
+		return preg_replace( '/[^a-z0-9_]/i', '', strtolower( $key ) ); }
 }
 
-class PreviewStyleTest extends TestCase
-{
-    public static array $options = [];
-    protected function setUp(): void
-    {
-        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
-        $prop = $ref->getProperty('widgets');
-        $prop->setAccessible(true);
-        $prop->setValue(null, []);
-    }
+class PreviewStyleTest extends TestCase {
 
-    public function test_preview_injects_style_tag(): void
-    {
-        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', '__return_null');
-        UserLayoutManager::save_role_layout('subscriber', [['id' => 'alpha']]);
-        UserLayoutManager::save_role_style('subscriber', ['background_color' => '#000']);
+	public static array $options = array();
+	protected function setUp(): void {
+		$ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
+		$prop = $ref->getProperty( 'widgets' );
+		$prop->setAccessible( true );
+		$prop->setValue( null, array() );
+	}
 
-        ob_start();
-        DashboardWidgetTools::render_role_dashboard_preview('subscriber');
-        $html = ob_get_clean();
+	public function test_preview_injects_style_tag(): void {
+		DashboardWidgetRegistry::register( 'alpha', 'Alpha', '', '', '__return_null' );
+		UserLayoutManager::save_role_layout( 'subscriber', array( array( 'id' => 'alpha' ) ) );
+		UserLayoutManager::save_role_style( 'subscriber', array( 'background_color' => '#000' ) );
 
-        $this->assertStringContainsString('<style id="ap-preview-style">', $html);
-        $this->assertStringContainsString('background:#000', $html);
-    }
+		ob_start();
+		DashboardWidgetTools::render_role_dashboard_preview( 'subscriber' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( '<style id="ap-preview-style">', $html );
+		$this->assertStringContainsString( 'background:#000', $html );
+	}
 }

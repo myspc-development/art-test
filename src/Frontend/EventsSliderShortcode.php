@@ -1,68 +1,65 @@
 <?php
 namespace ArtPulse\Frontend;
 
-class EventsSliderShortcode
-{
-    public static function register(): void
-    {
-        \ArtPulse\Core\ShortcodeRegistry::register('ap_events_slider', 'Events Slider', [self::class, 'render']);
-        add_action('wp_enqueue_scripts', [self::class, 'enqueue']);
-    }
+class EventsSliderShortcode {
 
-    public static function enqueue(): void
-    {
-        if (function_exists('ap_enqueue_global_styles')) {
-            ap_enqueue_global_styles();
-        }
-        $plugin_url = plugin_dir_url(ARTPULSE_PLUGIN_FILE);
-        wp_enqueue_style(
-            'swiper-css',
-            $plugin_url . 'assets/libs/swiper/swiper-bundle.min.css',
-            [],
-            null
-        );
-        wp_enqueue_style(
-            'ap-swiper',
-            $plugin_url . 'assets/css/swiper.css',
-            ['swiper-css'],
-            filemtime(plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'assets/css/swiper.css')
-        );
-        wp_enqueue_script(
-            'swiper-js',
-            $plugin_url . 'assets/libs/swiper/swiper-bundle.min.js',
-            [],
-            null,
-            true
-        );
-        wp_enqueue_script(
-            'ap-events-slider',
-            $plugin_url . 'assets/js/ap-events-slider.js',
-            ['swiper-js', 'wp-api-fetch'],
-            '1.0.0',
-            true
-        );
-        wp_localize_script(
-            'ap-events-slider',
-            'APEventsSlider',
-            [
-                'nonce'    => wp_create_nonce('wp_rest'),
-                'endpoint' => rest_url('artpulse/v1/events'),
-                'root'     => esc_url_raw(rest_url()),
-            ]
-        );
-    }
+	public static function register(): void {
+		\ArtPulse\Core\ShortcodeRegistry::register( 'ap_events_slider', 'Events Slider', array( self::class, 'render' ) );
+		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue' ) );
+	}
 
-    public static function render(): string
-    {
-        ob_start();
-        ?>
-        <div class="ap-events-slider swiper">
-            <div class="swiper-wrapper"></div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </div>
-        <?php
-        return ob_get_clean();
-    }
+	public static function enqueue(): void {
+		if ( function_exists( 'ap_enqueue_global_styles' ) ) {
+			ap_enqueue_global_styles();
+		}
+		$plugin_url = plugin_dir_url( ARTPULSE_PLUGIN_FILE );
+		wp_enqueue_style(
+			'swiper-css',
+			$plugin_url . 'assets/libs/swiper/swiper-bundle.min.css',
+			array(),
+			null
+		);
+		wp_enqueue_style(
+			'ap-swiper',
+			$plugin_url . 'assets/css/swiper.css',
+			array( 'swiper-css' ),
+			filemtime( plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/css/swiper.css' )
+		);
+		wp_enqueue_script(
+			'swiper-js',
+			$plugin_url . 'assets/libs/swiper/swiper-bundle.min.js',
+			array(),
+			null,
+			true
+		);
+		wp_enqueue_script(
+			'ap-events-slider',
+			$plugin_url . 'assets/js/ap-events-slider.js',
+			array( 'swiper-js', 'wp-api-fetch' ),
+			'1.0.0',
+			true
+		);
+		wp_localize_script(
+			'ap-events-slider',
+			'APEventsSlider',
+			array(
+				'nonce'    => wp_create_nonce( 'wp_rest' ),
+				'endpoint' => rest_url( 'artpulse/v1/events' ),
+				'root'     => esc_url_raw( rest_url() ),
+			)
+		);
+	}
+
+	public static function render(): string {
+		ob_start();
+		?>
+		<div class="ap-events-slider swiper">
+			<div class="swiper-wrapper"></div>
+			<div class="swiper-pagination"></div>
+			<div class="swiper-button-prev"></div>
+			<div class="swiper-button-next"></div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
 }

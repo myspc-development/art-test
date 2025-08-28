@@ -1,48 +1,52 @@
 <?php
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 function artpulse_enqueue_widget_scripts(): void {
-    if (!is_singular()) {
-        return;
-    }
+	if ( ! is_singular() ) {
+		return;
+	}
 
-    global $post;
-    $post = get_post();
-    if (!$post) {
-        return;
-    }
+	global $post;
+	$post = get_post();
+	if ( ! $post ) {
+		return;
+	}
 
-    $shortcodes = ['ap_widget', 'ap_user_dashboard', 'ap_react_dashboard', 'user_dashboard'];
-    $elementor_data = get_post_meta($post->ID, '_elementor_data', true);
+	$shortcodes     = array( 'ap_widget', 'ap_user_dashboard', 'ap_react_dashboard', 'user_dashboard' );
+	$elementor_data = get_post_meta( $post->ID, '_elementor_data', true );
 
-    $has_widget = false;
-    foreach ([$post->post_content, is_string($elementor_data) ? $elementor_data : ''] as $content) {
-        foreach ($shortcodes as $shortcode) {
-            if (has_shortcode($content, $shortcode) || strpos($content, '[' . $shortcode) !== false) {
-                $has_widget = true;
-                break 2;
-            }
-        }
-    }
-    if (!$has_widget) {
-        return;
-    }
+	$has_widget = false;
+	foreach ( array( $post->post_content, is_string( $elementor_data ) ? $elementor_data : '' ) as $content ) {
+		foreach ( $shortcodes as $shortcode ) {
+			if ( has_shortcode( $content, $shortcode ) || strpos( $content, '[' . $shortcode ) !== false ) {
+				$has_widget = true;
+				break 2;
+			}
+		}
+	}
+	if ( ! $has_widget ) {
+		return;
+	}
 
-    wp_enqueue_script(
-        'art-widgets',
-        plugins_url('assets/js/widgets.bundle.js', __FILE__),
-        ['wp-element', 'wp-api-fetch'],
-        '1.0.0',
-        true
-    );
+	wp_enqueue_script(
+		'art-widgets',
+		plugins_url( 'assets/js/widgets.bundle.js', __FILE__ ),
+		array( 'wp-element', 'wp-api-fetch' ),
+		'1.0.0',
+		true
+	);
 
-    wp_localize_script('art-widgets', 'APChat', [
-        'apiRoot'  => esc_url_raw(rest_url()),
-        'nonce'    => wp_create_nonce('wp_rest'),
-        'loggedIn' => is_user_logged_in(),
-    ]);
+	wp_localize_script(
+		'art-widgets',
+		'APChat',
+		array(
+			'apiRoot'  => esc_url_raw( rest_url() ),
+			'nonce'    => wp_create_nonce( 'wp_rest' ),
+			'loggedIn' => is_user_logged_in(),
+		)
+	);
 }
 
-add_action('wp_enqueue_scripts', 'artpulse_enqueue_widget_scripts');
+add_action( 'wp_enqueue_scripts', 'artpulse_enqueue_widget_scripts' );

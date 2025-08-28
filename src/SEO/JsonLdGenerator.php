@@ -6,195 +6,189 @@ use WP_Post;
 /**
  * Helper to output JSON-LD schema for events and artists.
  */
-class JsonLdGenerator
-{
-    /**
-     * Print schema for the current singular post if supported.
-     */
-    public static function output(): void
-    {
-        if (!is_singular()) {
-            return;
-        }
+class JsonLdGenerator {
 
-        $post = get_post();
-        if (!$post instanceof WP_Post) {
-            return;
-        }
+	/**
+	 * Print schema for the current singular post if supported.
+	 */
+	public static function output(): void {
+		if ( ! is_singular() ) {
+			return;
+		}
 
-        if ($post->post_type === 'artpulse_event') {
-            $schema = self::event_schema($post);
-        } elseif ($post->post_type === 'artpulse_artist') {
-            $schema = self::artist_schema($post);
-        } elseif ($post->post_type === 'artpulse_artwork') {
-            $schema = self::artwork_schema($post);
-        } else {
-            return;
-        }
+		$post = get_post();
+		if ( ! $post instanceof WP_Post ) {
+			return;
+		}
 
-        echo '<script type="application/ld+json">' .
-            wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) .
-            '</script>' . "\n";
-    }
+		if ( $post->post_type === 'artpulse_event' ) {
+			$schema = self::event_schema( $post );
+		} elseif ( $post->post_type === 'artpulse_artist' ) {
+			$schema = self::artist_schema( $post );
+		} elseif ( $post->post_type === 'artpulse_artwork' ) {
+			$schema = self::artwork_schema( $post );
+		} else {
+			return;
+		}
 
-    /**
-     * Get schema data for an event post.
-     */
-    public static function event_data(WP_Post $post): array
-    {
-        return self::event_schema($post);
-    }
+		echo '<script type="application/ld+json">' .
+			wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) .
+			'</script>' . "\n";
+	}
 
-    /**
-     * Build ItemList schema for a list of event posts.
-     *
-     * @param int[] $ids Event post IDs.
-     */
-    public static function directory_schema(array $ids): array
-    {
-        $items = [];
-        $pos   = 1;
-        foreach ($ids as $id) {
-            $items[] = [
-                '@type'    => 'ListItem',
-                'position' => $pos++,
-                'url'      => get_permalink($id),
-            ];
-        }
+	/**
+	 * Get schema data for an event post.
+	 */
+	public static function event_data( WP_Post $post ): array {
+		return self::event_schema( $post );
+	}
 
-        return [
-            '@context'        => 'https://schema.org',
-            '@type'           => 'ItemList',
-            'itemListElement' => $items,
-        ];
-    }
+	/**
+	 * Build ItemList schema for a list of event posts.
+	 *
+	 * @param int[] $ids Event post IDs.
+	 */
+	public static function directory_schema( array $ids ): array {
+		$items = array();
+		$pos   = 1;
+		foreach ( $ids as $id ) {
+			$items[] = array(
+				'@type'    => 'ListItem',
+				'position' => $pos++,
+				'url'      => get_permalink( $id ),
+			);
+		}
 
-    /**
-     * Build Event schema data.
-     */
-    private static function event_schema(WP_Post $post): array
-    {
-        $start   = get_post_meta($post->ID, 'event_start_date', true);
-        if (!$start) {
-            $start = get_post_meta($post->ID, '_ap_event_date', true);
-        }
-        $end     = get_post_meta($post->ID, 'event_end_date', true);
-        $loc     = get_post_meta($post->ID, '_ap_event_location', true);
-        $address = get_post_meta($post->ID, '_ap_event_address', true);
-        $desc    = $post->post_excerpt ?: wp_trim_words($post->post_content, 50);
+		return array(
+			'@context'        => 'https://schema.org',
+			'@type'           => 'ItemList',
+			'itemListElement' => $items,
+		);
+	}
 
-        $image = get_the_post_thumbnail_url($post, 'full');
+	/**
+	 * Build Event schema data.
+	 */
+	private static function event_schema( WP_Post $post ): array {
+		$start = get_post_meta( $post->ID, 'event_start_date', true );
+		if ( ! $start ) {
+			$start = get_post_meta( $post->ID, '_ap_event_date', true );
+		}
+		$end     = get_post_meta( $post->ID, 'event_end_date', true );
+		$loc     = get_post_meta( $post->ID, '_ap_event_location', true );
+		$address = get_post_meta( $post->ID, '_ap_event_address', true );
+		$desc    = $post->post_excerpt ?: wp_trim_words( $post->post_content, 50 );
 
-        $data = [
-            '@context'   => 'https://schema.org',
-            '@type'      => 'Event',
-            'name'       => get_the_title($post),
-            'startDate'  => $start,
-            'endDate'    => $end ?: $start,
-            'url'        => get_permalink($post),
-            'description'=> wp_strip_all_tags($desc),
-            'image'      => $image,
-        ];
+		$image = get_the_post_thumbnail_url( $post, 'full' );
 
-        if ($loc || $address) {
-            $data['location'] = [
-                '@type'   => 'Place',
-                'name'    => $loc ?: $address,
-                'address' => $address,
-            ];
-        }
+		$data = array(
+			'@context'    => 'https://schema.org',
+			'@type'       => 'Event',
+			'name'        => get_the_title( $post ),
+			'startDate'   => $start,
+			'endDate'     => $end ?: $start,
+			'url'         => get_permalink( $post ),
+			'description' => wp_strip_all_tags( $desc ),
+			'image'       => $image,
+		);
 
-        $org = get_post_meta($post->ID, 'event_organizer_name', true);
-        if ($org) {
-            $data['organizer'] = [
-                '@type' => 'Person',
-                'name'  => $org,
-            ];
-        }
+		if ( $loc || $address ) {
+			$data['location'] = array(
+				'@type'   => 'Place',
+				'name'    => $loc ?: $address,
+				'address' => $address,
+			);
+		}
 
-        $price = get_post_meta($post->ID, 'price', true);
-        if ($price !== '') {
-            $currency = get_option('artpulse_settings')['currency'] ?? 'USD';
-            $data['offers'] = [
-                '@type'         => 'Offer',
-                'price'         => $price,
-                'priceCurrency' => $currency,
-                'availability'  => 'https://schema.org/InStock',
-                'url'           => get_permalink($post),
-            ];
-        }
+		$org = get_post_meta( $post->ID, 'event_organizer_name', true );
+		if ( $org ) {
+			$data['organizer'] = array(
+				'@type' => 'Person',
+				'name'  => $org,
+			);
+		}
 
-        return array_filter($data);
-    }
+		$price = get_post_meta( $post->ID, 'price', true );
+		if ( $price !== '' ) {
+			$currency       = get_option( 'artpulse_settings' )['currency'] ?? 'USD';
+			$data['offers'] = array(
+				'@type'         => 'Offer',
+				'price'         => $price,
+				'priceCurrency' => $currency,
+				'availability'  => 'https://schema.org/InStock',
+				'url'           => get_permalink( $post ),
+			);
+		}
 
-    /**
-     * Build Artist schema data.
-     */
-    private static function artist_schema(WP_Post $post): array
-    {
-        $name = get_post_meta($post->ID, 'artist_name', true) ?: get_the_title($post);
-        $bio  = get_post_meta($post->ID, 'artist_bio', true);
-        if (!$bio) {
-            $bio = $post->post_excerpt ?: wp_trim_words($post->post_content, 50);
-        }
+		return array_filter( $data );
+	}
 
-        $links = [];
-        foreach (['artist_website', 'artist_facebook', 'artist_instagram', 'artist_twitter'] as $key) {
-            $url = get_post_meta($post->ID, $key, true);
-            if ($url) {
-                $links[] = esc_url_raw($url);
-            }
-        }
+	/**
+	 * Build Artist schema data.
+	 */
+	private static function artist_schema( WP_Post $post ): array {
+		$name = get_post_meta( $post->ID, 'artist_name', true ) ?: get_the_title( $post );
+		$bio  = get_post_meta( $post->ID, 'artist_bio', true );
+		if ( ! $bio ) {
+			$bio = $post->post_excerpt ?: wp_trim_words( $post->post_content, 50 );
+		}
 
-        $data = [
-            '@context'   => 'https://schema.org',
-            '@type'      => 'Person',
-            'name'       => $name,
-            'description'=> wp_strip_all_tags($bio),
-            'url'        => get_permalink($post),
-        ];
+		$links = array();
+		foreach ( array( 'artist_website', 'artist_facebook', 'artist_instagram', 'artist_twitter' ) as $key ) {
+			$url = get_post_meta( $post->ID, $key, true );
+			if ( $url ) {
+				$links[] = esc_url_raw( $url );
+			}
+		}
 
-        if ($links) {
-            $data['sameAs'] = $links;
-        }
+		$data = array(
+			'@context'    => 'https://schema.org',
+			'@type'       => 'Person',
+			'name'        => $name,
+			'description' => wp_strip_all_tags( $bio ),
+			'url'         => get_permalink( $post ),
+		);
 
-        return $data;
-    }
+		if ( $links ) {
+			$data['sameAs'] = $links;
+		}
 
-    /**
-     * Build VisualArtwork schema data.
-     */
-    private static function artwork_schema(WP_Post $post): array
-    {
-        $artist_id   = get_post_meta($post->ID, '_ap_artwork_artist', true);
-        $artist_name = $artist_id ? get_the_title($artist_id) : '';
+		return $data;
+	}
 
-        $desc = $post->post_excerpt ?: wp_trim_words($post->post_content, 50);
+	/**
+	 * Build VisualArtwork schema data.
+	 */
+	private static function artwork_schema( WP_Post $post ): array {
+		$artist_id   = get_post_meta( $post->ID, '_ap_artwork_artist', true );
+		$artist_name = $artist_id ? get_the_title( $artist_id ) : '';
 
-        $tags = wp_get_post_tags($post->ID, ['fields' => 'names']);
+		$desc = $post->post_excerpt ?: wp_trim_words( $post->post_content, 50 );
 
-        $image = get_the_post_thumbnail_url($post, 'full');
+		$tags = wp_get_post_tags( $post->ID, array( 'fields' => 'names' ) );
 
-        $data = [
-            '@context'   => 'https://schema.org',
-            '@type'      => 'VisualArtwork',
-            'name'       => get_the_title($post),
-            'image'      => $image,
-            'description'=> wp_strip_all_tags($desc),
-            'url'        => get_permalink($post),
-        ];
+		$image = get_the_post_thumbnail_url( $post, 'full' );
 
-        if ($artist_name) {
-            $data['creator'] = [
-                '@type' => 'Person',
-                'name'  => $artist_name,
-            ];
-        }
+		$data = array(
+			'@context'    => 'https://schema.org',
+			'@type'       => 'VisualArtwork',
+			'name'        => get_the_title( $post ),
+			'image'       => $image,
+			'description' => wp_strip_all_tags( $desc ),
+			'url'         => get_permalink( $post ),
+		);
 
-        if ($tags) {
-            $data['keywords'] = $tags;
-        }
+		if ( $artist_name ) {
+			$data['creator'] = array(
+				'@type' => 'Person',
+				'name'  => $artist_name,
+			);
+		}
 
-        return array_filter($data);
-    }
+		if ( $tags ) {
+			$data['keywords'] = $tags;
+		}
+
+		return array_filter( $data );
+	}
 }

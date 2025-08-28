@@ -1,40 +1,47 @@
 <?php
 namespace ArtPulse\Core;
 
-class EventRsvpMetaMigration
-{
-    public static function maybe_migrate(): void
-    {
-        if (get_option('ap_event_rsvp_meta_migrated')) {
-            return;
-        }
+class EventRsvpMetaMigration {
 
-        $posts = get_posts([
-            'post_type'      => 'artpulse_event',
-            'posts_per_page' => -1,
-            'fields'         => 'ids',
-            'meta_query'     => [
-                'relation' => 'OR',
-                ['key' => 'ap_event_requires_rsvp', 'compare' => 'EXISTS'],
-                ['key' => 'ap_event_rsvps', 'compare' => 'EXISTS'],
-            ],
-        ]);
+	public static function maybe_migrate(): void {
+		if ( get_option( 'ap_event_rsvp_meta_migrated' ) ) {
+			return;
+		}
 
-        foreach ($posts as $post_id) {
-            $enabled = get_post_meta($post_id, 'ap_event_requires_rsvp', true);
-            if ($enabled !== '' && ! metadata_exists('post', $post_id, 'event_rsvp_enabled')) {
-                update_post_meta($post_id, 'event_rsvp_enabled', $enabled);
-            }
+		$posts = get_posts(
+			array(
+				'post_type'      => 'artpulse_event',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					'relation' => 'OR',
+					array(
+						'key'     => 'ap_event_requires_rsvp',
+						'compare' => 'EXISTS',
+					),
+					array(
+						'key'     => 'ap_event_rsvps',
+						'compare' => 'EXISTS',
+					),
+				),
+			)
+		);
 
-            $list = get_post_meta($post_id, 'ap_event_rsvps', true);
-            if ($list && ! metadata_exists('post', $post_id, 'event_rsvp_list')) {
-                update_post_meta($post_id, 'event_rsvp_list', $list);
-            }
+		foreach ( $posts as $post_id ) {
+			$enabled = get_post_meta( $post_id, 'ap_event_requires_rsvp', true );
+			if ( $enabled !== '' && ! metadata_exists( 'post', $post_id, 'event_rsvp_enabled' ) ) {
+				update_post_meta( $post_id, 'event_rsvp_enabled', $enabled );
+			}
 
-            delete_post_meta($post_id, 'ap_event_requires_rsvp');
-            delete_post_meta($post_id, 'ap_event_rsvps');
-        }
+			$list = get_post_meta( $post_id, 'ap_event_rsvps', true );
+			if ( $list && ! metadata_exists( 'post', $post_id, 'event_rsvp_list' ) ) {
+				update_post_meta( $post_id, 'event_rsvp_list', $list );
+			}
 
-        update_option('ap_event_rsvp_meta_migrated', 1);
-    }
+			delete_post_meta( $post_id, 'ap_event_requires_rsvp' );
+			delete_post_meta( $post_id, 'ap_event_rsvps' );
+		}
+
+		update_option( 'ap_event_rsvp_meta_migrated', 1 );
+	}
 }

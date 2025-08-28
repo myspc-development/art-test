@@ -4,45 +4,41 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_Error;
 
-class EventCardController
-{
-    public static function register(): void
-    {
-        if (did_action('rest_api_init')) {
-            self::register_routes();
-        } else {
-            add_action('rest_api_init', [self::class, 'register_routes']);
-        }
-    }
+class EventCardController {
 
-    public static function register_routes(): void
-    {
-        register_rest_route(
-            'artpulse/v1',
-            '/event-card/(?P<id>\\d+)',
-            [
-                'methods'             => 'GET',
-                'callback'            => [self::class, 'get_card'],
-                'permission_callback' => [self::class, 'check_permission'],
-                'args'                => [ 'id' => [ 'validate_callback' => 'is_numeric' ] ],
-            ]
-        );
-    }
+	public static function register(): void {
+		if ( did_action( 'rest_api_init' ) ) {
+			self::register_routes();
+		} else {
+			add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
+		}
+	}
 
-    public static function check_permission(WP_REST_Request $request): bool
-    {
-        $nonce = $request->get_header('X-WP-Nonce');
-        return is_user_logged_in() && wp_verify_nonce($nonce, 'wp_rest');
-    }
+	public static function register_routes(): void {
+		register_rest_route(
+			'artpulse/v1',
+			'/event-card/(?P<id>\\d+)',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( self::class, 'get_card' ),
+				'permission_callback' => array( self::class, 'check_permission' ),
+				'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+			)
+		);
+	}
 
-    public static function get_card(WP_REST_Request $request)
-    {
-        $id = absint($request->get_param('id'));
-        if (!$id || get_post_type($id) !== 'artpulse_event') {
-            return new WP_Error('invalid_event', 'Invalid event.', ['status' => 404]);
-        }
+	public static function check_permission( WP_REST_Request $request ): bool {
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		return is_user_logged_in() && wp_verify_nonce( $nonce, 'wp_rest' );
+	}
 
-        $html = ap_get_event_card($id);
-        return rest_ensure_response($html);
-    }
+	public static function get_card( WP_REST_Request $request ) {
+		$id = absint( $request->get_param( 'id' ) );
+		if ( ! $id || get_post_type( $id ) !== 'artpulse_event' ) {
+			return new WP_Error( 'invalid_event', 'Invalid event.', array( 'status' => 404 ) );
+		}
+
+		$html = ap_get_event_card( $id );
+		return rest_ensure_response( $html );
+	}
 }

@@ -1,6 +1,6 @@
 <?php
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 use ArtPulse\Core\DashboardWidgetRegistry;
@@ -9,78 +9,81 @@ use ArtPulse\Admin\Widgets\WidgetStatusPanelWidget;
 use ArtPulse\Admin\Widgets\WidgetManifestPanelWidget;
 
 // Load and register widgets defined in the configuration file.
-add_action('artpulse_register_dashboard_widget', [WidgetRegistryLoader::class, 'register_widgets']);
+add_action( 'artpulse_register_dashboard_widget', array( WidgetRegistryLoader::class, 'register_widgets' ) );
 
 function ap_register_dashboard_builder_widget_map(): void {
-    $config = WidgetRegistryLoader::get_config();
+	$config = WidgetRegistryLoader::get_config();
 
-    global $ap_widget_source_map, $ap_widget_status;
-    $ap_widget_source_map = [];
-    $ap_widget_status     = [
-        'registered'   => [],
-        'missing'      => [],
-        'unregistered' => [],
-    ];
+	global $ap_widget_source_map, $ap_widget_status;
+	$ap_widget_source_map = array();
+	$ap_widget_status     = array(
+		'registered'   => array(),
+		'missing'      => array(),
+		'unregistered' => array(),
+	);
 
-    foreach ($config as $id => $data) {
-        $roles = $data['roles'] ?? [];
-        foreach ($roles as $role) {
-            $ap_widget_source_map[$role][$id] = $data['class'] ?? ($data['callback'] ?? '');
-        }
+	foreach ( $config as $id => $data ) {
+		$roles = $data['roles'] ?? array();
+		foreach ( $roles as $role ) {
+			$ap_widget_source_map[ $role ][ $id ] = $data['class'] ?? ( $data['callback'] ?? '' );
+		}
 
-        $args = [
-            'title' => $data['label'] ?? ucwords(str_replace(['_', '-'], ' ', $id)),
-            'roles' => $roles,
-        ];
+		$args = array(
+			'title' => $data['label'] ?? ucwords( str_replace( array( '_', '-' ), ' ', $id ) ),
+			'roles' => $roles,
+		);
 
-        if (isset($data['class']) && method_exists($data['class'], 'render')) {
-            $args['render_callback'] = [$data['class'], 'render'];
-        } elseif (isset($data['callback'])) {
-            $args['render_callback'] = $data['callback'];
-        } else {
-            $cb = function_exists('render_widget_' . $id) ? 'render_widget_' . $id : '__return_empty_string';
-            $args['render_callback'] = $cb;
-        }
+		if ( isset( $data['class'] ) && method_exists( $data['class'], 'render' ) ) {
+			$args['render_callback'] = array( $data['class'], 'render' );
+		} elseif ( isset( $data['callback'] ) ) {
+			$args['render_callback'] = $data['callback'];
+		} else {
+			$cb                      = function_exists( 'render_widget_' . $id ) ? 'render_widget_' . $id : '__return_empty_string';
+			$args['render_callback'] = $cb;
+		}
 
-        if (!DashboardWidgetRegistry::get($id)) {
-            DashboardWidgetRegistry::register($id, $args);
-        }
-    }
+		if ( ! DashboardWidgetRegistry::get( $id ) ) {
+			DashboardWidgetRegistry::register( $id, $args );
+		}
+	}
 }
-add_action('init', 'ap_register_dashboard_builder_widget_map', 20);
+add_action( 'init', 'ap_register_dashboard_builder_widget_map', 20 );
 
 function ap_register_builder_core_placeholders(): void {
-    $config = WidgetRegistryLoader::get_config();
-    foreach ($config as $id => $data) {
-        $core_id = 'widget_' . $id;
-        if (!DashboardWidgetRegistry::exists($core_id)) {
-            $label           = $data['label'] ?? ucwords(str_replace(['_', '-'], ' ', $id));
-            $placeholderLabel = $label . ' (Core)';
+	$config = WidgetRegistryLoader::get_config();
+	foreach ( $config as $id => $data ) {
+		$core_id = 'widget_' . $id;
+		if ( ! DashboardWidgetRegistry::exists( $core_id ) ) {
+			$label            = $data['label'] ?? ucwords( str_replace( array( '_', '-' ), ' ', $id ) );
+			$placeholderLabel = $label . ' (Core)';
 
-            $is_registered = false;
-            foreach (DashboardWidgetRegistry::get_all() as $widget) {
-                $existing = trim($widget['label'] ?? '');
-                if (strtolower($existing) === strtolower($placeholderLabel)) {
-                    $is_registered = true;
-                    break;
-                }
-            }
+			$is_registered = false;
+			foreach ( DashboardWidgetRegistry::get_all() as $widget ) {
+				$existing = trim( $widget['label'] ?? '' );
+				if ( strtolower( $existing ) === strtolower( $placeholderLabel ) ) {
+					$is_registered = true;
+					break;
+				}
+			}
 
-            if ($is_registered) {
-                continue;
-            }
+			if ( $is_registered ) {
+				continue;
+			}
 
-            DashboardWidgetRegistry::register_widget($core_id, [
-                'label'    => $placeholderLabel,
-                'callback' => 'render_widget_' . $core_id,
-                'roles'    => $data['roles'] ?? [],
-            ]);
-        }
-    }
+			DashboardWidgetRegistry::register_widget(
+				$core_id,
+				array(
+					'label'    => $placeholderLabel,
+					'callback' => 'render_widget_' . $core_id,
+					'roles'    => $data['roles'] ?? array(),
+				)
+			);
+		}
+	}
 }
-add_action('init', 'ap_register_builder_core_placeholders', 25);
+add_action( 'init', 'ap_register_builder_core_placeholders', 25 );
 
-if (defined('WIDGET_DEBUG_MODE') && WIDGET_DEBUG_MODE) {
-    WidgetStatusPanelWidget::register();
-    WidgetManifestPanelWidget::register();
+if ( defined( 'WIDGET_DEBUG_MODE' ) && WIDGET_DEBUG_MODE ) {
+	WidgetStatusPanelWidget::register();
+	WidgetManifestPanelWidget::register();
 }

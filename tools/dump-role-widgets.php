@@ -6,20 +6,20 @@
  * Usage (HTTP): tools/dump-role-widgets.php?role=member
  */
 
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 $role = php_sapi_name() === 'cli'
-    ? sanitize_key($argv[1] ?? 'member')
-    : sanitize_key($_GET['role'] ?? 'member');
+	? sanitize_key( $argv[1] ?? 'member' )
+	: sanitize_key( $_GET['role'] ?? 'member' );
 
-$widgets = DashboardWidgetRegistry::get_widgets_by_role($role);
+$widgets = DashboardWidgetRegistry::get_widgets_by_role( $role );
 
-if (php_sapi_name() !== 'cli') {
-    header('Content-Type: application/json');
+if ( php_sapi_name() !== 'cli' ) {
+	header( 'Content-Type: application/json' );
 }
 
-echo wp_json_encode(array_keys($widgets));
+echo wp_json_encode( array_keys( $widgets ) );

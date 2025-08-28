@@ -7,7 +7,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 use ArtPulse\Core\DashboardWidgetRegistry;
@@ -16,6 +16,5 @@ $role    = sanitize_key( $_GET['role'] ?? 'member' );
 $widgets = DashboardWidgetRegistry::get_widgets( $role );
 
 foreach ( $widgets as $widget_id => $widget ) {
-    echo do_shortcode( '[ap_widget id="' . esc_attr( $widget_id ) . '"]' );
+	echo do_shortcode( '[ap_widget id="' . esc_attr( $widget_id ) . '"]' );
 }
-

@@ -9,81 +9,88 @@ use ArtPulse\Core\DashboardWidgetManager;
 /**
  * Simple endpoints used by the React widget editor.
  */
-class WidgetEditorController
-{
-    public static function register(): void
-    {
-        add_action('rest_api_init', [self::class, 'register_routes']);
-    }
+class WidgetEditorController {
 
-    public static function register_routes(): void
-    {
-        register_rest_route(ARTPULSE_API_NAMESPACE, '/widgets', [
-            'methods'  => 'GET',
-            'callback' => [self::class, 'get_widgets'],
-            'permission_callback' => fn () => current_user_can('read'),
-        ]);
+	public static function register(): void {
+		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
+	}
 
-        register_rest_route(ARTPULSE_API_NAMESPACE, '/roles', [
-            'methods'  => 'GET',
-            'callback' => [self::class, 'get_roles'],
-            'permission_callback' => fn () => current_user_can('manage_options'),
-        ]);
+	public static function register_routes(): void {
+		register_rest_route(
+			ARTPULSE_API_NAMESPACE,
+			'/widgets',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( self::class, 'get_widgets' ),
+				'permission_callback' => fn () => current_user_can( 'read' ),
+			)
+		);
 
-        register_rest_route(ARTPULSE_API_NAMESPACE, '/layout', [
-            'methods'  => ['GET', 'POST'],
-            'callback' => [self::class, 'handle_layout'],
-            'permission_callback' => fn () => current_user_can('manage_options'),
-        ]);
-    }
+		register_rest_route(
+			ARTPULSE_API_NAMESPACE,
+			'/roles',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( self::class, 'get_roles' ),
+				'permission_callback' => fn () => current_user_can( 'manage_options' ),
+			)
+		);
 
-    public static function get_widgets(): WP_REST_Response
-    {
-        $defs = DashboardWidgetManager::getWidgetDefinitions(true);
-        return rest_ensure_response(array_values($defs));
-    }
+		register_rest_route(
+			ARTPULSE_API_NAMESPACE,
+			'/layout',
+			array(
+				'methods'             => array( 'GET', 'POST' ),
+				'callback'            => array( self::class, 'handle_layout' ),
+				'permission_callback' => fn () => current_user_can( 'manage_options' ),
+			)
+		);
+	}
 
-    public static function get_roles(): WP_REST_Response
-    {
-        global $wp_roles;
-        $roles = array_keys($wp_roles->roles);
-        return rest_ensure_response(array_values($roles));
-    }
+	public static function get_widgets(): WP_REST_Response {
+		$defs = DashboardWidgetManager::getWidgetDefinitions( true );
+		return rest_ensure_response( array_values( $defs ) );
+	}
 
-    public static function get_layout(WP_REST_Request $req): WP_REST_Response
-    {
-        $role = sanitize_key($req['role']);
-        $result = DashboardWidgetManager::getRoleLayout($role);
-        $layout = $result['layout'];
-        $style  = \ArtPulse\Admin\UserLayoutManager::get_role_style($role);
-        return rest_ensure_response([
-            'layout' => $layout,
-            'style'  => $style,
-        ]);
-    }
+	public static function get_roles(): WP_REST_Response {
+		global $wp_roles;
+		$roles = array_keys( $wp_roles->roles );
+		return rest_ensure_response( array_values( $roles ) );
+	}
 
-    public static function save_layout(WP_REST_Request $req): WP_REST_Response|WP_Error
-    {
-        $role = sanitize_key($req['role']);
-        $data = $req->get_json_params();
-        $layout = $data['layout'] ?? [];
-        if (!is_array($layout)) {
-            return new WP_Error('invalid', 'Invalid layout', ['status' => 400]);
-        }
-        $style = isset($data['style']) && is_array($data['style']) ? $data['style'] : [];
-        DashboardWidgetManager::saveRoleLayout($role, $layout);
-        if ($style) {
-            \ArtPulse\Admin\UserLayoutManager::save_role_style($role, $style);
-        }
-        return rest_ensure_response(['saved' => true]);
-    }
+	public static function get_layout( WP_REST_Request $req ): WP_REST_Response {
+		$role   = sanitize_key( $req['role'] );
+		$result = DashboardWidgetManager::getRoleLayout( $role );
+		$layout = $result['layout'];
+		$style  = \ArtPulse\Admin\UserLayoutManager::get_role_style( $role );
+		return rest_ensure_response(
+			array(
+				'layout' => $layout,
+				'style'  => $style,
+			)
+		);
+	}
 
-    public static function handle_layout(WP_REST_Request $req): WP_REST_Response|WP_Error
-    {
-        return match ($req->get_method()) {
-            'POST' => self::save_layout($req),
-            'GET'  => self::get_layout($req),
-            default => new WP_Error('invalid_method', 'Method not allowed', ['status' => 405]),
-        };
-    }
+	public static function save_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+		$role   = sanitize_key( $req['role'] );
+		$data   = $req->get_json_params();
+		$layout = $data['layout'] ?? array();
+		if ( ! is_array( $layout ) ) {
+			return new WP_Error( 'invalid', 'Invalid layout', array( 'status' => 400 ) );
+		}
+		$style = isset( $data['style'] ) && is_array( $data['style'] ) ? $data['style'] : array();
+		DashboardWidgetManager::saveRoleLayout( $role, $layout );
+		if ( $style ) {
+			\ArtPulse\Admin\UserLayoutManager::save_role_style( $role, $style );
+		}
+		return rest_ensure_response( array( 'saved' => true ) );
+	}
+
+	public static function handle_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+		return match ( $req->get_method() ) {
+			'POST' => self::save_layout( $req ),
+			'GET'  => self::get_layout( $req ),
+			default => new WP_Error( 'invalid_method', 'Method not allowed', array( 'status' => 405 ) ),
+		};
+	}
 }

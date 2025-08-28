@@ -3,8 +3,8 @@
  * Dashboard widget helpers and AJAX handlers.
  */
 
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 use ArtPulse\Core\DashboardWidgetRegistry;
@@ -13,1455 +13,1398 @@ use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Frontend\DashboardCard;
 use ArtPulse\Dashboard\WidgetVisibilityManager;
 
-function ap_render_widget(string $widget_id, ?int $user_id = null): void
-{
-    $uid    = $user_id ?? get_current_user_id();
-    $config = DashboardWidgetRegistry::get_widget($widget_id, $uid);
-    if (!$config) {
-        return;
-    }
+function ap_render_widget( string $widget_id, ?int $user_id = null ): void {
+	$uid    = $user_id ?? get_current_user_id();
+	$config = DashboardWidgetRegistry::get_widget( $widget_id, $uid );
+	if ( ! $config ) {
+		return;
+	}
 
-    $lazy = apply_filters('ap_dashboard_widget_lazy', $config['lazy'] ?? false, $widget_id, $uid, $config);
-    if ($lazy) {
-        $nonce = wp_create_nonce('ap_render_widget');
-        echo '<div class="ap-widget-placeholder" data-widget-id="' . esc_attr($widget_id) . '" data-nonce="' . esc_attr($nonce) . '"><span class="spinner"></span></div>';
-        return;
-    }
+	$lazy = apply_filters( 'ap_dashboard_widget_lazy', $config['lazy'] ?? false, $widget_id, $uid, $config );
+	if ( $lazy ) {
+		$nonce = wp_create_nonce( 'ap_render_widget' );
+		echo '<div class="ap-widget-placeholder" data-widget-id="' . esc_attr( $widget_id ) . '" data-nonce="' . esc_attr( $nonce ) . '"><span class="spinner"></span></div>';
+		return;
+	}
 
-    echo DashboardCard::render($widget_id, $uid);
-    do_action('ap_widget_rendered', $widget_id, $uid);
+	echo DashboardCard::render( $widget_id, $uid );
+	do_action( 'ap_widget_rendered', $widget_id, $uid );
 }
 
-function register_ap_widget(string $id, array $args): void
-{
-    if (isset($args["component"]) && !isset($args["callback"])) {
-        $args["callback"] = $args["component"];
-    }
-    if (isset($args["title"]) && !isset($args["label"])) {
-        $args["label"] = $args["title"];
-    }
-    \ArtPulse\Core\DashboardWidgetRegistry::register_widget($id, $args);
+function register_ap_widget( string $id, array $args ): void {
+	if ( isset( $args['component'] ) && ! isset( $args['callback'] ) ) {
+		$args['callback'] = $args['component'];
+	}
+	if ( isset( $args['title'] ) && ! isset( $args['label'] ) ) {
+		$args['label'] = $args['title'];
+	}
+	\ArtPulse\Core\DashboardWidgetRegistry::register_widget( $id, $args );
 }
 
-function ap_render_js_widget(string $id, array $props = []): void
-{
-    $defaults = [
-        'apiRoot' => esc_url_raw(rest_url()),
-        'nonce'   => wp_create_nonce('wp_rest'),
-    ];
+function ap_render_js_widget( string $id, array $props = array() ): void {
+	$defaults = array(
+		'apiRoot' => esc_url_raw( rest_url() ),
+		'nonce'   => wp_create_nonce( 'wp_rest' ),
+	);
 
-    $props      = array_merge($defaults, $props);
-    $json_props = esc_attr(wp_json_encode($props));
+	$props      = array_merge( $defaults, $props );
+	$json_props = esc_attr( wp_json_encode( $props ) );
 
-    echo '<div id="ap-widget-' . esc_attr($id) . '" data-widget="' . esc_attr($id) . '" data-props=\'' . $json_props . '\'></div>';
+	echo '<div id="ap-widget-' . esc_attr( $id ) . '" data-widget="' . esc_attr( $id ) . '" data-props=\'' . $json_props . '\'></div>';
 }
 
-\ArtPulse\Core\ShortcodeRegistry::register('ap_widget', 'Dashboard Widget', function ($atts) {
-    $atts = shortcode_atts([
-        'id'   => '',
-        'role' => '',
-    ], $atts, 'ap_widget');
+\ArtPulse\Core\ShortcodeRegistry::register(
+	'ap_widget',
+	'Dashboard Widget',
+	function ( $atts ) {
+		$atts = shortcode_atts(
+			array(
+				'id'   => '',
+				'role' => '',
+			),
+			$atts,
+			'ap_widget'
+		);
 
-    $id = sanitize_key($atts['id']);
-    if (!$id) {
-        return '';
-    }
+		$id = sanitize_key( $atts['id'] );
+		if ( ! $id ) {
+			return '';
+		}
 
-    $current_role = DashboardController::get_role(get_current_user_id());
+		$current_role = DashboardController::get_role( get_current_user_id() );
 
-    $config = DashboardWidgetRegistry::getById($id);
-    if (!$config) {
-        return '';
-    }
+		$config = DashboardWidgetRegistry::getById( $id );
+		if ( ! $config ) {
+			return '';
+		}
 
-    $widget_roles = isset($config['roles']) ? (array) $config['roles'] : [];
-    if ($widget_roles && !in_array($current_role, $widget_roles, true)) {
-        return '';
-    }
+		$widget_roles = isset( $config['roles'] ) ? (array) $config['roles'] : array();
+		if ( $widget_roles && ! in_array( $current_role, $widget_roles, true ) ) {
+			return '';
+		}
 
-    $attr_roles = array_filter(array_map('sanitize_key', explode(',', (string) $atts['role'])));
-    if ($attr_roles && !in_array($current_role, $attr_roles, true)) {
-        return '';
-    }
+		$attr_roles = array_filter( array_map( 'sanitize_key', explode( ',', (string) $atts['role'] ) ) );
+		if ( $attr_roles && ! in_array( $current_role, $attr_roles, true ) ) {
+			return '';
+		}
 
-    $rules = WidgetVisibilityManager::get_visibility_rules();
-    if (isset($rules[$id])) {
-        $rule   = $rules[$id];
-        $user   = wp_get_current_user();
-        $roles  = (array) $user->roles;
-        if (!empty($rule['capability']) && !user_can($user, $rule['capability'])) {
-            return '';
-        }
-        if (!empty($rule['allowed_roles']) && empty(array_intersect($roles, (array) $rule['allowed_roles']))) {
-            return '';
-        }
-        if (!empty($rule['exclude_roles']) && array_intersect($roles, (array) $rule['exclude_roles'])) {
-            return '';
-        }
-    }
+		$rules = WidgetVisibilityManager::get_visibility_rules();
+		if ( isset( $rules[ $id ] ) ) {
+			$rule  = $rules[ $id ];
+			$user  = wp_get_current_user();
+			$roles = (array) $user->roles;
+			if ( ! empty( $rule['capability'] ) && ! user_can( $user, $rule['capability'] ) ) {
+				return '';
+			}
+			if ( ! empty( $rule['allowed_roles'] ) && empty( array_intersect( $roles, (array) $rule['allowed_roles'] ) ) ) {
+				return '';
+			}
+			if ( ! empty( $rule['exclude_roles'] ) && array_intersect( $roles, (array) $rule['exclude_roles'] ) ) {
+				return '';
+			}
+		}
 
-    ob_start();
-    ap_render_widget($id);
-    $html = ob_get_clean();
+		ob_start();
+		ap_render_widget( $id );
+		$html = ob_get_clean();
 
-    if ($html === '') {
-        return '';
-    }
+		if ( $html === '' ) {
+			return '';
+		}
 
-    return '<div class="DashboardCard">' . $html . '</div>';
-});
+		return '<div class="DashboardCard">' . $html . '</div>';
+	}
+);
 
 
-function ap_get_all_widget_definitions(bool $include_schema = false): array
-{
-    return DashboardWidgetManager::getWidgetDefinitions($include_schema);
+function ap_get_all_widget_definitions( bool $include_schema = false ): array {
+	return DashboardWidgetManager::getWidgetDefinitions( $include_schema );
 }
 
 /**
  * Wrapper used by front-end scripts to load widget definitions with icons.
  */
-function artpulse_get_dashboard_widgets(bool $include_schema = true): array
-{
-    return DashboardWidgetManager::getWidgetDefinitions($include_schema);
-}
-
-
-add_action('wp_ajax_ap_save_dashboard_widget_config', 'ap_save_dashboard_widget_config');
-
-add_action('wp_ajax_ap_save_widget_layout', 'ap_save_widget_layout');
-add_action('wp_ajax_ap_save_role_layout', 'ap_save_role_layout');
-add_action('wp_ajax_ap_save_user_layout', 'ap_save_user_layout');
-add_action('wp_ajax_save_widget_order', 'ap_save_widget_order');
-add_action('wp_ajax_ap_save_dashboard_order', 'ap_save_dashboard_order_callback');
-add_action('wp_ajax_ap_render_widget', 'ap_ajax_render_widget');
-add_action('wp_ajax_save_dashboard_layout', function () {
-    check_admin_referer('save_dashboard_layout');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
-    check_ajax_referer('ap_widget_nonce', 'nonce');
-    $layout = json_decode(stripslashes($_POST['layout'] ?? ''), true);
-    if (!is_array($layout)) {
-        wp_send_json_error('Invalid layout');
-    }
-
-    update_user_meta(get_current_user_id(), 'ap_dashboard_layout', $layout);
-    wp_send_json_success();
-});
-
-function ap_ajax_render_widget(): void
-{
-    $widget_id = sanitize_key($_POST['widget_id'] ?? '');
-    check_ajax_referer('ap_render_widget', 'nonce');
-
-    if (!$widget_id || !is_user_logged_in() || !current_user_can('read')) {
-        wp_send_json_error(['message' => 'Invalid widget'], 403);
-    }
-
-    $html = DashboardCard::render($widget_id, get_current_user_id());
-    wp_send_json_success(['html' => $html]);
-}
-
-function ap_save_dashboard_widget_config(): void
-{
-    check_admin_referer('ap_save_dashboard_widget_config');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
-    check_ajax_referer('ap_dashboard_widget_config', 'nonce');
-
-    $raw = $_POST['config'] ?? [];
-    $sanitized = [];
-    foreach ($raw as $role => $widgets) {
-        $role_key = sanitize_key($role);
-        $ordered = [];
-        foreach ((array) $widgets as $w) {
-            $ordered[] = sanitize_key($w);
-        }
-        $sanitized[$role_key] = $ordered;
-    }
-
-    update_option('ap_dashboard_widget_config', $sanitized);
-    wp_send_json_success(['saved' => true]);
-}
-
-function ap_save_widget_layout(): void
-{
-    check_admin_referer('ap_save_widget_layout');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
-    $role = sanitize_key($_POST['role'] ?? '');
-    if (!get_role($role) && !current_user_can('manage_options')) {
-        wp_send_json_error(['message' => __('Invalid role', 'artpulse')], 400);
-        return;
-    }
-    check_ajax_referer('ap_save_widget_layout', 'nonce');
-    if (!in_array($role, wp_get_current_user()->roles, true) && !current_user_can('manage_options')) {
-        wp_send_json_error(['message' => __('Permission denied', 'artpulse')], 403);
-        return;
-    }
-    if (defined('WP_DEBUG') && WP_DEBUG) {
-        error_log('Saving widget layout for user ' . get_current_user_id());
-    }
-
-    $uid = get_current_user_id();
-
-    if (isset($_POST['layout'])) {
-        $layout_raw = $_POST['layout'];
-        if (is_string($layout_raw)) {
-            $layout_raw = json_decode($layout_raw, true);
-        }
-        $valid_ids = array_column(DashboardWidgetRegistry::get_definitions(), 'id');
-        $ordered = [];
-        foreach ((array) $layout_raw as $item) {
-            if (is_array($item) && isset($item['id'])) {
-                $id  = sanitize_key($item['id']);
-                $vis = isset($item['visible']) ? filter_var($item['visible'], FILTER_VALIDATE_BOOLEAN) : true;
-            } else {
-                $id  = sanitize_key($item);
-                $vis = true;
-            }
-            if (in_array($id, $valid_ids, true)) {
-                $ordered[] = ['id' => $id, 'visible' => $vis];
-            }
-        }
-        update_user_meta($uid, 'ap_dashboard_layout', $ordered);
-    }
-
-    wp_send_json_success(['saved' => true]);
-}
-
-function ap_save_role_layout(): void
-{
-    check_admin_referer('ap_save_role_layout');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
-    check_ajax_referer('ap_save_role_layout', 'nonce');
-
-    $role   = sanitize_key($_POST['role'] ?? '');
-    if (!get_role($role)) {
-        wp_send_json_error(['message' => __('Invalid role', 'artpulse')]);
-        return;
-    }
-    $layout = $_POST['layout'] ?? [];
-    if (is_string($layout)) {
-        $layout = json_decode($layout, true);
-    }
-    if (!is_array($layout)) {
-        $layout = [];
-    }
-
-    DashboardWidgetManager::saveRoleLayout($role, $layout);
-    if (defined('WP_DEBUG') && WP_DEBUG) {
-        error_log('Saved role layout for ' . $role . ': ' . wp_json_encode($layout));
-    }
-    wp_send_json_success(['saved' => true]);
-}
-
-function ap_save_user_layout(): void
-{
-    // Verify request nonce
-    check_ajax_referer('ap_save_user_layout', 'nonce');
-
-    if (!is_user_logged_in() || !current_user_can('read')) {
-        wp_send_json_error(['message' => __('Permission denied', 'artpulse')], 403);
-    }
-
-    $layout = [];
-
-    // Prefer POST parameter when the request is form encoded
-    if (isset($_POST['layout'])) {
-        $layout_raw = $_POST['layout'];
-        if (is_string($layout_raw)) {
-            $layout = json_decode(stripslashes($layout_raw), true);
-        }
-    } else {
-        // Fallback to JSON body when sent via fetch()
-        $input = json_decode(file_get_contents('php://input'), true);
-        if (is_array($input) && isset($input['layout'])) {
-            $layout = $input['layout'];
-        }
-    }
-
-    $user_id = get_current_user_id();
-
-    if ($user_id && is_array($layout)) {
-        DashboardWidgetManager::saveUserLayout($user_id, $layout);
-        wp_send_json_success(['message' => 'Layout saved']);
-    }
-
-    wp_send_json_error(['message' => 'Invalid data']);
-}
+function artpulse_get_dashboard_widgets( bool $include_schema = true ): array {
+	return DashboardWidgetManager::getWidgetDefinitions( $include_schema );
+}
+
+
+add_action( 'wp_ajax_ap_save_dashboard_widget_config', 'ap_save_dashboard_widget_config' );
+
+add_action( 'wp_ajax_ap_save_widget_layout', 'ap_save_widget_layout' );
+add_action( 'wp_ajax_ap_save_role_layout', 'ap_save_role_layout' );
+add_action( 'wp_ajax_ap_save_user_layout', 'ap_save_user_layout' );
+add_action( 'wp_ajax_save_widget_order', 'ap_save_widget_order' );
+add_action( 'wp_ajax_ap_save_dashboard_order', 'ap_save_dashboard_order_callback' );
+add_action( 'wp_ajax_ap_render_widget', 'ap_ajax_render_widget' );
+add_action(
+	'wp_ajax_save_dashboard_layout',
+	function () {
+		check_admin_referer( 'save_dashboard_layout' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( __( 'Cheatin&#8217; uh?' ) );
+		}
+		check_ajax_referer( 'ap_widget_nonce', 'nonce' );
+		$layout = json_decode( stripslashes( $_POST['layout'] ?? '' ), true );
+		if ( ! is_array( $layout ) ) {
+			wp_send_json_error( 'Invalid layout' );
+		}
+
+		update_user_meta( get_current_user_id(), 'ap_dashboard_layout', $layout );
+		wp_send_json_success();
+	}
+);
+
+function ap_ajax_render_widget(): void {
+	$widget_id = sanitize_key( $_POST['widget_id'] ?? '' );
+	check_ajax_referer( 'ap_render_widget', 'nonce' );
+
+	if ( ! $widget_id || ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid widget' ), 403 );
+	}
+
+	$html = DashboardCard::render( $widget_id, get_current_user_id() );
+	wp_send_json_success( array( 'html' => $html ) );
+}
+
+function ap_save_dashboard_widget_config(): void {
+	check_admin_referer( 'ap_save_dashboard_widget_config' );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( __( 'Cheatin&#8217; uh?' ) );
+	}
+	check_ajax_referer( 'ap_dashboard_widget_config', 'nonce' );
+
+	$raw       = $_POST['config'] ?? array();
+	$sanitized = array();
+	foreach ( $raw as $role => $widgets ) {
+		$role_key = sanitize_key( $role );
+		$ordered  = array();
+		foreach ( (array) $widgets as $w ) {
+			$ordered[] = sanitize_key( $w );
+		}
+		$sanitized[ $role_key ] = $ordered;
+	}
+
+	update_option( 'ap_dashboard_widget_config', $sanitized );
+	wp_send_json_success( array( 'saved' => true ) );
+}
+
+function ap_save_widget_layout(): void {
+	check_admin_referer( 'ap_save_widget_layout' );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( __( 'Cheatin&#8217; uh?' ) );
+	}
+	$role = sanitize_key( $_POST['role'] ?? '' );
+	if ( ! get_role( $role ) && ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Invalid role', 'artpulse' ) ), 400 );
+		return;
+	}
+	check_ajax_referer( 'ap_save_widget_layout', 'nonce' );
+	if ( ! in_array( $role, wp_get_current_user()->roles, true ) && ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'artpulse' ) ), 403 );
+		return;
+	}
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		error_log( 'Saving widget layout for user ' . get_current_user_id() );
+	}
+
+	$uid = get_current_user_id();
+
+	if ( isset( $_POST['layout'] ) ) {
+		$layout_raw = $_POST['layout'];
+		if ( is_string( $layout_raw ) ) {
+			$layout_raw = json_decode( $layout_raw, true );
+		}
+		$valid_ids = array_column( DashboardWidgetRegistry::get_definitions(), 'id' );
+		$ordered   = array();
+		foreach ( (array) $layout_raw as $item ) {
+			if ( is_array( $item ) && isset( $item['id'] ) ) {
+				$id  = sanitize_key( $item['id'] );
+				$vis = isset( $item['visible'] ) ? filter_var( $item['visible'], FILTER_VALIDATE_BOOLEAN ) : true;
+			} else {
+				$id  = sanitize_key( $item );
+				$vis = true;
+			}
+			if ( in_array( $id, $valid_ids, true ) ) {
+				$ordered[] = array(
+					'id'      => $id,
+					'visible' => $vis,
+				);
+			}
+		}
+		update_user_meta( $uid, 'ap_dashboard_layout', $ordered );
+	}
+
+	wp_send_json_success( array( 'saved' => true ) );
+}
+
+function ap_save_role_layout(): void {
+	check_admin_referer( 'ap_save_role_layout' );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( __( 'Cheatin&#8217; uh?' ) );
+	}
+	check_ajax_referer( 'ap_save_role_layout', 'nonce' );
+
+	$role = sanitize_key( $_POST['role'] ?? '' );
+	if ( ! get_role( $role ) ) {
+		wp_send_json_error( array( 'message' => __( 'Invalid role', 'artpulse' ) ) );
+		return;
+	}
+	$layout = $_POST['layout'] ?? array();
+	if ( is_string( $layout ) ) {
+		$layout = json_decode( $layout, true );
+	}
+	if ( ! is_array( $layout ) ) {
+		$layout = array();
+	}
+
+	DashboardWidgetManager::saveRoleLayout( $role, $layout );
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		error_log( 'Saved role layout for ' . $role . ': ' . wp_json_encode( $layout ) );
+	}
+	wp_send_json_success( array( 'saved' => true ) );
+}
+
+function ap_save_user_layout(): void {
+	// Verify request nonce
+	check_ajax_referer( 'ap_save_user_layout', 'nonce' );
+
+	if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'artpulse' ) ), 403 );
+	}
 
-function ap_save_widget_order(): void
-{
-    check_admin_referer('ap_save_widget_order');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
-    check_ajax_referer('ap_widget_order', 'nonce');
-    $order = isset($_POST['order']) ? json_decode(stripslashes($_POST['order']), true) : [];
-    $identifier = isset($_POST['identifier']) ? intval($_POST['identifier']) : 0;
-    $user_id = $identifier > 0 ? $identifier : get_current_user_id();
-    update_user_meta($user_id, 'ap_widget_order', $order);
-    wp_send_json_success();
+	$layout = array();
+
+	// Prefer POST parameter when the request is form encoded
+	if ( isset( $_POST['layout'] ) ) {
+		$layout_raw = $_POST['layout'];
+		if ( is_string( $layout_raw ) ) {
+			$layout = json_decode( stripslashes( $layout_raw ), true );
+		}
+	} else {
+		// Fallback to JSON body when sent via fetch()
+		$input = json_decode( file_get_contents( 'php://input' ), true );
+		if ( is_array( $input ) && isset( $input['layout'] ) ) {
+			$layout = $input['layout'];
+		}
+	}
+
+	$user_id = get_current_user_id();
+
+	if ( $user_id && is_array( $layout ) ) {
+		DashboardWidgetManager::saveUserLayout( $user_id, $layout );
+		wp_send_json_success( array( 'message' => 'Layout saved' ) );
+	}
+
+	wp_send_json_error( array( 'message' => 'Invalid data' ) );
+}
+
+function ap_save_widget_order(): void {
+	check_admin_referer( 'ap_save_widget_order' );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( __( 'Cheatin&#8217; uh?' ) );
+	}
+	check_ajax_referer( 'ap_widget_order', 'nonce' );
+	$order      = isset( $_POST['order'] ) ? json_decode( stripslashes( $_POST['order'] ), true ) : array();
+	$identifier = isset( $_POST['identifier'] ) ? intval( $_POST['identifier'] ) : 0;
+	$user_id    = $identifier > 0 ? $identifier : get_current_user_id();
+	update_user_meta( $user_id, 'ap_widget_order', $order );
+	wp_send_json_success();
 }
 
-function ap_save_dashboard_order_callback(): void
-{
-    check_admin_referer('ap_save_dashboard_order_callback');
-    if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( __( 'Cheatin&#8217; uh?' ) );
-    }
-    check_ajax_referer('ap_dashboard_nonce', 'nonce');
+function ap_save_dashboard_order_callback(): void {
+	check_admin_referer( 'ap_save_dashboard_order_callback' );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( __( 'Cheatin&#8217; uh?' ) );
+	}
+	check_ajax_referer( 'ap_dashboard_nonce', 'nonce' );
 
-    $order = json_decode(stripslashes($_POST['order'] ?? '[]'), true);
-    if (!is_array($order)) {
-        wp_send_json_error(['message' => 'Invalid format.']);
-    }
+	$order = json_decode( stripslashes( $_POST['order'] ?? '[]' ), true );
+	if ( ! is_array( $order ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid format.' ) );
+	}
 
-    update_user_meta(get_current_user_id(), 'ap_dashboard_order', $order);
+	update_user_meta( get_current_user_id(), 'ap_dashboard_order', $order );
 
-    wp_send_json_success(['message' => 'Dashboard order saved.']);
+	wp_send_json_success( array( 'message' => 'Dashboard order saved.' ) );
 }
 
-function ap_load_dashboard_template(string $template, array $vars = []): string
-{
-    $path = locate_template($template);
-    if (!$path) {
-        $path = plugin_dir_path(ARTPULSE_PLUGIN_FILE) . 'templates/' . $template;
-    }
-    if (!file_exists($path)) {
-        return '';
-    }
-    ob_start();
-    if ($vars) {
-        extract($vars, EXTR_SKIP);
-    }
-    include $path;
-    return ob_get_clean();
+function ap_load_dashboard_template( string $template, array $vars = array() ): string {
+	$path = locate_template( $template );
+	if ( ! $path ) {
+		$path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'templates/' . $template;
+	}
+	if ( ! file_exists( $path ) ) {
+		return '';
+	}
+	ob_start();
+	if ( $vars ) {
+		extract( $vars, EXTR_SKIP );
+	}
+	include $path;
+	return ob_get_clean();
 }
 
-function ap_widget_membership(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/membership.php', $vars);
+function ap_widget_membership( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/membership.php', $vars );
 }
 
-function ap_widget_next_payment(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/next-payment.php', $vars);
+function ap_widget_next_payment( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/next-payment.php', $vars );
 }
 
-function ap_widget_transactions(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/transactions.php', $vars);
+function ap_widget_transactions( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/transactions.php', $vars );
 }
 
-function ap_widget_upgrade(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/upgrade.php', $vars);
+function ap_widget_upgrade( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/upgrade.php', $vars );
 }
 
-function ap_widget_content(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/content.php', $vars);
+function ap_widget_content( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/content.php', $vars );
 }
 
-function ap_widget_local_events(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/local-events.php', $vars);
+function ap_widget_local_events( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/local-events.php', $vars );
 }
 
-function ap_widget_favorites(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/favorites.php', $vars);
+function ap_widget_favorites( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/favorites.php', $vars );
 }
 
-function ap_widget_my_favorites(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/my-favorites.php', $vars);
+function ap_widget_my_favorites( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/my-favorites.php', $vars );
 }
 
-function ap_widget_my_follows(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/my-follows.php', $vars);
+function ap_widget_my_follows( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/my-follows.php', $vars );
 }
 
-function ap_widget_creator_tips(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/widget-creator-tips.php', $vars);
+function ap_widget_creator_tips( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/widget-creator-tips.php', $vars );
 }
 
-function ap_widget_rsvps(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/rsvps.php', $vars);
+function ap_widget_rsvps( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/rsvps.php', $vars );
 }
 
-function ap_widget_rsvp_stats(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/rsvp-stats.php', $vars);
+function ap_widget_rsvp_stats( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/rsvp-stats.php', $vars );
 }
 
-function ap_widget_my_events(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/my-events.php', $vars);
+function ap_widget_my_events( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/my-events.php', $vars );
 }
 
-function ap_widget_events(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/events.php', $vars);
+function ap_widget_events( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/events.php', $vars );
 }
 
-function ap_widget_support_history(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/support-history.php', $vars);
+function ap_widget_support_history( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/support-history.php', $vars );
 }
 
-function ap_widget_notifications(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/notifications.php', $vars);
+function ap_widget_notifications( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/notifications.php', $vars );
 }
 
-function ap_widget_messages(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/messages.php', $vars);
+function ap_widget_messages( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/messages.php', $vars );
 }
 
-function ap_widget_for_you(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/widget-for-you.php', $vars);
+function ap_widget_for_you( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/widget-for-you.php', $vars );
 }
 
-function ap_widget_followed_artists(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/widget-followed-artists.php', $vars);
+function ap_widget_followed_artists( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/widget-followed-artists.php', $vars );
 }
 
-function ap_widget_account_tools(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/account-tools.php', $vars);
+function ap_widget_account_tools( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/account-tools.php', $vars );
 }
 
-function ap_widget_webhooks(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/webhooks.php', $vars);
+function ap_widget_webhooks( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/webhooks.php', $vars );
 }
 
-function ap_widget_instagram(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/instagram-widget.php', $vars);
+function ap_widget_instagram( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/instagram-widget.php', $vars );
 }
 
-function ap_widget_cat_fact(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/cat-fact.php', $vars);
+function ap_widget_cat_fact( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/cat-fact.php', $vars );
 }
 
-function ap_widget_spotlights(int $user_id = 0, array $vars = []): string
-{
-    $vars['role'] = DashboardController::get_role(get_current_user_id());
-    return ap_load_dashboard_template('widgets/widget-spotlights.php', $vars);
+function ap_widget_spotlights( int $user_id = 0, array $vars = array() ): string {
+	$vars['role'] = DashboardController::get_role( get_current_user_id() );
+	return ap_load_dashboard_template( 'widgets/widget-spotlights.php', $vars );
 }
 
-function ap_widget_role_spotlight(int $user_id = 0, array $vars = []): string
-{
-    $vars['role']      = DashboardController::get_role(get_current_user_id());
-    $vars['widget_id'] = 'role-spotlight';
-    return ap_load_dashboard_template('widgets/spotlight-dashboard.php', $vars);
+function ap_widget_role_spotlight( int $user_id = 0, array $vars = array() ): string {
+	$vars['role']      = DashboardController::get_role( get_current_user_id() );
+	$vars['widget_id'] = 'role-spotlight';
+	return ap_load_dashboard_template( 'widgets/spotlight-dashboard.php', $vars );
 }
 
-function ap_widget_spotlight_calls(int $user_id = 0, array $vars = []): string
-{
-    $vars['role'] = DashboardController::get_role(get_current_user_id());
-    return ap_load_dashboard_template('widgets/spotlight-dashboard-calls.php', $vars);
+function ap_widget_spotlight_calls( int $user_id = 0, array $vars = array() ): string {
+	$vars['role'] = DashboardController::get_role( get_current_user_id() );
+	return ap_load_dashboard_template( 'widgets/spotlight-dashboard-calls.php', $vars );
 }
 
-function ap_widget_spotlight_events(int $user_id = 0, array $vars = []): string
-{
-    $vars['role'] = DashboardController::get_role(get_current_user_id());
-    return ap_load_dashboard_template('widgets/spotlight-dashboard-events.php', $vars);
+function ap_widget_spotlight_events( int $user_id = 0, array $vars = array() ): string {
+	$vars['role'] = DashboardController::get_role( get_current_user_id() );
+	return ap_load_dashboard_template( 'widgets/spotlight-dashboard-events.php', $vars );
 }
 
-function ap_widget_spotlight_features(int $user_id = 0, array $vars = []): string
-{
-    $vars['role'] = DashboardController::get_role(get_current_user_id());
-    return ap_load_dashboard_template('widgets/spotlight-dashboard-features.php', $vars);
+function ap_widget_spotlight_features( int $user_id = 0, array $vars = array() ): string {
+	$vars['role'] = DashboardController::get_role( get_current_user_id() );
+	return ap_load_dashboard_template( 'widgets/spotlight-dashboard-features.php', $vars );
 }
 
-function ap_widget_upcoming_events_location(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/upcoming-events-location.php', $vars);
+function ap_widget_upcoming_events_location( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/upcoming-events-location.php', $vars );
 }
 
-function ap_widget_followed_artists_activity(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/followed-artists-activity.php', $vars);
+function ap_widget_followed_artists_activity( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/followed-artists-activity.php', $vars );
 }
 
-function ap_widget_artist_inbox_preview(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/artist-inbox-preview.php', $vars);
+function ap_widget_artist_inbox_preview( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/artist-inbox-preview.php', $vars );
 }
 
-function ap_widget_artist_revenue_summary(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/artist-revenue-summary.php', $vars);
+function ap_widget_artist_revenue_summary( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/artist-revenue-summary.php', $vars );
 }
 
-function ap_widget_artist_spotlight(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/artist-spotlight-widget.php', $vars);
+function ap_widget_artist_spotlight( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/artist-spotlight-widget.php', $vars );
 }
 
-function ap_widget_artist_artwork_manager(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/artist-artwork-manager.php', $vars);
+function ap_widget_artist_artwork_manager( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/artist-artwork-manager.php', $vars );
 }
 
-function ap_widget_artist_audience_insights(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/artist-audience-insights.php', $vars);
+function ap_widget_artist_audience_insights( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/artist-audience-insights.php', $vars );
 }
 
-function ap_widget_artist_earnings_summary(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/artist-earnings.php', $vars);
+function ap_widget_artist_earnings_summary( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/artist-earnings.php', $vars );
 }
 
-function ap_widget_artist_feed_publisher(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/artist-feed-publisher.php', $vars);
+function ap_widget_artist_feed_publisher( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/artist-feed-publisher.php', $vars );
 }
 
-function ap_widget_collab_requests(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/collab-requests.php', $vars);
+function ap_widget_collab_requests( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/collab-requests.php', $vars );
 }
 
-function ap_widget_onboarding_tracker(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/onboarding-tracker.php', $vars);
+function ap_widget_onboarding_tracker( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/onboarding-tracker.php', $vars );
 }
 
-function ap_widget_my_rsvps(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/my-rsvps.php', $vars);
+function ap_widget_my_rsvps( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/my-rsvps.php', $vars );
 }
 
-function ap_widget_my_shared_events_activity(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/my-shared-events-activity.php', $vars);
+function ap_widget_my_shared_events_activity( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/my-shared-events-activity.php', $vars );
 }
 
-function ap_widget_recommended_for_you_member(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/recommended-for-you.php', $vars);
+function ap_widget_recommended_for_you_member( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/recommended-for-you.php', $vars );
 }
 
-function ap_widget_dashboard_feedback(int $user_id = 0, array $vars = []): string
-{
-    return ap_load_dashboard_template('widgets/dashboard-feedback.php', $vars);
+function ap_widget_dashboard_feedback( int $user_id = 0, array $vars = array() ): string {
+	return ap_load_dashboard_template( 'widgets/dashboard-feedback.php', $vars );
 }
 
-function ap_widget_rsvp_button(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('rsvp_button', ['eventId' => $vars['event_id'] ?? 0]);
-    return ob_get_clean();
+function ap_widget_rsvp_button( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'rsvp_button', array( 'eventId' => $vars['event_id'] ?? 0 ) );
+	return ob_get_clean();
 }
 
-function ap_widget_event_chat(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('event_chat', ['eventId' => $vars['event_id'] ?? 0]);
-    return ob_get_clean();
+function ap_widget_event_chat( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'event_chat', array( 'eventId' => $vars['event_id'] ?? 0 ) );
+	return ob_get_clean();
 }
 
-function ap_widget_share_this_event(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('share_this_event', ['eventUrl' => $vars['event_url'] ?? '']);
-    return ob_get_clean();
+function ap_widget_share_this_event( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'share_this_event', array( 'eventUrl' => $vars['event_url'] ?? '' ) );
+	return ob_get_clean();
 }
 
-function ap_widget_audience_crm(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('audience_crm');
-    return ob_get_clean();
+function ap_widget_audience_crm( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'audience_crm' );
+	return ob_get_clean();
 }
 
-function ap_widget_sponsored_event_config(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('sponsored_event_config');
-    return ob_get_clean();
+function ap_widget_sponsored_event_config( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'sponsored_event_config' );
+	return ob_get_clean();
 }
 
-function ap_widget_embed_tool(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('embed_tool');
-    return ob_get_clean();
+function ap_widget_embed_tool( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'embed_tool' );
+	return ob_get_clean();
 }
 
-function ap_widget_org_event_overview(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('org_event_overview');
-    return ob_get_clean();
+function ap_widget_org_event_overview( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'org_event_overview' );
+	return ob_get_clean();
 }
 
-function ap_widget_org_team_roster(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('org_team_roster');
-    return ob_get_clean();
+function ap_widget_org_team_roster( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'org_team_roster' );
+	return ob_get_clean();
 }
 
-function ap_widget_branding_settings_panel(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('branding_settings_panel');
-    return ob_get_clean();
+function ap_widget_branding_settings_panel( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'branding_settings_panel' );
+	return ob_get_clean();
 }
 
-function ap_widget_org_widget_sharing(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('org_widget_sharing');
-    return ob_get_clean();
+function ap_widget_org_widget_sharing( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'org_widget_sharing' );
+	return ob_get_clean();
 }
 
-function ap_widget_sponsor_display(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('sponsor_display');
-    return ob_get_clean();
+function ap_widget_sponsor_display( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'sponsor_display' );
+	return ob_get_clean();
 }
 
-function ap_widget_org_approval_center(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('org_approval_center');
-    return ob_get_clean();
+function ap_widget_org_approval_center( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'org_approval_center' );
+	return ob_get_clean();
 }
 
-function ap_widget_org_ticket_insights(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('org_ticket_insights');
-    return ob_get_clean();
+function ap_widget_org_ticket_insights( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'org_ticket_insights' );
+	return ob_get_clean();
 }
 
-function ap_widget_org_broadcast_box(int $user_id = 0, array $vars = []): string
-{
-    ob_start();
-    ap_render_js_widget('org_broadcast_box');
-    return ob_get_clean();
+function ap_widget_org_broadcast_box( int $user_id = 0, array $vars = array() ): string {
+	ob_start();
+	ap_render_js_widget( 'org_broadcast_box' );
+	return ob_get_clean();
 }
 
 /**
  * Register core dashboard widgets.
  */
-function ap_register_core_dashboard_widgets(): void
-{
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'widget_membership',
-        __('Membership', 'artpulse'),
-        'users',
-        __('Subscription status and badges.', 'artpulse'),
-        'ap_widget_membership',
-        [
-            'category' => 'engagement',
-            'roles'    => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-            'settings' => [
-                [
-                    'key'     => 'show_badges',
-                    'label'   => __('Show Badges', 'artpulse'),
-                    'type'    => 'checkbox',
-                    'default' => true,
-                ],
-            ],
-        ]
-    );
+function ap_register_core_dashboard_widgets(): void {
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'widget_membership',
+		__( 'Membership', 'artpulse' ),
+		'users',
+		__( 'Subscription status and badges.', 'artpulse' ),
+		'ap_widget_membership',
+		array(
+			'category'   => 'engagement',
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'show_badges',
+					'label'   => __( 'Show Badges', 'artpulse' ),
+					'type'    => 'checkbox',
+					'default' => true,
+				),
+			),
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'upgrade',
-        __('Upgrade', 'artpulse'),
-        'star',
-        __('Upgrade options for the account.', 'artpulse'),
-        'ap_widget_upgrade',
-        [
-            'category' => 'account',
-            'roles'    => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-            'settings' => [
-                [
-                    'key'     => 'show_forms',
-                    'label'   => __('Show Forms', 'artpulse'),
-                    'type'    => 'checkbox',
-                    'default' => true,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'upgrade',
+		__( 'Upgrade', 'artpulse' ),
+		'star',
+		__( 'Upgrade options for the account.', 'artpulse' ),
+		'ap_widget_upgrade',
+		array(
+			'category'   => 'account',
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'show_forms',
+					'label'   => __( 'Show Forms', 'artpulse' ),
+					'type'    => 'checkbox',
+					'default' => true,
+				),
+			),
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'local-events',
-        __('Local Events', 'artpulse'),
-        'map-pin',
-        __('Shows events near the user.', 'artpulse'),
-        'ap_widget_local_events',
-        [
-            'category'   => 'community',
-            'roles'      => ['member'],
-            'visibility' => 'public',
-            'settings'   => [
-                [
-                    'key'     => 'limit',
-                    'label'   => __('Number of Events', 'artpulse'),
-                    'type'    => 'number',
-                    'default' => 5,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'local-events',
+		__( 'Local Events', 'artpulse' ),
+		'map-pin',
+		__( 'Shows events near the user.', 'artpulse' ),
+		'ap_widget_local_events',
+		array(
+			'category'   => 'community',
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'limit',
+					'label'   => __( 'Number of Events', 'artpulse' ),
+					'type'    => 'number',
+					'default' => 5,
+				),
+			),
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'favorites',
-        __('Favorites', 'artpulse'),
-        'heart',
-        __('Favorited content lists.', 'artpulse'),
-        'ap_widget_favorites',
-        [
-            'category'   => 'engagement',
-            'roles'      => ['member'],
-            'visibility' => 'public',
-            'settings'   => [
-                [
-                    'key'     => 'limit',
-                    'label'   => __('Items to Show', 'artpulse'),
-                    'type'    => 'number',
-                    'default' => 5,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'favorites',
+		__( 'Favorites', 'artpulse' ),
+		'heart',
+		__( 'Favorited content lists.', 'artpulse' ),
+		'ap_widget_favorites',
+		array(
+			'category'   => 'engagement',
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'limit',
+					'label'   => __( 'Items to Show', 'artpulse' ),
+					'type'    => 'number',
+					'default' => 5,
+				),
+			),
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'my-follows',
-        __('My Follows', 'artpulse'),
-        'visibility',
-        __('Artists and events you follow.', 'artpulse'),
-        'ap_widget_my_follows',
-        [
-            'category'   => 'engagement',
-            'roles'      => ['member'],
-            'visibility' => 'public',
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'my-follows',
+		__( 'My Follows', 'artpulse' ),
+		'visibility',
+		__( 'Artists and events you follow.', 'artpulse' ),
+		'ap_widget_my_follows',
+		array(
+			'category'   => 'engagement',
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'creator-tips',
-        __('Creator Tips', 'artpulse'),
-        'lightbulb',
-        __('Contextual suggestions for creators.', 'artpulse'),
-        'ap_widget_creator_tips',
-        [
-            'category' => 'engagement',
-            'roles'    => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'creator-tips',
+		__( 'Creator Tips', 'artpulse' ),
+		'lightbulb',
+		__( 'Contextual suggestions for creators.', 'artpulse' ),
+		'ap_widget_creator_tips',
+		array(
+			'category'   => 'engagement',
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'rsvps',
-        __('RSVPs', 'artpulse'),
-        'calendar',
-        __('User RSVP history.', 'artpulse'),
-        'ap_widget_rsvps',
-        [
-            'category' => 'events',
-            'roles'    => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-            'settings' => [
-                [
-                    'key'     => 'limit',
-                    'label'   => __('Items to Show', 'artpulse'),
-                    'type'    => 'number',
-                    'default' => 5,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'rsvps',
+		__( 'RSVPs', 'artpulse' ),
+		'calendar',
+		__( 'User RSVP history.', 'artpulse' ),
+		'ap_widget_rsvps',
+		array(
+			'category'   => 'events',
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'limit',
+					'label'   => __( 'Items to Show', 'artpulse' ),
+					'type'    => 'number',
+					'default' => 5,
+				),
+			),
+		)
+	);
 
-    // visible to organization and member dashboards
-    DashboardWidgetRegistry::register(
-        'rsvp_stats',
-        __('RSVP Stats', 'artpulse'),
-        'calendar',
-        __('RSVP summary for your events.', 'artpulse'),
-        'ap_widget_rsvp_stats',
-        [
-            'category' => 'events',
-            'roles'    => ['organization', 'member'],
-            'visibility' => 'public',
-        ]
-    );
+	// visible to organization and member dashboards
+	DashboardWidgetRegistry::register(
+		'rsvp_stats',
+		__( 'RSVP Stats', 'artpulse' ),
+		'calendar',
+		__( 'RSVP summary for your events.', 'artpulse' ),
+		'ap_widget_rsvp_stats',
+		array(
+			'category'   => 'events',
+			'roles'      => array( 'organization', 'member' ),
+			'visibility' => 'public',
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'my-events',
-        __('My Events', 'artpulse'),
-        'clock',
-        __('Events created by the user.', 'artpulse'),
-        'ap_widget_my_events',
-        [
-            'category' => 'events',
-            'roles'    => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-            'settings' => [
-                [
-                    'key'     => 'limit',
-                    'label'   => __('Items to Show', 'artpulse'),
-                    'type'    => 'number',
-                    'default' => 5,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'my-events',
+		__( 'My Events', 'artpulse' ),
+		'clock',
+		__( 'Events created by the user.', 'artpulse' ),
+		'ap_widget_my_events',
+		array(
+			'category'   => 'events',
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'limit',
+					'label'   => __( 'Items to Show', 'artpulse' ),
+					'type'    => 'number',
+					'default' => 5,
+				),
+			),
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'events',
-        __('Upcoming Events (Global)', 'artpulse'),
-        'calendar',
-        __('Global upcoming events.', 'artpulse'),
-        'ap_widget_events',
-        [
-            'category' => 'events',
-            'roles'    => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-            'settings' => [
-                [
-                    'key'     => 'limit',
-                    'label'   => __('Items to Show', 'artpulse'),
-                    'type'    => 'number',
-                    'default' => 5,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'events',
+		__( 'Upcoming Events (Global)', 'artpulse' ),
+		'calendar',
+		__( 'Global upcoming events.', 'artpulse' ),
+		'ap_widget_events',
+		array(
+			'category'   => 'events',
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'limit',
+					'label'   => __( 'Items to Show', 'artpulse' ),
+					'type'    => 'number',
+					'default' => 5,
+				),
+			),
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'messages',
-        __('Messages', 'artpulse'),
-        'mail',
-        __('Private messages inbox.', 'artpulse'),
-        'ap_widget_messages',
-        [
-            'category'   => 'engagement',
-            'roles'      => ['member', 'artist'],
-            'visibility' => 'public',
-            'capability' => 'can_receive_messages',
-            'settings'   => [
-                [
-                    'key'     => 'limit',
-                    'label'   => __('Items to Show', 'artpulse'),
-                    'type'    => 'number',
-                    'default' => 5,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'messages',
+		__( 'Messages', 'artpulse' ),
+		'mail',
+		__( 'Private messages inbox.', 'artpulse' ),
+		'ap_widget_messages',
+		array(
+			'category'   => 'engagement',
+			'roles'      => array( 'member', 'artist' ),
+			'visibility' => 'public',
+			'capability' => 'can_receive_messages',
+			'settings'   => array(
+				array(
+					'key'     => 'limit',
+					'label'   => __( 'Items to Show', 'artpulse' ),
+					'type'    => 'number',
+					'default' => 5,
+				),
+			),
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'account-tools',
-        __('Account Tools', 'artpulse'),
-        'settings',
-        __('Export and deletion options.', 'artpulse'),
-        'ap_widget_account_tools',
-        [
-            'category' => 'account',
-            'roles'    => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-            'settings' => [
-                [
-                    'key'     => 'show_export',
-                    'label'   => __('Show Export Links', 'artpulse'),
-                    'type'    => 'checkbox',
-                    'default' => true,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'account-tools',
+		__( 'Account Tools', 'artpulse' ),
+		'settings',
+		__( 'Export and deletion options.', 'artpulse' ),
+		'ap_widget_account_tools',
+		array(
+			'category'   => 'account',
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'show_export',
+					'label'   => __( 'Show Export Links', 'artpulse' ),
+					'type'    => 'checkbox',
+					'default' => true,
+				),
+			),
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'support-history',
-        __('Support History', 'artpulse'),
-        'life-buoy',
-        __('Previous support tickets.', 'artpulse'),
-        'ap_widget_support_history',
-        [
-            'category' => 'support',
-            'roles'    => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-            'settings' => [
-                [
-                    'key'     => 'limit',
-                    'label'   => __('Items to Show', 'artpulse'),
-                    'type'    => 'number',
-                    'default' => 5,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'support-history',
+		__( 'Support History', 'artpulse' ),
+		'life-buoy',
+		__( 'Previous support tickets.', 'artpulse' ),
+		'ap_widget_support_history',
+		array(
+			'category'   => 'support',
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'limit',
+					'label'   => __( 'Items to Show', 'artpulse' ),
+					'type'    => 'number',
+					'default' => 5,
+				),
+			),
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'notifications',
-        __('Notifications', 'artpulse'),
-        'bell',
-        __('Recent notifications.', 'artpulse'),
-        'ap_widget_notifications',
-        [
-            'category'   => 'engagement',
-            'roles'      => ['member'],
-            'visibility' => 'public',
-            'settings'   => [
-                [
-                    'key'     => 'limit',
-                    'label'   => __('Items to Show', 'artpulse'),
-                    'type'    => 'number',
-                    'default' => 5,
-                ],
-            ],
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'notifications',
+		__( 'Notifications', 'artpulse' ),
+		'bell',
+		__( 'Recent notifications.', 'artpulse' ),
+		'ap_widget_notifications',
+		array(
+			'category'   => 'engagement',
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'     => 'limit',
+					'label'   => __( 'Items to Show', 'artpulse' ),
+					'type'    => 'number',
+					'default' => 5,
+				),
+			),
+		)
+	);
 
-    // visible to member, artist and organization dashboards
-    DashboardWidgetRegistry::register(
-        'role-spotlight',
-        __('Featured Spotlight', 'artpulse'),
-        'star-filled',
-        __('Role based spotlights.', 'artpulse'),
-        'ap_widget_role_spotlight',
-        [
-            'roles' => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-        ]
-    );
+	// visible to member, artist and organization dashboards
+	DashboardWidgetRegistry::register(
+		'role-spotlight',
+		__( 'Featured Spotlight', 'artpulse' ),
+		'star-filled',
+		__( 'Role based spotlights.', 'artpulse' ),
+		'ap_widget_role_spotlight',
+		array(
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+		)
+	);
 
-    // visible to member, artist and organization dashboards
-    DashboardWidgetRegistry::register(
-        'widget_for_you_all',
-        __('For You (All)', 'artpulse'),
-        'sparkles',
-        __('Personalized recommendations.', 'artpulse'),
-        'ap_widget_for_you',
-        [
-            'roles'    => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-            'category' => 'recommended',
-        ]
-    );
+	// visible to member, artist and organization dashboards
+	DashboardWidgetRegistry::register(
+		'widget_for_you_all',
+		__( 'For You (All)', 'artpulse' ),
+		'sparkles',
+		__( 'Personalized recommendations.', 'artpulse' ),
+		'ap_widget_for_you',
+		array(
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+			'category'   => 'recommended',
+		)
+	);
 
-    // visible to member and artist dashboards
-    DashboardWidgetRegistry::register(
-        'widget_followed_artists',
-        __('Followed Artists', 'artpulse'),
-        'groups',
-        __('Artists the user follows.', 'artpulse'),
-        'ap_widget_followed_artists',
-        [
-            'roles' => ['member', 'artist'],
-            'visibility' => 'public',
-        ]
-    );
+	// visible to member and artist dashboards
+	DashboardWidgetRegistry::register(
+		'widget_followed_artists',
+		__( 'Followed Artists', 'artpulse' ),
+		'groups',
+		__( 'Artists the user follows.', 'artpulse' ),
+		'ap_widget_followed_artists',
+		array(
+			'roles'      => array( 'member', 'artist' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'upcoming_events_by_location',
-        __('Upcoming Events Near You', 'artpulse'),
-        'location',
-        __('Lists events based on your location or saved city.', 'artpulse'),
-        'ap_widget_upcoming_events_location',
-        [
-            'roles'    => ['member'],
-            'visibility' => 'public',
-            'category' => 'events',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'upcoming_events_by_location',
+		__( 'Upcoming Events Near You', 'artpulse' ),
+		'location',
+		__( 'Lists events based on your location or saved city.', 'artpulse' ),
+		'ap_widget_upcoming_events_location',
+		array(
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+			'category'   => 'events',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'followed_artists_activity',
-        __('Followed Artists Activity', 'artpulse'),
-        'activity',
-        __('Recent uploads or events from artists you follow.', 'artpulse'),
-        'ap_widget_followed_artists_activity',
-        [
-            'roles'    => ['member'],
-            'visibility' => 'public',
-            'category' => 'engagement',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'followed_artists_activity',
+		__( 'Followed Artists Activity', 'artpulse' ),
+		'activity',
+		__( 'Recent uploads or events from artists you follow.', 'artpulse' ),
+		'ap_widget_followed_artists_activity',
+		array(
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+			'category'   => 'engagement',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'rsvp_button',
-        __('RSVP Button', 'artpulse'),
-        'calendar-check',
-        __('Toggle RSVP status for an event.', 'artpulse'),
-        'ap_widget_rsvp_button',
-        [
-            'roles'      => ['member'],
-            'visibility' => 'public',
-            'category'   => 'events',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'rsvp_button',
+		__( 'RSVP Button', 'artpulse' ),
+		'calendar-check',
+		__( 'Toggle RSVP status for an event.', 'artpulse' ),
+		'ap_widget_rsvp_button',
+		array(
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+			'category'   => 'events',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'event_chat',
-        __('Event Chat', 'artpulse'),
-        'comments',
-        __('Chat with other attendees.', 'artpulse'),
-        'ap_widget_event_chat',
-        [
-            'roles'      => ['member'],
-            'visibility' => 'public',
-            'category'   => 'events',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'event_chat',
+		__( 'Event Chat', 'artpulse' ),
+		'comments',
+		__( 'Chat with other attendees.', 'artpulse' ),
+		'ap_widget_event_chat',
+		array(
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+			'category'   => 'events',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'share_this_event',
-        __('Share This Event', 'artpulse'),
-        'share',
-        __('Share this event with friends.', 'artpulse'),
-        'ap_widget_share_this_event',
-        [
-            'roles'      => ['member'],
-            'visibility' => 'public',
-            'category'   => 'events',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'share_this_event',
+		__( 'Share This Event', 'artpulse' ),
+		'share',
+		__( 'Share this event with friends.', 'artpulse' ),
+		'ap_widget_share_this_event',
+		array(
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+			'category'   => 'events',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'artist_inbox_preview',
-        __('Artist Inbox Preview', 'artpulse'),
-        'inbox',
-        __('Recent unread messages from artists.', 'artpulse'),
-        'ap_widget_artist_inbox_preview',
-        [
-            'roles'      => ['artist', 'member'],
-            'visibility' => 'public',
-            'capability' => 'can_receive_messages',
-            'category'   => 'engagement',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'artist_inbox_preview',
+		__( 'Artist Inbox Preview', 'artpulse' ),
+		'inbox',
+		__( 'Recent unread messages from artists.', 'artpulse' ),
+		'ap_widget_artist_inbox_preview',
+		array(
+			'roles'      => array( 'artist', 'member' ),
+			'visibility' => 'public',
+			'capability' => 'can_receive_messages',
+			'category'   => 'engagement',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'my_rsvps',
-        __('My RSVPs', 'artpulse'),
-        'calendar',
-        __('Events you have RSVP\'d to.', 'artpulse'),
-        'ap_widget_my_rsvps',
-        [
-            'roles'      => ['member'],
-            'category'   => 'events',
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'my_rsvps',
+		__( 'My RSVPs', 'artpulse' ),
+		'calendar',
+		__( 'Events you have RSVP\'d to.', 'artpulse' ),
+		'ap_widget_my_rsvps',
+		array(
+			'roles'      => array( 'member' ),
+			'category'   => 'events',
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'my_shared_events_activity',
-        __('My Shared Events', 'artpulse'),
-        'share',
-        __('Events you\'ve shared and engagement.', 'artpulse'),
-        'ap_widget_my_shared_events_activity',
-        [
-            'roles'    => ['member'],
-            'visibility' => 'public',
-            'category' => 'engagement',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'my_shared_events_activity',
+		__( 'My Shared Events', 'artpulse' ),
+		'share',
+		__( 'Events you\'ve shared and engagement.', 'artpulse' ),
+		'ap_widget_my_shared_events_activity',
+		array(
+			'roles'      => array( 'member' ),
+			'visibility' => 'public',
+			'category'   => 'engagement',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'recommended_for_you',
-        __('Recommended For You', 'artpulse'),
-        'thumbs-up',
-        __('Suggestions based on your interests.', 'artpulse'),
-        'ap_widget_recommended_for_you_member',
-        [
-            'roles'      => ['member'],
-            'category'   => 'recommended',
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'recommended_for_you',
+		__( 'Recommended For You', 'artpulse' ),
+		'thumbs-up',
+		__( 'Suggestions based on your interests.', 'artpulse' ),
+		'ap_widget_recommended_for_you_member',
+		array(
+			'roles'      => array( 'member' ),
+			'category'   => 'recommended',
+			'visibility' => 'public',
+		)
+	);
 
-    // visible to all dashboards
-    DashboardWidgetRegistry::register(
-        'cat_fact',
-        __('Cat Fact', 'artpulse'),
-        'smiley',
-        __('Random cat facts from catfact.ninja.', 'artpulse'),
-        'ap_widget_cat_fact',
-        [
-            'category'   => 'fun',
-            'roles'      => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-        ]
-    );
+	// visible to all dashboards
+	DashboardWidgetRegistry::register(
+		'cat_fact',
+		__( 'Cat Fact', 'artpulse' ),
+		'smiley',
+		__( 'Random cat facts from catfact.ninja.', 'artpulse' ),
+		'ap_widget_cat_fact',
+		array(
+			'category'   => 'fun',
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'dashboard_feedback',
-        __('Dashboard Feedback', 'artpulse'),
-        'message-circle',
-        __('Send feedback about your dashboard.', 'artpulse'),
-        'ap_widget_dashboard_feedback',
-        [
-            'roles'      => ['member', 'artist', 'organization'],
-            'category'   => 'engagement',
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'dashboard_feedback',
+		__( 'Dashboard Feedback', 'artpulse' ),
+		'message-circle',
+		__( 'Send feedback about your dashboard.', 'artpulse' ),
+		'ap_widget_dashboard_feedback',
+		array(
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'category'   => 'engagement',
+			'visibility' => 'public',
+		)
+	);
 
-    // visible to member and artist dashboards
-    DashboardWidgetRegistry::register(
-        'instagram_widget',
-        __('Instagram Feed', 'artpulse'),
-        'instagram',
-        __('Recent Instagram posts.', 'artpulse'),
-        'ap_widget_instagram',
-        [
-            'category' => 'social',
-            'roles'    => ['member', 'artist'],
-            'visibility' => 'public',
-            'settings' => [
-                [
-                    'key'   => 'access_token',
-                    'label' => __('Access Token', 'artpulse'),
-                    'type'  => 'text',
-                ],
-                [
-                    'key'   => 'urls',
-                    'label' => __('Post URLs', 'artpulse'),
-                    'type'  => 'text',
-                ],
-                [
-                    'key'     => 'count',
-                    'label'   => __('Items to Show', 'artpulse'),
-                    'type'    => 'number',
-                    'default' => 3,
-                ],
-            ],
-        ]
-    );
+	// visible to member and artist dashboards
+	DashboardWidgetRegistry::register(
+		'instagram_widget',
+		__( 'Instagram Feed', 'artpulse' ),
+		'instagram',
+		__( 'Recent Instagram posts.', 'artpulse' ),
+		'ap_widget_instagram',
+		array(
+			'category'   => 'social',
+			'roles'      => array( 'member', 'artist' ),
+			'visibility' => 'public',
+			'settings'   => array(
+				array(
+					'key'   => 'access_token',
+					'label' => __( 'Access Token', 'artpulse' ),
+					'type'  => 'text',
+				),
+				array(
+					'key'   => 'urls',
+					'label' => __( 'Post URLs', 'artpulse' ),
+					'type'  => 'text',
+				),
+				array(
+					'key'     => 'count',
+					'label'   => __( 'Items to Show', 'artpulse' ),
+					'type'    => 'number',
+					'default' => 3,
+				),
+			),
+		)
+	);
 
-    // visible to member and organization dashboards
-    DashboardWidgetRegistry::register(
-        'widget_spotlight_events',
-        __('Event Spotlights', 'artpulse'),
-        'calendar',
-        __('Event related highlights.', 'artpulse'),
-        'ap_widget_spotlight_events',
-        [
-            'roles' => ['member', 'organization'],
-            'visibility' => 'public',
-        ]
-    );
+	// visible to member and organization dashboards
+	DashboardWidgetRegistry::register(
+		'widget_spotlight_events',
+		__( 'Event Spotlights', 'artpulse' ),
+		'calendar',
+		__( 'Event related highlights.', 'artpulse' ),
+		'ap_widget_spotlight_events',
+		array(
+			'roles'      => array( 'member', 'organization' ),
+			'visibility' => 'public',
+		)
+	);
 
-    // visible to member, artist and organization dashboards
-    DashboardWidgetRegistry::register(
-        'widget_spotlight_calls',
-        __('Call Spotlights', 'artpulse'),
-        'phone',
-        __('Calls to artists or members.', 'artpulse'),
-        'ap_widget_spotlight_calls',
-        [
-            'roles' => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-        ]
-    );
+	// visible to member, artist and organization dashboards
+	DashboardWidgetRegistry::register(
+		'widget_spotlight_calls',
+		__( 'Call Spotlights', 'artpulse' ),
+		'phone',
+		__( 'Calls to artists or members.', 'artpulse' ),
+		'ap_widget_spotlight_calls',
+		array(
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+		)
+	);
 
-    // visible to member, artist and organization dashboards
-    DashboardWidgetRegistry::register(
-        'widget_spotlight_features',
-        __('Featured Spotlights', 'artpulse'),
-        'star-filled',
-        __('General featured items.', 'artpulse'),
-        'ap_widget_spotlight_features',
-        [
-            'roles' => ['member', 'artist', 'organization'],
-            'visibility' => 'public',
-        ]
-    );
+	// visible to member, artist and organization dashboards
+	DashboardWidgetRegistry::register(
+		'widget_spotlight_features',
+		__( 'Featured Spotlights', 'artpulse' ),
+		'star-filled',
+		__( 'General featured items.', 'artpulse' ),
+		'ap_widget_spotlight_features',
+		array(
+			'roles'      => array( 'member', 'artist', 'organization' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'artist_revenue_summary',
-        __('Artist Revenue Summary', 'artpulse'),
-        'dollar-sign',
-        __('Revenue totals from tickets and donations.', 'artpulse'),
-        'ap_widget_artist_revenue_summary',
-        [
-            'roles'      => ['artist'],
-            'visibility' => 'public',
-            'capability' => 'view_own_sales_data',
-            'category'   => 'commerce',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'artist_revenue_summary',
+		__( 'Artist Revenue Summary', 'artpulse' ),
+		'dollar-sign',
+		__( 'Revenue totals from tickets and donations.', 'artpulse' ),
+		'ap_widget_artist_revenue_summary',
+		array(
+			'roles'      => array( 'artist' ),
+			'visibility' => 'public',
+			'capability' => 'view_own_sales_data',
+			'category'   => 'commerce',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'artist_spotlight',
-        __('Artist Spotlight', 'artpulse'),
-        'star',
-        __('Recent mentions and highlights.', 'artpulse'),
-        'ap_widget_artist_spotlight',
-        [
-            'roles' => ['artist'],
-            'visibility' => 'public',
-            'category' => 'community',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'artist_spotlight',
+		__( 'Artist Spotlight', 'artpulse' ),
+		'star',
+		__( 'Recent mentions and highlights.', 'artpulse' ),
+		'ap_widget_artist_spotlight',
+		array(
+			'roles'      => array( 'artist' ),
+			'visibility' => 'public',
+			'category'   => 'community',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'artist_artwork_manager',
-        __('Artwork Manager', 'artpulse'),
-        'image',
-        __('Upload and manage artworks.', 'artpulse'),
-        'ap_widget_artist_artwork_manager',
-        [
-            'roles' => ['artist'],
-            'visibility' => 'public',
-            'default' => true
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'artist_artwork_manager',
+		__( 'Artwork Manager', 'artpulse' ),
+		'image',
+		__( 'Upload and manage artworks.', 'artpulse' ),
+		'ap_widget_artist_artwork_manager',
+		array(
+			'roles'      => array( 'artist' ),
+			'visibility' => 'public',
+			'default'    => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'artist_audience_insights',
-        __('Audience Insights', 'artpulse'),
-        'users',
-        __('Follower analytics and engagement.', 'artpulse'),
-        'ap_widget_artist_audience_insights',
-        [
-            'roles' => ['artist'],
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'artist_audience_insights',
+		__( 'Audience Insights', 'artpulse' ),
+		'users',
+		__( 'Follower analytics and engagement.', 'artpulse' ),
+		'ap_widget_artist_audience_insights',
+		array(
+			'roles'      => array( 'artist' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'artist_earnings_summary',
-        __('Earnings Summary', 'artpulse'),
-        'dollar-sign',
-        __('Revenue breakdown and payouts.', 'artpulse'),
-        'ap_widget_artist_earnings_summary',
-        [
-            'roles' => ['artist'],
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'artist_earnings_summary',
+		__( 'Earnings Summary', 'artpulse' ),
+		'dollar-sign',
+		__( 'Revenue breakdown and payouts.', 'artpulse' ),
+		'ap_widget_artist_earnings_summary',
+		array(
+			'roles'      => array( 'artist' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'artist_feed_publisher',
-        __('Post & Engage', 'artpulse'),
-        'edit',
-        __('Publish updates to your feed.', 'artpulse'),
-        'ap_widget_artist_feed_publisher',
-        [
-            'roles' => ['artist'],
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'artist_feed_publisher',
+		__( 'Post & Engage', 'artpulse' ),
+		'edit',
+		__( 'Publish updates to your feed.', 'artpulse' ),
+		'ap_widget_artist_feed_publisher',
+		array(
+			'roles'      => array( 'artist' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'collab_requests',
-        __('Collab Requests', 'artpulse'),
-        'handshake',
-        __('Collaboration invites from others.', 'artpulse'),
-        'ap_widget_collab_requests',
-        [
-            'roles' => ['artist'],
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'collab_requests',
+		__( 'Collab Requests', 'artpulse' ),
+		'handshake',
+		__( 'Collaboration invites from others.', 'artpulse' ),
+		'ap_widget_collab_requests',
+		array(
+			'roles'      => array( 'artist' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'onboarding_tracker',
-        __('Onboarding Checklist', 'artpulse'),
-        'check',
-        __('Steps to get started.', 'artpulse'),
-        'ap_widget_onboarding_tracker',
-        [
-            'roles' => ['artist'],
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'onboarding_tracker',
+		__( 'Onboarding Checklist', 'artpulse' ),
+		'check',
+		__( 'Steps to get started.', 'artpulse' ),
+		'ap_widget_onboarding_tracker',
+		array(
+			'roles'      => array( 'artist' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'widget_spotlights',
-        __('Spotlights', 'artpulse'),
-        'star',
-        __('Curated spotlights for artists.', 'artpulse'),
-        'ap_widget_spotlights',
-        [
-            'roles' => ['artist'],
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'widget_spotlights',
+		__( 'Spotlights', 'artpulse' ),
+		'star',
+		__( 'Curated spotlights for artists.', 'artpulse' ),
+		'ap_widget_spotlights',
+		array(
+			'roles'      => array( 'artist' ),
+			'visibility' => 'public',
+		)
+	);
 
-    // Organization widgets
-    DashboardWidgetRegistry::register(
-        'audience_crm',
-        __('Audience CRM', 'artpulse'),
-        'groups',
-        __('Manage organization contacts.', 'artpulse'),
-        'ap_widget_audience_crm',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	// Organization widgets
+	DashboardWidgetRegistry::register(
+		'audience_crm',
+		__( 'Audience CRM', 'artpulse' ),
+		'groups',
+		__( 'Manage organization contacts.', 'artpulse' ),
+		'ap_widget_audience_crm',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'sponsored_event_config',
-        __('Sponsored Event Config', 'artpulse'),
-        'star',
-        __('Configure sponsored event settings.', 'artpulse'),
-        'ap_widget_sponsored_event_config',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'sponsored_event_config',
+		__( 'Sponsored Event Config', 'artpulse' ),
+		'star',
+		__( 'Configure sponsored event settings.', 'artpulse' ),
+		'ap_widget_sponsored_event_config',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'embed_tool',
-        __('Embed Tool', 'artpulse'),
-        'share',
-        __('Generate embeddable event widgets.', 'artpulse'),
-        'ap_widget_embed_tool',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'embed_tool',
+		__( 'Embed Tool', 'artpulse' ),
+		'share',
+		__( 'Generate embeddable event widgets.', 'artpulse' ),
+		'ap_widget_embed_tool',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'org_event_overview',
-        __('Event Overview', 'artpulse'),
-        'calendar',
-        __('Overview of upcoming organization events.', 'artpulse'),
-        'ap_widget_org_event_overview',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'org_event_overview',
+		__( 'Event Overview', 'artpulse' ),
+		'calendar',
+		__( 'Overview of upcoming organization events.', 'artpulse' ),
+		'ap_widget_org_event_overview',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'branding_settings_panel',
-        __('Branding Settings', 'artpulse'),
-        'admin-customizer',
-        __('Customize organization branding.', 'artpulse'),
-        'ap_widget_branding_settings_panel',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'branding_settings_panel',
+		__( 'Branding Settings', 'artpulse' ),
+		'admin-customizer',
+		__( 'Customize organization branding.', 'artpulse' ),
+		'ap_widget_branding_settings_panel',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'org_widget_sharing',
-        __('Widget Sharing', 'artpulse'),
-        'share',
-        __('Share widgets with partners.', 'artpulse'),
-        'ap_widget_org_widget_sharing',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'org_widget_sharing',
+		__( 'Widget Sharing', 'artpulse' ),
+		'share',
+		__( 'Share widgets with partners.', 'artpulse' ),
+		'ap_widget_org_widget_sharing',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'webhooks',
-        __('Webhooks', 'artpulse'),
-        'admin-links',
-        __('Manage outbound webhooks for automation.', 'artpulse'),
-        'ap_widget_webhooks',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'webhooks',
+		__( 'Webhooks', 'artpulse' ),
+		'admin-links',
+		__( 'Manage outbound webhooks for automation.', 'artpulse' ),
+		'ap_widget_webhooks',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'sponsor_display',
-        __('Sponsor Display', 'artpulse'),
-        'star-filled',
-        __('Showcase sponsors on events.', 'artpulse'),
-        'ap_widget_sponsor_display',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'sponsor_display',
+		__( 'Sponsor Display', 'artpulse' ),
+		'star-filled',
+		__( 'Showcase sponsors on events.', 'artpulse' ),
+		'ap_widget_sponsor_display',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'org_approval_center',
-        __('Approval Center', 'artpulse'),
-        'yes',
-        __('Review pending items awaiting approval.', 'artpulse'),
-        'ap_widget_org_approval_center',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'org_approval_center',
+		__( 'Approval Center', 'artpulse' ),
+		'yes',
+		__( 'Review pending items awaiting approval.', 'artpulse' ),
+		'ap_widget_org_approval_center',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'org_ticket_insights',
-        __('Ticket Insights', 'artpulse'),
-        'chart-line',
-        __('Analyze ticket sales and attendance.', 'artpulse'),
-        'ap_widget_org_ticket_insights',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'org_ticket_insights',
+		__( 'Ticket Insights', 'artpulse' ),
+		'chart-line',
+		__( 'Analyze ticket sales and attendance.', 'artpulse' ),
+		'ap_widget_org_ticket_insights',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 
-    DashboardWidgetRegistry::register(
-        'org_broadcast_box',
-        __('Broadcast Box', 'artpulse'),
-        'megaphone',
-        __('Send messages to followers.', 'artpulse'),
-        'ap_widget_org_broadcast_box',
-        [
-            'roles'      => ['organization'],
-            'visibility' => 'public',
-            'lazy'       => true,
-        ]
-    );
+	DashboardWidgetRegistry::register(
+		'org_broadcast_box',
+		__( 'Broadcast Box', 'artpulse' ),
+		'megaphone',
+		__( 'Send messages to followers.', 'artpulse' ),
+		'ap_widget_org_broadcast_box',
+		array(
+			'roles'      => array( 'organization' ),
+			'visibility' => 'public',
+			'lazy'       => true,
+		)
+	);
 }
 
-add_action('artpulse_register_dashboard_widget', 'ap_register_core_dashboard_widgets');
+add_action( 'artpulse_register_dashboard_widget', 'ap_register_core_dashboard_widgets' );

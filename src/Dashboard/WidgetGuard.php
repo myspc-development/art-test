@@ -4,159 +4,183 @@ namespace ArtPulse\Dashboard;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 /**
  * Guards against invalid dashboard widget callbacks and registers placeholders.
  */
-class WidgetGuard
-{
-    /**
-     * IDs of widgets patched during the current request.
-     *
-     * @var array<string>
-     */
-    private static array $patched = [];
+class WidgetGuard {
 
-    /**
-     * Hook validation after widget registration.
-     */
-    public static function init(): void
-    {
-        add_action('init', [self::class, 'validate_and_patch'], 30);
-    }
+	/**
+	 * IDs of widgets patched during the current request.
+	 *
+	 * @var array<string>
+	 */
+	private static array $patched = array();
 
-    /**
-     * Validate registered widgets and patch any missing callbacks.
-     */
-    public static function validate_and_patch(?string $role = null): void
-    {
-        if (!apply_filters('ap_widget_placeholder_enabled', true)) {
-            return;
-        }
+	/**
+	 * Hook validation after widget registration.
+	 */
+	public static function init(): void {
+		add_action( 'init', array( self::class, 'validate_and_patch' ), 30 );
+	}
 
-        if ($role !== null) {
-            $widgets = DashboardWidgetRegistry::get_widgets_by_role($role);
-        } else {
-            $widgets = DashboardWidgetRegistry::get_all();
-        }
-        $map = apply_filters('ap_widget_placeholder_map', self::known_widget_map());
+	/**
+	 * Validate registered widgets and patch any missing callbacks.
+	 */
+	public static function validate_and_patch( ?string $role = null ): void {
+		if ( ! apply_filters( 'ap_widget_placeholder_enabled', true ) ) {
+			return;
+		}
 
-        foreach ($widgets as $id => $cfg) {
-            $cb = $cfg['callback'] ?? null;
-            $valid = is_callable($cb) && !self::is_default_fallback($cb);
-            if ($valid) {
-                continue;
-            }
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("[Member Dashboard] Widget {$id} callback missing");
-            }
-            $meta = $map[$id] ?? [
-                'title'   => ucwords(str_replace('_', ' ', $id)),
-                'icon'    => 'info',
-                'section' => 'insights',
-            ];
-            self::register_placeholder($id, $meta, $cfg);
-            self::$patched[] = $id;
-        }
+		if ( $role !== null ) {
+			$widgets = DashboardWidgetRegistry::get_widgets_by_role( $role );
+		} else {
+			$widgets = DashboardWidgetRegistry::get_all();
+		}
+		$map = apply_filters( 'ap_widget_placeholder_map', self::known_widget_map() );
 
-        if (defined('WP_DEBUG') && WP_DEBUG && self::$patched) {
-            error_log('[AP Widget Placeholder] Patched widgets: ' . implode(', ', self::$patched));
-        }
-    }
+		foreach ( $widgets as $id => $cfg ) {
+			$cb    = $cfg['callback'] ?? null;
+			$valid = is_callable( $cb ) && ! self::is_default_fallback( $cb );
+			if ( $valid ) {
+				continue;
+			}
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( "[Member Dashboard] Widget {$id} callback missing" );
+			}
+			$meta = $map[ $id ] ?? array(
+				'title'   => ucwords( str_replace( '_', ' ', $id ) ),
+				'icon'    => 'info',
+				'section' => 'insights',
+			);
+			self::register_placeholder( $id, $meta, $cfg );
+			self::$patched[] = $id;
+		}
 
-    /**
-     * Determine if the callback is the registry fallback.
-     */
-    private static function is_default_fallback($cb): bool
-    {
-        return is_array($cb)
-            && isset($cb[0], $cb[1])
-            && $cb[0] === DashboardWidgetRegistry::class
-            && $cb[1] === 'render_widget_fallback';
-    }
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && self::$patched ) {
+			error_log( '[AP Widget Placeholder] Patched widgets: ' . implode( ', ', self::$patched ) );
+		}
+	}
 
-    /**
-     * Overwrite a widget definition with placeholder info.
-     */
-    private static function register_placeholder(string $id, array $meta, array $cfg): void
-    {
-        $args = [ 'debug' => 'Missing callback' ];
-        $args = apply_filters('ap_widget_placeholder_debug_payload', $args, $id, $meta, $cfg);
-        $callback = static function ($user_id = null) use ($args) {
-            ApPlaceholderWidget::render($user_id, $args);
-        };
+	/**
+	 * Determine if the callback is the registry fallback.
+	 */
+	private static function is_default_fallback( $cb ): bool {
+		return is_array( $cb )
+			&& isset( $cb[0], $cb[1] )
+			&& $cb[0] === DashboardWidgetRegistry::class
+			&& $cb[1] === 'render_widget_fallback';
+	}
 
-        $def = $cfg;
-        $def['label']       = $meta['title'] ?? ($cfg['label'] ?? $id);
-        $def['icon']        = $meta['icon'] ?? ($cfg['icon'] ?? 'info');
-        $def['description'] = __('Placeholder widget', 'artpulse');
-        $def['callback']    = $callback;
-        $def['class']       = ApPlaceholderWidget::class;
-        $def['section']     = $meta['section'] ?? ($cfg['section'] ?? 'insights');
+	/**
+	 * Overwrite a widget definition with placeholder info.
+	 */
+	private static function register_placeholder( string $id, array $meta, array $cfg ): void {
+		$args     = array( 'debug' => 'Missing callback' );
+		$args     = apply_filters( 'ap_widget_placeholder_debug_payload', $args, $id, $meta, $cfg );
+		$callback = static function ( $user_id = null ) use ( $args ) {
+			ApPlaceholderWidget::render( $user_id, $args );
+		};
 
-        DashboardWidgetRegistry::update_widget($id, $def);
-    }
+		$def                = $cfg;
+		$def['label']       = $meta['title'] ?? ( $cfg['label'] ?? $id );
+		$def['icon']        = $meta['icon'] ?? ( $cfg['icon'] ?? 'info' );
+		$def['description'] = __( 'Placeholder widget', 'artpulse' );
+		$def['callback']    = $callback;
+		$def['class']       = ApPlaceholderWidget::class;
+		$def['section']     = $meta['section'] ?? ( $cfg['section'] ?? 'insights' );
 
-    /**
-     * Register a stub widget when no implementation exists.
-     *
-     * This provides a stable public API for registering placeholder
-     * widgets that do not yet have an implementation. It leverages the
-     * existing {@see register_placeholder()} logic so that the
-     * placeholder behaviour stays consistent.
-     */
-    public static function register_stub_widget(string $id, array $meta, array $cfg = []): void
-    {
-        $meta = array_merge([
-            'title'   => ucwords(str_replace('_', ' ', $id)),
-            'icon'    => 'info',
-            'section' => 'insights',
-        ], $meta);
+		DashboardWidgetRegistry::update_widget( $id, $def );
+	}
 
-        // Ensure the widget exists in the registry before attempting to
-        // update it with placeholder information.
-        if (!DashboardWidgetRegistry::exists($id)) {
-            $def = $cfg;
-            $def['label']       = $meta['title'] . ' (Stub)';
-            $def['icon']        = $meta['icon'];
-            $def['description'] = $def['description'] ?? __('Placeholder widget', 'artpulse');
-            $def['callback']    = static function () {};
-            $def['section']     = $meta['section'];
+	/**
+	 * Register a stub widget when no implementation exists.
+	 *
+	 * This provides a stable public API for registering placeholder
+	 * widgets that do not yet have an implementation. It leverages the
+	 * existing {@see register_placeholder()} logic so that the
+	 * placeholder behaviour stays consistent.
+	 */
+	public static function register_stub_widget( string $id, array $meta, array $cfg = array() ): void {
+		$meta = array_merge(
+			array(
+				'title'   => ucwords( str_replace( '_', ' ', $id ) ),
+				'icon'    => 'info',
+				'section' => 'insights',
+			),
+			$meta
+		);
 
-            DashboardWidgetRegistry::register_widget($id, $def);
-        }
+		// Ensure the widget exists in the registry before attempting to
+		// update it with placeholder information.
+		if ( ! DashboardWidgetRegistry::exists( $id ) ) {
+			$def                = $cfg;
+			$def['label']       = $meta['title'] . ' (Stub)';
+			$def['icon']        = $meta['icon'];
+			$def['description'] = $def['description'] ?? __( 'Placeholder widget', 'artpulse' );
+			$def['callback']    = static function () {};
+			$def['section']     = $meta['section'];
 
-        self::register_placeholder($id, $meta, $cfg);
-    }
+			DashboardWidgetRegistry::register_widget( $id, $def );
+		}
 
-    /**
-     * Default map of known widgets.
-     *
-     * @return array<string,array<string,string>>
-     */
-    public static function known_widget_map(): array
-    {
-        return [
-            'insights'           => ['title' => __('Insights', 'artpulse'),          'icon' => 'activity', 'section' => 'insights'],
-            'upcoming_events'    => ['title' => __('Upcoming Events', 'artpulse'),   'icon' => 'calendar', 'section' => 'insights'],
-            'settings'           => ['title' => __('Settings', 'artpulse'),          'icon' => 'settings', 'section' => 'settings'],
-            'nearby_events'      => ['title' => __('Nearby Events', 'artpulse'),     'icon' => 'map-pin',  'section' => 'insights'],
-            'my_favorite_events' => ['title' => __('My Favorite Events', 'artpulse'),'icon' => 'heart',    'section' => 'insights'],
-            'artist_inbox'       => ['title' => __('Artist Inbox', 'artpulse'),      'icon' => 'inbox',    'section' => 'actions'],
-            'view_all_messages'  => ['title' => __('View All Messages', 'artpulse'), 'icon' => 'mail',     'section' => 'actions'],
-        ];
-    }
+		self::register_placeholder( $id, $meta, $cfg );
+	}
 
-    /**
-     * Return patched widget IDs.
-     *
-     * @return array<string>
-     */
-    public static function get_patched(): array
-    {
-        return self::$patched;
-    }
+	/**
+	 * Default map of known widgets.
+	 *
+	 * @return array<string,array<string,string>>
+	 */
+	public static function known_widget_map(): array {
+		return array(
+			'insights'           => array(
+				'title'   => __( 'Insights', 'artpulse' ),
+				'icon'    => 'activity',
+				'section' => 'insights',
+			),
+			'upcoming_events'    => array(
+				'title'   => __( 'Upcoming Events', 'artpulse' ),
+				'icon'    => 'calendar',
+				'section' => 'insights',
+			),
+			'settings'           => array(
+				'title'   => __( 'Settings', 'artpulse' ),
+				'icon'    => 'settings',
+				'section' => 'settings',
+			),
+			'nearby_events'      => array(
+				'title'   => __( 'Nearby Events', 'artpulse' ),
+				'icon'    => 'map-pin',
+				'section' => 'insights',
+			),
+			'my_favorite_events' => array(
+				'title'   => __( 'My Favorite Events', 'artpulse' ),
+				'icon'    => 'heart',
+				'section' => 'insights',
+			),
+			'artist_inbox'       => array(
+				'title'   => __( 'Artist Inbox', 'artpulse' ),
+				'icon'    => 'inbox',
+				'section' => 'actions',
+			),
+			'view_all_messages'  => array(
+				'title'   => __( 'View All Messages', 'artpulse' ),
+				'icon'    => 'mail',
+				'section' => 'actions',
+			),
+		);
+	}
+
+	/**
+	 * Return patched widget IDs.
+	 *
+	 * @return array<string>
+	 */
+	public static function get_patched(): array {
+		return self::$patched;
+	}
 }

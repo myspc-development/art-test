@@ -6,115 +6,116 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
-class WidgetSettingsRestController
-{
-    public static function register(): void
-    {
-        if (did_action('rest_api_init')) {
-            self::register_routes();
-        } else {
-            add_action('rest_api_init', [self::class, 'register_routes']);
-        }
-    }
+class WidgetSettingsRestController {
 
-    public static function register_routes(): void
-    {
-        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/widget-settings/(?P<id>[a-z0-9_-]+)')) {
-            register_rest_route(ARTPULSE_API_NAMESPACE, '/widget-settings/(?P<id>[a-z0-9_-]+)', [
-                [
-                    'methods'             => 'GET',
-                    'callback'            => [self::class, 'get_settings'],
-                    'permission_callback' => fn() => current_user_can('read'),
-                ],
-                [
-                    'methods'             => 'POST',
-                    'callback'            => [self::class, 'save_settings'],
-                    'permission_callback' => [self::class, 'can_save'],
-                ],
-            ]);
-        }
-    }
+	public static function register(): void {
+		if ( did_action( 'rest_api_init' ) ) {
+			self::register_routes();
+		} else {
+			add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
+		}
+	}
 
-    /**
-     * Verify nonce and user capability for saving settings.
-     */
-    public static function can_save(WP_REST_Request $request): bool
-    {
-        $nonce = $request->get_header('X-WP-Nonce');
-        if ($nonce) {
-            $_REQUEST['X-WP-Nonce'] = $nonce;
-        }
+	public static function register_routes(): void {
+		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/widget-settings/(?P<id>[a-z0-9_-]+)' ) ) {
+			register_rest_route(
+				ARTPULSE_API_NAMESPACE,
+				'/widget-settings/(?P<id>[a-z0-9_-]+)',
+				array(
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( self::class, 'get_settings' ),
+						'permission_callback' => fn() => current_user_can( 'read' ),
+					),
+					array(
+						'methods'             => 'POST',
+						'callback'            => array( self::class, 'save_settings' ),
+						'permission_callback' => array( self::class, 'can_save' ),
+					),
+				)
+			);
+		}
+	}
 
-        return current_user_can('read') && check_ajax_referer('wp_rest', 'X-WP-Nonce', false);
-    }
+	/**
+	 * Verify nonce and user capability for saving settings.
+	 */
+	public static function can_save( WP_REST_Request $request ): bool {
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( $nonce ) {
+			$_REQUEST['X-WP-Nonce'] = $nonce;
+		}
 
-    public static function get_settings(WP_REST_Request $request): WP_REST_Response|WP_Error
-    {
-        $id     = sanitize_key($request['id']);
-        $global = (bool) $request->get_param('global');
-        $schema = DashboardWidgetRegistry::get_widget_schema($id);
+		return current_user_can( 'read' ) && check_ajax_referer( 'wp_rest', 'X-WP-Nonce', false );
+	}
 
-        if (empty($schema)) {
-            return new WP_Error('invalid_widget', __('Unknown widget.', 'artpulse'), ['status' => 404]);
-        }
+	public static function get_settings( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$id     = sanitize_key( $request['id'] );
+		$global = (bool) $request->get_param( 'global' );
+		$schema = DashboardWidgetRegistry::get_widget_schema( $id );
 
-        $settings = $global
-            ? (array) get_option('ap_widget_settings_' . $id, [])
-            : (array) get_user_meta(get_current_user_id(), 'ap_widget_settings_' . $id, true);
+		if ( empty( $schema ) ) {
+			return new WP_Error( 'invalid_widget', __( 'Unknown widget.', 'artpulse' ), array( 'status' => 404 ) );
+		}
 
-        $result = [];
-        foreach ($schema as $field) {
-            if (!isset($field['key'])) {
-                continue;
-            }
-            $key = $field['key'];
-            $result[$key] = $settings[$key] ?? ($field['default'] ?? '');
-        }
+		$settings = $global
+			? (array) get_option( 'ap_widget_settings_' . $id, array() )
+			: (array) get_user_meta( get_current_user_id(), 'ap_widget_settings_' . $id, true );
 
-        return rest_ensure_response([
-            'schema'   => $schema,
-            'settings' => $result,
-        ]);
-    }
+		$result = array();
+		foreach ( $schema as $field ) {
+			if ( ! isset( $field['key'] ) ) {
+				continue;
+			}
+			$key            = $field['key'];
+			$result[ $key ] = $settings[ $key ] ?? ( $field['default'] ?? '' );
+		}
 
-    public static function save_settings(WP_REST_Request $request): WP_REST_Response|WP_Error
-    {
-        $id     = sanitize_key($request['id']);
-        $global = (bool) $request->get_param('global');
-        $schema = DashboardWidgetRegistry::get_widget_schema($id);
+		return rest_ensure_response(
+			array(
+				'schema'   => $schema,
+				'settings' => $result,
+			)
+		);
+	}
 
-        if (empty($schema)) {
-            return new WP_Error('invalid_widget', __('Unknown widget.', 'artpulse'), ['status' => 404]);
-        }
+	public static function save_settings( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$id     = sanitize_key( $request['id'] );
+		$global = (bool) $request->get_param( 'global' );
+		$schema = DashboardWidgetRegistry::get_widget_schema( $id );
 
-        $raw = (array) $request->get_param('settings');
-        $sanitized = [];
+		if ( empty( $schema ) ) {
+			return new WP_Error( 'invalid_widget', __( 'Unknown widget.', 'artpulse' ), array( 'status' => 404 ) );
+		}
 
-        foreach ($schema as $field) {
-            if (!isset($field['key'])) {
-                continue;
-            }
-            $key  = $field['key'];
-            $type = $field['type'] ?? 'text';
-            $val  = $raw[$key] ?? null;
-            if ($type === 'checkbox') {
-                $sanitized[$key] = !empty($val);
-            } elseif ($type === 'number') {
-                $sanitized[$key] = $val !== null ? floatval($val) : ($field['default'] ?? 0);
-            } else {
-                $sanitized[$key] = $val !== null ? sanitize_text_field($val) : ($field['default'] ?? '');
-            }
-        }
+		$raw       = (array) $request->get_param( 'settings' );
+		$sanitized = array();
 
-        if ($global) {
-            if (!current_user_can('manage_options')) {
-                return new WP_Error('forbidden', __('Permission denied', 'artpulse'), ['status' => 403]);
-            }
-            update_option('ap_widget_settings_' . $id, $sanitized);
-        } else {
-            update_user_meta(get_current_user_id(), 'ap_widget_settings_' . $id, $sanitized);
-        }
+		foreach ( $schema as $field ) {
+			if ( ! isset( $field['key'] ) ) {
+				continue;
+			}
+			$key  = $field['key'];
+			$type = $field['type'] ?? 'text';
+			$val  = $raw[ $key ] ?? null;
+			if ( $type === 'checkbox' ) {
+				$sanitized[ $key ] = ! empty( $val );
+			} elseif ( $type === 'number' ) {
+				$sanitized[ $key ] = $val !== null ? floatval( $val ) : ( $field['default'] ?? 0 );
+			} else {
+				$sanitized[ $key ] = $val !== null ? sanitize_text_field( $val ) : ( $field['default'] ?? '' );
+			}
+		}
 
-        return rest_ensure_response(['saved' => true]);
-    }
+		if ( $global ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return new WP_Error( 'forbidden', __( 'Permission denied', 'artpulse' ), array( 'status' => 403 ) );
+			}
+			update_option( 'ap_widget_settings_' . $id, $sanitized );
+		} else {
+			update_user_meta( get_current_user_id(), 'ap_widget_settings_' . $id, $sanitized );
+		}
+
+		return rest_ensure_response( array( 'saved' => true ) );
+	}
 }

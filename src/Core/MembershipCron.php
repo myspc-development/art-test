@@ -1,37 +1,37 @@
 <?php
 namespace ArtPulse\Core;
 
-class MembershipCron
-{
-    public static function register()
-    {
-        add_action('ap_daily_expiry_check', [self::class, 'checkExpiries']);
-    }
+class MembershipCron {
 
-    public static function checkExpiries()
-    {
-        $users = get_users([
-            'meta_key'     => 'ap_membership_expires',
-            'meta_compare' => 'EXISTS',
-            'number'       => 500,
-        ]);
+	public static function register() {
+		add_action( 'ap_daily_expiry_check', array( self::class, 'checkExpiries' ) );
+	}
 
-        $now         = current_time('timestamp');
-        $warning_day = strtotime('+7 days', $now);
+	public static function checkExpiries() {
+		$users = get_users(
+			array(
+				'meta_key'     => 'ap_membership_expires',
+				'meta_compare' => 'EXISTS',
+				'number'       => 500,
+			)
+		);
 
-        foreach ($users as $user) {
-            $expires = intval(get_user_meta($user->ID, 'ap_membership_expires', true));
-            if (!$expires) {
-                continue;
-            }
+		$now         = current_time( 'timestamp' );
+		$warning_day = strtotime( '+7 days', $now );
 
-            if ($expires === $warning_day) {
-                MembershipNotifier::sendExpiryWarningEmail($user);
-            }
+		foreach ( $users as $user ) {
+			$expires = intval( get_user_meta( $user->ID, 'ap_membership_expires', true ) );
+			if ( ! $expires ) {
+				continue;
+			}
 
-            if ($expires < $now) {
-                update_user_meta($user->ID, 'ap_membership_level', 'Free');
-            }
-        }
-    }
+			if ( $expires === $warning_day ) {
+				MembershipNotifier::sendExpiryWarningEmail( $user );
+			}
+
+			if ( $expires < $now ) {
+				update_user_meta( $user->ID, 'ap_membership_level', 'Free' );
+			}
+		}
+	}
 }

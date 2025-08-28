@@ -1,14 +1,13 @@
 <?php
 namespace ArtPulse\Core;
 
-class ProfileMetrics
-{
-    public static function install_table(): void
-    {
-        global $wpdb;
-        $table   = $wpdb->prefix . 'ap_profile_metrics';
-        $charset = $wpdb->get_charset_collate();
-        $sql = "CREATE TABLE $table (
+class ProfileMetrics {
+
+	public static function install_table(): void {
+		global $wpdb;
+		$table   = $wpdb->prefix . 'ap_profile_metrics';
+		$charset = $wpdb->get_charset_collate();
+		$sql     = "CREATE TABLE $table (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             profile_id BIGINT NOT NULL,
@@ -17,125 +16,121 @@ class ProfileMetrics
             count BIGINT NOT NULL DEFAULT 0,
             UNIQUE KEY profile_metric_day (profile_id, metric, day)
         ) $charset;";
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
-        dbDelta($sql);
-    }
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( $sql ); }
+		dbDelta( $sql );
+	}
 
-    /**
-     * Ensure the profile metrics table exists.
-     */
-    public static function maybe_install_table(): void
-    {
-        global $wpdb;
-        $table  = $wpdb->prefix . 'ap_profile_metrics';
-        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
-        if ($exists !== $table) {
-            self::install_table();
-        }
-    }
+	/**
+	 * Ensure the profile metrics table exists.
+	 */
+	public static function maybe_install_table(): void {
+		global $wpdb;
+		$table  = $wpdb->prefix . 'ap_profile_metrics';
+		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+		if ( $exists !== $table ) {
+			self::install_table();
+		}
+	}
 
-    public static function register(): void
-    {
-        add_action('wp', [self::class, 'track_view']);
-        add_action('ap_follow_added', [self::class, 'track_follow'], 10, 3);
-        add_action('ap_favorite_added', [self::class, 'track_favorite'], 10, 3);
-        add_action('ap_profile_shared', [self::class, 'track_share'], 10, 2);
-    }
+	public static function register(): void {
+		add_action( 'wp', array( self::class, 'track_view' ) );
+		add_action( 'ap_follow_added', array( self::class, 'track_follow' ), 10, 3 );
+		add_action( 'ap_favorite_added', array( self::class, 'track_favorite' ), 10, 3 );
+		add_action( 'ap_profile_shared', array( self::class, 'track_share' ), 10, 2 );
+	}
 
-    public static function track_view(): void
-    {
-        if (is_singular('artpulse_artist') || is_singular('artpulse_org')) {
-            global $post;
-            if ($post) {
-                self::log_metric($post->post_author, 'view');
-            }
-        }
-    }
+	public static function track_view(): void {
+		if ( is_singular( 'artpulse_artist' ) || is_singular( 'artpulse_org' ) ) {
+			global $post;
+			if ( $post ) {
+				self::log_metric( $post->post_author, 'view' );
+			}
+		}
+	}
 
-    public static function track_follow($user_id, $object_id, $object_type): void
-    {
-        if ($object_type === 'user') {
-            self::log_metric($object_id, 'follow');
-        }
-    }
+	public static function track_follow( $user_id, $object_id, $object_type ): void {
+		if ( $object_type === 'user' ) {
+			self::log_metric( $object_id, 'follow' );
+		}
+	}
 
-    public static function track_favorite(int $user_id, int $object_id, string $object_type): void
-    {
-        if ($object_type === 'user') {
-            self::log_metric($object_id, 'favorite');
-        }
-    }
+	public static function track_favorite( int $user_id, int $object_id, string $object_type ): void {
+		if ( $object_type === 'user' ) {
+			self::log_metric( $object_id, 'favorite' );
+		}
+	}
 
-    public static function track_share(int $profile_id): void
-    {
-        self::log_metric($profile_id, 'share');
+	public static function track_share( int $profile_id ): void {
+		self::log_metric( $profile_id, 'share' );
 
-        global $wpdb;
-        $meta_key = 'share_count';
-        $table    = $wpdb->usermeta;
-        $updated = $wpdb->query(
-            $wpdb->prepare(
-                "UPDATE {$table} SET meta_value = GREATEST(CAST(meta_value AS SIGNED) + 1, 0) WHERE user_id = %d AND meta_key = %s",
-                $profile_id,
-                $meta_key
-            )
-        );
-        if (!$updated) {
-            add_user_meta($profile_id, $meta_key, 1, true);
-        }
-    }
+		global $wpdb;
+		$meta_key = 'share_count';
+		$table    = $wpdb->usermeta;
+		$updated  = $wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$table} SET meta_value = GREATEST(CAST(meta_value AS SIGNED) + 1, 0) WHERE user_id = %d AND meta_key = %s",
+				$profile_id,
+				$meta_key
+			)
+		);
+		if ( ! $updated ) {
+			add_user_meta( $profile_id, $meta_key, 1, true );
+		}
+	}
 
-    public static function log_metric(int $profile_id, string $metric, int $amount = 1): void
-    {
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_profile_metrics';
-        $day   = current_time('Y-m-d');
-        $updated = $wpdb->query(
-            $wpdb->prepare(
-                "UPDATE {$table} SET count = count + %d WHERE profile_id = %d AND metric = %s AND day = %s",
-                $amount,
-                $profile_id,
-                $metric,
-                $day
-            )
-        );
-        if (!$updated) {
-            $wpdb->insert(
-                $table,
-                [
-                    'profile_id' => $profile_id,
-                    'metric'     => $metric,
-                    'day'        => $day,
-                    'count'      => $amount,
-                ],
-                [ '%d', '%s', '%s', '%d' ]
-            );
-        }
-        do_action('ap_profile_metric_logged', $profile_id, $metric, $amount);
-    }
+	public static function log_metric( int $profile_id, string $metric, int $amount = 1 ): void {
+		global $wpdb;
+		$table   = $wpdb->prefix . 'ap_profile_metrics';
+		$day     = current_time( 'Y-m-d' );
+		$updated = $wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$table} SET count = count + %d WHERE profile_id = %d AND metric = %s AND day = %s",
+				$amount,
+				$profile_id,
+				$metric,
+				$day
+			)
+		);
+		if ( ! $updated ) {
+			$wpdb->insert(
+				$table,
+				array(
+					'profile_id' => $profile_id,
+					'metric'     => $metric,
+					'day'        => $day,
+					'count'      => $amount,
+				),
+				array( '%d', '%s', '%s', '%d' )
+			);
+		}
+		do_action( 'ap_profile_metric_logged', $profile_id, $metric, $amount );
+	}
 
-    public static function get_counts(int $profile_id, string $metric, int $days = 30): array
-    {
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_profile_metrics';
-        $since = date('Y-m-d', strtotime('-' . $days . ' days'));
-        $rows  = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT day, count FROM {$table} WHERE profile_id = %d AND metric = %s AND day >= %s ORDER BY day ASC",
-                $profile_id,
-                $metric,
-                $since
-            )
-        );
-        $output = [];
-        for ($i = $days - 1; $i >= 0; $i--) {
-            $d = date('Y-m-d', strtotime('-' . $i . ' days'));
-            $output[$d] = 0;
-        }
-        foreach ($rows as $row) {
-            $output[$row->day] = (int) $row->count;
-        }
-        return [ 'days' => array_keys($output), 'counts' => array_values($output) ];
-    }
+	public static function get_counts( int $profile_id, string $metric, int $days = 30 ): array {
+		global $wpdb;
+		$table  = $wpdb->prefix . 'ap_profile_metrics';
+		$since  = date( 'Y-m-d', strtotime( '-' . $days . ' days' ) );
+		$rows   = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT day, count FROM {$table} WHERE profile_id = %d AND metric = %s AND day >= %s ORDER BY day ASC",
+				$profile_id,
+				$metric,
+				$since
+			)
+		);
+		$output = array();
+		for ( $i = $days - 1; $i >= 0; $i-- ) {
+			$d            = date( 'Y-m-d', strtotime( '-' . $i . ' days' ) );
+			$output[ $d ] = 0;
+		}
+		foreach ( $rows as $row ) {
+			$output[ $row->day ] = (int) $row->count;
+		}
+		return array(
+			'days'   => array_keys( $output ),
+			'counts' => array_values( $output ),
+		);
+	}
 }

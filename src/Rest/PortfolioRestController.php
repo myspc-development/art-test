@@ -11,178 +11,207 @@ use ArtPulse\Rest\Util\Auth;
 /**
  * Artist portfolio persistence API.
  */
-class PortfolioRestController extends WP_REST_Controller
-{
-    protected $namespace = 'ap/v1';
+class PortfolioRestController extends WP_REST_Controller {
 
-    public static function register(): void
-    {
-        $controller = new self();
-        add_action('rest_api_init', [$controller, 'register_routes']);
-    }
+	protected $namespace = 'ap/v1';
 
-    public function register_routes(): void
-    {
-        register_rest_route($this->namespace, '/portfolio', [
-            'methods'             => WP_REST_Server::READABLE,
-            'callback'            => [$this, 'get_portfolio'],
-            'permission_callback' => Auth::require_login_and_cap('read'),
-            'args'                => [
-                'user' => ['type' => 'string', 'default' => 'me'],
-            ],
-        ]);
+	public static function register(): void {
+		$controller = new self();
+		add_action( 'rest_api_init', array( $controller, 'register_routes' ) );
+	}
 
-        register_rest_route($this->namespace, '/portfolio/items', [
-            'methods'             => WP_REST_Server::CREATABLE,
-            'callback'            => [$this, 'add_item'],
-            'permission_callback' => Auth::require_login_and_cap('read'),
-            'args'                => [
-                'media_id' => ['type' => 'integer', 'required' => true],
-                'meta'     => ['type' => 'object',  'required' => true],
-            ],
-        ]);
+	public function register_routes(): void {
+		register_rest_route(
+			$this->namespace,
+			'/portfolio',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_portfolio' ),
+				'permission_callback' => Auth::require_login_and_cap( 'read' ),
+				'args'                => array(
+					'user' => array(
+						'type'    => 'string',
+						'default' => 'me',
+					),
+				),
+			)
+		);
 
-        register_rest_route($this->namespace, '/portfolio/order', [
-            'methods'             => WP_REST_Server::EDITABLE,
-            'callback'            => [$this, 'save_order'],
-            'permission_callback' => Auth::require_login_and_cap('read'),
-            'args'                => [
-                'order' => ['type' => 'array', 'required' => true],
-            ],
-        ]);
+		register_rest_route(
+			$this->namespace,
+			'/portfolio/items',
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => array( $this, 'add_item' ),
+				'permission_callback' => Auth::require_login_and_cap( 'read' ),
+				'args'                => array(
+					'media_id' => array(
+						'type'     => 'integer',
+						'required' => true,
+					),
+					'meta'     => array(
+						'type'     => 'object',
+						'required' => true,
+					),
+				),
+			)
+		);
 
-        register_rest_route($this->namespace, '/portfolio/featured', [
-            'methods'             => WP_REST_Server::EDITABLE,
-            'callback'            => [$this, 'set_featured'],
-            'permission_callback' => Auth::require_login_and_cap('read'),
-            'args'                => [
-                'attachment_id' => ['type' => 'integer', 'required' => true],
-            ],
-        ]);
-    }
+		register_rest_route(
+			$this->namespace,
+			'/portfolio/order',
+			array(
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => array( $this, 'save_order' ),
+				'permission_callback' => Auth::require_login_and_cap( 'read' ),
+				'args'                => array(
+					'order' => array(
+						'type'     => 'array',
+						'required' => true,
+					),
+				),
+			)
+		);
 
-    protected function get_profile_id(int $user_id): int
-    {
-        $profile = get_posts([
-            'post_type'      => 'artist_profile',
-            'post_status'    => ['publish', 'draft', 'pending'],
-            'author'         => $user_id,
-            'posts_per_page' => 1,
-            'fields'         => 'ids',
-            'no_found_rows'  => true,
-        ]);
-        if ($profile) {
-            return (int) $profile[0];
-        }
-        $userdata = get_userdata($user_id);
-        return wp_insert_post([
-            'post_type'   => 'artist_profile',
-            'post_status' => 'draft',
-            'post_author' => $user_id,
-            'post_title'  => $userdata ? $userdata->display_name : 'Artist',
-        ]);
-    }
+		register_rest_route(
+			$this->namespace,
+			'/portfolio/featured',
+			array(
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => array( $this, 'set_featured' ),
+				'permission_callback' => Auth::require_login_and_cap( 'read' ),
+				'args'                => array(
+					'attachment_id' => array(
+						'type'     => 'integer',
+						'required' => true,
+					),
+				),
+			)
+		);
+	}
 
-    public function get_portfolio(WP_REST_Request $request): WP_REST_Response
-    {
-        $user_id = get_current_user_id();
-        $profile_id = $this->get_profile_id($user_id);
-        return rest_ensure_response($this->build_response($profile_id));
-    }
+	protected function get_profile_id( int $user_id ): int {
+		$profile = get_posts(
+			array(
+				'post_type'      => 'artist_profile',
+				'post_status'    => array( 'publish', 'draft', 'pending' ),
+				'author'         => $user_id,
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				'no_found_rows'  => true,
+			)
+		);
+		if ( $profile ) {
+			return (int) $profile[0];
+		}
+		$userdata = get_userdata( $user_id );
+		return wp_insert_post(
+			array(
+				'post_type'   => 'artist_profile',
+				'post_status' => 'draft',
+				'post_author' => $user_id,
+				'post_title'  => $userdata ? $userdata->display_name : 'Artist',
+			)
+		);
+	}
 
-    public function add_item(WP_REST_Request $request)
-    {
-        $user_id    = get_current_user_id();
-        $profile_id = $this->get_profile_id($user_id);
-        $media_id   = absint($request['media_id']);
-        $meta       = (array) $request->get_param('meta');
+	public function get_portfolio( WP_REST_Request $request ): WP_REST_Response {
+		$user_id    = get_current_user_id();
+		$profile_id = $this->get_profile_id( $user_id );
+		return rest_ensure_response( $this->build_response( $profile_id ) );
+	}
 
-        if ((int) get_post_field('post_author', $profile_id) !== $user_id) {
-            return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
-        }
+	public function add_item( WP_REST_Request $request ) {
+		$user_id    = get_current_user_id();
+		$profile_id = $this->get_profile_id( $user_id );
+		$media_id   = absint( $request['media_id'] );
+		$meta       = (array) $request->get_param( 'meta' );
 
-        if ($media_id < 1 || (int) get_post_field('post_author', $media_id) !== $user_id) {
-            return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
-        }
+		if ( (int) get_post_field( 'post_author', $profile_id ) !== $user_id ) {
+			return new WP_Error( 'rest_forbidden', __( "You don't have permission to modify this resource.", 'artpulse' ), array( 'status' => 403 ) );
+		}
 
-        $alt = sanitize_text_field( $meta['alt'] ?? '' );
-        if ( $alt === '' ) {
-            return new WP_Error( 'invalid_alt', __( 'ALT text is required for accessibility.', 'artpulse' ), [ 'status' => 400 ] );
-        }
+		if ( $media_id < 1 || (int) get_post_field( 'post_author', $media_id ) !== $user_id ) {
+			return new WP_Error( 'rest_forbidden', __( "You don't have permission to modify this resource.", 'artpulse' ), array( 'status' => 403 ) );
+		}
 
-        wp_update_post([
-            'ID'           => $media_id,
-            'post_title'   => sanitize_text_field($meta['title'] ?? ''),
-            'post_excerpt' => sanitize_text_field($meta['caption'] ?? ''),
-        ]);
-        update_post_meta($media_id, '_wp_attachment_image_alt', $alt);
-        update_post_meta($media_id, 'ap_year', sanitize_text_field($meta['year'] ?? ''));
-        update_post_meta($media_id, 'ap_medium', array_map('sanitize_text_field', (array) ($meta['medium'] ?? [])));
-        update_post_meta($media_id, 'ap_tags', array_map('sanitize_text_field', (array) ($meta['tags'] ?? [])));
+		$alt = sanitize_text_field( $meta['alt'] ?? '' );
+		if ( $alt === '' ) {
+			return new WP_Error( 'invalid_alt', __( 'ALT text is required for accessibility.', 'artpulse' ), array( 'status' => 400 ) );
+		}
 
-        $order = get_post_meta($profile_id, 'ap_portfolio_order', true);
-        $order = is_array($order) ? array_map('intval', $order) : [];
-        if (!in_array($media_id, $order, true)) {
-            $order[] = $media_id;
-            update_post_meta($profile_id, 'ap_portfolio_order', $order);
-        }
+		wp_update_post(
+			array(
+				'ID'           => $media_id,
+				'post_title'   => sanitize_text_field( $meta['title'] ?? '' ),
+				'post_excerpt' => sanitize_text_field( $meta['caption'] ?? '' ),
+			)
+		);
+		update_post_meta( $media_id, '_wp_attachment_image_alt', $alt );
+		update_post_meta( $media_id, 'ap_year', sanitize_text_field( $meta['year'] ?? '' ) );
+		update_post_meta( $media_id, 'ap_medium', array_map( 'sanitize_text_field', (array) ( $meta['medium'] ?? array() ) ) );
+		update_post_meta( $media_id, 'ap_tags', array_map( 'sanitize_text_field', (array) ( $meta['tags'] ?? array() ) ) );
 
-        return rest_ensure_response($this->build_response($profile_id));
-    }
+		$order = get_post_meta( $profile_id, 'ap_portfolio_order', true );
+		$order = is_array( $order ) ? array_map( 'intval', $order ) : array();
+		if ( ! in_array( $media_id, $order, true ) ) {
+			$order[] = $media_id;
+			update_post_meta( $profile_id, 'ap_portfolio_order', $order );
+		}
 
-    public function save_order(WP_REST_Request $request)
-    {
-        $user_id    = get_current_user_id();
-        $profile_id = $this->get_profile_id($user_id);
-        if ((int) get_post_field('post_author', $profile_id) !== $user_id) {
-            return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
-        }
-        $order = array_map('intval', (array) $request['order']);
-        foreach ($order as $att_id) {
-            if ((int) get_post_field('post_author', $att_id) !== $user_id) {
-                return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
-            }
-        }
-        update_post_meta($profile_id, 'ap_portfolio_order', $order);
-        return rest_ensure_response($this->build_response($profile_id));
-    }
+		return rest_ensure_response( $this->build_response( $profile_id ) );
+	}
 
-    public function set_featured(WP_REST_Request $request)
-    {
-        $user_id    = get_current_user_id();
-        $profile_id = $this->get_profile_id($user_id);
-        $att_id     = absint($request['attachment_id']);
-        if ((int) get_post_field('post_author', $profile_id) !== $user_id || (int) get_post_field('post_author', $att_id) !== $user_id) {
-            return new WP_Error('rest_forbidden', __("You don't have permission to modify this resource.", 'artpulse'), ['status' => 403]);
-        }
-        update_post_meta($profile_id, 'ap_portfolio_featured_id', $att_id);
-        return rest_ensure_response($this->build_response($profile_id));
-    }
+	public function save_order( WP_REST_Request $request ) {
+		$user_id    = get_current_user_id();
+		$profile_id = $this->get_profile_id( $user_id );
+		if ( (int) get_post_field( 'post_author', $profile_id ) !== $user_id ) {
+			return new WP_Error( 'rest_forbidden', __( "You don't have permission to modify this resource.", 'artpulse' ), array( 'status' => 403 ) );
+		}
+		$order = array_map( 'intval', (array) $request['order'] );
+		foreach ( $order as $att_id ) {
+			if ( (int) get_post_field( 'post_author', $att_id ) !== $user_id ) {
+				return new WP_Error( 'rest_forbidden', __( "You don't have permission to modify this resource.", 'artpulse' ), array( 'status' => 403 ) );
+			}
+		}
+		update_post_meta( $profile_id, 'ap_portfolio_order', $order );
+		return rest_ensure_response( $this->build_response( $profile_id ) );
+	}
 
-    protected function build_response(int $profile_id): array
-    {
-        $order    = get_post_meta($profile_id, 'ap_portfolio_order', true);
-        $order    = is_array($order) ? array_map('intval', $order) : [];
-        $featured = (int) get_post_meta($profile_id, 'ap_portfolio_featured_id', true);
-        $items    = [];
-        foreach ($order as $att_id) {
-            $img = wp_get_attachment_image_src($att_id, 'large');
-            $items[] = [
-                'id'      => $att_id,
-                'title'   => get_the_title($att_id),
-                'alt'     => get_post_meta($att_id, '_wp_attachment_image_alt', true),
-                'caption' => get_post_field('post_excerpt', $att_id),
-                'year'    => get_post_meta($att_id, 'ap_year', true),
-                'medium'  => (array) get_post_meta($att_id, 'ap_medium', true),
-                'tags'    => (array) get_post_meta($att_id, 'ap_tags', true),
-                'src'     => $img[0] ?? '',
-                'srcset'  => wp_get_attachment_image_srcset($att_id, 'large') ?: '',
-            ];
-        }
-        return [
-            'profile_id'  => $profile_id,
-            'featured_id' => $featured,
-            'items'       => $items,
-        ];
-    }
+	public function set_featured( WP_REST_Request $request ) {
+		$user_id    = get_current_user_id();
+		$profile_id = $this->get_profile_id( $user_id );
+		$att_id     = absint( $request['attachment_id'] );
+		if ( (int) get_post_field( 'post_author', $profile_id ) !== $user_id || (int) get_post_field( 'post_author', $att_id ) !== $user_id ) {
+			return new WP_Error( 'rest_forbidden', __( "You don't have permission to modify this resource.", 'artpulse' ), array( 'status' => 403 ) );
+		}
+		update_post_meta( $profile_id, 'ap_portfolio_featured_id', $att_id );
+		return rest_ensure_response( $this->build_response( $profile_id ) );
+	}
+
+	protected function build_response( int $profile_id ): array {
+		$order    = get_post_meta( $profile_id, 'ap_portfolio_order', true );
+		$order    = is_array( $order ) ? array_map( 'intval', $order ) : array();
+		$featured = (int) get_post_meta( $profile_id, 'ap_portfolio_featured_id', true );
+		$items    = array();
+		foreach ( $order as $att_id ) {
+			$img     = wp_get_attachment_image_src( $att_id, 'large' );
+			$items[] = array(
+				'id'      => $att_id,
+				'title'   => get_the_title( $att_id ),
+				'alt'     => get_post_meta( $att_id, '_wp_attachment_image_alt', true ),
+				'caption' => get_post_field( 'post_excerpt', $att_id ),
+				'year'    => get_post_meta( $att_id, 'ap_year', true ),
+				'medium'  => (array) get_post_meta( $att_id, 'ap_medium', true ),
+				'tags'    => (array) get_post_meta( $att_id, 'ap_tags', true ),
+				'src'     => $img[0] ?? '',
+				'srcset'  => wp_get_attachment_image_srcset( $att_id, 'large' ) ?: '',
+			);
+		}
+		return array(
+			'profile_id'  => $profile_id,
+			'featured_id' => $featured,
+			'items'       => $items,
+		);
+	}
 }

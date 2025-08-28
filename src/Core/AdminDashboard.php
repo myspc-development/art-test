@@ -1,88 +1,88 @@
 <?php
 namespace ArtPulse\Core;
 
-class AdminDashboard
-{
-    public static function register()
-    {
-        add_action('admin_menu', [ self::class, 'addMenus' ]);
-        add_action('admin_enqueue_scripts', [ self::class, 'enqueue' ]);
-    }
+class AdminDashboard {
 
-    public static function addMenus()
-    {
-        add_menu_page(
-            __('ArtPulse', 'artpulse'),
-            __('ArtPulse', 'artpulse'),
-            'manage_options',
-            'artpulse-dashboard',
-            [ self::class, 'renderDashboard' ],
-            'dashicons-art', // choose an appropriate dashicon
-            60
-        );
-        add_submenu_page(
-            'artpulse-dashboard',
-            __('Events','artpulse'),
-            __('Events','artpulse'),
-            'edit_artpulse_events',
-            'edit.php?post_type=artpulse_event'
-        );
-        add_submenu_page(
-            'artpulse-dashboard',
-            __('Artists','artpulse'),
-            __('Artists','artpulse'),
-            'edit_artpulse_artists',
-            'edit.php?post_type=artpulse_artist'
-        );
-        add_submenu_page(
-            'artpulse-dashboard',
-            __('Artworks','artpulse'),
-            __('Artworks','artpulse'),
-            'edit_artpulse_artworks',
-            'edit.php?post_type=artpulse_artwork'
-        );
-        add_submenu_page(
-            'artpulse-dashboard',
-            __('Organizations','artpulse'),
-            __('Organizations','artpulse'),
-            'edit_artpulse_orgs',
-            'edit.php?post_type=artpulse_org'
-        );
-    }
+	public static function register() {
+		add_action( 'admin_menu', array( self::class, 'addMenus' ) );
+		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue' ) );
+	}
 
-    public static function enqueue(string $hook): void
-    {
-        if ($hook !== 'toplevel_page_artpulse-dashboard') {
-            return;
-        }
+	public static function addMenus() {
+		add_menu_page(
+			__( 'ArtPulse', 'artpulse' ),
+			__( 'ArtPulse', 'artpulse' ),
+			'manage_options',
+			'artpulse-dashboard',
+			array( self::class, 'renderDashboard' ),
+			'dashicons-art', // choose an appropriate dashicon
+			60
+		);
+		add_submenu_page(
+			'artpulse-dashboard',
+			__( 'Events', 'artpulse' ),
+			__( 'Events', 'artpulse' ),
+			'edit_artpulse_events',
+			'edit.php?post_type=artpulse_event'
+		);
+		add_submenu_page(
+			'artpulse-dashboard',
+			__( 'Artists', 'artpulse' ),
+			__( 'Artists', 'artpulse' ),
+			'edit_artpulse_artists',
+			'edit.php?post_type=artpulse_artist'
+		);
+		add_submenu_page(
+			'artpulse-dashboard',
+			__( 'Artworks', 'artpulse' ),
+			__( 'Artworks', 'artpulse' ),
+			'edit_artpulse_artworks',
+			'edit.php?post_type=artpulse_artwork'
+		);
+		add_submenu_page(
+			'artpulse-dashboard',
+			__( 'Organizations', 'artpulse' ),
+			__( 'Organizations', 'artpulse' ),
+			'edit_artpulse_orgs',
+			'edit.php?post_type=artpulse_org'
+		);
+	}
 
-        // Legacy dashboard script removed.
+	public static function enqueue( string $hook ): void {
+		if ( $hook !== 'toplevel_page_artpulse-dashboard' ) {
+			return;
+		}
 
-        // Enable drag & drop and widget toggles within the dashboard preview
-        wp_enqueue_script(
-            'sortablejs',
-            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/libs/sortablejs/Sortable.min.js',
-            [],
-            '1.15.0',
-            true
-        );
+		// Legacy dashboard script removed.
 
-        wp_enqueue_script(
-            'role-dashboard',
-            plugin_dir_url(ARTPULSE_PLUGIN_FILE) . 'assets/js/role-dashboard.js',
-            ['jquery', 'sortablejs'],
-            '1.0.0',
-            true
-        );
+		// Enable drag & drop and widget toggles within the dashboard preview
+		wp_enqueue_script(
+			'sortablejs',
+			plugin_dir_url( ARTPULSE_PLUGIN_FILE ) . 'assets/libs/sortablejs/Sortable.min.js',
+			array(),
+			'1.15.0',
+			true
+		);
 
-        wp_localize_script('role-dashboard', 'ArtPulseDashboard', [
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('ap_dashboard_nonce'),
-        ]);
-    }
+		wp_enqueue_script(
+			'role-dashboard',
+			plugin_dir_url( ARTPULSE_PLUGIN_FILE ) . 'assets/js/role-dashboard.js',
+			array( 'jquery', 'sortablejs' ),
+			'1.0.0',
+			true
+		);
 
-    public static function renderDashboard()
-    {
-        \ArtPulse\Admin\DashboardWidgetTools::render();
-    }
+		wp_localize_script(
+			'role-dashboard',
+			'ArtPulseDashboard',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'ap_dashboard_nonce' ),
+			)
+		);
+	}
+
+	public static function renderDashboard() {
+		\ArtPulse\Admin\DashboardWidgetTools::render();
+	}
 }

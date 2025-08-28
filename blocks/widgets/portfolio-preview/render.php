@@ -1,1 +1,1 @@
-<?php echo ArtPulse\Widgets::render_portfolio_box(); ?>
+<?php echo ArtPulse\Widgets::render_portfolio_box();

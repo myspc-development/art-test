@@ -7,33 +7,31 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 require_once __DIR__ . '/../TestStubs.php';
 
-class WidgetSourcesVisibilityTest extends TestCase
-{
-    public static array $rows = [];
+class WidgetSourcesVisibilityTest extends TestCase {
 
-    protected function setUp(): void
-    {
-        $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
-        foreach (["widgets","builder_widgets","id_map","issues","logged_duplicates","aliases"] as $prop) {
-            if ($ref->hasProperty($prop)) {
-                $p = $ref->getProperty($prop);
-                $p->setAccessible(true);
-                $p->setValue(null, []);
-            }
-        }
-        update_option('artpulse_widget_roles', []);
-        update_option('artpulse_hidden_widgets', []);
-    }
+	public static array $rows = array();
 
-    public function test_roles_from_visibility_option(): void
-    {
-        DashboardWidgetRegistry::register('widget_demo', 'Demo', '', '', static fn() => '');
-        update_option('artpulse_widget_roles', ['member' => ['widget_demo']]);
+	protected function setUp(): void {
+		$ref = new \ReflectionClass( DashboardWidgetRegistry::class );
+		foreach ( array( 'widgets', 'builder_widgets', 'id_map', 'issues', 'logged_duplicates', 'aliases' ) as $prop ) {
+			if ( $ref->hasProperty( $prop ) ) {
+				$p = $ref->getProperty( $prop );
+				$p->setAccessible( true );
+				$p->setValue( null, array() );
+			}
+		}
+		update_option( 'artpulse_widget_roles', array() );
+		update_option( 'artpulse_hidden_widgets', array() );
+	}
 
-        $cmd = new WidgetAudit();
-        $cmd->widgets([], ['format' => 'table']);
+	public function test_roles_from_visibility_option(): void {
+		DashboardWidgetRegistry::register( 'widget_demo', 'Demo', '', '', static fn() => '' );
+		update_option( 'artpulse_widget_roles', array( 'member' => array( 'widget_demo' ) ) );
 
-        $this->assertNotEmpty(self::$rows);
-        $this->assertSame('member', self::$rows[0]['roles_from_visibility']);
-    }
+		$cmd = new WidgetAudit();
+		$cmd->widgets( array(), array( 'format' => 'table' ) );
+
+		$this->assertNotEmpty( self::$rows );
+		$this->assertSame( 'member', self::$rows[0]['roles_from_visibility'] );
+	}
 }

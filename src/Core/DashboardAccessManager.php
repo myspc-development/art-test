@@ -1,38 +1,36 @@
 <?php
 namespace ArtPulse\Core;
 
-class DashboardAccessManager
-{
-    public static function register(): void
-    {
-        add_action('template_redirect', [self::class, 'maybe_redirect']);
-    }
+class DashboardAccessManager {
 
-    public static function maybe_redirect(): void
-    {
-        if (is_user_logged_in() || !is_page()) {
-            return;
-        }
+	public static function register(): void {
+		add_action( 'template_redirect', array( self::class, 'maybe_redirect' ) );
+	}
 
-        global $post;
-        if (!$post) {
-            return;
-        }
+	public static function maybe_redirect(): void {
+		if ( is_user_logged_in() || ! is_page() ) {
+			return;
+		}
 
-        $content = $post->post_content ?? '';
-        $tag = apply_filters('ap_dashboard_shortcode_tag', 'ap_user_dashboard');
-        if (
-            strpos($content, '[' . $tag . ']') !== false ||
-            strpos($content, '[ap_react_dashboard]') !== false
-        ) {
-            $login_url = Plugin::get_login_url();
-            if (!$login_url) {
-                $login_url = wp_login_url();
-            }
-            if (is_string($login_url) && $login_url !== '') {
-                wp_safe_redirect(add_query_arg('redirect_to', rawurlencode(get_permalink($post)), $login_url));
-                exit;
-            }
-        }
-    }
+		global $post;
+		if ( ! $post ) {
+			return;
+		}
+
+		$content = $post->post_content ?? '';
+		$tag     = apply_filters( 'ap_dashboard_shortcode_tag', 'ap_user_dashboard' );
+		if (
+			strpos( $content, '[' . $tag . ']' ) !== false ||
+			strpos( $content, '[ap_react_dashboard]' ) !== false
+		) {
+			$login_url = Plugin::get_login_url();
+			if ( ! $login_url ) {
+				$login_url = wp_login_url();
+			}
+			if ( is_string( $login_url ) && $login_url !== '' ) {
+				wp_safe_redirect( add_query_arg( 'redirect_to', rawurlencode( get_permalink( $post ) ), $login_url ) );
+				exit;
+			}
+		}
+	}
 }

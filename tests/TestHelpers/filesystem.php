@@ -16,7 +16,7 @@ use ArtPulse\Support\FileSystem;
  * @return bool Whether the file was deleted.
  */
 function safe_unlink( string $path ): bool {
-    return FileSystem::safe_unlink( $path );
+	return FileSystem::safe_unlink( $path );
 }
 
 /**
@@ -26,10 +26,10 @@ function safe_unlink( string $path ): bool {
  * @return bool Whether the directory was removed.
  */
 function remove_dir( string $path ): bool {
-    return FileSystem::rm_rf( $path );
+	return FileSystem::rm_rf( $path );
 }
 
 // Backwards compatible alias
 function rm_rf( string $path ): bool {
-    return remove_dir( $path );
+	return remove_dir( $path );
 }

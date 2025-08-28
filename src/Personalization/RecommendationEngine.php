@@ -4,24 +4,22 @@ namespace ArtPulse\Personalization;
 use ArtPulse\Community\FavoritesManager;
 use ArtPulse\Personalization\RecommendationPreferenceManager;
 
-class RecommendationEngine
-{
-    public static function maybe_install_table(): void
-    {
-        global $wpdb;
-        $table  = $wpdb->prefix . 'ap_user_activity';
-        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
-        if ($exists !== $table) {
-            self::install_table();
-        }
-    }
+class RecommendationEngine {
 
-    public static function install_table(): void
-    {
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_user_activity';
-        $charset = $wpdb->get_charset_collate();
-        $sql = "CREATE TABLE $table (
+	public static function maybe_install_table(): void {
+		global $wpdb;
+		$table  = $wpdb->prefix . 'ap_user_activity';
+		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+		if ( $exists !== $table ) {
+			self::install_table();
+		}
+	}
+
+	public static function install_table(): void {
+		global $wpdb;
+		$table   = $wpdb->prefix . 'ap_user_activity';
+		$charset = $wpdb->get_charset_collate();
+		$sql     = "CREATE TABLE $table (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             PRIMARY KEY (id),
             user_id BIGINT NOT NULL,
@@ -35,201 +33,216 @@ class RecommendationEngine
             KEY action (action),
             KEY logged_at (logged_at)
         ) $charset;";
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        if (defined('WP_DEBUG') && WP_DEBUG) { error_log($sql); }
-        dbDelta($sql);
-    }
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( $sql ); }
+		dbDelta( $sql );
+	}
 
-    public static function log(int $user_id, string $object_type, int $object_id, string $action): void
-    {
-        if (!$user_id) {
-            return;
-        }
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_user_activity';
-        $wpdb->insert($table, [
-            'user_id'     => $user_id,
-            'object_type' => $object_type,
-            'object_id'   => $object_id,
-            'action'      => $action,
-            'logged_at'   => current_time('mysql'),
-        ]);
-    }
+	public static function log( int $user_id, string $object_type, int $object_id, string $action ): void {
+		if ( ! $user_id ) {
+			return;
+		}
+		global $wpdb;
+		$table = $wpdb->prefix . 'ap_user_activity';
+		$wpdb->insert(
+			$table,
+			array(
+				'user_id'     => $user_id,
+				'object_type' => $object_type,
+				'object_id'   => $object_id,
+				'action'      => $action,
+				'logged_at'   => current_time( 'mysql' ),
+			)
+		);
+	}
 
-    public static function get_viewed_objects(int $user_id, string $object_type): array
-    {
-        global $wpdb;
-        $table = $wpdb->prefix . 'ap_user_activity';
-        $since = date('Y-m-d H:i:s', strtotime('-30 days'));
-        $sql   = "SELECT object_id FROM $table WHERE user_id = %d AND object_type = %s AND action = 'view' AND logged_at >= %s";
-        return array_map('intval', $wpdb->get_col($wpdb->prepare($sql, $user_id, $object_type, $since)));
-    }
+	public static function get_viewed_objects( int $user_id, string $object_type ): array {
+		global $wpdb;
+		$table = $wpdb->prefix . 'ap_user_activity';
+		$since = date( 'Y-m-d H:i:s', strtotime( '-30 days' ) );
+		$sql   = "SELECT object_id FROM $table WHERE user_id = %d AND object_type = %s AND action = 'view' AND logged_at >= %s";
+		return array_map( 'intval', $wpdb->get_col( $wpdb->prepare( $sql, $user_id, $object_type, $since ) ) );
+	}
 
-    public static function get_recommendations(int $user_id, string $type = 'event', int $limit = 5, $location = null): array
-    {
-        $cache_suffix = $location ? md5(json_encode($location)) : 'none';
-        $cache_key    = "ap_rec_{$type}_{$user_id}_{$cache_suffix}";
-        $cached    = get_transient($cache_key);
-        if ($cached !== false) {
-            return $cached;
-        }
+	public static function get_recommendations( int $user_id, string $type = 'event', int $limit = 5, $location = null ): array {
+		$cache_suffix = $location ? md5( json_encode( $location ) ) : 'none';
+		$cache_key    = "ap_rec_{$type}_{$user_id}_{$cache_suffix}";
+		$cached       = get_transient( $cache_key );
+		if ( $cached !== false ) {
+			return $cached;
+		}
 
-        $prefs = RecommendationPreferenceManager::get($user_id);
-        $preferred_tags = array_map('strtolower', (array) $prefs['preferred_tags']);
-        $ignored_tags   = array_map('strtolower', (array) $prefs['ignored_tags']);
-        $blacklist_ids  = array_map('intval', (array) $prefs['blacklist_ids']);
+		$prefs          = RecommendationPreferenceManager::get( $user_id );
+		$preferred_tags = array_map( 'strtolower', (array) $prefs['preferred_tags'] );
+		$ignored_tags   = array_map( 'strtolower', (array) $prefs['ignored_tags'] );
+		$blacklist_ids  = array_map( 'intval', (array) $prefs['blacklist_ids'] );
 
-        $recs = [];
-        if ($type === 'event') {
-            $fav = FavoritesManager::get_user_favorites($user_id, 'artpulse_event');
-            $fav_ids = array_map(fn($f) => (int) $f->object_id, $fav);
-            $rsvp_ids = get_user_meta($user_id, 'ap_rsvp_events', true) ?: [];
-            $view_ids = self::get_viewed_objects($user_id, 'event');
-            $seed_ids = array_unique(array_merge($fav_ids, $rsvp_ids, $view_ids));
+		$recs = array();
+		if ( $type === 'event' ) {
+			$fav      = FavoritesManager::get_user_favorites( $user_id, 'artpulse_event' );
+			$fav_ids  = array_map( fn( $f ) => (int) $f->object_id, $fav );
+			$rsvp_ids = get_user_meta( $user_id, 'ap_rsvp_events', true ) ?: array();
+			$view_ids = self::get_viewed_objects( $user_id, 'event' );
+			$seed_ids = array_unique( array_merge( $fav_ids, $rsvp_ids, $view_ids ) );
 
-            $terms = [];
-            foreach ($seed_ids as $eid) {
-                $terms = array_merge($terms, wp_get_object_terms($eid, ['artpulse_category', 'post_tag'], ['fields' => 'ids']));
-            }
-            $terms = array_unique($terms);
+			$terms = array();
+			foreach ( $seed_ids as $eid ) {
+				$terms = array_merge( $terms, wp_get_object_terms( $eid, array( 'artpulse_category', 'post_tag' ), array( 'fields' => 'ids' ) ) );
+			}
+			$terms = array_unique( $terms );
 
-            if ($terms) {
-                $query = new \WP_Query([
-                    'post_type'      => 'artpulse_event',
-                    'post__not_in'   => $seed_ids,
-                    'tax_query'      => [
-                        [
-                            'taxonomy' => 'artpulse_category',
-                            'field'    => 'term_id',
-                            'terms'    => $terms,
-                            'operator' => 'IN',
-                        ],
-                    ],
-                    'posts_per_page' => $limit,
-                    'no_found_rows'  => true,
-                ]);
-                foreach ($query->posts as $post) {
-                    if (in_array($post->ID, $blacklist_ids, true)) {
-                        continue;
-                    }
-                    $post_tags = wp_get_object_terms($post->ID, ['artpulse_category','post_tag'], ['fields'=>'slugs']);
-                    $lower_tags = array_map('strtolower', $post_tags);
-                    if ($ignored_tags && array_intersect($ignored_tags, $lower_tags)) {
-                        continue;
-                    }
-                    $score = 1;
-                    if ($preferred_tags && array_intersect($preferred_tags, $lower_tags)) {
-                        $score *= 1.5;
-                    }
-                    $recs[] = [
-                        'id'     => $post->ID,
-                        'title'  => $post->post_title,
-                        'score'  => $score,
-                        'reason' => __('Based on your favorites', 'artpulse'),
-                    ];
-                }
-            }
+			if ( $terms ) {
+				$query = new \WP_Query(
+					array(
+						'post_type'      => 'artpulse_event',
+						'post__not_in'   => $seed_ids,
+						'tax_query'      => array(
+							array(
+								'taxonomy' => 'artpulse_category',
+								'field'    => 'term_id',
+								'terms'    => $terms,
+								'operator' => 'IN',
+							),
+						),
+						'posts_per_page' => $limit,
+						'no_found_rows'  => true,
+					)
+				);
+				foreach ( $query->posts as $post ) {
+					if ( in_array( $post->ID, $blacklist_ids, true ) ) {
+						continue;
+					}
+					$post_tags  = wp_get_object_terms( $post->ID, array( 'artpulse_category', 'post_tag' ), array( 'fields' => 'slugs' ) );
+					$lower_tags = array_map( 'strtolower', $post_tags );
+					if ( $ignored_tags && array_intersect( $ignored_tags, $lower_tags ) ) {
+						continue;
+					}
+					$score = 1;
+					if ( $preferred_tags && array_intersect( $preferred_tags, $lower_tags ) ) {
+						$score *= 1.5;
+					}
+					$recs[] = array(
+						'id'     => $post->ID,
+						'title'  => $post->post_title,
+						'score'  => $score,
+						'reason' => __( 'Based on your favorites', 'artpulse' ),
+					);
+				}
+			}
 
-            if (!$recs) {
-                $query = new \WP_Query([
-                    'post_type'      => 'artpulse_event',
-                    'post_status'    => 'publish',
-                    'posts_per_page' => -1,
-                    'no_found_rows'  => true,
-                ]);
-                $events = $query->posts;
-                usort($events, function($a, $b) {
-                    $fav_a = (int) get_post_meta($a->ID, 'ap_favorite_count', true);
-                    $fav_b = (int) get_post_meta($b->ID, 'ap_favorite_count', true);
-                    if ($fav_a === $fav_b) {
-                        $rsvp_a = count((array) get_post_meta($a->ID, 'event_rsvp_list', true));
-                        $rsvp_b = count((array) get_post_meta($b->ID, 'event_rsvp_list', true));
-                        if ($rsvp_a === $rsvp_b) {
-                            $view_a = (int) get_post_meta($a->ID, 'view_count', true);
-                            $view_b = (int) get_post_meta($b->ID, 'view_count', true);
-                            return $view_b <=> $view_a;
-                        }
-                        return $rsvp_b <=> $rsvp_a;
-                    }
-                    return $fav_b <=> $fav_a;
-                });
-                $events = array_slice($events, 0, $limit);
-                foreach ($events as $post) {
-                    if (in_array($post->ID, $blacklist_ids, true)) {
-                        continue;
-                    }
-                    $post_tags = wp_get_object_terms($post->ID, ['artpulse_category','post_tag'], ['fields'=>'slugs']);
-                    $lower_tags = array_map('strtolower', $post_tags);
-                    if ($ignored_tags && array_intersect($ignored_tags, $lower_tags)) {
-                        continue;
-                    }
-                    $score = 0.5;
-                    if ($preferred_tags && array_intersect($preferred_tags, $lower_tags)) {
-                        $score *= 1.5;
-                    }
-                    $recs[] = [
-                        'id'     => $post->ID,
-                        'title'  => $post->post_title,
-                        'score'  => $score,
-                        'reason' => __('Trending', 'artpulse'),
-                    ];
-                }
-            }
-        }
+			if ( ! $recs ) {
+				$query  = new \WP_Query(
+					array(
+						'post_type'      => 'artpulse_event',
+						'post_status'    => 'publish',
+						'posts_per_page' => -1,
+						'no_found_rows'  => true,
+					)
+				);
+				$events = $query->posts;
+				usort(
+					$events,
+					function ( $a, $b ) {
+						$fav_a = (int) get_post_meta( $a->ID, 'ap_favorite_count', true );
+						$fav_b = (int) get_post_meta( $b->ID, 'ap_favorite_count', true );
+						if ( $fav_a === $fav_b ) {
+							$rsvp_a = count( (array) get_post_meta( $a->ID, 'event_rsvp_list', true ) );
+							$rsvp_b = count( (array) get_post_meta( $b->ID, 'event_rsvp_list', true ) );
+							if ( $rsvp_a === $rsvp_b ) {
+								$view_a = (int) get_post_meta( $a->ID, 'view_count', true );
+								$view_b = (int) get_post_meta( $b->ID, 'view_count', true );
+								return $view_b <=> $view_a;
+							}
+							return $rsvp_b <=> $rsvp_a;
+						}
+						return $fav_b <=> $fav_a;
+					}
+				);
+				$events = array_slice( $events, 0, $limit );
+				foreach ( $events as $post ) {
+					if ( in_array( $post->ID, $blacklist_ids, true ) ) {
+						continue;
+					}
+					$post_tags  = wp_get_object_terms( $post->ID, array( 'artpulse_category', 'post_tag' ), array( 'fields' => 'slugs' ) );
+					$lower_tags = array_map( 'strtolower', $post_tags );
+					if ( $ignored_tags && array_intersect( $ignored_tags, $lower_tags ) ) {
+						continue;
+					}
+					$score = 0.5;
+					if ( $preferred_tags && array_intersect( $preferred_tags, $lower_tags ) ) {
+						$score *= 1.5;
+					}
+					$recs[] = array(
+						'id'     => $post->ID,
+						'title'  => $post->post_title,
+						'score'  => $score,
+						'reason' => __( 'Trending', 'artpulse' ),
+					);
+				}
+			}
+		}
 
-        $coords = self::parse_location($location);
-        if ($coords) {
-            foreach ($recs as &$rec) {
-                $lat = get_post_meta($rec['id'], 'event_lat', true);
-                $lng = get_post_meta($rec['id'], 'event_lng', true);
-                if ($lat && $lng) {
-                    $dist = self::haversine_distance($coords['lat'], $coords['lng'], floatval($lat), floatval($lng));
-                    $rec['distance'] = $dist;
-                    $rec['score']    = $rec['score'] / (1 + $dist);
-                }
-            }
-            usort($recs, fn($a, $b) => ($b['score'] <=> $a['score']));
-        } else {
-            usort($recs, fn($a, $b) => ($b['score'] <=> $a['score']));
-        }
+		$coords = self::parse_location( $location );
+		if ( $coords ) {
+			foreach ( $recs as &$rec ) {
+				$lat = get_post_meta( $rec['id'], 'event_lat', true );
+				$lng = get_post_meta( $rec['id'], 'event_lng', true );
+				if ( $lat && $lng ) {
+					$dist            = self::haversine_distance( $coords['lat'], $coords['lng'], floatval( $lat ), floatval( $lng ) );
+					$rec['distance'] = $dist;
+					$rec['score']    = $rec['score'] / ( 1 + $dist );
+				}
+			}
+			usort( $recs, fn( $a, $b ) => ( $b['score'] <=> $a['score'] ) );
+		} else {
+			usort( $recs, fn( $a, $b ) => ( $b['score'] <=> $a['score'] ) );
+		}
 
-        set_transient($cache_key, $recs, 15 * MINUTE_IN_SECONDS);
-        return $recs;
-    }
+		set_transient( $cache_key, $recs, 15 * MINUTE_IN_SECONDS );
+		return $recs;
+	}
 
-    private static function parse_location($location): ?array
-    {
-        if (is_array($location) && isset($location['lat'], $location['lng'])) {
-            return [
-                'lat' => floatval($location['lat']),
-                'lng' => floatval($location['lng']),
-            ];
-        }
-        if (is_string($location)) {
-            $location = trim($location);
-            if (preg_match('/^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/', $location)) {
-                [$lat, $lng] = array_map('floatval', array_map('trim', explode(',', $location)));
-                return ['lat' => $lat, 'lng' => $lng];
-            }
-            if (preg_match('/^\d{5}$/', $location)) {
-                $zips = [
-                    '90001' => ['lat' => 34.05, 'lng' => -118.25],
-                    '10001' => ['lat' => 40.71, 'lng' => -74.00],
-                ];
-                return $zips[$location] ?? null;
-            }
-        }
-        return null;
-    }
+	private static function parse_location( $location ): ?array {
+		if ( is_array( $location ) && isset( $location['lat'], $location['lng'] ) ) {
+			return array(
+				'lat' => floatval( $location['lat'] ),
+				'lng' => floatval( $location['lng'] ),
+			);
+		}
+		if ( is_string( $location ) ) {
+			$location = trim( $location );
+			if ( preg_match( '/^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/', $location ) ) {
+				[$lat, $lng] = array_map( 'floatval', array_map( 'trim', explode( ',', $location ) ) );
+				return array(
+					'lat' => $lat,
+					'lng' => $lng,
+				);
+			}
+			if ( preg_match( '/^\d{5}$/', $location ) ) {
+				$zips = array(
+					'90001' => array(
+						'lat' => 34.05,
+						'lng' => -118.25,
+					),
+					'10001' => array(
+						'lat' => 40.71,
+						'lng' => -74.00,
+					),
+				);
+				return $zips[ $location ] ?? null;
+			}
+		}
+		return null;
+	}
 
-    private static function haversine_distance(float $lat1, float $lng1, float $lat2, float $lng2): float
-    {
-        $earth = 6371;
-        $dLat  = deg2rad($lat2 - $lat1);
-        $dLon  = deg2rad($lng2 - $lng1);
-        $a     = sin($dLat / 2) * sin($dLat / 2) +
-            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) * sin($dLon / 2);
-        $c     = 2 * atan2(sqrt($a), sqrt(1 - $a));
-        return $earth * $c;
-    }
+	private static function haversine_distance( float $lat1, float $lng1, float $lat2, float $lng2 ): float {
+		$earth = 6371;
+		$dLat  = deg2rad( $lat2 - $lat1 );
+		$dLon  = deg2rad( $lng2 - $lng1 );
+		$a     = sin( $dLat / 2 ) * sin( $dLat / 2 ) +
+			cos( deg2rad( $lat1 ) ) * cos( deg2rad( $lat2 ) ) * sin( $dLon / 2 ) * sin( $dLon / 2 );
+		$c     = 2 * atan2( sqrt( $a ), sqrt( 1 - $a ) );
+		return $earth * $c;
+	}
 }

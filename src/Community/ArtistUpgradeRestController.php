@@ -7,99 +7,117 @@ use WP_Error;
 
 use ArtPulse\Traits\Registerable;
 
-class ArtistUpgradeRestController
-{
-    use Registerable;
+class ArtistUpgradeRestController {
 
-    private const HOOKS = [
-        'rest_api_init' => 'register_routes',
-    ];
+	use Registerable;
 
-    public static function register_routes(): void
-    {
-        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/artist-upgrade')) {
-            register_rest_route(ARTPULSE_API_NAMESPACE, '/artist-upgrade', [
-                'methods'  => 'POST',
-                'callback' => [self::class, 'handle_request'],
-                'permission_callback' => fn() => is_user_logged_in(),
-            ]);
-        }
+	private const HOOKS = array(
+		'rest_api_init' => 'register_routes',
+	);
 
-        if (!ap_rest_route_registered(ARTPULSE_API_NAMESPACE, '/upgrade-to-artist')) {
-            register_rest_route(ARTPULSE_API_NAMESPACE, '/upgrade-to-artist', [
-                'methods'  => 'POST',
-                'callback' => [self::class, 'upgrade_to_artist'],
-                'permission_callback' => fn() => is_user_logged_in(),
-            ]);
-        }
-    }
+	public static function register_routes(): void {
+		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/artist-upgrade' ) ) {
+			register_rest_route(
+				ARTPULSE_API_NAMESPACE,
+				'/artist-upgrade',
+				array(
+					'methods'             => 'POST',
+					'callback'            => array( self::class, 'handle_request' ),
+					'permission_callback' => fn() => is_user_logged_in(),
+				)
+			);
+		}
 
-    public static function handle_request(WP_REST_Request $request): WP_REST_Response|WP_Error
-    {
-        $user_id = get_current_user_id();
-        if (!$user_id) {
-            return new WP_Error('not_logged_in', 'Must be logged in', ['status' => 401]);
-        }
+		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/upgrade-to-artist' ) ) {
+			register_rest_route(
+				ARTPULSE_API_NAMESPACE,
+				'/upgrade-to-artist',
+				array(
+					'methods'             => 'POST',
+					'callback'            => array( self::class, 'upgrade_to_artist' ),
+					'permission_callback' => fn() => is_user_logged_in(),
+				)
+			);
+		}
+	}
 
-        $user = get_userdata($user_id);
-        if (!$user || user_can($user, 'artist')) {
-            return new WP_Error('already_artist', 'Already an artist', ['status' => 400]);
-        }
+	public static function handle_request( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$user_id = get_current_user_id();
+		if ( ! $user_id ) {
+			return new WP_Error( 'not_logged_in', 'Must be logged in', array( 'status' => 401 ) );
+		}
 
-        $post_id = wp_insert_post([
-            'post_type'   => 'ap_artist_request',
-            'post_status' => 'pending',
-            'post_title'  => 'Artist Upgrade: User ' . $user_id,
-            'post_author' => $user_id,
-        ], true);
+		$user = get_userdata( $user_id );
+		if ( ! $user || user_can( $user, 'artist' ) ) {
+			return new WP_Error( 'already_artist', 'Already an artist', array( 'status' => 400 ) );
+		}
 
-        if (is_wp_error($post_id)) {
-            return $post_id;
-        }
+		$post_id = wp_insert_post(
+			array(
+				'post_type'   => 'ap_artist_request',
+				'post_status' => 'pending',
+				'post_title'  => 'Artist Upgrade: User ' . $user_id,
+				'post_author' => $user_id,
+			),
+			true
+		);
 
-        return rest_ensure_response(['request_id' => $post_id, 'status' => 'pending']);
-    }
+		if ( is_wp_error( $post_id ) ) {
+			return $post_id;
+		}
 
-    /**
-     * Directly upgrades the current user to an artist and creates a profile post.
-     */
-    public static function upgrade_to_artist(WP_REST_Request $request): WP_REST_Response|WP_Error
-    {
-        $user_id = get_current_user_id();
-        if (!$user_id) {
-            return new WP_Error('not_logged_in', 'Must be logged in', ['status' => 401]);
-        }
+		return rest_ensure_response(
+			array(
+				'request_id' => $post_id,
+				'status'     => 'pending',
+			)
+		);
+	}
 
-        $user = get_userdata($user_id);
-        if (!$user) {
-            return new WP_Error('invalid_user', 'Invalid user', ['status' => 400]);
-        }
+	/**
+	 * Directly upgrades the current user to an artist and creates a profile post.
+	 */
+	public static function upgrade_to_artist( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$user_id = get_current_user_id();
+		if ( ! $user_id ) {
+			return new WP_Error( 'not_logged_in', 'Must be logged in', array( 'status' => 401 ) );
+		}
 
-        if (!in_array('artist', $user->roles, true)) {
-            $user->add_role('artist');
-        }
+		$user = get_userdata( $user_id );
+		if ( ! $user ) {
+			return new WP_Error( 'invalid_user', 'Invalid user', array( 'status' => 400 ) );
+		}
 
-        $profile_id = (int) get_user_meta($user_id, 'ap_artist_profile_id', true);
-        if (!$profile_id || 'artist_profile' !== get_post_type($profile_id)) {
-            $profile_id = wp_insert_post([
-                'post_type'   => 'artist_profile',
-                'post_status' => 'publish',
-                'post_title'  => $user->display_name ?: 'Artist ' . $user_id,
-                'post_author' => $user_id,
-            ], true);
+		if ( ! in_array( 'artist', $user->roles, true ) ) {
+			$user->add_role( 'artist' );
+		}
 
-            if (is_wp_error($profile_id)) {
-                return $profile_id;
-            }
+		$profile_id = (int) get_user_meta( $user_id, 'ap_artist_profile_id', true );
+		if ( ! $profile_id || 'artist_profile' !== get_post_type( $profile_id ) ) {
+			$profile_id = wp_insert_post(
+				array(
+					'post_type'   => 'artist_profile',
+					'post_status' => 'publish',
+					'post_title'  => $user->display_name ?: 'Artist ' . $user_id,
+					'post_author' => $user_id,
+				),
+				true
+			);
 
-            update_user_meta($user_id, 'ap_artist_profile_id', $profile_id);
-        }
+			if ( is_wp_error( $profile_id ) ) {
+				return $profile_id;
+			}
 
-        $url = add_query_arg('onboarding', '1', home_url('/dashboard'));
+			update_user_meta( $user_id, 'ap_artist_profile_id', $profile_id );
+		}
 
-        return rest_ensure_response([
-            'profile_id'     => $profile_id,
-            'onboarding_url' => $url,
-        ]);
-    }
+		$url = add_query_arg( 'onboarding', '1', home_url( '/dashboard' ) );
+
+		return rest_ensure_response(
+			array(
+				'profile_id'     => $profile_id,
+				'onboarding_url' => $url,
+			)
+		);
+	}
 }

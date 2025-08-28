@@ -6,50 +6,49 @@ use Brain\Monkey;
 use function Brain\Monkey\Functions\when;
 use WP_UnitTestCase;
 
-class PaymentHandlerTest extends WP_UnitTestCase
-{
-    public function set_up()
-    {
-        parent::set_up();
-        Monkey\setUp();
-        update_option('artpulse_settings', []);
-        require_once dirname(__DIR__, 2) . '/includes/payment-handler.php';
-    }
+class PaymentHandlerTest extends WP_UnitTestCase {
 
-    public function tear_down()
-    {
-        Monkey\tearDown();
-        parent::tear_down();
-    }
+	public function set_up() {
+		parent::set_up();
+		Monkey\setUp();
+		update_option( 'artpulse_settings', array() );
+		require_once dirname( __DIR__, 2 ) . '/includes/payment-handler.php';
+	}
 
-    public function test_create_stripe_session_builds_expected_payload(): void
-    {
-        $captured = null;
-        when('ArtPulse\\Payment\\StripeHelper::create_session')->alias(
-            function ($params) use (&$captured) {
-                $captured = $params;
-                return (object) ['id' => 'sess_dummy'];
-            }
-        );
+	public function tear_down() {
+		Monkey\tearDown();
+		parent::tear_down();
+	}
 
-        update_option('artpulse_settings', ['currency' => 'eur']);
+	public function test_create_stripe_session_builds_expected_payload(): void {
+		$captured = null;
+		when( 'ArtPulse\\Payment\\StripeHelper::create_session' )->alias(
+			function ( $params ) use ( &$captured ) {
+				$captured = $params;
+				return (object) array( 'id' => 'sess_dummy' );
+			}
+		);
 
-        $session = PaymentHandler::create_stripe_session(25.5, ['order_id' => 123]);
+		update_option( 'artpulse_settings', array( 'currency' => 'eur' ) );
 
-        $this->assertIsObject($session);
-        $this->assertSame('sess_dummy', $session->id);
+		$session = PaymentHandler::create_stripe_session( 25.5, array( 'order_id' => 123 ) );
 
-        $expected_line_items = [[
-            'price_data' => [
-                'currency'     => 'eur',
-                'unit_amount'  => 2550,
-                'product_data' => ['name' => 'Featured Listing'],
-            ],
-            'quantity' => 1,
-        ]];
+		$this->assertIsObject( $session );
+		$this->assertSame( 'sess_dummy', $session->id );
 
-        $this->assertSame($expected_line_items, $captured['line_items']);
-        $this->assertSame('http://example.org/?ap_payment=success', $captured['success_url']);
-        $this->assertSame('http://example.org/?ap_payment=cancel', $captured['cancel_url']);
-    }
+		$expected_line_items = array(
+			array(
+				'price_data' => array(
+					'currency'     => 'eur',
+					'unit_amount'  => 2550,
+					'product_data' => array( 'name' => 'Featured Listing' ),
+				),
+				'quantity'   => 1,
+			),
+		);
+
+		$this->assertSame( $expected_line_items, $captured['line_items'] );
+		$this->assertSame( 'http://example.org/?ap_payment=success', $captured['success_url'] );
+		$this->assertSame( 'http://example.org/?ap_payment=cancel', $captured['cancel_url'] );
+	}
 }

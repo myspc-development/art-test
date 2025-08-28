@@ -5,36 +5,34 @@ use ArtPulse\Core\UserDashboardManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\UserLayoutManager;
 
-class DashboardWidgetSaveTest extends \WP_UnitTestCase
-{
-    private int $user_id;
+class DashboardWidgetSaveTest extends \WP_UnitTestCase {
 
-    public function set_up()
-    {
-        parent::set_up();
-        $this->user_id = self::factory()->user->create([ 'role' => 'subscriber' ]);
-        wp_set_current_user($this->user_id);
+	private int $user_id;
 
-        DashboardWidgetRegistry::register('alpha', 'Alpha', '', '', '__return_null');
-        DashboardWidgetRegistry::register('beta', 'Beta', '', '', '__return_null');
+	public function set_up() {
+		parent::set_up();
+		$this->user_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		wp_set_current_user( $this->user_id );
 
-        UserDashboardManager::register();
-        do_action('rest_api_init');
-    }
+		DashboardWidgetRegistry::register( 'alpha', 'Alpha', '', '', '__return_null' );
+		DashboardWidgetRegistry::register( 'beta', 'Beta', '', '', '__return_null' );
 
-    public function test_role_layout_changes_reflected_via_rest(): void
-    {
-        UserLayoutManager::save_role_layout('subscriber', [ ['id' => 'alpha'], ['id' => 'beta'] ]);
+		UserDashboardManager::register();
+		do_action( 'rest_api_init' );
+	}
 
-        $req = new \WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
-        $res = rest_get_server()->dispatch($req);
-        $this->assertSame(200, $res->get_status());
-        $this->assertSame(['alpha', 'beta'], $res->get_data()['layout']);
+	public function test_role_layout_changes_reflected_via_rest(): void {
+		UserLayoutManager::save_role_layout( 'subscriber', array( array( 'id' => 'alpha' ), array( 'id' => 'beta' ) ) );
 
-        UserLayoutManager::save_role_layout('subscriber', [ ['id' => 'beta'], ['id' => 'alpha'] ]);
+		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
+		$res = rest_get_server()->dispatch( $req );
+		$this->assertSame( 200, $res->get_status() );
+		$this->assertSame( array( 'alpha', 'beta' ), $res->get_data()['layout'] );
 
-        $req2 = new \WP_REST_Request('GET', '/artpulse/v1/ap_dashboard_layout');
-        $res2 = rest_get_server()->dispatch($req2);
-        $this->assertSame(['beta', 'alpha'], $res2->get_data()['layout']);
-    }
+		UserLayoutManager::save_role_layout( 'subscriber', array( array( 'id' => 'beta' ), array( 'id' => 'alpha' ) ) );
+
+		$req2 = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
+		$res2 = rest_get_server()->dispatch( $req2 );
+		$this->assertSame( array( 'beta', 'alpha' ), $res2->get_data()['layout'] );
+	}
 }
