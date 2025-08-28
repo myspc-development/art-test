@@ -10,7 +10,7 @@ if (have_posts()) :
       echo '</div>';
     }
     $followers = (int) get_user_meta(get_the_author_meta('ID'), 'ap_follower_count', true);
-    echo '<h1 class="entry-title artist-title">' . get_the_title() . ' <span class="ap-followers-badge">' . esc_html($followers) . ' ' . __('followers','artpulse') . '</span></h1>';
+    echo '<h1 class="entry-title artist-title">' . esc_html( get_the_title() ) . ' <span class="ap-followers-badge">' . esc_html($followers) . ' ' . esc_html__('followers','artpulse') . '</span></h1>';
     echo '<div class="entry-content">';
     the_content();
     echo '</div>';
@@ -23,7 +23,7 @@ if (have_posts()) :
     <?php
     $donate = \ArtPulse\Frontend\ap_render_donate_button(get_the_author_meta('ID'));
     if ($donate) {
-        echo $donate;
+        echo wp_kses_post( $donate );
     }
 
     echo \ArtPulse\Frontend\ap_share_buttons( get_permalink(), get_the_title(), get_post_type(), get_the_ID() );

@@ -19,20 +19,20 @@ if ( have_posts() ) :
       echo '<div class="event-gallery swiper">';
       echo '<div class="swiper-wrapper">';
       foreach ( array_slice( $gallery_ids, 1 ) as $img_id ) {
-        echo '<div class="swiper-slide">' . wp_get_attachment_image( $img_id, 'large', false, ['loading' => 'lazy'] ) . '</div>';
+        echo '<div class="swiper-slide">' . wp_kses_post( wp_get_attachment_image( $img_id, 'large', false, ['loading' => 'lazy'] ) ) . '</div>';
       }
       echo '</div><div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div>';
     } else {
       echo '<p class="no-gallery">' . esc_html__( 'No gallery images available.', 'artpulse' ) . '</p>';
     }
 
-    echo '<h1 class="entry-title artist-title">' . get_the_title() . '</h1>';
+    echo '<h1 class="entry-title artist-title">' . esc_html( get_the_title() ) . '</h1>';
     echo '<div class="entry-content">';
     the_content();
     echo '</div>';
     $donate = \ArtPulse\Frontend\ap_render_donate_button(get_post_field('post_author', get_the_ID()));
     if ($donate) {
-        echo $donate;
+        echo wp_kses_post( $donate );
     }
 
     echo \ArtPulse\Frontend\ap_share_buttons( get_permalink(), get_the_title(), get_post_type(), get_the_ID() );

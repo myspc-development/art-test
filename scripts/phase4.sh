@@ -103,7 +103,7 @@ class ShortcodeManager
             $query->the_post();
             echo '<div class="portfolio-item">';
             the_post_thumbnail('medium');
-            echo '<h3><a href="' . get_permalink() . '">' . get_the_title() . '</a></h3>';
+            echo '<h3><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
             echo '</div>';
         }
         echo '</div>';
@@ -124,7 +124,7 @@ class ShortcodeManager
             $query->the_post();
             echo '<div class="portfolio-item">';
             the_post_thumbnail('medium');
-            echo '<h3><a href="' . get_permalink() . '">' . get_the_title() . '</a></h3>';
+            echo '<h3><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
             echo '</div>';
         }
         echo '</div>';
@@ -145,7 +145,7 @@ class ShortcodeManager
             $query->the_post();
             echo '<div class="portfolio-item">';
             the_post_thumbnail('medium');
-            echo '<h3><a href="' . get_permalink() . '">' . get_the_title() . '</a></h3>';
+            echo '<h3><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
             echo '</div>';
         }
         echo '</div>';
@@ -166,7 +166,7 @@ class ShortcodeManager
             $query->the_post();
             echo '<div class="portfolio-item">';
             the_post_thumbnail('medium');
-            echo '<h3><a href="' . get_permalink() . '">' . get_the_title() . '</a></h3>';
+            echo '<h3><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
             echo '</div>';
         }
         echo '</div>';

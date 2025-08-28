@@ -20,7 +20,7 @@ if ( have_posts() ) :
     }
 
     // Event title
-    echo '<h1 class="entry-title event-title">' . get_the_title() . '</h1>';
+    echo '<h1 class="entry-title event-title">' . esc_html( get_the_title() ) . '</h1>';
     $rsvps      = get_post_meta(get_the_ID(), 'event_rsvp_list', true);
     $rsvp_count = is_array($rsvps) ? count($rsvps) : 0;
     $fav_count  = intval(get_post_meta(get_the_ID(), 'ap_favorite_count', true));
@@ -29,7 +29,7 @@ if ( have_posts() ) :
     echo '<span class="ap-fav-count" aria-label="' . esc_attr__('Interested count','artpulse') . '">' . esc_html($fav_count) . '</span>';
     echo \ArtPulse\Frontend\ap_render_rsvp_button(get_the_ID());
     echo '<span class="ap-rsvp-count" aria-label="' . esc_attr__('RSVP count','artpulse') . '">' . esc_html($rsvp_count) . '</span>';
-    echo '<button class="ap-event-vote" data-event-id="' . get_the_ID() . '">⭐ ' . esc_html__('Mark as Memorable','artpulse') . '</button> <span class="ap-event-vote-count"></span>';
+    echo '<button class="ap-event-vote" data-event-id="' . esc_attr( get_the_ID() ) . '">⭐ ' . esc_html__('Mark as Memorable','artpulse') . '</button> <span class="ap-event-vote-count"></span>';
     echo '</div>';
 
     // Event meta
@@ -77,7 +77,7 @@ if ( have_posts() ) :
       if ($has_access) {
         $embed = wp_oembed_get($v_url);
         if ($embed) {
-          echo $embed;
+          echo wp_kses_post( $embed );
         } else {
           echo '<a href="' . esc_url($v_url) . '" target="_blank">' . esc_html__('Join Event', 'artpulse') . '</a>';
         }
