@@ -71,30 +71,19 @@ if (!function_exists(__NAMESPACE__ . '\\download_url')) {
             }
         }
     }
-    if (!function_exists(__NAMESPACE__ . '\\wp_remote_get')) {
-        function wp_remote_get($url, $args = []) {
-            if (\ArtPulse\Admin\Tests\UpdatesTabTest::$remote_error) {
-                return \ArtPulse\Admin\Tests\UpdatesTabTest::$remote_error;
-            }
-            return ['body' => json_encode(['sha' => 'def'])];
-        }
-    }
-    if (!function_exists(__NAMESPACE__ . '\\wp_remote_retrieve_body')) {
-        function wp_remote_retrieve_body($res) { return $res['body']; }
-    }
     if (!function_exists(__NAMESPACE__ . '\\error_log')) {
         function error_log($msg) { \ArtPulse\Admin\Tests\UpdatesTabTest::$logs[] = $msg; }
     }
 
 namespace ArtPulse\Admin\Tests;
 
-use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UpdatesTab;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
+use WP_UnitTestCase;
 use function ArtPulse\Tests\safe_unlink;
 
-class UpdatesTabTest extends TestCase
+class UpdatesTabTest extends WP_UnitTestCase
 {
     public static bool $can = true;
     public static string $redirect = '';
@@ -118,36 +107,48 @@ class UpdatesTabTest extends TestCase
         return self::$zip;
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        Monkey\setUp();
-        Functions\when('admin_url')->alias(fn($path = '') => $path);
+    private $http_response;
 
-        self::$can = true;
-        self::$redirect = '';
-        self::$options = ['ap_update_remote_sha' => 'abc'];
-        self::$unzipped = [];
-        self::$died = null;
+    public function set_up(): void
+    {
+        parent::set_up();
+        Monkey\setUp();
+        Functions\when( 'admin_url' )->alias( fn( $path = '' ) => $path );
+
+        self::$can          = true;
+        self::$redirect     = '';
+        self::$options      = [ 'ap_update_remote_sha' => 'abc' ];
+        self::$unzipped     = [];
+        self::$died         = null;
         self::$checked_action = '';
         self::$download_error = null;
-        self::$remote_error = null;
-        self::$logs = [];
-        $_REQUEST = [];
-        if (!is_dir(ABSPATH . 'wp-admin/includes')) {
-            mkdir(ABSPATH . 'wp-admin/includes', 0777, true);
-            file_put_contents(ABSPATH . 'wp-admin/includes/file.php', '<?php');
-            file_put_contents(ABSPATH . 'wp-admin/includes/plugin.php', '<?php');
+        self::$remote_error   = null;
+        self::$logs         = [];
+        $_REQUEST           = [];
+        $this->http_response = [ 'response' => [ 'code' => 200 ], 'body' => json_encode( [ 'sha' => 'def' ] ) ];
+        add_filter( 'pre_http_request', [ $this, 'mock_http' ], 10, 3 );
+        if ( ! is_dir( ABSPATH . 'wp-admin/includes' ) ) {
+            mkdir( ABSPATH . 'wp-admin/includes', 0777, true );
+            file_put_contents( ABSPATH . 'wp-admin/includes/file.php', '<?php' );
+            file_put_contents( ABSPATH . 'wp-admin/includes/plugin.php', '<?php' );
         }
     }
 
-    protected function tearDown(): void
+    public function tear_down(): void
     {
+        remove_filter( 'pre_http_request', [ $this, 'mock_http' ], 10 );
         Monkey\tearDown();
-        if (self::$zip && file_exists(self::$zip)) {
-            safe_unlink(self::$zip);
+        if ( self::$zip && file_exists( self::$zip ) ) {
+            safe_unlink( self::$zip );
         }
-        parent::tearDown();
+        parent::tear_down();
+    }
+
+    public function mock_http( $pre, $args, $url ) {
+        if ( self::$remote_error ) {
+            return self::$remote_error;
+        }
+        return $this->http_response;
     }
 
     public function test_run_update_stores_file_list_and_redirects(): void

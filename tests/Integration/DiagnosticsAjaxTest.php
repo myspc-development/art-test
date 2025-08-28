@@ -8,7 +8,7 @@ class DiagnosticsAjaxTest extends WP_Ajax_UnitTestCase
 {
     use AjaxTestHelper;
 
-    protected function tear_down(): void
+    public function tear_down(): void
     {
         $this->reset_superglobals();
         parent::tear_down();
@@ -30,7 +30,7 @@ class DiagnosticsAjaxTest extends WP_Ajax_UnitTestCase
     {
         $user_id = self::factory()->user->create(['role' => 'subscriber']);
         wp_set_current_user($user_id);
-        $this->set_nonce('ap_diagnostics_test', 'nonce');
+        $this->set_nonce('ap_ajax_test', 'nonce');
 
         try {
             $this->_handleAjax('ap_ajax_test');
@@ -45,7 +45,7 @@ class DiagnosticsAjaxTest extends WP_Ajax_UnitTestCase
     {
         $user_id = $this->make_admin_user();
         wp_set_current_user($user_id);
-        $this->set_nonce('ap_diagnostics_test', 'nonce');
+        $this->set_nonce('ap_ajax_test', 'nonce');
 
         $this->_handleAjax('ap_ajax_test');
         $resp = json_decode($this->_last_response, true);

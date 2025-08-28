@@ -37,7 +37,7 @@
       "@test:wp"
     ],
     "test:unit": "php -d opcache.enable_cli=0 -d display_errors=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
-    "test:wp": "WP_PHPUNIT__TESTS_DIR=vendor/wp-phpunit/wp-phpunit vendor/bin/phpunit -c phpunit.wp.xml.dist",
+    "test:wp": "WP_PHPUNIT__TESTS_DIR=vendor/wp-phpunit/wp-phpunit WP_PHPUNIT__TESTS_CONFIG=tests/wp-tests-config.php vendor/bin/phpunit -c phpunit.wp.xml.dist",
     "coverage": "php -d pcov.enabled=1 -d pcov.directory=src vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml || XDEBUG_MODE=coverage php vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml",
     "cs": "php -d memory_limit=512M vendor/bin/phpcs",
     "cs:fix": "vendor/bin/phpcbf",
