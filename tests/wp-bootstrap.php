@@ -19,5 +19,28 @@ tests_add_filter('muplugins_loaded', static function () {
     require_once dirname(__DIR__) . '/artpulse-management.php';
 });
 
+tests_add_filter('init', static function () {
+    $render = static fn(): string => '<div data-test="placeholder"></div>';
+    $slugs  = [
+        'widget_my_follows',
+        'widget_recommended_for_you',
+        'widget_local_events',
+        'widget_my_events',
+        'widget_site_stats',
+        'widget_membership',
+        'widget_account_tools',
+    ];
+
+    $registered = \ArtPulse\Core\DashboardWidgetRegistry::get_all();
+    foreach ($slugs as $slug) {
+        if (!isset($registered[$slug])) {
+            \ArtPulse\Core\DashboardWidgetRegistry::register_widget($slug, [
+                'label'    => $slug,
+                'callback' => $render,
+            ]);
+        }
+    }
+}, 100);
+
 require $wp_phpunit_dir . '/includes/bootstrap.php';
 
