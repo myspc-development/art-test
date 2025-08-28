@@ -76,13 +76,23 @@ class AdminAccessManagerTest extends TestCase {
 		}
 	}
 
-	public function test_allows_admin_users(): void {
-		self::$caps = array( 'manage_options' => true );
-		try {
-			AdminAccessManager::maybe_redirect_admin();
-		} catch ( \Exception $e ) {
-			$this->fail( 'Unexpected redirect: ' . $e->getMessage() );
-		}
-		$this->assertTrue( true ); // If we reached here, no redirect occurred
-	}
+        public function test_allows_admin_users(): void {
+                self::$caps = array( 'manage_options' => true );
+                try {
+                        AdminAccessManager::maybe_redirect_admin();
+                } catch ( \Exception $e ) {
+                        $this->fail( 'Unexpected redirect: ' . $e->getMessage() );
+                }
+                $this->assertTrue( true ); // If we reached here, no redirect occurred
+        }
+
+       public function test_allows_dashboard_role_page_without_redirect(): void {
+               $_GET['page'] = 'dashboard-role';
+               try {
+                       AdminAccessManager::maybe_redirect_admin();
+               } catch ( \Exception $e ) {
+                       $this->fail( 'Unexpected redirect: ' . $e->getMessage() );
+               }
+               $this->assertTrue( true ); // No redirect should occur for dashboard-role page
+       }
 }
