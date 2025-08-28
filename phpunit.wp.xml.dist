@@ -28,6 +28,7 @@
 
       <!-- Keep CLI/unit-only tests out of the WP suite -->
       <exclude>tests/Cli</exclude>
+      <exclude>tests/Rest/Helpers</exclude>
       <!-- Exclude helper bootstrap from widgets tests -->
       <exclude>tests/widgets/bootstrap.php</exclude>
     </testsuite>

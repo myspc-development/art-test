@@ -18,7 +18,8 @@ namespace ArtPulse\Rest\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Rest\SubmissionRestController;
-use ArtPulse\Tests\Rest\RequestStub as TestRequest;
+use ArtPulse\Tests\Rest\Helpers\RequestStub as TestRequest;
+require_once __DIR__ . '/Helpers/RequestStub.php';
 
 class SubmissionRestControllerTest extends TestCase
 {

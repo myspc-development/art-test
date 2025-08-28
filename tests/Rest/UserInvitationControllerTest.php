@@ -76,8 +76,9 @@ namespace ArtPulse\Rest\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Rest\UserInvitationController;
-use ArtPulse\Tests\Rest\RequestStub as TestRequest;
+use ArtPulse\Tests\Rest\Helpers\RequestStub as TestRequest;
 use WP_Error;
+require_once __DIR__ . '/Helpers/RequestStub.php';
 
 class Stub {
     public static bool $can = true;
