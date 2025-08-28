@@ -11,22 +11,22 @@ namespace ArtPulse\Widgets\Member {
     }
 }
 
-namespace ArtPulse\Tests;
+namespace ArtPulse\Tests {
+    require_once __DIR__ . '/../TestStubs.php';
 
-require_once __DIR__ . '/../TestStubs.php';
+    use ArtPulse\Widgets\Member\WelcomeBoxWidget;
+    use PHPUnit\Framework\TestCase;
 
-use ArtPulse\Widgets\Member\WelcomeBoxWidget;
-use PHPUnit\Framework\TestCase;
+    class WelcomeBoxWidgetTest extends TestCase {
+        public static $user;
 
-class WelcomeBoxWidgetTest extends TestCase {
-    public static $user;
+        protected function setUp(): void {
+            self::$user = (object) ['display_name' => 'Tester', 'user_login' => 'tester'];
+        }
 
-    protected function setUp(): void {
-        self::$user = (object) ['display_name' => 'Tester', 'user_login' => 'tester'];
-    }
-
-    public function test_render_includes_display_name(): void {
-        $html = WelcomeBoxWidget::render();
-        $this->assertStringContainsString('Welcome back, Tester!', $html);
+        public function test_render_includes_display_name(): void {
+            $html = WelcomeBoxWidget::render();
+            $this->assertStringContainsString('Welcome back, Tester!', $html);
+        }
     }
 }
