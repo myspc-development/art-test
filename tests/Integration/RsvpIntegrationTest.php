@@ -12,7 +12,7 @@ class RsvpIntegrationTest extends \WP_UnitTestCase
     private int $user2;
     private array $emails = [];
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         do_action('init');
@@ -36,7 +36,7 @@ class RsvpIntegrationTest extends \WP_UnitTestCase
         do_action('rest_api_init');
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_filter('pre_wp_mail', [$this, 'capture_mail'], 10);
         $_POST = [];

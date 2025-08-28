@@ -15,7 +15,7 @@ class AutoTaggerRestControllerTest extends \WP_UnitTestCase
     private string $mock_body = '';
     private array $request_args = [];
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->admin = self::factory()->user->create(['role' => 'administrator']);
@@ -28,7 +28,7 @@ class AutoTaggerRestControllerTest extends \WP_UnitTestCase
         add_filter('pre_http_request', [$this, 'mock_request'], 10, 3);
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_filter('pre_http_request', [$this, 'mock_request'], 10);
         parent::tear_down();

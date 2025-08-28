@@ -13,7 +13,7 @@ class FavoriteRestControllerTest extends \WP_UnitTestCase
     private int $user_id;
     private array $posts;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         FavoritesManager::install_favorites_table();

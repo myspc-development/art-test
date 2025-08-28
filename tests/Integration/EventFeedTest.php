@@ -7,7 +7,7 @@ class EventFeedTest extends \WP_UnitTestCase
 {
     private int $event_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->event_id = wp_insert_post([

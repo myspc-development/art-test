@@ -6,7 +6,7 @@ use ArtPulse\Core\EventMetrics;
 
 class EventRankingManagerTest extends \WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         EventRankingManager::register();

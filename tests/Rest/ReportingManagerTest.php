@@ -14,7 +14,7 @@ class ReportingManagerTest extends \WP_UnitTestCase
     private int $ticket_tier;
     private int $ticket;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\DB\create_monetization_tables();

@@ -40,10 +40,10 @@
     "test:unit": "php -d opcache.enable_cli=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
     "test:db": "php bin/create-test-db.php",
     "test:wp": "php -d opcache.enable_cli=0 -d display_errors=0 vendor/bin/phpunit -c phpunit.wp.xml.dist",
-    "test:coverage": "tools/run-coverage.sh",
-    "cs": "vendor/bin/phpcs",
+    "test:coverage": "mkdir -p build && (php -m | grep -qi pcov && php -d pcov.enabled=1 -d pcov.directory=src vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml || XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml)",
+    "cs": "php -d memory_limit=512M vendor/bin/phpcs",
     "cs:fix": "vendor/bin/phpcbf",
-    "stan": "vendor/bin/phpstan analyse",
+    "stan": "vendor/bin/phpstan analyse --memory-limit=1G",
     "stan:baseline": "vendor/bin/phpstan analyse --generate-baseline=phpstan-baseline.neon"
   },
   "config": {

@@ -5,7 +5,7 @@
 class UserLayoutControllerTest extends WP_UnitTestCase {
     protected $user_id;
 
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         set_error_handler(fn() => true, E_USER_WARNING);
         $this->user_id = self::factory()->user->create( [ 'role' => 'subscriber' ] );

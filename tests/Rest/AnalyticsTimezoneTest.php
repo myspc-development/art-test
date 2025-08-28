@@ -11,7 +11,7 @@ class AnalyticsTimezoneTest extends \WP_UnitTestCase {
     private string $prevDate;
     private string $todayDate;
 
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         \ArtPulse\Core\Activator::activate();
         $this->user = self::factory()->user->create(['role' => 'administrator']);

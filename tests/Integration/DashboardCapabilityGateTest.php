@@ -4,7 +4,7 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Core\DashboardController;
 
 class DashboardCapabilityGateTest extends \WP_UnitTestCase {
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         remove_filter('template_include', [DashboardController::class, 'interceptTemplate'], 9);
         DashboardController::init();

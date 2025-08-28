@@ -8,7 +8,7 @@ namespace ArtPulse\Rest\Tests;
  */
 class SystemStatusEndpointTest extends \WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         do_action('rest_api_init');

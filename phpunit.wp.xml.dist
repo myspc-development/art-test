@@ -28,7 +28,6 @@
 
   <php>
     <!-- Quiet, deterministic CLI -->
-    <ini name="display_startup_errors" value="0"/>
     <ini name="display_errors" value="0"/>
     <ini name="opcache.enable_cli" value="0"/>
 

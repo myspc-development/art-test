@@ -6,7 +6,7 @@ use ArtPulse\Core\WidgetRegistryLoader;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 class OrganizationWidgetConfigTest extends WP_UnitTestCase {
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
 
         // reset registry and loader caches

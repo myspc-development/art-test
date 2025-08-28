@@ -12,7 +12,7 @@ class EventChatRestTest extends \WP_UnitTestCase
     private int $event;
     private int $user;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         Chat\install_tables();

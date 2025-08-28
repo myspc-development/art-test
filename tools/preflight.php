@@ -100,8 +100,8 @@ if (empty($errors)) {
 
 /** 4) WP test library */
 $wpDir = getenv('WP_PHPUNIT__DIR') ?: 'vendor/wp-phpunit/wp-phpunit';
-if (!is_dir($wpDir) || (!is_file($wpDir . '/includes/bootstrap.php') && !is_file($wpDir . '/wp-settings.php'))) {
-    $errors[] = 'WP_PHPUNIT__DIR is missing or incomplete. Run tools/provision-wp-core.sh (offline) to unpack cached core.';
+if (!is_file($wpDir . '/wordpress/wp-settings.php')) {
+    $errors[] = 'WP_PHPUNIT__DIR is missing WordPress core (wordpress/wp-settings.php). Run tools/provision-wp-core.sh.';
 }
 
 /** 5) Optional: phpunit binary presence (warn only) */
@@ -116,6 +116,11 @@ foreach ($phpunitPaths as $p) {
 if (!$hasPhpunit) {
     // Non-fatal, but helpful
     fwrite(STDERR, "Note: PHPUnit binary not found under vendor/. Run `composer install`.\n");
+}
+
+/** 5) Coverage driver */
+if (!extension_loaded('pcov') && !extension_loaded('xdebug')) {
+    $errors[] = 'No code coverage driver available (install pcov or xdebug).';
 }
 
 /** 6) Outcome */

@@ -18,7 +18,7 @@ namespace ArtPulse\Rest\Tests {
  */
 class RestRouteAuditCommandTest extends \WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         // Test-only duplicate routes used to verify conflict detection.

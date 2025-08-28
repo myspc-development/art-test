@@ -2,11 +2,20 @@
 // WordPress integration bootstrap.
 declare(strict_types=1);
 
-$_tests_dir = getenv('WP_PHPUNIT__DIR');
-if (!$_tests_dir) {
-    fwrite(STDERR, "WP_PHPUNIT__DIR is not set. Run tools/provision-wp-core.sh first.\n");
+$_tests_dir = getenv('WP_PHPUNIT__DIR') ?: dirname(__DIR__) . '/vendor/wp-phpunit/wp-phpunit';
+
+if (!is_file($_tests_dir . '/wordpress/wp-settings.php')) {
+    fwrite(
+        STDERR,
+        "Could not find WordPress tests in {$_tests_dir}. " .
+        "Run tools/provision-wp-core.sh to install the test library.\n"
+    );
     exit(1);
 }
+
+// Be strict: hide PHP notices and disable opcode cache.
+ini_set('display_errors', '0');
+ini_set('opcache.enable_cli', '0');
 
 require $_tests_dir . '/includes/functions.php';
 

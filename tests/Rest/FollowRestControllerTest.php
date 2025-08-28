@@ -15,7 +15,7 @@ class FollowRestControllerTest extends \WP_UnitTestCase
     private int $event1;
     private int $event2;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         FollowManager::install_follows_table();

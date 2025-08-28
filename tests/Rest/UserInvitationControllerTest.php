@@ -72,27 +72,11 @@ function absint($num) {
 }
 
 
-// Minimal WP_REST_Request stub
-class WP_REST_Request_UserInvitationControllerTest {
-    private array $params;
-    private array $json;
-    public function __construct(array $params = [], array $json = []) {
-        $this->params = $params;
-        $this->json = $json;
-    }
-    public function get_param(string $key) {
-        return $this->params[$key] ?? null;
-    }
-    public function get_json_params() {
-        return $this->json;
-    }
-}
-
 namespace ArtPulse\Rest\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Rest\UserInvitationController;
-use ArtPulse\Rest\WP_REST_Request;
+use ArtPulse\Tests\Rest\RequestStub as TestRequest;
 use WP_Error;
 
 class Stub {
@@ -133,7 +117,9 @@ class UserInvitationControllerTest extends TestCase
     {
         Stub::$user_meta[1]['ap_organization_id'] = 5;
         Stub::$users = [2 => ['user_email' => 'a@test.com']];
-        $req = new \WP_REST_Request(['id' => 5], ['emails' => ['a@test.com', 'b@test.com'], 'role' => 'event_manager']);
+        $req = new TestRequest('POST', '/');
+        $req->set_param('id', 5);
+        $req->set_json_params(['emails' => ['a@test.com', 'b@test.com'], 'role' => 'event_manager']);
         $res = UserInvitationController::invite($req);
         $this->assertSame(['invited' => ['a@test.com', 'b@test.com'], 'role' => 'event_manager'], $res);
         $this->assertCount(2, Stub::$sent_emails);
@@ -144,14 +130,18 @@ class UserInvitationControllerTest extends TestCase
     public function test_invite_permission_failure(): void
     {
         Stub::$user_meta[1]['ap_organization_id'] = 3; // user not admin of org 5
-        $req = new \WP_REST_Request(['id' => 5], ['emails' => ['a@test.com']]);
+        $req = new TestRequest('POST', '/');
+        $req->set_param('id', 5);
+        $req->set_json_params(['emails' => ['a@test.com']]);
         $this->assertFalse(UserInvitationController::check_permissions($req));
     }
 
     public function test_invite_invalid_email(): void
     {
         Stub::$user_meta[1]['ap_organization_id'] = 5;
-        $req = new \WP_REST_Request(['id' => 5], ['emails' => ['bad-email']]);
+        $req = new TestRequest('POST', '/');
+        $req->set_param('id', 5);
+        $req->set_json_params(['emails' => ['bad-email']]);
         $res = UserInvitationController::invite($req);
         $this->assertInstanceOf(WP_Error::class, $res);
     }
@@ -159,7 +149,9 @@ class UserInvitationControllerTest extends TestCase
     public function test_batch_suspend_success(): void
     {
         Stub::$user_meta[1]['ap_organization_id'] = 5;
-        $req = new \WP_REST_Request(['id' => 5], ['action' => 'suspend', 'user_ids' => [7]]);
+        $req = new TestRequest('POST', '/');
+        $req->set_param('id', 5);
+        $req->set_json_params(['action' => 'suspend', 'user_ids' => [7]]);
         $res = UserInvitationController::batch_users($req);
         $this->assertSame(['action' => 'suspend', 'processed' => [7]], $res);
         $this->assertSame(1, Stub::$user_meta[7]['ap_suspended']);
@@ -168,7 +160,9 @@ class UserInvitationControllerTest extends TestCase
     public function test_batch_invalid_action(): void
     {
         Stub::$user_meta[1]['ap_organization_id'] = 5;
-        $req = new \WP_REST_Request(['id' => 5], ['action' => 'foo', 'user_ids' => [2]]);
+        $req = new TestRequest('POST', '/');
+        $req->set_param('id', 5);
+        $req->set_json_params(['action' => 'foo', 'user_ids' => [2]]);
         $res = UserInvitationController::batch_users($req);
         $this->assertInstanceOf(WP_Error::class, $res);
     }

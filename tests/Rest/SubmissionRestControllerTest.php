@@ -14,35 +14,11 @@ function wp_verify_nonce($nonce, $action) {
 }
 }
 
-class WP_REST_Request_SubmissionRestControllerTest {
-    private array $params;
-    private array $json;
-    private array $headers;
-
-    public function __construct(array $params = [], array $json = [], array $headers = []) {
-        $this->params  = $params;
-        $this->json    = $json;
-        $this->headers = array_change_key_case($headers, CASE_LOWER);
-    }
-
-    public function get_param(string $key) {
-        return $this->params[$key] ?? null;
-    }
-
-    public function get_json_params() {
-        return $this->json;
-    }
-
-    public function get_header(string $key) {
-        $key = strtolower($key);
-        return $this->headers[$key] ?? '';
-    }
-}
-
 namespace ArtPulse\Rest\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Rest\SubmissionRestController;
+use ArtPulse\Tests\Rest\RequestStub as TestRequest;
 
 class SubmissionRestControllerTest extends TestCase
 {
@@ -107,7 +83,8 @@ class SubmissionRestControllerTest extends TestCase
     public function test_check_permissions_valid_nonce_and_capability(): void
     {
         SubmissionStub::reset();
-        $req = new \ArtPulse\Rest\WP_REST_Request([], [], ['X-WP-Nonce' => 'good']);
+        $req = new TestRequest('POST', '/');
+        $req->set_header('X-WP-Nonce', 'good');
         $ref = new \ReflectionMethod(SubmissionRestController::class, 'check_permissions');
         $ref->setAccessible(true);
         $this->assertTrue($ref->invoke(null, $req));
@@ -117,7 +94,8 @@ class SubmissionRestControllerTest extends TestCase
     {
         SubmissionStub::reset();
         SubmissionStub::$nonce_valid = false;
-        $req = new \ArtPulse\Rest\WP_REST_Request([], [], ['X-WP-Nonce' => 'bad']);
+        $req = new TestRequest('POST', '/');
+        $req->set_header('X-WP-Nonce', 'bad');
         $ref = new \ReflectionMethod(SubmissionRestController::class, 'check_permissions');
         $ref->setAccessible(true);
         $this->assertFalse($ref->invoke(null, $req));
@@ -127,7 +105,8 @@ class SubmissionRestControllerTest extends TestCase
     {
         SubmissionStub::reset();
         SubmissionStub::$can = false;
-        $req = new \ArtPulse\Rest\WP_REST_Request([], [], ['X-WP-Nonce' => 'good']);
+        $req = new TestRequest('POST', '/');
+        $req->set_header('X-WP-Nonce', 'good');
         $ref = new \ReflectionMethod(SubmissionRestController::class, 'check_permissions');
         $ref->setAccessible(true);
         $this->assertFalse($ref->invoke(null, $req));

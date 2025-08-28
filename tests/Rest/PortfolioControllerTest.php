@@ -9,7 +9,7 @@ class PortfolioControllerTest extends \WP_UnitTestCase {
     private int $u2;
     private int $attachment;
 
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         $this->u1 = self::factory()->user->create(['role' => 'artist']);
         $this->u2 = self::factory()->user->create(['role' => 'artist']);

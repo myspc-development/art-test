@@ -11,7 +11,7 @@ class PromotionManagerTest extends \WP_UnitTestCase
 {
     private int $artwork_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\DB\create_monetization_tables();

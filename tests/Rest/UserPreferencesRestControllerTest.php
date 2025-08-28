@@ -11,7 +11,7 @@ class UserPreferencesRestControllerTest extends \WP_UnitTestCase
 {
     private int $uid;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->uid = self::factory()->user->create();

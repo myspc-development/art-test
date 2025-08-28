@@ -13,7 +13,7 @@ class OrgRolesMatrixRestTest extends \WP_UnitTestCase
     private int $user;
     private int $org;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->org = self::factory()->post->create(['post_type' => 'artpulse_org']);
@@ -28,7 +28,7 @@ class OrgRolesMatrixRestTest extends \WP_UnitTestCase
         wp_set_current_user($this->admin);
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         $_GET = [];
         parent::tear_down();

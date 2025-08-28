@@ -12,7 +12,7 @@ class SegmentationManagerTest extends \WP_UnitTestCase
     private int $user1;
     private int $user2;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->user1 = self::factory()->user->create(['role' => 'subscriber']);

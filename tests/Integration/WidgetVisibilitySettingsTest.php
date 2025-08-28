@@ -8,8 +8,9 @@ use ArtPulse\Widgets\DonationsWidget;
 use function ArtPulse\Tests\rm_rf;
 
 class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
+
         // reset registry
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');
@@ -20,6 +21,40 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         EventsWidget::register();
         DonationsWidget::register();
         OrgAnalyticsWidget::register();
+
+        // a) Stop default layout assignment during user creation (prevents missing-widget warnings)
+        if (has_action('user_register', [ \ArtPulse\Core\DashboardWidgetManager::class, 'assign_default_layout' ])) {
+            remove_action('user_register', [ \ArtPulse\Core\DashboardWidgetManager::class, 'assign_default_layout' ]);
+        }
+
+        // b) Stop portfolio sync/logger that requires a custom table
+        if (has_action('save_post_artpulse_org', [ \ArtPulse\Integration\PortfolioSync::class, 'sync_portfolio' ])) {
+            remove_action('save_post_artpulse_org', [ \ArtPulse\Integration\PortfolioSync::class, 'sync_portfolio' ]);
+        }
+
+        // c) Seed visibility fixture to avoid undefined index
+        $vis = get_option('ap_widget_visibility', []);
+        if (!is_array($vis)) { $vis = []; }
+        if (!isset($vis['test_widget'])) {
+            $vis['test_widget'] = [
+                'roles' => [ 'organization'    => true ],
+                'caps'  => [ 'view_analytics' => true ],
+            ];
+            update_option('ap_widget_visibility', $vis, false);
+        }
+
+        // d) Mute only the known missing-widget warning during this test (don’t hide others)
+        set_error_handler(function ($errno, $errstr) {
+            if ($errno === E_USER_WARNING && strpos($errstr, 'Dashboard widget not registered') !== false) {
+                return true;
+            }
+            return false;
+        }, E_USER_WARNING);
+    }
+
+    public function tear_down() {
+        restore_error_handler();
+        parent::tear_down();
     }
 
     public function test_settings_override_roles_and_capability(): void {

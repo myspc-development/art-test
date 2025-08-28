@@ -9,7 +9,7 @@ use ArtPulse\Rest\ReportTemplateController;
  */
 class ReportTemplateControllerTest extends \WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         wp_set_current_user(self::factory()->user->create(['role' => 'administrator']));

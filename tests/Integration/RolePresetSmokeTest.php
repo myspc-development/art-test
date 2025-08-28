@@ -23,7 +23,7 @@ class RolePresetSmokeTest extends \WP_UnitTestCase {
         'widget_webhooks',
     ];
 
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         $this->resetRegistries();
         foreach ( self::SLUGS as $slug ) {

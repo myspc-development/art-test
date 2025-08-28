@@ -16,7 +16,7 @@ class UserEngagementFeedTest extends \WP_UnitTestCase
     private int $event_id;
     private int $follow_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         UserEngagementLogger::install_table();
