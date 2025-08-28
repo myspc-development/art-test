@@ -18,6 +18,26 @@ if ( ! defined( 'WP_TESTS_CONFIG_FILE_PATH' ) ) {
 
 tests_add_filter( 'muplugins_loaded', function () {
     require dirname(__DIR__) . '/artpulse-management.php';
+
+    // Ensure DB tables exist in test runs
+    if ( function_exists( 'artpulse_activate' ) ) {
+        artpulse_activate();
+    }
+    if ( function_exists( 'ap_install_tables' ) ) {
+        ap_install_tables();
+    } elseif ( function_exists( 'ap_install' ) ) {
+        ap_install();
+    } elseif ( function_exists( 'artpulse_install' ) ) {
+        artpulse_install();
+    } elseif ( class_exists( '\\ArtPulse\\Installer' ) && method_exists( '\\ArtPulse\\Installer', 'install' ) ) {
+        \ArtPulse\Installer::install();
+    } elseif ( file_exists( __DIR__ . '/../includes/db-schema.php' ) ) {
+        require_once __DIR__ . '/../includes/db-schema.php';
+        if ( function_exists( 'ap_install' ) ) { ap_install(); }
+    }
+    if ( class_exists( '\\ArtPulse\\Core\\FeedbackManager' ) && method_exists( '\\ArtPulse\\Core\\FeedbackManager', 'install_table' ) ) {
+        \ArtPulse\Core\FeedbackManager::install_table();
+    }
 });
 
 // Optional: verbose errors for debugging
