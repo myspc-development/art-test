@@ -35,11 +35,11 @@ get_header(); ?>
                   ?>
 
                   <?php if ($date): ?>
-                    <p class="event-card-date"><strong>Date:</strong> <?= esc_html($date); ?></p>
+                    <p class="event-card-date"><strong><?php esc_html_e('Date:', 'artpulse'); ?></strong> <?= esc_html($date); ?></p>
                   <?php endif; ?>
 
                   <?php if ($venue): ?>
-                    <p class="event-card-venue"><strong>Venue:</strong> <?= esc_html($venue); ?></p>
+                    <p class="event-card-venue"><strong><?php esc_html_e('Venue:', 'artpulse'); ?></strong> <?= esc_html($venue); ?></p>
                   <?php endif; ?>
                 </div>
               </a>

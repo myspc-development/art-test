@@ -51,16 +51,16 @@ if ( have_posts() ) :
     }
     echo '<ul class="event-meta-list">';
 
-    echo '<li><strong>Date:</strong> ' . esc_html($date ?: __('Not specified', 'artpulse')) . '</li>';
-    $time_display = ($start || $end) ? esc_html($start) . ($start && $end ? ' – ' : '') . esc_html($end) : __('Not specified', 'artpulse');
-    echo '<li><strong>Time:</strong> ' . $time_display . '</li>';
-    echo '<li><strong>Venue:</strong> ' . esc_html($location ?: __('Not specified', 'artpulse')) . '</li>';
-    echo '<li><strong>Address:</strong> ' . esc_html($address ?: __('Not specified', 'artpulse')) . '</li>';
-    echo '<li><strong>Contact:</strong> ' . esc_html($contact ?: __('Not specified', 'artpulse')) . '</li>';
+    echo '<li><strong>' . esc_html__( 'Date:', 'artpulse' ) . '</strong> ' . esc_html( $date ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
+    $time_display = ($start || $end) ? esc_html( $start ) . ( $start && $end ? ' – ' : '' ) . esc_html( $end ) : esc_html__( 'Not specified', 'artpulse' );
+    echo '<li><strong>' . esc_html__( 'Time:', 'artpulse' ) . '</strong> ' . $time_display . '</li>';
+    echo '<li><strong>' . esc_html__( 'Venue:', 'artpulse' ) . '</strong> ' . esc_html( $location ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
+    echo '<li><strong>' . esc_html__( 'Address:', 'artpulse' ) . '</strong> ' . esc_html( $address ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
+    echo '<li><strong>' . esc_html__( 'Contact:', 'artpulse' ) . '</strong> ' . esc_html( $contact ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
     if (!empty($rsvp) && filter_var($rsvp, FILTER_VALIDATE_URL)) {
-        echo '<li><strong>RSVP:</strong> <a href="' . esc_url($rsvp) . '" class="event-rsvp-link" target="_blank">' . esc_html__('RSVP Now', 'artpulse') . '</a></li>';
+        echo '<li><strong>' . esc_html__( 'RSVP:', 'artpulse' ) . '</strong> <a href="' . esc_url( $rsvp ) . '" class="event-rsvp-link" target="_blank">' . esc_html__( 'RSVP Now', 'artpulse' ) . '</a></li>';
     } else {
-        echo '<li><strong>RSVP:</strong> ' . esc_html__('Not specified', 'artpulse') . '</li>';
+        echo '<li><strong>' . esc_html__( 'RSVP:', 'artpulse' ) . '</strong> ' . esc_html__( 'Not specified', 'artpulse' ) . '</li>';
     }
 
     echo '</ul></div>'; // close .event-meta
@@ -116,7 +116,7 @@ if ( have_posts() ) :
     echo '</div>'; // close .container
   endwhile;
 else :
-  echo '<p>No event found.</p>';
+  echo '<p>' . esc_html__( 'No event found.', 'artpulse' ) . '</p>';
 endif;
 
 get_footer();

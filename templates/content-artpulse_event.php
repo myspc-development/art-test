@@ -40,35 +40,35 @@ error_log('📦 content-artpulse_event.php loaded');
         <?php if ($date || $venue || $address || $start || $end || $contact || $rsvp || $organizer || $email || $city || $state || $country) : ?>
           <ul class="event-meta styled-box">
             <?php if ($date): ?>
-              <li><strong>Date:</strong> <?= esc_html($date); ?></li>
+              <li><strong><?php esc_html_e('Date:', 'artpulse'); ?></strong> <?= esc_html($date); ?></li>
             <?php endif; ?>
             <?php if ($venue): ?>
-              <li><strong>Venue:</strong> <?= esc_html($venue); ?></li>
+              <li><strong><?php esc_html_e('Venue:', 'artpulse'); ?></strong> <?= esc_html($venue); ?></li>
             <?php endif; ?>
             <?php if ($address): ?>
-              <li><strong>Address:</strong> <?= esc_html($address); ?></li>
+              <li><strong><?php esc_html_e('Address:', 'artpulse'); ?></strong> <?= esc_html($address); ?></li>
             <?php endif; ?>
             <?php if ($start || $end): ?>
-              <li><strong>Time:</strong>
+              <li><strong><?php esc_html_e('Time:', 'artpulse'); ?></strong>
                 <?= esc_html($start); ?>
                 <?= ($start && $end) ? ' – ' : ''; ?>
                 <?= esc_html($end); ?>
               </li>
             <?php endif; ?>
             <?php if ($organizer): ?>
-              <li><strong>Organizer:</strong> <?= esc_html($organizer); ?></li>
+              <li><strong><?php esc_html_e('Organizer:', 'artpulse'); ?></strong> <?= esc_html($organizer); ?></li>
             <?php endif; ?>
             <?php if ($email): ?>
-              <li><strong>Email:</strong> <?= esc_html($email); ?></li>
+              <li><strong><?php esc_html_e('Email:', 'artpulse'); ?></strong> <?= esc_html($email); ?></li>
             <?php endif; ?>
             <?php if ($contact): ?>
-              <li><strong>Contact:</strong> <?= esc_html($contact); ?></li>
+              <li><strong><?php esc_html_e('Contact:', 'artpulse'); ?></strong> <?= esc_html($contact); ?></li>
             <?php endif; ?>
             <?php if ($rsvp): ?>
-              <li><strong>RSVP:</strong> <a href="<?= esc_url($rsvp); ?>" target="_blank">Reserve Now</a></li>
+              <li><strong><?php esc_html_e('RSVP:', 'artpulse'); ?></strong> <a href="<?= esc_url($rsvp); ?>" target="_blank"><?php esc_html_e('Reserve Now', 'artpulse'); ?></a></li>
             <?php endif; ?>
             <?php if ($city || $state || $country): ?>
-              <li><strong>Location:</strong>
+              <li><strong><?php esc_html_e('Location:', 'artpulse'); ?></strong>
                 <?= esc_html(trim("{$city}, {$state}, {$country}", ", ")); ?>
               </li>
             <?php endif; ?>

@@ -11,7 +11,7 @@ use ArtPulse\Core\Plugin;
         <label for="ap-payout-method"><?php esc_html_e('Method', 'artpulse'); ?></label>
         <?php $method = get_user_meta(get_current_user_id(), 'ap_payout_method', true); ?>
         <select name="method" id="ap-payout-method">
-            <option value="paypal" <?php selected($method, 'paypal'); ?>>PayPal</option>
+            <option value="paypal" <?php selected($method, 'paypal'); ?>><?php esc_html_e('PayPal', 'artpulse'); ?></option>
             <option value="bank" <?php selected($method, 'bank'); ?>><?php esc_html_e('Bank Transfer', 'artpulse'); ?></option>
         </select>
         <button type="submit" class="ap-form-button nectar-button"><?php esc_html_e('Save', 'artpulse'); ?></button>
