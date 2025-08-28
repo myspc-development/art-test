@@ -1158,7 +1158,7 @@ add_action('wp_enqueue_scripts', function () {
     $ui_mode = ap_get_ui_mode();
 
     if ($ui_mode === 'react') {
-        wp_enqueue_script('ap-react', plugin_dir_url(__FILE__) . 'assets/dist/react-app.js', [], null, true);
+        wp_enqueue_script('ap-app-dashboard', plugin_dir_url(__FILE__) . 'dist/app-dashboard.js', [], null, true);
     }
 });
 
