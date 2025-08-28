@@ -1894,42 +1894,6 @@
     },
     {
       "namespace": "artpulse/v1",
-      "route": "/dashboard/layout",
-      "methods": [
-        "GET"
-      ],
-      "file": "src/Rest/DashboardLayoutRestController.php",
-      "line": 25,
-      "permission_callback_present": true,
-      "capabilities": [
-        "read"
-      ],
-      "nonce_check_present": false,
-      "args": {
-        "role": {
-          "type": "string",
-          "required": false
-        },
-        "callback": {},
-        "args": {
-          "type": "array",
-          "required": false
-        },
-        "visibility": {
-          "type": "object",
-          "required": false
-        }
-      },
-      "errors_standardized": false,
-      "pagination": {
-        "page": false,
-        "per_page": false,
-        "search": false
-      },
-      "notes": ""
-    },
-    {
-      "namespace": "artpulse/v1",
       "route": "/user/export",
       "methods": [
         "GET"
