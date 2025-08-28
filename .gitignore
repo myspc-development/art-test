@@ -64,3 +64,5 @@ wordpress/
 # Translation files
 languages/*.po
 languages/*.mo
+
+vendor/

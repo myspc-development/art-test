@@ -250,33 +250,31 @@
 
   var __$m = wp.i18n.__;
   function MessagesPanel() {
-    var _window$ArtPulseDashb, _window$ArtPulseDashb2;
+    var _window$ArtPulseDashb, _window$ArtPulseDashb2, _window$ArtPulseDashb3, _window$ArtPulseDashb4;
     var _useState = React$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       messages = _useState2[0],
       setMessages = _useState2[1];
-    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
-    var nonce = window.apNonce || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
+    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.apiUrl) || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.root) || '/wp-json/';
+    var nonce = window.apNonce || ((_window$ArtPulseDashb3 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb3 === void 0 ? void 0 : _window$ArtPulseDashb3.nonce) || '';
+    var token = ((_window$ArtPulseDashb4 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb4 === void 0 ? void 0 : _window$ArtPulseDashb4.apiToken) || '';
     React$1.useEffect(function () {
+      var headers = {
+        'X-WP-Nonce': nonce
+      };
+      if (token) headers['Authorization'] = "Bearer ".concat(token);
       fetch("".concat(apiRoot, "artpulse/v1/dashboard/messages"), {
-        headers: {
-          'X-WP-Nonce': nonce
-        },
+        headers: headers,
         credentials: 'same-origin'
       }).then(function (res) {
-        if (res.status === 401 || res.status === 403) {
-          setMessages([{
-            id: 0,
-            content: __$m('Please log in to view messages.', 'artpulse')
-          }]);
-          return Promise.reject('unauthorized');
-        }
-        return res.json();
-      }).then(setMessages)["catch"](function () {});
+        return res.status === 401 || res.status === 403 || res.status === 404 ? [] : res.json();
+      }).then(setMessages)["catch"](function () {
+        return setMessages([]);
+      });
     }, []);
     return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widget bg-white p-4 rounded shadow mb-4"
-    }, messages.map(function (msg) {
+    }, messages.length === 0 ? /*#__PURE__*/React$1.createElement("p", null, __$m('No messages available.', 'artpulse')) : messages.map(function (msg) {
       return /*#__PURE__*/React$1.createElement("p", {
         key: msg.id
       }, msg.content);
@@ -374,7 +372,7 @@
 
   var __$i = wp.i18n.__;
   function CommunityAnalyticsPanel() {
-    var _window$ArtPulseDashb, _window$ArtPulseDashb2;
+    var _window$ArtPulseDashb, _window$ArtPulseDashb2, _window$ArtPulseDashb3, _window$ArtPulseDashb4;
     var _useState = React$1.useState('messaging'),
       _useState2 = _slicedToArray(_useState, 2),
       tab = _useState2[0],
@@ -383,18 +381,28 @@
       _useState4 = _slicedToArray(_useState3, 2),
       data = _useState4[0],
       setData = _useState4[1];
-    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
-    var nonce = window.apNonce || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
+    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.apiUrl) || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.root) || '/wp-json/';
+    var nonce = window.apNonce || ((_window$ArtPulseDashb3 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb3 === void 0 ? void 0 : _window$ArtPulseDashb3.nonce) || '';
+    var token = ((_window$ArtPulseDashb4 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb4 === void 0 ? void 0 : _window$ArtPulseDashb4.apiToken) || '';
     React$1.useEffect(function () {
+      var headers = {
+        'X-WP-Nonce': nonce
+      };
+      if (token) headers['Authorization'] = "Bearer ".concat(token);
       fetch("".concat(apiRoot, "artpulse/v1/analytics/community/").concat(tab), {
-        headers: {
-          'X-WP-Nonce': nonce
-        },
+        headers: headers,
         credentials: 'same-origin'
       }).then(function (res) {
-        return res.ok ? res.json() : {};
-      }).then(setData);
+        return res.status === 401 || res.status === 403 || res.status === 404 ? {} : res.json();
+      }).then(setData)["catch"](function () {
+        return setData({});
+      });
     }, [tab]);
+    if (Object.keys(data).length === 0) {
+      return /*#__PURE__*/React$1.createElement("div", {
+        className: "ap-widget bg-white p-4 rounded shadow mb-4"
+      }, /*#__PURE__*/React$1.createElement("p", null, __$i('No analytics available.', 'artpulse')));
+    }
     return /*#__PURE__*/React$1.createElement("div", {
       className: "ap-widget bg-white p-4 rounded shadow mb-4"
     }, /*#__PURE__*/React$1.createElement("div", {
@@ -1539,7 +1547,7 @@
   }
 
   var __ = wp.i18n.__;
-  var registry = [{
+  var widgets = [{
     id: 'nearby_events_map',
     title: __('Nearby Events Map', 'artpulse'),
     component: NearbyEventsMapWidget,
@@ -1549,11 +1557,6 @@
     title: __('My Favorites', 'artpulse'),
     component: MyFavoritesWidget,
     roles: ['member', 'artist']
-  }, {
-    id: 'activity_feed',
-    title: __('Activity Feed', 'artpulse'),
-    component: ActivityFeedWidget,
-    roles: ['member', 'artist', 'organization']
   }, {
     id: 'my_upcoming_events',
     title: __('My Upcoming Events', 'artpulse'),
@@ -1578,11 +1581,6 @@
     id: 'share_this_event',
     title: __('Share This Event', 'artpulse'),
     component: ShareThisEventWidget,
-    roles: ['member']
-  }, {
-    id: 'qa_checklist',
-    title: __('QA Checklist', 'artpulse'),
-    component: QAChecklistWidget,
     roles: ['member']
   }, {
     id: 'sample_events',
@@ -1696,32 +1694,49 @@
     component: OrgBroadcastBoxWidget,
     roles: ['organization']
   }];
+  if (window.AP_DEV_MODE) {
+    widgets.push({
+      id: 'activity_feed',
+      title: __('Activity Feed', 'artpulse'),
+      component: ActivityFeedWidget,
+      roles: ['member', 'artist', 'organization']
+    });
+    widgets.push({
+      id: 'qa_checklist',
+      title: __('QA Checklist', 'artpulse'),
+      component: QAChecklistWidget,
+      roles: ['member']
+    });
+  }
 
   var GridLayout = reactGridLayout.WidthProvider(reactGridLayout.Responsive);
   function DashboardContainer(_ref) {
-    var _window$ArtPulseDashb, _window$ArtPulseDashb2;
+    var _window$ArtPulseDashb, _window$ArtPulseDashb2, _window$ArtPulseDashb3, _window$ArtPulseDashb4;
     var _ref$role = _ref.role,
       role = _ref$role === void 0 ? 'member' : _ref$role;
-    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
-    var nonce = window.apNonce || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
+    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.apiUrl) || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.root) || '/wp-json/';
+    var nonce = window.apNonce || ((_window$ArtPulseDashb3 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb3 === void 0 ? void 0 : _window$ArtPulseDashb3.nonce) || '';
+    var token = ((_window$ArtPulseDashb4 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb4 === void 0 ? void 0 : _window$ArtPulseDashb4.apiToken) || '';
     var _useState = React$1.useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       layout = _useState2[0],
       setLayout = _useState2[1];
-    var widgets = registry.filter(function (w) {
+    var widgets$1 = widgets.filter(function (w) {
       return !w.roles || w.roles.includes(role);
     });
-    var widgetTitles = Object.fromEntries(widgets.map(function (w) {
+    var widgetTitles = Object.fromEntries(widgets$1.map(function (w) {
       return [w.id, w.title];
     }));
     React$1.useEffect(function () {
+      var headers = {
+        'X-WP-Nonce': nonce
+      };
+      if (token) headers['Authorization'] = "Bearer ".concat(token);
       fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout"), {
-        headers: {
-          'X-WP-Nonce': nonce
-        },
+        headers: headers,
         credentials: 'same-origin'
       }).then(function (r) {
-        return r.json();
+        return r.status === 401 || r.status === 403 || r.status === 404 ? Promise.reject() : r.json();
       }).then(function (data) {
         var ids = Array.isArray(data.layout) ? data.layout : [];
         setLayout(ids.map(function (id, i) {
@@ -1733,6 +1748,8 @@
             h: 2
           };
         }));
+      })["catch"](function () {
+        return setLayout([]);
       });
     }, [role]);
     var handleLayoutChange = function handleLayoutChange(l) {
@@ -1740,19 +1757,21 @@
       var ids = l.map(function (it) {
         return it.i;
       });
+      var headers = {
+        'Content-Type': 'application/json',
+        'X-WP-Nonce': nonce
+      };
+      if (token) headers['Authorization'] = "Bearer ".concat(token);
       fetch("".concat(apiRoot, "artpulse/v1/ap_dashboard_layout"), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-WP-Nonce': nonce
-        },
+        headers: headers,
         credentials: 'same-origin',
         body: JSON.stringify({
           layout: ids
         })
       });
     };
-    var widgetMap = Object.fromEntries(widgets.map(function (w) {
+    var widgetMap = Object.fromEntries(widgets$1.map(function (w) {
       return [w.id, w.component];
     }));
     var handleKeyDown = function handleKeyDown(e, item) {
@@ -1856,30 +1875,36 @@
           return handleKeyDown(e, item);
         }
       }, Comp ? /*#__PURE__*/React$1.createElement(Comp, null) : /*#__PURE__*/React$1.createElement("div", {
+        className: "ap-widget placeholder",
         role: "region",
         "aria-label": "Unavailable Widget"
-      }, /*#__PURE__*/React$1.createElement("p", null, "")));
+      }));
     }));
   }
 
   function AppDashboard() {
-    var _window$ArtPulseDashb, _window$ArtPulseDashb2;
+    var _window$ArtPulseDashb, _window$ArtPulseDashb2, _window$ArtPulseDashb3, _window$ArtPulseDashb4;
     var _useState = React$1.useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       role = _useState2[0],
       setRole = _useState2[1];
-    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.root) || '/wp-json/';
-    var nonce = window.apNonce || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.nonce) || '';
+    var apiRoot = ((_window$ArtPulseDashb = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb === void 0 ? void 0 : _window$ArtPulseDashb.apiUrl) || ((_window$ArtPulseDashb2 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb2 === void 0 ? void 0 : _window$ArtPulseDashb2.root) || '/wp-json/';
+    var nonce = window.apNonce || ((_window$ArtPulseDashb3 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb3 === void 0 ? void 0 : _window$ArtPulseDashb3.nonce) || '';
+    var token = ((_window$ArtPulseDashb4 = window.ArtPulseDashboardApi) === null || _window$ArtPulseDashb4 === void 0 ? void 0 : _window$ArtPulseDashb4.apiToken) || '';
     React$1.useEffect(function () {
+      var headers = {
+        'X-WP-Nonce': nonce
+      };
+      if (token) headers['Authorization'] = "Bearer ".concat(token);
       fetch("".concat(apiRoot, "artpulse/v1/me"), {
-        headers: {
-          'X-WP-Nonce': nonce
-        },
+        headers: headers,
         credentials: 'same-origin'
       }).then(function (res) {
-        return res.json();
+        return res.status === 401 || res.status === 403 || res.status === 404 ? {} : res.json();
       }).then(function (data) {
         return setRole(data.role);
+      })["catch"](function () {
+        return setRole(null);
       });
     }, []);
     var logout = function logout() {
@@ -1898,7 +1923,8 @@
   }
   document.addEventListener('DOMContentLoaded', function () {
     var rootEl = document.getElementById('ap-dashboard-root');
-    if (rootEl) {
+    var isV2 = (rootEl === null || rootEl === void 0 ? void 0 : rootEl.dataset.apV2) === '1';
+    if (rootEl && isV2) {
       var root = client.createRoot(rootEl);
       root.render(/*#__PURE__*/React$1.createElement(AppDashboard, null));
     }
