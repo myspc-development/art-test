@@ -266,14 +266,17 @@ class MetaBoxesRelationship
 
         wp_localize_script('ap-admin-relationship', 'apAdminRelationship', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('ap_ajax_nonce'), // This nonce should be for your AJAX action
+            'nonce'    => wp_create_nonce('ap_search_posts'),
             'placeholder_text' => __('Search for items...', 'artpulse'), // For Select2 placeholder
         ]);
     }
 
     public static function ajax_search_posts() {
-        // Verify nonce for security
-        if (!isset($_GET['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['nonce'])), 'ap_ajax_nonce')) {
+        if (! current_user_can('edit_posts')) {
+            wp_send_json_error(['message' => 'Forbidden'], 403);
+        }
+        $nonce = sanitize_text_field(wp_unslash($_GET['nonce'] ?? ''));
+        if (! wp_verify_nonce($nonce, 'ap_search_posts')) {
             wp_send_json_error(['message' => 'Nonce verification failed.'], 403);
             return;
         }

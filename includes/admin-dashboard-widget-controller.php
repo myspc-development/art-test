@@ -24,7 +24,13 @@ function artpulse_get_available_dashboard_widgets() {
 }
 
 add_action('admin_init', function () {
-    register_setting('artpulse_widget_settings', 'artpulse_enabled_widgets');
+    register_setting('artpulse_widget_settings', 'artpulse_enabled_widgets', [
+        'type'              => 'array',
+        'sanitize_callback' => function ($val) {
+            $val = is_array($val) ? $val : [];
+            return array_map('sanitize_text_field', $val);
+        },
+    ]);
 });
 
 add_action('artpulse_register_dashboard_widget', 'artpulse_register_dashboard_widgets');

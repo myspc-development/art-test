@@ -72,6 +72,9 @@ class DashboardWidgetManager
      */
     public static function ajax_save_user_layout(): void
     {
+        if (!is_user_logged_in() || ! current_user_can('read')) {
+            wp_send_json_error(['message' => 'Forbidden'], 403);
+        }
         check_ajax_referer('ap_save_user_layout', 'nonce');
 
         $layout = null;
@@ -103,6 +106,9 @@ class DashboardWidgetManager
      */
     public static function ajax_save_role_layout(): void
     {
+        if (! current_user_can('manage_options')) {
+            wp_send_json_error(['message' => 'Forbidden'], 403);
+        }
         check_ajax_referer('ap_save_role_layout', 'nonce');
 
         $role = sanitize_key($_POST['role'] ?? '');
