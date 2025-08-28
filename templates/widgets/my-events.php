@@ -5,7 +5,8 @@ if (!user_can(get_current_user_id(), 'read')) return;
 \ArtPulse\Frontend\SubmissionForms::register();
 wp_enqueue_script('ap-submission-form-js');
 
-extract(ap_template_context($args ?? [], ['visible' => true]));
+$args    = ap_template_context($args ?? [], ['visible' => true]);
+$visible = $args['visible'] ?? true;
 /**
  * Dashboard widget: My Events.
  */

@@ -1,7 +1,14 @@
 <?php
 if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 if (!user_can(get_current_user_id(), 'read')) return;
-extract(ap_template_context($args ?? [], ['visible' => true]));
+$args            = ap_template_context($args ?? [], [
+    'visible'          => true,
+    'badges'           => [],
+    'profile_edit_url' => '',
+]);
+$visible         = $args['visible'] ?? true;
+$badges          = $args['badges'] ?? [];
+$profile_edit_url = $args['profile_edit_url'] ?? '';
 /**
  * Dashboard widget: Membership.
  */
