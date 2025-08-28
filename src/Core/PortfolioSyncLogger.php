@@ -46,7 +46,13 @@ class PortfolioSyncLogger
         if (!isset($wpdb)) {
             return;
         }
-        $table = $wpdb->prefix . 'ap_portfolio_sync_logs';
+
+        $table  = $wpdb->prefix . 'ap_portfolio_sync_logs';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists !== $table) {
+            return; // Table hasn't been installed yet (e.g. during tests)
+        }
+
         $wpdb->insert($table, [
             'user_id'   => $user_id,
             'action'    => $action,
