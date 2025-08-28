@@ -16,6 +16,7 @@ This folder collects every guide related to dashboard widgets. New developers sh
 4. **[Widget Matrix Reference](./widget-matrix-reference.md)** – describes how roles map to widget availability.
 5. **[Widget Settings Codex](./widget-settings-codex.md)** – covers per-user settings stored in metadata.
 6. **[Widget Layout Import Export Guide](./widget-layout-import-export-guide.md)** – shows how to migrate layouts between installations.
+7. **[Widget Placeholders](./widget-placeholders.md)** – explains how placeholder containers are enabled and customized.
 
 Use these guides alongside the [Widget Manager Data Layer Guide](./widget-manager-data-layer-guide.md) when customizing layouts. The recommended read order ensures you first grasp the core spec before exploring advanced usage and deployment scenarios.
 See the [REST API reference](../api/rest-api-reference.md) for endpoints used by widgets. QA should consult the [Dashboard QA Checklist](../qa/dashboard-qa-checklist.md).
