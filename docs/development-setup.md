@@ -31,7 +31,7 @@ Before running the tests for the first time, execute the environment setup scrip
 ```bash
 bash scripts/setup-env.sh
 ```
-The script requires the `svn` command. Install Subversion if it is not available. This script downloads WordPress and installs Composer dependencies. When the `CI` environment variable is present it runs `composer install` with non‑interactive options, making it suitable for automated pipelines.
+The script uses `curl` to download WordPress. Install `curl` if it is not available. This script downloads WordPress and installs Composer dependencies. When the `CI` environment variable is present it runs `composer install` with non‑interactive options, making it suitable for automated pipelines.
 
 Run the test suite and coding standards checks with:
 
