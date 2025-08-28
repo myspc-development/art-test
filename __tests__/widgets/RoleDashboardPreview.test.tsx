@@ -34,6 +34,6 @@ describe('RoleDashboard preview role', () => {
     fireEvent.change(select, { target: { value: 'member' } });
 
     expect(localStorage.getItem('ap_preview_role')).toBe('member');
-    expect(mockUse.mock.calls[0][1]).toEqual({ roles: ['member'] });
+    expect(mockUse.mock.calls[0][1]).toEqual({ roles: ['member'], capabilities: undefined });
   });
 });

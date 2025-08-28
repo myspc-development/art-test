@@ -74,7 +74,7 @@ describe('RoleDashboard widget filtering', () => {
     const select = screen.getByRole('combobox');
     fireEvent.change(select, { target: { value: 'member' } });
 
-    expect(mockUse.mock.calls[0][1]).toEqual({ roles: ['member'] });
+    expect(mockUse.mock.calls[0][1]).toEqual({ roles: ['member'], capabilities: undefined });
 
     expect(await screen.findByRole('region', { name: /alerts-heading/i })).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: /news-heading/i })).toBeNull();
@@ -84,7 +84,7 @@ describe('RoleDashboard widget filtering', () => {
     mockUse.mockClear();
     fireEvent.change(select, { target: { value: 'organization' } });
 
-    expect(mockUse.mock.calls[0][1]).toEqual({ roles: ['organization'] });
+    expect(mockUse.mock.calls[0][1]).toEqual({ roles: ['organization'], capabilities: undefined });
 
     expect(await screen.findByRole('region', { name: /manage-heading/i })).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: /news-heading/i })).toBeNull();
