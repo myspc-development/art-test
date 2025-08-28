@@ -7,16 +7,24 @@ For end‑user instructions see the [User Guide](docs/guides/user/README.md).
 Site administrators should consult the [Admin Guide](docs/guides/admin/README.md).
 > 🛠️ NOTE: Guides are now nested under /docs/guides/
 
-## Dev Quickstart
+## Quickstart
 
 ```bash
 composer install
-composer run test:unit
+bash tools/provision-wp-core.sh # or vendor/wp-phpunit/wp-phpunit fallback
+
+export WP_TESTS_DB_NAME=wordpress_test
+export WP_TESTS_DB_USER=wp
+export WP_TESTS_DB_PASSWORD=password
+export WP_TESTS_DB_HOST=localhost
 composer run test:db
+
+composer run test:unit
 composer run test:wp
-composer run lint:phpcs
-composer run lint:phpstan
+composer run test:coverage
 ```
+
+> Code coverage requires the [PCOV](https://github.com/krakjoe/pcov) extension or Xdebug 3 with `XDEBUG_MODE=coverage`.
 
 ## WebSocket Server
 
