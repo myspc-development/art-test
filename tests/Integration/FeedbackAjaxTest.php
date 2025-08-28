@@ -8,7 +8,7 @@ class FeedbackAjaxTest extends WP_Ajax_UnitTestCase
 {
     use AjaxTestHelper;
 
-    protected function tear_down(): void
+    public function tear_down(): void
     {
         $this->reset_superglobals();
         parent::tear_down();
@@ -33,7 +33,7 @@ class FeedbackAjaxTest extends WP_Ajax_UnitTestCase
         $user = get_user_by('ID', $user_id);
         $user->remove_cap('read');
         wp_set_current_user($user_id);
-        $this->set_nonce('ap_feedback_nonce', 'nonce');
+        $this->set_nonce('ap_submit_feedback', 'nonce');
         $_POST['description'] = 'Test';
 
         try {
@@ -49,7 +49,7 @@ class FeedbackAjaxTest extends WP_Ajax_UnitTestCase
     {
         $user_id = self::factory()->user->create(['role' => 'subscriber']);
         wp_set_current_user($user_id);
-        $this->set_nonce('ap_feedback_nonce', 'nonce');
+        $this->set_nonce('ap_submit_feedback', 'nonce');
         $_POST['description'] = 'Great plugin';
 
         $this->_handleAjax('ap_submit_feedback');

@@ -39,10 +39,9 @@ function function_exists($name) { return $name === 'wc_add_notice'; }
 
 namespace ArtPulse\Frontend\Tests;
 
-use PHPUnit\Framework\TestCase;
 use ArtPulse\Frontend\EventSubmissionShortcode;
 
-class EventSubmissionShortcodeTest extends TestCase
+class EventSubmissionShortcodeTest extends \WP_UnitTestCase
 {
     public static array $posts_return = [];
     public static array $user_meta = [];
@@ -51,8 +50,9 @@ class EventSubmissionShortcodeTest extends TestCase
     public static array $media_ids = [];
     public static int $thumbnail = 0;
 
-    protected function setUp(): void
+    public function set_up(): void
     {
+        parent::set_up();
         self::$posts_return = [];
         self::$user_meta = [];
         self::$notice = '';
@@ -62,11 +62,11 @@ class EventSubmissionShortcodeTest extends TestCase
         self::$thumbnail = 0;
         $_FILES = [];
 
-        if (!is_dir(ABSPATH . '/wp-admin/includes')) {
-            mkdir(ABSPATH . '/wp-admin/includes', 0777, true);
-            file_put_contents(ABSPATH . '/wp-admin/includes/image.php', '<?php');
-            file_put_contents(ABSPATH . '/wp-admin/includes/file.php', '<?php');
-            file_put_contents(ABSPATH . '/wp-admin/includes/media.php', '<?php');
+        if ( ! is_dir( ABSPATH . '/wp-admin/includes' ) ) {
+            mkdir( ABSPATH . '/wp-admin/includes', 0777, true );
+            file_put_contents( ABSPATH . '/wp-admin/includes/image.php', '<?php' );
+            file_put_contents( ABSPATH . '/wp-admin/includes/file.php', '<?php' );
+            file_put_contents( ABSPATH . '/wp-admin/includes/media.php', '<?php' );
         }
 
         // Required POST fields
@@ -81,7 +81,7 @@ class EventSubmissionShortcodeTest extends TestCase
         ];
     }
 
-    protected function tearDown(): void
+    public function tear_down(): void
     {
         $_POST = [];
         $_FILES = [];
@@ -91,7 +91,7 @@ class EventSubmissionShortcodeTest extends TestCase
         self::$inserted = [];
         self::$media_ids = [];
         self::$thumbnail = 0;
-        parent::tearDown();
+        parent::tear_down();
     }
 
     public function test_invalid_org_rejected(): void

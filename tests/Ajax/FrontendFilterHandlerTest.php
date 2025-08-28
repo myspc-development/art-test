@@ -1,19 +1,19 @@
 <?php
 namespace ArtPulse\Ajax\Tests;
 
-use PHPUnit\Framework\TestCase;
 use ArtPulse\Ajax\FrontendFilterHandler;
 use ArtPulse\Tests\Stubs\MockStorage;
 
-class FrontendFilterHandlerTest extends TestCase
+class FrontendFilterHandlerTest extends \WP_UnitTestCase
 {
     public static array $posts = [];
     public static array $json = [];
     public static array $query_args = [];
 
-    protected function setUp(): void
+    public function set_up(): void
     {
-        self::$posts = [];
+        parent::set_up();
+        self::$posts      = [];
         MockStorage::$json = [];
         self::$query_args = [];
         WP_Query::$default_posts = [];
@@ -22,13 +22,13 @@ class FrontendFilterHandlerTest extends TestCase
         $_GET = [];
     }
 
-    protected function tearDown(): void
+    public function tear_down(): void
     {
-        $_GET = [];
-        self::$posts = [];
+        $_GET              = [];
+        self::$posts       = [];
         MockStorage::$json = [];
-        self::$query_args = [];
-        parent::tearDown();
+        self::$query_args  = [];
+        parent::tear_down();
     }
 
     public function test_handle_filter_posts_outputs_json(): void

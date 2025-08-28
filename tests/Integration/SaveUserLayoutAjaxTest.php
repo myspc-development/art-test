@@ -8,7 +8,7 @@ class SaveUserLayoutAjaxTest extends WP_Ajax_UnitTestCase
 {
     use AjaxTestHelper;
 
-    protected function tear_down(): void
+    public function tear_down(): void
     {
         $this->reset_superglobals();
         parent::tear_down();

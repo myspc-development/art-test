@@ -7,11 +7,12 @@ use AjaxTestHelper;
 class EventEditAjaxTest extends WP_Ajax_UnitTestCase
 {
     use AjaxTestHelper;
-    protected function set_up(): void
+
+    public function set_up(): void
     {
         parent::set_up();
-        if (!post_type_exists('artpulse_event')) {
-            register_post_type('artpulse_event');
+        if ( ! post_type_exists( 'artpulse_event' ) ) {
+            register_post_type( 'artpulse_event' );
         }
     }
 
@@ -50,7 +51,7 @@ class EventEditAjaxTest extends WP_Ajax_UnitTestCase
 
         wp_set_current_user($other);
         $_POST = $this->base_post_data($post_id);
-        $this->set_nonce('ap_edit_event_nonce', 'nonce');
+        $this->set_nonce('ap_save_event', 'nonce');
 
         try {
             $this->_handleAjax('ap_save_event');
@@ -68,14 +69,14 @@ class EventEditAjaxTest extends WP_Ajax_UnitTestCase
         $post_id = self::factory()->post->create(['post_type' => 'artpulse_event', 'post_author' => $author]);
 
         $_POST = $this->base_post_data($post_id);
-        $this->set_nonce('ap_edit_event_nonce', 'nonce');
+        $this->set_nonce('ap_save_event', 'nonce');
 
         $this->_handleAjax('ap_save_event');
         $resp = json_decode($this->_last_response, true);
         $this->assertTrue($resp['success']);
     }
 
-    protected function tear_down(): void
+    public function tear_down(): void
     {
         $this->reset_superglobals();
         parent::tear_down();
