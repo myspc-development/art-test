@@ -14,10 +14,12 @@
         push: form.push.checked,
         sms: form.sms.checked
       };
+      const nonceField = form.querySelector('input[name="ap_notification_nonce"]');
       fetch(root + 'artpulse/v1/user-preferences', {
         method: 'POST',
         headers,
         body: JSON.stringify({
+          ap_notification_nonce: nonceField ? nonceField.value : '',
           notification_prefs: prefs,
           digest_frequency: form.digest_frequency.value,
           digest_topics: form.digest_topics.value

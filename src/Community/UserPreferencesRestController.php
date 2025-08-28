@@ -82,6 +82,7 @@ class UserPreferencesRestController
                 'notification_prefs'=> [ 'type' => 'object', 'required' => false ],
                 'digest_frequency'  => [ 'type' => 'string', 'required' => false ],
                 'digest_topics'     => [ 'type' => 'string', 'required' => false ],
+                'ap_notification_nonce' => [ 'type' => 'string', 'required' => true ],
                 'preferred_tags'   => [ 'type' => 'array',  'required' => false ],
                 'ignored_tags'     => [ 'type' => 'array',  'required' => false ],
                 'blacklist_ids'    => [ 'type' => 'array',  'required' => false ],
@@ -92,6 +93,11 @@ class UserPreferencesRestController
 
     public static function save_preferences(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        $nonce = $request->get_param('ap_notification_nonce');
+        if (!$nonce || !wp_verify_nonce($nonce, 'ap_notification_prefs')) {
+            return new WP_Error('invalid_nonce', __('Invalid nonce', 'artpulse'), ['status' => 403]);
+        }
+
         $user_id = get_current_user_id();
 
         if ($request->has_param('push_token')) {
