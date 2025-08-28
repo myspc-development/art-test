@@ -1,7 +1,7 @@
 <?php
 
 namespace {
-    require_once __DIR__ . '/WP_CLI_Stub.php';
+    // WP-CLI stub loaded via bootstrap
     if (!defined('ABSPATH')) { define('ABSPATH', __DIR__); }
     $GLOBALS['options'] = [];
     function get_option($name, $default = false) { return $GLOBALS['options'][$name] ?? $default; }

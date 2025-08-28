@@ -1,7 +1,7 @@
 <?php
 
 namespace {
-    require_once __DIR__ . '/WP_CLI_Stub.php';
+    // WP-CLI stub loaded via bootstrap
     $GLOBALS['hidden_widgets'] = [];
     $GLOBALS['options']        = [];
 
