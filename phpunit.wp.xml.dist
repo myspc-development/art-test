@@ -16,11 +16,9 @@
   </testsuites>
   <php>
     <ini name="display_errors" value="0"/>
-    <ini name="display_startup_errors" value="0"/>
     <ini name="opcache.enable_cli" value="0"/>
     <server name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
     <const name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
     <env name="PLUGIN_MAIN_FILE" value="artpulse-management.php"/>
-    <const name="WP_PHP_BINARY" value="/usr/bin/php"/>
   </php>
 </phpunit>
