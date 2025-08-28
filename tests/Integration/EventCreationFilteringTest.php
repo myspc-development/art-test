@@ -9,7 +9,7 @@ class EventCreationFilteringTest extends \WP_UnitTestCase
 {
     private int $user_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->user_id = self::factory()->user->create([ 'role' => 'administrator' ]);

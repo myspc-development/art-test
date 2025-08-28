@@ -13,7 +13,7 @@ class EventsRouteTest extends \WP_UnitTestCase
     private int $ny_event;
     private int $past_event;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
 

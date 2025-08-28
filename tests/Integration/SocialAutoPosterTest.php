@@ -13,7 +13,7 @@ class SocialAutoPosterTest extends \WP_UnitTestCase
         return ['headers' => [], 'body' => '', 'response' => ['code' => 200]];
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_filter('pre_http_request', [$this, 'intercept'], 10);
         parent::tear_down();

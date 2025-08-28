@@ -5,7 +5,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\WidgetRegistry;
 
 class WidgetAliasTest extends \WP_UnitTestCase {
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         $this->resetRegistries();
         WidgetRegistry::register( 'widget_my_follows', static fn() => '<section data-slug="widget_my_follows"></section>' );

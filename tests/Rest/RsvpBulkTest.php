@@ -10,7 +10,7 @@ class RsvpBulkTest extends \WP_UnitTestCase {
     private int $r1;
     private int $r2;
 
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         \ArtPulse\Core\Activator::activate();
         $this->org = self::factory()->user->create(['role' => 'administrator']);

@@ -12,7 +12,7 @@ class FeedbackRestControllerTest extends \WP_UnitTestCase
 {
     private int $user;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         FeedbackManager::install_table();

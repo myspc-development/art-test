@@ -10,7 +10,7 @@ use ArtPulse\Core\UserDashboardManager;
 class DashboardBuilderMappingTest extends \WP_UnitTestCase {
     private int $admin;
 
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         // reset registry
         $ref2 = new \ReflectionClass(DashboardWidgetRegistry::class);

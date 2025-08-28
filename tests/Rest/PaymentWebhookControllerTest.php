@@ -12,7 +12,7 @@ class PaymentWebhookControllerTest extends \WP_UnitTestCase
     private int $ticket_id;
     private int $user_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\DB\create_monetization_tables();

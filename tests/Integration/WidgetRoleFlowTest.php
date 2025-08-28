@@ -13,7 +13,7 @@ class WidgetRoleFlowTest extends \WP_UnitTestCase
     private int $userOne;
     private int $userTwo;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->admin   = self::factory()->user->create(['role' => 'administrator']);

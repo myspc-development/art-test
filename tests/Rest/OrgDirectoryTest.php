@@ -13,7 +13,7 @@ class OrgDirectoryTest extends \WP_UnitTestCase
     private int $logo_id;
     private string $org_type = 'museum';
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         // create dummy image for featured logo

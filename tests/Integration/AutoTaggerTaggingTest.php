@@ -5,13 +5,13 @@ use ArtPulse\AI\AutoTagger;
 
 class AutoTaggerTaggingTest extends \WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         AutoTagger::register();
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         $_POST = [];
         parent::tear_down();

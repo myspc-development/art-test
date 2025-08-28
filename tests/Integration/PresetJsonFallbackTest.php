@@ -9,7 +9,7 @@ class PresetJsonFallbackTest extends WP_UnitTestCase {
     private array $errors = [];
     private $errHandler;
 
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         $this->presetPath = dirname(__DIR__, 1) . '/../data/preset-member.json';
         if (is_readable($this->presetPath)) {
@@ -26,7 +26,7 @@ class PresetJsonFallbackTest extends WP_UnitTestCase {
         });
     }
 
-    public function tear_down(): void {
+    public function tear_down() {
         restore_error_handler();
         DashboardPresets::resetCache();
         if ($this->originalPreset !== null) {

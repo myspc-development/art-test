@@ -9,7 +9,7 @@ class AnalyticsPilotControllerTest extends \WP_UnitTestCase
     private int $admin;
     private int $user;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->admin = self::factory()->user->create(['role' => 'administrator']);

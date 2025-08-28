@@ -9,7 +9,7 @@ class MultiRoleLayoutTest extends \WP_UnitTestCase
 {
     private int $userId;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         // Ensure custom roles exist

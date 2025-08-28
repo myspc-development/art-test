@@ -9,7 +9,7 @@ class WebhookManagerTest extends \WP_UnitTestCase
     private int $org_id;
     private int $hook_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\Integration\WebhookManager::maybe_install_tables();
@@ -34,7 +34,7 @@ class WebhookManagerTest extends \WP_UnitTestCase
         $this->hook_id = $wpdb->insert_id;
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_filter('pre_http_request', [$this, 'intercept'], 10);
         parent::tear_down();

@@ -13,7 +13,7 @@ class TicketManagerTest extends \WP_UnitTestCase
     private int $user_id;
     private array $emails = [];
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\DB\create_monetization_tables();
@@ -30,7 +30,7 @@ class TicketManagerTest extends \WP_UnitTestCase
         do_action('rest_api_init');
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_filter('pre_wp_mail', [$this, 'capture_mail'], 10);
         parent::tear_down();

@@ -14,7 +14,7 @@ class OrgRolesControllerPermissionTest extends \WP_UnitTestCase
     private string $table;
     private OrgRolesController $controller;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         global $wpdb;
@@ -39,7 +39,7 @@ class OrgRolesControllerPermissionTest extends \WP_UnitTestCase
         $this->controller->register_routes();
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         global $wpdb;
         $wpdb->query("DROP TABLE IF EXISTS {$this->table}");

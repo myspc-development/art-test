@@ -4,7 +4,7 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DashboardWidgetRenderTest extends \WP_UnitTestCase {
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         $ref = new \ReflectionClass(DashboardWidgetRegistry::class);
         $prop = $ref->getProperty('widgets');

@@ -11,7 +11,7 @@ use ArtPulse\Admin\Tests\Stub;
  */
 class PaymentReportsControllerTest extends \WP_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         Stub::reset();

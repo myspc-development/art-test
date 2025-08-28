@@ -12,7 +12,7 @@ class DonationManagerTest extends \WP_UnitTestCase
     private int $artist_id;
     private int $user_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\Monetization\DonationManager::maybe_install_table();

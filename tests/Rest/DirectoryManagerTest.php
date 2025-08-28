@@ -12,7 +12,7 @@ class DirectoryManagerTest extends \WP_UnitTestCase
     private int $org_id;
     private int $logo_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         // create a dummy image file for the logo

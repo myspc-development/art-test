@@ -12,7 +12,7 @@ class AdvancedEventFiltersTest extends \WP_UnitTestCase
     private int $event1;
     private int $event2;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $date = date('Y-m-d', strtotime('+1 day'));

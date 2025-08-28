@@ -12,7 +12,7 @@ class TipManagerTest extends \WP_UnitTestCase
     private int $artist_id;
     private int $fan_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\Monetization\TipManager::maybe_install_table();

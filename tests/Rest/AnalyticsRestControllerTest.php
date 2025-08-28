@@ -13,7 +13,7 @@ class AnalyticsRestControllerTest extends \WP_UnitTestCase
     private int $event_id;
     private int $ticket_table;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         EventMetrics::install_table();

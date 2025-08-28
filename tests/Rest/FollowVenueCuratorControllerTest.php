@@ -13,7 +13,7 @@ class FollowVenueCuratorControllerTest extends \WP_UnitTestCase
     private int $venue;
     private int $curator;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->user = self::factory()->user->create();

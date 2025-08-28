@@ -15,7 +15,7 @@ class CuratorRestControllerTest extends \WP_UnitTestCase
     private int $collection1;
     private int $collection2;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         wp_set_current_user(self::factory()->user->create());

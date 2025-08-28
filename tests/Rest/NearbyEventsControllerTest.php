@@ -12,7 +12,7 @@ class NearbyEventsControllerTest extends \WP_UnitTestCase
     private int $near_event;
     private int $far_event;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $future = date('Y-m-d', strtotime('+1 day'));

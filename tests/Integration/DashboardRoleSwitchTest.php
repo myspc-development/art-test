@@ -4,7 +4,7 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Core\DashboardController;
 
 class DashboardRoleSwitchTest extends \WP_UnitTestCase {
-    public function set_up(): void {
+    public function set_up() {
         parent::set_up();
         if ( ! defined( 'AP_VERBOSE_DEBUG' ) ) {
             define( 'AP_VERBOSE_DEBUG', true );

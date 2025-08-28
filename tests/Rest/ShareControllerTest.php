@@ -15,7 +15,7 @@ class ShareControllerTest extends \WP_UnitTestCase
     private int $event_id;
     private int $user_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         EventMetrics::install_table();

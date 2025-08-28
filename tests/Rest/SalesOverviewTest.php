@@ -13,7 +13,7 @@ class SalesOverviewTest extends \WP_UnitTestCase
     private int $tier_id;
     private int $artist_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\DB\create_monetization_tables();

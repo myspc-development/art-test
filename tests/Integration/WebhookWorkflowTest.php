@@ -11,7 +11,7 @@ class WebhookWorkflowTest extends \WP_UnitTestCase
     private $response;
     private int $org_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         \ArtPulse\Integration\WebhookManager::maybe_install_tables();
@@ -27,7 +27,7 @@ class WebhookWorkflowTest extends \WP_UnitTestCase
         ]);
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_filter('pre_http_request', [$this, 'intercept'], 10);
         parent::tear_down();
