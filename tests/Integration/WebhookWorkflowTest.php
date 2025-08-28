@@ -30,6 +30,16 @@ class WebhookWorkflowTest extends \WP_UnitTestCase
     public function tear_down()
     {
         remove_filter('pre_http_request', [$this, 'intercept'], 10);
+
+        // Clean up any webhook data to avoid leaking state between tests.
+        global $wpdb;
+        $table = $wpdb->prefix . 'ap_webhooks';
+        $exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+        if ($exists === $table) {
+            $wpdb->query("DELETE FROM $table");
+            $wpdb->query("DROP TABLE IF EXISTS $table");
+        }
+
         parent::tear_down();
     }
 
