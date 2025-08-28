@@ -226,8 +226,8 @@ const RoleDashboard: React.FC = () => {
             </div>
           ) : (
             (() => {
-              const sanitized = DOMPurify.sanitize(htmlMap[widget.id] || '');
-              return <div dangerouslySetInnerHTML={{ __html: sanitized }} />;
+              const html = htmlMap[widget.id] || '';
+              return <div dangerouslySetInnerHTML={{ __html: html }} />;
             })()
           )}
         </DashboardCard>
