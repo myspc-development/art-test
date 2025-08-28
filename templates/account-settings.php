@@ -1,6 +1,6 @@
 <div class="ap-account-settings">
     <h2 class="ap-card__title"><?php esc_html_e('Account Settings', 'artpulse'); ?></h2>
-    <form id="ap-notification-prefs" class="ap-form-container">
+    <form id="ap-notification-prefs" class="ap-form-container" action="<?php echo esc_url( rest_url('artpulse/v1/user-preferences') ); ?>">
         <label>
             <input type="checkbox" name="email" <?php checked($email); ?>>
             <?php esc_html_e('Email Notifications', 'artpulse'); ?>
@@ -25,6 +25,7 @@
             <label for="ap_digest_topics" class="ap-form-label"><?php esc_html_e('Digest Topics', 'artpulse'); ?></label><br>
             <input type="text" id="ap_digest_topics" name="digest_topics" class="ap-input" value="<?php echo esc_attr($digest_topics); ?>" placeholder="painting, sculpture">
         </p>
+        <?php wp_nonce_field( 'ap_notification_prefs', 'ap_notification_nonce' ); ?>
         <button type="submit" class="ap-form-button nectar-button"><?php esc_html_e('Save', 'artpulse'); ?></button>
     </form>
     <div id="ap-notification-status" class="ap-form-messages" role="status" aria-live="polite"></div>
