@@ -22,6 +22,8 @@ npm install
 npm run build
 ```
 
+`npm install` installs Rollup and its plugins. Rerun `npm run build` whenever dependencies change so the compiled assets stay up to date.
+
 The `scripts/` directory stores optional scaffolding and release helpers used during early development. These scripts are **not** required when setting up the plugin from source.
 
 Before running the tests for the first time, execute the environment setup script to fetch WordPress and install dependencies:
