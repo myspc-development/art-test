@@ -34,13 +34,11 @@
     "pretest": "php tools/preflight.php",
     "test": [
       "@test:unit",
-      "@test:db",
       "@test:wp"
     ],
-    "test:unit": "php -d opcache.enable_cli=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
-    "test:db": "php bin/create-test-db.php",
+    "test:unit": "php -d opcache.enable_cli=0 -d display_errors=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
     "test:wp": "php -d opcache.enable_cli=0 -d display_errors=0 vendor/bin/phpunit -c phpunit.wp.xml.dist",
-    "test:coverage": "mkdir -p build && (php -m | grep -qi pcov && php -d pcov.enabled=1 -d pcov.directory=src vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml || XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml)",
+    "coverage": "php -d pcov.enabled=1 -d pcov.directory=src vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml || XDEBUG_MODE=coverage php vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml",
     "cs": "php -d memory_limit=512M vendor/bin/phpcs",
     "cs:fix": "vendor/bin/phpcbf",
     "stan": "vendor/bin/phpstan analyse --memory-limit=1G",
