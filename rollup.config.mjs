@@ -9,7 +9,7 @@ const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 const commonPlugins = [
   nodeResolve({ extensions }),
   commonjs(),
-  postcss({ inject: true, minimize: true }),
+  postcss({ inject: true, minimize: true, extract: 'bundle.css' }),
   babel({
     babelHelpers: 'bundled',
     extensions,

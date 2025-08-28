@@ -4,6 +4,7 @@ import DashboardNavbar from './components/DashboardNavbar';
 import MessagesPanel from './components/MessagesPanel';
 import CommunityAnalyticsPanel from './components/CommunityAnalyticsPanel';
 import DashboardContainer from './DashboardContainer.jsx';
+import '../css/main.css';
 
 function AppDashboard() {
   const [role, setRole] = useState(null);
