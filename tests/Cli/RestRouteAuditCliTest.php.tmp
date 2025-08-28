@@ -1,0 +1,62 @@
+<?php
+
+namespace {
+    require_once __DIR__ . '/WP_CLI_Stub.php';
+    if (!defined('ABSPATH')) { define('ABSPATH', __DIR__); }
+    function __return_true() { return true; }
+    function __return_false() { return false; }
+
+    class DummyRestServer {
+        private array $routes;
+        public function __construct(array $routes) { $this->routes = $routes; }
+        public function get_routes(): array { return $this->routes; }
+    }
+
+    $GLOBALS['rest_server'] = null;
+if (!function_exists("rest_get_server")) {
+    function rest_get_server() {
+        return $GLOBALS['rest_server'];
+    }
+}
+
+namespace ArtPulse\Cli\Tests {
+    use PHPUnit\Framework\TestCase;
+    use WP_CLI;
+
+    require_once __DIR__ . '/../../includes/class-cli-rest-route-audit.php';
+
+    class RestRouteAuditCliTest extends TestCase {
+        protected function setUp(): void {
+            WP_CLI::$commands = [];
+            WP_CLI::$last_output = '';
+        }
+
+        public function test_json_output_no_conflicts(): void {
+            global $rest_server;
+            $rest_server = new \DummyRestServer([
+                '/ap/v1/foo' => [
+                    [ 'methods' => 'GET', 'callback' => '__return_true' ],
+                ],
+            ]);
+            WP_CLI::add_command('ap:audit-rest-routes', \AP_CLI_Rest_Route_Audit::class);
+            $out = WP_CLI::runcommand('ap:audit-rest-routes --json');
+            $this->assertSame('[]', $out);
+            $out2 = WP_CLI::runcommand('ap:audit-rest-routes');
+            $this->assertStringContainsString('No REST route conflicts found.', $out2);
+        }
+
+        public function test_conflict_detection(): void {
+            global $rest_server;
+            $rest_server = new \DummyRestServer([
+                '/ap/v1/conflict' => [
+                    [ 'methods' => 'GET', 'callback' => '__return_true' ],
+                    [ 'methods' => 'GET', 'callback' => '__return_false' ],
+                ],
+            ]);
+            WP_CLI::add_command('ap:audit-rest-routes', \AP_CLI_Rest_Route_Audit::class);
+            $out = WP_CLI::runcommand('ap:audit-rest-routes');
+            $this->assertStringContainsString('GET /ap/v1/conflict', $out);
+        }
+    }
+}
+}

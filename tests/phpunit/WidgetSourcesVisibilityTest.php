@@ -38,13 +38,6 @@ class WidgetSourcesVisibilityTest extends TestCase
     }
 }
 }
-
-namespace WP_CLI\Utils {
-    function format_items($format, $rows, $fields) {
-        \ArtPulse\Audit\Tests\WidgetSourcesVisibilityTest::$rows = $rows;
-    }
-}
-
 namespace {
     if (!class_exists('WP_CLI')) {
         class WP_CLI {
