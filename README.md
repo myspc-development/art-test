@@ -18,6 +18,10 @@ composer run lint:phpcs
 composer run lint:phpstan
 ```
 
+## Browser Support
+
+The JavaScript build pipeline transpiles modern syntax like optional chaining to ES5 via Babel. Bundles are tested against ES5‑compliant browsers. Environments that still lack optional chaining support should include a suitable polyfill or use a modern browser (e.g., Chrome 80+, Firefox 78+, Safari 13.1+, Edge 80+).
+
 ## Documentation
 - [Architecture Docs](docs/architecture/)
   - [Role-Based Dashboard Builder](docs/architecture/Role_Based_Dashboard_Builder.md)
