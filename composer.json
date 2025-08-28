@@ -38,13 +38,12 @@
     ],
     "test:unit": "php -d opcache.enable_cli=0 -d display_errors=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
     "test:wp": "WP_PHPUNIT__DIR=vendor/wp-phpunit/wp-phpunit WP_TESTS_CONFIG_FILE_PATH=wp-tests-config.php php -d opcache.enable_cli=0 -d display_errors=0 vendor/bin/phpunit -c phpunit.wp.xml.dist",
-    "coverage": "php -d pcov.enabled=1 -d pcov.directory=src vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml || XDEBUG_MODE=coverage php vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml",
     "cs": "php -dmemory_limit=1G vendor/bin/phpcs -p",
     "cs:fix": "vendor/bin/phpcbf",
     "stan": "php -dmemory_limit=1G vendor/bin/phpstan analyse --memory-limit=1G",
     "stan:baseline": "vendor/bin/phpstan analyse --generate-baseline=phpstan-baseline.neon",
     "test:db": "php bin/create-test-db.php",
-    "test:coverage": "php -d pcov.enabled=1 -d pcov.directory=src vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml"
+    "test:coverage": "php -d pcov.enabled=1 -d pcov.directory=src vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml || XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml"
   },
   "config": {
     "allow-plugins": {
