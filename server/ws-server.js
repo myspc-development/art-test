@@ -38,7 +38,9 @@ io.use((socket, next) => {
 
 io.on('connection', socket => {
   connections.set(socket.userId, socket);
-  console.log('connection', socket.userId);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('connection', socket.userId);
+  }
 
   socket.on('message:send', data => {
     const recipient = connections.get(data.recipient_id);
@@ -57,11 +59,15 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     connections.delete(socket.userId);
-    console.log('disconnect', socket.userId);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('disconnect', socket.userId);
+    }
   });
 });
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-  console.log('ws server running on', PORT);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('ws server running on', PORT);
+  }
 });

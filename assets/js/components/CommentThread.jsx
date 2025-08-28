@@ -44,14 +44,13 @@ function Comment({ comment, onReply }) {
   );
 }
 
-export default function CommentThread({ comments = [], onReport }) {
+export default function CommentThread({ comments = [], onReport, onReply }) {
   const [activeReport, setActiveReport] = useState(null);
   const handleAction = (type, comment, text) => {
     if (type === 'report') {
       setActiveReport(comment);
-    } else if (type === 'reply') {
-      // placeholder for reply callback
-      console.log('reply to', comment.id, text);
+    } else if (type === 'reply' && typeof onReply === 'function') {
+      onReply(comment, text);
     }
   };
   const handleReportSubmit = (reason, notes) => {

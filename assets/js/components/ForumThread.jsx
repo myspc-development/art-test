@@ -34,11 +34,14 @@ function Post({ post, onReply }) {
   );
 }
 
-export default function ForumThread({ title, posts = [], onReport }) {
+export default function ForumThread({ title, posts = [], onReport, onReply }) {
   const [activeReport, setActiveReport] = useState(null);
   const handle = (type, post, text) => {
-    if (type === 'report') setActiveReport(post);
-    else if (type === 'reply') console.log('reply to', post.id, text);
+    if (type === 'report') {
+      setActiveReport(post);
+    } else if (type === 'reply' && typeof onReply === 'function') {
+      onReply(post, text);
+    }
   };
   const handleReportSubmit = (reason, notes) => {
     if (onReport && activeReport) {
