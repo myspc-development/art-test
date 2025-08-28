@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace {
+    // Minimal WP-CLI stub + ABSPATH for unit context
     require_once __DIR__ . '/WP_CLI_Stub.php';
     if (!defined('ABSPATH')) { define('ABSPATH', __DIR__); }
-    
-    // Provide minimal role handling for capability checks.
+
+    // Minimal role handling for capability checks.
     if (!function_exists('add_role')) {
         function add_role($role, $display_name = '', $caps = []) { $GLOBALS['test_roles'][$role] = $caps; }
     }
@@ -23,17 +25,35 @@ namespace {
     }
 }
 
-namespace ArtPulse\Core {
-    class DashboardController {
+namespace ArtPulse\Tests\Stubs {
+    /**
+     * Stubbed versions live in a separate namespace to avoid collisions.
+     * We will class_alias them to the production FQCNs only if those do not exist.
+     */
+    class DashboardControllerStub {
         private static array $presets = [];
         public static function set_presets(array $presets): void { self::$presets = $presets; }
         public static function get_default_presets(): array { return self::$presets; }
     }
-    class DashboardWidgetRegistry {
+
+    class DashboardWidgetRegistryStub {
         private static array $widgets = [];
         public static function set_widgets(array $widgets): void { self::$widgets = $widgets; }
         public static function getById(string $id) { return self::$widgets[$id] ?? null; }
     }
+}
+
+namespace {
+    // Safely alias stubs to the real FQCNs if the real classes are not loaded.
+    if (!class_exists(\ArtPulse\Core\DashboardController::class, /*autoload*/ false)) {
+        class_alias(\ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class);
+    }
+    if (!class_exists(\ArtPulse\Core\DashboardWidgetRegistry::class, /*autoload*/ false)) {
+        class_alias(\ArtPulse\Tests\Stubs\DashboardWidgetRegistryStub::class, \ArtPulse\Core\DashboardWidgetRegistry::class);
+    }
+
+    // Load the CLI command after aliases are in place.
+    require_once __DIR__ . '/../../includes/class-cli-check-widget-presets.php';
 }
 
 namespace ArtPulse\Cli\Tests {
@@ -41,26 +61,29 @@ namespace ArtPulse\Cli\Tests {
     use WP_CLI;
     use ArtPulse\Core\DashboardController;
     use ArtPulse\Core\DashboardWidgetRegistry;
-    
-    require_once __DIR__ . '/../../includes/class-cli-check-widget-presets.php';
-    
+
+    /**
+     * NOTE:
+     * - Run this test under the UNIT suite (phpunit.unit.xml.dist).
+     * - Exclude tests/Cli from the WP suite (phpunit.wp.xml.dist) to avoid loading real classes alongside stubs.
+     */
     class CheckWidgetPresetsCommandTest extends TestCase {
         protected function setUp(): void {
             WP_CLI::$commands = [];
             WP_CLI::$last_output = '';
             $GLOBALS['test_roles'] = [];
         }
-        
+
         public function test_reports_warnings_and_errors(): void {
             // Setup roles
             add_role('member', 'Member', ['read' => true]);
-            
+
             // Setup widgets
             DashboardWidgetRegistry::set_widgets([
                 'valid_widget' => ['roles' => ['member']],
                 'cap_widget'   => ['roles' => ['member'], 'capability' => 'manage_options'],
             ]);
-            
+
             // Setup presets with valid, missing, and capability restricted widgets
             DashboardController::set_presets([
                 'member_preset' => [
@@ -72,9 +95,9 @@ namespace ArtPulse\Cli\Tests {
                     ],
                 ],
             ]);
-            
+
             WP_CLI::add_command('artpulse check-widget-presets', \AP_CLI_Check_Widget_Presets::class);
-            
+
             try {
                 WP_CLI::runcommand('artpulse check-widget-presets');
                 $this->fail('Expected error not thrown');

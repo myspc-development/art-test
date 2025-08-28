@@ -3,7 +3,7 @@ namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Admin\ReportingManager;
 use ArtPulse\Monetization\TicketManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -50,7 +50,7 @@ class ReportingManagerTest extends \WP_UnitTestCase
     public function test_export_returns_csv(): void
     {
         wp_set_current_user(self::factory()->user->create(['role' => 'administrator']));
-        $req = new WP_REST_Request('GET', '/artpulse/v1/admin/export');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/admin/export');
         $req->set_param('type', 'attendance');
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);

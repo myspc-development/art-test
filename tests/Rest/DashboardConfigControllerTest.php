@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\DashboardConfigController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
@@ -27,7 +27,7 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase
     public function test_get_requires_read_capability(): void
     {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/dashboard-config');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/dashboard-config');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(401, $res->get_status());
 
@@ -36,7 +36,7 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase
         update_option('artpulse_dashboard_layouts', ['subscriber' => ['one', 'two']]);
         update_option('artpulse_locked_widgets', ['two']);
 
-        $req2 = new WP_REST_Request('GET', '/artpulse/v1/dashboard-config');
+        $req2 = new \WP_REST_Request('GET', '/artpulse/v1/dashboard-config');
         $res2 = rest_get_server()->dispatch($req2);
         $this->assertSame(200, $res2->get_status());
         $data = $res2->get_data();
@@ -48,7 +48,7 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase
     public function test_post_requires_manage_options_and_valid_nonce(): void
     {
         wp_set_current_user($this->user_id);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/dashboard-config');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/dashboard-config');
         $req->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));
         $req->set_body_params([]);
         $req->set_header('Content-Type', 'application/json');
@@ -59,7 +59,7 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase
         $this->assertSame(401, $res->get_status());
 
         wp_set_current_user($this->admin_id);
-        $bad = new WP_REST_Request('POST', '/artpulse/v1/dashboard-config');
+        $bad = new \WP_REST_Request('POST', '/artpulse/v1/dashboard-config');
         $bad->set_body_params([]);
         $bad->set_header('Content-Type', 'application/json');
         $bad->set_header('X-WP-Nonce', 'badnonce');
@@ -71,7 +71,7 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase
         $res_bad = rest_get_server()->dispatch($bad);
         $this->assertSame(403, $res_bad->get_status());
 
-        $good = new WP_REST_Request('POST', '/artpulse/v1/dashboard-config');
+        $good = new \WP_REST_Request('POST', '/artpulse/v1/dashboard-config');
         $good->set_body_params([]);
         $good->set_header('Content-Type', 'application/json');
         $good->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));

@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\AI\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\AI\AutoTaggerRestController;
 use function add_filter;
 
@@ -54,7 +54,7 @@ class AutoTaggerRestControllerTest extends \WP_UnitTestCase
     {
         wp_set_current_user($this->admin);
         $this->mock_body = json_encode(['choices' => [ ['message' => ['content' => 'abstract, modern']] ]]);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/tag');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/tag');
         $req->set_param('text', 'art');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -67,7 +67,7 @@ class AutoTaggerRestControllerTest extends \WP_UnitTestCase
     public function test_invalid_text_returns_error(): void
     {
         wp_set_current_user($this->admin);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/tag');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/tag');
         $req->set_param('text', '   ');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(400, $res->get_status());
@@ -79,7 +79,7 @@ class AutoTaggerRestControllerTest extends \WP_UnitTestCase
     public function test_requires_edit_posts_capability(): void
     {
         wp_set_current_user($this->subscriber);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/tag');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/tag');
         $req->set_param('text', 'art');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
@@ -93,7 +93,7 @@ class AutoTaggerRestControllerTest extends \WP_UnitTestCase
         wp_set_current_user($this->admin);
         update_option('artpulse_tag_prompt', 'Tag this:');
         $this->mock_body = json_encode(['choices' => [ ['message' => ['content' => 'a,b']] ]]);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/tag');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/tag');
         $req->set_param('text', 'painting');
         rest_get_server()->dispatch($req);
         $body = json_decode($this->request_args['body'], true);

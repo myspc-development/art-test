@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\AnalyticsPilotController;
 
 class AnalyticsPilotControllerTest extends \WP_UnitTestCase
@@ -21,7 +21,7 @@ class AnalyticsPilotControllerTest extends \WP_UnitTestCase
 
     public function test_invite_assigns_capability(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/analytics/pilot/invite');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/analytics/pilot/invite');
         $req->set_param('email', 'partner@example.com');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

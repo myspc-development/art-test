@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\RsvpRestController;
 
 /**
@@ -60,7 +60,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     public function test_join_adds_user_to_rsvp_list(): void
     {
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -73,7 +73,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     {
         update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
         wp_set_current_user($this->user2);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -87,7 +87,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
         update_post_meta($this->event_id, 'event_waitlist', [$this->user2]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp/cancel');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp/cancel');
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -100,7 +100,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     {
         update_post_meta($this->event_id, 'event_waitlist', [$this->user1]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/waitlist/remove');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/waitlist/remove');
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -110,7 +110,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     public function test_join_stores_event_in_user_meta(): void
     {
         wp_set_current_user($this->user2);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         rest_get_server()->dispatch($req);
         $this->assertSame([$this->event_id], get_user_meta($this->user2, 'ap_rsvp_events', true));
@@ -121,7 +121,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
         update_user_meta($this->user1, 'ap_rsvp_events', [$this->event_id]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp/cancel');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp/cancel');
         $req->set_param('event_id', $this->event_id);
         rest_get_server()->dispatch($req);
         $this->assertEmpty(get_user_meta($this->user1, 'ap_rsvp_events', true));
@@ -133,7 +133,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         update_post_meta($this->event_id, 'event_waitlist', [$this->user2]);
         update_post_meta($this->event_id, 'event_attended', [$this->user1]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -146,7 +146,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     {
         update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/attendees/' . $this->user1 . '/attended');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/attendees/' . $this->user1 . '/attended');
         $req->set_param('event_id', $this->event_id);
         $req->set_param('user_id', $this->user1);
         $res = rest_get_server()->dispatch($req);
@@ -159,7 +159,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
         update_post_meta($this->event_id, 'event_waitlist', [$this->user2]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/attendees/' . $this->user1 . '/remove');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/attendees/' . $this->user1 . '/remove');
         $req->set_param('event_id', $this->event_id);
         $req->set_param('user_id', $this->user1);
         $res = rest_get_server()->dispatch($req);
@@ -172,7 +172,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     {
         update_post_meta($this->event_id, 'event_organizer_email', 'org@test.com');
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         rest_get_server()->dispatch($req);
         $this->assertCount(2, $this->emails);
@@ -182,7 +182,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     {
         update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1, $this->user2]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/email-rsvps');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/email-rsvps');
         $req->set_param('event_id', $this->event_id);
         $req->set_param('subject', 'Hi');
         $req->set_param('message', 'Hello');
@@ -194,7 +194,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     {
         update_post_meta($this->event_id, 'event_rsvp_list', [$this->user1]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/attendees/' . $this->user1 . '/message');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/attendees/' . $this->user1 . '/message');
         $req->set_param('event_id', $this->event_id);
         $req->set_param('user_id', $this->user1);
         $req->set_param('subject', 'Hi');
@@ -207,7 +207,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     {
         update_post_meta($this->event_id, 'event_rsvp_enabled', '0');
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(400, $res->get_status());
@@ -216,7 +216,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     public function test_join_requires_login(): void
     {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(401, $res->get_status());
@@ -225,7 +225,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
     public function test_attendee_list_requires_edit_permission(): void
     {
         wp_set_current_user($this->user3);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
     }
@@ -238,7 +238,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase
         ]);
         update_post_meta($this->event_id, 'event_attended', [$this->user1]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees/export');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/attendees/export');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $csv = $res->get_data();

@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Taxonomies\TaxonomiesRegistrar;
 
 /**
@@ -21,7 +21,7 @@ class TaxonomyEndpointsTest extends \WP_UnitTestCase
 
     public function test_event_type_endpoint_returns_terms(): void
     {
-        $req = new WP_REST_Request('GET', '/wp/v2/event_type');
+        $req = new \WP_REST_Request('GET', '/wp/v2/event_type');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertIsArray($res->get_data());
@@ -29,7 +29,7 @@ class TaxonomyEndpointsTest extends \WP_UnitTestCase
 
     public function test_artwork_style_endpoint_returns_terms(): void
     {
-        $req = new WP_REST_Request('GET', '/wp/v2/artwork_style');
+        $req = new \WP_REST_Request('GET', '/wp/v2/artwork_style');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertIsArray($res->get_data());

@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Community\UserPreferencesRestController;
 
 /**
@@ -23,7 +23,7 @@ class UserPreferencesRestControllerTest extends \WP_UnitTestCase
 
     public function test_preferences_saved(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/user-preferences');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/user-preferences');
         $req->set_body_params([
             'notification_prefs' => [ 'email' => false, 'push' => true, 'sms' => false ],
         ]);

@@ -14,7 +14,7 @@ function wp_verify_nonce($nonce, $action) {
 }
 }
 
-class WP_REST_Request {
+class WP_REST_Request_SubmissionRestControllerTest {
     private array $params;
     private array $json;
     private array $headers;

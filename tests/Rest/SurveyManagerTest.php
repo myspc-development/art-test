@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Admin\SurveyManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -28,7 +28,7 @@ class SurveyManagerTest extends \WP_UnitTestCase
 
     public function test_post_records_response(): void
     {
-        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/survey");
+        $req = new \WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/survey");
         $req->set_param('answers', ['q1' => 'a1']);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

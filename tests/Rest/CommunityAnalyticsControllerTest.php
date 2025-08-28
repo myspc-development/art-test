@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\CommunityAnalyticsController;
 use ArtPulse\Community\DirectMessages;
 use ArtPulse\Community\CommentReports;
@@ -36,7 +36,7 @@ class CommunityAnalyticsControllerTest extends \WP_UnitTestCase
         DirectMessages::add_message($this->user1, $this->user2, 'hi');
         BlockedUsers::add($this->user1, $this->user2);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/analytics/community/messaging');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/analytics/community/messaging');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -55,7 +55,7 @@ class CommunityAnalyticsControllerTest extends \WP_UnitTestCase
         ]);
         CommentReports::add_report($cid, $this->user2);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/analytics/community/comments');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/analytics/community/comments');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -71,7 +71,7 @@ class CommunityAnalyticsControllerTest extends \WP_UnitTestCase
             'comment_approved'=> 1,
         ]);
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/analytics/community/forums');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/analytics/community/forums');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

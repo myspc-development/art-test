@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Community\ForumRestController;
 use ArtPulse\Community\CommunityRoles;
 
@@ -34,14 +34,14 @@ class ForumRestControllerTest extends \WP_UnitTestCase
 
     public function test_list_and_create_threads(): void
     {
-        $get = new WP_REST_Request('GET', '/artpulse/v1/forum/threads');
+        $get = new \WP_REST_Request('GET', '/artpulse/v1/forum/threads');
         $res = rest_get_server()->dispatch($get);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
         $this->assertCount(1, $data);
         $this->assertSame('Sample', $data[0]['title']);
 
-        $post = new WP_REST_Request('POST', '/artpulse/v1/forum/threads');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/forum/threads');
         $post->set_body_params(['title' => 'New Thread', 'content' => 'Hello']);
         $res = rest_get_server()->dispatch($post);
         $this->assertSame(200, $res->get_status());
@@ -52,7 +52,7 @@ class ForumRestControllerTest extends \WP_UnitTestCase
 
     public function test_comment_flow(): void
     {
-        $post = new WP_REST_Request('POST', '/artpulse/v1/forum/thread/' . $this->thread_id . '/comments');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/forum/thread/' . $this->thread_id . '/comments');
         $post->set_param('content', 'Test comment');
         $res = rest_get_server()->dispatch($post);
         $this->assertSame(200, $res->get_status());
@@ -60,7 +60,7 @@ class ForumRestControllerTest extends \WP_UnitTestCase
 
         wp_update_comment(['comment_ID' => $comment_id, 'comment_approved' => 1]);
 
-        $get = new WP_REST_Request('GET', '/artpulse/v1/forum/thread/' . $this->thread_id . '/comments');
+        $get = new \WP_REST_Request('GET', '/artpulse/v1/forum/thread/' . $this->thread_id . '/comments');
         $res = rest_get_server()->dispatch($get);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

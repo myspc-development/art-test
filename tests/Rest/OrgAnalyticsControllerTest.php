@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\OrgAnalyticsController;
 use ArtPulse\Rest\RsvpRestController;
 
@@ -38,7 +38,7 @@ class OrgAnalyticsControllerTest extends \WP_UnitTestCase
 
     public function test_get_event_rsvp_stats(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/rsvp-stats');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/rsvp-stats');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

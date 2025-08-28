@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Community\FollowRestController;
 use ArtPulse\Community\FollowManager;
 
@@ -44,7 +44,7 @@ class FollowRestControllerTest extends \WP_UnitTestCase
 
     public function test_add_follow_creates_record_and_updates_meta(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/follows');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/follows');
         $req->set_param('post_id', $this->event1);
         $req->set_param('post_type', 'artpulse_event');
         $res = rest_get_server()->dispatch($req);
@@ -69,12 +69,12 @@ class FollowRestControllerTest extends \WP_UnitTestCase
     public function test_remove_follow_deletes_record(): void
     {
         // add follow first
-        $add = new WP_REST_Request('POST', '/artpulse/v1/follows');
+        $add = new \WP_REST_Request('POST', '/artpulse/v1/follows');
         $add->set_param('post_id', $this->event1);
         $add->set_param('post_type', 'artpulse_event');
         rest_get_server()->dispatch($add);
 
-        $req = new WP_REST_Request('DELETE', '/artpulse/v1/follows');
+        $req = new \WP_REST_Request('DELETE', '/artpulse/v1/follows');
         $req->set_param('post_id', $this->event1);
         $req->set_param('post_type', 'artpulse_event');
         $res = rest_get_server()->dispatch($req);
@@ -95,17 +95,17 @@ class FollowRestControllerTest extends \WP_UnitTestCase
 
     public function test_list_follows_returns_all_rows(): void
     {
-        $req1 = new WP_REST_Request('POST', '/artpulse/v1/follows');
+        $req1 = new \WP_REST_Request('POST', '/artpulse/v1/follows');
         $req1->set_param('post_id', $this->event1);
         $req1->set_param('post_type', 'artpulse_event');
         rest_get_server()->dispatch($req1);
 
-        $req2 = new WP_REST_Request('POST', '/artpulse/v1/follows');
+        $req2 = new \WP_REST_Request('POST', '/artpulse/v1/follows');
         $req2->set_param('post_id', $this->event2);
         $req2->set_param('post_type', 'artpulse_event');
         rest_get_server()->dispatch($req2);
 
-        $list = new WP_REST_Request('GET', '/artpulse/v1/follows');
+        $list = new \WP_REST_Request('GET', '/artpulse/v1/follows');
         $res = rest_get_server()->dispatch($list);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -117,12 +117,12 @@ class FollowRestControllerTest extends \WP_UnitTestCase
 
     public function test_get_followers_returns_user_ids(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/follows');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/follows');
         $req->set_param('post_id', $this->user2);
         $req->set_param('post_type', 'user');
         rest_get_server()->dispatch($req);
 
-        $followers = new WP_REST_Request('GET', '/artpulse/v1/followers/' . $this->user2);
+        $followers = new \WP_REST_Request('GET', '/artpulse/v1/followers/' . $this->user2);
         $res = rest_get_server()->dispatch($followers);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -133,13 +133,13 @@ class FollowRestControllerTest extends \WP_UnitTestCase
 
     public function test_follow_user_post_and_delete(): void
     {
-        $post = new WP_REST_Request('POST', '/artpulse/v1/follows');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/follows');
         $post->set_param('post_id', $this->user2);
         $post->set_param('post_type', 'user');
         $res = rest_get_server()->dispatch($post);
         $this->assertSame(200, $res->get_status());
 
-        $delete = new WP_REST_Request('DELETE', '/artpulse/v1/follows');
+        $delete = new \WP_REST_Request('DELETE', '/artpulse/v1/follows');
         $delete->set_param('post_id', $this->user2);
         $delete->set_param('post_type', 'user');
         $res = rest_get_server()->dispatch($delete);
@@ -148,13 +148,13 @@ class FollowRestControllerTest extends \WP_UnitTestCase
 
     public function test_follow_user_invalid_id_returns_404(): void
     {
-        $invalid = new WP_REST_Request('POST', '/artpulse/v1/follows');
+        $invalid = new \WP_REST_Request('POST', '/artpulse/v1/follows');
         $invalid->set_param('post_id', 999999);
         $invalid->set_param('post_type', 'user');
         $res = rest_get_server()->dispatch($invalid);
         $this->assertSame(404, $res->get_status());
 
-        $invalid = new WP_REST_Request('DELETE', '/artpulse/v1/follows');
+        $invalid = new \WP_REST_Request('DELETE', '/artpulse/v1/follows');
         $invalid->set_param('post_id', 999999);
         $invalid->set_param('post_type', 'user');
         $res = rest_get_server()->dispatch($invalid);
@@ -167,7 +167,7 @@ class FollowRestControllerTest extends \WP_UnitTestCase
         $table = $wpdb->prefix . 'ap_follows';
         $wpdb->query("DROP TABLE IF EXISTS $table");
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/follows');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/follows');
         $res = rest_get_server()->dispatch($req);
 
         $this->assertSame(500, $res->get_status());

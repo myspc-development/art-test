@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\PortfolioRestController;
 
 class PortfolioControllerTest extends \WP_UnitTestCase {
@@ -23,7 +23,7 @@ class PortfolioControllerTest extends \WP_UnitTestCase {
 
     public function test_portfolio_crud_and_permissions(): void {
         // GET portfolio
-        $req = new WP_REST_Request('GET', '/ap/v1/portfolio');
+        $req = new \WP_REST_Request('GET', '/ap/v1/portfolio');
         $req->set_param('user', 'me');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -32,7 +32,7 @@ class PortfolioControllerTest extends \WP_UnitTestCase {
         $this->assertSame([], $data['items']);
 
         // POST without alt
-        $req = new WP_REST_Request('POST', '/ap/v1/portfolio/items');
+        $req = new \WP_REST_Request('POST', '/ap/v1/portfolio/items');
         $req->set_param('media_id', $this->attachment);
         $req->set_param('meta', []);
         $res = rest_get_server()->dispatch($req);
@@ -40,7 +40,7 @@ class PortfolioControllerTest extends \WP_UnitTestCase {
         $this->assertSame('invalid_alt', $res->get_data()['code']);
 
         // POST with alt
-        $req = new WP_REST_Request('POST', '/ap/v1/portfolio/items');
+        $req = new \WP_REST_Request('POST', '/ap/v1/portfolio/items');
         $req->set_param('media_id', $this->attachment);
         $req->set_param('meta', ['alt' => 'test image']);
         $res = rest_get_server()->dispatch($req);
@@ -51,7 +51,7 @@ class PortfolioControllerTest extends \WP_UnitTestCase {
 
         // Another user cannot link
         wp_set_current_user($this->u2);
-        $req = new WP_REST_Request('POST', '/ap/v1/portfolio/items');
+        $req = new \WP_REST_Request('POST', '/ap/v1/portfolio/items');
         $req->set_param('media_id', $this->attachment);
         $req->set_param('meta', ['alt' => 'x']);
         $res = rest_get_server()->dispatch($req);
@@ -63,12 +63,12 @@ class PortfolioControllerTest extends \WP_UnitTestCase {
         $other = self::factory()->attachment->create_upload_object($file);
         wp_update_post(['ID' => $other, 'post_author' => $this->u2]);
 
-        $req = new WP_REST_Request('POST', '/ap/v1/portfolio/order');
+        $req = new \WP_REST_Request('POST', '/ap/v1/portfolio/order');
         $req->set_param('order', [$this->attachment, $other]);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
 
-        $req = new WP_REST_Request('POST', '/ap/v1/portfolio/featured');
+        $req = new \WP_REST_Request('POST', '/ap/v1/portfolio/featured');
         $req->set_param('attachment_id', $other);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());

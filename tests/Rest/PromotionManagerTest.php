@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Marketplace\PromotionManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -38,7 +38,7 @@ class PromotionManagerTest extends \WP_UnitTestCase
             'priority_level' => 1,
         ]);
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/promoted');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/promoted');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

@@ -11,17 +11,32 @@
       <text outputFile="php://stdout"/>
     </report>
   </coverage>
+
   <testsuites>
-    <testsuite name="WordPress">
-      <directory>tests/</directory>
-      <exclude>tests/phpunit/*</exclude> <!-- keep pure unit tests out -->
+    <testsuite name="wordpress">
+      <!-- Run only WP-context tests -->
+      <directory suffix="Test.php">tests/Integration</directory>
+      <directory suffix="Test.php">tests/Rest</directory>
+
+      <!-- Explicit WP phpunit file that lives outside Integration/Rest -->
+      <file>tests/phpunit/DashboardTemplateIncludeTest.php</file>
+
+      <!-- Keep CLI/unit-only tests out of the WP suite -->
+      <exclude>tests/Cli</exclude>
     </testsuite>
   </testsuites>
+
   <php>
-    <ini    name="display_errors" value="0"/>
-    <ini    name="opcache.enable_cli" value="0"/>
+    <!-- Quiet, deterministic CLI -->
+    <ini name="display_startup_errors" value="0"/>
+    <ini name="display_errors" value="0"/>
+    <ini name="opcache.enable_cli" value="0"/>
+
+    <!-- WordPress test library -->
     <server name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
-    <env    name="PLUGIN_MAIN_FILE" value="artpulse-management.php"/>
-    <const  name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
+
+    <!-- Plugin & WP test config -->
+    <env   name="PLUGIN_MAIN_FILE" value="artpulse-management.php"/>
+    <const name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
   </php>
 </phpunit>

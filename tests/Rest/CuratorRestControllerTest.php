@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Curator\CuratorManager;
 use ArtPulse\Rest\CuratorRestController;
 
@@ -49,7 +49,7 @@ class CuratorRestControllerTest extends \WP_UnitTestCase
 
     public function test_get_curators(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/curators');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/curators');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -59,7 +59,7 @@ class CuratorRestControllerTest extends \WP_UnitTestCase
 
     public function test_get_single_curator(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/curator/' . $this->slug);
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/curator/' . $this->slug);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\OrgRolesController;
 
 /**
@@ -36,7 +36,7 @@ class OrgRolesMatrixRestTest extends \WP_UnitTestCase
 
     public function test_get_roles_for_org_returns_data(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/org-roles');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/org-roles');
         $req->set_param('org_id', $this->org);
         $res = rest_get_server()->dispatch($req);
 
@@ -51,7 +51,7 @@ class OrgRolesMatrixRestTest extends \WP_UnitTestCase
     {
         $nonce = wp_create_nonce('wp_rest');
         $_GET['_wpnonce'] = $nonce;
-        $req = new WP_REST_Request('POST', '/artpulse/v1/org-roles/update');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/org-roles/update');
         $req->set_body_params([
             'org_id' => $this->org,
             'roles'  => [ $this->user => 'admin' ],

@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 
 class FollowFeedRouteTest extends \WP_UnitTestCase
 {
@@ -18,7 +18,7 @@ class FollowFeedRouteTest extends \WP_UnitTestCase
     public function test_feed_requires_read_capability(): void
     {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/follow/feed');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/follow/feed');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
     }
@@ -26,7 +26,7 @@ class FollowFeedRouteTest extends \WP_UnitTestCase
     public function test_feed_returns_array_for_logged_in_user(): void
     {
         wp_set_current_user($this->user_id);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/follow/feed');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/follow/feed');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertIsArray($res->get_data());

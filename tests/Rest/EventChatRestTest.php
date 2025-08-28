@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\DB\Chat;
 
 /**
@@ -32,7 +32,7 @@ class EventChatRestTest extends \WP_UnitTestCase
 
     public function test_get_event_chat_returns_messages(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event . '/chat');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event . '/chat');
         $res = rest_get_server()->dispatch($req);
 
         $this->assertSame(200, $res->get_status());
@@ -45,7 +45,7 @@ class EventChatRestTest extends \WP_UnitTestCase
 
     public function test_post_event_chat_requires_nonce(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event . '/chat');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event . '/chat');
         $req->set_body_params(['content' => 'Another']);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(401, $res->get_status());
@@ -53,7 +53,7 @@ class EventChatRestTest extends \WP_UnitTestCase
 
     public function test_post_event_chat_with_nonce_succeeds(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event . '/chat');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event . '/chat');
         $req->set_body_params(['content' => 'Another']);
         $req->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));
         $res = rest_get_server()->dispatch($req);

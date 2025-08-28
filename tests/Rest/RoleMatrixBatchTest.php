@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\RoleMatrixController;
 
 /**
@@ -21,7 +21,7 @@ class RoleMatrixBatchTest extends \WP_UnitTestCase {
     }
 
     public function test_batch_endpoint_updates_roles(): void {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/roles/batch');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/roles/batch');
         $req->set_body_params([
             $this->user => [ 'organization' => true ]
         ]);

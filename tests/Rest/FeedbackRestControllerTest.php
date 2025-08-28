@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\FeedbackRestController;
 use ArtPulse\Core\FeedbackManager;
 
@@ -25,7 +25,7 @@ class FeedbackRestControllerTest extends \WP_UnitTestCase
     public function test_submit_vote_and_comment(): void
     {
         // Submit
-        $post = new WP_REST_Request('POST', '/artpulse/v1/feedback');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/feedback');
         $post->set_body_params([
             'type' => 'bug',
             'description' => 'Broken',
@@ -39,14 +39,14 @@ class FeedbackRestControllerTest extends \WP_UnitTestCase
         $id = (int) $wpdb->get_var("SELECT id FROM $table LIMIT 1");
 
         // Vote
-        $vote = new WP_REST_Request('POST', "/artpulse/v1/feedback/$id/vote");
+        $vote = new \WP_REST_Request('POST', "/artpulse/v1/feedback/$id/vote");
         $res = rest_get_server()->dispatch($vote);
         $this->assertSame(200, $res->get_status());
         $row = $wpdb->get_row($wpdb->prepare("SELECT votes FROM $table WHERE id=%d", $id));
         $this->assertSame('1', $row->votes);
 
         // Comment
-        $comment = new WP_REST_Request('POST', "/artpulse/v1/feedback/$id/comments");
+        $comment = new \WP_REST_Request('POST', "/artpulse/v1/feedback/$id/comments");
         $comment->set_body_params(['comment' => 'Nice']);
         $res = rest_get_server()->dispatch($comment);
         $this->assertSame(200, $res->get_status());

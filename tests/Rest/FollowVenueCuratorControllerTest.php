@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\FollowVenueCuratorController;
 
 /**
@@ -31,23 +31,23 @@ class FollowVenueCuratorControllerTest extends \WP_UnitTestCase
 
     public function test_follow_endpoints(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/follow/venue');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/follow/venue');
         $req->set_param('venue_id', $this->venue);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertSame([$this->venue], get_user_meta($this->user, 'ap_following_venues', true));
 
-        $req = new WP_REST_Request('POST', '/artpulse/v1/follow/curator');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/follow/curator');
         $req->set_param('curator_id', $this->curator);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertSame([$this->curator], get_user_meta($this->user, 'ap_following_curators', true));
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/followed/venues');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/followed/venues');
         $res = rest_get_server()->dispatch($req);
         $this->assertContains($this->venue, $res->get_data());
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/followed/curators');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/followed/curators');
         $res = rest_get_server()->dispatch($req);
         $this->assertContains($this->curator, $res->get_data());
     }

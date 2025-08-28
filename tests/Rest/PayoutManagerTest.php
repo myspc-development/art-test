@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\PayoutManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -33,7 +33,7 @@ class PayoutManagerTest extends \WP_UnitTestCase
 
     public function test_list_payouts_returns_records(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/user/payouts');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/user/payouts');
         $res = rest_get_server()->dispatch($req);
         $data = $res->get_data();
         $this->assertSame(200, $res->get_status());
@@ -43,7 +43,7 @@ class PayoutManagerTest extends \WP_UnitTestCase
 
     public function test_update_settings_updates_method(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/user/payouts/settings');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/user/payouts/settings');
         $req->set_param('method', 'bank');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Core\UserDashboardManager;
 
 /**
@@ -22,7 +22,7 @@ class UserOnboardingProgressTest extends \WP_UnitTestCase
 
     public function test_progress_marks_completed(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/user/onboarding');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/user/onboarding');
         $req->set_body_params(['step' => 'profile']);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

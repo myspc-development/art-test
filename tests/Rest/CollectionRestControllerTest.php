@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\CollectionRestController;
 
 /**
@@ -48,7 +48,7 @@ class CollectionRestControllerTest extends \WP_UnitTestCase
 
     public function test_get_collections(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/collections');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/collections');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -68,7 +68,7 @@ class CollectionRestControllerTest extends \WP_UnitTestCase
 
     public function test_get_single_collection(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/collection/' . $this->collection_id);
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/collection/' . $this->collection_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -89,7 +89,7 @@ class CollectionRestControllerTest extends \WP_UnitTestCase
         $user = self::factory()->user->create(['role' => 'administrator']);
         wp_set_current_user($user);
 
-        $req = new WP_REST_Request('POST', '/artpulse/v1/collections');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/collections');
         $req->set_param('title', 'New Collection');
         $req->set_param('items', [ $this->event_id ]);
         $res = rest_get_server()->dispatch($req);
@@ -105,7 +105,7 @@ class CollectionRestControllerTest extends \WP_UnitTestCase
         $user = self::factory()->user->create(['role' => 'artist']);
         wp_set_current_user($user);
 
-        $req = new WP_REST_Request('POST', '/artpulse/v1/collections');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/collections');
         $req->set_param('title', 'Artist Collection');
         $req->set_param('items', [ $this->event_id ]);
         $res = rest_get_server()->dispatch($req);

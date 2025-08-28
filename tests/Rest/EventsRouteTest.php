@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\RestRoutes;
 
 /**
@@ -81,7 +81,7 @@ class EventsRouteTest extends \WP_UnitTestCase
 
     public function test_query_by_coordinates_returns_events_within_radius(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/events');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/events');
         $req->set_param('lat', 34.05);
         $req->set_param('lng', -118.25);
         $req->set_param('radius', 0.5);
@@ -94,7 +94,7 @@ class EventsRouteTest extends \WP_UnitTestCase
 
     public function test_coordinates_do_not_override_region_filter(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/events');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/events');
         $req->set_param('lat', 34.05);
         $req->set_param('lng', -118.25);
         $req->set_param('region', 'NY');
@@ -125,7 +125,7 @@ class EventsRouteTest extends \WP_UnitTestCase
         update_post_meta($this->la_event, 'event_rsvp_limit', 5);
         update_post_meta($this->la_event, 'event_waitlist_enabled', '1');
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/events');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/events');
         $req->set_param('city', 'Los Angeles');
         $req->set_param('region', 'CA');
         $res = rest_get_server()->dispatch($req);
@@ -160,7 +160,7 @@ class EventsRouteTest extends \WP_UnitTestCase
 
     public function test_past_events_are_excluded(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/events');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/events');
         $res = rest_get_server()->dispatch($req);
         $ids = wp_list_pluck($res->get_data(), 'id');
         $this->assertContains($this->la_event, $ids);

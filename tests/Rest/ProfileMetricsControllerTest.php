@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\ProfileMetricsController;
 use ArtPulse\Core\ProfileMetrics;
 
@@ -33,7 +33,7 @@ class ProfileMetricsControllerTest extends \WP_UnitTestCase
 
         ProfileMetrics::log_metric($this->user_id, 'view');
 
-        $req = new WP_REST_Request('GET', "/artpulse/v1/profile-metrics/{$this->user_id}");
+        $req = new \WP_REST_Request('GET', "/artpulse/v1/profile-metrics/{$this->user_id}");
         $req->set_param('metric', 'view');
         $req->set_param('days', 2);
         $res = rest_get_server()->dispatch($req);

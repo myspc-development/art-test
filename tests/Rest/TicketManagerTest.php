@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\TicketManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -60,7 +60,7 @@ class TicketManagerTest extends \WP_UnitTestCase
     public function test_inventory_check_blocks_over_purchase(): void
     {
         $ticket_id = $this->create_ticket_tier(1, 0);
-        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
+        $req = new \WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
         $req->set_param('ticket_id', $ticket_id);
         $req->set_param('quantity', 2);
         $res = rest_get_server()->dispatch($req);
@@ -77,7 +77,7 @@ class TicketManagerTest extends \WP_UnitTestCase
     public function test_purchase_generates_code_and_increments_inventory(): void
     {
         $ticket_id = $this->create_ticket_tier(5, 0);
-        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
+        $req = new \WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
         $req->set_param('ticket_id', $ticket_id);
         $req->set_param('quantity', 1);
         $res = rest_get_server()->dispatch($req);
@@ -97,7 +97,7 @@ class TicketManagerTest extends \WP_UnitTestCase
     public function test_email_sent_on_purchase(): void
     {
         $ticket_id = $this->create_ticket_tier(2, 0);
-        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
+        $req = new \WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
         $req->set_param('ticket_id', $ticket_id);
         $req->set_param('quantity', 1);
         rest_get_server()->dispatch($req);
@@ -108,13 +108,13 @@ class TicketManagerTest extends \WP_UnitTestCase
     public function test_per_user_limit_blocks_extra_purchase(): void
     {
         $ticket_id = $this->create_ticket_tier(5, 0, 1);
-        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
+        $req = new \WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
         $req->set_param('ticket_id', $ticket_id);
         $req->set_param('quantity', 1);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
 
-        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
+        $req = new \WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket");
         $req->set_param('ticket_id', $ticket_id);
         $req->set_param('quantity', 1);
         $res = rest_get_server()->dispatch($req);

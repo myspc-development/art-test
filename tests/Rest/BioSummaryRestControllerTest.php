@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\AI\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\AI\BioSummaryRestController;
 
 /**
@@ -53,7 +53,7 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
     {
         wp_set_current_user($this->admin);
         $this->mock_body = json_encode(['choices' => [ ['message' => ['content' => 'A visionary artist blending tradition and technology.']] ]]);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/bio-summary');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/bio-summary');
         $req->set_param('bio', 'Artist biography');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -66,7 +66,7 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
     public function test_invalid_bio_returns_error(): void
     {
         wp_set_current_user($this->admin);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/bio-summary');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/bio-summary');
         $req->set_param('bio', '   ');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(400, $res->get_status());
@@ -78,7 +78,7 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
     public function test_requires_edit_posts_capability(): void
     {
         wp_set_current_user($this->subscriber);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/bio-summary');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/bio-summary');
         $req->set_param('bio', 'Artist bio');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
@@ -92,7 +92,7 @@ class BioSummaryRestControllerTest extends \WP_UnitTestCase
         wp_set_current_user($this->admin);
         update_option('artpulse_summary_prompt', 'Please summarize:');
         $this->mock_body = json_encode(['choices' => [ ['message' => ['content' => 'summary']] ]]);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/bio-summary');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/bio-summary');
         $req->set_param('bio', 'My life');
         rest_get_server()->dispatch($req);
         $body = json_decode($this->request_args['body'], true);

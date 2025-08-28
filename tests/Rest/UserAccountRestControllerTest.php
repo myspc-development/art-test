@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use WP_REST_Server;
 use ArtPulse\Rest\UserAccountRestController;
 
@@ -43,7 +43,7 @@ class UserAccountRestControllerTest extends \WP_UnitTestCase
 
     public function test_export_route_returns_profile_and_posts(): void
     {
-        $request  = new WP_REST_Request('GET', '/artpulse/v1/user/export');
+        $request  = new \WP_REST_Request('GET', '/artpulse/v1/user/export');
         $response = rest_get_server()->dispatch($request);
 
         $this->assertSame(200, $response->get_status());
@@ -58,7 +58,7 @@ class UserAccountRestControllerTest extends \WP_UnitTestCase
 
     public function test_export_route_as_csv_returns_csv_data(): void
     {
-        $request = new WP_REST_Request('GET', '/artpulse/v1/user/export');
+        $request = new \WP_REST_Request('GET', '/artpulse/v1/user/export');
         $request->set_param('format', 'csv');
         $response = rest_get_server()->dispatch($request);
 
@@ -74,7 +74,7 @@ class UserAccountRestControllerTest extends \WP_UnitTestCase
 
     public function test_delete_route_trashes_posts_and_meta(): void
     {
-        $request  = new WP_REST_Request('POST', '/artpulse/v1/user/delete');
+        $request  = new \WP_REST_Request('POST', '/artpulse/v1/user/delete');
         $response = rest_get_server()->dispatch($request);
 
         $this->assertSame(200, $response->get_status());

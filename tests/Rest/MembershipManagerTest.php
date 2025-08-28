@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\MembershipManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -25,7 +25,7 @@ class MembershipManagerTest extends \WP_UnitTestCase
         update_user_meta($this->user_id, 'ap_membership_level', 'Gold');
         update_user_meta($this->user_id, 'ap_membership_expires', 1234567890);
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/user/membership');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/user/membership');
         $res = rest_get_server()->dispatch($req);
 
         $this->assertSame(200, $res->get_status());
@@ -36,7 +36,7 @@ class MembershipManagerTest extends \WP_UnitTestCase
 
     public function test_post_updates_membership_data(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/user/membership');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/user/membership');
         $req->set_param('level', 'Silver');
         $req->set_param('expires', 111);
         $res = rest_get_server()->dispatch($req);

@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Core\DirectoryManager;
 
 /**
@@ -38,7 +38,7 @@ class DirectoryManagerTest extends \WP_UnitTestCase
 
     public function test_org_logo_populates_featured_media_url(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/filter');
         $req->set_param('type', 'org');
         $res = rest_get_server()->dispatch($req);
 
@@ -62,7 +62,7 @@ class DirectoryManagerTest extends \WP_UnitTestCase
         wp_set_object_terms($artist, [$medium['term_id']], 'artist_specialty');
         wp_set_object_terms($artist, [$style['term_id']], 'artwork_style');
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/filter');
         $req->set_param('type', 'artist');
         $req->set_param('medium', $medium['term_id']);
         $res = rest_get_server()->dispatch($req);
@@ -88,7 +88,7 @@ class DirectoryManagerTest extends \WP_UnitTestCase
         wp_set_object_terms($artist, [$medium['term_id']], 'artist_specialty');
         wp_set_object_terms($artist, [$style['term_id']], 'artwork_style');
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/filter');
         $req->set_param('type', 'artist');
         $req->set_param('style', $style['term_id']);
         $res = rest_get_server()->dispatch($req);
@@ -117,7 +117,7 @@ class DirectoryManagerTest extends \WP_UnitTestCase
         wp_set_object_terms($artwork, [$medium['term_id']], 'artpulse_medium');
         wp_set_object_terms($artwork, [$style['term_id']], 'artwork_style');
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/filter');
         $req->set_param('type', 'artwork');
         $req->set_param('medium', $medium['term_id']);
         $req->set_param('style', $style['term_id']);
@@ -149,7 +149,7 @@ class DirectoryManagerTest extends \WP_UnitTestCase
             'post_status' => 'publish',
         ]);
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/filter');
         $req->set_param('type', 'artist');
         $req->set_param('first_letter', 'A');
         $res = rest_get_server()->dispatch($req);
@@ -168,7 +168,7 @@ class DirectoryManagerTest extends \WP_UnitTestCase
 
     public function test_filter_results_are_cached(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/filter');
         $req->set_param('type', 'org');
         rest_get_server()->dispatch($req);
 

@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\DonationManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -30,7 +30,7 @@ class DonationManagerTest extends \WP_UnitTestCase
         $table = $wpdb->prefix . 'ap_donations';
         $this->assertSame('0', $wpdb->get_var("SELECT COUNT(*) FROM $table"));
 
-        $req = new WP_REST_Request('POST', '/artpulse/v1/donations');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/donations');
         $req->set_param('artist_id', $this->artist_id);
         $req->set_param('amount', 10);
         $res = rest_get_server()->dispatch($req);

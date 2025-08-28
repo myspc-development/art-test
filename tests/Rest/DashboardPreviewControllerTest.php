@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\DashboardPreviewController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
@@ -34,7 +34,7 @@ class DashboardPreviewControllerTest extends \WP_UnitTestCase
     public function test_get_preview_requires_permission(): void
     {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/preview/dashboard');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/preview/dashboard');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
     }
@@ -42,7 +42,7 @@ class DashboardPreviewControllerTest extends \WP_UnitTestCase
     public function test_get_preview_returns_user_and_widgets(): void
     {
         wp_set_current_user($this->user_id);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/preview/dashboard');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/preview/dashboard');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

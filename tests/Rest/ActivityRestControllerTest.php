@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\ActivityRestController;
 use ArtPulse\Core\ActivityLogger;
 
@@ -22,7 +22,7 @@ class ActivityRestControllerTest extends \WP_UnitTestCase
 
     public function test_activity_endpoint_returns_rows(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/activity');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/activity');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

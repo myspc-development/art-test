@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\PromoManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -26,7 +26,7 @@ class PromoManagerTest extends \WP_UnitTestCase
 
     public function test_apply_code_returns_discount(): void
     {
-        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/promo-code/apply");
+        $req = new \WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/promo-code/apply");
         $req->set_param('code', 'TEST');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

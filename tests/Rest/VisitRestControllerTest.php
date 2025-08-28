@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Core\VisitTracker;
 use ArtPulse\Rest\VisitRestController;
 
@@ -28,7 +28,7 @@ class VisitRestControllerTest extends \WP_UnitTestCase
 
     public function test_public_checkin_stores_visit(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/checkin');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/checkin');
         $req->set_param('event_id', $this->event_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -51,7 +51,7 @@ class VisitRestControllerTest extends \WP_UnitTestCase
             'visit_date'  => current_time('mysql'),
         ]);
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/visits/export');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/event/' . $this->event_id . '/visits/export');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $csv = $res->get_data();

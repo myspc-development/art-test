@@ -17,7 +17,7 @@ class UserLayoutControllerTest extends WP_UnitTestCase {
     }
 
     public function test_get_layout_defaults_to_preset_when_empty() {
-        $req = new WP_REST_Request( 'GET', '/artpulse/v1/user/layout' );
+        $req = new \WP_REST_Request( 'GET', '/artpulse/v1/user/layout' );
         $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
         $response = rest_do_request( $req );
         $this->assertSame( 200, $response->get_status() );
@@ -27,7 +27,7 @@ class UserLayoutControllerTest extends WP_UnitTestCase {
     }
 
     public function test_post_layout_persists_for_user() {
-        $req = new WP_REST_Request( 'POST', '/artpulse/v1/user/layout' );
+        $req = new \WP_REST_Request( 'POST', '/artpulse/v1/user/layout' );
         $req->set_body_params( [
             'role'   => 'artist',
             'layout' => [ 'upcomingEvents', 'sales', 'tasks' ],
@@ -39,7 +39,7 @@ class UserLayoutControllerTest extends WP_UnitTestCase {
         $this->assertTrue( $response->get_data()['saved'] );
 
         // Fetch again to confirm persistence
-        $get = new WP_REST_Request( 'GET', '/artpulse/v1/user/layout' );
+        $get = new \WP_REST_Request( 'GET', '/artpulse/v1/user/layout' );
         $get->set_query_params( [ 'role' => 'artist' ] );
         $get->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
         $get = rest_do_request( $get );

@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Community\DirectMessages;
 
 /**
@@ -46,7 +46,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
 
     public function test_send_and_fetch_message(): void
     {
-        $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/messages');
         $post->set_param('recipient_id', $this->user2);
         $post->set_param('content', 'Hello');
         $post->set_param('nonce', $this->nonce);
@@ -63,7 +63,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
 
         $this->assertCount(1, $this->mails);
 
-        $get = new WP_REST_Request('GET', '/artpulse/v1/messages');
+        $get = new \WP_REST_Request('GET', '/artpulse/v1/messages');
         $get->set_param('with', $this->user2);
         $get->set_param('nonce', $this->nonce);
         $res = rest_get_server()->dispatch($get);
@@ -75,7 +75,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
 
     public function test_send_rejects_invalid_nonce(): void
     {
-        $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/messages');
         $post->set_param('recipient_id', $this->user2);
         $post->set_param('content', 'Hello');
         $post->set_param('nonce', 'bad');
@@ -85,7 +85,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
 
     public function test_list_conversations_and_mark_read(): void
     {
-        $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/messages');
         $post->set_param('recipient_id', $this->user2);
         $post->set_param('content', 'Hi there');
         $post->set_param('nonce', $this->nonce);
@@ -97,7 +97,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $row   = $wpdb->get_row("SELECT * FROM $table", ARRAY_A);
         $msg_id = (int) $row['id'];
 
-        $convos = new WP_REST_Request('GET', '/artpulse/v1/conversations');
+        $convos = new \WP_REST_Request('GET', '/artpulse/v1/conversations');
         $convos->set_param('nonce', $this->nonce);
         $res = rest_get_server()->dispatch($convos);
         $this->assertSame(200, $res->get_status());
@@ -106,7 +106,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
         ], $res->get_data());
 
         wp_set_current_user($this->user2);
-        $read = new WP_REST_Request('POST', '/artpulse/v1/message/read');
+        $read = new \WP_REST_Request('POST', '/artpulse/v1/message/read');
         $read->set_param('ids', [$msg_id]);
         $read->set_param('nonce', $this->nonce);
         $res = rest_get_server()->dispatch($read);
@@ -118,7 +118,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
 
     public function test_context_and_block(): void
     {
-        $post = new WP_REST_Request('POST', '/artpulse/v1/messages');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/messages');
         $post->set_param('recipient_id', $this->user2);
         $post->set_param('content', 'Context hello');
         $post->set_param('context_type', 'artwork');
@@ -127,13 +127,13 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $res = rest_get_server()->dispatch($post);
         $this->assertSame(200, $res->get_status());
 
-        $get = new WP_REST_Request('GET', '/artpulse/v1/messages/context/artwork/55');
+        $get = new \WP_REST_Request('GET', '/artpulse/v1/messages/context/artwork/55');
         $res = rest_get_server()->dispatch($get);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
         $this->assertCount(1, $data);
 
-        $block = new WP_REST_Request('POST', '/artpulse/v1/messages/block');
+        $block = new \WP_REST_Request('POST', '/artpulse/v1/messages/block');
         $block->set_param('user_id', $this->user2);
         $res = rest_get_server()->dispatch($block);
         $this->assertSame(200, $res->get_status());
@@ -141,7 +141,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
 
     public function test_send_v2_updates_seen_and_search(): void
     {
-        $post = new WP_REST_Request('POST', '/artpulse/v1/messages/send');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/messages/send');
         $post->set_param('recipient_id', $this->user2);
         $post->set_param('content', 'Hey, I love your recent artwork!');
         $res = rest_get_server()->dispatch($post);
@@ -149,7 +149,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $data = $res->get_data();
         $this->assertSame('Hey, I love your recent artwork!', $data['content']);
 
-        $updates = new WP_REST_Request('GET', '/artpulse/v1/messages/updates');
+        $updates = new \WP_REST_Request('GET', '/artpulse/v1/messages/updates');
         $updates->set_param('since', '1970-01-01 00:00:00');
         $res = rest_get_server()->dispatch($updates);
         $this->assertSame(200, $res->get_status());
@@ -157,12 +157,12 @@ class DirectMessagesTest extends \WP_UnitTestCase
         $this->assertNotEmpty($list);
         $msg_id = $list[0]['id'];
 
-        $seen = new WP_REST_Request('POST', '/artpulse/v1/messages/seen');
+        $seen = new \WP_REST_Request('POST', '/artpulse/v1/messages/seen');
         $seen->set_param('message_ids', [$msg_id]);
         $res = rest_get_server()->dispatch($seen);
         $this->assertSame(200, $res->get_status());
 
-        $search = new WP_REST_Request('GET', '/artpulse/v1/messages/search');
+        $search = new \WP_REST_Request('GET', '/artpulse/v1/messages/search');
         $search->set_param('q', 'recent artwork');
         $res = rest_get_server()->dispatch($search);
         $this->assertSame(200, $res->get_status());
@@ -172,7 +172,7 @@ class DirectMessagesTest extends \WP_UnitTestCase
 
     public function test_send_v2_with_parent_attachments_and_tags(): void
     {
-        $post = new WP_REST_Request('POST', '/artpulse/v1/messages/send');
+        $post = new \WP_REST_Request('POST', '/artpulse/v1/messages/send');
         $post->set_param('recipient_id', $this->user2);
         $post->set_param('content', 'extras');
         $post->set_param('parent_id', 9);

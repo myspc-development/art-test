@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -17,7 +17,7 @@ class SystemStatusEndpointTest extends \WP_UnitTestCase
 
     public function test_status_returns_versions(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/status');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/status');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

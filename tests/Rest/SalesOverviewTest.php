@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\SalesOverview;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -50,7 +50,7 @@ class SalesOverviewTest extends \WP_UnitTestCase
 
     public function test_get_sales_returns_totals(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/user/sales');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/user/sales');
         $res = rest_get_server()->dispatch($req);
         $data = $res->get_data();
         $this->assertSame(200, $res->get_status());

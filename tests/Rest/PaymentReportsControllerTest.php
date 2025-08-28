@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\PaymentReportsController;
 use ArtPulse\Admin\PaymentAnalyticsDashboard;
 use ArtPulse\Admin\Tests\Stub;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -43,7 +43,7 @@ class PaymentReportsControllerTest extends \WP_UnitTestCase
 
     public function test_reports_endpoint_returns_metrics(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/payment-reports');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/payment-reports');
         $req->set_param('start_date', '2024-02-01');
         $req->set_param('end_date', '2024-02-29');
         $res = rest_get_server()->dispatch($req);

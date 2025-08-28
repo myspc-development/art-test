@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\AnalyticsRestController;
 use ArtPulse\Core\EventMetrics;
 
@@ -50,7 +50,7 @@ class AnalyticsRestControllerTest extends \WP_UnitTestCase
             'status' => 'active',
         ]);
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/analytics/trends');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/analytics/trends');
         $req->set_param('event_id', $this->event_id);
         $req->set_param('days', 2);
         $res = rest_get_server()->dispatch($req);
@@ -61,7 +61,7 @@ class AnalyticsRestControllerTest extends \WP_UnitTestCase
         $this->assertSame(2, $data['favorites'][1]);
         $this->assertSame(1, $data['tickets'][1]);
 
-        $req2 = new WP_REST_Request('GET', '/artpulse/v1/analytics/export');
+        $req2 = new \WP_REST_Request('GET', '/artpulse/v1/analytics/export');
         $req2->set_param('event_id', $this->event_id);
         $req2->set_param('days', 2);
         $res2 = rest_get_server()->dispatch($req2);

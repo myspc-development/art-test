@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\OrgRoleInviteController;
 use ArtPulse\Core\MultiOrgRoles;
 use ArtPulse\Core\OrgInviteManager;
@@ -28,7 +28,7 @@ class OrgRoleInviteControllerTest extends \WP_UnitTestCase
 
     public function test_invite_and_accept(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/org-roles/invite');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/org-roles/invite');
         $req->set_param('email', 'new@example.com');
         $req->set_param('org_id', $this->org);
         $req->set_param('role', 'curator');
@@ -37,7 +37,7 @@ class OrgRoleInviteControllerTest extends \WP_UnitTestCase
         $token = $res->get_data()['token'];
 
         wp_set_current_user($this->user);
-        $req2 = new WP_REST_Request('POST', '/artpulse/v1/org-roles/accept');
+        $req2 = new \WP_REST_Request('POST', '/artpulse/v1/org-roles/accept');
         $req2->set_param('token', $token);
         $res2 = rest_get_server()->dispatch($req2);
         $this->assertSame(200, $res2->get_status());

@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\CurrentUserController;
 
 /**
@@ -24,7 +24,7 @@ class CurrentUserControllerTest extends \WP_UnitTestCase
     public function test_requires_authentication(): void
     {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/me');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/me');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(401, $res->get_status());
     }
@@ -32,7 +32,7 @@ class CurrentUserControllerTest extends \WP_UnitTestCase
     public function test_returns_current_user_information(): void
     {
         wp_set_current_user($this->user_id);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/me');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/me');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

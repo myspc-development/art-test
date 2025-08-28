@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\EventPromotionManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -30,7 +30,7 @@ class EventPromotionManagerTest extends \WP_UnitTestCase
 
     public function test_feature_event_sets_meta(): void
     {
-        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/feature");
+        $req = new \WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/feature");
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertSame('1', get_post_meta($this->event_id, 'ap_featured', true));

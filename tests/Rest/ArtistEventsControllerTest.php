@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\ArtistEventsController;
 
 /**
@@ -56,14 +56,14 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase
     public function test_requires_authentication(): void
     {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/artist-events');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/artist-events');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(401, $res->get_status());
     }
 
     public function test_get_events_returns_current_user_posts(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/artist-events');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/artist-events');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

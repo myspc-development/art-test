@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\NearbyEventsController;
 
 /**
@@ -44,7 +44,7 @@ class NearbyEventsControllerTest extends \WP_UnitTestCase
 
     public function test_returns_events_within_radius(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/events/nearby');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/events/nearby');
         $req->set_param('lat', 40.70);
         $req->set_param('lng', -74.00);
         $req->set_param('radius', 50);
@@ -57,7 +57,7 @@ class NearbyEventsControllerTest extends \WP_UnitTestCase
 
     public function test_missing_parameters_return_error(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/events/nearby');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/events/nearby');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(400, $res->get_status());
     }

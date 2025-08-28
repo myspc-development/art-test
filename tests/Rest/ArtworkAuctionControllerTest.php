@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\ArtworkAuctionController;
 
 /**
@@ -34,7 +34,7 @@ class ArtworkAuctionControllerTest extends \WP_UnitTestCase
 
     public function test_status_returns_highest_bid(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/artwork/' . $this->artwork_id . '/auction');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/artwork/' . $this->artwork_id . '/auction');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
@@ -44,7 +44,7 @@ class ArtworkAuctionControllerTest extends \WP_UnitTestCase
     public function test_bid_adds_new_bid(): void
     {
         wp_set_current_user($this->user_id);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/artwork/' . $this->artwork_id . '/bid');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/artwork/' . $this->artwork_id . '/bid');
         $req->set_param('amount', 20);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

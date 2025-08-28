@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\TipManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -30,7 +30,7 @@ class TipManagerTest extends \WP_UnitTestCase
         $table = $wpdb->prefix . 'ap_tips';
         $this->assertSame('0', $wpdb->get_var("SELECT COUNT(*) FROM $table"));
 
-        $req = new WP_REST_Request('POST', '/artpulse/v1/artist/' . $this->artist_id . '/tip');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/artist/' . $this->artist_id . '/tip');
         $req->set_param('amount', 5);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

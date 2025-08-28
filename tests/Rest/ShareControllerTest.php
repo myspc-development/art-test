@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\ShareController;
 use ArtPulse\Core\EventMetrics;
 use ArtPulse\Core\EventViewCounter;
@@ -35,14 +35,14 @@ class ShareControllerTest extends \WP_UnitTestCase
 
     public function test_share_updates_event_and_profile_counts(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/share');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/share');
         $req->set_param('object_id', $this->event_id);
         $req->set_param('object_type', 'artpulse_event');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertSame('1', get_post_meta($this->event_id, 'share_count', true));
 
-        $req2 = new WP_REST_Request('POST', '/artpulse/v1/share');
+        $req2 = new \WP_REST_Request('POST', '/artpulse/v1/share');
         $req2->set_param('object_id', $this->user_id);
         $req2->set_param('object_type', 'user');
         $res2 = rest_get_server()->dispatch($req2);

@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Admin\CustomFieldsManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -30,7 +30,7 @@ class CustomFieldsManagerTest extends \WP_UnitTestCase
     public function test_get_returns_saved_fields(): void
     {
         update_post_meta($this->event_id, 'ap_rsvp_custom_fields', ['foo' => 'Foo']);
-        $req = new WP_REST_Request('GET', "/artpulse/v1/event/{$this->event_id}/rsvp/custom-fields");
+        $req = new \WP_REST_Request('GET', "/artpulse/v1/event/{$this->event_id}/rsvp/custom-fields");
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertSame(['foo' => 'Foo'], $res->get_data());
@@ -38,7 +38,7 @@ class CustomFieldsManagerTest extends \WP_UnitTestCase
 
     public function test_post_saves_fields(): void
     {
-        $req = new WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/rsvp/custom-fields");
+        $req = new \WP_REST_Request('POST', "/artpulse/v1/event/{$this->event_id}/rsvp/custom-fields");
         $req->set_param('fields', ['bar' => 'Bar']);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

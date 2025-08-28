@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Core\DirectoryManager;
 
 /**
@@ -42,7 +42,7 @@ class OrgDirectoryTest extends \WP_UnitTestCase
 
     public function test_org_directory_response_includes_meta(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/filter');
         $req->set_param('type', 'org');
         $res = rest_get_server()->dispatch($req);
 
@@ -59,7 +59,7 @@ class OrgDirectoryTest extends \WP_UnitTestCase
 
     public function test_filter_by_org_type(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/filter');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/filter');
         $req->set_param('type', 'org');
         $req->set_param('org_type', $this->org_type);
         $res = rest_get_server()->dispatch($req);

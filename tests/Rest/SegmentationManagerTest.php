@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Admin\SegmentationManager;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -26,7 +26,7 @@ class SegmentationManagerTest extends \WP_UnitTestCase
     public function test_filter_by_level(): void
     {
         wp_set_current_user(self::factory()->user->create(['role' => 'administrator']));
-        $req = new WP_REST_Request('GET', '/artpulse/v1/admin/users');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/admin/users');
         $req->set_param('level', 'Gold');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

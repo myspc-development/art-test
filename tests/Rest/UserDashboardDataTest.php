@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Core\UserDashboardManager;
 use ArtPulse\Community\FavoritesManager;
 
@@ -58,7 +58,7 @@ class UserDashboardDataTest extends \WP_UnitTestCase
 
     public function test_dashboard_data_returns_badges(): void
     {
-        $request = new WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
+        $request = new \WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
         $response = rest_get_server()->dispatch($request);
         $this->assertSame(200, $response->get_status());
         $data = $response->get_data();
@@ -70,7 +70,7 @@ class UserDashboardDataTest extends \WP_UnitTestCase
 
     public function test_dashboard_data_includes_event_lists(): void
     {
-        $request = new WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
+        $request = new \WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
         $response = rest_get_server()->dispatch($request);
         $data = $response->get_data();
         $this->assertIsArray($data['rsvp_events']);
@@ -104,7 +104,7 @@ class UserDashboardDataTest extends \WP_UnitTestCase
     public function test_dashboard_data_returns_theme(): void
     {
         update_user_meta($this->user_id, 'ap_dashboard_theme', 'dark');
-        $request = new WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
+        $request = new \WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
         $response = rest_get_server()->dispatch($request);
         $data = $response->get_data();
         $this->assertSame('dark', $data['dashboard_theme']);
@@ -112,7 +112,7 @@ class UserDashboardDataTest extends \WP_UnitTestCase
 
     public function test_dashboard_lists_favorites_for_all_types(): void
     {
-        $request = new WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
+        $request = new \WP_REST_Request('GET', '/artpulse/v1/user/dashboard');
         $response = rest_get_server()->dispatch($request);
         $this->assertSame(200, $response->get_status());
         $data = $response->get_data();

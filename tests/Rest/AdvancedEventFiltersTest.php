@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\RestRoutes;
 
 /**
@@ -59,7 +59,7 @@ class AdvancedEventFiltersTest extends \WP_UnitTestCase
 
     public function test_filter_by_genre_and_medium(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/events');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/events');
         $req->set_param('genre', ['painting']);
         $req->set_param('medium', ['oil']);
         $res = rest_get_server()->dispatch($req);
@@ -70,7 +70,7 @@ class AdvancedEventFiltersTest extends \WP_UnitTestCase
 
     public function test_within_km_includes_required_fields(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/events');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/events');
         $req->set_param('lat', 48.86);
         $req->set_param('lng', 2.35);
         $req->set_param('within_km', 5);

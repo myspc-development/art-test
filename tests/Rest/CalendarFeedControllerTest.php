@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Rest\CalendarFeedController;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -44,7 +44,7 @@ class CalendarFeedControllerTest extends \WP_UnitTestCase
 
     public function test_feed_returns_event(): void
     {
-        $req  = new WP_REST_Request('GET', '/ap/v1/calendar');
+        $req  = new \WP_REST_Request('GET', '/ap/v1/calendar');
         $res  = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

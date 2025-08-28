@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\RoleWidgetMapController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
@@ -50,7 +50,7 @@ class RoleWidgetMapControllerTest extends \WP_UnitTestCase
 
     public function test_get_role_widget_map(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/role-widget-map');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/role-widget-map');
         $req->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());

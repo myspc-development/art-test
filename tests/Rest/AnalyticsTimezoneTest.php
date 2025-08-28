@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\EventAnalyticsController;
 use ArtPulse\Rest\RsvpDbController;
 
@@ -57,7 +57,7 @@ class AnalyticsTimezoneTest extends \WP_UnitTestCase {
 
     public function test_timezone_bucket_and_range_validation(): void {
         wp_set_current_user($this->user);
-        $req = new WP_REST_Request('GET', '/ap/v1/analytics/events/summary');
+        $req = new \WP_REST_Request('GET', '/ap/v1/analytics/events/summary');
         $req->set_param('range', '7d');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
@@ -66,7 +66,7 @@ class AnalyticsTimezoneTest extends \WP_UnitTestCase {
         $this->assertContains($this->prevDate, $dates);
         $this->assertContains($this->todayDate, $dates);
 
-        $req = new WP_REST_Request('GET', '/ap/v1/analytics/events/summary');
+        $req = new \WP_REST_Request('GET', '/ap/v1/analytics/events/summary');
         $req->set_param('start', '2020-01-02');
         $req->set_param('end', '2020-01-01');
         $res = rest_get_server()->dispatch($req);

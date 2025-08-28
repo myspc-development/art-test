@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\OrgRolesController;
 
 /**
@@ -49,7 +49,7 @@ class OrgRolesControllerPermissionTest extends \WP_UnitTestCase
     public function test_get_roles_requires_authentication(): void
     {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/roles');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/roles');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(401, $res->get_status());
     }
@@ -57,7 +57,7 @@ class OrgRolesControllerPermissionTest extends \WP_UnitTestCase
     public function test_get_roles_requires_manage_options_capability(): void
     {
         wp_set_current_user($this->subscriber);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/roles');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/roles');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(403, $res->get_status());
     }
@@ -65,7 +65,7 @@ class OrgRolesControllerPermissionTest extends \WP_UnitTestCase
     public function test_get_roles_returns_data_for_admin(): void
     {
         wp_set_current_user($this->admin);
-        $req = new WP_REST_Request('GET', '/artpulse/v1/roles');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/roles');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

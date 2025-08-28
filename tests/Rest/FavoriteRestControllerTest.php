@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Rest\FavoriteRestController;
 use ArtPulse\Community\FavoritesManager;
 
@@ -38,7 +38,7 @@ class FavoriteRestControllerTest extends \WP_UnitTestCase
     {
         foreach ($this->posts as $type => $id) {
             // Add
-            $add = new WP_REST_Request('POST', '/artpulse/v1/favorites');
+            $add = new \WP_REST_Request('POST', '/artpulse/v1/favorites');
             $add->set_param('object_id', $id);
             $add->set_param('object_type', $type);
             $res = rest_get_server()->dispatch($add);
@@ -48,7 +48,7 @@ class FavoriteRestControllerTest extends \WP_UnitTestCase
             $this->assertSame('1', get_post_meta($id, 'ap_favorite_count', true));
 
             // Remove
-            $remove = new WP_REST_Request('POST', '/artpulse/v1/favorites');
+            $remove = new \WP_REST_Request('POST', '/artpulse/v1/favorites');
             $remove->set_param('object_id', $id);
             $remove->set_param('object_type', $type);
             $res = rest_get_server()->dispatch($remove);
@@ -65,7 +65,7 @@ class FavoriteRestControllerTest extends \WP_UnitTestCase
         $type = array_keys($this->posts)[0];
         FavoritesManager::add_favorite($this->user_id, $id, $type);
 
-        $req = new WP_REST_Request('GET', '/artpulse/v1/favorites');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/favorites');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();

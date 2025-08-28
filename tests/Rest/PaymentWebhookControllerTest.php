@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\PaymentWebhookController;
-use WP_REST_Request;
+
 
 /**
  * @group restapi
@@ -37,7 +37,7 @@ class PaymentWebhookControllerTest extends \WP_UnitTestCase
 
     public function test_successful_webhook_activates_ticket(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/payment/webhook');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/payment/webhook');
         $req->set_param('provider', 'test');
         $req->set_param('status', 'success');
         $req->set_param('ticket_id', $this->ticket_id);
@@ -55,14 +55,14 @@ class PaymentWebhookControllerTest extends \WP_UnitTestCase
 
     public function test_missing_fields_return_ignored(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/payment/webhook');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/payment/webhook');
         $req->set_param('status', 'success');
         $req->set_param('ticket_id', $this->ticket_id);
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertSame(['ignored' => true], $res->get_data());
 
-        $req2 = new WP_REST_Request('POST', '/artpulse/v1/payment/webhook');
+        $req2 = new \WP_REST_Request('POST', '/artpulse/v1/payment/webhook');
         $req2->set_param('status', 'success');
         $req2->set_param('user_id', $this->user_id);
         $res2 = rest_get_server()->dispatch($req2);

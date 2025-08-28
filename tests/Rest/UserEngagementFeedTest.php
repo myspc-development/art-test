@@ -1,7 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
+
 use ArtPulse\Core\UserDashboardManager;
 use ArtPulse\Core\UserEngagementLogger;
 use ArtPulse\Community\FollowManager;
@@ -43,7 +43,7 @@ class UserEngagementFeedTest extends \WP_UnitTestCase
 
     public function test_feed_returns_recent_items(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/user/engagement');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/user/engagement');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $data = $res->get_data();
