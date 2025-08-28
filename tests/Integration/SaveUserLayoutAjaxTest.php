@@ -2,9 +2,17 @@
 namespace ArtPulse\Integration\Tests;
 
 use WP_Ajax_UnitTestCase;
+use AjaxTestHelper;
 
 class SaveUserLayoutAjaxTest extends WP_Ajax_UnitTestCase
 {
+    use AjaxTestHelper;
+
+    protected function tear_down(): void
+    {
+        $this->reset_superglobals();
+        parent::tear_down();
+    }
     public function test_fails_without_nonce(): void
     {
         $user_id = self::factory()->user->create(['role' => 'subscriber']);
@@ -25,7 +33,7 @@ class SaveUserLayoutAjaxTest extends WP_Ajax_UnitTestCase
         $user->remove_cap('read');
         wp_set_current_user($user_id);
 
-        $_POST['nonce'] = wp_create_nonce('ap_save_user_layout');
+        $this->set_nonce('ap_save_user_layout', 'nonce');
 
         try {
             $this->_handleAjax('ap_save_user_layout');
@@ -41,7 +49,7 @@ class SaveUserLayoutAjaxTest extends WP_Ajax_UnitTestCase
         $user_id = self::factory()->user->create(['role' => 'subscriber']);
         wp_set_current_user($user_id);
 
-        $_POST['nonce']  = wp_create_nonce('ap_save_user_layout');
+        $this->set_nonce('ap_save_user_layout', 'nonce');
         $_POST['layout'] = wp_json_encode([['id' => 'widget', 'visible' => true]]);
 
         $this->_handleAjax('ap_save_user_layout');

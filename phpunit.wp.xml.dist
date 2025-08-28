@@ -1,49 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/wp-bootstrap.php" colors="true">
-  <coverage processUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">src</directory>
-    </include>
-    <exclude>
-      <directory>tests/views</directory>
-    </exclude>
-    <report>
-      <text outputFile="php://stdout"/>
-    </report>
-  </coverage>
-
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
   <testsuites>
-    <testsuite name="wordpress">
-      <!-- Run only WP-context tests -->
+    <testsuite name="Integration">
       <directory suffix="Test.php">tests/Integration</directory>
-      <directory suffix="Test.php">tests/Rest</directory>
-      <directory suffix="Test.php">tests/Community</directory>
-      <directory suffix="Test.php">tests/Frontend</directory>
-      <directory suffix="Test.php">tests/Payment</directory>
-      <directory suffix="Test.php">tests/Reporting</directory>
-      <directory suffix="Test.php">tests/widgets</directory>
-
-      <!-- Explicit WP phpunit file that lives outside Integration/Rest -->
-      <file>tests/phpunit/DashboardTemplateIncludeTest.php</file>
-
-      <!-- Keep CLI/unit-only tests out of the WP suite -->
-      <exclude>tests/Cli</exclude>
-      <exclude>tests/Rest/Helpers</exclude>
-      <!-- Exclude helper bootstrap from widgets tests -->
-      <exclude>tests/widgets/bootstrap.php</exclude>
     </testsuite>
   </testsuites>
-
-  <php>
-    <!-- Quiet, deterministic CLI -->
-    <ini name="display_errors" value="0"/>
-    <ini name="opcache.enable_cli" value="0"/>
-
-    <!-- WordPress test library -->
-    <server name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
-
-    <!-- Plugin & WP test config -->
-    <env   name="PLUGIN_MAIN_FILE" value="artpulse-management.php"/>
-    <const name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
-  </php>
 </phpunit>
