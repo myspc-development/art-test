@@ -18,6 +18,23 @@ composer run lint:phpcs
 composer run lint:phpstan
 ```
 
+## Debug Logging
+
+Verbose debug output is disabled by default. Use the `APDebug` utility instead of `console.log` and enable it in development with
+
+```bash
+AP_DEBUG=1 npm run dev
+```
+
+In a browser session you can toggle logging by setting `localStorage.AP_DEBUG`:
+
+```js
+localStorage.setItem('AP_DEBUG', '1'); // enable
+localStorage.removeItem('AP_DEBUG');   // disable
+```
+
+`APDebug.log()` no-ops when `NODE_ENV` is `production` so debug statements are safe to leave in committed code.
+
 ## Browser Support
 
 The JavaScript build pipeline transpiles modern syntax like optional chaining to ES5 via Babel. Bundles are tested against ES5‑compliant browsers. Environments that still lack optional chaining support should include a suitable polyfill or use a modern browser (e.g., Chrome 80+, Firefox 78+, Safari 13.1+, Edge 80+).

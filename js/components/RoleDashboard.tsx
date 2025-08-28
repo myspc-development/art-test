@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import useFilteredWidgets from '../../dashboard/useFilteredWidgets';
 import DOMPurify from 'dompurify';
+import APDebug from '../APDebug';
 
 interface WidgetDef {
   id: string;
@@ -131,12 +132,10 @@ const RoleDashboard: React.FC = () => {
   );
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.group('[RoleDashboard]');
-      console.log('User role:', previewRole || RoleDashboardData.currentUser.role);
-      console.log('Widgets rendered:', visibleWidgets.map(w => w.id));
-      console.groupEnd();
-    }
+    APDebug.group('[RoleDashboard]');
+    APDebug.log('User role:', previewRole || RoleDashboardData.currentUser.role);
+    APDebug.log('Widgets rendered:', visibleWidgets.map(w => w.id));
+    APDebug.groupEnd();
   }, [visibleWidgets, previewRole]);
   const [htmlMap, setHtmlMap] = useState<Record<string, string>>({});
   const [errorMap, setErrorMap] = useState<Record<string, boolean>>({});
