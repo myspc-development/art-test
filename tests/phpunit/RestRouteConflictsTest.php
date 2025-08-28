@@ -12,9 +12,14 @@ class RestRouteConflictsTest extends TestCase
     {
         $this->root = dirname(__DIR__, 2);
         $this->wpDir = $this->root . '/wordpress';
-        if (!is_dir($this->wpDir)) {
-            mkdir($this->wpDir);
+        if (is_link($this->wpDir) || file_exists($this->wpDir)) {
+            if (is_dir($this->wpDir) && !is_link($this->wpDir)) {
+                rm_rf($this->wpDir);
+            } else {
+                @unlink($this->wpDir);
+            }
         }
+        mkdir($this->wpDir);
         copy(__DIR__ . '/fixtures/wp-load.php', $this->wpDir . '/wp-load.php');
         $this->script = $this->root . '/tools/rest-route-conflicts.php';
     }
