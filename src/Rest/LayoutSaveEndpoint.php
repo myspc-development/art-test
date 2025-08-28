@@ -7,8 +7,12 @@ class LayoutSaveEndpoint {
 		add_action( 'wp_ajax_save_dashboard_layout', array( self::class, 'handle' ) );
 	}
 
-	public static function handle(): void {
-		check_ajax_referer( 'ap_dashboard_nonce' );
+        public static function handle(): void {
+                if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
+                        wp_send_json_error( array( 'message' => 'Forbidden' ), 403 );
+                }
+
+                check_ajax_referer( 'ap_dashboard_nonce' );
 
 		$user_id = get_current_user_id();
 		$raw     = $_POST['layout'] ?? array();
