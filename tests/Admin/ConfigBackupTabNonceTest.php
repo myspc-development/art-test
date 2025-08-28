@@ -7,7 +7,7 @@ class ConfigBackupTabNonceTest extends \WP_UnitTestCase
 {
     private int $admin;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->admin = self::factory()->user->create(['role' => 'administrator']);
@@ -15,7 +15,7 @@ class ConfigBackupTabNonceTest extends \WP_UnitTestCase
         $_REQUEST = [];
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         $_REQUEST = [];
         parent::tear_down();

@@ -10,7 +10,7 @@ class EventRsvpHandlerTest extends WP_UnitTestCase
     private int $future_event;
     private int $past_event;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->user_id = self::factory()->user->create();

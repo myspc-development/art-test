@@ -5,7 +5,7 @@ use WP_Ajax_UnitTestCase;
 
 class DiagnosticsPageTest extends WP_Ajax_UnitTestCase
 {
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         // Load plugin to register admin page and AJAX handler.

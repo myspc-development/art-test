@@ -11,7 +11,7 @@ class ReferralManagerTest extends \WP_UnitTestCase
     private int $referrer;
     private array $new_users = [];
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         ReferralManager::register();

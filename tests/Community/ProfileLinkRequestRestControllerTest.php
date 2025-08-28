@@ -10,7 +10,7 @@ class ProfileLinkRequestRestControllerTest extends \WP_UnitTestCase
     private int $org_user;
     private int $org_post;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         do_action('init');

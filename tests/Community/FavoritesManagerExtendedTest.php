@@ -11,7 +11,7 @@ class FavoritesManagerExtendedTest extends WP_UnitTestCase
     private int $user_id;
     private int $owner_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         FavoritesManager::install_favorites_table();

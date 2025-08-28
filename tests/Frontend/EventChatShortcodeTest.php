@@ -9,7 +9,7 @@ class EventChatShortcodeTest extends WP_UnitTestCase
     private int $event;
     private int $user;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->event = wp_insert_post([

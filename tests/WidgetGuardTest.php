@@ -19,7 +19,7 @@ class WidgetGuardTest extends WP_UnitTestCase
         $prop->setValue(null, null);
     }
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->reset_registry();

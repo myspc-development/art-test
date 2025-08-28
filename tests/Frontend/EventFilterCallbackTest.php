@@ -14,7 +14,7 @@ class EventFilterCallbackTest extends WP_UnitTestCase
     private int $tag1;
     private int $tag2;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         add_filter('wp_die_handler', [ $this, 'get_die_handler' ]);
@@ -53,11 +53,11 @@ class EventFilterCallbackTest extends WP_UnitTestCase
         wp_set_post_terms($this->event2, [$this->tag2], 'post_tag');
     }
 
-    public function tear_down(): void
+    public function tear_down()
     {
         remove_filter('wp_die_handler', [ $this, 'get_die_handler' ]);
-        parent::tear_down();
         $_REQUEST = [];
+        parent::tear_down();
     }
 
     public function get_die_handler()

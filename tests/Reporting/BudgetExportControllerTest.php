@@ -12,7 +12,7 @@ class BudgetExportControllerTest extends \WP_UnitTestCase
 {
     private int $event_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         Stub::reset();

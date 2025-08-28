@@ -10,7 +10,7 @@ class FollowManagerTest extends WP_UnitTestCase
     private int $follower_id;
     private int $followee_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         FollowManager::install_follows_table();

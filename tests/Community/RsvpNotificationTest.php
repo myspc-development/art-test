@@ -12,7 +12,7 @@ class RsvpNotificationTest extends \WP_UnitTestCase
     private int $user_id;
     private int $event_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         NotificationManager::install_notifications_table();

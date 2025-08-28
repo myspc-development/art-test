@@ -9,7 +9,7 @@ class CompetitionEntryManagerTest extends WP_UnitTestCase
     private int $comp_id;
     private int $artwork_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         CompetitionEntryManager::install_table();

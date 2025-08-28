@@ -11,7 +11,7 @@ class OrgReportControllerTest extends \WP_UnitTestCase
 {
     private int $org_id;
 
-    public function set_up(): void
+    public function set_up()
     {
         parent::set_up();
         $this->org_id = self::factory()->post->create([
