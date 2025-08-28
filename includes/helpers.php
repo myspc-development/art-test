@@ -178,23 +178,3 @@ function ap_render_dashboard( array $allowed_roles = array() ): void {
 	);
 }
 
-/**
- * Convenience wrapper to render the member dashboard.
- */
-function ap_render_member_dashboard(): void {
-	ap_render_dashboard( array( 'member' ) );
-}
-
-/**
- * Convenience wrapper to render the artist dashboard.
- */
-function ap_render_artist_dashboard(): void {
-	ap_render_dashboard( array( 'artist' ) );
-}
-
-/**
- * Convenience wrapper to render the organization dashboard.
- */
-function ap_render_organization_dashboard(): void {
-	ap_render_dashboard( array( 'organization' ) );
-}
