@@ -12,7 +12,22 @@ This guide explains how to spin up a WordPress instance with Docker and activate
 
 ## Requirements
 
+- PHP 8.2–8.4
+- Node.js 20
 - Docker and Docker Compose
+
+## Install PHP Dependencies
+
+```bash
+composer install
+```
+
+## Build JavaScript Assets
+
+```bash
+npm install
+npm run build
+```
 
 ## Setup
 
