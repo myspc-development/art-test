@@ -29,13 +29,13 @@ get_header(); ?>
               echo '<div class="event-gallery swiper">';
               echo '<div class="swiper-wrapper">';
               foreach ( $gallery_ids as $img_id ) {
-                echo '<div class="swiper-slide">' . wp_get_attachment_image( $img_id, 'large', false, [ 'loading' => 'lazy' ] ) . '</div>';
+                echo '<div class="swiper-slide">' . wp_kses_post( wp_get_attachment_image( $img_id, 'large', false, [ 'loading' => 'lazy' ] ) ) . '</div>';
               }
               echo '</div><div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div>';
             }
 
             // Title
-            echo '<h1 class="entry-title">'. get_the_title() .'</h1>';
+            echo '<h1 class="entry-title">' . esc_html( get_the_title() ) . '</h1>';
 
             // Content
             echo '<div class="entry-content">';

@@ -21,7 +21,7 @@ if ( have_posts() ) :
       echo '</div>';
     }
 
-    echo '<h1 class="event-title">' . get_the_title() . '</h1>';
+    echo '<h1 class="event-title">' . esc_html( get_the_title() ) . '</h1>';
 
     echo '<ul class="event-meta">';
     if ($date)    echo '<li><strong>Date:</strong> ' . esc_html($date) . '</li>';

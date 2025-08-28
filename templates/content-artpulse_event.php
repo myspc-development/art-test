@@ -13,7 +13,7 @@ error_log('📦 content-artpulse_event.php loaded');
 
         <?php if (has_post_thumbnail()) : ?>
           <div class="event-featured-image nectar-portfolio-single-media">
-            <?php the_post_thumbnail('large', ['class' => 'img-responsive', 'alt' => get_the_title()]); ?>
+            <?php the_post_thumbnail('large', ['class' => 'img-responsive', 'alt' => esc_attr( get_the_title() )]); ?>
           </div>
         <?php endif; ?>
 

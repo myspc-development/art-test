@@ -44,7 +44,7 @@ if (have_posts()) :
     <div class="ap-artist-gallery">
       <?php foreach ($images as $img_id): ?>
         <figure class="ap-artist-gallery-item<?php echo $img_id == $featured ? ' is-featured' : ''; ?>">
-          <?php echo wp_get_attachment_image($img_id, 'large', false, ['loading' => 'lazy']); ?>
+          <?php echo wp_kses_post( wp_get_attachment_image($img_id, 'large', false, ['loading' => 'lazy']) ); ?>
         </figure>
       <?php endforeach; ?>
     </div>
