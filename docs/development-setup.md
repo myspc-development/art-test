@@ -26,14 +26,24 @@ npm run build
 
 The `scripts/` directory stores optional scaffolding and release helpers used during early development. These scripts are **not** required when setting up the plugin from source.
 
-Before running the tests for the first time, execute the environment setup script to fetch WordPress and install dependencies:
+Before running the tests for the first time, create a test database, export the database credentials, then run the environment setup script to fetch WordPress and install dependencies:
 
 ```bash
+mysql -u root -p -e "CREATE DATABASE wordpress_test;"
+
+export DB_NAME=wordpress_test
+export DB_USER=root
+export DB_PASSWORD=your_password
+export DB_HOST=127.0.0.1
+# optional
+export DB_CHARSET=utf8mb4
+export DB_COLLATE=utf8mb4_unicode_ci
+
 bash scripts/setup-env.sh
 ```
 The script uses `curl` to download WordPress. Install `curl` if it is not available. This script downloads WordPress and installs Composer dependencies. When the `CI` environment variable is present it runs `composer install` with non‑interactive options, making it suitable for automated pipelines.
 
-Run the test suite and coding standards checks with:
+After the setup completes, run the test suite and coding standards checks with:
 
 ```bash
 vendor/bin/phpunit
