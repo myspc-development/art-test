@@ -15,6 +15,7 @@ interface DashboardData {
   currentUser: {
     role?: string;
     roles?: string[];
+    capabilities?: string[];
   };
 }
 
@@ -86,7 +87,10 @@ const RoleDashboard: React.FC = () => {
 
   const { widgets: allowed, error: configError, retry: retryConfig } = useFilteredWidgets(
     RoleDashboardData.widgets,
-    { roles: previewRole ? [previewRole] : RoleDashboardData.currentUser.roles }
+    {
+      roles: previewRole ? [previewRole] : RoleDashboardData.currentUser.roles,
+      capabilities: RoleDashboardData.currentUser.capabilities,
+    }
   );
   useEffect(() => {
     const role = previewRole || RoleDashboardData.currentUser.role;

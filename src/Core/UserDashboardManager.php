@@ -1080,6 +1080,7 @@ class UserDashboardManager
         }
 
         $user_role = $role;
+        $user_caps = array_keys($user->allcaps);
 
         $widget_defs = array_map(
             static fn($id) => ['id' => $id, 'restOnly' => true],
@@ -1091,8 +1092,9 @@ class UserDashboardManager
             [
                 'widgets' => array_values($widget_defs),
                 'currentUser' => [
-                    'role'  => $user_role,
-                    'roles' => $roles_list,
+                    'role'         => $user_role,
+                    'roles'        => $roles_list,
+                    'capabilities' => $user_caps,
                 ],
             ]
         );
