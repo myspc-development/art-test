@@ -17,12 +17,19 @@
       <!-- Run only WP-context tests -->
       <directory suffix="Test.php">tests/Integration</directory>
       <directory suffix="Test.php">tests/Rest</directory>
+      <directory suffix="Test.php">tests/Community</directory>
+      <directory suffix="Test.php">tests/Frontend</directory>
+      <directory suffix="Test.php">tests/Payment</directory>
+      <directory suffix="Test.php">tests/Reporting</directory>
+      <directory suffix="Test.php">tests/widgets</directory>
 
       <!-- Explicit WP phpunit file that lives outside Integration/Rest -->
       <file>tests/phpunit/DashboardTemplateIncludeTest.php</file>
 
       <!-- Keep CLI/unit-only tests out of the WP suite -->
       <exclude>tests/Cli</exclude>
+      <!-- Exclude helper bootstrap from widgets tests -->
+      <exclude>tests/widgets/bootstrap.php</exclude>
     </testsuite>
   </testsuites>
 
