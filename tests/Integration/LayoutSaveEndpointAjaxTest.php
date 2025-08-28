@@ -3,6 +3,7 @@ namespace ArtPulse\Integration\Tests;
 
 use WP_Ajax_UnitTestCase;
 use AjaxTestHelper;
+use ArtPulse\Core\DashboardWidgetRegistry;
 
 class LayoutSaveEndpointAjaxTest extends WP_Ajax_UnitTestCase {
 
@@ -26,4 +27,33 @@ class LayoutSaveEndpointAjaxTest extends WP_Ajax_UnitTestCase {
                         $this->assertSame( 'Forbidden', $resp['data']['message'] );
                 }
         }
+
+       public function test_updates_dashboard_layout_meta(): void {
+               $user_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+               wp_set_current_user( $user_id );
+
+               DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', 'strtolower' );
+
+               $this->set_nonce( 'ap_dashboard_nonce' );
+               $_POST['layout'] = wp_json_encode(
+                       array(
+                               array(
+                                       'id'      => 'widget_alpha',
+                                       'visible' => true,
+                               ),
+                       )
+               );
+
+               $this->_handleAjax( 'save_dashboard_layout' );
+               $resp = json_decode( $this->_last_response, true );
+               $this->assertTrue( $resp['success'] );
+
+               $expected = array(
+                       array(
+                               'id'      => 'widget_alpha',
+                               'visible' => true,
+                       ),
+               );
+               $this->assertSame( $expected, get_user_meta( $user_id, 'ap_dashboard_layout', true ) );
+       }
 }
