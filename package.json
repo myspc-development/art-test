@@ -33,6 +33,7 @@
     "socket.io": "^4.7.2"
   },
   "devDependencies": {
+    "@babel/plugin-transform-optional-chaining": "^7.27.1",
     "@playwright/test": "^1.55.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
