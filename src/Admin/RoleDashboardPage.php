@@ -34,6 +34,6 @@ class RoleDashboardPage {
 		// 'nonce'    => wp_create_nonce( 'wp_rest' ),
 		// 'role'     => $role_for_current_user,
 		// ]);
-		\ap_render_dashboard();
+		\ap_render_dashboard( $role ? array( $role ) : array() );
 	}
 }
