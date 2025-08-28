@@ -5,7 +5,6 @@ use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Core\UserDashboardManager;
-use WP_REST_Request;
 
 class WidgetRoleFlowTest extends \WP_UnitTestCase
 {

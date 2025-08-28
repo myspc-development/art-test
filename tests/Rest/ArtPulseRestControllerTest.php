@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
-use WP_REST_Request;
 
 class ArtPulseRestControllerTest extends \WP_UnitTestCase {
     private int $user;
@@ -23,12 +22,12 @@ class ArtPulseRestControllerTest extends \WP_UnitTestCase {
 
     public function test_rsvp_event_and_cancel(): void {
         wp_set_current_user($this->user);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/rsvp');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertSame([$this->event_id], get_user_meta($this->user, 'ap_rsvp_events', true));
 
-        $req = new WP_REST_Request('DELETE', '/artpulse/v1/event/' . $this->event_id . '/rsvp');
+        $req = new \WP_REST_Request('DELETE', '/artpulse/v1/event/' . $this->event_id . '/rsvp');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertEmpty(get_user_meta($this->user, 'ap_rsvp_events', true));
@@ -36,26 +35,26 @@ class ArtPulseRestControllerTest extends \WP_UnitTestCase {
 
     public function test_rsvp_invalid_event(): void {
         wp_set_current_user($this->user);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/event/999999/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/event/999999/rsvp');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(400, $res->get_status());
     }
 
     public function test_rsvp_requires_auth(): void {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/event/' . $this->event_id . '/rsvp');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(401, $res->get_status());
     }
 
     public function test_follow_and_unfollow_user(): void {
         wp_set_current_user($this->user);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/user/' . $this->other_user . '/follow');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/user/' . $this->other_user . '/follow');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertSame([$this->other_user], get_user_meta($this->user, 'ap_following', true));
 
-        $req = new WP_REST_Request('DELETE', '/artpulse/v1/user/' . $this->other_user . '/follow');
+        $req = new \WP_REST_Request('DELETE', '/artpulse/v1/user/' . $this->other_user . '/follow');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
         $this->assertEmpty(get_user_meta($this->user, 'ap_following', true));
@@ -63,14 +62,14 @@ class ArtPulseRestControllerTest extends \WP_UnitTestCase {
 
     public function test_follow_invalid_user(): void {
         wp_set_current_user($this->user);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/user/999999/follow');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/user/999999/follow');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(404, $res->get_status());
     }
 
     public function test_follow_requires_auth(): void {
         wp_set_current_user(0);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/user/' . $this->other_user . '/follow');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/user/' . $this->other_user . '/follow');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(401, $res->get_status());
     }

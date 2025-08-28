@@ -1,17 +1,5 @@
 <?php
-namespace {
-    if (!class_exists('WP_CLI')) {
-        class WP_CLI {
-            public static function log($msg): void {}
-            public static function success($msg): void {}
-            public static function warning($msg): void {}
-            public static function print_value($value, $opts = []): void { echo json_encode($value); }
-            public static function add_command($name, $callable): void {}
-        }
-    }
-}
-
-namespace ArtPulse\Rest\Tests {
+namespace ArtPulse\Rest\Tests;
 
 /**
  * @group restapi

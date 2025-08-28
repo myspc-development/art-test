@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Integration\Tests;
 
-use WP_REST_Request;
 use ArtPulse\Rest\DashboardWidgetController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\UserLayoutManager;
@@ -56,7 +55,7 @@ class DashboardBuilderMappingTest extends \WP_UnitTestCase {
     }
 
     public function test_builder_layout_maps_to_core_ids(): void {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/dashboard-widgets/save');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/dashboard-widgets/save');
         $req->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));
         $req->set_body_params([
             'role' => 'member',

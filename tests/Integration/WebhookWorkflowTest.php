@@ -2,7 +2,6 @@
 namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Integration\WebhookManager;
-use WP_REST_Request;
 use WP_Error;
 
 class WebhookWorkflowTest extends \WP_UnitTestCase
@@ -54,7 +53,7 @@ class WebhookWorkflowTest extends \WP_UnitTestCase
         $admin = self::factory()->user->create(['role' => 'administrator']);
         wp_set_current_user($admin);
 
-        $req = new WP_REST_Request('POST', '/artpulse/v1/org/' . $this->org_id . '/webhooks');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/org/' . $this->org_id . '/webhooks');
         $req->set_param('url', 'http://example.com/hook');
         $req->set_param('events', ['ticket_sold']);
         $req->set_param('active', 1);
@@ -86,7 +85,7 @@ class WebhookWorkflowTest extends \WP_UnitTestCase
         $admin = self::factory()->user->create(['role' => 'administrator']);
         wp_set_current_user($admin);
 
-        $req = new WP_REST_Request('POST', '/artpulse/v1/org/' . $this->org_id . '/webhooks');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/org/' . $this->org_id . '/webhooks');
         $req->set_param('url', 'http://example.com/hook');
         $req->set_param('events', ['ticket_sold']);
         $req->set_param('active', 1);

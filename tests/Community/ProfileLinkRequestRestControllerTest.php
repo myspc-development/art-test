@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Community\Tests;
 
-use WP_REST_Request;
 use ArtPulse\Community\ProfileLinkRequestRestController;
 
 class ProfileLinkRequestRestControllerTest extends \WP_UnitTestCase
@@ -30,7 +29,7 @@ class ProfileLinkRequestRestControllerTest extends \WP_UnitTestCase
     public function test_create_request_saves_meta(): void
     {
         wp_set_current_user($this->artist_id);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/link-request');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/link-request');
         $req->set_param('org_id', $this->org_post);
         $req->set_param('message', 'please link');
         $res = rest_get_server()->dispatch($req);
@@ -45,14 +44,14 @@ class ProfileLinkRequestRestControllerTest extends \WP_UnitTestCase
     public function test_approve_creates_profile_link(): void
     {
         wp_set_current_user($this->artist_id);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/link-request');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/link-request');
         $req->set_param('org_id', $this->org_post);
         $res = rest_get_server()->dispatch($req);
         $id  = $res->get_data()['request_id'];
 
         $admin = self::factory()->user->create(['role' => 'administrator']);
         wp_set_current_user($admin);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/link-request/' . $id . '/approve');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/link-request/' . $id . '/approve');
         $res = rest_get_server()->dispatch($req);
         $this->assertSame(200, $res->get_status());
 

@@ -1,7 +1,6 @@
 <?php
 namespace ArtPulse\Reporting\Tests;
 
-use WP_REST_Request;
 use ArtPulse\Reporting\OrgReportController;
 
 /**
@@ -27,7 +26,7 @@ class OrgReportControllerTest extends \WP_UnitTestCase
 
     public function test_download_csv_returns_csv(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/orgs/' . $this->org_id . '/report');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/orgs/' . $this->org_id . '/report');
         $req->set_param('type', 'engagement');
         $req->set_param('format', 'csv');
         $res = rest_get_server()->dispatch($req);
@@ -37,7 +36,7 @@ class OrgReportControllerTest extends \WP_UnitTestCase
 
     public function test_download_pdf_returns_pdf(): void
     {
-        $req = new WP_REST_Request('GET', '/artpulse/v1/orgs/' . $this->org_id . '/report');
+        $req = new \WP_REST_Request('GET', '/artpulse/v1/orgs/' . $this->org_id . '/report');
         $req->set_param('type', 'engagement');
         $req->set_param('format', 'pdf');
         $res = rest_get_server()->dispatch($req);

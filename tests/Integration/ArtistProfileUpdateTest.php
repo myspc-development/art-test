@@ -2,7 +2,6 @@
 namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Core\UserDashboardManager;
-use WP_REST_Request;
 
 class ArtistProfileUpdateTest extends \WP_UnitTestCase
 {
@@ -19,7 +18,7 @@ class ArtistProfileUpdateTest extends \WP_UnitTestCase
 
     public function test_profile_rest_update_persists(): void
     {
-        $req = new WP_REST_Request('POST', '/artpulse/v1/user/profile');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/user/profile');
         $req->set_body_params([
             'display_name' => 'New Name',
             'ap_country'   => 'US',

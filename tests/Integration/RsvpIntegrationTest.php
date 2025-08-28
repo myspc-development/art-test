@@ -3,7 +3,6 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Admin\MetaBoxesEvent;
 use ArtPulse\Rest\RsvpRestController;
-use WP_REST_Request;
 
 class RsvpIntegrationTest extends \WP_UnitTestCase
 {
@@ -84,13 +83,13 @@ class RsvpIntegrationTest extends \WP_UnitTestCase
     {
         // User1 joins first
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         rest_get_server()->dispatch($req);
 
         // User2 attempts to join, should be waitlisted
         wp_set_current_user($this->user2);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp');
         $req->set_param('event_id', $this->event_id);
         rest_get_server()->dispatch($req);
 
@@ -99,7 +98,7 @@ class RsvpIntegrationTest extends \WP_UnitTestCase
 
         // User1 cancels which should promote User2
         wp_set_current_user($this->user1);
-        $req = new WP_REST_Request('POST', '/artpulse/v1/rsvp/cancel');
+        $req = new \WP_REST_Request('POST', '/artpulse/v1/rsvp/cancel');
         $req->set_param('event_id', $this->event_id);
         rest_get_server()->dispatch($req);
 

@@ -148,6 +148,15 @@ namespace {
     if (!function_exists('esc_url')) {
         function esc_url($url) { return $url; }
     }
+    if (!function_exists('sanitize_title')) {
+        function sanitize_title($title) { return preg_replace('/[^a-z0-9_\-]+/i', '-', strtolower($title)); }
+    }
+    if (!function_exists('wp_script_is')) {
+        function wp_script_is($handle, $list = 'enqueued') { return false; }
+    }
+    if (!function_exists('esc_html__')) {
+        function esc_html__($text, $domain = null) { return $text; }
+    }
     if (!function_exists('remove_meta_box')) {
         function remove_meta_box($id, $screen, $context) {
             MockStorage::$removed[] = [$id, $screen, $context];
@@ -158,6 +167,10 @@ namespace {
     }
     if (!function_exists('set_transient')) {
         function set_transient($k, $v, $e) { MockStorage::$notice = $v; }
+    }
+
+    if (!function_exists('do_action')) {
+        function do_action($hook, ...$args) {}
     }
     if (!function_exists('get_transient')) {
         function get_transient($k) { return null; }
