@@ -21,34 +21,34 @@ class UserLayoutManagerMergeTest extends \WP_UnitTestCase {
                         add_role( 'artist', 'Artist' );
                 }
 
-                DashboardWidgetRegistry::register( 'alpha', 'Alpha', '', '', '__return_null', array( 'roles' => array( 'member' ) ) );
-                DashboardWidgetRegistry::register( 'beta', 'Beta', '', '', '__return_null', array( 'roles' => array( 'artist' ) ) );
-                DashboardWidgetRegistry::register( 'shared', 'Shared', '', '', '__return_null', array( 'roles' => array( 'member', 'artist' ) ) );
+               DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', '__return_null', array( 'roles' => array( 'member' ) ) );
+               DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', '__return_null', array( 'roles' => array( 'artist' ) ) );
+               DashboardWidgetRegistry::register( 'widget_shared', 'Shared', '', '', '__return_null', array( 'roles' => array( 'member', 'artist' ) ) );
 
                 UserLayoutManager::save_role_layout(
                         'member',
                         array(
-                                array(
-                                        'id'      => 'alpha',
-                                        'visible' => true,
-                                ),
-                                array(
-                                        'id'      => 'shared',
-                                        'visible' => true,
-                                ),
+                               array(
+                                       'id'      => 'widget_alpha',
+                                       'visible' => true,
+                               ),
+                               array(
+                                       'id'      => 'widget_shared',
+                                       'visible' => true,
+                               ),
                         )
                 );
                 UserLayoutManager::save_role_layout(
                         'artist',
                         array(
-                                array(
-                                        'id'      => 'beta',
-                                        'visible' => false,
-                                ),
-                                array(
-                                        'id'      => 'shared',
-                                        'visible' => true,
-                                ),
+                               array(
+                                       'id'      => 'widget_beta',
+                                       'visible' => false,
+                               ),
+                               array(
+                                       'id'      => 'widget_shared',
+                                       'visible' => true,
+                               ),
                         )
                 );
         }
@@ -63,20 +63,20 @@ class UserLayoutManagerMergeTest extends \WP_UnitTestCase {
 
                 $layout = UserLayoutManager::get_layout_for_user( $user_id );
 
-                $expected = array(
-                        array(
-                                'id'      => 'alpha',
-                                'visible' => true,
-                        ),
-                        array(
-                                'id'      => 'shared',
-                                'visible' => true,
-                        ),
-                        array(
-                                'id'      => 'beta',
-                                'visible' => false,
-                        ),
-                );
+               $expected = array(
+                       array(
+                               'id'      => 'widget_alpha',
+                               'visible' => true,
+                       ),
+                       array(
+                               'id'      => 'widget_shared',
+                               'visible' => true,
+                       ),
+                       array(
+                               'id'      => 'widget_beta',
+                               'visible' => false,
+                       ),
+               );
 
                 $this->assertSame( $expected, $layout );
         }
