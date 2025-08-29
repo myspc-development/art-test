@@ -8,9 +8,10 @@ class LayoutSaveEndpoint {
 	}
 
         public static function handle(): void {
-                if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
-                        wp_send_json_error( array( 'message' => 'Forbidden' ), 403 );
-                }
+               if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
+                       wp_send_json_error( array( 'message' => 'Forbidden' ), 403 );
+                       wp_die();
+               }
 
                 check_ajax_referer( 'ap_dashboard_nonce' );
 
