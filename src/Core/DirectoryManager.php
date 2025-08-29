@@ -51,7 +51,7 @@ class DirectoryManager {
 
 	public static function register_routes() {
 		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/filter' ) ) {
-                               register_rest_route(
+				register_rest_route(
                                        ARTPULSE_API_NAMESPACE,
                                        '/filter',
                                        array(
@@ -142,17 +142,17 @@ class DirectoryManager {
 			'page'         => $page,
 		);
 
-               $cache_key = self::get_cache_key( array_merge( array( 'type' => $type ), $search_args ) );
-               $cached    = get_transient( $cache_key );
+		$cache_key = self::get_cache_key( array_merge( array( 'type' => $type ), $search_args ) );
+		$cached    = get_transient( $cache_key );
 
-               if ( $cached !== false ) {
-                       return rest_ensure_response( $cached );
-               }
+		if ( $cached !== false ) {
+			return rest_ensure_response( $cached );
+		}
 
-               if ( ExternalSearch::is_enabled() ) {
-                       $posts = ExternalSearch::search( $type, $search_args );
-               } else {
-                       if ( $type === 'event' ) {
+		if ( ExternalSearch::is_enabled() ) {
+			$posts = ExternalSearch::search( $type, $search_args );
+		} else {
+			if ( $type === 'event' ) {
                                 if ( $event_type ) {
                                         $tax_query[] = array(
                                                 'taxonomy' => 'event_type',
@@ -227,14 +227,14 @@ class DirectoryManager {
 				$args['meta_query'] = $meta_query;
 			}
 
-                       $posts = get_posts( $args );
-               }
+			$posts = get_posts( $args );
+		}
 
-               $posts = self::filter_by_first_letter( $posts, $first_letter );
+		$posts = self::filter_by_first_letter( $posts, $first_letter );
 
-               $data = array_map(
-                       function ( $p ) use ( $type ) {
-                               $featured = get_the_post_thumbnail_url( $p, 'medium' );
+		$data = array_map(
+			function ( $p ) use ( $type ) {
+				$featured = get_the_post_thumbnail_url( $p, 'medium' );
 				if ( $type === 'org' && empty( $featured ) ) {
 					$logo_id       = get_post_meta( $p->ID, 'ead_org_logo_id', true );
 					$banner_id     = get_post_meta( $p->ID, 'ead_org_banner_id', true );
@@ -278,15 +278,15 @@ class DirectoryManager {
 					$item['address']  = get_post_meta( $p->ID, 'ead_org_street_address', true );
 					$item['website']  = get_post_meta( $p->ID, 'ead_org_website_url', true );
 					$item['org_type'] = get_post_meta( $p->ID, 'ead_org_type', true );
-                               }
-                               return $item;
-                       },
-                       $posts
-               );
+				}
+				return $item;
+			},
+			$posts
+		);
 
-               set_transient( $cache_key, $data, 5 * MINUTE_IN_SECONDS );
+		set_transient( $cache_key, $data, 5 * MINUTE_IN_SECONDS );
 
-               return rest_ensure_response( $data );
+		return rest_ensure_response( $data );
        }
 
 	public static function renderDirectory( $atts ) {
@@ -500,10 +500,13 @@ class DirectoryManager {
 
 		if ( $post && in_array( $post->post_type, array( 'artpulse_event', 'artpulse_artist', 'artpulse_artwork', 'artpulse_org' ), true ) ) {
 			global $wpdb;
-			$like = $wpdb->esc_like( '_transient_ap_dir_' ) . '%';
-			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $like ) );
-			$like = $wpdb->esc_like( '_transient_timeout_ap_dir_' ) . '%';
-			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $like ) );
+			$like       = $wpdb->esc_like( '_transient_ap_dir_' ) . '%';
+			$transients = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s", $like ) );
+
+			foreach ( $transients as $transient ) {
+				$transient = substr( $transient, strlen( '_transient_' ) );
+				delete_transient( $transient );
+			}
 		}
-	}
+       }
 }
