@@ -224,21 +224,50 @@ class UserLayoutManager {
 			return $layout;
 		}
 
-		$role   = self::get_primary_role( $user_id );
-		$result = self::get_role_layout( $role );
-		$layout = $result['layout'];
-		if ( ! empty( $layout ) ) {
-			return $layout;
-		}
+                $user  = get_userdata( $user_id );
+                $roles = $user && ! empty( $user->roles ) ? (array) $user->roles : array( 'subscriber' );
 
-		$all = DashboardWidgetRegistry::get_all();
-		return array_map(
-			fn( $id ) => array(
-				'id'      => $id,
-				'visible' => true,
-			),
-			array_keys( $all )
-		);
+                if ( count( $roles ) > 1 ) {
+                        $merged    = array();
+                        $seen_ids  = array();
+                        $valid_ids = array_column( DashboardWidgetRegistry::get_definitions(), 'id' );
+
+                        foreach ( $roles as $role ) {
+                                $result = self::get_role_layout( $role );
+                                foreach ( $result['layout'] as $item ) {
+                                        $id  = $item['id'] ?? '';
+                                        $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
+                                        if ( ! $id || isset( $seen_ids[ $id ] ) || ! in_array( $id, $valid_ids, true ) ) {
+                                                continue;
+                                        }
+                                        $seen_ids[ $id ] = true;
+                                        $merged[]        = array(
+                                                'id'      => $id,
+                                                'visible' => $vis,
+                                        );
+                                }
+                        }
+
+                        if ( ! empty( $merged ) ) {
+                                return $merged;
+                        }
+                }
+
+                $role   = $roles[0] ?? 'subscriber';
+                $result = self::get_role_layout( $role );
+                $layout = $result['layout'];
+                if ( ! empty( $layout ) ) {
+                        return $layout;
+                }
+
+                $all = DashboardWidgetRegistry::get_all();
+                return array_map(
+                        fn( $id ) => array(
+                                'id'      => $id,
+                                'visible' => true,
+                        ),
+                        array_keys( $all )
+                );
 	}
 
 	/**
