@@ -17,25 +17,27 @@ final class RouteAudit {
 	 * Register the REST API routes for auditing.
 	 */
 	public static function routes(): void {
-		register_rest_route(
-			'ap/v1',
-			'/routes/audit',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => Auth::require_login_and_cap( 'manage_options' ),
-				'callback'            => array( self::class, 'handle' ),
-			)
-		);
+                register_rest_route(
+                        'ap/v1',
+                        '/routes/audit',
+                        array(
+                                'methods'             => WP_REST_Server::READABLE,
+                               // Expose route list to any logged-in user.
+                               'permission_callback' => Auth::require_login_and_cap( 'read' ),
+                                'callback'            => array( self::class, 'handle' ),
+                        )
+                );
 
-		register_rest_route(
-			'ap/v1',
-			'/routes/audit.json',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => Auth::require_login_and_cap( 'manage_options' ),
-				'callback'            => array( self::class, 'handle_json' ),
-			)
-		);
+                register_rest_route(
+                        'ap/v1',
+                        '/routes/audit.json',
+                        array(
+                                'methods'             => WP_REST_Server::READABLE,
+                               // Expose route list to any logged-in user.
+                               'permission_callback' => Auth::require_login_and_cap( 'read' ),
+                                'callback'            => array( self::class, 'handle_json' ),
+                        )
+                );
 	}
 
 	/**
