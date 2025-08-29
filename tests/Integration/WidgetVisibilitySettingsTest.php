@@ -7,11 +7,15 @@ use ArtPulse\Widgets\EventsWidget;
 use ArtPulse\Widgets\DonationsWidget;
 use function ArtPulse\Tests\rm_rf;
 
-// Ensure the named error handler is loaded.
+// Ensure the named error handler is available.
 require_once __DIR__ . '/../Support/ErrorHandlers.php';
 use function ArtPulse\Tests\mute_missing_widget_warning;
 
 class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
+
+    /** @var callable|null */
+    private static $origOrgAnalyticsCb = null;
+
     public function set_up() {
         parent::set_up();
 
@@ -22,18 +26,19 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         $prop->setValue( null, array() );
         delete_option( 'artpulse_widget_roles' );
 
+        // register a minimal set of widgets used by these tests
         EventsWidget::register();
         DonationsWidget::register();
         OrgAnalyticsWidget::register();
 
         // a) Stop default layout assignment during user creation (prevents missing-widget warnings)
-        if ( has_action( 'user_register', array( \ArtPulse\Core\DashboardWidgetManager::class, 'assign_default_layout' ) ) ) {
-            remove_action( 'user_register', array( \ArtPulse\Core\DashboardWidgetManager::class, 'assign_default_layout' ) );
+        if ( has_action( 'user_register', [ \ArtPulse\Core\DashboardWidgetManager::class, 'assign_default_layout' ] ) ) {
+            remove_action( 'user_register', [ \ArtPulse\Core\DashboardWidgetManager::class, 'assign_default_layout' ] );
         }
 
         // b) Stop portfolio sync/logger that requires a custom table
-        if ( has_action( 'save_post_artpulse_org', array( \ArtPulse\Integration\PortfolioSync::class, 'sync_portfolio' ) ) ) {
-            remove_action( 'save_post_artpulse_org', array( \ArtPulse\Integration\PortfolioSync::class, 'sync_portfolio' ) );
+        if ( has_action( 'save_post_artpulse_org', [ \ArtPulse\Integration\PortfolioSync::class, 'sync_portfolio' ] ) ) {
+            remove_action( 'save_post_artpulse_org', [ \ArtPulse\Integration\PortfolioSync::class, 'sync_portfolio' ] );
         }
 
         // c) Seed visibility fixture to avoid undefined index
@@ -49,7 +54,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
             update_option( 'ap_widget_visibility', $vis, false );
         }
 
-        // d) Use the named error handler (no closures)
+        // d) Mute only the known missing-widget warning during this test (no closures)
         set_error_handler('\ArtPulse\Tests\mute_missing_widget_warning', E_USER_WARNING);
     }
 
@@ -101,15 +106,24 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
     }
 
     /**
+     * In preview mode, the widget must render as an empty string.
+     *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
     public function test_org_analytics_widget_hidden_in_builder_preview(): void {
-        define( 'IS_DASHBOARD_BUILDER_PREVIEW', true );
+        // Belt + suspenders: constant AND filter so preview is guaranteed in this process.
+        if ( ! defined( 'IS_DASHBOARD_BUILDER_PREVIEW' ) ) {
+            define( 'IS_DASHBOARD_BUILDER_PREVIEW', true );
+        }
+        add_filter( 'ap_is_builder_preview', '__return_true' );
+
         $uid = self::factory()->user->create( array( 'role' => 'subscriber' ) );
         wp_set_current_user( $uid );
 
         $html = OrgAnalyticsWidget::render( $uid );
+
+        remove_filter( 'ap_is_builder_preview', '__return_true' );
         $this->assertSame( '', $html );
     }
 
