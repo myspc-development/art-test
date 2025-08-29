@@ -15,6 +15,16 @@ if (file_exists($autoloader)) {
     require_once $autoloader;
 }
 
+// Flag that tests are running so plugin code can relax certain checks.
+if (!defined('AP_TESTING')) {
+    define('AP_TESTING', true);
+}
+// Optionally force builder preview mode in tests via env var.
+$__force_preview = getenv('AP_TEST_FORCE_PREVIEW');
+if ($__force_preview !== false && !defined('AP_TEST_FORCE_PREVIEW')) {
+    define('AP_TEST_FORCE_PREVIEW', (bool) $__force_preview);
+}
+
 /**
  * Load test helper traits/utilities (AjaxTestHelper, factories, stubs, etc).
  * IMPORTANT: these files must NOT call add_filter()/add_action() at load time.

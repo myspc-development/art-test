@@ -5,10 +5,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; }
-if ( defined( 'IS_DASHBOARD_BUILDER_PREVIEW' ) ) {
-        return;
-}
+        exit; }
 
 /**
  * Simple dashboard widget showing basic organization analytics.
@@ -53,6 +50,12 @@ class OrgAnalyticsWidget {
 		return 'insights'; }
 
         public static function render( int $user_id = 0 ): string {
+                if ( defined( 'IS_DASHBOARD_BUILDER_PREVIEW' ) && IS_DASHBOARD_BUILDER_PREVIEW ) {
+                        return '';
+                }
+                if ( defined( 'AP_TEST_FORCE_PREVIEW' ) && AP_TEST_FORCE_PREVIEW ) {
+                        return '';
+                }
                 if ( self::is_preview() ) {
                         return '';
                 }
