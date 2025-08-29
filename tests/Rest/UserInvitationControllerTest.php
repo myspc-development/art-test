@@ -179,12 +179,12 @@ class UserInvitationControllerTest extends TestCase {
 		Stub::$user_meta[1]['ap_organization_id'] = 5;
 		$req                                      = new TestRequest( 'POST', '/' );
 		$req->set_param( 'id', 5 );
-		$req->set_json_params(
-			array(
-				'action'   => 'foo',
-				'user_ids' => array( 2 ),
-			)
-		);
+               $req->set_json_params(
+                       array(
+                               'action'   => 'widget_foo',
+                               'user_ids' => array( 2 ),
+                       )
+               );
 		$res = UserInvitationController::batch_users( $req );
 		$this->assertInstanceOf( WP_Error::class, $res );
 	}
