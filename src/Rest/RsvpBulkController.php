@@ -18,29 +18,31 @@ class RsvpBulkController {
      * Register the bulk RSVP routes.
      */
     public function register_routes(): void {
-        register_rest_route(
-            ARTPULSE_API_NAMESPACE,
-            '/rsvp/bulk',
-            array(
-                'methods'             => WP_REST_Server::CREATABLE,
-                'callback'            => array( $this, 'bulk_update' ),
-                'permission_callback' => array( $this, 'check_permissions' ),
-                'args'                => array(
-                    'event_id' => array(
-                        'type'     => 'integer',
-                        'required' => true,
+        foreach ( array( ARTPULSE_API_NAMESPACE, 'ap/v1' ) as $namespace ) {
+            register_rest_route(
+                $namespace,
+                '/rsvp/bulk',
+                array(
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => array( $this, 'bulk_update' ),
+                    'permission_callback' => array( $this, 'check_permissions' ),
+                    'args'                => array(
+                        'event_id' => array(
+                            'type'     => 'integer',
+                            'required' => true,
+                        ),
+                        'ids'      => array(
+                            'type'     => 'array',
+                            'required' => true,
+                        ),
+                        'status'   => array(
+                            'type'     => 'string',
+                            'required' => true,
+                        ),
                     ),
-                    'ids'      => array(
-                        'type'     => 'array',
-                        'required' => true,
-                    ),
-                    'status'   => array(
-                        'type'     => 'string',
-                        'required' => true,
-                    ),
-                ),
-            )
-        );
+                )
+            );
+        }
     }
 
     /**
