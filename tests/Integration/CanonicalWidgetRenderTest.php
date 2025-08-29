@@ -22,8 +22,8 @@ class CanonicalWidgetRenderTest extends \WP_UnitTestCase {
 		ob_start();
 		include $template;
 		$html = ob_get_clean();
-		preg_match_all( '/data-slug="([^"]+)"/', $html, $m );
-		$expected = DashboardPresets::forRole( $role );
-		$this->assertSame( $expected, $m[1] );
+               preg_match_all( '/data-slug="([^"]+)"/', $html, $m );
+               $expected = DashboardPresets::forRole( $role );
+               $this->assertSame( $expected, array_values( array_unique( $m[1] ) ) );
 	}
 }

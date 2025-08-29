@@ -1230,15 +1230,15 @@ class DashboardWidgetRegistry {
 			echo '<div class="meta-box-sortables">';
 			foreach ( $sections[ $sec ] as $cfg ) {
 				try {
-					ob_start();
-					$result = call_user_func( $cfg['callback'], $user_id );
-					$echoed = ob_get_clean();
-					echo '<div class="postbox"><div class="inside">';
-					if ( is_string( $result ) && '' !== $result ) {
-						echo $result;
-					} else {
-						echo $echoed;
-					}
+                                       ob_start();
+                                       $result = call_user_func( $cfg['callback'], $user_id );
+                                       $echoed = ob_get_clean();
+                                       echo '<div class="postbox" data-slug="' . esc_attr( $cfg['id'] ) . '"><div class="inside">';
+                                       if ( is_string( $result ) && '' !== $result ) {
+                                               echo $result;
+                                       } else {
+                                               echo $echoed;
+                                       }
 					echo '</div></div>';
 					++$rendered;
 				} catch ( \Throwable $e ) {
