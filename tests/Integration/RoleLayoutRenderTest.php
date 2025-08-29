@@ -3,7 +3,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardPresets;
 
 class RoleLayoutRenderTest extends \WP_UnitTestCase {
-    protected function set_up(): void {
+    public function set_up(): void {
         parent::set_up();
         if ( ! get_role( 'member' ) ) {
             add_role( 'member', 'Member' );
@@ -30,7 +30,7 @@ class RoleLayoutRenderTest extends \WP_UnitTestCase {
         );
     }
 
-    protected function tear_down(): void {
+    public function tear_down(): void {
         DashboardPresets::resetCache();
         parent::tear_down();
     }
