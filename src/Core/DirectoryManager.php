@@ -51,23 +51,28 @@ class DirectoryManager {
 
 	public static function register_routes() {
 		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/filter' ) ) {
-			register_rest_route(
-				ARTPULSE_API_NAMESPACE,
-				'/filter',
-				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'handleFilter' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
-					'args'                => array(
-						'type'         => array(
-							'type'     => 'string',
-							'required' => true,
-						),
+                               register_rest_route(
+                                       ARTPULSE_API_NAMESPACE,
+                                       '/filter',
+                                       array(
+                                               'methods'             => 'GET',
+                                               'callback'            => array( self::class, 'handleFilter' ),
+                                               'permission_callback' => function ( $request ) {
+                                                       $type         = sanitize_key( $request['type'] ?? '' );
+                                                       $public_types = array( 'event', 'artist', 'artwork', 'org' );
+                                                       if ( in_array( $type, $public_types, true ) ) {
+                                                               return true;
+                                                       }
+                                                       if ( current_user_can( 'read' ) ) {
+                                                               return true;
+                                                       }
+                                                       return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
+                                               },
+                                               'args'                => array(
+                                                       'type'         => array(
+                                                               'type'     => 'string',
+                                                               'required' => true,
+                                                       ),
 						'limit'        => array(
 							'type'    => 'integer',
 							'default' => 10,
@@ -137,29 +142,22 @@ class DirectoryManager {
 			'page'         => $page,
 		);
 
-		$cache_key  = self::get_cache_key( array_merge( array( 'type' => $type ), $search_args ) );
-		$cached_ids = get_transient( $cache_key );
+               $cache_key = self::get_cache_key( array_merge( array( 'type' => $type ), $search_args ) );
+               $cached    = get_transient( $cache_key );
 
-		if ( $cached_ids !== false ) {
-			$posts = get_posts(
-				array(
-					'post_type'      => 'artpulse_' . $type,
-					'post__in'       => $cached_ids,
-					'orderby'        => 'post__in',
-					'posts_per_page' => $limit,
-				)
-			);
-		} elseif ( ExternalSearch::is_enabled() ) {
-			$posts = ExternalSearch::search( $type, $search_args );
-			$posts = self::filter_by_first_letter( $posts, $first_letter );
-			set_transient( $cache_key, wp_list_pluck( $posts, 'ID' ), 5 * MINUTE_IN_SECONDS );
-		} else {
-			if ( $type === 'event' ) {
-				if ( $event_type ) {
-					$tax_query[] = array(
-						'taxonomy' => 'event_type',
-						'field'    => 'term_id',
-						'terms'    => $event_type,
+               if ( $cached !== false ) {
+                       return rest_ensure_response( $cached );
+               }
+
+               if ( ExternalSearch::is_enabled() ) {
+                       $posts = ExternalSearch::search( $type, $search_args );
+               } else {
+                       if ( $type === 'event' ) {
+                                if ( $event_type ) {
+                                        $tax_query[] = array(
+                                                'taxonomy' => 'event_type',
+                                                'field'    => 'term_id',
+                                                'terms'    => $event_type,
 					);
 				}
 
@@ -229,14 +227,14 @@ class DirectoryManager {
 				$args['meta_query'] = $meta_query;
 			}
 
-			$posts = get_posts( $args );
-			$posts = self::filter_by_first_letter( $posts, $first_letter );
-			set_transient( $cache_key, wp_list_pluck( $posts, 'ID' ), 5 * MINUTE_IN_SECONDS );
-		}
+                       $posts = get_posts( $args );
+               }
 
-		$data = array_map(
-			function ( $p ) use ( $type ) {
-				$featured = get_the_post_thumbnail_url( $p, 'medium' );
+               $posts = self::filter_by_first_letter( $posts, $first_letter );
+
+               $data = array_map(
+                       function ( $p ) use ( $type ) {
+                               $featured = get_the_post_thumbnail_url( $p, 'medium' );
 				if ( $type === 'org' && empty( $featured ) ) {
 					$logo_id       = get_post_meta( $p->ID, 'ead_org_logo_id', true );
 					$banner_id     = get_post_meta( $p->ID, 'ead_org_banner_id', true );
@@ -280,20 +278,16 @@ class DirectoryManager {
 					$item['address']  = get_post_meta( $p->ID, 'ead_org_street_address', true );
 					$item['website']  = get_post_meta( $p->ID, 'ead_org_website_url', true );
 					$item['org_type'] = get_post_meta( $p->ID, 'ead_org_type', true );
-				}
-				return $item;
-			},
-			$posts
-		);
+                               }
+                               return $item;
+                       },
+                       $posts
+               );
 
-		$has_more = ( $query->max_num_pages > $page );
-		return rest_ensure_response(
-			array(
-				'posts'    => $data,
-				'has_more' => $has_more,
-			)
-		);
-	}
+               set_transient( $cache_key, $data, 5 * MINUTE_IN_SECONDS );
+
+               return rest_ensure_response( $data );
+       }
 
 	public static function renderDirectory( $atts ) {
 		$atts = shortcode_atts(
