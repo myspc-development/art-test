@@ -8,6 +8,7 @@ use Stripe\StripeClient;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Admin\LayoutSnapshotManager;
+use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\LayoutUtils;
 
@@ -21,17 +22,67 @@ class UserDashboardManager {
 		return file_exists( $path ) ? (string) filemtime( $path ) : '1.0.0';
 	}
 
-	public static function register() {
-		ShortcodeRegistry::register( 'ap_user_dashboard', 'Member Dashboard', array( self::class, 'renderDashboard' ) );
-		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueueAssets' ) );
-		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
-		// Dashboard widgets are registered via the `artpulse_register_dashboard_widget` hook.
-	}
+        public static function register() {
+                ShortcodeRegistry::register( 'ap_user_dashboard', 'Member Dashboard', array( self::class, 'renderDashboard' ) );
+                add_action( 'wp_enqueue_scripts', array( self::class, 'enqueueAssets' ) );
+                add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
+                add_filter( 'ap_dashboard_default_widgets', array( self::class, 'filterDefaultWidgets' ) );
+                add_filter( 'ap_dashboard_default_widgets_for_role', array( self::class, 'filterDefaultWidgetsForRole' ), 10, 2 );
+                // Dashboard widgets are registered via the `artpulse_register_dashboard_widget` hook.
+        }
 
 	// Aliased method for compatibility with provided code snippet
-	public static function register_routes() {
-		self::registerRestRoutes();
-	}
+       public static function register_routes() {
+               self::registerRestRoutes();
+       }
+
+       /**
+        * Resolve default dashboard widgets for the current user.
+        *
+        * @param array $defaults Existing defaults.
+        * @return array<int,array{id:string,visible:bool}> Filtered defaults.
+        */
+       public static function filterDefaultWidgets( array $defaults ): array {
+               $user  = wp_get_current_user();
+               $roles = is_array( $user->roles ) ? $user->roles : array();
+               $seen  = array();
+
+               foreach ( $roles as $role ) {
+                       $layout = UserLayoutManager::get_role_layout( $role );
+                       foreach ( $layout['layout'] as $item ) {
+                               $id = isset( $item['id'] ) ? sanitize_key( $item['id'] ) : '';
+                               if ( ! $id || isset( $seen[ $id ] ) ) {
+                                       continue;
+                               }
+                               $seen[ $id ] = true;
+                               $defaults[]  = array(
+                                       'id'      => $id,
+                                       'visible' => (bool) ( $item['visible'] ?? true ),
+                               );
+                       }
+               }
+
+               return $defaults;
+       }
+
+       /**
+        * Resolve default dashboard widgets for a specific role.
+        *
+        * @param array  $defaults Existing defaults.
+        * @param string $role     Role to retrieve layout for.
+        * @return array<int,string> Widget IDs.
+        */
+       public static function filterDefaultWidgetsForRole( array $defaults, string $role ): array {
+               $layout = UserLayoutManager::get_role_layout( $role );
+               $ids    = array();
+               foreach ( $layout['layout'] as $item ) {
+                       $id = isset( $item['id'] ) ? sanitize_key( $item['id'] ) : '';
+                       if ( $id ) {
+                               $ids[] = $id;
+                       }
+               }
+               return $ids;
+       }
 
 	public static function enqueueAssets() {
 		// Core dashboard script
@@ -892,24 +943,30 @@ class UserDashboardManager {
 			}
 		}
 
-		if ( empty( $layout_ids ) ) {
-			$defaults = (array) apply_filters( 'ap_dashboard_default_widgets', array() );
-			if ( $role ) {
-				$defaults = (array) apply_filters( 'ap_dashboard_default_widgets_for_role', $defaults, $role );
-			}
-			foreach ( $defaults as $id ) {
-				$id = sanitize_key( $id );
-				if ( ! $id || isset( $seen[ $id ] ) || ! in_array( $id, $valid, true ) ) {
-					continue;
-				}
-				$seen[ $id ]  = true;
-				$layout_ids[] = $id;
-				$visibility[] = array(
-					'id'      => $id,
-					'visible' => true,
-				);
-			}
-		}
+               if ( empty( $layout_ids ) ) {
+                       $defaults = (array) apply_filters( 'ap_dashboard_default_widgets', array() );
+                       if ( $role ) {
+                               $defaults = (array) apply_filters( 'ap_dashboard_default_widgets_for_role', $defaults, $role );
+                       }
+                       foreach ( $defaults as $item ) {
+                               if ( is_array( $item ) ) {
+                                       $id  = sanitize_key( $item['id'] ?? '' );
+                                       $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
+                               } else {
+                                       $id  = sanitize_key( $item );
+                                       $vis = true;
+                               }
+                               if ( ! $id || isset( $seen[ $id ] ) || ! in_array( $id, $valid, true ) ) {
+                                       continue;
+                               }
+                               $seen[ $id ]  = true;
+                               $layout_ids[] = $id;
+                               $visibility[] = array(
+                                       'id'      => $id,
+                                       'visible' => $vis,
+                               );
+                       }
+               }
 
 		return rest_ensure_response(
 			array(
