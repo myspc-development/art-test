@@ -45,15 +45,17 @@ final class WidgetIds {
 		if ( ! is_string( $id ) ) {
 			return '';
 		}
-		$id = strtolower( $id );
-		$id = str_replace( '-', '_', $id );
-		if ( $id === '' ) {
-			return '';
-		}
-		// Ensure "widget_" prefix for canonical space
-		if ( strpos( $id, 'widget_' ) !== 0 && ! isset( self::$aliases[ $id ] ) ) {
-			$id = 'widget_' . $id;
-		}
-		return self::$aliases[ $id ] ?? $id;
-	}
+                $id = strtolower( $id );
+                $id = str_replace( '-', '_', $id );
+                $id = preg_replace( '/[^a-z0-9_]/', '', $id );
+                $id = trim( $id, '_' );
+                if ( $id === '' ) {
+                        return '';
+                }
+                // Ensure "widget_" prefix for canonical space
+                if ( strpos( $id, 'widget_' ) !== 0 && ! isset( self::$aliases[ $id ] ) ) {
+                        $id = 'widget_' . $id;
+                }
+                return self::$aliases[ $id ] ?? $id;
+        }
 }

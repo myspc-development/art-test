@@ -8,7 +8,7 @@ require_once __DIR__ . '/../TestStubs.php';
 
 class WidgetIdsCanonicalizationTest extends TestCase {
 
-	public function test_canonicalize_aliases(): void {
+        public function test_canonicalize_aliases(): void {
 		$map = array(
 			'membership'                  => 'widget_membership',
 			'upgrade'                     => 'widget_upgrade',
@@ -36,12 +36,23 @@ class WidgetIdsCanonicalizationTest extends TestCase {
 		);
 		foreach ( $map as $in => $expected ) {
 			$this->assertSame( $expected, WidgetIds::canonicalize( $in ) );
-		}
-	}
+                }
+        }
 
-	public function test_canonicalize_non_strings_return_empty(): void {
-		$this->assertSame( '', WidgetIds::canonicalize( array( 'foo' ) ) );
-		$this->assertSame( '', WidgetIds::canonicalize( null ) );
-		$this->assertSame( '', WidgetIds::canonicalize( new \stdClass() ) );
+        public function test_canonicalize_sanitization(): void {
+                $map = array(
+                        'A-'              => 'widget_a',
+                        'B C'             => 'widget_bc',
+                        'in valid/slug'   => 'widget_invalidslug',
+                );
+                foreach ( $map as $in => $expected ) {
+                        $this->assertSame( $expected, WidgetIds::canonicalize( $in ) );
+                }
+        }
+
+        public function test_canonicalize_non_strings_return_empty(): void {
+                $this->assertSame( '', WidgetIds::canonicalize( array( 'foo' ) ) );
+                $this->assertSame( '', WidgetIds::canonicalize( null ) );
+                $this->assertSame( '', WidgetIds::canonicalize( new \stdClass() ) );
 	}
 }
