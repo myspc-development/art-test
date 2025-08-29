@@ -33,9 +33,9 @@ class RestRouteAuditCliTest extends TestCase {
 
 	public function test_json_output_no_conflicts(): void {
 		global $rest_server;
-		$rest_server = self::server(
-			array(
-				'/ap/v1/foo' => array(
+               $rest_server = self::server(
+                       array(
+                               '/ap/v1/widget_foo' => array(
 					array(
 						'methods'  => 'GET',
 						'callback' => array( self::class, 'return_true' ),

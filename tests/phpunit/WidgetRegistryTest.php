@@ -19,10 +19,10 @@ class WidgetRegistryTest extends TestCase {
 
 	public function test_register_and_render(): void {
 		WidgetRegistry::setDebug( false );
-		WidgetRegistry::register( 'foo', static fn( array $ctx = array() ): string => 'hello ' . ( $ctx['name'] ?? 'world' ) );
-		$this->assertTrue( WidgetRegistry::exists( 'foo' ) );
-		$this->assertSame( 'hello bob', WidgetRegistry::render( 'foo', array( 'name' => 'bob' ) ) );
-		$this->assertContains( 'widget_foo', WidgetRegistry::list() );
+               WidgetRegistry::register( 'widget_foo', static fn( array $ctx = array() ): string => 'hello ' . ( $ctx['name'] ?? 'world' ) );
+               $this->assertTrue( WidgetRegistry::exists( 'widget_foo' ) );
+               $this->assertSame( 'hello bob', WidgetRegistry::render( 'widget_foo', array( 'name' => 'bob' ) ) );
+               $this->assertContains( 'widget_foo', WidgetRegistry::list() );
 	}
 
 	public function test_missing_slug_returns_placeholder_with_data_slug(): void {
