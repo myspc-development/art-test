@@ -17,6 +17,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\wp_send_json_error' ) ) {
         function wp_send_json_error( $data, $status = null ) {
                 global $wp_send_json_error_status;
                 $wp_send_json_error_status = $status;
+                wp_die();
         }
 }
 
