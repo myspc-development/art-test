@@ -30,9 +30,7 @@ final class DashboardPresetsLoadTest extends TestCase {
 			}
 		}
                 $expected = array(
-                        'member'       => array_fill( 0, 7, 'widget_placeholder' ),
-                        'artist'       => array_fill( 0, 6, 'widget_placeholder' ),
-                        'organization' => array_fill( 0, 5, 'widget_placeholder' ),
+
                 );
 		foreach ( $roles as $r ) {
 			$this->assertSame( $expected[ $r ], DashboardPresets::forRole( $r ) );
@@ -45,11 +43,32 @@ final class DashboardPresetsLoadTest extends TestCase {
 	public function test_json_canonicalization(): void {
 		$path = "$this->dataDir/preset-member.json";
 		$orig = is_readable( $path ) ? file_get_contents( $path ) : null;
-		file_put_contents( $path, json_encode( array( 'membership', 'account-tools', 'widget_followed_artists' ) ) );
-		$this->assertSame(
-			array( 'widget_membership', 'widget_account_tools', 'widget_my_follows' ),
-			DashboardPresets::forRole( 'member' )
-		);
+                file_put_contents(
+                        $path,
+                        json_encode(
+                                array(
+                                        'membership',
+                                        'account-tools',
+                                        'widget_followed_artists',
+                                        'recommended_for_you',
+                                        'local-events',
+                                        'my-events',
+                                        'site-stats',
+                                )
+                        )
+                );
+                $this->assertSame(
+                        array(
+                                'widget_membership',
+                                'widget_account_tools',
+                                'widget_my_follows',
+                                'widget_recommended_for_you',
+                                'widget_local_events',
+                                'widget_my_events',
+                                'widget_site_stats',
+                        ),
+                        DashboardPresets::forRole( 'member' )
+                );
 		if ( $orig !== null ) {
 			file_put_contents( $path, $orig );
 		} else {
