@@ -20,9 +20,9 @@ class AnalyticsRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'get_trends' ),
-					'permission_callback' => function () {
-						return is_user_logged_in();
-					},
+                                       'permission_callback' => function () {
+                                               return current_user_can( 'read' );
+                                       },
 					'args'                => array(
 						'event_id' => array(
 							'type'     => 'integer',
@@ -44,9 +44,9 @@ class AnalyticsRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'export_csv' ),
-					'permission_callback' => function () {
-						return is_user_logged_in();
-					},
+                                       'permission_callback' => function () {
+                                               return current_user_can( 'read' );
+                                       },
 					'args'                => array(
 						'event_id' => array(
 							'type'     => 'integer',
