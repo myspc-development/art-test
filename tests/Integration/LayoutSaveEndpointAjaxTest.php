@@ -24,7 +24,7 @@ class LayoutSaveEndpointAjaxTest extends WP_Ajax_UnitTestCase {
                         $this->assertSame( 403, http_response_code() );
                         $resp = json_decode( $this->_last_response, true );
                         $this->assertFalse( $resp['success'] );
-                        $this->assertSame( 'Forbidden', $resp['data']['message'] );
+                        $this->assertNull( $resp['data'] );
                 }
         }
 
