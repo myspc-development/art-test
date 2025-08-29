@@ -1,10 +1,34 @@
 <?php
 declare(strict_types=1);
 
-$_tests_dir = getenv('WP_PHPUNIT__DIR');
-if (!$_tests_dir) {
-    $_tests_dir = __DIR__ . '/../vendor/wp-phpunit/wp-phpunit';
+// --- WP core local fallback: if vendor wordpress missing, symlink or fail with a clear message.
+$__tests_dir = getenv('WP_PHPUNIT__DIR') ?: __DIR__ . '/../vendor/wp-phpunit/wp-phpunit';
+$__vendor_wp = $__tests_dir . '/wordpress/wp-settings.php';
+
+if (!file_exists($__vendor_wp)) {
+    $local = getenv('WP_CORE_DIR'); // e.g. /www/wwwroot/192.168.1.21
+    if ($local && file_exists(rtrim($local, '/').'/wp-settings.php')) {
+        $target = $__tests_dir . '/wordpress';
+        if (!is_dir($target)) {
+            @mkdir(dirname($target), 0777, true);
+        }
+        // Try to symlink the real WP install into vendor/wp-phpunit/wp-phpunit/wordpress
+        if (!is_dir($target) || !file_exists($target.'/wp-settings.php')) {
+            @unlink($target);
+            if (@symlink($local, $target) === false) {
+                // As a last resort, stop here with guidance
+                fwrite(STDERR, "Could not create wordpress symlink. Set write perms or pre-create: ln -s {$local} {$target}\n");
+                exit(1);
+            }
+        }
+    } else {
+        fwrite(STDERR, "WordPress core not found. Set WP_CORE_DIR to an existing WP root or run the installer.\n");
+        fwrite(STDERR, "Example: export WP_CORE_DIR=/www/wwwroot/192.168.1.21 && ln -s \$WP_CORE_DIR {$__tests_dir}/wordpress\n");
+        exit(1);
+    }
 }
+
+$_tests_dir = $__tests_dir;
 if (!file_exists($_tests_dir . '/includes/functions.php')) {
     fwrite(STDERR, "WP PHPUnit not found at {$_tests_dir}\n");
     exit(1);
