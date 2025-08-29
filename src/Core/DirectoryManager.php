@@ -239,10 +239,10 @@ class DirectoryManager {
 					$logo_id       = get_post_meta( $p->ID, 'ead_org_logo_id', true );
 					$banner_id     = get_post_meta( $p->ID, 'ead_org_banner_id', true );
 					$attachment_id = $logo_id ?: $banner_id;
-					if ( $attachment_id ) {
-						$featured = wp_get_attachment_image_url( $attachment_id, 'medium' );
-					}
-				}
+                                        if ( $attachment_id ) {
+                                                $featured = wp_get_attachment_url( $attachment_id );
+                                        }
+                                }
 
 				$item = array(
 					'id'                 => $p->ID,
