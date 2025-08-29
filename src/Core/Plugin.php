@@ -40,6 +40,7 @@ use ArtPulse\AI\GrantAssistant;
 use ArtPulse\Rest\VisitRestController;
 use ArtPulse\Rest\OrgUserRolesController;
 use ArtPulse\Rest\OrgRoleInviteController;
+use ArtPulse\Rest\SystemStatusEndpoint;
 use ArtPulse\Core\FeedAccessLogger;
 use ArtPulse\Admin\PortfolioToolsPage;
 use ArtPulse\Admin\PortfolioSyncLogsPage;
@@ -90,11 +91,12 @@ class Plugin {
 		add_action( 'init', array( \ArtPulse\Frontend\SubmissionForms::class, 'register' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
 
-		add_action( 'init', array( \ArtPulse\Rest\EventChatController::class, 'register' ) );
-		\ArtPulse\Frontend\EventChatAssets::register();
-		add_action( 'rest_api_init', array( \ArtPulse\Rest\RestRoutes::class, 'register_all' ) );
-		add_action( 'init', array( \ArtPulse\Core\EventRsvpMetaMigration::class, 'maybe_migrate' ) );
-		add_action( 'init', array( OrgRoleMetaMigration::class, 'maybe_migrate' ) );
+                add_action( 'init', array( \ArtPulse\Rest\EventChatController::class, 'register' ) );
+                \ArtPulse\Frontend\EventChatAssets::register();
+                add_action( 'rest_api_init', array( \ArtPulse\Rest\RestRoutes::class, 'register_all' ) );
+                SystemStatusEndpoint::register();
+                add_action( 'init', array( \ArtPulse\Core\EventRsvpMetaMigration::class, 'maybe_migrate' ) );
+                add_action( 'init', array( OrgRoleMetaMigration::class, 'maybe_migrate' ) );
 		add_action( 'init', array( $this, 'maybe_migrate_org_meta' ) );
 		add_action( 'init', array( $this, 'maybe_migrate_profile_link_request_slug' ) );
 		add_action( 'init', array( $this, 'maybe_add_upload_cap' ) );
