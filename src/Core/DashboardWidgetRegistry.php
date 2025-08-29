@@ -260,10 +260,11 @@ class DashboardWidgetRegistry {
 	): array {
 		// Builder-style registration when the second argument is an array.
 		if ( is_array( $label ) ) {
-			$id = sanitize_key( $id );
-			if ( ! $id ) {
-				return array();
-			}
+                        $id = sanitize_key( $id );
+                        if ( ! $id ) {
+                                return array();
+                        }
+                        $base = strpos( $id, 'widget_' ) === 0 ? substr( $id, 7 ) : $id;
 			$args = array_merge(
 				array(
 					'title'           => '',
@@ -282,19 +283,19 @@ class DashboardWidgetRegistry {
 				? $args['visibility']
 				: WidgetVisibility::PUBLIC;
 
-			$args['roles'] = self::normalizeRoleList( $args['roles'] ?? array() );
+                        $args['roles'] = self::normalizeRoleList( $args['roles'] ?? array() );
 
-			self::$builder_widgets[ $id ] = array(
-				'id'              => $id,
-				'title'           => (string) $args['title'],
-				'render_callback' => $args['render_callback'],
-				'roles'           => $args['roles'],
-				'file'            => (string) $args['file'],
-				'visibility'      => $visibility,
-			);
+                        self::$builder_widgets[ $base ] = array(
+                                'id'              => $base,
+                                'title'           => (string) $args['title'],
+                                'render_callback' => $args['render_callback'],
+                                'roles'           => $args['roles'],
+                                'file'            => (string) $args['file'],
+                                'visibility'      => $visibility,
+                        );
 
-			return self::$builder_widgets[ $id ];
-		}
+                        return self::$builder_widgets[ $base ];
+                }
 
 		// Core-style registration.
 		$id = self::canon_slug( $id );
@@ -756,35 +757,37 @@ class DashboardWidgetRegistry {
 	 * @param array{preview_role?:string} $context
 	 */
 	public static function render( string $id, array $context = array() ): string {
-		$id = self::canon_slug( $id );
-		if ( ! isset( self::$builder_widgets[ $id ] ) ) {
-			return '';
-		}
-		$preview_role = isset( $context['preview_role'] ) ? (string) $context['preview_role'] : null;
-		if ( ! self::user_can_see( $id, 0, $preview_role ) ) {
-			return '';
-		}
+                $id   = self::canon_slug( $id );
+                $base = strpos( $id, 'widget_' ) === 0 ? substr( $id, 7 ) : $id;
+                $cfg  = self::$builder_widgets[ $id ] ?? self::$builder_widgets[ $base ] ?? null;
+                if ( ! $cfg ) {
+                        return '';
+                }
+                $preview_role = isset( $context['preview_role'] ) ? (string) $context['preview_role'] : null;
+                if ( ! self::user_can_see( $id, 0, $preview_role ) ) {
+                        return '';
+                }
 
-		static $stack = array();
-		if ( isset( $stack[ $id ] ) ) {
-			return '';
-		}
-		$stack[ $id ] = true;
+                static $stack = array();
+                if ( isset( $stack[ $id ] ) ) {
+                        return '';
+                }
+                $stack[ $id ] = true;
 
-		ob_start();
-		try {
-			call_user_func( self::$builder_widgets[ $id ]['render_callback'] );
-		} catch ( \Throwable $e ) {
-			$file = self::$builder_widgets[ $id ]['file'] ?? 'unknown';
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( '[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage() );
-			}
-		}
-		$html = ob_get_clean();
-		unset( $stack[ $id ] );
+                ob_start();
+                try {
+                        call_user_func( $cfg['render_callback'] );
+                } catch ( \Throwable $e ) {
+                        $file = $cfg['file'] ?? 'unknown';
+                        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                error_log( '[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage() );
+                        }
+                }
+                $html = ob_get_clean();
+                unset( $stack[ $id ] );
 
-		return $html;
-	}
+                return $html;
+        }
 
         /**
          * Render the preset layout for a role.
@@ -883,10 +886,10 @@ class DashboardWidgetRegistry {
 			return $widgets[ $cid ];
 		}
 
-		$builder = self::get_all( null, true );
-		$base    = strpos( $cid, 'widget_' ) === 0 ? substr( $cid, 7 ) : $cid;
-		return $builder[ $base ] ?? null;
-	}
+                $builder = self::get_all( null, true );
+                $base    = strpos( $cid, 'widget_' ) === 0 ? substr( $cid, 7 ) : $cid;
+                return $builder[ $cid ] ?? $builder[ $base ] ?? null;
+        }
 
 	/**
 	 * Get widget callbacks allowed for one or more user roles.
