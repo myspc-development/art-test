@@ -102,18 +102,22 @@ $wpDir      = getenv( 'WP_PHPUNIT__DIR' ) ?: 'vendor/wp-phpunit/wp-phpunit';
 $wpSettings = $wpDir . '/wordpress/wp-settings.php';
 if ( ! file_exists( $wpSettings ) ) {
         $local = getenv( 'WP_CORE_DIR' );
-        if ( $local && file_exists( rtrim( $local, '/' ) . '/wp-settings.php' ) ) {
+        if ( ! $local ) {
+                $errors[] = 'WP_CORE_DIR not set. Set WP_CORE_DIR to an existing WP root and run `composer run wp:core-link`.';
+        } elseif ( ! file_exists( rtrim( $local, '/' ) . '/wp-settings.php' ) ) {
+                $errors[] = 'wp-settings.php not found in WP_CORE_DIR=' . $local;
+        } else {
                 $targetDir = $wpDir . '/wordpress';
                 if ( ! is_dir( dirname( $targetDir ) ) ) {
                         @mkdir( dirname( $targetDir ), 0777, true );
                 }
-                if ( ! is_dir( $targetDir ) || ! file_exists( $targetDir . '/wp-settings.php' ) ) {
-                        @unlink( $targetDir );
-                        @symlink( $local, $targetDir );
+                @unlink( $targetDir );
+                @symlink( $local, $targetDir );
+                if ( ! file_exists( $wpSettings ) ) {
+                        $errors[] = 'wp core link failed: ' . $wpSettings . ' missing after linking';
+                } else {
+                        echo 'Linked ' . $local . ' -> ' . $targetDir . "\n";
                 }
-        }
-        if ( ! file_exists( $wpSettings ) ) {
-                $errors[] = 'WordPress core not found. Set WP_CORE_DIR to an existing WP root and run `composer run wp:core-link`.';
         }
 }
 

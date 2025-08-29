@@ -10,7 +10,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "ArtPulse\\Tests\\Stubs\\": "tests/Stubs/"
+      "ArtPulse\\Tests\\Stubs\\": "tests/Stubs/",
+      "ArtPulse\\Tests\\": "tests/Support/"
     }
   },
   "require-dev": {
