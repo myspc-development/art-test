@@ -6,13 +6,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detect and merge duplicate REST route handlers during bootstrapping.
  */
 function ap_deduplicate_rest_routes( array $endpoints ): array {
-	static $logged = false;
-	if ( $logged ) {
-		return $endpoints;
-	}
+        static $logged = false;
+        if ( $logged ) {
+                return $endpoints;
+        }
 
-	$seen          = array();
-	$core_prefixes = array( '/', '/wp/v2', '/wp/v2/', '/batch/v1', '/wp-site-health/v1', '/block-editor/v1', '/oembed/1.0' );
+        $GLOBALS['ap_rest_diagnostics'] = $GLOBALS['ap_rest_diagnostics'] ?? array(
+                'conflicts' => array(),
+                'missing'   => array(),
+        );
+
+        $seen          = array();
+        $logged_routes = array();
+        $core_prefixes = array( '/', '/wp/v2', '/wp/v2/', '/batch/v1', '/wp-site-health/v1', '/block-editor/v1', '/oembed/1.0' );
 
 	foreach ( $endpoints as $route => $handlers ) {
 		if ( ! is_array( $handlers ) ) {
@@ -42,14 +48,13 @@ function ap_deduplicate_rest_routes( array $endpoints ): array {
 			$method_label = implode( ',', $methods ) ?: 'ALL';
 			$dedupe_key   = $route . ' ' . $method_label;
 
-			if ( ! isset( $seen[ $dedupe_key ] ) ) {
-				$seen[ $dedupe_key ] = array(
-					'callback'            => $handler['callback'] ?? null,
-					'permission_callback' => $handler['permission_callback'] ?? null,
-					'logged'              => false,
-				);
-				continue;
-			}
+                        if ( ! isset( $seen[ $dedupe_key ] ) ) {
+                                $seen[ $dedupe_key ] = array(
+                                        'callback'            => $handler['callback'] ?? null,
+                                        'permission_callback' => $handler['permission_callback'] ?? null,
+                                );
+                                continue;
+                        }
 
 			$prev            = $seen[ $dedupe_key ];
 			$same_callback   = isset( $handler['callback'] ) && $prev['callback'] === $handler['callback'];
@@ -61,17 +66,20 @@ function ap_deduplicate_rest_routes( array $endpoints ): array {
 				continue;
 			}
 
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && ! $prev['logged'] ) {
-				$prev_loc = ap_callback_location( $prev['callback'] );
-				$curr_loc = ap_callback_location( $handler['callback'] ?? null );
-				error_log( "[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc." );
-				$seen[ $dedupe_key ]['logged'] = true;
-			}
-		}
-	}
+                        if ( defined( 'WP_DEBUG' ) && WP_DEBUG && empty( $logged_routes[ $route ] ) ) {
+                                $prev_loc = ap_callback_location( $prev['callback'] );
+                                $curr_loc = ap_callback_location( $handler['callback'] ?? null );
+                                error_log( "[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc." );
+                                $logged_routes[ $route ] = true;
+                                if ( ! in_array( $route, $GLOBALS['ap_rest_diagnostics']['conflicts'], true ) ) {
+                                        $GLOBALS['ap_rest_diagnostics']['conflicts'][] = $route;
+                                }
+                        }
+                }
+        }
 
-	$logged = true;
-	return $endpoints;
+        $logged = true;
+        return $endpoints;
 }
 
 function ap_callback_location( $callback ): string {
@@ -100,17 +108,31 @@ function ap_callback_location( $callback ): string {
  * Optionally, verify that a specific HTTP method exists for the route.
  */
 function ap_rest_route_registered( string $namespace, string $route, ?string $method = null ): bool {
-	global $wp_rest_server;
-	if ( ! $wp_rest_server ) {
-		$wp_rest_server = rest_get_server();
-	}
+        global $wp_rest_server;
+        if ( ! $wp_rest_server ) {
+                $wp_rest_server = rest_get_server();
+        }
 
-	$full_route = '/' . trim( $namespace, '/' ) . $route;
-	$routes     = $wp_rest_server->get_routes();
+        $GLOBALS['ap_rest_diagnostics'] = $GLOBALS['ap_rest_diagnostics'] ?? array(
+                'conflicts' => array(),
+                'missing'   => array(),
+        );
 
-	if ( ! isset( $routes[ $full_route ] ) ) {
-		return false;
-	}
+        $namespace  = trim( $namespace, '/' );
+        $route      = '/' . ltrim( $route, '/' );
+        $full_route = '/' . $namespace . $route;
+        $full_route = rtrim( $full_route, '/' );
+        $routes     = $wp_rest_server->get_routes();
+
+        if ( ! isset( $routes[ $full_route ] ) ) {
+                if ( ! in_array( $full_route, $GLOBALS['ap_rest_diagnostics']['missing'], true ) ) {
+                        $GLOBALS['ap_rest_diagnostics']['missing'][] = $full_route;
+                        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                error_log( "[REST MISSING] Route $full_route is not registered." );
+                        }
+                }
+                return false;
+        }
 
 	if ( $method === null ) {
 		return true;
