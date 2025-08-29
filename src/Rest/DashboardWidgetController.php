@@ -143,8 +143,8 @@ class DashboardWidgetController {
 		if ( $nonce ) {
 			$_REQUEST['X-WP-Nonce'] = $nonce;
 		}
-		return current_user_can( 'manage_options' ) && wp_verify_nonce( $nonce, 'wp_rest' );
-	}
+               return wp_verify_nonce( $nonce, 'wp_rest' );
+       }
 
 	public static function get_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$role        = sanitize_key( $request->get_param( 'role' ) );
