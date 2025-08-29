@@ -2,6 +2,10 @@
 <?php
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+if (class_exists(DashboardWidgetRegistry::class)) {
+  DashboardWidgetRegistry::init();
+}
+
 $id       = 'ap_donor_activity';
 $def      = function_exists('\\ArtPulse\\Core\\DashboardWidgetRegistry::getById')
   ? DashboardWidgetRegistry::getById($id)

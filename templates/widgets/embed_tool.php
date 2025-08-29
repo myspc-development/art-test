@@ -2,6 +2,10 @@
 <?php
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+if (class_exists(DashboardWidgetRegistry::class)) {
+  DashboardWidgetRegistry::init();
+}
+
 $id       = 'embed_tool';
 $def      = function_exists('\\ArtPulse\\Core\\DashboardWidgetRegistry::getById')
   ? DashboardWidgetRegistry::getById($id)
