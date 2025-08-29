@@ -5,6 +5,10 @@ use WP_Post;
 
 /**
  * Automatically tag posts using the OpenAI API.
+ *
+ * Developers can supply the API key via the `artpulse_openai_api_key` filter
+ * or through the `ARTPULSE_OPENAI_API_KEY`/`OPENAI_API_KEY` environment
+ * variables.
  */
 class AutoTagger {
 
@@ -30,11 +34,16 @@ class AutoTagger {
 			return;
 		}
 
-		$opts = get_option( 'artpulse_settings', array() );
-		$key  = $opts['openai_api_key'] ?? '';
-		if ( ! $key ) {
-			return;
-		}
+                $opts       = get_option( 'artpulse_settings', array() );
+                $option_key = $opts['openai_api_key'] ?? '';
+                if ( $option_key === '' ) {
+                        $option_key = getenv( 'ARTPULSE_OPENAI_API_KEY' ) ?: getenv( 'OPENAI_API_KEY' ) ?: '';
+                }
+                $filtered_key = apply_filters( 'artpulse_openai_api_key', $option_key );
+                if ( $filtered_key === '' && $option_key === '' ) {
+                        return;
+                }
+                $key = $filtered_key !== '' ? $filtered_key : $option_key;
 
 		$content = trim( wp_strip_all_tags( $post->post_content ) );
 		if ( ! $content ) {
