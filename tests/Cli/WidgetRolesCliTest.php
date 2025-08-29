@@ -2,24 +2,30 @@
 
 namespace {
 	// WP-CLI stub loaded via bootstrap
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ ); }
-	$GLOBALS['options'] = array();
-	function get_option( $name, $default = false ) {
-		return $GLOBALS['options'][ $name ] ?? $default; }
-	function update_option( $name, $value ) {
-		$GLOBALS['options'][ $name ] = $value; }
+        if ( ! defined( 'ABSPATH' ) ) {
+                define( 'ABSPATH', __DIR__ ); }
+        $GLOBALS['options'] = array();
+        if ( ! function_exists( 'get_option' ) ) {
+                function get_option( $name, $default = false ) {
+                        return $GLOBALS['options'][ $name ] ?? $default; }
+        }
+        if ( ! function_exists( 'update_option' ) ) {
+                function update_option( $name, $value ) {
+                        $GLOBALS['options'][ $name ] = $value; }
+        }
 }
 
 namespace ArtPulse\Core {
-	class DashboardWidgetRegistry {
-		public static function get_role_widget_map( array $roles = array() ): array {
-			return array(
-				'member' => array( array( 'id' => 'w1' ) ),
-				'artist' => array( array( 'id' => 'w2' ) ),
-			);
-		}
-	}
+        if ( ! class_exists( DashboardWidgetRegistry::class ) ) {
+        class DashboardWidgetRegistry {
+                public static function get_role_widget_map( array $roles = array() ): array {
+                        return array(
+                                'member' => array( array( 'id' => 'w1' ) ),
+                                'artist' => array( array( 'id' => 'w2' ) ),
+                        );
+                }
+        }
+        }
 }
 
 namespace ArtPulse\Cli\Tests {
