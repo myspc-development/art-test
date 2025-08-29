@@ -1,12 +1,37 @@
-#!/usr/bin/env bash
-set -euo pipefail
-: "${WP_CORE_DIR:?Set WP_CORE_DIR to an existing WP root (contains wp-settings.php)}"
-TESTS_DIR="${WP_PHPUNIT__DIR:-vendor/wp-phpunit/wp-phpunit}"
-mkdir -p "${TESTS_DIR}"
-if [ ! -f "${WP_CORE_DIR}/wp-settings.php" ]; then
-  echo "wp-settings.php not found in WP_CORE_DIR=${WP_CORE_DIR}" >&2
-  exit 1
-fi
-rm -rf "${TESTS_DIR}/wordpress"
-ln -s "${WP_CORE_DIR}" "${TESTS_DIR}/wordpress"
-echo "Linked ${WP_CORE_DIR} -> ${TESTS_DIR}/wordpress"
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+$root = dirname(__DIR__);
+$testsDir = $root . '/vendor/wp-phpunit/wp-phpunit';
+$coreDir = getenv('WP_CORE_DIR');
+if ($coreDir === false) {
+    fwrite(STDERR, "Set WP_CORE_DIR to an existing WP root (contains wp-settings.php)\n");
+    exit(1);
+}
+$coreDir = rtrim($coreDir, '/');
+if (!file_exists($coreDir . '/wp-settings.php')) {
+    fwrite(STDERR, "wp-settings.php not found in WP_CORE_DIR={$coreDir}\n");
+    exit(1);
+}
+if (!is_dir($testsDir) && !mkdir($testsDir, 0777, true)) {
+    fwrite(STDERR, "Failed to create {$testsDir}\n");
+    exit(1);
+}
+$target = $testsDir . '/wordpress';
+if (is_link($target) || file_exists($target)) {
+    if (!unlink($target)) {
+        fwrite(STDERR, "Failed to remove existing {$target}\n");
+        exit(1);
+    }
+}
+if (!symlink($coreDir, $target)) {
+    fwrite(STDERR, "Could not create symlink {$target}\n");
+    exit(1);
+}
+if (!file_exists($target . '/wp-settings.php')) {
+    fwrite(STDERR, "wp core link failed\n");
+    exit(1);
+}
+
+echo "Linked {$coreDir} -> {$target}" . PHP_EOL;

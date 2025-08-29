@@ -138,21 +138,18 @@ class DashboardWidgetController {
 		}
 	}
 
-       public static function check_permissions( WP_REST_Request $request ): bool {
+       public static function check_permissions( WP_REST_Request $request ) {
                $nonce = $request->get_header( 'X-WP-Nonce' );
-               if ( $nonce ) {
-                       $_REQUEST['X-WP-Nonce'] = $nonce;
+               $check = \ArtPulse\Rest\Util\Auth::verify_nonce( $nonce );
+               if ( is_wp_error( $check ) ) {
+                       return $check;
                }
 
-               if ( defined( 'AP_TESTING' ) && AP_TESTING && is_user_logged_in() ) {
+               if ( current_user_can( 'manage_options' ) || current_user_can( 'edit_posts' ) ) {
                        return true;
                }
 
-               if ( ! is_user_logged_in() || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-                       return false;
-               }
-
-               return current_user_can( 'manage_options' ) || current_user_can( 'edit_posts' );
+               return new WP_Error( 'rest_forbidden', 'Forbidden.', array( 'status' => 403 ) );
        }
 
 	public static function get_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {

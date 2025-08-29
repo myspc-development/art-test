@@ -55,34 +55,18 @@ class SubmissionRestController {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => fn() => rest_ensure_response( array( 'message' => 'Use POST to submit a form.' ) ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
-				),
-			)
-		);
-	}
+                                        'permission_callback' => \ArtPulse\Rest\Util\Auth::require_login_and_cap( 'read' ),
+                                ),
+                        )
+                );
+        }
 
 	/**
 	 * Permission callback for the submission endpoint.
 	 */
-	public static function check_permissions( WP_REST_Request $request ) {
-		$nonce = $request->get_header( 'X-WP-Nonce' ) ?: $request->get_param( '_wpnonce' );
-
-               if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-                       return false;
-               }
-
-               // Allow any logged in user with upload permissions to submit content.
-               // Members are granted this capability on registration so they can
-               // request upgrades without needing edit privileges.
-               if ( ! current_user_can( 'upload_files' ) ) {
-                       return false;
-               }
-               return true;
+       public static function check_permissions( WP_REST_Request $request ) {
+               $nonce = $request->get_header( 'X-WP-Nonce' ) ?: $request->get_param( '_wpnonce' );
+               return \ArtPulse\Rest\Util\Auth::guard( $nonce, 'upload_files' );
        }
 
 	/**

@@ -43,6 +43,7 @@ class ComposerStaticInit849fb949e6ed4c03b53fc31e3a3013ae
             'ArtPulse\\Widgets\\' => 17,
             'ArtPulse\\Tests\\Stubs\\' => 21,
             'ArtPulse\\' => 9,
+            'App\\' => 4,
         ),
     );
 
@@ -84,6 +85,10 @@ class ComposerStaticInit849fb949e6ed4c03b53fc31e3a3013ae
             0 => __DIR__ . '/../..' . '/tests/Stubs',
         ),
         'ArtPulse\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
+        'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

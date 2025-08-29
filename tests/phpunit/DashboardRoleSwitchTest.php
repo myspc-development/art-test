@@ -48,14 +48,14 @@ final class DashboardRoleSwitchTest extends TestCase {
 		DashboardPresets::resetCache();
 		MockStorage::$current_roles = array( 'view_artpulse_dashboard', 'artist' );
 		ini_set( 'error_log', '/tmp/phpunit-error.log' );
-		WidgetRegistry::register( 'widget_membership', static fn() => '<section></section>' );
-		WidgetRegistry::register( 'widget_artist_revenue_summary', static fn() => '<section></section>' );
-		WidgetRegistry::register( 'widget_audience_crm', static fn() => '<section></section>' );
+                WidgetRegistry::register( 'widget_membership', [self::class, 'renderSection'] );
+                WidgetRegistry::register( 'widget_artist_revenue_summary', [self::class, 'renderSection'] );
+                WidgetRegistry::register( 'widget_audience_crm', [self::class, 'renderSection'] );
 	}
 
-	protected function tearDown(): void {
-		DashboardPresets::resetCache();
-	}
+        protected function tearDown(): void {
+                DashboardPresets::resetCache();
+        }
 
 	/**
 	 * @dataProvider roles
@@ -87,7 +87,9 @@ final class DashboardRoleSwitchTest extends TestCase {
 		unset( $_GET['role'], $_GET['ap_role'], $_GET['ap_dashboard'] );
 	}
 
-	public function roles(): array {
-		return array( array( 'member' ), array( 'artist' ), array( 'organization' ) );
-	}
-}
+        public function roles(): array {
+                return array( array( 'member' ), array( 'artist' ), array( 'organization' ) );
+        }
+
+        public static function renderSection(): string { return '<section></section>'; }
+ }

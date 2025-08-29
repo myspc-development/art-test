@@ -39,6 +39,22 @@ jobs:
           WP_TESTS_DB_NAME: wordpress_test
       - name: Run unit tests
         run: composer run test:unit
+        env:
+          DB_NAME: wordpress_test
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
+          AP_TEST_MODE: 1
+      - name: Run focused WP groups
+        run: composer run test:wp -- --group admin --group restapi --group core --group engagement --group personalization
+        env:
+          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
+          DB_NAME: wordpress_test
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
+          AP_TEST_MODE: 1
       - name: Run WordPress tests
         run: composer run test:wp
         env:
@@ -48,3 +64,4 @@ jobs:
           DB_USER: root
           DB_PASSWORD: root
           DB_HOST: 127.0.0.1
+          AP_TEST_MODE: 1

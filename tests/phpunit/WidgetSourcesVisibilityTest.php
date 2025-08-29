@@ -24,14 +24,16 @@ class WidgetSourcesVisibilityTest extends TestCase {
 		update_option( 'artpulse_hidden_widgets', array() );
 	}
 
-	public function test_roles_from_visibility_option(): void {
-		DashboardWidgetRegistry::register( 'widget_demo', 'Demo', '', '', static fn() => '' );
-		update_option( 'artpulse_widget_roles', array( 'member' => array( 'widget_demo' ) ) );
+        public function test_roles_from_visibility_option(): void {
+                DashboardWidgetRegistry::register( 'widget_demo', 'Demo', '', '', [self::class, 'blank'] );
+                update_option( 'artpulse_widget_roles', array( 'member' => array( 'widget_demo' ) ) );
 
-		$cmd = new WidgetAudit();
-		$cmd->widgets( array(), array( 'format' => 'table' ) );
+                $cmd = new WidgetAudit();
+                $cmd->widgets( array(), array( 'format' => 'table' ) );
 
-		$this->assertNotEmpty( self::$rows );
-		$this->assertSame( 'member', self::$rows[0]['roles_from_visibility'] );
-	}
+                $this->assertNotEmpty( self::$rows );
+                $this->assertSame( 'member', self::$rows[0]['roles_from_visibility'] );
+        }
+
+        public static function blank(): string { return ''; }
 }

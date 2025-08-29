@@ -10,12 +10,13 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "ArtPulse\\Tests\\Stubs\\": "tests/Stubs/"
+      "ArtPulse\\Tests\\Stubs\\": "tests/Stubs/",
+      "ArtPulse\\Tests\\": "tests/Support/"
     }
   },
   "require-dev": {
-    "wp-phpunit/wp-phpunit": "^6",
-    "yoast/phpunit-polyfills": "^2",
+    "wp-phpunit/wp-phpunit": "^6.0",
+    "yoast/phpunit-polyfills": "^2.0",
     "brain/monkey": "^2.6",
     "phpunit/phpunit": "^9.6",
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
@@ -33,13 +34,10 @@
   },
   "scripts": {
     "pretest": "php tools/preflight.php",
-    "test": [
-      "@test:unit",
-      "@test:wp"
-    ],
-    "test:unit": "php -d opcache.enable_cli=0 -d display_errors=0 vendor/bin/phpunit -c phpunit.unit.xml.dist",
-    "test:wp": "vendor/bin/phpunit -c phpunit.wp.xml.dist --testsuite WP --verbose",
-    "wp:core-link": "bash bin/wp-core-link",
+    "test": "composer run test:unit && composer run test:wp",
+    "test:unit": "vendor/bin/phpunit -c phpunit.unit.xml.dist",
+    "test:wp": "vendor/bin/phpunit -c phpunit.wp.xml.dist --testsuite WP",
+    "wp:core-link": "php bin/wp-core-link",
     "cs": "php -dmemory_limit=1G vendor/bin/phpcs -p",
     "cs:fix": "vendor/bin/phpcbf",
     "stan": "php -dmemory_limit=1G vendor/bin/phpstan analyse --memory-limit=1G",

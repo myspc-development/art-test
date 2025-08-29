@@ -1,55 +1,39 @@
 <?php
-declare(strict_types=1);
+namespace ArtPulse\Tests;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-if (!function_exists('ap_widget_alpha_markup')) {
-    function ap_widget_alpha_markup(): string { return '<p>alpha</p>'; }
-}
-if (!function_exists('ap_widget_beta_markup')) {
-    function ap_widget_beta_markup(): string { return '<p>beta</p>'; }
-}
-if (!function_exists('ap_widget_gamma_markup')) {
-    function ap_widget_gamma_markup(): string { return '<p>gamma</p>'; }
-}
+final class SeedWidgets {
+    public static function widgetAlpha(): string { return '<p>alpha</p>'; }
+    public static function widgetBeta(): string { return '<p>beta</p>'; }
+    public static function widgetGamma(): string { return '<p>gamma</p>'; }
+    public static function widgetShared(): string { return '<p>shared</p>'; }
 
-if (!function_exists('ap_seed_dashboard_widgets_bootstrap')) {
-    function ap_seed_dashboard_widgets_bootstrap(): void {
-        if (!class_exists(DashboardWidgetRegistry::class)) {
-            return;
-        }
-        DashboardWidgetRegistry::register(
-            'widget_alpha',
-            'Alpha',
-            '',
-            '',
-            'ap_widget_alpha_markup',
-            [
-                'roles' => ['member'],
-                'section' => 'Insights',
-            ]
-        );
-        DashboardWidgetRegistry::register(
-            'widget_beta',
-            'Beta',
-            '',
-            '',
-            'ap_widget_beta_markup',
-            [
-                'roles' => ['artist'],
-                'section' => 'Actions',
-            ]
-        );
-        DashboardWidgetRegistry::register(
-            'widget_gamma',
-            'Gamma',
-            '',
-            '',
-            'ap_widget_gamma_markup',
-            [
-                'roles' => ['organization'],
-                'section' => 'Insights',
-            ]
-        );
+    public static function bootstrap(): void {
+        DashboardWidgetRegistry::register('widget_alpha', 'Alpha', '', '', [self::class, 'widgetAlpha'], ['roles' => ['member']]);
+        DashboardWidgetRegistry::register('widget_beta', 'Beta', '', '', [self::class, 'widgetBeta'], ['roles' => ['artist']]);
+        DashboardWidgetRegistry::register('widget_gamma', 'Gamma', '', '', [self::class, 'widgetGamma'], ['roles' => ['organization']]);
+        DashboardWidgetRegistry::register('widget_shared', 'Shared', '', '', [self::class, 'widgetShared'], ['roles' => ['member','artist','organization']]);
+
+        add_filter('pre_option_ap_widget_group_visibility', [self::class, 'groupVisibility']);
+        add_filter('pre_option_artpulse_role_layout_member', [self::class, 'memberLayout']);
+        add_filter('pre_option_artpulse_role_layout_artist', [self::class, 'artistLayout']);
+        add_filter('pre_option_artpulse_role_layout_organization', [self::class, 'organizationLayout']);
+    }
+
+    public static function groupVisibility(): array {
+        return ['insights' => true, 'actions' => true];
+    }
+
+    public static function memberLayout(): array {
+        return [ ['id' => 'widget_alpha'], ['id' => 'widget_shared'] ];
+    }
+
+    public static function artistLayout(): array {
+        return [ ['id' => 'widget_beta'], ['id' => 'widget_shared'] ];
+    }
+
+    public static function organizationLayout(): array {
+        return [ ['id' => 'widget_gamma'], ['id' => 'widget_shared'] ];
     }
 }

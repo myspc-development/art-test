@@ -1328,15 +1328,18 @@ class DashboardWidgetRegistry {
 				continue;
 			}
 
-			if ( array_key_exists( 'roles', $cfg ) ) {
-				$roles = $cfg['roles'];
-				if ( $roles === null ) {
-					// Interpret null as "no restriction" → empty list internally.
-					$widgets[ $id ]['roles'] = array();
-				} else {
-					$widgets[ $id ]['roles'] = self::normalizeRoleList( $roles );
-				}
-			}
+                        if ( array_key_exists( 'roles', $cfg ) ) {
+                                $roles = $cfg['roles'];
+                                if ( $roles === null ) {
+                                        // Interpret null as "no restriction" → empty list internally.
+                                        $widgets[ $id ]['roles'] = array();
+                                } else {
+                                        $normalized = self::normalizeRoleList( $roles );
+                                        if ( ! empty( $normalized ) ) {
+                                                $widgets[ $id ]['roles'] = $normalized;
+                                        }
+                                }
+                        }
 			if ( array_key_exists( 'capability', $cfg ) ) {
 				$widgets[ $id ]['capability'] = sanitize_key( (string) $cfg['capability'] );
 			}

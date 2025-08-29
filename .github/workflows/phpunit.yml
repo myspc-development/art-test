@@ -25,6 +25,17 @@ jobs:
           php-version: '8.3'
       - run: composer install --prefer-dist --no-progress
       - run: bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest
+      - name: Run focused WP groups
+        run: vendor/bin/phpunit -c phpunit.wp.xml.dist --group admin --group restapi --group core --group engagement --group personalization
+        env:
+          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
+          DB_NAME: wordpress_test
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
+          WP_CORE_DIR: /tmp/wordpress
+          AP_TEST_MODE: 1
       - name: Run tests with coverage
         run: tools/run-coverage.sh
         env:
@@ -34,3 +45,5 @@ jobs:
           DB_USER: root
           DB_PASSWORD: root
           DB_HOST: 127.0.0.1
+          WP_CORE_DIR: /tmp/wordpress
+          AP_TEST_MODE: 1
