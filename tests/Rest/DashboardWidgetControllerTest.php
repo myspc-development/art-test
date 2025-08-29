@@ -170,15 +170,15 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
 		$req->set_body_params(
 			array(
-				'role'   => 'administrator',
-				'layout' => array(
-					array(
-						'id'      => 'baz',
-						'visible' => true,
-					),
-				),
-			)
-		);
+                                'role'   => 'administrator',
+                                'layout' => array(
+                                        array(
+                                                'id'      => 'baz',
+                                                'visible' => true,
+                                        ),
+                                ),
+                        )
+                );
 
 	}
 
@@ -196,15 +196,15 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$req->set_header( 'X-WP-Nonce', 'badnonce' );
 		$req->set_body_params(
 			array(
-				'role'   => 'administrator',
-				'layout' => array(
-					array(
-						'id'      => 'baz',
-						'visible' => true,
-					),
-				),
-			)
-		);
+                                'role'   => 'administrator',
+                                'layout' => array(
+                                        array(
+                                                'id'      => 'baz',
+                                                'visible' => true,
+                                        ),
+                                ),
+                        )
+                );
 
 	}
 
@@ -325,7 +325,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				'role'   => 'administrator',
 				'layout' => array(
 					array(
-						'id'      => 'baz',
+						'id'      => 'Widget-BaZ',
 						'visible' => true,
 					),
 				),
