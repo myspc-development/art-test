@@ -16,11 +16,13 @@ if (file_exists($autoloader)) {
 }
 
 /**
- * Load test helper traits/utilities (AjaxTestHelper, factories, etc).
+ * Load test helper traits/utilities (AjaxTestHelper, factories, stubs, etc).
+ * NOTE: These files must NOT call add_filter()/add_action() at load time.
+ * Register hooks via functions and let us schedule them below.
  */
-foreach ([__DIR__.'/Traits', __DIR__.'/Support', __DIR__.'/helpers'] as $dir) {
+foreach ([__DIR__ . '/Traits', __DIR__ . '/Support', __DIR__ . '/helpers'] as $dir) {
     if (is_dir($dir)) {
-        foreach (glob($dir.'/*.php') as $file) {
+        foreach (glob($dir . '/*.php') as $file) {
             require_once $file;
         }
     }
@@ -31,7 +33,7 @@ foreach ([__DIR__.'/Traits', __DIR__.'/Support', __DIR__.'/helpers'] as $dir) {
  */
 function _manually_load_plugin() {
     $root = dirname(__DIR__);
-    foreach (['/artpulse-management.php','/artpulse.php'] as $rel) {
+    foreach (['/artpulse-management.php', '/artpulse.php'] as $rel) {
         $path = $root . $rel;
         if (file_exists($path)) { require_once $path; return; }
     }
@@ -39,6 +41,20 @@ function _manually_load_plugin() {
 }
 
 require $_tests_dir . '/includes/functions.php';
-tests_add_filter('muplugins_loaded', '_manually_load_plugin');
+
+/**
+ * Schedule test-only helpers BEFORE plugin boot (or at REST init).
+ */
+if (function_exists('ap_seed_dashboard_widgets_bootstrap')) {
+    // Seed widget definitions early so plugin preflight checks pass.
+    tests_add_filter('muplugins_loaded', 'ap_seed_dashboard_widgets_bootstrap', 5);
+}
+if (function_exists('ap_register_rest_profile_update_shim')) {
+    // Register the REST profile shim when the REST API is initialized.
+    tests_add_filter('rest_api_init', 'ap_register_rest_profile_update_shim', 1);
+}
+
+/** Now load the plugin */
+tests_add_filter('muplugins_loaded', '_manually_load_plugin', 15);
 
 require $_tests_dir . '/includes/bootstrap.php';
