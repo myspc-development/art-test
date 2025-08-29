@@ -90,13 +90,13 @@ class WidgetGuardTest extends WP_UnitTestCase {
 			10,
 			2
 		);
-		DashboardWidgetRegistry::register( 'foo', 'Foo', 'info', 'desc', 'missing_cb' );
-		WidgetGuard::validate_and_patch();
-		$cb = DashboardWidgetRegistry::get_widget_callback( 'foo' );
+               DashboardWidgetRegistry::register( 'widget_foo', 'Foo', 'info', 'desc', 'missing_cb' );
+               WidgetGuard::validate_and_patch();
+               $cb = DashboardWidgetRegistry::get_widget_callback( 'widget_foo' );
 		ob_start();
 		call_user_func( $cb );
 		$html = ob_get_clean();
-		$this->assertStringContainsString( 'foo', $html );
+               $this->assertStringContainsString( 'widget_foo', $html );
 		remove_all_filters( 'ap_widget_placeholder_debug_payload' );
 	}
 

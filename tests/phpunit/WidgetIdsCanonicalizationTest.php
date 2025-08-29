@@ -51,7 +51,7 @@ class WidgetIdsCanonicalizationTest extends TestCase {
         }
 
         public function test_canonicalize_non_strings_return_empty(): void {
-                $this->assertSame( '', WidgetIds::canonicalize( array( 'foo' ) ) );
+               $this->assertSame( '', WidgetIds::canonicalize( array( 'widget_foo' ) ) );
                 $this->assertSame( '', WidgetIds::canonicalize( null ) );
                 $this->assertSame( '', WidgetIds::canonicalize( new \stdClass() ) );
 	}

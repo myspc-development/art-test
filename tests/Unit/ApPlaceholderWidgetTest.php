@@ -29,9 +29,9 @@ class ApPlaceholderWidgetTest extends TestCase {
 
 	public function test_debug_encoded_when_non_empty(): void {
 		ob_start();
-		ApPlaceholderWidget::render( array( 'debug' => array( 'foo' => 'bar' ) ) );
+               ApPlaceholderWidget::render( array( 'debug' => array( 'widget_foo' => 'bar' ) ) );
 		$html = ob_get_clean();
-		$this->assertStringContainsString( json_encode( array( 'foo' => 'bar' ) ), $html );
+               $this->assertStringContainsString( json_encode( array( 'widget_foo' => 'bar' ) ), $html );
 		$this->assertStringContainsString( 'ap-widget__debug', $html );
 	}
 

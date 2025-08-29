@@ -173,7 +173,7 @@ class DirectMessagesTest extends \WP_UnitTestCase {
 		$post->set_param( 'content', 'extras' );
 		$post->set_param( 'parent_id', 9 );
 		$post->set_param( 'attachments', array( 5, '6' ) );
-		$post->set_param( 'tags', array( 'Foo', 'bar' ) );
+               $post->set_param( 'tags', array( 'widget_foo', 'bar' ) );
 		$res = rest_get_server()->dispatch( $post );
 		$this->assertSame( 200, $res->get_status() );
 
@@ -182,6 +182,6 @@ class DirectMessagesTest extends \WP_UnitTestCase {
 		$row   = $wpdb->get_row( "SELECT * FROM $table ORDER BY id DESC", ARRAY_A );
 		$this->assertSame( '9', $row['parent_id'] );
 		$this->assertSame( '5,6', $row['attachments'] );
-		$this->assertSame( 'foo,bar', $row['tags'] );
+               $this->assertSame( 'widget_foo,bar', $row['tags'] );
 	}
 }

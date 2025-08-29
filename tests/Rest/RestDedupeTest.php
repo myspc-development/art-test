@@ -17,7 +17,7 @@ class RestDedupeTest extends \WP_UnitTestCase {
                 ini_set( 'log_errors', '1' );
 
                 $endpoints = array(
-                        '/ap/v1/foo' => array(
+                       '/ap/v1/widget_foo' => array(
                                 array(
                                         'methods'             => 'GET',
                                         'callback'            => '__return_true',
@@ -55,7 +55,7 @@ class RestDedupeTest extends \WP_UnitTestCase {
 
                 $result = \ap_deduplicate_rest_routes( $endpoints );
 
-                $this->assertCount( 1, $result['/ap/v1/foo'] );
+               $this->assertCount( 1, $result['/ap/v1/widget_foo'] );
                 $this->assertCount( 4, $result['/ap/v1/bar'] );
 
                 $contents = file_get_contents( $log );
@@ -75,7 +75,7 @@ class RestDedupeTest extends \WP_UnitTestCase {
                 ini_set( 'log_errors', '1' );
 
                 $endpoints = array(
-                        '/ap/v1/foo' => array(
+                       '/ap/v1/widget_foo' => array(
                                 array(
                                         'methods'             => 'GET',
                                         'callback'            => '__return_true',
@@ -93,7 +93,7 @@ class RestDedupeTest extends \WP_UnitTestCase {
 
                 $result = \ap_deduplicate_rest_routes( $endpoints );
 
-                $this->assertCount( 1, $result['/ap/v1/foo'] );
+               $this->assertCount( 1, $result['/ap/v1/widget_foo'] );
                 $this->assertCount( 1, $result['/ap/v1/bar'] );
 
                 $contents = file_get_contents( $log );
