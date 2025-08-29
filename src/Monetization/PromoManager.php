@@ -18,12 +18,7 @@ class PromoManager {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'apply_code' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
+                                        'permission_callback' => '__return_true',
 					'args'                => array( 'id' => array( 'validate_callback' => 'absint' ) ),
 				)
 			);
