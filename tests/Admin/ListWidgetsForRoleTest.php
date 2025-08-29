@@ -20,8 +20,8 @@ class ListWidgetsForRoleTest extends \WP_UnitTestCase {
 	}
 
 	public function test_widget_without_callback_is_disabled(): void {
-		DashboardWidgetRegistry::register(
-			'foo',
+               DashboardWidgetRegistry::register(
+                       'widget_foo',
 			array(
 				'title'           => 'Foo',
 				'render_callback' => '__return_null',
@@ -45,6 +45,6 @@ class ListWidgetsForRoleTest extends \WP_UnitTestCase {
 		$this->assertArrayHasKey( 'bar', $map );
 		$this->assertTrue( $map['bar']['disabled'] );
 		$this->assertSame( 'no_renderer', $map['bar']['disabled_reason'] );
-		$this->assertFalse( $map['foo']['disabled'] );
+               $this->assertFalse( $map['widget_foo']['disabled'] );
 	}
 }

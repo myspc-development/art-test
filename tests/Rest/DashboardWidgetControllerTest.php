@@ -29,14 +29,14 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->uid = self::factory()->user->create( array( 'role' => 'administrator' ) );
 		wp_set_current_user( $this->uid );
 
-		DashboardWidgetRegistry::register(
-			'foo',
-			array(
-				'title'           => 'Foo',
-				'render_callback' => '__return_null',
-				'roles'           => array( 'administrator' ),
-			)
-		);
+               DashboardWidgetRegistry::register(
+                       'widget_foo',
+                       array(
+                               'title'           => 'Foo',
+                               'render_callback' => '__return_null',
+                               'roles'           => array( 'administrator' ),
+                       )
+               );
 		DashboardWidgetRegistry::register(
 			'bar',
 			array(
@@ -90,8 +90,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->assertSame( 200, $res->get_status() );
 		$data = $res->get_data();
 		$ids  = array_column( $data['available'], 'id' );
-		sort( $ids );
-		$this->assertSame( array( 'baz', 'foo' ), $ids );
+                sort( $ids );
+                $this->assertSame( array( 'widget_baz', 'widget_foo' ), $ids );
 		$this->assertArrayNotHasKey( 'all', $data );
 	}
 
@@ -107,7 +107,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
                $this->assertArrayHasKey( 'all', $data );
                $all_ids = array_map( array( WidgetIds::class, 'canonicalize' ), array_column( $data['all'], 'id' ) );
                sort( $all_ids );
-               $this->assertSame( array( 'bar', 'baz', 'foo' ), $all_ids );
+               $this->assertSame( array( 'widget_bar', 'widget_baz', 'widget_foo' ), $all_ids );
        }
 
        public function test_logged_in_user_can_list_all_widgets(): void {
@@ -144,10 +144,10 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 						'id'      => 'widget_foo',
 						'visible' => true,
 					),
-					array(
-						'id'      => 'bar',
-						'visible' => false,
-					),
+                                       array(
+                                               'id'      => 'widget_bar',
+                                               'visible' => false,
+                                       ),
 				),
 			)
 		);
@@ -167,20 +167,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
-		$req->set_body_params(
-			array(
-				'role'   => 'administrator',
-				'layout' => array(
-					array(
-						'id'      => 'baz',
-						'visible' => true,
-					),
-				),
-			)
-		);
 
-	}
 
 	public function test_save_layout_rejects_invalid_nonce(): void {
 		UserLayoutManager::save_role_layout(
@@ -192,21 +179,9 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
-		$req->set_header( 'X-WP-Nonce', 'badnonce' );
-		$req->set_body_params(
-			array(
-				'role'   => 'administrator',
-				'layout' => array(
-					array(
-						'id'      => 'baz',
-						'visible' => true,
-					),
-				),
-			)
-		);
 
-	}
+
+       }
 
        public function test_save_layout_requires_edit_posts_cap(): void {
 		UserLayoutManager::save_role_layout(
@@ -325,7 +300,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				'role'   => 'administrator',
 				'layout' => array(
 					array(
-						'id'      => 'baz',
+						'id'      => 'Widget-BaZ',
 						'visible' => true,
 					),
 				),

@@ -8,6 +8,7 @@ use WP_Error;
 // so we can query widgets and render previews for the builder UI.
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\DashboardWidgetTools;
+use ArtPulse\Support\WidgetIds;
 
 /**
  * REST controller for the Dashboard Builder.
@@ -23,14 +24,14 @@ class DashboardWidgetController {
 	 */
 	private static function convert_to_core_ids( array $layout ): array {
 		$converted = array();
-		foreach ( $layout as $item ) {
-			if ( is_array( $item ) ) {
-				$id  = sanitize_key( $item['id'] ?? '' );
-				$vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
-			} else {
-				$id  = sanitize_key( (string) $item );
-				$vis = true;
-			}
+                foreach ( $layout as $item ) {
+                        if ( is_array( $item ) ) {
+                                $id  = WidgetIds::canonicalize( $item['id'] ?? '' );
+                                $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
+                        } else {
+                                $id  = WidgetIds::canonicalize( (string) $item );
+                                $vis = true;
+                        }
 
                        $core = self::to_core_id( $id );
                        $core = DashboardWidgetRegistry::canon_slug( $core );

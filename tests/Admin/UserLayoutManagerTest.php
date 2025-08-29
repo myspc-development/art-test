@@ -129,28 +129,28 @@ namespace ArtPulse\Admin\Tests {
 		}
 
 		public function test_user_layout_is_stored_and_retrieved(): void {
-			DashboardWidgetRegistry::register( 'foo', 'Foo', '', '', '__return_null' );
+                       DashboardWidgetRegistry::register( 'widget_foo', 'Foo', '', '', '__return_null' );
 			DashboardWidgetRegistry::register( 'bar', 'Bar', '', '', '__return_null' );
 
 			UserLayoutManager::save_layout(
 				1,
 				array(
-					array( 'id' => 'bar' ),
-					array( 'id' => 'widget_foo' ),
-					array( 'id' => 'widget_foo' ),
+                                       array( 'id' => 'bar' ),
+                                       array( 'id' => 'widget_foo' ),
+                                       array( 'id' => 'widget_foo' ),
 					'invalid',
 				)
 			);
 
 			$expected_saved = array(
-				array(
-					'id'      => 'bar',
-					'visible' => true,
-				),
-				array(
-					'id'      => 'widget_foo',
-					'visible' => true,
-				),
+                               array(
+                                       'id'      => 'bar',
+                                       'visible' => true,
+                               ),
+                               array(
+                                       'id'      => 'widget_foo',
+                                       'visible' => true,
+                               ),
 			);
 
 			$this->assertSame( $expected_saved, self::$meta[1]['ap_dashboard_layout'] );
@@ -328,7 +328,7 @@ namespace ArtPulse\Admin\Tests {
 		}
 
 		public function test_export_layout_returns_pretty_json(): void {
-			DashboardWidgetRegistry::register( 'foo', 'Foo', '', '', '__return_null' );
+                       DashboardWidgetRegistry::register( 'widget_foo', 'Foo', '', '', '__return_null' );
 			UserLayoutManager::save_role_layout( 'subscriber', array( array( 'id' => 'widget_foo' ) ) );
 
 			$expected = json_encode(
@@ -344,7 +344,7 @@ namespace ArtPulse\Admin\Tests {
 		}
 
 		public function test_import_layout_decodes_and_saves(): void {
-			DashboardWidgetRegistry::register( 'foo', 'Foo', '', '', '__return_null' );
+                       DashboardWidgetRegistry::register( 'widget_foo', 'Foo', '', '', '__return_null' );
 			DashboardWidgetRegistry::register( 'bar', 'Bar', '', '', '__return_null' );
 
 			$json = json_encode(
@@ -387,7 +387,7 @@ namespace ArtPulse\Admin\Tests {
 			$prop->setValue( null, array() );
 
 			DashboardWidgetRegistry::register( 'artpulse_dashboard_widget', 'Manager', '', '', '__return_null' );
-			DashboardWidgetRegistry::register( 'foo', 'Foo', '', '', '__return_null' );
+                       DashboardWidgetRegistry::register( 'widget_foo', 'Foo', '', '', '__return_null' );
 
 			$layout = UserLayoutManager::get_role_layout( 'subscriber' )['layout'];
 			$this->assertSame( array(), $layout );

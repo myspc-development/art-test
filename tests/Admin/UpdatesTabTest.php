@@ -184,12 +184,12 @@ class UpdatesTabTest extends WP_UnitTestCase {
 	}
 
 	public function test_render_outputs_summary_and_clears_option(): void {
-		self::$options['ap_updated_files'] = array( 'foo.php' );
+               self::$options['ap_updated_files'] = array( 'widget_foo.php' );
 		$_GET['ap_update_success']         = '1';
 		ob_start();
 		UpdatesTab::render();
 		$html = ob_get_clean();
-		$this->assertStringContainsString( '<li>foo.php</li>', $html );
+               $this->assertStringContainsString( '<li>widget_foo.php</li>', $html );
 		$this->assertArrayNotHasKey( 'ap_updated_files', self::$options );
 	}
 
@@ -206,7 +206,7 @@ class UpdatesTabTest extends WP_UnitTestCase {
 
 	public function test_check_updates_valid_nonce(): void {
 		$_REQUEST['_wpnonce']               = 'valid';
-		self::$options['artpulse_settings'] = array( 'github_repo' => 'foo/bar' );
+               self::$options['artpulse_settings'] = array( 'github_repo' => 'widget_foo/bar' );
 		try {
 			UpdatesTab::check_updates();
 		} catch ( \Exception $e ) {
@@ -218,7 +218,7 @@ class UpdatesTabTest extends WP_UnitTestCase {
 
 	public function test_check_updates_invalid_nonce_dies(): void {
 		$_REQUEST['_wpnonce']               = 'bad';
-		self::$options['artpulse_settings'] = array( 'github_repo' => 'foo/bar' );
+               self::$options['artpulse_settings'] = array( 'github_repo' => 'widget_foo/bar' );
 		try {
 			UpdatesTab::check_updates();
 		} catch ( \Exception $e ) {
@@ -247,7 +247,7 @@ class UpdatesTabTest extends WP_UnitTestCase {
 	}
 
 	public function test_check_updates_remote_error_returns_error_and_redirects(): void {
-		self::$options['artpulse_settings'] = array( 'github_repo' => 'foo/bar' );
+               self::$options['artpulse_settings'] = array( 'github_repo' => 'widget_foo/bar' );
 		self::$remote_error                 = new \WP_Error( 'remote_fail', 'remote failed' );
 
 		$err = UpdatesTab::check_updates( true );
