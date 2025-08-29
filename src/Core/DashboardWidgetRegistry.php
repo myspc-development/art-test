@@ -786,6 +786,37 @@ class DashboardWidgetRegistry {
 		return $html;
 	}
 
+        /**
+         * Render the preset layout for a role.
+         *
+         * @param string $role Role slug.
+         * @return string
+         */
+        public static function render_role_layout( string $role ): string {
+                $slugs = DashboardPresets::forRole( $role );
+                if ( ! $slugs ) {
+                        return '';
+                }
+
+                $html     = '';
+                $rendered = 0;
+
+                foreach ( $slugs as $slug ) {
+                        $out = self::render( $slug, array( 'preview_role' => $role ) );
+                        if ( $out === '' ) {
+                                continue;
+                        }
+                        $html .= $out;
+                        ++$rendered;
+                }
+
+                if ( 0 === $rendered ) {
+                        $html = self::render( 'widget_placeholder', array( 'preview_role' => $role ) );
+                }
+
+                return $html;
+        }
+
 	/**
 	 * Determine if a user can see a widget.
 	 */
