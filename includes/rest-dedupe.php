@@ -118,10 +118,15 @@ function ap_rest_route_registered( string $namespace, string $route, ?string $me
                 'missing'   => array(),
         );
 
+        $namespace = trim( $namespace );
+        $route     = trim( $route );
+
         $namespace  = trim( $namespace, '/' );
         $route      = '/' . ltrim( $route, '/' );
-        $full_route = '/' . $namespace . $route;
-        $full_route = rtrim( $full_route, '/' );
+        $full_route = ( $namespace === '' ? '' : '/' . $namespace ) . $route;
+        if ( '/' !== $full_route ) {
+                $full_route = rtrim( $full_route, '/' );
+        }
         $routes     = $wp_rest_server->get_routes();
 
         if ( ! isset( $routes[ $full_route ] ) ) {
@@ -149,20 +154,34 @@ function ap_rest_route_registered( string $namespace, string $route, ?string $me
 
 		if ( is_string( $methods ) ) {
 			$list = array_map( 'trim', explode( '|', $methods ) );
-		} elseif ( is_int( $methods ) && class_exists( '\\WP_REST_Server' ) ) {
-			$map  = array(
-				\WP_REST_Server::READABLE  => array( 'GET', 'HEAD' ),
-				\WP_REST_Server::CREATABLE => array( 'POST' ),
-				\WP_REST_Server::EDITABLE  => array( 'PUT', 'PATCH' ),
-				\WP_REST_Server::DELETABLE => array( 'DELETE' ),
-			);
-			$list = array();
-			foreach ( $map as $bit => $verbs ) {
-				if ( $methods & $bit ) {
-					$list = array_merge( $list, $verbs );
-				}
-			}
-		} elseif ( is_array( $methods ) ) {
+                } elseif ( is_int( $methods ) && class_exists( '\\WP_REST_Server' ) ) {
+                        $map = array(
+                                \WP_REST_Server::READABLE  => array( 'GET', 'HEAD' ),
+                                \WP_REST_Server::CREATABLE => array( 'POST' ),
+                                \WP_REST_Server::EDITABLE  => array( 'PUT', 'PATCH' ),
+                                \WP_REST_Server::DELETABLE => array( 'DELETE' ),
+                        );
+
+                        if ( defined( 'WP_REST_Server::OPTIONS' ) ) {
+                                $map[ \WP_REST_Server::OPTIONS ] = array( 'OPTIONS' );
+                        }
+
+                        if ( defined( 'WP_REST_Server::ALLMETHODS' ) ) {
+                                $all = array( 'GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE' );
+                                if ( defined( 'WP_REST_Server::OPTIONS' ) ) {
+                                        $all[] = 'OPTIONS';
+                                }
+                                $map[ \WP_REST_Server::ALLMETHODS ] = $all;
+                        }
+
+                        $list = array();
+                        foreach ( $map as $bit => $verbs ) {
+                                if ( ( $methods & $bit ) === $bit ) {
+                                        $list = array_merge( $list, $verbs );
+                                }
+                        }
+                        $list = array_unique( $list );
+                } elseif ( is_array( $methods ) ) {
 			// Associative array of methods => details or simple list.
 			$keys = array_keys( $methods );
 			$list = array_keys( $methods ) === range( 0, count( $methods ) - 1 )
