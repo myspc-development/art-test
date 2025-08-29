@@ -32,17 +32,16 @@ class DashboardWidgetController {
 				$vis = true;
 			}
 
-			$core = self::to_core_id( $id );
-			if ( $id && $core === $id && ! \ArtPulse\Core\DashboardWidgetRegistry::exists( $id ) ) {
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log( '[DashboardBuilder] Unmapped widget ID: ' . $id );
-				}
-			}
+                       $core = self::to_core_id( $id );
+                       $core = DashboardWidgetRegistry::canon_slug( $core );
+                       if ( $id && ! DashboardWidgetRegistry::exists( $core ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                               error_log( '[DashboardBuilder] Unmapped widget ID: ' . $id );
+                       }
 
-			$converted[] = array(
-				'id'      => $core,
-				'visible' => $vis,
-			);
+                       $converted[] = array(
+                               'id'      => $core,
+                               'visible' => $vis,
+                       );
 		}
 
 		return $converted;
