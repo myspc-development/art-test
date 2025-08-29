@@ -12,11 +12,14 @@ class CurrentUserControllerTest extends \WP_UnitTestCase {
 
 	public function set_up() {
 		parent::set_up();
-		$this->user_id = self::factory()->user->create(
-			array(
-				'role' => 'subscriber',
-			)
-		);
+                // The plugin registers a custom `member` role which replaces the
+                // default WordPress `subscriber` role. Ensure the test user uses
+                // the correct role to align with the controller's response.
+                $this->user_id = self::factory()->user->create(
+                        array(
+                                'role' => 'member',
+                        )
+                );
 		CurrentUserController::register();
 		do_action( 'rest_api_init' );
 	}
@@ -35,8 +38,9 @@ class CurrentUserControllerTest extends \WP_UnitTestCase {
 		$this->assertSame( 200, $res->get_status() );
 		$data = $res->get_data();
                $this->assertSame( $this->user_id, $data['id'] );
-               $this->assertSame( 'subscriber', $data['role'] );
-               $this->assertContains( 'subscriber', $data['roles'] );
+               // The primary role should reflect the custom `member` role.
+               $this->assertSame( 'member', $data['role'] );
+               $this->assertContains( 'member', $data['roles'] );
                $this->assertSame( $data['roles'][0], $data['role'] );
         }
 }
