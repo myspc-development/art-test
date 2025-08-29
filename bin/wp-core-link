@@ -9,4 +9,8 @@ if [ ! -f "${WP_CORE_DIR}/wp-settings.php" ]; then
 fi
 rm -rf "${TESTS_DIR}/wordpress"
 ln -s "${WP_CORE_DIR}" "${TESTS_DIR}/wordpress"
+if [ ! -f "${TESTS_DIR}/wordpress/wp-settings.php" ]; then
+  echo "wp core link failed" >&2
+  exit 1
+fi
 echo "Linked ${WP_CORE_DIR} -> ${TESTS_DIR}/wordpress"

@@ -6,10 +6,7 @@ use ArtPulse\Widgets\OrgAnalyticsWidget;
 use ArtPulse\Widgets\EventsWidget;
 use ArtPulse\Widgets\DonationsWidget;
 use function ArtPulse\Tests\rm_rf;
-
-// Ensure the named error handler is available.
-require_once __DIR__ . '/../Support/ErrorHandlers.php';
-use function ArtPulse\Tests\mute_missing_widget_warning;
+use ArtPulse\Tests\ErrorSilencer;
 
 class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
 
@@ -55,7 +52,7 @@ class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
         }
 
         // d) Mute only the known missing-widget warning during this test (no closures)
-        set_error_handler('\ArtPulse\Tests\mute_missing_widget_warning', E_USER_WARNING);
+        set_error_handler([ErrorSilencer::class, 'muteMissingWidgetWarning'], E_USER_WARNING);
     }
 
     public function tear_down() {
