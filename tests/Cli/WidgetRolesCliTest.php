@@ -30,10 +30,11 @@ namespace ArtPulse\Core {
 
 namespace ArtPulse\Cli\Tests {
 	use PHPUnit\Framework\TestCase;
-	use WP_CLI;
-	use function ArtPulse\Tests\safe_unlink;
+        use WP_CLI;
+        use function ArtPulse\Tests\safe_unlink;
 
-	require_once __DIR__ . '/../../includes/class-cli-widget-roles.php';
+        require_once __DIR__ . '/../TestHelpers/filesystem.php';
+        require_once __DIR__ . '/../../includes/class-cli-widget-roles.php';
 
 	class WidgetRolesCliTest extends TestCase {
 		protected function setUp(): void {

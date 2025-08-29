@@ -50,7 +50,7 @@ class UserDashboardManager {
                foreach ( $roles as $role ) {
                        $layout = UserLayoutManager::get_role_layout( $role );
                        foreach ( $layout['layout'] as $item ) {
-                               $id = isset( $item['id'] ) ? sanitize_key( $item['id'] ) : '';
+                               $id = isset( $item['id'] ) ? DashboardWidgetRegistry::canon_slug( (string) $item['id'] ) : '';
                                if ( ! $id || isset( $seen[ $id ] ) ) {
                                        continue;
                                }
@@ -76,7 +76,7 @@ class UserDashboardManager {
                $layout = UserLayoutManager::get_role_layout( $role );
                $ids    = array();
                foreach ( $layout['layout'] as $item ) {
-                       $id = isset( $item['id'] ) ? sanitize_key( $item['id'] ) : '';
+                       $id = isset( $item['id'] ) ? DashboardWidgetRegistry::canon_slug( (string) $item['id'] ) : '';
                        if ( $id ) {
                                $ids[] = $id;
                        }
@@ -950,10 +950,10 @@ class UserDashboardManager {
                        }
                        foreach ( $defaults as $item ) {
                                if ( is_array( $item ) ) {
-                                       $id  = sanitize_key( $item['id'] ?? '' );
+                                       $id  = DashboardWidgetRegistry::canon_slug( (string) ( $item['id'] ?? '' ) );
                                        $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
                                } else {
-                                       $id  = sanitize_key( $item );
+                                       $id  = DashboardWidgetRegistry::canon_slug( (string) $item );
                                        $vis = true;
                                }
                                if ( ! $id || isset( $seen[ $id ] ) || ! in_array( $id, $valid, true ) ) {
@@ -1023,59 +1023,59 @@ class UserDashboardManager {
 			);
 			update_user_meta( $uid, 'ap_dashboard_layout', $ordered );
 			foreach ( $ordered as $item ) {
-				$layout_ids[] = $item['id'];
-				$visibility[] = array(
-					'id'      => $item['id'],
-					'visible' => (bool) $item['visible'],
-				);
-			}
-		} elseif ( $request->has_param( 'visibility' ) ) {
+                               $layout_ids[] = $item['id'];
+                               $visibility[] = array(
+                                       'id'      => $item['id'],
+                                       'visible' => (bool) $item['visible'],
+                               );
+                       }
+               } elseif ( $request->has_param( 'visibility' ) ) {
 			$vis_raw = (array) $request->get_param( 'visibility' );
 			$current = get_user_meta( $uid, 'ap_dashboard_layout', true );
 			if ( ! is_array( $current ) ) {
 				$current = array();
 			}
 			$updated = array();
-			foreach ( $current as $item ) {
-				if ( is_array( $item ) && isset( $item['id'] ) ) {
-					$id        = sanitize_key( $item['id'] );
-					$vis       = isset( $vis_raw[ $id ] ) ? (bool) $vis_raw[ $id ] : ( $item['visible'] ?? true );
-					$updated[] = array(
-						'id'      => $id,
-						'visible' => $vis,
-					);
-				} elseif ( is_string( $item ) ) {
-					$id        = sanitize_key( $item );
-					$vis       = isset( $vis_raw[ $id ] ) ? (bool) $vis_raw[ $id ] : true;
-					$updated[] = array(
-						'id'      => $id,
-						'visible' => $vis,
-					);
-				}
-			}
-			update_user_meta( $uid, 'ap_dashboard_layout', $updated );
-			foreach ( $updated as $item ) {
-				$layout_ids[] = $item['id'];
-				$visibility[] = array(
-					'id'      => $item['id'],
-					'visible' => (bool) $item['visible'],
-				);
-			}
-		} else {
-			$current = get_user_meta( $uid, 'ap_dashboard_layout', true );
-			if ( is_array( $current ) ) {
-				foreach ( $current as $item ) {
-					if ( is_array( $item ) && isset( $item['id'] ) ) {
-						$id           = sanitize_key( $item['id'] );
-						$layout_ids[] = $id;
-						$visibility[] = array(
-							'id'      => $id,
-							'visible' => (bool) ( $item['visible'] ?? true ),
-						);
-					}
-				}
-			}
-		}
+                       foreach ( $current as $item ) {
+                               if ( is_array( $item ) && isset( $item['id'] ) ) {
+                                       $id        = DashboardWidgetRegistry::canon_slug( (string) $item['id'] );
+                                       $vis       = isset( $vis_raw[ $id ] ) ? (bool) $vis_raw[ $id ] : ( $item['visible'] ?? true );
+                                       $updated[] = array(
+                                               'id'      => $id,
+                                               'visible' => $vis,
+                                       );
+                               } elseif ( is_string( $item ) ) {
+                                       $id        = DashboardWidgetRegistry::canon_slug( $item );
+                                       $vis       = isset( $vis_raw[ $id ] ) ? (bool) $vis_raw[ $id ] : true;
+                                       $updated[] = array(
+                                               'id'      => $id,
+                                               'visible' => $vis,
+                                       );
+                               }
+                       }
+                       update_user_meta( $uid, 'ap_dashboard_layout', $updated );
+                       foreach ( $updated as $item ) {
+                               $layout_ids[] = $item['id'];
+                               $visibility[] = array(
+                                       'id'      => $item['id'],
+                                       'visible' => (bool) $item['visible'],
+                               );
+                       }
+               } else {
+                       $current = get_user_meta( $uid, 'ap_dashboard_layout', true );
+                       if ( is_array( $current ) ) {
+                               foreach ( $current as $item ) {
+                                       if ( is_array( $item ) && isset( $item['id'] ) ) {
+                                               $id           = DashboardWidgetRegistry::canon_slug( (string) $item['id'] );
+                                               $layout_ids[] = $id;
+                                               $visibility[] = array(
+                                                       'id'      => $id,
+                                                       'visible' => (bool) ( $item['visible'] ?? true ),
+                                               );
+                                       }
+                               }
+                       }
+               }
 
 		return rest_ensure_response(
 			array(

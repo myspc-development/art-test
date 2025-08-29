@@ -40,9 +40,9 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                 $res2 = rest_get_server()->dispatch( $req2 );
                 $this->assertSame( 200, $res2->get_status() );
                 $data = $res2->get_data();
-                $this->assertSame( array( 'subscriber' => array( 'one' ) ), $data['widget_roles'] );
-                $this->assertSame( array( 'subscriber' => array( 'one', 'two' ) ), $data['role_widgets'] );
-                $this->assertSame( array( 'two' ), $data['locked'] );
+                $this->assertSame( array( 'subscriber' => array( 'widget_one' ) ), $data['widget_roles'] );
+                $this->assertSame( array( 'subscriber' => array( 'widget_one', 'widget_two' ) ), $data['role_widgets'] );
+                $this->assertSame( array( 'widget_two' ), $data['locked'] );
                 $this->assertSame( array( 'widget_one' => 'edit_posts' ), $data['capabilities'] );
                 $this->assertSame( array( 'widget_one' => array( 'subscriber' ) ), $data['excluded_roles'] );
         }
