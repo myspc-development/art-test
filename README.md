@@ -11,7 +11,9 @@ Site administrators should consult the [Admin Guide](docs/guides/admin/README.md
 
 ```bash
 composer install
-bash tools/provision-wp-core.sh # or vendor/wp-phpunit/wp-phpunit fallback
+
+export WP_CORE_DIR=/www/wwwroot/192.168.1.21
+composer run wp:core-link
 
 export WP_TESTS_DB_NAME=wordpress_test
 export WP_TESTS_DB_USER=wp
