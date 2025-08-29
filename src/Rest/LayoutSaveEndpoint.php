@@ -3,16 +3,15 @@ namespace ArtPulse\Rest;
 
 class LayoutSaveEndpoint {
 
-	public static function register(): void {
-		add_action( 'wp_ajax_save_dashboard_layout', array( self::class, 'handle' ) );
-	}
+        public static function register(): void {
+                add_action( 'wp_ajax_save_dashboard_layout', array( self::class, 'handle' ) );
+                add_action( 'wp_ajax_nopriv_save_dashboard_layout', array( self::class, 'handle' ) );
+        }
 
         public static function handle(): void {
-               if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
-                       http_response_code( 403 );
-                       wp_send_json_error( array( 'message' => 'Forbidden' ), 403 );
-                       wp_die();
-               }
+                if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
+                        wp_send_json_error( array( 'message' => 'Forbidden' ), 403 );
+                }
 
                 check_ajax_referer( 'ap_dashboard_nonce' );
 
