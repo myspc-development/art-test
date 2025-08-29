@@ -2,6 +2,7 @@
 namespace ArtPulse\Audit;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Support\WidgetIds;
 
 /**
@@ -89,36 +90,33 @@ class WidgetSources {
 	 * @param string $role
 	 * @return array<int,string>
 	 */
-	public static function get_builder_layout( string $role ): array {
-		$layouts = get_option( 'artpulse_dashboard_layouts', array() );
-		$layout  = $layouts[ $role ] ?? array();
-		$ids     = array();
-		foreach ( $layout as $item ) {
-			$id = is_array( $item ) ? ( $item['id'] ?? '' ) : $item;
-			$id = WidgetIds::canonicalize( $id );
-			if ( $id && ! in_array( $id, $ids, true ) ) {
-				$ids[] = $id;
-			}
-		}
-		return $ids;
-	}
+        public static function get_builder_layout( string $role ): array {
+                if ( class_exists( UserLayoutManager::class ) ) {
+                        $layout = UserLayoutManager::get_role_layout( $role )['layout'];
+                } else {
+                        $layouts = get_option( 'artpulse_dashboard_layouts', array() );
+                        $layout  = $layouts[ $role ] ?? array();
+                }
 
-	/**
-	 * Instance helper to mirror static builder layout lookup.
-	 *
-	 * @param string $role
-	 * @return array<int,string>
-	 */
-	public function builderForRole( string $role ): array {
-		$raw = get_option( 'artpulse_dashboard_layouts', array() );
-		if ( ! is_array( $raw ) ) {
-			$decoded = json_decode( (string) $raw, true );
-			$raw     = is_array( $decoded ) ? $decoded : array();
-		}
-		$ids = array_map(
-			static fn( $v ) => sanitize_key( (string) $v ),
-			(array) ( $raw[ $role ] ?? array() )
-		);
-		return array_values( array_filter( $ids ) );
-	}
+                $ids = array();
+                foreach ( $layout as $item ) {
+                        $id = is_array( $item ) ? ( $item['id'] ?? '' ) : $item;
+                        $id = WidgetIds::canonicalize( $id );
+                        if ( $id && ! in_array( $id, $ids, true ) ) {
+                                $ids[] = $id;
+                        }
+                }
+
+                return $ids;
+        }
+
+        /**
+         * Instance helper mirroring static builder layout lookup.
+         *
+         * @param string $role
+         * @return array<int,string>
+         */
+        public function builderForRole( string $role ): array {
+                return self::get_builder_layout( $role );
+        }
 }
