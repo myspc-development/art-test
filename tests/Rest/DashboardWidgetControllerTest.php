@@ -4,6 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\DashboardWidgetController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\Support\WidgetIds;
 
 /**
  * @group restapi
@@ -80,9 +81,22 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
                $this->assertSame( 200, $res->get_status() );
                $data = $res->get_data();
                $this->assertArrayHasKey( 'all', $data );
-               $all_ids = array_column( $data['all'], 'id' );
+               $all_ids = array_map( array( WidgetIds::class, 'canonicalize' ), array_column( $data['all'], 'id' ) );
                sort( $all_ids );
                $this->assertSame( array( 'bar', 'baz', 'foo' ), $all_ids );
+       }
+
+       public function test_logged_in_user_can_list_all_widgets(): void {
+               $sub = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+               wp_set_current_user( $sub );
+               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
+               $req->set_param( 'role', 'subscriber' );
+               $req->set_param( 'include_all', 'true' );
+               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $res = rest_get_server()->dispatch( $req );
+
+               $this->assertSame( 200, $res->get_status() );
+               $this->assertArrayHasKey( 'all', $res->get_data() );
        }
 
        public function test_get_widgets_requires_logged_in_user(): void {
