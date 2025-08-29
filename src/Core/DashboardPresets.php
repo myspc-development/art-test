@@ -37,8 +37,9 @@ class DashboardPresets {
 			return self::$cache[ $role ];
 		}
 
-		// plugin root from src/Core → ../../
-		$root = dirname( __DIR__, 2 );
+               // Resolve plugin root using WordPress helper to support symlinks.
+               // plugin_dir_path( __DIR__ ) yields the `src/` directory so step up one level.
+               $root = plugin_dir_path( __DIR__ ) . '../';
 
 		// Try current filename first, then legacy candidates
 		$candidates = array(
@@ -55,28 +56,31 @@ class DashboardPresets {
 		);
 		$candidates = array_values( array_filter( $candidates, 'is_string' ) );
 
-		$slugs = array();
-		foreach ( $candidates as $file ) {
-			if ( @is_readable( $file ) ) {
-				$raw = @file_get_contents( $file );
-				if ( is_string( $raw ) && $raw !== '' ) {
-					$json = json_decode( $raw, true );
-					if ( is_array( $json ) ) {
-						$list = isset( $json['widgets'] ) && is_array( $json['widgets'] )
-							? $json['widgets']
-							: ( array_keys( $json ) === range( 0, count( $json ) - 1 ) ? $json : array() );
-						foreach ( $list as $slug ) {
-							if ( is_string( $slug ) && $slug !== '' ) {
-								$slugs[] = WidgetIds::canonicalize( $slug );
-							}
-						}
-						if ( $slugs ) {
-							break;
-						}
-					}
-				}
-			}
-		}
+               $slugs = array();
+               foreach ( $candidates as $file ) {
+                       if ( ! @is_readable( $file ) ) {
+                               continue; // Try next candidate if file cannot be read.
+                       }
+                       $raw = @file_get_contents( $file );
+                       if ( ! is_string( $raw ) || $raw === '' ) {
+                               continue;
+                       }
+                       $json = json_decode( $raw, true );
+                       if ( ! is_array( $json ) ) {
+                               continue;
+                       }
+                       $list = isset( $json['widgets'] ) && is_array( $json['widgets'] )
+                               ? $json['widgets']
+                               : ( array_keys( $json ) === range( 0, count( $json ) - 1 ) ? $json : array() );
+                       foreach ( $list as $slug ) {
+                               if ( is_string( $slug ) && $slug !== '' ) {
+                                       $slugs[] = WidgetIds::canonicalize( $slug );
+                               }
+                       }
+                       if ( $slugs ) {
+                               break;
+                       }
+               }
 
 		// Fallback to the hard-coded canonical layout (docs/dashboard-mockup.tsx)
 		if ( ! $slugs ) {
