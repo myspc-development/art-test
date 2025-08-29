@@ -25,4 +25,26 @@ class RestDedupeTest extends \WP_UnitTestCase {
                 $filtered = \ap_deduplicate_rest_routes( $routes );
                 $this->assertCount( 1, $filtered['/ap/v1/thing'] );
         }
+
+        public function test_conflicting_routes_trigger_notice(): void {
+                $cb1   = static fn () => 'ok1';
+                $cb2   = static fn () => 'ok2';
+                $routes = array(
+                        '/ap/v1/thing' => array(
+                                array(
+                                        'methods'  => 'GET',
+                                        'callback' => $cb1,
+                                ),
+                                array(
+                                        'methods'  => 'GET',
+                                        'callback' => $cb2,
+                                ),
+                        ),
+                );
+
+                $this->setExpectedIncorrectUsage( 'ap_rest_dedupe' );
+                $filtered = \ap_deduplicate_rest_routes( $routes );
+                $this->assertCount( 2, $filtered['/ap/v1/thing'] );
+                $this->assertContains( '/ap/v1/thing', $GLOBALS['ap_rest_diagnostics']['conflicts'] );
+        }
 }
