@@ -976,11 +976,56 @@ class UserDashboardManager {
 		);
 	}
 
-	public static function resetDashboardLayout(): \WP_REST_Response {
-		$uid = get_current_user_id();
-		\ArtPulse\Core\DashboardWidgetManager::resetUserLayout( $uid );
-		return rest_ensure_response( array( 'reset' => true ) );
-	}
+       public static function resetDashboardLayout( ?WP_REST_Request $request = null ): \WP_REST_Response {
+               $uid = get_current_user_id();
+               \ArtPulse\Core\DashboardWidgetManager::resetUserLayout( $uid );
+
+               $defaults = array();
+               if ( $request instanceof WP_REST_Request && $request->has_param( 'defaults' ) ) {
+                       $defaults = $request->get_param( 'defaults' );
+                       if ( is_string( $defaults ) ) {
+                               $decoded = json_decode( $defaults, true );
+                               $defaults = is_array( $decoded ) ? $decoded : array();
+                       }
+               } else {
+                       $role     = \ArtPulse\Admin\UserLayoutManager::get_primary_role( $uid );
+                       $defaults = (array) apply_filters( 'ap_dashboard_default_widgets', array() );
+                       $defaults = (array) apply_filters( 'ap_dashboard_default_widgets_for_role', $defaults, $role );
+               }
+
+               $valid      = array_column( DashboardWidgetRegistry::get_definitions(), 'id' );
+               $seen       = array();
+               $layout_ids = array();
+               $visibility = array();
+
+               foreach ( (array) $defaults as $item ) {
+                       if ( is_array( $item ) ) {
+                               $id  = DashboardWidgetRegistry::canon_slug( (string) ( $item['id'] ?? '' ) );
+                               $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
+                       } else {
+                               $id  = DashboardWidgetRegistry::canon_slug( (string) $item );
+                               $vis = true;
+                       }
+
+                       if ( ! $id || isset( $seen[ $id ] ) || ! in_array( $id, $valid, true ) ) {
+                               continue;
+                       }
+                       $seen[ $id ]  = true;
+                       $layout_ids[] = $id;
+                       $visibility[] = array(
+                               'id'      => $id,
+                               'visible' => $vis,
+                       );
+               }
+
+               return rest_ensure_response(
+                       array(
+                               'reset'     => true,
+                               'layout'    => $layout_ids,
+                               'visibility'=> $visibility,
+                       )
+               );
+       }
 
 	public static function revertDashboardLayout(): \WP_REST_Response {
 		$uid = get_current_user_id();

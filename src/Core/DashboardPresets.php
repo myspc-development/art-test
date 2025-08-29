@@ -56,6 +56,35 @@ class DashboardPresets {
 		);
 		$candidates = array_values( array_filter( $candidates, 'is_string' ) );
 
+               // Hard-coded defaults used when no valid JSON exists.
+               $defaults = array(
+                       'member'       => array(
+                               'widget_membership',
+                               'widget_account_tools',
+                               'widget_my_follows',
+                               'widget_recommended_for_you',
+                               'widget_local_events',
+                               'widget_my_events',
+                               'widget_site_stats',
+                       ),
+                       'artist'       => array(
+                               'widget_artist_revenue_summary',
+                               'widget_artist_artwork_manager',
+                               'widget_artist_audience_insights',
+                               'widget_artist_feed_publisher',
+                               'widget_my_events',
+                               'widget_site_stats',
+                       ),
+                       'organization' => array(
+                               'widget_audience_crm',
+                               'widget_org_ticket_insights',
+                               'widget_webhooks',
+                               'widget_my_events',
+                               'widget_site_stats',
+                       ),
+               );
+               $expected = count( $defaults[ $role ] );
+
                $slugs = array();
                foreach ( $candidates as $file ) {
                        if ( ! @is_readable( $file ) ) {
@@ -72,6 +101,7 @@ class DashboardPresets {
                        $list = isset( $json['widgets'] ) && is_array( $json['widgets'] )
                                ? $json['widgets']
                                : ( array_keys( $json ) === range( 0, count( $json ) - 1 ) ? $json : array() );
+                       $tmp = array();
                        foreach ( $list as $item ) {
                                $slug = null;
                                if ( is_array( $item ) ) {
@@ -85,47 +115,26 @@ class DashboardPresets {
                                }
 
                                if ( is_string( $slug ) && $slug !== '' ) {
-                                       $slugs[] = WidgetIds::canonicalize( $slug );
+                                       $canon = WidgetIds::canonicalize( $slug );
+                                       if ( $canon && ! in_array( $canon, $tmp, true ) ) {
+                                               $tmp[] = $canon;
+                                       }
                                }
                        }
-                       if ( $slugs ) {
-                               break;
+
+                       if ( count( $tmp ) >= $expected ) {
+                               $slugs = $tmp;
+                               break; // Use the first candidate with a full list.
                        }
                }
 
-		// Fallback to the hard-coded canonical layout (docs/dashboard-mockup.tsx)
-		if ( ! $slugs ) {
-			$fallback = array(
-				'member'       => array(
-					'widget_membership',
-					'widget_account_tools',
-					'widget_my_follows',
-					'widget_recommended_for_you',
-					'widget_local_events',
-					'widget_my_events',
-					'widget_site_stats',
-				),
-				'artist'       => array(
-					'widget_artist_revenue_summary',
-					'widget_artist_artwork_manager',
-					'widget_artist_audience_insights',
-					'widget_artist_feed_publisher',
-					'widget_my_events',
-					'widget_site_stats',
-				),
-				'organization' => array(
-					'widget_audience_crm',
-					'widget_org_ticket_insights',
-					'widget_webhooks',
-					'widget_my_events',
-					'widget_site_stats',
-				),
-			);
-			$slugs    = $fallback[ $role ];
-		}
+               if ( count( $slugs ) < $expected ) {
+                       // Fallback to defaults when JSON missing or incomplete.
+                       $slugs = $defaults[ $role ];
+               }
 
-		// De-dupe preserving order
-		$slugs                       = array_values( array_unique( $slugs ) );
-		return self::$cache[ $role ] = $slugs;
-	}
+               // De-dupe preserving order and ensure canonical form
+               $slugs = array_values( array_unique( array_map( array( WidgetIds::class, 'canonicalize' ), $slugs ) ) );
+               return self::$cache[ $role ] = $slugs;
+        }
 }
