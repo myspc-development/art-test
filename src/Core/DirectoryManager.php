@@ -127,22 +127,24 @@ class DirectoryManager {
 		$tax_query  = array();
 		$meta_query = array();
 
-		$search_args = array(
-			'limit'        => $limit,
-			'event_type'   => $event_type,
-			'medium'       => $medium,
-			'style'        => $style,
-			'org_type'     => $org_type,
-			'location'     => $location,
-			'city'         => $city,
-			'region'       => $region,
-			'for_sale'     => $for_sale,
-			'keyword'      => $keyword,
-			'first_letter' => $first_letter,
-			'page'         => $page,
-		);
+                $search_args = array(
+                        'limit'        => $limit,
+                        'event_type'   => $event_type,
+                        'medium'       => $medium,
+                        'style'        => $style,
+                        'org_type'     => $org_type,
+                        'location'     => $location,
+                        'city'         => $city,
+                        'region'       => $region,
+                        'for_sale'     => $for_sale,
+                        'keyword'      => $keyword,
+                        'first_letter' => $first_letter,
+                        'page'         => $page,
+               );
 
-               $cache_key = self::get_cache_key( array_merge( array( 'type' => $type ), $search_args ) );
+               $cache_args = $search_args;
+               unset( $cache_args['page'] );
+               $cache_key = self::get_cache_key( array_merge( array( 'type' => $type ), $cache_args ) );
                $cached    = get_transient( $cache_key );
 
                if ( $cached !== false ) {
