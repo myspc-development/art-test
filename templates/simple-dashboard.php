@@ -9,6 +9,8 @@ if (!is_user_logged_in()) {
     return;
 }
 
+\ArtPulse\Core\DashboardWidgetRegistry::init();
+
 $role = function_exists('get_query_var') ? sanitize_key(get_query_var('ap_role')) : 'member';
 if (!in_array($role, ['member','artist','organization'], true)) {
     $role = 'member';

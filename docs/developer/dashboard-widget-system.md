@@ -25,6 +25,11 @@ DashboardWidgetRegistry::register(
 );
 ```
 
+## Initialization
+`DashboardWidgetRegistryLoader::load_all()` runs on the plugin's `init` hook to load widget classes.
+When rendering widgets outside of the normal WordPress bootstrap (for example in tests or standalone templates),
+call `DashboardWidgetRegistry::init()` first so the registry is populated before invoking `render()`.
+
 ## Role Fallback Logic
 `UserLayoutManager::get_layout_for_user()` checks the user's saved layout, their role default and finally all registered widgets. This ensures new users always see a complete dashboard.
 

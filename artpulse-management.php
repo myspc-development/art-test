@@ -116,7 +116,12 @@ add_action(
 );
 
 require_once __DIR__ . '/includes/widget-loader.php';
-add_action( 'plugins_loaded', array( \ArtPulse\DashboardWidgetRegistryLoader::class, 'load_all' ) );
+add_action(
+        'init',
+        static function () {
+                \ArtPulse\DashboardWidgetRegistryLoader::load_all();
+        }
+);
 
 // Setup automatic plugin updates from GitHub
 require_once plugin_dir_path( __FILE__ ) . 'vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php';
