@@ -128,13 +128,5 @@ class DashboardPresets {
                        }
                }
 
-               if ( count( $slugs ) < $expected ) {
-                       // Fallback to defaults when JSON missing or incomplete.
-                       $slugs = $defaults[ $role ];
-               }
 
-               // De-dupe preserving order and ensure canonical form
-               $slugs = array_values( array_unique( array_map( array( WidgetIds::class, 'canonicalize' ), $slugs ) ) );
-               return self::$cache[ $role ] = $slugs;
-        }
 }
