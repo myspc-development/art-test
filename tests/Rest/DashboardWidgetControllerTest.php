@@ -157,31 +157,61 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 
 	}
 
-	public function test_save_layout_requires_nonce(): void {
-		UserLayoutManager::save_role_layout(
-			'administrator',
-			array(
-				array(
-					'id'      => 'widget_foo',
-					'visible' => true,
-				),
-			)
-		);
+        public function test_save_layout_requires_nonce(): void {
+                UserLayoutManager::save_role_layout(
+                        'administrator',
+                        array(
+                                array(
+                                        'id'      => 'widget_foo',
+                                        'visible' => true,
+                                ),
+                        )
+                );
 
+                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
+                // Intentionally omit nonce header.
+                $req->set_body_params(
+                        array(
+                                'role'   => 'administrator',
+                                'layout' => array(
+                                        array(
+                                                'id'      => 'baz',
+                                                'visible' => true,
+                                        ),
+                                ),
+                        )
+                );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 403, $res->get_status() );
+        }
 
-	public function test_save_layout_rejects_invalid_nonce(): void {
-		UserLayoutManager::save_role_layout(
-			'administrator',
-			array(
-				array(
-					'id'      => 'widget_foo',
-					'visible' => true,
-				),
-			)
-		);
+        public function test_save_layout_rejects_invalid_nonce(): void {
+                UserLayoutManager::save_role_layout(
+                        'administrator',
+                        array(
+                                array(
+                                        'id'      => 'widget_foo',
+                                        'visible' => true,
+                                ),
+                        )
+                );
 
-
-       }
+                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
+                $req->set_header( 'X-WP-Nonce', 'badnonce' );
+                $req->set_body_params(
+                        array(
+                                'role'   => 'administrator',
+                                'layout' => array(
+                                        array(
+                                                'id'      => 'baz',
+                                                'visible' => true,
+                                        ),
+                                ),
+                        )
+                );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 403, $res->get_status() );
+        }
 
        public function test_save_layout_requires_edit_posts_cap(): void {
 		UserLayoutManager::save_role_layout(
