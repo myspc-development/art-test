@@ -231,7 +231,10 @@ class DashboardWidgetRegistry {
 	}
 
 	/**
-	 * Return all registered widget definitions.
+	 * Return all registered widget definitions (core registry, not builder).
+	 *
+	 * @param string|null $visibility Optional visibility filter.
+	 * @param bool        $builder    When true, returns builder widgets instead.
 	 */
 	public static function all(): array {
 		return self::$widgets;
@@ -246,13 +249,6 @@ class DashboardWidgetRegistry {
 
 	/**
 	 * Register a widget and its settings.
-	 *
-	 * @param callable|null $callback Callback used to render the widget. Must be
-	 *                                callable.
-	 *
-	 * @return array Widget definition. Returns the existing definition when a
-	 *               widget with the given ID is already registered or an empty
-	 *               array if registration fails.
 	 */
 	public static function register(
 		string $id,
@@ -260,7 +256,7 @@ class DashboardWidgetRegistry {
 		string $icon = '',
 		string $description = '',
 		?callable $callback = null,
-		array $options = array() // supports 'category', 'roles', optional 'settings' and 'tags'
+		array $options = array()
 	): array {
 		// Builder-style registration when the second argument is an array.
 		if ( is_array( $label ) ) {
@@ -703,28 +699,13 @@ class DashboardWidgetRegistry {
 			return $widgets;
 		}
 
-		$widgets  = self::$widgets;
-		$settings = get_option( 'artpulse_widget_roles', array() );
-		if ( is_string( $settings ) ) {
-			$decoded  = json_decode( $settings, true );
-			$settings = is_array( $decoded ) ? $decoded : array();
-		}
-		foreach ( $settings as $id => $cfg ) {
-			$id = self::canon_slug( $id );
-			if ( ! isset( $widgets[ $id ] ) ) {
-				continue;
-			}
+		// Start with in-memory registry.
+		$widgets = self::$widgets;
 
-			if ( isset( $cfg['roles'] ) ) {
-				$widgets[ $id ]['roles'] = self::normalizeRoleList( $cfg['roles'] );
-			}
-			if ( isset( $cfg['capability'] ) ) {
-				$widgets[ $id ]['capability'] = sanitize_key( $cfg['capability'] );
-			}
-			if ( isset( $cfg['exclude_roles'] ) ) {
-				$widgets[ $id ]['exclude_roles'] = self::normalizeRoleList( $cfg['exclude_roles'] );
-			}
-		}
+		// Merge DB-driven overrides (test writes via update_option()).
+		$widgets = self::apply_roles_overrides( $widgets );
+
+		// Filter out widgets disabled by group visibility.
 		$group_vis = get_option( 'ap_widget_group_visibility', array() );
 		foreach ( $widgets as $id => $cfg ) {
 			$grp = $cfg['group'] ?? '';
@@ -732,6 +713,9 @@ class DashboardWidgetRegistry {
 				unset( $widgets[ $id ] );
 			}
 		}
+
+		// Expose both canonical and unprefixed IDs (helps tests access 'test_widget').
+		$widgets = self::expand_legacy_keys( $widgets );
 
 		if ( $visibility !== null ) {
 			$widgets = array_filter(
@@ -853,9 +837,6 @@ class DashboardWidgetRegistry {
 
 	/**
 	 * Backwards compatibility alias for user_can_see().
-	 *
-	 * Uses the preview role from the "ap_role" query var when the current
-	 * user can manage options so dashboard previews are gated correctly.
 	 */
 	public static function isAllowedForCurrentUser( string $id, int $user_id = 0 ): bool {
 		return self::user_can_see( $id, $user_id );
@@ -876,9 +857,6 @@ class DashboardWidgetRegistry {
 		return $builder[ $base ] ?? null;
 	}
 
-	/**
-	 * Get widget callbacks allowed for a user role.
-	 */
 	/**
 	 * Get widget callbacks allowed for one or more user roles.
 	 *
@@ -1285,5 +1263,76 @@ class DashboardWidgetRegistry {
 		}
 
 		do_action( 'ap_after_widgets', $role );
+	}
+
+	/**
+	 * Merge roles/capability overrides from the `artpulse_widget_roles` option.
+	 *
+	 * Shape:
+	 * [
+	 *   'widget_id' => [
+	 *     'roles'      => array<string>|string|null,
+	 *     'capability' => string,
+	 *     'exclude_roles' => array<string>|string|null,
+	 *   ],
+	 *   ...
+	 * ]
+	 */
+	private static function apply_roles_overrides( array $widgets ): array {
+		$settings = get_option( 'artpulse_widget_roles', array() );
+		if ( is_string( $settings ) ) {
+			$decoded  = json_decode( $settings, true );
+			$settings = is_array( $decoded ) ? $decoded : array();
+		}
+		if ( ! is_array( $settings ) ) {
+			return $widgets;
+		}
+
+		foreach ( $settings as $raw_id => $cfg ) {
+			$id = self::canon_slug( (string) $raw_id );
+			if ( ! isset( $widgets[ $id ] ) || ! is_array( $cfg ) ) {
+				continue;
+			}
+
+			if ( array_key_exists( 'roles', $cfg ) ) {
+				$roles = $cfg['roles'];
+				if ( $roles === null ) {
+					// Interpret null as "no restriction" → empty list internally.
+					$widgets[ $id ]['roles'] = array();
+				} else {
+					$widgets[ $id ]['roles'] = self::normalizeRoleList( $roles );
+				}
+			}
+			if ( array_key_exists( 'capability', $cfg ) ) {
+				$widgets[ $id ]['capability'] = sanitize_key( (string) $cfg['capability'] );
+			}
+			if ( array_key_exists( 'exclude_roles', $cfg ) ) {
+				$widgets[ $id ]['exclude_roles'] = self::normalizeRoleList( $cfg['exclude_roles'] );
+			}
+		}
+
+		return $widgets;
+	}
+
+	/**
+	 * Ensure returned array exposes both canonical and unprefixed keys.
+	 * Example: 'widget_foo' will also be returned as 'foo' if not already present.
+	 */
+	private static function expand_legacy_keys( array $widgets ): array {
+		$extra = array();
+		foreach ( $widgets as $id => $cfg ) {
+			if ( strpos( $id, 'widget_' ) === 0 ) {
+				$alt = substr( $id, 7 );
+				if ( $alt !== '' && ! isset( $widgets[ $alt ] ) ) {
+					$extra[ $alt ] = $cfg;
+				}
+			} else {
+				$alt = 'widget_' . $id;
+				if ( ! isset( $widgets[ $alt ] ) ) {
+					$extra[ $alt ] = $cfg;
+				}
+			}
+		}
+		return $widgets + $extra;
 	}
 }
