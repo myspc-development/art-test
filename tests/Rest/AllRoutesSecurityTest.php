@@ -17,10 +17,20 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
 		$res = $server->dispatch( new \WP_REST_Request( $method, $route ) );
 		$this->assertEquals( 401, $res->get_status(), "Unauthenticated access to $method $route should return 401" );
 
-		// 403 or 401: authenticated without required capabilities
-		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
-		$res = $server->dispatch( new \WP_REST_Request( $method, $route ) );
-		$this->assertContains( $res->get_status(), array( 401, 403 ), "Subscriber access to $method $route should be 401/403" );
+               // 403 or 401: authenticated without required capabilities.
+               // Some read-only endpoints are accessible to subscribers.
+               wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
+               $res       = $server->dispatch( new \WP_REST_Request( $method, $route ) );
+               $allowed   = array(
+                       '/ap/v1/routes/audit',
+                       '/ap/v1/routes/audit.json',
+                       '/artpulse/v1/roles',
+               );
+               if ( in_array( $route, $allowed, true ) ) {
+                       $this->assertSame( 200, $res->get_status(), "Subscriber access to $method $route should be allowed" );
+               } else {
+                       $this->assertContains( $res->get_status(), array( 401, 403 ), "Subscriber access to $method $route should be 401/403" );
+               }
 
 		// 2xx: authenticated as administrator
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );

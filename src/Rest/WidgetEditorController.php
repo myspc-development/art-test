@@ -26,15 +26,16 @@ class WidgetEditorController {
 			)
 		);
 
-		register_rest_route(
-			ARTPULSE_API_NAMESPACE,
-			'/roles',
-			array(
-				'methods'             => 'GET',
-				'callback'            => array( self::class, 'get_roles' ),
-				'permission_callback' => fn () => current_user_can( 'manage_options' ),
-			)
-		);
+               register_rest_route(
+                       ARTPULSE_API_NAMESPACE,
+                       '/roles',
+                       array(
+                               'methods'             => 'GET',
+                               'callback'            => array( self::class, 'get_roles' ),
+                               // Read-only endpoint – allow any authenticated user with basic read capability.
+                               'permission_callback' => fn () => current_user_can( 'read' ),
+                       )
+               );
 
 		register_rest_route(
 			ARTPULSE_API_NAMESPACE,
