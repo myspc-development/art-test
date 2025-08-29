@@ -528,22 +528,24 @@ class UserDashboardManager {
 			'support_history'        => array(),
 		);
 
-		foreach ( array( 'event', 'artist', 'artwork' ) as $type ) {
-			$posts = get_posts(
-				array(
-					'post_type'      => "artpulse_{$type}",
-					'author'         => $user_id,
-					'posts_per_page' => -1,
-				)
-			);
-			foreach ( $posts as $p ) {
-				$data[ $type . 's' ][] = array(
-					'id'    => $p->ID,
-					'title' => $p->post_title,
-					'link'  => get_permalink( $p ),
-				);
-			}
-		}
+               foreach ( array( 'event', 'artist', 'artwork' ) as $type ) {
+                       $args = array(
+                               'post_type'      => "artpulse_{$type}",
+                               'author'         => $user_id,
+                               'posts_per_page' => -1,
+                       );
+                       if ( $type === 'event' ) {
+                               $args['post_status'] = array( 'draft', 'publish' );
+                       }
+                       $posts = get_posts( $args );
+                       foreach ( $posts as $p ) {
+                               $data[ $type . 's' ][] = array(
+                                       'id'    => $p->ID,
+                                       'title' => $p->post_title,
+                                       'link'  => get_permalink( $p ),
+                               );
+                       }
+               }
 
 		// Fetch favorited events
 		$favorite_events = FavoritesManager::get_user_favorites( $user_id, 'artpulse_event' );
