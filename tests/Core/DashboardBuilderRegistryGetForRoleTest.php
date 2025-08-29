@@ -19,22 +19,22 @@ class DashboardBuilderRegistryGetForRoleTest extends TestCase {
 	}
 
 	public function test_get_for_role_requires_explicit_match(): void {
-		DashboardWidgetRegistry::register(
-			'alpha',
-			array(
-				'title'           => 'Alpha',
-				'render_callback' => '__return_null',
-				'roles'           => array( 'member' ),
-			)
-		);
-		DashboardWidgetRegistry::register(
-			'beta',
-			array(
-				'title'           => 'Beta',
-				'render_callback' => '__return_null',
-				'roles'           => array( 'artist' ),
-			)
-		);
+               DashboardWidgetRegistry::register(
+                       'widget_alpha',
+                       array(
+                               'title'           => 'Alpha',
+                               'render_callback' => '__return_null',
+                               'roles'           => array( 'member' ),
+                       )
+               );
+               DashboardWidgetRegistry::register(
+                       'widget_beta',
+                       array(
+                               'title'           => 'Beta',
+                               'render_callback' => '__return_null',
+                               'roles'           => array( 'artist' ),
+                       )
+               );
 		DashboardWidgetRegistry::register(
 			'unassigned',
 			array(
@@ -43,15 +43,15 @@ class DashboardBuilderRegistryGetForRoleTest extends TestCase {
 			)
 		);
 
-		$member = DashboardWidgetRegistry::get_for_role( 'member' );
-		$artist = DashboardWidgetRegistry::get_for_role( 'artist' );
+               $member = DashboardWidgetRegistry::get_for_role( 'member' );
+               $artist = DashboardWidgetRegistry::get_for_role( 'artist' );
 
-		$this->assertArrayHasKey( 'alpha', $member );
-		$this->assertArrayNotHasKey( 'beta', $member );
-		$this->assertArrayNotHasKey( 'unassigned', $member );
+               $this->assertArrayHasKey( 'widget_alpha', $member );
+               $this->assertArrayNotHasKey( 'widget_beta', $member );
+               $this->assertArrayNotHasKey( 'unassigned', $member );
 
-		$this->assertArrayHasKey( 'beta', $artist );
-		$this->assertArrayNotHasKey( 'alpha', $artist );
-		$this->assertArrayNotHasKey( 'unassigned', $artist );
+               $this->assertArrayHasKey( 'widget_beta', $artist );
+               $this->assertArrayNotHasKey( 'widget_alpha', $artist );
+               $this->assertArrayNotHasKey( 'unassigned', $artist );
 	}
 }

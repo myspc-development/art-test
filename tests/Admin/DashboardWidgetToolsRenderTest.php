@@ -64,29 +64,29 @@ class DashboardWidgetToolsRenderTest extends TestCase {
 	}
 
 	public function test_role_layout_renders_in_order(): void {
-		DashboardWidgetRegistry::register(
-			'alpha',
-			'Alpha',
-			'',
-			'',
-			function () {
-				return 'alpha';
-			}
-		);
-		DashboardWidgetRegistry::register(
-			'beta',
-			'Beta',
-			'',
-			'',
-			function () {
-				return 'beta';
-			}
-		);
+               DashboardWidgetRegistry::register(
+                       'widget_alpha',
+                       'Alpha',
+                       '',
+                       '',
+                       function () {
+                               return 'alpha';
+                       }
+               );
+               DashboardWidgetRegistry::register(
+                       'widget_beta',
+                       'Beta',
+                       '',
+                       '',
+                       function () {
+                               return 'beta';
+                       }
+               );
 
 		self::$options['ap_dashboard_widget_config'] = array(
 			'subscriber' => array(
-				array( 'id' => 'beta' ),
-				array( 'id' => 'alpha' ),
+                               array( 'id' => 'widget_beta' ),
+                               array( 'id' => 'widget_alpha' ),
 			),
 		);
 
@@ -100,19 +100,19 @@ class DashboardWidgetToolsRenderTest extends TestCase {
 	}
 
 	public function test_widget_controls_have_accessibility_attributes(): void {
-		DashboardWidgetRegistry::register(
-			'alpha',
-			'Alpha',
-			'',
-			'',
-			function () {
-				return 'alpha';
-			}
-		);
+               DashboardWidgetRegistry::register(
+                       'widget_alpha',
+                       'Alpha',
+                       '',
+                       '',
+                       function () {
+                               return 'alpha';
+                       }
+               );
 
-		self::$options['ap_dashboard_widget_config'] = array(
-			'subscriber' => array( array( 'id' => 'alpha' ) ),
-		);
+                self::$options['ap_dashboard_widget_config'] = array(
+                        'subscriber' => array( array( 'id' => 'widget_alpha' ) ),
+                );
 
 		ob_start();
 		DashboardWidgetTools::render_role_dashboard_preview( 'subscriber' );
@@ -123,19 +123,19 @@ class DashboardWidgetToolsRenderTest extends TestCase {
 	}
 
 	public function test_render_dashboard_widgets_uses_role_layout_when_provided(): void {
-		DashboardWidgetRegistry::register(
-			'alpha',
-			'Alpha',
-			'',
-			'',
-			function () {
-				echo 'alpha';
-			}
-		);
+               DashboardWidgetRegistry::register(
+                       'widget_alpha',
+                       'Alpha',
+                       '',
+                       '',
+                       function () {
+                               echo 'alpha';
+                       }
+               );
 
-		self::$options['ap_dashboard_widget_config'] = array(
-			'subscriber' => array( array( 'id' => 'alpha' ) ),
-		);
+                self::$options['ap_dashboard_widget_config'] = array(
+                        'subscriber' => array( array( 'id' => 'widget_alpha' ) ),
+                );
 
 		ob_start();
 		DashboardWidgetTools::render_dashboard_widgets( 'subscriber' );
@@ -145,17 +145,17 @@ class DashboardWidgetToolsRenderTest extends TestCase {
 	}
 
 	public function test_render_dashboard_widgets_falls_back_to_user_layout(): void {
-		DashboardWidgetRegistry::register(
-			'alpha',
-			'Alpha',
-			'',
-			'',
-			function () {
-				echo 'alpha';
-			}
-		);
+               DashboardWidgetRegistry::register(
+                       'widget_alpha',
+                       'Alpha',
+                       '',
+                       '',
+                       function () {
+                               echo 'alpha';
+                       }
+               );
 
-		self::$meta[1]['ap_dashboard_layout'] = array( array( 'id' => 'alpha' ) );
+                self::$meta[1]['ap_dashboard_layout'] = array( array( 'id' => 'widget_alpha' ) );
 
 		ob_start();
 		DashboardWidgetTools::render_dashboard_widgets( '' );

@@ -11,42 +11,42 @@ class DashboardWidgetRenderTest extends \WP_UnitTestCase {
 		$prop->setAccessible( true );
 		$prop->setValue( null, array() );
 
-		DashboardWidgetRegistry::register(
-			'alpha',
-			'Alpha',
-			'',
-			'',
-			function () {
-				return 'alpha';
-			},
-			array( 'roles' => array( 'member' ) )
-		);
-		DashboardWidgetRegistry::register(
-			'beta',
-			'Beta',
-			'',
-			'',
-			function () {
-				return 'beta';
-			},
-			array( 'roles' => array( 'artist' ) )
-		);
-		DashboardWidgetRegistry::register(
-			'gamma',
-			'Gamma',
-			'',
-			'',
-			function () {
-				return 'gamma';
-			},
-			array( 'roles' => array( 'organization' ) )
-		);
+               DashboardWidgetRegistry::register(
+                       'widget_alpha',
+                       'Alpha',
+                       '',
+                       '',
+                       function () {
+                               return 'alpha';
+                       },
+                       array( 'roles' => array( 'member' ) )
+               );
+               DashboardWidgetRegistry::register(
+                       'widget_beta',
+                       'Beta',
+                       '',
+                       '',
+                       function () {
+                               return 'beta';
+                       },
+                       array( 'roles' => array( 'artist' ) )
+               );
+               DashboardWidgetRegistry::register(
+                       'widget_gamma',
+                       'Gamma',
+                       '',
+                       '',
+                       function () {
+                               return 'gamma';
+                       },
+                       array( 'roles' => array( 'organization' ) )
+               );
 	}
 
 	public static function roleProvider(): iterable {
-		yield 'member' => array( 'member', array( 'alpha' ) );
-		yield 'artist' => array( 'artist', array( 'beta' ) );
-		yield 'organization' => array( 'organization', array( 'gamma' ) );
+               yield 'member' => array( 'member', array( 'widget_alpha' ) );
+               yield 'artist' => array( 'artist', array( 'widget_beta' ) );
+               yield 'organization' => array( 'organization', array( 'widget_gamma' ) );
 	}
 
 	/**
@@ -58,11 +58,11 @@ class DashboardWidgetRenderTest extends \WP_UnitTestCase {
 		ob_start();
 		DashboardWidgetRegistry::render_for_role( $uid );
 		$html = ob_get_clean();
-		foreach ( $expected as $id ) {
-			$this->assertStringContainsString( $id, $html );
-		}
-		foreach ( array_diff( array( 'alpha', 'beta', 'gamma' ), $expected ) as $other ) {
-			$this->assertStringNotContainsString( $other, $html );
-		}
+               foreach ( $expected as $id ) {
+                       $this->assertStringContainsString( $id, $html );
+               }
+               foreach ( array_diff( array( 'widget_alpha', 'widget_beta', 'widget_gamma' ), $expected ) as $other ) {
+                       $this->assertStringNotContainsString( $other, $html );
+               }
 	}
 }

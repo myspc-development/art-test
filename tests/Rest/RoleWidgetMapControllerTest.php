@@ -26,7 +26,7 @@ class RoleWidgetMapControllerTest extends \WP_UnitTestCase {
 		}
 
                DashboardWidgetRegistry::register(
-                       'alpha',
+                       'widget_alpha',
                        'Alpha',
                        '',
                        '',
@@ -34,7 +34,7 @@ class RoleWidgetMapControllerTest extends \WP_UnitTestCase {
                        array( 'roles' => array( 'member' ) )
                );
                DashboardWidgetRegistry::register(
-                       'beta',
+                       'widget_beta',
                        'Beta',
                        '',
                        '',
@@ -42,7 +42,7 @@ class RoleWidgetMapControllerTest extends \WP_UnitTestCase {
                        array( 'roles' => array( 'artist' ) )
                );
                DashboardWidgetRegistry::register(
-                       'gamma',
+                       'widget_gamma',
                        'Gamma',
                        '',
                        '',
