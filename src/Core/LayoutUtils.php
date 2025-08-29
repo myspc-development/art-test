@@ -1,8 +1,10 @@
 <?php
 namespace ArtPulse\Core;
 
+use ArtPulse\Core\DashboardWidgetRegistry;
+
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+        exit;
 }
 
 /**
@@ -28,13 +30,13 @@ class LayoutUtils {
 		$seen       = array();
 
 		foreach ( $layout as $item ) {
-			if ( is_array( $item ) && isset( $item['id'] ) ) {
-				$id  = sanitize_key( $item['id'] );
-				$vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
-			} else {
-				$id  = sanitize_key( (string) $item );
-				$vis = true;
-			}
+                        if ( is_array( $item ) && isset( $item['id'] ) ) {
+                                $id  = DashboardWidgetRegistry::canon_slug( (string) $item['id'] );
+                                $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
+                        } else {
+                                $id  = DashboardWidgetRegistry::canon_slug( (string) $item );
+                                $vis = true;
+                        }
 
 			if ( isset( $seen[ $id ] ) ) {
 				continue; // drop duplicates

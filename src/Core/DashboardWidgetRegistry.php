@@ -1195,10 +1195,10 @@ class DashboardWidgetRegistry {
 		$layout  = $result['layout'];
 		$widgets = apply_filters( 'ap_dashboard_widgets', self::get_widgets_by_role( $role, $user_id ), $role );
 
-		$layout_ids = array_map(
-			static fn( $row ) => sanitize_key( $row['id'] ?? '' ),
-			$layout
-		);
+               $layout_ids = array_map(
+                       static fn( $row ) => self::canon_slug( $row['id'] ?? '' ),
+                       $layout
+               );
 		$widget_ids = array_keys( $widgets );
 
 		$debug = defined( 'WP_DEBUG' ) && WP_DEBUG;

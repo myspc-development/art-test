@@ -16,8 +16,8 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
 		parent::set_up();
 		$this->admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
 		$this->user_id  = self::factory()->user->create( array( 'role' => 'subscriber' ) );
-		DashboardWidgetRegistry::register( 'one', 'One', '', '', '__return_null' );
-		DashboardWidgetRegistry::register( 'two', 'Two', '', '', '__return_null' );
+                DashboardWidgetRegistry::register( 'one', 'One', '', '', '__return_null' );
+                DashboardWidgetRegistry::register( 'two', 'Two', '', '', '__return_null' );
 		DashboardConfigController::register();
 		do_action( 'rest_api_init' );
 	}
@@ -29,17 +29,17 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
 		$this->assertSame( 401, $res->get_status() );
 
 		wp_set_current_user( $this->user_id );
-		update_option( 'artpulse_widget_roles', array( 'subscriber' => array( 'one' ) ) );
-		update_option( 'artpulse_dashboard_layouts', array( 'subscriber' => array( 'one', 'two' ) ) );
-		update_option( 'artpulse_locked_widgets', array( 'two' ) );
+                update_option( 'artpulse_widget_roles', array( 'subscriber' => array( 'one' ) ) );
+                update_option( 'artpulse_dashboard_layouts', array( 'subscriber' => array( 'one', 'two' ) ) );
+                update_option( 'artpulse_locked_widgets', array( 'two' ) );
 
 		$req2 = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-config' );
 		$res2 = rest_get_server()->dispatch( $req2 );
 		$this->assertSame( 200, $res2->get_status() );
 		$data = $res2->get_data();
-		$this->assertSame( array( 'subscriber' => array( 'one' ) ), $data['widget_roles'] );
-		$this->assertSame( array( 'subscriber' => array( 'one', 'two' ) ), $data['role_widgets'] );
-		$this->assertSame( array( 'two' ), $data['locked'] );
+                $this->assertSame( array( 'subscriber' => array( 'widget_one' ) ), $data['widget_roles'] );
+                $this->assertSame( array( 'subscriber' => array( 'widget_one', 'widget_two' ) ), $data['role_widgets'] );
+                $this->assertSame( array( 'widget_two' ), $data['locked'] );
 	}
 
 	public function test_post_requires_manage_options_and_valid_nonce(): void {
@@ -50,9 +50,9 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
 		$req->set_header( 'Content-Type', 'application/json' );
 		$req->set_body(
 			json_encode(
-				array(
-					'widget_roles' => array( 'subscriber' => array( 'one' ) ),
-				)
+                                array(
+                                        'widget_roles' => array( 'subscriber' => array( 'one' ) ),
+                                )
 			)
 		);
 		$res = rest_get_server()->dispatch( $req );
@@ -65,11 +65,11 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
 		$bad->set_header( 'X-WP-Nonce', 'badnonce' );
 		$bad->set_body(
 			json_encode(
-				array(
-					'widget_roles' => array( 'administrator' => array( 'one' ) ),
-					'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
-					'locked'       => array( 'two' ),
-				)
+                                array(
+                                        'widget_roles' => array( 'administrator' => array( 'one' ) ),
+                                        'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
+                                        'locked'       => array( 'two' ),
+                                )
 			)
 		);
 		$res_bad = rest_get_server()->dispatch( $bad );
@@ -81,17 +81,17 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
 		$good->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
 		$good->set_body(
 			json_encode(
-				array(
-					'widget_roles' => array( 'administrator' => array( 'one' ) ),
-					'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
-					'locked'       => array( 'two' ),
-				)
+                                array(
+                                        'widget_roles' => array( 'administrator' => array( 'one' ) ),
+                                        'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
+                                        'locked'       => array( 'two' ),
+                                )
 			)
 		);
 		$res_good = rest_get_server()->dispatch( $good );
 		$this->assertSame( 200, $res_good->get_status() );
-		$this->assertSame( array( 'administrator' => array( 'one' ) ), get_option( 'artpulse_widget_roles' ) );
-		$this->assertSame( array( 'administrator' => array( 'one', 'two' ) ), get_option( 'artpulse_dashboard_layouts' ) );
-		$this->assertSame( array( 'two' ), get_option( 'artpulse_locked_widgets' ) );
+                $this->assertSame( array( 'administrator' => array( 'widget_one' ) ), get_option( 'artpulse_widget_roles' ) );
+                $this->assertSame( array( 'administrator' => array( 'widget_one', 'widget_two' ) ), get_option( 'artpulse_dashboard_layouts' ) );
+                $this->assertSame( array( 'widget_two' ), get_option( 'artpulse_locked_widgets' ) );
 	}
 }

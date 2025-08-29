@@ -34,37 +34,37 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
 	}
 
 	public function test_get_returns_layout_and_visibility(): void {
-		update_user_meta(
-			$this->user_id,
-			'ap_dashboard_layout',
-			array(
-				array(
-					'id'      => 'one',
-					'visible' => true,
-				),
-				array(
-					'id'      => 'two',
-					'visible' => true,
-				),
-			)
-		);
+                update_user_meta(
+                        $this->user_id,
+                        'ap_dashboard_layout',
+                        array(
+                                array(
+                                        'id'      => 'one',
+                                        'visible' => true,
+                                ),
+                                array(
+                                        'id'      => 'two',
+                                        'visible' => true,
+                                ),
+                        )
+                );
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
 		$data = $res->get_data();
-		$this->assertSame( array( 'one', 'two' ), $data['layout'] );
-		$expected = array(
-			array(
-				'id'      => 'one',
-				'visible' => true,
-			),
-			array(
-				'id'      => 'two',
-				'visible' => true,
-			),
-		);
-		$this->assertSame( $expected, $data['visibility'] );
-	}
+                $this->assertSame( array( 'widget_one', 'widget_two' ), $data['layout'] );
+                $expected = array(
+                        array(
+                                'id'      => 'widget_one',
+                                'visible' => true,
+                        ),
+                        array(
+                                'id'      => 'widget_two',
+                                'visible' => true,
+                        ),
+                );
+                $this->assertSame( $expected, $data['visibility'] );
+        }
 
 	public function test_post_saves_layout_and_visibility(): void {
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/ap_dashboard_layout' );
@@ -88,22 +88,22 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
 		);
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
-		$expected = array(
-			array(
-				'id'      => 'a',
-				'visible' => false,
-			),
-			array(
-				'id'      => 'b',
-				'visible' => true,
-			),
-			array(
-				'id'      => 'c',
-				'visible' => true,
-			),
-		);
-		$this->assertSame( $expected, get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
-	}
+                $expected = array(
+                        array(
+                                'id'      => 'widget_a',
+                                'visible' => false,
+                        ),
+                        array(
+                                'id'      => 'widget_b',
+                                'visible' => true,
+                        ),
+                        array(
+                                'id'      => 'widget_c',
+                                'visible' => true,
+                        ),
+                );
+                $this->assertSame( $expected, get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
+        }
 
 	public function test_post_sanitizes_layout_values(): void {
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/ap_dashboard_layout' );
@@ -118,22 +118,22 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
 		);
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
-		$expected = array(
-			array(
-				'id'      => 'a-',
-				'visible' => true,
-			),
-			array(
-				'id'      => 'bc',
-				'visible' => true,
-			),
-			array(
-				'id'      => 'invalidslug',
-				'visible' => true,
-			),
-		);
-		$this->assertSame( $expected, get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
-	}
+                $expected = array(
+                        array(
+                                'id'      => 'widget_a',
+                                'visible' => true,
+                        ),
+                        array(
+                                'id'      => 'widget_bc',
+                                'visible' => true,
+                        ),
+                        array(
+                                'id'      => 'widget_invalidslug',
+                                'visible' => true,
+                        ),
+                );
+                $this->assertSame( $expected, get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
+        }
 
 	public function test_post_ignores_duplicates_and_invalid_ids(): void {
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/ap_dashboard_layout' );
@@ -149,18 +149,18 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
 		);
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
-		$expected = array(
-			array(
-				'id'      => 'a',
-				'visible' => true,
-			),
-			array(
-				'id'      => 'b',
-				'visible' => true,
-			),
-		);
-		$this->assertSame( $expected, get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
-	}
+                $expected = array(
+                        array(
+                                'id'      => 'widget_a',
+                                'visible' => true,
+                        ),
+                        array(
+                                'id'      => 'widget_b',
+                                'visible' => true,
+                        ),
+                );
+                $this->assertSame( $expected, get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
+        }
 
 	public function test_get_uses_role_default_when_no_user_meta(): void {
 		$uid = self::factory()->user->create( array( 'role' => 'member' ) );
@@ -245,9 +245,9 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
-		$expected = array( 'a-', 'bc', 'invalidslug' );
-		$this->assertSame( $expected, $res->get_data()['layout'] );
-	}
+                $expected = array( 'widget_a', 'widget_bc', 'widget_invalidslug' );
+                $this->assertSame( $expected, $res->get_data()['layout'] );
+        }
     public function test_reset_route_clears_layout_and_visibility(): void {
         update_user_meta(
             $this->user_id,
@@ -290,15 +290,15 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
         $res = rest_get_server()->dispatch( $get );
         $this->assertSame( 200, $res->get_status() );
         $data = $res->get_data();
-        $this->assertSame( array( 'one', 'two' ), $data['layout'] );
+        $this->assertSame( array( 'widget_one', 'widget_two' ), $data['layout'] );
         $this->assertSame(
             array(
                 array(
-                    'id'      => 'one',
+                    'id'      => 'widget_one',
                     'visible' => true,
                 ),
                 array(
-                    'id'      => 'two',
+                    'id'      => 'widget_two',
                     'visible' => true,
                 ),
             ),
@@ -341,11 +341,11 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
         $this->assertSame(
             array(
                 array(
-                    'id'      => 'a',
+                    'id'      => 'widget_a',
                     'visible' => true,
                 ),
                 array(
-                    'id'      => 'b',
+                    'id'      => 'widget_b',
                     'visible' => true,
                 ),
             ),
