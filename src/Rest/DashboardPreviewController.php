@@ -12,16 +12,13 @@ class DashboardPreviewController {
 				ARTPULSE_API_NAMESPACE,
 				'/preview/dashboard',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'get_preview' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
-				)
-			);
+                                       'methods'             => 'GET',
+                                       'callback'            => array( self::class, 'get_preview' ),
+                                       'permission_callback' => function () {
+                                               return current_user_can( 'manage_options' );
+                                       },
+                               )
+                       );
 		}
 	}
 
