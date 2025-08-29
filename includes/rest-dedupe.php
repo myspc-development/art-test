@@ -6,18 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detect and merge duplicate REST route handlers during bootstrapping.
  */
 function ap_deduplicate_rest_routes( array $endpoints ): array {
-        static $logged = false;
-        if ( $logged ) {
-                return $endpoints;
-        }
-
         $GLOBALS['ap_rest_diagnostics'] = $GLOBALS['ap_rest_diagnostics'] ?? array(
                 'conflicts' => array(),
                 'missing'   => array(),
         );
 
-        $seen          = array();
-        $logged_routes = array();
+        $seen                = array();
+        static $logged_routes = array();
         $core_prefixes = array( '/', '/wp/v2', '/wp/v2/', '/batch/v1', '/wp-site-health/v1', '/block-editor/v1', '/oembed/1.0' );
 
 	foreach ( $endpoints as $route => $handlers ) {
@@ -78,7 +73,6 @@ function ap_deduplicate_rest_routes( array $endpoints ): array {
                 }
         }
 
-        $logged = true;
         return $endpoints;
 }
 
