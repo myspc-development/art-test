@@ -12,8 +12,8 @@ final class ProfileMetricsController {
 	}
 	public static function routes(): void {
 		register_rest_route(
-			'ap/v1',
-			'/profile/metrics',
+			ARTPULSE_API_NAMESPACE,
+			'/profile-metrics/(?P<id>\d+)',
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( self::class, 'get_metrics' ),
@@ -21,8 +21,8 @@ final class ProfileMetricsController {
 			)
 		);
 	}
-	public static function get_metrics( WP_REST_Request $req ): WP_REST_Response {
-		$uid = get_current_user_id();
+	public static function get_metrics( WP_REST_Request $req, int $id ): WP_REST_Response {
+		$uid = absint( $id );
 		// Count authored events last 30 days
 		$q      = new \WP_Query(
 			array(
