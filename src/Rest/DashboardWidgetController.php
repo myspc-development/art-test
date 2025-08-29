@@ -138,12 +138,15 @@ class DashboardWidgetController {
 		}
 	}
 
-	public static function check_permissions( WP_REST_Request $request ): bool {
-		$nonce = $request->get_header( 'X-WP-Nonce' );
-		if ( $nonce ) {
-			$_REQUEST['X-WP-Nonce'] = $nonce;
-		}
-               return wp_verify_nonce( $nonce, 'wp_rest' );
+       public static function check_permissions( WP_REST_Request $request ): bool {
+               $nonce = $request->get_header( 'X-WP-Nonce' );
+               if ( $nonce ) {
+                       $_REQUEST['X-WP-Nonce'] = $nonce;
+               }
+
+               return is_user_logged_in() &&
+                       wp_verify_nonce( $nonce, 'wp_rest' ) &&
+                       current_user_can( 'edit_posts' );
        }
 
 	public static function get_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {

@@ -70,20 +70,30 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->assertArrayNotHasKey( 'all', $data );
 	}
 
-	public function test_get_widgets_with_all_list(): void {
-		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
-		$req->set_param( 'role', 'administrator' );
-		$req->set_param( 'include_all', 'true' );
-		$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-		$res = rest_get_server()->dispatch( $req );
+       public function test_get_widgets_with_all_list(): void {
+               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
+               $req->set_param( 'role', 'administrator' );
+               $req->set_param( 'include_all', 'true' );
+               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $res = rest_get_server()->dispatch( $req );
 
-		$this->assertSame( 200, $res->get_status() );
-		$data = $res->get_data();
-		$this->assertArrayHasKey( 'all', $data );
-		$all_ids = array_column( $data['all'], 'id' );
-		sort( $all_ids );
-		$this->assertSame( array( 'bar', 'baz', 'foo' ), $all_ids );
-	}
+               $this->assertSame( 200, $res->get_status() );
+               $data = $res->get_data();
+               $this->assertArrayHasKey( 'all', $data );
+               $all_ids = array_column( $data['all'], 'id' );
+               sort( $all_ids );
+               $this->assertSame( array( 'bar', 'baz', 'foo' ), $all_ids );
+       }
+
+       public function test_get_widgets_requires_logged_in_user(): void {
+               wp_set_current_user( 0 );
+               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
+               $req->set_param( 'role', 'administrator' );
+               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $res = rest_get_server()->dispatch( $req );
+
+               $this->assertSame( 401, $res->get_status() );
+       }
 
 	public function test_save_layout_with_extra_widgets(): void {
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
@@ -196,7 +206,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		);
 	}
 
-	public function test_save_layout_requires_manage_options_cap(): void {
+       public function test_save_layout_requires_edit_posts_cap(): void {
 		UserLayoutManager::save_role_layout(
 			'administrator',
 			array(
@@ -295,7 +305,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->assertSame( 403, $res->get_status() );
 	}
 
-	public function test_export_layout_requires_manage_options_cap(): void {
+       public function test_export_layout_requires_edit_posts_cap(): void {
 		UserLayoutManager::save_role_layout(
 			'administrator',
 			array(
@@ -416,7 +426,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		);
 	}
 
-	public function test_import_layout_requires_manage_options_cap(): void {
+       public function test_import_layout_requires_edit_posts_cap(): void {
 		UserLayoutManager::save_role_layout(
 			'administrator',
 			array(
