@@ -167,32 +167,32 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
 		// Remove layout assigned during registration to simulate missing meta.
 		delete_user_meta( $uid, 'ap_dashboard_layout' );
 		wp_set_current_user( $uid );
-		tests_add_filter(
-			'ap_dashboard_default_widgets_for_role',
-			function ( $defaults, $role ) {
-				return 'member' === $role ? array( 'widget_membership', 'upgrade' ) : $defaults;
-			}
-		);
+               tests_add_filter(
+                       'ap_dashboard_default_widgets_for_role',
+                       function ( $defaults, $role ) {
+                               return 'member' === $role ? array( 'membership', 'upgrade' ) : $defaults;
+                       }
+               );
 
-		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
-		$res = rest_get_server()->dispatch( $req );
+               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
+               $res = rest_get_server()->dispatch( $req );
 
-		$this->assertSame( 200, $res->get_status() );
-		$data = $res->get_data();
-		$this->assertSame( array( 'widget_membership', 'upgrade' ), $data['layout'] );
-		$expected = array(
-			array(
-				'id'      => 'widget_membership',
-				'visible' => true,
-			),
-			array(
-				'id'      => 'upgrade',
-				'visible' => true,
-			),
-		);
-		$this->assertSame( $expected, $data['visibility'] );
-		remove_all_filters( 'ap_dashboard_default_widgets_for_role' );
-	}
+               $this->assertSame( 200, $res->get_status() );
+               $data = $res->get_data();
+               $this->assertSame( array( 'widget_membership', 'widget_upgrade' ), $data['layout'] );
+               $expected = array(
+                       array(
+                               'id'      => 'widget_membership',
+                               'visible' => true,
+                       ),
+                       array(
+                               'id'      => 'widget_upgrade',
+                               'visible' => true,
+                       ),
+               );
+               $this->assertSame( $expected, $data['visibility'] );
+               remove_all_filters( 'ap_dashboard_default_widgets_for_role' );
+       }
 
 	public function test_user_register_populates_default_layout(): void {
 		DashboardWidgetRegistry::register( 'widget_my_events', 'my-events', '', '', '__return_null' );
