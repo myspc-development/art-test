@@ -66,3 +66,11 @@ languages/*.po
 languages/*.mo
 
 
+# test artifacts
+/reports/
+/coverage/
+/node_modules/
+/vendor/
+/vendor/wp-phpunit/wp-phpunit/wp-tests-config.php
+/.env
+/.wp-test.env
