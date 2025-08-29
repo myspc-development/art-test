@@ -39,8 +39,10 @@ class DashboardWidgetAliasResolutionTest extends TestCase {
 	 */
 	public function test_aliases_resolve_and_render_per_role( string $role, string $alias, string $canonical ): void {
 		// Register canonical widget and its alias
-		WidgetRegistry::register( $canonical, static fn( array $ctx = array() ): string => '<div data-slug="' . $canonical . '"></div>' );
-		DashboardWidgetRegistry::register( $canonical, 'Test', '', '', static fn() => WidgetRegistry::render( $alias ), array( 'roles' => array( $role ) ) );
+        self::$currentCanonical = $canonical;
+        self::$currentAlias     = $alias;
+        WidgetRegistry::register( $canonical, [self::class, 'renderCanonical'] );
+        DashboardWidgetRegistry::register( $canonical, 'Test', '', '', [self::class, 'renderAlias'], array( 'roles' => array( $role ) ) );
 		DashboardWidgetRegistry::alias( $alias, $canonical );
 
 		$this->assertTrue( DashboardWidgetRegistry::exists( $canonical ) );
@@ -78,11 +80,22 @@ class DashboardWidgetAliasResolutionTest extends TestCase {
 		WidgetRegistry::resetDebug();
 	}
 
-	public function roleProvider(): array {
-		return array(
-			array( 'member' ),
-			array( 'artist' ),
-			array( 'organization' ),
-		);
-	}
+        public function roleProvider(): array {
+                return array(
+                        array( 'member' ),
+                        array( 'artist' ),
+                        array( 'organization' ),
+                );
+        }
+
+        private static string $currentCanonical = '';
+        private static string $currentAlias = '';
+
+        public static function renderCanonical( array $ctx = array() ): string {
+                return '<div data-slug="' . self::$currentCanonical . '"></div>';
+        }
+
+        public static function renderAlias(): string {
+                return WidgetRegistry::render( self::$currentAlias );
+        }
 }

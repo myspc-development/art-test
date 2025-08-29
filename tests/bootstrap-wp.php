@@ -1,18 +1,19 @@
 <?php
 declare(strict_types=1);
 
-$_tests_dir = getenv('WP_PHPUNIT__DIR') ?: __DIR__ . '/../vendor/wp-phpunit/wp-phpunit';
-$local_core = $_tests_dir . '/wordpress/wp-settings.php';
+$_tests_dir      = dirname(__DIR__);
+$wp_phpunit_dir  = $_tests_dir . '/vendor/wp-phpunit/wp-phpunit';
+$local_core      = $wp_phpunit_dir . '/wordpress/wp-settings.php';
 if (!file_exists($local_core)) {
-    fwrite(STDERR, "WordPress core not found. Set WP_CORE_DIR and run composer run wp:core-link.\n");
+    fwrite(STDERR, "Set WP_CORE_DIR and run composer run wp:core-link\n");
     exit(1);
 }
-if (!file_exists($_tests_dir . '/includes/functions.php')) {
-    fwrite(STDERR, "WP PHPUnit not found at {$_tests_dir}\n");
+if (!file_exists($wp_phpunit_dir . '/includes/functions.php')) {
+    fwrite(STDERR, "WP PHPUnit not found at {$wp_phpunit_dir}\n");
     exit(1);
 }
 
-$autoloader = dirname(__DIR__) . '/vendor/autoload.php';
+$autoloader = $_tests_dir . '/vendor/autoload.php';
 if (file_exists($autoloader)) {
     require_once $autoloader;
 }
@@ -33,19 +34,6 @@ if ($__force_preview !== false && !defined('AP_TEST_FORCE_PREVIEW')) {
 }
 
 /**
- * Load test helper traits/utilities (AjaxTestHelper, factories, stubs, etc).
- * IMPORTANT: these files must NOT call add_filter()/add_action() at load time.
- * Register hooks via functions we schedule below.
- */
-foreach ([__DIR__ . '/Traits', __DIR__ . '/helpers'] as $dir) {
-    if (is_dir($dir)) {
-        foreach (glob($dir . '/*.php') as $file) {
-            require_once $file;
-        }
-    }
-}
-
-/**
  * Load the plugin under test (try common entrypoints).
  */
 function _manually_load_plugin() {
@@ -61,7 +49,7 @@ function _manually_load_plugin() {
  * Load WordPress test helpers (tests_add_filter, etc.) exactly once.
  */
 if (!function_exists('tests_add_filter')) {
-    require_once $_tests_dir . '/includes/functions.php';
+    require_once $wp_phpunit_dir . '/includes/functions.php';
 }
 
 /**
@@ -77,7 +65,7 @@ tests_add_filter('init', [\ArtPulse\Tests\RestTestHelpers::class, 'boot'], 20);
 tests_add_filter('muplugins_loaded', '_manually_load_plugin', 15);
 
 /** Finally, boot the WP test environment (guarded, load once). */
-require_once $_tests_dir . '/includes/bootstrap.php';
+require_once $wp_phpunit_dir . '/includes/bootstrap.php';
 
 // Run after seeding (5) but before plugin load (15); 6 is fine.
 tests_add_filter('muplugins_loaded', [\ArtPulse\Tests\WidgetRolesOverlay::class, 'register'], 6);

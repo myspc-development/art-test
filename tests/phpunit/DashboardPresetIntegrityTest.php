@@ -25,9 +25,9 @@ class DashboardPresetIntegrityTest extends TestCase {
 				continue;
 			}
 			if ( preg_match_all( "/DashboardWidgetRegistry::register\(\s*'([^']+)'/", $contents, $m ) ) {
-				foreach ( $m[1] as $slug ) {
-					WidgetRegistry::register( $slug, static fn() => '' );
-				}
+                                  foreach ( $m[1] as $slug ) {
+                                          WidgetRegistry::register( $slug, [self::class, 'renderEmpty'] );
+                                  }
 			}
 		}
 	}
@@ -42,7 +42,7 @@ class DashboardPresetIntegrityTest extends TestCase {
 		parent::tearDown();
 	}
 
-	public function test_presets_reference_registered_slugs(): void {
+        public function test_presets_reference_registered_slugs(): void {
 		$registered = WidgetRegistry::list();
 		foreach ( array( 'member', 'artist', 'organization' ) as $role ) {
 			$preset  = DashboardPresets::forRole( $role );
@@ -51,6 +51,8 @@ class DashboardPresetIntegrityTest extends TestCase {
 				$unknown,
 				"Preset {$role} references unregistered widgets: " . implode( ', ', $unknown )
 			);
-		}
-	}
+        }
+
+        public static function renderEmpty(): string { return ''; }
+}
 }

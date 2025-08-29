@@ -7,9 +7,9 @@ use ArtPulse\Core\DashboardPresets;
 
 final class MemberPresetRenderTest extends TestCase {
 
-	protected function setUp(): void {
-		WidgetRegistry::register( 'widget_my_follows', static fn(): string => '<section></section>' );
-	}
+        protected function setUp(): void {
+                WidgetRegistry::register( 'widget_my_follows', [self::class, 'renderSection'] );
+        }
 	public function test_member_preset_contains_my_follows_section(): void {
 		$ids = $this->memberPresetIds();
 		$this->assertNotEmpty( $ids, 'Could not resolve member preset IDs' );
@@ -64,14 +64,14 @@ final class MemberPresetRenderTest extends TestCase {
 			$data = json_decode( (string) file_get_contents( $jsonPath ), true );
 			if ( is_array( $data ) ) {
 				// accept either full objects or string IDs
-				$ids = array_map(
-					static fn( $item ) => is_array( $item ) ? ( $item['id'] ?? '' ) : (string) $item,
-					$data
-				);
-				return array_values( array_filter( $ids ) );
-			}
-		}
+                                  $ids = array_map( [self::class, 'mapItem'], $data );
+                                  return array_values( array_filter( $ids ) );
+                          }
+                  }
 
 		return array();
-	}
+        }
+
+        public static function renderSection( array $ctx = array() ): string { return '<section></section>'; }
+        private static function mapItem( $item ) { return is_array( $item ) ? ( $item['id'] ?? '' ) : (string) $item; }
 }

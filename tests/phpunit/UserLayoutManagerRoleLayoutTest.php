@@ -33,11 +33,14 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
 			)
 		);
 
-		DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', static function () {}, array( 'roles' => array( 'member' ) ) );
-		DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', static function () {}, array( 'roles' => array( 'artist' ) ) );
-		WidgetRegistry::register( 'widget_alpha', static fn(): string => '<section></section>' );
-		WidgetRegistry::register( 'widget_beta', static fn(): string => '<section></section>' );
-	}
+                  DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'returnEmpty'], array( 'roles' => array( 'member' ) ) );
+                  DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', [self::class, 'returnEmpty'], array( 'roles' => array( 'artist' ) ) );
+                  WidgetRegistry::register( 'widget_alpha', [self::class, 'renderSection'] );
+                  WidgetRegistry::register( 'widget_beta', [self::class, 'renderSection'] );
+        }
+
+        public static function returnEmpty(): string { return ''; }
+        public static function renderSection(): string { return '<section></section>'; }
 
 	public function test_role_layout_registers_placeholders_for_missing_widgets(): void {
 		MockStorage::$options['ap_dashboard_widget_config'] = array(

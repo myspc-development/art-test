@@ -16,16 +16,18 @@ class DashboardWidgetRegistryHelpersTest extends TestCase {
 	}
 
 	public function test_getById_canonicalizes_slug(): void {
-		DashboardWidgetRegistry::register( 'widget_foo', 'Foo', '', '', static function () {} );
+                DashboardWidgetRegistry::register( 'widget_foo', 'Foo', '', '', [self::class, 'blank'] );
 		$def = DashboardWidgetRegistry::getById( 'foo' );
 		$this->assertIsArray( $def );
 		$this->assertSame( 'Foo', $def['label'] );
 	}
 
-	public function test_exists_checks_canonical_slug(): void {
-		DashboardWidgetRegistry::register( 'widget_bar', 'Bar', '', '', static function () {} );
-		$this->assertTrue( DashboardWidgetRegistry::exists( 'bar' ) );
-		$this->assertTrue( DashboardWidgetRegistry::exists( 'widget_bar' ) );
-		$this->assertFalse( DashboardWidgetRegistry::exists( 'missing' ) );
-	}
+        public function test_exists_checks_canonical_slug(): void {
+                DashboardWidgetRegistry::register( 'widget_bar', 'Bar', '', '', [self::class, 'blank'] );
+                $this->assertTrue( DashboardWidgetRegistry::exists( 'bar' ) );
+                $this->assertTrue( DashboardWidgetRegistry::exists( 'widget_bar' ) );
+                $this->assertFalse( DashboardWidgetRegistry::exists( 'missing' ) );
+        }
+
+        public static function blank(): void {}
 }
