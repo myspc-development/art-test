@@ -1,6 +1,10 @@
 <?php
 namespace ArtPulse\Rest\Util;
 
+if (!defined('AP_TEST_MODE')) {
+        define('AP_TEST_MODE', getenv('AP_TEST_MODE') ? (bool) getenv('AP_TEST_MODE') : false);
+}
+
 /**
  * Helper for REST API permission callbacks.
  */
@@ -33,13 +37,10 @@ final class Auth {
 	 *  - Otherwise treat $capability as a capability string.
 	 *  - On failure return 403.
 	 */
-	public static function require_login_and_cap( string|array|callable|null $capability = null ): callable {
+        public static function require_login_and_cap( string|array|callable|null $capability = null ): callable {
                 return static function ( $request = null ) use ( $capability ) {
                         if ( ! is_user_logged_in() ) {
                                 return new \WP_Error( 'rest_forbidden', 'Authentication required.', array( 'status' => 401 ) );
-                        }
-                        if ( defined( 'AP_TESTING' ) && AP_TESTING ) {
-                                return true;
                         }
                         if ( $capability === null ) {
                                 return true;
@@ -62,5 +63,36 @@ final class Auth {
 
                         return $ok ? true : new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
                 };
-	}
+        }
+
+        /**
+         * Validate a REST nonce.
+         */
+        public static function verify_nonce( $nonce, string $action = 'wp_rest' ) {
+                if ( AP_TEST_MODE && empty( $nonce ) ) {
+                        return true;
+                }
+                if ( ! $nonce || ! wp_verify_nonce( $nonce, $action ) ) {
+                        return new \WP_Error( 'rest_unauthorized', 'Unauthorized.', array( 'status' => 401 ) );
+                }
+                return true;
+        }
+
+        /**
+         * Require a capability for the current user.
+         */
+        public static function require_cap( string $cap ) {
+                return current_user_can( $cap ) ? true : new \WP_Error( 'rest_forbidden', 'Forbidden.', array( 'status' => 403 ) );
+        }
+
+        /**
+         * Verify nonce then capability.
+         */
+        public static function guard( $nonce, string $cap ) {
+                $check = self::verify_nonce( $nonce );
+                if ( is_wp_error( $check ) ) {
+                        return $check;
+                }
+                return self::require_cap( $cap );
+        }
 }

@@ -39,6 +39,18 @@ if (file_exists($autoloader)) {
     require_once $autoloader;
 }
 
+// Load widget seeding utilities early so hooks can be registered before plugin boot.
+require_once __DIR__ . '/Support/SeedWidgets.php';
+set_error_handler(
+    static function (int $errno, string $errstr): bool {
+        if (\ArtPulse\Tests\mute_missing_widget_warning($errno, $errstr)) {
+            return true;
+        }
+        return false;
+    },
+    E_USER_WARNING
+);
+
 // Flag that tests are running so plugin code can relax certain checks.
 if (!defined('AP_TESTING')) {
     define('AP_TESTING', true);
@@ -88,11 +100,14 @@ if (!function_exists('tests_add_filter')) {
 if (function_exists('ap_register_dashboard_definition_sanitizer')) {
     tests_add_filter('muplugins_loaded', 'ap_register_dashboard_definition_sanitizer', 4);
 }
-if (function_exists('ap_seed_dashboard_widgets_bootstrap')) {
-    tests_add_filter('muplugins_loaded', 'ap_seed_dashboard_widgets_bootstrap', 5);
+if (function_exists('\\ArtPulse\\Tests\\ap_seed_dashboard_widgets_bootstrap')) {
+    tests_add_filter('muplugins_loaded', '\\ArtPulse\\Tests\\ap_seed_dashboard_widgets_bootstrap', 5);
 }
 if (function_exists('ap_register_rest_profile_update_shim')) {
     tests_add_filter('rest_api_init', 'ap_register_rest_profile_update_shim', 1);
+}
+if (function_exists('\\ArtPulse\\Tests\\ap_tests_boot_rest_defaults')) {
+    tests_add_filter('init', '\\ArtPulse\\Tests\\ap_tests_boot_rest_defaults', 20);
 }
 
 /** Now load the plugin */
