@@ -14,16 +14,17 @@ if ( ! function_exists( __NAMESPACE__ . '\\current_user_can' ) ) {
 }
 
 if ( ! function_exists( __NAMESPACE__ . '\\wp_send_json_error' ) ) {
-        function wp_send_json_error( $data, $status = null ) {
+        function wp_send_json_error( $data = null, $status = null ) {
                 global $wp_send_json_error_status;
                 $wp_send_json_error_status = $status;
-                wp_die();
+                $response = json_encode( array( 'success' => false, 'data' => $data ) );
+                wp_die( $response );
         }
 }
 
 if ( ! function_exists( __NAMESPACE__ . '\\wp_die' ) ) {
-        function wp_die() {
-                throw new \Exception( 'wp_die called' );
+        function wp_die( $message = '' ) {
+                throw new \Exception( $message );
         }
 }
 
@@ -41,7 +42,7 @@ class LayoutSaveEndpointTest extends TestCase {
                         LayoutSaveEndpoint::handle();
                         $this->fail( 'Expected wp_die to be called' );
                 } catch ( \Exception $e ) {
-                        $this->assertSame( 'wp_die called', $e->getMessage() );
+                        $this->assertSame( '{"success":false,"data":null}', $e->getMessage() );
                 }
 
                 $this->assertSame( 403, $wp_send_json_error_status );
