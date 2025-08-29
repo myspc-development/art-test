@@ -1,11 +1,11 @@
 <?php
 namespace {
-    // Pretend we're in CLI mode.
+    // Pretend we're in CLI mode (for code that checks this).
     if (!defined('WP_CLI')) {
         define('WP_CLI', true);
     }
 
-    // Minimal base class many commands extend.
+    // Minimal base many commands extend.
     if (!class_exists('WP_CLI_Command')) {
         class WP_CLI_Command {}
     }
@@ -13,17 +13,20 @@ namespace {
     if (!class_exists('WP_CLI')) {
         class WP_CLI {
             /** @var array<string,mixed> */
-            private static $commands = [];
+            public static $commands = [];   // public so tests can reset
+            /** @var string */
+            public static $last_output = ''; // captured output from runcommand
             /** @var array<string,mixed> */
             private static $config = [];
 
             // Console-ish output
-            public static function log($msg)     { echo rtrim((string)$msg, "\n") . PHP_EOL; }
-            public static function line($msg)    { echo rtrim((string)$msg, "\n") . PHP_EOL; }
-            public static function success($msg) { echo rtrim((string)$msg, "\n") . PHP_EOL; }
-            public static function warning($msg) { fwrite(STDERR, rtrim((string)$msg, "\n") . PHP_EOL); }
-            public static function error($msg)   { throw new \RuntimeException(is_string($msg) ? $msg : json_encode($msg)); }
-            public static function debug($msg, $group = null) {
+            public static function log($msg){ echo rtrim((string)$msg, "\n") . PHP_EOL; }
+            public static function line($msg){ echo rtrim((string)$msg, "\n") . PHP_EOL; }
+            public static function success($msg){ echo rtrim((string)$msg, "\n") . PHP_EOL; }
+            public static function warning($msg){ fwrite(STDERR, rtrim((string)$msg, "\n") . PHP_EOL); }
+            public static function error($msg){ throw new \RuntimeException(is_string($msg) ? $msg : json_encode($msg)); }
+
+            public static function debug($msg, $group = null){
                 $enabled = getenv('WP_CLI_DEBUG') ?: (defined('WP_CLI_DEBUG') && WP_CLI_DEBUG);
                 if ($enabled) {
                     $prefix = $group ? "[{$group}] " : '';
@@ -31,63 +34,154 @@ namespace {
                 }
             }
 
-            // Command registry
-            public static function add_command($name, $callable, $args = []) { self::$commands[$name] = $callable; }
-            public static function get_command(string $name) { return self::$commands[$name] ?? null; }
-            public static function run(string $name, array $positional = [], array $assoc = []) {
-                $cmd = self::get_command($name);
-                if (is_array($cmd) && isset($cmd[0], $cmd[1]) && is_object($cmd[0])) {
-                    return $cmd[0]->{$cmd[1]}($positional, $assoc);
-                } elseif (is_object($cmd) && method_exists($cmd, '__invoke')) {
-                    return $cmd($positional, $assoc);
-                } elseif (is_callable($cmd)) {
-                    return call_user_func($cmd, $positional, $assoc);
+            public static function add_command($name, $callable, $args = []){
+                self::$commands[$name] = $callable;
+            }
+            public static function get_command(string $name){
+                return self::$commands[$name] ?? null;
+            }
+
+            // Run an already-parsed command name with args
+            public static function run(string $name, array $positional = [], array $assoc = []){
+                $callable = self::get_command($name);
+                if (!$callable) throw new \RuntimeException("Command '$name' not found");
+
+                // Resolve callable
+                $obj = null; $method = null;
+                if (is_string($callable) && class_exists($callable)) {
+                    $obj = new $callable();
+                } elseif (is_array($callable) && isset($callable[0])) {
+                    $obj = is_string($callable[0]) ? new $callable[0]() : $callable[0];
+                    $method = $callable[1] ?? null;
+                } elseif (is_callable($callable)) {
+                    $obj = $callable; // closure
+                } else {
+                    throw new \RuntimeException('Uncallable command');
                 }
-                throw new \RuntimeException("Command '$name' not found");
+
+                // Map WP-CLI subcommand token to actual method on the class.
+                $resolveMethod = static function($obj, string $token): ?string {
+                    // WP-CLI normalizes hyphens to underscores
+                    $candidates = [$token, str_replace('-', '_', $token)];
+                    // Reserved-name mappings used by WP-CLI
+                    if (in_array($token, ['list','new','class','namespace','trait','echo','print'], true)) {
+                        $candidates[] = $token . '_';
+                    }
+                    foreach ($candidates as $cand) {
+                        if (method_exists($obj, $cand)) return $cand;
+                    }
+                    return null;
+                };
+
+                // If method not specified, consume first positional as subcommand
+                if ($obj && !$method && is_object($obj) && !($obj instanceof \Closure)) {
+                    if ($positional && is_string($positional[0])) {
+                        $sub = array_shift($positional);
+                        $m = $resolveMethod($obj, $sub);
+                        if ($m) {
+                            $method = $m;
+                        } elseif (method_exists($obj, '__invoke')) {
+                            // push back; invoke will see it
+                            array_unshift($positional, $sub);
+                            $method = '__invoke';
+                        } else {
+                            throw new \RuntimeException("Subcommand '{$sub}' not found on command");
+                        }
+                    } elseif (method_exists($obj, '__invoke')) {
+                        $method = '__invoke';
+                    } else {
+                        throw new \RuntimeException('No subcommand and not invokable');
+                    }
+                }
+
+                ob_start();
+                try {
+                    if ($obj instanceof \Closure || (is_object($obj) && $method === '__invoke')) {
+                        $ret = ($obj)($positional, $assoc);
+                    } elseif (is_object($obj) && $method && method_exists($obj, $method)) {
+                        $ret = $obj->{$method}($positional, $assoc);
+                    } elseif (is_callable($callable)) {
+                        $ret = call_user_func($callable, $positional, $assoc);
+                    } else {
+                        throw new \RuntimeException('Uncallable command method');
+                    }
+                } finally {
+                    self::$last_output = ob_get_clean();
+                }
+                return self::$last_output;
+            }
+
+            // Parse a string e.g. "ns cmd sub --format=json --flag"
+            public static function runcommand(string $command_string){
+                $tokens = preg_split('/\s+/', trim($command_string));
+                if (!$tokens) return '';
+
+                // Find the longest registered command name prefix
+                $best = null; $bestLen = 0;
+                foreach (array_keys(self::$commands) as $name) {
+                    $parts = preg_split('/\s+/', trim($name));
+                    $len = count($parts);
+                    if ($len > $bestLen && $len <= count($tokens) && array_slice($tokens, 0, $len) === $parts) {
+                        $best = $name; $bestLen = $len;
+                    }
+                }
+                if (!$best) { $best = $tokens[0]; $bestLen = 1; }
+
+                $rest = array_slice($tokens, $bestLen);
+
+                // Extract assoc args: --key=value or --flag
+                $assoc = []; $positional = [];
+                foreach ($rest as $t) {
+                    if (strpos($t, '--') === 0) {
+                        $eq = strpos($t, '=');
+                        if ($eq !== false) {
+                            $k = substr($t, 2, $eq - 2);
+                            $v = substr($t, $eq + 1);
+                            $assoc[$k] = $v;
+                        } else {
+                            $assoc[substr($t, 2)] = true;
+                        }
+                    } else {
+                        $positional[] = $t;
+                    }
+                }
+                return self::run($best, $positional, $assoc);
             }
 
             // Misc helpers
-            public static function colorize($string) { return (string)$string; }  // no-op
+            public static function colorize($string){ return (string)$string; }
             public static function confirm($question, $assoc_args = []) { /* auto-yes */ }
-            public static function error_multi_line($lines) { throw new \RuntimeException(implode("\n", (array)$lines)); }
+            public static function error_multi_line($lines){ throw new \RuntimeException(implode("\n", (array)$lines)); }
             public static function add_hook($event, $callable, $args = []) { /* no-op */ }
 
-            // Config getters some code calls
-            public static function get_config($key = null) {
+            public static function get_config($key = null){
                 if ($key === null) return self::$config;
                 return self::$config[$key] ?? null;
             }
-            public static function set_config(array $cfg) { self::$config = $cfg; return true; }
+            public static function set_config(array $cfg){ self::$config = $cfg; return true; }
         }
     }
 }
 
 namespace WP_CLI {
-    /** Minimal stand-in for \WP_CLI\Formatter */
     class Formatter {
         /** @var array<int,string>|null */
         private $fields;
         /** @var string */
         private $format;
 
-        /**
-         * @param array<string,mixed> $assoc_args
-         * @param array<int,string>|string|null $fields
-         * @param string $default
-         */
         public function __construct(array $assoc_args = [], $fields = null, $default = 'table') {
             $this->fields = is_string($fields) ? array_map('trim', explode(',', $fields)) : $fields;
             $this->format = $assoc_args['format'] ?? $default;
         }
-        /** @param array<int,array<string,mixed>>|array<string,mixed> $items */
-        public function display_items($items) {
+        public function display_items($items){
             \WP_CLI\Utils\format_items($this->format, $items, $this->fields);
         }
     }
 }
 
 namespace WP_CLI\Utils {
-    function format_items($format, $items, $fields = null) {
+    function format_items($format, $items, $fields = null){
         if ($format === 'json') {
             echo json_encode($items, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
             return;
@@ -107,17 +201,10 @@ namespace WP_CLI\Utils {
         }
         echo print_r($items, true) . PHP_EOL;
     }
-    function get_flag_value($assoc_args, $key, $default = null) {
-        if (!is_array($assoc_args)) { return $default; }
+    function get_flag_value($assoc_args, $key, $default = null){
+        if (!is_array($assoc_args)) return $default;
         return array_key_exists($key, $assoc_args) ? $assoc_args[$key] : $default;
     }
-
-    // No-op progress bar used by some commands
-    class ProgressBar {
-        public function tick($n = 1) {}
-        public function finish() {}
-    }
-    function make_progress_bar($label, $count, $interval = 1) {
-        return new ProgressBar();
-    }
+    class ProgressBar { public function tick($n = 1) {} public function finish() {} }
+    function make_progress_bar($label, $count, $interval = 1){ return new ProgressBar(); }
 }

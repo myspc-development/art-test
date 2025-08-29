@@ -11,9 +11,9 @@
     <testsuite name="WP">
       <directory suffix="Test.php">tests/Integration</directory>
       <directory suffix="Test.php">tests/Rest</directory>
-      <directory suffix="Test.php">tests/Cli</directory>
       <directory suffix="Test.php">tests/Ajax</directory>
       <directory suffix="Test.php">tests/wpunit</directory>
+      <!-- NOTE: tests/Cli moved to Unit suite -->
     </testsuite>
   </testsuites>
   <coverage>

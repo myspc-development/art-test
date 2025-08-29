@@ -4,6 +4,7 @@
     <testsuite name="Unit">
       <directory suffix="Test.php">tests/phpunit</directory>
       <directory suffix="Test.php">tests/Unit</directory>
+      <directory suffix="Test.php">tests/Cli</directory> <!-- added -->
     </testsuite>
   </testsuites>
   <coverage>
