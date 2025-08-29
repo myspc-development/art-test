@@ -61,17 +61,18 @@ function ap_deduplicate_rest_routes( array $endpoints ): array {
 				continue;
 			}
 
-                        if ( defined( 'WP_DEBUG' ) && WP_DEBUG && empty( $logged_routes[ $route ] ) ) {
-                                $prev_loc = ap_callback_location( $prev['callback'] );
-                                $curr_loc = ap_callback_location( $handler['callback'] ?? null );
-                                error_log( "[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc." );
-                                $logged_routes[ $route ] = true;
-                                if ( ! in_array( $route, $GLOBALS['ap_rest_diagnostics']['conflicts'], true ) ) {
-                                        $GLOBALS['ap_rest_diagnostics']['conflicts'][] = $route;
-                                }
-                        }
-                }
-        }
+                       if ( ! in_array( $route, $GLOBALS['ap_rest_diagnostics']['conflicts'], true ) ) {
+                               $GLOBALS['ap_rest_diagnostics']['conflicts'][] = $route;
+                       }
+
+                       if ( defined( 'WP_DEBUG' ) && WP_DEBUG && empty( $logged_routes[ $route ] ) ) {
+                               $prev_loc = ap_callback_location( $prev['callback'] );
+                               $curr_loc = ap_callback_location( $handler['callback'] ?? null );
+                               error_log( "[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc." );
+                               $logged_routes[ $route ] = true;
+                       }
+               }
+       }
 
         return $endpoints;
 }
