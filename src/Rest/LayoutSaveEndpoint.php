@@ -9,15 +9,16 @@ class LayoutSaveEndpoint {
 
         public static function handle(): void {
                if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
+                       http_response_code( 403 );
                        wp_send_json_error( array( 'message' => 'Forbidden' ), 403 );
                        wp_die();
                }
 
                 check_ajax_referer( 'ap_dashboard_nonce' );
 
-		$user_id = get_current_user_id();
-		$raw     = $_POST['layout'] ?? array();
-		$raw     = wp_unslash( $raw );
+                $user_id = get_current_user_id();
+                $raw     = $_POST['layout'] ?? array();
+                $raw     = wp_unslash( $raw );
 
 		if ( is_string( $raw ) ) {
 			$raw = json_decode( $raw, true );
