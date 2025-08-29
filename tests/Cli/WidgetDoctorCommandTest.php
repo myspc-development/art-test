@@ -2,32 +2,41 @@
 
 namespace {
 	// WP-CLI stub loaded via bootstrap
-	$GLOBALS['hidden_widgets'] = array();
-	$GLOBALS['options']        = array();
+        $GLOBALS['hidden_widgets'] = array();
+        $GLOBALS['options']        = array();
 
-	function apply_filters( $hook, $value, $role ) {
-		if ( 'ap_dashboard_hidden_widgets' === $hook ) {
-			return $GLOBALS['hidden_widgets'][ $role ] ?? $value;
-		}
-		return $value;
-	}
+        if ( ! function_exists( 'apply_filters' ) ) {
+                function apply_filters( $hook, $value, $role ) {
+                        if ( 'ap_dashboard_hidden_widgets' === $hook ) {
+                                return $GLOBALS['hidden_widgets'][ $role ] ?? $value;
+                        }
+                        return $value;
+                }
+        }
 
-	function get_option( $name, $default = false ) {
-		return $GLOBALS['options'][ $name ] ?? $default;
-	}
+        if ( ! function_exists( 'get_option' ) ) {
+                function get_option( $name, $default = false ) {
+                        return $GLOBALS['options'][ $name ] ?? $default;
+                }
+        }
 
-	function update_option( $name, $value ) {
-		$GLOBALS['options'][ $name ] = $value;
-	}
+        if ( ! function_exists( 'update_option' ) ) {
+                function update_option( $name, $value ) {
+                        $GLOBALS['options'][ $name ] = $value;
+                }
+        }
 
-	function __return_true() {
-		return true;
-	}
+        if ( ! function_exists( '__return_true' ) ) {
+                function __return_true() {
+                        return true;
+                }
+        }
 }
 
 namespace ArtPulse\Core {
-	class DashboardWidgetRegistry {
-		private static array $widgets = array();
+        if ( ! class_exists( DashboardWidgetRegistry::class ) ) {
+                class DashboardWidgetRegistry {
+                private static array $widgets = array();
 
 		public static function set( array $widgets ): void {
 			self::$widgets = $widgets;
@@ -39,12 +48,13 @@ namespace ArtPulse\Core {
 
 		public static function update_widget( string $id, array $definition ): void {
 			self::$widgets[ $id ] = array_merge( self::$widgets[ $id ] ?? array(), $definition );
-		}
+                }
 
-		public static function canon_slug( string $slug ): string {
-			return $slug;
-		}
-	}
+                public static function canon_slug( string $slug ): string {
+                        return $slug;
+                }
+        }
+        }
 }
 
 namespace ArtPulse\Cli\Tests {
