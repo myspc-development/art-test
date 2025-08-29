@@ -37,41 +37,46 @@ class EventsWidget {
 		return '<div class="ap-widget-empty">' . esc_html( $msg ) . '</div>';
 	}
 
-	public static function render( int $user_id = 0 ): string {
-		try {
-			if ( ! post_type_exists( 'artpulse_event' ) ) {
-				return self::empty_state( __( 'No events yet.', 'artpulse' ) );
-			}
-			$q = new \WP_Query(
-				array(
-					'post_type'        => 'artpulse_event',
-					'posts_per_page'   => 5,
-					'no_found_rows'    => true,
-					'suppress_filters' => true,
-				)
-			);
-			if ( ! $q->have_posts() ) {
-				return self::empty_state( __( 'No upcoming events.', 'artpulse' ) );
-			}
-			ob_start();
-			while ( $q->have_posts() ) {
-				$q->the_post();
-				echo '<p>' . esc_html( get_the_title() ) . '</p>';
-			}
-			wp_reset_postdata();
-			return ob_get_clean();
-		} catch ( \Throwable $e ) {
-			do_action(
-				'artpulse_audit_event',
-				'render_exception',
-				array(
-					'widget' => 'widget_sample_events',
-					'error'  => $e->getMessage(),
-				)
-			);
-			return self::empty_state( __( 'Temporarily unavailable.', 'artpulse' ) );
-		}
-	}
+        public static function render( int $user_id = 0 ): string {
+                $user_id = $user_id ?: get_current_user_id();
+                if ( ! self::can_view( $user_id ) ) {
+                        return self::empty_state( __( 'Please log in.', 'artpulse' ) );
+                }
+
+                try {
+                        if ( ! post_type_exists( 'artpulse_event' ) ) {
+                                return self::empty_state( __( 'No events yet.', 'artpulse' ) );
+                        }
+                        $q = new \WP_Query(
+                                array(
+                                        'post_type'        => 'artpulse_event',
+                                        'posts_per_page'   => 5,
+                                        'no_found_rows'    => true,
+                                        'suppress_filters' => true,
+                                )
+                        );
+                        if ( ! $q->have_posts() ) {
+                                return self::empty_state( __( 'No upcoming events.', 'artpulse' ) );
+                        }
+                        ob_start();
+                        while ( $q->have_posts() ) {
+                                $q->the_post();
+                                echo '<p>' . esc_html( get_the_title() ) . '</p>';
+                        }
+                        wp_reset_postdata();
+                        return ob_get_clean();
+                } catch ( \Throwable $e ) {
+                        do_action(
+                                'artpulse_audit_event',
+                                'render_exception',
+                                array(
+                                        'widget' => 'widget_sample_events',
+                                        'error'  => $e->getMessage(),
+                                )
+                        );
+                        return self::empty_state( __( 'Temporarily unavailable.', 'artpulse' ) );
+                }
+        }
 }
 
 EventsWidget::register();
