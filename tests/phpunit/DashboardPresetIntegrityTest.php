@@ -47,12 +47,12 @@ class DashboardPresetIntegrityTest extends TestCase {
 		foreach ( array( 'member', 'artist', 'organization' ) as $role ) {
 			$preset  = DashboardPresets::forRole( $role );
 			$unknown = array_diff( $preset, $registered );
-			$this->assertEmpty(
-				$unknown,
-				"Preset {$role} references unregistered widgets: " . implode( ', ', $unknown )
-			);
-        }
+                        $this->assertEmpty(
+                                $unknown,
+                                "Preset {$role} references unregistered widgets: " . implode( ', ', $unknown )
+                        );
+               }
+       }
 
         public static function renderEmpty(): string { return ''; }
-}
 }
