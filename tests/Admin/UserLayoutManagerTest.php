@@ -136,8 +136,8 @@ namespace ArtPulse\Admin\Tests {
 				1,
 				array(
 					array( 'id' => 'bar' ),
-					array( 'id' => 'foo' ),
-					array( 'id' => 'foo' ),
+					array( 'id' => 'widget_foo' ),
+					array( 'id' => 'widget_foo' ),
 					'invalid',
 				)
 			);
@@ -148,7 +148,7 @@ namespace ArtPulse\Admin\Tests {
 					'visible' => true,
 				),
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			);
@@ -329,12 +329,12 @@ namespace ArtPulse\Admin\Tests {
 
 		public function test_export_layout_returns_pretty_json(): void {
 			DashboardWidgetRegistry::register( 'foo', 'Foo', '', '', '__return_null' );
-			UserLayoutManager::save_role_layout( 'subscriber', array( array( 'id' => 'foo' ) ) );
+			UserLayoutManager::save_role_layout( 'subscriber', array( array( 'id' => 'widget_foo' ) ) );
 
 			$expected = json_encode(
 				array(
 					array(
-						'id'      => 'foo',
+						'id'      => 'widget_foo',
 						'visible' => true,
 					),
 				),
@@ -350,7 +350,7 @@ namespace ArtPulse\Admin\Tests {
 			$json = json_encode(
 				array(
 					array( 'id' => 'bar' ),
-					array( 'id' => 'foo' ),
+					array( 'id' => 'widget_foo' ),
 				)
 			);
 			UserLayoutManager::import_layout( 'subscriber', $json );
@@ -362,7 +362,7 @@ namespace ArtPulse\Admin\Tests {
 						'visible' => true,
 					),
 					array(
-						'id'      => 'foo',
+						'id'      => 'widget_foo',
 						'visible' => true,
 					),
 				),
@@ -372,7 +372,7 @@ namespace ArtPulse\Admin\Tests {
 
 		public function test_reset_layout_for_role_removes_config(): void {
 			self::$options['ap_dashboard_widget_config'] = array(
-				'subscriber' => array( array( 'id' => 'foo' ) ),
+				'subscriber' => array( array( 'id' => 'widget_foo' ) ),
 			);
 
 			UserLayoutManager::reset_layout_for_role( 'subscriber' );
