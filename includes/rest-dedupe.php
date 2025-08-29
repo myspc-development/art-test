@@ -6,14 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detect and merge duplicate REST route handlers during bootstrapping.
  */
 function ap_deduplicate_rest_routes( array $endpoints ): array {
-        $GLOBALS['ap_rest_diagnostics'] = $GLOBALS['ap_rest_diagnostics'] ?? array(
-                'conflicts' => array(),
-                'missing'   => array(),
-        );
+	$GLOBALS['ap_rest_diagnostics'] = $GLOBALS['ap_rest_diagnostics'] ?? array(
+		'conflicts' => array(),
+		'missing'   => array(),
+	);
 
-        $seen                = array();
-        static $logged_routes = array();
-        $core_prefixes = array( '/', '/wp/v2', '/wp/v2/', '/batch/v1', '/wp-site-health/v1', '/block-editor/v1', '/oembed/1.0' );
+	$seen                = array();
+	static $logged_routes = array();
+	$core_prefixes = array( '/', '/wp/v2', '/wp/v2/', '/batch/v1', '/wp-site-health/v1', '/block-editor/v1', '/oembed/1.0' );
 
 	foreach ( $endpoints as $route => $handlers ) {
 		if ( ! is_array( $handlers ) ) {
@@ -43,38 +43,34 @@ function ap_deduplicate_rest_routes( array $endpoints ): array {
 			$method_label = implode( ',', $methods ) ?: 'ALL';
 			$dedupe_key   = $route . ' ' . $method_label;
 
-                        if ( ! isset( $seen[ $dedupe_key ] ) ) {
-                                $seen[ $dedupe_key ] = array(
-                                        'callback'            => $handler['callback'] ?? null,
-                                        'permission_callback' => $handler['permission_callback'] ?? null,
-                                );
-                                continue;
-                        }
+			if ( ! isset( $seen[ $dedupe_key ] ) ) {
+				// Store the full handler so we can compare all fields on duplicates.
+				$seen[ $dedupe_key ] = $handler;
+				continue;
+			}
 
-			$prev            = $seen[ $dedupe_key ];
-			$same_callback   = isset( $handler['callback'] ) && $prev['callback'] === $handler['callback'];
-			$same_permission = $prev['permission_callback'] === ( $handler['permission_callback'] ?? null );
+			$prev = $seen[ $dedupe_key ];
 
-			if ( $same_callback && $same_permission ) {
+			if ( $prev === $handler ) {
 				// Identical handler already registered - remove duplicate.
 				unset( $endpoints[ $route ][ $key ] );
 				continue;
 			}
 
-                       if ( ! in_array( $route, $GLOBALS['ap_rest_diagnostics']['conflicts'], true ) ) {
-                               $GLOBALS['ap_rest_diagnostics']['conflicts'][] = $route;
-                       }
+			if ( ! in_array( $route, $GLOBALS['ap_rest_diagnostics']['conflicts'], true ) ) {
+				$GLOBALS['ap_rest_diagnostics']['conflicts'][] = $route;
+			}
 
-                       if ( defined( 'WP_DEBUG' ) && WP_DEBUG && empty( $logged_routes[ $route ] ) ) {
-                               $prev_loc = ap_callback_location( $prev['callback'] );
-                               $curr_loc = ap_callback_location( $handler['callback'] ?? null );
-                               error_log( "[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc." );
-                               $logged_routes[ $route ] = true;
-                       }
-               }
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && empty( $logged_routes[ $route ] ) ) {
+				$prev_loc = ap_callback_location( $prev['callback'] ?? null );
+				$curr_loc = ap_callback_location( $handler['callback'] ?? null );
+				error_log( "[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc." );
+				$logged_routes[ $route ] = true;
+			}
+	       }
        }
 
-        return $endpoints;
+	return $endpoints;
 }
 
 function ap_callback_location( $callback ): string {
@@ -103,15 +99,15 @@ function ap_callback_location( $callback ): string {
  * Optionally, verify that a specific HTTP method exists for the route.
  */
 function ap_rest_route_registered( string $namespace, string $route, ?string $method = null ): bool {
-        global $wp_rest_server;
-        if ( ! $wp_rest_server ) {
-                $wp_rest_server = rest_get_server();
-        }
+	global $wp_rest_server;
+	if ( ! $wp_rest_server ) {
+		$wp_rest_server = rest_get_server();
+	}
 
-        $GLOBALS['ap_rest_diagnostics'] = $GLOBALS['ap_rest_diagnostics'] ?? array(
-                'conflicts' => array(),
-                'missing'   => array(),
-        );
+	$GLOBALS['ap_rest_diagnostics'] = $GLOBALS['ap_rest_diagnostics'] ?? array(
+		'conflicts' => array(),
+		'missing'   => array(),
+	);
 
 	$namespace = strtolower( trim( $namespace ) );
 	$route     = strtolower( trim( $route ) );
@@ -159,34 +155,34 @@ function ap_rest_route_registered( string $namespace, string $route, ?string $me
 
 		if ( is_string( $methods ) ) {
 			$list = array_map( 'trim', explode( '|', $methods ) );
-                } elseif ( is_int( $methods ) && class_exists( '\\WP_REST_Server' ) ) {
-                        $map = array(
-                                \WP_REST_Server::READABLE  => array( 'GET', 'HEAD' ),
-                                \WP_REST_Server::CREATABLE => array( 'POST' ),
-                                \WP_REST_Server::EDITABLE  => array( 'PUT', 'PATCH' ),
-                                \WP_REST_Server::DELETABLE => array( 'DELETE' ),
-                        );
+		} elseif ( is_int( $methods ) && class_exists( '\\WP_REST_Server' ) ) {
+			$map = array(
+				\WP_REST_Server::READABLE  => array( 'GET', 'HEAD' ),
+				\WP_REST_Server::CREATABLE => array( 'POST' ),
+				\WP_REST_Server::EDITABLE  => array( 'PUT', 'PATCH' ),
+				\WP_REST_Server::DELETABLE => array( 'DELETE' ),
+			);
 
-                        if ( defined( 'WP_REST_Server::OPTIONS' ) ) {
-                                $map[ \WP_REST_Server::OPTIONS ] = array( 'OPTIONS' );
-                        }
+			if ( defined( 'WP_REST_Server::OPTIONS' ) ) {
+				$map[ \WP_REST_Server::OPTIONS ] = array( 'OPTIONS' );
+			}
 
-                        if ( defined( 'WP_REST_Server::ALLMETHODS' ) ) {
-                                $all = array( 'GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE' );
-                                if ( defined( 'WP_REST_Server::OPTIONS' ) ) {
-                                        $all[] = 'OPTIONS';
-                                }
-                                $map[ \WP_REST_Server::ALLMETHODS ] = $all;
-                        }
+			if ( defined( 'WP_REST_Server::ALLMETHODS' ) ) {
+				$all = array( 'GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE' );
+				if ( defined( 'WP_REST_Server::OPTIONS' ) ) {
+					$all[] = 'OPTIONS';
+				}
+				$map[ \WP_REST_Server::ALLMETHODS ] = $all;
+			}
 
-                        $list = array();
-                        foreach ( $map as $bit => $verbs ) {
-                                if ( ( $methods & $bit ) === $bit ) {
-                                        $list = array_merge( $list, $verbs );
-                                }
-                        }
-                        $list = array_unique( $list );
-                } elseif ( is_array( $methods ) ) {
+			$list = array();
+			foreach ( $map as $bit => $verbs ) {
+				if ( ( $methods & $bit ) === $bit ) {
+					$list = array_merge( $list, $verbs );
+				}
+			}
+			$list = array_unique( $list );
+		} elseif ( is_array( $methods ) ) {
 			// Associative array of methods => details or simple list.
 			$keys = array_keys( $methods );
 			$list = array_keys( $methods ) === range( 0, count( $methods ) - 1 )
