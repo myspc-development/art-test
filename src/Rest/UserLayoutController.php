@@ -36,8 +36,7 @@ class UserLayoutController {
 	}
 
 	public static function check_permissions( WP_REST_Request $request ): bool {
-		$nonce = $request->get_header( 'X-WP-Nonce' );
-		return is_user_logged_in() && $nonce && wp_verify_nonce( $nonce, 'wp_rest' );
+		return is_user_logged_in();
 	}
 
 	public static function get_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
