@@ -3,6 +3,7 @@ namespace ArtPulse\Admin;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
+use ArtPulse\Core\DashboardPresets;
 use ArtPulse\Dashboard\WidgetGuard;
 
 /**
@@ -137,8 +138,10 @@ class UserLayoutManager {
 			$config[ $role_key ]['style'] = $style;
 		}
 
-		update_option( 'ap_dashboard_widget_config', $config );
-	}
+                update_option( 'ap_dashboard_widget_config', $config );
+
+                DashboardPresets::resetCache();
+        }
 
 	public static function export_layout( string $role ): string {
 		return json_encode( self::get_role_layout( $role )['layout'], JSON_PRETTY_PRINT );
