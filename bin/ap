@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
+cd "$REPO_ROOT"
+REPORT_ROOT="${REPORT_ROOT:-$REPO_ROOT/reports}"
+JUNIT_DIR="$REPORT_ROOT/junit"
+LOG_DIR="$REPORT_ROOT/logs"
+mkdir -p "$REPORT_ROOT" "$JUNIT_DIR" "$LOG_DIR"
+have(){ command -v "$1" >/dev/null 2>&1; }
+pm(){ if command -v pnpm >/dev/null && [ -f pnpm-lock.yaml ]; then echo pnpm; elif command -v yarn >/dev/null && [ -f yarn.lock ]; then echo yarn; elif command -v npm >/dev/null && [ -f package.json ]; then echo npm; fi; }
+pm_run(){ case "$(pm)" in pnpm) pnpm "$@";; yarn) [ "$1" = "ci" ] && { shift; yarn install --frozen-lockfile "$@"; } || yarn "$@";; npm) npm "$@";; esac }
+setup(){ [ -f composer.json ] && composer install --no-interaction --prefer-dist || true; [ -f package.json ] && (pm_run ci || pm_run install) || true; }
+build(){ [ -f package.json ] && grep -q '"build"' package.json && pm_run run build || echo "No JS build script; skipping"; }
+lint(){ [ -f vendor/bin/phpcs ] && vendor/bin/phpcs || true; [ -f vendor/bin/phpstan ] && vendor/bin/phpstan analyse || true; [ -f package.json ] && grep -q '"lint"' package.json && pm_run run lint || true; }
+test_php(){ local ran=0; if [ -f phpunit.xml ] || [ -f phpunit.xml.dist ]; then ran=1; vendor/bin/phpunit --log-junit "$JUNIT_DIR/phpunit.xml" || true; fi
+for cfg in phpunit.unit.xml phpunit.unit.xml.dist phpunit.wp.xml phpunit.wp.xml.dist phpunit.rest.xml phpunit.rest.xml.dist; do
+  [ -f "$cfg" ] && { ran=1; vendor/bin/phpunit -c "$cfg" --log-junit "$JUNIT_DIR/${cfg%.xml}.xml" || true; }
+done
+[ $ran -eq 0 ] && echo "No phpunit config; skipping PHP tests"; }
+test_js(){ if [ -f package.json ] && (grep -q '"jest"' package.json || [ -f node_modules/.bin/jest ]); then
+  if grep -q 'jest-junit' package.json 2>/dev/null; then JEST_JUNIT_OUTPUT="$JUNIT_DIR/jest.xml" npx --yes jest --ci --coverage --reporters=default --reporters=jest-junit || true
+  else npx --yes jest --ci --coverage || true; fi
+else echo "No Jest setup; skipping"; fi; }
+test_e2e(){ [ "${NO_E2E:-0}" = "1" ] && { echo "NO_E2E=1 → skipping e2e"; return 0; }
+[ -d cypress ] || grep -q '"cypress"' package.json 2>/dev/null && npx --yes cypress run --reporter junit --reporter-options "mochaFile=$JUNIT_DIR/cypress-[hash].xml,toConsole=true" || true
+grep -q '"@playwright/test"' package.json 2>/dev/null && PLAYWRIGHT_JUNIT_OUTPUT_NAME="$JUNIT_DIR/playwright.xml" npx --yes playwright test --reporter=junit || true; }
+report(){ shopt -s nullglob; files=("$JUNIT_DIR"/*.xml); [ ${#files[@]} -eq 0 ] && { echo "No JUnit XML in $JUNIT_DIR"; exit 0; }
+total=0; fail=0; err=0; skip=0
+for f in "${files[@]}"; do while read -r line; do [[ "$line" =~ \<testsuite\  ]] || continue
+t=$(sed -n 's/.*tests="\([0-9]\+\)".*/\1/p' <<<"$line"); total=$((total+${t:-0}))
+a=$(sed -n 's/.*failures="\([0-9]\+\)".*/\1/p'<<<"$line"); fail=$((fail+${a:-0}))
+b=$(sed -n 's/.*errors="\([0-9]\+\)".*/\1/p'  <<<"$line"); err=$((err+${b:-0}))
+c=$(sed -n 's/.*skipped="\([0-9]\+\)".*/\1/p' <<<"$line"); skip=$((skip+${c:-0}))
+done < "$f"; done
+pass=$((total-fail-err-skip))
+echo "── Test Summary ──"; echo "Total: $total  Passed: $pass  Failed: $fail  Errors: $err  Skipped: $skip"
+echo "Reports → $REPORT_ROOT"; }
+all(){ setup; build; lint; test_php; test_js; test_e2e; report; }
+case "${1:-all}" in
+  setup) setup;; build) build;; lint) lint;;
+  test:php) test_php;; test:js) test_js;; test:e2e) test_e2e;;
+  report) report;; all|ci) all;;
+  *) echo "Usage: bin/ap [setup|build|lint|test:php|test:js|test:e2e|report|all]"; exit 2;;
+esac

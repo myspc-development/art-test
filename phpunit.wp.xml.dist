@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/wp-bootstrap.php" colors="true">
-  <coverage>
-    <include>
-      <directory>src</directory>
-    </include>
-    <exclude>
-      <directory>tests</directory>
-      <directory>views</directory>
-    </exclude>
-  </coverage>
+<phpunit bootstrap="tests/bootstrap-wp.php" colors="true">
+  <php>
+    <env name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
+    <env name="DB_NAME" value="${DB_NAME}"/>
+    <env name="DB_USER" value="${DB_USER}"/>
+    <env name="DB_PASSWORD" value="${DB_PASSWORD}"/>
+    <env name="DB_HOST" value="${DB_HOST}"/>
+  </php>
   <testsuites>
-    <testsuite name="WordPress">
+    <testsuite name="WP">
       <directory suffix="Test.php">tests/Integration</directory>
+      <directory suffix="Test.php">tests/Rest</directory>
+      <directory suffix="Test.php">tests/Cli</directory>
+      <directory suffix="Test.php">tests/Ajax</directory>
+      <directory suffix="Test.php">tests/wpunit</directory>
     </testsuite>
   </testsuites>
-  <php>
-    <ini name="display_errors" value="0"/>
-    <ini name="opcache.enable_cli" value="0"/>
-    <server name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
-    <const name="WP_TESTS_CONFIG_FILE_PATH" value="wp-tests-config.php"/>
-    <env name="PLUGIN_MAIN_FILE" value="artpulse-management.php"/>
-  </php>
+  <coverage>
+    <include><directory>src</directory></include>
+    <report>
+      <html outputDirectory="reports/coverage/phpunit-wp"/>
+      <clover outputFile="reports/coverage/phpunit-wp.xml"/>
+    </report>
+  </coverage>
 </phpunit>

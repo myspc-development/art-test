@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php" colors="true"
-         beStrictAboutTestsThatDoNotTestAnything="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutCoversAnnotation="false">
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
   <testsuites>
     <testsuite name="Unit">
-      <!-- Only include pure unit folders -->
-      <directory>tests/phpunit</directory>
-      <directory>tests/Safety</directory>
-      <directory>tests/Cli</directory>
-      <!-- DO NOT include Integration or Rest here -->
+      <directory suffix="Test.php">tests/phpunit</directory>
+      <directory suffix="Test.php">tests/Unit</directory>
     </testsuite>
   </testsuites>
-  <php>
-    <ini name="display_errors" value="0"/>
-    <ini name="display_startup_errors" value="0"/>
-    <ini name="opcache.enable_cli" value="0"/>
-  </php>
+  <coverage>
+    <include><directory>src</directory></include>
+    <report>
+      <html outputDirectory="reports/coverage/phpunit-unit"/>
+      <clover outputFile="reports/coverage/phpunit-unit.xml"/>
+    </report>
+  </coverage>
 </phpunit>

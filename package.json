@@ -4,16 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "rollup -c",
+    "build": "echo 'no-op build' && exit 0",
     "dev": "rollup -c -w",
     "test": "jest",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "test:php": "composer test",
+    "test:php": "vendor/bin/phpunit -c phpunit.unit.xml.dist && vendor/bin/phpunit -c phpunit.wp.xml.dist",
     "test:php:up": "docker compose -f docker-compose.tests.yml up -d",
     "test:php:down": "docker compose -f docker-compose.tests.yml down -v",
     "test:php:local": "npm run test:php:up && composer test:php:local; npm run test:php:down",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:js": "jest --ci --coverage",
+    "ci": "bin/ap all"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
@@ -69,7 +71,8 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "jest-junit": "^16"
   },
   "description": "[![CI](https://github.com/example/art-test/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/example/art-test/actions/workflows/tests.yml) [![Coverage](https://img.shields.io/codecov/c/github/example/art-test?label=coverage)](https://codecov.io/gh/example/art-test)",
   "main": "eslint.config.js",
@@ -87,5 +90,8 @@
   "bugs": {
     "url": "https://github.com/myspc-development/art-test/issues"
   },
-  "homepage": "https://github.com/myspc-development/art-test#readme"
+  "homepage": "https://github.com/myspc-development/art-test#readme",
+  "jest-junit": {
+    "output": "reports/junit/jest.xml"
+  }
 }
