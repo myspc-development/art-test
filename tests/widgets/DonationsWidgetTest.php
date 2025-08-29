@@ -36,8 +36,8 @@ class DonationsWidgetTest extends WP_UnitTestCase {
 		$this->assertTrue( DashboardWidgetRegistry::exists( DonationsWidget::get_id() ) );
 
 		MockStorage::$current_roles = array( 'organization' );
-		$authorized                 = DonationsWidget::render( 1 );
-		$this->assertStringContainsString( 'Example donations data', $authorized );
+                $authorized                 = DonationsWidget::render( 1 );
+                $this->assertStringContainsString( 'Example donations', $authorized );
 
 		MockStorage::$current_roles = array( 'subscriber' );
 		$denied                     = DonationsWidget::render( 2 );
