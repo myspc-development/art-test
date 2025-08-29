@@ -21,16 +21,17 @@ final class DashboardDefinitionSanitizer {
     }
 
     public static function register(): void {
-        $filter = static function ($defs) {
-            if (!is_array($defs)) {
-                return $defs;
-            }
-            foreach ($defs as $id => $def) {
-                $defs[$id] = self::stripClosures($def);
-            }
+        add_filter('ap_dashboard_widget_definitions', [self::class, 'filter'], 999, 1);
+        add_filter('artpulse_dashboard_widget_definitions', [self::class, 'filter'], 999, 1);
+    }
+
+    public static function filter($defs) {
+        if (!is_array($defs)) {
             return $defs;
-        };
-        add_filter('ap_dashboard_widget_definitions', $filter, 999, 1);
-        add_filter('artpulse_dashboard_widget_definitions', $filter, 999, 1);
+        }
+        foreach ($defs as $id => $def) {
+            $defs[$id] = self::stripClosures($def);
+        }
+        return $defs;
     }
 }

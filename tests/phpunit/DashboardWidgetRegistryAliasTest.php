@@ -8,6 +8,7 @@ use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 require_once __DIR__ . '/../TestStubs.php';
 
 class DashboardWidgetRegistryAliasTest extends TestCase {
+        public static function renderBlank(): string { return ''; }
 
 	protected function setUp(): void {
 		$ref = new \ReflectionClass( DashboardWidgetRegistry::class );
@@ -21,8 +22,8 @@ class DashboardWidgetRegistryAliasTest extends TestCase {
 	}
 
 	public function test_alias_resolves_to_canonical(): void {
-		DashboardWidgetRegistry::register( 'widget_favorites', 'Favorites', '', '', static fn() => '' );
-		DashboardWidgetRegistry::register( 'widget_widget_favorites', 'Legacy', '', '', static fn() => '' );
+                DashboardWidgetRegistry::register( 'widget_favorites', 'Favorites', '', '', [self::class, 'renderBlank'] );
+                DashboardWidgetRegistry::register( 'widget_widget_favorites', 'Legacy', '', '', [self::class, 'renderBlank'] );
 		DashboardWidgetRegistry::alias( 'widget_widget_favorites', 'widget_favorites' );
 
 		$defs = DashboardWidgetRegistry::get_all();
@@ -50,7 +51,7 @@ class DashboardWidgetRegistryAliasTest extends TestCase {
 	}
 
 	public function test_news_alias_maps_to_feed(): void {
-		DashboardWidgetRegistry::register( 'widget_news_feed', 'NewsFeed', '', '', static fn() => '' );
+                DashboardWidgetRegistry::register( 'widget_news_feed', 'NewsFeed', '', '', [self::class, 'renderBlank'] );
 		DashboardWidgetRegistry::alias( 'widget_news', 'widget_news_feed' );
 		$this->assertTrue( DashboardWidgetRegistry::exists( 'widget_news' ) );
 		$this->assertSame(

@@ -9,22 +9,11 @@ Site administrators should consult the [Admin Guide](docs/guides/admin/README.md
 
 ## Quickstart
 
-```bash
-composer install
-
-export WP_CORE_DIR=/www/wwwroot/192.168.1.21
-composer run wp:core-link
-
-export WP_TESTS_DB_NAME=wordpress_test
-export WP_TESTS_DB_USER=wp
-export WP_TESTS_DB_PASSWORD=password
-export WP_TESTS_DB_HOST=localhost
-composer run test:db
-
-composer run test:unit
-composer run test:wp
-composer run test:coverage
-```
+1. `composer install && composer dump-autoload`
+2. `export WP_CORE_DIR=<path-to-local-wordpress>`
+3. `composer run wp:core-link`
+4. `export DB_NAME=<db> DB_USER=<user> DB_PASSWORD=<pass> DB_HOST=<host> AP_TEST_MODE=1`
+5. `composer run test:wp -- --verbose`
 
 > Code coverage requires the [PCOV](https://github.com/krakjoe/pcov) extension or Xdebug 3 with `XDEBUG_MODE=coverage`.
 
