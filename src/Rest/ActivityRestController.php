@@ -19,7 +19,7 @@ class ActivityRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'list' ),
-					'permission_callback' => fn() => is_user_logged_in(),
+                                       'permission_callback' => fn() => current_user_can( 'read' ),
 					'args'                => array(
 						'limit' => array(
 							'type'    => 'integer',
