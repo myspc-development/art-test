@@ -21,13 +21,13 @@ class WidgetLayoutRestTest extends \WP_UnitTestCase {
 	}
 
 	public function test_post_saves_layout_with_meta_key(): void {
-		$layout = array(
-			array( 'id' => 'foo' ),
-			array(
-				'id'      => 'bar',
-				'visible' => false,
-			),
-		);
+                $layout = array(
+                        array( 'id' => 'widget_foo' ),
+                        array(
+                                'id'      => 'bar',
+                                'visible' => false,
+                        ),
+                );
 		$req    = new \WP_REST_Request( 'POST', '/artpulse/v1/widget-layout' );
 		$req->set_body_params( $layout );
 		$res = rest_get_server()->dispatch( $req );

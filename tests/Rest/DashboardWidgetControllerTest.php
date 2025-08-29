@@ -117,7 +117,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				'role'   => 'administrator',
 				'layout' => array(
 					array(
-						'id'      => 'foo',
+						'id'      => 'widget_foo',
 						'visible' => true,
 					),
 					array(
@@ -134,7 +134,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->assertEquals(
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 				array(
@@ -152,7 +152,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -169,13 +169,15 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 403, $res->get_status() );
-		$saved = UserLayoutManager::get_role_layout( 'administrator' );
+                $res  = rest_get_server()->dispatch( $req );
+                $this->assertSame( 403, $res->get_status() );
+                $data = $res->get_data();
+                $this->assertSame( 'rest_cookie_invalid_nonce', $data['code'] );
+                $saved = UserLayoutManager::get_role_layout( 'administrator' );
 		$this->assertSame(
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			),
@@ -188,7 +190,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -206,13 +208,15 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 403, $res->get_status() );
-		$saved = UserLayoutManager::get_role_layout( 'administrator' );
+                $res  = rest_get_server()->dispatch( $req );
+                $this->assertSame( 403, $res->get_status() );
+                $data = $res->get_data();
+                $this->assertSame( 'rest_cookie_invalid_nonce', $data['code'] );
+                $saved = UserLayoutManager::get_role_layout( 'administrator' );
 		$this->assertSame(
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			),
@@ -225,7 +229,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -251,7 +255,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->assertSame(
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			),
@@ -264,7 +268,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -274,16 +278,16 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
-		$data = $res->get_data();
-		$this->assertSame(
-			array(
-				array(
-					'id'      => 'foo',
-					'visible' => true,
-				),
-			),
-			$data['layout']
-		);
+                $data = $res->get_data();
+                $this->assertSame(
+                        array(
+                                array(
+                                        'id'      => 'widget_foo',
+                                        'visible' => true,
+                                ),
+                        ),
+                        $data['layout']
+                );
 	}
 
 	public function test_export_layout_requires_nonce(): void {
@@ -291,7 +295,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -307,7 +311,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -324,7 +328,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -372,7 +376,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -395,7 +399,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->assertSame(
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			),
@@ -408,7 +412,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -432,7 +436,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->assertSame(
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			),
@@ -445,7 +449,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			'administrator',
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			)
@@ -471,7 +475,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->assertSame(
 			array(
 				array(
-					'id'      => 'foo',
+					'id'      => 'widget_foo',
 					'visible' => true,
 				),
 			),
