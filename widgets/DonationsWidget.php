@@ -44,13 +44,13 @@ class DonationsWidget {
 			$template = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'templates/widgets/donations.php';
 		}
 		ob_start();
-		if ( $template && file_exists( $template ) ) {
-			load_template( $template, false );
-		} else {
-			echo '<p>' . esc_html__( 'Example donations data.', 'artpulse' ) . '</p>';
-		}
-		return ob_get_clean();
-	}
+               if ( $template && file_exists( $template ) ) {
+                       load_template( $template, false );
+               } else {
+                       echo '<p>' . esc_html__( 'Example donations', 'artpulse' ) . '</p>';
+               }
+               return ob_get_clean();
+       }
 }
 
 DonationsWidget::register();
