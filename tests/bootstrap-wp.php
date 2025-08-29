@@ -22,8 +22,8 @@ if (!file_exists($__vendor_wp)) {
             }
         }
     } else {
-        fwrite(STDERR, "WordPress core not found. Set WP_CORE_DIR to an existing WP root or run the installer.\n");
-        fwrite(STDERR, "Example: export WP_CORE_DIR=/www/wwwroot/192.168.1.21 && ln -s \$WP_CORE_DIR {$__tests_dir}/wordpress\n");
+        fwrite(STDERR, "WordPress core not found. Set WP_CORE_DIR to an existing WP root and run `composer run wp:core-link`.\n");
+        fwrite(STDERR, "Example: export WP_CORE_DIR=/www/wwwroot/192.168.1.21 && composer run wp:core-link\n");
         exit(1);
     }
 }

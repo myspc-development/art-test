@@ -16,4 +16,5 @@ return array(
     'ArtPulse\\Widgets\\' => array($baseDir . '/widgets'),
     'ArtPulse\\Tests\\Stubs\\' => array($baseDir . '/tests/Stubs'),
     'ArtPulse\\' => array($baseDir . '/src'),
+    'App\\' => array($baseDir . '/src'),
 );
