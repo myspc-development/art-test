@@ -34,8 +34,9 @@ class CurrentUserControllerTest extends \WP_UnitTestCase {
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
 		$data = $res->get_data();
-		$this->assertSame( $this->user_id, $data['id'] );
-		$this->assertSame( 'subscriber', $data['role'] );
-		$this->assertContains( 'subscriber', $data['roles'] );
-	}
+               $this->assertSame( $this->user_id, $data['id'] );
+               $this->assertSame( 'subscriber', $data['role'] );
+               $this->assertContains( 'subscriber', $data['roles'] );
+               $this->assertSame( $data['roles'][0], $data['role'] );
+        }
 }
