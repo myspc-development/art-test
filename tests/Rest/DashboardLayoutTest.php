@@ -162,28 +162,41 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
                 $this->assertSame( $expected, get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
         }
 
-	public function test_get_uses_role_default_when_no_user_meta(): void {
-		$uid = self::factory()->user->create( array( 'role' => 'member' ) );
-		// Remove layout assigned during registration to simulate missing meta.
-		delete_user_meta( $uid, 'ap_dashboard_layout' );
-		wp_set_current_user( $uid );
+       public function test_get_uses_role_default_when_no_user_meta(): void {
+               $uid = self::factory()->user->create( array( 'role' => 'member' ) );
+               // Remove layout assigned during registration to simulate missing meta.
+               delete_user_meta( $uid, 'ap_dashboard_layout' );
+               wp_set_current_user( $uid );
 
+               tests_add_filter(
+                       'ap_dashboard_default_widgets_for_role',
+                       function ( $defaults, $role ) {
+                               return 'member' === $role ? array( 'widget_membership', 'widget_upgrade' ) : $defaults;
                        }
                );
 
                $req = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
                $res = rest_get_server()->dispatch( $req );
+               $this->assertSame( 200, $res->get_status() );
 
-
-                               'id'      => 'widget_membership',
-                               'visible' => true,
-                       ),
+               $data = $res->get_data();
+               $this->assertSame( array( 'widget_membership', 'widget_upgrade' ), $data['layout'] );
+               $this->assertSame(
                        array(
-                               'id'      => 'widget_upgrade',
-                               'visible' => true,
+                               array(
+                                       'id'      => 'widget_membership',
+                                       'visible' => true,
+                               ),
+                               array(
+                                       'id'      => 'widget_upgrade',
+                                       'visible' => true,
+                               ),
                        ),
+                       $data['visibility']
                );
 
+               remove_all_filters( 'ap_dashboard_default_widgets_for_role' );
+       }
 
 	public function test_user_register_populates_default_layout(): void {
 		DashboardWidgetRegistry::register( 'widget_my_events', 'my-events', '', '', '__return_null' );
