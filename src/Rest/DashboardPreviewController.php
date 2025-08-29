@@ -14,13 +14,11 @@ class DashboardPreviewController {
 				array(
                                        'methods'             => 'GET',
                                        'callback'            => array( self::class, 'get_preview' ),
-                                       'permission_callback' => function () {
-                                               return current_user_can( 'manage_options' );
-                                       },
+                                       'permission_callback' => \ArtPulse\Rest\Util\Auth::require_login_and_cap( 'manage_options' ),
                                )
                        );
-		}
-	}
+                }
+        }
 
 	public static function get_preview() {
 		return array(
