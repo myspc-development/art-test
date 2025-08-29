@@ -169,27 +169,27 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
 		wp_set_current_user( $uid );
 		tests_add_filter(
 			'ap_dashboard_default_widgets_for_role',
-			function ( $defaults, $role ) {
-				return 'member' === $role ? array( 'widget_membership', 'upgrade' ) : $defaults;
-			}
-		);
+                       function ( $defaults, $role ) {
+                               return 'member' === $role ? array( 'widget_membership', 'upgrade' ) : $defaults;
+                       }
+               );
 
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
 		$res = rest_get_server()->dispatch( $req );
 
 		$this->assertSame( 200, $res->get_status() );
 		$data = $res->get_data();
-		$this->assertSame( array( 'widget_membership', 'upgrade' ), $data['layout'] );
+               $this->assertSame( array( 'widget_membership', 'widget_upgrade' ), $data['layout'] );
 		$expected = array(
 			array(
-				'id'      => 'widget_membership',
-				'visible' => true,
-			),
-			array(
-				'id'      => 'upgrade',
-				'visible' => true,
-			),
-		);
+                               'id'      => 'widget_membership',
+                               'visible' => true,
+                       ),
+                       array(
+                               'id'      => 'widget_upgrade',
+                               'visible' => true,
+                       ),
+               );
 		$this->assertSame( $expected, $data['visibility'] );
 		remove_all_filters( 'ap_dashboard_default_widgets_for_role' );
 	}
@@ -272,40 +272,36 @@ class DashboardLayoutTest extends \WP_UnitTestCase {
             )
         );
 
-        $req = new \WP_REST_Request( 'POST', '/artpulse/v1/ap/layout/reset' );
-        $res = rest_get_server()->dispatch( $req );
-        $this->assertSame( 200, $res->get_status() );
-        $data = $res->get_data();
-        $this->assertTrue( $data['reset'] );
-        $this->assertEmpty( get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
-        $this->assertEmpty( get_user_meta( $this->user_id, 'ap_widget_visibility', true ) );
+       tests_add_filter(
+           'ap_dashboard_default_widgets_for_role',
+           function ( $defaults, $role ) {
+               return 'subscriber' === $role ? array( 'one', 'two' ) : $defaults;
+           }
+       );
 
-        tests_add_filter(
-            'ap_dashboard_default_widgets_for_role',
-            function ( $defaults, $role ) {
-                return 'subscriber' === $role ? array( 'one', 'two' ) : $defaults;
-            }
-        );
-        $get = new \WP_REST_Request( 'GET', '/artpulse/v1/ap_dashboard_layout' );
-        $res = rest_get_server()->dispatch( $get );
-        $this->assertSame( 200, $res->get_status() );
-        $data = $res->get_data();
-        $this->assertSame( array( 'widget_one', 'widget_two' ), $data['layout'] );
-        $this->assertSame(
-            array(
-                array(
-                    'id'      => 'widget_one',
-                    'visible' => true,
-                ),
-                array(
-                    'id'      => 'widget_two',
-                    'visible' => true,
-                ),
-            ),
-            $data['visibility']
-        );
-        remove_all_filters( 'ap_dashboard_default_widgets_for_role' );
-    }
+       $req = new \WP_REST_Request( 'POST', '/artpulse/v1/ap/layout/reset' );
+       $res = rest_get_server()->dispatch( $req );
+       $this->assertSame( 200, $res->get_status() );
+       $data = $res->get_data();
+       $this->assertTrue( $data['reset'] );
+       $this->assertSame( array( 'widget_one', 'widget_two' ), $data['layout'] );
+       $this->assertSame(
+           array(
+               array(
+                   'id'      => 'widget_one',
+                   'visible' => true,
+               ),
+               array(
+                   'id'      => 'widget_two',
+                   'visible' => true,
+               ),
+           ),
+           $data['visibility']
+       );
+       $this->assertEmpty( get_user_meta( $this->user_id, 'ap_dashboard_layout', true ) );
+       $this->assertEmpty( get_user_meta( $this->user_id, 'ap_widget_visibility', true ) );
+       remove_all_filters( 'ap_dashboard_default_widgets_for_role' );
+}
 
     public function test_revert_route_restores_last_snapshot(): void {
         update_user_meta(
