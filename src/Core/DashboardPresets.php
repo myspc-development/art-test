@@ -72,7 +72,18 @@ class DashboardPresets {
                        $list = isset( $json['widgets'] ) && is_array( $json['widgets'] )
                                ? $json['widgets']
                                : ( array_keys( $json ) === range( 0, count( $json ) - 1 ) ? $json : array() );
-                       foreach ( $list as $slug ) {
+                       foreach ( $list as $item ) {
+                               $slug = null;
+                               if ( is_array( $item ) ) {
+                                       if ( isset( $item['id'] ) ) {
+                                               $slug = $item['id'];
+                                       } elseif ( isset( $item['slug'] ) ) {
+                                               $slug = $item['slug'];
+                                       }
+                               } else {
+                                       $slug = $item;
+                               }
+
                                if ( is_string( $slug ) && $slug !== '' ) {
                                        $slugs[] = WidgetIds::canonicalize( $slug );
                                }
