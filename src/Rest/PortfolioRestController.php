@@ -21,13 +21,15 @@ class PortfolioRestController extends WP_REST_Controller {
 	}
 
 	public function register_routes(): void {
+		$permission = Auth::require_login_and_cap( 'read' );
+
 		register_rest_route(
 			$this->namespace,
 			'/portfolio',
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_portfolio' ),
-				'permission_callback' => Auth::require_login_and_cap( 'read' ),
+				'permission_callback' => $permission,
 				'args'                => array(
 					'user' => array(
 						'type'    => 'string',
@@ -43,7 +45,7 @@ class PortfolioRestController extends WP_REST_Controller {
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => array( $this, 'add_item' ),
-				'permission_callback' => Auth::require_login_and_cap( 'read' ),
+				'permission_callback' => $permission,
 				'args'                => array(
 					'media_id' => array(
 						'type'     => 'integer',
@@ -63,7 +65,7 @@ class PortfolioRestController extends WP_REST_Controller {
 			array(
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => array( $this, 'save_order' ),
-				'permission_callback' => Auth::require_login_and_cap( 'read' ),
+				'permission_callback' => $permission,
 				'args'                => array(
 					'order' => array(
 						'type'     => 'array',
@@ -79,7 +81,7 @@ class PortfolioRestController extends WP_REST_Controller {
 			array(
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => array( $this, 'set_featured' ),
-				'permission_callback' => Auth::require_login_and_cap( 'read' ),
+				'permission_callback' => $permission,
 				'args'                => array(
 					'attachment_id' => array(
 						'type'     => 'integer',
