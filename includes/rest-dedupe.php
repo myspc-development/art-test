@@ -112,28 +112,38 @@ function ap_rest_route_registered( string $namespace, string $route, ?string $me
                 'missing'   => array(),
         );
 
-        $namespace = trim( $namespace );
-        $route     = trim( $route );
+	$namespace = strtolower( trim( $namespace ) );
+	$route     = strtolower( trim( $route ) );
 
-        $namespace  = trim( $namespace, '/' );
-        $route      = '/' . ltrim( $route, '/' );
-        $full_route = ( $namespace === '' ? '' : '/' . $namespace ) . $route;
-        if ( '/' !== $full_route ) {
-                $full_route = rtrim( $full_route, '/' );
-        }
-        $routes     = $wp_rest_server->get_routes();
+	// Build a fully normalized route with a single leading slash and no
+	// trailing slash (except for the root route).
+	$full_route = '/' . trim( $namespace, '/' ) . '/' . ltrim( $route, '/' );
+	$full_route = preg_replace( '#/+#', '/', $full_route );
+	if ( '/' !== $full_route ) {
+		$full_route = rtrim( $full_route, '/' );
+	}
 
-        if ( ! isset( $routes[ $full_route ] ) ) {
-                if ( ! in_array( $full_route, $GLOBALS['ap_rest_diagnostics']['missing'], true ) ) {
-                        $GLOBALS['ap_rest_diagnostics']['missing'][] = $full_route;
-                        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                error_log( "[REST MISSING] Route $full_route is not registered." );
-                        }
-                }
-                return false;
-        }
+	// Normalize routes array for case-insensitive lookup.
+	$routes = array_change_key_case( $wp_rest_server->get_routes(), CASE_LOWER );
 
-	if ( $method === null ) {
+	if ( ! isset( $routes[ $full_route ] ) ) {
+		if ( ! in_array( $full_route, $GLOBALS['ap_rest_diagnostics']['missing'], true ) ) {
+			$GLOBALS['ap_rest_diagnostics']['missing'][] = $full_route;
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( "[REST MISSING] Route $full_route is not registered." );
+			}
+		}
+		return false;
+	}
+
+	// Ensure previously flagged routes are removed from the missing list.
+	$index = array_search( $full_route, $GLOBALS['ap_rest_diagnostics']['missing'], true );
+	if ( false !== $index ) {
+		unset( $GLOBALS['ap_rest_diagnostics']['missing'][ $index ] );
+		$GLOBALS['ap_rest_diagnostics']['missing'] = array_values( $GLOBALS['ap_rest_diagnostics']['missing'] );
+	}
+
+	if ( null === $method ) {
 		return true;
 	}
 

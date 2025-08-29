@@ -136,4 +136,26 @@ class RestDedupeTest extends \WP_UnitTestCase {
 
                 $wp_rest_server = $prev_server;
         }
+
+        public function test_ap_rest_route_registered_handles_trailing_slashes_and_case(): void {
+                $GLOBALS['ap_rest_diagnostics'] = array( 'conflicts' => array(), 'missing' => array() );
+
+                global $wp_rest_server;
+                $prev_server = $wp_rest_server;
+
+                $wp_rest_server = new class() {
+                        public function get_routes(): array {
+                                return array(
+                                        '/ap/v1/sample' => array(
+                                                array( 'methods' => 'GET' ),
+                                        ),
+                                );
+                        }
+                };
+
+                $this->assertTrue( \ap_rest_route_registered( 'AP/V1//', '//Sample///' ) );
+                $this->assertEmpty( $GLOBALS['ap_rest_diagnostics']['missing'] );
+
+                $wp_rest_server = $prev_server;
+        }
 }
