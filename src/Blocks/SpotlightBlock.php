@@ -28,13 +28,15 @@ class SpotlightBlock {
 			)
 		);
 
-		wp_register_script(
-			'artpulse-spotlight-block',
-			plugins_url( 'assets/js/spotlight-block.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'wp-blocks', 'wp-element', 'wp-i18n' ),
-			filemtime( plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/js/spotlight-block.js' )
-		);
-	}
+               $path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/js/spotlight-block.js';
+               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               wp_register_script(
+                       'artpulse-spotlight-block',
+                       plugins_url( 'assets/js/spotlight-block.js', ARTPULSE_PLUGIN_FILE ),
+                       array( 'wp-blocks', 'wp-element', 'wp-i18n' ),
+                       $ver
+               );
+       }
 
 	public static function render_callback( $attributes ): string {
 		if ( is_admin() ) {

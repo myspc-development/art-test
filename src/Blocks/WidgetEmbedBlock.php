@@ -25,13 +25,15 @@ class WidgetEmbedBlock {
 			)
 		);
 
-		wp_register_script(
-			'artpulse-widget-embed-block',
-			plugins_url( 'assets/js/widget-embed-block.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-data', 'wp-editor' ),
-			filemtime( plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/js/widget-embed-block.js' )
-		);
-	}
+               $path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/js/widget-embed-block.js';
+               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               wp_register_script(
+                       'artpulse-widget-embed-block',
+                       plugins_url( 'assets/js/widget-embed-block.js', ARTPULSE_PLUGIN_FILE ),
+                       array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-data', 'wp-editor' ),
+                       $ver
+               );
+       }
 
 	public static function render_callback( array $attributes ): string {
 		$id = intval( $attributes['widgetId'] ?? 0 );

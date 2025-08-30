@@ -31,13 +31,15 @@ class AjaxFilterBlock {
 			)
 		);
 
-		wp_register_script(
-			'artpulse-ajax-filter-block',
-			plugins_url( 'assets/js/ajax-filter-block.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-api-fetch' ),
-			filemtime( __DIR__ . '/../../assets/js/ajax-filter-block.js' )
-		);
-	}
+               $path = __DIR__ . '/../../assets/js/ajax-filter-block.js';
+               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               wp_register_script(
+                       'artpulse-ajax-filter-block',
+                       plugins_url( 'assets/js/ajax-filter-block.js', ARTPULSE_PLUGIN_FILE ),
+                       array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-api-fetch' ),
+                       $ver
+               );
+       }
 
 	public static function register_rest_routes() {
 		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/filtered-posts' ) ) {
