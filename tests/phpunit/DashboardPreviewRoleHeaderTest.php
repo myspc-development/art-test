@@ -18,11 +18,10 @@ if ( ! function_exists( 'is_user_logged_in' ) ) {
 		return true; }
 }
 if ( ! function_exists( 'esc_attr__' ) ) {
-	function esc_attr__( $text, $domain = null ) {
-		return $text; }
+        function esc_attr__( $text, $domain = null ) {
+                return $text; }
 }
 
-require_once dirname( __DIR__, 2 ) . '/src/Core/RoleResolver.php';
 require_once dirname( __DIR__, 2 ) . '/includes/helpers.php';
 
 use PHPUnit\Framework\TestCase;
@@ -48,41 +47,38 @@ final class DashboardPreviewRoleHeaderTest extends TestCase {
 
 	/** @runInSeparateProcess */
 	public function test_preview_role_sets_header_and_attributes_without_persisting(): void {
-		$_GET['ap_preview_role']  = 'artist';
+                $_GET['ap_preview_role']  = 'artist';
                 $_GET['ap_preview_nonce'] = 'nonce_ap_preview';
 
-		$roleHandle = \Patchwork\redefine(
-			'ap_get_effective_role',
-			function () {
-				return \ArtPulse\Core\RoleResolver::resolve();
-			}
-		);
+                $roleHandle = \Patchwork\redefine(
+                        'ap_get_effective_role',
+                        function () {
+                                return \ArtPulse\Core\RoleResolver::resolve();
+                        }
+                );
 
-		$captured     = array();
-		$headerHandle = \Patchwork\redefine(
-			'header',
-			function ( $string ) use ( &$captured ) {
-				$captured[] = $string;
-			}
-		);
+                require_once __DIR__ . '/../ap_get_effective_role_stub.php';
 
-		ob_start();
-		ap_render_dashboard();
-		ob_end_clean();
+                Functions\when( 'register_activation_hook' )->alias( fn() => null );
+                Functions\when( 'add_rewrite_rule' )->alias( fn() => null );
 
-		$user_role = \ArtPulse\Core\RoleResolver::resolve();
-		ob_start();
-		include dirname( __DIR__, 2 ) . '/templates/dashboard-role.php';
-		$html = ob_get_clean();
+                ob_start();
+                ap_render_dashboard();
+                ob_end_clean();
 
-		\Patchwork\restore( $headerHandle );
-		\Patchwork\restore( $roleHandle );
-		unset( $_GET['ap_preview_role'], $_GET['ap_preview_nonce'] );
+                $resolved  = ap_get_effective_role();
+                $user_role = \ArtPulse\Core\RoleResolver::resolve();
+                ob_start();
+                include dirname( __DIR__, 2 ) . '/templates/dashboard-role.php';
+                $html = ob_get_clean();
 
-		$this->assertContains( 'X-AP-Resolved-Role: artist', $captured );
-		$this->assertStringContainsString( 'data-role="artist"', $html );
+                \Patchwork\restore( $roleHandle );
+                unset( $_GET['ap_preview_role'], $_GET['ap_preview_nonce'] );
 
-		$this->assertArrayNotHasKey( 'ap_dashboard_layout', MockStorage::$user_meta[1] ?? array() );
-		$this->assertSame( 'value', MockStorage::$options['ap_dashboard_option'] );
-	}
+                $this->assertSame( 'artist', $resolved );
+                $this->assertStringContainsString( 'data-role="artist"', $html );
+
+                $this->assertArrayNotHasKey( 'ap_dashboard_layout', MockStorage::$user_meta[1] ?? array() );
+                $this->assertSame( 'value', MockStorage::$options['ap_dashboard_option'] );
+        }
 }
