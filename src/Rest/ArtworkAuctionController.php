@@ -63,10 +63,14 @@ class ArtworkAuctionController {
                return $artwork_id && get_post_type( $artwork_id ) === 'artpulse_artwork';
         }
 
+       private static function ok( $data, int $status = 200 ): WP_REST_Response {
+               return new WP_REST_Response( $data, $status );
+       }
+
         public static function status( WP_REST_Request $req ): WP_REST_Response|WP_Error {
                $artwork_id = absint( $req['artwork_id'] );
                if ( ! self::validate( $artwork_id ) ) {
-                        return new WP_Error( 'invalid_artwork', 'Invalid artwork', array( 'status' => 404 ) );
+                        return new WP_Error( 'rest_invalid_param', 'Invalid artwork.', array( 'status' => 400 ) );
                 }
                $enabled = get_post_meta( $artwork_id, 'artwork_auction_enabled', true ) === '1';
                $start   = get_post_meta( $artwork_id, 'artwork_auction_start', true );
@@ -80,7 +84,7 @@ class ArtworkAuctionController {
                                }
                        }
                }
-               return rest_ensure_response(
+               return self::ok(
                         array(
                                 'enabled'     => $enabled,
                                 'start'       => $start,
@@ -88,22 +92,22 @@ class ArtworkAuctionController {
                                 'highest_bid' => $highest,
                         )
                );
-        }
+       }
 
         public static function bid( WP_REST_Request $req ): WP_REST_Response|WP_Error {
                $artwork_id = absint( $req['artwork_id'] );
                $amount     = (float) $req->get_param( 'amount' );
                if ( ! self::validate( $artwork_id ) ) {
-                        return new WP_Error( 'invalid_artwork', 'Invalid artwork', array( 'status' => 404 ) );
+                        return new WP_Error( 'rest_invalid_param', 'Invalid artwork.', array( 'status' => 400 ) );
                 }
                if ( get_post_meta( $artwork_id, 'artwork_auction_enabled', true ) !== '1' ) {
-                        return new WP_Error( 'auction_disabled', 'Auction disabled', array( 'status' => 400 ) );
+                        return new WP_Error( 'rest_invalid_param', 'Auction disabled.', array( 'status' => 400 ) );
                 }
                $now   = current_time( 'timestamp' );
                $start = strtotime( get_post_meta( $artwork_id, 'artwork_auction_start', true ) );
                $end   = strtotime( get_post_meta( $artwork_id, 'artwork_auction_end', true ) );
                if ( ( $start && $now < $start ) || ( $end && $now > $end ) ) {
-                        return new WP_Error( 'auction_closed', 'Auction closed', array( 'status' => 400 ) );
+                        return new WP_Error( 'rest_invalid_param', 'Auction closed.', array( 'status' => 400 ) );
                 }
                $bids = get_post_meta( $artwork_id, 'artwork_bids', true );
                if ( ! is_array( $bids ) ) {
@@ -115,6 +119,6 @@ class ArtworkAuctionController {
                         'time'    => current_time( 'mysql' ),
                );
                update_post_meta( $artwork_id, 'artwork_bids', $bids );
-               return rest_ensure_response( array( 'success' => true ) );
-        }
+               return self::ok( array( 'success' => true ) );
+       }
 }
