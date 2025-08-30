@@ -6,18 +6,26 @@ require_once __DIR__ . '/../TestStubs.php';
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardPresets;
 use function ArtPulse\Tests\safe_unlink;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 final class DashboardPresetsLoadTest extends TestCase {
 	private string $dataDir;
 
-	protected function setUp(): void {
-		DashboardPresets::resetCache();
-		$this->dataDir = dirname( __DIR__, 2 ) . '/data';
-	}
+        protected function setUp(): void {
+                parent::setUp();
+                Monkey\setUp();
+                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
 
-	protected function tearDown(): void {
-		DashboardPresets::resetCache();
-	}
+                DashboardPresets::resetCache();
+                $this->dataDir = dirname( __DIR__, 2 ) . '/data';
+        }
+
+        protected function tearDown(): void {
+                DashboardPresets::resetCache();
+                Monkey\tearDown();
+                parent::tearDown();
+        }
 
 	public function test_fallback_when_json_missing(): void {
 		$roles   = array( 'member', 'artist', 'organization' );

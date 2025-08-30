@@ -10,6 +10,8 @@ use ArtPulse\Core\DashboardPresets;
 use ArtPulse\Tests\Stubs\MockStorage;
 use function Patchwork\redefine;
 use function Patchwork\restore;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 if ( ! defined( 'AP_VERBOSE_DEBUG' ) ) {
 	define( 'AP_VERBOSE_DEBUG', true );
@@ -37,24 +39,26 @@ if ( ! function_exists( 'current_user_can' ) ) {
 	function current_user_can( $cap ) {
 		return true; }
 }
-if ( ! function_exists( 'plugin_dir_path' ) ) {
-	function plugin_dir_path( $file ) {
-		return dirname( __DIR__, 2 ) . '/'; }
-}
 
 final class DashboardRoleSwitchTest extends TestCase {
 
-	protected function setUp(): void {
-		DashboardPresets::resetCache();
-		MockStorage::$current_roles = array( 'view_artpulse_dashboard', 'artist' );
-		ini_set( 'error_log', '/tmp/phpunit-error.log' );
+        protected function setUp(): void {
+                parent::setUp();
+                Monkey\setUp();
+                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
+
+                DashboardPresets::resetCache();
+                MockStorage::$current_roles = array( 'view_artpulse_dashboard', 'artist' );
+                ini_set( 'error_log', '/tmp/phpunit-error.log' );
                 WidgetRegistry::register( 'widget_membership', [self::class, 'renderSection'] );
                 WidgetRegistry::register( 'widget_artist_revenue_summary', [self::class, 'renderSection'] );
                 WidgetRegistry::register( 'widget_audience_crm', [self::class, 'renderSection'] );
-	}
+        }
 
         protected function tearDown(): void {
                 DashboardPresets::resetCache();
+                Monkey\tearDown();
+                parent::tearDown();
         }
 
 	/**
