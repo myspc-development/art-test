@@ -75,23 +75,18 @@ class DashboardConfigController {
                        }
                }
 
+               $to_canon = static function ( $id ) {
+                       $core = DashboardWidgetRegistry::map_to_core_id( (string) $id );
+                       return DashboardWidgetRegistry::canon_slug( $core );
+               };
+
                foreach ( $visibility as $role => &$ids ) {
-                       $ids = array_values(
-                               array_map(
-                                       static fn( $id ) => sanitize_key( DashboardWidgetRegistry::map_to_core_id( $id ) ),
-                                       (array) $ids
-                               )
-                       );
+                       $ids = array_values( array_map( $to_canon, (array) $ids ) );
                }
                unset( $ids );
 
                foreach ( $role_widgets as $role => &$ids ) {
-                       $ids = array_values(
-                               array_map(
-                                       static fn( $id ) => sanitize_key( DashboardWidgetRegistry::map_to_core_id( $id ) ),
-                                       (array) $ids
-                               )
-                       );
+                       $ids = array_values( array_map( $to_canon, (array) $ids ) );
                }
                unset( $ids );
 
