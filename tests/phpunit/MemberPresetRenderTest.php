@@ -12,7 +12,6 @@ final class MemberPresetRenderTest extends TestCase {
         protected function setUp(): void {
                 parent::setUp();
                 Monkey\setUp();
-                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
                 WidgetRegistry::register( 'widget_my_follows', [self::class, 'renderSection'] );
         }
 

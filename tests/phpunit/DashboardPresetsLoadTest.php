@@ -15,8 +15,6 @@ final class DashboardPresetsLoadTest extends TestCase {
         protected function setUp(): void {
                 parent::setUp();
                 Monkey\setUp();
-                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
-
                 DashboardPresets::resetCache();
                 $this->dataDir = dirname( __DIR__, 2 ) . '/data';
         }

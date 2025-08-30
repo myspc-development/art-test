@@ -23,7 +23,6 @@ class EnqueueAssetsTest extends TestCase {
         Functions\when('wp_enqueue_script')->alias(fn(...$args) => self::$scripts[] = $args);
         Functions\when('wp_enqueue_style')->justReturn();
         Functions\when('get_current_screen')->alias(fn() => self::$current_screen);
-        Functions\when('plugin_dir_path')->alias(fn($file) => '/');
         Functions\when('plugin_dir_url')->alias(fn($file) => '/');
         Functions\when('file_exists')->alias(fn($path) => true);
         Functions\when('rest_url')->alias(fn($path = '') => $path);

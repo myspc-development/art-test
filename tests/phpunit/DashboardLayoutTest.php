@@ -37,9 +37,8 @@ namespace ArtPulse\Core\Tests {
 
 		protected function setUp(): void {
 			parent::setUp();
-			Monkey\setUp();
-			Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( $file ) . '/' );
-			MockStorage::$user_meta     = array();
+                        Monkey\setUp();
+                        MockStorage::$user_meta     = array();
 			MockStorage::$options       = array();
 			MockStorage::$users         = array();
 			MockStorage::$current_roles = array();

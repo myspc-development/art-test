@@ -130,9 +130,8 @@ class ActivatorDeactivatorTest extends TestCase {
 		$defaults = array( 'theme' => 'default' );
 		Functions\when( 'artpulse_get_default_settings' )->justReturn( $defaults );
 
-		// Minimal stubs for plugin helpers.
-		Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( $file ) . '/' );
-		Functions\when( 'plugin_basename' )->alias( fn( $file ) => basename( $file ) );
+                // Minimal stubs for plugin helpers.
+                Functions\when( 'plugin_basename' )->alias( fn( $file ) => basename( $file ) );
 		Functions\when( 'plugins_url' )->justReturn( '' );
 		Functions\when( 'current_time' )->justReturn( 'now' );
 
