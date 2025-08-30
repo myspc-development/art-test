@@ -1,6 +1,6 @@
 <?php
 
-namespace ArtPulse\Admin {
+namespace ArtPulse\Admin { 
     // --- WordPress function stubs ---
     if ( ! function_exists( __NAMESPACE__ . '\\add_submenu_page' ) ) {
         function add_submenu_page( ...$args ) {
@@ -20,11 +20,7 @@ namespace ArtPulse\Admin {
 }
 
 namespace {
-    if ( ! function_exists( 'ap_render_dashboard' ) ) {
-        function ap_render_dashboard( array $roles ) {
-            \ArtPulse\Admin\Tests\RoleDashboardPageTest::$render_roles = $roles;
-        }
-    }
+    require_once dirname( __DIR__, 2 ) . '/includes/helpers.php';
 }
 
 namespace ArtPulse\Admin\Tests {
@@ -38,11 +34,19 @@ final class RoleDashboardPageTest extends TestCase {
     public static array $add_submenu_page_args = array();
     public static array $render_roles = array();
     public static ?string $enqueued_role = null;
+    private $renderDashboardHandle;
 
     protected function setUp(): void {
         self::$add_submenu_page_args = array();
         self::$render_roles = array();
         self::$enqueued_role = null;
+        $this->renderDashboardHandle = redefine( 'ap_render_dashboard', function ( $roles ) {
+            self::$render_roles = $roles;
+        } );
+    }
+
+    protected function tearDown(): void {
+        restore( $this->renderDashboardHandle );
     }
 
     public function test_render_callback_executes(): void {
