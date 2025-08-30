@@ -24,20 +24,18 @@ class DashboardConfigController {
                                                 'methods'  => 'GET',
                                                 'callback' => array( self::class, 'get_config' ),
                                                 'permission_callback' => function () {
-                                                        return Auth::require_cap( 'read' ) === true
+			return Auth::require_cap( 'read' ) === true
                                                                 ? true
                                                                 : new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
                                                 },
                                         ),
-                                        array(
-                                                'methods'  => 'POST',
-                                                'callback' => array( self::class, 'save_config' ),
-                                                'permission_callback' => function () {
-                                                        return Auth::require_cap( 'manage_options' ) === true
-                                                                ? true
-                                                                : new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
-                                                },
-                                                'args'                => array(
+			array(
+				'methods'  => 'POST',
+				'callback' => array( self::class, 'save_config' ),
+				'permission_callback' => function ( $request ) {
+					return Auth::guard( $request, 'manage_options' );
+				},
+				'args'                => array(
                                                         'widget_roles' => array(
                                                                 'type'     => 'object',
                                                                 'required' => false,
@@ -77,6 +75,26 @@ class DashboardConfigController {
                        }
                }
 
+               foreach ( $visibility as $role => &$ids ) {
+                       $ids = array_values(
+                               array_map(
+                                       static fn( $id ) => sanitize_key( DashboardWidgetRegistry::map_to_core_id( $id ) ),
+                                       (array) $ids
+                               )
+                       );
+               }
+               unset( $ids );
+
+               foreach ( $role_widgets as $role => &$ids ) {
+                       $ids = array_values(
+                               array_map(
+                                       static fn( $id ) => sanitize_key( DashboardWidgetRegistry::map_to_core_id( $id ) ),
+                                       (array) $ids
+                               )
+                       );
+               }
+               unset( $ids );
+
                $defs         = DashboardWidgetRegistry::get_all();
                $capabilities = array();
                $excluded     = array();
@@ -99,15 +117,14 @@ class DashboardConfigController {
 
                return new \WP_REST_Response( $payload, 200 );
        }
+	public static function save_config( WP_REST_Request $request ) {
+		$guard = Auth::guard( $request, 'manage_options' );
+		if ( is_wp_error( $guard ) ) {
+			return $guard;
+	}
 
-       public static function save_config( WP_REST_Request $request ) {
-               $nonce_check = Auth::verify_nonce( $request );
-               if ( is_wp_error( $nonce_check ) ) {
-                       return $nonce_check;
-               }
-
-               $data       = $request->get_json_params();
-               $visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();
+		$data       = $request->get_json_params();
+		$visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();
 		foreach ( $visibility as $role => &$ids ) {
 			$ids = array_values( array_unique( array_map( array( WidgetIds::class, 'canonicalize' ), (array) $ids ) ) );
 		}
