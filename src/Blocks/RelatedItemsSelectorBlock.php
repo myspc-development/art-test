@@ -9,19 +9,21 @@ class RelatedItemsSelectorBlock {
 
 	public static function register_block_and_meta() {
 		// Register block editor script (adjust the path accordingly)
-		wp_register_script(
-			'artpulse-related-items-selector',
-			plugins_url( 'assets/js/blocks/related-items-selector.js', ARTPULSE_PLUGIN_FILE ),
-			array(
-				'wp-blocks',
-				'wp-element',
-				'wp-components',
-				'wp-data',
-				'wp-editor',
-				'wp-api-fetch',
-			),
-			filemtime( __DIR__ . '/../../assets/js/blocks/related-items-selector.js' )
-		);
+               $path = __DIR__ . '/../../assets/js/blocks/related-items-selector.js';
+               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               wp_register_script(
+                       'artpulse-related-items-selector',
+                       plugins_url( 'assets/js/blocks/related-items-selector.js', ARTPULSE_PLUGIN_FILE ),
+                       array(
+                               'wp-blocks',
+                               'wp-element',
+                               'wp-components',
+                               'wp-data',
+                               'wp-editor',
+                               'wp-api-fetch',
+                       ),
+                       $ver
+               );
 
 		// Example: Register post meta fields with REST API enabled
 

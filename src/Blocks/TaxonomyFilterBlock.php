@@ -34,13 +34,15 @@ class TaxonomyFilterBlock {
 			)
 		);
 
-		wp_register_script(
-			'artpulse-taxonomy-filter-block',
-			plugins_url( 'assets/js/taxonomy-filter-block.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ),
-			filemtime( __DIR__ . '/../../assets/js/taxonomy-filter-block.js' )
-		);
-	}
+               $path = __DIR__ . '/../../assets/js/taxonomy-filter-block.js';
+               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               wp_register_script(
+                       'artpulse-taxonomy-filter-block',
+                       plugins_url( 'assets/js/taxonomy-filter-block.js', ARTPULSE_PLUGIN_FILE ),
+                       array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ),
+                       $ver
+               );
+       }
 
 	public static function render_callback( $attributes ) {
 		if ( empty( $attributes['postType'] ) || empty( $attributes['taxonomy'] ) ) {

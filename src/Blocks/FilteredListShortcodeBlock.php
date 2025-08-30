@@ -38,13 +38,15 @@ class FilteredListShortcodeBlock {
 			)
 		);
 
-		wp_register_script(
-			'artpulse-filtered-list-shortcode-block',
-			plugins_url( 'assets/js/filtered-list-shortcode-block.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components' ),
-			filemtime( __DIR__ . '/../../assets/js/filtered-list-shortcode-block.js' )
-		);
-	}
+               $path = __DIR__ . '/../../assets/js/filtered-list-shortcode-block.js';
+               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               wp_register_script(
+                       'artpulse-filtered-list-shortcode-block',
+                       plugins_url( 'assets/js/filtered-list-shortcode-block.js', ARTPULSE_PLUGIN_FILE ),
+                       array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components' ),
+                       $ver
+               );
+       }
 
 	public static function render_callback( $attributes ) {
 		$atts = array(
