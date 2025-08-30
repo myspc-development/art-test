@@ -84,6 +84,11 @@ unset( $endpoints[ $route ][ $key ] );
 continue;
 }
 
+if ( $seen[ $dedupe_key ]['callback'] === ( $handler['callback'] ?? null ) ) {
+unset( $endpoints[ $route ][ $key ] );
+continue;
+}
+
 if ( ! in_array( $route, $GLOBALS['ap_rest_diagnostics']['conflicts'], true ) ) {
 $GLOBALS['ap_rest_diagnostics']['conflicts'][] = $route;
 }
