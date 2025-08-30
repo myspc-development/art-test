@@ -40,6 +40,8 @@ namespace ArtPulse\Tests\Stubs {
 			self::$presets = $presets; }
 		public static function get_default_presets(): array {
 			return self::$presets; }
+		public static function get_role( int $user_id = 0 ): string {
+			return 'member'; }
 	}
 
 	class DashboardWidgetRegistryStub {

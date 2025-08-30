@@ -17,7 +17,7 @@ if (!class_exists('WP_CLI')) {
         public static function log($msg): void { echo rtrim((string)$msg, "\n") . PHP_EOL; }
         public static function line($msg): void { echo rtrim((string)$msg, "\n") . PHP_EOL; }
         public static function success($msg): void { echo rtrim((string)$msg, "\n") . PHP_EOL; }
-        public static function warning($msg): void { fwrite(STDERR, rtrim((string)$msg, "\n") . PHP_EOL); }
+        public static function warning($msg): void { echo rtrim((string)$msg, "\n") . PHP_EOL; }
         public static function error($msg): void { throw new \RuntimeException(is_string($msg) ? $msg : json_encode($msg)); }
         public static function debug($msg, $group = null): void
         {
