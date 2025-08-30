@@ -2,6 +2,8 @@
 namespace ArtPulse\Rest;
 
 use ArtPulse\Rest\Util\Auth;
+use WP_Error;
+use WP_REST_Response;
 
 class CurrentUserController {
 	public static function register(): void {
@@ -28,12 +30,14 @@ class CurrentUserController {
                 }
         }
 
-        public static function get_current_user() {
-                $user = wp_get_current_user();
-                return array(
-                        'id'    => $user->ID,
+       public static function get_current_user(): WP_REST_Response|WP_Error {
+               $user = wp_get_current_user();
+               $data = array(
+                       'id'    => $user->ID,
                        'role'  => $user->roles[0] ?? '',
-                        'roles' => $user->roles,
-                );
-        }
+                       'roles' => $user->roles,
+               );
+
+               return rest_ensure_response( $data );
+       }
 }

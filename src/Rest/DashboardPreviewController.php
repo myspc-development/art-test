@@ -1,6 +1,9 @@
 <?php
 namespace ArtPulse\Rest;
 
+use WP_Error;
+use WP_REST_Response;
+
 class DashboardPreviewController {
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
@@ -20,10 +23,12 @@ class DashboardPreviewController {
                 }
         }
 
-	public static function get_preview() {
-		return array(
-			'user'    => wp_get_current_user()->display_name,
-			'widgets' => \ArtPulse\Admin\DashboardWidgetTools::get_role_widgets_for_current_user(),
-		);
-	}
+       public static function get_preview(): WP_REST_Response|WP_Error {
+               $data = array(
+                       'user'    => wp_get_current_user()->display_name,
+                       'widgets' => \ArtPulse\Admin\DashboardWidgetTools::get_role_widgets_for_current_user(),
+               );
+
+               return rest_ensure_response( $data );
+       }
 }

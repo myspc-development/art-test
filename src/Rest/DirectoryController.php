@@ -24,21 +24,13 @@ class DirectoryController {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
                                'callback'            => array( self::class, 'get_events' ),
-                               'permission_callback' => function () {
-                                       if ( ! is_user_logged_in() ) {
-                                               return new WP_Error( 'rest_forbidden', __( 'Authentication required.', 'artpulse' ), array( 'status' => 401 ) );
-                                       }
-                                       if ( ! current_user_can( 'read' ) ) {
-                                               return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
-                                       }
-                                       return true;
-                               },
-			)
-		);
-	}
+                               'permission_callback' => '__return_true',
+                       )
+               );
+       }
 
 
-	public static function get_events( WP_REST_Request $request ): WP_REST_Response {
+       public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$query = new \WP_Query(
 			array(
 				'post_type'      => 'artpulse_event',
@@ -59,6 +51,6 @@ class DirectoryController {
 				'end_date'   => get_post_meta( $post->ID, 'event_end_date', true ),
 			);
 		}
-               return new WP_REST_Response( $data, 200 );
-        }
+               return rest_ensure_response( $data );
+       }
 }
