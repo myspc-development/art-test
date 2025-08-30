@@ -180,10 +180,14 @@ namespace {
 		function wp_kses_post( $msg ) {
 			return $msg; }
 	}
-	if ( ! function_exists( 'set_transient' ) ) {
-		function set_transient( $k, $v, $e ) {
-			MockStorage::$notice = $v; }
-	}
+        if ( ! function_exists( 'set_transient' ) ) {
+                function set_transient( $k, $v, $e ) {
+                        MockStorage::$notice = $v; }
+        }
+
+        if ( ! function_exists( 'register_activation_hook' ) ) {
+                function register_activation_hook( $file, $callback ) {}
+        }
 
 	if ( ! function_exists( 'do_action' ) ) {
 		function do_action( $hook, ...$args ) {}
