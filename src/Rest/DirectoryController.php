@@ -17,18 +17,18 @@ class DirectoryController {
 		}
 	}
 
-	public static function register_routes(): void {
+        public static function register_routes(): void {
 
-		register_rest_route(
-			ARTPULSE_API_NAMESPACE,
-			'/events',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-                               'callback'            => array( self::class, 'get_events' ),
-
-                       )
-               );
-       }
+                register_rest_route(
+                        ARTPULSE_API_NAMESPACE,
+                        '/events',
+                        array(
+                                'methods'             => WP_REST_Server::READABLE,
+                                'callback'            => array( self::class, 'get_events' ),
+                                'permission_callback' => '__return_true',
+                        )
+                );
+        }
 
 
        public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
