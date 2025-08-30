@@ -1,7 +1,9 @@
 <?php
 namespace ArtPulse\Rest;
 
+use WP_Error;
 use WP_REST_Request;
+use WP_REST_Response;
 use ArtPulse\Rest\Util\Auth;
 
 class ArtistEventsController {
@@ -26,44 +28,21 @@ class ArtistEventsController {
 		);
 	}
 
-	public static function get_events( WP_REST_Request $request ) {
-		$uid = get_current_user_id();
+        public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                $ids = get_posts(
+                        array(
+                                'post_type'   => 'artpulse_event',
+                                'author'      => get_current_user_id(),
+                                'fields'      => 'ids',
+                                'post_status' => array( 'publish', 'pending', 'draft', 'future' ),
+                                'numberposts' => -1,
+                        )
+                );
 
-		$posts = get_posts(
-			array(
-				'post_type'   => 'artpulse_event',
-				'author'      => $uid,
-				'post_status' => array( 'publish', 'pending', 'draft', 'future' ),
-				'numberposts' => -1,
-			)
-		);
-
-		$events = array();
-		foreach ( $posts as $post ) {
-			$status = $post->post_status;
-			$color  = '#6b7280';
-			switch ( $status ) {
-				case 'draft':
-					$color = '#9ca3af';
-					break;
-				case 'future':
-					$color = '#fbbf24';
-					break;
-				case 'publish':
-					$color = '#3b82f6';
-					break;
-			}
-			$events[] = array(
-				'id'     => $post->ID,
-				'title'  => $post->post_title,
-				'start'  => get_post_meta( $post->ID, '_ap_event_date', true ),
-				'end'    => get_post_meta( $post->ID, 'event_end_date', true ),
-				'status' => $status,
-				'color'  => $color,
-				'edit'   => get_edit_post_link( $post->ID ),
-			);
-		}
-
-		return rest_ensure_response( $events );
-	}
+                return rest_ensure_response(
+                        array(
+                                'ids' => array_map( 'intval', $ids ),
+                        )
+                );
+        }
 }
