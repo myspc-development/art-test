@@ -4,6 +4,10 @@ declare(strict_types=1);
 require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/../Support/Stubs/DashboardControllerStub.php';
 
+if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
+        class_alias( \ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class );
+}
+
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\WidgetRegistry;
