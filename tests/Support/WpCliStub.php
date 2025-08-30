@@ -21,10 +21,21 @@ if (!class_exists('WP_CLI')) {
         public static function error($msg): void { throw new \RuntimeException(is_string($msg) ? $msg : json_encode($msg)); }
         public static function print_value($value, array $assoc_args = array()): void
         {
-            if (!empty($assoc_args['json'])) {
-                echo json_encode($value);
+            $is_json = !empty($assoc_args['json']);
+            $nl      = array_key_exists('nl', $assoc_args) ? (bool) $assoc_args['nl'] : !$is_json;
+
+            if ($is_json) {
+                $out = json_encode($value);
+            } elseif (is_array($value) || is_object($value)) {
+                $out = print_r($value, true);
             } else {
-                echo $value;
+                $out = (string) $value;
+            }
+
+            if ($nl) {
+                echo rtrim($out, "\n") . PHP_EOL;
+            } else {
+                echo $out;
             }
         }
         public static function debug($msg, $group = null): void
