@@ -4,11 +4,21 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\WidgetRegistry;
 use ArtPulse\Core\DashboardPresets;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 final class MemberPresetRenderTest extends TestCase {
 
         protected function setUp(): void {
+                parent::setUp();
+                Monkey\setUp();
+                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
                 WidgetRegistry::register( 'widget_my_follows', [self::class, 'renderSection'] );
+        }
+
+        protected function tearDown(): void {
+                Monkey\tearDown();
+                parent::tearDown();
         }
 	public function test_member_preset_contains_my_follows_section(): void {
 		$ids = $this->memberPresetIds();

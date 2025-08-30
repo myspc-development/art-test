@@ -23,29 +23,35 @@ if ( ! function_exists( 'is_page' ) ) {
 	}
 }
 if ( ! function_exists( 'is_user_logged_in' ) ) {
-	function is_user_logged_in() {
-		global $mock_is_user_logged_in;
-		return $mock_is_user_logged_in;
-	}
-}
-if ( ! function_exists( 'plugin_dir_path' ) ) {
-	function plugin_dir_path( $file ) {
-		return dirname( __DIR__, 2 ) . '/'; }
+        function is_user_logged_in() {
+                global $mock_is_user_logged_in;
+                return $mock_is_user_logged_in;
+        }
 }
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Tests\Stubs\MockStorage;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 final class DashboardTemplateIncludeTest extends TestCase {
-	protected function setUp(): void {
-		global $mock_query_var, $mock_is_page_dashboard, $mock_is_user_logged_in;
-		$mock_query_var             = '';
-		$mock_is_page_dashboard     = false;
-		$mock_is_user_logged_in     = true;
-		$_GET                       = array();
-		MockStorage::$current_roles = array();
-	}
+        protected function setUp(): void {
+                global $mock_query_var, $mock_is_page_dashboard, $mock_is_user_logged_in;
+                $mock_query_var             = '';
+                $mock_is_page_dashboard     = false;
+                $mock_is_user_logged_in     = true;
+                $_GET                       = array();
+                MockStorage::$current_roles = array();
+
+                Monkey\setUp();
+                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
+        }
+
+        protected function tearDown(): void {
+                Monkey\tearDown();
+                parent::tearDown();
+        }
 
 	public function test_returns_dashboard_template_when_query_var_and_authorized(): void {
 		global $mock_query_var;
