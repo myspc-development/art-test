@@ -19,14 +19,6 @@ if ( ! defined( 'AP_VERBOSE_DEBUG' ) ) {
 if ( ! defined( 'ARTPULSE_PLUGIN_DIR' ) ) {
 	define( 'ARTPULSE_PLUGIN_DIR', dirname( __DIR__, 2 ) );
 }
-if ( ! function_exists( 'get_query_var' ) ) {
-	function get_query_var( $key ) {
-		return $_GET[ $key ] ?? ''; }
-}
-if ( ! function_exists( 'set_query_var' ) ) {
-	function set_query_var( $key, $val ) {
-		$_GET[ $key ] = $val; }
-}
 if ( ! function_exists( 'is_page' ) ) {
 	function is_page( $slug ) {
 		return false; }
@@ -46,6 +38,7 @@ final class DashboardRoleSwitchTest extends TestCase {
                 parent::setUp();
                 Monkey\setUp();
                 Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
+                Functions\when( 'get_query_var' )->alias( fn( $key ) => $_GET[ $key ] ?? '' );
 
                 DashboardPresets::resetCache();
                 MockStorage::$current_roles = array( 'view_artpulse_dashboard', 'artist' );
