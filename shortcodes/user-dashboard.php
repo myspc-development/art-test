@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 }
 
 use ArtPulse\Core\ShortcodeRegistry;
-use ArtPulse\Core\DashboardPresets;
+use ArtPulse\Admin\RolePresets;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 function ap_user_events_shortcode(): string {
@@ -35,7 +35,7 @@ function user_dashboard_shortcode(): string {
         $role = 'member';
     }
 
-    $slugs = DashboardPresets::forRole($role);
+    $slugs = RolePresets::get_preset_slugs($role);
 
     ob_start();
     echo '<section class="ap-role-layout" role="tabpanel"'

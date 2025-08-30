@@ -6,8 +6,10 @@ use ArtPulse\DashboardWidgetRegistryLoader;
 use ArtPulse\Dashboard\WidgetVisibility;
 use WP_Roles;
 use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\Admin\RolePresets;
 use ArtPulse\Core\WidgetFlags;
 use ArtPulse\Support\WidgetIds;
+use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 
 /**
  * Simple registry for dashboard widgets.
@@ -796,7 +798,7 @@ class DashboardWidgetRegistry {
          * @return string
          */
         public static function render_role_layout( string $role ): string {
-                $slugs = DashboardPresets::forRole( $role );
+               $slugs = RolePresets::get_preset_slugs( $role );
                 if ( ! $slugs ) {
                         return '';
                 }
@@ -1192,118 +1194,92 @@ class DashboardWidgetRegistry {
 	/**
 	 * Render all widgets visible to the specified user in a basic grid layout.
 	 */
-	public static function render_for_role( int $user_id ): void {
-		$role = DashboardController::get_role( $user_id );
+       public static function render_for_role( int $user_id ): void {
+               $role = DashboardController::get_role( $user_id );
 
-		do_action( 'ap_before_widgets', $role );
+               do_action( 'ap_before_widgets', $role );
 
-		$result  = UserLayoutManager::get_role_layout( $role );
-		$layout  = $result['layout'];
-		$widgets = apply_filters( 'ap_dashboard_widgets', self::get_widgets_by_role( $role, $user_id ), $role );
+               $layout  = UserLayoutManager::get_layout_for_user( $user_id );
+               $widgets = apply_filters( 'ap_dashboard_widgets', self::get_widgets_by_role( $role, $user_id ), $role );
 
-               $layout_ids = array_map(
-                       static fn( $row ) => self::canon_slug( $row['id'] ?? '' ),
-                       $layout
-               );
-		$widget_ids = array_keys( $widgets );
+               $debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
 
-		$debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
-		if ( $debug ) {
-			error_log( "[AP Dashboard] Rendering {$role} → layout: " . implode( ',', $layout_ids ) . ' widgets: ' . implode( ',', $widget_ids ) );
-		}
+               $sections = array();
+               $order    = array();
+               $rendered = 0;
 
-		$missing = array_diff( $layout_ids, $widget_ids );
-		foreach ( $missing as $id ) {
-			if ( $debug ) {
-				error_log( "[AP Dashboard] Widget {$id} missing for role {$role}" );
-			}
-		}
-		$extra = array_diff( $widget_ids, $layout_ids );
-		foreach ( $extra as $id ) {
-			if ( $debug ) {
-				error_log( "[AP Dashboard] Widget {$id} not in layout for role {$role}" );
-			}
-		}
+               foreach ( $layout as $row ) {
+                       $id      = self::canon_slug( $row['id'] ?? '' );
+                       if ( ! $id ) {
+                               continue;
+                       }
+                       $cfg        = $widgets[ $id ] ?? null;
+                       $can_render = $cfg && self::user_can_see( $id, $user_id ) && is_callable( $cfg['callback'] ?? null );
+                       $section    = '';
+                       if ( $cfg ) {
+                               $class   = $cfg['class'] ?? '';
+                               $section = $cfg['section'] ?? '';
+                               if ( $class && method_exists( $class, 'get_section' ) ) {
+                                       try {
+                                               $section = call_user_func( array( $class, 'get_section' ) );
+                                       } catch ( \Throwable $e ) {
+                                               $section = '';
+                                       }
+                               }
+                               $section = sanitize_key( $section );
+                       }
+                       if ( ! isset( $sections[ $section ] ) ) {
+                               $sections[ $section ] = array();
+                               $order[]              = $section;
+                       }
 
-		$sections = array();
-		$order    = array();
-		foreach ( $layout_ids as $id ) {
-			if ( ! isset( $widgets[ $id ] ) ) {
-				continue;
-			}
-			if ( ! self::user_can_see( $id, $user_id ) ) {
-				if ( $debug ) {
-					error_log( "[AP Dashboard] Visibility rejected for {$id} and role {$role}" );
-				}
-				continue;
-			}
-			$cfg = $widgets[ $id ];
-			if ( ! is_callable( $cfg['callback'] ?? null ) ) {
-				if ( $debug ) {
-					error_log( "[AP Dashboard] Widget {$id} callback not callable" );
-				}
-				continue;
-			}
-			$class   = $cfg['class'] ?? '';
-			$section = $cfg['section'] ?? '';
-			if ( $class && method_exists( $class, 'get_section' ) ) {
-				try {
-					$section = call_user_func( array( $class, 'get_section' ) );
-				} catch ( \Throwable $e ) {
-					$section = '';
-				}
-			}
-			$section = sanitize_key( $section );
-			if ( ! isset( $sections[ $section ] ) ) {
-				$sections[ $section ] = array();
-				$order[]              = $section;
-			}
-			$sections[ $section ][] = $cfg + array( 'id' => $id );
-		}
-
-		$rendered = 0;
-		foreach ( $order as $sec ) {
-			echo '<section class="ap-widget-section">';
-			if ( $sec ) {
-				echo '<h2>' . self::late_i18n( ucfirst( $sec ) ) . '</h2>';
-			}
-			echo '<div class="meta-box-sortables">';
-			foreach ( $sections[ $sec ] as $cfg ) {
-				try {
+                       $html = '';
+                       if ( $can_render ) {
+                               try {
                                        ob_start();
                                        $result = call_user_func( $cfg['callback'], $user_id );
                                        $echoed = ob_get_clean();
-                                       echo '<div class="postbox" data-slug="' . esc_attr( $cfg['id'] ) . '"><div class="inside">';
-                                       if ( is_string( $result ) && '' !== $result ) {
-                                               echo $result;
-                                       } else {
-                                               echo $echoed;
+                                       $html   = is_string( $result ) && '' !== $result ? $result : $echoed;
+                               } catch ( \Throwable $e ) {
+                                       ob_end_clean();
+                                       if ( $debug ) {
+                                               error_log( 'Widget ' . $id . ' failed: ' . $e->getMessage() );
                                        }
-					echo '</div></div>';
-					++$rendered;
-				} catch ( \Throwable $e ) {
-					ob_end_clean();
-					if ( $debug ) {
-						error_log( 'Widget ' . $cfg['id'] . ' failed: ' . $e->getMessage() );
-					}
-					echo '<div class="postbox ap-widget-error"><div class="inside"><p>' . self::late_i18n( 'Error loading widget.' ) . '</p></div></div>';
-					++$rendered;
-				}
-			}
-			echo '</div></section>';
-		}
+                               }
+                       }
+                       if ( $html === '' ) {
+                               ob_start();
+                               ApPlaceholderWidget::render( $user_id );
+                               $html = ob_get_clean();
+                       }
 
-		if ( 0 === $rendered ) {
-			echo '<div class="ap-dashboard-error">' . self::late_i18n( 'No dashboard widgets could be rendered.' ) . '</div>';
-			if ( $debug ) {
-				error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
-			}
-		} elseif ( $debug ) {
-				error_log( "[AP Dashboard] Rendered {$rendered} widgets for role {$role}" );
-		}
+                       $sections[ $section ][] = '<div class="postbox" data-slug="' . esc_attr( $id ) . '"><div class="inside">' . $html . '</div></div>';
+                       ++$rendered;
+               }
 
-		do_action( 'ap_after_widgets', $role );
-	}
+               foreach ( $order as $sec ) {
+                       echo '<section class="ap-widget-section">';
+                       if ( $sec ) {
+                               echo '<h2>' . self::late_i18n( ucfirst( $sec ) ) . '</h2>';
+                       }
+                       echo '<div class="meta-box-sortables">';
+                       foreach ( $sections[ $sec ] as $html ) {
+                               echo $html;
+                       }
+                       echo '</div></section>';
+               }
+
+               if ( 0 === $rendered ) {
+                       echo '<div class="ap-dashboard-error">' . self::late_i18n( 'No dashboard widgets could be rendered.' ) . '</div>';
+                       if ( $debug ) {
+                               error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
+                       }
+               } elseif ( $debug ) {
+                       error_log( "[AP Dashboard] Rendered {$rendered} widgets for role {$role}" );
+               }
+
+               do_action( 'ap_after_widgets', $role );
+       }
 
 	/**
 	 * Merge roles/capability overrides from the `artpulse_widget_roles` option.

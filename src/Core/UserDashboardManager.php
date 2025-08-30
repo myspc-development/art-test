@@ -43,25 +43,18 @@ class UserDashboardManager {
         * @return array<int,array{id:string,visible:bool}> Filtered defaults.
         */
        public static function filterDefaultWidgets( array $defaults ): array {
-               $user  = wp_get_current_user();
-               $roles = is_array( $user->roles ) ? $user->roles : array();
-               $seen  = array();
-
-               foreach ( $roles as $role ) {
-                       $layout = UserLayoutManager::get_role_layout( $role );
-                       foreach ( $layout['layout'] as $item ) {
-                               $id = isset( $item['id'] ) ? DashboardWidgetRegistry::canon_slug( (string) $item['id'] ) : '';
-                               if ( ! $id || isset( $seen[ $id ] ) ) {
-                                       continue;
-                               }
-                               $seen[ $id ] = true;
-                               $defaults[]  = array(
-                                       'id'      => $id,
-                                       'visible' => (bool) ( $item['visible'] ?? true ),
-                               );
+               $uid    = get_current_user_id();
+               $layout = UserLayoutManager::get_layout_for_user( $uid );
+               foreach ( $layout as $item ) {
+                       $id = isset( $item['id'] ) ? DashboardWidgetRegistry::canon_slug( (string) $item['id'] ) : '';
+                       if ( ! $id ) {
+                               continue;
                        }
+                       $defaults[] = array(
+                               'id'      => $id,
+                               'visible' => (bool) ( $item['visible'] ?? true ),
+                       );
                }
-
                return $defaults;
        }
 

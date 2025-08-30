@@ -23,7 +23,7 @@ if (!in_array($role, ['member','artist','organization'], true)) {
   aria-labelledby="ap-tab-<?php echo esc_attr($role); ?>"
   data-role="<?php echo esc_attr($role); ?>"
 >
-  <?php foreach (\ArtPulse\Core\DashboardPresets::forRole($role) as $slug): ?>
+  <?php foreach (\ArtPulse\Admin\RolePresets::get_preset_slugs($role) as $slug): ?>
       <?php echo \ArtPulse\Core\DashboardWidgetRegistry::render($slug, ['preview_role' => $role]); ?>
   <?php endforeach; ?>
 </section>

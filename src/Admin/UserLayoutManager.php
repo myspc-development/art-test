@@ -211,76 +211,88 @@ class UserLayoutManager {
 		}
 	}
 
-	/**
-	 * Remove a user's saved dashboard layout and visibility.
-	 */
-	public static function reset_user_layout( int $user_id ): void {
-		delete_user_meta( $user_id, self::META_KEY );
-		delete_user_meta( $user_id, self::VIS_META_KEY );
-	}
+        /**
+         * Remove a user's saved dashboard layout and visibility.
+         */
+        public static function reset_user_layout( int $user_id ): void {
+                delete_user_meta( $user_id, self::META_KEY );
+                delete_user_meta( $user_id, self::VIS_META_KEY );
+        }
 
-	/**
-	 * Retrieve the raw dashboard layout for a user.
-	 */
-	public static function get_user_layout( int $user_id ): array {
-		$layout = get_user_meta( $user_id, self::META_KEY, true );
-		return is_array( $layout ) ? $layout : array();
-	}
+        /**
+         * Retrieve the raw dashboard layout for a user.
+         */
+        public static function get_user_layout( int $user_id ): array {
+                $layout = get_user_meta( $user_id, self::META_KEY, true );
+                return is_array( $layout ) ? $layout : array();
+        }
+
+       /**
+        * Merge layouts for multiple roles preserving order and de-duping.
+        *
+        * @param string[] $roles Roles to merge.
+        * @return array<int,array{id:string,visible:bool}>
+        */
+       private static function merge_role_layouts( array $roles ): array {
+               $merged    = array();
+               $seen_ids  = array();
+               $valid_ids = array_column( DashboardWidgetRegistry::get_definitions(), 'id' );
+
+               foreach ( $roles as $role ) {
+                       $result = self::get_role_layout( $role );
+                       foreach ( $result['layout'] as $item ) {
+                               $id  = DashboardWidgetRegistry::canon_slug( (string) ( $item['id'] ?? '' ) );
+                               $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
+                               if ( ! $id || isset( $seen_ids[ $id ] ) || ! in_array( $id, $valid_ids, true ) ) {
+                                       continue;
+                               }
+                               $seen_ids[ $id ] = true;
+                               $merged[]        = array(
+                                       'id'      => $id,
+                                       'visible' => $vis,
+                               );
+                       }
+               }
+
+               return $merged;
+       }
 
 	/**
 	 * Determine a user's dashboard layout with fallbacks.
 	 */
-	public static function get_layout_for_user( int $user_id ): array {
-		$layout = self::get_user_layout( $user_id );
-		if ( ! empty( $layout ) ) {
-			return $layout;
-		}
-
-                $user  = get_userdata( $user_id );
-                $roles = $user && ! empty( $user->roles ) ? (array) $user->roles : array( 'subscriber' );
-
-                if ( count( $roles ) > 1 ) {
-                        $merged    = array();
-                        $seen_ids  = array();
-                        $valid_ids = array_column( DashboardWidgetRegistry::get_definitions(), 'id' );
-
-                        foreach ( $roles as $role ) {
-                                $result = self::get_role_layout( $role );
-                                foreach ( $result['layout'] as $item ) {
-                                        $id  = $item['id'] ?? '';
-                                        $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
-                                        if ( ! $id || isset( $seen_ids[ $id ] ) || ! in_array( $id, $valid_ids, true ) ) {
-                                                continue;
-                                        }
-                                        $seen_ids[ $id ] = true;
-                                        $merged[]        = array(
-                                                'id'      => $id,
-                                                'visible' => $vis,
-                                        );
-                                }
-                        }
-
-                        if ( ! empty( $merged ) ) {
-                                return $merged;
-                        }
-                }
-
-                $role   = $roles[0] ?? 'subscriber';
-                $result = self::get_role_layout( $role );
-                $layout = $result['layout'];
+        public static function get_layout_for_user( int $user_id ): array {
+                $layout = self::get_user_layout( $user_id );
                 if ( ! empty( $layout ) ) {
                         return $layout;
                 }
 
-                $all = DashboardWidgetRegistry::get_all();
-                return array_map(
-                        fn( $id ) => array(
-                                'id'      => $id,
-                                'visible' => true,
-                        ),
-                        array_keys( $all )
-                );
-	}
+                $user  = get_userdata( $user_id );
+                $roles = $user && ! empty( $user->roles ) ? (array) $user->roles : array( 'subscriber' );
+               if ( count( $roles ) > 1 ) {
+                       $primary = $roles[0];
+                       $others  = array_slice( $roles, 1 );
+                       $merged  = self::merge_role_layouts( array_merge( array( $primary ), array( 'shared' ), $others ) );
+                       if ( ! empty( $merged ) ) {
+                               return $merged;
+                       }
+               }
+
+               $role   = $roles[0] ?? 'subscriber';
+               $result = self::get_role_layout( $role );
+               $layout = $result['layout'];
+               if ( ! empty( $layout ) ) {
+                       return $layout;
+               }
+
+               $all = DashboardWidgetRegistry::get_all();
+               return array_map(
+                       fn( $id ) => array(
+                               'id'      => $id,
+                               'visible' => true,
+                       ),
+                       array_keys( $all )
+               );
+        }
 
 	/**
 	 * Get a user's primary role.
