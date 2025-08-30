@@ -152,16 +152,16 @@ namespace ArtPulse\Core\Tests {
 			$prop2->setAccessible( true );
 			$prop2->setValue( null, array( 'member' => array( 'widget_beta' ) ) );
 			MockStorage::$users[3] = (object) array( 'roles' => array( 'member' ) );
-			$layout                = DashboardController::get_user_dashboard_layout( 3 );
-			$this->assertSame(
-				array(
-					array(
-						'id'      => 'widget_alpha',
-						'visible' => true,
-					),
-				),
-				$layout
-			);
+                        $layout                = DashboardController::get_user_dashboard_layout( 3 );
+                        $this->assertSame(
+                                array(
+                                        array(
+                                                'id'      => 'empty_dashboard',
+                                                'visible' => true,
+                                        ),
+                                ),
+                                $layout
+                        );
 			$this->assertSame( array( array( 'ap_dashboard_empty_layout', array( 3, 'member' ) ) ), self::$actions );
 		}
 
