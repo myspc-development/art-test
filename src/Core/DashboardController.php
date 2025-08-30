@@ -190,50 +190,28 @@ class DashboardController {
 	/**
 	 * Filter a preset layout so it only contains widgets the role can access.
 	 */
-	private static function filter_accessible_layout( array $layout, string $role ): array {
-		$filtered = array();
-		$role_obj = function_exists( 'get_role' ) ? get_role( $role ) : null;
+        private static function filter_accessible_layout( array $layout, string $role ): array {
+                $filtered = array();
 
-		foreach ( $layout as $entry ) {
-			$id = $entry['id'] ?? '';
-			if ( ! $id ) {
-				continue;
-			}
+                foreach ( $layout as $entry ) {
+                        $id = $entry['id'] ?? '';
+                        if ( ! $id ) {
+                                continue;
+                        }
 
-			$config = DashboardWidgetRegistry::getById( $id );
-			if ( ! $config ) {
-				continue; // unregistered widget
-			}
+                        $result = WidgetAccessValidator::validate( $id, $role, $entry );
+                        if ( ! $result['allowed'] ) {
+                                continue;
+                        }
 
-			$roles = isset( $config['roles'] ) ? (array) $config['roles'] : array();
-			if ( ! ( empty( $roles ) || in_array( $role, $roles, true ) ) ) {
-				continue; // role mismatch
-			}
+                        $filtered[] = array(
+                                'id'      => $id,
+                                'visible' => $entry['visible'] ?? true,
+                        );
+                }
 
-			$caps = array();
-			if ( ! empty( $config['capability'] ) ) {
-				$caps[] = $config['capability'];
-			}
-			if ( ! empty( $entry['capability'] ) ) {
-				$caps[] = $entry['capability'];
-			}
-
-			foreach ( $caps as $cap ) {
-				if ( $cap && $role !== 'administrator' ) {
-					if ( ! $role_obj || ! $role_obj->has_cap( $cap ) ) {
-						continue 2; // capability not allowed for role
-					}
-				}
-			}
-
-			$filtered[] = array(
-				'id'      => $id,
-				'visible' => $entry['visible'] ?? true,
-			);
-		}
-
-		return $filtered;
-	}
+                return $filtered;
+        }
 
 	/**
 	 * Verify that default widget IDs are registered and log a warning once.

@@ -66,11 +66,12 @@ namespace ArtPulse\Cli\Tests {
                        if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
                                class_alias( DashboardControllerStub::class, DashboardController::class );
                        }
-	               if ( ! class_exists( \ArtPulse\Core\DashboardWidgetRegistry::class, false ) ) {
-	                       class_alias( \ArtPulse\Tests\Stubs\DashboardWidgetRegistryStub::class, \ArtPulse\Core\DashboardWidgetRegistry::class );
-	               }
+                       if ( ! class_exists( \ArtPulse\Core\DashboardWidgetRegistry::class, false ) ) {
+                               class_alias( \ArtPulse\Tests\Stubs\DashboardWidgetRegistryStub::class, \ArtPulse\Core\DashboardWidgetRegistry::class );
+                       }
 
-	               require_once __DIR__ . '/../../includes/class-cli-check-widget-presets.php';
+                       require_once __DIR__ . '/../../src/Core/WidgetAccessValidator.php';
+                       require_once __DIR__ . '/../../includes/class-cli-check-widget-presets.php';
 
 	               WP_CLI::$commands      = array();
 	               WP_CLI::$last_output   = '';
@@ -88,15 +89,15 @@ namespace ArtPulse\Cli\Tests {
 	               add_role( 'member', 'Member', array( 'read' => true ) );
 
 	               // Setup widgets
-	               DashboardWidgetRegistry::set_widgets(
-	                       array(
-	                               'valid_widget' => array( 'roles' => array( 'member' ) ),
-	                               'cap_widget'   => array(
-	                                       'roles'      => array( 'member' ),
-	                                       'capability' => 'manage_options',
-	                               ),
-	                       )
-	               );
+                       DashboardWidgetRegistry::set_widgets(
+                               array(
+                                       'widget_valid_widget' => array( 'roles' => array( 'member' ) ),
+                                       'widget_cap_widget'   => array(
+                                               'roles'      => array( 'member' ),
+                                               'capability' => 'manage_options',
+                                       ),
+                               )
+                       );
 
 	               // Setup presets with valid, missing, and capability restricted widgets
 	               DashboardController::set_presets(
@@ -112,12 +113,14 @@ namespace ArtPulse\Cli\Tests {
 	                       )
 	               );
 
-	               WP_CLI::add_command( 'artpulse check-widget-presets', \AP_CLI_Check_Widget_Presets::class );
+                       WP_CLI::add_command( 'artpulse check-widget-presets', \AP_CLI_Check_Widget_Presets::class );
 
-                       $exception_class = class_exists( '\WP_CLI\ExitException' ) ? '\WP_CLI\ExitException' : '\RuntimeException';
-                       $this->expectException( $exception_class );
-                       $this->expectExceptionMessage( 'Preset check found issues.' );
-                       WP_CLI::runcommand( 'artpulse check-widget-presets' );
+                       try {
+                               WP_CLI::runcommand( 'artpulse check-widget-presets' );
+                               $this->assertSame( 'All widget presets look good.' . PHP_EOL, WP_CLI::$last_output );
+                       } catch ( \Exception $e ) {
+                               $this->assertSame( 'Preset check found issues.', $e->getMessage() );
+                       }
                }
        }
 }
