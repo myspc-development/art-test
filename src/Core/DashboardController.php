@@ -533,15 +533,21 @@ class DashboardController {
 		return self::get_role( $user_id );
 	}
 
-	public static function get_role( $user_id ): string {
+       public static function get_role( $user_id ): string {
                if (
                        function_exists( '\ap_get_effective_role' )
                        && ( $user_id === 0 || $user_id === get_current_user_id() )
                ) {
-                       return \ap_get_effective_role();
+                       $role = \ap_get_effective_role();
+               } else {
+                       $role = RoleResolver::resolve( $user_id );
                }
 
-               return RoleResolver::resolve( $user_id );
+               if ( empty( $role ) ) {
+                       $role = 'member';
+               }
+
+               return sanitize_key( (string) $role );
        }
 
 	/**
