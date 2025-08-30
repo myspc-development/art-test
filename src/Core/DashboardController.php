@@ -81,8 +81,15 @@ class DashboardController {
                'administrator' => array(),
         );
 
-	/** @var bool */
-	private static bool $defaults_checked = false;
+        /** @var bool */
+        private static bool $defaults_checked = false;
+
+        /**
+         * Optional preset overrides set at runtime.
+         *
+         * @var array<string,array>
+         */
+        private static array $preset_overrides = array();
 
 	public static function init(): void {
 		add_filter( 'query_vars', array( __CLASS__, 'registerQueryVars' ) );
@@ -91,60 +98,71 @@ class DashboardController {
 	}
 
 
-	/**
-	 * Default layout presets keyed by unique identifier.
-	 *
-	 * Preset layouts are filtered so only widgets the specified role can access
-	 * are returned. Unregistered widgets, widgets limited to other roles and
-	 * widgets requiring capabilities the role lacks are automatically removed.
-	 *
-	 * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
-	 */
-	public static function get_default_presets(): array {
-		$presets = array(
-			'member_default'   => array(
-				'title'  => 'Member Default',
-				'role'   => 'member',
-				'layout' => array(
-					array( 'id' => 'widget_news' ),
-					array( 'id' => 'widget_favorites' ),
-					array( 'id' => 'widget_events' ),
-					array( 'id' => 'instagram_widget' ),
-				),
-			),
-			'artist_default'   => array(
-				'title'  => 'Artist Default',
-				'role'   => 'artist',
-				'layout' => array_values(
-					array_filter(
-						array(
-							defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'activity_feed' ) : null,
-							array( 'id' => 'artist_inbox_preview' ),
-							array( 'id' => 'artist_revenue_summary' ),
-							array( 'id' => 'artist_spotlight' ),
-							array( 'id' => 'widget_favorites' ),
-							defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'qa_checklist' ) : null,
-						)
-					)
-				),
-			),
-			// New sample layouts that can be applied from the dashboard UI
-			'new_member_intro' => array(
-				'title'  => 'New Member Intro',
-				'role'   => 'member',
-				'layout' => self::load_preset_layout( 'member', 'discovery' ),
-			),
-			'artist_tools'     => array(
-				'title'  => 'Artist Tools',
-				'role'   => 'artist',
-				'layout' => self::load_preset_layout( 'artist', 'tools' ),
-			),
-			'org_admin_start'  => array(
-				'title'  => 'Organization Admin Start',
-				'role'   => 'organization',
-				'layout' => self::load_preset_layout( 'organization', 'admin' ),
-			),
-		);
+        /**
+         * Inject preset overrides.
+         */
+        public static function set_presets( array $presets ): void {
+                self::$preset_overrides = $presets;
+        }
+
+        /**
+         * Default layout presets keyed by unique identifier.
+         *
+         * Preset layouts are filtered so only widgets the specified role can access
+         * are returned. Unregistered widgets, widgets limited to other roles and
+         * widgets requiring capabilities the role lacks are automatically removed.
+         *
+         * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
+         */
+        public static function get_default_presets(): array {
+                if ( ! empty( self::$preset_overrides ) ) {
+                        $presets = self::$preset_overrides;
+                } else {
+                        $presets = array(
+                                'member_default'   => array(
+                                        'title'  => 'Member Default',
+                                        'role'   => 'member',
+                                        'layout' => array(
+                                                array( 'id' => 'widget_news' ),
+                                                array( 'id' => 'widget_favorites' ),
+                                                array( 'id' => 'widget_events' ),
+                                                array( 'id' => 'instagram_widget' ),
+                                        ),
+                                ),
+                                'artist_default'   => array(
+                                        'title'  => 'Artist Default',
+                                        'role'   => 'artist',
+                                        'layout' => array_values(
+                                                array_filter(
+                                                        array(
+                                                                defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'activity_feed' ) : null,
+                                                                array( 'id' => 'artist_inbox_preview' ),
+                                                                array( 'id' => 'artist_revenue_summary' ),
+                                                                array( 'id' => 'artist_spotlight' ),
+                                                                array( 'id' => 'widget_favorites' ),
+                                                                defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'qa_checklist' ) : null,
+                                                        )
+                                                )
+                                        ),
+                                ),
+                                // New sample layouts that can be applied from the dashboard UI
+                                'new_member_intro' => array(
+                                        'title'  => 'New Member Intro',
+                                        'role'   => 'member',
+                                        'layout' => self::load_preset_layout( 'member', 'discovery' ),
+                                ),
+                                'artist_tools'     => array(
+                                        'title'  => 'Artist Tools',
+                                        'role'   => 'artist',
+                                        'layout' => self::load_preset_layout( 'artist', 'tools' ),
+                                ),
+                                'org_admin_start'  => array(
+                                        'title'  => 'Organization Admin Start',
+                                        'role'   => 'organization',
+                                        'layout' => self::load_preset_layout( 'organization', 'admin' ),
+                                ),
+                        );
+                }
 
 		// Remove widgets the role cannot access.
 		foreach ( $presets as $key => $preset ) {
