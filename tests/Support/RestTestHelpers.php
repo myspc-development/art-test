@@ -1,21 +1,7 @@
 <?php
 namespace ArtPulse\Tests;
 
-use WP_REST_Request;
-use WP_REST_Server;
-use WP_User;
 
-/**
- * Helpers for REST API tests.
- */
-final class RestTestHelpers
-{
-    public static function as_admin(): int
-    {
-        $id = username_exists('admin');
-        if (!$id) {
-            $id = wp_create_user('admin', 'password', 'admin@example.com');
-            $user = new WP_User($id);
             $user->set_role('administrator');
         }
         wp_set_current_user((int) $id);
