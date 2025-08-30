@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class DirectoryController {
 
@@ -24,7 +25,7 @@ class DirectoryController {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
                                'callback'            => array( self::class, 'get_events' ),
-                               'permission_callback' => '__return_true',
+
                        )
                );
        }
