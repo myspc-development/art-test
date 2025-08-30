@@ -29,21 +29,31 @@ class ArtistEventsController {
 	}
 
        public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-               $ids = get_posts(
+               $posts = get_posts(
                        array(
                                'post_type'   => 'artpulse_event',
                                'author'      => get_current_user_id(),
-                               'fields'      => 'ids',
                                'post_status' => array( 'publish', 'pending', 'draft', 'future' ),
                                'numberposts' => -1,
                        )
                );
 
-               return self::ok(
-                       array(
-                               'ids' => array_map( 'intval', $ids ),
-                       )
-               );
+               $events = array();
+
+               foreach ( $posts as $post ) {
+                       $status    = $post->post_status;
+                       $events[]  = array(
+                               'id'        => (int) $post->ID,
+                               'title'     => get_the_title( $post ),
+                               'status'    => $status,
+                               'date'      => get_post_meta( $post->ID, '_ap_event_date', true ),
+                               'end_date'  => get_post_meta( $post->ID, 'event_end_date', true ),
+                               'permalink' => get_permalink( $post ),
+                               'color'     => ( 'publish' === $status ) ? '#3b82f6' : '#9ca3af',
+                       );
+               }
+
+               return self::ok( $events );
        }
 
        private static function ok( $data, int $status = 200 ): WP_REST_Response {
