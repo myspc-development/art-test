@@ -114,8 +114,7 @@ namespace ArtPulse\Cli\Tests {
 
 	               WP_CLI::add_command( 'artpulse check-widget-presets', \AP_CLI_Check_Widget_Presets::class );
 
-                       $exception_class = class_exists( '\WP_CLI\ExitException' ) ? '\WP_CLI\ExitException' : '\RuntimeException';
-                       $this->expectException( $exception_class );
+                       $this->expectException( \WP_CLI\ExitException::class );
                        $this->expectExceptionMessage( 'Preset check found issues.' );
                        WP_CLI::runcommand( 'artpulse check-widget-presets' );
                }

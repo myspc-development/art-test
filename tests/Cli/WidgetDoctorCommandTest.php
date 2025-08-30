@@ -135,7 +135,7 @@ namespace ArtPulse\Cli\Tests {
 			try {
 				WP_CLI::runcommand( 'artpulse widgets audit' );
 				$this->fail( 'Expected error not thrown' );
-			} catch ( \RuntimeException $e ) {
+			} catch ( \WP_CLI\ExitException $e ) {
 				$this->assertSame( 'Widget issues found.', $e->getMessage() );
 				$out = WP_CLI::$last_output;
 				$this->assertStringContainsString( 'widget_bad', $out );

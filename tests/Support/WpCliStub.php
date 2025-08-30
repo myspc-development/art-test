@@ -18,7 +18,9 @@ if (!class_exists('WP_CLI')) {
         public static function line($msg): void { echo rtrim((string)$msg, "\n") . PHP_EOL; }
         public static function success($msg): void { echo rtrim((string)$msg, "\n") . PHP_EOL; }
         public static function warning($msg): void { echo rtrim((string)$msg, "\n") . PHP_EOL; }
-        public static function error($msg): void { throw new \RuntimeException(is_string($msg) ? $msg : json_encode($msg)); }
+        public static function error($msg, $exit_code = 1): void {
+            throw new \WP_CLI\ExitException(is_string($msg) ? $msg : json_encode($msg), (int) $exit_code);
+        }
         public static function print_value($value, array $assoc_args = array()): void
         {
             $is_json = !empty($assoc_args['json']);
@@ -167,7 +169,9 @@ if (!class_exists('WP_CLI')) {
             return (string) $string;
         }
         public static function confirm($question, $assoc_args = array()): void {}
-        public static function error_multi_line($lines): void { throw new \RuntimeException(implode("\n", (array) $lines)); }
+        public static function error_multi_line($lines, $exit_code = 1): void {
+            throw new \WP_CLI\ExitException(implode("\n", (array) $lines), (int) $exit_code);
+        }
         public static function add_hook($event, $callable, $args = array()): void {}
         public static function get_config($key = null)
         {
@@ -182,6 +186,9 @@ if (!class_exists('WP_CLI')) {
 }
 
 namespace WP_CLI {
+if (!class_exists('WP_CLI\\ExitException')) {
+    class ExitException extends \Exception {}
+}
 if (!class_exists('WP_CLI\\Formatter')) {
     class Formatter
     {
