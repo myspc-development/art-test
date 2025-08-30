@@ -22,10 +22,10 @@ if (!class_exists('WP_CLI')) {
         public static function print_value($value, array $assoc_args = array()): void
         {
             if (!empty($assoc_args['json'])) {
-                echo json_encode($value) . PHP_EOL;
-                return;
+                echo json_encode($value);
+            } else {
+                echo $value;
             }
-            echo $value . PHP_EOL;
         }
         public static function debug($msg, $group = null): void
         {
