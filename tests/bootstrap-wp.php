@@ -32,6 +32,9 @@ if (!defined('AP_TESTING')) {
 if (getenv('AP_TEST_MODE') === false) {
     putenv('AP_TEST_MODE=1');
 }
+if (!defined('AP_TEST_MODE')) {
+    define('AP_TEST_MODE', getenv('AP_TEST_MODE') === '1');
+}
 // Optionally force builder preview mode in tests via env var.
 $__force_preview = getenv('AP_TEST_FORCE_PREVIEW');
 if ($__force_preview !== false && !defined('AP_TEST_FORCE_PREVIEW')) {
@@ -71,7 +74,7 @@ tests_add_filter('muplugins_loaded', '_manually_load_plugin', 15);
 /** Finally, boot the WP test environment (guarded, load once). */
 require_once $wp_phpunit_dir . '/includes/bootstrap.php';
 
-if (getenv('AP_TEST_MODE')) {
+if ( defined('AP_TEST_MODE') && AP_TEST_MODE ) {
     if (!class_exists('Spy_REST_Server')) {
         require_once $wp_phpunit_dir . '/includes/spy-rest-server.php';
     }
