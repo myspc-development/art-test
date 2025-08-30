@@ -9,9 +9,7 @@ require_once __DIR__ . '/../TestStubs.php';
 
 class WidgetSourcesVisibilityTest extends TestCase {
 
-	public static array $rows = array();
-
-	protected function setUp(): void {
+        protected function setUp(): void {
 		$ref = new \ReflectionClass( DashboardWidgetRegistry::class );
 		foreach ( array( 'widgets', 'builder_widgets', 'id_map', 'issues', 'logged_duplicates', 'aliases' ) as $prop ) {
 			if ( $ref->hasProperty( $prop ) ) {
@@ -28,11 +26,11 @@ class WidgetSourcesVisibilityTest extends TestCase {
                 DashboardWidgetRegistry::register( 'widget_demo', 'Demo', '', '', [self::class, 'blank'] );
                 update_option( 'artpulse_widget_roles', array( 'member' => array( 'widget_demo' ) ) );
 
-                $cmd = new WidgetAudit();
-                $cmd->widgets( array(), array( 'format' => 'table' ) );
+                $cmd  = new WidgetAudit();
+                $rows = $cmd->widgets( array(), array( 'format' => 'table' ) );
 
-                $this->assertNotEmpty( self::$rows );
-                $this->assertSame( 'member', self::$rows[0]['roles_from_visibility'] );
+                $this->assertNotEmpty( $rows );
+                $this->assertSame( 'member', $rows[0]['roles_from_visibility'] );
         }
 
         public static function blank(): string { return ''; }
