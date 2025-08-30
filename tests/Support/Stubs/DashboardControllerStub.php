@@ -125,6 +125,103 @@ final class DashboardControllerStub
     }
 
     /**
+     * Return the widgets configured for a role.
+     *
+     * @return array<int,string>
+     */
+    public static function get_widgets_for_role(string $role): array
+    {
+        $role = self::sanitize($role);
+        return self::$role_widgets[$role] ?? [];
+    }
+
+    /**
+     * Determine the dashboard layout for a user.
+     */
+    public static function get_user_dashboard_layout(int $user_id): array
+    {
+        if (
+            isset($_GET['ap_preview_user']) &&
+            \function_exists('current_user_can') && \current_user_can('manage_options')
+        ) {
+            $nonce = isset($_GET['ap_preview_nonce'])
+                ? self::sanitize((string) $_GET['ap_preview_nonce'])
+                : '';
+            if (!\function_exists('wp_verify_nonce') || \wp_verify_nonce($nonce, 'ap_preview')) {
+                $preview = (int) $_GET['ap_preview_user'];
+                if ($preview > 0) {
+                    $user_id = $preview;
+                }
+            }
+        }
+
+        $role   = self::get_role($user_id);
+        $custom = \get_user_meta($user_id, 'ap_dashboard_layout', true);
+        $layout = [];
+
+        if (\is_array($custom) && !empty($custom)) {
+            $layout = $custom;
+        } else {
+            $layouts = \get_option('ap_dashboard_widget_config', []);
+            if (isset($layouts[$role]) && \is_array($layouts[$role])) {
+                $layout = $layouts[$role];
+            } else {
+                $layout = array_map(
+                    static fn($id) => ['id' => $id, 'visible' => true],
+                    self::get_widgets_for_role($role)
+                );
+            }
+        }
+
+        $out = [];
+        foreach ($layout as $entry) {
+            if (\is_array($entry) && isset($entry['id'])) {
+                $out[] = [
+                    'id'      => self::sanitize((string) $entry['id']),
+                    'visible' => isset($entry['visible']) ? (bool) $entry['visible'] : true,
+                ];
+            } elseif (\is_string($entry) && $entry !== '') {
+                $out[] = ['id' => self::sanitize($entry), 'visible' => true];
+            }
+        }
+
+        if (empty($out)) {
+            $out[] = ['id' => 'empty_dashboard', 'visible' => true];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Minimal role resolution mirroring production query handling.
+     */
+    public static function resolveRoleIntoQuery(\WP_Query $q): void
+    {
+        $req  = isset($_GET['role']) ? self::sanitize((string) $_GET['role']) : self::sanitize((string) $q->get('role'));
+        $role = \in_array($req, ['member', 'artist', 'organization'], true) ? $req : 'member';
+
+        if (\function_exists('set_query_var')) {
+            \set_query_var('ap_role', $role);
+        } else {
+            $GLOBALS['ap_role'] = $role;
+        }
+
+        if (\function_exists('add_action')) {
+            \add_action('send_headers', static function () use ($role): void {
+                if (\function_exists('header')) {
+                    \header('X-AP-Resolved-Role: ' . $role);
+                }
+            });
+        } else {
+            $GLOBALS['mock_send_headers'][] = static function () use ($role): void {
+                if (\function_exists('header')) {
+                    \header('X-AP-Resolved-Role: ' . $role);
+                }
+            };
+        }
+    }
+
+    /**
      * Mirror the production interceptTemplate logic without depending on
      * WordPress. Uses globals and MockStorage state that tests can control.
      */
