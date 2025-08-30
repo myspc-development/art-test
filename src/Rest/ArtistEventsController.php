@@ -29,6 +29,12 @@ class ArtistEventsController {
 		);
 	}
 
+        /**
+         * Retrieve events created by the authenticated artist.
+         *
+         * @param WP_REST_Request $request Request object.
+         * @return WP_REST_Response|WP_Error REST response on success or error on failure.
+         */
         public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
                 $permission = Auth::guard_read( $request );
                 if ( is_wp_error( $permission ) ) {
@@ -59,6 +65,7 @@ class ArtistEventsController {
                         );
                 }
 
+                // Wrap the results in a WP REST response object.
                 return rest_ensure_response( $data );
         }
 
