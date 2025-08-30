@@ -33,7 +33,10 @@ class WidgetEditorController {
                                'methods'             => 'GET',
                                'callback'            => array( self::class, 'get_roles' ),
                                // Read-only endpoint – allow any authenticated user with basic read capability.
-                               'permission_callback' => fn () => current_user_can( 'read' ),
+                               'permission_callback' => function () {
+                                       $ok = \ArtPulse\Rest\Util\Auth::guard( null, 'read' );
+                                       return $ok === true ? true : $ok;
+                               },
                        )
                );
 

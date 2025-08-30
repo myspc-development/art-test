@@ -16,38 +16,32 @@ class WidgetSettingsRestController {
 		}
 	}
 
-	public static function register_routes(): void {
-		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/widget-settings/(?P<id>[a-z0-9_-]+)' ) ) {
-			register_rest_route(
-				ARTPULSE_API_NAMESPACE,
-				'/widget-settings/(?P<id>[a-z0-9_-]+)',
-				array(
-					array(
-						'methods'             => 'GET',
-						'callback'            => array( self::class, 'get_settings' ),
-						'permission_callback' => fn() => current_user_can( 'read' ),
-					),
-					array(
-						'methods'             => 'POST',
-						'callback'            => array( self::class, 'save_settings' ),
-						'permission_callback' => array( self::class, 'can_save' ),
-					),
-				)
-			);
-		}
-	}
-
-	/**
-	 * Verify nonce and user capability for saving settings.
-	 */
-	public static function can_save( WP_REST_Request $request ): bool {
-		$nonce = $request->get_header( 'X-WP-Nonce' );
-		if ( $nonce ) {
-			$_REQUEST['X-WP-Nonce'] = $nonce;
-		}
-
-		return current_user_can( 'read' ) && check_ajax_referer( 'wp_rest', 'X-WP-Nonce', false );
-	}
+        public static function register_routes(): void {
+                if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/widget-settings/(?P<id>[a-z0-9_-]+)' ) ) {
+                        register_rest_route(
+                                ARTPULSE_API_NAMESPACE,
+                                '/widget-settings/(?P<id>[a-z0-9_-]+)',
+                                array(
+                                        array(
+                                                'methods'             => 'GET',
+                                                'callback'            => array( self::class, 'get_settings' ),
+                                                'permission_callback' => function () {
+                                                        $ok = \ArtPulse\Rest\Util\Auth::guard( null, 'read' );
+                                                        return $ok === true ? true : $ok;
+                                                },
+                                        ),
+                                        array(
+                                                'methods'             => 'POST',
+                                                'callback'            => array( self::class, 'save_settings' ),
+                                                'permission_callback' => function () {
+                                                        $ok = \ArtPulse\Rest\Util\Auth::guard( null, 'manage_options' );
+                                                        return $ok === true ? true : $ok;
+                                                },
+                                        ),
+                                )
+                        );
+                }
+        }
 
 	public static function get_settings( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$id     = sanitize_key( $request['id'] );
@@ -107,14 +101,11 @@ class WidgetSettingsRestController {
 			}
 		}
 
-		if ( $global ) {
-			if ( ! current_user_can( 'manage_options' ) ) {
-				return new WP_Error( 'forbidden', __( 'Permission denied', 'artpulse' ), array( 'status' => 403 ) );
-			}
-			update_option( 'ap_widget_settings_' . $id, $sanitized );
-		} else {
-			update_user_meta( get_current_user_id(), 'ap_widget_settings_' . $id, $sanitized );
-		}
+                if ( $global ) {
+                        update_option( 'ap_widget_settings_' . $id, $sanitized );
+                } else {
+                        update_user_meta( get_current_user_id(), 'ap_widget_settings_' . $id, $sanitized );
+                }
 
 		return rest_ensure_response( array( 'saved' => true ) );
 	}
