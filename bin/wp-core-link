@@ -5,13 +5,13 @@ declare(strict_types=1);
 $root = dirname(__DIR__);
 $testsDir = $root . '/vendor/wp-phpunit/wp-phpunit';
 $coreDir = getenv('WP_CORE_DIR');
-if ($coreDir === false) {
-    fwrite(STDERR, "Set WP_CORE_DIR to an existing WP root (contains wp-settings.php)\n");
+if ($coreDir === false || $coreDir === '') {
+    fwrite(STDERR, "WP_CORE_DIR not set.\nExport WP_CORE_DIR=/absolute/path/to/wordpress\n");
     exit(1);
 }
 $coreDir = rtrim($coreDir, '/');
 if (!file_exists($coreDir . '/wp-settings.php')) {
-    fwrite(STDERR, "wp-settings.php not found in WP_CORE_DIR={$coreDir}\n");
+    fwrite(STDERR, "wp-settings.php not found in WP_CORE_DIR={$coreDir}\nEnsure WP_CORE_DIR points to a valid WordPress root.\n");
     exit(1);
 }
 if (!is_dir($testsDir) && !mkdir($testsDir, 0777, true)) {
