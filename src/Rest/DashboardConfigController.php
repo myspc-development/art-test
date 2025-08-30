@@ -25,11 +25,11 @@ class DashboardConfigController {
 						'callback'            => array( self::class, 'get_config' ),
 						'permission_callback' => Auth::require_login_and_cap( 'read' ),
 					),
-					array(
-						'methods'             => 'POST',
-						'callback'            => array( self::class, 'save_config' ),
-						'permission_callback' => Auth::require_login_and_cap( 'manage_options' ),
-						'args'                => array(
+                                        array(
+                                                'methods'             => 'POST',
+                                                'callback'            => array( self::class, 'save_config' ),
+                                                'permission_callback' => '__return_true',
+                                                'args'                => array(
 							'widget_roles' => array(
 								'type'     => 'object',
 								'required' => false,
@@ -98,10 +98,9 @@ class DashboardConfigController {
        }
 
 	public static function save_config( WP_REST_Request $request ) {
-                $nonce = $request->get_header( 'X-WP-Nonce' );
-                $check = Auth::verify_nonce( $nonce );
-                if ( is_wp_error( $check ) ) {
-                        return $check;
+                $guard = Auth::guard( $request, 'manage_options' );
+                if ( is_wp_error( $guard ) ) {
+                        return $guard;
                 }
 
 		$data       = $request->get_json_params();

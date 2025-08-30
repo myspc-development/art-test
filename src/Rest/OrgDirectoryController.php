@@ -21,8 +21,7 @@ final class OrgDirectoryController {
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( self::class, 'get_orgs' ),
                 'permission_callback' => function () {
-                    $ok = \ArtPulse\Rest\Util\Auth::guard( null, 'read' );
-                    return $ok === true ? true : $ok;
+                    return \ArtPulse\Rest\Util\Auth::require_cap( 'read' );
                 },
                 'args'                => array(
                     'org_type' => array( 'type' => 'string' ),

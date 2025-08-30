@@ -26,8 +26,7 @@ class RsvpBulkController {
                     'methods'             => WP_REST_Server::CREATABLE,
                     'callback'            => array( $this, 'bulk_update' ),
                     'permission_callback' => function ( WP_REST_Request $request ) {
-                        $ok = \ArtPulse\Rest\Util\Auth::guard( $request->get_header( 'X-WP-Nonce' ), 'edit_posts' );
-                        return $ok === true ? true : $ok;
+                        return \ArtPulse\Rest\Util\Auth::guard( $request, 'edit_posts' );
                     },
                     'args'                => array(
                         'event_id' => array(

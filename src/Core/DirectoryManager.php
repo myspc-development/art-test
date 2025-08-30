@@ -58,8 +58,7 @@ class DirectoryManager {
                                                'methods'             => 'GET',
                                                'callback'            => array( self::class, 'handleFilter' ),
                                                'permission_callback' => function () {
-                                                       $ok = \ArtPulse\Rest\Util\Auth::guard( null, 'read' );
-                                                       return $ok === true ? true : $ok;
+                                                       return \ArtPulse\Rest\Util\Auth::require_cap( 'read' );
                                                },
                                                'args'                => array(
                                                        'type'         => array(

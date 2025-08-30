@@ -65,8 +65,7 @@ class SubmissionRestController {
 	 * Permission callback for the submission endpoint.
 	 */
        public static function check_permissions( WP_REST_Request $request ) {
-               $nonce = $request->get_header( 'X-WP-Nonce' ) ?: $request->get_param( '_wpnonce' );
-               return \ArtPulse\Rest\Util\Auth::guard( $nonce, 'upload_files' );
+               return \ArtPulse\Rest\Util\Auth::guard( $request, 'upload_files' );
        }
 
 	/**

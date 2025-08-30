@@ -14,8 +14,7 @@ final class ProfileMetricsController {
 
     public static function register_routes(): void {
         $permission = function () {
-            $ok = Auth::guard( null, 'read' );
-            return $ok === true ? true : $ok;
+            return Auth::require_cap( 'read' );
         };
 
         register_rest_route(
