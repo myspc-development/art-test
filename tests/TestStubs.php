@@ -214,6 +214,21 @@ namespace {
                 function did_action( $tag ) {
                         return 0; }
         }
+        if ( ! function_exists( 'plugin_dir_path' ) ) {
+                function plugin_dir_path( $file ) {
+                        return rtrim( dirname( $file ), '/\\' ) . '/';
+                }
+        }
+        if ( ! function_exists( 'get_query_var' ) ) {
+                function get_query_var( $key ) {
+                        return $_GET[ $key ] ?? null;
+                }
+        }
+        if ( ! function_exists( 'set_query_var' ) ) {
+                function set_query_var( $key, $value ) {
+                        $_GET[ $key ] = $value;
+                }
+        }
         if ( ! function_exists( 'admin_url' ) ) {
                 function admin_url( $path = '', $scheme = 'admin' ) {
                         return 'https://example.test/wp-admin/' . ltrim( $path, '/' ); }
