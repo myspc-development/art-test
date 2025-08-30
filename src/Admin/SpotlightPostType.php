@@ -26,15 +26,20 @@ class SpotlightPostType {
 			)
 		);
 
-		register_post_meta(
-			'spotlight',
-			'visible_to_roles',
-			array(
-				'show_in_rest' => true,
-				'single'       => true,
-				'type'         => 'array',
-			)
-		);
+                register_post_meta(
+                        'spotlight',
+                        'visible_to_roles',
+                        array(
+                                'show_in_rest' => array(
+                                        'schema' => array(
+                                                'type'  => 'array',
+                                                'items' => array( 'type' => 'string' ),
+                                        ),
+                                ),
+                                'single'       => true,
+                                'type'         => 'array',
+                        )
+                );
 		register_post_meta(
 			'spotlight',
 			'start_at',
