@@ -16,6 +16,60 @@ final class DashboardControllerStub
     private static string $defaultRole = 'member';
 
     /**
+     * Default widgets available to each role.
+     *
+     * @var array<string,string[]>
+     */
+    public static array $role_widgets = [
+        'member' => [
+            'widget_news',
+            'widget_membership',
+            'widget_upgrade',
+            'widget_account_tools',
+            'widget_recommended_for_you',
+            'widget_my_rsvps',
+            'widget_favorites',
+            'widget_local_events',
+            'widget_my_follows',
+            'widget_notifications',
+            'widget_messages',
+            'widget_dashboard_feedback',
+            'widget_cat_fact',
+        ],
+        'artist' => [
+            'widget_artist_feed_publisher',
+            'widget_artist_audience_insights',
+            'widget_artist_spotlight',
+            'widget_artist_revenue_summary',
+            'widget_my_events',
+            'widget_messages',
+            'widget_notifications',
+            'widget_dashboard_feedback',
+            'widget_cat_fact',
+        ],
+        'organization' => [
+            'widget_org_event_overview',
+            'widget_artpulse_analytics_widget',
+            'widget_org_ticket_insights',
+            'widget_my_events',
+            'widget_org_team_roster',
+            'widget_audience_crm',
+            'widget_org_broadcast_box',
+            'widget_org_approval_center',
+            'widget_webhooks',
+            'widget_support_history',
+        ],
+        'administrator' => [],
+    ];
+
+    /**
+     * Default presets used by the CLI checker.
+     *
+     * @var array<string,array{role:string,layout:array<int,array{id:string}>}>
+     */
+    private static array $presets = [];
+
+    /**
      * Allow tests to override the default role used when we cannot derive one.
      */
     public static function set_default_role(string $role): void
@@ -52,6 +106,22 @@ final class DashboardControllerStub
         }
 
         return self::$defaultRole;
+    }
+
+    /**
+     * Allow tests to define the presets returned from get_default_presets().
+     */
+    public static function set_presets(array $presets): void
+    {
+        self::$presets = $presets;
+    }
+
+    /**
+     * Minimal implementation mirroring the production method.
+     */
+    public static function get_default_presets(): array
+    {
+        return self::$presets;
     }
 
     /**

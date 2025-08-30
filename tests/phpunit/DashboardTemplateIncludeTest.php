@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../TestStubs.php';
-require_once __DIR__ . '/../Support/DashboardControllerStub.php';
+require_once __DIR__ . '/../Support/Stubs/DashboardControllerStub.php';
 
 if ( ! defined( 'ARTPULSE_PLUGIN_DIR' ) ) {
         define( 'ARTPULSE_PLUGIN_DIR', dirname( __DIR__, 2 ) );
