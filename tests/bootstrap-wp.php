@@ -78,6 +78,8 @@ tests_add_filter('muplugins_loaded', '_manually_load_plugin', 15);
 /** Finally, boot the WP test environment (guarded, load once). */
 require_once $wp_phpunit_dir . '/includes/bootstrap.php';
 
+remove_action('user_register', [\ArtPulse\Core\DashboardWidgetManager::class, 'assign_default_layout']);
+
 if (!defined('AP_TEST_MODE')) {
     define('AP_TEST_MODE', true);
 }

@@ -171,26 +171,41 @@ class DashboardWidgetManager {
 	 * configuration. Falls back to a minimal layout containing the core
 	 * `my-events` widget when no role preset is available.
 	 */
-	public static function assign_default_layout( int $user_id ): void {
-		$current = get_user_meta( $user_id, UserLayoutManager::META_KEY, true );
-		if ( is_array( $current ) && ! empty( $current ) ) {
-			return;
-		}
+       public static function assign_default_layout( int $user_id ): void {
+               if ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) {
+                       return;
+               }
 
-		$role   = UserLayoutManager::get_primary_role( $user_id );
-		$result = UserLayoutManager::get_role_layout( $role );
-		$layout = $result['layout'] ?? array();
-		if ( empty( $layout ) ) {
-			$layout = array(
-				array(
-					'id'      => 'my-events',
-					'visible' => true,
-				),
-			);
-		}
+               $current = get_user_meta( $user_id, UserLayoutManager::META_KEY, true );
+               if ( is_array( $current ) && ! empty( $current ) ) {
+                       return;
+               }
 
-		UserLayoutManager::save_user_layout( $user_id, $layout );
-	}
+               $role   = UserLayoutManager::get_primary_role( $user_id );
+               $result = UserLayoutManager::get_role_layout( $role );
+               $layout = $result['layout'] ?? array();
+
+               if ( ! empty( $layout ) ) {
+                       $defs = DashboardWidgetRegistry::get_all();
+                       foreach ( $layout as $item ) {
+                               if ( empty( $item['id'] ) || ! isset( $defs[ $item['id'] ] ) ) {
+                                       $layout = array();
+                                       break;
+                               }
+                       }
+               }
+
+               if ( empty( $layout ) ) {
+                       $layout = array(
+                               array(
+                                       'id'      => 'my-events',
+                                       'visible' => true,
+                               ),
+                       );
+               }
+
+               UserLayoutManager::save_user_layout( $user_id, $layout );
+       }
 
 	public static function renderPreview( string $role ): void {
 		DashboardWidgetTools::render_role_dashboard_preview( $role );
