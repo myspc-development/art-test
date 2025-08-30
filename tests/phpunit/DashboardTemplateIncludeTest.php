@@ -53,6 +53,9 @@ final class DashboardTemplateIncludeTest extends TestCase {
                 MockStorage::$current_roles = array();
 
                 Monkey\setUp();
+                Functions\when( 'is_page' )->alias( fn( $slug = '' ) => 'dashboard' === $slug && $GLOBALS['mock_is_page_dashboard'] );
+                Functions\when( 'is_user_logged_in' )->alias( fn() => (bool) $GLOBALS['mock_is_user_logged_in'] );
+                Functions\when( 'current_user_can' )->alias( fn( $cap ) => in_array( $cap, MockStorage::$current_roles, true ) );
         }
 
         protected function tearDown(): void {
