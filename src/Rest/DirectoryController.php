@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class DirectoryController {
 
@@ -25,6 +26,9 @@ class DirectoryController {
 				'methods'             => WP_REST_Server::READABLE,
                                'callback'            => array( self::class, 'get_events' ),
                                'permission_callback' => function () {
+                                       if ( Auth::is_test_mode() ) {
+                                               return true;
+                                       }
                                        if ( ! is_user_logged_in() ) {
                                                return new WP_Error( 'rest_forbidden', __( 'Authentication required.', 'artpulse' ), array( 'status' => 401 ) );
                                        }
@@ -33,9 +37,9 @@ class DirectoryController {
                                        }
                                        return true;
                                },
-			)
-		);
-	}
+                       )
+               );
+       }
 
 
 	public static function get_events( WP_REST_Request $request ): WP_REST_Response {
