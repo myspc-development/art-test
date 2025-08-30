@@ -2,6 +2,7 @@
 namespace ArtPulse\Rest;
 
 use ArtPulse\Core\FeedbackManager;
+use ArtPulse\Rest\Util\Auth;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -25,12 +26,12 @@ class FeedbackRestController {
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( self::class, 'submit' ),
-						'permission_callback' => fn () => is_user_logged_in(),
+                                                'permission_callback' => Auth::require_login_and_cap(null),
 					),
 					array(
 						'methods'             => 'GET',
 						'callback'            => array( self::class, 'list' ),
-						'permission_callback' => fn () => is_user_logged_in(),
+                                                'permission_callback' => Auth::require_login_and_cap(null),
 					),
 				)
 			);
@@ -42,7 +43,7 @@ class FeedbackRestController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'vote' ),
-					'permission_callback' => fn () => is_user_logged_in(),
+                                        'permission_callback' => Auth::require_login_and_cap(null),
 					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
 				)
 			);
@@ -55,13 +56,13 @@ class FeedbackRestController {
 					array(
 						'methods'             => 'GET',
 						'callback'            => array( self::class, 'comments' ),
-						'permission_callback' => fn () => is_user_logged_in(),
+                                                'permission_callback' => Auth::require_login_and_cap(null),
 						'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
 					),
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( self::class, 'add_comment' ),
-						'permission_callback' => fn () => is_user_logged_in(),
+                                                'permission_callback' => Auth::require_login_and_cap(null),
 						'args'                => array(
 							'id'      => array( 'validate_callback' => 'is_numeric' ),
 							'comment' => array(
