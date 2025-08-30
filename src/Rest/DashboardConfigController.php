@@ -29,13 +29,11 @@ class DashboardConfigController {
                                                                 : new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
                                                 },
                                         ),
-			array(
-				'methods'  => 'POST',
-				'callback' => array( self::class, 'save_config' ),
-				'permission_callback' => function ( $request ) {
-					return Auth::guard( $request, 'manage_options' );
-				},
-				'args'                => array(
+                        array(
+                                'methods'  => 'POST',
+                                'callback' => array( self::class, 'save_config' ),
+                                'permission_callback' => '__return_true',
+                                'args'                => array(
                                                         'widget_roles' => array(
                                                                 'type'     => 'object',
                                                                 'required' => false,
@@ -112,13 +110,17 @@ class DashboardConfigController {
 
                return new \WP_REST_Response( $payload, 200 );
        }
-	public static function save_config( WP_REST_Request $request ) {
-		$guard = Auth::guard( $request, 'manage_options' );
-		if ( is_wp_error( $guard ) ) {
-			return $guard;
-	}
+       public static function save_config( WP_REST_Request $request ) {
+                $nonce = $request->get_header( 'X-WP-Nonce' );
+                if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+                        return new WP_Error( 'rest_invalid_nonce', 'Invalid nonce.', array( 'status' => 401 ) );
+                }
 
-		$data       = $request->get_json_params();
+                if ( ! current_user_can( 'manage_options' ) ) {
+                        return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
+                }
+
+                $data       = $request->get_json_params();
 		$visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();
 		foreach ( $visibility as $role => &$ids ) {
 			$ids = array_values( array_unique( array_map( array( WidgetIds::class, 'canonicalize' ), (array) $ids ) ) );
