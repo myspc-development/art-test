@@ -1,9 +1,0 @@
-[
-  { "id": "widget_membership", "visible": true },
-  { "id": "widget_account_tools", "visible": true },
-  { "id": "widget_my_follows", "visible": true },
-  { "id": "widget_recommended_for_you", "visible": true },
-  { "id": "widget_local_events", "visible": true },
-  { "id": "widget_my_events", "visible": true },
-  { "id": "widget_site_stats", "visible": true }
-]

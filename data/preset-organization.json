@@ -1,7 +1,0 @@
-[
-  { "id": "widget_audience_crm", "visible": true },
-  { "id": "widget_org_ticket_insights", "visible": true },
-  { "id": "widget_webhooks", "visible": true },
-  { "id": "widget_my_events", "visible": true },
-  { "id": "widget_site_stats", "visible": true }
-]

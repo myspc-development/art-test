@@ -1,8 +1,0 @@
-[
-  { "id": "widget_artist_revenue_summary", "visible": true },
-  { "id": "widget_artist_artwork_manager", "visible": true },
-  { "id": "widget_artist_audience_insights", "visible": true },
-  { "id": "widget_artist_feed_publisher", "visible": true },
-  { "id": "widget_my_events", "visible": true },
-  { "id": "widget_site_stats", "visible": true }
-]
