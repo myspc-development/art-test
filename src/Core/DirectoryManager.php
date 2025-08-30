@@ -57,16 +57,9 @@ class DirectoryManager {
                                        array(
                                                'methods'             => 'GET',
                                                'callback'            => array( self::class, 'handleFilter' ),
-                                               'permission_callback' => function ( $request ) {
-                                                       $type         = sanitize_key( $request['type'] ?? '' );
-                                                       $public_types = array( 'event', 'artist', 'artwork', 'org' );
-                                                       if ( in_array( $type, $public_types, true ) ) {
-                                                               return true;
-                                                       }
-                                                       if ( current_user_can( 'read' ) ) {
-                                                               return true;
-                                                       }
-                                                       return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
+                                               'permission_callback' => function () {
+                                                       $ok = \ArtPulse\Rest\Util\Auth::guard( null, 'read' );
+                                                       return $ok === true ? true : $ok;
                                                },
                                                'args'                => array(
                                                        'type'         => array(
@@ -112,41 +105,56 @@ class DirectoryManager {
 		$keyword      = sanitize_text_field( $request->get_param( 'keyword' ) );
 		$first_letter = sanitize_text_field( $request->get_param( 'first_letter' ) );
 
-		$allowed = array( 'event', 'artist', 'artwork', 'org' );
-		if ( ! in_array( $type, $allowed, true ) ) {
-			return new \WP_Error( 'invalid_type', 'Invalid directory type', array( 'status' => 400 ) );
-		}
+               $allowed = array( 'event', 'artist', 'artwork', 'org' );
+               if ( ! in_array( $type, $allowed, true ) ) {
+                       return new \WP_Error( 'invalid_type', 'Invalid directory type', array( 'status' => 400 ) );
+               }
 
-		$args       = array(
-			'post_type'      => 'artpulse_' . $type,
-			'posts_per_page' => $limit,
-			'paged'          => $page,
-			'orderby'        => 'title',
-			'order'          => 'ASC',
-		);
+               $cache_args = array(
+                       'type'         => $type,
+                       'limit'        => $limit,
+                       'event_type'   => $event_type,
+                       'medium'       => $medium,
+                       'style'        => $style,
+                       'org_type'     => $org_type,
+                       'location'     => $location,
+                       'city'         => $city,
+                       'region'       => $region,
+                       'for_sale'     => $for_sale,
+                       'keyword'      => $keyword,
+                       'first_letter' => $first_letter,
+               );
+
+               $cache_key = self::get_cache_key( $cache_args );
+               $cached    = get_transient( $cache_key );
+               if ( $cached !== false ) {
+                       return rest_ensure_response( $cached );
+               }
+
+               $args       = array(
+                       'post_type'      => 'artpulse_' . $type,
+                       'posts_per_page' => $limit,
+                       'paged'          => $page,
+                       'orderby'        => 'title',
+                       'order'          => 'ASC',
+               );
 		$tax_query  = array();
 		$meta_query = array();
 
-                $search_args = array(
-                        'limit'        => $limit,
-                        'event_type'   => $event_type,
-                        'medium'       => $medium,
-                        'style'        => $style,
-                        'org_type'     => $org_type,
-                        'location'     => $location,
-                        'city'         => $city,
-                        'region'       => $region,
-                        'for_sale'     => $for_sale,
-                        'keyword'      => $keyword,
-                        'first_letter' => $first_letter,
-                        'page'         => $page,
+               $search_args = array(
+                       'limit'        => $limit,
+                       'event_type'   => $event_type,
+                       'medium'       => $medium,
+                       'style'        => $style,
+                       'org_type'     => $org_type,
+                       'location'     => $location,
+                       'city'         => $city,
+                       'region'       => $region,
+                       'for_sale'     => $for_sale,
+                       'keyword'      => $keyword,
+                       'first_letter' => $first_letter,
+                       'page'         => $page,
                );
-
-
-
-		if ( $cached !== false ) {
-			return rest_ensure_response( $cached );
-		}
 
 		if ( ExternalSearch::is_enabled() ) {
 			$posts = ExternalSearch::search( $type, $search_args );

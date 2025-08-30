@@ -41,6 +41,7 @@ use ArtPulse\Rest\VisitRestController;
 use ArtPulse\Rest\OrgUserRolesController;
 use ArtPulse\Rest\OrgRoleInviteController;
 use ArtPulse\Rest\SystemStatusEndpoint;
+use ArtPulse\Rest\OrgDirectoryController;
 use ArtPulse\Core\FeedAccessLogger;
 use ArtPulse\Admin\PortfolioToolsPage;
 use ArtPulse\Admin\PortfolioSyncLogsPage;
@@ -95,6 +96,7 @@ class Plugin {
                 \ArtPulse\Frontend\EventChatAssets::register();
                 add_action( 'rest_api_init', array( \ArtPulse\Rest\RestRoutes::class, 'register_all' ) );
                 SystemStatusEndpoint::register();
+                OrgDirectoryController::register();
                 add_action( 'init', array( \ArtPulse\Core\EventRsvpMetaMigration::class, 'maybe_migrate' ) );
                 add_action( 'init', array( OrgRoleMetaMigration::class, 'maybe_migrate' ) );
 		add_action( 'init', array( $this, 'maybe_migrate_org_meta' ) );

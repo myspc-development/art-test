@@ -99,12 +99,18 @@ final class Auth {
          * Verify nonce then capability.
          */
         public static function guard( ?string $nonce, string $cap, string $action = 'wp_rest' ): bool|\WP_Error {
+                if ( ! is_user_logged_in() ) {
+                        return new \WP_Error( 'rest_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
+                }
+
                 if ( ! self::verify_nonce( $nonce, $action ) ) {
                         return new \WP_Error( 'rest_unauthorized', 'Invalid or missing nonce.', array( 'status' => 401 ) );
                 }
+
                 if ( ! self::require_cap( $cap ) ) {
                         return new \WP_Error( 'rest_forbidden', 'Sorry, you are not allowed to do that.', array( 'status' => 403 ) );
                 }
+
                 return true;
         }
 }

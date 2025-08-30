@@ -25,7 +25,10 @@ class RsvpBulkController {
                 array(
                     'methods'             => WP_REST_Server::CREATABLE,
                     'callback'            => array( $this, 'bulk_update' ),
-                    'permission_callback' => array( $this, 'check_permissions' ),
+                    'permission_callback' => function ( WP_REST_Request $request ) {
+                        $ok = \ArtPulse\Rest\Util\Auth::guard( $request->get_header( 'X-WP-Nonce' ), 'edit_posts' );
+                        return $ok === true ? true : $ok;
+                    },
                     'args'                => array(
                         'event_id' => array(
                             'type'     => 'integer',
@@ -43,13 +46,6 @@ class RsvpBulkController {
                 )
             );
         }
-    }
-
-    /**
-     * Ensure the current user can perform bulk updates.
-     */
-    public function check_permissions(): bool {
-        return current_user_can( 'edit_posts' );
     }
 
     /**
