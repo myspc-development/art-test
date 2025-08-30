@@ -2,6 +2,10 @@
 require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/../Support/Stubs/DashboardControllerStub.php';
 
+if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
+        class_alias( \ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class );
+}
+
 if ( ! defined( 'ARTPULSE_PLUGIN_DIR' ) ) {
         define( 'ARTPULSE_PLUGIN_DIR', dirname( __DIR__, 2 ) );
 }

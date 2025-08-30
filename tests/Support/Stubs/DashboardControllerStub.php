@@ -187,11 +187,3 @@ final class DashboardControllerStub
     }
 }
 
-// In unit tests, production class may not exist. Alias the stub so
-// \ArtPulse\Core\DashboardController::get_role() resolves to this implementation.
-if (!\class_exists(\ArtPulse\Core\DashboardController::class, false)) {
-    \class_alias(
-        \ArtPulse\Tests\Stubs\DashboardControllerStub::class,
-        \ArtPulse\Core\DashboardController::class
-    );
-}
