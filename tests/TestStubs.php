@@ -85,14 +85,25 @@ namespace {
 			return in_array( $cap, MockStorage::$current_roles, true );
 		}
 	}
-	if ( ! function_exists( 'get_current_user_id' ) ) {
-		function get_current_user_id() {
-			return 1;
-		}
-	}
-	if ( ! function_exists( 'check_ajax_referer' ) ) {
-		function check_ajax_referer( $action, $name ) {}
-	}
+        if ( ! function_exists( 'get_current_user_id' ) ) {
+                function get_current_user_id() {
+                        return 1;
+                }
+        }
+        if ( ! function_exists( 'wp_get_current_user' ) ) {
+                /**
+                 * Retrieve the current user.
+                 *
+                 * Returns a minimal object mimicking WP_User with an empty roles array.
+                 * Brain Monkey or Patchwork can override this stub as needed during tests.
+                 */
+                function wp_get_current_user() {
+                        return (object) ['roles' => []];
+                }
+        }
+        if ( ! function_exists( 'check_ajax_referer' ) ) {
+                function check_ajax_referer( $action, $name ) {}
+        }
 	if ( ! function_exists( 'sanitize_text_field' ) ) {
 		function sanitize_text_field( $value ) {
 			return $value; }
