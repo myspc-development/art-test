@@ -214,14 +214,18 @@ namespace {
 		function __( $text, $domain = null ) {
 			return $text; }
 	}
-	if ( ! function_exists( 'did_action' ) ) {
-		function did_action( $tag ) {
-			return 0; }
-	}
-	if ( ! function_exists( 'add_query_arg' ) ) {
-		function add_query_arg( ...$args ) {
-			return '#'; }
-	}
+        if ( ! function_exists( 'did_action' ) ) {
+                function did_action( $tag ) {
+                        return 0; }
+        }
+        if ( ! function_exists( 'admin_url' ) ) {
+                function admin_url( $path = '', $scheme = 'admin' ) {
+                        return 'https://example.test/wp-admin/' . ltrim( $path, '/' ); }
+        }
+        if ( ! function_exists( 'add_query_arg' ) ) {
+                function add_query_arg( ...$args ) {
+                        return '#'; }
+        }
 	if ( ! function_exists( 'remove_query_arg' ) ) {
 		function remove_query_arg( $k ) {
 			return ''; }
