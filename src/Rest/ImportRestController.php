@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_REST_Server;
 
 class ImportRestController {
 
@@ -27,26 +28,31 @@ class ImportRestController {
 	}
 
 	public static function register_routes(): void {
-		register_rest_route(
-			'artpulse/v1',
-			'/import',
-			array(
-				'methods'             => 'POST',
-				'callback'            => array( self::class, 'handle_import' ),
-				'permission_callback' => array( self::class, 'check_permissions' ),
-			)
-		);
-	}
-
-	public static function check_permissions() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-		}
-		return true;
-	}
+                register_rest_route(
+                        'artpulse/v1',
+                        '/import',
+                        array(
+                                'methods'             => WP_REST_Server::CREATABLE,
+                                'callback'            => array( self::class, 'handle_import' ),
+                                'permission_callback' => function ( WP_REST_Request $request ) {
+                                        $ok = \ArtPulse\Rest\Util\Auth::guard( $request->get_header( 'X-WP-Nonce' ), 'manage_options' );
+                                        if ( $ok !== true ) {
+                                                return $ok;
+                                        }
+                                        if ( ! current_user_can( 'manage_options' ) ) {
+                                                return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
+                                        }
+                                        return true;
+                                },
+                        )
+                );
+        }
 
 	public static function handle_import( WP_REST_Request $request ): WP_REST_Response {
-		$params    = $request->get_json_params();
+               $params    = $request->get_json_params();
+               if ( empty( $params ) ) {
+                       $params = $request->get_body_params();
+               }
 		$rows      = $params['rows'] ?? array();
 		$post_type = sanitize_key( $params['post_type'] ?? '' );
 		$trim      = ! empty( $params['trim_whitespace'] );

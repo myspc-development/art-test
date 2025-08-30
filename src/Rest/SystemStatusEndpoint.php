@@ -14,13 +14,16 @@ final class SystemStatusEndpoint {
     }
 
     public static function register_routes(): void {
-        if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/system-status' ) ) {
+        if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/system/status' ) ) {
             register_rest_route(
                 ARTPULSE_API_NAMESPACE,
-                '/system-status',
+                '/system/status',
                 array(
                     'methods'             => WP_REST_Server::READABLE,
-                    'permission_callback' => Auth::allow_public(),
+                    'permission_callback' => function () {
+                        $ok = Auth::guard( null, 'read' );
+                        return $ok === true ? true : $ok;
+                    },
                     'callback'            => array( self::class, 'get_status' ),
                 )
             );

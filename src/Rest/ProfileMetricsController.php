@@ -1,66 +1,63 @@
 <?php
 namespace ArtPulse\Rest;
 
-use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Core\ProfileMetrics;
 
 final class ProfileMetricsController {
-	public static function register(): void {
-		add_action( 'rest_api_init', array( self::class, 'routes' ) );
-	}
-	public static function routes(): void {
-		register_rest_route(
-			ARTPULSE_API_NAMESPACE,
-			'/profile-metrics/(?P<id>\d+)',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => array( self::class, 'get_metrics' ),
-				'permission_callback' => Auth::require_login_and_cap( 'read' ),
-			)
-		);
-	}
-	public static function get_metrics( WP_REST_Request $req, int $id ): WP_REST_Response {
-		$uid = absint( $id );
-		// Count authored events last 30 days
-		$q      = new \WP_Query(
-			array(
-				'post_type'     => 'artpulse_event',
-				'author'        => $uid,
-				'date_query'    => array(
-					array(
-						'after'     => date( 'Y-m-d', strtotime( '-30 days' ) ),
-						'inclusive' => true,
-					),
-				),
-				'post_status'   => array( 'publish', 'draft', 'pending', 'future' ),
-				'fields'        => 'ids',
-				'no_found_rows' => true,
-			)
-		);
-		$events = is_array( $q->posts ) ? count( $q->posts ) : 0;
+    public static function register(): void {
+        add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
+    }
 
-		global $wpdb;
-		$rsvps = 0;
-		try {
-			$table = $wpdb->prefix . 'ap_rsvps';
-			$rsvps = (int) $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$table} WHERE user_id = %d AND created_at >= %s",
-					$uid,
-					date( 'Y-m-d', strtotime( '-30 days' ) ) . ' 00:00:00'
-				)
-			);
-		} catch ( \Throwable $e ) {
-		}
+    public static function register_routes(): void {
+        $permission = function () {
+            $ok = Auth::guard( null, 'read' );
+            return $ok === true ? true : $ok;
+        };
 
-		return new WP_REST_Response(
-			array(
-				'recent_events' => $events,
-				'recent_rsvps'  => $rsvps,
-			),
-			200
-		);
-	}
+        register_rest_route(
+            ARTPULSE_API_NAMESPACE,
+            '/profile/metrics',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( self::class, 'get_metrics' ),
+                'permission_callback' => $permission,
+                'args'                => array(
+                    'metric' => array( 'type' => 'string', 'default' => 'view' ),
+                    'days'   => array( 'type' => 'integer', 'default' => 30 ),
+                    'id'     => array( 'type' => 'integer' ),
+                ),
+            )
+        );
+
+        // Legacy path for backward compatibility.
+        register_rest_route(
+            ARTPULSE_API_NAMESPACE,
+            '/profile-metrics/(?P<id>\d+)',
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( self::class, 'get_metrics' ),
+                'permission_callback' => $permission,
+                'args'                => array(
+                    'metric' => array( 'type' => 'string', 'default' => 'view' ),
+                    'days'   => array( 'type' => 'integer', 'default' => 30 ),
+                ),
+            )
+        );
+    }
+
+    public static function get_metrics( WP_REST_Request $req ): WP_REST_Response {
+        $metric = sanitize_key( $req->get_param( 'metric' ) );
+        $days   = max( 1, absint( $req->get_param( 'days' ) ) );
+        $uid    = absint( $req->get_param( 'id' ) );
+        if ( ! $uid ) {
+            $uid = get_current_user_id();
+        }
+
+        $data = ProfileMetrics::get_counts( $uid, $metric, $days );
+        return rest_ensure_response( $data );
+    }
 }
