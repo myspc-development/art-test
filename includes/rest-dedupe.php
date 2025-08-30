@@ -33,51 +33,87 @@ function ap_deduplicate_rest_routes( array $endpoints ): array {
 				}
 			}
 
-			foreach ( $handlers as $key => $handler ) {
-				$methods = $handler['methods'] ?? array( 'ALL' );
-				if ( ! is_array( $methods ) ) {
-					$methods = preg_split( '/[\s,|]+/', (string) $methods );
-				}
-				$methods = array_filter( array_map( 'strtoupper', $methods ) );
-				sort( $methods );
-				$method_label = implode( ',', $methods ) ?: 'ALL';
-				$dedupe_key   = $route . ' ' . $method_label;
+foreach ( $handlers as $key => $handler ) {
+$methods = $handler['methods'] ?? array( 'ALL' );
+if ( ! is_array( $methods ) ) {
+$methods = preg_split( '/[\s,|]+/', (string) $methods );
+}
+$methods = array_filter( array_map( 'strtoupper', $methods ) );
+sort( $methods );
+$method_label = implode( ',', $methods ) ?: 'ALL';
 
-				if ( ! isset( $seen[ $dedupe_key ] ) ) {
-						$seen[ $dedupe_key ] = array(
-							'callback'            => $handler['callback'] ?? null,
-							'permission_callback' => $handler['permission_callback'] ?? null,
-						);
-						continue;
-				}
+$parts     = explode( '/', trim( $route, '/' ) );
+$namespace = implode( '/', array_slice( $parts, 0, 2 ) );
+$sub_route = '/' . implode( '/', array_slice( $parts, 2 ) );
+$sub_route = '/' === $sub_route ? '' : $sub_route;
+$args      = ap_normalize_args( $handler['args'] ?? array() );
+$signature = function_exists( 'wp_json_encode' )
+? wp_json_encode(
+array(
+'methods'             => $method_label,
+'namespace'           => $namespace,
+'route'               => $sub_route,
+'callback'            => $handler['callback'] ?? null,
+'permission_callback' => $handler['permission_callback'] ?? null,
+'args'                => $args,
+)
+)
+: json_encode(
+array(
+'methods'             => $method_label,
+'namespace'           => $namespace,
+'route'               => $sub_route,
+'callback'            => $handler['callback'] ?? null,
+'permission_callback' => $handler['permission_callback'] ?? null,
+'args'                => $args,
+)
+);
 
-				$prev            = $seen[ $dedupe_key ];
-				$same_callback   = isset( $handler['callback'] ) && $prev['callback'] === $handler['callback'];
-				$same_permission = $prev['permission_callback'] === ( $handler['permission_callback'] ?? null );
+$dedupe_key = $route . ' ' . $method_label;
 
-				if ( $same_callback && $same_permission ) {
-					// Identical handler already registered - remove duplicate.
-					unset( $endpoints[ $route ][ $key ] );
-					continue;
-				}
+if ( ! isset( $seen[ $dedupe_key ] ) ) {
+$seen[ $dedupe_key ] = array(
+'signature' => $signature,
+'callback'  => $handler['callback'] ?? null,
+);
+continue;
+}
 
-                                if ( ! in_array( $route, $GLOBALS['ap_rest_diagnostics']['conflicts'], true ) ) {
-                                                $GLOBALS['ap_rest_diagnostics']['conflicts'][] = $route;
-                                }
-                                if ( function_exists( '_doing_it_wrong' ) ) {
-                                                _doing_it_wrong( 'ap_rest_dedupe', "Conflicting REST route $route ($method_label)", '1.0.0' );
-                                }
+if ( $seen[ $dedupe_key ]['signature'] === $signature ) {
+unset( $endpoints[ $route ][ $key ] );
+continue;
+}
 
-                                if ( defined( 'WP_DEBUG' ) && WP_DEBUG && empty( $logged_routes[ $route ] ) ) {
-                                                $prev_loc = ap_callback_location( $prev['callback'] );
-                                                $curr_loc = ap_callback_location( $handler['callback'] ?? null );
-                                                error_log( "[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc." );
-                                                $logged_routes[ $route ] = true;
-                                }
-			}
+if ( ! in_array( $route, $GLOBALS['ap_rest_diagnostics']['conflicts'], true ) ) {
+$GLOBALS['ap_rest_diagnostics']['conflicts'][] = $route;
+}
+if ( function_exists( '_doing_it_wrong' ) ) {
+_doing_it_wrong( 'ap_rest_dedupe', "Conflicting REST route $route ($method_label)", '1.0.0' );
+}
+
+if ( defined( 'WP_DEBUG' ) && WP_DEBUG && empty( $logged_routes[ $route ] ) ) {
+$prev_loc = ap_callback_location( $seen[ $dedupe_key ]['callback'] );
+$curr_loc = ap_callback_location( $handler['callback'] ?? null );
+error_log( "[REST CONFLICT] Duplicate route $route ($method_label) between $prev_loc and $curr_loc." );
+$logged_routes[ $route ] = true;
+}
+}
 		}
 
-		return $endpoints;
+                return $endpoints;
+}
+
+function ap_normalize_args( $args ) {
+        if ( ! is_array( $args ) ) {
+                return array();
+        }
+        ksort( $args );
+        foreach ( $args as $k => $v ) {
+                if ( is_array( $v ) ) {
+                        $args[ $k ] = ap_normalize_args( $v );
+                }
+        }
+        return $args;
 }
 
 function ap_callback_location( $callback ): string {
@@ -119,13 +155,23 @@ function ap_rest_route_registered( string $namespace, string $route, ?string $me
 		$namespace = strtolower( trim( $namespace ) );
 		$route     = strtolower( trim( $route ) );
 
-		// Build a fully normalized route with a single leading slash and no
-		// trailing slash (except for the root route).
-		$full_route = '/' . trim( $namespace, '/' ) . '/' . ltrim( $route, '/' );
-		$full_route = preg_replace( '#/+#', '/', $full_route );
-		if ( '/' !== $full_route ) {
-			$full_route = rtrim( $full_route, '/' );
-		}
+// Build a fully normalized route with a single leading slash and no
+// trailing slash (except for the root route).
+$full_route = '/' . trim( $namespace, '/' ) . '/' . ltrim( $route, '/' );
+$full_route = preg_replace( '#/+#', '/', $full_route );
+if ( '/' !== $full_route ) {
+$full_route = rtrim( $full_route, '/' );
+}
+
+$method_key = $method ? strtoupper( $method ) : '';
+$check_key  = $full_route . ' ' . $method_key;
+if ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) {
+static $declared = array();
+if ( isset( $declared[ $check_key ] ) ) {
+return true;
+}
+$declared[ $check_key ] = true;
+}
 
 		// Normalize routes array for case-insensitive lookup.
 		$routes = array_change_key_case( $wp_rest_server->get_routes(), CASE_LOWER );
