@@ -243,6 +243,32 @@ class DashboardWidgetRegistry {
 	}
 
 	/**
+	 * Replace the internal widget registry.
+	 *
+	 * Primarily intended for tests and WP-CLI utilities.
+	 *
+	 * @param array<string,array> $widgets Widget definitions.
+	 */
+	public static function set( array $widgets ): void {
+		self::$widgets        = $widgets;
+		self::$builder_widgets = array();
+		self::$id_map         = null;
+		self::$issues         = array();
+		self::$aliases        = array();
+	}
+
+	/**
+	 * Alias of set().
+	 *
+	 * Primarily intended for tests and WP-CLI utilities.
+	 *
+	 * @param array<string,array> $widgets Widget definitions.
+	 */
+	public static function set_widgets( array $widgets ): void {
+		self::set( $widgets );
+	}
+
+	/**
 	 * Retrieve registration issues collected during runtime.
 	 */
 	public static function issues(): array {
@@ -262,11 +288,11 @@ class DashboardWidgetRegistry {
 	): array {
 		// Builder-style registration when the second argument is an array.
 		if ( is_array( $label ) ) {
-                        $id = sanitize_key( $id );
-                        if ( ! $id ) {
-                                return array();
-                        }
-                        $base = strpos( $id, 'widget_' ) === 0 ? substr( $id, 7 ) : $id;
+			$id = sanitize_key( $id );
+			if ( ! $id ) {
+			        return array();
+			}
+			$base = strpos( $id, 'widget_' ) === 0 ? substr( $id, 7 ) : $id;
 			$args = array_merge(
 				array(
 					'title'           => '',
@@ -285,19 +311,19 @@ class DashboardWidgetRegistry {
 				? $args['visibility']
 				: WidgetVisibility::PUBLIC;
 
-                        $args['roles'] = self::normalizeRoleList( $args['roles'] ?? array() );
+			$args['roles'] = self::normalizeRoleList( $args['roles'] ?? array() );
 
-                        self::$builder_widgets[ $base ] = array(
-                                'id'              => $base,
-                                'title'           => (string) $args['title'],
-                                'render_callback' => $args['render_callback'],
-                                'roles'           => $args['roles'],
-                                'file'            => (string) $args['file'],
-                                'visibility'      => $visibility,
-                        );
+			self::$builder_widgets[ $base ] = array(
+			        'id'              => $base,
+			        'title'           => (string) $args['title'],
+			        'render_callback' => $args['render_callback'],
+			        'roles'           => $args['roles'],
+			        'file'            => (string) $args['file'],
+			        'visibility'      => $visibility,
+			);
 
-                        return self::$builder_widgets[ $base ];
-                }
+			return self::$builder_widgets[ $base ];
+		}
 
 		// Core-style registration.
 		$id = self::canon_slug( $id );
@@ -759,68 +785,68 @@ class DashboardWidgetRegistry {
 	 * @param array{preview_role?:string} $context
 	 */
 	public static function render( string $id, array $context = array() ): string {
-                $id   = self::canon_slug( $id );
-                $base = strpos( $id, 'widget_' ) === 0 ? substr( $id, 7 ) : $id;
-                $cfg  = self::$builder_widgets[ $id ] ?? self::$builder_widgets[ $base ] ?? null;
-                if ( ! $cfg ) {
-                        return '';
-                }
-                $preview_role = isset( $context['preview_role'] ) ? (string) $context['preview_role'] : null;
-                if ( ! self::user_can_see( $id, 0, $preview_role ) ) {
-                        return '';
-                }
+		$id   = self::canon_slug( $id );
+		$base = strpos( $id, 'widget_' ) === 0 ? substr( $id, 7 ) : $id;
+		$cfg  = self::$builder_widgets[ $id ] ?? self::$builder_widgets[ $base ] ?? null;
+		if ( ! $cfg ) {
+			return '';
+		}
+		$preview_role = isset( $context['preview_role'] ) ? (string) $context['preview_role'] : null;
+		if ( ! self::user_can_see( $id, 0, $preview_role ) ) {
+			return '';
+		}
 
-                static $stack = array();
-                if ( isset( $stack[ $id ] ) ) {
-                        return '';
-                }
-                $stack[ $id ] = true;
+		static $stack = array();
+		if ( isset( $stack[ $id ] ) ) {
+			return '';
+		}
+		$stack[ $id ] = true;
 
-                ob_start();
-                try {
-                        call_user_func( $cfg['render_callback'] );
-                } catch ( \Throwable $e ) {
-                        $file = $cfg['file'] ?? 'unknown';
-                        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                error_log( '[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage() );
-                        }
-                }
-                $html = ob_get_clean();
-                unset( $stack[ $id ] );
+		ob_start();
+		try {
+			call_user_func( $cfg['render_callback'] );
+		} catch ( \Throwable $e ) {
+			$file = $cfg['file'] ?? 'unknown';
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			        error_log( '[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage() );
+			}
+		}
+		$html = ob_get_clean();
+		unset( $stack[ $id ] );
 
-                return $html;
-        }
+		return $html;
+	}
 
-        /**
-         * Render the preset layout for a role.
-         *
-         * @param string $role Role slug.
-         * @return string
-         */
-        public static function render_role_layout( string $role ): string {
-               $slugs = RolePresets::get_preset_slugs( $role );
-                if ( ! $slugs ) {
-                        return '';
-                }
+	/**
+	 * Render the preset layout for a role.
+	 *
+	 * @param string $role Role slug.
+	 * @return string
+	 */
+	public static function render_role_layout( string $role ): string {
+	       $slugs = RolePresets::get_preset_slugs( $role );
+		if ( ! $slugs ) {
+			return '';
+		}
 
-                $html     = '';
-                $rendered = 0;
+		$html     = '';
+		$rendered = 0;
 
-                foreach ( $slugs as $slug ) {
-                        $out = self::render( $slug, array( 'preview_role' => $role ) );
-                        if ( $out === '' ) {
-                                continue;
-                        }
-                        $html .= $out;
-                        ++$rendered;
-                }
+		foreach ( $slugs as $slug ) {
+			$out = self::render( $slug, array( 'preview_role' => $role ) );
+			if ( $out === '' ) {
+			        continue;
+			}
+			$html .= $out;
+			++$rendered;
+		}
 
-                if ( 0 === $rendered ) {
-                        $html = self::render( 'widget_placeholder', array( 'preview_role' => $role ) );
-                }
+		if ( 0 === $rendered ) {
+			$html = self::render( 'widget_placeholder', array( 'preview_role' => $role ) );
+		}
 
-                return $html;
-        }
+		return $html;
+	}
 
 	/**
 	 * Determine if a user can see a widget.
@@ -888,10 +914,10 @@ class DashboardWidgetRegistry {
 			return $widgets[ $cid ];
 		}
 
-                $builder = self::get_all( null, true );
-                $base    = strpos( $cid, 'widget_' ) === 0 ? substr( $cid, 7 ) : $cid;
-                return $builder[ $cid ] ?? $builder[ $base ] ?? null;
-        }
+		$builder = self::get_all( null, true );
+		$base    = strpos( $cid, 'widget_' ) === 0 ? substr( $cid, 7 ) : $cid;
+		return $builder[ $cid ] ?? $builder[ $base ] ?? null;
+	}
 
 	/**
 	 * Get widget callbacks allowed for one or more user roles.
@@ -1107,21 +1133,21 @@ class DashboardWidgetRegistry {
 		if ( $initialized ) {
 			return;
 		}
-                $initialized = true;
+		$initialized = true;
 
-                // Map legacy widget slugs to their canonical identifiers before
-                // loading widgets so that earlier registrations are merged
-                // correctly.
-                self::alias( 'myevents', 'widget_my_events' );
-                self::alias( 'widget_myevents', 'widget_my_events' );
+		// Map legacy widget slugs to their canonical identifiers before
+		// loading widgets so that earlier registrations are merged
+		// correctly.
+		self::alias( 'myevents', 'widget_my_events' );
+		self::alias( 'widget_myevents', 'widget_my_events' );
 
-                $loader_file = dirname( __DIR__, 2 ) . '/includes/widget-loader.php';
-                if ( ! class_exists( DashboardWidgetRegistryLoader::class ) && file_exists( $loader_file ) ) {
-                        require_once $loader_file;
-                }
-                if ( class_exists( DashboardWidgetRegistryLoader::class ) ) {
-                        DashboardWidgetRegistryLoader::load_all();
-                }
+		$loader_file = dirname( __DIR__, 2 ) . '/includes/widget-loader.php';
+		if ( ! class_exists( DashboardWidgetRegistryLoader::class ) && file_exists( $loader_file ) ) {
+			require_once $loader_file;
+		}
+		if ( class_exists( DashboardWidgetRegistryLoader::class ) ) {
+			DashboardWidgetRegistryLoader::load_all();
+		}
 
 		$register = array( self::class, 'register_widget' );
 		$register(
@@ -1201,90 +1227,90 @@ class DashboardWidgetRegistry {
 	 * Render all widgets visible to the specified user in a basic grid layout.
 	 */
        public static function render_for_role( int $user_id ): void {
-               $role = DashboardController::get_role( $user_id );
+	       $role = DashboardController::get_role( $user_id );
 
-               do_action( 'ap_before_widgets', $role );
+	       do_action( 'ap_before_widgets', $role );
 
-               $layout  = UserLayoutManager::get_layout_for_user( $user_id );
-               $widgets = apply_filters( 'ap_dashboard_widgets', self::get_widgets_by_role( $role, $user_id ), $role );
+	       $layout  = UserLayoutManager::get_layout_for_user( $user_id );
+	       $widgets = apply_filters( 'ap_dashboard_widgets', self::get_widgets_by_role( $role, $user_id ), $role );
 
-               $debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
+	       $debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
 
-               $sections = array();
-               $order    = array();
-               $rendered = 0;
+	       $sections = array();
+	       $order    = array();
+	       $rendered = 0;
 
-               foreach ( $layout as $row ) {
-                       $id      = self::canon_slug( $row['id'] ?? '' );
-                       if ( ! $id ) {
-                               continue;
-                       }
-                       $cfg        = $widgets[ $id ] ?? null;
-                       $can_render = $cfg && self::user_can_see( $id, $user_id ) && is_callable( $cfg['callback'] ?? null );
-                       $section    = '';
-                       if ( $cfg ) {
-                               $class   = $cfg['class'] ?? '';
-                               $section = $cfg['section'] ?? '';
-                               if ( $class && method_exists( $class, 'get_section' ) ) {
-                                       try {
-                                               $section = call_user_func( array( $class, 'get_section' ) );
-                                       } catch ( \Throwable $e ) {
-                                               $section = '';
-                                       }
-                               }
-                               $section = sanitize_key( $section );
-                       }
-                       if ( ! isset( $sections[ $section ] ) ) {
-                               $sections[ $section ] = array();
-                               $order[]              = $section;
-                       }
+	       foreach ( $layout as $row ) {
+		       $id      = self::canon_slug( $row['id'] ?? '' );
+		       if ( ! $id ) {
+			       continue;
+		       }
+		       $cfg        = $widgets[ $id ] ?? null;
+		       $can_render = $cfg && self::user_can_see( $id, $user_id ) && is_callable( $cfg['callback'] ?? null );
+		       $section    = '';
+		       if ( $cfg ) {
+			       $class   = $cfg['class'] ?? '';
+			       $section = $cfg['section'] ?? '';
+			       if ( $class && method_exists( $class, 'get_section' ) ) {
+			               try {
+			                       $section = call_user_func( array( $class, 'get_section' ) );
+			               } catch ( \Throwable $e ) {
+			                       $section = '';
+			               }
+			       }
+			       $section = sanitize_key( $section );
+		       }
+		       if ( ! isset( $sections[ $section ] ) ) {
+			       $sections[ $section ] = array();
+			       $order[]              = $section;
+		       }
 
-                       $html = '';
-                       if ( $can_render ) {
-                               try {
-                                       ob_start();
-                                       $result = call_user_func( $cfg['callback'], $user_id );
-                                       $echoed = ob_get_clean();
-                                       $html   = is_string( $result ) && '' !== $result ? $result : $echoed;
-                               } catch ( \Throwable $e ) {
-                                       ob_end_clean();
-                                       if ( $debug ) {
-                                               error_log( 'Widget ' . $id . ' failed: ' . $e->getMessage() );
-                                       }
-                               }
-                       }
-                       if ( $html === '' ) {
-                               ob_start();
-                               ApPlaceholderWidget::render( $user_id );
-                               $html = ob_get_clean();
-                       }
+		       $html = '';
+		       if ( $can_render ) {
+			       try {
+			               ob_start();
+			               $result = call_user_func( $cfg['callback'], $user_id );
+			               $echoed = ob_get_clean();
+			               $html   = is_string( $result ) && '' !== $result ? $result : $echoed;
+			       } catch ( \Throwable $e ) {
+			               ob_end_clean();
+			               if ( $debug ) {
+			                       error_log( 'Widget ' . $id . ' failed: ' . $e->getMessage() );
+			               }
+			       }
+		       }
+		       if ( $html === '' ) {
+			       ob_start();
+			       ApPlaceholderWidget::render( $user_id );
+			       $html = ob_get_clean();
+		       }
 
-                       $sections[ $section ][] = '<div class="postbox" data-slug="' . esc_attr( $id ) . '"><div class="inside">' . $html . '</div></div>';
-                       ++$rendered;
-               }
+		       $sections[ $section ][] = '<div class="postbox" data-slug="' . esc_attr( $id ) . '"><div class="inside">' . $html . '</div></div>';
+		       ++$rendered;
+	       }
 
-               foreach ( $order as $sec ) {
-                       echo '<section class="ap-widget-section">';
-                       if ( $sec ) {
-                               echo '<h2>' . self::late_i18n( ucfirst( $sec ) ) . '</h2>';
-                       }
-                       echo '<div class="meta-box-sortables">';
-                       foreach ( $sections[ $sec ] as $html ) {
-                               echo $html;
-                       }
-                       echo '</div></section>';
-               }
+	       foreach ( $order as $sec ) {
+		       echo '<section class="ap-widget-section">';
+		       if ( $sec ) {
+			       echo '<h2>' . self::late_i18n( ucfirst( $sec ) ) . '</h2>';
+		       }
+		       echo '<div class="meta-box-sortables">';
+		       foreach ( $sections[ $sec ] as $html ) {
+			       echo $html;
+		       }
+		       echo '</div></section>';
+	       }
 
-               if ( 0 === $rendered ) {
-                       echo '<div class="ap-dashboard-error">' . self::late_i18n( 'No dashboard widgets could be rendered.' ) . '</div>';
-                       if ( $debug ) {
-                               error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
-                       }
-               } elseif ( $debug ) {
-                       error_log( "[AP Dashboard] Rendered {$rendered} widgets for role {$role}" );
-               }
+	       if ( 0 === $rendered ) {
+		       echo '<div class="ap-dashboard-error">' . self::late_i18n( 'No dashboard widgets could be rendered.' ) . '</div>';
+		       if ( $debug ) {
+			       error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
+		       }
+	       } elseif ( $debug ) {
+		       error_log( "[AP Dashboard] Rendered {$rendered} widgets for role {$role}" );
+	       }
 
-               do_action( 'ap_after_widgets', $role );
+	       do_action( 'ap_after_widgets', $role );
        }
 
 	/**
@@ -1316,12 +1342,12 @@ class DashboardWidgetRegistry {
 				continue;
 			}
 
-                        if ( isset( $cfg['roles'] ) ) {
-                                $normalized = self::normalizeRoleList( $cfg['roles'] );
-                                if ( $normalized !== array() ) {
-                                        $widgets[ $id ]['roles'] = $normalized;
-                                }
-                        }
+			if ( isset( $cfg['roles'] ) ) {
+			        $normalized = self::normalizeRoleList( $cfg['roles'] );
+			        if ( $normalized !== array() ) {
+			                $widgets[ $id ]['roles'] = $normalized;
+			        }
+			}
 			if ( array_key_exists( 'capability', $cfg ) ) {
 				$widgets[ $id ]['capability'] = sanitize_key( (string) $cfg['capability'] );
 			}
