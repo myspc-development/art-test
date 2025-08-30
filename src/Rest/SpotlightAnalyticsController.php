@@ -25,7 +25,7 @@ class SpotlightAnalyticsController {
                                 'permission_callback' => Auth::require_login_and_cap(null),
 				'args'                => array(
 					'id' => array(
-						'validate_callback' => 'is_numeric',
+						'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
 						'required'          => true,
 					),
 				),

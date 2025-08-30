@@ -30,7 +30,7 @@ class RsvpRestController {
 						return true;
 					},
 					'args'                => array(
-						'event_id' => array( 'validate_callback' => 'is_numeric' ),
+						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);
@@ -50,7 +50,7 @@ class RsvpRestController {
 						return true;
 					},
 					'args'                => array(
-						'event_id' => array( 'validate_callback' => 'is_numeric' ),
+						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);
@@ -70,7 +70,7 @@ class RsvpRestController {
 						return true;
 					},
 					'args'                => array(
-						'event_id' => array( 'validate_callback' => 'is_numeric' ),
+						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);
@@ -84,7 +84,7 @@ class RsvpRestController {
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'get_attendees' ),
 					'permission_callback' => array( self::class, 'check_permissions' ),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}
@@ -97,7 +97,7 @@ class RsvpRestController {
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'export_attendees' ),
 					'permission_callback' => array( self::class, 'check_permissions' ),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}
@@ -111,8 +111,8 @@ class RsvpRestController {
 					'callback'            => array( self::class, 'toggle_attended' ),
 					'permission_callback' => array( self::class, 'check_permissions' ),
 					'args'                => array(
-						'event_id' => array( 'validate_callback' => 'is_numeric' ),
-						'user_id'  => array( 'validate_callback' => 'is_numeric' ),
+						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
+						'user_id'  => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);
@@ -127,8 +127,8 @@ class RsvpRestController {
 					'callback'            => array( self::class, 'remove_attendee' ),
 					'permission_callback' => array( self::class, 'check_permissions' ),
 					'args'                => array(
-						'event_id' => array( 'validate_callback' => 'is_numeric' ),
-						'user_id'  => array( 'validate_callback' => 'is_numeric' ),
+						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
+						'user_id'  => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);
@@ -143,7 +143,7 @@ class RsvpRestController {
 					'callback'            => array( self::class, 'email_rsvps' ),
 					'permission_callback' => array( self::class, 'check_permissions' ),
 					'args'                => array(
-						'event_id' => array( 'validate_callback' => 'is_numeric' ),
+						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);
@@ -158,8 +158,8 @@ class RsvpRestController {
 					'callback'            => array( self::class, 'email_attendee' ),
 					'permission_callback' => array( self::class, 'check_permissions' ),
 					'args'                => array(
-						'event_id' => array( 'validate_callback' => 'is_numeric' ),
-						'user_id'  => array( 'validate_callback' => 'is_numeric' ),
+						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
+						'user_id'  => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);

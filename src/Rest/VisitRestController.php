@@ -29,11 +29,11 @@ class VisitRestController {
 					},
 					'args'                => array(
 						'event_id'    => array(
-							'validate_callback' => 'is_numeric',
+							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
 							'required'          => true,
 						),
 						'institution' => array( 'sanitize_callback' => 'sanitize_text_field' ),
-						'group_size'  => array( 'validate_callback' => 'is_numeric' ),
+						'group_size'  => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);
@@ -47,7 +47,7 @@ class VisitRestController {
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'list' ),
 					'permission_callback' => array( \ArtPulse\Rest\RsvpRestController::class, 'check_permissions' ),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}
@@ -60,7 +60,7 @@ class VisitRestController {
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'export' ),
 					'permission_callback' => array( \ArtPulse\Rest\RsvpRestController::class, 'check_permissions' ),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}

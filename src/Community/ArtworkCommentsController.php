@@ -21,14 +21,14 @@ class ArtworkCommentsController {
 						'methods'             => 'GET',
 						'callback'            => array( self::class, 'list' ),
 						'permission_callback' => fn() => is_user_logged_in(),
-						'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+						'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 					),
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( self::class, 'add' ),
 						'permission_callback' => fn() => is_user_logged_in(),
 						'args'                => array(
-							'id'      => array( 'validate_callback' => 'is_numeric' ),
+							'id'      => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 							'content' => array(
 								'type'     => 'string',
 								'required' => true,

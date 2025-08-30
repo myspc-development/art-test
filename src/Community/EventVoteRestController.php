@@ -19,7 +19,7 @@ class EventVoteRestController {
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'vote' ),
 					'permission_callback' => fn() => is_user_logged_in(),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}
@@ -33,7 +33,7 @@ class EventVoteRestController {
 					'permission_callback' => function () {
 						return current_user_can( 'read' );
 					},
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}

@@ -63,7 +63,7 @@ class ArtistRestController extends WP_REST_Controller {
 				},
 				'args'                => array(
 					'id' => array(
-						'validate_callback' => 'is_numeric',
+						'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
 					),
 				),
 			)

@@ -52,14 +52,14 @@ class ForumRestController {
 						'methods'             => WP_REST_Server::READABLE,
 						'callback'            => array( self::class, 'get_comments' ),
 						'permission_callback' => fn() => is_user_logged_in(),
-						'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+						'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 					),
 					array(
 						'methods'             => WP_REST_Server::CREATABLE,
 						'callback'            => array( self::class, 'add_comment' ),
 						'permission_callback' => fn() => is_user_logged_in(),
 						'args'                => array(
-							'id'      => array( 'validate_callback' => 'is_numeric' ),
+							'id'      => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 							'content' => array(
 								'type'     => 'string',
 								'required' => true,
