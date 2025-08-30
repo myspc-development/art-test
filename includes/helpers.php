@@ -160,9 +160,15 @@ function ap_render_dashboard( array $allowed_roles = array() ): void {
 	$allowed_roles = array_map( 'sanitize_key', $allowed_roles );
 	$user_role     = function_exists( 'ap_get_effective_role' ) ? ap_get_effective_role() : \ArtPulse\Core\DashboardController::get_role( get_current_user_id() );
 
-	if ( defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG && function_exists( 'is_user_logged_in' ) && is_user_logged_in() ) {
-		header( 'X-AP-Resolved-Role: ' . $user_role );
-	}
+        if (
+                ! headers_sent() &&
+                defined( 'AP_VERBOSE_DEBUG' ) &&
+                AP_VERBOSE_DEBUG &&
+                function_exists( 'is_user_logged_in' ) &&
+                is_user_logged_in()
+        ) {
+                header( 'X-AP-Resolved-Role: ' . $user_role );
+        }
 
 	if ( $allowed_roles && ! in_array( $user_role, $allowed_roles, true ) ) {
 		wp_die( __( 'Access denied', 'artpulse' ) );
