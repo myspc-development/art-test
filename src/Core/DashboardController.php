@@ -106,19 +106,19 @@ class DashboardController {
         }
 
         /**
-         * Default layout presets keyed by unique identifier.
+         * Raw layout presets keyed by unique identifier.
          *
-         * Preset layouts are filtered so only widgets the specified role can access
-         * are returned. Unregistered widgets, widgets limited to other roles and
-         * widgets requiring capabilities the role lacks are automatically removed.
+         * These presets are not filtered for widget registration or role/capability
+         * access. Call {@see get_default_presets()} for a sanitized version.
          *
          * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
          */
-        public static function get_default_presets(): array {
+        public static function get_raw_presets(): array {
                 if ( ! empty( self::$preset_overrides ) ) {
-                        $presets = self::$preset_overrides;
-                } else {
-                        $presets = array(
+                        return self::$preset_overrides;
+                }
+
+                return array(
                                 'member_default'   => array(
                                         'title'  => 'Member Default',
                                         'role'   => 'member',
@@ -161,31 +161,43 @@ class DashboardController {
                                         'role'   => 'organization',
                                         'layout' => self::load_preset_layout( 'organization', 'admin' ),
                                 ),
+                );
+        }
+
+        /**
+         * Default layout presets keyed by unique identifier.
+         *
+         * Preset layouts are filtered so only widgets the specified role can access
+         * are returned. Unregistered widgets, widgets limited to other roles and
+         * widgets requiring capabilities the role lacks are automatically removed.
+         *
+         * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
+         */
+        public static function get_default_presets(): array {
+                $presets = self::get_raw_presets();
+
+                // Remove widgets the role cannot access.
+                foreach ( $presets as $key => $preset ) {
+                        $layout = self::filter_accessible_layout(
+                                $preset['layout'],
+                                $preset['role']
                         );
+                        if ( empty( $layout ) ) {
+                                $stub = sanitize_key( $key . '_placeholder' );
+                                WidgetGuard::register_stub_widget( $stub, array(), array( 'roles' => array( $preset['role'] ) ) );
+                                if (
+                                        defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
+                                        function_exists( 'is_user_logged_in' ) && is_user_logged_in()
+                                ) {
+                                        error_log( "[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}" );
+                                }
+                                $layout = array( array( 'id' => $stub ) );
+                        }
+                        $presets[ $key ]['layout'] = $layout;
                 }
 
-		// Remove widgets the role cannot access.
-		foreach ( $presets as $key => $preset ) {
-			$layout = self::filter_accessible_layout(
-				$preset['layout'],
-				$preset['role']
-			);
-			if ( empty( $layout ) ) {
-				$stub = sanitize_key( $key . '_placeholder' );
-				WidgetGuard::register_stub_widget( $stub, array(), array( 'roles' => array( $preset['role'] ) ) );
-				if (
-					defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
-					function_exists( 'is_user_logged_in' ) && is_user_logged_in()
-				) {
-					error_log( "[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}" );
-				}
-				$layout = array( array( 'id' => $stub ) );
-			}
-			$presets[ $key ]['layout'] = $layout;
-		}
-
-		return $presets;
-	}
+                return $presets;
+        }
 
 	/**
 	 * Filter a preset layout so it only contains widgets the role can access.

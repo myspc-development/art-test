@@ -38,30 +38,30 @@ namespace ArtPulse\Cli\Tests {
 	                       define( 'ABSPATH', __DIR__ );
 	               }
 
-	               if ( ! function_exists( 'add_role' ) ) {
-	                       function add_role( $role, $display_name = '', $caps = array() ) {
-	                               $GLOBALS['test_roles'][ $role ] = $caps;
-	                       }
-	               }
-	               if ( ! function_exists( 'remove_role' ) ) {
-	                       function remove_role( $role ) {
-	                               unset( $GLOBALS['test_roles'][ $role ] );
-	                       }
-	               }
-	               if ( ! function_exists( 'get_role' ) ) {
-	                       function get_role( $role ) {
-	                               $caps = $GLOBALS['test_roles'][ $role ] ?? array();
-	                               return new class( $caps ) {
-	                                       private array $caps;
-	                                       public function __construct( array $caps ) {
-	                                               $this->caps = $caps;
-	                                       }
-	                                       public function has_cap( $cap ) {
-	                                               return ! empty( $this->caps[ $cap ] );
-	                                       }
-	                               };
-	                       }
-	               }
+                       if ( ! function_exists( __NAMESPACE__ . '\\add_role' ) ) {
+                               function add_role( $role, $display_name = '', $caps = array() ) {
+                                       $GLOBALS['test_roles'][ $role ] = $caps;
+                               }
+                       }
+                       if ( ! function_exists( __NAMESPACE__ . '\\remove_role' ) ) {
+                               function remove_role( $role ) {
+                                       unset( $GLOBALS['test_roles'][ $role ] );
+                               }
+                       }
+                       if ( ! function_exists( __NAMESPACE__ . '\\get_role' ) ) {
+                               function get_role( $role ) {
+                                       $caps = $GLOBALS['test_roles'][ $role ] ?? array();
+                                       return new class( $caps ) {
+                                               private array $caps;
+                                               public function __construct( array $caps ) {
+                                                       $this->caps = $caps;
+                                               }
+                                               public function has_cap( $cap ) {
+                                                       return ! empty( $this->caps[ $cap ] );
+                                               }
+                                       };
+                               }
+                       }
 
                        if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
                                class_alias( DashboardControllerStub::class, DashboardController::class );
@@ -77,13 +77,13 @@ namespace ArtPulse\Cli\Tests {
 	               $GLOBALS['test_roles'] = array();
 	       }
 
-	       protected function tearDown(): void {
-	               WP_CLI::$commands      = array();
-	               WP_CLI::$last_output   = '';
-	               $GLOBALS['test_roles'] = array();
-	       }
+       protected function tearDown(): void {
+               WP_CLI::$commands      = array();
+               WP_CLI::$last_output   = '';
+               $GLOBALS['test_roles'] = array();
+       }
 
-	       public function test_reports_warnings_and_errors(): void {
+       public function test_reports_warnings_and_errors(): void {
 	               // Setup roles
 	               add_role( 'member', 'Member', array( 'read' => true ) );
 
@@ -118,5 +118,6 @@ namespace ArtPulse\Cli\Tests {
                        $this->expectExceptionMessage( 'Preset check found issues.' );
                        WP_CLI::runcommand( 'artpulse check-widget-presets' );
                }
+
        }
 }
