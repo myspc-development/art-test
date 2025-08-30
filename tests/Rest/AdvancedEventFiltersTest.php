@@ -15,45 +15,48 @@ class AdvancedEventFiltersTest extends \WP_UnitTestCase {
 		parent::set_up();
 		$date = date( 'Y-m-d', strtotime( '+1 day' ) );
 
-		$this->event1 = wp_insert_post(
-			array(
-				'post_title'  => 'Painting Show',
-				'post_type'   => 'artpulse_event',
-				'post_status' => 'publish',
-				'meta_input'  => array(
-					'event_start_date'     => $date,
-					'event_end_date'       => $date,
-					'event_lat'            => '48.86',
-					'event_lng'            => '2.35',
-					'event_street_address' => '123 Road',
-				),
-			)
-		);
-		update_post_meta( $this->event1, 'genre', array( 'painting' ) );
-		update_post_meta( $this->event1, 'medium', array( 'oil' ) );
-		update_post_meta( $this->event1, 'vibe', 'quiet' );
-		update_post_meta( $this->event1, 'accessibility', array( 'wheelchair' ) );
-		update_post_meta( $this->event1, 'age_range', 'adults' );
+                register_taxonomy( 'genre', 'artpulse_event' );
+                register_taxonomy( 'medium', 'artpulse_event' );
 
-		$this->event2 = wp_insert_post(
-			array(
-				'post_title'  => 'Video Demo',
-				'post_type'   => 'artpulse_event',
-				'post_status' => 'publish',
-				'meta_input'  => array(
-					'event_start_date'     => $date,
-					'event_end_date'       => $date,
-					'event_lat'            => '34.05',
-					'event_lng'            => '-118.25',
-					'event_street_address' => '456 Street',
-				),
-			)
-		);
-		update_post_meta( $this->event2, 'genre', array( 'installation' ) );
-		update_post_meta( $this->event2, 'medium', array( 'video' ) );
-		update_post_meta( $this->event2, 'vibe', 'loud' );
-		update_post_meta( $this->event2, 'accessibility', array( 'asl' ) );
-		update_post_meta( $this->event2, 'age_range', 'kids' );
+                $this->event1 = wp_insert_post(
+                        array(
+                                'post_title'  => 'Painting Show',
+                                'post_type'   => 'artpulse_event',
+                                'post_status' => 'publish',
+                                'meta_input'  => array(
+                                        'event_start_date'     => $date,
+                                        'event_end_date'       => $date,
+                                        'event_lat'            => '48.86',
+                                        'event_lng'            => '2.35',
+                                        'event_street_address' => '123 Road',
+                                ),
+                        )
+                );
+                wp_set_object_terms( $this->event1, array( 'painting' ), 'genre' );
+                wp_set_object_terms( $this->event1, array( 'oil' ), 'medium' );
+                update_post_meta( $this->event1, 'vibe', 'quiet' );
+                update_post_meta( $this->event1, 'accessibility', array( 'wheelchair' ) );
+                update_post_meta( $this->event1, 'age_range', 'adults' );
+
+                $this->event2 = wp_insert_post(
+                        array(
+                                'post_title'  => 'Video Demo',
+                                'post_type'   => 'artpulse_event',
+                                'post_status' => 'publish',
+                                'meta_input'  => array(
+                                        'event_start_date'     => $date,
+                                        'event_end_date'       => $date,
+                                        'event_lat'            => '34.05',
+                                        'event_lng'            => '-118.25',
+                                        'event_street_address' => '456 Street',
+                                ),
+                        )
+                );
+                wp_set_object_terms( $this->event2, array( 'installation' ), 'genre' );
+                wp_set_object_terms( $this->event2, array( 'video' ), 'medium' );
+                update_post_meta( $this->event2, 'vibe', 'loud' );
+                update_post_meta( $this->event2, 'accessibility', array( 'asl' ) );
+                update_post_meta( $this->event2, 'age_range', 'kids' );
 
 		RestRoutes::register();
 		do_action( 'rest_api_init' );
