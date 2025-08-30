@@ -21,7 +21,7 @@ class CommentReportRestController {
 					'callback'            => array( self::class, 'report' ),
 					'permission_callback' => fn() => is_user_logged_in(),
 					'args'                => array(
-						'id'     => array( 'validate_callback' => 'is_numeric' ),
+						'id'     => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 						'reason' => array(
 							'type'     => 'string',
 							'required' => false,

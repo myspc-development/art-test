@@ -23,7 +23,7 @@ class ProfileVerificationController {
 					'permission_callback' => fn() => current_user_can( 'manage_options' ),
 					'args'                => array(
 						'id' => array(
-							'validate_callback' => 'is_numeric',
+							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
 						),
 					),
 				)

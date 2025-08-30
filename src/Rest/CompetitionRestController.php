@@ -22,9 +22,9 @@ class CompetitionRestController {
 					'callback'            => array( self::class, 'submit_entry' ),
 					'permission_callback' => array( self::class, 'can_submit' ),
 					'args'                => array(
-						'id'         => array( 'validate_callback' => 'is_numeric' ),
+						'id'         => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 						'artwork_id' => array(
-							'validate_callback' => 'is_numeric',
+							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
 							'required'          => true,
 						),
 					),
@@ -41,8 +41,8 @@ class CompetitionRestController {
 					'callback'            => array( self::class, 'vote_entry' ),
 					'permission_callback' => array( self::class, 'can_vote' ),
 					'args'                => array(
-						'id'       => array( 'validate_callback' => 'is_numeric' ),
-						'entry_id' => array( 'validate_callback' => 'is_numeric' ),
+						'id'       => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
+						'entry_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);

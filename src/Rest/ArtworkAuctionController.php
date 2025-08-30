@@ -25,7 +25,7 @@ class ArtworkAuctionController {
 						}
 						return true;
 					},
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}
@@ -43,8 +43,8 @@ class ArtworkAuctionController {
 						return true;
 					},
 					'args'                => array(
-						'id'     => array( 'validate_callback' => 'is_numeric' ),
-						'amount' => array( 'validate_callback' => 'is_numeric' ),
+						'id'     => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
+						'amount' => array( 'type' => 'number', 'minimum' => 0, 'required' => true ),
 					),
 				)
 			);

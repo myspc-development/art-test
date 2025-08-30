@@ -23,7 +23,7 @@ class EventCardController {
                                 'methods'             => 'GET',
                                 'callback'            => array( self::class, 'get_card' ),
                                 'permission_callback' => array( Auth::class, 'guard_read' ),
-                                'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+                                'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
                         )
                 );
         }

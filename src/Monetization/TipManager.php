@@ -25,7 +25,7 @@ class TipManager {
 					'permission_callback' => array( self::class, 'check_logged_in' ),
 					'args'                => array(
 						'id'     => array( 'validate_callback' => 'absint' ),
-						'amount' => array( 'validate_callback' => 'is_numeric' ),
+						'amount' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
 				)
 			);

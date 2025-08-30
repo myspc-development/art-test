@@ -26,7 +26,7 @@ class DonationManager {
 							'required'          => true,
 						),
 						'amount'    => array(
-							'validate_callback' => 'is_numeric',
+							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
 							'required'          => true,
 						),
 					),

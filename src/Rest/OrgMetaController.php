@@ -20,7 +20,7 @@ class OrgMetaController {
 					'callback'            => array( self::class, 'handle' ),
 					'permission_callback' => function () {
 						return current_user_can( 'read' ); },
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}

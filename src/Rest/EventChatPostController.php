@@ -29,7 +29,7 @@ class EventChatPostController extends WP_REST_Controller {
 		// 'callback'            => [$this, 'create_item'],
 		// 'permission_callback' => [$this, 'permissions'],
 		// 'args'                => [
-		// 'id'      => ['validate_callback' => 'is_numeric'],
+		// 'id'      => ['validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value )],
 		// 'content' => ['type' => 'string', 'required' => true],
 		// ],
 		// ]);
@@ -42,7 +42,7 @@ class EventChatPostController extends WP_REST_Controller {
                                 'callback'            => array( $this, 'add_reaction' ),
                                 'permission_callback' => array( Auth::class, 'guard_read' ),
                                 'args'                => array(
-                                        'id'    => array( 'validate_callback' => 'is_numeric' ),
+                                        'id'    => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
                                         'emoji' => array(
                                                 'type'     => 'string',
                                                 'required' => true,
@@ -58,7 +58,7 @@ class EventChatPostController extends WP_REST_Controller {
                                 'methods'             => WP_REST_Server::DELETABLE,
                                 'callback'            => array( $this, 'delete_item' ),
                                 'permission_callback' => array( Auth::class, 'guard_manage' ),
-                                'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+                                'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
                         )
                 );
 
@@ -69,7 +69,7 @@ class EventChatPostController extends WP_REST_Controller {
                                 'methods'             => WP_REST_Server::EDITABLE,
                                 'callback'            => array( $this, 'flag_item' ),
                                 'permission_callback' => array( Auth::class, 'guard_manage' ),
-                                'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+                                'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
                         )
                 );
         }

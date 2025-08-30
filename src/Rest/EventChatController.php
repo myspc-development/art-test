@@ -44,7 +44,7 @@ class EventChatController extends WP_REST_Controller {
 					'permission_callback' => array( $this, 'can_read' ),
 					'args'                => array(
 						'id' => array(
-							'validate_callback' => static fn( $v ) => is_numeric( $v ) && (int) $v > 0,
+							'validate_callback' => static fn( $v ) => \is_numeric( $v ) && (int) $v > 0,
 						),
 					),
 				),
@@ -53,7 +53,7 @@ class EventChatController extends WP_REST_Controller {
 					'callback'            => array( $this, 'create_item' ),
 					'permission_callback' => array( $this, 'can_write' ),
 					'args'                => array(
-						'id'      => array( 'validate_callback' => static fn( $v ) => is_numeric( $v ) && (int) $v > 0 ),
+						'id'      => array( 'validate_callback' => static fn( $v ) => \is_numeric( $v ) && (int) $v > 0 ),
 						'content' => array(
 							'type'     => 'string',
 							'required' => true,
@@ -71,7 +71,7 @@ class EventChatController extends WP_REST_Controller {
 				'callback'            => array( $this, 'add_reaction' ),
 				'permission_callback' => array( $this, 'can_write' ),
 				'args'                => array(
-					'id'    => array( 'validate_callback' => static fn( $v ) => is_numeric( $v ) && (int) $v > 0 ),
+					'id'    => array( 'validate_callback' => static fn( $v ) => \is_numeric( $v ) && (int) $v > 0 ),
 					'emoji' => array(
 						'type'     => 'string',
 						'required' => true,
@@ -88,7 +88,7 @@ class EventChatController extends WP_REST_Controller {
 				'callback'            => array( $this, 'delete_item' ),
 				'permission_callback' => array( $this, 'moderator_check' ),
 				'args'                => array(
-					'id' => array( 'validate_callback' => static fn( $v ) => is_numeric( $v ) && (int) $v > 0 ),
+					'id' => array( 'validate_callback' => static fn( $v ) => \is_numeric( $v ) && (int) $v > 0 ),
 				),
 			)
 		);
@@ -101,7 +101,7 @@ class EventChatController extends WP_REST_Controller {
 				'callback'            => array( $this, 'flag_item' ),
 				'permission_callback' => array( $this, 'moderator_check' ),
 				'args'                => array(
-					'id' => array( 'validate_callback' => static fn( $v ) => is_numeric( $v ) && (int) $v > 0 ),
+					'id' => array( 'validate_callback' => static fn( $v ) => \is_numeric( $v ) && (int) $v > 0 ),
 				),
 			)
 		);

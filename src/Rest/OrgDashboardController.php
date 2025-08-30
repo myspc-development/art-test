@@ -20,7 +20,7 @@ class OrgDashboardController {
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'event_summary' ),
 					'permission_callback' => array( self::class, 'can_view' ),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}
@@ -33,7 +33,7 @@ class OrgDashboardController {
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'team_invite' ),
 					'permission_callback' => array( self::class, 'can_manage' ),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}
@@ -46,7 +46,7 @@ class OrgDashboardController {
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'ticket_metrics' ),
 					'permission_callback' => array( self::class, 'can_view' ),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}
@@ -59,7 +59,7 @@ class OrgDashboardController {
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'broadcast' ),
 					'permission_callback' => array( self::class, 'can_manage' ),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}

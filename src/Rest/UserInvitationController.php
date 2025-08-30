@@ -26,7 +26,7 @@ class UserInvitationController {
 					'permission_callback' => array( self::class, 'check_permissions' ),
 					'args'                => array(
 						'id' => array(
-							'validate_callback' => 'is_numeric',
+							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
 						),
 					),
 				)
@@ -43,7 +43,7 @@ class UserInvitationController {
 					'permission_callback' => array( self::class, 'check_permissions' ),
 					'args'                => array(
 						'id' => array(
-							'validate_callback' => 'is_numeric',
+							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
 						),
 					),
 				)

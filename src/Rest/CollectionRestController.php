@@ -60,7 +60,7 @@ class CollectionRestController {
 					return current_user_can( 'read' );
 				},
 				'args'                => array(
-					'id' => array( 'validate_callback' => 'is_numeric' ),
+					'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 				),
 			)
 		);

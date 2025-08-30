@@ -25,14 +25,14 @@ class EventCommentsController {
 						'methods'             => 'GET',
 						'callback'            => array( self::class, 'list' ),
 						'permission_callback' => fn() => is_user_logged_in(),
-						'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+						'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 					),
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( self::class, 'add' ),
 						'permission_callback' => fn() => is_user_logged_in(),
 						'args'                => array(
-							'id'      => array( 'validate_callback' => 'is_numeric' ),
+							'id'      => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 							'content' => array(
 								'type'     => 'string',
 								'required' => true,
@@ -52,7 +52,7 @@ class EventCommentsController {
 					'callback'            => array( self::class, 'moderate' ),
 					'permission_callback' => fn() => CommunityRoles::can_moderate( get_current_user_id() ),
 					'args'                => array(
-						'comment_id' => array( 'validate_callback' => 'is_numeric' ),
+						'comment_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 						'status'     => array(
 							'type'     => 'string',
 							'enum'     => array( 'approve', 'spam', 'trash' ),

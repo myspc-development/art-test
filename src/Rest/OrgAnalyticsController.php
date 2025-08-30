@@ -32,7 +32,7 @@ class OrgAnalyticsController {
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'get_event_rsvp_stats' ),
 					'permission_callback' => array( \ArtPulse\Rest\RsvpRestController::class, 'check_permissions' ),
-					'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
 		}

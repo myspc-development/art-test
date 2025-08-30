@@ -31,7 +31,7 @@ class BudgetExportController {
 					'args'                => array(
 						'event_id'  => array(
 							'required'          => false,
-							'validate_callback' => 'is_numeric',
+							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
 						),
 						'event_ids' => array(
 							'required'          => false,
