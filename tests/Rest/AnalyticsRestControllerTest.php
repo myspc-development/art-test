@@ -9,8 +9,8 @@ use ArtPulse\Core\EventMetrics;
  */
 class AnalyticsRestControllerTest extends \WP_UnitTestCase {
 
-	private int $event_id;
-	private int $ticket_table;
+        private int $event_id;
+        private string $ticket_table;
 
         public function set_up() {
                 parent::set_up();
