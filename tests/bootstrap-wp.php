@@ -23,17 +23,21 @@ if (file_exists($autoloader)) {
     require_once $autoloader;
 }
 
+require_once __DIR__ . '/Support/ErrorSilencer.php';
+
+if (!defined('WP_PHPUNIT__TESTS_CONFIG')) {
+    define('WP_PHPUNIT__TESTS_CONFIG', $_tests_dir . '/wp-tests-config.php');
+}
+
 set_error_handler([\ArtPulse\Tests\ErrorSilencer::class, 'muteMissingWidgetWarning'], E_USER_WARNING);
 
 // Flag that tests are running so plugin code can relax certain checks.
 if (!defined('AP_TESTING')) {
     define('AP_TESTING', true);
 }
-if (getenv('AP_TEST_MODE') === false) {
-    putenv('AP_TEST_MODE=1');
-}
+
 if (!defined('AP_TEST_MODE')) {
-    define('AP_TEST_MODE', getenv('AP_TEST_MODE') === '1');
+    define('AP_TEST_MODE', true);
 }
 // Optionally force builder preview mode in tests via env var.
 $__force_preview = getenv('AP_TEST_FORCE_PREVIEW');
@@ -74,12 +78,42 @@ tests_add_filter('muplugins_loaded', '_manually_load_plugin', 15);
 /** Finally, boot the WP test environment (guarded, load once). */
 require_once $wp_phpunit_dir . '/includes/bootstrap.php';
 
+if (!defined('AP_TEST_MODE')) {
+    define('AP_TEST_MODE', true);
+}
+
 if ( defined('AP_TEST_MODE') && AP_TEST_MODE ) {
     if (!class_exists('Spy_REST_Server')) {
         require_once $wp_phpunit_dir . '/includes/spy-rest-server.php';
     }
     $GLOBALS['wp_rest_server'] = new \Spy_REST_Server();
-    do_action('rest_api_init', $GLOBALS['wp_rest_server']);
+
+    tests_add_filter('init', static function () {
+        do_action('rest_api_init');
+
+        $admin_id = username_exists('ap-test-admin');
+        if (!$admin_id) {
+            $admin_id = wp_insert_user([
+                'user_login' => 'ap-test-admin',
+                'user_pass'  => wp_generate_password(12, false),
+                'user_email' => 'ap-test-admin@example.com',
+                'role'       => 'administrator',
+            ]);
+        }
+
+        if (!is_wp_error($admin_id)) {
+            wp_set_current_user($admin_id);
+        }
+
+        $ref = new \ReflectionClass( \ArtPulse\Core\DashboardWidgetRegistry::class );
+        foreach (['aliases'] as $prop) {
+            if ($ref->hasProperty($prop)) {
+                $p = $ref->getProperty($prop);
+                $p->setAccessible(true);
+                $p->setValue(null, []);
+            }
+        }
+    });
 }
 
 // Run after seeding (5) but before plugin load (15); 6 is fine.
