@@ -61,29 +61,9 @@ public static function get_events( WP_REST_Request $request ): WP_REST_Response|
         $lng       = $request->get_param( 'lng' );
         $within_km = $request->get_param( 'within_km' );
         if ( $lat && $lng && $within_km ) {
-                $lat       = (float) $lat;
-                $lng       = (float) $lng;
-                $within_km = (float) $within_km;
-                // Approximate bounding box filter to narrow query results.
-                $lat_delta = $within_km / 111.045; // km per degree lat.
-                $min_lat   = $lat - $lat_delta;
-                $max_lat   = $lat + $lat_delta;
-                $lng_delta = $within_km / ( 111.045 * cos( deg2rad( $lat ) ) );
-                $min_lng   = $lng - $lng_delta;
-                $max_lng   = $lng + $lng_delta;
-
-                $meta_query[] = array(
-                        'key'     => 'event_lat',
-                        'value'   => array( $min_lat, $max_lat ),
-                        'compare' => 'BETWEEN',
-                        'type'    => 'DECIMAL',
-                );
-                $meta_query[] = array(
-                        'key'     => 'event_lng',
-                        'value'   => array( $min_lng, $max_lng ),
-                        'compare' => 'BETWEEN',
-                        'type'    => 'DECIMAL',
-                );
+                // Delegate to advanced filter handler when a distance filter is provided.
+                $events = AdvancedEventFilters::within_km( $request );
+                return self::ok( $events );
         }
 
         $args = array(
@@ -103,21 +83,6 @@ public static function get_events( WP_REST_Request $request ): WP_REST_Response|
         }
 
         $ids = get_posts( $args );
-
-        if ( $lat && $lng && $within_km ) {
-                $ids = array_filter(
-                        $ids,
-                        function ( $id ) use ( $lat, $lng, $within_km ) {
-                                $e_lat = get_post_meta( $id, 'event_lat', true );
-                                $e_lng = get_post_meta( $id, 'event_lng', true );
-                                if ( empty( $e_lat ) || empty( $e_lng ) ) {
-                                        return false;
-                                }
-                                $dist = self::haversine_distance( $lat, $lng, (float) $e_lat, (float) $e_lng );
-                                return $dist <= $within_km;
-                        }
-                );
-        }
 
         $events = array();
         foreach ( $ids as $id ) {
@@ -141,15 +106,6 @@ public static function get_events( WP_REST_Request $request ): WP_REST_Response|
         }
 
         return self::ok( array_values( $events ) );
-}
-
-private static function haversine_distance( float $lat1, float $lon1, float $lat2, float $lon2 ): float {
-$earth = 6371; // km
-$lat_d = deg2rad( $lat2 - $lat1 );
-$lon_d = deg2rad( $lon2 - $lon1 );
-$a     = sin( $lat_d / 2 ) ** 2 + cos( deg2rad( $lat1 ) ) * cos( deg2rad( $lat2 ) ) * sin( $lon_d / 2 ) ** 2;
-$c     = 2 * atan2( sqrt( $a ), sqrt( 1 - $a ) );
-return $earth * $c;
 }
 
        private static function ok( $data, int $status = 200 ): WP_REST_Response {

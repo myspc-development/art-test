@@ -34,7 +34,7 @@ class AdvancedEventFiltersTest extends \WP_UnitTestCase {
                 );
                 wp_set_object_terms( $this->event1, array( 'painting' ), 'genre' );
                 wp_set_object_terms( $this->event1, array( 'oil' ), 'medium' );
-                update_post_meta( $this->event1, 'vibe', 'quiet' );
+                update_post_meta( $this->event1, 'style', 'quiet' );
                 update_post_meta( $this->event1, 'accessibility', array( 'wheelchair' ) );
                 update_post_meta( $this->event1, 'age_range', 'adults' );
 
@@ -54,7 +54,7 @@ class AdvancedEventFiltersTest extends \WP_UnitTestCase {
                 );
                 wp_set_object_terms( $this->event2, array( 'installation' ), 'genre' );
                 wp_set_object_terms( $this->event2, array( 'video' ), 'medium' );
-                update_post_meta( $this->event2, 'vibe', 'loud' );
+                update_post_meta( $this->event2, 'style', 'loud' );
                 update_post_meta( $this->event2, 'accessibility', array( 'asl' ) );
                 update_post_meta( $this->event2, 'age_range', 'kids' );
 
@@ -82,10 +82,27 @@ class AdvancedEventFiltersTest extends \WP_UnitTestCase {
 		$ids  = wp_list_pluck( $data, 'id' );
 		$this->assertContains( $this->event1, $ids );
 		$this->assertNotContains( $this->event2, $ids );
-		$evt = $data[0];
-		$this->assertArrayHasKey( 'event_lat', $evt );
-		$this->assertArrayHasKey( 'event_lng', $evt );
-		$this->assertArrayHasKey( 'event_start_date', $evt );
-		$this->assertArrayHasKey( 'event_street_address', $evt );
-	}
+                $evt       = $data[0];
+                $required = array(
+                        'id',
+                        'title',
+                        'link',
+                        'distance_km',
+                        'lat',
+                        'lng',
+                        'start_date',
+                        'end_date',
+                        'venue',
+                        'city',
+                        'state',
+                        'country',
+                        'thumbnail',
+                        'categories',
+                        'medium',
+                        'style',
+                );
+                foreach ( $required as $key ) {
+                        $this->assertArrayHasKey( $key, $evt );
+                }
+        }
 }
