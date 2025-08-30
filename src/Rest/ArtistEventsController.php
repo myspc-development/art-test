@@ -66,7 +66,7 @@ class ArtistEventsController {
                 }
 
                 // Wrap the results in a WP REST response object.
-                return rest_ensure_response( $data );
-        }
+                return new \WP_REST_Response( $data );
+       }
 
 }

@@ -126,7 +126,7 @@ class DashboardConfigController {
                        'excluded_roles' => $excluded,
                );
 
-               return rest_ensure_response( $payload );
+               return new \WP_REST_Response( $payload );
        }
        public static function save_config( WP_REST_Request $request ) {
                 $nonce = $request->get_header( 'X-WP-Nonce' );
