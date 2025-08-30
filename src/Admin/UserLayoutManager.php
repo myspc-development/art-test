@@ -60,25 +60,25 @@ class UserLayoutManager {
 			$logs    = array();
 			$ordered = \ArtPulse\Core\LayoutUtils::normalize_layout( $layout, $valid, $logs );
 
-			$defs  = DashboardWidgetRegistry::get_definitions();
-			$final = array();
-			foreach ( $ordered as $item ) {
-				$id  = $item['id'];
-				$def = $defs[ $id ] ?? null;
-				$vis = $item['visible'] ?? true;
+                       $defs  = DashboardWidgetRegistry::get_definitions();
+                       $final = array();
+                       foreach ( $ordered as $item ) {
+                               $slug = $item['id']; // preserve original slug for logging
+                               $def  = $defs[ $slug ] ?? null;
+                               $vis  = $item['visible'] ?? true;
 
-				if ( ! $def || ! is_callable( $def['callback'] ?? null ) ) {
-					if ( ! in_array( $id, $logs, true ) ) {
-						$logs[] = $id;
-					}
-					WidgetGuard::register_stub_widget( $id, array(), $def ?? array() );
-				}
+                               if ( ! $def || ! is_callable( $def['callback'] ?? null ) ) {
+                                       if ( ! in_array( $slug, $logs, true ) ) {
+                                               $logs[] = $slug;
+                                       }
+                                       WidgetGuard::register_stub_widget( $slug, array(), $def ?? array() );
+                               }
 
-				$final[] = array(
-					'id'      => $id,
-					'visible' => $vis,
-				);
-			}
+                               $final[] = array(
+                                       'id'      => $slug,
+                                       'visible' => $vis,
+                               );
+                       }
 
 			if ( $logs && defined( 'ARTPULSE_TEST_VERBOSE' ) && ARTPULSE_TEST_VERBOSE ) {
 				error_log( 'Invalid dashboard widgets for role ' . $role . ': ' . implode( ', ', $logs ) );

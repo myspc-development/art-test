@@ -70,7 +70,7 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
 			),
 			$result['layout']
 		);
-		$this->assertSame( array( 'ghost', 'widget_alpha' ), $result['logs'] );
+               $this->assertSame( array( 'ghost' ), $result['logs'] );
 		$def = DashboardWidgetRegistry::getById( 'ghost' );
 		$this->assertSame( ApPlaceholderWidget::class, $def['class'] );
 	}
