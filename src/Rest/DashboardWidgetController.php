@@ -97,62 +97,52 @@ class DashboardWidgetController {
 				ARTPULSE_API_NAMESPACE,
 				'/dashboard-widgets',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'get_widgets' ),
-					'permission_callback' => array( self::class, 'check_permissions' ),
-				)
-			);
-		}
-		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/dashboard-widgets/save' ) ) {
-			register_rest_route(
-				ARTPULSE_API_NAMESPACE,
-				'/dashboard-widgets/save',
-				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'save_widgets' ),
-					'permission_callback' => array( self::class, 'check_permissions' ),
-				)
-			);
-		}
-		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/dashboard-widgets/export' ) ) {
-			register_rest_route(
-				ARTPULSE_API_NAMESPACE,
-				'/dashboard-widgets/export',
-				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'export_layout' ),
-					'permission_callback' => array( self::class, 'check_permissions' ),
-				)
-			);
-		}
-		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/dashboard-widgets/import' ) ) {
-			register_rest_route(
-				ARTPULSE_API_NAMESPACE,
-				'/dashboard-widgets/import',
-				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'import_layout' ),
-					'permission_callback' => array( self::class, 'check_permissions' ),
-				)
-			);
-		}
-	}
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'get_widgets' ),
+                                        'permission_callback' => '__return_true',
+                                )
+                        );
+                }
+                if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/dashboard-widgets/save' ) ) {
+                        register_rest_route(
+                                ARTPULSE_API_NAMESPACE,
+                                '/dashboard-widgets/save',
+                                array(
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'save_widgets' ),
+                                        'permission_callback' => '__return_true',
+                                )
+                        );
+                }
+                if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/dashboard-widgets/export' ) ) {
+                        register_rest_route(
+                                ARTPULSE_API_NAMESPACE,
+                                '/dashboard-widgets/export',
+                                array(
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'export_layout' ),
+                                        'permission_callback' => '__return_true',
+                                )
+                        );
+                }
+                if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/dashboard-widgets/import' ) ) {
+                        register_rest_route(
+                                ARTPULSE_API_NAMESPACE,
+                                '/dashboard-widgets/import',
+                                array(
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'import_layout' ),
+                                        'permission_callback' => '__return_true',
+                                )
+                        );
+                }
+        }
 
-       public static function check_permissions( WP_REST_Request $request ) {
-               $nonce = $request->get_header( 'X-WP-Nonce' );
-               $check = \ArtPulse\Rest\Util\Auth::verify_nonce( $nonce );
-               if ( is_wp_error( $check ) ) {
-                       return $check;
-               }
-
-               if ( current_user_can( 'manage_options' ) || current_user_can( 'edit_posts' ) ) {
-                       return true;
-               }
-
-               return new WP_Error( 'rest_forbidden', 'Forbidden.', array( 'status' => 403 ) );
-       }
-
-	public static function get_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+        public static function get_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                $guard = \ArtPulse\Rest\Util\Auth::guard( $request, 'edit_posts' );
+                if ( is_wp_error( $guard ) ) {
+                        return $guard;
+                }
 		$role        = sanitize_key( $request->get_param( 'role' ) );
 		$include_all = filter_var( $request->get_param( 'include_all' ), FILTER_VALIDATE_BOOLEAN );
 		if ( ! $role ) {
@@ -191,7 +181,11 @@ class DashboardWidgetController {
 		return rest_ensure_response( $response );
 	}
 
-	public static function save_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+        public static function save_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                $guard = \ArtPulse\Rest\Util\Auth::guard( $request, 'edit_posts' );
+                if ( is_wp_error( $guard ) ) {
+                        return $guard;
+                }
 		$data = $request->get_json_params();
 		$role = sanitize_key( $data['role'] ?? '' );
 		if ( ! $role ) {
@@ -223,7 +217,11 @@ class DashboardWidgetController {
 		return rest_ensure_response( array( 'saved' => true ) );
 	}
 
-	public static function export_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+        public static function export_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                $guard = \ArtPulse\Rest\Util\Auth::guard( $request, 'edit_posts' );
+                if ( is_wp_error( $guard ) ) {
+                        return $guard;
+                }
 		$role = sanitize_key( $request->get_param( 'role' ) );
 		if ( ! $role ) {
 			return new WP_Error( 'invalid_role', __( 'Role parameter missing', 'artpulse' ), array( 'status' => 400 ) );
@@ -239,7 +237,11 @@ class DashboardWidgetController {
 		);
 	}
 
-	public static function import_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+        public static function import_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                $guard = \ArtPulse\Rest\Util\Auth::guard( $request, 'edit_posts' );
+                if ( is_wp_error( $guard ) ) {
+                        return $guard;
+                }
 		$data = $request->get_json_params();
 		$role = sanitize_key( $data['role'] ?? '' );
 		if ( ! $role ) {

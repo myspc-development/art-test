@@ -35,14 +35,7 @@ class ImportRestController {
                                 'methods'             => WP_REST_Server::CREATABLE,
                                 'callback'            => array( self::class, 'handle_import' ),
                                 'permission_callback' => function ( WP_REST_Request $request ) {
-                                        $ok = \ArtPulse\Rest\Util\Auth::guard( $request->get_header( 'X-WP-Nonce' ), 'manage_options' );
-                                        if ( $ok !== true ) {
-                                                return $ok;
-                                        }
-                                        if ( ! current_user_can( 'manage_options' ) ) {
-                                                return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-                                        }
-                                        return true;
+                                        return \ArtPulse\Rest\Util\Auth::guard( $request, 'manage_options' );
                                 },
                         )
                 );

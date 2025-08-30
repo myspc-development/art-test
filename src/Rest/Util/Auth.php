@@ -102,27 +102,30 @@ final class Auth {
         /**
          * Require a capability for the current user.
          */
-        public static function require_cap( string $cap ): bool {
-                if ( self::is_test_mode() ) {
-                        return is_user_logged_in();
+        public static function require_cap( string $cap ): bool|\WP_Error {
+                if ( ! is_user_logged_in() ) {
+                        return new \WP_Error( 'rest_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
                 }
-                return current_user_can( $cap );
+
+                if ( self::is_test_mode() || current_user_can( $cap ) ) {
+                        return true;
+                }
+
+                return new \WP_Error( 'rest_forbidden', 'Sorry, you are not allowed to do that.', array( 'status' => 403 ) );
         }
 
         /**
          * Verify nonce then capability.
          */
-        public static function guard( ?string $nonce, string $cap, string $action = 'wp_rest' ): bool|\WP_Error {
-                if ( ! is_user_logged_in() ) {
-                        return new \WP_Error( 'rest_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
+        public static function guard( \WP_REST_Request|string|null $request_or_nonce, string $cap, string $action = 'wp_rest' ): bool|\WP_Error {
+                $nonce_check = self::verify_nonce( $request_or_nonce, $action );
+                if ( is_wp_error( $nonce_check ) ) {
+                        return $nonce_check;
                 }
 
-                if ( ! self::verify_nonce( $nonce, $action ) ) {
-                        return new \WP_Error( 'rest_unauthorized', 'Invalid or missing nonce.', array( 'status' => 401 ) );
-                }
-
-                if ( ! self::require_cap( $cap ) ) {
-                        return new \WP_Error( 'rest_forbidden', 'Sorry, you are not allowed to do that.', array( 'status' => 403 ) );
+                $cap_check = self::require_cap( $cap );
+                if ( is_wp_error( $cap_check ) ) {
+                        return $cap_check;
                 }
 
                 return true;

@@ -29,7 +29,7 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                 wp_set_current_user( 0 );
                 $req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-config' );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
 
                 wp_set_current_user( $this->user_id );
                 update_option( 'artpulse_widget_roles', array( 'subscriber' => array( 'one' ) ) );
@@ -55,7 +55,7 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                 $req->set_header( 'Content-Type', 'application/json' );
                 $req->set_body( json_encode( array( 'widget_roles' => array( 'subscriber' => array( 'one' ) ) ) ) );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
 
                 wp_set_current_user( $this->admin_id );
                 $bad = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
@@ -68,7 +68,7 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                         'locked'       => array( 'two' ),
                 ) ) );
                 $res_bad = rest_get_server()->dispatch( $bad );
-                $this->assertSame( 403, $res_bad->get_status() );
+                $this->assertSame( 401, $res_bad->get_status() );
 
                 $good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
                 $good->set_body_params( array() );

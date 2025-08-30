@@ -21,8 +21,7 @@ final class SystemStatusEndpoint {
                 array(
                     'methods'             => WP_REST_Server::READABLE,
                     'permission_callback' => function () {
-                        $ok = Auth::guard( null, 'read' );
-                        return $ok === true ? true : $ok;
+                        return Auth::require_cap( 'read' );
                     },
                     'callback'            => array( self::class, 'get_status' ),
                 )
