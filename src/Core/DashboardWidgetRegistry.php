@@ -862,24 +862,25 @@ class DashboardWidgetRegistry {
 			return false;
 		}
 
-		$preview       = $preview_role ? sanitize_key( $preview_role ) : ( function_exists( 'get_query_var' ) ? get_query_var( 'ap_role' ) : null );
-		$admin_preview = false;
-		if ( function_exists( 'current_user_can' ) && current_user_can( 'manage_options' ) ) {
-			if ( ! is_string( $preview ) || $preview === '' ) {
-				return true;
-			}
-			$role          = $preview;
-			$admin_preview = true;
-		} else {
-			$role = DashboardController::get_role( $user_id );
-		}
+                $preview       = $preview_role ? sanitize_key( $preview_role ) : ( \function_exists( '\\get_query_var' ) ? \get_query_var( 'ap_role' ) : null );
+                $admin_preview = false;
+                if ( \function_exists( '\\current_user_can' ) && \current_user_can( 'manage_options' ) ) {
+                        if ( is_string( $preview ) && $preview !== '' ) {
+                                $role          = $preview;
+                                $admin_preview = true;
+                        } else {
+                                $role = DashboardController::get_role( $user_id );
+                        }
+                } else {
+                        $role = DashboardController::get_role( $user_id );
+                }
 		$widget_roles = self::normalizeRoleList( $widget['roles'] ?? array() );
 		if ( $widget_roles && ! in_array( $role, $widget_roles, true ) ) {
 			return false;
 		}
 
-		$cap = $widget['capability'] ?? '';
-		if ( ! $admin_preview && $cap && ! user_can( $user_id, $cap ) ) {
+                $cap = $widget['capability'] ?? '';
+                if ( ! $admin_preview && $cap && ! \user_can( $user_id, $cap ) ) {
 			return false;
 		}
 

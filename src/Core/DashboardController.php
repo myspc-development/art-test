@@ -286,8 +286,13 @@ class DashboardController {
                         }
 
                         $cap = $config['capability'] ?? '';
-                        if ( $cap && function_exists( 'get_role' ) ) {
-                                $role_obj = get_role( $role );
+                        if (
+                                $cap &&
+                                ( \function_exists( __NAMESPACE__ . '\get_role' ) || \function_exists( '\\get_role' ) )
+                        ) {
+                                $role_obj = \function_exists( __NAMESPACE__ . '\get_role' )
+                                        ? \call_user_func( __NAMESPACE__ . '\get_role', $role )
+                                        : \get_role( $role );
                                 if ( $role_obj && method_exists( $role_obj, 'has_cap' ) && ! $role_obj->has_cap( $cap ) ) {
                                         continue;
                                 }
