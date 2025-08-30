@@ -28,8 +28,6 @@ final class DashboardTemplateIncludeTest extends TestCase {
                 MockStorage::$current_roles = array();
 
                 Monkey\setUp();
-                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
-
         }
 
         protected function tearDown(): void {

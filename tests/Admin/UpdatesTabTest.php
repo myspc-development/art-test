@@ -32,10 +32,6 @@ if ( ! function_exists( __NAMESPACE__ . '\\is_wp_error' ) ) {
 	function is_wp_error( $thing ) {
 		return $thing instanceof WP_Error; }
 }
-if ( ! function_exists( __NAMESPACE__ . '\\plugin_dir_path' ) ) {
-	function plugin_dir_path( $file ) {
-		return '/dest'; }
-}
 if ( ! function_exists( __NAMESPACE__ . '\\get_temp_dir' ) ) {
 	function get_temp_dir() {
 		return sys_get_temp_dir(); }
@@ -126,10 +122,11 @@ class UpdatesTabTest extends WP_UnitTestCase {
 
 	private $http_response;
 
-	public function set_up(): void {
-		parent::set_up();
-		Monkey\setUp();
-		Functions\when( 'admin_url' )->alias( fn( $path = '' ) => $path );
+        public function set_up(): void {
+                parent::set_up();
+                Monkey\setUp();
+                Functions\when( 'admin_url' )->alias( fn( $path = '' ) => $path );
+                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => '/dest' );
 
 		self::$can            = true;
 		self::$redirect       = '';

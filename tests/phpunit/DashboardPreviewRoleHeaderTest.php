@@ -35,8 +35,6 @@ final class DashboardPreviewRoleHeaderTest extends TestCase {
         protected function setUp(): void {
                 parent::setUp();
                 Monkey\setUp();
-                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( $file ) . '/' );
-
                 MockStorage::$users[1]      = (object) array( 'roles' => array( 'administrator' ) );
                 MockStorage::$current_roles = array( 'manage_options' );
                 MockStorage::$user_meta     = array();

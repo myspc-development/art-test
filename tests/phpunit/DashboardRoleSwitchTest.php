@@ -52,7 +52,6 @@ final class DashboardRoleSwitchTest extends TestCase {
         protected function setUp(): void {
                 parent::setUp();
                 Monkey\setUp();
-                Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
                 Functions\when( 'get_query_var' )->alias( fn( $key ) => $_GET[ $key ] ?? '' );
 
                 DashboardPresets::resetCache();

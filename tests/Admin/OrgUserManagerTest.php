@@ -19,7 +19,6 @@ class OrgUserManagerTest extends TestCase {
         Functions\when('add_submenu_page')->justReturn();
         Functions\when('wp_enqueue_script')->justReturn();
         Functions\when('wp_localize_script')->justReturn();
-        Functions\when('plugin_dir_path')->alias(fn($file) => '/');
         Functions\when('plugin_dir_url')->alias(fn($file) => '/');
         Functions\when('file_exists')->alias(fn($path) => false);
         Functions\when('esc_url_raw')->alias(fn($url = '') => $url);
