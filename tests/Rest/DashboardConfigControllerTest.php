@@ -45,7 +45,7 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
 	public function test_post_requires_manage_options_and_valid_nonce(): void {
 		wp_set_current_user( $this->user_id );
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-		$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
 		$req->set_body_params( array() );
 		$req->set_header( 'Content-Type', 'application/json' );
 		$req->set_body(
@@ -78,7 +78,7 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
 		$good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
 		$good->set_body_params( array() );
 		$good->set_header( 'Content-Type', 'application/json' );
-		$good->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+                $good->set_header( 'X-WP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
 		$good->set_body(
 			json_encode(
                                 array(
