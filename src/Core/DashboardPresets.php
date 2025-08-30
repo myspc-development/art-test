@@ -41,20 +41,26 @@ class DashboardPresets {
                // plugin_dir_path( __DIR__ ) yields the `src/` directory so step up one level.
                $root = \plugin_dir_path( __DIR__ ) . '../';
 
-		// Try current filename first, then legacy candidates
-		$candidates = array(
-			"$root/data/preset-$role.json",
-			"$root/data/presets/{$role}-default.json",
-			"$root/data/presets/$role.json",
-			// organization sometimes used compact/admin variants historically
-			$role === 'organization' ? "$root/data/presets/organization-compact.json" : null,
-			$role === 'organization' ? "$root/data/presets/organization-admin.json" : null,
-			// earlier member/artist variants
-			$role === 'member' ? "$root/data/presets/member-discovery.json" : null,
-			$role === 'artist' ? "$root/data/presets/artist-default.json" : null,
-			$role === 'artist' ? "$root/data/presets/artist-tools.json" : null,
-		);
-                $candidates = array_values( array_filter( $candidates, 'is_string' ) );
+               $current    = "$root/data/preset-$role.json";
+               $candidates = array();
+
+               // Only look at legacy presets if the current file is readable. Otherwise,
+               // skip them entirely and fall back to the built-in defaults.
+               if ( @is_readable( $current ) ) {
+                       $candidates = array(
+                               $current,
+                               "$root/data/presets/{$role}-default.json",
+                               "$root/data/presets/$role.json",
+                               // organization sometimes used compact/admin variants historically
+                               $role === 'organization' ? "$root/data/presets/organization-compact.json" : null,
+                               $role === 'organization' ? "$root/data/presets/organization-admin.json" : null,
+                               // earlier member/artist variants
+                               $role === 'member' ? "$root/data/presets/member-discovery.json" : null,
+                               $role === 'artist' ? "$root/data/presets/artist-default.json" : null,
+                               $role === 'artist' ? "$root/data/presets/artist-tools.json" : null,
+                       );
+                       $candidates = array_values( array_filter( $candidates, 'is_string' ) );
+               }
 
                 // Hard-coded defaults used when no valid JSON exists.
                 $defaults = array(
