@@ -231,7 +231,7 @@ namespace ArtPulse\Admin\Tests {
 			$this->assertSame( $expected, self::$options['ap_dashboard_widget_config'] ?? null );
 		}
 
-		public function test_get_role_layout_returns_saved_or_fallback(): void {
+                public function test_get_role_layout_returns_saved_or_fallback(): void {
 			DashboardWidgetRegistry::register( 'gr_one', 'One', '', '', '__return_null' );
 			DashboardWidgetRegistry::register( 'gr_two', 'Two', '', '', '__return_null' );
 
@@ -267,10 +267,17 @@ namespace ArtPulse\Admin\Tests {
 				),
 				\ArtPulse\Core\DashboardController::get_widgets_for_role( 'subscriber' )
 			);
-			$this->assertSame( $expected, UserLayoutManager::get_role_layout( 'subscriber' )['layout'] );
-		}
+                        $this->assertSame( $expected, UserLayoutManager::get_role_layout( 'subscriber' )['layout'] );
+                }
 
-		public function test_get_role_layout_logs_and_stubs_invalid_widget(): void {
+               public function test_administrator_role_returns_empty_layout_without_logs(): void {
+                       $result = UserLayoutManager::get_role_layout( 'administrator' );
+                       $this->assertSame( array(), $result['layout'] );
+                       $this->assertSame( array(), $result['logs'] );
+                       $this->assertSame( array(), self::$logs );
+               }
+
+               public function test_get_role_layout_logs_and_stubs_invalid_widget(): void {
 			DashboardWidgetRegistry::register( 'good', 'Good', '', '', '__return_null' );
 
 			self::$options['ap_dashboard_widget_config'] = array(

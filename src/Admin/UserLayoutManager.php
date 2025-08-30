@@ -98,25 +98,34 @@ class UserLayoutManager {
 			),
 			$default_ids
 		);
-		if ( empty( $layout ) ) {
-			$stub = 'empty_dashboard';
-			WidgetGuard::register_stub_widget( $stub, array(), array() );
-			error_log( 'Empty dashboard layout resolved for role ' . $role );
-			return array(
-				'layout' => array(
-					array(
-						'id'      => $stub,
-						'visible' => true,
-					),
-				),
-				'logs'   => array( $stub ),
-			);
-		}
-		return array(
-			'layout' => $layout,
-			'logs'   => array(),
-		);
-	}
+               if ( empty( $layout ) ) {
+                       if ( 'administrator' === $role ) {
+                               // Administrators may intentionally have no widgets. Suppress the
+                               // empty dashboard warning and return an empty layout.
+                               return array(
+                                       'layout' => array(),
+                                       'logs'   => array(),
+                               );
+                       }
+
+                       $stub = 'empty_dashboard';
+                       WidgetGuard::register_stub_widget( $stub, array(), array() );
+                       error_log( 'Empty dashboard layout resolved for role ' . $role );
+                       return array(
+                               'layout' => array(
+                                       array(
+                                               'id'      => $stub,
+                                               'visible' => true,
+                                       ),
+                               ),
+                               'logs'   => array( $stub ),
+                       );
+               }
+               return array(
+                       'layout' => $layout,
+                       'logs'   => array(),
+               );
+       }
 
 	/**
 	 * Save the default layout for a role.
