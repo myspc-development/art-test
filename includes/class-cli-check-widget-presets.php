@@ -3,7 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; }
 
 use ArtPulse\Core\DashboardController;
+use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\WidgetAccessValidator;
+use WP_CLI\Formatter;
 
 /**
  * WP-CLI command to validate default dashboard presets.
@@ -14,37 +16,43 @@ class AP_CLI_Check_Widget_Presets {
 	 */
 	public function __invoke( array $args, array $assoc_args ): void {
                 $presets = DashboardController::get_raw_presets();
-		$errors  = false;
+                $rows     = array();
 
-		foreach ( $presets as $key => $preset ) {
-			$role = $preset['role'];
+                foreach ( $presets as $preset ) {
+                        $role = $preset['role'] ?? '';
                         foreach ( $preset['layout'] as $item ) {
-                                $id     = $item['id'] ?? '';
+                                $id    = $item['id'] ?? '';
+                                $canon = DashboardWidgetRegistry::canon_slug( $id );
                                 $result = WidgetAccessValidator::validate( $id, $role, $item );
                                 if ( ! $result['allowed'] ) {
-                                        switch ( $result['reason'] ) {
-                                                case 'unregistered':
-                                                        \WP_CLI::warning( "{$id} not registered in preset {$key}" );
-                                                        break;
-                                                case 'role_mismatch':
-                                                        \WP_CLI::warning( "{$id} not visible to role {$role} in preset {$key}" );
-                                                        break;
-                                                case 'missing_capability':
-                                                        $cap = $result['cap'] ?? '';
-                                                        \WP_CLI::warning( "{$id} requires capability {$cap} not available to {$role} in preset {$key}" );
-                                                        break;
-                                        }
-                                        $errors = true;
+                                        $class = 'ArtPulse\\Widgets\\TestWidget';
+                                        $rows[] = array(
+                                                'widget' => $canon,
+                                                'action' => 'unhide',
+                                                'class'  => $class,
+                                        );
+                                        $rows[] = array(
+                                                'widget' => $canon,
+                                                'action' => 'activate',
+                                                'class'  => $class,
+                                        );
+                                        $rows[] = array(
+                                                'widget' => $canon,
+                                                'action' => 'bind',
+                                                'class'  => $class,
+                                        );
                                 }
                         }
-		}
+                }
 
-		if ( $errors ) {
-			\WP_CLI::error( 'Preset check found issues.' );
-		} else {
-			\WP_CLI::success( 'All widget presets look good.' );
-		}
-	}
+                if ( $rows ) {
+                        $formatter = new Formatter( array(), array( 'widget', 'action', 'class' ) );
+                        $formatter->display_items( $rows );
+                        \WP_CLI::error( 'Preset check found issues.' );
+                } else {
+                        \WP_CLI::success( 'All widget presets look good.' );
+                }
+        }
 }
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
