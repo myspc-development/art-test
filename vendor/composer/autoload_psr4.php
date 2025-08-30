@@ -14,7 +14,7 @@ return array(
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'Brain\\Monkey\\' => array($vendorDir . '/brain/monkey/src'),
     'ArtPulse\\Widgets\\' => array($baseDir . '/widgets'),
-    'ArtPulse\\Tests\\Stubs\\' => array($baseDir . '/tests/Stubs'),
+    'ArtPulse\\Tests\\' => array($baseDir . '/tests/Support'),
     'ArtPulse\\' => array($baseDir . '/src'),
     'App\\' => array($baseDir . '/src'),
 );
