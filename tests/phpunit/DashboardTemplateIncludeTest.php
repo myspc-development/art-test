@@ -2,10 +2,6 @@
 require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/../Support/Stubs/DashboardControllerStub.php';
 
-if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
-        class_alias( \ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class );
-}
-
 if ( ! defined( 'ARTPULSE_PLUGIN_DIR' ) ) {
         define( 'ARTPULSE_PLUGIN_DIR', dirname( __DIR__, 2 ) );
 }
@@ -24,8 +20,14 @@ use ArtPulse\Tests\Stubs\MockStorage;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+/**
+ * @runInSeparateProcess
+ */
 final class DashboardTemplateIncludeTest extends TestCase {
         protected function setUp(): void {
+                if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
+                        class_alias( \ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class );
+                }
                 global $mock_is_page_dashboard, $mock_is_user_logged_in;
                 $mock_is_page_dashboard     = false;
                 $mock_is_user_logged_in     = true;

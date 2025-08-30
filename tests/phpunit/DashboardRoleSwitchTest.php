@@ -4,10 +4,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/../Support/Stubs/DashboardControllerStub.php';
 
-if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
-        class_alias( \ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class );
-}
-
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\WidgetRegistry;
@@ -52,9 +48,15 @@ if ( ! class_exists( 'WP_Query' ) ) {
         }
 }
 
+/**
+ * @runInSeparateProcess
+ */
 final class DashboardRoleSwitchTest extends TestCase {
 
         protected function setUp(): void {
+                if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
+                        class_alias( \ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class );
+                }
                 parent::setUp();
                 Monkey\setUp();
                 Functions\when( 'get_query_var' )->alias( fn( $key ) => $_GET[ $key ] ?? '' );
