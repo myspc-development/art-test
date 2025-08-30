@@ -286,8 +286,13 @@ class DashboardController {
                         }
 
                         $cap = $config['capability'] ?? '';
-                        if ( $cap && function_exists( 'get_role' ) ) {
-                                $role_obj = get_role( $role );
+                        if (
+                                $cap &&
+                                ( \function_exists( __NAMESPACE__ . '\get_role' ) || \function_exists( '\\get_role' ) )
+                        ) {
+                                $role_obj = \function_exists( __NAMESPACE__ . '\get_role' )
+                                        ? \call_user_func( __NAMESPACE__ . '\get_role', $role )
+                                        : \get_role( $role );
                                 if ( $role_obj && method_exists( $role_obj, 'has_cap' ) && ! $role_obj->has_cap( $cap ) ) {
                                         continue;
                                 }
@@ -533,11 +538,15 @@ class DashboardController {
 	}
 
 	public static function get_role( $user_id ): string {
-		if ( function_exists( 'ap_get_effective_role' ) && ( $user_id === 0 || $user_id === get_current_user_id() ) ) {
-			return ap_get_effective_role();
-		}
-		return RoleResolver::resolve( $user_id );
-	}
+               if (
+                       function_exists( '\\ap_get_effective_role' )
+                       && ( $user_id === 0 || $user_id === get_current_user_id() )
+               ) {
+                       return \ap_get_effective_role();
+               }
+
+               return RoleResolver::resolve( $user_id );
+       }
 
 	/**
 	 * Retrieve custom dashboard widget posts visible to the user's role.
