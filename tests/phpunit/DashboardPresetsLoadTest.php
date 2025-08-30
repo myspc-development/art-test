@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../TestStubs.php';
+require_once __DIR__ . '/../TestHelpers/filesystem.php';
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardPresets;
@@ -25,7 +26,7 @@ final class DashboardPresetsLoadTest extends TestCase {
                 parent::tearDown();
         }
 
-	public function test_fallback_when_json_missing(): void {
+        public function test_missing_preset_skips_legacy_and_uses_defaults(): void {
 		$roles   = array( 'member', 'artist', 'organization' );
 		$backups = array();
 		foreach ( $roles as $r ) {
