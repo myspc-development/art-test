@@ -6,11 +6,12 @@ if (file_exists($autoloader)) {
     require_once $autoloader;
 }
 
-// Auto-load test helpers/traits/stubs for UNIT tests (no WP loaded here)
-foreach ([__DIR__ . '/Traits', __DIR__ . '/Support', __DIR__ . '/helpers'] as $dir) {
-    if (is_dir($dir)) {
-        foreach (glob($dir . '/*.php') as $file) {
-            require_once $file;
-        }
-    }
+if (!defined('AP_TESTING')) {
+    define('AP_TESTING', true);
 }
+if (getenv('AP_TEST_MODE') === false) {
+    putenv('AP_TEST_MODE=1');
+}
+
+\ArtPulse\Tests\WPFunctionsStubs::register();
+\ArtPulse\Tests\WpCliStub::load();

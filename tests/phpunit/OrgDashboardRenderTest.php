@@ -11,16 +11,16 @@ final class OrgDashboardRenderTest extends TestCase {
                 WidgetRegistry::register( 'widget_webhooks', [self::class, 'renderSection'] );
         }
 
-        public function test_org_core_widgets_render_sections(): void {
-		foreach ( array(
-			'widget_audience_crm',
-			'widget_org_ticket_insights',
-			'widget_webhooks',
-		) as $slug ) {
-			$html = WidgetRegistry::render( $slug, array( 'user_id' => 1 ) );
-			$this->assertStringContainsString( '<section', $html, $slug . ' should render a <section>' );
-        }
+         public function test_org_core_widgets_render_sections(): void {
+                 foreach ( array(
+                         'widget_audience_crm',
+                         'widget_org_ticket_insights',
+                         'widget_webhooks',
+                 ) as $slug ) {
+                         $html = WidgetRegistry::render( $slug, array( 'user_id' => 1 ) );
+                         $this->assertStringContainsString( '<section', $html, $slug . ' should render a <section>' );
+                 }
+         }
 
-        public static function renderSection(): string { return '<section></section>'; }
-}
+         public static function renderSection(): string { return '<section></section>'; }
 }

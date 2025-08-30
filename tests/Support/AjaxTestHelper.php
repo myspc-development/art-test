@@ -1,4 +1,6 @@
 <?php
+namespace ArtPulse\Tests;
+
 trait AjaxTestHelper {
 	protected function make_admin_user(): int {
 		return self::factory()->user->create( array( 'role' => 'administrator' ) );

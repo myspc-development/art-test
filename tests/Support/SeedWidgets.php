@@ -10,10 +10,10 @@ final class SeedWidgets {
     public static function widgetShared(): string { return '<p>shared</p>'; }
 
     public static function bootstrap(): void {
-        DashboardWidgetRegistry::register('widget_alpha', 'Alpha', '', '', [self::class, 'widgetAlpha'], ['roles' => ['member']]);
-        DashboardWidgetRegistry::register('widget_beta', 'Beta', '', '', [self::class, 'widgetBeta'], ['roles' => ['artist']]);
-        DashboardWidgetRegistry::register('widget_gamma', 'Gamma', '', '', [self::class, 'widgetGamma'], ['roles' => ['organization']]);
-        DashboardWidgetRegistry::register('widget_shared', 'Shared', '', '', [self::class, 'widgetShared'], ['roles' => ['member','artist','organization']]);
+        DashboardWidgetRegistry::register('widget_alpha', 'Alpha', '', '', [self::class, 'widgetAlpha'], ['roles' => ['member'], 'group' => 'insights', 'section' => 'one']);
+        DashboardWidgetRegistry::register('widget_beta', 'Beta', '', '', [self::class, 'widgetBeta'], ['roles' => ['artist'], 'group' => 'insights', 'section' => 'two']);
+        DashboardWidgetRegistry::register('widget_gamma', 'Gamma', '', '', [self::class, 'widgetGamma'], ['roles' => ['organization'], 'group' => 'actions', 'section' => 'one']);
+        DashboardWidgetRegistry::register('widget_shared', 'Shared', '', '', [self::class, 'widgetShared'], ['roles' => ['member','artist','organization'], 'group' => 'actions', 'section' => 'two']);
 
         add_filter('pre_option_ap_widget_group_visibility', [self::class, 'groupVisibility']);
         add_filter('pre_option_artpulse_role_layout_member', [self::class, 'memberLayout']);
