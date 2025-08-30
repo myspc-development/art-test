@@ -88,6 +88,22 @@ class DashboardConfigController {
                }
                unset( $ids );
 
+               $layout = OptionUtils::get_array_option( 'artpulse_dashboard_layouts' );
+               foreach ( $layout as $role => &$items ) {
+                       $items = array_map(
+                               static function ( $item ) use ( $to_canon ) {
+                                       if ( is_array( $item ) && isset( $item['id'] ) ) {
+                                               $item['id'] = $to_canon( $item['id'] );
+                                               return $item;
+                                       }
+
+                                       return array( 'id' => $to_canon( $item ) );
+                               },
+                               (array) $items
+                       );
+               }
+               unset( $items );
+
                $defs         = DashboardWidgetRegistry::get_all();
                $capabilities = array();
                $excluded     = array();
@@ -103,6 +119,7 @@ class DashboardConfigController {
                $payload = array(
                        'widget_roles'   => $visibility,
                        'role_widgets'   => $role_widgets,
+                       'layout'         => $layout,
                        'locked'         => array_values( $locked ),
                        'capabilities'   => $capabilities,
                        'excluded_roles' => $excluded,
@@ -111,13 +128,13 @@ class DashboardConfigController {
                return new \WP_REST_Response( $payload, 200 );
        }
        public static function save_config( WP_REST_Request $request ) {
-                $nonce = $request->get_header( 'X-WP-Nonce' );
-                if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-                        return new WP_Error( 'rest_invalid_nonce', 'Invalid nonce.', array( 'status' => 401 ) );
-                }
-
                 if ( ! current_user_can( 'manage_options' ) ) {
                         return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
+                }
+
+                $nonce = $request->get_header( 'X-WP-Nonce' );
+                if ( ! wp_verify_nonce( $nonce, 'ap_dashboard_config' ) ) {
+                        return new WP_Error( 'rest_invalid_nonce', 'Invalid nonce.', array( 'status' => 401 ) );
                 }
 
                 $data       = $request->get_json_params();
