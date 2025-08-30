@@ -2,7 +2,7 @@
 namespace ArtPulse\Admin\Tests;
 
 use WP_Ajax_UnitTestCase;
-use AjaxTestHelper;
+use ArtPulse\Tests\AjaxTestHelper;
 
 class DiagnosticsPageTest extends WP_Ajax_UnitTestCase {
 
