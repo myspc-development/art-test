@@ -185,14 +185,15 @@ class DashboardController {
                         if ( empty( $layout ) ) {
                                 $stub = sanitize_key( $key . '_placeholder' );
                                 WidgetGuard::register_stub_widget( $stub, array(), array( 'roles' => array( $preset['role'] ) ) );
-                                if (
-                                        defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
-                                        function_exists( 'is_user_logged_in' ) && is_user_logged_in()
-                                ) {
-                                        error_log( "[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}" );
-                                }
-                                $layout = array( array( 'id' => $stub ) );
-                        }
+                               if (
+                                       defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
+                                       function_exists( 'is_user_logged_in' ) && is_user_logged_in() &&
+                                       ( ! defined( 'AP_TEST_MODE' ) || ! AP_TEST_MODE )
+                               ) {
+                                       error_log( "[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}" );
+                               }
+                               $layout = array( array( 'id' => $stub ) );
+                       }
                         $presets[ $key ]['layout'] = $layout;
                 }
 
@@ -484,14 +485,15 @@ class DashboardController {
 				$id = WidgetRegistry::normalize_slug( sanitize_key( $entry['id'] ) );
 
 				if ( ! WidgetRegistry::exists( $id ) && ! DashboardWidgetRegistry::exists( $id ) ) {
-					if (
-						defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
-						function_exists( 'is_user_logged_in' ) && is_user_logged_in()
-					) {
-						error_log( "[Dashboard Preset] Widget {$id} not registered" );
-					}
-					continue;
-				}
+                               if (
+                                       defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
+                                       function_exists( 'is_user_logged_in' ) && is_user_logged_in() &&
+                                       ( ! defined( 'AP_TEST_MODE' ) || ! AP_TEST_MODE )
+                               ) {
+                                       error_log( "[Dashboard Preset] Widget {$id} not registered" );
+                               }
+                               continue;
+                       }
 
 				$entry['id'] = $id;
 				$clean[]     = $entry;
