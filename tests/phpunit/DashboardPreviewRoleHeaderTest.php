@@ -48,7 +48,7 @@ final class DashboardPreviewRoleHeaderTest extends TestCase {
 	/** @runInSeparateProcess */
 	public function test_preview_role_sets_header_and_attributes_without_persisting(): void {
                 $_GET['ap_preview_role']  = 'artist';
-                $_GET['ap_preview_nonce'] = 'nonce_ap_preview';
+                $_GET['ap_preview_nonce'] = 'test-nonce';
 
                 $roleHandle = \Patchwork\redefine(
                         'ap_get_effective_role',
