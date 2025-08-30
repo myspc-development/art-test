@@ -54,6 +54,7 @@ final class DashboardRoleSwitchTest extends TestCase {
                 parent::setUp();
                 Monkey\setUp();
                 Functions\when( 'get_query_var' )->alias( fn( $key ) => $_GET[ $key ] ?? '' );
+                Functions\when( 'set_query_var' )->alias( fn( $key, $value ) => $_GET[ $key ] = $value );
 
                 DashboardPresets::resetCache();
                 MockStorage::$current_roles = array( 'view_artpulse_dashboard', 'artist' );
@@ -72,34 +73,32 @@ final class DashboardRoleSwitchTest extends TestCase {
 	/**
 	 * @dataProvider roles
 	 */
-	public function test_role_param_sets_header_and_attributes( string $role ): void {
+        public function test_role_param_sets_header_and_attributes( string $role ): void {
                 $_GET['ap_dashboard'] = '1';
                 $_GET['role']         = $role;
                 $captured             = array();
-                $handle               = redefine(
-                        'header',
-                        function ( $string ) use ( &$captured ) {
+                Functions\when( 'header' )->alias(
+                        static function ( $string ) use ( &$captured ) {
                                 $captured[] = $string;
+                        }
+                );
+                $hooks = array();
+                Functions\when( 'add_action' )->alias(
+                        static function ( $hook, $callback, $priority = 10, $accepted_args = 1 ) use ( &$hooks ) {
+                                $hooks[ $hook ][] = $callback;
+                                return true;
                         }
                 );
                 $initHandle           = redefine(
                         '\\ArtPulse\\Core\\DashboardWidgetRegistry::init',
                         static function (): void {}
                 );
-                $headerHook           = null;
-                $addHandle            = redefine(
-                        'add_action',
-                        function ( $hook, $callback ) use ( &$headerHook ) {
-                                if ( $hook === 'send_headers' ) {
-                                        $headerHook = $callback;
-                                }
-                        }
-                );
                 $q = new WP_Query();
                 DashboardController::resolveRoleIntoQuery( $q );
                 $tpl = DashboardController::interceptTemplate( 'index.php' );
-                if ( is_callable( $headerHook ) ) {
-                        $headerHook();
+                do_action( 'send_headers' );
+                foreach ( $hooks['send_headers'] ?? array() as $cb ) {
+                        $cb();
                 }
                 ob_start();
                 include $tpl;
@@ -111,11 +110,9 @@ final class DashboardRoleSwitchTest extends TestCase {
 
                 $this->assertContains( 'X-AP-Resolved-Role: ' . $role, $captured );
 
-                restore( $addHandle );
                 restore( $initHandle );
-                restore( $handle );
                 unset( $_GET['role'], $_GET['ap_role'], $_GET['ap_dashboard'] );
-	}
+        }
 
         public function roles(): array {
                 return array( array( 'member' ), array( 'artist' ), array( 'organization' ) );
