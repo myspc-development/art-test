@@ -28,21 +28,25 @@ class ArtistEventsController {
 		);
 	}
 
-        public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                $ids = get_posts(
-                        array(
-                                'post_type'   => 'artpulse_event',
-                                'author'      => get_current_user_id(),
-                                'fields'      => 'ids',
-                                'post_status' => array( 'publish', 'pending', 'draft', 'future' ),
-                                'numberposts' => -1,
-                        )
-                );
+       public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+               $ids = get_posts(
+                       array(
+                               'post_type'   => 'artpulse_event',
+                               'author'      => get_current_user_id(),
+                               'fields'      => 'ids',
+                               'post_status' => array( 'publish', 'pending', 'draft', 'future' ),
+                               'numberposts' => -1,
+                       )
+               );
 
-                return rest_ensure_response(
-                        array(
-                                'ids' => array_map( 'intval', $ids ),
-                        )
-                );
-        }
+               return self::ok(
+                       array(
+                               'ids' => array_map( 'intval', $ids ),
+                       )
+               );
+       }
+
+       private static function ok( $data, int $status = 200 ): WP_REST_Response {
+               return new WP_REST_Response( $data, $status );
+       }
 }

@@ -52,6 +52,10 @@ class DirectoryController {
 				'end_date'   => get_post_meta( $post->ID, 'event_end_date', true ),
 			);
 		}
-               return rest_ensure_response( $data );
+               return self::ok( $data );
+       }
+
+       private static function ok( $data, int $status = 200 ): WP_REST_Response {
+               return new WP_REST_Response( $data, $status );
        }
 }
