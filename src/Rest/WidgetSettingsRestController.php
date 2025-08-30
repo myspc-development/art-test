@@ -2,6 +2,7 @@
 namespace ArtPulse\Rest;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Rest\Util\Auth;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -25,18 +26,22 @@ class WidgetSettingsRestController {
                                         array(
                                                 'methods'             => 'GET',
                                                 'callback'            => array( self::class, 'get_settings' ),
-                                                'permission_callback' => function () {
-                                                        $ok = \ArtPulse\Rest\Util\Auth::guard( null, 'read' );
-                                                        return $ok === true ? true : $ok;
-                                                },
+                                                'permission_callback' => array( Auth::class, 'guard_read' ),
                                         ),
                                         array(
                                                 'methods'             => 'POST',
                                                 'callback'            => array( self::class, 'save_settings' ),
-                                                'permission_callback' => function () {
-                                                        $ok = \ArtPulse\Rest\Util\Auth::guard( null, 'manage_options' );
-                                                        return $ok === true ? true : $ok;
-                                                },
+                                                'permission_callback' => array( Auth::class, 'guard_manage' ),
+                                                'args'               => array(
+                                                        'settings' => array(
+                                                                'type'              => 'object',
+                                                                'required'          => true,
+                                                                'validate_callback' => function ( $value ) {
+                                                                        return is_array( $value );
+                                                                },
+                                                                'sanitize_callback' => array( self::class, 'sanitize_settings' ),
+                                                        ),
+                                                ),
                                         ),
                                 )
                         );
@@ -82,24 +87,12 @@ class WidgetSettingsRestController {
 			return new WP_Error( 'invalid_widget', __( 'Unknown widget.', 'artpulse' ), array( 'status' => 404 ) );
 		}
 
-		$raw       = (array) $request->get_param( 'settings' );
-		$sanitized = array();
+                $check = Auth::verify_nonce( $request );
+                if ( is_wp_error( $check ) ) {
+                        return $check;
+                }
 
-		foreach ( $schema as $field ) {
-			if ( ! isset( $field['key'] ) ) {
-				continue;
-			}
-			$key  = $field['key'];
-			$type = $field['type'] ?? 'text';
-			$val  = $raw[ $key ] ?? null;
-			if ( $type === 'checkbox' ) {
-				$sanitized[ $key ] = ! empty( $val );
-			} elseif ( $type === 'number' ) {
-				$sanitized[ $key ] = $val !== null ? floatval( $val ) : ( $field['default'] ?? 0 );
-			} else {
-				$sanitized[ $key ] = $val !== null ? sanitize_text_field( $val ) : ( $field['default'] ?? '' );
-			}
-		}
+                $sanitized = (array) $request->get_param( 'settings' );
 
                 if ( $global ) {
                         update_option( 'ap_widget_settings_' . $id, $sanitized );
@@ -107,6 +100,79 @@ class WidgetSettingsRestController {
                         update_user_meta( get_current_user_id(), 'ap_widget_settings_' . $id, $sanitized );
                 }
 
-		return rest_ensure_response( array( 'saved' => true ) );
-	}
+                return rest_ensure_response(
+                        array(
+                                'id'       => $id,
+                                'settings' => $sanitized,
+                        )
+                );
+        }
+
+        /**
+         * Sanitize incoming settings based on the widget schema. Unknown keys are ignored.
+         *
+         * @param mixed            $value    Raw value from the request.
+         * @param WP_REST_Request $request  The current request object.
+         * @return array                      Sanitized settings.
+         */
+        public static function sanitize_settings( $value, WP_REST_Request $request ): array {
+                if ( ! is_array( $value ) ) {
+                        return array();
+                }
+
+                $id     = sanitize_key( $request['id'] );
+                $schema = DashboardWidgetRegistry::get_widget_schema( $id );
+
+                $sanitized = array();
+                foreach ( $schema as $field ) {
+                        if ( ! isset( $field['key'] ) ) {
+                                continue;
+                        }
+                        $key = $field['key'];
+                        if ( ! array_key_exists( $key, $value ) ) {
+                                continue;
+                        }
+
+                        $raw = $value[ $key ];
+
+                        if ( is_array( $raw ) ) {
+                                $sanitized[ $key ] = self::deep_sanitize_array( $raw );
+                                continue;
+                        }
+
+                        $type = $field['type'] ?? 'string';
+                        switch ( $type ) {
+                                case 'boolean':
+                                case 'checkbox':
+                                case 'bool':
+                                        $sanitized[ $key ] = rest_sanitize_boolean( $raw );
+                                        break;
+                                case 'number':
+                                case 'int':
+                                case 'integer':
+                                        $sanitized[ $key ] = (int) $raw;
+                                        break;
+                                case 'float':
+                                case 'double':
+                                        $sanitized[ $key ] = (float) $raw;
+                                        break;
+                                default:
+                                        $sanitized[ $key ] = sanitize_text_field( (string) $raw );
+                        }
+                }
+
+                return $sanitized;
+        }
+
+        private static function deep_sanitize_array( array $arr ): array {
+                $out = array();
+                foreach ( $arr as $k => $v ) {
+                        if ( is_array( $v ) ) {
+                                $out[ sanitize_key( (string) $k ) ] = self::deep_sanitize_array( $v );
+                        } elseif ( is_scalar( $v ) || $v === null ) {
+                                $out[ sanitize_key( (string) $k ) ] = sanitize_text_field( (string) $v );
+                        }
+                }
+                return $out;
+        }
 }
