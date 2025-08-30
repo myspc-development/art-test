@@ -132,34 +132,18 @@ final class DashboardControllerStub
     {
         // Determine whether a dashboard request is being made either through
         // the special query var or by visiting the dashboard slug.
-        $isQuery = false;
-        if (isset($_GET['ap_dashboard']) && $_GET['ap_dashboard'] === '1') {
-            $isQuery = true;
-        } elseif (\function_exists('get_query_var') && \get_query_var('ap_dashboard') === '1') {
-            $isQuery = true;
-        }
+        $isQuery = isset($_GET['ap_dashboard']) && $_GET['ap_dashboard'] === '1';
 
-        $isPage = false;
-        if (\function_exists('is_page')) {
-            $isPage = \is_page('dashboard');
-        } elseif (isset($GLOBALS['mock_is_page_dashboard'])) {
-            $isPage = (bool) $GLOBALS['mock_is_page_dashboard'];
-        }
+        $isPage = isset($GLOBALS['mock_is_page_dashboard'])
+            ? (bool) $GLOBALS['mock_is_page_dashboard']
+            : false;
 
         // Authentication and capability checks can also be toggled by tests.
-        $isLoggedIn = true;
-        if (\function_exists('is_user_logged_in')) {
-            $isLoggedIn = \is_user_logged_in();
-        } elseif (isset($GLOBALS['mock_is_user_logged_in'])) {
-            $isLoggedIn = (bool) $GLOBALS['mock_is_user_logged_in'];
-        }
+        $isLoggedIn = isset($GLOBALS['mock_is_user_logged_in'])
+            ? (bool) $GLOBALS['mock_is_user_logged_in']
+            : true;
 
-        $hasCap = false;
-        if (\function_exists('current_user_can')) {
-            $hasCap = \current_user_can('view_artpulse_dashboard');
-        } else {
-            $hasCap = \in_array('view_artpulse_dashboard', MockStorage::$current_roles, true);
-        }
+        $hasCap = \in_array('view_artpulse_dashboard', MockStorage::$current_roles, true);
 
         if (($isQuery || $isPage) && $isLoggedIn && $hasCap) {
             $base = defined('ARTPULSE_PLUGIN_DIR')
