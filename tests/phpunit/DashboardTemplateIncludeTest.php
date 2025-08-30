@@ -20,6 +20,24 @@ use ArtPulse\Tests\Stubs\MockStorage;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+if ( ! function_exists( 'is_page' ) ) {
+        function is_page( $slug = '' ) {
+                global $mock_is_page_dashboard;
+                return 'dashboard' === $slug && $mock_is_page_dashboard;
+        }
+}
+if ( ! function_exists( 'is_user_logged_in' ) ) {
+        function is_user_logged_in() {
+                global $mock_is_user_logged_in;
+                return (bool) $mock_is_user_logged_in;
+        }
+}
+if ( ! function_exists( 'current_user_can' ) ) {
+        function current_user_can( $cap ) {
+                return in_array( $cap, MockStorage::$current_roles, true );
+        }
+}
+
 /**
  * @runInSeparateProcess
  */
