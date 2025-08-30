@@ -55,23 +55,23 @@ class UserLayoutManager {
 			$layout = $entry;
 		}
 
-		if ( is_array( $layout ) && ! empty( $layout ) ) {
-			$valid   = array_keys( DashboardWidgetRegistry::get_all() );
-			$logs    = array();
-			$ordered = \ArtPulse\Core\LayoutUtils::normalize_layout( $layout, $valid, $logs );
+               if ( is_array( $layout ) && ! empty( $layout ) ) {
+                       $defs   = DashboardWidgetRegistry::get_definitions();
+                       $valid  = array_keys( $defs );
+                       $logs   = array();
+                       $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout( $layout, $valid, $logs );
 
-                       $defs  = DashboardWidgetRegistry::get_definitions();
-                       $final = array();
-                       foreach ( $ordered as $item ) {
+                      $final = array();
+                      foreach ( $ordered as $item ) {
                                $slug = $item['id']; // preserve original slug for logging
                                $def  = $defs[ $slug ] ?? null;
                                $vis  = $item['visible'] ?? true;
 
-                               if ( ! $def || ! is_callable( $def['callback'] ?? null ) ) {
+                               if ( ! $def ) {
                                        if ( ! in_array( $slug, $logs, true ) ) {
                                                $logs[] = $slug;
                                        }
-                                       WidgetGuard::register_stub_widget( $slug, array(), $def ?? array() );
+                                       WidgetGuard::register_stub_widget( $slug, array(), array() );
                                }
 
                                $final[] = array(
