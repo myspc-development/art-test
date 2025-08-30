@@ -9,6 +9,7 @@ use ArtPulse\Core\RoleResolver;
 use ArtPulse\Core\LayoutUtils;
 use ArtPulse\Core\WidgetRegistryLoader;
 use ArtPulse\Core\WidgetRegistry;
+use ArtPulse\Support\WidgetIds;
 use WP;
 use WP_Query;
 
@@ -34,46 +35,45 @@ class DashboardController {
 	private static array $role_widgets = array(
 		// Default widgets for newly created members
 		'member'       => array(
-			'widget_news',
-			'widget_membership',
-			'upgrade',
-			'account-tools',
-			'recommended_for_you',
-			'my_rsvps',
-			'favorites',
-			'local-events',
-			'my-follows',
-			'notifications',
-			'messages',
-			'dashboard_feedback',
-			'cat_fact',
-		),
-		// Artist dashboard starter widgets
-		'artist'       => array(
-			'artist_feed_publisher',
-			'artist_audience_insights',
-			'artist_spotlight',
-			'artist_revenue_summary',
-			'my_events',
-			'messages',
-			'notifications',
-			'dashboard_feedback',
-			'cat_fact',
-		),
-		// Organization admin widgets
+                        'widget_news',
+                        'widget_membership',
+                        'widget_upgrade',
+                        'widget_account_tools',
+                        'widget_recommended_for_you',
+                        'widget_my_rsvps',
+                        'widget_favorites',
+                        'widget_local_events',
+                        'widget_my_follows',
+                        'widget_notifications',
+                        'widget_messages',
+                        'widget_dashboard_feedback',
+                        'widget_cat_fact',
+                ),
+                // Artist dashboard starter widgets
+                'artist'       => array(
+                        'widget_artist_feed_publisher',
+                        'widget_artist_audience_insights',
+                        'widget_artist_spotlight',
+                        'widget_artist_revenue_summary',
+                        'widget_my_events',
+                        'widget_messages',
+                        'widget_notifications',
+                        'widget_dashboard_feedback',
+                        'widget_cat_fact',
+                ),
+                // Organization admin widgets
                 // Synced with widget manifest. Guard below will warn on drift.
                 'organization' => array(
-                        'org_event_overview',
-                        'artpulse_analytics_widget',
-                        'rsvp_stats',
-                        'my-events',
-                        'org_ticket_insights',
-                        'org_team_roster',
-                        'audience_crm',
-                        'org_broadcast_box',
-                        'org_approval_center',
-                        'webhooks',
-                        'support-history',
+                        'widget_org_event_overview',
+                        'widget_artpulse_analytics_widget',
+                        'widget_org_ticket_insights',
+                        'widget_my_events',
+                        'widget_org_team_roster',
+                        'widget_audience_crm',
+                        'widget_org_broadcast_box',
+                        'widget_org_approval_center',
+                        'widget_webhooks',
+                        'widget_support_history',
                 ),
                // WordPress administrators don't have a default dashboard layout.
                // Use an explicit empty configuration so callers can distinguish
@@ -228,14 +228,14 @@ class DashboardController {
 		self::$defaults_checked = true;
 
 		$missing = array();
-		foreach ( self::$role_widgets as $ids ) {
-			foreach ( $ids as $id ) {
-				$id = WidgetRegistry::normalize_slug( $id );
-				if ( ! DashboardWidgetRegistry::exists( $id ) ) {
-					$missing[] = $id;
-				}
-			}
-		}
+                foreach ( self::$role_widgets as $ids ) {
+                        foreach ( $ids as $id ) {
+                                $id = WidgetIds::canonicalize( $id );
+                                if ( ! DashboardWidgetRegistry::exists( $id ) ) {
+                                        $missing[] = $id;
+                                }
+                        }
+                }
 
 		if ( $missing ) {
 			foreach ( array_unique( $missing ) as $id ) {
