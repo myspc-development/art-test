@@ -29,29 +29,40 @@ class LayoutUtils {
 		$normalized = array();
 		$seen       = array();
 
-		foreach ( $layout as $item ) {
-                        if ( is_array( $item ) && isset( $item['id'] ) ) {
-                                $id  = DashboardWidgetRegistry::canon_slug( (string) $item['id'] );
-                                $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
-                        } else {
-                                $id  = DashboardWidgetRegistry::canon_slug( (string) $item );
-                                $vis = true;
-                        }
+               foreach ( $layout as $item ) {
+                       if ( is_array( $item ) && isset( $item['id'] ) ) {
+                               $raw = (string) $item['id'];
+                               $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
+                       } else {
+                               $raw = (string) $item;
+                               $vis = true;
+                       }
 
-			if ( isset( $seen[ $id ] ) ) {
-				continue; // drop duplicates
-			}
-			$seen[ $id ] = true;
+                       $canon = DashboardWidgetRegistry::canon_slug( $raw );
 
-			if ( ! in_array( $id, $valid_ids, true ) ) {
-				$logs[] = $id;
-			}
+                       if ( in_array( $canon, $valid_ids, true ) ) {
+                               $id = $canon;
+                       } else {
+                               $id = strtolower( $raw );
+                               $id = str_replace( '-', '_', $id );
+                               $id = preg_replace( '/[^a-z0-9_]/', '', $id );
+                               $id = trim( $id, '_' );
+                       }
 
-			$normalized[] = array(
-				'id'      => $id,
-				'visible' => $vis,
-			);
-		}
+                       if ( $id === '' || isset( $seen[ $id ] ) ) {
+                               continue; // drop duplicates or empties
+                       }
+                       $seen[ $id ] = true;
+
+                       if ( ! in_array( $id, $valid_ids, true ) ) {
+                               $logs[] = $id;
+                       }
+
+                       $normalized[] = array(
+                               'id'      => $id,
+                               'visible' => $vis,
+                       );
+               }
 
 		return $normalized;
 	}
