@@ -42,17 +42,17 @@ class DashboardPresetIntegrityTest extends TestCase {
 		parent::tearDown();
 	}
 
-        public function test_presets_reference_registered_slugs(): void {
-		$registered = WidgetRegistry::list();
-		foreach ( array( 'member', 'artist', 'organization' ) as $role ) {
-			$preset  = DashboardPresets::forRole( $role );
-			$unknown = array_diff( $preset, $registered );
-			$this->assertEmpty(
-				$unknown,
-				"Preset {$role} references unregistered widgets: " . implode( ', ', $unknown )
-			);
-        }
+         public function test_presets_reference_registered_slugs(): void {
+                 $registered = WidgetRegistry::list();
+                 foreach ( array( 'member', 'artist', 'organization' ) as $role ) {
+                         $preset  = DashboardPresets::forRole( $role );
+                         $unknown = array_diff( $preset, $registered );
+                         $this->assertEmpty(
+                                 $unknown,
+                                 "Preset {$role} references unregistered widgets: " . implode( ', ', $unknown )
+                         );
+                 }
+         }
 
-        public static function renderEmpty(): string { return ''; }
-}
+         public static function renderEmpty(): string { return ''; }
 }
