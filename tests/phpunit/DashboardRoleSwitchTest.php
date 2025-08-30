@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../TestStubs.php';
+require_once __DIR__ . '/../Support/DashboardControllerStub.php';
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
