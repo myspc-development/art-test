@@ -65,15 +65,15 @@ class DashboardPreviewUserTest extends TestCase {
 		MockStorage::$users[2] = (object) array( 'roles' => array( 'artist' ) );
 
 		$layoutDefault = DashboardController::get_user_dashboard_layout( 1 );
-		$this->assertSame(
-			array(
-				array(
-					'id'      => 'empty_dashboard',
-					'visible' => true,
-				),
-			),
-			$layoutDefault
-		);
+               $this->assertSame(
+                        array(
+                                array(
+                                        'id'      => 'widget_alpha',
+                                        'visible' => true,
+                                ),
+                        ),
+                        $layoutDefault
+                );
 
 		$_GET['ap_preview_user']  = '2';
                 $_GET['ap_preview_nonce'] = 'nonce_ap_preview';
@@ -96,15 +96,15 @@ class DashboardPreviewUserTest extends TestCase {
 
 		$_GET['ap_preview_user'] = '2';
 		$layout                  = DashboardController::get_user_dashboard_layout( 1 );
-		$this->assertSame(
-			array(
-				array(
-					'id'      => 'empty_dashboard',
-					'visible' => true,
-				),
-			),
-			$layout
-		);
+               $this->assertSame(
+                        array(
+                                array(
+                                        'id'      => 'widget_alpha',
+                                        'visible' => true,
+                                ),
+                        ),
+                        $layout
+                );
 		unset( $_GET['ap_preview_user'] );
 	}
 
@@ -116,15 +116,15 @@ class DashboardPreviewUserTest extends TestCase {
 		$_GET['ap_preview_user']  = '2';
                 $_GET['ap_preview_nonce'] = 'nonce_ap_preview';
 		$layout                   = DashboardController::get_user_dashboard_layout( 1 );
-		$this->assertSame(
-			array(
-				array(
-					'id'      => 'empty_dashboard',
-					'visible' => true,
-				),
-			),
-			$layout
-		);
+               $this->assertSame(
+                        array(
+                                array(
+                                        'id'      => 'widget_alpha',
+                                        'visible' => true,
+                                ),
+                        ),
+                        $layout
+                );
 		unset( $_GET['ap_preview_user'], $_GET['ap_preview_nonce'] );
 	}
 

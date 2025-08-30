@@ -138,15 +138,13 @@ final class DashboardControllerStub
     /**
      * Determine the dashboard layout for a user.
      */
-    public static function get_user_dashboard_layout(int $user_id): array
+    public static function get_user_dashboard_layout(int $user_id, ?string $preview_role = null): array
     {
         if (
-            isset($_GET['ap_preview_user']) &&
+            isset($_GET['ap_preview_user'], $_GET['ap_preview_nonce']) &&
             \function_exists('current_user_can') && \current_user_can('manage_options')
         ) {
-            $nonce = isset($_GET['ap_preview_nonce'])
-                ? self::sanitize((string) $_GET['ap_preview_nonce'])
-                : '';
+            $nonce = self::sanitize((string) $_GET['ap_preview_nonce']);
             if (!\function_exists('wp_verify_nonce') || \wp_verify_nonce($nonce, 'ap_preview')) {
                 $preview = (int) $_GET['ap_preview_user'];
                 if ($preview > 0) {
@@ -155,7 +153,7 @@ final class DashboardControllerStub
             }
         }
 
-        $role   = self::get_role($user_id);
+        $role   = $preview_role ? self::sanitize($preview_role) : self::get_role($user_id);
         $custom = \get_user_meta($user_id, 'ap_dashboard_layout', true);
         $layout = [];
 

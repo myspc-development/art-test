@@ -314,7 +314,7 @@ class DashboardController {
 	 * Determine the dashboard layout for a user. Checks user overrides then
 	 * falls back to the default widgets for their role.
 	 */
-	public static function get_user_dashboard_layout( int $user_id ): array {
+       public static function get_user_dashboard_layout( int $user_id, ?string $preview_role = null ): array {
                if (
                        isset( $_GET['ap_preview_user'], $_GET['ap_preview_nonce'] ) &&
                        current_user_can( 'manage_options' ) &&
@@ -326,7 +326,11 @@ class DashboardController {
                        }
                }
 
-		$role = self::get_role( $user_id );
+               $preview_role = $preview_role
+                       ? sanitize_key( $preview_role )
+                       : ( function_exists( 'get_query_var' ) ? sanitize_key( (string) get_query_var( 'ap_role' ) ) : null );
+
+               $role = $preview_role ?: self::get_role( $user_id );
 
 		// Ensure all widgets are registered before deriving the layout.
 		if ( empty( DashboardWidgetRegistry::get_all() ) && function_exists( 'plugin_dir_path' ) ) {
@@ -373,15 +377,15 @@ class DashboardController {
 		);
 
                 // Filter out any widgets the user cannot access
-                $filtered = array_values(
-                        array_filter(
-                                $layout,
-                                static function ( $w ) use ( $user_id ) {
-                                        $id = $w['id'] ?? null;
-                                        return $id && DashboardWidgetRegistry::user_can_see( $id, $user_id );
-                                }
-                        )
-                );
+               $filtered = array_values(
+                       array_filter(
+                               $layout,
+                               static function ( $w ) use ( $user_id, $preview_role ) {
+                                       $id = $w['id'] ?? null;
+                                       return $id && DashboardWidgetRegistry::user_can_see( $id, $user_id, $preview_role );
+                               }
+                       )
+               );
 
 		if ( empty( $filtered ) ) {
 			WidgetGuard::register_stub_widget( 'empty_dashboard', array( 'title' => 'Dashboard Placeholder' ), array( 'roles' => array( $role ) ) );
