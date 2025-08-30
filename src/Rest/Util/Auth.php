@@ -47,7 +47,7 @@ final class Auth {
         public static function require_login_and_cap( string|array|callable|null $capability = null ): callable {
                 return static function ( $request = null ) use ( $capability ) {
                         if ( ! is_user_logged_in() ) {
-                                return new \WP_Error( 'rest_forbidden', 'Authentication required.', array( 'status' => 401 ) );
+                                return new \WP_Error( 'rest_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
                         }
                         if ( $capability === null ) {
                                 return true;
@@ -93,7 +93,7 @@ final class Auth {
                 }
 
                if ( ! $nonce || wp_verify_nonce( $nonce, $action ) === false ) {
-                       return new \WP_Error( 'rest_forbidden', 'Unauthorized.', array( 'status' => 401 ) );
+                       return new \WP_Error( 'rest_unauthorized', 'Invalid nonce.', array( 'status' => 401 ) );
                }
 
                 return true;
