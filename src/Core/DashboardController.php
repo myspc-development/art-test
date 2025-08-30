@@ -535,7 +535,7 @@ class DashboardController {
 
 	public static function get_role( $user_id ): string {
                if (
-                       function_exists( '\\ap_get_effective_role' )
+                       function_exists( '\ap_get_effective_role' )
                        && ( $user_id === 0 || $user_id === get_current_user_id() )
                ) {
                        return \ap_get_effective_role();
