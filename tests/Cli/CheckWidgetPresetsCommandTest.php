@@ -2,25 +2,29 @@
 declare(strict_types=1);
 
 namespace ArtPulse\Tests\Stubs {
-	/**
-	 * Stubbed versions live in a separate namespace to avoid collisions.
-	 * We will class_alias them to the production FQCNs only if those do not exist.
-	 */
-	class DashboardControllerStub {
-		private static array $presets = array();
-		public static function set_presets( array $presets ): void {
-			self::$presets = $presets; }
-		public static function get_default_presets(): array {
-			return self::$presets; }
-	}
+        /**
+         * Stubbed versions live in a separate namespace to avoid collisions.
+         * We will class_alias them to the production FQCNs only if those do not exist.
+         */
+        if ( ! class_exists( DashboardControllerStub::class, false ) ) {
+                class DashboardControllerStub {
+                        private static array $presets = array();
+                        public static function set_presets( array $presets ): void {
+                                self::$presets = $presets; }
+                        public static function get_default_presets(): array {
+                                return self::$presets; }
+                }
+        }
 
-	class DashboardWidgetRegistryStub {
-		private static array $widgets = array();
-		public static function set_widgets( array $widgets ): void {
-			self::$widgets = $widgets; }
-		public static function getById( string $id ) {
-			return self::$widgets[ $id ] ?? null; }
-	}
+        if ( ! class_exists( DashboardWidgetRegistryStub::class, false ) ) {
+                class DashboardWidgetRegistryStub {
+                        private static array $widgets = array();
+                        public static function set_widgets( array $widgets ): void {
+                                self::$widgets = $widgets; }
+                        public static function getById( string $id ) {
+                                return self::$widgets[ $id ] ?? null; }
+                }
+        }
 }
 
 // No global bootstrapping here to avoid leaking stubs or aliases into other tests.
