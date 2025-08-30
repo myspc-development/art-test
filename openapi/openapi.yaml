@@ -806,16 +806,44 @@ paths:
           description: OK
   /artpulse/v1/user/export:
     get:
-      summary: Auto-generated stub
+      summary: Export the authenticated user's profile and content
+      parameters:
+        - in: query
+          name: format
+          schema:
+            type: string
+            enum: [json, csv]
+            default: json
       responses:
         '200':
-          description: OK
+          description: Exported user data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profile:
+                    type: object
+                  posts:
+                    type: array
+                    items:
+                      type: object
+            text/csv:
+              schema:
+                type: string
   /artpulse/v1/user/delete:
     post:
-      summary: Auto-generated stub
+      summary: Delete the authenticated user's posts and personal data
       responses:
         '200':
-          description: OK
+          description: Deletion result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
   /artpulse/v1/dashboard-config:
     get:
       summary: Auto-generated stub
