@@ -26,6 +26,10 @@ final class DashboardRoleTemplateAttributesTest extends TestCase {
 
         /** @dataProvider roles */
         public function test_section_attributes_match_role( string $role ): void {
+                if ( ! defined( 'ABSPATH' ) ) {
+                        define( 'ABSPATH', dirname( __DIR__, 2 ) . '/' );
+                }
+                require_once dirname( __DIR__, 2 ) . '/includes/widget-loader.php';
                 DashboardWidgetRegistry::init();
                 $_GET['ap_role'] = $role;
                 ob_start();
