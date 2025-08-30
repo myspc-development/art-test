@@ -61,21 +61,25 @@ class DashboardController {
 			'cat_fact',
 		),
 		// Organization admin widgets
-		// Synced with widget manifest. Guard below will warn on drift.
-		'organization' => array(
-			'org_event_overview',
-			'artpulse_analytics_widget',
-			'rsvp_stats',
-			'my-events',
-			'org_ticket_insights',
-			'org_team_roster',
-			'audience_crm',
-			'org_broadcast_box',
-			'org_approval_center',
-			'webhooks',
-			'support-history',
-		),
-	);
+                // Synced with widget manifest. Guard below will warn on drift.
+                'organization' => array(
+                        'org_event_overview',
+                        'artpulse_analytics_widget',
+                        'rsvp_stats',
+                        'my-events',
+                        'org_ticket_insights',
+                        'org_team_roster',
+                        'audience_crm',
+                        'org_broadcast_box',
+                        'org_approval_center',
+                        'webhooks',
+                        'support-history',
+                ),
+               // WordPress administrators don't have a default dashboard layout.
+               // Use an explicit empty configuration so callers can distinguish
+               // between an intentionally empty set and an unknown role.
+               'administrator' => array(),
+        );
 
 	/** @var bool */
 	private static bool $defaults_checked = false;
