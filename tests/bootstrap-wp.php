@@ -116,6 +116,18 @@ if ( defined('AP_TEST_MODE') && AP_TEST_MODE ) {
             }
         }
     });
+
+    tests_add_filter(
+        'rest_pre_dispatch',
+        static function ($result, $server, $request) {
+            if ($server instanceof \WP_REST_Server && empty($server->get_routes())) {
+                do_action('rest_api_init', $server);
+            }
+            return $result;
+        },
+        10,
+        3
+    );
 }
 
 // Run after seeding (5) but before plugin load (15); 6 is fine.
