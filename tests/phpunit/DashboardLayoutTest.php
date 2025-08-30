@@ -190,7 +190,7 @@ namespace ArtPulse\Core\Tests {
 			MockStorage::$users[4]      = (object) array( 'roles' => array( 'administrator' ) );
 			MockStorage::$current_roles = array( 'manage_options' );
 			$_GET['ap_preview_role']    = 'artist';
-			$_GET['ap_preview_nonce']   = wp_create_nonce( 'ap_preview' );
+                        $_GET['ap_preview_nonce']   = 'nonce_ap_preview';
 			$layout                     = DashboardController::get_user_dashboard_layout( 4 );
 			unset( $_GET['ap_preview_role'], $_GET['ap_preview_nonce'] );
 			$this->assertSame(
@@ -226,7 +226,7 @@ namespace ArtPulse\Core\Tests {
 				),
 			);
 			$_GET['ap_preview_role']                          = 'artist';
-			$_GET['ap_preview_nonce']                         = wp_create_nonce( 'ap_preview' );
+                        $_GET['ap_preview_nonce']                         = 'nonce_ap_preview';
 			DashboardController::get_user_dashboard_layout( 6 );
 			unset( $_GET['ap_preview_role'], $_GET['ap_preview_nonce'] );
 			$this->assertSame(
