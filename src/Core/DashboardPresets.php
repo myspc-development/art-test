@@ -28,7 +28,7 @@ class DashboardPresets {
 	 * @return array<int,string>
 	 */
 	public static function forRole( string $role ): array {
-		$role = sanitize_key( $role );
+                $role = \sanitize_key( $role );
 		if ( ! in_array( $role, self::ROLES, true ) ) {
 			$role = 'member';
 		}
@@ -39,7 +39,7 @@ class DashboardPresets {
 
                // Resolve plugin root using WordPress helper to support symlinks.
                // plugin_dir_path( __DIR__ ) yields the `src/` directory so step up one level.
-               $root = plugin_dir_path( __DIR__ ) . '../';
+               $root = \plugin_dir_path( __DIR__ ) . '../';
 
 		// Try current filename first, then legacy candidates
 		$candidates = array(
