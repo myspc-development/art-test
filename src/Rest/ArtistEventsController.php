@@ -2,6 +2,7 @@
 namespace ArtPulse\Rest;
 
 use WP_Error;
+use WP_Query;
 use WP_REST_Request;
 use WP_REST_Response;
 use ArtPulse\Rest\Util\Auth;
@@ -29,34 +30,17 @@ class ArtistEventsController {
 	}
 
        public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-               $posts = get_posts(
+               $query = new WP_Query(
                        array(
-                               'post_type'   => 'artpulse_event',
-                               'author'      => get_current_user_id(),
-                               'post_status' => array( 'publish', 'pending', 'draft', 'future' ),
-                               'numberposts' => -1,
+                               'post_type'      => 'artpulse_event',
+                               'author'         => get_current_user_id(),
+                               'post_status'    => array( 'publish', 'pending', 'draft', 'future' ),
+                               'fields'         => 'ids',
+                               'posts_per_page' => -1,
                        )
                );
 
-               $events = array();
-
-               foreach ( $posts as $post ) {
-                       $status    = $post->post_status;
-                       $events[]  = array(
-                               'id'        => (int) $post->ID,
-                               'title'     => get_the_title( $post ),
-                               'status'    => $status,
-                               'date'      => get_post_meta( $post->ID, '_ap_event_date', true ),
-                               'end_date'  => get_post_meta( $post->ID, 'event_end_date', true ),
-                               'permalink' => get_permalink( $post ),
-                               'color'     => ( 'publish' === $status ) ? '#3b82f6' : '#9ca3af',
-                       );
-               }
-
-               return self::ok( $events );
+               return rest_ensure_response( $query->posts );
        }
 
-       private static function ok( $data, int $status = 200 ): WP_REST_Response {
-               return new WP_REST_Response( $data, $status );
-       }
 }
