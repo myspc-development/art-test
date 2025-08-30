@@ -143,6 +143,14 @@ if (!class_exists('WP_CLI')) {
             }
             return self::run($best, $positional, $assoc);
         }
+        public static function print_value($value, array $opts = array()): void
+        {
+            if (!empty($opts['json'])) {
+                echo json_encode($value);
+            } else {
+                echo print_r($value, true);
+            }
+        }
         public static function colorize($string)
         {
             return (string) $string;
