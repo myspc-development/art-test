@@ -309,15 +309,16 @@ class DashboardController {
 	 * falls back to the default widgets for their role.
 	 */
 	public static function get_user_dashboard_layout( int $user_id ): array {
-		if ( current_user_can( 'manage_options' ) && isset( $_GET['ap_preview_user'] ) ) {
-			$nonce = isset( $_GET['ap_preview_nonce'] ) ? sanitize_key( $_GET['ap_preview_nonce'] ) : '';
-			if ( wp_verify_nonce( $nonce, 'ap_preview' ) ) {
-				$preview = (int) $_GET['ap_preview_user'];
-				if ( $preview > 0 ) {
-					$user_id = $preview;
-				}
-			}
-		}
+               if (
+                       isset( $_GET['ap_preview_user'], $_GET['ap_preview_nonce'] ) &&
+                       current_user_can( 'manage_options' ) &&
+                       wp_verify_nonce( sanitize_key( $_GET['ap_preview_nonce'] ), 'ap_preview' )
+               ) {
+                       $preview = (int) $_GET['ap_preview_user'];
+                       if ( $preview > 0 ) {
+                               $user_id = $preview;
+                       }
+               }
 
 		$role = self::get_role( $user_id );
 
