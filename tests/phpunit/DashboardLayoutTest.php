@@ -91,8 +91,8 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_fallback_layout_and_filtering(): void {
-                        DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ), 'capability' => 'edit_posts' ) );
-                        DashboardWidgetRegistry::register( 'widget_gamma', 'Gamma', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
+                       DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
+                       DashboardWidgetRegistry::register( 'widget_gamma', 'Gamma', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
 
                         $ref2  = new \ReflectionClass( DashboardController::class );
                         $prop2 = $ref2->getProperty( 'role_widgets' );
