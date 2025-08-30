@@ -26,19 +26,23 @@ class RelatedItemsSelectorBlock {
 		// Example: Register post meta fields with REST API enabled
 
 		// Meta for multiple related artworks for artists (array)
-		register_post_meta(
-			'artpulse_artist',
-			'_ap_artist_artworks',
-			array(
-				'show_in_rest'  => true,
-				'single'        => false,
-				'type'          => 'array',
-				'items'         => array( 'type' => 'integer' ),
-				'auth_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
-			)
-		);
+                register_post_meta(
+                        'artpulse_artist',
+                        '_ap_artist_artworks',
+                        array(
+                                'show_in_rest'  => array(
+                                        'schema' => array(
+                                                'type'  => 'array',
+                                                'items' => array( 'type' => 'integer' ),
+                                        ),
+                                ),
+                                'single'        => false,
+                                'type'          => 'array',
+                                'auth_callback' => function () {
+                                        return current_user_can( 'edit_posts' );
+                                },
+                        )
+                );
 
 		// Meta for single related artist for artwork (integer)
 		register_post_meta(
