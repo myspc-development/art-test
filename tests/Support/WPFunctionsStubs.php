@@ -23,6 +23,11 @@ final class WPFunctionsStubs
                 return '/';
             }
         }
+        if (!function_exists('plugin_dir_path')) {
+            function plugin_dir_path($file): string { // phpcs:ignore
+                return rtrim(dirname($file), '/\\') . '/';
+            }
+        }
         if (!function_exists('wp_json_encode')) {
             function wp_json_encode($data, $options = 0, $depth = 512): string { // phpcs:ignore
                 return json_encode($data, $options, $depth) ?: '';

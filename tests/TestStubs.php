@@ -80,11 +80,6 @@ namespace {
 			return in_array( $cap, MockStorage::$current_roles, true );
 		}
 	}
-	if ( ! function_exists( 'wp_get_current_user' ) ) {
-		function wp_get_current_user() {
-			return new WP_User( 1, MockStorage::$current_roles );
-		}
-	}
 	if ( ! function_exists( 'get_current_user_id' ) ) {
 		function get_current_user_id() {
 			return 1;
@@ -100,10 +95,6 @@ namespace {
 	if ( ! function_exists( 'sanitize_key' ) ) {
 		function sanitize_key( $key ) {
 			return preg_replace( '/[^a-z0-9_]/i', '', strtolower( $key ) ); }
-	}
-	if ( ! function_exists( 'wp_create_nonce' ) ) {
-		function wp_create_nonce( $action = -1 ) {
-			return 'nonce_' . $action; }
 	}
 	if ( ! function_exists( 'wp_verify_nonce' ) ) {
 		function wp_verify_nonce( $nonce, $action = -1 ) {
@@ -214,14 +205,18 @@ namespace {
 		function __( $text, $domain = null ) {
 			return $text; }
 	}
-	if ( ! function_exists( 'did_action' ) ) {
-		function did_action( $tag ) {
-			return 0; }
-	}
-	if ( ! function_exists( 'add_query_arg' ) ) {
-		function add_query_arg( ...$args ) {
-			return '#'; }
-	}
+        if ( ! function_exists( 'did_action' ) ) {
+                function did_action( $tag ) {
+                        return 0; }
+        }
+        if ( ! function_exists( 'admin_url' ) ) {
+                function admin_url( $path = '', $scheme = 'admin' ) {
+                        return 'https://example.test/wp-admin/' . ltrim( $path, '/' ); }
+        }
+        if ( ! function_exists( 'add_query_arg' ) ) {
+                function add_query_arg( ...$args ) {
+                        return '#'; }
+        }
 	if ( ! function_exists( 'remove_query_arg' ) ) {
 		function remove_query_arg( $k ) {
 			return ''; }

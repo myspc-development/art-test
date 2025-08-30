@@ -76,7 +76,7 @@ class DashboardPreviewUserTest extends TestCase {
 		);
 
 		$_GET['ap_preview_user']  = '2';
-		$_GET['ap_preview_nonce'] = wp_create_nonce( 'ap_preview' );
+                $_GET['ap_preview_nonce'] = 'nonce_ap_preview';
 		$layoutPreview            = DashboardController::get_user_dashboard_layout( 1 );
 		$this->assertSame(
 			array(
@@ -114,7 +114,7 @@ class DashboardPreviewUserTest extends TestCase {
 		MockStorage::$current_roles = array();
 
 		$_GET['ap_preview_user']  = '2';
-		$_GET['ap_preview_nonce'] = wp_create_nonce( 'ap_preview' );
+                $_GET['ap_preview_nonce'] = 'nonce_ap_preview';
 		$layout                   = DashboardController::get_user_dashboard_layout( 1 );
 		$this->assertSame(
 			array(
@@ -139,7 +139,7 @@ class DashboardPreviewUserTest extends TestCase {
 		);
 
 		$_GET['ap_preview_user']  = '2';
-		$_GET['ap_preview_nonce'] = wp_create_nonce( 'ap_preview' );
+                $_GET['ap_preview_nonce'] = 'nonce_ap_preview';
 		DashboardController::get_user_dashboard_layout( 1 );
 		unset( $_GET['ap_preview_user'], $_GET['ap_preview_nonce'] );
 

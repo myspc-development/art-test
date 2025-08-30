@@ -6,18 +6,24 @@ require_once __DIR__ . '/../TestStubs.php';
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardPresets;
 use function ArtPulse\Tests\safe_unlink;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 final class DashboardPresetsLoadTest extends TestCase {
 	private string $dataDir;
 
-	protected function setUp(): void {
-		DashboardPresets::resetCache();
-		$this->dataDir = dirname( __DIR__, 2 ) . '/data';
-	}
+        protected function setUp(): void {
+                parent::setUp();
+                Monkey\setUp();
+                DashboardPresets::resetCache();
+                $this->dataDir = dirname( __DIR__, 2 ) . '/data';
+        }
 
-	protected function tearDown(): void {
-		DashboardPresets::resetCache();
-	}
+        protected function tearDown(): void {
+                DashboardPresets::resetCache();
+                Monkey\tearDown();
+                parent::tearDown();
+        }
 
 	public function test_fallback_when_json_missing(): void {
 		$roles   = array( 'member', 'artist', 'organization' );
@@ -30,11 +36,34 @@ final class DashboardPresetsLoadTest extends TestCase {
 			}
 		}
                 $expected = array(
-
+                        'member'       => array(
+                                'widget_membership',
+                                'widget_account_tools',
+                                'widget_my_follows',
+                                'widget_recommended_for_you',
+                                'widget_local_events',
+                                'widget_my_events',
+                                'widget_site_stats',
+                        ),
+                        'artist'       => array(
+                                'widget_artist_revenue_summary',
+                                'widget_artist_artwork_manager',
+                                'widget_artist_audience_insights',
+                                'widget_artist_feed_publisher',
+                                'widget_my_events',
+                                'widget_site_stats',
+                        ),
+                        'organization' => array(
+                                'widget_audience_crm',
+                                'widget_org_ticket_insights',
+                                'widget_webhooks',
+                                'widget_my_events',
+                                'widget_site_stats',
+                        ),
                 );
-		foreach ( $roles as $r ) {
-			$this->assertSame( $expected[ $r ], DashboardPresets::forRole( $r ) );
-		}
+                foreach ( $roles as $r ) {
+                        $this->assertSame( $expected[ $r ], DashboardPresets::forRole( $r ) );
+                }
 		foreach ( $backups as $r => $contents ) {
 			file_put_contents( "$this->dataDir/preset-$r.json", (string) $contents );
 		}

@@ -7,15 +7,11 @@ if ( ! defined( 'AP_VERBOSE_DEBUG' ) ) {
 	define( 'AP_VERBOSE_DEBUG', true );
 }
 if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
-	define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
-}
-if ( ! function_exists( 'plugin_dir_path' ) ) {
-	function plugin_dir_path( $file ) {
-		return dirname( $file ) . '/'; }
+        define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
 }
 if ( ! function_exists( 'locate_template' ) ) {
-	function locate_template( $template ) {
-		return ''; }
+        function locate_template( $template ) {
+                return ''; }
 }
 if ( ! function_exists( 'is_user_logged_in' ) ) {
 	function is_user_logged_in() {
@@ -31,20 +27,29 @@ require_once dirname( __DIR__, 2 ) . '/includes/helpers.php';
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Tests\Stubs\MockStorage;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 final class DashboardPreviewRoleHeaderTest extends TestCase {
 
-	protected function setUp(): void {
-		MockStorage::$users[1]      = (object) array( 'roles' => array( 'administrator' ) );
-		MockStorage::$current_roles = array( 'manage_options' );
-		MockStorage::$user_meta     = array();
-		MockStorage::$options       = array( 'ap_dashboard_option' => 'value' );
-	}
+        protected function setUp(): void {
+                parent::setUp();
+                Monkey\setUp();
+                MockStorage::$users[1]      = (object) array( 'roles' => array( 'administrator' ) );
+                MockStorage::$current_roles = array( 'manage_options' );
+                MockStorage::$user_meta     = array();
+                MockStorage::$options       = array( 'ap_dashboard_option' => 'value' );
+        }
+
+        protected function tearDown(): void {
+                Monkey\tearDown();
+                parent::tearDown();
+        }
 
 	/** @runInSeparateProcess */
 	public function test_preview_role_sets_header_and_attributes_without_persisting(): void {
 		$_GET['ap_preview_role']  = 'artist';
-		$_GET['ap_preview_nonce'] = wp_create_nonce( 'ap_preview' );
+                $_GET['ap_preview_nonce'] = 'nonce_ap_preview';
 
 		$roleHandle = \Patchwork\redefine(
 			'ap_get_effective_role',
