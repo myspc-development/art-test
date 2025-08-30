@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Core\DashboardWidgetManager;
+use ArtPulse\Rest\Util\Auth;
 
 /**
  * Simple endpoints used by the React widget editor.
@@ -33,10 +34,7 @@ class WidgetEditorController {
                                'methods'             => 'GET',
                                'callback'            => array( self::class, 'get_roles' ),
                                // Read-only endpoint – allow any authenticated user with basic read capability.
-                               'permission_callback' => function () {
-                                       $ok = \ArtPulse\Rest\Util\Auth::guard( null, 'read' );
-                                       return $ok === true ? true : $ok;
-                               },
+                               'permission_callback' => array( Auth::class, 'guard_read' ),
                        )
                );
 
