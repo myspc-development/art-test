@@ -1,6 +1,7 @@
 <?php
 namespace ArtPulse\Rest;
 
+use ArtPulse\Rest\Util\Auth;
 use WP_REST_Request;
 use WP_Error;
 
@@ -15,22 +16,17 @@ class EventCardController {
 	}
 
 	public static function register_routes(): void {
-		register_rest_route(
-			'artpulse/v1',
-			'/event-card/(?P<id>\\d+)',
-			array(
-				'methods'             => 'GET',
-				'callback'            => array( self::class, 'get_card' ),
-				'permission_callback' => array( self::class, 'check_permission' ),
-				'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
-			)
-		);
-	}
-
-	public static function check_permission( WP_REST_Request $request ): bool {
-		$nonce = $request->get_header( 'X-WP-Nonce' );
-		return is_user_logged_in() && wp_verify_nonce( $nonce, 'wp_rest' );
-	}
+                register_rest_route(
+                        'artpulse/v1',
+                        '/event-card/(?P<id>\\d+)',
+                        array(
+                                'methods'             => 'GET',
+                                'callback'            => array( self::class, 'get_card' ),
+                                'permission_callback' => array( Auth::class, 'guard_read' ),
+                                'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+                        )
+                );
+        }
 
 	public static function get_card( WP_REST_Request $request ) {
 		$id = absint( $request->get_param( 'id' ) );
