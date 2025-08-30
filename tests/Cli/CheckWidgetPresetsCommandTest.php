@@ -133,31 +133,33 @@ namespace ArtPulse\Cli\Tests {
 				)
 			);
 
-			// 3) Register the command exactly as production code does.
-			WP_CLI::add_command( 'artpulse check-widget-presets', \AP_CLI_Check_Widget_Presets::class );
+                        // 3) Register the command exactly as production code does.
+                        WP_CLI::add_command( 'artpulse check-widget-presets', \AP_CLI_Check_Widget_Presets::class );
 
-			// 4) Run & capture output.
-			$out = WP_CLI::runcommand( 'artpulse check-widget-presets' );
+                        // 4) Run & capture output.
+                        try {
+                                WP_CLI::runcommand( 'artpulse check-widget-presets' );
+                        } catch ( \WP_CLI\ExitException $e ) {
+                                // Command signals issues via ExitException; continue with captured output.
+                        }
+                        $out = WP_CLI::$last_output;
 
-			// 5) Assertions: header present, and at least one data row.
-			$this->assertNotEmpty( $out, 'CLI produced no output' );
-			$this->assertStringContainsString( "widget", $out );
-			$this->assertStringContainsString( "action", $out );
+                        // Header should mention widget/action columns.
+                        $this->assertNotEmpty( $out, 'CLI produced no output' );
+                        $this->assertStringContainsString( 'widget', $out );
+                        $this->assertStringContainsString( 'action', $out );
 
-			$lines = array_values( array_filter( array_map( 'trim', explode( "\n", $out ) ) ) );
-			$this->assertGreaterThanOrEqual( 2, count( $lines ), 'Expected header + at least one row' );
+                        // Expected widget id and actions present.
+                        $this->assertStringContainsString( 'widget_missing_widget', $out );
+                        $this->assertStringContainsString( 'unhide', $out );
+                        $this->assertStringContainsString( 'activate', $out );
+                        $this->assertStringContainsString( 'bind', $out );
+                        $this->assertStringContainsString( 'ArtPulse\\Widgets\\TestWidget', $out );
 
-			// 6) It should reference at least one of our preset ids in some form.
-			$this->assertTrue(
-				strpos( $out, 'missing_widget' ) !== false
-				|| strpos( $out, 'cap_widget' ) !== false
-				|| strpos( $out, 'valid_widget' ) !== false
-				|| strpos( $out, 'widget_missing_widget' ) !== false,
-				'Expected a row for missing/valid/cap widgets'
-			);
-
-			// 7) Optional sanity: rows look tabular (CLI stub prints tabs).
-			$this->assertStringContainsString( "\t", $lines[0], 'Header should be tab-separated' );
-		}
-	}
+                        // Split on newlines and ensure at least header + three rows.
+                        $lines = array_values( array_filter( array_map( 'trim', explode( "\n", $out ) ) ) );
+                        $this->assertGreaterThanOrEqual( 4, count( $lines ), 'Expected header and three rows' );
+                        $this->assertStringContainsString( "\t", $lines[0], 'Header should be tab-separated' );
+                }
+        }
 }
