@@ -32,97 +32,115 @@ class DirectoryController {
 
 
 public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-$meta_query = array( 'relation' => 'AND' );
+        $meta_query = array( 'relation' => 'AND' );
+        $tax_query  = array( 'relation' => 'AND' );
 
-foreach ( array( 'genre', 'medium', 'vibe', 'accessibility', 'age_range' ) as $taxonomy ) {
-$val = $request->get_param( $taxonomy );
-if ( ! empty( $val ) ) {
-$meta_query[] = array(
-'key'     => $taxonomy,
-'value'   => (array) $val,
-'compare' => 'IN',
-);
-}
-}
+        foreach ( array( 'vibe', 'accessibility', 'age_range' ) as $key ) {
+                $val = $request->get_param( $key );
+                if ( ! empty( $val ) ) {
+                        $meta_query[] = array(
+                                'key'     => $key,
+                                'value'   => (array) $val,
+                                'compare' => 'IN',
+                        );
+                }
+        }
 
-$lat       = $request->get_param( 'lat' );
-$lng       = $request->get_param( 'lng' );
-$within_km = $request->get_param( 'within_km' );
-if ( $lat && $lng && $within_km ) {
-$lat       = (float) $lat;
-$lng       = (float) $lng;
-$within_km = (float) $within_km;
-// Approximate bounding box filter to narrow query results.
-$lat_delta = $within_km / 111.045; // km per degree lat.
-$min_lat   = $lat - $lat_delta;
-$max_lat   = $lat + $lat_delta;
-$lng_delta = $within_km / ( 111.045 * cos( deg2rad( $lat ) ) );
-$min_lng   = $lng - $lng_delta;
-$max_lng   = $lng + $lng_delta;
+        foreach ( array( 'genre', 'medium' ) as $taxonomy ) {
+                $val = $request->get_param( $taxonomy );
+                if ( ! empty( $val ) ) {
+                        $tax_query[] = array(
+                                'taxonomy' => $taxonomy,
+                                'field'    => 'slug',
+                                'terms'    => (array) $val,
+                        );
+                }
+        }
 
-$meta_query[] = array(
-'key'     => 'event_lat',
-'value'   => array( $min_lat, $max_lat ),
-'compare' => 'BETWEEN',
-'type'    => 'DECIMAL',
-);
-$meta_query[] = array(
-'key'     => 'event_lng',
-'value'   => array( $min_lng, $max_lng ),
-'compare' => 'BETWEEN',
-'type'    => 'DECIMAL',
-);
-}
+        $lat       = $request->get_param( 'lat' );
+        $lng       = $request->get_param( 'lng' );
+        $within_km = $request->get_param( 'within_km' );
+        if ( $lat && $lng && $within_km ) {
+                $lat       = (float) $lat;
+                $lng       = (float) $lng;
+                $within_km = (float) $within_km;
+                // Approximate bounding box filter to narrow query results.
+                $lat_delta = $within_km / 111.045; // km per degree lat.
+                $min_lat   = $lat - $lat_delta;
+                $max_lat   = $lat + $lat_delta;
+                $lng_delta = $within_km / ( 111.045 * cos( deg2rad( $lat ) ) );
+                $min_lng   = $lng - $lng_delta;
+                $max_lng   = $lng + $lng_delta;
 
-$args = array(
-'post_type'      => 'artpulse_event',
-'post_status'    => 'publish',
-'posts_per_page' => -1,
-'orderby'        => 'meta_value',
-'meta_key'       => 'event_start_date',
-'order'          => 'ASC',
-);
-if ( count( $meta_query ) > 1 ) {
-$args['meta_query'] = $meta_query;
-}
-$query = new \WP_Query( $args );
+                $meta_query[] = array(
+                        'key'     => 'event_lat',
+                        'value'   => array( $min_lat, $max_lat ),
+                        'compare' => 'BETWEEN',
+                        'type'    => 'DECIMAL',
+                );
+                $meta_query[] = array(
+                        'key'     => 'event_lng',
+                        'value'   => array( $min_lng, $max_lng ),
+                        'compare' => 'BETWEEN',
+                        'type'    => 'DECIMAL',
+                );
+        }
 
-$events = array();
-foreach ( $query->posts as $post ) {
-$event = array(
-'id'                   => $post->ID,
-'title'                => $post->post_title,
-'link'                 => get_permalink( $post ),
-'event_start_date'     => get_post_meta( $post->ID, 'event_start_date', true ),
-'event_end_date'       => get_post_meta( $post->ID, 'event_end_date', true ),
-'event_lat'            => get_post_meta( $post->ID, 'event_lat', true ),
-'event_lng'            => get_post_meta( $post->ID, 'event_lng', true ),
-'event_street_address' => get_post_meta( $post->ID, 'event_street_address', true ),
-'genre'                => get_post_meta( $post->ID, 'genre', true ),
-'medium'               => get_post_meta( $post->ID, 'medium', true ),
-'vibe'                 => get_post_meta( $post->ID, 'vibe', true ),
-'accessibility'        => get_post_meta( $post->ID, 'accessibility', true ),
-'age_range'            => get_post_meta( $post->ID, 'age_range', true ),
-);
-$events[] = $event;
-}
+        $args = array(
+                'post_type'      => 'artpulse_event',
+                'post_status'    => 'publish',
+                'posts_per_page' => -1,
+                'orderby'        => 'meta_value',
+                'meta_key'       => 'event_start_date',
+                'order'          => 'ASC',
+                'fields'         => 'ids',
+        );
+        if ( count( $meta_query ) > 1 ) {
+                $args['meta_query'] = $meta_query;
+        }
+        if ( count( $tax_query ) > 1 ) {
+                $args['tax_query'] = $tax_query;
+        }
 
-if ( $lat && $lng && $within_km ) {
-$events = array_values(
-array_filter(
-$events,
-function ( $evt ) use ( $lat, $lng, $within_km ) {
-if ( empty( $evt['event_lat'] ) || empty( $evt['event_lng'] ) ) {
-return false;
-}
-$dist = self::haversine_distance( $lat, $lng, (float) $evt['event_lat'], (float) $evt['event_lng'] );
-return $dist <= $within_km;
-}
-)
-);
-}
+        $ids = get_posts( $args );
 
-return self::ok( $events );
+        if ( $lat && $lng && $within_km ) {
+                $ids = array_filter(
+                        $ids,
+                        function ( $id ) use ( $lat, $lng, $within_km ) {
+                                $e_lat = get_post_meta( $id, 'event_lat', true );
+                                $e_lng = get_post_meta( $id, 'event_lng', true );
+                                if ( empty( $e_lat ) || empty( $e_lng ) ) {
+                                        return false;
+                                }
+                                $dist = self::haversine_distance( $lat, $lng, (float) $e_lat, (float) $e_lng );
+                                return $dist <= $within_km;
+                        }
+                );
+        }
+
+        $events = array();
+        foreach ( $ids as $id ) {
+                $genre_terms  = wp_get_post_terms( $id, 'genre', array( 'fields' => 'slugs' ) );
+                $medium_terms = wp_get_post_terms( $id, 'medium', array( 'fields' => 'slugs' ) );
+                $events[]     = array(
+                        'id'                   => $id,
+                        'title'                => get_the_title( $id ),
+                        'link'                 => get_permalink( $id ),
+                        'event_start_date'     => get_post_meta( $id, 'event_start_date', true ),
+                        'event_end_date'       => get_post_meta( $id, 'event_end_date', true ),
+                        'event_lat'            => get_post_meta( $id, 'event_lat', true ),
+                        'event_lng'            => get_post_meta( $id, 'event_lng', true ),
+                        'event_street_address' => get_post_meta( $id, 'event_street_address', true ),
+                        'genre'                => is_wp_error( $genre_terms ) ? array() : $genre_terms,
+                        'medium'               => is_wp_error( $medium_terms ) ? array() : $medium_terms,
+                        'vibe'                 => get_post_meta( $id, 'vibe', true ),
+                        'accessibility'        => get_post_meta( $id, 'accessibility', true ),
+                        'age_range'            => get_post_meta( $id, 'age_range', true ),
+                );
+        }
+
+        return self::ok( array_values( $events ) );
 }
 
 private static function haversine_distance( float $lat1, float $lon1, float $lat2, float $lon2 ): float {
