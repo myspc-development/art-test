@@ -2,7 +2,6 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Request;
-use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Core\DashboardWidgetRegistry;
@@ -88,6 +87,8 @@ class DashboardConfigController {
                }
                unset( $ids );
 
+               $locked = array_values( array_map( $to_canon, (array) $locked ) );
+
                $layout = OptionUtils::get_array_option( 'artpulse_dashboard_layouts' );
                foreach ( $layout as $role => &$items ) {
                        $items = array_map(
@@ -120,12 +121,12 @@ class DashboardConfigController {
                        'widget_roles'   => $visibility,
                        'role_widgets'   => $role_widgets,
                        'layout'         => $layout,
-                       'locked'         => array_values( $locked ),
+                       'locked'         => $locked,
                        'capabilities'   => $capabilities,
                        'excluded_roles' => $excluded,
                );
 
-               return new \WP_REST_Response( $payload, 200 );
+               return rest_ensure_response( $payload );
        }
        public static function save_config( WP_REST_Request $request ) {
                 if ( ! current_user_can( 'manage_options' ) ) {
