@@ -3,6 +3,7 @@ namespace ArtPulse\Ajax\Tests;
 
 use ArtPulse\Ajax\FrontendFilterHandler;
 use ArtPulse\Tests\Stubs\MockStorage;
+use WP_Query;
 
 class FrontendFilterHandlerTest extends \WP_UnitTestCase {
 
