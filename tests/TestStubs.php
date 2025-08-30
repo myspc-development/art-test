@@ -80,11 +80,6 @@ namespace {
 			return in_array( $cap, MockStorage::$current_roles, true );
 		}
 	}
-	if ( ! function_exists( 'wp_get_current_user' ) ) {
-		function wp_get_current_user() {
-			return new WP_User( 1, MockStorage::$current_roles );
-		}
-	}
 	if ( ! function_exists( 'get_current_user_id' ) ) {
 		function get_current_user_id() {
 			return 1;
