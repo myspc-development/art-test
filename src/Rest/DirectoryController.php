@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use WP_Error;
 
 class DirectoryController {
 
@@ -22,13 +23,16 @@ class DirectoryController {
 			'/events',
 			array(
 				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => array( self::class, 'get_events' ),
-				'permission_callback' => function () {
-					if ( ! current_user_can( 'read' ) ) {
-						return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-					}
-					return true;
-				},
+                               'callback'            => array( self::class, 'get_events' ),
+                               'permission_callback' => function () {
+                                       if ( ! is_user_logged_in() ) {
+                                               return new WP_Error( 'rest_forbidden', __( 'Authentication required.', 'artpulse' ), array( 'status' => 401 ) );
+                                       }
+                                       if ( ! current_user_can( 'read' ) ) {
+                                               return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
+                                       }
+                                       return true;
+                               },
 			)
 		);
 	}
@@ -55,6 +59,6 @@ class DirectoryController {
 				'end_date'   => get_post_meta( $post->ID, 'event_end_date', true ),
 			);
 		}
-		return rest_ensure_response( $data );
-	}
+               return new WP_REST_Response( $data, 200 );
+        }
 }

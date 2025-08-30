@@ -53,44 +53,49 @@ class DashboardConfigController {
 		}
 	}
 
-	public static function get_config( WP_REST_Request $request ): WP_REST_Response {
-		$visibility   = OptionUtils::get_array_option( 'artpulse_widget_roles' );
-		$locked       = get_option( 'artpulse_locked_widgets', array() );
-		$role_widgets = OptionUtils::get_array_option( 'artpulse_dashboard_layouts' );
-		if ( ! $role_widgets ) {
-			$role_widgets = array();
-			foreach ( DashboardWidgetRegistry::get_role_widget_map() as $role => $widgets ) {
-				$role_widgets[ $role ] = array_values(
-					array_map(
-						static fn( $w ) => sanitize_key( $w['id'] ?? '' ),
-						$widgets
-					)
-				);
-			}
-		}
+       public static function get_config( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+               $guard = Auth::guard_read( $request );
+               if ( is_wp_error( $guard ) ) {
+                       return $guard;
+               }
 
-		$defs         = DashboardWidgetRegistry::get_all();
-		$capabilities = array();
-		$excluded     = array();
-		foreach ( $defs as $id => $def ) {
-			if ( ! empty( $def['capability'] ) ) {
-				$capabilities[ $id ] = sanitize_key( $def['capability'] );
-			}
-			if ( ! empty( $def['exclude_roles'] ) ) {
-				$excluded[ $id ] = array_map( 'sanitize_key', (array) $def['exclude_roles'] );
-			}
-		}
+               $visibility   = OptionUtils::get_array_option( 'artpulse_widget_roles' );
+               $locked       = get_option( 'artpulse_locked_widgets', array() );
+               $role_widgets = OptionUtils::get_array_option( 'artpulse_dashboard_layouts' );
+               if ( ! $role_widgets ) {
+                       $role_widgets = array();
+                       foreach ( DashboardWidgetRegistry::get_role_widget_map() as $role => $widgets ) {
+                               $role_widgets[ $role ] = array_values(
+                                       array_map(
+                                               static fn( $w ) => sanitize_key( $w['id'] ?? '' ),
+                                               $widgets
+                                       )
+                               );
+                       }
+               }
 
-		return rest_ensure_response(
-			array(
-				'widget_roles'   => $visibility,
-				'role_widgets'   => $role_widgets,
-				'locked'         => array_values( $locked ),
-				'capabilities'   => $capabilities,
-				'excluded_roles' => $excluded,
-			)
-		);
-	}
+               $defs         = DashboardWidgetRegistry::get_all();
+               $capabilities = array();
+               $excluded     = array();
+               foreach ( $defs as $id => $def ) {
+                       if ( ! empty( $def['capability'] ) ) {
+                               $capabilities[ $id ] = sanitize_key( $def['capability'] );
+                       }
+                       if ( ! empty( $def['exclude_roles'] ) ) {
+                               $excluded[ $id ] = array_map( 'sanitize_key', (array) $def['exclude_roles'] );
+                       }
+               }
+
+               $payload = array(
+                       'widget_roles'   => $visibility,
+                       'role_widgets'   => $role_widgets,
+                       'locked'         => array_values( $locked ),
+                       'capabilities'   => $capabilities,
+                       'excluded_roles' => $excluded,
+               );
+
+               return new \WP_REST_Response( $payload, 200 );
+       }
 
 	public static function save_config( WP_REST_Request $request ) {
                 $nonce = $request->get_header( 'X-WP-Nonce' );
