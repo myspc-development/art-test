@@ -1,9 +1,12 @@
 <?php
 namespace {
-	require_once __DIR__ . '/../TestStubs.php';
-	if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
-		define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
-	}
+        require_once __DIR__ . '/../TestStubs.php';
+        if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
+                define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
+        }
+        if ( ! defined( 'ABSPATH' ) ) {
+                define( 'ABSPATH', __DIR__ . '/' );
+        }
 }
 
 namespace ArtPulse\Core {
@@ -24,12 +27,12 @@ namespace ArtPulse\Core {
 }
 
 namespace ArtPulse\Core\Tests {
-	use PHPUnit\Framework\TestCase;
-	use Brain\Monkey;
-	use Brain\Monkey\Functions;
-	use ArtPulse\Core\DashboardController;
-	use ArtPulse\Core\DashboardWidgetRegistry;
-	use ArtPulse\Tests\Stubs\MockStorage;
+        use PHPUnit\Framework\TestCase;
+        use Brain\Monkey;
+        use Brain\Monkey\Functions;
+        use ArtPulse\Core\DashboardController;
+        use ArtPulse\Core\DashboardWidgetRegistry;
+        use ArtPulse\Tests\Stubs\MockStorage;
 
         class DashboardLayoutTest extends TestCase {
                 public static array $actions = array();
@@ -88,29 +91,18 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_fallback_layout_and_filtering(): void {
-			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
-			DashboardWidgetRegistry::register(
-				'widget_beta',
-				'Beta',
-				'',
-				'',
-				[self::class, 'noop'],
-				array(
-					'roles'      => array( 'member' ),
-					'capability' => 'edit_posts',
-				)
-			);
-			DashboardWidgetRegistry::register( 'widget_gamma', 'Gamma', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
+                        DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ), 'capability' => 'edit_posts' ) );
+                        DashboardWidgetRegistry::register( 'widget_gamma', 'Gamma', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
 
-			$ref2  = new \ReflectionClass( DashboardController::class );
-			$prop2 = $ref2->getProperty( 'role_widgets' );
-			$prop2->setAccessible( true );
-			$prop2->setValue(
-				null,
-				array(
-					'member' => array( 'widget_alpha', 'widget_beta', 'widget_gamma' ),
-				)
-			);
+                        $ref2  = new \ReflectionClass( DashboardController::class );
+                        $prop2 = $ref2->getProperty( 'role_widgets' );
+                        $prop2->setAccessible( true );
+                        $prop2->setValue(
+                                null,
+                                array(
+                                        'member' => array( 'widget_alpha', 'widget_gamma' ),
+                                )
+                        );
 
 			MockStorage::$users[1] = (object) array( 'roles' => array( 'member' ) );
 			$layout                = DashboardController::get_user_dashboard_layout( 1 );

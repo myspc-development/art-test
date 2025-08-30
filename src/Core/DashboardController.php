@@ -272,37 +272,43 @@ class DashboardController {
 			$widgets = array_values( array_unique( array_intersect( $widgets, $known ) ) );
 		}
 
-		$valid = array();
-		foreach ( $widgets as $id ) {
-			$config = DashboardWidgetRegistry::get( $id );
-			if ( ! $config ) {
-				trigger_error( 'Dashboard widget not registered: ' . $id, E_USER_WARNING );
-				continue;
-			}
+                $valid = array();
+                foreach ( $widgets as $id ) {
+                        $config = DashboardWidgetRegistry::get( $id );
+                        if ( ! $config ) {
+                                trigger_error( 'Dashboard widget not registered: ' . $id, E_USER_WARNING );
+                                continue;
+                        }
 
-			$roles = isset( $config['roles'] ) ? (array) $config['roles'] : array();
-			if ( $roles && ! in_array( $role, $roles, true ) ) {
-				continue;
-			}
+                        $roles = isset( $config['roles'] ) ? (array) $config['roles'] : array();
+                        if ( $roles && ! in_array( $role, $roles, true ) ) {
+                                continue;
+                        }
 
-			$cap = $config['capability'] ?? '';
-			if ( $cap && function_exists( 'user_can' ) ) {
-				if ( class_exists( 'WP_User' ) ) {
-					$u = new \WP_User( 0 );
-					$u->add_role( $role );
-					if ( ! user_can( $u, $cap ) ) {
-						continue;
-					}
-				} elseif ( ! user_can( 0, $cap ) ) {
-					continue;
-				}
-			}
+                        $cap = $config['capability'] ?? '';
+                        if ( $cap && function_exists( 'get_role' ) ) {
+                                $role_obj = get_role( $role );
+                                if ( $role_obj && method_exists( $role_obj, 'has_cap' ) && ! $role_obj->has_cap( $cap ) ) {
+                                        continue;
+                                }
+                        }
 
-			$valid[] = $id;
-		}
+                        $class = $config['class'] ?? '';
+                        if ( $class && method_exists( $class, 'can_view' ) ) {
+                                try {
+                                        if ( ! call_user_func( array( $class, 'can_view' ), 0 ) ) {
+                                                continue;
+                                        }
+                                } catch ( \Throwable $e ) {
+                                        continue;
+                                }
+                        }
 
-		return $valid;
-	}
+                        $valid[] = $id;
+                }
+
+                return $valid;
+        }
 
 	/**
 	 * Determine the dashboard layout for a user. Checks user overrides then
@@ -366,31 +372,16 @@ class DashboardController {
 			)
 		);
 
-		// Filter out any widgets not registered for this role
-		$filtered = array_values(
-			array_filter(
-				$layout,
-				static function ( $w ) use ( $role, $all, $user_id ) {
-					$id = $w['id'] ?? null;
-					if ( ! $id || ! isset( $all[ $id ] ) ) {
-						return false;
-					}
-
-					$config = $all[ $id ];
-					$roles  = isset( $config['roles'] ) ? (array) $config['roles'] : array();
-					if ( ! ( empty( $roles ) || in_array( $role, $roles, true ) ) ) {
-						return false;
-					}
-
-					$cap = $config['capability'] ?? '';
-					if ( $cap && function_exists( 'user_can' ) && ! user_can( $user_id, $cap ) ) {
-						return false;
-					}
-
-					return true;
-				}
-			)
-		);
+                // Filter out any widgets the user cannot access
+                $filtered = array_values(
+                        array_filter(
+                                $layout,
+                                static function ( $w ) use ( $user_id ) {
+                                        $id = $w['id'] ?? null;
+                                        return $id && DashboardWidgetRegistry::user_can_see( $id, $user_id );
+                                }
+                        )
+                );
 
 		if ( empty( $filtered ) ) {
 			WidgetGuard::register_stub_widget( 'empty_dashboard', array( 'title' => 'Dashboard Placeholder' ), array( 'roles' => array( $role ) ) );
