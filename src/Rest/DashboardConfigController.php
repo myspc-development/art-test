@@ -130,7 +130,7 @@ class DashboardConfigController {
        }
        public static function save_config( WP_REST_Request $request ) {
                 $nonce = $request->get_header( 'X-WP-Nonce' );
-                if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+                if ( ! wp_verify_nonce( $nonce, 'ap_dashboard_config' ) ) {
                         return new WP_Error( 'rest_invalid_nonce', 'Invalid nonce.', array( 'status' => 401 ) );
                 }
 
