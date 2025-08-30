@@ -1115,7 +1115,13 @@ class DashboardWidgetRegistry {
                 self::alias( 'myevents', 'widget_my_events' );
                 self::alias( 'widget_myevents', 'widget_my_events' );
 
-                DashboardWidgetRegistryLoader::load_all();
+                $loader_file = dirname( __DIR__, 2 ) . '/includes/widget-loader.php';
+                if ( ! class_exists( DashboardWidgetRegistryLoader::class ) && file_exists( $loader_file ) ) {
+                        require_once $loader_file;
+                }
+                if ( class_exists( DashboardWidgetRegistryLoader::class ) ) {
+                        DashboardWidgetRegistryLoader::load_all();
+                }
 
 		$register = array( self::class, 'register_widget' );
 		$register(
