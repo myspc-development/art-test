@@ -19,21 +19,29 @@ class DashboardConfigController {
 			register_rest_route(
 				ARTPULSE_API_NAMESPACE,
 				'/dashboard-config',
-				array(
-					array(
-						'methods'             => 'GET',
-						'callback'            => array( self::class, 'get_config' ),
-						'permission_callback' => Auth::require_login_and_cap( 'read' ),
-					),
+                                array(
                                         array(
-                                                'methods'             => 'POST',
-                                                'callback'            => array( self::class, 'save_config' ),
-                                                'permission_callback' => '__return_true',
+                                                'methods'  => 'GET',
+                                                'callback' => array( self::class, 'get_config' ),
+                                                'permission_callback' => function () {
+                                                        return Auth::require_cap( 'read' ) === true
+                                                                ? true
+                                                                : new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
+                                                },
+                                        ),
+                                        array(
+                                                'methods'  => 'POST',
+                                                'callback' => array( self::class, 'save_config' ),
+                                                'permission_callback' => function () {
+                                                        return Auth::require_cap( 'manage_options' ) === true
+                                                                ? true
+                                                                : new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
+                                                },
                                                 'args'                => array(
-							'widget_roles' => array(
-								'type'     => 'object',
-								'required' => false,
-							),
+                                                        'widget_roles' => array(
+                                                                'type'     => 'object',
+                                                                'required' => false,
+                                                        ),
 							'role_widgets' => array(
 								'type'     => 'object',
 								'required' => false,
@@ -54,11 +62,6 @@ class DashboardConfigController {
 	}
 
        public static function get_config( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
-               $guard = Auth::guard_read( $request );
-               if ( is_wp_error( $guard ) ) {
-                       return $guard;
-               }
-
                $visibility   = OptionUtils::get_array_option( 'artpulse_widget_roles' );
                $locked       = get_option( 'artpulse_locked_widgets', array() );
                $role_widgets = OptionUtils::get_array_option( 'artpulse_dashboard_layouts' );
@@ -97,14 +100,14 @@ class DashboardConfigController {
                return new \WP_REST_Response( $payload, 200 );
        }
 
-	public static function save_config( WP_REST_Request $request ) {
-                $guard = Auth::guard( $request, 'manage_options' );
-                if ( is_wp_error( $guard ) ) {
-                        return $guard;
-                }
+       public static function save_config( WP_REST_Request $request ) {
+               $nonce_check = Auth::verify_nonce( $request );
+               if ( is_wp_error( $nonce_check ) ) {
+                       return $nonce_check;
+               }
 
-		$data       = $request->get_json_params();
-		$visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();
+               $data       = $request->get_json_params();
+               $visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();
 		foreach ( $visibility as $role => &$ids ) {
 			$ids = array_values( array_unique( array_map( array( WidgetIds::class, 'canonicalize' ), (array) $ids ) ) );
 		}
