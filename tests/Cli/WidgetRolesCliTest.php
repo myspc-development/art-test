@@ -53,14 +53,14 @@ namespace ArtPulse\Cli\Tests {
 
 		public function test_import_missing_file_errors(): void {
 			WP_CLI::add_command( 'widget-roles', \AP_CLI_Widget_Roles::class );
-			$this->expectException( \RuntimeException::class );
+			$this->expectException( \WP_CLI\ExitException::class );
 			$this->expectExceptionMessage( 'Missing file.' );
 			WP_CLI::runcommand( 'widget-roles import' );
 		}
 
 		public function test_import_file_not_found_errors(): void {
 			WP_CLI::add_command( 'widget-roles', \AP_CLI_Widget_Roles::class );
-			$this->expectException( \RuntimeException::class );
+			$this->expectException( \WP_CLI\ExitException::class );
 			$this->expectExceptionMessage( 'File not found.' );
 			WP_CLI::runcommand( 'widget-roles --import=missing.json' );
 		}
@@ -70,7 +70,7 @@ namespace ArtPulse\Cli\Tests {
 			$tmp = tempnam( sys_get_temp_dir(), 'wr' );
 			file_put_contents( $tmp, '{invalid' );
 			try {
-				$this->expectException( \RuntimeException::class );
+				$this->expectException( \WP_CLI\ExitException::class );
 				$this->expectExceptionMessage( 'Invalid JSON.' );
 				WP_CLI::runcommand( 'widget-roles import ' . $tmp );
 			} finally {
