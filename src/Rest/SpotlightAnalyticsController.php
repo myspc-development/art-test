@@ -1,6 +1,7 @@
 <?php
 namespace ArtPulse\Rest;
 
+use ArtPulse\Rest\Util\Auth;
 use WP_REST_Request;
 use WP_Error;
 
@@ -21,7 +22,7 @@ class SpotlightAnalyticsController {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( self::class, 'log_view' ),
-				'permission_callback' => fn() => is_user_logged_in(),
+                                'permission_callback' => Auth::require_login_and_cap(null),
 				'args'                => array(
 					'id' => array(
 						'validate_callback' => 'is_numeric',

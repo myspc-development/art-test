@@ -1,6 +1,7 @@
 <?php
 namespace ArtPulse\Rest;
 
+use ArtPulse\Rest\Util\Auth;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -17,7 +18,7 @@ class LocationRestController {
 						array(
 							'methods'             => 'GET',
 							'callback'            => array( self::class, 'geonames' ),
-							'permission_callback' => fn() => is_user_logged_in(),
+                                                        'permission_callback' => Auth::require_login_and_cap(null),
 						)
 					);
 				}
@@ -28,7 +29,7 @@ class LocationRestController {
 						array(
 							'methods'             => 'GET',
 							'callback'            => array( self::class, 'google' ),
-							'permission_callback' => fn() => is_user_logged_in(),
+                                                        'permission_callback' => Auth::require_login_and_cap(null),
 						)
 					);
 				}

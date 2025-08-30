@@ -6,6 +6,7 @@ use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Core\OrgInviteManager;
 use ArtPulse\Core\MultiOrgRoles;
+use ArtPulse\Rest\Util\Auth;
 use function ArtPulse\Core\ap_user_has_org_role;
 
 class OrgRoleInviteController {
@@ -34,7 +35,7 @@ class OrgRoleInviteController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'accept' ),
-					'permission_callback' => fn() => is_user_logged_in(),
+                                        'permission_callback' => Auth::require_login_and_cap(null),
 				)
 			);
 		}

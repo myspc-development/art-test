@@ -1,6 +1,7 @@
 <?php
 namespace ArtPulse\Rest;
 
+use ArtPulse\Rest\Util\Auth;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -18,7 +19,7 @@ class FollowVenueCuratorController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'follow_venue' ),
-                                       'permission_callback' => fn() => is_user_logged_in(),
+                                       'permission_callback' => Auth::require_login_and_cap(null),
                                        'args'                => array(
 						'venue_id' => array(
 							'type'     => 'integer',
@@ -48,7 +49,7 @@ class FollowVenueCuratorController {
                                array(
                                        'methods'             => 'POST',
                                        'callback'            => array( self::class, 'follow_curator' ),
-                                       'permission_callback' => fn() => is_user_logged_in(),
+                                       'permission_callback' => Auth::require_login_and_cap(null),
                                        'args'                => array(
                                                'curator_id' => array(
                                                        'type'     => 'integer',
