@@ -178,3 +178,18 @@ function ap_render_dashboard( array $allowed_roles = array() ): void {
 	);
 }
 
+
+/**
+ * Render a static role layout shell listing preset widget slots.
+ *
+ * @param string $role Role slug.
+ */
+function ap_render_role_layout_template( string $role ): void {
+        $role  = sanitize_key( $role );
+        $slugs = \ArtPulse\Admin\RolePresets::get_preset_slugs( $role );
+        echo '<section class="ap-role-layout" role="tabpanel" id="ap-panel-' . esc_attr( $role ) . '" aria-labelledby="ap-tab-' . esc_attr( $role ) . '" data-role="' . esc_attr( $role ) . '">';
+        foreach ( $slugs as $slug ) {
+                echo '<section data-slug="' . esc_attr( $slug ) . '"></section>';
+        }
+        echo '</section>';
+}
