@@ -154,8 +154,25 @@ final class DashboardControllerStub
                 }
             }
         }
+        $role         = self::get_role($user_id);
+        $preview_role = null;
 
-        $role   = self::get_role($user_id);
+        if (
+            isset($_GET['ap_preview_role']) &&
+            \function_exists('current_user_can') && \current_user_can('manage_options')
+        ) {
+            $nonce = isset($_GET['ap_preview_nonce'])
+                ? self::sanitize((string) $_GET['ap_preview_nonce'])
+                : '';
+            if (!\function_exists('wp_verify_nonce') || \wp_verify_nonce($nonce, 'ap_preview')) {
+                $preview = self::sanitize((string) $_GET['ap_preview_role']);
+                if ($preview !== '') {
+                    $role         = $preview;
+                    $preview_role = $preview;
+                }
+            }
+        }
+
         $custom = \get_user_meta($user_id, 'ap_dashboard_layout', true);
         $layout = [];
 
@@ -185,11 +202,25 @@ final class DashboardControllerStub
             }
         }
 
-        if (empty($out)) {
-            $out[] = ['id' => 'empty_dashboard', 'visible' => true];
+        $filtered = [];
+        foreach ($out as $entry) {
+            $id = $entry['id'];
+            if (\ArtPulse\Core\DashboardWidgetRegistry::user_can_see($id, $user_id, $preview_role)) {
+                $filtered[] = $entry;
+            }
         }
 
-        return $out;
+        if (empty($filtered)) {
+            if (\function_exists('do_action')) {
+                \do_action('ap_dashboard_empty_layout', $user_id, $role);
+            }
+
+            return [
+                ['id' => 'empty_dashboard', 'visible' => true],
+            ];
+        }
+
+        return $filtered;
     }
 
     /**
