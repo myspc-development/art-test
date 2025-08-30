@@ -1,103 +1,59 @@
 <?php
-namespace ArtPulse\Admin;
-
-// --- WordPress function stubs ---
-if ( ! function_exists( __NAMESPACE__ . '\\add_action' ) ) {
-	function add_action( $hook, $callback, $priority = 10, $args = 1 ) {}
-}
-if ( ! function_exists( __NAMESPACE__ . '\\add_submenu_page' ) ) {
-	function add_submenu_page( ...$args ) {}
-}
-if ( ! function_exists( __NAMESPACE__ . '\\wp_enqueue_script' ) ) {
-	function wp_enqueue_script( ...$args ) {}
-}
-if ( ! function_exists( __NAMESPACE__ . '\\wp_localize_script' ) ) {
-	function wp_localize_script( ...$args ) {}
-}
-if ( ! function_exists( __NAMESPACE__ . '\\plugin_dir_path' ) ) {
-	function plugin_dir_path( $file ) {
-		return '/'; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\plugin_dir_url' ) ) {
-	function plugin_dir_url( $file ) {
-		return '/'; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\file_exists' ) ) {
-	function file_exists( $path ) {
-		return false; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\esc_url_raw' ) ) {
-	function esc_url_raw( $url = '' ) {
-		return $url; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\rest_url' ) ) {
-	function rest_url( $path = '' ) {
-		return $path; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\wp_create_nonce' ) ) {
-	function wp_create_nonce( $action = '' ) {
-		return 'nonce'; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\current_user_can' ) ) {
-	function current_user_can( $cap ) {
-		return OrgUserManagerTest::$can;
-	}
-}
-if ( ! function_exists( __NAMESPACE__ . '\\wp_die' ) ) {
-	function wp_die( $message = '' ) {
-		OrgUserManagerTest::$died = true; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\get_current_user_id' ) ) {
-	function get_current_user_id() {
-		return 1; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\get_user_meta' ) ) {
-	function get_user_meta( $uid, $key, $single = false ) {
-		return 5; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\get_users' ) ) {
-	function get_users( $args = array() ) {
-		return array(); }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\esc_html' ) ) {
-	function esc_html( $text ) {
-		return $text; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\esc_attr' ) ) {
-	function esc_attr( $text ) {
-		return $text; }
-}
-
 namespace ArtPulse\Admin\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\OrgUserManager;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
 class OrgUserManagerTest extends TestCase {
+    public static bool $can  = true;
+    public static bool $died = false;
 
-	public static bool $can  = true;
-	public static bool $died = false;
+    protected function setUp(): void {
+        parent::setUp();
+        self::$can  = true;
+        self::$died = false;
+        Monkey\setUp();
+        Functions\when('add_action')->justReturn();
+        Functions\when('add_submenu_page')->justReturn();
+        Functions\when('wp_enqueue_script')->justReturn();
+        Functions\when('wp_localize_script')->justReturn();
+        Functions\when('plugin_dir_path')->alias(fn($file) => '/');
+        Functions\when('plugin_dir_url')->alias(fn($file) => '/');
+        Functions\when('file_exists')->alias(fn($path) => false);
+        Functions\when('esc_url_raw')->alias(fn($url = '') => $url);
+        Functions\when('rest_url')->alias(fn($path = '') => $path);
+        Functions\when('wp_create_nonce')->alias(fn($action = '') => 'nonce');
+        Functions\when('current_user_can')->alias(fn($cap) => self::$can);
+        Functions\when('wp_die')->alias(function ( $message = '' ) { self::$died = true; });
+        Functions\when('get_current_user_id')->alias(fn() => 1);
+        Functions\when('get_user_meta')->alias(fn($uid, $key, $single = false) => 5);
+        Functions\when('get_users')->alias(fn($args = array()) => array());
+        Functions\when('esc_html')->alias(fn($text) => $text);
+        Functions\when('esc_attr')->alias(fn($text) => $text);
+    }
 
-	protected function setUp(): void {
-		self::$can  = true;
-		self::$died = false;
-	}
+    protected function tearDown(): void {
+        Monkey\tearDown();
+        parent::tearDown();
+    }
 
-	public function test_render_denied(): void {
-		self::$can = false;
-		ob_start();
-		OrgUserManager::render();
-		ob_end_clean();
-		$this->assertTrue( self::$died );
-	}
+    public function test_render_denied(): void {
+        self::$can = false;
+        ob_start();
+        OrgUserManager::render();
+        ob_end_clean();
+        $this->assertTrue(self::$died);
+    }
 
-	public function test_render_allowed_outputs_html(): void {
-		self::$can = true;
-		ob_start();
-		OrgUserManager::render();
-		$out = ob_get_clean();
-		$this->assertStringContainsString( 'ap-org-invite-form', $out );
-		$this->assertStringContainsString( 'ap-invite-role', $out );
-		$this->assertStringContainsString( 'Role', $out );
-	}
+    public function test_render_allowed_outputs_html(): void {
+        self::$can = true;
+        ob_start();
+        OrgUserManager::render();
+        $out = ob_get_clean();
+        $this->assertStringContainsString('ap-org-invite-form', $out);
+        $this->assertStringContainsString('ap-invite-role', $out);
+        $this->assertStringContainsString('Role', $out);
+    }
 }

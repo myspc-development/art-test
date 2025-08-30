@@ -2,24 +2,16 @@
 require_once __DIR__ . '/../TestStubs.php';
 
 if ( ! defined( 'ARTPULSE_PLUGIN_DIR' ) ) {
-	define( 'ARTPULSE_PLUGIN_DIR', dirname( __DIR__, 2 ) );
+        define( 'ARTPULSE_PLUGIN_DIR', dirname( __DIR__, 2 ) );
+}
+if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
+        define( 'ARTPULSE_PLUGIN_FILE', __FILE__ );
 }
 
 // Allow tests to toggle gating conditions and auth checks.
 $mock_is_page_dashboard = false;
 $mock_is_user_logged_in = true;
-if ( ! function_exists( 'is_page' ) ) {
-	function is_page( $slug ) {
-		global $mock_is_page_dashboard;
-		return $slug === 'dashboard' && $mock_is_page_dashboard;
-	}
-}
-if ( ! function_exists( 'is_user_logged_in' ) ) {
-        function is_user_logged_in() {
-                global $mock_is_user_logged_in;
-                return $mock_is_user_logged_in;
-        }
-}
+
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
@@ -37,7 +29,7 @@ final class DashboardTemplateIncludeTest extends TestCase {
 
                 Monkey\setUp();
                 Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
-                Functions\when( 'get_query_var' )->alias( fn( $var ) => $_GET[ $var ] ?? '' );
+
         }
 
         protected function tearDown(): void {
