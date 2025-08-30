@@ -19,10 +19,11 @@ namespace ArtPulse\Tests\Stubs {
 // No global bootstrapping here to avoid leaking stubs or aliases into other tests.
 
 namespace ArtPulse\Cli\Tests {
-	use PHPUnit\Framework\TestCase;
-	use WP_CLI;
-	use ArtPulse\Core\DashboardController;
-	use ArtPulse\Core\DashboardWidgetRegistry;
+        use PHPUnit\Framework\TestCase;
+        use WP_CLI;
+        use ArtPulse\Core\DashboardController;
+        use ArtPulse\Core\DashboardWidgetRegistry;
+        use ArtPulse\Tests\Stubs\DashboardControllerStub;
 
        /**
 	* NOTE:
@@ -62,9 +63,9 @@ namespace ArtPulse\Cli\Tests {
 	                       }
 	               }
 
-	               if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
-	                       class_alias( \ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class );
-	               }
+                       if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
+                               class_alias( DashboardControllerStub::class, DashboardController::class );
+                       }
 	               if ( ! class_exists( \ArtPulse\Core\DashboardWidgetRegistry::class, false ) ) {
 	                       class_alias( \ArtPulse\Tests\Stubs\DashboardWidgetRegistryStub::class, \ArtPulse\Core\DashboardWidgetRegistry::class );
 	               }
