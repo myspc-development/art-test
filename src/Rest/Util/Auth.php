@@ -92,9 +92,9 @@ final class Auth {
                         $nonce = $request_or_nonce;
                 }
 
-                if ( ! $nonce || wp_verify_nonce( $nonce, $action ) === false ) {
-                        return new \WP_Error( 'rest_unauthorized', 'Invalid or missing nonce.', array( 'status' => 401 ) );
-                }
+               if ( ! $nonce || wp_verify_nonce( $nonce, $action ) === false ) {
+                       return new \WP_Error( 'rest_forbidden', 'Unauthorized.', array( 'status' => 401 ) );
+               }
 
                 return true;
         }
