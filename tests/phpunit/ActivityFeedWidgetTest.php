@@ -34,28 +34,33 @@ namespace {
 		function sanitize_title( $title ) {
 			return preg_replace( '/[^a-z0-9_\-]+/i', '-', strtolower( $title ) ); }
 	}
-	if ( ! function_exists( 'date_i18n' ) ) {
-		function date_i18n( $format, $timestamp ) {
-			return date( $format, $timestamp ); }
-	}
-
-	if ( ! function_exists( 'ap_get_effective_role' ) ) {
-		function ap_get_effective_role() {
-			return \ActivityFeedWidgetTest::$role; }
-	}
+        if ( ! function_exists( 'date_i18n' ) ) {
+                function date_i18n( $format, $timestamp ) {
+                        return date( $format, $timestamp ); }
+        }
 
 	use ArtPulse\Widgets\Member\ActivityFeedWidget;
 	use ArtPulse\Core\ActivityLogger;
 	use ArtPulse\Tests\Stubs\MockStorage;
 	use PHPUnit\Framework\TestCase;
 
-	class ActivityFeedWidgetTest extends TestCase {
-		public static string $role;
-		protected function setUp(): void {
-			ActivityLogger::$logs                = array();
-			self::$role                          = 'member';
-			MockStorage::$options['date_format'] = 'Y-m-d';
-		}
+        class ActivityFeedWidgetTest extends TestCase {
+                public static string $role;
+                private $roleHandle;
+
+                protected function setUp(): void {
+                        parent::setUp();
+                        ActivityLogger::$logs                = array();
+                        self::$role                          = 'member';
+                        MockStorage::$options['date_format'] = 'Y-m-d';
+                        $this->roleHandle                    = \Patchwork\redefine( 'ap_get_effective_role', fn() => self::$role );
+                        require_once __DIR__ . '/../ap_get_effective_role_stub.php';
+                }
+
+                protected function tearDown(): void {
+                        \Patchwork\restore( $this->roleHandle );
+                        parent::tearDown();
+                }
 
 		public function test_render_displays_no_activity_message(): void {
 			$html = ActivityFeedWidget::render( 1 );
