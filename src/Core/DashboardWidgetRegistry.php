@@ -1028,18 +1028,19 @@ class DashboardWidgetRegistry {
 	 * @param string|array $role Single role or array of roles.
 	 */
 	public static function get_widgets_by_role( $role, int $user_id = 0 ): array {
-		$roles = self::normalizeRoleList( $role );
-		$defs  = array();
-		foreach ( self::get_all() as $id => $cfg ) {
-			$widget_roles = self::normalizeRoleList( $cfg['roles'] ?? array() );
-			if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
-				continue;
-			}
-			if ( ! self::user_can_see( $id, $user_id ) ) {
-				continue;
-			}
-			$defs[ $id ] = $cfg;
-		}
+               $roles   = self::normalizeRoleList( $role );
+               $defs    = array();
+               $preview = count( $roles ) === 1 ? $roles[0] : null;
+               foreach ( self::get_all() as $id => $cfg ) {
+                       $widget_roles = self::normalizeRoleList( $cfg['roles'] ?? array() );
+                       if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
+                               continue;
+                       }
+                       if ( ! self::user_can_see( $id, $user_id, $preview ) ) {
+                               continue;
+                       }
+                       $defs[ $id ] = $cfg;
+               }
 
 		return $defs;
 	}

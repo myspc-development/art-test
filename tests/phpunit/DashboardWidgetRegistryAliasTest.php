@@ -50,13 +50,30 @@ class DashboardWidgetRegistryAliasTest extends TestCase {
 		$this->assertTrue( is_callable( $def['callback'] ) );
 	}
 
-	public function test_news_alias_maps_to_feed(): void {
+        public function test_news_alias_maps_to_feed(): void {
                 DashboardWidgetRegistry::register( 'widget_news_feed', 'NewsFeed', '', '', [self::class, 'renderBlank'] );
-		DashboardWidgetRegistry::alias( 'widget_news', 'widget_news_feed' );
-		$this->assertTrue( DashboardWidgetRegistry::exists( 'widget_news' ) );
-		$this->assertSame(
-			DashboardWidgetRegistry::get( 'widget_news_feed' ),
-			DashboardWidgetRegistry::get( 'widget_news' )
-		);
-	}
+                DashboardWidgetRegistry::alias( 'widget_news', 'widget_news_feed' );
+                $this->assertTrue( DashboardWidgetRegistry::exists( 'widget_news' ) );
+                $this->assertSame(
+                        DashboardWidgetRegistry::get( 'widget_news_feed' ),
+                        DashboardWidgetRegistry::get( 'widget_news' )
+                );
+        }
+
+       public function test_hyphenated_aliases_resolve_to_canonical(): void {
+               DashboardWidgetRegistry::register( 'widget_my_events', 'My Events', '', '', [self::class, 'renderBlank'] );
+               DashboardWidgetRegistry::register( 'widget_account_tools', 'Account Tools', '', '', [self::class, 'renderBlank'] );
+
+               $this->assertTrue( DashboardWidgetRegistry::exists( 'my-events' ) );
+               $this->assertSame(
+                       DashboardWidgetRegistry::get( 'widget_my_events' ),
+                       DashboardWidgetRegistry::get( 'my-events' )
+               );
+
+               $this->assertTrue( DashboardWidgetRegistry::exists( 'widget_account-tools' ) );
+               $this->assertSame(
+                       DashboardWidgetRegistry::get( 'widget_account_tools' ),
+                       DashboardWidgetRegistry::get( 'widget_account-tools' )
+               );
+       }
 }

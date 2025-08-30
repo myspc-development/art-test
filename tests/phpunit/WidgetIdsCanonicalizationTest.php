@@ -12,8 +12,9 @@ class WidgetIdsCanonicalizationTest extends TestCase {
 		$map = array(
 			'membership'                  => 'widget_membership',
 			'upgrade'                     => 'widget_upgrade',
-			'account-tools'               => 'widget_account_tools',
-			'my-events'                   => 'widget_my_events',
+                       'account-tools'               => 'widget_account_tools',
+                       'widget_account-tools'        => 'widget_account_tools',
+                       'my-events'                   => 'widget_my_events',
 			'recommended_for_you'         => 'widget_recommended_for_you',
 			'my_rsvps'                    => 'widget_my_rsvps',
 			'favorites'                   => 'widget_favorites',
