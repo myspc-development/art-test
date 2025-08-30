@@ -15,4 +15,4 @@ define('WP_TESTS_TITLE',  'WP Tests');
 define('WP_PHP_BINARY', PHP_BINARY);
 
 // Point ABSPATH at the clean core we just copied
-define('ABSPATH', dirname(__DIR__) . '/vendor/wp-phpunit/wp-phpunit/wordpress/');
+define('ABSPATH', __DIR__ . '/vendor/wp-phpunit/wp-phpunit/wordpress/');
