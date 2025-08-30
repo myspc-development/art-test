@@ -117,11 +117,51 @@ final class DashboardControllerStub
     }
 
     /**
+     * Return raw presets without filtering.
+     */
+    public static function get_raw_presets(): array
+    {
+        return self::$presets;
+    }
+
+    /**
      * Minimal implementation mirroring the production method.
      */
     public static function get_default_presets(): array
     {
-        return self::$presets;
+        $presets = self::get_raw_presets();
+        foreach ($presets as $key => $preset) {
+            $layout = [];
+            foreach ($preset['layout'] as $entry) {
+                $id = $entry['id'] ?? '';
+                if ($id === '') {
+                    continue;
+                }
+                $config = \ArtPulse\Core\DashboardWidgetRegistry::getById($id);
+                if (!$config) {
+                    continue;
+                }
+                $roles = isset($config['roles']) ? (array) $config['roles'] : [];
+                if ($roles && !\in_array($preset['role'], $roles, true)) {
+                    continue;
+                }
+                $cap = $config['capability'] ?? '';
+                if ($cap && $preset['role'] !== 'administrator') {
+                    $roleObj = null;
+                    if (\function_exists('ArtPulse\\Cli\\Tests\\get_role')) {
+                        $roleObj = \call_user_func('ArtPulse\\Cli\\Tests\\get_role', $preset['role']);
+                    } elseif (\function_exists('get_role')) {
+                        $roleObj = \get_role($preset['role']);
+                    }
+                    if (!$roleObj || !$roleObj->has_cap($cap)) {
+                        continue;
+                    }
+                }
+                $layout[] = ['id' => $id, 'visible' => $entry['visible'] ?? true];
+            }
+            $presets[$key]['layout'] = $layout;
+        }
+        return $presets;
     }
 
     /**

@@ -13,7 +13,7 @@ class AP_CLI_Check_Widget_Presets {
 	 * Inspect preset layouts and report invalid or inaccessible widgets.
 	 */
 	public function __invoke( array $args, array $assoc_args ): void {
-		$presets = DashboardController::get_default_presets();
+                $presets = DashboardController::get_raw_presets();
 		$errors  = false;
 
 		foreach ( $presets as $key => $preset ) {
