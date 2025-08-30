@@ -10,10 +10,6 @@ if ( ! function_exists( 'is_user_logged_in' ) ) {
 	function is_user_logged_in() {
 		return true; }
 }
-if ( ! function_exists( 'get_query_var' ) ) {
-	function get_query_var( $key ) {
-		return $_GET[ $key ] ?? ''; }
-}
 
 final class DashboardRoleTemplateAttributesTest extends TestCase {
 
@@ -21,6 +17,7 @@ final class DashboardRoleTemplateAttributesTest extends TestCase {
                 parent::setUp();
                 Monkey\setUp();
                 Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => dirname( __DIR__, 2 ) . '/' );
+                Functions\when( 'get_query_var' )->alias( fn( $key ) => $_GET[ $key ] ?? '' );
         }
 
         protected function tearDown(): void {
