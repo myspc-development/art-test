@@ -1,6 +1,7 @@
 <?php
 namespace ArtPulse\Rest;
 
+use ArtPulse\Rest\Util\Auth;
 use WP_REST_Controller;
 use WP_REST_Server;
 use WP_REST_Request;
@@ -33,53 +34,45 @@ class EventChatPostController extends WP_REST_Controller {
 		// ],
 		// ]);
 
-		register_rest_route(
-			$this->namespace,
-			'/chat/(?P<id>\d+)/reaction',
-			array(
-				'methods'             => WP_REST_Server::CREATABLE,
-				'callback'            => array( $this, 'add_reaction' ),
-				'permission_callback' => array( $this, 'permissions' ),
-				'args'                => array(
-					'id'    => array( 'validate_callback' => 'is_numeric' ),
-					'emoji' => array(
-						'type'     => 'string',
-						'required' => true,
-					),
-				),
-			)
-		);
+                register_rest_route(
+                        $this->namespace,
+                        '/chat/(?P<id>\d+)/reaction',
+                        array(
+                                'methods'             => WP_REST_Server::CREATABLE,
+                                'callback'            => array( $this, 'add_reaction' ),
+                                'permission_callback' => array( Auth::class, 'guard_read' ),
+                                'args'                => array(
+                                        'id'    => array( 'validate_callback' => 'is_numeric' ),
+                                        'emoji' => array(
+                                                'type'     => 'string',
+                                                'required' => true,
+                                        ),
+                                ),
+                        )
+                );
 
-		register_rest_route(
-			$this->namespace,
-			'/chat/(?P<id>\d+)',
-			array(
-				'methods'             => WP_REST_Server::DELETABLE,
-				'callback'            => array( $this, 'delete_item' ),
-				'permission_callback' => array( $this, 'moderator_check' ),
-				'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
-			)
-		);
+                register_rest_route(
+                        $this->namespace,
+                        '/chat/(?P<id>\d+)',
+                        array(
+                                'methods'             => WP_REST_Server::DELETABLE,
+                                'callback'            => array( $this, 'delete_item' ),
+                                'permission_callback' => array( Auth::class, 'guard_manage' ),
+                                'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+                        )
+                );
 
-		register_rest_route(
-			$this->namespace,
-			'/chat/(?P<id>\d+)/flag',
-			array(
-				'methods'             => WP_REST_Server::EDITABLE,
-				'callback'            => array( $this, 'flag_item' ),
-				'permission_callback' => array( $this, 'moderator_check' ),
-				'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
-			)
-		);
-	}
-
-	public function permissions( WP_REST_Request $request ) {
-		return is_user_logged_in();
-	}
-
-	public function moderator_check( WP_REST_Request $request ) {
-		return current_user_can( 'moderate_comments' );
-	}
+                register_rest_route(
+                        $this->namespace,
+                        '/chat/(?P<id>\d+)/flag',
+                        array(
+                                'methods'             => WP_REST_Server::EDITABLE,
+                                'callback'            => array( $this, 'flag_item' ),
+                                'permission_callback' => array( Auth::class, 'guard_manage' ),
+                                'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+                        )
+                );
+        }
 
 	public function add_reaction( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$msg_id = absint( $request['id'] );
