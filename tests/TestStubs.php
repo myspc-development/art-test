@@ -101,10 +101,6 @@ namespace {
 		function sanitize_key( $key ) {
 			return preg_replace( '/[^a-z0-9_]/i', '', strtolower( $key ) ); }
 	}
-	if ( ! function_exists( 'wp_create_nonce' ) ) {
-		function wp_create_nonce( $action = -1 ) {
-			return 'nonce_' . $action; }
-	}
 	if ( ! function_exists( 'wp_verify_nonce' ) ) {
 		function wp_verify_nonce( $nonce, $action = -1 ) {
 			return $nonce === 'nonce_' . $action; }
