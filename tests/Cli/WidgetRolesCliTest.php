@@ -78,15 +78,25 @@ namespace ArtPulse\Cli\Tests {
 			}
 		}
 
-		public function test_import_success_updates_option(): void {
-			WP_CLI::add_command( 'widget-roles', \AP_CLI_Widget_Roles::class );
-			$tmp  = tempnam( sys_get_temp_dir(), 'wr' );
-			$data = array( 'member' => array( array( 'id' => 'w1' ) ) );
-			file_put_contents( $tmp, json_encode( $data ) );
-			$out = WP_CLI::runcommand( 'widget-roles --import=' . $tmp );
-			$this->assertStringContainsString( 'Imported widget-role map.', $out );
-			$this->assertSame( $data, $GLOBALS['options']['artpulse_widget_roles'] );
-			safe_unlink( $tmp );
-		}
-	}
+                public function test_import_success_updates_option(): void {
+                        WP_CLI::add_command( 'widget-roles', \AP_CLI_Widget_Roles::class );
+                        $tmp  = tempnam( sys_get_temp_dir(), 'wr' );
+                        $data = array( 'member' => array( array( 'id' => 'w1' ) ) );
+                        file_put_contents( $tmp, json_encode( $data ) );
+                        $out = WP_CLI::runcommand( 'widget-roles --import=' . $tmp );
+                        $this->assertStringContainsString( 'Imported widget-role map.', $out );
+                        $this->assertSame( $data, $GLOBALS['options']['artpulse_widget_roles'] );
+                        safe_unlink( $tmp );
+                }
+
+                public function test_import_valid_non_array_json_updates_option(): void {
+                        WP_CLI::add_command( 'widget-roles', \AP_CLI_Widget_Roles::class );
+                        $tmp = tempnam( sys_get_temp_dir(), 'wr' );
+                        file_put_contents( $tmp, 'null' );
+                        $out = WP_CLI::runcommand( 'widget-roles import ' . $tmp );
+                        $this->assertStringContainsString( 'Imported widget-role map.', $out );
+                        $this->assertNull( $GLOBALS['options']['artpulse_widget_roles'] );
+                        safe_unlink( $tmp );
+                }
+        }
 }

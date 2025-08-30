@@ -19,6 +19,14 @@ if (!class_exists('WP_CLI')) {
         public static function success($msg): void { echo rtrim((string)$msg, "\n") . PHP_EOL; }
         public static function warning($msg): void { echo rtrim((string)$msg, "\n") . PHP_EOL; }
         public static function error($msg): void { throw new \RuntimeException(is_string($msg) ? $msg : json_encode($msg)); }
+        public static function print_value($value, array $assoc_args = array()): void
+        {
+            if (!empty($assoc_args['json'])) {
+                echo json_encode($value) . PHP_EOL;
+                return;
+            }
+            echo $value . PHP_EOL;
+        }
         public static function debug($msg, $group = null): void
         {
             $enabled = getenv('WP_CLI_DEBUG');

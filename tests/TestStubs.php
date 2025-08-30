@@ -16,7 +16,11 @@ namespace ArtPulse\Tests\Stubs {
 }
 
 namespace {
-	use ArtPulse\Tests\Stubs\MockStorage;
+        use ArtPulse\Tests\Stubs\MockStorage;
+
+        if ( ! isset( $GLOBALS['options'] ) ) {
+                $GLOBALS['options'] = array();
+        }
 
 	// If the WordPress test suite is available, let core functions be loaded
 	// normally to avoid "cannot redeclare" errors when they are included later.
@@ -49,9 +53,10 @@ namespace {
 		}
 	}
 	if ( ! function_exists( 'update_option' ) ) {
-		function update_option( $key, $value ) {
-			MockStorage::$options[ $key ] = $value;
-		}
+                function update_option( $key, $value ) {
+                        $GLOBALS['options'][ $key ] = $value;
+                        MockStorage::$options[ $key ] = $value;
+                }
 	}
 	if ( ! function_exists( 'get_userdata' ) ) {
 		function get_userdata( $uid ) {
