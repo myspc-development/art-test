@@ -1105,9 +1105,15 @@ class DashboardWidgetRegistry {
 		if ( $initialized ) {
 			return;
 		}
-		$initialized = true;
+                $initialized = true;
 
-		DashboardWidgetRegistryLoader::load_all();
+                // Map legacy widget slugs to their canonical identifiers before
+                // loading widgets so that earlier registrations are merged
+                // correctly.
+                self::alias( 'myevents', 'widget_my_events' );
+                self::alias( 'widget_myevents', 'widget_my_events' );
+
+                DashboardWidgetRegistryLoader::load_all();
 
 		$register = array( self::class, 'register_widget' );
 		$register(
@@ -1328,9 +1334,9 @@ class DashboardWidgetRegistry {
 				continue;
 			}
 
-                        if ( array_key_exists( 'roles', $cfg ) ) {
+                        if ( isset( $cfg['roles'] ) ) {
                                 $normalized = self::normalizeRoleList( $cfg['roles'] );
-                                if ( ! empty( $normalized ) ) {
+                                if ( $normalized !== array() ) {
                                         $widgets[ $id ]['roles'] = $normalized;
                                 }
                         }
