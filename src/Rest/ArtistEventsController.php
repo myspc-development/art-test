@@ -29,18 +29,37 @@ class ArtistEventsController {
 		);
 	}
 
-       public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-               $query = new WP_Query(
-                       array(
-                               'post_type'      => 'artpulse_event',
-                               'author'         => get_current_user_id(),
-                               'post_status'    => array( 'publish', 'pending', 'draft', 'future' ),
-                               'fields'         => 'ids',
-                               'posts_per_page' => -1,
-                       )
-               );
+        public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                $permission = Auth::guard_read( $request );
+                if ( is_wp_error( $permission ) ) {
+                        return $permission;
+                }
 
-               return rest_ensure_response( $query->posts );
-       }
+                $query = new WP_Query(
+                        array(
+                                'post_type'      => 'artpulse_event',
+                                'author'         => get_current_user_id(),
+                                'post_status'    => array( 'publish', 'pending', 'draft', 'future' ),
+                                'fields'         => 'ids',
+                                'posts_per_page' => -1,
+                        )
+                );
+
+                $data = array();
+                foreach ( $query->posts as $post_id ) {
+                        $status = get_post_status( $post_id );
+                        $color  = $status === 'publish' ? '#3b82f6' : '#9ca3af';
+                        $data[] = array(
+                                'id'     => (int) $post_id,
+                                'title'  => get_the_title( $post_id ),
+                                'start'  => get_post_meta( $post_id, '_ap_event_date', true ),
+                                'end'    => get_post_meta( $post_id, 'event_end_date', true ),
+                                'status' => $status,
+                                'color'  => $color,
+                        );
+                }
+
+                return rest_ensure_response( $data );
+        }
 
 }
