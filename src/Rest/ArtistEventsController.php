@@ -64,8 +64,8 @@ class ArtistEventsController {
                $query = new WP_Query(
                        array(
                                'post_type'              => 'artpulse_event',
-                               'author__in'             => array( $user_id ),
-                               'post_status'            => array( 'publish', 'pending', 'draft', 'future' ),
+                               'author'                 => $user_id,
+                               'post_status'            => array( 'publish', 'pending', 'draft', 'future', 'private' ),
                                'fields'                 => 'ids',
                                'posts_per_page'         => -1,
                                'no_found_rows'          => true,

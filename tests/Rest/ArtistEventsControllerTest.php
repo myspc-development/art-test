@@ -56,6 +56,34 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
                        )
                );
 
+               $this->user_events[] = self::factory()->post->create(
+                       array(
+                               'post_title'  => 'Pending',
+                               'post_type'   => 'artpulse_event',
+                               'post_status' => 'pending',
+                               'post_author' => $this->user_id,
+                               'meta_input'  => array(
+                                       '_ap_event_date' => '2025-03-01',
+                                       'event_end_date' => '2025-03-02',
+                               ),
+                       )
+               );
+
+               $this->user_events[] = self::factory()->post->create(
+                       array(
+                               'post_title'    => 'Future',
+                               'post_type'     => 'artpulse_event',
+                               'post_status'   => 'future',
+                               'post_author'   => $this->user_id,
+                               'post_date'     => '2030-01-01 00:00:00',
+                               'post_date_gmt' => '2030-01-01 00:00:00',
+                               'meta_input'    => array(
+                                       '_ap_event_date' => '2030-01-01',
+                                       'event_end_date' => '2030-01-02',
+                               ),
+                       )
+               );
+
                $other_event = self::factory()->post->create(
                        array(
                                'post_title'  => 'Other',
@@ -86,19 +114,27 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
 	}
 
 	public function test_get_events_returns_current_user_posts(): void {
-                $req = new \WP_REST_Request( 'GET', '/artpulse/v1/artist-events' );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 200, $res->get_status() );
-                $data = $res->get_data();
-                $this->assertNotEmpty( $data );
-                $ids  = wp_list_pluck( $data, 'id' );
-                $this->assertSameSets( $this->user_events, $ids );
-                foreach ( $ids as $id ) {
-                        $this->assertSame( $this->user_id, (int) get_post_field( 'post_author', $id ) );
-                }
-                $this->assertCount( count( $this->user_events ), $data );
-                $events = wp_list_pluck( $data, 'color', 'status' );
-                $this->assertSame( '#3b82f6', $events['publish'] );
-                $this->assertSame( '#9ca3af', $events['draft'] );
-         }
+               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/artist-events' );
+               $res = rest_get_server()->dispatch( $req );
+               $this->assertSame( 200, $res->get_status() );
+               $data = $res->get_data();
+               $this->assertNotEmpty( $data );
+
+               $ids       = array_map( 'intval', wp_list_pluck( $data, 'id' ) );
+               $expected  = $this->user_events;
+               sort( $ids );
+               sort( $expected );
+               $this->assertSame( $expected, $ids );
+
+               foreach ( $ids as $id ) {
+                       $this->assertSame( $this->user_id, (int) get_post_field( 'post_author', $id ) );
+               }
+
+               $this->assertCount( count( $this->user_events ), $data );
+               $events = wp_list_pluck( $data, 'color', 'status' );
+               $this->assertSame( '#3b82f6', $events['publish'] );
+               $this->assertSame( '#9ca3af', $events['draft'] );
+               $this->assertSame( '#9ca3af', $events['pending'] );
+               $this->assertSame( '#9ca3af', $events['future'] );
+        }
 }
