@@ -21,6 +21,9 @@ use ArtPulse\Rest\SubmissionRestController;
 use ArtPulse\Tests\Rest\RequestStub as TestRequest;
 require_once __DIR__ . '/RequestStub.php';
 
+/**
+ * @group restapi
+ */
 class SubmissionRestControllerTest extends TestCase {
 
 	public function test_meta_fields_include_names(): void {

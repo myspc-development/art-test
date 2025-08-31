@@ -4,6 +4,9 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\ActivityRestController;
 use ArtPulse\Core\ActivityLogger;
 
+/**
+ * @group restapi
+ */
 class ActivityRestControllerTest extends \WP_UnitTestCase {
 
 	private int $uid;

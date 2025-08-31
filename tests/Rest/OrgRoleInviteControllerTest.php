@@ -5,6 +5,9 @@ use ArtPulse\Rest\OrgRoleInviteController;
 use ArtPulse\Core\MultiOrgRoles;
 use ArtPulse\Core\OrgInviteManager;
 
+/**
+ * @group restapi
+ */
 class OrgRoleInviteControllerTest extends \WP_UnitTestCase {
 
 	private int $admin;

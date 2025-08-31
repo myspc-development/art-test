@@ -1,6 +1,9 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
+/**
+ * @group restapi
+ */
 class ArtPulseRestControllerTest extends \WP_UnitTestCase {
 	private int $user;
 	private int $other_user;

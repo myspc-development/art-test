@@ -14,6 +14,8 @@ use WP_REST_Response;
  * - Fills basic required args when possible
  * - Verifies return type is WP_REST_Response (not raw array)
  * - Aggregates all issues so we get a full inventory in one run
+ *
+ * @group restapi
  */
 class RouteAuditSmokeTest extends \WP_UnitTestCase
 {

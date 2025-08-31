@@ -2,6 +2,9 @@
 
 use ArtPulse\Rest\PortfolioRestController;
 
+/**
+ * @group restapi
+ */
 class PortfolioPermissionsTest extends WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
