@@ -56,7 +56,8 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                $req->set_header( 'Content-Type', 'application/json' );
                $req->set_body( json_encode( array( 'widget_roles' => array( 'subscriber' => array( 'one' ) ) ) ) );
                $res = rest_get_server()->dispatch( $req );
-               $this->assertSame( 401, $res->get_status() );
+               // Users without sufficient capabilities should receive a 403 response.
+               $this->assertSame( 403, $res->get_status() );
 
                 wp_set_current_user( $this->admin_id );
                 $bad = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
