@@ -49,6 +49,42 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                 $this->assertSame( array( 'widget_one' => array( 'subscriber' ) ), $data['excluded_roles'] );
         }
 
+       public function test_response_keys_are_canonical_and_unique(): void {
+               // Replace default registry with duplicates using mixed slugs.
+               DashboardWidgetRegistry::set( array() );
+               DashboardWidgetRegistry::register(
+                       'news',
+                       'News',
+                       '',
+                       '',
+                       '__return_null',
+                       array(
+                               'capability'    => 'edit_posts',
+                               'exclude_roles' => array( 'subscriber' ),
+                       )
+               );
+               DashboardWidgetRegistry::register(
+                       'widget_news',
+                       'News Alias',
+                       '',
+                       '',
+                       '__return_null',
+                       array(
+                               'capability'    => 'delete_posts',
+                               'exclude_roles' => array( 'administrator' ),
+                       )
+               );
+
+               wp_set_current_user( $this->user_id );
+               $req  = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-config' );
+               $res  = rest_get_server()->dispatch( $req );
+               $this->assertSame( 200, $res->get_status() );
+               $data = $res->get_data();
+
+               $this->assertSame( array( 'widget_news' => 'edit_posts' ), $data['capabilities'] );
+               $this->assertSame( array( 'widget_news' => array( 'subscriber' ) ), $data['excluded_roles'] );
+       }
+
         public function test_post_enforces_permissions_and_nonce(): void {
                 wp_set_current_user( $this->user_id );
                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
