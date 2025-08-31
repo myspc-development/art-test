@@ -3,6 +3,9 @@ namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Messages\AP_Message;
 
+/**
+ * @group restapi
+ */
 class APMessageTest extends \WP_UnitTestCase {
 	public function test_send_and_receive_message() {
 		$sender   = self::factory()->user->create();

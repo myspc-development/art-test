@@ -1,6 +1,9 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
+/**
+ * @group restapi
+ */
 class FollowFeedRouteTest extends \WP_UnitTestCase {
 
 	private int $user_id;

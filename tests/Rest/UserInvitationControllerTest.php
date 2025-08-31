@@ -107,6 +107,9 @@ class Stub {
 	}
 }
 
+/**
+ * @group restapi
+ */
 class UserInvitationControllerTest extends TestCase {
 
 	protected function setUp(): void {
