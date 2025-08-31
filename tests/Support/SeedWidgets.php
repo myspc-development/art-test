@@ -14,6 +14,27 @@ final class SeedWidgets {
         DashboardWidgetRegistry::register('widget_beta', 'Beta', '', '', [self::class, 'widgetBeta'], ['roles' => ['artist'], 'group' => 'insights', 'section' => 'two']);
         DashboardWidgetRegistry::register('widget_gamma', 'Gamma', '', '', [self::class, 'widgetGamma'], ['roles' => ['organization'], 'group' => 'actions', 'section' => 'one']);
         DashboardWidgetRegistry::register('widget_shared', 'Shared', '', '', [self::class, 'widgetShared'], ['roles' => ['member','artist','organization'], 'group' => 'actions', 'section' => 'two']);
+        DashboardWidgetRegistry::register(
+            'widget_demo',
+            'Demo',
+            '',
+            '',
+            '__return_null',
+            [
+                'settings' => [
+                    [
+                        'key'     => 'title',
+                        'type'    => 'string',
+                        'default' => '',
+                    ],
+                    [
+                        'key'     => 'enabled',
+                        'type'    => 'boolean',
+                        'default' => false,
+                    ],
+                ],
+            ]
+        );
 
         add_filter('pre_option_ap_widget_group_visibility', [self::class, 'groupVisibility']);
         add_filter('pre_option_artpulse_role_layout_member', [self::class, 'memberLayout']);

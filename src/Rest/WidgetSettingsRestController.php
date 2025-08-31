@@ -35,7 +35,7 @@ class WidgetSettingsRestController {
                                                 'args'               => array(
                                                         'settings' => array(
                                                                 'type'              => 'object',
-                                                                'required'          => true,
+                                                                'required'          => false,
                                                                 'validate_callback' => function ( $value ) {
                                                                         return is_array( $value );
                                                                 },
@@ -92,7 +92,11 @@ class WidgetSettingsRestController {
                         return $check;
                 }
 
-                $sanitized = (array) $request->get_param( 'settings' );
+                $raw       = $request->get_param( 'settings' );
+                if ( $raw === null ) {
+                        $raw = $request->get_json_params();
+                }
+                $sanitized = is_array( $raw ) ? self::sanitize_settings( $raw, $request ) : array();
 
                 if ( $global ) {
                         update_option( 'ap_widget_settings_' . $id, $sanitized );
