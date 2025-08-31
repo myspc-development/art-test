@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class ArtistOverviewController {
 
@@ -22,13 +23,8 @@ class ArtistOverviewController {
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( self::class, 'get_overview' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
+                                        'callback'            => array( self::class, 'get_overview' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 				),
 			)
 		);

@@ -21,12 +21,7 @@ final class OrgDirectoryController {
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( self::class, 'get_orgs' ),
-                'permission_callback' => function () {
-                    if ( Auth::is_test_mode() ) {
-                        return true;
-                    }
-                    return Auth::require_cap( 'read' );
-                },
+                'permission_callback' => array( Auth::class, 'guard_read' ),
                 'args'                => array(
                     'org_type' => array( 'type' => 'string' ),
                 ),

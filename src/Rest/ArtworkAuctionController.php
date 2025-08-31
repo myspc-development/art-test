@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class ArtworkAuctionController {
 
@@ -19,12 +20,7 @@ class ArtworkAuctionController {
                                 array(
                                         'methods'             => 'GET',
                                         'callback'            => array( self::class, 'status' ),
-                                        'permission_callback' => function () {
-                                                if ( ! current_user_can( 'read' ) ) {
-                                                        return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-                                                }
-                                                return true;
-                                        },
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
                                         'args'                => array(
                                                 'artwork_id' => array(
                                                         'type'     => 'integer',
@@ -41,12 +37,7 @@ class ArtworkAuctionController {
                                 array(
                                         'methods'             => 'POST',
                                         'callback'            => array( self::class, 'bid' ),
-                                        'permission_callback' => function () {
-                                                if ( ! current_user_can( 'read' ) ) {
-                                                        return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-                                                }
-                                                return true;
-                                        },
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
                                         'args'                => array(
                                                 'artwork_id' => array(
                                                         'type'     => 'integer',

@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Response;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use ArtPulse\Rest\Util\Auth;
 
 class RoleWidgetMapController {
 
@@ -15,11 +16,9 @@ class RoleWidgetMapController {
 			'artpulse/v1',
 			'/role-widget-map',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( self::class, 'get_map' ),
-				'permission_callback' => function () {
-					return current_user_can( 'read' );
-				},
+                                'methods'             => 'GET',
+                                'callback'            => array( self::class, 'get_map' ),
+                                'permission_callback' => array( Auth::class, 'guard_read' ),
 			)
 		);
 	}

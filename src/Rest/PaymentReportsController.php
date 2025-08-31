@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use ArtPulse\Admin\PaymentAnalyticsDashboard;
+use ArtPulse\Rest\Util\Auth;
 
 class PaymentReportsController {
 
@@ -17,14 +18,9 @@ class PaymentReportsController {
 				ARTPULSE_API_NAMESPACE,
 				'/payment-reports',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'get_reports' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'manage_options' ) ) {
-							return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'get_reports' ),
+                                        'permission_callback' => array( Auth::class, 'guard_manage' ),
 				)
 			);
 		}

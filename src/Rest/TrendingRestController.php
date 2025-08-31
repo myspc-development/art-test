@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use ArtPulse\Discovery\TrendingManager;
+use ArtPulse\Rest\Util\Auth;
 
 class TrendingRestController {
 	public static function register(): void {
@@ -15,11 +16,9 @@ class TrendingRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/trending',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'get_trending' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' );
-					},
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'get_trending' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'type'  => array(
 							'type'    => 'string',

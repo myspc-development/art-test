@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use ArtPulse\Rest\Util\Auth;
 
 class RsvpBulkController {
     /**
@@ -25,9 +26,7 @@ class RsvpBulkController {
                 array(
                     'methods'             => WP_REST_Server::CREATABLE,
                     'callback'            => array( $this, 'bulk_update' ),
-                    'permission_callback' => function ( WP_REST_Request $request ) {
-                        return \ArtPulse\Rest\Util\Auth::guard( $request, 'edit_posts' );
-                    },
+                    'permission_callback' => Auth::require_login_and_cap( 'edit_posts' ),
                     'args'                => array(
                         'event_id' => array(
                             'type'     => 'integer',

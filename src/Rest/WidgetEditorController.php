@@ -22,9 +22,9 @@ class WidgetEditorController {
 			ARTPULSE_API_NAMESPACE,
 			'/widgets',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( self::class, 'get_widgets' ),
-				'permission_callback' => static fn () => current_user_can( 'read' ),
+                                'methods'             => 'GET',
+                                'callback'            => array( self::class, 'get_widgets' ),
+                                'permission_callback' => array( Auth::class, 'guard_read' ),
 			)
 		);
 
@@ -46,9 +46,9 @@ class WidgetEditorController {
 			'/layout',
 			array(
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'get_layout' ),
-					'permission_callback' => static fn () => current_user_can( 'manage_options' ),
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'get_layout' ),
+                                        'permission_callback' => array( Auth::class, 'guard_manage' ),
 					'args'                => array(
 						'role' => array(
 							'type'     => 'string',
@@ -57,9 +57,9 @@ class WidgetEditorController {
 					),
 				),
 				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'save_layout' ),
-					'permission_callback' => static fn () => current_user_can( 'manage_options' ),
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'save_layout' ),
+                                        'permission_callback' => array( Auth::class, 'guard_manage' ),
 					'args'                => array(
 						'role'   => array(
 							'type'     => 'string',

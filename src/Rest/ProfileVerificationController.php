@@ -5,6 +5,7 @@ use ArtPulse\Curator\CuratorManager;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use ArtPulse\Rest\Util\Auth;
 
 class ProfileVerificationController {
 
@@ -18,9 +19,9 @@ class ProfileVerificationController {
 				ARTPULSE_API_NAMESPACE,
 				'/profile/(?P<id>\d+)/verify',
 				array(
-					'methods'             => WP_REST_Server::CREATABLE,
-					'callback'            => array( self::class, 'verify_profile' ),
-					'permission_callback' => fn() => current_user_can( 'manage_options' ),
+                                        'methods'             => WP_REST_Server::CREATABLE,
+                                        'callback'            => array( self::class, 'verify_profile' ),
+                                        'permission_callback' => array( Auth::class, 'guard_manage' ),
 					'args'                => array(
 						'id' => array(
 							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),

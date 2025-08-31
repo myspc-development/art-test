@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use ArtPulse\Rest\Util\Auth;
 
 class OrgAnalyticsController {
 	public static function register(): void {
@@ -15,11 +16,9 @@ class OrgAnalyticsController {
 				ARTPULSE_API_NAMESPACE,
 				'/org-metrics',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'get_metrics' ),
-					'permission_callback' => function () {
-						return is_user_logged_in();
-					},
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'get_metrics' ),
+                                        'permission_callback' => Auth::require_login_and_cap( null ),
 				)
 			);
 		}

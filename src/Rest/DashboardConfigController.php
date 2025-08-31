@@ -23,28 +23,12 @@ class DashboardConfigController {
                     array(
                         'methods'             => 'GET',
                         'callback'            => array( self::class, 'get_config' ),
-                        'permission_callback' => function () {
-                            // Simple: require read; return 403 if not allowed
-                            return Auth::require_cap( 'read' ) === true
-                                ? true
-                                : new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
-                        },
+                        'permission_callback' => array( Auth::class, 'guard_read' ),
                     ),
                     array(
                         'methods'             => 'POST',
                         'callback'            => array( self::class, 'save_config' ),
-                        'permission_callback' => function ( $request ) {
-                            // IMPORTANT: tests expect 403 to win when a user lacks capability,
-                            // even if the nonce is missing/invalid.
-                            if ( Auth::require_cap( 'manage_options' ) !== true ) {
-                                return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
-                            }
-                            $nonce = $request->get_header( 'X-AP-Nonce' );
-                            if ( Auth::verify_nonce( $nonce, 'ap_dashboard_config' ) !== true ) {
-                                return new WP_Error( 'rest_invalid_nonce', 'Invalid or missing nonce.', array( 'status' => 401 ) );
-                            }
-                            return true;
-                        },
+                        'permission_callback' => Auth::require_login_and_cap( 'manage_options' ),
                         'args'                => array(
                             'widget_roles' => array(
                                 'type'     => 'object',

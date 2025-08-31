@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class UserAccountRestController {
 
@@ -23,14 +24,9 @@ class UserAccountRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/user/export',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'export_user_data' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'export_user_data' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'format' => array(
 							'type'    => 'string',
@@ -47,14 +43,9 @@ class UserAccountRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/user/delete',
 				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'delete_user_data' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'delete_user_data' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 				)
 			);
 		}

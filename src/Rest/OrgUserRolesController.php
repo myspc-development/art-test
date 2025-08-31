@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use ArtPulse\Core\MultiOrgRoles;
 use function ArtPulse\Core\ap_user_has_org_role;
+use ArtPulse\Rest\Util\Auth;
 
 class OrgUserRolesController {
 
@@ -49,10 +50,9 @@ class OrgUserRolesController {
 				ARTPULSE_API_NAMESPACE,
 				'/users/me/orgs',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'my_orgs' ),
-					'permission_callback' => function () {
-						return is_user_logged_in(); },
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'my_orgs' ),
+                                        'permission_callback' => Auth::require_login_and_cap( null ),
 				)
 			);
 		}

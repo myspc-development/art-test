@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use ArtPulse\Core\ActivityLogger;
+use ArtPulse\Rest\Util\Auth;
 
 class ActivityRestController {
 
@@ -17,9 +18,9 @@ class ActivityRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/activity',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'list' ),
-                                       'permission_callback' => fn() => current_user_can( 'read' ),
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'list' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'limit' => array(
 							'type'    => 'integer',

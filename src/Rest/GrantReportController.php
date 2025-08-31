@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use ArtPulse\Crm\ContactModel;
 use ArtPulse\Crm\DonationModel;
+use ArtPulse\Rest\Util\Auth;
 
 class GrantReportController {
 
@@ -18,10 +19,9 @@ class GrantReportController {
 				ARTPULSE_API_NAMESPACE,
 				'/orgs/(?P<id>\\d+)/grant-report',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'export' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' ); },
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'export' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'id'     => array( 'validate_callback' => 'absint' ),
 						'format' => array( 'default' => 'csv' ),

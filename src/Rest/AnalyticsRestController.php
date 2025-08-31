@@ -5,6 +5,7 @@ use ArtPulse\Core\EventMetrics;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class AnalyticsRestController {
 
@@ -20,9 +21,7 @@ class AnalyticsRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'get_trends' ),
-                                       'permission_callback' => function () {
-                                               return current_user_can( 'read' );
-                                       },
+                                       'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array(
 							'type'     => 'integer',
@@ -44,9 +43,7 @@ class AnalyticsRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'export_csv' ),
-                                       'permission_callback' => function () {
-                                               return current_user_can( 'read' );
-                                       },
+                                       'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array(
 							'type'     => 'integer',

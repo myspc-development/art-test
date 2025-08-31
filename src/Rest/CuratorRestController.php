@@ -5,6 +5,7 @@ use ArtPulse\Curator\CuratorManager;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use ArtPulse\Rest\Util\Auth;
 
 class CuratorRestController {
 
@@ -19,10 +20,8 @@ class CuratorRestController {
 				'/curators',
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( self::class, 'get_curators' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' );
-					},
+                                        'callback'            => array( self::class, 'get_curators' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 				)
 			);
 		}
@@ -33,10 +32,8 @@ class CuratorRestController {
 				'/curator/(?P<slug>[a-z0-9-]+)',
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( self::class, 'get_curator' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' );
-					},
+                                        'callback'            => array( self::class, 'get_curator' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'slug' => array( 'sanitize_callback' => 'sanitize_title' ),
 					),

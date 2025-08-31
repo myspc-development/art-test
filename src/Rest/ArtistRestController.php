@@ -6,6 +6,7 @@ use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use ArtPulse\Rest\Util\Auth;
 
 class ArtistRestController extends WP_REST_Controller {
 
@@ -39,13 +40,8 @@ class ArtistRestController extends WP_REST_Controller {
 			'/artists',
 			array(
 				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => array( $this, 'get_artists' ),
-				'permission_callback' => function () {
-					if ( ! current_user_can( 'read' ) ) {
-						return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-					}
-					return true;
-				},
+                                'callback'            => array( $this, 'get_artists' ),
+                                'permission_callback' => array( Auth::class, 'guard_read' ),
 			)
 		);
 
@@ -54,13 +50,8 @@ class ArtistRestController extends WP_REST_Controller {
 			'/artists/(?P<id>\d+)',
 			array(
 				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => array( $this, 'get_artist' ),
-				'permission_callback' => function () {
-					if ( ! current_user_can( 'read' ) ) {
-						return new \WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-					}
-					return true;
-				},
+                                'callback'            => array( $this, 'get_artist' ),
+                                'permission_callback' => array( Auth::class, 'guard_read' ),
 				'args'                => array(
 					'id' => array(
 						'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),

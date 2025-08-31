@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class UpdateDiagnosticsController {
 
@@ -20,16 +21,11 @@ class UpdateDiagnosticsController {
 			'artpulse/v1',
 			'/update/diagnostics',
 			array(
-				array(
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( self::class, 'get_diagnostics' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'update_plugins' ) ) {
-							return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
-				),
+                                array(
+                                        'methods'             => WP_REST_Server::READABLE,
+                                        'callback'            => array( self::class, 'get_diagnostics' ),
+                                        'permission_callback' => Auth::require_login_and_cap( 'update_plugins' ),
+                                ),
 			)
 		);
 	}

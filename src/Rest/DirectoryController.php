@@ -25,7 +25,7 @@ class DirectoryController {
                         array(
                                 'methods'             => WP_REST_Server::READABLE,
                                 'callback'            => array( self::class, 'get_events' ),
-                                'permission_callback' => '__return_true',
+                                'permission_callback' => Auth::allow_public(),
                         )
                 );
         }

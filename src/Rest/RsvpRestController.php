@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class RsvpRestController {
 
@@ -21,14 +22,9 @@ class RsvpRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/rsvp',
 				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'join' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'join' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
@@ -41,14 +37,9 @@ class RsvpRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/rsvp/cancel',
 				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'cancel' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'cancel' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
@@ -61,14 +52,9 @@ class RsvpRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/waitlist/remove',
 				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'remove_waitlist' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'read' ) ) {
-							return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'remove_waitlist' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),

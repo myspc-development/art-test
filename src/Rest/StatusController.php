@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class StatusController {
 
@@ -20,16 +21,11 @@ class StatusController {
 			'artpulse/v1',
 			'/status',
 			array(
-				array(
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( self::class, 'get_status' ),
-					'permission_callback' => function () {
-						if ( ! current_user_can( 'manage_options' ) ) {
-							return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
-						}
-						return true;
-					},
-				),
+                                array(
+                                        'methods'             => WP_REST_Server::READABLE,
+                                        'callback'            => array( self::class, 'get_status' ),
+                                        'permission_callback' => array( Auth::class, 'guard_manage' ),
+                                ),
 			)
 		);
 	}

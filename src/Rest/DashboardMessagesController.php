@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Rest;
 
+use ArtPulse\Rest\Util\Auth;
+
 class DashboardMessagesController {
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
@@ -12,10 +14,9 @@ class DashboardMessagesController {
 				ARTPULSE_API_NAMESPACE,
 				'/dashboard/messages',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'get_messages' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' ); },
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'get_messages' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 				)
 			);
 		}

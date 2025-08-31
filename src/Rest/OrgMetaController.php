@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use ArtPulse\Rest\Util\Auth;
 
 class OrgMetaController {
 
@@ -16,10 +17,9 @@ class OrgMetaController {
 				ARTPULSE_API_NAMESPACE,
 				'/org/(?P<id>\d+)/meta',
 				array(
-					'methods'             => array( 'GET', 'POST' ),
-					'callback'            => array( self::class, 'handle' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' ); },
+                                        'methods'             => array( 'GET', 'POST' ),
+                                        'callback'            => array( self::class, 'handle' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
