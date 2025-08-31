@@ -42,7 +42,10 @@
     "stan": "php -dmemory_limit=1G vendor/bin/phpstan analyse --memory-limit=1G",
     "stan:baseline": "vendor/bin/phpstan analyse --generate-baseline=phpstan-baseline.neon",
     "test:db": "php bin/create-test-db.php",
-    "test:coverage": "php -d pcov.enabled=1 -d pcov.directory=src vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml || XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml"
+    "test:coverage": "php -d pcov.enabled=1 -d pcov.directory=src vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml || XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-clover build/coverage-unit.xml",
+    "test:wp:smoke": "vendor/bin/phpunit -c phpunit.wp.xml.dist tests/Smoke tests/Rest/RouteAuditSmokeTest.php",
+    "test:rest": "vendor/bin/phpunit -c phpunit.wp.xml.dist tests/Rest --log-junit build/junit-rest.xml",
+    "test:rest:failures": "php tools/print-failures.php build/junit-rest.xml"
   },
   "config": {
     "allow-plugins": {
