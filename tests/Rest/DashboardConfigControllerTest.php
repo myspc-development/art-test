@@ -75,7 +75,7 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
 			)
 		);
                $res_bad = rest_get_server()->dispatch( $bad );
-               $this->assertSame( 403, $res_bad->get_status() );
+               $this->assertSame( 401, $res_bad->get_status() );
 
                $good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
                $good->set_body_params( array() );

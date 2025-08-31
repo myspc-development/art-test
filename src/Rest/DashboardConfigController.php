@@ -29,10 +29,16 @@ class DashboardConfigController {
                                                 },
                                         ),
                         array(
-                                'methods'  => 'POST',
-                                'callback' => array( self::class, 'save_config' ),
-                                'permission_callback' => Auth::require_login_and_cap( 'manage_options' ),
-                                'args'                => array(
+                               'methods'  => 'POST',
+                               'callback' => array( self::class, 'save_config' ),
+                               'permission_callback' => function ( $request ) {
+                                       return Auth::guard(
+                                               $request->get_header( 'X-AP-Nonce' ),
+                                               'manage_options',
+                                               'ap_dashboard_config'
+                                       );
+                               },
+                               'args'                => array(
                                                         'widget_roles' => array(
                                                                 'type'     => 'object',
                                                                 'required' => false,
@@ -180,16 +186,11 @@ class DashboardConfigController {
                return new \WP_REST_Response( $payload );
        }
        public static function save_config( WP_REST_Request $request ) {
-               $nonce = $request->get_header( 'X-AP-Nonce' );
-               if ( ! wp_verify_nonce( $nonce, 'ap_dashboard_config' ) ) {
-                       return new WP_Error( 'rest_forbidden', 'Invalid nonce.', array( 'status' => 403 ) );
+               $data       = $request->get_json_params();
+               $visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();
+               foreach ( $visibility as $role => &$ids ) {
+                       $ids = array_values( array_unique( array_map( array( WidgetIds::class, 'canonicalize' ), (array) $ids ) ) );
                }
-
-                $data       = $request->get_json_params();
-		$visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();
-		foreach ( $visibility as $role => &$ids ) {
-			$ids = array_values( array_unique( array_map( array( WidgetIds::class, 'canonicalize' ), (array) $ids ) ) );
-		}
 		unset( $ids );
 
 		$layout = array();
