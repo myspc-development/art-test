@@ -124,6 +124,30 @@ class DashboardConfigController {
                        }
                }
 
+               // Re-key maps to ensure canonical widget IDs and drop duplicates.
+               $capabilities = array_reduce(
+                       array_keys( $capabilities ),
+                       static function ( $out, $key ) use ( $capabilities ) {
+                               $cid = WidgetIds::canonicalize( $key );
+                               if ( $cid !== '' ) {
+                                       $out[ $cid ] = $capabilities[ $key ];
+                               }
+                               return $out;
+                       },
+                       array()
+               );
+               $excluded     = array_reduce(
+                       array_keys( $excluded ),
+                       static function ( $out, $key ) use ( $excluded ) {
+                               $cid = WidgetIds::canonicalize( $key );
+                               if ( $cid !== '' ) {
+                                       $out[ $cid ] = $excluded[ $key ];
+                               }
+                               return $out;
+                       },
+                       array()
+               );
+
                $payload = array(
                        'widget_roles'   => $visibility,
                        'role_widgets'   => $role_widgets,
