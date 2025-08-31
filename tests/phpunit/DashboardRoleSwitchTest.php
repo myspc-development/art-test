@@ -13,39 +13,14 @@ use function Patchwork\redefine;
 use function Patchwork\restore;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
-
 if ( ! defined( 'AP_VERBOSE_DEBUG' ) ) {
-	define( 'AP_VERBOSE_DEBUG', true );
+        define( 'AP_VERBOSE_DEBUG', true );
 }
 if ( ! defined( 'ARTPULSE_PLUGIN_DIR' ) ) {
         define( 'ARTPULSE_PLUGIN_DIR', dirname( __DIR__, 2 ) );
 }
 if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
         define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
-}
-if ( ! function_exists( 'is_page' ) ) {
-	function is_page( $slug ) {
-		return false; }
-}
-if ( ! function_exists( 'is_user_logged_in' ) ) {
-	function is_user_logged_in() {
-		return true; }
-}
-if ( ! function_exists( 'current_user_can' ) ) {
-        function current_user_can( $cap ) {
-                return true; }
-}
-
-if ( ! function_exists( 'register_activation_hook' ) ) {
-        function register_activation_hook( $file, $callback ) {}
-}
-
-if ( ! class_exists( 'WP_Query' ) ) {
-        class WP_Query {
-                public function get( $key ) {
-                        return '';
-                }
-        }
 }
 
 /**
@@ -59,6 +34,17 @@ final class DashboardRoleSwitchTest extends TestCase {
                 }
                 parent::setUp();
                 Monkey\setUp();
+                Functions\when( 'is_page' )->justReturn( false );
+                Functions\when( 'is_user_logged_in' )->justReturn( true );
+                Functions\when( 'current_user_can' )->justReturn( true );
+                Functions\when( 'register_activation_hook' )->justReturn( null );
+                if ( ! class_exists( 'WP_Query' ) ) {
+                        class WP_Query {
+                                public function get( $key ) {
+                                        return '';
+                                }
+                        }
+                }
                 Functions\when( 'get_query_var' )->alias( fn( $key ) => $_GET[ $key ] ?? '' );
                 Functions\when( 'set_query_var' )->alias( fn( $key, $value ) => $_GET[ $key ] = $value );
 

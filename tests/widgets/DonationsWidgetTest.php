@@ -1,40 +1,26 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
-require_once __DIR__ . '/../../widgets/DonationsWidget.php';
 
-use ArtPulse\Widgets\DonationsWidget;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
-use Brain\Monkey;
+use ArtPulse\Tests\Widgets\WidgetTestCase;
+use ArtPulse\Widgets\DonationsWidget;
 use Brain\Monkey\Functions;
 
 if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
-	define( 'ARTPULSE_PLUGIN_FILE', __FILE__ );
+        define( 'ARTPULSE_PLUGIN_FILE', __FILE__ );
 }
 
-if ( ! function_exists( 'locate_template' ) ) {
-	function locate_template( $path ) {
-		return ''; }
-}
-
-
-if ( ! function_exists( 'load_template' ) ) {
-	function load_template( $file, $require_once = false ) {
-		echo 'template'; }
-}
-
-class DonationsWidgetTest extends WP_UnitTestCase {
+class DonationsWidgetTest extends WidgetTestCase {
         protected function setUp(): void {
                 parent::setUp();
-                Monkey\setUp();
                 Functions\when( 'plugin_dir_path' )->alias( fn( $file ) => sys_get_temp_dir() . '/' );
+                Functions\when( 'locate_template' )->alias( fn( $path ) => '' );
+                Functions\when( 'load_template' )->alias( function ( $file, $require_once = false ) {
+                        echo 'template';
+                } );
                 DashboardWidgetRegistry::reset();
                 DonationsWidget::register();
-        }
-
-        protected function tearDown(): void {
-                Monkey\tearDown();
-                parent::tearDown();
         }
 
 	public function test_registration_and_rendering(): void {
