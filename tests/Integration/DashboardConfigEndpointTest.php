@@ -83,6 +83,13 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
 
                $this->assertSame( array( 'widget_news' => 'edit_posts' ), $data['capabilities'] );
                $this->assertSame( array( 'widget_news' => array( 'subscriber' ) ), $data['excluded_roles'] );
+
+               foreach ( array_keys( $data['capabilities'] ) as $id ) {
+                       $this->assertSame( 0, strpos( $id, 'widget_' ) );
+               }
+               foreach ( array_keys( $data['excluded_roles'] ) as $id ) {
+                       $this->assertSame( 0, strpos( $id, 'widget_' ) );
+               }
        }
 
         public function test_post_enforces_permissions_and_nonce(): void {
