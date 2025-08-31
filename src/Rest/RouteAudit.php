@@ -79,22 +79,24 @@ final class RouteAudit {
 		if ( ! $server ) {
 			return array();
 		}
-		$routes = array();
-		foreach ( $server->get_routes() as $path => $handlers ) {
-			foreach ( (array) $handlers as $endpoint ) {
-				$methods = $endpoint['methods'] ?? array();
-				if ( is_string( $methods ) ) {
-					$methods = array_map( 'trim', explode( ',', $methods ) );
-				}
-				$routes[] = array(
-					'path'     => $path,
-					'methods'  => array_map( 'strtoupper', (array) $methods ),
-					'callback' => self::callback_to_string( $endpoint['callback'] ?? null ),
-				);
-			}
-		}
-		return $routes;
-	}
+                $routes = array();
+                foreach ( $server->get_routes() as $path => $handlers ) {
+                        foreach ( (array) $handlers as $endpoint ) {
+                                $methods = $endpoint['methods'] ?? array();
+                                if ( is_int( $methods ) ) {
+                                        $methods = self::methods_from_mask( $methods );
+                                } elseif ( is_string( $methods ) ) {
+                                        $methods = array_map( 'trim', explode( ',', $methods ) );
+                                }
+                                $routes[] = array(
+                                        'path'     => $path,
+                                        'methods'  => array_map( 'strtoupper', (array) $methods ),
+                                        'callback' => self::callback_to_string( $endpoint['callback'] ?? null ),
+                                );
+                        }
+                }
+                return $routes;
+        }
 
 	/**
 	 * Convert a callback into a readable string.
@@ -128,28 +130,49 @@ final class RouteAudit {
 		$routes    = $server->get_routes();
 		$conflicts = array();
 
-		foreach ( $routes as $path => $handlers ) {
-			// $handlers is array of endpoint arrays
-			// Build method signatures for this path
-			$methodSeen = array();
-			foreach ( (array) $handlers as $endpoint ) {
-				$methods = $endpoint['methods'] ?? array();
-				if ( is_string( $methods ) ) {
-					$methods = array( $methods );
-				}
-				foreach ( $methods as $m ) {
-					$sig = strtoupper( $m );
-					if ( isset( $methodSeen[ $sig ] ) ) {
-						$conflicts[] = array(
-							'path'   => $path,
-							'method' => $sig,
-						);
-					} else {
-						$methodSeen[ $sig ] = true;
-					}
-				}
-			}
-		}
-		return $conflicts ? $conflicts : null;
-	}
+                foreach ( $routes as $path => $handlers ) {
+                        // $handlers is array of endpoint arrays
+                        // Build method signatures for this path
+                        $methodSeen = array();
+                        foreach ( (array) $handlers as $endpoint ) {
+                                $methods = $endpoint['methods'] ?? array();
+                                if ( is_int( $methods ) ) {
+                                        $methods = self::methods_from_mask( $methods );
+                                } elseif ( is_string( $methods ) ) {
+                                        $methods = array_map( 'trim', explode( ',', $methods ) );
+                                }
+                                foreach ( (array) $methods as $m ) {
+                                        $sig = strtoupper( $m );
+                                        if ( isset( $methodSeen[ $sig ] ) ) {
+                                                $conflicts[] = array(
+                                                        'path'   => $path,
+                                                        'method' => $sig,
+                                                );
+                                        } else {
+                                                $methodSeen[ $sig ] = true;
+                                        }
+                                }
+                        }
+                }
+                return $conflicts ? $conflicts : null;
+        }
+
+        /**
+         * Convert WP_REST_Server method mask to array of HTTP methods.
+         */
+        private static function methods_from_mask( int $mask ): array {
+                $map     = array(
+                        WP_REST_Server::READABLE  => array( 'GET', 'HEAD' ),
+                        WP_REST_Server::CREATABLE => array( 'POST' ),
+                        WP_REST_Server::EDITABLE  => array( 'PUT', 'PATCH' ),
+                        WP_REST_Server::DELETABLE => array( 'DELETE' ),
+                );
+                $methods = array();
+                foreach ( $map as $bit => $verbs ) {
+                        if ( $mask & $bit ) {
+                                $methods = array_merge( $methods, $verbs );
+                        }
+                }
+                return array_unique( $methods );
+        }
 }
