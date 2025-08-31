@@ -37,6 +37,10 @@ jobs:
           WP_TESTS_DB_PASS: root
           WP_TESTS_DB_HOST: 127.0.0.1
           WP_TESTS_DB_NAME: wordpress_test
+      - name: Link WordPress core
+        run: composer run wp:core-link
+        env:
+          WP_CORE_DIR: /tmp/wordpress
       - name: Run unit tests
         run: composer run test:unit
         env:
@@ -64,4 +68,27 @@ jobs:
           DB_USER: root
           DB_PASSWORD: root
           DB_HOST: 127.0.0.1
+          WP_CORE_DIR: /tmp/wordpress
+          AP_TEST_MODE: 1
+      - name: Run smoke tests
+        run: composer run test:wp:smoke
+        env:
+          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
+          DB_NAME: wordpress_test
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
+          WP_CORE_DIR: /tmp/wordpress
+          AP_TEST_MODE: 1
+      - name: Run REST API tests
+        run: composer run test:rest
+        env:
+          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
+          DB_NAME: wordpress_test
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
+          WP_CORE_DIR: /tmp/wordpress
           AP_TEST_MODE: 1
