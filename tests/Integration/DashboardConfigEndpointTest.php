@@ -75,11 +75,27 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                        )
                );
 
+               update_option(
+                       'artpulse_widget_roles',
+                       array( 'subscriber' => array( 'news', 'widget_news' ) )
+               );
+               update_option(
+                       'artpulse_dashboard_layouts',
+                       array( 'subscriber' => array( 'news', 'widget_news' ) )
+               );
+               update_option(
+                       'artpulse_locked_widgets',
+                       array( 'news', 'widget_news' )
+               );
+
                wp_set_current_user( $this->user_id );
                $req  = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-config' );
                $res  = rest_get_server()->dispatch( $req );
                $this->assertSame( 200, $res->get_status() );
                $data = $res->get_data();
+               $this->assertSame( array( 'subscriber' => array( 'widget_news' ) ), $data['widget_roles'] );
+               $this->assertSame( array( 'subscriber' => array( 'widget_news' ) ), $data['role_widgets'] );
+               $this->assertSame( array( 'widget_news' ), $data['locked'] );
                $this->assertSame( array( 'widget_news' => 'edit_posts' ), $data['capabilities'] );
                $this->assertSame( array( 'widget_news' => array( 'subscriber', 'administrator' ) ), $data['excluded_roles'] );
 

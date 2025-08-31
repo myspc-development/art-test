@@ -141,6 +141,29 @@ class DashboardConfigController {
                        }
                }
 
+               $filter_map = static function ( array $map ): array {
+                       $filtered = array();
+                       foreach ( $map as $id => $val ) {
+                               $cid = WidgetIds::canonicalize( $id );
+                               if ( $cid === '' || strpos( $cid, 'widget_' ) !== 0 ) {
+                                       continue;
+                               }
+
+                               if ( isset( $filtered[ $cid ] ) ) {
+                                       if ( is_array( $filtered[ $cid ] ) && is_array( $val ) ) {
+                                               $filtered[ $cid ] = array_values( array_unique( array_merge( $filtered[ $cid ], $val ) ) );
+                                       }
+                                       continue;
+                               }
+
+                               $filtered[ $cid ] = $val;
+                       }
+                       return $filtered;
+               };
+
+               $capabilities = $filter_map( $capabilities );
+               $excluded     = $filter_map( $excluded );
+
                $payload = array(
                        'widget_roles'   => $visibility,
                        'role_widgets'   => $role_widgets,
