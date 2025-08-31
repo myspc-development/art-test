@@ -41,6 +41,21 @@ class ArtistEventsController {
                         return $permission;
                 }
 
+                // Ensure the custom post type exists before querying.
+                if ( ! post_type_exists( 'artpulse_event' ) ) {
+                        if ( class_exists( '\\ArtPulse\\Core\\PostTypeRegistrar' ) ) {
+                                \ArtPulse\Core\PostTypeRegistrar::register();
+                        } else {
+                                register_post_type(
+                                        'artpulse_event',
+                                        array(
+                                                'public'   => true,
+                                                'supports' => array( 'title' ),
+                                        )
+                                );
+                        }
+                }
+
                 $query = new WP_Query(
                         array(
                                 'post_type'      => 'artpulse_event',
