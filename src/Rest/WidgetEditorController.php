@@ -49,10 +49,7 @@ class WidgetEditorController {
 		);
 	}
 
-	public static function get_widgets(): WP_REST_Response {
-		$defs = DashboardWidgetManager::getWidgetDefinitions( true );
-		return \rest_ensure_response( array_values( $defs ) );
-	}
+
 
 	public static function get_roles(): WP_REST_Response {
 		global $wp_roles;
@@ -64,13 +61,7 @@ class WidgetEditorController {
 		$role   = sanitize_key( $req['role'] );
 		$result = \ArtPulse\Core\DashboardWidgetManager::getRoleLayout( $role );
 		$layout = $result['layout'] ?? [];
-		$style  = \ArtPulse\Admin\UserLayoutManager::get_role_style( $role );
-		return \rest_ensure_response(
-			[
-				'layout' => $layout,
-				'style'  => $style,
-			]
-		);
+
 	}
 
 	public static function save_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -83,11 +74,7 @@ class WidgetEditorController {
 		$style = ( isset( $data['style'] ) && is_array( $data['style'] ) ) ? $data['style'] : [];
 
 		\ArtPulse\Core\DashboardWidgetManager::saveRoleLayout( $role, $layout );
-		if ( $style ) {
-			\ArtPulse\Admin\UserLayoutManager::save_role_style( $role, $style );
-		}
-		return \rest_ensure_response( [ 'saved' => true ] );
-	}
+
 
 	public static function handle_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		return match ( $req->get_method() ) {
