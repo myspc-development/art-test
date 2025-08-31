@@ -104,6 +104,7 @@ class WidgetSettingsRestController {
                         array(
                                 'id'       => $id,
                                 'settings' => $sanitized,
+                                'saved'    => true,
                         )
                 );
         }
