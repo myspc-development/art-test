@@ -1,119 +1,111 @@
 <?php
-namespace ArtPulse\Core {
-	interface DashboardWidgetInterface {}
-
-	class DashboardWidgetRegistry {
-		private static array $widgets = array();
-
-		public static function register( $id, $label = '', $icon = '', $description = '', $callback = null, $args = array() ): void {
-			self::$widgets[ $id ] = array(
-				'id'       => $id,
-				'callback' => $callback,
-				'args'     => $args,
-			);
-		}
-
-		public static function get_widget( $id ) {
-			return self::$widgets[ $id ] ?? null;
-		}
-
-		public static function get_widget_callback( $id ) {
-			return self::$widgets[ $id ]['callback'] ?? null;
-		}
-
-		public static function exists( $id ): bool {
-			return isset( self::$widgets[ $id ] );
-		}
-
-		public static function reset(): void {
-			self::$widgets = array();
-		}
-	}
-
-	class DashboardController {
-		public static function get_role( $user_id ): string {
-			return 'member'; }
-	}
-
-	class ActivityLogger {
-		public static function get_logs( $org_id, $user_id, int $limit = 10 ): array {
-			return array(
-				(object) array(
-					'description' => 'log',
-					'logged_at'   => date( 'Y-m-d H:i:s' ),
-				),
-			);
-		}
-	}
-}
+declare(strict_types=1);
 
 namespace {
-	require_once __DIR__ . '/../TestStubs.php';
-	require_once __DIR__ . '/../../widgets/member/ActivityFeedWidget.php';
+    // Ensure autoload and common stubs are available when running these widget tests in isolation.
+    $autoloader = __DIR__ . '/../../vendor/autoload.php';
+    if (file_exists($autoloader)) {
+        require_once $autoloader;
+    }
+    require_once __DIR__ . '/../TestStubs.php';
+}
 
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
+namespace ArtPulse\Tests\Widgets {
 
-	if ( ! class_exists( 'WP_UnitTestCase' ) ) {
-		class WP_UnitTestCase extends \PHPUnit\Framework\TestCase {}
-	}
+use PHPUnit\Framework\TestCase;
+use Brain\Monkey;
+use Brain\Monkey\Functions;
 
-	if ( ! function_exists( '__' ) ) {
-		function __( $text, $domain = null ) {
-			return $text; }
-	}
+abstract class WidgetTestCase extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Monkey\setUp();
+        Functions\when('__')->returnArg();
+        Functions\when('esc_html__')->returnArg();
+        Functions\when('esc_html_e')->alias(static function ($text): void {
+            echo $text;
+        });
+        Functions\when('esc_attr')->returnArg();
+        Functions\when('esc_url_raw')->returnArg();
+        Functions\when('rest_url')->returnArg();
+        Functions\when('wp_create_nonce')->justReturn('nonce');
+        Functions\when('is_user_logged_in')->justReturn(true);
+        Functions\when('user_can')->justReturn(true);
+        Functions\when('date_i18n')->alias(static fn($format, $timestamp) => date($format, $timestamp));
+        Functions\when('wp_get_current_user')->alias(static fn() => (object) ['display_name' => 'Test User', 'user_login' => 'test']);
+        Functions\when('wp_kses_post')->returnArg();
+        Functions\when('get_current_user_id')->justReturn(1);
+        Functions\when('get_user_meta')->alias(static fn($user_id, $key, $single = true) => null);
+        Functions\when('sanitize_title')->alias(static fn($title) => strtolower(preg_replace('/[^a-z0-9]+/i', '-', $title)));
+        Functions\when('get_option')->alias(static fn($key) => $key === 'date_format' ? 'Y-m-d' : null);
+        Functions\when('get_permalink')->alias(static fn($id) => 'http://example.com/?p=' . $id);
+    }
 
-	if ( ! function_exists( 'esc_html__' ) ) {
-		function esc_html__( $text, $domain = null ) {
-			return $text; }
-	}
+    protected function tearDown(): void
+    {
+        Monkey\tearDown();
+        parent::tearDown();
+    }
+}
+}
 
-	if ( ! function_exists( 'esc_url_raw' ) ) {
-		function esc_url_raw( $url ) {
-			return $url; }
-	}
+namespace ArtPulse\Core {
+    interface DashboardWidgetInterface {}
 
-	if ( ! function_exists( 'rest_url' ) ) {
-		function rest_url( $path = '' ) {
-			return $path; }
-	}
+    class DashboardWidgetRegistry
+    {
+        private static array $widgets = [];
 
-	if ( ! function_exists( 'wp_create_nonce' ) ) {
-		function wp_create_nonce( $action ) {
-			return 'nonce'; }
-	}
+        public static function register($id, $label = '', $icon = '', $description = '', $callback = null, $args = []): void
+        {
+            self::$widgets[$id] = [
+                'id'       => $id,
+                'callback' => $callback,
+                'args'     => $args,
+            ];
+        }
 
-	if ( ! function_exists( 'is_user_logged_in' ) ) {
-		function is_user_logged_in() {
-			return true; }
-	}
+        public static function get_widget($id)
+        {
+            return self::$widgets[$id] ?? null;
+        }
 
-	if ( ! function_exists( 'user_can' ) ) {
-		function user_can( $uid, $cap ) {
-			return true; }
-	}
+        public static function get_widget_callback($id)
+        {
+            return self::$widgets[$id]['callback'] ?? null;
+        }
 
-	if ( ! function_exists( 'date_i18n' ) ) {
-		function date_i18n( $format, $timestamp ) {
-			return date( $format, $timestamp ); }
-	}
+        public static function exists($id): bool
+        {
+            return isset(self::$widgets[$id]);
+        }
 
-	if ( ! function_exists( 'wp_get_current_user' ) ) {
-		function wp_get_current_user() {
-			return (object) array(
-				'display_name' => 'Test User',
-				'user_login'   => 'test',
-			);
-		}
-	}
+        public static function reset(): void
+        {
+            self::$widgets = [];
+        }
+    }
 
-	if ( ! function_exists( 'wp_kses_post' ) ) {
-		function wp_kses_post( $content ) {
-			return $content; }
-	}
+    class DashboardController
+    {
+        public static function get_role($user_id): string
+        {
+            return 'member';
+        }
+    }
 
-	if ( class_exists( 'ArtPulse\\Widgets\\Member\\ActivityFeedWidget' ) && ! class_exists( 'ActivityFeedWidget' ) ) {
-		class_alias( 'ArtPulse\\Widgets\\Member\\ActivityFeedWidget', 'ActivityFeedWidget' );
-	}
+    class ActivityLogger
+    {
+        public static function get_logs($org_id, $user_id, int $limit = 10): array
+        {
+            return [
+                (object) [
+                    'description' => 'log',
+                    'logged_at'   => date('Y-m-d H:i:s'),
+                ],
+            ];
+        }
+    }
 }

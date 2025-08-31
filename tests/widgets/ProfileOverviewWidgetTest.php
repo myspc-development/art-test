@@ -1,17 +1,17 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
-require_once __DIR__ . '/../../widgets/ProfileOverviewWidget.php';
 
-use ArtPulse\Widgets\ProfileOverviewWidget;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
+use ArtPulse\Tests\Widgets\WidgetTestCase;
+use ArtPulse\Widgets\ProfileOverviewWidget;
 
-class ProfileOverviewWidgetTest extends WP_UnitTestCase {
-	protected function setUp(): void {
-		parent::setUp();
-		DashboardWidgetRegistry::reset();
-		ProfileOverviewWidget::register();
-	}
+class ProfileOverviewWidgetTest extends WidgetTestCase {
+        protected function setUp(): void {
+                parent::setUp();
+                DashboardWidgetRegistry::reset();
+                ProfileOverviewWidget::register();
+        }
 
 	public function test_registration_and_access(): void {
 		$this->assertTrue( DashboardWidgetRegistry::exists( ProfileOverviewWidget::get_id() ) );
