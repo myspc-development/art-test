@@ -12,8 +12,13 @@ Site administrators should consult the [Admin Guide](docs/guides/admin/README.md
 1. `composer install && composer dump-autoload`
 2. `export WP_CORE_DIR=<path-to-local-wordpress>`
 3. `composer run wp:core-link`
-4. `export DB_NAME=<db> DB_USER=<user> DB_PASSWORD=<pass> DB_HOST=<host> AP_TEST_MODE=1`
-5. `composer run test:wp -- --verbose`
+4. `export WP_PHPUNIT__DIR="$WP_CORE_DIR/tests/phpunit"`
+5. `export WP_PHPUNIT__TESTS_CONFIG="$PWD/wp-tests-config.php"`
+6. `export DB_NAME=<db> DB_USER=<user> DB_PASSWORD=<pass> DB_HOST=<host> AP_TEST_MODE=1`
+7. `composer run test:wp:smoke`
+8. `composer run test:rest`
+9. `composer run test:rest:failures`
+10. `composer run test:wp -- --verbose`
 
 > Code coverage requires the [PCOV](https://github.com/krakjoe/pcov) extension or Xdebug 3 with `XDEBUG_MODE=coverage`.
 
