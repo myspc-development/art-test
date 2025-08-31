@@ -86,16 +86,19 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
 	}
 
 	public function test_get_events_returns_current_user_posts(): void {
-               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/artist-events' );
-               $res = rest_get_server()->dispatch( $req );
-               $this->assertSame( 200, $res->get_status() );
-               $data = $res->get_data();
-               $this->assertNotEmpty( $data );
-               $ids  = wp_list_pluck( $data, 'id' );
-               $this->assertSameSets( $this->user_events, $ids );
-               $this->assertCount( count( $this->user_events ), $data );
-               $events = wp_list_pluck( $data, 'color', 'status' );
-               $this->assertSame( '#3b82f6', $events['publish'] );
-               $this->assertSame( '#9ca3af', $events['draft'] );
-	}
+                $req = new \WP_REST_Request( 'GET', '/artpulse/v1/artist-events' );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 200, $res->get_status() );
+                $data = $res->get_data();
+                $this->assertNotEmpty( $data );
+                $ids  = wp_list_pluck( $data, 'id' );
+                $this->assertSameSets( $this->user_events, $ids );
+                foreach ( $ids as $id ) {
+                        $this->assertSame( $this->user_id, (int) get_post_field( 'post_author', $id ) );
+                }
+                $this->assertCount( count( $this->user_events ), $data );
+                $events = wp_list_pluck( $data, 'color', 'status' );
+                $this->assertSame( '#3b82f6', $events['publish'] );
+                $this->assertSame( '#9ca3af', $events['draft'] );
+         }
 }
