@@ -84,6 +84,19 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
                        )
                );
 
+               $this->user_events[] = self::factory()->post->create(
+                       array(
+                               'post_title'  => 'Private',
+                               'post_type'   => 'artpulse_event',
+                               'post_status' => 'private',
+                               'post_author' => $this->user_id,
+                               'meta_input'  => array(
+                                       '_ap_event_date' => '2025-04-01',
+                                       'event_end_date' => '2025-04-02',
+                               ),
+                       )
+               );
+
                $other_event = self::factory()->post->create(
                        array(
                                'post_title'  => 'Other',
@@ -120,8 +133,8 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
                $data = $res->get_data();
                $this->assertNotEmpty( $data );
 
-               $ids       = array_map( 'intval', wp_list_pluck( $data, 'id' ) );
-               $expected  = $this->user_events;
+               $ids      = array_map( 'intval', wp_list_pluck( $data, 'id' ) );
+               $expected = $this->user_events;
                sort( $ids );
                sort( $expected );
                $this->assertSame( $expected, $ids );
@@ -131,10 +144,14 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
                }
 
                $this->assertCount( count( $this->user_events ), $data );
-               $events = wp_list_pluck( $data, 'color', 'status' );
+               $events   = wp_list_pluck( $data, 'color', 'status' );
+               $statuses = array_keys( $events );
+               sort( $statuses );
+               $this->assertSame( array( 'draft', 'future', 'pending', 'private', 'publish' ), $statuses );
                $this->assertSame( '#3b82f6', $events['publish'] );
                $this->assertSame( '#9ca3af', $events['draft'] );
                $this->assertSame( '#9ca3af', $events['pending'] );
                $this->assertSame( '#9ca3af', $events['future'] );
+               $this->assertSame( '#9ca3af', $events['private'] );
         }
 }
