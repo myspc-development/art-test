@@ -68,6 +68,7 @@ class WidgetEditorController {
                 $result = \ArtPulse\Core\DashboardWidgetManager::getRoleLayout( $role );
                 $layout = $result['layout'] ?? [];
 
+                return \rest_ensure_response( $layout );
         }
 
         public static function handle_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -78,3 +79,6 @@ class WidgetEditorController {
                 };
 
 }
+}
+
+
