@@ -56,15 +56,21 @@ class ArtistEventsController {
                         }
                 }
 
-                $query = new WP_Query(
-                        array(
-                                'post_type'      => 'artpulse_event',
-                                'author'         => get_current_user_id(),
-                                'post_status'    => array( 'publish', 'pending', 'draft', 'future' ),
-                                'fields'         => 'ids',
-                                'posts_per_page' => -1,
-                        )
-                );
+		$user_id = get_current_user_id();
+		if ( ! $user_id ) {
+			return new WP_Error( 'ap_rest_author_required', __( 'Authentication required.', 'artpulse' ), array( 'status' => 401 ) );
+		}
+
+		$query = new WP_Query(
+			array(
+				'post_type'        => 'artpulse_event',
+				'author__in'       => array( $user_id ),
+				'post_status'      => array( 'publish', 'pending', 'draft', 'future' ),
+				'fields'           => 'ids',
+				'posts_per_page'   => -1,
+				'suppress_filters' => true,
+			)
+		);
 
                 $data = array();
                 foreach ( $query->posts as $post_id ) {
@@ -84,4 +90,4 @@ class ArtistEventsController {
                 return new \WP_REST_Response( $data );
        }
 
-}
+		}
