@@ -134,38 +134,34 @@ final class Auth {
         /**
          * Permission check for read-only endpoints.
          *
-         * Allows any authenticated user with the basic `read` capability.
-         * In test mode the capability check is skipped to keep fixtures
-         * lightweight.
-         */
-        public static function guard_read( \WP_REST_Request $req ): bool|\WP_Error {
-                if ( ! is_user_logged_in() ) {
-                        return new \WP_Error( 'rest_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
-                }
+       * Allows any authenticated user with the basic `read` capability.
+       */
+       public static function guard_read( \WP_REST_Request $req ): bool|\WP_Error {
+               if ( ! is_user_logged_in() ) {
+                       return new \WP_Error( 'rest_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
+               }
 
-                if ( self::is_test_mode() || current_user_can( 'read' ) ) {
-                        return true;
-                }
+               if ( current_user_can( 'read' ) ) {
+                       return true;
+               }
 
-                return new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
-        }
+               return new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
+       }
 
-        /**
-         * Permission check for endpoints that require administrative access.
-         *
-         * In production a user must have the `manage_options` capability. Under
-         * AP_TEST_MODE any logged-in user is allowed so tests can exercise the
-         * endpoint without bootstrapping roles.
-         */
-        public static function guard_manage( \WP_REST_Request $req ): bool|\WP_Error {
-                if ( ! is_user_logged_in() ) {
-                        return new \WP_Error( 'rest_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
-                }
+       /**
+        * Permission check for endpoints that require administrative access.
+        *
+       * In production a user must have the `manage_options` capability.
+        */
+       public static function guard_manage( \WP_REST_Request $req ): bool|\WP_Error {
+               if ( ! is_user_logged_in() ) {
+                       return new \WP_Error( 'rest_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
+               }
 
-                if ( self::is_test_mode() || current_user_can( 'manage_options' ) ) {
-                        return true;
-                }
+               if ( current_user_can( 'manage_options' ) ) {
+                       return true;
+               }
 
-                return new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
-        }
+               return new \WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
+       }
 }
