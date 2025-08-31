@@ -1,6 +1,7 @@
 <?php
 namespace ArtPulse\Rest\Tests;
 
+use ArtPulse\Core\PostTypeRegistrar;
 use ArtPulse\Rest\ArtistEventsController;
 
 /**
@@ -17,8 +18,12 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
         */
        private array $user_events;
 
-	public function set_up() {
-		parent::set_up();
+        public function set_up() {
+                parent::set_up();
+
+               // Ensure the custom post type exists before inserting posts.
+               PostTypeRegistrar::register();
+
                $this->user_id     = self::factory()->user->create();
                $this->other_id    = self::factory()->user->create();
                $this->user_events = array();
@@ -51,7 +56,7 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
                        )
                );
 
-               self::factory()->post->create(
+               $other_event = self::factory()->post->create(
                        array(
                                'post_title'  => 'Other',
                                'post_type'   => 'artpulse_event',
@@ -64,9 +69,14 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
                        )
                );
 
-		ArtistEventsController::register();
-		do_action( 'rest_api_init' );
-	}
+               // Verify the posts were created with the expected post type.
+               foreach ( array_merge( $this->user_events, array( $other_event ) ) as $event_id ) {
+                       $this->assertSame( 'artpulse_event', get_post_type( $event_id ) );
+               }
+
+                ArtistEventsController::register();
+                do_action( 'rest_api_init' );
+        }
 
 	public function test_requires_authentication(): void {
 		wp_set_current_user( 0 );
