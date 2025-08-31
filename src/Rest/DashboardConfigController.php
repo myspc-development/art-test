@@ -160,14 +160,14 @@ class DashboardConfigController {
                return new \WP_REST_Response( $payload );
        }
        public static function save_config( WP_REST_Request $request ) {
-                if ( ! current_user_can( 'manage_options' ) ) {
-                        return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
-                }
+               $nonce = $request->get_header( 'X-WP-Nonce' );
+               if ( ! wp_verify_nonce( $nonce, 'ap_dashboard_config' ) ) {
+                       return new WP_Error( 'rest_invalid_nonce', 'Invalid nonce.', array( 'status' => 401 ) );
+               }
 
-                $nonce = $request->get_header( 'X-WP-Nonce' );
-                if ( ! wp_verify_nonce( $nonce, 'ap_dashboard_config' ) ) {
-                        return new WP_Error( 'rest_invalid_nonce', 'Invalid nonce.', array( 'status' => 401 ) );
-                }
+               if ( ! current_user_can( 'manage_options' ) ) {
+                       return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
+               }
 
                 $data       = $request->get_json_params();
 		$visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();

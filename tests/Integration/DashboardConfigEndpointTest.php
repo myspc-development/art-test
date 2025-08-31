@@ -90,6 +90,7 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
                $req->set_body_params( array() );
                $req->set_header( 'Content-Type', 'application/json' );
+               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
                $req->set_body( json_encode( array( 'widget_roles' => array( 'subscriber' => array( 'one' ) ) ) ) );
                $res = rest_get_server()->dispatch( $req );
                // Users without sufficient capabilities should receive a 403 response.
