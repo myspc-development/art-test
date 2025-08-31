@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Admin\UserLayoutManager;
+use ArtPulse\Rest\Util\Auth;
 
 class WidgetLayoutController {
 
@@ -22,9 +23,9 @@ class WidgetLayoutController {
 			'/widget-layout',
 			array(
 				array(
-					'methods'             => WP_REST_Server::CREATABLE,
-					'callback'            => array( self::class, 'save_layout' ),
-					'permission_callback' => fn () => current_user_can( 'manage_options' ),
+                                        'methods'             => WP_REST_Server::CREATABLE,
+                                        'callback'            => array( self::class, 'save_layout' ),
+                                        'permission_callback' => array( Auth::class, 'guard_manage' ),
 					'args'                => array(
 						'layout' => array(
 							'type'     => 'array',

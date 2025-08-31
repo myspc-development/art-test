@@ -35,9 +35,9 @@ class FollowVenueCuratorController {
 				ARTPULSE_API_NAMESPACE,
 				'/followed/venues',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'get_followed_venues' ),
-                                       'permission_callback' => fn() => current_user_can( 'read' ),
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'get_followed_venues' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 				)
 			);
 		}
@@ -67,7 +67,7 @@ class FollowVenueCuratorController {
                                array(
                                        'methods'             => 'GET',
                                        'callback'            => array( self::class, 'get_followed_curators' ),
-                                       'permission_callback' => fn() => current_user_can( 'read' ),
+                                       'permission_callback' => array( Auth::class, 'guard_read' ),
                                )
                        );
                }

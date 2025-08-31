@@ -2,6 +2,7 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Request;
+use ArtPulse\Rest\Util\Auth;
 
 class MessagesController {
 
@@ -15,9 +16,9 @@ class MessagesController {
 				ARTPULSE_API_NAMESPACE,
 				'/messages/(?P<id>\d+)/reply',
 				array(
-					'methods'             => 'POST',
-					'permission_callback' => fn () => current_user_can( 'read' ),
-					'callback'            => array( self::class, 'reply' ),
+                                        'methods'             => 'POST',
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+                                        'callback'            => array( self::class, 'reply' ),
 				)
 			);
 		}

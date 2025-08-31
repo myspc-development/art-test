@@ -18,13 +18,9 @@ class CurrentUserController {
                                array(
                                        'methods'             => 'GET',
                                        'callback'            => array( self::class, 'get_current_user' ),
-                                       'permission_callback' => function ( $req ) {
-                                               if ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) {
-                                                       return is_user_logged_in();
-                                               }
-                                               $permission = Auth::require_login_and_cap( array( 'manage_options', 'edit_posts' ) );
-                                               return $permission( $req );
-                                       },
+                                       'permission_callback' => Auth::require_login_and_cap(
+                                               static fn() => Auth::is_test_mode() || current_user_can( 'manage_options' ) || current_user_can( 'edit_posts' )
+                                       ),
                                )
                         );
                 }

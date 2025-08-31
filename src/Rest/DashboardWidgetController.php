@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 // Use the dashboard builder registry rather than the core registry
 // so we can query widgets and render previews for the builder UI.
 use ArtPulse\Core\DashboardWidgetRegistry;
@@ -99,7 +100,7 @@ class DashboardWidgetController {
 				array(
                                         'methods'             => 'GET',
                                         'callback'            => array( self::class, 'get_widgets' ),
-                                        'permission_callback' => '__return_true',
+                                        'permission_callback' => Auth::require_login_and_cap( 'edit_posts' ),
                                 )
                         );
                 }
@@ -110,7 +111,7 @@ class DashboardWidgetController {
                                 array(
                                         'methods'             => 'POST',
                                         'callback'            => array( self::class, 'save_widgets' ),
-                                        'permission_callback' => '__return_true',
+                                        'permission_callback' => Auth::require_login_and_cap( 'edit_posts' ),
                                 )
                         );
                 }
@@ -121,7 +122,7 @@ class DashboardWidgetController {
                                 array(
                                         'methods'             => 'GET',
                                         'callback'            => array( self::class, 'export_layout' ),
-                                        'permission_callback' => '__return_true',
+                                        'permission_callback' => Auth::require_login_and_cap( 'edit_posts' ),
                                 )
                         );
                 }
@@ -132,7 +133,7 @@ class DashboardWidgetController {
                                 array(
                                         'methods'             => 'POST',
                                         'callback'            => array( self::class, 'import_layout' ),
-                                        'permission_callback' => '__return_true',
+                                        'permission_callback' => Auth::require_login_and_cap( 'edit_posts' ),
                                 )
                         );
                 }

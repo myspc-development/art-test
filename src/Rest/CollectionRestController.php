@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use ArtPulse\Rest\Util\Auth;
 
 class CollectionRestController {
 
@@ -20,17 +21,13 @@ class CollectionRestController {
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( self::class, 'get_collections' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' );
-					},
+                                        'callback'            => array( self::class, 'get_collections' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 				),
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
-					'callback'            => array( self::class, 'create_or_update' ),
-					'permission_callback' => function () {
-						return current_user_can( 'edit_ap_collections' );
-					},
+                                        'callback'            => array( self::class, 'create_or_update' ),
+                                        'permission_callback' => Auth::require_login_and_cap( 'edit_ap_collections' ),
 					'args'                => array(
 						'id'    => array(
 							'type'     => 'integer',
@@ -55,10 +52,8 @@ class CollectionRestController {
 			'/collection/(?P<id>\d+)',
 			array(
 				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => array( self::class, 'get_collection' ),
-				'permission_callback' => function () {
-					return current_user_can( 'read' );
-				},
+                                'callback'            => array( self::class, 'get_collection' ),
+                                'permission_callback' => array( Auth::class, 'guard_read' ),
 				'args'                => array(
 					'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 				),

@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use ArtPulse\Rest\Util\Auth;
 
 class SpotlightRestController {
 
@@ -18,11 +19,9 @@ class SpotlightRestController {
 			self::NAMESPACE,
 			'/spotlights',
 			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => array( self::class, 'get_current' ),
-				'permission_callback' => function () {
-					return current_user_can( 'read' );
-				},
+                                'methods'             => WP_REST_Server::READABLE,
+                                'callback'            => array( self::class, 'get_current' ),
+                                'permission_callback' => array( Auth::class, 'guard_read' ),
 			)
 		);
 	}

@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class ShareController {
 
@@ -17,11 +18,9 @@ class ShareController {
 				ARTPULSE_API_NAMESPACE,
 				'/share',
 				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'log_share' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' );
-					},
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'log_share' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'object_id'   => array(
 							'type'     => 'integer',

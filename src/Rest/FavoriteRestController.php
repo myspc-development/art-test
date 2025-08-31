@@ -5,6 +5,7 @@ use ArtPulse\Community\FavoritesManager;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Rest\Util\Auth;
 
 class FavoriteRestController {
 
@@ -22,11 +23,9 @@ class FavoriteRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/favorites',
 				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'handle_request' ),
-					'permission_callback' => function () {
-						return is_user_logged_in();
-					},
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'handle_request' ),
+                                        'permission_callback' => Auth::require_login_and_cap( null ),
 					'args'                => self::get_schema(),
 				)
 			);
@@ -34,11 +33,9 @@ class FavoriteRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/favorites',
 				array(
-					'methods'             => 'GET',
-					'callback'            => array( self::class, 'list_favorites' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' );
-					},
+                                        'methods'             => 'GET',
+                                        'callback'            => array( self::class, 'list_favorites' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
 				)
 			);
 		}
