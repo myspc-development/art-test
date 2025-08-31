@@ -9,11 +9,11 @@ use ArtPulse\Support\OptionUtils;
 use ArtPulse\Support\WidgetIds;
 
 class DashboardConfigController {
-	public static function register(): void {
-		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
-	}
+        public static function register(): void {
+                add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
+        }
 
-	public static function register_routes(): void {
+        public static function register_routes(): void {
 		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/dashboard-config' ) ) {
 			register_rest_route(
 				ARTPULSE_API_NAMESPACE,
@@ -53,8 +53,31 @@ class DashboardConfigController {
 					),
 				)
 			);
-		}
-	}
+                }
+        }
+
+       /**
+        * Assign a value to a map using a canonical widget ID.
+        *
+        * Canonicalizes the provided ID, verifies the widget exists and merges
+        * duplicate array values when encountered. Scalar values retain the first
+        * assignment.
+        */
+       private static function assign_canonical( array &$map, $id, $value ): void {
+               $cid = WidgetIds::canonicalize( $id );
+               if ( $cid === '' || ! DashboardWidgetRegistry::exists( $cid ) ) {
+                       return;
+               }
+
+               if ( isset( $map[ $cid ] ) ) {
+                       if ( is_array( $map[ $cid ] ) && is_array( $value ) ) {
+                               $map[ $cid ] = array_values( array_unique( array_merge( $map[ $cid ], $value ) ) );
+                       }
+                       return;
+               }
+
+               $map[ $cid ] = $value;
+       }
 
        public static function get_config( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
                $visibility   = OptionUtils::get_array_option( 'artpulse_widget_roles' );
@@ -105,39 +128,18 @@ class DashboardConfigController {
                }
                unset( $items );
 
-               $defs         = DashboardWidgetRegistry::get_all();
                $capabilities = array();
                $excluded     = array();
-               foreach ( $defs as $id => $def ) {
-                       $id = DashboardWidgetRegistry::canon_slug( $id );
-
-                       if ( isset( $capabilities[ $id ] ) || isset( $excluded[ $id ] ) ) {
-                               continue;
-                       }
-
+               foreach ( DashboardWidgetRegistry::get_all() as $id => $def ) {
                        if ( ! empty( $def['capability'] ) ) {
-                               $capabilities[ $id ] = sanitize_key( $def['capability'] );
+                               self::assign_canonical( $capabilities, $id, sanitize_key( $def['capability'] ) );
                        }
 
                        if ( ! empty( $def['exclude_roles'] ) ) {
-                               $excluded[ $id ] = array_map( 'sanitize_key', (array) $def['exclude_roles'] );
+                               $roles = array_map( 'sanitize_key', (array) $def['exclude_roles'] );
+                               self::assign_canonical( $excluded, $id, $roles );
                        }
                }
-
-               // Re-key maps to ensure canonical widget IDs and drop duplicates.
-               $normalize_keys = static function ( array $map ): array {
-                       $out = array();
-                       foreach ( $map as $raw => $value ) {
-                               $cid = WidgetIds::canonicalize( $raw );
-                               if ( $cid !== '' ) {
-                                       $out[ $cid ] = $value;
-                               }
-                       }
-                       return $out;
-               };
-
-               $capabilities = $normalize_keys( $capabilities );
-               $excluded     = $normalize_keys( $excluded );
 
                $payload = array(
                        'widget_roles'   => $visibility,

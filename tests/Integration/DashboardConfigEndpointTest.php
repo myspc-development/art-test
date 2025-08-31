@@ -41,13 +41,13 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                 $req2 = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-config' );
                 $res2 = rest_get_server()->dispatch( $req2 );
                 $this->assertSame( 200, $res2->get_status() );
-                $data = $res2->get_data();
-                $this->assertSame( array( 'subscriber' => array( 'widget_one' ) ), $data['widget_roles'] );
-                $this->assertSame( array( 'subscriber' => array( 'widget_one', 'widget_two' ) ), $data['role_widgets'] );
-                $this->assertSame( array( 'widget_two' ), $data['locked'] );
-                $this->assertSame( array( 'widget_one' => 'edit_posts' ), $data['capabilities'] );
-                $this->assertSame( array( 'widget_one' => array( 'subscriber' ) ), $data['excluded_roles'] );
-        }
+               $data = $res2->get_data();
+               $this->assertSame( array( 'subscriber' => array( 'widget_one' ) ), $data['widget_roles'] );
+               $this->assertSame( array( 'subscriber' => array( 'widget_one', 'widget_two' ) ), $data['role_widgets'] );
+               $this->assertSame( array( 'widget_two' ), $data['locked'] );
+               $this->assertSame( array( 'widget_one' => 'edit_posts' ), $data['capabilities'] );
+               $this->assertSame( array( 'widget_one' => array( 'subscriber' ) ), $data['excluded_roles'] );
+       }
 
        public function test_response_keys_are_canonical_and_unique(): void {
                // Replace default registry with duplicates using mixed slugs.
@@ -80,10 +80,27 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                $res  = rest_get_server()->dispatch( $req );
                $this->assertSame( 200, $res->get_status() );
                $data = $res->get_data();
-
                $this->assertSame( array( 'widget_news' => 'edit_posts' ), $data['capabilities'] );
-               $this->assertSame( array( 'widget_news' => array( 'subscriber' ) ), $data['excluded_roles'] );
+               $this->assertSame( array( 'widget_news' => array( 'subscriber', 'administrator' ) ), $data['excluded_roles'] );
 
+               foreach ( $data['widget_roles'] as $ids ) {
+                       foreach ( $ids as $id ) {
+                               $this->assertSame( 0, strpos( $id, 'widget_' ) );
+                       }
+               }
+               foreach ( $data['role_widgets'] as $ids ) {
+                       foreach ( $ids as $id ) {
+                               $this->assertSame( 0, strpos( $id, 'widget_' ) );
+                       }
+               }
+               foreach ( $data['locked'] as $id ) {
+                       $this->assertSame( 0, strpos( $id, 'widget_' ) );
+               }
+               foreach ( $data['layout'] as $items ) {
+                       foreach ( $items as $item ) {
+                               $this->assertSame( 0, strpos( $item['id'], 'widget_' ) );
+                       }
+               }
                foreach ( array_keys( $data['capabilities'] ) as $id ) {
                        $this->assertSame( 0, strpos( $id, 'widget_' ) );
                }
