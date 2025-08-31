@@ -97,7 +97,7 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                $this->assertSame( array( 'subscriber' => array( 'widget_news' ) ), $data['role_widgets'] );
                $this->assertSame( array( 'widget_news' ), $data['locked'] );
                $this->assertSame( array( 'widget_news' => 'edit_posts' ), $data['capabilities'] );
-               $this->assertSame( array( 'widget_news' => array( 'subscriber', 'administrator' ) ), $data['excluded_roles'] );
+               $this->assertSame( array( 'widget_news' => array( 'subscriber' ) ), $data['excluded_roles'] );
 
                foreach ( $data['widget_roles'] as $ids ) {
                        foreach ( $ids as $id ) {

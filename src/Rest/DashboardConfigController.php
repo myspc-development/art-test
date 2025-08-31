@@ -100,69 +100,73 @@ class DashboardConfigController {
                        return DashboardWidgetRegistry::canon_slug( $core );
                };
 
+               $canon_unique = static function ( $ids ) use ( $to_canon ) {
+                       $seen = array();
+                       foreach ( (array) $ids as $id ) {
+                               $cid = $to_canon( $id );
+                               if ( $cid === '' || isset( $seen[ $cid ] ) ) {
+                                       continue;
+                               }
+                               $seen[ $cid ] = true;
+                       }
+                       return array_keys( $seen );
+               };
+
                foreach ( $visibility as $role => &$ids ) {
-                       $ids = array_values( array_map( $to_canon, (array) $ids ) );
+                       $ids = $canon_unique( $ids );
                }
                unset( $ids );
 
                foreach ( $role_widgets as $role => &$ids ) {
-                       $ids = array_values( array_map( $to_canon, (array) $ids ) );
+                       $ids = $canon_unique( $ids );
                }
                unset( $ids );
 
-               $locked = array_values( array_map( $to_canon, (array) $locked ) );
+               $locked = $canon_unique( $locked );
 
                $layout = OptionUtils::get_array_option( 'artpulse_dashboard_layouts' );
                foreach ( $layout as $role => &$items ) {
-                       $items = array_map(
-                               static function ( $item ) use ( $to_canon ) {
-                                       if ( is_array( $item ) && isset( $item['id'] ) ) {
-                                               $item['id'] = $to_canon( $item['id'] );
-                                               return $item;
-                                       }
-
-                                       return array( 'id' => $to_canon( $item ) );
-                               },
-                               (array) $items
+                       $seen = array();
+                       $items = array_values(
+                               array_filter(
+                                       array_map(
+                                               static function ( $item ) use ( $to_canon, &$seen ) {
+                                                       $id = is_array( $item ) && isset( $item['id'] ) ? $item['id'] : $item;
+                                                       $cid = $to_canon( $id );
+                                                       if ( $cid === '' || isset( $seen[ $cid ] ) ) {
+                                                               return null;
+                                                       }
+                                                       $seen[ $cid ] = true;
+                                                       return is_array( $item ) ? array_merge( $item, array( 'id' => $cid ) ) : array( 'id' => $cid );
+                                               },
+                                               (array) $items
+                                       )
+                               )
                        );
                }
                unset( $items );
 
                $capabilities = array();
                $excluded     = array();
-               foreach ( DashboardWidgetRegistry::get_all() as $id => $def ) {
+               $processed    = array();
+               foreach ( DashboardWidgetRegistry::get_all( null, false, true ) as $id => $def ) {
+                       $cid = $to_canon( $id );
+                       if ( $cid === '' || isset( $processed[ $cid ] ) ) {
+                               continue;
+                       }
+                       $processed[ $cid ] = true;
+
                        if ( ! empty( $def['capability'] ) ) {
-                               self::assign_canonical( $capabilities, $id, sanitize_key( $def['capability'] ) );
+                               $capabilities[ $cid ] = sanitize_key( $def['capability'] );
                        }
 
                        if ( ! empty( $def['exclude_roles'] ) ) {
-                               $roles = array_map( 'sanitize_key', (array) $def['exclude_roles'] );
-                               self::assign_canonical( $excluded, $id, $roles );
+                               $roles = array_values( array_unique( array_map( 'sanitize_key', (array) $def['exclude_roles'] ) ) );
+                               if ( $roles ) {
+                                       $excluded[ $cid ] = $roles;
+                               }
                        }
                }
-
-               $filter_map = static function ( array $map ): array {
-                       $filtered = array();
-                       foreach ( $map as $id => $val ) {
-                               $cid = WidgetIds::canonicalize( $id );
-                               if ( $cid === '' || strpos( $cid, 'widget_' ) !== 0 ) {
-                                       continue;
-                               }
-
-                               if ( isset( $filtered[ $cid ] ) ) {
-                                       if ( is_array( $filtered[ $cid ] ) && is_array( $val ) ) {
-                                               $filtered[ $cid ] = array_values( array_unique( array_merge( $filtered[ $cid ], $val ) ) );
-                                       }
-                                       continue;
-                               }
-
-                               $filtered[ $cid ] = $val;
-                       }
-                       return $filtered;
-               };
-
-               $capabilities = $filter_map( $capabilities );
-               $excluded     = $filter_map( $excluded );
 
                $payload = array(
                        'widget_roles'   => $visibility,
