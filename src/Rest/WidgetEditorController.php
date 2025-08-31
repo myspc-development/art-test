@@ -55,7 +55,21 @@ class WidgetEditorController {
 		);
 	}
 
+	
+	public static function get_widgets( WP_REST_Request $req ): WP_REST_Response {
+		$role = sanitize_key( $req['role'] ?? '' );
+		if ( ! $role ) {
+			return \rest_ensure_response( [] );
+		}
 
+		$defs = DashboardWidgetManager::getWidgetDefinitions();
+		$defs = array_values( array_filter( $defs, static function ( $def ) use ( $role ) {
+			$roles = $def['roles'] ?? [];
+			return empty( $roles ) || in_array( $role, (array) $roles, true );
+		} ) );
+
+		return \rest_ensure_response( $defs );
+	}
 
 	public static function get_roles(): WP_REST_Response {
 		global $wp_roles;
@@ -80,5 +94,4 @@ class WidgetEditorController {
 
 }
 }
-
 
