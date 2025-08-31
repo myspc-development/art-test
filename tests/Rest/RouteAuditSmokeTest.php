@@ -6,6 +6,7 @@ namespace ArtPulse\Rest\Tests;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_REST_Server;
 
 /**
  * Smoke test that scans all /artpulse/v1 routes and exercises each method.
@@ -177,10 +178,30 @@ class RouteAuditSmokeTest extends \WP_UnitTestCase
             if (strpos($spec, '|') !== false) {
                 return array_map('trim', explode('|', $spec));
             }
+            if (strpos($spec, ',') !== false) {
+                return array_map('trim', explode(',', $spec));
+            }
             return [$spec];
         }
         if (is_array($spec)) {
             return array_values(array_unique(array_map('strval', $spec)));
+        }
+        if (is_int($spec)) {
+            $map = [
+                WP_REST_Server::READABLE => ['GET', 'HEAD'],
+                WP_REST_Server::CREATABLE => ['POST'],
+                WP_REST_Server::EDITABLE => ['PUT', 'PATCH'],
+                WP_REST_Server::DELETABLE => ['DELETE'],
+            ];
+            $verbs = [];
+            foreach ($map as $mask => $methods) {
+                if (($spec & $mask) === $mask) {
+                    $verbs = array_merge($verbs, $methods);
+                }
+            }
+            if ($verbs) {
+                return array_values(array_unique($verbs));
+            }
         }
         return ['GET'];
     }
