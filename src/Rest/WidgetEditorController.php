@@ -57,30 +57,32 @@ class WidgetEditorController {
                 return \rest_ensure_response( array_values( $roles ) );
         }
 
-	public static function get_layout( WP_REST_Request $req ): WP_REST_Response {
-		$role   = sanitize_key( $req['role'] );
-		$result = \ArtPulse\Core\DashboardWidgetManager::getRoleLayout( $role );
-		$layout = $result['layout'] ?? [];
+        public static function get_layout( WP_REST_Request $req ): WP_REST_Response {
+                $role   = sanitize_key( $req['role'] );
+                $result = \ArtPulse\Core\DashboardWidgetManager::getRoleLayout( $role );
+                $layout = $result['layout'] ?? [];
+                return \rest_ensure_response( $layout );
+        }
 
-	}
+        public static function save_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+                $role   = sanitize_key( $req['role'] );
+                $data   = (array) $req->get_json_params();
+                $layout = $data['layout'] ?? [];
+                if ( ! is_array( $layout ) ) {
+                        return new WP_Error( 'invalid', 'Invalid layout', [ 'status' => 400 ] );
+                }
+                $style = ( isset( $data['style'] ) && is_array( $data['style'] ) ) ? $data['style'] : [];
 
-	public static function save_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-		$role   = sanitize_key( $req['role'] );
-		$data   = (array) $req->get_json_params();
-		$layout = $data['layout'] ?? [];
-		if ( ! is_array( $layout ) ) {
-			return new WP_Error( 'invalid', 'Invalid layout', [ 'status' => 400 ] );
-		}
-		$style = ( isset( $data['style'] ) && is_array( $data['style'] ) ) ? $data['style'] : [];
+                \ArtPulse\Core\DashboardWidgetManager::saveRoleLayout( $role, $layout );
 
-		\ArtPulse\Core\DashboardWidgetManager::saveRoleLayout( $role, $layout );
+                return \rest_ensure_response( [ 'saved' => true ] );
+        }
 
-
-	public static function handle_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-		return match ( $req->get_method() ) {
-			'POST'  => self::save_layout( $req ),
-			'GET'   => self::get_layout( $req ),
-			default => new WP_Error( 'invalid_method', 'Method not allowed', [ 'status' => 405 ] ),
-		};
+        public static function handle_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+                return match ( $req->get_method() ) {
+                        'POST'  => self::save_layout( $req ),
+                        'GET'   => self::get_layout( $req ),
+                        default => new WP_Error( 'invalid_method', 'Method not allowed', [ 'status' => 405 ] ),
+                };
 	}
 }
