@@ -113,6 +113,18 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
                 ],
             ],
         ],
+        [
+            'name'    => 'WidgetSettings POST global',
+            'pattern' => '^/artpulse/v1/widget-settings/\(\?P<id>\[a-z0-9_-\]\+\)$',
+            'example' => '/artpulse/v1/widget-settings/widget_demo?global=1',
+            'methods' => [
+                'POST' => [
+                    'perm'    => ['unauth' => 401, 'read' => 403, 'admin' => 200],
+                    'payload' => ['title' => 'Demo Title', 'enabled' => true],
+                    'shape'   => ['saved'],
+                ],
+            ],
+        ],
     ];
 
     public function setUp(): void
