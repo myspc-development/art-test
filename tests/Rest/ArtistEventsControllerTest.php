@@ -90,6 +90,7 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
                $res = rest_get_server()->dispatch( $req );
                $this->assertSame( 200, $res->get_status() );
                $data = $res->get_data();
+               $this->assertNotEmpty( $data );
                $ids  = wp_list_pluck( $data, 'id' );
                $this->assertSameSets( $this->user_events, $ids );
                $this->assertCount( count( $this->user_events ), $data );
