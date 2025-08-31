@@ -12,6 +12,7 @@ require_once __DIR__ . '/includes/db-schema.php';
 require_once __DIR__ . '/includes/avatar-https-fix.php';
 require_once __DIR__ . '/includes/rest-dedupe.php';
 require_once __DIR__ . '/includes/rest-auth-code.php';
+require_once __DIR__ . '/includes/rest-route-utils.php';
 require_once __DIR__ . '/includes/install.php';
 require_once __DIR__ . '/includes/migrations/2025_08_23_unify_webhook_logs.php';
 require_once __DIR__ . '/ap-placeholder-bootstrap.php';
