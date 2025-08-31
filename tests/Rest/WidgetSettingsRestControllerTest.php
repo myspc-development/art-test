@@ -77,4 +77,49 @@ class WidgetSettingsRestControllerTest extends \WP_UnitTestCase {
                 $this->assertTrue( $data['saved'] );
                 $this->assertSame( array( 'limit' => 9 ), get_option( 'ap_widget_settings_test-widget' ) );
         }
+
+       public function test_permission_checks_run_even_when_permission_callback_disabled(): void {
+               register_rest_route(
+                       'artpulse/v1',
+                       '/widget-settings/(?P<id>[a-z0-9_-]+)',
+                       array(
+                               array(
+                                       'methods'            => 'POST',
+                                       'callback'           => array( WidgetSettingsRestController::class, 'save_settings' ),
+                                       'permission_callback' => '__return_true',
+                               ),
+                       ),
+                       true
+               );
+
+               $req = new \WP_REST_Request( 'POST', '/artpulse/v1/widget-settings/test-widget' );
+               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $req->set_param( 'global', 1 );
+               $req->set_body_params( array( 'settings' => array( 'limit' => 6 ) ) );
+               $res = rest_get_server()->dispatch( $req );
+               $this->assertSame( 403, $res->get_status() );
+               $this->assertSame( false, get_option( 'ap_widget_settings_test-widget', false ) );
+       }
+
+       public function test_requires_authentication_even_with_permission_callback_disabled(): void {
+               register_rest_route(
+                       'artpulse/v1',
+                       '/widget-settings/(?P<id>[a-z0-9_-]+)',
+                       array(
+                               array(
+                                       'methods'            => 'POST',
+                                       'callback'           => array( WidgetSettingsRestController::class, 'save_settings' ),
+                                       'permission_callback' => '__return_true',
+                               ),
+                       ),
+                       true
+               );
+
+               wp_set_current_user( 0 );
+               $req = new \WP_REST_Request( 'POST', '/artpulse/v1/widget-settings/test-widget' );
+               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $req->set_body_params( array( 'settings' => array( 'limit' => 5 ) ) );
+               $res = rest_get_server()->dispatch( $req );
+               $this->assertSame( 401, $res->get_status() );
+       }
 }

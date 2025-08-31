@@ -91,6 +91,10 @@ class WidgetSettingsRestController {
                 if ( is_wp_error( $check ) ) {
                         return $check;
                 }
+		$perm = $global ? Auth::guard_manage( $request ) : Auth::guard_read( $request );
+		if ( is_wp_error( $perm ) ) {
+			return $perm;
+		}
 
                 $raw       = $request->get_param( 'settings' );
                 if ( $raw === null ) {
