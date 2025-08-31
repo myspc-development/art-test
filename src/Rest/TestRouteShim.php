@@ -17,7 +17,8 @@ class TestRouteShim {
 			return;
 		}
 
-		add_action('rest_api_init', [self::class, 'register_stub_routes'], 5);
+               // Use a high priority so core controllers register first.
+               add_action('rest_api_init', [self::class, 'register_stub_routes'], 999);
 	}
 
 	public static function register_stub_routes(): void {
