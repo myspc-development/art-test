@@ -24,8 +24,8 @@ class DashboardConfigController {
 						'methods'             => 'GET',
 						'callback'            => array( self::class, 'get_config' ),
 						'permission_callback' => function () {
-							// Keep GET simple: require 'read' → 403 when missing.
-							return current_user_can( 'read' )
+							// Keep simple read gate; return 403 on failure.
+							return Auth::require_cap( 'read' ) === true
 								? true
 								: new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
 						},
@@ -33,11 +33,21 @@ class DashboardConfigController {
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( self::class, 'save_config' ),
-						'permission_callback' => function () {
-							// Enforce capability FIRST (tests expect 403 before nonce checks).
-							return current_user_can( 'manage_options' )
-								? true
-								: new WP_Error( 'rest_forbidden', 'Sorry, you are not allowed to do that.', array( 'status' => 403 ) );
+						// Order matters for test expectations:
+						//  - If user lacks capability -> 403
+						//  - Else, if nonce missing/invalid -> 401
+						'permission_callback' => function ( WP_REST_Request $request ) {
+							if ( ! current_user_can( 'manage_options' ) ) {
+								return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
+							}
+							$nonce = $request->get_header( 'X-AP-Nonce' )
+								?: $request->get_header( 'X-WP-Nonce' )
+								?: (string) $request->get_param( '_wpnonce' );
+
+							if ( ! $nonce || ! wp_verify_nonce( $nonce, 'ap_dashboard_config' ) ) {
+								return new WP_Error( 'ap_rest_invalid_nonce', 'Invalid or missing nonce.', array( 'status' => 401 ) );
+							}
+							return true;
 						},
 						'args'                => array(
 							'widget_roles' => array(
@@ -48,11 +58,11 @@ class DashboardConfigController {
 								'type'     => 'object',
 								'required' => false,
 							),
-							'layout' => array(
+							'layout'       => array(
 								'type'     => 'object',
 								'required' => false,
 							),
-							'locked' => array(
+							'locked'       => array(
 								'type'     => 'array',
 								'required' => false,
 							),
@@ -65,10 +75,13 @@ class DashboardConfigController {
 
 	/**
 	 * Assign a value to a map using a canonical widget ID.
-	 * (Kept for compatibility if you later need it.)
+	 *
+	 * Canonicalizes the provided ID, verifies the widget exists and merges
+	 * duplicate array values when encountered. Scalar values retain the first
+	 * assignment.
 	 */
 	private static function assign_canonical( array &$map, $id, $value ): void {
-		$cid = WidgetIds::canonicalize( $id );
+		$cid = WidgetIds::canonicalize( (string) $id );
 		if ( $cid === '' || ! DashboardWidgetRegistry::exists( $cid ) ) {
 			return;
 		}
@@ -88,27 +101,23 @@ class DashboardConfigController {
 		$locked       = get_option( 'artpulse_locked_widgets', array() );
 		$role_widgets = OptionUtils::get_array_option( 'artpulse_dashboard_layouts' );
 
+		// Seed role_widgets from registry if empty.
 		if ( ! $role_widgets ) {
 			$role_widgets = array();
 			foreach ( DashboardWidgetRegistry::get_role_widget_map() as $role => $widgets ) {
 				$role_widgets[ $role ] = array_values(
 					array_map(
-						static fn( $w ) => sanitize_key( $w['id'] ?? '' ),
+						static fn( $w ) => WidgetIds::canonicalize( (string) ( $w['id'] ?? '' ) ),
 						$widgets
 					)
 				);
 			}
 		}
 
-		$to_canon = static function ( $id ) {
-			$core = DashboardWidgetRegistry::map_to_core_id( (string) $id );
-			return DashboardWidgetRegistry::canon_slug( $core );
-		};
-
-		$canon_unique = static function ( $ids ) use ( $to_canon ) {
+		$canon_unique = static function ( $ids ): array {
 			$seen = array();
 			foreach ( (array) $ids as $id ) {
-				$cid = $to_canon( $id );
+				$cid = WidgetIds::canonicalize( (string) $id );
 				if ( $cid === '' || isset( $seen[ $cid ] ) ) {
 					continue;
 				}
@@ -117,6 +126,7 @@ class DashboardConfigController {
 			return array_keys( $seen );
 		};
 
+		// Canonicalize & de-dup inputs.
 		foreach ( $visibility as $role => &$ids ) {
 			$ids = $canon_unique( $ids );
 		}
@@ -135,9 +145,9 @@ class DashboardConfigController {
 			$items = array_values(
 				array_filter(
 					array_map(
-						static function ( $item ) use ( $to_canon, &$seen ) {
+						static function ( $item ) use ( &$seen ) {
 							$id  = is_array( $item ) && isset( $item['id'] ) ? $item['id'] : $item;
-							$cid = $to_canon( $id );
+							$cid = WidgetIds::canonicalize( (string) $id );
 							if ( $cid === '' || isset( $seen[ $cid ] ) ) {
 								return null;
 							}
@@ -151,19 +161,22 @@ class DashboardConfigController {
 		}
 		unset( $items );
 
-		// Build capability map keyed by canonical widget_* IDs.
+		// Build capabilities & excluded_roles keyed by canonical widget IDs (MUST be 'widget_*' keys).
 		$capabilities = array();
 		$excluded     = array();
+		$processed    = array();
 
-		// Use all() so tests that register exactly two widgets keep a tight payload.
-		foreach ( DashboardWidgetRegistry::all() as $id => $def ) {
-			$cid = $to_canon( $id );
-			if ( $cid === '' ) {
+		foreach ( DashboardWidgetRegistry::get_all() as $id => $def ) {
+			$cid = WidgetIds::canonicalize( (string) $id );
+			if ( $cid === '' || isset( $processed[ $cid ] ) ) {
 				continue;
 			}
+			$processed[ $cid ] = true;
+
 			if ( ! empty( $def['capability'] ) ) {
-				$capabilities[ $cid ] = sanitize_key( (string) $def['capability'] );
+				$capabilities[ $cid ] = sanitize_key( $def['capability'] );
 			}
+
 			if ( ! empty( $def['exclude_roles'] ) ) {
 				$roles = array_values( array_unique( array_map( 'sanitize_key', (array) $def['exclude_roles'] ) ) );
 				if ( $roles ) {
@@ -177,7 +190,7 @@ class DashboardConfigController {
 			'role_widgets'   => $role_widgets,
 			'layout'         => $layout,
 			'locked'         => $locked,
-			'capabilities'   => $capabilities,   // ← now canonical keys (e.g. widget_one)
+			'capabilities'   => $capabilities,
 			'excluded_roles' => $excluded,
 		);
 
@@ -185,24 +198,9 @@ class DashboardConfigController {
 	}
 
 	public static function save_config( WP_REST_Request $request ) {
-		// Since permission_callback has already enforced capability (403),
-		// handle nonce here (401) to satisfy test expectations/order.
-		$nonce = (string) $request->get_header( 'X-WP-Nonce' );
-		if ( $nonce === '' ) {
-			// also accept parameter form as a fallback
-			$nonce = (string) $request->get_param( '_wpnonce' );
-		}
-		if ( $nonce === '' || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new WP_Error(
-				'rest_invalid_nonce',
-				__( 'Invalid or missing nonce.', 'artpulse' ),
-				array( 'status' => 401 )
-			);
-		}
+		$data = $request->get_json_params();
 
-		$data       = (array) $request->get_json_params();
 		$visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();
-
 		foreach ( $visibility as $role => &$ids ) {
 			$ids = array_values( array_unique( array_map( array( WidgetIds::class, 'canonicalize' ), (array) $ids ) ) );
 		}
@@ -234,6 +232,6 @@ class DashboardConfigController {
 		update_option( 'artpulse_dashboard_layouts', $layout );
 		update_option( 'artpulse_locked_widgets', $locked );
 
-		return \rest_ensure_response( array( 'saved' => true ) );
+		return rest_ensure_response( array( 'saved' => true ) );
 	}
 }
