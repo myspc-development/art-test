@@ -138,8 +138,17 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                $this->assertSame( 403, $res->get_status() );
                $this->assertSame( 'rest_forbidden', $res->get_data()['code'] );
 
-               // Admins with a valid nonce should succeed.
+               // Admins without a nonce should be rejected.
                wp_set_current_user( $this->admin_id );
+               $missing = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
+               $missing->set_body_params( array() );
+               $missing->set_header( 'Content-Type', 'application/json' );
+               $missing->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $missing->set_body( json_encode( array( 'widget_roles' => array( 'administrator' => array( 'one' ) ) ) ) );
+               $res_missing = rest_get_server()->dispatch( $missing );
+               $this->assertSame( 401, $res_missing->get_status() );
+
+               // Admins with a valid nonce should succeed.
                $good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
                $good->set_body_params( array() );
                $good->set_header( 'Content-Type', 'application/json' );

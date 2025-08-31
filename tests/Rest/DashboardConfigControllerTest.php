@@ -59,7 +59,22 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
                 $res = rest_get_server()->dispatch( $req );
                 $this->assertSame( 403, $res->get_status() );
 
-		wp_set_current_user( $this->admin_id );
+                wp_set_current_user( $this->admin_id );
+
+               $missing = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
+               $missing->set_body_params( array() );
+               $missing->set_header( 'Content-Type', 'application/json' );
+               $missing->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $missing->set_body(
+                       json_encode(
+                               array(
+                                       'widget_roles' => array( 'administrator' => array( 'one' ) ),
+                               )
+                       )
+               );
+               $res_missing = rest_get_server()->dispatch( $missing );
+               $this->assertSame( 401, $res_missing->get_status() );
+
                $bad = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
                $bad->set_body_params( array() );
                $bad->set_header( 'Content-Type', 'application/json' );

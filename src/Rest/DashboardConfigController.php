@@ -191,6 +191,11 @@ class DashboardConfigController {
     }
 
     public static function save_config( WP_REST_Request $request ) {
+        $nonce_check = Auth::verify_nonce( $request->get_header( 'X-AP-Nonce' ), 'ap_dashboard_config' );
+        if ( is_wp_error( $nonce_check ) ) {
+            return $nonce_check;
+        }
+
         $data = $request->get_json_params();
 
         $visibility = isset( $data['widget_roles'] ) && is_array( $data['widget_roles'] ) ? $data['widget_roles'] : array();
