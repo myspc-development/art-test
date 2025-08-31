@@ -109,9 +109,16 @@ class DashboardConfigController {
                $capabilities = array();
                $excluded     = array();
                foreach ( $defs as $id => $def ) {
+                       $id = DashboardWidgetRegistry::canon_slug( $id );
+
+                       if ( isset( $capabilities[ $id ] ) || isset( $excluded[ $id ] ) ) {
+                               continue;
+                       }
+
                        if ( ! empty( $def['capability'] ) ) {
                                $capabilities[ $id ] = sanitize_key( $def['capability'] );
                        }
+
                        if ( ! empty( $def['exclude_roles'] ) ) {
                                $excluded[ $id ] = array_map( 'sanitize_key', (array) $def['exclude_roles'] );
                        }
