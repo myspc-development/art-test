@@ -36,36 +36,37 @@ class ArtistEventsController {
          * @return WP_REST_Response|WP_Error REST response on success or error on failure.
          */
         public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                $permission = Auth::guard_read( $request );
-                if ( is_wp_error( $permission ) ) {
-                        return $permission;
-                }
+               $permission = Auth::guard_read( $request );
+               if ( is_wp_error( $permission ) ) {
+                       return $permission;
+               }
 
-                // Ensure the custom post type exists before querying.
-                if ( ! post_type_exists( 'artpulse_event' ) ) {
-                        if ( class_exists( '\\ArtPulse\\Core\\PostTypeRegistrar' ) ) {
-                                \ArtPulse\Core\PostTypeRegistrar::register();
-                        } else {
-                                register_post_type(
-                                        'artpulse_event',
-                                        array(
-                                                'public'   => true,
-                                                'supports' => array( 'title' ),
-                                        )
-                                );
-                        }
-                }
+               $user_id = get_current_user_id();
+               if ( ! $user_id ) {
+                       return new WP_Error( 'ap_rest_author_required', __( 'Authentication required.', 'artpulse' ), array( 'status' => 401 ) );
+               }
 
-		$user_id = get_current_user_id();
-		if ( ! $user_id ) {
-			return new WP_Error( 'ap_rest_author_required', __( 'Authentication required.', 'artpulse' ), array( 'status' => 401 ) );
-		}
+               // Ensure the custom post type exists before querying.
+               if ( ! post_type_exists( 'artpulse_event' ) ) {
+                       if ( class_exists( '\\ArtPulse\\Core\\PostTypeRegistrar' ) ) {
+                               \ArtPulse\Core\PostTypeRegistrar::register();
+                       } else {
+                               register_post_type(
+                                       'artpulse_event',
+                                       array(
+                                               'public'   => true,
+                                               'supports' => array( 'title' ),
+                                       )
+                               );
+                       }
+               }
 
                $query = new WP_Query(
                        array(
                                'post_type'              => 'artpulse_event',
-                               'author'                 => $user_id,
+                               'author__in'             => array( $user_id ),
                                'post_status'            => array( 'publish', 'pending', 'draft', 'future', 'private' ),
+                               'perm'                   => 'editable',
                                'fields'                 => 'ids',
                                'posts_per_page'         => -1,
                                'no_found_rows'          => true,
