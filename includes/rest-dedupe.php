@@ -178,18 +178,31 @@ return true;
 $declared[ $check_key ] = true;
 }
 
-		// Normalize routes array for case-insensitive lookup.
-		$routes = array_change_key_case( $wp_rest_server->get_routes(), CASE_LOWER );
+$rest_initialized = did_action( 'rest_api_init' );
+$suppress_log     = ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) || ! $rest_initialized;
 
-		if ( ! isset( $routes[ $full_route ] ) ) {
-			if ( ! in_array( $full_route, $GLOBALS['ap_rest_diagnostics']['missing'], true ) ) {
-				$GLOBALS['ap_rest_diagnostics']['missing'][] = $full_route;
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log( "[REST MISSING] Route $full_route is not registered." );
-				}
-			}
-			return false;
-		}
+if ( ! $rest_initialized && ! ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) ) {
+add_action(
+'rest_api_init',
+static function () use ( $namespace, $route, $method ) {
+ap_rest_route_registered( $namespace, $route, $method );
+},
+999
+);
+}
+
+// Normalize routes array for case-insensitive lookup.
+$routes = array_change_key_case( $wp_rest_server->get_routes(), CASE_LOWER );
+
+if ( ! isset( $routes[ $full_route ] ) ) {
+                        if ( ! $suppress_log && ! in_array( $full_route, $GLOBALS['ap_rest_diagnostics']['missing'], true ) ) {
+                                $GLOBALS['ap_rest_diagnostics']['missing'][] = $full_route;
+                                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                        error_log( "[REST MISSING] Route $full_route is not registered." );
+                                }
+                        }
+                        return false;
+                }
 
 		// Ensure previously flagged routes are removed from the missing list.
 		$index = array_search( $full_route, $GLOBALS['ap_rest_diagnostics']['missing'], true );
