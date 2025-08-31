@@ -715,46 +715,48 @@ class DashboardWidgetRegistry {
 	 *
 	 * @return array<string,array>
 	 */
-	public static function get_all( ?string $visibility = null, bool $builder = false ): array {
-		if ( $builder ) {
-			$widgets = self::$builder_widgets;
-			if ( $visibility !== null ) {
-				$widgets = array_filter(
-					$widgets,
-					static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
-				);
-			}
+       public static function get_all( ?string $visibility = null, bool $builder = false, bool $canonical = false ): array {
+               if ( $builder ) {
+                       $widgets = self::$builder_widgets;
+                       if ( $visibility !== null ) {
+                               $widgets = array_filter(
+                                       $widgets,
+                                       static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
+                               );
+                       }
 
-			return $widgets;
-		}
+                       return $widgets;
+               }
 
-		// Start with in-memory registry.
-		$widgets = self::$widgets;
+               // Start with in-memory registry.
+               $widgets = self::$widgets;
 
-		// Merge DB-driven overrides (test writes via update_option()).
-		$widgets = self::apply_roles_overrides( $widgets );
+               // Merge DB-driven overrides (test writes via update_option()).
+               $widgets = self::apply_roles_overrides( $widgets );
 
-		// Filter out widgets disabled by group visibility.
-		$group_vis = get_option( 'ap_widget_group_visibility', array() );
-		foreach ( $widgets as $id => $cfg ) {
-			$grp = $cfg['group'] ?? '';
-			if ( $grp && isset( $group_vis[ $grp ] ) && ! $group_vis[ $grp ] ) {
-				unset( $widgets[ $id ] );
-			}
-		}
+               // Filter out widgets disabled by group visibility.
+               $group_vis = get_option( 'ap_widget_group_visibility', array() );
+               foreach ( $widgets as $id => $cfg ) {
+                       $grp = $cfg['group'] ?? '';
+                       if ( $grp && isset( $group_vis[ $grp ] ) && ! $group_vis[ $grp ] ) {
+                               unset( $widgets[ $id ] );
+                       }
+               }
 
-		// Expose both canonical and unprefixed IDs (helps tests access 'test_widget').
-		$widgets = self::expand_legacy_keys( $widgets );
+               if ( ! $canonical ) {
+                       // Expose both canonical and unprefixed IDs (helps tests access 'test_widget').
+                       $widgets = self::expand_legacy_keys( $widgets );
+               }
 
-		if ( $visibility !== null ) {
-			$widgets = array_filter(
-				$widgets,
-				static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
-			);
-		}
+               if ( $visibility !== null ) {
+                       $widgets = array_filter(
+                               $widgets,
+                               static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
+                       );
+               }
 
-		return $widgets;
-	}
+               return $widgets;
+       }
 
 	/**
 	 * Backwards compatibility alias for legacy code.
