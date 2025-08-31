@@ -91,7 +91,7 @@ class RoleMatrixController {
 			$user->remove_role( $role );
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'status' => 'ok',
 				'roles'  => $user->roles,
@@ -121,7 +121,7 @@ class RoleMatrixController {
 			}
 		}
 
-		return rest_ensure_response( array( 'status' => 'ok' ) );
+		return \rest_ensure_response( array( 'status' => 'ok' ) );
 	}
 
 	public static function seed(): WP_REST_Response {
@@ -151,6 +151,6 @@ class RoleMatrixController {
 			}
 		}
 
-		return rest_ensure_response( compact( 'users', 'roles', 'matrix' ) );
+		return \rest_ensure_response( compact( 'users', 'roles', 'matrix' ) );
 	}
 }

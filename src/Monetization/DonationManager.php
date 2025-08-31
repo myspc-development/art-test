@@ -87,6 +87,6 @@ class DonationManager {
 			)
 		);
 
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 }

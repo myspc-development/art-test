@@ -77,6 +77,6 @@ class SpotlightRestController {
 			);
 		}
 
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 }

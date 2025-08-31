@@ -422,7 +422,7 @@ class DirectMessages {
 
 		try {
 			self::add_message( $sender_id, $recipient_id, $content, $context_type, $context_id );
-			return rest_ensure_response( array( 'status' => 'sent' ) );
+			return \rest_ensure_response( array( 'status' => 'sent' ) );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages send error: ' . $e->getMessage() );
@@ -469,7 +469,7 @@ class DirectMessages {
 			);
 			$row = self::get_message( $id );
 
-			return rest_ensure_response( $row );
+			return \rest_ensure_response( $row );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages send_v2 error: ' . $e->getMessage() );
@@ -488,7 +488,7 @@ class DirectMessages {
 
 			$messages = self::get_conversation( $user_id, $other_id );
 
-			return rest_ensure_response( $messages );
+			return \rest_ensure_response( $messages );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages fetch error: ' . $e->getMessage() );
@@ -536,7 +536,7 @@ class DirectMessages {
 				$rows
 			);
 
-			return rest_ensure_response( $messages );
+			return \rest_ensure_response( $messages );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages updates error: ' . $e->getMessage() );
@@ -712,7 +712,7 @@ class DirectMessages {
 		try {
 			$user_id = get_current_user_id();
 			$list    = self::list_conversations( $user_id );
-			return rest_ensure_response( $list );
+			return \rest_ensure_response( $list );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages conversations error: ' . $e->getMessage() );
@@ -746,7 +746,7 @@ class DirectMessages {
 
 			self::mark_read_ids( $ids, get_current_user_id() );
 
-			return rest_ensure_response( array( 'updated' => count( $ids ) ) );
+			return \rest_ensure_response( array( 'updated' => count( $ids ) ) );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages mark_read error: ' . $e->getMessage() );
@@ -767,7 +767,7 @@ class DirectMessages {
 			$ids = array_map( 'intval', $ids );
 			self::mark_read_ids( $ids, get_current_user_id() );
 
-			return rest_ensure_response( array( 'updated' => count( $ids ) ) );
+			return \rest_ensure_response( array( 'updated' => count( $ids ) ) );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages seen error: ' . $e->getMessage() );
@@ -833,7 +833,7 @@ class DirectMessages {
 			$rows
 		);
 
-		return rest_ensure_response( $messages );
+		return \rest_ensure_response( $messages );
 	}
 
 	public static function fetch_context( WP_REST_Request $req ): WP_REST_Response {
@@ -845,7 +845,7 @@ class DirectMessages {
 			$type     = sanitize_key( $req['type'] );
 			$id       = absint( $req['id'] );
 			$messages = self::get_context_conversation( $user_id, $type, $id );
-			return rest_ensure_response( $messages );
+			return \rest_ensure_response( $messages );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages fetch_context error: ' . $e->getMessage() );
@@ -867,7 +867,7 @@ class DirectMessages {
 			return new WP_Error( 'missing_feature', 'Blocking not available', array( 'status' => 500 ) );
 		}
 		BlockedUsers::add( $user_id, $block_id );
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'status'  => 'blocked',
 				'user_id' => $block_id,
@@ -900,7 +900,7 @@ class DirectMessages {
 			}
 			$wpdb->update( $table, array( 'tags' => implode( ',', $tags ) ), array( 'id' => $id ) );
 
-			return rest_ensure_response( array( 'tags' => $tags ) );
+			return \rest_ensure_response( array( 'tags' => $tags ) );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages label error: ' . $e->getMessage() );
@@ -925,7 +925,7 @@ class DirectMessages {
 			$sql      = $wpdb->prepare( 'SELECT id, sender_id, recipient_id, content, context_type, context_id, parent_id, attachments, tags, created_at, is_read, is_delivered FROM %i WHERE id = %d OR parent_id = %d ORDER BY created_at ASC', $table, $thread_id, $thread_id );
 			$rows     = $wpdb->get_results( $sql, ARRAY_A );
 			$messages = array_map( array( self::class, 'get_message' ), wp_list_pluck( $rows, 'id' ) );
-			return rest_ensure_response( $messages );
+			return \rest_ensure_response( $messages );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages thread error: ' . $e->getMessage() );
@@ -968,7 +968,7 @@ class DirectMessages {
 				return new WP_Error( 'invalid_action', 'Unknown bulk action', array( 'status' => 400 ) );
 			}
 
-			return rest_ensure_response( array( 'updated' => count( $ids ) ) );
+			return \rest_ensure_response( array( 'updated' => count( $ids ) ) );
 		} catch ( \Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'DirectMessages bulk_action error: ' . $e->getMessage() );

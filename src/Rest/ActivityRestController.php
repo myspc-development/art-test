@@ -38,6 +38,6 @@ class ActivityRestController {
 		$limit   = absint( $request['limit'] ) ?: 20;
 
 		$logs = ActivityLogger::get_logs( $org_id ?: null, $user_id, $limit );
-		return rest_ensure_response( $logs );
+		return \rest_ensure_response( $logs );
 	}
 }

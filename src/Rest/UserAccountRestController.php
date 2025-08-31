@@ -112,7 +112,7 @@ class UserAccountRestController {
 			);
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'profile' => $profile,
 				'posts'   => $post_rows,
@@ -156,6 +156,6 @@ class UserAccountRestController {
 
 		wp_delete_user( $user_id );
 
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 }

@@ -30,7 +30,7 @@ class ProfileLinkRequestManager {
 			)
 		);
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'request_id' => $request_id,
 				'status'     => 'pending',

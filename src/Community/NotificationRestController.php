@@ -57,7 +57,7 @@ class NotificationRestController {
 
 		$notifications = NotificationManager::get( $user_id, $limit );
 
-		return rest_ensure_response( $notifications );
+		return \rest_ensure_response( $notifications );
 	}
 
 	public static function mark_read( WP_REST_Request $request ): WP_REST_Response {
@@ -68,7 +68,7 @@ class NotificationRestController {
 			NotificationManager::mark_read( $id, $user_id );
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'status' => 'read',
 				'id'     => $id,
@@ -80,6 +80,6 @@ class NotificationRestController {
 		$user_id = get_current_user_id();
 		NotificationManager::mark_all_read( $user_id );
 
-		return rest_ensure_response( array( 'status' => 'all_read' ) );
+		return \rest_ensure_response( array( 'status' => 'all_read' ) );
 	}
 }

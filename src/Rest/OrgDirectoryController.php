@@ -63,6 +63,6 @@ final class OrgDirectoryController {
             $posts
         );
 
-        return rest_ensure_response( $data );
+        return \rest_ensure_response( $data );
     }
 }

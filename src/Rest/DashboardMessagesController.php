@@ -27,7 +27,7 @@ class DashboardMessagesController {
 			return new \WP_Error( 'unauthorized', 'Login required', array( 'status' => 401 ) );
 		}
 
-		return rest_ensure_response( self::get_recent_messages_for_user( get_current_user_id() ) );
+		return \rest_ensure_response( self::get_recent_messages_for_user( get_current_user_id() ) );
 	}
 
 	private static function get_recent_messages_for_user( int $user_id ): array {

@@ -92,7 +92,7 @@ class UserInvitationController {
 			}
 			$invited[] = $email;
 		}
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'invited' => $invited,
 				'role'    => $role,
@@ -130,7 +130,7 @@ class UserInvitationController {
 				$processed[] = $uid;
 			}
 		}
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'action'    => $action,
 				'processed' => $processed,

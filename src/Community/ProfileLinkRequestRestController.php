@@ -133,7 +133,7 @@ class ProfileLinkRequestRestController {
 		$id = \ArtPulse\Community\ProfileLinkRequestManager::create( $artist_user_id, $org_id, $message );
 
 		if ( $id ) {
-			return rest_ensure_response(
+			return \rest_ensure_response(
 				array(
 					'success'    => true,
 					'request_id' => $id,
@@ -152,7 +152,7 @@ class ProfileLinkRequestRestController {
 		}
 
 		\ArtPulse\Community\ProfileLinkRequestManager::approve( $id, get_current_user_id() );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function deny_request( $request ) {
@@ -163,7 +163,7 @@ class ProfileLinkRequestRestController {
 		}
 
 		\ArtPulse\Community\ProfileLinkRequestManager::deny( $id, get_current_user_id() );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function list_requests( $request ) {
@@ -220,7 +220,7 @@ class ProfileLinkRequestRestController {
 			);
 		}
 
-		return rest_ensure_response( $out );
+		return \rest_ensure_response( $out );
 	}
 
 	public static function bulk_update( $request ) {
@@ -240,7 +240,7 @@ class ProfileLinkRequestRestController {
 			}
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'updated' => $ids,
 				'action'  => $action,

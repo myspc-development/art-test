@@ -81,19 +81,19 @@ class EventChatPostController extends WP_REST_Controller {
 			return new WP_Error( 'invalid_request', 'Invalid reaction.', array( 'status' => 400 ) );
 		}
 		\ArtPulse\DB\Chat\add_reaction( $msg_id, get_current_user_id(), $emoji );
-		return rest_ensure_response( array( 'status' => 'ok' ) );
+		return \rest_ensure_response( array( 'status' => 'ok' ) );
 	}
 
 	/** @param WP_REST_Request $request */
 	public function delete_item( $request ) {
 		$id = absint( $request['id'] );
 		\ArtPulse\DB\Chat\delete_message( $id );
-		return rest_ensure_response( array( 'status' => 'deleted' ) );
+		return \rest_ensure_response( array( 'status' => 'deleted' ) );
 	}
 
 	public function flag_item( WP_REST_Request $request ): WP_REST_Response {
 		$id = absint( $request['id'] );
 		\ArtPulse\DB\Chat\flag_message( $id );
-		return rest_ensure_response( array( 'status' => 'flagged' ) );
+		return \rest_ensure_response( array( 'status' => 'flagged' ) );
 	}
 }

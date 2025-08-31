@@ -100,7 +100,7 @@ class FavoriteRestController {
 
 		$fav_count = intval( get_post_meta( $object_id, 'ap_favorite_count', true ) );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'success'        => true,
 				'status'         => $status,
@@ -124,6 +124,6 @@ class FavoriteRestController {
 			$favs
 		);
 
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 }

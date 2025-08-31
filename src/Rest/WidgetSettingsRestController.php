@@ -70,7 +70,7 @@ class WidgetSettingsRestController {
 			$result[ $key ] = $settings[ $key ] ?? ( $field['default'] ?? '' );
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'schema'   => $schema,
 				'settings' => $result,
@@ -100,7 +100,7 @@ class WidgetSettingsRestController {
                         update_user_meta( get_current_user_id(), 'ap_widget_settings_' . $id, $sanitized );
                 }
 
-                return rest_ensure_response(
+                return \rest_ensure_response(
                         array(
                                 'id'       => $id,
                                 'settings' => $sanitized,

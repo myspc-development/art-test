@@ -97,7 +97,7 @@ class OrgDashboardController {
 				'status' => get_post_status( $id ),
 			);
 		}
-		return rest_ensure_response( array( 'events' => $events ) );
+		return \rest_ensure_response( array( 'events' => $events ) );
 	}
 
 	public static function team_invite( WP_REST_Request $req ) {
@@ -110,7 +110,7 @@ class OrgDashboardController {
 		$table   = $wpdb->prefix . 'ap_tickets';
 		$sales   = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $table WHERE org_id = %d AND status = 'active'", $org_id ) );
 		$revenue = (float) $wpdb->get_var( $wpdb->prepare( "SELECT SUM(total) FROM $table WHERE org_id = %d AND status = 'active'", $org_id ) );
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'sales'   => $sales,
 				'revenue' => $revenue,
@@ -134,6 +134,6 @@ class OrgDashboardController {
 			'msg'  => $msg,
 		);
 		set_transient( $key, $log, DAY_IN_SECONDS );
-		return rest_ensure_response( array( 'sent' => true ) );
+		return \rest_ensure_response( array( 'sent' => true ) );
 	}
 }

@@ -161,14 +161,14 @@ class MarketplaceManager {
 		$table = $wpdb->prefix . 'ap_market_artworks';
 		$wpdb->insert( $table, $data );
 		$id = (int) $wpdb->insert_id;
-		return rest_ensure_response( array( 'id' => $id ) );
+		return \rest_ensure_response( array( 'id' => $id ) );
 	}
 
 	public static function list_artworks(): WP_REST_Response {
 		global $wpdb;
 		$table = $wpdb->prefix . 'ap_market_artworks';
 		$rows  = $wpdb->get_results( "SELECT * FROM $table WHERE status = 'active' ORDER BY created_at DESC", ARRAY_A );
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 
 	public static function get_artwork( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -179,7 +179,7 @@ class MarketplaceManager {
 		if ( ! $row ) {
 			return new WP_Error( 'not_found', 'Artwork not found', array( 'status' => 404 ) );
 		}
-		return rest_ensure_response( $row );
+		return \rest_ensure_response( $row );
 	}
 
 	public static function submit_order( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -214,7 +214,7 @@ class MarketplaceManager {
 		if ( $artwork['stock'] > 0 ) {
 			$wpdb->update( $artwork_table, array( 'stock' => $artwork['stock'] - $qty ), array( 'id' => $artwork_id ) );
 		}
-		return rest_ensure_response( array( 'order_id' => $order_id ) );
+		return \rest_ensure_response( array( 'order_id' => $order_id ) );
 	}
 
 	public static function list_orders(): WP_REST_Response {
@@ -222,6 +222,6 @@ class MarketplaceManager {
 		$table = $wpdb->prefix . 'ap_market_orders';
 		$user  = get_current_user_id();
 		$rows  = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE buyer_id = %d ORDER BY created_at DESC", $user ), ARRAY_A );
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 }

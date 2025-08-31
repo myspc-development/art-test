@@ -75,7 +75,7 @@ class EventAnalyticsController extends WP_REST_Controller {
 
 		$cache_key = self::cache_key( $user_id, $start, $end, $range );
 		if ( false !== ( $cached = get_transient( $cache_key ) ) ) {
-			return rest_ensure_response( $cached );
+			return \rest_ensure_response( $cached );
 		}
 
 		// Build zero-filled series for each local day in range.
@@ -234,7 +234,7 @@ class EventAnalyticsController extends WP_REST_Controller {
 		);
 
 		set_transient( $cache_key, $data, MINUTE_IN_SECONDS );
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 
 	protected static function cache_key( int $user_id, ?string $start, ?string $end, string $range ): string {

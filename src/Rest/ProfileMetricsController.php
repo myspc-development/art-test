@@ -57,6 +57,6 @@ final class ProfileMetricsController {
         }
 
         $data = ProfileMetrics::get_counts( $uid, $metric, $days );
-        return rest_ensure_response( $data );
+        return \rest_ensure_response( $data );
     }
 }

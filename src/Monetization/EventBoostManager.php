@@ -98,7 +98,7 @@ class EventBoostManager {
 			return $session;
 		}
 
-		return rest_ensure_response( array( 'checkout_url' => $session->url ) );
+		return \rest_ensure_response( array( 'checkout_url' => $session->url ) );
 	}
 
 	public static function handle_webhook( WP_REST_Request $req ) {
@@ -123,7 +123,7 @@ class EventBoostManager {
 			}
 		}
 
-		return rest_ensure_response( array( 'received' => true ) );
+		return \rest_ensure_response( array( 'received' => true ) );
 	}
 
 	public static function record_boost( int $event_id, int $user_id, float $amount, string $method ): void {

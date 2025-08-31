@@ -117,7 +117,7 @@ class AuctionManager {
 				'created_at' => current_time( 'mysql' ),
 			)
 		);
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function list_bids( WP_REST_Request $req ): WP_REST_Response {
@@ -125,7 +125,7 @@ class AuctionManager {
 		global $wpdb;
 		$artwork_id = absint( $req['artwork_id'] );
 		$rows       = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $bid_table WHERE artwork_id = %d ORDER BY created_at DESC", $artwork_id ), ARRAY_A );
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 
 	public static function list_live(): WP_REST_Response {
@@ -133,6 +133,6 @@ class AuctionManager {
 		global $wpdb;
 		$now  = current_time( 'mysql' );
 		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $auction_table WHERE is_active = 1 AND start_time <= %s AND end_time >= %s", $now, $now ), ARRAY_A );
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 }

@@ -34,12 +34,12 @@ class OrgMetaController {
 				'color'  => get_post_meta( $id, 'branding_color', true ),
 				'footer' => get_post_meta( $id, 'branding_footer', true ),
 			);
-			return rest_ensure_response( $data );
+			return \rest_ensure_response( $data );
 		}
 		$body = json_decode( $req->get_body(), true ) ?: array();
 		update_post_meta( $id, 'branding_logo', sanitize_text_field( $body['logo'] ?? '' ) );
 		update_post_meta( $id, 'branding_color', sanitize_hex_color( $body['color'] ?? '' ) );
 		update_post_meta( $id, 'branding_footer', sanitize_text_field( $body['footer'] ?? '' ) );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 }

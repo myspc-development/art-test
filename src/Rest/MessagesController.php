@@ -28,6 +28,6 @@ class MessagesController {
 		$msg_id  = (int) $request['id'];
 		$content = sanitize_text_field( $request->get_param( 'message' ) );
 		// Save to DB or email logic here...
-		return rest_ensure_response( array( 'status' => 'sent' ) );
+		return \rest_ensure_response( array( 'status' => 'sent' ) );
 	}
 }

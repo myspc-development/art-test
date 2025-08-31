@@ -84,7 +84,7 @@ class WebhookManager {
 		global $wpdb;
 		$table = $wpdb->prefix . 'ap_webhooks';
 		$rows  = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE org_id = %d", $org_id ), ARRAY_A );
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 
 	public static function handle_webhooks( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -120,7 +120,7 @@ class WebhookManager {
 			)
 		);
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'id'     => $wpdb->insert_id,
 				'secret' => $secret,
@@ -160,7 +160,7 @@ class WebhookManager {
 			)
 		);
 
-		return rest_ensure_response( array( 'updated' => true ) );
+		return \rest_ensure_response( array( 'updated' => true ) );
 	}
 
 	public static function delete_webhook( WP_REST_Request $req ) {
@@ -177,7 +177,7 @@ class WebhookManager {
 			)
 		);
 
-		return rest_ensure_response( array( 'deleted' => true ) );
+		return \rest_ensure_response( array( 'deleted' => true ) );
 	}
 
 	public static function handle_webhook_item( WP_REST_Request $req ): WP_REST_Response|WP_Error {

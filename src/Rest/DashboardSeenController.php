@@ -26,6 +26,6 @@ class DashboardSeenController {
 
 	public static function mark_seen( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		update_user_meta( get_current_user_id(), 'ap_seen_dashboard_v2', 1 );
-		return rest_ensure_response( array( 'seen' => true ) );
+		return \rest_ensure_response( array( 'seen' => true ) );
 	}
 }

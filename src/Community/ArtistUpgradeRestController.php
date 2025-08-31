@@ -66,7 +66,7 @@ class ArtistUpgradeRestController {
 			return $post_id;
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'request_id' => $post_id,
 				'status'     => 'pending',
@@ -113,7 +113,7 @@ class ArtistUpgradeRestController {
 
 		$url = add_query_arg( 'onboarding', '1', home_url( '/dashboard' ) );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'profile_id'     => $profile_id,
 				'onboarding_url' => $url,

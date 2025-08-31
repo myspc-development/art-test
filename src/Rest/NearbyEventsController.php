@@ -56,7 +56,7 @@ class NearbyEventsController {
 	public static function get_nearby( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$cache_key = 'ap_nearby_events_' . get_current_user_id() . '_' . md5( serialize( $request->get_params() ) );
 		if ( false !== ( $cached = get_transient( $cache_key ) ) ) {
-			return rest_ensure_response( $cached );
+			return \rest_ensure_response( $cached );
 		}
 
 		$lat    = floatval( $request['lat'] );
@@ -106,7 +106,7 @@ class NearbyEventsController {
 		usort( $events, static fn( $a, $b ) => ( $a['distance'] <=> $b['distance'] ) );
 		$events = array_slice( $events, 0, $limit );
 		set_transient( $cache_key, $events, 30 );
-		return rest_ensure_response( $events );
+		return \rest_ensure_response( $events );
 	}
 
 	private static function haversine_distance( float $lat1, float $lng1, float $lat2, float $lng2 ): float {

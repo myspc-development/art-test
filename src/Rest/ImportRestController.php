@@ -95,6 +95,6 @@ class ImportRestController {
 			$created[] = $post_id;
 		}
 
-		return rest_ensure_response( array( 'created' => $created ) );
+		return \rest_ensure_response( array( 'created' => $created ) );
 	}
 }

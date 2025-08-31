@@ -102,7 +102,7 @@ class GrantAssistant {
 			);
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'draft'  => $draft,
 				'output' => $output,
@@ -134,7 +134,7 @@ class GrantAssistant {
 			);
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'draft'  => $draft,
 				'output' => $output,

@@ -194,7 +194,7 @@ class EventChatController extends WP_REST_Controller {
 				is_array( $rows ) ? $rows : array()
 			);
 
-			return rest_ensure_response( $messages );
+			return \rest_ensure_response( $messages );
 		} catch ( \Throwable $e ) {
 			error_log( '[artpulse] chat GET error for event ' . $event_id . ': ' . $e->getMessage() );
 			return new WP_Error( 'ap_chat_error', __( 'Chat load failed.', 'artpulse' ), array( 'status' => 500 ) );
@@ -232,7 +232,7 @@ class EventChatController extends WP_REST_Controller {
 			}
 			\ArtPulse\DB\Chat\maybe_install_tables();
 			$msg = \ArtPulse\DB\Chat\insert_message( $event_id, get_current_user_id(), $content );
-			return rest_ensure_response( $msg );
+			return \rest_ensure_response( $msg );
 		} catch ( \Throwable $e ) {
 			error_log( '[artpulse] chat POST error for event ' . $event_id . ': ' . $e->getMessage() );
 			return new WP_Error( 'ap_chat_error', __( 'Could not post message.', 'artpulse' ), array( 'status' => 500 ) );
@@ -251,7 +251,7 @@ class EventChatController extends WP_REST_Controller {
 				throw new \RuntimeException( 'Chat DB helpers not loaded' );
 			}
 			\ArtPulse\DB\Chat\add_reaction( $msg_id, get_current_user_id(), $emoji );
-			return rest_ensure_response( array( 'status' => 'ok' ) );
+			return \rest_ensure_response( array( 'status' => 'ok' ) );
 		} catch ( \Throwable $e ) {
 			error_log( '[artpulse] chat REACTION error for message ' . $msg_id . ': ' . $e->getMessage() );
 			return new WP_Error( 'ap_chat_error', __( 'Could not add reaction.', 'artpulse' ), array( 'status' => 500 ) );
@@ -277,7 +277,7 @@ class EventChatController extends WP_REST_Controller {
 				throw new \RuntimeException( 'Chat DB helpers not loaded' );
 			}
 			\ArtPulse\DB\Chat\delete_message( $id );
-			return rest_ensure_response( array( 'status' => 'deleted' ) );
+			return \rest_ensure_response( array( 'status' => 'deleted' ) );
 		} catch ( \Throwable $e ) {
 			error_log( '[artpulse] chat DELETE error for message ' . $id . ': ' . $e->getMessage() );
 			return new WP_Error( 'ap_chat_error', __( 'Could not delete message.', 'artpulse' ), array( 'status' => 500 ) );
@@ -295,7 +295,7 @@ class EventChatController extends WP_REST_Controller {
 				throw new \RuntimeException( 'Chat DB helpers not loaded' );
 			}
 			\ArtPulse\DB\Chat\flag_message( $id );
-			return rest_ensure_response( array( 'status' => 'flagged' ) );
+			return \rest_ensure_response( array( 'status' => 'flagged' ) );
 		} catch ( \Throwable $e ) {
 			error_log( '[artpulse] chat FLAG error for message ' . $id . ': ' . $e->getMessage() );
 			return new WP_Error( 'ap_chat_error', __( 'Could not flag message.', 'artpulse' ), array( 'status' => 500 ) );

@@ -36,7 +36,7 @@ class MembershipManager {
 			$level   = get_user_meta( $user_id, 'ap_membership_level', true ) ?: 'Free';
 			$expires = get_user_meta( $user_id, 'ap_membership_expires', true );
 
-			return rest_ensure_response(
+			return \rest_ensure_response(
 				array(
 					'level'   => $level,
 					'expires' => $expires ? intval( $expires ) : 0,
@@ -60,7 +60,7 @@ class MembershipManager {
 
 		do_action( 'artpulse_membership_updated', $user_id, $level, $expires );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'level'   => $level,
 				'expires' => $expires,

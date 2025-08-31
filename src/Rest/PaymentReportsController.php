@@ -32,6 +32,6 @@ class PaymentReportsController {
 
 		$metrics = PaymentAnalyticsDashboard::get_metrics( $start, $end );
 
-		return rest_ensure_response( array( 'metrics' => $metrics ) );
+		return \rest_ensure_response( array( 'metrics' => $metrics ) );
 	}
 }

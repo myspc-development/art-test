@@ -42,6 +42,6 @@ class DashboardAnalyticsController {
 			return new WP_Error( 'invalid_event', 'Event required', array( 'status' => 400 ) );
 		}
 		DashboardAnalyticsLogger::log( get_current_user_id(), $event, $details );
-		return rest_ensure_response( array( 'logged' => true ) );
+		return \rest_ensure_response( array( 'logged' => true ) );
 	}
 }

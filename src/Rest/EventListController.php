@@ -56,7 +56,7 @@ class EventListController {
 	public static function get_list( WP_REST_Request $request ) {
 		$cache_key = 'ap_event_list_' . get_current_user_id() . '_' . md5( serialize( $request->get_params() ) );
 		if ( false !== ( $cached = get_transient( $cache_key ) ) ) {
-			return rest_ensure_response( $cached );
+			return \rest_ensure_response( $cached );
 		}
 
 		$meta_query = array();
@@ -190,6 +190,6 @@ class EventListController {
 		}
 		$data = array( 'html' => $html );
 		set_transient( $cache_key, $data, 30 );
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 }

@@ -39,12 +39,12 @@ class LeaderboardRestController {
 	public static function most_helpful( WP_REST_Request $req ): WP_REST_Response {
 		$limit = $req->get_param( 'limit' ) ? absint( $req['limit'] ) : 5;
 		$data  = LeaderboardManager::get_most_helpful( $limit );
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 
 	public static function most_upvoted( WP_REST_Request $req ): WP_REST_Response {
 		$limit = $req->get_param( 'limit' ) ? absint( $req['limit'] ) : 5;
 		$data  = LeaderboardManager::get_most_upvoted( $limit );
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 }

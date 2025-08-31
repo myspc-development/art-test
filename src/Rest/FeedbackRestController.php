@@ -100,7 +100,7 @@ class FeedbackRestController {
 				'created_at'  => current_time( 'mysql' ),
 			)
 		);
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function list(): WP_REST_Response {
@@ -127,13 +127,13 @@ class FeedbackRestController {
 			},
 			$rows
 		);
-		return rest_ensure_response( $items );
+		return \rest_ensure_response( $items );
 	}
 
 	public static function vote( WP_REST_Request $req ): WP_REST_Response {
 		$id    = absint( $req['id'] );
 		$count = FeedbackManager::upvote( $id, get_current_user_id() );
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'success' => true,
 				'votes'   => $count,
@@ -143,7 +143,7 @@ class FeedbackRestController {
 
 	public static function comments( WP_REST_Request $req ): WP_REST_Response {
 		$id = absint( $req['id'] );
-		return rest_ensure_response( FeedbackManager::get_comments( $id ) );
+		return \rest_ensure_response( FeedbackManager::get_comments( $id ) );
 	}
 
 	public static function add_comment( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -153,6 +153,6 @@ class FeedbackRestController {
 			return new WP_Error( 'empty_comment', 'Comment required.', array( 'status' => 400 ) );
 		}
 		FeedbackManager::add_comment( $id, get_current_user_id(), $txt );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 }

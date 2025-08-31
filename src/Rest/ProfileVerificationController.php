@@ -37,7 +37,7 @@ class ProfileVerificationController {
 		$post = get_post( $id );
 		if ( $post && in_array( $post->post_type, array( 'artpulse_artist', 'artpulse_org' ), true ) ) {
 			update_post_meta( $post->ID, '_ap_is_verified', 1 );
-			return rest_ensure_response(
+			return \rest_ensure_response(
 				array(
 					'success' => true,
 					'type'    => $post->post_type,
@@ -48,7 +48,7 @@ class ProfileVerificationController {
 		$curator = CuratorManager::get_by_id( $id );
 		if ( $curator ) {
 			CuratorManager::verify( $id );
-			return rest_ensure_response(
+			return \rest_ensure_response(
 				array(
 					'success' => true,
 					'type'    => 'curator',

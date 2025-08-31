@@ -40,6 +40,6 @@ class SpotlightAnalyticsController {
 		}
 		$views = (int) get_post_meta( $id, 'spotlight_views', true );
 		update_post_meta( $id, 'spotlight_views', $views + 1 );
-		return rest_ensure_response( array( 'views' => $views + 1 ) );
+		return \rest_ensure_response( array( 'views' => $views + 1 ) );
 	}
 }

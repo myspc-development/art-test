@@ -60,7 +60,7 @@ class FrontendMembershipPage {
 		$level   = get_user_meta( $user_id, 'ap_membership_level', true ) ?: 'Free';
 		$expires = get_user_meta( $user_id, 'ap_membership_expires', true );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'level'          => $level,
 				'expires'        => $expires ? date_i18n( get_option( 'date_format' ), intval( $expires ) ) : __( 'Never', 'artpulse' ),

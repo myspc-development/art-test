@@ -33,13 +33,13 @@ class UpdateDiagnosticsController {
 	public static function get_diagnostics(): WP_REST_Response {
 		$repo = get_option( 'ap_github_repo_url' );
 		if ( ! $repo ) {
-			return rest_ensure_response( array( 'error' => 'No repo URL configured' ) );
+			return \rest_ensure_response( array( 'error' => 'No repo URL configured' ) );
 		}
 
 		$api  = str_replace( 'https://github.com/', 'https://api.github.com/repos/', rtrim( $repo, '/' ) ) . '/releases/latest';
 		$resp = wp_remote_get( $api, array( 'timeout' => 10 ) );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'repo'       => $repo,
 				'api'        => $api,

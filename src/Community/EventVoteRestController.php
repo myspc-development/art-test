@@ -59,7 +59,7 @@ class EventVoteRestController {
 		}
 		$user_id = get_current_user_id();
 		$count   = EventVoteManager::vote( $event_id, $user_id );
-		return rest_ensure_response( array( 'votes' => $count ) );
+		return \rest_ensure_response( array( 'votes' => $count ) );
 	}
 
 	public static function count( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -69,7 +69,7 @@ class EventVoteRestController {
 		}
 		$count = EventVoteManager::get_votes( $event_id );
 		$voted = is_user_logged_in() && EventVoteManager::has_voted( $event_id, get_current_user_id() );
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'votes' => $count,
 				'voted' => $voted,
@@ -80,6 +80,6 @@ class EventVoteRestController {
 	public static function top_events( WP_REST_Request $req ): WP_REST_Response {
 		$limit = $req->get_param( 'limit' ) ? absint( $req['limit'] ) : 10;
 		$list  = EventVoteManager::get_top_voted( $limit );
-		return rest_ensure_response( $list );
+		return \rest_ensure_response( $list );
 	}
 }

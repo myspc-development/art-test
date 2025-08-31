@@ -179,7 +179,7 @@ class DashboardWidgetController {
 			$response['all'] = $widgets;
 		}
 
-		return rest_ensure_response( $response );
+		return \rest_ensure_response( $response );
 	}
 
         public static function save_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {
@@ -215,7 +215,7 @@ class DashboardWidgetController {
 			);
 			\ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $layout );
 		}
-		return rest_ensure_response( array( 'saved' => true ) );
+		return \rest_ensure_response( array( 'saved' => true ) );
 	}
 
         public static function export_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
@@ -230,7 +230,7 @@ class DashboardWidgetController {
 
 		$result  = \ArtPulse\Admin\UserLayoutManager::get_role_layout( $role );
 		$builder = self::convert_to_builder_ids( $result['layout'] );
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'role'   => $role,
 				'layout' => $builder,
@@ -261,6 +261,6 @@ class DashboardWidgetController {
 
 		$core_layout = self::convert_to_core_ids( $layout );
 		\ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $core_layout );
-		return rest_ensure_response( array( 'imported' => true ) );
+		return \rest_ensure_response( array( 'imported' => true ) );
 	}
 }

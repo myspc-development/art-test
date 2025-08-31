@@ -34,7 +34,7 @@ class OrgDashboardManager {
 		$user_id = get_current_user_id();
 		$org_id  = get_user_meta( $user_id, 'ap_organization_id', true );
 		if ( ! $org_id ) {
-			return rest_ensure_response( array() );
+			return \rest_ensure_response( array() );
 		}
 
 		$data = array(
@@ -79,6 +79,6 @@ class OrgDashboardManager {
 			$data['metrics'] = $metrics;
 		}
 
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 }

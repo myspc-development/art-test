@@ -436,7 +436,7 @@ class MembershipManager {
 		}
 
 		delete_transient( 'ap_payment_metrics' );
-		return rest_ensure_response( array( 'received' => true ) );
+		return \rest_ensure_response( array( 'received' => true ) );
 	}
 
 	public static function pauseMembership( WP_REST_Request $request ) {
@@ -474,7 +474,7 @@ class MembershipManager {
 			return new WP_Error( 'stripe_error', $e->getMessage(), array( 'status' => 500 ) );
 		}
 
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function resumeMembership( WP_REST_Request $request ) {
@@ -512,7 +512,7 @@ class MembershipManager {
 			return new WP_Error( 'stripe_error', $e->getMessage(), array( 'status' => 500 ) );
 		}
 
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function checkManageMemberships() {
@@ -523,7 +523,7 @@ class MembershipManager {
 	}
 
 	public static function getLevelsEndpoint() {
-		return rest_ensure_response( self::getLevels() );
+		return \rest_ensure_response( self::getLevels() );
 	}
 
 	public static function addLevel( WP_REST_Request $req ) {
@@ -534,7 +534,7 @@ class MembershipManager {
 		$levels   = self::getLevels();
 		$levels[] = $level;
 		update_option( 'ap_membership_levels', array_values( array_unique( $levels ) ) );
-		return rest_ensure_response( array( 'levels' => $levels ) );
+		return \rest_ensure_response( array( 'levels' => $levels ) );
 	}
 
 	public static function handleMembershipLevels( WP_REST_Request $req ) {
@@ -549,7 +549,7 @@ class MembershipManager {
 		$level  = sanitize_text_field( $req['level'] );
 		$levels = array_values( array_diff( self::getLevels(), array( $level ) ) );
 		update_option( 'ap_membership_levels', $levels );
-		return rest_ensure_response( array( 'levels' => $levels ) );
+		return \rest_ensure_response( array( 'levels' => $levels ) );
 	}
 
 	/**

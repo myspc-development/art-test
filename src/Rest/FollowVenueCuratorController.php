@@ -82,13 +82,13 @@ class FollowVenueCuratorController {
 			$list[] = $venue_id;
 			update_user_meta( $user_id, 'ap_following_venues', $list );
 		}
-		return rest_ensure_response( array( 'venues' => array_map( 'intval', $list ) ) );
+		return \rest_ensure_response( array( 'venues' => array_map( 'intval', $list ) ) );
 	}
 
 	public static function get_followed_venues(): WP_REST_Response {
 		$list = get_user_meta( get_current_user_id(), 'ap_following_venues', true );
 		$list = is_array( $list ) ? array_map( 'intval', $list ) : array();
-		return rest_ensure_response( $list );
+		return \rest_ensure_response( $list );
 	}
 
 	public static function follow_curator( WP_REST_Request $req ): WP_REST_Response {
@@ -100,12 +100,12 @@ class FollowVenueCuratorController {
 			$list[] = $curator_id;
 			update_user_meta( $user_id, 'ap_following_curators', $list );
 		}
-		return rest_ensure_response( array( 'curators' => array_map( 'intval', $list ) ) );
+		return \rest_ensure_response( array( 'curators' => array_map( 'intval', $list ) ) );
 	}
 
 	public static function get_followed_curators(): WP_REST_Response {
 		$list = get_user_meta( get_current_user_id(), 'ap_following_curators', true );
 		$list = is_array( $list ) ? array_map( 'intval', $list ) : array();
-		return rest_ensure_response( $list );
+		return \rest_ensure_response( $list );
 	}
 }

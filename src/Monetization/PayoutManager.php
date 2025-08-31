@@ -77,7 +77,7 @@ class PayoutManager {
 		global $wpdb;
 		$table = $wpdb->prefix . 'ap_payouts';
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) !== $table ) {
-			return rest_ensure_response(
+			return \rest_ensure_response(
 				array(
 					'payouts' => array(),
 					'balance' => 0,
@@ -88,7 +88,7 @@ class PayoutManager {
 
 		$balance = self::get_balance( $user_id );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'payouts' => $rows,
 				'balance' => round( $balance, 2 ),
@@ -124,6 +124,6 @@ class PayoutManager {
 			return new WP_Error( 'invalid_method', 'Invalid payout method.', array( 'status' => 400 ) );
 		}
 		update_user_meta( get_current_user_id(), 'ap_payout_method', $method );
-		return rest_ensure_response( array( 'method' => $method ) );
+		return \rest_ensure_response( array( 'method' => $method ) );
 	}
 }

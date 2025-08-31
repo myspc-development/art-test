@@ -38,6 +38,6 @@ class TrendingRestController {
 		$type  = sanitize_key( $request['type'] );
 		$limit = max( 1, min( 50, (int) $request['limit'] ) );
 		$items = TrendingManager::get_trending( $limit, $type );
-		return rest_ensure_response( $items );
+		return \rest_ensure_response( $items );
 	}
 }

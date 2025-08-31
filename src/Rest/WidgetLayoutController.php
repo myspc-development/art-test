@@ -43,6 +43,6 @@ class WidgetLayoutController {
 			$layout = array();
 		}
 		update_user_meta( get_current_user_id(), UserLayoutManager::META_KEY, $layout );
-		return rest_ensure_response( array( 'saved' => true ) );
+		return \rest_ensure_response( array( 'saved' => true ) );
 	}
 }

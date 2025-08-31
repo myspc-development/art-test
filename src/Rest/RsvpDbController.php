@@ -162,7 +162,7 @@ class RsvpDbController extends WP_REST_Controller {
 		$data['id']         = $wpdb->insert_id;
 		$data['created_at'] = current_time( 'mysql' );
 		do_action( 'ap_rsvp_changed', $event_id );
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 
 	public function list_rsvps( WP_REST_Request $request ): WP_REST_Response {
@@ -198,7 +198,7 @@ class RsvpDbController extends WP_REST_Controller {
 			ARRAY_A
 		);
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'total'    => $total,
 				'page'     => $page,
@@ -219,7 +219,7 @@ class RsvpDbController extends WP_REST_Controller {
 		$wpdb->update( $this->table(), array( 'status' => $status ), array( 'id' => $id ), array( '%s' ), array( '%d' ) );
 		$event_id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT event_id FROM {$this->table()} WHERE id = %d", $id ) );
 		do_action( 'ap_rsvp_changed', $event_id );
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'id'     => $id,
 				'status' => $status,
@@ -268,6 +268,6 @@ class RsvpDbController extends WP_REST_Controller {
 		$in = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
 		$wpdb->query( $wpdb->prepare( "UPDATE {$this->table()} SET status = %s WHERE event_id = %d AND id IN ($in)", array_merge( array( $status, $event_id ), $ids ) ) );
 		do_action( 'ap_rsvp_changed', $event_id );
-		return rest_ensure_response( array( 'updated' => count( $ids ) ) );
+		return \rest_ensure_response( array( 'updated' => count( $ids ) ) );
 	}
 }

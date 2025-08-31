@@ -40,7 +40,7 @@ class PromoManager {
 
 		$discount = floatval( $codes[ $code ] );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'code'     => $code,
 				'discount' => $discount,

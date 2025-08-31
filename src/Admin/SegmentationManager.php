@@ -81,6 +81,6 @@ class SegmentationManager {
 			);
 		}
 
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 }

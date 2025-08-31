@@ -190,7 +190,7 @@ class TicketManager {
 			ARRAY_A
 		);
 
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 
 	public static function buy_ticket( \WP_REST_Request $req ) {
@@ -300,7 +300,7 @@ class TicketManager {
 
 		do_action( 'artpulse_ticket_purchased', $user_id, $event_id, $ticket_id, $qty );
 
-		return rest_ensure_response( array( 'ticket_code' => $code ) );
+		return \rest_ensure_response( array( 'ticket_code' => $code ) );
 	}
 
 	/**
@@ -385,7 +385,7 @@ class TicketManager {
 				'max_per_user' => $limit,
 			)
 		);
-		return rest_ensure_response( array( 'id' => $wpdb->insert_id ) );
+		return \rest_ensure_response( array( 'id' => $wpdb->insert_id ) );
 	}
 
 	public static function update_ticket_tier( \WP_REST_Request $req ) {
@@ -409,7 +409,7 @@ class TicketManager {
 		global $wpdb;
 		$table = $wpdb->prefix . 'ap_event_tickets';
 		$wpdb->update( $table, $data, array( 'id' => $tier_id ) );
-		return rest_ensure_response( array( 'updated' => true ) );
+		return \rest_ensure_response( array( 'updated' => true ) );
 	}
 
 	public static function delete_ticket_tier( \WP_REST_Request $req ) {
@@ -417,6 +417,6 @@ class TicketManager {
 		global $wpdb;
 		$table = $wpdb->prefix . 'ap_event_tickets';
 		$wpdb->delete( $table, array( 'id' => $tier_id ) );
-		return rest_ensure_response( array( 'deleted' => true ) );
+		return \rest_ensure_response( array( 'deleted' => true ) );
 	}
 }

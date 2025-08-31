@@ -41,7 +41,7 @@ class OrgAnalyticsController {
 		$user_id = get_current_user_id();
 		$org_id  = get_user_meta( $user_id, 'ap_organization_id', true );
 		if ( ! $org_id ) {
-			return rest_ensure_response( array() );
+			return \rest_ensure_response( array() );
 		}
 
 		$key  = 'ap_org_metrics_' . $org_id;
@@ -82,7 +82,7 @@ class OrgAnalyticsController {
 			set_transient( $key, $data, MINUTE_IN_SECONDS * 15 );
 		}
 
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 
 	public static function get_event_rsvp_stats( WP_REST_Request $request ): WP_REST_Response {
@@ -97,7 +97,7 @@ class OrgAnalyticsController {
 		$attended    = get_post_meta( $event_id, 'event_attended', true );
 		$waitlist_ct = is_array( $waitlist ) ? count( $waitlist ) : 0;
 		$attended_ct = is_array( $attended ) ? count( $attended ) : 0;
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'dates'       => array_keys( $history ),
 				'counts'      => array_values( $history ),

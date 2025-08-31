@@ -75,7 +75,7 @@ class OrgUserRolesController {
 		$org_id = absint( $request['id'] );
 		$table  = $wpdb->prefix . 'ap_org_user_roles';
 		$rows   = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, role, status FROM $table WHERE org_id = %d", $org_id ), ARRAY_A );
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 
 	public static function add_role( WP_REST_Request $request ): WP_REST_Response {
@@ -86,19 +86,19 @@ class OrgUserRolesController {
 			return new WP_REST_Response( array( 'error' => 'invalid' ), 400 );
 		}
 		MultiOrgRoles::assign_roles( $user_id, $org_id, array( $role ) );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function remove_role( WP_REST_Request $request ): WP_REST_Response {
 		$org_id  = absint( $request['id'] );
 		$user_id = absint( $request['user_id'] );
 		MultiOrgRoles::remove_role( $user_id, $org_id );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function my_orgs( WP_REST_Request $request ): WP_REST_Response {
 		$user_id = get_current_user_id();
 		$data    = MultiOrgRoles::get_user_orgs( $user_id );
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 }

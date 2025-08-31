@@ -262,7 +262,7 @@ class RsvpRestController {
 			\ArtPulse\Core\EmailService::send( $org_email, $org_subject, $org_message );
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'rsvp_count'     => count( $rsvps ),
 				'waitlist_count' => count( $waitlist ),
@@ -299,7 +299,7 @@ class RsvpRestController {
 			update_user_meta( $user_id, 'ap_rsvp_events', $events );
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'rsvp_count'     => count( $rsvps ),
 				'waitlist_count' => count( $waitlist ),
@@ -320,7 +320,7 @@ class RsvpRestController {
 
 		self::store_lists( $event_id, $rsvps, $waitlist );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'rsvp_count'     => count( $rsvps ),
 				'waitlist_count' => count( $waitlist ),
@@ -389,7 +389,7 @@ class RsvpRestController {
 			);
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'attendees' => $attendees,
 				'waitlist'  => $wl,
@@ -448,7 +448,7 @@ class RsvpRestController {
 			$status     = true;
 		}
 		update_post_meta( $event_id, 'event_attended', $attended );
-		return rest_ensure_response( array( 'attended' => $status ) );
+		return \rest_ensure_response( array( 'attended' => $status ) );
 	}
 
 	public static function remove_attendee( WP_REST_Request $request ): WP_REST_Response|WP_Error {
@@ -477,7 +477,7 @@ class RsvpRestController {
 		update_post_meta( $event_id, 'event_attended', $attended );
 		self::store_lists( $event_id, $rsvps, $waitlist );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'rsvp_count'     => count( $rsvps ),
 				'waitlist_count' => count( $waitlist ),
@@ -510,7 +510,7 @@ class RsvpRestController {
 			}
 		}
 
-		return rest_ensure_response( array( 'sent' => $sent ) );
+		return \rest_ensure_response( array( 'sent' => $sent ) );
 	}
 
 	public static function email_attendee( WP_REST_Request $request ): WP_REST_Response|WP_Error {
@@ -536,6 +536,6 @@ class RsvpRestController {
 
 		\ArtPulse\Core\EmailService::send( $user->user_email, $subject, $message );
 
-		return rest_ensure_response( array( 'sent' => array( $user->user_email ) ) );
+		return \rest_ensure_response( array( 'sent' => array( $user->user_email ) ) );
 	}
 }

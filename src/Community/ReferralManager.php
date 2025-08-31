@@ -102,7 +102,7 @@ class ReferralManager {
 
 		do_action( 'ap_referral_redeemed', (int) $row->referrer_id );
 
-		return rest_ensure_response( array( 'redeemed' => true ) );
+		return \rest_ensure_response( array( 'redeemed' => true ) );
 	}
 
 	public static function get_referral_count( int $user_id ): int {

@@ -59,7 +59,7 @@ class EmbedAnalytics {
 		$event  = absint( $req->get_param( 'event_id' ) );
 		$action = sanitize_key( $req->get_param( 'action' ) ?: 'view' );
 		self::log( $widget, $event, $action );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function log( string $widget_id, int $event_id = 0, string $action = 'view' ): void {

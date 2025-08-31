@@ -78,7 +78,7 @@ class QaThreadRestController {
 			'end_time'     => get_post_meta( $thread->ID, 'end_time', true ),
 			'participants' => get_post_meta( $thread->ID, 'participants', true ),
 		);
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'thread_id' => $thread->ID,
 				'meta'      => $meta,
@@ -119,6 +119,6 @@ class QaThreadRestController {
 				'comment_approved' => 1,
 			)
 		);
-		return rest_ensure_response( array( 'id' => $comment_id ) );
+		return \rest_ensure_response( array( 'id' => $comment_id ) );
 	}
 }

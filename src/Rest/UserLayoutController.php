@@ -43,7 +43,7 @@ class UserLayoutController {
 		$role   = sanitize_key( $request['role'] ?? '' );
 		$meta   = $role ? get_user_meta( get_current_user_id(), 'ap_layout_' . $role, true ) : array();
 		$layout = is_array( $meta ) ? array_values( array_filter( array_map( 'sanitize_key', $meta ) ) ) : array();
-		return rest_ensure_response( array( 'layout' => $layout ) );
+		return \rest_ensure_response( array( 'layout' => $layout ) );
 	}
 
 	public static function save_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
@@ -54,6 +54,6 @@ class UserLayoutController {
 		}
 		$layout = array_values( array_filter( array_map( 'sanitize_key', $layout ) ) );
 		update_user_meta( get_current_user_id(), 'ap_layout_' . $role, $layout );
-		return rest_ensure_response( array( 'saved' => true ) );
+		return \rest_ensure_response( array( 'saved' => true ) );
 	}
 }
