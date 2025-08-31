@@ -35,15 +35,15 @@ if ( ! function_exists( __NAMESPACE__ . '\get_user_by' ) ) {
 	}
 }
 if ( ! function_exists( __NAMESPACE__ . '\wp_delete_user' ) ) {
-	function wp_delete_user( int $user_id ) {
-		\ArtPulse\Rest\Tests\Stub::$deleted_users[] = $user_id;
-		return true;
-	}
+        function wp_delete_user( int $user_id ) {
+                \ArtPulse\Rest\Tests\Stub::$deleted_users[] = $user_id;
+                return true;
+        }
 }
 if ( ! function_exists( __NAMESPACE__ . '\rest_ensure_response' ) ) {
-	function rest_ensure_response( $data ) {
-		return $data;
-	}
+        function rest_ensure_response( $data ) {
+                return new \WP_REST_Response( $data );
+        }
 }
 if ( ! function_exists( __NAMESPACE__ . '\sanitize_email' ) ) {
 	function sanitize_email( $email ) {
@@ -116,29 +116,30 @@ class UserInvitationControllerTest extends TestCase {
 		Stub::reset();
 	}
 
-	public function test_invite_success(): void {
-		Stub::$user_meta[1]['ap_organization_id'] = 5;
-		Stub::$users                              = array( 2 => array( 'user_email' => 'a@test.com' ) );
-		$req                                      = new TestRequest( 'POST', '/' );
-		$req->set_param( 'id', 5 );
-		$req->set_json_params(
-			array(
-				'emails' => array( 'a@test.com', 'b@test.com' ),
-				'role'   => 'event_manager',
-			)
-		);
-		$res = UserInvitationController::invite( $req );
-		$this->assertSame(
-			array(
-				'invited' => array( 'a@test.com', 'b@test.com' ),
-				'role'    => 'event_manager',
-			),
-			$res
-		);
-		$this->assertCount( 2, Stub::$sent_emails );
-		$this->assertSame( 5, Stub::$user_meta[2]['ap_organization_id'] );
-		$this->assertSame( 'event_manager', Stub::$user_meta[2]['ap_org_role'] );
-	}
+        public function test_invite_success(): void {
+                Stub::$user_meta[1]['ap_organization_id'] = 5;
+                Stub::$users                              = array( 2 => array( 'user_email' => 'a@test.com' ) );
+                $req                                      = new TestRequest( 'POST', '/' );
+                $req->set_param( 'id', 5 );
+                $req->set_json_params(
+                        array(
+                                'emails' => array( 'a@test.com', 'b@test.com' ),
+                                'role'   => 'event_manager',
+                        )
+                );
+                $res = UserInvitationController::invite( $req );
+                $this->assertInstanceOf( \WP_REST_Response::class, $res );
+                $this->assertSame(
+                        array(
+                                'invited' => array( 'a@test.com', 'b@test.com' ),
+                                'role'    => 'event_manager',
+                        ),
+                        $res->get_data()
+                );
+                $this->assertCount( 2, Stub::$sent_emails );
+                $this->assertSame( 5, Stub::$user_meta[2]['ap_organization_id'] );
+                $this->assertSame( 'event_manager', Stub::$user_meta[2]['ap_org_role'] );
+        }
 
 	public function test_invite_permission_failure(): void {
 		Stub::$user_meta[1]['ap_organization_id'] = 3; // user not admin of org 5
@@ -161,22 +162,23 @@ class UserInvitationControllerTest extends TestCase {
 		Stub::$user_meta[1]['ap_organization_id'] = 5;
 		$req                                      = new TestRequest( 'POST', '/' );
 		$req->set_param( 'id', 5 );
-		$req->set_json_params(
-			array(
-				'action'   => 'suspend',
-				'user_ids' => array( 7 ),
-			)
-		);
-		$res = UserInvitationController::batch_users( $req );
-		$this->assertSame(
-			array(
-				'action'    => 'suspend',
-				'processed' => array( 7 ),
-			),
-			$res
-		);
-		$this->assertSame( 1, Stub::$user_meta[7]['ap_suspended'] );
-	}
+                $req->set_json_params(
+                       array(
+                               'action'   => 'suspend',
+                               'user_ids' => array( 7 ),
+                       )
+               );
+                $res = UserInvitationController::batch_users( $req );
+                $this->assertInstanceOf( \WP_REST_Response::class, $res );
+                $this->assertSame(
+                        array(
+                                'action'    => 'suspend',
+                                'processed' => array( 7 ),
+                        ),
+                        $res->get_data()
+                );
+                $this->assertSame( 1, Stub::$user_meta[7]['ap_suspended'] );
+        }
 
 	public function test_batch_invalid_action(): void {
 		Stub::$user_meta[1]['ap_organization_id'] = 5;
