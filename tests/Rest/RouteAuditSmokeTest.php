@@ -67,6 +67,7 @@ class RouteAuditSmokeTest extends \WP_UnitTestCase
 
         $wpNonce  = function_exists('wp_create_nonce') ? wp_create_nonce('wp_rest') : 'test';
         $apNonce  = function_exists('wp_create_nonce') ? wp_create_nonce('ap_dashboard_config') : 'test';
+        $skipped  = [];
 
         foreach ($targets as $route => $handlers) {
             // Each "handler" is an endpoint variant (methods, args, permission_callback, etc.)
@@ -74,7 +75,13 @@ class RouteAuditSmokeTest extends \WP_UnitTestCase
                 $methods = $this->expand_methods($handler['methods'] ?? 'GET');
 
                 foreach ($methods as $method) {
-                    $req = new WP_REST_Request($method, $route);
+                    $concreteRoute = $this->concretize_route($route);
+                    if ($concreteRoute === null) {
+                        $skipped[] = sprintf('%s [%s] (var #%d)', $route, $method, $idx);
+                        continue;
+                    }
+
+                    $req = new WP_REST_Request($method, $concreteRoute);
                     $req->set_header('X-WP-Nonce', $wpNonce);
                     $req->set_header('X-AP-Nonce', $apNonce);
                     $req->set_param('context', 'view');
@@ -149,6 +156,10 @@ class RouteAuditSmokeTest extends \WP_UnitTestCase
             }
         }
 
+        if ($skipped) {
+            fwrite(STDOUT, "Skipped dynamic routes (unresolved placeholders):\n- " . implode("\n- ", $skipped) . "\n");
+        }
+
         // Make the test fail with a readable inventory of issues
         $this->assertEmpty(
             $problems,
@@ -170,6 +181,30 @@ class RouteAuditSmokeTest extends \WP_UnitTestCase
             return array_values(array_unique(array_map('strval', $spec)));
         }
         return ['GET'];
+    }
+
+    /**
+     * Replace named regex groups in a route with safe sample values.
+     * Returns the concrete route or null if placeholders remain.
+     */
+    private function concretize_route(string $route): ?string
+    {
+        $concrete = preg_replace_callback('/\(\?P<[^>]+>[^)]+\)/', function (array $matches) {
+            $segment = $matches[0];
+            if (preg_match('/\(\?P<[^>]+>([^)]+)\)/', $segment, $m)) {
+                $pattern = $m[1];
+                if (preg_match('/\\d|\[0-9\]/', $pattern)) {
+                    return '1';
+                }
+            }
+            return 'test';
+        }, $route);
+
+        if (preg_match('/[\[\]\(\)\\?*+|^$]/', $concrete)) {
+            return null;
+        }
+
+        return $concrete;
     }
 
     /** Provide a safe default for required arg schema to let routes execute */
