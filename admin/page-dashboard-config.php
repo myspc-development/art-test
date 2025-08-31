@@ -23,6 +23,7 @@ function ap_render_dashboard_config_page(): void {
         [
             'endpoint' => rest_url('artpulse/v1/dashboard-config'),
             'nonce'    => wp_create_nonce('wp_rest'),
+            'apNonce'  => wp_create_nonce('ap_dashboard_config'),
         ]
     );
 

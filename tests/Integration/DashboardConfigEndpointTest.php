@@ -114,7 +114,8 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
                $req->set_body_params( array() );
                $req->set_header( 'Content-Type', 'application/json' );
-               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
+               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $req->set_header( 'X-AP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
                $req->set_body( json_encode( array( 'widget_roles' => array( 'subscriber' => array( 'one' ) ) ) ) );
                $res = rest_get_server()->dispatch( $req );
                // Users without sufficient capabilities should receive a 403 response.
@@ -124,19 +125,21 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                 $bad = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
                 $bad->set_body_params( array() );
                 $bad->set_header( 'Content-Type', 'application/json' );
-                $bad->set_header( 'X-WP-Nonce', 'badnonce' );
+                $bad->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+                $bad->set_header( 'X-AP-Nonce', 'badnonce' );
                 $bad->set_body( json_encode( array(
                         'widget_roles' => array( 'administrator' => array( 'one' ) ),
                         'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
                         'locked'       => array( 'two' ),
                 ) ) );
                 $res_bad = rest_get_server()->dispatch( $bad );
-                $this->assertSame( 401, $res_bad->get_status() );
+                $this->assertSame( 403, $res_bad->get_status() );
 
                 $good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
                 $good->set_body_params( array() );
                 $good->set_header( 'Content-Type', 'application/json' );
-                $good->set_header( 'X-WP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
+                $good->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+                $good->set_header( 'X-AP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
                 $good->set_body( json_encode( array(
                         'widget_roles' => array( 'administrator' => array( 'one' ) ),
                         'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),

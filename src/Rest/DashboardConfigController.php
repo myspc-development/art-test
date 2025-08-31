@@ -153,9 +153,9 @@ class DashboardConfigController {
                return new \WP_REST_Response( $payload );
        }
        public static function save_config( WP_REST_Request $request ) {
-               $nonce = $request->get_header( 'X-WP-Nonce' );
+               $nonce = $request->get_header( 'X-AP-Nonce' );
                if ( ! wp_verify_nonce( $nonce, 'ap_dashboard_config' ) ) {
-                       return new WP_Error( 'rest_invalid_nonce', 'Invalid nonce.', array( 'status' => 401 ) );
+                       return new WP_Error( 'rest_forbidden', 'Invalid nonce.', array( 'status' => 403 ) );
                }
 
                if ( ! current_user_can( 'manage_options' ) ) {

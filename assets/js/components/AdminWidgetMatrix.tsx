@@ -21,6 +21,7 @@ export default function AdminWidgetMatrix() {
   const restRoot = endpoint.replace(/artpulse\/v1\/dashboard-config\/?$/, '');
   const nonce =
     window.APWidgetMatrix?.nonce || window.wpApiSettings?.nonce || '';
+  const apNonce = window.APWidgetMatrix?.apNonce || '';
 
   const load = () => {
     setError('');
@@ -28,7 +29,7 @@ export default function AdminWidgetMatrix() {
       fetch(restRoot + 'artpulse/v1/widgets').then(r => r.json()),
       fetch(restRoot + 'artpulse/v1/roles').then(r => r.json()),
       fetch(endpoint, {
-        headers: { 'X-WP-Nonce': nonce }
+        headers: { 'X-WP-Nonce': nonce, 'X-AP-Nonce': apNonce }
       }).then(r => r.json())
     ])
       .then(([widgetsData, rolesData, config]) => {
@@ -63,7 +64,11 @@ export default function AdminWidgetMatrix() {
   const save = () => {
     fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WP-Nonce': nonce,
+        'X-AP-Nonce': apNonce
+      },
       body: JSON.stringify({
         widget_roles: matrix,
         layout: roleWidgets,
