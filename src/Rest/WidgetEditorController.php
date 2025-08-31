@@ -67,35 +67,7 @@ class WidgetEditorController {
                 $role   = sanitize_key( $req['role'] );
                 $result = \ArtPulse\Core\DashboardWidgetManager::getRoleLayout( $role );
                 $layout = $result['layout'] ?? [];
-                return \rest_ensure_response( array( 'layout' => $layout ) );
-        }
 
-        public static function save_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-                $role   = sanitize_key( $req['role'] );
-                $data   = (array) $req->get_json_params();
-                $layout = $data['layout'] ?? [];
-                if ( ! is_array( $layout ) ) {
-                        return new WP_Error( 'invalid', 'Invalid layout', [ 'status' => 400 ] );
-                }
-                \ArtPulse\Core\DashboardWidgetManager::saveRoleLayout( $role, $layout );
-                return \rest_ensure_response( [ 'saved' => true ] );
-        }
-
-        public static function get_widgets( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-                $role    = sanitize_key( $req->get_param( 'role' ) );
-                $widgets = DashboardWidgetManager::getWidgetDefinitions( true );
-                if ( $role ) {
-                        $widgets = array_values(
-                                array_filter(
-                                        $widgets,
-                                        static function ( $def ) use ( $role ) {
-                                                $roles = isset( $def['roles'] ) ? (array) $def['roles'] : [];
-                                                return ! $roles || in_array( $role, $roles, true );
-                                        }
-                                )
-                        );
-                }
-                return \rest_ensure_response( $widgets );
         }
 
         public static function handle_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -104,5 +76,5 @@ class WidgetEditorController {
                         'GET'   => self::get_layout( $req ),
                         default => new WP_Error( 'invalid_method', 'Method not allowed', [ 'status' => 405 ] ),
                 };
-        }
+
 }
