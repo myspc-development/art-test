@@ -32,7 +32,7 @@ class DashboardLayoutEndpoint {
 
 		if ( $request->get_method() === 'GET' ) {
 			$layout = $option[ $ctx ] ?? array();
-			return rest_ensure_response( $layout );
+			return \rest_ensure_response( $layout );
 		}
 
 		$layout = $request->get_json_params();
@@ -42,6 +42,6 @@ class DashboardLayoutEndpoint {
 
 		UserLayoutManager::save_role_layout( $ctx, $layout );
 
-		return rest_ensure_response( array( 'saved' => true ) );
+		return \rest_ensure_response( array( 'saved' => true ) );
 	}
 }

@@ -74,13 +74,13 @@ class VisitRestController {
 		$group_size  = absint( $req->get_param( 'group_size' ) ?: 1 );
 		$user_id     = get_current_user_id();
 		VisitTracker::record( $event_id, $user_id, $institution, $group_size );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function list( WP_REST_Request $req ): WP_REST_Response {
 		$id   = absint( $req['id'] );
 		$rows = VisitTracker::get_visits( $id );
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 
 	public static function export( WP_REST_Request $req ): WP_REST_Response {

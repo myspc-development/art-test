@@ -36,7 +36,7 @@ class ReminderManager {
 		$reminders = get_option( 'ap_event_reminders', array() );
 
 		if ( $request->get_method() === 'GET' ) {
-			return rest_ensure_response( array_values( $reminders ) );
+			return \rest_ensure_response( array_values( $reminders ) );
 		}
 
 		$event_id = absint( $request->get_param( 'event_id' ) );
@@ -56,7 +56,7 @@ class ReminderManager {
 
 		wp_schedule_single_event( $time, 'artpulse_send_reminder', array( $event_id, $message ) );
 
-		return rest_ensure_response( array( 'scheduled' => true ) );
+		return \rest_ensure_response( array( 'scheduled' => true ) );
 	}
 
 	public static function send_reminder( int $event_id, string $message ): void {

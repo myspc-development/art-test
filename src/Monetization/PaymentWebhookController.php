@@ -49,7 +49,7 @@ class PaymentWebhookController {
 		}
 
 		if ( $status !== 'success' || ! $ticket_id || ! $user_id ) {
-			return rest_ensure_response( array( 'ignored' => true ) );
+			return \rest_ensure_response( array( 'ignored' => true ) );
 		}
 
 		global $wpdb;
@@ -66,6 +66,6 @@ class PaymentWebhookController {
 		}
 
 		do_action( 'artpulse_ticket_purchased', $user_id, 0, 0, 1 );
-		return rest_ensure_response( array( 'status' => 'ok' ) );
+		return \rest_ensure_response( array( 'status' => 'ok' ) );
 	}
 }

@@ -227,7 +227,7 @@ class EventNotesTasks {
 						if ( ! current_user_can( 'edit_post', $id ) ) {
 							return new WP_REST_Response( array(), 403 );
 						}
-						return rest_ensure_response( self::get_notes( $id ) );
+						return \rest_ensure_response( self::get_notes( $id ) );
 					},
 					'permission_callback' => function ( WP_REST_Request $req ) {
 						$id = intval( $req['id'] );
@@ -250,7 +250,7 @@ class EventNotesTasks {
 						if ( ! current_user_can( 'edit_post', $id ) ) {
 							return new WP_REST_Response( array(), 403 );
 						}
-						return rest_ensure_response( self::get_tasks( $id ) );
+						return \rest_ensure_response( self::get_tasks( $id ) );
 					},
 					'permission_callback' => function ( WP_REST_Request $req ) {
 						$id = intval( $req['id'] );

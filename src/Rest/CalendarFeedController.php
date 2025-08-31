@@ -48,11 +48,11 @@ class CalendarFeedController {
 
 		$cached = get_transient( $cache_key );
 		if ( $cached !== false ) {
-			return rest_ensure_response( $cached );
+			return \rest_ensure_response( $cached );
 		}
 
 		$events = \ArtPulse\Util\ap_fetch_calendar_events( $lat, $lng, $radius, $start, $end );
 		set_transient( $cache_key, $events, MINUTE_IN_SECONDS * 10 );
-		return rest_ensure_response( $events );
+		return \rest_ensure_response( $events );
 	}
 }

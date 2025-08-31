@@ -100,7 +100,7 @@ class ForumRestController {
 			$posts
 		);
 
-		return rest_ensure_response( array_values( array_filter( $data ) ) );
+		return \rest_ensure_response( array_values( array_filter( $data ) ) );
 	}
 
 	public static function create_thread( WP_REST_Request $request ): WP_REST_Response|WP_Error {
@@ -122,7 +122,7 @@ class ForumRestController {
 			return $post_id;
 		}
 
-		return rest_ensure_response( array( 'id' => $post_id ) );
+		return \rest_ensure_response( array( 'id' => $post_id ) );
 	}
 
 	public static function get_comments( WP_REST_Request $request ): WP_REST_Response|WP_Error {
@@ -153,7 +153,7 @@ class ForumRestController {
 			$comments
 		);
 
-		return rest_ensure_response( array_values( array_filter( $data ) ) );
+		return \rest_ensure_response( array_values( array_filter( $data ) ) );
 	}
 
 	public static function add_comment( WP_REST_Request $request ): WP_REST_Response|WP_Error {
@@ -182,7 +182,7 @@ class ForumRestController {
 			return new WP_Error( 'create_failed', 'Unable to add comment.', array( 'status' => 500 ) );
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'id'     => $comment_id,
 				'status' => 'pending',

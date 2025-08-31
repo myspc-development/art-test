@@ -34,6 +34,6 @@ class CurrentUserController {
                        'roles' => $user->roles,
                );
 
-               return rest_ensure_response( $data );
+               return \rest_ensure_response( $data );
        }
 }

@@ -32,7 +32,7 @@ final class SystemStatusEndpoint {
     public static function get_status(): \WP_REST_Response {
         global $wp_version;
 
-        return rest_ensure_response(
+        return \rest_ensure_response(
             array(
                 'plugin'    => defined( 'ARTPULSE_VERSION' ) ? ARTPULSE_VERSION : null,
                 'wordpress' => $wp_version,

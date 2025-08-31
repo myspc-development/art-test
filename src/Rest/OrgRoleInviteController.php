@@ -55,7 +55,7 @@ class OrgRoleInviteController {
 			return new WP_Error( 'invalid_params', 'Invalid parameters', array( 'status' => 400 ) );
 		}
 		$token = OrgInviteManager::create_invite( $email, $org_id, $role );
-		return rest_ensure_response( array( 'token' => $token ) );
+		return \rest_ensure_response( array( 'token' => $token ) );
 	}
 
 	public static function accept( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -68,6 +68,6 @@ class OrgRoleInviteController {
 		if ( ! $ok ) {
 			return new WP_Error( 'invalid_token', 'Invalid token', array( 'status' => 404 ) );
 		}
-		return rest_ensure_response( array( 'accepted' => true ) );
+		return \rest_ensure_response( array( 'accepted' => true ) );
 	}
 }

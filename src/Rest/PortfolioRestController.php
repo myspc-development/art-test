@@ -120,7 +120,7 @@ class PortfolioRestController extends WP_REST_Controller {
 	public function get_portfolio( WP_REST_Request $request ): WP_REST_Response {
 		$user_id    = get_current_user_id();
 		$profile_id = $this->get_profile_id( $user_id );
-		return rest_ensure_response( $this->build_response( $profile_id ) );
+		return \rest_ensure_response( $this->build_response( $profile_id ) );
 	}
 
 	public function add_item( WP_REST_Request $request ) {
@@ -161,7 +161,7 @@ class PortfolioRestController extends WP_REST_Controller {
 			update_post_meta( $profile_id, 'ap_portfolio_order', $order );
 		}
 
-		return rest_ensure_response( $this->build_response( $profile_id ) );
+		return \rest_ensure_response( $this->build_response( $profile_id ) );
 	}
 
 	public function save_order( WP_REST_Request $request ) {
@@ -177,7 +177,7 @@ class PortfolioRestController extends WP_REST_Controller {
 			}
 		}
 		update_post_meta( $profile_id, 'ap_portfolio_order', $order );
-		return rest_ensure_response( $this->build_response( $profile_id ) );
+		return \rest_ensure_response( $this->build_response( $profile_id ) );
 	}
 
 	public function set_featured( WP_REST_Request $request ) {
@@ -188,7 +188,7 @@ class PortfolioRestController extends WP_REST_Controller {
 			return new WP_Error( 'rest_forbidden', __( "You don't have permission to modify this resource.", 'artpulse' ), array( 'status' => 403 ) );
 		}
 		update_post_meta( $profile_id, 'ap_portfolio_featured_id', $att_id );
-		return rest_ensure_response( $this->build_response( $profile_id ) );
+		return \rest_ensure_response( $this->build_response( $profile_id ) );
 	}
 
 	protected function build_response( int $profile_id ): array {

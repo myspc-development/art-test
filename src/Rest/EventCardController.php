@@ -35,6 +35,6 @@ class EventCardController {
 		}
 
 		$html = ap_get_event_card( $id );
-		return rest_ensure_response( $html );
+		return \rest_ensure_response( $html );
 	}
 }

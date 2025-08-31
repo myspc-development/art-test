@@ -67,7 +67,7 @@ class CompetitionRestController {
 		}
 
 		CompetitionEntryManager::add_entry( $comp_id, $artwork_id, $user_id );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function can_vote( WP_REST_Request $req ): bool {
@@ -85,7 +85,7 @@ class CompetitionRestController {
 	public static function vote_entry( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$entry_id = absint( $req['entry_id'] );
 		$count    = CompetitionEntryManager::vote( $entry_id, get_current_user_id() );
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'success' => true,
 				'votes'   => $count,

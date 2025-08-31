@@ -36,7 +36,7 @@ class ArtistOverviewController {
 		$sales     = (int) get_user_meta( $user_id, 'ap_total_sales', true );
 		$artworks  = count_user_posts( $user_id, 'artpulse_artwork' );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'followers' => $followers,
 				'sales'     => $sales,

@@ -44,7 +44,7 @@ class CuratorRestController {
 
 	public static function get_curators( WP_REST_Request $req ): WP_REST_Response {
 		$list = CuratorManager::get_all();
-		return rest_ensure_response( $list );
+		return \rest_ensure_response( $list );
 	}
 
 	public static function get_curator( WP_REST_Request $req ): WP_REST_Response {
@@ -64,6 +64,6 @@ class CuratorRestController {
 			)
 		);
 		$curator['collections'] = array_map( 'intval', $collections );
-		return rest_ensure_response( $curator );
+		return \rest_ensure_response( $curator );
 	}
 }

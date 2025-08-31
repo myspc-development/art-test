@@ -48,7 +48,7 @@ class FavoritesRestController {
 
 		FavoritesManager::remove_favorite( $user_id, $object_id, $object_type );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'status' => 'removed',
 				'id'     => $object_id,

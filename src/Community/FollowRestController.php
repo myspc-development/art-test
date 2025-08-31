@@ -104,7 +104,7 @@ class FollowRestController {
 			return new WP_Error( 'db_error', 'Error adding follow.', array( 'status' => 500 ) );
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'status'  => 'following',
 				'follows' => $follows,
@@ -146,7 +146,7 @@ class FollowRestController {
 			return new WP_Error( 'db_error', 'Error removing follow.', array( 'status' => 500 ) );
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'status'  => 'unfollowed',
 				'follows' => $follows,
@@ -173,7 +173,7 @@ class FollowRestController {
 			error_log( '[FollowRestController] DB error: ' . $wpdb->last_error );
 			return new WP_Error( 'db_error', 'Error retrieving follows.', array( 'status' => 500 ) );
 		}
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 
 	public static function get_followers( WP_REST_Request $request ): WP_REST_Response|WP_Error {
@@ -192,7 +192,7 @@ class FollowRestController {
 			error_log( '[FollowRestController] DB error: ' . $wpdb->last_error );
 			return new WP_Error( 'db_error', 'Error retrieving followers.', array( 'status' => 500 ) );
 		}
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'user_id'   => $user_id,
 				'followers' => $followers,

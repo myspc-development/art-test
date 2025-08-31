@@ -62,7 +62,7 @@ class LocationRestController {
 				);
 			}
 			self::merge_into_dataset( 'countries', $countries );
-			return rest_ensure_response( $countries );
+			return \rest_ensure_response( $countries );
 		}
 
 		if ( $type === 'states' && $country ) {
@@ -81,7 +81,7 @@ class LocationRestController {
 				);
 			}
 			self::merge_into_dataset( 'states', $states );
-			return rest_ensure_response( $states );
+			return \rest_ensure_response( $states );
 		}
 
 		if ( $type === 'cities' && $country && $state ) {
@@ -100,7 +100,7 @@ class LocationRestController {
 				);
 			}
 			self::merge_into_dataset( 'cities', $cities );
-			return rest_ensure_response( $cities );
+			return \rest_ensure_response( $cities );
 		}
 		return new WP_Error( 'invalid_params', 'Invalid parameters', array( 'status' => 400 ) );
 	}
@@ -110,7 +110,7 @@ class LocationRestController {
 		$key  = $opts['google_places_key'] ?? '';
 		if ( ! $key ) {
 			// Gracefully degrade when no API key is configured
-			return rest_ensure_response( array() );
+			return \rest_ensure_response( array() );
 		}
 		$query = urlencode( $req->get_param( 'query' ) );
 		$url   = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={$query}&key={$key}";
@@ -119,7 +119,7 @@ class LocationRestController {
 			return $resp;
 		}
 		$data = json_decode( wp_remote_retrieve_body( $resp ), true );
-		return rest_ensure_response( $data['predictions'] ?? array() );
+		return \rest_ensure_response( $data['predictions'] ?? array() );
 	}
 
 	private static function merge_into_dataset( string $key, array $items ): void {

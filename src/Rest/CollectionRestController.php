@@ -103,7 +103,7 @@ class CollectionRestController {
 				'items'       => $items,
 			);
 		}
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 
 	public static function create_or_update( WP_REST_Request $request ): WP_REST_Response {
@@ -135,7 +135,7 @@ class CollectionRestController {
 			update_post_meta( $id, 'ap_collection_items', array_map( 'intval', $items ) );
 		}
 
-		return rest_ensure_response( array( 'id' => $id ) );
+		return \rest_ensure_response( array( 'id' => $id ) );
 	}
 
 	public static function get_collection( WP_REST_Request $request ): WP_REST_Response {
@@ -168,6 +168,6 @@ class CollectionRestController {
 			'thumbnail'   => get_the_post_thumbnail_url( $post, 'thumbnail' ) ?: '',
 			'items'       => $items,
 		);
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 }

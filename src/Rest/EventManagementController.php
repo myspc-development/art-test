@@ -49,6 +49,6 @@ class EventManagementController extends WP_REST_Controller {
 		if ( $end ) {
 			update_post_meta( $id, 'event_end_date', $end );
 		}
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 }

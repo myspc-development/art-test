@@ -45,7 +45,7 @@ class SalesOverview {
 		$tiers   = $wpdb->prefix . 'ap_event_tickets';
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $tickets ) ) !== $tickets ||
 			$wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $tiers ) ) !== $tiers ) {
-			return rest_ensure_response(
+			return \rest_ensure_response(
 				array(
 					'tickets_sold'  => 0,
 					'total_revenue' => 0,
@@ -90,7 +90,7 @@ class SalesOverview {
 			$total_revenue += $revenue;
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'tickets_sold'  => $total_tickets,
 				'total_revenue' => round( $total_revenue, 2 ),

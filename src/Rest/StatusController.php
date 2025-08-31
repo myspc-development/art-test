@@ -36,7 +36,7 @@ class StatusController {
 		$cache          = ( defined( 'WP_CACHE' ) && WP_CACHE ) ? 'Enabled' : 'Disabled';
 		$debug          = defined( 'WP_DEBUG' ) && WP_DEBUG;
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'plugin_version' => $plugin_version,
 				'db_version'     => $db_version,

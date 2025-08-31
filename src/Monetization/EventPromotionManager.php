@@ -41,6 +41,6 @@ class EventPromotionManager {
 			return new \WP_Error( 'invalid_event', 'Invalid event.', array( 'status' => 400 ) );
 		}
 		update_post_meta( $id, 'ap_featured', 1 );
-		return rest_ensure_response( array( 'featured' => true ) );
+		return \rest_ensure_response( array( 'featured' => true ) );
 	}
 }

@@ -29,6 +29,6 @@ class DashboardPreviewController {
                        'widgets' => \ArtPulse\Admin\DashboardWidgetTools::get_role_widgets_for_current_user(),
                );
 
-               return rest_ensure_response( $data );
+               return \rest_ensure_response( $data );
        }
 }

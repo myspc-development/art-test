@@ -87,7 +87,7 @@ class PromotionManager {
 			),
 			ARRAY_A
 		);
-		return rest_ensure_response( $rows );
+		return \rest_ensure_response( $rows );
 	}
 
 	public static function create_promotion( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -111,6 +111,6 @@ class PromotionManager {
 				'priority_level' => $priority,
 			)
 		);
-		return rest_ensure_response( array( 'id' => (int) $wpdb->insert_id ) );
+		return \rest_ensure_response( array( 'id' => (int) $wpdb->insert_id ) );
 	}
 }

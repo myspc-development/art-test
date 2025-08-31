@@ -44,7 +44,7 @@ class ReportTemplateController {
 	public static function get_template( WP_REST_Request $request ): WP_REST_Response {
 		$type      = sanitize_key( $request['type'] );
 		$templates = get_option( self::OPTION, array() );
-		return rest_ensure_response( $templates[ $type ] ?? new \stdClass() );
+		return \rest_ensure_response( $templates[ $type ] ?? new \stdClass() );
 	}
 
 	public static function save_template( WP_REST_Request $request ): WP_REST_Response {
@@ -57,6 +57,6 @@ class ReportTemplateController {
 		$templates          = get_option( self::OPTION, array() );
 		$templates[ $type ] = $tpl;
 		update_option( self::OPTION, $templates );
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 }

@@ -51,7 +51,7 @@ class WidgetEditorController {
 
 	public static function get_widgets(): WP_REST_Response {
 		$defs = DashboardWidgetManager::getWidgetDefinitions( true );
-		return rest_ensure_response( array_values( $defs ) );
+		return \rest_ensure_response( array_values( $defs ) );
 	}
 
 	public static function get_roles(): WP_REST_Response {
@@ -65,7 +65,7 @@ class WidgetEditorController {
 		$result = \ArtPulse\Core\DashboardWidgetManager::getRoleLayout( $role );
 		$layout = $result['layout'] ?? [];
 		$style  = \ArtPulse\Admin\UserLayoutManager::get_role_style( $role );
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			[
 				'layout' => $layout,
 				'style'  => $style,
@@ -86,7 +86,7 @@ class WidgetEditorController {
 		if ( $style ) {
 			\ArtPulse\Admin\UserLayoutManager::save_role_style( $role, $style );
 		}
-		return rest_ensure_response( [ 'saved' => true ] );
+		return \rest_ensure_response( [ 'saved' => true ] );
 	}
 
 	public static function handle_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {

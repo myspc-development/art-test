@@ -51,6 +51,6 @@ class RsvpBulkController {
      */
     public function bulk_update( WP_REST_Request $request ): WP_REST_Response {
         $ids = (array) $request->get_param( 'ids' );
-        return rest_ensure_response( array( 'updated' => count( $ids ) ) );
+        return \rest_ensure_response( array( 'updated' => count( $ids ) ) );
     }
 }

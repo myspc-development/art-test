@@ -151,7 +151,7 @@ class UnifiedInboxController {
 
 		usort( $items, static fn( $a, $b ) => strcmp( $b['timestamp'], $a['timestamp'] ) );
 
-		return rest_ensure_response( $items );
+		return \rest_ensure_response( $items );
 	}
 
 	public static function mark_read( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -176,7 +176,7 @@ class UnifiedInboxController {
 			return new WP_Error( 'invalid_type', 'Unknown type', array( 'status' => 400 ) );
 		}
 
-		return rest_ensure_response( array( 'updated' => count( $ids ) ) );
+		return \rest_ensure_response( array( 'updated' => count( $ids ) ) );
 	}
 
 	public static function mark_unread( WP_REST_Request $req ): WP_REST_Response|WP_Error {
@@ -201,6 +201,6 @@ class UnifiedInboxController {
 			return new WP_Error( 'invalid_type', 'Unknown type', array( 'status' => 400 ) );
 		}
 
-		return rest_ensure_response( array( 'updated' => count( $ids ) ) );
+		return \rest_ensure_response( array( 'updated' => count( $ids ) ) );
 	}
 }

@@ -40,7 +40,7 @@ class SurveyManager {
 
 		if ( $request->get_method() === 'GET' ) {
 			$responses = get_post_meta( $event_id, 'ap_survey_responses', true );
-			return rest_ensure_response( is_array( $responses ) ? $responses : array() );
+			return \rest_ensure_response( is_array( $responses ) ? $responses : array() );
 		}
 
 		$answers = (array) $request->get_param( 'answers' );
@@ -60,6 +60,6 @@ class SurveyManager {
 
 		do_action( 'artpulse_survey_submitted', get_current_user_id(), $event_id, $answers );
 
-		return rest_ensure_response( array( 'submitted' => true ) );
+		return \rest_ensure_response( array( 'submitted' => true ) );
 	}
 }

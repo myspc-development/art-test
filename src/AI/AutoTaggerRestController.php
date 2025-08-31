@@ -56,6 +56,6 @@ class AutoTaggerRestController {
 			return $result;
 		}
 
-		return rest_ensure_response( array( 'tags' => $result ) );
+		return \rest_ensure_response( array( 'tags' => $result ) );
 	}
 }

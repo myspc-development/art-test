@@ -56,6 +56,6 @@ class BioSummaryRestController {
 			return $summary;
 		}
 
-		return rest_ensure_response( array( 'summary' => $summary ) );
+		return \rest_ensure_response( array( 'summary' => $summary ) );
 	}
 }

@@ -204,7 +204,7 @@ class UserPreferencesRestController {
 			RecommendationPreferenceManager::update( $user_id, $pref_update );
 		}
 
-		return rest_ensure_response( array( 'status' => 'saved' ) );
+		return \rest_ensure_response( array( 'status' => 'saved' ) );
 	}
 
 	public static function sanitize_prefs( $value ): array {

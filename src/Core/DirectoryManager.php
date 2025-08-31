@@ -127,7 +127,7 @@ class DirectoryManager {
                $cache_key = self::get_cache_key( $cache_args );
                $cached    = get_transient( $cache_key );
                if ( $cached !== false ) {
-                       return rest_ensure_response( $cached );
+                       return \rest_ensure_response( $cached );
                }
 
                $args       = array(
@@ -292,7 +292,7 @@ class DirectoryManager {
 
 		set_transient( $cache_key, $data, 5 * MINUTE_IN_SECONDS );
 
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
        }
 
 	public static function renderDirectory( $atts ) {

@@ -48,7 +48,7 @@ class CommentReportRestController {
 			update_comment_meta( $comment_id, 'ap_hidden', 1 );
 		}
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'reported' => true,
 				'count'    => $count,

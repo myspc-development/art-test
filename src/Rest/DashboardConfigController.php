@@ -229,6 +229,6 @@ class DashboardConfigController {
         update_option( 'artpulse_dashboard_layouts', $layout );
         update_option( 'artpulse_locked_widgets', $locked );
 
-        return rest_ensure_response( array( 'saved' => true ) );
+        return \rest_ensure_response( array( 'saved' => true ) );
     }
 }

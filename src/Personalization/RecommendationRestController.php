@@ -63,6 +63,6 @@ class RecommendationRestController {
 		$limit    = absint( $request->get_param( 'limit' ) );
 		$location = $request->get_param( 'location' );
 		$data     = RecommendationEngine::get_recommendations( (int) $user_id, $type, $limit, $location );
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 }

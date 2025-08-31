@@ -107,7 +107,7 @@ class CommunityAnalyticsController {
 		$blocked_table = $wpdb->prefix . 'ap_blocked_users';
 		$blocked_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $blocked_table" );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'total'         => $total,
 				'per_day'       => $per_day,
@@ -128,7 +128,7 @@ class CommunityAnalyticsController {
 		$flagged_table = $wpdb->prefix . 'ap_comment_reports';
 		$flagged_count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $flagged_table WHERE created_at >= %s", $since ) );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'total'         => $total,
 				'top_posts'     => $top_posts,
@@ -147,7 +147,7 @@ class CommunityAnalyticsController {
 
 		$top_threads = $wpdb->get_results( $wpdb->prepare( "SELECT comment_post_ID AS thread_id, COUNT(*) AS c FROM $comments WHERE comment_post_ID IN (SELECT ID FROM $posts WHERE post_type='ap_forum_thread') AND comment_approved='1' AND comment_date >= %s GROUP BY comment_post_ID ORDER BY c DESC LIMIT 5", $since ), ARRAY_A );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'threads_created' => $threads_created,
 				'top_threads'     => $top_threads,

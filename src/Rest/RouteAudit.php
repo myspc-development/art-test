@@ -62,7 +62,7 @@ final class RouteAudit {
 			'routes'    => self::collect_routes(),
 			'conflicts' => self::find_conflicts(),
 		);
-		$response = rest_ensure_response( $data );
+		$response = \rest_ensure_response( $data );
 		if ( $force_json ) {
 			$response->set_headers( array( 'Content-Type' => 'application/json' ) );
 		}

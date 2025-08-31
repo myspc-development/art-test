@@ -34,6 +34,6 @@ class RoleWidgetMapController {
 				)
 			);
 		}
-		return rest_ensure_response( $out );
+		return \rest_ensure_response( $out );
 	}
 }

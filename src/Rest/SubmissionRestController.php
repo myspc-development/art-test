@@ -54,7 +54,7 @@ class SubmissionRestController {
 				),
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => fn() => rest_ensure_response( array( 'message' => 'Use POST to submit a form.' ) ),
+					'callback'            => fn() => \rest_ensure_response( array( 'message' => 'Use POST to submit a form.' ) ),
                                         'permission_callback' => \ArtPulse\Rest\Util\Auth::require_login_and_cap( 'read' ),
                                 ),
                         )
@@ -194,7 +194,7 @@ class SubmissionRestController {
 			)
 		);
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'id'        => $post_id,
 				'title'     => $post->post_title,

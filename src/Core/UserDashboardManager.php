@@ -736,7 +736,7 @@ class UserDashboardManager {
 
 		$data['user_badges'] = self::getBadges( $user_id );
 
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 
 	public static function updateProfile( WP_REST_Request $request ) {
@@ -762,7 +762,7 @@ class UserDashboardManager {
 		if ( isset( $params['ap_profile_public'] ) ) {
 			update_user_meta( $user_id, 'ap_profile_public', $params['ap_profile_public'] ? 1 : 0 );
 		}
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function getEngagementFeed( WP_REST_Request $request ) {
@@ -776,7 +776,7 @@ class UserDashboardManager {
 		$offset   = ( $page - 1 ) * $per_page;
 
 		$items = UserEngagementLogger::get_feed( $user_id, $per_page, $offset );
-		return rest_ensure_response( $items );
+		return \rest_ensure_response( $items );
 	}
 
 	private static function get_trend_data( int $user_id ): array {
@@ -889,7 +889,7 @@ class UserDashboardManager {
 
 		if ( $step === 'skip' ) {
 			update_user_meta( $user_id, 'ap_onboarding_completed', 1 );
-			return rest_ensure_response( array( 'completed' => true ) );
+			return \rest_ensure_response( array( 'completed' => true ) );
 		}
 
 		$steps = get_user_meta( $user_id, 'ap_onboarding_steps', true );
@@ -907,7 +907,7 @@ class UserDashboardManager {
 			update_user_meta( $user_id, 'ap_onboarding_completed', 1 );
 		}
 
-		return rest_ensure_response( array( 'completed' => $completed ) );
+		return \rest_ensure_response( array( 'completed' => $completed ) );
 	}
 
 	public static function getDashboardLayout( ?\WP_REST_Request $request = null ): \WP_REST_Response {
@@ -963,7 +963,7 @@ class UserDashboardManager {
                        }
                }
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'layout'     => $layout_ids,
 				'visibility' => $visibility,
@@ -1013,7 +1013,7 @@ class UserDashboardManager {
                        );
                }
 
-               return rest_ensure_response(
+               return \rest_ensure_response(
                        array(
                                'reset'     => true,
                                'layout'    => $layout_ids,
@@ -1025,7 +1025,7 @@ class UserDashboardManager {
 	public static function revertDashboardLayout(): \WP_REST_Response {
 		$uid = get_current_user_id();
 		$ok  = \ArtPulse\Admin\LayoutSnapshotManager::restore_last( $uid );
-		return rest_ensure_response( array( 'reverted' => $ok ) );
+		return \rest_ensure_response( array( 'reverted' => $ok ) );
 	}
 
 	public static function getAvailableWidgets( WP_REST_Request $request ): \WP_REST_Response {
@@ -1040,7 +1040,7 @@ class UserDashboardManager {
 			),
 			$defs
 		);
-		return rest_ensure_response( array_values( $formatted ) );
+		return \rest_ensure_response( array_values( $formatted ) );
 	}
 
 	public static function saveDashboardLayout( WP_REST_Request $request ): \WP_REST_Response {
@@ -1117,7 +1117,7 @@ class UserDashboardManager {
                        }
                }
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'layout'     => $layout_ids,
 				'visibility' => $visibility,
@@ -1128,7 +1128,7 @@ class UserDashboardManager {
 	public static function completeDashboardTour( WP_REST_Request $request ): \WP_REST_Response {
 		$uid = get_current_user_id();
 		update_user_meta( $uid, 'ap_dashboard_tour_complete', 1 );
-		return rest_ensure_response( array( 'completed' => true ) );
+		return \rest_ensure_response( array( 'completed' => true ) );
 	}
 
 	public static function addBadge( int $user_id, string $slug ): void {

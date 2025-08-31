@@ -55,6 +55,6 @@ class ShareController {
 			do_action( 'ap_profile_shared', $id, $net );
 		}
 
-		return rest_ensure_response( array( 'success' => true ) );
+		return \rest_ensure_response( array( 'success' => true ) );
 	}
 }

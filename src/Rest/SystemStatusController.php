@@ -17,7 +17,7 @@ final class SystemStatusController {
 				'permission_callback' => Auth::allow_public(),
 				'callback'            => function () {
 					global $wp_version;
-					return rest_ensure_response(
+					return \rest_ensure_response(
 						array(
 							'wordpress' => $wp_version,
 							'php'       => PHP_VERSION,

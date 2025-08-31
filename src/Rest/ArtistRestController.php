@@ -88,7 +88,7 @@ class ArtistRestController extends WP_REST_Controller {
 			$data[] = $this->prepare_item_for_response( $item, get_post( $post_id ) );
 		}
 
-		return rest_ensure_response( $data );
+		return \rest_ensure_response( $data );
 	}
 
 	/**
@@ -115,6 +115,6 @@ class ArtistRestController extends WP_REST_Controller {
 			'is_verified' => (bool) get_post_meta( $post->ID, '_ap_is_verified', true ),
 		);
 
-		return rest_ensure_response( $item );
+		return \rest_ensure_response( $item );
 	}
 }

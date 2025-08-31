@@ -46,7 +46,7 @@ class CustomFieldsManager {
 
 		if ( $request->get_method() === 'GET' ) {
 			$fields = get_post_meta( $event_id, 'ap_rsvp_custom_fields', true );
-			return rest_ensure_response( is_array( $fields ) ? $fields : array() );
+			return \rest_ensure_response( is_array( $fields ) ? $fields : array() );
 		}
 
 		$fields    = (array) $request->get_param( 'fields' );
@@ -56,6 +56,6 @@ class CustomFieldsManager {
 		}
 		update_post_meta( $event_id, 'ap_rsvp_custom_fields', $sanitized );
 
-		return rest_ensure_response( $sanitized );
+		return \rest_ensure_response( $sanitized );
 	}
 }

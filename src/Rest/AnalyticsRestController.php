@@ -70,7 +70,7 @@ class AnalyticsRestController {
 		$favs    = EventMetrics::get_counts( $event_id, 'favorite', $days );
 		$tickets = self::get_ticket_counts( $event_id, $days );
 
-		return rest_ensure_response(
+		return \rest_ensure_response(
 			array(
 				'days'      => $views['days'],
 				'views'     => $views['counts'],
