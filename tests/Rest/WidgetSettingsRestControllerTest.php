@@ -37,7 +37,7 @@ class WidgetSettingsRestControllerTest extends \WP_UnitTestCase {
 		do_action( 'rest_api_init' );
 	}
 
-	public function test_save_and_get_settings(): void {
+        public function test_save_and_get_settings(): void {
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/widget-settings/test-widget' );
 		$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
                 $req->set_body_params( array( 'settings' => array( 'limit' => 8 ) ) );
@@ -52,7 +52,29 @@ class WidgetSettingsRestControllerTest extends \WP_UnitTestCase {
 		$res2 = rest_get_server()->dispatch( $get );
 		$data = $res2->get_data();
 		$this->assertSame( 200, $res2->get_status() );
-		$this->assertSame( array( 'limit' => 8 ), $data['settings'] );
-		$this->assertIsArray( $data['schema'] );
-	}
+                $this->assertSame( array( 'limit' => 8 ), $data['settings'] );
+                $this->assertIsArray( $data['schema'] );
+        }
+
+        public function test_global_settings_requires_manage_cap(): void {
+                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/widget-settings/test-widget' );
+                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+                $req->set_param( 'global', 1 );
+                $req->set_body_params( array( 'settings' => array( 'limit' => 7 ) ) );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 403, $res->get_status() );
+                $this->assertSame( false, get_option( 'ap_widget_settings_test-widget', false ) );
+
+                $admin = self::factory()->user->create( array( 'role' => 'administrator' ) );
+                wp_set_current_user( $admin );
+                $req2 = new \WP_REST_Request( 'POST', '/artpulse/v1/widget-settings/test-widget' );
+                $req2->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+                $req2->set_param( 'global', 1 );
+                $req2->set_body_params( array( 'settings' => array( 'limit' => 9 ) ) );
+                $res2 = rest_get_server()->dispatch( $req2 );
+                $this->assertSame( 200, $res2->get_status() );
+                $data = $res2->get_data();
+                $this->assertTrue( $data['saved'] );
+                $this->assertSame( array( 'limit' => 9 ), get_option( 'ap_widget_settings_test-widget' ) );
+        }
 }

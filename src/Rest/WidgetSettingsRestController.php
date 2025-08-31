@@ -31,7 +31,7 @@ class WidgetSettingsRestController {
                                         array(
                                                 'methods'             => 'POST',
                                                 'callback'            => array( self::class, 'save_settings' ),
-                                                'permission_callback' => array( Auth::class, 'guard_manage' ),
+                                                'permission_callback' => array( self::class, 'permissions_save_settings' ),
                                                 'args'               => array(
                                                         'settings' => array(
                                                                 'type'              => 'object',
@@ -76,9 +76,9 @@ class WidgetSettingsRestController {
 				'settings' => $result,
 			)
 		);
-	}
+        }
 
-	public static function save_settings( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+        public static function save_settings( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$id     = sanitize_key( $request['id'] );
 		$global = (bool) $request->get_param( 'global' );
 		$schema = DashboardWidgetRegistry::get_widget_schema( $id );
@@ -111,6 +111,12 @@ class WidgetSettingsRestController {
                                 'saved'    => true,
                         )
                 );
+        }
+
+        public static function permissions_save_settings( WP_REST_Request $req ): bool|WP_Error {
+                return $req->get_param( 'global' )
+                        ? Auth::guard_manage( $req )
+                        : Auth::guard_read( $req );
         }
 
         /**
