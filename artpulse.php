@@ -24,6 +24,12 @@ require_once __DIR__ . '/includes/class-cli-check-widget-presets.php';
 require_once __DIR__ . '/includes/widget-logging.php';
 require_once __DIR__ . '/includes/unhide-default-widgets.php';
 
+// Register test-only REST route shim when in test mode.
+$ap_test_mode = ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) || filter_var( getenv( 'AP_TEST_MODE' ), FILTER_VALIDATE_BOOLEAN );
+if ( $ap_test_mode && class_exists( \ArtPulse\Rest\TestRouteShim::class ) ) {
+        \ArtPulse\Rest\TestRouteShim::register();
+}
+
 // Load the textdomain after WordPress bootstrap but before most init callbacks.
 add_action(
 	'init',
