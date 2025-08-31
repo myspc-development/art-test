@@ -44,10 +44,11 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
 
 	public function test_post_requires_manage_options_and_valid_nonce(): void {
 		wp_set_current_user( $this->user_id );
-		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
-		$req->set_body_params( array() );
-		$req->set_header( 'Content-Type', 'application/json' );
+               $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
+               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $req->set_header( 'X-AP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
+               $req->set_body_params( array() );
+               $req->set_header( 'Content-Type', 'application/json' );
 		$req->set_body(
 			json_encode(
                                 array(
@@ -59,11 +60,12 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
                 $this->assertSame( 403, $res->get_status() );
 
 		wp_set_current_user( $this->admin_id );
-		$bad = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-		$bad->set_body_params( array() );
-		$bad->set_header( 'Content-Type', 'application/json' );
-		$bad->set_header( 'X-WP-Nonce', 'badnonce' );
-		$bad->set_body(
+               $bad = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
+               $bad->set_body_params( array() );
+               $bad->set_header( 'Content-Type', 'application/json' );
+               $bad->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $bad->set_header( 'X-AP-Nonce', 'badnonce' );
+               $bad->set_body(
 			json_encode(
                                 array(
                                         'widget_roles' => array( 'administrator' => array( 'one' ) ),
@@ -72,14 +74,15 @@ class DashboardConfigControllerTest extends \WP_UnitTestCase {
                                 )
 			)
 		);
-                $res_bad = rest_get_server()->dispatch( $bad );
-                $this->assertSame( 401, $res_bad->get_status() );
+               $res_bad = rest_get_server()->dispatch( $bad );
+               $this->assertSame( 403, $res_bad->get_status() );
 
-		$good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-		$good->set_body_params( array() );
-		$good->set_header( 'Content-Type', 'application/json' );
-                $good->set_header( 'X-WP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
-		$good->set_body(
+               $good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
+               $good->set_body_params( array() );
+               $good->set_header( 'Content-Type', 'application/json' );
+               $good->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $good->set_header( 'X-AP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
+               $good->set_body(
 			json_encode(
                                 array(
                                         'widget_roles' => array( 'administrator' => array( 'one' ) ),
