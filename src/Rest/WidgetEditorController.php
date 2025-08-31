@@ -57,8 +57,8 @@ class WidgetEditorController {
 	public static function get_roles(): WP_REST_Response {
 		global $wp_roles;
 		$roles = $wp_roles ? array_keys( $wp_roles->roles ) : [];
-		return rest_ensure_response( array_values( $roles ) );
-	}
+                return \rest_ensure_response( array_values( $roles ) );
+        }
 
 	public static function get_layout( WP_REST_Request $req ): WP_REST_Response {
 		$role   = sanitize_key( $req['role'] );
