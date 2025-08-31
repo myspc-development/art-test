@@ -13,13 +13,15 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
 
         public function set_up() {
                 parent::set_up();
-                $this->admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
-                $this->user_id  = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+               $this->admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+               $this->user_id  = self::factory()->user->create( array( 'role' => 'subscriber' ) );
 
-                DashboardWidgetRegistry::register( 'one', 'One', '', '', '__return_null', array(
-                        'capability'    => 'edit_posts',
-                        'exclude_roles' => array( 'subscriber' ),
-                ) );
+                DashboardWidgetRegistry::set( [] );
+
+               DashboardWidgetRegistry::register( 'one', 'One', '', '', '__return_null', array(
+                       'capability'    => 'edit_posts',
+                       'exclude_roles' => array( 'subscriber' ),
+               ) );
                 DashboardWidgetRegistry::register( 'two', 'Two', '', '', '__return_null' );
                 DashboardConfigController::register();
                 do_action( 'rest_api_init' );
