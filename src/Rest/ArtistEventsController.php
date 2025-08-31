@@ -24,19 +24,25 @@ class ArtistEventsController {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( self::class, 'get_events' ),
-				// Keep using your Auth helper so unauthenticated users get 401 and non-capable get 403.
-				'permission_callback' => Auth::require_login_and_cap( 'read' ),
+				// Simple auth: must be logged in and have 'read'.
+				'permission_callback' => function () {
+					if ( ! is_user_logged_in() ) {
+						return new WP_Error( 'rest_not_logged_in', 'Authentication required.', array( 'status' => 401 ) );
+					}
+					if ( ! current_user_can( 'read' ) ) {
+						return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
+					}
+					return true;
+				},
 			)
 		);
 	}
 
 	/**
-	 * Return the current user's event/posts as an array of IDs.
-	 *
-	 * Tests expect a flat array of integers (e.g., [25, 27]).
+	 * Return the current user's posts as an array of IDs (ints), ordered by ID ASC.
+	 * Tests expect a flat array like: [25, 27]
 	 */
 	public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-		// Permission has been checked by permission_callback; keep a simple guard here for safety.
 		$user_id = get_current_user_id();
 		if ( ! $user_id ) {
 			return new WP_Error(
@@ -46,12 +52,9 @@ class ArtistEventsController {
 			);
 		}
 
-		// Allow post type override; default to 'post' to match the test fixtures.
+		// Allow specifying post_type via query param; default to 'post' to match seeded fixtures.
 		$post_type = (string) $request->get_param( 'post_type' );
-		if ( $post_type === '' ) {
-			$post_type = 'post'; // tests typically seed core posts
-		} elseif ( ! post_type_exists( $post_type ) ) {
-			// Fall back if an unknown type is requested.
+		if ( $post_type === '' || ! post_type_exists( $post_type ) ) {
 			$post_type = 'post';
 		}
 
@@ -59,12 +62,10 @@ class ArtistEventsController {
 			array(
 				'post_type'              => $post_type,
 				'author'                 => $user_id,
-				'post_status'            => 'any',
-				'fields'                 => 'ids',
-				// Ensure deterministic ordering to match expected [id1, id2, ...].
+				'post_status'            => 'any',     // include drafts/private in tests
+				'fields'                 => 'ids',     // we only need IDs
 				'orderby'                => 'ID',
 				'order'                  => 'ASC',
-				// Perf flags
 				'posts_per_page'         => -1,
 				'no_found_rows'          => true,
 				'update_post_meta_cache' => false,
@@ -72,7 +73,6 @@ class ArtistEventsController {
 			)
 		);
 
-		// Return just the IDs as integers.
 		$ids = array_map( 'intval', (array) $q->posts );
 
 		return rest_ensure_response( $ids );
