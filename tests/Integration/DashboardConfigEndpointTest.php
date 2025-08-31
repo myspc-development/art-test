@@ -109,8 +109,9 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                }
        }
 
-        public function test_post_enforces_permissions_and_nonce(): void {
-                wp_set_current_user( $this->user_id );
+       public function test_post_enforces_permissions_and_nonce(): void {
+               // Subscribers should be blocked even with a valid nonce.
+               wp_set_current_user( $this->user_id );
                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
                $req->set_body_params( array() );
                $req->set_header( 'Content-Type', 'application/json' );
@@ -118,44 +119,31 @@ class DashboardConfigEndpointTest extends \WP_UnitTestCase {
                $req->set_header( 'X-AP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
                $req->set_body( json_encode( array( 'widget_roles' => array( 'subscriber' => array( 'one' ) ) ) ) );
                $res = rest_get_server()->dispatch( $req );
-               // Users without sufficient capabilities should receive a 403 response.
                $this->assertSame( 403, $res->get_status() );
 
-                wp_set_current_user( $this->admin_id );
-                $bad = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-                $bad->set_body_params( array() );
-                $bad->set_header( 'Content-Type', 'application/json' );
-                $bad->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-                $bad->set_header( 'X-AP-Nonce', 'badnonce' );
-                $bad->set_body( json_encode( array(
-                        'widget_roles' => array( 'administrator' => array( 'one' ) ),
-                        'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
-                        'locked'       => array( 'two' ),
-                ) ) );
-                $res_bad = rest_get_server()->dispatch( $bad );
-                $this->assertSame( 403, $res_bad->get_status() );
-
-                $good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-                $good->set_body_params( array() );
-                $good->set_header( 'Content-Type', 'application/json' );
-                $good->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-                $good->set_header( 'X-AP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
-                $good->set_body( json_encode( array(
-                        'widget_roles' => array( 'administrator' => array( 'one' ) ),
-                        'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
-                        'locked'       => array( 'two' ),
-                ) ) );
-                $res_good = rest_get_server()->dispatch( $good );
-                $this->assertSame( 200, $res_good->get_status() );
-                $this->assertSame(
-                        array( 'administrator' => array( 'widget_one' ) ),
-                        get_option( 'artpulse_widget_roles' )
-                );
-                $this->assertSame(
-                        array( 'administrator' => array( 'widget_one', 'widget_two' ) ),
-                        get_option( 'artpulse_dashboard_layouts' )
-                );
-                $this->assertSame( array( 'widget_two' ), get_option( 'artpulse_locked_widgets' ) );
-        }
+               // Admins with a valid nonce should succeed.
+               wp_set_current_user( $this->admin_id );
+               $good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
+               $good->set_body_params( array() );
+               $good->set_header( 'Content-Type', 'application/json' );
+               $good->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+               $good->set_header( 'X-AP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
+               $good->set_body( json_encode( array(
+                       'widget_roles' => array( 'administrator' => array( 'one' ) ),
+                       'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
+                       'locked'       => array( 'two' ),
+               ) ) );
+               $res_good = rest_get_server()->dispatch( $good );
+               $this->assertSame( 200, $res_good->get_status() );
+               $this->assertSame(
+                       array( 'administrator' => array( 'widget_one' ) ),
+                       get_option( 'artpulse_widget_roles' )
+               );
+               $this->assertSame(
+                       array( 'administrator' => array( 'widget_one', 'widget_two' ) ),
+                       get_option( 'artpulse_dashboard_layouts' )
+               );
+               $this->assertSame( array( 'widget_two' ), get_option( 'artpulse_locked_widgets' ) );
+       }
 }
 

@@ -31,7 +31,7 @@ class DashboardConfigController {
                         array(
                                 'methods'  => 'POST',
                                 'callback' => array( self::class, 'save_config' ),
-                                'permission_callback' => '__return_true',
+                                'permission_callback' => Auth::require_login_and_cap( 'manage_options' ),
                                 'args'                => array(
                                                         'widget_roles' => array(
                                                                 'type'     => 'object',
@@ -156,10 +156,6 @@ class DashboardConfigController {
                $nonce = $request->get_header( 'X-AP-Nonce' );
                if ( ! wp_verify_nonce( $nonce, 'ap_dashboard_config' ) ) {
                        return new WP_Error( 'rest_forbidden', 'Invalid nonce.', array( 'status' => 403 ) );
-               }
-
-               if ( ! current_user_can( 'manage_options' ) ) {
-                       return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
                }
 
                 $data       = $request->get_json_params();
