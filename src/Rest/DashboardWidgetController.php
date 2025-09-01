@@ -4,19 +4,23 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
-use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
 // Use the dashboard builder registry rather than the core registry
 // so we can query widgets and render previews for the builder UI.
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Support\WidgetIds;
+use ArtPulse\Rest\Util\Auth;
 
 /**
  * REST controller for the Dashboard Builder.
  */
 class DashboardWidgetController {
-	use RestResponder;
+        use RestResponder;
+
+        private static function verify_nonce( WP_REST_Request $request, string $action ): bool|WP_Error {
+                return Auth::verify_nonce( $request->get_header( 'X-AP-Nonce' ), $action );
+        }
 
 	/**
 	 * Convert an array of builder layout items to core widget IDs.
@@ -185,11 +189,14 @@ class DashboardWidgetController {
 	}
 
         public static function save_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                $guard = \ArtPulse\Rest\Util\Auth::guard( $request, 'edit_posts' );
-                if ( is_wp_error( $guard ) ) {
-                        return $guard;
+                if ( ! current_user_can( 'edit_posts' ) ) {
+                        return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
                 }
-		$data = $request->get_json_params();
+                $nonce = self::verify_nonce( $request, 'ap_save_layout' );
+                if ( is_wp_error( $nonce ) ) {
+                        return $nonce;
+                }
+                $data = $request->get_json_params();
 		$role = sanitize_key( $data['role'] ?? '' );
 		if ( ! $role ) {
 			return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
@@ -221,11 +228,14 @@ class DashboardWidgetController {
 	}
 
         public static function export_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                $guard = \ArtPulse\Rest\Util\Auth::guard( $request, 'edit_posts' );
-                if ( is_wp_error( $guard ) ) {
-                        return $guard;
+                if ( ! current_user_can( 'edit_posts' ) ) {
+                        return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
                 }
-		$role = sanitize_key( $request->get_param( 'role' ) );
+                $nonce = self::verify_nonce( $request, 'ap_export_layout' );
+                if ( is_wp_error( $nonce ) ) {
+                        return $nonce;
+                }
+                $role = sanitize_key( $request->get_param( 'role' ) );
 		if ( ! $role ) {
 			return new WP_Error( 'invalid_role', __( 'Role parameter missing', 'artpulse' ), array( 'status' => 400 ) );
 		}
@@ -241,11 +251,14 @@ class DashboardWidgetController {
 	}
 
         public static function import_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                $guard = \ArtPulse\Rest\Util\Auth::guard( $request, 'edit_posts' );
-                if ( is_wp_error( $guard ) ) {
-                        return $guard;
+                if ( ! current_user_can( 'edit_posts' ) ) {
+                        return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
                 }
-		$data = $request->get_json_params();
+                $nonce = self::verify_nonce( $request, 'ap_import_layout' );
+                if ( is_wp_error( $nonce ) ) {
+                        return $nonce;
+                }
+                $data = $request->get_json_params();
 		$role = sanitize_key( $data['role'] ?? '' );
 		if ( ! $role ) {
 			return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
