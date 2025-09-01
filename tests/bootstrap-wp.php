@@ -18,16 +18,16 @@ if (!getenv('WP_PHPUNIT__TESTS_CONFIG')) {
     putenv('WP_PHPUNIT__TESTS_CONFIG=' . $root . '/tests/wp-tests-config.php');
 }
 
-$wpPhpUnit = getenv('WP_PHPUNIT__DIR');
-$config    = getenv('WP_PHPUNIT__TESTS_CONFIG');
+$wpPhpUnit   = getenv('WP_PHPUNIT__DIR');
+$testsConfig = getenv('WP_PHPUNIT__TESTS_CONFIG');
 
-if (!is_file($config)) {
-    $sample = dirname($config) . '/wp-tests-config-sample.php';
+if (!is_file($testsConfig)) {
+    $sample = dirname($testsConfig) . '/wp-tests-config-sample.php';
     if (is_file($sample)) {
-        copy($sample, $config);
-        fwrite(STDERR, "Created default tests config at: {$config}\n");
+        copy($sample, $testsConfig);
+        fwrite(STDERR, "Created default tests config at: {$testsConfig}\n");
     } else {
-        fwrite(STDERR, "Missing tests config at: {$config}\n" .
+        fwrite(STDERR, "Missing tests config at: {$testsConfig}\n" .
             "Copy tests/wp-tests-config-sample.php → tests/wp-tests-config.php and fill DB/consts.\n");
         exit(1);
     }
@@ -40,12 +40,12 @@ if (!is_file($coreWpSettings)) {
     exit(1);
 }
 
-// ✅ This loads the WP test framework and boots WordPress, defining ABSPATH.
-require $wpPhpUnit . '/includes/bootstrap.php';
-
 if (!defined('AP_TEST_MODE')) {
     define('AP_TEST_MODE', 1);
 }
+
+// ✅ This loads the WP test framework and boots WordPress, defining ABSPATH.
+require $wpPhpUnit . '/includes/bootstrap.php';
 
 // Ensure routes are registered for REST tests that assume pre-registration.
 if (function_exists('do_action')) {
