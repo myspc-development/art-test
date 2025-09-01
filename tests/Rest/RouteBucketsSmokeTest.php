@@ -127,9 +127,9 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
         ],
     ];
 
-    public function setUp(): void
+    public function set_up(): void
     {
-        parent::setUp();
+        parent::set_up();
 
         // Ensure roles exist (plugin often has 'member', fallback to subscriber).
         if ( ! get_role('member') ) {
@@ -157,10 +157,10 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
         }
     }
 
-    public function tearDown(): void
+    public function tear_down(): void
     {
         wp_set_current_user(0);
-        parent::tearDown();
+        parent::tear_down();
     }
 
     public function test_bucket_A_registration(): void
