@@ -14,6 +14,46 @@ use ArtPulse\Core\LayoutUtils;
 
 class UserDashboardManager {
 
+       /**
+        * Map legacy widget IDs to their canonical slugs.
+        *
+        * @var array<string,string>
+        */
+       private const ALIASES = array(
+               'widget_news'                  => 'widget_news_feed',
+               'widget_widget_events'         => 'widget_events',
+               'widget_widget_favorites'      => 'widget_favorites',
+               'widget_widget_near_me_events' => 'widget_near_me_events',
+               'widget_widget_near_me'        => 'widget_near_me_events',
+               'widget_followed_artists'      => 'widget_my_follows',
+               'followed_artists'             => 'widget_my_follows',
+       );
+
+       /**
+        * Canonicalize a list of widget IDs ensuring aliases resolve and duplicates are removed.
+        *
+        * @param array<int,string|array{id:string}> $ids Raw widget IDs.
+        * @return array<int,string> Canonical unique IDs.
+        */
+       private static function canonicalize( array $ids ): array {
+               $result = array();
+               $seen   = array();
+               foreach ( $ids as $item ) {
+                       $id = is_array( $item ) ? ( $item['id'] ?? '' ) : $item;
+                       $cid = DashboardWidgetRegistry::canon_slug( (string) $id );
+                       if ( ! $cid ) {
+                               continue;
+                       }
+                       $cid = self::ALIASES[ $cid ] ?? $cid;
+                       if ( isset( $seen[ $cid ] ) ) {
+                               continue;
+                       }
+                       $seen[ $cid ] = true;
+                       $result[]     = $cid;
+               }
+               return $result;
+       }
+
 	/**
 	 * Generate a cache-busting asset version based on file modification time.
 	 */
@@ -74,7 +114,7 @@ class UserDashboardManager {
                                $ids[] = $id;
                        }
                }
-               return $ids;
+               return self::canonicalize( $ids );
        }
 
 	public static function enqueueAssets() {
@@ -939,7 +979,7 @@ class UserDashboardManager {
 		}
 
                if ( empty( $layout_ids ) ) {
-                       $defaults = (array) apply_filters( 'ap_dashboard_default_widgets', array() );
+                       $defaults = (array) apply_filters( 'ap_dashboard_default_widgets', array(), $role );
                        if ( $role ) {
                                $defaults = (array) apply_filters( 'ap_dashboard_default_widgets_for_role', $defaults, $role );
                        }
@@ -963,19 +1003,50 @@ class UserDashboardManager {
                        }
                }
 
-		return \rest_ensure_response(
-			array(
-				'layout'     => $layout_ids,
-				'visibility' => $visibility,
-			)
-		);
-	}
+               $layout_ids = self::canonicalize( $layout_ids );
+               $vis_map    = array();
+               foreach ( $visibility as $item ) {
+                       $cid = DashboardWidgetRegistry::canon_slug( (string) ( $item['id'] ?? '' ) );
+                       if ( ! $cid ) {
+                               continue;
+                       }
+                       $cid            = self::ALIASES[ $cid ] ?? $cid;
+                       $vis_map[ $cid ] = array(
+                               'id'      => $cid,
+                               'visible' => (bool) ( $item['visible'] ?? true ),
+                       );
+               }
+               $visibility = array_values(
+                       array_filter(
+                               $vis_map,
+                               static fn( $v ) => in_array( $v['id'], $layout_ids, true )
+                       )
+               );
+
+               $hook       = ! empty( $saved ) ? 'ap_dashboard_saved_layout' : ( $role ? 'ap_dashboard_preview_layout' : 'ap_dashboard_default_layout' );
+               $layout_ids = apply_filters( $hook, $layout_ids, $role );
+               $layout_ids = self::canonicalize( $layout_ids );
+               $visibility = array_values(
+                       array_filter(
+                               $visibility,
+                               static fn( $v ) => in_array( $v['id'], $layout_ids, true )
+                       )
+               );
+
+                return \rest_ensure_response(
+                        array(
+                                'layout'     => $layout_ids,
+                                'visibility' => $visibility,
+                        )
+                );
+       }
 
        public static function resetDashboardLayout( ?WP_REST_Request $request = null ): \WP_REST_Response {
                $uid = get_current_user_id();
                \ArtPulse\Core\DashboardWidgetManager::resetUserLayout( $uid );
 
                $defaults = array();
+               $role     = \ArtPulse\Admin\UserLayoutManager::get_primary_role( $uid );
                if ( $request instanceof WP_REST_Request && $request->has_param( 'defaults' ) ) {
                        $defaults = $request->get_param( 'defaults' );
                        if ( is_string( $defaults ) ) {
@@ -983,8 +1054,7 @@ class UserDashboardManager {
                                $defaults = is_array( $decoded ) ? $decoded : array();
                        }
                } else {
-                       $role     = \ArtPulse\Admin\UserLayoutManager::get_primary_role( $uid );
-                       $defaults = (array) apply_filters( 'ap_dashboard_default_widgets', array() );
+                       $defaults = (array) apply_filters( 'ap_dashboard_default_widgets', array(), $role );
                        $defaults = (array) apply_filters( 'ap_dashboard_default_widgets_for_role', $defaults, $role );
                }
 
@@ -1012,6 +1082,35 @@ class UserDashboardManager {
                                'visible' => $vis,
                        );
                }
+
+               $layout_ids = self::canonicalize( $layout_ids );
+               $vis_map    = array();
+               foreach ( $visibility as $item ) {
+                       $cid = DashboardWidgetRegistry::canon_slug( (string) ( $item['id'] ?? '' ) );
+                       if ( ! $cid ) {
+                               continue;
+                       }
+                       $cid            = self::ALIASES[ $cid ] ?? $cid;
+                       $vis_map[ $cid ] = array(
+                               'id'      => $cid,
+                               'visible' => (bool) ( $item['visible'] ?? true ),
+                       );
+               }
+               $visibility = array_values(
+                       array_filter(
+                               $vis_map,
+                               static fn( $v ) => in_array( $v['id'], $layout_ids, true )
+                       )
+               );
+
+               $layout_ids = apply_filters( 'ap_dashboard_default_layout', $layout_ids, $role );
+               $layout_ids = self::canonicalize( $layout_ids );
+               $visibility = array_values(
+                       array_filter(
+                               $visibility,
+                               static fn( $v ) => in_array( $v['id'], $layout_ids, true )
+                       )
+               );
 
                return \rest_ensure_response(
                        array(
@@ -1117,13 +1216,43 @@ class UserDashboardManager {
                        }
                }
 
-		return \rest_ensure_response(
-			array(
-				'layout'     => $layout_ids,
-				'visibility' => $visibility,
-			)
-		);
-	}
+               $role       = \ArtPulse\Admin\UserLayoutManager::get_primary_role( $uid );
+               $layout_ids = self::canonicalize( $layout_ids );
+               $vis_map    = array();
+               foreach ( $visibility as $item ) {
+                       $cid = DashboardWidgetRegistry::canon_slug( (string) ( $item['id'] ?? '' ) );
+                       if ( ! $cid ) {
+                               continue;
+                       }
+                       $cid            = self::ALIASES[ $cid ] ?? $cid;
+                       $vis_map[ $cid ] = array(
+                               'id'      => $cid,
+                               'visible' => (bool) ( $item['visible'] ?? true ),
+                       );
+               }
+               $visibility = array_values(
+                       array_filter(
+                               $vis_map,
+                               static fn( $v ) => in_array( $v['id'], $layout_ids, true )
+                       )
+               );
+
+               $layout_ids = apply_filters( 'ap_dashboard_saved_layout', $layout_ids, $role );
+               $layout_ids = self::canonicalize( $layout_ids );
+               $visibility = array_values(
+                       array_filter(
+                               $visibility,
+                               static fn( $v ) => in_array( $v['id'], $layout_ids, true )
+                       )
+               );
+
+               return \rest_ensure_response(
+                        array(
+                                'layout'     => $layout_ids,
+                                'visibility' => $visibility,
+                        )
+                );
+       }
 
 	public static function completeDashboardTour( WP_REST_Request $request ): \WP_REST_Response {
 		$uid = get_current_user_id();
