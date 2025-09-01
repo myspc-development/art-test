@@ -25,10 +25,26 @@ require_once __DIR__ . '/includes/class-cli-check-widget-presets.php';
 require_once __DIR__ . '/includes/widget-logging.php';
 require_once __DIR__ . '/includes/unhide-default-widgets.php';
 
+add_action( 'rest_api_init', array( \ArtPulse\Rest\OrgRolesController::class, 'register_routes' ) );
+
 // Register test-only REST route shim when in test mode.
 $ap_test_mode = ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) || filter_var( getenv( 'AP_TEST_MODE' ), FILTER_VALIDATE_BOOLEAN );
 if ( $ap_test_mode && class_exists( \ArtPulse\Rest\TestRouteShim::class ) ) {
         \ArtPulse\Rest\TestRouteShim::register();
+}
+
+if ( $ap_test_mode && ! function_exists( 'ap_as_user_with_role' ) ) {
+        function ap_as_user_with_role( string $role ): int {
+                $user_id = wp_insert_user(
+                        array(
+                                'user_login' => uniqid( 'ap_test_' ),
+                                'user_pass'  => wp_generate_password(),
+                                'user_email' => uniqid( 'ap_test_' ) . '@example.com',
+                                'role'       => sanitize_key( $role ),
+                        )
+                );
+                return is_wp_error( $user_id ) ? 0 : (int) $user_id;
+        }
 }
 
 // Load the textdomain after WordPress bootstrap but before most init callbacks.
