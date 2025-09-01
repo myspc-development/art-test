@@ -6,7 +6,7 @@ define( 'DB_PASSWORD', getenv( 'WP_TESTS_DB_PASS' ) ?: '' );
 define( 'DB_HOST', getenv( 'WP_TESTS_DB_HOST' ) ?: '127.0.0.1' );
 define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
-define( 'WP_TESTS_TABLE_PREFIX', 'wptests_' );
+$table_prefix = 'wptests_';
 define( 'WP_DEBUG', true );
 
 define( 'WP_TESTS_DOMAIN', 'example.org' );
