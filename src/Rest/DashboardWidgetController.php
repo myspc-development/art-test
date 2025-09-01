@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 // Use the dashboard builder registry rather than the core registry
 // so we can query widgets and render previews for the builder UI.
 use ArtPulse\Core\DashboardWidgetRegistry;
@@ -15,6 +16,7 @@ use ArtPulse\Support\WidgetIds;
  * REST controller for the Dashboard Builder.
  */
 class DashboardWidgetController {
+	use RestResponder;
 
 	/**
 	 * Convert an array of builder layout items to core widget IDs.

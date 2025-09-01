@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
+use ArtPulse\Rest\RestResponder;
 
 // Ensure this controller checks current user and validates role/widget IDs:
 // - Only for logged-in users.
@@ -11,6 +12,7 @@ use WP_REST_Response;
 // - Filter incoming layout to allowed widget IDs.
 // - update_user_meta(get_current_user_id(), "ap_layout_{$role}", $layout).
 class UserLayoutController {
+	use RestResponder;
 
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );

@@ -8,8 +8,10 @@ use ArtPulse\Core\OrgInviteManager;
 use ArtPulse\Core\MultiOrgRoles;
 use ArtPulse\Rest\Util\Auth;
 use function ArtPulse\Core\ap_user_has_org_role;
+use ArtPulse\Rest\RestResponder;
 
 class OrgRoleInviteController {
+	use RestResponder;
 
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'routes' ) );

@@ -3,8 +3,10 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 class CalendarFeedController {
+	use RestResponder;
 
 	/** @var string REST namespace */
 	private const NAMESPACE = 'ap/v1';

@@ -5,8 +5,10 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 class SpotlightRestController {
+	use RestResponder;
 
 	private const NAMESPACE = 'artpulse/v1';
 

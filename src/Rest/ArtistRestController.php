@@ -7,8 +7,10 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 class ArtistRestController extends WP_REST_Controller {
+	use RestResponder;
 
 	/**
 	 * Namespace for the REST API
@@ -65,7 +67,7 @@ class ArtistRestController extends WP_REST_Controller {
 	 * GET /artists
 	 * Return list of artists
 	 */
-	public function get_artists( WP_REST_Request $request ): WP_REST_Response {
+	public function get_artists( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$query = new \WP_Query(
 			array(
 				'post_type'      => 'artpulse_artist',
@@ -88,19 +90,19 @@ class ArtistRestController extends WP_REST_Controller {
 			$data[] = $this->prepare_item_for_response( $item, get_post( $post_id ) );
 		}
 
-		return \rest_ensure_response( $data );
+		return $this->ok( $data );
 	}
 
 	/**
 	 * GET /artists/{id}
 	 * Return single artist
 	 */
-	public function get_artist( WP_REST_Request $request ): WP_REST_Response {
+	public function get_artist( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$id   = (int) $request['id'];
 		$post = get_post( $id );
 
 		if ( empty( $post ) || 'artpulse_artist' !== $post->post_type ) {
-			return new WP_REST_Response( array( 'message' => 'Artist not found' ), 404 );
+			return $this->fail( 'Artist not found', 'not_found', 404 );
 		}
 
 		$item = array(
@@ -115,6 +117,6 @@ class ArtistRestController extends WP_REST_Controller {
 			'is_verified' => (bool) get_post_meta( $post->ID, '_ap_is_verified', true ),
 		);
 
-		return \rest_ensure_response( $item );
+		return $this->ok( $item );
 	}
 }

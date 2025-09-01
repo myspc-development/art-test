@@ -4,8 +4,10 @@ namespace ArtPulse\Rest;
 use ArtPulse\Rest\Util\Auth;
 use WP_Error;
 use WP_REST_Response;
+use ArtPulse\Rest\RestResponder;
 
 class CurrentUserController {
+	use RestResponder;
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
 	}
@@ -34,6 +36,6 @@ class CurrentUserController {
                        'roles' => $user->roles,
                );
 
-               return \rest_ensure_response( $data );
+               return ( new self() )->ok( $data );
        }
 }

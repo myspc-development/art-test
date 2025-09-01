@@ -5,8 +5,10 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 class RsvpRestController {
+	use RestResponder;
 
 	public static function register(): void {
 		if ( did_action( 'rest_api_init' ) ) {
