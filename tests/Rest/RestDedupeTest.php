@@ -11,10 +11,15 @@ class RestDedupeTest extends \WP_UnitTestCase {
           public static function ok1(): string { return 'ok1'; }
           public static function ok2(): string { return 'ok2'; }
 
-          protected function setUp(): void {
-                  parent::setUp();
-                  $GLOBALS['ap_rest_dedupe_notices'] = array();
-          }
+            protected function set_up() {
+                    parent::set_up();
+                    $GLOBALS['ap_rest_dedupe_notices'] = array();
+            }
+
+            protected function tear_down() {
+                    unset( $GLOBALS['ap_rest_dedupe_notices'] );
+                    parent::tear_down();
+            }
 
           public function test_removes_duplicate_routes_with_same_callback(): void {
                   $callback = [self::class, 'ok'];
