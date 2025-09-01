@@ -18,7 +18,7 @@ class LeaderboardRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'most_helpful' ),
-					'permission_callback' => fn() => is_user_logged_in(),
+                                       'permission_callback' => '__return_true',
 				)
 			);
 		}
@@ -30,11 +30,11 @@ class LeaderboardRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'most_upvoted' ),
-					'permission_callback' => fn() => is_user_logged_in(),
-				)
-			);
-		}
-	}
+                                       'permission_callback' => '__return_true',
+                               )
+                       );
+               }
+        }
 
 	public static function most_helpful( WP_REST_Request $req ): WP_REST_Response {
 		$limit = $req->get_param( 'limit' ) ? absint( $req['limit'] ) : 5;

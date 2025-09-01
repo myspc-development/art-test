@@ -18,13 +18,11 @@ class QaThreadRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'get_thread' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' );
-					},
-				)
-			);
-		}
-		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/qa-thread/(?P<event_id>\d+)/post' ) ) {
+                                       'permission_callback' => '__return_true',
+                               )
+                       );
+               }
+               if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/qa-thread/(?P<event_id>\d+)/post' ) ) {
 			register_rest_route(
 				ARTPULSE_API_NAMESPACE,
 				'/qa-thread/(?P<event_id>\d+)/post',

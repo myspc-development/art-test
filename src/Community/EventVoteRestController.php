@@ -30,9 +30,7 @@ class EventVoteRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'count' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' );
-					},
+                                       'permission_callback' => '__return_true',
 					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
@@ -44,13 +42,11 @@ class EventVoteRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'top_events' ),
-					'permission_callback' => function () {
-						return current_user_can( 'read' );
-					},
-				)
-			);
-		}
-	}
+                                       'permission_callback' => '__return_true',
+                               )
+                       );
+               }
+        }
 
 	public static function vote( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$event_id = absint( $req['id'] );
