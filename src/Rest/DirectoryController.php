@@ -9,32 +9,40 @@ use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
 
 class DirectoryController {
-	use RestResponder;
+        use RestResponder;
 
-	public static function register(): void {
-		if ( did_action( 'rest_api_init' ) ) {
-			self::register_routes();
-		} else {
-			add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
-		}
-	}
+        public static function register(): void {
+                $controller = new self();
+                if ( did_action( 'rest_api_init' ) ) {
+                        $controller->register_routes();
+                } else {
+                        add_action( 'rest_api_init', array( $controller, 'register_routes' ) );
+                }
+        }
 
-        public static function register_routes(): void {
-
+        public function register_routes(): void {
                 register_rest_route(
                         ARTPULSE_API_NAMESPACE,
                         '/events',
                         array(
                                 'methods'             => WP_REST_Server::READABLE,
-                                'callback'            => array( self::class, 'get_events' ),
+                                'callback'            => array( $this, 'get_events' ),
                                 'permission_callback' => Auth::allow_public(),
                         )
                 );
         }
 
 
-public static function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-        $meta_query = array( 'relation' => 'AND' );
+public function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+        $meta_query = array(
+                'relation' => 'AND',
+                array(
+                        'key'     => 'ap_event_end_ts',
+                        'value'   => time(),
+                        'compare' => '>=',
+                        'type'    => 'NUMERIC',
+                ),
+        );
         $tax_query  = array( 'relation' => 'AND' );
 
         foreach ( array( 'vibe', 'accessibility', 'age_range' ) as $key ) {
@@ -59,13 +67,44 @@ public static function get_events( WP_REST_Request $request ): WP_REST_Response|
                 }
         }
 
+        $region = $request->get_param( 'region' );
+        if ( ! empty( $region ) ) {
+                $region_terms = array_map( 'sanitize_text_field', (array) $region );
+                if ( taxonomy_exists( 'region' ) ) {
+                        $tax_query[] = array(
+                                'taxonomy' => 'region',
+                                'field'    => 'slug',
+                                'terms'    => $region_terms,
+                        );
+                } else {
+                        $meta_query[] = array(
+                                'key'     => 'region',
+                                'value'   => $region_terms,
+                                'compare' => 'IN',
+                        );
+                }
+        }
+
         $lat       = $request->get_param( 'lat' );
         $lng       = $request->get_param( 'lng' );
         $within_km = $request->get_param( 'within_km' );
-        if ( $lat && $lng && $within_km ) {
-                // Delegate to advanced filter handler when a distance filter is provided.
-                $events = AdvancedEventFilters::within_km( $request );
-                return self::ok( $events );
+        $do_radius = is_numeric( $lat ) && is_numeric( $lng ) && is_numeric( $within_km );
+        if ( $do_radius ) {
+                $lat = (float) $lat;
+                $lng = (float) $lng;
+                $r   = (float) $within_km / 111.0;
+                $meta_query[] = array(
+                        'key'     => 'event_lat',
+                        'value'   => array( $lat - $r, $lat + $r ),
+                        'compare' => 'BETWEEN',
+                        'type'    => 'NUMERIC',
+                );
+                $meta_query[] = array(
+                        'key'     => 'event_lng',
+                        'value'   => array( $lng - $r, $lng + $r ),
+                        'compare' => 'BETWEEN',
+                        'type'    => 'NUMERIC',
+                );
         }
 
         $args = array(
@@ -76,10 +115,8 @@ public static function get_events( WP_REST_Request $request ): WP_REST_Response|
                 'meta_key'       => 'event_start_date',
                 'order'          => 'ASC',
                 'fields'         => 'ids',
+                'meta_query'     => $meta_query,
         );
-        if ( count( $meta_query ) > 1 ) {
-                $args['meta_query'] = $meta_query;
-        }
         if ( count( $tax_query ) > 1 ) {
                 $args['tax_query'] = $tax_query;
         }
@@ -88,6 +125,18 @@ public static function get_events( WP_REST_Request $request ): WP_REST_Response|
 
         $events = array();
         foreach ( $ids as $id ) {
+                if ( $do_radius ) {
+                        $e_lat = get_post_meta( $id, 'event_lat', true );
+                        $e_lng = get_post_meta( $id, 'event_lng', true );
+                        if ( $e_lat === '' || $e_lng === '' ) {
+                                continue;
+                        }
+                        $dist = $this->haversine_distance( $lat, $lng, (float) $e_lat, (float) $e_lng );
+                        if ( $dist > (float) $within_km ) {
+                                continue;
+                        }
+                }
+
                 $genre_terms  = wp_get_post_terms( $id, 'genre', array( 'fields' => 'slugs' ) );
                 $medium_terms = wp_get_post_terms( $id, 'medium', array( 'fields' => 'slugs' ) );
                 $events[]     = array(
@@ -107,10 +156,15 @@ public static function get_events( WP_REST_Request $request ): WP_REST_Response|
                 );
         }
 
-        return self::ok( array_values( $events ) );
+        return $this->ok( array_values( $events ) );
 }
 
-       private static function ok( $data, int $status = 200 ): WP_REST_Response {
-               return new WP_REST_Response( $data, $status );
-       }
+        private function haversine_distance( float $lat1, float $lng1, float $lat2, float $lng2 ): float {
+                $earth = 6371; // km
+                $dLat  = deg2rad( $lat2 - $lat1 );
+                $dLon  = deg2rad( $lng2 - $lng1 );
+                $a     = sin( $dLat / 2 ) * sin( $dLat / 2 ) + cos( deg2rad( $lat1 ) ) * cos( deg2rad( $lat2 ) ) * sin( $dLon / 2 ) * sin( $dLon / 2 );
+                $c     = 2 * atan2( sqrt( $a ), sqrt( 1 - $a ) );
+                return $earth * $c;
+        }
 }
