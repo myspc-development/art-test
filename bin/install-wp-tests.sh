@@ -1,88 +1,51 @@
 #!/usr/bin/env bash
 
-# Usage: bin/install-wp-tests.sh <db-name> <db-user> <db-pass> <db-host> [wp-version]
+set -euo pipefail
 
-set -e
+# Requires DB credentials via environment variables
+: "${DB_NAME:?DB_NAME is not set}"
+: "${DB_USER:?DB_USER is not set}"
+: "${DB_PASSWORD:?DB_PASSWORD is not set}"
+: "${DB_HOST:?DB_HOST is not set}"
 
-if [ $# -lt 4 ]; then
-  echo "Usage: $0 <db-name> <db-user> <db-pass> <db-host> [wp-version]"
-  exit 1
+WP_CORE_DIR=${WP_CORE_DIR:-/tmp/wordpress}
+WP_TESTS_DIR=${WP_TESTS_DIR:-$(pwd)/vendor/wp-phpunit/wp-phpunit}
+
+# Ensure Composer dependencies are installed
+if [ ! -d "vendor" ]; then
+  composer install >/dev/null
 fi
 
-DB_NAME=$1
-DB_USER=$2
-DB_PASS=$3
-DB_HOST=$4
-WP_VERSION=${5-latest}
+if [ ! -f "$WP_CORE_DIR/wp-load.php" ]; then
+  echo "Installing WordPress via Composer..."
+  composer create-project --no-interaction --prefer-dist johnpbloch/wordpress "$WP_CORE_DIR" >/dev/null
+fi
 
-WP_TESTS_DIR=/tmp/wordpress-tests-lib
-WP_CORE_DIR=/tmp/wordpress
-
-download() {
-  if command -v curl >/dev/null; then
-    curl -sSL "$1" -o "$2"
-  elif command -v wget >/dev/null; then
-    wget -q -O "$2" "$1"
-  else
-    echo "Error: neither curl nor wget is installed." >&2
-    exit 1
-  fi
+if [ ! -f "$WP_TESTS_DIR/wp-tests-config.php" ]; then
+  echo "Setting up WordPress test suite configuration..."
+  cat >"$WP_TESTS_DIR/wp-tests-config.php" <<'EOF'
+<?php
+define( 'DB_NAME', getenv( 'DB_NAME' ) );
+define( 'DB_USER', getenv( 'DB_USER' ) );
+define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) );
+define( 'DB_HOST', getenv( 'DB_HOST' ) );
+define( 'DB_CHARSET', 'utf8' );
+define( 'DB_COLLATE', '' );
+$table_prefix = 'wptests_';
+define( 'WP_TESTS_DOMAIN', 'example.org' );
+define( 'WP_TESTS_EMAIL', 'admin@example.org' );
+define( 'WP_TESTS_TITLE', 'WP Tests' );
+define( 'WP_PHP_BINARY', 'php' );
+define( 'WPLANG', '' );
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', '$WP_CORE_DIR/' );
 }
+EOF
+fi
 
-install_wp() {
-  if [ ! -d "$WP_CORE_DIR" ]; then
-    mkdir -p "$WP_CORE_DIR"
-  fi
+echo "Creating WordPress test database..."
+mysqladmin drop "$DB_NAME" --user="$DB_USER" --password="$DB_PASSWORD" --host="$DB_HOST" --force >/dev/null 2>&1 || true
+mysqladmin create "$DB_NAME" --user="$DB_USER" --password="$DB_PASSWORD" --host="$DB_HOST"
 
-  if [ ! -f "$WP_CORE_DIR/wp-load.php" ]; then
-    echo "Downloading WordPress $WP_VERSION ..."
-    local ARCHIVE="/tmp/wordpress.tar.gz"
-    if [ "$WP_VERSION" = "latest" ]; then
-      download https://wordpress.org/latest.tar.gz "$ARCHIVE"
-    else
-      download "https://wordpress.org/wordpress-$WP_VERSION.tar.gz" "$ARCHIVE"
-    fi
-    tar --strip-components=1 -zxmf "$ARCHIVE" -C "$WP_CORE_DIR"
-    rm "$ARCHIVE"
-  fi
-}
+echo "WordPress test environment installed."
 
-install_test_suite() {
-  if [ ! -d "$WP_TESTS_DIR" ]; then
-    mkdir -p "$WP_TESTS_DIR"
-  fi
-
-  if [ ! -f "$WP_TESTS_DIR/includes/functions.php" ]; then
-    echo "Installing WordPress test suite..."
-    if ! command -v svn >/dev/null 2>&1; then
-      echo "Error: svn is required to download the test suite." >&2
-      exit 1
-    fi
-
-    if [ "$WP_VERSION" = "latest" ]; then
-      svn export --quiet https://develop.svn.wordpress.org/trunk/tests/phpunit/includes/ "$WP_TESTS_DIR/includes"
-      download https://develop.svn.wordpress.org/trunk/wp-tests-config-sample.php "$WP_TESTS_DIR/wp-tests-config.php"
-    else
-      svn export --quiet https://develop.svn.wordpress.org/tags/"$WP_VERSION"/tests/phpunit/includes/ "$WP_TESTS_DIR/includes"
-      download https://develop.svn.wordpress.org/tags/"$WP_VERSION"/wp-tests-config-sample.php "$WP_TESTS_DIR/wp-tests-config.php"
-    fi
-
-    sed -i "s:dirname( __FILE__ ) . '/src/':'$WP_CORE_DIR':" "$WP_TESTS_DIR/wp-tests-config.php"
-    sed -i "s/youremptytestdbnamehere/$DB_NAME/" "$WP_TESTS_DIR/wp-tests-config.php"
-    sed -i "s/yourusernamehere/$DB_USER/" "$WP_TESTS_DIR/wp-tests-config.php"
-    sed -i "s/yourpasswordhere/$DB_PASS/" "$WP_TESTS_DIR/wp-tests-config.php"
-    sed -i "s|localhost|$DB_HOST|" "$WP_TESTS_DIR/wp-tests-config.php"
-  fi
-}
-
-install_db() {
-  echo "Creating WordPress test database..."
-  mysqladmin drop "$DB_NAME" --user="$DB_USER" --password="$DB_PASS" --host="$DB_HOST" --force >/dev/null 2>&1 || true
-  mysqladmin create "$DB_NAME" --user="$DB_USER" --password="$DB_PASS" --host="$DB_HOST"
-}
-
-install_wp
-install_test_suite
-install_db
-
-echo "WordPress test environment installed." 
