@@ -1,5 +1,5 @@
 describe('Dashboard Layout', () => {
-  ['member','artist','organization'].forEach(role => {
+  ['member', Cypress.env('ARTIST_USER'), 'organization'].forEach(role => {
     it(`loads widgets for ${role}`, () => {
       cy.login(role);
       cy.visit('/dashboard');
@@ -17,7 +17,7 @@ describe('Dashboard Layout', () => {
   });
 
   it('allows drag and drop between tabs', () => {
-    cy.login('artist');
+    cy.login(Cypress.env('ARTIST_USER'));
     cy.visit('/dashboard');
     // Assumes custom command for drag
     cy.drag('#messages', '#favorites');

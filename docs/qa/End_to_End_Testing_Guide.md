@@ -23,11 +23,19 @@ Ensure Node dependencies are installed (`npm install`). See [../development-setu
 
 ## Running the Tests
 
-Set environment variables for your WordPress user and then run Cypress via the
-provided npm script:
+The suite expects credentials for several sample accounts. You can override
+them with environment variables or rely on the defaults defined in
+`cypress.config.ts`:
+
+- `CYPRESS_ARTIST_USER` – artist account username (default `artist`)
+- `CYPRESS_PUBLIC_USER` – public user without dashboard access (default `public_user`)
+- `CYPRESS_MEMBER_USER` – member account username (default `member`)
+- `CYPRESS_MEMBER_PASS` – member account password (default `password`)
+
+Run all specs headlessly:
 
 ```bash
-CYPRESS_WP_USER=admin CYPRESS_WP_PASS=password npm run cypress:run
+npm run cypress:run
 ```
 
 Or open the interactive runner:
