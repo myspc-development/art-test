@@ -11,6 +11,11 @@ class RestDedupeTest extends \WP_UnitTestCase {
           public static function ok1(): string { return 'ok1'; }
           public static function ok2(): string { return 'ok2'; }
 
+          protected function setUp(): void {
+                  parent::setUp();
+                  $GLOBALS['ap_rest_dedupe_notices'] = array();
+          }
+
           public function test_removes_duplicate_routes_with_same_callback(): void {
                   $callback = [self::class, 'ok'];
                   $routes   = array(
@@ -46,9 +51,9 @@ class RestDedupeTest extends \WP_UnitTestCase {
                         ),
                 );
 
-                $this->setExpectedIncorrectUsage( 'ap_rest_dedupe' );
                 $filtered = \ap_deduplicate_rest_routes( $routes );
                 $this->assertCount( 2, $filtered['/ap/v1/thing'] );
-                $this->assertContains( '/ap/v1/thing', $GLOBALS['ap_rest_diagnostics']['conflicts'] );
+                $this->assertNotEmpty( $GLOBALS['ap_rest_dedupe_notices'] );
+                $this->assertStringContainsString( '/ap/v1/thing', $GLOBALS['ap_rest_dedupe_notices'][0] );
         }
 }
