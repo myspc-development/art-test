@@ -2,6 +2,8 @@
 <phpunit bootstrap="tests/bootstrap-wp.php" colors="true">
   <php>
     <env name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
+    <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-tests-config.php"/>
+    <env name="AP_TEST_MODE" value="1"/>
     <env name="DB_NAME" value="${DB_NAME}"/>
     <env name="DB_USER" value="${DB_USER}"/>
     <env name="DB_PASSWORD" value="${DB_PASSWORD}"/>
@@ -16,6 +18,14 @@
       <!-- NOTE: tests/Cli moved to Unit suite -->
     </testsuite>
   </testsuites>
+  <groups>
+    <include>
+      <group>restapi</group>
+    </include>
+  </groups>
+  <logging>
+    <junit outputFile="build/junit.xml"/>
+  </logging>
   <coverage>
     <include><directory>src</directory></include>
     <report>
