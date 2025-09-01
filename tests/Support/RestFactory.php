@@ -68,6 +68,20 @@ final class RestFactory {
     }
 
     /**
+     * Seed event meta with deterministic location data.
+     */
+    public static function seed_event_meta( int $id, array $meta = array() ): void {
+        $defaults = array(
+            'event_lat' => '40.71',
+            'event_lng' => '-74.00',
+        );
+
+        foreach ( array_merge( $defaults, $meta ) as $key => $value ) {
+            update_post_meta( $id, $key, $value );
+        }
+    }
+
+    /**
      * Create a term in the supplied taxonomy.
      */
     public static function term( string $taxonomy, array $args = array() ): int {
