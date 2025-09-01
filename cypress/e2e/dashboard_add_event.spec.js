@@ -1,5 +1,5 @@
 describe('Dashboard Quick Add Event button', () => {
-  const roles = ['artist', 'organization'];
+  const roles = [Cypress.env('ARTIST_USER'), 'organization'];
 
   roles.forEach((role) => {
     describe(`${role} flow`, () => {
@@ -11,7 +11,7 @@ describe('Dashboard Quick Add Event button', () => {
       it('shows Add New Event control', () => {
         cy.get('#ap-add-event-btn').should('exist').click();
 
-        if (role === 'artist') {
+        if (role === Cypress.env('ARTIST_USER')) {
           cy.get('#ap-add-event-form').should('be.visible');
 
           // mock network request to ensure submit triggers

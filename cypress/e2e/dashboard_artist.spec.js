@@ -9,7 +9,7 @@ describe('Artist Dashboard', () => {
   ];
 
   it('renders all artist widgets', () => {
-    cy.login('artist');
+    cy.login(Cypress.env('ARTIST_USER'));
     cy.visit('/dashboard');
     widgets.forEach((id) => {
       cy.get(`[data-widget-id="${id}"]`).should('exist');

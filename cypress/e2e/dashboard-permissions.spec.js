@@ -5,7 +5,7 @@ describe('Dashboard Permissions', () => {
     });
 
     it('shows message when user lacks dashboard capability', () => {
-        cy.login('public_user');
+        cy.login(Cypress.env('PUBLIC_USER'));
         cy.visit('/dashboard');
         cy.contains('Please log in to view your dashboard.');
     });
