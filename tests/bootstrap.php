@@ -25,7 +25,9 @@ if (!$wp_phpunit_dir) {
 }
 
 // Try a local wordpress-develop checkout if still not found
-$dev_bootstrap = '/home/craig/wordpress-develop/tests/phpunit/includes/bootstrap.php';
+$dev_bootstrap = getenv('WP_DEVELOP_DIR')
+    ? rtrim(getenv('WP_DEVELOP_DIR'), '/\\') . '/tests/phpunit/includes/bootstrap.php'
+    : null;
 
 // Load the WP test bootstrap
 $wp_root        = '';
@@ -36,11 +38,7 @@ if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/bootstrap.php'))
     $bootstrap_file = $wp_phpunit_dir . '/includes/bootstrap.php';
 } elseif (defined('ABSPATH') && file_exists(ABSPATH . 'tests/phpunit/includes/bootstrap.php')) {
     // ABSPATH may be defined by tests/wp-tests-config.php
-    $wp_root        = ABSPATH;
-    $bootstrap_file = ABSPATH . 'tests/phpunit/includes/bootstrap.php';
-} elseif (file_exists($dev_bootstrap)) {
-    $wp_root        = dirname(dirname(dirname(dirname($dev_bootstrap)))) . '/src';
-    $bootstrap_file = $dev_bootstrap;
+
 } else {
     fwrite(STDERR, "ERROR: Could not locate WordPress PHPUnit bootstrap.\n" .
                    "Set WP_PHPUNIT__DIR or install wp-phpunit in vendor.\n");

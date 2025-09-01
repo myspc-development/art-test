@@ -125,6 +125,8 @@ Database credentials for the WordPress test suite must be supplied via environme
 - `DB_HOST` – database host
 - `DB_CHARSET` – optional character set
 - `DB_COLLATE` – optional collation
+- `WP_DEVELOP_DIR` – path to a local `wordpress-develop` checkout. When set, tests use this
+  source instead of downloading WordPress.
 
 You may also set `WORDPRESS_TARBALL` to the path of a local WordPress archive if you need an offline setup. If any variables are omitted the test bootstrap will fail to connect to the database.
 
