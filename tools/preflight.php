@@ -88,7 +88,9 @@ $dbPass = $envValues['WP_TESTS_DB_PASSWORD'];
 $dbHost = $envValues['WP_TESTS_DB_HOST'];
 
 if ( ! file_exists( $configPath ) && file_exists( $samplePath ) ) {
-
+        if ( ! @copy( $samplePath, $configPath ) ) {
+                $errors[] = 'Failed to copy tests/wp-tests-config-sample.php to tests/wp-tests-config.php.';
+        }
 }
 
 if ( ! file_exists( $configPath ) ) {
