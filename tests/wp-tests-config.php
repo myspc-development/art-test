@@ -14,7 +14,3 @@ $table_prefix = 'wptests_';
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_DISPLAY', true );
 
-// Point to your local wordpress-develop build (matches your paths)
-if ( ! defined( 'ABSPATH' ) ) {
-    define( 'ABSPATH', '/home/craig/wordpress-develop/build/' );
-}

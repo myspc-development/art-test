@@ -4,9 +4,6 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
-if ( ! defined( 'ABSPATH' ) ) {
-        define( 'ABSPATH', __DIR__ . '/' );
-}
 
 require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/../../src/Dashboard/WidgetVisibility.php';

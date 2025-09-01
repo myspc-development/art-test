@@ -2,8 +2,6 @@
 
 namespace {
 	// WP-CLI stub loaded via bootstrap
-        if ( ! defined( 'ABSPATH' ) ) {
-                define( 'ABSPATH', __DIR__ ); }
         $GLOBALS['options'] = array();
         if ( ! function_exists( 'get_option' ) ) {
                 function get_option( $name, $default = false ) {

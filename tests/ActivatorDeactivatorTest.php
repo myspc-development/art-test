@@ -15,16 +15,6 @@ class ActivatorDeactivatorTest extends TestCase {
 		parent::setUp();
 		Monkey\setUp();
 
-		if ( ! defined( 'ABSPATH' ) ) {
-			$tmp = sys_get_temp_dir() . '/wp/';
-			define( 'ABSPATH', $tmp );
-			if ( ! is_dir( $tmp . 'wp-admin/includes' ) ) {
-				mkdir( $tmp . 'wp-admin/includes', 0777, true );
-			}
-			if ( ! file_exists( $tmp . 'wp-admin/includes/upgrade.php' ) ) {
-				file_put_contents( $tmp . 'wp-admin/includes/upgrade.php', '<?php' );
-			}
-		}
 
 		Functions\when( '__' )->alias( fn( $t ) => $t );
 		Functions\when( 'add_filter' )->justReturn( true );

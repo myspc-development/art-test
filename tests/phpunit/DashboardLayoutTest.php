@@ -4,9 +4,6 @@ namespace {
         if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
                 define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
         }
-        if ( ! defined( 'ABSPATH' ) ) {
-                define( 'ABSPATH', __DIR__ . '/' );
-        }
 }
 
 namespace ArtPulse\Core {

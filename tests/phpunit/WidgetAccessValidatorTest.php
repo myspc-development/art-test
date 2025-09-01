@@ -1,8 +1,5 @@
 <?php
 namespace {
-    if ( ! defined( 'ABSPATH' ) ) {
-        define( 'ABSPATH', __DIR__ . '/' );
-    }
     if ( ! function_exists( 'get_role' ) ) {
         function get_role( $role ) {
             $caps = $GLOBALS['test_roles'][ $role ] ?? array();

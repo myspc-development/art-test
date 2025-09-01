@@ -67,9 +67,6 @@ namespace ArtPulse\Core\Tests {
 				'actions' => array(),
 				'filters' => array(),
 			);
-			if ( ! defined( 'ABSPATH' ) ) {
-				define( 'ABSPATH', __DIR__ );
-			}
 
 			$this->uploadsDir = sys_get_temp_dir() . '/ap_uploads_' . uniqid();
 			mkdir( $this->uploadsDir );

@@ -21,9 +21,6 @@ namespace ArtPulse\Core {
 namespace {
 	require_once __DIR__ . '/../TestStubs.php';
 
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
 
 	if ( ! function_exists( 'esc_html__' ) ) {
 		function esc_html__( $text, $domain = null ) {

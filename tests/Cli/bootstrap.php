@@ -1,9 +1,6 @@
 <?php
 declare(strict_types=1);
 
-if (!defined('ABSPATH')) {
-    define('ABSPATH', __DIR__);
-}
 
 // Load Patchwork early so we can redefine classes if necessary.
 $patchwork = __DIR__ . '/../../vendor/antecedent/patchwork/Patchwork.php';

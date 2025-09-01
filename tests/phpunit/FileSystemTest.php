@@ -91,13 +91,6 @@ class FileSystemTest extends TestCase {
 	 * @runInSeparateProcess
 	 */
 	public function test_root_guard_refuses_abspath(): void {
-		$root = defined( 'ABSPATH' ) ? ABSPATH : sys_get_temp_dir() . '/wp-test-root';
-		if ( ! defined( 'ABSPATH' ) ) {
-			define( 'ABSPATH', $root );
-		}
-		if ( ! file_exists( $root ) ) {
-			mkdir( $root, 0777, true );
-		}
 		$this->assertFalse( FileSystem::safe_unlink( ABSPATH ) );
 		$this->assertFalse( FileSystem::rm_rf( ABSPATH ) );
 		$this->assertTrue( file_exists( ABSPATH ) );

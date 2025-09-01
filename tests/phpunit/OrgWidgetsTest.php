@@ -28,9 +28,6 @@ require_once __DIR__ . '/../TestStubs.php';
 class OrgWidgetsTest extends TestCase {
         protected function setUp(): void {
                 parent::setUp();
-                if ( ! defined( 'ABSPATH' ) ) {
-                        define( 'ABSPATH', __DIR__ );
-                }
                 $ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
                 $prop = $ref->getProperty( 'widgets' );
                 $prop->setAccessible( true );

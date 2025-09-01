@@ -69,10 +69,6 @@ namespace ArtPulse\Cli\Tests {
 	class CheckWidgetPresetsCommandTest extends TestCase {
 
 		protected function setUp(): void {
-			// Provide ABSPATH for any include checks in CLI file.
-			if ( ! defined( 'ABSPATH' ) ) {
-				define( 'ABSPATH', __DIR__ );
-			}
 
 			// Use the unit WP-CLI stub (autoloaded by dev autoload); guard in case it isn't loaded yet.
 			if ( ! class_exists('\WP_CLI') && file_exists(__DIR__ . '/../../tests/Support/WpCliStub.php') ) {

@@ -38,9 +38,6 @@ class AvatarHttpsFixTest extends TestCase {
 			}
 		}
 
-		if ( ! defined( 'ABSPATH' ) ) {
-			define( 'ABSPATH', sys_get_temp_dir() . '/wp/' );
-		}
 
 		require __DIR__ . '/../includes/avatar-https-fix.php';
 	}

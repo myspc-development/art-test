@@ -15,9 +15,6 @@ require_once __DIR__ . '/quick-add-bootstrap.php';
 class QuickAddEventWidgetTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
-		if ( ! defined( 'ABSPATH' ) ) {
-			define( 'ABSPATH', __DIR__ );
-		}
 		Monkey\setUp();
 
 		when( 'current_user_can' )->justReturn( true );
