@@ -37,7 +37,11 @@
     "test:unit": "vendor/bin/phpunit -c phpunit.unit.xml.dist --no-coverage",
     "test:rest": "vendor/bin/phpunit -c phpunit.wp.xml.dist --group restapi -v --log-junit build/junit.xml",
     "test:rest:buckets": "bash bin/rest-buckets",
-    "test:smoke": "bin/test-rest-smoke"
+    "test:smoke": "bin/test-rest-smoke",
+    "test:php:local": [
+      "@test:unit",
+      "@test:rest"
+    ]
   },
   "config": {
     "allow-plugins": {
