@@ -3,6 +3,7 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Admin\MetaBoxesEvent;
 use ArtPulse\Rest\RsvpRestController;
+use ArtPulse\Tests\Email;
 
 /**
 
@@ -12,18 +13,21 @@ use ArtPulse\Rest\RsvpRestController;
 
 class RsvpIntegrationTest extends \WP_UnitTestCase {
 
-	private int $event_id;
-	private int $user1;
-	private int $user2;
-	private array $emails = array();
+        private int $event_id;
+        private int $user1;
+        private int $user2;
 
-	public function set_up() {
-		parent::set_up();
-		do_action( 'init' );
-		add_filter( 'pre_wp_mail', array( $this, 'capture_mail' ), 10, 6 );
+        public static function setUpBeforeClass(): void {
+                parent::setUpBeforeClass();
+                Email::install();
+        }
 
-		$this->user1 = self::factory()->user->create( array( 'role' => 'subscriber' ) );
-		$this->user2 = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+        public function set_up() {
+                parent::set_up();
+                do_action( 'init' );
+
+                $this->user1 = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+                $this->user2 = self::factory()->user->create( array( 'role' => 'subscriber' ) );
 
 		$this->event_id = wp_insert_post(
 			array(
@@ -42,17 +46,11 @@ class RsvpIntegrationTest extends \WP_UnitTestCase {
 		do_action( 'rest_api_init' );
 	}
 
-	public function tear_down() {
-		remove_filter( 'pre_wp_mail', array( $this, 'capture_mail' ), 10 );
-		$_POST = array();
-		parent::tear_down();
-	}
-
-	public function capture_mail(): bool {
-		$args           = func_get_args();
-		$this->emails[] = $args;
-		return true;
-	}
+        public function tear_down() {
+                Email::clear();
+                $_POST = array();
+                parent::tear_down();
+        }
 
 	public function test_rsvp_meta_fields_saved(): void {
 		$admin = self::factory()->user->create( array( 'role' => 'administrator' ) );

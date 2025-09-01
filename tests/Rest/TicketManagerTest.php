@@ -2,25 +2,28 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Monetization\TicketManager;
-
+use ArtPulse\Tests\Email;
 
 /**
  * @group REST
  */
 class TicketManagerTest extends \WP_UnitTestCase {
 
-	private int $event_id;
-	private int $user_id;
-	private array $emails = array();
+        private int $event_id;
+        private int $user_id;
 
-	public function set_up() {
-		parent::set_up();
-		\ArtPulse\DB\create_monetization_tables();
-		add_filter( 'pre_wp_mail', array( $this, 'capture_mail' ), 10, 6 );
-		do_action( 'init' );
-		$this->user_id = self::factory()->user->create( array( 'user_email' => 'buyer@test.com' ) );
-		wp_set_current_user( $this->user_id );
-		$this->event_id = wp_insert_post(
+        public static function setUpBeforeClass(): void {
+                parent::setUpBeforeClass();
+                Email::install();
+        }
+
+        public function set_up() {
+                parent::set_up();
+                \ArtPulse\DB\create_monetization_tables();
+                do_action( 'init' );
+                $this->user_id = self::factory()->user->create( array( 'user_email' => 'buyer@test.com' ) );
+                wp_set_current_user( $this->user_id );
+                $this->event_id = wp_insert_post(
 			array(
 				'post_title'  => 'Event',
 				'post_type'   => 'artpulse_event',
@@ -31,15 +34,10 @@ class TicketManagerTest extends \WP_UnitTestCase {
 		do_action( 'rest_api_init' );
 	}
 
-	public function tear_down() {
-		remove_filter( 'pre_wp_mail', array( $this, 'capture_mail' ), 10 );
-		parent::tear_down();
-	}
-
-	public function capture_mail( $null, $to, $subject, $message ): bool {
-		$this->emails[] = array( $to, $subject, $message );
-		return true;
-	}
+        public function tear_down() {
+                Email::clear();
+                parent::tear_down();
+        }
 
 	private function create_ticket_tier( int $inventory, int $sold = 0, int $max = 0 ): int {
 		global $wpdb;
@@ -98,9 +96,10 @@ class TicketManagerTest extends \WP_UnitTestCase {
 		$req       = new \WP_REST_Request( 'POST', "/artpulse/v1/event/{$this->event_id}/buy-ticket" );
 		$req->set_param( 'ticket_id', $ticket_id );
 		$req->set_param( 'quantity', 1 );
-		rest_get_server()->dispatch( $req );
-		$this->assertCount( 1, $this->emails );
-		$this->assertSame( 'buyer@test.com', $this->emails[0][0] );
+                rest_get_server()->dispatch( $req );
+                $emails = Email::messages();
+                $this->assertCount( 1, $emails );
+                $this->assertSame( 'buyer@test.com', $emails[0][0] );
 	}
 
 	public function test_per_user_limit_blocks_extra_purchase(): void {
@@ -138,9 +137,10 @@ class TicketManagerTest extends \WP_UnitTestCase {
 		);
 		$ticket_id = $wpdb->insert_id;
 
-		TicketManager::handle_completed_order( $this->user_id, $ticket_id, 1 );
+                TicketManager::handle_completed_order( $this->user_id, $ticket_id, 1 );
 
-		$this->assertCount( 1, $this->emails );
-		$this->assertSame( 'buyer@test.com', $this->emails[0][0] );
-	}
+                $emails = Email::messages();
+                $this->assertCount( 1, $emails );
+                $this->assertSame( 'buyer@test.com', $emails[0][0] );
+        }
 }
