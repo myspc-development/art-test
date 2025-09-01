@@ -61,26 +61,40 @@ namespace ArtPulse\Core {
 }
 
 namespace ArtPulse\Cli\Tests {
-	use PHPUnit\Framework\TestCase;
-	use ArtPulse\Core\DashboardWidgetRegistry;
-	use WP_CLI;
+        use PHPUnit\Framework\TestCase;
+        use ArtPulse\Core\DashboardWidgetRegistry;
+        use WP_CLI;
+        use ArtPulse\Tests\WpTeardownTrait;
 
 	require_once __DIR__ . '/../../src/Cli/WidgetDoctor.php';
 
-	class WidgetDoctorCommandTest extends TestCase {
-		protected function setUp(): void {
-			WP_CLI::$commands          = array();
-			WP_CLI::$last_output       = '';
-			$GLOBALS['hidden_widgets'] = array();
-			$GLOBALS['options']        = array();
-			DashboardWidgetRegistry::set( array() );
-			WP_CLI::add_command( 'artpulse widgets', \ArtPulse\Cli\WidgetDoctor::class );
-		}
+        class WidgetDoctorCommandTest extends TestCase {
+                use WpTeardownTrait;
 
-		public function test_list_outputs_table(): void {
-			DashboardWidgetRegistry::set(
-				array(
-					'widget_one' => array(
+                protected function setUp(): void {
+                        WP_CLI::$commands          = array();
+                        WP_CLI::$last_output       = '';
+                        $GLOBALS['hidden_widgets'] = array();
+                        $GLOBALS['options']        = array();
+                        DashboardWidgetRegistry::set( array() );
+                        WP_CLI::add_command( 'artpulse widgets', \ArtPulse\Cli\WidgetDoctor::class );
+                }
+
+                protected function tearDown(): void {
+                        $this->reset_wp_state();
+                        WP_CLI::$commands    = array();
+                        WP_CLI::$last_output = '';
+                        $GLOBALS['hidden_widgets'] = array();
+                        $GLOBALS['options']        = array();
+                }
+
+                public function test_list_outputs_table(): void {
+                        if ( ! class_exists( 'WP_CLI' ) ) {
+                                $this->markTestSkipped( 'WP_CLI is not available.' );
+                        }
+                        DashboardWidgetRegistry::set(
+                                array(
+                                        'widget_one' => array(
 						'status'   => 'active',
 						'roles'    => array( 'member' ),
 						'callback' => '__return_true',
@@ -97,10 +111,13 @@ namespace ArtPulse\Cli\Tests {
 			$this->assertStringContainsString( "widget_two\tartist", $out );
 		}
 
-		public function test_list_supports_json(): void {
-			DashboardWidgetRegistry::set(
-				array(
-					'widget_one' => array(
+                public function test_list_supports_json(): void {
+                        if ( ! class_exists( 'WP_CLI' ) ) {
+                                $this->markTestSkipped( 'WP_CLI is not available.' );
+                        }
+                        DashboardWidgetRegistry::set(
+                                array(
+                                        'widget_one' => array(
 						'status'   => 'active',
 						'roles'    => array( 'member' ),
 						'callback' => '__return_true',
@@ -117,10 +134,13 @@ namespace ArtPulse\Cli\Tests {
 			$this->assertSame( 'artist', $decoded[1]['roles'] );
 		}
 
-		public function test_audit_reports_issues_and_errors(): void {
-			DashboardWidgetRegistry::set(
-				array(
-					'widget_ok'     => array(
+                public function test_audit_reports_issues_and_errors(): void {
+                        if ( ! class_exists( 'WP_CLI' ) ) {
+                                $this->markTestSkipped( 'WP_CLI is not available.' );
+                        }
+                        DashboardWidgetRegistry::set(
+                                array(
+                                        'widget_ok'     => array(
 						'status'   => 'active',
 						'callback' => '__return_true',
 					),
@@ -146,10 +166,13 @@ namespace ArtPulse\Cli\Tests {
 			}
 		}
 
-		public function test_fix_unhides_and_activates(): void {
-			DashboardWidgetRegistry::set(
-				array(
-					'widget_fix' => array(
+                public function test_fix_unhides_and_activates(): void {
+                        if ( ! class_exists( 'WP_CLI' ) ) {
+                                $this->markTestSkipped( 'WP_CLI is not available.' );
+                        }
+                        DashboardWidgetRegistry::set(
+                                array(
+                                        'widget_fix' => array(
 						'status'   => 'coming_soon',
 						'callback' => '__return_true',
 					),

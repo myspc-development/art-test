@@ -57,8 +57,9 @@ namespace ArtPulse\Cli\Tests {
 
 	use ArtPulse\Core\DashboardController;
 	use ArtPulse\Core\DashboardWidgetRegistry;
-	use ArtPulse\Tests\Stubs\DashboardControllerStub;
-	use ArtPulse\Tests\Stubs\DashboardWidgetRegistryStub;
+        use ArtPulse\Tests\Stubs\DashboardControllerStub;
+        use ArtPulse\Tests\Stubs\DashboardWidgetRegistryStub;
+        use ArtPulse\Tests\WpTeardownTrait;
 
 	/**
 	 * Run under the unit suite (phpunit.unit.xml.dist).
@@ -66,7 +67,8 @@ namespace ArtPulse\Cli\Tests {
 	 *
 	 * @runInSeparateProcess
 	 */
-	class CheckWidgetPresetsCommandTest extends TestCase {
+        class CheckWidgetPresetsCommandTest extends TestCase {
+                use WpTeardownTrait;
 
 		protected function setUp(): void {
 
@@ -94,15 +96,19 @@ namespace ArtPulse\Cli\Tests {
 			WP_CLI::$last_output = '';
 		}
 
-		protected function tearDown(): void {
-			WP_CLI::$commands    = array();
-			WP_CLI::$last_output = '';
-		}
+                protected function tearDown(): void {
+                        $this->reset_wp_state();
+                        WP_CLI::$commands    = array();
+                        WP_CLI::$last_output = '';
+                }
 
-		public function test_reports_warnings_and_errors(): void {
-			// 1) Registry: one valid, one restricted (capability), and intentionally leave one "missing".
-			DashboardWidgetRegistry::set_widgets(
-				array(
+                public function test_reports_warnings_and_errors(): void {
+                        if ( ! class_exists( 'WP_CLI' ) ) {
+                                $this->markTestSkipped( 'WP_CLI is not available.' );
+                        }
+                        // 1) Registry: one valid, one restricted (capability), and intentionally leave one "missing".
+                        DashboardWidgetRegistry::set_widgets(
+                                array(
 					'widget_valid_widget' => array(
 						'label' => 'Valid',
 						'roles' => array( 'member' ),

@@ -7,6 +7,7 @@ require_once __DIR__ . '/../../includes/class-cli-rest-route-audit.php';
 
 use PHPUnit\Framework\TestCase;
 use WP_CLI;
+use ArtPulse\Tests\WpTeardownTrait;
 
 /**
 
@@ -15,12 +16,19 @@ use WP_CLI;
  */
 
 class RestRouteAuditCliTest extends TestCase {
+        use WpTeardownTrait;
 
-	protected function setUp(): void {
-		WP_CLI::$commands       = array();
-		WP_CLI::$last_output    = '';
-		$GLOBALS['rest_server'] = null;
-	}
+        protected function setUp(): void {
+                WP_CLI::$commands       = array();
+                WP_CLI::$last_output    = '';
+                $GLOBALS['rest_server'] = null;
+        }
+
+        protected function tearDown(): void {
+                $this->reset_wp_state();
+                WP_CLI::$commands    = array();
+                WP_CLI::$last_output = '';
+        }
 
 	private static function server( array $routes ) {
 		return new class($routes) {
@@ -37,8 +45,11 @@ class RestRouteAuditCliTest extends TestCase {
 	public static function return_false() {
 		return false; }
 
-	public function test_json_output_no_conflicts(): void {
-		global $rest_server;
+        public function test_json_output_no_conflicts(): void {
+                if ( ! class_exists( 'WP_CLI' ) ) {
+                        $this->markTestSkipped( 'WP_CLI is not available.' );
+                }
+                global $rest_server;
                $rest_server = self::server(
                        array(
                                '/ap/v1/widget_foo' => array(
@@ -56,9 +67,12 @@ class RestRouteAuditCliTest extends TestCase {
 		$this->assertStringContainsString( 'No REST route conflicts found.', $out2 );
 	}
 
-	public function test_conflict_detection(): void {
-		global $rest_server;
-		$rest_server = self::server(
+        public function test_conflict_detection(): void {
+                if ( ! class_exists( 'WP_CLI' ) ) {
+                        $this->markTestSkipped( 'WP_CLI is not available.' );
+                }
+                global $rest_server;
+                $rest_server = self::server(
 			array(
 				'/ap/v1/conflict' => array(
 					array(
