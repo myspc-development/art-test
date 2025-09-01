@@ -56,15 +56,15 @@ if ( ! function_exists( __NAMESPACE__ . '\esc_url' ) ) {
 		return $url; }
 }
 if ( ! function_exists( __NAMESPACE__ . '\do_shortcode' ) ) {
-	function do_shortcode( $code ) {
-		if ( $code === '[ap_submit_artist]' ) {
-			return '<form class="ap-artist-submission-form"></form>';
-		}
-	}
-	if ( $code === '[ap_submit_organization]' ) {
-		return '<form class="ap-org-submission-form"></form>';
-	}
-	return '';
+        function do_shortcode( $code ) {
+                if ( $code === '[ap_submit_artist]' ) {
+                        return '<form class="ap-artist-submission-form"></form>';
+                }
+                if ( $code === '[ap_submit_organization]' ) {
+                        return '<form class="ap-org-submission-form"></form>';
+                }
+                return '';
+        }
 }
 if ( ! function_exists( __NAMESPACE__ . '\locate_template' ) ) {
 	function locate_template( $template ) {
