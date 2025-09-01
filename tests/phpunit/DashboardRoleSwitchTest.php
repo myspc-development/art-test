@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/../Support/Stubs/DashboardControllerStub.php';
+require_once __DIR__ . '/../Stubs/WP_Query.php';
+if ( ! class_exists( 'WP_Query' ) ) {
+        class_alias( \ArtPulse\Tests\Stubs\WP_Query::class, 'WP_Query' );
+}
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardController;
@@ -38,13 +42,6 @@ final class DashboardRoleSwitchTest extends TestCase {
                 Functions\when( 'is_user_logged_in' )->justReturn( true );
                 Functions\when( 'current_user_can' )->justReturn( true );
                 Functions\when( 'register_activation_hook' )->justReturn( null );
-                if ( ! class_exists( 'WP_Query' ) ) {
-                        class WP_Query {
-                                public function get( $key ) {
-                                        return '';
-                                }
-                        }
-                }
                 Functions\when( 'get_query_var' )->alias( fn( $key ) => $_GET[ $key ] ?? '' );
                 Functions\when( 'set_query_var' )->alias( fn( $key, $value ) => $_GET[ $key ] = $value );
 
