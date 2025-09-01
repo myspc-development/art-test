@@ -6,7 +6,9 @@
   "scripts": {
     "build": "echo 'no-op build' && exit 0",
     "dev": "rollup -c -w",
-    "test": "npm run test:all",
+    "test": "vendor/bin/phpunit -c phpunit.wp.xml.dist",
+    "test:rest": "vendor/bin/phpunit -c phpunit.wp.xml.dist --group restapi",
+    "test:frontend": "vendor/bin/phpunit -c phpunit.wp.xml.dist --testsuite Frontend || vendor/bin/phpunit -c phpunit.wp.xml.dist tests/Frontend",
     "test:all": "npm run test:js && npm run test:php && npm run cypress:run && npm run test:e2e",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
