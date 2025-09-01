@@ -12,6 +12,8 @@ function fail( array $errors ): void {
         exit( 1 );
 }
 
+$errors = array();
+
 $root      = dirname( __DIR__ );
 $phpunit   = $root . '/vendor/bin/phpunit';
 $wpSetting = $root . '/vendor/wp-phpunit/wp-phpunit/wordpress/wp-settings.php';
