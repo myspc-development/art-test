@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/bootstrap.php';
 
 use ArtPulse\Tests\Widgets\WidgetTestCase;
 use ArtPulse\Widgets\Member\ActivityFeedWidget;

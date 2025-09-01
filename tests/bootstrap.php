@@ -51,7 +51,10 @@ if (file_exists($kses) && ! function_exists('wp_kses')) {
     require_once $kses;
 }
 
-require_once $bootstrap_file;
+// Load WP test functions early so we can hook before WordPress boots
+if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/functions.php')) {
+    require_once $wp_phpunit_dir . '/includes/functions.php';
+}
 
 // 4) Load the plugin under test once WordPress loads mu-plugins
 tests_add_filter('muplugins_loaded', function () {
@@ -73,5 +76,9 @@ tests_add_filter('muplugins_loaded', function () {
     }
 });
 
-// 5) Load shared Frontend stubs AFTER WP test environment is initialized
+// Now bootstrap WordPress
+require_once $bootstrap_file;
+
+// 5) Load shared stubs AFTER WP test environment is initialized
+require_once __DIR__ . '/TestStubs.php';
 require_once __DIR__ . '/Frontend/_stubs.php';
