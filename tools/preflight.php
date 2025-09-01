@@ -42,6 +42,17 @@ function parse_db_host( string $raw ): array {
                 }
         }
 
+        // host:port or host
+        $host  = $raw;
+        $port  = null;
+        $colon = strrpos( $raw, ':' );
+        if ( $colon !== false ) {
+                $host = substr( $raw, 0, $colon );
+                $port = (int) substr( $raw, $colon + 1 );
+        }
+
+        return array( $host ?: null, $port ?: null, null );
+}
 
 $configPath = $root . '/tests/wp-tests-config.php';
 $samplePath = $root . '/tests/wp-tests-config-sample.php';
