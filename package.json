@@ -63,6 +63,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jest-junit": "^16",
     "postcss-import": "^16.1.1",
     "postcss-nested": "^7.0.2",
     "prettier": "^3.6.2",
@@ -70,9 +71,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "vitest": "^3.2.4",
-    "jest-junit": "^16"
+    "typescript": "^5.4.5"
   },
   "description": "[![CI](https://github.com/example/art-test/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/example/art-test/actions/workflows/tests.yml) [![Coverage](https://img.shields.io/codecov/c/github/example/art-test?label=coverage)](https://codecov.io/gh/example/art-test)",
   "main": "eslint.config.js",
