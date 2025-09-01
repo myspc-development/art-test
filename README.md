@@ -9,12 +9,13 @@ Site administrators should consult the [Admin Guide](docs/guides/admin/README.md
 
 ## Quickstart
 
-1. `export WP_CORE_DIR=/path/to/wordpress-develop/build`
-2. `composer run wp:core-link`
-3. `composer preflight`
-4. `composer test:unit`
-5. `composer test:rest`
-6. `bin/test-rest-smoke`
+1. `export WP_DEVELOP_DIR=/path/to/wordpress-develop`
+2. `export WP_CORE_DIR=$WP_DEVELOP_DIR/build`
+3. `composer run wp:core-link`
+4. `composer preflight`
+5. `composer test:unit`
+6. `composer test:rest`
+7. `bin/test-rest-smoke`
 
 > Code coverage requires the [PCOV](https://github.com/krakjoe/pcov) extension or Xdebug 3 with `XDEBUG_MODE=coverage`.
 
