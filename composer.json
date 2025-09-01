@@ -32,6 +32,12 @@
     "erusev/parsedown": "^1.7"
   },
   "scripts": {
+    "test": [
+      "@test:php:local",
+      "@test:unit",
+      "@test:rest"
+    ],
+    "test:frontend": "vendor/bin/phpunit -c phpunit.wp.xml.dist tests/Frontend",
     "preflight": "php tools/preflight.php",
     "wp:core-link": "php bin/wp-core-link",
     "test:unit": "vendor/bin/phpunit -c phpunit.unit.xml.dist --no-coverage",
