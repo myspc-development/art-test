@@ -42,7 +42,13 @@ class EmailService {
 				case 'sendgrid':
 					return self::send_sendgrid( $to, $subject, $message, $options['sendgrid_api_key'] ?? '', $from_name, $from_address );
 				default:
-					return \ArtPulse\Community\EmailNotifier::send( $to, $subject, $message, $headers );
+					// Allow custom filters to modify the parameters before mailing.
+					// Filters should use priority 10 and accept four arguments.
+					list( $to, $subject, $message, $headers ) = apply_filters(
+						'wp_mail',
+						array( $to, $subject, $message, $headers )
+					);
+					return wp_mail( $to, $subject, $message, $headers, $attachments );
 			}
 		} finally {
 			if ( $from_cb ) {
