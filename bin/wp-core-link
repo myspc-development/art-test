@@ -2,22 +2,68 @@
 <?php
 declare(strict_types=1);
 
-$root = dirname(__DIR__);
+$root     = dirname(__DIR__);
 $testsDir = $root . '/vendor/wp-phpunit/wp-phpunit';
-$coreDir = getenv('WP_CORE_DIR');
-if ($coreDir === false || $coreDir === '') {
-    fwrite(STDERR, "WP_CORE_DIR not set.\nExport WP_CORE_DIR=/absolute/path/to/wordpress\n");
+
+$coreDir = getenv('WP_CORE_DIR') ?: '';
+if ($coreDir !== '' && file_exists($coreDir . '/wp-settings.php')) {
+    $coreDir = rtrim($coreDir, '/');
+} else {
+    $coreDir   = '';
+    $candidates = [];
+
+    $home = getenv('HOME') ?: '';
+    if ($home !== '') {
+        $candidates[] = $home . '/wordpress-develop/build';
+
+        $findHome = trim(
+            shell_exec('find ' . escapeshellarg($home) . ' -type d -path "*/wordpress-develop/build" 2>/dev/null')
+            ?? ''
+        );
+        if ($findHome !== '') {
+            $candidates = array_merge($candidates, preg_split("/\r?\n/", $findHome));
+        }
+    }
+
+    $gitRoot = trim(shell_exec('git rev-parse --show-toplevel 2>/dev/null') ?? '');
+    if ($gitRoot !== '') {
+        $candidates[] = dirname($gitRoot) . '/wordpress-develop/build';
+    }
+
+    $findRoot = trim(
+        shell_exec(
+            "find / -maxdepth 3 -type f -name wp-settings.php 2>/dev/null | " .
+            "grep '/build/wp-settings.php' | head -n1 | xargs -r dirname 2>/dev/null"
+        ) ?? ''
+    );
+    if ($findRoot !== '') {
+        $candidates[] = $findRoot;
+    }
+
+    foreach ($candidates as $candidate) {
+        if ($candidate !== '' && file_exists($candidate . '/wp-settings.php')) {
+            $coreDir = rtrim($candidate, '/');
+            break;
+        }
+    }
+}
+
+if ($coreDir === '' || !file_exists($coreDir . '/wp-settings.php')) {
+    if (($env = getenv('WP_CORE_DIR')) !== false && $env !== '') {
+        fwrite(STDERR, "WP_CORE_DIR={$env} is invalid or missing wp-settings.php\n");
+    }
+    fwrite(
+        STDERR,
+        "Could not locate WordPress core. Set WP_CORE_DIR or ensure wordpress-develop is available.\n"
+    );
     exit(1);
 }
-$coreDir = rtrim($coreDir, '/');
-if (!file_exists($coreDir . '/wp-settings.php')) {
-    fwrite(STDERR, "wp-settings.php not found in WP_CORE_DIR={$coreDir}\nEnsure WP_CORE_DIR points to a valid WordPress root.\n");
-    exit(1);
-}
+
 if (!is_dir($testsDir) && !mkdir($testsDir, 0777, true)) {
     fwrite(STDERR, "Failed to create {$testsDir}\n");
     exit(1);
 }
+
 $target = $testsDir . '/wordpress';
 if (is_link($target) || file_exists($target)) {
     if (!unlink($target)) {
@@ -25,13 +71,16 @@ if (is_link($target) || file_exists($target)) {
         exit(1);
     }
 }
+
 if (!symlink($coreDir, $target)) {
     fwrite(STDERR, "Could not create symlink {$target}\n");
     exit(1);
 }
+
 if (!file_exists($target . '/wp-settings.php')) {
     fwrite(STDERR, "wp core link failed\n");
     exit(1);
 }
 
 echo "Linked {$coreDir} -> {$target}" . PHP_EOL;
+
