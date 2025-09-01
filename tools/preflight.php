@@ -46,12 +46,27 @@ function parse_db_host( string $raw ): array {
 
 $errors = array();
 
-// Ensure tests configuration exists by copying the sample if missing.
+// Gather DB env (WP_TESTS_DB_* preferred, DB_* fallback)
+$dbHost = getenv( 'WP_TESTS_DB_HOST' ) ?: getenv( 'DB_HOST' ) ?: '127.0.0.1:3306';
+$dbUser = getenv( 'WP_TESTS_DB_USER' ) ?: getenv( 'DB_USER' ) ?: '';
+$dbPass = getenv( 'WP_TESTS_DB_PASSWORD' ) ?: getenv( 'DB_PASSWORD' ) ?: '';
+$dbName = getenv( 'WP_TESTS_DB_NAME' ) ?: getenv( 'DB_NAME' ) ?: 'wordpress_test';
+
+// Ensure tests configuration exists by copying the sample if missing and
+// populating it with the gathered DB settings.
 $root       = dirname( __DIR__ );
 $configPath = $root . '/tests/wp-tests-config.php';
 $samplePath = $root . '/tests/wp-tests-config-sample.php';
 if ( ! file_exists( $configPath ) && file_exists( $samplePath ) ) {
-    @copy( $samplePath, $configPath );
+    $cfg  = file_get_contents( $samplePath );
+    $map  = array(
+        "define( 'DB_NAME', getenv( 'WP_TESTS_DB_NAME' ) ?: 'wordpress_test' );" => "define( 'DB_NAME', " . var_export( $dbName, true ) . " );",
+        "define( 'DB_USER', getenv( 'WP_TESTS_DB_USER' ) ?: 'root' );" => "define( 'DB_USER', " . var_export( $dbUser, true ) . " );",
+        "define( 'DB_PASSWORD', getenv( 'WP_TESTS_DB_PASSWORD' ) ?: '' );" => "define( 'DB_PASSWORD', " . var_export( $dbPass, true ) . " );",
+        "define( 'DB_HOST', getenv( 'WP_TESTS_DB_HOST' ) ?: '127.0.0.1' );" => "define( 'DB_HOST', " . var_export( $dbHost, true ) . " );",
+    );
+    $cfg = str_replace( array_keys( $map ), array_values( $map ), $cfg );
+    @file_put_contents( $configPath, $cfg );
     echo 'Created tests/wp-tests-config.php from sample.' . "\n";
 }
 
@@ -72,12 +87,7 @@ if ( ! extension_loaded( 'mysqli' ) ) {
         $errors[] = 'The mysqli extension is not loaded (install/enable php-mysql for CLI).';
 }
 
-/** 3) Gather DB env (WP_TESTS_DB_* preferred, DB_* fallback) */
-$dbHost = getenv( 'WP_TESTS_DB_HOST' ) ?: getenv( 'DB_HOST' ) ?: '127.0.0.1:3306';
-$dbUser = getenv( 'WP_TESTS_DB_USER' ) ?: getenv( 'DB_USER' ) ?: '';
-$dbPass = getenv( 'WP_TESTS_DB_PASSWORD' ) ?: getenv( 'DB_PASSWORD' ) ?: '';
-$dbName = getenv( 'WP_TESTS_DB_NAME' ) ?: getenv( 'DB_NAME' ) ?: 'wordpress_test';
-
+/** 3) DB credentials provided */
 if ( $dbUser === '' ) {
         $errors[] = 'Database credentials not provided. Set WP_TESTS_DB_USER/PASSWORD/HOST/NAME.';
 }
