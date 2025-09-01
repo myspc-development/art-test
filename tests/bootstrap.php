@@ -28,18 +28,32 @@ if (!$wp_phpunit_dir) {
 $dev_bootstrap = '/home/craig/wordpress-develop/tests/phpunit/includes/bootstrap.php';
 
 // Load the WP test bootstrap
+$wp_root        = '';
+$bootstrap_file = '';
+
 if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/bootstrap.php')) {
-    require_once $wp_phpunit_dir . '/includes/bootstrap.php';
+    $wp_root        = dirname($wp_phpunit_dir);
+    $bootstrap_file = $wp_phpunit_dir . '/includes/bootstrap.php';
 } elseif (defined('ABSPATH') && file_exists(ABSPATH . 'tests/phpunit/includes/bootstrap.php')) {
     // ABSPATH may be defined by tests/wp-tests-config.php
-    require_once ABSPATH . 'tests/phpunit/includes/bootstrap.php';
+    $wp_root        = ABSPATH;
+    $bootstrap_file = ABSPATH . 'tests/phpunit/includes/bootstrap.php';
 } elseif (file_exists($dev_bootstrap)) {
-    require_once $dev_bootstrap;
+    $wp_root        = dirname(dirname(dirname(dirname($dev_bootstrap)))) . '/src';
+    $bootstrap_file = $dev_bootstrap;
 } else {
-    fwrite(STDERR, "ERROR: Could not locate WordPress PHPUnit bootstrap.\n".
+    fwrite(STDERR, "ERROR: Could not locate WordPress PHPUnit bootstrap.\n" .
                    "Set WP_PHPUNIT__DIR or install wp-phpunit in vendor.\n");
     exit(1);
 }
+
+$wp_root = rtrim($wp_root, '/');
+$kses    = $wp_root . '/wp-includes/kses.php';
+if (file_exists($kses) && ! function_exists('wp_kses')) {
+    require_once $kses;
+}
+
+require_once $bootstrap_file;
 
 // 4) Load the plugin under test once WordPress loads mu-plugins
 tests_add_filter('muplugins_loaded', function () {
