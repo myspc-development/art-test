@@ -7,17 +7,12 @@ if ( ! function_exists( __NAMESPACE__ . '\\wp_insert_post' ) ) {
 	function wp_insert_post( $arr ) {
 		return 123; }
 }
-if ( ! function_exists( __NAMESPACE__ . '\\wp_set_post_terms' ) ) {
-	function wp_set_post_terms( $id, $terms, $tax ) {
-		\ArtPulse\Frontend\Tests\EventServiceTest::$terms = array( $id, $terms, $tax ); }
+function wp_set_post_terms( $id, $terms, $tax ) {
+        \ArtPulse\Frontend\Tests\EventServiceTest::$terms = array( $id, $terms, $tax );
 }
 if ( ! function_exists( __NAMESPACE__ . '\\get_posts' ) ) {
 	function get_posts( $args = array() ) {
 		return \ArtPulse\Frontend\Tests\EventServiceTest::$user_org_posts; }
-}
-if ( ! function_exists( __NAMESPACE__ . '\\get_user_meta' ) ) {
-	function get_user_meta( $uid, $key, $single = false ) {
-		return \ArtPulse\Frontend\Tests\EventServiceTest::$user_meta; }
 }
 
 namespace ArtPulse\Frontend\Tests;
@@ -32,16 +27,16 @@ use ArtPulse\Frontend\EventService;
  */
 
 class EventServiceTest extends TestCase {
-	public static array $terms          = array();
-	public static array $user_org_posts = array();
-	public static int $user_meta        = 0;
+        public static array $terms          = array();
+        public static array $user_org_posts = array();
 
-	protected function setUp(): void {
-		\ArtPulse\Frontend\StubState::reset();
-		self::$terms          = array();
-		self::$user_org_posts = array( (object) array( 'ID' => 5 ) );
-		self::$user_meta      = 5;
-	}
+        protected function setUp(): void {
+                \ArtPulse\Frontend\StubState::reset();
+                self::$terms          = array();
+                self::$user_org_posts = array( (object) array( 'ID' => 5 ) );
+                $GLOBALS['__ap_test_user_meta'] = array();
+                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 5;
+        }
 
 	public function test_missing_title_returns_error(): void {
 		$result = EventService::create_event(
