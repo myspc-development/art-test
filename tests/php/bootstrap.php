@@ -4,7 +4,7 @@
  */
 
 $wp_phpunit_dir = getenv( 'WP_PHPUNIT__DIR' ) ?: __DIR__ . '/../../vendor/wp-phpunit/wp-phpunit';
-$tests_config   = getenv( 'WP_PHPUNIT__TESTS_CONFIG' ) ?: __DIR__ . '/wp-tests-config.php';
+$tests_config   = getenv( 'WP_PHPUNIT__TESTS_CONFIG' ) ?: __DIR__ . '/../wp-tests-config.php';
 
 if ( ! file_exists( $wp_phpunit_dir . '/includes/bootstrap.php' ) ) {
 	fwrite( STDERR, "\n[bootstrap] wp-phpunit not installed at {$wp_phpunit_dir}. Run composer install.\n" );
