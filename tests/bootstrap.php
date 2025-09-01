@@ -36,6 +36,11 @@ if (!$phpunitDir) {
 // Load WordPress test functions so we can hook into plugin loading.
 require_once $phpunitDir . '/includes/functions.php';
 
+// Ensure KSES functions are loaded for sanitization routines.
+if ( ! function_exists( 'wp_kses' ) ) {
+    require_once ABSPATH . WPINC . '/kses.php';
+}
+
 // Tell WordPress to load this plugin once the testing environment is set up.
 tests_add_filter('muplugins_loaded', static function () use ($pluginRoot): void {
     // Load the plugin's main file.
