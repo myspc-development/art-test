@@ -40,7 +40,7 @@ class RestDedupeTest extends \WP_UnitTestCase {
                 $this->assertCount( 1, $filtered['/ap/v1/thing'] );
         }
 
-          public function test_conflicting_routes_trigger_notice(): void {
+        public function test_conflicting_routes_trigger_notice(): void {
                   $cb1   = [self::class, 'ok1'];
                   $cb2   = [self::class, 'ok2'];
                   $routes = array(
@@ -60,5 +60,46 @@ class RestDedupeTest extends \WP_UnitTestCase {
                 $this->assertCount( 2, $filtered['/ap/v1/thing'] );
                 $this->assertNotEmpty( $GLOBALS['ap_rest_dedupe_notices'] );
                 $this->assertStringContainsString( '/ap/v1/thing', $GLOBALS['ap_rest_dedupe_notices'][0] );
+        }
+
+        public function test_removes_duplicate_routes_with_array_methods(): void {
+                $callback = [self::class, 'ok'];
+                $routes   = array(
+                        '/ap/v1/thing' => array(
+                                array(
+                                        'methods'  => array( 'get', 'post' ),
+                                        'callback' => $callback,
+                                ),
+                                array(
+                                        'methods'  => array( 'POST', 'GET' ),
+                                        'callback' => $callback,
+                                ),
+                        ),
+                );
+
+                $filtered = \ap_deduplicate_rest_routes( $routes );
+                $this->assertCount( 1, $filtered['/ap/v1/thing'] );
+                $this->assertSame( 'GET,POST', $filtered['/ap/v1/thing'][0]['methods'] );
+        }
+
+        public function test_conflicting_routes_trigger_notice_with_array_methods(): void {
+                $cb1   = [self::class, 'ok1'];
+                $cb2   = [self::class, 'ok2'];
+                $routes = array(
+                        '/ap/v1/thing' => array(
+                                array(
+                                        'methods'  => array( 'GET', 'POST' ),
+                                        'callback' => $cb1,
+                                ),
+                                array(
+                                        'methods'  => array( 'post', 'get' ),
+                                        'callback' => $cb2,
+                                ),
+                        ),
+                );
+
+                $filtered = \ap_deduplicate_rest_routes( $routes );
+                $this->assertCount( 2, $filtered['/ap/v1/thing'] );
+                $this->assertNotEmpty( $GLOBALS['ap_rest_dedupe_notices'] );
         }
 }

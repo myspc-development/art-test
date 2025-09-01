@@ -29,17 +29,23 @@ if ( ! function_exists( 'ap__callback_id' ) ) {
 }
 
 if ( ! function_exists( 'ap__normalize_method' ) ) {
-	function ap__normalize_method( $methods ): string {
-		$m = strtoupper( (string) $methods );
-		return match ( $m ) {
-			'READABLE'   => 'GET',
-			'CREATABLE'  => 'POST',
-			'EDITABLE'   => 'PUT',
-			'DELETABLE'  => 'DELETE',
-			'ALLMETHODS' => '*',
-			default      => $m,
-		};
-	}
+        function ap__normalize_method( $methods ): string {
+                if ( is_array( $methods ) ) {
+                        $methods = array_map( 'ap__normalize_method', $methods );
+                        $methods = array_unique( $methods );
+                        sort( $methods );
+                        return implode( ',', $methods );
+                }
+                $m = strtoupper( (string) $methods );
+                return match ( $m ) {
+                        'READABLE'   => 'GET',
+                        'CREATABLE'  => 'POST',
+                        'EDITABLE'   => 'PUT',
+                        'DELETABLE'  => 'DELETE',
+                        'ALLMETHODS' => '*',
+                        default      => $m,
+                };
+        }
 }
 
 if ( ! function_exists( 'ap_rest_dedupe_endpoints' ) ) {
