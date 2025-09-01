@@ -13,6 +13,12 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\WidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
 
+/**
+
+ * @group phpunit
+
+ */
+
 final class WidgetAliasTest extends TestCase {
 	protected function setUp(): void {
 		// ensure widgets+aliases registered for the test

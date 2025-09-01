@@ -7,6 +7,12 @@ use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 
 require_once __DIR__ . '/../TestStubs.php';
 
+/**
+
+ * @group phpunit
+
+ */
+
 class DashboardWidgetRegistryAliasTest extends TestCase {
         public static function renderBlank(): string { return ''; }
 

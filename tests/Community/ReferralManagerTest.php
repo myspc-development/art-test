@@ -5,6 +5,12 @@ use ArtPulse\Community\ReferralManager;
 use ArtPulse\Core\BadgeRules;
 use ArtPulse\Core\UserDashboardManager;
 
+/**
+
+ * @group community
+
+ */
+
 class ReferralManagerTest extends \WP_UnitTestCase {
 
 	private int $referrer;

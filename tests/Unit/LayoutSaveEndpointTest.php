@@ -33,6 +33,12 @@ namespace ArtPulse\Rest\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Rest\LayoutSaveEndpoint;
 
+/**
+
+ * @group unit
+
+ */
+
 class LayoutSaveEndpointTest extends TestCase {
 
         public function test_sets_403_status_when_not_logged_in(): void {

@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group core
+
+ */
+
 class UserLayoutManagerMergeTest extends \WP_UnitTestCase {
 
         public function set_up() {

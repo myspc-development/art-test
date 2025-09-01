@@ -7,6 +7,12 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 require_once __DIR__ . '/../TestStubs.php';
 
+/**
+
+ * @group phpunit
+
+ */
+
 class WidgetSourcesVisibilityTest extends TestCase {
 
         protected function setUp(): void {

@@ -7,6 +7,12 @@ function error_log( $msg ) {
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Dashboard\WidgetGuard;
 
+/**
+
+ * @group widgetguard
+
+ */
+
 class WidgetGuardTest extends WP_UnitTestCase {
 
 	public static array $logs = array();

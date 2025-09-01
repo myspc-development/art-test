@@ -40,6 +40,12 @@ if ( ! function_exists( __NAMESPACE__ . '\wp_mail' ) ) {
 		DashboardFeedbackManagerTest::$mail = array( $to, $sub, $body ); }
 }
 
+/**
+
+ * @group core
+
+ */
+
 class DBStub {
 	public $prefix      = 'wp_';
 	public $insert_args = array();

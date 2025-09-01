@@ -49,6 +49,9 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\FeedbackManager;
 
 if ( ! class_exists( __NAMESPACE__ . '\\WPDBStub' ) ) {
+	/**
+	 * @group core
+	 */
 	class WPDBStub {
 		public string $prefix     = 'wp_';
 		public array $insert_args = array();

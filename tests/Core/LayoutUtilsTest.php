@@ -3,6 +3,9 @@ namespace ArtPulse\Core\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\LayoutUtils;
+/**
+ * @group core
+ */
 class LayoutUtilsTest extends TestCase {
 
         public function test_normalize_layout_filters_invalid_and_duplicates(): void {

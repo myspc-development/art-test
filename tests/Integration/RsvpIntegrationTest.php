@@ -4,6 +4,12 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Admin\MetaBoxesEvent;
 use ArtPulse\Rest\RsvpRestController;
 
+/**
+
+ * @group integration
+
+ */
+
 class RsvpIntegrationTest extends \WP_UnitTestCase {
 
 	private int $event_id;

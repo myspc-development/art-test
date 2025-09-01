@@ -7,6 +7,9 @@ namespace ArtPulse\Tests\Stubs {
 	 * NOTE: Keep this lean so it doesn't leak unexpected behavior into other unit tests.
 	 */
 	if ( ! class_exists( DashboardWidgetRegistryStub::class, false ) ) {
+		/**
+		 * @group cli
+		 */
 		class DashboardWidgetRegistryStub {
 			/** @var array<string,array> */
 			private static array $widgets = array();

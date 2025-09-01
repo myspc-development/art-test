@@ -6,6 +6,12 @@ use ArtPulse\Tests\Stubs\MockStorage;
 use ArtPulse\Tests\Widgets\WidgetTestCase;
 use ArtPulse\Widgets\ProfileOverviewWidget;
 
+/**
+
+ * @group widgets
+
+ */
+
 class ProfileOverviewWidgetTest extends WidgetTestCase {
         protected function setUp(): void {
                 parent::setUp();

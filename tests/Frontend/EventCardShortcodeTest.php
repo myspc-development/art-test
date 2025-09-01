@@ -4,6 +4,12 @@ namespace ArtPulse\Frontend\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Frontend\EventCardShortcode;
 
+/**
+
+ * @group frontend
+
+ */
+
 class EventCardShortcodeTest extends WP_UnitTestCase {
 	public function test_shortcode_outputs_title(): void {
 		$id   = wp_insert_post(

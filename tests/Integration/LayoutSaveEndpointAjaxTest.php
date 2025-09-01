@@ -5,6 +5,12 @@ use WP_Ajax_UnitTestCase;
 use ArtPulse\Tests\AjaxTestHelper;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group integration
+
+ */
+
 class LayoutSaveEndpointAjaxTest extends WP_Ajax_UnitTestCase {
 
         use AjaxTestHelper;

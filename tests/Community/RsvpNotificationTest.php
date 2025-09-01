@@ -5,6 +5,12 @@ use ArtPulse\Rest\RsvpRestController;
 use ArtPulse\Community\NotificationManager;
 use ArtPulse\Community\NotificationHooks;
 
+/**
+
+ * @group community
+
+ */
+
 class RsvpNotificationTest extends \WP_UnitTestCase {
 
 	private int $organizer_id;

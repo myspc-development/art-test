@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Core\DashboardController;
 
+/**
+
+ * @group integration
+
+ */
+
 class ResolvedRoleHeaderTest extends \WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();

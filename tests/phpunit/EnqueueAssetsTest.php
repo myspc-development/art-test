@@ -7,6 +7,12 @@ use Brain\Monkey\Functions;
 use Brain\Monkey\Actions;
 use ArtPulse\Admin\EnqueueAssets;
 
+/**
+
+ * @group phpunit
+
+ */
+
 final class EnqueueAssetsTest extends TestCase {
 
 	private array $enqueuedScripts   = array();

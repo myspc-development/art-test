@@ -4,6 +4,12 @@ namespace ArtPulse\Frontend\Tests;
 use WP_UnitTestCase;
 use function ArtPulse\Frontend\ap_filter_events_callback;
 
+/**
+
+ * @group frontend
+
+ */
+
 class EventFilterCallbackTest extends WP_UnitTestCase {
 
 	private int $event1;

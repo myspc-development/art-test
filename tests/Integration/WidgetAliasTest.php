@@ -4,6 +4,12 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\WidgetRegistry;
 
+/**
+
+ * @group integration
+
+ */
+
 class WidgetAliasTest extends \WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();

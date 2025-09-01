@@ -5,6 +5,9 @@
  * @package ArtPulse
  * @subpackage Smoke
  */
+/**
+ * @group smoke
+ */
 class PluginLoadsTest extends WP_UnitTestCase {
 	/**
 	 * Verify WordPress bootstrap and plugin constants exist.

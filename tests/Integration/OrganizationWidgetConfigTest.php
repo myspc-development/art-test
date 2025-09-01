@@ -5,6 +5,12 @@ use WP_UnitTestCase;
 use ArtPulse\Core\WidgetRegistryLoader;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group integration
+
+ */
+
 class OrganizationWidgetConfigTest extends WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();

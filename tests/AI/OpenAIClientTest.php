@@ -5,6 +5,12 @@ use ArtPulse\AI\OpenAIClient;
 use WP_Error;
 use WP_UnitTestCase;
 
+/**
+
+ * @group ai
+
+ */
+
 class OpenAIClientTest extends WP_UnitTestCase {
 	private $http_response;
 	private $last_request;

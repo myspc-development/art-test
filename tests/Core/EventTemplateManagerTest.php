@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Core\EventTemplateManager;
 
+/**
+
+ * @group core
+
+ */
+
 class EventTemplateManagerTest extends WP_UnitTestCase {
 
 	private int $event_id;

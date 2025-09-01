@@ -7,6 +7,12 @@ use ArtPulse\Community\FollowManager;
 use ArtPulse\Community\NotificationManager;
 use ArtPulse\Rest\RsvpRestController;
 
+/**
+
+ * @group personalization
+
+ */
+
 class ActivityLoggingTest extends \WP_UnitTestCase {
 
 	private int $user_id;

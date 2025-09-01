@@ -4,6 +4,12 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group integration
+
+ */
+
 class DashboardWidgetVisibilityTest extends \WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();

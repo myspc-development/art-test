@@ -6,6 +6,12 @@ use ArtPulse\Community\NotificationManager;
 use ArtPulse\Core\CompetitionEntryManager;
 use WP_UnitTestCase;
 
+/**
+
+ * @group community
+
+ */
+
 class FavoritesManagerExtendedTest extends WP_UnitTestCase {
 
 	private int $user_id;

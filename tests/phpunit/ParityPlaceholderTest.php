@@ -9,6 +9,12 @@ use ArtPulse\Audit\Parity;
 
 require_once __DIR__ . '/../TestStubs.php';
 
+/**
+
+ * @group phpunit
+
+ */
+
 class ParityPlaceholderTest extends TestCase {
 
 	protected function setUp(): void {

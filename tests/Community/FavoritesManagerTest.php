@@ -5,6 +5,12 @@ use WP_UnitTestCase;
 use ArtPulse\Community\FavoritesManager;
 use ArtPulse\Community\NotificationManager;
 
+/**
+
+ * @group community
+
+ */
+
 class FavoritesManagerTest extends WP_UnitTestCase {
 
 	private int $user_id;

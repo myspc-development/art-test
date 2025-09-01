@@ -8,6 +8,12 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
 use PHPUnit\Framework\TestCase;
 
+/**
+
+ * @group admin
+
+ */
+
 class GetRoleWidgetsForCurrentUserTest extends TestCase {
 
 	protected function setUp(): void {

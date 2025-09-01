@@ -8,6 +8,12 @@ use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
 
+/**
+
+ * @group phpunit
+
+ */
+
 class DashboardPreviewUserTest extends TestCase {
 	protected function setUp(): void {
 		MockStorage::$users         = array();

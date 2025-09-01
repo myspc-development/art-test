@@ -10,6 +10,12 @@ if ( ! function_exists( 'add_action' ) ) {
 	function add_action( $hook, $callback, $priority = 10, $args = 1 ): void {}
 }
 
+/**
+
+ * @group widgets
+
+ */
+
 class SponsorDisplayWidgetTest extends \WP_UnitTestCase {
 	public function test_append_disclosure_returns_string() {
 		$result = SponsorDisplayWidget::append_disclosure( 'content' );

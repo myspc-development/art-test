@@ -48,6 +48,12 @@ namespace ArtPulse\Admin\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group admin
+
+ */
+
 class WidgetLayoutAjaxTest extends TestCase {
 
 	public static bool $can     = true;

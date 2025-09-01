@@ -5,6 +5,12 @@ use WP_UnitTestCase;
 use ArtPulse\Core\EventViewCounter;
 use ArtPulse\Core\EventMetrics;
 
+/**
+
+ * @group core
+
+ */
+
 class EventViewCounterTest extends WP_UnitTestCase {
 
 	private int $event_id;

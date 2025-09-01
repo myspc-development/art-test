@@ -28,6 +28,9 @@ if ( ! function_exists( __NAMESPACE__ . '\\__' ) ) {
 }
 
 if ( ! class_exists( __NAMESPACE__ . '\\wpdb' ) ) {
+	/**
+	 * @group admin
+	 */
 	class wpdb {
 		public static array $col_results = array();
 		public $posts                    = 'wp_posts';

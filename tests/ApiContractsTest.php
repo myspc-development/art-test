@@ -2,6 +2,9 @@
 /**
  * PHPUnit tests ensuring REST API routes follow basic contracts.
  */
+/**
+ * @group apicontracts
+ */
 class ApiContractsTest extends WP_UnitTestCase {
 	/** Ensure every route defines permission_callback. */
 	public function test_routes_have_permission_callbacks() {

@@ -8,6 +8,12 @@ if ( ! function_exists( 'do_shortcode' ) ) {
 	}
 }
 
+/**
+
+ * @group phpunit
+
+ */
+
 class NearbyEventsWidgetTest extends TestCase {
 	public function test_render_outputs_shortcode(): void {
 		$output = NearbyEventsWidget::render();

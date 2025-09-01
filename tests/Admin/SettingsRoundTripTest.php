@@ -1,6 +1,12 @@
 <?php
 namespace ArtPulse\Admin\Tests;
 
+/**
+
+ * @group admin
+
+ */
+
 final class SettingsRoundTripTest extends \WP_UnitTestCase {
 	public function test_round_trip_sanitizes_and_escapes(): void {
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );

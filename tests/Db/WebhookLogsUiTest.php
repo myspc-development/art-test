@@ -7,6 +7,12 @@ use ArtPulse\Integration\WebhookManager;
 
 require_once __DIR__ . '/../../includes/install.php';
 
+/**
+
+ * @group db
+
+ */
+
 class WebhookLogsUiTest extends WP_UnitTestCase {
 
 	public function set_up() {

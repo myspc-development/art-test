@@ -4,6 +4,12 @@ namespace ArtPulse\Frontend\Tests {
 	use PHPUnit\Framework\TestCase;
 	use ArtPulse\Tests\Stubs\MockStorage;
 
+	/**
+
+	 * @group frontend
+
+	 */
+
 	class OrgTemplateTest extends TestCase {
 
 		protected function setUp(): void {

@@ -2,6 +2,12 @@
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\DashboardWidgetTools;
 
+/**
+
+ * @group admin
+
+ */
+
 class DashboardWidgetToolsTest extends TestCase {
 
 	public function test_get_role_widgets_returns_array() {

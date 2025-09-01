@@ -6,6 +6,12 @@ use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
 
+/**
+
+ * @group core
+
+ */
+
 class DashboardLayoutRoleFilterTest extends TestCase {
 
 	protected function setUp(): void {

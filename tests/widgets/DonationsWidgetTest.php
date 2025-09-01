@@ -11,6 +11,12 @@ if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
         define( 'ARTPULSE_PLUGIN_FILE', __FILE__ );
 }
 
+/**
+
+ * @group widgets
+
+ */
+
 class DonationsWidgetTest extends WidgetTestCase {
         protected function setUp(): void {
                 parent::setUp();

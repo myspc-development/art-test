@@ -3,6 +3,12 @@ namespace ArtPulse\Admin\Tests;
 
 use ArtPulse\Admin\ConfigBackupTab;
 
+/**
+
+ * @group admin
+
+ */
+
 class ConfigBackupTabNonceTest extends \WP_UnitTestCase {
 
 	private int $admin;

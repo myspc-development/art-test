@@ -4,6 +4,12 @@ namespace ArtPulse\Frontend\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Frontend\EventChatShortcode;
 
+/**
+
+ * @group frontend
+
+ */
+
 class EventChatShortcodeTest extends WP_UnitTestCase {
 
 	private int $event;

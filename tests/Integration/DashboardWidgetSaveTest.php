@@ -5,6 +5,12 @@ use ArtPulse\Core\UserDashboardManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\UserLayoutManager;
 
+/**
+
+ * @group integration
+
+ */
+
 class DashboardWidgetSaveTest extends \WP_UnitTestCase {
 
 	private int $user_id;

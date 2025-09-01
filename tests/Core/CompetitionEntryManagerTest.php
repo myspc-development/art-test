@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Core\CompetitionEntryManager;
 
+/**
+
+ * @group core
+
+ */
+
 class CompetitionEntryManagerTest extends WP_UnitTestCase {
 
 	private int $comp_id;

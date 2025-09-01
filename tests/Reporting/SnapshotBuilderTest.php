@@ -27,6 +27,12 @@ use ArtPulse\Reporting\SnapshotBuilder;
 use ArtPulse\Admin\Tests\Stub;
 use function ArtPulse\Tests\safe_unlink;
 
+/**
+
+ * @group reporting
+
+ */
+
 class SnapshotBuilderTest extends TestCase {
 
 	protected function setUp(): void {

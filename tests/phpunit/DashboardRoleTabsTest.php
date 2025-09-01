@@ -41,6 +41,9 @@ use Brain\Monkey\Functions;
 /**
  * @runTestsInSeparateProcesses
  */
+/**
+ * @group phpunit
+ */
 final class DashboardRoleTabsTest extends TestCase {
 
 	protected function setUp(): void {

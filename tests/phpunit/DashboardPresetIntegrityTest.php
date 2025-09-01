@@ -8,6 +8,9 @@ use ArtPulse\Core\WidgetRegistry;
 use ArtPulse\Core\DashboardPresets;
 
 /** @coversNothing */
+/**
+ * @group phpunit
+ */
 class DashboardPresetIntegrityTest extends TestCase {
     public static function renderEmpty(): string {
         return '';

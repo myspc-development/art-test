@@ -4,6 +4,12 @@ namespace ArtPulse\Payment\Tests;
 use Brain\Monkey;
 use function Brain\Monkey\Functions\when;
 
+/**
+
+ * @group payment
+
+ */
+
 class PaymentEndpointTest extends \WP_UnitTestCase {
 
 	public function set_up() {

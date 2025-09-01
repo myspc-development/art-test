@@ -4,6 +4,12 @@ namespace ArtPulse\Community\Tests;
 use ArtPulse\Community\NotificationManager;
 use WP_UnitTestCase;
 
+/**
+
+ * @group community
+
+ */
+
 class EmailDeliveryTest extends WP_UnitTestCase {
 
 	private int $user_id;

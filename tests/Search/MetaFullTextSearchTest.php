@@ -3,6 +3,12 @@ namespace ArtPulse\Search\Tests;
 
 use ArtPulse\Search\MetaFullTextSearch;
 
+/**
+
+ * @group search
+
+ */
+
 class MetaFullTextSearchTest extends \WP_UnitTestCase {
 
 	public function test_rest_filter_adds_meta_query_for_valid_key(): void {

@@ -11,6 +11,9 @@ namespace {
 
 namespace ArtPulse\Core {
 	/** Simple role object for capability checks. */
+	/**
+	 * @group phpunit
+	 */
 	class RoleStub {
 		private array $caps;
 		public function __construct( array $caps ) {

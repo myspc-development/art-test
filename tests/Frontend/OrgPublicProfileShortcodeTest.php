@@ -16,6 +16,12 @@ namespace ArtPulse\Frontend\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Frontend\OrgPublicProfileShortcode;
 
+/**
+
+ * @group frontend
+
+ */
+
 class OrgPublicProfileShortcodeTest extends TestCase {
 
 	public static $page = null;

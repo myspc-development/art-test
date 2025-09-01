@@ -38,6 +38,12 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\AdminAccessManager;
 
+/**
+
+ * @group core
+
+ */
+
 class AdminAccessManagerTest extends TestCase {
 
 	public static array $caps         = array();

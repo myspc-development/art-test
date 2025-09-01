@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Frontend\ShortcodeRoleDashboard;
 
+/**
+
+ * @group integration
+
+ */
+
 class ShortcodeRoleDashboardTest extends \WP_UnitTestCase {
     public function set_up() : void {
         parent::set_up();

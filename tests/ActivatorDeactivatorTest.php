@@ -3,6 +3,12 @@ use PHPUnit\Framework\TestCase;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+/**
+
+ * @group activatordeactivator
+
+ */
+
 class ActivatorDeactivatorTest extends TestCase {
 
 	protected function setUp(): void {

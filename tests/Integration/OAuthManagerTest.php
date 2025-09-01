@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests {
 
 	use ArtPulse\Integration\OAuthManager;
 
+	/**
+
+	 * @group integration
+
+	 */
+
 	class OAuthManagerTest extends \WP_UnitTestCase {
 
 		private array $hook_args = array();

@@ -23,6 +23,12 @@ use ArtPulse\Reporting\GrantReportBuilder;
 use ArtPulse\Admin\Tests\Stub;
 use function ArtPulse\Tests\safe_unlink;
 
+/**
+
+ * @group reporting
+
+ */
+
 class GrantReportBuilderTest extends TestCase {
 
 	protected function setUp(): void {

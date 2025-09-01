@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Integration\WebhookManager;
 
+/**
+
+ * @group integration
+
+ */
+
 class WebhookManagerTest extends \WP_UnitTestCase {
 
 	private array $requests = array();

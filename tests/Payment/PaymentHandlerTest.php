@@ -6,6 +6,12 @@ use Brain\Monkey;
 use function Brain\Monkey\Functions\when;
 use WP_UnitTestCase;
 
+/**
+
+ * @group payment
+
+ */
+
 class PaymentHandlerTest extends WP_UnitTestCase {
 
 	public function set_up() {

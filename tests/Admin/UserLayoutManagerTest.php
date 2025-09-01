@@ -83,6 +83,12 @@ namespace ArtPulse\Admin\Tests {
 	use Brain\Monkey;
 	use Brain\Monkey\Functions;
 
+	/**
+
+	 * @group admin
+
+	 */
+
 	class UserLayoutManagerTest extends TestCase {
 
 		public static bool $can             = true;

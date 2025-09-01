@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Core\ArtworkEventLinkManager;
 
+/**
+
+ * @group core
+
+ */
+
 class ArtworkEventLinkManagerTest extends WP_UnitTestCase {
 
 	private int $artwork_id;

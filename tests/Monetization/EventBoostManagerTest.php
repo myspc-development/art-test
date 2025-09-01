@@ -9,6 +9,12 @@ if ( ! function_exists( __NAMESPACE__ . '\current_time' ) ) {
 
 use PHPUnit\Framework\TestCase;
 
+/**
+
+ * @group monetization
+
+ */
+
 class EventBoostManagerTest extends TestCase {
 
 	public static int $now;

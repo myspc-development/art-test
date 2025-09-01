@@ -5,6 +5,12 @@ use WP_UnitTestCase;
 use ArtPulse\Admin\WebhookLogsPage;
 use ArtPulse\Integration\WebhookManager;
 
+/**
+
+ * @group db
+
+ */
+
 class MigrationWebhookLogsTest extends WP_UnitTestCase {
 
 	public function set_up() {

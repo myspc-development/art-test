@@ -6,6 +6,12 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Core\UserDashboardManager;
 
+/**
+
+ * @group integration
+
+ */
+
 class WidgetRoleFlowTest extends \WP_UnitTestCase {
 
 	private int $admin;

@@ -43,6 +43,12 @@ use ArtPulse\Admin\ApprovalManager;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+/**
+
+ * @group admin
+
+ */
+
 class ApprovalManagerTest extends TestCase {
 
 	public static bool $can = true;

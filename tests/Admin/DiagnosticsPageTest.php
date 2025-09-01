@@ -4,6 +4,12 @@ namespace ArtPulse\Admin\Tests;
 use WP_Ajax_UnitTestCase;
 use ArtPulse\Tests\AjaxTestHelper;
 
+/**
+
+ * @group admin
+
+ */
+
 class DiagnosticsPageTest extends WP_Ajax_UnitTestCase {
 
 	use AjaxTestHelper;

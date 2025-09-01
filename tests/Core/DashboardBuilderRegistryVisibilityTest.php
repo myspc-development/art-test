@@ -5,6 +5,12 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Dashboard\WidgetVisibility;
 
+/**
+
+ * @group core
+
+ */
+
 class DashboardBuilderRegistryVisibilityTest extends TestCase {
 
 	protected function setUp(): void {

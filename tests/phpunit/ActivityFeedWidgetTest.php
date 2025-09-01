@@ -1,6 +1,9 @@
 <?php
 namespace ArtPulse\Core {
 	if ( ! class_exists( \ArtPulse\Core\DashboardWidgetRegistry::class ) ) {
+		/**
+		 * @group phpunit
+		 */
 		class DashboardWidgetRegistry {
 			public static function register( ...$args ): void {}
 		}

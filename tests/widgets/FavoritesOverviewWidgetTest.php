@@ -2,6 +2,12 @@
 use ArtPulse\Widgets\FavoritesOverviewWidget;
 use ArtPulse\Community\FavoritesManager;
 
+/**
+
+ * @group widgets
+
+ */
+
 class FavoritesOverviewWidgetTest extends \WP_UnitTestCase {
 	public function test_render_outputs_links() {
 		FavoritesManager::install_favorites_table();

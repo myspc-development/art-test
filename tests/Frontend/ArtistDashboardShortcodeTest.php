@@ -35,6 +35,12 @@ namespace ArtPulse\Frontend\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Frontend\ArtistDashboardShortcode;
 
+/**
+
+ * @group frontend
+
+ */
+
 class ArtistDashboardShortcodeTest extends TestCase {
 
 	public static array $posts       = array();

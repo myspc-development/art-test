@@ -1,5 +1,11 @@
 <?php
 
+/**
+
+ * @group integration
+
+ */
+
 class DbTablesExistTest extends WP_UnitTestCase {
 	public function test_all_custom_tables_exist() {
 		global $wpdb;

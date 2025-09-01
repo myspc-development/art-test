@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Rest\RsvpRestController;
 
+/**
+
+ * @group integration
+
+ */
+
 class AttendeePermissionsTest extends \WP_UnitTestCase {
 
 	private int $event_id;

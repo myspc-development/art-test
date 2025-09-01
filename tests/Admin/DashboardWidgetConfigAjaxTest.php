@@ -41,6 +41,12 @@ use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../../includes/dashboard-widgets.php';
 
+/**
+
+ * @group admin
+
+ */
+
 class DashboardWidgetConfigAjaxTest extends TestCase {
 
 	public static bool $can      = true;

@@ -11,6 +11,12 @@ require_once __DIR__ . '/../TestStubs.php';
 	use ArtPulse\Widgets\Artist\MyEventsWidget;
 	use ArtPulse\Widgets\Common\SiteStatsWidget;
 
+/**
+
+ * @group phpunit
+
+ */
+
 class ArtistWidgetsTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();

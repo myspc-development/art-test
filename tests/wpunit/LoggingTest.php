@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group wpunit
+ */
 class LoggingTest extends WP_UnitTestCase {
 	private string $file;
 	private $prev;

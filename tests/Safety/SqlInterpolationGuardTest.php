@@ -1,5 +1,11 @@
 <?php
 
+/**
+
+ * @group safety
+
+ */
+
 final class SqlInterpolationGuardTest extends \PHPUnit\Framework\TestCase {
 	/** @test */
 	public function no_unprepared_selects_with_superglobals(): void {

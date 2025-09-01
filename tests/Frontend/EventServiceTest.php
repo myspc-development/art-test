@@ -25,6 +25,12 @@ namespace ArtPulse\Frontend\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Frontend\EventService;
 
+/**
+
+ * @group frontend
+
+ */
+
 class EventServiceTest extends TestCase {
 	public static array $terms          = array();
 	public static array $user_org_posts = array();

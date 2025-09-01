@@ -4,6 +4,12 @@ namespace ArtPulse\Admin\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\PaymentAnalyticsDashboard;
 
+/**
+
+ * @group admin
+
+ */
+
 class PaymentAnalyticsDashboardTest extends TestCase {
 
 	protected function setUp(): void {

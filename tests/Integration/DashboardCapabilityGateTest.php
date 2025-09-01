@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Core\DashboardController;
 
+/**
+
+ * @group integration
+
+ */
+
 class DashboardCapabilityGateTest extends \WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();

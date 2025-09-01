@@ -3,6 +3,12 @@ namespace ArtPulse\Community\Tests;
 
 use WP_UnitTestCase;
 
+/**
+
+ * @group community
+
+ */
+
 class PostStatusHooksTest extends WP_UnitTestCase {
 
 	private array $mails    = array();

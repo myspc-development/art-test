@@ -4,6 +4,12 @@ namespace ArtPulse\AI\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\AI\AutoTagger;
 
+/**
+
+ * @group ai
+
+ */
+
 class AutoTaggerTest extends TestCase {
 
 	/**

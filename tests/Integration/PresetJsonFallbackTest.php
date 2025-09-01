@@ -3,6 +3,12 @@
 use ArtPulse\Core\DashboardPresets;
 use ArtPulse\Dashboard\WidgetGuard;
 
+/**
+
+ * @group integration
+
+ */
+
 class PresetJsonFallbackTest extends WP_UnitTestCase {
 	private string $presetPath;
 	private ?string $originalPreset = null;

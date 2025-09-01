@@ -12,6 +12,12 @@ namespace ArtPulse\Blocks\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Blocks\FilteredListShortcodeBlock;
 
+/**
+
+ * @group blocks
+
+ */
+
 class FilteredListShortcodeBlockTest extends TestCase {
 
 	public function test_render_callback_builds_shortcode(): void {

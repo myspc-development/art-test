@@ -48,6 +48,12 @@ namespace ArtPulse\Frontend\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Frontend\OrganizationDashboardShortcode;
 
+/**
+
+ * @group frontend
+
+ */
+
 class OrganizationEventAjaxTest extends TestCase {
 
 	public static array $posts       = array();

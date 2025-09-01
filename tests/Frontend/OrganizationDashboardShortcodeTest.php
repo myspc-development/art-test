@@ -21,6 +21,12 @@ namespace ArtPulse\Frontend\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Frontend\OrganizationDashboardShortcode;
 
+/**
+
+ * @group frontend
+
+ */
+
 class OrganizationDashboardShortcodeTest extends TestCase {
 
 	public static array $user_meta = array();

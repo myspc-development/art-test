@@ -20,6 +20,12 @@ if ( ! function_exists( __NAMESPACE__ . '\current_time' ) ) {
 
 use PHPUnit\Framework\TestCase;
 
+/**
+
+ * @group crm
+
+ */
+
 class ContactModelTest extends TestCase {
 
 	public static string $now;

@@ -1,6 +1,12 @@
 <?php
 namespace ArtPulse\Reporting;
 
+/**
+
+ * @group core
+
+ */
+
 class SnapshotBuilder {
 	public static string $called = '';
 	public static function generate_csv( array $args ): string {

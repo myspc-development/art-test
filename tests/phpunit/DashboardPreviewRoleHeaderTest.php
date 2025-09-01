@@ -29,6 +29,12 @@ use ArtPulse\Tests\Stubs\MockStorage;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+/**
+
+ * @group phpunit
+
+ */
+
 final class DashboardPreviewRoleHeaderTest extends TestCase {
 
         protected function setUp(): void {

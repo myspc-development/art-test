@@ -14,6 +14,12 @@ namespace ArtPulse\Core\Tests {
 
 	use ArtPulse\Tests\Stubs\MockStorage;
 
+	/**
+
+	 * @group core
+
+	 */
+
 	class OrgDashboardWidgetRoleTest extends TestCase {
 
 		protected function setUp(): void {

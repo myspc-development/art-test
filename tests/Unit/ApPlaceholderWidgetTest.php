@@ -19,6 +19,12 @@ namespace ArtPulse\Widgets\Placeholder\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 
+/**
+
+ * @group unit
+
+ */
+
 class ApPlaceholderWidgetTest extends TestCase {
 
 	protected function setUp(): void {

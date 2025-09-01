@@ -5,6 +5,12 @@ use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\UserDashboardManager;
 
+/**
+
+ * @group integration
+
+ */
+
 class MultiRoleLayoutTest extends \WP_UnitTestCase {
 
 	private int $userId;
