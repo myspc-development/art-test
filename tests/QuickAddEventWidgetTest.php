@@ -8,7 +8,7 @@ require_once __DIR__ . '/quick-add-bootstrap.php';
 
 /**
 
- * @group quickaddeventwidget
+ * @group WIDGETS
 
  */
 

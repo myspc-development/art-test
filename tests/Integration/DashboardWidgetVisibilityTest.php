@@ -6,7 +6,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

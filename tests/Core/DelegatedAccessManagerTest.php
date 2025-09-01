@@ -6,7 +6,7 @@ use ArtPulse\Core\DelegatedAccessManager;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

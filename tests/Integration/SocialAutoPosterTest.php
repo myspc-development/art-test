@@ -5,7 +5,7 @@ use ArtPulse\Integration\SocialAutoPoster;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

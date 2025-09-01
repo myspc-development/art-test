@@ -5,7 +5,7 @@ use ArtPulse\Core\PostTypeRegistrar;
 use ArtPulse\Rest\ArtistEventsController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class ArtistEventsControllerTest extends \WP_UnitTestCase {
 

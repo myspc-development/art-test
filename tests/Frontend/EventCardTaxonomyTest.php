@@ -6,7 +6,7 @@ use ArtPulse\Taxonomies\TaxonomiesRegistrar;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

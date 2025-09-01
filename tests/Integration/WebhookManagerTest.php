@@ -5,7 +5,7 @@ use ArtPulse\Integration\WebhookManager;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

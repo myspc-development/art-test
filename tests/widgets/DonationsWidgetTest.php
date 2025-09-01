@@ -13,7 +13,7 @@ if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
 
 /**
 
- * @group widgets
+ * @group WIDGETS
 
  */
 

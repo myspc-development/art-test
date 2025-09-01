@@ -4,7 +4,7 @@ namespace ArtPulse\Engagement\Tests;
 use ArtPulse\Engagement\DigestMailer;
 
 /**
- * @group engagement
+ * @group ENGAGEMENT
  */
 class DigestMailerTest extends \WP_UnitTestCase {
 

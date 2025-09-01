@@ -3,7 +3,7 @@ namespace ArtPulse\Integration\Tests;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

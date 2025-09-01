@@ -7,7 +7,7 @@ use ArtPulse\Core\WidgetRegistry;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

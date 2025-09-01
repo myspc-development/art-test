@@ -5,7 +5,7 @@ use ArtPulse\Admin\SegmentationManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class SegmentationManagerTest extends \WP_UnitTestCase {
 

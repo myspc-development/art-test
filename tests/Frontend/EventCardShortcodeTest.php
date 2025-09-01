@@ -6,7 +6,7 @@ use ArtPulse\Frontend\EventCardShortcode;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

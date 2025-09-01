@@ -40,7 +40,7 @@ use ArtPulse\Core\AdminAccessManager;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

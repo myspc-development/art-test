@@ -5,7 +5,7 @@ use ArtPulse\Dashboard\WidgetGuard;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

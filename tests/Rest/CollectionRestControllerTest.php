@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\CollectionRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class CollectionRestControllerTest extends \WP_UnitTestCase {
 

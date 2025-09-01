@@ -7,7 +7,7 @@ use ArtPulse\Personalization\RecommendationPreferenceManager;
 
 /**
 
- * @group personalization
+ * @group PERSONALIZATION
 
  */
 

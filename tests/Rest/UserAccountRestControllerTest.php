@@ -5,7 +5,7 @@ use WP_REST_Server;
 use ArtPulse\Rest\UserAccountRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class UserAccountRestControllerTest extends \WP_UnitTestCase {
 

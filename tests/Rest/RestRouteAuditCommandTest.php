@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 /**
- * @group restapi
+ * @group REST
  */
 class RestRouteAuditCommandTest extends \WP_UnitTestCase {
 

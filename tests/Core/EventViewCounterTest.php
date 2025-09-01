@@ -7,7 +7,7 @@ use ArtPulse\Core\EventMetrics;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

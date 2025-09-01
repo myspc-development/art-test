@@ -5,7 +5,7 @@ use ArtPulse\Monetization\MembershipManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class MembershipManagerTest extends \WP_UnitTestCase {
 

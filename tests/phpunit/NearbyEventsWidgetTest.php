@@ -10,7 +10,7 @@ if ( ! function_exists( 'do_shortcode' ) ) {
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

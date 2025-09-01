@@ -6,7 +6,7 @@ use ArtPulse\Core\AccessControlManager;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

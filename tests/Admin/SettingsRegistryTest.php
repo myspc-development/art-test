@@ -4,7 +4,7 @@ use ArtPulse\Admin\SettingsRegistry;
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

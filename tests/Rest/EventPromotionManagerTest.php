@@ -5,7 +5,7 @@ use ArtPulse\Monetization\EventPromotionManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class EventPromotionManagerTest extends \WP_UnitTestCase {
 

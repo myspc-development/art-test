@@ -8,7 +8,7 @@ use ArtPulse\Tests\Stubs\MockStorage;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

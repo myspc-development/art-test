@@ -108,7 +108,7 @@ class Stub {
 }
 
 /**
- * @group restapi
+ * @group REST
  */
 class UserInvitationControllerTest extends TestCase {
 

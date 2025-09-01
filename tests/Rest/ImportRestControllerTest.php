@@ -5,7 +5,7 @@ use ArtPulse\Rest\ImportRestController;
 use WP_REST_Request;
 
 /**
- * @group restapi
+ * @group REST
  */
 class ImportRestControllerTest extends \WP_UnitTestCase {
     private int $admin_id;

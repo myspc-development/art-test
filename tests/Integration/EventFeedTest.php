@@ -5,7 +5,7 @@ use function ArtPulse\Util\ap_fetch_calendar_events;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

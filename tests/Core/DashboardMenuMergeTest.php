@@ -8,7 +8,7 @@ namespace {
 			return new WP_User(); } }
 	if ( ! class_exists( 'WP_User' ) ) {
 		/**
-		 * @group core
+		 * @group CORE
 		 */
 		class WP_User {
 			public $roles = array(); public function __construct( $id = 0 ) {}

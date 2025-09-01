@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 /**
- * @group restapi
+ * @group REST
  */
 class ArtPulseRestControllerTest extends \WP_UnitTestCase {
 	private int $user;

@@ -25,7 +25,7 @@ use function ArtPulse\Tests\safe_unlink;
 
 /**
 
- * @group reporting
+ * @group REPORTING
 
  */
 

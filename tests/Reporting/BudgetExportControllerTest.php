@@ -7,7 +7,7 @@ use ArtPulse\Reporting\BudgetExportController;
 use ArtPulse\Admin\Tests\Stub;
 
 /**
- * @group restapi
+ * @group REPORTING
  */
 class BudgetExportControllerTest extends \WP_UnitTestCase {
 

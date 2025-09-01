@@ -10,7 +10,7 @@ use ArtPulse\Tests\Stubs\MockStorage;
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

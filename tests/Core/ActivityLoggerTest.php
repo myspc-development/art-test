@@ -6,7 +6,7 @@ use ArtPulse\Core\ActivityLogger;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

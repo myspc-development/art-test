@@ -8,7 +8,7 @@ use ArtPulse\Widgets\ProfileOverviewWidget;
 
 /**
 
- * @group widgets
+ * @group WIDGETS
 
  */
 

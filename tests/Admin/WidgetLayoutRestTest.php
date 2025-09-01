@@ -5,7 +5,7 @@ use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Rest\WidgetLayoutController;
 
 /**
- * @group admin
+ * @group ADMIN
  */
 class WidgetLayoutRestTest extends \WP_UnitTestCase {
 

@@ -42,7 +42,7 @@ use Brain\Monkey\Functions;
  * @runTestsInSeparateProcesses
  */
 /**
- * @group phpunit
+ * @group PHPUNIT
  */
 final class DashboardRoleTabsTest extends TestCase {
 

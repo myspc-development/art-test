@@ -7,7 +7,7 @@ use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Support\WidgetIds;
 
 /**
- * @group restapi
+ * @group REST
  */
 class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 

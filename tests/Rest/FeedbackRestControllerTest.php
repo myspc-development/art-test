@@ -5,7 +5,7 @@ use ArtPulse\Rest\FeedbackRestController;
 use ArtPulse\Core\FeedbackManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class FeedbackRestControllerTest extends \WP_UnitTestCase {
 

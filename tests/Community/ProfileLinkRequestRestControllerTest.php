@@ -5,7 +5,7 @@ use ArtPulse\Community\ProfileLinkRequestRestController;
 
 /**
 
- * @group community
+ * @group COMMUNITY
 
  */
 

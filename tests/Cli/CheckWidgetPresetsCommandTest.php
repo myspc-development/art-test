@@ -8,7 +8,7 @@ namespace ArtPulse\Tests\Stubs {
 	 */
 	if ( ! class_exists( DashboardWidgetRegistryStub::class, false ) ) {
 		/**
-		 * @group cli
+		 * @group CLI
 		 */
 		class DashboardWidgetRegistryStub {
 			/** @var array<string,array> */

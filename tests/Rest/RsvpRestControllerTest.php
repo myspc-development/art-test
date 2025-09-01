@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\RsvpRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class RsvpRestControllerTest extends \WP_UnitTestCase {
 

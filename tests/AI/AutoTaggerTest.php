@@ -6,7 +6,7 @@ use ArtPulse\AI\AutoTagger;
 
 /**
 
- * @group ai
+ * @group AI
 
  */
 

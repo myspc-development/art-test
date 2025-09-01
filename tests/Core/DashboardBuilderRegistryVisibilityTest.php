@@ -7,7 +7,7 @@ use ArtPulse\Dashboard\WidgetVisibility;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

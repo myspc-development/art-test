@@ -5,7 +5,7 @@ use WP_UnitTestCase;
 use ArtPulse\Admin\EngagementDashboard;
 
 /**
- * @group admin
+ * @group ADMIN
  */
 class EngagementDashboardTest extends WP_UnitTestCase {
 

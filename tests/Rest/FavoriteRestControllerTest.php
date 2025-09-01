@@ -5,7 +5,7 @@ use ArtPulse\Rest\FavoriteRestController;
 use ArtPulse\Community\FavoritesManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class FavoriteRestControllerTest extends \WP_UnitTestCase {
 

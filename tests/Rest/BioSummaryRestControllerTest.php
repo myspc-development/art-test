@@ -4,7 +4,7 @@ namespace ArtPulse\AI\Tests;
 use ArtPulse\AI\BioSummaryRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class BioSummaryRestControllerTest extends \WP_UnitTestCase {
 

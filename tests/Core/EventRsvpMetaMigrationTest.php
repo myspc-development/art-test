@@ -6,7 +6,7 @@ use ArtPulse\Core\EventRsvpMetaMigration;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

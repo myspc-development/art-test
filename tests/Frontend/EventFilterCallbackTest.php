@@ -6,7 +6,7 @@ use function ArtPulse\Frontend\ap_filter_events_callback;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

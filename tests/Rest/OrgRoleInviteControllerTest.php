@@ -6,7 +6,7 @@ use ArtPulse\Core\MultiOrgRoles;
 use ArtPulse\Core\OrgInviteManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class OrgRoleInviteControllerTest extends \WP_UnitTestCase {
 

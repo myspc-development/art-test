@@ -6,7 +6,7 @@ use ArtPulse\Widgets\Member\ActivityFeedWidget;
 
 /**
 
- * @group widgets
+ * @group WIDGETS
 
  */
 

@@ -9,7 +9,7 @@ use ArtPulse\Admin\EnqueueAssets;
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

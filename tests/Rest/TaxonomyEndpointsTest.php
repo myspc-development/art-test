@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Taxonomies\TaxonomiesRegistrar;
 
 /**
- * @group restapi
+ * @group REST
  */
 class TaxonomyEndpointsTest extends \WP_UnitTestCase {
 

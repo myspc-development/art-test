@@ -5,7 +5,7 @@ use ArtPulse\Admin\OrgCommunicationsCenter;
 use WP_UnitTestCase;
 
 /**
- * @group admin
+ * @group ADMIN
  */
 class OrgCommunicationsCenterTest extends WP_UnitTestCase {
 

@@ -6,7 +6,7 @@ use ArtPulse\Core\WidgetRegistry;
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

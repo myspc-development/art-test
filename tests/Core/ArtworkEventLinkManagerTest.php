@@ -6,7 +6,7 @@ use ArtPulse\Core\ArtworkEventLinkManager;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

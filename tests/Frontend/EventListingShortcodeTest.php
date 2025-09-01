@@ -6,7 +6,7 @@ use ArtPulse\Frontend\EventListingShortcode;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

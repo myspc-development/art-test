@@ -5,7 +5,7 @@ use ArtPulse\Rest\AnalyticsRestController;
 use ArtPulse\Core\EventMetrics;
 
 /**
- * @group restapi
+ * @group REST
  */
 class AnalyticsRestControllerTest extends \WP_UnitTestCase {
 

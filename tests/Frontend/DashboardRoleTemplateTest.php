@@ -7,7 +7,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

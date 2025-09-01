@@ -42,7 +42,7 @@ if ( ! function_exists( __NAMESPACE__ . '\wp_mail' ) ) {
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

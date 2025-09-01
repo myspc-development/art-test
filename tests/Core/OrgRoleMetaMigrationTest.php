@@ -7,7 +7,7 @@ namespace ArtPulse\Core\Tests {
 
 	/**
 
-	 * @group core
+	 * @group CORE
 
 	 */
 

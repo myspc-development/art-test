@@ -5,7 +5,7 @@ use ArtPulse\Rest\RsvpRestController;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

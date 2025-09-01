@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\OrgRolesController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class OrgRolesControllerPermissionTest extends \WP_UnitTestCase {
 

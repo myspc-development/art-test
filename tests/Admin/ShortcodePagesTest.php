@@ -29,7 +29,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\__' ) ) {
 
 if ( ! class_exists( __NAMESPACE__ . '\\wpdb' ) ) {
 	/**
-	 * @group admin
+	 * @group ADMIN
 	 */
 	class wpdb {
 		public static array $col_results = array();

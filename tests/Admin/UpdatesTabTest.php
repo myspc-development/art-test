@@ -99,7 +99,7 @@ use function ArtPulse\Tests\safe_unlink;
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

@@ -6,7 +6,7 @@ use WP_Error;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

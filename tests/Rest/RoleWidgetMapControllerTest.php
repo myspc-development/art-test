@@ -5,7 +5,7 @@ use ArtPulse\Rest\RoleWidgetMapController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
- * @group restapi
+ * @group REST
  */
 class RoleWidgetMapControllerTest extends \WP_UnitTestCase {
 

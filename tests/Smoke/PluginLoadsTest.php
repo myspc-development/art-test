@@ -6,7 +6,7 @@
  * @subpackage Smoke
  */
 /**
- * @group smoke
+ * @group SMOKE
  */
 class PluginLoadsTest extends WP_UnitTestCase {
 	/**

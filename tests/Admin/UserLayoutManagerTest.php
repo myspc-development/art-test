@@ -85,7 +85,7 @@ namespace ArtPulse\Admin\Tests {
 
 	/**
 
-	 * @group admin
+	 * @group ADMIN
 
 	 */
 

@@ -16,7 +16,7 @@ use WP_REST_Server;
  * - Verifies return type is WP_REST_Response (not raw array)
  * - Aggregates all issues so we get a full inventory in one run
  *
- * @group restapi
+ * @group REST
  */
 class RouteAuditSmokeTest extends \WP_UnitTestCase
 {

@@ -2,7 +2,7 @@
 
 /**
 
- * @group safety
+ * @group SAFETY
 
  */
 

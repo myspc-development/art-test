@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\DirectoryController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class DirectoryControllerTest extends \WP_UnitTestCase {
     private int $near_event;

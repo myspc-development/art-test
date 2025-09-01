@@ -5,7 +5,7 @@ use ArtPulse\Search\MetaFullTextSearch;
 
 /**
 
- * @group search
+ * @group SEARCH
 
  */
 

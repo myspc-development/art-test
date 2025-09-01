@@ -12,7 +12,7 @@ require_once __DIR__ . '/fixtures/TestWidget.php';
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

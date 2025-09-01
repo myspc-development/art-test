@@ -6,7 +6,7 @@ use ArtPulse\Core\EventTemplateManager;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

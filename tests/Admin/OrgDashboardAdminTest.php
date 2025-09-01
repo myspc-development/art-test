@@ -44,7 +44,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\get_post_meta' ) ) {
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

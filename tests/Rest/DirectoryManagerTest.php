@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Core\DirectoryManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class DirectoryManagerTest extends \WP_UnitTestCase {
 

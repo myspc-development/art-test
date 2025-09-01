@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../includes/role-upgrade-handler.php';
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

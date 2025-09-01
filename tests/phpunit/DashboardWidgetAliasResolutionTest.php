@@ -10,7 +10,7 @@ require_once __DIR__ . '/../TestStubs.php';
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

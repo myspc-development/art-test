@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Community\DirectMessages;
 
 /**
- * @group restapi
+ * @group REST
  */
 class DirectMessagesTest extends \WP_UnitTestCase {
 

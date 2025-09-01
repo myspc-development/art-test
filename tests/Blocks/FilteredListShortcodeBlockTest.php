@@ -14,7 +14,7 @@ use ArtPulse\Blocks\FilteredListShortcodeBlock;
 
 /**
 
- * @group blocks
+ * @group BLOCKS
 
  */
 

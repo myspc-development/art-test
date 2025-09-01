@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../src/Core/DashboardWidgetRegistry.php';
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

@@ -6,7 +6,7 @@ use function ArtPulse\Frontend\ap_filtered_feed_link;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

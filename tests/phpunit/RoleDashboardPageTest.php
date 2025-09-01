@@ -32,7 +32,7 @@ use function Patchwork\restore;
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

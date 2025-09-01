@@ -31,7 +31,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
 
- * @group unit
+ * @group UNIT
 
  */
 

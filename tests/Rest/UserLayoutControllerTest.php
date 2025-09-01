@@ -1,6 +1,6 @@
 <?php
 /**
- * @group restapi
+ * @group REST
  */
 class UserLayoutControllerTest extends WP_UnitTestCase {
 	protected $user_id;

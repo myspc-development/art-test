@@ -4,7 +4,7 @@ namespace ArtPulse\Reporting\Tests;
 use ArtPulse\Reporting\OrgReportController;
 
 /**
- * @group restapi
+ * @group REPORTING
  */
 class OrgReportControllerTest extends \WP_UnitTestCase {
 

@@ -9,7 +9,7 @@ use ArtPulse\Admin\Tests\Stub;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class PaymentReportsControllerTest extends \WP_UnitTestCase {
 

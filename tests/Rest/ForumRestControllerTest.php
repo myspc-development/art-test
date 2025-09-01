@@ -5,7 +5,7 @@ use ArtPulse\Community\ForumRestController;
 use ArtPulse\Community\CommunityRoles;
 
 /**
- * @group restapi
+ * @group REST
  */
 class ForumRestControllerTest extends \WP_UnitTestCase {
 

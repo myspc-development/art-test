@@ -6,7 +6,7 @@ use ArtPulse\Widgets\QAChecklistWidget;
 
 /**
 
- * @group widgets
+ * @group WIDGETS
 
  */
 

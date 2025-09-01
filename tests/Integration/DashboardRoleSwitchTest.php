@@ -5,7 +5,7 @@ use ArtPulse\Core\DashboardController;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

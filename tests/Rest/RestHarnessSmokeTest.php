@@ -8,7 +8,7 @@ use WP_REST_Server;
 /**
  * Basic smoke tests to verify the WP REST testing harness is wired up.
  *
- * @group restapi
+ * @group REST
  */
 class RestHarnessSmokeTest extends \WP_UnitTestCase
 {

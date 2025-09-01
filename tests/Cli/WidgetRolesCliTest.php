@@ -18,7 +18,7 @@ namespace {
 namespace ArtPulse\Core {
         if ( ! class_exists( DashboardWidgetRegistry::class ) ) {
         /**
-         * @group cli
+         * @group CLI
          */
         class DashboardWidgetRegistry {
                 public static function get_role_widget_map( array $roles = array() ): array {

@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\NearbyEventsController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class NearbyEventsControllerTest extends \WP_UnitTestCase {
 

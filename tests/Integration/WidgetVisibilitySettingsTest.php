@@ -10,7 +10,7 @@ use ArtPulse\Tests\ErrorSilencer;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

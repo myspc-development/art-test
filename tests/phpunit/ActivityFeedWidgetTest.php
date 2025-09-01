@@ -2,7 +2,7 @@
 namespace ArtPulse\Core {
 	if ( ! class_exists( \ArtPulse\Core\DashboardWidgetRegistry::class ) ) {
 		/**
-		 * @group phpunit
+		 * @group PHPUNIT
 		 */
 		class DashboardWidgetRegistry {
 			public static function register( ...$args ): void {}

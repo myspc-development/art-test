@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 require_once dirname( __DIR__, 2 ) . '/includes/rest-dedupe.php';
 
 /**
- * @group restapi
+ * @group REST
  */
 class RestDedupeTest extends \WP_UnitTestCase {
           public static function ok(): string { return 'ok'; }

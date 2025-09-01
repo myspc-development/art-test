@@ -5,7 +5,7 @@ use Brain\Monkey\Functions;
 
 /**
 
- * @group activatordeactivator
+ * @group CORE
 
  */
 

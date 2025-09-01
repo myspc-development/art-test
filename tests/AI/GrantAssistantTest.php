@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
 
- * @group ai
+ * @group AI
 
  */
 

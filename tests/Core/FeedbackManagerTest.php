@@ -50,7 +50,7 @@ use ArtPulse\Core\FeedbackManager;
 
 if ( ! class_exists( __NAMESPACE__ . '\\WPDBStub' ) ) {
 	/**
-	 * @group core
+	 * @group CORE
 	 */
 	class WPDBStub {
 		public string $prefix     = 'wp_';

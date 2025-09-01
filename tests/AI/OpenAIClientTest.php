@@ -7,7 +7,7 @@ use WP_UnitTestCase;
 
 /**
 
- * @group ai
+ * @group AI
 
  */
 

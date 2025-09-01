@@ -24,7 +24,7 @@ namespace ArtPulse\Core\Tests {
      * @runInSeparateProcess
      */
     /**
-     * @group phpunit
+     * @group PHPUNIT
      */
     class WidgetAccessValidatorTest extends TestCase {
         protected function setUp(): void {

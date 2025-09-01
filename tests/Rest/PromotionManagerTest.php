@@ -5,7 +5,7 @@ use ArtPulse\Marketplace\PromotionManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class PromotionManagerTest extends \WP_UnitTestCase {
 

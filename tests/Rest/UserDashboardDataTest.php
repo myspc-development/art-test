@@ -5,7 +5,7 @@ use ArtPulse\Core\UserDashboardManager;
 use ArtPulse\Community\FavoritesManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class UserDashboardDataTest extends \WP_UnitTestCase {
 

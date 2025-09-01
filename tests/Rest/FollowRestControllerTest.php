@@ -5,7 +5,7 @@ use ArtPulse\Community\FollowRestController;
 use ArtPulse\Community\FollowManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class FollowRestControllerTest extends \WP_UnitTestCase {
 

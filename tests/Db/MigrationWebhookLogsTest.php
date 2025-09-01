@@ -7,7 +7,7 @@ use ArtPulse\Integration\WebhookManager;
 
 /**
 
- * @group db
+ * @group DB
 
  */
 

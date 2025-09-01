@@ -4,7 +4,7 @@ use ArtPulse\Core\DashboardPresets;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

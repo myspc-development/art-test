@@ -7,7 +7,7 @@ use ArtPulse\Community\CommentReports;
 use ArtPulse\Community\BlockedUsers;
 
 /**
- * @group restapi
+ * @group REST
  */
 class CommunityAnalyticsControllerTest extends \WP_UnitTestCase {
 

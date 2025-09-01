@@ -5,7 +5,7 @@ use ArtPulse\Rest\ActivityRestController;
 use ArtPulse\Core\ActivityLogger;
 
 /**
- * @group restapi
+ * @group REST
  */
 class ActivityRestControllerTest extends \WP_UnitTestCase {
 

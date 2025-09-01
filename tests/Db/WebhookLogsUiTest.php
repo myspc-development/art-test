@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../includes/install.php';
 
 /**
 
- * @group db
+ * @group DB
 
  */
 

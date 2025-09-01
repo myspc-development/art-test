@@ -42,7 +42,7 @@ if ( ! function_exists( 'current_user_can' ) ) {
  * @runInSeparateProcess
  */
 /**
- * @group phpunit
+ * @group PHPUNIT
  */
 final class DashboardTemplateIncludeTest extends TestCase {
         protected function setUp(): void {

@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\FollowVenueCuratorController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class FollowVenueCuratorControllerTest extends \WP_UnitTestCase {
 

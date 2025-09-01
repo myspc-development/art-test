@@ -15,7 +15,7 @@ if ( ! function_exists( 'get_user_meta' ) ) {
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

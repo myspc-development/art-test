@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 /**
  * Base class for REST API tests.
  *
- * @group restapi
+ * @group REST
  */
 abstract class RestTestCase extends \WP_UnitTestCase {
 	protected int $admin;

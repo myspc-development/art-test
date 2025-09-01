@@ -21,7 +21,7 @@ use WP_Error;
  *   vendor/bin/phpunit -c phpunit.wp.xml.dist --filter RouteBucketsSmokeTest -v
  */
 /**
- * @group restapi
+ * @group REST
  */
 class RouteBucketsSmokeTest extends WP_UnitTestCase
 {

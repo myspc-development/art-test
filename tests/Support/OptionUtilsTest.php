@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
 
- * @group support
+ * @group SUPPORT
 
  */
 

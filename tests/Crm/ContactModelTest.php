@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
 
- * @group crm
+ * @group CRM
 
  */
 

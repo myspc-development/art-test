@@ -13,7 +13,7 @@ if ( ! function_exists( 'is_user_logged_in' ) ) {
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\DB\Chat;
 
 /**
- * @group restapi
+ * @group REST
  */
 class EventChatRestTest extends \WP_UnitTestCase {
 

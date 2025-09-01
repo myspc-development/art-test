@@ -6,7 +6,7 @@ use ArtPulse\Blocks\AdvancedTaxonomyFilterBlock;
 
 /**
 
- * @group blocks
+ * @group BLOCKS
 
  */
 
