@@ -74,5 +74,4 @@ languages/*.mo
 /vendor/wp-phpunit/wp-phpunit/wp-tests-config.php
 /.env
 /.wp-test.env
-wp-tests-config.php
 tests/wp-tests-config.php

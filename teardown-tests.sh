@@ -9,7 +9,7 @@ set -euo pipefail
 : "${DB_HOST:?DB_HOST is not set}"
 
 echo "Removing WordPress test installation..."
-rm -rf wordpress wp-tests-config.php
+rm -rf wordpress tests/wp-tests-config.php
 
 echo "Dropping test database..."
 mysqladmin drop "$DB_NAME" --user="$DB_USER" --password="$DB_PASSWORD" --host="$DB_HOST" --force >/dev/null 2>&1 || true
