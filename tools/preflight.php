@@ -81,6 +81,12 @@ if ( $missing ) {
         exit( 1 );
 }
 
+// Assign validated environment variables for use below.
+$dbName = $envValues['WP_TESTS_DB_NAME'];
+$dbUser = $envValues['WP_TESTS_DB_USER'];
+$dbPass = $envValues['WP_TESTS_DB_PASSWORD'];
+$dbHost = $envValues['WP_TESTS_DB_HOST'];
+
 if ( ! file_exists( $configPath ) && file_exists( $samplePath ) ) {
 
 }
