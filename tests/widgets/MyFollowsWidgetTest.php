@@ -2,6 +2,12 @@
 
 use ArtPulse\Community\FollowManager;
 
+/**
+
+ * @group widgets
+
+ */
+
 class MyFollowsWidgetTest extends \WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();

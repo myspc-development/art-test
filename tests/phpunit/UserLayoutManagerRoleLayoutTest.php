@@ -10,6 +10,12 @@ use ArtPulse\Core\WidgetRegistry;
 use ArtPulse\Tests\Stubs\MockStorage;
 use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 
+/**
+
+ * @group phpunit
+
+ */
+
 class UserLayoutManagerRoleLayoutTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();

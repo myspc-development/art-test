@@ -5,6 +5,9 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\RoleSetup;
 
 if ( ! class_exists( __NAMESPACE__ . '\\WPDBStub' ) ) {
+	/**
+	 * @group core
+	 */
 	class WPDBStub {
 		public $prefix     = 'wp_';
 		public array $data = array();

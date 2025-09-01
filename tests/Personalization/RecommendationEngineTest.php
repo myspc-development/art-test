@@ -5,6 +5,12 @@ use WP_UnitTestCase;
 use ArtPulse\Personalization\RecommendationEngine;
 use ArtPulse\Personalization\RecommendationPreferenceManager;
 
+/**
+
+ * @group personalization
+
+ */
+
 class RecommendationEngineTest extends WP_UnitTestCase {
 
 	private int $user_id;

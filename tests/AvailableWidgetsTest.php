@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
+/**
+
+ * @group availablewidgets
+
+ */
+
 class AvailableWidgetsTest extends TestCase {
 
 	public function test_widget_callbacks_are_renderable(): void {

@@ -4,6 +4,12 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Discovery\EventRankingManager;
 use ArtPulse\Core\EventMetrics;
 
+/**
+
+ * @group integration
+
+ */
+
 class EventRankingManagerTest extends \WP_UnitTestCase {
 
 	public function set_up() {

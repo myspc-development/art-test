@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\WidgetRegistry;
 
+/**
+
+ * @group phpunit
+
+ */
+
 class WidgetRegistryTest extends TestCase {
 
          public static function renderGreeting( array $ctx = array() ): string {

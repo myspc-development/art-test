@@ -5,6 +5,12 @@ use ArtPulse\Core\DashboardPresets;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\UserLayoutManager;
 
+/**
+
+ * @group integration
+
+ */
+
 class CanonicalWidgetRenderTest extends \WP_UnitTestCase {
         private const ROLES = array( 'member', 'artist', 'organization' );
 

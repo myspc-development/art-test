@@ -1,6 +1,12 @@
 <?php
 use ArtPulse\Widgets\EventsWidget;
 
+/**
+
+ * @group widgets
+
+ */
+
 class EventsWidgetTest extends \WP_UnitTestCase {
 
         private int $user_id;

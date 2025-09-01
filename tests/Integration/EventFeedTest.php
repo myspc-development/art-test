@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use function ArtPulse\Util\ap_fetch_calendar_events;
 
+/**
+
+ * @group integration
+
+ */
+
 class EventFeedTest extends \WP_UnitTestCase {
 
 	private int $event_id;

@@ -26,6 +26,12 @@ namespace ArtPulse\Search\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Search\ExternalSearch;
 
+/**
+
+ * @group search
+
+ */
+
 class ExternalSearchTest extends TestCase {
 
 	public static array $options         = array();

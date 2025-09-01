@@ -19,6 +19,12 @@ use ArtPulse\Core\DocumentGenerator;
 use ArtPulse\Admin\Tests\Stub;
 use function ArtPulse\Tests\safe_unlink;
 
+/**
+
+ * @group core
+
+ */
+
 class DocumentGeneratorTest extends TestCase {
 
 	protected function setUp(): void {

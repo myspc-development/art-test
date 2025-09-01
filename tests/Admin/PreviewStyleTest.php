@@ -29,6 +29,12 @@ if ( ! function_exists( __NAMESPACE__ . '\\sanitize_key' ) ) {
 		return preg_replace( '/[^a-z0-9_]/i', '', strtolower( $key ) ); }
 }
 
+/**
+
+ * @group admin
+
+ */
+
 class PreviewStyleTest extends TestCase {
 
 	public static array $options = array();

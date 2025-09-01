@@ -4,6 +4,12 @@ namespace ArtPulse\Admin\Tests;
 use ArtPulse\Admin\SettingsPage;
 use WP_UnitTestCase;
 
+/**
+
+ * @group admin
+
+ */
+
 class SettingsPageSanitizeTest extends WP_UnitTestCase {
 
 	public function test_checkbox_unchecked_saves_zero(): void {

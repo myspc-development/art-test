@@ -8,6 +8,12 @@ use Brain\Monkey\Functions;
 use function Patchwork\redefine;
 use function Patchwork\restore;
 
+/**
+
+ * @group phpunit
+
+ */
+
 final class DashboardRoleRewritePreviewTest extends TestCase {
     protected function setUp(): void {
         parent::setUp();

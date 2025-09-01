@@ -31,6 +31,12 @@ if ( ! function_exists( __NAMESPACE__ . '\add_action' ) ) {
 
 use PHPUnit\Framework\TestCase;
 
+/**
+
+ * @group ai
+
+ */
+
 class DummyRequest {
 
 	private array $p;

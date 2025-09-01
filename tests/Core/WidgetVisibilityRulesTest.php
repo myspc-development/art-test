@@ -14,6 +14,12 @@ require_once __DIR__ . '/../../includes/widget-loader.php';
 require_once __DIR__ . '/../../src/Dashboard/WidgetVisibilityManager.php';
 require_once __DIR__ . '/../../src/Core/DashboardWidgetRegistry.php';
 
+/**
+
+ * @group core
+
+ */
+
 class WidgetVisibilityRulesTest extends TestCase {
 	protected function setUp(): void {
 		\ArtPulse\Tests\Stubs\MockStorage::$options = array();

@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests {
 	use PHPUnit\Framework\TestCase;
 	use ArtPulse\Core\DashboardController;
 
+	/**
+
+	 * @group core
+
+	 */
+
 	class DashboardControllerTest extends TestCase {
 
 		public function test_default_presets_include_new_templates(): void {

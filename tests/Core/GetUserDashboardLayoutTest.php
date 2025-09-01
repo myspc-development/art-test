@@ -6,6 +6,12 @@ namespace ArtPulse\Core\Tests {
 	use ArtPulse\Core\DashboardWidgetRegistry;
 	use ArtPulse\Tests\Stubs\MockStorage;
 
+	/**
+
+	 * @group core
+
+	 */
+
 	class GetUserDashboardLayoutTest extends TestCase {
 
 		protected function setUp(): void {

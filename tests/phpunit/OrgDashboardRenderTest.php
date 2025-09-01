@@ -6,6 +6,9 @@ use ArtPulse\Core\WidgetRegistry;
 use ArtPulse\Core\DashboardPresets;
 
 /** @coversNothing */
+/**
+ * @group phpunit
+ */
 final class OrgDashboardRenderTest extends TestCase {
         public static function renderSection(): string {
                 return '';

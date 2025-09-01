@@ -2,6 +2,12 @@
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Support\FileSystem;
 
+/**
+
+ * @group phpunit
+
+ */
+
 class FileSystemTest extends TestCase {
 
 	private string $tmpDir;

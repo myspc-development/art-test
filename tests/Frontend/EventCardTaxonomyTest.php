@@ -4,6 +4,12 @@ namespace ArtPulse\Frontend\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Taxonomies\TaxonomiesRegistrar;
 
+/**
+
+ * @group frontend
+
+ */
+
 class EventCardTaxonomyTest extends WP_UnitTestCase {
 
 	private int $event_id;

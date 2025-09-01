@@ -36,6 +36,12 @@ namespace ArtPulse\Admin\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\MetaBoxesArtwork;
 
+/**
+
+ * @group admin
+
+ */
+
 class MetaBoxesArtworkTest extends TestCase {
 
 	public static array $meta    = array();

@@ -5,6 +5,12 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\WidgetRegistry;
 use ArtPulse\Core\DashboardPresets;
 
+/**
+
+ * @group integration
+
+ */
+
 final class MemberPresetRenderTest extends TestCase {
 
 	public function test_member_preset_contains_my_follows_section(): void {

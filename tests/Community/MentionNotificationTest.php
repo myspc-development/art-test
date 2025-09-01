@@ -5,6 +5,12 @@ use ArtPulse\Community\NotificationHooks;
 use ArtPulse\Community\NotificationManager;
 use WP_UnitTestCase;
 
+/**
+
+ * @group community
+
+ */
+
 class MentionNotificationTest extends WP_UnitTestCase {
 
 	private int $post_id;

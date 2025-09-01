@@ -4,6 +4,12 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Rest\SubmissionRestController;
 use ArtPulse\Frontend\EventFilter;
 
+/**
+
+ * @group integration
+
+ */
+
 class EventCreationFilteringTest extends \WP_UnitTestCase {
 
 	private int $user_id;

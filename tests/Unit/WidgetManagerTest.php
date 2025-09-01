@@ -29,6 +29,12 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group unit
+
+ */
+
 class WidgetManagerTest extends TestCase {
 
 	public static array $meta  = array();

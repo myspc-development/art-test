@@ -23,6 +23,9 @@ namespace ArtPulse\Core\Tests {
     /**
      * @runInSeparateProcess
      */
+    /**
+     * @group phpunit
+     */
     class WidgetAccessValidatorTest extends TestCase {
         protected function setUp(): void {
             $GLOBALS['test_roles'] = array();

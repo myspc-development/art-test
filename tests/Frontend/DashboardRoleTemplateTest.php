@@ -5,6 +5,12 @@ use WP_UnitTestCase;
 use ArtPulse\Frontend\DashboardRoleRewrite;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group frontend
+
+ */
+
 class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
 	public function set_up() {

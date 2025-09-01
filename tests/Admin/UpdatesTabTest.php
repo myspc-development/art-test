@@ -97,6 +97,12 @@ use Brain\Monkey\Functions;
 use WP_UnitTestCase;
 use function ArtPulse\Tests\safe_unlink;
 
+/**
+
+ * @group admin
+
+ */
+
 class UpdatesTabTest extends WP_UnitTestCase {
 
 	public static bool $can              = true;

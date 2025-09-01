@@ -1,6 +1,12 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
+/**
+
+ * @group avatarhttpsfix
+
+ */
+
 class AvatarHttpsFixTest extends TestCase {
 
 	protected function setUp(): void {

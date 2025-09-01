@@ -13,6 +13,12 @@ namespace ArtPulse\Support\Tests;
 use ArtPulse\Support\OptionUtils;
 use PHPUnit\Framework\TestCase;
 
+/**
+
+ * @group support
+
+ */
+
 class OptionUtilsTest extends TestCase {
 
 	public static array $options = array();

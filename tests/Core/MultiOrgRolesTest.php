@@ -3,6 +3,12 @@ namespace ArtPulse\Core\Tests;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+
+ * @group core
+
+ */
+
 class MultiOrgRolesTest extends TestCase {
 
 	private $old_wpdb;

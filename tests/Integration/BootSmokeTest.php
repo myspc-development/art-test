@@ -1,6 +1,12 @@
 <?php
 namespace ArtPulse\Integration\Tests;
 
+/**
+
+ * @group integration
+
+ */
+
 class BootSmokeTest extends \WP_UnitTestCase {
 	public function test_bootstrap(): void {
 		$this->assertGreaterThan( 0, did_action( 'muplugins_loaded' ) );

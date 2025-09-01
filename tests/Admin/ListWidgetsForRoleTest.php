@@ -4,6 +4,12 @@ namespace ArtPulse\Admin\Tests;
 use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group admin
+
+ */
+
 class ListWidgetsForRoleTest extends \WP_UnitTestCase {
 
 	public function set_up() {

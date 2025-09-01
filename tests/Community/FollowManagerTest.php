@@ -5,6 +5,12 @@ use WP_UnitTestCase;
 use ArtPulse\Community\FollowManager;
 use ArtPulse\Community\NotificationManager;
 
+/**
+
+ * @group community
+
+ */
+
 class FollowManagerTest extends WP_UnitTestCase {
 
 	private int $follower_id;

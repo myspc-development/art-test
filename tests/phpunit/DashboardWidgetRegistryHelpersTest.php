@@ -6,6 +6,12 @@ require_once __DIR__ . '/../TestStubs.php';
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group phpunit
+
+ */
+
 class DashboardWidgetRegistryHelpersTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();

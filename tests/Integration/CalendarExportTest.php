@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Integration\CalendarExport;
 
+/**
+
+ * @group integration
+
+ */
+
 class CalendarExportTest extends \WP_UnitTestCase {
 
 	public function set_up() {

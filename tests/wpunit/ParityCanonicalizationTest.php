@@ -9,6 +9,12 @@ use ArtPulse\Admin\UserLayoutManager;
 
 require_once __DIR__ . '/../TestStubs.php';
 
+/**
+
+ * @group wpunit
+
+ */
+
 class ParityCanonicalizationTest extends \WP_UnitTestCase {
 
 	protected function setUp(): void {

@@ -7,6 +7,12 @@ use ArtPulse\Core\DashboardPresets;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+/**
+
+ * @group phpunit
+
+ */
+
 final class MemberPresetRenderTest extends TestCase {
 
         protected function setUp(): void {

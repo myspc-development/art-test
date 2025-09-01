@@ -6,6 +6,12 @@ use ArtPulse\Admin\OrgUserManager;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+/**
+
+ * @group admin
+
+ */
+
 class OrgUserManagerTest extends TestCase {
     public static bool $can  = true;
     public static bool $died = false;

@@ -5,6 +5,12 @@ namespace ArtPulse\Core\Tests {
 	use ArtPulse\Core\OrgRoleMetaMigration;
 	use ArtPulse\Tests\Stubs\MockStorage;
 
+	/**
+
+	 * @group core
+
+	 */
+
 	class OrgRoleMetaMigrationTest extends TestCase {
 
 		private $old_wpdb;

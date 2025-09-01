@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group core
+
+ */
+
 class DashboardWidgetRegistryValidationTest extends TestCase {
 
 	protected function setUp(): void {

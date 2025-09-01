@@ -2,6 +2,12 @@
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardPresets;
 
+/**
+
+ * @group integration
+
+ */
+
 class RoleLayoutRenderTest extends \WP_UnitTestCase {
     public function set_up(): void {
         parent::set_up();

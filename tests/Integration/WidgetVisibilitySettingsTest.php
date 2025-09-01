@@ -8,6 +8,12 @@ use ArtPulse\Widgets\DonationsWidget;
 use function ArtPulse\Tests\rm_rf;
 use ArtPulse\Tests\ErrorSilencer;
 
+/**
+
+ * @group integration
+
+ */
+
 class WidgetVisibilitySettingsTest extends \WP_UnitTestCase {
 
     /** @var callable|null */

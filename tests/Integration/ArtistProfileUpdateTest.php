@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Core\UserDashboardManager;
 
+/**
+
+ * @group integration
+
+ */
+
 class ArtistProfileUpdateTest extends \WP_UnitTestCase {
 
 	private int $user_id;

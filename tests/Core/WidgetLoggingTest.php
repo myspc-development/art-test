@@ -50,6 +50,12 @@ namespace ArtPulse\Core\Tests {
 	use function ArtPulse\Tests\safe_unlink;
 	use function ArtPulse\Tests\rm_rf;
 
+	/**
+
+	 * @group core
+
+	 */
+
 	class WidgetLoggingTest extends TestCase {
 
 		private string $uploadsDir;

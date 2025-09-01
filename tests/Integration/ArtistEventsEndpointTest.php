@@ -4,6 +4,12 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Core\PostTypeRegistrar;
 use ArtPulse\Rest\ArtistEventsController;
 
+/**
+
+ * @group integration
+
+ */
+
 class ArtistEventsEndpointTest extends \WP_UnitTestCase {
 
 	private int $user_id;

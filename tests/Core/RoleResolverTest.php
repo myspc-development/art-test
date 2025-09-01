@@ -8,6 +8,12 @@ namespace ArtPulse\Core\Tests {
 	use ArtPulse\Core\RoleResolver;
 	use ArtPulse\Tests\Stubs\MockStorage;
 
+	/**
+
+	 * @group core
+
+	 */
+
 	class RoleResolverTest extends TestCase {
 		protected function setUp(): void {
 			parent::setUp();

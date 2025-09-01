@@ -20,6 +20,9 @@ use WP_Error;
  *   export AP_TEST_MODE=1
  *   vendor/bin/phpunit -c phpunit.wp.xml.dist --filter RouteBucketsSmokeTest -v
  */
+/**
+ * @group restapi
+ */
 class RouteBucketsSmokeTest extends WP_UnitTestCase
 {
     private int $admin_id;

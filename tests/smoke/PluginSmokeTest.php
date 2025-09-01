@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+
+ * @group smoke
+
+ */
+
 class PluginSmokeTest extends WP_UnitTestCase {
 	public function test_plugin_loaded_and_shortcode_registered(): void {
 		$this->assertTrue( defined( 'ARTPULSE_PLUGIN_FILE' ) );

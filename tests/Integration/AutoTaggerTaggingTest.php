@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\AI\AutoTagger;
 
+/**
+
+ * @group integration
+
+ */
+
 class AutoTaggerTaggingTest extends \WP_UnitTestCase {
 
 	public function set_up() {

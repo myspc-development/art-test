@@ -4,6 +4,12 @@ namespace ArtPulse\Integration\Tests;
 use WP_Ajax_UnitTestCase;
 use ArtPulse\Tests\AjaxTestHelper;
 
+/**
+
+ * @group integration
+
+ */
+
 class SaveUserLayoutAjaxTest extends WP_Ajax_UnitTestCase {
 
 	use AjaxTestHelper;

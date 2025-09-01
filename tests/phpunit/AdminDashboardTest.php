@@ -6,6 +6,12 @@ use Brain\Monkey;
 use Brain\Monkey\Functions;
 use ArtPulse\Core\AdminDashboard;
 
+/**
+
+ * @group phpunit
+
+ */
+
 final class AdminDashboardTest extends TestCase {
     private array $scripts = array();
     private array $styles = array();

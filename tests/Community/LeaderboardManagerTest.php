@@ -6,6 +6,12 @@ use ArtPulse\Community\LeaderboardManager;
 use ArtPulse\Core\UserEngagementLogger;
 use WP_UnitTestCase;
 
+/**
+
+ * @group community
+
+ */
+
 class LeaderboardManagerTest extends WP_UnitTestCase {
 
 	private int $user1;

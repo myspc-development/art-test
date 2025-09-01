@@ -3,6 +3,12 @@ namespace ArtPulse\Community\Tests;
 
 use ArtPulse\Community\ProfileLinkRequestRestController;
 
+/**
+
+ * @group community
+
+ */
+
 class ProfileLinkRequestRestControllerTest extends \WP_UnitTestCase {
 
 	private int $artist_id;

@@ -52,6 +52,12 @@ namespace ArtPulse\Frontend\Tests;
 
 use ArtPulse\Frontend\EventSubmissionShortcode;
 
+/**
+
+ * @group frontend
+
+ */
+
 class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 
 	public static array $posts_return = array();

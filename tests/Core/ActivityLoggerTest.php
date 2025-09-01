@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Core\ActivityLogger;
 
+/**
+
+ * @group core
+
+ */
+
 class ActivityLoggerTest extends WP_UnitTestCase {
 
 	public function set_up() {

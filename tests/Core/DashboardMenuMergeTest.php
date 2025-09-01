@@ -7,6 +7,9 @@ namespace {
 		function wp_get_current_user() {
 			return new WP_User(); } }
 	if ( ! class_exists( 'WP_User' ) ) {
+		/**
+		 * @group core
+		 */
 		class WP_User {
 			public $roles = array(); public function __construct( $id = 0 ) {}
 		} }

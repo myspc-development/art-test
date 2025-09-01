@@ -4,6 +4,12 @@ namespace ArtPulse\Frontend\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Frontend\EventListingShortcode;
 
+/**
+
+ * @group frontend
+
+ */
+
 class EventListingShortcodeTest extends WP_UnitTestCase {
 
 	public function test_category_dropdown_rendered(): void {

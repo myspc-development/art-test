@@ -41,6 +41,9 @@ if ( ! function_exists( 'current_user_can' ) ) {
 /**
  * @runInSeparateProcess
  */
+/**
+ * @group phpunit
+ */
 final class DashboardTemplateIncludeTest extends TestCase {
         protected function setUp(): void {
                 if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {

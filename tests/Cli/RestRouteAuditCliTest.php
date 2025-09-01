@@ -8,6 +8,12 @@ require_once __DIR__ . '/../../includes/class-cli-rest-route-audit.php';
 use PHPUnit\Framework\TestCase;
 use WP_CLI;
 
+/**
+
+ * @group cli
+
+ */
+
 class RestRouteAuditCliTest extends TestCase {
 
 	protected function setUp(): void {

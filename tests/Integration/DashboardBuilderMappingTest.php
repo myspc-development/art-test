@@ -6,6 +6,12 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Core\UserDashboardManager;
 
+/**
+
+ * @group integration
+
+ */
+
 class DashboardBuilderMappingTest extends \WP_UnitTestCase {
 	private int $admin;
 

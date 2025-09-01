@@ -10,6 +10,12 @@ use function ArtPulse\Tests\safe_unlink;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+/**
+
+ * @group phpunit
+
+ */
+
 final class DashboardPresetsLoadTest extends TestCase {
 	private string $dataDir;
 

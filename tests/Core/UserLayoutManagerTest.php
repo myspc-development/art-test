@@ -13,6 +13,12 @@ if ( ! function_exists( 'get_user_meta' ) ) {
 		return \UserLayoutManagerTest::$user_meta; }
 }
 
+/**
+
+ * @group core
+
+ */
+
 class UserLayoutManagerTest extends \WP_UnitTestCase {
 	public static array $user_meta = array();
 

@@ -30,6 +30,12 @@ use ArtPulse\Admin\RoleDashboardPage;
 use function Patchwork\redefine;
 use function Patchwork\restore;
 
+/**
+
+ * @group phpunit
+
+ */
+
 final class RoleDashboardPageTest extends TestCase {
     public static array $add_submenu_page_args = array();
     public static array $render_roles = array();

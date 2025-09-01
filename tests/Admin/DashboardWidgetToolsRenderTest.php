@@ -49,6 +49,12 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Admin\DashboardWidgetTools;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group admin
+
+ */
+
 class DashboardWidgetToolsRenderTest extends TestCase {
 
 	public static array $options = array();

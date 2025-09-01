@@ -4,6 +4,12 @@ namespace ArtPulse\Frontend\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Frontend\EventRsvpHandler;
 
+/**
+
+ * @group frontend
+
+ */
+
 class EventRsvpHandlerTest extends WP_UnitTestCase {
 
 	private int $user_id;

@@ -12,6 +12,12 @@ namespace ArtPulse\Core\Tests {
 	use ArtPulse\Core\WidgetRegistry;
 	use ArtPulse\Core\DashboardPresets;
 
+	/**
+
+	 * @group core
+
+	 */
+
 	class DashboardPresetIntegrityTest extends TestCase {
 
 		protected function setUp(): void {

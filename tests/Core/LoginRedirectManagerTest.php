@@ -28,6 +28,12 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\LoginRedirectManager;
 use WP_Error;
 
+/**
+
+ * @group core
+
+ */
+
 class LoginRedirectManagerTest extends TestCase {
 	public static array $caps         = array();
 	public static bool $admin_enabled = false;

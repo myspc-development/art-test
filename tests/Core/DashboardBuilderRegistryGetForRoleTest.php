@@ -4,6 +4,12 @@ namespace ArtPulse\DashboardBuilder\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group core
+
+ */
+
 class DashboardBuilderRegistryGetForRoleTest extends TestCase {
 
 	protected function setUp(): void {

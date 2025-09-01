@@ -6,6 +6,12 @@ use ArtPulse\Admin\EnqueueAssets;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+/**
+
+ * @group admin
+
+ */
+
 class EnqueueAssetsTest extends TestCase {
     public static array $localized      = array();
     public static array $user_meta      = array();

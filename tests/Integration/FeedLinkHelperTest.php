@@ -4,6 +4,12 @@ namespace ArtPulse\Integration\Tests;
 use PHPUnit\Framework\TestCase;
 use function ArtPulse\Frontend\ap_filtered_feed_link;
 
+/**
+
+ * @group integration
+
+ */
+
 class FeedLinkHelperTest extends TestCase {
 
 	public function test_builds_filtered_url(): void {

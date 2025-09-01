@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Core\EventRsvpMetaMigration;
 
+/**
+
+ * @group core
+
+ */
+
 class EventRsvpMetaMigrationTest extends WP_UnitTestCase {
 
 	public function test_migration_copies_and_removes_old_meta(): void {

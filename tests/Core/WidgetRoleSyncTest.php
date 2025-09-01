@@ -6,6 +6,12 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\WidgetRoleSync;
 use ArtPulse\Core\DashboardController;
 
+/**
+
+ * @group core
+
+ */
+
 class WidgetRoleSyncTest extends TestCase {
 
 	protected function setUp(): void {

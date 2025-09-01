@@ -42,6 +42,12 @@ if ( ! function_exists( __NAMESPACE__ . '\\get_post_meta' ) ) {
 		return \ArtPulse\Admin\Tests\OrgDashboardAdminStub::get_post_meta( $post_id, $key ); }
 }
 
+/**
+
+ * @group admin
+
+ */
+
 class WP_Post {
 	public $post_type;
 	public $ID;

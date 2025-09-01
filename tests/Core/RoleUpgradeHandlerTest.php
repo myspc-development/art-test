@@ -9,6 +9,12 @@ use ArtPulse\Tests\Stubs\MockStorage;
 
 require_once __DIR__ . '/../../includes/role-upgrade-handler.php';
 
+/**
+
+ * @group core
+
+ */
+
 class RoleUpgradeHandlerTest extends TestCase {
 
 	protected function setUp(): void {

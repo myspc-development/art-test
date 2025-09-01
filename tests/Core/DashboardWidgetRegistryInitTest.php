@@ -12,6 +12,12 @@ require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/../../src/Dashboard/WidgetVisibility.php';
 require_once __DIR__ . '/../../src/Core/DashboardWidgetRegistry.php';
 
+/**
+
+ * @group core
+
+ */
+
 class DashboardWidgetRegistryInitTest extends TestCase {
         /**
          * @runInSeparateProcess

@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\AccessControlManager;
 
+/**
+
+ * @group core
+
+ */
+
 class AccessControlManagerTest extends TestCase {
 
 	public function test_free_member_requires_redirect(): void {

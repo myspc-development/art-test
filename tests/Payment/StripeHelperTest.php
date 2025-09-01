@@ -4,6 +4,12 @@ namespace ArtPulse\Payment\Tests;
 use ArtPulse\Payment\StripeHelper;
 use WP_UnitTestCase;
 
+/**
+
+ * @group payment
+
+ */
+
 class StripeHelperTest extends WP_UnitTestCase {
 
 	public function set_up() {

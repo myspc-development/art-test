@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use ArtPulse\Core\DashboardRenderer;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group core
+
+ */
+
 class DashboardRendererSanitizationTest extends \WP_UnitTestCase {
 	public function test_filtered_output_is_sanitized() {
 		DashboardWidgetRegistry::register_widget(

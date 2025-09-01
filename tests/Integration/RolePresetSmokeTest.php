@@ -5,6 +5,12 @@ use ArtPulse\Core\DashboardPresets;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\WidgetRegistry;
 
+/**
+
+ * @group integration
+
+ */
+
 class RolePresetSmokeTest extends \WP_UnitTestCase {
 	private const SLUGS = array(
 		'widget_membership',

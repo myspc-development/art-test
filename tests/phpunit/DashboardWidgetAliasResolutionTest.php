@@ -8,6 +8,12 @@ use ArtPulse\Tests\Stubs\MockStorage;
 
 require_once __DIR__ . '/../TestStubs.php';
 
+/**
+
+ * @group phpunit
+
+ */
+
 class DashboardWidgetAliasResolutionTest extends TestCase {
 
 	protected function setUp(): void {

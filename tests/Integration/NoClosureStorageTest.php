@@ -6,6 +6,9 @@ use PHPUnit\Framework\TestCase;
 /**
  * Ensure no closures are written to persistent WordPress storage APIs.
  */
+/**
+ * @group integration
+ */
 class NoClosureStorageTest extends TestCase {
 
 	public function test_no_closure_in_persistent_storage_calls(): void {

@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group integration
+
+ */
+
 class DashboardWidgetRenderTest extends \WP_UnitTestCase {
         public static function alpha() { return 'alpha'; }
         public static function beta() { return 'beta'; }

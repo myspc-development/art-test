@@ -6,6 +6,12 @@ use ArtPulse\Support\WidgetIds;
 
 require_once __DIR__ . '/../TestStubs.php';
 
+/**
+
+ * @group phpunit
+
+ */
+
 class WidgetIdsCanonicalizationTest extends TestCase {
 
         public function test_canonicalize_aliases(): void {

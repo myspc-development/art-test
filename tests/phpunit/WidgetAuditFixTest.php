@@ -10,6 +10,12 @@ use ArtPulse\Widgets\TestWidget;
 require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/fixtures/TestWidget.php';
 
+/**
+
+ * @group phpunit
+
+ */
+
 class WidgetAuditFixTest extends TestCase {
 
 	protected function setUp(): void {

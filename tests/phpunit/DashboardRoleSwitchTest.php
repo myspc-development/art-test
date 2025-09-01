@@ -5,6 +5,9 @@ require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/../Support/Stubs/DashboardControllerStub.php';
 require_once __DIR__ . '/../Stubs/WP_Query.php';
 if ( ! class_exists( 'WP_Query' ) ) {
+        /**
+         * @group phpunit
+         */
         class_alias( \ArtPulse\Tests\Stubs\WP_Query::class, 'WP_Query' );
 }
 

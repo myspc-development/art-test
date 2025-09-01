@@ -19,6 +19,12 @@ require_once __DIR__ . '/../TestStubs.php';
         use ArtPulse\Widgets\Organization\MyEventsWidget;
         use ArtPulse\Widgets\Common\SiteStatsWidget;
 
+/**
+
+ * @group phpunit
+
+ */
+
 class OrgWidgetsTest extends TestCase {
         protected function setUp(): void {
                 parent::setUp();

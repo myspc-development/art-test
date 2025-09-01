@@ -4,6 +4,12 @@ namespace ArtPulse\Core\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Core\AnalyticsManager;
 
+/**
+
+ * @group core
+
+ */
+
 class AnalyticsManagerTest extends WP_UnitTestCase {
 
 	public function test_print_tracking_snippet_outputs_ga4_when_enabled(): void {

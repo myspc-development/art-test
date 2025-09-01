@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Integration\PortfolioSync;
 
+/**
+
+ * @group integration
+
+ */
+
 class PortfolioSyncTest extends \WP_UnitTestCase {
 
 	public function set_up() {

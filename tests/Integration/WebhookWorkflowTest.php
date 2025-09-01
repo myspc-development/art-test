@@ -4,6 +4,12 @@ namespace ArtPulse\Integration\Tests;
 use ArtPulse\Integration\WebhookManager;
 use WP_Error;
 
+/**
+
+ * @group integration
+
+ */
+
 class WebhookWorkflowTest extends \WP_UnitTestCase {
 
 	private array $requests = array();

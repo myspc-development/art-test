@@ -20,6 +20,12 @@ if ( ! function_exists( __NAMESPACE__ . '\get_current_user_id' ) ) {
 	}
 }
 
+/**
+
+ * @group core
+
+ */
+
 class OrgRoleManagerTest extends TestCase {
 
 	public static array $meta      = array();

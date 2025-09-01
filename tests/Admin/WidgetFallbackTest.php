@@ -4,6 +4,12 @@ namespace ArtPulse\Admin\Tests;
 use WP_UnitTestCase;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
+/**
+
+ * @group admin
+
+ */
+
 class WidgetFallbackTest extends WP_UnitTestCase {
 
 	public function set_up() {

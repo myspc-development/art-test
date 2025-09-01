@@ -3,6 +3,12 @@ namespace ArtPulse\Integration\Tests;
 
 use ArtPulse\Integration\SocialAutoPoster;
 
+/**
+
+ * @group integration
+
+ */
+
 class SocialAutoPosterTest extends \WP_UnitTestCase {
 
 	private array $requests = array();

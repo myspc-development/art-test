@@ -76,6 +76,12 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\UserDashboardManager;
 
+/**
+
+ * @group core
+
+ */
+
 class Stub {
 	public static $logged_in = true;
 	public static $can_view  = true;

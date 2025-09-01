@@ -5,6 +5,12 @@ use ArtPulse\Ajax\FrontendFilterHandler;
 use ArtPulse\Tests\Stubs\MockStorage;
 use WP_Query;
 
+/**
+
+ * @group ajax
+
+ */
+
 class FrontendFilterHandlerTest extends \WP_UnitTestCase {
 
 	public static array $posts      = array();
