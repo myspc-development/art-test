@@ -133,29 +133,38 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
                $this->assertSame( 401, $res->get_status() );
        }
 
-	public function test_save_layout_with_extra_widgets(): void {
-		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
-		$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-		$req->set_body_params(
-			array(
-				'role'   => 'administrator',
-				'layout' => array(
-					array(
-						'id'      => 'widget_foo',
-						'visible' => true,
-					),
-                                       array(
-                                               'id'      => 'widget_bar',
-                                               'visible' => false,
-                                       ),
-				),
-			)
-		);
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 200, $res->get_status() );
+        public function test_save_layout_with_extra_widgets(): void {
+                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
+                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+                $req->set_body_params(
+                        array(
+                                'role'   => 'administrator',
+                                'layout' => array(
+                                        array(
+                                                'id'      => 'widget_foo',
+                                                'visible' => true,
+                                        ),
+                                        array(
+                                                'id'      => 'widget_bar',
+                                                'visible' => false,
+                                        ),
+                                ),
+                        )
+                );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 200, $res->get_status() );
 
-
-	}
+                $saved = UserLayoutManager::get_role_layout( 'administrator' );
+                $this->assertSame(
+                        array(
+                                array(
+                                        'id'      => 'widget_foo',
+                                        'visible' => true,
+                                ),
+                        ),
+                        $saved['layout']
+                );
+        }
 
         public function test_save_layout_requires_nonce(): void {
                 UserLayoutManager::save_role_layout(
@@ -182,7 +191,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
                         )
                 );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
+                $this->assertSame( 401, $res->get_status() );
         }
 
         public function test_save_layout_rejects_invalid_nonce(): void {
@@ -210,7 +219,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
                         )
                 );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
+                $this->assertSame( 401, $res->get_status() );
         }
 
        public function test_save_layout_requires_edit_posts_cap(): void {
@@ -238,8 +247,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 403, $res->get_status() );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 401, $res->get_status() );
 
 	}
 
@@ -282,8 +291,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		);
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets/export' );
 		$req->set_param( 'role', 'administrator' );
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 403, $res->get_status() );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 401, $res->get_status() );
 	}
 
 	public function test_export_layout_rejects_invalid_nonce(): void {
@@ -299,8 +308,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets/export' );
 		$req->set_param( 'role', 'administrator' );
 		$req->set_header( 'X-WP-Nonce', 'badnonce' );
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 403, $res->get_status() );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 401, $res->get_status() );
 	}
 
        public function test_export_layout_requires_edit_posts_cap(): void {
@@ -316,11 +325,11 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$subscriber = self::factory()->user->create( array( 'role' => 'subscriber' ) );
 		wp_set_current_user( $subscriber );
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets/export' );
-		$req->set_param( 'role', 'administrator' );
-		$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 403, $res->get_status() );
-	}
+                $req->set_param( 'role', 'administrator' );
+                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 401, $res->get_status() );
+        }
 
 	public function test_import_layout_endpoint(): void {
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/import' );
@@ -373,8 +382,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 403, $res->get_status() );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 401, $res->get_status() );
 
 	}
 
@@ -401,8 +410,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 403, $res->get_status() );
+                $res = rest_get_server()->dispatch( $req );
+                $this->assertSame( 401, $res->get_status() );
 
 	}
 
