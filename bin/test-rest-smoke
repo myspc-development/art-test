@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+composer preflight
+
+if ! composer test:smoke -- --log-junit build/junit-rest.xml; then
+    php tools/print-failures.php build/junit-rest.xml
+fi
