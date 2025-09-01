@@ -75,3 +75,4 @@ tests_add_filter('muplugins_loaded', function () {
 
 // 5) Load shared Frontend stubs AFTER WP test environment is initialized
 require_once __DIR__ . '/Frontend/_stubs.php';
+require_once __DIR__ . '/Rest/helpers.php';
