@@ -2,24 +2,28 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Rest\RsvpRestController;
+use ArtPulse\Tests\Email;
 
 /**
  * @group REST
  */
 class RsvpRestControllerTest extends \WP_UnitTestCase {
 
-	private int $event_id;
-	private int $user1;
-	private int $user2;
-	private int $user3;
-	private array $emails = array();
+        private int $event_id;
+        private int $user1;
+        private int $user2;
+        private int $user3;
 
-	public function set_up() {
-		parent::set_up();
-		add_filter( 'pre_wp_mail', array( $this, 'capture_mail' ), 10, 6 );
-		$this->user1 = self::factory()->user->create( array( 'role' => 'organization' ) );
-		$this->user2 = self::factory()->user->create();
-		$this->user3 = self::factory()->user->create( array( 'role' => 'organization' ) );
+        public static function setUpBeforeClass(): void {
+                parent::setUpBeforeClass();
+                Email::install();
+        }
+
+        public function set_up() {
+                parent::set_up();
+                $this->user1 = self::factory()->user->create( array( 'role' => 'organization' ) );
+                $this->user2 = self::factory()->user->create();
+                $this->user3 = self::factory()->user->create( array( 'role' => 'organization' ) );
 
 		$this->event_id = wp_insert_post(
 			array(
@@ -45,15 +49,10 @@ class RsvpRestControllerTest extends \WP_UnitTestCase {
 		do_action( 'rest_api_init' );
 	}
 
-	public function tear_down() {
-		remove_filter( 'pre_wp_mail', array( $this, 'capture_mail' ), 10 );
-		parent::tear_down();
-	}
-
-	public function capture_mail( $null, $to, $subject, $message ): bool {
-		$this->emails[] = array( $to, $subject, $message );
-		return true;
-	}
+        public function tear_down() {
+                Email::clear();
+                parent::tear_down();
+        }
 
 	public function test_join_adds_user_to_rsvp_list(): void {
 		wp_set_current_user( $this->user1 );
@@ -163,7 +162,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase {
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/rsvp' );
 		$req->set_param( 'event_id', $this->event_id );
 		rest_get_server()->dispatch( $req );
-		$this->assertCount( 2, $this->emails );
+                $this->assertCount( 2, Email::messages() );
 	}
 
 	public function test_bulk_email_rsvps(): void {
@@ -174,7 +173,7 @@ class RsvpRestControllerTest extends \WP_UnitTestCase {
 		$req->set_param( 'subject', 'Hi' );
 		$req->set_param( 'message', 'Hello' );
 		rest_get_server()->dispatch( $req );
-		$this->assertCount( 2, $this->emails );
+                $this->assertCount( 2, Email::messages() );
 	}
 
 	public function test_email_single_attendee(): void {
@@ -186,8 +185,8 @@ class RsvpRestControllerTest extends \WP_UnitTestCase {
 		$req->set_param( 'subject', 'Hi' );
 		$req->set_param( 'message', 'Hello' );
 		rest_get_server()->dispatch( $req );
-		$this->assertCount( 1, $this->emails );
-	}
+                $this->assertCount( 1, Email::messages() );
+        }
 
 	public function test_join_fails_when_rsvp_disabled(): void {
 		update_post_meta( $this->event_id, 'event_rsvp_enabled', '0' );

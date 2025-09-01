@@ -2,43 +2,42 @@
 namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Community\DirectMessages;
+use ArtPulse\Tests\Email;
 
 /**
  * @group REST
  */
 class DirectMessagesTest extends \WP_UnitTestCase {
 
-	private int $user1;
-	private int $user2;
-	private array $mails = array();
-	private string $nonce;
+        private int $user1;
+        private int $user2;
+        private string $nonce;
 
-	public function set_up() {
-		parent::set_up();
-		DirectMessages::install_table();
-		DirectMessages::install_flags_table();
-		DirectMessages::register();
-		do_action( 'rest_api_init' );
+        public static function setUpBeforeClass(): void {
+                parent::setUpBeforeClass();
+                Email::install();
+        }
 
-		$this->user1 = self::factory()->user->create( array( 'user_email' => 'u1@test.com' ) );
-		$this->user2 = self::factory()->user->create( array( 'user_email' => 'u2@test.com' ) );
+        public function set_up() {
+                parent::set_up();
+                DirectMessages::install_table();
+                DirectMessages::install_flags_table();
+                DirectMessages::register();
+                do_action( 'rest_api_init' );
 
-		wp_set_current_user( $this->user1 );
-		$user = new \WP_User( $this->user1 );
-		$user->add_cap( 'ap_send_messages' );
-		$this->nonce = wp_create_nonce( 'wp_rest' );
-		add_filter( 'pre_wp_mail', array( $this, 'capture_mail' ), 10, 6 );
-	}
+                $this->user1 = self::factory()->user->create( array( 'user_email' => 'u1@test.com' ) );
+                $this->user2 = self::factory()->user->create( array( 'user_email' => 'u2@test.com' ) );
 
-	public function tear_down() {
-		remove_filter( 'pre_wp_mail', array( $this, 'capture_mail' ), 10 );
-		parent::tear_down();
-	}
+                wp_set_current_user( $this->user1 );
+                $user = new \WP_User( $this->user1 );
+                $user->add_cap( 'ap_send_messages' );
+                $this->nonce = wp_create_nonce( 'wp_rest' );
+        }
 
-	public function capture_mail(): bool {
-		$this->mails[] = func_get_args();
-		return true;
-	}
+        public function tear_down() {
+                Email::clear();
+                parent::tear_down();
+        }
 
 	public function test_send_and_fetch_message(): void {
 		$post = new \WP_REST_Request( 'POST', '/artpulse/v1/messages' );
@@ -56,7 +55,7 @@ class DirectMessagesTest extends \WP_UnitTestCase {
 		$this->assertSame( 'Hello', $row['content'] );
 		$this->assertSame( '0', $row['is_read'] );
 
-		$this->assertCount( 1, $this->mails );
+                $this->assertCount( 1, Email::messages() );
 
 		$get = new \WP_REST_Request( 'GET', '/artpulse/v1/messages' );
 		$get->set_param( 'with', $this->user2 );
