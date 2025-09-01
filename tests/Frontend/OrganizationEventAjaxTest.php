@@ -2,42 +2,6 @@
 namespace ArtPulse\Frontend;
 
 require_once __DIR__ . '/../TestHelpers/FrontendFunctionStubs.php';
-if ( ! function_exists( 'ArtPulse\\Frontend\\get_post_type' ) ) {
-	function get_post_type( $id ) {
-		return 'artpulse_event'; }
-}
-if ( ! function_exists( 'ArtPulse\\Frontend\\wp_update_post' ) ) {
-	function wp_update_post( $arr ) {
-		\ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$updated = $arr; }
-}
-if ( ! function_exists( 'ArtPulse\\Frontend\\get_posts' ) ) {
-	function get_posts( $args = array() ) {
-		\ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$passed_args = $args;
-		return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$posts; }
-}
-if ( ! function_exists( 'ArtPulse\\Frontend\\wp_set_post_terms' ) ) {
-	function wp_set_post_terms( $id, $terms, $tax ) {
-		\ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$terms = array( $id, $terms, $tax ); }
-}
-if ( ! function_exists( 'ArtPulse\\Frontend\\wp_send_json_success' ) ) {
-	function wp_send_json_success( $data ) {
-		\ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$json = $data; }
-}
-if ( ! function_exists( 'ArtPulse\\Frontend\\wp_send_json_error' ) ) {
-	function wp_send_json_error( $data ) {
-		\ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$json_error = $data; }
-}
-if ( ! function_exists( 'ArtPulse\\Frontend\\media_handle_upload' ) ) {
-	function media_handle_upload( $field, $post_id ) {
-		return \ArtPulse\Frontend\Tests\OrganizationEventAjaxTest::$media_result; }
-}
-if ( ! function_exists( 'ArtPulse\\Frontend\\wp_insert_post' ) ) {
-	function wp_insert_post( $arr ) {
-		return 99; }
-}
-if ( ! function_exists( 'ArtPulse\\Frontend\\set_post_thumbnail' ) ) {
-	function set_post_thumbnail( $id, $thumb ) {}
-}
 
 namespace ArtPulse\Frontend\Tests;
 
@@ -52,23 +16,8 @@ use ArtPulse\Frontend\OrganizationDashboardShortcode;
 
 class OrganizationEventAjaxTest extends TestCase {
 
-	public static array $posts       = array();
-	public static array $passed_args = array();
-	public static array $updated     = array();
-	public static array $json        = array();
-	public static $json_error        = null;
-	public static array $terms       = array();
-	public static $media_result      = 1;
-
         protected function setUp(): void {
                 \ArtPulse\Frontend\StubState::reset();
-                self::$posts        = array();
-                self::$passed_args  = array();
-                self::$updated      = array();
-                self::$json         = array();
-                self::$json_error   = null;
-                self::$terms        = array();
-                self::$media_result = 1;
                 $_POST              = array();
                 $_FILES             = array();
                 $GLOBALS['__ap_test_user_meta'] = array();
@@ -77,28 +26,22 @@ class OrganizationEventAjaxTest extends TestCase {
         protected function tearDown(): void {
                 $_POST               = array();
                 $_FILES              = array();
-                self::$posts         = array();
-                self::$passed_args   = array();
-                self::$updated       = array();
-                self::$json          = array();
-                self::$json_error    = null;
-                self::$terms         = array();
-                self::$media_result  = 1;
                 $GLOBALS['__ap_test_user_meta'] = array();
+                \ArtPulse\Frontend\StubState::reset();
                 parent::tearDown();
         }
 
 	public function test_update_event_returns_html(): void {
-		self::$posts = array(
-			(object) array(
-				'ID'         => 7,
-				'post_title' => 'First',
-			),
-			(object) array(
-				'ID'         => 8,
-				'post_title' => 'Second',
-			),
-		);
+                \ArtPulse\Frontend\StubState::$get_posts_return = array(
+                        (object) array(
+                                'ID'         => 7,
+                                'post_title' => 'First',
+                        ),
+                        (object) array(
+                                'ID'         => 8,
+                                'post_title' => 'Second',
+                        ),
+                );
 
 		$addr = array(
 			'country' => 'US',
@@ -127,9 +70,9 @@ class OrganizationEventAjaxTest extends TestCase {
 
 		OrganizationDashboardShortcode::handle_ajax_update_event();
 
-		$this->assertSame( 7, self::$updated['ID'] ?? null );
-		$this->assertSame( 5, self::$passed_args['meta_value'] ?? null );
-		$html = self::$json['updated_list_html'] ?? '';
+                $this->assertSame( 7, \ArtPulse\Frontend\StubState::$wp_update_post_args['ID'] ?? null );
+                $this->assertSame( 5, \ArtPulse\Frontend\StubState::$get_posts_args['meta_value'] ?? null );
+                $html = \ArtPulse\Frontend\StubState::$json['updated_list_html'] ?? '';
 		$this->assertStringContainsString( 'First', $html );
 		$this->assertStringContainsString( 'Second', $html );
 
@@ -138,7 +81,7 @@ class OrganizationEventAjaxTest extends TestCase {
 	}
 
         public function test_add_event_returns_error_when_upload_fails(): void {
-                self::$media_result = new \WP_Error( 'upload_error', 'Upload failed' );
+                \ArtPulse\Frontend\StubState::$media_default = new \WP_Error( 'upload_error', 'Upload failed' );
                 $_FILES             = array( 'event_banner' => array( 'tmp_name' => 'tmp' ) );
 
                 $_POST = array(
@@ -153,6 +96,6 @@ class OrganizationEventAjaxTest extends TestCase {
 
                 OrganizationDashboardShortcode::handle_ajax_add_event();
 
-                $this->assertSame( 'Upload failed', self::$json_error['message'] ?? null );
+                $this->assertSame( 'Upload failed', \ArtPulse\Frontend\StubState::$json_error['message'] ?? null );
         }
 }
