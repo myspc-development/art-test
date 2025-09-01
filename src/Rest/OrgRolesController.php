@@ -2,6 +2,7 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
 
@@ -20,7 +21,7 @@ class OrgRolesController {
                 );
         }
 
-        public static function get_roles(): WP_REST_Response {
+        public static function get_roles(): WP_REST_Response|WP_Error {
                 return \rest_ensure_response(
                         array(
                                 'roles' => array( 'owner', 'manager', 'editor', 'viewer' ),

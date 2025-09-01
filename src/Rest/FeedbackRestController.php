@@ -105,7 +105,7 @@ class FeedbackRestController {
 		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
-	public static function list(): WP_REST_Response {
+	public static function list(): WP_REST_Response|WP_Error {
 		global $wpdb;
 		$table = $wpdb->prefix . 'ap_feedback';
 		$rows  = $wpdb->get_results( "SELECT * FROM $table ORDER BY votes DESC, created_at DESC LIMIT 100", ARRAY_A );
@@ -132,7 +132,7 @@ class FeedbackRestController {
 		return \rest_ensure_response( $items );
 	}
 
-	public static function vote( WP_REST_Request $req ): WP_REST_Response {
+	public static function vote( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$id    = absint( $req['id'] );
 		$count = FeedbackManager::upvote( $id, get_current_user_id() );
 		return \rest_ensure_response(
@@ -143,7 +143,7 @@ class FeedbackRestController {
 		);
 	}
 
-	public static function comments( WP_REST_Request $req ): WP_REST_Response {
+	public static function comments( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$id = absint( $req['id'] );
 		return \rest_ensure_response( FeedbackManager::get_comments( $id ) );
 	}

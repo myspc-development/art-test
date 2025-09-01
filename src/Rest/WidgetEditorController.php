@@ -58,7 +58,7 @@ class WidgetEditorController {
 	}
 
 	
-	public static function get_widgets( WP_REST_Request $req ): WP_REST_Response {
+	public static function get_widgets( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$role = sanitize_key( $req['role'] ?? '' );
 		if ( ! $role ) {
 			return \rest_ensure_response( [] );
@@ -73,13 +73,13 @@ class WidgetEditorController {
 		return \rest_ensure_response( $defs );
 	}
 
-	public static function get_roles(): WP_REST_Response {
+	public static function get_roles(): WP_REST_Response|WP_Error {
 		global $wp_roles;
 		$roles = $wp_roles ? array_keys( $wp_roles->roles ) : [];
                 return \rest_ensure_response( array_values( $roles ) );
         }
 
-        public static function get_layout( WP_REST_Request $req ): WP_REST_Response {
+        public static function get_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
                 $role   = sanitize_key( $req['role'] );
                 $result = \ArtPulse\Core\DashboardWidgetManager::getRoleLayout( $role );
                 $layout = $result['layout'] ?? [];

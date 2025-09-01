@@ -32,7 +32,7 @@ class UpdateDiagnosticsController {
 		);
 	}
 
-	public static function get_diagnostics(): WP_REST_Response {
+	public static function get_diagnostics(): WP_REST_Response|WP_Error {
 		$repo = get_option( 'ap_github_repo_url' );
 		if ( ! $repo ) {
 			return \rest_ensure_response( array( 'error' => 'No repo URL configured' ) );

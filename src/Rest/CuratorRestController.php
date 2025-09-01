@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use ArtPulse\Curator\CuratorManager;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -44,12 +45,12 @@ class CuratorRestController {
 		}
 	}
 
-	public static function get_curators( WP_REST_Request $req ): WP_REST_Response {
+	public static function get_curators( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$list = CuratorManager::get_all();
 		return \rest_ensure_response( $list );
 	}
 
-	public static function get_curator( WP_REST_Request $req ): WP_REST_Response {
+	public static function get_curator( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$slug    = sanitize_title( $req['slug'] );
 		$curator = CuratorManager::get_by_slug( $slug );
 		if ( ! $curator ) {

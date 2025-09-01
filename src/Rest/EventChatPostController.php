@@ -93,7 +93,7 @@ class EventChatPostController extends WP_REST_Controller {
 		return \rest_ensure_response( array( 'status' => 'deleted' ) );
 	}
 
-	public function flag_item( WP_REST_Request $request ): WP_REST_Response {
+	public function flag_item( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$id = absint( $request['id'] );
 		\ArtPulse\DB\Chat\flag_message( $id );
 		return \rest_ensure_response( array( 'status' => 'flagged' ) );

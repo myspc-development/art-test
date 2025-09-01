@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Core\ActivityLogger;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -34,7 +35,7 @@ class ActivityRestController {
 		}
 	}
 
-	public static function list( WP_REST_Request $request ): WP_REST_Response {
+	public static function list( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$user_id = get_current_user_id();
 		$org_id  = (int) get_user_meta( $user_id, 'ap_organization_id', true );
 		$limit   = absint( $request['limit'] ) ?: 20;

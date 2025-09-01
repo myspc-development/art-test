@@ -93,7 +93,7 @@ class CommunityAnalyticsController {
 		return date( 'Y-m-d H:i:s', strtotime( '-7 days' ) );
 	}
 
-	public static function get_messaging( WP_REST_Request $req ): WP_REST_Response {
+	public static function get_messaging( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		global $wpdb;
 		$since = self::range_date( $req->get_param( 'range' ) ?? '7d' );
 		$table = $wpdb->prefix . 'ap_messages';
@@ -119,7 +119,7 @@ class CommunityAnalyticsController {
 		);
 	}
 
-	public static function get_comments( WP_REST_Request $req ): WP_REST_Response {
+	public static function get_comments( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		global $wpdb;
 		$since    = self::range_date( $req->get_param( 'range' ) ?? '7d' );
 		$comments = $wpdb->comments;
@@ -139,7 +139,7 @@ class CommunityAnalyticsController {
 		);
 	}
 
-	public static function get_forums( WP_REST_Request $req ): WP_REST_Response {
+	public static function get_forums( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		global $wpdb;
 		$since    = self::range_date( $req->get_param( 'range' ) ?? '7d' );
 		$posts    = $wpdb->posts;

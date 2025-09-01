@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 
 /**
  * Test-only shim: registers stub routes so RouteAuditSmokeTest doesn't fail on 404.
@@ -243,7 +244,7 @@ class TestRouteShim {
 		);
 	}
 
-	public static function ok( WP_REST_Request $req ): WP_REST_Response {
+	public static function ok( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		return new WP_REST_Response(array(
 			'ok'    => true,
 			'path'  => $req->get_route(),

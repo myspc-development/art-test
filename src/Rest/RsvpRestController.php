@@ -344,7 +344,7 @@ class RsvpRestController {
 		return new WP_Error( 'rest_forbidden', __( 'Unauthorized.', 'artpulse' ), array( 'status' => 403 ) );
 	}
 
-	public static function get_attendees( WP_REST_Request $request ): WP_REST_Response {
+	public static function get_attendees( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$event_id = absint( $request->get_param( 'id' ) );
 		if ( ! current_user_can( 'edit_post', $event_id ) ) {
 			return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
@@ -399,7 +399,7 @@ class RsvpRestController {
 		);
 	}
 
-	public static function export_attendees( WP_REST_Request $request ): WP_REST_Response {
+	public static function export_attendees( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$event_id = absint( $request->get_param( 'id' ) );
 		if ( ! current_user_can( 'edit_post', $event_id ) ) {
 			return new WP_Error( 'rest_forbidden', 'Insufficient permissions.', array( 'status' => 403 ) );
@@ -435,7 +435,7 @@ class RsvpRestController {
 		);
 	}
 
-	public static function toggle_attended( WP_REST_Request $request ): WP_REST_Response {
+	public static function toggle_attended( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$event_id = absint( $request->get_param( 'event_id' ) );
 		$user_id  = absint( $request->get_param( 'user_id' ) );
 		$attended = get_post_meta( $event_id, 'event_attended', true );

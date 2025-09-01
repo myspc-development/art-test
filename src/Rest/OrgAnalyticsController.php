@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
 
@@ -39,7 +40,7 @@ class OrgAnalyticsController {
 		}
 	}
 
-	public static function get_metrics( WP_REST_Request $request ): WP_REST_Response {
+	public static function get_metrics( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$user_id = get_current_user_id();
 		$org_id  = get_user_meta( $user_id, 'ap_organization_id', true );
 		if ( ! $org_id ) {
@@ -87,7 +88,7 @@ class OrgAnalyticsController {
 		return \rest_ensure_response( $data );
 	}
 
-	public static function get_event_rsvp_stats( WP_REST_Request $request ): WP_REST_Response {
+	public static function get_event_rsvp_stats( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$event_id = absint( $request->get_param( 'id' ) );
 		$history  = get_post_meta( $event_id, 'event_rsvp_history', true );
 		if ( ! is_array( $history ) ) {

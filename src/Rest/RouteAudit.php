@@ -2,6 +2,7 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Response;
+use WP_Error;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -48,14 +49,14 @@ final class RouteAudit {
         /**
          * Callback for the standard endpoint.
          */
-        public function get(): WP_REST_Response {
+        public function get(): WP_REST_Response|WP_Error {
                 return $this->prepare_response( false );
         }
 
         /**
          * Callback for the JSON enforced endpoint.
          */
-        public function get_json(): WP_REST_Response {
+        public function get_json(): WP_REST_Response|WP_Error {
                 return $this->prepare_response( true );
         }
 

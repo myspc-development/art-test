@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -31,7 +32,7 @@ final class OrgDirectoryController {
         );
     }
 
-    public static function get_orgs( WP_REST_Request $request ): WP_REST_Response {
+    public static function get_orgs( WP_REST_Request $request ): WP_REST_Response|WP_Error {
         $args = array(
             'post_type'      => 'artpulse_org',
             'post_status'    => 'publish',

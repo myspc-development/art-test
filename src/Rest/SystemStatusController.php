@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Server;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
 
@@ -32,7 +33,7 @@ final class SystemStatusController {
                 );
         }
 
-       public static function get_status(): WP_REST_Response {
+       public static function get_status(): WP_REST_Response|WP_Error {
                 global $wp_version;
                 return \rest_ensure_response(
                         array(

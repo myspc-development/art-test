@@ -69,7 +69,7 @@ class PortfolioMigration {
 						'error' => $portfolio_id->get_error_message(),
 					)
 				);
-				if ( $interactive && class_exists( 'WP_CLI' ) ) {
+				if ( $interactive && defined( 'WP_CLI' ) && WP_CLI ) {
 					\WP_CLI::warning( "Failed to insert portfolio for {$post->ID}" );
 				}
 				continue;
@@ -115,7 +115,7 @@ class PortfolioMigration {
 		}
 
 		PortfolioSyncLogger::log( 'migration', 'Migration complete', array( 'count' => $count ) );
-		if ( $interactive && class_exists( 'WP_CLI' ) ) {
+		if ( $interactive && defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::success( "Portfolio migration complete ({$count})" );
 		}
 		return $count;

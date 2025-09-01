@@ -79,13 +79,13 @@ class VisitRestController {
 		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
-	public static function list( WP_REST_Request $req ): WP_REST_Response {
+	public static function list( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$id   = absint( $req['id'] );
 		$rows = VisitTracker::get_visits( $id );
 		return \rest_ensure_response( $rows );
 	}
 
-	public static function export( WP_REST_Request $req ): WP_REST_Response {
+	public static function export( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$id     = absint( $req['id'] );
 		$rows   = VisitTracker::get_visits( $id );
 		$stream = fopen( 'php://temp', 'w' );

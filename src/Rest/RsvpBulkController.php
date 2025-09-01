@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -51,7 +52,7 @@ class RsvpBulkController {
     /**
      * Dummy bulk update handler.
      */
-    public function bulk_update( WP_REST_Request $request ): WP_REST_Response {
+    public function bulk_update( WP_REST_Request $request ): WP_REST_Response|WP_Error {
         $ids = (array) $request->get_param( 'ids' );
         return \rest_ensure_response( array( 'updated' => count( $ids ) ) );
     }
