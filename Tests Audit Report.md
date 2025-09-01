@@ -2,7 +2,7 @@
 
 ## Harness
 - Integration suite configured via `phpunit.wp.xml.dist` and bootstraps through `tests/bootstrap.php`.
-- Added `tests/wp-tests-config.php.dist`; copy to `tests/wp-tests-config.php` for local runs.
+- Added `tests/wp-tests-config-sample.php`; copy to `tests/wp-tests-config.php` for local runs.
 - Composer script `test:wp` now exports `WP_PHPUNIT__TESTS_DIR` and `WP_PHPUNIT__TESTS_CONFIG`.
 - `tests/bootstrap.php` locates a WordPress source if `WP_PHPUNIT__WP_DIR` is missing, defines `WP_TESTS_CONFIG_FILE_PATH`, and adds an optional closure-serialization guard (enable with `AP_TEST_CLOSURE_GUARD`).
 
