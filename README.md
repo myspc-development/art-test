@@ -18,6 +18,15 @@ Site administrators should consult the [Admin Guide](docs/guides/admin/README.md
 
 > Code coverage requires the [PCOV](https://github.com/krakjoe/pcov) extension or Xdebug 3 with `XDEBUG_MODE=coverage`.
 
+## Environment Variables
+
+The tooling can be configured via environment variables. Defaults support local development:
+
+- `CYPRESS_BASE_URL` – base URL for Cypress tests (default `http://localhost:8080`).
+- `AJAX_URL` – WordPress `admin-ajax.php` endpoint used by `test-dashboard-widgets.sh` (default `http://localhost/wp-admin/admin-ajax.php`).
+- `REST_URL` – REST API base used by `test-dashboard-widgets.sh` (default `http://localhost/wp-json/artpulse/v1`).
+- `TEST_USER_ID` – user ID checked by `test-dashboard-widgets.sh` (default `1`).
+
 ## WebSocket Server
 
 Some features rely on a real-time WebSocket backend. Copy the example environment file and configure a secret:
