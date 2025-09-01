@@ -4,8 +4,10 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 class OrgMetaController {
+	use RestResponder;
 
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'routes' ) );

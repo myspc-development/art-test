@@ -3,8 +3,10 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 final class SystemStatusController {
+	use RestResponder;
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'routes' ) );
 	}

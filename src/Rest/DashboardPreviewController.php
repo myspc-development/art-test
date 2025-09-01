@@ -3,8 +3,10 @@ namespace ArtPulse\Rest;
 
 use WP_Error;
 use WP_REST_Response;
+use ArtPulse\Rest\RestResponder;
 
 class DashboardPreviewController {
+	use RestResponder;
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
 	}

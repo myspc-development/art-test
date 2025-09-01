@@ -6,8 +6,10 @@ use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 class WidgetLayoutController {
+	use RestResponder;
 
 	public static function register(): void {
 		if ( did_action( 'rest_api_init' ) ) {

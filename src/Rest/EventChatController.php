@@ -8,8 +8,10 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use ArtPulse\Rest\RestResponder;
 
 class EventChatController extends WP_REST_Controller {
+	use RestResponder;
 
 	/** @var string */
 	protected $namespace;

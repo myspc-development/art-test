@@ -5,8 +5,10 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 class ArtworkAuctionController {
+	use RestResponder;
 
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );

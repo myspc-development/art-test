@@ -3,8 +3,10 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use ArtPulse\Rest\RestResponder;
 
 class ReportTemplateController {
+	use RestResponder;
 
 	private const OPTION = 'ap_report_templates';
 

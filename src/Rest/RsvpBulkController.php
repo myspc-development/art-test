@@ -5,8 +5,10 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 class RsvpBulkController {
+	use RestResponder;
     /**
      * Hook registration into rest_api_init.
      */

@@ -6,8 +6,10 @@ use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Core\ProfileMetrics;
+use ArtPulse\Rest\RestResponder;
 
 final class ProfileMetricsController {
+	use RestResponder;
     public static function register(): void {
         add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
     }

@@ -6,12 +6,14 @@ use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 if ( ! defined( 'ARTPULSE_API_NAMESPACE' ) ) {
 	define( 'ARTPULSE_API_NAMESPACE', 'artpulse/v1' );
 }
 
 class WidgetEditorController {
+	use RestResponder;
 
 	public static function register(): void {
 		add_action( 'rest_api_init', [ self::class, 'register_routes' ], 99 ); // late, so de-duper keeps ours

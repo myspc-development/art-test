@@ -5,11 +5,13 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 /**
  * REST controller for organization directory listings.
  */
 final class OrgDirectoryController {
+	use RestResponder;
     public static function register(): void {
         add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
     }

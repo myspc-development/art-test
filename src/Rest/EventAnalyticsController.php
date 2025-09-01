@@ -6,11 +6,13 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 /**
  * Provides simple event metrics for organization dashboards.
  */
 class EventAnalyticsController extends WP_REST_Controller {
+	use RestResponder;
 
 	// Ensure tests hit the exact namespace they expect.
 	protected $namespace = 'ap/v1';

@@ -5,8 +5,10 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use function ArtPulse\Core\ap_user_has_org_role;
+use ArtPulse\Rest\RestResponder;
 
 class OrgDashboardController {
+	use RestResponder;
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'routes' ) );
 	}

@@ -8,8 +8,10 @@ use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Support\OptionUtils;
 use ArtPulse\Support\WidgetIds;
+use ArtPulse\Rest\RestResponder;
 
 class DashboardConfigController {
+	use RestResponder;
     public static function register(): void {
         add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
     }

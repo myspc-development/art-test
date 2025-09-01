@@ -7,8 +7,10 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Integration\PortfolioSync;
+use ArtPulse\Rest\RestResponder;
 
 class SubmissionRestController {
+	use RestResponder;
 
 	/**
 	 * Allowed post types for submission.

@@ -5,8 +5,10 @@ use WP_REST_Controller;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
+use ArtPulse\Rest\RestResponder;
 
 class EventManagementController extends WP_REST_Controller {
+	use RestResponder;
 
 	/**
 	 * REST API namespace used by this controller.
