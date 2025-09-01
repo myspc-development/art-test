@@ -11,7 +11,7 @@ module.exports = function analyze(input) {
     }
   }
 
-  if (typeof data !== 'object' || data === null) {
+  if (typeof data !== 'object' || data === null || Array.isArray(data)) {
     errors.push('Input must be an object');
   } else {
     if (typeof data.name !== 'string' || data.name.trim() === '') {
