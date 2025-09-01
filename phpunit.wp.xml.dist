@@ -35,6 +35,10 @@
   <groups>
     <include>
       <group>restapi</group>
+      <group>admin</group>
+      <group>core</group>
+      <group>engagement</group>
+      <group>personalization</group>
     </include>
   </groups>
   <logging>
