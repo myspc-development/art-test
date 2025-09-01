@@ -32,14 +32,14 @@ if (!defined('AP_TEST_MODE')) {
     define('AP_TEST_MODE', 1);
 }
 
-// --- Load WP testing helpers first (lets us hook plugin load) ---
-require_once $WP_PHPUNIT . '/includes/functions.php';
-
 // Load Composer autoload early so classmaps exist even before plugin main is required.
 $autoload = $PLUGIN_ROOT . '/vendor/autoload.php';
 if (file_exists($autoload)) {
     require_once $autoload;
 }
+
+// --- Load WP testing helpers next (lets us hook plugin load) ---
+require_once $WP_PHPUNIT . '/includes/functions.php';
 
 // Tell WordPress how to load this plugin in the test environment.
 // We try common entrypoints; adjust if your main plugin file differs.
@@ -61,6 +61,12 @@ tests_add_filter('muplugins_loaded', function () use ($PLUGIN_ROOT): void {
 // Now bootstrap WordPress (this DEFINES ABSPATH and loads vendor wp-settings.php)
 require_once $WP_PHPUNIT . '/includes/bootstrap.php';
 
+// Ensure tests start unauthenticated.
+if (!function_exists('wp_set_current_user')) {
+    require_once ABSPATH . 'wp-includes/pluggable.php';
+}
+wp_set_current_user(0);
+
 // Optional sanity checks (helpful when debugging ABSPATH issues)
 if (!defined('ABSPATH')) {
     fwrite(STDERR, "ERROR: ABSPATH not defined after WP bootstrap.\n");
@@ -75,9 +81,3 @@ if (!file_exists(ABSPATH . 'wp-settings.php')) {
 // Preload REST routes to avoid 404s in tests that assume routes are registered.
 do_action('init');
 do_action('rest_api_init');
-
-// If your tests need an admin context by default:
-if (!function_exists('wp_set_current_user')) {
-    require_once ABSPATH . 'wp-includes/pluggable.php';
-}
-wp_set_current_user(1);
