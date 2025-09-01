@@ -1,17 +1,16 @@
 <?php
-// tests/bootstrap-wp.php
 declare(strict_types=1);
 
 /**
- * Deterministic WP test bootstrap for the WP suite.
- * - Requires wp-phpunit bootstrap (defines ABSPATH)
- * - Fails early with a helpful message if core isn't linked
- * - Enables AP test mode conveniences only AFTER WP is loaded
+ * Deterministic WordPress test bootstrap.
+ * - Verifies the wp-phpunit path & tests config
+ * - Fails early if the WordPress core symlink is missing
+ * - Loads the official wp-phpunit bootstrap (defines ABSPATH)
+ * - Preloads REST routes; clears current user for unauth checks
  */
 
 $root = dirname(__DIR__);
 
-// Ensure the plugin’s expected wp-phpunit dir and config are set.
 if (!getenv('WP_PHPUNIT__DIR')) {
     putenv('WP_PHPUNIT__DIR=' . $root . '/vendor/wp-phpunit/wp-phpunit');
 }
@@ -22,7 +21,12 @@ if (!getenv('WP_PHPUNIT__TESTS_CONFIG')) {
 $wpPhpUnit = getenv('WP_PHPUNIT__DIR');
 $config    = getenv('WP_PHPUNIT__TESTS_CONFIG');
 
-// Hard fail if the WordPress core symlink isn’t present.
+if (!is_file($config)) {
+    fwrite(STDERR, "Missing tests config at: {$config}\n".
+        "Copy tests/wp-tests-config-sample.php → tests/wp-tests-config.php and fill DB/consts.\n");
+    exit(1);
+}
+
 $coreWpSettings = $wpPhpUnit . '/wordpress/wp-settings.php';
 if (!is_file($coreWpSettings)) {
     fwrite(STDERR, "WordPress core not found at {$wpPhpUnit}/wordpress\n".
@@ -30,22 +34,19 @@ if (!is_file($coreWpSettings)) {
     exit(1);
 }
 
-// ✅ Load the official WP test bootstrap (this defines ABSPATH and loads WP)
+// ✅ This loads the WP test framework and boots WordPress, defining ABSPATH.
 require $wpPhpUnit . '/includes/bootstrap.php';
 
-// From here on, WordPress is loaded and ABSPATH is defined.
 if (!defined('AP_TEST_MODE')) {
     define('AP_TEST_MODE', 1);
 }
 
-// Preload REST routes (mirrors how your tests expect routes to exist).
-// If your plugin registers routes on `rest_api_init`, do this once:
+// Ensure routes are registered for REST tests that assume pre-registration.
 if (function_exists('do_action')) {
     do_action('rest_api_init');
 }
 
-// Optional: if your REST auth utils expect a logged-out baseline by default,
-// explicitly clear current user to ensure unauth checks behave as expected.
+// Start unauthenticated by default (tests can set users explicitly).
 if (function_exists('wp_set_current_user')) {
     wp_set_current_user(0);
 }
