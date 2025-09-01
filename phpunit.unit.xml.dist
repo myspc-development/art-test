@@ -18,6 +18,11 @@
       <file>tests/QuickAddEventWidgetTest.php</file>
     </testsuite>
   </testsuites>
+  <groups>
+    <exclude>
+      <group>slow</group>
+    </exclude>
+  </groups>
   <coverage>
     <include><directory>src</directory></include>
     <report>
