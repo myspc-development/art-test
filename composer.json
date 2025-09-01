@@ -32,18 +32,11 @@
     "erusev/parsedown": "^1.7"
   },
   "scripts": {
+    "preflight": "php tools/preflight.php",
     "wp:core-link": "php bin/wp-core-link",
-    "test:unit": "vendor/bin/phpunit -c phpunit.unit.xml.dist",
-    "test:wp": "vendor/bin/phpunit -c phpunit.wp.xml.dist --testsuite WP",
-    "test:rest": "vendor/bin/phpunit -c phpunit.wp.xml.dist tests/Rest --log-junit build/junit-rest.xml",
-    "test:smoke": "vendor/bin/phpunit -c phpunit.wp.xml.dist tests/Smoke tests/Rest/RouteAuditSmokeTest.php",
-    "tests:all": [
-      "@test:unit",
-      "@test:wp",
-      "@test:rest",
-      "@test:smoke"
-    ],
-    "preflight": "php tools/preflight.php"
+    "test:unit": "vendor/bin/phpunit -c phpunit.unit.xml.dist --no-coverage",
+    "test:rest": "vendor/bin/phpunit -c phpunit.wp.xml.dist --group restapi -v --log-junit build/junit.xml",
+    "test:smoke": "bin/test-rest-smoke"
   },
   "config": {
     "allow-plugins": {
