@@ -1,54 +1,65 @@
 <?php
-declare(strict_types=1);
+// tests/bootstrap.php
 
-// Load Composer autoload to register plugin classes.
-$pluginRoot = dirname(__DIR__);
-$autoload = $pluginRoot . '/vendor/autoload.php';
+// 1) Composer autoload (optional libs)
+$autoload = dirname(__DIR__) . '/vendor/autoload.php';
 if (file_exists($autoload)) {
     require_once $autoload;
 }
 
-// Load the test configuration which defines DB creds and ABSPATH.
-$config = $pluginRoot . '/tests/wp-tests-config.php';
-if (!file_exists($config)) {
-    fwrite(STDERR, "Missing tests/wp-tests-config.php. Copy tests/wp-tests-config-sample.php to tests/wp-tests-config.php and fill in the database details.\n");
-    exit(1);
+// 2) Per-suite config (DB creds, optional ABSPATH hint)
+$config = __DIR__ . '/wp-tests-config.php';
+if (file_exists($config)) {
+    require_once $config;
 }
-require_once $config;
 
-// Locate the WordPress PHPUnit bootstrap directory.
-$phpunitDir = getenv('WP_PHPUNIT__DIR');
-if (!$phpunitDir) {
-    $vendorDir = $pluginRoot . '/vendor/wp-phpunit/wp-phpunit';
-    if (is_dir($vendorDir)) {
-        $phpunitDir = $vendorDir;
-    } else {
-        $localDir = dirname($pluginRoot) . '/wordpress-develop/tests/phpunit';
-        if (is_dir($localDir)) {
-            $phpunitDir = $localDir;
-        } else {
-            fwrite(STDERR, "Could not locate the WordPress test suite. Set WP_PHPUNIT__DIR or install wp-phpunit.\n");
-            exit(1);
-        }
+// 3) Locate the WordPress PHPUnit bootstrap
+$wp_phpunit_dir = getenv('WP_PHPUNIT__DIR');
+
+if (!$wp_phpunit_dir) {
+    // Prefer vendor-installed wp-phpunit
+    $vendor_wp = dirname(__DIR__) . '/vendor/wp-phpunit/wp-phpunit';
+    if (file_exists($vendor_wp . '/includes/bootstrap.php')) {
+        $wp_phpunit_dir = $vendor_wp;
     }
 }
 
-// Load WordPress test functions so we can hook into plugin loading.
-require_once $phpunitDir . '/includes/functions.php';
+// Try a local wordpress-develop checkout if still not found
+$dev_bootstrap = '/home/craig/wordpress-develop/tests/phpunit/includes/bootstrap.php';
 
-// Ensure KSES functions are loaded for sanitization routines.
-if ( ! function_exists( 'wp_kses' ) ) {
-    require_once ABSPATH . WPINC . '/kses.php';
+// Load the WP test bootstrap
+if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/bootstrap.php')) {
+    require_once $wp_phpunit_dir . '/includes/bootstrap.php';
+} elseif (defined('ABSPATH') && file_exists(ABSPATH . 'tests/phpunit/includes/bootstrap.php')) {
+    // ABSPATH may be defined by tests/wp-tests-config.php
+    require_once ABSPATH . 'tests/phpunit/includes/bootstrap.php';
+} elseif (file_exists($dev_bootstrap)) {
+    require_once $dev_bootstrap;
+} else {
+    fwrite(STDERR, "ERROR: Could not locate WordPress PHPUnit bootstrap.\n".
+                   "Set WP_PHPUNIT__DIR or install wp-phpunit in vendor.\n");
+    exit(1);
 }
 
-// Tell WordPress to load this plugin once the testing environment is set up.
-tests_add_filter('muplugins_loaded', static function () use ($pluginRoot): void {
-    // Load the plugin's main file.
-    require $pluginRoot . '/artpulse-management.php';
+// 4) Load the plugin under test once WordPress loads mu-plugins
+tests_add_filter('muplugins_loaded', function () {
+    $plugin_root = dirname(__DIR__);
+
+    // Try to find the plugin main file by header
+    foreach (glob($plugin_root . '/*.php') as $file) {
+        $head = @file_get_contents($file, false, null, 0, 2048);
+        if ($head !== false && strpos($head, 'Plugin Name:') !== false) {
+            require_once $file;
+            return;
+        }
+    }
+
+    // Fallback to a conventional filename
+    $fallback = $plugin_root . '/art-test-main.php';
+    if (file_exists($fallback)) {
+        require_once $fallback;
+    }
 });
 
-// Include test stubs after hooking the plugin.
-require_once $pluginRoot . '/tests/Frontend/_stubs.php';
-
-// Finally, bootstrap WordPress so the tests can run.
-require_once $phpunitDir . '/includes/bootstrap.php';
+// 5) Load shared Frontend stubs AFTER WP test environment is initialized
+require_once __DIR__ . '/Frontend/_stubs.php';
