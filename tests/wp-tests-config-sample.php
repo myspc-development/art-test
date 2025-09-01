@@ -15,5 +15,3 @@ $table_prefix = 'wptests_';
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_DISPLAY', false );
 
-define( 'ABSPATH', getenv( 'WP_TESTS_ABSPATH' ) ?: dirname( __DIR__ ) . '/vendor/wp-phpunit/wp-phpunit/wordpress/' );
-
