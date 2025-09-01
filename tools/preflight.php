@@ -42,17 +42,7 @@ function parse_db_host( string $raw ): array {
                 }
         }
 
-        // host:port or plain host
-        if ( strpos( $raw, ':' ) !== false ) {
-                [$h, $p] = explode( ':', $raw, 2 );
-                $p       = ctype_digit( $p ) ? (int) $p : null;
-                return array( trim( $h ), $p, null );
-        }
 
-        return array( $raw, null, null );
-}
-
-$errors     = array();
 $configPath = $root . '/tests/wp-tests-config.php';
 $samplePath = $root . '/tests/wp-tests-config-sample.php';
 
@@ -81,22 +71,7 @@ if ( $missing ) {
 }
 
 if ( ! file_exists( $configPath ) && file_exists( $samplePath ) ) {
-        $cfg = file_get_contents( $samplePath );
-        $replacements = array(
-                'DB_NAME'     => $envValues['WP_TESTS_DB_NAME'],
-                'DB_USER'     => $envValues['WP_TESTS_DB_USER'],
-                'DB_PASSWORD' => $envValues['WP_TESTS_DB_PASSWORD'],
-                'DB_HOST'     => $envValues['WP_TESTS_DB_HOST'],
-        );
-        foreach ( $replacements as $const => $val ) {
-                $val = addslashes( $val );
-                $cfg = preg_replace( "/define\(\s*'{$const}',.*?\);/", "define( '{$const}', '{$val}' );", $cfg );
-        }
-        file_put_contents( $configPath, $cfg );
-        echo 'Created tests/wp-tests-config.php with the following values:' . "\n";
-        foreach ( $replacements as $const => $val ) {
-                echo " - {$const}={$val}\n";
-        }
+
 }
 
 if ( ! file_exists( $configPath ) ) {
@@ -115,10 +90,7 @@ if ( ! extension_loaded( 'mysqli' ) ) {
         $errors[] = 'The mysqli extension is not loaded (install/enable php-mysql for CLI).';
 }
 
-$dbHost = $envValues['WP_TESTS_DB_HOST'];
-$dbUser = $envValues['WP_TESTS_DB_USER'];
-$dbPass = $envValues['WP_TESTS_DB_PASSWORD'];
-$dbName = $envValues['WP_TESTS_DB_NAME'];
+
 
 if ( empty( $errors ) ) {
         [$host, $port, $socket] = parse_db_host( $dbHost );
