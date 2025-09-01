@@ -55,24 +55,36 @@ if ( ! file_exists( $configPath ) && file_exists( $samplePath ) ) {
     echo 'Created tests/wp-tests-config.php from sample.' . "\n";
 }
 
-/** 1) mysqli extension */
+/** 1) tests configuration */
+if ( ! file_exists( $configPath ) ) {
+        $errors[] = 'tests/wp-tests-config.php missing (copy tests/wp-tests-config-sample.php).';
+} else {
+        $cfg       = file_get_contents( $configPath );
+        $required  = array( 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_HOST' );
+        foreach ( $required as $const ) {
+                if ( ! preg_match( '/define\(\s*["\']' . $const . '["\']/', $cfg ) ) {
+                        $errors[] = 'tests/wp-tests-config.php missing definition for ' . $const . '.';
+                }
+        }
+}
+/** 2) mysqli extension */
 if ( ! extension_loaded( 'mysqli' ) ) {
-	$errors[] = 'The mysqli extension is not loaded (install/enable php-mysql for CLI).';
+        $errors[] = 'The mysqli extension is not loaded (install/enable php-mysql for CLI).';
 }
 
-/** 2) Gather DB env (WP_TESTS_DB_* preferred, DB_* fallback) */
+/** 3) Gather DB env (WP_TESTS_DB_* preferred, DB_* fallback) */
 $dbHost = getenv( 'WP_TESTS_DB_HOST' ) ?: getenv( 'DB_HOST' ) ?: '127.0.0.1:3306';
 $dbUser = getenv( 'WP_TESTS_DB_USER' ) ?: getenv( 'DB_USER' ) ?: '';
 $dbPass = getenv( 'WP_TESTS_DB_PASSWORD' ) ?: getenv( 'DB_PASSWORD' ) ?: '';
 $dbName = getenv( 'WP_TESTS_DB_NAME' ) ?: getenv( 'DB_NAME' ) ?: 'wordpress_test';
 
 if ( $dbUser === '' ) {
-	$errors[] = 'Database credentials not provided. Set WP_TESTS_DB_USER/PASSWORD/HOST/NAME.';
+        $errors[] = 'Database credentials not provided. Set WP_TESTS_DB_USER/PASSWORD/HOST/NAME.';
 }
 
-/** 3) DB connectivity (skip if mysqli missing to avoid fatal) */
+/** 4) DB connectivity (skip if mysqli missing to avoid fatal) */
 if ( empty( $errors ) ) {
-	[$host, $port, $socket] = parse_db_host( $dbHost );
+        [$host, $port, $socket] = parse_db_host( $dbHost );
 
 	mysqli_report( MYSQLI_REPORT_OFF );
 	$mysqli = mysqli_init();
@@ -106,7 +118,7 @@ if ( empty( $errors ) ) {
 	}
 }
 
-/** 4) WP test library */
+/** 5) WP test library */
 $wpDir      = getenv( 'WP_PHPUNIT__DIR' ) ?: 'vendor/wp-phpunit/wp-phpunit';
 $wpSettings = $wpDir . '/wordpress/wp-settings.php';
 if ( ! file_exists( $wpSettings ) ) {
@@ -130,29 +142,18 @@ if ( ! file_exists( $wpSettings ) ) {
         }
 }
 
-/** 5) Optional: phpunit binary presence (warn only) */
-$phpunitPaths = array(
-	'vendor/bin/phpunit',
-	'vendor/phpunit/phpunit/phpunit',
-);
-$hasPhpunit   = false;
-foreach ( $phpunitPaths as $p ) {
-	if ( is_file( $p ) || is_link( $p ) ) {
-		$hasPhpunit = true;
-		break; }
-}
-if ( ! $hasPhpunit ) {
-	// Non-fatal, but helpful
-	fwrite( STDERR, "Note: PHPUnit binary not found under vendor/. Run `composer install`.\n" );
+/** 6) PHPUnit binary */
+if ( ! is_file( 'vendor/bin/phpunit' ) && ! is_link( 'vendor/bin/phpunit' ) ) {
+        $errors[] = 'PHPUnit binary not found at vendor/bin/phpunit. Run `composer install`.';
 }
 
-/** 5) Coverage driver */
+/** 7) Coverage driver */
 if ( ! extension_loaded( 'pcov' ) && ! extension_loaded( 'xdebug' ) ) {
-	$errors[] = 'No code coverage driver available (install pcov or xdebug).';
+        $errors[] = 'No code coverage driver available (install pcov or xdebug).';
 }
 
-/** 6) Outcome */
+/** 8) Outcome */
 if ( $errors ) {
-	fail( $errors );
+        fail( $errors );
 }
 echo "Preflight checks passed.\n";
