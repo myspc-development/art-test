@@ -4,8 +4,6 @@ use Brain\Monkey;
 use function Brain\Monkey\Functions\when;
 use function Brain\Monkey\Functions\stubs;
 
-require_once __DIR__ . '/quick-add-bootstrap.php';
-
 /**
 
  * @group WIDGETS
