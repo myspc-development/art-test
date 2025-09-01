@@ -12,32 +12,17 @@ if ($coreDir !== '' && file_exists($coreDir . '/wp-settings.php')) {
     $coreDir   = '';
     $candidates = [];
 
+    $candidates[] = dirname($root) . '/wordpress';
+    $candidates[] = dirname($root) . '/wordpress-develop/build';
+
     $home = getenv('HOME') ?: '';
     if ($home !== '') {
-        $candidates[] = $home . '/wordpress-develop/build';
-
-        $findHome = trim(
-            shell_exec('find ' . escapeshellarg($home) . ' -type d -path "*/wordpress-develop/build" 2>/dev/null')
-            ?? ''
-        );
-        if ($findHome !== '') {
-            $candidates = array_merge($candidates, preg_split("/\r?\n/", $findHome));
-        }
+        $candidates[] = rtrim($home, '/') . '/wordpress-develop/build';
     }
 
     $gitRoot = trim(shell_exec('git rev-parse --show-toplevel 2>/dev/null') ?? '');
     if ($gitRoot !== '') {
         $candidates[] = dirname($gitRoot) . '/wordpress-develop/build';
-    }
-
-    $findRoot = trim(
-        shell_exec(
-            "find / -maxdepth 3 -type f -name wp-settings.php 2>/dev/null | " .
-            "grep '/build/wp-settings.php' | head -n1 | xargs -r dirname 2>/dev/null"
-        ) ?? ''
-    );
-    if ($findRoot !== '') {
-        $candidates[] = $findRoot;
     }
 
     foreach ($candidates as $candidate) {
@@ -46,17 +31,19 @@ if ($coreDir !== '' && file_exists($coreDir . '/wp-settings.php')) {
             break;
         }
     }
-}
 
-if ($coreDir === '' || !file_exists($coreDir . '/wp-settings.php')) {
-    if (($env = getenv('WP_CORE_DIR')) !== false && $env !== '') {
-        fwrite(STDERR, "WP_CORE_DIR={$env} is invalid or missing wp-settings.php\n");
+    if ($coreDir === '') {
+        if (($env = getenv('WP_CORE_DIR')) !== false && $env !== '') {
+            fwrite(STDERR, "WP_CORE_DIR={$env} is invalid or missing wp-settings.php\n");
+        }
+
+        fwrite(STDERR, "Could not locate WordPress core. Checked paths:\n");
+        foreach ($candidates as $candidate) {
+            fwrite(STDERR, " - {$candidate}\n");
+        }
+        fwrite(STDERR, "Set WP_CORE_DIR or ensure wordpress-develop is available.\n");
+        exit(1);
     }
-    fwrite(
-        STDERR,
-        "Could not locate WordPress core. Set WP_CORE_DIR or ensure wordpress-develop is available.\n"
-    );
-    exit(1);
 }
 
 if (!is_dir($testsDir) && !mkdir($testsDir, 0777, true)) {
