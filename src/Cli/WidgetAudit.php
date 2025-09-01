@@ -13,16 +13,16 @@ use WP_CLI; // phpcs:ignore
  * WP-CLI interface for the Widget Audit Suite.
  */
 class WidgetAudit {
-	public function register(): void {
-		if ( ! class_exists( 'WP_CLI' ) ) {
-			return;
-		}
-		\WP_CLI::add_command( 'artpulse audit:widgets', array( $this, 'widgets' ) );
-		\WP_CLI::add_command( 'artpulse audit:visibility', array( $this, 'visibility' ) );
-		\WP_CLI::add_command( 'artpulse audit:builder', array( $this, 'builder' ) );
-		\WP_CLI::add_command( 'artpulse audit:render', array( $this, 'render' ) );
-		\WP_CLI::add_command( 'artpulse audit:fix', array( $this, 'fix' ) );
-	}
+        public function register(): void {
+                if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+                        return;
+                }
+                \WP_CLI::add_command( 'artpulse audit:widgets', array( $this, 'widgets' ) );
+                \WP_CLI::add_command( 'artpulse audit:visibility', array( $this, 'visibility' ) );
+                \WP_CLI::add_command( 'artpulse audit:builder', array( $this, 'builder' ) );
+                \WP_CLI::add_command( 'artpulse audit:render', array( $this, 'render' ) );
+                \WP_CLI::add_command( 'artpulse audit:fix', array( $this, 'fix' ) );
+        }
 
         /**
          * Last generated widget audit rows.
