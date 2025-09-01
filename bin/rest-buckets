@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+WP_PHPUNIT__DIR="${WP_PHPUNIT__DIR:-$ROOT_DIR/vendor/wp-phpunit/wp-phpunit}"
+WP_PHPUNIT__TESTS_CONFIG="${WP_PHPUNIT__TESTS_CONFIG:-$ROOT_DIR/tests/wp-tests-config.php}"
+AP_TEST_MODE="${AP_TEST_MODE:-1}"
+WP_TESTS_DB_NAME="${WP_TESTS_DB_NAME:-wordpress_test}"
+WP_TESTS_DB_USER="${WP_TESTS_DB_USER:-root}"
+WP_TESTS_DB_PASSWORD="${WP_TESTS_DB_PASSWORD:-}"
+WP_TESTS_DB_HOST="${WP_TESTS_DB_HOST:-127.0.0.1}"
+
+export WP_PHPUNIT__DIR WP_PHPUNIT__TESTS_CONFIG AP_TEST_MODE \
+       WP_TESTS_DB_NAME WP_TESTS_DB_USER WP_TESTS_DB_PASSWORD WP_TESTS_DB_HOST
+
+# Sanity checks
+if [[ ! -f "$WP_PHPUNIT__DIR/wordpress/wp-settings.php" ]]; then
+    echo "Linked WordPress core not found. Run bin/wp-core-link." >&2
+    exit 1
+fi
+
+if [[ ! -f "$WP_PHPUNIT__TESTS_CONFIG" ]]; then
+    echo "Missing test config: $WP_PHPUNIT__TESTS_CONFIG" >&2
+    exit 1
+fi
+
+# Run RouteBucketsSmokeTest
+vendor/bin/phpunit -c phpunit.wp.xml.dist --filter RouteBucketsSmokeTest -v
+
+# Run full restapi group, capture JSON for pretty printing and summaries
+TMPFILE="$(mktemp)"
+set +e
+vendor/bin/phpunit -c phpunit.wp.xml.dist --group restapi --testdox-json "$TMPFILE" >/dev/null
+STATUS=$?
+set -e
+
+if [[ $STATUS -ne 0 ]]; then
+    echo "REST API test failures:" >&2
+    jq -r '.classes[].methods[] | select(.status=="fail") | "- \(.class)::\(.name): \(.message)"' "$TMPFILE" >&2
+    echo >&2
+    echo "Summary by class:" >&2
+    jq -r '.classes[] | {class:.name, total:(.methods|length), failed:(.methods|map(select(.status=="fail"))|length)} | "\(.class): \(.failed)/\(.total) failed"' "$TMPFILE" >&2
+    exit $STATUS
+else
+    echo "REST API summary:"
+    jq -r '.classes[] | {class:.name, total:(.methods|length), failed:(.methods|map(select(.status=="fail"))|length)} | "\(.class): \(.failed)/\(.total) failed"' "$TMPFILE"
+fi
