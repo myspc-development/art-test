@@ -4,7 +4,7 @@ use ArtPulse\Community\FavoritesManager;
 
 /**
 
- * @group widgets
+ * @group WIDGETS
 
  */
 

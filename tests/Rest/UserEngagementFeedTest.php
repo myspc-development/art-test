@@ -7,7 +7,7 @@ use ArtPulse\Community\FollowManager;
 use ArtPulse\Community\FavoritesManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class UserEngagementFeedTest extends \WP_UnitTestCase {
 

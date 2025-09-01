@@ -37,7 +37,7 @@ use ArtPulse\Frontend\ArtistDashboardShortcode;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

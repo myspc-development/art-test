@@ -6,7 +6,7 @@ use function Brain\Monkey\Functions\when;
 
 /**
 
- * @group payment
+ * @group PAYMENT
 
  */
 

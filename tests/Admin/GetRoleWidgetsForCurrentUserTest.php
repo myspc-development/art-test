@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

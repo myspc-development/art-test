@@ -5,7 +5,7 @@ use ArtPulse\Marketplace\AuctionManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class AuctionManagerTest extends \WP_UnitTestCase {
 

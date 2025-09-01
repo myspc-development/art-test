@@ -5,7 +5,7 @@ use ArtPulse\Rest\DashboardConfigController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
- * @group restapi
+ * @group REST
  */
 class DashboardConfigControllerTest extends \WP_UnitTestCase {
 

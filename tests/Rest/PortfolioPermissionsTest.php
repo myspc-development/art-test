@@ -3,7 +3,7 @@
 use ArtPulse\Rest\PortfolioRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class PortfolioPermissionsTest extends WP_UnitTestCase {
 	public function set_up() {

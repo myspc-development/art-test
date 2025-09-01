@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 /**
- * @group restapi
+ * @group REST
  */
 class FollowFeedRouteTest extends \WP_UnitTestCase {
 

@@ -4,7 +4,7 @@ use ArtPulse\Admin\DashboardWidgetTools;
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

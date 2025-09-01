@@ -5,7 +5,7 @@ use ArtPulse\Reporting\SnapshotExportController;
 use ArtPulse\Core\VisitTracker;
 
 /**
- * @group restapi
+ * @group REPORTING
  */
 class SnapshotExportControllerTest extends \WP_UnitTestCase {
 

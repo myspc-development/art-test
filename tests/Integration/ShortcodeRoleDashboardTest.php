@@ -5,7 +5,7 @@ use ArtPulse\Frontend\ShortcodeRoleDashboard;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

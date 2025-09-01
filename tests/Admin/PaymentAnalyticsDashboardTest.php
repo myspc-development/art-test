@@ -6,7 +6,7 @@ use ArtPulse\Admin\PaymentAnalyticsDashboard;
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

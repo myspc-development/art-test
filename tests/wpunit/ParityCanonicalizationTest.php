@@ -11,7 +11,7 @@ require_once __DIR__ . '/../TestStubs.php';
 
 /**
 
- * @group wpunit
+ * @group WPUNIT
 
  */
 

@@ -6,7 +6,7 @@ use ArtPulse\Core\EventMetrics;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

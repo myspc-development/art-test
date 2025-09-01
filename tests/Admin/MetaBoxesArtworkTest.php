@@ -38,7 +38,7 @@ use ArtPulse\Admin\MetaBoxesArtwork;
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

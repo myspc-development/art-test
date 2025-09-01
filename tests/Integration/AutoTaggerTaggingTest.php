@@ -5,7 +5,7 @@ use ArtPulse\AI\AutoTagger;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

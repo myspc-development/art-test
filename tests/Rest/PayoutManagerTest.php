@@ -5,7 +5,7 @@ use ArtPulse\Monetization\PayoutManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class PayoutManagerTest extends \WP_UnitTestCase {
 

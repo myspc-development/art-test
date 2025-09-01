@@ -6,7 +6,7 @@ use ArtPulse\Frontend\EventRsvpHandler;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

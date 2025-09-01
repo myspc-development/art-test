@@ -8,7 +8,7 @@ use Brain\Monkey\Functions;
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

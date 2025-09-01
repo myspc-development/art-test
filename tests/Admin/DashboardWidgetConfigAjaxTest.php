@@ -43,7 +43,7 @@ require_once __DIR__ . '/../../includes/dashboard-widgets.php';
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

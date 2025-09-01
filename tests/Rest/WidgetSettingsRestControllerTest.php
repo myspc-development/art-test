@@ -6,7 +6,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\UserDashboardManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class WidgetSettingsRestControllerTest extends \WP_UnitTestCase {
 

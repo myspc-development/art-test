@@ -7,7 +7,7 @@ use ArtPulse\Core\EventViewCounter;
 use ArtPulse\Core\ProfileMetrics;
 
 /**
- * @group restapi
+ * @group REST
  */
 class ShareControllerTest extends \WP_UnitTestCase {
 

@@ -5,7 +5,7 @@ use ArtPulse\Monetization\PaymentWebhookController;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class PaymentWebhookControllerTest extends \WP_UnitTestCase {
 

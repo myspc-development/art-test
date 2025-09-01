@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\RestRoutes;
 
 /**
- * @group restapi
+ * @group REST
  */
 class AdvancedEventFiltersTest extends \WP_UnitTestCase {
 

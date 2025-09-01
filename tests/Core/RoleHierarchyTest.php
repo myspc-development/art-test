@@ -6,7 +6,7 @@ use ArtPulse\Core\RoleSetup;
 
 if ( ! class_exists( __NAMESPACE__ . '\\WPDBStub' ) ) {
 	/**
-	 * @group core
+	 * @group CORE
 	 */
 	class WPDBStub {
 		public $prefix     = 'wp_';

@@ -4,7 +4,7 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\LayoutUtils;
 /**
- * @group core
+ * @group CORE
  */
 class LayoutUtilsTest extends TestCase {
 

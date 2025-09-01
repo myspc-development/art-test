@@ -5,7 +5,7 @@ use ArtPulse\Core\VisitTracker;
 use ArtPulse\Rest\VisitRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class VisitRestControllerTest extends \WP_UnitTestCase {
 

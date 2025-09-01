@@ -7,7 +7,7 @@ use WP_Query;
 
 /**
 
- * @group ajax
+ * @group AJAX
 
  */
 

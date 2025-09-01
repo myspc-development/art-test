@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
 
- * @group availablewidgets
+ * @group WIDGETS
 
  */
 

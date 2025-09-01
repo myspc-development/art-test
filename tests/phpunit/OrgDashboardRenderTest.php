@@ -7,7 +7,7 @@ use ArtPulse\Core\DashboardPresets;
 
 /** @coversNothing */
 /**
- * @group phpunit
+ * @group PHPUNIT
  */
 final class OrgDashboardRenderTest extends TestCase {
         public static function renderSection(): string {

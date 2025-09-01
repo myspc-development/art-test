@@ -4,7 +4,7 @@ namespace ArtPulse\Core\Tests;
 use ArtPulse\Core\ReportSubscriptionManager;
 
 /**
- * @group core
+ * @group CORE
  */
 class ReportSubscriptionManagerTest extends \WP_UnitTestCase {
 

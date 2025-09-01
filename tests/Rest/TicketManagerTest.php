@@ -5,7 +5,7 @@ use ArtPulse\Monetization\TicketManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class TicketManagerTest extends \WP_UnitTestCase {
 

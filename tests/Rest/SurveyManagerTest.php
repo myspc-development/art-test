@@ -5,7 +5,7 @@ use ArtPulse\Admin\SurveyManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class SurveyManagerTest extends \WP_UnitTestCase {
 

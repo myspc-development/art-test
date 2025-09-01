@@ -4,7 +4,7 @@ use ArtPulse\Community\FollowManager;
 
 /**
 
- * @group widgets
+ * @group WIDGETS
 
  */
 

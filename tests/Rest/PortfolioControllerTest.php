@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\PortfolioRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class PortfolioControllerTest extends \WP_UnitTestCase {
 	private int $u1;

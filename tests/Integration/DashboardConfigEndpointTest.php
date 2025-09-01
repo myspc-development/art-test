@@ -5,7 +5,7 @@ use ArtPulse\Rest\DashboardConfigController;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
- * @group restapi
+ * @group INTEGRATION
  */
 class DashboardConfigEndpointTest extends \WP_UnitTestCase {
         private int $admin_id;

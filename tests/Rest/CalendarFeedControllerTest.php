@@ -5,7 +5,7 @@ use ArtPulse\Rest\CalendarFeedController;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class CalendarFeedControllerTest extends \WP_UnitTestCase {
 

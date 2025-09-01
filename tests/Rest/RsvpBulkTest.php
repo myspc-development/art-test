@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\RsvpBulkController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class RsvpBulkTest extends \WP_UnitTestCase {
     public function set_up() {

@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\ArtworkAuctionController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class ArtworkAuctionControllerTest extends \WP_UnitTestCase {
 

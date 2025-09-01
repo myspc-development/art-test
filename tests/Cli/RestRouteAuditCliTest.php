@@ -10,7 +10,7 @@ use WP_CLI;
 
 /**
 
- * @group cli
+ * @group CLI
 
  */
 

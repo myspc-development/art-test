@@ -28,7 +28,7 @@ use ArtPulse\Search\ExternalSearch;
 
 /**
 
- * @group search
+ * @group SEARCH
 
  */
 

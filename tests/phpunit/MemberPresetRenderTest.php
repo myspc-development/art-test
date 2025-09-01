@@ -9,7 +9,7 @@ use Brain\Monkey\Functions;
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

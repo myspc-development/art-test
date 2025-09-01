@@ -50,7 +50,7 @@ use ArtPulse\Frontend\OrganizationDashboardShortcode;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

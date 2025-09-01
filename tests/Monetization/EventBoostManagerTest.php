@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
 
- * @group monetization
+ * @group MONETIZATION
 
  */
 

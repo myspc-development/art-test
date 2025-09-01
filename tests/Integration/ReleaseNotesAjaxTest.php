@@ -6,7 +6,7 @@ use ArtPulse\Tests\AjaxTestHelper;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

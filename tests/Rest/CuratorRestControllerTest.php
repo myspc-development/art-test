@@ -5,7 +5,7 @@ use ArtPulse\Curator\CuratorManager;
 use ArtPulse\Rest\CuratorRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class CuratorRestControllerTest extends \WP_UnitTestCase {
 

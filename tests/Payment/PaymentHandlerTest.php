@@ -8,7 +8,7 @@ use WP_UnitTestCase;
 
 /**
 
- * @group payment
+ * @group PAYMENT
 
  */
 

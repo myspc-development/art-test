@@ -5,7 +5,7 @@ use ArtPulse\Admin\ConfigBackupTab;
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

@@ -9,7 +9,7 @@ use ArtPulse\Rest\RsvpRestController;
 
 /**
 
- * @group personalization
+ * @group PERSONALIZATION
 
  */
 

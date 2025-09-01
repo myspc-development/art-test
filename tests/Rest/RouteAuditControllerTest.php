@@ -2,7 +2,7 @@
 namespace ArtPulse\Rest\Tests;
 
 /**
- * @group restapi
+ * @group REST
  */
 class RouteAuditControllerTest extends \WP_UnitTestCase {
         public function set_up(): void {

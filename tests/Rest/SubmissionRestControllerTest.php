@@ -22,7 +22,7 @@ use ArtPulse\Tests\Rest\RequestStub as TestRequest;
 require_once __DIR__ . '/RequestStub.php';
 
 /**
- * @group restapi
+ * @group REST
  */
 class SubmissionRestControllerTest extends TestCase {
 

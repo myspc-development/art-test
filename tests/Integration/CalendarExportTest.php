@@ -5,7 +5,7 @@ use ArtPulse\Integration\CalendarExport;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

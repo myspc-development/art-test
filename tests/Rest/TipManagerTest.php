@@ -5,7 +5,7 @@ use ArtPulse\Monetization\TipManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class TipManagerTest extends \WP_UnitTestCase {
 

@@ -9,7 +9,7 @@ use ArtPulse\Core\DashboardPresets;
 
 /** @coversNothing */
 /**
- * @group phpunit
+ * @group PHPUNIT
  */
 class DashboardPresetIntegrityTest extends TestCase {
     public static function renderEmpty(): string {

@@ -12,7 +12,7 @@ use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

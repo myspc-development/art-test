@@ -5,7 +5,7 @@ use ArtPulse\Rest\OrgAnalyticsController;
 use ArtPulse\Rest\RsvpRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class OrgAnalyticsControllerTest extends \WP_UnitTestCase {
 

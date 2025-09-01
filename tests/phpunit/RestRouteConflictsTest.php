@@ -1,4 +1,4 @@
 <?php
 /**
- * @group phpunit
+ * @group PHPUNIT
  */

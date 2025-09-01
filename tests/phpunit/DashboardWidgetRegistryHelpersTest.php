@@ -8,7 +8,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

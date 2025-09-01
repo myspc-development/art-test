@@ -7,7 +7,7 @@ use ArtPulse\Core\UserDashboardManager;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

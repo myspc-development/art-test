@@ -5,7 +5,7 @@ use ArtPulse\Monetization\DonationManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class DonationManagerTest extends \WP_UnitTestCase {
 

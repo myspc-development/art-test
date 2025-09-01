@@ -5,7 +5,7 @@ use ArtPulse\Rest\EventAnalyticsController;
 use ArtPulse\Rest\RsvpDbController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class AnalyticsTimezoneTest extends \WP_UnitTestCase {
 	private int $user;

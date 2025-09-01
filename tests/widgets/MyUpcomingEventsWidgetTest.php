@@ -3,7 +3,7 @@ use ArtPulse\Widgets\MyUpcomingEventsWidget;
 
 /**
 
- * @group widgets
+ * @group WIDGETS
 
  */
 

@@ -5,7 +5,7 @@ use ArtPulse\Integration\PortfolioSync;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

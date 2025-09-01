@@ -8,7 +8,7 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
 	);
 	/**
 	 * @dataProvider routesProvider
-	 * @group restapi
+	 * @group REST
 	 */
 	public function test_route_security( string $route, string $method, array $args ): void {
 		$server = rest_get_server();

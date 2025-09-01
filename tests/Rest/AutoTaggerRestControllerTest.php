@@ -5,7 +5,7 @@ use ArtPulse\AI\AutoTaggerRestController;
 use function add_filter;
 
 /**
- * @group restapi
+ * @group REST
  */
 class AutoTaggerRestControllerTest extends \WP_UnitTestCase {
 

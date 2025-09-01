@@ -54,7 +54,7 @@ use ArtPulse\Frontend\EventSubmissionShortcode;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

@@ -6,7 +6,7 @@ use ArtPulse\Admin\ScheduledMessageManager;
 use ArtPulse\Admin\OrgCommunicationsCenter;
 
 /**
- * @group admin
+ * @group ADMIN
  */
 class ScheduledMessageManagerTest extends WP_UnitTestCase {
 

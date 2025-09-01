@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\RoleMatrixController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class RoleMatrixBatchTest extends \WP_UnitTestCase {
 	private int $admin;

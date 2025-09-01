@@ -5,7 +5,7 @@ use WP_UnitTestCase;
 use function ArtPulse\Tests\rm_rf;
 
 /**
- * @group admin
+ * @group ADMIN
  */
 class TemplateCopyTest extends WP_UnitTestCase {
 

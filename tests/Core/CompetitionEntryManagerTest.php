@@ -6,7 +6,7 @@ use ArtPulse\Core\CompetitionEntryManager;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

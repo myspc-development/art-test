@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Messages\AP_Message;
 
 /**
- * @group restapi
+ * @group REST
  */
 class APMessageTest extends \WP_UnitTestCase {
 	public function test_send_and_receive_message() {

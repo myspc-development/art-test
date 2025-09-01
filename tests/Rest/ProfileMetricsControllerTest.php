@@ -5,7 +5,7 @@ use ArtPulse\Rest\ProfileMetricsController;
 use ArtPulse\Core\ProfileMetrics;
 
 /**
- * @group restapi
+ * @group REST
  */
 class ProfileMetricsControllerTest extends \WP_UnitTestCase {
 

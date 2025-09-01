@@ -5,7 +5,7 @@ use ArtPulse\Monetization\SalesOverview;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class SalesOverviewTest extends \WP_UnitTestCase {
 

@@ -36,7 +36,7 @@ namespace {
 namespace ArtPulse\Core {
         if ( ! class_exists( DashboardWidgetRegistry::class ) ) {
                 /**
-                 * @group cli
+                 * @group CLI
                  */
                 class DashboardWidgetRegistry {
                 private static array $widgets = array();

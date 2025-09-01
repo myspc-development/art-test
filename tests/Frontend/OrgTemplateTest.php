@@ -6,7 +6,7 @@ namespace ArtPulse\Frontend\Tests {
 
 	/**
 
-	 * @group frontend
+	 * @group FRONTEND
 
 	 */
 

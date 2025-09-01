@@ -12,7 +12,7 @@ if ( ! function_exists( 'add_action' ) ) {
 
 /**
 
- * @group widgets
+ * @group WIDGETS
 
  */
 

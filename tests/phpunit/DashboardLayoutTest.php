@@ -12,7 +12,7 @@ namespace {
 namespace ArtPulse\Core {
 	/** Simple role object for capability checks. */
 	/**
-	 * @group phpunit
+	 * @group PHPUNIT
 	 */
 	class RoleStub {
 		private array $caps;

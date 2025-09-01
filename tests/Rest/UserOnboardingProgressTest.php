@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Core\UserDashboardManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class UserOnboardingProgressTest extends \WP_UnitTestCase {
 

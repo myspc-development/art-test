@@ -3,7 +3,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
 
- * @group avatarhttpsfix
+ * @group CORE
 
  */
 

@@ -6,7 +6,7 @@ use ArtPulse\Frontend\EventFilter;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

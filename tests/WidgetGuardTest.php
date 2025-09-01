@@ -9,7 +9,7 @@ use ArtPulse\Dashboard\WidgetGuard;
 
 /**
 
- * @group widgetguard
+ * @group WIDGETS
 
  */
 

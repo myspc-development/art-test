@@ -31,7 +31,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\sanitize_key' ) ) {
 
 /**
 
- * @group admin
+ * @group ADMIN
 
  */
 

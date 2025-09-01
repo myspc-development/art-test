@@ -27,7 +27,7 @@ use ArtPulse\Frontend\EventService;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

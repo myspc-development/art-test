@@ -78,7 +78,7 @@ use ArtPulse\Core\UserDashboardManager;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

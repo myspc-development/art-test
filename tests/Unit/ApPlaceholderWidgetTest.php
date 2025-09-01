@@ -21,7 +21,7 @@ use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 
 /**
 
- * @group unit
+ * @group UNIT
 
  */
 

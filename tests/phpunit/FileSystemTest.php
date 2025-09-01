@@ -4,7 +4,7 @@ use ArtPulse\Support\FileSystem;
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

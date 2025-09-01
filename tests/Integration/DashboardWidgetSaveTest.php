@@ -7,7 +7,7 @@ use ArtPulse\Admin\UserLayoutManager;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

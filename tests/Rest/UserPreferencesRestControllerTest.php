@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Community\UserPreferencesRestController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class UserPreferencesRestControllerTest extends \WP_UnitTestCase {
 

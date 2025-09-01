@@ -5,7 +5,7 @@ use ArtPulse\Admin\CustomFieldsManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class CustomFieldsManagerTest extends \WP_UnitTestCase {
 

@@ -6,7 +6,7 @@ use ArtPulse\Core\AnalyticsManager;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

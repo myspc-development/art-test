@@ -18,7 +18,7 @@ use ArtPulse\Frontend\OrgPublicProfileShortcode;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

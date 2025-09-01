@@ -6,7 +6,7 @@ use WP_UnitTestCase;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

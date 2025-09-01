@@ -7,7 +7,7 @@ use ArtPulse\Core\DashboardWidgetManager;
 use ArtPulse\Admin\LayoutSnapshotManager;
 
 /**
- * @group restapi
+ * @group REST
  */
 class DashboardLayoutTest extends \WP_UnitTestCase {
 

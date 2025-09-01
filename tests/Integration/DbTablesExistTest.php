@@ -2,7 +2,7 @@
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

@@ -6,7 +6,7 @@ use ArtPulse\Frontend\EventMapShortcode;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

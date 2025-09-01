@@ -4,7 +4,7 @@ namespace ArtPulse\Rest\Tests;
 use ArtPulse\Rest\AnalyticsPilotController;
 
 /**
- * @group restapi
+ * @group REST
  */
 class AnalyticsPilotControllerTest extends \WP_UnitTestCase {
 

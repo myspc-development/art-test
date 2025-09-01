@@ -5,7 +5,7 @@ use ArtPulse\Personalization\WeeklyRecommendations;
 use ArtPulse\Personalization\RecommendationEngine;
 
 /**
- * @group personalization
+ * @group PERSONALIZATION
  */
 class WeeklyRecommendationsTest extends \WP_UnitTestCase {
 

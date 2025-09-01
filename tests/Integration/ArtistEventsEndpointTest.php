@@ -6,7 +6,7 @@ use ArtPulse\Rest\ArtistEventsController;
 
 /**
 
- * @group integration
+ * @group INTEGRATION
 
  */
 

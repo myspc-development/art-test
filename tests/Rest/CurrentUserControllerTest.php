@@ -6,7 +6,7 @@ use function ap_rest_request;
 use function ap_as_user_with_role;
 
 /**
- * @group restapi
+ * @group REST
  */
 class CurrentUserControllerTest extends \WP_UnitTestCase {
 

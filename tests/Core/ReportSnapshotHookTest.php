@@ -3,7 +3,7 @@ namespace ArtPulse\Reporting;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

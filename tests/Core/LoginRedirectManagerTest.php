@@ -30,7 +30,7 @@ use WP_Error;
 
 /**
 
- * @group core
+ * @group CORE
 
  */
 

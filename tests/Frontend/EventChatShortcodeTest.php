@@ -6,7 +6,7 @@ use ArtPulse\Frontend\EventChatShortcode;
 
 /**
 
- * @group frontend
+ * @group FRONTEND
 
  */
 

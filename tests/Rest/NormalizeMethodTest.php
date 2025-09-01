@@ -10,7 +10,7 @@ namespace ArtPulse\Rest\Tests {
 require_once dirname( __DIR__, 2 ) . '/includes/rest-dedupe.php';
 
 /**
- * @group restapi
+ * @group REST
  */
 class NormalizeMethodTest extends \PHPUnit\Framework\TestCase {
         public function test_normalizes_string_method(): void {

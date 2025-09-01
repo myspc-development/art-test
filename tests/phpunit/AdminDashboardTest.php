@@ -8,7 +8,7 @@ use ArtPulse\Core\AdminDashboard;
 
 /**
 
- * @group phpunit
+ * @group PHPUNIT
 
  */
 

@@ -5,7 +5,7 @@ use ArtPulse\Monetization\PromoManager;
 
 
 /**
- * @group restapi
+ * @group REST
  */
 class PromoManagerTest extends \WP_UnitTestCase {
 

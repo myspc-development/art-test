@@ -7,7 +7,7 @@ use ArtPulse\Community\NotificationHooks;
 
 /**
 
- * @group community
+ * @group COMMUNITY
 
  */
 
