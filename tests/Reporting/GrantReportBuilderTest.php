@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../TestHelpers.php';
+
 namespace ArtPulse\Reporting;
 
 if ( ! function_exists( __NAMESPACE__ . '\esc_html' ) ) {

@@ -33,7 +33,6 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 trait_exists( \ArtPulse\Rest\RestResponder::class );
 require_once __DIR__ . '/src/Blocks/Version.php';
 class_exists( \ArtPulse\Rest\OrgRolesController::class );
-class_exists( \ArtPulse\Admin\Tests\Stub::class );
 
 add_action(
         'rest_api_init',
