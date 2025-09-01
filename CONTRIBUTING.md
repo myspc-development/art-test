@@ -5,7 +5,8 @@ Thank you for your interest in contributing to ArtPulse. Development requires **
 Run the automated test suite and coding standards checks with:
 
 ```bash
-vendor/bin/phpunit
+vendor/bin/phpunit -c phpunit.unit.xml.dist
+vendor/bin/phpunit -c phpunit.wp.xml.dist
 composer sniff
 ```
 

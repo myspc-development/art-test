@@ -7,10 +7,27 @@
   </php>
   <testsuites>
     <testsuite name="WP">
-      <directory suffix="Test.php">tests/Integration</directory>
-      <directory suffix="Test.php">tests/Rest</directory>
+      <directory suffix="Test.php">tests/AI</directory>
+      <directory suffix="Test.php">tests/Admin</directory>
       <directory suffix="Test.php">tests/Ajax</directory>
+      <directory suffix="Test.php">tests/Community</directory>
+      <directory suffix="Test.php">tests/Core</directory>
+      <directory suffix="Test.php">tests/Db</directory>
+      <directory suffix="Test.php">tests/Engagement</directory>
+      <directory suffix="Test.php">tests/Frontend</directory>
+      <directory suffix="Test.php">tests/Integration</directory>
+      <directory suffix="Test.php">tests/Payment</directory>
+      <directory suffix="Test.php">tests/Personalization</directory>
+      <directory suffix="Test.php">tests/Reporting</directory>
+      <directory suffix="Test.php">tests/Rest</directory>
+      <directory suffix="Test.php">tests/Search</directory>
+      <directory suffix="Test.php">tests/Smoke</directory>
+      <directory suffix="Test.php">tests/php</directory>
+      <directory suffix="Test.php">tests/smoke</directory>
+      <directory suffix="Test.php">tests/widgets</directory>
       <directory suffix="Test.php">tests/wpunit</directory>
+      <file>tests/ApiContractsTest.php</file>
+      <file>tests/WidgetGuardTest.php</file>
       <!-- NOTE: tests/Cli moved to Unit suite -->
     </testsuite>
   </testsuites>

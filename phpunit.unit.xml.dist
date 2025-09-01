@@ -4,7 +4,17 @@
     <testsuite name="Unit">
       <directory suffix="Test.php">tests/phpunit</directory>
       <directory suffix="Test.php">tests/Unit</directory>
-      <directory suffix="Test.php">tests/Cli</directory> <!-- added -->
+      <directory suffix="Test.php">tests/Cli</directory>
+      <directory suffix="Test.php">tests/Blocks</directory>
+      <directory suffix="Test.php">tests/Crm</directory>
+      <directory suffix="Test.php">tests/Monetization</directory>
+      <directory suffix="Test.php">tests/Safety</directory>
+      <directory suffix="Test.php">tests/Support</directory>
+      <file>tests/ActivatorDeactivatorTest.php</file>
+      <file>tests/AvatarHttpsFixTest.php</file>
+      <file>tests/AvailableWidgetsTest.php</file>
+      <file>tests/EnvironmentTest.php</file>
+      <file>tests/QuickAddEventWidgetTest.php</file>
     </testsuite>
   </testsuites>
   <coverage>

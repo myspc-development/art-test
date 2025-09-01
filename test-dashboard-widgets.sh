@@ -64,9 +64,10 @@ curl -s -X POST "$AJAX_URL" \
   -d "config[$TEST_ROLE][]=${SAMPLE_WIDGET}" | jq
 
 # 7. OPTIONAL: RUN UNIT TESTS
-if [ -f phpunit.xml.dist ]; then
+if [ -f phpunit.unit.xml.dist ] || [ -f phpunit.wp.xml.dist ]; then
     echo "✅ Running PHPUnit tests..."
-    ./vendor/bin/phpunit || echo "⚠️ PHPUnit failed"
+    [ -f phpunit.unit.xml.dist ] && ./vendor/bin/phpunit -c phpunit.unit.xml.dist || true
+    [ -f phpunit.wp.xml.dist ] && ./vendor/bin/phpunit -c phpunit.wp.xml.dist || true
 else
     echo "⚠️ No PHPUnit config found."
 fi

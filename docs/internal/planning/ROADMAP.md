@@ -40,7 +40,7 @@ A living document to track major tasks across the project.
 
 | Task ID | Task Title | Description | Status |
 |--------|-------------|-------------|--------|
-| TE1 | Setup PHPUnit & Bootstrap | Create `phpunit.xml` and bootstrap WordPress testing framework. | ✅ |
+| TE1 | Setup PHPUnit & Bootstrap | Create `phpunit.unit.xml.dist` and `phpunit.wp.xml.dist` and bootstrap WordPress testing framework. | ✅ |
 | TE2 | Write Unit Tests | Add tests for post tagging and plugin activation. | ✅ |
 
 ---

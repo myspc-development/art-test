@@ -46,7 +46,8 @@ The script uses `curl` to download WordPress. Install `curl` if it is not availa
 After the setup completes, run the test suite and coding standards checks with:
 
 ```bash
-vendor/bin/phpunit
+vendor/bin/phpunit -c phpunit.unit.xml.dist
+vendor/bin/phpunit -c phpunit.wp.xml.dist
 composer sniff
 ```
 
@@ -116,7 +117,7 @@ For production deployments the server should run behind a TLS‑terminating prox
 
 ## Test Environment Variables
 
-Database credentials for the WordPress test suite must be supplied via environment variables. Define these before running `bash scripts/setup-env.sh` or `vendor/bin/phpunit`:
+Database credentials for the WordPress test suite must be supplied via environment variables. Define these before running `bash scripts/setup-env.sh` or `vendor/bin/phpunit -c phpunit.wp.xml.dist`:
 
 - `DB_NAME` – name of the test database
 - `DB_USER` – database user

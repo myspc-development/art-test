@@ -111,7 +111,8 @@ composer run test:wp
 Generate coverage (optional):
 
 ```
-XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-html coverage
+XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-html coverage/unit
+XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.wp.xml.dist --coverage-html coverage/wp
 ```
 
 JavaScript unit tests can be executed with:
