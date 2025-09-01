@@ -7,7 +7,7 @@
  * - Env:
  *     WP_PHPUNIT__DIR            => <repo>/vendor/wp-phpunit/wp-phpunit
  *     WP_PHPUNIT__TESTS_CONFIG   => <repo>/tests/wp-tests-config.php
- * - DO NOT define ABSPATH anywhere in this repo. The WP bootstrap will.
+ * - ABSPATH must be defined in tests/wp-tests-config.php pointing to the linked core (required by wp-phpunit).
  */
 
 declare(strict_types=1);
@@ -58,7 +58,7 @@ tests_add_filter('muplugins_loaded', function () use ($PLUGIN_ROOT): void {
     }
 });
 
-// Now bootstrap WordPress (this DEFINES ABSPATH and loads vendor wp-settings.php)
+// Now bootstrap WordPress (requires ABSPATH defined in the config)
 require_once $WP_PHPUNIT . '/includes/bootstrap.php';
 
 // Ensure tests start unauthenticated.
