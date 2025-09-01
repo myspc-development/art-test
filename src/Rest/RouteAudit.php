@@ -4,19 +4,24 @@ namespace ArtPulse\Rest;
 use WP_REST_Response;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
+use ArtPulse\Rest\RestResponder;
 
 final class RouteAudit {
-	/**
-	 * Hook route registration into rest_api_init.
-	 */
-	public static function register(): void {
-		add_action( 'rest_api_init', array( self::class, 'routes' ) );
-	}
+        use RestResponder;
 
-	/**
-	 * Register the REST API routes for auditing.
-	 */
-	public static function routes(): void {
+        /**
+         * Hook route registration into rest_api_init.
+         */
+        public static function register(): void {
+                add_action( 'rest_api_init', array( self::class, 'routes' ) );
+        }
+
+        /**
+         * Register the REST API routes for auditing.
+         */
+        public static function routes(): void {
+                $controller = new self();
+
                 register_rest_route(
                         'ap/v1',
                         '/routes/audit',
@@ -24,7 +29,7 @@ final class RouteAudit {
                                 'methods'             => WP_REST_Server::READABLE,
                                // Expose route list to any logged-in user.
                                'permission_callback' => Auth::require_login_and_cap( 'read' ),
-                                'callback'            => array( self::class, 'handle' ),
+                                'callback'            => array( $controller, 'get' ),
                         )
                 );
 
@@ -35,39 +40,40 @@ final class RouteAudit {
                                 'methods'             => WP_REST_Server::READABLE,
                                // Expose route list to any logged-in user.
                                'permission_callback' => Auth::require_login_and_cap( 'read' ),
-                                'callback'            => array( self::class, 'handle_json' ),
+                                'callback'            => array( $controller, 'get_json' ),
                         )
                 );
-	}
+        }
 
-	/**
-	 * Callback for the standard endpoint.
-	 */
-	public static function handle(): WP_REST_Response {
-		return self::prepare_response( false );
-	}
+        /**
+         * Callback for the standard endpoint.
+         */
+        public function get(): WP_REST_Response {
+                return $this->prepare_response( false );
+        }
 
-	/**
-	 * Callback for the JSON enforced endpoint.
-	 */
-	public static function handle_json(): WP_REST_Response {
-		return self::prepare_response( true );
-	}
+        /**
+         * Callback for the JSON enforced endpoint.
+         */
+        public function get_json(): WP_REST_Response {
+                return $this->prepare_response( true );
+        }
 
-	/**
-	 * Build the response data and optionally enforce JSON header.
-	 */
-	private static function prepare_response( bool $force_json ): WP_REST_Response {
-		$data     = array(
-			'routes'    => self::collect_routes(),
-			'conflicts' => self::find_conflicts(),
-		);
-		$response = \rest_ensure_response( $data );
-		if ( $force_json ) {
-			$response->set_headers( array( 'Content-Type' => 'application/json' ) );
-		}
-		return $response;
-	}
+        /**
+         * Build the response data and optionally enforce JSON header.
+         */
+        private function prepare_response( bool $force_json ): WP_REST_Response {
+                $response = $this->ok(
+                        array(
+                                'routes'    => self::collect_routes(),
+                                'conflicts' => self::find_conflicts(),
+                        )
+                );
+                if ( $force_json ) {
+                        $response->set_headers( array( 'Content-Type' => 'application/json' ) );
+                }
+                return $response;
+        }
 
 	/**
 	 * Gather route data from the REST server.
