@@ -46,8 +46,8 @@ require_once $WP_PHPUNIT . '/includes/functions.php';
 tests_add_filter('muplugins_loaded', function () use ($PLUGIN_ROOT): void {
     $candidates = [
         $PLUGIN_ROOT . '/art-test-main.php',
-        $PLUGIN_ROOT . '/artpulse.php',
         $PLUGIN_ROOT . '/artpulse-management.php',
+        $PLUGIN_ROOT . '/artpulse.php',
         $PLUGIN_ROOT . '/plugin.php',
         // as a fallback, your plugin may self-register on autoload/init only
     ];
