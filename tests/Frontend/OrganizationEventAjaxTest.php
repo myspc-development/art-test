@@ -38,10 +38,6 @@ if ( ! function_exists( 'ArtPulse\\Frontend\\wp_insert_post' ) ) {
 if ( ! function_exists( 'ArtPulse\\Frontend\\set_post_thumbnail' ) ) {
 	function set_post_thumbnail( $id, $thumb ) {}
 }
-if ( ! function_exists( 'ArtPulse\\Frontend\\get_user_meta' ) ) {
-	function get_user_meta( $user_id, $key, $single = false ) {
-		return 1; }
-}
 
 namespace ArtPulse\Frontend\Tests;
 
@@ -64,31 +60,33 @@ class OrganizationEventAjaxTest extends TestCase {
 	public static array $terms       = array();
 	public static $media_result      = 1;
 
-	protected function setUp(): void {
-		\ArtPulse\Frontend\StubState::reset();
-		self::$posts        = array();
-		self::$passed_args  = array();
-		self::$updated      = array();
-		self::$json         = array();
-		self::$json_error   = null;
-		self::$terms        = array();
-		self::$media_result = 1;
-		$_POST              = array();
-		$_FILES             = array();
-	}
+        protected function setUp(): void {
+                \ArtPulse\Frontend\StubState::reset();
+                self::$posts        = array();
+                self::$passed_args  = array();
+                self::$updated      = array();
+                self::$json         = array();
+                self::$json_error   = null;
+                self::$terms        = array();
+                self::$media_result = 1;
+                $_POST              = array();
+                $_FILES             = array();
+                $GLOBALS['__ap_test_user_meta'] = array();
+        }
 
-	protected function tearDown(): void {
-		$_POST              = array();
-		$_FILES             = array();
-		self::$posts        = array();
-		self::$passed_args  = array();
-		self::$updated      = array();
-		self::$json         = array();
-		self::$json_error   = null;
-		self::$terms        = array();
-		self::$media_result = 1;
-		parent::tearDown();
-	}
+        protected function tearDown(): void {
+                $_POST               = array();
+                $_FILES              = array();
+                self::$posts         = array();
+                self::$passed_args   = array();
+                self::$updated       = array();
+                self::$json          = array();
+                self::$json_error    = null;
+                self::$terms         = array();
+                self::$media_result  = 1;
+                $GLOBALS['__ap_test_user_meta'] = array();
+                parent::tearDown();
+        }
 
 	public function test_update_event_returns_html(): void {
 		self::$posts = array(
@@ -139,20 +137,22 @@ class OrganizationEventAjaxTest extends TestCase {
 		$this->assertContains( $expected_meta, \ArtPulse\Frontend\StubState::$meta_log );
 	}
 
-	public function test_add_event_returns_error_when_upload_fails(): void {
-		self::$media_result = new \WP_Error( 'upload_error', 'Upload failed' );
-		$_FILES             = array( 'event_banner' => array( 'tmp_name' => 'tmp' ) );
+        public function test_add_event_returns_error_when_upload_fails(): void {
+                self::$media_result = new \WP_Error( 'upload_error', 'Upload failed' );
+                $_FILES             = array( 'event_banner' => array( 'tmp_name' => 'tmp' ) );
 
-		$_POST = array(
-			'nonce'                 => 'n',
-			'ap_event_title'        => 'Event',
-			'ap_event_date'         => '2024-01-01',
-			'ap_event_location'     => '',
-			'ap_event_organization' => 1,
-		);
+                $_POST = array(
+                        'nonce'                 => 'n',
+                        'ap_event_title'        => 'Event',
+                        'ap_event_date'         => '2024-01-01',
+                        'ap_event_location'     => '',
+                        'ap_event_organization' => 1,
+                );
 
-		OrganizationDashboardShortcode::handle_ajax_add_event();
+                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 1;
 
-		$this->assertSame( 'Upload failed', self::$json_error['message'] ?? null );
-	}
+                OrganizationDashboardShortcode::handle_ajax_add_event();
+
+                $this->assertSame( 'Upload failed', self::$json_error['message'] ?? null );
+        }
 }

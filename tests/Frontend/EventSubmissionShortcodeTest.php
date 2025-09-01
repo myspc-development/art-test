@@ -8,10 +8,6 @@ if ( ! function_exists( __NAMESPACE__ . '\get_posts' ) ) {
 	function get_posts( $args ) {
 		return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$posts_return; }
 }
-if ( ! function_exists( __NAMESPACE__ . '\get_user_meta' ) ) {
-	function get_user_meta( $uid, $key, $single = false ) {
-		return \ArtPulse\Frontend\Tests\EventSubmissionShortcodeTest::$user_meta[ $uid ][ $key ] ?? ''; }
-}
 if ( ! function_exists( __NAMESPACE__ . '\wp_list_pluck' ) ) {
 	function wp_list_pluck( $input, $field ) {
 		return array_map( fn( $i ) => is_object( $i ) ? $i->$field : $i[ $field ], $input ); }
@@ -60,23 +56,22 @@ use ArtPulse\Frontend\EventSubmissionShortcode;
 
 class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 
-	public static array $posts_return = array();
-	public static array $user_meta    = array();
-	public static string $notice      = '';
-	public static array $inserted     = array();
-	public static array $media_ids    = array();
-	public static int $thumbnail      = 0;
+        public static array $posts_return = array();
+        public static string $notice      = '';
+        public static array $inserted     = array();
+        public static array $media_ids    = array();
+        public static int $thumbnail      = 0;
 
 	public function set_up(): void {
 		parent::set_up();
-		self::$posts_return = array();
-		self::$user_meta    = array();
-		self::$notice       = '';
-		\ArtPulse\Frontend\StubState::reset();
-		self::$inserted  = array();
-		self::$media_ids = array();
-		self::$thumbnail = 0;
-		$_FILES          = array();
+                self::$posts_return           = array();
+                $GLOBALS['__ap_test_user_meta'] = array();
+                self::$notice                 = '';
+                \ArtPulse\Frontend\StubState::reset();
+                self::$inserted  = array();
+                self::$media_ids = array();
+                self::$thumbnail = 0;
+                $_FILES          = array();
 
 		if ( ! is_dir( ABSPATH . '/wp-admin/includes' ) ) {
 			mkdir( ABSPATH . '/wp-admin/includes', 0777, true );
@@ -98,21 +93,21 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 	}
 
 	public function tear_down(): void {
-		$_POST              = array();
-		$_FILES             = array();
-		self::$posts_return = array();
-		self::$user_meta    = array();
-		self::$notice       = '';
-		self::$inserted     = array();
-		self::$media_ids    = array();
-		self::$thumbnail    = 0;
-		parent::tear_down();
-	}
+                $_POST               = array();
+                $_FILES              = array();
+                self::$posts_return  = array();
+                $GLOBALS['__ap_test_user_meta'] = array();
+                self::$notice        = '';
+                self::$inserted      = array();
+                self::$media_ids     = array();
+                self::$thumbnail     = 0;
+                parent::tear_down();
+        }
 
 	public function test_invalid_org_rejected(): void {
 		// Authorized org id is 5, selected org 99 should fail
-		self::$user_meta[1]['ap_organization_id'] = 5;
-		self::$posts_return                       = array();
+                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 5;
+                self::$posts_return = array();
 
 		EventSubmissionShortcode::maybe_handle_form();
 
@@ -122,7 +117,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 
 	public function test_start_date_after_end_date_rejected(): void {
 		// Valid organization to avoid org failure
-		self::$user_meta[1]['ap_organization_id'] = 99;
+                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 99;
 
 		$_POST['event_start_date'] = '2024-02-01';
 		$_POST['event_end_date']   = '2024-01-01';
@@ -135,7 +130,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 
 	public function test_banner_included_in_submission_images(): void {
 		// Valid organization
-		self::$user_meta[1]['ap_organization_id'] = 99;
+                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 99;
 
 		// Pretend banner uploaded and media handler returns ID 55
 		self::$media_ids        = array( 'event_banner' => 55 );
@@ -161,7 +156,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 
 	public function test_first_gallery_image_used_as_banner_when_missing(): void {
 		// Valid organization
-		self::$user_meta[1]['ap_organization_id'] = 99;
+                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 99;
 
 		// Upload a single additional image
 		self::$media_ids   = array( 'ap_image' => 11 );

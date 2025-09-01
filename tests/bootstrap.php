@@ -13,6 +13,8 @@ if (file_exists($autoloader)) {
     require_once $autoloader;
 }
 
+require_once __DIR__ . '/Frontend/_stubs.php';
+
 if (!defined('AP_TESTING')) {
     define('AP_TESTING', true);
 }
