@@ -3,16 +3,29 @@ const { execSync } = require('child_process');
 
 const baseUrl = process.env.BASE_URL || 'http://localhost:8000';
 const username = process.env.WP_USER || 'admin';
-test.beforeEach(() => {
-    execSync('docker compose -f docker-compose.yml.example down -v', { stdio: 'inherit' });
-    execSync('docker compose -f docker-compose.yml.example up -d --wait', { stdio: 'inherit' });
-});
-
-test.afterAll(() => {
-    execSync('docker compose -f docker-compose.yml.example down -v', { stdio: 'inherit' });
-});
-
 const password = process.env.WP_PASS || 'password';
+
+// Start WordPress once for the entire suite.
+test.beforeAll(() => {
+    execSync('docker compose -f docker-compose.yml.example up -d --wait', {
+        stdio: 'inherit',
+    });
+});
+
+// Reset dashboard state before each test without rebuilding containers.
+test.beforeEach(() => {
+    execSync(
+        'docker compose -f docker-compose.yml.example exec -T wordpress wp ap reset-layout 1',
+        { stdio: 'inherit' }
+    );
+});
+
+// Stop and clean up containers when the suite finishes.
+test.afterAll(() => {
+    execSync('docker compose -f docker-compose.yml.example down -v', {
+        stdio: 'inherit',
+    });
+});
 
 test('user can customize dashboard layout and widgets', async ({ page }) => {
     await page.goto(`${baseUrl}/wp-login.php`);
