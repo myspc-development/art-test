@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../TestHelpers.php';
-
 namespace ArtPulse\Core;
+
+require_once __DIR__ . '/../TestHelpers.php';
 
 if ( ! function_exists( __NAMESPACE__ . '\esc_html' ) ) {
 	function esc_html( $text ) {
