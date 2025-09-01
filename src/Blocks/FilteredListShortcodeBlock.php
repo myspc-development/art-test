@@ -39,7 +39,8 @@ class FilteredListShortcodeBlock {
 		);
 
                $path = __DIR__ . '/../../assets/js/filtered-list-shortcode-block.js';
-               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               $version = \ArtPulse\Blocks\ap_block_version();
+               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
                wp_register_script(
                        'artpulse-filtered-list-shortcode-block',
                        plugins_url( 'assets/js/filtered-list-shortcode-block.js', ARTPULSE_PLUGIN_FILE ),

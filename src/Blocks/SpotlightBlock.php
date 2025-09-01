@@ -29,7 +29,8 @@ class SpotlightBlock {
 		);
 
                $path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/js/spotlight-block.js';
-               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               $version = \ArtPulse\Blocks\ap_block_version();
+               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
                wp_register_script(
                        'artpulse-spotlight-block',
                        plugins_url( 'assets/js/spotlight-block.js', ARTPULSE_PLUGIN_FILE ),

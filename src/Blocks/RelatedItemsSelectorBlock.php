@@ -10,7 +10,8 @@ class RelatedItemsSelectorBlock {
 	public static function register_block_and_meta() {
 		// Register block editor script (adjust the path accordingly)
                $path = __DIR__ . '/../../assets/js/blocks/related-items-selector.js';
-               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               $version = \ArtPulse\Blocks\ap_block_version();
+               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
                wp_register_script(
                        'artpulse-related-items-selector',
                        plugins_url( 'assets/js/blocks/related-items-selector.js', ARTPULSE_PLUGIN_FILE ),

@@ -31,7 +31,8 @@ class AdvancedTaxonomyFilterBlock {
 		);
 
                $path = __DIR__ . '/../../assets/js/advanced-taxonomy-filter-block.js';
-               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               $version = \ArtPulse\Blocks\ap_block_version();
+               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
                wp_register_script(
                        'artpulse-advanced-taxonomy-filter-block',
                        plugins_url( 'assets/js/advanced-taxonomy-filter-block.js', ARTPULSE_PLUGIN_FILE ),

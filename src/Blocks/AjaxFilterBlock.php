@@ -32,7 +32,8 @@ class AjaxFilterBlock {
 		);
 
                $path = __DIR__ . '/../../assets/js/ajax-filter-block.js';
-               $ver  = file_exists( $path ) ? filemtime( $path ) : ART_PULSE_VERSION;
+               $version = \ArtPulse\Blocks\ap_block_version();
+               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
                wp_register_script(
                        'artpulse-ajax-filter-block',
                        plugins_url( 'assets/js/ajax-filter-block.js', ARTPULSE_PLUGIN_FILE ),
