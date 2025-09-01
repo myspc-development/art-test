@@ -3,113 +3,117 @@ namespace ArtPulse\Rest\Tests;
 
 use ArtPulse\Rest\DashboardConfigController;
 use ArtPulse\Core\DashboardWidgetRegistry;
+use function ArtPulse\Rest\Tests\as_role;
+use function ArtPulse\Rest\Tests\nonce;
+use function ArtPulse\Rest\Tests\call;
+use function ArtPulse\Rest\Tests\assertStatus;
+use function ArtPulse\Rest\Tests\body;
 
 /**
  * @group REST
  */
 class DashboardConfigControllerTest extends \WP_UnitTestCase {
 
-	private int $admin_id;
-	private int $user_id;
-
-	public function set_up() {
-		parent::set_up();
-		$this->admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
-		$this->user_id  = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+        public function set_up() {
+                parent::set_up();
                 DashboardWidgetRegistry::register( 'one', 'One', '', '', '__return_null' );
                 DashboardWidgetRegistry::register( 'two', 'Two', '', '', '__return_null' );
-		DashboardConfigController::register();
-		do_action( 'rest_api_init' );
-	}
+                DashboardConfigController::register();
+                do_action( 'rest_api_init' );
+        }
 
 	public function test_get_requires_read_capability(): void {
-		wp_set_current_user( 0 );
-		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-config' );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
+                wp_set_current_user( 0 );
+                $res = call( 'GET', '/artpulse/v1/dashboard-config' );
+                assertStatus( $res, 403 );
 
-		wp_set_current_user( $this->user_id );
+                as_role( 'subscriber' );
                 update_option( 'artpulse_widget_roles', array( 'subscriber' => array( 'one' ) ) );
                 update_option( 'artpulse_dashboard_layouts', array( 'subscriber' => array( 'one', 'two' ) ) );
                 update_option( 'artpulse_locked_widgets', array( 'two' ) );
 
-		$req2 = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-config' );
-		$res2 = rest_get_server()->dispatch( $req2 );
-		$this->assertSame( 200, $res2->get_status() );
-		$data = $res2->get_data();
-                $this->assertSame( array( 'subscriber' => array( 'widget_one' ) ), $data['widget_roles'] );
-                $this->assertSame( array( 'subscriber' => array( 'widget_one', 'widget_two' ) ), $data['role_widgets'] );
-                $this->assertSame( array( 'widget_two' ), $data['locked'] );
-	}
+                $res2 = call( 'GET', '/artpulse/v1/dashboard-config' );
+                assertStatus( $res2, 200 );
+                $data = body( $res2 );
+                $this->assertArrayHasKey( 'widget_roles', $data );
+                $this->assertArrayHasKey( 'role_widgets', $data );
+                $this->assertArrayHasKey( 'locked', $data );
+                $this->assertArrayHasKey( 'subscriber', $data['widget_roles'] );
+                $this->assertContains( 'widget_one', $data['widget_roles']['subscriber'] );
+                $this->assertArrayHasKey( 'subscriber', $data['role_widgets'] );
+                $this->assertContains( 'widget_one', $data['role_widgets']['subscriber'] );
+                $this->assertContains( 'widget_two', $data['role_widgets']['subscriber'] );
+                $this->assertContains( 'widget_two', $data['locked'] );
+        }
 
 	public function test_post_requires_manage_options_and_valid_nonce(): void {
-		wp_set_current_user( $this->user_id );
-               $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $req->set_header( 'X-AP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
-               $req->set_body_params( array() );
-               $req->set_header( 'Content-Type', 'application/json' );
-		$req->set_body(
-			json_encode(
-                                array(
-                                        'widget_roles' => array( 'subscriber' => array( 'one' ) ),
-                                )
-			)
-		);
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
+                as_role( 'subscriber' );
+                $res = call(
+                        'POST',
+                        '/artpulse/v1/dashboard-config',
+                        array(
+                                'widget_roles' => array( 'subscriber' => array( 'one' ) ),
+                        ),
+                        array(
+                                'X-WP-Nonce' => nonce( 'wp_rest' ),
+                                'X-AP-Nonce' => nonce( 'ap_dashboard_config' ),
+                                'Content-Type' => 'application/json',
+                        )
+                );
+                assertStatus( $res, 403 );
 
-                wp_set_current_user( $this->admin_id );
+                as_role( 'administrator' );
 
-               $missing = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-               $missing->set_body_params( array() );
-               $missing->set_header( 'Content-Type', 'application/json' );
-               $missing->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $missing->set_body(
-                       json_encode(
-                               array(
-                                       'widget_roles' => array( 'administrator' => array( 'one' ) ),
-                               )
-                       )
-               );
-               $res_missing = rest_get_server()->dispatch( $missing );
-               $this->assertSame( 401, $res_missing->get_status() );
+                $res_missing = call(
+                        'POST',
+                        '/artpulse/v1/dashboard-config',
+                        array(
+                                'widget_roles' => array( 'administrator' => array( 'one' ) ),
+                        ),
+                        array(
+                                'X-WP-Nonce'   => nonce( 'wp_rest' ),
+                                'Content-Type' => 'application/json',
+                        )
+                );
+                assertStatus( $res_missing, 401 );
 
-               $bad = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-               $bad->set_body_params( array() );
-               $bad->set_header( 'Content-Type', 'application/json' );
-               $bad->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $bad->set_header( 'X-AP-Nonce', 'badnonce' );
-               $bad->set_body(
-			json_encode(
-                                array(
-                                        'widget_roles' => array( 'administrator' => array( 'one' ) ),
-                                        'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
-                                        'locked'       => array( 'two' ),
-                                )
-			)
-		);
-               $res_bad = rest_get_server()->dispatch( $bad );
-               $this->assertSame( 401, $res_bad->get_status() );
+                $payload = array(
+                        'widget_roles' => array( 'administrator' => array( 'one' ) ),
+                        'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
+                        'locked'       => array( 'two' ),
+                );
 
-               $good = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-config' );
-               $good->set_body_params( array() );
-               $good->set_header( 'Content-Type', 'application/json' );
-               $good->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $good->set_header( 'X-AP-Nonce', wp_create_nonce( 'ap_dashboard_config' ) );
-               $good->set_body(
-			json_encode(
-                                array(
-                                        'widget_roles' => array( 'administrator' => array( 'one' ) ),
-                                        'role_widgets' => array( 'administrator' => array( 'one', 'two' ) ),
-                                        'locked'       => array( 'two' ),
-                                )
-			)
-		);
-		$res_good = rest_get_server()->dispatch( $good );
-		$this->assertSame( 200, $res_good->get_status() );
-                $this->assertSame( array( 'administrator' => array( 'widget_one' ) ), get_option( 'artpulse_widget_roles' ) );
-                $this->assertSame( array( 'administrator' => array( 'widget_one', 'widget_two' ) ), get_option( 'artpulse_dashboard_layouts' ) );
-                $this->assertSame( array( 'widget_two' ), get_option( 'artpulse_locked_widgets' ) );
-	}
+                $res_bad = call(
+                        'POST',
+                        '/artpulse/v1/dashboard-config',
+                        $payload,
+                        array(
+                                'X-WP-Nonce' => nonce( 'wp_rest' ),
+                                'X-AP-Nonce' => 'badnonce',
+                                'Content-Type' => 'application/json',
+                        )
+                );
+                assertStatus( $res_bad, 401 );
+
+                $res_good = call(
+                        'POST',
+                        '/artpulse/v1/dashboard-config',
+                        $payload,
+                        array(
+                                'X-WP-Nonce' => nonce( 'wp_rest' ),
+                                'X-AP-Nonce' => nonce( 'ap_dashboard_config' ),
+                                'Content-Type' => 'application/json',
+                        )
+                );
+                assertStatus( $res_good, 200 );
+                $roles = get_option( 'artpulse_widget_roles' );
+                $this->assertArrayHasKey( 'administrator', $roles );
+                $this->assertContains( 'widget_one', $roles['administrator'] );
+                $layouts = get_option( 'artpulse_dashboard_layouts' );
+                $this->assertArrayHasKey( 'administrator', $layouts );
+                $this->assertContains( 'widget_one', $layouts['administrator'] );
+                $this->assertContains( 'widget_two', $layouts['administrator'] );
+                $locked = get_option( 'artpulse_locked_widgets' );
+                $this->assertContains( 'widget_two', $locked );
+        }
 }
