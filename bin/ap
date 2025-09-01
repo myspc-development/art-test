@@ -12,7 +12,7 @@ pm_run(){ case "$(pm)" in pnpm) pnpm "$@";; yarn) [ "$1" = "ci" ] && { shift; ya
 setup(){ [ -f composer.json ] && composer install --no-interaction --prefer-dist || true; [ -f package.json ] && (pm_run ci || pm_run install) || true; }
 build(){ [ -f package.json ] && grep -q '"build"' package.json && pm_run run build || echo "No JS build script; skipping"; }
 lint(){ [ -f vendor/bin/phpcs ] && vendor/bin/phpcs || true; [ -f vendor/bin/phpstan ] && vendor/bin/phpstan analyse || true; [ -f package.json ] && grep -q '"lint"' package.json && pm_run run lint || true; }
-test_php(){ local ran=0; if [ -f phpunit.xml ] || [ -f phpunit.xml.dist ]; then ran=1; vendor/bin/phpunit --log-junit "$JUNIT_DIR/phpunit.xml" || true; fi
+test_php(){ local ran=0; if [ -f phpunit.xml ]; then ran=1; vendor/bin/phpunit --log-junit "$JUNIT_DIR/phpunit.xml" || true; fi
 for cfg in phpunit.unit.xml phpunit.unit.xml.dist phpunit.wp.xml phpunit.wp.xml.dist phpunit.rest.xml phpunit.rest.xml.dist; do
   [ -f "$cfg" ] && { ran=1; vendor/bin/phpunit -c "$cfg" --log-junit "$JUNIT_DIR/${cfg%.xml}.xml" || true; }
 done

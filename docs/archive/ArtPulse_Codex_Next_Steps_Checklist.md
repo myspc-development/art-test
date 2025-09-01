@@ -55,7 +55,7 @@ npm install leaflet react-leaflet @testing-library/react
 ---
 
 ## 🧪 4. Testing Framework Extensions
-- [x] Extend `phpunit.xml` to cover new RSVP and follow APIs
+- [x] Extend `phpunit.wp.xml.dist` to cover new RSVP and follow APIs
 - [x] Add test cases for REST permission validation and return structure
 - [x] Create Jest test stubs for new widgets (render, prop usage, user interactions)
 
