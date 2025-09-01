@@ -44,8 +44,6 @@ jobs:
           key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       - name: Install JS deps
         run: npm ci
-      - name: Run JS tests
-        run: npm test
       - name: Install Composer deps
         run: composer install --prefer-dist --no-progress
       - name: Wait for MySQL
@@ -63,6 +61,8 @@ jobs:
           WP_DB_NAME: wordpress_test
           WP_VERSION: ${{ matrix.wp }}
         run: bash bin/install-wp-tests.sh "$WP_DB_NAME" "$WP_DB_USER" "$WP_DB_PASS" "$WP_DB_HOST" "$WP_VERSION"
+      - name: Run full test suite
+        run: npm test
       - name: PHP CodeSniffer
         run: vendor/bin/phpcs --standard=phpcs.xml src --ignore=tests/TestHelpers/* -d memory_limit=512M
       - name: PHPStan
@@ -107,19 +107,13 @@ jobs:
         run: |
           php -r '
             $x=simplexml_load_file("build/coverage.xml");
-            if(!$x){fwrite(STDERR,"No coverage.xml\n"); exit(1);} 
+            if(!$x){fwrite(STDERR,"No coverage.xml\n"); exit(1);}
             $m=(float)$x->project->metrics["lines-covered"];
             $n=(float)$x->project->metrics["lines-valid"];
             $pct=$n?($m/$n):0;
             echo "Coverage: ".round($pct*100,2)."%\n";
             exit($pct>=0.70?0:1);
           '
-      - name: Run Cypress
-        if: github.event_name == 'pull_request' && matrix.php == '8.2' && matrix.wp == 'latest'
-        run: npm run cypress:run
-      - name: Run Playwright
-        if: github.event_name == 'pull_request' && matrix.php == '8.2' && matrix.wp == 'latest'
-        run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: always()
         with:

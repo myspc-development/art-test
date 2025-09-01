@@ -19,12 +19,10 @@ Ensure the project is configured as described in [../development-setup.md](../de
 - **PHPUnit** tests cover core classes and REST endpoints.
 - Run all tests with:
   ```bash
-  composer test
+  npm test
   ```
-- The `composer test` script attempts to run `setup-tests.sh` before
-  executing PHPUnit. If the setup script fails (for example, when
-  WordPress can't be downloaded), a warning is printed and PHPUnit is
-  skipped so the command exits successfully.
+- Individual suites can be executed with `npm run test:php`, `npm run test:js`,
+  or `npm run test:e2e` if you only need a subset.
 - Coding standards are checked with PHP_CodeSniffer:
   ```bash
   composer sniff

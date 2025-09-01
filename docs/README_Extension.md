@@ -35,7 +35,7 @@ For implementation details refer to [Monetization & Ticketing Codex](guides/deve
 Artists may enable a tip jar and track payouts from the dashboard. Payments run through Stripe or PayPal using the endpoints described in [Artist Monetization Tools Codex](guides/developer/artist-monetization-tools-codex.md). A simple revenue graph summarizes sales per event.
 
 ## Developer Utilities
-A full test suite is recommended. Jest covers React components while PHPUnit handles REST endpoints. Run `npm test` and `composer test` during CI. Translation templates are generated with `make-pot` so that strings from `src/` are localizable.
+A full test suite is recommended. `npm test` sequentially runs JavaScript, PHP, and end-to-end tests. Individual suites can still be executed with `npm run test:js`, `npm run test:php`, or `npm run test:e2e`. Translation templates are generated with `make-pot` so that strings from `src/` are localizable.
 
 ## Deployment Workflow
 GitHub Actions provides the default pipeline. Workflow `ci.yml` checks coding standards and builds the plugin:

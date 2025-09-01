@@ -6,7 +6,8 @@
   "scripts": {
     "build": "echo 'no-op build' && exit 0",
     "dev": "rollup -c -w",
-    "test": "jest",
+    "test": "npm run test:all",
+    "test:all": "npm run test:js && npm run test:php && npm run cypress:run && npm run test:e2e",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "test:php": "vendor/bin/phpunit -c phpunit.unit.xml.dist && vendor/bin/phpunit -c phpunit.wp.xml.dist",

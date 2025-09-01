@@ -1,9 +1,15 @@
 # Running PHPUnit Tests
 
-Follow the [development setup guide](development-setup.md) to install dependencies and prepare WordPress for testing. Once configured, run:
+Follow the [development setup guide](development-setup.md) to install dependencies and prepare WordPress for testing. Once configured, run the full test suite:
 
 ```bash
-composer test
+npm test
+```
+
+To run only the PHP tests:
+
+```bash
+npm run test:php
 ```
 
 ## End-to-End Tests
