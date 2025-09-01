@@ -1,8 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-composer preflight
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-if ! composer test:smoke -- --log-junit build/junit-rest.xml; then
-    php tools/print-failures.php build/junit-rest.xml
+WP_PHPUNIT__DIR="${WP_PHPUNIT__DIR:-$ROOT_DIR/vendor/wp-phpunit/wp-phpunit}"
+WP_PHPUNIT__TESTS_CONFIG="${WP_PHPUNIT__TESTS_CONFIG:-$ROOT_DIR/tests/wp-tests-config.php}"
+AP_TEST_MODE="${AP_TEST_MODE:-1}"
+export WP_PHPUNIT__DIR WP_PHPUNIT__TESTS_CONFIG AP_TEST_MODE
+
+if ! composer preflight; then
+    exit 1
 fi
+
+tests=(RestHarnessSmokeTest)
+if [[ "${1:-}" == "--routes" ]]; then
+    tests+=(RouteBucketsSmokeTest)
+fi
+
+for test in "${tests[@]}"; do
+    vendor/bin/phpunit -c phpunit.wp.xml.dist --filter "$test" -v
+done
