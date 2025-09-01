@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Rest\RestResponder;
 
 class ReportTemplateController {
@@ -43,13 +44,13 @@ class ReportTemplateController {
 		return current_user_can( 'manage_options' );
 	}
 
-	public static function get_template( WP_REST_Request $request ): WP_REST_Response {
+	public static function get_template( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$type      = sanitize_key( $request['type'] );
 		$templates = get_option( self::OPTION, array() );
 		return \rest_ensure_response( $templates[ $type ] ?? new \stdClass() );
 	}
 
-	public static function save_template( WP_REST_Request $request ): WP_REST_Response {
+	public static function save_template( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$type   = sanitize_key( $request['type'] );
 		$params = $request->get_json_params();
 		$tpl    = $params['template'] ?? array();

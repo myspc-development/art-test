@@ -167,7 +167,7 @@ class RsvpDbController extends WP_REST_Controller {
 		return \rest_ensure_response( $data );
 	}
 
-	public function list_rsvps( WP_REST_Request $request ): WP_REST_Response {
+	public function list_rsvps( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		global $wpdb;
 		$event_id = intval( $request['event_id'] );
 		$status   = sanitize_text_field( $request['status'] );

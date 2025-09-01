@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Admin\PaymentAnalyticsDashboard;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -28,7 +29,7 @@ class PaymentReportsController {
 		}
 	}
 
-	public static function get_reports( WP_REST_Request $request ): WP_REST_Response {
+	public static function get_reports( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$start = sanitize_text_field( $request->get_param( 'start_date' ) ?? '' );
 		$end   = sanitize_text_field( $request->get_param( 'end_date' ) ?? '' );
 

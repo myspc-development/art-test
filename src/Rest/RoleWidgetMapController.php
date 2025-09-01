@@ -2,6 +2,7 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -25,7 +26,7 @@ class RoleWidgetMapController {
 		);
 	}
 
-	public static function get_map(): WP_REST_Response {
+	public static function get_map(): WP_REST_Response|WP_Error {
 		$map = DashboardWidgetRegistry::get_role_widget_map();
 		$out = array();
 		foreach ( $map as $role => $widgets ) {

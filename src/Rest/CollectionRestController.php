@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -63,7 +64,7 @@ class CollectionRestController {
 		);
 	}
 
-	public static function get_collections( WP_REST_Request $request ): WP_REST_Response {
+	public static function get_collections( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$posts = get_posts(
 			array(
 				'post_type'      => 'ap_collection',
@@ -108,7 +109,7 @@ class CollectionRestController {
 		return \rest_ensure_response( $data );
 	}
 
-	public static function create_or_update( WP_REST_Request $request ): WP_REST_Response {
+	public static function create_or_update( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$id    = intval( $request->get_param( 'id' ) );
 		$title = sanitize_text_field( $request->get_param( 'title' ) );
 		$items = $request->get_param( 'items' );
@@ -140,7 +141,7 @@ class CollectionRestController {
 		return \rest_ensure_response( array( 'id' => $id ) );
 	}
 
-	public static function get_collection( WP_REST_Request $request ): WP_REST_Response {
+	public static function get_collection( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$id   = intval( $request['id'] );
 		$post = get_post( $id );
 		if ( ! $post || $post->post_type !== 'ap_collection' ) {

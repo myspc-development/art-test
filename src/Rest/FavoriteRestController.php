@@ -111,7 +111,7 @@ class FavoriteRestController {
 		);
 	}
 
-	public static function list_favorites( WP_REST_Request $request ): WP_REST_Response {
+	public static function list_favorites( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$user_id     = get_current_user_id();
 		$object_type = $request->get_param( 'object_type' );
 		$favs        = FavoritesManager::get_user_favorites( $user_id, $object_type );

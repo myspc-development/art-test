@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -45,7 +46,7 @@ class EventAnalyticsController extends WP_REST_Controller {
 		);
 	}
 
-	public function get_summary( WP_REST_Request $request ): WP_REST_Response {
+	public function get_summary( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$user_id = get_current_user_id();
 		$start   = $request->get_param( 'start' );
 		$end     = $request->get_param( 'end' );

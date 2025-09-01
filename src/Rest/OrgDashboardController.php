@@ -79,7 +79,7 @@ class OrgDashboardController {
 		return $org_id && ap_user_has_org_role( $uid, $org_id, 'admin' );
 	}
 
-	public static function event_summary( WP_REST_Request $req ): WP_REST_Response {
+	public static function event_summary( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$org_id = absint( $req['id'] );
 		$query  = new \WP_Query(
 			array(
@@ -106,7 +106,7 @@ class OrgDashboardController {
 		return UserInvitationController::invite( $req );
 	}
 
-	public static function ticket_metrics( WP_REST_Request $req ): WP_REST_Response {
+	public static function ticket_metrics( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		global $wpdb;
 		$org_id  = absint( $req['id'] );
 		$table   = $wpdb->prefix . 'ap_tickets';

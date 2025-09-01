@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Core\ProfileMetrics;
@@ -50,7 +51,7 @@ final class ProfileMetricsController {
         );
     }
 
-    public static function get_metrics( WP_REST_Request $req ): WP_REST_Response {
+    public static function get_metrics( WP_REST_Request $req ): WP_REST_Response|WP_Error {
         $metric = sanitize_key( $req->get_param( 'metric' ) );
         $days   = max( 1, absint( $req->get_param( 'days' ) ) );
         $uid    = absint( $req->get_param( 'id' ) );

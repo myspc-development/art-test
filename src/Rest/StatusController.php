@@ -32,7 +32,7 @@ class StatusController {
 		);
 	}
 
-	public static function get_status(): WP_REST_Response {
+	public static function get_status(): WP_REST_Response|WP_Error {
 		$plugin_version = defined( 'ARTPULSE_VERSION' ) ? ARTPULSE_VERSION : '1.0.0';
 		$db_version     = get_option( 'artpulse_db_version', '0.0.0' );
 		$cache          = ( defined( 'WP_CACHE' ) && WP_CACHE ) ? 'Enabled' : 'Disabled';

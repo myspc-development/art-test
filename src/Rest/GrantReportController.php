@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Crm\ContactModel;
 use ArtPulse\Crm\DonationModel;
 use ArtPulse\Rest\Util\Auth;

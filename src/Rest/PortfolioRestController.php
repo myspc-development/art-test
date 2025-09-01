@@ -119,7 +119,7 @@ class PortfolioRestController extends WP_REST_Controller {
 		);
 	}
 
-	public function get_portfolio( WP_REST_Request $request ): WP_REST_Response {
+	public function get_portfolio( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$user_id    = get_current_user_id();
 		$profile_id = $this->get_profile_id( $user_id );
 		return \rest_ensure_response( $this->build_response( $profile_id ) );

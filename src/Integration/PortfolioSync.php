@@ -384,7 +384,7 @@ class PortfolioSync {
 	}
 
 	public static function cli_sync() {
-		if ( ! function_exists( 'WP_CLI' ) ) {
+		if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 			return;
 		}
 		if ( ! \wp_get_current_user()->has_cap( 'manage_options' ) ) {

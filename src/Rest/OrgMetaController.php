@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
 
@@ -28,7 +29,7 @@ class OrgMetaController {
 		}
 	}
 
-	public static function handle( WP_REST_Request $req ): WP_REST_Response {
+	public static function handle( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$id = absint( $req['id'] );
 		if ( $req->get_method() === 'GET' ) {
 			$data = array(

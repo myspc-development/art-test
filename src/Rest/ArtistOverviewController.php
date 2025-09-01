@@ -32,7 +32,7 @@ class ArtistOverviewController {
 		);
 	}
 
-	public static function get_overview(): WP_REST_Response {
+	public static function get_overview(): WP_REST_Response|WP_Error {
 		$user_id   = get_current_user_id();
 		$followers = (int) get_user_meta( $user_id, 'ap_follower_count', true );
 		$sales     = (int) get_user_meta( $user_id, 'ap_total_sales', true );

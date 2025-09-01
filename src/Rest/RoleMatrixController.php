@@ -101,7 +101,7 @@ class RoleMatrixController {
 		);
 	}
 
-	public static function batch_update( WP_REST_Request $req ): WP_REST_Response {
+	public static function batch_update( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$data = $req->get_json_params();
 		if ( ! is_array( $data ) ) {
 			$data = array();
@@ -126,7 +126,7 @@ class RoleMatrixController {
 		return \rest_ensure_response( array( 'status' => 'ok' ) );
 	}
 
-	public static function seed(): WP_REST_Response {
+	public static function seed(): WP_REST_Response|WP_Error {
 		$users = array_map(
 			function ( $u ) {
 				return array(

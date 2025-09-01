@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Core\MultiOrgRoles;
 use function ArtPulse\Core\ap_user_has_org_role;
 use ArtPulse\Rest\Util\Auth;
@@ -72,7 +73,7 @@ class OrgUserRolesController {
 		return ap_user_has_org_role( $user_id, $org_id ) || user_can( $user_id, 'manage_options' );
 	}
 
-	public static function list_roles( WP_REST_Request $request ): WP_REST_Response {
+	public static function list_roles( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		global $wpdb;
 		$org_id = absint( $request['id'] );
 		$table  = $wpdb->prefix . 'ap_org_user_roles';
@@ -80,7 +81,7 @@ class OrgUserRolesController {
 		return \rest_ensure_response( $rows );
 	}
 
-	public static function add_role( WP_REST_Request $request ): WP_REST_Response {
+	public static function add_role( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$org_id  = absint( $request['id'] );
 		$user_id = absint( $request->get_param( 'user_id' ) );
 		$role    = sanitize_key( $request->get_param( 'role' ) );
@@ -91,14 +92,14 @@ class OrgUserRolesController {
 		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
-	public static function remove_role( WP_REST_Request $request ): WP_REST_Response {
+	public static function remove_role( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$org_id  = absint( $request['id'] );
 		$user_id = absint( $request['user_id'] );
 		MultiOrgRoles::remove_role( $user_id, $org_id );
 		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
-	public static function my_orgs( WP_REST_Request $request ): WP_REST_Response {
+	public static function my_orgs( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$user_id = get_current_user_id();
 		$data    = MultiOrgRoles::get_user_orgs( $user_id );
 		return \rest_ensure_response( $data );

@@ -5,6 +5,7 @@ namespace ArtPulse\Rest;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;

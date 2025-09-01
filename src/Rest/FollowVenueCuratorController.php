@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use ArtPulse\Rest\Util\Auth;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Rest\RestResponder;
 
 class FollowVenueCuratorController {
@@ -75,7 +76,7 @@ class FollowVenueCuratorController {
                }
 	}
 
-	public static function follow_venue( WP_REST_Request $req ): WP_REST_Response {
+	public static function follow_venue( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$user_id  = get_current_user_id();
 		$venue_id = absint( $req['venue_id'] );
 		$list     = get_user_meta( $user_id, 'ap_following_venues', true );
@@ -87,13 +88,13 @@ class FollowVenueCuratorController {
 		return \rest_ensure_response( array( 'venues' => array_map( 'intval', $list ) ) );
 	}
 
-	public static function get_followed_venues(): WP_REST_Response {
+	public static function get_followed_venues(): WP_REST_Response|WP_Error {
 		$list = get_user_meta( get_current_user_id(), 'ap_following_venues', true );
 		$list = is_array( $list ) ? array_map( 'intval', $list ) : array();
 		return \rest_ensure_response( $list );
 	}
 
-	public static function follow_curator( WP_REST_Request $req ): WP_REST_Response {
+	public static function follow_curator( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$user_id    = get_current_user_id();
 		$curator_id = absint( $req['curator_id'] );
 		$list       = get_user_meta( $user_id, 'ap_following_curators', true );
@@ -105,7 +106,7 @@ class FollowVenueCuratorController {
 		return \rest_ensure_response( array( 'curators' => array_map( 'intval', $list ) ) );
 	}
 
-	public static function get_followed_curators(): WP_REST_Response {
+	public static function get_followed_curators(): WP_REST_Response|WP_Error {
 		$list = get_user_meta( get_current_user_id(), 'ap_following_curators', true );
 		$list = is_array( $list ) ? array_map( 'intval', $list ) : array();
 		return \rest_ensure_response( $list );

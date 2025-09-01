@@ -108,7 +108,7 @@ class WidgetRoleSync {
 	 */
 	public static function cli_sync(): void {
 		$added = self::sync();
-		if ( class_exists( 'WP_CLI' ) ) {
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			foreach ( $added as $role => $ids ) {
 				if ( $ids ) {
 					\WP_CLI::log( $role . ': ' . implode( ', ', $ids ) );

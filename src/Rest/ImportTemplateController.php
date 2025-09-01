@@ -3,6 +3,7 @@ namespace ArtPulse\Rest;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Rest\RestResponder;
 
 class ImportTemplateController {
@@ -44,13 +45,13 @@ class ImportTemplateController {
 		}
 	}
 
-	public static function get_template( WP_REST_Request $request ): WP_REST_Response {
+	public static function get_template( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$post_type = sanitize_key( $request['post_type'] );
 		$templates = get_option( self::OPTION, array() );
 		return \rest_ensure_response( $templates[ $post_type ] ?? new \stdClass() );
 	}
 
-	public static function save_template( WP_REST_Request $request ): WP_REST_Response {
+	public static function save_template( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$post_type = sanitize_key( $request['post_type'] );
 		$params    = $request->get_json_params();
 		$mapping   = $params['mapping'] ?? array();

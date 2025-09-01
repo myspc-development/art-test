@@ -5,6 +5,7 @@ use WP_REST_Controller;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use ArtPulse\Rest\RestResponder;
 
 class EventManagementController extends WP_REST_Controller {
@@ -43,7 +44,7 @@ class EventManagementController extends WP_REST_Controller {
 		return current_user_can( 'edit_post', $id );
 	}
 
-	public function update_dates( WP_REST_Request $request ): WP_REST_Response {
+	public function update_dates( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$id    = intval( $request['id'] );
 		$start = sanitize_text_field( $request->get_param( 'start' ) );
 		$end   = sanitize_text_field( $request->get_param( 'end' ) );

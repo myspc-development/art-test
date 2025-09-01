@@ -4,6 +4,7 @@ namespace ArtPulse\Rest;
 use ArtPulse\Curator\CuratorManager;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 use WP_REST_Server;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
@@ -34,7 +35,7 @@ class ProfileVerificationController {
 		}
 	}
 
-	public static function verify_profile( WP_REST_Request $req ): WP_REST_Response {
+	public static function verify_profile( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$id   = (int) $req['id'];
 		$post = get_post( $id );
 		if ( $post && in_array( $post->post_type, array( 'artpulse_artist', 'artpulse_org' ), true ) ) {
