@@ -115,10 +115,16 @@ XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.unit.xml.dist --coverage-html
 XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.wp.xml.dist --coverage-html coverage/wp
 ```
 
-JavaScript unit tests can be executed with:
+Run the full test suite with:
 
 ```
 npm test
+```
+
+To run only the JavaScript unit tests:
+
+```
+npm run test:js
 ```
 
 ## Dashboard routes
@@ -629,7 +635,7 @@ Place a file under `your-theme/widgets/` with the same name as the plugin templa
 See the [Development Setup](docs/development-setup.md) guide for preparing the WordPress test library. Once configured, run:
 
 ```bash
-composer test
+npm run test:php
 ```
 
 ## Widget Doctor
