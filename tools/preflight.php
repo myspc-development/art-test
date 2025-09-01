@@ -46,6 +46,15 @@ function parse_db_host( string $raw ): array {
 
 $errors = array();
 
+// Ensure tests configuration exists by copying the sample if missing.
+$root       = dirname( __DIR__ );
+$configPath = $root . '/tests/wp-tests-config.php';
+$samplePath = $root . '/tests/wp-tests-config-sample.php';
+if ( ! file_exists( $configPath ) && file_exists( $samplePath ) ) {
+    @copy( $samplePath, $configPath );
+    echo 'Created tests/wp-tests-config.php from sample.' . "\n";
+}
+
 /** 1) mysqli extension */
 if ( ! extension_loaded( 'mysqli' ) ) {
 	$errors[] = 'The mysqli extension is not loaded (install/enable php-mysql for CLI).';

@@ -22,9 +22,15 @@ $wpPhpUnit = getenv('WP_PHPUNIT__DIR');
 $config    = getenv('WP_PHPUNIT__TESTS_CONFIG');
 
 if (!is_file($config)) {
-    fwrite(STDERR, "Missing tests config at: {$config}\n".
-        "Copy tests/wp-tests-config-sample.php → tests/wp-tests-config.php and fill DB/consts.\n");
-    exit(1);
+    $sample = dirname($config) . '/wp-tests-config-sample.php';
+    if (is_file($sample)) {
+        copy($sample, $config);
+        fwrite(STDERR, "Created default tests config at: {$config}\n");
+    } else {
+        fwrite(STDERR, "Missing tests config at: {$config}\n" .
+            "Copy tests/wp-tests-config-sample.php → tests/wp-tests-config.php and fill DB/consts.\n");
+        exit(1);
+    }
 }
 
 $coreWpSettings = $wpPhpUnit . '/wordpress/wp-settings.php';
