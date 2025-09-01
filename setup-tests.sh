@@ -3,45 +3,29 @@
 
 set -e
 
-# Provide defaults for DB connection if not already set
-DB_NAME=${DB_NAME:-wordpress_test}
-DB_USER=${DB_USER:-root}
-DB_PASSWORD=${DB_PASSWORD:-root}
-DB_HOST=${DB_HOST:-localhost}
+# Require DB connection details via environment variables
+: "${DB_NAME:?DB_NAME is not set}"
+: "${DB_USER:?DB_USER is not set}"
+: "${DB_PASSWORD:?DB_PASSWORD is not set}"
+: "${DB_HOST:?DB_HOST is not set}"
 
 if [ ! -f wordpress/wp-load.php ]; then
-    echo "=== Downloading WordPress core into ./wordpress ==="
-    mkdir -p wordpress
-    curl -L https://wordpress.org/latest.tar.gz -o wordpress/latest.tar.gz
-    tar -xzf wordpress/latest.tar.gz -C wordpress --strip-components=1
-    rm wordpress/latest.tar.gz
+    echo "=== Installing WordPress via Composer into ./wordpress ==="
+    composer create-project --no-interaction --prefer-dist johnpbloch/wordpress wordpress >/dev/null
 else
     echo "WordPress already installed in ./wordpress"
 fi
 
-echo "=== Creating wp-tests-config.php with correct paths and DB settings ==="
-cat > wp-tests-config.php << 'EOF'
+echo "=== Creating wp-tests-config.php with environment-based DB settings ==="
+cat > wp-tests-config.php <<'EOF'
 <?php
 // DB settings for your test database.
-// Credentials can be provided via environment variables.
-if ( ! defined( 'DB_NAME' ) ) {
-    define( 'DB_NAME', getenv( 'DB_NAME' ) );
-}
-if ( ! defined( 'DB_USER' ) ) {
-    define( 'DB_USER', getenv( 'DB_USER' ) );
-}
-if ( ! defined( 'DB_PASSWORD' ) ) {
-    define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) );
-}
-if ( ! defined( 'DB_HOST' ) ) {
-    define( 'DB_HOST', getenv( 'DB_HOST' ) );
-}
-if ( ! defined( 'DB_CHARSET' ) ) {
-    define( 'DB_CHARSET', getenv( 'DB_CHARSET' ) );
-}
-if ( ! defined( 'DB_COLLATE' ) ) {
-    define( 'DB_COLLATE', getenv( 'DB_COLLATE' ) );
-}
+define( 'DB_NAME', getenv( 'DB_NAME' ) );
+define( 'DB_USER', getenv( 'DB_USER' ) );
+define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) );
+define( 'DB_HOST', getenv( 'DB_HOST' ) );
+define( 'DB_CHARSET', getenv( 'DB_CHARSET' ) ?: 'utf8' );
+define( 'DB_COLLATE', getenv( 'DB_COLLATE' ) ?: '' );
 
 // Site constants required by WP test suite
 define( 'WP_TESTS_DOMAIN', 'example.org' );
@@ -53,9 +37,6 @@ define( 'WP_PHP_BINARY', 'php' );
 
 // Path to WordPress source
 define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
-
-// Bootstrap the WordPress environment for testing
-require_once ABSPATH . '/wp-settings.php';
 EOF
 
 echo "=== Done setting up wp-tests-config.php ==="
