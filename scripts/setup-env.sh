@@ -32,7 +32,8 @@ fi
 echo "Installing Node dependencies..."
 npm install
 
-cat > wp-tests-config.php <<'PHP'
+mkdir -p tests
+cat > tests/wp-tests-config.php <<'PHP'
 <?php
 /**
  * WordPress test suite configuration file.
@@ -51,7 +52,7 @@ define( 'WP_TESTS_TITLE', 'Test Blog' );
 
 define( 'WP_PHP_BINARY', 'php' );
 
-define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
+define( 'ABSPATH', dirname( __FILE__ ) . '/../wordpress/' );
 
 require_once ABSPATH . '/wp-settings.php';
 PHP

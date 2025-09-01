@@ -16,8 +16,9 @@ else
     echo "WordPress already installed in ./wordpress"
 fi
 
-echo "=== Creating wp-tests-config.php with environment-based DB settings ==="
-cat > wp-tests-config.php <<'EOF'
+mkdir -p tests
+echo "=== Creating tests/wp-tests-config.php with environment-based DB settings ==="
+cat > tests/wp-tests-config.php <<'EOF'
 <?php
 // DB settings for your test database.
 define( 'DB_NAME', getenv( 'DB_NAME' ) );
@@ -36,9 +37,9 @@ define( 'WP_TESTS_TITLE', 'Test Blog' );
 define( 'WP_PHP_BINARY', 'php' );
 
 // Path to WordPress source
-define( 'ABSPATH', dirname( __FILE__ ) . '/wordpress/' );
+define( 'ABSPATH', dirname( __FILE__ ) . '/../wordpress/' );
 EOF
 
-echo "=== Done setting up wp-tests-config.php ==="
+echo "=== Done setting up tests/wp-tests-config.php ==="
 echo "You can now run: vendor/bin/phpunit --testdox"
 
