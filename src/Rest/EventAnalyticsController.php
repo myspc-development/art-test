@@ -133,9 +133,12 @@ class EventAnalyticsController extends WP_REST_Controller {
 		$top_events  = array();
 		$top_event   = '';
 
-		if ( $ids ) {
-			$table = $wpdb->prefix . 'ap_rsvps';
-			$in    = implode( ',', array_map( 'intval', $ids ) );
+                if ( $ids ) {
+                        $table = $wpdb->prefix . 'ap_rsvps';
+                        if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) !== $table ) {
+                                return $this->fail( 'Required table missing', 'ap_db_missing', 500 );
+                        }
+                        $in    = implode( ',', array_map( 'intval', $ids ) );
 
 			// Totals by status (robust to unknown statuses).
 			$rows = $wpdb->get_results( "SELECT status, COUNT(*) c FROM {$table} WHERE event_id IN ($in) GROUP BY status", ARRAY_A ) ?: array();
