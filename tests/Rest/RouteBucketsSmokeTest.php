@@ -6,6 +6,7 @@ namespace ArtPulse\Rest\Tests;
 use WP_UnitTestCase;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 
 /**
  * Buckets:
@@ -198,19 +199,23 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
             foreach ($methods as $method => $expect) {
                 // A) Unauthenticated
                 wp_set_current_user(0);
-                $resp = $this->dispatch($method, $example, $expect['payload'] ?? null, $expect);
-                $status = $resp ? $resp->get_status() : 0;
+                $resp   = $this->dispatch($method, $example, $expect['payload'] ?? null, $expect);
+                $status = is_wp_error($resp)
+                    ? (int) ($resp->get_error_data()['status'] ?? 0)
+                    : $resp->get_status();
                 if (($expect['perm']['unauth'] ?? null) !== null && $status !== $expect['perm']['unauth']) {
                     $problems[] = "[PERM unauth] {$spec['name']} {$method} expected {$expect['perm']['unauth']}, got {$status}";
                 }
 
                 // B) Reader (read-cap)
                 wp_set_current_user($this->reader_id);
-                $resp = $this->dispatch($method, $example, $expect['payload'] ?? null, $expect);
-                $status = $resp ? $resp->get_status() : 0;
+                $resp   = $this->dispatch($method, $example, $expect['payload'] ?? null, $expect);
+                $status = is_wp_error($resp)
+                    ? (int) ($resp->get_error_data()['status'] ?? 0)
+                    : $resp->get_status();
                 if (($expect['perm']['read'] ?? null) !== null && $status !== $expect['perm']['read']) {
                     $problems[] = "[PERM read] {$spec['name']} {$method} expected {$expect['perm']['read']}, got {$status}";
-                } elseif ($status === 200 && !empty($expect['shape'])) {
+                } elseif (!is_wp_error($resp) && $status === 200 && !empty($expect['shape'])) {
                     $shapeErr = $this->assertShape($resp, $expect['shape']);
                     if ($shapeErr) {
                         $problems[] = "[SHAPE read] {$spec['name']} {$method} " . $shapeErr;
@@ -219,11 +224,13 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
 
                 // C) Admin
                 wp_set_current_user($this->admin_id);
-                $resp = $this->dispatch($method, $example, $expect['payload'] ?? null, $expect, true);
-                $status = $resp ? $resp->get_status() : 0;
+                $resp   = $this->dispatch($method, $example, $expect['payload'] ?? null, $expect, true);
+                $status = is_wp_error($resp)
+                    ? (int) ($resp->get_error_data()['status'] ?? 0)
+                    : $resp->get_status();
                 if (($expect['perm']['admin'] ?? null) !== null && $status !== $expect['perm']['admin']) {
                     $problems[] = "[PERM admin] {$spec['name']} {$method} expected {$expect['perm']['admin']}, got {$status}";
-                } elseif ($status === 200 && !empty($expect['shape'])) {
+                } elseif (!is_wp_error($resp) && $status === 200 && !empty($expect['shape'])) {
                     $shapeErr = $this->assertShape($resp, $expect['shape']);
                     if ($shapeErr) {
                         $problems[] = "[SHAPE admin] {$spec['name']} {$method} " . $shapeErr;
@@ -252,7 +259,7 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
         return false;
     }
 
-    private function dispatch(string $method, string $path, ?array $payload, array $expect, bool $as_admin = false): ?WP_REST_Response
+    private function dispatch(string $method, string $path, ?array $payload, array $expect, bool $as_admin = false): WP_REST_Response|WP_Error
     {
         // Build request
         $req = new WP_REST_Request($method, $path);
@@ -272,7 +279,13 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
             $req->set_header('X-WP-Nonce', wp_create_nonce('wp_rest'));
         }
 
-        return $this->server->dispatch($req);
+        $response = $this->server->dispatch($req);
+
+        if (is_wp_error($response)) {
+            return $response;
+        }
+
+        return rest_ensure_response($response);
     }
 
     private function assertShape(WP_REST_Response $resp, array $requiredKeys): ?string
