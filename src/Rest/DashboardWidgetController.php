@@ -18,10 +18,6 @@ use ArtPulse\Rest\Util\Auth;
 class DashboardWidgetController {
         use RestResponder;
 
-        private static function verify_nonce( WP_REST_Request $request, string $action ): bool|WP_Error {
-                return Auth::verify_nonce( $request->get_header( 'X-AP-Nonce' ), $action );
-        }
-
 	/**
 	 * Convert an array of builder layout items to core widget IDs.
 	 * Logs a warning if a widget ID cannot be mapped.
@@ -29,8 +25,8 @@ class DashboardWidgetController {
 	 * @param array<int,array|string> $layout
 	 * @return array<int,array>
 	 */
-	private static function convert_to_core_ids( array $layout ): array {
-		$converted = array();
+        private static function convert_to_core_ids( array $layout ): array {
+                $converted = array();
                 foreach ( $layout as $item ) {
                         if ( is_array( $item ) ) {
                                 $id  = WidgetIds::canonicalize( $item['id'] ?? '' );
@@ -40,20 +36,24 @@ class DashboardWidgetController {
                                 $vis = true;
                         }
 
-                       $core = self::to_core_id( $id );
-                       $core = DashboardWidgetRegistry::canon_slug( $core );
-                       if ( $id && ! DashboardWidgetRegistry::exists( $core ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                               error_log( '[DashboardBuilder] Unmapped widget ID: ' . $id );
-                       }
+                        $core = self::to_core_id( $id );
+                        $core = DashboardWidgetRegistry::canon_slug( $core );
 
-                       $converted[] = array(
-                               'id'      => $core,
-                               'visible' => $vis,
-                       );
-		}
+                        if ( $id && ! DashboardWidgetRegistry::exists( $core ) ) {
+                                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                        error_log( '[DashboardBuilder] Unmapped widget ID: ' . $id );
+                                }
+                                continue;
+                        }
 
-		return $converted;
-	}
+                        $converted[] = array(
+                                'id'      => $core,
+                                'visible' => $vis,
+                        );
+                }
+
+                return $converted;
+        }
 
 	/**
 	 * Convert an array of core layout items to builder widget IDs.
@@ -189,93 +189,84 @@ class DashboardWidgetController {
 	}
 
         public static function save_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                if ( ! current_user_can( 'edit_posts' ) ) {
-                        return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
+                $guard = Auth::guard( $request, 'edit_posts', 'ap_save_layout' );
+                if ( is_wp_error( $guard ) ) {
+                        return $guard;
                 }
-                $nonce = self::verify_nonce( $request, 'ap_save_layout' );
-                if ( is_wp_error( $nonce ) ) {
-                        return $nonce;
-                }
+
                 $data = $request->get_json_params();
-		$role = sanitize_key( $data['role'] ?? '' );
-		if ( ! $role ) {
-			return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
-		}
+                $role = sanitize_key( $data['role'] ?? '' );
+                if ( ! $role ) {
+                        return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
+                }
 		if ( empty( DashboardWidgetRegistry::get_for_role( $role ) ) && ! get_role( $role ) ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'Attempt to save dashboard layout for unsupported role: ' . $role );
 			}
 			return new WP_Error( 'invalid_role', __( 'Unsupported role', 'artpulse' ), array( 'status' => 400 ) );
 		}
-		if ( isset( $data['layout'] ) && is_array( $data['layout'] ) ) {
-			$layout = self::convert_to_core_ids( $data['layout'] );
-			\ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $layout );
-		} else {
-			$enabled = array_map( 'sanitize_key', (array) ( $data['enabledWidgets'] ?? array() ) );
-			$order   = array_map( 'sanitize_key', (array) ( $data['layoutOrder'] ?? array() ) );
-			$layout  = self::convert_to_core_ids(
-				array_map(
-					fn( $id ) => array(
-						'id'      => $id,
-						'visible' => true,
-					),
-					$order
-				)
-			);
-			\ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $layout );
-		}
-		return \rest_ensure_response( array( 'saved' => true ) );
-	}
+                if ( isset( $data['layout'] ) && is_array( $data['layout'] ) ) {
+                        $layout = self::convert_to_core_ids( $data['layout'] );
+                        \ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $layout );
+                } else {
+                        $order   = array_map( 'sanitize_key', (array) ( $data['layoutOrder'] ?? array() ) );
+                        $layout  = self::convert_to_core_ids(
+                                array_map(
+                                        fn( $id ) => array(
+                                                'id'      => $id,
+                                                'visible' => true,
+                                        ),
+                                        $order
+                                )
+                        );
+                        \ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $layout );
+                }
+
+                return ( new self() )->ok( array( 'saved' => true ) );
+        }
 
         public static function export_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                if ( ! current_user_can( 'edit_posts' ) ) {
-                        return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
+                $guard = Auth::guard( $request, 'edit_posts', 'ap_export_layout' );
+                if ( is_wp_error( $guard ) ) {
+                        return $guard;
                 }
-                $nonce = self::verify_nonce( $request, 'ap_export_layout' );
-                if ( is_wp_error( $nonce ) ) {
-                        return $nonce;
-                }
-                $role = sanitize_key( $request->get_param( 'role' ) );
-		if ( ! $role ) {
-			return new WP_Error( 'invalid_role', __( 'Role parameter missing', 'artpulse' ), array( 'status' => 400 ) );
-		}
 
-		$result  = \ArtPulse\Admin\UserLayoutManager::get_role_layout( $role );
-		$builder = self::convert_to_builder_ids( $result['layout'] );
-		return \rest_ensure_response(
-			array(
-				'role'   => $role,
-				'layout' => $builder,
-			)
-		);
-	}
+                $role = sanitize_key( $request->get_param( 'role' ) );
+                if ( ! $role ) {
+                        return new WP_Error( 'invalid_role', __( 'Role parameter missing', 'artpulse' ), array( 'status' => 400 ) );
+                }
+
+                $result  = \ArtPulse\Admin\UserLayoutManager::get_role_layout( $role );
+                $builder = self::convert_to_builder_ids( $result['layout'] );
+
+                return ( new self() )->ok( array( 'layout' => $builder ) );
+        }
 
         public static function import_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                if ( ! current_user_can( 'edit_posts' ) ) {
-                        return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
+                $guard = Auth::guard( $request, 'edit_posts', 'ap_import_layout' );
+                if ( is_wp_error( $guard ) ) {
+                        return $guard;
                 }
-                $nonce = self::verify_nonce( $request, 'ap_import_layout' );
-                if ( is_wp_error( $nonce ) ) {
-                        return $nonce;
-                }
+
                 $data = $request->get_json_params();
-		$role = sanitize_key( $data['role'] ?? '' );
-		if ( ! $role ) {
-			return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
-		}
+                $role = sanitize_key( $data['role'] ?? '' );
+                if ( ! $role ) {
+                        return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
+                }
 		if ( empty( DashboardWidgetRegistry::get_for_role( $role ) ) && ! get_role( $role ) ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'Attempt to import dashboard layout for unsupported role: ' . $role );
 			}
 			return new WP_Error( 'invalid_role', __( 'Unsupported role', 'artpulse' ), array( 'status' => 400 ) );
 		}
-		$layout = $data['layout'] ?? null;
-		if ( ! is_array( $layout ) ) {
-			return new WP_Error( 'invalid_layout', __( 'Invalid layout', 'artpulse' ), array( 'status' => 400 ) );
-		}
+                $layout = $data['layout'] ?? null;
+                if ( ! is_array( $layout ) ) {
+                        return new WP_Error( 'invalid_layout', __( 'Invalid layout', 'artpulse' ), array( 'status' => 400 ) );
+                }
 
-		$core_layout = self::convert_to_core_ids( $layout );
-		\ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $core_layout );
-		return \rest_ensure_response( array( 'imported' => true ) );
-	}
+                $core_layout = self::convert_to_core_ids( $layout );
+                \ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $core_layout );
+
+                return ( new self() )->ok( array( 'imported' => true ) );
+        }
 }
