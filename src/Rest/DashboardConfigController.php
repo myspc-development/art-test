@@ -11,7 +11,10 @@ use ArtPulse\Support\WidgetIds;
 use ArtPulse\Rest\RestResponder;
 
 class DashboardConfigController {
-	use RestResponder;
+        use RestResponder;
+    private static function verify_nonce( WP_REST_Request $request, string $action ): bool|WP_Error {
+        return Auth::verify_nonce( $request->get_header( 'X-AP-Nonce' ), $action );
+    }
     public static function register(): void {
         add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
     }
@@ -193,9 +196,12 @@ class DashboardConfigController {
     }
 
     public static function save_config( WP_REST_Request $request ) {
-        $nonce_check = Auth::verify_nonce( $request->get_header( 'X-AP-Nonce' ), 'ap_dashboard_config' );
+        $nonce_check = self::verify_nonce( $request, 'ap_dashboard_config' );
         if ( is_wp_error( $nonce_check ) ) {
             return $nonce_check;
+        }
+        if ( ! current_user_can( 'edit_posts' ) ) {
+            return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
         }
 
         $data = $request->get_json_params();

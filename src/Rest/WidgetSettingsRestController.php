@@ -9,7 +9,11 @@ use WP_Error;
 use ArtPulse\Rest\RestResponder;
 
 class WidgetSettingsRestController {
-	use RestResponder;
+        use RestResponder;
+
+        private static function verify_nonce( WP_REST_Request $request, string $action ): bool|WP_Error {
+                return Auth::verify_nonce( $request->get_header( 'X-AP-Nonce' ), $action );
+        }
 
 	public static function register(): void {
 		if ( did_action( 'rest_api_init' ) ) {
@@ -81,22 +85,25 @@ class WidgetSettingsRestController {
         }
 
         public static function save_settings( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-		$id     = sanitize_key( $request['id'] );
-		$global = (bool) $request->get_param( 'global' );
-		$schema = DashboardWidgetRegistry::get_widget_schema( $id );
-
-		if ( empty( $schema ) ) {
-			return new WP_Error( 'invalid_widget', __( 'Unknown widget.', 'artpulse' ), array( 'status' => 404 ) );
-		}
-
-                $check = Auth::verify_nonce( $request );
-                if ( is_wp_error( $check ) ) {
-                        return $check;
+                if ( ! current_user_can( 'edit_posts' ) ) {
+                        return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
                 }
-		$perm = $global ? Auth::guard_manage( $request ) : Auth::guard_read( $request );
-		if ( is_wp_error( $perm ) ) {
-			return $perm;
-		}
+                $nonce = self::verify_nonce( $request, 'ap_save_widget_settings' );
+                if ( is_wp_error( $nonce ) ) {
+                        return $nonce;
+                }
+                $id     = sanitize_key( $request['id'] );
+                $global = (bool) $request->get_param( 'global' );
+                $schema = DashboardWidgetRegistry::get_widget_schema( $id );
+
+                if ( empty( $schema ) ) {
+                        return new WP_Error( 'invalid_widget', __( 'Unknown widget.', 'artpulse' ), array( 'status' => 404 ) );
+                }
+
+                $perm = $global ? Auth::guard_manage( $request ) : Auth::guard_read( $request );
+                if ( is_wp_error( $perm ) ) {
+                        return $perm;
+                }
 
                 $raw       = $request->get_param( 'settings' );
                 if ( $raw === null ) {

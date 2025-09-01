@@ -4,11 +4,16 @@ namespace ArtPulse\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use ArtPulse\Rest\Util\Auth;
+use WP_Error;
 use ArtPulse\Rest\RestResponder;
+use ArtPulse\Rest\Util\Auth;
 
 class ImportRestController {
-	use RestResponder;
+        use RestResponder;
+
+        private static function verify_nonce( WP_REST_Request $request, string $action ): bool|\WP_Error {
+                return Auth::verify_nonce( $request->get_header( 'X-AP-Nonce' ), $action );
+        }
 
 	/**
 	 * Allowed post types for import.
@@ -42,7 +47,14 @@ class ImportRestController {
                 );
         }
 
-	public static function handle_import( WP_REST_Request $request ): WP_REST_Response {
+        public static function handle_import( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+               if ( ! current_user_can( 'edit_posts' ) ) {
+                       return new WP_REST_Response( array( 'message' => 'Insufficient permissions' ), 403 );
+               }
+               $nonce = self::verify_nonce( $request, 'ap_import_content' );
+               if ( is_wp_error( $nonce ) ) {
+                       return $nonce;
+               }
                $params    = $request->get_json_params();
                if ( empty( $params ) ) {
                        $params = $request->get_body_params();
