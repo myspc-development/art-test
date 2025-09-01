@@ -32,7 +32,11 @@ class RestHarnessSmokeTest extends \WP_UnitTestCase
         $this->assertFalse(is_user_logged_in(), 'No user should be logged in by default');
 
         $this->loginAsAdmin();
-        $this->assertTrue(is_user_logged_in(), 'Helper should authenticate a user');
+        try {
+            $this->assertTrue(is_user_logged_in(), 'Helper should authenticate a user');
+        } finally {
+            wp_set_current_user(0);
+        }
     }
 
     /**
