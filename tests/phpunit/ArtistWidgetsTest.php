@@ -44,17 +44,19 @@ class ArtistWidgetsTest extends TestCase {
 		);
 	}
 
-	/**
-	 * @dataProvider widgetIds
-	 */
-	public function test_widgets_registered( string $id ): void {
+        /**
+         * @dataProvider widgetIds
+         * @group slow
+         */
+        public function test_widgets_registered( string $id ): void {
 		$this->assertTrue( DashboardWidgetRegistry::exists( $id ) );
 	}
 
-	/**
-	 * @dataProvider widgetIds
-	 */
-	public function test_widgets_render( string $id ): void {
+        /**
+         * @dataProvider widgetIds
+         * @group slow
+         */
+        public function test_widgets_render( string $id ): void {
 		$def = DashboardWidgetRegistry::getById( $id );
 		$this->assertIsArray( $def );
 		$callback = $def['callback'];

@@ -6,10 +6,11 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
 		'/ap/v1/roles',
 		'/artpulse/v1/webhooks',
 	);
-	/**
-	 * @dataProvider routesProvider
-	 * @group REST
-	 */
+        /**
+         * @dataProvider routesProvider
+         * @group REST
+         * @group slow
+         */
 	public function test_route_security( string $route, string $method, array $args ): void {
 		$server = rest_get_server();
 

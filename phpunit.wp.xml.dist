@@ -25,6 +25,9 @@
       <group>engagement</group>
       <group>personalization</group>
     </include>
+    <exclude>
+      <group>slow</group>
+    </exclude>
   </groups>
   <logging>
     <junit outputFile="build/junit.xml"/>

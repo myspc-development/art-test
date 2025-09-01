@@ -18,17 +18,19 @@ class CalendarExportTest extends \WP_UnitTestCase {
 	}
 
 	public function test_event_calendar_export_builds_ics(): void {
-		$id = wp_insert_post(
-			array(
-				'post_title'   => 'Export Event',
-				'post_type'    => 'artpulse_event',
-				'post_status'  => 'publish',
-				'post_content' => 'An event description.',
-			)
-		);
-		update_post_meta( $id, 'event_start_date', '2030-01-01' );
-		update_post_meta( $id, 'event_end_date', '2030-01-02' );
-		update_post_meta( $id, 'venue_name', 'Main Hall' );
+                $id = self::factory()->post->create(
+                        array(
+                                'post_title'   => 'Export Event',
+                                'post_type'    => 'artpulse_event',
+                                'post_status'  => 'publish',
+                                'post_content' => 'An event description.',
+                                'meta_input'   => array(
+                                        'event_start_date' => '2030-01-01',
+                                        'event_end_date'   => '2030-01-02',
+                                        'venue_name'       => 'Main Hall',
+                                ),
+                        )
+                );
 
 		$ref = new \ReflectionMethod( CalendarExport::class, 'build_event_ics' );
 		$ref->setAccessible( true );
@@ -47,47 +49,47 @@ class CalendarExportTest extends \WP_UnitTestCase {
 	}
 
 	public function test_org_calendar_export_builds_ics_for_events(): void {
-		$org = wp_insert_post(
-			array(
-				'post_title'  => 'My Org',
-				'post_type'   => 'artpulse_org',
-				'post_status' => 'publish',
-			)
-		);
-		$id1 = wp_insert_post(
-			array(
-				'post_title'   => 'First Event',
-				'post_type'    => 'artpulse_event',
-				'post_status'  => 'publish',
-				'post_content' => 'First description',
-				'meta_input'   => array(
-					'_ap_event_organization' => $org,
-					'event_start_date'       => '2031-01-01',
-				),
-			)
-		);
-		$id2 = wp_insert_post(
-			array(
-				'post_title'   => 'Second Event',
-				'post_type'    => 'artpulse_event',
-				'post_status'  => 'publish',
-				'post_content' => 'Second description',
-				'meta_input'   => array(
-					'_ap_event_organization' => $org,
-					'event_start_date'       => '2031-02-01',
-				),
-			)
-		);
+                $org = self::factory()->post->create(
+                        array(
+                                'post_title'  => 'My Org',
+                                'post_type'   => 'artpulse_org',
+                                'post_status' => 'publish',
+                        )
+                );
+                $id1 = self::factory()->post->create(
+                        array(
+                                'post_title'   => 'First Event',
+                                'post_type'    => 'artpulse_event',
+                                'post_status'  => 'publish',
+                                'post_content' => 'First description',
+                                'meta_input'   => array(
+                                        '_ap_event_organization' => $org,
+                                        'event_start_date'       => '2031-01-01',
+                                ),
+                        )
+                );
+                $id2 = self::factory()->post->create(
+                        array(
+                                'post_title'   => 'Second Event',
+                                'post_type'    => 'artpulse_event',
+                                'post_status'  => 'publish',
+                                'post_content' => 'Second description',
+                                'meta_input'   => array(
+                                        '_ap_event_organization' => $org,
+                                        'event_start_date'       => '2031-02-01',
+                                ),
+                        )
+                );
 
-		$events = get_posts(
-			array(
-				'post_type'      => 'artpulse_event',
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'meta_key'       => '_ap_event_organization',
-				'meta_value'     => $org,
-			)
-		);
+                $events = get_posts(
+                        array(
+                                'post_type'      => 'artpulse_event',
+                                'post_status'    => 'publish',
+                                'posts_per_page' => 2,
+                                'meta_key'       => '_ap_event_organization',
+                                'meta_value'     => $org,
+                        )
+                );
 
 		$ref = new \ReflectionMethod( CalendarExport::class, 'build_org_ics' );
 		$ref->setAccessible( true );
@@ -104,24 +106,24 @@ class CalendarExportTest extends \WP_UnitTestCase {
 
 	public function test_artist_calendar_export_builds_ics_for_events(): void {
 		$artist = self::factory()->user->create( array( 'role' => 'author' ) );
-		$id     = wp_insert_post(
-			array(
-				'post_title'  => 'Artist Event',
-				'post_type'   => 'artpulse_event',
-				'post_status' => 'publish',
-				'post_author' => $artist,
-				'meta_input'  => array( 'event_start_date' => '2032-03-01' ),
-			)
-		);
+                $id     = self::factory()->post->create(
+                        array(
+                                'post_title'  => 'Artist Event',
+                                'post_type'   => 'artpulse_event',
+                                'post_status' => 'publish',
+                                'post_author' => $artist,
+                                'meta_input'  => array( 'event_start_date' => '2032-03-01' ),
+                        )
+                );
 
-		$events = get_posts(
-			array(
-				'post_type'      => 'artpulse_event',
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'author'         => $artist,
-			)
-		);
+                $events = get_posts(
+                        array(
+                                'post_type'      => 'artpulse_event',
+                                'post_status'    => 'publish',
+                                'posts_per_page' => 1,
+                                'author'         => $artist,
+                        )
+                );
 
 		$ref = new \ReflectionMethod( CalendarExport::class, 'build_artist_ics' );
 		$ref->setAccessible( true );
@@ -133,30 +135,30 @@ class CalendarExportTest extends \WP_UnitTestCase {
 	}
 
 	public function test_all_calendar_export_builds_ics_for_all_events(): void {
-		$id1 = wp_insert_post(
-			array(
-				'post_title'  => 'First Global',
-				'post_type'   => 'artpulse_event',
-				'post_status' => 'publish',
-				'meta_input'  => array( 'event_start_date' => '2033-01-01' ),
-			)
-		);
-		$id2 = wp_insert_post(
-			array(
-				'post_title'  => 'Second Global',
-				'post_type'   => 'artpulse_event',
-				'post_status' => 'publish',
-				'meta_input'  => array( 'event_start_date' => '2033-02-01' ),
-			)
-		);
+                $id1 = self::factory()->post->create(
+                        array(
+                                'post_title'  => 'First Global',
+                                'post_type'   => 'artpulse_event',
+                                'post_status' => 'publish',
+                                'meta_input'  => array( 'event_start_date' => '2033-01-01' ),
+                        )
+                );
+                $id2 = self::factory()->post->create(
+                        array(
+                                'post_title'  => 'Second Global',
+                                'post_type'   => 'artpulse_event',
+                                'post_status' => 'publish',
+                                'meta_input'  => array( 'event_start_date' => '2033-02-01' ),
+                        )
+                );
 
-		$events = get_posts(
-			array(
-				'post_type'      => 'artpulse_event',
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-			)
-		);
+                $events = get_posts(
+                        array(
+                                'post_type'      => 'artpulse_event',
+                                'post_status'    => 'publish',
+                                'posts_per_page' => 2,
+                        )
+                );
 
 		$ref = new \ReflectionMethod( CalendarExport::class, 'build_all_ics' );
 		$ref->setAccessible( true );
