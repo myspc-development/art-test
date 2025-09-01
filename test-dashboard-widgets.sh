@@ -1,5 +1,16 @@
 #!/bin/bash
+# Required tools:
+#   wp   - WordPress CLI
+#   curl - Command-line HTTP client
+#   jq   - JSON processor
 set -euo pipefail
+
+for cmd in wp curl jq; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "❌ Missing required command '$cmd'. Please install it before running this script." >&2
+    exit 1
+  fi
+done
 
 echo "🔍 Running Dashboard Widgets System Checks..."
 
