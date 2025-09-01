@@ -4,10 +4,6 @@
     <env name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
     <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-tests-config.php"/>
     <env name="AP_TEST_MODE" value="1"/>
-    <env name="DB_NAME" value="${DB_NAME}"/>
-    <env name="DB_USER" value="${DB_USER}"/>
-    <env name="DB_PASSWORD" value="${DB_PASSWORD}"/>
-    <env name="DB_HOST" value="${DB_HOST}"/>
   </php>
   <testsuites>
     <testsuite name="WP">
