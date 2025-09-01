@@ -1,20 +1,21 @@
 #!/bin/bash
+set -euo pipefail
 
 echo "🔍 Running Dashboard Widgets System Checks..."
 
 # CONFIGURATION
-PLUGIN_SLUG="artpulse-management"
-WIDGET_META_PREFIX="ap_dashboard_widgets_"
-NONCE_ACTION="save_dashboard_widgets"
-AJAX_URL="http://localhost/wp-admin/admin-ajax.php"
-REST_URL="http://localhost/wp-json/artpulse/v1"
-TEST_USER_ID=1
-TEST_ROLE="subscriber"
+: "${PLUGIN_SLUG:=artpulse-management}"
+: "${WIDGET_META_PREFIX:=ap_dashboard_widgets_}"
+: "${NONCE_ACTION:=save_dashboard_widgets}"
+: "${AJAX_URL:=http://localhost/wp-admin/admin-ajax.php}"
+: "${REST_URL:=http://localhost/wp-json/artpulse/v1}"
+: "${TEST_USER_ID:=1}"
+: "${TEST_ROLE:=subscriber}"
 
 # 0. VERIFY PHP MODULES
 echo "✅ Checking PHP modules..."
 MODULE_OUTPUT=$(php -m 2>&1)
-echo "$MODULE_OUTPUT" | grep -E "Zend OPcache|zip" || true
+echo "$MODULE_OUTPUT" | grep -E "Zend OPcache|zip"
 if echo "$MODULE_OUTPUT" | grep -qi 'already loaded'; then
     echo "⚠️ PHP configuration appears to load some modules multiple times:"
     echo "$MODULE_OUTPUT" | grep -i 'already loaded'
@@ -27,7 +28,10 @@ find . -name "*.php" ! -path "./vendor/*" -exec php -l {} \;
 # 2. RUN PHPCS (Requires squizlabs/php_codesniffer)
 if command -v phpcs >/dev/null 2>&1; then
     echo "✅ Running PHPCS..."
-    phpcs --standard=PSR12 --ignore=vendor . > phpcs.log || echo "⚠️ PHPCS issues found: check phpcs.log"
+    if ! phpcs --standard=PSR12 --ignore=vendor . > phpcs.log; then
+        echo "❌ PHPCS issues found: check phpcs.log"
+        exit 1
+    fi
 else
     echo "⚠️ PHPCS not installed. Skipping."
 fi
@@ -54,11 +58,11 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 $defs = DashboardWidgetRegistry::get_definitions();
 echo $defs[0]["id"];
 ')
-curl -s "${REST_URL}/widget-settings/${SAMPLE_WIDGET}" | jq
+curl -fsS "${REST_URL}/widget-settings/${SAMPLE_WIDGET}" | jq
 
 # 6. TEST WIDGET LAYOUT SAVE VIA AJAX (mock test)
 echo "✅ Mock-saving layout via AJAX..."
-curl -s -X POST "$AJAX_URL" \
+curl -fsS -X POST "$AJAX_URL" \
   -d "action=ap_save_dashboard_widget_config" \
   -d "nonce=$(wp create nonce $NONCE_ACTION)" \
   -d "config[$TEST_ROLE][]=${SAMPLE_WIDGET}" | jq
@@ -66,8 +70,8 @@ curl -s -X POST "$AJAX_URL" \
 # 7. OPTIONAL: RUN UNIT TESTS
 if [ -f phpunit.unit.xml.dist ] || [ -f phpunit.wp.xml.dist ]; then
     echo "✅ Running PHPUnit tests..."
-    [ -f phpunit.unit.xml.dist ] && ./vendor/bin/phpunit -c phpunit.unit.xml.dist || true
-    [ -f phpunit.wp.xml.dist ] && ./vendor/bin/phpunit -c phpunit.wp.xml.dist || true
+    [ -f phpunit.unit.xml.dist ] && ./vendor/bin/phpunit -c phpunit.unit.xml.dist
+    [ -f phpunit.wp.xml.dist ] && ./vendor/bin/phpunit -c phpunit.wp.xml.dist
 else
     echo "⚠️ No PHPUnit config found."
 fi
