@@ -26,10 +26,23 @@ class EventListingShortcodeTest extends WP_UnitTestCase {
        }
 
        public function test_category_dropdown_rendered(): void {
-               $term  = wp_insert_term( 'Music', 'event_category' );
-               $html  = EventListingShortcode::render( array() );
-               $this->assertStringContainsString( '<select name="category"', $html );
+               $captured_taxonomies = null;
+               add_filter(
+                       'get_terms_args',
+                       function ( $args, $taxonomies ) use ( & $captured_taxonomies ) {
+                               $captured_taxonomies = $taxonomies;
+                               return $args;
+                       },
+                       10,
+                       2
+               );
+
+               $term = wp_insert_term( 'Music', 'event_category' );
+               $html = EventListingShortcode::render( array() );
                $slug = get_term( $term['term_id'] )->slug;
+
+               $this->assertContains( 'event_category', (array) $captured_taxonomies );
+               $this->assertStringContainsString( '<select name="category"', $html );
                $this->assertStringContainsString( 'value="' . esc_attr( $slug ) . '"', $html );
        }
 }
