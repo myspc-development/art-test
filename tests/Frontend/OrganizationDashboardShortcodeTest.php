@@ -36,6 +36,7 @@ class OrganizationDashboardShortcodeTest extends TestCase {
 
         protected function setUp(): void {
                 \ArtPulse\Frontend\StubState::reset();
+                \ArtPulse\Frontend\StubState::$current_user = 1;
                 $GLOBALS['__ap_test_user_meta'] = array();
                \ArtPulse\Frontend\StubState::$current_user_caps = array();
                \ArtPulse\Frontend\StubState::$shortcodes['[ap_user_dashboard]'] = '<div class="ap-dashboard-grid"></div>';
