@@ -23,6 +23,9 @@
       <group>slow</group>
     </exclude>
   </groups>
+  <logging>
+    <junit outputFile="build/junit-phpunit-unit.xml"/>
+  </logging>
   <coverage>
     <include><directory>src</directory></include>
     <report>
