@@ -116,14 +116,16 @@ namespace {
 		function wp_verify_nonce( $nonce, $action = -1 ) {
 			return $nonce === 'nonce_' . $action; }
 	}
-	if ( ! function_exists( 'get_the_title' ) ) {
-		function get_the_title( $id ) {
-			return 'Post ' . $id; }
-	}
-	if ( ! function_exists( 'get_permalink' ) ) {
-		function get_permalink( $id ) {
-			return '/post/' . $id; }
-	}
+        if ( ! function_exists( 'get_the_title' ) ) {
+                function get_the_title( $id = 0 ) {
+                        return 'Post ' . $id;
+                }
+        }
+        if ( ! function_exists( 'get_permalink' ) ) {
+                function get_permalink( $id = 0 ) {
+                        return '/post/' . $id;
+                }
+        }
 	if ( ! function_exists( 'wp_send_json' ) ) {
 		function wp_send_json( $data ) {
 			MockStorage::$json = $data; }
@@ -153,15 +155,20 @@ namespace {
 		function the_content() {
 			echo 'Org Content'; }
 	}
-	if ( ! function_exists( 'get_the_ID' ) ) {
-		function get_the_ID() {
-			return 1; }
-	}
-	if ( ! function_exists( 'get_post_meta' ) ) {
-		function get_post_meta( $id, $key, $single = false ) {
-			return MockStorage::$post_meta[ $key ] ?? '';
-		}
-	}
+        if ( ! function_exists( 'get_the_ID' ) ) {
+                function get_the_ID() {
+                        return 1; }
+        }
+        if ( ! function_exists( 'get_post_type' ) ) {
+                function get_post_type( $post = null ) {
+                        return 'artpulse_org';
+                }
+        }
+        if ( ! function_exists( 'get_post_meta' ) ) {
+                function get_post_meta( $id, $key, $single = false ) {
+                        return MockStorage::$post_meta[ $key ] ?? '';
+                }
+        }
 	if ( ! function_exists( 'esc_html' ) ) {
 		function esc_html( $text ) {
 			return $text; }
@@ -178,15 +185,20 @@ namespace {
 		function wp_script_is( $handle, $list = 'enqueued' ) {
 			return false; }
 	}
-	if ( ! function_exists( 'esc_html__' ) ) {
-		function esc_html__( $text, $domain = null ) {
-			return $text; }
-	}
-	if ( ! function_exists( 'remove_meta_box' ) ) {
-		function remove_meta_box( $id, $screen, $context ) {
-			MockStorage::$removed[] = array( $id, $screen, $context );
-		}
-	}
+        if ( ! function_exists( 'esc_html__' ) ) {
+                function esc_html__( $text, $domain = null ) {
+                        return $text; }
+        }
+        if ( ! function_exists( 'esc_html_e' ) ) {
+                function esc_html_e( $text, $domain = null ) {
+                        echo $text;
+                }
+        }
+        if ( ! function_exists( 'remove_meta_box' ) ) {
+                function remove_meta_box( $id, $screen, $context ) {
+                        MockStorage::$removed[] = array( $id, $screen, $context );
+                }
+        }
 	if ( ! function_exists( 'wp_kses_post' ) ) {
 		function wp_kses_post( $msg ) {
 			return $msg; }
