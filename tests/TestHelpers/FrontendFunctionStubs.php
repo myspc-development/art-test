@@ -62,10 +62,14 @@ self::$post_types           = array();
 		}
 	}
 
-	if ( ! function_exists( __NAMESPACE__ . '\\get_permalink' ) ) {
-		function get_permalink( $id ) {
-			return '/post/' . $id; }
-	}
+        if ( ! function_exists( __NAMESPACE__ . '\\get_permalink' ) ) {
+                function get_permalink( $id ) {
+                        if ( is_object( $id ) ) {
+                                $id = $id->ID ?? 0;
+                        }
+                        return '/post/' . $id;
+                }
+        }
 
 	if ( ! function_exists( __NAMESPACE__ . '\\get_the_title' ) ) {
 		function get_the_title( $postOrId ) {
