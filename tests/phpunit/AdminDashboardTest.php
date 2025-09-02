@@ -26,6 +26,9 @@ final class AdminDashboardTest extends TestCase {
         }
 
         Functions\when( 'plugin_dir_url' )->alias( fn( $f ) => 'https://example.test/p/' );
+        Functions\when( 'plugin_dir_path' )->alias( fn( $f ) => '/p/' );
+        Functions\when( 'file_exists' )->alias( fn( $p ) => true );
+        Functions\when( 'filemtime' )->alias( fn( $p ) => 1234567890 );
         Functions\when( 'admin_url' )->alias( fn( $p = '' ) => 'https://example.test/wp-admin/' . ltrim( $p, '/' ) );
         Functions\when( 'wp_create_nonce' )->alias( fn( $a ) => 'nonce' );
 
@@ -75,6 +78,8 @@ final class AdminDashboardTest extends TestCase {
         $this->assertNotNull( $role );
         $this->assertContains( 'jquery', $role['deps'] );
         $this->assertContains( 'sortablejs', $role['deps'] );
+        $this->assertSame( 1234567890, $sortable['ver'] );
+        $this->assertSame( 1234567890, $role['ver'] );
         $this->assertSame( 'https://example.test/p/assets/js/role-dashboard.js', $role['src'] );
 
         $this->assertArrayHasKey( 'role-dashboard', $this->localized );

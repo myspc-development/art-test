@@ -55,22 +55,29 @@ class AdminDashboard {
 
 		// Legacy dashboard script removed.
 
-		// Enable drag & drop and widget toggles within the dashboard preview
-		wp_enqueue_script(
-			'sortablejs',
-			plugin_dir_url( ARTPULSE_PLUGIN_FILE ) . 'assets/libs/sortablejs/Sortable.min.js',
-			array(),
-			'1.15.0',
-			true
-		);
+               // Enable drag & drop and widget toggles within the dashboard preview
+               $sortable_rel = 'assets/libs/sortablejs/Sortable.min.js';
+               $role_rel     = 'assets/js/role-dashboard.js';
 
-		wp_enqueue_script(
-			'role-dashboard',
-			plugin_dir_url( ARTPULSE_PLUGIN_FILE ) . 'assets/js/role-dashboard.js',
-			array( 'jquery', 'sortablejs' ),
-			'1.0.0',
-			true
-		);
+               $sortable_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $sortable_rel;
+               $sortable_ver  = file_exists( $sortable_path ) ? filemtime( $sortable_path ) : false;
+               wp_enqueue_script(
+                       'sortablejs',
+                       plugin_dir_url( ARTPULSE_PLUGIN_FILE ) . $sortable_rel,
+                       array(),
+                       $sortable_ver,
+                       true
+               );
+
+               $role_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $role_rel;
+               $role_ver  = file_exists( $role_path ) ? filemtime( $role_path ) : false;
+               wp_enqueue_script(
+                       'role-dashboard',
+                       plugin_dir_url( ARTPULSE_PLUGIN_FILE ) . $role_rel,
+                       array( 'jquery', 'sortablejs' ),
+                       $role_ver,
+                       true
+               );
 
 		wp_localize_script(
 			'role-dashboard',
