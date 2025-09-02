@@ -18,6 +18,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
         public function set_up(): void {
                 parent::set_up();
                 \ArtPulse\Frontend\StubState::reset();
+                \ArtPulse\Frontend\StubState::$current_user = 1;
                 $GLOBALS['__ap_test_user_meta'] = array();
                 \ArtPulse\Frontend\StubState::$function_exists_map = array( 'wc_add_notice' => true );
                 \ArtPulse\Frontend\StubState::$notice       = '';

@@ -19,6 +19,7 @@ class ArtistDashboardShortcodeTest extends TestCase {
 
         protected function setUp(): void {
                 \ArtPulse\Frontend\StubState::reset();
+                \ArtPulse\Frontend\StubState::$current_user = 1;
                 \ArtPulse\Frontend\StubState::$get_posts_return = array(
                         (object) array(
                                 'ID'         => 5,

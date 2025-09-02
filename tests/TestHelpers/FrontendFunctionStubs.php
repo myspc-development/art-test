@@ -19,6 +19,7 @@ public static array $inserted_post         = array();
 public static $wp_insert_post_return       = 1;
 public static int $thumbnail               = 0;
 public static array $shortcodes            = array();
+public static int $current_user            = 0;
 public static array $current_user_caps     = array();
 public static $page                        = null;
 public static string $notice               = '';
@@ -42,6 +43,7 @@ self::$inserted_post        = array();
 self::$wp_insert_post_return = 1;
 self::$thumbnail            = 0;
 self::$shortcodes           = array();
+self::$current_user         = 0;
 self::$current_user_caps    = array();
 self::$page                 = null;
 self::$notice               = '';
@@ -132,15 +134,17 @@ self::$post_types           = array();
                 }
         }
 
-	if ( ! function_exists( __NAMESPACE__ . '\\is_user_logged_in' ) ) {
-		function is_user_logged_in() {
-			return true; }
-	}
+        if ( ! function_exists( __NAMESPACE__ . '\\is_user_logged_in' ) ) {
+                function is_user_logged_in() {
+                        return get_current_user_id() > 0;
+                }
+        }
 
-	if ( ! function_exists( __NAMESPACE__ . '\\get_current_user_id' ) ) {
-		function get_current_user_id() {
-			return 1; }
-	}
+        if ( ! function_exists( __NAMESPACE__ . '\\get_current_user_id' ) ) {
+                function get_current_user_id() {
+                        return StubState::$current_user;
+                }
+        }
 
 	if ( ! function_exists( __NAMESPACE__ . '\\wp_verify_nonce' ) ) {
 		function wp_verify_nonce( $nonce, $action ) {
