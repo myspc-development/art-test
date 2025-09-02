@@ -56,13 +56,13 @@ class DashboardWidgetRegistryAliasTest extends TestCase {
 		$this->assertTrue( is_callable( $def['callback'] ) );
 	}
 
-        public function test_news_alias_maps_to_feed(): void {
-                DashboardWidgetRegistry::register( 'widget_news_feed', 'NewsFeed', '', '', [self::class, 'renderBlank'] );
-                DashboardWidgetRegistry::alias( 'widget_news', 'widget_news_feed' );
-                $this->assertTrue( DashboardWidgetRegistry::exists( 'widget_news' ) );
+        public function test_feed_alias_maps_to_news(): void {
+                DashboardWidgetRegistry::register( 'widget_news', 'News', '', '', [self::class, 'renderBlank'] );
+                DashboardWidgetRegistry::alias( 'widget_news_feed', 'widget_news' );
+                $this->assertTrue( DashboardWidgetRegistry::exists( 'widget_news_feed' ) );
                 $this->assertSame(
-                        DashboardWidgetRegistry::get( 'widget_news_feed' ),
-                        DashboardWidgetRegistry::get( 'widget_news' )
+                        DashboardWidgetRegistry::get( 'widget_news' ),
+                        DashboardWidgetRegistry::get( 'widget_news_feed' )
                 );
         }
 

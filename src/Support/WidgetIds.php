@@ -21,7 +21,7 @@ final class WidgetIds {
 		'messages'                     => 'widget_messages',
 		'dashboard_feedback'           => 'widget_dashboard_feedback',
 		'cat_fact'                     => 'widget_cat_fact',
-		'news'                         => 'widget_news_feed',
+                'news'                         => 'widget_news',
 
 		// Organization widgets
 		'lead_capture'                 => 'widget_audience_crm',
@@ -31,7 +31,7 @@ final class WidgetIds {
 		'webhooks'                     => 'widget_webhooks',
 
 		// Duplicates / legacy slugs → canonical
-		'widget_news'                  => 'widget_news_feed',
+                'widget_news_feed'             => 'widget_news',
 		'widget_widget_events'         => 'widget_events',
 		'widget_widget_favorites'      => 'widget_favorites',
 		'widget_widget_near_me_events' => 'widget_near_me_events',

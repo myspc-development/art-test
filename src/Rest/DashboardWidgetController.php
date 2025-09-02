@@ -116,7 +116,7 @@ class DashboardWidgetController {
                                 '/dashboard-widgets/save',
                                 array(
                                         'methods'             => 'POST',
-                                        'callback'            => array( self::class, 'save_widgets' ),
+                                        'callback'            => array( self::class, 'save_layout' ),
                                         'permission_callback' => Auth::require_login_and_cap( 'edit_posts' ),
                                 )
                         );
@@ -188,7 +188,7 @@ class DashboardWidgetController {
 		return \rest_ensure_response( $response );
 	}
 
-        public static function save_widgets( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+        public static function save_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
                 $guard = Auth::guard( $request, 'edit_posts', 'ap_save_layout' );
                 if ( is_wp_error( $guard ) ) {
                         return $guard;
@@ -243,9 +243,16 @@ class DashboardWidgetController {
         }
 
         public static function import_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                $guard = Auth::guard( $request, 'edit_posts', 'ap_import_layout' );
-                if ( is_wp_error( $guard ) ) {
-                        return $guard;
+                $nonce_check = Auth::verify_nonce( $request, 'ap_import_layout' );
+                if ( is_wp_error( $nonce_check ) ) {
+                        $nonce_check->add_data( array( 'status' => 403 ) );
+                        return $nonce_check;
+                }
+
+                $cap_check = Auth::require_cap( 'edit_posts' );
+                if ( is_wp_error( $cap_check ) ) {
+                        $cap_check->add_data( array( 'status' => 403 ) );
+                        return $cap_check;
                 }
 
                 $data = $request->get_json_params();

@@ -192,17 +192,21 @@ class DashboardWidgetManager {
                }
 
                // Compute the canonical default layout for the role.
-               $ids    = DashboardPresets::forRole( $role );
-               $layout = array();
-               foreach ( $ids as $id ) {
-                       $cid = DashboardWidgetRegistry::canon_slug( $id );
-                       if ( $cid ) {
-                               $layout[] = array(
-                                       'id'      => $cid,
-                                       'visible' => true,
-                               );
-                       }
-               }
+               $ids = DashboardPresets::forRole( $role );
+               $ids = array_values(
+                       array_unique(
+                               array_filter(
+                                       array_map( array( DashboardWidgetRegistry::class, 'canon_slug' ), $ids )
+                               )
+                       )
+               );
+               $layout = array_map(
+                       fn( $id ) => array(
+                               'id'      => $id,
+                               'visible' => true,
+                       ),
+                       $ids
+               );
 
                if ( empty( $layout ) ) {
                        $layout[] = array(
