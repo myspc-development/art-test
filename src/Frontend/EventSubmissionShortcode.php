@@ -485,27 +485,28 @@ class EventSubmissionShortcode {
 		}
 		unset( $_FILES['ap_image'] );
 
-		// Handle Image Order (reordering logic)
-		$final_image_ids = array();
+               // Handle Image Order (reordering logic)
+               $final_image_ids = $image_ids;
 
-		if ( ! empty( $image_order ) ) {
-			// Reorder images based on user-defined order
-			foreach ( $image_order as $image_id ) {
-				if ( in_array( $image_id, $image_ids ) ) {
-					$final_image_ids[] = $image_id;
-				}
-			}
+               if ( ! empty( $image_order ) ) {
+                       $reordered = array();
 
-			// Add any remaining images that weren't in the order (append them)
-			foreach ( $image_ids as $image_id ) {
-				if ( ! in_array( $image_id, $final_image_ids ) ) {
-					$final_image_ids[] = $image_id;
-				}
-			}
-                } else {
-                        // No order specified, use the order images were uploaded
-                        $final_image_ids = $image_ids;
-                }
+                       // Reorder images based on user-defined order
+                       foreach ( $image_order as $image_id ) {
+                               if ( in_array( $image_id, $image_ids ) ) {
+                                       $reordered[] = $image_id;
+                               }
+                       }
+
+                       // Add any remaining images that weren't in the order (append them)
+                       foreach ( $image_ids as $image_id ) {
+                               if ( ! in_array( $image_id, $reordered ) ) {
+                                       $reordered[] = $image_id;
+                               }
+                       }
+
+                       $final_image_ids = $reordered;
+               }
 
                 // Ensure the banner is included in the submission images and handle fallbacks.
                 if ( $banner_id ) {
@@ -517,11 +518,9 @@ class EventSubmissionShortcode {
                         $banner_id = $final_image_ids[0];
                 }
 
-                // Update Post Meta with Image IDs and banner ID
-                update_post_meta( $post_id, '_ap_submission_images', $final_image_ids );
-                if ( $banner_id ) {
-                        update_post_meta( $post_id, 'event_banner_id', $banner_id );
-                }
+               // Update Post Meta with Image IDs and banner ID
+               update_post_meta( $post_id, '_ap_submission_images', $final_image_ids );
+               update_post_meta( $post_id, 'event_banner_id', $banner_id );
 
 		// Success message and redirect
 		$message = $post_status === 'pending'

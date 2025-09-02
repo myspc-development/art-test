@@ -165,4 +165,22 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 $this->assertSame( 11, \ArtPulse\Frontend\StubState::$thumbnail );
                 $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
         }
+
+        public function test_meta_logged_when_no_images_uploaded(): void {
+                EventSubmissionShortcode::maybe_handle_form();
+
+                $gallery = $banner = null;
+                foreach ( \ArtPulse\Frontend\StubState::$meta_log as $args ) {
+                        if ( $args[1] === '_ap_submission_images' ) {
+                                $gallery = $args[2];
+                        }
+                        if ( $args[1] === 'event_banner_id' ) {
+                                $banner = $args[2];
+                        }
+                }
+
+                $this->assertSame( array(), $gallery );
+                $this->assertSame( 0, $banner );
+                $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
+        }
 }
