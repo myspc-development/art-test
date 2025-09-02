@@ -26,14 +26,16 @@ class PortfolioBuilder {
 
 		wp_enqueue_media();
 
-		// Load the SortableJS library locally for drag and drop ordering.
-		wp_enqueue_script(
-			'sortablejs',
-			plugins_url( 'assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE ),
-			array(),
-			null,
-			true
-		);
+                // Load the SortableJS library locally for drag and drop ordering.
+                $sortable_rel  = 'assets/libs/sortablejs/Sortable.min.js';
+                $sortable_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $sortable_rel;
+                wp_enqueue_script(
+                        'sortablejs',
+                        plugins_url( $sortable_rel, ARTPULSE_PLUGIN_FILE ),
+                        array(),
+                        file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
+                        true
+                );
 
 		wp_enqueue_script(
 			'ap-portfolio-builder',

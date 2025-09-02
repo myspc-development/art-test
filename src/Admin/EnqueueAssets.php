@@ -114,18 +114,19 @@ class EnqueueAssets {
 			self::enqueue_style_if_exists( 'ap-dashboard', 'assets/css/dashboard.css' );
 			self::enqueue_script_if_exists( 'ap-role-tabs', 'assets/js/dashboard-role-tabs.js' );
 
-			$deps         = array( 'ap-role-tabs' );
-			$sortable_rel = 'assets/libs/sortablejs/Sortable.min.js';
-			if ( file_exists( self::asset_path( $sortable_rel ) ) ) {
-				self::enqueue_script_if_exists( 'sortablejs', $sortable_rel );
-				if ( wp_script_is( 'sortablejs', 'enqueued' ) ) {
-					$deps[] = 'sortablejs';
-				}
-			}
+                        $deps         = array( 'ap-role-tabs' );
+                        $sortable_rel = 'assets/libs/sortablejs/Sortable.min.js';
+                        $role_rel     = 'assets/js/role-dashboard.js';
+                        if ( file_exists( self::asset_path( $sortable_rel ) ) ) {
+                                self::enqueue_script_if_exists( 'sortablejs', $sortable_rel );
+                                if ( wp_script_is( 'sortablejs', 'enqueued' ) ) {
+                                        $deps[] = 'sortablejs';
+                                }
+                        }
 
-			self::enqueue_script_if_exists( 'role-dashboard', 'assets/js/role-dashboard.js', $deps );
-			return;
-		}
+                        self::enqueue_script_if_exists( 'role-dashboard', $role_rel, $deps );
+                        return;
+                }
 
 		$settings_pages = array(
 			'toplevel_page_artpulse-settings',
