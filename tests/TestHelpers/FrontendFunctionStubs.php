@@ -160,12 +160,19 @@ self::$post_authors         = array();
 
         if ( ! function_exists( __NAMESPACE__ . '\\is_user_logged_in' ) ) {
                 function is_user_logged_in() {
-                        return get_current_user_id() > 0;
+                        return StubState::$current_user > 0;
                 }
         }
 
         if ( ! function_exists( __NAMESPACE__ . '\\get_current_user_id' ) ) {
                 function get_current_user_id() {
+                        return StubState::$current_user;
+                }
+        }
+
+        if ( ! function_exists( __NAMESPACE__ . '\\wp_set_current_user' ) ) {
+                function wp_set_current_user( $user_id ) {
+                        StubState::$current_user = (int) $user_id;
                         return StubState::$current_user;
                 }
         }
