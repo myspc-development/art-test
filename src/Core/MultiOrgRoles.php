@@ -22,14 +22,15 @@ class MultiOrgRoles {
 		$table   = $wpdb->prefix . 'ap_org_user_roles';
 		$charset = $wpdb->get_charset_collate();
 
-		$sql = "CREATE TABLE $table (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+                $sql = "CREATE TABLE $table (
+            id INT NOT NULL AUTO_INCREMENT,
             org_id INT NOT NULL,
             user_id BIGINT NOT NULL,
             role ENUM('admin','editor','curator','promoter') DEFAULT 'editor',
             status ENUM('active','pending','invited') DEFAULT 'active',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY  (id),
             KEY org_user (org_id, user_id),
             KEY user_id (user_id)
         ) $charset;";
