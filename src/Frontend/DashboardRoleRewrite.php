@@ -39,8 +39,9 @@ class DashboardRoleRewrite {
                         } else {
                                 \ap_render_dashboard();
                         }
+                        $ap_test_mode = defined( 'AP_TEST_MODE' ) ? AP_TEST_MODE : (bool) getenv( 'AP_TEST_MODE' );
                         if (
-                                ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) ||
+                                $ap_test_mode ||
                                 ( defined( 'WP_RUNNING_TESTS' ) && WP_RUNNING_TESTS )
                         ) {
                                 return;
