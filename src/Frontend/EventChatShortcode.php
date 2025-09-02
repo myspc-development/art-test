@@ -34,10 +34,14 @@ class EventChatShortcode {
 			return '';
 		}
 
-                $logged_in = get_current_user_id() > 0;
-                $req       = new \WP_REST_Request( 'POST', '/' );
-                $req->set_param( 'id', $event_id );
-                $can_post  = \ArtPulse\Community\EventChatController::can_post( $req );
+               $logged_in = is_user_logged_in();
+               $can_post  = false;
+
+               if ( $logged_in ) {
+                       $req = new \WP_REST_Request( 'POST', '/' );
+                       $req->set_param( 'id', $event_id );
+                       $can_post = \ArtPulse\Community\EventChatController::can_post( $req );
+               }
 
 		ob_start();
 		?>
@@ -50,7 +54,7 @@ class EventChatShortcode {
                                                 <button type="submit">Send</button>
                                         </form>
                                 <?php else : ?>
-                                        <p><?php esc_html_e( 'Only attendees can post messages', 'artpulse' ); ?></p>
+                               <p><?php esc_html_e( 'Only attendees can post messages.', 'artpulse' ); ?></p>
                                 <?php endif; ?>
                         <?php else : ?>
                                 <p><?php esc_html_e( 'Please log in to chat.', 'artpulse' ); ?></p>
