@@ -34,8 +34,12 @@ class OrgRolesController {
 
     public function get_roles( WP_REST_Request $request ): WP_REST_Response|WP_Error {
         global $wpdb;
-        $table = $wpdb->prefix . 'ap_roles';
-        $rows  = $wpdb->get_results( "SELECT role_key, display_name, parent_role_key FROM $table", ARRAY_A );
+        $table  = $wpdb->prefix . 'ap_roles';
+        $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+        if ( ! $exists ) {
+            return $this->fail( 'ap_db_missing', 'Required table missing', 500 );
+        }
+        $rows = $wpdb->get_results( "SELECT role_key, display_name, parent_role_key FROM $table", ARRAY_A );
         if ( ! is_array( $rows ) ) {
             $rows = array();
         }

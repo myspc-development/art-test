@@ -59,11 +59,15 @@ class DashboardFeedbackManager {
 			)
 		);
 		$admin = get_option( 'admin_email' );
-		if ( $admin && is_email( $admin ) ) {
-			$subject = sprintf( __( 'Dashboard feedback from %s', 'artpulse' ), $role );
-			$body    = sprintf( "%s\n\nUser ID: %d\nRole: %s\nTime: %s", $message, $user_id, $role, current_time( 'mysql' ) );
-			wp_mail( $admin, $subject, $body );
-		}
+                if ( $admin && is_email( $admin ) ) {
+                        $subject = sprintf( __( 'Dashboard feedback from %s', 'artpulse' ), $role );
+                        $body    = sprintf( "%s\n\nUser ID: %d\nRole: %s\nTime: %s", $message, $user_id, $role, current_time( 'mysql' ) );
+                        list( $admin, $subject, $body, $headers ) = apply_filters(
+                                'wp_mail',
+                                array( $admin, $subject, $body, array() )
+                        );
+                        wp_mail( $admin, $subject, $body, $headers );
+                }
 		wp_send_json_success( array( 'saved' => true ) );
 	}
 }

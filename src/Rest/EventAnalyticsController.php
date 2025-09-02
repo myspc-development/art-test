@@ -135,9 +135,10 @@ class EventAnalyticsController extends WP_REST_Controller {
 		$top_event   = '';
 
                 if ( $ids ) {
-                        $table = $wpdb->prefix . 'ap_rsvps';
-                        if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) !== $table ) {
-                                return $this->fail( 'Required table missing', 'ap_db_missing', 500 );
+                        $table  = $wpdb->prefix . 'ap_rsvps';
+                        $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+                        if ( ! $exists ) {
+                                return $this->fail( 'ap_db_missing', 'Required table missing', 500 );
                         }
                         $in    = implode( ',', array_map( 'intval', $ids ) );
 

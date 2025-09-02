@@ -31,6 +31,13 @@ class DashboardMessagesController {
                         return $responder->fail( 'unauthorized', 'Login required', 401 );
                 }
 
+                global $wpdb;
+                $table  = $wpdb->prefix . 'ap_messages';
+                $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+                if ( ! $exists ) {
+                        return $responder->fail( 'ap_db_missing', 'Required table missing', 500 );
+                }
+
                 return $responder->ok( self::get_recent_messages_for_user( get_current_user_id() ) );
         }
 

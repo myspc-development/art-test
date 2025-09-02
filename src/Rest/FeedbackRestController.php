@@ -87,13 +87,17 @@ class FeedbackRestController {
 		if ( $description === '' ) {
 			return new WP_Error( 'required', 'Description required.', array( 'status' => 400 ) );
 		}
-		$user_id = get_current_user_id() ?: null;
-		global $wpdb;
-		$table = $wpdb->prefix . 'ap_feedback';
-		$wpdb->insert(
-			$table,
-			array(
-				'user_id'     => $user_id,
+                $user_id = get_current_user_id() ?: null;
+                global $wpdb;
+                $table  = $wpdb->prefix . 'ap_feedback';
+                $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+                if ( ! $exists ) {
+                        return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
+                }
+                $wpdb->insert(
+                        $table,
+                        array(
+                                'user_id'     => $user_id,
 				'type'        => $type,
 				'description' => $description,
 				'email'       => $email,
@@ -106,9 +110,13 @@ class FeedbackRestController {
 	}
 
 	public static function list(): WP_REST_Response|WP_Error {
-		global $wpdb;
-		$table = $wpdb->prefix . 'ap_feedback';
-		$rows  = $wpdb->get_results( "SELECT * FROM $table ORDER BY votes DESC, created_at DESC LIMIT 100", ARRAY_A );
+                global $wpdb;
+                $table  = $wpdb->prefix . 'ap_feedback';
+                $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+                if ( ! $exists ) {
+                        return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
+                }
+                $rows  = $wpdb->get_results( "SELECT * FROM $table ORDER BY votes DESC, created_at DESC LIMIT 100", ARRAY_A );
 		$voted = array();
 		if ( is_user_logged_in() ) {
 			$voted = get_user_meta( get_current_user_id(), 'ap_feedback_votes', true );
