@@ -33,16 +33,20 @@ class OrganizationEventAjaxTest extends TestCase {
         }
 
 	public function test_update_event_returns_html(): void {
-                \ArtPulse\Frontend\StubState::$get_posts_return = array(
-                        (object) array(
-                                'ID'         => 7,
-                                'post_title' => 'First',
-                        ),
-                        (object) array(
-                                'ID'         => 8,
-                                'post_title' => 'Second',
-                        ),
-                );
+               \ArtPulse\Frontend\StubState::$get_posts_return = array(
+                       (object) array(
+                               'ID'         => 7,
+                               'post_title' => 'First',
+                       ),
+                       (object) array(
+                               'ID'         => 8,
+                               'post_title' => 'Second',
+                       ),
+               );
+
+               // Ensure the event has an associated organization and that user meta differs
+               \ArtPulse\Frontend\StubState::$post_meta[7]['_ap_event_organization'] = 12;
+               $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id']           = 99;
 
 		$addr = array(
 			'country' => 'US',
@@ -71,8 +75,8 @@ class OrganizationEventAjaxTest extends TestCase {
 
 		OrganizationDashboardShortcode::handle_ajax_update_event();
 
-                $this->assertSame( 7, \ArtPulse\Frontend\StubState::$wp_update_post_args['ID'] ?? null );
-                $this->assertSame( 5, \ArtPulse\Frontend\StubState::$get_posts_args['meta_value'] ?? null );
+               $this->assertSame( 7, \ArtPulse\Frontend\StubState::$wp_update_post_args['ID'] ?? null );
+               $this->assertSame( 12, \ArtPulse\Frontend\StubState::$get_posts_args['meta_value'] ?? null );
                 $html = \ArtPulse\Frontend\StubState::$json['updated_list_html'] ?? '';
 		$this->assertStringContainsString( 'First', $html );
 		$this->assertStringContainsString( 'Second', $html );
