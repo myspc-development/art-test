@@ -512,24 +512,9 @@ class Plugin {
 			)
 		);
 
-		wp_enqueue_script(
-			'ap-favorites-js',
-			plugins_url( 'assets/js/ap-favorites.js', ARTPULSE_PLUGIN_FILE ),
-			array(),
-			'1.0.0',
-			true
-		);
-		if ( function_exists( 'wp_script_add_data' ) ) {
-			wp_script_add_data( 'ap-favorites-js', 'type', 'module' );
-		}
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-favorites-js', 'assets/js/ap-favorites.js', array(), true, array( 'type' => 'module' ) );
 
-		wp_enqueue_script(
-			'ap-follow-feed-js',
-			plugins_url( 'assets/js/favorites.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'wp-api-fetch' ),
-			'1.0.0',
-			true
-		);
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-follow-feed-js', 'assets/js/favorites.js', array( 'wp-api-fetch' ) );
 
 		wp_localize_script(
 			'ap-follow-feed-js',

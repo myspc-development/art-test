@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Blocks;
 
+use ArtPulse\Admin\EnqueueAssets;
+
 class AdvancedTaxonomyFilterBlock {
 
 	public static function register() {
@@ -30,15 +32,7 @@ class AdvancedTaxonomyFilterBlock {
 			)
 		);
 
-               $path = __DIR__ . '/../../assets/js/advanced-taxonomy-filter-block.js';
-               $version = \ArtPulse\Blocks\ap_block_version();
-               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
-               wp_register_script(
-                       'artpulse-advanced-taxonomy-filter-block',
-                       plugins_url( 'assets/js/advanced-taxonomy-filter-block.js', ARTPULSE_PLUGIN_FILE ),
-                       array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ),
-                       $ver
-               );
+               EnqueueAssets::register_script( 'artpulse-advanced-taxonomy-filter-block', 'assets/js/advanced-taxonomy-filter-block.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ), false );
        }
 
 	public static function render_callback( $attributes ) {

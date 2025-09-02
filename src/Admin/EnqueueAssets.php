@@ -22,53 +22,69 @@ class EnqueueAssets {
 		return rtrim( plugin_dir_url( ARTPULSE_PLUGIN_FILE ), '/\\' ) . '/' . $rel;
 	}
 
-	/**
-	 * Enqueue a style only if the file exists and has not been enqueued.
-	 */
-	private static function enqueue_style_if_exists( string $handle, string $rel, array $deps = array() ): void {
-		if ( function_exists( 'wp_style_is' ) && wp_style_is( $handle, 'enqueued' ) ) {
-			return;
-		}
-		$path = self::asset_path( $rel );
-		if ( file_exists( $path ) && function_exists( 'wp_enqueue_style' ) ) {
-			wp_enqueue_style( $handle, self::asset_url( $rel ), $deps, filemtime( $path ) );
-		}
-	}
+        /**
+         * Register a style with a filemtime-based version.
+         */
+        public static function register_style( string $handle, string $rel, array $deps = array() ): void {
+                if ( function_exists( 'wp_style_is' ) && wp_style_is( $handle, 'registered' ) ) {
+                        return;
+                }
+                $path = self::asset_path( $rel );
+                if ( file_exists( $path ) && function_exists( 'wp_register_style' ) ) {
+                        wp_register_style( $handle, self::asset_url( $rel ), $deps, filemtime( $path ) );
+                }
+        }
 
-	/**
-	 * Enqueue a script only if the file exists and has not been enqueued.
-	 */
-	private static function enqueue_script_if_exists( string $handle, string $rel, array $deps = array(), bool $in_footer = true, array $attributes = array() ): void {
-		if ( function_exists( 'wp_script_is' ) && wp_script_is( $handle, 'enqueued' ) ) {
-			return;
-		}
-		$path = self::asset_path( $rel );
-		if ( file_exists( $path ) && function_exists( 'wp_enqueue_script' ) ) {
-			wp_enqueue_script( $handle, self::asset_url( $rel ), $deps, filemtime( $path ), $in_footer );
-			if ( $attributes && function_exists( 'wp_script_add_data' ) ) {
-				foreach ( $attributes as $key => $value ) {
-					wp_script_add_data( $handle, $key, $value );
-				}
-			}
-		}
-	}
+        /**
+         * Register a script with a filemtime-based version and optional attributes.
+         */
+        public static function register_script( string $handle, string $rel, array $deps = array(), bool $in_footer = true, array $attributes = array() ): void {
+                if ( function_exists( 'wp_script_is' ) && wp_script_is( $handle, 'registered' ) ) {
+                        return;
+                }
+                $path = self::asset_path( $rel );
+                if ( file_exists( $path ) && function_exists( 'wp_register_script' ) ) {
+                        wp_register_script( $handle, self::asset_url( $rel ), $deps, filemtime( $path ), $in_footer );
+                        if ( $attributes && function_exists( 'wp_script_add_data' ) ) {
+                                foreach ( $attributes as $key => $value ) {
+                                        wp_script_add_data( $handle, $key, $value );
+                                }
+                        }
+                }
+        }
+
+        /**
+         * Enqueue a style only if the file exists and has not been enqueued.
+         */
+        public static function enqueue_style_if_exists( string $handle, string $rel, array $deps = array() ): void {
+                if ( function_exists( 'wp_style_is' ) && wp_style_is( $handle, 'enqueued' ) ) {
+                        return;
+                }
+                self::register_style( $handle, $rel, $deps );
+                if ( function_exists( 'wp_style_is' ) && wp_style_is( $handle, 'registered' ) && function_exists( 'wp_enqueue_style' ) ) {
+                        wp_enqueue_style( $handle );
+                }
+        }
+
+        /**
+         * Enqueue a script only if the file exists and has not been enqueued.
+         */
+        public static function enqueue_script_if_exists( string $handle, string $rel, array $deps = array(), bool $in_footer = true, array $attributes = array() ): void {
+                if ( function_exists( 'wp_script_is' ) && wp_script_is( $handle, 'enqueued' ) ) {
+                        return;
+                }
+                self::register_script( $handle, $rel, $deps, $in_footer, $attributes );
+                if ( function_exists( 'wp_script_is' ) && wp_script_is( $handle, 'registered' ) && function_exists( 'wp_enqueue_script' ) ) {
+                        wp_enqueue_script( $handle );
+                }
+        }
 
 	/**
 	 * Register Chart.js so it can be used as a dependency.
 	 */
-	private static function register_chart_js(): void {
-		if ( function_exists( 'wp_script_is' ) && wp_script_is( 'chart-js', 'registered' ) ) {
-			return;
-		}
-
-               $rel  = 'assets/libs/chart.js/4.4.1/chart.min.js';
-               $path = self::asset_path( $rel );
-               $ver  = file_exists( $path ) ? filemtime( $path ) : null;
-
-               if ( function_exists( 'wp_register_script' ) ) {
-                       wp_register_script( 'chart-js', self::asset_url( $rel ), array(), $ver, true );
-               }
-	}
+        private static function register_chart_js(): void {
+                self::register_script( 'chart-js', 'assets/libs/chart.js/4.4.1/chart.min.js' );
+        }
 
 	/**
 	 * Wire up WordPress hooks.
@@ -157,11 +173,7 @@ class EnqueueAssets {
 
                // Guard helper existence
                if ( ! function_exists( 'ap_styles_disabled' ) || ! ap_styles_disabled() ) {
-                       $rel  = 'assets/css/ap-style.css';
-                       $path = self::asset_path( $rel );
-                       if ( file_exists( $path ) ) {
-                               wp_enqueue_style( 'ap-style', self::asset_url( $rel ), array(), filemtime( $path ) );
-                       }
+                       self::enqueue_style_if_exists( 'ap-style', 'assets/css/ap-style.css' );
                }
                if ( function_exists( 'ap_enqueue_frontend_styles' ) ) {
                        ap_enqueue_frontend_styles();

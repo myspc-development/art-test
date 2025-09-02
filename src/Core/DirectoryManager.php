@@ -18,23 +18,8 @@ class DirectoryManager {
 	}
 
 	public static function enqueueAssets() {
-		wp_enqueue_script(
-			'ap-directory-js',
-			plugins_url( 'assets/js/ap-directory.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'wp-api-fetch' ),
-			'1.0.0',
-			true
-		);
-		wp_enqueue_script(
-			'ap-analytics-js',
-			plugins_url( 'assets/js/ap-analytics.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'ap-directory-js' ),
-			'1.0.0',
-			true
-		);
-		if ( function_exists( 'wp_script_add_data' ) ) {
-			wp_script_add_data( 'ap-analytics-js', 'type', 'module' );
-		}
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-directory-js', 'assets/js/ap-directory.js', array( 'wp-api-fetch' ) );
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-analytics-js', 'assets/js/ap-analytics.js', array( 'ap-directory-js' ), true, array( 'type' => 'module' ) );
 		wp_localize_script(
 			'ap-directory-js',
 			'ArtPulseApi',

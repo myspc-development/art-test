@@ -1,6 +1,7 @@
 <?php
 namespace ArtPulse\Blocks;
 
+use ArtPulse\Admin\EnqueueAssets;
 use ArtPulse\Frontend\WidgetEmbedShortcode;
 
 class WidgetEmbedBlock {
@@ -25,15 +26,7 @@ class WidgetEmbedBlock {
 			)
 		);
 
-               $path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/js/widget-embed-block.js';
-               $version = \ArtPulse\Blocks\ap_block_version();
-               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
-               wp_register_script(
-                       'artpulse-widget-embed-block',
-                       plugins_url( 'assets/js/widget-embed-block.js', ARTPULSE_PLUGIN_FILE ),
-                       array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-data', 'wp-editor' ),
-                       $ver
-               );
+               EnqueueAssets::register_script( 'artpulse-widget-embed-block', 'assets/js/widget-embed-block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-data', 'wp-editor' ), false );
        }
 
 	public static function render_callback( array $attributes ): string {

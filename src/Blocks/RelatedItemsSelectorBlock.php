@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Blocks;
 
+use ArtPulse\Admin\EnqueueAssets;
+
 class RelatedItemsSelectorBlock {
 
 	public static function register() {
@@ -9,12 +11,9 @@ class RelatedItemsSelectorBlock {
 
 	public static function register_block_and_meta() {
 		// Register block editor script (adjust the path accordingly)
-               $path = __DIR__ . '/../../assets/js/blocks/related-items-selector.js';
-               $version = \ArtPulse\Blocks\ap_block_version();
-               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
-               wp_register_script(
+               EnqueueAssets::register_script(
                        'artpulse-related-items-selector',
-                       plugins_url( 'assets/js/blocks/related-items-selector.js', ARTPULSE_PLUGIN_FILE ),
+                       'assets/js/blocks/related-items-selector.js',
                        array(
                                'wp-blocks',
                                'wp-element',
@@ -23,7 +22,7 @@ class RelatedItemsSelectorBlock {
                                'wp-editor',
                                'wp-api-fetch',
                        ),
-                       $ver
+                       false
                );
 
 		// Example: Register post meta fields with REST API enabled

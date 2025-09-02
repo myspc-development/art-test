@@ -23,16 +23,7 @@ class EventCalendarShortcode {
 			null,
 			true
 		);
-		wp_enqueue_script(
-			'ap-event-calendar',
-			plugin_dir_url( ARTPULSE_PLUGIN_FILE ) . 'assets/js/ap-event-calendar.js',
-			array( 'fullcalendar-js' ),
-			'1.0',
-			true
-		);
-		if ( function_exists( 'wp_script_add_data' ) ) {
-			wp_script_add_data( 'ap-event-calendar', 'type', 'module' );
-		}
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-event-calendar', 'assets/js/ap-event-calendar.js', array( 'fullcalendar-js' ), true, array( 'type' => 'module' ) );
 
 		wp_localize_script(
 			'ap-event-calendar',

@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Blocks;
 
+use ArtPulse\Admin\EnqueueAssets;
+
 class TaxonomyFilterBlock {
 
 	public static function register() {
@@ -34,15 +36,7 @@ class TaxonomyFilterBlock {
 			)
 		);
 
-               $path = __DIR__ . '/../../assets/js/taxonomy-filter-block.js';
-               $version = \ArtPulse\Blocks\ap_block_version();
-               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
-               wp_register_script(
-                       'artpulse-taxonomy-filter-block',
-                       plugins_url( 'assets/js/taxonomy-filter-block.js', ARTPULSE_PLUGIN_FILE ),
-                       array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ),
-                       $ver
-               );
+               EnqueueAssets::register_script( 'artpulse-taxonomy-filter-block', 'assets/js/taxonomy-filter-block.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ), false );
        }
 
 	public static function render_callback( $attributes ) {

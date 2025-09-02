@@ -1178,17 +1178,14 @@ function ap_enqueue_event_calendar_assets() {
 			'fullcalendar-css',
 			plugins_url( 'assets/libs/fullcalendar/6.1.11/main.min.css', __FILE__ )
 		);
-		wp_enqueue_script(
-			'fullcalendar-js',
-			plugins_url( 'assets/libs/fullcalendar/6.1.11/main.min.js', __FILE__ ),
-			array(),
-			null,
-			true
-		);
-		wp_enqueue_script( 'ap-event-calendar', plugin_dir_url( __FILE__ ) . 'assets/js/ap-event-calendar.js', array( 'fullcalendar-js', 'jquery' ), '1.0', true );
-		if ( function_exists( 'wp_script_add_data' ) ) {
-			wp_script_add_data( 'ap-event-calendar', 'type', 'module' );
-		}
+               wp_enqueue_script(
+                       'fullcalendar-js',
+                       plugins_url( 'assets/libs/fullcalendar/6.1.11/main.min.js', __FILE__ ),
+                       array(),
+                       null,
+                       true
+               );
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-event-calendar', 'assets/js/ap-event-calendar.js', array( 'fullcalendar-js', 'jquery' ), true, array( 'type' => 'module' ) );
 		wp_localize_script(
 			'ap-event-calendar',
 			'APCalendar',
