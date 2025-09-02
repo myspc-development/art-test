@@ -61,13 +61,13 @@ class EnqueueAssets {
 			return;
 		}
 
-		$rel  = 'assets/libs/chart.js/4.4.1/chart.min.js';
-		$path = self::asset_path( $rel );
-		$ver  = file_exists( $path ) ? filemtime( $path ) : '4.4.1';
+               $rel  = 'assets/libs/chart.js/4.4.1/chart.min.js';
+               $path = self::asset_path( $rel );
+               $ver  = file_exists( $path ) ? filemtime( $path ) : null;
 
-		if ( function_exists( 'wp_register_script' ) ) {
-			wp_register_script( 'chart-js', self::asset_url( $rel ), array(), $ver, true );
-		}
+               if ( function_exists( 'wp_register_script' ) ) {
+                       wp_register_script( 'chart-js', self::asset_url( $rel ), array(), $ver, true );
+               }
 	}
 
 	/**
@@ -154,19 +154,17 @@ class EnqueueAssets {
 	public static function enqueue_frontend(): void {
 		self::register_chart_js();
 
-		$plugin_url = plugin_dir_url( ARTPULSE_PLUGIN_FILE );
-		// Guard helper existence
-		if ( ! function_exists( 'ap_styles_disabled' ) || ! ap_styles_disabled() ) {
-			wp_enqueue_style(
-				'ap-style',
-				$plugin_url . '/assets/css/ap-style.css',
-				array(),
-				'1.0.0'
-			);
-		}
-		if ( function_exists( 'ap_enqueue_frontend_styles' ) ) {
-			ap_enqueue_frontend_styles();
-		}
+               // Guard helper existence
+               if ( ! function_exists( 'ap_styles_disabled' ) || ! ap_styles_disabled() ) {
+                       $rel  = 'assets/css/ap-style.css';
+                       $path = self::asset_path( $rel );
+                       if ( file_exists( $path ) ) {
+                               wp_enqueue_style( 'ap-style', self::asset_url( $rel ), array(), filemtime( $path ) );
+                       }
+               }
+               if ( function_exists( 'ap_enqueue_frontend_styles' ) ) {
+                       ap_enqueue_frontend_styles();
+               }
 
 		// Frontend scripts would be enqueued here when needed.
 	}
