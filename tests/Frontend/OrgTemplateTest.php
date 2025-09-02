@@ -1,11 +1,15 @@
 <?php
 namespace ArtPulse\Frontend {
-        function ap_render_favorite_button( int $object_id, string $object_type = '' ): string {
-                return '';
+        if ( ! function_exists( __NAMESPACE__ . '\\ap_render_favorite_button' ) ) {
+                function ap_render_favorite_button( int $object_id, string $object_type = '' ): string {
+                        return '';
+                }
         }
 
-        function ap_share_buttons( ...$args ): string {
-                return '';
+        if ( ! function_exists( __NAMESPACE__ . '\\ap_share_buttons' ) ) {
+                function ap_share_buttons( ...$args ): string {
+                        return '';
+                }
         }
 }
 
