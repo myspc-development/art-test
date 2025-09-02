@@ -65,16 +65,20 @@ class EventRsvpHandler {
 		 * @return array
 		 */
         public static function get_rsvp_summary_for_user( $user_id ): array {
-                $event_ids = get_user_meta( $user_id, 'ap_rsvp_events', true );
-                if ( ! is_array( $event_ids ) ) {
-                        $event_ids = $event_ids ? array( $event_ids ) : array();
-                }
+               $event_ids = (array) get_user_meta( $user_id, 'ap_rsvp_events', true );
+               if ( empty( $event_ids ) ) {
+                       return array(
+                               'going'      => 0,
+                               'interested' => 0,
+                               'trend'      => array(),
+                       );
+               }
 
                $going      = 0;
                $interested = 0;
                $trend_map  = array();
 
-                foreach ( $event_ids as $eid ) {
+               foreach ( $event_ids as $eid ) {
                        $date = get_post_meta( $eid, '_ap_event_date', true );
                        $ts   = false;
                        if (
