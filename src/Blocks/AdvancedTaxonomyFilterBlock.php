@@ -2,6 +2,7 @@
 namespace ArtPulse\Blocks;
 
 use ArtPulse\Admin\EnqueueAssets;
+use WP_Block_Type_Registry;
 
 class AdvancedTaxonomyFilterBlock {
 
@@ -11,6 +12,10 @@ class AdvancedTaxonomyFilterBlock {
 
 	public static function register_block() {
 		if ( ! function_exists( 'register_block_type' ) ) {
+			return;
+		}
+
+		if ( WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/advanced-taxonomy-filter' ) ) {
 			return;
 		}
 
