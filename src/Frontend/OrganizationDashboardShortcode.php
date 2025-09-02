@@ -389,18 +389,21 @@ class OrganizationDashboardShortcode {
 			update_post_meta( $event_id, '_ap_submission_images', $image_ids );
 		}
 
-		// Reload the event list for this organization
-		$org_id = intval( get_post_meta( $event_id, '_ap_event_organization', true ) );
-		ob_start();
-		$events = get_posts(
-			array(
-				'post_type'   => 'artpulse_event',
-				'post_status' => array( 'publish', 'pending', 'draft' ),
-				'meta_key'    => '_ap_event_organization',
-				'meta_value'  => $org_id,
-				'numberposts' => 50,
-			)
-		);
+                // Reload the event list for this organization
+                $org_id = intval( get_post_meta( $event_id, '_ap_event_organization', true ) );
+                if ( ! $org_id ) {
+                        $org_id = intval( get_user_meta( get_current_user_id(), 'ap_organization_id', true ) );
+                }
+                ob_start();
+                $events = get_posts(
+                        array(
+                                'post_type'   => 'artpulse_event',
+                                'post_status' => array( 'publish', 'pending', 'draft' ),
+                                'meta_key'    => '_ap_event_organization',
+                                'meta_value'  => $org_id,
+                                'numberposts' => 50,
+                        )
+                );
 		foreach ( $events as $event ) {
 			echo self::build_event_list_item( $event );
 		}
