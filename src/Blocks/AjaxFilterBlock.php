@@ -10,12 +10,16 @@ class AjaxFilterBlock {
 		add_action( 'rest_api_init', array( self::class, 'register_rest_routes' ) );
 	}
 
-	public static function register_block() {
-		if ( ! function_exists( 'register_block_type' ) ) {
-			return;
-		}
+       public static function register_block() {
+               if ( ! function_exists( 'register_block_type' ) ) {
+                       return;
+               }
 
-		register_block_type(
+               if ( \WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/ajax-filter' ) ) {
+                       return;
+               }
+
+               register_block_type(
 			'artpulse/ajax-filter',
 			array(
 				'editor_script'   => 'artpulse-ajax-filter-block',
