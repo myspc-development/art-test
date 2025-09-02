@@ -7,13 +7,7 @@ if (file_exists($autoload)) {
     require_once $autoload;
 }
 
-// 2) Per-suite config (DB creds, optional ABSPATH hint)
-$config = __DIR__ . '/wp-tests-config.php';
-if (file_exists($config)) {
-    require_once $config;
-}
-
-// 3) Locate the WordPress PHPUnit bootstrap
+// 2) Locate the WordPress PHPUnit bootstrap
 $wp_phpunit_dir = getenv('WP_PHPUNIT__DIR');
 
 if (!$wp_phpunit_dir) {
@@ -57,7 +51,7 @@ if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/bootstrap.php'))
         }
     }
 } elseif (defined('ABSPATH') && file_exists(ABSPATH . 'tests/phpunit/includes/bootstrap.php')) {
-    // ABSPATH may be defined by tests/wp-tests-config.php
+    // ABSPATH may be defined by WordPress' wp-tests-config.php
     $wp_root        = rtrim(ABSPATH, '/');
     $bootstrap_file = ABSPATH . 'tests/phpunit/includes/bootstrap.php';
 } else {
@@ -91,7 +85,7 @@ if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/functions.php'))
     require_once $wp_phpunit_dir . '/includes/functions.php';
 }
 
-// 4) Load the plugin under test once WordPress loads mu-plugins
+// 3) Load the plugin under test once WordPress loads mu-plugins
 tests_add_filter('muplugins_loaded', function () {
     $plugin_root = dirname(__DIR__);
     $plugin_file = $plugin_root . '/artpulse-management.php';
@@ -106,7 +100,7 @@ tests_add_filter('muplugins_loaded', function () {
 // Now bootstrap WordPress
 require_once $bootstrap_file;
 
-// 5) Load shared stubs AFTER WP test environment is initialized
+// 4) Load shared stubs AFTER WP test environment is initialized
 require_once __DIR__ . '/TestStubs.php';
 require_once __DIR__ . '/Frontend/_stubs.php';
 require_once __DIR__ . '/Rest/helpers.php';
