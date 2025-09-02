@@ -34,20 +34,43 @@ $wp_root        = '';
 $bootstrap_file = '';
 
 if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/bootstrap.php')) {
-    $wp_root        = dirname($wp_phpunit_dir);
     $bootstrap_file = $wp_phpunit_dir . '/includes/bootstrap.php';
+
+    $candidates   = [];
+    $candidates[] = dirname($wp_phpunit_dir);
+    $candidates[] = $wp_phpunit_dir . '/wordpress';
+
+    if (($env = getenv('WP_CORE_DIR')) !== false) {
+        $candidates[] = rtrim($env, '/');
+    }
+
+    if (($dev = getenv('WP_DEVELOP_DIR')) !== false) {
+        $dev          = rtrim($dev, '/\\');
+        $candidates[] = $dev . '/src';
+        $candidates[] = $dev . '/build';
+    }
+
+    foreach ($candidates as $candidate) {
+        if ($candidate !== '' && file_exists($candidate . '/wp-settings.php')) {
+            $wp_root = rtrim($candidate, '/');
+            break;
+        }
+    }
 } elseif (defined('ABSPATH') && file_exists(ABSPATH . 'tests/phpunit/includes/bootstrap.php')) {
     // ABSPATH may be defined by tests/wp-tests-config.php
-
+    $wp_root        = rtrim(ABSPATH, '/');
+    $bootstrap_file = ABSPATH . 'tests/phpunit/includes/bootstrap.php';
 } else {
     fwrite(STDERR, "ERROR: Could not locate WordPress PHPUnit bootstrap.\n" .
                    "Set WP_PHPUNIT__DIR or install wp-phpunit in vendor.\n");
     exit(1);
 }
 
-$wp_root = rtrim($wp_root, '/');
-$kses    = $wp_root . '/wp-includes/kses.php';
-if (file_exists($kses) && ! function_exists('wp_kses')) {
+$kses = $wp_root !== '' ? $wp_root . '/wp-includes/kses.php' : '';
+if ($kses === '' || !file_exists($kses)) {
+    fwrite(STDERR, "ERROR: Missing WordPress core files. Run 'composer run wp:core-link'.\n");
+    exit(1);
+} elseif (! function_exists('wp_kses')) {
     require_once $kses;
 }
 
