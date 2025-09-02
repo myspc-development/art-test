@@ -6,6 +6,7 @@ use WP_REST_Response;
 use WP_Error;
 use ArtPulse\Core\EmailService;
 use ArtPulse\Community\CommunityRoles;
+use ArtPulse\DB\DbEnsure;
 
 class DirectMessages {
 
@@ -15,14 +16,11 @@ class DirectMessages {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
 	}
 
-	public static function maybe_install_table(): void {
-		global $wpdb;
-		$table  = $wpdb->prefix . 'ap_messages';
-		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-		if ( $exists !== $table ) {
-			self::install_table();
-		}
-	}
+        public static function maybe_install_table(): void {
+                global $wpdb;
+                $table = $wpdb->prefix . 'ap_messages';
+                DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) );
+        }
 
 	public static function install_table(): void {
 		global $wpdb;
@@ -53,14 +51,11 @@ class DirectMessages {
 		dbDelta( $sql );
 	}
 
-	public static function maybe_install_flags_table(): void {
-		global $wpdb;
-		$table  = $wpdb->prefix . 'ap_message_flags';
-		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-		if ( $exists !== $table ) {
-			self::install_flags_table();
-		}
-	}
+        public static function maybe_install_flags_table(): void {
+                global $wpdb;
+                $table = $wpdb->prefix . 'ap_message_flags';
+                DbEnsure::table_exists_or_install( $table, array( self::class, 'install_flags_table' ) );
+        }
 
 	public static function install_flags_table(): void {
 		global $wpdb;
@@ -85,9 +80,14 @@ class DirectMessages {
 
 	public static function log_flag( int $message_id, int $user_id, string $action, string $note = '' ): void {
 		global $wpdb;
-		$table = $wpdb->prefix . 'ap_message_flags';
-		$wpdb->insert(
-			$table,
+                $table = $wpdb->prefix . 'ap_message_flags';
+
+                if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_flags_table' ) ) ) {
+                        return;
+                }
+
+                $wpdb->insert(
+                        $table,
 			array(
 				'message_id' => $message_id,
 				'user_id'    => $user_id,
@@ -100,12 +100,14 @@ class DirectMessages {
 
 	private static function ensure_messages_table(): ?WP_Error {
 		global $wpdb;
-		$table = $wpdb->prefix . 'ap_messages';
-		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) !== $table ) {
-			return new WP_Error( 'missing_table', 'Messages table missing.', array( 'status' => 500 ) );
-		}
-		return null;
-	}
+                $table = $wpdb->prefix . 'ap_messages';
+
+                if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
+                        return new WP_Error( 'missing_table', 'Messages table missing.', array( 'status' => 500 ) );
+                }
+
+                return null;
+        }
 
 	public static function register_routes(): void {
 		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/messages/send' ) ) {
