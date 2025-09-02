@@ -34,10 +34,10 @@ class EventChatShortcode {
 			return '';
 		}
 
-                $logged_in = is_user_logged_in();
+                $logged_in = get_current_user_id() > 0;
                 $req       = new \WP_REST_Request( 'POST', '/' );
                 $req->set_param( 'id', $event_id );
-                $can_post  = $logged_in && \ArtPulse\Community\EventChatController::can_post( $req );
+                $can_post  = \ArtPulse\Community\EventChatController::can_post( $req );
 
 		ob_start();
 		?>
