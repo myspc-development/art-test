@@ -151,8 +151,11 @@ function ap_dashboard_v2_enabled(): bool {
 	}
 
 	if ( isset( $_GET['ap_v2'] ) ) {
-		$_SESSION['ap_v2'] = $_GET['ap_v2'] === '1' ? 1 : 0;
-		return $_SESSION['ap_v2'] === 1;
+		$ap_v2 = filter_var( $_GET['ap_v2'], FILTER_VALIDATE_INT );
+		if ( in_array( $ap_v2, array( 0, 1 ), true ) ) {
+			$_SESSION['ap_v2'] = $ap_v2;
+			return $ap_v2 === 1;
+		}
 	}
 
 	if ( isset( $_SESSION['ap_v2'] ) ) {
