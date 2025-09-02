@@ -39,7 +39,7 @@ class ArtistDashboardShortcodeTest extends TestCase {
 	public function test_delete_button_rendered(): void {
 		$html = ArtistDashboardShortcode::render();
 		$this->assertStringContainsString( 'ap-delete-artwork', $html );
-		$this->assertStringContainsString( '[ap_user_profile]', $html );
+                $this->assertStringContainsString( 'ap-user-profile', $html );
 	}
 
 	public function test_deletion_returns_ordered_html(): void {
