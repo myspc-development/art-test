@@ -25,10 +25,11 @@ class DashboardRoleTemplateTest extends WP_UnitTestCase {
 		set_query_var( 'ap_dashboard', null );
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 */
-	public function test_renders_when_dashboard_role_query_var_present(): void {
+        /**
+         * @runInSeparateProcess
+         * @preserveGlobalState disabled
+         */
+        public function test_renders_when_dashboard_role_query_var_present(): void {
 		if ( ! get_role( 'artist' ) ) {
 			add_role( 'artist', 'Artist' );
 		}
@@ -41,10 +42,11 @@ class DashboardRoleTemplateTest extends WP_UnitTestCase {
 		DashboardRoleRewrite::maybe_render();
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 */
-	public function test_renders_when_dashboard_query_var_present(): void {
+        /**
+         * @runInSeparateProcess
+         * @preserveGlobalState disabled
+         */
+        public function test_renders_when_dashboard_query_var_present(): void {
 		if ( ! get_role( 'organization' ) ) {
 			add_role( 'organization', 'Organization' );
 		}
