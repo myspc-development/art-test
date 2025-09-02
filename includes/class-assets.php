@@ -19,31 +19,11 @@ class ArtPulse_Assets {
 	 * Conditionally enqueue scripts and styles for public pages.
 	 */
 	public static function enqueue_assets(): void {
-                if ( is_page( 'dashboard' ) || is_page_template( 'page-dashboard.php' ) ) {
-                        $base_url  = plugin_dir_url( dirname( __DIR__ ) );
-                        $base_path = plugin_dir_path( __DIR__ );
+               if ( is_page( 'dashboard' ) || is_page_template( 'page-dashboard.php' ) ) {
+                        \ArtPulse\Admin\EnqueueAssets::enqueue_style_if_exists( 'ap-dashboard', 'assets/css/dashboard.css' );
+                        \ArtPulse\Admin\EnqueueAssets::enqueue_style_if_exists( 'ap-calendar', 'assets/css/calendar.css' );
 
-                        wp_enqueue_style(
-                                'ap-dashboard',
-                                $base_url . 'assets/css/dashboard.css',
-                                array(),
-                                filemtime( $base_path . 'assets/css/dashboard.css' )
-                        );
-                        wp_enqueue_style(
-                                'ap-calendar',
-                                $base_url . 'assets/css/calendar.css',
-                                array(),
-                                filemtime( $base_path . 'assets/css/calendar.css' )
-                        );
-
-                        wp_enqueue_script(
-                                'ap-user-dashboard',
-                                $base_url . 'assets/js/ap-user-dashboard.js',
-                                array(),
-                                filemtime( $base_path . 'assets/js/ap-user-dashboard.js' ),
-                                true
-                        );
-                        wp_script_add_data( 'ap-user-dashboard', 'type', 'module' );
+                        \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-user-dashboard', 'assets/js/ap-user-dashboard.js', array(), true, array( 'type' => 'module' ) );
 
 			$user = wp_get_current_user();
 			$boot = array(
@@ -76,8 +56,8 @@ class ArtPulse_Assets {
 			wp_localize_script( 'ap-user-dashboard', 'ARTPULSE_BOOT', $boot );
 
                         if ( function_exists( 'wp_set_script_translations' ) ) {
-                                wp_set_script_translations( 'ap-user-dashboard', 'artpulse', $base_path . 'languages' );
+                                wp_set_script_translations( 'ap-user-dashboard', 'artpulse', plugin_dir_path( __DIR__ ) . 'languages' );
                         }
-		}
-	}
+                }
+        }
 }

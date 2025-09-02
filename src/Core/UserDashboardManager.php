@@ -118,44 +118,14 @@ class UserDashboardManager {
        }
 
 	public static function enqueueAssets() {
-		// Core dashboard script
-		wp_enqueue_script(
-			'ap-widget-lifecycle',
-			plugins_url( 'assets/js/widget-lifecycle.js', ARTPULSE_PLUGIN_FILE ),
-			array(),
-			self::get_asset_version( 'assets/js/widget-lifecycle.js' ),
-			true
-		);
-		wp_enqueue_script(
-			'ap-user-dashboard-js',
-			plugins_url( 'assets/js/ap-user-dashboard.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'wp-api-fetch', 'chart-js', 'ap-widget-lifecycle' ),
-			self::get_asset_version( 'assets/js/ap-user-dashboard.js' ),
-			true
-		);
-		if ( function_exists( 'wp_script_add_data' ) ) {
-			wp_script_add_data( 'ap-user-dashboard-js', 'type', 'module' );
-		}
+               // Core dashboard script
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-widget-lifecycle', 'assets/js/widget-lifecycle.js' );
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-user-dashboard-js', 'assets/js/ap-user-dashboard.js', array( 'wp-api-fetch', 'chart-js', 'ap-widget-lifecycle' ), true, array( 'type' => 'module' ) );
 
-		// Analytics events
-		wp_enqueue_script(
-			'ap-analytics-js',
-			plugins_url( 'assets/js/ap-analytics.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'ap-user-dashboard-js' ),
-			self::get_asset_version( 'assets/js/ap-analytics.js' ),
-			true
-		);
-		if ( function_exists( 'wp_script_add_data' ) ) {
-			wp_script_add_data( 'ap-analytics-js', 'type', 'module' );
-		}
+               // Analytics events
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-analytics-js', 'assets/js/ap-analytics.js', array( 'ap-user-dashboard-js' ), true, array( 'type' => 'module' ) );
 
-		wp_enqueue_script(
-			'ap-event-analytics',
-			plugins_url( 'assets/js/event-analytics.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'ap-user-dashboard-js' ),
-			self::get_asset_version( 'assets/js/event-analytics.js' ),
-			true
-		);
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-event-analytics', 'assets/js/event-analytics.js', array( 'ap-user-dashboard-js' ) );
 
 		// Localize dashboard REST endpoint
 		$opts = get_option( 'artpulse_settings', array() );
@@ -247,13 +217,7 @@ class UserDashboardManager {
 		}
 
 		wp_enqueue_media();
-		wp_enqueue_script(
-			'ap-profile-modal',
-			plugins_url( 'assets/js/ap-profile-modal.js', ARTPULSE_PLUGIN_FILE ),
-			array(),
-			self::get_asset_version( 'assets/js/ap-profile-modal.js' ),
-			true
-		);
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-profile-modal', 'assets/js/ap-profile-modal.js' );
 		wp_localize_script(
 			'ap-profile-modal',
 			'APProfileModal',
@@ -263,13 +227,7 @@ class UserDashboardManager {
 			)
 		);
 
-		wp_enqueue_script(
-			'ap-widget-settings',
-			plugins_url( 'assets/js/ap-widget-settings.js', ARTPULSE_PLUGIN_FILE ),
-			array(),
-			self::get_asset_version( 'assets/js/ap-widget-settings.js' ),
-			true
-		);
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-widget-settings', 'assets/js/ap-widget-settings.js' );
 		wp_localize_script(
 			'ap-widget-settings',
 			'APWidgetSettings',
@@ -280,20 +238,8 @@ class UserDashboardManager {
 		);
 
 		// Enable drag-and-drop layout editing
-		wp_enqueue_script(
-			'sortablejs',
-			plugins_url( 'assets/libs/sortablejs/Sortable.min.js', ARTPULSE_PLUGIN_FILE ),
-			array(),
-			self::get_asset_version( 'assets/libs/sortablejs/Sortable.min.js' ),
-			true
-		);
-		wp_enqueue_script(
-			'user-dashboard-layout',
-			plugins_url( 'assets/js/user-dashboard-layout.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'sortablejs' ),
-			self::get_asset_version( 'assets/js/user-dashboard-layout.js' ),
-			true
-		);
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'sortablejs', 'assets/libs/sortablejs/Sortable.min.js' );
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'user-dashboard-layout', 'assets/js/user-dashboard-layout.js', array( 'sortablejs' ) );
 		wp_localize_script(
 			'user-dashboard-layout',
 			'APLayout',
@@ -303,13 +249,7 @@ class UserDashboardManager {
 			)
 		);
 
-		wp_enqueue_script(
-			'ap-dashboard-nav',
-			plugins_url( 'assets/js/dashboard-nav.js', ARTPULSE_PLUGIN_FILE ),
-			array(),
-			self::get_asset_version( 'assets/js/dashboard-nav.js' ),
-			true
-		);
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-dashboard-nav', 'assets/js/dashboard-nav.js' );
 		$user = wp_get_current_user();
 		$menu = ap_merge_dashboard_menus( $user->roles, true );
 		if ( empty( $menu ) ) {
@@ -1404,13 +1344,7 @@ class UserDashboardManager {
 				array(),
 				'4.2.2'
 			);
-			wp_enqueue_script(
-				'ap-dashboard-tour',
-				plugins_url( 'assets/js/ap-dashboard-tour.js', ARTPULSE_PLUGIN_FILE ),
-				array( 'intro-js', 'ap-user-dashboard-js' ),
-				'1.0.0',
-				true
-			);
+                       \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-dashboard-tour', 'assets/js/ap-dashboard-tour.js', array( 'intro-js', 'ap-user-dashboard-js' ) );
 			wp_localize_script(
 				'ap-dashboard-tour',
 				'APDashboardTour',

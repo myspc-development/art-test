@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Blocks;
 
+use ArtPulse\Admin\EnqueueAssets;
+
 class SpotlightBlock {
 
 	public static function register(): void {
@@ -28,15 +30,7 @@ class SpotlightBlock {
 			)
 		);
 
-               $path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/js/spotlight-block.js';
-               $version = \ArtPulse\Blocks\ap_block_version();
-               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
-               wp_register_script(
-                       'artpulse-spotlight-block',
-                       plugins_url( 'assets/js/spotlight-block.js', ARTPULSE_PLUGIN_FILE ),
-                       array( 'wp-blocks', 'wp-element', 'wp-i18n' ),
-                       $ver
-               );
+               EnqueueAssets::register_script( 'artpulse-spotlight-block', 'assets/js/spotlight-block.js', array( 'wp-blocks', 'wp-element', 'wp-i18n' ), false );
        }
 
 	public static function render_callback( $attributes ): string {

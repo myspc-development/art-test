@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Blocks;
 
+use ArtPulse\Admin\EnqueueAssets;
+
 class AjaxFilterBlock {
 
 	public static function register() {
@@ -31,15 +33,7 @@ class AjaxFilterBlock {
 			)
 		);
 
-               $path = __DIR__ . '/../../assets/js/ajax-filter-block.js';
-               $version = \ArtPulse\Blocks\ap_block_version();
-               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
-               wp_register_script(
-                       'artpulse-ajax-filter-block',
-                       plugins_url( 'assets/js/ajax-filter-block.js', ARTPULSE_PLUGIN_FILE ),
-                       array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-api-fetch' ),
-                       $ver
-               );
+               EnqueueAssets::register_script( 'artpulse-ajax-filter-block', 'assets/js/ajax-filter-block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-api-fetch' ), false );
        }
 
 	public static function register_rest_routes() {

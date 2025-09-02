@@ -24,21 +24,11 @@ class PortfolioBuilder {
 			ap_enqueue_global_styles();
 		}
 
-		wp_enqueue_media();
+               wp_enqueue_media();
 
-
-
-		$builder_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $builder_rel;
-		wp_enqueue_script(
-			'ap-portfolio-builder',
-			plugins_url( $builder_rel, ARTPULSE_PLUGIN_FILE ),
-			array( 'jquery', 'sortablejs' ),
-			file_exists( $builder_path ) ? filemtime( $builder_path ) : null,
-			true
-		);
-		if ( function_exists( 'wp_script_add_data' ) ) {
-			wp_script_add_data( 'ap-portfolio-builder', 'type', 'module' );
-		}
+               $builder_rel  = 'assets/js/ap-portfolio-builder.js';
+               $builder_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $builder_rel;
+               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-portfolio-builder', $builder_rel, array( 'jquery', 'sortablejs' ), true, array( 'type' => 'module' ) );
 
 		wp_localize_script(
 			'ap-portfolio-builder',

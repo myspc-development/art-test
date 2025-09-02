@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Blocks;
 
+use ArtPulse\Admin\EnqueueAssets;
+
 class FilteredListShortcodeBlock {
 
 	public static function register() {
@@ -38,15 +40,7 @@ class FilteredListShortcodeBlock {
 			)
 		);
 
-               $path = __DIR__ . '/../../assets/js/filtered-list-shortcode-block.js';
-               $version = \ArtPulse\Blocks\ap_block_version();
-               $ver  = file_exists( $path ) ? filemtime( $path ) : $version;
-               wp_register_script(
-                       'artpulse-filtered-list-shortcode-block',
-                       plugins_url( 'assets/js/filtered-list-shortcode-block.js', ARTPULSE_PLUGIN_FILE ),
-                       array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components' ),
-                       $ver
-               );
+               EnqueueAssets::register_script( 'artpulse-filtered-list-shortcode-block', 'assets/js/filtered-list-shortcode-block.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components' ), false );
        }
 
 	public static function render_callback( $attributes ) {
