@@ -58,25 +58,25 @@ class EventCardShortcodeTest extends WP_UnitTestCase {
                 $this->assertStringNotContainsString( 'ap-rsvp-btn', $html );
         }
 
-        public function test_rsvp_button_shown_for_logged_in_user(): void {
-                if ( ! \function_exists( 'ap_render_rsvp_button' ) ) {
-                        \eval( 'function ap_render_rsvp_button( int $event_id ): string { return \'<button class="ap-rsvp-btn ap-form-button">RSVP</button>\'; }' );
-                }
+       public function test_rsvp_button_shown_for_logged_in_user(): void {
+               if ( ! \function_exists( 'ap_render_rsvp_button' ) ) {
+                       require __DIR__ . '/stubs/ap_render_rsvp_button.php';
+               }
 
-                $author = self::factory()->user->create( array( 'role' => 'subscriber' ) );
-                $viewer = self::factory()->user->create( array( 'role' => 'subscriber' ) );
-                $id     = wp_insert_post(
-                        array(
-                                'post_title'  => 'Viewer Event',
-                                'post_type'   => 'artpulse_event',
-                                'post_status' => 'publish',
-                                'post_author' => $author,
-                        )
-                );
+               $author = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+               $viewer = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+               $id     = wp_insert_post(
+                       array(
+                               'post_title'  => 'Viewer Event',
+                               'post_type'   => 'artpulse_event',
+                               'post_status' => 'publish',
+                               'post_author' => $author,
+                       )
+               );
 
-                wp_set_current_user( $viewer );
-                $html = EventCardShortcode::render( array( 'id' => $id ) );
-                $this->assertStringContainsString( 'ap-rsvp-btn', $html );
-                $this->assertStringNotContainsString( 'ap-btn-edit', $html );
-        }
+               wp_set_current_user( $viewer );
+               $html = EventCardShortcode::render( array( 'id' => $id ) );
+               $this->assertStringContainsString( 'ap-rsvp-btn', $html );
+               $this->assertStringNotContainsString( 'ap-btn-edit', $html );
+       }
 }
