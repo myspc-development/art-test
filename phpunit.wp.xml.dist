@@ -7,15 +7,9 @@
     <env name="AP_TEST_MODE" value="1"/>
   </php>
   <testsuites>
-    <testsuite name="Rest">
-      <directory>tests/Rest</directory>
-    </testsuite>
-    <testsuite name="Frontend">
-      <directory>tests/Frontend</directory>
-    </testsuite>
-    <testsuite name="Unit">
-      <directory>tests/Unit</directory>
-    </testsuite>
+    <testsuite name="Rest"><directory>tests/Rest</directory></testsuite>
+    <testsuite name="Frontend"><directory>tests/Frontend</directory></testsuite>
+    <testsuite name="Unit"><directory>tests/Unit</directory></testsuite>
   </testsuites>
   <groups>
     <include>
