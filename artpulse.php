@@ -32,14 +32,13 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 // Explicitly load core classes and helpers.
 trait_exists( \ArtPulse\Rest\RestResponder::class );
 require_once __DIR__ . '/src/Blocks/Version.php';
-class_exists( \ArtPulse\Rest\OrgRolesController::class );
 
-add_action(
-        'rest_api_init',
-        static function () {
-                ( new \ArtPulse\Rest\OrgRolesController() )->register_routes();
-        }
-);
+\ArtPulse\Rest\OrgRolesController::register();
+\ArtPulse\Rest\StatusController::register();
+\ArtPulse\Rest\DirectoryController::register();
+\ArtPulse\Rest\OrgDirectoryController::register();
+\ArtPulse\Rest\RouteAudit::register();
+\ArtPulse\Rest\SystemStatusController::register();
 
 // Register test-only REST route shim when in test mode.
 $ap_test_mode = ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) || filter_var( getenv( 'AP_TEST_MODE' ), FILTER_VALIDATE_BOOLEAN );

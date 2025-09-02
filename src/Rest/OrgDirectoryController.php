@@ -5,26 +5,31 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use WP_REST_Server;
-use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
 
 /**
  * REST controller for organization directory listings.
  */
 final class OrgDirectoryController {
-	use RestResponder;
+        use RestResponder;
+
     public static function register(): void {
-        add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
+        $controller = new self();
+        if ( did_action( 'rest_api_init' ) ) {
+            $controller->register_routes();
+        } else {
+            add_action( 'rest_api_init', array( $controller, 'register_routes' ) );
+        }
     }
 
-    public static function register_routes(): void {
+    public function register_routes(): void {
         register_rest_route(
             ARTPULSE_API_NAMESPACE,
             '/directory/orgs',
             array(
                 'methods'             => WP_REST_Server::READABLE,
-                'callback'            => array( self::class, 'get_orgs' ),
-                'permission_callback' => array( Auth::class, 'guard_read' ),
+                'callback'            => array( $this, 'get_orgs' ),
+                'permission_callback' => '__return_true',
                 'args'                => array(
                     'org_type' => array( 'type' => 'string' ),
                 ),
@@ -32,7 +37,7 @@ final class OrgDirectoryController {
         );
     }
 
-    public static function get_orgs( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+    public function get_orgs( WP_REST_Request $request ): WP_REST_Response|WP_Error {
         $args = array(
             'post_type'      => 'artpulse_org',
             'post_status'    => 'publish',
@@ -66,6 +71,6 @@ final class OrgDirectoryController {
             $posts
         );
 
-        return \rest_ensure_response( $data );
+        return $this->ok( $data );
     }
 }
