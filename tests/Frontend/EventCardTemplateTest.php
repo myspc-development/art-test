@@ -37,10 +37,10 @@ class EventCardTemplateTest extends WP_UnitTestCase {
                 $this->assertStringContainsString( 'Exhibition', $html );
         }
 
-        public function test_organizer_email_not_encoded(): void {
+        public function test_organizer_email_obfuscated(): void {
                 update_post_meta( $this->event_id, 'event_organizer_email', 'organizer@example.com' );
                 $html = ap_get_event_card( $this->event_id );
-                $this->assertStringContainsString( 'organizer@example.com', $html );
-                $this->assertStringNotContainsString( '&#', $html );
+                $this->assertStringContainsString( '&#64;', $html );
+                $this->assertStringNotContainsString( 'organizer@example.com', $html );
         }
 }
