@@ -28,6 +28,9 @@
           $end     = get_post_meta(get_the_ID(), '_ap_event_end_time', true);
           $contact = get_post_meta(get_the_ID(), '_ap_event_contact', true);
           $rsvp    = get_post_meta(get_the_ID(), '_ap_event_rsvp', true);
+          $org_email = sanitize_email( get_post_meta( get_the_ID(), 'event_organizer_email', true ) );
+          $event_type_terms = wp_get_post_terms( get_the_ID(), 'event_type', [ 'fields' => 'names' ] );
+          $event_type = ! is_wp_error( $event_type_terms ) && ! empty( $event_type_terms ) ? $event_type_terms[0] : '';
         ?>
 
           <ul class="event-meta styled-box" itemscope itemtype="https://schema.org/Event">
@@ -40,6 +43,8 @@
             <li><strong><?php esc_html_e('Venue:', 'artpulse'); ?></strong> <?php echo esc_html( $venue ?: __( 'Not specified', 'artpulse' ) ); ?></li>
             <li><strong><?php esc_html_e('Address:', 'artpulse'); ?></strong> <?php echo esc_html( $address ?: __( 'Not specified', 'artpulse' ) ); ?></li>
             <li><strong><?php esc_html_e('Contact:', 'artpulse'); ?></strong> <?php echo esc_html( $contact ?: __( 'Not specified', 'artpulse' ) ); ?></li>
+            <li><strong><?php esc_html_e('Type:', 'artpulse'); ?></strong> <?php echo esc_html( $event_type ?: __( 'Not specified', 'artpulse' ) ); ?></li>
+            <li><strong><?php esc_html_e('Organizer Email:', 'artpulse'); ?></strong> <?php echo esc_html( $org_email ?: __( 'Not specified', 'artpulse' ) ); ?></li>
             <?php if (!empty($rsvp) && filter_var($rsvp, FILTER_VALIDATE_URL)) : ?>
               <li><strong><?php esc_html_e('RSVP:', 'artpulse'); ?></strong> <a href="<?php echo esc_url($rsvp); ?>" class="event-rsvp-link" target="_blank"><?php esc_html_e('RSVP Now', 'artpulse'); ?></a></li>
             <?php else : ?>
