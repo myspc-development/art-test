@@ -106,7 +106,11 @@ class EventCardShortcode {
                                                 <?php if ( $can_edit ) : ?>
                                                         <a href="<?php echo \esc_url( \get_edit_post_link( $event_id ) ); ?>" class="ap-form-button ap-btn-edit"><?php \esc_html_e( 'Edit Event', 'artpulse' ); ?></a>
                                                 <?php elseif ( $show_rsvp ) : ?>
-                                                        <?php echo \ap_render_rsvp_button( $event_id ); ?>
+                                                        <?php if ( \function_exists( 'ap_render_rsvp_button' ) ) : ?>
+                                                                <?php echo \ap_render_rsvp_button( $event_id ); ?>
+                                                        <?php else : ?>
+                                                                <a href="<?php echo \esc_url( \get_permalink( $event_id ) ); ?>" class="ap-form-button ap-btn-rsvp"><?php \esc_html_e( 'RSVP', 'artpulse' ); ?></a>
+                                                        <?php endif; ?>
                                                 <?php endif; ?>
                                         </div>
                                 <?php endif; ?>
