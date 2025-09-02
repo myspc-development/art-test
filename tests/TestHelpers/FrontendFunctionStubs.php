@@ -302,7 +302,23 @@ self::$post_authors         = array();
 
         if ( ! function_exists( __NAMESPACE__ . '\\function_exists' ) ) {
                 function function_exists( $name ) {
+                        if ( in_array( $name, array( 'wp_safe_redirect', 'wp_get_referer' ), true ) ) {
+                                return StubState::$function_exists_map[ $name ] ?? false;
+                        }
                         return StubState::$function_exists_map[ $name ] ?? \function_exists( $name );
+                }
+        }
+
+        if ( ! function_exists( __NAMESPACE__ . '\\wp_safe_redirect' ) ) {
+                function wp_safe_redirect( $url ) {
+                        StubState::$page = $url;
+                        throw new \RuntimeException( 'redirect' );
+                }
+        }
+
+        if ( ! function_exists( __NAMESPACE__ . '\\wp_get_referer' ) ) {
+                function wp_get_referer() {
+                        return '/referer';
                 }
         }
 
