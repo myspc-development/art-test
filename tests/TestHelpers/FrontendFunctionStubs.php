@@ -272,10 +272,11 @@ self::$post_types           = array();
         }
 
         if ( ! function_exists( __NAMESPACE__ . '\\get_terms' ) ) {
-                function get_terms( $tax, $args = array() ) {
-                        return StubState::$terms_return[ $tax ] ?? array();
-                }
-        }
+               function get_terms( $tax, $args = array() ) {
+                       $taxonomy = is_array( $tax ) ? ( $tax['taxonomy'] ?? '' ) : $tax;
+                       return StubState::$terms_return[ $taxonomy ] ?? array();
+               }
+       }
 
         if ( ! function_exists( __NAMESPACE__ . '\\wp_set_post_terms' ) ) {
                 function wp_set_post_terms( $id, $terms, $tax ) {
