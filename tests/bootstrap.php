@@ -60,26 +60,6 @@ if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/bootstrap.php'))
     exit(1);
 }
 
-$kses         = $wp_root !== '' ? $wp_root . '/wp-includes/kses.php' : '';
-$blocks       = $wp_root !== '' ? $wp_root . '/wp-includes/blocks.php' : '';
-$block_parser = $wp_root !== '' ? $wp_root . '/wp-includes/class-wp-block-parser.php' : '';
-if ($kses === '' || !file_exists($kses)) {
-    fwrite(STDERR, "ERROR: Missing WordPress core files. Run 'composer run wp:core-link'.\n");
-    exit(1);
-}
-
-if ($block_parser !== '' && file_exists($block_parser) && ! class_exists('WP_Block_Parser')) {
-    require_once $block_parser;
-}
-
-if ($blocks !== '' && file_exists($blocks) && ! function_exists('register_block_type')) {
-    require_once $blocks;
-}
-
-if (! function_exists('wp_kses')) {
-    require_once $kses;
-}
-
 // Load WP test functions early so we can hook before WordPress boots
 if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/functions.php')) {
     require_once $wp_phpunit_dir . '/includes/functions.php';
