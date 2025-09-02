@@ -65,7 +65,7 @@ class EventRsvpHandler {
 		 * @return array
 		 */
         public static function get_rsvp_summary_for_user( $user_id ): array {
-               $event_ids = (array) get_user_meta( $user_id, 'ap_rsvp_events', true );
+               $event_ids = (array) \get_user_meta( $user_id, 'ap_rsvp_events', true );
                if ( empty( $event_ids ) ) {
                        return array(
                                'going'      => 0,
@@ -79,22 +79,22 @@ class EventRsvpHandler {
                $trend_map  = array();
 
                foreach ( $event_ids as $eid ) {
-                       $date = get_post_meta( $eid, '_ap_event_date', true );
+                       $date = \get_post_meta( $eid, '_ap_event_date', true );
                        $ts   = false;
                        if (
                                is_string( $date ) &&
                                preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date )
                        ) {
-                               $ts = strtotime( $date . ' ' . wp_timezone_string() );
+                               $ts = strtotime( $date . ' ' . \wp_timezone_string() );
                        }
 
-                       if ( false !== $ts && $ts >= current_time( 'timestamp' ) ) {
+                       if ( false !== $ts && $ts >= \current_time( 'timestamp' ) ) {
                                ++$going;
                        } else {
                                ++$interested;
                        }
 
-                        $history = get_post_meta( $eid, 'event_rsvp_history', true );
+                        $history = \get_post_meta( $eid, 'event_rsvp_history', true );
                         if ( is_array( $history ) ) {
                                 foreach ( $history as $day => $count ) {
                                         if ( ! isset( $trend_map[ $day ] ) ) {
