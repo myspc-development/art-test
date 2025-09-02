@@ -76,17 +76,17 @@ class EventListingShortcode {
 		}
 
                $categories = get_terms(
-                       'event_category',
-                       array(
+                       ['event_category'],
+                       [
                                'hide_empty' => false,
-                       )
+                       ]
                );
 
                if ( is_wp_error( $categories ) ) {
                        $categories = array();
                }
 
-		ob_start();
+               ob_start();
 		?>
 		<div class="ap-event-listing-wrapper" data-per-page="<?php echo intval( $atts['posts_per_page'] ); ?>">
 			<nav class="ap-alpha-bar" aria-label="<?php esc_attr_e( 'Filter by alphabet', 'artpulse' ); ?>"></nav>
