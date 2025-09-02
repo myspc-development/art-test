@@ -1,8 +1,20 @@
 <?php
+namespace ArtPulse\Frontend {
+        function ap_render_favorite_button( int $object_id, string $object_type = '' ): string {
+                return '';
+        }
+
+        function ap_share_buttons( ...$args ): string {
+                return '';
+        }
+}
+
 namespace ArtPulse\Frontend\Tests {
 
-	use PHPUnit\Framework\TestCase;
-	use ArtPulse\Tests\Stubs\MockStorage;
+        require_once __DIR__ . '/../TestStubs.php';
+
+        use PHPUnit\Framework\TestCase;
+        use ArtPulse\Tests\Stubs\MockStorage;
 
 	/**
 
@@ -26,6 +38,7 @@ namespace ArtPulse\Frontend\Tests {
                         ob_start();
                         include __DIR__ . '/../../templates/salient/content-artpulse_org.php';
                         $html = ob_get_clean();
+                        $this->assertFalse( MockStorage::$have_posts );
                         $this->assertStringContainsString( 'Opening Hours', $html );
                         $this->assertStringContainsString( 'Monday', $html );
                         $this->assertStringContainsString( '09:00 - 17:00', $html );
@@ -36,6 +49,7 @@ namespace ArtPulse\Frontend\Tests {
                         ob_start();
                         include __DIR__ . '/../../templates/salient/content-artpulse_org.php';
                         $html = ob_get_clean();
+                        $this->assertFalse( MockStorage::$have_posts );
                         $this->assertStringContainsString( 'Org Content', $html );
                 }
         }
