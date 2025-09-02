@@ -18,6 +18,7 @@ class OrganizationEventAjaxTest extends TestCase {
 
         protected function setUp(): void {
                 \ArtPulse\Frontend\StubState::reset();
+                \ArtPulse\Frontend\StubState::$current_user = 1;
                 $_POST              = array();
                 $_FILES             = array();
                 $GLOBALS['__ap_test_user_meta'] = array();
