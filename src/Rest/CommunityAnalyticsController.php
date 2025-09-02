@@ -93,21 +93,31 @@ class CommunityAnalyticsController {
 		return date( 'Y-m-d H:i:s', strtotime( '-7 days' ) );
 	}
 
-	public static function get_messaging( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-		global $wpdb;
-		$since = self::range_date( $req->get_param( 'range' ) ?? '7d' );
-		$table = $wpdb->prefix . 'ap_messages';
+        public static function get_messaging( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+                global $wpdb;
+                $since  = self::range_date( $req->get_param( 'range' ) ?? '7d' );
+                $tables = array(
+                        $wpdb->prefix . 'ap_messages',
+                        $wpdb->prefix . 'ap_blocked_users',
+                );
+                foreach ( $tables as $tbl ) {
+                        $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $tbl ) );
+                        if ( ! $exists ) {
+                                return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
+                        }
+                }
 
-		$total   = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table WHERE created_at >= %s", $since ) );
-		$per_day = $wpdb->get_results( $wpdb->prepare( "SELECT DATE(created_at) AS day, COUNT(*) AS c FROM $table WHERE created_at >= %s GROUP BY day", $since ), ARRAY_A );
+                $table = $tables[0];
+                $total = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table WHERE created_at >= %s", $since ) );
+                $per_day = $wpdb->get_results( $wpdb->prepare( "SELECT DATE(created_at) AS day, COUNT(*) AS c FROM $table WHERE created_at >= %s GROUP BY day", $since ), ARRAY_A );
 
-		$top = array();
-		if ( $req->get_param( 'top_users' ) ) {
-			$top = $wpdb->get_results( $wpdb->prepare( "SELECT sender_id AS user_id, COUNT(*) AS c FROM $table WHERE created_at >= %s GROUP BY sender_id ORDER BY c DESC LIMIT 5", $since ), ARRAY_A );
-		}
+                $top = array();
+                if ( $req->get_param( 'top_users' ) ) {
+                        $top = $wpdb->get_results( $wpdb->prepare( "SELECT sender_id AS user_id, COUNT(*) AS c FROM $table WHERE created_at >= %s GROUP BY sender_id ORDER BY c DESC LIMIT 5", $since ), ARRAY_A );
+                }
 
-		$blocked_table = $wpdb->prefix . 'ap_blocked_users';
-		$blocked_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $blocked_table" );
+                $blocked_table = $tables[1];
+                $blocked_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $blocked_table" );
 
 		return \rest_ensure_response(
 			array(
@@ -119,16 +129,21 @@ class CommunityAnalyticsController {
 		);
 	}
 
-	public static function get_comments( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-		global $wpdb;
-		$since    = self::range_date( $req->get_param( 'range' ) ?? '7d' );
-		$comments = $wpdb->comments;
+        public static function get_comments( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+                global $wpdb;
+                $since    = self::range_date( $req->get_param( 'range' ) ?? '7d' );
+                $comments = $wpdb->comments;
 
-		$total     = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $comments WHERE comment_approved = '1' AND comment_date >= %s", $since ) );
-		$top_posts = $wpdb->get_results( $wpdb->prepare( "SELECT comment_post_ID AS post_id, COUNT(*) AS c FROM $comments WHERE comment_approved = '1' AND comment_date >= %s GROUP BY comment_post_ID ORDER BY c DESC LIMIT 5", $since ), ARRAY_A );
+                $flagged_table = $wpdb->prefix . 'ap_comment_reports';
+                $exists        = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $flagged_table ) );
+                if ( ! $exists ) {
+                        return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
+                }
 
-		$flagged_table = $wpdb->prefix . 'ap_comment_reports';
-		$flagged_count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $flagged_table WHERE created_at >= %s", $since ) );
+                $total     = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $comments WHERE comment_approved = '1' AND comment_date >= %s", $since ) );
+                $top_posts = $wpdb->get_results( $wpdb->prepare( "SELECT comment_post_ID AS post_id, COUNT(*) AS c FROM $comments WHERE comment_approved = '1' AND comment_date >= %s GROUP BY comment_post_ID ORDER BY c DESC LIMIT 5", $since ), ARRAY_A );
+
+                $flagged_count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $flagged_table WHERE created_at >= %s", $since ) );
 
 		return \rest_ensure_response(
 			array(

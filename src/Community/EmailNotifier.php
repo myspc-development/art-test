@@ -94,9 +94,13 @@ class EmailNotifier {
 					);
 				case 'sendgrid':
 					return self::send_sendgrid( $to, $subject, $message, $options['sendgrid_api_key'] ?? '', $from_name, $from_address );
-				default:
-					return wp_mail( $to, $subject, $message, $headers );
-			}
+                                default:
+                                        list( $to, $subject, $message, $headers ) = apply_filters(
+                                                'wp_mail',
+                                                array( $to, $subject, $message, $headers )
+                                        );
+                                        return wp_mail( $to, $subject, $message, $headers );
+                        }
 		} finally {
 			if ( $from_cb ) {
 				remove_filter( 'wp_mail_from', $from_cb );

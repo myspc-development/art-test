@@ -134,10 +134,17 @@ class RsvpDbController extends WP_REST_Controller {
 		);
 	}
 
-	protected function table(): string {
-		global $wpdb;
-		return $wpdb->prefix . 'ap_rsvps';
-	}
+        protected function table(): string {
+                global $wpdb;
+                return $wpdb->prefix . 'ap_rsvps';
+        }
+
+        private function ensure_table(): ?\WP_Error {
+                global $wpdb;
+                $table  = $this->table();
+                $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+                return $exists ? null : $this->fail( 'ap_db_missing', 'Required table missing', 500 );
+        }
 
 	protected function csv_safe( string $value ): string {
 		if ( preg_match( '/^[=+\-@]/', $value ) ) {
@@ -146,18 +153,20 @@ class RsvpDbController extends WP_REST_Controller {
 		return $value;
 	}
 
-	public function create_rsvp( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-		$event_id = intval( $request['event_id'] );
-		if ( ! $event_id || get_post_type( $event_id ) !== 'artpulse_event' ) {
-			return new WP_Error( 'invalid_event', 'Invalid event.', array( 'status' => 400 ) );
-		}
-
-		global $wpdb;
-		$data = array(
-			'event_id' => $event_id,
-			'user_id'  => get_current_user_id() ?: null,
-			'name'     => sanitize_text_field( $request['name'] ),
-			'email'    => sanitize_email( $request['email'] ),
+        public function create_rsvp( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                $event_id = intval( $request['event_id'] );
+                if ( ! $event_id || get_post_type( $event_id ) !== 'artpulse_event' ) {
+                        return new WP_Error( 'invalid_event', 'Invalid event.', array( 'status' => 400 ) );
+                }
+                if ( $err = $this->ensure_table() ) {
+                        return $err;
+                }
+                global $wpdb;
+                $data = array(
+                        'event_id' => $event_id,
+                        'user_id'  => get_current_user_id() ?: null,
+                        'name'     => sanitize_text_field( $request['name'] ),
+                        'email'    => sanitize_email( $request['email'] ),
 			'status'   => 'going',
 		);
 		$wpdb->insert( $this->table(), $data, array( '%d', '%d', '%s', '%s', '%s' ) );
@@ -167,9 +176,12 @@ class RsvpDbController extends WP_REST_Controller {
 		return \rest_ensure_response( $data );
 	}
 
-	public function list_rsvps( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-		global $wpdb;
-		$event_id = intval( $request['event_id'] );
+        public function list_rsvps( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                if ( $err = $this->ensure_table() ) {
+                        return $err;
+                }
+                global $wpdb;
+                $event_id = intval( $request['event_id'] );
 		$status   = sanitize_text_field( $request['status'] );
 		$from     = $request['from'] ? sanitize_text_field( $request['from'] ) : null;
 		$to       = $request['to'] ? sanitize_text_field( $request['to'] ) : null;
@@ -210,15 +222,18 @@ class RsvpDbController extends WP_REST_Controller {
 		);
 	}
 
-	public function update_rsvp( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-		$id      = intval( $request['id'] );
-		$status  = sanitize_text_field( $request['status'] );
-		$allowed = array( 'going', 'waitlist', 'cancelled' );
-		if ( ! in_array( $status, $allowed, true ) ) {
-			return new WP_Error( 'invalid_status', 'Invalid status.', array( 'status' => 400 ) );
-		}
-		global $wpdb;
-		$wpdb->update( $this->table(), array( 'status' => $status ), array( 'id' => $id ), array( '%s' ), array( '%d' ) );
+        public function update_rsvp( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                $id      = intval( $request['id'] );
+                $status  = sanitize_text_field( $request['status'] );
+                $allowed = array( 'going', 'waitlist', 'cancelled' );
+                if ( ! in_array( $status, $allowed, true ) ) {
+                        return new WP_Error( 'invalid_status', 'Invalid status.', array( 'status' => 400 ) );
+                }
+                if ( $err = $this->ensure_table() ) {
+                        return $err;
+                }
+                global $wpdb;
+                $wpdb->update( $this->table(), array( 'status' => $status ), array( 'id' => $id ), array( '%s' ), array( '%d' ) );
 		$event_id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT event_id FROM {$this->table()} WHERE id = %d", $id ) );
 		do_action( 'ap_rsvp_changed', $event_id );
 		return \rest_ensure_response(
@@ -229,11 +244,15 @@ class RsvpDbController extends WP_REST_Controller {
 		);
 	}
 
-	public function export_csv( WP_REST_Request $request ) {
-		$request->set_param( 'page', 1 );
-		$request->set_param( 'per_page', 10000 );
-		$payload = $this->list_rsvps( $request )->get_data();
-		$rows    = $payload['rows'] ?? array();
+        public function export_csv( WP_REST_Request $request ) {
+                $request->set_param( 'page', 1 );
+                $request->set_param( 'per_page', 10000 );
+                $result = $this->list_rsvps( $request );
+                if ( $result instanceof \WP_Error ) {
+                        return $result;
+                }
+                $payload = $result->get_data();
+                $rows    = $payload['rows'] ?? array();
 		$cols    = array( 'id', 'name', 'email', 'status', 'created_at' );
 		$header  = implode( ',', array_map( array( $this, 'csv_safe' ), $cols ) ) . "\n";
 		$out     = $header;
@@ -255,9 +274,12 @@ class RsvpDbController extends WP_REST_Controller {
 		);
 	}
 
-	public function bulk_update( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-		$event_id = intval( $request['event_id'] );
-		$ids      = array_map( 'intval', (array) $request['ids'] );
+        public function bulk_update( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+                if ( $err = $this->ensure_table() ) {
+                        return $err;
+                }
+                $event_id = intval( $request['event_id'] );
+                $ids      = array_map( 'intval', (array) $request['ids'] );
 		$status   = sanitize_text_field( $request['status'] );
 		$allowed  = array( 'going', 'waitlist', 'cancelled' );
 		if ( ! in_array( $status, $allowed, true ) ) {

@@ -67,8 +67,9 @@ public function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Erro
                 }
         }
 
-        $region = $request->get_param( 'region' );
-        if ( ! empty( $region ) ) {
+        $region     = $request->get_param( 'region' );
+        $has_region = ! empty( $region );
+        if ( $has_region ) {
                 $region_terms = array_map( 'sanitize_text_field', (array) $region );
                 if ( taxonomy_exists( 'region' ) ) {
                         $tax_query[] = array(
@@ -89,7 +90,7 @@ public function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Erro
         $lng       = $request->get_param( 'lng' );
         $within_km = $request->get_param( 'within_km' );
         $do_radius = is_numeric( $lat ) && is_numeric( $lng ) && is_numeric( $within_km );
-        if ( $do_radius ) {
+        if ( $do_radius && ! $has_region ) {
                 $lat = (float) $lat;
                 $lng = (float) $lng;
                 $r   = (float) $within_km / 111.0;
@@ -129,11 +130,14 @@ public function get_events( WP_REST_Request $request ): WP_REST_Response|WP_Erro
                         $e_lat = get_post_meta( $id, 'event_lat', true );
                         $e_lng = get_post_meta( $id, 'event_lng', true );
                         if ( $e_lat === '' || $e_lng === '' ) {
-                                continue;
-                        }
-                        $dist = $this->haversine_distance( $lat, $lng, (float) $e_lat, (float) $e_lng );
-                        if ( $dist > (float) $within_km ) {
-                                continue;
+                                if ( ! $has_region ) {
+                                        continue;
+                                }
+                        } else {
+                                $dist = $this->haversine_distance( $lat, $lng, (float) $e_lat, (float) $e_lng );
+                                if ( $dist > (float) $within_km ) {
+                                        continue;
+                                }
                         }
                 }
 
