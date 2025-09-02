@@ -35,11 +35,12 @@ class WidgetIdsCanonicalizationTest extends TestCase {
 			'webhooks'                    => 'widget_webhooks',
 			'notifications'               => 'widget_notifications',
 			'messages'                    => 'widget_messages',
-			'dashboard_feedback'          => 'widget_dashboard_feedback',
-			'cat_fact'                    => 'widget_cat_fact',
-			'widget_news'                 => 'widget_news_feed',
-			'widget_widget_events'        => 'widget_events',
-			'widget_widget_favorites'     => 'widget_favorites',
+                        'dashboard_feedback'          => 'widget_dashboard_feedback',
+                        'cat_fact'                    => 'widget_cat_fact',
+                        'news'                         => 'widget_news',
+                        'widget_news_feed'            => 'widget_news',
+                        'widget_widget_events'        => 'widget_events',
+                        'widget_widget_favorites'     => 'widget_favorites',
 		);
 		foreach ( $map as $in => $expected ) {
 			$this->assertSame( $expected, WidgetIds::canonicalize( $in ) );

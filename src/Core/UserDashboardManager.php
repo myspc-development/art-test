@@ -20,7 +20,7 @@ class UserDashboardManager {
         * @var array<string,string>
         */
        private const ALIASES = array(
-               'widget_news'                  => 'widget_news_feed',
+               'widget_news_feed'             => 'widget_news',
                'widget_widget_events'         => 'widget_events',
                'widget_widget_favorites'      => 'widget_favorites',
                'widget_widget_near_me_events' => 'widget_near_me_events',

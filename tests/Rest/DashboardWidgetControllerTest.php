@@ -130,7 +130,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
                $res = rest_get_server()->dispatch( $req );
 
-               $this->assertSame( 401, $res->get_status() );
+               $this->assertSame( 403, $res->get_status() );
        }
 
         public function test_save_layout_with_extra_widgets(): void {
@@ -191,7 +191,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
                         )
                 );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
         }
 
         public function test_save_layout_rejects_invalid_nonce(): void {
@@ -219,7 +219,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
                         )
                 );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
         }
 
        public function test_save_layout_requires_edit_posts_cap(): void {
@@ -248,7 +248,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			)
 		);
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
 
 	}
 
@@ -292,7 +292,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets/export' );
 		$req->set_param( 'role', 'administrator' );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
 	}
 
 	public function test_export_layout_rejects_invalid_nonce(): void {
@@ -309,7 +309,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$req->set_param( 'role', 'administrator' );
 		$req->set_header( 'X-WP-Nonce', 'badnonce' );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
 	}
 
        public function test_export_layout_requires_edit_posts_cap(): void {
@@ -328,7 +328,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
                 $req->set_param( 'role', 'administrator' );
                 $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
         }
 
 	public function test_import_layout_endpoint(): void {
@@ -383,7 +383,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			)
 		);
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
 
 	}
 
@@ -411,7 +411,7 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 			)
 		);
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() );
 
 	}
 
