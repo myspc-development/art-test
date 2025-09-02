@@ -42,7 +42,7 @@ class ArtistDashboardShortcodeTest extends TestCase {
                 $this->assertStringContainsString( 'ap-user-profile', $html );
 	}
 
-	public function test_deletion_returns_ordered_html(): void {
+        public function test_deletion_returns_ordered_html(): void {
                 \ArtPulse\Frontend\StubState::$get_posts_return = array(
                         (object) array(
                                 'ID'         => 1,
@@ -55,6 +55,7 @@ class ArtistDashboardShortcodeTest extends TestCase {
                 );
                 $_POST['artwork_id'] = 2;
                 $_POST['nonce']      = 'n';
+                \ArtPulse\Frontend\StubState::$post_types[2] = 'artpulse_artwork';
 
                 ArtistDashboardShortcode::handle_ajax_delete_artwork();
 
