@@ -395,37 +395,48 @@ class SettingsPage {
 		if ( isset( $current_screen->id ) && $current_screen->id != 'toplevel_page_artpulse-settings' ) {
 			return;
 		}
+		$chart_js_path              = 'assets/libs/chart.js/4.4.1/chart.min.js';
+		$ap_admin_dashboard_path    = 'assets/js/ap-admin-dashboard.js';
+		$ap_settings_tabs_path      = 'assets/js/ap-settings-tabs.js';
+		$ap_update_diagnostics_path = 'assets/js/update-diagnostics.js';
+
 		wp_enqueue_script(
 			'chart-js',
-			plugins_url( '/assets/libs/chart.js/4.4.1/chart.min.js', ARTPULSE_PLUGIN_FILE ),
+			plugins_url( $chart_js_path, ARTPULSE_PLUGIN_FILE ),
 			array(),
-			null,
+			filemtime( plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $chart_js_path ),
 			true
 		);
-		wp_enqueue_script( 'ap-admin-dashboard', plugins_url( '/assets/js/ap-admin-dashboard.js', ARTPULSE_PLUGIN_FILE ), array( 'chart-js' ), '1.0', true );
+		wp_enqueue_script(
+			'ap-admin-dashboard',
+			plugins_url( $ap_admin_dashboard_path, ARTPULSE_PLUGIN_FILE ),
+			array( 'chart-js' ),
+			filemtime( plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $ap_admin_dashboard_path ),
+			true
+		);
 		wp_enqueue_script(
 			'ap-settings-tabs',
-			plugins_url( '/assets/js/ap-settings-tabs.js', ARTPULSE_PLUGIN_FILE ),
+			plugins_url( $ap_settings_tabs_path, ARTPULSE_PLUGIN_FILE ),
 			array(),
-			'1.0',
+			filemtime( plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $ap_settings_tabs_path ),
 			true
 		);
 		if ( isset( $_GET['page'] ) && $_GET['page'] === 'artpulse-settings' ) {
-			wp_enqueue_script(
-				'ap-update-diagnostics',
-				plugins_url( '/assets/js/update-diagnostics.js', ARTPULSE_PLUGIN_FILE ),
-				array( 'wp-api-fetch' ),
-				'1.0.0',
-				true
-			);
-			wp_localize_script(
-				'ap-update-diagnostics',
-				'AP_UpdateData',
-				array(
-					'endpoint' => rest_url( 'artpulse/v1/update/diagnostics' ),
-					'nonce'    => wp_create_nonce( 'wp_rest' ),
-				)
-			);
+				wp_enqueue_script(
+					'ap-update-diagnostics',
+					plugins_url( $ap_update_diagnostics_path, ARTPULSE_PLUGIN_FILE ),
+					array( 'wp-api-fetch' ),
+					filemtime( plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $ap_update_diagnostics_path ),
+					true
+				);
+				wp_localize_script(
+					'ap-update-diagnostics',
+					'AP_UpdateData',
+					array(
+						'endpoint' => rest_url( 'artpulse/v1/update/diagnostics' ),
+						'nonce'    => wp_create_nonce( 'wp_rest' ),
+					)
+				);
 		}
 		$signup_data = self::getMonthlySignupsByLevel();
 		wp_localize_script( 'ap-admin-dashboard', 'APAdminStats', $signup_data );
@@ -446,10 +457,10 @@ class SettingsPage {
 				$users     = $wpdb->get_var(
 					$wpdb->prepare(
 						"SELECT COUNT(*) FROM $wpdb->usermeta AS um
-                         JOIN $wpdb->users AS u ON u.ID = um.user_id
-                         WHERE um.meta_key = 'ap_membership_level'
-                         AND um.meta_value = %s
-                         AND u.user_registered >= %s AND u.user_registered < %s",
+				         JOIN $wpdb->users AS u ON u.ID = um.user_id
+				         WHERE um.meta_key = 'ap_membership_level'
+				         AND um.meta_value = %s
+				         AND u.user_registered >= %s AND u.user_registered < %s",
 						$level,
 						$month,
 						$nextMonth

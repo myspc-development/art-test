@@ -26,22 +26,14 @@ class PortfolioBuilder {
 
 		wp_enqueue_media();
 
-                // Load the SortableJS library locally for drag and drop ordering.
-                $sortable_rel  = 'assets/libs/sortablejs/Sortable.min.js';
-                $sortable_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $sortable_rel;
-                wp_enqueue_script(
-                        'sortablejs',
-                        plugins_url( $sortable_rel, ARTPULSE_PLUGIN_FILE ),
-                        array(),
-                        file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
-                        true
-                );
 
+
+		$builder_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $builder_rel;
 		wp_enqueue_script(
 			'ap-portfolio-builder',
-			plugins_url( '/assets/js/ap-portfolio-builder.js', ARTPULSE_PLUGIN_FILE ),
+			plugins_url( $builder_rel, ARTPULSE_PLUGIN_FILE ),
 			array( 'jquery', 'sortablejs' ),
-			'1.0',
+			file_exists( $builder_path ) ? filemtime( $builder_path ) : null,
 			true
 		);
 		if ( function_exists( 'wp_script_add_data' ) ) {
@@ -111,7 +103,7 @@ class PortfolioBuilder {
 
 			foreach ( $items as $item ) :
 				$visibility = get_post_meta( $item->ID, 'portfolio_visibility', true ) ?: 'public';
-				$desc       = get_post_meta( $item->ID, 'portfolio_description', true );
+				$desc	    = get_post_meta( $item->ID, 'portfolio_description', true );
 				?>
 				<div class="ap-saved-item" data-id="<?php echo esc_attr( $item->ID ); ?>">
 					<strong><?php echo esc_html( $item->post_title ); ?></strong>
@@ -139,13 +131,13 @@ class PortfolioBuilder {
 
 		$post_id    = intval( $_POST['post_id'] ?? 0 );
 		$user_id    = get_current_user_id();
-		$title      = sanitize_text_field( $_POST['title'] );
-		$desc       = sanitize_text_field( $_POST['description'] );
-		$cat        = sanitize_text_field( $_POST['category'] );
-		$link       = esc_url_raw( $_POST['link'] );
+		$title	    = sanitize_text_field( $_POST['title'] );
+		$desc	    = sanitize_text_field( $_POST['description'] );
+		$cat	    = sanitize_text_field( $_POST['category'] );
+		$link	    = esc_url_raw( $_POST['link'] );
 		$visibility = sanitize_text_field( $_POST['visibility'] );
 		$image_id   = intval( $_POST['image_id'] ?? 0 );
-		$alt        = sanitize_text_field( $_POST['image_alt'] ?? '' );
+		$alt	    = sanitize_text_field( $_POST['image_alt'] ?? '' );
 		$featured   = ! empty( $_POST['featured'] ) ? 1 : 0;
 
 		if ( $post_id && ( get_post_type( $post_id ) !== 'artpulse_portfolio' || get_post_field( 'post_author', $post_id ) != $user_id ) ) {
@@ -155,7 +147,7 @@ class PortfolioBuilder {
 		if ( $post_id ) {
 			wp_update_post(
 				array(
-					'ID'         => $post_id,
+					'ID'	     => $post_id,
 					'post_title' => $title,
 				)
 			);
@@ -203,8 +195,8 @@ class PortfolioBuilder {
 		wp_send_json_success(
 			array(
 				'message' => 'Saved successfully.',
-				'id'      => $post_id,
-				'title'   => $title,
+				'id'	  => $post_id,
+				'title'	  => $title,
 			)
 		);
 	}
@@ -223,10 +215,10 @@ class PortfolioBuilder {
 
 		wp_send_json_success(
 			array(
-				'id'          => $post->ID,
-				'title'       => $post->post_title,
+				'id'	      => $post->ID,
+				'title'	      => $post->post_title,
 				'description' => get_post_meta( $post->ID, 'portfolio_description', true ),
-				'link'        => get_post_meta( $post->ID, 'portfolio_link', true ),
+				'link'	      => get_post_meta( $post->ID, 'portfolio_link', true ),
 				'visibility'  => get_post_meta( $post->ID, 'portfolio_visibility', true ),
 				'image_id'    => $image_id,
 				'image_url'   => $image_id ? wp_get_attachment_url( $image_id ) : '',
@@ -287,7 +279,7 @@ class PortfolioBuilder {
 			}
 			wp_update_post(
 				array(
-					'ID'         => $post_id,
+					'ID'	     => $post_id,
 					'menu_order' => $index,
 				)
 			);

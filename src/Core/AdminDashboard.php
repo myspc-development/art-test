@@ -55,27 +55,7 @@ class AdminDashboard {
 
 		// Legacy dashboard script removed.
 
-		// Enable drag & drop and widget toggles within the dashboard preview
-                $sortable_rel = 'assets/libs/sortablejs/Sortable.min.js';
-                $role_rel     = 'assets/js/role-dashboard.js';
-                $sortable_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $sortable_rel;
-                $role_path     = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $role_rel;
 
-                wp_enqueue_script(
-                        'sortablejs',
-                        plugin_dir_url( ARTPULSE_PLUGIN_FILE ) . $sortable_rel,
-                        array(),
-                        file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
-                        true
-                );
-
-                wp_enqueue_script(
-                        'role-dashboard',
-                        plugin_dir_url( ARTPULSE_PLUGIN_FILE ) . $role_rel,
-                        array( 'jquery', 'sortablejs' ),
-                        file_exists( $role_path ) ? (string) filemtime( $role_path ) : null,
-                        true
-                );
 
 		wp_localize_script(
 			'role-dashboard',
