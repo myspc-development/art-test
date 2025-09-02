@@ -3,7 +3,6 @@ namespace ArtPulse\Rest;
 
 use ArtPulse\Rest\Util\Auth;
 use WP_REST_Request;
-use WP_Error;
 use ArtPulse\Rest\RestResponder;
 
 class SpotlightAnalyticsController {
@@ -35,13 +34,15 @@ class SpotlightAnalyticsController {
 		);
 	}
 
-	public static function log_view( WP_REST_Request $request ) {
-		$id = absint( $request['id'] );
-		if ( ! $id ) {
-			return new WP_Error( 'invalid_id', 'Invalid spotlight ID', array( 'status' => 400 ) );
-		}
-		$views = (int) get_post_meta( $id, 'spotlight_views', true );
-		update_post_meta( $id, 'spotlight_views', $views + 1 );
-		return \rest_ensure_response( array( 'views' => $views + 1 ) );
-	}
+        public static function log_view( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+                $responder = new self();
+
+                $id = absint( $request['id'] );
+                if ( ! $id ) {
+                        return $responder->fail( 'invalid_id', 'Invalid spotlight ID', 400 );
+                }
+                $views = (int) get_post_meta( $id, 'spotlight_views', true );
+                update_post_meta( $id, 'spotlight_views', $views + 1 );
+                return $responder->ok( array( 'views' => $views + 1 ) );
+        }
 }

@@ -26,10 +26,12 @@ class MessagesController {
 		}
 	}
 
-	public static function reply( WP_REST_Request $request ) {
-		$msg_id  = (int) $request['id'];
-		$content = sanitize_text_field( $request->get_param( 'message' ) );
-		// Save to DB or email logic here...
-		return \rest_ensure_response( array( 'status' => 'sent' ) );
-	}
+        public static function reply( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+                $responder = new self();
+
+                $msg_id  = (int) $request['id'];
+                $content = sanitize_text_field( $request->get_param( 'message' ) );
+                // Save to DB or email logic here...
+                return $responder->ok( array( 'status' => 'sent' ) );
+        }
 }

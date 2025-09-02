@@ -2,8 +2,6 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Request;
-use WP_REST_Response;
-use WP_Error;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
 
@@ -31,9 +29,11 @@ final class AnalyticsPilotController {
                 }
         }
 
-        public static function invite( WP_REST_Request $req ) {
+        public static function invite( WP_REST_Request $req ): \WP_REST_Response|\WP_Error {
+                $responder = new self();
+
                 if ( ! wp_verify_nonce( $req->get_header( 'X-WP-Nonce' ), 'wp_rest' ) ) {
-                        return new WP_Error( 'invalid_nonce', 'Invalid nonce', array( 'status' => 401 ) );
+                        return $responder->fail( 'invalid_nonce', 'Invalid nonce', 401 );
                 }
 
 		$user    = null;
@@ -47,10 +47,11 @@ final class AnalyticsPilotController {
 				$user = get_user_by( 'email', $email );
 			}
 		}
-		if ( ! $user ) {
-			return new WP_Error( 'user_not_found', 'User not found', array( 'status' => 404 ) );
-		}
-		$user->add_cap( 'ap_analytics_pilot' );
-		return new WP_REST_Response( array( 'granted' => true ), 200 );
-	}
+                if ( ! $user ) {
+                        return $responder->fail( 'user_not_found', 'User not found', 404 );
+                }
+                $user->add_cap( 'ap_analytics_pilot' );
+
+                return $responder->ok( array( 'granted' => true ) );
+        }
 }

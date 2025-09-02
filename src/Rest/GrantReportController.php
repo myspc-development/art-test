@@ -2,8 +2,6 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Request;
-use WP_REST_Response;
-use WP_Error;
 use ArtPulse\Crm\ContactModel;
 use ArtPulse\Crm\DonationModel;
 use ArtPulse\Rest\Util\Auth;
@@ -34,24 +32,21 @@ class GrantReportController {
 		}
 	}
 
-	public static function export( WP_REST_Request $req ) {
-		$org_id    = absint( $req['id'] );
-		$donations = DonationModel::get_by_org( $org_id );
-		$stream    = fopen( 'php://temp', 'w' );
-		fputcsv( $stream, array( 'email', 'amount', 'date' ) );
-		foreach ( $donations as $d ) {
-			fputcsv( $stream, array( $d['user_id'], $d['amount'], $d['donated_at'] ) );
-		}
-		rewind( $stream );
-		$csv = stream_get_contents( $stream );
-		fclose( $stream );
-		return new WP_REST_Response(
-			$csv,
-			200,
-			array(
-				'Content-Type'        => 'text/csv',
-				'Content-Disposition' => 'attachment; filename="grant-report.csv"',
-			)
-		);
-	}
+        public static function export( WP_REST_Request $req ): \WP_REST_Response|\WP_Error {
+                $org_id    = absint( $req['id'] );
+                $donations = DonationModel::get_by_org( $org_id );
+                $stream    = fopen( 'php://temp', 'w' );
+                fputcsv( $stream, array( 'email', 'amount', 'date' ) );
+                foreach ( $donations as $d ) {
+                        fputcsv( $stream, array( $d['user_id'], $d['amount'], $d['donated_at'] ) );
+                }
+                rewind( $stream );
+                $csv = stream_get_contents( $stream );
+                fclose( $stream );
+
+                $response = rest_ensure_response( $csv );
+                $response->header( 'Content-Type', 'text/csv' );
+                $response->header( 'Content-Disposition', 'attachment; filename="grant-report.csv"' );
+                return $response;
+        }
 }
