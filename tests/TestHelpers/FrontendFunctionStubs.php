@@ -52,15 +52,15 @@ self::$post_types           = array();
 }
 
 	if ( ! function_exists( __NAMESPACE__ . '\\get_post' ) ) {
-		function get_post( $id ) {
-			return (object) array(
-				'ID'          => $id,
-				'post_title'  => 'Event ' . $id,
-				'post_type'   => 'artpulse_artwork',
-				'post_author' => 1,
-			);
-		}
-	}
+                function get_post( $id ) {
+                        return (object) array(
+                                'ID'          => $id,
+                                'post_title'  => 'Event ' . $id,
+                                'post_type'   => StubState::$post_types[ $id ] ?? 'artpulse_event',
+                                'post_author' => 1,
+                        );
+                }
+        }
 
         if ( ! function_exists( __NAMESPACE__ . '\\get_permalink' ) ) {
                 function get_permalink( $id ) {
