@@ -510,9 +510,9 @@ class EventSubmissionShortcode {
                 // Ensure the banner is included in the submission images and handle fallbacks.
                 $banner_id = get_post_thumbnail_id( $post_id );
                 if ( $banner_id ) {
-                        if ( ! in_array( $banner_id, $final_image_ids, true ) ) {
-                                array_unshift( $final_image_ids, $banner_id );
-                        }
+                        // Remove any existing occurrences so the banner can be prepended.
+                        $final_image_ids = array_values( array_diff( $final_image_ids, array( $banner_id ) ) );
+                        array_unshift( $final_image_ids, $banner_id );
                 } elseif ( ! empty( $final_image_ids ) ) {
                         set_post_thumbnail( $post_id, $final_image_ids[0] );
                         update_post_meta( $post_id, 'event_banner_id', $final_image_ids[0] );

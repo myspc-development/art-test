@@ -79,55 +79,74 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
 	}
 
-	public function test_banner_included_in_submission_images(): void {
+        public function test_banner_prepend_and_notice_on_success(): void {
                 // Pretend banner uploaded and media handler returns ID 55
-                \ArtPulse\Frontend\StubState::$media_returns = array( 'event_banner' => 55 );
-		$_FILES['event_banner'] = array(
-			'name'     => 'b.jpg',
-			'tmp_name' => '/tmp/b',
-			'type'     => 'image/jpeg',
-			'error'    => 0,
-			'size'     => 1,
-		);
+                // Also upload one additional image with ID 11 and place banner second in order
+                \ArtPulse\Frontend\StubState::$media_returns = array(
+                        'event_banner' => 55,
+                        'ap_image'     => 11,
+                );
+                $_FILES['event_banner'] = array(
+                        'name'     => 'b.jpg',
+                        'tmp_name' => '/tmp/b',
+                        'type'     => 'image/jpeg',
+                        'error'    => 0,
+                        'size'     => 1,
+                );
+                $_FILES['image_1'] = array(
+                        'name'     => 'a.jpg',
+                        'tmp_name' => '/tmp/a',
+                        'type'     => 'image/jpeg',
+                        'error'    => 0,
+                        'size'     => 1,
+                );
+                $_POST['image_order'] = '11,55';
 
-		EventSubmissionShortcode::maybe_handle_form();
+                EventSubmissionShortcode::maybe_handle_form();
 
-		$gallery = null;
-		foreach ( \ArtPulse\Frontend\StubState::$meta_log as $args ) {
-			if ( $args[1] === '_ap_submission_images' ) {
-				$gallery = $args[2];
-			}
-		}
+                $gallery           = null;
+                $banner_meta_found = false;
+                foreach ( \ArtPulse\Frontend\StubState::$meta_log as $args ) {
+                        if ( $args[1] === '_ap_submission_images' ) {
+                                $gallery = $args[2];
+                        }
+                        if ( $args[1] === 'event_banner_id' && $args[2] === 55 ) {
+                                $banner_meta_found = true;
+                        }
+                }
 
-                $this->assertSame( array( 55 ), $gallery );
-	}
+                $this->assertSame( array( 55, 11 ), $gallery );
+                $this->assertTrue( $banner_meta_found );
+                $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
+        }
 
-	public function test_first_gallery_image_used_as_banner_when_missing(): void {
+        public function test_first_gallery_image_used_as_banner_when_missing(): void {
                 // Upload a single additional image
                 \ArtPulse\Frontend\StubState::$media_returns   = array( 'ap_image' => 11 );
-		$_FILES['image_1'] = array(
-			'name'     => 'a.jpg',
-			'tmp_name' => '/tmp/a',
-			'type'     => 'image/jpeg',
-			'error'    => 0,
-			'size'     => 1,
-		);
+                $_FILES['image_1'] = array(
+                        'name'     => 'a.jpg',
+                        'tmp_name' => '/tmp/a',
+                        'type'     => 'image/jpeg',
+                        'error'    => 0,
+                        'size'     => 1,
+                );
 
-		EventSubmissionShortcode::maybe_handle_form();
+                EventSubmissionShortcode::maybe_handle_form();
 
-		$gallery           = null;
-		$banner_meta_found = false;
-		foreach ( \ArtPulse\Frontend\StubState::$meta_log as $args ) {
-			if ( $args[1] === '_ap_submission_images' ) {
-				$gallery = $args[2];
-			}
-			if ( $args[1] === 'event_banner_id' && $args[2] === 11 ) {
-				$banner_meta_found = true;
-			}
-		}
+                $gallery           = null;
+                $banner_meta_found = false;
+                foreach ( \ArtPulse\Frontend\StubState::$meta_log as $args ) {
+                        if ( $args[1] === '_ap_submission_images' ) {
+                                $gallery = $args[2];
+                        }
+                        if ( $args[1] === 'event_banner_id' && $args[2] === 11 ) {
+                                $banner_meta_found = true;
+                        }
+                }
 
                 $this->assertSame( array( 11 ), $gallery );
                 $this->assertTrue( $banner_meta_found );
                 $this->assertSame( 11, \ArtPulse\Frontend\StubState::$thumbnail );
-	}
+                $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
+        }
 }
