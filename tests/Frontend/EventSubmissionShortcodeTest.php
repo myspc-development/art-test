@@ -59,25 +59,41 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 parent::tear_down();
         }
 
-	public function test_invalid_org_rejected(): void {
+        public function test_invalid_org_rejected(): void {
                 // Organization belongs to another user
                 \ArtPulse\Frontend\StubState::$post_authors[99] = 2;
+                \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = true;
+                \ArtPulse\Frontend\StubState::$function_exists_map['wp_get_referer']    = true;
 
-                EventSubmissionShortcode::maybe_handle_form();
+                try {
+                        EventSubmissionShortcode::maybe_handle_form();
+                        $this->fail( 'Expected redirect' );
+                } catch ( \RuntimeException $e ) {
+                        $this->assertSame( 'redirect', $e->getMessage() );
+                }
 
                 $this->assertSame( 'Invalid organization selected.', \ArtPulse\Frontend\StubState::$notice );
                 $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
+                $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
         }
 
-	public function test_start_date_after_end_date_rejected(): void {
+        public function test_start_date_after_end_date_rejected(): void {
                 $_POST['event_start_date'] = '2024-02-01';
                 $_POST['event_end_date']   = '2024-01-01';
+                \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = true;
+                \ArtPulse\Frontend\StubState::$function_exists_map['wp_get_referer']    = true;
 
-		EventSubmissionShortcode::maybe_handle_form();
+                try {
+                        EventSubmissionShortcode::maybe_handle_form();
+                        $this->fail( 'Expected redirect' );
+                } catch ( \RuntimeException $e ) {
+                        $this->assertSame( 'redirect', $e->getMessage() );
+                }
 
                 $this->assertSame( 'Start date cannot be later than end date.', \ArtPulse\Frontend\StubState::$notice );
                 $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
-	}
+                $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
+        }
 
         public function test_banner_prepend_and_notice_on_success(): void {
                 // Pretend banner uploaded and media handler returns ID 55
