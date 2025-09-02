@@ -40,6 +40,9 @@ if ( have_posts() ) :
     $end      = get_post_meta(get_the_ID(), '_ap_event_end_time', true);
     $contact  = get_post_meta(get_the_ID(), '_ap_event_contact', true);
     $rsvp     = get_post_meta(get_the_ID(), '_ap_event_rsvp', true);
+    $org_email = sanitize_email( get_post_meta( get_the_ID(), 'event_organizer_email', true ) );
+    $event_type_terms = wp_get_post_terms( get_the_ID(), 'event_type', [ 'fields' => 'names' ] );
+    $event_type = ! is_wp_error( $event_type_terms ) && ! empty( $event_type_terms ) ? $event_type_terms[0] : '';
 
     echo '<div class="event-meta styled-box" itemscope itemtype="https://schema.org/Event">';
     echo '<meta itemprop="name" content="' . esc_attr(get_the_title()) . '" />';
@@ -57,6 +60,10 @@ if ( have_posts() ) :
     echo '<li><strong>' . esc_html__( 'Venue:', 'artpulse' ) . '</strong> ' . esc_html( $location ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
     echo '<li><strong>' . esc_html__( 'Address:', 'artpulse' ) . '</strong> ' . esc_html( $address ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
     echo '<li><strong>' . esc_html__( 'Contact:', 'artpulse' ) . '</strong> ' . esc_html( $contact ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
+    echo '<li><strong>' . esc_html__( 'Type:', 'artpulse' ) . '</strong> ' . esc_html( $event_type ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
+    if ( $org_email ) {
+        echo '<li><strong>' . esc_html__( 'Organizer Email:', 'artpulse' ) . '</strong> ' . esc_html( antispambot( $org_email ) ) . '</li>';
+    }
     if (!empty($rsvp) && filter_var($rsvp, FILTER_VALIDATE_URL)) {
         echo '<li><strong>' . esc_html__( 'RSVP:', 'artpulse' ) . '</strong> <a href="' . esc_url( $rsvp ) . '" class="event-rsvp-link" target="_blank">' . esc_html__( 'RSVP Now', 'artpulse' ) . '</a></li>';
     } else {
