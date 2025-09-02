@@ -46,16 +46,15 @@ class EventSubmissionShortcode {
 	/**
 	 * Redirect back to the form when possible.
 	 */
-	protected static function maybe_redirect(): void {
-		if ( function_exists( 'wp_safe_redirect' ) && function_exists( 'wp_get_referer' ) ) {
-			$target = wp_get_referer();
-			if ( ! $target ) {
-				$target = \ArtPulse\Core\Plugin::get_event_submission_url();
-			}
-			wp_safe_redirect( $target );
-			exit;
-		}
-	}
+        protected static function maybe_redirect(): void {
+                if ( function_exists( 'wp_safe_redirect' ) ) {
+                        $target = function_exists( 'wp_get_referer' )
+                                ? wp_get_referer()
+                                : \ArtPulse\Core\Plugin::get_event_submission_url();
+                        wp_safe_redirect( $target );
+                        exit;
+                }
+        }
 
 	public static function register() {
 		\ArtPulse\Core\ShortcodeRegistry::register( 'ap_submit_event', 'Submit Event', array( self::class, 'render' ) );
