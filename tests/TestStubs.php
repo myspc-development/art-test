@@ -22,15 +22,9 @@ namespace {
                 $GLOBALS['options'] = array();
         }
 
-	// If the WordPress test suite is available, let core functions be loaded
-	// normally to avoid "cannot redeclare" errors when they are included later.
-	if ( defined( 'WP_TESTS_DIR' ) && file_exists( WP_TESTS_DIR . '/includes/bootstrap.php' ) ) {
-		return;
-	}
-
-	if ( ! function_exists( 'nsl_init' ) ) {
-		function nsl_init() {}
-	}
+        if ( ! function_exists( 'nsl_init' ) ) {
+                function nsl_init() {}
+        }
 
 	if ( ! function_exists( 'get_user_meta' ) ) {
 		function get_user_meta( $uid, $key, $single = false ) {
@@ -133,17 +127,26 @@ namespace {
 	if ( ! function_exists( 'get_header' ) ) {
 		function get_header() {}
 	}
-	if ( ! function_exists( 'get_footer' ) ) {
-		function get_footer() {}
-	}
-	if ( ! function_exists( 'have_posts' ) ) {
-		function have_posts() {
-			return MockStorage::$have_posts; }
-	}
-	if ( ! function_exists( 'the_post' ) ) {
-		function the_post() {
-			MockStorage::$have_posts = false; }
-	}
+        if ( ! function_exists( 'get_footer' ) ) {
+                function get_footer() {}
+        }
+
+        // Provide loop stubs even when WordPress core is available so tests can
+        // observe loop state transitions.
+        if ( ! function_exists( 'have_posts' ) ) {
+                function have_posts() {
+                        return MockStorage::$have_posts; }
+        }
+        if ( ! function_exists( 'the_post' ) ) {
+                function the_post() {
+                        MockStorage::$have_posts = false; }
+        }
+
+        // If the WordPress test suite is available, let core functions be loaded
+        // normally to avoid "cannot redeclare" errors for the remaining stubs.
+        if ( defined( 'WP_TESTS_DIR' ) && file_exists( WP_TESTS_DIR . '/includes/bootstrap.php' ) ) {
+                return;
+        }
 	if ( ! function_exists( 'the_post_thumbnail' ) ) {
 		function the_post_thumbnail( $size, $attr = array() ) {}
 	}
