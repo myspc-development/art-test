@@ -1,35 +1,49 @@
-<?php
+<?php // phpcs:ignoreFile WordPress.Files.FileName.NotHyphenatedLowercase,WordPress.Files.FileName.InvalidClassFileName -- Autoloader requires class-based filename.
+
 namespace ArtPulse\Frontend;
 
+/**
+ * Handle RSVP submissions.
+ *
+ * @package ArtPulse
+ */
+
+/**
+ * Event RSVP handler.
+ */
 class EventRsvpHandler {
 
+		/**
+		 * Register hooks.
+		 */
 	public static function register(): void {
-		add_action( 'admin_post_ap_rsvp_event', array( self::class, 'handle' ) );
-		add_action( 'admin_post_nopriv_ap_rsvp_event', array( self::class, 'handle' ) );
+			add_action( 'admin_post_ap_rsvp_event', array( self::class, 'handle' ) );
+			add_action( 'admin_post_nopriv_ap_rsvp_event', array( self::class, 'handle' ) );
 	}
 
+		/**
+		 * Process RSVP form submissions.
+		 */
 	public static function handle(): void {
-		if ( ! is_user_logged_in() ) {
-			return;
+		if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
+				wp_die( esc_html__( 'Insufficient permissions', 'artpulse' ) );
 		}
 
-		if ( ! check_admin_referer( 'ap_rsvp_event' ) ) {
-			wp_die( __( 'Invalid nonce', 'artpulse' ) );
-		}
+			check_admin_referer( 'ap_rsvp_event' );
 
-		$event_id = isset( $_POST['event_id'] ) ? intval( $_POST['event_id'] ) : 0;
+			$event_id = isset( $_POST['event_id'] ) ? intval( $_POST['event_id'] ) : 0;
 		if ( ! $event_id ) {
 			return;
 		}
 
-		$enabled = get_post_meta( $event_id, 'event_rsvp_enabled', true );
+			$enabled = get_post_meta( $event_id, 'event_rsvp_enabled', true );
 		if ( ! $enabled ) {
 			wp_safe_redirect( get_permalink( $event_id ) );
 			exit;
 		}
 
-		$user_id  = get_current_user_id();
-		$existing = get_post_meta( $event_id, 'event_rsvp_list', true );
+			$user_id  = get_current_user_id();
+			$existing = get_post_meta( $event_id, 'event_rsvp_list', true );
 		if ( ! is_array( $existing ) ) {
 			$existing = array();
 		}
@@ -40,12 +54,18 @@ class EventRsvpHandler {
 			do_action( 'ap_event_rsvp_added', $event_id, get_current_user_id() );
 		}
 
-		wp_safe_redirect( get_permalink( $event_id ) );
-		exit;
+			wp_safe_redirect( get_permalink( $event_id ) );
+			exit;
 	}
 
+		/**
+		 * Get RSVP summary for a user.
+		 *
+		 * @param int $user_id User ID.
+		 * @return array
+		 */
 	public static function get_rsvp_summary_for_user( $user_id ): array {
-		$event_ids = get_user_meta( $user_id, 'ap_rsvp_events', true );
+			$event_ids = get_user_meta( $user_id, 'ap_rsvp_events', true );
 		if ( ! is_array( $event_ids ) ) {
 			$event_ids = array();
 		}
@@ -57,9 +77,9 @@ class EventRsvpHandler {
 		$today = strtotime( 'today' );
 
 		foreach ( $event_ids as $eid ) {
-			$date = get_post_meta( $eid, '_ap_event_date', true );
-			$ts   = $date ? strtotime( $date ) : false;
-			if ( $ts !== false && $ts >= $today ) {
+						$date = get_post_meta( $eid, '_ap_event_date', true );
+						$ts   = $date ? strtotime( $date ) : false;
+			if ( false !== $ts && $ts >= $today ) {
 				++$going;
 			} else {
 				++$interested;
