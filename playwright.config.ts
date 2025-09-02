@@ -3,9 +3,8 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: 'tests/playwright',
   reporter: [
-    ['html', { open: 'never', outputFolder: 'build/e2e/playwright-report' }],
-    ['list'],
-    ['junit', { outputFile: 'build/e2e/playwright.xml' }]
+    ['junit', { outputFile: 'build/e2e/junit.xml' }],
+    ['html', { open: 'never', outputFolder: 'build/e2e/html' }]
   ],
   expect: {
     toHaveScreenshot: {

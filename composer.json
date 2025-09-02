@@ -47,7 +47,9 @@
     "test:php:local": [
       "@test:unit",
       "@test:rest"
-    ]
+    ],
+    "test:php:wp": "phpunit -c phpunit.wp.xml.dist --log-junit build/junit-phpunit.xml --coverage-clover build/coverage-phpunit.xml",
+    "test:php:unit": "phpunit -c phpunit.unit.xml.dist --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml"
   },
   "config": {
     "allow-plugins": {

@@ -7,30 +7,11 @@
     <env name="AP_TEST_MODE" value="1"/>
   </php>
   <testsuites>
-    <testsuite name="Rest"><directory>tests/Rest</directory></testsuite>
-    <testsuite name="Frontend"><directory>tests/Frontend</directory></testsuite>
-    <testsuite name="Unit"><directory>tests/Unit</directory></testsuite>
+    <testsuite name="Rest">
+      <directory suffix="Test.php">tests/Rest</directory>
+    </testsuite>
+    <testsuite name="Frontend">
+      <directory suffix="Test.php">tests/Frontend</directory>
+    </testsuite>
   </testsuites>
-  <groups>
-    <include>
-      <group>restapi</group>
-      <group>admin</group>
-      <group>core</group>
-      <group>engagement</group>
-      <group>personalization</group>
-    </include>
-    <exclude>
-      <group>slow</group>
-    </exclude>
-  </groups>
-  <logging>
-    <junit outputFile="build/junit.xml"/>
-  </logging>
-  <coverage>
-    <include><directory>src</directory></include>
-    <report>
-      <html outputDirectory="reports/coverage/phpunit-wp"/>
-      <clover outputFile="reports/coverage/phpunit-wp.xml"/>
-    </report>
-  </coverage>
 </phpunit>

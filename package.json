@@ -17,8 +17,10 @@
     "test:php:up": "docker compose -f docker-compose.tests.yml up -d",
     "test:php:down": "docker compose -f docker-compose.tests.yml down -v",
     "test:php:local": "npm run test:php:up && composer test:php:local; npm run test:php:down",
-    "test:e2e": "playwright test",
-    "test:js": "JEST_JUNIT_OUTPUT_DIR=build JEST_JUNIT_OUTPUT_NAME=junit-jest.xml jest --ci --coverage --reporters=default --reporters=jest-junit --coverageDirectory=coverage",
+    "test:e2e": "playwright test --reporter=junit,html",
+    "test:js": "jest --runInBand --reporters=default --reporters=jest-junit --coverage",
+    "test:js:ci": "jest --runInBand --reporters=jest-junit --coverage --silent",
+    "test:summary": "node tools/aggregate-test-report.js",
     "ci": "bin/ap all"
   },
   "dependencies": {
