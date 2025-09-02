@@ -10,8 +10,8 @@ class EventListingShortcode {
         }
 
        public static function maybe_register_event_category(): void {
-               if ( ! taxonomy_exists( 'event_category' ) ) {
-                       register_taxonomy(
+               if ( ! \taxonomy_exists( 'event_category' ) ) {
+                       \register_taxonomy(
                                'event_category',
                                'artpulse_event',
                                array(
@@ -65,7 +65,7 @@ class EventListingShortcode {
 			'ap_event_listing'
 		);
 
-               $event_types = get_terms(
+               $event_types = \get_terms(
                        'event_type',
                        array(
                                'hide_empty' => false,
@@ -75,11 +75,11 @@ class EventListingShortcode {
 			$event_types = array();
 		}
 
-               $categories = get_terms(
-                       ['event_category'],
-                       [
+               $categories = \get_terms(
+                       'event_category',
+                       array(
                                'hide_empty' => false,
-                       ]
+                       )
                );
 
                if ( is_wp_error( $categories ) ) {

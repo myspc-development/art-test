@@ -46,12 +46,12 @@ class EventChatController {
 	 * Check if the current user can post to an event chat.
 	 */
 	public static function can_post( WP_REST_Request $req ): bool {
-                $user_id  = get_current_user_id();
+                $user_id  = \get_current_user_id();
                 if ( ! $user_id ) {
                         return false;
                 }
                 $event_id = absint( $req['id'] );
-                $list     = get_post_meta( $event_id, 'event_rsvp_list', true );
+                $list     = \get_post_meta( $event_id, 'event_rsvp_list', true );
                 return is_array( $list ) && in_array( $user_id, $list, true );
 	}
 }
