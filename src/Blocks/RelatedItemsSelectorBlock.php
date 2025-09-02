@@ -2,6 +2,7 @@
 namespace ArtPulse\Blocks;
 
 use ArtPulse\Admin\EnqueueAssets;
+use WP_Block_Type_Registry;
 
 class RelatedItemsSelectorBlock {
 
@@ -59,6 +60,10 @@ class RelatedItemsSelectorBlock {
 				},
 			)
 		);
+
+		if ( WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/related-items-selector' ) ) {
+			return;
+		}
 
 		// Register the block type
 		register_block_type(
