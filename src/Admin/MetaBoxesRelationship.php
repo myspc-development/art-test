@@ -237,40 +237,37 @@ class MetaBoxesRelationship {
 			return;
 		}
 
-		// Enqueue Select2 from plugin assets
-		wp_enqueue_style(
-			'select2-css',
-			plugins_url( 'assets/libs/select2/css/select2.min.css', ARTPULSE_PLUGIN_FILE ),
-			array(),
-			'4.1.0-rc.0'
-		);
-		wp_enqueue_script(
-			'select2-js',
-			plugins_url( 'assets/libs/select2/js/select2.min.js', ARTPULSE_PLUGIN_FILE ),
-			array( 'jquery' ),
-			'4.1.0-rc.0',
-			true
-		);
+                // Paths relative to the plugin base.
+                $select2_css_rel = 'assets/libs/select2/css/select2.min.css';
+                $select2_js_rel  = 'assets/libs/select2/js/select2.min.js';
+                $rel_path        = 'assets/js/admin-relationship.js';
 
-		// Enqueue your custom admin script for relationship boxes
-		// Adjust the path to your admin-relationship.js file
-		$script_url = plugins_url( 'assets/js/admin-relationship.js', ARTPULSE_PLUGIN_FILE ); // Assuming ARTPULSE_PLUGIN_FILE is defined in your main plugin file
-		if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
-			// Fallback if ARTPULSE_PLUGIN_FILE is not defined, adjust path accordingly
-			// This might happen if this class is loaded before the main plugin file defines constants.
-			// It's better to define ARTPULSE_PLUGIN_FILE early.
-			// For now, let's assume it's two levels up from this Admin directory.
-			$plugin_base_file = dirname( __DIR__, 2 ) . '/artpulse-management.php';
-			$script_url       = plugins_url( 'assets/js/admin-relationship.js', $plugin_base_file );
-		}
+                $plugin_file      = defined( 'ARTPULSE_PLUGIN_FILE' ) ? ARTPULSE_PLUGIN_FILE : dirname( __DIR__, 2 ) . '/artpulse-management.php';
+                $select2_css_path = plugin_dir_path( $plugin_file ) . $select2_css_rel;
+                $select2_js_path  = plugin_dir_path( $plugin_file ) . $select2_js_rel;
+                $rel_script_path  = plugin_dir_path( $plugin_file ) . $rel_path;
 
-		wp_enqueue_script(
-			'ap-admin-relationship',
-			$script_url,
-			array( 'jquery', 'select2-js' ), // Ensure select2-js is a dependency
-			ARTPULSE_VERSION, // Use your plugin version constant
-			true
-		);
+                wp_enqueue_style(
+                        'select2-css',
+                        plugins_url( $select2_css_rel, $plugin_file ),
+                        array(),
+                        file_exists( $select2_css_path ) ? filemtime( $select2_css_path ) : null
+                );
+                wp_enqueue_script(
+                        'select2-js',
+                        plugins_url( $select2_js_rel, $plugin_file ),
+                        array( 'jquery' ),
+                        file_exists( $select2_js_path ) ? filemtime( $select2_js_path ) : null,
+                        true
+                );
+
+                wp_enqueue_script(
+                        'ap-admin-relationship',
+                        plugins_url( $rel_path, $plugin_file ),
+                        array( 'jquery', 'select2-js' ), // Ensure select2-js is a dependency
+                        file_exists( $rel_script_path ) ? filemtime( $rel_script_path ) : null,
+                        true
+                );
 
 		wp_localize_script(
 			'ap-admin-relationship',
