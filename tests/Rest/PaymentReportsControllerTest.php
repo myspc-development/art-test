@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../TestHelpers.php';
-
 namespace ArtPulse\Rest\Tests;
+
+require_once __DIR__ . '/../TestHelpers.php';
 
 use ArtPulse\Rest\PaymentReportsController;
 use ArtPulse\Admin\PaymentAnalyticsDashboard;

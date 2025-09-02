@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../TestHelpers.php';
-
 namespace ArtPulse\Reporting\Tests;
+
+require_once __DIR__ . '/../TestHelpers.php';
 
 use ArtPulse\Reporting\BudgetExportController;
 use ArtPulse\Admin\Tests\Stub;
