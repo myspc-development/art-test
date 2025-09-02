@@ -19,30 +19,31 @@ class ArtPulse_Assets {
 	 * Conditionally enqueue scripts and styles for public pages.
 	 */
 	public static function enqueue_assets(): void {
-		if ( is_page( 'dashboard' ) || is_page_template( 'page-dashboard.php' ) ) {
-			$base = plugin_dir_url( __DIR__ );
+                if ( is_page( 'dashboard' ) || is_page_template( 'page-dashboard.php' ) ) {
+                        $base_url  = plugin_dir_url( dirname( __DIR__ ) );
+                        $base_path = plugin_dir_path( __DIR__ );
 
-			wp_enqueue_style(
-				'ap-dashboard',
-				$base . 'assets/css/dashboard.css',
-				array(),
-				defined( 'ARTPULSE_VERSION' ) ? ARTPULSE_VERSION : false
-			);
-			wp_enqueue_style(
-				'ap-calendar',
-				$base . 'assets/css/calendar.css',
-				array(),
-				defined( 'ARTPULSE_VERSION' ) ? ARTPULSE_VERSION : false
-			);
+                        wp_enqueue_style(
+                                'ap-dashboard',
+                                $base_url . 'assets/css/dashboard.css',
+                                array(),
+                                filemtime( $base_path . 'assets/css/dashboard.css' )
+                        );
+                        wp_enqueue_style(
+                                'ap-calendar',
+                                $base_url . 'assets/css/calendar.css',
+                                array(),
+                                filemtime( $base_path . 'assets/css/calendar.css' )
+                        );
 
-			wp_enqueue_script(
-				'ap-user-dashboard',
-				$base . 'assets/js/ap-user-dashboard.js',
-				array(),
-				defined( 'ARTPULSE_VERSION' ) ? ARTPULSE_VERSION : false,
-				true
-			);
-			wp_script_add_data( 'ap-user-dashboard', 'type', 'module' );
+                        wp_enqueue_script(
+                                'ap-user-dashboard',
+                                $base_url . 'assets/js/ap-user-dashboard.js',
+                                array(),
+                                filemtime( $base_path . 'assets/js/ap-user-dashboard.js' ),
+                                true
+                        );
+                        wp_script_add_data( 'ap-user-dashboard', 'type', 'module' );
 
 			$user = wp_get_current_user();
 			$boot = array(
@@ -74,9 +75,9 @@ class ArtPulse_Assets {
 			);
 			wp_localize_script( 'ap-user-dashboard', 'ARTPULSE_BOOT', $boot );
 
-			if ( function_exists( 'wp_set_script_translations' ) ) {
-				wp_set_script_translations( 'ap-user-dashboard', 'artpulse', plugin_dir_path( __DIR__ ) . 'languages' );
-			}
+                        if ( function_exists( 'wp_set_script_translations' ) ) {
+                                wp_set_script_translations( 'ap-user-dashboard', 'artpulse', $base_path . 'languages' );
+                        }
 		}
 	}
 }
