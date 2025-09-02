@@ -60,15 +60,24 @@ class EventListingShortcode {
 			$event_types = array();
 		}
 
-		$categories = get_terms(
-			array(
-				'taxonomy'   => 'category',
-				'hide_empty' => false,
-			)
-		);
-		if ( is_wp_error( $categories ) ) {
-			$categories = array();
-		}
+               $categories = get_terms(
+                       array(
+                               'taxonomy'   => 'event_category',
+                               'hide_empty' => false,
+                       )
+               );
+
+               if ( is_wp_error( $categories ) || empty( $categories ) ) {
+                       $categories = get_terms(
+                               array(
+                                       'taxonomy'   => 'category',
+                                       'hide_empty' => false,
+                               )
+                       );
+                       if ( is_wp_error( $categories ) ) {
+                               $categories = array();
+                       }
+               }
 
 		ob_start();
 		?>
