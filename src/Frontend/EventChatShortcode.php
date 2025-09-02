@@ -34,30 +34,27 @@ class EventChatShortcode {
 			return '';
 		}
 
-		$req = new \WP_REST_Request( 'POST', '/' );
-		$req->set_param( 'id', $event_id );
-		$can_post = is_user_logged_in() && \ArtPulse\Community\EventChatController::can_post( $req );
+                $logged_in = is_user_logged_in();
+                $req       = new \WP_REST_Request( 'POST', '/' );
+                $req->set_param( 'id', $event_id );
+                $can_post  = $logged_in && \ArtPulse\Community\EventChatController::can_post( $req );
 
 		ob_start();
 		?>
 		<div class="ap-event-chat" data-event-id="<?php echo esc_attr( $event_id ); ?>" data-can-post="<?php echo $can_post ? '1' : '0'; ?>">
-			<ul class="ap-chat-list" role="status" aria-live="polite"></ul>
-			<?php if ( is_user_logged_in() ) : ?>
-				<?php
-				$req = new \WP_REST_Request( 'POST', '/' );
-				$req->set_param( 'id', $event_id );
-				if ( \ArtPulse\Community\EventChatController::can_post( $req ) ) :
-					?>
-					<form class="ap-chat-form">
-						<input type="text" name="content" required>
-						<button type="submit">Send</button>
-					</form>
-				<?php else : ?>
-					<p><?php esc_html_e( 'Only attendees can post messages', 'artpulse' ); ?></p>
-				<?php endif; ?>
-			<?php else : ?>
-				<p><?php esc_html_e( 'Please log in to chat.', 'artpulse' ); ?></p>
-			<?php endif; ?>
+                        <ul class="ap-chat-list" role="status" aria-live="polite"></ul>
+                        <?php if ( $logged_in ) : ?>
+                                <?php if ( $can_post ) : ?>
+                                        <form class="ap-chat-form">
+                                                <input type="text" name="content" required>
+                                                <button type="submit">Send</button>
+                                        </form>
+                                <?php else : ?>
+                                        <p><?php esc_html_e( 'Only attendees can post messages', 'artpulse' ); ?></p>
+                                <?php endif; ?>
+                        <?php else : ?>
+                                <p><?php esc_html_e( 'Please log in to chat.', 'artpulse' ); ?></p>
+                        <?php endif; ?>
 		</div>
 		<?php
 		return ob_get_clean();
