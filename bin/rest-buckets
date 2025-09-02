@@ -30,19 +30,26 @@ vendor/bin/phpunit -c phpunit.wp.xml.dist --filter RouteBucketsSmokeTest -v
 
 # Run full restapi group, capture JSON for pretty printing and summaries
 TMPFILE="$(mktemp)"
+REPORTS_DIR="$ROOT_DIR/reports"
+OUTPUT_FILE="$REPORTS_DIR/rest-buckets.json"
+mkdir -p "$REPORTS_DIR"
 set +e
 vendor/bin/phpunit -c phpunit.wp.xml.dist --group restapi --testdox-json "$TMPFILE" >/dev/null
 STATUS=$?
 set -e
+cp "$TMPFILE" "$OUTPUT_FILE"
+rm "$TMPFILE"
 
 if [[ $STATUS -ne 0 ]]; then
     echo "REST API test failures:" >&2
-    jq -r '.classes[].methods[] | select(.status=="fail") | "- \(.class)::\(.name): \(.message)"' "$TMPFILE" >&2
+    jq -r '.classes[].methods[] | select(.status=="fail") | "- \(.class)::\(.name): \(.message)"' "$OUTPUT_FILE" >&2
     echo >&2
     echo "Summary by class:" >&2
-    jq -r '.classes[] | {class:.name, total:(.methods|length), failed:(.methods|map(select(.status=="fail"))|length)} | "\(.class): \(.failed)/\(.total) failed"' "$TMPFILE" >&2
+    jq -r '.classes[] | {class:.name, total:(.methods|length), failed:(.methods|map(select(.status=="fail"))|length)} | "\(.class): \(.failed)/\(.total) failed"' "$OUTPUT_FILE" >&2
+    echo "JSON report: $OUTPUT_FILE" >&2
     exit $STATUS
 else
     echo "REST API summary:"
-    jq -r '.classes[] | {class:.name, total:(.methods|length), failed:(.methods|map(select(.status=="fail"))|length)} | "\(.class): \(.failed)/\(.total) failed"' "$TMPFILE"
+    jq -r '.classes[] | {class:.name, total:(.methods|length), failed:(.methods|map(select(.status=="fail"))|length)} | "\(.class): \(.failed)/\(.total) failed"' "$OUTPUT_FILE"
+    echo "JSON report: $OUTPUT_FILE"
 fi

@@ -85,6 +85,18 @@ jobs:
           WP_DB_NAME: wordpress_test
           WP_VERSION: ${{ matrix.wp }}
         run: vendor/bin/phpunit --log-junit build/junit.xml --coverage-clover build/coverage.xml
+      - name: Run REST API tests
+        id: rest_buckets
+        continue-on-error: true
+        run: composer run test:rest:buckets
+        env:
+          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+          WP_PHPUNIT__TESTS_CONFIG: tests/wp-tests-config.php
+          WP_TESTS_DB_NAME: wordpress_test
+          WP_TESTS_DB_USER: root
+          WP_TESTS_DB_PASSWORD: ""
+          WP_TESTS_DB_HOST: 127.0.0.1:3306
+          AP_TEST_MODE: 1
       - name: Coverage summary (bottom 15 files)
         if: always()
         run: |
@@ -119,6 +131,16 @@ jobs:
         with:
           name: phpunit-${{ matrix.php }}-${{ matrix.wp }}
           path: build/
+
+      - name: Upload REST buckets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rest-buckets-${{ matrix.php }}-${{ matrix.wp }}
+          path: reports/rest-buckets.json
+      - name: Fail if REST buckets failed
+        if: steps.rest_buckets.outcome == 'failure'
+        run: exit 1
 
       - uses: actions/upload-artifact@v4
         if: always()

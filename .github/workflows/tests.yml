@@ -82,13 +82,24 @@ jobs:
           WP_CORE_DIR: /tmp/wordpress
           AP_TEST_MODE: 1
       - name: Run REST API tests
-        run: composer run test:rest
+        id: rest_buckets
+        continue-on-error: true
+        run: composer run test:rest:buckets
         env:
           WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
-          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
-          DB_NAME: wordpress_test
-          DB_USER: root
-          DB_PASSWORD: root
-          DB_HOST: 127.0.0.1
+          WP_PHPUNIT__TESTS_CONFIG: tests/wp-tests-config.php
+          WP_TESTS_DB_NAME: wordpress_test
+          WP_TESTS_DB_USER: root
+          WP_TESTS_DB_PASSWORD: root
+          WP_TESTS_DB_HOST: 127.0.0.1
           WP_CORE_DIR: /tmp/wordpress
           AP_TEST_MODE: 1
+      - name: Upload REST buckets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rest-buckets-${{ matrix.php }}
+          path: reports/rest-buckets.json
+      - name: Fail if REST buckets failed
+        if: steps.rest_buckets.outcome == 'failure'
+        run: exit 1
