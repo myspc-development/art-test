@@ -10,10 +10,11 @@ namespace ArtPulse\Frontend;
  * @param int    $object_id   Optional object ID for analytics.
  * @return string HTML markup for share buttons.
  */
+if ( ! function_exists( __NAMESPACE__ . '\ap_share_buttons' ) ) {
 function ap_share_buttons( string $url, string $title, string $object_type = '', int $object_id = 0 ): string {
-	if ( ! $url || ! $title ) {
-		return '';
-	}
+        if ( ! $url || ! $title ) {
+                return '';
+        }
 
 	$networks = array(
 		'facebook' => sprintf( 'https://www.facebook.com/sharer/sharer.php?u=%s', urlencode( $url ) ),
@@ -50,8 +51,9 @@ function ap_share_buttons( string $url, string $title, string $object_type = '',
 			esc_attr( $object_type )
 		);
 	}
-	echo '</div>';
-	return trim( ob_get_clean() );
+        echo '</div>';
+        return trim( ob_get_clean() );
+}
 }
 
 /**
@@ -60,11 +62,13 @@ function ap_share_buttons( string $url, string $title, string $object_type = '',
  * @param int $event_id Event post ID.
  * @return string HTML markup for share buttons.
  */
+if ( ! function_exists( __NAMESPACE__ . '\ap_event_share_buttons' ) ) {
 function ap_event_share_buttons( int $event_id ): string {
-	$url   = get_permalink( $event_id );
-	$title = get_the_title( $event_id );
+        $url   = get_permalink( $event_id );
+        $title = get_the_title( $event_id );
 
-	return ap_share_buttons( $url ?: '', $title ?: '', 'artpulse_event', $event_id );
+        return ap_share_buttons( $url ?: '', $title ?: '', 'artpulse_event', $event_id );
+}
 }
 
 /**
@@ -73,6 +77,7 @@ function ap_event_share_buttons( int $event_id ): string {
  * @param int $event_id Event ID.
  * @return string HTML links.
  */
+if ( ! function_exists( __NAMESPACE__ . '\ap_event_calendar_links' ) ) {
 function ap_event_calendar_links( int $event_id ): string {
 	$event = get_post( $event_id );
 	if ( ! $event || $event->post_type !== 'artpulse_event' ) {
@@ -102,5 +107,6 @@ function ap_event_calendar_links( int $event_id ): string {
 		<a class="ap-calendar-ics" href="<?php echo esc_url( $ics ); ?>">Apple (.ics)</a>
 	</div>
 	<?php
-	return trim( ob_get_clean() );
+        return trim( ob_get_clean() );
+}
 }
