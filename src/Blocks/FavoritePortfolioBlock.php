@@ -11,6 +11,10 @@ class FavoritePortfolioBlock {
 			return;
 		}
 
+		if ( \WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/favorite-portfolio' ) ) {
+			return;
+		}
+
 		register_block_type_from_metadata( __DIR__ . '/../../blocks/favorite-portfolio' );
 	}
 	public static function render_callback( $attributes ) {
