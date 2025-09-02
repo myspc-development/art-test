@@ -36,10 +36,12 @@ class TrendingRestController {
 		}
 	}
 
-	public static function get_trending( WP_REST_Request $request ) {
-		$type  = sanitize_key( $request['type'] );
-		$limit = max( 1, min( 50, (int) $request['limit'] ) );
-		$items = TrendingManager::get_trending( $limit, $type );
-		return \rest_ensure_response( $items );
-	}
+        public static function get_trending( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+                $responder = new self();
+
+                $type  = sanitize_key( $request['type'] );
+                $limit = max( 1, min( 50, (int) $request['limit'] ) );
+                $items = TrendingManager::get_trending( $limit, $type );
+                return $responder->ok( $items );
+        }
 }

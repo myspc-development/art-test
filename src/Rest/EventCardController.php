@@ -3,7 +3,6 @@ namespace ArtPulse\Rest;
 
 use ArtPulse\Rest\Util\Auth;
 use WP_REST_Request;
-use WP_Error;
 use ArtPulse\Rest\RestResponder;
 
 class EventCardController {
@@ -30,13 +29,15 @@ class EventCardController {
                 );
         }
 
-	public static function get_card( WP_REST_Request $request ) {
-		$id = absint( $request->get_param( 'id' ) );
-		if ( ! $id || get_post_type( $id ) !== 'artpulse_event' ) {
-			return new WP_Error( 'invalid_event', 'Invalid event.', array( 'status' => 404 ) );
-		}
+        public static function get_card( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+                $responder = new self();
 
-		$html = ap_get_event_card( $id );
-		return \rest_ensure_response( $html );
-	}
+                $id = absint( $request->get_param( 'id' ) );
+                if ( ! $id || get_post_type( $id ) !== 'artpulse_event' ) {
+                        return $responder->fail( 'invalid_event', 'Invalid event.', 404 );
+                }
+
+                $html = ap_get_event_card( $id );
+                return \rest_ensure_response( $html );
+        }
 }

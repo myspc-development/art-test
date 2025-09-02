@@ -24,13 +24,15 @@ class DashboardMessagesController {
 		}
 	}
 
-	public static function get_messages() {
-		if ( ! current_user_can( 'read' ) ) {
-			return new \WP_Error( 'unauthorized', 'Login required', array( 'status' => 401 ) );
-		}
+        public static function get_messages(): \WP_REST_Response|\WP_Error {
+                $responder = new self();
 
-		return \rest_ensure_response( self::get_recent_messages_for_user( get_current_user_id() ) );
-	}
+                if ( ! current_user_can( 'read' ) ) {
+                        return $responder->fail( 'unauthorized', 'Login required', 401 );
+                }
+
+                return $responder->ok( self::get_recent_messages_for_user( get_current_user_id() ) );
+        }
 
 	private static function get_recent_messages_for_user( int $user_id ): array {
 		global $wpdb;

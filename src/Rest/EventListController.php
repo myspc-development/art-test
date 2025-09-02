@@ -2,7 +2,6 @@
 namespace ArtPulse\Rest;
 
 use WP_REST_Request;
-use WP_Error;
 use ArtPulse\Rest\Util\Auth;
 use ArtPulse\Rest\RestResponder;
 
@@ -55,11 +54,13 @@ class EventListController {
 		}
 	}
 
-	public static function get_list( WP_REST_Request $request ) {
-		$cache_key = 'ap_event_list_' . get_current_user_id() . '_' . md5( serialize( $request->get_params() ) );
-		if ( false !== ( $cached = get_transient( $cache_key ) ) ) {
-			return \rest_ensure_response( $cached );
-		}
+        public static function get_list( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+                $responder = new self();
+
+                $cache_key = 'ap_event_list_' . get_current_user_id() . '_' . md5( serialize( $request->get_params() ) );
+                if ( false !== ( $cached = get_transient( $cache_key ) ) ) {
+                        return $responder->ok( $cached );
+                }
 
 		$meta_query = array();
 		$venue      = $request->get_param( 'venue' );
@@ -190,8 +191,8 @@ class EventListController {
 				$html .= ap_get_event_card( $p->ID );
 			}
 		}
-		$data = array( 'html' => $html );
-		set_transient( $cache_key, $data, 30 );
-		return \rest_ensure_response( $data );
-	}
+                $data = array( 'html' => $html );
+                set_transient( $cache_key, $data, 30 );
+                return $responder->ok( $data );
+        }
 }
