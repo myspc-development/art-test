@@ -65,19 +65,19 @@ class EventListingShortcode {
 			'ap_event_listing'
 		);
 
-		$event_types = get_terms(
-			array(
-				'taxonomy'   => 'event_type',
-				'hide_empty' => false,
-			)
-		);
+               $event_types = get_terms(
+                       'event_type',
+                       array(
+                               'hide_empty' => false,
+                       )
+               );
 		if ( is_wp_error( $event_types ) ) {
 			$event_types = array();
 		}
 
                $categories = get_terms(
+                       'event_category',
                        array(
-                               'taxonomy'   => 'event_category',
                                'hide_empty' => false,
                        )
                );
