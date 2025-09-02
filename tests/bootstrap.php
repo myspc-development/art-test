@@ -66,11 +66,18 @@ if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/bootstrap.php'))
     exit(1);
 }
 
-$kses = $wp_root !== '' ? $wp_root . '/wp-includes/kses.php' : '';
+$kses   = $wp_root !== '' ? $wp_root . '/wp-includes/kses.php' : '';
+$blocks = $wp_root !== '' ? $wp_root . '/wp-includes/blocks.php' : '';
 if ($kses === '' || !file_exists($kses)) {
     fwrite(STDERR, "ERROR: Missing WordPress core files. Run 'composer run wp:core-link'.\n");
     exit(1);
-} elseif (! function_exists('wp_kses')) {
+}
+
+if ($blocks !== '' && file_exists($blocks) && ! function_exists('register_block_type')) {
+    require_once $blocks;
+}
+
+if (! function_exists('wp_kses')) {
     require_once $kses;
 }
 
