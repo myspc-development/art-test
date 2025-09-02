@@ -70,28 +70,25 @@ class EventRsvpHandler {
                         $event_ids = $event_ids ? array( $event_ids ) : array();
                 }
 
-                $going      = 0;
-                $interested = 0;
-                $trend_map  = array();
-
-                $today = current_time( 'timestamp' );
+               $going      = 0;
+               $interested = 0;
+               $trend_map  = array();
 
                 foreach ( $event_ids as $eid ) {
-                        $date = get_post_meta( $eid, '_ap_event_date', true );
-                        $ts   = false;
-                        if (
-                                is_string( $date ) &&
-                                preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) &&
-                                ( $dt = date_create_from_format( 'Y-m-d', $date, wp_timezone() ) )
-                        ) {
-                                $ts = $dt instanceof \DateTime ? $dt->getTimestamp() : false;
-                        }
+                       $date = get_post_meta( $eid, '_ap_event_date', true );
+                       $ts   = false;
+                       if (
+                               is_string( $date ) &&
+                               preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date )
+                       ) {
+                               $ts = strtotime( $date . ' ' . wp_timezone_string() );
+                       }
 
-                        if ( false !== $ts && $ts >= $today ) {
-                                ++$going;
-                        } else {
-                                ++$interested;
-                        }
+                       if ( false !== $ts && $ts >= current_time( 'timestamp' ) ) {
+                               ++$going;
+                       } else {
+                               ++$interested;
+                       }
 
                         $history = get_post_meta( $eid, 'event_rsvp_history', true );
                         if ( is_array( $history ) ) {
