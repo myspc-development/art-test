@@ -24,12 +24,16 @@ class PaymentAnalyticsDashboard {
 		$start_date = sanitize_text_field( $_GET['start_date'] ?? '' );
 		$end_date   = sanitize_text_field( $_GET['end_date'] ?? '' );
 
+		$chart_rel  = 'assets/libs/chart.js/4.4.1/chart.min.js';
+		$chart_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $chart_rel;
+		$chart_ver  = file_exists( $chart_path ) ? filemtime( $chart_path ) : '4.4.1';
+
 		wp_enqueue_script(
-			'chart-js',
-			plugins_url( 'assets/libs/chart.js/4.4.1/chart.min.js', ARTPULSE_PLUGIN_FILE ),
-			array(),
-			null,
-			true
+		        'chart-js',
+		        plugins_url( $chart_rel, ARTPULSE_PLUGIN_FILE ),
+		        array(),
+		        $chart_ver,
+		        true
 		);
 
 		$script_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/js/payment-analytics-dashboard.js';
