@@ -151,9 +151,9 @@ self::$post_types           = array();
 			return true; }
 	}
 
-	if ( ! function_exists( __NAMESPACE__ . '\\check_ajax_referer' ) ) {
-		function check_ajax_referer( $action, $name ) {}
-	}
+        if ( ! function_exists( __NAMESPACE__ . '\\check_ajax_referer' ) ) {
+                function check_ajax_referer( $action, $name = false ) {}
+        }
 
         if ( ! function_exists( __NAMESPACE__ . '\\current_user_can' ) ) {
                 function current_user_can( $cap, $id = 0 ) {
