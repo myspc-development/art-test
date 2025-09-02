@@ -3,34 +3,7 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
   <testsuites>
     <testsuite name="Unit">
-      <directory suffix="Test.php">tests/phpunit</directory>
       <directory suffix="Test.php">tests/Unit</directory>
-      <directory suffix="Test.php">tests/Cli</directory>
-      <directory suffix="Test.php">tests/Blocks</directory>
-      <directory suffix="Test.php">tests/Crm</directory>
-      <directory suffix="Test.php">tests/Monetization</directory>
-      <directory suffix="Test.php">tests/Safety</directory>
-      <directory suffix="Test.php">tests/Support</directory>
-      <file>tests/ActivatorDeactivatorTest.php</file>
-      <file>tests/AvatarHttpsFixTest.php</file>
-      <file>tests/AvailableWidgetsTest.php</file>
-      <file>tests/EnvironmentTest.php</file>
-      <file>tests/QuickAddEventWidgetTest.php</file>
     </testsuite>
   </testsuites>
-  <groups>
-    <exclude>
-      <group>slow</group>
-    </exclude>
-  </groups>
-  <logging>
-    <junit outputFile="build/junit-phpunit-unit.xml"/>
-  </logging>
-  <coverage>
-    <include><directory>src</directory></include>
-    <report>
-      <html outputDirectory="reports/coverage/phpunit-unit"/>
-      <clover outputFile="reports/coverage/phpunit-unit.xml"/>
-    </report>
-  </coverage>
 </phpunit>

@@ -28,6 +28,8 @@ const config: Config = {
     '<rootDir>/assets/js/components/__tests__/ReportDialog.test.js',
     '<rootDir>/assets/js/components/__tests__/WidgetSettingsForm.test.js',
   ],
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
   coverageReporters: ['json', 'lcov', 'text'],
 };
 

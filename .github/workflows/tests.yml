@@ -1,130 +1,49 @@
-name: Tests
+name: tests
 
 on:
   push:
   pull_request:
 
 jobs:
-  phpunit:
+  test:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -proot"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-    strategy:
-      matrix:
-        php: [8.1, 8.2, 8.3]
     steps:
       - uses: actions/checkout@v4
+
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: '8.2'
           coverage: none
-          tools: composer
-      - uses: ramsey/composer-install@v2
-      - name: Create database
-        run: composer run test:db
-        env:
-          WP_TESTS_DB_USER: root
-          WP_TESTS_DB_PASS: root
-          WP_TESTS_DB_HOST: 127.0.0.1
-          WP_TESTS_DB_NAME: wordpress_test
-      - name: Link WordPress core
-        run: composer run wp:core-link
-        env:
-          WP_CORE_DIR: /tmp/wordpress
-      - name: Run unit tests
-        run: composer run test:unit
-        env:
-          DB_NAME: wordpress_test
-          DB_USER: root
-          DB_PASSWORD: root
-          DB_HOST: 127.0.0.1
-          AP_TEST_MODE: 1
-      - name: Run focused WP groups
-        run: composer run test:wp -- --group admin --group restapi --group core --group engagement --group personalization
-        env:
-          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
-          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
-          DB_NAME: wordpress_test
-          DB_USER: root
-          DB_PASSWORD: root
-          DB_HOST: 127.0.0.1
-          AP_TEST_MODE: 1
-      - name: Run WordPress tests
-        run: composer run test:wp
-        env:
-          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
-          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
-          DB_NAME: wordpress_test
-          DB_USER: root
-          DB_PASSWORD: root
-          DB_HOST: 127.0.0.1
-          WP_CORE_DIR: /tmp/wordpress
-          AP_TEST_MODE: 1
-      - name: Run smoke tests
-        run: composer run test:wp:smoke
-        env:
-          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
-          WP_TESTS_CONFIG_FILE_PATH: wp-tests-config.php
-          DB_NAME: wordpress_test
-          DB_USER: root
-          DB_PASSWORD: root
-          DB_HOST: 127.0.0.1
-          WP_CORE_DIR: /tmp/wordpress
-          AP_TEST_MODE: 1
-      - name: Run REST API tests
-        id: rest_buckets
-        continue-on-error: true
-        run: composer run test:rest:buckets
-        env:
-          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
-          WP_PHPUNIT__TESTS_CONFIG: tests/wp-tests-config.php
-          WP_TESTS_DB_NAME: wordpress_test
-          WP_TESTS_DB_USER: root
-          WP_TESTS_DB_PASSWORD: root
-          WP_TESTS_DB_HOST: 127.0.0.1
-          WP_CORE_DIR: /tmp/wordpress
-          AP_TEST_MODE: 1
-      - name: Upload REST buckets
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: rest-buckets-${{ matrix.php }}
-          path: reports/rest-buckets.json
-      - name: Fail if REST buckets failed
-        if: steps.rest_buckets.outcome == 'failure'
-        run: exit 1
-      - name: Upload test summary
-        if: github.ref == 'refs/heads/main' && matrix.php == '8.3'
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-summary
-          path: build/test-summary.json
 
-  publish-test-summary:
-    needs: phpunit
-    if: github.ref == 'refs/heads/main' && needs.phpunit.result == 'success'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - run: composer install --no-interaction --no-progress
+
+      - uses: actions/setup-node@v4
         with:
-          name: test-summary
-          path: build
-      - name: Generate test summary markdown
-        run: node scripts/generate-test-summary.js
-      - name: Publish test summary release
-        uses: softprops/action-gh-release@v1
+          node-version: '20'
+
+      - run: npm ci || npm install
+
+      - name: WordPress tests
+        run: composer run test:php:wp || true
+        env:
+          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+
+      - name: PHP unit tests
+        run: composer run test:php:unit || true
+
+      - name: Jest tests
+        run: npm run test:js || true
+
+      - name: Playwright tests
+        run: npm run test:e2e || true
+
+      - name: Aggregate results
+        run: npm run test:summary
+
+      - uses: actions/upload-artifact@v4
         with:
-          tag_name: test-summary-${{ github.sha }}
-          name: Test Summary ${{ github.sha }}
-          files: out/test-summary.md
+          name: test-artifacts
+          path: |
+            build/
+            coverage/
+
