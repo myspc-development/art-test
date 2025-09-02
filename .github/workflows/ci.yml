@@ -158,6 +158,32 @@ jobs:
           echo "### Playwright report" >> $GITHUB_STEP_SUMMARY
           echo "Download the **playwright** artifact from the run’s Artifacts section." >> $GITHUB_STEP_SUMMARY
 
+      - uses: actions/upload-artifact@v4
+        if: hashFiles('coverage/coverage-summary.json') != ''
+        with:
+          name: coverage-${{ matrix.php }}-${{ matrix.wp }}
+          path: coverage/
+
+      - name: Aggregate test results
+        if: always()
+        run: node scripts/aggregate-results.js
+
+      - name: Comment test suite status
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const suites = JSON.parse(fs.readFileSync('aggregated-results.json', 'utf8'));
+            const icons = { pass: '✅', warn: '⚠️', missing: '❌' };
+            const body = suites.map(s => `${icons[s.status] || '❓'} ${s.name}`).join('\n');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });
+
   playwright-visual:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
