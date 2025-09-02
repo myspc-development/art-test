@@ -3,10 +3,24 @@ namespace ArtPulse\Frontend;
 
 class EventListingShortcode {
 
-	public static function register(): void {
-		\ArtPulse\Core\ShortcodeRegistry::register( 'ap_event_listing', 'Event Listing', array( self::class, 'render' ) );
-		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue' ) );
-	}
+        public static function register(): void {
+                \ArtPulse\Core\ShortcodeRegistry::register( 'ap_event_listing', 'Event Listing', array( self::class, 'render' ) );
+                add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue' ) );
+                add_action( 'init', array( self::class, 'maybe_register_event_category' ) );
+        }
+
+       public static function maybe_register_event_category(): void {
+               if ( ! taxonomy_exists( 'event_category' ) ) {
+                       register_taxonomy(
+                               'event_category',
+                               'artpulse_event',
+                               array(
+                                       'label'  => 'Event Categories',
+                                       'public' => true,
+                               )
+                       );
+               }
+       }
 
 	public static function enqueue(): void {
 		if ( function_exists( 'ap_enqueue_global_styles' ) ) {
@@ -41,8 +55,9 @@ class EventListingShortcode {
 		);
 	}
 
-	public static function render( $atts ): string {
-		$atts = shortcode_atts(
+       public static function render( $atts ): string {
+               self::maybe_register_event_category();
+               $atts = shortcode_atts(
 			array(
 				'posts_per_page' => 12,
 			),
@@ -67,16 +82,8 @@ class EventListingShortcode {
                        )
                );
 
-               if ( is_wp_error( $categories ) || empty( $categories ) ) {
-                       $categories = get_terms(
-                               array(
-                                       'taxonomy'   => 'category',
-                                       'hide_empty' => false,
-                               )
-                       );
-                       if ( is_wp_error( $categories ) ) {
-                               $categories = array();
-                       }
+               if ( is_wp_error( $categories ) ) {
+                       $categories = array();
                }
 
 		ob_start();
