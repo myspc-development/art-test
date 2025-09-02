@@ -126,24 +126,38 @@ function ap_filter_events_callback(): void {
 			'value' => $price_type,
 		);
 	}
-	if ( $location !== '' && is_numeric( $radius ) ) {
-		[$lat, $lng] = array_pad( array_map( 'floatval', explode( ',', $location ) ), 2, 0.0 );
-		$r           = floatval( $radius );
-		if ( $lat && $lng && $r > 0 ) {
-			$meta_query[] = array(
-				'key'     => 'event_lat',
-				'value'   => array( $lat - $r, $lat + $r ),
-				'compare' => 'BETWEEN',
-				'type'    => 'numeric',
-			);
-			$meta_query[] = array(
-				'key'     => 'event_lng',
-				'value'   => array( $lng - $r, $lng + $r ),
-				'compare' => 'BETWEEN',
-				'type'    => 'numeric',
-			);
-		}
-	}
+       $distance_clauses = null;
+       if ( $location !== '' && is_numeric( $radius ) ) {
+               [$lat, $lng] = array_pad( array_map( 'floatval', explode( ',', $location ) ), 2, 0.0 );
+               $r           = floatval( $radius );
+               if ( $lat && $lng && $r > 0 ) {
+                       global $wpdb;
+                       $join_filter  = static function ( $join ) use ( $wpdb ) {
+                               $join .= $wpdb->prepare(
+                                       " INNER JOIN {$wpdb->postmeta} latmeta ON ({$wpdb->posts}.ID = latmeta.post_id AND latmeta.meta_key = %s)",
+                                       'event_lat'
+                               );
+                               $join .= $wpdb->prepare(
+                                       " INNER JOIN {$wpdb->postmeta} lngmeta ON ({$wpdb->posts}.ID = lngmeta.post_id AND lngmeta.meta_key = %s)",
+                                       'event_lng'
+                               );
+                               return $join;
+                       };
+                       $where_filter = static function ( $where ) use ( $wpdb, $lat, $lng, $r ) {
+                               $where .= $wpdb->prepare(
+                                       ' AND ( 6371 * ACOS( COS( RADIANS(%f) ) * COS( RADIANS( latmeta.meta_value ) ) * COS( RADIANS( lngmeta.meta_value ) - RADIANS(%f) ) + SIN( RADIANS(%f) ) * SIN( RADIANS( latmeta.meta_value ) ) ) ) <= %f',
+                                       $lat,
+                                       $lng,
+                                       $lat,
+                                       $r
+                               );
+                               return $where;
+                       };
+                       add_filter( 'posts_join', $join_filter, 10, 2 );
+                       add_filter( 'posts_where', $where_filter, 10, 2 );
+                       $distance_clauses = array( $join_filter, $where_filter );
+               }
+       }
 
 	$tax_query = array();
 	if ( $category !== '' ) {
@@ -179,13 +193,18 @@ function ap_filter_events_callback(): void {
 	if ( $meta_query ) {
 		$args['meta_query'] = $meta_query;
 	}
-	if ( $tax_query ) {
-		$args['tax_query'] = $tax_query;
-	}
+       if ( $tax_query ) {
+               $args['tax_query'] = $tax_query;
+       }
 
-	$query = new \WP_Query( $args );
+       $query = new \WP_Query( $args );
 
-	ob_start();
+       if ( $distance_clauses ) {
+               remove_filter( 'posts_join', $distance_clauses[0], 10 );
+               remove_filter( 'posts_where', $distance_clauses[1], 10 );
+       }
+
+       ob_start();
 	if ( $query->have_posts() ) {
 		while ( $query->have_posts() ) {
 			$query->the_post();
