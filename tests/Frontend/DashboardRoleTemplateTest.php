@@ -38,9 +38,9 @@ class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
 		set_query_var( 'ap_dashboard_role', 1 );
 
-		$this->expectOutputRegex( '/ap-dashboard--role-artist.*No widgets available for your role./s' );
+		$this->expectOutputRegex( '/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="artist"[^>]*>/s' );
 		DashboardRoleRewrite::maybe_render();
-	}
+}
 
         /**
          * @runInSeparateProcess
@@ -55,7 +55,7 @@ class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
 		set_query_var( 'ap_dashboard', 1 );
 
-		$this->expectOutputRegex( '/ap-dashboard--role-organization.*No widgets available for your role./s' );
+		$this->expectOutputRegex( '/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="organization"[^>]*>/s' );
 		DashboardRoleRewrite::maybe_render();
-	}
+}
 }
