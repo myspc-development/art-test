@@ -31,14 +31,20 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 
 // Explicitly load core classes and helpers.
 trait_exists( \ArtPulse\Rest\RestResponder::class );
+class_exists( \ArtPulse\Rest\OrgRolesController::class );
 require_once __DIR__ . '/src/Blocks/Version.php';
 
-\ArtPulse\Rest\OrgRolesController::register();
-\ArtPulse\Rest\StatusController::register();
-\ArtPulse\Rest\DirectoryController::register();
-\ArtPulse\Rest\OrgDirectoryController::register();
-\ArtPulse\Rest\RouteAudit::register();
-\ArtPulse\Rest\SystemStatusController::register();
+add_action(
+        'rest_api_init',
+        static function () {
+                ( new \ArtPulse\Rest\OrgRolesController() )->register_routes();
+                ( new \ArtPulse\Rest\StatusController() )->register_routes();
+                ( new \ArtPulse\Rest\DirectoryController() )->register_routes();
+                ( new \ArtPulse\Rest\OrgDirectoryController() )->register_routes();
+                \ArtPulse\Rest\RouteAudit::routes();
+                ( new \ArtPulse\Rest\SystemStatusController() )->routes();
+        }
+);
 
 // Register test-only REST route shim when in test mode.
 $ap_test_mode = ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) || filter_var( getenv( 'AP_TEST_MODE' ), FILTER_VALIDATE_BOOLEAN );
@@ -46,7 +52,7 @@ if ( $ap_test_mode && class_exists( \ArtPulse\Rest\TestRouteShim::class ) ) {
         \ArtPulse\Rest\TestRouteShim::register();
 }
 
-if ( $ap_test_mode && ! function_exists( 'ap_as_user_with_role' ) ) {
+if ( defined( 'WP_RUNNING_TESTS' ) && WP_RUNNING_TESTS && ! function_exists( 'ap_as_user_with_role' ) ) {
         function ap_as_user_with_role( string $role ): int {
                 $user_id = wp_insert_user(
                         array(
