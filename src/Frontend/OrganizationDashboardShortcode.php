@@ -81,8 +81,11 @@ class OrganizationDashboardShortcode {
 	/**
 	 * Build the markup for a single event list item with RSVP counts
 	 * and action buttons.
+	 *
+	 * @param \WP_Post|array|object $event Event data.
 	 */
-	protected static function build_event_list_item( \WP_Post $event ): string {
+	protected static function build_event_list_item( $event ): string {
+		$event      = (object) $event;
 		$rsvps      = get_post_meta( $event->ID, 'event_rsvp_list', true );
 		$waitlist   = get_post_meta( $event->ID, 'event_waitlist', true );
 		$limit      = intval( get_post_meta( $event->ID, 'event_rsvp_limit', true ) );
