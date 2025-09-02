@@ -89,17 +89,39 @@ self::$post_types           = array();
 
         if ( ! function_exists( __NAMESPACE__ . '\\get_post_meta' ) ) {
                 function get_post_meta( $post_id, $key, $single = false ) {
-                        return StubState::$post_meta[ $post_id ][ $key ] ?? '';
+                        if ( isset( StubState::$post_meta[ $post_id ] ) && array_key_exists( $key, StubState::$post_meta[ $post_id ] ) ) {
+                                return StubState::$post_meta[ $post_id ][ $key ];
+                        }
+
+                        if ( function_exists( '\\get_post_meta' ) ) {
+                                return \get_post_meta( $post_id, $key, $single );
+                        }
+
+                        return '';
                 }
         }
 
-	if ( ! function_exists( __NAMESPACE__ . '\\update_post_meta' ) ) {
-		function update_post_meta( $post_id, $key, $value ) {
-			StubState::$post_meta[ $post_id ][ $key ] = $value;
-			StubState::$meta_log[]                    = array( $post_id, $key, $value );
-			return true;
-		}
-	}
+        if ( ! function_exists( __NAMESPACE__ . '\\update_post_meta' ) ) {
+                function update_post_meta( $post_id, $key, $value ) {
+                        if ( isset( StubState::$post_meta[ $post_id ] ) && array_key_exists( $key, StubState::$post_meta[ $post_id ] ) ) {
+                                StubState::$post_meta[ $post_id ][ $key ] = $value;
+                                StubState::$meta_log[]                    = array( $post_id, $key, $value );
+
+                                return true;
+                        }
+
+                        if ( function_exists( '\\update_post_meta' ) ) {
+                                StubState::$meta_log[] = array( $post_id, $key, $value );
+
+                                return \update_post_meta( $post_id, $key, $value );
+                        }
+
+                        StubState::$post_meta[ $post_id ][ $key ] = $value;
+                        StubState::$meta_log[]                    = array( $post_id, $key, $value );
+
+                        return true;
+                }
+        }
 
 	if ( ! function_exists( __NAMESPACE__ . '\\delete_post_meta' ) ) {
 		function delete_post_meta( $post_id, $key ) {
