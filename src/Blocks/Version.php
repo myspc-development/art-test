@@ -1,11 +1,8 @@
 <?php
 namespace ArtPulse\Blocks;
-
-/**
- * Resolve the plugin version for block assets.
- *
- * @return string
- */
 function ap_block_version(): string {
-	return defined( 'ART_PULSE_VERSION' ) ? ART_PULSE_VERSION : '0.1.0-test';
+    $ns = __NAMESPACE__ . '\ART_PULSE_VERSION';
+    if (defined($ns)) return constant($ns);
+    if (defined('ART_PULSE_VERSION')) return \ART_PULSE_VERSION;
+    return '0.1.0-test';
 }
