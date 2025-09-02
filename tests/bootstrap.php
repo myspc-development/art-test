@@ -82,21 +82,13 @@ if ($wp_phpunit_dir && file_exists($wp_phpunit_dir . '/includes/functions.php'))
 // 4) Load the plugin under test once WordPress loads mu-plugins
 tests_add_filter('muplugins_loaded', function () {
     $plugin_root = dirname(__DIR__);
+    $plugin_file = $plugin_root . '/artpulse-management.php';
 
-    // Try to find the plugin main file by header
-    foreach (glob($plugin_root . '/*.php') as $file) {
-        $head = @file_get_contents($file, false, null, 0, 2048);
-        if ($head !== false && strpos($head, 'Plugin Name:') !== false) {
-            require_once $file;
-            return;
-        }
+    if (! defined('ARTPULSE_PLUGIN_FILE')) {
+        define('ARTPULSE_PLUGIN_FILE', $plugin_file);
     }
 
-    // Fallback to a conventional filename
-    $fallback = $plugin_root . '/art-test-main.php';
-    if (file_exists($fallback)) {
-        require_once $fallback;
-    }
+    require_once $plugin_file;
 });
 
 // Now bootstrap WordPress
