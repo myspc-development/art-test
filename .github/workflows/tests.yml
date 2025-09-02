@@ -103,3 +103,28 @@ jobs:
       - name: Fail if REST buckets failed
         if: steps.rest_buckets.outcome == 'failure'
         run: exit 1
+      - name: Upload test summary
+        if: github.ref == 'refs/heads/main' && matrix.php == '8.3'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-summary
+          path: build/test-summary.json
+
+  publish-test-summary:
+    needs: phpunit
+    if: github.ref == 'refs/heads/main' && needs.phpunit.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: test-summary
+          path: build
+      - name: Generate test summary markdown
+        run: node scripts/generate-test-summary.js
+      - name: Publish test summary release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: test-summary-${{ github.sha }}
+          name: Test Summary ${{ github.sha }}
+          files: out/test-summary.md
