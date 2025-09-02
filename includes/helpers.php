@@ -116,8 +116,28 @@ function ap_locate_template( string $relative_template, string $plugin_path ): s
 	return apply_filters( 'ap_locate_template', $template, $relative_template );
 }
 
-function ap_clear_portfolio_cache(): void {
-	wp_cache_flush();
+/**
+ * Clear cached portfolio queries.
+ *
+ * If specific keys are provided only those cache entries will be removed.
+ * Otherwise the entire `artpulse_queries` group is deleted without
+ * affecting other cache groups.
+ *
+ * @param string|string[]|null $keys Optional cache key or list of keys to clear.
+ */
+function ap_clear_portfolio_cache( string|array|null $keys = null ): void {
+        $group = 'artpulse_queries';
+
+        if ( null !== $keys ) {
+                foreach ( (array) $keys as $key ) {
+                        wp_cache_delete( (string) $key, $group );
+                }
+                return;
+        }
+
+        if ( function_exists( 'wp_cache_delete_group' ) ) {
+                wp_cache_delete_group( $group );
+        }
 }
 
 /**
