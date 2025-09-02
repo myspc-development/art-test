@@ -84,7 +84,7 @@ add_action(
 		\ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_widget_favorites', 'widget_favorites' );
                 \ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_widget_near_me_events', 'widget_widget_near_me' );
                 \ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_news_feed', 'widget_news' );
-		\ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_local-events', 'widget_local_events' );
+                \ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_local-events', 'widget_events' );
 		\ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_account-tools', 'widget_account_tools' );
 
 		if ( class_exists( \ArtPulse\Widgets\FavoritesOverviewWidget::class ) ) {
