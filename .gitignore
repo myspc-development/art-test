@@ -75,3 +75,4 @@ languages/*.mo
 /.env
 /.wp-test.env
 tests/wp-tests-config.php
+out/test-summary.md
