@@ -64,51 +64,59 @@ class EventRsvpHandler {
 		 * @param int $user_id User ID.
 		 * @return array
 		 */
-	public static function get_rsvp_summary_for_user( $user_id ): array {
-			$event_ids = get_user_meta( $user_id, 'ap_rsvp_events', true );
-		if ( ! is_array( $event_ids ) ) {
-			$event_ids = array();
-		}
+        public static function get_rsvp_summary_for_user( $user_id ): array {
+                $event_ids = get_user_meta( $user_id, 'ap_rsvp_events', true );
+                if ( ! is_array( $event_ids ) ) {
+                        $event_ids = $event_ids ? array( $event_ids ) : array();
+                }
 
-		$going      = 0;
-		$interested = 0;
-		$trend_map  = array();
+                $going      = 0;
+                $interested = 0;
+                $trend_map  = array();
 
-		$today = strtotime( 'today' );
+                $today = current_time( 'timestamp' );
 
-		foreach ( $event_ids as $eid ) {
-						$date = get_post_meta( $eid, '_ap_event_date', true );
-						$ts   = $date ? strtotime( $date ) : false;
-			if ( false !== $ts && $ts >= $today ) {
-				++$going;
-			} else {
-				++$interested;
-			}
+                foreach ( $event_ids as $eid ) {
+                        $date = get_post_meta( $eid, '_ap_event_date', true );
+                        $ts   = false;
+                        if (
+                                is_string( $date ) &&
+                                preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) &&
+                                ( $dt = date_create_from_format( 'Y-m-d', $date, wp_timezone() ) )
+                        ) {
+                                $ts = $dt instanceof \DateTime ? $dt->getTimestamp() : false;
+                        }
 
-			$history = get_post_meta( $eid, 'event_rsvp_history', true );
-			if ( is_array( $history ) ) {
-				foreach ( $history as $day => $count ) {
-					if ( ! isset( $trend_map[ $day ] ) ) {
-						$trend_map[ $day ] = 0;
-					}
-					$trend_map[ $day ] += (int) $count;
-				}
-			}
-		}
+                        if ( false !== $ts && $ts >= $today ) {
+                                ++$going;
+                        } else {
+                                ++$interested;
+                        }
 
-		ksort( $trend_map );
-		$trend = array();
-		foreach ( $trend_map as $day => $count ) {
-			$trend[] = array(
-				'date'  => $day,
-				'count' => $count,
-			);
-		}
+                        $history = get_post_meta( $eid, 'event_rsvp_history', true );
+                        if ( is_array( $history ) ) {
+                                foreach ( $history as $day => $count ) {
+                                        if ( ! isset( $trend_map[ $day ] ) ) {
+                                                $trend_map[ $day ] = 0;
+                                        }
+                                        $trend_map[ $day ] += (int) $count;
+                                }
+                        }
+                }
 
-		return array(
-			'going'      => $going,
-			'interested' => $interested,
-			'trend'      => $trend,
-		);
-	}
+                ksort( $trend_map );
+                $trend = array();
+                foreach ( $trend_map as $day => $count ) {
+                        $trend[] = array(
+                                'date'  => $day,
+                                'count' => $count,
+                        );
+                }
+
+                return array(
+                        'going'      => $going,
+                        'interested' => $interested,
+                        'trend'      => $trend,
+                );
+        }
 }
