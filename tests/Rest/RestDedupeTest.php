@@ -16,7 +16,7 @@ class RestDedupeTest extends \WP_UnitTestCase {
                     $GLOBALS['ap_rest_dedupe_notices'] = array();
             }
 
-            protected function tear_down() {
+            public function tear_down() {
                     unset( $GLOBALS['ap_rest_dedupe_notices'] );
                     parent::tear_down();
             }
