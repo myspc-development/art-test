@@ -18,7 +18,7 @@
     "test:php:down": "docker compose -f docker-compose.tests.yml down -v",
     "test:php:local": "npm run test:php:up && composer test:php:local; npm run test:php:down",
     "test:e2e": "playwright test",
-    "test:js": "jest --ci --coverage",
+    "test:js": "JEST_JUNIT_OUTPUT_DIR=build JEST_JUNIT_OUTPUT_NAME=junit-jest.xml jest --ci --coverage --reporters=default --reporters=jest-junit --coverageDirectory=coverage",
     "ci": "bin/ap all"
   },
   "dependencies": {
@@ -95,6 +95,6 @@
   },
   "homepage": "https://github.com/myspc-development/art-test#readme",
   "jest-junit": {
-    "output": "reports/junit/jest.xml"
+    "output": "build/junit-jest.xml"
   }
 }

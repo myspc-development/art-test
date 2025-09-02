@@ -28,6 +28,7 @@ const config: Config = {
     '<rootDir>/assets/js/components/__tests__/ReportDialog.test.js',
     '<rootDir>/assets/js/components/__tests__/WidgetSettingsForm.test.js',
   ],
+  coverageReporters: ['json', 'lcov', 'text'],
 };
 
 export default config;
