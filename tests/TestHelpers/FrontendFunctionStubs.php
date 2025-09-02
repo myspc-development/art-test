@@ -26,6 +26,7 @@ public static string $notice               = '';
 public static array $function_exists_map   = array();
 public static array $terms_return          = array();
 public static array $post_types            = array();
+public static array $post_authors          = array();
 
 public static function reset(): void {
 self::$post_meta            = array();
@@ -50,6 +51,7 @@ self::$notice               = '';
 self::$function_exists_map  = array();
 self::$terms_return         = array();
 self::$post_types           = array();
+self::$post_authors         = array();
 }
 }
 
@@ -59,7 +61,7 @@ self::$post_types           = array();
                                 'ID'          => $id,
                                 'post_title'  => 'Event ' . $id,
                                 'post_type'   => StubState::$post_types[ $id ] ?? 'artpulse_event',
-                                'post_author' => 1,
+                                'post_author' => StubState::$post_authors[ $id ] ?? 1,
                         );
                 }
         }

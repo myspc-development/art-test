@@ -45,6 +45,10 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                         'event_location'    => '',
                         'event_org'         => 99,
                 );
+
+                // By default the selected organization is valid for the current user.
+                \ArtPulse\Frontend\StubState::$post_types[99]   = 'artpulse_org';
+                \ArtPulse\Frontend\StubState::$post_authors[99] = 1;
         }
 
         public function tear_down(): void {
@@ -56,20 +60,16 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
         }
 
 	public function test_invalid_org_rejected(): void {
-                // Authorized org id is 5, selected org 99 should fail
-                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 5;
-                \ArtPulse\Frontend\StubState::$get_posts_return = array();
+                // Organization belongs to another user
+                \ArtPulse\Frontend\StubState::$post_authors[99] = 2;
 
-		EventSubmissionShortcode::maybe_handle_form();
+                EventSubmissionShortcode::maybe_handle_form();
 
                 $this->assertSame( 'Invalid organization selected.', \ArtPulse\Frontend\StubState::$notice );
                 $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
-	}
+        }
 
 	public function test_start_date_after_end_date_rejected(): void {
-		// Valid organization to avoid org failure
-                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 99;
-
                 $_POST['event_start_date'] = '2024-02-01';
                 $_POST['event_end_date']   = '2024-01-01';
 
@@ -80,10 +80,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 	}
 
 	public function test_banner_included_in_submission_images(): void {
-		// Valid organization
-                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 99;
-
-		// Pretend banner uploaded and media handler returns ID 55
+                // Pretend banner uploaded and media handler returns ID 55
                 \ArtPulse\Frontend\StubState::$media_returns = array( 'event_banner' => 55 );
 		$_FILES['event_banner'] = array(
 			'name'     => 'b.jpg',
@@ -106,10 +103,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 	}
 
 	public function test_first_gallery_image_used_as_banner_when_missing(): void {
-		// Valid organization
-                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 99;
-
-		// Upload a single additional image
+                // Upload a single additional image
                 \ArtPulse\Frontend\StubState::$media_returns   = array( 'ap_image' => 11 );
 		$_FILES['image_1'] = array(
 			'name'     => 'a.jpg',

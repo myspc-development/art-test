@@ -321,21 +321,36 @@ class EventSubmissionShortcode {
 		$rsvp_url           = esc_url_raw( $_POST['event_rsvp_url'] ?? '' );
 		$organizer_name     = sanitize_text_field( $_POST['event_organizer_name'] ?? '' );
 		$organizer_email    = sanitize_email( $_POST['event_organizer_email'] ?? '' );
-		$event_org          = intval( $_POST['event_org'] );
-		$event_artists      = isset( $_POST['event_artists'] ) ? array_map( 'intval', (array) $_POST['event_artists'] ) : array();
-		$event_type         = intval( $_POST['event_type'] ?? 0 );
-		$featured           = isset( $_POST['event_featured'] ) ? '1' : '0';
+                $event_org          = intval( $_POST['event_org'] );
+                $event_artists      = isset( $_POST['event_artists'] ) ? array_map( 'intval', (array) $_POST['event_artists'] ) : array();
+                $event_type         = intval( $_POST['event_type'] ?? 0 );
+                $featured           = isset( $_POST['event_featured'] ) ? '1' : '0';
 
-		if ( empty( $event_description ) ) {
-			self::add_notice( __( 'Please enter an event description.', 'artpulse' ), 'error' );
-			self::maybe_redirect();
-			return;
-		}
+                if ( empty( $event_description ) ) {
+                        self::add_notice( __( 'Please enter an event description.', 'artpulse' ), 'error' );
+                        self::maybe_redirect();
+                        return;
+                }
 
-		$status_choice = sanitize_text_field( $_POST['event_status'] ?? 'publish' );
-		$publish_date  = sanitize_text_field( $_POST['event_publish_date'] ?? '' );
-		$can_publish   = current_user_can( 'publish_events' );
-		$post_status   = $can_publish ? 'publish' : 'pending';
+                // Ensure the selected organization belongs to the current user.
+                $org_post = get_post( $event_org );
+                if ( ! $org_post || $org_post->post_type !== 'artpulse_org' || (int) $org_post->post_author !== $user_id ) {
+                        self::add_notice( 'Invalid organization selected.', 'error' );
+                        self::maybe_redirect();
+                        return;
+                }
+
+                // Validate start and end dates when both provided.
+                if ( $start_date && $end_date && strtotime( $start_date ) > strtotime( $end_date ) ) {
+                        self::add_notice( 'Start date cannot be later than end date.', 'error' );
+                        self::maybe_redirect();
+                        return;
+                }
+
+                $status_choice = sanitize_text_field( $_POST['event_status'] ?? 'publish' );
+                $publish_date  = sanitize_text_field( $_POST['event_publish_date'] ?? '' );
+                $can_publish   = current_user_can( 'publish_events' );
+                $post_status   = $can_publish ? 'publish' : 'pending';
 		$post_date     = null;
 
 		if ( $can_publish ) {
@@ -487,19 +502,25 @@ class EventSubmissionShortcode {
 					$final_image_ids[] = $image_id;
 				}
 			}
-		} else {
-			// No order specified, use the order images were uploaded
-			$final_image_ids = $image_ids;
-		}
+                } else {
+                        // No order specified, use the order images were uploaded
+                        $final_image_ids = $image_ids;
+                }
 
-		// If no banner was uploaded, use the first gallery image as the banner
-		if ( ! empty( $final_image_ids ) && ! get_post_thumbnail_id( $post_id ) ) {
-			set_post_thumbnail( $post_id, $final_image_ids[0] );
-			update_post_meta( $post_id, 'event_banner_id', $final_image_ids[0] );
-		}
+                // Ensure the banner is included in the submission images and handle fallbacks.
+                $banner_id = get_post_thumbnail_id( $post_id );
+                if ( $banner_id ) {
+                        if ( ! in_array( $banner_id, $final_image_ids, true ) ) {
+                                array_unshift( $final_image_ids, $banner_id );
+                        }
+                } elseif ( ! empty( $final_image_ids ) ) {
+                        set_post_thumbnail( $post_id, $final_image_ids[0] );
+                        update_post_meta( $post_id, 'event_banner_id', $final_image_ids[0] );
+                        $banner_id = $final_image_ids[0];
+                }
 
-		// Update Post Meta with Image IDs (including banner when present)
-		update_post_meta( $post_id, '_ap_submission_images', $final_image_ids );
+                // Update Post Meta with Image IDs (including banner when present)
+                update_post_meta( $post_id, '_ap_submission_images', $final_image_ids );
 
 		// Success message and redirect
 		$message = $post_status === 'pending'
