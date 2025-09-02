@@ -42,7 +42,7 @@ $address = implode( ', ', $addr_parts );
 
 $types     = get_the_terms( $event_id, 'event_type' );
 $org_name  = get_post_meta( $event_id, 'event_organizer_name', true );
-$org_email = get_post_meta( $event_id, 'event_organizer_email', true );
+$org_email = sanitize_email( get_post_meta( $event_id, 'event_organizer_email', true ) );
 
 $now = current_time( 'timestamp' );
 $status = '';
@@ -84,7 +84,7 @@ if ( $start && strtotime( $start ) > $now ) {
             <span class="screen-reader-text"><?php esc_html_e( 'Type:', 'artpulse' ); ?> <?php echo esc_html( implode( ', ', wp_list_pluck( $types, 'name' ) ) ); ?></span>
         <?php endif; ?>
         <?php if ( $org_name || $org_email ) : ?>
-            <span class="screen-reader-text"><?php esc_html_e( 'Organizer:', 'artpulse' ); ?> <?php echo esc_html( $org_name ); ?><?php if ( $org_email ) : ?> (<?php echo esc_html( antispambot( $org_email ) ); ?>)<?php endif; ?></span>
+            <span class="screen-reader-text"><?php esc_html_e( 'Organizer:', 'artpulse' ); ?> <?php echo esc_html( $org_name ); ?><?php if ( $org_email ) : ?> (<?php echo esc_html( $org_email ); ?>)<?php endif; ?></span>
         <?php endif; ?>
         <?php
             $rsvps      = get_post_meta( $event_id, 'event_rsvp_list', true );
