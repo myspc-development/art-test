@@ -196,6 +196,6 @@ function ap_filter_events_callback(): void {
 		echo '<div class="ap-empty">' . esc_html__( 'No events found.', 'artpulse' ) . '</div>';
 	}
 	$html = ob_get_clean();
-	echo $html;
-	wp_die();
+        echo $html;
+        wp_die( '', 200 );
 }
