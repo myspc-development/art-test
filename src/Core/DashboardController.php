@@ -35,61 +35,61 @@ class DashboardController {
 	private static array $role_widgets = array(
 		// Default widgets for newly created members
 		'member'       => array(
-                        'widget_news',
-                        'widget_membership',
-                        'widget_upgrade',
-                        'widget_account_tools',
-                        'widget_recommended_for_you',
-                        'widget_my_rsvps',
-                        'widget_favorites',
-                        'widget_local_events',
-                        'widget_my_follows',
-                        'widget_notifications',
-                        'widget_messages',
-                        'widget_dashboard_feedback',
-                        'widget_cat_fact',
-                ),
-                // Artist dashboard starter widgets
-                'artist'       => array(
-                        'widget_artist_feed_publisher',
-                        'widget_artist_audience_insights',
-                        'widget_artist_spotlight',
-                        'widget_artist_revenue_summary',
-                        'widget_my_events',
-                        'widget_messages',
-                        'widget_notifications',
-                        'widget_dashboard_feedback',
-                        'widget_cat_fact',
-                ),
-                // Organization admin widgets
-                // Synced with widget manifest. Guard below will warn on drift.
-                'organization' => array(
-                        'widget_org_event_overview',
-                        'widget_artpulse_analytics_widget',
-                        'widget_org_ticket_insights',
-                        'widget_my_events',
-                        'widget_org_team_roster',
-                        'widget_audience_crm',
-                        'widget_org_broadcast_box',
-                        'widget_org_approval_center',
-                        'widget_webhooks',
-                        'widget_support_history',
-                ),
-               // WordPress administrators don't have a default dashboard layout.
-               // Use an explicit empty configuration so callers can distinguish
-               // between an intentionally empty set and an unknown role.
-               'administrator' => array(),
-        );
+			'widget_news',
+			'widget_membership',
+			'widget_upgrade',
+			'widget_account_tools',
+			'widget_recommended_for_you',
+			'widget_my_rsvps',
+			'widget_favorites',
+			'widget_local_events',
+			'widget_my_follows',
+			'widget_notifications',
+			'widget_messages',
+			'widget_dashboard_feedback',
+			'widget_cat_fact',
+		),
+		// Artist dashboard starter widgets
+		'artist'       => array(
+			'widget_artist_feed_publisher',
+			'widget_artist_audience_insights',
+			'widget_artist_spotlight',
+			'widget_artist_revenue_summary',
+			'widget_my_events',
+			'widget_messages',
+			'widget_notifications',
+			'widget_dashboard_feedback',
+			'widget_cat_fact',
+		),
+		// Organization admin widgets
+		// Synced with widget manifest. Guard below will warn on drift.
+		'organization' => array(
+			'widget_org_event_overview',
+			'widget_artpulse_analytics_widget',
+			'widget_org_ticket_insights',
+			'widget_my_events',
+			'widget_org_team_roster',
+			'widget_audience_crm',
+			'widget_org_broadcast_box',
+			'widget_org_approval_center',
+			'widget_webhooks',
+			'widget_support_history',
+		),
+		// WordPress administrators don't have a default dashboard layout.
+		// Use an explicit empty configuration so callers can distinguish
+		// between an intentionally empty set and an unknown role.
+		'administrator' => array(),
+	);
 
-        /** @var bool */
-        private static bool $defaults_checked = false;
+	/** @var bool */
+	private static bool $defaults_checked = false;
 
-        /**
-         * Optional preset overrides set at runtime.
-         *
-         * @var array<string,array>
-         */
-        private static array $preset_overrides = array();
+	/**
+	 * Optional preset overrides set at runtime.
+	 *
+	 * @var array<string,array>
+	 */
+	private static array $preset_overrides = array();
 
 	public static function init(): void {
 		add_filter( 'query_vars', array( __CLASS__, 'registerQueryVars' ) );
@@ -98,133 +98,133 @@ class DashboardController {
 	}
 
 
-        /**
-         * Inject preset overrides.
-         */
-        public static function set_presets( array $presets ): void {
-                self::$preset_overrides = $presets;
-        }
+	/**
+	 * Inject preset overrides.
+	 */
+	public static function set_presets( array $presets ): void {
+		self::$preset_overrides = $presets;
+	}
 
-        /**
-         * Raw layout presets keyed by unique identifier.
-         *
-         * These presets are not filtered for widget registration or role/capability
-         * access. Call {@see get_default_presets()} for a sanitized version.
-         *
-         * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
-         */
-        public static function get_raw_presets(): array {
-                if ( ! empty( self::$preset_overrides ) ) {
-                        return self::$preset_overrides;
-                }
+	/**
+	 * Raw layout presets keyed by unique identifier.
+	 *
+	 * These presets are not filtered for widget registration or role/capability
+	 * access. Call {@see get_default_presets()} for a sanitized version.
+	 *
+	 * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
+	 */
+	public static function get_raw_presets(): array {
+		if ( ! empty( self::$preset_overrides ) ) {
+			return self::$preset_overrides;
+		}
 
-                return array(
-                                'member_default'   => array(
-                                        'title'  => 'Member Default',
-                                        'role'   => 'member',
-                                        'layout' => array(
-                                                array( 'id' => 'widget_news' ),
-                                                array( 'id' => 'widget_favorites' ),
-                                                array( 'id' => 'widget_events' ),
-                                                array( 'id' => 'instagram_widget' ),
-                                        ),
-                                ),
-                                'artist_default'   => array(
-                                        'title'  => 'Artist Default',
-                                        'role'   => 'artist',
-                                        'layout' => array_values(
-                                                array_filter(
-                                                        array(
-                                                                defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'activity_feed' ) : null,
-                                                                array( 'id' => 'artist_inbox_preview' ),
-                                                                array( 'id' => 'artist_revenue_summary' ),
-                                                                array( 'id' => 'artist_spotlight' ),
-                                                                array( 'id' => 'widget_favorites' ),
-                                                                defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'qa_checklist' ) : null,
-                                                        )
-                                                )
-                                        ),
-                                ),
-                                // New sample layouts that can be applied from the dashboard UI
-                                'new_member_intro' => array(
-                                        'title'  => 'New Member Intro',
-                                        'role'   => 'member',
-                                        'layout' => self::load_preset_layout( 'member', 'discovery' ),
-                                ),
-                                'artist_tools'     => array(
-                                        'title'  => 'Artist Tools',
-                                        'role'   => 'artist',
-                                        'layout' => self::load_preset_layout( 'artist', 'tools' ),
-                                ),
-                                'org_admin_start'  => array(
-                                        'title'  => 'Organization Admin Start',
-                                        'role'   => 'organization',
-                                        'layout' => self::load_preset_layout( 'organization', 'admin' ),
-                                ),
-                );
-        }
+		return array(
+				'member_default'   => array(
+					 'title'  => 'Member Default',
+					 'role'   => 'member',
+					 'layout' => array(
+						 array( 'id' => 'widget_news' ),
+						 array( 'id' => 'widget_favorites' ),
+						 array( 'id' => 'widget_events' ),
+						 array( 'id' => 'instagram_widget' ),
+					 ),
+				),
+				'artist_default'   => array(
+					 'title'  => 'Artist Default',
+					 'role'   => 'artist',
+					 'layout' => array_values(
+						 array_filter(
+						         array(
+						                 defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'activity_feed' ) : null,
+						                 array( 'id' => 'artist_inbox_preview' ),
+						                 array( 'id' => 'artist_revenue_summary' ),
+						                 array( 'id' => 'artist_spotlight' ),
+						                 array( 'id' => 'widget_favorites' ),
+						                 defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'qa_checklist' ) : null,
+						         )
+						 )
+					 ),
+				),
+				// New sample layouts that can be applied from the dashboard UI
+				'new_member_intro' => array(
+					 'title'  => 'New Member Intro',
+					 'role'   => 'member',
+					 'layout' => self::load_preset_layout( 'member', 'discovery' ),
+				),
+				'artist_tools'     => array(
+					 'title'  => 'Artist Tools',
+					 'role'   => 'artist',
+					 'layout' => self::load_preset_layout( 'artist', 'tools' ),
+				),
+				'org_admin_start'  => array(
+					 'title'  => 'Organization Admin Start',
+					 'role'   => 'organization',
+					 'layout' => self::load_preset_layout( 'organization', 'admin' ),
+				),
+		);
+	}
 
-        /**
-         * Default layout presets keyed by unique identifier.
-         *
-         * Preset layouts are filtered so only widgets the specified role can access
-         * are returned. Unregistered widgets, widgets limited to other roles and
-         * widgets requiring capabilities the role lacks are automatically removed.
-         *
-         * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
-         */
-        public static function get_default_presets(): array {
-                $presets = self::get_raw_presets();
+	/**
+	 * Default layout presets keyed by unique identifier.
+	 *
+	 * Preset layouts are filtered so only widgets the specified role can access
+	 * are returned. Unregistered widgets, widgets limited to other roles and
+	 * widgets requiring capabilities the role lacks are automatically removed.
+	 *
+	 * @return array<string,array{title:string,role:string,layout:array<int,array{id:string}>}>
+	 */
+	public static function get_default_presets(): array {
+		$presets = self::get_raw_presets();
 
-                // Remove widgets the role cannot access.
-                foreach ( $presets as $key => $preset ) {
-                        $layout = self::filter_accessible_layout(
-                                $preset['layout'],
-                                $preset['role']
-                        );
-                        if ( empty( $layout ) ) {
-                                $stub = sanitize_key( $key . '_placeholder' );
-                                WidgetGuard::register_stub_widget( $stub, array(), array( 'roles' => array( $preset['role'] ) ) );
-                               if (
-                                       defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
-                                       function_exists( 'is_user_logged_in' ) && is_user_logged_in() &&
-                                       ( ! defined( 'AP_TEST_MODE' ) || ! AP_TEST_MODE )
-                               ) {
-                                       error_log( "[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}" );
-                               }
-                               $layout = array( array( 'id' => $stub ) );
-                       }
-                        $presets[ $key ]['layout'] = $layout;
-                }
+		// Remove widgets the role cannot access.
+		foreach ( $presets as $key => $preset ) {
+			$layout = self::filter_accessible_layout(
+				$preset['layout'],
+				$preset['role']
+			);
+			if ( empty( $layout ) ) {
+				$stub = sanitize_key( $key . '_placeholder' );
+				WidgetGuard::register_stub_widget( $stub, array(), array( 'roles' => array( $preset['role'] ) ) );
+				if (
+					defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
+					function_exists( 'is_user_logged_in' ) && is_user_logged_in() &&
+					( ! defined( 'AP_TEST_MODE' ) || ! AP_TEST_MODE )
+				) {
+					error_log( "[Dashboard Preset] {$key} for role {$preset['role']} missing widgets; registered stub {$stub}" );
+				}
+				$layout = array( array( 'id' => $stub ) );
+			}
+			$presets[ $key ]['layout'] = $layout;
+		}
 
-                return $presets;
-        }
+		return $presets;
+	}
 
 	/**
 	 * Filter a preset layout so it only contains widgets the role can access.
 	 */
-        private static function filter_accessible_layout( array $layout, string $role ): array {
-                $filtered = array();
+	private static function filter_accessible_layout( array $layout, string $role ): array {
+		$filtered = array();
 
-                foreach ( $layout as $entry ) {
-                        $id = $entry['id'] ?? '';
-                        if ( ! $id ) {
-                                continue;
-                        }
+		foreach ( $layout as $entry ) {
+			$id = $entry['id'] ?? '';
+			if ( ! $id ) {
+				continue;
+			}
 
-                        $result = WidgetAccessValidator::validate( $id, $role, $entry );
-                        if ( ! $result['allowed'] ) {
-                                continue;
-                        }
+			$result = WidgetAccessValidator::validate( $id, $role, $entry );
+			if ( ! $result['allowed'] ) {
+				continue;
+			}
 
-                        $filtered[] = array(
-                                'id'      => $id,
-                                'visible' => $entry['visible'] ?? true,
-                        );
-                }
+			$filtered[] = array(
+				'id'      => $id,
+				'visible' => $entry['visible'] ?? true,
+			);
+		}
 
-                return $filtered;
-        }
+		return $filtered;
+	}
 
 	/**
 	 * Verify that default widget IDs are registered and log a warning once.
@@ -237,14 +237,14 @@ class DashboardController {
 		self::$defaults_checked = true;
 
 		$missing = array();
-                foreach ( self::$role_widgets as $ids ) {
-                        foreach ( $ids as $id ) {
-                                $id = WidgetIds::canonicalize( $id );
-                                if ( ! DashboardWidgetRegistry::exists( $id ) ) {
-                                        $missing[] = $id;
-                                }
-                        }
-                }
+		foreach ( self::$role_widgets as $ids ) {
+			foreach ( $ids as $id ) {
+				$id = WidgetIds::canonicalize( $id );
+				if ( ! DashboardWidgetRegistry::exists( $id ) ) {
+					 $missing[] = $id;
+				}
+			}
+		}
 
 		if ( $missing ) {
 			foreach ( array_unique( $missing ) as $id ) {
@@ -278,67 +278,80 @@ class DashboardController {
 		$widgets = array_map( array( WidgetRegistry::class, 'normalize_slug' ), $widgets );
 		$known   = WidgetRegistry::get_canonical_ids();
 		if ( ! empty( $known ) ) {
-			$widgets = array_values( array_unique( array_intersect( $widgets, $known ) ) );
+			$widgets = array_values(
+				array_unique(
+					array_filter(
+						$widgets,
+						static fn( $id ) => in_array( $id, $known, true ) || DashboardWidgetRegistry::exists( $id )
+					)
+				)
+			);
+		} else {
+			$widgets = array_values(
+				array_unique(
+					array_filter( $widgets, array( DashboardWidgetRegistry::class, 'exists' ) )
+				)
+			);
 		}
 
-                $valid = array();
-                foreach ( $widgets as $id ) {
-                        $config = DashboardWidgetRegistry::get( $id );
-                        if ( ! $config ) {
-                                trigger_error( 'Dashboard widget not registered: ' . $id, E_USER_WARNING );
-                                continue;
-                        }
+		$valid = array();
+		foreach ( $widgets as $id ) {
+			$config = DashboardWidgetRegistry::get( $id );
+			if ( ! $config ) {
+				trigger_error( 'Dashboard widget not registered: ' . $id, E_USER_WARNING );
+				continue;
+			}
 
-                        $roles = isset( $config['roles'] ) ? (array) $config['roles'] : array();
-                        if ( $roles && ! in_array( $role, $roles, true ) ) {
-                                continue;
-                        }
+			$roles = isset( $config['roles'] ) ? (array) $config['roles'] : array();
+			if ( $roles && ! in_array( $role, $roles, true ) ) {
+				continue;
+			}
 
-                        $cap = $config['capability'] ?? '';
-                        if (
-                                $cap &&
-                                ( \function_exists( __NAMESPACE__ . '\get_role' ) || \function_exists( '\\get_role' ) )
-                        ) {
-                                $role_obj = \function_exists( __NAMESPACE__ . '\get_role' )
-                                        ? \call_user_func( __NAMESPACE__ . '\get_role', $role )
-                                        : \get_role( $role );
-                                if ( $role_obj && method_exists( $role_obj, 'has_cap' ) && ! $role_obj->has_cap( $cap ) ) {
-                                        continue;
-                                }
-                        }
+			$cap = $config['capability'] ?? '';
+			if (
+				$cap &&
+				( \function_exists( __NAMESPACE__ . '\get_role' ) || \function_exists( '\\get_role' ) )
+			) {
+				$role_obj = \function_exists( __NAMESPACE__ . '\get_role' )
+					 ? \call_user_func( __NAMESPACE__ . '\get_role', $role )
+					 : \get_role( $role );
+				if ( $role_obj && method_exists( $role_obj, 'has_cap' ) && ! $role_obj->has_cap( $cap ) ) {
+					 continue;
+				}
+			}
 
-                        $class = $config['class'] ?? '';
-                        if ( $class && method_exists( $class, 'can_view' ) ) {
-                                try {
-                                        if ( ! call_user_func( array( $class, 'can_view' ), 0 ) ) {
-                                                continue;
-                                        }
-                                } catch ( \Throwable $e ) {
-                                        continue;
-                                }
-                        }
+			$class = $config['class'] ?? '';
+			if ( $class && method_exists( $class, 'can_view' ) ) {
+				try {
+					 if ( ! call_user_func( array( $class, 'can_view' ), 0 ) ) {
+						 continue;
+					 }
+				} catch ( \Throwable $e ) {
+					 continue;
+				}
+			}
 
-                        $valid[] = $id;
-                }
+			$valid[] = $id;
+		}
 
-                return $valid;
-        }
+		return $valid;
+	}
 
 	/**
 	 * Determine the dashboard layout for a user. Checks user overrides then
 	 * falls back to the default widgets for their role.
 	 */
 	public static function get_user_dashboard_layout( int $user_id ): array {
-               if (
-                       isset( $_GET['ap_preview_user'], $_GET['ap_preview_nonce'] ) &&
-                       current_user_can( 'manage_options' ) &&
-                       wp_verify_nonce( sanitize_key( $_GET['ap_preview_nonce'] ), 'ap_preview' )
-               ) {
-                       $preview = (int) $_GET['ap_preview_user'];
-                       if ( $preview > 0 ) {
-                               $user_id = $preview;
-                       }
-               }
+		if (
+			isset( $_GET['ap_preview_user'], $_GET['ap_preview_nonce'] ) &&
+			current_user_can( 'manage_options' ) &&
+			wp_verify_nonce( sanitize_key( $_GET['ap_preview_nonce'] ), 'ap_preview' )
+		) {
+			$preview = (int) $_GET['ap_preview_user'];
+			if ( $preview > 0 ) {
+				$user_id = $preview;
+			}
+		}
 
 		$role = self::get_role( $user_id );
 
@@ -386,16 +399,16 @@ class DashboardController {
 			)
 		);
 
-                // Filter out any widgets the user cannot access
-                $filtered = array_values(
-                        array_filter(
-                                $layout,
-                                static function ( $w ) use ( $user_id ) {
-                                        $id = $w['id'] ?? null;
-                                        return $id && DashboardWidgetRegistry::user_can_see( $id, $user_id );
-                                }
-                        )
-                );
+		// Filter out any widgets the user cannot access
+		$filtered = array_values(
+			array_filter(
+				$layout,
+				static function ( $w ) use ( $user_id ) {
+					 $id = $w['id'] ?? null;
+					 return $id && DashboardWidgetRegistry::user_can_see( $id, $user_id );
+				}
+			)
+		);
 
 		if ( empty( $filtered ) ) {
 			WidgetGuard::register_stub_widget( 'empty_dashboard', array( 'title' => 'Dashboard Placeholder' ), array( 'roles' => array( $role ) ) );
@@ -485,15 +498,15 @@ class DashboardController {
 				$id = WidgetRegistry::normalize_slug( sanitize_key( $entry['id'] ) );
 
 				if ( ! WidgetRegistry::exists( $id ) && ! DashboardWidgetRegistry::exists( $id ) ) {
-                               if (
-                                       defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
-                                       function_exists( 'is_user_logged_in' ) && is_user_logged_in() &&
-                                       ( ! defined( 'AP_TEST_MODE' ) || ! AP_TEST_MODE )
-                               ) {
-                                       error_log( "[Dashboard Preset] Widget {$id} not registered" );
-                               }
-                               continue;
-                       }
+				if (
+					defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
+					function_exists( 'is_user_logged_in' ) && is_user_logged_in() &&
+					( ! defined( 'AP_TEST_MODE' ) || ! AP_TEST_MODE )
+				) {
+					error_log( "[Dashboard Preset] Widget {$id} not registered" );
+				}
+				continue;
+			}
 
 				$entry['id'] = $id;
 				$clean[]     = $entry;
@@ -544,20 +557,20 @@ class DashboardController {
 	}
 
        public static function get_role( $user_id ): string {
-               if (
-                       function_exists( '\ap_get_effective_role' )
-                       && ( $user_id === 0 || $user_id === get_current_user_id() )
-               ) {
-                       $role = \ap_get_effective_role();
-               } else {
-                       $role = RoleResolver::resolve( $user_id );
-               }
+		if (
+			function_exists( '\ap_get_effective_role' )
+			&& ( $user_id === 0 || $user_id === get_current_user_id() )
+		) {
+			$role = \ap_get_effective_role();
+		} else {
+			$role = RoleResolver::resolve( $user_id );
+		}
 
-               if ( empty( $role ) ) {
-                       $role = 'member';
-               }
+		if ( empty( $role ) ) {
+			$role = 'member';
+		}
 
-               return sanitize_key( (string) $role );
+		return sanitize_key( (string) $role );
        }
 
 	/**
