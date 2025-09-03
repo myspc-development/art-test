@@ -47,14 +47,14 @@ class EventSubmissionShortcode {
 	 * Redirect back to the form when possible.
 	 */
         protected static function maybe_redirect(): void {
-                $target = is_callable( '\\wp_get_referer' )
-                        ? wp_get_referer()
-                        : \ArtPulse\Core\Plugin::get_event_submission_url();
+               $target = function_exists( 'wp_get_referer' )
+                       ? wp_get_referer()
+                       : \ArtPulse\Core\Plugin::get_event_submission_url();
 
-                if ( is_callable( '\\wp_safe_redirect' ) ) {
-                        wp_safe_redirect( $target );
-                        exit;
-                }
+               if ( function_exists( 'wp_safe_redirect' ) ) {
+                       wp_safe_redirect( $target );
+                       exit;
+               }
         }
 
 	public static function register() {
