@@ -333,10 +333,10 @@ class DashboardWidgetRegistry {
 		$options['roles'] = self::normalizeRoleList( $options['roles'] ?? array() );
 
 		if ( isset( self::$widgets[ $id ] ) ) {
-			if ( empty( self::$logged_duplicates[ $id ] ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( "AP: widget id already registered: $id" );
-				self::$logged_duplicates[ $id ] = true;
-			}
+                        if ( empty( self::$logged_duplicates[ $id ] ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                ap_debug_log( "widget id already registered: $id" );
+                                self::$logged_duplicates[ $id ] = true;
+                        }
 			return self::$widgets[ $id ];
 		}
 

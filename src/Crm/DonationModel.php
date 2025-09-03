@@ -54,7 +54,7 @@ class DonationModel {
 		global $wpdb; /** @var wpdb $wpdb */
 		$table = $wpdb->prefix . 'ap_donations';
 		if ( ! Schema::column_exists( $table, 'org_id' ) ) {
-			error_log( 'AP: donations table missing org_id column; returning empty set' );
+                        \ArtPulse\Core\ap_debug_log( 'donations table missing org_id column; returning empty set' );
 			return array();
 		}
 		$sql = "SELECT * FROM {$table} WHERE org_id = %d ORDER BY donated_at DESC";
