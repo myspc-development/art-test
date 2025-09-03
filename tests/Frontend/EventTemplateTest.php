@@ -64,6 +64,7 @@ class EventTemplateTest extends TestCase {
 
         $this->assertStringContainsString( '&#64;', $html );
         $this->assertStringNotContainsString( 'organizer@example.com', $html );
+        $this->assertStringNotContainsString( '@', $html );
     }
 }
 
