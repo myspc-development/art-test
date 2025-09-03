@@ -83,6 +83,8 @@ class DashboardPresets {
                                 'widget_site_stats',
                         ),
                         'organization' => array(
+                                'widget_org_event_overview',
+                                'widget_artpulse_analytics_widget',
                                 'widget_audience_crm',
                                 'widget_org_ticket_insights',
                                 'widget_webhooks',
