@@ -225,55 +225,72 @@ class DashboardWidgetController {
                 return ( new self() )->ok( array( 'saved' => true ) );
         }
 
-        public static function export_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                $guard = Auth::guard( $request, 'edit_posts', 'ap_export_layout' );
-                if ( is_wp_error( $guard ) ) {
-                        return $guard;
-                }
+       /**
+        * Export the dashboard widget layout for a role.
+        *
+        * The role may be supplied via the query string, a JSON body, or a
+        * form-encoded request. The response contains the widget layout
+        * encoded with builder widget IDs.
+        */
+       public static function export_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+               $guard = Auth::guard( $request, 'edit_posts', 'ap_export_layout' );
+               if ( is_wp_error( $guard ) ) {
+                       return $guard;
+               }
 
-                $role = sanitize_key( $request->get_param( 'role' ) );
-                if ( ! $role ) {
-                        return new WP_Error( 'invalid_role', __( 'Role parameter missing', 'artpulse' ), array( 'status' => 400 ) );
-                }
+               $role = sanitize_key( $request->get_param( 'role' ) );
+               if ( ! $role ) {
+                       return new WP_Error( 'invalid_role', __( 'Role parameter missing', 'artpulse' ), array( 'status' => 400 ) );
+               }
 
-                $result  = \ArtPulse\Admin\UserLayoutManager::get_role_layout( $role );
-                $builder = self::convert_to_builder_ids( $result['layout'] );
+               $result  = \ArtPulse\Admin\UserLayoutManager::get_role_layout( $role );
+               $builder = self::convert_to_builder_ids( $result['layout'] );
 
-                return ( new self() )->ok( array( 'layout' => $builder ) );
-        }
+               return ( new self() )->ok( array( 'layout' => $builder ) );
+       }
 
-        public static function import_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                $nonce_check = Auth::verify_nonce( $request, 'ap_import_layout' );
-                if ( is_wp_error( $nonce_check ) ) {
-                        $nonce_check->add_data( array( 'status' => 403 ) );
-                        return $nonce_check;
-                }
+       /**
+        * Import a dashboard widget layout for a role.
+        *
+        * Accepts either JSON or form-encoded payloads. The request must
+        * include a `role` parameter and a `layout` array. When using
+        * form encoding, the `layout` value should be JSON encoded.
+        */
+       public static function import_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+               $nonce_check = Auth::verify_nonce( $request, 'ap_import_layout' );
+               if ( is_wp_error( $nonce_check ) ) {
+                       $nonce_check->add_data( array( 'status' => 403 ) );
+                       return $nonce_check;
+               }
 
-                $cap_check = Auth::require_cap( 'edit_posts' );
-                if ( is_wp_error( $cap_check ) ) {
-                        $cap_check->add_data( array( 'status' => 403 ) );
-                        return $cap_check;
-                }
+               $cap_check = Auth::require_cap( 'edit_posts' );
+               if ( is_wp_error( $cap_check ) ) {
+                       $cap_check->add_data( array( 'status' => 403 ) );
+                       return $cap_check;
+               }
 
-                $data = $request->get_json_params();
-                $role = sanitize_key( $data['role'] ?? '' );
-                if ( ! $role ) {
-                        return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
-                }
-		if ( empty( DashboardWidgetRegistry::get_for_role( $role ) ) && ! get_role( $role ) ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( 'Attempt to import dashboard layout for unsupported role: ' . $role );
-			}
-			return new WP_Error( 'invalid_role', __( 'Unsupported role', 'artpulse' ), array( 'status' => 400 ) );
-		}
-                $layout = $data['layout'] ?? null;
-                if ( ! is_array( $layout ) ) {
-                        return new WP_Error( 'invalid_layout', __( 'Invalid layout', 'artpulse' ), array( 'status' => 400 ) );
-                }
+               $role = sanitize_key( $request->get_param( 'role' ) );
+               if ( ! $role ) {
+                       return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
+               }
+               if ( empty( DashboardWidgetRegistry::get_for_role( $role ) ) && ! get_role( $role ) ) {
+                       if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                               error_log( 'Attempt to import dashboard layout for unsupported role: ' . $role );
+                       }
+                       return new WP_Error( 'invalid_role', __( 'Unsupported role', 'artpulse' ), array( 'status' => 400 ) );
+               }
 
-                $core_layout = self::convert_to_core_ids( $layout );
-                \ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $core_layout );
+               $layout = $request->get_param( 'layout' );
+               if ( is_string( $layout ) ) {
+                       $layout = json_decode( $layout, true );
+               }
+               if ( ! is_array( $layout ) ) {
+                       return new WP_Error( 'invalid_layout', __( 'Invalid layout', 'artpulse' ), array( 'status' => 400 ) );
+               }
 
-                return ( new self() )->ok( array( 'imported' => true ) );
-        }
+               $core_layout = self::convert_to_core_ids( $layout );
+               \ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $core_layout );
+
+               return ( new self() )->ok( array( 'imported' => true ) );
+       }
 }
