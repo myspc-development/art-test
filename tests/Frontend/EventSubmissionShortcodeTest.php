@@ -20,7 +20,11 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 \ArtPulse\Frontend\StubState::reset();
                 \ArtPulse\Frontend\StubState::$current_user = 1;
                 $GLOBALS['__ap_test_user_meta'] = array();
-                \ArtPulse\Frontend\StubState::$function_exists_map = array( 'wc_add_notice' => true );
+               \ArtPulse\Frontend\StubState::$function_exists_map = array(
+                       'wc_add_notice'                            => true,
+                       'ArtPulse\\Frontend\\wp_safe_redirect' => true,
+                       'ArtPulse\\Frontend\\wp_get_referer'   => true,
+               );
                 \ArtPulse\Frontend\StubState::$notice       = '';
                 \ArtPulse\Frontend\StubState::$inserted_post = array();
                \ArtPulse\Frontend\StubState::$media_returns = array();
