@@ -38,15 +38,16 @@ class EventSubmissionShortcode {
                        'type'    => $type,
                );
 
+               // Always record the notice internally before invoking any external handlers.
+               self::$notice_log[] = $entry;
+
                if ( function_exists( 'wc_add_notice' ) ) {
                        wc_add_notice( $message, $type );
-                       self::$notice_log[] = $entry;
                        return;
                }
 
                $notices   = get_transient( self::NOTICE_KEY ) ?: array();
                $notices[] = $entry;
-               self::$notice_log[] = $entry;
                set_transient( self::NOTICE_KEY, $notices, defined( 'MINUTE_IN_SECONDS' ) ? MINUTE_IN_SECONDS : 60 );
        }
 
@@ -87,6 +88,11 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
         $target = \ArtPulse\Core\Plugin::get_event_submission_url();
     }
 
+    // Always expose the intended target to tests when possible.
+    if ( class_exists( __NAMESPACE__ . '\StubState' ) ) {
+        StubState::$page = $target;
+    }
+
     if ( ! is_callable( $redirect ) ) {
         $redirect = __NAMESPACE__ . '\wp_safe_redirect';
 
@@ -97,11 +103,6 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
                 $redirect = null;
             }
         }
-    }
-
-    // Expose the intended target to tests when possible.
-    if ( class_exists( __NAMESPACE__ . '\StubState' ) ) {
-        StubState::$page = $target;
     }
 
     if ( is_callable( $redirect ) ) {
