@@ -40,12 +40,14 @@ if ( $country ) {
 }
 $address = implode( ', ', $addr_parts );
 
-$types     = get_the_terms( $event_id, 'event_type' );
+$types = get_the_terms( $event_id, 'event_type' );
+if ( is_wp_error( $types ) ) {
+    $types = array();
+} else {
+    $types = wp_list_pluck( $types, 'name' );
+}
 $org_name  = get_post_meta( $event_id, 'event_organizer_name', true );
 $org_email = sanitize_email( get_post_meta( $event_id, 'event_organizer_email', true ) );
-if ( $types && ! is_wp_error( $types ) ) {
-    $types = array_map( static fn( $t ) => $t->name, $types );
-}
 
 $now = current_time( 'timestamp' );
 $status = '';
@@ -83,7 +85,7 @@ if ( $start && strtotime( $start ) > $now ) {
                 <?php echo esc_html( $venue ); ?><?php echo $venue && $address ? ', ' : ''; ?><?php echo esc_html( $address ); ?>
             </p>
         <?php endif; ?>
-        <?php if ( $types ) : ?>
+        <?php if ( ! empty( $types ) ) : ?>
             <span class="screen-reader-text"><?php esc_html_e( 'Type:', 'artpulse' ); ?> <?php echo esc_html( implode( ', ', $types ) ); ?></span>
         <?php endif; ?>
         <?php if ( $org_name || $org_email ) : ?>
