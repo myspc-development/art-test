@@ -126,20 +126,20 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 
                 EventSubmissionShortcode::maybe_handle_form();
 
-                $gallery           = null;
-                $banner_meta_found = false;
-                foreach ( \ArtPulse\Frontend\StubState::$meta_log as $args ) {
-                        if ( $args[1] === '_ap_submission_images' ) {
-                                $gallery = $args[2];
-                        }
-                        if ( $args[1] === 'event_banner_id' && $args[2] === 55 ) {
-                                $banner_meta_found = true;
-                        }
-                }
+               $gallery_calls = array_filter(
+                       \ArtPulse\Frontend\StubState::$meta_log,
+                       static fn( $args ) => $args[1] === '_ap_submission_images'
+               );
+               $banner_calls = array_filter(
+                       \ArtPulse\Frontend\StubState::$meta_log,
+                       static fn( $args ) => $args[1] === 'event_banner_id'
+               );
 
-                $this->assertSame( array( 55, 11 ), $gallery );
-                $this->assertTrue( $banner_meta_found );
-                $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
+               $this->assertCount( 1, $gallery_calls );
+               $this->assertSame( array( 55, 11 ), array_values( $gallery_calls )[0][2] );
+               $this->assertCount( 1, $banner_calls );
+               $this->assertSame( 55, array_values( $banner_calls )[0][2] );
+               $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
         }
 
         public function test_first_gallery_image_used_as_banner_when_missing(): void {
@@ -155,38 +155,39 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 
                 EventSubmissionShortcode::maybe_handle_form();
 
-                $gallery           = null;
-                $banner_meta_found = false;
-                foreach ( \ArtPulse\Frontend\StubState::$meta_log as $args ) {
-                        if ( $args[1] === '_ap_submission_images' ) {
-                                $gallery = $args[2];
-                        }
-                        if ( $args[1] === 'event_banner_id' && $args[2] === 11 ) {
-                                $banner_meta_found = true;
-                        }
-                }
+               $gallery_calls = array_filter(
+                       \ArtPulse\Frontend\StubState::$meta_log,
+                       static fn( $args ) => $args[1] === '_ap_submission_images'
+               );
+               $banner_calls = array_filter(
+                       \ArtPulse\Frontend\StubState::$meta_log,
+                       static fn( $args ) => $args[1] === 'event_banner_id'
+               );
 
-                $this->assertSame( array( 11 ), $gallery );
-                $this->assertTrue( $banner_meta_found );
-                $this->assertSame( 11, \ArtPulse\Frontend\StubState::$thumbnail );
-                $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
+               $this->assertCount( 1, $gallery_calls );
+               $this->assertSame( array( 11 ), array_values( $gallery_calls )[0][2] );
+               $this->assertCount( 1, $banner_calls );
+               $this->assertSame( 11, array_values( $banner_calls )[0][2] );
+               $this->assertSame( 11, \ArtPulse\Frontend\StubState::$thumbnail );
+               $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
         }
 
         public function test_meta_logged_when_no_images_uploaded(): void {
                 EventSubmissionShortcode::maybe_handle_form();
 
-                $gallery = $banner = null;
-                foreach ( \ArtPulse\Frontend\StubState::$meta_log as $args ) {
-                        if ( $args[1] === '_ap_submission_images' ) {
-                                $gallery = $args[2];
-                        }
-                        if ( $args[1] === 'event_banner_id' ) {
-                                $banner = $args[2];
-                        }
-                }
+               $gallery_calls = array_filter(
+                       \ArtPulse\Frontend\StubState::$meta_log,
+                       static fn( $args ) => $args[1] === '_ap_submission_images'
+               );
+               $banner_calls = array_filter(
+                       \ArtPulse\Frontend\StubState::$meta_log,
+                       static fn( $args ) => $args[1] === 'event_banner_id'
+               );
 
-                $this->assertSame( array(), $gallery );
-                $this->assertSame( 0, $banner );
-                $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
+               $this->assertCount( 1, $gallery_calls );
+               $this->assertSame( array(), array_values( $gallery_calls )[0][2] );
+               $this->assertCount( 1, $banner_calls );
+               $this->assertSame( 0, array_values( $banner_calls )[0][2] );
+               $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
         }
 }
