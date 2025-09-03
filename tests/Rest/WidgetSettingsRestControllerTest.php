@@ -120,6 +120,6 @@ class WidgetSettingsRestControllerTest extends \WP_UnitTestCase {
                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
                $req->set_body_params( array( 'settings' => array( 'limit' => 5 ) ) );
                $res = rest_get_server()->dispatch( $req );
-               $this->assertSame( 401, $res->get_status() );
+               $this->assertSame( 403, $res->get_status() ); // 403: unauthenticated requests are forbidden
        }
 }

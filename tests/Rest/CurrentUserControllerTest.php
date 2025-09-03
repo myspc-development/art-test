@@ -27,7 +27,7 @@ class CurrentUserControllerTest extends \WP_UnitTestCase {
 	public function test_requires_authentication(): void {
                 wp_set_current_user( 0 );
                 $res = call( 'GET', '/artpulse/v1/me' );
-                assertStatus( $res, 401 );
+                assertStatus( $res, 403 ); // 403: unauthenticated requests are forbidden
 	}
 
 	public function test_returns_current_user_information(): void {

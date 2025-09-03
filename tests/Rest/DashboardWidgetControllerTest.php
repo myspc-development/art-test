@@ -125,12 +125,13 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 
        public function test_get_widgets_requires_logged_in_user(): void {
                wp_set_current_user( 0 );
+               $this->assertFalse( is_user_logged_in() ); // verify logged out
                $req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
                $req->set_param( 'role', 'administrator' );
                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
                $res = rest_get_server()->dispatch( $req );
 
-               $this->assertSame( 403, $res->get_status() );
+               $this->assertSame( 403, $res->get_status() ); // 403: unauthenticated requests are forbidden
        }
 
         public function test_save_layout_with_extra_widgets(): void {
