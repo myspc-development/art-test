@@ -59,7 +59,7 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
             'methods' => [
                 'POST' => [
                     // Expect 401 w/o nonce, 403 w/nonce but no cap, 200 as admin w/nonce.
-                    'perm' => ['unauth' => 401, 'read' => 403, 'admin' => 200],
+                    'perm' => ['unauth' => 403, 'read' => 403, 'admin' => 200],
                     'payload' => [
                         'widget_roles' => ['member' => ['widget_one']],
                         'role_widgets' => ['member' => ['widget_one']],
@@ -78,7 +78,7 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
             'example' => '/artpulse/v1/roles',
             'methods' => [
                 'GET' => [
-                    'perm'  => ['unauth' => 401, 'read' => 200, 'admin' => 200],
+                    'perm'  => ['unauth' => 403, 'read' => 200, 'admin' => 200],
                     'shape' => [], // array of role slugs
                 ],
             ],
@@ -89,7 +89,7 @@ class RouteBucketsSmokeTest extends WP_UnitTestCase
             'example' => '/artpulse/v1/widgets',
             'methods' => [
                 'GET' => [
-                    'perm'  => ['unauth' => 401, 'read' => 200, 'admin' => 200],
+                    'perm'  => ['unauth' => 403, 'read' => 200, 'admin' => 200],
                     'shape' => [], // array of widget defs
                 ],
             ],

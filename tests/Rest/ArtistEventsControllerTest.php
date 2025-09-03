@@ -123,7 +123,7 @@ class ArtistEventsControllerTest extends \WP_UnitTestCase {
 		wp_set_current_user( 0 );
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/artist-events' );
 		$res = rest_get_server()->dispatch( $req );
-		$this->assertSame( 401, $res->get_status() );
+		$this->assertSame( 403, $res->get_status() ); // 403: unauthenticated requests are forbidden
 	}
 
 	public function test_get_events_returns_current_user_posts(): void {

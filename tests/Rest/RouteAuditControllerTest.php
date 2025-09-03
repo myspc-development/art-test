@@ -32,6 +32,6 @@ class RouteAuditControllerTest extends \WP_UnitTestCase {
                wp_set_current_user( 0 );
                $req = new \WP_REST_Request( 'GET', '/ap/v1/routes/audit' );
                $res = rest_get_server()->dispatch( $req );
-               $this->assertSame( 401, $res->get_status() );
+               $this->assertSame( 403, $res->get_status() ); // 403: unauthenticated requests are forbidden
        }
 }

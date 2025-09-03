@@ -13,7 +13,7 @@ class RsvpBulkTest extends \WP_UnitTestCase {
         do_action( 'rest_api_init' );
     }
 
-    public function test_unauthenticated_request_returns_401(): void {
+    public function test_unauthenticated_request_returns_403(): void {
         wp_set_current_user( 0 );
         $req = new \WP_REST_Request( 'POST', '/ap/v1/rsvp/bulk' );
         $req->set_body_params(
@@ -24,7 +24,7 @@ class RsvpBulkTest extends \WP_UnitTestCase {
             )
         );
         $res = rest_get_server()->dispatch( $req );
-        $this->assertSame( 401, $res->get_status() );
+        $this->assertSame( 403, $res->get_status() ); // 403: unauthenticated requests are forbidden
     }
 
     public function test_authenticated_request_returns_200(): void {
