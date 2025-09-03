@@ -106,17 +106,20 @@ class OrganizationDashboardShortcode {
 		echo ' <button class="ap-delete-event" data-id="' . esc_attr( $event->ID ) . '">Delete</button></li>';
 		return ob_get_clean();
 	}
-	public static function render( $atts ) {
-		if ( ! is_user_logged_in() ) {
-			return '<p>' . esc_html__( 'You must be logged in to view this dashboard.', 'artpulse' ) . '</p>';
-		}
-                if ( ! \ArtPulse\Frontend\current_user_can( 'organization' ) && ! \ArtPulse\Frontend\current_user_can( 'administrator' ) ) {
-			return '<p>' . esc_html__( 'Access denied.', 'artpulse' ) . '</p>';
-		}
-		$mode = ap_get_ui_mode();
-		if ( $mode === 'react' ) {
-			return do_shortcode( '[ap_render_ui]' );
-		}
+        public static function render( $atts ) {
+                if ( ! is_user_logged_in() ) {
+                        return '<p>' . esc_html__( 'You must be logged in to view this dashboard.', 'artpulse' ) . '</p>';
+                }
+                $cap_fn   = __NAMESPACE__ . '\\current_user_can';
+                $can_org   = function_exists( $cap_fn ) ? $cap_fn( 'organization' ) : \current_user_can( 'organization' );
+                $can_admin = function_exists( $cap_fn ) ? $cap_fn( 'administrator' ) : \current_user_can( 'administrator' );
+                if ( ! $can_org && ! $can_admin ) {
+                        return '<p>' . esc_html__( 'Access denied.', 'artpulse' ) . '</p>';
+                }
+                $mode = ap_get_ui_mode();
+                if ( $mode === 'react' ) {
+                        return do_shortcode( '[ap_render_ui]' );
+                }
 		$tag = apply_filters( 'ap_dashboard_shortcode_tag', 'ap_user_dashboard' );
 		return do_shortcode( '[' . $tag . ']' );
 	}
