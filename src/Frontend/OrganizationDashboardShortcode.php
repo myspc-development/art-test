@@ -110,12 +110,17 @@ class OrganizationDashboardShortcode {
                 if ( ! is_user_logged_in() ) {
                         return '<p>' . esc_html__( 'You must be logged in to view this dashboard.', 'artpulse' ) . '</p>';
                 }
-                $cap_fn   = __NAMESPACE__ . '\\current_user_can';
-                $can_org   = function_exists( $cap_fn ) ? $cap_fn( 'organization' ) : \current_user_can( 'organization' );
-                $can_admin = function_exists( $cap_fn ) ? $cap_fn( 'administrator' ) : \current_user_can( 'administrator' );
-                if ( ! $can_org && ! $can_admin ) {
-                        return '<p>' . esc_html__( 'Access denied.', 'artpulse' ) . '</p>';
-                }
+               $cap_fn = __NAMESPACE__ . '\\current_user_can';
+               if ( function_exists( $cap_fn ) ) {
+                       $can_org   = $cap_fn( 'organization' );
+                       $can_admin = $cap_fn( 'administrator' );
+               } else {
+                       $can_org   = \current_user_can( 'organization' );
+                       $can_admin = \current_user_can( 'administrator' );
+               }
+               if ( ! $can_org && ! $can_admin ) {
+                       return '<p>' . esc_html__( 'Access denied.', 'artpulse' ) . '</p>';
+               }
                 $mode = ap_get_ui_mode();
                 if ( $mode === 'react' ) {
                         return do_shortcode( '[ap_render_ui]' );
