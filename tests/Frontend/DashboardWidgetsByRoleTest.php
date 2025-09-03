@@ -1,10 +1,14 @@
 <?php
 namespace ArtPulse\Frontend;
 
+require_once __DIR__ . '/_Html.php';
+
+namespace ArtPulse\Frontend\Tests;
+
 use WP_UnitTestCase;
 use function ArtPulse\Frontend\Html\extract_widget_ids;
-
-require_once __DIR__ . '/_Html.php';
+use function ArtPulse\Frontend\ap_set_current_user_role;
+use function ArtPulse\Frontend\ap_set_user_meta;
 
 /**
  * @backupGlobals disabled
