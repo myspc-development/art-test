@@ -194,22 +194,27 @@ class DashboardWidgetController {
                         return $guard;
                 }
 
-                $data = $request->get_json_params();
-                $role = sanitize_key( $data['role'] ?? '' );
-                if ( ! $role ) {
-                        return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
-                }
+               $data = $request->get_json_params();
+               if ( empty( $data ) ) {
+                       $data = $request->get_body_params();
+               }
+               // Support both JSON and form-encoded requests.
+               $role = sanitize_key( $data['role'] ?? '' );
+               if ( ! $role ) {
+                       return new WP_Error( 'invalid_role', __( 'Invalid role', 'artpulse' ), array( 'status' => 400 ) );
+               }
 		if ( empty( DashboardWidgetRegistry::get_for_role( $role ) ) && ! get_role( $role ) ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'Attempt to save dashboard layout for unsupported role: ' . $role );
 			}
 			return new WP_Error( 'invalid_role', __( 'Unsupported role', 'artpulse' ), array( 'status' => 400 ) );
 		}
-                if ( isset( $data['layout'] ) && is_array( $data['layout'] ) ) {
-                        $layout = self::convert_to_core_ids( $data['layout'] );
-                        \ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $layout );
-                } else {
-                        $order   = array_map( 'sanitize_key', (array) ( $data['layoutOrder'] ?? array() ) );
+               $layout = $data['layout'] ?? null;
+               if ( isset( $layout ) && is_array( $layout ) ) {
+                       $layout = self::convert_to_core_ids( $layout );
+                       \ArtPulse\Admin\UserLayoutManager::save_role_layout( $role, $layout );
+               } else {
+                       $order   = array_map( 'sanitize_key', (array) ( $data['layoutOrder'] ?? array() ) );
                         $layout  = self::convert_to_core_ids(
                                 array_map(
                                         fn( $id ) => array(
@@ -224,6 +229,7 @@ class DashboardWidgetController {
 
                 return ( new self() )->ok( array( 'saved' => true ) );
         }
+
 
 
 }
