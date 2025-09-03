@@ -89,6 +89,7 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
                 $this->assertStringContainsString( 'Exhibition', $html );
                 $this->assertStringContainsString( '&#64;', $html );
                 $this->assertStringNotContainsString( 'org@example.com', $html );
+                $this->assertStringNotContainsString( '@', $html );
         }
 
        public function test_single_template_outputs_meta(): void {
@@ -101,5 +102,6 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
                $this->assertStringContainsString( 'Exhibition', $html );
                $this->assertStringContainsString( '&#64;', $html );
                $this->assertStringNotContainsString( 'org@example.com', $html );
+               $this->assertStringNotContainsString( '@', $html );
        }
 }
