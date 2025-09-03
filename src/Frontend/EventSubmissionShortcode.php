@@ -76,10 +76,11 @@ class EventSubmissionShortcode {
          * @param callable|null $redirect Optional redirect function.
          */
 protected static function maybe_redirect( ?callable $redirect = null ): void {
-    $referer = __NAMESPACE__ . '\wp_get_referer';
-    if ( is_callable( $referer ) ) {
-        $target = $referer();
-    } elseif ( is_callable( '\wp_get_referer' ) ) {
+    $referer_fn = __NAMESPACE__ . '\wp_get_referer';
+
+    if ( function_exists( $referer_fn ) ) {
+        $target = $referer_fn();
+    } elseif ( function_exists( '\wp_get_referer' ) ) {
         $target = \wp_get_referer();
     } else {
         $target = false;
@@ -94,11 +95,11 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
         StubState::$page = $target;
     }
 
-    if ( ! is_callable( $redirect ) ) {
+    if ( ! $redirect ) {
         $redirect = __NAMESPACE__ . '\wp_safe_redirect';
 
-        if ( ! is_callable( $redirect ) ) {
-            if ( is_callable( '\wp_safe_redirect' ) ) {
+        if ( ! function_exists( $redirect ) ) {
+            if ( function_exists( '\wp_safe_redirect' ) ) {
                 $redirect = '\wp_safe_redirect';
             } else {
                 $redirect = null;
