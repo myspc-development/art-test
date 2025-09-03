@@ -2,13 +2,15 @@
 namespace ArtPulse\Util;
 
 /**
- * Obfuscate email for safe display.
+ * Obfuscate an email address for safe display.
+ *
+ * Note: The returned string is not escaped. Callers must escape the
+ * result before outputting it in HTML.
  *
  * @param string $email Email address.
- * @return string Escaped, obfuscated email.
+ * @return string Obfuscated email address.
  */
 function ap_obfuscate_email( $email ): string {
     $obfuscated = antispambot( $email );
-    $obfuscated = str_replace( array( '@', '&#064;', '&#x40;' ), '&#64;', $obfuscated );
-    return esc_html( $obfuscated );
+    return str_replace( array( '@', '&#064;', '&#x40;' ), '&#64;', $obfuscated );
 }
