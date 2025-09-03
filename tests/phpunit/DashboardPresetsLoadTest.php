@@ -44,6 +44,7 @@ final class DashboardPresetsLoadTest extends TestCase {
 		}
                 $expected = array(
                         'member'       => array(
+                                'widget_news',
                                 'widget_membership',
                                 'widget_account_tools',
                                 'widget_my_follows',

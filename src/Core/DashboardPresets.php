@@ -65,6 +65,7 @@ class DashboardPresets {
                 // Hard-coded defaults used when no valid JSON exists.
                 $defaults = array(
                         'member'       => array(
+                                'widget_news',
                                 'widget_membership',
                                 'widget_account_tools',
                                 'widget_my_follows',

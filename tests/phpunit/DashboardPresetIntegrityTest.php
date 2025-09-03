@@ -19,6 +19,7 @@ class DashboardPresetIntegrityTest extends TestCase {
         parent::setUp();
         // Register a minimal set of widgets used by presets.
         $slugs = array(
+            'widget_news',
             'widget_membership',
             'widget_my_follows',
             'widget_local_events',
