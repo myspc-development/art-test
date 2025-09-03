@@ -3,15 +3,15 @@ namespace ArtPulse\Taxonomies;
 
 use ArtPulse\Taxonomies\SpotlightCategory;
 class TaxonomiesRegistrar {
+	const EVENT_TYPES_OPTION = 'ap_default_event_types_inserted';
 	public static function register() {
 		self::register_artist_specialties();
 		self::register_artwork_styles();
 		self::register_event_types();
 		self::register_org_categories();
 		self::register_project_stages();
-		self::register_reviewed_type();
-		SpotlightCategory::register();
-		self::insert_default_event_types();
+                self::register_reviewed_type();
+                SpotlightCategory::register();
 	}
 	public static function register_artist_specialties() {
 		$labels = array(
@@ -143,28 +143,36 @@ class TaxonomiesRegistrar {
 			)
 		);
 	}
-	public static function register_reviewed_type() {
-		$labels = array(
-			'name'          => __( 'Reviewed Types', 'artpulse' ),
-			'singular_name' => __( 'Reviewed Type', 'artpulse' ),
-		);
-		register_taxonomy(
-			'reviewed_type',
-			'review',
-			array(
-				'hierarchical' => false,
-				'public'       => true,
-				'labels'       => $labels,
-				'show_ui'      => true,
-				'show_in_rest' => true,
-			)
-		);
-	}
-	public static function insert_default_event_types() {
-		$types = array(
-			'exhibition'  => __( 'Exhibition', 'artpulse' ),
-			'opening'     => __( 'Opening Reception', 'artpulse' ),
-			'workshop'    => __( 'Workshop', 'artpulse' ),
+        public static function register_reviewed_type() {
+                $labels = array(
+                        'name'          => __( 'Reviewed Types', 'artpulse' ),
+                        'singular_name' => __( 'Reviewed Type', 'artpulse' ),
+                );
+                register_taxonomy(
+                        'reviewed_type',
+                        'review',
+                        array(
+                                'hierarchical' => false,
+                                'public'       => true,
+                                'labels'       => $labels,
+                                'show_ui'      => true,
+                                'show_in_rest' => true,
+                        )
+                );
+        }
+        public static function maybe_insert_default_event_types() {
+                if ( get_option( self::EVENT_TYPES_OPTION ) ) {
+                        return false;
+                }
+                self::insert_default_event_types();
+                update_option( self::EVENT_TYPES_OPTION, 1 );
+                return true;
+        }
+        public static function insert_default_event_types() {
+                $types = array(
+                        'exhibition'  => __( 'Exhibition', 'artpulse' ),
+                        'opening'     => __( 'Opening Reception', 'artpulse' ),
+                        'workshop'    => __( 'Workshop', 'artpulse' ),
 			'lecture'     => __( 'Lecture', 'artpulse' ),
 			'performance' => __( 'Performance', 'artpulse' ),
 			'screening'   => __( 'Screening', 'artpulse' ),

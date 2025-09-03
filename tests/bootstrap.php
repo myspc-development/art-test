@@ -6,6 +6,7 @@ $autoload = dirname(__DIR__) . '/vendor/autoload.php';
 if (file_exists($autoload)) {
     require_once $autoload;
 }
+require_once dirname(__DIR__) . '/vendor/antecedent/patchwork/Patchwork.php';
 
 // 2) Locate the WordPress PHPUnit bootstrap
 $wp_phpunit_dir = getenv('WP_PHPUNIT__DIR');

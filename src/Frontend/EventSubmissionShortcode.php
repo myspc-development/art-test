@@ -347,19 +347,32 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
 		return ob_get_clean();
 	}
 
-	public static function maybe_handle_form() {
-		if ( ! is_user_logged_in() || ! isset( $_POST['ap_submit_event'] ) ) {
-			return;
-		}
+       public static function maybe_handle_form() {
+               $is_logged_in_fn = __NAMESPACE__ . '\\is_user_logged_in';
+               $get_user_fn     = __NAMESPACE__ . '\\get_current_user_id';
+               $can_fn          = __NAMESPACE__ . '\\current_user_can';
 
-		// Verify nonce
-		if ( ! isset( $_POST['ap_event_nonce'] ) || ! wp_verify_nonce( $_POST['ap_event_nonce'], 'ap_submit_event' ) ) {
-			self::add_notice( __( 'Security check failed.', 'artpulse' ), 'error' );
-			self::maybe_redirect();
-			return;
-		}
+               $is_logged_in = function_exists( $is_logged_in_fn )
+                       ? $is_logged_in_fn()
+                       : \is_user_logged_in();
+               if ( ! $is_logged_in || ! isset( $_POST['ap_submit_event'] ) ) {
+                       return;
+               }
 
-		$user_id = get_current_user_id();
+               $user_id = function_exists( $get_user_fn )
+                       ? $get_user_fn()
+                       : \get_current_user_id();
+
+               $can_publish = function_exists( $can_fn )
+                       ? $can_fn( 'publish_events' )
+                       : \current_user_can( 'publish_events' );
+
+               // Verify nonce
+               if ( ! isset( $_POST['ap_event_nonce'] ) || ! wp_verify_nonce( $_POST['ap_event_nonce'], 'ap_submit_event' ) ) {
+                       self::add_notice( __( 'Security check failed.', 'artpulse' ), 'error' );
+                       self::maybe_redirect();
+                       return;
+               }
 
 		// Validate event data
 		$event_title        = sanitize_text_field( $_POST['event_title'] );
@@ -410,11 +423,10 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
                         return;
                 }
 
-                $status_choice = sanitize_text_field( $_POST['event_status'] ?? 'publish' );
-                $publish_date  = sanitize_text_field( $_POST['event_publish_date'] ?? '' );
-                $can_publish   = current_user_can( 'publish_events' );
-                $post_status   = $can_publish ? 'publish' : 'pending';
-		$post_date     = null;
+               $status_choice = sanitize_text_field( $_POST['event_status'] ?? 'publish' );
+               $publish_date  = sanitize_text_field( $_POST['event_publish_date'] ?? '' );
+               $post_status   = $can_publish ? 'publish' : 'pending';
+               $post_date     = null;
 
 		if ( $can_publish ) {
 			if ( $status_choice === 'draft' ) {

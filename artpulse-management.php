@@ -184,6 +184,7 @@ require_once __DIR__ . '/includes/class-favorites.php';
 require_once __DIR__ . '/src/helpers.php';
 require_once __DIR__ . '/src/Blocks/Version.php';
 require_once __DIR__ . '/src/Util/EventFeed.php';
+require_once __DIR__ . '/src/Util/Email.php';
 require_once __DIR__ . '/includes/dashboard-widgets.php';
 require_once __DIR__ . '/includes/dashboard-builder-widgets.php';
 require_once __DIR__ . '/includes/dashboard-menu.php';

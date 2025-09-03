@@ -231,11 +231,5 @@ class DashboardWidgetController {
         }
 
 
-                       return $nonce_check;
-               }
-
-               $cap_check = Auth::require_cap( 'edit_posts' );
-               if ( is_wp_error( $cap_check ) ) {
-
 
 }

@@ -45,6 +45,10 @@ namespace ArtPulse\Frontend\Tests {
         function get_the_ID(): int {
                 return 1;
         }
+
+        function get_post_meta( $id, $key, $single = false ) {
+                return MockStorage::$post_meta[ $key ] ?? '';
+        }
 }
 
 namespace {

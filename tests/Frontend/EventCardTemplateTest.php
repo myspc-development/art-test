@@ -47,6 +47,7 @@ class EventCardTemplateTest extends WP_UnitTestCase {
         $html = ap_get_event_card( $this->event_id );
         $this->assertStringContainsString( '&#64;', $html );
         $this->assertStringNotContainsString( 'organizer@example.com', $html );
+        $this->assertStringNotContainsString( '@', $html );
     }
 
     public function test_handles_missing_taxonomy_without_error(): void {

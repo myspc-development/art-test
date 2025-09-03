@@ -62,7 +62,7 @@ if ( have_posts() ) :
     echo '<li><strong>' . esc_html__( 'Contact:', 'artpulse' ) . '</strong> ' . esc_html( $contact ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
     echo '<li><strong>' . esc_html__( 'Type:', 'artpulse' ) . '</strong> ' . esc_html( $event_type ?: esc_html__( 'Not specified', 'artpulse' ) ) . '</li>';
     if ( $org_email ) {
-        echo '<li><strong>' . esc_html__( 'Organizer Email:', 'artpulse' ) . '</strong> ' . str_replace( '&#064;', '&#64;', esc_html( antispambot( $org_email ) ) ) . '</li>';
+        echo '<li><strong>' . esc_html__( 'Organizer Email:', 'artpulse' ) . '</strong> ' . \ArtPulse\Util\ap_obfuscate_email( $org_email ) . '</li>';
     }
     if (!empty($rsvp) && filter_var($rsvp, FILTER_VALIDATE_URL)) {
         echo '<li><strong>' . esc_html__( 'RSVP:', 'artpulse' ) . '</strong> <a href="' . esc_url( $rsvp ) . '" class="event-rsvp-link" target="_blank">' . esc_html__( 'RSVP Now', 'artpulse' ) . '</a></li>';
