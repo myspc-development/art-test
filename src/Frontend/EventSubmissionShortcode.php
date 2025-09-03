@@ -55,26 +55,16 @@ class EventSubmissionShortcode {
                $target = \ArtPulse\Core\Plugin::get_event_submission_url();
        }
 
-       if ( ! $target ) {
-               $target = \ArtPulse\Core\Plugin::get_event_submission_url();
-       }
 
-       if ( null === $redirect ) {
-               if ( function_exists( __NAMESPACE__ . '\wp_safe_redirect' ) ) {
-                       $redirect = __NAMESPACE__ . '\wp_safe_redirect';
-               } elseif ( function_exists( 'wp_safe_redirect' ) ) {
-                       $redirect = '\\wp_safe_redirect';
-               }
-       }
 
-       if ( $redirect ) {
-               $redirect( $target );
+	if ( is_callable( $redirect ) ) {
+		$redirect( $target );
 
-               // Only halt execution when using the global WordPress redirect.
-               if ( '\\wp_safe_redirect' === $redirect ) {
-                       exit;
-               }
-       }
+		// Only halt execution when using the global WordPress redirect.
+		if ( '\wp_safe_redirect' === $redirect ) {
+			exit;
+		}
+	}
         }
 
 	public static function register() {

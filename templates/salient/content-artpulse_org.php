@@ -1,7 +1,17 @@
 <?php
 \get_header();
+
+// During tests the loop helpers are defined in a namespaced context so we need
+// to explicitly call them when the test flag is set.
+if ( defined( 'WP_ENV_FOR_TESTS' ) ) {
+  $have_posts = '\\ArtPulse\\Frontend\\Tests\\have_posts';
+  $the_post   = '\\ArtPulse\\Frontend\\Tests\\the_post';
+} else {
+  $have_posts = 'have_posts';
+  $the_post   = 'the_post';
+}
 ?>
-<?php if ( have_posts() ) { the_post(); ?>
+<?php if ( $have_posts() ) { $the_post(); ?>
   <div class="nectar-portfolio-single-media">
     <?php \the_post_thumbnail('full',['class'=>'img-responsive']); ?>
   </div>

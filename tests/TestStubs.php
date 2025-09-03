@@ -36,6 +36,13 @@ namespace ArtPulse\Frontend\Tests {
 namespace {
         use ArtPulse\Tests\Stubs\MockStorage;
 
+        // Flag to allow templates to detect when they are being executed within
+        // the test suite so they can call namespaced helpers instead of
+        // WordPress's loop functions.
+        if ( ! defined( 'WP_ENV_FOR_TESTS' ) ) {
+                define( 'WP_ENV_FOR_TESTS', true );
+        }
+
         if ( ! isset( $GLOBALS['options'] ) ) {
                 $GLOBALS['options'] = array();
         }
