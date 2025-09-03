@@ -228,16 +228,53 @@ class UserLayoutManager {
         }
 
        /**
+        * Normalize WordPress roles to plugin roles.
+        *
+        * @param string[] $roles Raw WP roles.
+        * @return string[] Normalized plugin roles.
+        */
+       private static function normalize_roles( array $roles ): array {
+               $normalized = array();
+               foreach ( $roles as $role ) {
+                       $role = strtolower( (string) $role );
+                       switch ( $role ) {
+                               case 'administrator':
+                               case 'organization':
+                                       $role = 'organization';
+                                       break;
+                               case 'subscriber':
+                               case 'contributor':
+                               case 'author':
+                               case 'editor':
+                               case 'member':
+                                       $role = 'member';
+                                       break;
+                               case 'artist':
+                               case 'shared':
+                                       // leave as is.
+                                       break;
+                               default:
+                                       continue 2;
+                       }
+                       if ( ! in_array( $role, $normalized, true ) ) {
+                               $normalized[] = $role;
+                       }
+               }
+               return $normalized;
+       }
+
+       /**
         * Merge layouts for multiple roles preserving order and de-duping.
         *
         * @param string[] $roles Roles to merge.
         * @return array<int,array{id:string,visible:bool}>
         */
        private static function merge_role_layouts( array $roles ): array {
+               $roles     = self::normalize_roles( $roles );
                $merged    = array();
                $seen_ids  = array();
                $valid_ids = array_column( DashboardWidgetRegistry::get_definitions(), 'id' );
-
+               
                foreach ( $roles as $role ) {
                        $result = self::get_role_layout( $role );
                        foreach ( $result['layout'] as $item ) {
@@ -266,8 +303,12 @@ class UserLayoutManager {
                         return $layout;
                 }
 
-                $user  = get_userdata( $user_id );
-                $roles = $user && ! empty( $user->roles ) ? (array) $user->roles : array( 'subscriber' );
+               $user  = get_userdata( $user_id );
+               $roles = $user && ! empty( $user->roles ) ? (array) $user->roles : array( 'subscriber' );
+               $roles = self::normalize_roles( $roles );
+               if ( empty( $roles ) ) {
+                       $roles = array( 'member' );
+               }
                if ( count( $roles ) > 1 ) {
                        $primary = $roles[0];
                        $others  = array_slice( $roles, 1 );
@@ -277,7 +318,7 @@ class UserLayoutManager {
                        }
                }
 
-               $role   = $roles[0] ?? 'subscriber';
+               $role   = $roles[0] ?? 'member';
                $result = self::get_role_layout( $role );
                $layout = $result['layout'];
                if ( ! empty( $layout ) ) {
