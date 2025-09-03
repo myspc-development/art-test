@@ -38,7 +38,7 @@ class DashboardPreviewControllerTest extends \WP_UnitTestCase {
                 wp_set_current_user( 0 );
                 $req = new \WP_REST_Request( 'GET', '/artpulse/v1/preview/dashboard' );
                 $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 401, $res->get_status() );
+                $this->assertSame( 403, $res->get_status() ); // 403: unauthenticated requests are forbidden
         }
 
         public function test_get_preview_returns_user_and_widgets(): void {

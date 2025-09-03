@@ -31,12 +31,12 @@ class Auth_Test extends WP_UnitTestCase {
 		$this->assertSame( '/wp-admin', $result );
 	}
 
-	public function test_require_login_and_cap_unauthenticated_returns_401() {
+	public function test_require_login_and_cap_unauthenticated_returns_403() {
 		wp_set_current_user( 0 );
 		$cb     = \ArtPulse\Rest\Util\Auth::require_login_and_cap( 'read' );
 		$result = $cb( new \WP_REST_Request( 'GET', '/' ) );
 		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertSame( 401, $result->get_error_data()['status'] );
+		$this->assertSame( 403, $result->get_error_data()['status'] ); // 403 keeps clients from prompting for auth
 	}
 
 	public function test_require_login_and_cap_handles_various_capabilities() {
